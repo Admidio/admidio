@@ -53,7 +53,7 @@ else
 
 if (!in_array($step, $availableSteps, true))
 {
-    admRedirect(safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')));
+    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')));
     // => EXIT
 }
 
@@ -92,7 +92,7 @@ if (is_file($configPath))
     {
         showNotice(
             $gL10n->get('SYS_DATABASE_NO_LOGIN_CONFIG_FILE', array($e->getText())),
-            safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
             $gL10n->get('INS_CONTINUE_INSTALLATION'),
             'fa-arrow-circle-right'
         );
@@ -128,7 +128,7 @@ if (is_file($configPath))
         $_SESSION['db_password']  = DB_PASSWORD;
         $_SESSION['table_prefix'] = TABLE_PREFIX;
 
-        admRedirect(safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
         // => EXIT
     }
 }

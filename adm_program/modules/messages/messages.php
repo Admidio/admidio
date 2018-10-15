@@ -70,7 +70,7 @@ if ($gSettingsManager->getBool('enable_mail_module'))
 if ($gSettingsManager->getBool('enable_pm_module'))
 {
     $messagesMenu->addItem(
-        'admMenuItemNewPm', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM')),
+        'admMenuItemNewPm', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM')),
         $gL10n->get('SYS_WRITE_PM'), 'fa-comment-alt'
     );
 }
@@ -87,7 +87,7 @@ if ($gSettingsManager->getBool('enable_chat_module'))
 if ($gCurrentUser->isAdministrator())
 {
     $messagesMenu->addItem(
-        'admMenuItemPreferences', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'messages')),
+        'admMenuItemPreferences', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'messages')),
         $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
     );
 }

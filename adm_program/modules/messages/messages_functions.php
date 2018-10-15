@@ -19,7 +19,7 @@
 function getMessageIcon($msgId, $icon, $title)
 {
     return '
-        <a class="admidio-icon-link" href="' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_id' => $msgId)) . '">
+        <a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_id' => $msgId)) . '">
             <i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $title . '"></i>
         </a>';
 }
@@ -31,7 +31,7 @@ function getMessageIcon($msgId, $icon, $title)
  */
 function getMessageLink($msgId, $msgSubject)
 {
-    return '<a href="' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_id' => $msgId)) . '">' . $msgSubject . '</a>';
+    return '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_id' => $msgId)) . '">' . $msgSubject . '</a>';
 }
 
 /**
@@ -98,7 +98,7 @@ function getAdministrationLink($rowIndex, $msgId, $msgSubject)
 
     return '
         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-            href="' . safeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $rowIndex, 'name' => $msgSubject, 'database_id' => $msgId)) . '">
+            href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $rowIndex, 'name' => $msgSubject, 'database_id' => $msgId)) . '">
             <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('MSG_REMOVE').'"></i>
         </a>';
 }

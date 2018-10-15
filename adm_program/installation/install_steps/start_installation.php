@@ -18,7 +18,7 @@ if (!is_file($configPath))
 {
     showNotice(
         $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),
-        safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')),
+        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')),
         $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left'
     );
@@ -39,7 +39,7 @@ if (isset($_SESSION['table_prefix'])
 {
     showNotice(
         $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
-        safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
+        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
         $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left'
     );
@@ -54,7 +54,7 @@ $sqlQueryResult = querySqlFile($db, 'db.sql');
 
 if (is_string($sqlQueryResult))
 {
-    showNotice($sqlQueryResult, safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    showNotice($sqlQueryResult, SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
     // => EXIT
 }
 

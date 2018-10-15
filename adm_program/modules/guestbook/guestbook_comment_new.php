@@ -140,7 +140,7 @@ $guestbookCommentCreateMenu = $page->getMenu();
 $guestbookCommentCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
-$form = new HtmlForm('guestbook_comment_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('id' => $id, 'headline' => $getHeadline, 'mode' => $mode)), $page);
+$form = new HtmlForm('guestbook_comment_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('id' => $id, 'headline' => $getHeadline, 'mode' => $mode)), $page);
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     // registered users should not change their name

@@ -441,7 +441,7 @@ if ($getMode !== 'csv')
                 if ($(this).val().length > 1) {
                     var result = $(this).val();
                     $(this).prop("selectedIndex", 0);
-                    self.location.href = "'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'&mode=" + result;
+                    self.location.href = "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'&mode=" + result;
                 }
             });
 
@@ -451,7 +451,7 @@ if ($getMode !== 'csv')
             });
 
             $("#menu_item_print_view").click(function() {
-                window.open("'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
+                window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
             });',
             true
         );
@@ -465,7 +465,7 @@ if ($getMode !== 'csv')
         {
             $listsMenu->addItem(
                 'menu_item_normal_picture',
-                safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'html', 'show_former_members' => $getShowFormerMembers, 'full_screen' => 'false', 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'html', 'show_former_members' => $getShowFormerMembers, 'full_screen' => 'false', 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
                 $gL10n->get('SYS_NORMAL_PICTURE'), 'fa-compress'
             );
         }
@@ -473,7 +473,7 @@ if ($getMode !== 'csv')
         {
             $listsMenu->addItem(
                 'menu_item_full_screen',
-                safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'html', 'show_former_members' => $getShowFormerMembers, 'full_screen' => 'true', 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'html', 'show_former_members' => $getShowFormerMembers, 'full_screen' => 'true', 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
                 $gL10n->get('SYS_FULL_SCREEN'), 'fa-expand-arrows-alt'
             );
         }
@@ -488,7 +488,7 @@ if ($getMode !== 'csv')
             {
                 $listsMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'));
 
-                $listsMenu->addItem('menu_item_assign_members', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => (int) $role->getValue('rol_id'))),
+                $listsMenu->addItem('menu_item_assign_members', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => (int) $role->getValue('rol_id'))),
                     $gL10n->get('SYS_ASSIGN_MEMBERS'), 'fa-user-plus', 'left', 'menu_item_extras');
             }
         }
@@ -749,7 +749,7 @@ foreach ($membersList as $member)
                 // show user photo
                 if ($getMode === 'html' || $getMode === 'print')
                 {
-                    $content = '<img src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $member['usr_id'])).'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
+                    $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $member['usr_id'])).'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
                 }
                 if ($getMode === 'csv' && $member[$sqlColumnNumber] != null)
                 {
@@ -834,7 +834,7 @@ foreach ($membersList as $member)
                     || $usfId === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
                 {
                     $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']);
-                    $columnValues[] = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $member['usr_id'])).'">'.$htmlValue.'</a>';
+                    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $member['usr_id'])).'">'.$htmlValue.'</a>';
                 }
                 else
                 {
@@ -872,7 +872,7 @@ foreach ($membersList as $member)
         $dateId         = $datesStatement->fetchColumn();
         // prepare edit icon
         $columnValues[] = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId, 'usr_id' => $member['usr_id'])) . '">
+                                href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId, 'usr_id' => $member['usr_id'])) . '">
                                 <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
     }
 

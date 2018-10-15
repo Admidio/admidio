@@ -99,7 +99,7 @@ if($getMode === 'show_list')
 
     // show link to create new backup
     $backupMenu->addItem(
-        'admMenuItemNewBackup', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', array('mode' => 'create_backup')),
+        'admMenuItemNewBackup', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', array('mode' => 'create_backup')),
         $gL10n->get('BAC_START_BACKUP'), 'fa-database'
     );
 
@@ -127,12 +127,12 @@ if($getMode === 'show_list')
 
         // create array with all column values
         $columnValues = array(
-            '<a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php', array('job' => 'get_file', 'filename' => $oldBackupFile)). '">
+            '<a class="btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php', array('job' => 'get_file', 'filename' => $oldBackupFile)). '">
                 <i class="fas fa-file-archive"></i>'. $oldBackupFile. '</a>',
             date($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'), filemtime($backupAbsolutePath.$oldBackupFile)),
             round($fileSize / 1024). ' kB',
             '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'bac', 'element_id' => 'row_file_'.$key, 'name' => $oldBackupFile, 'database_id' => $oldBackupFile)).'">
+                href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'bac', 'element_id' => 'row_file_'.$key, 'name' => $oldBackupFile, 'database_id' => $oldBackupFile)).'">
                 <i class="fas fa-trash-alt"></i></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);
     }

@@ -453,7 +453,7 @@ $javascriptCode .= '
 
     function loadList() {
         var listId = $("#sel_select_configuration").val();
-        self.location.href = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('active_role' => (int) $getActiveRole)) . '&lst_id=" + listId;
+        self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('active_role' => (int) $getActiveRole)) . '&lst_id=" + listId;
     }
 
     /**
@@ -472,12 +472,12 @@ $javascriptCode .= '
 
         switch (mode) {
             case "show":
-                myListConfigForm.action = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('mode' => 2)).'";
+                myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('mode' => 2)).'";
                 myListConfigForm.submit();
                 break;
 
             case "save":
-                myListConfigForm.action = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('lst_id' => $getListId, 'mode' => 1)).'";
+                myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('lst_id' => $getListId, 'mode' => 1)).'";
                 myListConfigForm.submit();
                 break;
 
@@ -485,7 +485,7 @@ $javascriptCode .= '
                 var listName = "";
                 listName = prompt("'.$gL10n->get('LST_CONFIGURATION_SAVE').'");
                 if (listName !== "") {
-                    myListConfigForm.action = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('mode' => 1)) . '&name=" + listName;
+                    myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('mode' => 1)) . '&name=" + listName;
                     myListConfigForm.submit();
                 }
                 break;
@@ -493,7 +493,7 @@ $javascriptCode .= '
             case "delete":
                 var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DELETE').'");
                 if (msg_result) {
-                    myListConfigForm.action = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('lst_id' => $getListId, 'mode' => 3)).'";
+                    myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('lst_id' => $getListId, 'mode' => 3)).'";
                     myListConfigForm.submit();
                 }
                 break;
@@ -501,7 +501,7 @@ $javascriptCode .= '
             case "system":
                 var msg_result = confirm("'.$gL10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
                 if (msg_result) {
-                    myListConfigForm.action = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('lst_id' => $getListId, 'mode' => 4)).'";
+                    myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('lst_id' => $getListId, 'mode' => 4)).'";
                     myListConfigForm.submit();
                 }
                 break;
@@ -528,7 +528,7 @@ $myListMenu = $page->getMenu();
 // show link to system preferences of roles
 if($gCurrentUser->isAdministrator())
 {
-    $myListMenu->addItem('admMenuItemPreferencesLists', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'lists')),
+    $myListMenu->addItem('admMenuItemPreferencesLists', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'lists')),
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right');
 }
 
@@ -626,7 +626,7 @@ if($gCurrentUser->isAdministrator())
                 <th style="width: 18%;">'.$gL10n->get('SYS_ORDER').'</th>
                 <th style="width: 25%;">'.$gL10n->get('SYS_CONDITION').'
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => 'mylist_condition', 'inline' => 'true')).'">
+                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => 'mylist_condition', 'inline' => 'true')).'">
                         <i class="fas fa-info-circle admidio-info-icon"></i>
                     </a>
                 </th>

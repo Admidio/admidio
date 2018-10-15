@@ -158,15 +158,15 @@ else
 
         // change mode of users that should be shown
         $("#filter_rol_id").change(function() {
-            window.location.replace("'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $getRoleId, 'mem_show_all' => 0)).'&filter_rol_id=" + $("#filter_rol_id").val());
+            window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $getRoleId, 'mem_show_all' => 0)).'&filter_rol_id=" + $("#filter_rol_id").val());
         });
 
         // change mode of users that should be shown
         $("#mem_show_all").click(function() {
             if ($("#mem_show_all").is(":checked")) {
-                window.location.replace("'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $getRoleId, 'mem_show_all' => 1)).'");
+                window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $getRoleId, 'mem_show_all' => 1)).'");
             } else {
-                window.location.replace("'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $getRoleId, 'mem_show_all' => 0)).'");
+                window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $getRoleId, 'mem_show_all' => 0)).'");
             }
         });
 
@@ -194,7 +194,7 @@ else
             }
 
             // change data in database
-            $.post("'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('mode' => 'assign', 'rol_id' => $getRoleId)).'&usr_id=" + userId,
+            $.post("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('mode' => 'assign', 'rol_id' => $getRoleId)).'&usr_id=" + userId,
                 "member_" + userId + "=" + memberChecked + "&leader_" + userId + "=" + leaderChecked,
                 function(data) {
                     // check if error occurs
@@ -307,7 +307,7 @@ else
     $columnHeading[] = $htmlLeaderColumn;
     $columnAlignment[] = 'left';
 
-    $table->setServerSideProcessing(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment_data.php', array('rol_id' => $getRoleId, 'filter_rol_id' => $getFilterRoleId, 'mem_show_all' => $getMembersShowAll)));
+    $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment_data.php', array('rol_id' => $getRoleId, 'filter_rol_id' => $getFilterRoleId, 'mem_show_all' => $getMembersShowAll)));
     $table->setColumnAlignByArray($columnAlignment);
     $table->addRowHeadingByArray($columnHeading);
 

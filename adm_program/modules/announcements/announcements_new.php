@@ -92,7 +92,7 @@ $announcementsMenu = $page->getMenu();
 $announcementsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
-$form = new HtmlForm('announcements_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_id' => $getAnnId, 'headline' => $getHeadline, 'mode' => '1')), $page);
+$form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_id' => $getAnnId, 'headline' => $getHeadline, 'mode' => '1')), $page);
 $form->addInput(
     'ann_headline', $gL10n->get('SYS_TITLE'), SecurityUtils::encodeHTML($announcement->getValue('ann_headline')),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)

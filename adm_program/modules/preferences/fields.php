@@ -83,7 +83,7 @@ $page->addJavascript('
 
         if (secondSequence > 0) {
             // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
-            $.get("' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/fields_function.php', array('mode' => 4)) . '&usf_id=" + usfID + "&sequence=" + direction);
+            $.get("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/fields_function.php', array('mode' => 4)) . '&usf_id=" + usfID + "&sequence=" + direction);
         }
     }
 ');
@@ -101,7 +101,7 @@ $fieldsMenu->addItem(
 );
 // define link to maintain categories
 $fieldsMenu->addItem(
-    'menu_item_maintain_category', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'USF')),
+    'menu_item_maintain_category', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'USF')),
     $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large'
 );
 
@@ -166,7 +166,7 @@ while($row = $statement->fetch())
     {
         $description = substr($userField->getValue('usf_description', 'database'), 0, 22).'
             <a data-toggle="modal" data-target="#admidio_modal"
-                href="'. safeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'user_field_description', 'message_var1' => $userField->getValue('usf_name_intern'), 'inline' => 'true')).'"><span  data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
+                href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'user_field_description', 'message_var1' => $userField->getValue('usf_name_intern'), 'inline' => 'true')).'"><span  data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
     }
     elseif($userField->getValue('usf_description') === '')
     {
@@ -227,7 +227,7 @@ while($row = $statement->fetch())
 
     $usfId = (int) $userField->getValue('usf_id');
 
-    $usfSystem = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php', array('usf_id' => $usfId)).'">'.
+    $usfSystem = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php', array('usf_id' => $usfId)).'">'.
                     '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
     if($userField->getValue('usf_system') == 1)
@@ -237,14 +237,14 @@ while($row = $statement->fetch())
     else
     {
         $usfSystem .='<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$usfId,
+                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$usfId,
                         'name' => $userField->getValue('usf_name'), 'database_id' => $usfId)).'">'.
                         '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
     }
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php', array('usf_id' => $usfId)).'">'.$userField->getValue('usf_name').'</a>',
+        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php', array('usf_id' => $usfId)).'">'.$userField->getValue('usf_name').'</a>',
         '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_UP.'\', '.$usfId.')">'.
             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('CAT_MOVE_UP', array('MEM_PROFILE_FIELD')) . '"></i></a>
         <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_DOWN.'\', '.$usfId.')">'.

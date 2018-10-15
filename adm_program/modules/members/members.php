@@ -52,7 +52,7 @@ $page->addJavascript('
 
     // change mode of users that should be shown
     $("#mem_show_all").click(function() {
-        window.location.replace("'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members.php', array('members' => $flagShowMembers)).'");
+        window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members.php', array('members' => $flagShowMembers)).'");
     });', true);
 
 // get module menu
@@ -107,7 +107,7 @@ if($gCurrentUser->isAdministrator())
 
     // show link to system preferences of weblinks
     $membersAdministrationMenu->addItem(
-        'menu_item_preferences_links', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'user_management')),
+        'menu_item_preferences_links', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'user_management')),
         $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right', 'menu_item_extras'
     );
 }
@@ -129,7 +129,7 @@ $columnHeading = array(
     '&nbsp;'
 );
 
-$membersTable->setServerSideProcessing(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_data.php', array('members' => $getMembers)));
+$membersTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_data.php', array('members' => $getMembers)));
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $membersTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
 $membersTable->addRowHeadingByArray($columnHeading);

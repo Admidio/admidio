@@ -41,7 +41,7 @@ echo '
                     formMembersAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('MEM_USER_COULD_BE_CREATED').'</strong>");
                     formMembersAlert.fadeIn("slow");
                     setTimeout(function() {
-                        self.location.href = "'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => 1)).'&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
+                        self.location.href = "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => 1)).'&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
                     }, 2500);
                 } else {
                     if (data.length > 1000) {

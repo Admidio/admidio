@@ -148,8 +148,8 @@ while ($row = $statement->fetch())
             if (is_file($photoPath))
             {
                 $description .=
-                    '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php', array('pho_id' => $phoId, 'photo_nr' => $photoNr)).'"><img
-                    src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $phoId, 'photo_nr' => $photoNr,
+                    '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php', array('pho_id' => $phoId, 'photo_nr' => $photoNr)).'"><img
+                    src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $phoId, 'photo_nr' => $photoNr,
                     'pho_begin' => $photoAlbum->getValue('pho_begin', 'Y-m-d'), 'thumb' => '1')).'" border="0" /></a>&nbsp;';
             }
         }
@@ -159,7 +159,7 @@ while ($row = $statement->fetch())
     $rss->addItem(
         $parents . $photoAlbum->getValue('pho_name'),
         $description,
-        safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', array('pho_id' => $phoId)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', array('pho_id' => $phoId)),
         $row['create_name'],
         \DateTime::createFromFormat('Y-m-d H:i:s', $photoAlbum->getValue('pho_timestamp_create', 'Y-m-d H:i:s'))->format('r')
     );

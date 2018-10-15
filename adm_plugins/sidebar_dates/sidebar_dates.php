@@ -135,7 +135,7 @@ if($plgDatesResult['numResults'] > 0)
         }
 
         // ?ber $plg_link_url wird die Verbindung zum Date-Modul hergestellt.
-        echo $plgHtmlEndDate. '<br /><a class="'. $plg_link_class. '" href="'. safeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '" target="'. $plg_link_target. '">';
+        echo $plgHtmlEndDate. '<br /><a class="'. $plg_link_class. '" href="'. SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '" target="'. $plg_link_target. '">';
 
         if($plg_max_char_per_word > 0)
         {
@@ -177,7 +177,7 @@ if($plgDatesResult['numResults'] > 0)
             $textPrev = substr($textPrev, 0, $plg_dates_show_preview + 15);
             $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
                 <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
-                    href="'.safeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '"><i
+                    href="'.SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '"><i
                     class="fas fa-plus-circle" aria-hidden="true"></i>'.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a>';
             $textPrev = pluginDatesCloseTags($textPrev);
 

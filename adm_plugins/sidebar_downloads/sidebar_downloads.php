@@ -136,7 +136,7 @@ if ($gSettingsManager->getBool('enable_download_module'))
                 }
 
                 echo '
-                <a class="btn admidio-icon-link '.$plg_link_class_downl.'" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/downloads/get_file.php', array('file_id' => $rowFile['fil_id'])). '">'.
+                <a class="btn admidio-icon-link '.$plg_link_class_downl.'" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/downloads/get_file.php', array('file_id' => $rowFile['fil_id'])). '">'.
                     '<i class="fas ' . $iconFile . '"></i>'.$fileName.'.'.$fileExtension. '</a>';
 
                 if($countVisibleDownloads === $plg_downloads_count)

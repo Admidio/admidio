@@ -150,7 +150,7 @@ if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
     $ecardMenu->addItem(
-        'menu_item_preferences', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'ecards')),
+        'menu_item_preferences', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'ecards')),
         $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
     );
 }
@@ -164,8 +164,8 @@ $form->addInput('photo_nr', '', $getPhotoNr, array('type' => 'hidden'));
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
 $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
     <a data-toggle="lightbox" data-type="image" data-title="'.$gL10n->get('SYS_PREVIEW').'"
-        href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
-        src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale'))).'"
+        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
+        src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale'))).'"
         class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
     </a>');
 $templates = admFuncGetDirectoryEntries(THEME_PATH.'/ecard_templates');

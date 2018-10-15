@@ -577,7 +577,7 @@ echo '<div class="alert alert-success form-alert"><i class="fas fa-check"></i><s
     $gL10n->get('BAC_BACKUP_COMPLETED', array(FormattedTimeRemaining(getmicrotime() - $starttime, 2))).'.</strong><br /><br />
 
 '.$gL10n->get('BAC_BACKUP_FILE').'
-<a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php', array('job' => 'get_file', 'filename' => basename($newfullfilename))).'">
+<a class="btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php', array('job' => 'get_file', 'filename' => basename($newfullfilename))).'">
     <i class="fas fa-file-archive"></i>'.basename($newfullfilename).'</a>
 ('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</div>';
 

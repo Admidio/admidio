@@ -50,7 +50,7 @@ $relationTypeEditMenu = $page->getMenu();
 $relationTypeEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
-$form = new HtmlForm('relationtype_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_function.php', array('urt_id' => $getUrtId, 'mode' => '1')), $page);
+$form = new HtmlForm('relationtype_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_function.php', array('urt_id' => $getUrtId, 'mode' => '1')), $page);
 
 $form->openGroupBox('gb_user_relationship', $gL10n->get('SYS_USER_RELATION'));
 $form->addInput(

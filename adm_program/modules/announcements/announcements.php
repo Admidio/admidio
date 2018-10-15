@@ -65,7 +65,7 @@ $page->enableModal();
 if($gSettingsManager->getBool('enable_rss'))
 {
     $page->addRssFile(
-        safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/rss_announcements.php', array('headline' => $getHeadline)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/rss_announcements.php', array('headline' => $getHeadline)),
         $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline))
     );
 }
@@ -87,7 +87,7 @@ if(count($gCurrentUser->getAllEditableCategories('ANN')) > 0)
 {
     // show link to create new announcement
     $announcementsMenu->addItem(
-        'menu_item_new_announcement', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)),
+        'menu_item_new_announcement', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)),
         $gL10n->get('SYS_CREATE_ENTRY'), 'fa-plus-circle'
     );
 }
@@ -99,7 +99,7 @@ $page->addJavascript('
     true
 );
 
-$navbarForm = new HtmlForm('navbar_cat_id_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
+$navbarForm = new HtmlForm('navbar_cat_id_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
 $navbarForm->addSelectBoxForCategories(
     'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', HtmlForm::SELECT_BOX_MODUS_FILTER,
     array('defaultValue' => $getCatId)
@@ -110,7 +110,7 @@ if($gCurrentUser->editAnnouncements())
 {
     // if no calendar selectbox is shown, then show link to edit calendars
     $announcementsMenu->addItem(
-        'admMenuItemCategories', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')),
+        'admMenuItemCategories', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')),
         $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large'
     );
 }
@@ -119,7 +119,7 @@ if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
     $announcementsMenu->addItem(
-        'menu_item_preferences', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'announcements')),
+        'menu_item_preferences', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'announcements')),
         $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
     );
 }
@@ -163,12 +163,12 @@ else
                     if($announcement->isEditable())
                     {
                         $page->addHtml('
-                        <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'copy' => '1', 'headline' => $getHeadline)).'">
+                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'copy' => '1', 'headline' => $getHeadline)).'">
                             <i class="fas fa-clone" data-toggle="tooltip" title="'.$gL10n->get('SYS_COPY').'"></i></a>
-                        <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'headline' => $getHeadline)).'">
+                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'headline' => $getHeadline)).'">
                             <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
                         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annId, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annId)).'">
+                            href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annId, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annId)).'">
                             <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
                     }
                 $page->addHtml('</div>
@@ -186,14 +186,14 @@ else
                 ) .
                 '<div class="admidio-info-category">' .
                     $gL10n->get('SYS_CATEGORY') .
-                    '&nbsp;<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_id' => (int) $announcement->getValue('ann_cat_id'))).'">' . SecurityUtils::encodeHTML($announcement->getValue('cat_name')).'</a>
+                    '&nbsp;<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_id' => (int) $announcement->getValue('ann_cat_id'))).'">' . SecurityUtils::encodeHTML($announcement->getValue('cat_name')).'</a>
                 </div>
             </div>
         </div>');
     }  // Ende foreach
 
     // If necessary show links to navigate to next and previous recordsets of the query
-    $baseUrl = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_id' => $getCatId));
+    $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_id' => $getCatId));
     $page->addHtml(admFuncGeneratePagination($baseUrl, $announcementsCount, $announcementsPerPage, $getStart));
 }
 

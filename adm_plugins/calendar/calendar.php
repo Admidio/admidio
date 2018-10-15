@@ -502,7 +502,7 @@ while($currentDay <= $lastDayCurrentMonth)
             {
                 // Link_Target auf Termin-Vorgabe einstellen
                 $plgLinkTarget = $plg_link_target_termin;
-                $plgLink = safeUrl($plg_link_url, array('date_from' => $dateObj->format('Y-m-d'), 'date_to' => $dateObj->format('Y-m-d')));
+                $plgLink = SecurityUtils::encodeUrl($plg_link_url, array('date_from' => $dateObj->format('Y-m-d'), 'date_to' => $dateObj->format('Y-m-d')));
             }
 
             if($plg_ajaxbox !== 1 && count($eventsMonthDayArray[$currentDay]) > 1)

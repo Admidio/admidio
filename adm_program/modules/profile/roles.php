@@ -126,7 +126,7 @@ else
 }
 
 // show headline of module
-$html .= '<form id="roles_assignment_form" action="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles_save.php', array('usr_id' => $getUserId, 'new_user' => $getNewUser, 'inline' => $getInline)).'" method="post">';
+$html .= '<form id="roles_assignment_form" action="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles_save.php', array('usr_id' => $getUserId, 'new_user' => $getNewUser, 'inline' => $getInline)).'" method="post">';
 
 // Create table
 $table = new HtmlTable('role_assignment_table');

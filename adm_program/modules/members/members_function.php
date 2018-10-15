@@ -53,11 +53,11 @@ if ($getMode === 1)
         </p>
 
         <button id="btnFormer" type="button" class="btn btn-primary"
-            onclick="self.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 2)).'\'">
+            onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 2)).'\'">
             <i class="fas fa-user-clock"></i>'.$gL10n->get('SYS_FORMER').'</button>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <button id="btnDelete" type="button" class="btn btn-primary"
-            onclick="self.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 3)).'\'">
+            onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 3)).'\'">
             <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_DELETE').'</button>
     </div>');
 
@@ -182,7 +182,7 @@ elseif ($getMode === 4)
 elseif ($getMode === 5)
 {
     // Ask to send new login-data
-    $gMessage->setForwardYesNo(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 4)));
+    $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 4)));
     $gMessage->show($gL10n->get('MEM_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))));
     // => EXIT
 }
@@ -193,13 +193,13 @@ elseif ($getMode === 6)
         if (isMember($getUserId))
         {
             // User is ONLY member of this organization -> ask if make to former member or delete completely
-            admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 1)));
+            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 1)));
             // => EXIT
         }
         else
         {
             // User is not member of any organization -> ask if delete completely
-            $gMessage->setForwardYesNo(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 3)));
+            $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 3)));
             $gMessage->show($gL10n->get('MEM_USER_DELETE', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))), $gL10n->get('SYS_DELETE'));
             // => EXIT
         }
@@ -207,7 +207,7 @@ elseif ($getMode === 6)
     else
     {
         // User could only be removed from this organization -> ask so
-        $gMessage->setForwardYesNo(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 2)));
+        $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 2)));
         $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))), $gL10n->get('SYS_REMOVE'));
         // => EXIT
     }

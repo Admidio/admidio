@@ -116,12 +116,12 @@ if ($getMode === 1 || $getMode === 2)
         $_SESSION['mylist_request']['sel_select_configuration'] = $listId;
 
         // go back to mylist configuration
-        admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/lists/mylist.php', array('lst_id' => $listId)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/lists/mylist.php', array('lst_id' => $listId)));
         // => EXIT
     }
 
     // weiterleiten zur allgemeinen Listeseite
-    admRedirect(safeUrl(
+    admRedirect(SecurityUtils::encodeUrl(
         ADMIDIO_URL . FOLDER_MODULES.'/lists/lists_show.php',
         array(
             'lst_id' => $listId, 'mode' => 'html',

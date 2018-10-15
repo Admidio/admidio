@@ -111,10 +111,10 @@ while($relRow = $relationTypesStatement->fetch())
     }
 
     $relationtypeAdministration = '
-    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_id' => $relationType1->getValue('urt_id'))). '"><img
+    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_id' => $relationType1->getValue('urt_id'))). '"><img
         src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_'. $relationType1->getValue('urt_id'),
+        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_'. $relationType1->getValue('urt_id'),
         'name' => $relationType1->getValue('urt_name').($relationType1->isUnidirectional() ? '' : ('/'.$relationType2->getValue('urt_name'))),
         'database_id' => $relationType1->getValue('urt_id'))).'"><img
            src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';

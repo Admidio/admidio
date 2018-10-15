@@ -196,7 +196,7 @@ if ($getMode === 'new' || $getMode === 'change')
 
     if ($getMode === 'new')
     {
-        admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $getPhotoId)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $getPhotoId)));
         // => EXIT
     }
     else

@@ -73,9 +73,9 @@ $page->addJavascript('
         roleId    = elementId.substr(elementId.search(/_/) + 1);
 
         if ($(this).val() === "mylist") {
-            self.location.href = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('active_role' => (int) $getActiveRole)) . '&rol_id=" + roleId;
+            self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('active_role' => (int) $getActiveRole)) . '&rol_id=" + roleId;
         } else {
-            self.location.href = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists_show.php', array('mode' => 'html')) . '&lst_id=" + $(this).val() + "&rol_ids=" + roleId;
+            self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists_show.php', array('mode' => 'html')) . '&lst_id=" + $(this).val() + "&rol_ids=" + roleId;
         }
     });',
     true
@@ -97,12 +97,12 @@ if($gCurrentUser->manageRoles())
 if($gCurrentUser->manageRoles() && !$gCurrentUser->isAdministrator())
 {
     // show link to maintain categories
-    $listsMenu->addItem('menu_item_maintain_categories', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
+    $listsMenu->addItem('menu_item_maintain_categories', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
                         $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large');
 }
 
 $page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit(); });', true);
-$navbarForm = new HtmlForm('navbar_cat_id_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php', array('active_role' => (int) $getActiveRole)), $page, array('type' => 'navbar', 'setFocus' => false));
+$navbarForm = new HtmlForm('navbar_cat_id_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php', array('active_role' => (int) $getActiveRole)), $page, array('type' => 'navbar', 'setFocus' => false));
 $navbarForm->addSelectBoxForCategories(
     'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', HtmlForm::SELECT_BOX_MODUS_FILTER,
     array('defaultValue' => $getCatId)
@@ -112,7 +112,7 @@ $listsMenu->addForm($navbarForm->show());
 if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of roles
-    $listsMenu->addItem('admMenuItemPreferencesLists', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'lists')),
+    $listsMenu->addItem('admMenuItemPreferencesLists', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'lists')),
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right');
 }
 
@@ -203,7 +203,7 @@ foreach($listsResult['recordset'] as $row)
                 if($gCurrentUser->hasRightSendMailToRole($rolId) && $gSettingsManager->getBool('enable_mail_module'))
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $rolId)).'">'.
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $rolId)).'">'.
                         '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'"></i></a>');
                 }
 
@@ -211,7 +211,7 @@ foreach($listsResult['recordset'] as $row)
                 if($row['num_members'] > 0 || $row['num_leader'] > 0)
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id' => $rolId)).'">'.
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id' => $rolId)).'">'.
                         '<i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'"></i></a>');
                 }
 
@@ -219,7 +219,7 @@ foreach($listsResult['recordset'] as $row)
                 if($role->allowedToAssignMembers($gCurrentUser))
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $rolId)).'">'.
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $rolId)).'">'.
                         '<i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'"></i></a>');
                 }
 
@@ -227,7 +227,7 @@ foreach($listsResult['recordset'] as $row)
                 if($gCurrentUser->manageRoles())
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php', array('rol_id' => $rolId)).'">'.
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php', array('rol_id' => $rolId)).'">'.
                         '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_EDIT_ROLE').'"></i></a>');
                 }
             $page->addHtml('</div>
@@ -276,7 +276,7 @@ foreach($listsResult['recordset'] as $row)
                 }
 
                 // add count of participants to role
-                $html = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)). '">'.$row['num_members'].'</a>';
+                $html = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)). '">'.$row['num_members'].'</a>';
 
                 if($role->getValue('rol_max_members') > 0)
                 {
@@ -294,7 +294,7 @@ foreach($listsResult['recordset'] as $row)
                         $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                     }
 
-                    $html .= '&nbsp;&nbsp;(<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId, 'show_former_members' => '1')).'">'.$row['num_former'].' '.$textFormerMembers.'</a>) ';
+                    $html .= '&nbsp;&nbsp;(<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId, 'show_former_members' => '1')).'">'.$row['num_former'].' '.$textFormerMembers.'</a>) ';
                 }
                 $form->addStaticControl('list_participants', $gL10n->get('SYS_PARTICIPANTS'), $html);
 
@@ -328,7 +328,7 @@ if($listsResult['numResults'] > 0)
 }
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$baseUrl = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php', array('cat_id' => $getCatId, 'active_role' => (int) $getActiveRole));
+$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php', array('cat_id' => $getCatId, 'active_role' => (int) $getActiveRole));
 $page->addHtml(admFuncGeneratePagination($baseUrl, $listsResult['totalCount'], $gSettingsManager->getInt('lists_roles_per_page'), $getStart));
 
 $page->addHtml('</div>');

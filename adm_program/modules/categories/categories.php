@@ -166,7 +166,7 @@ $page->addJavascript('
 
         if (secondSequence > 0) {
             // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-            $.get("' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4)) . '&cat_id=" + catId + "&sequence=" + direction);
+            $.get("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4)) . '&cat_id=" + catId + "&sequence=" + direction);
         }
     }
 ');
@@ -179,7 +179,7 @@ $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10
 
 // define link to create new category
 $categoriesMenu->addItem(
-    'admMenuItemNewCategory', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType, 'title' => $getTitle)),
+    'admMenuItemNewCategory', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType, 'title' => $getTitle)),
     $gL10n->get('SYS_CREATE_VAR', array($addButtonText)), 'fa-plus-circle'
 );
 
@@ -324,7 +324,7 @@ while($catRow = $categoryStatement->fetch())
 
     if($category->isEditable())
     {
-        $categoryAdministration = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType, 'title' => $getTitle)).'">'.
+        $categoryAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType, 'title' => $getTitle)).'">'.
                                     '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
         if($category->getValue('cat_system') == 1)
@@ -334,7 +334,7 @@ while($catRow = $categoryStatement->fetch())
         else
         {
             $categoryAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                            href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. (int) $category->getValue('cat_id'), 'name' => $category->getValue('cat_name'), 'database_id' => $catId, 'database_id_2' => $getType)).'">'.
+                                            href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. (int) $category->getValue('cat_id'), 'name' => $category->getValue('cat_name'), 'database_id' => $catId, 'database_id_2' => $getType)).'">'.
                                             '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
     }
@@ -345,7 +345,7 @@ while($catRow = $categoryStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType, 'title' => $getTitle)).'">'. $category->getValue('cat_name'). '</a>',
+        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType, 'title' => $getTitle)).'">'. $category->getValue('cat_name'). '</a>',
         $htmlMoveRow,
         $htmlDefaultCategory,
         $htmlViewRolesNames,

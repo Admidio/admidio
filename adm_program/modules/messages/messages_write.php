@@ -218,7 +218,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     }
 
     // show form
-    $form = new HtmlForm('pm_send_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('pm_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
 
     if ($getUserId === 0)
     {
@@ -307,7 +307,7 @@ elseif (!isset($messageStatement))
     }
 
     // show form
-    $form = new HtmlForm('mail_send_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('mail_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
     $sqlRoleIds = array();

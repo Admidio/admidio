@@ -57,7 +57,7 @@ else
     }
 
     // show form
-    $form = new HtmlForm('menu_install_form', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 1)), $page);
+    $form = new HtmlForm('menu_install_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 1)), $page);
 
     $form->addSelectBoxForCategories('men_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'MEN', 'EDIT_CATEGORIES', array('property' => HtmlForm::FIELD_REQUIRED));
 

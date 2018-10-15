@@ -72,7 +72,7 @@ if($announcements->getDataSetCount() > 0)
         $rss->addItem(
             $announcement->getValue('ann_headline'),
             $announcement->getValue('ann_description'),
-            safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('id' => (int) $announcement->getValue('ann_id'), 'headline' => $getHeadline)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('id' => (int) $announcement->getValue('ann_id'), 'headline' => $getHeadline)),
             $row['create_name'],
             \DateTime::createFromFormat('Y-m-d H:i:s', $announcement->getValue('ann_timestamp_create', 'Y-m-d H:i:s'))->format('r')
         );

@@ -303,7 +303,7 @@ switch($getMode)
         $page->addHtml('<p class="lead">'.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'</p>');
 
         // show form
-        $form = new HtmlForm('add_new_organization_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '3')), $page);
+        $form = new HtmlForm('add_new_organization_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '3')), $page);
         $form->addInput(
             'orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'],
             array('maxLength' => 10, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')

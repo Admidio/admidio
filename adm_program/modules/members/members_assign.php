@@ -119,7 +119,7 @@ echo '
                 echo '<hr />';
             }
             echo '<p>
-                <a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">
+                <a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">
                     <i class="fas fa-user"></i>'.$row['first_name'].' '.$row['last_name'].'</a><br />';
 
                 if(strlen($row['street']) > 0)
@@ -142,7 +142,7 @@ echo '
                 {
                     if($gSettingsManager->getBool('enable_mail_module'))
                     {
-                        echo '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('usr_id' => $row['usr_id'])).'">'.$row['email'].'</a><br />';
+                        echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('usr_id' => $row['usr_id'])).'">'.$row['email'].'</a><br />';
                     }
                     else
                     {
@@ -154,7 +154,7 @@ echo '
             if(!isMember($row['usr_id']))
             {
                 // gefundene User ist noch KEIN Mitglied dieser Organisation
-                $link = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $row['usr_id']));
+                $link = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $row['usr_id']));
 
                 // KEINE Logindaten vorhanden
                 echo '<p>'.$gL10n->get('MEM_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
@@ -171,7 +171,7 @@ echo '
     <div class="panel-body">
         <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER').'</p>
 
-        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => 1, 'lastname' => $getLastname, 'firstname' => $getFirstname)).'\'">
+        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => 1, 'lastname' => $getLastname, 'firstname' => $getFirstname)).'\'">
             <i class="fas fa-plus-circle"></i>'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
     </div>
 </div>';

@@ -237,14 +237,14 @@ if($numberBirthdays > 0)
                 // show name and e-mail link for registered users
                 if($gValidLogin)
                 {
-                    $plgShowName = '<a href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => $row['usr_id'])) . '"
+                    $plgShowName = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => $row['usr_id'])) . '"
                         target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $plgShowName. '</a>';
 
                     // E-Mail-Adresse ist hinterlegt und soll auch bei eingeloggten Benutzern verlinkt werden
                     if(strlen($row['email']) > 0 && $plg_show_email_extern < 2)
                     {
                         $plgShowName .= '
-                            <a class="admidio-icon-link" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('usr_id' => $row['usr_id'])) . '">'.
+                            <a class="admidio-icon-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('usr_id' => $row['usr_id'])) . '">'.
                                 '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_WRITE_EMAIL').'"></i></a>';
                     }
                 }

@@ -148,7 +148,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
 
                             if($gCurrentUser->hasRightViewRole((int) $member->getValue('mem_rol_id')))
                             {
-                                $roleMemHTML .= '<a href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => (int) $member->getValue('mem_rol_id'))). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
+                                $roleMemHTML .= '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => (int) $member->getValue('mem_rol_id'))). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
                             }
                             else
                             {
@@ -193,7 +193,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                                 || ($role->getValue('rol_administrator') == 0))
                                 {
                                     $roleMemHTML .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.(int) $role->getValue('rol_id'), 'database_id' => $memberId, 'name' => $role->getValue('rol_name'))).'"><i
+                                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.(int) $role->getValue('rol_id'), 'database_id' => $memberId, 'name' => $role->getValue('rol_name'))).'"><i
                                             class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'"></i></a>';
                                 }
                                 else
@@ -211,7 +211,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                         $roleMemHTML .= '</span>
                     </li>
                     <li class="list-group-item" id="membership_period_'.$memberId.'" style="visibility: hidden; display: none;"><div class="collapse navbar-collapse">';
-                        $form = new HtmlForm('membership_period_form_'.$memberId, safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '7', 'user_id' => (int) $user->getValue('usr_id'), 'mem_id' => $row['mem_id'])), null, array('type' => 'navbar', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
+                        $form = new HtmlForm('membership_period_form_'.$memberId, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '7', 'user_id' => (int) $user->getValue('usr_id'), 'mem_id' => $row['mem_id'])), null, array('type' => 'navbar', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
                         $form->addInput(
                             'membership_start_date_'.$memberId, $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gSettingsManager->getString('system_date')),
                             array('type' => 'date', 'maxLength' => 10)

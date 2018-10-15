@@ -156,7 +156,7 @@ $profileEditMenu = $page->getMenu();
 $profileEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // create html form
-$form = new HtmlForm('edit_profile_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_save.php', array('user_id' => $getUserId, 'new_user' => $getNewUser)), $page);
+$form = new HtmlForm('edit_profile_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_save.php', array('user_id' => $getUserId, 'new_user' => $getNewUser)), $page);
 
 // *******************************************************************************
 // Loop over all categories and profile fields
@@ -259,7 +259,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
                             <a id="password_link" class="btn" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $getUserId)).'">
+                                href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $getUserId)).'">
                                 <i class="fas fa-key"></i>'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
                 }

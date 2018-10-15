@@ -65,7 +65,7 @@ $page->enableModal();
 if($gSettingsManager->getBool('enable_rss'))
 {
     $page->addRssFile(
-        safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/links/rss_links.php', array('headline' => $getHeadline)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/links/rss_links.php', array('headline' => $getHeadline)),
         $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline))
     );
 }
@@ -83,7 +83,7 @@ if($weblinks->getId() === 0)
     {
         // show link to create new weblink
         $linksMenu->addItem(
-            'menu_item_new_link', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('headline' => $getHeadline)),
+            'menu_item_new_link', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('headline' => $getHeadline)),
             $gL10n->get('LNK_CREATE_LINK'), 'fa-plus-circle'
         );
     }
@@ -92,7 +92,7 @@ if($weblinks->getId() === 0)
     {
         // show link to maintain categories
         $linksMenu->addItem(
-            'menu_item_maintain_categories', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK', 'title' => $getHeadline)),
+            'menu_item_maintain_categories', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK', 'title' => $getHeadline)),
             $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large'
         );
     }
@@ -101,7 +101,7 @@ if($weblinks->getId() === 0)
     {
         // show link to system preferences of weblinks
         $linksMenu->addItem(
-            'menu_items_links_preferences', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'links')),
+            'menu_items_links_preferences', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'links')),
             $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
         );
     }
@@ -113,7 +113,7 @@ if($weblinks->getId() === 0)
         true
     );
 
-    $navbarForm = new HtmlForm('navbar_cat_id_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
+    $navbarForm = new HtmlForm('navbar_cat_id_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
     $navbarForm->addSelectBoxForCategories(
         'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', HtmlForm::SELECT_BOX_MODUS_FILTER,
         array('defaultValue' => $getCatId)
@@ -175,17 +175,17 @@ else
 
                 // show weblink
                 $page->addHtml('
-                <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('lnk_id' => $lnkId)).'" target="'. $gSettingsManager->getString('weblinks_target'). '">
+                <a class="btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('lnk_id' => $lnkId)).'" target="'. $gSettingsManager->getString('weblinks_target'). '">
                     <i class="fas fa-link"></i>'.$lnkName.'</a>');
 
                 // change and delete only users with rights
                 if ($weblink->isEditable())
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('lnk_id' => $lnkId, 'headline' => $getHeadline)). '">
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('lnk_id' => $lnkId, 'headline' => $getHeadline)). '">
                         <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'lnk',
+                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'lnk',
                         'element_id' => 'lnk_'.$lnkId, 'name' => $weblink->getValue('lnk_name'), 'database_id' => $lnkId)).'">
                         <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
                 }
@@ -220,7 +220,7 @@ else
 $page->addHtml('</div>');
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$baseUrl = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('headline' => $getHeadline, 'cat_id' => $getCatId));
+$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('headline' => $getHeadline, 'cat_id' => $getCatId));
 $page->addHtml(admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $weblinks->getStartElement()));
 
 // show html of complete page

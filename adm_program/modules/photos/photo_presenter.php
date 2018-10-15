@@ -54,15 +54,15 @@ $previousImage = $getPhotoNr - 1;
 $nextImage     = $getPhotoNr + 1;
 $urlPreviousImage = '#';
 $urlNextImage     = '#';
-$urlCurrentImage  = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height')));
+$urlCurrentImage  = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height')));
 
 if ($previousImage > 0)
 {
-    $urlPreviousImage = safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $previousImage, 'pho_id' => $getPhotoId));
+    $urlPreviousImage = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $previousImage, 'pho_id' => $getPhotoId));
 }
 if ($nextImage <= $photoAlbum->getValue('pho_quantity'))
 {
-    $urlNextImage = safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $nextImage, 'pho_id' => $getPhotoId));
+    $urlNextImage = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $nextImage, 'pho_id' => $getPhotoId));
 }
 
 // create html page object
@@ -83,7 +83,7 @@ if ((int) $gSettingsManager->get('photo_show_mode') === 2)
     if ((int) $gSettingsManager->get('photo_show_mode') === 2)
     {
         $photoPresenterMenu->addItem(
-            'menu_item_back_to_album', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $getPhotoId)),
+            'menu_item_back_to_album', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $getPhotoId)),
             $gL10n->get('PHO_BACK_TO_ALBUM'), 'fa-image'
         );
     }

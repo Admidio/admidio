@@ -65,7 +65,7 @@ $page->addJavascript('
 
         if (secondSequence > 0) {
             // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-            $.get("' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3)) . '&men_id=" + menID + "&sequence=" + direction);
+            $.get("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3)) . '&men_id=" + menID + "&sequence=" + direction);
         }
     }');
 
@@ -152,21 +152,21 @@ while ($mainMen = $mainMenStatement->fetch())
             $htmlStandardMenu = '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))) . '"></i>';
         }
 
-        $menuAdministration = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', array('men_id' => $menuRow['men_id'])). '">'.
+        $menuAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', array('men_id' => $menuRow['men_id'])). '">'.
                                 '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>';
 
         // don't allow delete for standard menus
         if(!$menuRow['men_standard'])
         {
             $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'men', 'element_id' => 'row_men_'.
+                                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'men', 'element_id' => 'row_men_'.
                                         $menuRow['men_id'], 'name' => $menuName, 'database_id' => $menuRow['men_id'])).'">'.
                                         '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
 
         // create array with all column values
         $columnValues = array(
-            '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php', array('men_id' => $menuRow['men_id'])). '" title="'.$menuNameDesc.'">'.$menuName.'</a>',
+            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php', array('men_id' => $menuRow['men_id'])). '" title="'.$menuNameDesc.'">'.$menuName.'</a>',
             $htmlMoveRow,
             '<a href="'.$menuLink. '" title="'.$menuNameDesc.'">'. $menuRow['men_url']. '</a>',
             $htmlStandardMenu,

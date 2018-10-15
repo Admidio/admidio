@@ -22,7 +22,7 @@ elseif (!isset($_SESSION['language']))
 {
     showNotice(
         $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'),
-        safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')),
+        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')),
         $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left'
     );
@@ -57,7 +57,7 @@ else
 }
 
 // create a page to enter all necessary database connection information
-$form = new HtmlFormInstallation('installation-form', safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
+$form = new HtmlFormInstallation('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
 $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
 $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
 $form->addSelectBoxFromXml(
@@ -91,7 +91,7 @@ $form->addInput(
 $form->closeGroupBox();
 $form->addButton(
     'previous_page', $gL10n->get('SYS_BACK'),
-    array('icon' => 'fa-arrow-circle-left', 'link' => safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')))
+    array('icon' => 'fa-arrow-circle-left', 'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')))
 );
 $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'fa-arrow-circle-right'));
 echo $form->show();

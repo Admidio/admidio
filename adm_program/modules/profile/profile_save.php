@@ -352,7 +352,7 @@ if($getNewUser === 1 || $getNewUser === 3)
     // otherwise go to previous url (default roles are assigned automatically)
     if($gCurrentUser->assignRoles())
     {
-        admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('usr_id' => (int) $user->getValue('usr_id'), 'new_user' => $getNewUser)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('usr_id' => (int) $user->getValue('usr_id'), 'new_user' => $getNewUser)));
         // => EXIT
     }
     else

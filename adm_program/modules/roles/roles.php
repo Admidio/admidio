@@ -96,12 +96,12 @@ $rolesMenu->addItem(
 );
 // define link to maintain categories
 $rolesMenu->addItem(
-    'menu_item_maintain_category', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
+    'menu_item_maintain_category', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
     $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large'
 );
 // define link to show inactive roles
 $rolesMenu->addItem(
-    'menu_item_inactive_role', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php', array('inactive' => $activeRolesFlag)),
+    'menu_item_inactive_role', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php', array('inactive' => $activeRolesFlag)),
     $activeRolesLinkDescription, $activeRolesImage
 );
 
@@ -109,7 +109,7 @@ if((int) $gSettingsManager->get('enable_dates_module') > 0)
 {
     // if event module is enabled then define link to confirmation roles of event participations
     $rolesMenu->addItem(
-        'menu_item_hidden_role', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php', array('events' => $eventsRolesFlag)),
+        'menu_item_hidden_role', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php', array('events' => $eventsRolesFlag)),
         $eventsRolesLinkDescription, $eventsRolesImage
     );
 }
@@ -267,16 +267,16 @@ while($row = $rolStatement->fetch())
     $rolId = (int) $role->getValue('rol_id');
     $rolName = $role->getValue('rol_name');
 
-    $linkAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)).'">'.
+    $linkAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)).'">'.
                                 '<i class="fas fa-list" data-toggle="tooltip" title="'.$gL10n->get('ROL_SHOW_MEMBERS').'"></i></a>';
 
     if(!$getInactive)
     {
-        $linkAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $rolId)).'">'.
+        $linkAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $rolId)).'">'.
                                     '<i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'"></i></a>';
     }
 
-    $linkAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id'. $rolId)).'">'.
+    $linkAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id'. $rolId)).'">'.
                                 '<i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($rolName)).'"></i></a>';
 
     if($role->getValue('cat_name_intern') !== 'EVENTS')
@@ -284,13 +284,13 @@ while($row = $rolStatement->fetch())
         if($getInactive)
         {
             $linkAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $rolId)).'">'.
+                                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $rolId)).'">'.
                                         '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('ROL_ENABLE_ROLE').'"></i></a>';
         }
         else
         {
             $linkAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $rolId)).'">'.
+                                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $rolId)).'">'.
                                         '<i class="fas fa-user-secret" data-toggle="tooltip" title="'.$gL10n->get('ROL_DISABLE_ROLE').'"></i></a>';
         }
     }
@@ -302,14 +302,14 @@ while($row = $rolStatement->fetch())
     else
     {
         $linkAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                    href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $rolId)).'">'.
+                                    href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $rolId)).'">'.
                                     '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('ROL_ROLE_DELETE').'"></i></a>';
     }
 
     // create array with all column values
     $columnValues = array(
         array('value' => $role->getValue('cat_name'), 'order' => (int) $role->getValue('cat_sequence')),
-        '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php', array('rol_id' => $rolId)).'" title="'.$role->getValue('rol_description').'">'.$rolName.'</a>',
+        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php', array('rol_id' => $rolId)).'" title="'.$role->getValue('rol_description').'">'.$rolName.'</a>',
         $assignRoles,
         $gL10n->get($viewEmail),
         $gL10n->get($viewRole),

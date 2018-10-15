@@ -128,7 +128,7 @@ else
 }
 
 // show form
-$form = new HtmlForm('photo_album_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => $getPhotoId, 'mode' => $getMode)), $page);
+$form = new HtmlForm('photo_album_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => $getPhotoId, 'mode' => $getMode)), $page);
 $form->addInput(
     'pho_name', $gL10n->get('PHO_ALBUM'), $photoAlbum->getValue('pho_name'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 50)

@@ -184,7 +184,7 @@ $categoryCreateMenu = $page->getMenu();
 $categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
-$form = new HtmlForm('categories_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_function.php', array('cat_id' => $getCatId, 'type' => $getType, 'mode' => '1')), $page);
+$form = new HtmlForm('categories_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_function.php', array('cat_id' => $getCatId, 'type' => $getType, 'mode' => '1')), $page);
 
 // systemcategories should not be renamed
 $fieldPropertyCatName = HtmlForm::FIELD_REQUIRED;
