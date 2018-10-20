@@ -18,10 +18,10 @@
 $plg_show_names_extern = 0;
 
 // How should the name of the birthday child be displayed?
-// 1 = (Default) First name Last name  (Hans Mustermann)
-// 2 = Last name, First name (Mustermann, Hans)
-// 3 = First name (Hans)
-// 4 = Loginname (Hansi)
+// 1 = (Default) First name Last name  (John Doe)
+// 2 = Last name, First name (Doe, John)
+// 3 = First name (John)
+// 4 = Loginname (Johni)
 $plg_show_names = 1;
 
 // Show the age of the birthday person (only for registered users)
@@ -32,7 +32,7 @@ $plg_show_age = 0;
 // From which age of the birthday children the first name will be replaced
 // by the salutation for visitors?
 // 18 = (Default)
-// If you don't want to use this functio set the value to 99
+// If you don't want to use this function set the value to 99
 $plg_show_alter_anrede = 18;
 
 // Should the reference to the fact that there are no birthday children be omitted?
@@ -54,7 +54,7 @@ $plg_show_future = 10;
 $plg_show_email_extern = 0;
 
 // Specification of the target in which the contents of the links are to be opened
-// You can insert specified values of the html target attribut
+// You can insert specified values of the html target attribute
 $plg_link_target = '_self';
 
 // You can list role ids (comma separated) from which the birthday persons should
