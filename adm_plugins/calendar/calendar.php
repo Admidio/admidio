@@ -109,13 +109,13 @@ if(!isset($plg_link_class_merge) || $plg_link_class_merge === '')
 // /////////////////////////////////////////////////////// //
 // Prüfen, ob die Rollenbedingung gesetzt wurde            //
 // /////////////////////////////////////////////////////// //
-if(!isset($plg_rolle_sql) || $plg_rolle_sql === 'all' || $plg_rolle_sql === '')
+if(isset($plg_rolle_sql) && count($plg_rolle_sql) > 0)
 {
-    $sqlRoleIds = ' IS NOT NULL ';
+    $sqlRoleIds = 'IN (' . implode(',', $plg_rolle_sql) . ')';
 }
 else
 {
-    $sqlRoleIds = ' IN '.$plg_rolle_sql;
+    $sqlRoleIds = 'IS NOT NULL';
 }
 
 // Nun noch einige Variablen initialisieren

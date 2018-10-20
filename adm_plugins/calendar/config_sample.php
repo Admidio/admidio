@@ -52,9 +52,9 @@ $plg_kal_cat = array('all');
 $plg_kal_cat_show = 0;
 
 // Angabe welche Rollen (ID) selektiert werden sollen
-// Alle Rollen (Standard)  = 'all';
-// Nur Rollenids 2 und 5   = '(2,5)';
-$plg_rolle_sql = 'all';
+// Alle Rollen (Standard)  = array();
+// Nur Rollenids 2 und 5   = array(2, 5);
+$plg_rolle_sql = array();
 
 // Angabe der Prefix-Url für den Aufruf in Joomla
 // wenn keine Angabe erfolgt dann wird die Standard-URL von Admidio verwendet

@@ -75,13 +75,13 @@ if(!isset($plg_show_future) || !is_numeric($plg_show_future))
     $plg_show_future = 10;
 }
 // Prüfen, ob die Rollenbedingung gesetzt wurde
-if(!isset($plg_rolle_sql) || $plg_rolle_sql === '')
+if(isset($plg_rolle_sql) && count($plg_rolle_sql) > 0)
 {
-    $sqlRol = 'IS NOT NULL';
+    $sqlRol = 'IN (' . implode(',', $plg_rolle_sql) . ')';
 }
 else
 {
-    $sqlRol = 'IN '.$plg_rolle_sql;
+    $sqlRol = 'IS NOT NULL';
 }
 
 // Prüfen, ob die Sortierbedingung gesetzt wurde
