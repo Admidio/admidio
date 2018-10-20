@@ -59,7 +59,7 @@ $plg_link_target = '_self';
 
 // You can list role ids (comma separated) from which the birthday persons should
 // be searched. If no role is set than the plugin will search for all active members.
-// example value: '2,5,13'
+// example value: '(2,5,13)'
 $plg_rolle_sql = '';
 
 // In which sort order should the birthdays be listed?
