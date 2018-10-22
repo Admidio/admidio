@@ -183,9 +183,28 @@ class HtmlNavbar
         }
 
         $html = '
-            <li class="' . $data['class'] . '">
-                <a class="navbar-link" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $iconHtml . $data['text'] . '</a>
+            <li class="nav-item ' . $data['class'] . '">
+                <a class="nav-link" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $iconHtml . $data['text'] . '</a>
             </li>';
+
+        return $html;
+    }
+
+    /**
+     * Creates the html for the menu entry.
+     * @param array<string,string> $data An array with all data if the item. This will be **id**, **url**, **text** and **icon**.
+     * @return string Returns the html for the menu entry
+     */
+    protected function createHtmlDropdownLink(array $data)
+    {
+        $iconHtml = '';
+
+        if ($data['icon'] !== '')
+        {
+            $iconHtml = TableUserField::getIconHtml($data['icon'], $data['text']);
+        }
+
+        $html = '<a class="dropdown-item" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $iconHtml . $data['text'] . '</a>';
 
         return $html;
     }
@@ -197,7 +216,7 @@ class HtmlNavbar
      */
     private function getNavHtml(array $items, $class = '')
     {
-        $html = '<ul class="nav navbar-nav ' . $class . '">';
+        $html = '<ul class="navbar-nav mr-auto ' . $class . '">';
 
         foreach($items as $menuEntry)
         {
@@ -212,17 +231,17 @@ class HtmlNavbar
                 {
                     // add a dropdown to the navbar
                     $html .= '
-                        <li class="dropdown ' . $menuEntry['class'] . '">
-                            <a id="' . $menuEntry['id'] . '" href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <li class="nav-item dropdown ' . $menuEntry['class'] . '">
+                            <a id="' . $menuEntry['id'] . '" href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bars"></i>' . $menuEntry['text'] . '<span class="caret"></span>
                             </a>
-                            <ul class="dropdown-menu" role="menu">';
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">';
 
                     foreach ($menuEntry['items'] as $menuEntryDropDown)
                     {
-                        $html .= $this->createHtmlLink($menuEntryDropDown);
+                        $html .= $this->createHtmlDropdownLink($menuEntryDropDown);
                     }
-                    $html .= '</ul></li>';
+                    $html .= '</div></li>';
                 }
             }
             else
@@ -295,7 +314,7 @@ class HtmlNavbar
         // default navbar should not show the brand, only in xs mode
         if ($this->type === 'default')
         {
-            $cssClassBrand = 'visible-xs-block';
+            $cssClassBrand = 'd-block d-sm-none';
             $cssClassNavbar = 'navbar-menu';
         }
         elseif ($this->type === 'filter')
@@ -305,22 +324,15 @@ class HtmlNavbar
 
         // add html for navbar
         $html = '
-            <nav class="navbar navbar-default ' . $cssClassNavbar . $this->customCssClass . '" role="navigation">
-                <div class="container-fluid">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#' . $this->id . '">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                      </button>
-                      <a class="navbar-brand ' . $cssClassBrand . '" href="#">' . $this->name . '</a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="' . $this->id . '">';
+            <nav class="navbar navbar-expand-lg bg-light ' . $cssClassNavbar . $this->customCssClass . '">
+                <a class="navbar-brand ' . $cssClassBrand . '" href="#">' . $this->name . '</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#' . $this->id . '" aria-controls="' . $this->id . '" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="' . $this->id . '">';
 
         $html .= $navHtml;
-        $html .= '</div></div></nav>';
+        $html .= '</div></nav>';
 
         // now show the complete html of the menu
         return $html;

@@ -20,6 +20,7 @@ body {
     color: #474b4c;
     margin: auto;
     text-align: center;
+    font-size: 0.9rem;
 }
 
 #page {
@@ -396,28 +397,29 @@ a.btn {
     background: -webkit-linear-gradient(top, #ffffff 0%, #96c4cb 95%);
     background: linear-gradient(to bottom, #ffffff 0%, #96c4cb 95%);
 }
-
+/*
 .nav > li > a {
     padding-top: 10px;
     padding-bottom: 10px;
     color: #474b4c !important;
-}
+}*/
 
+/*
 .navbar .form-control,
 .navbar .btn {
     height: 28px;
     padding: 3px 8px;
-}
-
+}*/
+/*
 .navbar-brand {
     color: #474b4c !important;
     padding: 10px 15px 10px 15px;
     line-height: inherit;
-}
-
+}*/
+/*
 .navbar-toggle {
     margin-right: 5px;
-}
+}*/
 
 .navbar .checkbox {
     padding-top: 2px;
@@ -437,6 +439,14 @@ a.btn {
     .navbar-nav > li:first-child > a {
         padding-left: 0;
     }
+}
+
+.form-inline div {
+    padding-right: 15px;
+}
+
+.form-inline label {
+    padding-right: 5px;
 }
 
 /* Style for tabs */

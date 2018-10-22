@@ -136,7 +136,7 @@ class HtmlForm extends HtmlFormBasic
         }
         elseif ($this->type === 'navbar')
         {
-            $optionsAll['class'] .= ' form-horizontal navbar-form navbar-left';
+            $optionsAll['class'] .= ' form-inline ';
         }
 
         if ($optionsAll['class'] !== '')
