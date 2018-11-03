@@ -117,10 +117,15 @@ $participationForm->addButton(
     'btn_attend_' . $getDateId, $gL10n->get('DAT_ATTEND'),
     array('icon' => THEME_URL.'/icons/ok.png', 'class' => $disableStatusAttend)
 );
-$participationForm->addButton(
-    'btn_tentative_' . $getDateId, $gL10n->get('DAT_USER_TENTATIVE'),
-    array('icon' => THEME_URL.'/icons/help_violett.png', 'class' => $disableStatusTentative)
-);
+
+if ($gSettingsManager->getBool('dates_may_take_part'))
+{
+    $participationForm->addButton(
+        'btn_tentative_' . $getDateId, $gL10n->get('DAT_USER_TENTATIVE'),
+        array('icon' => THEME_URL.'/icons/help_violett.png', 'class' => $disableStatusTentative)
+    );
+}
+
 $participationForm->addButton(
     'btn_refuse_' . $getDateId, $gL10n->get('DAT_CANCEL'),
     array('icon' => THEME_URL.'/icons/no.png')
