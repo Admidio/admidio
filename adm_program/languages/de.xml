@@ -1251,6 +1251,8 @@
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmer</string>
   <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Mit Vorbehalt teilnehmen</string>
+  <string name="SYS_MAYBE_PARTICIPATE_DESC">Ist diese Option aktiviert, so steht bei der Terminanmeldung neben den Möglichkeiten #VAR1_BOLD# und #VAR2_BOLD# noch eine dritte Option #VAR3_BOLD# zur Verfügung. (Standard: Deaktiviert)</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Mitglied</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Mitglied der Organisation #VAR1#</string>

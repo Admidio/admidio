@@ -1364,6 +1364,10 @@ $formEvents->addCheckbox(
     'dates_save_all_confirmations', $gL10n->get('DAT_SAVE_ALL_CONFIRMATIONS'), (bool) $formValues['dates_save_all_confirmations'],
     array('helpTextIdInline' => 'DAT_SAVE_ALL_CONFIRMATIONS_DESC')
 );
+$formEvents->addCheckbox(
+    'dates_may_take_part', $gL10n->get('SYS_MAYBE_PARTICIPATE'), (bool) $formValues['dates_may_take_part'],
+    array('helpTextIdInline' => $gL10n->get('SYS_MAYBE_PARTICIPATE_DESC', array('DAT_ATTEND', 'DAT_CANCEL', 'DAT_USER_TENTATIVE')))
+);
 $html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_EDIT_CALENDAR_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
