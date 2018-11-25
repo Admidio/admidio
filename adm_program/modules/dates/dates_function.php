@@ -255,7 +255,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
         $totalMembers = $participants->getCount();
 
-        if ($_POST['dat_max_members'] < $totalMembers)
+        if ($_POST['dat_max_members'] < $totalMembers && $_POST['dat_max_members'] > 0)
         {
             // minimum value must fit to current number of participants
             $_POST['dat_max_members'] = $totalMembers;
