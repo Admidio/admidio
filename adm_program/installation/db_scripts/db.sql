@@ -522,7 +522,7 @@ CREATE TABLE %PREFIX%_roles
     rol_weekday                 smallint,
     rol_location                varchar(30),
     rol_max_members             integer,
-    rol_cost                    float   unsigned,
+    rol_cost                    float,
     rol_cost_period             smallint,
     rol_usr_id_create           integer unsigned,
     rol_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
