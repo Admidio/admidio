@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/tableusers.php');
+require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/TableUsers.php');
 
 // drop foreign keys to delete index
 if(DB_ENGINE === Database::PDO_ENGINE_MYSQL)
