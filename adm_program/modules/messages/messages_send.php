@@ -392,6 +392,13 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                         // => EXIT
                     }
 
+                    // check if a file was really uploaded
+                    if(!file_exists($_FILES['userfile']['error'][$currentAttachmentNo]) || !is_uploaded_file($_FILES['userfile']['error'][$currentAttachmentNo]))
+                    {
+                        $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
+                        // => EXIT
+                    }
+
                     if ($_FILES['userfile']['error'][$currentAttachmentNo] === UPLOAD_ERR_OK)
                     {
                         // check the size of the attachment

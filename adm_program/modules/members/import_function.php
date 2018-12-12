@@ -19,7 +19,7 @@ $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'int', 
 $_SESSION['import_request'] = $_POST;
 unset($_SESSION['import_csv_request']);
 
-// nur berechtigte User duerfen User importieren
+// only authorized users should import users
 if(!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -33,8 +33,14 @@ if(strlen($_FILES['userfile']['tmp_name'][0]) === 0)
 }
 elseif($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE)
 {
-    // Dateigroesse ueberpruefen Servereinstellungen
+    // check the filesize against the server settings
     $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('max_file_upload_size'))));
+    // => EXIT
+}
+elseif(!file_exists($_FILES['userfile']['tmp_name'][0]) || !is_uploaded_file($_FILES['userfile']['tmp_name'][0]))
+{
+    // check if a file was really uploaded
+    $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
     // => EXIT
 }
 elseif($postRoleId === 0)

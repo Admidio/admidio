@@ -24,6 +24,12 @@ $getlangCode        = admFuncVariableIsValid($_GET, 'langCode',        'string',
 $htmlUrl = '';
 $message = '';
 
+// check if a file was really uploaded
+if(!file_exists($_FILES['upload']['tmp_name']) || !is_uploaded_file($_FILES['upload']['tmp_name']))
+{
+    $message = $gL10n->get('SYS_FILE_NOT_EXIST');
+}
+
 // checks if the server settings for file_upload are set to ON
 if (!PhpIniUtils::isFileUploadEnabled())
 {
