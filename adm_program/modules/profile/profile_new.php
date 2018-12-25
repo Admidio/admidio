@@ -173,8 +173,8 @@ foreach($gProfileFields->getProfileFields() as $field)
     {
         $showField = true;
     }
-    // only allow to edit viewable fields, check for edit profile was done before
-    elseif($getNewUser !== 2 && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern')))
+    // check if the current user has the right to edit this profile field of the selected user
+    elseif($getNewUser !== 2 && $gCurrentUser->allowedEditProfileField($user, $field->getValue('usf_name_intern')))
     {
         $showField = true;
     }

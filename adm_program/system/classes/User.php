@@ -97,6 +97,18 @@ class User extends TableAccess
     }
 
     /**
+     * Checks if the current user is allowed to edit a profile field of the user of the parameter.
+     * @param User   $user            User object of the user that should be checked if the current user can view his profile field.
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
+     * @return bool Return true if the current user is allowed to view this profile field of **$user**.
+     */
+    public function allowedEditProfileField(User $user, $fieldNameIntern)
+    {
+        
+        return ($this->hasRightEditProfile($user) && $user->mProfileFieldsData->isEditable($fieldNameIntern));
+    }
+
+    /**
      * Checks if the current user is allowed to view a profile field of the user of the parameter.
      * It will check if the current user could view the profile field category. Within the own profile
      * you can view profile fields of hidden categories. We will also check if the current user
