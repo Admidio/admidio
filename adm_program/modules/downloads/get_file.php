@@ -64,5 +64,23 @@ header('Cache-Control: private');
 header('Pragma: public');
 
 // file output
-// use this function because of problems with big files
-readfile($completePath);
+if ($fileSize > 10 * 1024 * 1024)
+{
+    // file output for large files (> 10MB)
+    $chunkSize = 1024 * 1024;
+    $handle = fopen($completePath, 'rb');
+    while (!feof($handle))
+    {
+        $buffer = fread($handle, $chunkSize);
+        echo $buffer;
+        ob_flush();
+        flush();
+    }
+    fclose($handle);
+}
+else
+{
+    // file output for small files (< 10MB)
+    readfile($completePath);
+}
+
