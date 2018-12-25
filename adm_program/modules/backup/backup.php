@@ -81,6 +81,10 @@ if($getMode === 'show_list')
             try
             {
                 admStrIsValidFileName($entry, true);
+
+                // replace invalid characters in filename
+                $entry = FileSystemUtils::removeInvalidCharsInFilename($entry);
+
                 $existingBackupFiles[] = $entry;
             }
             catch(AdmException $e)

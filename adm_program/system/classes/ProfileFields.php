@@ -432,6 +432,22 @@ class ProfileFields
     }
 
     /**
+     * This method checks if the current user is allowed to edit this profile field of $fieldNameIntern
+     * within the context of the user in this object. 
+     * !!! NOTE that this method ONLY checks if it could be possible to edit this field. There MUST be 
+     * another check if the current user is allowed to edit the user profile generally.
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
+     * @return bool Return true if the current user is allowed to view this profile field
+     */
+    public function isEditable($fieldNameIntern)
+    {
+        global $gCurrentUser;
+
+        return($this->isVisible($fieldNameIntern, false)
+        && ($gCurrentUser->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0));
+    }
+
+    /**
      * This method checks if the current user is allowed to view this profile field of $fieldNameIntern
      * within the context of the user in this object. If no context is set than we only check if the
      * current user has the right to view the category of the profile field.

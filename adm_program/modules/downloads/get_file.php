@@ -83,4 +83,3 @@ else
     // file output for small files (< 10MB)
     readfile($completePath);
 }
-

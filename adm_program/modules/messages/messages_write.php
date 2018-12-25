@@ -644,7 +644,7 @@ if (isset($messageStatement))
         }
 
         $receiverName = '';
-        $messageText = htmlspecialchars_decode($row['msc_message']);
+        $messageText = htmlspecialchars_decode(stripslashes($row['msc_message']));
         if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
         {
             // list history of this PM
