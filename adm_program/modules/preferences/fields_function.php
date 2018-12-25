@@ -100,6 +100,9 @@ if($getMode === 1)
         try
         {
             admStrIsValidFileName($_POST['usf_icon']);
+
+            // replace invalid characters in filename
+            $_POST['usf_icon'] = FileSystemUtils::removeInvalidCharsInFilename($_POST['usf_icon']);
         }
         catch (AdmException $e)
         {

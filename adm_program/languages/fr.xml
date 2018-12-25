@@ -1170,7 +1170,7 @@
   <string name="SYS_FILE_TO_LARGE_SERVER">Le fichier téléchargé dépasse la taille de fichier autorisée par le serveur de #VAR1# MB.</string>
   <string name="SYS_FILE_UPLOADS">Téléchargements de fichiers</string>
   <string name="SYS_FILENAME_EMPTY">Aucun nom de fichier n\'a été spécifié !</string>
-  <string name="SYS_FILENAME_INVALID">Le nom de fichier sélectionné #VAR1_BOLD# contient des caractères invalides.\n\nPermis sont seulement les lettres et les trémas, les chiffres 0-9 et les caractères spéciaux $!?._+-()&amp; .</string>
+  <string name="SYS_FILENAME_INVALID">Le nom de fichier sélectionné #VAR1_BOLD# contient des caractères invalides. Veuillez vérifier le nom du fichier.\n\nLes caractères spéciaux suivants ne sont pas autorisés: ? * ~ ; : " | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">La version de la base de données #VAR1# est supérieure à la version des scripts Admidio #VAR2#.\n\nActualise tes fichiers Admidio sur le serveur FTP #VAR3#avec une version récente d\'Admidio#VAR4#.</string>
   <string name="SYS_FILTER">Filtre</string>
   <string name="SYS_FIRSTNAME">Prénom</string>

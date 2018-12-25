@@ -76,6 +76,9 @@ if($getMode === 1)
         try
         {
             admStrIsValidFileName($postIcon, true);
+
+            // replace invalid characters in filename
+            $postIcon = FileSystemUtils::removeInvalidCharsInFilename($postIcon);
         }
         catch (AdmException $exception)
         {

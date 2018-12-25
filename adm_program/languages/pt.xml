@@ -1173,7 +1173,7 @@
   <string name="SYS_FILE_TO_LARGE_SERVER">O tamanho do ficheiro enviado excede o tamanho máximo de envio do servidor, que é de #VAR1# MB.</string>
   <string name="SYS_FILE_UPLOADS">Envio de ficheiros</string>
   <string name="SYS_FILENAME_EMPTY">O nome de ficheiro está faltando!</string>
-  <string name="SYS_FILENAME_INVALID">O nome do ficheiro selecionado #VAR1_BOLD# contem caracteres inválidos.\n\nApenas letras, acentos, números de 0-9 e os caracteres especiais $!?._+-()&amp; são permitidos.</string>
+  <string name="SYS_FILENAME_INVALID">O nome do ficheiro selecionado #VAR1_BOLD# contem caracteres inválidos. Por favor, verifique o nome do arquivo.\n\nOs seguintes caracteres especiais não são permitidos: ? * ~ ; : " | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">A versão #VAR1# da base de dados é superior à versão dos scripts #VAR2# do Admidio.\n\nPor favor, atualize teus ficheiros do Admidio no servidor #VAR3# utilizando-se de uma versão mais recente do Admidio - #VAR4#.</string>
   <string name="SYS_FILTER">Filtro</string>
   <string name="SYS_FIRSTNAME">Primeiro nome</string>

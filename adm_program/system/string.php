@@ -297,7 +297,7 @@ function admStrIsValidFileName($filename, $checkExtension = false)
     }
 
     // filename should only contains valid characters and don't start with a dot
-    if (basename($filename) !== $filename || !strValidCharacters($filename, 'file') || admStrStartsWith($filename, '.'))
+    if (basename($filename) !== $filename || !preg_match('=^[^/?*;:~<>|\"\\\\]+\.[^/?*;:~<>|‚\"\\\\]+$=', $filename) || admStrStartsWith($filename, '.'))
     {
         throw new AdmException('SYS_FILENAME_INVALID', array($filename));
     }

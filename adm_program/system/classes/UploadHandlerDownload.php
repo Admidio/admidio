@@ -57,6 +57,9 @@ class UploadHandlerDownload extends UploadHandler
                 // check filename and throw exception if something is wrong
                 admStrIsValidFileName($file->name, true);
 
+                // replace invalid characters in filename
+                $file->name = FileSystemUtils::removeInvalidCharsInFilename($file->name);
+
                 // get recordset of current folder from database and throw exception if necessary
                 $targetFolder = new TableFolder($gDb);
                 $targetFolder->getFolderForDownload($getId);

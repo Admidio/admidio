@@ -1233,7 +1233,9 @@ final class FileSystemUtils
      */
     public static function removeInvalidCharsInFilename($filename)
     {
-        $filename = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $filename);
+        // remove NULL value from filename
+        $filename = str_replace(chr(0), '', $filename);
+        $filename = mb_ereg_replace("([^\w\s\d\-_~:;<>|\[\]\(\).])", '', $filename);
         // Remove any runs of periods 
         $filename = mb_ereg_replace("([\.]{2,})", '', $filename);
         

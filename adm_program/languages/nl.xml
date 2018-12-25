@@ -1182,7 +1182,7 @@
   <string name="SYS_FILE_TO_LARGE_SERVER">Grootte van geuploade bestand is groter dan door server gedefinieerde maximale grootte #VAR1# MB.</string>
   <string name="SYS_FILE_UPLOADS">Bestand uploads</string>
   <string name="SYS_FILENAME_EMPTY">Er is geen bestandsnaam opgegeven!</string>
-  <string name="SYS_FILENAME_INVALID">De geselecteerde bestandsnaam #VAR1_BOLD# bevat ongeldige tekens.\n\nAlleen letters en umlauts, nummers 0-9 en de speciale tekens $!?._+-()&amp; zijn toegestaan.</string>
+  <string name="SYS_FILENAME_INVALID">De geselecteerde bestandsnaam #VAR1_BOLD# bevat ongeldige tekens. Controleer de bestandsnaam.\n\nDe volgende speciale tekens zijn niet toegestaan ? * ~ ; : " | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">De database versie #VAR1# is lager dan de versie van Admidio scripts #VAR2#.\n\nUpdate uw Admidio-bestanden op de FTP-server #VAR3# met de meer recente Admidio-versie #VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">Voornaam</string>
