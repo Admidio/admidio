@@ -25,7 +25,6 @@ $postName       = admFuncVariableIsValid($_POST, 'namefrom', 'string');
 $postSubject    = admFuncVariableIsValid($_POST, 'subject',  'html');
 $postSubjectSQL = admFuncVariableIsValid($_POST, 'subject',  'string');
 $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
-$postBodySQL    = admFuncVariableIsValid($_POST, 'msg_body', 'string');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
 $postUserIdList = admFuncVariableIsValid($_POST, 'userIdList',   'string');
@@ -55,7 +54,7 @@ if ($postSubjectSQL === '')
     // => EXIT
 }
 
-if ($postBodySQL === '')
+if ($postBody === '')
 {
     // message when no subject is given
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_MESSAGE'))));
@@ -570,9 +569,9 @@ else
 
     $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. '
                    (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-            VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $messagePartNr, $currUsrId, $postBodySQL';
+            VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $messagePartNr, $currUsrId, $postBody';
 
-    if ($gDb->queryPrepared($sql, array($getMsgId, $messagePartNr, $currUsrId, $postBodySQL)))
+    if ($gDb->queryPrepared($sql, array($getMsgId, $messagePartNr, $currUsrId, $postBody)))
     {
         $sendResult = true;
     }
@@ -592,8 +591,8 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
 
         $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. '
                        (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-                VALUES (?, 1, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $currUsrId, $postBodySQL';
-        $gDb->queryPrepared($sql, array($getMsgId, $currUsrId, $postBodySQL));
+                VALUES (?, 1, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $currUsrId, $postBody';
+        $gDb->queryPrepared($sql, array($getMsgId, $currUsrId, $postBody));
     }
 
     // after sending remove the actual Page from the NaviObject and remove also the send-page
