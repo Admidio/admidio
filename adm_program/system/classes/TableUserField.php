@@ -295,7 +295,7 @@ class TableUserField extends TableAccess
                                     }
                                     else
                                     {
-                                        $listValue = $this->getIconHtml($listValueImage, $listValueText);
+                                        $listValue = self::getIconHtml($listValueImage, $listValueText);
                                     }
                                 }
                             }
@@ -313,7 +313,7 @@ class TableUserField extends TableAccess
                     break;
                 case 'usf_icon':
                     // if value is font awesome icon or imagefile or imageurl then show image
-                    $value = $this->getIconHtml($value, $this->getValue('usf_name'));
+                    $value = self::getIconHtml($value, $this->getValue('usf_name'));
 
                     break;
                 default:
