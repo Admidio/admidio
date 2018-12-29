@@ -25,6 +25,11 @@ if (is_file(__DIR__ . '/config.php'))
     require_once(__DIR__ . '/config.php');
 }
 
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
+$getId       = admFuncVariableIsValid($_GET, 'id',        'int');
+$getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
+$getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
+
 // set default values if there no value has been stored in the config.php
 if(!isset($plg_announcements_count) || !is_numeric($plg_announcements_count))
 {
@@ -80,6 +85,9 @@ elseif(Language::isTranslationStringId($plg_headline))
 
 // create announcements object
 $plgAnnouncements = new ModuleAnnouncements();
+$plgAnnouncements->setParameter('id', $getId);
+$plgAnnouncements->setParameter('cat_id', $getCatId);
+$plgAnnouncements->setDateRange($getDateFrom, $getDateTo);
 
 echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
 
