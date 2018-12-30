@@ -114,54 +114,6 @@ class TableUserField extends TableAccess
     }
 
     /**
-     * Method creates a short html snippet that contains a image tag with an icon.
-     * The icon itself could be a font awesome icon name or a full url to an icon
-     * or only a filename than the icon must be in the theme folder **icons**.
-     * @param string $icon The icon name or url or filename
-     * @param string $text A text that should be shown on mouseover
-     * @return string Html snippet that contains a image tag
-     */
-    public static function getIconHtml($icon, $text)
-    {
-        $html = '';
-
-        try
-        {
-            // a font awesome icon
-            if (StringUtils::strStartsWith($icon, 'fas ') || StringUtils::strStartsWith($icon, 'fab ') || StringUtils::strStartsWith($icon, 'fa-'))
-            {
-                if(StringUtils::strStartsWith($icon, 'fa-'))
-                {
-                    $icon = 'fas ' . $icon;
-                }
-                $html = '<i class="' . $icon . ' fa-fw" data-toggle="tooltip" title="' . $text . '"></i>';
-            }
-            elseif(StringUtils::strContains($icon, '.png', false) || StringUtils::strContains($icon, '.jpg', false))
-            {
-                    // a full url with an icon
-                    if (strValidCharacters($icon, 'url') && StringUtils::strStartsWith($icon, 'http', false))
-                    {
-                        $iconUrl = $icon;
-                    }
-                    // only a filename than the icon must be in the theme folder
-                    elseif (admStrIsValidFileName($icon, true))
-                    {
-                        $iconUrl = THEME_URL . '/icons/' . $icon;
-                    }
-
-                    $html = '<img class="admidio-icon-info" src="' . $iconUrl . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
-            }
-        }
-        catch (AdmException $e)
-        {
-            $e->showText();
-            // => EXIT
-        }
-
-        return $html;
-    }
-
-    /**
      * This recursive method creates from the parameter name a unique name that only have
      * capital letters followed by the next free number (index)
      * Example: 'Membership' => 'MEMBERSHIP_2'
@@ -259,23 +211,18 @@ class TableUserField extends TableAccess
                             if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON')
                             {
                                 // if value is imagefile or imageurl then show image
-                                if (StringUtils::strContains($listValue, '.png', false)
-                                || StringUtils::strContains($listValue, '.jpg', false)
-                                || StringUtils::strStartsWith($listValue, 'fas ')
-                                || StringUtils::strStartsWith($listValue, 'fab ')
-                                || StringUtils::strStartsWith($listValue, 'fa-'))
+                                if (Image::isFontAwesomeIcon($listValue)
+                                || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false)) // TODO: simplify check for images
                                 {
                                     // if there is imagefile and text separated by | then explode them
-                                    $listValues = explode('|', $listValue);
-                                    if (count($listValues) === 1)
+                                    if (StringUtils::strContains($listValue, '|'))
                                     {
-                                        $listValueImage = $listValue;
-                                        $listValueText  = $this->getValue('usf_name');
+                                        list($listValueImage, $listValueText) = explode('|', $listValue);
                                     }
                                     else
                                     {
-                                        $listValueImage = $listValues[0];
-                                        $listValueText  = $listValues[1];
+                                        $listValueImage = $listValue;
+                                        $listValueText  = $this->getValue('usf_name');
                                     }
 
                                     // if text is a translation-id then translate it
@@ -284,18 +231,18 @@ class TableUserField extends TableAccess
                                     if ($format === 'text')
                                     {
                                         // if no image is wanted then return the text part or only the position of the entry
-                                        if (count($listValues) === 1)
+                                        if (StringUtils::strContains($listValue, '|'))
                                         {
-                                            $listValue = $key + 1;
+                                            $listValue = $listValueText;
                                         }
                                         else
                                         {
-                                            $listValue = $listValueText;
+                                            $listValue = $key + 1;
                                         }
                                     }
                                     else
                                     {
-                                        $listValue = self::getIconHtml($listValueImage, $listValueText);
+                                        $listValue = Image::getIconHtml($listValueImage, $listValueText);
                                     }
                                 }
                             }
@@ -313,7 +260,7 @@ class TableUserField extends TableAccess
                     break;
                 case 'usf_icon':
                     // if value is font awesome icon or imagefile or imageurl then show image
-                    $value = self::getIconHtml($value, $this->getValue('usf_name'));
+                    $value = Image::getIconHtml($value, $this->getValue('usf_name'));
 
                     break;
                 default:

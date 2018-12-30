@@ -234,12 +234,8 @@ class ProfileFields
                     foreach ($arrListValues as $index => $listValue)
                     {
                         // if value is imagefile or imageurl then show image
-                        if ($usfType === 'RADIO_BUTTON'
-                        && (StringUtils::strContains($listValue, '.png', false)
-                            || StringUtils::strContains($listValue, '.jpg', false)
-                            || StringUtils::strStartsWith($listValue, 'fas ')
-                            || StringUtils::strStartsWith($listValue, 'fab ')
-                            || StringUtils::strStartsWith($listValue, 'fa-')))
+                        if ($usfType === 'RADIO_BUTTON' && (Image::isFontAwesomeIcon($listValue)
+                        || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false))) // TODO: simplify check for images
                         {
                             // if there is imagefile and text separated by | then explode them
                             if (StringUtils::strContains($listValue, '|'))
@@ -256,7 +252,7 @@ class ProfileFields
                             $listValueText = Language::translateIfTranslationStrId($listValueText);
 
                             // get html snippet with image tag
-                            $listValue = TableUserField::getIconHtml($listValueImage, $listValueText);
+                            $listValue = Image::getIconHtml($listValueImage, $listValueText);
                         }
 
                         // if text is a translation-id then translate it

@@ -212,9 +212,13 @@ class HtmlForm extends HtmlFormBasic
 
         if ($optionsAll['icon'] !== '')
         {
-            if(StringUtils::strStartsWith($optionsAll['icon'], 'fa-'))
+            if (Image::isFontAwesomeIcon($optionsAll['icon']))
             {
-                $value = '<i class="fas ' . $optionsAll['icon'] . '"></i>' . $value;
+                if (StringUtils::strStartsWith($optionsAll['icon'], 'fa-'))
+                {
+                    $optionsAll['icon'] = 'fas ' . $optionsAll['icon'];
+                }
+                $value = '<i class="' . $optionsAll['icon'] . '"></i>' . $value;
             }
             else
             {
@@ -413,7 +417,7 @@ class HtmlForm extends HtmlFormBasic
         if ($optionsAll['icon'] !== '')
         {
             // create html for icon
-            $htmlIcon = TableUserField::getIconHtml($optionsAll['icon'], $label);
+            $htmlIcon = Image::getIconHtml($optionsAll['icon'], $label);
         }
 
         if ($optionsAll['helpTextIdLabel'] !== '')
@@ -2002,7 +2006,7 @@ class HtmlForm extends HtmlFormBasic
         if ($icon !== '')
         {
             // create html for icon
-            $htmlIcon = TableUserField::getIconHtml($icon, $label);
+            $htmlIcon = Image::getIconHtml($icon, $label);
         }
 
         if ($helpTextId !== '')
