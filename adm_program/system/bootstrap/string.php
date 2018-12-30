@@ -62,26 +62,6 @@ function strStripTags($value)
 }
 
 /**
- * fuegt Quotes einem mittels addslashes() gequoteten Array und String hinzu
- * @param string|array<mixed,string|array> $value
- * @return string|array<mixed,string|array>
- */
-function strAddSlashesDeep($value)
-{
-    if(is_array($value))
-    {
-        // call function for every array element
-        $value = array_map('strAddSlashesDeep', $value);
-    }
-    else
-    {
-        $value = addslashes($value);
-    }
-
-    return $value;
-}
-
-/**
  * Entfernt Quotes aus einem mittels addslashes() gequoteten Array und String
  * @param string|array<mixed,string|array> $value
  * @return string|array<mixed,string|array>
@@ -99,52 +79,6 @@ function strStripSlashesDeep($value)
     }
 
     return $value;
-}
-
-/**
- * Determines the previous or next letter in the alphabet
- *
- * reverse = false -> naechster Buchstabe
- * reverse = true -> vorheriger Buchstabe
- * Example:   g -> h      g -> f
- *
- * @param string $letter
- * @param bool $reverse
- * @return string
- */
-function strNextLetter($letter, $reverse = false)
-{
-    $ascii      = ord($letter);
-    $aLowerCase = ord('a');
-    $zLowerCase = ord('z');
-    $aUpperCase = ord('A');
-    $zUpperCase = ord('Z');
-
-    if ($ascii === $aLowerCase || $ascii === $zLowerCase || $ascii === $aUpperCase || $ascii === $zUpperCase)
-    {
-        if (!$reverse && ($ascii === $aLowerCase || $ascii === $aUpperCase))
-        {
-            ++$ascii;
-        }
-
-        if ($reverse && ($ascii === $zLowerCase || $ascii === $zUpperCase))
-        {
-            --$ascii;
-        }
-    }
-    else
-    {
-        if ($reverse)
-        {
-            --$ascii;
-        }
-        else
-        {
-            ++$ascii;
-        }
-    }
-
-    return chr($ascii);
 }
 
 /**
