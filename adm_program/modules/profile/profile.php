@@ -810,8 +810,7 @@ if($gSettingsManager->getBool('profile_show_former_roles'))
 }
 
 if($gSettingsManager->getBool('profile_show_extern_roles')
-&& ($gCurrentOrganization->getValue('org_org_id_parent') > 0
-    || $gCurrentOrganization->isParentOrganization()))
+&& ($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->isParentOrganization()))
 {
     // *******************************************************************************
     // Block with roles from other organizations
