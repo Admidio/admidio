@@ -25,7 +25,7 @@ class User extends TableAccess
      */
     protected $mProfileFieldsData;
     /**
-     * @var array<string,bool> Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
+     * @var array<string,bool> Array with all roles rights and the status of the current user e.g. array('rol_assign_roles' => false, 'rol_approve_users' => true ...)
      */
     protected $rolesRights = array();
     /**

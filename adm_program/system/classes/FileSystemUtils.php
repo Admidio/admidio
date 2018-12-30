@@ -1227,7 +1227,7 @@ final class FileSystemUtils
 
     /**
      * Remove anything which isn't a word, whitespace, number
-     * or any of the following caracters -_~,;[]().
+     * or any of the following characters: "-_~:;<>|[]()."
      * @params string $filename The filename where the invalid characters should be removed
      * @return string Returns the filename with the removed invalid characters
      */
