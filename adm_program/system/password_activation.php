@@ -41,7 +41,7 @@ try
         $user->setValue('usr_activation_code', '');
         $user->save(false);
 
-        // if user has tried login several times we should reset the invalid counter, 
+        // if user has tried login several times we should reset the invalid counter,
         // so he could login with the new password immediately
         $user->resetInvalidLogins();
 

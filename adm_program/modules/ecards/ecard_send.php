@@ -173,7 +173,7 @@ if($ecardSendResult)
                    (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
             VALUES (?, 1, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $currUsrId, $postBodySQL';
     $gDb->queryPrepared($sql, array($getMsgId, (int) $gCurrentUser->getValue('usr_id'), $ecardHtmlData));
-    
+
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
     $gMessage->show($gL10n->get('ECA_SUCCESSFULLY_SEND'));
     // => EXIT

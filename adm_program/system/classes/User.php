@@ -104,8 +104,7 @@ class User extends TableAccess
      */
     public function allowedEditProfileField(User $user, $fieldNameIntern)
     {
-        
-        return ($this->hasRightEditProfile($user) && $user->mProfileFieldsData->isEditable($fieldNameIntern));
+        return $this->hasRightEditProfile($user) && $user->mProfileFieldsData->isEditable($fieldNameIntern);
     }
 
     /**
@@ -1698,7 +1697,7 @@ class User extends TableAccess
         $this->rolesMembershipLeader   = array();
         $this->rolesMembershipNoLeader = array();
     }
-    
+
     /**
      * Reset the count of invalid logins. After that it's possible for the user to try another login.
      */

@@ -147,7 +147,7 @@ if(!empty($_POST['recipient_email']))
             $user->saveChangesWithoutRights();
             $user->save(false);
         }
-        
+
         $e->showHtml();
         // => EXIT
     }

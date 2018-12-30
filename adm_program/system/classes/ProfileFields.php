@@ -65,7 +65,6 @@ class ProfileFields
         {
             $this->db = $gDb;
         }
-
     }
 
     /**
@@ -429,8 +428,8 @@ class ProfileFields
 
     /**
      * This method checks if the current user is allowed to edit this profile field of $fieldNameIntern
-     * within the context of the user in this object. 
-     * !!! NOTE that this method ONLY checks if it could be possible to edit this field. There MUST be 
+     * within the context of the user in this object.
+     * !!! NOTE that this method ONLY checks if it could be possible to edit this field. There MUST be
      * another check if the current user is allowed to edit the user profile generally.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field
@@ -439,8 +438,7 @@ class ProfileFields
     {
         global $gCurrentUser;
 
-        return($this->isVisible($fieldNameIntern, false)
-        && ($gCurrentUser->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0));
+        return $this->isVisible($fieldNameIntern) && ($gCurrentUser->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0);
     }
 
     /**
@@ -460,7 +458,7 @@ class ProfileFields
         // check if the current user could view the category of the profile field
         // if it's the own profile than we check if user could edit his profile and if so he could view all fields
         // check if the profile field is only visible for users that could edit this
-        return ((array_key_exists($fieldNameIntern, $this->mProfileFields) && $this->mProfileFields[$fieldNameIntern]->isVisible()) 
+        return ((array_key_exists($fieldNameIntern, $this->mProfileFields) && $this->mProfileFields[$fieldNameIntern]->isVisible())
                 || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
             && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
     }
