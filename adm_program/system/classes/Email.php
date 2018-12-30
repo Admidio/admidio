@@ -265,7 +265,7 @@ class Email extends PHPMailer
         // if something went wrong then throw an exception with the error message
         if ($returnCode !== true)
         {
-            throw new AdmException('SYS_EMAIL_NOT_SEND', $gSettingsManager->getString('email_administrator'), $returnCode);
+            throw new AdmException('SYS_EMAIL_NOT_SEND', array($gSettingsManager->getString('email_administrator'), $returnCode));
         }
 
         return true;
