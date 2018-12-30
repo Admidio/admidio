@@ -55,7 +55,7 @@ class UploadHandlerDownload extends UploadHandler
                 }
 
                 // check filename and throw exception if something is wrong
-                admStrIsValidFileName($file->name, true);
+                StringUtils::strIsValidFileName($file->name, true);
 
                 // replace invalid characters in filename
                 $file->name = FileSystemUtils::removeInvalidCharsInFilename($file->name);

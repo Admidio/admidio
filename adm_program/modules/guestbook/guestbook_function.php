@@ -232,7 +232,7 @@ if ($getMode === 1 || $getMode === 3)
                 $gboText  = $_POST['gbo_text'];
             }
             $senderName = $gboName;
-            if (!strValidCharacters($gboEmail, 'email'))
+            if (!StringUtils::strValidCharacters($gboEmail, 'email'))
             {
                 $gboEmail = $gSettingsManager->getString('email_administrator');
                 $senderName = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');

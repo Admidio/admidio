@@ -622,7 +622,7 @@ class ProfileFields
                     break;
                 case 'EMAIL':
                     // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
-                    if (!$this->noValueCheck && !strValidCharacters($fieldValue, 'email'))
+                    if (!$this->noValueCheck && !StringUtils::strValidCharacters($fieldValue, 'email'))
                     {
                         return false;
                     }
@@ -649,7 +649,7 @@ class ProfileFields
                     break;
                 case 'PHONE':
                     // check phone number for valid characters
-                    if (!$this->noValueCheck && !strValidCharacters($fieldValue, 'phone'))
+                    if (!$this->noValueCheck && !StringUtils::strValidCharacters($fieldValue, 'phone'))
                     {
                         return false;
                     }

@@ -208,7 +208,7 @@ class Email extends PHPMailer
         // Blindcopy must be Ascii-US formated, so encode in MimeHeader
         $asciiName = stripslashes($name);
 
-        if (strValidCharacters($address, 'email'))
+        if (StringUtils::strValidCharacters($address, 'email'))
         {
             $this->emBccArray[] = array('name' => $asciiName, 'address' => $address);
             $this->emAddresses[] = $name;

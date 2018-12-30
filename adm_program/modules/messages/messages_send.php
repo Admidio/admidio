@@ -129,7 +129,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 if ($currUsrId > 0)
 {
     $postName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
-    if (!strValidCharacters($postFrom, 'email'))
+    if (!StringUtils::strValidCharacters($postFrom, 'email'))
     {
         $postFrom = $gCurrentUser->getValue('EMAIL');
     }
@@ -141,7 +141,7 @@ else
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('MAI_YOUR_NAME'))));
         // => EXIT
     }
-    if (!strValidCharacters($postFrom, 'email'))
+    if (!StringUtils::strValidCharacters($postFrom, 'email'))
     {
         $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('MAI_YOUR_EMAIL'))));
         // => EXIT
@@ -293,7 +293,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     // all role members will be attached as BCC
                     while ($row = $statement->fetch())
                     {
-                        if (strValidCharacters($row['email'], 'email'))
+                        if (StringUtils::strValidCharacters($row['email'], 'email'))
                         {
                             $receiver[] = array($row['email'], $row['firstName'] . ' ' . $row['lastName']);
                         }
@@ -306,7 +306,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 $user = new User($gDb, $gProfileFields, $value);
 
                 // only send email to user if current user is allowed to view this user and he has a valid email address
-                if ($gCurrentUser->hasRightViewProfile($user) && strValidCharacters($user->getValue('EMAIL'), 'email'))
+                if ($gCurrentUser->hasRightViewProfile($user) && StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email'))
                 {
                     $sql = 'SELECT first_name.usd_value AS firstName, last_name.usd_value AS lastName, email.usd_value AS email
                               FROM ' . TBL_USERS . '
@@ -329,7 +329,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 
                     while ($row = $statement->fetch())
                     {
-                        if (strValidCharacters($row['email'], 'email'))
+                        if (StringUtils::strValidCharacters($row['email'], 'email'))
                         {
                             $receiver[] = array($row['email'], $row['firstName'] . ' ' . $row['lastName']);
                         }

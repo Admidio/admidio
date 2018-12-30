@@ -57,7 +57,6 @@ require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/logging.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/shutdown.php');
 // Add some common functions
 require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/function.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/string.php');
 // Remove HTML & PHP-Code and escape all quotes from all request parameters
 // If debug is on and change is made, log it
 require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/global_request_params.php');

@@ -176,7 +176,7 @@ if (StringUtils::strContains($gNavigation->getUrl(), 'messages_send.php') && iss
 {
     // Das Formular wurde also schon einmal ausgefüllt,
     // da der User hier wieder gelandet ist nach der Mailversand-Seite
-    $formValues = strStripSlashesDeep($_SESSION['message_request']);
+    $formValues = StringUtils::strStripSlashesDeep($_SESSION['message_request']);
     unset($_SESSION['message_request']);
 
     if(!isset($formValues['carbon_copy']))
@@ -272,7 +272,7 @@ elseif (!isset($messageStatement))
     if ($getUserId > 0)
     {
         // besitzt der User eine gueltige E-Mail-Adresse
-        if (!strValidCharacters($user->getValue('EMAIL'), 'email'))
+        if (!StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email'))
         {
             $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))));
             // => EXIT

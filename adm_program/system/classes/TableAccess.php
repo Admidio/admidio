@@ -650,7 +650,7 @@ class TableAccess
                 case 'char':
                 case 'varchar':
                 case 'text':
-                    $newValue = strStripTags($newValue);
+                    $newValue = StringUtils::strStripTags($newValue);
                     break;
 
                 // Byte/Blob

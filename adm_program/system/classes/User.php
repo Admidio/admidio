@@ -1891,7 +1891,7 @@ class User extends TableAccess
             }
 
             // username should not contain special characters
-            if ($checkValue && $columnName === 'usr_login_name' && $newValue !== '' && !strValidCharacters($newValue, 'noSpecialChar'))
+            if ($checkValue && $columnName === 'usr_login_name' && $newValue !== '' && !StringUtils::strValidCharacters($newValue, 'noSpecialChar'))
             {
                 return false;
             }

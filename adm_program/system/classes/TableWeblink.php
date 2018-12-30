@@ -50,7 +50,7 @@ class TableWeblink extends TableAccess
             }
             elseif ($format === 'database')
             {
-                $value = html_entity_decode(strStripTags($this->dbColumns['lnk_description']));
+                $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['lnk_description']));
             }
             else
             {

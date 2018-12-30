@@ -90,7 +90,7 @@ if($getMode === 1)
         // => EXIT
     }
 
-    if($_POST['usf_icon'] !== '' && StringUtils::strStartsWith($_POST['usf_icon'], 'http') && !strValidCharacters($_POST['usf_icon'], 'url'))
+    if($_POST['usf_icon'] !== '' && StringUtils::strStartsWith($_POST['usf_icon'], 'http') && !StringUtils::strValidCharacters($_POST['usf_icon'], 'url'))
     {
         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_ICON'))));
         // => EXIT
@@ -99,7 +99,7 @@ if($getMode === 1)
     {
         try
         {
-            admStrIsValidFileName($_POST['usf_icon']);
+            StringUtils::strIsValidFileName($_POST['usf_icon']);
 
             // replace invalid characters in filename
             $_POST['usf_icon'] = FileSystemUtils::removeInvalidCharsInFilename($_POST['usf_icon']);
@@ -111,7 +111,7 @@ if($getMode === 1)
         }
     }
 
-    if($_POST['usf_url'] !== '' && !strValidCharacters($_POST['usf_url'], 'url'))
+    if($_POST['usf_url'] !== '' && !StringUtils::strValidCharacters($_POST['usf_url'], 'url'))
     {
         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('ORG_URL'))));
         // => EXIT

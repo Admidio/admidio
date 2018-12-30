@@ -289,7 +289,7 @@ foreach ($membersList as $member)
     $user = new User($gDb, $gProfileFields, $member['usr_id']);
 
     // besitzt der User eine gueltige E-Mail-Adresse? && aktuellen User ausschließen
-    if (strValidCharacters($user->getValue('EMAIL'), 'email') && (int) $gCurrentUser->getValue('usr_id') !== (int) $member['usr_id'])
+    if (StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email') && (int) $gCurrentUser->getValue('usr_id') !== (int) $member['usr_id'])
     {
         $userIdList[] = $member['usr_id'];
     }

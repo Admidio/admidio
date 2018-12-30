@@ -58,12 +58,12 @@ $_SESSION['links_request'] = $_POST;
 
 if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
 {
-    if(strlen(strStripTags($_POST['lnk_name'])) === 0)
+    if(strlen(StringUtils::strStripTags($_POST['lnk_name'])) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('LNK_LINK_NAME'))));
         // => EXIT
     }
-    if(strlen(strStripTags($_POST['lnk_url'])) === 0)
+    if(strlen(StringUtils::strStripTags($_POST['lnk_url'])) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('LNK_LINK_ADDRESS'))));
         // => EXIT

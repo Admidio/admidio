@@ -428,7 +428,7 @@ class Image
             try
             {
                 // Only a filename -> look into theme icon folder
-                if (admStrIsValidFileName($icon, true))
+                if (StringUtils::strIsValidFileName($icon, true))
                 {
                     $iconPath = THEME_URL . '/icons/' . $icon;
                     if (is_file($iconPath))

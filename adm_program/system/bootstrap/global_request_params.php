@@ -25,9 +25,9 @@ if ($gDebug)
 }
 
 // remove HTML & PHP-Code from all parameters
-$_GET    = admStrStripTagsSpecial($_GET);
-$_POST   = admStrStripTagsSpecial($_POST);
-$_COOKIE = admStrStripTagsSpecial($_COOKIE);
+$_GET    = StringUtils::strStripSpecialTags($_GET);
+$_POST   = StringUtils::strStripSpecialTags($_POST);
+$_COOKIE = StringUtils::strStripSpecialTags($_COOKIE);
 
 if ($gDebug)
 {

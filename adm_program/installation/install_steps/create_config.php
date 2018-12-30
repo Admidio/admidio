@@ -16,10 +16,10 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_config.php')
 if (isset($_POST['user_last_name']))
 {
     // Daten des Administrators in Sessionvariablen gefiltert speichern
-    $_SESSION['user_last_name']        = strStripTags($_POST['user_last_name']);
-    $_SESSION['user_first_name']       = strStripTags($_POST['user_first_name']);
-    $_SESSION['user_email']            = strStripTags($_POST['user_email']);
-    $_SESSION['user_login']            = strStripTags($_POST['user_login']);
+    $_SESSION['user_last_name']        = StringUtils::strStripTags($_POST['user_last_name']);
+    $_SESSION['user_first_name']       = StringUtils::strStripTags($_POST['user_first_name']);
+    $_SESSION['user_email']            = StringUtils::strStripTags($_POST['user_email']);
+    $_SESSION['user_login']            = StringUtils::strStripTags($_POST['user_login']);
     $_SESSION['user_password']         = $_POST['user_password'];
     $_SESSION['user_password_confirm'] = $_POST['user_password_confirm'];
 
@@ -39,7 +39,7 @@ if (isset($_POST['user_last_name']))
     }
 
     // username should only have valid chars
-    if (!strValidCharacters($_SESSION['user_login'], 'noSpecialChar'))
+    if (!StringUtils::strValidCharacters($_SESSION['user_login'], 'noSpecialChar'))
     {
         showNotice(
             $gL10n->get('SYS_FIELD_INVALID_CHAR', array($gL10n->get('SYS_USERNAME'))),
@@ -50,7 +50,7 @@ if (isset($_POST['user_last_name']))
         // => EXIT
     }
 
-    if (!strValidCharacters($_SESSION['user_email'], 'email'))
+    if (!StringUtils::strValidCharacters($_SESSION['user_email'], 'email'))
     {
         showNotice(
             $gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL'))),

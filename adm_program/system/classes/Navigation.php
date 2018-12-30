@@ -101,7 +101,7 @@ class Navigation
     {
         global $gLogger;
 
-        if (!strValidCharacters($url, 'url'))
+        if (!StringUtils::strValidCharacters($url, 'url'))
         {
             // TODO throw Exception or return false
             $gLogger->notice('NAVIGATION: Invalid URL added to navigation-stack!', array('url' => $url, 'text' => $text, 'icon' => $icon));

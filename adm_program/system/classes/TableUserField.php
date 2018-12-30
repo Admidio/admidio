@@ -165,7 +165,7 @@ class TableUserField extends TableAccess
             }
             elseif ($format === 'database')
             {
-                $value = html_entity_decode(strStripTags($this->dbColumns['usf_description']), ENT_QUOTES, 'UTF-8');
+                $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['usf_description']), ENT_QUOTES, 'UTF-8');
             }
             else
             {
