@@ -196,7 +196,7 @@ final class StringUtils
                 $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß.@+-]+$/i';
                 break;
             case 'file':
-                $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() .@+-]+$/i';
+                $validRegex = '=^[^/?*;:~<>|\"\\\\]+\.[^/?*;:~<>|‚\"\\\\]+$=';
                 break;
             case 'url':
                 $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() \/%=#:~.@+-]+$/i';
@@ -245,7 +245,7 @@ final class StringUtils
         }
 
         // filename should only contains valid characters and don't start with a dot
-        if (basename($filename) !== $filename || !preg_match('=^[^/?*;:~<>|\"\\\\]+\.[^/?*;:~<>|‚\"\\\\]+$=', $filename) || self::strStartsWith($filename, '.'))
+        if (basename($filename) !== $filename || !strValidCharacters($filename, 'file') || self::strStartsWith($filename, '.'))
         {
             throw new AdmException('SYS_FILENAME_INVALID', array($filename));
         }
