@@ -45,7 +45,7 @@ class TableRooms extends TableAccess
             }
             elseif ($format === 'database')
             {
-                $value = html_entity_decode(strStripTags($this->dbColumns['room_description']));
+                $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['room_description']));
             }
             else
             {

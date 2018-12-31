@@ -160,6 +160,7 @@ $defaultOrgPreferences = array(
     'dates_ical_days_future'            => '365',
     'dates_default_list_configuration'  => '',
     'dates_save_all_confirmations'      => '1',
+    'dates_may_take_part'               => '0',
 
     // Weblinks
     'enable_weblinks_module'    => '1',

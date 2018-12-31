@@ -16,7 +16,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_organization.php')
 if (isset($_POST['db_host']))
 {
     // PHP-Check Regex-Patterns
-    $sqlIdentifiersRegex = '/^[a-zA-Z0-9_$]+$/';
+    $sqlIdentifiersRegex = '/^[a-zA-Z0-9_$@-]+$/';
 
     // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
     $_SESSION['db_engine']    = $_POST['db_engine'];

@@ -58,7 +58,7 @@ $list = new ListConfiguration($gDb, $getListId);
 
 if(isset($_SESSION['mylist_request']))
 {
-    $formValues = strStripSlashesDeep($_SESSION['mylist_request']);
+    $formValues = StringUtils::strStripSlashesDeep($_SESSION['mylist_request']);
     unset($_SESSION['mylist_request']);
 
     if(!isset($formValues['cbx_global_configuration']))

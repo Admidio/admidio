@@ -154,7 +154,7 @@ class Component extends TableAccess
                 break;
 
             case 'LISTS':
-                if($gSettingsManager->getBool('lists_enable_module'))
+                if($gSettingsManager->getBool('lists_enable_module') && $gValidLogin)
                 {
                     return true;
                 }

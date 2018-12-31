@@ -140,7 +140,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                             }
                             break;
                         case 'EMAIL':
-                            if(strValidCharacters($columnValue, 'email'))
+                            if(StringUtils::strValidCharacters($columnValue, 'email'))
                             {
                                 $user->setValue($usfNameIntern, substr($columnValue, 0, 255));
                             }

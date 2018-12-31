@@ -52,18 +52,18 @@ switch($getMode)
                         'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check'
                     );
 
-                    if(!admStrIsValidFileName($_POST['theme'])
+                    if(!StringUtils::strIsValidFileName($_POST['theme'])
                     || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $_POST['theme'] . '/index.html'))
                     {
                         $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
                         // => EXIT
                     }
-                    if($_POST['system_url_imprint'] !== '' && !strValidCharacters($_POST['system_url_imprint'], 'url'))
+                    if($_POST['system_url_imprint'] !== '' && !StringUtils::strValidCharacters($_POST['system_url_imprint'], 'url'))
                     {
                         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_IMPRINT'))));
                         // => EXIT
                     }
-                    if($_POST['system_url_data_protection'] !== '' && !strValidCharacters($_POST['system_url_data_protection'], 'url'))
+                    if($_POST['system_url_data_protection'] !== '' && !StringUtils::strValidCharacters($_POST['system_url_data_protection'], 'url'))
                     {
                         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_DATA_PROTECTION'))));
                         // => EXIT
@@ -100,7 +100,7 @@ switch($getMode)
                     break;
 
                 case 'regional_settings':
-                    if(!admStrIsValidFileName($_POST['system_language'])
+                    if(!StringUtils::strIsValidFileName($_POST['system_language'])
                     || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $_POST['system_language'] . '.xml'))
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LANGUAGE'))));
@@ -129,7 +129,7 @@ switch($getMode)
 
                     if($_POST['mail_sendmail_address'] !== '')
                     {
-                        if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
+                        if(!StringUtils::strValidCharacters($_POST['mail_sendmail_address'], 'email'))
                         {
                             $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('MAI_SENDER_EMAIL'))));
                             // => EXIT
@@ -147,7 +147,7 @@ switch($getMode)
                     }
                     else
                     {
-                        if(!strValidCharacters($_POST['email_administrator'], 'email'))
+                        if(!StringUtils::strValidCharacters($_POST['email_administrator'], 'email'))
                         {
                             $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'))));
                             // => EXIT
@@ -197,7 +197,7 @@ switch($getMode)
                     break;
 
                 case 'events':
-                    $checkboxes = array('enable_dates_ical', 'dates_show_map_link', 'dates_show_rooms', 'dates_save_all_confirmations');
+                    $checkboxes = array('enable_dates_ical', 'dates_show_map_link', 'dates_show_rooms', 'dates_save_all_confirmations', 'dates_may_take_part');
                     break;
 
                 case 'links':
@@ -278,7 +278,7 @@ switch($getMode)
     case 2:
         if(isset($_SESSION['add_organization_request']))
         {
-            $formValues = strStripSlashesDeep($_SESSION['add_organization_request']);
+            $formValues = StringUtils::strStripSlashesDeep($_SESSION['add_organization_request']);
             unset($_SESSION['add_organization_request']);
         }
         else
@@ -330,7 +330,7 @@ switch($getMode)
         /******************************************************/
         /* Create basic data for new organization in database */
         /******************************************************/
-        $_SESSION['add_organization_request'] = strStripSlashesDeep($_POST);
+        $_SESSION['add_organization_request'] = StringUtils::strStripSlashesDeep($_POST);
 
         // form fields are not filled
         if($_POST['orgaShortName'] === '' || $_POST['orgaLongName'] === '')
@@ -348,7 +348,7 @@ switch($getMode)
         }
 
         // allow only letters, numbers and special characters like .-_+@
-        if(!strValidCharacters($_POST['orgaShortName'], 'noSpecialChar'))
+        if(!StringUtils::strValidCharacters($_POST['orgaShortName'], 'noSpecialChar'))
         {
             $gMessage->show($gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION')));
             // => EXIT

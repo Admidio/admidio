@@ -52,7 +52,7 @@ class TableGuestbookComment extends TableAccess
             }
             elseif ($format === 'database')
             {
-                $value = html_entity_decode(strStripTags($this->dbColumns['gbc_text']));
+                $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['gbc_text']));
             }
             else
             {
@@ -117,7 +117,7 @@ class TableGuestbookComment extends TableAccess
             if ($columnName === 'gbc_email' && $newValue !== '')
             {
                 // If Email has a invalid format, it won't be set
-                if (!strValidCharacters($newValue, 'email'))
+                if (!StringUtils::strValidCharacters($newValue, 'email'))
                 {
                     return false;
                 }

@@ -139,8 +139,8 @@ foreach($gProfileFields->getProfileFields() as $field)
     {
         $showField = true;
     }
-    // only allow to edit viewable fields, check for edit profile was done before
-    elseif($getNewUser !== 2 && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern')))
+    // check if the current user has the right to edit this profile field of the selected user
+    elseif($getNewUser !== 2 && $gCurrentUser->allowedEditProfileField($user, $field->getValue('usf_name_intern')))
     {
         $showField = true;
     }
@@ -165,7 +165,7 @@ foreach($gProfileFields->getProfileFields() as $field)
             // if social network then extract username from url
             if(in_array($field->getValue('usf_name_intern'), array('FACEBOOK', 'GOOGLE_PLUS', 'TWITTER', 'XING'), true))
             {
-                if(strValidCharacters($_POST[$postId], 'url') && StringUtils::strContains($_POST[$postId], '/'))
+                if(StringUtils::strValidCharacters($_POST[$postId], 'url') && StringUtils::strContains($_POST[$postId], '/'))
                 {
                     if(strrpos($_POST[$postId], '/profile.php?id=') > 0)
                     {

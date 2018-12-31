@@ -25,7 +25,7 @@ class User extends TableAccess
      */
     protected $mProfileFieldsData;
     /**
-     * @var array<string,bool> Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
+     * @var array<string,bool> Array with all roles rights and the status of the current user e.g. array('rol_assign_roles' => false, 'rol_approve_users' => true ...)
      */
     protected $rolesRights = array();
     /**
@@ -94,6 +94,17 @@ class User extends TableAccess
         $this->organizationId = (int) $gCurrentOrganization->getValue('org_id');
 
         parent::__construct($database, TBL_USERS, 'usr', $userId);
+    }
+
+    /**
+     * Checks if the current user is allowed to edit a profile field of the user of the parameter.
+     * @param User   $user            User object of the user that should be checked if the current user can view his profile field.
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
+     * @return bool Return true if the current user is allowed to view this profile field of **$user**.
+     */
+    public function allowedEditProfileField(User $user, $fieldNameIntern)
+    {
+        return $this->hasRightEditProfile($user) && $user->mProfileFieldsData->isEditable($fieldNameIntern);
     }
 
     /**
@@ -1686,7 +1697,7 @@ class User extends TableAccess
         $this->rolesMembershipLeader   = array();
         $this->rolesMembershipNoLeader = array();
     }
-    
+
     /**
      * Reset the count of invalid logins. After that it's possible for the user to try another login.
      */
@@ -1879,7 +1890,7 @@ class User extends TableAccess
             }
 
             // username should not contain special characters
-            if ($checkValue && $columnName === 'usr_login_name' && $newValue !== '' && !strValidCharacters($newValue, 'noSpecialChar'))
+            if ($checkValue && $columnName === 'usr_login_name' && $newValue !== '' && !StringUtils::strValidCharacters($newValue, 'noSpecialChar'))
             {
                 return false;
             }

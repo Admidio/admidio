@@ -392,7 +392,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             {
                 if ($value !== '')
                 {
-                    admStrIsValidFileName($value);
+                    StringUtils::strIsValidFileName($value);
                 }
             }
             catch (AdmException $e)
@@ -454,7 +454,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             break;
 
         case 'string':
-            $value = strStripTags(SecurityUtils::encodeHTML($value));
+            $value = StringUtils::strStripTags(SecurityUtils::encodeHTML($value));
             break;
 
         case 'html':
@@ -716,7 +716,7 @@ function admFuncCheckUrl($url)
     }
 
     // For Homepage only valid url chars are allowed
-    if (!strValidCharacters($url, 'url'))
+    if (!StringUtils::strValidCharacters($url, 'url'))
     {
         return false;
     }

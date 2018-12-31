@@ -4,24 +4,24 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.5', 0, 710)
-                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.5', 0, 0)
-                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.5', 0, 0)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.5', 0, 0)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.5', 0, 0)
-                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.5', 0, 0)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.5', 0, 0)
-                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.5', 0, 0)
-                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.5', 0, 0)
-                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.5', 0, 0)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.5', 0, 0)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.5', 0, 0)
-                              , (130, 'MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.3.5', 0, 0)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.5', 0, 0)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.5', 0, 0)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.5', 0, 0)
-                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.5', 0, 0)
-                              , (180, 'MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.3.5', 0, 0);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.8', 0, 710)
+                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.8', 0, 0)
+                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.8', 0, 0)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.8', 0, 0)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.8', 0, 0)
+                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.8', 0, 0)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.8', 0, 0)
+                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.8', 0, 0)
+                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.8', 0, 0)
+                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.8', 0, 0)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.8', 0, 0)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.8', 0, 0)
+                              , (130, 'MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.3.8', 0, 0)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.8', 0, 0)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.8', 0, 0)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.8', 0, 0)
+                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.8', 0, 0)
+                              , (180, 'MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.3.8', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -99,6 +99,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (4700, 1, 'dates_show_rooms', '0'),
 (4705, 1, 'dates_default_list_configuration', '13'),
 (4710, 1, 'dates_save_all_confirmations', '1'),
+(4720, 1, 'dates_may_take_part', '1'),
 (4900, 1, 'default_country', 'DEU'),
 (5000, 1, 'flooding_protection_time', '60'),
 (6200, 1, 'guestbook_entries_per_page', '10'),
@@ -210,6 +211,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (47001, 2, 'dates_show_rooms', '0'),
 (47005, 2, 'dates_default_list_configuration', '14'),
 (47010, 2, 'dates_save_all_confirmations', '1'),
+(47020, 2, 'dates_may_take_part', '1'),
 (49001, 2, 'default_country', 'DEU'),
 (50001, 2, 'flooding_protection_time', '60'),
 (62001, 2, 'guestbook_entries_per_page', '10'),

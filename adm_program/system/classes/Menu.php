@@ -194,7 +194,7 @@ class Menu
             }
             else
             {
-                $iconHtml = TableUserField::getIconHtml($item['icon'], $item['text']);
+                $iconHtml = Image::getIconHtml($item['icon'], $item['text']);
                 $html .= '
                     <li>
                         <a id="lmenu_'.$this->id.'_'.$item['id'].'" class="btn" href="'.$item['link'].'">

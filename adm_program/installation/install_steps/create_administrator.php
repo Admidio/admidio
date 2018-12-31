@@ -16,9 +16,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_administrator.php')
 if (isset($_POST['orga_shortname']))
 {
     // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
-    $_SESSION['orga_shortname'] = strStripTags($_POST['orga_shortname']);
-    $_SESSION['orga_longname']  = strStripTags($_POST['orga_longname']);
-    $_SESSION['orga_email']     = strStripTags($_POST['orga_email']);
+    $_SESSION['orga_shortname'] = StringUtils::strStripTags($_POST['orga_shortname']);
+    $_SESSION['orga_longname']  = StringUtils::strStripTags($_POST['orga_longname']);
+    $_SESSION['orga_email']     = StringUtils::strStripTags($_POST['orga_email']);
     $_SESSION['orga_timezone']  = $_POST['orga_timezone'];
 
     if ($_SESSION['orga_shortname'] === ''
@@ -36,7 +36,7 @@ if (isset($_POST['orga_shortname']))
     }
 
     // allow only letters, numbers and special characters like .-_+@
-    if(!strValidCharacters($_SESSION['orga_shortname'], 'noSpecialChar'))
+    if(!StringUtils::strValidCharacters($_SESSION['orga_shortname'], 'noSpecialChar'))
     {
         showNotice(
             $gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION')),

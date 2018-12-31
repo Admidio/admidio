@@ -40,7 +40,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 if(isset($_SESSION['download_request']))
 {
-    $formValues = strStripSlashesDeep($_SESSION['download_request']);
+    $formValues = StringUtils::strStripSlashesDeep($_SESSION['download_request']);
     unset($_SESSION['download_request']);
 }
 else

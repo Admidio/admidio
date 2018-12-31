@@ -114,10 +114,15 @@ $participationForm->addButton(
     'btn_attend_' . $getDateId, $gL10n->get('DAT_ATTEND'),
     array('icon' => 'fa-check-circle', 'class' => 'admidio-btn-event-attend')
 );
-$participationForm->addButton(
-    'btn_tentative_' . $getDateId, $gL10n->get('DAT_USER_TENTATIVE'),
-    array('icon' => 'fa-question-circle', 'class' => 'admidio-btn-event-tentative')
-);
+
+if ($gSettingsManager->getBool('dates_may_take_part'))
+{
+    $participationForm->addButton(
+        'btn_tentative_' . $getDateId, $gL10n->get('DAT_USER_TENTATIVE'),
+        array('icon' => 'fa-question-circle', 'class' => 'admidio-btn-event-tentative')
+    );
+}
+
 $participationForm->addButton(
     'btn_refuse_' . $getDateId, $gL10n->get('DAT_CANCEL'),
     array('icon' => 'fa-times-circle', 'class' => 'admidio-btn-event-cancel')

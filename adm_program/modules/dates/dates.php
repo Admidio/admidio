@@ -566,15 +566,18 @@ else
                                         <a class="btn admidio-btn-event-attend" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '3', 'dat_id' => $dateId)) . '"' . $disableStatusAttend . '>
                                             <i class="fas fa-check-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>' . $gL10n->get('DAT_ATTEND') . '
                                         </a>
-                                    </li>
-                                    <li>
-                                        <a class="btn admidio-btn-event-tentative" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_id' => $dateId)) . '"' . $disableStatusTentative . '>
-                                            <i class="fas fa-question-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>' . $gL10n->get('DAT_USER_TENTATIVE') . '
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="btn admidio-btn-event-cancel" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '4', 'dat_id' => $dateId)) . '">
-                                            <i class="fas fa-times-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>' . $gL10n->get('DAT_CANCEL') . '
+                                    </li>';
+                                    if ($gSettingsManager->getBool('dates_may_take_part'))
+                                    {
+                                        $outputButtonParticipation .= '<li>
+                                            <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_id' => $dateId)) . '"' . $disableStatusTentative . '>
+                                                <i class="fas fa-question-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_USER_TENTATIVE').'"></i>' . $gL10n->get('DAT_USER_TENTATIVE') . '
+                                            </a>
+                                        </li>';
+                                    }
+                                    $outputButtonParticipation .= '<li>
+                                        <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '4', 'dat_id' => $dateId)) . '">
+                                            <i class="fas fa-times-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_CANCEL').'"></i>' . $gL10n->get('DAT_CANCEL') . '
                                         </a>
                                     </li>
                                 </ul>

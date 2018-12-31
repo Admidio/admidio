@@ -219,7 +219,7 @@ class TableDate extends TableAccess
         // Semicolons herausfiltern
         $iCalVEvent[] = 'UID:' . $this->getValue('dat_timestamp_create', $dateTimeFormat) . '+' . (int) $this->getValue('dat_usr_id_create') . '@' . $domain;
         $iCalVEvent[] = 'SUMMARY:' . $this->escapeIcalText($this->getValue('dat_headline'));
-        $iCalVEvent[] = 'DESCRIPTION:' . strStripTags($this->escapeIcalText(html_entity_decode($this->getValue('dat_description'), ENT_QUOTES, 'UTF-8')));
+        $iCalVEvent[] = 'DESCRIPTION:' . StringUtils::strStripTags($this->escapeIcalText(html_entity_decode($this->getValue('dat_description'), ENT_QUOTES, 'UTF-8')));
         $iCalVEvent[] = 'DTSTAMP:' . date($dateTimeFormat);
         $iCalVEvent[] = 'LOCATION:' . $this->escapeIcalText($this->getValue('dat_location'));
 
@@ -279,7 +279,7 @@ class TableDate extends TableAccess
             }
             elseif ($format === 'database')
             {
-                $value = html_entity_decode(strStripTags($this->dbColumns['dat_description']), ENT_QUOTES, 'UTF-8');
+                $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['dat_description']), ENT_QUOTES, 'UTF-8');
             }
             else
             {

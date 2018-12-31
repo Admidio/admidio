@@ -85,7 +85,7 @@ if ($getUserId > 0)
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
-    if (!strValidCharacters($user->getValue('EMAIL'), 'email'))
+    if (!StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email'))
     {
         $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))));
         // => EXIT

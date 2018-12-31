@@ -65,7 +65,6 @@ class ProfileFields
         {
             $this->db = $gDb;
         }
-
     }
 
     /**
@@ -234,12 +233,8 @@ class ProfileFields
                     foreach ($arrListValues as $index => $listValue)
                     {
                         // if value is imagefile or imageurl then show image
-                        if ($usfType === 'RADIO_BUTTON'
-                        && (StringUtils::strContains($listValue, '.png', false)
-                            || StringUtils::strContains($listValue, '.jpg', false)
-                            || StringUtils::strStartsWith($listValue, 'fas ')
-                            || StringUtils::strStartsWith($listValue, 'fab ')
-                            || StringUtils::strStartsWith($listValue, 'fa-')))
+                        if ($usfType === 'RADIO_BUTTON' && (Image::isFontAwesomeIcon($listValue)
+                        || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false))) // TODO: simplify check for images
                         {
                             // if there is imagefile and text separated by | then explode them
                             if (StringUtils::strContains($listValue, '|'))
@@ -256,7 +251,7 @@ class ProfileFields
                             $listValueText = Language::translateIfTranslationStrId($listValueText);
 
                             // get html snippet with image tag
-                            $listValue = TableUserField::getIconHtml($listValueImage, $listValueText);
+                            $listValue = Image::getIconHtml($listValueImage, $listValueText);
                         }
 
                         // if text is a translation-id then translate it
@@ -432,6 +427,21 @@ class ProfileFields
     }
 
     /**
+     * This method checks if the current user is allowed to edit this profile field of $fieldNameIntern
+     * within the context of the user in this object.
+     * !!! NOTE that this method ONLY checks if it could be possible to edit this field. There MUST be
+     * another check if the current user is allowed to edit the user profile generally.
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
+     * @return bool Return true if the current user is allowed to view this profile field
+     */
+    public function isEditable($fieldNameIntern)
+    {
+        global $gCurrentUser;
+
+        return $this->isVisible($fieldNameIntern) && ($gCurrentUser->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0);
+    }
+
+    /**
      * This method checks if the current user is allowed to view this profile field of $fieldNameIntern
      * within the context of the user in this object. If no context is set than we only check if the
      * current user has the right to view the category of the profile field.
@@ -448,7 +458,7 @@ class ProfileFields
         // check if the current user could view the category of the profile field
         // if it's the own profile than we check if user could edit his profile and if so he could view all fields
         // check if the profile field is only visible for users that could edit this
-        return ((array_key_exists($fieldNameIntern, $this->mProfileFields) && $this->mProfileFields[$fieldNameIntern]->isVisible()) 
+        return ((array_key_exists($fieldNameIntern, $this->mProfileFields) && $this->mProfileFields[$fieldNameIntern]->isVisible())
                 || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
             && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
     }
@@ -610,7 +620,7 @@ class ProfileFields
                     break;
                 case 'EMAIL':
                     // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
-                    if (!$this->noValueCheck && !strValidCharacters($fieldValue, 'email'))
+                    if (!$this->noValueCheck && !StringUtils::strValidCharacters($fieldValue, 'email'))
                     {
                         return false;
                     }
@@ -637,7 +647,7 @@ class ProfileFields
                     break;
                 case 'PHONE':
                     // check phone number for valid characters
-                    if (!$this->noValueCheck && !strValidCharacters($fieldValue, 'phone'))
+                    if (!$this->noValueCheck && !StringUtils::strValidCharacters($fieldValue, 'phone'))
                     {
                         return false;
                     }

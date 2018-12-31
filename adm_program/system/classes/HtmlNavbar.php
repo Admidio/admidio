@@ -179,7 +179,7 @@ class HtmlNavbar
 
         if ($data['icon'] !== '')
         {
-            $iconHtml = TableUserField::getIconHtml($data['icon'], $data['text']);
+            $iconHtml = Image::getIconHtml($data['icon'], $data['text']);
         }
 
         $html = '

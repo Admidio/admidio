@@ -39,7 +39,7 @@ if(!empty($_POST['recipient_email']))
             FormValidation::checkCaptcha($_POST['captcha_code']);
         }
 
-        if(strValidCharacters($_POST['recipient_email'], 'email'))
+        if(StringUtils::strValidCharacters($_POST['recipient_email'], 'email'))
         {
             // search for user with the email address that have a valid login and membership to a role
             $sql = 'SELECT usr_id
@@ -126,7 +126,7 @@ if(!empty($_POST['recipient_email']))
         // always show a positive feedback to prevent hackers to validate an email-address or username
         $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/login.php');
 
-        if(strValidCharacters($_POST['recipient_email'], 'email'))
+        if(StringUtils::strValidCharacters($_POST['recipient_email'], 'email'))
         {
             $gMessage->show($gL10n->get('SYS_LOSTPW_SEND_EMAIL', array($_POST['recipient_email'])));
             // => EXIT
@@ -147,7 +147,7 @@ if(!empty($_POST['recipient_email']))
             $user->saveChangesWithoutRights();
             $user->save(false);
         }
-        
+
         $e->showHtml();
         // => EXIT
     }
