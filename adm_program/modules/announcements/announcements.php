@@ -152,12 +152,12 @@ else
         $annHeadline = SecurityUtils::encodeHTML($announcement->getValue('ann_headline'));
 
         $page->addHtml('
-        <div class="panel panel-primary" id="ann_'.$annId.'">
-            <div class="panel-heading">
-                <div class="pull-left">
+        <div class="card" id="ann_'.$annId.'">
+            <div class="card-header">
+                <div class="float-left">
                     <i class="fas fa-newspaper"></i>' . $annHeadline . '
                 </div>
-                <div class="pull-right text-right">'.$announcement->getValue('ann_timestamp_create', $gSettingsManager->getString('system_date')));
+                <div class="float-right text-right">'.$announcement->getValue('ann_timestamp_create', $gSettingsManager->getString('system_date')));
 
                     // check if the user could edit this announcement
                     if($announcement->isEditable())
@@ -174,10 +174,10 @@ else
                 $page->addHtml('</div>
             </div>
 
-            <div class="panel-body">'.
+            <div class="card-body">'.
                 $announcement->getValue('ann_description').
             '</div>
-            <div class="panel-footer">'.
+            <div class="card-footer">'.
                 // show information about user who creates the recordset and changed it
                 admFuncShowCreateChangeInfoByName(
                     $row['create_name'], $announcement->getValue('ann_timestamp_create'),

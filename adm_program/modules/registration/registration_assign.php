@@ -122,9 +122,9 @@ $registrationAssignMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(
 
 $page->addHtml('
     <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', array($newUser->getValue('FIRST_NAME'). ' '. $newUser->getValue('LAST_NAME'))).'</p>
-    <div class="panel panel-default">
-        <div class="panel-heading">'.$gL10n->get('SYS_USERS_FOUND').'</div>
-        <div class="panel-body">'
+    <div class="card">
+        <div class="card-header">'.$gL10n->get('SYS_USERS_FOUND').'</div>
+        <div class="card-body">'
 );
 
 // show all found users with their address who have a similar name and show link for further handling
@@ -211,9 +211,9 @@ while($row = $usrStatement->fetch())
 $page->addHtml('
     </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">'.$gL10n->get('SYS_CREATE_NEW_USER').'</div>
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-header">'.$gL10n->get('SYS_CREATE_NEW_USER').'</div>
+        <div class="card-body">
             <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '</p>
 
             <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$urlCreateNewUser.'\'">

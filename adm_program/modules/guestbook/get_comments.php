@@ -58,9 +58,9 @@ if ($getGbcGboId > 0)
             $gbcEmail    = $gbComment->getValue('gbc_email');
 
             echo '
-            <div class="panel panel-info admidio-panel-comment" id="gbc_'.$gbcId.'">
-                <div class="panel-heading">
-                    <div class="pull-left">
+            <div class="card admidio-panel-comment" id="gbc_'.$gbcId.'">
+                <div class="card-header">
+                    <div class="float-left">
                         <i class="fas fa-comment"></i>' . $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name')));
 
             // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
@@ -70,7 +70,7 @@ if ($getGbcGboId > 0)
                     <i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'"></i></a>';
             }
             echo '</div>
-            <div class="pull-right text-right">'. $gbComment->getValue('gbc_timestamp_create', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
+            <div class="float-right text-right">'. $gbComment->getValue('gbc_timestamp_create', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
 
             // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
             if ($gCurrentUser->editGuestbookRight())
@@ -85,7 +85,7 @@ if ($getGbcGboId > 0)
             echo '</div>
             </div>
 
-            <div class="panel-body">'.
+            <div class="card-body">'.
                 $gbComment->getValue('gbc_text');
 
             // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
@@ -104,7 +104,7 @@ if ($getGbcGboId > 0)
             // show information about user who edit the recordset
             if(strlen($gbComment->getValue('gbc_usr_id_change')) > 0)
             {
-                echo '<div class="panel-footer">'.admFuncShowCreateChangeInfoById(
+                echo '<div class="card-footer">'.admFuncShowCreateChangeInfoById(
                     0, '',
                     (int) $gbComment->getValue('gbc_usr_id_change'), $gbComment->getValue('gbc_timestamp_change')
                 ).'</div>';

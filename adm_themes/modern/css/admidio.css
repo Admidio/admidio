@@ -317,16 +317,16 @@ a.btn {
 
 .btn .fas,
 .btn .fab,
-.panel-title .fas,
-.panel-title .fab,
+.card-header .fas,
+.card-header .fab,
 .navbar-link .fas,
 .checkbox .fas,
-.panel-heading .pull-left .fas,
+.card-header .float-left .fas,
 .admidio-profile-user-right .fas {
     margin-right: 6px;
 }
 
-.panel-title .fab {
+.card-header .fab {
     font-weight: normal;
 }
 
@@ -626,11 +626,12 @@ input[type="time"] {
 /* A simple groupbox/panel to group some elements. This is often used in forms. */
 /********************************************************************************/
 
-.panel-default {
+.card {
     border: 1px solid #7d7d7d;
+    margin-top: 30px;
 }
 
-.panel-default > .panel-heading {
+.card > .card-header {
     color: #333333;
     font-weight: bold;
     letter-spacing: 0.1em;
@@ -641,49 +642,49 @@ input[type="time"] {
     background: linear-gradient(to bottom, #ffffff 0%, #96c4cb 95%);
 }
 
-.tab-pane > .panel-group > .panel-default > .panel-heading {
+.tab-pane > .panel-group > .card > .card-header {
     border-bottom-left-radius: 9px;
     border-bottom-right-radius: 9px;
 }
 
-.panel-default.in > .panel-heading {
+.card.in > .card-header {
     background: -webkit-linear-gradient(top, #55b6c5 0%, #347078 95%);
     background: linear-gradient(to bottom, #55b6c5 0%, #347078 95%);
 }
 
-.panel-heading {
+.card-header {
     display: inline-block;
     width: 100%;
     font-size: 12pt;
 }
 
-.panel-heading a:link,
-.panel-heading a:visited {
+.card-header a:link,
+.card-header a:visited {
     color: #222222;
     font-weight: bold;
     text-decoration: none;
 }
 
-.panel-group .panel,
-.panel-default {
+.panel-group .card,
+.card {
     border-radius: 10px !important;
 }
 
 /* Panel which includes the ckeditor in a nice way without separate borders */
-.admidio-panel-editor .panel-body {
+.admidio-panel-editor .card-body {
     padding: 0;
 }
 
-.admidio-panel-editor .panel-body .form-group {
+.admidio-panel-editor .card-body .form-group {
     margin-bottom: 0;
 }
 
-.admidio-panel-editor .panel-body .cke_chrome {
+.admidio-panel-editor .card-body .cke_chrome {
     border-width: 0;
 }
 
-.admidio-panel-editor .panel-body .cke_bottom,
-.admidio-panel-editor .panel-body .cke_inner {
+.admidio-panel-editor .card-body .cke_bottom,
+.admidio-panel-editor .card-body .cke_inner {
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
 }
@@ -701,7 +702,7 @@ input[type="time"] {
 
 /* Layout for some boxes that is used in announcements or events module */
 
-.panel-primary {
+/*.panel-primary {
     background-color: transparent;
     border-color: transparent;
     box-shadow: none;
@@ -718,13 +719,13 @@ input[type="time"] {
 
 .panel-primary > .panel-body {
     padding: 10px 0 0;
-}
+}*/
 
 
-.panel-primary > .panel-footer {
-    padding: 5px 0 0 0;
-    background-color: #ffffff;
-    border-top: 2px solid #c1dce6;
+.card > .card-footer {
+    /*padding: 5px 0 0 0;*/
+    /*background-color: #ffffff;*/
+    /*border-top: 2px solid #c1dce6;*/
     font-size: 8pt;
 }
 

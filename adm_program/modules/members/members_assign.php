@@ -106,9 +106,9 @@ if($memberCount === 0)
 echo '
 <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', array($getFirstname. ' '. $getLastname)).'</p>
 
-<div class="panel panel-default">
-    <div class="panel-heading">'.$gL10n->get('SYS_USERS_FOUND').'</div>
-    <div class="panel-body">';
+<div class="card">
+    <div class="card-header">'.$gL10n->get('SYS_USERS_FOUND').'</div>
+    <div class="card-body">';
 
         // show all found users with their address who have a similar name and show link for further handling
         $i = 0;
@@ -166,9 +166,9 @@ echo '
         }
     echo '</div>
 </div>
-<div class="panel panel-default">
-    <div class="panel-heading">'.$gL10n->get('SYS_CREATE_NEW_USER').'</div>
-    <div class="panel-body">
+<div class="card">
+    <div class="card-header">'.$gL10n->get('SYS_CREATE_NEW_USER').'</div>
+    <div class="card-body">
         <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER').'</p>
 
         <button class="btn btn-default btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => 1, 'lastname' => $getLastname, 'firstname' => $getFirstname)).'\'">

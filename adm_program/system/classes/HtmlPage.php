@@ -117,7 +117,7 @@ class HtmlPage
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/solid.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/brands.css');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery/dist/jquery.js');
-        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/js/bootstrap.js');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/js/bootstrap.bundle.js');
         $this->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/common_functions.js');
     }
 

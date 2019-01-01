@@ -473,10 +473,10 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
 
         $page->addHtml('
             <div class="col-sm-6 admidio-album-card" id="panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id').'">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="pull-left"><i class="fas fa-image"></i>'.$albumTitle.'</div>
-                        <div class="pull-right text-right">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="float-left"><i class="fas fa-image"></i>'.$albumTitle.'</div>
+                        <div class="float-right text-right">
         ');
 
         // check if download option is enabled
@@ -504,7 +504,7 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
         $page->addHtml('
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-preview">
                         <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'"><img

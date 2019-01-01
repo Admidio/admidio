@@ -157,16 +157,16 @@ function getStaticText($type, $text, $info = '')
 function getPreferencePanel($group, $id, $title, $icon, $body)
 {
     $html = '
-        <div class="panel panel-default" id="panel_' . $id . '">
-            <div class="panel-heading">
-                <h4 class="panel-title">
+        <div class="card" id="panel_' . $id . '">
+            <div class="card-header">
+                <h4 class="card-title">
                     <a data-toggle="collapse" data-parent="#accordion_' . $group . '" href="#collapse_' . $id . '">
                         <i class="' . $icon . ' fa-fw"></i>' . $title . '
                     </a>
                 </h4>
             </div>
             <div id="collapse_' . $id . '" class="panel-collapse collapse">
-                <div class="panel-body">
+                <div class="card-body">
                     ' . $body . '
                 </div>
             </div>

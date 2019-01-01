@@ -310,9 +310,9 @@ if($gCurrentUser->isAdministrator())
 // *******************************************************************************
 
 $page->addHtml('
-<div class="panel panel-default" id="user_data_panel">
-    <div class="panel-heading">'.$gL10n->get('SYS_MASTER_DATA').'</div>
-    <div class="panel-body row">
+<div class="card" id="user_data_panel">
+    <div class="card-header">'.$gL10n->get('SYS_MASTER_DATA').'</div>
+    <div class="card-body row">
         <div class="col-sm-8">');
             // create a static form
             $form = new HtmlForm('profile_master_data_form');
@@ -514,9 +514,9 @@ foreach($gProfileFields->getProfileFields() as $field)
             $category = $field->getValue('cat_name');
 
             $page->addHtml('
-                <div class="panel panel-default" id="'.$field->getValue('cat_name_intern').'_data_panel">
-                    <div class="panel-heading">'.$field->getValue('cat_name').'</div>
-                    <div class="panel-body">');
+                <div class="card" id="'.$field->getValue('cat_name_intern').'_data_panel">
+                    <div class="card-header">'.$field->getValue('cat_name').'</div>
+                    <div class="card-body">');
 
             // create a static form
             $form = new HtmlForm('profile_'.$field->getValue('cat_name_intern').'_form');
@@ -599,9 +599,9 @@ if($gSettingsManager->getBool('profile_show_roles'))
     }
 
     $page->addHtml('
-    <div class="panel panel-default" id="profile_authorizations_box">
-        <div class="panel-heading">'.$gL10n->get('SYS_PERMISSIONS').'</div>
-        <div class="panel-body row" id="profile_authorizations_box_body">');
+    <div class="card" id="profile_authorizations_box">
+        <div class="card-header">'.$gL10n->get('SYS_PERMISSIONS').'</div>
+        <div class="card-body row" id="profile_authorizations_box_body">');
 
     if(count($rightsOrigin) > 0)
     {
@@ -739,16 +739,16 @@ if($gSettingsManager->getBool('profile_show_roles'))
 
     // Ausgabe
     $page->addHtml('
-    <div class="panel panel-default" id="profile_roles_box">
-        <div class="panel-heading"><div class="pull-left">'.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'</div>');
+    <div class="card" id="profile_roles_box">
+        <div class="card-header"><div class="float-left">'.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'</div>');
             // if you have the right to assign roles then show the link to assign new roles to this user
             if($gCurrentUser->assignRoles())
             {
-                $page->addHtml('<div class="pull-right text-right"><a class="admidio-icon-link" id="profile_role_memberships_change" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId, 'inline' => '1')).'">
+                $page->addHtml('<div class="float-right text-right"><a class="admidio-icon-link" id="profile_role_memberships_change" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId, 'inline' => '1')).'">
                     <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'"></i></a></div>');
             }
         $page->addHtml('</div>
-        <div class="panel-body" id="profile_roles_box_body">
+        <div class="card-body" id="profile_roles_box_body">
             '.getRoleMemberships('role_list', $user, $roleStatement).'
         </div>
     </div>');
@@ -771,9 +771,9 @@ if($gSettingsManager->getBool('profile_show_roles'))
     }
 
     $page->addHtml('
-    <div class="panel panel-default" id="profile_future_roles_box" '.$visible.'>
-        <div class="panel-heading">'.$gL10n->get('PRO_FUTURE_ROLE_MEMBERSHIP').'</div>
-        <div class="panel-body" id="profile_future_roles_box_body">
+    <div class="card" id="profile_future_roles_box" '.$visible.'>
+        <div class="card-header">'.$gL10n->get('PRO_FUTURE_ROLE_MEMBERSHIP').'</div>
+        <div class="card-body" id="profile_future_roles_box_body">
             '.getRoleMemberships('future_role_list', $user, $roleStatement).'
         </div>
     </div>');
@@ -801,9 +801,9 @@ if($gSettingsManager->getBool('profile_show_former_roles'))
     }
 
     $page->addHtml('
-    <div class="panel panel-default" id="profile_former_roles_box" '.$visible.'>
-        <div class="panel-heading">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'</div>
-        <div class="panel-body" id="profile_former_roles_box_body">
+    <div class="card" id="profile_former_roles_box" '.$visible.'>
+        <div class="card-heading">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'</div>
+        <div class="card-body" id="profile_former_roles_box_body">
             '.getRoleMemberships('former_role_list', $user, $roleStatement).'
         </div>
     </div>');
@@ -860,11 +860,11 @@ if($gSettingsManager->getBool('profile_show_extern_roles')
                 if(!$showRolesOtherOrganizations)
                 {
                     $page->addHtml('
-                    <div class="panel panel-default" id="profile_other_orga_roles_box">
-                        <div class="panel-heading">'.
+                    <div class="card" id="profile_other_orga_roles_box">
+                        <div class="card-header">'.
                             $gL10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').HtmlForm::getHelpTextIcon('PRO_VIEW_ROLES_OTHER_ORGAS').'
                         </div>
-                        <div class="panel-body" id="profile_other_orga_roles_box_body">
+                        <div class="card-body" id="profile_other_orga_roles_box_body">
                             <ul class="list-group admidio-list-roles-assign">');
 
                     $showRolesOtherOrganizations = true;
@@ -883,7 +883,7 @@ if($gSettingsManager->getBool('profile_show_extern_roles')
                         }
                         $page->addHtml('&nbsp;
                     </span>
-                    <span class="pull-right">'.$gL10n->get('SYS_SINCE', array($startDate->format($gSettingsManager->getString('system_date')))).'</span>
+                    <span class="float-right">'.$gL10n->get('SYS_SINCE', array($startDate->format($gSettingsManager->getString('system_date')))).'</span>
                 </li>');
             }
         }
@@ -916,17 +916,17 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
     if($count > 0)
     {
         $page->addHtml('
-        <div class="panel panel-default" id="profile_user_relations_box">
-            <div class="panel-heading"><div class="pull-left">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>');
+        <div class="card" id="profile_user_relations_box">
+            <div class="card-header"><div class="float-left">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>');
                 // show link to create relations
                 if($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser->editUsers())
                 {
-                    $page->addHtml('<div class="pull-right text-right">
+                    $page->addHtml('<div class="float-right text-right">
                         <a class="admidio-icon-link" id="profile_relations_new_entry" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('usr_id' => $userId)).'">
                             <i class="fas fa-plus-circle" data-toggle="tooltip" title="'.$gL10n->get('PRO_ADD_USER_RELATION').'"></i></a></div>');
                 }
             $page->addHtml('</div>
-            <div class="panel-body" id="profile_user_relations_box_body">');
+            <div class="card-body" id="profile_user_relations_box_body">');
 
         $sql = 'SELECT *
                   FROM '.TBL_USER_RELATIONS.'
@@ -975,7 +975,7 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
             $page->addHtml('<div>');
             $page->addHtml('<span>'.$relationName.' - <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => (int) $otherUser->getValue('usr_id'))).
                            '">'.$otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME').'</a> ' . $editUserIcon . '<span>');
-            $page->addHtml('<span class="pull-right text-right">');
+            $page->addHtml('<span class="float-right text-right">');
 
             if($gCurrentUser->editUsers())
             {

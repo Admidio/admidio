@@ -201,7 +201,7 @@ class HtmlNavbar
 
         if ($data['icon'] !== '')
         {
-            $iconHtml = TableUserField::getIconHtml($data['icon'], $data['text']);
+            $iconHtml = Image::getIconHtml($data['icon'], $data['text']);
         }
 
         $html = '<a class="dropdown-item" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $iconHtml . $data['text'] . '</a>';

@@ -570,13 +570,13 @@ else
                                     if ($gSettingsManager->getBool('dates_may_take_part'))
                                     {
                                         $outputButtonParticipation .= '<li>
-                                            <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_id' => $dateId)) . '"' . $disableStatusTentative . '>
+                                            <a class="btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_id' => $dateId)) . '"' . $disableStatusTentative . '>
                                                 <i class="fas fa-question-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_USER_TENTATIVE').'"></i>' . $gL10n->get('DAT_USER_TENTATIVE') . '
                                             </a>
                                         </li>';
                                     }
                                     $outputButtonParticipation .= '<li>
-                                        <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '4', 'dat_id' => $dateId)) . '">
+                                        <a class="btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '4', 'dat_id' => $dateId)) . '">
                                             <i class="fas fa-times-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_CANCEL').'"></i>' . $gL10n->get('DAT_CANCEL') . '
                                         </a>
                                     </li>
@@ -757,17 +757,17 @@ else
             }
 
             $page->addHtml('
-                <div class="panel panel-primary ' . $cssClassHighlight . '" id="dat_' . $dateId . '">
-                    <div class="panel-heading">
-                        <div class="pull-left">
+                <div class="card ' . $cssClassHighlight . '" id="dat_' . $dateId . '">
+                    <div class="card-header">
+                        <div class="float-left">
                             <i class="fas fa-calendar-alt"></i>' .
                             $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline . '
                         </div>
-                        <div class="pull-right text-right">' .
+                        <div class="float-right text-right">' .
                             $outputButtonIcal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete . '
                         </div>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         ' . $htmlDateElements . '<br />
                         <p>' . $date->getValue('dat_description') . '</p>' .$attentionDeadline);
 
@@ -778,7 +778,7 @@ else
             }
             $page->addHtml('
                 </div>
-                <div class="panel-footer">'.
+                <div class="card-footer">'.
                     // show information about user who created the recordset and changed it
                     admFuncShowCreateChangeInfoByName(
                         $row['create_name'], $date->getValue('dat_timestamp_create'),

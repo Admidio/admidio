@@ -259,9 +259,9 @@ else
         $gboEmail    = $guestbook->getValue('gbo_email');
 
         $page->addHtml('
-        <div class="panel panel-primary" id="gbo_'.$gboId.'">
-            <div class="panel-heading">
-                <div class="pull-left">
+        <div class="card" id="gbo_'.$gboId.'">
+            <div class="card-header">
+                <div class="float-left">
                     <i class="fas fa-book"></i>'.$gboName);
 
                     // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
@@ -280,7 +280,7 @@ else
                             <i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'"></i></a>');
                     }
                 $page->addHtml('</div>
-                <div class="pull-right text-right">'. $guestbook->getValue('gbo_timestamp_create'));
+                <div class="float-right text-right">'. $guestbook->getValue('gbo_timestamp_create'));
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($gCurrentUser->editGuestbookRight())
@@ -296,7 +296,7 @@ else
                 $page->addHtml('</div>
             </div>
 
-            <div class="panel-body">'.
+            <div class="card-body">'.
                 $guestbook->getValue('gbo_text'));
 
                 // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
@@ -399,7 +399,7 @@ else
             // show information about user who edit the recordset
             if(strlen($guestbook->getValue('gbo_usr_id_change')) > 0)
             {
-                $page->addHtml('<div class="panel-footer">'.admFuncShowCreateChangeInfoById(
+                $page->addHtml('<div class="card-footer">'.admFuncShowCreateChangeInfoById(
                     0, '',
                     (int) $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')
                 ).'</div>');
