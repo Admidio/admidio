@@ -802,7 +802,7 @@ if($gSettingsManager->getBool('profile_show_former_roles'))
 
     $page->addHtml('
     <div class="card" id="profile_former_roles_box" '.$visible.'>
-        <div class="card-heading">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'</div>
+        <div class="card-header">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'</div>
         <div class="card-body" id="profile_former_roles_box_body">
             '.getRoleMemberships('former_role_list', $user, $roleStatement).'
         </div>

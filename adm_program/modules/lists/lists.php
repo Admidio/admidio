@@ -184,7 +184,7 @@ foreach($listsResult['recordset'] as $row)
             $page->addHtml('</div></div></div>');
         }
         $page->addHtml('<div class="card">
-            <div class="card-heading">'. $role->getValue('cat_name'). '</div>
+            <div class="card-header">'. $role->getValue('cat_name'). '</div>
             <div class="card-body">
                 <div class="panel-group" id="accordion_'.$catId.'">');
         $previousCategoryId = $catId;
