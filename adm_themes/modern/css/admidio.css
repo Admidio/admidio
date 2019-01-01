@@ -628,7 +628,6 @@ input[type="time"] {
 
 .card {
     border: 1px solid #7d7d7d;
-    margin-top: 30px;
 }
 
 .card > .card-header {
@@ -642,7 +641,7 @@ input[type="time"] {
     background: linear-gradient(to bottom, #ffffff 0%, #96c4cb 95%);
 }
 
-.tab-pane > .panel-group > .card > .card-header {
+.tab-pane > .accordion > .card > .card-header {
     border-bottom-left-radius: 9px;
     border-bottom-right-radius: 9px;
 }
@@ -665,9 +664,15 @@ input[type="time"] {
     text-decoration: none;
 }
 
-.panel-group .card,
+
+
+/*.accordion .card,
 .card {
     border-radius: 10px !important;
+}*/
+
+.accordion .card-header {
+    padding: 0px;
 }
 
 /* Panel which includes the ckeditor in a nice way without separate borders */

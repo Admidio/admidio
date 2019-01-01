@@ -44,9 +44,9 @@ $showOptionValidModules = array(
 if(in_array($showOption, $showOptionValidModules, true))
 {
     $page->addJavascript('
-        $("#tabs_nav_modules").attr("class", "active");
-        $("#tabs-modules").attr("class", "tab-pane active");
-        $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");
+        $("#tabs_nav_modules").attr("class", "nav-link active");
+        $("#tabs-modules").attr("class", "tab-pane fade show active");
+        $("#collapse_'.$showOption.'").attr("class", "collapse show");
         location.hash = "#" + "panel_'.$showOption.'";',
         true
     );
@@ -54,9 +54,9 @@ if(in_array($showOption, $showOptionValidModules, true))
 else
 {
     $page->addJavascript('
-        $("#tabs_nav_common").attr("class", "active");
-        $("#tabs-common").attr("class", "tab-pane active");
-        $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");
+        $("#tabs_nav_common").attr("class", "nav-link active");
+        $("#tabs-common").attr("class", "tab-pane fade show active");
+        $("#collapse_'.$showOption.'").attr("class", "collapse show");
         location.hash = "#" + "panel_'.$showOption.'";',
         true
     );
@@ -160,12 +160,12 @@ function getPreferencePanel($group, $id, $title, $icon, $body)
         <div class="card" id="panel_' . $id . '">
             <div class="card-header">
                 <h4 class="card-title">
-                    <a data-toggle="collapse" data-parent="#accordion_' . $group . '" href="#collapse_' . $id . '">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_' . $id . '">
                         <i class="' . $icon . ' fa-fw"></i>' . $title . '
                     </a>
                 </h4>
             </div>
-            <div id="collapse_' . $id . '" class="panel-collapse collapse">
+            <div id="collapse_' . $id . '" class="collapse" aria-labelledby="headingOne" data-parent="#accordion_preferences">
                 <div class="card-body">
                     ' . $body . '
                 </div>
@@ -176,14 +176,18 @@ function getPreferencePanel($group, $id, $title, $icon, $body)
 }
 
 $page->addHtml('
-<ul class="nav nav-tabs" id="preferences_tabs">
-  <li id="tabs_nav_common"><a href="#tabs-common" data-toggle="tab">'.$gL10n->get('SYS_COMMON').'</a></li>
-  <li id="tabs_nav_modules"><a href="#tabs-modules" data-toggle="tab">'.$gL10n->get('SYS_MODULES').'</a></li>
+<ul id="preferences_tabs" class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+        <a id="tabs_nav_common" class="nav-link" href="#tabs-common" data-toggle="tab" role="tab">'.$gL10n->get('SYS_COMMON').'</a>
+    </li>
+    <li class="nav-item">
+        <a id="tabs_nav_modules" class="nav-link" href="#tabs-modules" data-toggle="tab" role="tab">'.$gL10n->get('SYS_MODULES').'</a>
+    </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane" id="tabs-common">
-        <div class="panel-group" id="accordion_common">');
+    <div class="tab-pane fade" id="tabs-common" role="tabpanel">
+        <div class="accordion" id="accordion_preferences">');
 
 // PANEL: COMMON
 
@@ -858,8 +862,8 @@ $page->addHtml(getPreferencePanel('common', 'system_information', $gL10n->get('O
 $page->addHtml('
         </div>
     </div>
-    <div class="tab-pane" id="tabs-modules">
-        <div class="panel-group" id="accordion_modules">');
+    <div class="tab-pane fade" id="tabs-modules" role="tabpanel">
+        <div class="accordion" id="accordion_modules">');
 
 // PANEL: ANNOUNCEMENTS
 
