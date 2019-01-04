@@ -23,7 +23,7 @@ function checkLogin()
 
     // get username and password
     $loginName = admFuncVariableIsValid($_POST, 'login_name', 'string', array('requireValue' => true, 'directOutput' => true));
-    $password  = admFuncVariableIsValid($_POST, 'password',   'string', array('requireValue' => true, 'directOutput' => true));
+    $password  = $_POST['password']; // password could contain special chars, so no conversation should be done
 
     // Search for username
     $sql = 'SELECT usr_id
