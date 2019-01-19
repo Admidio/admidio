@@ -206,6 +206,9 @@ function strValidCharacters($string, $checkType)
         case 'file':
             $validRegex = '=^[^/?*;:~<>|\"\\\\]+\.[^/?*;:~<>|‚\"\\\\]+$=';
             break;
+        case 'folder':
+            $validRegex = '=^[^/?*;:~<>|\"\\\\]+$=';
+            break;
         case 'url':
             $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() \/%=#:~.@+-]+$/';
             break;
@@ -297,7 +300,9 @@ function admStrIsValidFileName($filename, $checkExtension = false)
     }
 
     // filename should only contains valid characters and don't start with a dot
-    if (basename($filename) !== $filename || !strValidCharacters($filename, 'file') || admStrStartsWith($filename, '.'))
+    if (basename($filename) !== $filename || admStrStartsWith($filename, '.')
+    || (!strValidCharacters($filename, 'file') && $checkExtension)
+    || (!strValidCharacters($filename, 'folder') && !$checkExtension))
     {
         throw new AdmException('SYS_FILENAME_INVALID', array($filename));
     }
