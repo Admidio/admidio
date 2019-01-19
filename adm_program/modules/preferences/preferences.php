@@ -257,7 +257,7 @@ $page->addHtml(getPreferencePanel('common', 'common', $gL10n->get('SYS_COMMON'),
 // PANEL: SECURITY
 
 $formSecurity = new HtmlForm(
-    'organization_preferences_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'security')),
+    'security_preferences_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'security')),
     $page, array('class' => 'form-preferences')
 );
 
