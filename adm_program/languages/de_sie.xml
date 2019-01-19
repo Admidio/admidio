@@ -155,7 +155,6 @@
   <string name="DOW_FILES_UPLOADED">#VAR1# Dateien wurden erfolgreich hochgeladen.</string>
   <string name="DOW_FOLDER_CREATED">Der Ordner #VAR1_BOLD# wurde angelegt.</string>
   <string name="DOW_FOLDER_EXISTS">Der Ordner #VAR1# existiert bereits!\n\nBitte wählen Sie einen anderen Namen für den Ordner aus.</string>
-  <string name="DOW_FOLDER_NAME_INVALID">Der ausgewählte Ordnername enthält ungültige Zeichen!\n\nBitte wählen Sie einen anderen Namen für den Ordner aus.</string>
   <string name="DOW_FOLDER_NO_FILES">Der Ordner enthält keine Dateien.</string>
   <string name="DOW_FOLDER_NO_RIGHTS">Sie besitzen keine Rechte den gewählten Downloadordner zu sehen.</string>
   <string name="DOW_FOLDER_NOT_EXISTS">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</string>

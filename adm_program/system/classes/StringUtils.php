@@ -239,7 +239,7 @@ final class StringUtils
      *                      DOW_FILE_EXTENSION_INVALID : Filename contains invalid extension
      * @return true Returns @true if filename contains only valid characters. Otherwise an AdmException is thrown
      */
-    public static function strIsValidFileName($filename, $checkExtension = false)
+    public static function strIsValidFileName($filename, $checkExtension = true)
     {
         // If the filename was not empty
         if (trim($filename) === '')
@@ -266,6 +266,31 @@ final class StringUtils
             {
                 throw new AdmException('DOW_FILE_EXTENSION_INVALID');
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if a filename contains invalid characters. The characters will be checked with StringUtils::strValidCharacters.
+     * In addition the function checks if the name contains .. or a . at the beginning.
+     * @param string $filename     Name of the file that should be checked.
+     * @throws AdmException SYS_FILENAME_EMPTY : Filename was empty
+     *                      SYS_FILENAME_INVALID : Filename contains invalid characters
+     * @return true Returns @true if filename contains only valid characters. Otherwise an AdmException is thrown
+     */
+    public static function strIsValidFolderName($filename)
+    {
+        // If the filename was not empty
+        if (trim($filename) === '')
+        {
+            throw new AdmException('SYS_FOLDER_NAME_EMPTY');
+        }
+
+        // filename should only contains valid characters and don't start with a dot
+        if (basename($filename) !== $filename || self::strStartsWith($filename, '.') || !self::strValidCharacters($filename, 'folder'))
+        {
+            throw new AdmException('SYS_FOLDER_NAME_INVALID', array($filename));
         }
 
         return true;

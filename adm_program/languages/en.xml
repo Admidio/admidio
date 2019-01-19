@@ -155,7 +155,6 @@
   <string name="DOW_FILES_UPLOADED">#VAR1# files have been uploaded successfully.</string>
   <string name="DOW_FOLDER_CREATED">Folder #VAR1_BOLD# was created.</string>
   <string name="DOW_FOLDER_EXISTS">Folder #VAR1# already exists!\n\nPlease select different folder name.</string>
-  <string name="DOW_FOLDER_NAME_INVALID">Folder name contains illegal characters!\n\nPlease select different folder name.</string>
   <string name="DOW_FOLDER_NO_FILES">Folder contains no files.</string>
   <string name="DOW_FOLDER_NO_RIGHTS">You are not allowed to display selected folder.</string>
   <string name="DOW_FOLDER_NOT_EXISTS">Folder does not exist anymore on the server. It should be deleted from the database.</string>

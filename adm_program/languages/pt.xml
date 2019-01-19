@@ -154,7 +154,6 @@
   <string name="DOW_FILES_UPLOADED">#VAR1# ficheiros foram enviados com sucesso.</string>
   <string name="DOW_FOLDER_CREATED">O diretório #VAR1_BOLD# foi criado.</string>
   <string name="DOW_FOLDER_EXISTS">O diretório #VAR1# já existe!\n\nPor favor, escolha um nome diferente.</string>
-  <string name="DOW_FOLDER_NAME_INVALID">O nome do diretório contem caracteres inválidos!\n\nPor favor, escolha um outro nome para o diretório.</string>
   <string name="DOW_FOLDER_NO_FILES">O diretório está vazia.</string>
   <string name="DOW_FOLDER_NO_RIGHTS">Não tens permissão para exibir o diretório selecionado.</string>
   <string name="DOW_FOLDER_NOT_EXISTS">O diretório não está mais fisicamente disponível no servidor. Ele deve ser removida da base de dados.</string>

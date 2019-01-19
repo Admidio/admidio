@@ -89,7 +89,6 @@
   <string name="DOW_FILE_UPLOADED">Téléchargement du fichier #VAR1_BOLD# terminé.</string>
   <string name="DOW_FOLDER_CREATED">Le dossier #VAR1_BOLD# a été créé.</string>
   <string name="DOW_FOLDER_EXISTS">Le dossier (#VAR1#) existe déjà!\n\nVeuillez sélectionner un nom différent.</string>
-  <string name="DOW_FOLDER_NAME_INVALID">Le nom du dossier contient des caractères illégaux!\n\nVeuillez sélectionner un nom différent.</string>
   <string name="DOW_FOLDER_NO_FILES">Le dossier est vide.</string>
   <string name="DOW_FOLDER_NO_RIGHTS">Vous n\'êtes pas autorisé à afficher le dossier sélectionné.</string>
   <string name="DOW_FOLDER_NOT_EXISTS">Le dossier n\'existe plus sur le serveur. Il devrait être supprimé de la base de données.</string>

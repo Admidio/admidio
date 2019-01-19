@@ -110,7 +110,6 @@
   <string name="DOW_FILES_UPLOADED">#VAR1# file sono stati caricati con successo.</string>
   <string name="DOW_FOLDER_CREATED">La cartella #VAR1_BOLD# è stata creata.</string>
   <string name="DOW_FOLDER_EXISTS">La cartella #VAR1# già esiste!\n\nPer favore scegli un nome diverso per la cartella.</string>
-  <string name="DOW_FOLDER_NAME_INVALID">Il nome della cartella contiene caratteri non validi!\n\nPer favore scegli un nome diverso per la cartella.</string>
   <string name="DOW_FOLDER_NO_FILES">La cartella non contiene file.</string>
   <string name="DOW_FOLDER_NO_RIGHTS">Non ti è consentito visualizzare la cartella selezionata.</string>
   <string name="DOW_FOLDER_NOT_EXISTS">La cartella non esiste più sul server. Essa andrebbe cancellata dal database.</string>

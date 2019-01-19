@@ -155,7 +155,6 @@
   <string name="DOW_FILES_UPLOADED">#VAR1# Dateien wurden erfolgreich hochgeladen.</string>
   <string name="DOW_FOLDER_CREATED">Der Ordner #VAR1_BOLD# wurde angelegt.</string>
   <string name="DOW_FOLDER_EXISTS">Der Ordner #VAR1# existiert bereits!\n\nWähle bitte einen anderen Namen für den Ordner aus.</string>
-  <string name="DOW_FOLDER_NAME_INVALID">Der ausgewählte Ordnername enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für den Ordner aus.</string>
   <string name="DOW_FOLDER_NO_FILES">Der Ordner enthält keine Dateien.</string>
   <string name="DOW_FOLDER_NO_RIGHTS">Du besitzt keine Rechte den gewählten Downloadordner zu sehen.</string>
   <string name="DOW_FOLDER_NOT_EXISTS">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</string>
@@ -1182,6 +1181,8 @@
   <string name="SYS_FOLDER">Ordner</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWende dich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
+  <string name="SYS_FOLDER_NAME_EMPTY">Es wurde kein Name für den Ordner angegeben!</string>
+  <string name="SYS_FOLDER_NAME_INVALID">Der ausgewählte Name des Ordners #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfe den Ordnernamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : " | &lt; &gt;</string>
   <string name="SYS_FONT_AWESOME_DESC">Du kannst auf unterschiedliche Arten ein Icon hinterlegen:\n1. Ein Icon des Webfonts "Font Awesome". Gehe dazu auf #VAR1#http://fontawesome.com#VAR2# und wähle ein kostenloses Icon der Sammlung "Solid" oder "Brands" aus. Als Präfix musst du noch fa- davor setzen. Wählst du also das Icon "user" aus, musst du hier "fa-user" eintragen.\n2. Ein JPEG oder PNG Icon. Trage dazu die vollständige URL zusammen mit dem Dateinamen des Icons ein. Alternativ kannst du das Icon auch im Theme im Ordner "icons" ablegen, dann brauchst du nur den Dateinamen anzugeben.</string>
   <string name="SYS_FORMER">Ehemaliger</string>
   <string name="SYS_FORMER_PL">Ehemalige</string>
