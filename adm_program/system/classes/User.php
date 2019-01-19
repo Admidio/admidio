@@ -105,7 +105,7 @@ class User extends TableAccess
     public function allowedEditProfileField(User $user, $fieldNameIntern)
     {
         
-        return ($this->hasRightEditProfile($user) && $user->mProfileFieldsData->isEditable($fieldNameIntern));
+        return ($this->hasRightEditProfile($user) && $user->mProfileFieldsData->isEditable($fieldNameIntern, $this->hasRightEditProfile($user)));
     }
 
     /**

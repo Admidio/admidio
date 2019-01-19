@@ -448,13 +448,16 @@ class ProfileFields
      * !!! NOTE that this method ONLY checks if it could be possible to edit this field. There MUST be 
      * another check if the current user is allowed to edit the user profile generally.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
+     * @param bool   $allowedToEditProfile Set to **true** if the current user has the right to edit the profile
+     *                                    in which context the right should be checked. This param must not be
+     *                                    set if you are not in a user context.
      * @return bool Return true if the current user is allowed to view this profile field
      */
-    public function isEditable($fieldNameIntern)
+    public function isEditable($fieldNameIntern, $allowedToEditProfile)
     {
         global $gCurrentUser;
 
-        return($this->isVisible($fieldNameIntern, false)
+        return($this->isVisible($fieldNameIntern, $allowedToEditProfile)
         && ($gCurrentUser->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0));
     }
 
