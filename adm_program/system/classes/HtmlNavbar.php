@@ -139,7 +139,7 @@ class HtmlNavbar
         // add root path to link unless the full URL is given
         if ($url !== '' && $url !== '#' && preg_match($urlStartRegex, $url) === 0)
         {
-            $url = ADMIDIO_URL . '/' . $url;
+            $url = ADMIDIO_URL . $url;
         }
 
         // add THEME_URL to images unless the full URL is given
