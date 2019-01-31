@@ -780,13 +780,9 @@ input[type="time"] {
     background: linear-gradient(to bottom, #ddeff2 0%, #7dbec8 90%);
 }
 
-/*.dataTable {
+.dataTable {
     border-bottom: 2px solid #c1dce6;
 }
-
-.dt-bootstrap {
-    margin-bottom: 20px;
-}*/
 
 /**************************************************/
 /* Module specific css layout */
