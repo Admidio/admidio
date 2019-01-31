@@ -177,8 +177,8 @@ elseif($getMode === 'html')
     </script>
 
     <div class="modal-header">
+        <h3 class="modal-title">'.$gL10n->get('PRO_EDIT_PASSWORD').'</h3>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">'.$gL10n->get('PRO_EDIT_PASSWORD').'</h4>
     </div>
     <div class="modal-body">';
         // show form
@@ -209,7 +209,7 @@ elseif($getMode === 'html')
         );
         $form->addSubmitButton(
             'btn_save', $gL10n->get('SYS_SAVE'),
-            array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+            array('icon' => 'fa-check', 'class' => ' offset-sm-3')
         );
         echo $form->show();
     echo '</div>';

@@ -226,7 +226,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         $this->addElement('button');
-        $this->addAttribute('class', 'btn btn-default');
+        $this->addAttribute('class', 'btn btn-secondary');
 
         if ($optionsAll['data-admidio'] !== '')
         {
@@ -698,7 +698,7 @@ class HtmlForm extends HtmlFormBasic
         {
             // show button to add new upload field to form
             $this->addHtml(
-                '<button type="button" id="btn_add_attachment_' . $id . '" class="btn btn-default">
+                '<button type="button" id="btn_add_attachment_' . $id . '" class="btn btn-secondary">
                     <i class="fas ' . $optionsAll['icon'] . '"></i>' . $optionsAll['multiUploadLabel'] . '
                 </button>'
             );
@@ -2038,7 +2038,7 @@ class HtmlForm extends HtmlFormBasic
             }
             else
             {
-                $this->addHtml('<div class="col-sm-offset-3 col-sm-9">');
+                $this->addHtml('<div class="offset-sm-3 col-sm-9">');
             }
         }
     }

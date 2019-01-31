@@ -245,6 +245,12 @@ class HtmlPage
         if ($this->showModal)
         {
             $this->addJavascript('
+                $("#admidio_modal").on("show.bs.modal", function (event) {
+                  var link = $(event.relatedTarget);
+                  var url  = link.attr("href");
+                  $(this).find(".modal-content").load(url);
+                });
+
                 $("body").on("hidden.bs.modal", ".modal", function() {
                     $(this).removeData("bs.modal");
                 });',
@@ -253,7 +259,7 @@ class HtmlPage
             $this->addHtml('
                 <div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content"></div>
+                        <div class="modal-content">Test</div>
                     </div>
                 </div>'
             );

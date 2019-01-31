@@ -171,7 +171,7 @@ while($row = $usrStatement->fetch())
             {
                 $page->addHtml('<br />'.$gL10n->get('NWU_REMINDER_SEND_LOGIN').'</p>
 
-                <button class="btn btn-default btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '6')).'\'">
+                <button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '6')).'\'">
                     <i class="fas fa-key"></i>'.$gL10n->get('NWU_SEND_LOGIN').'</button>');
             }
         }
@@ -180,7 +180,7 @@ while($row = $usrStatement->fetch())
             // Logindaten sind NICHT vorhanden -> diese nun zuordnen
             $page->addHtml('<p>'.$gL10n->get('NWU_USER_NO_VALID_LOGIN').'</p>
 
-            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '1')).'\'">
+            <button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '1')).'\'">
                 <i class="fas fa-user-check"></i>'.$gL10n->get('NWU_ASSIGN_LOGIN').'</button>');
         }
     }
@@ -194,7 +194,7 @@ while($row = $usrStatement->fetch())
             // Logindaten sind bereits vorhanden
             $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
 
-            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'">
+            <button class="btn btn-primary" onclick="window.location.href=\''.$link.'\'">
                 <i class="fas fa-user-check"></i>'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'</button>');
         }
         else
@@ -202,7 +202,7 @@ while($row = $usrStatement->fetch())
             // KEINE Logindaten vorhanden
             $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP_NO_LOGIN', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
 
-            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'">
+            <button class="btn btn-primary" onclick="window.location.href=\''.$link.'\'">
                 <i class="fas fa-user-check"></i>'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'</button>');
         }
     }
@@ -216,7 +216,7 @@ $page->addHtml('
         <div class="card-body">
             <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '</p>
 
-            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$urlCreateNewUser.'\'">
+            <button class="btn btn-primary" onclick="window.location.href=\''.$urlCreateNewUser.'\'">
                 <i class="fas fa-plus-circle"></i>'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
         </div>
     </div>'

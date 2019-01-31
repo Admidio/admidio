@@ -120,18 +120,18 @@ else
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-2 col-xs-4">'.$gL10n->get('ROO_CAPACITY').'</div>
-                    <div class="col-sm-4 col-xs-8"><strong>'.(int) $room->getValue('room_capacity').'</strong></div>');
+                    <div class="col-sm-2 col-4">'.$gL10n->get('ROO_CAPACITY').'</div>
+                    <div class="col-sm-4 col-8"><strong>'.(int) $room->getValue('room_capacity').'</strong></div>');
 
                     if($room->getValue('room_overhang') > 0)
                     {
-                        $page->addHtml('<div class="col-sm-2 col-xs-4">'.$gL10n->get('ROO_OVERHANG').'</div>
-                        <div class="col-sm-4 col-xs-8"><strong>'.(int) $room->getValue('room_overhang').'</strong></div>');
+                        $page->addHtml('<div class="col-sm-2 col-4">'.$gL10n->get('ROO_OVERHANG').'</div>
+                        <div class="col-sm-4 col-8"><strong>'.(int) $room->getValue('room_overhang').'</strong></div>');
                     }
                     else
                     {
-                        $page->addHtml('<div class="col-sm-2 col-xs-4">&nbsp;</div>
-                        <div class="col-sm-4 col-xs-8">&nbsp;</div>');
+                        $page->addHtml('<div class="col-sm-2 col-4">&nbsp;</div>
+                        <div class="col-sm-4 col-8">&nbsp;</div>');
                     }
 
                     //echo $table->getHtmlTable();

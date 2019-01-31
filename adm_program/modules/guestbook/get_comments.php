@@ -93,9 +93,9 @@ if ($getGbcGboId > 0)
             {
                 echo '
                 <div class="btn-group" role="group">
-                    <button class="btn btn-default" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 10, 'id' => $gbcId)).'\')">
-                        <i class=\"fas fa-check\"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
-                    <button class="btn btn-default" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 5, 'id' => $gbcId)).'\')">
+                    <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 10, 'id' => $gbcId)).'\')">
+                        <i class="fas fa-check"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
+                    <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 5, 'id' => $gbcId)).'\')">
                         <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_REMOVE').'</button>
                 </div>';
             }
@@ -116,7 +116,7 @@ if ($getGbcGboId > 0)
         {
             // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
             echo '
-            <button type="button" class="btn btn-default" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('id' => $getGbcGboId)).'\'">
+            <button type="button" class="btn btn-secondary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('id' => $getGbcGboId)).'\'">
                 <i class="fas fa-pencil-alt"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
         }
     }

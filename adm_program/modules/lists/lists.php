@@ -194,9 +194,8 @@ foreach($listsResult['recordset'] as $row)
     <div class="card" id="role_details_panel_'.$rolId.'">
         <div class="card-header">
             <div class="float-left">
-                <h4 class="card-title">
-                    <a data-toggle="collapse" data-parent="#accordion_'.$catId.'" href="#collapse_'.$rolId.'">
-                        '. $role->getValue('rol_name'). '</a></h4>
+                <a data-toggle="collapse" data-parent="#accordion_'.$catId.'" href="#collapse_'.$rolId.'">
+                    '. $role->getValue('rol_name'). '</a><
             </div>
             <div class="float-right text-right">');
                 // send a mail to all role members

@@ -253,7 +253,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
     {
         if ($actThumbnail <= $photoAlbum->getValue('pho_quantity'))
         {
-            $photoThumbnailTable .= '<div class="col-sm-6 col-md-3 admidio-album-thumbnail" id="div_image_'.$actThumbnail.'">';
+            $photoThumbnailTable .= '<div class="col-sm-6 col-md-3 admidio-album-thumbnail text-center" id="div_image_'.$actThumbnail.'">';
 
                 // Popup window
                 if ((int) $gSettingsManager->get('photo_show_mode') === 0)
@@ -369,12 +369,12 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
     $page->addHtml('
         <br />
         <div class="row">
-            <div class="col-sm-2 col-xs-4">'.$gL10n->get('SYS_DATE').'</div>
-            <div class="col-sm-4 col-xs-8"><strong>'.$datePeriod.'</strong></div>
+            <div class="col-sm-2 col-4">'.$gL10n->get('SYS_DATE').'</div>
+            <div class="col-sm-4 col-8"><strong>'.$datePeriod.'</strong></div>
         </div>
         <div class="row">
-            <div class="col-sm-2 col-xs-4">'.$gL10n->get('PHO_PHOTOGRAPHER').'</div>
-            <div class="col-sm-4 col-xs-8"><strong>'.$photoAlbum->getValue('pho_photographers').'</strong></div>
+            <div class="col-sm-2 col-4">'.$gL10n->get('PHO_PHOTOGRAPHER').'</div>
+            <div class="col-sm-4 col-8"><strong>'.$photoAlbum->getValue('pho_photographers').'</strong></div>
         </div>
     ');
 
@@ -506,11 +506,11 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-preview">
+                    <div class="col-12 col-sm-12 col-md-6 admidio-album-card-preview">
                         <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'"><img
                             class="thumbnail" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $shuffleImage['shuffle_pho_id'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)).'" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-description">
+                    <div class="col-12 col-sm-12 col-md-6 admidio-album-card-description">
         ');
 
         $form = new HtmlForm('form_album_'.(int) $childPhotoAlbum->getValue('pho_id'), null, $page, array('type' => 'vertical'));
@@ -553,11 +553,11 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
 
             $page->addHtml('
                 <div class="btn-group" role="group" style="width: 100%;">
-                    <button class="btn btn-default admidio-btn-album-upload" style="width: 50%;"
+                    <button class="btn btn-secondary admidio-btn-album-upload" style="width: 50%;"
                         data-pho-id="'.(int) $childPhotoAlbum->getValue('pho_id').'" data-toggle="modal" data-target="#admidio_modal">
                         <i class="fas fa-upload"></i>'.$gL10n->get('PHO_UPLOAD_PHOTOS').'
                     </button>
-                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => $lockMode)).'\'">
+                    <button class="btn btn-secondary" style="width: 50%;" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => $lockMode)).'\'">
                         <i class="fas ' . $lockIcon . '"></i>'.$lockBtnName.'
                     </button>
                 </div>
