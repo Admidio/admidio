@@ -1975,7 +1975,7 @@ class HtmlForm extends HtmlFormBasic
      */
     protected function openControlStructure($id, $label, $property = self::FIELD_DEFAULT, $helpTextId = '', $icon = '', $class = '')
     {
-        $cssClassRow  = '';
+        $cssClassRow  = 'form-group';
         $htmlIcon     = '';
         $htmlHelpIcon = '';
         $htmlIdFor    = '';
@@ -1984,6 +1984,11 @@ class HtmlForm extends HtmlFormBasic
         if ($class !== '')
         {
             $cssClassRow .= ' ' . $class;
+        }
+
+        if($this->type === 'default')
+        {
+            $cssClassRow .= ' row';
         }
 
         // if necessary set css class for a mandatory element
@@ -1996,11 +2001,11 @@ class HtmlForm extends HtmlFormBasic
         if ($id !== '')
         {
             $htmlIdFor = ' for="' . $id . '"';
-            $this->addHtml('<div id="' . $id . '_group" class="form-group' . $cssClassRow . '">');
+            $this->addHtml('<div id="' . $id . '_group" class="' . $cssClassRow . '">');
         }
         else
         {
-            $this->addHtml('<div class="form-group' . $cssClassRow . '">');
+            $this->addHtml('<div class="' . $cssClassRow . '">');
         }
 
         if ($icon !== '')
