@@ -30,7 +30,7 @@
   <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">All administrators of the module of the parent organization</string>
   <string name="CAT_ALL_THIS_ORGANIZATION">All members of this organization</string>
   <string name="CAT_CATEGORY_EXIST">Category name already exists in selected organization.</string>
-  <string name="CAT_CATEGORY_GLOBAL">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization. </string>
+  <string name="CAT_CATEGORY_GLOBAL">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
   <string name="CAT_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Could not delete category #VAR1_BOLD# because of #VAR2# depending entries.</string>
@@ -49,7 +49,7 @@
   <string name="DAT_ASSIGN_PARTICIPANTS">Add participants</string>
   <string name="DAT_ATTEND">Participate</string>
   <string name="DAT_ATTEND_DATE">You signed up for the event #VAR1_BOLD# on #VAR2#.</string>
-  <string name="DAT_ATTEND_POSSIBLY">You signed up tentative for the event #VAR1_BOLD# on #VAR2#. </string>
+  <string name="DAT_ATTEND_POSSIBLY">You signed up tentative for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="DAT_CALENDAR">Calendar</string>
   <string name="DAT_CANCEL">Cancel</string>
   <string name="DAT_CANCEL_DATE">You canceled the participation for the event #VAR1_BOLD# on #VAR2#.</string>
@@ -93,7 +93,7 @@
   <string name="DAT_PARTICIPATE_NO_RIGHTS">You do not have the right to sign up for this appointment.</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Join the event as organizer</string>
   <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">You become the organizer of the appointment and receive the right to add or remove additional participants. You can also appoint other people as organizers.</string>
-  <string name="DAT_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2# </string>
+  <string name="DAT_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2#</string>
   <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Previous #VAR1#</string>
   <string name="DAT_REGISTRATION_POSSIBLE_FOR">Registration possible for</string>
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">Registration is closed.</string>
@@ -178,7 +178,7 @@
   <string name="ECA_A_ECARD_FROM">Greeting card sent by</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Activating greeting card module</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">The greeting card module can be activated or deactivated via this setting. If the server does not support e-mail, the module should be disabled. This module is generally only available to registered users. (Default: yes)</string>
-  <string name="ECA_GREETING_CARD">Greeting card </string>
+  <string name="ECA_GREETING_CARD">Greeting card</string>
   <string name="ECA_GREETING_CARDS">Greeting cards</string>
   <string name="ECA_GREETING_CARD_EDIT">Edit greeting card</string>
   <string name="ECA_LAYOUT">Layout</string>
@@ -249,7 +249,7 @@
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
   <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Current database version: #VAR1#\n\nDatabase version after update: #VAR2#</string>
   <string name="INS_DATABASE_NAME_INVALID">The database name contains invalid characters!</string>
-  <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhoster need a special port, you can type it here. </string>
+  <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhoster need a special port, you can type it here.</string>
   <string name="INS_DATABASE_PORT_INVALID">The specified port is not valid. For a valid port, select between 1 and 65535 or leave it blank.</string>
   <string name="INS_DATABASE_SYSTEM">Database system</string>
   <string name="INS_DATABASE_TYPE_INVALID">Admidio only supports MySQL and PostgreSQL.</string>
@@ -601,7 +601,7 @@
   <string name="MEN_NAME_DESC">The name of the entry in the menu. Here you can also enter the name of a translation string.</string>
   <string name="MEN_MENU_ITEM">Menu item</string>
   <string name="MEN_MENU_LEVEL">Menu level</string>
-  <string name="MEN_MENU_LEVEL_DESC">A menu item is always subordinate to another menu item. In the selection list, select a menu level in which the new menu item should be visible. </string>
+  <string name="MEN_MENU_LEVEL_DESC">A menu item is always subordinate to another menu item. In the selection list, select a menu level in which the new menu item should be visible.</string>
   <string name="MEN_MODULE_RIGHTS">Module rights</string>
   <string name="MEN_MODULE_RIGHTS_DESC">If you specify a module here, the menu item will only be displayed if the user also has the right to see this module.</string>
   <string name="MEN_PLUGIN">Plugins</string>
@@ -871,7 +871,7 @@
   <string name="PRO_ADD_USER">Add user</string>
   <string name="PRO_ADD_USER_RELATION">Create relationship</string>
   <string name="PRO_ASSIGNED_BY_ROLES">Set by the roles</string>
-  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL"> Registration has been confirmed. The user can now log on to the system.</string>
+  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Registration has been confirmed. The user can now log on to the system.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Cancel membership</string>
   <string name="PRO_CANCEL_USER_RELATION">Delete relationship</string>
   <string name="PRO_CHANGE_DATE">Change date</string>
@@ -1104,7 +1104,7 @@
   <string name="SYS_CREATED_BY">Created by #VAR1# on #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your #VAR1#profile#VAR1#.</string>
-  <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, weblinks ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD# </string>
+  <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, weblinks ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Data visible to multiple organizations</string>
   <string name="SYS_DATA_PROTECTION">Data protection</string>
   <string name="SYS_DATA_PROTECTION_DESC">Here, the URL to your page with the privacy policy can be deposited. This page is linked to the use of cookies for further information. If the selected theme supports this, a link will also be displayed on the Admidio pages. (Example: https://www.example.com/data_protection.html)</string>
@@ -1419,7 +1419,7 @@
   <string name="SYS_UPDATE">Update</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
   <string name="SYS_UPLOAD_NAME_ERROR">The file name can not be named \"Submit\".</string>
-  <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed. </string>
+  <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
   <string name="SYS_USER">User</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>
