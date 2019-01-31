@@ -4,24 +4,24 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#bs/dt-1.10.16/fh-3.1.3/r-2.2.1
+ *   https://datatables.net/download/#bs4/dt-1.10.18/fh-3.1.4/r-2.2.2/rg-1.1.0
  *
  * Included libraries:
- *   DataTables 1.10.16, FixedHeader 3.1.3, Responsive 2.2.1
+ *   DataTables 1.10.18, FixedHeader 3.1.4, Responsive 2.2.2, RowGroup 1.1.0
  */
 
-/*! DataTables 1.10.16
- * ©2008-2017 SpryMedia Ltd - datatables.net/license
+/*! DataTables 1.10.18
+ * ©2008-2018 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     DataTables
  * @description Paginate, search and order HTML tables
- * @version     1.10.16
+ * @version     1.10.18
  * @file        jquery.dataTables.js
  * @author      SpryMedia Ltd
  * @contact     www.datatables.net
- * @copyright   Copyright 2008-2017 SpryMedia Ltd.
+ * @copyright   Copyright 2008-2018 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license
@@ -921,8 +921,11 @@
 				var s = allSettings[i];
 			
 				/* Base check on table node */
-				if ( s.nTable == this || s.nTHead.parentNode == this || (s.nTFoot && s.nTFoot.parentNode == this) )
-				{
+				if (
+					s.nTable == this ||
+					(s.nTHead && s.nTHead.parentNode == this) ||
+					(s.nTFoot && s.nTFoot.parentNode == this)
+				) {
 					var bRetrieve = oInit.bRetrieve !== undefined ? oInit.bRetrieve : defaults.bRetrieve;
 					var bDestroy = oInit.bDestroy !== undefined ? oInit.bDestroy : defaults.bDestroy;
 			
@@ -979,11 +982,7 @@
 			
 			// Backwards compatibility, before we apply all the defaults
 			_fnCompatOpts( oInit );
-			
-			if ( oInit.oLanguage )
-			{
-				_fnLanguageCompat( oInit.oLanguage );
-			}
+			_fnLanguageCompat( oInit.oLanguage );
 			
 			// If the length menu is given, but the init display length is not, use the length menu
 			if ( oInit.aLengthMenu && ! oInit.iDisplayLength )
@@ -1366,8 +1365,10 @@
 	// - fr - Swiss Franc
 	// - kr - Swedish krona, Norwegian krone and Danish krone
 	// - \u2009 is thin space and \u202F is narrow no-break space, both used in many
+	// - Ƀ - Bitcoin
+	// - Ξ - Ethereum
 	//   standards as thousands separators.
-	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F\u20BD\u20a9\u20BArfk]/gi;
+	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F\u20BD\u20a9\u20BArfkɃΞ]/gi;
 	
 	
 	var _empty = function ( d ) {
@@ -1742,33 +1743,43 @@
 	 */
 	function _fnLanguageCompat( lang )
 	{
+		// Note the use of the Hungarian notation for the parameters in this method as
+		// this is called after the mapping of camelCase to Hungarian
 		var defaults = DataTable.defaults.oLanguage;
-		var zeroRecords = lang.sZeroRecords;
 	
-		/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
-		 * sZeroRecords - assuming that is given.
-		 */
-		if ( ! lang.sEmptyTable && zeroRecords &&
-			defaults.sEmptyTable === "No data available in table" )
-		{
-			_fnMap( lang, lang, 'sZeroRecords', 'sEmptyTable' );
+		// Default mapping
+		var defaultDecimal = defaults.sDecimal;
+		if ( defaultDecimal ) {
+			_addNumericSort( defaultDecimal );
 		}
 	
-		/* Likewise with loading records */
-		if ( ! lang.sLoadingRecords && zeroRecords &&
-			defaults.sLoadingRecords === "Loading..." )
-		{
-			_fnMap( lang, lang, 'sZeroRecords', 'sLoadingRecords' );
-		}
+		if ( lang ) {
+			var zeroRecords = lang.sZeroRecords;
 	
-		// Old parameter name of the thousands separator mapped onto the new
-		if ( lang.sInfoThousands ) {
-			lang.sThousands = lang.sInfoThousands;
-		}
+			// Backwards compatibility - if there is no sEmptyTable given, then use the same as
+			// sZeroRecords - assuming that is given.
+			if ( ! lang.sEmptyTable && zeroRecords &&
+				defaults.sEmptyTable === "No data available in table" )
+			{
+				_fnMap( lang, lang, 'sZeroRecords', 'sEmptyTable' );
+			}
 	
-		var decimal = lang.sDecimal;
-		if ( decimal ) {
-			_addNumericSort( decimal );
+			// Likewise with loading records
+			if ( ! lang.sLoadingRecords && zeroRecords &&
+				defaults.sLoadingRecords === "Loading..." )
+			{
+				_fnMap( lang, lang, 'sZeroRecords', 'sLoadingRecords' );
+			}
+	
+			// Old parameter name of the thousands separator mapped onto the new
+			if ( lang.sInfoThousands ) {
+				lang.sThousands = lang.sInfoThousands;
+			}
+	
+			var decimal = lang.sDecimal;
+			if ( decimal && defaultDecimal !== decimal ) {
+				_addNumericSort( decimal );
+			}
 		}
 	}
 	
@@ -3140,7 +3151,7 @@
 				}
 			}
 	
-			_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [nTr, rowData, iRow] );
+			_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [nTr, rowData, iRow, cells] );
 		}
 	
 		// Remove once webkit bug 131819 and Chromium bug 365619 have been resolved
@@ -3465,7 +3476,7 @@
 				// iRowCount and j are not currently documented. Are they at all
 				// useful?
 				_fnCallbackFire( oSettings, 'aoRowCallback', null,
-					[nRow, aoData._aData, iRowCount, j] );
+					[nRow, aoData._aData, iRowCount, j, iDataIndex] );
 	
 				anRows.push( nRow );
 				iRowCount++;
@@ -3869,12 +3880,12 @@
 		{
 			ajaxData = ajax.data;
 	
-			var newData = $.isFunction( ajaxData ) ?
+			var newData = typeof ajaxData === 'function' ?
 				ajaxData( data, oSettings ) :  // fn can manipulate data or return
 				ajaxData;                      // an object object or array to merge
 	
 			// If the function returned something, use that alone
-			data = $.isFunction( ajaxData ) && newData ?
+			data = typeof ajaxData === 'function' && newData ?
 				newData :
 				$.extend( true, data, newData );
 	
@@ -3938,7 +3949,7 @@
 				url: ajax || oSettings.sAjaxSource
 			} ) );
 		}
-		else if ( $.isFunction( ajax ) )
+		else if ( typeof ajax === 'function' )
 		{
 			// Is a function - let the caller define what needs to be done
 			oSettings.jqXHR = ajax.call( instance, data, callback, oSettings );
@@ -5372,14 +5383,18 @@
 		// both match, but we want to hide it completely. We want to also fix their
 		// width to what they currently are
 		_fnApplyToChildren( function(nSizer, i) {
-			nSizer.innerHTML = '<div class="dataTables_sizing" style="height:0;overflow:hidden;">'+headerContent[i]+'</div>';
+			nSizer.innerHTML = '<div class="dataTables_sizing">'+headerContent[i]+'</div>';
+			nSizer.childNodes[0].style.height = "0";
+			nSizer.childNodes[0].style.overflow = "hidden";
 			nSizer.style.width = headerWidths[i];
 		}, headerSrcEls );
 	
 		if ( footer )
 		{
 			_fnApplyToChildren( function(nSizer, i) {
-				nSizer.innerHTML = '<div class="dataTables_sizing" style="height:0;overflow:hidden;">'+footerContent[i]+'</div>';
+				nSizer.innerHTML = '<div class="dataTables_sizing">'+footerContent[i]+'</div>';
+				nSizer.childNodes[0].style.height = "0";
+				nSizer.childNodes[0].style.overflow = "hidden";
 				nSizer.style.width = footerWidths[i];
 			}, footerSrcEls );
 		}
@@ -6573,7 +6588,7 @@
 	{
 		$(n)
 			.on( 'click.DT', oData, function (e) {
-					n.blur(); // Remove focus outline for mouse users
+					$(n).blur(); // Remove focus outline for mouse users
 					fn(e);
 				} )
 			.on( 'keypress.DT', oData, function (e){
@@ -7813,13 +7828,26 @@
 			}
 		}
 		else if ( order == 'current' || order == 'applied' ) {
-			a = search == 'none' ?
-				displayMaster.slice() :                      // no search
-				search == 'applied' ?
-					displayFiltered.slice() :                // applied search
-					$.map( displayMaster, function (el, i) { // removed search
-						return $.inArray( el, displayFiltered ) === -1 ? el : null;
-					} );
+			if ( search == 'none') {
+				a = displayMaster.slice();
+			}
+			else if ( search == 'applied' ) {
+				a = displayFiltered.slice();
+			}
+			else if ( search == 'removed' ) {
+				// O(n+m) solution by creating a hash map
+				var displayFilteredMap = {};
+	
+				for ( var i=0, ien=displayFiltered.length ; i<ien ; i++ ) {
+					displayFilteredMap[displayFiltered[i]] = null;
+				}
+	
+				a = $.map( displayMaster, function (el) {
+					return ! displayFilteredMap.hasOwnProperty(el) ?
+						el :
+						null;
+				} );
+			}
 		}
 		else if ( order == 'index' || order == 'original' ) {
 			for ( i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
@@ -7852,14 +7880,13 @@
 	 * {array}     - jQuery array of nodes, or simply an array of TR nodes
 	 *
 	 */
-	
-	
 	var __row_selector = function ( settings, selector, opts )
 	{
 		var rows;
 		var run = function ( sel ) {
 			var selInt = _intVal( sel );
 			var i, ien;
+			var aoData = settings.aoData;
 	
 			// Short cut - selector is a number and no options provided (default is
 			// all records, so no need to check if the index is in there, since it
@@ -7884,23 +7911,26 @@
 			// Selector - function
 			if ( typeof sel === 'function' ) {
 				return $.map( rows, function (idx) {
-					var row = settings.aoData[ idx ];
+					var row = aoData[ idx ];
 					return sel( idx, row._aData, row.nTr ) ? idx : null;
 				} );
 			}
 	
-			// Get nodes in the order from the `rows` array with null values removed
-			var nodes = _removeEmpty(
-				_pluck_order( settings.aoData, rows, 'nTr' )
-			);
-	
 			// Selector - node
 			if ( sel.nodeName ) {
-				if ( sel._DT_RowIndex !== undefined ) {
-					return [ sel._DT_RowIndex ]; // Property added by DT for fast lookup
+				var rowIdx = sel._DT_RowIndex;  // Property added by DT for fast lookup
+				var cellIdx = sel._DT_CellIndex;
+	
+				if ( rowIdx !== undefined ) {
+					// Make sure that the row is actually still present in the table
+					return aoData[ rowIdx ] && aoData[ rowIdx ].nTr === sel ?
+						[ rowIdx ] :
+						[];
 				}
-				else if ( sel._DT_CellIndex ) {
-					return [ sel._DT_CellIndex.row ];
+				else if ( cellIdx ) {
+					return aoData[ cellIdx.row ] && aoData[ cellIdx.row ].nTr === sel ?
+						[ cellIdx.row ] :
+						[];
 				}
 				else {
 					var host = $(sel).closest('*[data-dt-row]');
@@ -7929,6 +7959,11 @@
 				// need to fall through to jQuery in case there is DOM id that
 				// matches
 			}
+			
+			// Get nodes in the order from the `rows` array with null values removed
+			var nodes = _removeEmpty(
+				_pluck_order( settings.aoData, rows, 'nTr' )
+			);
 	
 			// Selector - jQuery selector string, array of nodes or jQuery object/
 			// As jQuery's .filter() allows jQuery objects to be passed in filter,
@@ -8123,7 +8158,13 @@
 		}
 	
 		// Set
-		ctx[0].aoData[ this[0] ]._aData = data;
+		var row = ctx[0].aoData[ this[0] ];
+		row._aData = data;
+	
+		// If the DOM has an id, and the data source is an array
+		if ( $.isArray( data ) && row.nTr.id ) {
+			_fnSetObjectDataFn( ctx[0].rowId )( data, row.nTr.id );
+		}
 	
 		// Automatically invalidate
 		_fnInvalidate( ctx[0], this[0], 'data' );
@@ -8549,6 +8590,12 @@
 		_fnDrawHead( settings, settings.aoHeader );
 		_fnDrawHead( settings, settings.aoFooter );
 	
+		// Update colspan for no records display. Child rows and extensions will use their own
+		// listeners to do this - only need to update the empty table item here
+		if ( ! settings.aiDisplay.length ) {
+			$(settings.nTBody).find('td[colspan]').attr('colspan', _fnVisbleColumns(settings));
+		}
+	
 		_fnSaveState( settings );
 	};
 	
@@ -8714,7 +8761,10 @@
 			
 			// Selector - index
 			if ( $.isPlainObject( s ) ) {
-				return [s];
+				// Valid cell index and its in the array of selectable rows
+				return s.column !== undefined && s.row !== undefined && $.inArray( s.row, rows ) !== -1 ?
+					[s] :
+					[];
 			}
 	
 			// Selector - jQuery filtered cells
@@ -8778,11 +8828,11 @@
 		}
 	
 		// Row + column selector
-		var columns = this.columns( columnSelector, opts );
-		var rows = this.rows( rowSelector, opts );
+		var columns = this.columns( columnSelector );
+		var rows = this.rows( rowSelector );
 		var a, i, ien, j, jen;
 	
-		var cells = this.iterator( 'table', function ( settings, idx ) {
+		this.iterator( 'table', function ( settings, idx ) {
 			a = [];
 	
 			for ( i=0, ien=rows[idx].length ; i<ien ; i++ ) {
@@ -8793,9 +8843,10 @@
 					} );
 				}
 			}
-	
-			return a;
 		}, 1 );
+	
+	    // Now pass through the cell selector for options
+	    var cells = this.cells( a, opts );
 	
 		$.extend( cells.selector, {
 			cols: columnSelector,
@@ -9425,7 +9476,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.10.16";
+	DataTable.version = "1.10.18";
 
 	/**
 	 * Private data store, containing all of the settings objects that are
@@ -12363,8 +12414,8 @@
 		 *          { "data": "engine" },
 		 *          { "data": "browser" },
 		 *          { "data": "platform.inner" },
-		 *          { "data": "platform.details.0" },
-		 *          { "data": "platform.details.1" }
+		 *          { "data": "details.0" },
+		 *          { "data": "details.1" }
 		 *        ]
 		 *      } );
 		 *    } );
@@ -13847,7 +13898,7 @@
 		 *
 		 *  @type string
 		 */
-		build:"bs/dt-1.10.16/fh-3.1.3/r-2.2.1",
+		build:"bs4/dt-1.10.18/fh-3.1.4/r-2.2.2/rg-1.1.0",
 	
 	
 		/**
@@ -14161,7 +14212,7 @@
 			 *    $.fn.dataTable.ext.type.detect.push(
 			 *      function ( data, settings ) {
 			 *        // Check the numeric part
-			 *        if ( ! $.isNumeric( data.substring(1) ) ) {
+			 *        if ( ! data.substring(1).match(/[0-9]/) ) {
 			 *          return null;
 			 *        }
 			 *
@@ -14744,7 +14795,8 @@
 	$.extend( _ext.type.order, {
 		// Dates
 		"date-pre": function ( d ) {
-			return Date.parse( d ) || -Infinity;
+			var ts = Date.parse( d );
+			return isNaN(ts) ? -Infinity : ts;
 		},
 	
 		// html
@@ -15060,6 +15112,7 @@
 		_fnRenderer: _fnRenderer,
 		_fnDataSource: _fnDataSource,
 		_fnRowAttributes: _fnRowAttributes,
+		_fnExtend: _fnExtend,
 		_fnCalculateEnd: function () {} // Used by a lot of plug-ins, but redundant
 		                                // in 1.10, so this dead-end function is
 		                                // added to prevent errors
@@ -15255,12 +15308,12 @@
 }));
 
 
-/*! DataTables Bootstrap 3 integration
- * ©2011-2015 SpryMedia Ltd - datatables.net/license
+/*! DataTables Bootstrap 4 integration
+ * ©2011-2017 SpryMedia Ltd - datatables.net/license
  */
 
 /**
- * DataTables integration for Bootstrap 3. This requires Bootstrap 3 and
+ * DataTables integration for Bootstrap 4. This requires Bootstrap 4 and
  * DataTables 1.10 or newer.
  *
  * This file sets the defaults and adds options to DataTables to style its
@@ -15303,19 +15356,20 @@ var DataTable = $.fn.dataTable;
 /* Set the defaults for DataTables initialisation */
 $.extend( true, DataTable.defaults, {
 	dom:
-		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+		"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 		"<'row'<'col-sm-12'tr>>" +
-		"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+		"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 	renderer: 'bootstrap'
 } );
 
 
 /* Default class modification */
 $.extend( DataTable.ext.classes, {
-	sWrapper:      "dataTables_wrapper form-inline dt-bootstrap",
-	sFilterInput:  "form-control input-sm",
-	sLengthSelect: "form-control input-sm",
-	sProcessing:   "dataTables_processing panel panel-default"
+	sWrapper:      "dataTables_wrapper dt-bootstrap4",
+	sFilterInput:  "form-control form-control-sm",
+	sLengthSelect: "custom-select custom-select-sm form-control form-control-sm",
+	sProcessing:   "dataTables_processing card",
+	sPageButton:   "paginate_button page-item"
 } );
 
 
@@ -15395,7 +15449,8 @@ DataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, bu
 								'aria-controls': settings.sTableId,
 								'aria-label': aria[ button ],
 								'data-dt-idx': counter,
-								'tabindex': settings.iTabIndex
+								'tabindex': settings.iTabIndex,
+								'class': 'page-link'
 							} )
 							.html( btnDisplay )
 						)
@@ -15439,19 +15494,19 @@ return DataTable;
 }));
 
 
-/*! FixedHeader 3.1.3
- * ©2009-2017 SpryMedia Ltd - datatables.net/license
+/*! FixedHeader 3.1.4
+ * ©2009-2018 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     FixedHeader
  * @description Fix a table's header or footer, so it is always visible while
  *              scrolling
- * @version     3.1.3
+ * @version     3.1.4
  * @file        dataTables.fixedHeader.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
- * @copyright   Copyright 2009-2017 SpryMedia Ltd.
+ * @copyright   Copyright 2009-2018 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license/mit
@@ -15656,10 +15711,10 @@ $.extend( FixedHeader.prototype, {
 			.on( 'scroll'+this.s.namespace, function () {
 				that._scroll();
 			} )
-			.on( 'resize'+this.s.namespace, function () {
+			.on( 'resize'+this.s.namespace, DataTable.util.throttle( function () {
 				that.s.position.windowHeight = $(window).height();
 				that.update();
-			} );
+			}, 50 ) );
 
 		var autoHeader = $('.fh-fixedHeader');
 		if ( ! this.c.headerOffset && autoHeader.length ) {
@@ -15671,11 +15726,19 @@ $.extend( FixedHeader.prototype, {
 			this.c.footerOffset = autoFooter.outerHeight();
 		}
 
-		dt.on( 'column-reorder.dt.dtfc column-visibility.dt.dtfc draw.dt.dtfc column-sizing.dt.dtfc', function () {
+		dt.on( 'column-reorder.dt.dtfc column-visibility.dt.dtfc draw.dt.dtfc column-sizing.dt.dtfc responsive-display.dt.dtfc', function () {
 			that.update();
 		} );
 
 		dt.on( 'destroy.dtfc', function () {
+			if ( that.c.header ) {
+				that._modeChange( 'in-place', 'header', true );
+			}
+
+			if ( that.c.footer && that.dom.tfoot.length ) {
+				that._modeChange( 'in-place', 'footer', true );
+			}
+
 			dt.off( '.dtfc' );
 			$(window).off( that.s.namespace );
 		} );
@@ -15721,6 +15784,7 @@ $.extend( FixedHeader.prototype, {
 
 			itemDom.floating = $( dt.table().node().cloneNode( false ) )
 				.css( 'table-layout', 'fixed' )
+				.attr( 'aria-hidden', 'true' )
 				.removeAttr( 'id' )
 				.append( itemElement )
 				.appendTo( 'body' );
@@ -15844,6 +15908,10 @@ $.extend( FixedHeader.prototype, {
 		var focus = $.contains( tablePart[0], document.activeElement ) ?
 			document.activeElement :
 			null;
+		
+		if ( focus ) {
+			focus.blur();
+		}
 
 		if ( mode === 'in-place' ) {
 			// Insert the header back into the table's real header
@@ -15855,10 +15923,10 @@ $.extend( FixedHeader.prototype, {
 			this._unsize( item );
 
 			if ( item === 'header' ) {
-				itemDom.host.prepend( this.dom.thead );
+				itemDom.host.prepend( tablePart );
 			}
 			else {
-				itemDom.host.append( this.dom.tfoot );
+				itemDom.host.append( tablePart );
 			}
 
 			if ( itemDom.floating ) {
@@ -15904,7 +15972,9 @@ $.extend( FixedHeader.prototype, {
 
 		// Restore focus if it was lost
 		if ( focus && focus !== document.activeElement ) {
-			focus.focus();
+			setTimeout( function () {
+				focus.focus();
+			}, 10 );
 		}
 
 		this.s.scrollLeft.header = -1;
@@ -16016,7 +16086,7 @@ $.extend( FixedHeader.prototype, {
  * @type {String}
  * @static
  */
-FixedHeader.version = "3.1.3";
+FixedHeader.version = "3.1.4";
 
 /**
  * Defaults
@@ -16118,18 +16188,18 @@ return FixedHeader;
 }));
 
 
-/*! Responsive 2.2.1
- * 2014-2017 SpryMedia Ltd - datatables.net/license
+/*! Responsive 2.2.2
+ * 2014-2018 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     Responsive
  * @description Responsive tables plug-in for DataTables
- * @version     2.2.1
+ * @version     2.2.2
  * @file        dataTables.responsive.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
- * @copyright   Copyright 2014-2017 SpryMedia Ltd.
+ * @copyright   Copyright 2014-2018 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license/mit
@@ -16328,12 +16398,21 @@ $.extend( Responsive.prototype, {
 
 			// DataTables will trigger this event on every column it shows and
 			// hides individually
-			dt.on( 'column-visibility.dtr', function (e, ctx, col, vis, recalc) {
-				if ( recalc ) {
+			dt.on( 'column-visibility.dtr', function () {
+				// Use a small debounce to allow multiple columns to be set together
+				if ( that._timer ) {
+					clearTimeout( that._timer );
+				}
+
+				that._timer = setTimeout( function () {
+					that._timer = null;
+
 					that._classLogic();
 					that._resizeAuto();
 					that._resize();
-				}
+
+					that._redrawChildren();
+				}, 100 );
 			} );
 
 			// Redraw the details box on each draw which will happen if the data
@@ -16436,7 +16515,10 @@ $.extend( Responsive.prototype, {
 		// Class logic - determine which columns are in this breakpoint based
 		// on the classes. If no class control (i.e. `auto`) then `-` is used
 		// to indicate this to the rest of the function
-		var display = $.map( columns, function ( col ) {
+		var display = $.map( columns, function ( col, i ) {
+			if ( dt.column(i).visible() === false ) {
+				return 'not-visible';
+			}
 			return col.auto && col.minWidth === null ?
 				false :
 				col.auto === true ?
@@ -16504,7 +16586,7 @@ $.extend( Responsive.prototype, {
 		var showControl = false;
 
 		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
-			if ( ! columns[i].control && ! columns[i].never && ! display[i] ) {
+			if ( ! columns[i].control && ! columns[i].never && display[i] === false ) {
 				showControl = true;
 				break;
 			}
@@ -16513,6 +16595,11 @@ $.extend( Responsive.prototype, {
 		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
 			if ( columns[i].control ) {
 				display[i] = showControl;
+			}
+
+			// Replace not visible string with false from the control column detection above
+			if ( display[i] === 'not-visible' ) {
+				display[i] = false;
 			}
 		}
 
@@ -16878,7 +16965,7 @@ $.extend( Responsive.prototype, {
 		// any columns that are not visible but can be shown
 		var collapsedClass = false;
 		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
-			if ( columnsVis[i] === false && ! columns[i].never && ! columns[i].control ) {
+			if ( columnsVis[i] === false && ! columns[i].never && ! columns[i].control && ! dt.column(i).visible() === false ) {
 				collapsedClass = true;
 				break;
 			}
@@ -17004,6 +17091,10 @@ $.extend( Responsive.prototype, {
 		// multiple times. For example, cloning and inserting a checked radio
 		// clears the chcecked state of the original radio.
 		$( clonedTable ).find( '[name]' ).removeAttr( 'name' );
+
+		// A position absolute table would take the table out of the flow of
+		// our container element, bypassing the height and width (Scroller)
+		$( clonedTable ).css( 'position', 'relative' )
 		
 		var inserted = $('<div/>')
 			.css( {
@@ -17073,19 +17164,22 @@ $.extend( Responsive.prototype, {
 
 		cells.filter( '[data-dtr-keyboard]' ).removeData( '[data-dtr-keyboard]' );
 
-		var selector = typeof target === 'number' ?
-			':eq('+target+')' :
-			target;
-
-		// This is a bit of a hack - we need to limit the selected nodes to just
-		// those of this table
-		if ( selector === 'td:first-child, th:first-child' ) {
-			selector = '>td:first-child, >th:first-child';
+		if ( typeof target === 'number' ) {
+			dt.cells( null, target, { page: 'current' } ).nodes().to$()
+				.attr( 'tabIndex', ctx.iTabIndex )
+				.data( 'dtr-keyboard', 1 );
 		}
+		else {
+			// This is a bit of a hack - we need to limit the selected nodes to just
+			// those of this table
+			if ( target === 'td:first-child, th:first-child' ) {
+				target = '>td:first-child, >th:first-child';
+			}
 
-		$( selector, dt.rows( { page: 'current' } ).nodes() )
-			.attr( 'tabIndex', ctx.iTabIndex )
-			.data( 'dtr-keyboard', 1 );
+			$( target, dt.rows( { page: 'current' } ).nodes() )
+				.attr( 'tabIndex', ctx.iTabIndex )
+				.data( 'dtr-keyboard', 1 );
+		}
 	}
 } );
 
@@ -17458,7 +17552,7 @@ Api.registerPlural( 'columns().responsiveHidden()', 'column().responsiveHidden()
  * @name Responsive.version
  * @static
  */
-Responsive.version = '2.2.1';
+Responsive.version = '2.2.2';
 
 
 $.fn.dataTable.Responsive = Responsive;
@@ -17486,6 +17580,479 @@ $(document).on( 'preInit.dt.dtr', function (e, settings, json) {
 
 
 return Responsive;
+}));
+
+
+/*! RowGroup 1.1.0
+ * ©2017-2018 SpryMedia Ltd - datatables.net/license
+ */
+
+/**
+ * @summary     RowGroup
+ * @description RowGrouping for DataTables
+ * @version     1.1.0
+ * @file        dataTables.rowGroup.js
+ * @author      SpryMedia Ltd (www.sprymedia.co.uk)
+ * @contact     datatables.net
+ * @copyright   Copyright 2017-2018 SpryMedia Ltd.
+ *
+ * This source file is free software, available under the following license:
+ *   MIT license - http://datatables.net/license/mit
+ *
+ * This source file is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
+ *
+ * For details please refer to: http://www.datatables.net
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		module.exports = function (root, $) {
+			if ( ! root ) {
+				root = window;
+			}
+
+			if ( ! $ || ! $.fn.dataTable ) {
+				$ = require('datatables.net')(root, $).$;
+			}
+
+			return factory( $, root, root.document );
+		};
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document, undefined ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+var RowGroup = function ( dt, opts ) {
+	// Sanity check that we are using DataTables 1.10 or newer
+	if ( ! DataTable.versionCheck || ! DataTable.versionCheck( '1.10.8' ) ) {
+		throw 'RowGroup requires DataTables 1.10.8 or newer';
+	}
+
+	// User and defaults configuration object
+	this.c = $.extend( true, {},
+		DataTable.defaults.rowGroup,
+		RowGroup.defaults,
+		opts
+	);
+
+	// Internal settings
+	this.s = {
+		dt: new DataTable.Api( dt )
+	};
+
+	// DOM items
+	this.dom = {
+
+	};
+
+	// Check if row grouping has already been initialised on this table
+	var settings = this.s.dt.settings()[0];
+	var existing = settings.rowGroup;
+	if ( existing ) {
+		return existing;
+	}
+
+	settings.rowGroup = this;
+	this._constructor();
+};
+
+
+$.extend( RowGroup.prototype, {
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * API methods for DataTables API interface
+	 */
+
+	/**
+	 * Get/set the grouping data source - need to call draw after this is
+	 * executed as a setter
+	 * @returns string~RowGroup
+	 */
+	dataSrc: function ( val )
+	{
+		if ( val === undefined ) {
+			return this.c.dataSrc;
+		}
+
+		var dt = this.s.dt;
+
+		this.c.dataSrc = val;
+
+		$(dt.table().node()).triggerHandler( 'rowgroup-datasrc.dt', [ dt, val ] );
+
+		return this;
+	},
+
+	/**
+	 * Disable - need to call draw after this is executed
+	 * @returns RowGroup
+	 */
+	disable: function ()
+	{
+		this.c.enable = false;
+		return this;
+	},
+
+	/**
+	 * Enable - need to call draw after this is executed
+	 * @returns RowGroup
+	 */
+	enable: function ( flag )
+	{
+		if ( flag === false ) {
+			return this.disable();
+		}
+
+		this.c.enable = true;
+		return this;
+	},
+
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Constructor
+	 */
+	_constructor: function ()
+	{
+		var that = this;
+		var dt = this.s.dt;
+
+		dt.on( 'draw.dtrg', function () {
+			if ( that.c.enable ) {
+				that._draw();
+			}
+		} );
+
+		dt.on( 'column-visibility.dt.dtrg responsive-resize.dt.dtrg', function () {
+			that._adjustColspan();
+		} );
+
+		dt.on( 'destroy', function () {
+			dt.off( '.dtrg' );
+		} );
+
+		dt.on('responsive-resize.dt', function () {
+			that._adjustColspan();
+		})
+	},
+
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Private methods
+	 */
+
+	/**
+	 * Adjust column span when column visibility changes
+	 * @private
+	 */
+	_adjustColspan: function ()
+	{
+		$( 'tr.'+this.c.className, this.s.dt.table().body() ).find('td')
+			.attr( 'colspan', this._colspan() );
+	},
+
+	/**
+	 * Get the number of columns that a grouping row should span
+	 * @private
+	 */
+	_colspan: function ()
+	{
+		return this.s.dt.columns().visible().reduce( function (a, b) {
+			return a + b;
+		}, 0 );
+	},
+
+
+	/**
+	 * Update function that is called whenever we need to draw the grouping rows.
+	 * This is basically a bootstrap for the self iterative _group and _groupDisplay
+	 * methods
+	 * @private
+	 */
+	_draw: function ()
+	{
+		var dt = this.s.dt;
+		var groupedRows = this._group( 0, dt.rows( { page: 'current' } ).indexes() );
+
+		this._groupDisplay( 0, groupedRows );
+	},
+
+	/**
+	 * Get the grouping information from a data set (index) of rows
+	 * @param {number} level Nesting level
+	 * @param {DataTables.Api} rows API of the rows to consider for this group
+	 * @returns {object[]} Nested grouping information - it is structured like this:
+	 *	{
+	 *		dataPoint: 'Edinburgh',
+	 *		rows: [ 1,2,3,4,5,6,7 ],
+	 *		children: [ {
+	 *			dataPoint: 'developer'
+	 *			rows: [ 1, 2, 3 ]
+	 *		},
+	 *		{
+	 *			dataPoint: 'support',
+	 *			rows: [ 4, 5, 6, 7 ]
+	 *		} ]
+	 *	}
+	 * @private
+	 */
+	_group: function ( level, rows ) {
+		var fns = $.isArray( this.c.dataSrc ) ? this.c.dataSrc : [ this.c.dataSrc ];
+		var fn = DataTable.ext.oApi._fnGetObjectDataFn( fns[ level ] );
+		var dt = this.s.dt;
+		var group, last;
+		var data = [];
+
+		for ( var i=0, ien=rows.length ; i<ien ; i++ ) {
+			var rowIndex = rows[i];
+			var rowData = dt.row( rowIndex ).data();
+			var group = fn( rowData );
+
+			if ( group === null || group === undefined ) {
+				group = that.c.emptyDataGroup;
+			}
+			
+			if ( last === undefined || group !== last ) {
+				data.push( {
+					dataPoint: group,
+					rows: []
+				} );
+
+				last = group;
+			}
+
+			data[ data.length-1 ].rows.push( rowIndex );
+		}
+
+		if ( fns[ level+1 ] !== undefined ) {
+			for ( var i=0, ien=data.length ; i<ien ; i++ ) {
+				data[i].children = this._group( level+1, data[i].rows );
+			}
+		}
+
+		return data;
+	},
+
+	/**
+	 * Row group display - insert the rows into the document
+	 * @param {number} level Nesting level
+	 * @param {object[]} groups Takes the nested array from `_group`
+	 * @private
+	 */
+	_groupDisplay: function ( level, groups )
+	{
+		var dt = this.s.dt;
+		var display;
+	
+		for ( var i=0, ien=groups.length ; i<ien ; i++ ) {
+			var group = groups[i];
+			var groupName = group.dataPoint;
+			var row;
+			var rows = group.rows;
+
+			if ( this.c.startRender ) {
+				display = this.c.startRender.call( this, dt.rows(rows), groupName, level );
+				row = this._rowWrap( display, this.c.startClassName, level );
+
+				if ( row ) {
+					row.insertBefore( dt.row( rows[0] ).node() );
+				}
+			}
+
+			if ( this.c.endRender ) {
+				display = this.c.endRender.call( this, dt.rows(rows), groupName, level );
+				row = this._rowWrap( display, this.c.endClassName, level );
+
+				if ( row ) {
+					row.insertAfter( dt.row( rows[ rows.length-1 ] ).node() );
+				}
+			}
+
+			if ( group.children ) {
+				this._groupDisplay( level+1, group.children );
+			}
+		}
+	},
+
+	/**
+	 * Take a rendered value from an end user and make it suitable for display
+	 * as a row, by wrapping it in a row, or detecting that it is a row.
+	 * @param {node|jQuery|string} display Display value
+	 * @param {string} className Class to add to the row
+	 * @param {array} group
+	 * @param {number} group level
+	 * @private
+	 */
+	_rowWrap: function ( display, className, level )
+	{
+		var row;
+		
+		if ( display === null || display === '' ) {
+			display = this.c.emptyDataGroup;
+		}
+
+		if ( display === undefined ) {
+			return null;
+		}
+		
+		if ( typeof display === 'object' && display.nodeName && display.nodeName.toLowerCase() === 'tr') {
+			row = $(display);
+		}
+		else if (display instanceof $ && display.length && display[0].nodeName.toLowerCase() === 'tr') {
+			row = display;
+		}
+		else {
+			row = $('<tr/>')
+				.append(
+					$('<td/>')
+						.attr( 'colspan', this._colspan() )
+						.append( display  )
+				);
+		}
+
+		return row
+			.addClass( this.c.className )
+			.addClass( className )
+			.addClass( 'dtrg-level-'+level );
+	}
+} );
+
+
+/**
+ * RowGroup default settings for initialisation
+ *
+ * @namespace
+ * @name RowGroup.defaults
+ * @static
+ */
+RowGroup.defaults = {
+	/**
+	 * Class to apply to grouping rows - applied to both the start and
+	 * end grouping rows.
+	 * @type string
+	 */
+	className: 'dtrg-group',
+
+	/**
+	 * Data property from which to read the grouping information
+	 * @type string|integer|array
+	 */
+	dataSrc: 0,
+
+	/**
+	 * Text to show if no data is found for a group
+	 * @type string
+	 */
+	emptyDataGroup: 'No group',
+
+	/**
+	 * Initial enablement state
+	 * @boolean
+	 */
+	enable: true,
+
+	/**
+	 * Class name to give to the end grouping row
+	 * @type string
+	 */
+	endClassName: 'dtrg-end',
+
+	/**
+	 * End grouping label function
+	 * @function
+	 */
+	endRender: null,
+
+	/**
+	 * Class name to give to the start grouping row
+	 * @type string
+	 */
+	startClassName: 'dtrg-start',
+
+	/**
+	 * Start grouping label function
+	 * @function
+	 */
+	startRender: function ( rows, group ) {
+		return group;
+	}
+};
+
+
+RowGroup.version = "1.1.0";
+
+
+$.fn.dataTable.RowGroup = RowGroup;
+$.fn.DataTable.RowGroup = RowGroup;
+
+
+DataTable.Api.register( 'rowGroup()', function () {
+	return this;
+} );
+
+DataTable.Api.register( 'rowGroup().disable()', function () {
+	return this.iterator( 'table', function (ctx) {
+		if ( ctx.rowGroup ) {
+			ctx.rowGroup.enable( false );
+		}
+	} );
+} );
+
+DataTable.Api.register( 'rowGroup().enable()', function ( opts ) {
+	return this.iterator( 'table', function (ctx) {
+		if ( ctx.rowGroup ) {
+			ctx.rowGroup.enable( opts === undefined ? true : opts );
+		}
+	} );
+} );
+
+DataTable.Api.register( 'rowGroup().dataSrc()', function ( val ) {
+	if ( val === undefined ) {
+		return this.context[0].rowGroup.dataSrc();
+	}
+
+	return this.iterator( 'table', function (ctx) {
+		if ( ctx.rowGroup ) {
+			ctx.rowGroup.dataSrc( val );
+		}
+	} );
+} );
+
+
+// Attach a listener to the document which listens for DataTables initialisation
+// events so we can automatically initialise
+$(document).on( 'preInit.dt.dtrg', function (e, settings, json) {
+	if ( e.namespace !== 'dt' ) {
+		return;
+	}
+
+	var init = settings.oInit.rowGroup;
+	var defaults = DataTable.defaults.rowGroup;
+
+	if ( init || defaults ) {
+		var opts = $.extend( {}, defaults, init );
+
+		if ( init !== false ) {
+			new RowGroup( settings, opts  );
+		}
+	}
+} );
+
+
+return RowGroup;
+
 }));
 
 
