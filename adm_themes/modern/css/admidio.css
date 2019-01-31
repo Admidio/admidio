@@ -55,6 +55,12 @@ body > .admContent {
     padding: 15px;
 }
 
+.media,
+.navbar,
+.admidio-plugin-content {
+    margin-bottom: 20px;
+}
+
 /* Layout adjustments for devices > 7" */
 @media (min-width: 768px) {
     body {
@@ -158,7 +164,7 @@ h4,
 h5 {
     color: #333333;
     font-weight: bold;
-    margin: 20px 0 15px 0;
+    margin-bottom: 10px;
 }
 
 h2 {
@@ -475,10 +481,6 @@ a {
     content: ' ]';
 }
 
-.breadcrumb {
-    margin-top: 20px;
-}
-
 /**************************************************/
 /* Customized layout for forms and their elements */
 /**************************************************/
@@ -717,10 +719,6 @@ input[type="time"] {
 /*******************************************************************/
 /* Layout for tables that will be used in lists or download module */
 /*******************************************************************/
-
-.dataTables_wrapper, .table-responsive {
-    margin-top: 20px;
-}
 
 @-moz-document url-prefix() {
     fieldset {
