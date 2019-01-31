@@ -1031,6 +1031,7 @@
   <string name="ROO_SEATING">Zitplaatsen</string>
   <string name="ROO_STANDING">Staanplaatsen</string>
   <!--System-Phrases for use in every module-->
+  <string name="SYS_64BIT">64bit</string>
   <string name="SYS_ABORT">Annuleer</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
   <string name="SYS_ACTIVATED">Geactiveerd</string>
@@ -1039,6 +1040,7 @@
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Ga naar de downloadpagina van Admidio</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Het online management systeem voor Verenigingen, Groepen en Organisaties</string>
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
+  <string name="SYS_ADMIDIO_UPDATE">Admidio Update</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio versie</string>
   <string name="SYS_ADMINISTRATION">Administratie</string>
   <string name="SYS_ADMINISTRATOR">Beheerder</string>
@@ -1120,7 +1122,7 @@
   <string name="SYS_DATE_MODIFIED">Aangepast op datum</string>
   <string name="SYS_DATE_TO">tot</string>
   <string name="SYS_DEACTIVATED">Gedeactiveerd</string>
-  <string name="SYS_DEBUG_MODE">Debug modus</string>
+  <string name="SYS_DEBUG_MODE">Debug mode</string>
   <string name="SYS_DECIMAL_NUMBER">Decimaal cijfer</string>
   <string name="SYS_DELETE">Verwijder</string>
   <string name="SYS_DELETE_DATA">Gegevens zijn verwijderd.</string>
@@ -1131,6 +1133,7 @@
   <string name="SYS_DESCRIPTION">Omschrijving</string>
   <string name="SYS_DESIGNATION">Naam</string>
   <string name="SYS_DIRECTORY_PROTECTION">Directory bescherming</string>
+  <string name="SYS_DIRECTORY_SEPARATOR">Map scheidingsteken</string>
   <string name="SYS_DISK_SPACE">Geheugen</string>
   <string name="SYS_DISK_SPACE_ERROR">Het gebruik van het geheugen kon niet worden bepaald.\n\nFoutmelding:\n#VAR1#</string>
   <string name="SYS_DONATE">Doneer</string>
@@ -1169,7 +1172,7 @@
   <string name="SYS_FILE_TO_LARGE_SERVER">Grootte van geuploade bestand is groter dan door server gedefinieerde maximale grootte #VAR1# MB.</string>
   <string name="SYS_FILE_UPLOADS">Bestand uploads</string>
   <string name="SYS_FILENAME_EMPTY">Er is geen bestandsnaam opgegeven!</string>
-  <string name="SYS_FILENAME_INVALID">De geselecteerde bestandsnaam #VAR1_BOLD# bevat ongeldige tekens. Controleer de bestandsnaam.\n\nDe volgende speciale tekens zijn niet toegestaan ? * ~ ; : " | &lt; &gt;</string>
+  <string name="SYS_FILENAME_INVALID">De geselecteerde bestandsnaam #VAR1_BOLD# bevat ongeldige tekens. Controleer svp de bestandsnaam.\n\n De volgende tekens zijn niet toegestaan: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">De database versie #VAR1# is lager dan de versie van Admidio scripts #VAR2#.\n\nUpdate uw Admidio-bestanden op de FTP-server #VAR3# met de meer recente Admidio-versie #VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">Voornaam</string>
@@ -1200,6 +1203,7 @@
   <string name="SYS_ICAL_DISABLED">iCal is uitgeschakeld door de beheerder.</string>
   <string name="SYS_ICON">Icoon</string>
   <string name="SYS_IMPORTANT">Belangrijk</string>
+  <string name="SYS_IMPORT_MODE">Import mode</string>
   <string name="SYS_IMPRINT">Afdruk</string>
   <string name="SYS_IMPRINT_DESC">Hier kan de URL voor de afdruk van uw pagina worden ingesteld. Als het geselecteerde thema dit ondersteunt, wordt er ook een link weergegeven op de Admidio-pagina\'s. (Voorbeeld: https://www.example.com/imprint.html)</string>
   <string name="SYS_INFORMATIONS">informatie</string>
@@ -1245,7 +1249,10 @@
   <string name="SYS_MAP_LINK_ROUTE_DESC">Geeft een route weer van uw eigen woonplaats naar de locatie van deze gebruiker op Google Maps. De straat, postcode, plaats en land worden verstuurd naar Google.</string>
   <string name="SYS_MASTER_DATA">Basis informatie</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. deelnemers</string>
+  <string name="SYS_MAX_PATH_LENGTH">Max padlengte</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Max. grootte van afbeelding</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Onder voorbehoud deelnemen</string>
+  <string name="SYS_MAYBE_PARTICIPATE_DESC">Als deze optie is geactiveerd, staat voor de aanmelding van het evenement naast de opties #VAR1_BOLD# en #VAR2_BOLD# nog een derde optie #VAR3_BOLD# ter beschikking. (Standaard: gedeactiveerd)</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Lid</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Lid van organisatie #VAR1#</string>
@@ -1286,6 +1293,7 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">aan</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Het online ledenbeheer</string>
+  <string name="SYS_OPERATING_SYSTEM">Besturingssysteem</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Tegenovergestelde relatie</string>
   <string name="SYS_OPTIONAL">Optioneel</string>
   <string name="SYS_ORDER">Volgorde</string>
@@ -1299,6 +1307,7 @@
   <string name="SYS_PASSWORD_FORGOTTEN">Wachtwoord vergeten</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Als u uw wachtwoord bent vergeten, kan het systeem een nieuw wachtwoord genereren en u deze in een e-mail sturen. Voer daarvoor uw gebruikersnaam of e-mailadres in, waarmee u uzelf voor dit systeem geregistreerd hebt. Het nieuwe wachtwoord wordt onmiddellijk naar dit e-mailadres verzonden.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Inloggen niet gelukt omdat u een verkeerd wachtwoord heeft ingevoerd.\n\nControleer uw wachtwoord en voer het opnieuw in.</string>
+  <string name="SYS_PATH_SEPARATOR">Pad scheidingsteken</string>
   <string name="SYS_PERIOD">Tijdvlak</string>
   <string name="SYS_PERMISSIONS">Rechten</string>
   <string name="SYS_PDF">PDF</string>
@@ -1306,6 +1315,7 @@
   <string name="SYS_PHONE_INVALID_CHAR">Het telefoonnummer in veld #VAR1_BOLD# bevat ongeldige karakters.\n\nAlleen nummers van 0-9 en de tekens +-/() kunnen gebruikt worden.</string>
   <string name="SYS_PHOTO">Foto</string>
   <string name="SYS_PHOTOS">Foto\'s</string>
+  <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">Alle PHP instellingen</string>
   <string name="SYS_PHP_VERSION">PHP versie</string>
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio heeft #VAR1# of hoger nodig</string>
@@ -1402,6 +1412,7 @@
   <string name="SYS_TO" description="E-Mail">Naar</string>
   <string name="SYS_TUESDAY">Dinsdag</string>
   <string name="SYS_TYPE">Type</string>
+  <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Onbekend</string>
   <string name="SYS_UNLIMITED">Onbeperkt</string>
   <string name="SYS_UNLOCK">Heropen</string>
