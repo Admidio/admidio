@@ -746,7 +746,7 @@ final class FileSystemUtils
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         $now = new \DateTime();
 
-        return $now->format('Ymd-His') . '_' . PasswordHashing::genRandomPassword(16, $charset = '0123456789abcdefghijklmnopqrstuvwxyz') . '.' . strtolower($extension);
+        return $now->format('Ymd-His') . '_' . SecurityUtils::getRandomString(16, $charset = '0123456789abcdefghijklmnopqrstuvwxyz') . '.' . strtolower($extension);
     }
 
     /**

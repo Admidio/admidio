@@ -160,16 +160,14 @@
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Rudi kwenye kitabu cha wageni</string>
   <string name="GBO_CREATE_COMMENT">Toa maoni</string>
-  <string name="GBO_CREATE_ENTRY">Acha ingizo</string>
-  <string name="GBO_CREATE_VAR_ENTRY">Acha ingizo la #VAR1#</string>
   <string name="GBO_EDIT_COMMENT">Hariri maoni</string>
-  <string name="GBO_EDIT_ENTRY">Hariri ingizo la #VAR1#</string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">Oni jipya la kitabu cha wageni limetengenezwa</string>
   <!--Phrases only in Installation-->
   <!--Phrases only in Linkmodule-->
   <!--Phrases only in Listsmodule-->
   <!--Phrases only in Mailmodule-->
   <!--Phrases only in Membersadministration-->
+  <!--Phrases only in Menu-->
   <!--Phrases only in Messagemodule-->
   <!--Phrases only in New-User-Registration-->
   <!--Phrases only in Organizationadministration-->

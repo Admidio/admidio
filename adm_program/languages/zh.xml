@@ -29,7 +29,7 @@
   <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">上级部门模块的所有管理员</string>
   <string name="CAT_ALL_THIS_ORGANIZATION">这个部门的所有会员</string>
   <string name="CAT_CATEGORY_EXIST">类别名称已存在于所选部门中。</string>
-  <string name="CAT_CATEGORY_GLOBAL">如果激活选项，此类别的配置文件字段将出现，并且可在以下部门的配置文件视图中进行编辑：#VAR1#.\n\n 如果字段只应显示在您的部门中，请停用。</string>
+  <string name="CAT_CATEGORY_GLOBAL">如果激活选项，此类别的配置文件字段将出现，并且可在以下部门的配置文件视图中进行编辑：#VAR1#.\n\n如果字段只应显示在您的部门中，请停用。</string>
   <string name="CAT_DEFAULT_VAR">标准 #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">你真的想删除部门 #VAR1_BOLD# 么?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">无法删除类别 #VAR1_BOLD# 因为其含有子类别#VAR2# 。</string>
@@ -178,7 +178,7 @@
   <string name="MEM_CHOOSE_FILE">选择文件</string>
   <string name="MEM_COMPLEMENT">补充</string>
   <string name="MEM_DAYS_FIELD_HISTORY">字段历史记录的默认时间段(天)</string>
-  <string name="MEM_DAYS_FIELD_HISTORY_DESC">配置文件字段的更改将以指定的时间段（以天为单位）列出。这是过滤器的默认选项，用户以后可以更改。对于大型数据库，此选项用于限制更改历史列表。(默认值: 365)</string>
+  <string name="MEM_DAYS_FIELD_HISTORY_DESC"> 配置文件字段的更改将以指定的时间段（以天为单位）列出。这是过滤器的默认选项，用户以后可以更改。对于大型数据库，此选项用于限制更改历史列表。(默认值: 365)</string>
   <string name="MEM_DUPLICATE">重复</string>
   <string name="MEM_EDIT_USER">编辑用户</string>
   <string name="MEM_ENABLE_USER_RELATIONS">保持和显示关系</string>
@@ -206,7 +206,6 @@
   <!--Phrases only in Updatecheck-->
   <!--Phrases only in Photomodule-->
   <!--Phrases only in Profilemodule-->
-  <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">您可以创建和编辑能在类别中合并的个人资料字段。</string>
   <!--Phrases only in Relationssmodule-->
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ROLE_NAME_EXISTS">在这个类别中已经有相同角色。</string>
@@ -215,7 +214,7 @@
   <string name="SYS_ALL_ORGANIZATIONS">所有部门</string>
   <string name="SYS_CATEGORIES">类别</string>
   <string name="SYS_CATEGORIES_VAR">#VAR1# - 类别</string>
-  <string name="SYS_CATEGORY">类别</string>
+  <string name="SYS_CATEGORY"> 类别</string>
   <string name="SYS_CATEGORY_VAR">#VAR1# - 类别</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">你不能删除系统类别</string>
   <string name="SYS_MAINTAIN_CATEGORIES">管理类别</string>
@@ -230,7 +229,7 @@
   <string name="SYS_TIME_INVALID">时间字段错误 #VAR1_BOLD#.\n\n时间格式的值必须以如下方式表示： #VAR2_BOLD#.</string>
   <string name="SYS_TIME_TO">时间到</string>
   <string name="SYS_TITLE">标题</string>
-  <string name="SYS_TO" description="E-Mail">To</string>
+  <string name="SYS_TO" description="E-Mail"> To</string>
   <string name="SYS_TUESDAY">星期二</string>
   <string name="SYS_TYPE">类型</string>
   <string name="SYS_UNKNOWN">未经确认的</string>
@@ -251,11 +250,11 @@
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VIEW">视图</string>
   <string name="SYS_VISIBLE">可见</string>
-  <string name="SYS_VISITORS">访客</string>
+  <string name="SYS_VISITORS"> 访客</string>
   <string name="SYS_WANT_REGISTER">我想要注册！</string>
   <string name="SYS_WARNING">警告</string>
   <string name="SYS_WEBMASTER">网站管理员</string>
-  <string name="SYS_WEBSITE">网站</string>
+  <string name="SYS_WEBSITE"> 网站</string>
   <string name="SYS_WEDNESDAY">星期三</string>
   <string name="SYS_WHAT_TO_DO">该怎么办？</string>
   <string name="SYS_WIDTH">宽度</string>

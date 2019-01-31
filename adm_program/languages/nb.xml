@@ -62,7 +62,7 @@
   <string name="INS_FACEBOOK">Facebook</string>
   <string name="INS_GOOGLE_PLUS">Google+</string>
   <string name="INS_ICQ">ICQ</string>
-  <string name="INS_INSTALL_ADMIDIO">Installer Admidio</string>
+  <string name="INS_INSTALL_ADMIDIO">Installer Admidio </string>
   <string name="INS_INTERN">Intern</string>
   <string name="INS_TWITTER">Twitter</string>
   <string name="INS_UPDATE">Oppdater</string>
@@ -152,6 +152,7 @@
   <string name="MEM_USER_COULD_BE_CREATED">Bruker kunne opprettes</string>
   <string name="MEM_USER_MANAGEMENT">Brukerhåndtering</string>
   <string name="MEM_USERS_PER_PAGE">Antall brukere pr. side</string>
+  <!--Phrases only in Menu-->
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Aktiver chat</string>
   <string name="MSG_ACTIVATE_PM_MODULE">Aktiver private meldinger</string>
@@ -164,7 +165,6 @@
   <!--Phrases only in New-User-Registration-->
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ADMIDIO_THEME">Admidio-Tema</string>
-  <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Auto logg-ut etter</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Etter aktivering vil brukere med utdaterte nettlesere rådes til å kjøre en oppdatering. Nyere nettlesere garanterer en bedre beskyttelse mot svindel, virus, trojanere, identitetstyveri og andre trusler mot personvern og sikkerhet. Hver ny nettlesergenerasjon forbedrer hastigheten og støtter flere og flere nye web-teknologier, noe som fører til en bedre nettopplevelse . Til dette formålet blir https://browser-update.org/ anvendt.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Bakgrunnsfarge</string>
   <string name="ORG_PIXEL">Piksel</string>
@@ -179,7 +179,6 @@
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Organisasjonsnavn</string>
   <string name="ORG_VARIABLE_NEW_PASSWORD">Nytt brukerpassord</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_ADMIDIO">Gå til Admidios oppdateringsside</string>
   <string name="UPD_BETA_VERSION">Tilgjengelig Beta</string>
   <string name="UPD_CURRENT_VERSION">Installert</string>
   <string name="UPD_STABLE_VERSION">Tilgjengelig</string>
@@ -193,8 +192,6 @@
   <string name="PHO_CAPTION_SIZE">Bildestørrelse</string>
   <string name="PHO_CREATE_ALBUM">Opprett album</string>
   <string name="PHO_DISPLAY_PHOTOS">Bildevisning</string>
-  <string name="PHO_DOWNLOAD_PHOTOS">Last ned bilder</string>
-  <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Lagre bilde</string>
   <string name="PHO_DOWNLOAD_ENABLED">Aktiver nedlastning</string>
   <string name="PHO_EDIT_ALBUM">Endre album</string>
   <string name="PHO_EMAIL_NOTIFICATION_TITLE">Et nyttfotoalbum ble opprettet</string>
@@ -245,7 +242,6 @@
   <string name="SYS_DATE_MODIFIED">Endringsdato</string>
   <string name="SYS_DATE_TO">til</string>
   <string name="SYS_DEACTIVATED">Inaktiv</string>
-  <string name="SYS_DEBUG_MODE">Feilsøkingsmodus</string>
   <string name="SYS_DECIMAL_NUMBER">Desimaltall</string>
   <string name="SYS_DELETE">Slett</string>
   <string name="SYS_DELETE_DATA">Dataene er blitt slettet</string>
@@ -306,7 +302,6 @@
   <string name="SYS_MALE">Mann</string>
   <string name="SYS_MANDATORY_FIELD">Påkrevet felt</string>
   <string name="SYS_MAP">Kart</string>
-  <string name="SYS_MEGA_PIXEL">Megapiksel</string>
   <string name="SYS_MEMBER">Medlem</string>
   <string name="SYS_MEMBERS">Medlemmer</string>
   <string name="SYS_MEMORY_LIMIT">Minnegrense</string>
