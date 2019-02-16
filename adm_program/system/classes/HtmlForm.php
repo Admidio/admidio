@@ -136,7 +136,7 @@ class HtmlForm extends HtmlFormBasic
         }
         elseif ($this->type === 'navbar')
         {
-            $optionsAll['class'] .= ' form-horizontal navbar-form navbar-left';
+            $optionsAll['class'] .= ' form-inline ';
         }
 
         if ($optionsAll['class'] !== '')
@@ -226,7 +226,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         $this->addElement('button');
-        $this->addAttribute('class', 'btn btn-default');
+        $this->addAttribute('class', 'btn btn-secondary');
 
         if ($optionsAll['data-admidio'] !== '')
         {
@@ -698,7 +698,7 @@ class HtmlForm extends HtmlFormBasic
         {
             // show button to add new upload field to form
             $this->addHtml(
-                '<button type="button" id="btn_add_attachment_' . $id . '" class="btn btn-default">
+                '<button type="button" id="btn_add_attachment_' . $id . '" class="btn btn-secondary">
                     <i class="fas ' . $optionsAll['icon'] . '"></i>' . $optionsAll['multiUploadLabel'] . '
                 </button>'
             );
@@ -1975,7 +1975,7 @@ class HtmlForm extends HtmlFormBasic
      */
     protected function openControlStructure($id, $label, $property = self::FIELD_DEFAULT, $helpTextId = '', $icon = '', $class = '')
     {
-        $cssClassRow  = '';
+        $cssClassRow  = 'form-group';
         $htmlIcon     = '';
         $htmlHelpIcon = '';
         $htmlIdFor    = '';
@@ -1984,6 +1984,11 @@ class HtmlForm extends HtmlFormBasic
         if ($class !== '')
         {
             $cssClassRow .= ' ' . $class;
+        }
+
+        if($this->type === 'default')
+        {
+            $cssClassRow .= ' row';
         }
 
         // if necessary set css class for a mandatory element
@@ -1996,11 +2001,11 @@ class HtmlForm extends HtmlFormBasic
         if ($id !== '')
         {
             $htmlIdFor = ' for="' . $id . '"';
-            $this->addHtml('<div id="' . $id . '_group" class="form-group' . $cssClassRow . '">');
+            $this->addHtml('<div id="' . $id . '_group" class="' . $cssClassRow . '">');
         }
         else
         {
-            $this->addHtml('<div class="form-group' . $cssClassRow . '">');
+            $this->addHtml('<div class="' . $cssClassRow . '">');
         }
 
         if ($icon !== '')
@@ -2033,7 +2038,7 @@ class HtmlForm extends HtmlFormBasic
             }
             else
             {
-                $this->addHtml('<div class="col-sm-offset-3 col-sm-9">');
+                $this->addHtml('<div class="offset-sm-3 col-sm-9">');
             }
         }
     }
@@ -2048,13 +2053,13 @@ class HtmlForm extends HtmlFormBasic
      */
     public function openGroupBox($id, $headline = null, $class = '')
     {
-        $this->addHtml('<div id="' . $id . '" class="panel panel-default ' . $class . '">');
+        $this->addHtml('<div id="' . $id . '" class="card ' . $class . '">');
         // add headline to groupbox
         if ($headline !== null)
         {
-            $this->addHtml('<div class="panel-heading">' . $headline . '</div>');
+            $this->addHtml('<div class="card-header">' . $headline . '</div>');
         }
-        $this->addHtml('<div class="panel-body">');
+        $this->addHtml('<div class="card-body">');
     }
 
 

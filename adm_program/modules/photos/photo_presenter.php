@@ -121,11 +121,11 @@ if ((int) $gSettingsManager->get('photo_show_mode') === 0)
     // in popup mode show buttons for prev, next and close
     $page->addHtml('
     <div class="btn-group">
-        <button class="btn btn-default" onclick="window.location.href=\''.$urlPreviousImage.'\'">
+        <button class="btn btn-secondary" onclick="window.location.href=\''.$urlPreviousImage.'\'">
             <i class="fas fa-arrow-alt-circle-left"></i>'.$gL10n->get('PHO_PREVIOUS_PHOTO').'</button>
-        <button class="btn btn-default" onclick="parent.window.close()">
+        <button class="btn btn-secondary" onclick="parent.window.close()">
             <i class="fas fa-window-close"></i>'.$gL10n->get('SYS_CLOSE_WINDOW').'</button>
-        <button class="btn btn-default" onclick="window.location.href=\''.$urlNextImage.'\'">
+        <button class="btn btn-secondary" onclick="window.location.href=\''.$urlNextImage.'\'">
             <i class="fas fa-arrow-alt-circle-right"></i>'.$gL10n->get('PHO_NEXT_PHOTO').'</button>
     </div>');
 }
@@ -142,12 +142,12 @@ elseif ((int) $gSettingsManager->get('photo_show_mode') === 2)
 
     $page->addHtml('
     <div class="row">
-        <div class="col-sm-2 col-xs-4">'.$gL10n->get('SYS_DATE').'</div>
-        <div class="col-sm-4 col-xs-8"><strong>'.$datePeriod.'</strong></div>
+        <div class="col-sm-2 col-4">'.$gL10n->get('SYS_DATE').'</div>
+        <div class="col-sm-4 col-8"><strong>'.$datePeriod.'</strong></div>
     </div>
     <div class="row">
-        <div class="col-sm-2 col-xs-4">'.$gL10n->get('PHO_PHOTOGRAPHER').'</div>
-        <div class="col-sm-4 col-xs-8"><strong>'.$photoAlbum->getValue('pho_photographers').'</strong></div>
+        <div class="col-sm-2 col-4">'.$gL10n->get('PHO_PHOTOGRAPHER').'</div>
+        <div class="col-sm-4 col-8"><strong>'.$photoAlbum->getValue('pho_photographers').'</strong></div>
     </div>');
 }
 

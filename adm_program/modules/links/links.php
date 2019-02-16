@@ -166,9 +166,9 @@ else
                 {
                     $page->addHtml('</div></div>');
                 }
-                $page->addHtml('<div class="panel panel-primary">
-                    <div class="panel-heading">'.$weblink->getValue('cat_name').'</div>
-                    <div class="panel-body">');
+                $page->addHtml('<div class="card">
+                    <div class="card-header">'.$weblink->getValue('cat_name').'</div>
+                    <div class="card-body">');
             }
 
             $page->addHtml('<div class="admidio-weblink-item" id="lnk_'.$lnkId.'">');

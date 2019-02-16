@@ -146,7 +146,7 @@ $form->addMultilineTextInput(
 );
 $form->addSubmitButton(
     'btn_rename', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 $form->addHtml(admFuncShowCreateChangeInfoById($createUserId, $createTimestamp));
 

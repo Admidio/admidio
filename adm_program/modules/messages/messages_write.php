@@ -657,20 +657,20 @@ if (isset($messageStatement))
             // open some additional functions for messages
 
             $receiverName = prepareReceivers($receivers);
-            $receiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.$receiverName.'</div>';
+            $receiverName = '<div class="card-footer">'.$gL10n->get('MSG_OPPOSITE').': '.$receiverName.'</div>';
         }
 
         $date = \DateTime::createFromFormat('Y-m-d H:i:s', $row['msc_timestamp']);
         $page->addHtml('
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="pull-left">
+        <div class="card">
+            <div class="card-header">
+                <div class="float-left">
                     <i class="fas fa-comment-alt"></i>' . $sentUser . '
                 </div>
-                <div class="pull-right text-right">' . $date->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')) .'
+                <div class="fload-right text-right">' . $date->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')) .'
                 </div>
             </div>
-            <div class="panel-body">'.
+            <div class="card-body">'.
                 $messageText.'
             </div>
             '.$receiverName.'

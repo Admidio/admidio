@@ -58,8 +58,8 @@ echo '
 </script>
 
 <div class="modal-header">
+    <h3 class="modal-title">'.$gL10n->get('MEM_CREATE_USER').'</h3>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">'.$gL10n->get('MEM_CREATE_USER').'</h4>
 </div>
 <div class="modal-body">
     <p class="lead">'.$gL10n->get('MEM_INPUT_FIRSTNAME_LASTNAME').'</p>';
@@ -75,7 +75,7 @@ echo '
     );
     $form->addSubmitButton(
         'btn_add', $gL10n->get('MEM_CREATE_USER'),
-        array('icon' => 'fa-plus-circle', 'class' => ' col-sm-offset-3')
+        array('icon' => 'fa-plus-circle', 'class' => ' offset-sm-3')
     );
     echo $form->show();
 echo '</div>';

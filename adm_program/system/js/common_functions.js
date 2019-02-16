@@ -54,7 +54,7 @@ function callUrlHideElement(elementId, url, callback) {
             // entry could not be deleted, than show content of data or an common error message
             $("#btn_yes").hide();
             $("#btn_no").hide();
-            $("#btn_close").attr("class", "btn btn-default");
+            $("#btn_close").attr("class", "btn btn-secondary");
 
             var message = (data.length > 0) ? data : "Error: Entry not deleted";
             var messageText = $("#message_text");

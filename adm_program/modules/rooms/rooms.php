@@ -104,12 +104,12 @@ else
         $room->setArray($row);
 
         $page->addHtml('
-        <div class="panel panel-primary" id="room_'.(int) $room->getValue('room_id').'">
-            <div class="panel-heading">
-                <div class="pull-left">
+        <div class="card" id="room_'.(int) $room->getValue('room_id').'">
+            <div class="card-header">
+                <div class="float-left">
                     <i class="fas fa-home"></i>' . $room->getValue('room_name') . '
                 </div>
-                <div class="pull-right text-right">
+                <div class="float-right text-right">
                     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_id' => (int) $room->getValue('room_id'), 'headline' => $textRoom)).'">
                         <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
@@ -118,20 +118,20 @@ else
                         <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-2 col-xs-4">'.$gL10n->get('ROO_CAPACITY').'</div>
-                    <div class="col-sm-4 col-xs-8"><strong>'.(int) $room->getValue('room_capacity').'</strong></div>');
+                    <div class="col-sm-2 col-4">'.$gL10n->get('ROO_CAPACITY').'</div>
+                    <div class="col-sm-4 col-8"><strong>'.(int) $room->getValue('room_capacity').'</strong></div>');
 
                     if($room->getValue('room_overhang') > 0)
                     {
-                        $page->addHtml('<div class="col-sm-2 col-xs-4">'.$gL10n->get('ROO_OVERHANG').'</div>
-                        <div class="col-sm-4 col-xs-8"><strong>'.(int) $room->getValue('room_overhang').'</strong></div>');
+                        $page->addHtml('<div class="col-sm-2 col-4">'.$gL10n->get('ROO_OVERHANG').'</div>
+                        <div class="col-sm-4 col-8"><strong>'.(int) $room->getValue('room_overhang').'</strong></div>');
                     }
                     else
                     {
-                        $page->addHtml('<div class="col-sm-2 col-xs-4">&nbsp;</div>
-                        <div class="col-sm-4 col-xs-8">&nbsp;</div>');
+                        $page->addHtml('<div class="col-sm-2 col-4">&nbsp;</div>
+                        <div class="col-sm-4 col-8">&nbsp;</div>');
                     }
 
                     //echo $table->getHtmlTable();
@@ -142,7 +142,7 @@ else
                     $page->addHtml($room->getValue('room_description'));
                 }
             $page->addHtml('</div>
-            <div class="panel-footer">'.
+            <div class="card-footer">'.
                 // show information about user who creates the recordset and changed it
                 admFuncShowCreateChangeInfoByName(
                     $row['create_name'], $room->getValue('room_timestamp_create'),

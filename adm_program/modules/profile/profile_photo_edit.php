@@ -214,7 +214,7 @@ if($getMode === 'choose')
     );
     $form->addSubmitButton(
         'btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'),
-        array('icon' => 'fa-upload', 'class' => ' col-sm-offset-3')
+        array('icon' => 'fa-upload', 'class' => ' offset-sm-3')
     );
 
     // add form to html page and show page

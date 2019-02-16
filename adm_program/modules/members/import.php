@@ -122,7 +122,7 @@ $form->addSelectBox(
 );
 $form->addSubmitButton(
     'btn_forward', $gL10n->get('SYS_NEXT'),
-    array('icon' => 'fa-arrow-circle-right', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-arrow-circle-right', 'class' => ' offset-sm-3')
 );
 
 // add form to html page and show page

@@ -34,8 +34,8 @@ $statement = $gDb->queryPrepared($sql);
 
 if($statement->rowCount() > 0)
 {
-    $page->addHtml('<div class="panel-body">This Plugin is already installed</div>');
-    $page->addHtml('<div class="panel-body"><a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu.php">use this menu for delete</a></div>');
+    $page->addHtml('<div class="card-body">This Plugin is already installed</div>');
+    $page->addHtml('<div class="card-body"><a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu.php">use this menu for delete</a></div>');
 }
 else
 {

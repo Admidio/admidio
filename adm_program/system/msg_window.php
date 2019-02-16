@@ -28,8 +28,8 @@ if($getInlineView)
 {
     echo '
         <div class="modal-header">
+            <h3 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h3>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
         </div>
         <div class="modal-body">';
 }
@@ -43,20 +43,20 @@ switch ($getMessageId)
             $room = new TableRooms($gDb, $getMessageVar1);
             echo '
                 <div class="row">
-                    <div class="col-xs-4"><strong>'.$gL10n->get('SYS_ROOM').':</strong></div>
-                    <div class="col-xs-8">'.$room->getValue('room_name').'</div>
+                    <div class="col-4"><strong>'.$gL10n->get('SYS_ROOM').':</strong></div>
+                    <div class="col-8">'.$room->getValue('room_name').'</div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-4"><strong>'.$gL10n->get('ROO_CAPACITY').':</strong></div>
-                    <div class="col-xs-8">'.(int) $room->getValue('room_capacity').'</div>
+                    <div class="col-4"><strong>'.$gL10n->get('ROO_CAPACITY').':</strong></div>
+                    <div class="col-8">'.(int) $room->getValue('room_capacity').'</div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-4"><strong>'.$gL10n->get('ROO_OVERHANG').':</strong></div>
-                    <div class="col-xs-8">'.(int) $room->getValue('room_overhang').'</div>
+                    <div class="col-4"><strong>'.$gL10n->get('ROO_OVERHANG').':</strong></div>
+                    <div class="col-8">'.(int) $room->getValue('room_overhang').'</div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-4"><strong>'.$gL10n->get('SYS_DESCRIPTION').':</strong></div>
-                    <div class="col-xs-8">'.$room->getValue('room_description').'</div>
+                    <div class="col-4"><strong>'.$gL10n->get('SYS_DESCRIPTION').':</strong></div>
+                    <div class="col-8">'.$room->getValue('room_description').'</div>
                 </div>';
         }
         break;
