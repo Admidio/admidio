@@ -101,7 +101,7 @@ and sharing great software.
 
 - [Admidio Team](https://github.com/Admidio/admidio/graphs/contributors): The core developers of this project
 - [Bootstrap](https://getbootstrap.com/): HTML, CSS and JS framework
-- [Bootstrap-Datepicker](https://github.com/eternicode/bootstrap-datepicker): Datepicker for bootstrap 3
+- [Bootstrap-Datepicker](https://github.com/eternicode/bootstrap-datepicker): Datepicker for Bootstrap
 - [CKEditor](http://ckeditor.com/): Javascript-Editor
 - [Cookie Consent](https://cookieconsent.insites.com/): The most popular solution to the EU cookie law
 - [Datatables](https://www.datatables.net/): Table plugin for jQuery
@@ -110,7 +110,7 @@ and sharing great software.
 - [James Heinrich](http://www.silisoftware.com/): backupDB
 - [jQuery](https://jquery.com/): JavaScript-Library
 - [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin
-- [Lightbox](https://ashleydw.github.io/lightbox/): Lightbox for bootstrap 3
+- [Lightbox](https://ashleydw.github.io/lightbox/): Lightbox for Bootstrap
 - [Moment](http://momentjs.com/): Parse, validate, manipulate, and display dates in JavaScript
 - [NobleCount](https://tpgblog.com/NobleCount/): NobleCount… for a more ‘proper’ count of the characters remaining.
 - [phpass](https://github.com/hautelook/phpass/): Portable PHP password hashing framework
