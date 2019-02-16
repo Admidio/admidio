@@ -155,7 +155,6 @@
   <string name="DOW_FILES_UPLOADED">Los archivos #VAR1# han sido cargados exitosamente.</string>
   <string name="DOW_FOLDER_CREATED">La carpeta #VAR1_BOLD#  ha sido creada.</string>
   <string name="DOW_FOLDER_EXISTS">La carpeta #VAR1# ya existe.\n\nPor favor use un nombre diferente.</string>
-  <string name="DOW_FOLDER_NAME_INVALID">¡El nombre de la carpeta seleccionada contiene caracteres no válidos!\n\nUse un nombre diferente.</string>
   <string name="DOW_FOLDER_NO_FILES">La carpeta no contiene ningún archivo.</string>
   <string name="DOW_FOLDER_NO_RIGHTS">No tiene autorización para ver la carpeta seleccionada.</string>
   <string name="DOW_FOLDER_NOT_EXISTS">La carpeta ya no existe físicamente en el servidor. Debe ser eliminada de la base de datos.</string>

@@ -155,7 +155,6 @@
   <string name="DOW_FILES_UPLOADED">#VAR1# bestanden zijn succesvol geüpload.</string>
   <string name="DOW_FOLDER_CREATED">Map #VAR1_BOLD# aangemaakt.</string>
   <string name="DOW_FOLDER_EXISTS">Map #VAR1# bestaat al!\n\nKies svp andere naam.</string>
-  <string name="DOW_FOLDER_NAME_INVALID">Naam van map bevat onjuiste karakters!\n\nKies svp een andere naam.</string>
   <string name="DOW_FOLDER_NO_FILES">Niets gevonden.</string>
   <string name="DOW_FOLDER_NO_RIGHTS">U heeft geen toegang tot de geselecteerde map.</string>
   <string name="DOW_FOLDER_NOT_EXISTS">De map is niet meer beschikbaar op de server. Het moet uit de database verwijderd worden.</string>

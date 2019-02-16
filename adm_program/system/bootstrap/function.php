@@ -301,7 +301,7 @@ function admFuncProcessableImageSize()
  * @param array<string,mixed> $array        The array with the element that should be checked
  * @param string              $variableName Name of the array element that should be checked
  * @param string              $datatype     The datatype like **string**, **numeric**, **int**, **float**, **bool**, **boolean**, **html**,
- *                                          **date** or **file** that is expected and which will be checked.
+ *                                          **date**, **file** or **folder** that is expected and which will be checked.
  *                                          Datatype **date** expects a date that has the Admidio default format from the
  *                                          preferences or the english date format **Y-m-d**
  * @param array<string,mixed> $options      (optional) An array with the following possible entries:
@@ -392,7 +392,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             {
                 if ($value !== '')
                 {
-                    StringUtils::strIsValidFileName($value);
+                    StringUtils::strIsValidFileName($value, false);
                 }
             }
             catch (AdmException $e)
