@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2018 The Admidio Team
+ * @copyright 2004-2019 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -546,7 +546,7 @@ class HtmlPage
         }
 
         $htmlHeader = '<head>
-            <!-- (c) 2004 - 2018 The Admidio Team - ' . ADMIDIO_HOMEPAGE . ' -->
+            <!-- (c) 2004 - 2019 The Admidio Team - ' . ADMIDIO_HOMEPAGE . ' -->
 
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
