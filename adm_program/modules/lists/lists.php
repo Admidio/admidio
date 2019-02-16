@@ -183,22 +183,21 @@ foreach($listsResult['recordset'] as $row)
         {
             $page->addHtml('</div></div></div>');
         }
-        $page->addHtml('<div class="panel panel-primary">
-            <div class="panel-heading">'. $role->getValue('cat_name'). '</div>
-            <div class="panel-body">
+        $page->addHtml('<div class="card">
+            <div class="card-header">'. $role->getValue('cat_name'). '</div>
+            <div class="card-body">
                 <div class="panel-group" id="accordion_'.$catId.'">');
         $previousCategoryId = $catId;
     }
 
     $page->addHtml('
-    <div class="panel panel-default" id="role_details_panel_'.$rolId.'">
-        <div class="panel-heading">
-            <div class="pull-left">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion_'.$catId.'" href="#collapse_'.$rolId.'">
-                        '. $role->getValue('rol_name'). '</a></h4>
+    <div class="card" id="role_details_panel_'.$rolId.'">
+        <div class="card-header">
+            <div class="float-left">
+                <a data-toggle="collapse" data-parent="#accordion_'.$catId.'" href="#collapse_'.$rolId.'">
+                    '. $role->getValue('rol_name'). '</a><
             </div>
-            <div class="pull-right text-right">');
+            <div class="float-right text-right">');
                 // send a mail to all role members
                 if($gCurrentUser->hasRightSendMailToRole($rolId) && $gSettingsManager->getBool('enable_mail_module'))
                 {
@@ -233,7 +232,7 @@ foreach($listsResult['recordset'] as $row)
             $page->addHtml('</div>
         </div>
         <div id="collapse_'.$rolId.'" class="panel-collapse collapse">
-            <div class="panel-body" id="admRoleDetails'.$rolId.'">');
+            <div class="card-body" id="admRoleDetails'.$rolId.'">');
                 // create a static form
                 $form = new HtmlForm('lists_static_form');
 

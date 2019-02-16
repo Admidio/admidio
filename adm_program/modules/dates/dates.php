@@ -558,7 +558,7 @@ else
                     {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-default dropdown-toggle ' . $buttonClass . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'
+                                <button class="btn btn-secondary dropdown-toggle ' . $buttonClass . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
@@ -570,13 +570,13 @@ else
                                     if ($gSettingsManager->getBool('dates_may_take_part'))
                                     {
                                         $outputButtonParticipation .= '<li>
-                                            <a class="btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_id' => $dateId)) . '"' . $disableStatusTentative . '>
+                                            <a class="btn admidio-btn-event-tentative" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_id' => $dateId)) . '"' . $disableStatusTentative . '>
                                                 <i class="fas fa-question-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_USER_TENTATIVE').'"></i>' . $gL10n->get('DAT_USER_TENTATIVE') . '
                                             </a>
                                         </li>';
                                     }
                                     $outputButtonParticipation .= '<li>
-                                        <a class="btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '4', 'dat_id' => $dateId)) . '">
+                                        <a class="btn admidio-btn-event-cancel" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '4', 'dat_id' => $dateId)) . '">
                                             <i class="fas fa-times-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_CANCEL').'"></i>' . $gL10n->get('DAT_CANCEL') . '
                                         </a>
                                     </li>
@@ -587,7 +587,7 @@ else
                     {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-default" data-toggle="modal" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId)) . '" data-target="#admidio_modal">' . $iconParticipationStatus . $buttonText . '
+                                <button class="btn btn-secondary" data-toggle="modal" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId)) . '" data-target="#admidio_modal">' . $iconParticipationStatus . $buttonText . '
                             </div>';
                     }
                 }
@@ -623,7 +623,7 @@ else
                         if ($getView === 'detail')
                         {
                             $outputButtonParticipants = '
-                                <button class="btn btn-default" onclick="window.location.href=\'' . $buttonURL . '\'">
+                                <button class="btn btn-secondary" onclick="window.location.href=\'' . $buttonURL . '\'">
                                     <i class="fas fa-list"></i>' . $gL10n->get('DAT_SHOW_PARTICIPANTS') . '</button>';
                         }
                         else
@@ -645,7 +645,7 @@ else
                         if ($getView === 'detail')
                         {
                             $outputButtonParticipantsEmail = '
-                                <button class="btn btn-default" onclick="window.location.href=\'' . $buttonURL . '\'">
+                                <button class="btn btn-secondary" onclick="window.location.href=\'' . $buttonURL . '\'">
                                     <i class="fas fa-envelope"></i>' . $gL10n->get('SYS_WRITE_EMAIL') . '</button>';
                         }
                         else
@@ -665,7 +665,7 @@ else
                     if ($getView === 'detail')
                     {
                         $outputButtonParticipantsAssign = '
-                            <button class="btn btn-default" onclick="window.location.href=\'' . $buttonURL . '\'">
+                            <button class="btn btn-secondary" onclick="window.location.href=\'' . $buttonURL . '\'">
                                 <i class="fas fa-user-plus"></i>' . $gL10n->get('DAT_ASSIGN_PARTICIPANTS') . '</button>';
                     }
                     else
@@ -735,8 +735,8 @@ else
                         $htmlDateElements .= '<div class="row">';
                     }
 
-                    $htmlDateElements .= '<div class="col-sm-2 col-xs-4">' . $element[0] . '</div>
-                        <div class="col-sm-4 col-xs-8">' . $element[1] . '</div>';
+                    $htmlDateElements .= '<div class="col-sm-2 col-4">' . $element[0] . '</div>
+                        <div class="col-sm-4 col-8">' . $element[1] . '</div>';
 
                     if($firstElement)
                     {
@@ -757,17 +757,17 @@ else
             }
 
             $page->addHtml('
-                <div class="panel panel-primary ' . $cssClassHighlight . '" id="dat_' . $dateId . '">
-                    <div class="panel-heading">
-                        <div class="pull-left">
+                <div class="card ' . $cssClassHighlight . '" id="dat_' . $dateId . '">
+                    <div class="card-header">
+                        <div class="float-left">
                             <i class="fas fa-calendar-alt"></i>' .
                             $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline . '
                         </div>
-                        <div class="pull-right text-right">' .
+                        <div class="float-right text-right">' .
                             $outputButtonIcal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete . '
                         </div>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         ' . $htmlDateElements . '<br />
                         <p>' . $date->getValue('dat_description') . '</p>' .$attentionDeadline);
 
@@ -778,7 +778,7 @@ else
             }
             $page->addHtml('
                 </div>
-                <div class="panel-footer">'.
+                <div class="card-footer">'.
                     // show information about user who created the recordset and changed it
                     admFuncShowCreateChangeInfoByName(
                         $row['create_name'], $date->getValue('dat_timestamp_create'),

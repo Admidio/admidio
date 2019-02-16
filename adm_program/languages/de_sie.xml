@@ -100,7 +100,7 @@
   <string name="DAT_REGISTRATION_POSSIBLE">Anmeldung zu diesem Termin ermöglichen</string>
   <string name="DAT_REMOVE_APPLICATION">Wollen Sie die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmer gelöscht werden.</string>
   <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Teilnehmer können die Teilnehmerliste einsehen</string>
-  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Teilnehmer können Mails an alle Teilnehmer senden</string>
+  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Teilnehmer können Mails an alle Teilnehmer senden </string>
   <string name="DAT_ROLES_DIFFERENT">Sie haben bei den Teilnehmern Rollen zugeordnet, welche bei der gewählten Kategorie nicht das Recht haben die Termine zu sehen. Bitte wählen Sie bei den Teilnehmern eine der folgenden Rollen: #VAR1_BOLD#.</string>
   <string name="DAT_ROOM_INFORMATIONS">Rauminformationen</string>
   <string name="DAT_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzplätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
@@ -327,7 +327,7 @@
   <string name="INS_BROTHER">Bruder</string>
   <string name="INS_CHILD">Kind</string>
   <string name="INS_COHABITANT">Partner/-in</string>
-  <string name="INS_COHABITANT_MALE">Partner</string>
+  <string name="INS_COHABITANT_MALE">Partner </string>
   <string name="INS_COHABITANT_FEMALE">Partnerin</string>
   <string name="INS_COMPANION">Freund/-in</string>
   <string name="INS_DAUGHTER">Tochter</string>
@@ -355,7 +355,6 @@
   <string name="LNK_EDIT_WEBLINKS">Weblinks bearbeiten</string>
   <string name="LNK_EMAIL_NOTIFICATION_TITLE">Ein neuer Weblink wurde angelegt</string>
   <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei #VAR1# angelegt.\n\nLink: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
-  <string name="LNK_GO_TO">Gehe zu #VAR1#</string>
   <string name="LNK_LINK_ADDRESS">Linkadresse</string>
   <string name="LNK_LINK_NAME">Linkname</string>
   <string name="LNK_LINK_TARGET">Linkziel</string>
@@ -498,7 +497,7 @@
   <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# hat an die ehemaligen Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
   <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# hat an die aktiven und ehemaligen Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
   <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# hat Ihnen von #VAR2# folgende E-Mail geschickt:</string>
-  <string name="MAI_HIDDEN">Versteckt</string>
+  <string name="MAI_HIDDEN">Versteckt </string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML-Mails</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Die Erstellung und der Versand von HTML-Mails kann für registrierte Benutzer aktiviert werden. Anstelle des normalen Textfeldes wird dann ein Javascript-Editor angezeigt über den der Text komfortabel editiert werden kann. Aus Sicherheitsgründen ist diese Funktion nicht für Gäste möglich.</string>
   <string name="MAI_INTO_TO">Empfänger im TO-Feld und nicht im BCC-Feld auflisten</string>
@@ -703,7 +702,6 @@
   <string name="ORG_FIELD_DESCRIPTION">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</string>
   <string name="ORG_FIELD_DISABLED">Feld nur für Benutzer mit dem Recht #VAR1_BOLD# editierbar</string>
   <string name="ORG_FIELD_DISABLED_DESC">Ein gesperrtes Feld kann vom Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten. Leiter einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</string>
-  <string name="ORG_FIELD_DOWN">Profilfeld nach unten verschieben</string>
   <string name="ORG_FIELD_EXIST">Es existiert bereits ein Feld in dieser Kategorie mit dem selben Namen.</string>
   <string name="ORG_FIELD_HIDDEN">Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Ein Feld ist normalerweise für alle Benutzer sichtbar, die das Profil sehen dürfen. Ist diese Einstellung nicht gesetzt, dann können nur Benutzer das Feld sehen, die das Profil auch bearbeiten dürfen.</string>
@@ -714,7 +712,6 @@
   <string name="ORG_FIELD_REGISTRATION">Feld wird bei der Registrierung angezeigt</string>
   <string name="ORG_FIELD_REQUIRED">Pflichtfeld, muss immer ausgefüllt werden</string>
   <string name="ORG_FIELD_REQUIRED_DESC">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</string>
-  <string name="ORG_FIELD_UP">Profilfeld nach oben verschieben</string>
   <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später im Profil den Inhalt, den der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter #user_content# in die URL eingebaut werden. Dies ist dann der Inhalt, den der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: https://www.google.de/search?q=#user_content#\nFeldinhalt: Admidio\nLink im Profil: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</string>
@@ -739,7 +736,7 @@
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Sie können diese nun bei der Anmeldung auswählen.\n\nFalls Sie für diese Organisation eine separate Homepage erstellt haben, müssen Sie auf der entsprechenden Seite noch die neue Organisation in die config.php eintragen.</string>
   <string name="ORG_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Hier können Sie die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit </string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier können Sie festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nSehr hoch: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>
@@ -788,7 +785,6 @@
   <string name="ORG_VARIABLE_URL_ORGANIZATION">URL der Webseite der Organisation</string>
   <string name="ORG_VARIABLE_USERNAME">Benutzername des Benutzers aus dem jeweiligen E-Mailkontext</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_ADMIDIO">Zur Admidio-Updateseite wechseln</string>
   <string name="UPD_BETA_VERSION">Verfügbare Beta</string>
   <string name="UPD_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfen Sie Ihre Internetverbindung oder versuchn Sie es zu einem späteren Zeitpunkt nocheinmal. Alternativ können Sie auch manuell auf der Webseite von #VAR1# prüfen ob ein Update vorliegt.</string>
   <string name="UPD_CURRENT_VERSION">Installiert</string>
@@ -802,7 +798,7 @@
   <string name="PHO_ALBUM_DELETE">Album Löschen</string>
   <string name="PHO_ALBUM_LOCK">Album sperren</string>
   <string name="PHO_ALBUM_LOCK_DESC">Gesperrte Alben können von Besuchern und Mitgliedern nicht eingesehen werden. Sie können zum Beispiel ein Album vorübergehen sperren, während Sie gerade alle Bilder des Albums hochladen.</string>
-  <string name="PHO_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt. Sie können das Album über das Schlüsselsymbol in der Bearbeitungszeile freigeben.</string>
+  <string name="PHO_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt.</string>
   <string name="PHO_ALBUM_UNLOCK">Album entsperren</string>
   <string name="PHO_ALBUM_WRITE_SUCCESS">Das Album wurde erfolgreich angelegt / geändert</string>
   <string name="PHO_BACK_TO_ALBUM">zurück zum Album</string>
@@ -949,19 +945,14 @@
   <string name="PRO_YEARS">Jahre</string>
   <!--Phrases only in Relationssmodule-->
   <string name="REL_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein Benutzer das Profil eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
-  <string name="REL_EDIT_USER_IN_RELATION">Benutzerprofil dieser Beziehung bearbeiten</string>
   <string name="REL_NO_USER_RELATION_TYPES_FOUND">Es existieren noch keine Beziehungstypen. Beziehungstypen können in der Benutzerverwaltung erstellt werden.</string>
   <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
-  <string name="REL_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
   <string name="REL_USER_RELATION_TYPE_DEL">Wollen Sie den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
   <string name="REL_USER_RELATION_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen, z.B. für Geschwister, verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
-  <string name="REL_USER_RELATION_TYPE_FORWARD">Vorwärts</string>
   <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
   <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Aktive Rollen</string>
-  <string name="ROL_ALL_GUESTS">Alle Besucher der Seite</string>
-  <string name="ROL_ALL_MEMBERS">Alle angemeldeten Benutzer</string>
   <string name="ROL_ANNUALLY">Jährlich</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Mitglieder zuordnen und bearbeiten</string>
   <string name="ROL_DELETE_NO_DEFAULT_ROLE">Sie können die Rolle #VAR1_BOLD# nicht löschen. Es muss mindestens eine Rolle die Einstellung #VAR2_BOLD# besitzen.</string>
@@ -992,8 +983,6 @@
   <string name="ROL_NEW_ROLE">Neue Rolle</string>
   <string name="ROL_NO_ADDITIONAL_RIGHTS">Keine zusätzlichen Rechte</string>
   <string name="ROL_NO_DEFAULT_ROLE">Sie können die Einstellung #VAR1_BOLD# nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</string>
-  <string name="ROL_ONLY_ROLE_MEMBERS">Nur Rollenmitglieder</string>
-  <string name="ROL_PREF" description="Abbreviation for Preferences">Einst.</string>
   <string name="ROL_ROLE_ASSIGNMENT">Rollenzuordnung für #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Vierteljährlich</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen einsehen</string>
@@ -1026,17 +1015,12 @@
   <string name="ROL_SAVE_ROLES">Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.</string>
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
   <string name="ROL_SEMIYEARLY">Halbjährlich</string>
-  <string name="ROL_SEND_MAIL_GUESTS">Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben.</string>
-  <string name="ROL_SEND_MAIL_MEMBERS">Angemeldete Benutzer dürfen E-Mails an diese Rolle schreiben.</string>
-  <string name="ROL_SEND_MAIL_ROLE">Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreiben.</string>
   <string name="ROL_SEND_MAILS">E-Mails zusenden</string>
   <string name="ROL_SHOW_MEMBERS">Mitglieder anzeigen</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
   <string name="ROL_UNIQUELY">Einmalig</string>
   <string name="ROL_VALID_FROM" description="Date valid from">Gültig von</string>
   <string name="ROL_VALID_TO" description="Date valid to">Gültig bis</string>
-  <string name="ROL_VIEW_LIST_MEMBERS">Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen.</string>
-  <string name="ROL_VIEW_LIST_ROLE">Nur Mitglieder dieser Rolle können die Mitgliederliste einsehen.</string>
   <string name="ROL_WEEKDAY">Wochentag</string>
   <string name="ROL_WITHOUT_LEADER">Ohne Leiter</string>
   <!--Phrases only in Roommodule-->
@@ -1046,13 +1030,16 @@
   <string name="ROO_SEATING">Sitzplätze</string>
   <string name="ROO_STANDING">Stehplätze</string>
   <!--System-Phrases for use in every module-->
+  <string name="SYS_64BIT">64bit</string>
   <string name="SYS_ABORT">Abbrechen</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
   <string name="SYS_ACTIVATED">Aktiviert</string>
   <string name="SYS_ADD_RECIPIENTS">Empfänger hinzufügen</string>
   <string name="SYS_ADDRESS">Adresse</string>
+  <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Gehe zur Admidio-Downloadseite</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen</string>
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
+  <string name="SYS_ADMIDIO_UPDATE">Admidio Update</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
@@ -1145,6 +1132,7 @@
   <string name="SYS_DESCRIPTION">Beschreibung</string>
   <string name="SYS_DESIGNATION">Bezeichnung</string>
   <string name="SYS_DIRECTORY_PROTECTION">Verzeichnisschutz</string>
+  <string name="SYS_DIRECTORY_SEPARATOR">Verzeichnis Trenner</string>
   <string name="SYS_DISK_SPACE">Speicherplatz</string>
   <string name="SYS_DISK_SPACE_ERROR">Die Belegung des Speicherplatzes konnte nicht ermittelt werden.\n\nFehlermeldung:\n#VAR1#</string>
   <string name="SYS_DONATE">Spenden</string>
@@ -1155,6 +1143,7 @@
   <string name="SYS_EDIT">Bearbeiten</string>
   <string name="SYS_EDIT_ENTRY">Eintrag bearbeiten</string>
   <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
+  <string name="SYS_EDIT_USER_IN_RELATION">Benutzerprofil dieser Beziehung kann bearbeitet werden</string>
   <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
   <string name="SYS_EDITED_BY">Geändert von</string>
   <string name="SYS_EMAIL">E-Mail</string>
@@ -1182,7 +1171,7 @@
   <string name="SYS_FILE_TO_LARGE_SERVER">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von #VAR1# MB.</string>
   <string name="SYS_FILE_UPLOADS">Dateiuploads</string>
   <string name="SYS_FILENAME_EMPTY">Es wurde kein Dateiname angegeben!</string>
-  <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfen Sie den Dateinamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : " | &lt; &gt;</string>
+  <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfen Sie den Dateinamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisieren Sie bitte Ihre Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">Vorname</string>
@@ -1192,6 +1181,7 @@
   <string name="SYS_FOLDER">Ordner</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWenden Sie Sich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWenden Sie sich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
+  <string name="SYS_FONT_AWESOME_DESC">Sie können auf unterschiedliche Arten ein Icon hinterlegen:\n1. Ein Icon des Webfonts \"Font Awesome\". Gehen Sie dazu auf #VAR1#http://fontawesome.com#VAR2# und wählen Sie ein kostenloses Icon der Sammlung \"Solid\" oder \"Brands\" aus. Als Präfix müssen Sie noch fa- davor setzen. Wählen Sie also das Icon \"user\" aus, müssen Sie hier \"fa-user\" eintragen.\n2. Ein JPEG oder PNG Icon. Tragen Sie dazu die vollständige URL zusammen mit dem Dateinamen des Icons ein. Alternativ können Sie das Icon auch im Theme im Ordner \"icons\" ablegen, dann brauchen Sie nur den Dateinamen anzugeben.</string>
   <string name="SYS_FORMER">Ehemaliger</string>
   <string name="SYS_FORMER_PL">Ehemalige</string>
   <string name="SYS_FONT">Schriftart</string>
@@ -1212,11 +1202,13 @@
   <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Administrator deaktiviert.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IMPORTANT">Wichtig</string>
+  <string name="SYS_IMPORT_MODE">Import Modus</string>
   <string name="SYS_IMPRINT">Impressum</string>
   <string name="SYS_IMPRINT_DESC">Hier kann die URL zum Impressum deiner Seite hinterlegt werden. Sofern das gewählte Theme dies unterstützt, wird ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/imprint.html)</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
   <string name="SYS_INTERNAL_NAME">Interner Name</string>
   <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
+  <string name="SYS_INVALID_FONT_AWESOME">Der eingegebene Icon-Name entspricht nicht der Syntax von Font Awesome. Prüfen Sie bitte, ob es diesen Namen auch als Icon gibt.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <string name="SYS_IO_ERROR">E/A Fehler</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
@@ -1256,6 +1248,7 @@
   <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt eine Route vom eigenen Wohnort zum Wohnort dieses Benutzers bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MASTER_DATA">Stammdaten</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmer</string>
+  <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
   <string name="SYS_MAYBE_PARTICIPATE">Mit Vorbehalt teilnehmen</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Ist diese Option aktiviert, so steht bei der Terminanmeldung neben den Möglichkeiten #VAR1_BOLD# und #VAR2_BOLD# noch eine dritte Option #VAR3_BOLD# zur Verfügung. (Standard: Deaktiviert)</string>
@@ -1299,6 +1292,8 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">an</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Die Online-Mitgliederverwaltung</string>
+  <string name="SYS_OPERATING_SYSTEM">Betriebssystem</string>
+  <string name="SYS_OPPOSITE_RELATIONSHIP">Entgegengesetzte Beziehung</string>
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Reihenfolge</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
@@ -1311,6 +1306,7 @@
   <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Solltest du dein Passwort vergessen haben, kann das System ein neues Passwort erstellen und an deine E-Mail-Adresse senden. Gib dazu bitte deinen Benutzernamen oder die E-Mail-Adresse an, unter der du dich in diesem System registriert hast. Das neue Passwort wird dann unverzüglich an diese E-Mail-Adresse gesendet.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Sie haben ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfen Sie bitte Ihr Passwort und geben Sie dieses dann erneut ein.</string>
+  <string name="SYS_PATH_SEPARATOR">Pfad Trenner</string>
   <string name="SYS_PERIOD">Zeitraum</string>
   <string name="SYS_PERMISSIONS">Berechtigungen</string>
   <string name="SYS_PDF">PDF</string>
@@ -1318,6 +1314,7 @@
   <string name="SYS_PHONE_INVALID_CHAR">Die Telefonnummer im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</string>
   <string name="SYS_PHOTO">Foto</string>
   <string name="SYS_PHOTOS">Fotos</string>
+  <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">alle PHP-Einstellungen</string>
   <string name="SYS_PHP_VERSION">PHP-Version</string>
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
@@ -1357,6 +1354,7 @@
   <string name="SYS_RESTRICTIONS">Einschränkungen</string>
   <string name="SYS_ROLE">Rolle</string>
   <string name="SYS_ROLE_MAX_MEMBERS">Speichern ist nicht möglich, bei der Rolle #VAR1_BOLD# würde die maximale Mitgliederzahl überschritten.</string>
+  <string name="SYS_ROLE_MEMBERS">Rollenmitglieder</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROOM">Raum</string>
   <string name="SYS_RSS_DISABLED">Der Web-Feed wurde vom Administrator deaktiviert.</string>
@@ -1413,6 +1411,7 @@
   <string name="SYS_TO" description="E-Mail">An</string>
   <string name="SYS_TUESDAY">Dienstag</string>
   <string name="SYS_TYPE">Typ</string>
+  <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Unbekannt</string>
   <string name="SYS_UNLIMITED">Unbegrenzt</string>
   <string name="SYS_UNLOCK">Freigeben</string>

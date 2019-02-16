@@ -20,6 +20,7 @@ body {
     color: #474b4c;
     margin: auto;
     text-align: center;
+    font-size: 0.9rem;
 }
 
 #page {
@@ -52,6 +53,12 @@ body {
 body > .admContent {
     background-color: #ffffff;
     padding: 15px;
+}
+
+.media,
+.navbar,
+.admidio-plugin-content {
+    margin-bottom: 20px;
 }
 
 /* Layout adjustments for devices > 7" */
@@ -157,7 +164,7 @@ h4,
 h5 {
     color: #333333;
     font-weight: bold;
-    margin: 20px 0 15px 0;
+    margin-bottom: 10px;
 }
 
 h2 {
@@ -166,7 +173,7 @@ h2 {
 }
 
 h3 {
-    font-size: 110%;
+    font-size: 120%;
 }
 
 h4 {
@@ -241,7 +248,8 @@ hr {
 }
 
 .lead {
-    font-size: 12pt;
+    font-size: 130%;
+    margin-top: 20px;
 }
 
 .popover {
@@ -310,22 +318,26 @@ a.btn {
     text-align: left !important;
 }
 
+a {
+    cursor: pointer;    
+}
+
 /**************************/
 /* Settings for all icons */
 /**************************/
 
 .btn .fas,
 .btn .fab,
-.panel-title .fas,
-.panel-title .fab,
-.navbar-link .fas,
+.card-header .fas,
+.card-header .fab,
+.nav-link .fas,
 .checkbox .fas,
-.panel-heading .pull-left .fas,
+.card-header .float-left .fas,
 .admidio-profile-user-right .fas {
     margin-right: 6px;
 }
 
-.panel-title .fab {
+.card-header .fab {
     font-weight: normal;
 }
 
@@ -397,28 +409,6 @@ a.btn {
     background: linear-gradient(to bottom, #ffffff 0%, #96c4cb 95%);
 }
 
-.nav > li > a {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    color: #474b4c !important;
-}
-
-.navbar .form-control,
-.navbar .btn {
-    height: 28px;
-    padding: 3px 8px;
-}
-
-.navbar-brand {
-    color: #474b4c !important;
-    padding: 10px 15px 10px 15px;
-    line-height: inherit;
-}
-
-.navbar-toggle {
-    margin-right: 5px;
-}
-
 .navbar .checkbox {
     padding-top: 2px;
     margin-bottom: 0;
@@ -437,6 +427,14 @@ a.btn {
     .navbar-nav > li:first-child > a {
         padding-left: 0;
     }
+}
+
+.form-inline div {
+    padding-right: 15px;
+}
+
+.form-inline label {
+    padding-right: 5px;
 }
 
 /* Style for tabs */
@@ -520,8 +518,16 @@ input[type="file"] {
     margin-right: 5px;
 }
 
+label {
+    font-weight: bold;
+}
+
+.checkbox input {
+    margin-right: 6px;
+}
+
 @media (min-width: 768px) {
-    .col-sm-offset-3.btn {
+    .offset-sm-3.btn {
         margin-left: 26%;
     }
 
@@ -575,15 +581,21 @@ input[type="time"] {
 }
 
 .btn-primary {
-    background-color: #409099;
-    border-color: #409099;
-    color: #ffffff;
+    background-color: #409099 !important;
+    border-color: #409099 !important;
+    color: #ffffff !important;
+}
+
+.btn-secondary {
+    background-color: #c5c5c5;
+    border-color: #c5c5c5;
+    color: #000000;
 }
 
 .btn-primary:hover,
-.btn-primary:focus {
-    background-color: #387f87;
-    border-color: #387f87;
+.btn-primary:focus{
+    background-color: #387f87 !important;
+    border-color: #387f87 !important;
 }
 
 .btn.disabled {
@@ -616,11 +628,16 @@ input[type="time"] {
 /* A simple groupbox/panel to group some elements. This is often used in forms. */
 /********************************************************************************/
 
-.panel-default {
+.card {
     border: 1px solid #7d7d7d;
+    margin-top: 20px;
 }
 
-.panel-default > .panel-heading {
+.accordion .card {
+    margin-top: 0px !important;
+}
+
+.card > .card-header {
     color: #333333;
     font-weight: bold;
     letter-spacing: 0.1em;
@@ -631,49 +648,44 @@ input[type="time"] {
     background: linear-gradient(to bottom, #ffffff 0%, #96c4cb 95%);
 }
 
-.tab-pane > .panel-group > .panel-default > .panel-heading {
+.tab-pane > .accordion > .card > .card-header {
     border-bottom-left-radius: 9px;
     border-bottom-right-radius: 9px;
 }
 
-.panel-default.in > .panel-heading {
+.card.in > .card-header {
     background: -webkit-linear-gradient(top, #55b6c5 0%, #347078 95%);
     background: linear-gradient(to bottom, #55b6c5 0%, #347078 95%);
 }
 
-.panel-heading {
+.card-header {
     display: inline-block;
     width: 100%;
     font-size: 12pt;
 }
 
-.panel-heading a:link,
-.panel-heading a:visited {
+.card-header a:link,
+.card-header a:visited {
     color: #222222;
     font-weight: bold;
     text-decoration: none;
 }
 
-.panel-group .panel,
-.panel-default {
-    border-radius: 10px !important;
-}
-
 /* Panel which includes the ckeditor in a nice way without separate borders */
-.admidio-panel-editor .panel-body {
+.admidio-panel-editor .card-body {
     padding: 0;
 }
 
-.admidio-panel-editor .panel-body .form-group {
+.admidio-panel-editor .card-body .form-group {
     margin-bottom: 0;
 }
 
-.admidio-panel-editor .panel-body .cke_chrome {
+.admidio-panel-editor .card-body .cke_chrome {
     border-width: 0;
 }
 
-.admidio-panel-editor .panel-body .cke_bottom,
-.admidio-panel-editor .panel-body .cke_inner {
+.admidio-panel-editor .card-body .cke_bottom,
+.admidio-panel-editor .card-body .cke_inner {
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
 }
@@ -689,32 +701,7 @@ input[type="time"] {
     display: block;
 }
 
-/* Layout for some boxes that is used in announcements or events module */
-
-.panel-primary {
-    background-color: transparent;
-    border-color: transparent;
-    box-shadow: none;
-}
-
-.panel-primary > .panel-heading {
-    color: #333333;
-    font-weight: bold;
-    letter-spacing: 0.1em;
-    background-color: transparent;
-    border-bottom: 2px solid #449ba6;
-    padding: 3px 0;
-}
-
-.panel-primary > .panel-body {
-    padding: 10px 0 0;
-}
-
-
-.panel-primary > .panel-footer {
-    padding: 5px 0 0 0;
-    background-color: #ffffff;
-    border-top: 2px solid #c1dce6;
+.card > .card-footer {
     font-size: 8pt;
 }
 
@@ -768,10 +755,6 @@ input[type="time"] {
 
 .dataTable {
     border-bottom: 2px solid #c1dce6;
-}
-
-.dt-bootstrap {
-    margin-bottom: 20px;
 }
 
 /**************************************************/

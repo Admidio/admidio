@@ -92,6 +92,7 @@
   <string name="DAT_PARTICIPANTS_LIMIT">Número limitado de participantes</string>
   <string name="DAT_PARTICIPATE_NO_RIGHTS">Não tens permissão para se inscrever nesse compromisso.</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Participar do evento como organizador</string>
+  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Você se tornou um organizador do evento e recebeu as permissões para adicionar ou remover futuros participantes, e promovê-los a organizadores.</string>
   <string name="DAT_PERIOD_FROM_TO">Período entre #VAR1# e #VAR2#</string>
   <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">#VAR1# anterior</string>
   <string name="DAT_REGISTRATION_POSSIBLE_FOR">Registro possível para</string>
@@ -354,7 +355,6 @@
   <string name="LNK_EDIT_WEBLINKS">Editar links web</string>
   <string name="LNK_EMAIL_NOTIFICATION_TITLE">Um novo link web foi criado</string>
   <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">Um novo link web foi criado em #VAR1#.\n\nEndereço: #VAR2#\nCriado por: #VAR3#\nCriado às: #VAR4#</string>
-  <string name="LNK_GO_TO">Ir para #VAR1#</string>
   <string name="LNK_LINK_ADDRESS">Endereço</string>
   <string name="LNK_LINK_NAME">Nome do link</string>
   <string name="LNK_LINK_TARGET">Alvo do link</string>
@@ -652,8 +652,6 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Variáveis adicionais</string>
   <string name="ORG_ADMIDIO_THEME">Tema do Admidio</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Selecione um leiaute para Admidio. Todos os temas guardados no diretório adm_themes estão a ser mostrados. (padrão: moderno)</string>
-  <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Encerrar sessão após </string>
-  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Define o tempo em que o sistema automaticamente encerrará a sessão de um usuário inativo. Um usuário é dado como inativo quando nenhuma página é carregada por um certo tempo. Esta configuração será ignorada quando o usuário selecionar #VAR1_BOLD#. (padrão: 20 minutos)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Atualizar mensagem para navegadores obsoletos</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Após ativação os usuários com navegadores obsoletos serão advertidos para que atualizem seus navegadores. Navegadores atualizados garantem maior segurança e proteção contra fraudes, vírus, trojans, ladrões de identidade e outras ameaças à privacidade. Toda nova geração de navegadores aperfeiçoa em velocidade e suporta cada vez mais tecnologias web, o que provoca uma experiência melhor. Pra este propósito, o serviço do https://browser-update.org/ é usado.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Cor de fundo</string>
@@ -700,7 +698,6 @@
   <string name="ORG_FIELD_DESCRIPTION">Definir ilimitados campos adicionais. Os campos serão exibidos no perfil e podem ser editados. Estes campos estarão disponíveis nas listas personalizadas também.</string>
   <string name="ORG_FIELD_DISABLED">Campo editável apenas para usuários com permissão #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">Um campo de perfil bloqueado não pode mais ser editado pelo usuário em seu próprio perfil. Poderá apenas ser editado por usuários com permissão adequada. Os líderes de um cargo com permissões para editar os perfis dos membros também podem alterar este campo.</string>
-  <string name="ORG_FIELD_DOWN">Mover campo para baixo</string>
   <string name="ORG_FIELD_EXIST">Já existe um campo com esse nome nessa categoria.</string>
   <string name="ORG_FIELD_HIDDEN">Campo visível apenas para usuários autorizados (próprio perfil &amp; autorização de cargo)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Geralmente um campo é visível para todos que possuem permissão para ver o perfil. Se esta opção estiver desmarcada, apenas usuários que podem editar o perfil podem ver o campo.</string>
@@ -711,7 +708,6 @@
   <string name="ORG_FIELD_REGISTRATION">O campo é mostrado durante o registro</string>
   <string name="ORG_FIELD_REQUIRED">Os campos obrigatórios precisam ser preenchidos.</string>
   <string name="ORG_FIELD_REQUIRED_DESC">Campos marcados são de preenchimento obrigatório. Esta regra se aplica aos registros e para alterações em perfis comuns realizadas por usuários.</string>
-  <string name="ORG_FIELD_UP">Mover campo para cima</string>
   <string name="ORG_FIELD_URL_DESC">A URL inserida redirecionará para o conteúdo que o usuário indicar neste campo. Opcionalmente, até o mesmo o coringa #user_content# pode ser definido na URL. Este é o conteúdo que o usuário inseriu no campo.\n\nExemplo:\nURL: https://www.google.pt/search?q=#user_content#\nValor do campo: Admidio\nLink no perfil: https://www.google.pt/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Esta página aparece quando um usuário inicia sessão. Um endereço deve ser fornecido como caminho relativo para o diretório principal do Admidio.\n(ex: amd_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Esta é a página padrão do Admidio para visitantes. Um endereço deve ser fornecido como caminho relativo para o diretório principal do Admidio.\n(ex.: adm_program/index.php)</string>
@@ -785,7 +781,6 @@
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Endereço para o sítio web da organização</string>
   <string name="ORG_VARIABLE_USERNAME">Nome de usuário do usuário do contexto do respectivo e-mail</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_ADMIDIO">Ir para a página de atualizações do Admidio</string>
   <string name="UPD_BETA_VERSION">Beta disponível</string>
   <string name="UPD_CONNECTION_ERROR">Não foi possível conectar à página de atualizações do Admidio. Verifique tua conexão de internet ou tente novamente mais tarde. Também pode visitar a página #VAR1# e atualizar o Admidio manualmente.</string>
   <string name="UPD_CURRENT_VERSION">Instalado</string>
@@ -799,7 +794,6 @@
   <string name="PHO_ALBUM_DELETE">Remover álbum</string>
   <string name="PHO_ALBUM_LOCK">Bloquear álbum</string>
   <string name="PHO_ALBUM_LOCK_DESC">Álbuns bloqueados não podem ser vistos por visitantes ou membros, por exemplo. Pode bloquear um álbum assim que todas as imagens estiverem a ser carregadas.</string>
-  <string name="PHO_ALBUM_NOT_APPROVED">O álbum está bloqueado e visitantes não podem vê-lo. Desbloqueie-o pressionando o símbolo de chave na edição do campo. </string>
   <string name="PHO_ALBUM_UNLOCK">Desbloquear álbum</string>
   <string name="PHO_ALBUM_WRITE_SUCCESS">O álbum foi criado / modificado com sucesso.</string>
   <string name="PHO_BACK_TO_ALBUM">voltar ao álbum</string>
@@ -944,19 +938,14 @@
   <string name="PRO_YEARS">Anos</string>
   <!--Phrases only in Relationssmodule-->
   <string name="REL_EDIT_USER_DESC">Se definida, um usuário pode editar o perfil de outro usuário com o qual possua relação. Para um relacionamento assimétrico, a permissão é atribuída separadamente para cada relacionamento, e para relacionamentos simétricos, ambos usuários podem editar o perfil do outro. No caso de relacionamentos unidirecionais, apenas o usuário com a relação gravada pode editar o perfil do outro.</string>
-  <string name="REL_EDIT_USER_IN_RELATION">Edite o perfil de usuário deste relacionamento</string>
   <string name="REL_NO_USER_RELATION_TYPES_FOUND">Não há tipos de relação. Eles podem ser criados na Gestão de Usuários.</string>
   <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">Assimétrica</string>
-  <string name="REL_USER_RELATION_TYPE_BACKWARD">Anterior</string>
   <string name="REL_USER_RELATION_TYPE_DEL">Queres apagar o tipo de relação #VAR1_BOLD#? Aviso: Serão apagados todos os relacionamentos deste tipo.</string>
   <string name="REL_USER_RELATION_TYPE_DESC">Uma relação assimétrica é usada, por exemplo, para pai / filho; enquanto uma simétrica é usada por exemplo, para irmãos. Relações simétricas são sempre bidirecionais, entretanto, relações unidirecionais apenas marcam em uma direção.</string>
-  <string name="REL_USER_RELATION_TYPE_FORWARD">Próximo</string>
   <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">Simétrica</string>
   <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">Unidirecional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Cargos ativos</string>
-  <string name="ROL_ALL_GUESTS">Todos os visitantes do site</string>
-  <string name="ROL_ALL_MEMBERS">Todos os usuário em sessão</string>
   <string name="ROL_ANNUALLY">Anualmente</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Atribuir e editar membros</string>
   <string name="ROL_DELETE_NO_DEFAULT_ROLE">Não é possível remover o cargo #VAR1_BOLD#. Pelo menos um cargo requer a configuração #VAR2_BOLD#.</string>
@@ -987,8 +976,6 @@
   <string name="ROL_NEW_ROLE">Novo cargo</string>
   <string name="ROL_NO_ADDITIONAL_RIGHTS">Nenhuma permissão adicional</string>
   <string name="ROL_NO_DEFAULT_ROLE">Não é possível remover a configuração #VAR1_BOLD#, porque é necessário que pelo menos um cargo esteja guardado como atribuição padrão.</string>
-  <string name="ROL_ONLY_ROLE_MEMBERS">Apenas membros do cargo</string>
-  <string name="ROL_PREF" description="Abbreviation for Preferences">Config.</string>
   <string name="ROL_ROLE_ASSIGNMENT">Atribuição de cargo para #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Trimestralmente</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">Exibir todas as listas de filiação de todos os cargos</string>
@@ -1003,7 +990,6 @@
   <string name="ROL_RIGHT_EDIT_USER_DESC">Cargos com esta permissão podem alterar os dados de outros usuários (exceto palavras passe).\n Adicionalmente, também possuem acesso à Administração de usuários e podem adicionar/remover usuários.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Editar e apagar notas no livro de visitas</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Criar comentários nas notas do livro de visitas</string>
-  <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Esta configuração controla quem tem permissão de enviar e-mails para este cargo através do módulo de e-mail. Entretanto, a permissão de cargo #VAR1_BOLD# ainda possui prioridade sobre esta configuração.</string>
   <string name="ROL_RIGHT_MAIL_TO_ALL">Enviar e-mail para todos os cargos</string>
   <string name="ROL_RIGHT_PHOTO">Enviar e editar fotos</string>
   <string name="ROL_RIGHT_PROFILE">Editar o meu perfil</string>
@@ -1021,17 +1007,12 @@
   <string name="ROL_SAVE_ROLES">Guardar estas configurações pode ocasionar na perda das dependências definidas para este cargo.</string>
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Exibir filiações de cargo</string>
   <string name="ROL_SEMIYEARLY">Semestralmente</string>
-  <string name="ROL_SEND_MAIL_GUESTS">Todos os visitantes podem enviar e-mails para o cargo atual.</string>
-  <string name="ROL_SEND_MAIL_MEMBERS">Usuários em sessão tem permissão para enviar e-mails para o cargo atual.</string>
-  <string name="ROL_SEND_MAIL_ROLE">Os membros deste cargo podem enviar e-mails somente para o cargo atual.</string>
   <string name="ROL_SEND_MAILS">Enviar e-mails</string>
   <string name="ROL_SHOW_MEMBERS">Exibir membros</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">Lista padrão de todo o sistema</string>
   <string name="ROL_UNIQUELY">Uma única vez</string>
   <string name="ROL_VALID_FROM" description="Date valid from">Validade com início em</string>
   <string name="ROL_VALID_TO" description="Date valid to">Válido até</string>
-  <string name="ROL_VIEW_LIST_MEMBERS">Usuários em sessão podem ver as listas de filiação para o cargo atual.</string>
-  <string name="ROL_VIEW_LIST_ROLE">Membros do cargo atual podem ver apenas a lista de filiação.</string>
   <string name="ROL_WEEKDAY">Dia da semana</string>
   <string name="ROL_WITHOUT_LEADER">Sem líder</string>
   <!--Phrases only in Roommodule-->
@@ -1124,7 +1105,6 @@
   <string name="SYS_DATE_MODIFIED">Data da alteração</string>
   <string name="SYS_DATE_TO">a</string>
   <string name="SYS_DEACTIVATED">Inativo</string>
-  <string name="SYS_DEBUG_MODE">Modo de depuração</string>
   <string name="SYS_DECIMAL_NUMBER">Número decimal</string>
   <string name="SYS_DELETE">Excluir</string>
   <string name="SYS_DELETE_DATA">Os dados foram excluídos</string>
@@ -1172,7 +1152,6 @@
   <string name="SYS_FILE_TO_LARGE_SERVER">O tamanho do ficheiro enviado excede o tamanho máximo de envio do servidor, que é de #VAR1# MB.</string>
   <string name="SYS_FILE_UPLOADS">Envio de ficheiros</string>
   <string name="SYS_FILENAME_EMPTY">O nome de ficheiro está faltando!</string>
-  <string name="SYS_FILENAME_INVALID">O nome do ficheiro selecionado #VAR1_BOLD# contem caracteres inválidos. Por favor, verifique o nome do arquivo.\n\nOs seguintes caracteres especiais não são permitidos: ? * ~ ; : " | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">A versão #VAR1# da base de dados é superior à versão dos scripts #VAR2# do Admidio.\n\nPor favor, atualize teus ficheiros do Admidio no servidor #VAR3# utilizando-se de uma versão mais recente do Admidio - #VAR4#.</string>
   <string name="SYS_FILTER">Filtro</string>
   <string name="SYS_FIRSTNAME">Primeiro nome</string>
@@ -1236,7 +1215,6 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">O endereço de e-mail #VAR1_BOLD# foi atribuído para vários registos. Um único registo de usuário não foi identificado.</string>
   <string name="SYS_MAIL_DISPATCH">Entrega de e-mail</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Gerenciar categorias</string>
-  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Manter tipos de relação</string>
   <string name="SYS_MALE">Masculino</string>
   <string name="SYS_MANDATORY_FIELD">Campo obrigatório</string>
   <string name="SYS_MAP">Mapa</string>
@@ -1401,7 +1379,6 @@
   <string name="SYS_USER_RELATION">Relação</string>
   <string name="SYS_USER_RELATIONS">Relações</string>
   <string name="SYS_USER_RELATION_TYPE">Tipo de relação</string>
-  <string name="SYS_USER_RELATION_TYPES">Tipos de relação</string>
   <string name="SYS_USERNAME">Nome de usuário</string>
   <string name="SYS_USERNAME_OR_EMAIL">Nome de usuário ou e-mail</string>
   <string name="SYS_USERS_FOUND">Usuário encontrado</string>

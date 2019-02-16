@@ -16,7 +16,6 @@
   <string name="BAC_DATABASE_BACKUP">Backup del database</string>
   <string name="BAC_DATABASE_BACKUP_DESC">Crea e scarica il backup delle delle tabelle del database di Admidio.</string>
   <string name="BAC_DAYS_VAR">#VAR1# giorni</string>
-  <string name="BAC_FILE_NAME_INVALID">Il nome file selezionato contiene caratteri non validi.\n\nSono consentiti solo lettere, dieresi, cifre da 0-9 e i caratteri speciali $!?._+-()&amp; .</string>
   <string name="BAC_HOURS_VAR">#VAR1# ore</string>
   <string name="BAC_MINUTES_VAR">#VAR1# minuti</string>
   <string name="BAC_NO_BACKUP_FILE_EXISTS">Non è presente nessun file di backup!</string>
@@ -28,7 +27,7 @@
   <!--Phrases only in Category-Administration-->
   <string name="CAT_ALL_THIS_ORGANIZATION">Tutti i membri di questa organizzazione</string>
   <string name="CAT_CATEGORY_EXIST">Il nome della categoria esiste già nell\'organizzazione selezionata.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Se questa opzione è attiva, i campi del profilo di questa categoria compariranno e potranno essere gestiti anche nelle seguenti organizzazioni:\n\n#VAR1#.\n\n Se desideri che i dati vengano mostrati solamente nella tua organizzazione, l\'opzione dev\'essere disattivata.</string>
+  <string name="CAT_CATEGORY_GLOBAL">Se questa opzione è attiva, i campi del profilo di questa categoria compariranno e potranno essere gestiti anche nelle seguenti organizzazioni:\n\n#VAR1#.\n\nSe desideri che i dati vengano mostrati solamente nella tua organizzazione, l\'opzione dev\'essere disattivata.</string>
   <string name="CAT_DEFAULT_VAR">#VAR1# standard</string>
   <string name="CAT_DELETE_CATEGORY">Vuoi davvero cancellare la categoria #VAR1_BOLD# ?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Non è possibile cancellare la categoria #VAR1_BOLD# perché a #VAR2# sono associati degli inserimenti.</string>
@@ -57,9 +56,7 @@
   <string name="DAT_EXPORT_ICAL">Esporta (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Data evidenziata</string>
   <string name="DAT_ICAL_DAYS_FUTURE">Numero di giorni iCal futuri</string>
-  <string name="DAT_ICAL_DAYS_FUTURE_DESC">Questo valore definisce come quanti giorni in futuro saranno inclusi nello scaricamento o nella sottoscrizione in iCal. (predefinito: 365)</string>
   <string name="DAT_ICAL_DAYS_PAST">Numero di giorni iCal passati</string>
-  <string name="DAT_ICAL_DAYS_PAST_DESC">Questo valore definisce quanti giorni passati potrai includere in uno scarico o sottoscrizione iCal. (predefiniti: 30)</string>
   <string name="DAT_LOCATION">Località</string>
   <string name="DAT_LOCATION_LINK">Se ci sono abbastanza informazioni sulla località (strada, città, località), Google Maps può calcolare la posizione della località.</string>
   <string name="DAT_LOGIN_POSSIBLE">Vuoi abilitare la registrazione all\'evento?\nSe l\'evento è cancellato, anche tutti i partecipanti saranno cancellati.\nSe ti piacerebbe bloccare ulteriori registrazioni, per favore riduci il numero dei possibili partecipanti.</string>
@@ -127,7 +124,7 @@
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Cartolina inviata da</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Attivazione modulo cartoline</string>
-  <string name="ECA_GREETING_CARD">Cartolina</string>
+  <string name="ECA_GREETING_CARD">Cartolina </string>
   <string name="ECA_GREETING_CARDS">Cartolina</string>
   <string name="ECA_GREETING_CARD_EDIT">Modifica la cartolina</string>
   <string name="ECA_LAYOUT">Layout</string>
@@ -144,10 +141,7 @@
   <string name="GBO_COMMENT_BY">Commento di #VAR1#</string>
   <string name="GBO_COMMENTS4ALL">Consenti commenti anonimi</string>
   <string name="GBO_CREATE_COMMENT">Lascia un commento</string>
-  <string name="GBO_CREATE_ENTRY">Lascia un inserimento</string>
-  <string name="GBO_CREATE_VAR_ENTRY">lascia l\'inserimento #VAR1#</string>
   <string name="GBO_EDIT_COMMENT">Modifica commento</string>
-  <string name="GBO_EDIT_ENTRY">Modifica l\'inserimento #VAR1#</string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">Un nuovo commento è stato creato nel libro degli ospiti</string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">Un nuovo commento nel libro degli opsiti è stato creato il #VAR1#.\n\nTesto: #VAR2#\nCreato da: #VAR3#\nCreato il: #VAR4#</string>
   <string name="GBO_EMAIL_NOTIFICATION_TITLE">E\' stato effettuato un nuovo inserimento nel libro degli ospiti</string>
@@ -186,7 +180,6 @@
   <string name="INS_DATABASE_IS_UP_TO_DATE">Il database di Admidio è aggiornato</string>
   <string name="INS_DATABASE_IS_UPDATED">Aggiornamento database</string>
   <string name="INS_DATABASE_LOGIN">Inserisci le informazioni del database</string>
-  <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">La versione del tuo database è #VAR1#.\n\nAggiorna alla versione richiesta #VAR2#</string>
   <string name="INS_DATABASE_SYSTEM">Sistema database</string>
   <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Crea database</string>
   <string name="INS_DELETE_CONFIG_FILE">La directory principale di Admidio #VAR1_BOLD# contiene un file config.php. Esso è stato già spostato nella cartella adm_my_files. Per favore cancella il file nella cdirectory principale.</string>
@@ -215,7 +208,6 @@
   <string name="INS_INSTALLATION_VERSION">Installazione dell vaersione #VAR1#</string>
   <string name="INS_INSTALLATION_WAS_SUCCESSFUL">L\'installazione ha avuto successo</string>
   <string name="INS_INTERN">Interno</string>
-  <string name="INS_LANGUAGE_NOT_CHOSEN">Nessuna lingua è stata selezionata.</string>
   <string name="INS_MEMBERSHIP">Membership</string>
   <string name="INS_MESSENGER">Messenger</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Non è stato possibile trovare l\'installazione corrente. Se hai usato Admidio 1.x aggiorna prima a Admidio 2.x. Solo successivamente puoi aggiornare l\'installazione alla versione #VAR1#. Se stai già usando Admidio 2.x o una versione superiore per favore verifica la correttezza del tuo database.</string>
@@ -256,7 +248,6 @@
   <string name="LNK_DISPLAY_REDIRECT_DESC">Attiva l\'auto forward per i collegamenti. L\'utente sarà avvisato da un messaggio di allerta che sta lasciando le pagine di Admidio quando clicca su un collegamento nel modulo collegamenti. Il collegamento cliccato sarà aperto dopo un tempo predefinito. Se il reindirizzamento è impostato a 0, il collegamento sarà aperto senza mostrare il messaggio di allerta (predefinito: 10 secondi).</string>
   <string name="LNK_EMAIL_NOTIFICATION_TITLE">Un nuovo collegamento è stato creato</string>
   <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">Un nuovo collegamento è stato creato il #VAR1#.\n\nIndirizzo del collegamento: #VAR2#\nCreato da: #VAR3#\nCreato il: #VAR4#</string>
-  <string name="LNK_GO_TO">Vai a #VAR1#</string>
   <string name="LNK_LINK_ADDRESS">Indirizzo del collegamento</string>
   <string name="LNK_LINK_NAME">Nome del collegamento</string>
   <string name="LNK_LINK_TARGET">Destinazione del collegamento</string>
@@ -301,7 +292,6 @@
   <string name="LST_KONFIGURATION_OWN_LIST">Configurazione dei propri elenchi</string>
   <string name="LST_LIST">Elenco</string>
   <string name="LST_LISTS">Elenchi</string>
-  <string name="LST_LISTS_DESC">L\'elenco dello specifico ruolo può essere visualizzato qui. Inoltre gli utenti sono abilitati a generare e salvare anche i propri elenchi.</string>
   <string name="LST_LIST_VIEW">Panoramica dell\'elenco</string>
   <string name="LST_MAX">del massimo. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Assegnazione membro</string>
@@ -451,6 +441,7 @@
   <string name="MEM_USER_MANAGEMENT_DESC">Visualizza e organizza tutti i membri attivi e gli ex membri qui. Nuovi utenti possono essere creati o importati.</string>
   <string name="MEM_USERS_PER_PAGE">Numero di utenti per pagina</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Numero di utenti elencati su ogni pagina. Se ci sono più membri in questo gruppo le relative pagine possono essere attivate. (Predefinito: 25)</string>
+  <!--Phrases only in Menu-->
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Attiva chat</string>
   <string name="MSG_ACTIVATE_PM_MODULE">Attiva i messaggi privati</string>
@@ -483,8 +474,6 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Variabili aggiuntive</string>
   <string name="ORG_ADMIDIO_THEME">Tema Admidio</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Seleziona il lay-out per Admidio. Tutti i temi salvati nella cartella adm_themes sono mostrati. (predefinito: modern)</string>
-  <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Auto disconnessione dopo</string>
-  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Imposta il tempo dopo il quale il sistema automaticamente disconnette un utente inattivo. Un utente è inattivo quando nessuna pagina è caricata per un certo tempo. Queta configurazione è ignorata quando l\'utente selezionato è #VAR1_BOLD#. (predefinito: 20 minuti)</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Colore dello sfondo</string>
   <string name="ORG_CAPTCHA_PREVIEW">Anteprima captcha</string>
   <string name="ORG_CAPTCHA_REGISTRATION">Dopo l\'attivazione un\'immagine con un codice captcha o un semplice calcolo sarà visualizzato ai nuovi utenti. E\' necessario inserire il codice corretto o il risultato per salvare la voce modificata ora. Il captcha è parte del sistema anti-spam di Admidio. (predefinito: sì)</string>
@@ -507,7 +496,6 @@
   <string name="ORG_ENABLE_CAPTCHA">Attivazione captcha</string>
   <string name="ORG_FIELD_DESCRIPTION">Definisci campi aggiuntivi illimitati. I campi saranno visualizzati e possono essere modificati nel profilo dell\'utente. Questi campi saranno disponibili anche in un proprio elenco.</string>
   <string name="ORG_FIELD_DISABLED">Il campo è modificabile solo per l\'utente con il permesso #VAR1_BOLD#</string>
-  <string name="ORG_FIELD_DOWN">Sposta sotto il campo del profilo</string>
   <string name="ORG_FIELD_EXIST">Un campo con lo stesso nome esiste già in questa categoria.</string>
   <string name="ORG_FIELD_HIDDEN">Campo visibile solo per gli utenti autorizzati (autorizzazione solo per il proprio profilo &amp; ruolo)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Di solito un campo è visibile a tutti coloro che sono abilitati a vedere il profilo. Se questa opzione è deselezionata solo gli utenti che sono abilitati a modificare questo profilo possono vedere il campo.</string>
@@ -516,7 +504,6 @@
   <string name="ORG_FIELD_NOT_MANDATORY">Il campo è obbligatorio. Esso deve essere inserito.</string>
   <string name="ORG_FIELD_REQUIRED">Campo obbligatorio che deve sempre essere inserito.</string>
   <string name="ORG_FIELD_REQUIRED_DESC">I campi contrassegnati (obbligatori) devono sempre essere inseriti.  Questa regola vale per le registrazioni per regolari cambi di profilo eseguiti dagli utenti.</string>
-  <string name="ORG_FIELD_UP">Sppsta sopra il campo del profilo</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Questa pagina appare quando un utente ha effettuato l\'accesso. Questo percorso deve essere fornito come un percorso relativo al percorso della cartella principale di Admidio.\n(es.: adm_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Questa pagina è la pagina predefinita di Admindio per gli ospiti. Il percorso deve essere fornito come un percorso relativo al percorso della cartella principale di Admidio.\n(es.: adm_program/index.php)</string>
   <string name="ORG_INVALID_THEME">Impossibile trovare un tema valido.</string>
@@ -534,7 +521,6 @@
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Numero di voci per pagina</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Solo per gli utenti registrati</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Gestisci le preferenze organizzative generali o le preferenze del modulo qui.</string>
-  <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">L\'organizzazione #VAR1_BOLD# è stata aggiunta con successo. Essa è ora selezionabile quando viene effettuato l\'accesso.\n\nSe hai previsto una home page diversa per questa organizzazione per favore aggiungila come home page separata nel file config.php.</string>
   <string name="ORG_PARENT_ORGANIZATION">Organizzazione madre</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Definisci l\'organizzazione madre qui. Le organizzazioni madre sono in grado di creare eventi e annunci, per esempio, che saranno visualizzati nelle organizzazioni (figlie) selezionate.</string>
   <string name="ORG_PIXEL">Pixel</string>
@@ -552,9 +538,9 @@
   <string name="ORG_SHOW_ALL_USERS_DESC">Se questa opzione è abilitata, gli ex membri e i membri di altre organizzazioni saranno visualizzati in aggiunta ai membri attivi dell\'organizzazione corrente. Altrimenti saranno visualizzati solo i membri dell\'organizzazione corrente. Quando si creano nuovi utenti o si assegnano delle registrazioni tutte le organizzazioni saranno comunque controllate rispetto agli utenti esistenti.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Visualizza la selezione dell\'organizzazione</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Dovrebbero esserci diverse organizzazioni presenti nel database, la schermata di accesso può visualizzare un box di selezione con tutte le organizzazioni disponibili. L\'utente può in seguito in fase di accesso selezionare un\'altra organizzazione (un\'altra di quelle definite nel file config.php). Comunque l\'utente deve essere un membro registrato dell\'organizzazione selezionata.</string>
-  <string name="ORG_SYSTEM_INFORMATION">Informazioni di sistema</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Questo campo contiene l\'indirizzo email dell\'amministratore e sarà usato come indirizzo del mittente nelle notifiche di sistema, Es. per la conferma della registrazione.</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notifica per nuovi inserimenti</string>
+  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Questa funzionalità è usata per abilitare le notifiche di sistema per nuovi inserimenti all\'interno dei moduli. E\' usata come funzionalità di monitoraggio all\'interno di Admidio. Così l\'amministratore riceverà notifica via e-mail quando nuovi inserimenti saranno aggiunti all\'interno dei moduli (solo i nuovi inserimenti saranno considerati). Le notifiche di sistema saranno inviate all\'indirizzo email #VAR1#. (Default: No)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Qui è possibile definire i testi di ogni notifica di sistema. I testi sono divisi in due parti (soggetto e contenuto) e sono identificati da #subject# e #content#. Il contenuto di ogni sezione segue la sezione stessa.\n\nIn in ogni mail possono essere usati i seguenti caratteri jolly. Essi saranno sostituiti con il corrispondente contenuto in fase di esecuzione</string>
   <string name="ORG_TIME_FORMAT">Formato ora</string>
   <string name="ORG_TIME_FORMAT_DESC">Il ormato rispetta la funzione PHP #VAR1#. (predefinito: H:i)</string>
@@ -567,7 +553,6 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Nome breve dell\'organization</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Sito web dell\'organization</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_ADMIDIO">Vai alla pagina di aggiornamento di Admidio</string>
   <string name="UPD_BETA_VERSION">Beta disponibile</string>
   <string name="UPD_CONNECTION_ERROR">Impossibile stabilire il collegamento alla pagina di aggiornamento di Admidio. Verifica la tua connessione internet o riprova in seguito. È inoltre possibile controllare il sito web #VAR1# per l\'aggiornamento manuale.</string>
   <string name="UPD_CURRENT_VERSION">Installato</string>
@@ -581,15 +566,12 @@
   <string name="PHO_ALBUM_DELETE">Cancella album</string>
   <string name="PHO_ALBUM_LOCK">Blocca album</string>
   <string name="PHO_ALBUM_LOCK_DESC">Gli album bloccati non possono essere visti dai visitatori o dai membri, es. puoi bloccare un album solo se tutte le immagini sono state caricate.</string>
-  <string name="PHO_ALBUM_NOT_APPROVED">L\'album è stato bloccato e gli ospiti non sono in grado di visualizzarlo. Attivalo con il tasto con il simbolo della chiave nel campo di modifica.</string>
   <string name="PHO_ALBUM_UNLOCK">Sblocca album</string>
   <string name="PHO_ALBUM_WRITE_SUCCESS">L\'album è stato creato / modificato con successo.</string>
   <string name="PHO_BACK_TO_ALBUM">indietro all\'album</string>
   <string name="PHO_CREATE_ALBUM">Creazione album</string>
   <string name="PHO_DISPLAY_PHOTOS">Come visualizzare le foto</string>
   <string name="PHO_DISPLAY_PHOTOS_DESC">Con questa opzione puoi definire come le immagini saranno visualizzate nel modulo foto. Questa può essere impostata come una finestra modale che sarà aperta in una finestra separata del browser. L\'anteprima dell\'immagine sarà attiva in background. Se l\'immagine sarà visualizzata nella stessa finestra l\'anteprima dell\'immagine corrente sarà chiusa. La terza opzione permette di mostrare l\'immagine in una finestra popup che può essere usata in aggiunta all\'anteprima dell\'immagine. (Predefinita: finestra modale)</string>
-  <string name="PHO_DOWNLOAD_PHOTOS">Scarica foto</string>
-  <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Salva foto</string>
   <string name="PHO_DOWNLOAD_ENABLED">Attiva lo scaricamento</string>
   <string name="PHO_EDIT_ALBUM">Modifica album</string>
   <string name="PHO_EMAIL_NOTIFICATION_TITLE">Un nuovo album di foto è stato creato</string>
@@ -641,7 +623,7 @@
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Conferma la nuova foto del profilo</string>
   <string name="PRO_ADD_USER">Aggiungi utente</string>
-  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">La registrazione è stata confermata. L\'utente può ora accedere al sistema.</string>
+  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL"> La registrazione è stata confermata. L\'utente può ora accedere al sistema.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Cancella membership</string>
   <string name="PRO_CHANGE_DATE">Cambia data</string>
   <string name="PRO_CHANGE_PROFILE_PICTURE">Carica immagine del profilo</string>
@@ -669,7 +651,6 @@
   <string name="PRO_LOGIN_NAME_EXIST">Il nome utente selezionato è già esistente.\n\nSi prega di scegliere un altro nome.</string>
   <string name="PRO_MAINTAIN_ITEM_FIELDS">Mantieni i campi dell\'articolo</string>
   <string name="PRO_MAINTAIN_PROFILE_FIELDS">Gestisci i campi del profilo</string>
-  <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">Nella manutenzione dei campi del profilo essi possono essere creati e modificati. Essi possono poi essere raggruppati in categorie.</string>
   <string name="PRO_MY_PROFILE">Il mio profilo</string>
   <string name="PRO_NEW_PASSWORD">Nuova password</string>
   <string name="PRO_NEW_PICTURE">Nuova immagine del profilo</string>
@@ -681,7 +662,6 @@
   <string name="PRO_PHOTO_DELETED">L\'immagine del profilo è stata eliminata.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">La dimensione della foto caricata eccede la dimensione consentita dal server di #VAR1# B.</string>
   <string name="PRO_PHOTO_FORMAT_INVALID">Solo foto di formato JPG e PNG sono consentite.</string>
-  <string name="PRO_PHOTO_NOT_CHOSEN">Nessun file di immagine selezionato.</string>
   <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">La dimensione dell\'immagine caricata eccede la risoluzione consentita dal server di #VAR1# megapixels.</string>
   <string name="PRO_PHOTO_SAVED">La nuova immagine del profilo è stata salvata con successo.</string>
   <string name="PRO_PROFILE">Profilo</string>
@@ -695,7 +675,6 @@
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP">Visualizza le membership negli ex ruoli</string>
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">Un box sarà visualizzato con tutti i ruoli dell\'utente nell\'organizzazione attuale. Le date di inizio e fine delle iscrizioni saranno visualizzate. (predefinito: sì)</string>
   <string name="PRO_SHOW_MAP_LINK">Mostra la mappa con il link</string>
-  <string name="PRO_SHOW_MAP_LINK_DESC">Quando le informazioni sull\'indirizzo sono complete, viene creato un collegamento a Google Maps per mostrare la posizione sulla mappa e il percorso dalla propria posizione a quella dell\'utente. (predefinito: sì)</string>
   <string name="PRO_SHOW_ROLE_MEMBERSHIP">Mostra le membership del ruolo</string>
   <string name="PRO_SHOW_ROLE_MEMBERSHIP_DESC">Un box sarà visualizzato con tutti i ruoli dell\'utente nell\'organizzazione attuale. Verranno visualizzati i permessi e la data di registrazione. (predefinito: sì)</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Visualizza il ruolo di altre organizzazioni</string>
@@ -711,8 +690,6 @@
   <!--Phrases only in Relationssmodule-->
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Ruoi attivi</string>
-  <string name="ROL_ALL_GUESTS">Tutti gli ospiti del sito</string>
-  <string name="ROL_ALL_MEMBERS">Tutti gli utenti collegati</string>
   <string name="ROL_ANNUALLY">Annualmente</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Assegna e modifica i membri</string>
   <string name="ROL_DELETE_NO_DEFAULT_ROLE">Non puoi cancellare il ruolo #VAR1_BOLD#. Almeno un ruolo richiede l\'impostazione #VAR2_BOLD#.</string>
@@ -739,8 +716,6 @@
   <string name="ROL_NEW_ROLE">Nuovo ruolo</string>
   <string name="ROL_NO_ADDITIONAL_RIGHTS">Nessun diritto aggiuntivo</string>
   <string name="ROL_NO_DEFAULT_ROLE">Non puoi rimuovere l\'impostazione #VAR1_BOLD#, perché almeno un ruolo deve avere memorizzata l\'assegnazione predefinita.</string>
-  <string name="ROL_ONLY_ROLE_MEMBERS">Solo membri del ruolo</string>
-  <string name="ROL_PREF" description="Abbreviation for Preferences">Pref.</string>
   <string name="ROL_ROLE_ASSIGNMENT">Mappatura del ruolo #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Trimestrale</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">Visualizza tutti gli elenchi delle membrship di tutti i ruoli</string>
@@ -764,16 +739,12 @@
   <string name="ROL_SAVE_ROLES">Salvando queste impostazioni si può causare la perdita delle dipendenze configurate per il ruolo.</string>
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Visualizza le membership del ruolo</string>
   <string name="ROL_SEMIYEARLY">Due volte l\'anno</string>
-  <string name="ROL_SEND_MAIL_GUESTS">Tutti gli ospiti sono autorizzati a inviare email al ruolo corrente.</string>
-  <string name="ROL_SEND_MAIL_ROLE">Solo i membri di questo ruolo sono autorizzati a inviare email al ruolo corrente.</string>
   <string name="ROL_SEND_MAILS">Invia email</string>
   <string name="ROL_SHOW_MEMBERS">Mostra membri</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">Elenco predefinito di sistema</string>
   <string name="ROL_UNIQUELY">Univocamente</string>
   <string name="ROL_VALID_FROM" description="Date valid from">Valido a partire dal</string>
   <string name="ROL_VALID_TO" description="Date valid to">Valido fino al</string>
-  <string name="ROL_VIEW_LIST_MEMBERS">Gli utenti registrati sono in grado di visualizzare gli elenchi dei membri del ruolo corrente.</string>
-  <string name="ROL_VIEW_LIST_ROLE">Solo i membri del ruolo corrente sono autorizzati a visualizzare l\'elenco dei membri.</string>
   <string name="ROL_WEEKDAY">Settimanalmente</string>
   <string name="ROL_WITHOUT_LEADER">Nessun leader</string>
   <!--Phrases only in Roommodule-->
@@ -832,10 +803,10 @@
   <string name="SYS_COUNTRY">Nazione</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
   <string name="SYS_CREATE">Crea</string>
-  <string name="SYS_CREATE_VAR">Crea #VAR1#</string>
   <string name="SYS_CREATE_NEW_USER">Aggiungi un nuovo utente</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Potrai creare un nuovo utente, se l\'utente non è elencato tra gli utenti trovati.</string>
   <string name="SYS_CREATE_ROLE">Crea ruolo</string>
+  <string name="SYS_CREATE_VAR">Crea #VAR1#</string>
   <string name="SYS_CREATED_BY">Creato da #VAR1# il #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Nessun indirizzo email valido è stato fornito!\n\nPer favore fornisci un indirizzo email nel tuo #VAR1#profilo#VAR1#.</string>
@@ -850,7 +821,6 @@
   <string name="SYS_DATE_MODIFIED">Data di modifica</string>
   <string name="SYS_DATE_TO">a</string>
   <string name="SYS_DEACTIVATED">Inattivo</string>
-  <string name="SYS_DEBUG_MODE">Modo debug</string>
   <string name="SYS_DECIMAL_NUMBER">Numero decimale</string>
   <string name="SYS_DELETE">Cancella</string>
   <string name="SYS_DELETE_DATA">I dati sono stati cancellati.</string>
@@ -911,7 +881,6 @@
   <string name="SYS_ICON">Icona</string>
   <string name="SYS_INFORMATIONS">informazioni</string>
   <string name="SYS_INTERNAL_NAME">Nome interno</string>
-  <string name="SYS_INTERNAL_NAME_DESC">Il nome interno è usato come uno specifico identificatore di un campo. Ai fini dell\'uso del programma, comunque, esso è irrilevante. Durante lo sviluppo del software questo nome è stato usato al fine di poter usare il metodo getValue. Il nome interno sarà acquisito in automatico durante la creazione di un campo.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Visualizzazione della pagina non valida</string>
   <string name="SYS_IO_ERROR">Errore di I/O</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
@@ -943,7 +912,6 @@
   <string name="SYS_MASTER_DATA">Informazioni di base</string>
   <string name="SYS_MAX_PARTICIPANTS">Massimo numero di partecipanti</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">massima dimensione dell\'immagine processabile</string>
-  <string name="SYS_MEGA_PIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Membro</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Membro dell\'organizzazione #VAR1#</string>
   <string name="SYS_MEMBERS">Membri</string>

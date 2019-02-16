@@ -291,7 +291,7 @@ form hr {
 }
 
 @media (min-width: 768px) {
-    .col-sm-offset-3.btn {
+    .offset-sm-3.btn {
         margin-left: 26%;
     }
 }

@@ -30,7 +30,7 @@
   <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Semua administrator modul organisasi induk</string>
   <string name="CAT_ALL_THIS_ORGANIZATION">Semua anggota organisasi ini</string>
   <string name="CAT_CATEGORY_EXIST">Nama kategori sudah ada di organisasi yang dipilih.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Jika opsi diaktifkan, kolom profil kategori ini akan muncul dan dapat diedit pada tampilan profil organisasi berikut: #VAR1#\n\n Harap dinonaktif, jika kolom hanya ditampilkan di organisasi Anda.</string>
+  <string name="CAT_CATEGORY_GLOBAL">Jika opsi diaktifkan, kolom profil kategori ini akan muncul dan dapat diedit pada tampilan profil organisasi berikut: #VAR1#\n\nHarap dinonaktif, jika kolom hanya ditampilkan di organisasi Anda.</string>
   <string name="CAT_DEFAULT_VAR">Standar #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Apakah Anda benar-benar ingin menghapus kategori #VAR1_BOLD# ?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Tidak dapat menghapus kategori #VAR1_BOLD# karena #VAR2# tergantung entri</string>
@@ -77,6 +77,38 @@
   <string name="DAT_ENABLE_ICAL">Mengaktifkan fungsi iCal</string>
   <string name="DAT_ENABLE_ICAL_DESC">Jika fungsi iCal diaktifkan, acara individual atau semua acara dalam jangka waktu tertentu dapat didownload. Selain itu, pengguna akan dapat berlangganan acara dengan menggunakan perangkat lunak klien kalender mereka sendiri. (standar: iya)</string>
   <string name="DAT_ERROR_DELETE_DEFAULT_LIST">Daftar #VAR1_BOLD# adalah konfigurasi standar untuk daftar peserta dalam organisasi ini dan tidak dapat dihapus. Pada pengaturan modul, pilih konfigurasi yang berbeda untuk konfigurasi standar dan kemudian coba hapus konfigurasi ini.</string>
+  <string name="DAT_EXPORT_ICAL">Ekspor (iCal)</string>
+  <string name="DAT_HIGHLIGHT_DATE">Penunjukan acara sorotan</string>
+  <string name="DAT_ICAL_DAYS_FUTURE">Nomor iCal hari kedepan</string>
+  <string name="DAT_ICAL_DAYS_FUTURE_DESC">Jumlah hari di masa depan untuk disertakan dalam unduhan iCal atau abo. Jika download iCal dimulai dalam modul acara, maka pengaturan ini akan diabaikan dan tanggal yang disaring diekspor. (Standar: 365)</string>
+  <string name="DAT_ICAL_DAYS_PAST">Jumlah hari iCal di masa lalu</string>
+  <string name="DAT_ICAL_DAYS_PAST_DESC">Jumlah hari di masa lalu, untuk dimasukkan dalam unduhan iCal atau -Abo. Jika unduhan iCal dimulai dalam modul Acara, Pengaturan ini diabaikan dan mengekspor tanggal yang difilter. (Standar: 30)</string>
+  <string name="DAT_LOCATION">Tempat</string>
+  <string name="DAT_LOCATION_LINK">Jika informasi yang cukup mengenai lokasi disediakan (jalan, kota, lokasi), Google Maps dapat menghitung rute ke lokasi.</string>
+  <string name="DAT_LOGIN_POSSIBLE">Di sini Anda dapat memilih apakah Anda ingin pendaftaran pada penunjukan yang ditentukan atau tidak. \nJika pendaftaran kemudian dihapus, semua peserta yang ada akan dihapus dari penunjukan janji temu. \nNamun, Anda hanya ingin menghentikan pendaftaran untuk peserta baru, Anda mungkin Anda memasukkan jumlah peserta saat ini sebagai batas partisipasi.</string>
+  <string name="DAT_MAINTAIN_CATEGORIES_DESC">Kategori dapat dibuat dan diedit di sini.</string>
+  <string name="DAT_MANAGE_CALENDARS">Mengelola kalender</string>
+  <string name="DAT_MAX_MEMBERS">Di sini, jumlah peserta untuk penunjukan janji ini dapat dibatasi. Jika jumlahnya tidak terbatas, bidang ini dapat dibiarkan kosong.</string>
+  <string name="DAT_PARTICIPANTS_LIMIT">Pembatasan jumlah peserta</string>
+  <string name="DAT_PARTICIPATE_NO_RIGHTS">Anda tidak memiliki hak untuk mendaftar ke penunjukan ini.</string>
+  <string name="DAT_PARTICIPATE_AT_DATE">Berpartisipasi dalam penunjukan sebagai penyelenggara</string>
+  <string name="DAT_PERIOD_FROM_TO">Periode dari #VAR1# ke #VAR2#</string>
+  <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Sebelumnya #VAR1#</string>
+  <string name="DAT_REGISTRATION_POSSIBLE_FOR">Pendaftaran dimungkinkan untuk</string>
+  <string name="DAT_REGISTRATION_NOT_POSSIBLE">Tidak ada pendaftaran.</string>
+  <string name="DAT_REGISTRATION_POSSIBLE">Izinkan pendaftaran untuk penunjukan ini</string>
+  <string name="DAT_REMOVE_APPLICATION">Apakah Anda benar-benar ingin menghapus pendaftaran untuk penunjukan janji temu? Semua peserta sebelumnya akan terhapus.</string>
+  <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Peserta dapat melihat daftar peserta</string>
+  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Peserta bisa mengirim email ke semua peserta</string>
+  <string name="DAT_ROLES_DIFFERENT">Anda telah menetapkan peran kepada peserta yang tidak memiliki hak untuk melihat tanggal dalam kategori yang dipilih. Pilih salah satu dari peran berikut: #VAR1_BOLD#.</string>
+  <string name="DAT_ROOM_INFORMATIONS">Informasi ruang</string>
+  <string name="DAT_ROOM_OVERHANG">Jika kursi tambahan akan dialokasikan selain kursi yang ditunjukkan di atas, seperti melalui kursi tambahan atau kemungkinan ruang berdiri, sehingga jumlah mereka dapat ditentukan di sini.</string>
+  <string name="DAT_ROOM_RESERVED">Ruang yang dipilih sudah dipesan saat ini.</string>
+  <string name="DAT_ROOM_SELECTABLE">Ruang dapat dipilih</string>
+  <string name="DAT_ROOM_SELECTABLE_DESC">Kotak pilihan untuk ruang yang tersedia ditampilkan untuk memungkinkan pencipta janji untuk memilih sebuah ruangan. (Standar: tidak)</string>
+  <string name="DAT_SAVE_ALL_CONFIRMATIONS">Menyimpan pembatalan ke penunjukan</string>
+  <string name="DAT_SAVE_ALL_CONFIRMATIONS_DESC">Pembatalan peserta ke acara dapat disimpan. Pembatalan tersebut kemudian juga ditampilkan dalam daftar peserta. Jika opsi ini dinonaktif, pembatalan tidak disimpan dan tidak dapat dilihat dalam daftar peserta. Pilihan ini berlaku sejak saat pengaturan dan tidak dapat diterapkan secara retrospektif! (Standar: Ya)</string>
+  <string name="DAT_SHOW_MAP_LINK">Tampilkan link peta</string>
   <!--Phrases only in Downloadsmodule-->
   <!--Phrases only in Ecardsmodule-->
   <!--Phrases only in Guestbookmodule-->

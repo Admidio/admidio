@@ -44,9 +44,9 @@ $showOptionValidModules = array(
 if(in_array($showOption, $showOptionValidModules, true))
 {
     $page->addJavascript('
-        $("#tabs_nav_modules").attr("class", "active");
-        $("#tabs-modules").attr("class", "tab-pane active");
-        $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");
+        $("#tabs_nav_modules").attr("class", "nav-link active");
+        $("#tabs-modules").attr("class", "tab-pane fade show active");
+        $("#collapse_'.$showOption.'").attr("class", "collapse show");
         location.hash = "#" + "panel_'.$showOption.'";',
         true
     );
@@ -54,9 +54,9 @@ if(in_array($showOption, $showOptionValidModules, true))
 else
 {
     $page->addJavascript('
-        $("#tabs_nav_common").attr("class", "active");
-        $("#tabs-common").attr("class", "tab-pane active");
-        $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");
+        $("#tabs_nav_common").attr("class", "nav-link active");
+        $("#tabs-common").attr("class", "tab-pane fade show active");
+        $("#collapse_'.$showOption.'").attr("class", "collapse show");
         location.hash = "#" + "panel_'.$showOption.'";',
         true
     );
@@ -157,16 +157,14 @@ function getStaticText($type, $text, $info = '')
 function getPreferencePanel($group, $id, $title, $icon, $body)
 {
     $html = '
-        <div class="panel panel-default" id="panel_' . $id . '">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion_' . $group . '" href="#collapse_' . $id . '">
-                        <i class="' . $icon . ' fa-fw"></i>' . $title . '
-                    </a>
-                </h4>
+        <div class="card" id="panel_' . $id . '">
+            <div class="card-header">
+                <a class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_' . $id . '">
+                    <i class="' . $icon . ' fa-fw"></i>' . $title . '
+                </a>
             </div>
-            <div id="collapse_' . $id . '" class="panel-collapse collapse">
-                <div class="panel-body">
+            <div id="collapse_' . $id . '" class="collapse" aria-labelledby="headingOne" data-parent="#accordion_preferences">
+                <div class="card-body">
                     ' . $body . '
                 </div>
             </div>
@@ -176,14 +174,18 @@ function getPreferencePanel($group, $id, $title, $icon, $body)
 }
 
 $page->addHtml('
-<ul class="nav nav-tabs" id="preferences_tabs">
-  <li id="tabs_nav_common"><a href="#tabs-common" data-toggle="tab">'.$gL10n->get('SYS_COMMON').'</a></li>
-  <li id="tabs_nav_modules"><a href="#tabs-modules" data-toggle="tab">'.$gL10n->get('SYS_MODULES').'</a></li>
+<ul id="preferences_tabs" class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+        <a id="tabs_nav_common" class="nav-link" href="#tabs-common" data-toggle="tab" role="tab">'.$gL10n->get('SYS_COMMON').'</a>
+    </li>
+    <li class="nav-item">
+        <a id="tabs_nav_modules" class="nav-link" href="#tabs-modules" data-toggle="tab" role="tab">'.$gL10n->get('SYS_MODULES').'</a>
+    </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane" id="tabs-common">
-        <div class="panel-group" id="accordion_common">');
+    <div class="tab-pane fade" id="tabs-common" role="tabpanel">
+        <div class="accordion" id="accordion_preferences">');
 
 // PANEL: COMMON
 
@@ -250,7 +252,7 @@ $formCommon->addCheckbox(
 );
 $formCommon->addSubmitButton(
     'btn_save_common', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('common', 'common', $gL10n->get('SYS_COMMON'), 'fas fa-cog', $formCommon->show()));
@@ -289,7 +291,7 @@ $formSecurity->addCheckbox(
 
 $formSecurity->addSubmitButton(
     'btn_save_security', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('common', 'security', $gL10n->get('SYS_SECURITY'), 'fas fa-shield-alt', $formSecurity->show()));
@@ -344,7 +346,7 @@ $htmlDesc = $gL10n->get('ORG_ADD_ORGANIZATION_DESC').'<div class="alert alert-wa
 $formOrganization->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextIdInline' => $htmlDesc));
 $formOrganization->addSubmitButton(
     'btn_save_organization', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('common', 'organization', $gL10n->get('SYS_ORGANIZATION'), 'fas fa-sitemap', $formOrganization->show()));
@@ -382,7 +384,7 @@ $formRegionalSettings->addInput(
 );
 $formRegionalSettings->addSubmitButton(
     'btn_save_regional_settings', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('common', 'regional_settings', $gL10n->get('ORG_REGIONAL_SETTINGS'), 'fas fa-globe', $formRegionalSettings->show()));
@@ -408,7 +410,7 @@ $formRegistration->addCheckbox(
 );
 $formRegistration->addSubmitButton(
     'btn_save_registration', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('common', 'registration', $gL10n->get('SYS_REGISTRATION'), 'fas fa-address-card', $formRegistration->show()));
@@ -487,7 +489,7 @@ $formEmailDispatch->addInput(
 );
 $formEmailDispatch->addSubmitButton(
     'btn_save_email_dispatch', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('common', 'email_dispatch', $gL10n->get('SYS_MAIL_DISPATCH'), 'fas fa-envelope', $formEmailDispatch->show()));
@@ -544,7 +546,7 @@ $formSystemNotification->addMultilineTextInput(
 
 $formSystemNotification->addSubmitButton(
     'btn_save_system_notification', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('common', 'system_notification', $gL10n->get('SYS_SYSTEM_MAILS'), 'fas fa-broadcast-tower', $formSystemNotification->show()));
@@ -616,7 +618,7 @@ $formCaptcha->addCustomContent(
 
 $formCaptcha->addSubmitButton(
     'btn_save_captcha', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('common', 'captcha', $gL10n->get('SYS_CAPTCHA'), 'fas fa-font', $formCaptcha->show()));
@@ -858,8 +860,8 @@ $page->addHtml(getPreferencePanel('common', 'system_information', $gL10n->get('O
 $page->addHtml('
         </div>
     </div>
-    <div class="tab-pane" id="tabs-modules">
-        <div class="panel-group" id="accordion_modules">');
+    <div class="tab-pane fade" id="tabs-modules" role="tabpanel">
+        <div class="accordion" id="accordion_modules">');
 
 // PANEL: ANNOUNCEMENTS
 
@@ -890,7 +892,7 @@ $formAnnouncements->addCustomContent(
 );
 $formAnnouncements->addSubmitButton(
     'btn_save_announcements', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'announcements', $gL10n->get('ANN_ANNOUNCEMENTS'), 'fas fa-newspaper', $formAnnouncements->show()));
@@ -927,7 +929,7 @@ $formUserManagement->addCustomContent($gL10n->get('SYS_CONFIGURE_RELATIONSHIPS')
 
 $formUserManagement->addSubmitButton(
     'btn_save_user_management', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'user_administration', $gL10n->get('MEM_USER_MANAGEMENT'), 'fas fa-user-friends', $formUserManagement->show()));
@@ -949,7 +951,7 @@ $formDownloads->addInput(
 );
 $formDownloads->addSubmitButton(
     'btn_save_downloads', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'downloads', $gL10n->get('DOW_DOWNLOADS'), 'fas fa-download', $formDownloads->show()));
@@ -1021,7 +1023,7 @@ $formPhotos->addCheckbox(
 );
 $formPhotos->addSubmitButton(
     'btn_save_photos', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'photos', $gL10n->get('PHO_PHOTOS'), 'fas fa-image', $formPhotos->show()));
@@ -1073,7 +1075,7 @@ $formGuestbook->addInput(
 );
 $formGuestbook->addSubmitButton(
     'btn_save_guestbook', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'guestbook', $gL10n->get('GBO_GUESTBOOK'), 'fas fa-book', $formGuestbook->show()));
@@ -1118,7 +1120,7 @@ $formEcards->addSelectBox(
 );
 $formEcards->addSubmitButton(
     'btn_save_ecards', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'ecards', $gL10n->get('ECA_GREETING_CARDS'), 'fas fa-file-image', $formEcards->show()));
@@ -1174,7 +1176,7 @@ $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert
 $formLists->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
 $formLists->addSubmitButton(
     'btn_save_lists', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('LST_LISTS'), 'fas fa-list', $formLists->show()));
@@ -1237,7 +1239,7 @@ $formMessages->addSelectBox(
 );
 $formMessages->addSubmitButton(
     'btn_save_messages', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'messages', $gL10n->get('SYS_MESSAGES'), 'fas fa-comments', $formMessages->show()));
@@ -1285,7 +1287,7 @@ $formProfile->addSelectBox(
 );
 $formProfile->addSubmitButton(
     'btn_save_profile', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'profile', $gL10n->get('PRO_PROFILE'), 'fas fa-user', $formProfile->show()));
@@ -1382,7 +1384,7 @@ $htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning 
 $formEvents->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => $htmlDesc));
 $formEvents->addSubmitButton(
     'btn_save_events', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'events', $gL10n->get('DAT_DATES'), 'fas fa-calendar-alt', $formEvents->show()));
@@ -1425,7 +1427,7 @@ $formWeblinks->addCustomContent(
 );
 $formWeblinks->addSubmitButton(
     'btn_save_links', $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 $page->addHtml(getPreferencePanel('modules', 'links', $gL10n->get('LNK_WEBLINKS'), 'fas fa-link', $formWeblinks->show()));

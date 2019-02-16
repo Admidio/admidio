@@ -30,7 +30,7 @@
   <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">All administrators of the module of the parent organization</string>
   <string name="CAT_ALL_THIS_ORGANIZATION">All members of this organization</string>
   <string name="CAT_CATEGORY_EXIST">Category name already exists in selected organization.</string>
-  <string name="CAT_CATEGORY_GLOBAL">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization. </string>
+  <string name="CAT_CATEGORY_GLOBAL">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
   <string name="CAT_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Could not delete category #VAR1_BOLD# because of #VAR2# depending entries.</string>
@@ -49,7 +49,7 @@
   <string name="DAT_ASSIGN_PARTICIPANTS">Add participants</string>
   <string name="DAT_ATTEND">Participate</string>
   <string name="DAT_ATTEND_DATE">You signed up for the event #VAR1_BOLD# on #VAR2#.</string>
-  <string name="DAT_ATTEND_POSSIBLY">You signed up tentative for the event #VAR1_BOLD# on #VAR2#. </string>
+  <string name="DAT_ATTEND_POSSIBLY">You signed up tentative for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="DAT_CALENDAR">Calendar</string>
   <string name="DAT_CANCEL">Cancel</string>
   <string name="DAT_CANCEL_DATE">You canceled the participation for the event #VAR1_BOLD# on #VAR2#.</string>
@@ -93,7 +93,7 @@
   <string name="DAT_PARTICIPATE_NO_RIGHTS">You do not have the right to sign up for this appointment.</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Join the event as organizer</string>
   <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">You become the organizer of the appointment and receive the right to add or remove additional participants. You can also appoint other people as organizers.</string>
-  <string name="DAT_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2# </string>
+  <string name="DAT_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2#</string>
   <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Previous #VAR1#</string>
   <string name="DAT_REGISTRATION_POSSIBLE_FOR">Registration possible for</string>
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">Registration is closed.</string>
@@ -248,7 +248,7 @@
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
   <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Current database version: #VAR1#\n\nDatabase version after update: #VAR2#</string>
   <string name="INS_DATABASE_NAME_INVALID">The database name contains invalid characters!</string>
-  <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhoster need a special port, you can type it here. </string>
+  <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhoster need a special port, you can type it here.</string>
   <string name="INS_DATABASE_PORT_INVALID">The specified port is not valid. For a valid port, select between 1 and 65535 or leave it blank.</string>
   <string name="INS_DATABASE_SYSTEM">Database system</string>
   <string name="INS_DATABASE_TYPE_INVALID">Admidio only supports MySQL and PostgreSQL.</string>
@@ -355,7 +355,6 @@
   <string name="LNK_EDIT_WEBLINKS">Edit web links</string>
   <string name="LNK_EMAIL_NOTIFICATION_TITLE">A new weblink was created</string>
   <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">A new weblink at #VAR1# was created.\n\nLink address: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
-  <string name="LNK_GO_TO">Go to #VAR1#</string>
   <string name="LNK_LINK_ADDRESS">Link address</string>
   <string name="LNK_LINK_NAME">Link name</string>
   <string name="LNK_LINK_TARGET">Link target</string>
@@ -601,7 +600,7 @@
   <string name="MEN_NAME_DESC">The name of the entry in the menu. Here you can also enter the name of a translation string.</string>
   <string name="MEN_MENU_ITEM">Menu item</string>
   <string name="MEN_MENU_LEVEL">Menu level</string>
-  <string name="MEN_MENU_LEVEL_DESC">A menu item is always subordinate to another menu item. In the selection list, select a menu level in which the new menu item should be visible. </string>
+  <string name="MEN_MENU_LEVEL_DESC">A menu item is always subordinate to another menu item. In the selection list, select a menu level in which the new menu item should be visible.</string>
   <string name="MEN_MODULE_RIGHTS">Module rights</string>
   <string name="MEN_MODULE_RIGHTS_DESC">If you specify a module here, the menu item will only be displayed if the user also has the right to see this module.</string>
   <string name="MEN_PLUGIN">Plugins</string>
@@ -655,8 +654,8 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Additional variables</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Select layout for Admidio. All themes saved in folder adm_themes are being shown. (default: modern)</string>
-  <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Auto log off after</string>
-  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Set the time before the system automatically logs an inactive user off. A user is inactive when no page is loaded for a certain time. This configuration is being ignored when user selected #VAR1_BOLD#. (default: 20 minutes)</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatic logout after</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">This value indicates after how many minutes an inactive user is automatically logged out. Inactive is a user as long as he does not call any page of the Admidio system. This setting is ignored if the user has selected #VAR1_BOLD#. (Default: 20 minutes)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update message for outdated browsers</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">After activation users with outdated browsers are advised to run a browserupdate. Newer browsers guarantee a better protection against fraud, viruses, Trojans, identity theft and other threats to your privacy and security. Every new browser generation improves speed and supports more and more new web technologies, which leads to a better web experience. For this purpose, the service of https://browser-update.org/ is used.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Background color</string>
@@ -703,7 +702,6 @@
   <string name="ORG_FIELD_DESCRIPTION">Define unlimited additional fields. Fields will be displayed and can be edited in user\'s profile. These fields will be available in own list, too.</string>
   <string name="ORG_FIELD_DISABLED">Field editable only for user with permission #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by the user in its own profile. It can be edited only by users who have the permission to edit all users. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
-  <string name="ORG_FIELD_DOWN">Move profile field down</string>
   <string name="ORG_FIELD_EXIST">Field with same name already exists in this category.</string>
   <string name="ORG_FIELD_HIDDEN">Field viewable for authorized users only (own profile &amp; role rights)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Usually a field is visible to everybody who is allowed to view the profile. If this option is deselected only user who are allowed to edit this profile can see the field.</string>
@@ -714,7 +712,6 @@
   <string name="ORG_FIELD_REGISTRATION">Field is displayed during registration</string>
   <string name="ORG_FIELD_REQUIRED">Mandatory field that has to be filled in always.</string>
   <string name="ORG_FIELD_REQUIRED_DESC">Flagged (mandatory) fields always have to be filled in. This rule applies for registrations and for regular profile changes performed by users.</string>
-  <string name="ORG_FIELD_UP">Move profile field up</string>
   <string name="ORG_FIELD_URL_DESC">The entered URL later links in the profile to the content that the user has entered in this field. Optionally, even the wildcard #user_content# can be defined in the URL. This is the content that the user has entered in the field..\n\nExample:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nLink in profile: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</string>
@@ -788,7 +785,6 @@
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Website URL of the organization</string>
   <string name="ORG_VARIABLE_USERNAME">Username of the user from the respective e-mail context</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_ADMIDIO">Go to Admidio update page</string>
   <string name="UPD_BETA_VERSION">Available Beta</string>
   <string name="UPD_CONNECTION_ERROR">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the #VAR1# website for manual update.</string>
   <string name="UPD_CURRENT_VERSION">Installed</string>
@@ -802,7 +798,7 @@
   <string name="PHO_ALBUM_DELETE">Delete album</string>
   <string name="PHO_ALBUM_LOCK">Lock album</string>
   <string name="PHO_ALBUM_LOCK_DESC">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</string>
-  <string name="PHO_ALBUM_NOT_APPROVED">Album is being blocked and guests are unable to display it. Enable it by pressing key symbol in editing field.</string>
+  <string name="PHO_ALBUM_NOT_APPROVED">The album is currently locked and will not be shown to visitors for this reason.</string>
   <string name="PHO_ALBUM_UNLOCK">Unlock album</string>
   <string name="PHO_ALBUM_WRITE_SUCCESS">Album has been successfully created / changed.</string>
   <string name="PHO_BACK_TO_ALBUM">back to album</string>
@@ -949,19 +945,14 @@
   <string name="PRO_YEARS">Years</string>
   <!--Phrases only in Relationssmodule-->
   <string name="REL_EDIT_USER_DESC">If set, then a user can edit the profile of another user to which he is related to. For an asymmetric relationship, the right is assigned separately for each relationship, and for a symmetric relationship, both users can edit the other profile, and in case of a unidirectional relationship, only the user with the relationship stored can edit the other profile.</string>
-  <string name="REL_EDIT_USER_IN_RELATION">Edit user profile of this relationship</string>
   <string name="REL_NO_USER_RELATION_TYPES_FOUND">No relationship types exists. Relationship types can be created in the user management.</string>
   <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">Asymmetrical</string>
-  <string name="REL_USER_RELATION_TYPE_BACKWARD">Backward</string>
   <string name="REL_USER_RELATION_TYPE_DEL">Do you want to remove this type of relationship #VAR1_BOLD#? Warning: This will delete all existing relationships of this type.</string>
   <string name="REL_USER_RELATION_TYPE_DESC">An asymmetrical relationship is e.g. used for parent / child while symmetrical relations e.g. can be used for siblings. These are always bidirectional, however,  unidirectional relations only mark in one direction.</string>
-  <string name="REL_USER_RELATION_TYPE_FORWARD">Forward</string>
   <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">Symmetrical</string>
   <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">Unidirectional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Active roles</string>
-  <string name="ROL_ALL_GUESTS">All guests of the site</string>
-  <string name="ROL_ALL_MEMBERS">All logged in users</string>
   <string name="ROL_ANNUALLY">Annually</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
   <string name="ROL_DELETE_NO_DEFAULT_ROLE">You can not delete role #VAR1_BOLD#. At least one role requires the #VAR2_BOLD# setting.</string>
@@ -992,8 +983,6 @@
   <string name="ROL_NEW_ROLE">New role</string>
   <string name="ROL_NO_ADDITIONAL_RIGHTS">No additional rights</string>
   <string name="ROL_NO_DEFAULT_ROLE">You can not remove the setting #VAR1_BOLD#, because at least one role must be stored as the default assignment.</string>
-  <string name="ROL_ONLY_ROLE_MEMBERS">Role members only</string>
-  <string name="ROL_PREF" description="Abbreviation for Preferences">Pref.</string>
   <string name="ROL_ROLE_ASSIGNMENT">Role assignment for #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Quarterly</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">View membership lists of all roles</string>
@@ -1026,17 +1015,12 @@
   <string name="ROL_SAVE_ROLES">Saving this settings might cause loosing of role configured dependencies.</string>
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Display role memberships</string>
   <string name="ROL_SEMIYEARLY">Twice a year</string>
-  <string name="ROL_SEND_MAIL_GUESTS">All guests are allowed to send e-mails to current role.</string>
-  <string name="ROL_SEND_MAIL_MEMBERS">Logged in users are allowed to send e-mails to current role.</string>
-  <string name="ROL_SEND_MAIL_ROLE">Role members of this role only are allowed to send e-mails to current role.</string>
   <string name="ROL_SEND_MAILS">Send e-mails</string>
   <string name="ROL_SHOW_MEMBERS">Show members</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">System-wide default list</string>
   <string name="ROL_UNIQUELY">Uniquely</string>
   <string name="ROL_VALID_FROM" description="Date valid from">Valid starting from</string>
   <string name="ROL_VALID_TO" description="Date valid to">Valid until</string>
-  <string name="ROL_VIEW_LIST_MEMBERS">Logged in users are able to display membership lists of the current role.</string>
-  <string name="ROL_VIEW_LIST_ROLE">Members of the current role only are allowed to display the membership list.</string>
   <string name="ROL_WEEKDAY">Weekday</string>
   <string name="ROL_WITHOUT_LEADER">No leader</string>
   <!--Phrases only in Roommodule-->
@@ -1052,6 +1036,7 @@
   <string name="SYS_ACTIVATED">Active</string>
   <string name="SYS_ADD_RECIPIENTS">Add recipient</string>
   <string name="SYS_ADDRESS">Address</string>
+  <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Go to the Admidio download page</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">The online management system for associations, groups and organizations</string>
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
   <string name="SYS_ADMIDIO_UPDATE">Admidio update</string>
@@ -1118,7 +1103,7 @@
   <string name="SYS_CREATED_BY">Created by #VAR1# on #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your #VAR1#profile#VAR1#.</string>
-  <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, weblinks ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD# </string>
+  <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, weblinks ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Data visible to multiple organizations</string>
   <string name="SYS_DATA_PROTECTION">Data protection</string>
   <string name="SYS_DATA_PROTECTION_DESC">Here, the URL to your page with the privacy policy can be deposited. This page is linked to the use of cookies for further information. If the selected theme supports this, a link will also be displayed on the Admidio pages. (Example: https://www.example.com/data_protection.html)</string>
@@ -1158,6 +1143,7 @@
   <string name="SYS_EDIT">Edit</string>
   <string name="SYS_EDIT_ENTRY">Edit entry</string>
   <string name="SYS_EDIT_MEMBERS">Edit members</string>
+  <string name="SYS_EDIT_USER_IN_RELATION">User profile of this relationship can be edited</string>
   <string name="SYS_EDIT_VAR">Edit #VAR1#</string>
   <string name="SYS_EDITED_BY">Last edited by</string>
   <string name="SYS_EMAIL">E-mail</string>
@@ -1185,7 +1171,7 @@
   <string name="SYS_FILE_TO_LARGE_SERVER">Size of uploaded file exceeds server defined maximum file size of #VAR1# MB.</string>
   <string name="SYS_FILE_UPLOADS">File uploads</string>
   <string name="SYS_FILENAME_EMPTY">Filename is missing!</string>
-  <string name="SYS_FILENAME_INVALID">The selected file name #VAR1_BOLD# contains invalid characters. Please check the file name.\n\nThe following special characters are not allowed: ? * ~ ; : " | &lt; &gt;</string>
+  <string name="SYS_FILENAME_INVALID">The selected file name #VAR1_BOLD# contains invalid characters. Please check the file name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is higher than the version of the Admidio scripts #VAR2#.\n\nPlease update your Admidio files on the server #VAR3# by using a later version of Admidio#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">First name</string>
@@ -1195,6 +1181,7 @@
   <string name="SYS_FOLDER">Folder</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created.\n\nPlease ask an #VAR2#administrator#VAR3# for help to check write permissions of the parent folder.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
+  <string name="SYS_FONT_AWESOME_DESC">You can store an icon in different ways:\n1. An icon of the web font \"Font Awesome\". Go to #VAR1#http://fontawesome.com#VAR2# and select a free icon from the \"Solid\" or \"Brands\" collection. As a prefix you have to put a fa- in front of it. So if you choose the icon \"user\", you have to enter \"fa-user\" here.\n2. A JPEG or PNG icon. To do this, enter the complete URL together with the file name of the icon. Alternatively, you can put the icon in the theme in the folder \"icons\", then you only need to specify the file name.</string>
   <string name="SYS_FORMER">Former</string>
   <string name="SYS_FORMER_PL">Former</string>
   <string name="SYS_FONT">Font</string>
@@ -1221,6 +1208,7 @@
   <string name="SYS_INFORMATIONS">information</string>
   <string name="SYS_INTERNAL_NAME">Internal name</string>
   <string name="SYS_INTERNAL_NAME_DESC">The internal name is used to uniquely access this data object. This is not relevant for program use. In development, however, this name must always be used to identify the field, e.g. to address with getValue (). The internal name is automatically filled when creating a data record.</string>
+  <string name="SYS_INVALID_FONT_AWESOME">The entered icon name does not match the syntax of Font Awesome. Please check if there is an icon with this name.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Invalid page view</string>
   <string name="SYS_IO_ERROR">I/O error</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
@@ -1262,8 +1250,8 @@
   <string name="SYS_MAX_PARTICIPANTS">Max. participants</string>
   <string name="SYS_MAX_PATH_LENGTH">Max path length</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. processable image size</string>
-  <string name="SYS_MAYBE_PARTICIPATE">I may take part</string>
-  <string name="SYS_MAYBE_PARTICIPATE_DESC">If this option is activated, then in addition to the options #VAR1_BOLD# and #VAR2_BOLD# a third option #VAR3_BOLD# is available for appointment registration. (Default: disabled)</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Participate with reservation</string>
+  <string name="SYS_MAYBE_PARTICIPATE_DESC">If this option is activated, there will be a third option #VAR3_BOLD# besides the options #VAR1_BOLD# and #VAR2_BOLD#. (Default: disabled)</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Member</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Member of organization #VAR1#</string>
@@ -1366,6 +1354,7 @@
   <string name="SYS_RESTRICTIONS">Restrictions</string>
   <string name="SYS_ROLE">Role</string>
   <string name="SYS_ROLE_MAX_MEMBERS">It was not possible to save the change. Maximum number of role members in role #VAR1_BOLD# will exceed predefined limit.</string>
+  <string name="SYS_ROLE_MEMBERS">Role members</string>
   <string name="SYS_ROLES">Roles</string>
   <string name="SYS_ROOM">Room</string>
   <string name="SYS_RSS_DISABLED">Web feed has been disabled by the system administrator.</string>
@@ -1429,7 +1418,7 @@
   <string name="SYS_UPDATE">Update</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
   <string name="SYS_UPLOAD_NAME_ERROR">The file name can not be named \"Submit\".</string>
-  <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed. </string>
+  <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
   <string name="SYS_USER">User</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>

@@ -161,21 +161,21 @@ header('Content-type: text/html; charset=utf-8');
 
 echo '
 <div class="modal-header">
+    <h3 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h3>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
 </div>
 <div class="modal-body row">
-    <div class="col-xs-2"><i class="fas fa-times-circle fa-3x" style="color: #f93535;"></i></div>
-    <div id="message_text" class="col-xs-10">'.$gL10n->get($text, array($getName, '')).'</div>
+    <div class="col-2"><i class="fas fa-times-circle fa-3x" style="color: #f93535;"></i></div>
+    <div id="message_text" class="col-10">'.$gL10n->get($text, array($getName, '')).'</div>
 </div>
 <div class="modal-footer">
-    <button id="btn_yes" class="btn btn-default" type="button" onclick="callUrlHideElement(\''.$getElementId.'\', \''.$url.'\''.$callbackFunction.')">
+    <button id="btn_yes" class="btn btn-secondary" type="button" onclick="callUrlHideElement(\''.$getElementId.'\', \''.$url.'\''.$callbackFunction.')">
         <i class="fas fa-check-circle"></i>'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;
     </button>
-    <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal">
+    <button id="btn_no" class="btn btn-secondary" type="button" data-dismiss="modal">
         <i class="fas fa-minus-circle"></i>'.$gL10n->get('SYS_NO').'
     </button>
-    <button id="btn_close" class="btn btn-default hidden" type="button" data-dismiss="modal">
+    <button id="btn_close" class="btn btn-secondary hidden" type="button" data-dismiss="modal">
         <i class="fas fa-window-close"></i>'.$gL10n->get('SYS_CLOSE').'
     </button>
 </div>';
