@@ -99,7 +99,7 @@ if($getMode === 1)
     {
         try
         {
-            StringUtils::strIsValidFileName($_POST['usf_icon']);
+            StringUtils::strIsValidFolderName($_POST['usf_icon']);
 
             // replace invalid characters in filename
             $_POST['usf_icon'] = FileSystemUtils::removeInvalidCharsInFilename($_POST['usf_icon']);

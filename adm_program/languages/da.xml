@@ -136,7 +136,6 @@
   <string name="DOW_FILES_UPLOADED">#VAR1# filer er blevet uploadet.</string>
   <string name="DOW_FOLDER_CREATED">Folderen #VAR1_BOLD# blev oprettet.</string>
   <string name="DOW_FOLDER_EXISTS">Folderen #VAR1# eksisterer allerede!\n\nVenligst vælg et andet navn til folderen.</string>
-  <string name="DOW_FOLDER_NAME_INVALID">Folder navnet indeholder ulovlige karakterer!\n\nVenligst skriv et andet folder navn (ikke ÆØÅ)</string>
   <string name="DOW_FOLDER_NO_FILES">Folderen indeholder ikke nogen filer.</string>
   <string name="DOW_FOLDER_NO_RIGHTS">Du har ikke ret til at se den valgte folder.</string>
   <string name="DOW_FOLDER_NOT_EXISTS">Folderen eksisterer ikke længere på serveren. Den bør slettes i databasen også.</string>

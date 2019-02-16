@@ -119,7 +119,6 @@
   <string name="DOW_FILES_UPLOADED">Mafaili #VAR1# yamepakiwa kikamilifu.</string>
   <string name="DOW_FOLDER_CREATED">Folda #VAR1_BOLD# limetengenezwa.</string>
   <string name="DOW_FOLDER_EXISTS">Folda #VAR1# tayari lipo!\n\nTafadhali chagua jina lingine la folda.</string>
-  <string name="DOW_FOLDER_NAME_INVALID">Jina la folda lina herufi/alama zisizoruhusiwa!\n\nTafadhali chagua jina lingine la folda.</string>
   <string name="DOW_FOLDER_NO_FILES">Folda halina mafaili.</string>
   <string name="DOW_FOLDER_NO_RIGHTS">Hauruhusiwi kuonesha folda lililochaguliwa.</string>
   <string name="DOW_FOLDER_NOT_EXISTS">Folda halipo tena kwenye seva. Huenda litakuwa limefutwa kwenye hazinadata.</string>

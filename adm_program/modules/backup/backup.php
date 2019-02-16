@@ -80,7 +80,7 @@ if($getMode === 'show_list')
 
             try
             {
-                StringUtils::strIsValidFileName($entry, true);
+                StringUtils::strIsValidFileName($entry);
 
                 // replace invalid characters in filename
                 $entry = FileSystemUtils::removeInvalidCharsInFilename($entry);

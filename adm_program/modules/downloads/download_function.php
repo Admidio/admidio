@@ -163,7 +163,7 @@ elseif ($getMode === 3)
         }
         if($e->getMessage() === 'SYS_FILENAME_INVALID')
         {
-            $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
+            $e->setNewMessage('SYS_FOLDER_NAME_INVALID');
         }
         $e->showHtml();
         // => EXIT
@@ -283,7 +283,7 @@ elseif ($getMode === 4)
         }
         if($e->getMessage() === 'SYS_FILENAME_INVALID' && $getFolderId > 0)
         {
-            $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
+            $e->setNewMessage('SYS_FOLDER_NAME_INVALID');
         }
         $e->showHtml();
         // => EXIT

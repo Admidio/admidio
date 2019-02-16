@@ -54,7 +54,7 @@ class UploadHandlerPhoto extends UploadHandler
                 $albumFolder  = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id');
 
                 // check filename and throw exception if something is wrong
-                StringUtils::strIsValidFileName($file->name, true);
+                StringUtils::strIsValidFileName($file->name);
 
                 // replace invalid characters in filename
                 $file->name = FileSystemUtils::removeInvalidCharsInFilename($file->name);
