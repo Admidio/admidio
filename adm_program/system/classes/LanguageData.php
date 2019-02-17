@@ -40,7 +40,11 @@ class LanguageData
      */
     private $language;
     /**
-     * @var string The code of the language that should be used within several libs e.g. datepicker, ckeditor 
+     * @var string The ISO 639-1 code of the language 
+     */
+    private $languageIsoCode;
+    /**
+     * @var array<int,string> Array with all relevant language files
      */
     private $languageLibs;
     /**
@@ -61,19 +65,20 @@ class LanguageData
      * Therefore the language must be set and optional a path where the language files are stored.
      * @param string $language The ISO code of the language for which the texts should be read e.g. **'de'**
      *                         If no language is set than the browser language will be determined.
+     * @param array $languageInfos An array with additional necessary informations such as iso code, name etc.
+     *                             The array must have the following keys 'isocode' and 'libs'. 
      * @throws \UnexpectedValueException
      */
-    public function __construct($language = '', $languageLibs = '')
+    public function __construct($language = '', $languageInfos = array())
     {
-        global $gSupportedLanguages, $gLogger;
-
         if ($language === '')
         {
             // get browser language and set this language as default
             $language = static::determineBrowserLanguage(self::REFERENCE_LANGUAGE);
         }
         $this->language = $language;
-        $this->languageLibs = $languageLibs;
+        $this->languageLibs = $languageInfos['libs'];
+        $this->languageIsoCode = $languageInfos['isocode'];
 
         $this->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_LANGUAGES);
         foreach (self::getPluginLanguageFolderPaths() as $pluginLanguageFolderPath)
@@ -205,6 +210,15 @@ class LanguageData
     public function getLanguage()
     {
         return $this->language;
+    }
+
+    /**
+     * Returns the language ISO 639-1 code
+     * @return string Returns the language ISO 639-1 code
+     */
+    public function getLanguageIsoCode()
+    {
+        return $this->languageIsoCode;
     }
 
     /**

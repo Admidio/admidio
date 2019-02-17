@@ -247,19 +247,12 @@ class Language
     }
 
     /**
-     * Returns the ISO code of the language of this object.
-     * @return string Returns the ISO code of the language of this object or the reference language e.g. **de** or **en**.
+     * Returns the ISO 639-1 code of the language of this object.
+     * @return string Returns the ISO 639-1 code of the language of this object e.g. **de** or **en**.
      */
     public function getLanguageIsoCode()
     {
-        $language = $this->getLanguage();
-
-        if ($language === 'de_sie')
-        {
-            return 'de';
-        }
-
-        return $language;
+        return $this->languageData->getLanguageIsoCode();
     }
 
     /**
