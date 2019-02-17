@@ -319,20 +319,9 @@ class Language
      */
     private static function loadAvailableLanguages()
     {
-        $languagesXml = new \SimpleXMLElement(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.xml', 0, true);
+        global $gSupportedLanguages;
 
-        $languages = array();
-
-        /**
-         * @var \SimpleXMLElement $xmlNode
-         */
-        foreach ($languagesXml->children() as $xmlNode)
-        {
-            $xmlChildNodes = $xmlNode->children();
-            $languages[(string) $xmlChildNodes->isocode] = (string) $xmlChildNodes->name;
-        }
-
-        return $languages;
+        return array_map(function($languageInfos) { return $languageInfos['name']; }, $gSupportedLanguages);        
     }
 
     /**

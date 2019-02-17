@@ -71,14 +71,16 @@ class LanguageData
      */
     public function __construct($language = '', $languageInfos = array())
     {
+        global $gSupportedLanguages;
+
         if ($language === '')
         {
             // get browser language and set this language as default
             $language = static::determineBrowserLanguage(self::REFERENCE_LANGUAGE);
         }
         $this->language = $language;
-        $this->languageLibs = $languageInfos['libs'];
-        $this->languageIsoCode = $languageInfos['isocode'];
+        $this->languageLibs = $gSupportedLanguages[$language]['libs'];
+        $this->languageIsoCode = $gSupportedLanguages[$language]['isocode'];
 
         $this->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_LANGUAGES);
         foreach (self::getPluginLanguageFolderPaths() as $pluginLanguageFolderPath)
