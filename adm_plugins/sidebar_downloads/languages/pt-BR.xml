@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_DOWNLOADS_HEADLINE">Transferências</string>
+  <string name="PLG_DOWNLOADS_MORE_DOWNLOADS">Mais Transferências</string>
+  <string name="PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE">Não existem ficheiros disponíveis para transferir.</string>
+  <string name="PLG_DOWNLOADS_UPLOAD_FROM_AT">Enviado por #VAR1# em #VAR2#</string>
+</resources>

@@ -100,7 +100,7 @@ $page->enableModal();
 
 $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/js/bootstrap-datepicker.js');
-$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/locales/bootstrap-datepicker.'.$gL10n->getLanguageIsoCode().'.min.js');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/locales/bootstrap-datepicker.'.$gL10n->getLanguageLibs().'.min.js');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 
@@ -198,7 +198,7 @@ $page->addJavascript('
     $("#profile_role_memberships_change").attr("data-target", "#admidio_modal");
 
     $("input[data-provide=\'datepicker\']").datepicker({
-        language: "'.$gL10n->getLanguageIsoCode().'",
+        language: "'.$gL10n->getLanguageLibs().'",
         format: "'.DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')).'",
         todayHighlight: true,
         autoclose: true

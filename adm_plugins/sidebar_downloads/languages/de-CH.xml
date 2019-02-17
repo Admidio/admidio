@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="PLG_DOWNLOADS_HEADLINE">Downloads</string>
+    <string name="PLG_DOWNLOADS_MORE_DOWNLOADS">Weitere Downloads</string>
+    <string name="PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE">Es stehen keine Dateien zum Download zur Verfügung.</string>
+    <string name="PLG_DOWNLOADS_UPLOAD_FROM_AT">Hochgeladen von #VAR1# am #VAR2#</string>
+</resources>

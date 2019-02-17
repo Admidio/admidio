@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="PLG_ONLINE_HEADLINE">Wer ist Online?</string>
+    <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">Zur Zeit sind keine Besucher auf der Webseite.</string>
+    <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# Besucher</string>
+    <string name="PLG_ONLINE_VAR_NUM_MEMBER">#VAR1# Mitglied</string>
+    <string name="PLG_ONLINE_VAR_NUM_MEMBERS">#VAR1# Mitglieder</string>
+    <string name="PLG_ONLINE_VAR_ONLINE_ARE">Online sind #VAR1#</string>
+    <string name="PLG_ONLINE_VAR_ONLINE_IS">Online ist #VAR1#</string>
+</resources>
