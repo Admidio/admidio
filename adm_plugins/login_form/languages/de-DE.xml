@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="PLG_LOGIN_ACTIVE_SINCE">Aktiv seit</string>
+    <string name="PLG_LOGIN_HONORARY_MEMBER">Ehrenmitglied</string>
+    <string name="PLG_LOGIN_LAST_LOGIN">Letzter Login</string>
+    <string name="PLG_LOGIN_NEW_ONLINE_MEMBER">Neues Onlinemitglied</string>
+    <string name="PLG_LOGIN_NUMBER_OF_LOGINS">Anzahl Logins</string>
+    <string name="PLG_LOGIN_ONLINE_MEMBER">Onlinemitglied</string>
+    <string name="PLG_LOGIN_SENIOR_ONLINE_MEMBER">Senior Onlinemitglied</string>
+</resources>

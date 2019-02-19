@@ -552,7 +552,7 @@ class HtmlForm extends HtmlFormBasic
         $javascriptCode = '
             CKEDITOR.replace("' . $id . '", {
                 toolbar: "' . $optionsAll['toolbar'] . '",
-                language: "' . $gL10n->getLanguageIsoCode() . '",
+                language: "' . $gL10n->getLanguageLibs() . '",
                 uiColor: "' . $gSettingsManager->getString('system_js_editor_color') . '",
                 filebrowserImageUploadUrl: "' . ADMIDIO_URL . '/adm_program/system/ckeditor_upload_handler.php"
             });
@@ -868,7 +868,7 @@ class HtmlForm extends HtmlFormBasic
                 $javascriptCode = '
                     $("input[data-provide=\'' . $attributes['data-provide'] . '\']").each(function() {
                         $(this).datepicker({
-                            language: "' . $gL10n->getLanguageIsoCode() . '",
+                            language: "' . $gL10n->getLanguageLibs() . '",
                             format: "' . DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')) . '",
                             ' . $datepickerOptions . '
                             todayHighlight: true
@@ -886,7 +886,7 @@ class HtmlForm extends HtmlFormBasic
             {
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/js/bootstrap-datepicker.js');
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/locales/bootstrap-datepicker.' . $gL10n->getLanguageIsoCode() . '.min.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/locales/bootstrap-datepicker.' . $gL10n->getLanguageLibs() . '.min.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
         }
@@ -1430,7 +1430,7 @@ class HtmlForm extends HtmlFormBasic
                     allowClear: ' . $allowClear . ',
                     ' . $maximumSelectionNumber . '
                     placeholder: "' . $optionsAll['placeholder'] . '",
-                    language: "' . $gL10n->getLanguage() . '"
+                    language: "' . $gL10n->getLanguageLibs() . '"
                 });';
 
             // add default values to multi select
@@ -1447,7 +1447,7 @@ class HtmlForm extends HtmlFormBasic
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/select2/dist/css/select2.css');
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/select2-bootstrap-theme/dist/select2-bootstrap.css');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/select2/dist/js/select2.js');
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/select2/dist/js/i18n/' . $gL10n->getLanguageIsoCode() . '.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/select2/dist/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
         }

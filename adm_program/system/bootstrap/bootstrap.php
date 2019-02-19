@@ -19,6 +19,7 @@ $rootPath = dirname(dirname(dirname(__DIR__)));
 // TODO: In future require config.php here
 require_once($rootPath . '/adm_program/system/bootstrap/init_globals.php');
 require_once($rootPath . '/adm_program/system/bootstrap/constants.php');
+require_once($rootPath . '/adm_program/languages/languages.php');
 
 // ERROR REPORTING
 // http://www.phptherightway.com/#error_reporting

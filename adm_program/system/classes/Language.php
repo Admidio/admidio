@@ -147,8 +147,8 @@ class Language
      */
     private function getCountryFile()
     {
-        $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage() . '.xml';
-        $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . LanguageData::REFERENCE_LANGUAGE   . '.xml';
+        $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries-' . $this->languageData->getLanguage() . '.xml';
+        $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries-' . LanguageData::REFERENCE_LANGUAGE   . '.xml';
 
         if (is_file($langFile))
         {
@@ -237,8 +237,8 @@ class Language
     }
 
     /**
-     * Returns the language code of the language of this object. This is the code that is set within
-     * Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
+     * Returns the language code of the language of this object. That will also return the country specific
+     * codes such as de-CH. If you only want the ISO code then call getLanguageIsoCode().
      * @return string Returns the language code of the language of this object or the reference language.
      */
     public function getLanguage()
@@ -247,19 +247,21 @@ class Language
     }
 
     /**
-     * Returns the ISO code of the language of this object.
-     * @return string Returns the ISO code of the language of this object or the reference language e.g. **de** or **en**.
+     * Returns the ISO 639-1 code of the language of this object.
+     * @return string Returns the ISO 639-1 code of the language of this object e.g. **de** or **en**.
      */
     public function getLanguageIsoCode()
     {
-        $language = $this->getLanguage();
+        return $this->languageData->getLanguageIsoCode();
+    }
 
-        if ($language === 'de_sie')
-        {
-            return 'de';
-        }
-
-        return $language;
+    /**
+     * Returns the language code of the language that we need for some libs e.g. datepicker or ckeditor.
+     * @return string Returns the language code of the language of this object or the reference language.
+     */
+    public function getLanguageLibs()
+    {
+        return $this->languageData->getLanguageLibs();
     }
 
     /**
@@ -317,20 +319,9 @@ class Language
      */
     private static function loadAvailableLanguages()
     {
-        $languagesXml = new \SimpleXMLElement(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.xml', 0, true);
+        global $gSupportedLanguages;
 
-        $languages = array();
-
-        /**
-         * @var \SimpleXMLElement $xmlNode
-         */
-        foreach ($languagesXml->children() as $xmlNode)
-        {
-            $xmlChildNodes = $xmlNode->children();
-            $languages[(string) $xmlChildNodes->isocode] = (string) $xmlChildNodes->name;
-        }
-
-        return $languages;
+        return array_map(function($languageInfos) { return $languageInfos['name']; }, $gSupportedLanguages);        
     }
 
     /**

@@ -30,15 +30,23 @@
  * $languageData = $session->getObject('languageData')
  * $language = new Language($languageData);
  * ```
- */
+ */ 
 class LanguageData
 {
     const REFERENCE_LANGUAGE = 'en'; // The ISO code of the default language that should be read if in the current language the text id is not translated
 
     /**
-     * @var string The ISO code of the language that should be read in this object
+     * @var string The code of the language that should be read in this object
      */
     private $language;
+    /**
+     * @var string The ISO 639-1 code of the language 
+     */
+    private $languageIsoCode;
+    /**
+     * @var array<int,string> Array with all relevant language files
+     */
+    private $languageLibs;
     /**
      * @var array<int,string> Array with all relevant language files
      */
@@ -57,16 +65,22 @@ class LanguageData
      * Therefore the language must be set and optional a path where the language files are stored.
      * @param string $language The ISO code of the language for which the texts should be read e.g. **'de'**
      *                         If no language is set than the browser language will be determined.
+     * @param array $languageInfos An array with additional necessary informations such as iso code, name etc.
+     *                             The array must have the following keys 'isocode' and 'libs'. 
      * @throws \UnexpectedValueException
      */
-    public function __construct($language = '')
+    public function __construct($language = '', $languageInfos = array())
     {
+        global $gSupportedLanguages;
+
         if ($language === '')
         {
             // get browser language and set this language as default
             $language = static::determineBrowserLanguage(self::REFERENCE_LANGUAGE);
         }
         $this->language = $language;
+        $this->languageLibs = $gSupportedLanguages[$language]['libs'];
+        $this->languageIsoCode = $gSupportedLanguages[$language]['isocode'];
 
         $this->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_LANGUAGES);
         foreach (self::getPluginLanguageFolderPaths() as $pluginLanguageFolderPath)
@@ -191,13 +205,31 @@ class LanguageData
     }
 
     /**
-     * Returns the language code of the language of this object. This is the code that is set within
-     * Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
+     * Returns the language code of the language of this object. That will also return the country specific
+     * codes such as de-CH. If you only want the ISO code then call getLanguageIsoCode().
      * @return string Returns the language code of the language of this object or the reference language.
      */
     public function getLanguage()
     {
         return $this->language;
+    }
+
+    /**
+     * Returns the language ISO 639-1 code
+     * @return string Returns the language ISO 639-1 code
+     */
+    public function getLanguageIsoCode()
+    {
+        return $this->languageIsoCode;
+    }
+
+    /**
+     * Returns the language code of the language that we need for some libs e.g. datepicker or ckeditor.
+     * @return string Returns the language code of the language of this object or the reference language.
+     */
+    public function getLanguageLibs()
+    {
+        return $this->languageLibs;
     }
 
     /**

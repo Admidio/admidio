@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Mês Atual</string>
+  <string name="PLG_CALENDAR_MONTH">Janeiro,Fevereiro,Março,Abril,Maio,Junho,Julho,Agosto,Setembro,Outubro,Novembro,Dezembro</string>
+  <string name="PLG_CALENDAR_MORE">(... mais)</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Seg</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Ter</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Qua</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">Qui</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">Sex</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">Sáb</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Dom</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Vários dias</string>
+</resources>

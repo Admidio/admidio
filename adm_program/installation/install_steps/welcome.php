@@ -42,9 +42,9 @@ $form->setFormDescription(
 );
 
 // the possible languages will be read from a xml file
-$form->addSelectBoxFromXml(
-    'system_language', $gL10n->get('INS_PLEASE_CHOOSE_LANGUAGE'), ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.xml',
-    'isocode', 'name', array('defaultValue' => $gL10n->getLanguage(), 'showContextDependentFirstEntry' => false)
+$form->addSelectBox(
+    'system_language', $gL10n->get('INS_PLEASE_CHOOSE_LANGUAGE'), $gL10n->getAvailableLanguages(),
+    array('defaultValue' => $gL10n->getLanguage(), 'showContextDependentFirstEntry' => false)
 );
 
 $form->addHtml($messageWarning);
