@@ -974,12 +974,6 @@
   <string name="ROL_VALID_TO" description="Date valid to">Valid until</string>
   <string name="ROL_WEEKDAY">Weekday</string>
   <string name="ROL_WITHOUT_LEADER">No leader</string>
-  <!--Phrases only in Roommodule-->
-  <string name="ROO_CAPACITY">Capacity</string>
-  <string name="ROO_OVERHANG">Overhang</string>
-  <string name="ROO_ROOM_MANAGEMENT">Room administration</string>
-  <string name="ROO_SEATING">Seats</string>
-  <string name="ROO_STANDING">Standing room</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64bit</string>
   <string name="SYS_ABORT">Cancel</string>
@@ -1008,6 +1002,7 @@
   <string name="SYS_BACK">Back</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Back to module overview</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
+  <string name="SYS_CAPACITY">Capacity</string>
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Result of the calculation</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">The result of the calculation is not correct.</string>
@@ -1092,7 +1087,7 @@
   <string name="SYS_DIRECTORY_SEPARATOR">Directory separator</string>
   <string name="SYS_DISK_SPACE">Disk space</string>
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
-  <string name="SYS_DOCUMENTS_FILES">Documents & Files</string>
+  <string name="SYS_DOCUMENTS_FILES">Documents &amp; Files</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Different documents and files can be viewed or provided for download. These files can be categorized in folders with different access permission levels.</string>
   <string name="SYS_DONATE">Donate</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
@@ -1285,6 +1280,7 @@
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Order</string>
   <string name="SYS_ORGANIZATION">Organization</string>
+  <string name="SYS_OVERHANG">Overhang</string>
   <string name="SYS_OVERVIEW">Overview</string>
   <string name="SYS_PAGE">Page</string>
   <string name="SYS_PAGE_PREVIOUS">Previous</string>
@@ -1347,6 +1343,7 @@
   <string name="SYS_ROLE_MEMBERS">Role members</string>
   <string name="SYS_ROLES">Roles</string>
   <string name="SYS_ROOM">Room</string>
+  <string name="SYS_ROOM_MANAGEMENT">Room administration</string>
   <string name="SYS_RSS_DISABLED">Web feed has been disabled by the system administrator.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
@@ -1354,15 +1351,16 @@
   <string name="SYS_SATURDAY">Saturday</string>
   <string name="SYS_SAVE">Save</string>
   <string name="SYS_SAVE_DATA">Data has been saved.</string>
+  <string name="SYS_SEARCH">Search</string>
+  <string name="SYS_SEATING">Seating</string>
   <string name="SYS_SECONDS">Seconds</string>
   <string name="SYS_SECURE">Secure</string>
   <string name="SYS_SECURITY">Security</string>
   <string name="SYS_SECURITY_ERROR">Security error</string>
+  <string name="SYS_SELECT_FILES">Select files</string>
   <string name="SYS_SELECT_FROM_LIST">Select from list</string>
   <string name="SYS_SEND">Send</string>
   <string name="SYS_SEND_EMAIL_TO">Send e-mail to #VAR1#</string>
-  <string name="SYS_SEARCH">Search</string>
-  <string name="SYS_SELECT_FILES">Select files</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send e-mails to all e-mail addresses of the user</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, e-mails will be sent to all user e-mail addresses stored in the profile. If the setting is deactivated, e-mails will only be sent to the e-mail address from the profile field with the internal name EMAIL. (Default: enabled)</string>
   <string name="SYS_SEND_NEW_PW">Send new password</string>

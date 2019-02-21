@@ -21,7 +21,7 @@ if (!$gCurrentUser->isAdministrator())
 
 unset($_SESSION['rooms_request']);
 
-$headline = $gL10n->get('ROO_ROOM_MANAGEMENT');
+$headline = $gL10n->get('SYS_ROOM_MANAGEMENT');
 $textRoom = $gL10n->get('SYS_ROOM');
 
 // Navigation weiterfuehren
@@ -120,12 +120,12 @@ else
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-2 col-4">'.$gL10n->get('ROO_CAPACITY').'</div>
+                    <div class="col-sm-2 col-4">'.$gL10n->get('SYS_CAPACITY').'</div>
                     <div class="col-sm-4 col-8"><strong>'.(int) $room->getValue('room_capacity').'</strong></div>');
 
                     if($room->getValue('room_overhang') > 0)
                     {
-                        $page->addHtml('<div class="col-sm-2 col-4">'.$gL10n->get('ROO_OVERHANG').'</div>
+                        $page->addHtml('<div class="col-sm-2 col-4">'.$gL10n->get('SYS_OVERHANG').'</div>
                         <div class="col-sm-4 col-8"><strong>'.(int) $room->getValue('room_overhang').'</strong></div>');
                     }
                     else

@@ -1024,10 +1024,10 @@
   <string name="ROL_WEEKDAY">Doordeweeks</string>
   <string name="ROL_WITHOUT_LEADER">Geen leider</string>
   <!--Phrases only in Roommodule-->
-  <string name="ROO_CAPACITY">Capaciteit</string>
-  <string name="ROO_OVERHANG">Maximaal aantal</string>
-  <string name="ROO_ROOM_MANAGEMENT">Zaalbeheer</string>
-  <string name="ROO_SEATING">Zitplaatsen</string>
+  <string name="SYS_CAPACITY">Capaciteit</string>
+  <string name="SYS_OVERHANG">Maximaal aantal</string>
+  <string name="SYS_ROOM_MANAGEMENT">Zaalbeheer</string>
+  <string name="SYS_SEATING">Zitplaatsen</string>
   <string name="ROO_STANDING">Staanplaatsen</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64bit</string>

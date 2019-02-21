@@ -1024,10 +1024,10 @@
   <string name="ROL_WEEKDAY">Dia da semana</string>
   <string name="ROL_WITHOUT_LEADER">Sem líder</string>
   <!--Phrases only in Roommodule-->
-  <string name="ROO_CAPACITY">Capacidade</string>
-  <string name="ROO_OVERHANG">Excesso</string>
-  <string name="ROO_ROOM_MANAGEMENT">Administração de sala</string>
-  <string name="ROO_SEATING">Assentos</string>
+  <string name="SYS_CAPACITY">Capacidade</string>
+  <string name="SYS_OVERHANG">Excesso</string>
+  <string name="SYS_ROOM_MANAGEMENT">Administração de sala</string>
+  <string name="SYS_SEATING">Assentos</string>
   <string name="ROO_STANDING">Sala de espera</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64 bits</string>

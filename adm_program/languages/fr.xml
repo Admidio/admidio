@@ -1023,10 +1023,10 @@
   <string name="ROL_WEEKDAY">Jour de la semaine</string>
   <string name="ROL_WITHOUT_LEADER">Aucun chef</string>
   <!--Phrases only in Roommodule-->
-  <string name="ROO_CAPACITY">Capacité</string>
-  <string name="ROO_OVERHANG">Surplomb</string>
-  <string name="ROO_ROOM_MANAGEMENT">Administration des salles</string>
-  <string name="ROO_SEATING">Places assises</string>
+  <string name="SYS_CAPACITY">Capacité</string>
+  <string name="SYS_OVERHANG">Surplomb</string>
+  <string name="SYS_ROOM_MANAGEMENT">Administration des salles</string>
+  <string name="SYS_SEATING">Places assises</string>
   <string name="ROO_STANDING">Places debout</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_ABORT">Annuler</string>

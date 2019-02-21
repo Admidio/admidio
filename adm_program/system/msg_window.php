@@ -47,11 +47,11 @@ switch ($getMessageId)
                     <div class="col-8">'.$room->getValue('room_name').'</div>
                 </div>
                 <div class="row">
-                    <div class="col-4"><strong>'.$gL10n->get('ROO_CAPACITY').':</strong></div>
+                    <div class="col-4"><strong>'.$gL10n->get('SYS_CAPACITY').':</strong></div>
                     <div class="col-8">'.(int) $room->getValue('room_capacity').'</div>
                 </div>
                 <div class="row">
-                    <div class="col-4"><strong>'.$gL10n->get('ROO_OVERHANG').':</strong></div>
+                    <div class="col-4"><strong>'.$gL10n->get('SYS_OVERHANG').':</strong></div>
                     <div class="col-8">'.(int) $room->getValue('room_overhang').'</div>
                 </div>
                 <div class="row">

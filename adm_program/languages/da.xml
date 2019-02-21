@@ -937,10 +937,10 @@
   <string name="ROL_WEEKDAY">Ugedag</string>
   <string name="ROL_WITHOUT_LEADER">Ingen leder</string>
   <!--Phrases only in Roommodule-->
-  <string name="ROO_CAPACITY">Kapacitet</string>
-  <string name="ROO_OVERHANG">Overbooking</string>
-  <string name="ROO_ROOM_MANAGEMENT">Lokale administration</string>
-  <string name="ROO_SEATING">sæder</string>
+  <string name="SYS_CAPACITY">Kapacitet</string>
+  <string name="SYS_OVERHANG">Overbooking</string>
+  <string name="SYS_ROOM_MANAGEMENT">Lokale administration</string>
+  <string name="SYS_SEATING">sæder</string>
   <string name="ROO_STANDING">stå plads</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_ABORT">Afbryd</string>

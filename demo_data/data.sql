@@ -21,7 +21,7 @@ INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, co
                               , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.8', 0, 0)
                               , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.8', 0, 0)
                               , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.8', 0, 0)
-                              , (180, 'MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.3.8', 0, 0);
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '3.3.8', 0, 0);
 
 --
 -- Data for table adm_organizations

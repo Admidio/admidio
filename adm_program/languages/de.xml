@@ -1024,9 +1024,9 @@
   <string name="ROL_WEEKDAY">Wochentag</string>
   <string name="ROL_WITHOUT_LEADER">Ohne Leiter</string>
   <!--Phrases only in Roommodule-->
-  <string name="ROO_CAPACITY">Kapazität</string>
-  <string name="ROO_OVERHANG">Überhang</string>
-  <string name="ROO_ROOM_MANAGEMENT">Raumverwaltung</string>
+  <string name="SYS_CAPACITY">Kapazität</string>
+  <string name="SYS_OVERHANG">Überhang</string>
+  <string name="SYS_ROOM_MANAGEMENT">Raumverwaltung</string>
   <string name="ROO_SEATING">Sitzplätze</string>
   <string name="ROO_STANDING">Stehplätze</string>
   <!--System-Phrases for use in every module-->

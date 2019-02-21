@@ -748,10 +748,10 @@
   <string name="ROL_WEEKDAY">Settimanalmente</string>
   <string name="ROL_WITHOUT_LEADER">Nessun leader</string>
   <!--Phrases only in Roommodule-->
-  <string name="ROO_CAPACITY">Capacità</string>
-  <string name="ROO_OVERHANG">Eccedenti</string>
-  <string name="ROO_ROOM_MANAGEMENT">Amministrazione della stanza</string>
-  <string name="ROO_SEATING">posti a sedere</string>
+  <string name="SYS_CAPACITY">Capacità</string>
+  <string name="SYS_OVERHANG">Eccedenti</string>
+  <string name="SYS_ROOM_MANAGEMENT">Amministrazione della stanza</string>
+  <string name="SYS_SEATING">posti a sedere</string>
   <string name="ROO_STANDING">posti in piedi</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_ABORT">Annulla</string>
