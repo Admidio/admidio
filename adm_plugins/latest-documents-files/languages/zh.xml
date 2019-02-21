@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_FILES_HEADLINE">下载</string>
+  <string name="PLG_LATEST_FILES_MORE_DOWNLOADS">更多下载</string>
+  <string name="PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE">没有可供下载的文件。</string>
+  <string name="PLG_LATEST_FILES_UPLOAD_FROM_AT">上传者： #VAR1# 在 #VAR2#</string>
+</resources>

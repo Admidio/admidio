@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Configuration file for Admidio plugin sidebar downloads
+ * Configuration file for Admidio plugin latest documents & files
  *
  * Rename this file to config.php if you want to change some of the preferences below. The plugin
  * will only read the parameters from config.php and not the example file.
@@ -12,8 +12,8 @@
  ***********************************************************************************************
  */
 
-// Number of download files, that should be shown by this plugin (Default = 5)
-$plg_downloads_count = 5;
+// Number of files, that should be shown by this plugin (Default = 5)
+$plgCountFiles = 5;
 
 // Number of characters of the file name to be displayed
 // If set to 0 than the whole filename should be shown,
@@ -22,10 +22,6 @@ $plgMaxCharsFilename = 0;
 
 // if set to true then the upload timestamp will be shown next to each file
 $plg_show_upload_timestamp = true;
-
-// Name of css class for links
-// This must only be filled if your links should have another css class than Admidio use
-$plg_link_class_downl = '';
 
 // Should the headline of the plugin be shown
 // 1 = (Default) Headline should be shown

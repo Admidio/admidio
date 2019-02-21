@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_FILES_HEADLINE">Nedlastninger</string>
+  <string name="PLG_LATEST_FILES_MORE_DOWNLOADS">Flere nedlastninger</string>
+  <string name="PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE">Det er ingen filer tilgjengelig for nedlastning</string>
+  <string name="PLG_LATEST_FILES_UPLOAD_FROM_AT">Lastet opp av #VAR1# den #VAR2#</string>
+</resources>
