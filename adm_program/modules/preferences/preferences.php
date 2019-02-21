@@ -942,12 +942,12 @@ $formDownloads = new HtmlForm(
 );
 
 $formDownloads->addCheckbox(
-    'enable_download_module', $gL10n->get('DOW_ENABLE_DOWNLOAD_MODULE'), (bool) $formValues['enable_download_module'],
-    array('helpTextIdInline' => 'DOW_ENABLE_DOWNLOAD_MODULE_DESC')
+    'enable_download_module', $gL10n->get('SYS_ENABLE_DOCUMENTS_FILES_MODULE'), (bool) $formValues['enable_download_module'],
+    array('helpTextIdInline' => 'SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC')
 );
 $formDownloads->addInput(
-    'max_file_upload_size', $gL10n->get('DOW_MAXIMUM_FILE_SIZE').' (MB)', $formValues['max_file_upload_size'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextIdInline' => 'DOW_MAXIMUM_FILE_SIZE_DESC')
+    'max_file_upload_size', $gL10n->get('SYS_MAXIMUM_FILE_SIZE').' (MB)', $formValues['max_file_upload_size'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextIdInline' => 'SYS_MAXIMUM_FILE_SIZE_DESC')
 );
 $formDownloads->addSubmitButton(
     'btn_save_downloads', $gL10n->get('SYS_SAVE'),

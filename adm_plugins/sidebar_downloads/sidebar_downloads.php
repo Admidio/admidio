@@ -96,7 +96,7 @@ if ($gSettingsManager->getBool('enable_download_module'))
             {
                 $errorCode = $e->getMessage();
 
-                if($errorCode !== 'DOW_FOLDER_NO_RIGHTS')
+                if($errorCode !== 'SYS_FOLDER_NO_RIGHTS')
                 {
                     $e->showText();
                     // => EXIT
@@ -104,7 +104,7 @@ if ($gSettingsManager->getBool('enable_download_module'))
             }
 
             // only show download if user has rights to view folder
-            if($errorCode !== 'DOW_FOLDER_NO_RIGHTS')
+            if($errorCode !== 'SYS_FOLDER_NO_RIGHTS')
             {
                 // get filename without extension and extension separatly
                 $fileName      = pathinfo($rowFile['fil_name'], PATHINFO_FILENAME);

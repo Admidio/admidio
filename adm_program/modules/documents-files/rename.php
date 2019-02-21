@@ -23,11 +23,11 @@ $getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'int');
 // set headline of the script
 if($getFileId > 0)
 {
-    $headline = $gL10n->get('DOW_EDIT_FILE');
+    $headline = $gL10n->get('SYS_EDIT_FILE');
 }
 else
 {
-    $headline = $gL10n->get('DOW_EDIT_FOLDER');
+    $headline = $gL10n->get('SYS_EDIT_FOLDER');
 }
 
 // check if the module is enabled and disallow access if it's disabled
@@ -128,17 +128,17 @@ $form = new HtmlForm('edit_download_form', SecurityUtils::encodeUrl(ADMIDIO_URL.
 if ($getFileId)
 {
     $form->addInput(
-        'file_type', $gL10n->get('DOW_FILE_TYPE'), $fileType,
+        'file_type', $gL10n->get('SYS_FILE_TYPE'), $fileType,
         array('property' => HtmlForm::FIELD_DISABLED, 'class' => 'form-control-small')
     );
 }
 $form->addInput(
-    'previous_name', $gL10n->get('DOW_PREVIOUS_NAME'), $originalName,
+    'previous_name', $gL10n->get('SYS_PREVIOUS_NAME'), $originalName,
     array('property' => HtmlForm::FIELD_DISABLED)
 );
 $form->addInput(
-    'new_name', $gL10n->get('DOW_NEW_NAME'), $formValues['new_name'],
-    array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'DOW_FILE_NAME_RULES')
+    'new_name', $gL10n->get('SYS_NEW_NAME'), $formValues['new_name'],
+    array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_FILE_NAME_RULES')
 );
 $form->addMultilineTextInput(
     'new_description', $gL10n->get('SYS_DESCRIPTION'), $formValues['new_description'], 4,

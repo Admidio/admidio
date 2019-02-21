@@ -112,7 +112,7 @@ elseif ($getMode === 3)
         // Test ob der Ordner schon existiert im Filesystem
         if (is_dir($folder->getFullFolderPath() . '/' . $newFolderName))
         {
-            $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', array($newFolderName)));
+            $gMessage->show($gL10n->get('SYS_FOLDER_EXISTS', array($newFolderName)));
             // => EXIT
         }
         else
@@ -151,7 +151,7 @@ elseif ($getMode === 3)
             }
 
             $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-            $gMessage->show($gL10n->get('DOW_FOLDER_CREATED', array($newFolderName)));
+            $gMessage->show($gL10n->get('SYS_FOLDER_CREATED', array($newFolderName)));
             // => EXIT
         }
     }
@@ -198,7 +198,7 @@ elseif ($getMode === 4)
             // check if file already exists in filesystem
             if ($newFile !== $file->getValue('fil_name') && is_file($newPath . $newFile))
             {
-                $gMessage->show($gL10n->get('DOW_FILE_EXIST', array($newFile)));
+                $gMessage->show($gL10n->get('SYS_FILE_EXIST', array($newFile)));
                 // => EXIT
             }
             else
@@ -215,7 +215,7 @@ elseif ($getMode === 4)
                     catch (\RuntimeException $exception)
                     {
                         $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-                        $gMessage->show($gL10n->get('DOW_FILE_RENAME_ERROR', array($oldName)));
+                        $gMessage->show($gL10n->get('SYS_FILE_RENAME_ERROR', array($oldName)));
                         // => EXIT
                     }
                 }
@@ -225,7 +225,7 @@ elseif ($getMode === 4)
                 $file->save();
 
                 $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-                $gMessage->show($gL10n->get('DOW_FILE_RENAME', array($oldName)));
+                $gMessage->show($gL10n->get('SYS_FILE_RENAME', array($oldName)));
                 // => EXIT
             }
         }
@@ -241,7 +241,7 @@ elseif ($getMode === 4)
             if ($newFolder !== $folder->getValue('fol_name')
             && is_dir(ADMIDIO_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
             {
-                $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', array($newFolder)));
+                $gMessage->show($gL10n->get('SYS_FOLDER_EXISTS', array($newFolder)));
                 // => EXIT
             }
             else
@@ -260,7 +260,7 @@ elseif ($getMode === 4)
                     catch (\RuntimeException $exception)
                     {
                         $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-                        $gMessage->show($gL10n->get('DOW_FOLDER_RENAME_ERROR', array($oldName)));
+                        $gMessage->show($gL10n->get('SYS_FOLDER_RENAME_ERROR', array($oldName)));
                         // => EXIT
                     }
                 }
@@ -269,7 +269,7 @@ elseif ($getMode === 4)
                 $folder->save();
 
                 $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-                $gMessage->show($gL10n->get('DOW_FOLDER_RENAME', array($oldName)));
+                $gMessage->show($gL10n->get('SYS_FOLDER_RENAME', array($oldName)));
                 // => EXIT
             }
         }
@@ -279,7 +279,7 @@ elseif ($getMode === 4)
     {
         if($e->getMessage() === 'SYS_FILENAME_EMPTY')
         {
-            $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('DOW_NEW_NAME'));
+            $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('SYS_NEW_NAME'));
         }
         if($e->getMessage() === 'SYS_FILENAME_INVALID' && $getFolderId > 0)
         {

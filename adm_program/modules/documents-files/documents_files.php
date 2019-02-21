@@ -86,12 +86,12 @@ if ($currentFolder->hasUploadRight())
         // show links for upload, create folder and folder configuration
         $documentsFilesMenu->addItem(
             'menu_item_create_folder', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_id' => $getFolderId)),
-            $gL10n->get('DOW_CREATE_FOLDER'), 'fa-plus-circle'
+            $gL10n->get('SYS_CREATE_FOLDER'), 'fa-plus-circle'
         );
 
         $documentsFilesMenu->addItem(
             'menu_item_upload_files', SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)),
-            $gL10n->get('DOW_UPLOAD_FILES'), 'fa-upload'
+            $gL10n->get('SYS_UPLOAD_FILES'), 'fa-upload'
         );
     }
 
@@ -119,7 +119,7 @@ $downloadOverview = new HtmlTable('tbl_downloads', $page, true, true);
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_TYPE'),
-    '<i class="fas fa-fw fa-folder-open" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'"></i>',
+    '<i class="fas fa-fw fa-folder-open" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('SYS_FILE_TYPE').'"></i>',
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_DATE_MODIFIED'),
     $gL10n->get('SYS_SIZE'),
@@ -134,7 +134,7 @@ if ($currentFolder->hasUploadRight())
 
 $downloadOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right', 'right', 'right'));
 $downloadOverview->addRowHeadingByArray($columnHeading);
-$downloadOverview->setMessageIfNoRowsFound('DOW_FOLDER_NO_FILES', 'warning');
+$downloadOverview->setMessageIfNoRowsFound('SYS_FOLDER_NO_FILES', 'warning');
 
 // Get folder content
 if (isset($folderContent['folders']))
@@ -175,7 +175,7 @@ if (isset($folderContent['folders']))
             {
                 $additionalFolderFunctions = '
                 <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover" data-placement="left"
-                    title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('DOW_FOLDER_NOT_EXISTS').'"></i>';
+                    title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('SYS_FOLDER_NOT_EXISTS').'"></i>';
             }
 
             $columnValues[] = $additionalFolderFunctions.'
@@ -239,7 +239,7 @@ if (isset($folderContent['files']))
             {
                 $additionalFileFunctions = '
                 <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover" data-placement="left"
-                    title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('DOW_FILE_NOT_EXISTS').'"></i>';
+                    title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('SYS_FILE_NOT_EXIST_DELETE_FROM_DB').'"></i>';
             }
             $columnValues[] = $additionalFileFunctions.'
             <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
@@ -266,7 +266,7 @@ if ($gCurrentUser->editDownloadRight())
     // Check whether additional content was found in the folder
     if (isset($folderContent['additionalFolders']) || isset($folderContent['additionalFiles']))
     {
-        $htmlAdminTableHeadline = '<h2>'.$gL10n->get('DOW_UNMANAGED_FILES').HtmlForm::getHelpTextIcon('SYS_ADDITIONAL_FILES').'</h2>';
+        $htmlAdminTableHeadline = '<h2>'.$gL10n->get('SYS_UNMANAGED_FILES').HtmlForm::getHelpTextIcon('SYS_ADDITIONAL_FILES').'</h2>';
 
         // Create table object
         $adminTable = new HtmlTable('tbl_downloads', $page, true);
@@ -274,7 +274,7 @@ if ($gCurrentUser->editDownloadRight())
 
         // create array with all column heading values
         $columnHeading = array(
-            '<i class="fas fa-fw fa-folder-open" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'"></i>',
+            '<i class="fas fa-fw fa-folder-open" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('SYS_FILE_TYPE').'"></i>',
             $gL10n->get('SYS_NAME'),
             $gL10n->get('SYS_SIZE'),
             '&nbsp;'

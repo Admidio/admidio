@@ -117,12 +117,12 @@ elseif($getModule === 'downloads')
         // => EXIT
     }
 
-    $headline = $gL10n->get('DOW_UPLOAD_FILES');
-    $textFileUploaded = $gL10n->get('DOW_FILE_UPLOADED');
-    $textUploadSuccessful = $gL10n->get('DOW_FILES_UPLOAD_SUCCESSFUL');
-    $textUploadNotSuccessful = $gL10n->get('DOW_FILES_UPLOAD_NOT_SUCCESSFUL');
-    $textUploadDescription = $gL10n->get('DOW_FILES_UPLOAD_DESC', array($folder->getValue('fol_name')));
-    $textSelectFiles = $gL10n->get('DOW_SELECT_FILES');
+    $headline = $gL10n->get('SYS_UPLOAD_FILES');
+    $textFileUploaded = $gL10n->get('SYS_FILE_UPLOADED');
+    $textUploadSuccessful = $gL10n->get('SYS_FILES_UPLOAD_SUCCESSFUL');
+    $textUploadNotSuccessful = $gL10n->get('SYS_FILES_UPLOAD_NOT_SUCCESSFUL');
+    $textUploadDescription = $gL10n->get('SYS_FILES_UPLOAD_DESC', array($folder->getValue('fol_name')));
+    $textSelectFiles = $gL10n->get('SYS_SELECT_FILES');
 }
 
 // check if the server allow file uploads

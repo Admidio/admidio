@@ -477,7 +477,7 @@ class TableFolder extends TableAccess
         // Check if a dataset is found
         if ((int) $this->getValue('fol_id') === 0)
         {
-            throw new AdmException('DOW_FOLDER_NOT_FOUND', $folderId);
+            throw new AdmException('SYS_FOLDER_NOT_FOUND', $folderId);
         }
 
         // If current user has download-admin-rights => allow
@@ -490,7 +490,7 @@ class TableFolder extends TableAccess
         if ($this->getValue('fol_locked'))
         {
             $this->clear();
-            throw new AdmException('DOW_FOLDER_NO_RIGHTS');
+            throw new AdmException('SYS_FOLDER_NO_RIGHTS');
         }
 
         // If folder is public (and file is not locked) => allow
@@ -506,7 +506,7 @@ class TableFolder extends TableAccess
         }
 
         $this->clear();
-        throw new AdmException('DOW_FOLDER_NO_RIGHTS');
+        throw new AdmException('SYS_FOLDER_NO_RIGHTS');
     }
 
     /**
