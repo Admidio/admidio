@@ -126,10 +126,10 @@
   <string name="DAT_VIEW_MODE_COMPACT">Compacto</string>
   <string name="DAT_VISIBILITY">Visibilidade</string>
   <!--Phrases only in Downloadsmodule-->
-  <string name="DOW_ADD_TO_DATABASE">Adicionar à base de dados</string>
-  <string name="DOW_ADDITIONAL_FILES">Esta lista tem a intenção de oferecer uma visão geral dos ficheiros e pastas ainda não importados para a base de dados. Eles podem adicionados à base. Permissões de acesso serão copiadas da pasta selecionada.</string>
-  <string name="DOW_ADMINISTRATORS_DESC">Esses cargos são administradores do módulo de transferência e possuem acesso total aos diretórios e arquivos. É possível enviar, transferir e configurar permissões de acesso. Um cargo pode ser definido como administrador atribuindo-lhe a permissão #VAR1_BOLD#.</string>
-  <string name="DOW_COUNTER">Contador</string>
+  <string name="SYS_ADD_TO_DATABASE">Adicionar à base de dados</string>
+  <string name="SYS_ADDITIONAL_FILES">Esta lista tem a intenção de oferecer uma visão geral dos ficheiros e pastas ainda não importados para a base de dados. Eles podem adicionados à base. Permissões de acesso serão copiadas da pasta selecionada.</string>
+  <string name="SYS_ADMINISTRATORS_DESC">Esses cargos são administradores do módulo de transferência e possuem acesso total aos diretórios e arquivos. É possível enviar, transferir e configurar permissões de acesso. Um cargo pode ser definido como administrador atribuindo-lhe a permissão #VAR1_BOLD#.</string>
+  <string name="SYS_COUNTER">Contador</string>
   <string name="DOW_CREATE_FOLDER">Criar diretório</string>
   <string name="DOW_CREATE_FOLDER_DESC">Uma novo diretório será criado no diretório #VAR1_BOLD#.</string>
   <string name="DOW_DOWNLOADS">Transferências</string>

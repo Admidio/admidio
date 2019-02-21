@@ -126,14 +126,12 @@
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Visibility</string>
   <!--Phrases only in Downloadsmodule-->
-  <string name="DOW_ADD_TO_DATABASE">Add to database</string>
-  <string name="DOW_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
-  <string name="DOW_ADMINISTRATORS_DESC">These roles are administrators of the download module and have access to all folders and files. You can upload, download and configure access rights. A role can be set as administrator by assigning the permission #VAR1_BOLD#.</string>
-  <string name="DOW_COUNTER">Counter</string>
+  <string name="SYS_ADD_TO_DATABASE">Add to database</string>
+  <string name="SYS_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
+  <string name="SYS_ADMINISTRATORS_DESC">These roles are administrators of the download module and have access to all folders and files. You can upload, download and configure access rights. A role can be set as administrator by assigning the permission #VAR1_BOLD#.</string>
+  <string name="SYS_COUNTER">Counter</string>
   <string name="DOW_CREATE_FOLDER">Create folder</string>
   <string name="DOW_CREATE_FOLDER_DESC">A new folder will be created in folder #VAR1_BOLD#.</string>
-  <string name="DOW_DOWNLOADS">Downloads</string>
-  <string name="DOW_DOWNLOADS_DESC">Different data files and file types can be provided for download. This downloads can be categorized in folders with different access permission levels.</string>
   <string name="DOW_EDIT_FILE">Edit file</string>
   <string name="DOW_EDIT_FOLDER">Edit folder</string>
   <string name="DOW_EMAIL_NOTIFICATION_TITLE">A new file was uploaded</string>
@@ -543,7 +541,6 @@
   <string name="MAI_SMTP_USER">SMTP username</string>
   <string name="MAI_SMTP_USER_DESC">The username that is used in the SMTP authentication.</string>
   <string name="MAI_SUBJECT">Subject</string>
-  <string name="MAI_SUBJECT_ATTACHMENT">Subject &amp; Attachment</string>
   <string name="MAI_YOUR_EMAIL">Your e-mail</string>
   <string name="MAI_YOUR_NAME">Your name</string>
   <!--Phrases only in Membersadministration-->
@@ -1135,6 +1132,8 @@
   <string name="SYS_DIRECTORY_SEPARATOR">Directory separator</string>
   <string name="SYS_DISK_SPACE">Disk space</string>
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
+  <string name="SYS_DOCUMENTS_FILES">Documents & Files</string>
+  <string name="SYS_DOCUMENTS_FILES_DESC">Different documents and files can be viewed or provided for download. These files can be categorized in folders with different access permission levels.</string>
   <string name="SYS_DONATE">Donate</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>

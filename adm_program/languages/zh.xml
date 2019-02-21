@@ -95,9 +95,9 @@
   <string name="DAT_VIEW_MODE_COMPACT">紧凑</string>
   <string name="DAT_VISIBILITY">可见度</string>
   <!--Phrases only in Downloadsmodule-->
-  <string name="DOW_ADD_TO_DATABASE">添加到数据库</string>
-  <string name="DOW_ADDITIONAL_FILES">此列表旨在提供未导入数据库的文件和文件夹的概述。它们可以添加到数据库中。将从选定的文件夹复制访问权限。</string>
-  <string name="DOW_COUNTER">计数器</string>
+  <string name="SYS_ADD_TO_DATABASE">添加到数据库</string>
+  <string name="SYS_ADDITIONAL_FILES">此列表旨在提供未导入数据库的文件和文件夹的概述。它们可以添加到数据库中。将从选定的文件夹复制访问权限。</string>
+  <string name="SYS_COUNTER">计数器</string>
   <string name="DOW_CREATE_FOLDER">创建文件夹</string>
   <string name="DOW_DOWNLOADS">下载</string>
   <string name="DOW_DOWNLOADS_DESC">可以提供不同的数据文件和文件类型以供下载。此下载可以分类在具有不同访问权限级别的文件夹中。</string>

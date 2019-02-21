@@ -83,9 +83,9 @@
   <string name="DAT_VIEW_MODE_COMPACT">Sintetico</string>
   <string name="DAT_VISIBILITY">Visibilità</string>
   <!--Phrases only in Downloadsmodule-->
-  <string name="DOW_ADD_TO_DATABASE">Aggiungi al database</string>
-  <string name="DOW_ADDITIONAL_FILES">L\'elenco intende fornire una vista d\'insieme sui file e le cartelle non importate già nel database. Aggiungile qui. I diritti per l\'accesso saranno copiati dalla cartella selezionata.</string>
-  <string name="DOW_COUNTER">Contatore</string>
+  <string name="SYS_ADD_TO_DATABASE">Aggiungi al database</string>
+  <string name="SYS_ADDITIONAL_FILES">L\'elenco intende fornire una vista d\'insieme sui file e le cartelle non importate già nel database. Aggiungile qui. I diritti per l\'accesso saranno copiati dalla cartella selezionata.</string>
+  <string name="SYS_COUNTER">Contatore</string>
   <string name="DOW_CREATE_FOLDER">Crea cartella</string>
   <string name="DOW_CREATE_FOLDER_DESC">Una nuova cartella sarà creata nella cartella #VAR1_BOLD#.</string>
   <string name="DOW_DOWNLOADS">Scaricamenti</string>

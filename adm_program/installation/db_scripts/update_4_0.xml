@@ -29,5 +29,7 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="260" database="pgsql">ALTER TABLE %PREFIX%_users ALTER COLUMN usr_login_name TYPE varchar(254)</step>
     <step id="270">UPDATE %PREFIX%_preferences SET prf_value = 'pt-BR' WHERE prf_name = 'system_language' AND prf_value = 'pt'</step>
     <step id="280">UPDATE %PREFIX%_preferences SET prf_value = 'de-DE' WHERE prf_name = 'system_language' AND prf_value = 'de_sie'</step>
+    <step id="290">UPDATE %PREFIX%_menu SET men_name_intern = 'documents-files', men_name = 'SYS_DOCUMENTS_FILES', men_description = 'SYS_DOCUMENTS_FILES_DESC', men_url = '/adm_program/modules/documents-files/documents_files.php', men_icon = 'fa-file-download' WHERE men_name_intern = 'download'</step>
+    <step id="300">UPDATE %PREFIX%_components SET com_name_intern = 'DOCUMENTS-FILES', com_name = 'SYS_DOCUMENTS_FILES' WHERE com_name_intern = 'DOWNLOADS'</step>
     <step>stop</step>
 </update>

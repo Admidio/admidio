@@ -934,7 +934,7 @@ $formUserManagement->addSubmitButton(
 
 $page->addHtml(getPreferencePanel('modules', 'user_administration', $gL10n->get('MEM_USER_MANAGEMENT'), 'fas fa-user-friends', $formUserManagement->show()));
 
-// PANEL: DOWNLOADS
+// PANEL: DOCUMENTS-FILES
 
 $formDownloads = new HtmlForm(
     'downloads_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'downloads')),
@@ -954,7 +954,7 @@ $formDownloads->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'downloads', $gL10n->get('DOW_DOWNLOADS'), 'fas fa-download', $formDownloads->show()));
+$page->addHtml(getPreferencePanel('modules', 'downloads', $gL10n->get('SYS_DOCUMENTS_FILES'), 'fas fa-file-download', $formDownloads->show()));
 
 // PANEL: PHOTOS
 

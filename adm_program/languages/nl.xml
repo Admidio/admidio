@@ -126,10 +126,10 @@
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Zichtbaarheid</string>
   <!--Phrases only in Downloadsmodule-->
-  <string name="DOW_ADD_TO_DATABASE">Voeg toe in database</string>
-  <string name="DOW_ADDITIONAL_FILES">Deze lijst geeft u een overzicht van alle bestanden en mappen die nog niet in de database zijn geimporteerd. Voeg ze hier toe. Toegangsrechten zullen van geselecteerde map gekopieerd worden.</string>
-  <string name="DOW_ADMINISTRATORS_DESC">Leden van deze rol zijn beheerders van de download module en hebben toegang tot alle mappen en bestanden. U kunt bestanden uploaden, downloaden en toegangsrechten instellen. Een rol kan een beheerder worden als deze het recht #VAR1_BOLD# toegewezen wordt.</string>
-  <string name="DOW_COUNTER">Teller</string>
+  <string name="SYS_ADD_TO_DATABASE">Voeg toe in database</string>
+  <string name="SYS_ADDITIONAL_FILES">Deze lijst geeft u een overzicht van alle bestanden en mappen die nog niet in de database zijn geimporteerd. Voeg ze hier toe. Toegangsrechten zullen van geselecteerde map gekopieerd worden.</string>
+  <string name="SYS_ADMINISTRATORS_DESC">Leden van deze rol zijn beheerders van de download module en hebben toegang tot alle mappen en bestanden. U kunt bestanden uploaden, downloaden en toegangsrechten instellen. Een rol kan een beheerder worden als deze het recht #VAR1_BOLD# toegewezen wordt.</string>
+  <string name="SYS_COUNTER">Teller</string>
   <string name="DOW_CREATE_FOLDER">Maak map</string>
   <string name="DOW_CREATE_FOLDER_DESC">De nieuwe map wordt in de bestaande map #VAR1_BOLD# aangemaakt.</string>
   <string name="DOW_DOWNLOADS">Downloads</string>

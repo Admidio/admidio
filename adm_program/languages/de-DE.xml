@@ -126,10 +126,10 @@
   <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
   <string name="DAT_VISIBILITY">Sichtbarkeit</string>
   <!--Phrases only in Downloadsmodule-->
-  <string name="DOW_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
-  <string name="DOW_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
-  <string name="DOW_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Downloadmoduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
-  <string name="DOW_COUNTER">Zähler</string>
+  <string name="SYS_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
+  <string name="SYS_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
+  <string name="SYS_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Downloadmoduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
+  <string name="SYS_COUNTER">Zähler</string>
   <string name="DOW_CREATE_FOLDER">Ordner anlegen</string>
   <string name="DOW_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
   <string name="DOW_DOWNLOADS">Downloads</string>

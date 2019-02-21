@@ -108,9 +108,9 @@
   <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
   <string name="DAT_VISIBILITY">Synlighed</string>
   <!--Phrases only in Downloadsmodule-->
-  <string name="DOW_ADD_TO_DATABASE">Tilføj til database</string>
-  <string name="DOW_ADDITIONAL_FILES">Denne listes opgave er at give et overblik over filer og foldere som ikke er importeret ind i databasen endnu. Tilføj dem her. Adgangs rettigheder vil blive kopieret fra den valgte folder.</string>
-  <string name="DOW_COUNTER">Tæller</string>
+  <string name="SYS_ADD_TO_DATABASE">Tilføj til database</string>
+  <string name="SYS_ADDITIONAL_FILES">Denne listes opgave er at give et overblik over filer og foldere som ikke er importeret ind i databasen endnu. Tilføj dem her. Adgangs rettigheder vil blive kopieret fra den valgte folder.</string>
+  <string name="SYS_COUNTER">Tæller</string>
   <string name="DOW_CREATE_FOLDER">Opret folder</string>
   <string name="DOW_CREATE_FOLDER_DESC">En ny folder vil blive oprettet i folderen #VAR1_BOLD#.</string>
   <string name="DOW_DOWNLOADS">Filer</string>

@@ -145,7 +145,7 @@ elseif ($getMode === 3)
             else
             {
                 // der entsprechende Ordner konnte nicht angelegt werden
-                $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php');
+                $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php');
                 $gMessage->show($gL10n->get($error['text'], array($error['path'], '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
                 // => EXIT
             }

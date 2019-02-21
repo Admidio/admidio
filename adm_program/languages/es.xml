@@ -126,10 +126,10 @@
   <string name="DAT_VIEW_MODE_COMPACT">Compacto</string>
   <string name="DAT_VISIBILITY">Visibilidad</string>
   <!--Phrases only in Downloadsmodule-->
-  <string name="DOW_ADD_TO_DATABASE">Añadir a la base de datos</string>
-  <string name="DOW_ADDITIONAL_FILES">Esta descripción general enumera los archivos y las carpetas que aún no se importan a la base de datos. Estos se pueden agregar a la base de datos. Los privilegios de acceso serán copiados de la carpeta seleccionada.</string>
-  <string name="DOW_ADMINISTRATORS_DESC">Estos roles son administradores del módulo de descarga y, por lo tanto, tienen acceso a todas las carpetas y archivos. Usted puede subir, descargar y asignar privilegios de acceso. Un rol puede ser designado como administrador asignándole el permiso # VAR1_BOLD #.</string>
-  <string name="DOW_COUNTER">Contador</string>
+  <string name="SYS_ADD_TO_DATABASE">Añadir a la base de datos</string>
+  <string name="SYS_ADDITIONAL_FILES">Esta descripción general enumera los archivos y las carpetas que aún no se importan a la base de datos. Estos se pueden agregar a la base de datos. Los privilegios de acceso serán copiados de la carpeta seleccionada.</string>
+  <string name="SYS_ADMINISTRATORS_DESC">Estos roles son administradores del módulo de descarga y, por lo tanto, tienen acceso a todas las carpetas y archivos. Usted puede subir, descargar y asignar privilegios de acceso. Un rol puede ser designado como administrador asignándole el permiso # VAR1_BOLD #.</string>
+  <string name="SYS_COUNTER">Contador</string>
   <string name="DOW_CREATE_FOLDER">Crear carpeta</string>
   <string name="DOW_CREATE_FOLDER_DESC">Una nueva carpeta será creada en la carpeta #VAR1_BOLD#.</string>
   <string name="DOW_DOWNLOADS">Descargas</string>
