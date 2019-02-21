@@ -86,7 +86,7 @@ if(!isset($plg_kal_cat_show))
 
 if(!isset($plg_link_url) || $plg_link_url === '')
 {
-    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/events/events.php';
+    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
 }
 
 // ///////////////////////////////////////////////////// //

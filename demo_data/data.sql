@@ -46,7 +46,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (20, 1, 0, 2, 1, 'announcements', '/adm_program/modules/announcements/announcements.php', 'announcements.png', 'ANN_ANNOUNCEMENTS', 'ANN_ANNOUNCEMENTS_DESC'),
 (130, 1, 0, 5, 1, 'photo', '/adm_program/modules/photos/photos.php', 'photo.png', 'PHO_PHOTOS', 'PHO_PHOTOS_DESC'),
 (70, 1, 0, 6, 1, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'guestbook.png', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC'),
-(50, 1, 0, 8, 1, 'dates', '/adm_program/modules/events/events.php', 'dates.png', 'DAT_DATES', 'DAT_DATES_DESC'),
+(50, 1, 0, 8, 1, 'dates', '/adm_program/modules/dates/dates.php', 'dates.png', 'DAT_DATES', 'DAT_DATES_DESC'),
 (80, 1, 0, 9, 1, 'weblinks', '/adm_program/modules/links/links.php', 'weblinks.png', 'LNK_WEBLINKS', 'LNK_WEBLINKS_DESC'),
 (30, 2, 0, 4, 1, 'dbback', '/adm_program/modules/backup/backup.php', 'backup.png', 'BAC_DATABASE_BACKUP', 'BAC_DATABASE_BACKUP_DESC'),
 (140, 2, 0, 6, 1, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'options.png', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC'),

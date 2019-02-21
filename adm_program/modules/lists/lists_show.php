@@ -872,7 +872,7 @@ foreach ($membersList as $member)
         $dateId         = $datesStatement->fetchColumn();
         // prepare edit icon
         $columnValues[] = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/popup_participation.php', array('dat_id' => $dateId, 'usr_id' => $member['usr_id'])) . '">
+                                href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId, 'usr_id' => $member['usr_id'])) . '">
                                 <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
     }
 
