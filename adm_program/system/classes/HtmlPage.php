@@ -850,7 +850,7 @@ class HtmlPage
                                 || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin)))
                             {
                                 $menu->addSubItem(
-                                    'dates', 'olddates', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php', array('mode' => 'old')),
+                                    'dates', 'olddates', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('mode' => 'old')),
                                     $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES')))
                                 );
                             }

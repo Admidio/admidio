@@ -94,7 +94,7 @@ echo '<script>
 </script>';
 
 // Define form
-$participationForm = new HtmlForm('participate_form_'. $getDateId, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $getDateId, 'usr_id' => $getUserId, 'mode' => '')), null, array('type' => 'default', 'method' => 'post', 'setFocus' => false));
+$participationForm = new HtmlForm('participate_form_'. $getDateId, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/events/events_function.php', array('dat_id' => $getDateId, 'usr_id' => $getUserId, 'mode' => '')), null, array('type' => 'default', 'method' => 'post', 'setFocus' => false));
 $participationForm->addHtml('<div class="modal-header">
                                 <h3 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h3>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
