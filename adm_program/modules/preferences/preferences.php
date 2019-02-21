@@ -36,7 +36,7 @@ $page = new HtmlPage($headline);
 $page->enableModal();
 
 $showOptionValidModules = array(
-    'announcements', 'downloads', 'guestbook', 'ecards', 'lists',
+    'announcements', 'documents-files', 'guestbook', 'ecards', 'lists',
     'messages', 'photos', 'profile', 'events', 'links', 'user_management'
 );
 
@@ -937,7 +937,7 @@ $page->addHtml(getPreferencePanel('modules', 'user_administration', $gL10n->get(
 // PANEL: DOCUMENTS-FILES
 
 $formDownloads = new HtmlForm(
-    'downloads_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'downloads')),
+    'documents_files_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'documents-files')),
     $page, array('class' => 'form-preferences')
 );
 
@@ -950,11 +950,11 @@ $formDownloads->addInput(
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextIdInline' => 'SYS_MAXIMUM_FILE_SIZE_DESC')
 );
 $formDownloads->addSubmitButton(
-    'btn_save_downloads', $gL10n->get('SYS_SAVE'),
+    'btn_save_documents_files', $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'downloads', $gL10n->get('SYS_DOCUMENTS_FILES'), 'fas fa-file-download', $formDownloads->show()));
+$page->addHtml(getPreferencePanel('modules', 'documents-files', $gL10n->get('SYS_DOCUMENTS_FILES'), 'fas fa-file-download', $formDownloads->show()));
 
 // PANEL: PHOTOS
 
