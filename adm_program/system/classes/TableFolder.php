@@ -544,8 +544,8 @@ class TableFolder extends TableAccess
 
             if ($currentFolderRow['fol_fol_id_parent'])
             {
-                $currentNavigation = '<li><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_id' => $currentFolderRow['fol_id'])).
-                    '">'.$currentFolderRow['fol_name'].'</a></li>'.$currentNavigation;
+                $currentNavigation = '<li class="breadcrumb-item"><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_id' => $currentFolderRow['fol_id'])).
+                    '">' . $currentFolderRow['fol_name'] . '</a></li>' . $currentNavigation;
 
                 // Next call with parent folder
                 return $this->getNavigationForDownload($currentFolderRow['fol_fol_id_parent'], $currentNavigation);
@@ -574,15 +574,17 @@ class TableFolder extends TableAccess
         $rootFolderId = $rootFolderStatement->fetchColumn();
 
         $link = '
+        <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li>
+                <li class="breadcrumb-item">
                     <i class="fas fa-folder-open"></i>
-                    <a class="btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_id' => $rootFolderId)).'">
+                    <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_id' => $rootFolderId)).'">
                         '.$gL10n->get('SYS_DOCUMENTS_FILES').'</a>
                 </li>'.
                 $currentNavigation.
-                '<li>'.$this->getValue('fol_name').'</li>
-            </ol>';
+                '<li class="breadcrumb-item active" aria-current="page">'.$this->getValue('fol_name').'</li>
+            </ol>
+        </nav>';
 
         return $link;
     }
