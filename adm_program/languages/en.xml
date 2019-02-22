@@ -125,54 +125,6 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detailed</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Visibility</string>
-  <!--Phrases only in Downloadsmodule-->
-  <string name="DOW_ADD_TO_DATABASE">Add to database</string>
-  <string name="DOW_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
-  <string name="DOW_ADMINISTRATORS_DESC">These roles are administrators of the download module and have access to all folders and files. You can upload, download and configure access rights. A role can be set as administrator by assigning the permission #VAR1_BOLD#.</string>
-  <string name="DOW_COUNTER">Counter</string>
-  <string name="DOW_CREATE_FOLDER">Create folder</string>
-  <string name="DOW_CREATE_FOLDER_DESC">A new folder will be created in folder #VAR1_BOLD#.</string>
-  <string name="DOW_DOWNLOADS">Downloads</string>
-  <string name="DOW_DOWNLOADS_DESC">Different data files and file types can be provided for download. This downloads can be categorized in folders with different access permission levels.</string>
-  <string name="DOW_EDIT_FILE">Edit file</string>
-  <string name="DOW_EDIT_FOLDER">Edit folder</string>
-  <string name="DOW_EMAIL_NOTIFICATION_TITLE">A new file was uploaded</string>
-  <string name="DOW_EMAIL_NOTIFICATION_MESSAGE">A new file was uploaded at #VAR1#\n\nFile: #VAR2#\nUploaded by: #VAR3#\nUploaded at: #VAR4#</string>
-  <string name="DOW_ENABLE_DOWNLOAD_MODULE">Activating download module</string>
-  <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">The download module can be activated or deactivated via this setting. (Default: yes)</string>
-  <string name="DOW_FILE_EXIST">File #VAR1# already exists!\n\nPlease select different file name.</string>
-  <string name="DOW_FILE_EXTENSION_INVALID">File type is not allowed on this server.</string>
-  <string name="DOW_FILE_NAME_RULES">File name should indicate the file content. The file name affects to the listing order. E.g. file names in folders with proceedings should begin with date (yyyy-mm-tt).</string>
-  <string name="DOW_FILE_NOT_EXISTS">The file is physically not available anymore on the server. It should be deleted from the database.</string>
-  <string name="DOW_FILE_RENAME">File #VAR1# was renamed.</string>
-  <string name="DOW_FILE_RENAME_ERROR">An error occurred while file #VAR1# was renamed.</string>
-  <string name="DOW_FILE_TO_LARGE">Uploaded files size is greater than allowed (maximum file size: #VAR1# MB).</string>
-  <string name="DOW_FILE_TYPE">File type</string>
-  <string name="DOW_FILE_UPLOADED">File #VAR1_BOLD# was uploaded.</string>
-  <string name="DOW_FILES_UPLOAD_SUCCESSFUL">All files were uploaded successfully.\n\nDialog can be closed.</string>
-  <string name="DOW_FILES_UPLOAD_NOT_SUCCESSFUL">Not all files were uploaded successfully.</string>
-  <string name="DOW_FILES_UPLOAD_DESC">Please select all files to be uploaded into the folder #VAR1_BOLD#</string>
-  <string name="DOW_FILES_UPLOADED">#VAR1# files have been uploaded successfully.</string>
-  <string name="DOW_FOLDER_CREATED">Folder #VAR1_BOLD# was created.</string>
-  <string name="DOW_FOLDER_EXISTS">Folder #VAR1# already exists!\n\nPlease select different folder name.</string>
-  <string name="DOW_FOLDER_NO_FILES">Folder contains no files.</string>
-  <string name="DOW_FOLDER_NO_RIGHTS">You are not allowed to display selected folder.</string>
-  <string name="DOW_FOLDER_NOT_EXISTS">Folder does not exist anymore on the server. It should be deleted from the database.</string>
-  <string name="DOW_FOLDER_NOT_FOUND">Folder (ID #VAR1#) not found.</string>
-  <string name="DOW_FOLDER_RENAME">Folder #VAR1# was renamed.</string>
-  <string name="DOW_FOLDER_RENAME_ERROR">An error occurred while folder #VAR1# was renamed.</string>
-  <string name="DOW_MAXIMUM_FILE_SIZE">Maximum file size</string>
-  <string name="DOW_MAXIMUM_FILE_SIZE_DESC">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default: 3MB)</string>
-  <string name="DOW_NEW_FILE_NAME">New file name</string>
-  <string name="DOW_NEW_NAME">New name</string>
-  <string name="DOW_NO_ADDITIONAL_PERMISSIONS_SET">No additional permissions set</string>
-  <string name="DOW_PREVIOUS_NAME">Previous name</string>
-  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">On this page you can configure who can view the folder #VAR1_BOLD#, download files or upload files. The permissions are inherited to all subfolders, and existing permissions in subfolders are overwritten. Only roles with access to the parent folder are selectable. Administrators have all permissions for the folder.</string>
-  <string name="DOW_SELECT_FILES">Select files</string>
-  <string name="DOW_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
-  <string name="DOW_UNMANAGED_FILES">Unmanaged files</string>
-  <string name="DOW_UPLOAD_FILE_TO_FOLDER">Upload file to folder #VAR1_BOLD#</string>
-  <string name="DOW_UPLOAD_FILES">Upload files</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Greeting card sent by</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Activating greeting card module</string>
@@ -543,7 +495,6 @@
   <string name="MAI_SMTP_USER">SMTP username</string>
   <string name="MAI_SMTP_USER_DESC">The username that is used in the SMTP authentication.</string>
   <string name="MAI_SUBJECT">Subject</string>
-  <string name="MAI_SUBJECT_ATTACHMENT">Subject &amp; Attachment</string>
   <string name="MAI_YOUR_EMAIL">Your e-mail</string>
   <string name="MAI_YOUR_NAME">Your name</string>
   <!--Phrases only in Membersadministration-->
@@ -1023,19 +974,15 @@
   <string name="ROL_VALID_TO" description="Date valid to">Valid until</string>
   <string name="ROL_WEEKDAY">Weekday</string>
   <string name="ROL_WITHOUT_LEADER">No leader</string>
-  <!--Phrases only in Roommodule-->
-  <string name="ROO_CAPACITY">Capacity</string>
-  <string name="ROO_OVERHANG">Overhang</string>
-  <string name="ROO_ROOM_MANAGEMENT">Room administration</string>
-  <string name="ROO_SEATING">Seats</string>
-  <string name="ROO_STANDING">Standing room</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64bit</string>
   <string name="SYS_ABORT">Cancel</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
   <string name="SYS_ACTIVATED">Active</string>
   <string name="SYS_ADD_RECIPIENTS">Add recipient</string>
+  <string name="SYS_ADD_TO_DATABASE">Add to database</string>
   <string name="SYS_ADDRESS">Address</string>
+  <string name="SYS_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Go to the Admidio download page</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">The online management system for associations, groups and organizations</string>
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
@@ -1044,6 +991,7 @@
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_ADMINISTRATORS">Administrators</string>
+  <string name="SYS_ADMINISTRATORS_DESC">These roles are administrators of the download module and have access to all folders and files. You can upload, download and configure access rights. A role can be set as administrator by assigning the permission #VAR1_BOLD#.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax request error.\nError Details: #VAR1#</string>
   <string name="SYS_ALL">All</string>
   <string name="SYS_ALL_ORGANIZATIONS">All organizations</string>
@@ -1054,6 +1002,7 @@
   <string name="SYS_BACK">Back</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Back to module overview</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
+  <string name="SYS_CAPACITY">Capacity</string>
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Result of the calculation</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">The result of the calculation is not correct.</string>
@@ -1091,10 +1040,13 @@
   <string name="SYS_COOKIE_NOT_SET">Log-in error! Your browser does not accept cookies!\n\nFor successful log-in, please, configure your browser to accept cookies from #VAR1_BOLD#.</string>
   <string name="SYS_COPY">Copy</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
+  <string name="SYS_COUNTER">Counter</string>
   <string name="SYS_COUNTRY">Country</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
   <string name="SYS_CREATE">Create</string>
   <string name="SYS_CREATE_ENTRY">Add entry</string>
+  <string name="SYS_CREATE_FOLDER">Create folder</string>
+  <string name="SYS_CREATE_FOLDER_DESC">A new folder will be created in folder #VAR1_BOLD#.</string>
   <string name="SYS_CREATE_HTACCESS">Create .htaccess</string>
   <string name="SYS_CREATE_NEW_USER">Add new user</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">If the new user is not listed among the users found, you can create it.</string>
@@ -1135,6 +1087,8 @@
   <string name="SYS_DIRECTORY_SEPARATOR">Directory separator</string>
   <string name="SYS_DISK_SPACE">Disk space</string>
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
+  <string name="SYS_DOCUMENTS_FILES">Documents &amp; Files</string>
+  <string name="SYS_DOCUMENTS_FILES_DESC">Different documents and files can be viewed or provided for download. These files can be categorized in folders with different access permission levels.</string>
   <string name="SYS_DONATE">Donate</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>
@@ -1142,6 +1096,8 @@
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
   <string name="SYS_EDIT">Edit</string>
   <string name="SYS_EDIT_ENTRY">Edit entry</string>
+  <string name="SYS_EDIT_FILE">Edit file</string>
+  <string name="SYS_EDIT_FOLDER">Edit folder</string>
   <string name="SYS_EDIT_MEMBERS">Edit members</string>
   <string name="SYS_EDIT_USER_IN_RELATION">User profile of this relationship can be edited</string>
   <string name="SYS_EDIT_VAR">Edit #VAR1#</string>
@@ -1149,8 +1105,12 @@
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_INVALID">E-mail address in field #VAR1_BOLD# includes invalid characters or is incomplete.</string>
   <string name="SYS_EMAIL_NOT_SEND">The email could not be sent to #VAR1_BOLD#.\n\nThe following error occurred:\n#VAR2#</string>
+  <string name="SYS_EMAIL_NOTIFICATION_TITLE">A new file was uploaded</string>
+  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">A new file was uploaded at #VAR1#\n\nFile: #VAR2#\nUploaded by: #VAR3#\nUploaded at: #VAR4#</string>
   <string name="SYS_EMAIL_SEND">Mail has been send successfully</string>
   <string name="SYS_EMPTY">Empty</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activate documents &amp; files module</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">The documents &amp; files module can be activated or deactivated via this setting. (Default: yes)</string>
   <string name="SYS_END" description="End of a date">End</string>
   <string name="SYS_ERROR">Error</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Error occurred during database access:\n\n#VAR1#</string>
@@ -1167,9 +1127,20 @@
   <string name="SYS_FIELD_INVALID_CHAR">Field #VAR1_BOLD# contains illegal characters.\n\nAllowed characters are letters from \'a\' to \'z\' and \'A\' to \'Z\', numbers from 0 to 9 and special characters like .-_+@ .</string>
   <string name="SYS_FIELDS_EMPTY">Some fields are empty.</string>
   <string name="SYS_FILE">File</string>
+  <string name="SYS_FILE_EXIST">File #VAR1# already exists!\n\nPlease select different file name.</string>
+  <string name="SYS_FILE_EXTENSION_INVALID">File type is not allowed on this server.</string>
+  <string name="SYS_FILE_NAME_RULES">File name should indicate the file content. The file name affects to the listing order. E.g. file names in folders with proceedings should begin with date (yyyy-mm-tt).</string>
   <string name="SYS_FILE_NOT_EXIST">Selected file does not exist on the server.</string>
+  <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">The file is physically not available anymore on the server. It should be deleted from the database.</string>
+  <string name="SYS_FILE_RENAME">File #VAR1# was renamed.</string>
+  <string name="SYS_FILE_RENAME_ERROR">An error occurred while file #VAR1# was renamed.</string>
   <string name="SYS_FILE_TO_LARGE_SERVER">Size of uploaded file exceeds server defined maximum file size of #VAR1# MB.</string>
+  <string name="SYS_FILE_TYPE">File type</string>
+  <string name="SYS_FILE_UPLOADED">File #VAR1_BOLD# was uploaded.</string>
   <string name="SYS_FILE_UPLOADS">File uploads</string>
+  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">All files were uploaded successfully.\n\nDialog can be closed.</string>
+  <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Not all files were uploaded successfully.</string>
+  <string name="SYS_FILES_UPLOAD_DESC">Please select all files to be uploaded into the folder #VAR1_BOLD#</string>
   <string name="SYS_FILENAME_EMPTY">Filename is missing!</string>
   <string name="SYS_FILENAME_INVALID">The selected file name #VAR1_BOLD# contains invalid characters. Please check the file name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is higher than the version of the Admidio scripts #VAR2#.\n\nPlease update your Admidio files on the server #VAR3# by using a later version of Admidio#VAR4#.</string>
@@ -1179,7 +1150,15 @@
   <string name="SYS_FROM">from #VAR1#</string>
   <string name="SYS_FROM_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_FOLDER">Folder</string>
+  <string name="SYS_FOLDER_CREATED">Folder #VAR1_BOLD# was created.</string>
+  <string name="SYS_FOLDER_EXISTS">Folder #VAR1# already exists!\n\nPlease select different folder name.</string>
+  <string name="SYS_FOLDER_NO_FILES">Folder contains no files.</string>
+  <string name="SYS_FOLDER_NO_RIGHTS">You are not allowed to display selected folder.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created.\n\nPlease ask an #VAR2#administrator#VAR3# for help to check write permissions of the parent folder.</string>
+  <string name="SYS_FOLDER_NOT_EXISTS">Folder does not exist anymore on the server. It should be deleted from the database.</string>
+  <string name="SYS_FOLDER_NOT_FOUND">Folder (ID #VAR1#) not found.</string>
+  <string name="SYS_FOLDER_RENAME">Folder #VAR1# was renamed.</string>
+  <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while folder #VAR1# was renamed.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT_AWESOME_DESC">You can store an icon in different ways:\n1. An icon of the web font \"Font Awesome\". Go to #VAR1#http://fontawesome.com#VAR2# and select a free icon from the \"Solid\" or \"Brands\" collection. As a prefix you have to put a fa- in front of it. So if you choose the icon \"user\", you have to enter \"fa-user\" here.\n2. A JPEG or PNG icon. To do this, enter the complete URL together with the file name of the icon. Alternatively, you can put the icon in the theme in the folder \"icons\", then you only need to specify the file name.</string>
   <string name="SYS_FORMER">Former</string>
@@ -1250,6 +1229,8 @@
   <string name="SYS_MAX_PARTICIPANTS">Max. participants</string>
   <string name="SYS_MAX_PATH_LENGTH">Max path length</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. processable image size</string>
+  <string name="SYS_MAXIMUM_FILE_SIZE">Maximum file size</string>
+  <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Participate with reservation</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">If this option is activated, there will be a third option #VAR3_BOLD# besides the options #VAR1_BOLD# and #VAR2_BOLD#. (Default: disabled)</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
@@ -1271,9 +1252,11 @@
   <string name="SYS_MYLIST_DESC">New list configurations can be created and saved here. In addition, lists can be displayed over several roles.</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Short name</string>
+  <string name="SYS_NEW_NAME">New name</string>
   <string name="SYS_NEW_VALUE">New value</string>
   <string name="SYS_NEXT">Next</string>
   <string name="SYS_NO">No</string>
+  <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">No additional permissions set</string>
   <string name="SYS_NO_ENTRY">Requested entry does not exist in the database.</string>
   <string name="SYS_NO_ENTRIES">No entries available.</string>
   <string name="SYS_NO_ENTRIES_FOUND">No entries found.</string>
@@ -1297,6 +1280,7 @@
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Order</string>
   <string name="SYS_ORGANIZATION">Organization</string>
+  <string name="SYS_OVERHANG">Overhang</string>
   <string name="SYS_OVERVIEW">Overview</string>
   <string name="SYS_PAGE">Page</string>
   <string name="SYS_PAGE_PREVIOUS">Previous</string>
@@ -1329,6 +1313,7 @@
   <string name="SYS_PRESENTATION">Display</string>
   <string name="SYS_PREVIEW">Preview</string>
   <string name="SYS_PREVIOUS">Previous</string>
+  <string name="SYS_PREVIOUS_NAME">Previous name</string>
   <string name="SYS_PREVIOUS_VALUE">Previous value</string>
   <string name="SYS_PRNG">Pseudo-random number generator</string>
   <string name="SYS_PRNG_INSECURE">Admidio/PHP can not generate secure pseudo-random numbers! Please contact the Admidio team with the following information:</string>
@@ -1353,10 +1338,12 @@
   <string name="SYS_REQUIRED_FIELDS">Required fields</string>
   <string name="SYS_RESTRICTIONS">Restrictions</string>
   <string name="SYS_ROLE">Role</string>
+  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">On this page you can configure who can view the folder #VAR1_BOLD#, download files or upload files. The permissions are inherited to all subfolders, and existing permissions in subfolders are overwritten. Only roles with access to the parent folder are selectable. Administrators have all permissions for the folder.</string>
   <string name="SYS_ROLE_MAX_MEMBERS">It was not possible to save the change. Maximum number of role members in role #VAR1_BOLD# will exceed predefined limit.</string>
   <string name="SYS_ROLE_MEMBERS">Role members</string>
   <string name="SYS_ROLES">Roles</string>
   <string name="SYS_ROOM">Room</string>
+  <string name="SYS_ROOM_MANAGEMENT">Room administration</string>
   <string name="SYS_RSS_DISABLED">Web feed has been disabled by the system administrator.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
@@ -1364,20 +1351,23 @@
   <string name="SYS_SATURDAY">Saturday</string>
   <string name="SYS_SAVE">Save</string>
   <string name="SYS_SAVE_DATA">Data has been saved.</string>
+  <string name="SYS_SEARCH">Search</string>
+  <string name="SYS_SEATING">Seating</string>
   <string name="SYS_SECONDS">Seconds</string>
   <string name="SYS_SECURE">Secure</string>
   <string name="SYS_SECURITY">Security</string>
   <string name="SYS_SECURITY_ERROR">Security error</string>
+  <string name="SYS_SELECT_FILES">Select files</string>
   <string name="SYS_SELECT_FROM_LIST">Select from list</string>
   <string name="SYS_SEND">Send</string>
   <string name="SYS_SEND_EMAIL_TO">Send e-mail to #VAR1#</string>
-  <string name="SYS_SEARCH">Search</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send e-mails to all e-mail addresses of the user</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, e-mails will be sent to all user e-mail addresses stored in the profile. If the setting is deactivated, e-mails will only be sent to the e-mail address from the profile field with the internal name EMAIL. (Default: enabled)</string>
   <string name="SYS_SEND_NEW_PW">Send new password</string>
   <string name="SYS_SENDER">Sender</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server settings do not allow files uploads.</string>
+  <string name="SYS_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
   <string name="SYS_SETTINGS">Preferences</string>
   <string name="SYS_SHOW_CALENDAR">Display calendar</string>
   <string name="SYS_SHOW_PROFILE">Show profile</string>
@@ -1415,7 +1405,9 @@
   <string name="SYS_UNKNOWN">Unidentified</string>
   <string name="SYS_UNLIMITED">Unlimited</string>
   <string name="SYS_UNLOCK">Unlock</string>
+  <string name="SYS_UNMANAGED_FILES">Unmanaged files</string>
   <string name="SYS_UPDATE">Update</string>
+  <string name="SYS_UPLOAD_FILES">Upload files</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
   <string name="SYS_UPLOAD_NAME_ERROR">The file name can not be named \"Submit\".</string>
   <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>

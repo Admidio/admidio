@@ -294,7 +294,7 @@ if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
     $profileMenu->addItem(
-        'menu_item_maintain_profile_fields', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields.php',
+        'menu_item_maintain_profile_fields', ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php',
         $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'fa-th-list', 'right', 'menu_item_extras'
     );
 

@@ -1,4 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="PLG_DOWNLOADS_HEADLINE">Downloads</string>
+  <string name="PLG_LATEST_FILES_HEADLINE">Downloads</string>
 </resources>

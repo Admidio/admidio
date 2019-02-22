@@ -83,7 +83,7 @@ $page->addJavascript('
 
         if (secondSequence > 0) {
             // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
-            $.get("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/fields_function.php', array('mode' => 4)) . '&usf_id=" + usfID + "&sequence=" + direction);
+            $.get("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4)) . '&usf_id=" + usfID + "&sequence=" + direction);
         }
     }
 ');
@@ -96,7 +96,7 @@ $fieldsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->g
 
 // define link to create new profile field
 $fieldsMenu->addItem(
-    'menu_item_new_field', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php',
+    'menu_item_new_field', ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php',
     $gL10n->get('ORG_CREATE_PROFILE_FIELD'), 'fa-plus-circle'
 );
 // define link to maintain categories
@@ -227,7 +227,7 @@ while($row = $statement->fetch())
 
     $usfId = (int) $userField->getValue('usf_id');
 
-    $usfSystem = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php', array('usf_id' => $usfId)).'">'.
+    $usfSystem = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_id' => $usfId)).'">'.
                     '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
     if($userField->getValue('usf_system') == 1)
@@ -244,7 +244,7 @@ while($row = $statement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php', array('usf_id' => $usfId)).'">'.$userField->getValue('usf_name').'</a>',
+        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_id' => $usfId)).'">'.$userField->getValue('usf_name').'</a>',
         '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_UP.'\', '.$usfId.')">'.
             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('CAT_MOVE_UP', array('MEM_PROFILE_FIELD')) . '"></i></a>
         <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_DOWN.'\', '.$usfId.')">'.

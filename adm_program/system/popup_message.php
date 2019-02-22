@@ -64,10 +64,10 @@ switch ($getType)
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates_function.php', array('mode' => 2, 'dat_id' => $getDatabaseId));
         break;
     case 'fil':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/downloads/download_function.php', array('mode' => 2, 'file_id' => $getDatabaseId, 'folder_id' => $getDatabaseId2));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 2, 'file_id' => $getDatabaseId, 'folder_id' => $getDatabaseId2));
         break;
     case 'fol':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/downloads/download_function.php', array('mode' => 5, 'folder_id' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files_function.php', array('mode' => 5, 'folder_id' => $getDatabaseId));
         break;
     case 'gbo':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('mode' => 2, 'id' => $getDatabaseId));
@@ -131,7 +131,7 @@ switch ($getType)
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 2, 'room_id' => $getDatabaseId));
         break;
     case 'usf':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/fields_function.php', array('mode' => 2, 'usf_id' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 2, 'usf_id' => $getDatabaseId));
         break;
     case 'urt':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 2, 'urt_id' => $getDatabaseId));

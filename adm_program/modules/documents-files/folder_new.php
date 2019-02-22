@@ -18,7 +18,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int', array('requireValue' => true));
 
-$headline = $gL10n->get('DOW_CREATE_FOLDER');
+$headline = $gL10n->get('SYS_CREATE_FOLDER');
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('enable_download_module'))
@@ -69,10 +69,10 @@ $page = new HtmlPage($headline);
 $folderNewMenu = $page->getMenu();
 $folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
-$page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', array($parentFolderName)).'</p>');
+$page->addHtml('<p class="lead">'.$gL10n->get('SYS_CREATE_FOLDER_DESC', array($parentFolderName)).'</p>');
 
 // show form
-$form = new HtmlForm('new_folder_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php', array('mode' => '3', 'folder_id' => $getFolderId)), $page);
+$form = new HtmlForm('new_folder_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '3', 'folder_id' => $getFolderId)), $page);
 $form->addInput(
     'new_folder', $gL10n->get('SYS_NAME'), $formValues['new_folder'],
     array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED)
@@ -82,7 +82,7 @@ $form->addMultilineTextInput(
     array('maxLength' => 4000)
 );
 $form->addSubmitButton(
-    'btn_create', $gL10n->get('DOW_CREATE_FOLDER'),
+    'btn_create', $gL10n->get('SYS_CREATE_FOLDER'),
     array('icon' => 'fa-plus-circle', 'class' => ' offset-sm-3')
 );
 

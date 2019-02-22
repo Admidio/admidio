@@ -51,7 +51,7 @@ class UploadHandlerDownload extends UploadHandler
                 // check filesize against module settings
                 if ($file->size > $gSettingsManager->getInt('max_file_upload_size') * 1024 * 1024)
                 {
-                    throw new AdmException('DOW_FILE_TO_LARGE', $gSettingsManager->getInt('max_file_upload_size'));
+                    throw new AdmException('SYS_FILE_TO_LARGE_SERVER', $gSettingsManager->getInt('max_file_upload_size'));
                 }
 
                 // check filename and throw exception if something is wrong
@@ -75,7 +75,7 @@ class UploadHandlerDownload extends UploadHandler
                 // Benachrichtigungs-Email für neue Einträge
                 $fullName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
                 $message = $gL10n->get(
-                    'DOW_EMAIL_NOTIFICATION_MESSAGE',
+                    'SYS_EMAIL_NOTIFICATION_MESSAGE',
                     array(
                         $gCurrentOrganization->getValue('org_longname'),
                         $file->name,
@@ -85,7 +85,7 @@ class UploadHandlerDownload extends UploadHandler
                 );
                 $notification = new Email();
                 $notification->adminNotification(
-                    $gL10n->get('DOW_EMAIL_NOTIFICATION_TITLE'),
+                    $gL10n->get('SYS_EMAIL_NOTIFICATION_TITLE'),
                     $message,
                     $fullName,
                     $gCurrentUser->getValue('EMAIL')

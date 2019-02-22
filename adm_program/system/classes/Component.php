@@ -130,7 +130,7 @@ class Component extends TableAccess
                 }
                 break;
 
-            case 'DOWNLOADS':
+            case 'DOCUMENTS-FILES':
                 if($gSettingsManager->getBool('enable_download_module'))
                 {
                     return true;

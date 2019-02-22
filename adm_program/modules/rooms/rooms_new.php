@@ -71,11 +71,11 @@ $form->addInput(
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'room_capacity', $gL10n->get('ROO_CAPACITY').' ('.$gL10n->get('ROO_SEATING').')', (int) $room->getValue('room_capacity'),
+    'room_capacity', $gL10n->get('SYS_CAPACITY').' ('.$gL10n->get('SYS_SEATING').')', (int) $room->getValue('room_capacity'),
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'room_overhang', $gL10n->get('ROO_OVERHANG'), (int) $room->getValue('room_overhang'),
+    'room_overhang', $gL10n->get('SYS_OVERHANG'), (int) $room->getValue('room_overhang'),
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_ROOM_OVERHANG')
 );
 $form->closeGroupBox();

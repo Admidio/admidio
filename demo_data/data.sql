@@ -21,7 +21,7 @@ INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, co
                               , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.8', 0, 0)
                               , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.8', 0, 0)
                               , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.8', 0, 0)
-                              , (180, 'MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.3.8', 0, 0);
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '3.3.8', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -40,7 +40,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (NULL, NULL, 1, 2, 1, 'administration', NULL, '', 'SYS_ADMINISTRATION', ''),
 (NULL, NULL, 1, 3, 1, 'plugins', NULL, '', 'MEN_PLUGIN', ''),
 (NULL, 1, 0, 1, 1, 'overview', '/adm_program/index.php', 'home.png', 'SYS_OVERVIEW', ''),
-(60, 1, 0, 3, 1, 'download', '/adm_program/modules/downloads/downloads.php', 'download.png', 'DOW_DOWNLOADS', 'DOW_DOWNLOADS_DESC'),
+(60, 1, 0, 3, 1, 'download', '/adm_program/modules/downloads/documents_files.php', 'download.png', 'DOW_DOWNLOADS', 'DOW_DOWNLOADS_DESC'),
 (90, 1, 0, 7, 1, 'lists', '/adm_program/modules/lists/lists.php', 'lists.png', 'LST_LISTS', 'LST_LISTS_DESC'),
 (90, 1, 0, 8, 1, 'mylist', '/adm_program/modules/lists/mylist.php', 'mylist.png', 'LST_MY_LIST', 'SYS_MYLIST_DESC'),
 (20, 1, 0, 2, 1, 'announcements', '/adm_program/modules/announcements/announcements.php', 'announcements.png', 'ANN_ANNOUNCEMENTS', 'ANN_ANNOUNCEMENTS_DESC'),

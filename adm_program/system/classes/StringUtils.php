@@ -236,7 +236,7 @@ final class StringUtils
      *                             php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi
      * @throws AdmException SYS_FILENAME_EMPTY : Filename was empty
      *                      SYS_FILENAME_INVALID : Filename contains invalid characters
-     *                      DOW_FILE_EXTENSION_INVALID : Filename contains invalid extension
+     *                      SYS_FILE_EXTENSION_INVALID : Filename contains invalid extension
      * @return true Returns @true if filename contains only valid characters. Otherwise an AdmException is thrown
      */
     public static function strIsValidFileName($filename, $checkExtension = true)
@@ -264,7 +264,7 @@ final class StringUtils
 
             if (in_array($fileExtension, $extensionBlacklist, true))
             {
-                throw new AdmException('DOW_FILE_EXTENSION_INVALID');
+                throw new AdmException('SYS_FILE_EXTENSION_INVALID');
             }
         }
 

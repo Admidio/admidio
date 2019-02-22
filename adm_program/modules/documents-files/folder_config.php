@@ -18,7 +18,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int', array('requireValue' => true));
 
-$headline = $gL10n->get('DOW_SET_FOLDER_PERMISSIONS');
+$headline = $gL10n->get('SYS_SET_FOLDER_PERMISSIONS');
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('enable_download_module'))
@@ -131,10 +131,10 @@ $page = new HtmlPage($headline);
 $folderConfigMenu = $page->getMenu();
 $folderConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
-$page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))).'</p>');
+$page->addHtml('<p class="lead">'.$gL10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))).'</p>');
 
 // show form
-$form = new HtmlForm('folder_rights_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php', array('mode' => '7', 'folder_id' => $getFolderId)), $page);
+$form = new HtmlForm('folder_rights_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '7', 'folder_id' => $getFolderId)), $page);
 $form->addSelectBoxFromSql(
     'adm_roles_view_right', $gL10n->get('SYS_VISIBLE_FOR'), $gDb, $sqlDataView,
     array(
@@ -145,17 +145,17 @@ $form->addSelectBoxFromSql(
     )
 );
 $form->addSelectBoxFromSql(
-    'adm_roles_upload_right', $gL10n->get('DOW_UPLOAD_FILES'), $gDb, $sqlDataView,
+    'adm_roles_upload_right', $gL10n->get('SYS_UPLOAD_FILES'), $gDb, $sqlDataView,
     array(
         'property'     => HtmlForm::FIELD_REQUIRED,
         'defaultValue' => $roleUploadSet,
         'multiselect'  => true,
-        'placeholder'  => $gL10n->get('DOW_NO_ADDITIONAL_PERMISSIONS_SET')
+        'placeholder'  => $gL10n->get('SYS_NO_ADDITIONAL_PERMISSIONS_SET')
     )
 );
 $form->addStaticControl(
     'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
-    array('helpTextIdLabel' => $gL10n->get('DOW_ADMINISTRATORS_DESC', array($gL10n->get('ROL_RIGHT_DOWNLOAD'))))
+    array('helpTextIdLabel' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('ROL_RIGHT_DOWNLOAD'))))
 );
 $form->addSubmitButton(
     'btn_save', $gL10n->get('SYS_SAVE'),

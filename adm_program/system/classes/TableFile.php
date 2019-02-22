@@ -82,7 +82,7 @@ class TableFile extends TableAccess
      * Reads the file recordset from database table **adm_folders** and throws an AdmException
      * if the user has no right to see the corresponding folder or the file id doesn't exists.
      * @param int $fileId The id of the file.
-     * @throws AdmException DOW_FOLDER_NO_RIGHTS
+     * @throws AdmException SYS_FOLDER_NO_RIGHTS
      *                      SYS_INVALID_PAGE_VIEW
      * @return true Returns **true** if everything is ok otherwise an AdmException is thrown.
      */
@@ -108,7 +108,7 @@ class TableFile extends TableAccess
         if ($this->getValue('fil_locked'))
         {
             $this->clear();
-            throw new AdmException('DOW_FOLDER_NO_RIGHTS');
+            throw new AdmException('SYS_FOLDER_NO_RIGHTS');
         }
 
         // If folder is public (and file is not locked) => allow
@@ -126,7 +126,7 @@ class TableFile extends TableAccess
         }
 
         $this->clear();
-        throw new AdmException('DOW_FOLDER_NO_RIGHTS');
+        throw new AdmException('SYS_FOLDER_NO_RIGHTS');
     }
 
     /**

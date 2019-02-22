@@ -477,7 +477,7 @@ class TableFolder extends TableAccess
         // Check if a dataset is found
         if ((int) $this->getValue('fol_id') === 0)
         {
-            throw new AdmException('DOW_FOLDER_NOT_FOUND', $folderId);
+            throw new AdmException('SYS_FOLDER_NOT_FOUND', $folderId);
         }
 
         // If current user has download-admin-rights => allow
@@ -490,7 +490,7 @@ class TableFolder extends TableAccess
         if ($this->getValue('fol_locked'))
         {
             $this->clear();
-            throw new AdmException('DOW_FOLDER_NO_RIGHTS');
+            throw new AdmException('SYS_FOLDER_NO_RIGHTS');
         }
 
         // If folder is public (and file is not locked) => allow
@@ -506,7 +506,7 @@ class TableFolder extends TableAccess
         }
 
         $this->clear();
-        throw new AdmException('DOW_FOLDER_NO_RIGHTS');
+        throw new AdmException('SYS_FOLDER_NO_RIGHTS');
     }
 
     /**
@@ -544,7 +544,7 @@ class TableFolder extends TableAccess
 
             if ($currentFolderRow['fol_fol_id_parent'])
             {
-                $currentNavigation = '<li><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php', array('folder_id' => $currentFolderRow['fol_id'])).
+                $currentNavigation = '<li><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_id' => $currentFolderRow['fol_id'])).
                     '">'.$currentFolderRow['fol_name'].'</a></li>'.$currentNavigation;
 
                 // Next call with parent folder
@@ -577,8 +577,8 @@ class TableFolder extends TableAccess
             <ol class="breadcrumb">
                 <li>
                     <i class="fas fa-folder-open"></i>
-                    <a class="btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php', array('folder_id' => $rootFolderId)).'">
-                        '.$gL10n->get('DOW_DOWNLOADS').'</a>
+                    <a class="btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_id' => $rootFolderId)).'">
+                        '.$gL10n->get('SYS_DOCUMENTS_FILES').'</a>
                 </li>'.
                 $currentNavigation.
                 '<li>'.$this->getValue('fol_name').'</li>

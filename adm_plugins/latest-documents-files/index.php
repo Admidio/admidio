@@ -1,11 +1,11 @@
 <?php
 /**
  ***********************************************************************************************
- * sidebar_downloads
+ * Latest documents & files
  *
- * Plugin das die aktuellsten X Downloads auflistet
+ * This plugin lists the latest documents and files uploaded by users
  *
- * Compatible with Admidio version 3.3
+ * Compatible with Admidio version 4.0
  *
  * @copyright 2004-2019 The Admidio Team
  * @see https://www.admidio.org/
@@ -26,23 +26,14 @@ if (is_file(__DIR__ . '/config.php'))
 }
 
 // set default values if there no value has been stored in the config.php
-if(!isset($plg_downloads_count) || !is_numeric($plg_downloads_count))
+if(!isset($plgCountFiles) || !is_numeric($plgCountFiles))
 {
-    $plg_downloads_count = 10;
+    $plgCountFiles = 10;
 }
 
 if(!isset($plgMaxCharsFilename) || !is_numeric($plgMaxCharsFilename))
 {
     $plgMaxCharsFilename = 0;
-}
-
-if(isset($plg_link_class_downl))
-{
-    $plg_link_class_downl = strip_tags($plg_link_class_downl);
-}
-else
-{
-    $plg_link_class_downl = '';
 }
 
 if(!isset($plg_show_upload_timestamp))
@@ -59,7 +50,7 @@ if ($gSettingsManager->getBool('enable_download_module'))
     echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
     if($plg_show_headline)
     {
-        echo '<h3>'.$gL10n->get('PLG_DOWNLOADS_HEADLINE').'</h3>';
+        echo '<h3>'.$gL10n->get('PLG_LATEST_FILES_HEADLINE').'</h3>';
     }
 
     if(!$gValidLogin)
@@ -96,7 +87,7 @@ if ($gSettingsManager->getBool('enable_download_module'))
             {
                 $errorCode = $e->getMessage();
 
-                if($errorCode !== 'DOW_FOLDER_NO_RIGHTS')
+                if($errorCode !== 'SYS_FOLDER_NO_RIGHTS')
                 {
                     $e->showText();
                     // => EXIT
@@ -104,7 +95,7 @@ if ($gSettingsManager->getBool('enable_download_module'))
             }
 
             // only show download if user has rights to view folder
-            if($errorCode !== 'DOW_FOLDER_NO_RIGHTS')
+            if($errorCode !== 'SYS_FOLDER_NO_RIGHTS')
             {
                 // get filename without extension and extension separatly
                 $fileName      = pathinfo($rowFile['fil_name'], PATHINFO_FILENAME);
@@ -132,14 +123,14 @@ if ($gSettingsManager->getBool('enable_download_module'))
                     // Vorname und Nachname abfragen (Upload der Datei)
                     $user = new User($gDb, $gProfileFields, $rowFile['fil_usr_id']);
 
-                    $tooltip .= '<br />'. $gL10n->get('PLG_DOWNLOADS_UPLOAD_FROM_AT', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $rowFile['fil_timestamp']));
+                    $tooltip .= '<br />'. $gL10n->get('PLG_LATEST_FILES_UPLOAD_FROM_AT', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $rowFile['fil_timestamp']));
                 }
 
                 echo '
-                <a class="btn admidio-icon-link '.$plg_link_class_downl.'" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/downloads/get_file.php', array('file_id' => $rowFile['fil_id'])). '">'.
+                <a class="btn admidio-icon-link" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/documents-files/get_file.php', array('file_id' => $rowFile['fil_id'])). '">'.
                     '<i class="fas ' . $iconFile . '"></i>'.$fileName.'.'.$fileExtension. '</a>';
 
-                if($countVisibleDownloads === $plg_downloads_count)
+                if($countVisibleDownloads === $plgCountFiles)
                 {
                     break;
                 }
@@ -151,11 +142,11 @@ if ($gSettingsManager->getBool('enable_download_module'))
 
     if($countVisibleDownloads === 0)
     {
-        echo $gL10n->get('PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE');
+        echo $gL10n->get('PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE');
     }
     else
     {
-        echo '<a class="btn '.$plg_link_class_downl.'" href="'.ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php">'.$gL10n->get('PLG_DOWNLOADS_MORE_DOWNLOADS').'</a>';
+        echo '<a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php">'.$gL10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS').'</a>';
     }
     echo '</div>';
 }

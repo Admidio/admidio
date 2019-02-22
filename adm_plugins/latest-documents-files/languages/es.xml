@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_FILES_HEADLINE">Descargas</string>
+  <string name="PLG_LATEST_FILES_MORE_DOWNLOADS">Más descargas</string>
+  <string name="PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE">No hay archivos disponibles para descargar.</string>
+  <string name="PLG_LATEST_FILES_UPLOAD_FROM_AT">Subido de #VAR1# el #VAR2#</string>
+</resources>

@@ -56,7 +56,7 @@
                               , ('MODULE', 'PRO_PROFILE', 'PROFILE', '3.0.0', 0)
                               , ('MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.0.0', 0)
                               , ('MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.0.0', 0)
-                              , ('MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.0.0', 0)</step>
+                              , ('MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '3.0.0', 0)</step>
     <step id="170" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_name varchar(100) NOT NULL</step>
     <step id="180" database="pgsql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_name TYPE varchar(100)</step>
     <step id="190" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_location varchar(100)</step>

@@ -251,7 +251,7 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
                 'property'     => HtmlForm::FIELD_REQUIRED,
                 'defaultValue' => $roleEditSet,
                 'multiselect'  => true,
-                'placeholder'  => $gL10n->get('DOW_NO_ADDITIONAL_PERMISSIONS_SET')
+                'placeholder'  => $gL10n->get('SYS_NO_ADDITIONAL_PERMISSIONS_SET')
             )
         );
     }
