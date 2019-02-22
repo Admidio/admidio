@@ -32,5 +32,6 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="290">UPDATE %PREFIX%_menu SET men_name_intern = 'documents-files', men_name = 'SYS_DOCUMENTS_FILES', men_description = 'SYS_DOCUMENTS_FILES_DESC', men_url = '/adm_program/modules/documents-files/documents_files.php', men_icon = 'fa-file-download' WHERE men_name_intern = 'download'</step>
     <step id="300">UPDATE %PREFIX%_components SET com_name_intern = 'DOCUMENTS-FILES', com_name = 'SYS_DOCUMENTS_FILES' WHERE com_name_intern = 'DOWNLOADS'</step>
     <step id="310">UPDATE %PREFIX%_components SET com_name = 'SYS_ROOM_MANAGEMENT' WHERE com_name_intern = 'ROOMS'</step>
+    <step id="320">UPDATE %PREFIX%_preferences SET prf_value = '200' WHERE prf_name = 'photo_thumbs_scale'</step>
     <step>stop</step>
 </update>
