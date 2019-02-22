@@ -210,8 +210,8 @@ while ($phoParentId > 0)
     $photoAlbumParent->readDataById($phoParentId);
 
     // Link zusammensetzen
-    $navilink = '<li><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $photoAlbumParent->getValue('pho_id'))).'">'.
-        $photoAlbumParent->getValue('pho_name').'</a></li>'.$navilink;
+    $navilink = '<li class="breadcrumb-item"><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $photoAlbumParent->getValue('pho_id'))).'">'.
+        $photoAlbumParent->getValue('pho_name') . '</a></li>' . $navilink;
 
     // Elternveranst
     $phoParentId = (int) $photoAlbumParent->getValue('pho_pho_id_parent');
@@ -221,13 +221,16 @@ if ($getPhotoId > 0)
 {
     // Ausgabe des Linkpfads
     $page->addHtml('
+    <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li>
+            <li class="breadcrumb-item">
                 <i class="fas fa-image"></i>
                 <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php">'.$gL10n->get('PHO_PHOTO_ALBUMS').'</a>
             </li>'.
-            $navilink.'&nbsp;&gt;&nbsp;'.$photoAlbum->getValue('pho_name').'
+            $navilink.'
+            <li class="breadcrumb-item active" aria-current="page">'.$photoAlbum->getValue('pho_name').'</li>
         </ol>
+    </nav>
     ');
 }
 
@@ -395,9 +398,9 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
     ));
 
 }
-/************************Albumliste*************************************/
+/************************ Album list *************************************/
 
-// erfassen der Alben die in der Albentabelle ausgegeben werden sollen
+// show all albums of the current level
 $sql = 'SELECT *
           FROM '.TBL_PHOTOS.'
          WHERE pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
@@ -441,24 +444,25 @@ $page->addHtml('<div class="row">');
 
 for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_per_page') - 1 && $x < $albumsCount; ++$x)
 {
+    $htmlLock = '';
     // Daten in ein Photo-Objekt uebertragen
     $childPhotoAlbum->clear();
     $childPhotoAlbum->setArray($albumList[$x]);
 
     // folder of the album
-    $ordner = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $childPhotoAlbum->getValue('pho_id');
+    $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $childPhotoAlbum->getValue('pho_id');
 
     // show album if album is not locked or it has child albums or the user has the photo module edit right
-    if ((is_dir($ordner) && $childPhotoAlbum->getValue('pho_locked') == 0)
+    if ((is_dir($albumFolder) && $childPhotoAlbum->getValue('pho_locked') == 0)
     || $childPhotoAlbum->hasChildAlbums() || $gCurrentUser->editPhotoRight())
     {
         // Zufallsbild fuer die Vorschau ermitteln
         $shuffleImage = $childPhotoAlbum->shuffleImage();
 
         // Album angaben
-        if (is_dir($ordner) || $childPhotoAlbum->hasChildAlbums())
+        if (is_dir($albumFolder) || $childPhotoAlbum->hasChildAlbums())
         {
-            $albumTitle = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">'.$childPhotoAlbum->getValue('pho_name').'</a><br />';
+            $albumTitle = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">'.$childPhotoAlbum->getValue('pho_name').'</a>';
         }
         else
         {
@@ -474,97 +478,65 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
         $page->addHtml('
             <div class="col-sm-6 admidio-album-card" id="panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id').'">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="float-left"><i class="fas fa-image"></i>'.$albumTitle.'</div>
-                        <div class="float-right text-right">
-        ');
+                    <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'"><img
+                        class="card-img-top" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $shuffleImage['shuffle_pho_id'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)).'" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
+                    <div class="card-body">
+                        <h5 class="card-title">'.$albumTitle);
 
-        // check if download option is enabled
-        if ($gSettingsManager->getBool('photo_download_enabled') && $childPhotoAlbum->getValue('pho_quantity') > 0)
-        {
-            $page->addHtml('
-                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">
-                    <i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('SYS_DOWNLOAD_ALBUM').'"></i></a>
-            ');
-        }
+                            // if user has admin rights for photo module then show some functions
+                            if ($gCurrentUser->editPhotoRight())
+                            {
+                                if ($childPhotoAlbum->getValue('pho_locked') != 1)
+                                {
+                                    $htmlLock = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'lock')).'">
+                                        <i class="fas fa-lock" data-toggle="tooltip" title="'.$gL10n->get('PHO_ALBUM_LOCK').'"></i></a>';
+                                }
+                    
+                                $page->addHtml('<div class="float-right">
+                                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'change')).'">
+                                        <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
+                                    ' . $htmlLock . '
+                                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id'),
+                                        'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">
+                                        <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>
+                                    </div>
+                                ');
+                            }
 
-        // if user has admin rights for photo module then show some functions
-        if ($gCurrentUser->editPhotoRight())
-        {
-            $page->addHtml('
-                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'change')).'">
-                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
-                <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                    href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id'),
-                    'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">
-                    <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>
-            ');
-        }
 
-        $page->addHtml('
+                        $page->addHtml('</h5>
+
+                        <p class="card-text">' . $albumDate . '</p>
+                        <p class="card-text">' . $childPhotoAlbum->countImages() . ' ' . $gL10n->get('SYS_PHOTOS') . '</p>');
+                        if (strlen($childPhotoAlbum->getValue('pho_photographers')) > 0)
+                        {
+                            $page->addHtml('<p class="card-text">' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $childPhotoAlbum->getValue('pho_photographers') . '</p>');
+                        }
+                        
+                        // Notice for users with foto edit rights that the folder of the album doesn't exists
+                        if (!is_dir($albumFolder) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight())
+                        {
+                            $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('PHO_FOLDER_NOT_FOUND').'</div></p>');
+                        }
+                
+                        // Notice for users with foto edit right that this album is locked
+                        if ($childPhotoAlbum->getValue('pho_locked') == 1)
+                        {
+                            $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div></p>');
+                        }
+                        
+                        if ($gCurrentUser->editPhotoRight() && $childPhotoAlbum->getValue('pho_locked') == 1)
+                        {
+                            $page->addHtml('<button class="btn btn-primary" style="width: 50%;" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'unlock')).'\'">
+                                '.$gL10n->get('PHO_ALBUM_UNLOCK').'
+                            </button>');
+                        }
+        
+                        $page->addHtml('</div>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-6 admidio-album-card-preview">
-                        <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'"><img
-                            class="thumbnail" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $shuffleImage['shuffle_pho_id'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)).'" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-6 admidio-album-card-description">
         ');
-
-        $form = new HtmlForm('form_album_'.(int) $childPhotoAlbum->getValue('pho_id'), null, $page, array('type' => 'vertical'));
-        $form->addStaticControl('pho_date', $gL10n->get('SYS_DATE'), $albumDate);
-        $form->addStaticControl('pho_count', $gL10n->get('SYS_PHOTOS'), $childPhotoAlbum->countImages());
-        if (strlen($childPhotoAlbum->getValue('pho_photographers')) > 0)
-        {
-            $form->addStaticControl('pho_photographer', $gL10n->get('PHO_PHOTOGRAPHER'), $childPhotoAlbum->getValue('pho_photographers'));
-        }
-        $page->addHtml($form->show());
-        $page->addHtml('</div></div>');
-
-        // Notice for users with foto edit rights that the folder of the album doesn't exists
-        if (!is_dir($ordner) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight())
-        {
-            $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('PHO_FOLDER_NOT_FOUND').'</div>');
-        }
-
-        // Notice for users with foto edit right that this album is locked
-        if ($childPhotoAlbum->getValue('pho_locked') == 1 && is_dir($ordner))
-        {
-            $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div>');
-        }
-
-        // if user has admin rights for photo module then show some functions
-        if ($gCurrentUser->editPhotoRight())
-        {
-            if ($childPhotoAlbum->getValue('pho_locked') == 1)
-            {
-                $lockBtnName = $gL10n->get('PHO_ALBUM_UNLOCK');
-                $lockIcon    = 'fa-unlock';
-                $lockMode    = 'unlock';
-            }
-            else
-            {
-                $lockBtnName = $gL10n->get('PHO_ALBUM_LOCK');
-                $lockIcon    = 'fa-lock';
-                $lockMode    = 'lock';
-            }
-
-            $page->addHtml('
-                <div class="btn-group" role="group" style="width: 100%;">
-                    <button class="btn btn-secondary admidio-btn-album-upload" style="width: 50%;"
-                        data-pho-id="'.(int) $childPhotoAlbum->getValue('pho_id').'" data-toggle="modal" data-target="#admidio_modal">
-                        <i class="fas fa-upload"></i>'.$gL10n->get('PHO_UPLOAD_PHOTOS').'
-                    </button>
-                    <button class="btn btn-secondary" style="width: 50%;" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => $lockMode)).'\'">
-                        <i class="fas ' . $lockIcon . '"></i>'.$lockBtnName.'
-                    </button>
-                </div>
-            ');
-        }
-
-        $page->addHtml('</div></div></div>');
     }//Ende wenn Ordner existiert
 }//for
 

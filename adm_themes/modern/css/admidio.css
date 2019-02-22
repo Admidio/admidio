@@ -352,7 +352,8 @@ a {
 
 .admidio-list-roles-assign .fas,
 .table th .fas,
-.table td .fas {
+.table td .fas,
+h5 .fas {
     margin-left: 6px;
 }
 
