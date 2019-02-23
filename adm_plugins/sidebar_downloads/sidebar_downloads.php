@@ -50,6 +50,11 @@ if(!isset($plg_show_upload_timestamp))
     $plg_show_upload_timestamp = true;
 }
 
+if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
+{
+    $plg_show_headline = 1;
+}
+
 // check if the module is enabled
 if ($gSettingsManager->getBool('enable_download_module'))
 {

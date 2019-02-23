@@ -68,6 +68,11 @@ else
     $plg_link_target = '_self';
 }
 
+if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
+{
+    $plg_show_headline = 1;
+}
+
 // Referenzzeit setzen
 $now = new \DateTime();
 $minutesOffset = new \DateInterval('PT' . $plg_time_online . 'M');

@@ -71,6 +71,11 @@ if(!isset($plg_photos_show_link))
     $plg_photos_show_link = true;
 }
 
+if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
+{
+    $plg_show_headline = 1;
+}
+
 echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
 if($plg_show_headline)
 {
