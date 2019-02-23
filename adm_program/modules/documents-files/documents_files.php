@@ -13,7 +13,6 @@
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/../../system/file_extension_icons.php');
 
 unset($_SESSION['download_request']);
 
@@ -191,63 +190,73 @@ if (isset($folderContent['folders']))
 // Get contained files
 if (isset($folderContent['files']))
 {
+    $file = new TableFile($gDb);
+
     foreach ($folderContent['files'] as $nextFile)
     {
-        // Check filetyp
-        $fileExtension = strtolower(pathinfo($nextFile['fil_name'], PATHINFO_EXTENSION));
+        $file->clear();
+        $file->setArray($nextFile);
 
-        // Choose icon for the file
-        $iconFile = 'fa-file';
-        if(array_key_exists($fileExtension, $iconFileExtension))
+        $fileId   = $file->getValue('fil_id');
+        $fileLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_id' => $fileId, 'view' => 1));
+        $target   = '';
+
+        if($file->isViewableInBrowser())
         {
-            $iconFile = $iconFileExtension[$fileExtension];
+            $target = ' target="_blank"';
         }
 
         // Format timestamp
         $timestamp = \DateTime::createFromFormat('Y-m-d H:i:s', $nextFile['fil_timestamp']);
 
         $fileDescription = '';
-        if($nextFile['fil_description'] !== null)
+        if($file->getValue('fil_description') !== '')
         {
             $fileDescription = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-trigger="hover"
-                data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFile['fil_description'].'"></i>';
+                data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$file->getValue('fil_description').'"></i>';
         }
 
         // create array with all column values
         $columnValues = array(
             2, // Type file
-            '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_id' => $nextFile['fil_id'])). '">
-                <i class="fas fa-fw ' . $iconFile . '" data-toggle="tooltip" title="'.$gL10n->get('SYS_FILE').'"></i></a>',
-            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_id' => $nextFile['fil_id'])). '">'. $nextFile['fil_name']. '</a>'.$fileDescription,
+            '<a class="admidio-icon-link" href="' . $fileLink . '"' . $target . '>
+                <i class="fas fa-fw ' . $file->getFontAwesomeIcon() . '" data-toggle="tooltip" title="'.$gL10n->get('SYS_FILE').'"></i></a>',
+            '<a href="' . $fileLink . '"' . $target . '>'. $file->getValue('fil_name'). '</a>'.$fileDescription,
             $timestamp->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
-            round($nextFile['fil_size'] / 1024). ' kB&nbsp;',
-            ($nextFile['fil_counter'] !== '') ? $nextFile['fil_counter'] : 0
+            round($file->getValue('fil_size') / 1024). ' kB&nbsp;',
+            ($file->getValue('fil_counter') !== '') ? $file->getValue('fil_counter') : 0
         );
+
+        $additionalFileFunctions = '';
+
+        // add download link
+        $additionalFileFunctions .= '
+        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_id' => $fileId)). '">
+            <i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('SYS_DOWNLOAD_FILE').'"></i></a>';
 
         if ($currentFolder->hasUploadRight())
         {
             // Links for change and delete
-            $additionalFileFunctions = '';
-
-            if($nextFile['fil_exists'] === true)
+            if($file->getValue('fil_exists') === true)
             {
-                $additionalFileFunctions = '
-                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_id' => $getFolderId, 'file_id' => $nextFile['fil_id'])). '">
+                $additionalFileFunctions .= '
+                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_id' => $getFolderId, 'file_id' => $fileId)). '">
                     <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
             }
             elseif($gCurrentUser->editDownloadRight())
             {
-                $additionalFileFunctions = '
+                $additionalFileFunctions .= '
                 <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover" data-placement="left"
                     title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('SYS_FILE_NOT_EXIST_DELETE_FROM_DB').'"></i>';
             }
-            $columnValues[] = $additionalFileFunctions.'
+            $additionalFileFunctions .= '
             <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fil', 'element_id' => 'row_file_'.$nextFile['fil_id'],
-                'name' => $nextFile['fil_name'], 'database_id' => $nextFile['fil_id'], 'database_id_2' => $getFolderId)).'">
+                href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fil', 'element_id' => 'row_file_'.$fileId,
+                'name' => $file->getValue('fil_name'), 'database_id' => $fileId, 'database_id_2' => $getFolderId)).'">
                 <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
-        $downloadOverview->addRowByArray($columnValues, 'row_file_'.$nextFile['fil_id']);
+        $columnValues[] = $additionalFileFunctions;
+        $downloadOverview->addRowByArray($columnValues, 'row_file_'.$fileId);
     }
 }
 
@@ -301,23 +310,18 @@ if ($gCurrentUser->editDownloadRight())
         // Get files
         if (isset($folderContent['additionalFiles']))
         {
+            $file = new TableFile($gDb);
+            
             foreach ($folderContent['additionalFiles'] as $nextFile)
             {
-                // Get filetyp
-                $fileExtension = strtolower(pathinfo($nextFile['fil_name'], PATHINFO_EXTENSION));
-
-                // Choose icon for the file
-                $iconFile = 'fa-file';
-                if(array_key_exists($fileExtension, $iconFileExtension))
-                {
-                    $iconFile = $iconFileExtension[$fileExtension];
-                }
+                $file->clear();
+                $file->setArray($nextFile);
 
                 $columnValues = array(
-                    '<i class="fas fa-fw ' . $iconFile . '" data-toggle="tooltip" title="'.$gL10n->get('SYS_FILE').'"></i>',
-                    $nextFile['fil_name'],
-                    round($nextFile['fil_size'] / 1024). ' kB&nbsp;',
-                    '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '6', 'folder_id' => $getFolderId, 'name' => $nextFile['fil_name'])). '">
+                    '<i class="fas fa-fw ' . $file->getFontAwesomeIcon() . '" data-toggle="tooltip" title="'.$gL10n->get('SYS_FILE').'"></i>',
+                    $file->getValue('fil_name'),
+                    round($file->getValue('fil_size') / 1024). ' kB&nbsp;',
+                    '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '6', 'folder_id' => $getFolderId, 'name' => $file->getValue('fil_name'))). '">
                         <i class="fas fa-plus-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_ADD_TO_DATABASE').'"></i>
                     </a>'
                 );

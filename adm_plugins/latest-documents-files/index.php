@@ -17,7 +17,6 @@ $rootPath = dirname(dirname(__DIR__));
 $pluginFolder = basename(__DIR__);
 
 require_once($rootPath . '/adm_program/system/common.php');
-require_once($rootPath . '/adm_program/system/file_extension_icons.php');
 
 // only include config file if it exists
 if (is_file(__DIR__ . '/config.php'))
@@ -39,6 +38,11 @@ if(!isset($plgMaxCharsFilename) || !is_numeric($plgMaxCharsFilename))
 if(!isset($plg_show_upload_timestamp))
 {
     $plg_show_upload_timestamp = true;
+}
+
+if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
+{
+    $plg_show_headline = 1;
 }
 
 // check if the module is enabled
@@ -99,7 +103,6 @@ if ($gSettingsManager->getBool('enable_download_module'))
             {
                 // get filename without extension and extension separatly
                 $fileName      = pathinfo($rowFile['fil_name'], PATHINFO_FILENAME);
-                $fileExtension = strtolower(pathinfo($rowFile['fil_name'], PATHINFO_EXTENSION));
                 $fullFolderFileName = $rowFile['fol_path']. '/'. $rowFile['fol_name']. '/'.$rowFile['fil_name'];
                 $tooltip            = $fullFolderFileName;
                 ++$countVisibleDownloads;
@@ -108,13 +111,6 @@ if ($gSettingsManager->getBool('enable_download_module'))
                 if($plgMaxCharsFilename > 0 && strlen($fileName) > $plgMaxCharsFilename)
                 {
                     $fileName = substr($fileName, 0, $plgMaxCharsFilename). '...';
-                }
-
-                // get icon of file extension
-                $iconFile = 'fa-file';
-                if(array_key_exists($fileExtension, $iconFileExtension))
-                {
-                    $iconFile = $iconFileExtension[$fileExtension];
                 }
 
                 // if set in config file then show timestamp of file upload
@@ -128,7 +124,7 @@ if ($gSettingsManager->getBool('enable_download_module'))
 
                 echo '
                 <a class="btn admidio-icon-link" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/documents-files/get_file.php', array('file_id' => $rowFile['fil_id'])). '">'.
-                    '<i class="fas ' . $iconFile . '"></i>'.$fileName.'.'.$fileExtension. '</a>';
+                    '<i class="fas ' . $file->getFontAwesomeIcon() . '"></i>' . $fileName . '.' . $file->getFileExtension() . '</a>';
 
                 if($countVisibleDownloads === $plgCountFiles)
                 {

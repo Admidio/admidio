@@ -390,6 +390,7 @@ class TableFolder extends TableAccess
         // Get all files of the current folder
         $sqlFiles = 'SELECT *
                        FROM '.TBL_FILES.'
+                      INNER JOIN '.TBL_FOLDERS.' ON fol_id = fil_fol_id
                       WHERE fil_fol_id = ? -- $this->getValue(\'fol_id\')
                    ORDER BY fil_name';
         $filesStatement = $this->db->queryPrepared($sqlFiles, array((int) $this->getValue('fol_id')));
@@ -424,7 +425,10 @@ class TableFolder extends TableAccess
                     'fil_locked'      => $rowFiles['fil_locked'],
                     'fil_exists'      => $fileExists,
                     'fil_size'        => $fileSize,
-                    'fil_counter'     => $rowFiles['fil_counter']
+                    'fil_counter'     => $rowFiles['fil_counter'],
+                    'fol_id'          => $rowFiles['fol_id'],
+                    'fol_name'        => $rowFiles['fol_name'],
+                    'fol_path'        => $rowFiles['fol_path']
                 );
             }
         }
