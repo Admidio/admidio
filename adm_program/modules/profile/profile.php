@@ -466,7 +466,7 @@ $page->addHtml('
             // Profile photo
             // *******************************************************************************
 
-            $page->addHtml('<img id="profile_photo" class="thumbnail" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $userId)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
+            $page->addHtml('<img id="profile_photo" class="img-thumbnail" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $userId)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
 
             // Nur berechtigte User duerfen das Profilfoto editieren
             if($gCurrentUser->hasRightEditProfile($user))

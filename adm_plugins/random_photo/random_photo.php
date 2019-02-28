@@ -154,7 +154,7 @@ else
 // Ausgabe
 $phoId = (int) $album->getValue('pho_id');
 echo '<a class="'.$plg_link_class.'" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId, 'photo_nr' => $picNr)).'" target="'. $plg_link_target. '"><img
-    class="thumbnail" alt="'.$linkText.'" title="'.$linkText.'"
+    class="img-thumbnail d-block" alt="'.$linkText.'" title="'.$linkText.'"
     src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $phoId, 'photo_nr' => $picNr, 'pho_begin' => $album->getValue('pho_begin', 'Y-m-d'), 'max_width' => $plg_photos_max_width, 'max_height' => $plg_photos_max_height)).'" /></a>';
 
 // Link zum Album
