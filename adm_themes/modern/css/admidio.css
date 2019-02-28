@@ -848,11 +848,11 @@ body > .admidio-content {
     }
 }
 
-.thumbnail:hover {
+.img-thumbnail:hover {
     border: 1px solid #ff9c00;
 }
 
-.thumbnail {
+.img-thumbnail {
     margin-bottom: 5px;
 }
 

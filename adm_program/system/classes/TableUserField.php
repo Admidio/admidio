@@ -371,51 +371,55 @@ class TableUserField extends TableAccess
     {
         global $gL10n;
 
-        if($checkValue)
+        if($newValue !== parent::getValue($columnName))
         {
-            if ($columnName === 'usf_description')
+            if($checkValue)
             {
-                return parent::setValue($columnName, $newValue, false);
-            }
-            elseif ($columnName === 'usf_cat_id')
-            {
-                $category = new TableCategory($this->db, $newValue);
-
-                if (!$category->isVisible() || $category->getValue('cat_type') !== 'USF')
+                if ($columnName === 'usf_description')
                 {
-                    throw new AdmException('Category of the user field '. $this->getValue('dat_name'). ' could not be set
-                        because the category is not visible to the current user and current organization.');
+                    return parent::setValue($columnName, $newValue, false);
+                }
+                elseif ($columnName === 'usf_cat_id')
+                {
+                    $category = new TableCategory($this->db, $newValue);
+
+                    if (!$category->isVisible() || $category->getValue('cat_type') !== 'USF')
+                    {
+                        throw new AdmException('Category of the user field '. $this->getValue('dat_name'). ' could not be set
+                            because the category is not visible to the current user and current organization.');
+                    }
+                }
+                elseif ($columnName === 'usf_url' && $newValue !== '')
+                {
+                    $newValue = admFuncCheckUrl($newValue);
+
+                    if ($newValue === false)
+                    {
+                        throw new AdmException('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL'));
+                    }
+                }
+
+                // name, category and type couldn't be edited if it's a system field
+                if (in_array($columnName, array('usf_cat_id', 'usf_type', 'usf_name'), true) && (int) $this->getValue('usf_system') === 1)
+                {
+                    throw new AdmException('The user field ' . $this->getValue('usf_name_intern') . ' as a system field. You could
+                        not change the category, type or name.');
                 }
             }
-            elseif ($columnName === 'usf_url' && $newValue !== '')
-            {
-                $newValue = admFuncCheckUrl($newValue);
 
-                if ($newValue === false)
-                {
-                    throw new AdmException('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL'));
-                }
+            if ($columnName === 'usf_cat_id' && (int) $this->getValue($columnName) !== (int) $newValue)
+            {
+                // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
+                $sql = 'SELECT COUNT(*) AS count
+                          FROM '.TBL_USER_FIELDS.'
+                         WHERE usf_cat_id = ? -- $newValue';
+                $pdoStatement = $this->db->queryPrepared($sql, array($newValue));
+
+                $this->setValue('usf_sequence', $pdoStatement->fetchColumn() + 1);
             }
 
-            // name, category and type couldn't be edited if it's a system field
-            if (in_array($columnName, array('usf_cat_id', 'usf_type', 'usf_name'), true) && (int) $this->getValue('usf_system') === 1)
-            {
-                throw new AdmException('The user field ' . $this->getValue('usf_name_intern') . ' as a system field. You could
-                    not change the category, type or name.');
-            }
+            return parent::setValue($columnName, $newValue, $checkValue);
         }
-
-        if ($columnName === 'usf_cat_id' && (int) $this->getValue($columnName) !== (int) $newValue)
-        {
-            // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
-            $sql = 'SELECT COUNT(*) AS count
-                      FROM '.TBL_USER_FIELDS.'
-                     WHERE usf_cat_id = ? -- $newValue';
-            $pdoStatement = $this->db->queryPrepared($sql, array($newValue));
-
-            $this->setValue('usf_sequence', $pdoStatement->fetchColumn() + 1);
-        }
-
-        return parent::setValue($columnName, $newValue, $checkValue);
+        return false;
     }
 }

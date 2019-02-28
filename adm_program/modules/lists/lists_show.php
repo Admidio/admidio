@@ -276,13 +276,6 @@ $numMembers = $listStatement->rowCount();
 // get all members and their data of this list in an array
 $membersList = $listStatement->fetchAll(\PDO::FETCH_BOTH);
 
-if ($numMembers === 0)
-{
-    // Es sind keine Daten vorhanden !
-    $gMessage->show($gL10n->get('LST_NO_USER_FOUND'));
-    // => EXIT
-}
-
 $userIdList = array();
 foreach ($membersList as $member)
 {
@@ -537,6 +530,15 @@ else
 {
     $columnAlign  = array('left');
     $columnValues = array($gL10n->get('SYS_ABR_NO'));
+}
+
+
+if ($numMembers === 0)
+{
+    // Es sind keine Daten vorhanden !
+    $page->addHtml('<div class="alert alert-warning" role="alert">' . $gL10n->get('LST_NO_USER_FOUND') . '</div>');
+    $page->show();
+    // => EXIT
 }
 
 // headlines for columns
