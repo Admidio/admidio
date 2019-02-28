@@ -125,53 +125,6 @@
   <string name="DAT_VIEW_MODE_DETAIL">Détaillé</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Visibilité</string>
-  <!--Phrases only in Downloadsmodule-->
-  <string name="SYS_ADD_TO_DATABASE">Ajouter à la base de donnée</string>
-  <string name="SYS_ADDITIONAL_FILES">Cette liste vise à fournir un aperçu des fichiers et dossiers qui ne sont pas encore gérés dans la base de données. Celles-ci peuvent maintenant être ajoutées à la base de données. Les permissions du dossier courant sont automatiquement reprises.</string>
-  <string name="SYS_ADMINISTRATORS_DESC">Ces rôles sont des administrateurs du module de téléchargement et ont donc accès à tous les dossiers et fichiers. Tu peux télécharger des documents et attribuer des droits d\'accès. Un rôle peut-être définis comme administrateur en lui assignant le droit #VAR1_BOLD#.</string>
-  <string name="SYS_COUNTER">Compteur</string>
-  <string name="SYS_CREATE_FOLDER">Créer un dossier</string>
-  <string name="SYS_CREATE_FOLDER_DESC">Le nouveau dossier est créé dans le dossier existant #VAR1_BOLD#.</string>
-  <string name="DOW_DOWNLOADS">Téléchargements</string>
-  <string name="DOW_DOWNLOADS_DESC">Différentes données et fichiers peuvent être téléchargés ici. Ceux-ci peuvent être combinés dans des dossiers avec des droits d\'accès individuels.</string>
-  <string name="SYS_EDIT_FILE">Éditer le fichier</string>
-  <string name="SYS_EDIT_FOLDER">Éditer le dossier</string>
-  <string name="SYS_EMAIL_NOTIFICATION_TITLE">Un nouveau fichier a été téléchargé</string>
-  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">Un nouveau fichier a été télécharger vers #VAR1#\n\nFile: #VAR2#\nTéléchargé par: #VAR3#\nTéléchargé à: #VAR4#</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activer le module de téléchargement</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Le module de téléchargement peut être activé ou désactivé. (Par défaut: oui)</string>
-  <string name="SYS_FILE_EXIST">Le fichier #VAR1# existe déjà!\n\nSélectionne un autre nom de fichier.</string>
-  <string name="SYS_FILE_EXTENSION_INVALID">Les fichiers de ce type ne sont pas autorisés sur le serveur.</string>
-  <string name="SYS_FILE_NAME_RULES">Le nom du fichier doit indiquer le contenu du fichier. Le nom du fichier influence l\'ordre de tri. Par exemple, dans un dossier où sont stockés les journaux de session, les noms de fichiers doivent toujours commencer par la date (aaaaa-mm-jjj).</string>
-  <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Le fichier n\'existe plus physiquement sur le serveur. Le fichier doit être supprimé de la base de données.</string>
-  <string name="SYS_FILE_RENAME">Le fichier #VAR1# a été renommé.</string>
-  <string name="SYS_FILE_RENAME_ERROR">Une erreur s\'est produite quand le fichier #VAR1# a été renommé.</string>
-  <string name="SYS_FILE_TO_LARGE">Le fichier téléchargé dépasse la taille de fichier autorisée de #VAR1# MB.</string>
-  <string name="SYS_FILE_TYPE">Type de fichier</string>
-  <string name="SYS_FILE_UPLOADED">Le fichier #VAR1_BOLD# a été téléchargé.</string>
-  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Tous les fichiers ont été téléchargés avec succès.\n\nLe dialogue peut maintenant être férmé.</string>
-  <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Pas tous les fichiers ont été téléchargés avec succès.</string>
-  <string name="SYS_FILES_UPLOAD_DESC">Choisis tous les fichiers que tu veux télécharger dans le dossier #VAR1_BOLD#.</string>
-  <string name="DOW_FILES_UPLOADED">Les fichiers #VAR1# ont été téléchargés avec succès.</string>
-  <string name="SYS_FOLDER_CREATED">Le dossier #VAR1_BOLD# a été créé.</string>
-  <string name="SYS_FOLDER_EXISTS">Le dossier (#VAR1#) existe déjà!\n\nVeuillez sélectionner un nom différent.</string>
-  <string name="SYS_FOLDER_NO_FILES">Le dossier est vide.</string>
-  <string name="SYS_FOLDER_NO_RIGHTS">Vous n\'êtes pas autorisé à afficher le dossier sélectionné.</string>
-  <string name="SYS_FOLDER_NOT_EXISTS">Le dossier n\'existe plus sur le serveur. Il devrait être supprimé de la base de données.</string>
-  <string name="SYS_FOLDER_RENAME">Le dossier #VAR1# a été renommé.</string>
-  <string name="SYS_FOLDER_RENAME_ERROR">Une erreur s\'est produite quand le dossier #VAR1# a été renommé..</string>
-  <string name="SYS_MAXIMUM_FILE_SIZE">Taille maximale du fichiers</string>
-  <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Les utilisateurs ne peuvent télécharger que des fichiers dont la taille est inférieure à la valeur spécifiée ici. Si cette valeur est 0, le téléchargement est désactivé. (Par défaut : 3MB)</string>
-  <string name="DOW_NEW_FILE_NAME">Nouveau nom de fichier</string>
-  <string name="SYS_NEW_NAME">Nouveau nom</string>
-  <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Pas de droits supplémentairs attribués</string>
-  <string name="SYS_PREVIOUS_NAME">Nom précédent</string>
-  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Sur cette page tu peux configurer, qui peut voir le dossier #VAR1_BOLD# ou télécharger des fichiers. Les droits sont hérités à tous les sous-dossiers et les drois existants dans les sous-dossiers sont écrasés. Seuls les rôles qui ont accès au dossier parent sont disponibles. Les administrateurs ont tous les droits pour le dossier.</string>
-  <string name="SYS_SELECT_FILES">Sélectionner les fichiers</string>
-  <string name="SYS_SET_FOLDER_PERMISSIONS">Attribuer des droits aux dossiers</string>
-  <string name="SYS_UNMANAGED_FILES">Fichiers non gérés</string>
-  <string name="DOW_UPLOAD_FILE_TO_FOLDER">Télécharger le fichier vers le dossier #VAR1_BOLD#</string>
-  <string name="SYS_UPLOAD_FILES">Télécharger des fichiers</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Carte de voeux envoyés par</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Activer le module de cartes de vœux</string>
@@ -542,7 +495,6 @@
   <string name="MAI_SMTP_USER">Nom d\'utilisateur SMTP</string>
   <string name="MAI_SMTP_USER_DESC">Le nom d\'utilisateur utilisé pour l\'authentification SMTP.</string>
   <string name="MAI_SUBJECT">Sujet</string>
-  <string name="MAI_SUBJECT_ATTACHMENT">Sujet &amp; Annexe</string>
   <string name="MAI_YOUR_EMAIL">Ton courriel</string>
   <string name="MAI_YOUR_NAME">Ton nom</string>
   <!--Phrases only in Membersadministration-->
@@ -1022,25 +974,24 @@
   <string name="ROL_VALID_TO" description="Date valid to">Valable jusqu\'au</string>
   <string name="ROL_WEEKDAY">Jour de la semaine</string>
   <string name="ROL_WITHOUT_LEADER">Aucun chef</string>
-  <!--Phrases only in Roommodule-->
-  <string name="SYS_CAPACITY">Capacité</string>
-  <string name="SYS_OVERHANG">Surplomb</string>
-  <string name="SYS_ROOM_MANAGEMENT">Administration des salles</string>
-  <string name="SYS_SEATING">Places assises</string>
-  <string name="ROO_STANDING">Places debout</string>
   <!--System-Phrases for use in every module-->
+  <string name="SYS_64BIT">64bit</string>
   <string name="SYS_ABORT">Annuler</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">no.</string>
   <string name="SYS_ACTIVATED">Activé</string>
   <string name="SYS_ADD_RECIPIENTS">Ajouter un destinataire</string>
+  <string name="SYS_ADD_TO_DATABASE">Ajouter à la base de donnée</string>
   <string name="SYS_ADDRESS">Adresse</string>
+  <string name="SYS_ADDITIONAL_FILES">Cette liste vise à fournir un aperçu des fichiers et dossiers qui ne sont pas encore gérés dans la base de données. Celles-ci peuvent maintenant être ajoutées à la base de données. Les permissions du dossier courant sont automatiquement reprises.</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Changer à la page de téléchargement d\'Admidio</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Le système de gestion en ligne pour les associations, les groupes et les organisations</string>
   <string name="SYS_ADMIDIO_TEAM">Équipe Admidio</string>
+  <string name="SYS_ADMIDIO_UPDATE">Mise à jour d\'Admidio</string>
   <string name="SYS_ADMIDIO_VERSION">Version Admidio</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrateur</string>
   <string name="SYS_ADMINISTRATORS">Administrateurs</string>
+  <string name="SYS_ADMINISTRATORS_DESC">Ces rôles sont des administrateurs du module de téléchargement et ont donc accès à tous les dossiers et fichiers. Tu peux télécharger des documents et attribuer des droits d\'accès. Un rôle peut-être définis comme administrateur en lui assignant le droit #VAR1_BOLD#.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Il y avait une erreur dans la requête Ajax. \nDétails de l\'erreur : #VAR1#</string>
   <string name="SYS_ALL">Tous</string>
   <string name="SYS_ALL_ORGANIZATIONS">Toutes les organisations</string>
@@ -1051,6 +1002,7 @@
   <string name="SYS_BACK">Retour</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Retour à l\'aperçu des modules</string>
   <string name="SYS_BIRTHDAY">Anniversaire</string>
+  <string name="SYS_CAPACITY">Capacité</string>
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Résultat du calcul</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Le résultat du calcul a été saisi incorrectement.</string>
@@ -1075,6 +1027,7 @@
   <string name="SYS_COMMENT">Commentaire</string>
   <string name="SYS_COMMON">Général</string>
   <string name="SYS_CONDITION">Condition</string>
+  <string name="SYS_CONFIGURE_RELATIONSHIPS">Configurer les relations</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirmer le mot de passe</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirmation des saisies</string>
   <string name="SYS_CONTACT_DETAILS">Coordonnées</string>
@@ -1087,10 +1040,13 @@
   <string name="SYS_COOKIE_NOT_SET">Tu ne peux pas te connecter parce que ton navigateur n\'autorise pas les cookies !\n\nTu dois configurer ton navigateur pour accepter les cookies de #VAR1_BOLD# pour te connecter avec succès.</string>
   <string name="SYS_COPY">Copier</string>
   <string name="SYS_COPY_VAR">Copier #VAR1#</string>
+  <string name="SYS_COUNTER">Compteur</string>
   <string name="SYS_COUNTRY">Pays</string>
   <string name="SYS_COUNTRY_EG" translation="edited">FRA</string>
   <string name="SYS_CREATE">Création</string>
   <string name="SYS_CREATE_ENTRY">Création d\'une entrée</string>
+  <string name="SYS_CREATE_FOLDER">Créer un dossier</string>
+  <string name="SYS_CREATE_FOLDER_DESC">Le nouveau dossier est créé dans le dossier existant #VAR1_BOLD#.</string>
   <string name="SYS_CREATE_HTACCESS">Créer .htaccess</string>
   <string name="SYS_CREATE_NEW_USER">Créer un nouvel utilisateur</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Si le nouvel utilisateur ne figure pas dans la liste des utilisateurs trouvés, tu peux créer un nouvel utilisateur.</string>
@@ -1117,6 +1073,7 @@
   <string name="SYS_DATE_MODIFIED">Date de modification</string>
   <string name="SYS_DATE_TO">à</string>
   <string name="SYS_DEACTIVATED">Désactivé</string>
+  <string name="SYS_DEBUG_MODE">Mode débogage</string>
   <string name="SYS_DECIMAL_NUMBER">Décimale</string>
   <string name="SYS_DELETE">Supprimer</string>
   <string name="SYS_DELETE_DATA">Les données ont été supprimées.</string>
@@ -1127,8 +1084,11 @@
   <string name="SYS_DESCRIPTION">Description</string>
   <string name="SYS_DESIGNATION">Libellé</string>
   <string name="SYS_DIRECTORY_PROTECTION">Protection des répertoires</string>
+  <string name="SYS_DIRECTORY_SEPARATOR">Séparateur de dossiers</string>
   <string name="SYS_DISK_SPACE">Espace disque</string>
   <string name="SYS_DISK_SPACE_ERROR"> L\'utilisation de l\'espace disque n\'a pas pu être déterminée.\n\nMessage d\'erreur:\n#VAR1#.</string>
+  <string name="SYS_DOCUMENTS_FILES">Documents & amp; Des dossiers</string>
+  <string name="SYS_DOCUMENTS_FILES_DESC">Différents documents et fichiers peuvent être visualisés ou fournis pour téléchargement. Ces fichiers peuvent être classés dans des dossiers avec différents niveaux d\'autorisation d\'accès.</string>
   <string name="SYS_DONATE">Don</string>
   <string name="SYS_DONT_SHOW">Ne pas afficher</string>
   <string name="SYS_DROPDOWN_LISTBOX">Liste déroulante</string>
@@ -1136,6 +1096,8 @@
   <string name="SYS_DOWNLOAD_ALBUM">Télécharger l\'album</string>
   <string name="SYS_EDIT">Editer</string>
   <string name="SYS_EDIT_ENTRY">Editer la saisie</string>
+  <string name="SYS_EDIT_FILE">Éditer le fichier</string>
+  <string name="SYS_EDIT_FOLDER">Éditer le dossier</string>
   <string name="SYS_EDIT_MEMBERS">Editer les membres</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Le profil utilisateur de cette relation peut être modifié.</string>
   <string name="SYS_EDIT_VAR">#VAR1# éditer</string>
@@ -1143,8 +1105,12 @@
   <string name="SYS_EMAIL">Courriel</string>
   <string name="SYS_EMAIL_INVALID">L\'adresse courriel dans le champ #VAR1_BOLD# contient des caractères non valides ou n\'a pas été saisie complètement.</string>
   <string name="SYS_EMAIL_NOT_SEND"> Le courriel n\'a pas pu être envoyé à #VAR1_BOLD#.\n\nL\'erreur suivante s\'est produite:\n#VAR2#.</string>
+  <string name="SYS_EMAIL_NOTIFICATION_TITLE">Un nouveau fichier a été téléchargé</string>
+  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">Un nouveau fichier a été télécharger vers #VAR1#\n\nFile: #VAR2#\nTéléchargé par: #VAR3#\nTéléchargé à: #VAR4#</string>
   <string name="SYS_EMAIL_SEND">Le courriel a été envoyé.</string>
   <string name="SYS_EMPTY">Vide</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activer le module de téléchargement</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Le module de téléchargement peut être activé ou désactivé. (Par défaut: oui)</string>
   <string name="SYS_END" description="End of a date">Fin</string>
   <string name="SYS_ERROR">Erreur</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">L\'erreur suivante s\'est produite lors de l\'accès à la base de données:\n\n#VAR1#</string>
@@ -1161,10 +1127,22 @@
   <string name="SYS_FIELD_INVALID_CHAR">Le champ #VAR1_BOLD# contient des caractères invalides.\n\nPermis ne sont que les lettres a-z et A-Z, les chiffres 0-9 et les caractères spéciaux .-_+@ .</string>
   <string name="SYS_FIELDS_EMPTY">Tous les champs n\'ont pas été remplis.</string>
   <string name="SYS_FILE">Fichier</string>
+  <string name="SYS_FILE_EXIST">Le fichier #VAR1# existe déjà!\n\nSélectionne un autre nom de fichier.</string>
+  <string name="SYS_FILE_EXTENSION_INVALID">Les fichiers de ce type ne sont pas autorisés sur le serveur.</string>
+  <string name="SYS_FILE_NAME_RULES">Le nom du fichier doit indiquer le contenu du fichier. Le nom du fichier influence l\'ordre de tri. Par exemple, dans un dossier où sont stockés les journaux de session, les noms de fichiers doivent toujours commencer par la date (aaaaa-mm-jjj).</string>
   <string name="SYS_FILE_NOT_EXIST">Le fichier sélectionné n\'existe pas sur le serveur.</string>
+  <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Le fichier n\'existe plus physiquement sur le serveur. Le fichier doit être supprimé de la base de données.</string>
+  <string name="SYS_FILE_RENAME">Le fichier #VAR1# a été renommé.</string>
+  <string name="SYS_FILE_RENAME_ERROR">Une erreur s\'est produite quand le fichier #VAR1# a été renommé.</string>
   <string name="SYS_FILE_TO_LARGE_SERVER">Le fichier téléchargé dépasse la taille de fichier autorisée par le serveur de #VAR1# MB.</string>
+  <string name="SYS_FILE_TYPE">Type de fichier</string>
+  <string name="SYS_FILE_UPLOADED">Le fichier #VAR1_BOLD# a été téléchargé.</string>
   <string name="SYS_FILE_UPLOADS">Téléchargements de fichiers</string>
+  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Tous les fichiers ont été téléchargés avec succès.\n\nLe dialogue peut maintenant être férmé.</string>
+  <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Pas tous les fichiers ont été téléchargés avec succès.</string>
+  <string name="SYS_FILES_UPLOAD_DESC">Choisis tous les fichiers que tu veux télécharger dans le dossier #VAR1_BOLD#.</string>
   <string name="SYS_FILENAME_EMPTY">Aucun nom de fichier n\'a été spécifié !</string>
+  <string name="SYS_FILENAME_INVALID">Le nom de fichier sélectionné #VAR1_BOLD# contient des caractères invalides. Prière de vérifier le nom.\n\nLes caractères spéciaux suivants ne sont pas acceptés: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">La version de la base de données #VAR1# est supérieure à la version des scripts Admidio #VAR2#.\n\nActualise tes fichiers Admidio sur le serveur FTP #VAR3#avec une version récente d\'Admidio#VAR4#.</string>
   <string name="SYS_FILTER">Filtre</string>
   <string name="SYS_FIRSTNAME">Prénom</string>
@@ -1172,7 +1150,15 @@
   <string name="SYS_FROM">de #VAR1#</string>
   <string name="SYS_FROM_TO">#VAR1# vers #VAR2#</string>
   <string name="SYS_FOLDER">Dossier</string>
+  <string name="SYS_FOLDER_CREATED">Le dossier #VAR1_BOLD# a été créé.</string>
+  <string name="SYS_FOLDER_EXISTS">Le dossier (#VAR1#) existe déjà!\n\nVeuillez sélectionner un nom différent.</string>
+  <string name="SYS_FOLDER_NO_FILES">Le dossier est vide.</string>
+  <string name="SYS_FOLDER_NO_RIGHTS">Vous n\'êtes pas autorisé à afficher le dossier sélectionné.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Le dossier #VAR1_BOLD# ne peut pas être créé.\n\nContacte l\'administrateur #VAR2#Administrateur#VAR3#, afin qu\'il puisse vérifier les permissions d\'écriture du dossier parent.</string>
+  <string name="SYS_FOLDER_NOT_EXISTS">Le dossier n\'existe plus sur le serveur. Il devrait être supprimé de la base de données.</string>
+  <string name="SYS_FOLDER_NOT_FOUND">Dossier (ID # VAR1 #) non trouvé.</string>
+  <string name="SYS_FOLDER_RENAME">Le dossier #VAR1# a été renommé.</string>
+  <string name="SYS_FOLDER_RENAME_ERROR">Une erreur s\'est produite quand le dossier #VAR1# a été renommé..</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Le dossier #VAR1_BOLD# ne peut pas être créé avec les droits d\'écriture.\n\nContacte l\'administrateur #VAR2#Administrateur#VAR3#, afin qu\'il puisse vérifier les droits d\'écriture (définis les attributs du fichier à 0777 ou drwxrwxrwx via FTP).</string>
   <string name="SYS_FONT_AWESOME_DESC">Tu peux créer une icône de différentes manières:\n1. une icône de la police web \"Font Awesome\". Va à #VAR1##http://fontawesome.com#VAR2# et sélectionne une icône gratuite dans la collection Solid ou Brands. En tant que préfixe, tu dois mettre fa- devant l\'icône. Donc si tuvsélectionne l\'icône \"user\", tu dois saisir \"fa-user\" ici.\n2. Une icône JPEG ou PNG. Saisis l\'URL complète ainsi que le nom de fichier de l\'icône. Alternativement, tu peux placer l\'icône dans le thème dans le dossier \"icônes\", alors tu as qu\'à saisir le nom du fichier.</string>
   <string name="SYS_FORMER">Ancien</string>
@@ -1195,6 +1181,7 @@
   <string name="SYS_ICAL_DISABLED">La fonction iCal a été désactivée par l\'administrateur.</string>
   <string name="SYS_ICON">Icone</string>
   <string name="SYS_IMPORTANT">Important</string>
+  <string name="SYS_IMPORT_MODE">Mode importation</string>
   <string name="SYS_IMPRINT">Impressum</string>
   <string name="SYS_IMPRINT_DESC">Ici, tu peux entrer l\'URL de l\'impressum de ta page. Si le thème sélectionné le supporte, un lien sera affiché sur les pages Admidio. (Exemple : https://www.example.com/imprint.html)</string>
   <string name="SYS_INFORMATIONS">Informations</string>
@@ -1240,7 +1227,12 @@
   <string name="SYS_MAP_LINK_ROUTE_DESC"> Affiche un itinéraire depuis le propre domicile jusqu\'au domicile de cet utilisateur sur Google Maps. La rue, le code postal, la ville et le pays sont transférés à Google.</string>
   <string name="SYS_MASTER_DATA">Données de base</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. participants</string>
+  <string name="SYS_MAX_PATH_LENGTH">Longueur maximale de chemin</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Taille maximale de l\'image éditable</string>
+  <string name="SYS_MAXIMUM_FILE_SIZE">Taille maximale du fichiers</string>
+  <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Les utilisateurs ne peuvent télécharger que des fichiers dont la taille est inférieure à la valeur spécifiée ici. Si cette valeur est 0, le téléchargement est désactivé. (Par défaut : 3MB)</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Participer avec réservation</string>
+  <string name="SYS_MAYBE_PARTICIPATE_DESC">Si cette option est activée, il y aura une troisième option #VAR3_BOLD# à côté des options #VAR1_BOLD# et #VAR2_BOLD#. (désactivé par défaut)</string>
   <string name="SYS_MEGAPIXEL">Mégapixel</string>
   <string name="SYS_MEMBER">Membre</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Membres de l\'organisation #VAR1#</string>
@@ -1260,9 +1252,11 @@
   <string name="SYS_MYLIST_DESC">De nouvelles configurations de listes peuvent être créées et sauvegardées ici. Tu peux également afficher des listes pour plusieurs rôles.</string>
   <string name="SYS_NAME">Nom</string>
   <string name="SYS_NAME_ABBREVIATION">Nom (abréviation)</string>
+  <string name="SYS_NEW_NAME">Nouveau nom</string>
   <string name="SYS_NEW_VALUE">Nouvelle valeur</string>
   <string name="SYS_NEXT">Suivant</string>
   <string name="SYS_NO">Non</string>
+  <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Pas de droits supplémentairs attribués</string>
   <string name="SYS_NO_ENTRY">L\'entrée demandée n\'existe pas dans la base de données.</string>
   <string name="SYS_NO_ENTRIES">Il n\'y a pas d\'entrées.</string>
   <string name="SYS_NO_ENTRIES_FOUND">Aucune entrée n\'a été trouvée.</string>
@@ -1281,9 +1275,12 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">Désactivé</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Administration de membres en ligne</string>
+  <string name="SYS_OPERATING_SYSTEM">Système d\'opération</string>
+  <string name="SYS_OPPOSITE_RELATIONSHIP">Relation opposée</string>
   <string name="SYS_OPTIONAL">Facultatif</string>
   <string name="SYS_ORDER">Chronologie</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
+  <string name="SYS_OVERHANG">Surplomb</string>
   <string name="SYS_OVERVIEW">Aperçu</string>
   <string name="SYS_PAGE">Page</string>
   <string name="SYS_PAGE_PREVIOUS">Précédent</string>
@@ -1293,6 +1290,7 @@
   <string name="SYS_PASSWORD_FORGOTTEN">Mot de passe oublié</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Si tu as oublié ton mot de passe, le système peut créer un nouveau mot de passe et l\'envoyer à ton adresse de courriel. Entre ton nom d\'utilisateur ou l\'adresse courriel que tu as utilisée pour t\'inscrire à ce système. Le nouveau mot de passe sera envoyé immédiatement à cette adresse courriel.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Tu as saisi un mot de passe incorrect et n\'as pas pu être connecté. \n\nVérifie ton mot de passe et saisis le à nouveau.</string>
+  <string name="SYS_PATH_SEPARATOR">Séparateur de chemin</string>
   <string name="SYS_PERIOD">Période</string>
   <string name="SYS_PERMISSIONS">Droits</string>
   <string name="SYS_PDF">PDF</string>
@@ -1300,6 +1298,7 @@
   <string name="SYS_PHONE_INVALID_CHAR">Le numéro de téléphone dans le champ #VAR1_BOLD# contient des caractères non valides.\n\nSeuls les chiffres 0-9 et les caractères spéciaux +-/ () sont autorisés.</string>
   <string name="SYS_PHOTO">Photo</string>
   <string name="SYS_PHOTOS">Photos</string>
+  <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">Tous les paramètres PHP</string>
   <string name="SYS_PHP_VERSION">Version PHP</string>
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio nécessite #VAR1# ou supérieur</string>
@@ -1314,6 +1313,7 @@
   <string name="SYS_PRESENTATION">Affichage</string>
   <string name="SYS_PREVIEW">Aperçu</string>
   <string name="SYS_PREVIOUS">Précédent</string>
+  <string name="SYS_PREVIOUS_NAME">Nom précédent</string>
   <string name="SYS_PREVIOUS_VALUE">Valeur précédente</string>
   <string name="SYS_PRNG">Générateur de nombres pseudo-aléatoires</string>
   <string name="SYS_PRNG_INSECURE">Admidio/PHP ne peut pas générer des nombres pseudo-aléatoires sécurisés ! Contacte l\'équipe Admidio avec les informations suivantes :</string>
@@ -1329,6 +1329,8 @@
   <string name="SYS_REGISTERED_AS">Connecté en tant que</string>
   <string name="SYS_REGISTRATION">Inscription</string>
   <string name="SYS_REGISTRATION_SAVED">Tes données ont été enregistrées.\n\nUne connexion n\'est pas encore possible. Ton inscription doit d\'abord être activée. Après l\'activation, tu seras averti par e-mail.</string>
+  <string name="SYS_RELATIONSHIP_CONFIGURATION">Configuration des relations</string>
+  <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Configurations des relations</string>
   <string name="SYS_RELOAD">Rechargement</string>
   <string name="SYS_REMEMBER_ME">Rester connecté</string>
   <string name="SYS_REMOVE">Supprimer</string>
@@ -1336,10 +1338,12 @@
   <string name="SYS_REQUIRED_FIELDS">PfliChamps obligatoires</string>
   <string name="SYS_RESTRICTIONS">Resctrictions</string>
   <string name="SYS_ROLE">Rôle</string>
+  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Sur cette page tu peux configurer, qui peut voir le dossier #VAR1_BOLD# ou télécharger des fichiers. Les droits sont hérités à tous les sous-dossiers et les drois existants dans les sous-dossiers sont écrasés. Seuls les rôles qui ont accès au dossier parent sont disponibles. Les administrateurs ont tous les droits pour le dossier.</string>
   <string name="SYS_ROLE_MAX_MEMBERS">L\'enregistrement n\'est pas possible, au rôle #VAR1_BOLD# le nombre maximum de membres serait dépassé.</string>
   <string name="SYS_ROLE_MEMBERS">Membres de rôle</string>
   <string name="SYS_ROLES">Rôles</string>
   <string name="SYS_ROOM">Chambre</string>
+  <string name="SYS_ROOM_MANAGEMENT">Administration des salles</string>
   <string name="SYS_RSS_DISABLED">Le flux Web a été désactivé par l\'administrateur.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">flux Web pour #VAR1#</string>
   <string name="SYS_SAFE_MODE">Mode sans échec</string>
@@ -1347,20 +1351,23 @@
   <string name="SYS_SATURDAY">Samedi</string>
   <string name="SYS_SAVE">Enregistrer</string>
   <string name="SYS_SAVE_DATA">Les données ont été enregistrées.</string>
+  <string name="SYS_SEARCH">Recherche</string>
+  <string name="SYS_SEATING">Places assises</string>
   <string name="SYS_SECONDS">Secondes</string>
   <string name="SYS_SECURE">Sécurisé</string>
   <string name="SYS_SECURITY">Sécurité</string>
   <string name="SYS_SECURITY_ERROR">Erreur de sécurité</string>
+  <string name="SYS_SELECT_FILES">Sélectionner les fichiers</string>
   <string name="SYS_SELECT_FROM_LIST">Sélectionner dans la liste</string>
   <string name="SYS_SEND">Envoyer</string>
   <string name="SYS_SEND_EMAIL_TO">Envoyer un courriel à #VAR1#</string>
-  <string name="SYS_SEARCH">Recherche</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Envoyer des courriels à toutes les adresses de courriel de l\'utilisateur</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Si ce paramètre est activé, des courriels sont envoyés à toutes les adresses de courriels de l\'utilisateur stockées dans le profil. Si ce paramètre est désactivé, les courriels ne sont envoyés à l\'adresse de courriel qu\'à partir du champ de profil avec le nom interne EMAIL. (Par défaut : Activé)</string>
   <string name="SYS_SEND_NEW_PW">Envoyer le nouveau mot de passe</string>
   <string name="SYS_SENDER">Expéditeur</string>
   <string name="SYS_SERVER">Serveur</string>
   <string name="SYS_SERVER_NO_UPLOAD">Les paramètres du serveur n\'autorisent pas les téléchargements de fichiers.</string>
+  <string name="SYS_SET_FOLDER_PERMISSIONS">Attribuer des droits aux dossiers</string>
   <string name="SYS_SETTINGS">Paramétrages</string>
   <string name="SYS_SHOW_CALENDAR">Affichage du calendrier</string>
   <string name="SYS_SHOW_PROFILE">Afficher le profil</string>
@@ -1394,10 +1401,13 @@
   <string name="SYS_TO" description="E-Mail">À</string>
   <string name="SYS_TUESDAY">Mardi</string>
   <string name="SYS_TYPE">Type</string>
+  <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Inconnu</string>
   <string name="SYS_UNLIMITED">Illimité</string>
   <string name="SYS_UNLOCK">Déverrouiller</string>
+  <string name="SYS_UNMANAGED_FILES">Fichiers non gérés</string>
   <string name="SYS_UPDATE">Actualiser</string>
+  <string name="SYS_UPLOAD_FILES">Télécharger des fichiers</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Taille max. du fichier à télécharger</string>
   <string name="SYS_UPLOAD_NAME_ERROR">Le nom du fichier ne doit pas être \"submit\".</string>
   <string name="SYS_URL_INVALID_CHAR">L\'URL dans le champ #VAR1_BOLD# contient des caractères invalides.\n\nPermis ne sont que des lettres et des trémas, des chiffres de 0 à 9 et les caractères spéciaux .-+_:/#?= .</string>

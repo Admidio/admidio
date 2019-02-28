@@ -125,54 +125,6 @@
   <string name="DAT_VIEW_MODE_DETAIL">Gedetailleerd</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Zichtbaarheid</string>
-  <!--Phrases only in Downloadsmodule-->
-  <string name="SYS_ADD_TO_DATABASE">Voeg toe in database</string>
-  <string name="SYS_ADDITIONAL_FILES">Deze lijst geeft u een overzicht van alle bestanden en mappen die nog niet in de database zijn geimporteerd. Voeg ze hier toe. Toegangsrechten zullen van geselecteerde map gekopieerd worden.</string>
-  <string name="SYS_ADMINISTRATORS_DESC">Leden van deze rol zijn beheerders van de download module en hebben toegang tot alle mappen en bestanden. U kunt bestanden uploaden, downloaden en toegangsrechten instellen. Een rol kan een beheerder worden als deze het recht #VAR1_BOLD# toegewezen wordt.</string>
-  <string name="SYS_COUNTER">Teller</string>
-  <string name="SYS_CREATE_FOLDER">Maak map</string>
-  <string name="SYS_CREATE_FOLDER_DESC">De nieuwe map wordt in de bestaande map #VAR1_BOLD# aangemaakt.</string>
-  <string name="DOW_DOWNLOADS">Downloads</string>
-  <string name="DOW_DOWNLOADS_DESC">U kunt hier verschillende soorten bestanden als download aanbieden. Downloads kunnen in mappen verdeeld worden en hieraan kunnen toegangsrechten gekoppeld worden.</string>
-  <string name="SYS_EDIT_FILE">Bewerk bestand</string>
-  <string name="SYS_EDIT_FOLDER">Edit map</string>
-  <string name="SYS_EMAIL_NOTIFICATION_TITLE">Nieuw bestand geupload</string>
-  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">Nieuw bestand geupload op #VAR1#\n\nBestand: #VAR2#\nGeupload door: #VAR3#\nGeupload op: #VAR4#</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activeer download module</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">De downloadmodule kan met deze instelling worden in- of uitgeschakeld. (Standaard: ja)</string>
-  <string name="SYS_FILE_EXIST">Bestand #VAR1# bestaat al!\n\nKies svp andere bestandsnaam.</string>
-  <string name="SYS_FILE_EXTENSION_INVALID">Type bestand is niet toegestaan op deze server.</string>
-  <string name="SYS_FILE_NAME_RULES">Bestandsnaam moet indicatie van inhoud geven. Bestandsnaam is van invloed op volgorde in overzicht. Bestanden in b.v. mappen met procedures moeten beginnen met datum (jjjj-mm-dd).</string>
-  <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Bestand is niet meer beschikbaar op de server. Het moet uit de database verwijderd worden.</string>
-  <string name="SYS_FILE_RENAME">Bestand #VAR1# is hernoemd.</string>
-  <string name="SYS_FILE_RENAME_ERROR">Foutmelding tijdens hernoemen van bestand #VAR1#.</string>
-  <string name="SYS_FILE_TO_LARGE">De grootte van bestanden die geupload moeten worden is groter dan toegestaan (maximale grootte: #VAR1# MB).</string>
-  <string name="SYS_FILE_TYPE">Type bestand</string>
-  <string name="SYS_FILE_UPLOADED">Bestand #VAR1_BOLD# is geupload.</string>
-  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle bestanden werden succesvol geüpload.\n\nDit venster kan nu gesloten worden.</string>
-  <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Niet alle bestanden werden succesvol geüpload.</string>
-  <string name="SYS_FILES_UPLOAD_DESC">Kies alle bestanden, die je naar de map #VAR1_BOLD# wilt uploaden.</string>
-  <string name="DOW_FILES_UPLOADED">#VAR1# bestanden zijn succesvol geüpload.</string>
-  <string name="SYS_FOLDER_CREATED">Map #VAR1_BOLD# aangemaakt.</string>
-  <string name="SYS_FOLDER_EXISTS">Map #VAR1# bestaat al!\n\nKies svp andere naam.</string>
-  <string name="SYS_FOLDER_NO_FILES">Niets gevonden.</string>
-  <string name="SYS_FOLDER_NO_RIGHTS">U heeft geen toegang tot de geselecteerde map.</string>
-  <string name="SYS_FOLDER_NOT_EXISTS">De map is niet meer beschikbaar op de server. Het moet uit de database verwijderd worden.</string>
-  <string name="SYS_FOLDER_NOT_FOUND">Map (ID #VAR1#) is niet gevonden.</string>
-  <string name="SYS_FOLDER_RENAME">Map #VAR1# is hernoemd.</string>
-  <string name="SYS_FOLDER_RENAME_ERROR">Foutmelding tijdens hernoemen van map #VAR1#.</string>
-  <string name="SYS_MAXIMUM_FILE_SIZE">Maximale grootte van bestand</string>
-  <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Gebruikers mogen alleen bestanden uploaden die kleiner zijn dan hier staat. Als hier 0 staat, is uploaden gedeactiveerd. (Standaard: 3MB)</string>
-  <string name="DOW_NEW_FILE_NAME">Naam nieuw bestand</string>
-  <string name="SYS_NEW_NAME">Nieuwe naam</string>
-  <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Geen bijkomstige rechten ingesteld</string>
-  <string name="SYS_PREVIOUS_NAME">Vorige naam</string>
-  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Op deze pagina kun je instellen wie de map #VAR1_BOLD# kan zien, bestanden kan downloaden of bestanden kan uploaden. De ingestelde machtigingen worden overgenomen door alle submappen en bestaande machtigingen in submappen worden overschreven. Alleen rollen die toegang hebben tot de bovenliggende map zijn voor u beschikbaar. Beheerders hebben alle machtigingen voor de map.</string>
-  <string name="SYS_SELECT_FILES">Bestanden kiezen</string>
-  <string name="SYS_SET_FOLDER_PERMISSIONS">Instellingen toegangsrechten map</string>
-  <string name="SYS_UNMANAGED_FILES">Onbeheerde bestanden</string>
-  <string name="DOW_UPLOAD_FILE_TO_FOLDER">Upload naar map #VAR1_BOLD#</string>
-  <string name="SYS_UPLOAD_FILES">Bestanden uploaden</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Ecard gestuurd door</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Ecard module activeren</string>
@@ -543,7 +495,6 @@
   <string name="MAI_SMTP_USER">SMTP Gebruikersnaam</string>
   <string name="MAI_SMTP_USER_DESC">De gebruikersnaam gebruikt voor de SMTP authenticatie.</string>
   <string name="MAI_SUBJECT">Onderwerp</string>
-  <string name="MAI_SUBJECT_ATTACHMENT">Onderwerp &amp; Bijlage</string>
   <string name="MAI_YOUR_EMAIL">Uw e-mail</string>
   <string name="MAI_YOUR_NAME">Uw naam</string>
   <!--Phrases only in Membersadministration-->
@@ -1023,19 +974,15 @@
   <string name="ROL_VALID_TO" description="Date valid to">Geldig tot</string>
   <string name="ROL_WEEKDAY">Doordeweeks</string>
   <string name="ROL_WITHOUT_LEADER">Geen leider</string>
-  <!--Phrases only in Roommodule-->
-  <string name="SYS_CAPACITY">Capaciteit</string>
-  <string name="SYS_OVERHANG">Maximaal aantal</string>
-  <string name="SYS_ROOM_MANAGEMENT">Zaalbeheer</string>
-  <string name="SYS_SEATING">Zitplaatsen</string>
-  <string name="ROO_STANDING">Staanplaatsen</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64bit</string>
   <string name="SYS_ABORT">Annuleer</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
   <string name="SYS_ACTIVATED">Geactiveerd</string>
   <string name="SYS_ADD_RECIPIENTS">Ontvanger toevoegen</string>
+  <string name="SYS_ADD_TO_DATABASE">Voeg toe in database</string>
   <string name="SYS_ADDRESS">Adres</string>
+  <string name="SYS_ADDITIONAL_FILES">Deze lijst geeft u een overzicht van alle bestanden en mappen die nog niet in de database zijn geimporteerd. Voeg ze hier toe. Toegangsrechten zullen van geselecteerde map gekopieerd worden.</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Ga naar de downloadpagina van Admidio</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Het online management systeem voor Verenigingen, Groepen en Organisaties</string>
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
@@ -1044,6 +991,7 @@
   <string name="SYS_ADMINISTRATION">Administratie</string>
   <string name="SYS_ADMINISTRATOR">Beheerder</string>
   <string name="SYS_ADMINISTRATORS">Beheerders</string>
+  <string name="SYS_ADMINISTRATORS_DESC">Leden van deze rol zijn beheerders van de download module en hebben toegang tot alle mappen en bestanden. U kunt bestanden uploaden, downloaden en toegangsrechten instellen. Een rol kan een beheerder worden als deze het recht #VAR1_BOLD# toegewezen wordt.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax foutmelding.\nDetails foutmelding: #VAR1#</string>
   <string name="SYS_ALL">Iedereen</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle organisaties</string>
@@ -1054,6 +1002,7 @@
   <string name="SYS_BACK">Terug</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Terug naar beginpagina</string>
   <string name="SYS_BIRTHDAY">Geboortedatum</string>
+  <string name="SYS_CAPACITY">Capaciteit</string>
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Resultaat van berekening</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Het resultaat van de berekening is onjuist</string>
@@ -1091,10 +1040,13 @@
   <string name="SYS_COOKIE_NOT_SET">U kunt niet inloggen omdat uw browser geen cookies accepteert!\n\nOm in te kunnen loggen moet u uw browser Cookies laten accepteren van #VAR1_BOLD#.</string>
   <string name="SYS_COPY">Kopieer</string>
   <string name="SYS_COPY_VAR">#VAR1# kopiëren</string>
+  <string name="SYS_COUNTER">Teller</string>
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">DUI</string>
   <string name="SYS_CREATE">Maak</string>
   <string name="SYS_CREATE_ENTRY">Item invoeren</string>
+  <string name="SYS_CREATE_FOLDER">Maak map</string>
+  <string name="SYS_CREATE_FOLDER_DESC">De nieuwe map wordt in de bestaande map #VAR1_BOLD# aangemaakt.</string>
   <string name="SYS_CREATE_HTACCESS">.htaccess maken</string>
   <string name="SYS_CREATE_NEW_USER">Voeg nieuwe gebruiker toe</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">U kunt nieuwe gebruiker aanmaken, als deze gebruiker niet voorkomt in de lijst met gevonden gebruikers.</string>
@@ -1135,6 +1087,8 @@
   <string name="SYS_DIRECTORY_SEPARATOR">Map scheidingsteken</string>
   <string name="SYS_DISK_SPACE">Geheugen</string>
   <string name="SYS_DISK_SPACE_ERROR">Het gebruik van het geheugen kon niet worden bepaald.\n\nFoutmelding:\n#VAR1#</string>
+  <string name="SYS_DOCUMENTS_FILES">Documenten &amp; Bestanden</string>
+  <string name="SYS_DOCUMENTS_FILES_DESC">U kunt hier verschillende soorten bestanden als download aanbieden. Deze bestanden kunnen in mappen verdeeld worden met verschillende toegangsrechten.</string>
   <string name="SYS_DONATE">Doneer</string>
   <string name="SYS_DONT_SHOW">Niet weergeven</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down box</string>
@@ -1142,6 +1096,8 @@
   <string name="SYS_DOWNLOAD_ALBUM">Album downloaden</string>
   <string name="SYS_EDIT">Bewerk</string>
   <string name="SYS_EDIT_ENTRY">Bericht bewerken</string>
+  <string name="SYS_EDIT_FILE">Bewerk bestand</string>
+  <string name="SYS_EDIT_FOLDER">Edit map</string>
   <string name="SYS_EDIT_MEMBERS">Gebruikers aanpassen</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Gebruikersprofiel van deze relatie kan bewerkt worden</string>
   <string name="SYS_EDIT_VAR">Bewerk #VAR1#</string>
@@ -1149,8 +1105,12 @@
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_INVALID">Het e-mailadres in veld #VAR1_BOLD# bevat onjuiste karakters of is niet compleet.</string>
   <string name="SYS_EMAIL_NOT_SEND">De e-mail kon niet worden verzonden naar #VAR1_BOLD#.\n\nDe volgende fout heeft plaatsgevonden:\n#VAR2#</string>
+  <string name="SYS_EMAIL_NOTIFICATION_TITLE">Nieuw bestand geupload</string>
+  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">Nieuw bestand geupload op #VAR1#\n\nBestand: #VAR2#\nGeupload door: #VAR3#\nGeupload op: #VAR4#</string>
   <string name="SYS_EMAIL_SEND">De e-mail is verstuurd.</string>
   <string name="SYS_EMPTY">Leeg</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activeer download module</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">De downloadmodule kan met deze instelling worden in- of uitgeschakeld. (Standaard: ja)</string>
   <string name="SYS_END" description="End of a date">Tot</string>
   <string name="SYS_ERROR">Foutmelding</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Foutmelding tijdens toegang krijgen tot database:\n\n#VAR1#</string>
@@ -1167,9 +1127,20 @@
   <string name="SYS_FIELD_INVALID_CHAR">In veld #VAR1_BOLD# staan onjuiste karakters.\n\nToegestaan zijn letters a-z en A-Z, cijfers 0-9 en speciale karakters zoals .-_+@ .</string>
   <string name="SYS_FIELDS_EMPTY">Niet alle velden zijn ingevuld.</string>
   <string name="SYS_FILE">Bestand</string>
+  <string name="SYS_FILE_EXIST">Bestand #VAR1# bestaat al!\n\nKies svp andere bestandsnaam.</string>
+  <string name="SYS_FILE_EXTENSION_INVALID">Type bestand is niet toegestaan op deze server.</string>
+  <string name="SYS_FILE_NAME_RULES">Bestandsnaam moet indicatie van inhoud geven. Bestandsnaam is van invloed op volgorde in overzicht. Bestanden in b.v. mappen met procedures moeten beginnen met datum (jjjj-mm-dd).</string>
   <string name="SYS_FILE_NOT_EXIST">Geselecteerde bestand bestaat niet op de server.</string>
+  <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Bestand is niet meer beschikbaar op de server. Het moet uit de database verwijderd worden.</string>
+  <string name="SYS_FILE_RENAME">Bestand #VAR1# is hernoemd.</string>
+  <string name="SYS_FILE_RENAME_ERROR">Foutmelding tijdens hernoemen van bestand #VAR1#.</string>
   <string name="SYS_FILE_TO_LARGE_SERVER">Grootte van geuploade bestand is groter dan door server gedefinieerde maximale grootte #VAR1# MB.</string>
+  <string name="SYS_FILE_TYPE">Type bestand</string>
+  <string name="SYS_FILE_UPLOADED">Bestand #VAR1_BOLD# is geupload.</string>
   <string name="SYS_FILE_UPLOADS">Bestand uploads</string>
+  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle bestanden werden succesvol geüpload.\n\nDit venster kan nu gesloten worden.</string>
+  <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Niet alle bestanden werden succesvol geüpload.</string>
+  <string name="SYS_FILES_UPLOAD_DESC">Kies alle bestanden, die je naar de map #VAR1_BOLD# wilt uploaden.</string>
   <string name="SYS_FILENAME_EMPTY">Er is geen bestandsnaam opgegeven!</string>
   <string name="SYS_FILENAME_INVALID">De geselecteerde bestandsnaam #VAR1_BOLD# bevat ongeldige tekens. Controleer svp de bestandsnaam.\n\n De volgende tekens zijn niet toegestaan: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">De database versie #VAR1# is lager dan de versie van Admidio scripts #VAR2#.\n\nUpdate uw Admidio-bestanden op de FTP-server #VAR3# met de meer recente Admidio-versie #VAR4#.</string>
@@ -1179,7 +1150,15 @@
   <string name="SYS_FROM">van #VAR1#</string>
   <string name="SYS_FROM_TO">van #VAR1# tot #VAR2#</string>
   <string name="SYS_FOLDER">Map</string>
+  <string name="SYS_FOLDER_CREATED">Map #VAR1_BOLD# aangemaakt.</string>
+  <string name="SYS_FOLDER_EXISTS">Map #VAR1# bestaat al!\n\nKies svp andere naam.</string>
+  <string name="SYS_FOLDER_NO_FILES">Niets gevonden.</string>
+  <string name="SYS_FOLDER_NO_RIGHTS">U heeft geen toegang tot de geselecteerde map.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden.\n\nVraag svp hulp bij een  #VAR2#beheerder#VAR3# om de schrijfrechten van de bovenliggende map na te kijken.</string>
+  <string name="SYS_FOLDER_NOT_EXISTS">De map is niet meer beschikbaar op de server. Het moet uit de database verwijderd worden.</string>
+  <string name="SYS_FOLDER_NOT_FOUND">Map (ID #VAR1#) is niet gevonden.</string>
+  <string name="SYS_FOLDER_RENAME">Map #VAR1# is hernoemd.</string>
+  <string name="SYS_FOLDER_RENAME_ERROR">Foutmelding tijdens hernoemen van map #VAR1#.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden.\n\nVraag svp hulp bij een #VAR2#beheerder#VAR3# om de schrijfrechten na te kijken (via FTP rechten veranderen naar 0777 of drwxrwxrwx).</string>
   <string name="SYS_FONT_AWESOME_DESC">U kunt een pictogram op verschillende manieren deponeren:\n1. Een pictogram van het weblettertype \"Font Awesome\". Ga hiervoor naar #VAR1#http://fontawesome.com#VAR2# en selecteer een gratis pictogram uit de collectie \"Solid\" of \"Brands\". Als voorvoegsel moet u \"fa-\" daarvoor plaatsen. Als u ook het pictogram \"gebruiker\" kiest, moet u hier \"fa-user\" invoeren.\n2. Een JPEG- of PNG-pictogram. Hiertoe voert u de volledige URL in samen met de bestandsnaam van het pictogram. Als alternatief kunt u het pictogram in de thema-map \"pictogrammen\" plaatsen, waarna u alleen de bestandsnaam hoeft op te geven.</string>
   <string name="SYS_FORMER">Voormalig</string>
@@ -1250,6 +1229,8 @@
   <string name="SYS_MAX_PARTICIPANTS">Max. deelnemers</string>
   <string name="SYS_MAX_PATH_LENGTH">Max padlengte</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Max. grootte van afbeelding</string>
+  <string name="SYS_MAXIMUM_FILE_SIZE">Maximale grootte van bestand</string>
+  <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Gebruikers mogen alleen bestanden uploaden die kleiner zijn dan hier staat. Als hier 0 staat, is uploaden gedeactiveerd. (Standaard: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Onder voorbehoud deelnemen</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Als deze optie is geactiveerd, staat voor de aanmelding van het evenement naast de opties #VAR1_BOLD# en #VAR2_BOLD# nog een derde optie #VAR3_BOLD# ter beschikking. (Standaard: gedeactiveerd)</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
@@ -1271,9 +1252,11 @@
   <string name="SYS_MYLIST_DESC">Nieuwe lijstconfiguraties kunnen hier worden aangemaakt en opgeslagen. Bovendien kunnen lijsten voor verschillende rollen worden weergegeven.</string>
   <string name="SYS_NAME">Naam</string>
   <string name="SYS_NAME_ABBREVIATION">Naam (afkorting)</string>
+  <string name="SYS_NEW_NAME">Nieuwe naam</string>
   <string name="SYS_NEW_VALUE">Nieuwe waarde</string>
   <string name="SYS_NEXT">Volgende</string>
   <string name="SYS_NO">Nee</string>
+  <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Geen bijkomstige rechten ingesteld</string>
   <string name="SYS_NO_ENTRY">Gevraagde item bestaat niet in database.</string>
   <string name="SYS_NO_ENTRIES">Er zijn geen berichten beschikbaar.</string>
   <string name="SYS_NO_ENTRIES_FOUND">Er zijn geen berichten gevonden.</string>
@@ -1297,6 +1280,7 @@
   <string name="SYS_OPTIONAL">Optioneel</string>
   <string name="SYS_ORDER">Volgorde</string>
   <string name="SYS_ORGANIZATION">Organisatie</string>
+  <string name="SYS_OVERHANG">Maximaal aantal</string>
   <string name="SYS_OVERVIEW">Overzicht</string>
   <string name="SYS_PAGE">Pagina</string>
   <string name="SYS_PAGE_PREVIOUS">Vorige</string>
@@ -1329,6 +1313,7 @@
   <string name="SYS_PRESENTATION">Toon</string>
   <string name="SYS_PREVIEW">Preview</string>
   <string name="SYS_PREVIOUS">Vorige</string>
+  <string name="SYS_PREVIOUS_NAME">Vorige naam</string>
   <string name="SYS_PREVIOUS_VALUE">Vorige waarde</string>
   <string name="SYS_PRNG">Pseudo-willekeurige nummergenerator</string>
   <string name="SYS_PRNG_INSECURE">Admidio / PHP kan geen veilige pseudo-willekeurige nummers genereren! Neem contact op met het Admidio-team met de volgende informatie:</string>
@@ -1353,10 +1338,12 @@
   <string name="SYS_REQUIRED_FIELDS">Verplichte velden</string>
   <string name="SYS_RESTRICTIONS">Voorwaarden</string>
   <string name="SYS_ROLE">Rol</string>
+  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Op deze pagina kun je instellen wie de map #VAR1_BOLD# kan zien, bestanden kan downloaden of bestanden kan uploaden. De ingestelde machtigingen worden overgenomen door alle submappen en bestaande machtigingen in submappen worden overschreven. Alleen rollen die toegang hebben tot de bovenliggende map zijn voor u beschikbaar. Beheerders hebben alle machtigingen voor de map.</string>
   <string name="SYS_ROLE_MAX_MEMBERS">Opslaan is niet mogelijk. Voor rol #VAR1_BOLD# wordt het maximale aantal leden overschreden.</string>
   <string name="SYS_ROLE_MEMBERS">Rolleden</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROOM">Zaal</string>
+  <string name="SYS_ROOM_MANAGEMENT">Zaalbeheer</string>
   <string name="SYS_RSS_DISABLED">De webfeed is uitgeschakeld door de beheerder.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Webfeed voor #VAR1#</string>
   <string name="SYS_SAFE_MODE">Veilige modus</string>
@@ -1364,20 +1351,23 @@
   <string name="SYS_SATURDAY">Zaterdag</string>
   <string name="SYS_SAVE">Opslaan</string>
   <string name="SYS_SAVE_DATA">Gegevens opgeslagen.</string>
+  <string name="SYS_SEARCH">Zoek</string>
+  <string name="SYS_SEATING">Zitplaatsen</string>
   <string name="SYS_SECONDS">Seconden</string>
   <string name="SYS_SECURE">Veilig</string>
   <string name="SYS_SECURITY">Veiligheid</string>
   <string name="SYS_SECURITY_ERROR">Veiligheidsfout</string>
+  <string name="SYS_SELECT_FILES">Bestanden kiezen</string>
   <string name="SYS_SELECT_FROM_LIST">Uit lijst kiezen</string>
   <string name="SYS_SEND">Verstuur</string>
   <string name="SYS_SEND_EMAIL_TO">Stuur e-mail naar #VAR1#</string>
-  <string name="SYS_SEARCH">Zoek</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Stuur e-mails naar alle e-mailadressen van de gebruiker</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Als deze instelling is ingeschakeld, worden e-mails naar alle e-mailadressen gestuurd die in het profiel staan. Als deze instelling is uitgeschakeld, worden e-mails alleen gestuurd naar het e-mailadres van het profielveld met de interne naam EMAIL. (Standaard: ingeschakeld)</string>
   <string name="SYS_SEND_NEW_PW">Stuur nieuw wachtwoord</string>
   <string name="SYS_SENDER">Afzender</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server instellingen staan niet toe dat bestanden geupload worden.</string>
+  <string name="SYS_SET_FOLDER_PERMISSIONS">Instellingen toegangsrechten map</string>
   <string name="SYS_SETTINGS">Voorkeuren</string>
   <string name="SYS_SHOW_CALENDAR">Toon kalender</string>
   <string name="SYS_SHOW_PROFILE">Toon profiel</string>
@@ -1415,7 +1405,9 @@
   <string name="SYS_UNKNOWN">Onbekend</string>
   <string name="SYS_UNLIMITED">Onbeperkt</string>
   <string name="SYS_UNLOCK">Heropen</string>
+  <string name="SYS_UNMANAGED_FILES">Onbeheerde bestanden</string>
   <string name="SYS_UPDATE">Update</string>
+  <string name="SYS_UPLOAD_FILES">Bestanden uploaden</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. upload grootte</string>
   <string name="SYS_UPLOAD_NAME_ERROR">Bestandsnaam kan niet \"Submit\" heten.</string>
   <string name="SYS_URL_INVALID_CHAR">De URL in veld #VAR1_BOLD# bevat ongeldige karakters.\n\nAlleen alfabetische karakters, umlauts, nummers 0-9 en speciale karakters .-+_:/#?= zijn toegestaan.</string>
