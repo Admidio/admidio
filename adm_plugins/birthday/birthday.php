@@ -256,23 +256,15 @@ if($numberBirthdays > 0)
                 }
 
                 // set css class and string for birthday today, in the future or in the past
-                $birthayDate  = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
-                $plgDays      = ' ';
-                $plgCssClass  = '';
-                $birthdayText = '';
+                $birthdayDate = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
 
-                if ($row['days_to_bdate'] === 0)
-                {
-                    $plgCssClass  = 'plgBirthdayNameHighlight';
-                    $birthdayText = 'PLG_BIRTHDAY_TODAY';
-                    $plgDays      = $row['age'];
-                }
                 if ($row['days_to_bdate'] < 0)
                 {
                     $plgCssClass = 'plgBirthdayNameHighlightAgo';
-                    if($row['days_to_bdate'] == -1)
+                    if ($row['days_to_bdate'] == -1)
                     {
                         $birthdayText = 'PLG_BIRTHDAY_YESTERDAY';
+                        $plgDays = ' ';
                     }
                     else
                     {
@@ -283,9 +275,10 @@ if($numberBirthdays > 0)
                 elseif ($row['days_to_bdate'] > 0)
                 {
                     $plgCssClass = 'plgBirthdayNameHighlightFuture';
-                    if($row['days_to_bdate'] == 1)
+                    if ($row['days_to_bdate'] == 1)
                     {
                         $birthdayText = 'PLG_BIRTHDAY_TOMORROW';
+                        $plgDays = ' ';
                     }
                     else
                     {
@@ -293,16 +286,22 @@ if($numberBirthdays > 0)
                         $plgDays = $row['days_to_bdate'];
                     }
                 }
+                else
+                {
+                    $plgCssClass  = 'plgBirthdayNameHighlight';
+                    $birthdayText = 'PLG_BIRTHDAY_TODAY';
+                    $plgDays      = $row['age'];
+                }
 
                 // don't show age of birthday person if preference is set
-                if($plg_show_age === 0 || !$gValidLogin)
+                if ($plg_show_age === 0 || !$gValidLogin)
                 {
                     $birthdayText .= '_NO_AGE';
                 }
 
                 // now show string with the birthday person
                 echo '<li><span id="'.$plgCssClass.'">'.
-                    $gL10n->get($birthdayText, array($plgShowName, $plgDays, $row['age'], $birthayDate->format($gSettingsManager->getString('system_date')))).
+                    $gL10n->get($birthdayText, array($plgShowName, $plgDays, $row['age'], $birthdayDate->format($gSettingsManager->getString('system_date')))).
                 '</span></li>';
             }
         echo '</ul>';
