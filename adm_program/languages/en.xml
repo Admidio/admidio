@@ -1092,8 +1092,9 @@
   <string name="SYS_DONATE">Donate</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>
-  <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
+  <string name="SYS_DOWNLOAD_FILE">Download file</string>
+  <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
   <string name="SYS_EDIT">Edit</string>
   <string name="SYS_EDIT_ENTRY">Edit entry</string>
   <string name="SYS_EDIT_FILE">Edit file</string>

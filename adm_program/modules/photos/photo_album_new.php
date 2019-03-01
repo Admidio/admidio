@@ -155,6 +155,10 @@ $form->addInput(
     'pho_photographers', $gL10n->get('PHO_PHOTOGRAPHER'), $photoAlbum->getValue('pho_photographers'),
     array('maxLength' => 100)
 );
+$form->addMultilineTextInput(
+    'pho_description', $gL10n->get('SYS_DESCRIPTION'), $photoAlbum->getValue('pho_description'), 6,
+    array('maxLength' => 4000)
+);
 $form->addCheckbox(
     'pho_locked', $gL10n->get('PHO_ALBUM_LOCK'), (bool) $photoAlbum->getValue('pho_locked'),
     array('helpTextIdLabel' => 'PHO_ALBUM_LOCK_DESC')

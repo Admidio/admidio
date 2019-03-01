@@ -206,20 +206,26 @@ $photoAlbumParent = new TablePhotos($gDb);
 
 while ($phoParentId > 0)
 {
-    // Einlesen des Eltern Albums
+    // get parent photo album
     $photoAlbumParent->readDataById($phoParentId);
 
-    // Link zusammensetzen
+    // create link to parent photo album
     $navilink = '<li class="breadcrumb-item"><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $photoAlbumParent->getValue('pho_id'))).'">'.
         $photoAlbumParent->getValue('pho_name') . '</a></li>' . $navilink;
 
-    // Elternveranst
     $phoParentId = (int) $photoAlbumParent->getValue('pho_pho_id_parent');
 }
 
 if ($getPhotoId > 0)
 {
-    // Ausgabe des Linkpfads
+    // show additional album information
+    $datePeriod = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
+
+    if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin') && strlen($photoAlbum->getValue('pho_end')) > 0)
+    {
+        $datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'));
+    }
+
     $page->addHtml('
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -231,7 +237,20 @@ if ($getPhotoId > 0)
             <li class="breadcrumb-item active" aria-current="page">'.$photoAlbum->getValue('pho_name').'</li>
         </ol>
     </nav>
-    ');
+
+    <div class="card admidio-album-informations">
+        <div class="card-body">
+            <h5 class="card-title">' . $datePeriod . '</h5>');
+
+            if (strlen($photoAlbum->getValue('pho_description')) > 0)
+            {
+                $page->addHtml('<p class="card-text">' . $photoAlbum->getValue('pho_description') . '</p>');
+            }
+
+            $page->addHtml('
+            <p class="card-text">' . $photoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $photoAlbum->getValue('pho_photographers') . '</p>
+        </div>
+    </div>');
 }
 
 /*************************THUMBNAILS**********************************/
@@ -250,7 +269,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
     }
 
     // create thumbnail container
-    $page->addHtml('<div class="row album-container">');
+    $page->addHtml('<div class="row admidio-album-container mb-5">');
 
     for ($actThumbnail = $firstPhotoNr; $actThumbnail <= $lastPhotoNr && $actThumbnail <= $photoAlbum->getValue('pho_quantity'); ++$actThumbnail)
     {
@@ -271,7 +290,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
                 elseif ((int) $gSettingsManager->get('photo_show_mode') === 1)
                 {
                     $photoThumbnailTable .= '
-                        <a data-gallery="admidio-gallery" data-type="image" data-parent=".album-container" data-toggle="lightbox" data-title="'.$headline.'"
+                        <a data-gallery="admidio-gallery" data-type="image" data-parent=".admidio-album-container" data-toggle="lightbox" data-title="'.$headline.'"
                             href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $actThumbnail, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
                             class="img-thumbnail" id="img_'.$actThumbnail.'" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" alt="'.$actThumbnail.'" /></a>';
                 }
@@ -360,26 +379,6 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
         $photoThumbnailTable .= '</div>';   // close album-container
         $page->addHtml($photoThumbnailTable);
     }
-
-    // show additional album information
-    $datePeriod = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
-
-    if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin') && strlen($photoAlbum->getValue('pho_end')) > 0)
-    {
-        $datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'));
-    }
-
-    $page->addHtml('
-        <br />
-        <div class="row">
-            <div class="col-sm-2 col-4">'.$gL10n->get('SYS_DATE').'</div>
-            <div class="col-sm-4 col-8"><strong>'.$datePeriod.'</strong></div>
-        </div>
-        <div class="row">
-            <div class="col-sm-2 col-4">'.$gL10n->get('PHO_PHOTOGRAPHER').'</div>
-            <div class="col-sm-4 col-8"><strong>'.$photoAlbum->getValue('pho_photographers').'</strong></div>
-        </div>
-    ');
 
     // show information about user who creates the recordset and changed it
     $page->addHtml(admFuncShowCreateChangeInfoById(
@@ -507,12 +506,20 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
 
                         $page->addHtml('</h5>
 
-                        <p class="card-text">' . $albumDate . '</p>
-                        <p class="card-text">' . $childPhotoAlbum->countImages() . ' ' . $gL10n->get('SYS_PHOTOS') . '</p>');
-                        if (strlen($childPhotoAlbum->getValue('pho_photographers')) > 0)
+                        <p class="card-text">' . $albumDate . '</p>');
+
+                        if (strlen($childPhotoAlbum->getValue('pho_description')) > 0)
                         {
-                            $page->addHtml('<p class="card-text">' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $childPhotoAlbum->getValue('pho_photographers') . '</p>');
+                            $description = $childPhotoAlbum->getValue('pho_description');
+
+                            if(strlen($description) > 400)
+                            {
+                                $description = substr($description, 0, 400) . ' ...';
+                            }
+                            $page->addHtml('<p class="card-text">' . $description . '</p>');
                         }
+
+                        $page->addHtml('<p class="card-text">' . $childPhotoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $childPhotoAlbum->getValue('pho_photographers') . '</p>');
                         
                         // Notice for users with foto edit rights that the folder of the album doesn't exists
                         if (!is_dir($albumFolder) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight())
