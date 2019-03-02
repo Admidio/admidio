@@ -195,7 +195,7 @@ foreach($listsResult['recordset'] as $row)
         <div class="card-header">
             <div class="float-left">
                 <a data-toggle="collapse" data-parent="#accordion_'.$catId.'" href="#collapse_'.$rolId.'">
-                    '. $role->getValue('rol_name'). '</a><
+                    '. $role->getValue('rol_name'). '</a>
             </div>
             <div class="float-right text-right">');
                 // send a mail to all role members
