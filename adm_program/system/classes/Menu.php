@@ -148,12 +148,12 @@ class Menu
         if ($complex)
         {
             $html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>';
-            $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-media-menu">'; // or class="media-list"
+            $html .= '<ul id="menu_'.$this->id.'" class="list-unstyled admidio-media-menu">'; // or class="media-list"
         }
         else
         {
             $html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>';
-            $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-menu btn-group-vertical">';
+            $html .= '<ul id="menu_'.$this->id.'" class="list-unstyled admidio-menu btn-group-vertical">';
         }
 
         // now create each menu item
@@ -178,14 +178,14 @@ class Menu
                     // adding submenus if any
                     if ($item['subitems'])
                     {
-                        $html .= '<menu id="lsubmenu_'.$this->id.'_'.$item['id'].'" class="list-inline admidio-media-submenu">';
+                        $html .= '<ul id="lsubmenu_'.$this->id.'_'.$item['id'].'" class="list-inline admidio-media-submenu">';
 
                         foreach($item['subitems'] as $subitem)
                         {
                             $html .= '<li><a href="'.$subitem['link'].'">'.$subitem['text'].'</a></li>';
                         }
 
-                        $html .= '</menu>'; // closes sub-menu "menu.admidio-media-submenu"
+                        $html .= '</ul>'; // closes sub-menu "menu.admidio-media-submenu"
                     }
 
                     $html .= '<p>'.$item['desc'].'</p>';
@@ -204,7 +204,7 @@ class Menu
             }
         }
 
-        $html .= '</menu>'; // closes main-menu "menu.list-unstyled"
+        $html .= '</ul>'; // closes main-menu "menu.list-unstyled"
 
         return $html;
     }
