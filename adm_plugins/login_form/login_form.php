@@ -51,13 +51,13 @@ if(!isset($plg_show_icons) || !is_numeric($plg_show_icons))
     $plg_show_icons = 1;
 }
 
-if(isset($plg_link_target) && $plg_link_target !== '_self')
+if(isset($plg_link_target))
 {
-    $plg_link_target = ' target="'. strip_tags($plg_link_target). '" ';
+    $plg_link_target = strip_tags($plg_link_target);
 }
 else
 {
-    $plg_link_target = '';
+    $plg_link_target = '_self';
 }
 
 if(!isset($plg_rank))
@@ -148,7 +148,7 @@ if($gValidLogin)
     $form = new HtmlForm('plugin-login-static-form', '#', null, array('type' => 'vertical', 'setFocus' => false));
     $form->addStaticControl(
         'plg_user', $gL10n->get('SYS_MEMBER'),
-        '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => (int) $gCurrentUser->getValue('usr_id'))). '" '. $plg_link_target. ' title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'
+        '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => (int) $gCurrentUser->getValue('usr_id'))). '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'
         . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') .
         '</a>'
     );
@@ -223,7 +223,7 @@ else
         }
         else
         {
-            echo '<a href="'. ADMIDIO_URL. FOLDER_MODULES. '/registration/registration.php" '. $plg_link_target. '>'.$gL10n->get('SYS_REGISTRATION').'</a>';
+            echo '<a href="'. ADMIDIO_URL. FOLDER_MODULES. '/registration/registration.php" target="'. $plg_link_target. '">'.$gL10n->get('SYS_REGISTRATION').'</a>';
         }
     }
 
@@ -270,7 +270,7 @@ else
         }
         else
         {
-            echo '<a href="'.$linkUrl.'" '.$plg_link_target.'>'.$linkText.'</a>';
+            echo '<a href="'.$linkUrl.'" target="'.$plg_link_target.'">'.$linkText.'</a>';
         }
     }
     echo '</div>';
