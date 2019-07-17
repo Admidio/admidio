@@ -147,8 +147,8 @@ class Menu
 
         if ($complex)
         {
-            $html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>';
-            $html .= '<ul id="menu_'.$this->id.'" class="list-unstyled admidio-media-menu">'; // or class="media-list"
+            $html .= '<h2 id="head_'.$this->id.'_complex">'.$this->title.'</h2>';
+            $html .= '<ul id="menu_'.$this->id.'_complex" class="list-unstyled admidio-media-menu">'; // or class="media-list"
         }
         else
         {
