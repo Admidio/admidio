@@ -466,7 +466,6 @@
   <string name="MAI_SEND_MAIL_TO_ROLE">Your e-mail will be sent to all members with an e-mail address of the selected role or the selected recipients .\n\nFurther roles and recipients are available for logged in users only.</string>
   <string name="MAI_SEND_METHOD">Send via</string>
   <string name="MAI_SEND_METHOD_DESC">PHP\'s mail() method might be restricted by some providers and can be a reason for spam suspicion. Hence it is recommended to send mails by using an existing mail address and SMTP server. You can configure the SMTP settings below (default: PHP mail()).</string>
-  <string name="MAI_SENDER">Sender</string>
   <string name="MAI_SENDER_EMAIL">Sender mail address</string>
   <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Using an unknown mail address as a sender address is not allowed by some providers. In this case you can add an email address which will be used as sender address within the mail module (e.g. noreply@#VAR1#).\nIf the field remains empty the sender\'s mail address will be used (default: empty).</string>
   <string name="MAI_SENDER_NAME">Name of sender</string>

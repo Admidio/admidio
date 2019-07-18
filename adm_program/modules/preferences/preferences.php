@@ -435,7 +435,7 @@ $formEmailDispatch->addInput(
     'mail_sendmail_name', $gL10n->get('MAI_SENDER_NAME'), $formValues['mail_sendmail_name'],
     array('maxLength' => 50, 'helpTextIdInline' => 'MAI_SENDER_NAME_DESC')
 );
-$selectBoxEntries = array(0 => $gL10n->get('MAI_HIDDEN'), 1 => $gL10n->get('MAI_SENDER'), 2 => $gL10n->get('SYS_ADMINISTRATOR'));
+$selectBoxEntries = array(0 => $gL10n->get('MAI_HIDDEN'), 1 => $gL10n->get('SYS_SENDER'), 2 => $gL10n->get('SYS_ADMINISTRATOR'));
 $formEmailDispatch->addSelectBox(
     'mail_recipients_with_roles', $gL10n->get('MAI_RECIPIENTS_WITH_ROLES'), $selectBoxEntries,
     array('defaultValue' => $formValues['mail_recipients_with_roles'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MAI_RECIPIENTS_WITH_ROLES_DESC')
