@@ -1105,7 +1105,7 @@ class HtmlForm extends HtmlFormBasic
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                          + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
-     *                        - **default**Value : This is the value of that radio button that is preselected.
+     *                        - **defaultValue** : This is the value of that radio button that is preselected.
      *                        - **showNoValueButton** : If set to true than one radio with no value will be set in front of the other array.
      *                          This could be used if the user should also be able to set no radio to value.
      *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
@@ -1202,7 +1202,7 @@ class HtmlForm extends HtmlFormBasic
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                          + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
-     *                        - **default**Value : This is the value the selectbox shows when loaded. If **multiselect** is activated than
+     *                        - **defaultValue** : This is the value the selectbox shows when loaded. If **multiselect** is activated than
      *                          an array with all default values could be set.
      *                        - **showContextDependentFirstEntry** : If set to **true** the select box will get an additional first entry.
      *                          If self::FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
@@ -1210,6 +1210,8 @@ class HtmlForm extends HtmlFormBasic
      *                        - **firstEntry** : Here you can define a string that should be shown as firstEntry and will be the
      *                          default value if no other value is set. This entry will only be added if **showContextDependentFirstEntry**
      *                          is set to false!
+     *                        - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as 
+     *                          option value and not the key of the array
      *                        - **multiselect** : If set to **true** than the jQuery plugin Select2 will be used to create a selectbox
      *                          where the user could select multiple values from the selectbox. Then an array will be
      *                          created within the $_POST array.
@@ -1251,6 +1253,7 @@ class HtmlForm extends HtmlFormBasic
             'defaultValue'                   => '',
             'showContextDependentFirstEntry' => true,
             'firstEntry'                     => '',
+            'arrayKeyIsNotValue'             => false,
             'multiselect'                    => false,
             'search'                         => false,
             'placeholder'                    => '',
@@ -1388,22 +1391,30 @@ class HtmlForm extends HtmlFormBasic
             }
             else
             {
+                // if value is a translation string we must translate it
+                $value = Language::translateIfTranslationStrId($value);
+
+                // set the value attribute of the option tag
+                $optionValue = $key;
+
+                if($optionsAll['arrayKeyIsNotValue'])
+                {
+                    $optionValue = $value;
+                }
+
                 // array has only key and value then create a normal selectbox without optiongroups
-                if (!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == $key)
+                if (!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == $optionValue)
                 {
                     $defaultEntry = true;
                 }
 
-                // if value is a translation string we must translate it
-                $value = Language::translateIfTranslationStrId($value);
-
                 if(is_array($optionsAll['valueAttributes']))
                 {
-                    $this->addOption((string) $key, $value, null, $defaultEntry, false, $optionsAll['valueAttributes'][$key]);
+                    $this->addOption((string) $optionValue, $value, null, $defaultEntry, false, $optionsAll['valueAttributes'][$key]);
                 }
                 else
                 {
-                    $this->addOption((string) $key, $value, null, $defaultEntry);
+                    $this->addOption((string) $optionValue, $value, null, $defaultEntry);
                 }
             }
         }
@@ -1480,8 +1491,10 @@ class HtmlForm extends HtmlFormBasic
      *                                 + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                                 + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                                 + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
-     *                               - **default**Value : This is the value the selectbox shows when loaded. If **multiselect** is activated than
+     *                               - **defaultValue** : This is the value the selectbox shows when loaded. If **multiselect** is activated than
      *                                 an array with all default values could be set.
+     *                               - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as 
+     *                                 option value and not the key of the array
      *                               - **showContextDependentFirstEntry** : If set to **true** the select box will get an additional first entry.
      *                                 If self::FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
      *                                 an empty entry will be added so you must not select something.
@@ -1567,8 +1580,10 @@ class HtmlForm extends HtmlFormBasic
      *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                          + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
-     *                        - **default**Value : This is the value the selectbox shows when loaded. If **multiselect** is activated than
+     *                        - **defaultValue** : This is the value the selectbox shows when loaded. If **multiselect** is activated than
      *                          an array with all default values could be set.
+     *                        - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as 
+     *                          option value and not the key of the array
      *                        - **showContextDependentFirstEntry** : If set to **true** the select box will get an additional first entry.
      *                          If self::FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
      *                          an empty entry will be added so you must not select something.
@@ -1648,7 +1663,9 @@ class HtmlForm extends HtmlFormBasic
      *                                   + **self::FIELD_DEFAULT**  : The field can accept an input.
      *                                   + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                                   + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
-     *                                 - **default**Value : Id of category that should be selected per default.
+     *                                 - **defaultValue** : Id of category that should be selected per default.
+     *.                                - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as 
+     *                                   option value and not the key of the array
      *                                 - **showSystemCategory** : Show user defined and system categories
      *                                 - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
      *                                   e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
@@ -1671,6 +1688,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsDefault = array(
             'property'                       => self::FIELD_DEFAULT,
             'defaultValue'                   => '',
+            'arrayKeyIsNotValue'             => false,
             'showContextDependentFirstEntry' => true,
             'multiselect'                    => false,
             'showSystemCategory'             => true,

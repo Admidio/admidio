@@ -1071,7 +1071,7 @@ final class FileSystemUtils
 
         while (($entry = readdir($dirHandle)) !== false)
         {
-            if ($entry === '.' || $entry === '..')
+            if ($entry === '.' || $entry === '..' || strpos($entry, '.') === 0)
             {
                 continue;
             }

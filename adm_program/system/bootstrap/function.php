@@ -656,53 +656,6 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
 }
 
 /**
- * Search all visible files or directories in the specified directory.
- * @param string $directory  The directory where the files or directories should be searched.
- * @param string $searchType This could be **file**, **dir**, **both** or **all** and represent
- *                           the type of entries that should be searched.
- * @return false|array<string,string> Returns an array with all found entries or false if an error occurs.
- */
-function admFuncGetDirectoryEntries($directory, $searchType = 'file')
-{
-    if (!is_dir($directory))
-    {
-        return false;
-    }
-
-    $dirHandle = @opendir($directory);
-    if ($dirHandle === false)
-    {
-        return false;
-    }
-
-    $entries = array();
-
-    while (($entry = readdir($dirHandle)) !== false)
-    {
-        if ($searchType === 'all')
-        {
-            $entries[$entry] = $entry; // $entries[] = $entry;
-        }
-        elseif (strpos($entry, '.') !== 0)
-        {
-            $resource = $directory . '/' . $entry;
-
-            if ($searchType === 'both'
-            || ($searchType === 'file' && is_file($resource))
-            || ($searchType === 'dir'  && is_dir($resource)))
-            {
-                $entries[$entry] = $entry; // $entries[] = $entry;
-            }
-        }
-    }
-    closedir($dirHandle);
-
-    asort($entries); // sort($entries);
-
-    return $entries;
-}
-
-/**
  * Prefix url with "http://" if no protocol is defined and check if is valid url
  * @param $url string
  * @return false|string
@@ -787,4 +740,31 @@ function getExecutionTime($startTime)
     $stopTime = microtime(true);
 
     return number_format(($stopTime - $startTime) * 1000, 6, '.', '') . ' ms';
+}
+
+/**
+ * Search all visible files or directories in the specified directory.
+ * @deprecated 4.0.0:4.1.0 "admFuncGetDirectoryEntries()" is deprecated, use "FileSystemUtils::getDirectoryContent()" instead.
+ * @param string $directory  The directory where the files or directories should be searched.
+ * @param string $searchType This could be **file**, **dir**, **both** or **all** and represent
+ *                           the type of entries that should be searched.
+ * @return false|array<string,string> Returns an array with all found entries or false if an error occurs.
+ */
+function admFuncGetDirectoryEntries($directory, $searchType = 'file')
+{
+    switch($searchType)
+    {
+        case 'file':
+            return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+            break;
+        case 'dir':
+            return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
+            break;            
+        case 'both':
+            return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false));
+            break;            
+        case 'all':
+            return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false));
+            break;            
+    }
 }

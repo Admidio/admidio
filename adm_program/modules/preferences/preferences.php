@@ -195,15 +195,15 @@ $formCommon = new HtmlForm(
 );
 
 // search all available themes in theme folder
-$themes = admFuncGetDirectoryEntries(ADMIDIO_PATH . FOLDER_THEMES, 'dir');
-if (!is_array($themes))
+$themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
+if (count($themes) === 0)
 {
     $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
     // => EXIT
 }
 $formCommon->addSelectBox(
     'theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'helpTextIdInline' => 'ORG_ADMIDIO_THEME_DESC')
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'ORG_ADMIDIO_THEME_DESC')
 );
 $formCommon->addInput(
     'homepage_logout', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')', $formValues['homepage_logout'],
@@ -568,11 +568,11 @@ $formCaptcha->addSelectBox(
     array('defaultValue' => $formValues['captcha_type'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_TYPE_TEXT')
 );
 
-$fonts = admFuncGetDirectoryEntries(ADMIDIO_PATH . '/adm_program/system/fonts/');
+$fonts = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . '/adm_program/system/fonts/', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 asort($fonts);
 $formCaptcha->addSelectBox(
     'captcha_fonts', $gL10n->get('SYS_FONT'), $fonts,
-    array('defaultValue' => $formValues['captcha_fonts'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_FONT')
+    array('defaultValue' => $formValues['captcha_fonts'], 'showContextDependentFirstEntry' => false, 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'ORG_CAPTCHA_FONT')
 );
 $formCaptcha->addInput(
     'captcha_width', $gL10n->get('SYS_WIDTH').' ('.$gL10n->get('ORG_PIXEL').')', $formValues['captcha_width'],
@@ -586,11 +586,11 @@ $formCaptcha->addInput(
     'captcha_perturbation', $gL10n->get('ORG_CAPTCHA_DISTORTION'), $formValues['captcha_perturbation'],
     array('type' => 'string', 'helpTextIdInline' => 'ORG_CAPTCHA_DISTORTION_DESC', 'class' => 'form-control-small')
 );
-$backgrounds = admFuncGetDirectoryEntries(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/backgrounds/');
+$backgrounds = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/backgrounds/', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 asort($backgrounds);
 $formCaptcha->addSelectBox(
     'captcha_background_image', $gL10n->get('ORG_CAPTCHA_BACKGROUND_IMAGE'), $backgrounds,
-    array('defaultValue' => $formValues['captcha_background_image'], 'showContextDependentFirstEntry' => true, 'helpTextIdInline' => 'ORG_CAPTCHA_BACKGROUND_IMAGE_DESC'));
+    array('defaultValue' => $formValues['captcha_background_image'], 'showContextDependentFirstEntry' => true, 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'ORG_CAPTCHA_BACKGROUND_IMAGE_DESC'));
 $formCaptcha->addInput(
     'captcha_background_color', $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'), $formValues['captcha_background_color'],
     array('maxLength' => 7, 'class' => 'form-control-small'));
@@ -1103,7 +1103,7 @@ $formEcards->addInput(
     'ecard_card_picture_height', $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'), $formValues['ecard_card_picture_height'],
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'ECA_MAX_PHOTO_SIZE_DESC')
 );
-$templates = admFuncGetDirectoryEntries(THEME_PATH.'/ecard_templates');
+$templates = array_keys(FileSystemUtils::getDirectoryContent(THEME_PATH.'/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 if (!is_array($templates))
 {
     $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
@@ -1116,7 +1116,7 @@ foreach($templates as &$templateName)
 unset($templateName);
 $formEcards->addSelectBox(
     'ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates,
-    array('defaultValue' => $formValues['ecard_template'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ECA_TEMPLATE_DESC')
+    array('defaultValue' => $formValues['ecard_template'], 'showContextDependentFirstEntry' => false, 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'ECA_TEMPLATE_DESC')
 );
 $formEcards->addSubmitButton(
     'btn_save_ecards', $gL10n->get('SYS_SAVE'),
