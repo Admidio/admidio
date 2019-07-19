@@ -466,7 +466,6 @@
   <string name="MAI_SEND_MAIL_TO_ROLE">Ton courriel sera envoyé à tous les membres du rôle séléctionné, s\'ils ont entré leur adresse de courriel dans le système ou aux destinataires sélectionnés.\n\nSi tu es connecté, tu as d\'autres rôles et destinataires auxquels tu peux envoyer des courriels.</string>
   <string name="MAI_SEND_METHOD">Envoyer par</string>
   <string name="MAI_SEND_METHOD_DESC">La fonction mail() de PHP est limitée par certains hébérgeurs et conduit parfois à des soupçons de Spam. Par conséquent, l\'envoi à partir d\'une adresse courriel existante via un serveur SMTP est généralement recommandé. Les paramètres SMTP peuvent être configurés ci-dessous. (Par défaut : PHP mail()))</string>
-  <string name="MAI_SENDER">Expéditeur</string>
   <string name="MAI_SENDER_EMAIL">Adresse de courriel de l\'expéditeur</string>
   <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Certains hébérgeurs n\'autorisent pas l\'utilisation d\'adresses mails inconnus comme expéditeur. Dans ce cas, il est possible d\'entrer ici une adresse à partir de laquelle tous les courriels du module courriel peuvent être envoyés (par ex. mailversand@#VAR1#).\nSi le champ reste vide, l\'adresse de l\'expéditeur est utilisée. (Par défaut : vide)</string>
   <string name="MAI_SENDER_NAME">Nom de l\'expéditeur </string>
@@ -1092,8 +1091,8 @@
   <string name="SYS_DONATE">Don</string>
   <string name="SYS_DONT_SHOW">Ne pas afficher</string>
   <string name="SYS_DROPDOWN_LISTBOX">Liste déroulante</string>
-  <string name="SYS_DOWNLOAD_PHOTO">Télécharger la photo</string>
   <string name="SYS_DOWNLOAD_ALBUM">Télécharger l\'album</string>
+  <string name="SYS_DOWNLOAD_PHOTO">Télécharger la photo</string>
   <string name="SYS_EDIT">Editer</string>
   <string name="SYS_EDIT_ENTRY">Editer la saisie</string>
   <string name="SYS_EDIT_FILE">Éditer le fichier</string>

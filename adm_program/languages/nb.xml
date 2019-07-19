@@ -4,6 +4,7 @@
   <string name="ANN_ANNOUNCEMENT">Kunngjøring</string>
   <string name="ANN_ANNOUNCEMENTS">Kunngjøringer</string>
   <string name="ANN_ANNOUNCEMENTS_DESC">Vis eller endre meddelelser, nyheter og annen informasjon.</string>
+  <string name="ANN_EDIT_ANNOUNCEMENTS">Endre kunngjøringer</string>
   <string name="ANN_EMAIL_NOTIFICATION_TITLE">En meddelelse ble opprettet</string>
   <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">En ny meddelelse i #VAR1# ble opprettet\n\nTittel: #VAR2#\nSkrevet av: #VAR3#\nSkrevet den: #VAR4#</string>
   <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Siste kunngjøringer fra organisasjon #VAR1#</string>
@@ -23,7 +24,6 @@
   <string name="BAC_START_BACKUP">Start sikkerhetskopiering</string>
   <string name="BAC_SUM">Total</string>
   <string name="BAC_SECONDS_VAR">#VAR1# sekunder</string>
-  <!--Phrases only in Category-Administration-->
   <string name="CAT_ALL_THIS_ORGANIZATION">Alle medlemmer av denne organisasjonen</string>
   <string name="CAT_CATEGORY_EXIST">Det er allerede en kategori i denne organisasjonen med dette navnet.</string>
   <string name="CAT_DEFAULT_VAR">Standard-#VAR1#</string>
@@ -42,15 +42,11 @@
   <string name="DAT_EDIT_CALENDAR_DESC">Her kan du opprette og endre kalendere.</string>
   <string name="DAT_LOCATION">By</string>
   <string name="DAT_MANAGE_CALENDARS">Administrer kalendere</string>
-  <!--Phrases only in Downloadsmodule-->
-  <string name="DOW_DOWNLOADS">Nedlastninger</string>
-  <!--Phrases only in Ecardsmodule-->
   <string name="ECA_VIEW_PICTURE_FULL_SIZED">Vis bilde i full størrelse</string>
   <string name="ECA_TEMPLATE_FOLDER_OPEN">Mal-mappen kunne ikke leses/åpnes.</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tilbake til gjesteboken</string>
   <string name="GBO_COMMENTS4ALL">Tillat anonyme kommentarer</string>
-  <!--Phrases only in Installation-->
   <string name="INS_ADD_ORGANIZATION">Legg til organisasjon</string>
   <string name="INS_ADDIDIONAL_DATA">Tilleggsinformasjon</string>
   <string name="INS_ADDRESS_LIST">Adresseliste</string>
@@ -91,7 +87,6 @@
   <string name="INS_SON">Sønn</string>
   <string name="INS_SPOUSE">Ektefelle</string>
   <string name="INS_WIFE">Kone</string>
-  <!--Phrases only in Linkmodule-->
   <!--Phrases only in Listsmodule-->
   <string name="LST_A_TO_Z">A til Å</string>
   <string name="LST_ACTIVE_FORMER_MEMBERS">Aktive og tidligere medlemmer</string>
@@ -115,7 +110,6 @@
   <string name="LST_USER_PHOTO">Brukerbilde</string>
   <string name="LST_VARIOUS_ROLES">Diverse roller</string>
   <string name="LST_VARIOUS_USER_RELATION_TYPES">Diverse relasjoner</string>
-  <!--Phrases only in Mailmodule-->
   <string name="MAI_ADD_ATTACHEMENT">Legg ved fil</string>
   <string name="MAI_ATTACHEMENT">Vedlegg</string>
   <string name="MAI_HIDDEN">Skjult</string>
@@ -152,7 +146,6 @@
   <string name="MEM_USER_COULD_BE_CREATED">Bruker kunne opprettes</string>
   <string name="MEM_USER_MANAGEMENT">Brukerhåndtering</string>
   <string name="MEM_USERS_PER_PAGE">Antall brukere pr. side</string>
-  <!--Phrases only in Menu-->
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Aktiver chat</string>
   <string name="MSG_ACTIVATE_PM_MODULE">Aktiver private meldinger</string>
@@ -162,8 +155,6 @@
   <string name="MSG_OPPOSITE">Forretningspartner</string>
   <string name="MSG_REMOVE">Fjern melding</string>
   <string name="MSG_SEND_PM">Din PM vil bli sendt til valgt mottaker</string>
-  <!--Phrases only in New-User-Registration-->
-  <!--Phrases only in Organizationadministration-->
   <string name="ORG_ADMIDIO_THEME">Admidio-Tema</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Etter aktivering vil brukere med utdaterte nettlesere rådes til å kjøre en oppdatering. Nyere nettlesere garanterer en bedre beskyttelse mot svindel, virus, trojanere, identitetstyveri og andre trusler mot personvern og sikkerhet. Hver ny nettlesergenerasjon forbedrer hastigheten og støtter flere og flere nye web-teknologier, noe som fører til en bedre nettopplevelse . Til dette formålet blir https://browser-update.org/ anvendt.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Bakgrunnsfarge</string>
@@ -208,11 +199,6 @@
   <string name="PHO_PHOTO">Bilde</string>
   <string name="PHO_PHOTOS">Bilder</string>
   <string name="PHO_PREVIOUS_PHOTO">Forrige bilde</string>
-  <!--Phrases only in Profilemodule-->
-  <!--Phrases only in Relationssmodule-->
-  <!--Phrases only in Rolesmodule-->
-  <!--Phrases only in Roommodule-->
-  <!--System-Phrases for use in every module-->
   <string name="SYS_CITY">By</string>
   <string name="SYS_CLOSE_WINDOW">Lukk vindu</string>
   <string name="SYS_COMMENT">Kommentar</string>
@@ -376,11 +362,11 @@
   <string name="SYS_SATURDAY">Lørdag</string>
   <string name="SYS_SAVE">Lagre</string>
   <string name="SYS_SAVE_DATA">Dataene ble lagret.</string>
+  <string name="SYS_SEARCH">Søk</string>
   <string name="SYS_SECONDS">Sekunder</string>
   <string name="SYS_SELECT_FROM_LIST">Velg fra liste</string>
   <string name="SYS_SEND">Send</string>
   <string name="SYS_SEND_EMAIL_TO">Send epost til #VAR1#</string>
-  <string name="SYS_SEARCH">Søk</string>
   <string name="SYS_SEND_NEW_PW">Send nytt passord</string>
   <string name="SYS_SENDER">Avsender</string>
   <string name="SYS_SERVER">Server</string>

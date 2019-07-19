@@ -466,7 +466,6 @@
   <string name="MAI_SEND_MAIL_TO_ROLE">Uw e-mail wordt verzonden naar alle leden van de geselecteerde rol, als hun e-mailadres bekend is of aan de geselecteerde ontvangers.\n\nAls u ingelogd bent, zijn extra rollen en ontvangers beschikbaar.</string>
   <string name="MAI_SEND_METHOD">Stuur via</string>
   <string name="MAI_SEND_METHOD_DESC">De PHP mail() functie word door sommige provider beperkt en kan af en toe leiden tot mogelijke spam. Daarom wordt het aangeraden om e-mail te versturen via een bestaand e-mailadres en SMTP server. De SMTP instellingen kunnen hieronder worden opgegeven. (Standaard: PHP mail())</string>
-  <string name="MAI_SENDER">Afzender</string>
   <string name="MAI_SENDER_EMAIL">E-mailadres afzender</string>
   <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Sommige providers accepteren geen onbekende afzenders. Geef daarom een e-mailadres op wat als standaard e-mailadres wordt gebruik in deze e-mail module (b.v. noreply@#VAR1#).\nAls dit veld leeg blijft zal het e-mailadres van de verstuurder gebruikt worden. (Standaard: leeg)</string>
   <string name="MAI_SENDER_NAME">Afzender</string>
@@ -1092,8 +1091,9 @@
   <string name="SYS_DONATE">Doneer</string>
   <string name="SYS_DONT_SHOW">Niet weergeven</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down box</string>
-  <string name="SYS_DOWNLOAD_PHOTO">Foto downloaden</string>
   <string name="SYS_DOWNLOAD_ALBUM">Album downloaden</string>
+  <string name="SYS_DOWNLOAD_FILE">Download bestand</string>
+  <string name="SYS_DOWNLOAD_PHOTO">Foto downloaden</string>
   <string name="SYS_EDIT">Bewerk</string>
   <string name="SYS_EDIT_ENTRY">Bericht bewerken</string>
   <string name="SYS_EDIT_FILE">Bewerk bestand</string>
