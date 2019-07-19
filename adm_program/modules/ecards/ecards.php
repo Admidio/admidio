@@ -174,14 +174,16 @@ if (!is_array($templates))
     $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
     // => EXIT
 }
-foreach($templates as &$templateName)
-{
-    $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
+// create new array without file extension in visual value
+$newTemplateArray = array();
+foreach($templates as $templateName)
+{  
+    $newTemplateArray[$templateName] = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
 }
 unset($templateName);
 $form->addSelectBox(
-    'ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates,
-    array('defaultValue' => $template, 'property' => HtmlForm::FIELD_REQUIRED, 'showContextDependentFirstEntry' => false, 'arrayKeyIsNotValue' => true)
+    'ecard_template', $gL10n->get('ECA_TEMPLATE'), $newTemplateArray,
+    array('defaultValue' => $template, 'property' => HtmlForm::FIELD_REQUIRED, 'showContextDependentFirstEntry' => false)
 );
 $form->closeGroupBox();
 $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));

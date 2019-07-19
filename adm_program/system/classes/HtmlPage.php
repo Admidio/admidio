@@ -248,7 +248,8 @@ class HtmlPage
                 $("#admidio_modal").on("show.bs.modal", function (event) {
                   var link = $(event.relatedTarget);
                   var url  = link.attr("href");
-                  $(this).find(".modal-content").load(url);
+                  if(typeof(url) != "undefined")
+                      $(this).find(".modal-content").load(url);
                 });
 
                 $("body").on("hidden.bs.modal", ".modal", function() {
