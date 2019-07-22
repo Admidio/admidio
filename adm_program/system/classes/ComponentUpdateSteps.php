@@ -631,5 +631,15 @@ final class ComponentUpdateSteps
             $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'template.html\' WHERE prf_name = \'mail_template\'';
             $pdoStatement = self::$db->queryPrepared($sql);
         }
+        elseif(file_exists(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/template_default.html'))
+        {
+            $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'template_default.html\' WHERE prf_name = \'mail_template\'';
+            $pdoStatement = self::$db->queryPrepared($sql);
+        }
+        else
+        {
+            $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'\' WHERE prf_name = \'mail_template\'';
+            $pdoStatement = self::$db->queryPrepared($sql);
+        }
     }
 }

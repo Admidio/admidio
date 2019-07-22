@@ -55,7 +55,6 @@ $defaultOrgPreferences = array(
     'mail_smtp_authentication_type'  => 'LOGIN',
     'mail_smtp_user'                 => '',
     'mail_smtp_password'             => '',
-    'mail_template'                  => '',
 
     // System notifications
     'enable_system_mails'         => '1',
@@ -134,6 +133,7 @@ $defaultOrgPreferences = array(
     'mail_html_registered_users'  => '1',
     'mail_delivery_confirmation'  => '0',
     'mail_send_to_all_addresses'  => '1',
+    'mail_template'               => 'template_default.html',
 
     // E-Cards
     'enable_ecard_module'       => '1',
