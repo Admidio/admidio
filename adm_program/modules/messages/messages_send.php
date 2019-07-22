@@ -450,7 +450,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     // if possible send html mail
     if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users'))
     {
-        $email->sendDataAsHtml();
+        $email->setHtmlMail();
     }
 
     // set flag if copy should be send to sender
@@ -480,16 +480,6 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         $email->ConfirmReadingTo = $gCurrentUser->getValue('EMAIL');
     }
 
-    // load the template and set the new email body with template
-    try
-    {
-        $emailTemplate = FileSystemUtils::readFile(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/template.html');
-    }
-    catch (\RuntimeException $exception)
-    {
-        $emailTemplate = '#message#';
-    }
-
     require_once(__DIR__ . '/messages_functions.php');
 
     if ($postListId > 0)
@@ -501,18 +491,8 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 
     $receiverName = prepareReceivers($receiverString);
 
-    $replaces = array(
-        '#sender#'   => $postName,
-        '#message#'  => $postBody,
-        '#receiver#' => $receiverName
-    );
-    $emailTemplate = StringUtils::strMultiReplace($emailTemplate, $replaces);
-
-    // prepare body of email with note of sender and homepage
-    $email->setSenderInText($postName, $receiverName);
-
-    // set Text
-    $email->setText($emailTemplate);
+    // load mail template and replace text
+    $email->setTemplateText($postBody, $postName, $receiverName);
 
     // finally send the mail
     $sendResult = $email->sendEmail();

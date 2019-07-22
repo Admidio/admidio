@@ -620,4 +620,16 @@ final class ComponentUpdateSteps
             }
         }
     }
+
+    /**
+     * This method adds the email template to the preferences
+     */
+    public static function updateStepAddEmailTemplate()
+    {
+        if(file_exists(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/template.html'))
+        {
+            $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'template.html\' WHERE prf_name = \'mail_template\'';
+            $pdoStatement = self::$db->queryPrepared($sql);
+        }
+    }
 }

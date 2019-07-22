@@ -55,6 +55,7 @@ $defaultOrgPreferences = array(
     'mail_smtp_authentication_type'  => 'LOGIN',
     'mail_smtp_user'                 => '',
     'mail_smtp_password'             => '',
+    'mail_template'                  => '',
 
     // System notifications
     'enable_system_mails'         => '1',
