@@ -1207,9 +1207,9 @@ $formMessages->addCheckbox(
 // search all available email templates in folder of adm_my_files
 $emailTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 $formMessages->addSelectBox(
-    'mail_template', $gL10n->get('SYS_EMAIL_TEMPLATES'), $emailTemplatesFiles,
+    'mail_template', $gL10n->get('SYS_EMAIL_TEMPLATE'), $emailTemplatesFiles,
     array('defaultValue' => $formValues['mail_template'], 'showContextDependentFirstEntry' => true, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true,
-        'helpTextIdInline' => array('SYS_EMAIL_TEMPLATES_DESC', array('adm_my_files/mail_templates', '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:e-mail-templates">', '</a>')))
+        'helpTextIdInline' => array('SYS_EMAIL_TEMPLATE_DESC', array('adm_my_files/mail_templates', '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:e-mail-templates">', '</a>')))
 );
 $formMessages->addInput(
     'mail_max_receiver', $gL10n->get('MAI_MAX_RECEIVER'), $formValues['mail_max_receiver'],

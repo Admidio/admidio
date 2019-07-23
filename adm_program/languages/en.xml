@@ -1105,8 +1105,8 @@
   <string name="SYS_EMAIL_NOTIFICATION_TITLE">A new file was uploaded</string>
   <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">A new file was uploaded at #VAR1#\n\nFile: #VAR2#\nUploaded by: #VAR3#\nUploaded at: #VAR4#</string>
   <string name="SYS_EMAIL_SEND">Mail has been send successfully</string>
-  <string name="SYS_EMAIL_TEMPLATES">E-mail templates</string>
-  <string name="SYS_EMAIL_TEMPLATES_DESC">Here you can select an HTML template file from the folder #VAR1_BOLD#. When sending an e-mail, the contents of this file will be copied to the e-mail and the following variables will be replaced: #sender#, #message#, #recipients#, #organization_name#, #organization_shortname#, #organization_website#. For more information on using email templates, see the #VAR2#documentation#VAR3#.</string>
+  <string name="SYS_EMAIL_TEMPLATE">E-mail template</string>
+  <string name="SYS_EMAIL_TEMPLATE_DESC">Here you can select an HTML template file from the folder #VAR1_BOLD#. When sending an e-mail, the contents of this file will be copied to the e-mail and the following variables will be replaced: #sender#, #message#, #recipients#, #organization_name#, #organization_shortname#, #organization_website#. For more information on using email templates, see the #VAR2#documentation#VAR3#.</string>
   <string name="SYS_EMPTY">Empty</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activate documents &amp; files module</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">The documents &amp; files module can be activated or deactivated via this setting. (Default: yes)</string>
