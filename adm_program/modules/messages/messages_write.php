@@ -656,8 +656,7 @@ if (isset($messageStatement))
             $receivers = $message->getValue('msg_usr_id_receiver');
             // open some additional functions for messages
 
-            $receiverName = prepareReceivers($receivers);
-            $receiverName = '<div class="card-footer">'.$gL10n->get('MSG_OPPOSITE').': '.$receiverName.'</div>';
+            $receiverName = '<div class="card-footer">'.$gL10n->get('MSG_OPPOSITE').': ' . prepareRecipients($receivers, true) . '</div>';
         }
 
         $date = \DateTime::createFromFormat('Y-m-d H:i:s', $row['msc_timestamp']);

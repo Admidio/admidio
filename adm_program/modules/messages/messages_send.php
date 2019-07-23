@@ -489,7 +489,14 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         $receiverString = 'list ' . $gL10n->get('LST_LIST') . ($listName === '' ? '' : ' - ' . $listName);
     }
 
-    $receiverName = prepareReceivers($receiverString);
+    if($gSettingsManager->getBool('mail_into_to'))
+    {
+        $receiverName = prepareRecipients($receiverString, true);
+    }
+    else
+    {
+        $receiverName = prepareRecipients($receiverString, false);
+    }
 
     // load mail template and replace text
     $email->setTemplateText($postBody, $postName, $receiverName);

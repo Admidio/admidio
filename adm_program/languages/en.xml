@@ -1034,6 +1034,8 @@
   <string name="SYS_COOKIE_NOT_SET">Log-in error! Your browser does not accept cookies!\n\nFor successful log-in, please, configure your browser to accept cookies from #VAR1_BOLD#.</string>
   <string name="SYS_COPY">Copy</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individual recipient</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individual recipients</string>
   <string name="SYS_COUNTER">Counter</string>
   <string name="SYS_COUNTRY">Country</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
@@ -1283,6 +1285,7 @@
   <string name="SYS_PAGE">Page</string>
   <string name="SYS_PAGE_PREVIOUS">Previous</string>
   <string name="SYS_PAGE_NEXT">Next</string>
+  <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# and #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Members</string>
   <string name="SYS_PASSWORD">Password</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten</string>

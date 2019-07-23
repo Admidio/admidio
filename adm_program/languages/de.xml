@@ -1091,6 +1091,8 @@
   <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du deinen Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
   <string name="SYS_COPY">Kopieren</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individueller Empfänger</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuelle Empfänger</string>
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">DEU</string>
   <string name="SYS_CREATE">Anlegen</string>
@@ -1309,6 +1311,7 @@
   <string name="SYS_PAGE">Seite</string>
   <string name="SYS_PAGE_PREVIOUS">Vorherige</string>
   <string name="SYS_PAGE_NEXT">Nächste</string>
+  <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# und #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Teilnehmer</string>
   <string name="SYS_PASSWORD">Passwort</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen</string>
