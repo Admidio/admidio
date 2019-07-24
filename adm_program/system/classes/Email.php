@@ -398,11 +398,12 @@ class Email extends PHPMailer
 
     /**
      * Add the template text to the email message and replace the plaeholders of the template.
-     * @param string $text       Email text that should be send
-     * @param string $senderName Firstname and lastname of email sender
-     * @param string $recipients List with firstname and lastname of all recipients of this mail
+     * @param string $text        Email text that should be send
+     * @param string $senderName  Firstname and lastname of email sender
+     * @param string $senderEmail The email address of the sender
+     * @param string $recipients  List with firstname and lastname of all recipients of this mail
      */
-    public function setTemplateText($text, $senderName, $recipients)
+    public function setTemplateText($text, $senderName, $senderEmail, $recipients)
     {
         global $gValidLogin, $gCurrentOrganization, $gSettingsManager;
 
@@ -427,10 +428,12 @@ class Email extends PHPMailer
 
         // replace parameters in email template
         $replaces = array(
-            '#sender#'     => $senderName,
-            '#message#'    => $text,
-            '#receiver#'   => $recipients,
-            '#recipients#' => $recipients,
+            '#sender#'       => $senderName,
+            '#sender_name#'  => $senderName,
+            '#sender_email#' => $senderEmail,
+            '#message#'      => $text,
+            '#receiver#'     => $recipients,
+            '#recipients#'   => $recipients,
             '#organization_name#'      => $gCurrentOrganization->getValue('org_longname'),
             '#organization_shortname#' => $gCurrentOrganization->getValue('org_shortname'),
             '#organization_website#'   => $gCurrentOrganization->getValue('org_homepage')
