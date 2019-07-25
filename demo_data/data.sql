@@ -4,24 +4,24 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.8', 0, 710)
-                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.8', 0, 0)
-                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.8', 0, 0)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.8', 0, 0)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.8', 0, 0)
-                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.8', 0, 0)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.8', 0, 0)
-                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.8', 0, 0)
-                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.8', 0, 0)
-                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.8', 0, 0)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.8', 0, 0)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.8', 0, 0)
-                              , (130, 'MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.3.8', 0, 0)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.8', 0, 0)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.8', 0, 0)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.8', 0, 0)
-                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.8', 0, 0)
-                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '3.3.8', 0, 0);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.11', 0, 730)
+                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.11', 0, 0)
+                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.11', 0, 0)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.11', 0, 0)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.11', 0, 0)
+                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.11', 0, 0)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.11', 0, 0)
+                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.11', 0, 0)
+                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.11', 0, 0)
+                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.11', 0, 0)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.11', 0, 0)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.11', 0, 0)
+                              , (130, 'MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.3.11', 0, 0)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.11', 0, 0)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.11', 0, 0)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.11', 0, 0)
+                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.11', 0, 0)
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '3.3.11', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -583,13 +583,11 @@ Thüringen', NULL, NULL, 0, 0, 0, 0, 1, 6, 1, '2013-11-27T17:50:14', 1, '2013-11
 female.png|SYS_FEMALE', NULL, NULL, 0, 0, 0, 0, 1, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
 (12, 1, 'EMAIL', 'EMAIL', 'SYS_EMAIL', NULL, NULL, NULL, NULL, 1, 0, 0, 1, 1, 13, 1, '2012-01-08 11:12:05', NULL, NULL),
 (13, 1, 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 1, 14, 1, '2012-01-08 11:12:05', NULL, NULL),
-(22, 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'INS_FACEBOOK_DESC', NULL, 'facebook.png', 'https://www.facebook.com/#user_content#', 0, 0, 0, 0, 0, 2, 1, '2012-01-08 11:11:40', NULL, NULL),
-(15, 2, 'TEXT', 'GOOGLE_PLUS', 'INS_GOOGLE_PLUS', 'INS_GOOGLE_PLUS_DESC', NULL, 'google_plus.png', 'https://plus.google.com/#user_content#/posts', 0, 0, 0, 0, 0, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
-(16, 2, 'TEXT', 'ICQ', 'INS_ICQ', 'INS_ICQ_DESC', NULL, 'icq.png', 'https://www.icq.com/people/#user_content#', 0, 0, 0, 0, 0, 4, 1, '2012-01-08 11:12:07', NULL, NULL),
-(18, 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'INS_SKYPE_DESC', NULL, 'skype.png', NULL, 0, 0, 0, 0, 0, 5, 1, '2012-01-08 11:12:07', NULL, NULL),
-(23, 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'INS_TWITTER_DESC', NULL, 'twitter.png', 'https://twitter.com/#user_content#', 0, 0, 0, 0, 0, 6, 1, '2012-01-08 11:11:40', NULL, NULL),
-(24, 2, 'TEXT', 'XING', 'INS_XING', 'INS_XING_DESC', NULL, 'xing.png', 'https://www.xing.com/profile/#user_content#', 0, 0, 0, 0, 0, 8, 1, '2012-01-08 11:11:40', NULL, NULL),
-(19, 2, 'TEXT', 'YAHOO_MESSENGER', 'INS_YAHOO_MESSENGER', NULL, NULL, 'yahoo.png', NULL, 0, 0, 0, 0, 0, 9, 1, '2012-01-08 11:12:07', NULL, NULL),
+(22, 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'INS_FACEBOOK_DESC', NULL, 'facebook.png', 'https://www.facebook.com/#user_content#', 0, 0, 0, 0, 0, 1, 1, '2012-01-08 11:11:40', NULL, NULL),
+(16, 2, 'TEXT', 'ICQ', 'INS_ICQ', 'INS_ICQ_DESC', NULL, 'icq.png', 'https://www.icq.com/people/#user_content#', 0, 0, 0, 0, 0, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
+(18, 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'INS_SKYPE_DESC', NULL, 'skype.png', NULL, 0, 0, 0, 0, 0, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
+(23, 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'INS_TWITTER_DESC', NULL, 'twitter.png', 'https://twitter.com/#user_content#', 0, 0, 0, 0, 0, 4, 1, '2012-01-08 11:11:40', NULL, NULL),
+(24, 2, 'TEXT', 'XING', 'INS_XING', 'INS_XING_DESC', NULL, 'xing.png', 'https://www.xing.com/profile/#user_content#', 0, 0, 0, 0, 0, 5, 1, '2012-01-08 11:11:40', NULL, NULL),
 (20, 8, 'NUMBER', 'MEMBERSHIP_NUMBER', 'DEMO_PRO_MEMBERSHIP_NUMBER', NULL, NULL, NULL, NULL, 0, 1, 0, 0, 0, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
 (21, 8, 'TEXT', 'FAVORITE_COLOR', 'DEMO_PRO_FAVORITE_COLOR', 'DEMO_PRO_FAVORITE_COLOR_CONTENT', NULL, NULL, NULL, 0, 0, 0, 0, 0, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
 

@@ -300,7 +300,7 @@ class TableRoles extends TableAccess
      */
     public function getDefaultList()
     {
-        global $gSettingsManager;
+        global $gSettingsManager, $gCurrentOrganization;
 
         $defaultListId = (int) $this->getValue('rol_lst_id');
 
@@ -317,8 +317,24 @@ class TableRoles extends TableAccess
         }
         else
         {
-            // read system default list configuration
-            return $gSettingsManager->getInt('lists_default_configuration');
+            try
+            {
+                // read system default list configuration
+                $defaultListConfiguration = $gSettingsManager->getInt('lists_default_configuration');
+            }
+            catch (\InvalidArgumentException $exception)
+            {
+                // if no default list was set than load another global list of this organization
+                $sql = 'SELECT MIN(lst_id) as lst_id
+                          FROM '.TBL_LISTS.'
+                         WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                           AND lst_global = 1 ';
+                $statement = $this->db->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+                $row = $statement->fetch();
+                $defaultListConfiguration = $row['lst_id'];
+            }
+
+            return $defaultListConfiguration;
         }
     }
 
