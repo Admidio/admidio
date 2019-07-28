@@ -792,7 +792,6 @@ class HtmlPage
     {
         global $gL10n, $gValidLogin, $gSettingsManager, $gDb, $gCurrentUser;
 
-        $menuIcon = '/dummy.png';
         $htmlMenu = '';
 
         $mainMenuStatement = self::getMainMenuStatement();
@@ -825,6 +824,7 @@ class HtmlPage
                         $menuDescription = Language::translateIfTranslationStrId($row['men_description']);
                         $menuUrl = $row['men_url'];
 
+                        $menuIcon = 'dummy.png';
                         if (strlen($row['men_icon']) > 2)
                         {
                             $menuIcon = $row['men_icon'];

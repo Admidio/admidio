@@ -92,9 +92,10 @@ if($getMode === 1)
             $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
             // => EXIT
         }
-        $menu->setValue('men_icon', $arrayIcons[$postIcon]);
+        $postIcon = $arrayIcons[$postIcon];
     }
 
+    $menu->setValue('men_icon', $postIcon);
     $menu->setValue('men_men_id_parent', $postIdParent);
     $menu->setValue('men_name', $postName);
     $menu->setValue('men_description', $postDesc);
