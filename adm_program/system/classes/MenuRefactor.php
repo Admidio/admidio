@@ -40,13 +40,20 @@ class MenuRefactor
         return count($this->menuNodes);
     }
 
-    public function getHtmlSidebar()
+    /**
+     * Create the html code of the menu as a list. There are different
+     * parameters to change the look of the menu.
+     * @param bool $mediaView If set to true than the menu will be shown in the style of bootstrap media object
+     *                        https://getbootstrap.com/docs/4.3/components/media-object/
+     * @return string Html code of the menu.
+     */
+    public function getHtml($mediaView = false)
     {
         $html = '';
 
         foreach($this->menuNodes as $menuNode)
         {
-            $html .= $menuNode->getHtmlSidebar();
+            $html .= $menuNode->getHtml($mediaView);
         }
 
         return $html;

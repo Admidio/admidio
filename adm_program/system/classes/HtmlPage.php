@@ -786,7 +786,7 @@ class HtmlPage
 
         $menu = new MenuRefactor();
         $menu->loadFromDatabase();
-        $htmlMenu = $menu->getHtmlSidebar();
+        $htmlMenu = $menu->getHtml($details);
 
 /*
         $menuIcon = 'fa-trash-alt admidio-opacity-0';

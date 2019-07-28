@@ -49,7 +49,14 @@ class MenuNode
         return count($this->nodeEntries);
     }
 
-    public function getHtmlSidebar()
+    /**
+     * Create the html code of the menu as a list. There are different
+     * parameters to change the look of the menu.
+     * @param bool $mediaView If set to true than the menu will be shown in the style of bootstrap media object
+     *                        https://getbootstrap.com/docs/4.3/components/media-object/
+     * @return string Html code of the menu.
+     */
+    public function getHtml($mediaView = false)
     {
         $html = '';
 
@@ -60,14 +67,34 @@ class MenuNode
 
             foreach($this->nodeEntries as $menuEntry)
             {
-                $iconHtml = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
-                $html .= '
+                if($mediaView)
+                {
+                    $iconHtml = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name'], 'fa-2x');
+                    $html .= '
+                    <li class="media">
+                        <div class="media-left">
+                            <a id="menu_'.$this->textId.'_'.$menuEntry['men_name_intern'].'" href="'.$menuEntry['men_url'].'">
+                                '.$iconHtml.'
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">
+                                <a id="lmenu_'.$this->textId.'_'.$menuEntry['men_name_intern'].'" href="'.$menuEntry['men_url'].'">'.$menuEntry['men_name'].'</a>
+                            </h4>
+                            <p>'.$menuEntry['men_description'].'</p>
+                        </div>
+                    </li>';
+                }
+                else
+                {
+                    $iconHtml = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
+                    $html .= '
                     <li>
                         <a id="lmenu_'.$this->textId.'_'.$menuEntry['men_name_intern'].'" class="btn" href="'.$menuEntry['men_url'].'">
                             ' . $iconHtml . $menuEntry['men_name'] . '
                         </a>
                     </li>';
-
+                }
             }
 
             $html .= '</ul>';
@@ -107,16 +134,7 @@ class MenuNode
                 {
                     continue;
                 }
-/*
-                $menuName = Language::translateIfTranslationStrId($node['men_name']);
-                $menuDescription = Language::translateIfTranslationStrId($node['men_description']);
-                $menuUrl = $node['men_url'];
 
-                if (strlen($node['men_icon']) > 2)
-                {
-                    $menuIcon = $node['men_icon'];
-                }
-*/
                 // special case because there are different links if you are logged in or out for mail
                 /*if ($gValidLogin && $node['men_name_intern'] === 'mail')
                 {
@@ -135,6 +153,11 @@ class MenuNode
                 if (preg_match('/^http(s?):\/\//', $node['men_url']) === 0)
                 {
                     $node['men_url'] = ADMIDIO_URL . $node['men_url'];
+                }
+
+                if (strlen($node['men_icon']) === 0)
+                {
+                    $node['men_icon'] = 'fa-trash-alt admidio-opacity-0';
                 }
 
                 $this->nodeEntries[$node['men_id']] = $node;
