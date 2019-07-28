@@ -71,16 +71,13 @@ if($getMode === 1)
         // => EXIT
     }
 
-    if($postIcon !== '')
+    if($postIcon !== '' && !preg_match('/^fa-[a-z]*$/', $postIcon))
     {
-        if(!preg_match('/^fa-[a-z]*$/', $postIcon))
-        {
-            $gMessage->show($gL10n->get('SYS_INVALID_FONT_AWESOME'));
-            // => EXIT
-        }
-        $menu->setValue('men_icon', $postIcon);
+        $gMessage->show($gL10n->get('SYS_INVALID_FONT_AWESOME'));
+        // => EXIT
     }
 
+    $menu->setValue('men_icon', $postIcon);
     $menu->setValue('men_men_id_parent', $postIdParent);
     $menu->setValue('men_name', $postName);
     $menu->setValue('men_description', $postDesc);

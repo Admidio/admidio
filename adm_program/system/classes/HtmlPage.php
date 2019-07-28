@@ -784,7 +784,6 @@ class HtmlPage
     {
         global $gL10n, $gValidLogin, $gSettingsManager, $gDb, $gCurrentUser;
 
-        $menuIcon = 'fa-trash-alt admidio-opacity-0';
         $htmlMenu = '';
 
         $mainMenuStatement = self::getMainMenuStatement();
@@ -815,7 +814,8 @@ class HtmlPage
 
                         $menuName = Language::translateIfTranslationStrId($row['men_name']);
                         $menuDescription = Language::translateIfTranslationStrId($row['men_description']);
-                        $menuUrl = $row['men_url'];
+                        $menuUrl  = $row['men_url'];
+                        $menuIcon = 'fa-trash-alt admidio-opacity-0';
 
                         if (strlen($row['men_icon']) > 2)
                         {
