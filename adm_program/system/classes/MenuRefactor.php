@@ -1,0 +1,147 @@
+<?php
+/**
+ ***********************************************************************************************
+ * Class manages display of menus
+ *
+ * @copyright 2004-2019 The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/**
+ * Create, modify and display menus. Each menu item is defined by
+ *
+ *      - $id   : identifier of the menu item
+ *      - $link : URL, relative to the admidio root directory, starting with a /
+ *                or full URL with http or https protocol
+ *      - $text : menu text
+ *      - $icon : URL, relative to the theme plugin, starting with a /
+ *              : or full URL with http or https protocol
+ *      - $desc : (optional) long description of the menu item
+ */
+class MenuRefactor
+{
+    /**
+     * @var array Array with the main nodes and their entries
+     */
+    protected $menuNodes = array();
+
+    public function __construct()
+    {
+    }
+
+    /**
+     * Count the number of main nodes from this menu
+     * @return int Number of nodes from this menu
+     */
+    public function countMainNodes()
+    {
+        return count($this->menuNodes);
+    }
+
+    public function getHtmlSidebar()
+    {
+        $html = '';
+
+        foreach($this->menuNodes as $menuNode)
+        {
+            $html .= $menuNode->getHtmlSidebar();
+        }
+
+        return $html;
+    }
+
+    /**
+     * Load the menu from the database table adm_menu
+     */
+    public function loadFromDatabase()
+    {
+        global $gDb, $gLogger;
+
+        $countMenuNodes = 0;
+        $sql = 'SELECT men_id, men_name, men_name_intern
+                  FROM '.TBL_MENU.'
+                 WHERE men_men_id_parent IS NULL
+              ORDER BY men_order';
+
+        $mainNodesStatement = $gDb->queryPrepared($sql);
+
+        while ($mainNodes = $mainNodesStatement->fetch())
+        {
+            $this->menuNodes[$countMenuNodes] = new MenuNode($mainNodes['men_name_intern'], $mainNodes['men_name']);
+            $this->menuNodes[$countMenuNodes]->loadFromDatabase($mainNodes['men_id']);
+
+            $countMenuNodes++;
+        }
+        $gLogger->error(print_r($this->menuNodes, true));
+    }
+
+    /**
+     * Create the html menu from the internal array that must be filled before.
+     * You have the option to create a simple menu with icon and link or
+     * a more complex menu with submenu and description text.
+     * @param bool $complex Create a @b simple menu as default. If you set the param to **true**
+     *                      then you will create a menu with submenus and description
+     * @return string Return the html code of the form.
+     */
+    public function show($complex = false)
+    {
+        if (count($this->items) === 0)
+        {
+            return '';
+        }
+
+        $html = '';
+
+        if ($complex)
+        {
+            $html .= '<h2 id="head_'.$this->id.'_complex">'.$this->title.'</h2>';
+            $html .= '<ul id="menu_'.$this->id.'_complex" class="list-unstyled admidio-media-menu">'; // or class="media-list"
+        }
+        else
+        {
+            $html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>';
+            $html .= '<ul id="menu_'.$this->id.'" class="list-unstyled admidio-menu btn-group-vertical">';
+        }
+
+        // now create each menu item
+        foreach($this->items as $item)
+        {
+            if ($complex)
+            {
+                if($item['id'] !== 'overview')
+                {
+                    $html .= '
+                        <li class="media">
+                            <div class="media-left">
+                                <a id="menu_'.$this->id.'_'.$item['id'].'" href="'.$item['link'].'">
+                                    <i class="fas fa-fw '.$item['icon'].' fa-2x"></i>
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    <a id="lmenu_'.$this->id.'_'.$item['id'].'" href="'.$item['link'].'">'.$item['text'].'</a>
+                                </h4>
+                                <p>'.$item['desc'].'</p>
+                            </div>
+                        </li>'; // closes "div.media-body" and "li.media"
+                }
+            }
+            else
+            {
+                $iconHtml = Image::getIconHtml($item['icon'], $item['text']);
+                $html .= '
+                    <li>
+                        <a id="lmenu_'.$this->id.'_'.$item['id'].'" class="btn" href="'.$item['link'].'">
+                            ' . $iconHtml . $item['text'] . '
+                        </a>
+                    </li>';
+            }
+        }
+
+        $html .= '</ul>'; // closes main-menu "menu.list-unstyled"
+
+        return $html;
+    }
+}

@@ -784,6 +784,11 @@ class HtmlPage
     {
         global $gL10n, $gValidLogin, $gSettingsManager, $gDb, $gCurrentUser;
 
+        $menu = new MenuRefactor();
+        $menu->loadFromDatabase();
+        $htmlMenu = $menu->getHtmlSidebar();
+
+/*
         $menuIcon = 'fa-trash-alt admidio-opacity-0';
         $htmlMenu = '';
 
@@ -866,7 +871,7 @@ class HtmlPage
                 'menu_item_private_message', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $unreadBadge,
                 'fa-comments', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
-        }
+        }*/
 
         return $htmlMenu;
     }
