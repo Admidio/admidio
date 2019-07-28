@@ -63,7 +63,15 @@ class MenuNode
         if($this->countEntries() > 0)
         {
             $html .= '<h3 id="head_'.$this->textId.'">'.$this->name.'</h3>';
-            $html .= '<ul id="menu_'.$this->textId.'" class="list-unstyled admidio-menu btn-group-vertical">';
+
+            if($mediaView)
+            {
+                $html .= '<ul id="menu_'.$this->textId.'" class="list-unstyled admidio-media-menu">';
+            }
+            else
+            {
+                $html .= '<ul id="menu_'.$this->textId.'" class="list-unstyled admidio-menu btn-group-vertical">';
+            }
 
             foreach($this->nodeEntries as $menuEntry)
             {
