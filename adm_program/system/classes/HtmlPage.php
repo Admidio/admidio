@@ -782,11 +782,9 @@ class HtmlPage
      */
     public function showMainMenu($details = true)
     {
-        global $gL10n, $gValidLogin, $gSettingsManager, $gDb, $gCurrentUser;
+        global $gL10n, $gValidLogin, $gSettingsManager, $gDb, $gCurrentUser, $gMenu;
 
-        $menu = new MenuRefactor();
-        $menu->loadFromDatabase();
-        $htmlMenu = $menu->getHtml($details);
+        $htmlMenu = $gMenu->getHtml($details);
 
 /*
         $menuIcon = 'fa-trash-alt admidio-opacity-0';

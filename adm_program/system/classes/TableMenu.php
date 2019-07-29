@@ -41,6 +41,24 @@ class TableMenu extends TableAccess
     }
 
     /**
+     * Deletes the selected menu entries.
+     * After that the class will be initialize.
+     * @return bool **true** if no error occurred
+     */
+    public function delete()
+    {
+        global $gCurrentSession;
+
+        if ($gCurrentSession instanceof Session)
+        {
+            // now set menu object in session invalid because the menu has changed
+            $gCurrentSession->renewMenuObject();
+        }
+
+        return parent::delete();
+    }
+
+    /**
      * This recursive method creates from the parameter name a unique name that only have
      * capital letters followed by the next free number (index)
      * Example: 'Membership' => 'MEMBERSHIP_2'
@@ -194,6 +212,8 @@ class TableMenu extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
+        global $gCurrentSession;
+
         $this->db->startTransaction();
 
         if($this->newRecord)
@@ -212,6 +232,12 @@ class TableMenu extends TableAccess
         }
 
         $returnValue = parent::save($updateFingerPrint);
+
+        if ($gCurrentSession instanceof Session)
+        {
+            // now set menu object in session invalid because the menu has changed
+            $gCurrentSession->renewMenuObject();
+        }
 
         $this->db->endTransaction();
 

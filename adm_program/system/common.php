@@ -137,7 +137,7 @@ $gL10n = new Language($gLanguageData);
 $orgId    = (int) $gCurrentOrganization->getValue('org_id');
 $sesUsrId = (int) $gCurrentSession->getValue('ses_usr_id');
 
-// now if auto login is done, read global user data
+// now if auto login is done, read global user data und create the menu
 if($gCurrentSession->hasObject('gCurrentUser'))
 {
     /**
@@ -155,6 +155,10 @@ if($gCurrentSession->hasObject('gCurrentUser'))
         $gCurrentUser->clear();
         $gCurrentSession->setValue('ses_usr_id', '');
     }
+    /**
+     * @var Menu $gMenu
+     */
+    $gMenu =& $gCurrentSession->getObject('gMenu');
 }
 else
 {
@@ -170,9 +174,14 @@ else
         $gCurrentUser->updateLoginData();
     }
 
+    // read menu from database
+    $gMenu = new MenuRefactor();
+    $gMenu->loadFromDatabase();
+
     // save all data in session
     $gCurrentSession->addObject('gProfileFields', $gProfileFields);
     $gCurrentSession->addObject('gCurrentUser', $gCurrentUser);
+    $gCurrentSession->addObject('gMenu', $gMenu);
 }
 
 $sesRenew = (int) $gCurrentSession->getValue('ses_renew');
@@ -185,6 +194,13 @@ if($sesRenew === 1 || $sesRenew === 3)
     $gProfileFields->readProfileFields($orgId);
     $gCurrentUser->readDataById($usrId);
     $gCurrentSession->setValue('ses_renew', 0);
+}
+
+// if the renew flag is set than the menu must be reloaded
+if($sesRenew === 4)
+{
+    $gMenu->clear();
+    $gMenu->loadFromDatabase();
 }
 
 // check session if user login is valid

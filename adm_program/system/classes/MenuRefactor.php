@@ -32,6 +32,14 @@ class MenuRefactor
     }
 
     /**
+     * Initialise the member parameters
+     */
+    public function clear()
+    {
+        $this->menuNodes = array();
+    }
+
+    /**
      * Count the number of main nodes from this menu
      * @return int Number of nodes from this menu
      */
