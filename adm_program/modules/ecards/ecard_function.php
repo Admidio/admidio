@@ -235,7 +235,7 @@ class FunctionClass
         }
 
         $email->setText($ecardHtmlData);
-        $email->sendDataAsHtml();
+        $email->setHtmlMail();
 
         if ($returnCode)
         {

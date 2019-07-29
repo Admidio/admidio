@@ -1204,6 +1204,13 @@ $formMessages->addCheckbox(
     'enable_mail_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), (bool) $formValues['enable_mail_captcha'],
     array('helpTextIdInline' => 'MAI_SHOW_CAPTCHA_DESC')
 );
+// search all available email templates in folder of adm_my_files
+$emailTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+$formMessages->addSelectBox(
+    'mail_template', $gL10n->get('SYS_EMAIL_TEMPLATE'), $emailTemplatesFiles,
+    array('defaultValue' => $formValues['mail_template'], 'showContextDependentFirstEntry' => true, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true,
+        'helpTextIdInline' => array('SYS_EMAIL_TEMPLATE_DESC', array('adm_my_files/mail_templates', '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:e-mail-templates">', '</a>')))
+);
 $formMessages->addInput(
     'mail_max_receiver', $gL10n->get('MAI_MAX_RECEIVER'), $formValues['mail_max_receiver'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'MAI_MAX_RECEIVER_DESC')

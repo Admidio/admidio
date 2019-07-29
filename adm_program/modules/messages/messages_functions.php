@@ -35,34 +35,70 @@ function getMessageLink($msgId, $msgSubject)
 }
 
 /**
- * @param string $receiversString
- * @return string
+ * Create a readable string of recipients from role-ids and user-ids of the select2 control
+ * @param string $recipientsString  The source string with the role and user-ids of the select2 control
+ * @param bool   $showFullUserNames If set to true than the individual recipients will be shown with full user name
+ * @return string Returns a readable string of recipients roles and users e.g. "Members, John Doe"
  */
-function prepareReceivers($receiversString)
+function prepareRecipients($recipientsString, $showFullUserNames = false)
 {
-    global $gDb, $gProfileFields;
+    global $gDb, $gProfileFields, $gL10n;
 
-    $receiverNames = '';
-    $receiversSplit = explode('|', $receiversString);
-    foreach ($receiversSplit as $receivers)
+    $singleRecipientsCount = 0;
+    $recipientName = '';
+    $recipientsSplit = explode('|', $recipientsString);
+
+    foreach ($recipientsSplit as $recipients)
     {
-        if (StringUtils::strStartsWith($receivers, 'list '))
+        if (StringUtils::strStartsWith($recipients, 'list '))
         {
-            $receiverNames .= '; ' . substr($receivers, 5);
+            $recipientName .= '; ' . substr($recipients, 5);
         }
-        elseif (StringUtils::strContains($receivers, ':'))
+        elseif (StringUtils::strContains($recipients, ':'))
         {
             $moduleMessages = new ModuleMessages();
-            $receiverNames .= '; ' . $moduleMessages->msgGroupNameSplit($receivers);
+            $recipientName .= '; ' . $moduleMessages->msgGroupNameSplit($recipients);
         }
         else
         {
-            $user = new User($gDb, $gProfileFields, (int) trim($receivers));
-            $receiverNames .= '; ' . $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
+            $singleRecipientsCount = $singleRecipientsCount + 1;
+
+            if($showFullUserNames)
+            {
+                $user = new User($gDb, $gProfileFields, (int) trim($recipients));
+                $recipientName .= '; ' . $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
+            }
         }
     }
 
-    return substr($receiverNames, 2);
+    if(strlen($recipientName) > 0)
+    {
+        $recipientName = substr($recipientName, 2);
+    }
+
+    // if full user names should not be shown than create a text with the number of individual recipients
+    if(!$showFullUserNames && $singleRecipientsCount > 0)
+    {
+        if($singleRecipientsCount === 1)
+        {
+            $textIndividualRecipients = $gL10n->get('SYS_COUNT_INDIVIDUAL_RECIPIENT', array($singleRecipientsCount));
+        }
+        else
+        {
+            $textIndividualRecipients = $gL10n->get('SYS_COUNT_INDIVIDUAL_RECIPIENTS', array($singleRecipientsCount));
+        }
+
+        if(strlen($recipientName) > 0)
+        {
+            $recipientName = $gL10n->get('SYS_PARAMETER1_AND_PARAMETER2', array($recipientName, $textIndividualRecipients));
+        }
+        else
+        {
+            $recipientName = $textIndividualRecipients;
+        }
+    }
+
+    return $recipientName;
 }
 
 /**

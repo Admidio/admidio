@@ -444,11 +444,6 @@
   <string name="MAI_DELIVERY_CONFIRMATION">Request delivery confirmation</string>
   <string name="MAI_DELIVERY_CONFIRMATION_DESC">When enabled, the author of an e-mail has the opportunity to request a delivery confirmation. However, it depends on the settings of the recipients email program, whether a delivery confirmation is sent. The recipient may suppress its transmission.</string>
   <string name="MAI_EMAIL_DESC">E-mails can be sent to different roles like groups, courses or departments.</string>
-  <string name="MAI_EMAIL_SEND_TO_RECEIVER">#VAR1# sent to the receivers: #VAR3# from #VAR2# the following E-Mail:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_ACTIVE">#VAR1# has sent following e-mail to active users of role #VAR3# on #VAR2#:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# has sent following e-mail to former users of role #VAR3# on #VAR2#:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# has sent following e-mail to active and former users of role #VAR3# on #VAR2#:</string>
-  <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# from #VAR2# has sent to you following e-mail:</string>
   <string name="MAI_HIDDEN">Hidden</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Creating and sending HTML based e-mails can be enabled for registered users. A JavaScript editor will be displayed for comfortable editing, instead of the standard text field. The current option is for guests due security reasons unavailable.</string>
@@ -1039,6 +1034,8 @@
   <string name="SYS_COOKIE_NOT_SET">Log-in error! Your browser does not accept cookies!\n\nFor successful log-in, please, configure your browser to accept cookies from #VAR1_BOLD#.</string>
   <string name="SYS_COPY">Copy</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individual recipient</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individual recipients</string>
   <string name="SYS_COUNTER">Counter</string>
   <string name="SYS_COUNTRY">Country</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
@@ -1108,6 +1105,8 @@
   <string name="SYS_EMAIL_NOTIFICATION_TITLE">A new file was uploaded</string>
   <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">A new file was uploaded at #VAR1#\n\nFile: #VAR2#\nUploaded by: #VAR3#\nUploaded at: #VAR4#</string>
   <string name="SYS_EMAIL_SEND">Mail has been send successfully</string>
+  <string name="SYS_EMAIL_TEMPLATE">E-mail template</string>
+  <string name="SYS_EMAIL_TEMPLATE_DESC">Here you can select an HTML template file from the folder #VAR1_BOLD#. When sending an e-mail, the contents of this file will be copied to the e-mail and the following variables will be replaced: #sender#, #message#, #recipients#, #organization_name#, #organization_shortname#, #organization_website#. For more information on using email templates, see the #VAR2#documentation#VAR3#.</string>
   <string name="SYS_EMPTY">Empty</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activate documents &amp; files module</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">The documents &amp; files module can be activated or deactivated via this setting. (Default: yes)</string>
@@ -1262,6 +1261,7 @@
   <string name="SYS_NO_ENTRIES_FOUND">No entries found.</string>
   <string name="SYS_NO_DATA_FOUND">No data found!</string>
   <string name="SYS_NO_RIGHTS">You do not have the required permission to perform this action.</string>
+  <string name="SYS_NO_TEMPLATE">No template</string>
   <string name="SYS_NOBODY">Nobody</string>
   <string name="SYS_NONE">None</string>
   <string name="SYS_NORMAL_PICTURE">Normal image</string>
@@ -1285,6 +1285,7 @@
   <string name="SYS_PAGE">Page</string>
   <string name="SYS_PAGE_PREVIOUS">Previous</string>
   <string name="SYS_PAGE_NEXT">Next</string>
+  <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# and #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Members</string>
   <string name="SYS_PASSWORD">Password</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten</string>
