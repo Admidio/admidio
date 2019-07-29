@@ -123,7 +123,7 @@ while ($row = $allEmailsStatement->fetch())
         array(
             getMessageIcon($msgId, 'fa-envelope', $gL10n->get('SYS_EMAIL')),
             getMessageLink($msgId, $msgSubject),
-            prepareReceivers($row['user']),
+            prepareRecipients($row['user'], true),
             $message->getValue('msg_timestamp'),
             getAdministrationLink($rowIndex, $msgId, $msgSubject)
         ),

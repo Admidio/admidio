@@ -1091,6 +1091,8 @@
   <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du deinen Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
   <string name="SYS_COPY">Kopieren</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individueller Empfänger</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuelle Empfänger</string>
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">DEU</string>
   <string name="SYS_CREATE">Anlegen</string>
@@ -1153,6 +1155,8 @@
   <string name="SYS_EMAIL_INVALID">Die E-Mail-Adresse im Feld #VAR1_BOLD# enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</string>
   <string name="SYS_EMAIL_NOT_SEND">Die E-Mail konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
   <string name="SYS_EMAIL_SEND">Die E-Mail wurde versendet.</string>
+  <string name="SYS_EMAIL_TEMPLATE">E-Mail-Vorlage</string>
+  <string name="SYS_EMAIL_TEMPLATE_DESC">Hier kann eine HTML-Vorlagendatei aus dem Ordner #VAR1_BOLD# ausgewählt werden. Beim Versand einer E-Mail wird der Inhalt dieser Datei in die E-Mail kopiert und folgende Variablen ersetzt: #sender#, #message#, #recipients#, #organization_name#, #organization_shortname#, #organization_website#. Weitere Informationen zu der Nutzung von E-Mail-Vorlagen findest du in der #VAR2#Dokumentation#VAR3#.</string>
   <string name="SYS_EMPTY">Leer</string>
   <string name="SYS_END" description="End of a date">Ende</string>
   <string name="SYS_ERROR">Fehler</string>
@@ -1284,6 +1288,7 @@
   <string name="SYS_NO_ENTRIES_FOUND">Es wurden keine Einträge gefunden.</string>
   <string name="SYS_NO_DATA_FOUND">Es wurden keine Daten gefunden.</string>
   <string name="SYS_NO_RIGHTS">Du hast kein Recht, diese Aktion auszuführen.</string>
+  <string name="SYS_NO_TEMPLATE">Keine Vorlage</string>
   <string name="SYS_NOBODY">Niemand</string>
   <string name="SYS_NONE">Keiner</string>
   <string name="SYS_NORMAL_PICTURE">Normalbild</string>
@@ -1306,6 +1311,7 @@
   <string name="SYS_PAGE">Seite</string>
   <string name="SYS_PAGE_PREVIOUS">Vorherige</string>
   <string name="SYS_PAGE_NEXT">Nächste</string>
+  <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# und #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Teilnehmer</string>
   <string name="SYS_PASSWORD">Passwort</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen</string>

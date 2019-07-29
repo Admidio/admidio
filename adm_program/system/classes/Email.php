@@ -358,6 +358,30 @@ class Email extends PHPMailer
     }
 
     /**
+     * Funktion um das Flag zu setzen, dass eine Kopie verschickt werden soll...
+     */
+    public function setCopyToSenderFlag()
+    {
+        $this->emCopyToSender = true;
+    }
+
+    /**
+     * The mail will be send as html email
+     */
+    public function setHtmlMail()
+    {
+        $this->emSendAsHTML = true;
+    }
+
+    /**
+     * Funktion um das Flag zu setzen, dass in der Kopie alle Empfaenger der Mail aufgelistet werden
+     */
+    public function setListRecipientsFlag()
+    {
+        $this->emListRecipients = true;
+    }
+
+    /**
      * Set the subject of the email
      * @param string $subject A text that should be the subject of the email
      * @return bool Returns **false** if the parameter has no text
@@ -373,72 +397,71 @@ class Email extends PHPMailer
     }
 
     /**
+     * Add the template text to the email message and replace the plaeholders of the template.
+     * @param string $text        Email text that should be send
+     * @param string $senderName  Firstname and lastname of email sender
+     * @param string $senderEmail The email address of the sender
+     * @param string $recipients  List with firstname and lastname of all recipients of this mail
+     */
+    public function setTemplateText($text, $senderName, $senderEmail, $recipients)
+    {
+        global $gValidLogin, $gCurrentOrganization, $gSettingsManager;
+
+
+        // load the template and set the new email body with template
+        try
+        {
+            $emailTemplateText = FileSystemUtils::readFile(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/' . $gSettingsManager->getString('mail_template'));
+        }
+        catch (\RuntimeException $exception)
+        {
+            $emailTemplateText = '#message#';
+        }
+
+        if (!$gValidLogin)
+        {
+            $senderName .= ' (' . $gL10n->get('MAI_SENDER_NOT_LOGGED_IN') . ') ';
+        }
+
+        // replace all line feeds within the mailtext into simple breaks because only those are valid within mails
+        $text = str_replace("\r\n", "\n", $text);
+
+        // replace parameters in email template
+        $replaces = array(
+            '#sender#'       => $senderName,
+            '#sender_name#'  => $senderName,
+            '#sender_email#' => $senderEmail,
+            '#message#'      => $text,
+            '#receiver#'     => $recipients,
+            '#recipients#'   => $recipients,
+            '#organization_name#'      => $gCurrentOrganization->getValue('org_longname'),
+            '#organization_shortname#' => $gCurrentOrganization->getValue('org_shortname'),
+            '#organization_website#'   => $gCurrentOrganization->getValue('org_homepage')
+        );
+        $emailHtmlText = StringUtils::strMultiReplace($emailTemplateText, $replaces);
+
+        // now remove html und css from template
+        $emailText = strip_tags($emailHtmlText,'<style>');
+        $substring = substr($emailText, strpos($emailText, '<style'), strpos($emailText, '</style>') + 6);
+        $emailText = str_replace($substring, '', $emailText);
+        $emailText = str_replace(array("\t","\r","\n"), '', $emailText);
+        $emailText = trim($emailText);
+
+        $this->emText = $emailText;
+        $this->emHtmlText = $emailHtmlText;
+    }
+
+    /**
      * Funktion um den Nachrichtentext an die Mail uebergeben
      * @param string $text
      */
     public function setText($text)
     {
-        // Erst mal die Zeilenumbrueche innerhalb des Mailtextes umwandeln in einfache Umbrueche
-        // statt \r\n nur noch \n
+        // replace all line feeds within the mailtext into simple breaks because only those are valid within mails
         $text = str_replace("\r\n", "\n", $text);
 
         $this->emText .= strip_tags($text);
         $this->emHtmlText .= $text;
-    }
-
-    /**
-     * Funktion um das Flag zu setzen, dass eine Kopie verschickt werden soll...
-     */
-    public function setCopyToSenderFlag()
-    {
-        $this->emCopyToSender = true;
-    }
-
-    /**
-     * Funktion um das Flag zu setzen, dass in der Kopie alle Empfaenger der Mail aufgelistet werden
-     */
-    public function setListRecipientsFlag()
-    {
-        $this->emListRecipients = true;
-    }
-
-    /**
-     * Write a short text with sender information in text of email
-     * @param string $senderName Firstname and lastname of email sender
-     * @param string $receivers  List with firstname and lastname of all recipients of this mail
-     */
-    public function setSenderInText($senderName, $receivers)
-    {
-        global $gL10n, $gValidLogin, $gCurrentOrganization;
-
-        $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_RECEIVER', array($senderName, $gCurrentOrganization->getValue('org_homepage'), $receivers));
-
-        if (!$gValidLogin)
-        {
-            $senderText .= static::$LE . $gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
-        }
-
-        if($this->emSendAsHTML)
-        {
-            $senderText .= static::$LE . '<hr style="border: 1px solid;" />' . static::$LE . static::$LE;
-        }
-        else
-        {
-            $senderText .= static::$LE .
-                '*****************************************************************************************************************************' .
-                static::$LE . static::$LE;
-        }
-
-        $this->emText .= $senderText;
-        $this->emHtmlText .= nl2br($senderText);
-    }
-
-    /**
-     * method change email header so that client will interpret mail as html mail
-     */
-    public function sendDataAsHtml()
-    {
-        $this->emSendAsHTML = true;
     }
 
     /**
@@ -543,6 +566,15 @@ class Email extends PHPMailer
         $this->addAddress($this->emSender['address'], $this->emSender['name']);
 
         $this->send();
+    }
+
+    /**
+     * method change email header so that client will interpret mail as html mail
+     * @deprecated 4.0.0:4.1.0 "sendDataAsHtml()" is deprecated, use "setHtmlMail()" instead.
+     */
+    public function sendDataAsHtml()
+    {
+        $this->setHtmlMail();
     }
 
     /**

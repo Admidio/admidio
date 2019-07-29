@@ -33,7 +33,7 @@
  * $language = new Language();
  *
  * // read and display a language specific text with placeholders for individual content
- * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', array('John Doe', 'Demo-Organization', 'Administrator'));
+ * echo $gL10n->get('SYS_CREATED_BY', array('John Doe', '2019-04-13'));
  * ```
  */
 class Language
@@ -98,7 +98,7 @@ class Language
      * // display a text without placeholders
      * echo $gL10n->get('SYS_NUMBER');
      * // display a text with placeholders for individual content
-     * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', array('John Doe', 'Demo-Organization', 'Administrator'));
+     * echo $gL10n->get('SYS_CREATED_BY', array('John Doe', '2019-04-13'));
      * ``
      */
     public function get($textId, array $params = array())
@@ -321,7 +321,7 @@ class Language
     {
         global $gSupportedLanguages;
 
-        return array_map(function($languageInfos) { return $languageInfos['name']; }, $gSupportedLanguages);        
+        return array_map(function($languageInfos) { return $languageInfos['name']; }, $gSupportedLanguages);
     }
 
     /**
