@@ -216,7 +216,6 @@ class HtmlNavbar
      */
     private function getNavHtml(array $items, $class = '')
     {
-        global $gLogger;
         $html = '<ul class="navbar-nav mr-auto ' . $class . '">';
 
         foreach($items as $menuEntry)
