@@ -5,7 +5,7 @@
 
             </div><!-- closes "div#left-block" -->
         </div><!-- closes "div.col-md-9" -->
-        <div class="col-md-3">
+        <div class="col-lg-3">
             <div id="right-block" class="admidio-container">
                 <?php
 

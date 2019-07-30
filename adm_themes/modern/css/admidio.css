@@ -62,7 +62,7 @@ body > .admContent {
 }
 
 /* Layout adjustments for devices > 7" */
-@media (min-width: 768px) {
+@media (min-width: 992px) {
     body {
         padding: 15px 0;
         background-color: #96c4cb;
@@ -129,7 +129,7 @@ body > .admContent {
 }
 
 /* Layout adjustments for small devices */
-@media (max-width: 767px) {
+@media (max-width: 991px) {
     #header-block {
         margin: 0 -15px 0 -15px;
         background-color: #c1dce6;
@@ -139,6 +139,12 @@ body > .admContent {
         font-size: 14pt;
         letter-spacing: 0.1em;
         padding: 7px 10px 7px 5px;
+    }
+
+    .admidio-module-headline,
+    #page-h1-membership,
+    #admidio-logo {
+        display: none !important;
     }
 }
 
@@ -319,7 +325,7 @@ a.btn {
 }
 
 a {
-    cursor: pointer;    
+    cursor: pointer;
 }
 
 /**************************/
