@@ -548,7 +548,7 @@
   <string name="MEN_MENU_LEVEL_DESC">Et menupunkt er altid underordnet et andet menupunkt. I valglisten skal du vælge et menuniveau, hvor det nye menupunkt skal være synligt.</string>
   <string name="MEN_MODULE_RIGHTS">Modulrettigheder</string>
   <string name="MEN_MODULE_RIGHTS_DESC">Hvis du specificerer et modul her, vises menupunktet kun, hvis brugeren også har ret til at se dette modul.</string>
-  <string name="MEN_PLUGIN">plugins</string>
+  <string name="MEN_PLUGIN">Plugins</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Aktiver chat</string>
   <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Chatmodulet kan aktiveres eller deaktiveres ved hjælp af denne indstilling. Modulet indlæser dynamisk data fra databasen hvert 3. sekund. Der gemmes maksimalt 99 poster. For 100 meddelelser slettes de første 50 poster. (Standard: Deaktiveret)</string>
@@ -1141,7 +1141,7 @@
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Ikke alle filer blev overført.</string>
   <string name="SYS_FILES_UPLOAD_DESC">Vælg venligst alle de filer du vil uploade til folderen #VAR1_BOLD#</string>
   <string name="SYS_FILENAME_EMPTY">Filnavn mangler!</string>
-  <string name="SYS_FILENAME_INVALID">Det valgte filnavn #VAR1_BOLD# indeholder ugyldige tegn. Kontroller filnavnet.\n\nFølgende specialtegn er ikke tilladt:? * ~; : \"| & lt; & gt; & Ææ; & Øø; & Åå</string>
+  <string name="SYS_FILENAME_INVALID">Det valgte filnavn #VAR1_BOLD# indeholder ugyldige tegn. Kontroller filnavnet.\n\nFølgende specialtegn er ikke tilladt:? * ~; : \"| &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Database versionen #VAR1# er højere end versionen på selve Admidio Scriptet #VAR2#.\n\nVenligst opdater dine Admidio filer på serveren #VAR3#, med en nyere version af Admidio #VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">Fornavn</string>
