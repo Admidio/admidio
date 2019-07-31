@@ -576,7 +576,8 @@ class HtmlPage
      */
     private function getHtmlBody()
     {
-        $htmlHeadline     = '';
+        $htmlMenu     = '';
+        $htmlHeadline = '';
 
         if ($this->showMenu)
         {
