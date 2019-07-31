@@ -80,7 +80,9 @@
   <string name="DAT_EXPORT_ICAL">Eksport (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Fremhæv dato</string>
   <string name="DAT_ICAL_DAYS_FUTURE">Antal iCal dage i ud i fremtiden</string>
+  <string name="DAT_ICAL_DAYS_FUTURE_DESC">Antal dage i fremtiden, der skal inkluderes i en iCal-download eller -abo. Hvis iCal-downloadet startes i begivenhedsmodulet, ignoreres denne indstilling, og de filtrerede aftaler eksporteres. (Standard: 365)</string>
   <string name="DAT_ICAL_DAYS_PAST">Antal iCal dage tilbage i tiden</string>
+  <string name="DAT_ICAL_DAYS_PAST_DESC">Antal dage i fortiden, der skal inkluderes i en iCal-download eller -Abo. Hvis iCal-downloaden startede i begivenhedsmodulet, ignoreres denne indstilling og eksporterer de filtrerede aftaler. (Standard: 30)</string>
   <string name="DAT_LOCATION">Lokalitet</string>
   <string name="DAT_LOCATION_LINK">Hvis nok information om en lokalitet oplyses såsom (gade, by, land), så kan Google Maps lave en rute til lokationen.</string>
   <string name="DAT_LOGIN_POSSIBLE">Vil du aktivere event registrering? \nHvis en event bliver slettet så fjernes også alle deltagere fra eventen.\nVil du blokere for yderligere deltagere, så skal du reducere antallet af tilladte deltagere.</string>
@@ -123,52 +125,6 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detaljeret</string>
   <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
   <string name="DAT_VISIBILITY">Synlighed</string>
-  <!--Phrases only in Downloadsmodule-->
-  <string name="SYS_ADD_TO_DATABASE">Tilføj til database</string>
-  <string name="SYS_ADDITIONAL_FILES">Denne listes opgave er at give et overblik over filer og foldere som ikke er importeret ind i databasen endnu. Tilføj dem her. Adgangs rettigheder vil blive kopieret fra den valgte folder.</string>
-  <string name="SYS_COUNTER">Tæller</string>
-  <string name="SYS_CREATE_FOLDER">Opret folder</string>
-  <string name="SYS_CREATE_FOLDER_DESC">En ny folder vil blive oprettet i folderen #VAR1_BOLD#.</string>
-  <string name="DOW_DOWNLOADS">Filer</string>
-  <string name="DOW_DOWNLOADS_DESC">Forskellige data filer og filtyper kan gøres tilgængelige via download. Disse filer kan kategoriseres i foldere med forskellige adgangs rettigheder.</string>
-  <string name="SYS_EDIT_FILE">Rediger fil</string>
-  <string name="SYS_EDIT_FOLDER">Rediger folder</string>
-  <string name="SYS_EMAIL_NOTIFICATION_TITLE">En ny fil blev overført</string>
-  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">En ny fil blev overført til #VAR1#\n\nFil: #VAR2#\nOverført af: #VAR3#\nOverført den: #VAR4#</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Aktiver Fil/Folder modul</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Download modulet kan aktiveres eller deaktiveres via denne indstilling (Standard: aktiveret)</string>
-  <string name="SYS_FILE_EXIST">Filen #VAR1# eksisterer allerede!\n\nVælg en anden fil.</string>
-  <string name="SYS_FILE_EXTENSION_INVALID">Denne filtype er ikke tilladt på denne server.</string>
-  <string name="SYS_FILE_NAME_RULES">Filnavnet bør indikere fil indholdet. Fil navnet påvirker liste rækkefølgen. F.eks. bør fil navne i foldere med sager begynde med (yyyy-mm-tt).</string>
-  <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Filen er ikke længere fysisk til stede på serveren. Den bør slettes fra databasen.</string>
-  <string name="SYS_FILE_RENAME">Fil #VAR1# blev omdøbt.</string>
-  <string name="SYS_FILE_RENAME_ERROR">Der opstod en fejl da filen #VAR1# skulle omdøbes.</string>
-  <string name="SYS_FILE_TO_LARGE">Den overførte fil størrelse er større end det tilladte maximum.(maximum fil størrelse: #VAR1# MB).</string>
-  <string name="SYS_FILE_TYPE">Fil type</string>
-  <string name="SYS_FILE_UPLOADED">Filen #VAR1_BOLD# blev overført.</string>
-  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle filer blev overført.\n\nDu kan lukke dialogboksen nu.</string>
-  <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Ikke alle filer blev overført.</string>
-  <string name="SYS_FILES_UPLOAD_DESC">Vælg venligst alle de filer du vil uploade til folderen #VAR1_BOLD#</string>
-  <string name="DOW_FILES_UPLOADED">#VAR1# filer er blevet uploadet.</string>
-  <string name="SYS_FOLDER_CREATED">Folderen #VAR1_BOLD# blev oprettet.</string>
-  <string name="SYS_FOLDER_EXISTS">Folderen #VAR1# eksisterer allerede!\n\nVenligst vælg et andet navn til folderen.</string>
-  <string name="SYS_FOLDER_NO_FILES">Folderen indeholder ikke nogen filer.</string>
-  <string name="SYS_FOLDER_NO_RIGHTS">Du har ikke ret til at se den valgte folder.</string>
-  <string name="SYS_FOLDER_NOT_EXISTS">Folderen eksisterer ikke længere på serveren. Den bør slettes i databasen også.</string>
-  <string name="SYS_FOLDER_NOT_FOUND">Folder (ID #VAR1#) ikke fundet.</string>
-  <string name="SYS_FOLDER_RENAME">Folderen #VAR1# blev omdøbt.</string>
-  <string name="SYS_FOLDER_RENAME_ERROR">En fejl opstod imens folderen #VAR1# blev omdøbt.</string>
-  <string name="SYS_MAXIMUM_FILE_SIZE">Maximum fil størrelse</string>
-  <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Brugere må kun overføre filer mindre end det her viste. Hvis du skriver 0 deaktiveres overførsler. (Standard: 3MB)</string>
-  <string name="DOW_NEW_FILE_NAME">Nyt fil navn</string>
-  <string name="SYS_NEW_NAME">Nyt navn</string>
-  <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Ingen yderligere rettigheder er sat</string>
-  <string name="SYS_PREVIOUS_NAME">Tidligere navn</string>
-  <string name="SYS_SELECT_FILES">Vælg filer</string>
-  <string name="SYS_SET_FOLDER_PERMISSIONS">Sæt folder rettigheder</string>
-  <string name="SYS_UNMANAGED_FILES">Filer uden ejer</string>
-  <string name="DOW_UPLOAD_FILE_TO_FOLDER">Overfør fil til folder #VAR1_BOLD#</string>
-  <string name="SYS_UPLOAD_FILES">Overfør filer</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Postkort sendt af</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Aktiverer postkort modul</string>
@@ -488,11 +444,6 @@
   <string name="MAI_DELIVERY_CONFIRMATION">Bed om bekræftelse på levering</string>
   <string name="MAI_DELIVERY_CONFIRMATION_DESC">Hvis denne er aktiv, har afsenderen af en e-mail mulighed for at få bekræftet levering af en e-mail. Dog afhænger et eventuelt svar af hvordan modtagerens e-mail program er konfigureret. Modtageren kan vælge at undertrykke afsendelse af en sådan bekræftelse.</string>
   <string name="MAI_EMAIL_DESC">E-mails kan sendes til forskellige roller såsom grupper, kurser, afdelinger.</string>
-  <string name="MAI_EMAIL_SEND_TO_RECEIVER">#VAR1# sendt til modtagerne: #VAR3# fra #VAR2# den følgende e-mail:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_ACTIVE">#VAR1# har sendt følgende e-mail til aktive brugere i rollen #VAR3# på #VAR2#:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# har sendt følgende e-mail til tidligere brugere i rollen #VAR3# på #VAR2#:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# har sendt følgende e-mail til aktive og tidligere brugere i rollen #VAR3# på #VAR2#:</string>
-  <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# fra #VAR2# har sendt dig følgende e-mail:</string>
   <string name="MAI_HIDDEN">Skjult</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Oprettelse og afsendelse af HTML formaterede e-mails kan tillades for registrerede brugere. En JavaScript editor vil blive vist, istedet for standard tekstfeltet. Af sikkerheds årsager er dette ikke tilladt for gæster.</string>
@@ -538,7 +489,6 @@
   <string name="MAI_SMTP_USER">SMTP brugernavn</string>
   <string name="MAI_SMTP_USER_DESC">Det brugernavn der anvendes til SMTP godkendelsen.</string>
   <string name="MAI_SUBJECT">Emne</string>
-  <string name="MAI_SUBJECT_ATTACHMENT">Emne &amp; Vedhæftning</string>
   <string name="MAI_YOUR_EMAIL">Din e-mail</string>
   <string name="MAI_YOUR_NAME">Dit navn</string>
   <!--Phrases only in Membersadministration-->
@@ -1018,12 +968,6 @@
   <string name="ROL_VALID_TO" description="Date valid to">Gyldig indtil</string>
   <string name="ROL_WEEKDAY">Ugedag</string>
   <string name="ROL_WITHOUT_LEADER">Ingen leder</string>
-  <!--Phrases only in Roommodule-->
-  <string name="SYS_CAPACITY">Kapacitet</string>
-  <string name="SYS_OVERHANG">Overbooking</string>
-  <string name="SYS_ROOM_MANAGEMENT">Lokale administration</string>
-  <string name="SYS_SEATING">sæder</string>
-  <string name="ROO_STANDING">stå plads</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64 bit</string>
   <string name="SYS_ABORT">Afbryd</string>

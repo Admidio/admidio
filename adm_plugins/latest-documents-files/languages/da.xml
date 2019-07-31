@@ -1,4 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_LATEST_FILES_HEADLINE">Downloads</string>
+  <string name="PLG_LATEST_FILES_MORE_DOWNLOADS">Flere downloads</string>
+  <string name="PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE">Der er ingen filer, der kan downloades.</string>
+  <string name="PLG_LATEST_FILES_UPLOAD_FROM_AT">Uploadet af #VAR1# på #VAR2#</string>
 </resources>
