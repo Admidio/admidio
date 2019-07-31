@@ -582,6 +582,7 @@ class HtmlPage
         {
             // add mobile menu
             $this->addModalMenu();
+            $htmlMenu = $this->menu->show();
         }
 
         if ($this->headline !== '')
@@ -600,6 +601,7 @@ class HtmlPage
         $htmlBody .= $this->htmlMyBodyTop;
         $htmlBody .= '<div class="admidio-content">';
         $htmlBody .= $htmlHeadline;
+        $htmlBody .= $htmlMenu;
         $htmlBody .= $this->pageContent;
         $htmlBody .= '</div>';
         $htmlBody .= $this->htmlMyBodyBottom;
