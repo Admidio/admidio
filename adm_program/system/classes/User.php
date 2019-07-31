@@ -1750,6 +1750,7 @@ class User extends TableAccess
         }
 
         $returnValue = parent::save($updateFingerPrint);
+        $usrId = (int) $this->getValue('usr_id'); // if a new user was created get the new id
 
         // if this was an registration then set this user id to create user id
         if ($updateCreateUserId)

@@ -314,7 +314,7 @@ class HtmlNavbar
         // default navbar should not show the brand, only in xs mode
         if ($this->type === 'default')
         {
-            $cssClassBrand = 'd-block d-sm-none';
+            $cssClassBrand = 'd-block d-md-none';
             $cssClassNavbar = 'navbar-menu';
         }
         elseif ($this->type === 'filter')
@@ -324,10 +324,10 @@ class HtmlNavbar
 
         // add html for navbar
         $html = '
-            <nav class="navbar navbar-expand-lg bg-light ' . $cssClassNavbar . $this->customCssClass . '">
+            <nav class="navbar navbar-expand-md bg-light ' . $cssClassNavbar . $this->customCssClass . '">
                 <a class="navbar-brand ' . $cssClassBrand . '" href="#">' . $this->name . '</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#' . $this->id . '" aria-controls="' . $this->id . '" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon fas fa-bars"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="' . $this->id . '">';
 
