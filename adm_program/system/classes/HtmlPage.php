@@ -577,7 +577,6 @@ class HtmlPage
         if ($this->showMenu)
         {
             // add modules and administration modules to the menu
-            $this->showMainMenu();
             $this->addModalMenu();
             $htmlMenu = $this->menu->show();
         }
