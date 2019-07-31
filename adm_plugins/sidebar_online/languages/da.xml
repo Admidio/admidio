@@ -5,4 +5,6 @@
   <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# Gæster</string>
   <string name="PLG_ONLINE_VAR_NUM_MEMBER">#VAR1# Medlem</string>
   <string name="PLG_ONLINE_VAR_NUM_MEMBERS">#VAR1# Medlemmer</string>
+  <string name="PLG_ONLINE_VAR_ONLINE_ARE">Online er #VAR1#</string>
+  <string name="PLG_ONLINE_VAR_ONLINE_IS">Online er #VAR1#</string>
 </resources>
