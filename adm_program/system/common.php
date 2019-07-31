@@ -175,7 +175,7 @@ else
     }
 
     // read menu from database
-    $gMenu = new MenuRefactor();
+    $gMenu = new Menu();
     $gMenu->loadFromDatabase();
 
     // save all data in session
