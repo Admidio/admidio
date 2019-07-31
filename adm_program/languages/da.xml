@@ -1221,7 +1221,7 @@
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Ikke alle filer blev overført.</string>
   <string name="SYS_FILES_UPLOAD_DESC">Vælg venligst alle de filer du vil uploade til folderen #VAR1_BOLD#</string>
   <string name="SYS_FILENAME_EMPTY">Filnavn mangler!</string>
-  <string name="SYS_FILENAME_INVALID">Det valgte filnavn #VAR1_BOLD# indeholder ugyldige tegn. Kontroller filnavnet.\n\nFølgende specialtegn er ikke tilladt:? * ~; : \"| & lt; & gt; & Ææ; & Øø; & Åå</string>
+  <string name="SYS_FILENAME_INVALID">Det valgte filnavn #VAR1_BOLD# indeholder ugyldige tegn. Kontroller filnavnet.\n\nFølgende specialtegn er ikke tilladt:? * ~; : \"| &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Database versionen #VAR1# er højere end versionen på selve Admidio Scriptet #VAR2#.\n\nVenligst opdater dine Admidio filer på serveren #VAR3#, med en nyere version af Admidio #VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">Fornavn</string>
