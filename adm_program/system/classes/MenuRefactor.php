@@ -32,6 +32,34 @@ class MenuRefactor
     }
 
     /**
+     * Add the main nodes as a dropdown control to the navbar and assign all
+     * entries of the main node as elements of that dropdown.
+     * @param HtmlNavbar $navbar The navbar object to which the menu should be added.
+     */
+    public function addToNavbar(HtmlNavbar &$navbar)
+    {
+        foreach($this->menuNodes as $menuNode)
+        {
+            if($menuNode->count() > 0)
+            {
+                $navbar->addItem(
+                    'menu_item_'.$menuNode->getTextId(), '', $menuNode->getName(),
+                    'fa-align-justify', 'right', 'navbar', 'admidio-default-menu-item'
+                );
+
+                // now add each entry of the node to the navbar dropdown
+                foreach($menuNode->getEntries() as $menuEntry)
+                {
+                    $navbar->addItem(
+                        $menuEntry['men_name_intern'], $menuEntry['men_url'], $menuEntry['men_name'], $menuEntry['men_icon'], 'right',
+                        'menu_item_'.$menuNode->getTextId(), 'admidio-default-menu-item'
+                    );
+                }
+            }
+        }
+    }
+
+    /**
      * Initialise the member parameters
      */
     public function clear()

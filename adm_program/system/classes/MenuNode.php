@@ -9,17 +9,6 @@
  ***********************************************************************************************
  */
 
-/**
- * Create, modify and display menus. Each menu item is defined by
- *
- *      - $id   : identifier of the menu item
- *      - $link : URL, relative to the admidio root directory, starting with a /
- *                or full URL with http or https protocol
- *      - $text : menu text
- *      - $icon : URL, relative to the theme plugin, starting with a /
- *              : or full URL with http or https protocol
- *      - $desc : (optional) long description of the menu item
- */
 class MenuNode
 {
     protected $textId;
@@ -44,9 +33,36 @@ class MenuNode
      * Count the number of entries from this node
      * @return int Number of entries from this node
      */
-    public function countEntries()
+    public function count()
     {
         return count($this->nodeEntries);
+    }
+
+    /**
+     * Get the entries of this node as an array.
+     * @return array Array with all entries of this node
+     */
+    public function getEntries()
+    {
+        return $this->nodeEntries;
+    }
+
+    /**
+     * Get the translated name of this node.
+     * @return string Name of this node.
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get the internal name of this node.
+     * @return string The internal name e.g. '''modules''' of this node
+     */
+    public function getTextId()
+    {
+        return $this->textId;
     }
 
     /**
@@ -60,7 +76,7 @@ class MenuNode
     {
         $html = '';
 
-        if($this->countEntries() > 0)
+        if($this->count() > 0)
         {
             $html .= '<h3 id="head_'.$this->textId.'">'.$this->name.'</h3>';
 

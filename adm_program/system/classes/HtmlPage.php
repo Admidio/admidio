@@ -280,8 +280,10 @@ class HtmlPage
      */
     public function addModalMenu()
     {
-        global $gL10n, $gValidLogin, $gDb, $gCurrentUser;
+        global $gL10n, $gValidLogin, $gDb, $gCurrentUser, $gMenu;
 
+        $gMenu->addToNavbar($this->menu);
+/*
         $mainMenuStatement = self::getMainMenuStatement();
 
         while ($mainMenu = $mainMenuStatement->fetch())
@@ -348,7 +350,7 @@ class HtmlPage
                 }
             }
         }
-
+*/
         if ($gValidLogin)
         {
             // show link to own profile
