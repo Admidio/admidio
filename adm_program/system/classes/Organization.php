@@ -68,6 +68,7 @@ class Organization extends TableAccess
         if((int) $this->getValue('org_id') > 0)
         {
             $this->settingsManager = new SettingsManager($database, (int) $this->getValue('org_id'));
+            $this->settingsManager->resetAll();
         }
     }
 
@@ -79,6 +80,7 @@ class Organization extends TableAccess
         if(!$this->settingsManager instanceof SettingsManager)
         {
             $this->settingsManager = new SettingsManager($this->db, (int) $this->getValue('org_id'));
+            $this->settingsManager->resetAll();
         }
 
         return $this->settingsManager;
