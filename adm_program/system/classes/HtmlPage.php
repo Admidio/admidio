@@ -431,7 +431,7 @@ class HtmlPage
     private function getFileContent($filename)
     {
         global $gLogger, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
-        global $gValidLogin, $gProfileFields, $gHomepage, $gSettingsManager;
+        global $gValidLogin, $gProfileFields, $gHomepage, $gSettingsManager, $gMenu;
 
         $filePath = THEME_PATH . '/' . $filename;
         if (!is_file($filePath))
@@ -576,15 +576,12 @@ class HtmlPage
      */
     private function getHtmlBody()
     {
-        $htmlMenu         = '';
         $htmlHeadline     = '';
 
         if ($this->showMenu)
         {
-            // add modules and administration modules to the menu
-            $this->showMainMenu();
+            // add mobile menu
             $this->addModalMenu();
-            $htmlMenu = $this->menu->show();
         }
 
         if ($this->headline !== '')
@@ -603,7 +600,6 @@ class HtmlPage
         $htmlBody .= $this->htmlMyBodyTop;
         $htmlBody .= '<div class="admidio-content">';
         $htmlBody .= $htmlHeadline;
-        $htmlBody .= $htmlMenu;
         $htmlBody .= $this->pageContent;
         $htmlBody .= '</div>';
         $htmlBody .= $this->htmlMyBodyBottom;
