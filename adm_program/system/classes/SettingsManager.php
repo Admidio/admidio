@@ -45,7 +45,7 @@ class SettingsManager
      */
     public function __sleep()
     {
-        return array('orgId');
+        return array('orgId', 'settings');
     }
 
     /**
