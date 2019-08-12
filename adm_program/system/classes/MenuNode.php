@@ -93,21 +93,24 @@ class MenuNode
             {
                 if($mediaView)
                 {
-                    $iconHtml = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name'], 'fa-2x');
-                    $html .= '
-                    <li class="media">
-                        <div class="media-left">
-                            <a id="menu_'.$this->textId.'_'.$menuEntry['men_name_intern'].'" href="'.$menuEntry['men_url'].'">
-                                '.$iconHtml.'
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading">
-                                <a id="lmenu_'.$this->textId.'_'.$menuEntry['men_name_intern'].'" href="'.$menuEntry['men_url'].'">'.$menuEntry['men_name'].'</a>
-                            </h4>
-                            <p>'.$menuEntry['men_description'].'</p>
-                        </div>
-                    </li>';
+                    if($menuEntry['men_name_intern'] !== 'overview') // overview should not be shown in detailed list, because it's the detailed list
+                    {
+                        $iconHtml = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name'], 'fa-2x');
+                        $html .= '
+                        <li class="media">
+                            <div class="media-left">
+                                <a id="menu_'.$this->textId.'_'.$menuEntry['men_name_intern'].'" href="'.$menuEntry['men_url'].'">
+                                    '.$iconHtml.'
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    <a id="lmenu_'.$this->textId.'_'.$menuEntry['men_name_intern'].'" href="'.$menuEntry['men_url'].'">'.$menuEntry['men_name'].'</a>
+                                </h4>
+                                <p>'.$menuEntry['men_description'].'</p>
+                            </div>
+                        </li>';
+                    }
                 }
                 else
                 {

@@ -52,7 +52,7 @@ function initLoginParams($prefix)
  */
 function createUserObjectFromPost()
 {
-    global $gLogger, $gCurrentUser, $loginname, $password, $gDb, $gL10n, $gCurrentOrganization, $bAutoLogin, $organizationId, $gProfileFields, $userStatement, $gCurrentSession;
+    global $gLogger, $gCurrentUser, $gMenu, $loginname, $password, $gDb, $gL10n, $gCurrentOrganization, $bAutoLogin, $organizationId, $gProfileFields, $userStatement, $gCurrentSession;
 
     if (array_key_exists('usr_login_name', $_POST) && $_POST['usr_login_name'] !== '')
     {
@@ -106,6 +106,9 @@ function createUserObjectFromPost()
         $gCurrentSession->setValue('ses_org_id', $organizationId);
         $gCurrentSession->save();
     }
+
+    // remove all menu entries
+    $gMenu->initialize();
 
     // create user object
     $gCurrentUser = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());

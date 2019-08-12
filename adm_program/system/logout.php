@@ -23,8 +23,9 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
     $gProfileFields->readProfileFields((int) $gCurrentOrganization->getValue('org_id'));
 }
 
-// clear data from object of current user
+// clear data from global objects
 $gCurrentUser->clear();
+$gMenu->initialize();
 
 // set homepage to logout page
 $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');

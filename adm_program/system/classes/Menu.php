@@ -13,10 +13,16 @@ class Menu
     /**
      * @var array Array with the main nodes and their entries
      */
-    protected $menuNodes = array();
+    protected $menuNodes;
+    
+    /**
+     * @var bool Flag to remember if data must be reloaded from database
+     */
+    protected $loadData;    
 
     public function __construct()
     {
+        $this->initialize();
     }
 
     /**
@@ -48,11 +54,12 @@ class Menu
     }
 
     /**
-     * Initialise the member parameters
+     * Initialise the member parameters of this class
      */
-    public function clear()
+    public function initialize()
     {
         $this->menuNodes = array();
+        $this->loadData  = true;
     }
 
     /**
@@ -61,6 +68,11 @@ class Menu
      */
     public function countMainNodes()
     {
+        if($this->loadData)
+        {
+            $this->loadFromDatabase();
+        }
+
         return count($this->menuNodes);
     }
 
@@ -73,6 +85,11 @@ class Menu
      */
     public function getHtml($mediaView = false)
     {
+        if($this->loadData)
+        {
+            $this->loadFromDatabase();
+        }
+
         $html = '<div class="admidio-menu-list">';
 
         foreach($this->menuNodes as $menuNode)

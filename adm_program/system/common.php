@@ -176,7 +176,6 @@ else
 
     // read menu from database
     $gMenu = new Menu();
-    $gMenu->loadFromDatabase();
 
     // save all data in session
     $gCurrentSession->addObject('gProfileFields', $gProfileFields);
@@ -199,8 +198,7 @@ if($sesRenew === 1 || $sesRenew === 3)
 // if the renew flag is set than the menu must be reloaded
 if($sesRenew === 4)
 {
-    $gMenu->clear();
-    $gMenu->loadFromDatabase();
+    $gMenu->initialize();
 }
 
 // check session if user login is valid
