@@ -107,9 +107,11 @@ class Menu
      */
     public function loadFromDatabase()
     {
-        global $gDb, $gLogger;
+        global $gDb;
 
         $countMenuNodes = 0;
+        $this->loadData = false;
+
         $sql = 'SELECT men_id, men_name, men_name_intern
                   FROM '.TBL_MENU.'
                  WHERE men_men_id_parent IS NULL
@@ -124,6 +126,5 @@ class Menu
 
             $countMenuNodes++;
         }
-        $gLogger->error(print_r($this->menuNodes, true));
     }
 }
