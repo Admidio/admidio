@@ -131,6 +131,33 @@ class MenuNode
     }
 
     /**
+     * This method checks if a special menu item of the current node is visible for the current user.
+     * Therefor this method checks if roles are assigned to the menu item and if the current
+     * user is a member of at least one of this roles.
+     * @param menuId The id of the menu item that should be checked if it's visible.
+     * @return bool Return true if the menu item is visible to the current user.
+     */
+    public function menuItemIsVisible($menuId)
+    {
+        global $gDb, $gCurrentUser;
+
+        if($menuId > 0)
+        {
+            // Read current roles rights of the menu
+            $displayMenu = new RolesRights($gDb, 'menu_view', $menuId);
+            $rolesDisplayRight = $displayMenu->getRolesIds();
+
+            // check for right to show the menu
+            if (count($rolesDisplayRight) === 0 || $displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Load the menu node from the database table adm_menu
      * @param int $nodeId The database id of the node menu entry
      */
@@ -152,42 +179,35 @@ class MenuNode
         {
             if ((int) $node['men_com_id'] === 0 || Component::isVisible($node['com_name_intern']))
             {
-                // Read current roles rights of the menu
-                $displayMenu = new RolesRights($gDb, 'menu_view', $node['men_id']);
-                $rolesDisplayRight = $displayMenu->getRolesIds();
-
-                // check for right to show the menu
-                if (count($rolesDisplayRight) > 0 && !$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                if($this->menuItemIsVisible($node['men_id']))
                 {
-                    continue;
+                    // special case because there are different links if you are logged in or out for mail
+                    /*if ($gValidLogin && $node['men_name_intern'] === 'mail')
+                    {
+                        $unreadBadge = self::getUnreadMessagesBadge();
+    
+                        $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
+                        $menuIcon = 'fa-comments';
+                        $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
+                    }*/
+    
+                    // translate name and description
+                    $node['men_name'] = Language::translateIfTranslationStrId($node['men_name']);
+                    $node['men_description'] = Language::translateIfTranslationStrId($node['men_description']);
+    
+                    // add root path to link unless the full URL is given
+                    if (preg_match('/^http(s?):\/\//', $node['men_url']) === 0)
+                    {
+                        $node['men_url'] = ADMIDIO_URL . $node['men_url'];
+                    }
+    
+                    if (strlen($node['men_icon']) === 0)
+                    {
+                        $node['men_icon'] = 'fa-trash-alt admidio-opacity-0';
+                    }
+    
+                    $this->nodeEntries[$node['men_id']] = $node;
                 }
-
-                // special case because there are different links if you are logged in or out for mail
-                /*if ($gValidLogin && $node['men_name_intern'] === 'mail')
-                {
-                    $unreadBadge = self::getUnreadMessagesBadge();
-
-                    $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
-                    $menuIcon = 'fa-comments';
-                    $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
-                }*/
-
-                // translate name and description
-                $node['men_name'] = Language::translateIfTranslationStrId($node['men_name']);
-                $node['men_description'] = Language::translateIfTranslationStrId($node['men_description']);
-
-                // add root path to link unless the full URL is given
-                if (preg_match('/^http(s?):\/\//', $node['men_url']) === 0)
-                {
-                    $node['men_url'] = ADMIDIO_URL . $node['men_url'];
-                }
-
-                if (strlen($node['men_icon']) === 0)
-                {
-                    $node['men_icon'] = 'fa-trash-alt admidio-opacity-0';
-                }
-
-                $this->nodeEntries[$node['men_id']] = $node;
             }
         }
     }
