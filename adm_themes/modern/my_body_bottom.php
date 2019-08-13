@@ -8,15 +8,11 @@
         <div class="col-lg-3">
             <div id="right-block" class="admidio-container">
                 <?php
-
                 require(ADMIDIO_PATH . FOLDER_PLUGINS . '/login_form/login_form.php');
                 require(ADMIDIO_PATH . FOLDER_PLUGINS . '/latest-documents-files/index.php');
                 require(ADMIDIO_PATH . FOLDER_PLUGINS . '/random_photo/random_photo.php');
 
-                // create html page object and display Menu
-                $page = new HtmlPage();
-                echo $page->showMainMenu(false);
-
+                echo $gMenu->getHtml();
                 ?>
             </div><!-- closes "div#right-block" -->
         </div><!-- closes "div.col-md-3" -->

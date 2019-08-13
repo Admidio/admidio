@@ -322,6 +322,17 @@ class Session extends TableAccess
 
     /**
      * If you call this function than a flag is set so that all other active sessions
+     * know that they should renew the menu object. They will renew it when the
+     * user perform the next action.
+     */
+    public function renewMenuObject()
+    {
+        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 4';
+        $this->db->queryPrepared($sql);
+    }
+
+    /**
+     * If you call this function than a flag is set so that all other active sessions
      * know that they should renew the organization object. They will renew it when the
      * user perform the next action.
      */

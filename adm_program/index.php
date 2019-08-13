@@ -61,6 +61,6 @@ else
 }
 
 // display Menu
-$page->addHtml($page->showMainMenu());
+$page->addHtml($gMenu->getHtml(true));
 
 $page->show();

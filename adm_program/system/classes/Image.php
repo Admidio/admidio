@@ -400,11 +400,12 @@ class Image
      * Method creates a short html snippet that contains a image tag with an icon.
      * The icon itself could be a font awesome icon name or a full url to an icon
      * or only a filename than the icon must be in the theme folder **icons**.
-     * @param string $icon The font-awesome icon-name or url or filename
-     * @param string $text A text that should be shown on mouseover
+     * @param string $icon     The font-awesome icon-name or url or filename
+     * @param string $text     A text that should be shown on mouseover
+     * @param string $cssClass Optional an additional css class for the icon can be set
      * @return string Html snippet that contains a image tag
      */
-    public static function getIconHtml($icon, $text)
+    public static function getIconHtml($icon, $text, $cssClass = '')
     {
         global $gLogger;
 
@@ -414,7 +415,7 @@ class Image
             {
                 $icon = 'fas ' . $icon;
             }
-            return '<i class="' . $icon . ' fa-fw" data-toggle="tooltip" title="' . $text . '"></i>';
+            return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw" data-toggle="tooltip" title="' . $text . '"></i>';
         }
 
         if (self::isImageFilename($icon))
@@ -422,7 +423,7 @@ class Image
             // A full URL of an icon
             if (StringUtils::strStartsWith($icon, 'http', false) && filter_var($icon, FILTER_VALIDATE_URL) !== false)
             {
-                return '<img class="admidio-icon-info" src="' . $icon . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
+                return '<img class="admidio-icon-info ' . $cssClass . '" src="' . $icon . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
             }
 
             try
@@ -433,7 +434,7 @@ class Image
                     $iconPath = THEME_URL . '/icons/' . $icon;
                     if (is_file($iconPath))
                     {
-                        return '<img class="admidio-icon-info" src="' . $iconPath . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
+                        return '<img class="admidio-icon-info' . $cssClass . '" src="' . $iconPath . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
                     }
                 }
             }
