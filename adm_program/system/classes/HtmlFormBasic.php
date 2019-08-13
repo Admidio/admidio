@@ -15,13 +15,13 @@
  * The class supports setting all form elements and allows you to configure all attributes programatically.
  * The parsed form object  is returned as string.
  *
- * **Code examples:**
+ * **Code examples**
  * ```
  * // Example of an array with further attributes
  * $attrArray = array('class' => 'Classname');
  * ```
  *
- * **Code examples:**
+ * **Code examples**
  * ```
  * // Example: Creating a form element
  *

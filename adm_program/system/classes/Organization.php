@@ -15,7 +15,7 @@
  * are also some method to read the relationship of organizations if the
  * database contains more then one organization.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // create object and read the value of the language preference
  * $organization    = new Organization($gDb, $organizationId);

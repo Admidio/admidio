@@ -18,13 +18,13 @@
  * CSS classes are needed using this option for class change !
  * This class supports strings, arrays, bi dimensional arrays and associative arrays for creating the table content.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Data array for example
  * $dataArray = array('Data 1', 'Data 2', 'Data 3');
  * ```
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Example without defining table head and table foot elements.
  * // Starting a row directly, all missing table elements are set automatically for semantic table.
@@ -36,7 +36,7 @@
  * echo $table->getHtmlTable();
  * ```
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Create an table instance with optional table ID, table class and border
  * $table = new HtmlTableBasic('Id_Example_2', 'tableClass', 1);
@@ -68,7 +68,7 @@
  * echo $table->getHtmlTable();
  * ```
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Example with fixed columns width and changing classes for rows in body element and table border
  * $table = new HtmlTableBasic('Id_Example_3', 'tableClass', 1);

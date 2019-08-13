@@ -17,7 +17,7 @@
  * of mandatory fields, help buttons and special css classes for every
  * element.
  *
- * **Code examples:**
+ * **Code examples**
  * ```
  * // create a simple form with one input field and a button
  * $form = new HtmlForm('simple-form', 'next_page.php');
@@ -1522,7 +1522,7 @@ class HtmlForm extends HtmlFormBasic
      *                               - **icon** : An icon can be set. This will be placed in front of the label.
      *                               - **class** : An additional css classname. The class **admSelectbox**
      *                                 is set as default and need not set with this parameter.
-     * **Code examples:**
+     * **Code examples**
      * ```
      * // create a selectbox with all profile fields of a specific category
      * $sql = 'SELECT usf_id, usf_name FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = 4711'

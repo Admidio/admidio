@@ -14,7 +14,7 @@
  * output. The exception get's a language string as parameter and returns a
  * html or plain text message with the translated error if an exception is thrown
  *
- * **Code example:**
+ * **Code example**
  * ```
  * try
  * {

@@ -15,7 +15,7 @@
  * The class supports nesting of several div elements and allows you to configure all attributes programatically.
  * The parsed div object with inline elements is returned as string.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Creating a div element
  *

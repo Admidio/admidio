@@ -16,7 +16,7 @@
  * With this class it should be easy to add other objects to the session and read
  * them out if you need them elsewhere.
  *
- * **Code examples:**
+ * **Code examples**
  * ```
  * // add a new object to the session
  * $organization = new Organization($gDb, $organizationId);

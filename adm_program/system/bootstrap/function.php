@@ -314,7 +314,7 @@ function admFuncProcessableImageSize()
  *                                                              to false a html message with the error will be returned
  * @return mixed|null Returns the value of the element or the error message if a test failed
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // numeric value that would get a default value 0 if not set
  * $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', array('defaultValue' => 0));

@@ -17,7 +17,7 @@
  * The position of the items is important. Only the first items will display
  * permanently in the module. The other items are summarized in a submenu.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // create module menu
  * $myNavbar = new HtmlNavbar('menu_my_module', 'My module');

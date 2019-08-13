@@ -15,7 +15,7 @@
  * user to the current session. Now the current session has become a valid user
  * that is automatically login.
  *
- * **Code examples:**
+ * **Code examples**
  * ```
  * // create a valid user login for a Admidio session from auto login
  * $autoLogin = new AutoLogin($gDb, $gSessionId);

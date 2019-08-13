@@ -13,7 +13,7 @@
  * The class search in the database table **adm_members** for role memberships of
  * users. It has easy methods to start or stop a membership.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // start membership without read data before
  * $membership = new TableMembers($gDb);

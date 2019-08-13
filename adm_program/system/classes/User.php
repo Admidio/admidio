@@ -1075,7 +1075,7 @@ class User extends TableAccess
      * @return mixed Returns the value of the database column or the value of adm_user_fields
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
      *
-     * **Code example:**
+     * **Code example**
      * ```
      * // reads data of adm_users column
      * $loginname = $gCurrentUser->getValue('usr_login_name');
@@ -1869,7 +1869,7 @@ class User extends TableAccess
      *                           not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      *
-     * **Code example:**
+     * **Code example**
      * ```
      * // set data of adm_users column
      * $gCurrentUser->getValue('usr_login_name', 'Admidio');

@@ -16,7 +16,7 @@
  * This class uses AdmExceptions when an error occurred. Make sure you catch these
  * exceptions when using the class.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // create a valid SQL condition out of the special syntax
  * $parser = new ConditionParser();
@@ -162,7 +162,7 @@ class ConditionParser
      * This must bei a full subselect that starts with SELECT. The statement is used if
      * a condition with EMPTY or NOT EMPTY is used.
      * @param string $sqlStatement String with the full subselect
-     * **Code example:**
+     * **Code example**
      * ```$parser->setNotExistsStatement('SELECT 1 FROM adm_user_data WHERE usd_usr_id = 1 AND usd_usf_id = 9');```
      */
     public function setNotExistsStatement($sqlStatement)

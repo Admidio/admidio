@@ -16,7 +16,7 @@
  * or deleted. If a registration is confirmed or deleted then a notification SystemMail
  * will be send to the user. If email couldn't be send than an AdmException will be thrown.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // create a valid registration
  * $user = new UserRegistration($gDb, $gProfileFields);
@@ -27,7 +27,7 @@
  * $user->save();
  * ´´´
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // assign a registration
  * $userId = 4711;

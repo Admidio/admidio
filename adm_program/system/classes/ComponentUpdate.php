@@ -18,7 +18,7 @@
  * plugin directory. The xml files should have the prefix update and than the main und subversion
  * within their filename e.g. **update_3_0.xml**.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // update the system module to the actual filesystem version
  * $componentUpdateHandle = new ComponentUpdate($gDb);

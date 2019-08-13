@@ -15,7 +15,7 @@
  * the Admidio database will be updated. If you want do upload files for the download
  * module just create an instance of this class.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // create object and do upload
  * $uploadHandler = new UploadHandlerPhoto(array('upload_dir' => $uploadDir,

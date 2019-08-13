@@ -16,7 +16,7 @@
  * object itself couldn't be stored in a Session because it uses PHP objects
  * which couldn't stored in a PHP session.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // show how to use this class with the language class and sessions
  * script_a.php

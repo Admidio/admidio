@@ -16,7 +16,7 @@
  * be within a try and catch structure. Also all method are declared static.
  *
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // validate the captcha code
  * try

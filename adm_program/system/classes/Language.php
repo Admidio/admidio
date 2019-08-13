@@ -18,7 +18,7 @@
  * should be assigned to this class that stored all necessary data and can be
  * stored in a session.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // show how to use this class with the language data class and sessions
  * script_a.php
@@ -93,7 +93,7 @@ class Language
      *                                  $params[1] will replace **#VAR2#** or **#VAR2_BOLD#** etc.
      * @return string Returns the text string with replaced placeholders of the text id.
      *
-     * **Code example:**
+     * **Code example**
      * ```
      * // display a text without placeholders
      * echo $gL10n->get('SYS_NUMBER');

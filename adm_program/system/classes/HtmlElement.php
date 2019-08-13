@@ -18,13 +18,13 @@
  * element. Content data can be passed as string or as array.
  * The class supports also reading the data from assoc arrays and bi dimensional arrays.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Example content arrays
  * $dataArray = array('Data 1', 'Data 2', 'Data 3');
  * ```
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Example_1: **unorderedlist**
  *
@@ -64,7 +64,7 @@
  * echo $htmlList;
  * ```
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Example_2 Nested Div Elements using nesting mode
  *
@@ -88,7 +88,7 @@
  * echo $htmlBlock;
  * ```
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Example_3 Hyperlinks
  *
@@ -100,7 +100,7 @@
  * echo $hyperlink;
  * ```
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Example_4 Form element
  *

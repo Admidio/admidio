@@ -17,7 +17,7 @@
  * you call this multiple times only 1 transaction will be open and it will be closed
  * after the last endTransaction was send.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // To open a connection you can use the settings of the config.php of Admidio.
  * // create object and open connection to database
@@ -31,7 +31,7 @@
  * }
  * ```
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Now you can use the new object **$gDb** to send a query to the database
  * // send sql to database and assign the returned \PDOStatement

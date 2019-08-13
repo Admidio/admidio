@@ -15,7 +15,7 @@
  * The class supports data lists and lists and combination of nested lists and data lists.
  * The parsed list object is returned as string.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Example 1: Creating datalist
  *
@@ -30,7 +30,7 @@
  * echo $list->getHtmlList();
  * ```
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // Example 2: Creating  ordered list
  *

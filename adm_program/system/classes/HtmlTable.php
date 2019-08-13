@@ -16,7 +16,7 @@
  * their column values to the table. It's also possible to add the jQuery plugin Datatables
  * to each table. Therefore you only need to set a flag when creating the object.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // create a simple table with one input field and a button
  * $table = new HtmlTable('simple-table');
@@ -26,7 +26,7 @@
  * $table->show();
  * ```
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // create a table with jQuery datatables and align columns to center or right
  * $table = new HtmlTable('simple-table', null, true, true);
@@ -464,7 +464,7 @@ class HtmlTable extends HtmlTableBasic
      *                                                                Optional this could also only be a numeric value than the
      *                                                                datatable will be ordered by the number of this column ascending.
      *
-     * **Code examples:**
+     * **Code examples**
      * ```
      * $table = new HtmlTable('simple-table');
      *

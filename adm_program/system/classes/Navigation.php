@@ -16,7 +16,7 @@
  * to create a html navigation bar. Therefore you should add a url and a link text
  * to the object everytime you submit a url.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // start the navigation in a module (the object $gNavigation is created in common.php)
  * $gNavigation->addStartUrl('https://www.example.com/index.php', 'Example-Module');
@@ -31,7 +31,7 @@
  * $gNavigation->deleteLastUrl();
  * ```
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // show a navigation bar in your html code
  * ... <br /><?php echo $gNavigation->getHtmlNavigationBar('id-my-navigation'); ?><br /> ...

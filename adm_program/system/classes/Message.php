@@ -17,7 +17,7 @@
  * default buttons yes and no. There is also an option to automatically leave the
  * message after some time.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // show a message with a back button, the object $gMessage is created in common.php
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));

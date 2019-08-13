@@ -16,7 +16,7 @@
  * page will automatically integrate the chosen theme. You can optional disable the
  * integration of the theme files.
  *
- * **Code example:**
+ * **Code example**
  * ```
  * // create a simple html page with some text
  * $page = new HtmlPage();

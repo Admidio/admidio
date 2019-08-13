@@ -15,7 +15,7 @@
  * category could be created or existing category could be edited. Special properties of
  * data like save urls, checks for evil code or timestamps of last changes will be handled within this class.
  *
- * **Code examples:**
+ * **Code examples**
  * ```
  * // get data from an existing category
  * $category = new TableCategory($gDb, $categoryId);
