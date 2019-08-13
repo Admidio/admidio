@@ -1,17 +1,38 @@
 <?php
 /**
  ***********************************************************************************************
- * Class manages the entries of one menu node
- *
  * @copyright 2004-2019 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
 
+ /**
+ * Create a menu node from database and serve several output formats
+ *
+ * This class will create a menu node. The data will be read from the database table **adm_menu**.
+ * All entries of this menu node will be added to an internal array. There is a method to get
+ * a html menu list of that node. This class will be used with the Menu class to read each main
+ * node of the menu as a separate MenuNode object.
+ *
+ * **Code example**
+ * ```
+ * // create an object for the menu and show a html list
+ * $menuNode = new MenuNode('my_internal_name', 'My visible node name');
+ * $menuNodes->loadFromDatabase(4711);
+ * $html = $menuNode->getHtml();
+ * ```
+ */
 class MenuNode
 {
+    /**
+     * @var array Internal id of the node. Should be the value of mem_name_intern from adm_menu.
+     */
     protected $textId;
+
+    /**
+     * @var array The name of the node that will be shown as the head of the list. Should be the value of mem_name from adm_menu.
+     */
     protected $name;
 
     /**
@@ -66,7 +87,7 @@ class MenuNode
     }
 
     /**
-     * Create the html code of the menu as a list. There are different
+     * Create the html code of the menu as a html list. There are different
      * parameters to change the look of the menu.
      * @param bool $mediaView If set to true than the menu will be shown in the style of bootstrap media object
      *                        https://getbootstrap.com/docs/4.3/components/media-object/
@@ -158,7 +179,9 @@ class MenuNode
     }
 
     /**
-     * Load the menu node from the database table adm_menu
+     * Load all entries of that node from the database table **adm_menu**. Therefore each entry
+     * must have stored the $nodeId as the mem_mem_id_parent. The entries will be stored within
+     * the internal array $nodeEntries.
      * @param int $nodeId The database id of the node menu entry
      */
     public function loadFromDatabase($nodeId)

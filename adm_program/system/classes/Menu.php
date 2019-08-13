@@ -1,12 +1,32 @@
 <?php
 /**
  ***********************************************************************************************
- * Class manages display of menus
- *
  * @copyright 2004-2019 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
+ */
+ 
+ /**
+ * Create menu from database and serve several output formats
+ *
+ * This class will read the menu structure from the database table **adm_menu** and stores each main 
+ * node as a MenuNode object within an internal array. There are severel output methods to use the 
+ * menu within the layout. You can create a simple html list, a bootstrap media object list or
+ * add it to an existing navbar. 
+ *
+ * **Code examples**
+ * ```
+ * // create an object for the menu and show a html list
+ * $menuList = new Menu();
+ * $html = $menuList->getHtml();
+ *
+ *
+ * // create an object for the menu and add the menu to the navbar
+ * $navbar = new HtmlNavbar('navbar', 'Example');
+ * $menuNavbar = new Menu();
+ * $menuList->addToNavbar($navbar);
+ * ```
  */
 class Menu
 {
@@ -16,9 +36,9 @@ class Menu
     protected $menuNodes;
     
     /**
-     * @var bool Flag to remember if data must be reloaded from database
+     * @var bool Flag to remember if the menu must be reloaded from database
      */
-    protected $loadData;    
+    protected $menuLoaded;    
 
     public function __construct()
     {
@@ -26,9 +46,9 @@ class Menu
     }
 
     /**
-     * Add the main nodes as a dropdown control to the navbar and assign all
+     * Add each main node as a dropdown control to the navbar and assign all
      * entries of the main node as elements of that dropdown.
-     * @param HtmlNavbar $navbar The navbar object to which the menu should be added.
+     * @param HtmlNavbar $navbar The HtmlNavbar object to which the menu should be added.
      */
     public function addToNavbar(HtmlNavbar &$navbar)
     {
@@ -58,8 +78,8 @@ class Menu
      */
     public function initialize()
     {
-        $this->menuNodes = array();
-        $this->loadData  = true;
+        $this->menuNodes   = array();
+        $this->menuLoaded  = false;
     }
 
     /**
@@ -68,7 +88,7 @@ class Menu
      */
     public function countMainNodes()
     {
-        if($this->loadData)
+        if($this->menuLoaded)
         {
             $this->loadFromDatabase();
         }
@@ -85,7 +105,7 @@ class Menu
      */
     public function getHtml($mediaView = false)
     {
-        if($this->loadData)
+        if($this->menuLoaded)
         {
             $this->loadFromDatabase();
         }
@@ -110,7 +130,7 @@ class Menu
         global $gDb;
 
         $countMenuNodes = 0;
-        $this->loadData = false;
+        $this->menuLoaded = true;
 
         $sql = 'SELECT men_id, men_name, men_name_intern
                   FROM '.TBL_MENU.'
