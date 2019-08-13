@@ -444,11 +444,6 @@
   <string name="MAI_DELIVERY_CONFIRMATION">Vraag om ontvangstbevestiging</string>
   <string name="MAI_DELIVERY_CONFIRMATION_DESC">Indien ingeschakeld, kan de auteur van de e-mail een ontvangstbevestiging aanvragen. Het hangt echter van het e-mailprogramma van de ontvanger af of een ontvangstbevestiging wordt verzonden.</string>
   <string name="MAI_EMAIL_DESC">Er kunnen e-mails gestuurd worden naar verschillende rollen, personen, groepen of afdelingen. </string>
-  <string name="MAI_EMAIL_SEND_TO_RECEIVER">#VAR1# heeft deze ontvangers: #VAR3# van #VAR2# deze e-mail gestuurd:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_ACTIVE">#VAR1# heeft volgende mail verstuurd naar alle actieve leden van rol #VAR3# van #VAR2#:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# heeft volgende mail verstuurd naar alle oud-leden van rol #VAR3# van #VAR2#:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# heeft volgende mail verstuurd naar alle actieve en oud-leden van rol #VAR3# van #VAR2#:</string>
-  <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# van #VAR2# heeft jou de volgende e-mail gestuurd:</string>
   <string name="MAI_HIDDEN">Verborgen</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Het maken en versturen van op HTML gebaseerde e-mails kan ingeschakeld worden voor geregistreerde gebruikers. Een JavaScript editor wordt getoond voor comfortabel bewerken, in plaats van het standaard tekst veld. Deze optie is voor gasten in verband met veiligheid niet mogelijk.</string>
@@ -1039,6 +1034,8 @@
   <string name="SYS_COOKIE_NOT_SET">U kunt niet inloggen omdat uw browser geen cookies accepteert!\n\nOm in te kunnen loggen moet u uw browser Cookies laten accepteren van #VAR1_BOLD#.</string>
   <string name="SYS_COPY">Kopieer</string>
   <string name="SYS_COPY_VAR">#VAR1# kopiëren</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuele ontvanger</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuele ontvangers</string>
   <string name="SYS_COUNTER">Teller</string>
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">DUI</string>
@@ -1108,6 +1105,8 @@
   <string name="SYS_EMAIL_NOTIFICATION_TITLE">Nieuw bestand geupload</string>
   <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">Nieuw bestand geupload op #VAR1#\n\nBestand: #VAR2#\nGeupload door: #VAR3#\nGeupload op: #VAR4#</string>
   <string name="SYS_EMAIL_SEND">De e-mail is verstuurd.</string>
+  <string name="SYS_EMAIL_TEMPLATE">E-mail sjabloon</string>
+  <string name="SYS_EMAIL_TEMPLATE_DESC">Hier kun je een HTML sjabloon-bestand kiezen uit de map #VAR1_BOLD#. Bij het verzenden van een e-mail wordt de inhoud van dit bestand naar de e-mail gekopieerd en worden de volgende variabelen vervangen: #sender#, #message#, #recipients#, #organization_name#, #organization_shortname#, #organization_website#. Voor meer informatie over het gebruik van e-mail sjablonen, zie de #VAR2#documentatie#VAR3#.</string>
   <string name="SYS_EMPTY">Leeg</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activeer download module</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">De downloadmodule kan met deze instelling worden in- of uitgeschakeld. (Standaard: ja)</string>
@@ -1262,6 +1261,7 @@
   <string name="SYS_NO_ENTRIES_FOUND">Er zijn geen berichten gevonden.</string>
   <string name="SYS_NO_DATA_FOUND">Er werden geen bestanden gevonden</string>
   <string name="SYS_NO_RIGHTS">U heeft niet voldoende rechten om deze actie uit te voeren.</string>
+  <string name="SYS_NO_TEMPLATE">Geen sjabloon</string>
   <string name="SYS_NOBODY">Niemand</string>
   <string name="SYS_NONE">Geen</string>
   <string name="SYS_NORMAL_PICTURE">Normale afbeelding</string>
@@ -1285,6 +1285,7 @@
   <string name="SYS_PAGE">Pagina</string>
   <string name="SYS_PAGE_PREVIOUS">Vorige</string>
   <string name="SYS_PAGE_NEXT">Volgende</string>
+  <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# en #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Deelnemers</string>
   <string name="SYS_PASSWORD">Wachtwoord</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Wachtwoord vergeten</string>
