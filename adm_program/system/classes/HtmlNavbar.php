@@ -28,7 +28,7 @@
  *     $gL10n->get('SYS_CREATE'), 'add.png'
  * );
  * $myNavbar->show();
- * ´´´
+ * ```
  */
 class HtmlNavbar
 {

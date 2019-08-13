@@ -99,7 +99,7 @@ class Language
      * echo $gL10n->get('SYS_NUMBER');
      * // display a text with placeholders for individual content
      * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', array('John Doe', 'Demo-Organization', 'Administrator'));
-     * ``
+     * ```
      */
     public function get($textId, $params = array())
     {
