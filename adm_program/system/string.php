@@ -95,6 +95,7 @@ function strStripTags($value)
 }
 
 /**
+ * @deprecated 3.3.0:4.0.0 "strStripSlashesDeep()" is deprecated.
  * fuegt Quotes einem mittels addslashes() gequoteten Array und String hinzu
  * @param string|array<mixed,string|array> $value
  * @return string|array<mixed,string|array>
@@ -115,6 +116,7 @@ function strAddSlashesDeep($value)
 }
 
 /**
+ * @deprecated 3.3.0:4.0.0 "strStripSlashesDeep()" is deprecated.
  * Entfernt Quotes aus einem mittels addslashes() gequoteten Array und String
  * @param string|array<mixed,string|array> $value
  * @return string|array<mixed,string|array>
