@@ -25,7 +25,7 @@
  * ...
  * // save user data and create registration
  * $user->save();
- * ´´´
+ * ```
  *
  * **Code example**
  * ```

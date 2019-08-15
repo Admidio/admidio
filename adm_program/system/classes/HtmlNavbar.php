@@ -28,7 +28,7 @@
  *     $gL10n->get('SYS_CREATE'), 'fa-plus-circle'
  * );
  * $myNavbar->show();
- * ´´´
+ * ```
  */
 class HtmlNavbar
 {

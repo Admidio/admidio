@@ -99,7 +99,7 @@ class Language
      * echo $gL10n->get('SYS_NUMBER');
      * // display a text with placeholders for individual content
      * echo $gL10n->get('SYS_CREATED_BY', array('John Doe', '2019-04-13'));
-     * ``
+     * ```
      */
     public function get($textId, array $params = array())
     {

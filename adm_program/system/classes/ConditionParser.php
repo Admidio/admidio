@@ -162,8 +162,10 @@ class ConditionParser
      * This must bei a full subselect that starts with SELECT. The statement is used if
      * a condition with EMPTY or NOT EMPTY is used.
      * @param string $sqlStatement String with the full subselect
-     * **Code example**
-     * ```$parser->setNotExistsStatement('SELECT 1 FROM adm_user_data WHERE usd_usr_id = 1 AND usd_usf_id = 9');```
+     * **Code example:**
+     * ``` 
+     * $parser->setNotExistsStatement('SELECT 1 FROM adm_user_data WHERE usd_usr_id = 1 AND usd_usf_id = 9');
+     * ```
      */
     public function setNotExistsStatement($sqlStatement)
     {
