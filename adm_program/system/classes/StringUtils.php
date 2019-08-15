@@ -153,26 +153,6 @@ final class StringUtils
     }
 
     /**
-     * Entfernt Quotes aus einem mittels addslashes() gequoteten Array und String
-     * @param string|array<mixed,string|array> $value
-     * @return string|array<mixed,string|array>
-     */
-    public static function strStripSlashesDeep($value)
-    {
-        if (is_array($value))
-        {
-            // call function for every array element
-            $value = array_map('self::strStripSlashesDeep', $value);
-        }
-        else
-        {
-            $value = stripslashes($value);
-        }
-
-        return $value;
-    }
-
-    /**
      * Check if a string contains only valid characters. Therefore the string is
      * compared with a hard coded list of valid characters for each datatype.
      * @param string $string    The string that should be checked.

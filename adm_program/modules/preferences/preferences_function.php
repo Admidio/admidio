@@ -278,7 +278,7 @@ switch($getMode)
     case 2:
         if(isset($_SESSION['add_organization_request']))
         {
-            $formValues = StringUtils::strStripSlashesDeep($_SESSION['add_organization_request']);
+            $formValues = $_SESSION['add_organization_request'];
             unset($_SESSION['add_organization_request']);
         }
         else
@@ -330,7 +330,7 @@ switch($getMode)
         /******************************************************/
         /* Create basic data for new organization in database */
         /******************************************************/
-        $_SESSION['add_organization_request'] = StringUtils::strStripSlashesDeep($_POST);
+        $_SESSION['add_organization_request'] = $_POST;
 
         // form fields are not filled
         if($_POST['orgaShortName'] === '' || $_POST['orgaLongName'] === '')

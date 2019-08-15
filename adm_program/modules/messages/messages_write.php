@@ -176,7 +176,7 @@ if (StringUtils::strContains($gNavigation->getUrl(), 'messages_send.php') && iss
 {
     // Das Formular wurde also schon einmal ausgefüllt,
     // da der User hier wieder gelandet ist nach der Mailversand-Seite
-    $formValues = StringUtils::strStripSlashesDeep($_SESSION['message_request']);
+    $formValues = $_SESSION['message_request'];
     unset($_SESSION['message_request']);
 
     if(!isset($formValues['carbon_copy']))
