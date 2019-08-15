@@ -31,12 +31,12 @@ $_COOKIE = admStrStripTagsSpecial($_COOKIE);
 
 // escape all quotes so db queries are save
 // TODO deprecated: Remove in Admidio 4.0
-if(!get_magic_quotes_gpc())
+/*if(!get_magic_quotes_gpc())
 {
     $_GET    = strAddSlashesDeep($_GET);
     $_POST   = strAddSlashesDeep($_POST);
     $_COOKIE = strAddSlashesDeep($_COOKIE);
-}
+}*/
 
 if ($gDebug)
 {
