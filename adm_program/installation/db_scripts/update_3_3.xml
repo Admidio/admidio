@@ -112,5 +112,6 @@
     <step id="710">UPDATE %PREFIX%_menu SET men_description = 'SYS_MENU_DESC' WHERE men_name_intern = 'menu'</step>
     <step id="720">UPDATE %PREFIX%_preferences SET prf_value = '1' WHERE prf_name = 'dates_may_take_part'</step>
     <step id="730" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_cost float</step>
+    <step id="740">ComponentUpdateSteps::updateStepRemoveExpiredMessengers</step>
     <step>stop</step>
 </update>

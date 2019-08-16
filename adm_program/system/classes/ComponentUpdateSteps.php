@@ -614,4 +614,22 @@ final class ComponentUpdateSteps
             }
         }
     }
+    
+    /**
+     * This method removes expired messengers like GooglePlus, AOL Messenger and Yahoo. Messenger from the system.
+     */
+    public static function updateStepRemoveExpiredMessengers()
+    {
+        $sql = 'SELECT usf_id
+                  FROM ' . TBL_USER_FIELDS . '
+                 WHERE usf_name_intern IN (\'AOL_INSTANT_MESSENGER\', \'GOOGLE_PLUS\', \'YAHOO_MESSENGER\')';
+        $messengerStatement = self::$db->queryPrepared($sql);
+
+        while($row = $messengerStatement->fetch())
+        {
+            // save roles to role right
+            $rightCategoryView = new TableUserField(self::$db, (int) $row['usf_id']);
+            $rightCategoryView->delete();
+        }
+    }
 }
