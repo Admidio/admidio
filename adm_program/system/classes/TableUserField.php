@@ -103,8 +103,11 @@ class TableUserField extends TableAccess
                  WHERE lsc_usf_id = ? -- $usfId';
         $this->db->queryPrepared($sql, array($usfId));
 
-        // all active users must renew their user data because the user field structure has been changed
-        $gCurrentSession->renewUserObject();
+        if(is_object($gCurrentSession))
+        {
+            // all active users must renew their user data because the user field structure has been changed
+            $gCurrentSession->renewUserObject();
+        }
 
         $return = parent::delete();
 
