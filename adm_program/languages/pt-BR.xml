@@ -125,54 +125,6 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detalhado</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compacto</string>
   <string name="DAT_VISIBILITY">Visibilidade</string>
-  <!--Phrases only in Downloadsmodule-->
-  <string name="SYS_ADD_TO_DATABASE">Adicionar ao banco de dados</string>
-  <string name="SYS_ADDITIONAL_FILES">Esta lista tem a intenção de oferecer uma visão geral dos arquivos e pastas ainda não importados para o banco de dados. Eles podem ser adicionados ao banco. Permissões de acesso serão copiadas da pasta selecionada.</string>
-  <string name="SYS_ADMINISTRATORS_DESC">Esses cargos são administradores do módulo de download e possuem acesso total às pastas e arquivos. É possível enviar, baixar e configurar permissões de acesso. Um cargo pode ser definido como administrador atribuindo-lhe a permissão #VAR1_BOLD#.</string>
-  <string name="SYS_COUNTER">Contador</string>
-  <string name="SYS_CREATE_FOLDER">Criar pasta</string>
-  <string name="SYS_CREATE_FOLDER_DESC">Uma nova pasta será criada na pasta #VAR1_BOLD#.</string>
-  <string name="DOW_DOWNLOADS">Downloads</string>
-  <string name="DOW_DOWNLOADS_DESC">Diferentes arquivos de diferentes tipos podem ser disponibilizados para download. Estes downloads podem ser categorizados em pastas com diferentes níveis de permissão de acesso.</string>
-  <string name="SYS_EDIT_FILE">Editar arquivo</string>
-  <string name="SYS_EDIT_FOLDER">Editar pasta</string>
-  <string name="SYS_EMAIL_NOTIFICATION_TITLE">Um novo arquivo foi enviado</string>
-  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">Um novo arquivo foi enviado para #VAR1#\n\nArquivo: #VAR2#\nEnviado por: #VAR3#Enviado às #VAR4#</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">A ativar módulo de download</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Ativar o módulo de download? (Padrão: sim)</string>
-  <string name="SYS_FILE_EXIST">O arquivo #VAR1# já existe!\n\nPor favor, escolha um nome diferente.</string>
-  <string name="SYS_FILE_EXTENSION_INVALID">O tipo do arquivo não é permitido neste servidor</string>
-  <string name="SYS_FILE_NAME_RULES">O nome do arquivo deve indicar seu conteúdo. O nome afeta a ordenação da lista, por exemplo, nomes de arquivos em pastas com precedência devem começar com data (aaaa-mm-dd).</string>
-  <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">O arquivo não está mais fisicamente disponível no servidor. Ele deve ser removido do banco de  dados.</string>
-  <string name="SYS_FILE_RENAME">Arquivo #VAR1# foi renomeado.</string>
-  <string name="SYS_FILE_RENAME_ERROR">Um problema foi encontrado durante a renomeação do arquivo #VAR1#.</string>
-  <string name="SYS_FILE_TO_LARGE">O tamanho dos arquivos enviados é maior que o permitido. O tamanho máximo permitido é #VAR1# MB.</string>
-  <string name="SYS_FILE_TYPE">Tipo de arquivo</string>
-  <string name="SYS_FILE_UPLOADED">O arquivo #VAR1_BOLD# foi enviado.</string>
-  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Todos os arquivos foram enviados com sucesso.\n\nEsta janela pode ser fechada.</string>
-  <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Houve algum problema em enviar alguns arquivos.</string>
-  <string name="SYS_FILES_UPLOAD_DESC">Selecione todos os arquivos a serem enviados para a pasta #VAR1_BOLD#</string>
-  <string name="DOW_FILES_UPLOADED">#VAR1# arquivos foram enviados com sucesso.</string>
-  <string name="SYS_FOLDER_CREATED">A pasta #VAR1_BOLD# foi criada.</string>
-  <string name="SYS_FOLDER_EXISTS">A pasta #VAR1# já existe!\n\nPor favor, escolha um nome diferente.</string>
-  <string name="SYS_FOLDER_NO_FILES">A pasta está vazia.</string>
-  <string name="SYS_FOLDER_NO_RIGHTS">Você não tem permissão para exibir a pasta selecionada.</string>
-  <string name="SYS_FOLDER_NOT_EXISTS">A pasta não está mais fisicamente disponível no servidor. Ela deve ser removida do banco de dados.</string>
-  <string name="SYS_FOLDER_NOT_FOUND">A pasta (ID #VAR1#) não foi encontrada.</string>
-  <string name="SYS_FOLDER_RENAME">A pasta #VAR1# foi renomeada.</string>
-  <string name="SYS_FOLDER_RENAME_ERROR">Um problema foi encontrado durante a renomeação da pasta #VAR1#.</string>
-  <string name="SYS_MAXIMUM_FILE_SIZE">Tamanho máximo</string>
-  <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Este valor indica o tamanho máximo dos arquivos que podem ser enviados pelos usuários. O valor 0 indica que o envio de arquivos está desativado. (padrão: 3MB)</string>
-  <string name="DOW_NEW_FILE_NAME">Novo nome de arquivo</string>
-  <string name="SYS_NEW_NAME">Novo nome</string>
-  <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Nenhuma permissão adicional definida</string>
-  <string name="SYS_PREVIOUS_NAME">Nome anterior</string>
-  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Nesta página é possível configurar quem pode ver a pasta #VAR1_BOLD#, baixar e/ou enviar arquivos. As permissões são herdadas por todos as subpastas, sobrescrevendo suas permissões existentes. Apenas cargos com acesso à pasta pai são elegíveis. Administradores possuem todas as permissões para a pasta.</string>
-  <string name="SYS_SELECT_FILES">Selecionar arquivos</string>
-  <string name="SYS_SET_FOLDER_PERMISSIONS">Definir permissões de pasta</string>
-  <string name="SYS_UNMANAGED_FILES">Arquivos não-gerenciados</string>
-  <string name="DOW_UPLOAD_FILE_TO_FOLDER">Enviar arquivo para a pasta #VAR1_BOLD#</string>
-  <string name="SYS_UPLOAD_FILES">Enviar arquivos</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Cartão enviado por</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">A ativar módulo de cartões</string>
@@ -492,11 +444,6 @@
   <string name="MAI_DELIVERY_CONFIRMATION">Pedir confirmação de entrega</string>
   <string name="MAI_DELIVERY_CONFIRMATION_DESC">Quando ativado, o autor do e-mail pode pedir uma confirmação de entrega. Entretanto, depende das configurações dos clientes de e-mail dos destinatários se a confirmação será ou não enviada. O destinatário pode interromper a transmissão.</string>
   <string name="MAI_EMAIL_DESC">E-mails podem ser enviados para diferentes cargos como grupos, cursos e departamentos.</string>
-  <string name="MAI_EMAIL_SEND_TO_RECEIVER">#VAR1# enviado para os destinatários: #VAR3# de #VAR2# o seguinte e-mail:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_ACTIVE">#VAR1# enviou o seguinte e-mail para os usuários ativos do cargo #VAR3# em #VAR2#:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# enviou o seguinte e-mail para usuários antigos do cargo #VAR3# em #VAR2#:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# enviou o seguinte e-mail para os usuários ativos e antigos do cargo #VAR3# em #VAR2#:</string>
-  <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# de #VAR2# lhe enviou o seguinte e-mail:</string>
   <string name="MAI_HIDDEN">Oculto</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS">e-mail HTML</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Criar e enviar e-mails baseado em HTML pode ser ativado para usuários registrados. Um editor JavaScript será exibido para uma ediçao confortável, ao invés do campo de texto padrão. Ela não está disponível para visitantes por razões de segurança.</string>
@@ -514,7 +461,6 @@
   <string name="MAI_SEND_MAIL_TO_ROLE">Teu e-mail será enviado para todos os membros do cargo ou para todos os e-mails da lista.\n\nSe estiver em sessão, mais cargos e destinatários estarão disponíveis.</string>
   <string name="MAI_SEND_METHOD">Enviar via</string>
   <string name="MAI_SEND_METHOD_DESC">O método mail() do PHP pode ser restringido por alguns provedores e isto pode ser um motivo para suspeita de spam. Consequentemente, é recomendado enviar e-mails usando um endereço de e-mail existente e um servidor SMTP. As configurações para o SMTP podem ser definidas abaixo (padrão: PHP mail()).</string>
-  <string name="MAI_SENDER">Remetente</string>
   <string name="MAI_SENDER_EMAIL">Endereço de e-mail do remetente</string>
   <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Utilizar um endereço de e-mail existente como remetente não é permitido por alguns provedores. Neste caso, adicione um endereço de e-mail que será usado como endereço do remetente no módulo de e-mail (ex: noreply@#VAR1#).\nSe o campo permanecer vazio, o endereço do remetente será usado (padrão: vazio).</string>
   <string name="MAI_SENDER_NAME">Nome do remetente</string>
@@ -543,7 +489,6 @@
   <string name="MAI_SMTP_USER">Nome de usuário SMTP</string>
   <string name="MAI_SMTP_USER_DESC">O nome de usuário a ser usado na autenticação SMTP.</string>
   <string name="MAI_SUBJECT">Assunto</string>
-  <string name="MAI_SUBJECT_ATTACHMENT">Assunto &amp; Anexo</string>
   <string name="MAI_YOUR_EMAIL">Teu e-email</string>
   <string name="MAI_YOUR_NAME">Teu nome</string>
   <!--Phrases only in Membersadministration-->
@@ -1023,19 +968,15 @@
   <string name="ROL_VALID_TO" description="Date valid to">Válido até</string>
   <string name="ROL_WEEKDAY">Dia da semana</string>
   <string name="ROL_WITHOUT_LEADER">Sem líder</string>
-  <!--Phrases only in Roommodule-->
-  <string name="SYS_CAPACITY">Capacidade</string>
-  <string name="SYS_OVERHANG">Excesso</string>
-  <string name="SYS_ROOM_MANAGEMENT">Administração de sala</string>
-  <string name="SYS_SEATING">Assentos</string>
-  <string name="ROO_STANDING">Sala de espera</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64 bits</string>
   <string name="SYS_ABORT">Cancelar</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Num.</string>
   <string name="SYS_ACTIVATED">Ativado</string>
   <string name="SYS_ADD_RECIPIENTS">Adicionar destinatário</string>
+  <string name="SYS_ADD_TO_DATABASE">Adicionar ao banco de dados</string>
   <string name="SYS_ADDRESS">Endereço</string>
+  <string name="SYS_ADDITIONAL_FILES">Esta lista tem a intenção de oferecer uma visão geral dos arquivos e pastas ainda não importados para o banco de dados. Eles podem ser adicionados ao banco. Permissões de acesso serão copiadas da pasta selecionada.</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Ir para a página de download do Admidio</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">O sistema de gestão online para associações, grupos e organizações</string>
   <string name="SYS_ADMIDIO_TEAM">Equipe Admidio</string>
@@ -1044,6 +985,7 @@
   <string name="SYS_ADMINISTRATION">Administração</string>
   <string name="SYS_ADMINISTRATOR">Administrador</string>
   <string name="SYS_ADMINISTRATORS">Administradores</string>
+  <string name="SYS_ADMINISTRATORS_DESC">Esses cargos são administradores do módulo de download e possuem acesso total às pastas e arquivos. É possível enviar, baixar e configurar permissões de acesso. Um cargo pode ser definido como administrador atribuindo-lhe a permissão #VAR1_BOLD#.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Erro na requisição do Ajax.\nDetalhes: #VAR1#</string>
   <string name="SYS_ALL">Todos</string>
   <string name="SYS_ALL_ORGANIZATIONS">Todas as organizações</string>
@@ -1054,6 +996,7 @@
   <string name="SYS_BACK">Voltar</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Voltar para a visão geral do módulo</string>
   <string name="SYS_BIRTHDAY">Data de nascimento</string>
+  <string name="SYS_CAPACITY">Capacidade</string>
   <string name="SYS_CAPTCHA">CAPTCHA</string>
   <string name="SYS_CAPTCHA_CALC">Resultado</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">O resultado foi incorretamente digitado.</string>
@@ -1091,10 +1034,14 @@
   <string name="SYS_COOKIE_NOT_SET">Não foi possível iniciar a sessão! Teu navegador não permite cookies!\n\nPara uma sessão bem sucedida, configure seu navegador para aceitar cookies de #VAR1_BOLD#.</string>
   <string name="SYS_COPY">Copiar</string>
   <string name="SYS_COPY_VAR">Copiar #VAR1#</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">Os documentos podem ser visualizados ou disponíveis para download. Estes arquivos podem ser classificados em pastas com diferentes níveis de permissão de acesso. </string>
+  <string name="SYS_COUNTER">Contador</string>
   <string name="SYS_COUNTRY">País</string>
   <string name="SYS_COUNTRY_EG" translation="edited">ALE</string>
   <string name="SYS_CREATE">Criar</string>
   <string name="SYS_CREATE_ENTRY">Adicionar nota</string>
+  <string name="SYS_CREATE_FOLDER">Criar pasta</string>
+  <string name="SYS_CREATE_FOLDER_DESC">Uma nova pasta será criada na pasta #VAR1_BOLD#.</string>
   <string name="SYS_CREATE_HTACCESS">Criar .htaccess</string>
   <string name="SYS_CREATE_NEW_USER">Adicionar novo usuário</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Se o novo usuário não estiver na lista, podes criá-lo.</string>
@@ -1136,13 +1083,17 @@
   <string name="SYS_DIRECTORY_SEPARATOR">Separador de pasta</string>
   <string name="SYS_DISK_SPACE">Espaço em disco</string>
   <string name="SYS_DISK_SPACE_ERROR">Não foi possível determinar a alocação do espaço de armazenamento.\n\nMensagem de erro:\n#VAR1#</string>
+  <string name="SYS_DOCUMENTS_FILES_DESC">Diferentes arquivos e documentos podem ser visualizados ou disponíveis para download. Estes arquivos podem ser classificados em pastas com diferentes níveis de permissão de acesso.</string>
   <string name="SYS_DONATE">Doar</string>
   <string name="SYS_DONT_SHOW">Não exibir</string>
   <string name="SYS_DROPDOWN_LISTBOX">Caixa de listagem suspensa</string>
-  <string name="SYS_DOWNLOAD_PHOTO">Baixar a foto</string>
   <string name="SYS_DOWNLOAD_ALBUM">Baixar o álbum</string>
+  <string name="SYS_DOWNLOAD_FILE">Baixar arquivo</string>
+  <string name="SYS_DOWNLOAD_PHOTO">Baixar a foto</string>
   <string name="SYS_EDIT">Editar</string>
   <string name="SYS_EDIT_ENTRY">Editar nota</string>
+  <string name="SYS_EDIT_FILE">Editar arquivo</string>
+  <string name="SYS_EDIT_FOLDER">Editar pasta</string>
   <string name="SYS_EDIT_MEMBERS">Editar membros</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Perfil de usuário desta relação pode ser editado</string>
   <string name="SYS_EDIT_VAR">Editar #VAR1#</string>
@@ -1150,8 +1101,14 @@
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_INVALID">O endereço de e-mail no campo #VAR1_BOLD# contém caracteres inválidos ou está incompleto.</string>
   <string name="SYS_EMAIL_NOT_SEND">Não foi possível enviar o e-mail para #VAR1_BOLD#.\n\nDetalhes:\n#VAR2#</string>
+  <string name="SYS_EMAIL_NOTIFICATION_TITLE">Um novo arquivo foi enviado</string>
+  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">Um novo arquivo foi enviado para #VAR1#\n\nArquivo: #VAR2#\nEnviado por: #VAR3#Enviado às #VAR4#</string>
   <string name="SYS_EMAIL_SEND">O e-mail foi enviado com sucesso</string>
+  <string name="SYS_EMAIL_TEMPLATE">Modelo de e-mail</string>
+  <string name="SYS_EMAIL_TEMPLATE_DESC">Aqui você pode selecionar um arquivo no formato HTML da pasta #VAR1_BOLD#. Quando ao enviar um e-mail, o conteúdo deste arquivo será copiado para o e-mail e as seguintes variáveis serão substituídas: #remetente#, #mensagem#, #destinatários#, #nome_organização#, #organização_nome abreviado#, #organização_website#, Para mais informações sobre como utilizar formulários de e-mail, veja a #VAR2#documentação#VAR3#. </string>
   <string name="SYS_EMPTY">Vazio</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">A ativar módulo de download</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Ativar o módulo de download? (Padrão: sim)</string>
   <string name="SYS_END" description="End of a date">Fim</string>
   <string name="SYS_ERROR">Erro</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Não foi possível acessar o banco de dados:\n\n#VAR1#</string>
@@ -1168,9 +1125,20 @@
   <string name="SYS_FIELD_INVALID_CHAR">O campo #VAR1_BOLD# contém caracteres inválidos.\n\nApenas letras de \'a\' a \'z\' e \'A\' a \'Z\', números de 0-9 e caracteres especiais como .-_+@ são permitidos.</string>
   <string name="SYS_FIELDS_EMPTY">Alguns campos estão vazios.</string>
   <string name="SYS_FILE">Arquivo</string>
+  <string name="SYS_FILE_EXIST">O arquivo #VAR1# já existe!\n\nPor favor, escolha um nome diferente.</string>
+  <string name="SYS_FILE_EXTENSION_INVALID">O tipo do arquivo não é permitido neste servidor</string>
+  <string name="SYS_FILE_NAME_RULES">O nome do arquivo deve indicar seu conteúdo. O nome afeta a ordenação da lista, por exemplo, nomes de arquivos em pastas com precedência devem começar com data (aaaa-mm-dd).</string>
   <string name="SYS_FILE_NOT_EXIST">O arquivo selecionado não existe no servidor.</string>
+  <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">O arquivo não está mais fisicamente disponível no servidor. Ele deve ser removido do banco de  dados.</string>
+  <string name="SYS_FILE_RENAME">Arquivo #VAR1# foi renomeado.</string>
+  <string name="SYS_FILE_RENAME_ERROR">Um problema foi encontrado durante a renomeação do arquivo #VAR1#.</string>
   <string name="SYS_FILE_TO_LARGE_SERVER">O tamanho do arquivo enviado excede o tamanho máximo de envio do servidor, que é de #VAR1# MB.</string>
+  <string name="SYS_FILE_TYPE">Tipo de arquivo</string>
+  <string name="SYS_FILE_UPLOADED">O arquivo #VAR1_BOLD# foi enviado.</string>
   <string name="SYS_FILE_UPLOADS">Envio de arquivos</string>
+  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Todos os arquivos foram enviados com sucesso.\n\nEsta janela pode ser fechada.</string>
+  <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Houve algum problema em enviar alguns arquivos.</string>
+  <string name="SYS_FILES_UPLOAD_DESC">Selecione todos os arquivos a serem enviados para a pasta #VAR1_BOLD#</string>
   <string name="SYS_FILENAME_EMPTY">O nome de arquivo está faltando!</string>
   <string name="SYS_FILENAME_INVALID">O nome do arquivo selecionado #VAR1_BOLD# contém caracteres inválidos.\n\nOs seguintes caracteres especiais não são permitidos: ? * ~ ; : \" | &it; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">A versão #VAR1# do banco de dados é superior à versão dos scripts #VAR2# do Admidio.\n\nPor favor, atualize seus arquivos do Admidio no servidor #VAR3# utilizando-se de uma versão mais recente do Admidio - #VAR4#.</string>
@@ -1180,7 +1148,15 @@
   <string name="SYS_FROM">de #VAR1#</string>
   <string name="SYS_FROM_TO">de #VAR1# a #VAR2#</string>
   <string name="SYS_FOLDER">Pasta</string>
+  <string name="SYS_FOLDER_CREATED">A pasta #VAR1_BOLD# foi criada.</string>
+  <string name="SYS_FOLDER_EXISTS">A pasta #VAR1# já existe!\n\nPor favor, escolha um nome diferente.</string>
+  <string name="SYS_FOLDER_NO_FILES">A pasta está vazia.</string>
+  <string name="SYS_FOLDER_NO_RIGHTS">Você não tem permissão para exibir a pasta selecionada.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">A pasta #VAR1_BOLD# não pode ser criada.\n\nPor favor, peça #VAR2#administrador#VAR3# ajuda para verificar as permissões de escrita da pasta pai.</string>
+  <string name="SYS_FOLDER_NOT_EXISTS">A pasta não está mais fisicamente disponível no servidor. Ela deve ser removida do banco de dados.</string>
+  <string name="SYS_FOLDER_NOT_FOUND">A pasta (ID #VAR1#) não foi encontrada.</string>
+  <string name="SYS_FOLDER_RENAME">A pasta #VAR1# foi renomeada.</string>
+  <string name="SYS_FOLDER_RENAME_ERROR">Um problema foi encontrado durante a renomeação da pasta #VAR1#.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">A pasta #VAR1_BOLD# não pode ser criada com as permissões de escrita requeridas.\n\nPor favor, peça #VAR2#administrador#VAR3# ajuda para verificar as permissões de escrita (usando FTP, alterando os atributos de arquivo para 0777 ou drwxrwxrwx).</string>
   <string name="SYS_FONT_AWESOME_DESC">Você pode armazenar um ícone de diferentes formas:\n1. Um ícone da fonte web \"Font Awesome\". Vá para #VAR1#http://fontawesome.com#VAR2# e selecione um ícone gratuito da coleção \"Solid\" ou \"Brands\". É necessário usar o prefixo \"fa-\", por exemplo, o ícone \"user\" deve ser usado como \"fa-user\".\n2. Um ícone JPEG ou PNG. Para isto, insira a URL completa junto com o nome do arquivo de ícone. Alternativamente, você pode colocar ícones no tema na pasta \"icons\", e então apenas informar o nome do arquivo.</string>
   <string name="SYS_FORMER">Ex</string>
@@ -1251,6 +1227,8 @@
   <string name="SYS_MAX_PARTICIPANTS">Máx. participantes</string>
   <string name="SYS_MAX_PATH_LENGTH">Comprimento máximo de caminho</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">tamanho máx processável de imagem</string>
+  <string name="SYS_MAXIMUM_FILE_SIZE">Tamanho máximo</string>
+  <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Este valor indica o tamanho máximo dos arquivos que podem ser enviados pelos usuários. O valor 0 indica que o envio de arquivos está desativado. (padrão: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Participar com reserva</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Se esta opção for ativada, haverá uma terceira opção #VAR3_BOLD# além das opções #VAR1_BOLD# e #VAR2_BOLD#. (Padrão: desativado)</string>
   <string name="SYS_MEGAPIXEL">Megapíxel</string>
@@ -1272,14 +1250,17 @@
   <string name="SYS_MYLIST_DESC">Novas configurações de listas podem ser criadas e salvas aqui. Adicionalmente, listas podem ser exibidas sobre vários cargos.</string>
   <string name="SYS_NAME">Nome</string>
   <string name="SYS_NAME_ABBREVIATION">Nome (abreviação)</string>
+  <string name="SYS_NEW_NAME">Novo nome</string>
   <string name="SYS_NEW_VALUE">Novo valor</string>
   <string name="SYS_NEXT">Próximo</string>
   <string name="SYS_NO">Não</string>
+  <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Nenhuma permissão adicional definida</string>
   <string name="SYS_NO_ENTRY">A entrada não existe no banco de dados.</string>
   <string name="SYS_NO_ENTRIES">Nenhuma entrada disponível.</string>
   <string name="SYS_NO_ENTRIES_FOUND">Nenhuma entrada encontrada.</string>
   <string name="SYS_NO_DATA_FOUND">Nenhum dado encontrado!</string>
   <string name="SYS_NO_RIGHTS">Não tens permissão para isto.</string>
+  <string name="SYS_NO_TEMPLATE">Sem formulário</string>
   <string name="SYS_NOBODY">Ninguém</string>
   <string name="SYS_NONE">Nenhum</string>
   <string name="SYS_NORMAL_PICTURE">Imagem normal</string>
@@ -1298,10 +1279,12 @@
   <string name="SYS_OPTIONAL">Opcional</string>
   <string name="SYS_ORDER">Ordem</string>
   <string name="SYS_ORGANIZATION">Organização</string>
+  <string name="SYS_OVERHANG">Excesso</string>
   <string name="SYS_OVERVIEW">Visão geral</string>
   <string name="SYS_PAGE">Página</string>
   <string name="SYS_PAGE_PREVIOUS">Anterior</string>
   <string name="SYS_PAGE_NEXT">Próximo</string>
+  <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# e #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Membros</string>
   <string name="SYS_PASSWORD">Senha</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Senha esquecida</string>
@@ -1330,6 +1313,7 @@
   <string name="SYS_PRESENTATION">Exibir</string>
   <string name="SYS_PREVIEW">Pré-visualizar</string>
   <string name="SYS_PREVIOUS">Anterior</string>
+  <string name="SYS_PREVIOUS_NAME">Nome anterior</string>
   <string name="SYS_PREVIOUS_VALUE">Valor anterior</string>
   <string name="SYS_PRNG">Gerador de número pseudo-aleatório</string>
   <string name="SYS_PRNG_INSECURE">Admidio/PHP não pode gerar números pseudo-aleatórios seguros! Por favor, entre em contato com a equipe Admidio com as seguintes informações:</string>
@@ -1354,10 +1338,12 @@
   <string name="SYS_REQUIRED_FIELDS">Campos necessários</string>
   <string name="SYS_RESTRICTIONS">Restrições</string>
   <string name="SYS_ROLE">Cargo</string>
+  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Nesta página é possível configurar quem pode ver a pasta #VAR1_BOLD#, baixar e/ou enviar arquivos. As permissões são herdadas por todos as subpastas, sobrescrevendo suas permissões existentes. Apenas cargos com acesso à pasta pai são elegíveis. Administradores possuem todas as permissões para a pasta.</string>
   <string name="SYS_ROLE_MAX_MEMBERS">Não é possível salvar a alteração. O número máximo de membros no cargo #VAR1_BOLD# será excedido.</string>
   <string name="SYS_ROLE_MEMBERS">Membros do cargo</string>
   <string name="SYS_ROLES">Cargos</string>
   <string name="SYS_ROOM">Sala</string>
+  <string name="SYS_ROOM_MANAGEMENT">Administração de sala</string>
   <string name="SYS_RSS_DISABLED">Feeds web foram desativados pelo administrador do sistema.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Feed web para #VAR1#</string>
   <string name="SYS_SAFE_MODE">Modo de segurança</string>
@@ -1365,20 +1351,23 @@
   <string name="SYS_SATURDAY">Sábado</string>
   <string name="SYS_SAVE">Salvar</string>
   <string name="SYS_SAVE_DATA">Os dados foram salvos</string>
+  <string name="SYS_SEARCH">Buscar</string>
+  <string name="SYS_SEATING">Assentos</string>
   <string name="SYS_SECONDS">segundos</string>
   <string name="SYS_SECURE">Seguro</string>
   <string name="SYS_SECURITY">Segurança</string>
   <string name="SYS_SECURITY_ERROR">Erro de segurança</string>
+  <string name="SYS_SELECT_FILES">Selecionar arquivos</string>
   <string name="SYS_SELECT_FROM_LIST">Selecionar da lista</string>
   <string name="SYS_SEND">Enviar</string>
   <string name="SYS_SEND_EMAIL_TO">Enviar e-mail para #VAR1#</string>
-  <string name="SYS_SEARCH">Buscar</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Enviar emails para todos os endereços de email do usuário</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Se esta confguração é ativada, emails serão enviados para todos os endereços de email armazenados no perfil. Se a configuração é desativada, emails serão enviados apenas para o endereço de email no campo de perfil com o nome interno EMAIL. (Padrão: ativado)</string>
   <string name="SYS_SEND_NEW_PW">Enviar nova senha</string>
   <string name="SYS_SENDER">Remetente</string>
   <string name="SYS_SERVER">Servidor</string>
   <string name="SYS_SERVER_NO_UPLOAD">O servidor está configurado para proibir envio de arquivos.</string>
+  <string name="SYS_SET_FOLDER_PERMISSIONS">Definir permissões de pasta</string>
   <string name="SYS_SETTINGS">Preferências</string>
   <string name="SYS_SHOW_CALENDAR">Exibir calendário</string>
   <string name="SYS_SHOW_PROFILE">Exibir perfil</string>
@@ -1416,7 +1405,9 @@
   <string name="SYS_UNKNOWN">Não identificado</string>
   <string name="SYS_UNLIMITED">Ilimitado</string>
   <string name="SYS_UNLOCK">Desbloquear</string>
+  <string name="SYS_UNMANAGED_FILES">Arquivos não-gerenciados</string>
   <string name="SYS_UPDATE">Atualizar</string>
+  <string name="SYS_UPLOAD_FILES">Enviar arquivos</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Tam. máx. de arquivo para envio</string>
   <string name="SYS_UPLOAD_NAME_ERROR">O nome do arquivo não pode ser \"Submit\".</string>
   <string name="SYS_URL_INVALID_CHAR">A URL no campo #VAR1_BOLD# contém caracteres inválidos.\n\nApenas letras, tremas, números de 0-9 e os caracteres especiais . - + _ : / # ? = são permitidos.</string>
