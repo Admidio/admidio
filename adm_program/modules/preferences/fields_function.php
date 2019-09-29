@@ -16,7 +16,7 @@
  * mode     : 1 - create or edit profile field
  *            2 - delete profile field
  *            4 - change sequence of profile field
- * sequence : new sequence für profile field
+ * sequence : mode if the profile field move up or down, values are TableUserField::MOVE_UP, TableUserField::MOVE_DOWN
  *
  *****************************************************************************/
 
