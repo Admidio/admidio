@@ -298,8 +298,8 @@ class TableUserField extends TableAccess
     }
 
     /**
-     * das Feld wird um eine Position in der Reihenfolge verschoben
-     * @param string $mode
+     * Profile field will change the sequence one step up or one step down.
+     * @param string $mode mode if the profile field move up or down, values are TableUserField::MOVE_UP, TableUserField::MOVE_DOWN
      * @throws AdmException
      */
     public function moveSequence($mode)
@@ -311,20 +311,21 @@ class TableUserField extends TableAccess
                  WHERE usf_cat_id   = ? -- $usfCatId
                    AND usf_sequence = ? -- $usfSequence -/+ 1';
 
-        // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
+        // profile field will get one number lower and therefore move a position up in the list
         if ($mode === self::MOVE_UP)
         {
-            --$usfSequence;
+            $newSequence = $usfSequence - 1;
         }
-        // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
+        // profile field will get one number higher and therefore move a position down in the list
         elseif ($mode === self::MOVE_DOWN)
         {
-            ++$usfSequence;
+            $newSequence = $usfSequence + 1;
         }
 
-        $this->db->queryPrepared($sql, array($usfSequence, $usfCatId, $usfSequence));
+        // update the existing entry with the sequence of the field that should get the new sequence
+        $this->db->queryPrepared($sql, array($usfSequence, $usfCatId, $newSequence));
 
-        $this->setValue('usf_sequence', $usfSequence);
+        $this->setValue('usf_sequence', $newSequence);
         $this->save();
     }
 
