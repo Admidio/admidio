@@ -34,7 +34,7 @@ function admFuncAutoload($className)
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpmailer/src/' . str_replace('\\', '/', substr($className, strlen('PHPMailer\\PHPMailer'))) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/zxcvbn-php/src/' . str_replace('\\', '/', substr($className, strlen('ZxcvbnPhp'))) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/' . strtolower($className) . '.php',
-        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/' . strtolower($className) . '.class.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/' . $className . '.class.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/tcpdf/' . strtolower($className) . '.php'
     );
 

@@ -26,7 +26,8 @@
  * $page->show();
  * ```
  */
-class HtmlPage extends Smarty
+ 
+class HtmlPage extends \Smarty
 {
     /**
      * @var string The title for the html page and the headline for the Admidio content.
@@ -122,12 +123,13 @@ class HtmlPage extends Smarty
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/js/bootstrap.bundle.js');
         $this->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/common_functions.js');
         
+        parent::__construct();
+        
         // initialize php template engine smarty
-        $this->setTemplateDir(ADMIDIO_PATH . '/' . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme') . '/templates/');
-        $this->setCacheDir(ADMIDIO_PATH . '/' . FOLDER_DATA . '/template/cache');
-        $this->setCompileDir(ADMIDIO_PATH . '/' . FOLDER_DATA . '/template/compile');
-        $this->setConfigDir(ADMIDIO_PATH . '/' . FOLDER_LIBS_SERVER . '/smarty/configs');
-        //$this->template->debugging = true;
+        $this->setTemplateDir(ADMIDIO_PATH . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme') . '/templates/');
+        $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/template/cache/');
+        $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/template/compile/');
+        $this->setConfigDir(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/configs/');
     }
 
     /**
@@ -675,6 +677,8 @@ class HtmlPage extends Smarty
      */
     public function show()
     {
+        $this->assign('title', $this->title);
+
         $this->display('index.tpl');
         /*
         $this->addMainFilesAndContent();
