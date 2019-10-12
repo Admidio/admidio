@@ -109,7 +109,7 @@ class HtmlPage extends \Smarty
      */
     public function __construct($headline = '')
     {
-        global $gSettingsManager, $gLogger;
+        global $gSettingsManager;
 
         $this->mainNavbar = new HtmlNavbar('menu_main_script', $headline, $this);
 
@@ -405,7 +405,7 @@ class HtmlPage extends \Smarty
         $headerContent = '';
 
         // add css files to page
-        foreach ($this->cssFiles as $cssFile)
+      /*  foreach ($this->cssFiles as $cssFile)
         {
             $headerContent .= '<link rel="stylesheet" type="text/css" href="' . $cssFile . '" />';
         }
@@ -427,16 +427,16 @@ class HtmlPage extends \Smarty
             {
                 $headerContent .= '<link rel="alternate" type="application/rss+xml" href="' . $rssFile . '" />';
             }
-        }
-
+        }*/
+/*
         // add javascript code to page
         if ($this->javascriptContent !== '')
         {
             $headerContent .= '<script type="text/javascript">' . $this->javascriptContent . '</script>';
-        }
+        }*/
 
         // add javascript code to page that will be executed after page is fully loaded
-        if ($this->javascriptContentExecute !== '')
+        /*if ($this->javascriptContentExecute !== '')
         {
             $headerContent .= '<script type="text/javascript">
                 $(function() {
@@ -445,7 +445,7 @@ class HtmlPage extends \Smarty
                     ' . $this->javascriptContentExecute . '
                 });
             </script>';
-        }
+        }*/
 
         if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note'))
         {
@@ -492,7 +492,7 @@ class HtmlPage extends \Smarty
                 });
             </script>';
         }
-
+/*
         $htmlHeader = '<head>
             <!-- (c) 2004 - 2019 The Admidio Team - ' . ADMIDIO_HOMEPAGE . ' -->
 
@@ -506,7 +506,7 @@ class HtmlPage extends \Smarty
                 var gRootPath  = "' . ADMIDIO_URL . '";
                 var gThemePath = "' . THEME_URL . '";
             </script>';
-
+*/
         $htmlHeader .= $headerContent;
         $htmlHeader .= $this->header;
         $htmlHeader .= $this->htmlMyHeader;
@@ -554,6 +554,52 @@ class HtmlPage extends \Smarty
         $htmlBody .= '</body>';
 
         return $htmlBody;
+    }
+
+    // add css files to page
+    public function getHtmlCssFiles()
+    {
+        $html = '';
+        
+        foreach ($this->cssFiles as $cssFile)
+        {
+            $html .= '<link rel="stylesheet" type="text/css" href="' . $cssFile . '" />'."\n";
+        }
+        
+        return $html;
+    }
+
+    // add javascript files to page
+    public function getHtmlJsFiles()
+    {
+        $html = '';
+        
+        foreach ($this->jsFiles as $jsFile)
+        {
+            $html .= '<script type="text/javascript" src="' . $jsFile . '"></script>'."\n";
+        }
+        
+        return $html;
+    }
+
+    // add rss feed files to page
+    public function getHtmlRssFiles()
+    {
+        $html = '';
+        
+        foreach ($this->rssFiles as $title => $rssFile)
+        {
+            if (!is_numeric($title))
+            {
+                $html .= '<link rel="alternate" type="application/rss+xml" title="' . $title . '" href="' . $rssFile . '" />'."\n";
+            }
+            else
+            {
+                $html .= '<link rel="alternate" type="application/rss+xml" href="' . $rssFile . '" />'."\n";
+            }
+        }
+        
+        return $html;
     }
 
     /**
@@ -677,7 +723,23 @@ class HtmlPage extends \Smarty
      */
     public function show()
     {
+        global $gDebug;
+
         $this->assign('title', $this->title);
+        $this->assign('headline', $this->headline);
+        $this->assign('urlAdmidio', ADMIDIO_URL);
+        $this->assign('urlTheme', THEME_URL);
+        $this->assign('javascriptContent', $this->javascriptContent);
+        $this->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
+
+        if($gDebug)
+        {
+            $this->assign('jsCssFiles', 'js_css_files_debug.tpl');        
+        }
+        else
+        {
+            $this->assign('jsCssFiles', 'js_css_files.tpl');                    
+        }
 
         $this->display('index.tpl');
         /*
