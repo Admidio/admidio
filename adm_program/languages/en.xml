@@ -461,7 +461,7 @@
   <string name="LST_SELECT_CONFIGURATION">Select configuration</string>
   <string name="LST_SELECT_MEMBERS">Select members</string>
   <string name="LST_SHOW_FORMER_MEMBERS">Show former members</string>
-  <string name="LST_SHOW_FORMER_MEMBERS_DESC">This setting can be used to determine who can view former roles. The user must, however, also have the right to view the role himself. Leaders of a role may also view former members of their role, if they have permission to be set here. (Default: #VAR1#)</string>
+  <string name="LST_SHOW_FORMER_MEMBERS_DESC">This setting can be used to determine who can view former roles. However, the user must also have the right to see the role itself. Leaders of a role may also view former members of their role, if they have permission to be set here. (Default: #VAR1#)</string>
   <string name="LST_SHOW_FORMER_MEMBERS_ONLY">Only show former members</string>
   <string name="LST_SHOW_FORMER_MEMBERS_RIGHT">User with permission #VAR1_BOLD#</string>
   <string name="LST_SHOW_LIST">Display list</string>
@@ -1402,7 +1402,7 @@
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Credentials for #organization_long_name#\n#content# Hello #user_first_name#,\n\nYou receive your credentials for the website #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nCheers,\nThe administrators</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in registration at #organization_long_name# rejected.\n#content#Hello #user_first_name# your application at #organization_homepage# was rejected.\n\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\nTo clarify the reasons for the rejection please contact the administrator #administrator_email# from #organization_homepage#.\n\nRegards,\nThe administrators</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration at #organization_long_name# confirmed\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# has been confirmed.\n\nYou can now log in to the homepage with your username #user_login_name# and your password.\n\nIf you have any questions, write an email to #administrator_email#.\n\nCheers,\nThe administrators</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# New registration at #organization_long_name# website\n#content# A new user registered himself on #organization_homepage#.\n\nSurname: #user_last_name#\nFirst Name: #user_first_name#\nE-Mail: #user_email#\n\n\nThis message was generated automatically.</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# New registration at #organization_long_name# website\n#content# A new user has registered on #organization_homepage#.\n\nSurname: #user_last_name#\nFirst Name: #user_first_name#\nE-Mail: #user_email#\n\n\nThis message was generated automatically.</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_MAILS">System notifications</string>
   <string name="SYS_TEXT">Text</string>
