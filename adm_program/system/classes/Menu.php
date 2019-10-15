@@ -88,7 +88,7 @@ class Menu
      */
     public function countMainNodes()
     {
-        if($this->menuLoaded)
+        if(!$this->menuLoaded)
         {
             $this->loadFromDatabase();
         }
@@ -105,19 +105,19 @@ class Menu
      */
     public function getHtml($mediaView = false)
     {
-        if($this->menuLoaded)
+        if(!$this->menuLoaded)
         {
             $this->loadFromDatabase();
         }
 
-        $html = '<div class="admidio-menu-list">';
+        $html = '<nav class="admidio-menu-list collapse" id="admidio-main-menu">';
 
         foreach($this->menuNodes as $menuNode)
         {
             $html .= $menuNode->getHtml($mediaView);
         }
 
-        $html .= '</div>';
+        $html .= '</nav>';
 
         return $html;
     }

@@ -96,7 +96,7 @@ class MenuNode
     public function getHtml($mediaView = false)
     {
         $html = '';
-
+/*
         if($this->count() > 0)
         {
             $html .= '<h3 id="head_'.$this->textId.'">'.$this->name.'</h3>';
@@ -143,6 +143,26 @@ class MenuNode
                         </a>
                     </li>';
                 }
+            }
+
+            $html .= '</ul>';
+        }*/
+
+        if($this->count() > 0)
+        {
+            $html .= '<div class="admidio-menu-header">'.$this->name.'</div>
+            
+            <ul class="nav flex-column bg-white mb-0">';
+
+            foreach($this->nodeEntries as $menuEntry)
+            {
+                $iconHtml = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
+                $html .= '
+                <li class="nav-item">
+                    <a class="nav-link text-dark font-italic bg-light" href="'.$menuEntry['men_url'].'">
+                        ' . $iconHtml . $menuEntry['men_name'] . '
+                    </a>
+                </li>';
             }
 
             $html .= '</ul>';

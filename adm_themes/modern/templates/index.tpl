@@ -21,16 +21,41 @@
         $(function() {
             $("[data-toggle=\'popover\']").popover();
             $("[data-toggle=tooltip]").tooltip();
+            
+  // Sidebar toggle behavior
+  $('#sidebarCollapse').on('click', function() {
+    $('#sidebar, #content').toggleClass('active');
+  });
+            
             {$javascriptContentExecuteAtPageLoad}
         });
     </script>
 </head>
 <body>
-    <nav class="navbar navbar-light" id="admidio-main-navbar">
+    <nav class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar" id="admidio-main-navbar">
       <a class="navbar-brand" href="#">
-        <img class="d-none d-sm-inline" src="{$urlTheme}/images/admidio_writing_100.png" width="100" height="29" class="d-inline-block align-top" alt="">
-        {$headline}
+        <img class="d-none d-sm-inline" src="{$urlTheme}/images/admidio_logo.png" width="120" height="40" class="d-inline-block align-top" alt="">
+        {$organizationName}
       </a>
     </nav>
+    
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+            <div class="col-12 col-md-3 col-xl-2 admidio-sidebar" id="sidebar">
+                <div class="admidio-headline-mobile-menu d-md-none p-2 ml-2">
+                <span class="text-uppercase">Menü</span>
+                <button class="btn btn-link d-md-none collapsed" type="button" data-toggle="collapse" 
+                    data-target="#admidio-main-menu" aria-controls="admidio-main-menu" aria-expanded="false">
+                    <i class="fas fa-bars fa-fw"></i>
+                </button>
+                </div>
+                {$menuSidebar}
+            </div>
+            
+            <div class="col-12 col-md-9 col-xl-10 admidio-content" id="content" role="main">
+                {$content}
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -723,10 +723,11 @@ class HtmlPage extends \Smarty
      */
     public function show()
     {
-        global $gDebug;
+        global $gDebug, $gMenu, $gCurrentOrganization;
 
         $this->assign('title', $this->title);
         $this->assign('headline', $this->headline);
+        $this->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
         $this->assign('urlAdmidio', ADMIDIO_URL);
         $this->assign('urlTheme', THEME_URL);
         $this->assign('javascriptContent', $this->javascriptContent);
@@ -740,6 +741,9 @@ class HtmlPage extends \Smarty
         {
             $this->assign('jsCssFiles', 'js_css_files.tpl');                    
         }
+
+        $this->assign('menuSidebar', $gMenu->getHtml());
+        $this->assign('content', $this->getHtmlBody());
 
         $this->display('index.tpl');
         /*

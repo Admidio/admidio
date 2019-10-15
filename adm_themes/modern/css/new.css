@@ -11,6 +11,9 @@
 
 #admidio-main-navbar {
     background-color: #349aaa;
+    min-height: 4rem;
+    position: sticky;
+    padding-bottom: 0px;
 }
 
 #admidio-main-navbar .navbar-brand {
@@ -20,4 +23,79 @@
 
 #admidio-main-navbar .navbar-brand img {
     margin-right: 15px;
+}
+
+@media (max-width: 767px)
+{
+    /* navbar should not be fixed at top if in mobile view */
+    #admidio-main-navbar.fixed-top
+    {
+        position: relative;
+        top: auto;
+    }
+}
+
+.admidio-sidebar {
+    padding: 0px;
+    background-color: #dfe3e3;
+}
+
+.admidio-content {
+    order: 1;
+}
+
+.nav-link .fas {
+    margin-right: 5px;
+}
+
+.admidio-menu-list {
+    overflow-y: auto;
+}
+
+@media (min-width: 768px)
+{
+    /* sidebar should only be there in non mobile view */
+    .admidio-sidebar {
+        position: sticky;
+        top: 4rem;
+        z-index: 1000;
+        height: calc(100vh - 4rem);
+    }
+
+    .admidio-menu-list {
+        display: block !important;
+    }
+}
+
+.admidio-menu-header {
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    margin: 0px;
+    color: #959e9e;
+}
+
+a.bg-light {
+    background-color: #dfe3e3 !important;
+}
+
+a.bg-light:hover {
+    background-color: #959e9e !important;    
+}
+
+body {
+    color: #263340;
+}
+
+a, .btn-link {
+    color: #349aaa;
+}
+
+a:hover {
+    color:#25717d;
+}
+
+.admidio-headline-mobile-menu {
+    width: 100%;
+    font-size: 1.1rem;
 }
