@@ -88,7 +88,7 @@ class Menu
      */
     public function countMainNodes()
     {
-        if($this->menuLoaded)
+        if(!$this->menuLoaded)
         {
             $this->loadFromDatabase();
         }
@@ -105,7 +105,7 @@ class Menu
      */
     public function getHtml($mediaView = false)
     {
-        if($this->menuLoaded)
+        if(!$this->menuLoaded)
         {
             $this->loadFromDatabase();
         }
