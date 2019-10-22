@@ -33,10 +33,35 @@
 </head>
 <body>
     <nav class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar" id="admidio-main-navbar">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="{$urlAdmidio}/adm_program/index.php">
         <img class="d-none d-sm-inline" src="{$urlTheme}/images/admidio_logo.png" width="120" height="40" class="d-inline-block align-top" alt="">
-        {$organizationName}
       </a>
+      {$organizationName}
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+          {if $validLogin}
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/profile/profile.php">{$l10n->get('PRO_MY_PROFILE')}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{$urlAdmidio}/adm_program/system/logout.php">{$l10n->get('SYS_LOGOUT')}</a>
+              </li>
+            </ul>
+          {else}
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{$urlAdmidio}/adm_program/system/login.php">{$l10n->get('SYS_LOGIN')}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/registration/registration.php">{$l10n->get('SYS_REGISTRATION')}</a>
+              </li>
+            </ul>
+          {/if}
+      </div>
+      <!--<img id="admidio-navbar-photo" class="rounded-circle float-right" src="{$urlAdmidio}/adm_program/modules/profile/profile_photo_show.php?usr_id={$userId}" alt="Profile picture" />-->
     </nav>
     
     <div class="container-fluid">

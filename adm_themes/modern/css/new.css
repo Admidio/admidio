@@ -16,13 +16,23 @@
     padding-bottom: 0px;
 }
 
-#admidio-main-navbar .navbar-brand {
+#admidio-main-navbar {
     color: #eeeeee;
     font-weight: bold;
+    font-size: 1.4rem;
 }
 
 #admidio-main-navbar .navbar-brand img {
     margin-right: 15px;
+}
+
+#admidio-main-navbar a {
+    color: #263340;
+    font-size: 1rem
+}
+
+#admidio-main-navbar a:hover {
+    color: #000000;
 }
 
 @media (max-width: 767px)
@@ -98,4 +108,9 @@ a:hover {
 .admidio-headline-mobile-menu {
     width: 100%;
     font-size: 1.1rem;
+}
+
+.admidio-navbar-photo {
+    max-height: 30px;
+    max-width: 30px;
 }

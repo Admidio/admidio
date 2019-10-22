@@ -723,7 +723,7 @@ class HtmlPage extends \Smarty
      */
     public function show()
     {
-        global $gDebug, $gMenu, $gCurrentOrganization;
+        global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n;
 
         $this->assign('title', $this->title);
         $this->assign('headline', $this->headline);
@@ -732,6 +732,9 @@ class HtmlPage extends \Smarty
         $this->assign('urlTheme', THEME_URL);
         $this->assign('javascriptContent', $this->javascriptContent);
         $this->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
+
+        $this->assign('userId', $gCurrentUser->getValue('usr_id'));
+        $this->assign('validLogin', $gValidLogin);
 
         if($gDebug)
         {
@@ -744,6 +747,8 @@ class HtmlPage extends \Smarty
 
         $this->assign('menuSidebar', $gMenu->getHtml());
         $this->assign('content', $this->getHtmlBody());
+
+        $this->assign('l10n', $gL10n);
 
         $this->display('index.tpl');
         /*
