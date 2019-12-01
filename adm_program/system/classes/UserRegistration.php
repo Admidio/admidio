@@ -85,6 +85,7 @@ class UserRegistration extends User
         $this->db->startTransaction();
 
         // set user active
+        $this->saveChangesWithoutRights();
         $this->setValue('usr_valid', 1);
         $this->save();
 
