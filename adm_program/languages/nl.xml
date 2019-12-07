@@ -411,7 +411,7 @@
   <string name="LST_SELECT_CONFIGURATION">Configuratie kiezen</string>
   <string name="LST_SELECT_MEMBERS">Leden kiezen</string>
   <string name="LST_SHOW_FORMER_MEMBERS">Toon voormalige leden</string>
-  <string name="LST_SHOW_FORMER_MEMBERS_DESC">Deze instelling kan worden gebruikt om aan te geven wie leden van oude rollen mag zien. De gebruiker moet zelf ook het recht hebben om de rol te zien. Leiders van een rol kunnen ook voormalige leden van hun eigen rol zien, als ze hetzelfde recht hebben gekregen voor de rol die hier is ingesteld. (Standaard: #VAR1#)</string>
+  <string name="LST_SHOW_FORMER_MEMBERS_DESC">Deze instelling kan worden gebruikt om te bepalen wie eerdere rollen kan bekijken. De gebruiker moet echter ook het recht hebben om de rol zelf te zien. Leiders van een rol kunnen ook voormalige leden van hun rol bekijken, als ze toestemming hebben om hier te worden ingesteld. (Standaard: #VAR1#)</string>
   <string name="LST_SHOW_FORMER_MEMBERS_ONLY">Toon alleen voormalige leden</string>
   <string name="LST_SHOW_FORMER_MEMBERS_RIGHT">Gebruiker met recht #VAR1_BOLD#</string>
   <string name="LST_SHOW_LIST">Toon lijst</string>
@@ -1389,7 +1389,7 @@
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Inloggegevens voor #organization_long_name#\n#content# Hallo #user_first_name#,\n\nUw nieuwe inloggegevens voor de website #organization_homepage#\nGebruikersnaam: #user_login_name#\nWachtwoord: #variable1#\n\nHet wachtwoord is automatisch gegenereerd.\nU moet dit wijzigen in je profiel nadat u bent ingelogd op #organization_homepage#.\n\nHartelijke groeten,\nDe beheerders</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registratie bij #organization_long_name# geweigerd.\n#content# Hallo #user_first_name#,\n\nUw registratie bij #organization_homepage# werd afgewezen.\n\nRegistraties worden alleen geaccepteerd voor leden. Als u lid bent maar uw registratie werd toch geweigerd, is het mogelijk dat u niet werd herkend als lid.\nVoor meer info omtrent de weigering, gelieve contact op te nemen met de beheerder #webmaster_email# van #organization_homepage#.\n\nHartelijke groeten,\nDe beheerders</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registratie voor #organization_long_name# bevestigd\n#content# Hallo #user_first_name#,\n\nUw registratie bij #organization_homepage# is goedgekeurd.\n\nU kunt nu inloggen met gebruikersnaam #user_login_name# en uw wachtwoord.\n\nAls u vragen heeft neem gerust contact op met de beheerder via: #webmaster_email#.\n\nHartelijke groeten,\nDe beheerders</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Nieuwe registratie voor website #organization_long_name#\n#content# Een nieuwe gebruiker heeft zich geregistreerd op #organization_homepage#.\n\nAchternaam: #user_last_name#\nVoornaam: #user_first_name#\nE-mailadres: #user_email#\n\nDit bericht is automatisch gegenereerd.</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Nieuwe registratie op de #organization_long_name# website\n#content# Een nieuwe gebruiker heeft zich geregistreerd op  #organization_homepage#.\n\nAchternaam: #user_last_name#\nVoornaam: #user_first_name#\nE-mailadres: #user_email#\n\n\nDit bericht is automatisch gegenereerd.</string>
   <string name="SYS_SYSTEM">Systeem</string>
   <string name="SYS_SYSTEM_MAILS">Systeem berichten</string>
   <string name="SYS_TEXT">Tekst</string>
