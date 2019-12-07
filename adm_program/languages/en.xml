@@ -920,7 +920,7 @@
   <string name="ROL_LEADER_EDIT_MEMBERS">Head of this role can edit profile data of all role members.</string>
   <string name="ROL_LEADER_ASSIGN_MEMBERS">Head of this role can add new role members or remove existing members.</string>
   <string name="ROL_LEADER_RIGHTS_DESC">Roles members can be appointed as managers of a role and get optional extended rights.\nThey can get the right to manipulate profile data of all roles members and / or the right to add or remove members of the role. Having both rights, however, they would be able to edit information of all members.</string>
-  <string name="ROL_LINK_MEMBERSHIP_DEL">Would you like to move back role #VAR1_BOLD# to current roles?</string>
+  <string name="ROL_LINK_MEMBERSHIP_DEL">Do you really want to remove the reference to the former membership in the role #VAR1_BOLD#??</string>
   <string name="ROL_MEETINGS">Meetings</string>
   <string name="ROL_MEMBERSHIP_DEL">Would you like to end membership in role #VAR1_BOLD#?</string>
   <string name="ROL_MODULE_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights.</string>
