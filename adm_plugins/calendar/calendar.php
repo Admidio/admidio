@@ -4,7 +4,7 @@
  * Calendar
  *
  * Plugin shows the actual month with all the events and birthdays that are
- * coming. This plugin can be used to show the Admidio events and birthdays in a
+ * coming. This plugin can be used to show the Admidio events andbirthdays in a
  * sidebar within Admidio or in an external website.
  *
  * Compatible with Admidio version 3.3
@@ -87,23 +87,6 @@ if(!isset($plg_kal_cat_show))
 if(!isset($plg_link_url) || $plg_link_url === '')
 {
     $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
-}
-
-// ///////////////////////////////////////////////////// //
-// Prüfen ob the CSS Link-Klassen gesetzt wurden         //
-// ///////////////////////////////////////////////////// //
-
-if(!isset($plg_link_class_geb) || $plg_link_class_geb === '')
-{
-    $plg_link_class_geb = 'geb';
-}
-if(!isset($plg_link_class_date) || $plg_link_class_date === '')
-{
-    $plg_link_class_date = 'date';
-}
-if(!isset($plg_link_class_merge) || $plg_link_class_merge === '')
-{
-    $plg_link_class_date = 'merge';
 }
 
 // /////////////////////////////////////////////////////// //
