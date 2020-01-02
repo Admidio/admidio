@@ -45,15 +45,6 @@ if(!isset($plgShowFullDescription) || !is_numeric($plgShowFullDescription))
     $plgShowFullDescription = 0;
 }
 
-if(isset($plg_link_class))
-{
-    $plg_link_class = strip_tags($plg_link_class);
-}
-else
-{
-    $plg_link_class = '';
-}
-
 if(isset($plg_link_target))
 {
     $plg_link_target = strip_tags($plg_link_target);
@@ -113,7 +104,7 @@ if(Component::isVisible('ANNOUNCEMENTS'))
             $plgAnnouncement->clear();
             $plgAnnouncement->setArray($plgRow);
     
-            echo '<h4><a class="'. $plg_link_class. '" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php', array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '" target="'. $plg_link_target. '">';
+            echo '<h4><a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php', array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '" target="'. $plg_link_target. '">';
     
             if($plg_max_char_per_word > 0)
             {
@@ -154,7 +145,7 @@ if(Component::isVisible('ANNOUNCEMENTS'))
                 // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
                 $textPrev = substr($textPrev, 0, $plg_show_preview + 15);
                 $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
-                    <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
+                    <a target="'. $plg_link_target. '"
                         href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php', array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '"><i
                         class="fas fa-plus-circle" aria-hidden="true"></i>'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_MORE').'</a>';
                 $textPrev = pluginAnnouncementsCloseTags($textPrev);
@@ -168,7 +159,7 @@ if(Component::isVisible('ANNOUNCEMENTS'))
     
         }
     
-        echo '<a class="'.$plg_link_class.'" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $plg_headline)).'" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES').'</a>';
+        echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $plg_headline)).'" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES').'</a>';
     }
     echo '</div>';
 }

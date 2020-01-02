@@ -31,15 +31,6 @@ if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
     $plg_max_char_per_word = 0;
 }
 
-if(isset($plg_link_class))
-{
-    $plg_link_class = strip_tags($plg_link_class);
-}
-else
-{
-    $plg_link_class = '';
-}
-
 if(isset($plg_link_target))
 {
     $plg_link_target = strip_tags($plg_link_target);
@@ -160,14 +151,14 @@ if(Component::isVisible('PHOTOS'))
     
     // Ausgabe
     $phoId = (int) $album->getValue('pho_id');
-    echo '<a class="'.$plg_link_class.'" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId, 'photo_nr' => $picNr)).'" target="'. $plg_link_target. '"><img
+    echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId, 'photo_nr' => $picNr)).'" target="'. $plg_link_target. '"><img
         class="img-thumbnail d-block" alt="'.$linkText.'" title="'.$linkText.'"
         src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $phoId, 'photo_nr' => $picNr, 'pho_begin' => $album->getValue('pho_begin', 'Y-m-d'), 'max_width' => $plg_photos_max_width, 'max_height' => $plg_photos_max_height)).'" /></a>';
     
     // Link zum Album
     if($plg_photos_show_link)
     {
-        echo '<a class="'.$plg_link_class.'" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId)).'" target="'.$plg_link_target.'">'.$linkText.'</a>';
+        echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId)).'" target="'.$plg_link_target.'">'.$linkText.'</a>';
     }
     
     echo '</div>';

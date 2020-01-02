@@ -36,10 +36,6 @@ $plg_show_self = 1;
 // 1 = List user names side by side
 $plg_show_users_side_by_side = 0;
 
-// Name of a CSS class for links
-// Only necessary, if the links should get a different look
-$plg_link_class = '';
-
 // Specification of the target in which the contents of the links are to be opened
 // You can insert specified values of the html target attribut
 $plg_link_target = '_self';

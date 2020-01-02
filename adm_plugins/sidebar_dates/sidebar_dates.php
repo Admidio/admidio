@@ -51,15 +51,6 @@ if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
     $plg_max_char_per_word = 0;
 }
 
-if(isset($plg_link_class))
-{
-    $plg_link_class = strip_tags($plg_link_class);
-}
-else
-{
-    $plg_link_class = '';
-}
-
 if(isset($plg_link_target))
 {
     $plg_link_target = strip_tags($plg_link_target);
@@ -137,7 +128,7 @@ if(Component::isVisible('DATES'))
             }
     
             // ?ber $plg_link_url wird die Verbindung zum Date-Modul hergestellt.
-            echo $plgHtmlEndDate. '<br /><a class="'. $plg_link_class. '" href="'. SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '" target="'. $plg_link_target. '">';
+            echo $plgHtmlEndDate. '<br /><a href="'. SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '" target="'. $plg_link_target. '">';
     
             if($plg_max_char_per_word > 0)
             {
@@ -178,7 +169,7 @@ if(Component::isVisible('DATES'))
                 // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
                 $textPrev = substr($textPrev, 0, $plg_dates_show_preview + 15);
                 $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
-                    <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
+                    <a target="'. $plg_link_target. '"
                         href="'.SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '"><i
                         class="fas fa-plus-circle" aria-hidden="true"></i>'.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a>';
                 $textPrev = pluginDatesCloseTags($textPrev);
@@ -190,7 +181,7 @@ if(Component::isVisible('DATES'))
         }
     
         // forward to $plg_link_url without any additional parameters
-        echo '<a class="'. $plg_link_class. '" href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_DATES_ALL_EVENTS').'</a>';
+        echo '<a href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_DATES_ALL_EVENTS').'</a>';
     }
     else
     {
