@@ -466,7 +466,7 @@ class HtmlForm extends HtmlFormBasic
 
         $this->openControlStructure(
             $optionsAll['referenceId'], $label, self::FIELD_DEFAULT,
-            $optionsAll['helpTextIdLabel'], $optionsAll['icon'], 'form-custom-content'
+            $optionsAll['helpTextIdLabel'], $optionsAll['icon'], 'form-custom-content ' . $optionsAll['class']
         );
         $this->addHtml($content);
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
