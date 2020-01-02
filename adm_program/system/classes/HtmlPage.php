@@ -868,11 +868,6 @@ class HtmlPage
 
                 $htmlMenu .= $menu->show($details);
             }
-
-            $this->menu->addItem(
-                'menu_item_private_message', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $unreadBadge,
-                'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
         }
 
         return $htmlMenu;
