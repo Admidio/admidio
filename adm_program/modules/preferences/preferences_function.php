@@ -165,7 +165,7 @@ switch($getMode)
                     $checkboxes = array('members_show_all_users', 'members_enable_user_relations');
                     break;
 
-                case 'downloads':
+                case 'documents-files':
                     $checkboxes = array('enable_download_module');
                     break;
 

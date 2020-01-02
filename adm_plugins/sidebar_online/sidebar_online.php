@@ -50,15 +50,6 @@ if(!isset($plg_show_users_side_by_side) || !is_numeric($plg_show_users_side_by_s
     $plg_show_users_side_by_side = 0;
 }
 
-if(isset($plg_link_class))
-{
-    $plg_link_class = strip_tags($plg_link_class);
-}
-else
-{
-    $plg_link_class = '';
-}
-
 if(isset($plg_link_target))
 {
     $plg_link_target = strip_tags($plg_link_target);
@@ -122,7 +113,7 @@ if($onlineUsersStatement->rowCount() > 0)
             if(((int) $row['ses_usr_id'] !== $usrIdMerker)
             && ($plg_show_members == 1 || $gValidLogin))
             {
-                $allVisibleOnlineUsers[] = '<strong><a class="'. $plg_link_class. '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'"
+                $allVisibleOnlineUsers[] = '<strong><a target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'"
                     href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => $row['ses_usr_id'])). '">'. $row['usr_login_name']. '</a></strong>';
                 $usrIdMerker = (int) $row['ses_usr_id'];
             }

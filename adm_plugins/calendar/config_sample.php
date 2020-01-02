@@ -59,12 +59,3 @@ $plg_rolle_sql = array();
 // Angabe der Prefix-Url für den Aufruf in Joomla
 // wenn keine Angabe erfolgt dann wird die Standard-URL von Admidio verwendet
 $plg_link_url = '';
-
-// Welche CSS-Linkklasse soll für die Anzeige der Geburtstage verwendet werden
-$plg_link_class_geb = 'geb';
-
-// Welche CSS-Linkklasse soll für die Anzeige der Termine verwendet werden
-$plg_link_class_date = 'date';
-
-// Welche CSS-Linkklasse soll bei Daten mit Geburtstagen und Terminen verwendet werden
-$plg_link_class_merge = 'merge';

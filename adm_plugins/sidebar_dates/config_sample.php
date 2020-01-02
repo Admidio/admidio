@@ -49,10 +49,6 @@ $plg_show_headline = 1;
 // wenn keine Angabe erfolgt dann wird die Standard-URL von Admidio verwendet
 $plg_link_url = '';
 
-// Name einer CSS-Klasse fuer Links
-// Nur noetig, falls die Links ein anderes Aussehen bekommen sollen
-$plg_link_class = '';
-
 // Angabe des Ziels (target) in dem die Inhalte der Links geöffnet werden sollen
 // Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
 $plg_link_target = '_self';

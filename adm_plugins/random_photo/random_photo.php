@@ -31,15 +31,6 @@ if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
     $plg_max_char_per_word = 0;
 }
 
-if(isset($plg_link_class))
-{
-    $plg_link_class = strip_tags($plg_link_class);
-}
-else
-{
-    $plg_link_class = '';
-}
-
 if(isset($plg_link_target))
 {
     $plg_link_target = strip_tags($plg_link_target);
@@ -76,96 +67,99 @@ if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
     $plg_show_headline = 1;
 }
 
-echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
-if($plg_show_headline)
+if(Component::isVisible('PHOTOS'))
 {
-    echo '<h3>'.$gL10n->get('PHO_PHOTOS').'</h3>';
-}
-
-// Fotoalben Aufrufen
-// Bedingungen: freigegeben,Anzahllimit, Bilder enthalten
-$sql = 'SELECT *
-          FROM '.TBL_PHOTOS.'
-         WHERE pho_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
-           AND pho_locked   = 0
-           AND pho_quantity > 0
-      ORDER BY pho_begin DESC';
-
-// Limit setzen falls gefordert
-if($plg_photos_albums > 0)
-{
-    $sql .= ' LIMIT '.$plg_photos_albums;
-}
-
-$albumStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
-$albumList      = $albumStatement->fetchAll();
-
-// Variablen initialisieren
-$i        = 0;
-$picNr    = 0;
-$picPath  = '';
-$linkText = '';
-$album = new TablePhotos($gDb);
-
-// Schleife, falls nicht direkt ein Bild gefunden wird, aber auf 20 Durchlaeufe begrenzen
-while(!is_file($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
-{
-    // Ausgewähltendatendatz holen
-    $album->setArray($albumList[mt_rand(0, $albumStatement->rowCount()-1)]);
-
-    // Falls gewuensch Bild per Zufall auswaehlen
-    if($plg_photos_picnr === 0)
+    echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
+    if($plg_show_headline)
     {
-        $picNr = mt_rand(1, (int) $album->getValue('pho_quantity'));
+        echo '<h3>'.$gL10n->get('PHO_PHOTOS').'</h3>';
     }
-    else
+    
+    // Fotoalben Aufrufen
+    // Bedingungen: freigegeben,Anzahllimit, Bilder enthalten
+    $sql = 'SELECT *
+              FROM '.TBL_PHOTOS.'
+             WHERE pho_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND pho_locked   = 0
+               AND pho_quantity > 0
+          ORDER BY pho_begin DESC';
+    
+    // Limit setzen falls gefordert
+    if($plg_photos_albums > 0)
     {
-        $picNr = $plg_photos_picnr;
+        $sql .= ' LIMIT '.$plg_photos_albums;
     }
-
-    // Bilpfad zusammensetzen
-    $picPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $album->getValue('pho_begin', 'Y-m-d') . '_' . (int) $album->getValue('pho_id') . '/' . $picNr . '.jpg';
-    ++$i;
-}
-
-if(!is_file($picPath))
-{
-    $picPath = THEME_PATH . '/images/no_photo_found.png';
-}
-
-if($plg_photos_show_link && $plg_max_char_per_word > 0)
-{
-    // Linktext umbrechen wenn noetig
-    $words = explode(' ', $album->getValue('pho_name'));
-
-    foreach ($words as $word)
+    
+    $albumStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
+    $albumList      = $albumStatement->fetchAll();
+    
+    // Variablen initialisieren
+    $i        = 0;
+    $picNr    = 0;
+    $picPath  = '';
+    $linkText = '';
+    $album = new TablePhotos($gDb);
+    
+    // Schleife, falls nicht direkt ein Bild gefunden wird, aber auf 20 Durchlaeufe begrenzen
+    while(!is_file($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
     {
-        if(strlen($word) > $plg_max_char_per_word)
+        // Ausgewähltendatendatz holen
+        $album->setArray($albumList[mt_rand(0, $albumStatement->rowCount()-1)]);
+    
+        // Falls gewuensch Bild per Zufall auswaehlen
+        if($plg_photos_picnr === 0)
         {
-            $linkText .= substr($word, 0, $plg_max_char_per_word).'-<br />'.
-                substr($word, $plg_max_char_per_word).' ';
+            $picNr = mt_rand(1, (int) $album->getValue('pho_quantity'));
         }
         else
         {
-            $linkText .= $word.' ';
+            $picNr = $plg_photos_picnr;
+        }
+    
+        // Bilpfad zusammensetzen
+        $picPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $album->getValue('pho_begin', 'Y-m-d') . '_' . (int) $album->getValue('pho_id') . '/' . $picNr . '.jpg';
+        ++$i;
+    }
+    
+    if(!is_file($picPath))
+    {
+        $picPath = THEME_PATH . '/images/no_photo_found.png';
+    }
+    
+    if($plg_photos_show_link && $plg_max_char_per_word > 0)
+    {
+        // Linktext umbrechen wenn noetig
+        $words = explode(' ', $album->getValue('pho_name'));
+    
+        foreach ($words as $word)
+        {
+            if(strlen($word) > $plg_max_char_per_word)
+            {
+                $linkText .= substr($word, 0, $plg_max_char_per_word).'-<br />'.
+                    substr($word, $plg_max_char_per_word).' ';
+            }
+            else
+            {
+                $linkText .= $word.' ';
+            }
         }
     }
+    else
+    {
+        $linkText = $album->getValue('pho_name');
+    }
+    
+    // Ausgabe
+    $phoId = (int) $album->getValue('pho_id');
+    echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId, 'photo_nr' => $picNr)).'" target="'. $plg_link_target. '"><img
+        class="img-thumbnail d-block" alt="'.$linkText.'" title="'.$linkText.'"
+        src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $phoId, 'photo_nr' => $picNr, 'pho_begin' => $album->getValue('pho_begin', 'Y-m-d'), 'max_width' => $plg_photos_max_width, 'max_height' => $plg_photos_max_height)).'" /></a>';
+    
+    // Link zum Album
+    if($plg_photos_show_link)
+    {
+        echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId)).'" target="'.$plg_link_target.'">'.$linkText.'</a>';
+    }
+    
+    echo '</div>';
 }
-else
-{
-    $linkText = $album->getValue('pho_name');
-}
-
-// Ausgabe
-$phoId = (int) $album->getValue('pho_id');
-echo '<a class="'.$plg_link_class.'" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId, 'photo_nr' => $picNr)).'" target="'. $plg_link_target. '"><img
-    class="img-thumbnail d-block" alt="'.$linkText.'" title="'.$linkText.'"
-    src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $phoId, 'photo_nr' => $picNr, 'pho_begin' => $album->getValue('pho_begin', 'Y-m-d'), 'max_width' => $plg_photos_max_width, 'max_height' => $plg_photos_max_height)).'" /></a>';
-
-// Link zum Album
-if($plg_photos_show_link)
-{
-    echo '<a class="'.$plg_link_class.'" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId)).'" target="'.$plg_link_target.'">'.$linkText.'</a>';
-}
-
-echo '</div>';

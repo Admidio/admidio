@@ -253,5 +253,11 @@ class MenuNode
                 }
             }
         }
+        
+        // if only the overview entry exists, than don't show anly menu item
+        if(count($this->nodeEntries) === 1 && $this->nodeEntries[key($this->nodeEntries)]['men_name_intern'] === 'overview')
+        {
+            $this->nodeEntries = array();
+        }
     }
 }

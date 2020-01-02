@@ -46,7 +46,7 @@ if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
 }
 
 // check if the module is enabled
-if ($gSettingsManager->getBool('enable_download_module'))
+if(Component::isVisible('DOCUMENTS-FILES'))
 {
     $countVisibleDownloads = 0;
     $sqlCondition          = '';
