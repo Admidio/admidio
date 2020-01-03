@@ -45,8 +45,14 @@ function callUrlHideElement(elementId, url, callback) {
         if (data === "done") {
             $("#admidio_modal").modal("hide");
 
-            if (callback && typeof callback === "function") {
-                $(entryDeleted).fadeOut("slow", callback());
+            if (callback === 'callbackRoles') {
+                $(entryDeleted).fadeOut("slow", callbackRoles);
+            } else if (callback === 'callbackFormerRoles') {
+                $(entryDeleted).fadeOut("slow", callbackFormerRoles);                
+            } else if (callback === 'callbackFutureRoles') {
+                $(entryDeleted).fadeOut("slow", callbackFutureRoles);                
+            } else if (callback === 'callbackProfilePhoto') {
+                callbackProfilePhoto();                
             } else {
                 $(entryDeleted).fadeOut("slow");
             }
