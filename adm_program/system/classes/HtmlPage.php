@@ -270,7 +270,7 @@ class HtmlPage
      */
     public function addModalMenu()
     {
-        global $gL10n, $gValidLogin, $gDb, $gCurrentUser;
+        global $gL10n, $gValidLogin, $gDb, $gCurrentUser, $gSettingsManager;
 
         $mainMenuStatement = self::getMainMenuStatement();
 
@@ -354,11 +354,14 @@ class HtmlPage
         }
         else
         {
-            // show registration link
-            $this->menu->addItem(
-                'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
-                'new_registrations.png', 'right', 'navbar', 'admidio-default-menu-item'
-            );
+            if($gSettingsManager->getBool('registration_enable_module'))
+            {
+                // show registration link
+                $this->menu->addItem(
+                    'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
+                    'new_registrations.png', 'right', 'navbar', 'admidio-default-menu-item'
+                );
+            }
             // show login link
             $this->menu->addItem(
                 'menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),
