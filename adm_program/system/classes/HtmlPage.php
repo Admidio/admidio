@@ -723,7 +723,7 @@ class HtmlPage extends \Smarty
      */
     public function show()
     {
-        global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n;
+        global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager;
 
         $this->assign('title', $this->title);
         $this->assign('headline', $this->headline);
@@ -735,6 +735,7 @@ class HtmlPage extends \Smarty
 
         $this->assign('userId', $gCurrentUser->getValue('usr_id'));
         $this->assign('validLogin', $gValidLogin);
+        $this->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
 
         if($gDebug)
         {
