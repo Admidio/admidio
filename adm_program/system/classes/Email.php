@@ -124,7 +124,11 @@ class Email extends PHPMailer
             $this->SMTPAuth    = $gSettingsManager->getBool('mail_smtp_auth');
             $this->Port        = $gSettingsManager->getInt('mail_smtp_port');
             $this->SMTPSecure  = $gSettingsManager->getString('mail_smtp_secure');
-            $this->AuthType    = $gSettingsManager->getString('mail_smtp_authentication_type');
+            // only set auth type if there is a value, otherwise phpmailer will check all methods automatically
+            if(strlen($gSettingsManager->getString('mail_smtp_authentication_type')) > 0)
+            {
+                $this->AuthType    = $gSettingsManager->getString('mail_smtp_authentication_type');
+            }
             $this->Username    = $gSettingsManager->getString('mail_smtp_user');
             $this->Password    = $gSettingsManager->getString('mail_smtp_password');
 

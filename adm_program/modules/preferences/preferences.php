@@ -471,13 +471,14 @@ $formEmailDispatch->addSelectBox(
     array('defaultValue' => $formValues['mail_smtp_secure'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MAI_SMTP_SECURE_DESC')
 );
 $selectBoxEntries = array(
-    'LOGIN' => $gL10n->get('MAI_SMTP_AUTH_LOGIN'),
-    'PLAIN' => $gL10n->get('MAI_SMTP_AUTH_PLAIN'),
-    'NTLM'  => $gL10n->get('MAI_SMTP_AUTH_NTLM')
+    ''         => $gL10n->get('SYS_AUTOMATICALLY'),
+    'LOGIN'    => $gL10n->get('SYS_SMTP_AUTH_LOGIN'),
+    'PLAIN'    => $gL10n->get('SYS_SMTP_AUTH_PLAIN'),
+    'CRAM-MD5' => $gL10n->get('SYS_SMTP_AUTH_CRAM_MD5')
 );
 $formEmailDispatch->addSelectBox(
-    'mail_smtp_authentication_type', $gL10n->get('MAI_SMTP_AUTH_TYPE'), $selectBoxEntries,
-    array('defaultValue' => $formValues['mail_smtp_authentication_type'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MAI_SMTP_AUTH_TYPE_DESC')
+    'mail_smtp_authentication_type', $gL10n->get('SYS_SMTP_AUTH_TYPE'), $selectBoxEntries,
+    array('defaultValue' => $formValues['mail_smtp_authentication_type'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_SMTP_AUTH_TYPE_DESC', array('SYS_AUTOMATICALLY')))
 );
 $formEmailDispatch->addInput(
     'mail_smtp_user', $gL10n->get('MAI_SMTP_USER'), $formValues['mail_smtp_user'],

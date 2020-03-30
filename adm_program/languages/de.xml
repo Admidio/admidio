@@ -526,7 +526,7 @@
   <string name="MAI_SMTP_AUTH_LOGIN">Login</string>
   <string name="MAI_SMTP_AUTH_NTLM">NTLM</string>
   <string name="MAI_SMTP_AUTH_PLAIN">Plain</string>
-  <string name="MAI_SMTP_AUTH_TYPE">SMTP Authentifizierungs-Typ</string>
+  <string name="MAI_SMTP_AUTH_TYPE">SMTP Authentifizierungstyp</string>
   <string name="MAI_SMTP_AUTH_TYPE_DESC">SMTP kennt verschiedene Authentifizierungsmethoden. Die hier ausgewählte wird von Admidio verwendet. (Standard: Login)</string>
   <string name="MAI_SMTP_HOST">SMTP Host</string>
   <string name="MAI_SMTP_HOST_DESC">Adresse des zu verwendenden SMTP-Servers.</string>
