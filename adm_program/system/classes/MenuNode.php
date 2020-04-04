@@ -60,6 +60,42 @@ class MenuNode
     }
 
     /**
+     * Add a new item to this menu node
+     * @param string $id          A id string for the menu item. That will be used as html id tag. 
+     *                            It should be unique within this menu node.
+     * @param string $name        Name of the menu node that will also shown in the menu
+     * @param string $url         The url of this menu item that will be called if someone click the menu item
+     * @param string $icon        An icon that will be shown together with the name in the menu
+     * @param string $description A optional description of the menu node that could be shown in some output cases
+     * œparam string $componentId Optional the component id could be set
+     */
+    public function addItem($id, $name, $url, $icon, $description = '', $componentId = 0)
+    {
+        $node['men_id'] = $this->count();
+        $node['men_name_intern'] = $id;
+        $node['men_com_id'] = $componentId;
+
+        // translate name and description
+        $node['men_name'] = Language::translateIfTranslationStrId($name);
+        $node['men_description'] = Language::translateIfTranslationStrId($description);
+
+        // add root path to link unless the full URL is given
+        if (preg_match('/^http(s?):\/\//', $url) === 0)
+        {
+            $url = ADMIDIO_URL . $url;
+        }
+        $node['men_url'] = $url;
+
+        if (strlen($icon) === 0)
+        {
+            $icon = 'fa-trash-alt admidio-opacity-0';
+        }
+        $node['men_icon'] = $icon;
+        
+        $this->nodeEntries[$node['men_id']] = $node;        
+    }
+
+    /**
      * Get the entries of this node as an array.
      * @return array Array with all entries of this node
      */
@@ -234,22 +270,7 @@ class MenuNode
                         $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                     }*/
     
-                    // translate name and description
-                    $node['men_name'] = Language::translateIfTranslationStrId($node['men_name']);
-                    $node['men_description'] = Language::translateIfTranslationStrId($node['men_description']);
-    
-                    // add root path to link unless the full URL is given
-                    if (preg_match('/^http(s?):\/\//', $node['men_url']) === 0)
-                    {
-                        $node['men_url'] = ADMIDIO_URL . $node['men_url'];
-                    }
-    
-                    if (strlen($node['men_icon']) === 0)
-                    {
-                        $node['men_icon'] = 'fa-trash-alt admidio-opacity-0';
-                    }
-    
-                    $this->nodeEntries[$node['men_id']] = $node;
+                    $this->addItem($node['men_name_intern'], $node['men_name'], $node['men_url'], $node['men_icon'], $node['men_description'], $node['men_com_id']);
                 }
             }
         }

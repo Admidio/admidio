@@ -9,7 +9,7 @@
 
     <title>{$title}</title>
     
-    {include file="$jsCssFiles"}
+    {include file="js_css_files.tpl"}
     
     <script type="text/javascript">
         var gRootPath  = "{$urlAdmidio}";

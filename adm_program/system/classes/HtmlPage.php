@@ -50,6 +50,10 @@ class HtmlPage extends \Smarty
      */
     protected $mainNavbar;
     /**
+     * @var MenuNode An object that represents all functions of the current page that should be shown in the default menu
+     */
+    protected $menuNodePageFunctions;
+    /**
      * @var bool If set to true then the custom html code of the theme for each page will be included.
      */
     protected $showThemeHtml = true;
@@ -112,9 +116,11 @@ class HtmlPage extends \Smarty
         global $gSettingsManager;
 
         $this->mainNavbar = new HtmlNavbar('menu_main_script', $headline, $this);
+        $this->menuNodePageFunctions = new MenuNode('admidio-menu-page-functions', $headline);
 
         $this->setHeadline($headline);
 
+/*
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/css/bootstrap.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/fontawesome.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/solid.css');
@@ -122,7 +128,7 @@ class HtmlPage extends \Smarty
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery/dist/jquery.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/js/bootstrap.bundle.js');
         $this->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/common_functions.js');
-        
+  */      
         parent::__construct();
         
         // initialize php template engine smarty
@@ -323,6 +329,19 @@ class HtmlPage extends \Smarty
                 'fa-key', 'right', 'navbar', 'admidio-default-menu-item'
             );
         }
+    }
+
+    /**
+     * Add a new menu item to the page menu part. This is only the menu that will show functions of the
+     * current page.
+     * @param string $name        Name of the menu node that will also shown in the menu
+     * @param string $url         The url of this menu item that will be called if someone click the menu item
+     * @param string $icon        An icon that will be shown together with the name in the menu
+     * @param string $description A optional description of the menu node that could be shown in some output cases
+     */
+    public function addPageFunctionsMenuItem($name, $url, $icon, $description = '')
+    {
+        $this->menuNodePageFunctions->addItem($name, $url, $icon, $description);
     }
 
     /**
@@ -726,6 +745,9 @@ class HtmlPage extends \Smarty
     {
         global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager;
 
+        // add page functions menu to global menu
+        $gMenu->addFunctionsNode($this->menuNodePageFunctions);
+
         $this->assign('title', $this->title);
         $this->assign('headline', $this->headline);
         $this->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
@@ -736,8 +758,11 @@ class HtmlPage extends \Smarty
 
         $this->assign('userId', $gCurrentUser->getValue('usr_id'));
         $this->assign('validLogin', $gValidLogin);
+        $this->assign('debug', $gDebug);
         $this->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
-
+        $this->assign('additionalCssFiles', $this->getHtmlCssFiles());
+        $this->assign('additionalJsFiles', $this->getHtmlJsFiles());
+/*
         if($gDebug)
         {
             $this->assign('jsCssFiles', 'js_css_files_debug.tpl');        
@@ -746,7 +771,7 @@ class HtmlPage extends \Smarty
         {
             $this->assign('jsCssFiles', 'js_css_files.tpl');                    
         }
-
+*/
         $this->assign('menuSidebar', $gMenu->getHtml());
         $this->assign('content', $this->getHtmlBody());
 

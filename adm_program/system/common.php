@@ -159,6 +159,7 @@ if($gCurrentSession->hasObject('gCurrentUser'))
      * @var Menu $gMenu
      */
     $gMenu =& $gCurrentSession->getObject('gMenu');
+    $gMenu->removeFunctionsNode();
 }
 else
 {

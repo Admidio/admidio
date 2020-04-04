@@ -80,49 +80,39 @@ else
     $announcementsPerPage = $announcementsCount;
 }
 
-// get module menu
-$announcementsMenu = $page->getMenu();
-
+// create module specific functions menu
 if(count($gCurrentUser->getAllEditableCategories('ANN')) > 0)
 {
     // show link to create new announcement
-    $announcementsMenu->addItem(
-        'menu_item_new_announcement', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)),
-        $gL10n->get('SYS_CREATE_ENTRY'), 'fa-plus-circle'
-    );
+    $page->addPageFunctionsMenuItem('menu_item_new_announcement', $gL10n->get('SYS_CREATE_ENTRY'), 
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)), 
+        'fa-plus-circle');
 }
 
+if($gCurrentUser->editAnnouncements())
+{
+    $page->addPageFunctionsMenuItem('admMenuItemCategories', $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')),
+        'fa-th-large');    
+}
+
+// add filter navbar
 $page->addJavascript('
     $("#cat_id").change(function() {
-        $("#navbar_cat_id_form").submit();
+        $("#navbar_filter_form").submit();
     });',
     true
 );
 
-$navbarForm = new HtmlForm('navbar_cat_id_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
-$navbarForm->addSelectBoxForCategories(
+// create filter menu with elements for category
+$filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
+$form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
+$form->addSelectBoxForCategories(
     'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', HtmlForm::SELECT_BOX_MODUS_FILTER,
-    array('defaultValue' => $getCatId)
-);
-$announcementsMenu->addForm($navbarForm->show());
+    array('defaultValue' => $getCatId));
+$filterNavbar->addForm($form->show());
+$page->addHtml($filterNavbar->show());
 
-if($gCurrentUser->editAnnouncements())
-{
-    // if no calendar selectbox is shown, then show link to edit calendars
-    $announcementsMenu->addItem(
-        'admMenuItemCategories', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')),
-        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large'
-    );
-}
-
-if($gCurrentUser->isAdministrator())
-{
-    // show link to system preferences of announcements
-    $announcementsMenu->addItem(
-        'menu_item_preferences', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'announcements')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
-    );
-}
 
 if($announcementsCount === 0)
 {
