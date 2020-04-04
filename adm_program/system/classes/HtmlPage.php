@@ -316,6 +316,7 @@ class HtmlPage extends \Smarty
                 'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
                 'fa-address-card', 'right', 'navbar', 'admidio-default-menu-item'
             );
+
             // show login link
             $this->mainNavbar->addItem(
                 'menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),

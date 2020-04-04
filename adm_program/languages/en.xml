@@ -342,7 +342,6 @@
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">No default list configuration set defined by the administrator!\n\nContact system administrator for help.</string>
   <string name="LST_DELETE_CONFIGURATION">Delete configuration</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-mail to members</string>
-  <string name="LST_EMAIL_TO_LIST">E-mail to list</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Finds all users who have not filled the Road field</string>
   <string name="LST_ENABLE_LISTS_MODULE">Enable list module</string>
   <string name="LST_ENABLE_LISTS_MODULE_DESC">The display of the lists and the configuration of your own lists can be activated or deactivated by this setting. This module is generally only available to logged in users. (Default: yes)</string>
@@ -470,11 +469,6 @@
   <string name="MAI_SMTP">SMTP</string>
   <string name="MAI_SMTP_AUTH">SMTP authentication</string>
   <string name="MAI_SMTP_AUTH_DESC">If the SMTP server requires authentication, the username and password fields are also required. (Default: Yes)</string>
-  <string name="MAI_SMTP_AUTH_LOGIN">Login</string>
-  <string name="MAI_SMTP_AUTH_NTLM">NTLM</string>
-  <string name="MAI_SMTP_AUTH_PLAIN">Plain</string>
-  <string name="MAI_SMTP_AUTH_TYPE">SMTP authentication type</string>
-  <string name="MAI_SMTP_AUTH_TYPE_DESC">SMTP supports different authentication methods. The current selection is used by Admidio. (Default: Login)</string>
   <string name="MAI_SMTP_HOST">SMTP Host</string>
   <string name="MAI_SMTP_HOST_DESC">Address of the SMTP server.</string>
   <string name="MAI_SMTP_PASSWORD">SMTP password</string>
@@ -993,6 +987,7 @@
   <string name="SYS_ALSO_VISITORS">Also visitors</string>
   <string name="SYS_APPLY">Apply</string>
   <string name="SYS_ASSIGN_MEMBERS">Assigning members</string>
+  <string name="SYS_AUTOMATICALLY">Automatically</string>
   <string name="SYS_BACK">Back</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Back to module overview</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
@@ -1377,6 +1372,11 @@
   <string name="SYS_SINCE">since #VAR1#</string>
   <string name="SYS_SINCE_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_SIZE">Size</string>
+  <string name="SYS_SMTP_AUTH_CRAM_MD5">CRAM-MD5</string>
+  <string name="SYS_SMTP_AUTH_LOGIN">Login</string>
+  <string name="SYS_SMTP_AUTH_PLAIN">Plain</string>
+  <string name="SYS_SMTP_AUTH_TYPE">SMTP authentication type</string>
+  <string name="SYS_SMTP_AUTH_TYPE_DESC">SMTP knows different authentication methods. Enter here the authentication method that your SMTP server supports. If you are not sure which method is supported, select #VAR1_BOLD#. Admidio will then try the different authentication methods one after the other until a login was successful. (Default: Automatically)</string>
   <string name="SYS_SOCIAL_NETWORKS">Social media</string>
   <string name="SYS_START" description="Start of a date">Start</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>

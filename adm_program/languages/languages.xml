@@ -78,4 +78,10 @@
         <name>Swahili - Kiswahili</name>
         <datepicker>sw</datepicker>
     </language>
+    <language>
+        <code>sv</code>
+        <isocode>sv</isocode>
+        <name>Swedish - Svenska</name>
+        <datepicker>sw</datepicker>
+    </language>
 </languagelist>

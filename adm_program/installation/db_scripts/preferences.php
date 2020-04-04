@@ -52,7 +52,7 @@ $defaultOrgPreferences = array(
     'mail_smtp_auth'                 => '1',
     'mail_smtp_port'                 => '25',
     'mail_smtp_secure'               => '',
-    'mail_smtp_authentication_type'  => 'LOGIN',
+    'mail_smtp_authentication_type'  => '',
     'mail_smtp_user'                 => '',
     'mail_smtp_password'             => '',
 
