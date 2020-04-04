@@ -116,7 +116,7 @@ if($getMode === 'show_list')
         $gL10n->get('BAC_BACKUP_FILE'),
         $gL10n->get('BAC_CREATION_DATE'),
         $gL10n->get('SYS_SIZE'),
-        $gL10n->get('SYS_DELETE')
+        $gL10n->get('SYS_FEATURES')
     );
     $table->setColumnAlignByArray(array('left', 'left', 'right', 'center'));
     $table->addRowHeadingByArray($columnHeading);
