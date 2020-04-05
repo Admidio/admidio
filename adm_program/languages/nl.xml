@@ -342,7 +342,6 @@
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">Geen standaard lijst-instellingen gedefinieerd door beheerder!\n\nNeem voor hulp contact met beheerder op.</string>
   <string name="LST_DELETE_CONFIGURATION">Verwijder instellingen</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-mail aan leden</string>
-  <string name="LST_EMAIL_TO_LIST">E-mail aan lijst</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Zoek alle gebruikers die het Straat veld niet hebben ingevuld</string>
   <string name="LST_ENABLE_LISTS_MODULE">Lijst module inschakelen</string>
   <string name="LST_ENABLE_LISTS_MODULE_DESC">De weergave van de lijsten en de configuratie van eigen lijsten kan met deze instelling worden geactiveerd of gedeactiveerd. Deze module is over het algemeen alleen beschikbaar voor ingelogde gebruikers. (Standaard: ja)</string>
@@ -470,11 +469,6 @@
   <string name="MAI_SMTP">SMTP</string>
   <string name="MAI_SMTP_AUTH">SMTP authenticatie</string>
   <string name="MAI_SMTP_AUTH_DESC">Indien de SMTP server authenticatie vereist, zijn de gebruikersnaam en wachtwoordvelden ook vereist. (Standaard: Ja)</string>
-  <string name="MAI_SMTP_AUTH_LOGIN">Login</string>
-  <string name="MAI_SMTP_AUTH_NTLM">NTLM</string>
-  <string name="MAI_SMTP_AUTH_PLAIN">Plain</string>
-  <string name="MAI_SMTP_AUTH_TYPE">SMTP authenticatie type</string>
-  <string name="MAI_SMTP_AUTH_TYPE_DESC">SMTP ondersteunt verschillende authenticatie methodes. De hier geselecteerde wordt gebruikt door Admidio. (Standaard: Login)</string>
   <string name="MAI_SMTP_HOST">SMTP Host</string>
   <string name="MAI_SMTP_HOST_DESC">Adres van de SMTP server.</string>
   <string name="MAI_SMTP_PASSWORD">SMTP wachtwoord</string>
@@ -993,6 +987,7 @@
   <string name="SYS_ALSO_VISITORS">ook bezoekers</string>
   <string name="SYS_APPLY">Overnemen</string>
   <string name="SYS_ASSIGN_MEMBERS">Leden toewijzen</string>
+  <string name="SYS_AUTOMATICALLY">Automatisch</string>
   <string name="SYS_BACK">Terug</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Terug naar beginpagina</string>
   <string name="SYS_BIRTHDAY">Geboortedatum</string>
@@ -1377,6 +1372,11 @@
   <string name="SYS_SINCE">sinds #VAR1#</string>
   <string name="SYS_SINCE_TO">vanaf #VAR1# tot #VAR2#</string>
   <string name="SYS_SIZE">Formaat</string>
+  <string name="SYS_SMTP_AUTH_CRAM_MD5">CRAM-MD5</string>
+  <string name="SYS_SMTP_AUTH_LOGIN">Login</string>
+  <string name="SYS_SMTP_AUTH_PLAIN">Eenvoudig</string>
+  <string name="SYS_SMTP_AUTH_TYPE">SMTP authenticatie type</string>
+  <string name="SYS_SMTP_AUTH_TYPE_DESC">SMTP kent verschillende authenticatiemethoden. Voer hier de authenticatiemethode in die uw SMTP-server ondersteunt. Als u niet zeker weet welke methode wordt ondersteund, selecteer dan #VAR1_BOLD#. Admidio zal dan de verschillende authenticatiemethoden één voor één proberen totdat een login succesvol is. (Standaard: automatisch)</string>
   <string name="SYS_SOCIAL_NETWORKS">Social media</string>
   <string name="SYS_START" description="Start of a date">Vanaf</string>
   <string name="SYS_STATUS_CODE_INVALID">Ongeldige status-code!</string>

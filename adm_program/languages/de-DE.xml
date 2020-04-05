@@ -125,54 +125,6 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detailliert</string>
   <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
   <string name="DAT_VISIBILITY">Sichtbarkeit</string>
-  <!--Phrases only in Downloadsmodule-->
-  <string name="SYS_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
-  <string name="SYS_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
-  <string name="SYS_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Downloadmoduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
-  <string name="SYS_COUNTER">Zähler</string>
-  <string name="SYS_CREATE_FOLDER">Ordner anlegen</string>
-  <string name="SYS_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
-  <string name="DOW_DOWNLOADS">Downloads</string>
-  <string name="DOW_DOWNLOADS_DESC">Unterschiedliche Daten und Dateien können hier zum Download angeboten werden. Diese können in Ordnern mit individuellen Zugriffsrechten zusammengefasst werden.</string>
-  <string name="SYS_EDIT_FILE">Datei bearbeiten</string>
-  <string name="SYS_EDIT_FOLDER">Ordner bearbeiten</string>
-  <string name="SYS_EMAIL_NOTIFICATION_TITLE">Eine neue Datei wurde hochgeladen</string>
-  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">Es wurde eine neue Datei bei #VAR1# hochgeladen.\n\nDatei: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Downloadmodul aktivieren</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Downloadmodul kann über diese Einstellung aktiviert oder deaktiviert werden. (Standard: ja)</string>
-  <string name="SYS_FILE_EXIST">Die Datei #VAR1# existiert bereits!\n\nBitte wählen Sie einen anderen Dateinamen aus.</string>
-  <string name="SYS_FILE_EXTENSION_INVALID">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</string>
-  <string name="SYS_FILE_NAME_RULES">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</string>
-  <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</string>
-  <string name="SYS_FILE_RENAME">Die Datei #VAR1# wurde umbenannt.</string>
-  <string name="SYS_FILE_RENAME_ERROR">Beim Umbenennen der Datei #VAR1# ist ein Fehler aufgetreten.</string>
-  <string name="SYS_FILE_TO_LARGE">Die hochgeladene Datei übersteigt die zulässige Dateigröße von #VAR1# MB.</string>
-  <string name="SYS_FILE_TYPE">Dateityp</string>
-  <string name="SYS_FILE_UPLOADED">Die Datei #VAR1_BOLD# wurde hochgeladen</string>
-  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle Dateien wurden erfolgreich hochgeladen.\n\nDer Dialog kann jetzt geschlossen werden.</string>
-  <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Dateien erfolgreich hochgeladen.</string>
-  <string name="SYS_FILES_UPLOAD_DESC">Wählen Sie bitte alle Dateien aus, die Sie in den Ordner #VAR1_BOLD# hochladen möchten.</string>
-  <string name="DOW_FILES_UPLOADED">#VAR1# Dateien wurden erfolgreich hochgeladen.</string>
-  <string name="SYS_FOLDER_CREATED">Der Ordner #VAR1_BOLD# wurde angelegt.</string>
-  <string name="SYS_FOLDER_EXISTS">Der Ordner #VAR1# existiert bereits!\n\nBitte wählen Sie einen anderen Namen für den Ordner aus.</string>
-  <string name="SYS_FOLDER_NO_FILES">Der Ordner enthält keine Dateien.</string>
-  <string name="SYS_FOLDER_NO_RIGHTS">Sie besitzen keine Rechte den gewählten Downloadordner zu sehen.</string>
-  <string name="SYS_FOLDER_NOT_EXISTS">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</string>
-  <string name="SYS_FOLDER_NOT_FOUND">Der gesuchte Ordner konnte nicht gefunden werden.</string>
-  <string name="SYS_FOLDER_RENAME">Der Ordner #VAR1# wurde umbenannt.</string>
-  <string name="SYS_FOLDER_RENAME_ERROR">Beim Umbenennen des Ordners #VAR1# ist ein Fehler aufgetreten.</string>
-  <string name="SYS_MAXIMUM_FILE_SIZE">Maximale Dateigröße</string>
-  <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 3MB)</string>
-  <string name="DOW_NEW_FILE_NAME">Neuer Dateiname</string>
-  <string name="SYS_NEW_NAME">Neuer Name</string>
-  <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Keine zusätzlichen Berechtigungen gesetzt</string>
-  <string name="SYS_PREVIOUS_NAME">Bisheriger Name</string>
-  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite können Sie einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen Ihnen nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administratoren besitzen alle Berechtigungen für den Ordner.</string>
-  <string name="SYS_SELECT_FILES">Dateien auswählen</string>
-  <string name="SYS_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
-  <string name="SYS_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
-  <string name="DOW_UPLOAD_FILE_TO_FOLDER">Datei in den Ordner #VAR1_BOLD# hochladen</string>
-  <string name="SYS_UPLOAD_FILES">Dateien hochladen</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Eine Grußkarte von</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Grußkarten aktivieren</string>
@@ -390,7 +342,6 @@
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWenden Sie sich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
   <string name="LST_DELETE_CONFIGURATION">Konfiguration löschen</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
-  <string name="LST_EMAIL_TO_LIST">E-Mail an Liste</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Straße nicht gefüllt haben</string>
   <string name="LST_ENABLE_LISTS_MODULE">Listenmodul aktivieren</string>
   <string name="LST_ENABLE_LISTS_MODULE_DESC">Die Anzeige der Listen und die Konfiguration von eigenen Listen kann über diese Einstellung aktiviert oder deaktiviert werden. Dieses Modul steht generell nur angemeldeten Benutzern zur Verfügung. (Standard: ja)</string>
@@ -492,11 +443,6 @@
   <string name="MAI_DELIVERY_CONFIRMATION">Lesebestätigung anfordern</string>
   <string name="MAI_DELIVERY_CONFIRMATION_DESC">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfängers ab, ob eine Lesebestätigung versendet wird. Der Empfänger kann dies auf seinen Wunsch unterdrücken.</string>
   <string name="MAI_EMAIL_DESC">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</string>
-  <string name="MAI_EMAIL_SEND_TO_RECEIVER">#VAR1# hat an die folgenden Empfänger: #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_ACTIVE">#VAR1# hat an die aktiven Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# hat an die ehemaligen Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# hat an die aktiven und ehemaligen Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
-  <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# hat Ihnen von #VAR2# folgende E-Mail geschickt:</string>
   <string name="MAI_HIDDEN">Versteckt </string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML-Mails</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Die Erstellung und der Versand von HTML-Mails kann für registrierte Benutzer aktiviert werden. Anstelle des normalen Textfeldes wird dann ein Javascript-Editor angezeigt über den der Text komfortabel editiert werden kann. Aus Sicherheitsgründen ist diese Funktion nicht für Gäste möglich.</string>
@@ -514,7 +460,6 @@
   <string name="MAI_SEND_MAIL_TO_ROLE">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen und Empfänger zur Verfügung, an die Sie E-Mails schreiben können.</string>
   <string name="MAI_SEND_METHOD">Versandmethode</string>
   <string name="MAI_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden E-Mail-Adresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</string>
-  <string name="MAI_SENDER">Absender</string>
   <string name="MAI_SENDER_EMAIL">Absender E-Mail-Adresse</string>
   <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter E-Mail-Adressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle E-Mails aus dem E-Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</string>
   <string name="MAI_SENDER_NAME">Name des Absenders</string>
@@ -524,11 +469,6 @@
   <string name="MAI_SMTP">SMTP</string>
   <string name="MAI_SMTP_AUTH">SMTP Authentifizierung</string>
   <string name="MAI_SMTP_AUTH_DESC">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Benutzername und Passwort ausgefüllt werden.  (Standard: Ja)</string>
-  <string name="MAI_SMTP_AUTH_LOGIN">Login</string>
-  <string name="MAI_SMTP_AUTH_NTLM">NTLM</string>
-  <string name="MAI_SMTP_AUTH_PLAIN">Plain</string>
-  <string name="MAI_SMTP_AUTH_TYPE">SMTP Authentifizierungs-Typ</string>
-  <string name="MAI_SMTP_AUTH_TYPE_DESC">SMTP kennt verschiedene Authentifizierungsmethoden. Die hier ausgewählte wird von Admidio verwendet. (Standard: Login)</string>
   <string name="MAI_SMTP_HOST">SMTP Host</string>
   <string name="MAI_SMTP_HOST_DESC">Adresse des zu verwendenden SMTP-Servers.</string>
   <string name="MAI_SMTP_PASSWORD">SMTP Passwort</string>
@@ -543,7 +483,6 @@
   <string name="MAI_SMTP_USER">SMTP Benutzername</string>
   <string name="MAI_SMTP_USER_DESC">Der Benutzername, der bei der SMTP-Authentifizierung verwendet wird.</string>
   <string name="MAI_SUBJECT">Betreff</string>
-  <string name="MAI_SUBJECT_ATTACHMENT">Betreff &amp; Anhang</string>
   <string name="MAI_YOUR_EMAIL">Ihre E-Mail</string>
   <string name="MAI_YOUR_NAME">Ihr Name</string>
   <!--Phrases only in Membersadministration-->
@@ -1023,19 +962,15 @@
   <string name="ROL_VALID_TO" description="Date valid to">Gültig bis</string>
   <string name="ROL_WEEKDAY">Wochentag</string>
   <string name="ROL_WITHOUT_LEADER">Ohne Leiter</string>
-  <!--Phrases only in Roommodule-->
-  <string name="SYS_CAPACITY">Kapazität</string>
-  <string name="SYS_OVERHANG">Überhang</string>
-  <string name="SYS_ROOM_MANAGEMENT">Raumverwaltung</string>
-  <string name="SYS_SEATING">Sitzplätze</string>
-  <string name="ROO_STANDING">Stehplätze</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64bit</string>
   <string name="SYS_ABORT">Abbrechen</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
   <string name="SYS_ACTIVATED">Aktiviert</string>
   <string name="SYS_ADD_RECIPIENTS">Empfänger hinzufügen</string>
+  <string name="SYS_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
   <string name="SYS_ADDRESS">Adresse</string>
+  <string name="SYS_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Gehe zur Admidio-Downloadseite</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen</string>
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
@@ -1044,6 +979,7 @@
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_ADMINISTRATORS">Administratoren</string>
+  <string name="SYS_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Downloadmoduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle Organisationen</string>
@@ -1051,9 +987,11 @@
   <string name="SYS_ALSO_VISITORS">auch Besucher</string>
   <string name="SYS_APPLY">Übernehmen</string>
   <string name="SYS_ASSIGN_MEMBERS">Mitglieder zuordnen</string>
+  <string name="SYS_AUTOMATICALLY">Automatisch</string>
   <string name="SYS_BACK">Zurück</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Zurück zur Modulübersicht</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
+  <string name="SYS_CAPACITY">Kapazität</string>
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Ergebnis der Rechnung</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Das Ergebnis der Rechnung wurde falsch eingegeben.</string>
@@ -1091,10 +1029,15 @@
   <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da Ihr Browser das Setzen von Cookies verbietet!\n\nDamit Sie sich erfolgreich anmelden können, müssen Sie Ihren Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
   <string name="SYS_COPY">Kopieren</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individueller Empfänger</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuelle Empfänger</string>
+  <string name="SYS_COUNTER">Zähler</string>
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">DEU</string>
   <string name="SYS_CREATE">Anlegen</string>
   <string name="SYS_CREATE_ENTRY">Eintrag anlegen</string>
+  <string name="SYS_CREATE_FOLDER">Ordner anlegen</string>
+  <string name="SYS_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
   <string name="SYS_CREATE_HTACCESS">.htaccess erstellen</string>
   <string name="SYS_CREATE_NEW_USER">Neuen Benutzer anlegen</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, können Sie diesen neu anlegen.</string>
@@ -1135,13 +1078,18 @@
   <string name="SYS_DIRECTORY_SEPARATOR">Verzeichnis Trenner</string>
   <string name="SYS_DISK_SPACE">Speicherplatz</string>
   <string name="SYS_DISK_SPACE_ERROR">Die Belegung des Speicherplatzes konnte nicht ermittelt werden.\n\nFehlermeldung:\n#VAR1#</string>
+  <string name="SYS_DOCUMENTS_FILES">Dokumente & Dateien</string>
+  <string name="SYS_DOCUMENTS_FILES_DESC">Unterschiedliche Dokumente und Dateien können hier zur Ansicht oder zum Download angeboten werden. Diese können in Ordnern mit individuellen Zugriffsrechten zusammengefasst werden.</string>
   <string name="SYS_DONATE">Spenden</string>
   <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
   <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>
-  <string name="SYS_DOWNLOAD_PHOTO">Foto herunterladen</string>
   <string name="SYS_DOWNLOAD_ALBUM">Album herunterladen</string>
+  <string name="SYS_DOWNLOAD_FILE">Datei herunterladen</string>
+  <string name="SYS_DOWNLOAD_PHOTO">Foto herunterladen</string>
   <string name="SYS_EDIT">Bearbeiten</string>
   <string name="SYS_EDIT_ENTRY">Eintrag bearbeiten</string>
+  <string name="SYS_EDIT_FILE">Datei bearbeiten</string>
+  <string name="SYS_EDIT_FOLDER">Ordner bearbeiten</string>
   <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Benutzerprofil dieser Beziehung kann bearbeitet werden</string>
   <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
@@ -1149,8 +1097,14 @@
   <string name="SYS_EMAIL">E-Mail</string>
   <string name="SYS_EMAIL_INVALID">Die E-Mail-Adresse im Feld #VAR1_BOLD# enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</string>
   <string name="SYS_EMAIL_NOT_SEND">Die E-Mail konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
+  <string name="SYS_EMAIL_NOTIFICATION_TITLE">Eine neue Datei wurde hochgeladen</string>
+  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">Es wurde eine neue Datei bei #VAR1# hochgeladen.\n\nDatei: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
   <string name="SYS_EMAIL_SEND">Die E-Mail wurde versendet.</string>
+  <string name="SYS_EMAIL_TEMPLATE">E-Mail-Vorlage</string>
+  <string name="SYS_EMAIL_TEMPLATE_DESC">Hier kann eine HTML-Vorlagendatei aus dem Ordner #VAR1_BOLD# ausgewählt werden. Beim Versand einer E-Mail wird der Inhalt dieser Datei in die E-Mail kopiert und folgende Variablen ersetzt: #sender#, #message#, #recipients#, #organization_name#, #organization_shortname#, #organization_website#. Weitere Informationen zu der Nutzung von E-Mail-Vorlagen finden Sie in der #VAR2#Dokumentation#VAR3#.</string>
   <string name="SYS_EMPTY">Leer</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Downloadmodul aktivieren</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Downloadmodul kann über diese Einstellung aktiviert oder deaktiviert werden. (Standard: ja)</string>
   <string name="SYS_END" description="End of a date">Ende</string>
   <string name="SYS_ERROR">Fehler</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n#VAR1#</string>
@@ -1167,9 +1121,20 @@
   <string name="SYS_FIELD_INVALID_CHAR">Das Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</string>
   <string name="SYS_FIELDS_EMPTY">Es sind nicht alle Felder gefüllt worden.</string>
   <string name="SYS_FILE">Datei</string>
+  <string name="SYS_FILE_EXIST">Die Datei #VAR1# existiert bereits!\n\nBitte wählen Sie einen anderen Dateinamen aus.</string>
+  <string name="SYS_FILE_EXTENSION_INVALID">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</string>
+  <string name="SYS_FILE_NAME_RULES">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</string>
   <string name="SYS_FILE_NOT_EXIST">Die ausgewählte Datei existiert nicht auf dem Server.</string>
+  <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</string>
+  <string name="SYS_FILE_RENAME">Die Datei #VAR1# wurde umbenannt.</string>
+  <string name="SYS_FILE_RENAME_ERROR">Beim Umbenennen der Datei #VAR1# ist ein Fehler aufgetreten.</string>
   <string name="SYS_FILE_TO_LARGE_SERVER">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von #VAR1# MB.</string>
+  <string name="SYS_FILE_TYPE">Dateityp</string>
+  <string name="SYS_FILE_UPLOADED">Die Datei #VAR1_BOLD# wurde hochgeladen</string>
   <string name="SYS_FILE_UPLOADS">Dateiuploads</string>
+  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle Dateien wurden erfolgreich hochgeladen.\n\nDer Dialog kann jetzt geschlossen werden.</string>
+  <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Dateien erfolgreich hochgeladen.</string>
+  <string name="SYS_FILES_UPLOAD_DESC">Wählen Sie bitte alle Dateien aus, die Sie in den Ordner #VAR1_BOLD# hochladen möchten.</string>
   <string name="SYS_FILENAME_EMPTY">Es wurde kein Dateiname angegeben!</string>
   <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfen Sie den Dateinamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisieren Sie bitte Ihre Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
@@ -1179,7 +1144,15 @@
   <string name="SYS_FROM">ab #VAR1#</string>
   <string name="SYS_FROM_TO">vom #VAR1# bis #VAR2#</string>
   <string name="SYS_FOLDER">Ordner</string>
+  <string name="SYS_FOLDER_CREATED">Der Ordner #VAR1_BOLD# wurde angelegt.</string>
+  <string name="SYS_FOLDER_EXISTS">Der Ordner #VAR1# existiert bereits!\n\nBitte wählen Sie einen anderen Namen für den Ordner aus.</string>
+  <string name="SYS_FOLDER_NO_FILES">Der Ordner enthält keine Dateien.</string>
+  <string name="SYS_FOLDER_NO_RIGHTS">Sie besitzen keine Rechte den gewählten Downloadordner zu sehen.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWenden Sie Sich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
+  <string name="SYS_FOLDER_NOT_EXISTS">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</string>
+  <string name="SYS_FOLDER_NOT_FOUND">Der gesuchte Ordner konnte nicht gefunden werden.</string>
+  <string name="SYS_FOLDER_RENAME">Der Ordner #VAR1# wurde umbenannt.</string>
+  <string name="SYS_FOLDER_RENAME_ERROR">Beim Umbenennen des Ordners #VAR1# ist ein Fehler aufgetreten.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWenden Sie sich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
   <string name="SYS_FONT_AWESOME_DESC">Sie können auf unterschiedliche Arten ein Icon hinterlegen:\n1. Ein Icon des Webfonts \"Font Awesome\". Gehen Sie dazu auf #VAR1#http://fontawesome.com#VAR2# und wählen Sie ein kostenloses Icon der Sammlung \"Solid\" oder \"Brands\" aus. Als Präfix müssen Sie noch fa- davor setzen. Wählen Sie also das Icon \"user\" aus, müssen Sie hier \"fa-user\" eintragen.\n2. Ein JPEG oder PNG Icon. Tragen Sie dazu die vollständige URL zusammen mit dem Dateinamen des Icons ein. Alternativ können Sie das Icon auch im Theme im Ordner \"icons\" ablegen, dann brauchen Sie nur den Dateinamen anzugeben.</string>
   <string name="SYS_FORMER">Ehemaliger</string>
@@ -1250,6 +1223,8 @@
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmer</string>
   <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
+  <string name="SYS_MAXIMUM_FILE_SIZE">Maximale Dateigröße</string>
+  <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Mit Vorbehalt teilnehmen</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Ist diese Option aktiviert, so steht bei der Terminanmeldung neben den Möglichkeiten #VAR1_BOLD# und #VAR2_BOLD# noch eine dritte Option #VAR3_BOLD# zur Verfügung. (Standard: Deaktiviert)</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
@@ -1271,14 +1246,17 @@
   <string name="SYS_MYLIST_DESC">Neue Listenkonfigurationen können hier erstellt und gespeichert werden. Außerdem können Listen über mehrere Rollen angezeigt werden.</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Name (Abkürzung)</string>
+  <string name="SYS_NEW_NAME">Neuer Name</string>
   <string name="SYS_NEW_VALUE">Neuer Wert</string>
   <string name="SYS_NEXT">Weiter</string>
   <string name="SYS_NO">Nein</string>
+  <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Keine zusätzlichen Berechtigungen gesetzt</string>
   <string name="SYS_NO_ENTRY">Der angeforderte Eintrag existiert nicht in der Datenbank.</string>
   <string name="SYS_NO_ENTRIES">Es sind keine Einträge vorhanden.</string>
   <string name="SYS_NO_ENTRIES_FOUND">Es wurden keine Einträge gefunden.</string>
   <string name="SYS_NO_DATA_FOUND">Es wurden keine Daten gefunden.</string>
   <string name="SYS_NO_RIGHTS">Sie haben kein Recht, diese Aktion auszuführen.</string>
+  <string name="SYS_NO_TEMPLATE">Keine Vorlage</string>
   <string name="SYS_NOBODY">Niemand</string>
   <string name="SYS_NONE">Keiner</string>
   <string name="SYS_NORMAL_PICTURE">Normalbild</string>
@@ -1297,10 +1275,12 @@
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Reihenfolge</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
+  <string name="SYS_OVERHANG">Überhang</string>
   <string name="SYS_OVERVIEW">Übersicht</string>
   <string name="SYS_PAGE">Seite</string>
   <string name="SYS_PAGE_PREVIOUS">Vorherige</string>
   <string name="SYS_PAGE_NEXT">Nächste</string>
+  <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# und #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Teilnehmer</string>
   <string name="SYS_PASSWORD">Passwort</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen</string>
@@ -1329,6 +1309,7 @@
   <string name="SYS_PRESENTATION">Darstellung</string>
   <string name="SYS_PREVIEW">Vorschau</string>
   <string name="SYS_PREVIOUS">Voriges</string>
+  <string name="SYS_PREVIOUS_NAME">Bisheriger Name</string>
   <string name="SYS_PREVIOUS_VALUE">Vorheriger Wert</string>
   <string name="SYS_PRNG">Pseudo-Zufallszahlen Generator</string>
   <string name="SYS_PRNG_INSECURE">Admidio/PHP kann keine sicheren Pseudo-Zufallszahlen generieren! Bitte um Kontaktaufnahme mit dem Admidio-Team mit folgenden Informationen:</string>
@@ -1353,10 +1334,12 @@
   <string name="SYS_REQUIRED_FIELDS">Pflichtfelder</string>
   <string name="SYS_RESTRICTIONS">Einschränkungen</string>
   <string name="SYS_ROLE">Rolle</string>
+  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite können Sie einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen Ihnen nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administratoren besitzen alle Berechtigungen für den Ordner.</string>
   <string name="SYS_ROLE_MAX_MEMBERS">Speichern ist nicht möglich, bei der Rolle #VAR1_BOLD# würde die maximale Mitgliederzahl überschritten.</string>
   <string name="SYS_ROLE_MEMBERS">Rollenmitglieder</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROOM">Raum</string>
+  <string name="SYS_ROOM_MANAGEMENT">Raumverwaltung</string>
   <string name="SYS_RSS_DISABLED">Der Web-Feed wurde vom Administrator deaktiviert.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web-Feed für #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
@@ -1364,20 +1347,23 @@
   <string name="SYS_SATURDAY">Samstag</string>
   <string name="SYS_SAVE">Speichern</string>
   <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>
+  <string name="SYS_SEARCH">Suche</string>
+  <string name="SYS_SEATING">Sitzplätze</string>
   <string name="SYS_SECONDS">Sekunden</string>
   <string name="SYS_SECURE">Sicher</string>
   <string name="SYS_SECURITY">Sicherheit</string>
   <string name="SYS_SECURITY_ERROR">Sicherheitsfehler</string>
+  <string name="SYS_SELECT_FILES">Dateien auswählen</string>
   <string name="SYS_SELECT_FROM_LIST">Aus Liste auswählen</string>
   <string name="SYS_SEND">Abschicken</string>
   <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
-  <string name="SYS_SEARCH">Suche</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Sende E-Mails an alle E-Mail Adressen des Benutzers</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen des Benutzer gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Standard: Aktiviert)</string>
   <string name="SYS_SEND_NEW_PW">Neues Passwort zusenden</string>
   <string name="SYS_SENDER">Absender</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
+  <string name="SYS_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
   <string name="SYS_SETTINGS">Einstellungen</string>
   <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
   <string name="SYS_SHOW_PROFILE">Profil anzeigen</string>
@@ -1386,6 +1372,11 @@
   <string name="SYS_SINCE">seit #VAR1#</string>
   <string name="SYS_SINCE_TO">seit #VAR1# bis #VAR2#</string>
   <string name="SYS_SIZE">Größe</string>
+  <string name="SYS_SMTP_AUTH_CRAM_MD5">CRAM-MD5</string>
+  <string name="SYS_SMTP_AUTH_LOGIN">Login</string>
+  <string name="SYS_SMTP_AUTH_PLAIN">Plain</string>
+  <string name="SYS_SMTP_AUTH_TYPE">SMTP-Authentifizierungstyp </string>
+  <string name="SYS_SMTP_AUTH_TYPE_DESC">SMTP kennt verschiedene Authentifizierungsmethoden. Geben Sie hier die Authentifizierungsmethode ein, die Ihr SMTP-Server unterstützt. Wenn Sie nicht sicher sind, welche Methode unterstützt wird, wählen Sie #VAR1_BOLD#. Admidio wird dann nacheinander die verschiedenen Authentifizierungsmethoden ausprobieren, bis eine Anmeldung erfolgreich war. (Voreinstellung: automatisch)</string>
   <string name="SYS_SOCIAL_NETWORKS">Soziale Netzwerke</string>
   <string name="SYS_START" description="Start of a date">Beginn</string>
   <string name="SYS_STATUS_CODE_INVALID">Ungültiger Status-Code!</string>
@@ -1415,7 +1406,9 @@
   <string name="SYS_UNKNOWN">Unbekannt</string>
   <string name="SYS_UNLIMITED">Unbegrenzt</string>
   <string name="SYS_UNLOCK">Freigeben</string>
+  <string name="SYS_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
   <string name="SYS_UPDATE">Aktualisieren</string>
+  <string name="SYS_UPLOAD_FILES">Dateien hochladen</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">max. Uploadgröße</string>
   <string name="SYS_UPLOAD_NAME_ERROR">Der Dateiname darf nicht \"submit\" heißen.</string>
   <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-+_:/#?= .</string>
