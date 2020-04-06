@@ -105,6 +105,10 @@ class HtmlPage extends \Smarty
      * @var string Contains the custom html code of the bottom body theme file. This will be added to the end of thebody part of the page.
      */
     protected $htmlMyBodyBottom = '';
+    /**
+     * @var string Contains the url to the previous page. If a url is set than a link to this page will be shown under the headline
+     */
+    protected $urlPreviousPage = '';
 
 
     /**
@@ -551,7 +555,7 @@ class HtmlPage extends \Smarty
             $htmlMenu = $this->mainNavbar->show();
         }
 
-        if ($this->headline !== '')
+        /*if ($this->headline !== '')
         {
             if ($this->hasNavbar)
             {
@@ -561,12 +565,12 @@ class HtmlPage extends \Smarty
             {
                 $htmlHeadline = '<h1 class="admidio-module-headline">' . $this->headline . '</h1>';
             }
-        }
+        }*/
 
         $htmlBody = '<body>';
         $htmlBody .= $this->htmlMyBodyTop;
         $htmlBody .= '<div class="admidio-content">';
-        $htmlBody .= $htmlHeadline;
+        //$htmlBody .= $htmlHeadline;
         $htmlBody .= $htmlMenu;
         $htmlBody .= $this->pageContent;
         $htmlBody .= '</div>';
@@ -736,6 +740,16 @@ class HtmlPage extends \Smarty
     {
         $this->printMode = true;
     }
+    
+    /**
+     * Set a url to the previous page that will be shown as link on the page after the headline.
+     * @param string $url The url to the previous page. This must be a valid url.
+     */
+    public function setUrlPreviousPage($url)
+    {
+        //$this->urlPreviousPage = admFuncCheckUrl($url);
+        $this->urlPreviousPage = $url;
+    }
 
     /**
      * This method send the whole html code of the page to the browser.
@@ -750,6 +764,7 @@ class HtmlPage extends \Smarty
 
         $this->assign('title', $this->title);
         $this->assign('headline', $this->headline);
+        $this->assign('urlPreviousPage', $this->urlPreviousPage);
         $this->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
         $this->assign('urlAdmidio', ADMIDIO_URL);
         $this->assign('urlTheme', THEME_URL);
@@ -763,6 +778,7 @@ class HtmlPage extends \Smarty
         $this->assign('additionalCssFiles', $this->getHtmlCssFiles());
         $this->assign('additionalJsFiles', $this->getHtmlJsFiles());
 /*
+    
         if($gDebug)
         {
             $this->assign('jsCssFiles', 'js_css_files_debug.tpl');        

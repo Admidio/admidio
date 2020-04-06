@@ -45,21 +45,33 @@
     }
 }
 
-.admidio-sidebar {
-    padding: 0px;
-    background-color: #dfe3e3;
-}
-
 .admidio-content {
     order: 1;
 }
 
-.nav-link .fas {
+/***********************************/
+/* Sidebar Navigation */
+/***********************************/
+.admidio-sidebar {
+    padding: 0px;
+    background-color: #263340;
+}
+
+/* add 5px distance to all icons within a icon text combination */
+.nav-link .fas, .btn .fas {
     margin-right: 5px;
 }
 
 .admidio-menu-list {
     overflow-y: auto;
+}
+
+.admidio-menu-list a {
+    color: #cccccc;
+}
+
+.admidio-menu-list a:hover {
+    color: #ffffff;
 }
 
 @media (min-width: 768px)
@@ -86,12 +98,16 @@
 }
 
 a.bg-light {
-    background-color: #dfe3e3 !important;
+    background-color: #263340 !important;
 }
 
 a.bg-light:hover {
     background-color: #959e9e !important;    
 }
+
+/***********************************/
+/* Default tags */
+/***********************************/
 
 body {
     color: #263340;
@@ -102,7 +118,7 @@ a, .btn-link {
 }
 
 a:hover {
-    color:#25717d;
+    color: #25717d;
 }
 
 .admidio-headline-mobile-menu {
@@ -113,4 +129,61 @@ a:hover {
 .admidio-navbar-photo {
     max-height: 30px;
     max-width: 30px;
+}
+
+.btn-primary {
+    background-color: #349aaa;
+    border-color: #349aaa;
+}
+
+.btn-primary:hover {
+    background-color: #25717d;
+    border-color: #25717d;
+}
+
+/***********************************/
+/* Mark mandatory fields */
+/***********************************/
+.admidio-form-group-required label:after,
+.admidio-form-required-notice span:after {
+    font-family: "Font Awesome 5 Free";
+    font-size: 6pt;
+    content: "\f111";
+    color: #d91515;
+    white-space: nowrap;
+    vertical-align: super;
+    margin-left: 3px;
+}
+
+.admidio-form-required-notice {
+    font-size: 9pt;
+    margin-top: 5px;
+    margin-bottom: -10px;
+    text-align: right;
+    width: 100%;
+    display: inline-block;
+}
+
+/***********************************/
+/* Forms */
+/***********************************/
+
+.form-control:focus {   
+  border-color: #349aaa;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #349aaa;
+  outline: 0 none;
+}
+
+/***********************************/
+/* Cards */
+/***********************************/
+
+.card {
+    margin-bottom: 50px;
+    border: none;
+}
+
+.card-header, .card-body, .card-footer {
+    border: none;
+    background-color: #eeeeee;
 }

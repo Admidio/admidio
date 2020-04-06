@@ -188,14 +188,14 @@ class MenuNode
         {
             $html .= '<div class="admidio-menu-header">'.$this->name.'</div>
             
-            <ul class="nav flex-column bg-white mb-0">';
+            <ul class="nav flex-column mb-0">';
 
             foreach($this->nodeEntries as $menuEntry)
             {
                 $iconHtml = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
                 $html .= '
                 <li class="nav-item">
-                    <a class="nav-link text-dark font-italic bg-light" href="'.$menuEntry['men_url'].'">
+                    <a class="nav-link" href="'.$menuEntry['men_url'].'">
                         ' . $iconHtml . $menuEntry['men_name'] . '
                     </a>
                 </li>';

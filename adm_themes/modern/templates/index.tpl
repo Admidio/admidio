@@ -80,6 +80,13 @@
             </div>
             
             <div class="col-12 col-md-9 col-xl-10 admidio-content" id="content" role="main">
+                <h1 class="admidio-module-headline">{$headline}</h1>
+    
+                <!-- Add link to previous page -->
+                {if $urlPreviousPage != ''}
+                    <a class="" href="{$urlPreviousPage}"><i class="fas fa-arrow-circle-left fa-fw"></i> {$l10n->get('SYS_BACK')}</a>
+                {/if}
+
                 {$content}
             </div>
         </div>

@@ -226,7 +226,6 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         $this->addElement('button');
-        $this->addAttribute('class', 'btn btn-secondary');
 
         if ($optionsAll['data-admidio'] !== '')
         {
@@ -275,6 +274,10 @@ class HtmlForm extends HtmlFormBasic
         {
             $this->addAttribute('class', $optionsAll['class']);
         }
+        else
+        {
+            $this->addAttribute('class', 'btn btn-secondary');
+        }
 
         $this->addSimpleButton($id, $optionsAll['type'], $value, $id);
     }
@@ -304,7 +307,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add default css class
-        $optionsAll['class'] .= ' btn-primary';
+        $optionsAll['class'] .= ' btn btn-primary';
 
         // now add button to form
         $this->addButton($id, $text, $optionsAll);
