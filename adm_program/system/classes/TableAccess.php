@@ -444,7 +444,7 @@ class TableAccess
         // add every array element as a sql condition to the condition string
         foreach ($columnArray as $columnName => $columnValue)
         {
-            $sqlWhereCondition .= ' AND ' . $columnName . ' = \'' . $columnValue . '\' ';
+            $sqlWhereCondition .= ' AND ' . $columnName . ' = \'' . addslashes($columnValue) . '\' ';
         }
 
         // call method to read data out of database
