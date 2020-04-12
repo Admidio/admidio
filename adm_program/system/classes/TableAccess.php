@@ -444,11 +444,11 @@ class TableAccess
         // add every array element as a sql condition to the condition string
         foreach ($columnArray as $columnName => $columnValue)
         {
-            $sqlWhereCondition .= ' AND ' . $columnName . ' = \'' . $columnValue . '\' ';
+            $sqlWhereCondition .= ' AND ' . $columnName . ' = ? ';
         }
 
         // call method to read data out of database
-        $returnCode = $this->readData($sqlWhereCondition);
+        $returnCode = $this->readData($sqlWhereCondition, array_values($columnArray));
 
         // save the array fields in the object
         if (!$returnCode)
