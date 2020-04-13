@@ -197,7 +197,7 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         }
 
         $urlString = '#';
-        if ($url !== '' && $className === '')
+        if ($url !== '')
         {
             $urlString = $url.'&'.$paramName.'='.$paramValue;
         }
@@ -248,13 +248,13 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         $pageNavClassPrev = '';
         if ($onPage === 1)
         {
-            $pageNavClassPrev = 'disabled';
+            $pageNavClassPrev = 'page-item disabled';
         }
 
         $pageNavClassNext = '';
         if ($onPage === $totalPagesCount)
         {
-            $pageNavClassNext = 'disabled';
+            $pageNavClassNext = 'page-item disabled';
         }
 
         $pageNavigationPrevText = getListElementString($gL10n->get('SYS_BACK'),      $pageNavClassPrev, $baseUrl, $queryParamName, ($onPage - 2) * $itemsPerPage);
