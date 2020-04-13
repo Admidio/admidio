@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- (c) 2004 - 2019 The Admidio Team - https://www.admidio.org -->
+    <!-- (c) 2004 - 2020 The Admidio Team - https://www.admidio.org -->
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="shortcut icon" type="image/x-icon" href="{$urlTheme}/images/favicon.ico" />
+    <link rel="icon" type="image/png" href="{$urlTheme}/images/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{$urlTheme}/images/favicon-16x16.png" sizes="16x16" />
+    <link rel="apple-touch-icon" type="image/png" href="{$urlTheme}/images/apple-touch-icon.png" sizes="180x180" />
 
     <title>{$title}</title>
     
@@ -88,6 +93,15 @@
                 {/if}
 
                 {$content}
+                
+                <div id="imprint">&copy; 2004 - 2020&nbsp;&nbsp;<a href="https://www.admidio.org">{$l10n->get('SYS_ADMIDIO_TEAM')}</a>
+                    {if $urlImprint != ''}
+                        &nbsp;&nbsp;-&nbsp;&nbsp;<a href="{$urlImprint}">{$l10n->get('SYS_IMPRINT')}</a>
+                    {/if}
+                    {if $urlDataProtection != ''}
+                        &nbsp;&nbsp;-&nbsp;&nbsp;<a href="{$urlDataProtection}">{$l10n->get('SYS_DATA_PROTECTION')}</a>
+                    {/if}
+                </div>
             </div>
         </div>
     </div>

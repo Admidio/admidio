@@ -113,11 +113,11 @@ body {
     color: #263340;
 }
 
-a, .btn-link {
+a, .btn-link, .page-link {
     color: #349aaa;
 }
 
-a:hover {
+a:hover, .page-link:hover {
     color: #25717d;
 }
 
@@ -243,5 +243,21 @@ label {
 
 form .admidio-info-created-edited {
     margin-top: 15px;
+    font-size: 80%;
+}
+
+.accordion .card-header:hover {
+    color: #eeeeee;
+    background-color: #263340;
+}
+
+.page-item.active .page-link {
+    background-color: #263340;
+    border-color: #263340;
+}
+
+#imprint {
+    margin-top: 30px;
+    margin-bottom: 30px;
     font-size: 80%;
 }

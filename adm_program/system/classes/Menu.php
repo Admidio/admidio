@@ -163,6 +163,10 @@ class Menu
      */
     public function removeFunctionsNode()
     {
-        array_shift($this->menuNodes);
+        if($this->functionsNodeAdded)
+        {
+            array_shift($this->menuNodes);
+            $this->functionsNodeAdded = false;
+        }
     }
 }

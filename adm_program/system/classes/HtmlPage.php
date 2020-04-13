@@ -759,6 +759,9 @@ class HtmlPage extends \Smarty
     {
         global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager;
 
+        $urlImprint = '';
+        $urlDataProtection = '';
+
         // add page functions menu to global menu
         $gMenu->addFunctionsNode($this->menuNodePageFunctions);
 
@@ -791,6 +794,19 @@ class HtmlPage extends \Smarty
         $this->assign('menuSidebar', $gMenu->getHtml());
         $this->assign('content', $this->getHtmlBody());
 
+        // add imprint and data protection
+        if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0)
+        {
+            $urlImprint = $gSettingsManager->getString('system_url_imprint');
+        }
+        if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0)
+        {
+            $urlDataProtection = $gSettingsManager->getString('system_url_data_protection');
+        }
+        $this->assign('urlImprint', $urlImprint);
+        $this->assign('urlDataProtection', $urlDataProtection);
+
+        // add translation object
         $this->assign('l10n', $gL10n);
 
         $this->display('index.tpl');
