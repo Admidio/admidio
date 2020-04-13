@@ -145,7 +145,7 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         return '';
     }
 
-    $totalPagesCount = ceil($itemsCount / $itemsPerPage);
+    $totalPagesCount = (int) ceil($itemsCount / $itemsPerPage);
 
     if ($totalPagesCount <= 1)
     {
