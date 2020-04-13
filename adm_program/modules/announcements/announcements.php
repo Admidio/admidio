@@ -84,7 +84,7 @@ else
 if(count($gCurrentUser->getAllEditableCategories('ANN')) > 0)
 {
     // show link to create new announcement
-    $page->addPageFunctionsMenuItem('menu_item_new_announcement', $gL10n->get('SYS_CREATE_ENTRY'), 
+    $page->addPageFunctionsMenuItem('admMenuItemNewAnnouncement', $gL10n->get('SYS_CREATE_ENTRY'), 
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)), 
         'fa-plus-circle');
 }
@@ -142,24 +142,30 @@ else
         $annHeadline = SecurityUtils::encodeHTML($announcement->getValue('ann_headline'));
 
         $page->addHtml('
-        <div class="card" id="ann_'.$annId.'">
+        <div class="card admidio-blog" id="ann_'.$annId.'">
             <div class="card-header">
                 <div class="float-left">
                     <i class="fas fa-newspaper"></i>' . $annHeadline . '
                 </div>
-                <div class="float-right text-right">'.$announcement->getValue('ann_timestamp_create', $gSettingsManager->getString('system_date')));
+                <div class="float-right text-right">');
 
                     // check if the user could edit this announcement
                     if($announcement->isEditable())
                     {
                         $page->addHtml('
-                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'copy' => '1', 'headline' => $getHeadline)).'">
-                            <i class="fas fa-clone" data-toggle="tooltip" title="'.$gL10n->get('SYS_COPY').'"></i></a>
-                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'headline' => $getHeadline)).'">
-                            <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
-                        <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annId, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annId)).'">
-                            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
+                        <div class="dropdown">
+                            <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'copy' => '1', 'headline' => $getHeadline)).'">
+                                    <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
+                                <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'headline' => $getHeadline)).'">
+                                    <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#admidio_modal"
+                                    href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annId, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annId)).'">
+                                    <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                            </div>
+                        </div>');
                     }
                 $page->addHtml('</div>
             </div>

@@ -126,93 +126,70 @@ if($getViewMode === 'html')
             window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('view_mode' => 'print', 'view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_id' => $getCatId, 'id' => $getId, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'))) . '", "_blank");
         });', true);
 
-    // get module menu
-    $datesMenu = $page->getMenu();
-
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
     if($getId > 0)
     {
         // add back link to module menu
-        $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
-        $datesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'fa-print');
+        $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
+        $page->addPageFunctionsMenuItem('admMenuItemPrintView', $gL10n->get('LST_PRINT_PREVIEW'), '#', 'fa-print');
     }
 
     // Add new event
     if(count($gCurrentUser->getAllEditableCategories('DAT')) > 0 && $getId === 0)
     {
-        $datesMenu->addItem(
-            'admMenuItemAdd', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('headline' => $getHeadline)),
-            $gL10n->get('SYS_CREATE_VAR', array($getHeadline)), 'fa-plus-circle'
-        );
+        $page->addPageFunctionsMenuItem('admMenuItemAdd', $gL10n->get('SYS_CREATE_VAR', array($getHeadline)), 
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('headline' => $getHeadline)), 
+            'fa-plus-circle');
     }
 
     if($getId === 0)
     {
-        $form = new HtmlForm('navbar_change_view_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-        if($gSettingsManager->getBool('dates_show_rooms'))
-        {
-            $selectBoxEntries = array(
-                'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
-                'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
-                'room'         => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_ROOM'),
-                'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
-                'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
-            );
-        }
-        else
-        {
-            $selectBoxEntries = array(
-                'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
-                'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
-                'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
-                'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
-            );
-        }
-        $form->addSelectBox(
-            'sel_change_view', $gL10n->get('SYS_VIEW'), $selectBoxEntries,
-            array('defaultValue' => $getView, 'showContextDependentFirstEntry' => false)
-        );
-        $datesMenu->addForm($form->show());
-
         // show print button
-        $datesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'fa-print');
-
-        if($gSettingsManager->getBool('enable_dates_ical') || $gCurrentUser->isAdministrator() || $gCurrentUser->editDates())
-        {
-            $datesMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'), '', 'right');
-        }
+        $page->addPageFunctionsMenuItem('admMenuItemPrintView', $gL10n->get('LST_PRINT_PREVIEW'), '#', 'fa-print');
 
         // ical Download
         if($gSettingsManager->getBool('enable_dates_ical'))
         {
-            $datesMenu->addItem(
-                'admMenuItemICal', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('headline' => $getHeadline, 'cat_id' => $getCatId, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
-                $gL10n->get('DAT_EXPORT_ICAL'), 'fa-download', 'right', 'menu_item_extras'
-            );
+            $page->addPageFunctionsMenuItem('admMenuItemICal', $gL10n->get('DAT_EXPORT_ICAL'), 
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('headline' => $getHeadline, 'cat_id' => $getCatId, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)), 
+                'fa-file-export');
         }
 
         if($gCurrentUser->editDates())
         {
             // if no calendar selectbox is shown, then show link to edit calendars
-            $datesMenu->addItem(
-                'admMenuItemCategories', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))),
-                $gL10n->get('DAT_MANAGE_CALENDARS'), 'fa-th-large', 'right', 'menu_item_extras'
-            );
-        }
-
-        if($gCurrentUser->isAdministrator())
-        {
-            // show link to system preferences of weblinks
-            $datesMenu->addItem(
-                'admMenuItemPreferencesLinks', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'events')),
-                $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right', 'menu_item_extras'
-            );
+            $page->addPageFunctionsMenuItem('admMenuItemCategories', $gL10n->get('DAT_MANAGE_CALENDARS'), 
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))), 
+                'fa-th-large');
         }
     }
 
     // create filter menu with elements for calendar and start-/enddate
     $filterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('headline' => $getHeadline, 'view' => $getView)), $page, array('type' => 'navbar', 'setFocus' => false));
+    if($gSettingsManager->getBool('dates_show_rooms'))
+    {
+        $selectBoxEntries = array(
+            'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
+            'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
+            'room'         => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_ROOM'),
+            'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
+            'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
+        );
+    }
+    else
+    {
+        $selectBoxEntries = array(
+            'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
+            'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
+            'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
+            'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
+        );
+    }
+    $form->addSelectBox(
+        'sel_change_view', $gL10n->get('SYS_VIEW'), $selectBoxEntries,
+        array('defaultValue' => $getView, 'showContextDependentFirstEntry' => false)
+    );
     $form->addSelectBoxForCategories(
         'cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', HtmlForm::SELECT_BOX_MODUS_FILTER,
         array('defaultValue' => $dates->getParameter('cat_id'))
@@ -356,7 +333,7 @@ else
             if($gSettingsManager->getBool('enable_dates_ical'))
             {
                 $outputButtonIcal = '
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $dateId, 'mode' => 6)).'">
+                    <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $dateId, 'mode' => 6)).'">
                         <i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('DAT_EXPORT_ICAL').'"></i></a>';
             }
 
@@ -364,13 +341,13 @@ else
             if ($date->isEditable())
             {
                 $outputButtonCopy = '
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'copy' => 1, 'headline' => $getHeadline)) . '">
+                    <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'copy' => 1, 'headline' => $getHeadline)) . '">
                         <i class="fas fa-clone" data-toggle="tooltip" title="'.$gL10n->get('SYS_COPY').'"></i></a>';
                 $outputButtonEdit = '
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'headline' => $getHeadline)) . '">
+                    <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'headline' => $getHeadline)) . '">
                         <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
                 $outputButtonDelete = '
-                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                    <a class="dropdown-item" data-toggle="modal" data-target="#admidio_modal"
                         href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateId,
                         'name' => $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateId)) . '">
                         <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
@@ -757,15 +734,45 @@ else
             }
 
             $page->addHtml('
-                <div class="card ' . $cssClassHighlight . '" id="dat_' . $dateId . '">
+                <div class="card admidio-blog ' . $cssClassHighlight . '" id="dat_' . $dateId . '">
                     <div class="card-header">
                         <div class="float-left">
                             <i class="fas fa-calendar-alt"></i>' .
                             $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline . '
                         </div>
-                        <div class="float-right text-right">' .
-                            $outputButtonIcal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete . '
-                        </div>
+                        <div class="float-right text-right">');
+                            if($date->isEditable() || $gSettingsManager->getBool('enable_dates_ical'))
+                            {
+                                $page->addHtml('
+                                <div class="dropdown">
+                                    <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">');
+                                        // ical Download
+                                        if($gSettingsManager->getBool('enable_dates_ical'))
+                                        {
+                                            $page->addHtml('
+                                                <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $dateId, 'mode' => 6)).'">
+                                                    <i class="fas fa-file-export" data-toggle="tooltip"></i> '.$gL10n->get('DAT_EXPORT_ICAL').'</a>');
+                                        }
+                            
+                                        // change and delete is only for users with additional rights
+                                        if ($date->isEditable())
+                                        {
+                                            $page->addHtml('
+                                                <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'copy' => 1, 'headline' => $getHeadline)) . '">
+                                                    <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
+                                                <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'headline' => $getHeadline)) . '">
+                                                    <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                                                <a class="dropdown-item" data-toggle="modal" data-target="#admidio_modal"
+                                                    href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateId,
+                                                    'name' => $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateId)) . '">
+                                                    <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>');
+                                        }
+                                    $page->addHtml('</div>
+                                </div>');
+                            }
+                        $page->addHtml('</div>
                     </div>
                     <div class="card-body">
                         ' . $htmlDateElements . '<br />

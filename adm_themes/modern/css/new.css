@@ -58,7 +58,7 @@
 }
 
 /* add 5px distance to all icons within a icon text combination */
-.nav-link .fas, .btn .fas {
+.nav-link .fas, .btn .fas, .alert .fas {
     margin-right: 5px;
 }
 
@@ -169,21 +169,79 @@ a:hover {
 /***********************************/
 
 .form-control:focus {   
-  border-color: #349aaa;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #349aaa;
-  outline: 0 none;
+    border-color: #349aaa;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #349aaa;
+    outline: 0 none;
+}
+
+input[type=checkbox] {
+    margin-right: 10px;
+}
+
+label {
+    font-weight: bold;
+}
+
+@media (min-width: 768px) {
+    .offset-sm-3.btn {
+        margin-left: 26%;
+    }
+
+    .form-control-small {
+        width: 50%;
+    }
 }
 
 /***********************************/
 /* Cards */
 /***********************************/
 
-.card {
+.admidio-blog {
     margin-bottom: 50px;
     border: none;
 }
 
-.card-header, .card-body, .card-footer {
+.admidio-blog .card-header, .admidio-blog .card-body, .admidio-blog .card-footer {
     border: none;
     background-color: #eeeeee;
+}
+
+.card-header {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+.card-header .btn {
+    font-weight: bold;
+    font-size: 90%;
+}
+
+
+.card-header .fas, .card-header .fab {
+    margin-right: 10px;
+}
+
+.admidio-blog .card-footer {
+    font-size: 80%;
+}
+
+/***********************************/
+/* Nav-Bars */
+/***********************************/
+
+.navbar label {
+    margin-right: 10px;
+}
+
+/***********************************/
+/* Various settings */
+/***********************************/
+
+.admidio-info-created {
+    display: block;
+}
+
+form .admidio-info-created-edited {
+    margin-top: 15px;
+    font-size: 80%;
 }
