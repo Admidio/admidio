@@ -55,6 +55,7 @@
 .admidio-sidebar {
     padding: 0px;
     background-color: #263340;
+    overflow-y: auto;
 }
 
 /* add 5px distance to all icons within a icon text combination */
@@ -72,6 +73,7 @@
 
 .admidio-menu-list a:hover {
     color: #ffffff;
+    background-color: #324b64;
 }
 
 @media (min-width: 768px)
