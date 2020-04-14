@@ -329,7 +329,7 @@ while($catRow = $categoryStatement->fetch())
 
         if($category->getValue('cat_system') == 1)
         {
-            $categoryAdministration .= '<i class="fas fa-trash admidio-opacity-0"></i>';
+            $categoryAdministration .= '<i class="fas fa-trash invisible"></i>';
         }
         else
         {
@@ -340,7 +340,7 @@ while($catRow = $categoryStatement->fetch())
     }
     else
     {
-        $categoryAdministration = '<i class="fas fa-trash admidio-opacity-0"></i><i class="fas fa-trash admidio-opacity-0"></i>';
+        $categoryAdministration = '<i class="fas fa-trash invisible"></i><i class="fas fa-trash invisible"></i>';
     }
 
     // create array with all column values

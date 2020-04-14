@@ -58,11 +58,6 @@
     overflow-y: auto;
 }
 
-/* add 5px distance to all icons within a icon text combination */
-.nav-link .fas, .btn .fas, .alert .fas {
-    margin-right: 5px;
-}
-
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination, #imprint {
     margin-top: 45px;
@@ -152,6 +147,15 @@ a:hover, .page-link:hover, a.btn:hover {
     border-color: #25717d;
 }
 
+/* add 5px distance to all icons within a icon text combination */
+.nav-link .fas, .btn .fas, .alert .fas {
+    margin-right: 5px;
+}
+
+.admidio-icon-link {
+    margin-left: 10px;
+}
+
 /***********************************/
 /* Mark mandatory fields */
 /***********************************/
@@ -183,6 +187,10 @@ a:hover, .page-link:hover, a.btn:hover {
     border-color: #349aaa;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #349aaa;
     outline: 0 none;
+}
+
+.form-group {
+    margin-bottom: 0px;
 }
 
 input[type=checkbox] {
@@ -232,8 +240,22 @@ label {
     margin-right: 10px;
 }
 
+.card-header a .fas, .card-header a .fab {
+    margin-right: 0px;
+}
+
 .admidio-blog .card-footer {
     font-size: 80%;
+}
+
+.admidio-field-group .list-group-item {
+    border: none;
+    background-color: #eeeeee;
+    padding: 0px 0px 1rem 0px;
+}
+
+.admidio-field-group .list-group-item .list-group-item {
+    padding: 0px;
 }
 
 /***********************************/

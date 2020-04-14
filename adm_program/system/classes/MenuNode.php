@@ -88,7 +88,7 @@ class MenuNode
 
         if (strlen($icon) === 0)
         {
-            $icon = 'fa-trash-alt admidio-opacity-0';
+            $icon = 'fa-trash-alt invisible';
         }
         $node['men_icon'] = $icon;
         

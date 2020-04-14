@@ -297,7 +297,7 @@ while($row = $rolStatement->fetch())
 
     if($role->getValue('rol_administrator') == 1)
     {
-        $linkAdministration .= '<i class="fas fa-trash admidio-opacity-0"></i>';
+        $linkAdministration .= '<i class="fas fa-trash invisible"></i>';
     }
     else
     {

@@ -232,7 +232,7 @@ while($row = $statement->fetch())
 
     if($userField->getValue('usf_system') == 1)
     {
-        $usfSystem .= '<i class="fas fa-trash admidio-opacity-0"></i>';
+        $usfSystem .= '<i class="fas fa-trash invisible"></i>';
     }
     else
     {
