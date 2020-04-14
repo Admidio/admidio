@@ -131,13 +131,13 @@ if($getViewMode === 'html')
     {
         // add back link to module menu
         $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
-        $page->addPageFunctionsMenuItem('admMenuItemPrintView', $gL10n->get('LST_PRINT_PREVIEW'), '#', 'fa-print');
+        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('LST_PRINT_PREVIEW'), '#', 'fa-print');
     }
 
     // Add new event
     if(count($gCurrentUser->getAllEditableCategories('DAT')) > 0 && $getId === 0)
     {
-        $page->addPageFunctionsMenuItem('admMenuItemAdd', $gL10n->get('SYS_CREATE_VAR', array($getHeadline)), 
+        $page->addPageFunctionsMenuItem('menu_item_event_add', $gL10n->get('SYS_CREATE_VAR', array($getHeadline)), 
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('headline' => $getHeadline)), 
             'fa-plus-circle');
     }
@@ -145,12 +145,12 @@ if($getViewMode === 'html')
     if($getId === 0)
     {
         // show print button
-        $page->addPageFunctionsMenuItem('admMenuItemPrintView', $gL10n->get('LST_PRINT_PREVIEW'), '#', 'fa-print');
+        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('LST_PRINT_PREVIEW'), '#', 'fa-print');
 
         // ical Download
         if($gSettingsManager->getBool('enable_dates_ical'))
         {
-            $page->addPageFunctionsMenuItem('admMenuItemICal', $gL10n->get('DAT_EXPORT_ICAL'), 
+            $page->addPageFunctionsMenuItem('menu_item_event_ical', $gL10n->get('DAT_EXPORT_ICAL'), 
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('headline' => $getHeadline, 'cat_id' => $getCatId, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)), 
                 'fa-file-export');
         }
@@ -158,7 +158,7 @@ if($getViewMode === 'html')
         if($gCurrentUser->editDates())
         {
             // if no calendar selectbox is shown, then show link to edit calendars
-            $page->addPageFunctionsMenuItem('admMenuItemCategories', $gL10n->get('DAT_MANAGE_CALENDARS'), 
+            $page->addPageFunctionsMenuItem('menu_item_event_categories', $gL10n->get('DAT_MANAGE_CALENDARS'), 
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))), 
                 'fa-th-large');
         }

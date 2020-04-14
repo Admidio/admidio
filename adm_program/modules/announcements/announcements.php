@@ -84,14 +84,14 @@ else
 if(count($gCurrentUser->getAllEditableCategories('ANN')) > 0)
 {
     // show link to create new announcement
-    $page->addPageFunctionsMenuItem('admMenuItemNewAnnouncement', $gL10n->get('SYS_CREATE_ENTRY'), 
+    $page->addPageFunctionsMenuItem('menu_item_announcement_add', $gL10n->get('SYS_CREATE_ENTRY'), 
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)), 
         'fa-plus-circle');
 }
 
 if($gCurrentUser->editAnnouncements())
 {
-    $page->addPageFunctionsMenuItem('admMenuItemCategories', $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 
+    $page->addPageFunctionsMenuItem('menu_item_announcement_categories', $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')),
         'fa-th-large');    
 }

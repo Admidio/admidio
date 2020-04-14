@@ -63,6 +63,15 @@
     margin-right: 5px;
 }
 
+/* default distance between elements */
+.admidio-blog, .admidio-field-group, .pagination, #imprint {
+    margin-top: 45px;
+}
+
+.admidio-module-headline {
+    margin-top: 20px;
+}
+
 .admidio-menu-list {
     overflow-y: auto;
 }
@@ -115,11 +124,11 @@ body {
     color: #263340;
 }
 
-a, .btn-link, .page-link {
+a, .btn-link, .page-link, a.btn {
     color: #349aaa;
 }
 
-a:hover, .page-link:hover {
+a:hover, .page-link:hover, a.btn:hover {
     color: #25717d;
 }
 
@@ -198,12 +207,12 @@ label {
 /* Cards */
 /***********************************/
 
-.admidio-blog {
-    margin-bottom: 50px;
+.admidio-blog, .admidio-field-group {
     border: none;
 }
 
-.admidio-blog .card-header, .admidio-blog .card-body, .admidio-blog .card-footer {
+.admidio-blog .card-header, .admidio-blog .card-body, .admidio-blog .card-footer,
+.admidio-field-group .card-header, .admidio-field-group .card-body, .admidio-field-group .card-footer {
     border: none;
     background-color: #eeeeee;
 }
@@ -243,9 +252,13 @@ label {
     display: block;
 }
 
-form .admidio-info-created-edited {
+.admidio-info-created-edited {
     margin-top: 15px;
     font-size: 80%;
+}
+
+.card .admidio-info-created-edited {
+    margin-top: 0px;
 }
 
 .accordion .card-header:hover {
@@ -259,7 +272,12 @@ form .admidio-info-created-edited {
 }
 
 #imprint {
-    margin-top: 30px;
     margin-bottom: 30px;
     font-size: 80%;
+}
+
+.admidio-info-icon {
+    color: #4496dd;
+    cursor: help;
+    margin-left: 6px;
 }
