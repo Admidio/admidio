@@ -148,7 +148,7 @@ a:hover, .page-link:hover, a.btn:hover {
 }
 
 /* add 5px distance to all icons within a icon text combination */
-.nav-link .fas, .btn .fas, .alert .fas {
+.nav-link .fas, .btn .fas, .alert .fas, .admidio-profile-user-right .fas {
     margin-right: 5px;
 }
 
@@ -209,6 +209,14 @@ label {
     .form-control-small {
         width: 50%;
     }
+}
+
+.form-inline div {
+    padding-right: 15px;
+}
+
+.form-inline label {
+    padding-right: 5px;
 }
 
 /***********************************/
@@ -302,4 +310,8 @@ label {
     color: #4496dd;
     cursor: help;
     margin-left: 6px;
+}
+
+.admidio-profile-user-right {
+    cursor: help;    
 }

@@ -222,7 +222,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                         );
                         $form->addButton(
                             'btn_send_'.$memberId, $gL10n->get('SYS_OK'),
-                            array('class' => 'button-membership-period-form', 'data-admidio' => $memberId)
+                            array('class' => 'btn btn-primary button-membership-period-form', 'data-admidio' => $memberId)
                         );
                         $roleMemHTML .= $form->show();
                     $roleMemHTML .= '</li>
