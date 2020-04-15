@@ -121,8 +121,8 @@ while($row = $usrStatement->fetch())
         $mailLink,
         '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_id' => $row['usr_id'])).'">
             <i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'"></i></a>
-        <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-            href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'nwu', 'element_id' => 'row_user_'.$row['usr_id'], 'name' => $row['first_name'].' '.$row['last_name'], 'database_id' => $row['usr_id'])).'">
+        <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'nwu', 'element_id' => 'row_user_'.$row['usr_id'], 'name' => $row['first_name'].' '.$row['last_name'], 'database_id' => $row['usr_id'])).'">
             <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
 
     $table->addRowByArray($columnValues, 'row_user_'.$row['usr_id']);

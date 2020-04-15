@@ -68,8 +68,9 @@ $page->addJavascript('
         $(this).removeData("bs.modal");
         location.reload();
     });
-    $("#menu_item_upload_files").attr("data-toggle", "modal");
-    $("#menu_item_upload_files").attr("data-target", "#admidio_modal");
+    $("#menu_item_upload_files").attr("href", "javascript:void(0);");
+    $("#menu_item_upload_files").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)).'");
+    $("#menu_item_upload_files").attr("class", "nav-link openPopup");
     ',
     true
 );
@@ -178,8 +179,8 @@ if (isset($folderContent['folders']))
             }
 
             $columnValues[] = $additionalFolderFunctions.'
-                                <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                    href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fol', 'element_id' => 'row_folder_'.$nextFolder['fol_id'],
+                                <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fol', 'element_id' => 'row_folder_'.$nextFolder['fol_id'],
                                     'name' => $nextFolder['fol_name'], 'database_id' => $nextFolder['fol_id'])).'">
                                     <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
@@ -250,8 +251,8 @@ if (isset($folderContent['files']))
                     title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('SYS_FILE_NOT_EXIST_DELETE_FROM_DB').'"></i>';
             }
             $additionalFileFunctions .= '
-            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fil', 'element_id' => 'row_file_'.$fileId,
+            <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fil', 'element_id' => 'row_file_'.$fileId,
                 'name' => $file->getValue('fil_name'), 'database_id' => $fileId, 'database_id_2' => $getFolderId)).'">
                 <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }

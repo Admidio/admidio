@@ -190,12 +190,10 @@ $page->addJavascript('
     $(".admMemberInfo").click(function() {
         showHideMembershipInformation($(this))
     });
-    $("#menu_item_password").attr("data-toggle", "modal");
-    $("#menu_item_password").attr("data-target", "#admidio_modal");
-    $("#menu_item_role_memberships_change").attr("data-toggle", "modal");
-    $("#menu_item_role_memberships_change").attr("data-target", "#admidio_modal");
-    $("#profile_role_memberships_change").attr("data-toggle", "modal");
-    $("#profile_role_memberships_change").attr("data-target", "#admidio_modal");
+
+    $("#menu_item_profile_password").attr("href", "javascript:void(0);");
+    $("#menu_item_profile_password").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $userId)).'");
+    $("#menu_item_profile_password").attr("class", "nav-link openPopup");
 
     $("input[data-provide=\'datepicker\']").datepicker({
         language: "'.$gL10n->getLanguageLibs().'",
@@ -265,7 +263,7 @@ $page->addPageFunctionsMenuItem('menu_item_profile_vcard', $gL10n->get('PRO_EXPO
 if($gCurrentUser->assignRoles())
 {
     $page->addPageFunctionsMenuItem('menu_item_profile_role_memberships_change', $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'), 
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId, 'inline' => '1')),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId)),
         'fa-user-tie');    
 }
 
@@ -273,7 +271,7 @@ if($gCurrentUser->assignRoles())
 if($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser->editUsers())
 {
     $page->addPageFunctionsMenuItem('menu_item_profile_user_relation_types', $gL10n->get('PRO_ADD_USER_RELATION'), 
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', array('usr_id' => $userId)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('usr_id' => $userId)),
         'fa-users-cog');    
 }
 
@@ -727,7 +725,8 @@ if($gSettingsManager->getBool('profile_show_roles'))
             // if you have the right to assign roles then show the link to assign new roles to this user
             if($gCurrentUser->assignRoles())
             {
-                $page->addHtml('<div class="float-right text-right"><a class="admidio-icon-link" id="profile_role_memberships_change" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId, 'inline' => '1')).'">
+                $page->addHtml('<div class="float-right text-right"><a class="admidio-icon-link openPopup" id="profile_role_memberships_change" data-class="modal-lg"
+                    href="javascript:void(0);" data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId, 'inline' => '1')).'">
                     <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'"></i></a></div>');
             }
         $page->addHtml('</div>

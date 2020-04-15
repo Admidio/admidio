@@ -338,14 +338,15 @@ class HtmlPage extends \Smarty
     /**
      * Add a new menu item to the page menu part. This is only the menu that will show functions of the
      * current page.
+     * @param string $id.         Id of the menu item that will be the html id of the <a> tag
      * @param string $name        Name of the menu node that will also shown in the menu
      * @param string $url         The url of this menu item that will be called if someone click the menu item
      * @param string $icon        An icon that will be shown together with the name in the menu
      * @param string $description A optional description of the menu node that could be shown in some output cases
      */
-    public function addPageFunctionsMenuItem($name, $url, $icon, $description = '')
+    public function addPageFunctionsMenuItem($id, $name, $url, $icon, $description = '')
     {
-        $this->menuNodePageFunctions->addItem($name, $url, $icon, $description);
+        $this->menuNodePageFunctions->addItem($id, $name, $url, $icon, $description);
     }
 
     /**
@@ -780,6 +781,8 @@ class HtmlPage extends \Smarty
         $this->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
         $this->assign('additionalCssFiles', $this->getHtmlCssFiles());
         $this->assign('additionalJsFiles', $this->getHtmlJsFiles());
+
+        $this->assign('showModal', $this->showModal);
 /*
     
         if($gDebug)

@@ -195,7 +195,7 @@ class MenuNode
                 $iconHtml = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
                 $html .= '
                 <li class="nav-item">
-                    <a class="nav-link" href="'.$menuEntry['men_url'].'">
+                    <a id="'.$menuEntry['men_name_intern'].'" class="nav-link" href="'.$menuEntry['men_url'].'">
                         ' . $iconHtml . $menuEntry['men_name'] . '
                     </a>
                 </li>';

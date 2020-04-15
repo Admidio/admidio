@@ -21,22 +21,46 @@
         var gThemePath = "{$urlTheme}";
 
         {$javascriptContent}
-
+            
         // add javascript code to page that will be executed after page is fully loaded
         $(function() {
             $("[data-toggle=\'popover\']").popover();
             $("[data-toggle=tooltip]").tooltip();
             
-  // Sidebar toggle behavior
-  $('#sidebarCollapse').on('click', function() {
-    $('#sidebar, #content').toggleClass('active');
-  });
+            // Sidebar toggle behavior
+            $('#sidebarCollapse').on('click', function() {
+                $('#sidebar, #content').toggleClass('active');
+            });
             
             {$javascriptContentExecuteAtPageLoad}
+            
+            // functions to handle modal window and load data from url
+            {if $showModal}
+                $('.openPopup').on('click',function(){
+                    $('.modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
+                    $('.modal-content').load($(this).attr('data-href'),function(){
+                        $('#admidio_modal').modal({
+                            show:true
+                        });
+                    });
+                });
+
+                $("body").on("hidden.bs.modal", ".modal", function() {
+                    $(this).removeData("bs.modal");
+                });
+            {/if}
         });
     </script>
 </head>
 <body>
+    {if $showModal}
+        <div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">Test</div>
+            </div>
+        </div>'
+    {/if}
+    
     <nav class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar" id="admidio-main-navbar">
       <a class="navbar-brand" href="{$urlAdmidio}/adm_program/index.php">
         <img class="d-none d-sm-inline" src="{$urlTheme}/images/admidio_logo.png" width="120" height="40" class="d-inline-block align-top" alt="">
