@@ -347,8 +347,8 @@ else
                     <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'headline' => $getHeadline)) . '">
                         <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
                 $outputButtonDelete = '
-                    <a class="dropdown-item" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateId,
+                    <a class="dropdown-item openPopup" href="javascript:void(0);" 
+                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateId,
                         'name' => $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateId)) . '">
                         <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
             }
@@ -427,7 +427,7 @@ else
             if($getViewMode === 'html')
             {
                 $roomLink = SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'room_detail', 'message_title' => 'DAT_ROOM_INFORMATIONS', 'message_var1' => $dateRoomId, 'inline' => 'true'));
-                $outputLinkRoom = '<strong><a data-toggle="modal" data-target="#admidio_modal" href="' . $roomLink . '">' . $room->getValue('room_name') . '</a></strong>';
+                $outputLinkRoom = '<strong><a class="openPopup" href="javascript:void(0);" data-href="' . $roomLink . '">' . $room->getValue('room_name') . '</a></strong>';
             }
             else // $getViewMode = 'print'
             {
@@ -564,7 +564,8 @@ else
                     {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-secondary" data-toggle="modal" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId)) . '" data-target="#admidio_modal">' . $iconParticipationStatus . $buttonText . '
+                                <button class="btn btn-secondary openPopup" href="javascript:void(0);" 
+                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId)) . '">' . $iconParticipationStatus . $buttonText . '
                             </div>';
                     }
                 }
@@ -764,8 +765,8 @@ else
                                                     <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
                                                 <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'headline' => $getHeadline)) . '">
                                                     <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
-                                                <a class="dropdown-item" data-toggle="modal" data-target="#admidio_modal"
-                                                    href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateId,
+                                                <a class="dropdown-item openPopup" href="javascript:void(0);" 
+                                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateId,
                                                     'name' => $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateId)) . '">
                                                     <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>');
                                         }

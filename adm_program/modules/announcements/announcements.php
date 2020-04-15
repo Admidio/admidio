@@ -161,8 +161,8 @@ else
                                     <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
                                 <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'headline' => $getHeadline)).'">
                                     <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#admidio_modal"
-                                    href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annId, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annId)).'">
+                                <a class="dropdown-item openPopup" href="javascript:void(0);" 
+                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annId, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annId)).'">
                                     <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                             </div>
                         </div>');

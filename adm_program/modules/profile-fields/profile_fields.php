@@ -165,8 +165,8 @@ while($row = $statement->fetch())
     if(strlen($userField->getValue('usf_description')) > 22)
     {
         $description = substr($userField->getValue('usf_description', 'database'), 0, 22).'
-            <a data-toggle="modal" data-target="#admidio_modal"
-                href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'user_field_description', 'message_var1' => $userField->getValue('usf_name_intern'), 'inline' => 'true')).'"><span  data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
+            <a class="openPopup" href="javascript:void(0);" 
+                data-href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'user_field_description', 'message_var1' => $userField->getValue('usf_name_intern'), 'inline' => 'true')).'"><span  data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
     }
     elseif($userField->getValue('usf_description') === '')
     {
@@ -236,8 +236,8 @@ while($row = $statement->fetch())
     }
     else
     {
-        $usfSystem .='<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$usfId,
+        $usfSystem .='<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$usfId,
                         'name' => $userField->getValue('usf_name'), 'database_id' => $usfId)).'">'.
                         '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
     }

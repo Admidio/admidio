@@ -961,10 +961,10 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
 
             if($gCurrentUser->editUsers())
             {
-                 $page->addHtml('<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                 href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_'.(int) $relation->getValue('ure_id'), 'database_id' => (int) $relation->getValue('ure_id'),
-                                 'name' => $relationType->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))).'"><i
-                                    class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'"></i></a>');
+                 $page->addHtml('<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_'.(int) $relation->getValue('ure_id'), 'database_id' => (int) $relation->getValue('ure_id'),
+                                'name' => $relationType->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))).'"><i
+                                class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'"></i></a>');
             }
 
             // only show info if system setting is activated
