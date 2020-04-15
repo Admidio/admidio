@@ -440,7 +440,7 @@ $page->addHtml('
             }
             $page->addHtml($form->show());
         $page->addHtml('</div>
-        <div class="col-sm-4" id="div_profile_photo">');
+        <div class="col-sm-4 text-right" id="div_profile_photo">');
 
             // *******************************************************************************
             // Profile photo

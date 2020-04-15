@@ -2074,7 +2074,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function openGroupBox($id, $headline = null, $class = '')
     {
-        $this->addHtml('<div id="' . $id . '" class="card ' . $class . '">');
+        $this->addHtml('<div id="' . $id . '" class="card admidio-field-group ' . $class . '">');
         // add headline to groupbox
         if ($headline !== null)
         {

@@ -58,11 +58,6 @@
     overflow-y: auto;
 }
 
-/* default distance between elements */
-.admidio-blog, .admidio-field-group, .pagination, #imprint {
-    margin-top: 45px;
-}
-
 .admidio-module-headline {
     margin-top: 20px;
 }
@@ -147,6 +142,12 @@ a:hover, .page-link:hover, a.btn:hover {
     border-color: #25717d;
 }
 
+/* default distance between elements */
+.admidio-blog, .admidio-field-group, .pagination, .admidio-info-created-edited,
+form > button[type=submit] {
+    margin-bottom: 45px;
+}
+
 /* add 5px distance to all icons within a icon text combination */
 .nav-link .fas, .btn .fas, .alert .fas, .admidio-profile-user-right .fas {
     margin-right: 5px;
@@ -189,10 +190,6 @@ a:hover, .page-link:hover, a.btn:hover {
     outline: 0 none;
 }
 
-.form-group {
-    margin-bottom: 0px;
-}
-
 input[type=checkbox] {
     margin-right: 10px;
 }
@@ -217,6 +214,10 @@ label {
 
 .form-inline label {
     padding-right: 5px;
+}
+
+.radio-inline {
+    margin-right: 15px;
 }
 
 /***********************************/
@@ -266,6 +267,11 @@ label {
     padding: 0px;
 }
 
+.card .admidio-info-created-edited {
+    margin-bottom: 0px;
+    font-size: 100% !important;
+}
+
 /***********************************/
 /* Nav-Bars */
 /***********************************/
@@ -283,7 +289,6 @@ label {
 }
 
 .admidio-info-created-edited {
-    margin-top: 15px;
     font-size: 80%;
 }
 
