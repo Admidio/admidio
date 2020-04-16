@@ -112,8 +112,8 @@ else
                 <div class="float-right text-right">
                     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_id' => (int) $room->getValue('room_id'), 'headline' => $textRoom)).'">
                         <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
-                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.(int) $room->getValue('room_id'),
+                    <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.(int) $room->getValue('room_id'),
                         'name' => $room->getValue('room_name'), 'database_id' => (int) $room->getValue('room_id'))).'">
                         <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>
                 </div>

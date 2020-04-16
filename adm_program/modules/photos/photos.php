@@ -333,8 +333,8 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
                             <i class="fas fa-redo-alt" data-toggle="tooltip" title="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'"></i></a>
                         <a class="admidio-icon-link"  href="javascript:void(0)" onclick="return imgrotate('.$actThumbnail.', \'left\')">
                             <i class="fas fa-undo-alt" data-toggle="tooltip" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'"></i></a>
-                        <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho', 'element_id' => 'div_image_'.$actThumbnail,
+                        <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho', 'element_id' => 'div_image_'.$actThumbnail,
                             'database_id' => $actThumbnail, 'database_id_2' => $getPhotoId)).'">
                             <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
                 }
@@ -495,8 +495,8 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
                                     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'change')).'">
                                         <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
                                     ' . $htmlLock . '
-                                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id'),
+                                    <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id'),
                                         'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">
                                         <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>
                                     </div>

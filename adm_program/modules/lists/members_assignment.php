@@ -144,6 +144,7 @@ else
     // create html page object
     $page = new HtmlPage($headline);
     $page->enableModal();
+    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
     $javascriptCode = '';
 
@@ -153,8 +154,9 @@ else
     }
 
     $javascriptCode .= '
-        $("#menu_item_create_user").attr("data-toggle", "modal");
-        $("#menu_item_create_user").attr("data-target", "#admidio_modal");
+        $("#menu_item_members_assign_create_user").attr("href", "javascript:void(0);");
+        $("#menu_item_members_assign_create_user").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php");
+        $("#menu_item_members_assign_create_user").attr("class", "nav-link openPopup");
 
         // change mode of users that should be shown
         $("#filter_rol_id").change(function() {
@@ -219,14 +221,12 @@ else
 
     $page->addJavascript($javascriptCode, true);
 
-    // get module menu
-    $membersAssignmentMenu = $page->getMenu();
-    $membersAssignmentMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
     if ($gCurrentUser->editUsers())
     {
-        $membersAssignmentMenu->addItem('menu_item_create_user', ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'fa-plus-circle');
+        $page->addPageFunctionsMenuItem('menu_item_members_assign_create_user', $gL10n->get('MEM_CREATE_USER'), 
+            ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', 'fa-plus-circle');
     }
-    $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
+
     $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
                            FROM '.TBL_ROLES.'
                      INNER JOIN '.TBL_CATEGORIES.'
@@ -237,12 +237,17 @@ else
                                 OR cat_org_id IS NULL )
                        ORDER BY cat_sequence, rol_name';
     $sqlData['params'] = array((int) $gCurrentOrganization->getValue('org_id'));
-    $navbarForm->addSelectBoxFromSql(
+
+    // create filter menu with elements for role
+    $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
+    $form = new HtmlForm('navbar_filter_form_roles', '', $page, array('type' => 'navbar', 'setFocus' => false));
+    $form->addSelectBoxFromSql(
         'filter_rol_id', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
         array('defaultValue' => $getFilterRoleId, 'firstEntry' => $gL10n->get('SYS_ALL'))
     );
-    $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), false, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
-    $membersAssignmentMenu->addForm($navbarForm->show());
+    $form->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), false, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
+    $filterNavbar->addForm($form->show());
+    $page->addHtml($filterNavbar->show());
 
     // create table object
     $table = new HtmlTable('tbl_assign_role_membership', $page, true, true, 'table table-condensed');

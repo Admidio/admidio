@@ -119,10 +119,6 @@ $page->addJavascript('
         $(this).ekkoLightbox();
     });
 
-    $("#admidio_modal").on("show.bs.modal", function() {
-        $(this).find(".modal-dialog").css({width: "800px"});
-    });
-
     $("#btn_ecard_preview").click(function(event) {
         event.preventDefault();
         $("#ecard_form input[id=\'submit_action\']").val("preview");
@@ -132,6 +128,7 @@ $page->addJavascript('
             data: $("#ecard_form").serialize(), // get the form data
             url: "ecard_preview.php", // the file to call
             success: function(response) { // on success..
+                $(".modal-dialog").attr("class", "modal-dialog modal-lg");
                 $(".modal-content").html(response);
                 $("#admidio_modal").modal();
             }

@@ -332,7 +332,8 @@ while($row = $mglStatement->fetch())
         else
         {
             // if user has no email or send email is disabled then administrators could set a new password
-            $userAdministration = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $row['usr_id'])).'">'.
+            $userAdministration = '<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $row['usr_id'])).'">'.
                 '<i class="fas fa-key" data-toggle="tooltip" title="' . $gL10n->get('SYS_CHANGE_PASSWORD') . '"></i></a>';
         }
     }

@@ -136,8 +136,8 @@ if($getMode === 'show_list')
                 <i class="fas fa-file-archive"></i>'. $oldBackupFile. '</a>',
             date($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'), filemtime($backupAbsolutePath.$oldBackupFile)),
             round($fileSize / 1024). ' kB',
-            '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'bac', 'element_id' => 'row_file_'.$key, 'name' => $oldBackupFile, 'database_id' => $oldBackupFile)).'">
+            '<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'bac', 'element_id' => 'row_file_'.$key, 'name' => $oldBackupFile, 'database_id' => $oldBackupFile)).'">
                 <i class="fas fa-trash-alt"></i></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);
     }

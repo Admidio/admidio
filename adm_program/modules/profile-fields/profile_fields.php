@@ -166,7 +166,8 @@ while($row = $statement->fetch())
     {
         $description = substr($userField->getValue('usf_description', 'database'), 0, 22).'
             <a class="openPopup" href="javascript:void(0);" 
-                data-href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'user_field_description', 'message_var1' => $userField->getValue('usf_name_intern'), 'inline' => 'true')).'"><span  data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
+                data-href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'user_field_description', 'message_var1' => $userField->getValue('usf_name_intern'), 'inline' => 'true')).'"><span 
+                data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
     }
     elseif($userField->getValue('usf_description') === '')
     {

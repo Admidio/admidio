@@ -288,8 +288,8 @@ else
                         $page->addHtml('
                         <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('id' => $gboId, 'headline' => $getHeadline)). '">
                             <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
-                        <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbo',
+                        <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbo',
                             'element_id' => 'gbo_'.$gboId, 'database_id' => $gboId, 'name' => $gboName)).'">
                             <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
                     }
