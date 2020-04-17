@@ -109,6 +109,10 @@ class HtmlPage extends \Smarty
      * @var string Contains the url to the previous page. If a url is set than a link to this page will be shown under the headline
      */
     protected $urlPreviousPage = '';
+    /**
+     * @var bool If set to true then a page without header menue and sidebar menu will be created. The main template file will be index_inline.tpl
+     */
+    protected $modeInline = false;
 
 
     /**
@@ -713,6 +717,14 @@ class HtmlPage extends \Smarty
         $this->mainNavbar->setName($headline);
     }
 
+    /** If set to true then a page without header menue and sidebar menu will be created. 
+     *  The main template file will be index_inline.tpl instead of index.tpl.
+     */
+    public function setModeInline()
+    {
+        $this->modeInline = true;
+    }
+
     /**
      * Set the title of the html page that will be shown in the <title> tag.
      * @param string $title A string that contains the title for the page.
@@ -812,7 +824,14 @@ class HtmlPage extends \Smarty
         // add translation object
         $this->assign('l10n', $gL10n);
 
-        $this->display('index.tpl');
+        if($this->modeInline)
+        {
+            $this->display('index_inline.tpl');
+        }
+        else
+        {
+            $this->display('index.tpl');
+        }
         /*
         $this->addMainFilesAndContent();
 

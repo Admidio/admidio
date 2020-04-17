@@ -152,6 +152,7 @@ if(!$category->isEditable())
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $roleViewDescription = '';
 if($getType === 'USF')
@@ -178,10 +179,6 @@ if($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1)
         true
     );
 }
-
-// add back link to module menu
-$categoryCreateMenu = $page->getMenu();
-$categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('categories_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_function.php', array('cat_id' => $getCatId, 'type' => $getType, 'mode' => '1')), $page);

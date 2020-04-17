@@ -68,15 +68,13 @@ $page->addJavascript('
         $(this).removeData("bs.modal");
         location.reload();
     });
-    $("#menu_item_upload_files").attr("href", "javascript:void(0);");
-    $("#menu_item_upload_files").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)).'");
-    $("#menu_item_upload_files").attr("class", "nav-link openPopup");
+
+    $("#menu_item_documents_upload_files").attr("href", "javascript:void(0);");
+    $("#menu_item_documents_upload_files").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)).'");
+    $("#menu_item_documents_upload_files").attr("class", "nav-link openPopup");
     ',
     true
 );
-
-// get module menu
-$documentsFilesMenu = $page->getMenu();
 
 if ($currentFolder->hasUploadRight())
 {
@@ -84,33 +82,21 @@ if ($currentFolder->hasUploadRight())
     if ($gSettingsManager->getInt('max_file_upload_size') > 0)
     {
         // show links for upload, create folder and folder configuration
-        $documentsFilesMenu->addItem(
-            'menu_item_create_folder', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_id' => $getFolderId)),
-            $gL10n->get('SYS_CREATE_FOLDER'), 'fa-plus-circle'
-        );
+        $page->addPageFunctionsMenuItem('menu_item_documents_create_folder', $gL10n->get('SYS_CREATE_FOLDER'), 
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_id' => $getFolderId)), 
+            'fa-plus-circle');
 
-        $documentsFilesMenu->addItem(
-            'menu_item_upload_files', SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)),
-            $gL10n->get('SYS_UPLOAD_FILES'), 'fa-upload'
-        );
+        $page->addPageFunctionsMenuItem('menu_item_documents_upload_files', $gL10n->get('SYS_UPLOAD_FILES'), 
+            SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)), 
+            'fa-upload');
     }
 
     if($gCurrentUser->editDownloadRight())
     {
-        $documentsFilesMenu->addItem(
-            'menu_item_config_folder', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_id' => $getFolderId)),
-            $gL10n->get('SYS_PERMISSIONS'), 'fa-lock'
-        );
+        $page->addPageFunctionsMenuItem('menu_item_documents_permissions', $gL10n->get('SYS_PERMISSIONS'), 
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_id' => $getFolderId)), 
+            'fa-lock');
     }
-}
-
-if($gCurrentUser->isAdministrator())
-{
-    // show link to system preferences of weblinks
-    $documentsFilesMenu->addItem(
-        'admMenuItemPreferencesLinks', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'documents-files')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
-    );
 }
 
 // Create table object

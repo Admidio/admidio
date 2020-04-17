@@ -143,8 +143,9 @@ a:hover, .page-link:hover, a.btn:hover {
 }
 
 /* default distance between elements */
-.admidio-blog, .admidio-field-group, .pagination, .admidio-info-created-edited,
-form > button[type=submit] {
+.admidio-blog, .admidio-field-group, .pagination, 
+.admidio-info-created-edited, form > button[type=submit], 
+.navbar-filter, .table-responsive, .admidio-content-header {
     margin-bottom: 45px;
 }
 
@@ -184,7 +185,7 @@ form > button[type=submit] {
 /* Forms */
 /***********************************/
 
-.form-control:focus {   
+.form-control:focus {  
     border-color: #349aaa;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #349aaa;
     outline: 0 none;

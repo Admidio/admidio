@@ -137,14 +137,10 @@ $page->addJavascript('
         $(this).removeData("bs.modal");
         location.reload();
     });
-    $("#menu_item_upload_photo").attr("data-toggle", "modal");
-    $("#menu_item_upload_photo").attr("data-target", "#admidio_modal");
-    $(".admidio-btn-album-upload").click(function(event) {
-        $.get("'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'photos')).'&id=" + $(this).attr("data-pho-id"), function(response) {
-            $(".modal-content").html(response);
-            $("#admidio_modal").modal();
-        });
-    });',
+
+    $("#menu_item_photos_upload_photo").attr("href", "javascript:void(0);");
+    $("#menu_item_photos_upload_photo").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'photos', 'id' => $getPhotoId)). '");
+    $("#menu_item_photos_upload_photo").attr("class", "nav-link openPopup");',
     true
 );
 
@@ -154,29 +150,24 @@ if ($getPhotoNr > 0)
     $page->addJavascript('$("#img_'.$getPhotoNr.'").trigger("click");', true);
 }
 
-// get module menu
-$photosMenu = $page->getMenu();
-
 if ($photoAlbum->getValue('pho_id') > 0)
 {
-    $photosMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 }
 
 if ($gCurrentUser->editPhotoRight())
 {
     // show link to create new album
-    $photosMenu->addItem(
-        'menu_item_new_album', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('mode' => 'new', 'pho_id' => $getPhotoId)),
-        $gL10n->get('PHO_CREATE_ALBUM'), 'fa-plus-circle'
-    );
+    $page->addPageFunctionsMenuItem('menu_item_photos_new_album', $gL10n->get('PHO_CREATE_ALBUM'), 
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('mode' => 'new', 'pho_id' => $getPhotoId)),
+        'fa-plus-circle');  
 
     if ($getPhotoId > 0)
     {
         // show link to upload photos
-        $photosMenu->addItem(
-            'menu_item_upload_photo', SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'photos', 'id' => $getPhotoId)),
-            $gL10n->get('PHO_UPLOAD_PHOTOS'), 'fa-upload'
-        );
+        $page->addPageFunctionsMenuItem('menu_item_photos_upload_photo', $gL10n->get('PHO_UPLOAD_PHOTOS'), 
+            SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'photos', 'id' => $getPhotoId)),
+            'fa-upload');  
     }
 }
 
@@ -184,19 +175,9 @@ if ($gCurrentUser->editPhotoRight())
 if ($gSettingsManager->getBool('photo_download_enabled') && $photoAlbum->getValue('pho_quantity') > 0)
 {
     // show link to download photos
-    $photosMenu->addItem(
-        'menu_item_download_photos', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => $getPhotoId)),
-        $gL10n->get('SYS_DOWNLOAD_ALBUM'), 'fa-download'
-    );
-}
-
-if ($gCurrentUser->isAdministrator())
-{
-    // show link to system preferences of photos
-    $photosMenu->addItem(
-        'menu_item_preferences_photos', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'photos')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
-    );
+    $page->addPageFunctionsMenuItem('menu_item_photos_download', $gL10n->get('SYS_DOWNLOAD_ALBUM'), 
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => $getPhotoId)),
+        'fa-download');  
 }
 
 // Breadcrump bauen

@@ -147,8 +147,7 @@ if($getMode === 'choose_files')
 
     // create html page object
     $page = new HtmlPage();
-    $page->hideThemeHtml();
-    $page->hideMenu();
+    $page->setModeInline();
 
     $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/css/jquery.fileupload.css');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/js/vendor/jquery.ui.widget.js');

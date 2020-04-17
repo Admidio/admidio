@@ -117,6 +117,7 @@ unset($_SESSION['categories_request']);
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 $page->enableModal();
 
 $page->addJavascript('
@@ -171,17 +172,10 @@ $page->addJavascript('
     }
 ');
 
-// get module menu
-$categoriesMenu = $page->getMenu();
-
-// show back link
-$categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
-
 // define link to create new category
-$categoriesMenu->addItem(
-    'admMenuItemNewCategory', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType, 'title' => $getTitle)),
-    $gL10n->get('SYS_CREATE_VAR', array($addButtonText)), 'fa-plus-circle'
-);
+$page->addPageFunctionsMenuItem('menu_item_categories_add', $gL10n->get('SYS_CREATE_VAR', array($addButtonText)), 
+    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType, 'title' => $getTitle)), 
+    'fa-plus-circle');
 
 // Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
