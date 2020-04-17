@@ -185,9 +185,9 @@ a:hover, .page-link:hover, a.btn:hover {
 /* Forms */
 /***********************************/
 
-.form-control:focus {  
+.form-control:focus, .select2-container--bootstrap.select2-container--focus .select2-selection {  
     border-color: #349aaa;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #349aaa;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #349aaa !important;
     outline: 0 none;
 }
 

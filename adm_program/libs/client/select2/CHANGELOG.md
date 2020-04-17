@@ -1,5 +1,111 @@
 # Change Log
 
+## 4.0.13
+
+### New features / improvements
+
+* Trigger `input` event before `change` events (#4649)
+* Feed back the keypress code that was responsible for the 'close' event (#5513)
+* Only trigger `selection:update` once on DOM change events (#5734)
+
+### Bug fixes
+
+* Prevent opening of disabled elements (#5751)
+
+### Documentation
+
+* Fix "edit this page" links in docs (#5689)
+
+### Miscellaneous
+
+* Registered Select2 on Open Collective (#5700, #5721, #5741)
+
+## 4.0.12
+
+### Bug fixes
+
+* Fixes incorrect offset when using the Shadow DOM and styling the `<html>` element (#5682)
+
+### Miscellaneous
+
+* Replace cdnjs with jsDelivr in the documentation (#5687)
+* Fix incorrect provider for the automated NPM deployment (#5686)
+
+## 4.0.11
+
+### Bug fixes
+
+* Fixes jQuery migrate error when getting offset when dropdownParent not in document (#5584)
+
+### Miscellaneous
+
+* Enable GitHub actions for CI (#5591)
+* Documentation has been moved into and is deployed from the code repository (#5638)
+* Remove Travis CI integration (#5665)
+
+## 4.0.10
+
+### New features / improvements
+
+* Support passing in a selector for `dropdownParent` option (#5622)
+
+### Bug fixes
+
+* Fix bug where dropdowns pointing upwards were incorrectly positioned (#5621)
+
+## 4.0.9
+
+### New features / improvements
+
+* Mirror disabled state through aria-disabled on selection (#5579)
+* Select2 now clears the internal ID when it is destroyed (#5587)
+* Set the main ARIA 1.1 roles and properties for comboboxes (#5582)
+* The `language` option now has a clearly defined fallback chain (#5602)
+
+### Bug fixes
+
+* Do not propagate click when search box is not empty (#5580)
+* Fix `maximumSelectionLength` being ignored by `closeOnSelect` (#5581)
+* Fix generated options not receiving result IDs (#5586)
+* Remove selection title attribute if text is empty (#5589)
+* Reposition dropdown whenever items are selected (#5590)
+* Fix dropdown positioning when displayed above with messages (#5592)
+* Fix search box expanding width of container (#5595)
+* `allowClear` no longer shifts selections to a new line (#5603)
+
+### Translations
+
+* Fix error in German translations (#5604)
+
+### Miscellaneous
+
+* Updated development grunt version so it no longer shows as vulnerable (#5597)
+* Remove unused variables (#5554)
+
+## 4.0.8
+
+### New features / improvements
+
+* Test against and fix compatibility with jQuery 3.4.1 (#5531)
+* Results respect disabled state of `<option>` (#5560)
+* Add `computedstyle` option for calculating the width (#5559)
+
+### Bug fixes
+
+* Fix tag creation being broken in 4.0.7 (#5558)
+* Fix infinite scroll when the scrollbar is not visible (#5575)
+* Revert change to focusing behaviour in 4.0.6 (#5576)
+
+### Translations
+
+* Fix wording in French translations (#5521)
+
+### Miscellaneous
+
+* Update grunt-contrib-qunit to latest version (#5530)
+* Removed unused `.select2-selection__placeholder` CSS definitions for multiple selects (#5508)
+* Remove deprecated jQuery shorthand (#5564)
+
 ## 4.0.7
 
 ### New features/improvements
