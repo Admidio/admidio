@@ -98,14 +98,10 @@ if($getMode === 'show_list')
     // sort files (filename/date)
     sort($existingBackupFiles);
 
-    // get module menu
-    $backupMenu = $page->getMenu();
-
     // show link to create new backup
-    $backupMenu->addItem(
-        'admMenuItemNewBackup', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', array('mode' => 'create_backup')),
-        $gL10n->get('BAC_START_BACKUP'), 'fa-database'
-    );
+    $page->addPageFunctionsMenuItem('menu_item_backup_start', $gL10n->get('BAC_START_BACKUP'), 
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', array('mode' => 'create_backup')), 
+        'fa-database');
 
     // Define table
     $table = new HtmlTable('tableList', $page, true, true);

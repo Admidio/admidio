@@ -185,10 +185,15 @@ a:hover, .page-link:hover, a.btn:hover {
 /* Forms */
 /***********************************/
 
-.form-control:focus, .select2-container--bootstrap.select2-container--focus .select2-selection {  
+.form-control:focus, .select2-container--bootstrap.select2-container--focus .select2-selection,
+input[type=checkbox]:focus, button:focus {  
     border-color: #349aaa;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #349aaa !important;
     outline: 0 none;
+}
+
+button:focus {
+    background-color: #349aaa !important;
 }
 
 input[type=checkbox] {
@@ -219,6 +224,16 @@ label {
 
 .radio-inline {
     margin-right: 15px;
+}
+
+.datetime-date-control {
+    display: inline;
+    width: 200px;
+}
+
+.datetime-time-control {
+    width: 100px !important;
+    margin-left: 20px;
 }
 
 /***********************************/
@@ -295,6 +310,16 @@ label {
 
 .card .admidio-info-created-edited {
     margin-top: 0px;
+}
+
+/* Style for popover */
+.popover-header {
+    color: white;
+    background-color: #263340;
+}
+
+.popover-body {
+    background-color: #eeeeee;
 }
 
 .accordion .card-header:hover {

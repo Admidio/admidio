@@ -15,6 +15,12 @@
     <title>{$title}</title>
     
     {include file="js_css_files.tpl"}
+
+    {if $printView}
+        <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/print.css" />
+    {else}
+        <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/new.css" />
+    {/if}
     
     <script type="text/javascript">
         var gRootPath  = "{$urlAdmidio}";
@@ -26,11 +32,6 @@
         $(function() {
             $("[data-toggle=\'popover\']").popover();
             $("[data-toggle=tooltip]").tooltip();
-            
-            // Sidebar toggle behavior
-            $('#sidebarCollapse').on('click', function() {
-                $('#sidebar, #content').toggleClass('active');
-            });
             
             {$javascriptContentExecuteAtPageLoad}            
         });

@@ -16,8 +16,6 @@
   <link rel="stylesheet" type="text/css" href="{$urlAdmidio}/adm_program/libs/client/fontawesome/css/brands.min.css" />
 {/if}
 
-<link rel="stylesheet" type="text/css" href="{$urlTheme}/css/new.css" />
-
 {$additionalCssFiles}
 
 <script type="text/javascript" src="{$urlAdmidio}/adm_program/system/js/common_functions.js"></script>

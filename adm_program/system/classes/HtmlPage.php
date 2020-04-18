@@ -84,7 +84,7 @@ class HtmlPage extends \Smarty
     /**
      * @var bool A flag that indicates if the page should be styled in print mode then no colors will be shown
      */
-    protected $printMode = false;
+    protected $printView = false;
     /**
      * @var string Contains the custom javascript of the current page. This will be added to the header part of the page.
      */
@@ -250,7 +250,7 @@ class HtmlPage extends \Smarty
         $this->addCssFile(THEME_URL.'/css/admidio.css');
 
         // if print mode is set then add a print specific css file
-        if ($this->printMode)
+        if ($this->printView)
         {
             $this->addCssFile(THEME_URL.'/css/print.css');
         }
@@ -720,7 +720,7 @@ class HtmlPage extends \Smarty
     /** If set to true then a page without header menue and sidebar menu will be created. 
      *  The main template file will be index_inline.tpl instead of index.tpl.
      */
-    public function setModeInline()
+    public function setInlineMode()
     {
         $this->modeInline = true;
     }
@@ -751,7 +751,8 @@ class HtmlPage extends \Smarty
      */
     public function setPrintMode()
     {
-        $this->printMode = true;
+        $this->setInlineMode();
+        $this->printView = true;
     }
     
     /**
@@ -795,6 +796,7 @@ class HtmlPage extends \Smarty
         $this->assign('additionalJsFiles', $this->getHtmlJsFiles());
 
         $this->assign('showModal', $this->showModal);
+        $this->assign('printView', $this->printView);
 /*
     
         if($gDebug)
@@ -826,7 +828,7 @@ class HtmlPage extends \Smarty
 
         if($this->modeInline)
         {
-            $this->display('index_inline.tpl');
+            $this->display('index_reduced.tpl');
         }
         else
         {

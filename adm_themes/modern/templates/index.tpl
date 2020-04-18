@@ -15,6 +15,8 @@
     <title>{$title}</title>
     
     {include file="js_css_files.tpl"}
+
+    <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/new.css" />
     
     <script type="text/javascript">
         var gRootPath  = "{$urlAdmidio}";
