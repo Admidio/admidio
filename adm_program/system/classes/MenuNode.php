@@ -80,7 +80,7 @@ class MenuNode
         $node['men_description'] = Language::translateIfTranslationStrId($description);
 
         // add root path to link unless the full URL is given
-        if (preg_match('/^http(s?):\/\//', $url) === 0)
+        if (preg_match('/^http(s?):\/\//', $url) === 0 && strpos($url, 'javascript:') !== 0)
         {
             $url = ADMIDIO_URL . $url;
         }

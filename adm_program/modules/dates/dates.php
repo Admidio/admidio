@@ -131,7 +131,7 @@ if($getViewMode === 'html')
     {
         // add back link to module menu
         $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
-        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('LST_PRINT_PREVIEW'), '#', 'fa-print');
+        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('LST_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
     }
 
     // Add new event
@@ -145,7 +145,7 @@ if($getViewMode === 'html')
     if($getId === 0)
     {
         // show print button
-        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('LST_PRINT_PREVIEW'), '#', 'fa-print');
+        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('LST_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
 
         // ical Download
         if($gSettingsManager->getBool('enable_dates_ical'))
@@ -751,7 +751,7 @@ else
                                         if($gSettingsManager->getBool('enable_dates_ical'))
                                         {
                                             $page->addHtml('
-                                                <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $dateId, 'mode' => 6)).'">
+                                                <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $dateId, 'mode' => 6)).'">
                                                     <i class="fas fa-file-export" data-toggle="tooltip"></i> '.$gL10n->get('DAT_EXPORT_ICAL').'</a>');
                                         }
                             
@@ -759,11 +759,11 @@ else
                                         if ($date->isEditable())
                                         {
                                             $page->addHtml('
-                                                <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'copy' => 1, 'headline' => $getHeadline)) . '">
+                                                <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'copy' => 1, 'headline' => $getHeadline)) . '">
                                                     <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
-                                                <a class="dropdown-item" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'headline' => $getHeadline)) . '">
+                                                <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'headline' => $getHeadline)) . '">
                                                     <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
-                                                <a class="dropdown-item openPopup" href="javascript:void(0);" 
+                                                <a class="dropdown-item btn openPopup" href="javascript:void(0);" 
                                                     data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateId,
                                                     'name' => $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateId)) . '">
                                                     <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>');

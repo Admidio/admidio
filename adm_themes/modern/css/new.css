@@ -236,6 +236,10 @@ label {
     margin-left: 20px;
 }
 
+.dropdown-menu .btn {
+    text-align: left;
+}
+
 /***********************************/
 /* Cards */
 /***********************************/
@@ -255,17 +259,11 @@ label {
     font-size: 150%;
 }
 
-.card-header .btn {
-    font-weight: bold;
-    font-size: 90%;
-}
-
-
 .card-header .fas, .card-header .fab {
     margin-right: 10px;
 }
 
-.card-header a .fas, .card-header a .fab {
+.card-header .dropdown .fas, .card-header .dropdown .fab {
     margin-right: 0px;
 }
 
@@ -297,6 +295,19 @@ label {
 }
 
 /***********************************/
+/* Accordion */
+/***********************************/
+
+.accordion .card-header:hover {
+    color: #eeeeee;
+    background-color: #263340;
+}
+
+.accordion .card-header {
+    color: #349aaa;
+}
+
+/***********************************/
 /* Various settings */
 /***********************************/
 
@@ -322,11 +333,6 @@ label {
     background-color: #eeeeee;
 }
 
-.accordion .card-header:hover {
-    color: #eeeeee;
-    background-color: #263340;
-}
-
 .page-item.active .page-link {
     background-color: #263340;
     border-color: #263340;
@@ -345,4 +351,16 @@ label {
 
 .admidio-profile-user-right {
     cursor: help;    
+}
+
+.admidio-btn-event-attend {
+    color: #008000 !important;
+}
+
+.admidio-btn-event-tentative {
+    color: #800080 !important;
+}
+
+.admidio-btn-event-cancel {
+    color: #f93535 !important;
 }

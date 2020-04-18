@@ -159,7 +159,7 @@ function getPreferencePanel($group, $id, $title, $icon, $body)
     $html = '
         <div class="card" id="panel_' . $id . '">
             <div class="card-header">
-                <a class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_' . $id . '">
+                <a type="button" data-toggle="collapse" data-target="#collapse_' . $id . '">
                     <i class="' . $icon . ' fa-fw"></i>' . $title . '
                 </a>
             </div>
