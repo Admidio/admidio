@@ -199,15 +199,12 @@ else
     $formValues['delivery_confirmation'] = $getDeliveryConfirmation;
 }
 
-// create html page object
-$page = new HtmlPage($headline);
-
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// add back link to module menu
-$messagesWriteMenu = $page->getMenu();
-$messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+// create html page object
+$page = new HtmlPage($headline);
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {
@@ -237,7 +234,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     }
     else
     {
-        $form->addInput('msg_to', '', $getUserId, array('type' => 'hidden'));
+        $form->addInput('msg_to', '', $getUserId, array('property' => HtmlForm::FIELD_HIDDEN));
         $sendto = ' ' . $gL10n->get('SYS_TO') . ' ' .$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').' ('.$user->getValue('usr_login_name').')';
     }
 
@@ -252,7 +249,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     }
     else
     {
-        $form->addInput('subject', '', $formValues['subject'], array('type' => 'hidden'));
+        $form->addInput('subject', '', $formValues['subject'], array('property' => HtmlForm::FIELD_HIDDEN));
     }
 
     $form->addMultilineTextInput(

@@ -735,44 +735,42 @@ else
             $page->addHtml('
                 <div class="card admidio-blog ' . $cssClassHighlight . '" id="dat_' . $dateId . '">
                     <div class="card-header">
-                        <div class="float-left">
-                            <i class="fas fa-calendar-alt"></i>' .
-                            $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline . '
-                        </div>
-                        <div class="float-right text-right">');
-                            if($date->isEditable() || $gSettingsManager->getBool('enable_dates_ical'))
-                            {
-                                $page->addHtml('
-                                <div class="dropdown">
-                                    <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">');
-                                        // ical Download
-                                        if($gSettingsManager->getBool('enable_dates_ical'))
-                                        {
-                                            $page->addHtml('
-                                                <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $dateId, 'mode' => 6)).'">
-                                                    <i class="fas fa-file-export" data-toggle="tooltip"></i> '.$gL10n->get('DAT_EXPORT_ICAL').'</a>');
-                                        }
-                            
-                                        // change and delete is only for users with additional rights
-                                        if ($date->isEditable())
-                                        {
-                                            $page->addHtml('
-                                                <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'copy' => 1, 'headline' => $getHeadline)) . '">
-                                                    <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
-                                                <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'headline' => $getHeadline)) . '">
-                                                    <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
-                                                <a class="dropdown-item btn openPopup" href="javascript:void(0);" 
-                                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateId,
-                                                    'name' => $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateId)) . '">
-                                                    <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>');
-                                        }
-                                    $page->addHtml('</div>
-                                </div>');
-                            }
-                        $page->addHtml('</div>
-                    </div>
+                        <i class="fas fa-calendar-alt"></i>' .
+                        $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline);
+
+                        if($date->isEditable() || $gSettingsManager->getBool('enable_dates_ical'))
+                        {
+                            $page->addHtml('
+                            <div class="dropdown float-right">
+                                <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">');
+                                    // ical Download
+                                    if($gSettingsManager->getBool('enable_dates_ical'))
+                                    {
+                                        $page->addHtml('
+                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $dateId, 'mode' => 6)).'">
+                                                <i class="fas fa-file-export" data-toggle="tooltip"></i> '.$gL10n->get('DAT_EXPORT_ICAL').'</a>');
+                                    }
+                        
+                                    // change and delete is only for users with additional rights
+                                    if ($date->isEditable())
+                                    {
+                                        $page->addHtml('
+                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'copy' => 1, 'headline' => $getHeadline)) . '">
+                                                <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
+                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'headline' => $getHeadline)) . '">
+                                                <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                                            <a class="dropdown-item btn openPopup" href="javascript:void(0);" 
+                                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateId,
+                                                'name' => $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateId)) . '">
+                                                <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>');
+                                    }
+                                $page->addHtml('</div>
+                            </div>');
+                        }
+                    $page->addHtml('</div>
+
                     <div class="card-body">
                         ' . $htmlDateElements . '<br />
                         <p>' . $date->getValue('dat_description') . '</p>' .$attentionDeadline);

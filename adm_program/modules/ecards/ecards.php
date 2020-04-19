@@ -109,6 +109,7 @@ else
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 $page->enableModal();
 
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.min.js');
@@ -139,24 +140,11 @@ $page->addJavascript('
     true
 );
 
-// add back link to module menu
-$ecardMenu = $page->getMenu();
-$ecardMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
-
-if($gCurrentUser->isAdministrator())
-{
-    // show link to system preferences of announcements
-    $ecardMenu->addItem(
-        'menu_item_preferences', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'ecards')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
-    );
-}
-
 // show form
 $form = new HtmlForm('ecard_form', 'ecard_send.php', $page);
-$form->addInput('submit_action', '', '', array('type' => 'hidden'));
-$form->addInput('photo_id', '', $getPhotoId, array('type' => 'hidden'));
-$form->addInput('photo_nr', '', $getPhotoNr, array('type' => 'hidden'));
+$form->addInput('submit_action', '', '', array('property' => HtmlForm::FIELD_HIDDEN));
+$form->addInput('photo_id', '', $getPhotoId, array('property' => HtmlForm::FIELD_HIDDEN));
+$form->addInput('photo_nr', '', $getPhotoNr, array('property' => HtmlForm::FIELD_HIDDEN));
 
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
 $form->addCustomContent($gL10n->get('SYS_PHOTO'), '

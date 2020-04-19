@@ -145,7 +145,8 @@ a:hover, .page-link:hover, a.btn:hover {
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination, 
 .admidio-info-created-edited, form > button[type=submit], 
-.navbar-filter, .table-responsive, .admidio-content-header {
+.navbar-filter, .table-responsive, .admidio-content-header,
+.dataTables_wrapper, .btn-group {
     margin-bottom: 45px;
 }
 
@@ -286,6 +287,25 @@ label {
     font-size: 100% !important;
 }
 
+.admidio-blog-comment .card-header, .admidio-blog-comment .card-body, .admidio-blog-comment .card-footer {
+    background-color: #dddddd;
+}
+
+.admidio-blog-comment .card-header {
+    font-size: 120%;
+    padding-bottom: 0px;
+}
+
+.admidio-blog-comment {
+    margin-bottom: 20px;
+}
+
+.admidio-blog .card-body > .btn {
+    margin-top: 20px;
+    display: block;
+    text-align: left;
+}
+
 /***********************************/
 /* Nav-Bars */
 /***********************************/
@@ -310,6 +330,10 @@ label {
 /***********************************/
 /* Various settings */
 /***********************************/
+
+.badge {
+    margin-left: 5px;
+}
 
 .admidio-info-created {
     display: block;

@@ -60,7 +60,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">Test</div>
             </div>
-        </div>'
+        </div>
     {/if}
     
     <nav class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar" id="admidio-main-navbar">

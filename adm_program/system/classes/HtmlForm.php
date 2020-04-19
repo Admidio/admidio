@@ -163,27 +163,6 @@ class HtmlForm extends HtmlFormBasic
     }
 
     /**
-     * Adds any javascript content to the page. The javascript will be added to the page header or as inline script.
-     * @param string $javascriptCode       A valid javascript code that will be added to the header of the page or as inline script.
-     * @param bool   $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
-     *                                     the page is fully loaded.
-     */
-    protected function addJavascriptCode($javascriptCode, $executeAfterPageLoad = false)
-    {
-        if ($this->htmlPage instanceof HtmlPage)
-        {
-            $this->htmlPage->addJavascript($javascriptCode, $executeAfterPageLoad);
-            return;
-        }
-
-        if ($executeAfterPageLoad)
-        {
-            $javascriptCode = '$(function() { ' . $javascriptCode . ' });';
-        }
-        $this->addHtml('<script type="text/javascript">' . $javascriptCode . '</script>');
-    }
-
-    /**
      * Add a new button with a custom text to the form. This button could have
      * an icon in front of the text.
      * @param string $id      Id of the button. This will also be the name of the button.
@@ -280,42 +259,6 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $this->addSimpleButton($id, $optionsAll['type'], $value, $id);
-    }
-
-    /**
-     * Add a new button with a custom text to the form. This button could have
-     * an icon in front of the text. Different to addButton this method adds an
-     * additional **div** around the button and the type of the button is **submit**.
-     * @param string $id      Id of the button. This will also be the name of the button.
-     * @param string $text    Text of the button
-     * @param array  $options (optional) An array with the following possible entries:
-     *                        - **icon** : Optional parameter. Path and filename of an icon.
-     *                          If set a icon will be shown in front of the text.
-     *                        - **link** : If set a javascript click event with a page load to this link
-     *                          will be attached to the button.
-     *                        - **onClickText** : A text that will be shown after a click on this button
-     *                          until the next page is loaded. The button will be disabled after click.
-     *                        - **class** : Optional an additional css classname. The class **admButton**
-     *                          is set as default and need not set with this parameter.
-     *                        - **type** : If set to true this button get the type **submit**. This will
-     *                          be the default.
-     */
-    public function addSubmitButton($id, $text, array $options = array())
-    {
-        // create array with all options
-        $optionsDefault = array('icon' => '', 'link' => '', 'onClickText' => '', 'class' => '', 'type' => 'submit');
-        $optionsAll     = array_replace($optionsDefault, $options);
-
-        // add default css class
-        $optionsAll['class'] .= ' btn btn-primary';
-
-        // now add button to form
-        $this->addButton($id, $text, $optionsAll);
-
-        if (!$this->buttonGroupOpen)
-        {
-            $this->addHtml('<div class="form-alert" style="display: none;">&nbsp;</div>');
-        }
     }
 
     /**
@@ -830,7 +773,7 @@ class HtmlForm extends HtmlFormBasic
 
             case self::FIELD_HIDDEN:
                 $attributes['hidden'] = 'hidden';
-                $attributes['class'] .= ' hide';
+                $attributes['class'] .= ' invisible';
                 break;
         }
 
@@ -987,6 +930,27 @@ class HtmlForm extends HtmlFormBasic
     }
 
     /**
+     * Adds any javascript content to the page. The javascript will be added to the page header or as inline script.
+     * @param string $javascriptCode       A valid javascript code that will be added to the header of the page or as inline script.
+     * @param bool   $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
+     *                                     the page is fully loaded.
+     */
+    protected function addJavascriptCode($javascriptCode, $executeAfterPageLoad = false)
+    {
+        if ($this->htmlPage instanceof HtmlPage)
+        {
+            $this->htmlPage->addJavascript($javascriptCode, $executeAfterPageLoad);
+            return;
+        }
+
+        if ($executeAfterPageLoad)
+        {
+            $javascriptCode = '$(function() { ' . $javascriptCode . ' });';
+        }
+        $this->addHtml('<script type="text/javascript">' . $javascriptCode . '</script>');
+    }
+
+    /**
      * Add a simple line to the form. This could be used to structure a form. The line has only a visual effect.
      */
     public function addLine()
@@ -1050,7 +1014,7 @@ class HtmlForm extends HtmlFormBasic
         elseif ($optionsAll['property'] === self::FIELD_HIDDEN)
         {
             $attributes['hidden'] = 'hidden';
-            $attributes['class']  = 'hide';
+            $attributes['class']  = 'invisible';
             $label                = '';
         }
 
@@ -1867,6 +1831,42 @@ class HtmlForm extends HtmlFormBasic
         $this->openControlStructure('', $label, self::FIELD_DEFAULT, $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         $this->addHtml('<p class="' . $attributes['class'] . '">' . $value . '</p>');
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
+    }
+
+    /**
+     * Add a new button with a custom text to the form. This button could have
+     * an icon in front of the text. Different to addButton this method adds an
+     * additional **div** around the button and the type of the button is **submit**.
+     * @param string $id      Id of the button. This will also be the name of the button.
+     * @param string $text    Text of the button
+     * @param array  $options (optional) An array with the following possible entries:
+     *                        - **icon** : Optional parameter. Path and filename of an icon.
+     *                          If set a icon will be shown in front of the text.
+     *                        - **link** : If set a javascript click event with a page load to this link
+     *                          will be attached to the button.
+     *                        - **onClickText** : A text that will be shown after a click on this button
+     *                          until the next page is loaded. The button will be disabled after click.
+     *                        - **class** : Optional an additional css classname. The class **admButton**
+     *                          is set as default and need not set with this parameter.
+     *                        - **type** : If set to true this button get the type **submit**. This will
+     *                          be the default.
+     */
+    public function addSubmitButton($id, $text, array $options = array())
+    {
+        // create array with all options
+        $optionsDefault = array('icon' => '', 'link' => '', 'onClickText' => '', 'class' => '', 'type' => 'submit');
+        $optionsAll     = array_replace($optionsDefault, $options);
+
+        // add default css class
+        $optionsAll['class'] .= ' btn btn-primary';
+
+        // now add button to form
+        $this->addButton($id, $text, $optionsAll);
+
+        if (!$this->buttonGroupOpen)
+        {
+            $this->addHtml('<div class="form-alert" style="display: none;">&nbsp;</div>');
+        }
     }
 
     /**

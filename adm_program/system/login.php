@@ -56,7 +56,7 @@ if($gSettingsManager->getBool('system_organization_select'))
           ORDER BY org_longname ASC, org_shortname ASC';
     $form->addSelectBoxFromSql(
         'org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $gCurrentOrganization->getValue('org_id'))
+        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $gCurrentOrganization->getValue('org_id'), 'class' => 'form-control-small')
     );
 }
 

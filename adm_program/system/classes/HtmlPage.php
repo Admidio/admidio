@@ -341,16 +341,17 @@ class HtmlPage extends \Smarty
 
     /**
      * Add a new menu item to the page menu part. This is only the menu that will show functions of the
-     * current page.
+     * current page. The menu header will automatically the name of the page.
      * @param string $id.         Id of the menu item that will be the html id of the <a> tag
      * @param string $name        Name of the menu node that will also shown in the menu
      * @param string $url         The url of this menu item that will be called if someone click the menu item
      * @param string $icon        An icon that will be shown together with the name in the menu
+     * @param string $badgeCount  If set > 0 than a small badge with the number will be shown after the menu item name
      * @param string $description A optional description of the menu node that could be shown in some output cases
      */
-    public function addPageFunctionsMenuItem($id, $name, $url, $icon, $description = '')
+    public function addPageFunctionsMenuItem($id, $name, $url, $icon, $badgeCount = 0, $description = '')
     {
-        $this->menuNodePageFunctions->addItem($id, $name, $url, $icon, $description);
+        $this->menuNodePageFunctions->addItem($id, $name, $url, $icon, $badgeCount, $description);
     }
 
     /**
@@ -650,26 +651,6 @@ class HtmlPage extends \Smarty
     }
 
     /**
-     * Get a badge with the unread messages count
-     * @return string
-     */
-    private static function getUnreadMessagesBadge()
-    {
-        global $gDb, $gCurrentUser;
-
-        // get number of unread messages for user
-        $message = new TableMessage($gDb);
-        $unread = $message->countUnreadMessageRecords((int) $gCurrentUser->getValue('usr_id'));
-
-        if ($unread > 0)
-        {
-            return '<span class="badge">' . $unread . '</span>';
-        }
-
-        return '';
-    }
-
-    /**
      * Flag if the current page has a navbar.
      * @return void
      */
@@ -718,7 +699,7 @@ class HtmlPage extends \Smarty
     }
 
     /** If set to true then a page without header menue and sidebar menu will be created. 
-     *  The main template file will be index_inline.tpl instead of index.tpl.
+     *  The main template file will be **index_reduced.tpl** instead of index.tpl.
      */
     public function setInlineMode()
     {
@@ -745,8 +726,9 @@ class HtmlPage extends \Smarty
     }
 
     /**
-     * If print mode is set then a print specific css file will be loaded.
-     * All styles will be more print compatible and are only black, grey and white.
+     * If print mode is set then the reduced template file **index_reduced.tpl** will be loaded with
+     * a print specific css file **print.css**. All styles will be more print compatible and are 
+     * only black, grey and white.
      * @return void
      */
     public function setPrintMode()

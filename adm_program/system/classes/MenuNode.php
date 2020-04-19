@@ -66,10 +66,11 @@ class MenuNode
      * @param string $name        Name of the menu node that will also shown in the menu
      * @param string $url         The url of this menu item that will be called if someone click the menu item
      * @param string $icon        An icon that will be shown together with the name in the menu
+     * @param string $badgeCount  If set > 0 than a small badge with the number will be shown after the menu item name
      * @param string $description A optional description of the menu node that could be shown in some output cases
      * œparam string $componentId Optional the component id could be set
      */
-    public function addItem($id, $name, $url, $icon, $description = '', $componentId = 0)
+    public function addItem($id, $name, $url, $icon, $badgeCount = 0, $description = '', $componentId = 0)
     {
         $node['men_id'] = $this->count();
         $node['men_name_intern'] = $id;
@@ -91,6 +92,7 @@ class MenuNode
             $icon = 'fa-trash-alt invisible';
         }
         $node['men_icon'] = $icon;
+        $node['badge_count'] = $badgeCount;
         
         $this->nodeEntries[$node['men_id']] = $node;        
     }
@@ -123,66 +125,12 @@ class MenuNode
     }
 
     /**
-     * Create the html code of the menu as a html list. There are different
-     * parameters to change the look of the menu.
-     * @param bool $mediaView If set to true than the menu will be shown in the style of bootstrap media object
-     *                        https://getbootstrap.com/docs/4.3/components/media-object/
+     * Create the html code of the menu node as a html list.
      * @return string Html code of the menu.
      */
-    public function getHtml($mediaView = false)
+    public function getHtml()
     {
         $html = '';
-/*
-        if($this->count() > 0)
-        {
-            $html .= '<h3 id="head_'.$this->textId.'">'.$this->name.'</h3>';
-
-            if($mediaView)
-            {
-                $html .= '<ul id="menu_'.$this->textId.'" class="list-unstyled admidio-media-menu">';
-            }
-            else
-            {
-                $html .= '<ul id="menu_'.$this->textId.'" class="list-unstyled admidio-menu btn-group-vertical">';
-            }
-
-            foreach($this->nodeEntries as $menuEntry)
-            {
-                if($mediaView)
-                {
-                    if($menuEntry['men_name_intern'] !== 'overview') // overview should not be shown in detailed list, because it's the detailed list
-                    {
-                        $iconHtml = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name'], 'fa-2x');
-                        $html .= '
-                        <li class="media">
-                            <div class="media-left">
-                                <a id="menu_'.$this->textId.'_'.$menuEntry['men_name_intern'].'" href="'.$menuEntry['men_url'].'">
-                                    '.$iconHtml.'
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading">
-                                    <a id="lmenu_'.$this->textId.'_'.$menuEntry['men_name_intern'].'" href="'.$menuEntry['men_url'].'">'.$menuEntry['men_name'].'</a>
-                                </h4>
-                                <p>'.$menuEntry['men_description'].'</p>
-                            </div>
-                        </li>';
-                    }
-                }
-                else
-                {
-                    $iconHtml = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
-                    $html .= '
-                    <li>
-                        <a id="lmenu_'.$this->textId.'_'.$menuEntry['men_name_intern'].'" class="btn" href="'.$menuEntry['men_url'].'">
-                            ' . $iconHtml . $menuEntry['men_name'] . '
-                        </a>
-                    </li>';
-                }
-            }
-
-            $html .= '</ul>';
-        }*/
 
         if($this->count() > 0)
         {
@@ -192,11 +140,18 @@ class MenuNode
 
             foreach($this->nodeEntries as $menuEntry)
             {
+                $htmlBadge = '';
                 $iconHtml = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
+                
+                if($menuEntry['badge_count'] > 0)
+                {
+                    $htmlBadge = '<span class="badge badge-light">' . $menuEntry['badge_count'] . '</span>';
+                }
+                
                 $html .= '
                 <li class="nav-item">
                     <a id="'.$menuEntry['men_name_intern'].'" class="nav-link" href="'.$menuEntry['men_url'].'">
-                        ' . $iconHtml . $menuEntry['men_name'] . '
+                        ' . $iconHtml . $menuEntry['men_name'] . $htmlBadge . '
                     </a>
                 </li>';
             }
@@ -242,9 +197,11 @@ class MenuNode
      */
     public function loadFromDatabase($nodeId)
     {
-        global $gDb, $gCurrentUser, $gValidLogin;
+        global $gDb, $gCurrentUser, $gValidLogin, $gL10n;
 
         $countMenuNodes = 0;
+        $badgeCount = 0;
+    
         $sql = 'SELECT men_id, men_com_id, men_name_intern, men_name, men_description, men_url, men_icon, com_name_intern
                   FROM '.TBL_MENU.'
              LEFT JOIN '.TBL_COMPONENTS.'
@@ -261,16 +218,24 @@ class MenuNode
                 if($this->menuItemIsVisible($node['men_id']))
                 {
                     // special case because there are different links if you are logged in or out for mail
-                    /*if ($gValidLogin && $node['men_name_intern'] === 'mail')
+                    if ($gValidLogin && $node['men_name_intern'] === 'mail')
                     {
-                        $unreadBadge = self::getUnreadMessagesBadge();
-    
-                        $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
+                        // get number of unread messages for user
+                        $message = new TableMessage($gDb);
+                        $badgeCount = $message->countUnreadMessageRecords((int) $gCurrentUser->getValue('usr_id'));
+                           
+                        $menuUrl  = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
                         $menuIcon = 'fa-comments';
-                        $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
-                    }*/
+                        $menuName = $gL10n->get('SYS_MESSAGES');
+                    }
+                    else
+                    {
+                        $menuUrl  = $node['men_url'];
+                        $menuIcon = $node['men_icon'];
+                        $menuName = $node['men_name'];                        
+                    }
     
-                    $this->addItem($node['men_name_intern'], $node['men_name'], $node['men_url'], $node['men_icon'], $node['men_description'], $node['men_com_id']);
+                    $this->addItem($node['men_name_intern'], $menuName, $menuUrl, $menuIcon, $badgeCount, $node['men_description'], $node['men_com_id']);
                 }
             }
         }
