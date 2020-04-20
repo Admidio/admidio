@@ -56,40 +56,25 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage($headline);
 $page->enableModal();
 
-// get module menu for messages
-$messagesMenu = $page->getMenu();
 // link to write new email
 if ($gSettingsManager->getBool('enable_mail_module'))
 {
-    $messagesMenu->addItem(
-        'admMenuItemNewEmail', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php',
-        $gL10n->get('SYS_WRITE_EMAIL'), 'fa-envelope-open'
-    );
+    $page->addPageFunctionsMenuItem('menu_item_messages_new_email', $gL10n->get('SYS_WRITE_EMAIL'), 
+        ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', 'fa-envelope-open');
 }
 // link to write new PM
 if ($gSettingsManager->getBool('enable_pm_module'))
 {
-    $messagesMenu->addItem(
-        'admMenuItemNewPm', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM')),
-        $gL10n->get('SYS_WRITE_PM'), 'fa-comment-alt'
-    );
+    $page->addPageFunctionsMenuItem('menu_item_messages_new_pm', $gL10n->get('SYS_WRITE_PM'), 
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM')), 
+        'fa-comment-alt');
 }
 
 // link to Chat
 if ($gSettingsManager->getBool('enable_chat_module'))
 {
-    $messagesMenu->addItem(
-        'admMenuItemNewChat', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_chat.php',
-        $gL10n->get('MSG_CHAT'), 'fa-comments'
-    );
-}
-
-if ($gCurrentUser->isAdministrator())
-{
-    $messagesMenu->addItem(
-        'admMenuItemPreferences', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'messages')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
-    );
+    $page->addPageFunctionsMenuItem('menu_item_messages_chat', $gL10n->get('MSG_CHAT'), 
+        ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_chat.php', 'fa-comments');
 }
 
 $table = new HtmlTable('adm_lists_table', $page, true, true);

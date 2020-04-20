@@ -658,13 +658,10 @@ if (isset($messageStatement))
 
         $date = \DateTime::createFromFormat('Y-m-d H:i:s', $row['msc_timestamp']);
         $page->addHtml('
-        <div class="card">
+        <div class="card admidio-blog">
             <div class="card-header">
-                <div class="float-left">
-                    <i class="fas fa-comment-alt"></i>' . $sentUser . '
-                </div>
-                <div class="fload-right text-right">' . $date->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')) .'
-                </div>
+                <i class="fas fa-comment-alt"></i>' . 
+                $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($sentUser, $date->format($gSettingsManager->getString('system_date')), $date->format($gSettingsManager->getString('system_time')))) . '
             </div>
             <div class="card-body">'.
                 $messageText.'
