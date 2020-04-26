@@ -44,7 +44,6 @@ $flagShowMembers = !$getMembers;
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
 
 $page->addJavascript('
     $("#menu_item_members_create_user").attr("href", "javascript:void(0);");

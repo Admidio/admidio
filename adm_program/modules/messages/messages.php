@@ -54,7 +54,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
 
 // link to write new email
 if ($gSettingsManager->getBool('enable_mail_module'))

@@ -62,7 +62,6 @@ $navigationBar = $currentFolder->getNavigationForDownload();
 // create html page object
 $page = new HtmlPage($headline);
 
-$page->enableModal();
 $page->addJavascript('
     $("body").on("hidden.bs.modal", ".modal", function() {
         $(this).removeData("bs.modal");

@@ -28,7 +28,6 @@ unset($_SESSION['fields_request']);
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
 
 $page->addJavascript('
     $(".admidio-group-heading").click(function() {

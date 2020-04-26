@@ -101,7 +101,6 @@ if($getViewMode === 'html' && $getId === 0)
 
 // create html page object
 $page = new HtmlPage($dates->getHeadline($getHeadline));
-$page->enableModal();
 
 if($getViewMode === 'html')
 {

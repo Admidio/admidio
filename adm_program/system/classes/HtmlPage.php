@@ -66,10 +66,6 @@ class HtmlPage extends \Smarty
      */
     protected $hasNavbar = false;
     /**
-     * @var bool If set to true then html code for a modal window will be included.
-     */
-    protected $showModal = false;
-    /**
      * @var array<int,string> An array with all necessary cascading style sheets files for the html page.
      */
     protected $cssFiles = array();
@@ -267,29 +263,26 @@ class HtmlPage extends \Smarty
         }
 
         // add code for a modal window
-        if ($this->showModal)
-        {
-            $this->addJavascript('
-                $("#admidio_modal").on("show.bs.modal", function (event) {
-                  var link = $(event.relatedTarget);
-                  var url  = link.attr("href");
-                  if(typeof(url) != "undefined")
-                      $(this).find(".modal-content").load(url);
-                });
+        $this->addJavascript('
+            $("#admidio_modal").on("show.bs.modal", function (event) {
+              var link = $(event.relatedTarget);
+              var url  = link.attr("href");
+              if(typeof(url) != "undefined")
+                  $(this).find(".modal-content").load(url);
+            });
 
-                $("body").on("hidden.bs.modal", ".modal", function() {
-                    $(this).removeData("bs.modal");
-                });',
-                true
-            );
-            $this->addHtml('
-                <div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">Test</div>
-                    </div>
-                </div>'
-            );
-        }
+            $("body").on("hidden.bs.modal", ".modal", function() {
+                $(this).removeData("bs.modal");
+            });',
+            true
+        );
+        $this->addHtml('
+            <div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">Test</div>
+                </div>
+            </div>'
+        );
 
         // load content of theme files at this point so that files could add css and js files
         if ($this->showThemeHtml)
@@ -352,15 +345,6 @@ class HtmlPage extends \Smarty
     public function addPageFunctionsMenuItem($id, $name, $url, $icon, $badgeCount = 0, $description = '')
     {
         $this->menuNodePageFunctions->addItem($id, $name, $url, $icon, $badgeCount, $description);
-    }
-
-    /**
-     * Adds the html code for a modal window to the current script.
-     * The link must have the following attributes: data-toggle="modal" data-target="#admidio_modal"
-     */
-    public function enableModal()
-    {
-        $this->showModal = true;
     }
 
     /**
@@ -777,19 +761,7 @@ class HtmlPage extends \Smarty
         $this->assign('additionalCssFiles', $this->getHtmlCssFiles());
         $this->assign('additionalJsFiles', $this->getHtmlJsFiles());
 
-        $this->assign('showModal', $this->showModal);
         $this->assign('printView', $this->printView);
-/*
-    
-        if($gDebug)
-        {
-            $this->assign('jsCssFiles', 'js_css_files_debug.tpl');        
-        }
-        else
-        {
-            $this->assign('jsCssFiles', 'js_css_files.tpl');                    
-        }
-*/
         $this->assign('menuSidebar', $gMenu->getHtml());
         $this->assign('content', $this->getHtmlBody());
 

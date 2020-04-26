@@ -36,32 +36,29 @@
             
             {$javascriptContentExecuteAtPageLoad}
             
-            // functions to handle modal window and load data from url
-            {if $showModal}
-                $('.openPopup').on('click',function(){
-                    $('.modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
-                    $('.modal-content').load($(this).attr('data-href'),function(){
-                        $('#admidio_modal').modal({
-                            show:true
-                        });
+            // function to handle modal window and load data from url
+            $('.openPopup').on('click',function(){
+                $('.modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
+                $('.modal-content').load($(this).attr('data-href'),function(){
+                    $('#admidio_modal').modal({
+                        show:true
                     });
                 });
+            });
 
-                $("body").on("hidden.bs.modal", ".modal", function() {
-                    $(this).removeData("bs.modal");
-                });
-            {/if}
+            // remove data from modal if modal is closed
+            $("body").on("hidden.bs.modal", ".modal", function() {
+                $(this).removeData("bs.modal");
+            });
         });
     </script>
 </head>
 <body>
-    {if $showModal}
-        <div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">Test</div>
-            </div>
+    <div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">Test</div>
         </div>
-    {/if}
+    </div>
     
     <nav class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar" id="admidio-main-navbar">
       <a class="navbar-brand" href="{$urlAdmidio}/adm_program/index.php">

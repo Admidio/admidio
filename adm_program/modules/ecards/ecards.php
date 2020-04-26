@@ -110,7 +110,6 @@ else
 // create html page object
 $page = new HtmlPage($headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
-$page->enableModal();
 
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.min.js');
 

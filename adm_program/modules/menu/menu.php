@@ -20,7 +20,6 @@ $headline = $gL10n->get('SYS_MENU');
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
 
 $page->addJavascript('
     function moveMenu(direction, menID) {

@@ -143,7 +143,6 @@ else
 
     // create html page object
     $page = new HtmlPage($headline);
-    $page->enableModal();
     $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
     $javascriptCode = '';

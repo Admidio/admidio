@@ -33,7 +33,6 @@ $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManag
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
 
 $showOptionValidModules = array(
     'announcements', 'documents-files', 'guestbook', 'ecards', 'lists',

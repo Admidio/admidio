@@ -72,7 +72,6 @@ if ($usrStatement->rowCount() === 0)
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
 
 if($gCurrentUser->isAdministrator())
 {

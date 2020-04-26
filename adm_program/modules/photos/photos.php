@@ -88,7 +88,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
 
 // add rss feed to photos
 if ($gSettingsManager->getBool('enable_rss'))
