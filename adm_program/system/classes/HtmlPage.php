@@ -745,6 +745,7 @@ class HtmlPage extends \Smarty
         // add page functions menu to global menu
         $gMenu->addFunctionsNode($this->menuNodePageFunctions);
 
+        $this->assign('additionalHeaderData', $this->header);
         $this->assign('title', $this->title);
         $this->assign('headline', $this->headline);
         $this->assign('urlPreviousPage', $this->urlPreviousPage);
