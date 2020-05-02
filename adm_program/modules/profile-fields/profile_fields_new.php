@@ -89,6 +89,7 @@ if(isset($_SESSION['fields_request']))
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascript('
     $("#usf_type").click(function() {
@@ -103,10 +104,6 @@ $page->addJavascript('
     $("#usf_type").trigger("click");',
     true
 );
-
-// add back link to module menu
-$profileFieldsEditMenu = $page->getMenu();
-$profileFieldsEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('profile_fields_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_function.php', array('usf_id' => $getUsfId, 'mode' => '1')), $page);

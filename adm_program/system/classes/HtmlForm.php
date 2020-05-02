@@ -363,7 +363,7 @@ class HtmlForm extends HtmlFormBasic
         if ($optionsAll['icon'] !== '')
         {
             // create html for icon
-            $htmlIcon = Image::getIconHtml($optionsAll['icon'], $label);
+            $htmlIcon = Image::getIconHtml($optionsAll['icon'], '');
         }
 
         if ($optionsAll['helpTextIdLabel'] !== '')

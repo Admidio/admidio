@@ -44,27 +44,24 @@ if($getUrtId > 0)
 
 // create html page object
 $page = new HtmlPage($headline);
-
-// add back link to module menu
-$relationTypeEditMenu = $page->getMenu();
-$relationTypeEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('relationtype_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_function.php', array('urt_id' => $getUrtId, 'mode' => '1')), $page);
 
 $form->openGroupBox('gb_user_relationship', $gL10n->get('SYS_USER_RELATION'));
 $form->addInput(
-    'urt_name', $gL10n->get('SYS_NAME'), $relationtype1->getValue('urt_name'),
+    'urt_name', $gL10n->get('SYS_NAME'), $relationType1->getValue('urt_name'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
     'urt_name_male', $gL10n->get('SYS_MALE'),
-    ($relationtype1->getValue('urt_name_male') !== $relationtype1->getValue('urt_name')) ? $relationtype1->getValue('urt_name_male') : '',
+    ($relationType1->getValue('urt_name_male') !== $relationType1->getValue('urt_name')) ? $relationType1->getValue('urt_name_male') : '',
     array('maxLength' => 100)
 );
 $form->addInput(
     'urt_name_female', $gL10n->get('SYS_FEMALE'),
-    ($relationtype1->getValue('urt_name_female') !== $relationtype1->getValue('urt_name')) ? $relationtype1->getValue('urt_name_female') : '',
+    ($relationType1->getValue('urt_name_female') !== $relationType1->getValue('urt_name')) ? $relationType1->getValue('urt_name_female') : '',
     array('maxLength' => 100)
 );
 $form->addCheckbox(
@@ -128,17 +125,17 @@ $page->addJavascript('
 );
 
 $form->addInput(
-    'urt_name_inverse', $gL10n->get('SYS_NAME'), $relationtype2->getValue('urt_name'),
+    'urt_name_inverse', $gL10n->get('SYS_NAME'), $relationType2->getValue('urt_name'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
     'urt_name_male_inverse', $gL10n->get('SYS_MALE'),
-    ($relationtype2->getValue('urt_name_male') !== $relationtype2->getValue('urt_name')) ? $relationtype2->getValue('urt_name_male') : '',
+    ($relationType2->getValue('urt_name_male') !== $relationType2->getValue('urt_name')) ? $relationType2->getValue('urt_name_male') : '',
     array('maxLength' => 100)
 );
 $form->addInput(
     'urt_name_female_inverse', $gL10n->get('SYS_FEMALE'),
-    ($relationtype2->getValue('urt_name_female') !== $relationtype2->getValue('urt_name')) ? $relationtype2->getValue('urt_name_female') : '',
+    ($relationType2->getValue('urt_name_female') !== $relationType2->getValue('urt_name')) ? $relationType2->getValue('urt_name_female') : '',
     array('maxLength' => 100)
 );
 $form->addCheckbox(

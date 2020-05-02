@@ -144,14 +144,19 @@ a:hover, .page-link:hover, a.btn:hover {
 
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination, 
-.admidio-info-created-edited, form > button[type=submit], 
+.admidio-info-created-edited, /*.form-dialog > button[type=submit], */
+button, 
 .navbar-filter, .table-responsive, .admidio-content-header,
 .dataTables_wrapper, .btn-group {
     margin-bottom: 45px;
 }
 
+.navbar button {
+    margin-bottom: 0px;
+}
+
 /* add 5px distance to all icons within a icon text combination */
-.nav-link .fas, .btn .fas, .alert .fas, .admidio-profile-user-right .fas {
+.nav-link .fas, .btn .fas, .alert .fas, .admidio-profile-user-right .fas, .checkbox .fas, input[type="radio"] {
     margin-right: 5px;
 }
 
@@ -330,6 +335,10 @@ label {
 /***********************************/
 /* Various settings */
 /***********************************/
+
+.admidio-opacity-reduced {
+    opacity: 0.4;
+}
 
 .badge {
     margin-left: 5px;

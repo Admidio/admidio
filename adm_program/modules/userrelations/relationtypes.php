@@ -29,18 +29,12 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage($headline);
-
-// get module menu
-$relationTypesMenu = $page->getMenu();
-
-// show back link
-$relationTypesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // define link to create new category
-$relationTypesMenu->addItem(
-    'admMenuItemNewRelationType', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php',
-    $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('LST_CONFIGURATION'))), 'fa-plus-circle'
-);
+$page->addPageFunctionsMenuItem('menu_item_relation_type_add', $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('LST_CONFIGURATION'))), 
+    ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', 'fa-plus-circle');
+
 
 // Create table object
 $relationTypesOverview = new HtmlTable('tbl_relationtypes', $page, true);
