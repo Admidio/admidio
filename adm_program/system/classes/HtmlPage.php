@@ -570,6 +570,16 @@ class HtmlPage extends \Smarty
         return $htmlBody;
     }
 
+    /* Add page specific javascript files, css files or rss files to the header. Also specific header 
+     * informations will also be added
+     * @return string Html string with all additional header informations
+     */
+    public function getHtmlAdditionalHeader()
+    {
+        $this->header .= $this->getHtmlCssFiles() . $this->getHtmlJsFiles() . $this->getHtmlRssFiles();
+        return $this->header;
+    }
+
     // add css files to page
     public function getHtmlCssFiles()
     {
@@ -745,7 +755,7 @@ class HtmlPage extends \Smarty
         // add page functions menu to global menu
         $gMenu->addFunctionsNode($this->menuNodePageFunctions);
 
-        $this->assign('additionalHeaderData', $this->header);
+        $this->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
         $this->assign('title', $this->title);
         $this->assign('headline', $this->headline);
         $this->assign('urlPreviousPage', $this->urlPreviousPage);
@@ -759,8 +769,6 @@ class HtmlPage extends \Smarty
         $this->assign('validLogin', $gValidLogin);
         $this->assign('debug', $gDebug);
         $this->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
-        $this->assign('additionalCssFiles', $this->getHtmlCssFiles());
-        $this->assign('additionalJsFiles', $this->getHtmlJsFiles());
 
         $this->assign('printView', $this->printView);
         $this->assign('menuSidebar', $gMenu->getHtml());

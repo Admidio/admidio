@@ -740,7 +740,6 @@
   <string name="PHO_ALBUM_NOT_APPROVED">The album is currently locked and will not be shown to visitors for this reason.</string>
   <string name="PHO_ALBUM_UNLOCK">Unlock album</string>
   <string name="PHO_ALBUM_WRITE_SUCCESS">Album has been successfully created / changed.</string>
-  <string name="PHO_BACK_TO_ALBUM">back to album</string>
   <string name="PHO_CAPTION_SIZE">Caption size</string>
   <string name="PHO_CAPTION_SIZE_DESC">The size of the caption is proportional to the image size, calculated by the formula \"Image size / Devisor\". By increasing the devisor, the font size will be reduced. (Default: 40)</string>
   <string name="PHO_CREATE_ALBUM">Create album</string>
@@ -782,7 +781,6 @@
   <string name="PHO_PHOTO_UPLOAD_SUCCESSFUL">All photos were successfully uploaded.\n\nYou can close the dialog now.</string>
   <string name="PHO_PHOTO">Photo</string>
   <string name="PHO_PHOTOGRAPHER">Photos of</string>
-  <string name="PHO_PHOTOS">Photos</string>
   <string name="PHO_PHOTOS_DESC">Pictures of events can be uploaded and displayed. Pictures can be organized in albums which can be interlinked.</string>
   <string name="PHO_POPUP_WINDOW">Popup window</string>
   <string name="PHO_PREVIOUS_PHOTO">Previous picture</string>
@@ -1012,7 +1010,6 @@
   <string name="SYS_CITY">City</string>
   <string name="SYS_CLOCK">o\'clock</string>
   <string name="SYS_CLOSE">Close</string>
-  <string name="SYS_CLOSE_WINDOW">Close window</string>
   <string name="SYS_COMMENT">Comment</string>
   <string name="SYS_COMMON">General</string>
   <string name="SYS_CONDITION">Requirement</string>
@@ -1293,6 +1290,7 @@
   <string name="SYS_PHONE_INVALID_CHAR">The phone number in the field #VAR1_BOLD# has invalid characters.\n\nAllowed are only numbers 0-9 and the special characters +-/ ().</string>
   <string name="SYS_PHOTO">Photo</string>
   <string name="SYS_PHOTOS">Photos</string>
+  <string name="SYS_PHOTO_OF_VAR">Photo of #VAR1#</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">All PHP settings</string>
   <string name="SYS_PHP_VERSION">PHP version</string>

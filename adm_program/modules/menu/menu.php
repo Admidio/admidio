@@ -68,16 +68,11 @@ $page->addJavascript('
         }
     }');
 
-// get module menu
-$menuMenu = $page->getMenu();
-
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // define link to create new menu
-$menuMenu->addItem(
-    'admMenuItemNew', ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php',
-    $gL10n->get('SYS_CREATE_ENTRY'), 'fa-plus-circle'
-);
+$page->addPageFunctionsMenuItem('menu_item_menu_new', $gL10n->get('SYS_CREATE_ENTRY'), 
+    ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', 'fa-plus-circle');
 
 // Create table object
 $menuOverview = new HtmlTable('tbl_menues', $page, true);

@@ -1293,6 +1293,7 @@
   <string name="SYS_PHONE_INVALID_CHAR">Die Telefonnummer im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</string>
   <string name="SYS_PHOTO">Foto</string>
   <string name="SYS_PHOTOS">Fotos</string>
+  <string name="SYS_PHOTO_OF_VAR">Foto von #VAR1#</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">alle PHP-Einstellungen</string>
   <string name="SYS_PHP_VERSION">PHP-Version</string>

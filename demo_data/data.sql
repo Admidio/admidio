@@ -16,7 +16,7 @@ INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, co
                               , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.11', 0, 0)
                               , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.11', 0, 0)
                               , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.11', 0, 0)
-                              , (130, 'MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.3.11', 0, 0)
+                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '3.3.11', 0, 0)
                               , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.11', 0, 0)
                               , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.11', 0, 0)
                               , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.11', 0, 0)
@@ -44,7 +44,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (90, 1, 0, 7, 1, 'lists', '/adm_program/modules/lists/lists.php', 'lists.png', 'LST_LISTS', 'LST_LISTS_DESC'),
 (90, 1, 0, 8, 1, 'mylist', '/adm_program/modules/lists/mylist.php', 'mylist.png', 'LST_MY_LIST', 'SYS_MYLIST_DESC'),
 (20, 1, 0, 2, 1, 'announcements', '/adm_program/modules/announcements/announcements.php', 'announcements.png', 'ANN_ANNOUNCEMENTS', 'ANN_ANNOUNCEMENTS_DESC'),
-(130, 1, 0, 5, 1, 'photo', '/adm_program/modules/photos/photos.php', 'photo.png', 'PHO_PHOTOS', 'PHO_PHOTOS_DESC'),
+(130, 1, 0, 5, 1, 'photo', '/adm_program/modules/photos/photos.php', 'photo.png', 'SYS_PHOTOS', 'PHO_PHOTOS_DESC'),
 (70, 1, 0, 6, 1, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'guestbook.png', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC'),
 (50, 1, 0, 8, 1, 'dates', '/adm_program/modules/dates/dates.php', 'dates.png', 'DAT_DATES', 'DAT_DATES_DESC'),
 (80, 1, 0, 9, 1, 'weblinks', '/adm_program/modules/links/links.php', 'weblinks.png', 'LNK_WEBLINKS', 'LNK_WEBLINKS_DESC'),

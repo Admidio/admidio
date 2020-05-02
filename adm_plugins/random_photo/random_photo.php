@@ -72,7 +72,7 @@ if(Component::isVisible('PHOTOS'))
     echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
     if($plg_show_headline)
     {
-        echo '<h3>'.$gL10n->get('PHO_PHOTOS').'</h3>';
+        echo '<h3>'.$gL10n->get('SYS_PHOTOS').'</h3>';
     }
     
     // Fotoalben Aufrufen

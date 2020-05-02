@@ -218,19 +218,16 @@ if ($getPhotoId > 0)
         </ol>
     </nav>
 
-    <div class="card admidio-album-informations">
-        <div class="card-body">
-            <h5 class="card-title">' . $datePeriod . '</h5>');
+    <p class="lead">
+        <p class="font-weight-bold">' . $datePeriod . '</p>
+        <p>' . $photoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $photoAlbum->getValue('pho_photographers') . '</p>');
 
-            if (strlen($photoAlbum->getValue('pho_description')) > 0)
-            {
-                $page->addHtml('<p class="card-text">' . $photoAlbum->getValue('pho_description') . '</p>');
-            }
+        if (strlen($photoAlbum->getValue('pho_description')) > 0)
+        {
+            $page->addHtml('<p>' . $photoAlbum->getValue('pho_description') . '</p>');
+        }
 
-            $page->addHtml('
-            <p class="card-text">' . $photoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $photoAlbum->getValue('pho_photographers') . '</p>
-        </div>
-    </div>');
+    $page->addHtml('</p>');
 }
 
 /*************************THUMBNAILS**********************************/
@@ -262,7 +259,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
                 {
                     $photoThumbnailTable .= '
                         <img class="img-thumbnail" id="img_'.$actThumbnail.'" style="cursor: pointer"
-                            onclick="window.open(\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $actThumbnail, 'pho_id' => $getPhotoId)).'\',\'msg\', \'height='.($gSettingsManager->getInt('photo_show_height') + 210).', width='.($gSettingsManager->getInt('photo_show_width')+70).',left=162,top=5\')"
+                            onclick="window.open(\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $actThumbnail, 'pho_id' => $getPhotoId)).'\',\'msg\', \'height='.($gSettingsManager->getInt('photo_show_height') + 300).', width='.($gSettingsManager->getInt('photo_show_width')+70).',left=162,top=5\')"
                             src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" alt="'.$actThumbnail.'" />';
                 }
 
@@ -458,7 +455,7 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
             <div class="col-sm-6 admidio-album-card" id="panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id').'">
                 <div class="card">
                     <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'"><img
-                        class="card-img-top" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $shuffleImage['shuffle_pho_id'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)).'" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
+                        class="card-img-top" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $shuffleImage['shuffle_pho_id'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)).'" alt="'.$gL10n->get('SYS_PHOTOS').'" /></a>
                     <div class="card-body">
                         <h5 class="card-title">'.$albumTitle);
 

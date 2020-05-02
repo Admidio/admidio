@@ -37,15 +37,17 @@
         });
     </script>
 </head>
-<body>   
+<body class="admidio-reduced">   
     <div class="admidio-content" id="content" role="main">
-        <h1 class="admidio-module-headline">{$headline}</h1>
-
-        <!-- Add link to previous page -->
-        {if $urlPreviousPage != ''}
-            <a class="" href="{$urlPreviousPage}"><i class="fas fa-arrow-circle-left fa-fw"></i> {$l10n->get('SYS_BACK')}</a>
-        {/if}
-
+        <div class="admidio-content-header">
+            <h1 class="admidio-module-headline">{$headline}</h1>
+    
+            <!-- Add link to previous page -->
+            {if $urlPreviousPage != ''}
+                <a class="" href="{$urlPreviousPage}"><i class="fas fa-arrow-circle-left fa-fw"></i> {$l10n->get('SYS_BACK')}</a>
+            {/if}
+        </div>
+    
         {$content}
     </div>
 </body>

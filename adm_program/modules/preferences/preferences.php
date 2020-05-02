@@ -1026,7 +1026,7 @@ $formPhotos->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'photos', $gL10n->get('PHO_PHOTOS'), 'fas fa-image', $formPhotos->show()));
+$page->addHtml(getPreferencePanel('modules', 'photos', $gL10n->get('SYS_PHOTOS'), 'fas fa-image', $formPhotos->show()));
 
 // PANEL: GUESTBOOK
 

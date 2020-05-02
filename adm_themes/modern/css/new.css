@@ -145,9 +145,9 @@ a:hover, .page-link:hover, a.btn:hover {
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination, 
 .admidio-info-created-edited, /*.form-dialog > button[type=submit], */
-button, 
+button, .admidio-img-presenter,
 .navbar-filter, .table-responsive, .admidio-content-header,
-.dataTables_wrapper, .btn-group {
+.dataTables_wrapper {
     margin-bottom: 45px;
 }
 
@@ -162,6 +162,11 @@ button,
 
 .admidio-icon-link {
     margin-left: 10px;
+}
+
+.admidio-reduced {
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 /***********************************/

@@ -59,10 +59,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage($headline);
-
-// add back link to module menu
-$relationEditMenu = $page->getMenu();
-$relationEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('relation_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php', array('usr_id' => $getUsrId, 'mode' => '1')), $page);
