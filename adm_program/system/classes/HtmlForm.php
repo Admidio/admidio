@@ -1971,9 +1971,9 @@ class HtmlForm extends HtmlFormBasic
         }
         else
         {
-            $html = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => $textId, 'inline' => 'true')).'"><img 
-                src="'.THEME_URL.'/icons/help.png" alt="Help" />
+            $html = '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-class="modal-lg"
+                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => $textId, 'inline' => 'true')).'"><i 
+                class="fas fa-info-circle admidio-info-icon"></i>
             </a>';
         }
         

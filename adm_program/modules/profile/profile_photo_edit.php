@@ -200,11 +200,7 @@ if($getMode === 'choose')
 
     // create html page object
     $page = new HtmlPage($headline);
-    $page->enableModal();
-
-    // add back link to module menu
-    $profilePhotoMenu = $page->getMenu();
-    $profilePhotoMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
     // show form
     $form = new HtmlForm('upload_files_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'upload', 'usr_id' => $getUserId)), $page, array('enableFileUpload' => true));
