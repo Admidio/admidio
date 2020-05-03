@@ -240,7 +240,7 @@ switch ($getMode)
 // Array to assign names to tables
 $arrColName = array(
     'usr_login_name'       => $gL10n->get('SYS_USERNAME'),
-    'usr_photo'            => $gL10n->get('PHO_PHOTO'),
+    'usr_photo'            => $gL10n->get('SYS_PHOTO'),
     'mem_begin'            => $gL10n->get('SYS_START'),
     'mem_end'              => $gL10n->get('SYS_END'),
     'mem_leader'           => $gL10n->get('SYS_LEADERS'),

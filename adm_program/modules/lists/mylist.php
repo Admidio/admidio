@@ -307,8 +307,8 @@ foreach($gProfileFields->getProfileFields() as $field)
             "cat_id": userFields[1]["cat_id"],
             "cat_name": userFields[1]["cat_name"],
             "usf_id": "usr_photo",
-            "usf_name": "'.$gL10n->get('PHO_PHOTO').'",
-            "usf_name_intern": "'.$gL10n->get('PHO_PHOTO').'"
+            "usf_name": "'.$gL10n->get('SYS_PHOTO').'",
+            "usf_name_intern": "'.$gL10n->get('SYS_PHOTO').'"
         };
 
         userFields[' . $i . '] = {
