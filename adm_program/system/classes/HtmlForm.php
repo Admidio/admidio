@@ -1964,8 +1964,20 @@ class HtmlForm extends HtmlFormBasic
             $text = $gL10n->get($textId, array($parameter));
         }
 
-        return '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
-            title="'.$gL10n->get('SYS_NOTE').'" data-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
+        if(Language::isTranslationStringId($textId))
+        {
+            $html = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
+                title="'.$gL10n->get('SYS_NOTE').'" data-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
+        }
+        else
+        {
+            $html = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => $textId, 'inline' => 'true')).'"><img 
+                src="'.THEME_URL.'/icons/help.png" alt="Help" />
+            </a>';
+        }
+        
+        return $html;
     }
 
     /**
