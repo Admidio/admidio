@@ -521,20 +521,10 @@ $page->addJavascript('$(function() {
     }
 });', true);
 
-// get module menu
-$myListMenu = $page->getMenu();
-
-// show link to system preferences of roles
-if($gCurrentUser->isAdministrator())
-{
-    $myListMenu->addItem('admMenuItemPreferencesLists', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'lists')),
-                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right');
-}
-
 // if mylist was not called directly then show link to navigate to previous page
 if($gNavigation->count() > 1)
 {
-    $myListMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 }
 
 // show form

@@ -109,13 +109,6 @@ $navbarForm->addSelectBoxForCategories(
 );
 $listsMenu->addForm($navbarForm->show());
 
-if($gCurrentUser->isAdministrator())
-{
-    // show link to system preferences of roles
-    $listsMenu->addItem('admMenuItemPreferencesLists', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'lists')),
-                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right');
-}
-
 $previousCategoryId = 0;
 
 // Get Lists

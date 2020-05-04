@@ -29,16 +29,12 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
-// get module menu
-$roomsMenu = $page->getMenu();
-// show back link
-$roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 // show link to create new room
-$roomsMenu->addItem(
-    'menu_item_new_room', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('headline' => $textRoom)),
-    $gL10n->get('SYS_CREATE_VAR', array($textRoom)), 'fa-plus-circle'
-);
+$page->addPageFunctionsMenuItem('menu_item_new_room', $gL10n->get('SYS_CREATE_VAR', array($textRoom)), 
+    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('headline' => $textRoom)), 
+    'fa-plus-circle');
 
 if((int) $gSettingsManager->get('system_show_create_edit') === 1)
 {
@@ -103,18 +99,19 @@ else
         $room->setArray($row);
 
         $page->addHtml('
-        <div class="card" id="room_'.(int) $room->getValue('room_id').'">
+        <div class="card admidio-blog" id="room_'.(int) $room->getValue('room_id').'">
             <div class="card-header">
-                <div class="float-left">
-                    <i class="fas fa-home"></i>' . $room->getValue('room_name') . '
-                </div>
-                <div class="float-right text-right">
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_id' => (int) $room->getValue('room_id'), 'headline' => $textRoom)).'">
-                        <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
-                    <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
-                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.(int) $room->getValue('room_id'),
-                        'name' => $room->getValue('room_name'), 'database_id' => (int) $room->getValue('room_id'))).'">
-                        <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>
+                <i class="fas fa-home"></i>' . $room->getValue('room_name') . '
+                <div class="dropdown float-right">
+                    <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_id' => (int) $room->getValue('room_id'), 'headline' => $textRoom)).'">
+                            <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                        <a class="dropdown-item btn openPopup" href="javascript:void(0);" 
+                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.(int) $room->getValue('room_id'), 'name' => $room->getValue('room_name'), 'database_id' => (int) $room->getValue('room_id'))).'">
+                            <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                    </div>
                 </div>
             </div>
             <div class="card-body">

@@ -189,6 +189,9 @@ class HtmlForm extends HtmlFormBasic
         // add text and icon to button
         $value = $text;
 
+        // add default css class
+        $optionsAll['class'] .= ' btn';
+
         if ($optionsAll['icon'] !== '')
         {
             if (Image::isFontAwesomeIcon($optionsAll['icon']))
@@ -1858,7 +1861,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add default css class
-        $optionsAll['class'] .= ' btn btn-primary';
+        $optionsAll['class'] .= ' btn-primary';
 
         // now add button to form
         $this->addButton($id, $text, $optionsAll);

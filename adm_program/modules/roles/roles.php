@@ -123,8 +123,7 @@ $columnHeading = array(
     $gL10n->get('SYS_PERMISSIONS'),
     $gL10n->get('ROL_SEND_MAILS'),
     $gL10n->get('ROL_SEE_ROLE_MEMBERSHIP'),
-    $gL10n->get('SYS_LEADER'),
-    $gL10n->get('SYS_FEATURES')
+    $gL10n->get('SYS_LEADER')
 );
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $table->disableDatatablesColumnsSort(array(3, 7));
