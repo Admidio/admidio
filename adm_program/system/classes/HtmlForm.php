@@ -190,7 +190,14 @@ class HtmlForm extends HtmlFormBasic
         $value = $text;
 
         // add default css class
-        $optionsAll['class'] .= ' btn';
+        if ($optionsAll['class'] !== '')
+        {
+            $optionsAll['class'] .= ' btn';
+        }
+        else
+        {
+            $optionsAll['class'] = 'btn btn-secondary';            
+        }
 
         if ($optionsAll['icon'] !== '')
         {

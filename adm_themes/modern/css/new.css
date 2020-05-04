@@ -145,7 +145,7 @@ a:hover, .page-link:hover, a.btn:hover {
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination, 
 .admidio-info-created-edited, /*.form-dialog > button[type=submit], */
-button, .admidio-img-presenter,
+.btn-primary, .admidio-img-presenter,
 .navbar-filter, .table-responsive, .admidio-content-header,
 .dataTables_wrapper {
     margin-bottom: 45px;
@@ -391,14 +391,14 @@ label {
     cursor: help;    
 }
 
-.admidio-btn-event-attend {
-    color: #008000 !important;
+.admidio-btn-event-attend .fas {
+    color: #00b100 !important;
 }
 
-.admidio-btn-event-tentative {
-    color: #800080 !important;
+.admidio-btn-event-tentative .fas {
+    color: #9b009b !important;
 }
 
-.admidio-btn-event-cancel {
-    color: #f93535 !important;
+.admidio-btn-event-cancel .fas {
+    color: #df2424 !important;
 }
