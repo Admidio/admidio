@@ -278,6 +278,10 @@ label {
     margin-right: 10px;
 }
 
+.card-header .float-right .fas {
+    margin-right: 0px;
+}
+
 .card-header .dropdown .fas, .card-header .dropdown .fab {
     margin-right: 0px;
 }

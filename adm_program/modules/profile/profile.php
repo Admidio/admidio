@@ -213,17 +213,17 @@ if($gNavigation->count() > 1)
 // if user has right then show link to edit profile
 if($gCurrentUser->hasRightEditProfile($user))
 {
-    $page->addPageFunctionsMenuItem('menu_item_profile_edit', $gL10n->get('PRO_EDIT_PROFILE'), 
+    $page->addPageFunctionsMenuItem('menu_item_profile_edit', $gL10n->get('PRO_EDIT_PROFILE'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_id' => $userId)),
-        'fa-edit');    
+        'fa-edit');
 }
 
 // Password of own user could be changed
 if($userId === $currUsrId)
 {
-    $page->addPageFunctionsMenuItem('menu_item_profile_password', $gL10n->get('SYS_CHANGE_PASSWORD'), 
+    $page->addPageFunctionsMenuItem('menu_item_profile_password', $gL10n->get('SYS_CHANGE_PASSWORD'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $userId)),
-        'fa-key');    
+        'fa-key');
 }
 elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0)
 {
@@ -232,53 +232,53 @@ elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->ge
     if(strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->getBool('enable_system_mails'))
     {
         // if email is set and systemmails are activated then administrator can send a new password to user
-        $page->addPageFunctionsMenuItem('menu_item_profile_send_password', $gL10n->get('ORG_SEND_NEW_PASSWORD'), 
+        $page->addPageFunctionsMenuItem('menu_item_profile_send_password', $gL10n->get('ORG_SEND_NEW_PASSWORD'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $userId, 'mode' => '5')),
-            'fa-key');    
+            'fa-key');
     }
     else
     {
         // if user has no email or send email is disabled then administrator could set a new password
-        $page->addPageFunctionsMenuItem('menu_item_profile_password', $gL10n->get('SYS_CHANGE_PASSWORD'), 
+        $page->addPageFunctionsMenuItem('menu_item_profile_password', $gL10n->get('SYS_CHANGE_PASSWORD'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $userId)),
-            'fa-key');    
+            'fa-key');
     }
 }
 
 // show link to view profile field change history
 if($gSettingsManager->getBool('profile_log_edit_fields') && $gCurrentUser->hasRightEditProfile($user))
 {
-    $page->addPageFunctionsMenuItem('menu_item_profile_change_history', $gL10n->get('MEM_CHANGE_HISTORY'), 
+    $page->addPageFunctionsMenuItem('menu_item_profile_change_history', $gL10n->get('MEM_CHANGE_HISTORY'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', array('usr_id' => $userId)),
-        'fa-history');    
+        'fa-history');
 }
 
 // show link to export the profile as vCard
-$page->addPageFunctionsMenuItem('menu_item_profile_vcard', $gL10n->get('PRO_EXPORT_VCARD'), 
+$page->addPageFunctionsMenuItem('menu_item_profile_vcard', $gL10n->get('PRO_EXPORT_VCARD'),
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '1', 'user_id' => $userId)),
-    'fa-file-export');    
+    'fa-file-export');
 
 // if you have the right to assign roles then show the link to assign new roles to this user
 if($gCurrentUser->assignRoles())
 {
-    $page->addPageFunctionsMenuItem('menu_item_profile_role_memberships_change', $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'), 
+    $page->addPageFunctionsMenuItem('menu_item_profile_role_memberships_change', $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId)),
-        'fa-user-tie');    
+        'fa-user-tie');
 }
 
 // show link to create relations
 if($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser->editUsers())
 {
-    $page->addPageFunctionsMenuItem('menu_item_profile_user_relation_types', $gL10n->get('PRO_ADD_USER_RELATION'), 
+    $page->addPageFunctionsMenuItem('menu_item_profile_user_relation_types', $gL10n->get('PRO_ADD_USER_RELATION'),
         SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('usr_id' => $userId)),
-        'fa-users-cog');    
+        'fa-users-cog');
 }
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
-    $page->addPageFunctionsMenuItem('menu_item_profile_maintain_fields', $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 
-        ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php', 'fa-th-list');    
+    $page->addPageFunctionsMenuItem('menu_item_profile_maintain_fields', $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'),
+        ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php', 'fa-th-list');
 }
 
 // *******************************************************************************
@@ -455,7 +455,7 @@ $page->addHtml('
                 if((strlen($user->getValue('usr_photo')) > 0 && (int) $gSettingsManager->get('profile_photo_storage') === 0)
                     || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/'.$userId.'.jpg') && (int) $gSettingsManager->get('profile_photo_storage') === 1)
                 {
-                    $page->addHtml('<a id="btn_delete_photo" class="btn openPopup" href="javascript:void(0);" 
+                    $page->addHtml('<a id="btn_delete_photo" class="btn openPopup" href="javascript:void(0);"
                                     data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pro_pho', 'element_id' => 'no_element', 'database_id' => $userId)).
                                     '"><i class="fas fa-trash-alt"></i>'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a>');
                 }
@@ -720,13 +720,13 @@ if($gSettingsManager->getBool('profile_show_roles'))
     // Ausgabe
     $page->addHtml('
     <div class="card admidio-field-group" id="profile_roles_box">
-        <div class="card-header"><div class="float-left">'.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'</div>');
+        <div class="card-header">'.$gL10n->get('ROL_ROLE_MEMBERSHIPS'));
             // if you have the right to assign roles then show the link to assign new roles to this user
             if($gCurrentUser->assignRoles())
             {
-                $page->addHtml('<div class="float-right text-right"><a class="admidio-icon-link openPopup" id="profile_role_memberships_change" data-class="modal-lg"
+                $page->addHtml('<a class="admidio-icon-link float-right openPopup" id="profile_role_memberships_change" data-class="modal-lg"
                     href="javascript:void(0);" data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId, 'inline' => '1')).'">
-                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'"></i></a></div>');
+                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'"></i></a>');
             }
         $page->addHtml('</div>
         <div class="card-body" id="profile_roles_box_body">
@@ -898,13 +898,13 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
     {
         $page->addHtml('
         <div class="card admidio-field-group" id="profile_user_relations_box">
-            <div class="card-header"><div class="float-left">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>');
+            <div class="card-header">' . $gL10n->get('SYS_USER_RELATIONS'));
                 // show link to create relations
                 if($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser->editUsers())
                 {
-                    $page->addHtml('<div class="float-right text-right">
-                        <a class="admidio-icon-link" id="profile_relations_new_entry" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('usr_id' => $userId)).'">
-                            <i class="fas fa-plus-circle" data-toggle="tooltip" title="'.$gL10n->get('PRO_ADD_USER_RELATION').'"></i></a></div>');
+                    $page->addHtml('
+                        <a class="admidio-icon-link float-right" id="profile_relations_new_entry" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('usr_id' => $userId)).'">
+                            <i class="fas fa-plus-circle" data-toggle="tooltip" title="'.$gL10n->get('PRO_ADD_USER_RELATION').'"></i></a>');
                 }
             $page->addHtml('</div>
             <div class="card-body" id="profile_user_relations_box_body">');
@@ -960,7 +960,7 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
 
             if($gCurrentUser->editUsers())
             {
-                 $page->addHtml('<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                 $page->addHtml('<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_'.(int) $relation->getValue('ure_id'), 'database_id' => (int) $relation->getValue('ure_id'),
                                 'name' => $relationType->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))).'"><i
                                 class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'"></i></a>');
