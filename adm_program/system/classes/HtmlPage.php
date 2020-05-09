@@ -334,7 +334,9 @@ class HtmlPage extends \Smarty
 
     /**
      * Add a new menu item to the page menu part. This is only the menu that will show functions of the
-     * current page. The menu header will automatically the name of the page.
+     * current page. The menu header will automatically the name of the page. If a dropdown menu item should
+     * be created than $parentMenuItemId must be set to each entry of the dropdown. If a badge should
+     * be shown at this menu item than set the $badgeCount.
      * @param string $id.         Id of the menu item that will be the html id of the <a> tag
      * @param string $name        Name of the menu node that will also shown in the menu
      * @param string $url         The url of this menu item that will be called if someone click the menu item

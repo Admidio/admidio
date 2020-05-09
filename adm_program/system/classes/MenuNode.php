@@ -60,7 +60,8 @@ class MenuNode
     }
 
     /**
-     * Add a new item to this menu node
+     * Add a new item to this menu node. If a dropdown menu item should be created than $parentMenuItemId must be set
+     * to each entry of the dropdown. If a badge should be shown at this menu item than set the $badgeCount.
      * @param string $id          A id string for the menu item. That will be used as html id tag.
      *                            It should be unique within this menu node.
      * @param string $name        Name of the menu node that will also shown in the menu
@@ -69,7 +70,7 @@ class MenuNode
      * @param string $parentMenuItemId The id of the parent item to which this item will be added.
      * @param string $badgeCount  If set > 0 than a small badge with the number will be shown after the menu item name
      * @param string $description A optional description of the menu node that could be shown in some output cases
-     * œparam string $componentId Optional the component id could be set
+     * @param string $componentId Optional the component id could be set
      */
     public function addItem($id, $name, $url, $icon, $parentMenuItemId = '', $badgeCount = 0, $description = '', $componentId = 0)
     {
@@ -133,7 +134,8 @@ class MenuNode
     }
 
     /**
-     * Create the html code of the menu node as a html list.
+     * Create the html code of the menu node as a html list. If a node has sub items than
+     * a dropdown will be created.
      * @return string Html code of the menu.
      */
     public function getHtml()
