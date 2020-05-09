@@ -346,6 +346,22 @@ class HtmlPage extends \Smarty
     {
         $this->menuNodePageFunctions->addItem($id, $name, $url, $icon, $badgeCount, $description);
     }
+    
+    /**
+     * Add a new menu item to the page menu part. This is only the menu that will show functions of the
+     * current page. The menu header will automatically the name of the page.
+     * @param string $parentItemId The id of the parent item to which this item will be added.
+     * @param string $id.         Id of the menu item that will be the html id of the <a> tag
+     * @param string $name        Name of the menu node that will also shown in the menu
+     * @param string $url         The url of this menu item that will be called if someone click the menu item
+     * @param string $icon        An icon that will be shown together with the name in the menu
+     * @param string $badgeCount  If set > 0 than a small badge with the number will be shown after the menu item name
+     * @param string $description A optional description of the menu node that could be shown in some output cases
+     */
+    public function addPageFunctionsSubMenuItem($parentItemId, $id, $name, $url, $icon, $badgeCount = 0, $description = '')
+    {
+        $this->menuNodePageFunctions->addSubItem($parentItemId, $id, $name, $url, $icon, $badgeCount, $description);
+    }
 
     /**
      * The method will return the filename. If you are in debug mode than it will return the

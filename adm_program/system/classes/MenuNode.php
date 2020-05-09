@@ -98,6 +98,45 @@ class MenuNode
     }
 
     /**
+     * Add a new item as a dropdown item to a parent menu item.
+     * @param string $parentItemId The id of the parent item to which this item will be added.
+     * @param string $id           A id string for the menu item. That will be used as html id tag. 
+     *                             It should be unique within this menu node.
+     * @param string $name         Name of the menu node that will also shown in the menu
+     * @param string $url          The url of this menu item that will be called if someone click the menu item
+     * @param string $icon         An icon that will be shown together with the name in the menu
+     * @param string $badgeCount   If set > 0 than a small badge with the number will be shown after the menu item name
+     * @param string $description  A optional description of the menu node that could be shown in some output cases
+     * œparam string $componentId  Optional the component id could be set
+     */
+    public function addSubItem($parentItemId, $id, $name, $url, $icon, $badgeCount = 0, $description = '', $componentId = 0)
+    {
+        $node['men_id'] = $this->count();
+        $node['men_name_intern'] = $id;
+        $node['men_com_id'] = $componentId;
+
+        // translate name and description
+        $node['men_name'] = Language::translateIfTranslationStrId($name);
+        $node['men_description'] = Language::translateIfTranslationStrId($description);
+
+        // add root path to link unless the full URL is given
+        if (preg_match('/^http(s?):\/\//', $url) === 0 && strpos($url, 'javascript:') !== 0)
+        {
+            $url = ADMIDIO_URL . $url;
+        }
+        $node['men_url'] = $url;
+
+        if (strlen($icon) === 0)
+        {
+            $icon = 'fa-trash-alt invisible';
+        }
+        $node['men_icon'] = $icon;
+        $node['badge_count'] = $badgeCount;
+        
+        $this->nodeEntries[$parentItemId]['sub_items'][] = $node;
+    }
+
+    /**
      * Get the entries of this node as an array.
      * @return array Array with all entries of this node
      */
@@ -148,12 +187,34 @@ class MenuNode
                     $htmlBadge = '<span class="badge badge-light">' . $menuEntry['badge_count'] . '</span>';
                 }
                 
-                $html .= '
-                <li class="nav-item">
-                    <a id="'.$menuEntry['men_name_intern'].'" class="nav-link" href="'.$menuEntry['men_url'].'">
-                        ' . $iconHtml . $menuEntry['men_name'] . $htmlBadge . '
-                    </a>
-                </li>';
+                if(isset($menuEntry['sub_items']))
+                {
+                    $html .= '
+                    <li class="nav-item dropdown">
+                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link dropdown-toggle" data-toggle="dropdown" 
+                            href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            ' . $iconHtml . $menuEntry['men_name'] . $htmlBadge . '
+                        </a>
+                        <div class="dropdown-menu">';                        
+                            foreach($menuEntry['sub_items'] as $subMenuEntry)
+                            {
+                                $html .= '
+                                <a id="'.$menuEntry['men_name_intern'].'" class="dropdown-item" href="'.$menuEntry['men_url'].'">
+                                    ' . $iconHtml . $menuEntry['men_name'] . $htmlBadge . '
+                                </a>';
+                            }
+                        $html .= '</div>
+                    </li>';                    
+                }
+                else
+                {
+                    $html .= '
+                    <li class="nav-item">
+                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link" href="'.$menuEntry['men_url'].'">
+                            ' . $iconHtml . $menuEntry['men_name'] . $htmlBadge . '
+                        </a>
+                    </li>';
+                }
             }
 
             $html .= '</ul>';

@@ -397,6 +397,7 @@ if ($getMode !== 'csv')
 
         // create html page object
         $page = new HtmlPage();
+        $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
         if ($getFullScreen)
         {
@@ -432,7 +433,7 @@ if ($getMode !== 'csv')
                 }
             });
 
-            $("#menu_item_print_view").click(function() {
+            $("#menu_item_lists_print_view").click(function() {
                 window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
             });',
             true
@@ -441,39 +442,38 @@ if ($getMode !== 'csv')
         // get module menu
         $listsMenu = $page->getMenu();
 
-        $listsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
-
         if ($getFullScreen)
         {
-            $listsMenu->addItem(
-                'menu_item_normal_picture',
+            $page->addPageFunctionsMenuItem('menu_item_lists_default_view', $gL10n->get('SYS_NORMAL_PICTURE'), 
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'html', 'show_former_members' => $getShowFormerMembers, 'full_screen' => 'false', 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
-                $gL10n->get('SYS_NORMAL_PICTURE'), 'fa-compress'
-            );
+                'fa-compress');    
         }
         else
         {
-            $listsMenu->addItem(
-                'menu_item_full_screen',
+            $page->addPageFunctionsMenuItem('menu_item_lists_full_screen', $gL10n->get('SYS_FULL_SCREEN'), 
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'html', 'show_former_members' => $getShowFormerMembers, 'full_screen' => 'true', 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
-                $gL10n->get('SYS_FULL_SCREEN'), 'fa-expand-arrows-alt'
-            );
+                'fa-expand-arrows-alt');    
         }
 
         // link to print overlay and exports
-        $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'fa-print');
+        $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('LST_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');    
 
         if ($numberRoles === 1)
         {
             // link to assign or remove members if you are allowed to do it
             if ($role->allowedToAssignMembers($gCurrentUser))
             {
-                $listsMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'));
-
-                $listsMenu->addItem('menu_item_assign_members', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => (int) $role->getValue('rol_id'))),
-                    $gL10n->get('SYS_ASSIGN_MEMBERS'), 'fa-user-plus', 'left', 'menu_item_extras');
+                $page->addPageFunctionsMenuItem('menu_item_lists_assign_members', $gL10n->get('SYS_ASSIGN_MEMBERS'), 
+                    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => (int) $role->getValue('rol_id'))),
+                    'fa-user-plus');    
             }
         }
+
+
+        $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('LST_EXPORT_TO'), '#', 'fa-file-download');    
+        $page->addPageFunctionsSubMenuItem('menu_item_lists_export', 'menu_item_lists_csv_ms', $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')', 
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-ms')), 
+            'fa-file-excel');    
 
         $form = new HtmlForm('navbar_export_to_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
         $selectBoxEntries = array(
