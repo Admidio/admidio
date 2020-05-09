@@ -1155,7 +1155,6 @@
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FORGOT_MY_PASSWORD">I forgot my password!</string>
   <string name="SYS_FRIDAY">Friday</string>
-  <string name="SYS_FULL_SCREEN">Full screen</string>
   <string name="SYS_FURTHER_INFORMATIONS">Further informations</string>
   <string name="SYS_GENDER">Gender</string>
   <string name="SYS_GEN_RANDOM_ERROR">An unexpected error occurred while generating a random number.\nError Code: #VAR1#\nError Message: #VAR2#</string>
@@ -1253,7 +1252,6 @@
   <string name="SYS_NO_TEMPLATE">No template</string>
   <string name="SYS_NOBODY">Nobody</string>
   <string name="SYS_NONE">None</string>
-  <string name="SYS_NORMAL_PICTURE">Normal image</string>
   <string name="SYS_NOT_EMPTY">Not empty</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">You are not a member of organization #VAR1#</string>
   <string name="SYS_NOT_REGISTERED">Not registered</string>

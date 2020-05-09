@@ -61,16 +61,17 @@ class MenuNode
 
     /**
      * Add a new item to this menu node
-     * @param string $id          A id string for the menu item. That will be used as html id tag. 
+     * @param string $id          A id string for the menu item. That will be used as html id tag.
      *                            It should be unique within this menu node.
      * @param string $name        Name of the menu node that will also shown in the menu
      * @param string $url         The url of this menu item that will be called if someone click the menu item
      * @param string $icon        An icon that will be shown together with the name in the menu
+     * @param string $parentMenuItemId The id of the parent item to which this item will be added.
      * @param string $badgeCount  If set > 0 than a small badge with the number will be shown after the menu item name
      * @param string $description A optional description of the menu node that could be shown in some output cases
      * œparam string $componentId Optional the component id could be set
      */
-    public function addItem($id, $name, $url, $icon, $badgeCount = 0, $description = '', $componentId = 0)
+    public function addItem($id, $name, $url, $icon, $parentMenuItemId = '', $badgeCount = 0, $description = '', $componentId = 0)
     {
         $node['men_id'] = $this->count();
         $node['men_name_intern'] = $id;
@@ -93,47 +94,15 @@ class MenuNode
         }
         $node['men_icon'] = $icon;
         $node['badge_count'] = $badgeCount;
-        
-        $this->nodeEntries[$node['men_id']] = $node;        
-    }
 
-    /**
-     * Add a new item as a dropdown item to a parent menu item.
-     * @param string $parentItemId The id of the parent item to which this item will be added.
-     * @param string $id           A id string for the menu item. That will be used as html id tag. 
-     *                             It should be unique within this menu node.
-     * @param string $name         Name of the menu node that will also shown in the menu
-     * @param string $url          The url of this menu item that will be called if someone click the menu item
-     * @param string $icon         An icon that will be shown together with the name in the menu
-     * @param string $badgeCount   If set > 0 than a small badge with the number will be shown after the menu item name
-     * @param string $description  A optional description of the menu node that could be shown in some output cases
-     * œparam string $componentId  Optional the component id could be set
-     */
-    public function addSubItem($parentItemId, $id, $name, $url, $icon, $badgeCount = 0, $description = '', $componentId = 0)
-    {
-        $node['men_id'] = $this->count();
-        $node['men_name_intern'] = $id;
-        $node['men_com_id'] = $componentId;
-
-        // translate name and description
-        $node['men_name'] = Language::translateIfTranslationStrId($name);
-        $node['men_description'] = Language::translateIfTranslationStrId($description);
-
-        // add root path to link unless the full URL is given
-        if (preg_match('/^http(s?):\/\//', $url) === 0 && strpos($url, 'javascript:') !== 0)
+        if($parentMenuItemId === '')
         {
-            $url = ADMIDIO_URL . $url;
+            $this->nodeEntries[$node['men_name_intern']] = $node;
         }
-        $node['men_url'] = $url;
-
-        if (strlen($icon) === 0)
+        else
         {
-            $icon = 'fa-trash-alt invisible';
+            $this->nodeEntries[$parentMenuItemId]['sub_items'][] = $node;
         }
-        $node['men_icon'] = $icon;
-        $node['badge_count'] = $badgeCount;
-        
-        $this->nodeEntries[$parentItemId]['sub_items'][] = $node;
     }
 
     /**
@@ -174,44 +143,52 @@ class MenuNode
         if($this->count() > 0)
         {
             $html .= '<div class="admidio-menu-header">'.$this->name.'</div>
-            
+
             <ul class="nav flex-column mb-0">';
 
             foreach($this->nodeEntries as $menuEntry)
             {
                 $htmlBadge = '';
-                $iconHtml = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
-                
+                $htmlIcon = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
+
                 if($menuEntry['badge_count'] > 0)
                 {
                     $htmlBadge = '<span class="badge badge-light">' . $menuEntry['badge_count'] . '</span>';
                 }
-                
+
                 if(isset($menuEntry['sub_items']))
                 {
                     $html .= '
                     <li class="nav-item dropdown">
-                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link dropdown-toggle" data-toggle="dropdown" 
+                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link dropdown-toggle" data-toggle="dropdown"
                             href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            ' . $iconHtml . $menuEntry['men_name'] . $htmlBadge . '
+                            ' . $htmlIcon . $menuEntry['men_name'] . $htmlBadge . '
                         </a>
-                        <div class="dropdown-menu">';                        
+                        <div class="dropdown-menu dropdown-menu-left">';
                             foreach($menuEntry['sub_items'] as $subMenuEntry)
                             {
+                                $htmlSubBadge = '';
+                                $htmlSubIcon = Image::getIconHtml($subMenuEntry['men_icon'], $subMenuEntry['men_name']);
+
+                                if($subMenuEntry['badge_count'] > 0)
+                                {
+                                    $htmlSubBadge = '<span class="badge badge-light">' . $subMenuEntry['badge_count'] . '</span>';
+                                }
+
                                 $html .= '
-                                <a id="'.$menuEntry['men_name_intern'].'" class="dropdown-item" href="'.$menuEntry['men_url'].'">
-                                    ' . $iconHtml . $menuEntry['men_name'] . $htmlBadge . '
+                                <a id="'.$subMenuEntry['men_name_intern'].'" class="dropdown-item" href="'.$subMenuEntry['men_url'].'">
+                                    ' . $htmlSubIcon . $subMenuEntry['men_name'] . $htmlSubBadge . '
                                 </a>';
                             }
                         $html .= '</div>
-                    </li>';                    
+                    </li>';
                 }
                 else
                 {
                     $html .= '
                     <li class="nav-item">
                         <a id="'.$menuEntry['men_name_intern'].'" class="nav-link" href="'.$menuEntry['men_url'].'">
-                            ' . $iconHtml . $menuEntry['men_name'] . $htmlBadge . '
+                            ' . $htmlIcon . $menuEntry['men_name'] . $htmlBadge . '
                         </a>
                     </li>';
                 }
@@ -262,7 +239,7 @@ class MenuNode
 
         $countMenuNodes = 0;
         $badgeCount = 0;
-    
+
         $sql = 'SELECT men_id, men_com_id, men_name_intern, men_name, men_description, men_url, men_icon, com_name_intern
                   FROM '.TBL_MENU.'
              LEFT JOIN '.TBL_COMPONENTS.'
@@ -284,7 +261,7 @@ class MenuNode
                         // get number of unread messages for user
                         $message = new TableMessage($gDb);
                         $badgeCount = $message->countUnreadMessageRecords((int) $gCurrentUser->getValue('usr_id'));
-                           
+
                         $menuUrl  = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
                         $menuIcon = 'fa-comments';
                         $menuName = $gL10n->get('SYS_MESSAGES');
@@ -293,14 +270,14 @@ class MenuNode
                     {
                         $menuUrl  = $node['men_url'];
                         $menuIcon = $node['men_icon'];
-                        $menuName = $node['men_name'];                        
+                        $menuName = $node['men_name'];
                     }
-    
-                    $this->addItem($node['men_name_intern'], $menuName, $menuUrl, $menuIcon, $badgeCount, $node['men_description'], $node['men_com_id']);
+
+                    $this->addItem($node['men_name_intern'], $menuName, $menuUrl, $menuIcon, '', $badgeCount, $node['men_description'], $node['men_com_id']);
                 }
             }
         }
-        
+
         // if only the overview entry exists, than don't show anly menu item
         if(count($this->nodeEntries) === 1 && $this->nodeEntries[key($this->nodeEntries)]['men_name_intern'] === 'overview')
         {

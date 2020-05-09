@@ -70,6 +70,10 @@
     color: #cccccc;
 }
 
+.admidio-menu-list .dropdown-item {
+    color: #263340;
+}
+
 .admidio-menu-list a:hover {
     color: #ffffff;
     background-color: #324b64;
@@ -103,7 +107,7 @@ a.bg-light {
 }
 
 a.bg-light:hover {
-    background-color: #959e9e !important;    
+    background-color: #959e9e !important;
 }
 
 /***********************************/
@@ -143,7 +147,7 @@ a:hover, .page-link:hover, a.btn:hover {
 }
 
 /* default distance between elements */
-.admidio-blog, .admidio-field-group, .pagination, 
+.admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, /*.form-dialog > button[type=submit], */
 .btn-primary, .admidio-img-presenter,
 .navbar-filter, .table-responsive, .admidio-content-header,
@@ -197,7 +201,7 @@ a:hover, .page-link:hover, a.btn:hover {
 /***********************************/
 
 .form-control:focus, .select2-container--bootstrap.select2-container--focus .select2-selection,
-input[type=checkbox]:focus, button:focus {  
+input[type=checkbox]:focus, button:focus {
     border-color: #349aaa;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #349aaa !important;
     outline: 0 none;
@@ -388,7 +392,7 @@ label {
 }
 
 .admidio-profile-user-right {
-    cursor: help;    
+    cursor: help;
 }
 
 .admidio-btn-event-attend .fas {

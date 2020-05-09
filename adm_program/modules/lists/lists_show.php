@@ -17,8 +17,6 @@
  * rol_id:          Id of the role whose members should be shown
  * show_former_members: 0 - (Default) show members of role that are active within the selected date range
  *                      1 - show only former members of the role
- * full_screen:     false - (Default) show sidebar, head and page bottom of html page
- *                  true  - Only show the list without any other html unnecessary elements
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -34,7 +32,6 @@ $getListId            = admFuncVariableIsValid($_GET, 'lst_id',              'in
 $getRoleIds           = admFuncVariableIsValid($_GET, 'rol_ids',             'string'); // could be int or int[], so string is necessary
 $getShowFormerMembers = admFuncVariableIsValid($_GET, 'show_former_members', 'bool', array('defaultValue' => false));
 $getRelationTypeIds   = admFuncVariableIsValid($_GET, 'urt_ids',             'string'); // could be int or int[], so string is necessary
-$getFullScreen        = admFuncVariableIsValid($_GET, 'full_screen',         'bool');
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('lists_enable_module'))
@@ -399,11 +396,6 @@ if ($getMode !== 'csv')
         $page = new HtmlPage();
         $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
-        if ($getFullScreen)
-        {
-            $page->hideThemeHtml();
-        }
-
         $page->setTitle($title);
         $page->setHeadline($headline);
 
@@ -439,52 +431,33 @@ if ($getMode !== 'csv')
             true
         );
 
-        // get module menu
-        $listsMenu = $page->getMenu();
-
-        if ($getFullScreen)
-        {
-            $page->addPageFunctionsMenuItem('menu_item_lists_default_view', $gL10n->get('SYS_NORMAL_PICTURE'), 
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'html', 'show_former_members' => $getShowFormerMembers, 'full_screen' => 'false', 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
-                'fa-compress');    
-        }
-        else
-        {
-            $page->addPageFunctionsMenuItem('menu_item_lists_full_screen', $gL10n->get('SYS_FULL_SCREEN'), 
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'html', 'show_former_members' => $getShowFormerMembers, 'full_screen' => 'true', 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
-                'fa-expand-arrows-alt');    
-        }
-
         // link to print overlay and exports
-        $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('LST_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');    
+        $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('LST_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
+
+        $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('LST_EXPORT_TO'), '#', 'fa-file-download');
+        $page->addPageFunctionsMenuItem('menu_item_lists_csv_ms', $gL10n->get('LST_MICROSOFT_EXCEL'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-ms')),
+            'fa-file-excel', 'menu_item_lists_export');
+        $page->addPageFunctionsMenuItem('menu_item_lists_pdf', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
+            'fa-file-pdf', 'menu_item_lists_export');
+        $page->addPageFunctionsMenuItem('menu_item_lists_pdfl', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
+            'fa-file-pdf', 'menu_item_lists_export');
+        $page->addPageFunctionsMenuItem('menu_item_lists_csv', $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-oo')),
+            'fa-file-csv', 'menu_item_lists_export');
 
         if ($numberRoles === 1)
         {
             // link to assign or remove members if you are allowed to do it
             if ($role->allowedToAssignMembers($gCurrentUser))
             {
-                $page->addPageFunctionsMenuItem('menu_item_lists_assign_members', $gL10n->get('SYS_ASSIGN_MEMBERS'), 
+                $page->addPageFunctionsMenuItem('menu_item_lists_assign_members', $gL10n->get('SYS_ASSIGN_MEMBERS'),
                     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => (int) $role->getValue('rol_id'))),
-                    'fa-user-plus');    
+                    'fa-user-plus');
             }
         }
-
-
-        $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('LST_EXPORT_TO'), '#', 'fa-file-download');    
-        $page->addPageFunctionsSubMenuItem('menu_item_lists_export', 'menu_item_lists_csv_ms', $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')', 
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-ms')), 
-            'fa-file-excel');    
-
-        $form = new HtmlForm('navbar_export_to_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-        $selectBoxEntries = array(
-            ''       => $gL10n->get('LST_EXPORT_TO').' ...',
-            'csv-ms' => $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')',
-            'pdf'    => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
-            'pdfl'   => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
-            'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')'
-        );
-        $form->addSelectBox('export_list_to', '', $selectBoxEntries, array('showContextDependentFirstEntry' => false));
-        $listsMenu->addForm($form->show());
 
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
         $table->setDatatablesRowsPerPage($gSettingsManager->getInt('lists_members_per_page'));
@@ -849,7 +822,7 @@ foreach ($membersList as $member)
         $datesStatement = $gDb->queryPrepared($sql, $roleIds);
         $dateId         = $datesStatement->fetchColumn();
         // prepare edit icon
-        $columnValues[] = '<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+        $columnValues[] = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId, 'usr_id' => $member['usr_id'])) . '">
                                 <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
     }
