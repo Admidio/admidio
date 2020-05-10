@@ -11,6 +11,7 @@
  *
  * lst_id : Id of the list configuration that should be shown
  * rol_id : (Optional) If a role id is set then the form field will be preassigned.
+ * rol_ids: (Optional) Id of the role or an integer array of all role ids whose members should be shown
  * active_role  : true  - (Default) List only active roles
  *                false - List only deactivated roles
  * show_members : 0 - (Default) show active members of role
@@ -23,7 +24,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'int');
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
+$getRoleIds     = admFuncVariableIsValid($_GET, 'rol_ids',      'string'); // could be int or int[], so string is necessary
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('defaultValue' => true));
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
@@ -43,7 +44,7 @@ if(!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 // set headline of the script
 $headline = $gL10n->get('LST_MY_LIST').' - '.$gL10n->get('LST_CONFIGURATION');
 
-if($getRoleId === 0)
+if($getRoleIds === '')
 {
     // Navigation faengt hier im Modul an
     $gNavigation->clear();
@@ -88,7 +89,7 @@ else
 {
     $formValues['sel_select_configuration'] = $getListId;
     $formValues['cbx_global_configuration'] = $list->getValue('lst_global');
-    $formValues['sel_roles_ids']            = $getRoleId;
+    $formValues['sel_roles_ids']            = $getRoleIds;
 
     // if a saved configuration was loaded then add columns to formValues array
     if($getListId > 0)

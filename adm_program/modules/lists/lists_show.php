@@ -14,7 +14,7 @@
  * date_to:         Value for the end date of the date range filter (default: current date)
  * lst_id:          Id of the list configuration that should be shown.
  *                  If id is null then the default list of the role will be shown.
- * rol_id:          Id of the role whose members should be shown
+ * rol_ids:         Id of the role or an integer array of all role ids whose members should be shown
  * show_former_members: 0 - (Default) show members of role that are active within the selected date range
  *                      1 - show only former members of the role
  ***********************************************************************************************
@@ -399,24 +399,75 @@ if ($getMode !== 'csv')
         $page->setTitle($title);
         $page->setHeadline($headline);
 
+        // create selectbox with all list configurations
+        $sql = 'SELECT lst_id, lst_name, lst_global
+                  FROM '.TBL_LISTS.'
+                 WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   AND (  lst_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
+                       OR lst_global = 1)
+                   AND lst_name IS NOT NULL
+              ORDER BY lst_global ASC, lst_name ASC';
+        $pdoStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), (int) $gCurrentUser->getValue('usr_id')));
+
+        $listConfigurations = array();
+        while($row = $pdoStatement->fetch())
+        {
+            $listConfigurations[] = array((int) $row['lst_id'], $row['lst_name'], (bool) $row['lst_global']);
+        }
+
+        foreach($listConfigurations as &$rowConfigurations)
+        {
+            if($rowConfigurations[2] == 0)
+            {
+                $rowConfigurations[2] = $gL10n->get('LST_YOUR_LISTS');
+            }
+            else
+            {
+                $rowConfigurations[2] = $gL10n->get('LST_GENERAL_LISTS');
+            }
+        }
+        unset($rowConfigurations);
+        
+        // add list item for own list
+        $listConfigurations[] = array('mylist', $gL10n->get('LST_CREATE_OWN_LIST'), $gL10n->get('LST_CONFIGURATION'));
+
+        // add navbar with filter elements and the selectbox with all lists configuraitons
+        $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
+        $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
+        $form->addSelectBox(
+            'list_configurations', $gL10n->get('LST_SHOW_LIST'), $listConfigurations,
+            array('defaultValue' => $getListId)
+        );
+
+
         // Only for active members of a role and if user has right to view former members
         if ($hasRightViewFormerMembers)
         {
             // create filter menu with elements for start-/enddate
-            $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
-            $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
             $form->addInput('date_from', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('LST_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('lst_id', '', $getListId, array('property' => HtmlForm::FIELD_HIDDEN));
             $form->addInput('rol_ids', '', $getRoleIds, array('property' => HtmlForm::FIELD_HIDDEN));
             $form->addCheckbox('show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-            $filterNavbar->addForm($form->show());
-            $page->addHtml($filterNavbar->show());
         }
+
+        $filterNavbar->addForm($form->show());
+        $page->addHtml($filterNavbar->show());
 
         $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
         $page->addJavascript('
+            $("#list_configurations").change(function() {
+                elementId = $(this).attr("id");
+                roleId    = elementId.substr(elementId.search(/_/) + 1);
+
+                if ($(this).val() === "mylist") {
+                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('rol_ids' => $getRoleIds)) . '";
+                } else {
+                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $getRoleIds)) . '&lst_id=" + $(this).val();
+                }
+            });
+
             $("#menu_item_lists_print_view").click(function() {
                 window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
             });',
