@@ -435,7 +435,7 @@ if ($getMode !== 'csv')
         $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
         $form->addSelectBox(
-            'list_configurations', $gL10n->get('LST_SHOW_LIST'), $listConfigurations,
+            'list_configurations', $gL10n->get('LST_CONFIGURATION_LIST'), $listConfigurations,
             array('defaultValue' => $getListId)
         );
 
