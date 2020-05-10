@@ -302,6 +302,10 @@ label {
 
 .card .admidio-info-created-edited {
     margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.card-footer .admidio-info-created-edited {
     font-size: 100% !important;
 }
 
@@ -363,10 +367,6 @@ label {
 
 .admidio-info-created-edited {
     font-size: 80%;
-}
-
-.card .admidio-info-created-edited {
-    margin-top: 0px;
 }
 
 /* Style for popover */
