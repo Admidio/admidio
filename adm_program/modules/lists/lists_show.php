@@ -464,7 +464,7 @@ if ($getMode !== 'csv')
                 if ($(this).val() === "mylist") {
                     self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('rol_ids' => $getRoleIds)) . '";
                 } else {
-                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $getRoleIds)) . '&lst_id=" + $(this).val();
+                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers)) . '&lst_id=" + $(this).val();
                 }
             });
 
