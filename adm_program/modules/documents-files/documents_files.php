@@ -167,7 +167,7 @@ if (isset($folderContent['folders']))
                                 <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
                                     data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fol', 'element_id' => 'row_folder_'.$nextFolder['fol_id'],
                                     'name' => $nextFolder['fol_name'], 'database_id' => $nextFolder['fol_id'])).'">
-                                    <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                                    <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FOLDER').'"></i></a>';
         }
         $downloadOverview->addRowByArray($columnValues, 'row_folder_'.$nextFolder['fol_id']);
     }
@@ -239,7 +239,7 @@ if (isset($folderContent['files']))
             <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fil', 'element_id' => 'row_file_'.$fileId,
                 'name' => $file->getValue('fil_name'), 'database_id' => $fileId, 'database_id_2' => $getFolderId)).'">
-                <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FILE').'"></i></a>';
         }
         $columnValues[] = $additionalFileFunctions;
         $downloadOverview->addRowByArray($columnValues, 'row_file_'.$fileId);

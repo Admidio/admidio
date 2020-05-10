@@ -1067,6 +1067,8 @@
   <string name="SYS_DEBUG_MODE">Debugmodus</string>
   <string name="SYS_DECIMAL_NUMBER">Dezimalzahl</string>
   <string name="SYS_DELETE">Löschen</string>
+  <string name="SYS_DELETE_FILE">Datei löschen</string>
+  <string name="SYS_DELETE_FOLDER">Ordner löschen</string>
   <string name="SYS_DELETE_DATA">Die Daten wurden gelöscht.</string>
   <string name="SYS_DELETE_ENTRY">Willst du den Eintrag #VAR1_BOLD# löschen?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Es existiert keine weitere Kategorie für diesen Bereich. Aus diesem Grund kann die Kategorie nicht gelöscht werden.</string>

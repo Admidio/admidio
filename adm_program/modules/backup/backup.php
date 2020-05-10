@@ -132,7 +132,7 @@ if($getMode === 'show_list')
             round($fileSize / 1024). ' kB',
             '<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'bac', 'element_id' => 'row_file_'.$key, 'name' => $oldBackupFile, 'database_id' => $oldBackupFile)).'">
-                <i class="fas fa-trash-alt"></i></a>');
+                <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FILE').'"></i></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);
     }
 

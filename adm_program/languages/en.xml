@@ -1063,6 +1063,8 @@
   <string name="SYS_DEBUG_MODE">Debug mode</string>
   <string name="SYS_DECIMAL_NUMBER">Decimal number</string>
   <string name="SYS_DELETE">Delete</string>
+  <string name="SYS_DELETE_FILE">Delete file</string>
+  <string name="SYS_DELETE_FOLDER">Delete folder</string>
   <string name="SYS_DELETE_DATA">Data has been deleted.</string>
   <string name="SYS_DELETE_ENTRY">Would you like to delete entry #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">There is no other category in this area. For this reason, the category can not be deleted.</string>
