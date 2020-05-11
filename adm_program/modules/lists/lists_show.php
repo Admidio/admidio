@@ -464,7 +464,7 @@ if ($getMode !== 'csv')
                 if ($(this).val() === "mylist") {
                     self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('rol_ids' => $getRoleIds)) . '";
                 } else {
-                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers)) . '&lst_id=" + $(this).val();
+                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&lst_id=" + $(this).val();
                 }
             });
 
@@ -965,7 +965,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
         || strlen($role->getValue('rol_max_members')) > 0)
         {
             $htmlBox = '
-            <div class="card" id="adm_lists_infobox">
+            <div class="card admidio-blog" id="adm_lists_infobox">
                 <div class="card-header">'.$gL10n->get('LST_INFOBOX').': '.$role->getValue('rol_name').'</div>
                 <div class="card-body">';
             $form = new HtmlForm('list_infobox_items');
