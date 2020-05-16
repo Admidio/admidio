@@ -438,6 +438,11 @@ if ($getMode !== 'csv')
                 }
             });
 
+            $("#menu_item_mail_to_list").click(function() {
+                redirectPost("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {lst_id: "'.$getListId.'", userIdList: "'.implode(',', $userIdList).'"});
+                return false;
+            });
+
             $("#menu_item_print_view").click(function() {
                 window.open("'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
             });',
@@ -478,6 +483,19 @@ if ($getMode !== 'csv')
 
                 $listsMenu->addItem('menu_item_assign_members', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $role->getValue('rol_id'))),
                     $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png', 'left', 'menu_item_extras');
+            }
+        }
+
+        // link to email-module
+        if($showLinkMailToList)
+        {
+            if ($numberRoles === 1 && $role->allowedToAssignMembers($gCurrentUser))
+            {
+                $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png', 'left', 'menu_item_extras');
+            }
+            else
+            {
+                $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png');
             }
         }
 

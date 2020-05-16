@@ -392,6 +392,7 @@
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">No default list configuration set defined by the administrator!\n\nContact system administrator for help.</string>
   <string name="LST_DELETE_CONFIGURATION">Delete configuration</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-mail to members</string>
+  <string name="LST_EMAIL_TO_LIST">E-mail to list</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Finds all users who have not filled the Road field</string>
   <string name="LST_ENABLE_LISTS_MODULE">Enable list module</string>
   <string name="LST_ENABLE_LISTS_MODULE_DESC">The display of the lists and the configuration of your own lists can be activated or deactivated by this setting. This module is generally only available to logged in users. (Default: yes)</string>
