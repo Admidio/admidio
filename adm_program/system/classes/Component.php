@@ -153,7 +153,7 @@ class Component extends TableAccess
                 }
                 break;
 
-            case 'LISTS':
+            case 'GROUPS-ROLES':
                 if($gSettingsManager->getBool('lists_enable_module') && $gValidLogin)
                 {
                     return true;

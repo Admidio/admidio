@@ -136,6 +136,10 @@ a:hover, .page-link:hover, a.btn:hover {
     max-width: 30px;
 }
 
+a.btn-primary {
+    color: #ffffff !important;
+}
+
 .btn-primary {
     background-color: #349aaa;
     border-color: #349aaa;

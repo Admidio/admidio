@@ -180,11 +180,6 @@ class ModuleLists extends Modules
      */
     public function __construct()
     {
-        global $gL10n;
-
-        // define constant for headline
-        define('HEADLINE', $gL10n->get('LST_ACTIVE_ROLES'));
-
         // get parent instance with all parameters from $_GET Array
         parent::__construct();
 
@@ -335,31 +330,6 @@ class ModuleLists extends Modules
         $pdoStatement = $gDb->queryPrepared($sql, array((int) $this->activeRole, (int) $gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         return (int) $pdoStatement->fetchColumn();
-    }
-
-    /**
-     * Function to get list configurations accessible by current user
-     * @return array<int,array<int,int|string|bool>> with accessible list configurations
-     */
-    public function getListConfigurations()
-    {
-        global $gCurrentOrganization, $gCurrentUser, $gDb;
-
-        $sql = 'SELECT lst_id, lst_name, lst_global
-                  FROM '.TBL_LISTS.'
-                 WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                   AND (  lst_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
-                       OR lst_global = 1)
-                   AND lst_name IS NOT NULL
-              ORDER BY lst_global ASC, lst_name ASC';
-        $pdoStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), (int) $gCurrentUser->getValue('usr_id')));
-
-        $configurations = array();
-        while($row = $pdoStatement->fetch())
-        {
-            $configurations[] = array((int) $row['lst_id'], $row['lst_name'], (bool) $row['lst_global']);
-        }
-        return $configurations;
     }
 
     /**

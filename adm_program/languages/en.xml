@@ -322,10 +322,8 @@
   <string name="LST_A_TO_Z">A to Z</string>
   <string name="LST_ACTIVE_FORMER_MEMBERS">Active and former members</string>
   <string name="LST_ACTIVE_MEMBERS">Active Members</string>
-  <string name="LST_ACTIVE_ROLES">Overview of active roles</string>
   <string name="LST_ADD_COLUMN">Add column</string>
   <string name="LST_ADD_COLUMNS_DESC">Assign any number of columns corresponding to profile fields in the table below. In addition, you can specify the default sorting and add conditions under which the respective members are to be filtered.</string>
-  <string name="LST_CHOOSE_LIST">Choose list</string>
   <string name="LST_CHOOSE_ROLE">Choose role for selected list.</string>
   <string name="LST_COLUMN">Column</string>
   <string name="LST_CONFIGURATION">Configuration</string>
@@ -354,12 +352,9 @@
   <string name="LST_GENERAL_LISTS">General lists</string>
   <string name="LST_HIDE_DETAILS">Hide details in overview</string>
   <string name="LST_HIDE_DETAILS_DESC">Activate this option in order to hide details in list overview by default. Details will be displayed after user activation. (default: no)</string>
-  <string name="LST_INACTIVE_ROLES">Overview of inactive roles</string>
   <string name="LST_INFOBOX" description="A small html box that will show additional informations">Info box</string>
   <string name="LST_KONFIGURATION_OWN_LIST">Configuration of own listings</string>
   <string name="LST_LIST">List</string>
-  <string name="LST_LISTS">Lists</string>
-  <string name="LST_LISTS_DESC">Overview of all roles with the possibility to display different lists. The lists can be printed and exported.</string>
   <string name="LST_LIST_VIEW">List overview</string>
   <string name="LST_MAX">of maximum. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Member assignment</string>
@@ -1162,6 +1157,8 @@
   <string name="SYS_GEN_RANDOM_ERROR">An unexpected error occurred while generating a random number.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">The program can not generate random numbers.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">The program expects a string with at least 2 different characters.</string>
+  <string name="SYS_GROUPS_ROLES">Groups &amp; roles</string>
+  <string name="SYS_GROUPS_ROLES_DESC">Overview and management of all groups and roles of the organization. Different member lists can be displayed, exported and own lists can be created.</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP header already sent!</string>
   <string name="SYS_HEADLINE">Headline</string>
   <string name="SYS_HELP">Help</string>
@@ -1174,6 +1171,7 @@
   <string name="SYS_IMPORT_MODE">Import mode</string>
   <string name="SYS_IMPRINT">Imprint</string>
   <string name="SYS_IMPRINT_DESC">Here the URL for the imprint of your page can be deposited. If the selected theme supports this, a link will be displayed on the Admidio pages. (Example: https://www.example.com/imprint.html)</string>
+  <string name="SYS_INACTIVE_GROUPS_ROLES">Inactive groups and roles</string>
   <string name="SYS_INFORMATIONS">information</string>
   <string name="SYS_INTERNAL_NAME">Internal name</string>
   <string name="SYS_INTERNAL_NAME_DESC">The internal name is used to uniquely access this data object. This is not relevant for program use. In development, however, this name must always be used to identify the field, e.g. to address with getValue (). The internal name is automatically filled when creating a data record.</string>
@@ -1361,6 +1359,7 @@
   <string name="SYS_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
   <string name="SYS_SETTINGS">Preferences</string>
   <string name="SYS_SHOW_CALENDAR">Display calendar</string>
+  <string name="SYS_SHOW_MEMBER_LIST">Show member list</string>
   <string name="SYS_SHOW_PROFILE">Show profile</string>
   <string name="SYS_SHOW_ROUTE">Show route</string>
   <string name="SYS_SIMILAR_USERS_FOUND">At least one user with similar name (#VAR1_BOLD# ) was found in the database.</string>

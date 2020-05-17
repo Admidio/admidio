@@ -1179,7 +1179,7 @@ $formLists->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('LST_LISTS'), 'fas fa-list', $formLists->show()));
+$page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('SYS_GROUPS_ROLES'), 'fas fa-user-tie', $formLists->show()));
 
 // PANEL: MESSAGES
 

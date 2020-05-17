@@ -322,10 +322,8 @@
   <string name="LST_A_TO_Z">A bis Z</string>
   <string name="LST_ACTIVE_FORMER_MEMBERS">Aktive und ehemalige Mitglieder</string>
   <string name="LST_ACTIVE_MEMBERS">Aktive Mitglieder</string>
-  <string name="LST_ACTIVE_ROLES">Übersicht der aktiven Rollen</string>
   <string name="LST_ADD_COLUMN">Spalte hinzufügen</string>
   <string name="LST_ADD_COLUMNS_DESC">Ordne in der folgenden Tabelle beliebig vielen Spalten entsprechende Profilfelder zu. Zusätzlich kannst du die Standardsortierung vorgeben und Bedingungen zu Feldern hinzufügen, nach denen die jeweiligen Mitglieder gefiltert werden sollen.</string>
-  <string name="LST_CHOOSE_LIST">Liste auswählen</string>
   <string name="LST_CHOOSE_ROLE">Wähle eine Rolle aus, von der du die konfigurierte Mitgliederliste anzeigen möchtest.</string>
   <string name="LST_COLUMN">Spalte</string>
   <string name="LST_CONFIGURATION">Konfiguration</string>
@@ -354,12 +352,9 @@
   <string name="LST_GENERAL_LISTS">Allgemeine Listen</string>
   <string name="LST_HIDE_DETAILS">Details in Übersicht einklappen</string>
   <string name="LST_HIDE_DETAILS_DESC">Bei Aktivierung dieser Option werden die Details in der Listenübersicht standardmäßig eingeklappt. Auf Wunsch lassen sich die Details weiterhin anzeigen. (Standard: nein)</string>
-  <string name="LST_INACTIVE_ROLES">Übersicht der inaktiven Rollen</string>
   <string name="LST_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="LST_KONFIGURATION_OWN_LIST">Konfiguration eigene Liste</string>
   <string name="LST_LIST">Liste</string>
-  <string name="LST_LISTS">Listen</string>
-  <string name="LST_LISTS_DESC">Übersicht über alle Rollen mit der Möglichkeit verschiedene Listen anzuzeigen. Die Listen können gedruckt und exportiert werden.</string>
   <string name="LST_LIST_VIEW">Listenübersicht</string>
   <string name="LST_MAX">von max. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
@@ -1168,6 +1163,8 @@
   <string name="SYS_GEN_RANDOM_ERROR">Es ist ein unerwarteter Fehler bei der Generierung einer zufälligen Zahl aufgetreten.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">Das Programm kann keine zufälligen Zahlen erzeugen.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Das Programm erwartet eine Zeichenkette mit mindestens 2 unterschiedlichen Zeichen.</string>
+  <string name="SYS_GROUPS_ROLES">Gruppen &amp; Rollen</string>
+  <string name="SYS_GROUPS_ROLES_DESC">Übersicht und Verwaltung aller Gruppen und Rollen der Organisation. Es können verschiedene Mitgliederlisten angezeigt, exportiert und eigene Listen erstellt werden.</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP-Header wurden bereits gesendet!</string>
   <string name="SYS_HEADLINE">Überschrift</string>
   <string name="SYS_HELP">Hilfe</string>
@@ -1180,6 +1177,7 @@
   <string name="SYS_IMPORT_MODE">Import Modus</string>
   <string name="SYS_IMPRINT">Impressum</string>
   <string name="SYS_IMPRINT_DESC">Hier kann die URL zum Impressum deiner Seite hinterlegt werden. Sofern das gewählte Theme dies unterstützt, wird ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/imprint.html)</string>
+  <string name="SYS_INACTIVE_GROUPS_ROLES">Inaktive Gruppen und Rollen</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
   <string name="SYS_INTERNAL_NAME">Interner Name</string>
   <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
@@ -1368,6 +1366,7 @@
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
   <string name="SYS_SETTINGS">Einstellungen</string>
   <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
+  <string name="SYS_SHOW_MEMBER_LIST">Mitgliederliste anzeigen</string>
   <string name="SYS_SHOW_PROFILE">Profil anzeigen</string>
   <string name="SYS_SHOW_ROUTE">Route anzeigen</string>
   <string name="SYS_SIMILAR_USERS_FOUND">Es wurden bereits Benutzer mit ähnlichem Namen wie #VAR1_BOLD# in der Datenbank gefunden.</string>

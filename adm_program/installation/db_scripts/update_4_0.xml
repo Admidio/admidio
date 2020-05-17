@@ -39,5 +39,7 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="360" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = '' FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_send_method' AND pr2.prf_value = 'phpmail' AND pr1.prf_name = 'mail_smtp_authentication_type' AND pr1.prf_org_id = pr2.prf_org_id</step>
     <step id="370">UPDATE %PREFIX%_components SET com_name = 'SYS_PHOTOS' WHERE com_name = 'PHO_PHOTOS'</step>
     <step id="380">UPDATE %PREFIX%_menu SET men_name = 'SYS_PHOTOS' WHERE men_name = 'PHO_PHOTOS'</step>
+    <step id="390">UPDATE %PREFIX%_menu SET men_name_intern = 'groups-roles', men_name = 'SYS_GROUPS_ROLES', men_description = 'SYS_GROUPS_ROLES_DESC', men_url = '/adm_program/modules/groups-roles/groups_roles.php', men_icon = 'fa-user-tie' WHERE men_name_intern = 'lists'</step>
+    <step id="400">UPDATE %PREFIX%_components SET com_name_intern = 'GROUPS-ROLES', com_name = 'SYS_GROUPS_ROLES' WHERE com_name_intern = 'LISTS'</step>
     <step>stop</step>
 </update>
