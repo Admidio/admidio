@@ -61,7 +61,7 @@ if($gSettingsManager->getBool('enable_auto_login'))
 {
     $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
 }
-$form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key'));
+$form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key', 'class' => ' offset-sm-3'));
 $page->addHtml($form->show());
 
 if($gSettingsManager->getBool('registration_enable_module'))

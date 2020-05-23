@@ -118,6 +118,10 @@ body {
     color: #263340;
 }
 
+h6, h5 {
+    font-weight: bold;
+}
+
 a, .btn-link, .page-link, a.btn {
     color: #349aaa;
 }
@@ -153,9 +157,9 @@ a.btn-primary {
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, /*.form-dialog > button[type=submit], */
-.btn-primary, .admidio-img-presenter,
+.admidio-img-presenter,
 .navbar-filter, .table-responsive, .admidio-content-header,
-.dataTables_wrapper {
+.dataTables_wrapper, .admidio-margin-bottom {
     margin-bottom: 45px;
 }
 
@@ -225,7 +229,7 @@ label {
 
 @media (min-width: 768px) {
     .offset-sm-3.btn {
-        margin-left: 26%;
+        margin-left: 25.5%;
     }
 
     .form-control-small {
@@ -330,6 +334,17 @@ label {
     margin-top: 20px;
     display: block;
     text-align: left;
+}
+
+.admidio-roles {
+    border: none;
+    background-color: #eeeeee;
+}
+
+.admidio-roles li {
+    padding-left: 0px;
+    padding-right: 0px;
+    background-color: #eeeeee;
 }
 
 /***********************************/

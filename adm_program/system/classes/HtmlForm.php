@@ -1868,7 +1868,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add default css class
-        $optionsAll['class'] .= ' btn-primary';
+        $optionsAll['class'] .= ' btn-primary admidio-margin-bottom';
 
         // now add button to form
         $this->addButton($id, $text, $optionsAll);

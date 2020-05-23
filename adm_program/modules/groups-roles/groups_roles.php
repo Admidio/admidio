@@ -162,91 +162,102 @@ foreach($listsResult['recordset'] as $row)
         {
             $page->addHtml('</div>');
         }
-        /*$page->addHtml('<div class="card">
-            <div class="card-header">' . $role->getValue('cat_name') . '</div>
-            <div class="card-body">
-                <div class="panel-group" id="accordion_'.$catId.'">');*/
         $page->addHtml('<h2>' . $role->getValue('cat_name') . '</h2>
         <div class="row mb-5">');
         $previousCategoryId = $catId;
     }
 
     $page->addHtml('
-    <div class="card admidio-roles col-sm-6 col-md-3" id="role_details_panel_'.$rolId.'">
-        <div class="card-header">
-            <div class="float-left">
-                <a data-toggle="collapse" data-parent="#accordion_'.$catId.'" href="#collapse_'.$rolId.'">
-                    '. $role->getValue('rol_name'). '</a>
-            </div>
-            <div class="float-right text-right">');
-                // send a mail to all role members
-                if($gCurrentUser->hasRightSendMailToRole($rolId) && $gSettingsManager->getBool('enable_mail_module'))
-                {
-                    $page->addHtml('
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $rolId)).'">'.
-                        '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'"></i></a>');
-                }
-
-                // show link to export vCard if user is allowed to see members and the role has members
-                if($row['num_members'] > 0 || $row['num_leader'] > 0)
-                {
-                    $page->addHtml('
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id' => $rolId)).'">'.
-                        '<i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'"></i></a>');
-                }
-
-                // link to assign or remove members if you are allowed to do it
-                if($role->allowedToAssignMembers($gCurrentUser))
-                {
-                    $page->addHtml('
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $rolId)).'">'.
-                        '<i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'"></i></a>');
-                }
-
-                // edit roles of you are allowed to assign roles
-                if($gCurrentUser->manageRoles())
-                {
-                    $page->addHtml('
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php', array('rol_id' => $rolId)).'">'.
-                        '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_EDIT_ROLE').'"></i></a>');
-                }
-            $page->addHtml('</div>
-        </div>
+    <div class="col-sm-6 col-lg-4 col-xl-3">
+    <div class="card admidio-roles" id="role_details_panel_'.$rolId.'">
         <div class="card-body" id="admRoleDetails'.$rolId.'">
             <h5 class="card-title">'. $role->getValue('rol_name'). '</h5>');
 
-            if(strlen($role->getValue('rol_description')) > 0)
-            {
-                $page->addHtml('<div class="card-text">' . $role->getValue('rol_description') . '</div>');
-                //$form->addStaticControl('list_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'));
-            }
+            $page->addHtml('<ul class="list-group list-group-flush">');
+                $html = '';
+                
+                // send a mail to all role members
+                if($gCurrentUser->hasRightSendMailToRole($rolId) && $gSettingsManager->getBool('enable_mail_module'))
+                {
+                    $html .= '
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $rolId)).'">'.
+                        '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'"></i></a>';
+                }
+    
+                // show link to export vCard if user is allowed to see members and the role has members
+                if($row['num_members'] > 0 || $row['num_leader'] > 0)
+                {
+                    $html .= '
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id' => $rolId)).'">'.
+                        '<i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'"></i></a>';
+                }
+    
+                // link to assign or remove members if you are allowed to do it
+                if($role->allowedToAssignMembers($gCurrentUser))
+                {
+                    $html .= '
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $rolId)).'">'.
+                        '<i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'"></i></a>';
+                }
+    
+                // edit roles of you are allowed to assign roles
+                if($gCurrentUser->manageRoles())
+                {
+                    $html .= '
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/roles_new.php', array('rol_id' => $rolId)).'">'.
+                        '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_EDIT_ROLE').'"></i></a>
+                    <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.
+                        '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('ROL_ROLE_DELETE').'"></i></a>';
+                }
+                
+                if(strlen($html) > 0)
+                {
+                     $page->addHtml('<li class="list-group-item">' . $html . '</li>');
+                }
+    
+                if(strlen($role->getValue('rol_description')) > 0)
+                {
+                    $page->addHtml('<li class="list-group-item">' . $role->getValue('rol_description') . '</li>');
+                }
+            
+                // block with informations about events and meeting-point
+                if(strlen($role->getValue('rol_start_date')) > 0 || $role->getValue('rol_weekday') > 0 
+                || strlen($role->getValue('rol_start_time')) > 0 || strlen($role->getValue('rol_location')) > 0)
+                {
+                    $page->addHtml('<li class="list-group-item"><h6>'.$gL10n->get('DAT_DATES').' / '.$gL10n->get('ROL_MEETINGS').'</h6>');
+                        if(strlen($role->getValue('rol_start_date')) > 0)
+                        {
+                            $page->addHtml('<span class="d-block">'.$gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))).'</span>');
+                        }
+                        
+                        if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
+                        {
+                            $html = '';
+                            if($role->getValue('rol_weekday') > 0)
+                            {
+                                $html .= DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
+                            }
+                            if(strlen($role->getValue('rol_start_time')) > 0)
+                            {
+                                $html .= $gL10n->get('LST_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
+                            }
+                            $page->addHtml('<span class="d-block">'.$html.'</span>');
+                        }
+    
+                        // Meeting point
+                        if(strlen($role->getValue('rol_location')) > 0)
+                        {
+                            $page->addHtml('<span class="d-block"><i class="fas fa-map-marker-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_LOCATION').'"></i> '. $role->getValue('rol_location').'</span>');
+                        }
+                    $page->addHtml('</li>');
+                }
+
+                $page->addHtml('
+            </ul>');
 
             // create a static form
             $form = new HtmlForm('lists_static_form');
-
-            if(strlen($role->getValue('rol_start_date')) > 0)
-            {
-                $form->addStaticControl('list_date_from_to', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))));
-            }
-
-            if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
-            {
-                if($role->getValue('rol_weekday') > 0)
-                {
-                    $html = DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
-                }
-                if(strlen($role->getValue('rol_start_time')) > 0)
-                {
-                    $html = $gL10n->get('LST_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
-                }
-                $form->addStaticControl('list_date', $gL10n->get('DAT_DATE'), $html);
-            }
-
-            // Meeting point
-            if(strlen($role->getValue('rol_location')) > 0)
-            {
-                $form->addStaticControl('list_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'));
-            }
 
             // add count of participants to role
             $html = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)). '">'.$row['num_members'].'</a>';
@@ -293,6 +304,7 @@ foreach($listsResult['recordset'] as $row)
             $page->addHtml('
             <a class="btn btn-primary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)) . '">' . $gL10n->get('SYS_SHOW_MEMBER_LIST') . '</a>
         </div>
+    </div>
     </div>');
 }
 
