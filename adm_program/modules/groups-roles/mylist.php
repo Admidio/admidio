@@ -44,11 +44,6 @@ if(!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 // set headline of the script
 $headline = $gL10n->get('LST_MY_LIST').' - '.$gL10n->get('LST_CONFIGURATION');
 
-if($getRoleIds === '')
-{
-    // Navigation faengt hier im Modul an
-    $gNavigation->clear();
-}
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 $defaultColumnRows   = 6;    // number of columns that should be shown
@@ -522,11 +517,7 @@ $page->addJavascript('$(function() {
     }
 });', true);
 
-// if mylist was not called directly then show link to navigate to previous page
-if($gNavigation->count() > 1)
-{
-    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
-}
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('mylist_configuration_form', ADMIDIO_URL. FOLDER_MODULES.'/lists/mylist_prepare.php', $page);

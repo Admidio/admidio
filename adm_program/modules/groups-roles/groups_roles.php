@@ -93,6 +93,10 @@ if($gCurrentUser->manageRoles())
         'fa-th-large');
 }
 
+// show link to create own list
+$page->addPageFunctionsMenuItem('menu_item_groups_own_list', $gL10n->get('LST_CREATE_OWN_LIST'),
+    ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/mylist.php', 'fa-list-alt');
+
 // add filter navbar
 $page->addJavascript('
     $("#cat_id").change(function() {
