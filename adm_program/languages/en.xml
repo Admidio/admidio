@@ -357,7 +357,6 @@
   <string name="LST_KONFIGURATION_OWN_LIST">Configuration of own listings</string>
   <string name="LST_LIST">List</string>
   <string name="LST_LIST_VIEW">List overview</string>
-  <string name="LST_MAX">of maximum. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Member assignment</string>
   <string name="LST_MEMBERS_BETWEEN_PERIOD">Members between #VAR1# and #VAR2#</string>
   <string name="LST_MEMBERS_PER_PAGE">Members displayed per page</string>
@@ -1216,6 +1215,7 @@
   <string name="SYS_MAP_LINK_ROUTE_DESC">Displays a route from your own place of residence to the location of this user on Google Maps. The street, postal code, city and country are transferred to Google.</string>
   <string name="SYS_MASTER_DATA">Basic information</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. participants</string>
+  <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# of max. #VAR2# participants</string>
   <string name="SYS_MAX_PATH_LENGTH">Max path length</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. processable image size</string>
   <string name="SYS_MAXIMUM_FILE_SIZE">Maximum file size</string>

@@ -175,7 +175,7 @@ foreach($listsResult['recordset'] as $row)
 
             $page->addHtml('<ul class="list-group list-group-flush">');
                 $html = '';
-                
+
                 // send a mail to all role members
                 if($gCurrentUser->hasRightSendMailToRole($rolId) && $gSettingsManager->getBool('enable_mail_module'))
                 {
@@ -183,7 +183,7 @@ foreach($listsResult['recordset'] as $row)
                     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $rolId)).'">'.
                         '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'"></i></a>';
                 }
-    
+
                 // show link to export vCard if user is allowed to see members and the role has members
                 if($row['num_members'] > 0 || $row['num_leader'] > 0)
                 {
@@ -191,7 +191,7 @@ foreach($listsResult['recordset'] as $row)
                     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id' => $rolId)).'">'.
                         '<i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'"></i></a>';
                 }
-    
+
                 // link to assign or remove members if you are allowed to do it
                 if($role->allowedToAssignMembers($gCurrentUser))
                 {
@@ -199,30 +199,30 @@ foreach($listsResult['recordset'] as $row)
                     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $rolId)).'">'.
                         '<i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'"></i></a>';
                 }
-    
+
                 // edit roles of you are allowed to assign roles
                 if($gCurrentUser->manageRoles())
                 {
                     $html .= '
                     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/roles_new.php', array('rol_id' => $rolId)).'">'.
                         '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_EDIT_ROLE').'"></i></a>
-                    <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                    <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.
                         '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('ROL_ROLE_DELETE').'"></i></a>';
                 }
-                
+
                 if(strlen($html) > 0)
                 {
                      $page->addHtml('<li class="list-group-item">' . $html . '</li>');
                 }
-    
+
                 if(strlen($role->getValue('rol_description')) > 0)
                 {
                     $page->addHtml('<li class="list-group-item">' . $role->getValue('rol_description') . '</li>');
                 }
-            
+
                 // block with informations about events and meeting-point
-                if(strlen($role->getValue('rol_start_date')) > 0 || $role->getValue('rol_weekday') > 0 
+                if(strlen($role->getValue('rol_start_date')) > 0 || $role->getValue('rol_weekday') > 0
                 || strlen($role->getValue('rol_start_time')) > 0 || strlen($role->getValue('rol_location')) > 0)
                 {
                     $page->addHtml('<li class="list-group-item"><h6>'.$gL10n->get('DAT_DATES').' / '.$gL10n->get('ROL_MEETINGS').'</h6>');
@@ -230,7 +230,7 @@ foreach($listsResult['recordset'] as $row)
                         {
                             $page->addHtml('<span class="d-block">'.$gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))).'</span>');
                         }
-                        
+
                         if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
                         {
                             $html = '';
@@ -244,7 +244,7 @@ foreach($listsResult['recordset'] as $row)
                             }
                             $page->addHtml('<span class="d-block">'.$html.'</span>');
                         }
-    
+
                         // Meeting point
                         if(strlen($role->getValue('rol_location')) > 0)
                         {
@@ -253,40 +253,42 @@ foreach($listsResult['recordset'] as $row)
                     $page->addHtml('</li>');
                 }
 
-                $page->addHtml('
-            </ul>');
+                // show count of members and leaders of this role
+                $html = '';
+                $htmlLeader = '';
 
-            // create a static form
-            $form = new HtmlForm('lists_static_form');
-
-            // add count of participants to role
-            $html = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)). '">'.$row['num_members'].'</a>';
-
-            if($role->getValue('rol_max_members') > 0)
-            {
-                $html .= '&nbsp;'.$gL10n->get('LST_MAX', array((int) $role->getValue('rol_max_members')));
-            }
-            if($gCurrentUser->hasRightViewFormerRolesMembers($rolId) && $getActiveRole && $row['num_former'] > 0)
-            {
-                // show former members
-                if($row['num_former'] == 1)
+                if($role->getValue('rol_max_members') > 0)
                 {
-                    $textFormerMembers = $gL10n->get('SYS_FORMER');
+                    $html .= $gL10n->get('SYS_MAX_PARTICIPANTS_OF_ROLE', array((int) $row['num_members'], (int) $role->getValue('rol_max_members')));
                 }
                 else
                 {
-                    $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
+                    $html .= $row['num_members'] . ' ' . $gL10n->get('SYS_PARTICIPANTS');
                 }
 
-                $html .= '&nbsp;&nbsp;(<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId, 'show_former_members' => '1')).'">'.$row['num_former'].' '.$textFormerMembers.'</a>) ';
-            }
-            $form->addStaticControl('list_participants', $gL10n->get('SYS_PARTICIPANTS'), $html);
+                if($gCurrentUser->hasRightViewFormerRolesMembers($rolId) && $getActiveRole && $row['num_former'] > 0)
+                {
+                    // show former members
+                    if($row['num_former'] == 1)
+                    {
+                        $textFormerMembers = $gL10n->get('SYS_FORMER');
+                    }
+                    else
+                    {
+                        $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
+                    }
 
-            // Leader of role
-            if($row['num_leader'] > 0)
-            {
-                $form->addStaticControl('list_leader', $gL10n->get('SYS_LEADERS'), $row['num_leader']);
-            }
+                    $html .= '&nbsp;&nbsp;('.$row['num_former'].' '.$textFormerMembers.') ';
+                }
+
+                if($row['num_leader'] > 0)
+                {
+                    $htmlLeader = '<span class="d-block">' . $row['num_leader'] . ' ' . $gL10n->get('SYS_LEADERS') . '</span>';
+                }
+
+                $page->addHtml('
+                <li class="list-group-item"><span class="d-block">' . $html . '</span>' . $htmlLeader . '</li>
+            </ul>');
 
             // Member fee
             if(strlen($role->getValue('rol_cost')) > 0)
@@ -300,7 +302,6 @@ foreach($listsResult['recordset'] as $row)
                 $form->addStaticControl('list_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), TableRoles::getCostPeriods($role->getValue('rol_cost_period')));
             }
 
-            $page->addHtml($form->show());
             $page->addHtml('
             <a class="btn btn-primary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)) . '">' . $gL10n->get('SYS_SHOW_MEMBER_LIST') . '</a>
         </div>

@@ -339,6 +339,8 @@ label {
 .admidio-roles {
     border: none;
     background-color: #eeeeee;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .admidio-roles li {

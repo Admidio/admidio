@@ -357,7 +357,6 @@
   <string name="LST_KONFIGURATION_OWN_LIST">Konfiguration eigene Liste</string>
   <string name="LST_LIST">Liste</string>
   <string name="LST_LIST_VIEW">Listenübersicht</string>
-  <string name="LST_MAX">von max. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
   <string name="LST_MEMBERS_BETWEEN_PERIOD">Mitglieder zwischen #VAR1# und #VAR2#</string>
   <string name="LST_MEMBERS_PER_PAGE">Anzahl Teilnehmer pro Seite</string>
@@ -1222,6 +1221,7 @@
   <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt eine Route vom eigenen Wohnort zum Wohnort dieses Benutzers bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MASTER_DATA">Stammdaten</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmer</string>
+  <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# von max. #VAR2# Teilnehmern</string>
   <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
   <string name="SYS_MAXIMUM_FILE_SIZE">Maximale Dateigröße</string>

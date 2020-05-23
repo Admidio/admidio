@@ -709,7 +709,7 @@ $form->closeGroupBox();
 
 $form->addButton(
     'btn_show_list', $gL10n->get('LST_SHOW_LIST'),
-    array('icon' => 'fa-list-alt', 'class' => 'btn-primary')
+    array('icon' => 'fa-list-alt', 'class' => 'btn-primary admidio-margin-bottom')
 );
 
 // add form to html page and show page
