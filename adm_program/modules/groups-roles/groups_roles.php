@@ -9,18 +9,24 @@
  *
  * Parameters:
  *
- * start    : Position of query recordset where the visual output should start
- * cat_id   : show only roles of this category id, if id is not set than show all roles
- * active_role : true  - (Default) aktive Rollen auflisten
- *               false - inaktive Rollen auflisten
+ * start     : Position of query recordset where the visual output should start
+ * cat_id    : show only roles of this category id, if id is not set than show all roles
+ * role_type : The type of roles that should be shown within this page.
+ *             0 - inactive roles
+ *             1 - active roles
+ *             2 - event participation roles
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getStart      = admFuncVariableIsValid($_GET, 'start',       'int');
-$getCatId      = admFuncVariableIsValid($_GET, 'cat_id',      'int');
-$getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
+$getStart    = admFuncVariableIsValid($_GET, 'start',     'int');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
+$getRoleType = admFuncVariableIsValid($_GET, 'role_type', 'int', array('defaultValue' => 1));
+
+define('ROLE_TYPE_INACTIVE', 0);
+define('ROLE_TYPE_ACTIVE', 1);
+define('ROLE_TYPE_EVENT_PARTICIPATION', 2);
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('lists_enable_module'))
@@ -30,25 +36,31 @@ if (!$gSettingsManager->getBool('lists_enable_module'))
 }
 
 // set headline
-if($getActiveRole)
+switch($getRoleType)
 {
-    $headline = $gL10n->get('SYS_GROUPS_ROLES');
-}
-else
-{
-    $headline = $gL10n->get('SYS_INACTIVE_GROUPS_ROLES');
+    case ROLE_TYPE_INACTIVE:
+        $headline = $gL10n->get('SYS_INACTIVE_GROUPS_ROLES');
+        break;
+
+    case ROLE_TYPE_ACTIVE:
+        $headline = $gL10n->get('SYS_GROUPS_ROLES');
+        break;
+
+    case ROLE_TYPE_EVENT_PARTICIPATION:
+        $headline = $gL10n->get('ROL_ROLES_CONFIRMATION_OF_PARTICIPATION');
+        break;
 }
 
 // only users with the right to assign roles can view inactive roles
 if(!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 {
-    $getActiveRole = true;
+    $getRoleType = ROLE_TYPE_ACTIVE;
 }
 
 // New Modulelist object
 $lists = new ModuleLists();
 $lists->setParameter('cat_id', $getCatId);
-$lists->setParameter('active_role', (int) $getActiveRole);
+$lists->setParameter('role_type', (int) $getRoleType);
 
 if($getCatId > 0)
 {
@@ -73,7 +85,7 @@ $page->addJavascript('
         roleId    = elementId.substr(elementId.search(/_/) + 1);
 
         if ($(this).val() === "mylist") {
-            self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('active_role' => (int) $getActiveRole)) . '&rol_ids=" + roleId;
+            self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('active_role' => (int) $getRoleType)) . '&rol_ids=" + roleId;
         } else {
             self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists_show.php', array('mode' => 'html')) . '&lst_id=" + $(this).val() + "&rol_ids=" + roleId;
         }
@@ -107,7 +119,7 @@ $page->addJavascript('
 
 // create filter menu with elements for category
 $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
-$form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('active_role' => (int) $getActiveRole)), $page, array('type' => 'navbar', 'setFocus' => false));
+$form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('role_type' => (int) $getRoleType)), $page, array('type' => 'navbar', 'setFocus' => false));
 $form->addSelectBoxForCategories(
     'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', HtmlForm::SELECT_BOX_MODUS_FILTER,
     array('defaultValue' => $getCatId));
@@ -125,7 +137,7 @@ if($listsResult['totalCount'] === 0)
     if($gValidLogin)
     {
         // If login valid, than show message for non available roles
-        if($getActiveRole)
+        if(ROLE_TYPE_ACTIVE === 1)
         {
             $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
             // => EXIT
@@ -203,6 +215,19 @@ foreach($listsResult['recordset'] as $row)
                 // edit roles of you are allowed to assign roles
                 if($gCurrentUser->manageRoles())
                 {
+                    if($getRoleType === ROLE_TYPE_INACTIVE)
+                    {
+                        $html .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
+                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'row_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.
+                                        '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('ROL_ENABLE_ROLE').'"></i></a>';
+                    }
+                    elseif($getRoleType === ROLE_TYPE_ACTIVE)
+                    {
+                        $html .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
+                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'row_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.
+                                        '<i class="fas fa-user-secret" data-toggle="tooltip" title="'.$gL10n->get('ROL_DISABLE_ROLE').'"></i></a>';
+                    }
+
                     $html .= '
                     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/roles_new.php', array('rol_id' => $rolId)).'">'.
                         '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_EDIT_ROLE').'"></i></a>
@@ -266,7 +291,7 @@ foreach($listsResult['recordset'] as $row)
                     $html .= $row['num_members'] . ' ' . $gL10n->get('SYS_PARTICIPANTS');
                 }
 
-                if($gCurrentUser->hasRightViewFormerRolesMembers($rolId) && $getActiveRole && $row['num_former'] > 0)
+                if($gCurrentUser->hasRightViewFormerRolesMembers($rolId) && $getRoleType === ROLE_TYPE_ACTIVE && $row['num_former'] > 0)
                 {
                     // show former members
                     if($row['num_former'] == 1)
@@ -315,7 +340,7 @@ if($listsResult['numResults'] > 0)
 }
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php', array('cat_id' => $getCatId, 'active_role' => (int) $getActiveRole));
+$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('cat_id' => $getCatId, 'role_type' => (int) $getRoleType));
 $page->addHtml(admFuncGeneratePagination($baseUrl, $listsResult['totalCount'], $gSettingsManager->getInt('lists_roles_per_page'), $getStart));
 
 $page->show();

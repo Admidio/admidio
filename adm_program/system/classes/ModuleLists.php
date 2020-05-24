@@ -166,14 +166,9 @@
  */
 class ModuleLists extends Modules
 {
-    const MEMBER_STATUS_ACTIVE = 'active';
-    const MEMBER_STATUS_INACTIVE = 'inactive';
-    const MEMBER_STATUS_BOTH = 'both';
-
-    /**
-     * @var string
-     */
-    private $memberStatus = self::MEMBER_STATUS_ACTIVE;
+    const ROLE_TYPE_INACTIVE = 0;
+    const ROLE_TYPE_ACTIVE = 1;
+    const ROLE_TYPE_EVENT_PARTICIPATION = 2;
 
     /**
      * creates an new ModuleLists object
@@ -182,28 +177,8 @@ class ModuleLists extends Modules
     {
         // get parent instance with all parameters from $_GET Array
         parent::__construct();
-
-        $this->setMemberStatus();
     }
 
-    /**
-     * Evaluates memberStatus an returns appropriate SQL conditions
-     * @return string SQL for member status
-     */
-    private function getMemberStatusSql()
-    {
-        switch ($this->memberStatus)
-        {
-            case self::MEMBER_STATUS_INACTIVE:
-                return ' AND mem_end < \''.DATE_NOW.'\' ';
-            case self::MEMBER_STATUS_BOTH:
-                return '';
-            case self::MEMBER_STATUS_ACTIVE:
-            default:
-                return ' AND mem_begin <= \''.DATE_NOW.'\'
-                         AND mem_end   >= \''.DATE_NOW.'\' ';
-        }
-    }
 
     /**
      * returns SQL condition
@@ -219,6 +194,34 @@ class ModuleLists extends Modules
     }
 
     /**
+     * returns SQL condition that considered the role type
+     * @return string SQL condition for role type
+     */
+    private function getRoleTypeSql()
+    {
+        $sql = '';
+
+        switch($this->roleType)
+        {
+            case ROLE_TYPE_INACTIVE:
+                $sql = ' AND rol_valid   = \'0\'
+                         AND cat_name_intern <> \'EVENTS\' ';
+                break;
+
+            case ROLE_TYPE_ACTIVE:
+                $sql = ' AND rol_valid   = \'1\'
+                         AND cat_name_intern <> \'EVENTS\' ';
+                break;
+
+            case ROLE_TYPE_INACTIVE:
+                $sql = ' AND cat_name_intern = \'EVENTS\' ';
+                break;
+        }
+
+        return $sql;
+    }
+
+    /**
      * assembles SQL roles visible for current user
      * @return string SQL condition visible for current user
      */
@@ -226,7 +229,7 @@ class ModuleLists extends Modules
     {
         global $gCurrentUser;
 
-        if(!$this->activeRole && $gCurrentUser->isAdministrator())
+        if($this->roleType == 0 && $gCurrentUser->isAdministrator())
         {
             // if inactive roles should be shown, then show all of them to administrator
             return '';
@@ -260,16 +263,18 @@ class ModuleLists extends Modules
         }
 
         // assemble conditions
-        $sqlConditions = $this->getCategorySql().$this->getVisibleRolesSql();
+        $sqlConditions = $this->getCategorySql() . $this->getRoleTypeSql() . $this->getVisibleRolesSql();
 
         $sql = 'SELECT rol.*, cat.*,
                        (SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' AS mem
-                         WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().'
+                         WHERE mem.mem_rol_id = rol.rol_id
+                           AND ? BETWEEN mem_begin AND mem_end
                            AND mem_leader = 0) AS num_members,
                        (SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' AS mem
-                         WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().'
+                         WHERE mem.mem_rol_id = rol.rol_id
+                           AND ? BETWEEN mem_begin AND mem_end
                            AND mem_leader = 1) AS num_leader,
                        (SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' AS mem
@@ -278,9 +283,7 @@ class ModuleLists extends Modules
                   FROM '.TBL_ROLES.' AS rol
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = rol_cat_id
-                 WHERE cat_name_intern <> \'EVENTS\'
-                   AND rol_valid = ? -- $this->activeRole
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                 WHERE (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                        '.$sqlConditions.'
               ORDER BY cat_sequence, rol_name';
@@ -295,7 +298,7 @@ class ModuleLists extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $listsStatement = $gDb->queryPrepared($sql, array(DATE_NOW, (int) $this->activeRole, (int) $gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $listsStatement = $gDb->queryPrepared($sql, array(DATE_NOW, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         // array for results
         return array(
@@ -316,31 +319,17 @@ class ModuleLists extends Modules
         global $gCurrentOrganization, $gDb;
 
         // assemble conditions
-        $sqlConditions = $this->getCategorySql() . $this->getVisibleRolesSql();
+        $sqlConditions = $this->getCategorySql() . $this->getRoleTypeSql() . $this->getVisibleRolesSql();
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ROLES.' AS rol
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON rol_cat_id = cat_id
-                 WHERE rol_valid   = ? -- $this->activeRole
-                   AND cat_name_intern <> \'EVENTS\'
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                 WHERE (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                        '.$sqlConditions;
-        $pdoStatement = $gDb->queryPrepared($sql, array((int) $this->activeRole, (int) $gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $pdoStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         return (int) $pdoStatement->fetchColumn();
-    }
-
-    /**
-     * Sets the status of role members to be shown
-     * @param string $status active(default), inactive, both
-     */
-    public function setMemberStatus($status = self::MEMBER_STATUS_ACTIVE)
-    {
-        if (in_array($status, array(self::MEMBER_STATUS_ACTIVE, self::MEMBER_STATUS_INACTIVE, self::MEMBER_STATUS_BOTH), true))
-        {
-            $this->memberStatus = $status;
-        }
     }
 }

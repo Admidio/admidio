@@ -40,9 +40,9 @@
 abstract class Modules
 {
     /**
-     * @var bool Boolean false/true for active role
+     * @var int Integer Active, inactive or event participation roles
      */
-    protected $activeRole = false;
+    protected $roleType = 1;
     /**
      * @var string String with headline expression
      */
@@ -182,7 +182,7 @@ abstract class Modules
     public function getParameters()
     {
         // Set Array
-        $this->arrParameter['active_role']  = $this->activeRole;
+        $this->arrParameter['role_type']    = $this->roleType;
         $this->arrParameter['cat_id']       = $this->catId;
         $this->arrParameter['daterange']    = $this->daterange;
         $this->arrParameter['headline']     = $this->headline;
@@ -252,9 +252,9 @@ abstract class Modules
             {
                 $this->catId = (int) $parameterValue;
             }
-            elseif ($parameterName === 'active_role')
+            elseif ($parameterName === 'role_type')
             {
-                $this->activeRole = (bool) $parameterValue;
+                $this->roleType = (bool) $parameterValue;
             }
             elseif ($parameterName === 'mode')
             {
