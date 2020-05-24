@@ -148,7 +148,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
 
                             if($gCurrentUser->hasRightViewRole((int) $member->getValue('mem_rol_id')))
                             {
-                                $roleMemHTML .= '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => (int) $member->getValue('mem_rol_id'))). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
+                                $roleMemHTML .= '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => (int) $member->getValue('mem_rol_id'))). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
                             }
                             else
                             {
@@ -192,7 +192,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                                 if (($role->getValue('rol_administrator') == 1 && (int) $gCurrentUser->getValue('usr_id') !== (int) $user->getValue('usr_id'))
                                 || ($role->getValue('rol_administrator') == 0))
                                 {
-                                    $roleMemHTML .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                                    $roleMemHTML .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.(int) $role->getValue('rol_id'), 'database_id' => $memberId, 'name' => $role->getValue('rol_name'))).'"><i
                                         class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'"></i></a>';
                                 }

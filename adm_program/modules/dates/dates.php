@@ -136,8 +136,8 @@ if($getViewMode === 'html')
     // Add new event
     if(count($gCurrentUser->getAllEditableCategories('DAT')) > 0 && $getId === 0)
     {
-        $page->addPageFunctionsMenuItem('menu_item_event_add', $gL10n->get('SYS_CREATE_VAR', array($getHeadline)), 
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('headline' => $getHeadline)), 
+        $page->addPageFunctionsMenuItem('menu_item_event_add', $gL10n->get('SYS_CREATE_VAR', array($getHeadline)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('headline' => $getHeadline)),
             'fa-plus-circle');
     }
 
@@ -149,16 +149,16 @@ if($getViewMode === 'html')
         // ical Download
         if($gSettingsManager->getBool('enable_dates_ical'))
         {
-            $page->addPageFunctionsMenuItem('menu_item_event_ical', $gL10n->get('DAT_EXPORT_ICAL'), 
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('headline' => $getHeadline, 'cat_id' => $getCatId, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)), 
+            $page->addPageFunctionsMenuItem('menu_item_event_ical', $gL10n->get('DAT_EXPORT_ICAL'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('headline' => $getHeadline, 'cat_id' => $getCatId, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
                 'fa-file-export');
         }
 
         if($gCurrentUser->editDates())
         {
             // if no calendar selectbox is shown, then show link to edit calendars
-            $page->addPageFunctionsMenuItem('menu_item_event_categories', $gL10n->get('DAT_MANAGE_CALENDARS'), 
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))), 
+            $page->addPageFunctionsMenuItem('menu_item_event_categories', $gL10n->get('DAT_MANAGE_CALENDARS'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))),
                 'fa-th-large');
         }
     }
@@ -344,7 +344,7 @@ else
                     <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'headline' => $getHeadline)) . '">
                         <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
                 $outputButtonDelete = '
-                    <a class="openPopup" href="javascript:void(0);" 
+                    <a class="openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateId,
                         'name' => $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateId)) . '">
                         <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
@@ -561,7 +561,7 @@ else
                     {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-secondary openPopup" href="javascript:void(0);" 
+                                <button class="btn btn-secondary openPopup" href="javascript:void(0);"
                                     data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId)) . '">' . $iconParticipationStatus . $buttonText . '
                             </div>';
                     }
@@ -593,7 +593,7 @@ else
                 {
                     if($outputNumberMembers > 0 || $outputNumberLeaders > 0)
                     {
-                        $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $dateRolId));
+                        $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $dateRolId));
 
                         if ($getView === 'detail')
                         {
@@ -635,7 +635,7 @@ else
                 // Link for managing new participants
                 if($row['mem_leader'])
                 {
-                    $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $dateRolId));
+                    $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('rol_id' => $dateRolId));
 
                     if ($getView === 'detail')
                     {
@@ -751,7 +751,7 @@ else
                                             <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $dateId, 'mode' => 6)).'">
                                                 <i class="fas fa-file-export" data-toggle="tooltip"></i> '.$gL10n->get('DAT_EXPORT_ICAL').'</a>');
                                     }
-                        
+
                                     // change and delete is only for users with additional rights
                                     if ($date->isEditable())
                                     {
@@ -760,7 +760,7 @@ else
                                                 <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
                                             <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'headline' => $getHeadline)) . '">
                                                 <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
-                                            <a class="dropdown-item btn openPopup" href="javascript:void(0);" 
+                                            <a class="dropdown-item btn openPopup" href="javascript:void(0);"
                                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateId,
                                                 'name' => $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateId)) . '">
                                                 <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>');

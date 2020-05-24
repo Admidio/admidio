@@ -427,13 +427,13 @@ if ($getMode !== 'csv')
             }
         }
         unset($rowConfigurations);
-        
+
         // add list item for own list
         $listConfigurations[] = array('mylist', $gL10n->get('LST_CREATE_OWN_LIST'), $gL10n->get('LST_CONFIGURATION'));
 
         // add navbar with filter elements and the selectbox with all lists configuraitons
         $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
-        $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
+        $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
         $form->addSelectBox(
             'list_configurations', $gL10n->get('LST_CONFIGURATION_LIST'), $listConfigurations,
             array('defaultValue' => $getListId)
@@ -462,9 +462,9 @@ if ($getMode !== 'csv')
                 roleId    = elementId.substr(elementId.search(/_/) + 1);
 
                 if ($(this).val() === "mylist") {
-                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('rol_ids' => $getRoleIds)) . '";
+                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php', array('rol_ids' => $getRoleIds)) . '";
                 } else {
-                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&lst_id=" + $(this).val();
+                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&lst_id=" + $(this).val();
                 }
             });
 
@@ -474,7 +474,7 @@ if ($getMode !== 'csv')
             });
 
             $("#menu_item_lists_print_view").click(function() {
-                window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
+                window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
             });',
             true
         );
@@ -485,16 +485,16 @@ if ($getMode !== 'csv')
         // dropdown menu item with all export possibilities
         $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('LST_EXPORT_TO'), '#', 'fa-file-download');
         $page->addPageFunctionsMenuItem('menu_item_lists_csv_ms', $gL10n->get('LST_MICROSOFT_EXCEL'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-ms')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-ms')),
             'fa-file-excel', 'menu_item_lists_export');
         $page->addPageFunctionsMenuItem('menu_item_lists_pdf', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
             'fa-file-pdf', 'menu_item_lists_export');
         $page->addPageFunctionsMenuItem('menu_item_lists_pdfl', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
             'fa-file-pdf', 'menu_item_lists_export');
         $page->addPageFunctionsMenuItem('menu_item_lists_csv', $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-oo')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-oo')),
             'fa-file-csv', 'menu_item_lists_export');
 
         if ($numberRoles === 1)
@@ -503,7 +503,7 @@ if ($getMode !== 'csv')
             if ($role->allowedToAssignMembers($gCurrentUser))
             {
                 $page->addPageFunctionsMenuItem('menu_item_lists_assign_members', $gL10n->get('SYS_ASSIGN_MEMBERS'),
-                    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => (int) $role->getValue('rol_id'))),
+                    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('rol_id' => (int) $role->getValue('rol_id'))),
                     'fa-user-plus');
             }
         }

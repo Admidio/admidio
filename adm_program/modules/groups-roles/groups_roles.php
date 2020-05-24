@@ -79,20 +79,6 @@ if(!$gSettingsManager->getBool('lists_hide_overview_details'))
     $page->addJavascript('$(".collapse").collapse();', true);
 }
 
-$page->addJavascript('
-    $(".panel-collapse select").change(function() {
-        elementId = $(this).attr("id");
-        roleId    = elementId.substr(elementId.search(/_/) + 1);
-
-        if ($(this).val() === "mylist") {
-            self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('active_role' => (int) $getRoleType)) . '&rol_ids=" + roleId;
-        } else {
-            self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists_show.php', array('mode' => 'html')) . '&lst_id=" + $(this).val() + "&rol_ids=" + roleId;
-        }
-    });',
-    true
-);
-
 if($gCurrentUser->manageRoles())
 {
     // show link to create new role
@@ -208,7 +194,7 @@ foreach($listsResult['recordset'] as $row)
                 if($role->allowedToAssignMembers($gCurrentUser))
                 {
                     $html .= '
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $rolId)).'">'.
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('rol_id' => $rolId)).'">'.
                         '<i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'"></i></a>';
                 }
 

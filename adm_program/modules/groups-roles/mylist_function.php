@@ -116,13 +116,13 @@ if ($getMode === 1 || $getMode === 2)
         $_SESSION['mylist_request']['sel_select_configuration'] = $listId;
 
         // go back to mylist configuration
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/lists/mylist.php', array('lst_id' => $listId)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/groups-roles/mylist.php', array('lst_id' => $listId)));
         // => EXIT
     }
 
     // weiterleiten zur allgemeinen Listeseite
     admRedirect(SecurityUtils::encodeUrl(
-        ADMIDIO_URL . FOLDER_MODULES.'/lists/lists_show.php',
+        ADMIDIO_URL . FOLDER_MODULES.'/groups-roles/lists_show.php',
         array(
             'lst_id' => $listId, 'mode' => 'html',
             'rol_ids' => implode(',', array_map('intval', $_POST['sel_roles_ids'])),
@@ -146,6 +146,6 @@ elseif ($getMode === 3)
     }
 
     // go back to list configuration
-    admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/lists/mylist.php');
+    admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/groups-roles/mylist.php');
     // => EXIT
 }
