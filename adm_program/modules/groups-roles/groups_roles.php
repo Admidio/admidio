@@ -94,6 +94,9 @@ $page->addPageFunctionsMenuItem('menu_item_groups_own_list', $gL10n->get('LST_CR
 $page->addJavascript('
     $("#cat_id").change(function() {
         $("#navbar_filter_form").submit();
+    });
+    $("#role_type").change(function() {
+        $("#navbar_filter_form").submit();
     });',
     true
 );
@@ -104,6 +107,12 @@ $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.
 $form->addSelectBoxForCategories(
     'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', HtmlForm::SELECT_BOX_MODUS_FILTER,
     array('defaultValue' => $getCatId));
+if($gCurrentUser->manageRoles())
+{
+    $form->addSelectBox(
+        'role_type', $gL10n->get('SYS_ROLE_TYPES'), array(0 => $gL10n->get('SYS_INACTIVE_GROUPS_ROLES'), 1 => $gL10n->get('SYS_ACTIVE_GROUPS_ROLES'), 2 => $gL10n->get('ROL_ROLES_CONFIRMATION_OF_PARTICIPATION')),
+        array('defaultValue' => $getRoleType));
+}
 $filterNavbar->addForm($form->show());
 $page->addHtml($filterNavbar->show());
 
@@ -118,7 +127,7 @@ if($listsResult['totalCount'] === 0)
     if($gValidLogin)
     {
         // If login valid, than show message for non available roles
-        if(ROLE_TYPE_ACTIVE === 1)
+        if($getRoleType === ROLE_TYPE_ACTIVE)
         {
             $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
             // => EXIT
@@ -199,13 +208,13 @@ foreach($listsResult['recordset'] as $row)
                     if($getRoleType === ROLE_TYPE_INACTIVE)
                     {
                         $html .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'row_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.
+                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'role_details_panel_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.
                                         '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('ROL_ENABLE_ROLE').'"></i></a>';
                     }
                     elseif($getRoleType === ROLE_TYPE_ACTIVE)
                     {
                         $html .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'row_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.
+                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'role_details_panel_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.
                                         '<i class="fas fa-user-secret" data-toggle="tooltip" title="'.$gL10n->get('ROL_DISABLE_ROLE').'"></i></a>';
                     }
 
@@ -213,7 +222,7 @@ foreach($listsResult['recordset'] as $row)
                     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/roles_new.php', array('rol_id' => $rolId)).'">'.
                         '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_EDIT_ROLE').'"></i></a>
                     <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.
+                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'role_details_panel_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.
                         '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('ROL_ROLE_DELETE').'"></i></a>';
                 }
 
@@ -259,6 +268,27 @@ foreach($listsResult['recordset'] as $row)
                     $page->addHtml('</li>');
                 }
 
+                // show members fee
+                if(strlen($role->getValue('rol_cost')) > 0
+                || (strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0))
+                {
+                    $html = '';
+
+                    // Member fee
+                    if(strlen($role->getValue('rol_cost')) > 0)
+                    {
+                        $html .= (float) $role->getValue('rol_cost').' '.$gSettingsManager->getString('system_currency');
+                    }
+
+                    // Contributory period
+                    if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
+                    {
+                        $html .= ' - ' . TableRoles::getCostPeriods($role->getValue('rol_cost_period'));
+                    }
+
+                    $page->addHtml('<li class="list-group-item"><h6>' . $gL10n->get('SYS_CONTRIBUTION') . '</h6><span class="d-block">' . $html . '</span>' . $htmlLeader . '</li>');
+                }
+
                 // show count of members and leaders of this role
                 $html = '';
                 $htmlLeader = '';
@@ -294,21 +324,8 @@ foreach($listsResult['recordset'] as $row)
 
                 $page->addHtml('
                 <li class="list-group-item"><span class="d-block">' . $html . '</span>' . $htmlLeader . '</li>
-            </ul>');
+            </ul>
 
-            // Member fee
-            if(strlen($role->getValue('rol_cost')) > 0)
-            {
-                $form->addStaticControl('list_contribution', $gL10n->get('SYS_CONTRIBUTION'), (float) $role->getValue('rol_cost').' '.$gSettingsManager->getString('system_currency'));
-            }
-
-            // Contributory period
-            if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
-            {
-                $form->addStaticControl('list_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), TableRoles::getCostPeriods($role->getValue('rol_cost_period')));
-            }
-
-            $page->addHtml('
             <a class="btn btn-primary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)) . '">' . $gL10n->get('SYS_SHOW_MEMBER_LIST') . '</a>
         </div>
     </div>

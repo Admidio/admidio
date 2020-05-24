@@ -254,7 +254,7 @@ abstract class Modules
             }
             elseif ($parameterName === 'role_type')
             {
-                $this->roleType = (bool) $parameterValue;
+                $this->roleType = (int) $parameterValue;
             }
             elseif ($parameterName === 'mode')
             {

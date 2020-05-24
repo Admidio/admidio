@@ -213,7 +213,7 @@ class ModuleLists extends Modules
                          AND cat_name_intern <> \'EVENTS\' ';
                 break;
 
-            case ROLE_TYPE_INACTIVE:
+            case ROLE_TYPE_EVENT_PARTICIPATION:
                 $sql = ' AND cat_name_intern = \'EVENTS\' ';
                 break;
         }

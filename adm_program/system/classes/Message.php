@@ -197,7 +197,7 @@ class Message
                 {
                     // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
                     $htmlButtons .= '
-                        <button class="btn btn-primary" onclick="self.location.href=\'' . $this->forwardUrl . '\'">'.$gL10n->get('SYS_NEXT').'
+                        <button class="btn btn-primary admidio-margin-bottom" onclick="self.location.href=\'' . $this->forwardUrl . '\'">'.$gL10n->get('SYS_NEXT').'
                             <i class="fas fa-arrow-circle-right"></i>
                         </button>';
                 }
@@ -209,7 +209,7 @@ class Message
                 if(!$this->modalWindowMode)
                 {
                     $htmlButtons .= '
-                        <button class="btn btn-primary" onclick="history.back()">
+                        <button class="btn btn-primary admidio-margin-bottom" onclick="history.back()">
                             <i class="fas fa-arrow-circle-left"></i>'.
                             $gL10n->get('SYS_BACK').
                         '</button>';
