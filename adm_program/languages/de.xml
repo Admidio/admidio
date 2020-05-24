@@ -351,8 +351,6 @@
   <string name="LST_FORMER_MEMBERS">Ehemalige Mitglieder</string>
   <string name="LST_FROM_TO">von #VAR1# bis #VAR2#</string>
   <string name="LST_GENERAL_LISTS">Allgemeine Listen</string>
-  <string name="LST_HIDE_DETAILS">Details in Übersicht einklappen</string>
-  <string name="LST_HIDE_DETAILS_DESC">Bei Aktivierung dieser Option werden die Details in der Listenübersicht standardmäßig eingeklappt. Auf Wunsch lassen sich die Details weiterhin anzeigen. (Standard: nein)</string>
   <string name="LST_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="LST_KONFIGURATION_OWN_LIST">Konfiguration eigene Liste</string>
   <string name="LST_LIST">Liste</string>

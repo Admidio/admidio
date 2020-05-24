@@ -351,8 +351,6 @@
   <string name="LST_FORMER_MEMBERS">Former members</string>
   <string name="LST_FROM_TO">from #VAR1# to #VAR2#</string>
   <string name="LST_GENERAL_LISTS">General lists</string>
-  <string name="LST_HIDE_DETAILS">Hide details in overview</string>
-  <string name="LST_HIDE_DETAILS_DESC">Activate this option in order to hide details in list overview by default. Details will be displayed after user activation. (default: no)</string>
   <string name="LST_INFOBOX" description="A small html box that will show additional informations">Info box</string>
   <string name="LST_KONFIGURATION_OWN_LIST">Configuration of own listings</string>
   <string name="LST_LIST">List</string>

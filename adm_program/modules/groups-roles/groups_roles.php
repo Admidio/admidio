@@ -74,11 +74,6 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage($headline);
 
-if(!$gSettingsManager->getBool('lists_hide_overview_details'))
-{
-    $page->addJavascript('$(".collapse").collapse();', true);
-}
-
 if($gCurrentUser->manageRoles())
 {
     // show link to create new role

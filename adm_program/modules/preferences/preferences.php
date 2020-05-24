@@ -1145,10 +1145,6 @@ $formLists->addSelectBox(
     'lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries,
     array('defaultValue' => $formValues['lists_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC')
 );
-$formLists->addCheckbox(
-    'lists_hide_overview_details', $gL10n->get('LST_HIDE_DETAILS'), (bool) $formValues['lists_hide_overview_details'],
-    array('helpTextIdInline' => 'LST_HIDE_DETAILS_DESC')
-);
 // read all global lists
 $sqlData = array();
 $sqlData['query'] = 'SELECT lst_id, lst_name
