@@ -11,7 +11,7 @@
     <step id="90">UPDATE %PREFIX%_menu SET men_icon = 'fa-link' WHERE men_icon = 'weblinks.png'</step>
     <step id="100">UPDATE %PREFIX%_menu SET men_icon = 'fa-list-alt' WHERE men_icon = 'mylist.png'</step>
     <step id="110">UPDATE %PREFIX%_menu SET men_icon = 'fa-address-card' WHERE men_icon = 'new_registrations.png'</step>
-    <step id="120">UPDATE %PREFIX%_menu SET men_icon = 'fa-user-friends' WHERE men_icon = 'user_administration.png'</step>
+    <step id="120">UPDATE %PREFIX%_menu SET men_icon = 'fa-users-cog' WHERE men_icon = 'user_administration.png'</step>
     <step id="130">UPDATE %PREFIX%_menu SET men_icon = 'fa-database' WHERE men_icon = 'backup.png'</step>
     <step id="140">UPDATE %PREFIX%_menu SET men_icon = 'fa-cog' WHERE men_icon = 'options.png'</step>
     <step id="150">UPDATE %PREFIX%_menu SET men_icon = 'fa-user-tie' WHERE men_icon = 'roles.png'</step>
@@ -39,7 +39,7 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="360" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = '' FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_send_method' AND pr2.prf_value = 'phpmail' AND pr1.prf_name = 'mail_smtp_authentication_type' AND pr1.prf_org_id = pr2.prf_org_id</step>
     <step id="370">UPDATE %PREFIX%_components SET com_name = 'SYS_PHOTOS' WHERE com_name = 'PHO_PHOTOS'</step>
     <step id="380">UPDATE %PREFIX%_menu SET men_name = 'SYS_PHOTOS' WHERE men_name = 'PHO_PHOTOS'</step>
-    <step id="390">UPDATE %PREFIX%_menu SET men_name_intern = 'groups-roles', men_name = 'SYS_GROUPS_ROLES', men_description = 'SYS_GROUPS_ROLES_DESC', men_url = '/adm_program/modules/groups-roles/groups_roles.php', men_icon = 'fa-user-tie' WHERE men_name_intern = 'lists'</step>
+    <step id="390">UPDATE %PREFIX%_menu SET men_name_intern = 'groups-roles', men_name = 'SYS_GROUPS_ROLES', men_description = 'SYS_GROUPS_ROLES_DESC', men_url = '/adm_program/modules/groups-roles/groups_roles.php', men_icon = 'fa-users' WHERE men_name_intern = 'lists'</step>
     <step id="400">UPDATE %PREFIX%_components SET com_name_intern = 'GROUPS-ROLES', com_name = 'SYS_GROUPS_ROLES' WHERE com_name_intern = 'LISTS'</step>
     <step id="410">DELETE FROM %PREFIX%_menu WHERE men_name_intern = 'mylist'</step>
     <step>stop</step>

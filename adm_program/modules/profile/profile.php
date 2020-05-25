@@ -263,7 +263,7 @@ if($gCurrentUser->assignRoles())
 {
     $page->addPageFunctionsMenuItem('menu_item_profile_role_memberships_change', $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId)),
-        'fa-user-tie');
+        'fa-users');
 }
 
 // show link to create relations
@@ -591,7 +591,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_assign_roles'],
                 'right' => $gL10n->get('ROL_RIGHT_ASSIGN_ROLES'),
-                'icon'  => 'fa-user-tie'
+                'icon'  => 'fa-users'
             );
         }
         if($user->checkRolesRight('rol_approve_users'))
@@ -607,7 +607,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_edit_user'],
                 'right' => $gL10n->get('ROL_RIGHT_EDIT_USER'),
-                'icon'  => 'fa-user-friends'
+                'icon'  => 'fa-users-cog'
             );
         }
 

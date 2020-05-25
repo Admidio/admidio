@@ -932,7 +932,7 @@ $formUserManagement->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'user_administration', $gL10n->get('MEM_USER_MANAGEMENT'), 'fas fa-user-friends', $formUserManagement->show()));
+$page->addHtml(getPreferencePanel('modules', 'user_administration', $gL10n->get('MEM_USER_MANAGEMENT'), 'fas fa-users-cog', $formUserManagement->show()));
 
 // PANEL: DOCUMENTS-FILES
 
@@ -1175,7 +1175,7 @@ $formLists->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('SYS_GROUPS_ROLES'), 'fas fa-user-tie', $formLists->show()));
+$page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('SYS_GROUPS_ROLES'), 'fas fa-users', $formLists->show()));
 
 // PANEL: MESSAGES
 
