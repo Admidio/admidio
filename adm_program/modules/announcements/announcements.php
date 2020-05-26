@@ -83,16 +83,16 @@ else
 if(count($gCurrentUser->getAllEditableCategories('ANN')) > 0)
 {
     // show link to create new announcement
-    $page->addPageFunctionsMenuItem('menu_item_announcement_add', $gL10n->get('SYS_CREATE_ENTRY'), 
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)), 
+    $page->addPageFunctionsMenuItem('menu_item_announcement_add', $gL10n->get('SYS_CREATE_ENTRY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)),
         'fa-plus-circle');
 }
 
 if($gCurrentUser->editAnnouncements())
 {
-    $page->addPageFunctionsMenuItem('menu_item_announcement_categories', $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 
+    $page->addPageFunctionsMenuItem('menu_item_announcement_categories', $gL10n->get('SYS_MAINTAIN_CATEGORIES'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')),
-        'fa-th-large');    
+        'fa-th-large');
 }
 
 // add filter navbar
@@ -157,7 +157,7 @@ else
                                 <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
                             <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'headline' => $getHeadline)).'">
                                 <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
-                            <a class="dropdown-item btn openPopup" href="javascript:void(0);" 
+                            <a class="dropdown-item btn openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annId, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annId)).'">
                                 <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                         </div>

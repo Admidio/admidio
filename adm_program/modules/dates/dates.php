@@ -191,7 +191,7 @@ if($getViewMode === 'html')
     );
     $form->addSelectBoxForCategories(
         'cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', HtmlForm::SELECT_BOX_MODUS_FILTER,
-        array('defaultValue' => $dates->getParameter('cat_id'))
+        array('defaultValue' => (int) $dates->getParameter('cat_id'))
     );
     $form->addInput(
         'date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'),

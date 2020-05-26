@@ -4,24 +4,24 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.11', 0, 730)
-                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.11', 0, 0)
-                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.11', 0, 0)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.11', 0, 0)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.11', 0, 0)
-                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.11', 0, 0)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.11', 0, 0)
-                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.11', 0, 0)
-                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.11', 0, 0)
-                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.11', 0, 0)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.11', 0, 0)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.11', 0, 0)
-                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '3.3.11', 0, 0)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.11', 0, 0)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.11', 0, 0)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.11', 0, 0)
-                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.11', 0, 0)
-                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '3.3.11', 0, 0);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.15', 0, 730)
+                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.15', 0, 0)
+                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.15', 0, 0)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.15', 0, 0)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.15', 0, 0)
+                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.15', 0, 0)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.15', 0, 0)
+                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.15', 0, 0)
+                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.15', 0, 0)
+                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.15', 0, 0)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.15', 0, 0)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.15', 0, 0)
+                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '3.3.15', 0, 0)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.15', 0, 0)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.15', 0, 0)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.15', 0, 0)
+                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.15', 0, 0)
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '3.3.15', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -473,13 +473,13 @@ INSERT INTO %PREFIX%_categories (cat_id, cat_org_id, cat_type, cat_name_intern, 
 (1, NULL, 'USF', 'MASTER_DATA', 'SYS_MASTER_DATA', 1, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (2, NULL, 'USF', 'SOCIAL_NETWORKS', 'SYS_SOCIAL_NETWORKS', 0, 0, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
 (3, 1, 'ROL', 'COMMON', 'SYS_COMMON', 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(4, 1, 'ROL', 'GROUPS', 'INS_GROUPS', 0, 0, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(4, 1, 'ROL', 'GROUPS', 'INS_GROUPS', 0, 1, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
 (5, 1, 'ROL', 'COURSES', 'INS_COURSES', 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
 (6, 1, 'ROL', 'TEAMS', 'INS_TEAMS', 0, 0, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
 (7, 1, 'LNK', 'COMMON', 'SYS_COMMON', 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (8, NULL, 'USF', 'ADDIDIONAL_DATA', 'INS_ADDIDIONAL_DATA', 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(9, 1, 'LNK', 'ADMIDIO', 'Admidio', 0, 0, 2, 1, '2011-04-06 22:05:20', NULL, NULL),
-(10, 1, 'DAT', 'COMMON', 'SYS_COMMON', 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(9, 1, 'LNK', 'ADMIDIO', 'Admidio', 0, 1, 2, 1, '2011-04-06 22:05:20', NULL, NULL),
+(10, 1, 'DAT', 'COMMON', 'SYS_COMMON', 0, 1, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (11, 1, 'DAT', 'COURSES', 'INS_COURSES', 0, 0, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
 (12, 1, 'DAT', 'TRAINING', 'INS_TRAINING', 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
 (13, 1, 'ANN', 'COMMON', 'SYS_COMMON', 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
