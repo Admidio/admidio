@@ -196,7 +196,7 @@ class HtmlForm extends HtmlFormBasic
         }
         else
         {
-            $optionsAll['class'] = 'btn btn-secondary';            
+            $optionsAll['class'] = 'btn btn-secondary';
         }
 
         if ($optionsAll['icon'] !== '')
@@ -1187,7 +1187,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - **firstEntry** : Here you can define a string that should be shown as firstEntry and will be the
      *                          default value if no other value is set. This entry will only be added if **showContextDependentFirstEntry**
      *                          is set to false!
-     *                        - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as 
+     *                        - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as
      *                          option value and not the key of the array
      *                        - **multiselect** : If set to **true** than the jQuery plugin Select2 will be used to create a selectbox
      *                          where the user could select multiple values from the selectbox. Then an array will be
@@ -1470,7 +1470,7 @@ class HtmlForm extends HtmlFormBasic
      *                                 + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
      *                               - **defaultValue** : This is the value the selectbox shows when loaded. If **multiselect** is activated than
      *                                 an array with all default values could be set.
-     *                               - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as 
+     *                               - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as
      *                                 option value and not the key of the array
      *                               - **showContextDependentFirstEntry** : If set to **true** the select box will get an additional first entry.
      *                                 If self::FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
@@ -1559,7 +1559,7 @@ class HtmlForm extends HtmlFormBasic
      *                          + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
      *                        - **defaultValue** : This is the value the selectbox shows when loaded. If **multiselect** is activated than
      *                          an array with all default values could be set.
-     *                        - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as 
+     *                        - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as
      *                          option value and not the key of the array
      *                        - **showContextDependentFirstEntry** : If set to **true** the select box will get an additional first entry.
      *                          If self::FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
@@ -1641,7 +1641,7 @@ class HtmlForm extends HtmlFormBasic
      *                                   + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                                   + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
      *                                 - **defaultValue** : Id of category that should be selected per default.
-     *.                                - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as 
+     *.                                - **arrayKeyIsNotValue** : If set to **true** than the entry of the values-array will be used as
      *                                   option value and not the key of the array
      *                                 - **showSystemCategory** : Show user defined and system categories
      *                                 - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
@@ -1775,7 +1775,7 @@ class HtmlForm extends HtmlFormBasic
         while ($row = $pdoStatement->fetch())
         {
             // if several categories exist than select default category
-            if ($optionsAll['defaultValue'] === '' && ($countCategories === 1 || $row['cat_default'] === '1'))
+            if ($optionsAll['defaultValue'] === '' && ($countCategories === 1 || $row['cat_default'] === 1))
             {
                 $optionsAll['defaultValue'] = $row['cat_id'];
             }
@@ -1982,11 +1982,11 @@ class HtmlForm extends HtmlFormBasic
         else
         {
             $html = '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-class="modal-lg"
-                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => $textId, 'inline' => 'true')).'"><i 
+                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => $textId, 'inline' => 'true')).'"><i
                 class="fas fa-info-circle admidio-info-icon"></i>
             </a>';
         }
-        
+
         return $html;
     }
 
