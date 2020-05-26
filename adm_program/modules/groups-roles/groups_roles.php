@@ -78,7 +78,7 @@ if($gCurrentUser->manageRoles())
 {
     // show link to create new role
     $page->addPageFunctionsMenuItem('menu_item_groups_roles_add', $gL10n->get('SYS_CREATE_ROLE'),
-        ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/roles_new.php', 'fa-plus-circle');
+        ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', 'fa-plus-circle');
 
      // show link to maintain categories
     $page->addPageFunctionsMenuItem('menu_item_groups_roles_maintain_categories', $gL10n->get('SYS_MAINTAIN_CATEGORIES'),
@@ -219,7 +219,7 @@ foreach($listsResult['recordset'] as $row)
                     }
 
                     $html .= '
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/roles_new.php', array('rol_id' => $rolId)).'">'.
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('rol_id' => $rolId)).'">'.
                         '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_EDIT_ROLE').'"></i></a>
                     <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'role_details_panel_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.

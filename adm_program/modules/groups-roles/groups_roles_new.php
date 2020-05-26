@@ -139,7 +139,7 @@ $page->addJavascript('
 ');
 
 // show form
-$form = new HtmlForm('roles_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/roles_function.php', array('rol_id' => $getRoleId, 'mode' => '2')), $page);
+$form = new HtmlForm('roles_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_function.php', array('rol_id' => $getRoleId, 'mode' => '2')), $page);
 $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->get('SYS_CATEGORY'));
 if($role->getValue('rol_administrator') == 1)
 {
