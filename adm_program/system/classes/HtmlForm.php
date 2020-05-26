@@ -1798,7 +1798,7 @@ class HtmlForm extends HtmlFormBasic
         while ($row = $pdoStatement->fetch())
         {
             // if several categories exist than select default category
-            if ($optionsAll['defaultValue'] === '' && ($countCategories === 1 || $row['cat_default'] === '1'))
+            if ($optionsAll['defaultValue'] === '' && ($countCategories === 1 || $row['cat_default'] === 1))
             {
                 $optionsAll['defaultValue'] = $row['cat_id'];
             }
@@ -1969,11 +1969,11 @@ class HtmlForm extends HtmlFormBasic
         else
         {
             $html = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => $textId, 'inline' => 'true')).'"><img 
+                href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => $textId, 'inline' => 'true')).'"><img
                 src="'.THEME_URL.'/icons/help.png" alt="Help" />
             </a>';
         }
-        
+
         return $html;
     }
 
