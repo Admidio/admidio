@@ -884,7 +884,6 @@
   <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
   <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
   <!--Phrases only in Rolesmodule-->
-  <string name="ROL_ACTIV_ROLES">Aktive Rollen</string>
   <string name="ROL_ANNUALLY">Jährlich</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Mitglieder zuordnen und bearbeiten</string>
   <string name="ROL_DELETE_NO_DEFAULT_ROLE">Du kannst die Rolle #VAR1_BOLD# nicht löschen. Es muss mindestens eine Rolle die Einstellung #VAR2_BOLD# besitzen.</string>
@@ -901,8 +900,6 @@
   <string name="ROL_EDIT_ROLE">Rolle bearbeiten</string>
   <string name="ROL_ENABLE_ROLE">Rolle aktivieren</string>
   <string name="ROL_ENABLE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# wieder aktivierst, bekommen die Rollenmitglieder wieder die Rechte zugeordnet und die Rolle erscheint in sämtlichen Listen.\n\nMöchtest du die Rollen wieder aktivieren?</string>
-  <string name="ROL_INACTIV_ROLE">Inaktive Rolle</string>
-  <string name="ROL_INACTIV_ROLES">Inaktive Rollen</string>
   <string name="ROL_LEADER_NO_ADDITIONAL_RIGHTS">Leiter dieser Rolle haben keine gesonderten Rechte. Sie werden in Listenansichten nur hervorgehoben dargestellt.</string>
   <string name="ROL_LEADER_EDIT_MEMBERS">Leiter dieser Rolle können Profildaten aller Rollenmitglieder bearbeiten.</string>
   <string name="ROL_LEADER_ASSIGN_MEMBERS">Leiter dieser Rolle können neue Rollenmitglieder hinzufügen oder vorhandene Mitglieder entfernen.</string>
@@ -935,8 +932,6 @@
   <string name="ROL_RIGHT_PROFILE">Eigenes Profil bearbeiten</string>
   <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
   <string name="ROL_RIGHT_WEBLINKS">Weblinks verwalten</string>
-  <string name="ROL_ROLE_ADMINISTRATION">Rollenverwaltung</string>
-  <string name="ROL_ROLE_ADMINISTRATION_DESC">Rollen, dies können Gruppen, Kurse oder Abteilungen sein, können hier erstellt und bearbeitet werden. Auch die Rechte der einzelnen Rollen werden hier festgelegt.</string>
   <string name="ROL_ROLE_DELETE">Rolle löschen</string>
   <string name="ROL_ROLE_DELETE_DESC">Willst du die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften endgültig entfernt.</string>
   <string name="ROL_ROLE_DEPENDENCIES">Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der #VAR1# sein!\n\nBeim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen Rolle Mitglied der #VAR1#. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften nicht aufgehoben!</string>
@@ -948,7 +943,6 @@
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
   <string name="ROL_SEMIYEARLY">Halbjährlich</string>
   <string name="ROL_SEND_MAILS">E-Mails zusenden</string>
-  <string name="ROL_SHOW_MEMBERS">Mitglieder anzeigen</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
   <string name="ROL_UNIQUELY">Einmalig</string>
   <string name="ROL_VALID_FROM" description="Date valid from">Gültig von</string>

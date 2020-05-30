@@ -41,6 +41,9 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="380">UPDATE %PREFIX%_menu SET men_name = 'SYS_PHOTOS' WHERE men_name = 'PHO_PHOTOS'</step>
     <step id="390">UPDATE %PREFIX%_menu SET men_name_intern = 'groups-roles', men_name = 'SYS_GROUPS_ROLES', men_description = 'SYS_GROUPS_ROLES_DESC', men_url = '/adm_program/modules/groups-roles/groups_roles.php', men_icon = 'fa-users' WHERE men_name_intern = 'lists'</step>
     <step id="400">UPDATE %PREFIX%_components SET com_name_intern = 'GROUPS-ROLES', com_name = 'SYS_GROUPS_ROLES' WHERE com_name_intern = 'LISTS'</step>
-    <step id="410">DELETE FROM %PREFIX%_menu WHERE men_name_intern = 'mylist'</step>
+    <step id="410">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'lists_hide_overview_details'</step>
+    <step id="420">DELETE FROM %PREFIX%_menu WHERE men_name_intern = 'mylist'</step>
+    <step id="430">DELETE FROM %PREFIX%_menu WHERE men_name_intern = 'roladm'</step>
+    <step id="440">DELETE FROM %PREFIX%_components WHERE com_name_intern = 'ROLES'</step>
     <step>stop</step>
 </update>

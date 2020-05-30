@@ -881,7 +881,6 @@
   <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">Symmetrical</string>
   <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">Unidirectional</string>
   <!--Phrases only in Rolesmodule-->
-  <string name="ROL_ACTIV_ROLES">Active roles</string>
   <string name="ROL_ANNUALLY">Annually</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
   <string name="ROL_DELETE_NO_DEFAULT_ROLE">You can not delete role #VAR1_BOLD#. At least one role requires the #VAR2_BOLD# setting.</string>
@@ -898,8 +897,6 @@
   <string name="ROL_EDIT_ROLE">Edit role</string>
   <string name="ROL_ENABLE_ROLE">Activate role</string>
   <string name="ROL_ENABLE_ROLE_DESC">If you re-activate the role #VAR1_BOLD#, the role members are assigned again with permissions and the role is selectable in all lists.\n\nDo you want to re-activate the roles?</string>
-  <string name="ROL_INACTIV_ROLE">Inactive role</string>
-  <string name="ROL_INACTIV_ROLES">Inactive roles</string>
   <string name="ROL_LEADER_NO_ADDITIONAL_RIGHTS">Head of this role have no special rights. They will be highlighted in list views only.</string>
   <string name="ROL_LEADER_EDIT_MEMBERS">Head of this role can edit profile data of all role members.</string>
   <string name="ROL_LEADER_ASSIGN_MEMBERS">Head of this role can add new role members or remove existing members.</string>
@@ -932,8 +929,6 @@
   <string name="ROL_RIGHT_PROFILE">Edit own profile</string>
   <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Define which user should be able to see several lists and certain user profiles of members of the current role. Role permission #VAR1_BOLD# is parent configuration is the current permission level.</string>
   <string name="ROL_RIGHT_WEBLINKS">Manage web links</string>
-  <string name="ROL_ROLE_ADMINISTRATION">Role administration</string>
-  <string name="ROL_ROLE_ADMINISTRATION_DESC">Roles, which can be groups, courses or departments, can be created and edited here. The rights of the individual roles are also defined here.</string>
   <string name="ROL_ROLE_DELETE">Deleting role</string>
   <string name="ROL_ROLE_DELETE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
   <string name="ROL_ROLE_DEPENDENCIES">A member of a dependent role will become automatically a member of #VAR1#!\n\nWhen this dependency is set all existing members of the dependent role will become a member of #VAR1#. When a dependency is going to be deleted, memberships will remain the same!</string>
@@ -945,7 +940,6 @@
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Display role memberships</string>
   <string name="ROL_SEMIYEARLY">Twice a year</string>
   <string name="ROL_SEND_MAILS">Send e-mails</string>
-  <string name="ROL_SHOW_MEMBERS">Show members</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">System-wide default list</string>
   <string name="ROL_UNIQUELY">Uniquely</string>
   <string name="ROL_VALID_FROM" description="Date valid from">Valid starting from</string>
