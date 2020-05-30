@@ -46,10 +46,6 @@ class HtmlPage extends \Smarty
      */
     protected $pageContent = '';
     /**
-     * @var HtmlNavbar An object of the menu of this page
-     */
-    protected $mainNavbar;
-    /**
      * @var MenuNode An object that represents all functions of the current page that should be shown in the default menu
      */
     protected $menuNodePageFunctions;
@@ -119,7 +115,6 @@ class HtmlPage extends \Smarty
     {
         global $gSettingsManager;
 
-        $this->mainNavbar = new HtmlNavbar('menu_main_script', $headline, $this);
         $this->menuNodePageFunctions = new MenuNode('admidio-menu-page-functions', $headline);
 
         $this->setHeadline($headline);
@@ -285,51 +280,12 @@ class HtmlPage extends \Smarty
         );
 
         // load content of theme files at this point so that files could add css and js files
-        if ($this->showThemeHtml)
+        /*if ($this->showThemeHtml)
         {
             $this->htmlMyHeader     = $this->getFileContent('my_header.php');
             $this->htmlMyBodyTop    = $this->getFileContent('my_body_top.php');
             $this->htmlMyBodyBottom = $this->getFileContent('my_body_bottom.php');
-        }
-    }
-
-    /**
-     * Adds the modal menu to the navbar
-     */
-    public function addModalMenu()
-    {
-        global $gL10n, $gValidLogin, $gDb, $gCurrentUser, $gMenu;
-
-        // add database menu as dropdown to the navbar
-        $gMenu->addToNavbar($this->mainNavbar);
-
-        if ($gValidLogin)
-        {
-            // show link to own profile
-            $this->mainNavbar->addItem(
-                'menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'),
-                'fa-user', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-            // show logout link
-            $this->mainNavbar->addItem(
-                'menu_item_logout', ADMIDIO_URL . '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'),
-                'fa-sign-out-alt', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-        }
-        else
-        {
-            // show registration link
-            $this->mainNavbar->addItem(
-                'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
-                'fa-address-card', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-
-            // show login link
-            $this->mainNavbar->addItem(
-                'menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),
-                'fa-key', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-        }
+        }*/
     }
 
     /**
@@ -421,49 +377,6 @@ class HtmlPage extends \Smarty
 
         $headerContent = '';
 
-        // add css files to page
-      /*  foreach ($this->cssFiles as $cssFile)
-        {
-            $headerContent .= '<link rel="stylesheet" type="text/css" href="' . $cssFile . '" />';
-        }
-
-        // add javascript files to page
-        foreach ($this->jsFiles as $jsFile)
-        {
-            $headerContent .= '<script type="text/javascript" src="' . $jsFile . '"></script>';
-        }
-
-        // add rss feed files to page
-        foreach ($this->rssFiles as $title => $rssFile)
-        {
-            if (!is_numeric($title))
-            {
-                $headerContent .= '<link rel="alternate" type="application/rss+xml" title="' . $title . '" href="' . $rssFile . '" />';
-            }
-            else
-            {
-                $headerContent .= '<link rel="alternate" type="application/rss+xml" href="' . $rssFile . '" />';
-            }
-        }*/
-/*
-        // add javascript code to page
-        if ($this->javascriptContent !== '')
-        {
-            $headerContent .= '<script type="text/javascript">' . $this->javascriptContent . '</script>';
-        }*/
-
-        // add javascript code to page that will be executed after page is fully loaded
-        /*if ($this->javascriptContentExecute !== '')
-        {
-            $headerContent .= '<script type="text/javascript">
-                $(function() {
-                    $("[data-toggle=\'popover\']").popover();
-                    $("[data-toggle=tooltip]").tooltip();
-                    ' . $this->javascriptContentExecute . '
-                });
-            </script>';
-        }*/
-
         if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note'))
         {
             if ($gSetCookieForDomain)
@@ -509,21 +422,7 @@ class HtmlPage extends \Smarty
                 });
             </script>';
         }
-/*
-        $htmlHeader = '<head>
-            <!-- (c) 2004 - 2019 The Admidio Team - ' . ADMIDIO_HOMEPAGE . ' -->
 
-            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-            <title>' . $this->title . '</title>
-
-            <script type="text/javascript">
-                var gRootPath  = "' . ADMIDIO_URL . '";
-                var gThemePath = "' . THEME_URL . '";
-            </script>';
-*/
         $htmlHeader .= $headerContent;
         $htmlHeader .= $this->header;
         $htmlHeader .= $this->htmlMyHeader;
@@ -540,25 +439,6 @@ class HtmlPage extends \Smarty
     {
         $htmlMenu     = '';
         $htmlHeadline = '';
-
-        if ($this->showMenu)
-        {
-            // add mobile menu
-            $this->addModalMenu();
-            $htmlMenu = $this->mainNavbar->show();
-        }
-
-        /*if ($this->headline !== '')
-        {
-            if ($this->hasNavbar)
-            {
-                $htmlHeadline = '<h1 class="admidio-module-headline hidden-xs">' . $this->headline . '</h1>';
-            }
-            else
-            {
-                $htmlHeadline = '<h1 class="admidio-module-headline">' . $this->headline . '</h1>';
-            }
-        }*/
 
         $htmlBody = '<body>';
         $htmlBody .= $this->htmlMyBodyTop;
@@ -630,15 +510,6 @@ class HtmlPage extends \Smarty
     }
 
     /**
-     * Returns the menu object of this html page.
-     * @return HtmlNavbar Returns the menu object of this html page.
-     */
-    public function getMenu()
-    {
-        return $this->mainNavbar;
-    }
-
-    /**
      * Returns the title of the html page.
      * @return string Returns the title of the html page.
      */
@@ -692,7 +563,6 @@ class HtmlPage extends \Smarty
         }
 
         $this->headline = $headline;
-        $this->mainNavbar->setName($headline);
     }
 
     /** If set to true then a page without header menue and sidebar menu will be created.
@@ -800,15 +670,5 @@ class HtmlPage extends \Smarty
         {
             $this->display('index.tpl');
         }
-        /*
-        $this->addMainFilesAndContent();
-
-        // now show the complete html of the page
-        header('Content-type: text/html; charset=utf-8');
-
-        echo '<!DOCTYPE html><html>';
-        echo $this->getHtmlHeader();
-        echo $this->getHtmlBody();
-        echo '</html>';*/
     }
 }

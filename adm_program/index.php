@@ -26,41 +26,6 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage($headline);
 
-// main menu of the page
-$mainMenu = $page->getMenu();
-
-if($gValidLogin)
-{
-    // show link to own profile
-    $mainMenu->addItem(
-        'adm_menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
-        $gL10n->get('PRO_MY_PROFILE'), 'fa-user'
-    );
-    // show logout link
-    $mainMenu->addItem(
-        'adm_menu_item_logout', ADMIDIO_URL . '/adm_program/system/logout.php',
-        $gL10n->get('SYS_LOGOUT'), 'fa-sign-out-alt'
-    );
-}
-else
-{
-    // show login link
-    $mainMenu->addItem(
-        'adm_menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php',
-        $gL10n->get('SYS_LOGIN'), 'fa-key'
-    );
-
-    if($gSettingsManager->getBool('registration_enable_module'))
-    {
-        // show registration link
-        $mainMenu->addItem(
-            'adm_menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php',
-            $gL10n->get('SYS_REGISTRATION'), 'fa-address-card'
-        );
-    }
-}
-
 // display Menu
-$page->addHtml($gMenu->getHtml(true));
 
 $page->show();

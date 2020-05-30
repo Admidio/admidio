@@ -40,10 +40,7 @@ if ($getMode === 1)
 {
     // create html page object
     $page = new HtmlPage($gL10n->get('MEM_REMOVE_USER'));
-
-    // add back link to module menu
-    $messageMenu = $page->getMenu();
-    $messageMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
     $page->addHtml('
     <div class="message">

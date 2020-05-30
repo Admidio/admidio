@@ -123,8 +123,7 @@ if($showOption !== '')
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // add back link to module menu
-    $preferencesMenu = $page->getMenu();
-    $preferencesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fas fa-arrow-circle-left');
+    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 }
 else
 {
