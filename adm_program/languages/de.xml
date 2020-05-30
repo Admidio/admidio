@@ -1367,6 +1367,7 @@
   <string name="SYS_SETTINGS">Einstellungen</string>
   <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
   <string name="SYS_SHOW_MEMBER_LIST">Mitgliederliste anzeigen</string>
+  <string name="SYS_SHOW_PERMISSIONS">Berechtigungen anzeigen</string>
   <string name="SYS_SHOW_PROFILE">Profil anzeigen</string>
   <string name="SYS_SHOW_ROUTE">Route anzeigen</string>
   <string name="SYS_SIMILAR_USERS_FOUND">Es wurden bereits Benutzer mit ähnlichem Namen wie #VAR1_BOLD# in der Datenbank gefunden.</string>

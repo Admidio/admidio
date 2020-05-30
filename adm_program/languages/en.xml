@@ -1360,6 +1360,7 @@
   <string name="SYS_SETTINGS">Preferences</string>
   <string name="SYS_SHOW_CALENDAR">Display calendar</string>
   <string name="SYS_SHOW_MEMBER_LIST">Show member list</string>
+  <string name="SYS_SHOW_PERMISSIONS">Show permissions</string>
   <string name="SYS_SHOW_PROFILE">Show profile</string>
   <string name="SYS_SHOW_ROUTE">Show route</string>
   <string name="SYS_SIMILAR_USERS_FOUND">At least one user with similar name (#VAR1_BOLD# ) was found in the database.</string>

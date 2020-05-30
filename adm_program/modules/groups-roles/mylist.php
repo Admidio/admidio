@@ -111,6 +111,7 @@ else
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // within MySql it's only possible to join 61 tables therefore show a message if user
 // want's to join more than 57 columns
@@ -516,8 +517,6 @@ $page->addJavascript('$(function() {
         addColumn();
     }
 });', true);
-
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('mylist_configuration_form', ADMIDIO_URL. FOLDER_MODULES.'/groups-roles/mylist_prepare.php', $page);
