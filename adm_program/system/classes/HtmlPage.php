@@ -86,18 +86,6 @@ class HtmlPage extends \Smarty
      */
     protected $javascriptContentExecute = '';
     /**
-     * @var string Contains the custom html code of the header theme file. This will be added to the header part of the page.
-     */
-    protected $htmlMyHeader = '';
-    /**
-     * @var string Contains the custom html code of the top body theme file. This will be added to the top of the body part of the page.
-     */
-    protected $htmlMyBodyTop = '';
-    /**
-     * @var string Contains the custom html code of the bottom body theme file. This will be added to the end of thebody part of the page.
-     */
-    protected $htmlMyBodyBottom = '';
-    /**
      * @var string Contains the url to the previous page. If a url is set than a link to this page will be shown under the headline
      */
     protected $urlPreviousPage = '';
@@ -119,15 +107,6 @@ class HtmlPage extends \Smarty
 
         $this->setHeadline($headline);
 
-/*
-        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/css/bootstrap.css');
-        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/fontawesome.css');
-        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/solid.css');
-        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/brands.css');
-        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery/dist/jquery.js');
-        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/js/bootstrap.bundle.js');
-        $this->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/common_functions.js');
-  */
         parent::__construct();
 
         // initialize php template engine smarty
@@ -135,6 +114,11 @@ class HtmlPage extends \Smarty
         $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/template/cache/');
         $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/template/compile/');
         $this->setConfigDir(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/configs/');
+
+        if ($gSettingsManager->has('system_browser_update_check') && $gSettingsManager->getBool('system_browser_update_check'))
+        {
+            $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/browser-update/browser-update.js');
+        }
     }
 
     /**
@@ -230,64 +214,7 @@ class HtmlPage extends \Smarty
         $this->pageContent .= $html;
     }
 
-    /**
-     * adds the main necessary files
-     */
-    private function addMainFilesAndContent()
-    {
-        global $gSettingsManager;
-
-        // add admidio css file at last because there the user can redefine all css
-        $this->addCssFile(THEME_URL.'/css/admidio.css');
-
-        // if print mode is set then add a print specific css file
-        if ($this->printView)
-        {
-            $this->addCssFile(THEME_URL.'/css/print.css');
-        }
-
-        // add custom css file if it exists to add own css styles without edit the original admidio css
-        if (is_file(THEME_URL.'/css/custom.css'))
-        {
-            $this->addCssFile(THEME_URL.'/css/custom.css');
-        }
-
-        if ($gSettingsManager->has('system_browser_update_check') && $gSettingsManager->getBool('system_browser_update_check'))
-        {
-            $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/browser-update/browser-update.js');
-        }
-
-        // add code for a modal window
-        $this->addJavascript('
-            $("#admidio_modal").on("show.bs.modal", function (event) {
-              var link = $(event.relatedTarget);
-              var url  = link.attr("href");
               if(typeof(url) != "undefined")
-                  $(this).find(".modal-content").load(url);
-            });
-
-            $("body").on("hidden.bs.modal", ".modal", function() {
-                $(this).removeData("bs.modal");
-            });',
-            true
-        );
-        $this->addHtml('
-            <div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">Test</div>
-                </div>
-            </div>'
-        );
-
-        // load content of theme files at this point so that files could add css and js files
-        /*if ($this->showThemeHtml)
-        {
-            $this->htmlMyHeader     = $this->getFileContent('my_header.php');
-            $this->htmlMyBodyTop    = $this->getFileContent('my_body_top.php');
-            $this->htmlMyBodyBottom = $this->getFileContent('my_body_bottom.php');
-        }*/
-    }
-
     /**
      * Add a new menu item to the page menu part. This is only the menu that will show functions of the
      * current page. The menu header will automatically the name of the page. If a dropdown menu item should
@@ -339,32 +266,6 @@ class HtmlPage extends \Smarty
     public function getHeadline()
     {
         return $this->headline;
-    }
-
-    /**
-     * Loads the content of the given theme file
-     * @param string $filename Filename to load out of the theme directory
-     * @return string
-     */
-    private function getFileContent($filename)
-    {
-        global $gLogger, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
-        global $gValidLogin, $gProfileFields, $gHomepage, $gSettingsManager, $gMenu;
-
-        $filePath = THEME_PATH . '/' . $filename;
-        if (!is_file($filePath))
-        {
-            $gLogger->error('THEME: Theme file "' . $filename . '" not found!', array('filePath' => $filePath));
-
-            return '';
-        }
-
-        ob_start();
-        require($filePath);
-        $fileContent = ob_get_contents();
-        ob_end_clean();
-
-        return $fileContent;
     }
 
     /**
@@ -425,32 +326,9 @@ class HtmlPage extends \Smarty
 
         $htmlHeader .= $headerContent;
         $htmlHeader .= $this->header;
-        $htmlHeader .= $this->htmlMyHeader;
         $htmlHeader .= '</head>';
 
         return $htmlHeader;
-    }
-
-    /**
-     * Builds the HTML-Body content
-     * @return string
-     */
-    private function getHtmlBody()
-    {
-        $htmlMenu     = '';
-        $htmlHeadline = '';
-
-        $htmlBody = '<body>';
-        $htmlBody .= $this->htmlMyBodyTop;
-        $htmlBody .= '<div class="admidio-content">';
-        //$htmlBody .= $htmlHeadline;
-        $htmlBody .= $htmlMenu;
-        $htmlBody .= $this->pageContent;
-        $htmlBody .= '</div>';
-        $htmlBody .= $this->htmlMyBodyBottom;
-        $htmlBody .= '</body>';
-
-        return $htmlBody;
     }
 
     /* Add page specific javascript files, css files or rss files to the header. Also specific header
@@ -645,7 +523,7 @@ class HtmlPage extends \Smarty
 
         $this->assign('printView', $this->printView);
         $this->assign('menuSidebar', $gMenu->getHtml());
-        $this->assign('content', $this->getHtmlBody());
+        $this->assign('content', $this->pageContent);
 
         // add imprint and data protection
         if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0)
