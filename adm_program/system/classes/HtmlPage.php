@@ -214,7 +214,6 @@ class HtmlPage extends \Smarty
         $this->pageContent .= $html;
     }
 
-              if(typeof(url) != "undefined")
     /**
      * Add a new menu item to the page menu part. This is only the menu that will show functions of the
      * current page. The menu header will automatically the name of the page. If a dropdown menu item should
