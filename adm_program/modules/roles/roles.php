@@ -269,7 +269,7 @@ while($row = $rolStatement->fetch())
                                     src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>';
     }
 
-    $linkAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id'. $rolId)).'"><img
+    $linkAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id' => $rolId)).'"><img
                 src="'. THEME_URL. '/icons/vcard.png"
                 alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($rolName)).'"
                 title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($rolName)).'"/></a>';
