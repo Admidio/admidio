@@ -1958,19 +1958,9 @@ class HtmlForm extends HtmlFormBasic
             }
         }
 
-        if(Language::isTranslationStringId($textId))
-        {
-            $html = '<img class="admidio-icon-help" src="' . THEME_URL . '/icons/help.png"
-                title="' . $gL10n->get('SYS_NOTE') . '" alt="Help" data-toggle="popover" data-html="true"
-                data-trigger="hover" data-placement="auto" data-content="' . htmlspecialchars($text) . '" />';
-        }
-        else
-        {
-            $html = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => $textId, 'inline' => 'true')).'"><img
-                src="'.THEME_URL.'/icons/help.png" alt="Help" />
-            </a>';
-        }
+        $html = '<img class="admidio-icon-help" src="' . THEME_URL . '/icons/help.png"
+            title="' . $gL10n->get('SYS_NOTE') . '" alt="Help" data-toggle="popover" data-html="true"
+            data-trigger="hover" data-placement="auto" data-content="' . htmlspecialchars($text) . '" />';
 
         return $html;
     }
