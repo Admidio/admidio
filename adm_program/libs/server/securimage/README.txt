@@ -4,16 +4,19 @@ NAME:
 
 VERSION:
 
-    3.6.6
+    3.6.8
 
-AUTHOR:
+## Project Status
 
-    Drew Phillips <drew@drew-phillips.com>
+See the Project Status issue on GitHub at https://github.com/dapphp/securimage/issues/99
 
 DOWNLOAD:
 
-    The latest version can always be
-    found at http://www.phpcaptcha.org
+    Download and browse the code at https://github.com/dapphp/securimage.
+    Beta code is available at https://github.com/dapphp/securimage/tree/nextgen.
+
+    Other information is available at [phpcaptcha.org](https://www.phpcaptcha.org)
+
 
 DOCUMENTATION:
 
@@ -22,7 +25,7 @@ DOCUMENTATION:
 
 REQUIREMENTS:
 
-    PHP 5.2 or greater
+    PHP 5.4 or greater
     GD  2.0
     FreeType (Required, for TTF fonts)
     PDO (if using Sqlite, MySQL, or PostgreSQL)
@@ -90,7 +93,7 @@ UPGRADE NOTICE:
 
 COPYRIGHT:
 
-    Copyright (c) 2016 Drew Phillips
+    Copyright (c) 2018 Drew Phillips
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without

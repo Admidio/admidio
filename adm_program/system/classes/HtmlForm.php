@@ -1974,18 +1974,9 @@ class HtmlForm extends HtmlFormBasic
             $text = $gL10n->get($textId, array($parameter));
         }
 
-        if(Language::isTranslationStringId($textId))
-        {
-            $html = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
-                title="'.$gL10n->get('SYS_NOTE').'" data-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
-        }
-        else
-        {
-            $html = '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-class="modal-lg"
-                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => $textId, 'inline' => 'true')).'"><i
-                class="fas fa-info-circle admidio-info-icon"></i>
-            </a>';
-        }
+        $html = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover"
+            data-html="true" data-trigger="hover" data-placement="auto"
+            title="'.$gL10n->get('SYS_NOTE').'" data-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
 
         return $html;
     }
