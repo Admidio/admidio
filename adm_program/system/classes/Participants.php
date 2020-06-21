@@ -103,11 +103,12 @@ class Participants
         $sql = 'SELECT DISTINCT mem_usr_id, mem_leader, mem_approved, mem_count_guests
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = ? -- $this->rolId
-                   AND mem_end   >= ? -- DATE_NOW
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
                    AND (mem_approved IS NULL
                             OR mem_approved < 3)';
 
-        $membersStatement = $this->db->queryPrepared($sql, array($this->rolId, DATE_NOW));
+        $membersStatement = $this->db->queryPrepared($sql, array($this->rolId, DATE_NOW, DATE_NOW));
 
         // Write all member Id´s and leader status in an array
         $numParticipants = array();
@@ -207,11 +208,13 @@ class Participants
                     ON firstname.usd_usr_id = mem_usr_id
                    AND firstname.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                  WHERE mem_rol_id = ? -- $this->rolId
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
               ORDER BY surname '.$this->order;
         $queryParams = array(
             (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
             (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-            $this->rolId
+            $this->rolId, DATE_NOW, DATE_NOW
         );
         $membersStatement = $this->db->queryPrepared($sql, $queryParams);
 
