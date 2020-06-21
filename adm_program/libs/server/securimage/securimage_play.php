@@ -27,18 +27,14 @@
  * @link http://www.phpcaptcha.org Securimage PHP CAPTCHA
  * @link http://www.phpcaptcha.org/latest.zip Download Latest Version
  * @link http://www.phpcaptcha.org/Securimage_Docs/ Online Documentation
- * @copyright 2012 Drew Phillips
+ * @copyright 2018 Drew Phillips
  * @author Drew Phillips <drew@drew-phillips.com>
- * @version 3.6.6 (Nov 20 2017)
+ * @version 3.6.8 (May 2020)
  * @package Securimage
  *
  */
 
 require_once dirname(__FILE__) . '/securimage.php';
-
-// ***** START ADMIDIO CODE *****
-require_once(__DIR__ . '/../../../../adm_program/system/common.php');
-// ***** END ADMIDIO CODE *****
 
 // if using database, adjust these options as necessary and change $img = new Securimage(); to $img = new Securimage($options);
 // see test.mysql.php or test.sqlite.php for examples
