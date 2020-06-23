@@ -66,12 +66,18 @@ class RssFeed
      * @param string $title       Headline of this item
      * @param string $description The main content of the item which can contain html
      * @param string $link        Link to this entry on the homepage
-     * @param string $author      The name of the member who creates this entry
-     * @param string $date        Publication date of this entry
+     * @param string $author      Optional the email address of the member who creates this entry
+     * @param string $pubDate     Optional the publication date of this entry
+     * @param string $category    Optional the category of this entry
      */
-    public function addItem($title, $description, $link, $author, $date)
+    public function addItem($title, $description, $link, $author = '', $pubDate = '', $category = '')
     {
-        $this->items[] = array('title' => $title, 'description' => $description, 'link' => $link, 'author' => $author, 'pubDate' => $date);
+        if(!strValidCharacters(admStrToLower($author), 'email'))
+        {
+            $author = '';
+        }
+
+        $this->items[] = array('title' => $title, 'description' => $description, 'link' => $link, 'author' => $author, 'pubDate' => $pubDate, 'category' => $category);
     }
 
     /**
@@ -96,7 +102,8 @@ class RssFeed
      */
     private function getRssHeader()
     {
-        return '<?xml version="1.0" encoding="utf-8"?>'.chr(10).'<rss version="2.0">'.chr(10);
+        return '<?xml version="1.0" encoding="utf-8"?>'.chr(10).
+        '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">'.chr(10);
     }
 
     /**
@@ -104,7 +111,8 @@ class RssFeed
      */
     private function getChannelOpener()
     {
-        return '<channel>'.chr(10);
+        return '<channel>'.chr(10).
+        '<atom:link href="' . $this->feed . '" rel="self" type="application/rss+xml" />'.chr(10);
     }
 
     /**
@@ -138,11 +146,15 @@ class RssFeed
         foreach ($this->items as $item)
         {
             $itemString .= '<item>'.chr(10);
-            foreach (array('title', 'description', 'link', 'author', 'pubDate') as $field)
+            foreach (array('title', 'description', 'link', 'author', 'pubDate', 'category') as $field)
             {
                 if (isset($item[$field]))
                 {
-                    $itemString .= '<'.$field.'>'.htmlspecialchars($item[$field], ENT_QUOTES).'</'.$field.'>'.chr(10);
+                    // optional fields should only be set if they have a value
+                    if($item[$field] !== '')
+                    {
+                        $itemString .= '<'.$field.'>'.htmlspecialchars($item[$field], ENT_QUOTES).'</'.$field.'>'.chr(10);
+                    }
                 }
             }
             $itemString .= '<guid>'.str_replace('&', '&amp;', $item['link']).'</guid>'.chr(10);
