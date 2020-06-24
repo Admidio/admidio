@@ -72,7 +72,7 @@ class RssFeed
      */
     public function addItem($title, $description, $link, $author = '', $pubDate = '', $category = '')
     {
-        if(!strValidCharacters(admStrToLower($author), 'email'))
+        if(!StringUtils::strValidCharacters(StringUtils::strToLower($author), 'email'))
         {
             $author = '';
         }
