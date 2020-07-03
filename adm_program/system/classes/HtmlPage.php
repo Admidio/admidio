@@ -267,69 +267,6 @@ class HtmlPage extends \Smarty
         return $this->headline;
     }
 
-    /**
-     * Builds the HTML-Header content
-     * @return string
-     */
-    private function getHtmlHeader()
-    {
-        global $gL10n, $gSettingsManager, $gSetCookieForDomain;
-
-        $headerContent = '';
-
-        if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note'))
-        {
-            if ($gSetCookieForDomain)
-            {
-                $path = '/';
-            }
-            else
-            {
-                $path = ADMIDIO_URL_PATH . '/';
-            }
-
-            // add cookie approval to the page
-            $headerContent .= '<link rel="stylesheet" type="text/css" href="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/cookieconsent/cookieconsent.min.css" />
-            <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/cookieconsent/cookieconsent.min.js"></script>
-            <script>
-                window.addEventListener("load", function() {
-                    window.cookieconsent.initialise({
-                        "cookie": {
-                            "name": "' . COOKIE_PREFIX . '_cookieconsent_status",
-                            "domain": "' . DOMAIN .'",
-                            "path": "' . $path .'"
-                        },
-                        "content": {
-                            "message": "' . $gL10n->get('SYS_COOKIE_DESC') . '",
-                            "dismiss": "' . $gL10n->get('SYS_OK') . '",';
-                            if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0)
-                            {
-                                $headerContent .= ' "href": "'. $gSettingsManager->getString('system_url_data_protection') .'", ';
-                            }
-                            $headerContent .= '"link": "' . $gL10n->get('SYS_FURTHER_INFORMATIONS') . '"
-                        },
-                        "position": "bottom",
-                        "theme": "classic",
-                        "palette": {
-                            "popup": {
-                                "background": "#252e39"
-                            },
-                            "button": {
-                                "background": "#409099"
-                            }
-                        }
-                    });
-                });
-            </script>';
-        }
-
-        $htmlHeader .= $headerContent;
-        $htmlHeader .= $this->header;
-        $htmlHeader .= '</head>';
-
-        return $htmlHeader;
-    }
-
     /* Add page specific javascript files, css files or rss files to the header. Also specific header
      * informations will also be added
      * @return string Html string with all additional header informations
@@ -497,7 +434,7 @@ class HtmlPage extends \Smarty
      */
     public function show()
     {
-        global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager;
+        global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager, $gSetCookieForDomain;
 
         $urlImprint = '';
         $urlDataProtection = '';
@@ -535,6 +472,32 @@ class HtmlPage extends \Smarty
         }
         $this->assign('urlImprint', $urlImprint);
         $this->assign('urlDataProtection', $urlDataProtection);
+
+        // show cookie note
+        if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note'))
+        {
+            $this->assign('cookieNote', $gSettingsManager->getBool('system_cookie_note'));
+            $this->assign('cookieDomain', DOMAIN);
+            $this->assign('cookiePrefix', COOKIE_PREFIX);
+
+            if ($gSetCookieForDomain)
+            {
+                $this->assign('cookiePath', '/');
+            }
+            else
+            {
+                $this->assign('cookiePath', ADMIDIO_URL_PATH . '/');
+            }
+
+            if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0)
+            {
+                $this->assign('cookieDataProtectionUrl', '"href": "'. $gSettingsManager->getString('system_url_data_protection') .'", ');
+            }
+            else
+            {
+                $this->assign('cookieDataProtectionUrl', '');
+            }
+        }
 
         // add translation object
         $this->assign('l10n', $gL10n);

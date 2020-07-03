@@ -13,31 +13,31 @@
     <link rel="apple-touch-icon" type="image/png" href="{$urlTheme}/images/apple-touch-icon.png" sizes="180x180" />
 
     <title>{$title}</title>
-    
+
     {include file="js_css_files.tpl"}
 
     {$additionalHeaderData}
 
     <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/new.css" />
-    
+
     <script type="text/javascript">
         var gRootPath  = "{$urlAdmidio}";
         var gThemePath = "{$urlTheme}";
 
         {$javascriptContent}
-            
+
         // add javascript code to page that will be executed after page is fully loaded
         $(function() {
             $("[data-toggle=\'popover\']").popover();
             $("[data-toggle=tooltip]").tooltip();
-            
+
             // Sidebar toggle behavior
             $('#sidebarCollapse').on('click', function() {
                 $('#sidebar, #content').toggleClass('active');
             });
-            
+
             {$javascriptContentExecuteAtPageLoad}
-            
+
             // function to handle modal window and load data from url
             $('.openPopup').on('click',function(){
                 $('.modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
@@ -54,6 +54,10 @@
             });
         });
     </script>
+
+    {if $cookieNote}
+        {include file="cookie_note.tpl"}
+    {/if}
 </head>
 <body>
     <div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -61,7 +65,7 @@
             <div class="modal-content">Test</div>
         </div>
     </div>
-    
+
     <nav class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar" id="admidio-main-navbar">
       <a class="navbar-brand" href="{$urlAdmidio}/adm_program/index.php">
         <img class="d-none d-sm-inline" src="{$urlTheme}/images/admidio_logo.png" width="120" height="40" class="d-inline-block align-top" alt="">
@@ -89,30 +93,30 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/registration/registration.php">{$l10n->get('SYS_REGISTRATION')}</a>
                 </li>
-              {/if} 
+              {/if}
             </ul>
           {/if}
       </div>
       <!--<img id="admidio-navbar-photo" class="rounded-circle float-right" src="{$urlAdmidio}/adm_program/modules/profile/profile_photo_show.php?usr_id={$userId}" alt="Profile picture" />-->
     </nav>
-    
+
     <div class="container-fluid">
         <div class="row flex-xl-nowrap">
             <div class="col-12 col-md-3 col-xl-2 admidio-sidebar" id="sidebar">
                 <div class="admidio-headline-mobile-menu d-md-none p-2 ml-2">
                 <span class="text-uppercase">Menü</span>
-                <button class="btn btn-link d-md-none collapsed" type="button" data-toggle="collapse" 
+                <button class="btn btn-link d-md-none collapsed" type="button" data-toggle="collapse"
                     data-target="#admidio-main-menu" aria-controls="admidio-main-menu" aria-expanded="false">
                     <i class="fas fa-bars fa-fw"></i>
                 </button>
                 </div>
                 {$menuSidebar}
             </div>
-            
+
             <div class="col-12 col-md-9 col-xl-10 admidio-content" id="content" role="main">
                 <div class="admidio-content-header">
                     <h1 class="admidio-module-headline">{$headline}</h1>
-        
+
                     <!-- Add link to previous page -->
                     {if $urlPreviousPage != ''}
                         <a class="" href="{$urlPreviousPage}"><i class="fas fa-arrow-circle-left fa-fw"></i> {$l10n->get('SYS_BACK')}</a>
@@ -120,7 +124,7 @@
                 </div>
 
                 {$content}
-                
+
                 <div id="imprint">&copy; 2004 - 2020&nbsp;&nbsp;<a href="https://www.admidio.org">{$l10n->get('SYS_ADMIDIO_TEAM')}</a>
                     {if $urlImprint != ''}
                         &nbsp;&nbsp;-&nbsp;&nbsp;<a href="{$urlImprint}">{$l10n->get('SYS_IMPRINT')}</a>
