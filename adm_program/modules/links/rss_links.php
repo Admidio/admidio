@@ -103,7 +103,8 @@ while ($row = $statement->fetch())
         '<a href="'.$lnkUrl.'" target="_blank">'.$lnkUrl.'</a><br /><br />'. $weblink->getValue('lnk_description'),
         SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/links/links.php', array('id' => (int) $weblink->getValue('lnk_id'))),
         $row['create_name'],
-        \DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create', 'Y-m-d H:i:s'))->format('r')
+        \DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
+        $weblink->getValue('cat_name')
     );
 }
 
