@@ -151,12 +151,11 @@ class Message
         {
             // create html page object
             $page = new HtmlPage($headline);
-            $page->hideMenu();
 
             if(!$this->includeThemeBody)
             {
                 // don't show custom html of the current theme
-                $page->hideThemeHtml();
+                $page->setInlineMode();
             }
 
             // forward to next page after x seconds

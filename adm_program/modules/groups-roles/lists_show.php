@@ -344,8 +344,6 @@ if ($getMode !== 'csv')
     {
         // create html page object without the custom theme files
         $page = new HtmlPage();
-        $page->hideThemeHtml();
-        $page->hideMenu();
         $page->setPrintMode();
         $page->setTitle($title);
         $page->setHeadline($headline);

@@ -68,9 +68,12 @@
 
     <nav class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar" id="admidio-main-navbar">
       <a class="navbar-brand" href="{$urlAdmidio}/adm_program/index.php">
-        <img class="d-none d-sm-inline" src="{$urlTheme}/images/admidio_logo.png" width="120" height="40" class="d-inline-block align-top" alt="">
+        <img class="d-none d-sm-inline d-inline-block align-top" src="{$urlTheme}/images/admidio_logo.png" width="120" height="40"
+            alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
       </a>
-      {$organizationName}
+      <span id="headline-membership" class="d-block d-lg-none">{$organizationName}</span>
+      <span id="headline-membership" class="d-none d-lg-block">{$l10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION')} - {$organizationName}</span>
+
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -125,7 +128,7 @@
 
                 {$content}
 
-                <div id="imprint">&copy; 2004 - 2020&nbsp;&nbsp;<a href="https://www.admidio.org">{$l10n->get('SYS_ADMIDIO_TEAM')}</a>
+                <div id="imprint">&copy; 2004 - 2020&nbsp;&nbsp;<a href="https://www.admidio.org">Admidio</a>
                     {if $urlImprint != ''}
                         &nbsp;&nbsp;-&nbsp;&nbsp;<a href="{$urlImprint}">{$l10n->get('SYS_IMPRINT')}</a>
                     {/if}

@@ -50,14 +50,6 @@ class HtmlPage extends \Smarty
      */
     protected $menuNodePageFunctions;
     /**
-     * @var bool If set to true then the custom html code of the theme for each page will be included.
-     */
-    protected $showThemeHtml = true;
-    /**
-     * @var bool If set to true then the menu will be included.
-     */
-    protected $showMenu = true;
-    /**
      * @var bool Flag if the current page has a navbar.
      */
     protected $hasNavbar = false;
@@ -339,28 +331,6 @@ class HtmlPage extends \Smarty
     public function hasNavbar()
     {
         $this->hasNavbar = true;
-    }
-
-    /**
-     * Every html page of Admidio contains a menu.
-     * If the menu should not be included in the current page, than this method must be called.
-     * @return void
-     */
-    public function hideMenu()
-    {
-        $this->showMenu = false;
-    }
-
-    /**
-     * Every html page of Admidio contains three files of the custom theme.
-     * my_header.php, my_body_top.php and my_body_bottom.php
-     * With these files the administrator can contain custom layout to Admidio.
-     * If these files should not be included in the current page, than this method must be called.
-     * @return void
-     */
-    public function hideThemeHtml()
-    {
-        $this->showThemeHtml = false;
     }
 
     /**

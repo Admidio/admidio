@@ -17,13 +17,15 @@
 }
 
 #admidio-main-navbar {
-    color: #eeeeee;
+    color: #ffffff;
     font-weight: bold;
-    font-size: 1.4rem;
+    font-size: 1.7rem;
+    padding-top: 0px;
 }
 
 #admidio-main-navbar .navbar-brand img {
-    margin-right: 15px;
+    margin-right: 10px;
+    margin-top: 10px;
 }
 
 #admidio-main-navbar a {
