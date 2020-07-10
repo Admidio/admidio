@@ -72,17 +72,16 @@ PhpIniUtils::startNewExecutionTimeLimit(600);
 for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
 {
     $user->clear();
-    $columnArray = explode($_SESSION['value_separator'], $line);
+    $columnArray = str_getcsv($line, $_SESSION['value_separator']);
 
     foreach($columnArray as $columnKey => $columnValue)
     {
-        // Hochkomma und Spaces entfernen
-        $columnValue = trim(strip_tags(str_replace('"', '', $columnValue)));
+        // remove spaces and html tags
+        $columnValue = trim(strip_tags($columnValue));
         $columnValueToLower = admStrToLower($columnValue);
 
-        // nun alle Userfelder durchgehen und schauen, bei welchem
-        // die entsprechende Dateispalte ausgewaehlt wurde
-        // dieser dann den Wert zuordnen
+        // now go through all user fields and see, at which the corresponding
+        // file column was selected then assign the value to this
         /**
          * @var TableUserField $field
          */
@@ -94,7 +93,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
             {
                 $usfNameIntern = $field->getValue('usf_name_intern');
 
-                // importiertes Feld merken
+                // remember imported field
                 if(!isset($importedFields[$usfId]))
                 {
                     $importedFields[$usfId] = $usfNameIntern;
