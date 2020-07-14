@@ -13,41 +13,41 @@
     <link rel="apple-touch-icon" type="image/png" href="{$urlTheme}/images/apple-touch-icon.png" sizes="180x180" />
 
     <title>{$title}</title>
-    
+
     {include file="js_css_files.tpl"}
 
     {if $printView}
         <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/print.css" />
     {else}
-        <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/new.css" />
+        <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/admidio.css" />
     {/if}
-    
+
     <script type="text/javascript">
         var gRootPath  = "{$urlAdmidio}";
         var gThemePath = "{$urlTheme}";
 
         {$javascriptContent}
-            
+
         // add javascript code to page that will be executed after page is fully loaded
         $(function() {
             $("[data-toggle=\'popover\']").popover();
             $("[data-toggle=tooltip]").tooltip();
-            
-            {$javascriptContentExecuteAtPageLoad}            
+
+            {$javascriptContentExecuteAtPageLoad}
         });
     </script>
 </head>
-<body class="admidio-reduced">   
+<body class="admidio-reduced">
     <div class="admidio-content" id="content" role="main">
         <div class="admidio-content-header">
             <h1 class="admidio-module-headline">{$headline}</h1>
-    
+
             <!-- Add link to previous page -->
             {if $urlPreviousPage != ''}
                 <a class="" href="{$urlPreviousPage}"><i class="fas fa-arrow-circle-left fa-fw"></i> {$l10n->get('SYS_BACK')}</a>
             {/if}
         </div>
-    
+
         {$content}
     </div>
 </body>

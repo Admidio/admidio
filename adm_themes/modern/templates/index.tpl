@@ -18,7 +18,7 @@
 
     {$additionalHeaderData}
 
-    <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/new.css" />
+    <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/admidio.css" />
 
     <script type="text/javascript">
         var gRootPath  = "{$urlAdmidio}";
