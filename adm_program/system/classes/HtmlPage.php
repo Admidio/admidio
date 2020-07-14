@@ -78,13 +78,17 @@ class HtmlPage extends \Smarty
      */
     protected $javascriptContentExecute = '';
     /**
-     * @var string Contains the url to the previous page. If a url is set than a link to this page will be shown under the headline
-     */
-    protected $urlPreviousPage = '';
-    /**
      * @var bool If set to true then a page without header menue and sidebar menu will be created. The main template file will be index_inline.tpl
      */
     protected $modeInline = false;
+    /**
+     * @var string Name of an additional template file that should be loaded within the current page.
+     */
+    protected $templateFile = '';
+    /**
+     * @var string Contains the url to the previous page. If a url is set than a link to this page will be shown under the headline
+     */
+    protected $urlPreviousPage = '';
 
 
     /**
@@ -222,6 +226,23 @@ class HtmlPage extends \Smarty
     public function addPageFunctionsMenuItem($id, $name, $url, $icon, $parentMenuItemId = '', $badgeCount = 0, $description = '')
     {
         $this->menuNodePageFunctions->addItem($id, $name, $url, $icon, $parentMenuItemId, $badgeCount, $description);
+    }
+
+    /**
+     * If print mode is set then the reduced template file **index_reduced.tpl** will be loaded with
+     * a print specific css file **print.css**. All styles will be more print compatible and are
+     * only black, grey and white.
+     * @param string $templateFile The name of the template file in the templates folder of
+     *                             the current theme that should be loaded within the current page.
+     */
+    public function addTemplateFile($templateFile)
+    {
+        if($templateFile === '' || !is_file(THEME_PATH . '/templates/' . $templateFile))
+        {
+            throw new \UnexpectedValueException('Invalid folder path!');
+        }
+
+        $this->templateFile = $templateFile;
     }
 
     /**
@@ -394,12 +415,17 @@ class HtmlPage extends \Smarty
      */
     public function setUrlPreviousPage($url)
     {
-        //$this->urlPreviousPage = admFuncCheckUrl($url);
+        if(admFuncCheckUrl($url) === false)
+        {
+            throw new \UnexpectedValueException('Invalid url!');
+        }
+
         $this->urlPreviousPage = $url;
     }
 
     /**
-     * This method send the whole html code of the page to the browser.
+     * This method will set all variables for the Smarty engine and than send the whole html
+     * content also to the template engine which will generate the html page.
      * Call this method if you have finished your page layout.
      */
     public function show()
@@ -429,6 +455,7 @@ class HtmlPage extends \Smarty
 
         $this->assign('printView', $this->printView);
         $this->assign('menuSidebar', $gMenu->getHtml());
+        $this->assign('templateFile', $this->templateFile);
         $this->assign('content', $this->pageContent);
 
         // add imprint and data protection

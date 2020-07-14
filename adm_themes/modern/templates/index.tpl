@@ -16,6 +16,7 @@
 
     {include file="js_css_files.tpl"}
 
+    {* Additional header informations that will be displayed if the header was set through $page->addHeader() *}
     {$additionalHeaderData}
 
     <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/admidio.css" />
@@ -55,6 +56,7 @@
         });
     </script>
 
+    {* If activated in the Admidio settings a cookie note script will be integrated and show a cookie message that the user must accept *}
     {if $cookieNote}
         {include file="cookie_note.tpl"}
     {/if}
@@ -126,7 +128,13 @@
                     {/if}
                 </div>
 
+                {* The main content of the page that will be generated through the Admidio scripts *}
                 {$content}
+
+                {* Additional template file that will be loaded if the file was set through $page->setTemplateFile() *}
+                {if $templateFile != ''}
+                    {include file=$templateFile}
+                {/if}
 
                 <div id="imprint">&copy; 2004 - 2020&nbsp;&nbsp;<a href="https://www.admidio.org">Admidio</a>
                     {if $urlImprint != ''}
