@@ -110,6 +110,7 @@ class HtmlPage extends \Smarty
         $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/template/cache/');
         $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/template/compile/');
         $this->setConfigDir(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/configs/');
+        $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
 
         if ($gSettingsManager->has('system_browser_update_check') && $gSettingsManager->getBool('system_browser_update_check'))
         {
@@ -229,9 +230,8 @@ class HtmlPage extends \Smarty
     }
 
     /**
-     * If print mode is set then the reduced template file **index_reduced.tpl** will be loaded with
-     * a print specific css file **print.css**. All styles will be more print compatible and are
-     * only black, grey and white.
+     * This method add a specific template file of the themes folder to the current page. The default
+     * template will be loaded and this file will be included after the main page content.
      * @param string $templateFile The name of the template file in the templates folder of
      *                             the current theme that should be loaded within the current page.
      */
@@ -239,7 +239,7 @@ class HtmlPage extends \Smarty
     {
         if($templateFile === '' || !is_file(THEME_PATH . '/templates/' . $templateFile))
         {
-            throw new \UnexpectedValueException('Invalid folder path!');
+            throw new \UnexpectedValueException('Invalid template file ' . $templateFile . ' !');
         }
 
         $this->templateFile = $templateFile;

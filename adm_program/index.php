@@ -25,6 +25,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->addTemplateFile('overview.tpl');
 
 // display Menu
 
