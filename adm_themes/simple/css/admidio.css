@@ -434,3 +434,7 @@ label {
 .admidio-btn-event-cancel .fas {
     color: #df2424 !important;
 }
+
+#plgCalendarTable {
+    width: 100%;
+}
