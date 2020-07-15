@@ -29,12 +29,6 @@ if (is_file(__DIR__ . '/config.php'))
 // Initialize and check the parameters
 $getDateId = admFuncVariableIsValid($_GET, 'date_id', 'string');
 
-if(isset($_GET['ajax_change']) && $plg_ajax_change)
-{
-    // Header kodieren
-    header('Content-Type: text/html; charset=utf-8');
-}
-
 // set default values if there no value has been stored in the config.php
 if(!isset($plg_ajaxbox))
 {
@@ -81,17 +75,14 @@ if(!isset($plg_kal_cat_show))
     $plg_kal_cat_show = 1;
 }
 
-// Prüfen ob the Link-URL gesetzt wurde oder leer ist
-// wenn leer, dann Standardpfad zum Admidio-Modul
-
+// check if the link url was set or is empty
+// otherwise the defaut url to the Admidio event module will be set
 if(!isset($plg_link_url) || $plg_link_url === '')
 {
     $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
 }
 
-// /////////////////////////////////////////////////////// //
-// Prüfen, ob die Rollenbedingung gesetzt wurde            //
-// /////////////////////////////////////////////////////// //
+// check if role conditions where set
 if(isset($plg_rolle_sql) && count($plg_rolle_sql) > 0)
 {
     $sqlRoleIds = 'IN (' . implode(',', $plg_rolle_sql) . ')';
@@ -99,6 +90,12 @@ if(isset($plg_rolle_sql) && count($plg_rolle_sql) > 0)
 else
 {
     $sqlRoleIds = 'IS NOT NULL';
+}
+
+// add header content type if in ajax mode
+if($plg_ajax_change)
+{
+    header('Content-Type: text/html; charset=utf-8');
 }
 
 // Nun noch einige Variablen initialisieren
