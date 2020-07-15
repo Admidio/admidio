@@ -151,7 +151,7 @@ if ($message !== '')
 {
     showNotice(
         $message,
-        ADMIDIO_URL . '/adm_program/index.php',
+        ADMIDIO_URL . '/adm_program/overview.php',
         $gL10n->get('SYS_OVERVIEW'),
         'fa-home'
     );
@@ -207,7 +207,7 @@ if ($installedDbVersion === '')
 
     showNotice(
         $message,
-        ADMIDIO_URL . '/adm_program/index.php',
+        ADMIDIO_URL . '/adm_program/overview.php',
         $gL10n->get('SYS_OVERVIEW'),
         'fa-home',
         true
@@ -285,7 +285,7 @@ if ($getMode === 1)
 
         showNotice(
             $message,
-            ADMIDIO_URL . '/adm_program/index.php',
+            ADMIDIO_URL . '/adm_program/overview.php',
             $gL10n->get('SYS_OVERVIEW'),
             'fa-home',
             true
@@ -309,7 +309,7 @@ if ($getMode === 1)
 
         showNotice(
             $message,
-            ADMIDIO_URL . '/adm_program/index.php',
+            ADMIDIO_URL . '/adm_program/overview.php',
             $gL10n->get('SYS_OVERVIEW'),
             'fa-home',
             true
@@ -350,7 +350,7 @@ elseif ($getMode === 2)
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
     $form->addButton(
         'main_page', $gL10n->get('SYS_LATER'),
-        array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/index.php')
+        array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/overview.php')
     );
     $form->closeButtonGroup();
     echo $form->show();

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
     <step id="5">UPDATE %PREFIX%_preferences SET prf_value = 'simple' WHERE prf_name = 'theme'</step>
+    <step id="7">UPDATE %PREFIX%_preferences SET prf_value = 'adm_program/overview.php' WHERE prf_name = 'homepage_logout' AND prf_value = 'adm_program/index.php'</step>
+    <step id="8">UPDATE %PREFIX%_preferences SET prf_value = 'adm_program/overview.php' WHERE prf_name = 'homepage_login' AND prf_value = 'adm_program/index.php'</step>
+    <step id="9">UPDATE %PREFIX%_menu SET men_url = '/adm_program/overview.php' WHERE men_name_intern = 'overview' AND men_url = '/adm_program/index.php'</step>
     <step id="10">UPDATE %PREFIX%_menu SET men_icon = 'fa-home' WHERE men_icon = 'home.png'</step>
     <step id="20">UPDATE %PREFIX%_menu SET men_icon = 'fa-newspaper' WHERE men_icon = 'announcements.png'</step>
     <step id="30">UPDATE %PREFIX%_menu SET men_icon = 'fa-download' WHERE men_icon = 'download.png'</step>

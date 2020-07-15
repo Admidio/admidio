@@ -254,7 +254,7 @@ $sql = 'INSERT INTO '.TBL_MENU.'
         VALUES (NULL, NULL, 1, 1, 1, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
              , (NULL, NULL, 1, 2, 1, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
              , (NULL, NULL, 1, 3, 1, \'plugins\', NULL, \'\', \'MEN_PLUGIN\', \'\')
-             , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/index.php\', \'fa-home\', \'SYS_OVERVIEW\', \'\')
+             , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/overview.php\', \'fa-home\', \'SYS_OVERVIEW\', \'\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOCUMENTS-FILES\'), 1, 0, 3, 1, \'documents-files\', \''.FOLDER_MODULES.'/documents-files/documents_files.php\', \'fa-file-download\', \'SYS_DOCUMENTS_FILES\', \'SYS_DOCUMENTS_FILES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GROUPS-ROLES\'), 1, 0, 7, 1, \'groups-roles\', \''.FOLDER_MODULES.'/groups-roles/groups_roles.php\', \'fa-users\', \'SYS_GROUPS_ROLES\', \'SYS_GROUPS_ROLES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, 0, 2, 1, \'announcements\', \''.FOLDER_MODULES.'/announcements/announcements.php\', \'fa-newspaper\', \'ANN_ANNOUNCEMENTS\', \'ANN_ANNOUNCEMENTS_DESC\')
@@ -300,7 +300,7 @@ $form->openButtonGroup();
 $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
 $form->addButton(
     'main_page', $gL10n->get('SYS_LATER'),
-    array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/index.php')
+    array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/overview.php')
 );
 $form->closeButtonGroup();
 echo $form->show();

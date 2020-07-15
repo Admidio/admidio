@@ -68,12 +68,12 @@ define('ADMIDIO_URL_PATH', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
 // PATHS
 define('SERVER_PATH',  realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www
 define('ADMIDIO_PATH', dirname(dirname(dirname(__DIR__)))); // /var/www/subfolder
-define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/index.php
+define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/overview.php
 
 // URLS
 define('ADMIDIO_URL', $g_root_path); // https://www.example.org:1234/subfolder | https://www.myproxy.com:1234/www.example.com/subfolder
-define('FILE_URL',    (strpos($_SERVER['SCRIPT_NAME'], ADMIDIO_URL_PATH) === false) ? SCHEME . '://' . HOST . ADMIDIO_URL_PATH . $_SERVER['SCRIPT_NAME'] : SCHEME . '://' . HOST . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
-define('CURRENT_URL', (strpos($_SERVER['REQUEST_URI'], ADMIDIO_URL_PATH) === false) ? SCHEME . '://' . HOST . ADMIDIO_URL_PATH . $_SERVER['REQUEST_URI'] : SCHEME . '://' . HOST . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
+define('FILE_URL',    (strpos($_SERVER['SCRIPT_NAME'], ADMIDIO_URL_PATH) === false) ? SCHEME . '://' . HOST . ADMIDIO_URL_PATH . $_SERVER['SCRIPT_NAME'] : SCHEME . '://' . HOST . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/overview.php
+define('CURRENT_URL', (strpos($_SERVER['REQUEST_URI'], ADMIDIO_URL_PATH) === false) ? SCHEME . '://' . HOST . ADMIDIO_URL_PATH . $_SERVER['REQUEST_URI'] : SCHEME . '://' . HOST . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/overview.php?param=value
 
 // FOLDERS
 define('FOLDER_DATA', '/adm_my_files');

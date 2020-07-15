@@ -25,6 +25,6 @@ if (isset($gHomepage))
 else
 {
     // if parameter gHomepage doesn't exists then show default page
-    admRedirect(ADMIDIO_URL . '/adm_program/index.php');
+    admRedirect(ADMIDIO_URL . '/adm_program/overview.php');
     // => EXIT
 }

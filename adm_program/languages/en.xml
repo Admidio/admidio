@@ -645,8 +645,8 @@
   <string name="ORG_FIELD_REQUIRED">Mandatory field that has to be filled in always.</string>
   <string name="ORG_FIELD_REQUIRED_DESC">Flagged (mandatory) fields always have to be filled in. This rule applies for registrations and for regular profile changes performed by users.</string>
   <string name="ORG_FIELD_URL_DESC">The entered URL later links in the profile to the content that the user has entered in this field. Optionally, even the wildcard #user_content# can be defined in the URL. This is the content that the user has entered in the field..\n\nExample:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nLink in profile: https://www.google.de/search?q=Admidio</string>
-  <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</string>
-  <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</string>
+  <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/overview.php)</string>
+  <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/overview.php)</string>
   <string name="ORG_INVALID_THEME">Could not find a valid theme.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Color of the JavaScript editor</string>
   <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Define background color of the JavaScript editor here. The value can be a hexadecimal color value like #ffa500 or RGB value like (255, 185, 0).</string>
