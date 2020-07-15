@@ -158,8 +158,7 @@ a.btn-primary {
 
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination,
-.admidio-info-created-edited, /*.form-dialog > button[type=submit], */
-.admidio-img-presenter,
+.admidio-info-created-edited, .admidio-img-presenter,
 .navbar-filter, .table-responsive, .admidio-content-header,
 .dataTables_wrapper, .admidio-margin-bottom {
     margin-bottom: 45px;
@@ -176,12 +175,18 @@ a.btn-primary {
 }
 
 .admidio-icon-link {
-    margin-left: 10px;
+    margin-left: 0px;
+    padding-left: 0px;
+    text-align: left;
 }
 
 .admidio-reduced {
     padding-left: 15px;
     padding-right: 15px;
+}
+
+.btn-group-vertical {
+    display: block;
 }
 
 /***********************************/
@@ -435,6 +440,14 @@ label {
     color: #df2424 !important;
 }
 
+/***********************************/
+/* Overview page */
+/***********************************/
+
 #plgCalendarTable {
     width: 100%;
+}
+
+#plugin-login-form .btn {
+    margin-bottom: 15px;
 }

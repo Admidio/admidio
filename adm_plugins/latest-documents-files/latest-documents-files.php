@@ -142,7 +142,7 @@ if(Component::isVisible('DOCUMENTS-FILES'))
     }
     else
     {
-        echo '<a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php">'.$gL10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS').'</a>';
+        echo '<a class="btn admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php"><i class="fas fa-list"></i>' . $gL10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS').'</a>';
     }
     echo '</div>';
 }

@@ -31,7 +31,7 @@
     <div class="col-sm-6 col-lg-4 col-xl-3">
         <div class="card admidio-roles" id="role_details_panel_'.$rolId.'">
             <div class="card-body" id="admRoleDetails'.$rolId.'">
-                {load_admidio_plugin plugin="latest-documents-files" file="index.php"}
+                {load_admidio_plugin plugin="latest-documents-files" file="latest-documents-files.php"}
             </div>
         </div>
     </div>
