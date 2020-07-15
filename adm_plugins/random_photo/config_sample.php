@@ -17,12 +17,12 @@
 $plg_max_char_per_word = 0;
 
 // Maximale Photobreite
-// Angabe in px, (Default = 150)
-$plg_photos_max_width = 150;
+// Angabe in px, (Default = 220)
+$plg_photos_max_width = 220;
 
 // Maximale Photohoehe
-// Angabe in px, (Default = 200)
-$plg_photos_max_height = 200;
+// Angabe in px, (Default = 220)
+$plg_photos_max_height = 220;
 
 // Zahl der Alben aus denen das Foto kommen darf, gezählt wird ab dem Aktuellsten
 // Default = 0 (Keine Einschraenkung)

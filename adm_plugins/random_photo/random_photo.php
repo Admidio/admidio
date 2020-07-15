@@ -51,12 +51,12 @@ else
 
 if(!isset($plg_photos_max_width) || !is_numeric($plg_photos_max_width))
 {
-    $plg_photos_max_width = 150;
+    $plg_photos_max_width = 220;
 }
 
 if(!isset($plg_photos_max_height) || !is_numeric($plg_photos_max_height))
 {
-    $plg_photos_max_height = 200;
+    $plg_photos_max_height = 220;
 }
 if(!isset($plg_photos_albums) || !is_numeric($plg_photos_albums))
 {
