@@ -151,7 +151,7 @@ if($gValidLogin)
 
     // show link for logout
     echo '<div class="btn-group-vertical" role="group">
-        <a id="adm_logout_link" class="btn" href="'.ADMIDIO_URL.'/adm_program/system/logout.php"><i class="fas fa-sign-out-alt"></i>'.$gL10n->get('SYS_LOGOUT').'</a>
+        <a id="adm_logout_link" class="btn admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/system/logout.php"><i class="fas fa-sign-out-alt"></i>'.$gL10n->get('SYS_LOGOUT').'</a>
     </div>';
 }
 else

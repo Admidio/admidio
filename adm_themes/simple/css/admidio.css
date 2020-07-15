@@ -161,7 +161,7 @@ a.btn-primary {
 .admidio-info-created-edited, .admidio-img-presenter,
 .navbar-filter, .table-responsive, .admidio-content-header,
 .dataTables_wrapper, .admidio-margin-bottom {
-    margin-bottom: 45px;
+    margin-bottom: 40px;
 }
 
 .navbar button {
@@ -170,7 +170,8 @@ a.btn-primary {
 
 /* add 5px distance to all icons within a icon text combination */
 .admidio-icon-chain, .nav-link .fas, .btn .fas, .alert .fas,
-.admidio-profile-user-right .fas, .checkbox .fas, input[type="radio"] {
+.admidio-profile-user-right .fas, .checkbox .fas, input[type="radio"],
+label img, .form-control-static img {
     margin-right: 5px;
 }
 
