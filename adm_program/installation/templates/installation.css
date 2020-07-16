@@ -9,107 +9,35 @@
  *
  *****************************************************************************/
 
-#admidio-main-navbar {
+#installation-header {
     background-color: #349aaa;
-    min-height: 4rem;
-    position: sticky;
-    padding-bottom: 0px;
-}
-
-#admidio-main-navbar {
     color: #ffffff;
+}
+
+.admidio-area {
+    width: 100%;
+}
+
+.admidio-container {
+    max-width: 750px;
+    padding: 10px;
+}
+
+.admidio-container img {
+    padding-right: 25px;
+    padding-bottom: 10px;
+}
+
+#installation-headline {
+    font-size: 2rem;
     font-weight: bold;
-    font-size: 1.7rem;
-    padding-top: 0px;
-}
-
-#admidio-main-navbar .navbar-brand img {
-    margin-right: 10px;
-    margin-top: 10px;
-}
-
-#admidio-main-navbar a {
-    color: #263340;
-    font-size: 1rem
-}
-
-#admidio-main-navbar a:hover {
-    color: #000000;
-}
-
-@media (max-width: 767px)
-{
-    /* navbar should not be fixed at top if in mobile view */
-    #admidio-main-navbar.fixed-top
-    {
-        position: relative;
-        top: auto;
-    }
+    letter-spacing: 1px;
+    height: 100%;
+    vertical-align: bottom;
 }
 
 .admidio-content {
     order: 1;
-}
-
-/***********************************/
-/* Sidebar Navigation */
-/***********************************/
-.admidio-sidebar {
-    padding: 0px;
-    background-color: #263340;
-    overflow-y: auto;
-}
-
-.admidio-module-headline {
-    margin-top: 20px;
-}
-
-.admidio-menu-list {
-    overflow-y: auto;
-}
-
-.admidio-menu-list a {
-    color: #cccccc;
-}
-
-.admidio-menu-list .dropdown-item {
-    color: #263340;
-}
-
-.admidio-menu-list a:hover {
-    color: #ffffff;
-    background-color: #324b64;
-}
-
-@media (min-width: 768px)
-{
-    /* sidebar should only be there in non mobile view */
-    .admidio-sidebar {
-        position: sticky;
-        top: 4rem;
-        z-index: 1000;
-        height: calc(100vh - 4rem);
-    }
-
-    .admidio-menu-list {
-        display: block !important;
-    }
-}
-
-.admidio-menu-header {
-    font-weight: bold;
-    text-transform: uppercase;
-    padding: 8px 16px;
-    margin: 0px;
-    color: #959e9e;
-}
-
-a.bg-light {
-    background-color: #263340 !important;
-}
-
-a.bg-light:hover {
-    background-color: #959e9e !important;
 }
 
 /***********************************/
@@ -444,16 +372,4 @@ label {
 
 .admidio-btn-event-cancel .fas {
     color: #df2424 !important;
-}
-
-/***********************************/
-/* Overview page */
-/***********************************/
-
-#plgCalendarTable {
-    width: 100%;
-}
-
-#plugin-login-form .btn {
-    margin-bottom: 15px;
 }

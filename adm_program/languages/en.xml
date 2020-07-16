@@ -198,7 +198,6 @@
   <string name="INS_DATABASE_IS_UPDATED">Updating database</string>
   <string name="INS_DATABASE_LOGIN">Database access</string>
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
-  <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Current database version: #VAR1#\n\nDatabase version after update: #VAR2#</string>
   <string name="INS_DATABASE_NAME_INVALID">The database name contains invalid characters!</string>
   <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhoster need a special port, you can type it here.</string>
   <string name="INS_DATABASE_PORT_INVALID">The specified port is not valid. For a valid port, select between 1 and 65535 or leave it blank.</string>
@@ -1028,6 +1027,7 @@
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATED_BY">Created by #VAR1# on #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
+  <string name="SYS_CURRENT_DATABASE_VERSION">Current database version</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your #VAR1#profile#VAR1#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, weblinks ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Data visible to multiple organizations</string>
@@ -1038,6 +1038,7 @@
   <string name="SYS_DATABASE_NO_LOGIN">The connection to the database failed!\n\nThe following error occurred:\n#VAR1#.</string>
   <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">No connection to the database could be created!\n\nPlease check the access data in the file config.php in the folder adm_my_files. If the file is still from another installation, please remove the config.php from the folder, because a new file will be created via the installation wizard. After that you can continue the installation.\n\nThe following error occurred: \n#VAR1#.</string>
   <string name="SYS_DATABASE_VERSION">Database version</string>
+  <string name="SYS_DATABASE_VERSION_AFTER_UPDATE">Database version after update</string>
   <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 and Var4 create link to update">The database version #VAR1# is lower than the version of the Admidio scripts #VAR2#.\n\nPlease perform #VAR3# database update to version #VAR4#.</string>
   <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio requires #VAR1# or higher</string>
   <string name="SYS_DATE">Date</string>

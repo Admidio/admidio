@@ -198,7 +198,6 @@
   <string name="INS_DATABASE_IS_UPDATED">Datenbank wird aktualisiert</string>
   <string name="INS_DATABASE_LOGIN">Datenbank Zugangsdaten</string>
   <string name="INS_DATABASE_LOGIN_DESC">Gib in diesem Formular deine Zugangsdaten zur Datenbank an. Du kannst das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls du mehrere Admidio-Installationen auf derselben Datenbank einrichten möchtest.</string>
-  <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Aktuelle Datenbankversion: #VAR1#\n\nDatenbankversion nach Update: #VAR2#</string>
   <string name="INS_DATABASE_NAME_INVALID">Der Datenbank-Name enthält ungültige Zeichen!</string>
   <string name="INS_DATABASE_PORT_INFO">Wird dieses Feld nicht ausgefüllt, so wird der Standardport der Datenbank (MySQL: 3306, PostgreSQL: 5432) verwendet. Nutzt du oder dein Webhoster einen speziellen Port, so kann dieser hier eingetragen werden.</string>
   <string name="INS_DATABASE_PORT_INVALID">Der angegebene Port ist nicht gültig. Für einen gültigen Port wähle zwischen 1 und 65535 oder lass den Port für den Standardport leer.</string>
@@ -1033,6 +1032,8 @@
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
+  <string name="SYS_CURRENT_DATABASE_VERSION">Aktuelle Datenbankversion</string>
+  <string name="SYS_DATABASE_VERSION_AFTER_UPDATE">Datenbankversion nach Update</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du hast keine gültige E-Mail-Adresse hinterlegt!\n\nTrage bitte in deinem #VAR1#Profil#VAR1# eine E-Mail-Adresse ein.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, so sind die Objekte (Termine, Ankündigungen, Weblinks ...) dieser Kategorie auch auf den Webseiten folgender Organisationen sichtbar:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>

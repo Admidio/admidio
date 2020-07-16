@@ -35,8 +35,8 @@ else
 }
 
 require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
-require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
-require_once(ADMIDIO_PATH . '/adm_program/installation/update_functions.php');
+require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/install_functions.php');
+require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/update_functions.php');
 
 // Initialize and check the parameters
 
@@ -52,7 +52,7 @@ catch (AdmException $e)
 {
     showNotice(
         $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
-        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database')),
         $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left'
     );
@@ -136,7 +136,7 @@ if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA 
     {
         showNotice(
             $gL10n->get('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL)),
-            ADMIDIO_URL . '/adm_program/installation/index.php',
+            ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php',
             $gL10n->get('SYS_OVERVIEW'),
             'fa-redo-alt'
         );
@@ -225,24 +225,19 @@ if ($getMode === 1)
     || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep))
     {
         // create a page with the notice that the installation must be configured on the next pages
-        $form = new HtmlFormInstallation('update_login_form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 2)));
-        $form->setUpdateModus();
-        $form->setFormDescription(
-            $gL10n->get(
-                'INS_WELCOME_TEXT_UPDATE',
-                array(ADMIDIO_VERSION_TEXT,
-                    $installedDbVersion,
-                    '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update" target="_blank">',
-                    '</a>',
-                    '<a href="https://www.admidio.org/forum" target="_blank">',
-                    '</a>'
-                )
-            ).
-            '<h3>' . $gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', array($installedDbVersion, ADMIDIO_VERSION_TEXT)) . '</h3>',
-            $gL10n->get('INS_WELCOME_TO_UPDATE')
-        );
+        $page = new HtmlPageInstallation($gL10n->get('INS_UPDATE_VERSION', array(ADMIDIO_VERSION_TEXT)));
+        $page->addTemplateFile('update.tpl');
+        $page->addJavascript('
+            $("#next_page").on("click", function() {
+                $("#next_page i").attr("class", "fas fa-sync fa-spin");
+                $(this).prop("disabled", true);
+            });', true);
+        $page->assign('installedDbVersion', $installedDbVersion);
 
-        if (!isset($gLoginForUpdate) || $gLoginForUpdate == 1)
+        // create form with login and update button
+        $form = new HtmlForm('update_login_form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 2)));
+
+        if (!isset($gLoginForUpdate) || $gLoginForUpdate === 1)
         {
             $form->addDescription($gL10n->get('INS_ADMINISTRATOR_LOGIN_DESC'));
             $form->addInput(
@@ -256,22 +251,13 @@ if ($getMode === 1)
             );
         }
 
-        // if this is a beta version then show a warning message
-        if (ADMIDIO_VERSION_BETA > 0)
-        {
-            $gLogger->notice('UPDATE: This is a BETA release!');
-
-            $form->addHtml('
-                <div class="alert alert-warning alert-small" role="alert">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    ' . $gL10n->get('INS_WARNING_BETA_VERSION') . '
-                </div>');
-        }
         $form->addSubmitButton(
             'next_page', $gL10n->get('INS_UPDATE_DATABASE'),
-            array('icon' => 'fa-wrench', 'onClickText' => $gL10n->get('INS_DATABASE_IS_UPDATED'))
+            array('icon' => 'fa-sync', 'onClickText' => $gL10n->get('INS_DATABASE_IS_UPDATED'))
         );
-        echo $form->show();
+
+        $page->addHtml($form->show());
+        $page->show();
     }
     // if versions are equal > no update
     elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep)

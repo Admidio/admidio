@@ -78,6 +78,7 @@ define('CURRENT_URL', (strpos($_SERVER['REQUEST_URI'], ADMIDIO_URL_PATH) === fal
 // FOLDERS
 define('FOLDER_DATA', '/adm_my_files');
 define('FOLDER_CLASSES', '/adm_program/system/classes');
+define('FOLDER_INSTALLATION', '/adm_program/installation');
 define('FOLDER_LIBS_SERVER', '/adm_program/libs/server'); // PHP libs
 define('FOLDER_LIBS_CLIENT', '/adm_program/libs/client'); // JS/CSS libs
 define('FOLDER_LANGUAGES', '/adm_program/languages');

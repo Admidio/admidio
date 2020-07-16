@@ -107,8 +107,8 @@ class HtmlPage extends \Smarty
 
         // initialize php template engine smarty
         $this->setTemplateDir(ADMIDIO_PATH . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme') . '/templates/');
-        $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/template/cache/');
-        $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/template/compile/');
+        $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
+        $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
         $this->setConfigDir(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/configs/');
         $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
 
@@ -237,11 +237,6 @@ class HtmlPage extends \Smarty
      */
     public function addTemplateFile($templateFile)
     {
-        if($templateFile === '' || !is_file(THEME_PATH . '/templates/' . $templateFile))
-        {
-            throw new \UnexpectedValueException('Invalid template file ' . $templateFile . ' !');
-        }
-
         $this->templateFile = $templateFile;
     }
 

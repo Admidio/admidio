@@ -18,24 +18,21 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'autoload.php')
  * for default autoload implementation. Therefore the class name must be the same
  * as the file name except for case sensitive.
  * @param string $className Name of the class for which the file should be loaded.
- * @return null|false Return **false** if the file for the class wasn't found.
  */
 function admFuncAutoload($className)
 {
-    global $gLogger;
-
     $libFiles = array(
         ADMIDIO_PATH . FOLDER_CLASSES . '/' . $className . '.php',
-        ADMIDIO_PATH . FOLDER_LIBS_CLIENT . '/jquery-file-upload/server/php/' . $className . '.php', // PHP files in the client folder
-        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/src/' . $className . '.php',
-        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/psr/log/' . str_replace('\\', '/', $className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/monolog/src/' . str_replace('\\', '/', $className) . '.php',
-        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/src/' . str_replace('\\', '/', $className) . '.php', // old phpass password hashing lib for backward compatibility
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/' . $className . '.class.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/psr/log/' . str_replace('\\', '/', $className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpmailer/src/' . str_replace('\\', '/', substr($className, strlen('PHPMailer\\PHPMailer'))) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/zxcvbn-php/src/' . str_replace('\\', '/', substr($className, strlen('ZxcvbnPhp'))) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/' . strtolower($className) . '.php',
-        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/' . $className . '.class.php',
-        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/tcpdf/' . strtolower($className) . '.php'
+        ADMIDIO_PATH . FOLDER_LIBS_CLIENT . '/jquery-file-upload/server/php/' . $className . '.php', // PHP files in the client folder
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/tcpdf/' . strtolower($className) . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/src/' . $className . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/src/' . str_replace('\\', '/', $className) . '.php' // old phpass password hashing lib for backward compatibility
     );
 
     foreach ($libFiles as $libFile)
@@ -46,18 +43,6 @@ function admFuncAutoload($className)
             return null;
         }
     }
-
-    $logErrorMessage = 'Class-File for Class "' . $className . '" could not be found and included!';
-    if ($gLogger instanceof \Psr\Log\LoggerInterface)
-    {
-        $gLogger->critical($logErrorMessage);
-    }
-    else
-    {
-        error_log($logErrorMessage);
-    }
-
-    return false;
 }
 
 // now register this function in this script so only function.php must be included for autoload

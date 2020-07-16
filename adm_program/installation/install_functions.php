@@ -73,7 +73,7 @@ function querySqlFile(Database $db, $sqlFileName)
 {
     global $gL10n;
 
-    $sqlPath = ADMIDIO_PATH . '/adm_program/installation/db_scripts/';
+    $sqlPath = ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/';
     $sqlFilePath = $sqlPath . $sqlFileName;
 
     if (!is_file($sqlFilePath))

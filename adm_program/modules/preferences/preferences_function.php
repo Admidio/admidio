@@ -364,7 +364,7 @@ switch($getMode)
         $newOrganization->save();
 
         // write all preferences from preferences.php in table adm_preferences
-        require_once(__DIR__ . '/../../installation/db_scripts/preferences.php');
+        require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
 
         // set some specific preferences whose values came from user input of the installation wizard
         $defaultOrgPreferences['email_administrator'] = $_POST['orgaEmail'];
