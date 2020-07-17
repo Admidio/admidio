@@ -18,9 +18,13 @@
     width: 100%;
 }
 
+#installation-body .admidio-container {
+    background-color: #ffffff;
+}
+
 .admidio-container {
     max-width: 750px;
-    padding: 10px;
+    padding: 10px 20px;
 }
 
 .admidio-container img {
@@ -40,12 +44,17 @@
     order: 1;
 }
 
+#installation-message h3, #installation-message p {
+    margin-bottom: 30px;
+}
+
 /***********************************/
 /* Default tags */
 /***********************************/
 
 body {
     color: #263340;
+    background-color: #eeeeee;
 }
 
 h6, h5 {

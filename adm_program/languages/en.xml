@@ -1300,6 +1300,7 @@
   <string name="SYS_PRNG">Pseudo-random number generator</string>
   <string name="SYS_PRNG_INSECURE">Admidio/PHP can not generate secure pseudo-random numbers! Please contact the Admidio team with the following information:</string>
   <string name="SYS_PROCESS_CANCELED">Process canceled.</string>
+  <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing user input.</string>
   <string name="SYS_PROGRESSBAR">Progress bar</string>
   <string name="SYS_PROPERTIES">Properties</string>
   <string name="SYS_PWACT_PW_SAVED">New password saved!</string>

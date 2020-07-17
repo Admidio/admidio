@@ -39,16 +39,21 @@ class HtmlPageInstallation extends HtmlPage
 
         // initialize php template engine smarty
         $this->addTemplateDir(ADMIDIO_PATH . FOLDER_INSTALLATION . '/templates/', 'inst');
+
+        // if no modus set then set installation modus
+        if ($headline === '')
+        {
+            $this->setInstallationModus();
+        }
     }
 
     /**
-     * This method will set all variables for the Smarty engine and than send the whole html
-     * content also to the template engine which will generate the html page.
-     * Call this method if you have finished your page layout.
+     * Internal method that will assign a default set of variables to the Smarty template engine.
+     * These variables are available in all installation and update template files.
      */
-    public function show()
+    private function assignDefaultVariables()
     {
-        global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager, $gSetCookieForDomain;
+        global $gDebug, $gCurrentOrganization, $gValidLogin, $gL10n;
 
         $this->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
         $this->assign('title', $this->title);
@@ -69,7 +74,67 @@ class HtmlPageInstallation extends HtmlPage
 
         // add translation object
         $this->assign('l10n', $gL10n);
+    }
 
+    /**
+     * Set the form in the installation modus. Therefore headline and title will be changed.
+     * This is the default modus and will be set automatically if not modus is set in the calling code.
+     */
+    public function setInstallationModus()
+    {
+        global $gL10n;
+
+        $this->title = $gL10n->get('INS_INSTALLATION');
+        $this->headline = $gL10n->get('INS_INSTALLATION_VERSION', array(ADMIDIO_VERSION_TEXT));
+    }
+
+    /**
+     * Set the form in the update modus. Therefore headline and title will be changed.
+     */
+    public function setUpdateModus()
+    {
+        global $gL10n;
+
+        $this->title = $gL10n->get('INS_UPDATE');
+        $this->headline = $gL10n->get('INS_UPDATE_VERSION', array(ADMIDIO_VERSION_TEXT));
+    }
+
+    /**
+     * This method will set all variables for the Smarty engine and than send the whole html
+     * content also to the template engine which will generate the html page.
+     * Call this method if you have finished your page layout.
+     */
+    public function show()
+    {
+        $this->assignDefaultVariables();
         $this->display('installation.tpl');
+    }
+
+    /**
+     * This Method creates a message page that will show a simple message text with a button
+     * that will navigate to a custom url.
+     * @param string $outputMode     Defines the style of the html message. The values are:
+     *                               "error" Shows a red box with the message text.
+     * @param string $headline       The headline of the message page.
+     * @param string $text           The text of the message.
+     * @param string $buttonText     The text of the button which will navigate to the **$destinationUrl**
+     * @param string $buttonIcon     The icon of the button which will navigate to the **$destinationUrl**
+     * @param string $destinationUrl A url to which the user should navigate if he click on the button.
+     */
+    public function showMessage($outputMode, $headline, $text, $buttonText, $buttonIcon, $destinationUrl)
+    {
+        $this->assign('outputMode', $outputMode);
+        $this->assign('messageHeadline', $headline);
+        $this->assign('messageText', $text);
+        $this->addTemplateFile('message.tpl');
+
+        // add form with submit button
+        $form = new HtmlForm('installation-form', $destinationUrl);
+        $form->addSubmitButton('next_page', $buttonText, array('icon' => $buttonIcon));
+        $this->addHtml($form->show());
+
+        $this->assignDefaultVariables();
+        $this->display('installation.tpl');
+        exit();
     }
 }
