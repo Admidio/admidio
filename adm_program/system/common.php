@@ -220,10 +220,10 @@ $gCurrentSession->save();
 
 // create necessary objects and parameters
 
-// set default theme if no theme was set
-if (!$gSettingsManager->has('theme'))
+// set default theme if no theme or old theme was set
+if (!$gSettingsManager->has('theme') || $gSettingsManager->get('theme') == 'modern')
 {
-    $gSettingsManager->set('theme', 'modern');
+    $gSettingsManager->set('theme', 'simple');
 }
 
 define('THEME_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme'));

@@ -8,22 +8,29 @@
  */
 
 /**
- * Creates an Admidio specific complete html page
+ * Creates an Admidio specific complete html page specialized for installation and update process
  *
  * This class creates a html page with head and body and integrates some Admidio
  * specific elements like css files, javascript files and javascript code. It
  * also provides some methods to easily add new html data to the page. The generated
  * page will automatically integrate the chosen theme. You can optional disable the
- * integration of the theme files.
+ * integration of the theme files. Additional to the basic class HtmlPage this class only assigns
+ * variables that are in installation and update mode available. There is also a method that will
+ * easily creates a message page.
  *
  * **Code example**
  * ```
  * // create a simple html page with some text
- * $page = new HtmlPage();
- * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery/jquery.min.js');
- * $page->setHeadline('A simple Html page');
+ * $page = new HtmlPageInstallation();
+ * $page->addTemplateFile('update.tpl');
+ * $page->setUpdateModus();
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
  * $page->show();
+ *
+ * // create a message
+ * $page = new HtmlPageInstallation();
+ * $page->setUpdateModus();
+ * $page->showMessage('error', 'Message', 'Some error message.', $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
  * ```
  */
 
@@ -114,7 +121,8 @@ class HtmlPageInstallation extends HtmlPage
      * This Method creates a message page that will show a simple message text with a button
      * that will navigate to a custom url.
      * @param string $outputMode     Defines the style of the html message. The values are:
-     *                               "error" Shows a red box with the message text.
+     *                               **error** Shows a red box with the message text.
+     *                               **success** Shows a green box with the message text.
      * @param string $headline       The headline of the message page.
      * @param string $text           The text of the message.
      * @param string $buttonText     The text of the button which will navigate to the **$destinationUrl**

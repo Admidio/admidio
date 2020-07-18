@@ -190,13 +190,13 @@ class HtmlForm extends HtmlFormBasic
         $value = $text;
 
         // add default css class
-        if ($optionsAll['class'] !== '')
+        if (strpos($optionsAll['class'], 'btn-primary') === false)
         {
-            $optionsAll['class'] .= ' btn';
+            $optionsAll['class'] .= ' btn btn-secondary';
         }
         else
         {
-            $optionsAll['class'] = 'btn btn-secondary';
+            $optionsAll['class'] .= ' btn';
         }
 
         if ($optionsAll['icon'] !== '')

@@ -262,20 +262,10 @@ if ($getMode === 1)
     // if versions are equal > no update
     elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep)
     {
-        $message = '
-            <div class="alert alert-success form-alert">
-                <i class="fas fa-check"></i>
-                <strong>' . $gL10n->get('INS_DATABASE_IS_UP_TO_DATE') . '</strong>
-            </div>
-            <p>' . $gL10n->get('INS_DATABASE_DOESNOT_NEED_UPDATED') . '</p>';
-
-        showNotice(
-            $message,
-            ADMIDIO_URL . '/adm_program/overview.php',
-            $gL10n->get('SYS_OVERVIEW'),
-            'fa-home',
-            true
-        );
+        $page = new HtmlPageInstallation();
+        $page->setUpdateModus();
+        $page->showMessage('success', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_DATABASE_IS_UP_TO_DATE') . '<br />' . $gL10n->get('SYS_DATABASE_DOESNOT_NEED_UPDATED'),
+            $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
         // => EXIT
     }
     // if source version smaller then database -> show error
@@ -310,21 +300,19 @@ elseif ($getMode === 2)
     session_destroy();
 
     // show notice that update was successful
-    $form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE . 'donate.php');
-    $form->setUpdateModus();
-    $form->setFormDescription(
-        $gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', array(ADMIDIO_VERSION_TEXT)) . '<br /><br />' . $gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'),
-        '<div class="alert alert-success form-alert">
-            <i class="fas fa-check"></i>
-            <strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong>
-        </div>'
-    );
+    $page = new HtmlPageInstallation();
+    $page->addTemplateFile('update_successful.tpl');
+    $page->setUpdateModus();
+
+    $form = new HtmlForm('update-successful-form', ADMIDIO_HOMEPAGE . 'donate.php');
     $form->openButtonGroup();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
     $form->addButton(
         'main_page', $gL10n->get('SYS_LATER'),
-        array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/overview.php')
+        array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/overview.php', 'class' => 'admidio-margin-bottom')
     );
     $form->closeButtonGroup();
-    echo $form->show();
+
+    $page->addHtml($form->show());
+    $page->show();
 }

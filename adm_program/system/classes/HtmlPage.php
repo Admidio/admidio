@@ -106,7 +106,7 @@ class HtmlPage extends \Smarty
         parent::__construct();
 
         // initialize php template engine smarty
-        $this->setTemplateDir(ADMIDIO_PATH . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme') . '/templates/');
+        $this->setTemplateDir(THEME_PATH . '/templates/');
         $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
         $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
         $this->setConfigDir(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/configs/');

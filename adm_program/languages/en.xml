@@ -191,10 +191,8 @@
   <string name="INS_CREATE_CONFIGURATION_FILE">Creating configuration file</string>
   <string name="INS_DATA_FULLY_ENTERED">You have entered all the necessary data for installing Admidio.\n\nNow the database has to be created and filled with your data.</string>
   <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">The database parameters have not been entered completely!</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Database update is not required</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">File #VAR1_BOLD# could not be found in folder #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Enter the name of the database server here. This can be a URL or localhost if the database is running on the same machine as the webpage.</string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">Admidio\'s database is up to date</string>
   <string name="INS_DATABASE_IS_UPDATED">Updating database</string>
   <string name="INS_DATABASE_LOGIN">Database access</string>
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
@@ -1034,7 +1032,9 @@
   <string name="SYS_DATA_PROTECTION">Data protection</string>
   <string name="SYS_DATA_PROTECTION_DESC">Here, the URL to your page with the privacy policy can be deposited. This page is linked to the use of cookies for further information. If the selected theme supports this, a link will also be displayed on the Admidio pages. (Example: https://www.example.com/data_protection.html)</string>
   <string name="SYS_DATABASE">Database</string>
+  <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">It is not necessary to update the database.</string>
   <string name="SYS_DATABASE_ERROR">Database error</string>
+  <string name="SYS_DATABASE_IS_UP_TO_DATE">Admidio\'s database is up to date.</string>
   <string name="SYS_DATABASE_NO_LOGIN">The connection to the database failed!\n\nThe following error occurred:\n#VAR1#.</string>
   <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">No connection to the database could be created!\n\nPlease check the access data in the file config.php in the folder adm_my_files. If the file is still from another installation, please remove the config.php from the folder, because a new file will be created via the installation wizard. After that you can continue the installation.\n\nThe following error occurred: \n#VAR1#.</string>
   <string name="SYS_DATABASE_VERSION">Database version</string>
@@ -1300,7 +1300,7 @@
   <string name="SYS_PRNG">Pseudo-random number generator</string>
   <string name="SYS_PRNG_INSECURE">Admidio/PHP can not generate secure pseudo-random numbers! Please contact the Admidio team with the following information:</string>
   <string name="SYS_PROCESS_CANCELED">Process canceled.</string>
-  <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing user input.</string>
+  <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing the data.</string>
   <string name="SYS_PROGRESSBAR">Progress bar</string>
   <string name="SYS_PROPERTIES">Properties</string>
   <string name="SYS_PWACT_PW_SAVED">New password saved!</string>
@@ -1401,6 +1401,7 @@
   <string name="SYS_UPLOAD_FILES">Upload files</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
   <string name="SYS_UPLOAD_NAME_ERROR">The file name can not be named \"Submit\".</string>
+  <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
   <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
   <string name="SYS_USER">User</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>

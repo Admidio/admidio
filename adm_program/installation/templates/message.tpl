@@ -10,6 +10,13 @@
                 <strong>{$messageText}</strong>
             </div>
         </p>
+    {elseif $outputMode == "success"}
+        <p>
+            <div class="alert alert-success alert-small" role="alert">
+                <i class="fas fa-check"></i>
+                <strong>{$messageText}</strong>
+            </div>
+        </p>
     {/if}
 
     <p>{$content}</p>

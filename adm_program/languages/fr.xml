@@ -191,10 +191,10 @@
   <string name="INS_CREATE_CONFIGURATION_FILE">Générer le ficher de configuration</string>
   <string name="INS_DATA_FULLY_ENTERED">Tu as saisi toutes les données nécessaires pour l\'installation d\'Admidio.\n\nMaintenant la base de données doit être créée et remplie avec tes données.</string>
   <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">Les paramètres de la base de données n\'ont pas été entièrement saisis !</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Une mise à jour de la base de données n\'est pas nécessaire.</string>
+  <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Une mise à jour de la base de données n\'est pas nécessaire.</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">Le fichier #VAR1_BOLD# n\'a pas pu être trouvé dans le répertoire #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Introduit ici le nom du serveur de la base de données. Il peut s\'agir d\'une URL ou d\'un serveur local si la base de données fonctionne sur le même serveur que le site Web.</string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">La base de données Admidio est à jour!</string>
+  <string name="SYS_DATABASE_IS_UP_TO_DATE">La base de données Admidio est à jour!</string>
   <string name="INS_DATABASE_IS_UPDATED">Mise à jour de la base de données en cours</string>
   <string name="INS_DATABASE_LOGIN">Données d\'accès à la base de données</string>
   <string name="INS_DATABASE_LOGIN_DESC">Saisis tes données d\'accès à la base de données dans ce formulaire. Tu peux changer le préfixe de la table si tu le souhaite. Ceci est nécessaire si tu souhaite configurer plusieurs installations Admidio dans la même base de données.</string>

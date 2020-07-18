@@ -191,10 +191,10 @@
   <string name="INS_CREATE_CONFIGURATION_FILE">Skapar konfigurationsfil</string>
   <string name="INS_DATA_FULLY_ENTERED">Du har angett alla nödvändiga data för installation av Admidio. \n\n Nu måste databasen skapas och fyllas med dina data.</string>
   <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">Databasparametrarna har inte skrivits in helt!</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Databasuppdatering krävs</string>
+  <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Databasuppdatering krävs</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">Fil #VAR1_BOLD# kunde inte hittas i mappen #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Ange namnet på databasservern här. Det här kan vara en URL eller localhost om databasen körs på samma maskin som webbsidan.</string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">Admidios databas är uppdaterad</string>
+  <string name="SYS_DATABASE_IS_UP_TO_DATE">Admidios databas är uppdaterad</string>
   <string name="INS_DATABASE_IS_UPDATED">Uppdaterar databas</string>
   <string name="INS_DATABASE_LOGIN">Databastillgång</string>
   <string name="INS_DATABASE_LOGIN_DESC">Ange din databasåtkomstinformation här. Tabellprefix kan anpassas vid behov. Anpassning är nödvändig om flera Admidio-installationer använder samma databas.</string>

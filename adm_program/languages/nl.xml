@@ -191,10 +191,10 @@
   <string name="INS_CREATE_CONFIGURATION_FILE">Configuratie bestand maken</string>
   <string name="INS_DATA_FULLY_ENTERED">U heeft alle benodigde gegevens om Admidio te installeren ingevoerd.\n\nNu wordt de database gemaakt en gevuld met uw gegevens.</string>
   <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">De database parameters zijn niet volledig ingevoerd!</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Database update is niet nodig</string>
+  <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Database update is niet nodig</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">Bestand #VAR1_BOLD# is niet gevonden in map #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Voer hier de naam van de database server in. Dit kan een URL zijn maar ook een localhost, als de database op dezelfde machine wordt uitgevoerd als de webpagina.</string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">Admidio\'s database is up to date</string>
+  <string name="SYS_DATABASE_IS_UP_TO_DATE">Admidio\'s database is up to date</string>
   <string name="INS_DATABASE_IS_UPDATED">Database wordt bijgewerkt</string>
   <string name="INS_DATABASE_LOGIN">Database informatie doorgeven</string>
   <string name="INS_DATABASE_LOGIN_DESC">Vul hier uw inloggegevens voor de database in. Hier kunt u de prefix van de tabel naar wens wijzigen. Dit is nodig als u voor meerdere Admidio-installaties dezelfde database wilt gebruiken.</string>

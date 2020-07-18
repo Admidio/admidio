@@ -175,9 +175,9 @@
   <string name="INS_COURSES">Corsi</string>
   <string name="INS_CREATE_ADMINISTRATOR">Crea amministratore</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">Crea  file di configurazione</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">L\'aggiornamento del dtaabase non è richiesto</string>
+  <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">L\'aggiornamento del dtaabase non è richiesto</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">Il file #VAR1_BOLD# non può essere trovato nella cartella #VAR2_BOLD#.</string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">Il database di Admidio è aggiornato</string>
+  <string name="SYS_DATABASE_IS_UP_TO_DATE">Il database di Admidio è aggiornato</string>
   <string name="INS_DATABASE_IS_UPDATED">Aggiornamento database</string>
   <string name="INS_DATABASE_LOGIN">Inserisci le informazioni del database</string>
   <string name="INS_DATABASE_SYSTEM">Sistema database</string>
