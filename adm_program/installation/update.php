@@ -50,12 +50,13 @@ try
 }
 catch (AdmException $e)
 {
-    showNotice(
-        $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database')),
-        $gL10n->get('SYS_BACK'),
-        'fa-arrow-circle-left'
-    );
+    $gLanguageData = new LanguageData('en');
+    $gL10n = new Language($gLanguageData);
+
+    $page = new HtmlPageInstallation();
+    $page->setUpdateModus();
+    $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
+        $gL10n->get('SYS_RELOAD'), 'fa-arrow-circle-right', ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
     // => EXIT
 }
 

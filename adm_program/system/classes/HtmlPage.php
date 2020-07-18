@@ -101,18 +101,29 @@ class HtmlPage extends \Smarty
 
         $this->menuNodePageFunctions = new MenuNode('admidio-menu-page-functions', $headline);
 
-        $this->setHeadline($headline);
+        if($headline !== '')
+        {
+            $this->setHeadline($headline);
+        }
 
         parent::__construct();
 
         // initialize php template engine smarty
-        $this->setTemplateDir(THEME_PATH . '/templates/');
+        if(defined('THEME_PATH'))
+        {
+            $this->setTemplateDir(THEME_PATH . '/templates/');
+        }
+        else
+        {
+            $this->setTemplateDir(ADMIDIO_PATH . FOLDER_THEMES . '/simple/templates/');
+        }
         $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
         $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
         $this->setConfigDir(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/configs/');
         $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
 
-        if ($gSettingsManager->has('system_browser_update_check') && $gSettingsManager->getBool('system_browser_update_check'))
+        if(is_object($gSettingsManager) && $gSettingsManager->has('system_browser_update_check')
+        && $gSettingsManager->getBool('system_browser_update_check'))
         {
             $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/browser-update/browser-update.js');
         }

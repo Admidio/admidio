@@ -66,7 +66,6 @@ class HtmlPageInstallation extends HtmlPage
         $this->assign('title', $this->title);
         $this->assign('headline', $this->headline);
         $this->assign('urlPreviousPage', $this->urlPreviousPage);
-        $this->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
         $this->assign('urlAdmidio', ADMIDIO_URL);
         $this->assign('urlTheme', THEME_URL);
         $this->assign('javascriptContent', $this->javascriptContent);
