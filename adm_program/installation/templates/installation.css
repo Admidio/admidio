@@ -170,6 +170,10 @@ button:focus {
     background-color: #349aaa !important;
 }
 
+.btn-secondary {
+    margin-right: 25px;
+}
+
 input[type=checkbox] {
     margin-right: 10px;
 }
@@ -381,4 +385,15 @@ label {
 
 .admidio-btn-event-cancel .fas {
     color: #df2424 !important;
+}
+
+#admidio-password-strength {
+    margin-top: 10px;
+}
+
+#admidio-password-strength-minimum {
+    position: absolute;
+    border: 9px solid transparent;
+    border-left-color: #555555;
+    border-right-width: 0;
 }

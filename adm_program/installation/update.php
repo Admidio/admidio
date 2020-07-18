@@ -229,8 +229,8 @@ if ($getMode === 1)
 
                 if(showProgress == true)
                 {
-                    $("#next_page i").attr("class", "fas fa-sync fa-spin");
                     $(this).prop("disabled", true);
+                    $(this).html("<i class=\"fas fa-sync fa-spin\"></i> ' . $gL10n->get('INS_DATABASE_IS_UPDATED') . '");
                 }
             });', true);
         $page->assign('installedDbVersion', $installedDbVersion);
@@ -254,7 +254,7 @@ if ($getMode === 1)
 
         $form->addSubmitButton(
             'next_page', $gL10n->get('INS_UPDATE_DATABASE'),
-            array('icon' => 'fa-sync', 'onClickText' => $gL10n->get('INS_DATABASE_IS_UPDATED'))
+            array('icon' => 'fa-sync')
         );
 
         $page->addHtml($form->show());

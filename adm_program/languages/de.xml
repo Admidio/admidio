@@ -232,7 +232,7 @@
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</string>
   <string name="INS_INSTALLATION_SUCCESSFUL">Die Admidio-Datenbank ist nun installiert und die Konfigurationsdatei eingerichtet. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.</string>
-  <string name="INS_INSTALLATION_VERSION">Installation der Version #VAR1#</string>
+  <string name="INS_INSTALLATION_VERSION">Installation Version #VAR1#</string>
   <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Die Installation war erfolgreich</string>
   <string name="INS_INTERN">Intern</string>
   <string name="INS_LANGUAGE_NOT_CHOSEN">Es wurde keine Sprache ausgewählt.</string>

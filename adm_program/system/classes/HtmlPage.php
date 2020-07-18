@@ -113,10 +113,7 @@ class HtmlPage extends \Smarty
         {
             $this->setTemplateDir(THEME_PATH . '/templates/');
         }
-        else
-        {
-            $this->setTemplateDir(ADMIDIO_PATH . FOLDER_THEMES . '/simple/templates/');
-        }
+
         $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
         $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
         $this->setConfigDir(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/configs/');

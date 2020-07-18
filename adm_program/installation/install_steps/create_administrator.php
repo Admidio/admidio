@@ -26,24 +26,18 @@ if (isset($_POST['orga_shortname']))
     ||  $_SESSION['orga_email']     === ''
     ||  !in_array($_SESSION['orga_timezone'], \DateTimeZone::listIdentifiers(), true))
     {
-        showNotice(
-            $gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')),
-            $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left'
-        );
+        $page = new HtmlPageInstallation();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')));
         // => EXIT
     }
 
     // allow only letters, numbers and special characters like .-_+@
     if(!StringUtils::strValidCharacters($_SESSION['orga_shortname'], 'noSpecialChar'))
     {
-        showNotice(
-            $gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION')),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')),
-            $gL10n->get('SYS_BACK'),
-            'layout/back.png'
-        );
+        $page = new HtmlPageInstallation();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION')), $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')));
         // => EXIT
     }
 }
@@ -67,27 +61,27 @@ else
 $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
 
 // create a page to enter all necessary data to create a administrator user
-$form = new HtmlFormInstallation('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config')));
-$form->addHeader('<script type="text/javascript" src="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/zxcvbn/dist/zxcvbn.js"></script>');
-$form->addHeader('
-    <script type="text/javascript">
-        $(function() {
-            $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4)");
+$page = new HtmlPageInstallation();
+$page->addTemplateFile('installation.tpl');
+$page->assign('subHeadline', $gL10n->get('INS_CREATE_ADMINISTRATOR'));
+$page->assign('text', $gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'));
+$page->addJavascriptFile(FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
+$page->addJavascript('
+    $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4)");
 
-            $("#user_password").keyup(function(e) {
-                var result = zxcvbn(e.target.value, ' . json_encode($userData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');
-                var cssClasses = ["progress-bar-danger", "progress-bar-danger", "progress-bar-warning", "progress-bar-info", "progress-bar-success"];
+    $("#user_password").keyup(function(e) {
+        var result = zxcvbn(e.target.value, ' . json_encode($userData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');
+        var cssClasses = ["bg-danger", "bg-danger", "bg-warning", "bg-info", "bg-success"];
 
-                var progressBar = $("#admidio-password-strength .progress-bar");
-                progressBar.attr("aria-valuenow", result.score * 25);
-                progressBar.css("width", result.score * 25 + "%");
-                progressBar.removeClass(cssClasses.join(" "));
-                progressBar.addClass(cssClasses[result.score]);
-            });
-        });
-    </script>
-');
-$form->setFormDescription($gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'), $gL10n->get('INS_CREATE_ADMINISTRATOR'));
+        var progressBar = $("#admidio-password-strength .progress-bar");
+        progressBar.attr("aria-valuenow", result.score * 25);
+        progressBar.css("width", result.score * 25 + "%");
+        progressBar.removeClass(cssClasses.join(" "));
+        progressBar.addClass(cssClasses[result.score]);
+    });
+', true);
+
+$form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config')));
 $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ADMINISTRATOR'));
 $form->addInput(
     'user_last_name', $gL10n->get('SYS_LASTNAME'), $userLastName,
@@ -116,7 +110,10 @@ $form->addInput(
 $form->closeGroupBox();
 $form->addButton(
     'previous_page', $gL10n->get('SYS_BACK'),
-    array('icon' => 'fa-arrow-circle-left', 'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')))
+    array('icon' => 'fa-arrow-circle-left', 'class' => 'admidio-margin-bottom',
+        'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')))
 );
-$form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'fa-arrow-circle-right'));
-echo $form->show();
+$form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'fa-arrow-circle-right', 'class' => 'float-right'));
+
+$page->addHtml($form->show());
+$page->show();

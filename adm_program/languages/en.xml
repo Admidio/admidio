@@ -230,7 +230,7 @@
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">The database already contains an Admidio installation. An additional installation is not possible.</string>
   <string name="INS_INSTALLATION_SUCCESSFUL">Admidio database installation and configuration is complete, system is ready for use. Please log in now by using access information of the system administrator.</string>
-  <string name="INS_INSTALLATION_VERSION">Installation of version #VAR1#</string>
+  <string name="INS_INSTALLATION_VERSION">Installation version #VAR1#</string>
   <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Installation was successful</string>
   <string name="INS_INTERN">Internal</string>
   <string name="INS_LANGUAGE_NOT_CHOSEN">No language has been selected.</string>

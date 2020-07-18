@@ -172,8 +172,6 @@ class HtmlForm extends HtmlFormBasic
      *                          If set a icon will be shown in front of the text.
      *                        - **link** : If set a javascript click event with a page load to this link
      *                          will be attached to the button.
-     *                        - **onClickText** : A text that will be shown after a click on this button
-     *                          until the next page is loaded. The button will be disabled after click.
      *                        - **class** : Optional an additional css classname. The class **admButton**
      *                          is set as default and need not set with this parameter.
      *                        - **type** : Optional a button type could be set. The default is **button**.
@@ -183,7 +181,7 @@ class HtmlForm extends HtmlFormBasic
         ++$this->countElements;
 
         // create array with all options
-        $optionsDefault = array('icon' => '', 'link' => '', 'onClickText' => '', 'class' => '', 'type' => 'button', 'data-admidio' => '');
+        $optionsDefault = array('icon' => '', 'link' => '', 'class' => '', 'type' => 'button', 'data-admidio' => '');
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add text and icon to button
@@ -221,12 +219,6 @@ class HtmlForm extends HtmlFormBasic
             $this->addAttribute('data-admidio', (string) $optionsAll['data-admidio']);
         }
 
-        if ($optionsAll['onClickText'] !== '')
-        {
-            $this->addAttribute('data-loading-text', $optionsAll['onClickText']);
-            $this->addAttribute('autocomplete', 'off');
-        }
-
         // add javascript for stateful button and/or
         // a different link that should be loaded after click
 
@@ -238,12 +230,7 @@ class HtmlForm extends HtmlFormBasic
             $javascriptCode .= 'self.location.href="' . $optionsAll['link'] . '";';
         }
 
-        if ($optionsAll['onClickText'] !== '')
-        {
-            $javascriptCode .= '$(this).button("loading");';
-        }
-
-        if ($optionsAll['link'] !== '' || $optionsAll['onClickText'] !== '')
+        if ($optionsAll['link'] !== '')
         {
             if ($optionsAll['type'] === 'submit')
             {
@@ -912,7 +899,7 @@ class HtmlForm extends HtmlFormBasic
 
                     $("#' . $id . '").keyup(function(e) {
                         var result = zxcvbn(e.target.value, ' . $zxcvbnUserInputs . ');
-                        var cssClasses = ["progress-bar-danger", "progress-bar-danger", "progress-bar-warning", "progress-bar-info", "progress-bar-success"];
+                        var cssClasses = ["bg-danger", "bg-danger", "bg-warning", "bg-info", "bg-success"];
 
                         var progressBar = $("#admidio-password-strength .progress-bar");
                         progressBar.attr("aria-valuenow", result.score * 25);
@@ -1854,8 +1841,6 @@ class HtmlForm extends HtmlFormBasic
      *                          If set a icon will be shown in front of the text.
      *                        - **link** : If set a javascript click event with a page load to this link
      *                          will be attached to the button.
-     *                        - **onClickText** : A text that will be shown after a click on this button
-     *                          until the next page is loaded. The button will be disabled after click.
      *                        - **class** : Optional an additional css classname. The class **admButton**
      *                          is set as default and need not set with this parameter.
      *                        - **type** : If set to true this button get the type **submit**. This will
@@ -1864,7 +1849,7 @@ class HtmlForm extends HtmlFormBasic
     public function addSubmitButton($id, $text, array $options = array())
     {
         // create array with all options
-        $optionsDefault = array('icon' => '', 'link' => '', 'onClickText' => '', 'class' => '', 'type' => 'submit');
+        $optionsDefault = array('icon' => '', 'link' => '', 'class' => '', 'type' => 'submit');
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add default css class

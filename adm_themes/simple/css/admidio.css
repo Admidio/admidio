@@ -446,6 +446,18 @@ label {
     color: #df2424 !important;
 }
 
+#admidio-password-strength {
+    margin-top: 10px;
+}
+
+#admidio-password-strength-minimum {
+    position: absolute;
+    border: 9px solid transparent;
+    border-left-color: #555555;
+    border-right-width: 0;
+    margin-top: 1px;
+}
+
 /***********************************/
 /* Overview page */
 /***********************************/

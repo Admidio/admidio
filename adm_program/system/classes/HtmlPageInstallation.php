@@ -113,7 +113,7 @@ class HtmlPageInstallation extends HtmlPage
     public function show()
     {
         $this->assignDefaultVariables();
-        $this->display('installation.tpl');
+        $this->display('index.tpl');
     }
 
     /**
@@ -141,7 +141,7 @@ class HtmlPageInstallation extends HtmlPage
         $this->addHtml($form->show());
 
         $this->assignDefaultVariables();
-        $this->display('installation.tpl');
+        $this->display('index.tpl');
         exit();
     }
 }

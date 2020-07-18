@@ -90,12 +90,9 @@ if (is_file($configPath))
     }
     catch (AdmException $e)
     {
-        showNotice(
-            $gL10n->get('SYS_DATABASE_NO_LOGIN_CONFIG_FILE', array($e->getText())),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
-            $gL10n->get('INS_CONTINUE_INSTALLATION'),
-            'fa-arrow-circle-right'
-        );
+        $page = new HtmlPageInstallation();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_DATABASE_NO_LOGIN_CONFIG_FILE', array($e->getText())), $gL10n->get('INS_CONTINUE_INSTALLATION'),
+            'fa-arrow-circle-right', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database')));
         // => EXIT
     }
 
@@ -107,12 +104,9 @@ if (is_file($configPath))
     if ($pdoStatement !== false && $pdoStatement->rowCount() > 0)
     {
         // valid installation exists -> exit installation
-        showNotice(
-            $gL10n->get('INS_INSTALLATION_EXISTS'),
-            '../index.php',
-            $gL10n->get('SYS_OVERVIEW'),
-            'fa-home'
-        );
+        $page = new HtmlPageInstallation();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_INSTALLATION_EXISTS'), $gL10n->get('SYS_OVERVIEW'),
+            'fa-home', '../index.php');
         // => EXIT
     }
 

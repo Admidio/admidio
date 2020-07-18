@@ -16,12 +16,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php')
 // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
 if (!is_file($configPath))
 {
-    showNotice(
-        $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),
-        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')),
-        $gL10n->get('SYS_BACK'),
-        'fa-arrow-circle-left'
-    );
+    $page = new HtmlPageInstallation();
+    $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')), $gL10n->get('SYS_BACK'),
+        'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config')));
     // => EXIT
 }
 
@@ -37,12 +34,9 @@ if (isset($_SESSION['table_prefix'])
     || $_SESSION['table_prefix']   !== TABLE_PREFIX
     || $_SESSION['orga_shortname'] !== $g_organization))
 {
-    showNotice(
-        $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
-        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
-        $gL10n->get('SYS_BACK'),
-        'fa-arrow-circle-left'
-    );
+    $page = new HtmlPageInstallation();
+    $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')), $gL10n->get('SYS_BACK'),
+        'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database')));
     // => EXIT
 }
 
@@ -54,7 +48,9 @@ $sqlQueryResult = querySqlFile($db, 'db.sql');
 
 if (is_string($sqlQueryResult))
 {
-    showNotice($sqlQueryResult, SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $page = new HtmlPageInstallation();
+    $page->showMessage('error', $gL10n->get('SYS_NOTE'), $sqlQueryResult, $gL10n->get('SYS_BACK'),
+        'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config')));
     // => EXIT
 }
 
