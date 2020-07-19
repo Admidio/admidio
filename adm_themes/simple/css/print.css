@@ -22,18 +22,20 @@ h1 {
     border-bottom-width: 0;
 }
 
-.panel {
-    text-align: left;
+h3, h5 {
+    margin-bottom: 25px;
 }
 
-.panel-primary > .panel-heading {
-    color: #555555;
-    border-bottom: 2px solid #555555;
+/* default distance between elements */
+.admidio-blog, .admidio-field-group, .pagination,
+.navbar-filter, .table-responsive, .admidio-content-header,
+.dataTables_wrapper, .admidio-margin-bottom {
+    margin-bottom: 40px;
 }
 
-.panel-primary > .panel-footer {
-    border-top: 2px solid #cccccc;
-}
+/***********************************/
+/* Tables */
+/***********************************/
 
 .table {
     width: 270mm;
@@ -58,6 +60,45 @@ h1 {
     letter-spacing: 0.5em;
     background-color: #eeeeee;
     border-bottom: 1px solid #dddddd;
+}
+
+/***********************************/
+/* Cards */
+/***********************************/
+
+.admidio-blog, .admidio-field-group {
+    border: none;
+}
+
+.admidio-blog .card-header, .admidio-blog .card-body, .admidio-blog .card-footer,
+.admidio-field-group .card-header, .admidio-field-group .card-body, .admidio-field-group .card-footer {
+    border: none;
+    background-color: #eeeeee;
+}
+
+.card-header {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+.card-header .fas, .card-header .fab {
+    margin-right: 10px;
+}
+
+.card-header .float-right .fas {
+    margin-right: 0px;
+}
+
+.card-header .dropdown .fas, .card-header .dropdown .fab {
+    margin-right: 0px;
+}
+
+.admidio-blog .card-footer {
+    font-size: 80%;
+}
+
+.card-header .dropdown {
+    display: none;
 }
 
 /* Highlight events */

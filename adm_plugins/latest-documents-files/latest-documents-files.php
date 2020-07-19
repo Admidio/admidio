@@ -51,7 +51,7 @@ if(Component::isVisible('DOCUMENTS-FILES'))
     $countVisibleDownloads = 0;
     $sqlCondition          = '';
 
-    echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
+    echo '<div id="plugin-'. $pluginFolder. '" class="admidio-plugin-content">';
     if($plg_show_headline)
     {
         echo '<h3>'.$gL10n->get('PLG_LATEST_FILES_HEADLINE').'</h3>';
@@ -142,7 +142,8 @@ if(Component::isVisible('DOCUMENTS-FILES'))
     }
     else
     {
-        echo '<a class="btn admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php"><i class="fas fa-list"></i>' . $gL10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS').'</a>';
+        echo '<hr />
+        <a class="btn admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php"><i class="fas fa-list"></i>' . $gL10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS').'</a>';
     }
     echo '</div>';
 }
