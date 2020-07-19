@@ -810,36 +810,6 @@ else
             $dateEnd = $date->getValue('dat_end', $gSettingsManager->getString('system_date'));
             $timeEnd = $date->getValue('dat_end', $gSettingsManager->getString('system_time'));
 
-            $dateTimeValue = '';
-
-            if($dateBegin === $dateEnd)
-            {
-                $dateTimeValue = $dateBegin. ' '. $timeBegin. ' - '. $timeEnd;
-            }
-            else
-            {
-                if ($date->getValue('dat_all_day'))
-                {
-                    // full-time event that only exists one day should only show the begin date
-                    $objDateBegin = new \DateTime($row['dat_begin']);
-                    $objDateEnd = new \DateTime($row['dat_end']);
-                    $dateDiff = $objDateBegin->diff($objDateEnd);
-
-                    if($dateDiff->d === 1)
-                    {
-                        $dateTimeValue = $dateBegin;
-                    }
-                    else
-                    {
-                        $dateTimeValue = $dateBegin. ' - '. $dateEnd;
-                    }
-                }
-                else
-                {
-                    $dateTimeValue = $dateBegin. ' '. $timeBegin. ' - '. $dateEnd. ' '. $timeEnd;
-                }
-            }
-
             $columnValues = array();
 
             if($outputButtonParticipation !== '')
@@ -851,7 +821,7 @@ else
                 $columnValues[] = '';
             }
 
-            $columnValues[] = $dateTimeValue;
+            $columnValues[] = $date->getDateTimePeriod();
 
             if($getViewMode === 'html')
             {

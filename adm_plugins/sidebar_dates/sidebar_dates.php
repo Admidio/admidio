@@ -103,38 +103,16 @@ if(Component::isVisible('DATES'))
             $plgDate->setArray($plgRow);
             $plgHtmlEndDate = '';
 
-            echo '<h5>'.$plgDate->getValue('dat_begin', $gSettingsManager->getString('system_date')). '&nbsp;&nbsp;';
+            echo '<h5>'.$plgDate->getDateTimePeriod($plg_show_date_end);
 
-            if ($plgDate->getValue('dat_all_day') != 1)
-            {
-                echo $plgDate->getValue('dat_begin', $gSettingsManager->getString('system_time'));
-            }
-
-            // Bis-Datum und Uhrzeit anzeigen
-            if($plg_show_date_end)
-            {
-                if($plgDate->getValue('dat_begin', $gSettingsManager->getString('system_date')) !== $plgDate->getValue('dat_end', $gSettingsManager->getString('system_date')))
-                {
-                    $plgHtmlEndDate .= $plgDate->getValue('dat_end', $gSettingsManager->getString('system_date'));
-                }
-                if ($plgDate->getValue('dat_all_day') != 1)
-                {
-                    $plgHtmlEndDate .= ' '. $plgDate->getValue('dat_end', $gSettingsManager->getString('system_time'));
-                }
-                if($plgHtmlEndDate !== '')
-                {
-                    $plgHtmlEndDate = ' - '. $plgHtmlEndDate;
-                }
-            }
-
-            // ?ber $plg_link_url wird die Verbindung zum Date-Modul hergestellt.
-            echo $plgHtmlEndDate. '<br /><a href="'. SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '" target="'. $plg_link_target. '">';
+            // create a link to date module
+            echo '<br /><a href="'. SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '" target="'. $plg_link_target. '">';
 
             if($plg_max_char_per_word > 0)
             {
                 $plgNewHeadline = '';
 
-                // Woerter unterbrechen, wenn sie zu lang sind
+                // Pause words if they are too long
                 $plgWords = explode(' ', $plgDate->getValue('dat_headline'));
 
                 foreach($plgWords as $plgValue)
