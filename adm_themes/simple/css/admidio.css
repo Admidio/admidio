@@ -64,6 +64,15 @@
     margin-top: 20px;
 }
 
+.admidio-headline-mobile-menu {
+    color: #eeeeee;
+    letter-spacing: 2px;
+}
+
+.admidio-headline-mobile-menu .btn {
+    padding: 0px;
+}
+
 .admidio-menu-list {
     overflow-y: auto;
 }

@@ -70,7 +70,7 @@
 
     <nav class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar" id="admidio-main-navbar">
       <a class="navbar-brand" href="{$urlAdmidio}/adm_program/overview.php">
-        <img class="d-none d-sm-inline d-inline-block align-top" src="{$urlTheme}/images/admidio_logo.png" width="120" height="40"
+        <img class="d-none d-md-block align-top" src="{$urlTheme}/images/admidio_logo.png" width="120" height="40"
             alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
       </a>
       <span id="headline-membership" class="d-block d-lg-none">{$organizationName}</span>
@@ -108,9 +108,9 @@
     <div class="container-fluid">
         <div class="row flex-xl-nowrap">
             <div class="col-12 col-md-3 col-xl-2 admidio-sidebar" id="sidebar">
-                <div class="admidio-headline-mobile-menu d-md-none p-2 ml-2">
-                <span class="text-uppercase">Menü</span>
-                <button class="btn btn-link d-md-none collapsed" type="button" data-toggle="collapse"
+                <div class="admidio-headline-mobile-menu d-md-none p-2">
+                <span class="text-uppercase">{$l10n->get('SYS_MENU')}</span>
+                <button class="btn btn-link d-md-none collapsed float-right" type="button" data-toggle="collapse"
                     data-target="#admidio-main-menu" aria-controls="admidio-main-menu" aria-expanded="false">
                     <i class="fas fa-bars fa-fw"></i>
                 </button>
