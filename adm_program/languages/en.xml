@@ -1166,6 +1166,9 @@
   <string name="SYS_IMPRINT_DESC">Here the URL for the imprint of your page can be deposited. If the selected theme supports this, a link will be displayed on the Admidio pages. (Example: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inactive groups and roles</string>
   <string name="SYS_INFORMATIONS">information</string>
+  <string name="SYS_INSTALLATION_SUCCESSFUL">Installation successful</string>
+  <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">The Admidio database is now installed and completely set up. The configuration file with the access data to the database has been created and stored. You can now work with Admidio and log in with the administrator data.</string>
+  <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">The installation and setup of the database was successfully completed.</string>
   <string name="SYS_INTERNAL_NAME">Internal name</string>
   <string name="SYS_INTERNAL_NAME_DESC">The internal name is used to uniquely access this data object. This is not relevant for program use. In development, however, this name must always be used to identify the field, e.g. to address with getValue (). The internal name is automatically filled when creating a data record.</string>
   <string name="SYS_INVALID_FONT_AWESOME">The entered icon name does not match the syntax of Font Awesome. Please check if there is an icon with this name.</string>

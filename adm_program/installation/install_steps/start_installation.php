@@ -270,33 +270,20 @@ $db->query($sql);
 session_unset();
 session_destroy();
 
-// text for dialog
-$text = $gL10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
-if (!is_writable(ADMIDIO_PATH . FOLDER_DATA))
-{
-    $text = $text.'
-        <div class="alert alert-warning alert-small" role="alert">
-            <i class="fas fa-exclamation-triangle"></i>
-            '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', array('adm_my_files')).'
-        </div>';
-}
-
 $gLogger->info('INSTALLATION: Installation successfully complete');
 
 // show dialog with success notification
-$form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE.'donate.php');
-$form->setFormDescription(
-    $text,
-    '<div class="alert alert-success form-alert">
-        <i class="fas fa-check"></i>
-        <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong>
-    </div>'
-);
-$form->openButtonGroup();
-$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
+$page = new HtmlPageInstallation();
+$page->addTemplateFile('installation_successful.tpl');
+$page->addJavascript('$("#next_page").focus();', true);
+
+$form = new HtmlForm('installation-form', ADMIDIO_HOMEPAGE.'donate.php', null, array('setFocus' => false));
 $form->addButton(
     'main_page', $gL10n->get('SYS_LATER'),
-    array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/overview.php')
+    array('icon' => 'fa-home', 'class' => 'admidio-margin-bottom',
+        'link' => ADMIDIO_URL . '/adm_program/overview.php')
 );
-$form->closeButtonGroup();
-echo $form->show();
+$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
+
+$page->addHtml($form->show());
+$page->show();

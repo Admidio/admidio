@@ -81,6 +81,13 @@ $gL10n = new Language($gLanguageData);
 
 $language = $gL10n->getLanguage();
 
+// check if adm_my_files has write privileges
+if (!is_writable(ADMIDIO_PATH . FOLDER_DATA))
+{
+    echo $gL10n->get('INS_FOLDER_NOT_WRITABLE', array('adm_my_files'));
+    exit();
+}
+
 // if config file exists then connect to database
 if (is_file($configPath))
 {
