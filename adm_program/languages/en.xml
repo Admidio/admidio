@@ -181,7 +181,6 @@
   <string name="INS_ADDRESS_LIST">Address list</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Administrator\'s information is incomplete!</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">An update can only be performed by an administrator. Please define the administrator credentials.</string>
-  <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
   <string name="INS_BOARD">Association\'s board</string>
   <string name="INS_CONFERENCE_ROOM">Conference room</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">File #VAR1_BOLD# can not be found in main directory of Admidio!\n\nPlease download file again and copy it to the mentioned directory.</string>
@@ -220,8 +219,6 @@
   <string name="INS_FACEBOOK">Facebook</string>
   <string name="INS_FACEBOOK_DESC">Would you like to set a link to your Facebook profile? Your Facebook login name is required. Log in to your Facebook account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Facebook profile directly.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Folder #VAR1_BOLD# is not writeable. Please grant write access in order to upload photos and files to download module.</string>
-  <string name="INS_GOOGLE_PLUS">Google+</string>
-  <string name="INS_GOOGLE_PLUS_DESC">Would you like to set a link to your Google+ profile? In order to do this, you will need your profile Google+ profile number. Log in to your Google+ account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Google+ profile directly.</string>
   <string name="INS_GROUPS">Groups</string>
   <string name="INS_HOST_INVALID">Hostname is not valid. Enter a valid host name or IP address.</string>
   <string name="INS_ICQ">ICQ</string>
@@ -261,17 +258,13 @@
   <string name="INS_UPDATE_VERSION">Update to version #VAR1#</string>
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Update process successful</string>
   <string name="INS_WARNING_BETA_VERSION">This is a beta version of Admidio.\n\nUsage can be risky due to possible instability and data loss. Please use as test environment only!</string>
-  <string name="INS_WARNING_SAFE_MODE">Save Mode on server is active. This can cause later problems when using certain functions.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Welcome to the installation of Admidio</string>
   <string name="INS_WELCOME_TO_UPDATE">Welcome to the Admidio update</string>
   <string name="INS_WELCOME_TEXT">This assistant helps you to set up the Admidio member management. All necessary data will be requested so that the system can be fully set up and you can log in as an administrator.\n\nIf you have questions or problems with the installation, please check #VAR1#our installation instructions#VAR2# or contact us at #VAR3#our support forum#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">You have already updated the directories of Admidio with a new version. Now the database has to be updated from the current version #VAR2# to the version #VAR1#, so that Admidio can run with the new version.\n\nIf you have questions or problems with the update, please check #VAR3#our update instruction#VAR4# or contact #VAR5#our support forum#VAR6#.</string>
-  <string name="INS_WINDOWS_LIVE">Windows Live</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requires at least MySQL version #VAR2#. Please try to update your MySQL database or use an #VAR3#older Admidio version#VAR4# in order to ensure compatibility.</string>
-  <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# requires at least PHP version #VAR2#. Please try to update your PHP version or oder use an #VAR3#older Admidio version#VAR4# in order to ensure compatibility.</string>
   <string name="INS_XING">Xing</string>
   <string name="INS_XING_DESC">Would you like to set a link to your Xing profile? Your Xing login name is required. Log in to your Xing account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Xing profile directly.</string>
-  <string name="INS_YAHOO_MESSENGER">Yahoo! Messenger</string>
   <string name="INS_BOYFRIEND">Friend</string>
   <string name="INS_BROTHER">Brother</string>
   <string name="INS_CHILD">Child</string>

@@ -304,15 +304,14 @@ elseif ($getMode === 2)
     $page = new HtmlPageInstallation();
     $page->addTemplateFile('update_successful.tpl');
     $page->setUpdateModus();
+    $page->addJavascript('$("#next_page").focus();', true);
 
-    $form = new HtmlForm('update-successful-form', ADMIDIO_HOMEPAGE . 'donate.php');
-    $form->openButtonGroup();
-    $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
+    $form = new HtmlForm('update-successful-form', ADMIDIO_HOMEPAGE . 'donate.php', null, array('setFocus' => false));
     $form->addButton(
         'main_page', $gL10n->get('SYS_LATER'),
         array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/overview.php', 'class' => 'admidio-margin-bottom')
     );
-    $form->closeButtonGroup();
+    $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
 
     $page->addHtml($form->show());
     $page->show();
