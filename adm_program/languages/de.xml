@@ -242,7 +242,7 @@
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Die bereits installierte Version konnte nicht ermittelt werden. Falls du bisher noch Version 1.x von Admidio genutzt hast, aktualisiere zuerst auf Version 2.x und starte danach das Update auf Version #VAR1#. Falls du bereits Version 2.x oder neuer installiert hast, prüfe bitte die Konsistenz deiner Datenbank.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Eine Organisation mit dem Namen #VAR1_BOLD# existiert bereits. Wähle bitte einen anderen Namen aus.</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben!</string>
-  <string name="INS_PASSWORDS_NOT_EQUAL">Das Passwort stimmt nicht mit der Wiederholung überein.</string>
+  <string name="SYS_PASSWORDS_NOT_EQUAL">Das eingegebene Passwort stimmt nicht mit der Wiederholung überein.</string>
   <string name="INS_PHONE_LIST">Telefonliste</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Wähle bitte eine Sprache aus</string>
   <string name="INS_SET_ORGANIZATION">Organisation festlegen</string>
@@ -843,7 +843,6 @@
   <string name="PRO_PASSWORD_DESCRIPTION">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\n\nDie Stärke deines gewählten Passworts wird dir farblich über einen Balken dargestellt. Die mindestens notwendige Stärke zeigt dir der Pfeil im Balken an.</string>
   <string name="PRO_PASSWORD_LENGTH">Das Passwort muss aus mindestens 8 Zeichen bestehen.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">Das alte Passwort ist falsch.</string>
-  <string name="PRO_PASSWORDS_NOT_EQUAL">Das Passwort stimmt nicht mit der Wiederholung überein.</string>
   <string name="PRO_PASSWORD_NOT_STRONG_ENOUGH">Das Passwort ist nicht sicher genug.</string>
   <string name="PRO_PHOTO_DELETED">Das Profilfoto wurde gelöscht.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">Das hochgeladene Foto übersteigt die vom Server zugelassene Dateigröße von #VAR1# B.</string>

@@ -236,7 +236,6 @@
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Could not find the current installation. If you\'ve used Admidio 1.x update to Admidio 2.x first. Afterwards you can update the version to #VAR1#. If you are already using Admidio 2.x or higher please check the consistency of your database.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Organization #VAR1_BOLD# already exists. Please select another name.</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Provided organization name is not complete!</string>
-  <string name="INS_PASSWORDS_NOT_EQUAL">The password does not match with the repetition.</string>
   <string name="INS_PHONE_LIST">Phone list</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Please choose a language</string>
   <string name="INS_SET_ORGANIZATION">Define organization</string>
@@ -830,7 +829,6 @@
   <string name="PRO_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\n\nThe strength of your selected password will be displayed in color using a bar. The minimum required strength is indicated by the arrow in the bar.</string>
   <string name="PRO_PASSWORD_LENGTH">Password must have at least 8 characters.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">Old password is incorrect.</string>
-  <string name="PRO_PASSWORDS_NOT_EQUAL">Original and retyped passwords are different.</string>
   <string name="PRO_PASSWORD_NOT_STRONG_ENOUGH">The password is not secure enough.</string>
   <string name="PRO_PHOTO_DELETED">Profile picture has been deleted.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">Size of uploaded photo exceeds server allowed file size of #VAR1# B.</string>
@@ -1267,6 +1265,7 @@
   <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">If you have forgotten your password, the system can create a new password and send it to your email address. Please type in, your user name or e-mail address used for registration in the system. The new password will be sent immediately to the registred e-mail address.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Login failed due to incorrect password.\n\nPlease check your password and try again.</string>
+  <string name="SYS_PASSWORDS_NOT_EQUAL">The password entered does not match the repeat.</string>
   <string name="SYS_PATH_SEPARATOR">Path separator</string>
   <string name="SYS_PERIOD">Time period</string>
   <string name="SYS_PERMISSIONS">Permissions</string>

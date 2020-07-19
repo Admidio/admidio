@@ -81,7 +81,7 @@ if (isset($_POST['user_last_name']))
     if ($_SESSION['user_password'] !== $_SESSION['user_password_confirm'])
     {
         $page = new HtmlPageInstallation();
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_PASSWORDS_NOT_EQUAL'), $gL10n->get('SYS_BACK'),
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_PASSWORDS_NOT_EQUAL'), $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
         // => EXIT
     }

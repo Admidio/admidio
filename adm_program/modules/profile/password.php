@@ -97,7 +97,7 @@ if($getMode === 'change')
                 }
                 else
                 {
-                    $phrase = $gL10n->get('PRO_PASSWORDS_NOT_EQUAL');
+                    $phrase = $gL10n->get('SYS_PASSWORDS_NOT_EQUAL');
                 }
             }
             else
