@@ -161,7 +161,7 @@ if (!is_array($templates))
 // create new array without file extension in visual value
 $newTemplateArray = array();
 foreach($templates as $templateName)
-{  
+{
     $newTemplateArray[$templateName] = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
 }
 unset($templateName);
@@ -252,7 +252,7 @@ $form->addEditor(
 );
 $form->closeGroupBox();
 $form->openButtonGroup();
-$form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'fa-eye'));
+$form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'fa-eye', 'class' => 'admidio-margin-bottom'));
 $form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
 $form->closeButtonGroup();
 

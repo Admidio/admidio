@@ -25,7 +25,7 @@
 
 #admidio-main-navbar .navbar-brand img {
     margin-right: 10px;
-    margin-top: 10px;
+    margin-top: -15px;
 }
 
 #admidio-main-navbar a {
@@ -266,6 +266,10 @@ label {
 
 .form-inline label {
     padding-right: 5px;
+}
+
+.form-control-static {
+    margin-bottom: 0px;
 }
 
 .radio-inline {

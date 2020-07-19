@@ -70,7 +70,7 @@
 
     <nav class="navbar fixed-top navbar-light navbar-expand flex-column flex-md-row bd-navbar" id="admidio-main-navbar">
       <a class="navbar-brand" href="{$urlAdmidio}/adm_program/overview.php">
-        <img class="d-none d-md-block align-top" src="{$urlTheme}/images/admidio_logo.png" width="120" height="40"
+        <img class="d-none d-md-block align-top" src="{$urlTheme}/images/admidio_logo.png"
             alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
       </a>
       <span id="headline-membership" class="d-block d-lg-none">{$organizationName}</span>
