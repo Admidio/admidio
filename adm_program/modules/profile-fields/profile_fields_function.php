@@ -90,23 +90,16 @@ if($getMode === 1)
         // => EXIT
     }
 
-    if($_POST['usf_icon'] !== '' && StringUtils::strStartsWith($_POST['usf_icon'], 'http') && !StringUtils::strValidCharacters($_POST['usf_icon'], 'url'))
-    {
-        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_ICON'))));
-        // => EXIT
-    }
-    elseif($_POST['usf_icon'] !== '' && !StringUtils::strStartsWith($_POST['usf_icon'], 'http'))
+    // check if font awesome syntax is used or if its a valid filename syntax
+    if($_POST['usf_icon'] !== '' && !preg_match('/fa-[a-zA-z0-9]/', $_POST['usf_icon']))
     {
         try
         {
-            StringUtils::strIsValidFolderName($_POST['usf_icon']);
-
-            // replace invalid characters in filename
-            $_POST['usf_icon'] = FileSystemUtils::removeInvalidCharsInFilename($_POST['usf_icon']);
+            StringUtils::strIsValidFileName($_POST['usf_icon'], true);
         }
         catch (AdmException $e)
         {
-            $e->showHtml();
+            $gMessage->show($gL10n->get('SYS_INVALID_FONT_AWESOME'));
             // => EXIT
         }
     }
