@@ -247,7 +247,8 @@ elseif($getMode === 'upload_files')
         $uploadHandler = new UploadHandlerDownload(array(
             'upload_dir'     => $uploadDir,
             'upload_url'     => $uploadUrl,
-            'image_versions' => array()
+            'image_versions' => array(),
+            'accept_file_types' => '/.+$/i'
         ));
     }
 }
