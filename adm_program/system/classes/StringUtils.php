@@ -238,8 +238,9 @@ final class StringUtils
         if ($checkExtension)
         {
             // check if the extension is not blacklisted
-            $extensionBlacklist = array('php', 'php3', 'php4', 'php5', 'html', 'htm', 'htaccess', 'htpasswd', 'pl',
-                'js', 'vbs', 'asp', 'cgi', 'ssi');
+            $extensionBlacklist = array('php', 'php3', 'php4', 'php5', 'pht', 'html', 'htm', 'phtml',
+                'shtml', 'htaccess', 'htpasswd', 'pl', 'js', 'vbs', 'asp',
+                'asa', 'cer', 'asax', 'swf', 'xap', 'cgi', 'ssi');
             $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
             if (in_array($fileExtension, $extensionBlacklist, true))
