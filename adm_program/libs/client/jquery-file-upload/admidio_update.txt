@@ -5,3 +5,4 @@ Short description to update the current lib
 3. Copy ONLY the files and folders into libs/jquery-file-upload folder that already exists
 4. Folders test/ and cors/ could be removed
 5. All folders within server/ could be removed until php/
+6. Remove all files of server/php except the upload handler
