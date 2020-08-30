@@ -40,9 +40,24 @@ class Menu
      */
     protected $menuLoaded;    
 
+    /**
+     * @var bool Flag to remember if the function node was already added to the menu
+     */
+    protected $functionsNodeAdded;    
+
     public function __construct()
     {
         $this->initialize();
+    }
+    
+    /**
+     * Adds an additional menu node with page specific functions to the first place of this menu
+     * @param MenuNode $node A object of the class MenuNode
+     */
+    public function addFunctionsNode(MenuNode &$node)
+    {
+        $this->functionsNodeAdded = true;
+        array_unshift($this->menuNodes, $node);
     }
 
     /**
@@ -74,26 +89,22 @@ class Menu
     }
 
     /**
-     * Initialise the member parameters of this class
-     */
-    public function initialize()
-    {
-        $this->menuNodes   = array();
-        $this->menuLoaded  = false;
-    }
-
-    /**
      * Count the number of main nodes from this menu
      * @return int Number of nodes from this menu
      */
     public function countMainNodes()
     {
-        if(!$this->menuLoaded)
-        {
-            $this->loadFromDatabase();
-        }
-
         return count($this->menuNodes);
+    }
+
+    /**
+     * Initialise the member parameters of this class
+     */
+    public function initialize()
+    {
+        $this->menuNodes          = array();
+        $this->menuLoaded         = false;
+        $this->functionsNodeAdded = false;
     }
 
     /**
@@ -110,14 +121,14 @@ class Menu
             $this->loadFromDatabase();
         }
 
-        $html = '<div class="admidio-menu-list">';
+        $html = '<nav class="admidio-menu-list collapse" id="admidio-main-menu">';
 
         foreach($this->menuNodes as $menuNode)
         {
             $html .= $menuNode->getHtml($mediaView);
         }
 
-        $html .= '</div>';
+        $html .= '</nav>';
 
         return $html;
     }
@@ -129,7 +140,7 @@ class Menu
     {
         global $gDb;
 
-        $countMenuNodes = 0;
+        $countMenuNodes = $this->countMainNodes();
         $this->menuLoaded = true;
 
         $sql = 'SELECT men_id, men_name, men_name_intern
@@ -141,10 +152,21 @@ class Menu
 
         while ($mainNodes = $mainNodesStatement->fetch())
         {
+            $countMenuNodes++;
             $this->menuNodes[$countMenuNodes] = new MenuNode($mainNodes['men_name_intern'], $mainNodes['men_name']);
             $this->menuNodes[$countMenuNodes]->loadFromDatabase($mainNodes['men_id']);
-
-            $countMenuNodes++;
+        }
+    }
+    
+    /**
+     * Removes the functions node from the current menu
+     */
+    public function removeFunctionsNode()
+    {
+        if($this->functionsNodeAdded)
+        {
+            array_shift($this->menuNodes);
+            $this->functionsNodeAdded = false;
         }
     }
 }

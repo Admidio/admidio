@@ -118,10 +118,7 @@ catch(AdmException $e)
 
 // create html page object
 $page = new HtmlPage($headline);
-
-// add back link to module menu
-$downloadRenameMenu = $page->getMenu();
-$downloadRenameMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // create html form
 $form = new HtmlForm('edit_download_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '4', 'folder_id' => $getFolderId, 'file_id' => $getFileId)), $page);

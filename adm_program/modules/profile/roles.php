@@ -116,13 +116,10 @@ else
 {
     // create html page object
     $page = new HtmlPage($headline);
+    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 
     $page->addJavascript('var profileJS = new ProfileJS(gRootPath);');
-
-    // add back link to module menu
-    $rolesMenu = $page->getMenu();
-    $rolesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 }
 
 // show headline of module
@@ -266,7 +263,7 @@ while($row = $statement->fetch())
     if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_NO_RIGHTS)
     {
         $leaderRights .= '<i class="fas fa-info-circle" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
-                          <i class="fas fa-trash admidio-opacity-0"></i>';
+                          <i class="fas fa-trash invisible"></i>';
     }
 
     // show icon with edit user right if leader has this right
@@ -286,7 +283,7 @@ while($row = $statement->fetch())
     // show dummy icon if leader has not all rights
     if((int) $role->getValue('rol_leader_rights') !== ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $leaderRights .= '<i class="fas fa-trash admidio-opacity-0"></i>';
+        $leaderRights .= '<i class="fas fa-trash invisible"></i>';
     }
     $columnValues[] = $leaderRights;
 

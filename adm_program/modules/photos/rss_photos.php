@@ -127,14 +127,18 @@ while ($row = $statement->fetch())
     }
 
     // Inhalt zusammensetzen
-    $description = $gL10n->get('SYS_DATE').': '.$photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
+    $description = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
     // Enddatum nur wenn anders als startdatum
     if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin'))
     {
         $description = $gL10n->get('SYS_DATE_FROM_TO', array($description, $photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'))));
     }
-    $description .= '<br />'.$gL10n->get('PHO_PHOTOS').': '.$photoAlbum->countImages();
-    $description .= '<br />'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$photoAlbum->getValue('pho_photographers');
+    $description .= '<br />' . $photoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $photoAlbum->getValue('pho_photographers');
+
+    if (strlen($photoAlbum->getValue('pho_description')) > 0)
+    {
+        $description .= '<br /><br />' . $photoAlbum->getValue('pho_description') . '</p>';
+    }
 
     // show the last five photos as examples
     if ($photoAlbum->getValue('pho_quantity') > 0)

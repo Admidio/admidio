@@ -149,6 +149,65 @@ class Image
     }
 
     /**
+     * Method creates a short html snippet that contains a image tag with an icon.
+     * The icon itself could be a font awesome icon name or a full url to an icon
+     * or only a filename than the icon must be in the theme folder **images**.
+     * @param string $icon     The font-awesome icon-name or url or filename
+     * @param string $text     A text that should be shown on mouseover
+     * @param string $cssClass Optional an additional css class for the icon can be set
+     * @return string Html snippet that contains a image tag
+     */
+    public static function getIconHtml($icon, $text, $cssClass = '')
+    {
+        global $gLogger;
+
+        if(self::isFontAwesomeIcon($icon))
+        {
+            if(StringUtils::strStartsWith($icon, 'fa-'))
+            {
+                $icon = 'fas ' . $icon;
+            }
+
+            if($text !== '')
+            {
+                return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw" data-toggle="tooltip" title="' . $text . '"></i>';
+            }
+            else
+            {
+                return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw"></i>';
+            }
+        }
+
+        if(self::isImageFilename($icon))
+        {
+            // A full URL of an icon
+            if(StringUtils::strStartsWith($icon, 'http', false) && filter_var($icon, FILTER_VALIDATE_URL) !== false)
+            {
+                return '<img class="admidio-icon-info ' . $cssClass . '" src="' . $icon . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
+            }
+
+            try
+            {
+                // Only a filename -> look into theme icon folder
+                if(StringUtils::strIsValidFileName($icon))
+                {
+                    $iconPath = THEME_URL . '/images/' . $icon;
+
+                    return '<img class="admidio-icon-info' . $cssClass . '" src="' . $iconPath . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
+                }
+            }
+            catch (AdmException $e)
+            {
+                // Do nothing here
+            }
+        }
+
+        $gLogger->warning('Invalid image/icon name!', array('icon' => $icon, 'text' => $text));
+
+        return '';
+    }
+
+    /**
      * @return resource|null Returns the image resource
      */
     public function getImageResource()
@@ -171,6 +230,34 @@ class Image
     public function getMimeType()
     {
         return image_type_to_mime_type($this->imageType);
+    }
+
+    /**
+     * Checks if the given icon is a font-awesome icon
+     * @param string $icon Font-Awesome icon name
+     * @return bool Returns true if icon is a font-awesome icon
+     */
+    public static function isFontAwesomeIcon($icon)
+    {
+        return StringUtils::strStartsWith($icon, 'fa-') || StringUtils::strStartsWith($icon, 'fas fa-') || StringUtils::strStartsWith($icon, 'fab fa-');
+    }
+
+    /**
+     * Checks if the given image filename is an allowed image type
+     * @param string            $image        Image filename
+     * @param array<int,string> $allowedTypes Array of allowed image types
+     * @return bool Returns true if image is an allowed image type
+     */
+    public static function isImageFilename($image, array $allowedTypes = array('.png', '.jpg', '.jpeg'))
+    {
+        foreach ($allowedTypes as $allowedType)
+        {
+            if (StringUtils::strEndsWith($image, $allowedType, false))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -368,84 +455,4 @@ class Image
         return true;
     }
 
-    /**
-     * Checks if the given icon is a font-awesome icon
-     * @param string $icon Font-Awesome icon name
-     * @return bool Returns true if icon is a font-awesome icon
-     */
-    public static function isFontAwesomeIcon($icon)
-    {
-        return StringUtils::strStartsWith($icon, 'fa-') || StringUtils::strStartsWith($icon, 'fas fa-') || StringUtils::strStartsWith($icon, 'fab fa-');
-    }
-
-    /**
-     * Checks if the given image filename is an allowed image type
-     * @param string            $image        Image filename
-     * @param array<int,string> $allowedTypes Array of allowed image types
-     * @return bool Returns true if image is an allowed image type
-     */
-    public static function isImageFilename($image, array $allowedTypes = array('.png', '.jpg', '.jpeg'))
-    {
-        foreach ($allowedTypes as $allowedType)
-        {
-            if (StringUtils::strEndsWith($image, $allowedType, false))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Method creates a short html snippet that contains a image tag with an icon.
-     * The icon itself could be a font awesome icon name or a full url to an icon
-     * or only a filename than the icon must be in the theme folder **icons**.
-     * @param string $icon     The font-awesome icon-name or url or filename
-     * @param string $text     A text that should be shown on mouseover
-     * @param string $cssClass Optional an additional css class for the icon can be set
-     * @return string Html snippet that contains a image tag
-     */
-    public static function getIconHtml($icon, $text, $cssClass = '')
-    {
-        global $gLogger;
-
-        if (self::isFontAwesomeIcon($icon))
-        {
-            if (StringUtils::strStartsWith($icon, 'fa-'))
-            {
-                $icon = 'fas ' . $icon;
-            }
-            return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw" data-toggle="tooltip" title="' . $text . '"></i>';
-        }
-
-        if (self::isImageFilename($icon))
-        {
-            // A full URL of an icon
-            if (StringUtils::strStartsWith($icon, 'http', false) && filter_var($icon, FILTER_VALIDATE_URL) !== false)
-            {
-                return '<img class="admidio-icon-info ' . $cssClass . '" src="' . $icon . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
-            }
-
-            try
-            {
-                // Only a filename -> look into theme icon folder
-                if (StringUtils::strIsValidFileName($icon))
-                {
-                    $iconPath = THEME_URL . '/icons/' . $icon;
-                    if (is_file($iconPath))
-                    {
-                        return '<img class="admidio-icon-info' . $cssClass . '" src="' . $iconPath . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
-                    }
-                }
-            }
-            catch (AdmException $e)
-            {
-                // Do nothing here
-            }
-        }
-
-        $gLogger->warning('Invalid image/icon name!', array('icon' => $icon, 'text' => $text));
-
-        return '';
-    }
 }

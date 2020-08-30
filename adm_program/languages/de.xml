@@ -191,14 +191,13 @@
   <string name="INS_CREATE_CONFIGURATION_FILE">Konfigurationsdatei erzeugen</string>
   <string name="INS_DATA_FULLY_ENTERED">Du hast alle notwendigen Daten für die Installation von Admidio eingegeben.\n\nJetzt muss die Datenbank erstellt und mit deinen Daten befüllt werden.</string>
   <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">Die Datenbank Parameter wurden nicht vollständig eingegeben!</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Eine Aktualisierung der Datenbank ist nicht erforderlich</string>
+  <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Eine Aktualisierung der Datenbank ist nicht erforderlich.</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">Die Datei #VAR1_BOLD# konnte nicht im Verzeichnis #VAR2_BOLD# gefunden werden.</string>
   <string name="INS_DATABASE_HOST_INFO">Gib an dieser Stelle den Namen des Datenbankservers an. Dies kann eine URL sein oder aber auch localhost, wenn die Datenbank auf demselben Rechner läuft, wie die Webseite.  </string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">Die Admidio-Datenbank ist aktuell</string>
+  <string name="SYS_DATABASE_IS_UP_TO_DATE">Die Admidio-Datenbank ist aktuell.</string>
   <string name="INS_DATABASE_IS_UPDATED">Datenbank wird aktualisiert</string>
   <string name="INS_DATABASE_LOGIN">Datenbank Zugangsdaten</string>
   <string name="INS_DATABASE_LOGIN_DESC">Gib in diesem Formular deine Zugangsdaten zur Datenbank an. Du kannst das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls du mehrere Admidio-Installationen auf derselben Datenbank einrichten möchtest.</string>
-  <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Aktuelle Datenbankversion: #VAR1#\n\nDatenbankversion nach Update: #VAR2#</string>
   <string name="INS_DATABASE_NAME_INVALID">Der Datenbank-Name enthält ungültige Zeichen!</string>
   <string name="INS_DATABASE_PORT_INFO">Wird dieses Feld nicht ausgefüllt, so wird der Standardport der Datenbank (MySQL: 3306, PostgreSQL: 5432) verwendet. Nutzt du oder dein Webhoster einen speziellen Port, so kann dieser hier eingetragen werden.</string>
   <string name="INS_DATABASE_PORT_INVALID">Der angegebene Port ist nicht gültig. Für einen gültigen Port wähle zwischen 1 und 65535 oder lass den Port für den Standardport leer.</string>
@@ -232,9 +231,10 @@
   <string name="INS_INSTALL_ADMIDIO">Admidio installieren</string>
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</string>
-  <string name="INS_INSTALLATION_SUCCESSFUL">Die Admidio-Datenbank ist nun installiert und die Konfigurationsdatei eingerichtet. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.</string>
-  <string name="INS_INSTALLATION_VERSION">Installation der Version #VAR1#</string>
-  <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Die Installation war erfolgreich</string>
+  <string name="SYS_INSTALLATION_SUCCESSFUL">Installation erfolgreich</string>
+  <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Die Admidio-Datenbank ist nun installiert und fertig eingerichtet. Die Konfigurationsdatei mit den Zugangsdaten zur Datenbank wurde erstellt und hinterlegt. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.</string>
+  <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">Die Installation und Einrichtung der Datenbank wurde erfolgreich durchgeführt.</string>
+  <string name="INS_INSTALLATION_VERSION">Installation Version #VAR1#</string>
   <string name="INS_INTERN">Intern</string>
   <string name="INS_LANGUAGE_NOT_CHOSEN">Es wurde keine Sprache ausgewählt.</string>
   <string name="INS_MEMBERSHIP">Mitgliedschaft</string>
@@ -242,7 +242,7 @@
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Die bereits installierte Version konnte nicht ermittelt werden. Falls du bisher noch Version 1.x von Admidio genutzt hast, aktualisiere zuerst auf Version 2.x und starte danach das Update auf Version #VAR1#. Falls du bereits Version 2.x oder neuer installiert hast, prüfe bitte die Konsistenz deiner Datenbank.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Eine Organisation mit dem Namen #VAR1_BOLD# existiert bereits. Wähle bitte einen anderen Namen aus.</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben!</string>
-  <string name="INS_PASSWORDS_NOT_EQUAL">Das Passwort stimmt nicht mit der Wiederholung überein.</string>
+  <string name="SYS_PASSWORDS_NOT_EQUAL">Das eingegebene Passwort stimmt nicht mit der Wiederholung überein.</string>
   <string name="INS_PHONE_LIST">Telefonliste</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Wähle bitte eine Sprache aus</string>
   <string name="INS_SET_ORGANIZATION">Organisation festlegen</string>
@@ -322,10 +322,8 @@
   <string name="LST_A_TO_Z">A bis Z</string>
   <string name="LST_ACTIVE_FORMER_MEMBERS">Aktive und ehemalige Mitglieder</string>
   <string name="LST_ACTIVE_MEMBERS">Aktive Mitglieder</string>
-  <string name="LST_ACTIVE_ROLES">Übersicht der aktiven Rollen</string>
   <string name="LST_ADD_COLUMN">Spalte hinzufügen</string>
   <string name="LST_ADD_COLUMNS_DESC">Ordne in der folgenden Tabelle beliebig vielen Spalten entsprechende Profilfelder zu. Zusätzlich kannst du die Standardsortierung vorgeben und Bedingungen zu Feldern hinzufügen, nach denen die jeweiligen Mitglieder gefiltert werden sollen.</string>
-  <string name="LST_CHOOSE_LIST">Liste auswählen</string>
   <string name="LST_CHOOSE_ROLE">Wähle eine Rolle aus, von der du die konfigurierte Mitgliederliste anzeigen möchtest.</string>
   <string name="LST_COLUMN">Spalte</string>
   <string name="LST_CONFIGURATION">Konfiguration</string>
@@ -353,16 +351,10 @@
   <string name="LST_FORMER_MEMBERS">Ehemalige Mitglieder</string>
   <string name="LST_FROM_TO">von #VAR1# bis #VAR2#</string>
   <string name="LST_GENERAL_LISTS">Allgemeine Listen</string>
-  <string name="LST_HIDE_DETAILS">Details in Übersicht einklappen</string>
-  <string name="LST_HIDE_DETAILS_DESC">Bei Aktivierung dieser Option werden die Details in der Listenübersicht standardmäßig eingeklappt. Auf Wunsch lassen sich die Details weiterhin anzeigen. (Standard: nein)</string>
-  <string name="LST_INACTIVE_ROLES">Übersicht der inaktiven Rollen</string>
   <string name="LST_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="LST_KONFIGURATION_OWN_LIST">Konfiguration eigene Liste</string>
   <string name="LST_LIST">Liste</string>
-  <string name="LST_LISTS">Listen</string>
-  <string name="LST_LISTS_DESC">Übersicht über alle Rollen mit der Möglichkeit verschiedene Listen anzuzeigen. Die Listen können gedruckt und exportiert werden.</string>
   <string name="LST_LIST_VIEW">Listenübersicht</string>
-  <string name="LST_MAX">von max. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
   <string name="LST_MEMBERS_BETWEEN_PERIOD">Mitglieder zwischen #VAR1# und #VAR2#</string>
   <string name="LST_MEMBERS_PER_PAGE">Anzahl Teilnehmer pro Seite</string>
@@ -851,7 +843,6 @@
   <string name="PRO_PASSWORD_DESCRIPTION">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\n\nDie Stärke deines gewählten Passworts wird dir farblich über einen Balken dargestellt. Die mindestens notwendige Stärke zeigt dir der Pfeil im Balken an.</string>
   <string name="PRO_PASSWORD_LENGTH">Das Passwort muss aus mindestens 8 Zeichen bestehen.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">Das alte Passwort ist falsch.</string>
-  <string name="PRO_PASSWORDS_NOT_EQUAL">Das Passwort stimmt nicht mit der Wiederholung überein.</string>
   <string name="PRO_PASSWORD_NOT_STRONG_ENOUGH">Das Passwort ist nicht sicher genug.</string>
   <string name="PRO_PHOTO_DELETED">Das Profilfoto wurde gelöscht.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">Das hochgeladene Foto übersteigt die vom Server zugelassene Dateigröße von #VAR1# B.</string>
@@ -892,7 +883,6 @@
   <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
   <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
   <!--Phrases only in Rolesmodule-->
-  <string name="ROL_ACTIV_ROLES">Aktive Rollen</string>
   <string name="ROL_ANNUALLY">Jährlich</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Mitglieder zuordnen und bearbeiten</string>
   <string name="ROL_DELETE_NO_DEFAULT_ROLE">Du kannst die Rolle #VAR1_BOLD# nicht löschen. Es muss mindestens eine Rolle die Einstellung #VAR2_BOLD# besitzen.</string>
@@ -909,8 +899,6 @@
   <string name="ROL_EDIT_ROLE">Rolle bearbeiten</string>
   <string name="ROL_ENABLE_ROLE">Rolle aktivieren</string>
   <string name="ROL_ENABLE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# wieder aktivierst, bekommen die Rollenmitglieder wieder die Rechte zugeordnet und die Rolle erscheint in sämtlichen Listen.\n\nMöchtest du die Rollen wieder aktivieren?</string>
-  <string name="ROL_INACTIV_ROLE">Inaktive Rolle</string>
-  <string name="ROL_INACTIV_ROLES">Inaktive Rollen</string>
   <string name="ROL_LEADER_NO_ADDITIONAL_RIGHTS">Leiter dieser Rolle haben keine gesonderten Rechte. Sie werden in Listenansichten nur hervorgehoben dargestellt.</string>
   <string name="ROL_LEADER_EDIT_MEMBERS">Leiter dieser Rolle können Profildaten aller Rollenmitglieder bearbeiten.</string>
   <string name="ROL_LEADER_ASSIGN_MEMBERS">Leiter dieser Rolle können neue Rollenmitglieder hinzufügen oder vorhandene Mitglieder entfernen.</string>
@@ -943,8 +931,6 @@
   <string name="ROL_RIGHT_PROFILE">Eigenes Profil bearbeiten</string>
   <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
   <string name="ROL_RIGHT_WEBLINKS">Weblinks verwalten</string>
-  <string name="ROL_ROLE_ADMINISTRATION">Rollenverwaltung</string>
-  <string name="ROL_ROLE_ADMINISTRATION_DESC">Rollen, dies können Gruppen, Kurse oder Abteilungen sein, können hier erstellt und bearbeitet werden. Auch die Rechte der einzelnen Rollen werden hier festgelegt.</string>
   <string name="ROL_ROLE_DELETE">Rolle löschen</string>
   <string name="ROL_ROLE_DELETE_DESC">Willst du die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften endgültig entfernt.</string>
   <string name="ROL_ROLE_DEPENDENCIES">Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der #VAR1# sein!\n\nBeim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen Rolle Mitglied der #VAR1#. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften nicht aufgehoben!</string>
@@ -956,7 +942,6 @@
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
   <string name="ROL_SEMIYEARLY">Halbjährlich</string>
   <string name="ROL_SEND_MAILS">E-Mails zusenden</string>
-  <string name="ROL_SHOW_MEMBERS">Mitglieder anzeigen</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
   <string name="ROL_UNIQUELY">Einmalig</string>
   <string name="ROL_VALID_FROM" description="Date valid from">Gültig von</string>
@@ -968,6 +953,7 @@
   <string name="SYS_ABORT">Abbrechen</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
   <string name="SYS_ACTIVATED">Aktiviert</string>
+  <string name="SYS_ACTIVE_GROUPS_ROLES">Aktive Gruppen und Rollen</string>
   <string name="SYS_ADD_RECIPIENTS">Empfänger hinzufügen</string>
   <string name="SYS_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
   <string name="SYS_ADDRESS">Adresse</string>
@@ -1046,6 +1032,8 @@
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
+  <string name="SYS_CURRENT_DATABASE_VERSION">Aktuelle Datenbankversion</string>
+  <string name="SYS_DATABASE_VERSION_AFTER_UPDATE">Datenbankversion nach Update</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du hast keine gültige E-Mail-Adresse hinterlegt!\n\nTrage bitte in deinem #VAR1#Profil#VAR1# eine E-Mail-Adresse ein.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, so sind die Objekte (Termine, Ankündigungen, Weblinks ...) dieser Kategorie auch auf den Webseiten folgender Organisationen sichtbar:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
@@ -1068,6 +1056,8 @@
   <string name="SYS_DEBUG_MODE">Debugmodus</string>
   <string name="SYS_DECIMAL_NUMBER">Dezimalzahl</string>
   <string name="SYS_DELETE">Löschen</string>
+  <string name="SYS_DELETE_FILE">Datei löschen</string>
+  <string name="SYS_DELETE_FOLDER">Ordner löschen</string>
   <string name="SYS_DELETE_DATA">Die Daten wurden gelöscht.</string>
   <string name="SYS_DELETE_ENTRY">Willst du den Eintrag #VAR1_BOLD# löschen?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Es existiert keine weitere Kategorie für diesen Bereich. Aus diesem Grund kann die Kategorie nicht gelöscht werden.</string>
@@ -1155,7 +1145,7 @@
   <string name="SYS_FOLDER_RENAME">Der Ordner #VAR1# wurde umbenannt.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Beim Umbenennen des Ordners #VAR1# ist ein Fehler aufgetreten.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
-  <string name="SYS_FONT_AWESOME_DESC">Du kannst auf unterschiedliche Arten ein Icon hinterlegen:\n1. Ein Icon des Webfonts "Font Awesome". Gehe dazu auf #VAR1#http://fontawesome.com#VAR2# und wähle ein kostenloses Icon der Sammlung "Solid" oder "Brands" aus. Als Präfix musst du noch fa- davor setzen. Wählst du also das Icon "user" aus, musst du hier "fa-user" eintragen.\n2. Ein JPEG oder PNG Icon. Trage dazu die vollständige URL zusammen mit dem Dateinamen des Icons ein. Alternativ kannst du das Icon auch im Theme im Ordner "icons" ablegen, dann brauchst du nur den Dateinamen anzugeben.</string>
+  <string name="SYS_FONT_AWESOME_DESC">Du kannst auf unterschiedliche Arten ein Icon hinterlegen:\n1. Ein Icon des Webfonts "Font Awesome". Gehe dazu auf #VAR1#http://fontawesome.com#VAR2# und wähle ein kostenloses Icon der Sammlung "Solid" oder "Brands" aus. Als Präfix musst du noch fa- davor setzen. Wählst du also das Icon "user" aus, musst du hier "fa-user" eintragen.\n2. Ein JPEG oder PNG Icon. Trage dazu die vollständige URL zusammen mit dem Dateinamen des Icons ein. Alternativ kannst du das Icon auch im Theme im Ordner "images" ablegen, dann brauchst du nur den Dateinamen anzugeben.</string>
   <string name="SYS_FORMER">Ehemaliger</string>
   <string name="SYS_FORMER_PL">Ehemalige</string>
   <string name="SYS_FONT">Schriftart</string>
@@ -1167,6 +1157,8 @@
   <string name="SYS_GEN_RANDOM_ERROR">Es ist ein unerwarteter Fehler bei der Generierung einer zufälligen Zahl aufgetreten.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">Das Programm kann keine zufälligen Zahlen erzeugen.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Das Programm erwartet eine Zeichenkette mit mindestens 2 unterschiedlichen Zeichen.</string>
+  <string name="SYS_GROUPS_ROLES">Gruppen &amp; Rollen</string>
+  <string name="SYS_GROUPS_ROLES_DESC">Übersicht und Verwaltung aller Gruppen und Rollen der Organisation. Es können verschiedene Mitgliederlisten angezeigt, exportiert und eigene Listen erstellt werden.</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP-Header wurden bereits gesendet!</string>
   <string name="SYS_HEADLINE">Überschrift</string>
   <string name="SYS_HELP">Hilfe</string>
@@ -1179,10 +1171,11 @@
   <string name="SYS_IMPORT_MODE">Import Modus</string>
   <string name="SYS_IMPRINT">Impressum</string>
   <string name="SYS_IMPRINT_DESC">Hier kann die URL zum Impressum deiner Seite hinterlegt werden. Sofern das gewählte Theme dies unterstützt, wird ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/imprint.html)</string>
+  <string name="SYS_INACTIVE_GROUPS_ROLES">Inaktive Gruppen und Rollen</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
   <string name="SYS_INTERNAL_NAME">Interner Name</string>
   <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
-  <string name="SYS_INVALID_FONT_AWESOME">Der eingegebene Icon-Name entspricht nicht der Syntax von Font Awesome. Prüfe bitte, ob es diesen Namen auch als Icon gibt.</string>
+  <string name="SYS_INVALID_FONT_AWESOME">Der eingegebene Icon-Name entspricht nicht der erwarteten Syntax. Ein Icon von Font Awesome muss dem Schema fa-iconname entsprechen. Eine Datei muss im Themeordner images abgelegt sein und eine png oder jpg Endung besitzen.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <string name="SYS_IO_ERROR">E/A Fehler</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
@@ -1222,6 +1215,7 @@
   <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt eine Route vom eigenen Wohnort zum Wohnort dieses Benutzers bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MASTER_DATA">Stammdaten</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmer</string>
+  <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# von max. #VAR2# Teilnehmern</string>
   <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
   <string name="SYS_MAXIMUM_FILE_SIZE">Maximale Dateigröße</string>
@@ -1240,11 +1234,9 @@
   <string name="SYS_MINUTES">Minuten</string>
   <string name="SYS_MOBILE">Handy</string>
   <string name="SYS_MODULE_DISABLED">Dieses Modul ist nicht freigegeben.</string>
-  <string name="SYS_MODULE_PREFERENCES">Moduleinstellungen</string>
   <string name="SYS_MODULES">Module</string>
   <string name="SYS_MONDAY">Montag</string>
   <string name="SYS_MORE_FEATURES">Weitere Funktionen</string>
-  <string name="SYS_MYLIST_DESC">Neue Listenkonfigurationen können hier erstellt und gespeichert werden. Außerdem können Listen über mehrere Rollen angezeigt werden.</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Name (Abkürzung)</string>
   <string name="SYS_NEW_NAME">Neuer Name</string>
@@ -1295,6 +1287,7 @@
   <string name="SYS_PHONE_INVALID_CHAR">Die Telefonnummer im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</string>
   <string name="SYS_PHOTO">Foto</string>
   <string name="SYS_PHOTOS">Fotos</string>
+  <string name="SYS_PHOTO_OF_VAR">Foto von #VAR1#</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">alle PHP-Einstellungen</string>
   <string name="SYS_PHP_VERSION">PHP-Version</string>
@@ -1315,6 +1308,7 @@
   <string name="SYS_PRNG">Pseudo-Zufallszahlen Generator</string>
   <string name="SYS_PRNG_INSECURE">Admidio/PHP kann keine sicheren Pseudo-Zufallszahlen generieren! Bitte um Kontaktaufnahme mit dem Admidio-Team mit folgenden Informationen:</string>
   <string name="SYS_PROCESS_CANCELED">Der Vorgang wurde abgebrochen.</string>
+  <string name="SYS_PROCESSING_ERROR_DESC">Bei der Verarbeitung der Daten ist folgendes Problem aufgetreten.</string>
   <string name="SYS_PROGRESSBAR">Ladebalken</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
   <string name="SYS_PWACT_PW_SAVED">Das neue Passwort wurde nun übernommen!</string>
@@ -1338,6 +1332,7 @@
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administratoren besitzen alle Berechtigungen für den Ordner.</string>
   <string name="SYS_ROLE_MAX_MEMBERS">Speichern ist nicht möglich, bei der Rolle #VAR1_BOLD# würde die maximale Mitgliederzahl überschritten.</string>
   <string name="SYS_ROLE_MEMBERS">Rollenmitglieder</string>
+  <string name="SYS_ROLE_TYPES">Rollentypen</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROOM">Raum</string>
   <string name="SYS_ROOM_MANAGEMENT">Raumverwaltung</string>
@@ -1367,6 +1362,8 @@
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
   <string name="SYS_SETTINGS">Einstellungen</string>
   <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
+  <string name="SYS_SHOW_MEMBER_LIST">Mitgliederliste anzeigen</string>
+  <string name="SYS_SHOW_PERMISSIONS">Berechtigungen anzeigen</string>
   <string name="SYS_SHOW_PROFILE">Profil anzeigen</string>
   <string name="SYS_SHOW_ROUTE">Route anzeigen</string>
   <string name="SYS_SIMILAR_USERS_FOUND">Es wurden bereits Benutzer mit ähnlichem Namen wie #VAR1_BOLD# in der Datenbank gefunden.</string>
@@ -1412,6 +1409,7 @@
   <string name="SYS_UPLOAD_FILES">Dateien hochladen</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">max. Uploadgröße</string>
   <string name="SYS_UPLOAD_NAME_ERROR">Der Dateiname darf nicht \"submit\" heißen.</string>
+  <string name="SYS_UPDATE_SUCCESSFUL">Aktualisierung erfolgreich</string>
   <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-+_:/#?= .</string>
   <string name="SYS_USER">Benutzer</string>
   <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</string>
@@ -1421,6 +1419,7 @@
   <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
   <string name="SYS_USERNAME">Benutzername</string>
   <string name="SYS_USERNAME_OR_EMAIL">Benutzername oder E-Mail</string>
+  <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# am #VAR2# um #VAR3#</string>
   <string name="SYS_USERS_FOUND">Gefundene Benutzer</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_VERSION">Version</string>

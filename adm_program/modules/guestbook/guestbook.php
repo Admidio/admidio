@@ -54,7 +54,6 @@ $gNavigation->addUrl(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage();
-$page->enableModal();
 
 // add rss feed to guestbook
 if($gSettingsManager->getBool('enable_rss'))
@@ -161,25 +160,18 @@ else
     $guestbookEntriesPerPage = $guestbookEntries;
 }
 
-// get module menu
-$guestbookMenu = $page->getMenu();
-
 if($getGboId === 0 && !$getModeration)
 {
     // show link to create new guestbook entry
-    $guestbookMenu->addItem(
-        'admMenuItemNewEntry', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('headline' => $getHeadline)),
-        $gL10n->get('SYS_WRITE_ENTRY'), 'fa-pencil-alt'
-    );
+    $page->addPageFunctionsMenuItem('menu_item_guestbook_new_entry', $gL10n->get('SYS_WRITE_ENTRY'), 
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('headline' => $getHeadline)), 
+        'fa-pencil-alt');    
 }
 
 if($getGboId > 0 || $getModeration)
 {
     // show link to navigate back to guestbook
-    $guestbookMenu->addItem(
-        'admMenuItemNavigateBack', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('headline' => $getHeadline)),
-        $gL10n->get('GBO_BACK_TO_GUESTBOOK'), 'fa-arrow-circle-left'
-    );
+    $page->setUrlPreviousPage(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('headline' => $getHeadline)));
 }
 
 if(!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsManager->get('enable_guestbook_moderation') > 0)
@@ -203,20 +195,14 @@ if(!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsMan
 
     if($countLockedEntries > 0)
     {
-        $guestbookMenu->addItem(
+        $page->addPageFunctionsMenuItem('menu_item_guestbook_moderate', $gL10n->get('GBO_MODERATE_ENTRIES'), 
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('moderation' => '1', 'headline' => $getHeadline)), 
+            'fa-tasks', $countLockedEntries);    
+        /*$guestbookMenu->addItem(
             'admMenuItemModerate', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('moderation' => '1', 'headline' => $getHeadline)),
             $gL10n->get('GBO_MODERATE_ENTRIES').'<span class="badge">'.$countLockedEntries.'</span>', 'fa-tasks'
-        );
+        );*/
     }
-}
-
-if($gCurrentUser->isAdministrator())
-{
-    // show link to system preferences of announcements
-    $guestbookMenu->addItem(
-        'admMenuItemPreferencesGuestbook', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'guestbook')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
-    );
 }
 
 $guestbook = new TableGuestbook($gDb);
@@ -259,41 +245,46 @@ else
         $gboEmail    = $guestbook->getValue('gbo_email');
 
         $page->addHtml('
-        <div class="card" id="gbo_'.$gboId.'">
+        <div class="card admidio-blog" id="gbo_'.$gboId.'">
             <div class="card-header">
-                <div class="float-left">
-                    <i class="fas fa-book"></i>'.$gboName);
+                <i class="fas fa-book"></i>'.
+                $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($gboName, $guestbook->getValue('gbo_timestamp_create', 
+                    $gSettingsManager->getString('system_date')), $guestbook->getValue('gbo_timestamp_create', $gSettingsManager->getString('system_time')))));
 
-                    // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
-                    if (strlen($gboHomepage) > 0)
-                    {
-                        $page->addHtml('
-                        <a class="admidio-icon-link" href="'.$gboHomepage.'" target="_blank">
-                            <i class="fas fa-link" data-toggle="tooltip" title="'.$gboHomepage.'"></i></a>');
-                    }
+                // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
+                if (strlen($gboHomepage) > 0)
+                {
+                    $page->addHtml('
+                    <a class="admidio-icon-link" href="'.$gboHomepage.'" target="_blank">
+                        <i class="fas fa-link" data-toggle="tooltip" title="'.$gboHomepage.'"></i></a>');
+                }
 
-                    // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
-                    if (strlen($gboEmail) > 0)
-                    {
-                        $page->addHtml('
-                        <a class="admidio-icon-link" href="mailto:'.$gboEmail.'">
-                            <i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'"></i></a>');
-                    }
-                $page->addHtml('</div>
-                <div class="float-right text-right">'. $guestbook->getValue('gbo_timestamp_create'));
+                // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
+                if (strlen($gboEmail) > 0)
+                {
+                    $page->addHtml('
+                    <a class="admidio-icon-link" href="mailto:'.$gboEmail.'">
+                        <i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'"></i></a>');
+                }
 
-                    // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-                    if ($gCurrentUser->editGuestbookRight())
-                    {
-                        $page->addHtml('
-                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('id' => $gboId, 'headline' => $getHeadline)). '">
-                            <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
-                        <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbo',
-                            'element_id' => 'gbo_'.$gboId, 'database_id' => $gboId, 'name' => $gboName)).'">
-                            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
-                    }
-                $page->addHtml('</div>
+                // aendern & loeschen duerfen nur User mit den gesetzten Rechten
+                if ($gCurrentUser->editGuestbookRight())
+                {
+                    $page->addHtml('
+                    <div class="dropdown float-right">
+                        <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('id' => $gboId, 'headline' => $getHeadline)). '">
+                                <i class="fas fa-edit"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                            <a class="dropdown-item btn openPopup" href="javascript:void(0);" 
+                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbo',
+                                'element_id' => 'gbo_'.$gboId, 'database_id' => $gboId, 'name' => $gboName)).'">
+                                <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                        </div>
+                    </div>');
+                }
+            $page->addHtml('
             </div>
 
             <div class="card-body">'.

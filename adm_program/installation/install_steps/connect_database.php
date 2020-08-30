@@ -20,12 +20,9 @@ if (isset($_POST['system_language']) && trim($_POST['system_language']) !== '')
 }
 elseif (!isset($_SESSION['language']))
 {
-    showNotice(
-        $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')),
-        $gL10n->get('SYS_BACK'),
-        'fa-arrow-circle-left'
-    );
+    $page = new HtmlPageInstallation();
+    $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'), $gL10n->get('SYS_BACK'),
+        'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome')));
     // => EXIT
 }
 
@@ -57,9 +54,13 @@ else
 }
 
 // create a page to enter all necessary database connection information
-$form = new HtmlFormInstallation('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
-$form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
-$form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
+$page = new HtmlPageInstallation();
+$page->addTemplateFile('installation.tpl');
+$page->assign('subHeadline', $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
+$page->assign('text', $gL10n->get('INS_DATABASE_LOGIN_DESC'));
+
+$form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')));
+$form->openGroupBox('gbConnectDatabase', $gL10n->get('INS_DATABASE_LOGIN'));
 $form->addSelectBoxFromXml(
     'db_engine', $gL10n->get('INS_DATABASE_SYSTEM'), ADMIDIO_PATH.'/adm_program/system/databases.xml',
     'identifier', 'name', array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $dbEngine)
@@ -91,7 +92,10 @@ $form->addInput(
 $form->closeGroupBox();
 $form->addButton(
     'previous_page', $gL10n->get('SYS_BACK'),
-    array('icon' => 'fa-arrow-circle-left', 'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')))
+    array('icon' => 'fa-arrow-circle-left', 'class' => 'admidio-margin-bottom',
+        'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome')))
 );
-$form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'fa-arrow-circle-right'));
-echo $form->show();
+$form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'fa-arrow-circle-right', 'class' => 'float-right'));
+
+$page->addHtml($form->show());
+$page->show();

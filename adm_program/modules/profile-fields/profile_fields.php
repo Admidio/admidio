@@ -28,7 +28,7 @@ unset($_SESSION['fields_request']);
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascript('
     $(".admidio-group-heading").click(function() {
@@ -88,22 +88,14 @@ $page->addJavascript('
     }
 ');
 
-// get module menu
-$fieldsMenu = $page->getMenu();
-
-// show back link
-$fieldsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
-
 // define link to create new profile field
-$fieldsMenu->addItem(
-    'menu_item_new_field', ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php',
-    $gL10n->get('ORG_CREATE_PROFILE_FIELD'), 'fa-plus-circle'
-);
+$page->addPageFunctionsMenuItem('menu_item_new_field', $gL10n->get('ORG_CREATE_PROFILE_FIELD'), 
+    ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', 'fa-plus-circle');
+
 // define link to maintain categories
-$fieldsMenu->addItem(
-    'menu_item_maintain_category', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'USF')),
-    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large'
-);
+$page->addPageFunctionsMenuItem('menu_item_maintain_category', $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 
+    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'USF')), 
+    'fa-th-large');
 
 $sql = 'SELECT *
           FROM '.TBL_USER_FIELDS.'
@@ -165,8 +157,9 @@ while($row = $statement->fetch())
     if(strlen($userField->getValue('usf_description')) > 22)
     {
         $description = substr($userField->getValue('usf_description', 'database'), 0, 22).'
-            <a data-toggle="modal" data-target="#admidio_modal"
-                href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'user_field_description', 'message_var1' => $userField->getValue('usf_name_intern'), 'inline' => 'true')).'"><span  data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
+            <a class="openPopup" href="javascript:void(0);" 
+                data-href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'user_field_description', 'message_var1' => $userField->getValue('usf_name_intern'), 'inline' => 'true')).'"><span 
+                data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
     }
     elseif($userField->getValue('usf_description') === '')
     {
@@ -232,12 +225,12 @@ while($row = $statement->fetch())
 
     if($userField->getValue('usf_system') == 1)
     {
-        $usfSystem .= '<i class="fas fa-trash admidio-opacity-0"></i>';
+        $usfSystem .= '<i class="fas fa-trash invisible"></i>';
     }
     else
     {
-        $usfSystem .='<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$usfId,
+        $usfSystem .='<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$usfId,
                         'name' => $userField->getValue('usf_name'), 'database_id' => $usfId)).'">'.
                         '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
     }

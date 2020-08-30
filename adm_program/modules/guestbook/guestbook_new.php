@@ -111,10 +111,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
 
 // create html page object
 $page = new HtmlPage($headline);
-
-// add back link to module menu
-$guestbookCreateMenu = $page->getMenu();
-$guestbookCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // Html des Modules ausgeben
 if ($getGboId > 0)

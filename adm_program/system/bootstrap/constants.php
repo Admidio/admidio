@@ -68,7 +68,7 @@ define('ADMIDIO_URL_PATH', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
 // PATHS
 define('SERVER_PATH',  realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www
 define('ADMIDIO_PATH', dirname(dirname(dirname(__DIR__)))); // /var/www/subfolder
-define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/index.php
+define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/overview.php
 
 // URLS
 define('ADMIDIO_URL', $g_root_path); // https://www.example.org:1234/subfolder | https://www.myproxy.com:1234/www.example.com/subfolder
@@ -78,6 +78,7 @@ define('CURRENT_URL', (strlen(ADMIDIO_URL_PATH) > 0 && strpos($_SERVER['REQUEST_
 // FOLDERS
 define('FOLDER_DATA', '/adm_my_files');
 define('FOLDER_CLASSES', '/adm_program/system/classes');
+define('FOLDER_INSTALLATION', '/adm_program/installation');
 define('FOLDER_LIBS_SERVER', '/adm_program/libs/server'); // PHP libs
 define('FOLDER_LIBS_CLIENT', '/adm_program/libs/client'); // JS/CSS libs
 define('FOLDER_LANGUAGES', '/adm_program/languages');

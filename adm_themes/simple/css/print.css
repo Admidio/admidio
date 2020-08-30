@@ -1,0 +1,113 @@
+/******************************************************************************
+ * Cascading-Style-Sheets-File to change the layout of optimized print pages
+ *
+ * Copyright    : (c) 2004 - 2019 The Admidio Team
+ * Homepage     : https://www.admidio.org/
+ * License      : GNU Public License 2 https://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * This css file is used to specify the layout of print previews e.g. in lists
+ * or in dates. The file is loaded after the admidio.css and could override
+ * layout settings of that file.
+ *
+ *****************************************************************************/
+
+body {
+    color: #000000;
+    background: #ffffff none;
+    text-align: center;
+    margin: 20px;
+}
+
+h1 {
+    border-bottom-width: 0;
+}
+
+h3, h5 {
+    margin-bottom: 25px;
+}
+
+/* default distance between elements */
+.admidio-blog, .admidio-field-group, .pagination,
+.navbar-filter, .table-responsive, .admidio-content-header,
+.dataTables_wrapper, .admidio-margin-bottom {
+    margin-bottom: 40px;
+}
+
+/***********************************/
+/* Tables */
+/***********************************/
+
+.table {
+    width: 270mm;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 0;
+    border-spacing: 0;
+    margin: auto;
+}
+
+.table thead > tr > th {
+    color: #000000;
+    font-family: arial, sans-serif;
+    background-color: #cccccc;
+    border-bottom: 2px solid #cccccc;
+}
+
+.admidio-group-heading td {
+    color: #666666;
+    font-size: 12pt;
+    font-weight: bold;
+    letter-spacing: 0.5em;
+    background-color: #eeeeee;
+    border-bottom: 1px solid #dddddd;
+}
+
+/***********************************/
+/* Cards */
+/***********************************/
+
+.admidio-blog, .admidio-field-group {
+    border: none;
+}
+
+.admidio-blog .card-header, .admidio-blog .card-body, .admidio-blog .card-footer,
+.admidio-field-group .card-header, .admidio-field-group .card-body, .admidio-field-group .card-footer {
+    border: none;
+    background-color: #eeeeee;
+}
+
+.card-header {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+.card-header .fas, .card-header .fab {
+    margin-right: 10px;
+}
+
+.card-header .float-right .fas {
+    margin-right: 0px;
+}
+
+.card-header .dropdown .fas, .card-header .dropdown .fab {
+    margin-right: 0px;
+}
+
+.admidio-blog .card-footer {
+    font-size: 80%;
+}
+
+.card-header .dropdown {
+    display: none;
+}
+
+/* Highlight events */
+
+tr.admidio-event-highlight,
+.admidio-event-highlight .panel-heading {
+    color: #000000;
+}
+
+.panel-primary.admidio-event-highlight > .panel-heading {
+    border-bottom: 4px solid #000000;
+}

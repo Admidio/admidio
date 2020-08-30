@@ -169,11 +169,11 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         {
             if ($i === $page)
             {
-                $pageNavString .= getListElementString((string) $i, 'active');
+                $pageNavString .= getListElementString((string) $i, 'page-item active');
             }
             else
             {
-                $pageNavString .= getListElementString((string) $i, '', $url, $paramName, ($i - 1) * $itemsPerPage);
+                $pageNavString .= getListElementString((string) $i, 'page-item', $url, $paramName, ($i - 1) * $itemsPerPage);
             }
         }
 
@@ -197,12 +197,12 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         }
 
         $urlString = '#';
-        if ($url !== '' && $className === '')
+        if ($url !== '')
         {
             $urlString = $url.'&'.$paramName.'='.$paramValue;
         }
 
-        return '<li'.$classString.'><a href="'.$urlString.'">'.$linkText.'</a></li>';
+        return '<li'.$classString.'><a class="page-link" href="'.$urlString.'">'.$linkText.'</a></li>';
     }
 
     $onPage = (int) floor($pageStartItem / $itemsPerPage) + 1;
@@ -217,7 +217,7 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
 
         if ($totalPagesCount > 3)
         {
-            $disabledLink = '<li class="disabled"><a>...</a></li>';
+            $disabledLink = '<li class="page-item disabled"><a>...</a></li>';
 
             if ($onPage > 1 && $onPage < $totalPagesCount)
             {
@@ -248,13 +248,13 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         $pageNavClassPrev = '';
         if ($onPage === 1)
         {
-            $pageNavClassPrev = 'disabled';
+            $pageNavClassPrev = 'page-item disabled';
         }
 
         $pageNavClassNext = '';
         if ($onPage === $totalPagesCount)
         {
-            $pageNavClassNext = 'disabled';
+            $pageNavClassNext = 'page-item disabled';
         }
 
         $pageNavigationPrevText = getListElementString($gL10n->get('SYS_BACK'),      $pageNavClassPrev, $baseUrl, $queryParamName, ($onPage - 2) * $itemsPerPage);
@@ -263,7 +263,7 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         $pageNavigationString = $pageNavigationPrevText.$pageNavigationString.$pageNavigationNextText;
     }
 
-    $pageNavigationString = '<ul class="pagination">'.$pageNavigationString.'</ul>';
+    $pageNavigationString = '<nav><ul class="pagination">'.$pageNavigationString.'</ul></nav>';
 
     return $pageNavigationString;
 }

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
+    <step id="5">UPDATE %PREFIX%_preferences SET prf_value = 'simple' WHERE prf_name = 'theme'</step>
+    <step id="7">UPDATE %PREFIX%_preferences SET prf_value = 'adm_program/overview.php' WHERE prf_name = 'homepage_logout' AND prf_value = 'adm_program/index.php'</step>
+    <step id="8">UPDATE %PREFIX%_preferences SET prf_value = 'adm_program/overview.php' WHERE prf_name = 'homepage_login' AND prf_value = 'adm_program/index.php'</step>
+    <step id="9">UPDATE %PREFIX%_menu SET men_url = '/adm_program/overview.php' WHERE men_name_intern = 'overview' AND men_url = '/adm_program/index.php'</step>
     <step id="10">UPDATE %PREFIX%_menu SET men_icon = 'fa-home' WHERE men_icon = 'home.png'</step>
     <step id="20">UPDATE %PREFIX%_menu SET men_icon = 'fa-newspaper' WHERE men_icon = 'announcements.png'</step>
     <step id="30">UPDATE %PREFIX%_menu SET men_icon = 'fa-download' WHERE men_icon = 'download.png'</step>
@@ -11,7 +15,7 @@
     <step id="90">UPDATE %PREFIX%_menu SET men_icon = 'fa-link' WHERE men_icon = 'weblinks.png'</step>
     <step id="100">UPDATE %PREFIX%_menu SET men_icon = 'fa-list-alt' WHERE men_icon = 'mylist.png'</step>
     <step id="110">UPDATE %PREFIX%_menu SET men_icon = 'fa-address-card' WHERE men_icon = 'new_registrations.png'</step>
-    <step id="120">UPDATE %PREFIX%_menu SET men_icon = 'fa-user-friends' WHERE men_icon = 'user_administration.png'</step>
+    <step id="120">UPDATE %PREFIX%_menu SET men_icon = 'fa-users-cog' WHERE men_icon = 'user_administration.png'</step>
     <step id="130">UPDATE %PREFIX%_menu SET men_icon = 'fa-database' WHERE men_icon = 'backup.png'</step>
     <step id="140">UPDATE %PREFIX%_menu SET men_icon = 'fa-cog' WHERE men_icon = 'options.png'</step>
     <step id="150">UPDATE %PREFIX%_menu SET men_icon = 'fa-user-tie' WHERE men_icon = 'roles.png'</step>
@@ -37,5 +41,13 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="340">ComponentUpdateSteps::updateStepAddEmailTemplate</step>
     <step id="350" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_send_method' AND pr2.prf_value = 'phpmail' AND pr1.prf_org_id = pr2.prf_org_id SET pr1.prf_value = '' WHERE pr1.prf_name = 'mail_smtp_authentication_type'</step>
     <step id="360" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = '' FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_send_method' AND pr2.prf_value = 'phpmail' AND pr1.prf_name = 'mail_smtp_authentication_type' AND pr1.prf_org_id = pr2.prf_org_id</step>
+    <step id="370">UPDATE %PREFIX%_components SET com_name = 'SYS_PHOTOS' WHERE com_name = 'PHO_PHOTOS'</step>
+    <step id="380">UPDATE %PREFIX%_menu SET men_name = 'SYS_PHOTOS' WHERE men_name = 'PHO_PHOTOS'</step>
+    <step id="390">UPDATE %PREFIX%_menu SET men_name_intern = 'groups-roles', men_name = 'SYS_GROUPS_ROLES', men_description = 'SYS_GROUPS_ROLES_DESC', men_url = '/adm_program/modules/groups-roles/groups_roles.php', men_icon = 'fa-users' WHERE men_name_intern = 'lists'</step>
+    <step id="400">UPDATE %PREFIX%_components SET com_name_intern = 'GROUPS-ROLES', com_name = 'SYS_GROUPS_ROLES' WHERE com_name_intern = 'LISTS'</step>
+    <step id="410">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'lists_hide_overview_details'</step>
+    <step id="420">DELETE FROM %PREFIX%_menu WHERE men_name_intern = 'mylist'</step>
+    <step id="430">DELETE FROM %PREFIX%_menu WHERE men_name_intern = 'roladm'</step>
+    <step id="440">DELETE FROM %PREFIX%_components WHERE com_name_intern = 'ROLES'</step>
     <step>stop</step>
 </update>

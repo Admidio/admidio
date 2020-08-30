@@ -20,7 +20,6 @@ $headline = $gL10n->get('SYS_MENU');
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
 
 $page->addJavascript('
     function moveMenu(direction, menID) {
@@ -69,16 +68,11 @@ $page->addJavascript('
         }
     }');
 
-// get module menu
-$menuMenu = $page->getMenu();
-
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // define link to create new menu
-$menuMenu->addItem(
-    'admMenuItemNew', ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php',
-    $gL10n->get('SYS_CREATE_ENTRY'), 'fa-plus-circle'
-);
+$page->addPageFunctionsMenuItem('menu_item_menu_new', $gL10n->get('SYS_CREATE_ENTRY'), 
+    ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', 'fa-plus-circle');
 
 // Create table object
 $menuOverview = new HtmlTable('tbl_menues', $page, true);
@@ -158,8 +152,8 @@ while ($mainMen = $mainMenStatement->fetch())
         // don't allow delete for standard menus
         if(!$menuRow['men_standard'])
         {
-            $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'men', 'element_id' => 'row_men_'.
+            $menuAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'men', 'element_id' => 'row_men_'.
                                         $menuRow['men_id'], 'name' => $menuName, 'database_id' => $menuRow['men_id'])).'">'.
                                         '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }

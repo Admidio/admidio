@@ -33,13 +33,10 @@ function checkLogin()
 
     if ($userStatement->rowCount() === 0)
     {
-        $message = '
-            <div class="alert alert-danger alert-small" role="alert">
-                <i class="fas fa-exclamation-sign"></i>
-                <strong>' . $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT') . '</strong>
-            </div>';
-
-        showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', true);
+        // show message that username or password is incorrect
+        $page = new HtmlPageInstallation();
+        $page->setUpdateModus();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT'), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', 'update.php');
         // => EXIT
     }
     else
@@ -57,13 +54,10 @@ function checkLogin()
         }
         catch (AdmException $e)
         {
-            $message = '
-                <div class="alert alert-danger alert-small" role="alert">
-                    <i class="fas fa-exclamation-sign"></i>
-                    <strong>' . $e->getText() . '</strong>
-                </div>';
-
-            showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', true);
+            // show message with the error of the exception
+            $page = new HtmlPageInstallation();
+            $page->setUpdateModus();
+            $page->showMessage('error', $gL10n->get('SYS_NOTE'), $e->getText(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', 'update.php');
             // => EXIT
         }
     }

@@ -152,6 +152,7 @@ else
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/date-functions.js');
 $page->addJavascript('
@@ -248,10 +249,6 @@ $page->addJavascript('
     });',
     true
 );
-
-// add back link to module menu
-$datesMenu = $page->getMenu();
-$datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('dates_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $getDateId, 'mode' => $mode, 'copy' => $getCopy)), $page);

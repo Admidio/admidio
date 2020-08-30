@@ -137,6 +137,44 @@ class TableDate extends TableAccess
     }
 
     /**
+     * This Method will return a string with the date and time period of the current event.
+     * If the begin and end of the date is at the same day than the date will only included once.
+     * Also the all-day flag will be considered.
+     * @return string Returns a formated date and time string corresponding to the event settings.
+     */
+    public function getDateTimePeriod($showPeriodEnd = true)
+    {
+        global $gSettingsManager;
+
+        $beginDate = $this->getValue('dat_begin', $gSettingsManager->getString('system_date')). '&nbsp;&nbsp;';
+        $endDate   = '';
+
+        if ($this->getValue('dat_all_day') != 1)
+        {
+            $beginDate .= $this->getValue('dat_begin', $gSettingsManager->getString('system_time'));
+        }
+
+        if($showPeriodEnd)
+        {
+            // Show date end and time
+            if($this->getValue('dat_begin', $gSettingsManager->getString('system_date')) !== $this->getValue('dat_end', $gSettingsManager->getString('system_date')))
+            {
+                $endDate .= $this->getValue('dat_end', $gSettingsManager->getString('system_date'));
+            }
+            if ($this->getValue('dat_all_day') != 1)
+            {
+                $endDate .= ' '. $this->getValue('dat_end', $gSettingsManager->getString('system_time'));
+            }
+            if($endDate !== '')
+            {
+                $endDate = ' - '. $endDate;
+            }
+        }
+
+        return $beginDate . $endDate;
+    }
+
+    /**
      * gibt einen Termin im iCal-Format zurueck
      * @param string $domain
      * @return string

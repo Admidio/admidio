@@ -59,7 +59,6 @@ $gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
 
 // create html page object
 $page = new HtmlPage($getHeadline);
-$page->enableModal();
 
 // add rss feed to announcements
 if($gSettingsManager->getBool('enable_rss'))
@@ -80,49 +79,39 @@ else
     $announcementsPerPage = $announcementsCount;
 }
 
-// get module menu
-$announcementsMenu = $page->getMenu();
-
+// create module specific functions menu
 if(count($gCurrentUser->getAllEditableCategories('ANN')) > 0)
 {
     // show link to create new announcement
-    $announcementsMenu->addItem(
-        'menu_item_new_announcement', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)),
-        $gL10n->get('SYS_CREATE_ENTRY'), 'fa-plus-circle'
-    );
+    $page->addPageFunctionsMenuItem('menu_item_announcement_add', $gL10n->get('SYS_CREATE_ENTRY'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)),
+        'fa-plus-circle');
 }
 
+if($gCurrentUser->editAnnouncements())
+{
+    $page->addPageFunctionsMenuItem('menu_item_announcement_categories', $gL10n->get('SYS_MAINTAIN_CATEGORIES'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')),
+        'fa-th-large');
+}
+
+// add filter navbar
 $page->addJavascript('
     $("#cat_id").change(function() {
-        $("#navbar_cat_id_form").submit();
+        $("#navbar_filter_form").submit();
     });',
     true
 );
 
-$navbarForm = new HtmlForm('navbar_cat_id_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
-$navbarForm->addSelectBoxForCategories(
+// create filter menu with elements for category
+$filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
+$form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
+$form->addSelectBoxForCategories(
     'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', HtmlForm::SELECT_BOX_MODUS_FILTER,
-    array('defaultValue' => $getCatId)
-);
-$announcementsMenu->addForm($navbarForm->show());
+    array('defaultValue' => $getCatId));
+$filterNavbar->addForm($form->show());
+$page->addHtml($filterNavbar->show());
 
-if($gCurrentUser->editAnnouncements())
-{
-    // if no calendar selectbox is shown, then show link to edit calendars
-    $announcementsMenu->addItem(
-        'admMenuItemCategories', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')),
-        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large'
-    );
-}
-
-if($gCurrentUser->isAdministrator())
-{
-    // show link to system preferences of announcements
-    $announcementsMenu->addItem(
-        'menu_item_preferences', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'announcements')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
-    );
-}
 
 if($announcementsCount === 0)
 {
@@ -152,27 +141,29 @@ else
         $annHeadline = SecurityUtils::encodeHTML($announcement->getValue('ann_headline'));
 
         $page->addHtml('
-        <div class="card" id="ann_'.$annId.'">
+        <div class="card admidio-blog" id="ann_'.$annId.'">
             <div class="card-header">
-                <div class="float-left">
-                    <i class="fas fa-newspaper"></i>' . $annHeadline . '
-                </div>
-                <div class="float-right text-right">'.$announcement->getValue('ann_timestamp_create', $gSettingsManager->getString('system_date')));
+                <i class="fas fa-newspaper"></i>' . $annHeadline);
 
-                    // check if the user could edit this announcement
-                    if($announcement->isEditable())
-                    {
-                        $page->addHtml('
-                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'copy' => '1', 'headline' => $getHeadline)).'">
-                            <i class="fas fa-clone" data-toggle="tooltip" title="'.$gL10n->get('SYS_COPY').'"></i></a>
-                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'headline' => $getHeadline)).'">
-                            <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
-                        <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annId, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annId)).'">
-                            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
-                    }
-                $page->addHtml('</div>
-            </div>
+                // check if the user could edit this announcement
+                if($announcement->isEditable())
+                {
+                    $page->addHtml('
+                    <div class="dropdown float-right">
+                        <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'copy' => '1', 'headline' => $getHeadline)).'">
+                                <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
+                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'headline' => $getHeadline)).'">
+                                <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
+                            <a class="dropdown-item btn openPopup" href="javascript:void(0);"
+                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annId, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annId)).'">
+                                <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
+                        </div>
+                    </div>');
+                }
+            $page->addHtml('</div>
 
             <div class="card-body">'.
                 $announcement->getValue('ann_description').

@@ -29,19 +29,12 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
-
-// get module menu
-$relationTypesMenu = $page->getMenu();
-
-// show back link
-$relationTypesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // define link to create new category
-$relationTypesMenu->addItem(
-    'admMenuItemNewRelationType', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php',
-    $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('LST_CONFIGURATION'))), 'fa-plus-circle'
-);
+$page->addPageFunctionsMenuItem('menu_item_relation_type_add', $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('LST_CONFIGURATION'))),
+    ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', 'fa-plus-circle');
+
 
 // Create table object
 $relationTypesOverview = new HtmlTable('tbl_relationtypes', $page, true);
@@ -85,7 +78,7 @@ while($relRow = $relationTypesStatement->fetch())
 
     if((bool) $relRow['urt_edit_user'])
     {
-        $editUserIcon = '<i class="fas fa-pen-square" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
+        $editUserIcon = ' <i class="fas fa-user-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
     }
 
     $nameRelationshiptype = $relationType1->getValue('urt_name') . $editUserIcon;
@@ -103,21 +96,19 @@ while($relRow = $relationTypesStatement->fetch())
 
         if((bool) $relRow['urt_edit_user_inverse'])
         {
-            $editUserInverseIcon = ' <img class="admidio-icon-info" src="'. THEME_URL. '/icons/profile_edit.png"
-                                alt="'.$gL10n->get('REL_EDIT_USER_IN_RELATION').'" title="'.$gL10n->get('REL_EDIT_USER_IN_RELATION').'" />';
+            $editUserInverseIcon = ' <i class="fas fa-user-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
         }
 
         $nameRelationshiptype .= '&nbsp;&nbsp;-&nbsp;&nbsp;'. $relationType2->getValue('urt_name') . $editUserInverseIcon;
     }
 
     $relationtypeAdministration = '
-    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_id' => $relationType1->getValue('urt_id'))). '"><img
-        src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_'. $relationType1->getValue('urt_id'),
+    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php',
+        array('urt_id' => $relationType1->getValue('urt_id'))). '"><i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
+    <a class="admidio-icon-link openPopup" href="javascript:void(0);"
+        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_'. $relationType1->getValue('urt_id'),
         'name' => $relationType1->getValue('urt_name').($relationType1->isUnidirectional() ? '' : ('/'.$relationType2->getValue('urt_name'))),
-        'database_id' => $relationType1->getValue('urt_id'))).'"><img
-           src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+        'database_id' => $relationType1->getValue('urt_id'))).'"><i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
 
     // create array with all column values
     $columnValues = array(

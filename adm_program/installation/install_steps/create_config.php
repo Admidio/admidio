@@ -29,47 +29,35 @@ if (isset($_POST['user_last_name']))
     ||  $_SESSION['user_login']      === ''
     ||  $_SESSION['user_password']   === '')
     {
-        showNotice(
-            $gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')),
-            $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left'
-        );
+        $page = new HtmlPageInstallation();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
         // => EXIT
     }
 
     // username should only have valid chars
     if (!StringUtils::strValidCharacters($_SESSION['user_login'], 'noSpecialChar'))
     {
-        showNotice(
-            $gL10n->get('SYS_FIELD_INVALID_CHAR', array($gL10n->get('SYS_USERNAME'))),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')),
-            $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left'
-        );
+        $page = new HtmlPageInstallation();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_FIELD_INVALID_CHAR', array($gL10n->get('SYS_USERNAME'))), $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
         // => EXIT
     }
 
     if (!StringUtils::strValidCharacters($_SESSION['user_email'], 'email'))
     {
-        showNotice(
-            $gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL'))),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')),
-            $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left'
-        );
+        $page = new HtmlPageInstallation();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL'))), $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
         // => EXIT
     }
 
     // Password min length is 8 chars
     if (strlen($_SESSION['user_password']) < PASSWORD_MIN_LENGTH)
     {
-        showNotice(
-            $gL10n->get('PRO_PASSWORD_LENGTH'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')),
-            $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left'
-        );
+        $page = new HtmlPageInstallation();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('PRO_PASSWORD_LENGTH'), $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
         // => EXIT
     }
 
@@ -83,24 +71,18 @@ if (isset($_POST['user_last_name']))
     // Admin Password should have a minimum strength of 1
     if (PasswordUtils::passwordStrength($_SESSION['user_password'], $userData) < 1)
     {
-        showNotice(
-            $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')),
-            $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left'
-        );
+        $page = new HtmlPageInstallation();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'), $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
         // => EXIT
     }
 
     // password must be the same with password confirm
     if ($_SESSION['user_password'] !== $_SESSION['user_password_confirm'])
     {
-        showNotice(
-            $gL10n->get('INS_PASSWORDS_NOT_EQUAL'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')),
-            $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left'
-        );
+        $page = new HtmlPageInstallation();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_PASSWORDS_NOT_EQUAL'), $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
         // => EXIT
     }
 }
@@ -108,7 +90,7 @@ if (isset($_POST['user_last_name']))
 // if config file exists than don't create a new one
 if (is_file($configPath))
 {
-    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
+    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation')));
     // => EXIT
 }
 
@@ -156,6 +138,14 @@ $configFileContent = StringUtils::strMultiReplace($configFileContent, $replaces)
 
 $_SESSION['config_file_content'] = $configFileContent;
 
+$page = new HtmlPageInstallation();
+$page->addTemplateFile('installation.tpl');
+$page->addJavascript('
+    $("#next_page").on("click", function() {
+        $(this).prop("disabled", true);
+        $(this).html("<i class=\"fas fa-sync fa-spin\"></i> ' . $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED') . '");
+    });', true);
+
 // now save new configuration file in Admidio folder if user has write access to this folder
 $configFileHandle = @fopen($configPath, 'ab');
 
@@ -166,19 +156,22 @@ if ($configFileHandle)
     fclose($configFileHandle);
 
     // start installation
-    $form = new HtmlFormInstallation('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
-    $form->setFormDescription($gL10n->get('INS_DATA_FULLY_ENTERED'), $gL10n->get('INS_INSTALL_ADMIDIO'));
+    $page->assign('subHeadline', $gL10n->get('INS_INSTALL_ADMIDIO'));
+    $page->assign('text', $gL10n->get('INS_DATA_FULLY_ENTERED'));
+
+    $form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
     $form->addSubmitButton(
         'next_page', $gL10n->get('INS_INSTALL_ADMIDIO'),
-        array('icon' => 'fa-wrench', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED'))
+        array('icon' => 'fa-sync')
     );
-    echo $form->show();
 }
 else
 {
     // if user doesn't has write access then create a page with a download link for the config file
-    $form = new HtmlFormInstallation('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
-    $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', array('config.php', ADMIDIO_URL . FOLDER_DATA, 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE')));
+    $page->assign('subHeadline', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
+    $page->assign('text', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', array('config.php', ADMIDIO_URL . FOLDER_DATA, 'adm_my_files')));
+
+    $form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
     $form->addButton(
         'previous_page', $gL10n->get('SYS_BACK'),
         array('icon' => 'fa-arrow-circle-left', 'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')))
@@ -189,7 +182,10 @@ else
     );
     $form->addSubmitButton(
         'next_page', $gL10n->get('INS_INSTALL_ADMIDIO'),
-        array('icon' => 'fa-wrench', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED'))
+        array('icon' => 'fa-sync')
     );
-    echo $form->show();
 }
+
+$page->addHtml($form->show());
+$page->show();
+

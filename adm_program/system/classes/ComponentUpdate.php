@@ -66,7 +66,7 @@ class ComponentUpdate extends Component
         // update of Admidio core has another path for the xml files as plugins
         if ($this->getValue('com_type') === 'SYSTEM')
         {
-            $updateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
+            $updateFile = ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
 
             if (is_file($updateFile))
             {

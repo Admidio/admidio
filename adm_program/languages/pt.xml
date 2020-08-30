@@ -191,10 +191,10 @@
   <string name="INS_CREATE_CONFIGURATION_FILE">A criar arquivo de configuração</string>
   <string name="INS_DATA_FULLY_ENTERED">Toda a informação necessária para a instalação do Admidio já foi inserida.\n\nAgora a base de dados tem de ser criada e preenchida com teus dados.</string>
   <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">Os parâmetros da base de dados não foram totalmente preenchidos!</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Atualização da base de dados não é necessária</string>
+  <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Atualização da base de dados não é necessária</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">O ficheiro #VAR1_BOLD# não pôde ser encontrado no diretório #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Insira o nome do servidor da base de dados. Pode ser uma URL ou localhost, se a base de dados estiver funcionando na mesma máquina que a página web.</string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">A base de dados do Admidio está atualizada</string>
+  <string name="SYS_DATABASE_IS_UP_TO_DATE">A base de dados do Admidio está atualizada</string>
   <string name="INS_DATABASE_IS_UPDATED">A atualizar base de dados</string>
   <string name="INS_DATABASE_LOGIN">Inserindo as informações da base de dados</string>
   <string name="INS_DATABASE_LOGIN_DESC">Forneça aqui as informações de acesso para tua base de dados. O prefixo de tabela pode ser personalizado se necessário. Personalização é necessária se múltiplas instalações do Admidio estão a usar a mesma base de dados.</string>

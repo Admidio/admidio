@@ -56,7 +56,6 @@ $headline = $gL10n->get('BAC_DATABASE_BACKUP');
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
 
 $backupAbsolutePath = ADMIDIO_PATH . FOLDER_DATA . '/backup/'; // make sure to include trailing slash
 
@@ -98,14 +97,10 @@ if($getMode === 'show_list')
     // sort files (filename/date)
     sort($existingBackupFiles);
 
-    // get module menu
-    $backupMenu = $page->getMenu();
-
     // show link to create new backup
-    $backupMenu->addItem(
-        'admMenuItemNewBackup', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', array('mode' => 'create_backup')),
-        $gL10n->get('BAC_START_BACKUP'), 'fa-database'
-    );
+    $page->addPageFunctionsMenuItem('menu_item_backup_start', $gL10n->get('BAC_START_BACKUP'), 
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', array('mode' => 'create_backup')), 
+        'fa-database');
 
     // Define table
     $table = new HtmlTable('tableList', $page, true, true);
@@ -116,7 +111,7 @@ if($getMode === 'show_list')
         $gL10n->get('BAC_BACKUP_FILE'),
         $gL10n->get('BAC_CREATION_DATE'),
         $gL10n->get('SYS_SIZE'),
-        $gL10n->get('SYS_FEATURES')
+        '&nbsp;'
     );
     $table->setColumnAlignByArray(array('left', 'left', 'right', 'center'));
     $table->addRowHeadingByArray($columnHeading);
@@ -136,9 +131,9 @@ if($getMode === 'show_list')
                 <i class="fas fa-file-archive"></i>'. $oldBackupFile. '</a>',
             date($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'), filemtime($backupAbsolutePath.$oldBackupFile)),
             round($fileSize / 1024). ' kB',
-            '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'bac', 'element_id' => 'row_file_'.$key, 'name' => $oldBackupFile, 'database_id' => $oldBackupFile)).'">
-                <i class="fas fa-trash-alt"></i></a>');
+            '<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'bac', 'element_id' => 'row_file_'.$key, 'name' => $oldBackupFile, 'database_id' => $oldBackupFile)).'">
+                <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FILE').'"></i></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);
     }
 

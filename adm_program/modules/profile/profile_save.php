@@ -117,7 +117,7 @@ if($getNewUser === 2)
     // beide Passwortfelder muessen identisch sein
     if($_POST['usr_password'] !== $_POST['password_confirm'])
     {
-        $gMessage->show($gL10n->get('PRO_PASSWORDS_NOT_EQUAL'));
+        $gMessage->show($gL10n->get('SYS_PASSWORDS_NOT_EQUAL'));
         // => EXIT
     }
 

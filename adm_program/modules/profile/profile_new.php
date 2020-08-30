@@ -148,12 +148,8 @@ if(isset($_SESSION['profile_request']))
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
-
-// add back link to module menu
-$profileEditMenu = $page->getMenu();
-$profileEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // create html form
 $form = new HtmlForm('edit_profile_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_save.php', array('user_id' => $getUserId, 'new_user' => $getNewUser)), $page);
@@ -258,8 +254,8 @@ foreach($gProfileFields->getProfileFields() as $field)
                           && (strlen($user->getValue('usr_login_name')) === 0 || strlen($user->getValue('EMAIL')) === 0))))
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
-                            <a id="password_link" class="btn" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $getUserId)).'">
+                            <a id="password_link" class="btn openPopup" href="javascript:void(0);" 
+                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $getUserId)).'">
                                 <i class="fas fa-key"></i>'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
                 }

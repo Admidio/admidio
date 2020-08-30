@@ -27,9 +27,6 @@ if (is_file(__DIR__ . '/config.php'))
     require_once(__DIR__ . '/config.php');
 }
 
-// initialize parameters
-$iconCode = null;
-
 // set default values if there no value has been stored in the config.php
 if(!isset($plg_show_register_link) || !is_numeric($plg_show_register_link))
 {
@@ -44,11 +41,6 @@ if(!isset($plg_show_email_link) || !is_numeric($plg_show_email_link))
 if(!isset($plg_show_logout_link) || !is_numeric($plg_show_logout_link))
 {
     $plg_show_logout_link = 1;
-}
-
-if(!isset($plg_show_icons) || !is_numeric($plg_show_icons))
-{
-    $plg_show_icons = 1;
 }
 
 if(isset($plg_link_target))
@@ -157,26 +149,14 @@ if($gValidLogin)
     $form->addStaticControl('plg_number_of_logins', $gL10n->get('PLG_LOGIN_NUMBER_OF_LOGINS'), (int) $gCurrentUser->getValue('usr_number_login').$htmlUserRank);
     echo $form->show();
 
-    echo '<div class="btn-group-vertical" role="group">';
-
     // show link for logout
-    if($plg_show_icons)
-    {
-        echo '<a id="adm_logout_link" class="btn" href="'.ADMIDIO_URL.'/adm_program/system/logout.php"><i class="fas fa-sign-out-alt"></i>'.$gL10n->get('SYS_LOGOUT').'</a>';
-    }
-    else
-    {
-        echo '<a id="adm_logout_link" href="'.ADMIDIO_URL.'/adm_program/system/logout.php">'.$gL10n->get('SYS_LOGOUT').'</a>';
-    }
-    echo '</div>';
+    echo '<div class="btn-group-vertical" role="group">
+        <a id="adm_logout_link" class="btn admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/system/logout.php"><i class="fas fa-sign-out-alt"></i>'.$gL10n->get('SYS_LOGOUT').'</a>
+    </div>';
 }
 else
 {
     // create and show the login form
-    if($plg_show_icons)
-    {
-        $iconCode  = 'fa-key';
-    }
 
     $form = new HtmlForm(
         'plugin-login-form', ADMIDIO_URL.'/adm_program/system/login_check.php', null,
@@ -208,7 +188,7 @@ else
         $form->addCheckbox('plg_auto_login', $gL10n->get('SYS_REMEMBER_ME'), false);
     }
 
-    $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), array('icon' => $iconCode));
+    $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key'));
     echo $form->show();
 
     echo '<div class="btn-group-vertical" role="group">';
@@ -216,15 +196,7 @@ else
     // show links for registration and help
     if($plg_show_register_link && $gSettingsManager->getBool('registration_enable_module'))
     {
-        if($plg_show_icons)
-        {
-            echo '
-            <a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES. '/registration/registration.php"><i class="fas fa-address-card"></i>'.$gL10n->get('SYS_REGISTRATION').'</a>';
-        }
-        else
-        {
-            echo '<a href="'. ADMIDIO_URL. FOLDER_MODULES. '/registration/registration.php" target="'. $plg_link_target. '">'.$gL10n->get('SYS_REGISTRATION').'</a>';
-        }
+        echo '<a class="btn admidio-icon-link" href="'. ADMIDIO_URL. FOLDER_MODULES. '/registration/registration.php" target="'. $plg_link_target. '"><i class="fas fa-address-card"></i>'.$gL10n->get('SYS_REGISTRATION').'</a>';
     }
 
     if($plg_show_email_link)
@@ -263,15 +235,7 @@ else
             $linkUrl = SecurityUtils::encodeUrl('mailto:'. $gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         }
 
-        if($plg_show_icons)
-        {
-            echo '
-            <a class="btn" href="'. $linkUrl. '"><i class="fas fa-envelope"></i>'.$linkText.'</a>';
-        }
-        else
-        {
-            echo '<a href="'.$linkUrl.'" target="'.$plg_link_target.'">'.$linkText.'</a>';
-        }
+        echo '<a class="btn admidio-icon-link" href="'. $linkUrl. '" target="'.$plg_link_target.'"><i class="fas fa-envelope"></i>'.$linkText.'</a>';
     }
     echo '</div>';
 }

@@ -191,10 +191,10 @@
   <string name="INS_CREATE_CONFIGURATION_FILE">Opretter konfigurations fil</string>
   <string name="INS_DATA_FULLY_ENTERED">Du har indtastet alle de nødvendige oplysninger til installation af Admidio.\n\nNu skal databasen etableres og fyldes med dine data.</string>
   <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">Database parametre er ikke fuldstændigt indtastet!</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Database opdatering ikke nødvendig</string>
+  <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Database opdatering ikke nødvendig</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">Filen #VAR1_BOLD# kunne ikke findes i folderen #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Indtast navnet på database serveren her. Dette kan være en URL eller localhost hvis databasen kører på samme server som Admidio websiden.</string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">Admidio\'s database er up to date</string>
+  <string name="SYS_DATABASE_IS_UP_TO_DATE">Admidio\'s database er up to date</string>
   <string name="INS_DATABASE_IS_UPDATED">Updaterer database</string>
   <string name="INS_DATABASE_LOGIN">Indtastning af database information</string>
   <string name="INS_DATABASE_LOGIN_DESC">Angiv dine database adgangs oplysninger her. Tabel prefix kan ændres hvis behovet er derfor. Ændring af tabel prefix er kun nødvendig hvis flere Admidio installationer anvender den samme database.</string>

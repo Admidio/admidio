@@ -56,7 +56,7 @@ else
 
 if(!isset($plg_show_preview) || !is_numeric($plg_show_preview))
 {
-    $plg_show_preview = 0;
+    $plg_show_preview = 70;
 }
 
 if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
@@ -81,14 +81,14 @@ if(Component::isVisible('ANNOUNCEMENTS'))
     $plgAnnouncements->setParameter('id', $getId);
     $plgAnnouncements->setParameter('cat_id', $getCatId);
     $plgAnnouncements->setDateRange($getDateFrom, $getDateTo);
-    
+
     echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
-    
+
     if($plg_show_headline === 1)
     {
         echo '<h3>'.$plg_headline.'</h3>';
     }
-    
+
     if($plgAnnouncements->getDataSetCount() === 0)
     {
         echo $gL10n->get('SYS_NO_ENTRIES');
@@ -98,21 +98,21 @@ if(Component::isVisible('ANNOUNCEMENTS'))
         // get announcements data
         $plgGetAnnouncements = $plgAnnouncements->getDataSet(0, $plg_announcements_count);
         $plgAnnouncement = new TableAnnouncement($gDb);
-    
+
         foreach($plgGetAnnouncements['recordset'] as $plgRow)
         {
             $plgAnnouncement->clear();
             $plgAnnouncement->setArray($plgRow);
-    
-            echo '<h4><a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php', array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '" target="'. $plg_link_target. '">';
-    
+
+            echo '<h5><a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php', array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '" target="'. $plg_link_target. '">';
+
             if($plg_max_char_per_word > 0)
             {
                 $plgNewHeadline = '';
-    
+
                 // Woerter unterbrechen, wenn sie zu lang sind
                 $plgWords = explode(' ', SecurityUtils::encodeHTML($plgAnnouncement->getValue('ann_headline')));
-    
+
                 foreach($plgWords as $plgValue)
                 {
                     if(strlen($plgValue) > $plg_max_char_per_word)
@@ -125,13 +125,13 @@ if(Component::isVisible('ANNOUNCEMENTS'))
                         $plgNewHeadline .= ' '. $plgValue;
                     }
                 }
-                echo $plgNewHeadline.'</a></h4>';
+                echo $plgNewHeadline.'</a></h5>';
             }
             else
             {
-                echo SecurityUtils::encodeHTML($plgAnnouncement->getValue('ann_headline')).'</a></h4>';
+                echo SecurityUtils::encodeHTML($plgAnnouncement->getValue('ann_headline')).'</a></h5>';
             }
-    
+
             // show preview text
             if($plgShowFullDescription === 1)
             {
@@ -140,25 +140,25 @@ if(Component::isVisible('ANNOUNCEMENTS'))
             elseif($plg_show_preview > 0)
             {
                 // remove all html tags except some format tags
-                $textPrev = strip_tags($plgAnnouncement->getValue('ann_description'), '<p></p><br><br/><br /><i></i><b></b><strong></strong><em></em>');
-    
+                $textPrev = strip_tags($plgAnnouncement->getValue('ann_description'), '<br><br/><br /><i></i><b></b><strong></strong><em></em>');
+
                 // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
                 $textPrev = substr($textPrev, 0, $plg_show_preview + 15);
                 $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
-                    <a target="'. $plg_link_target. '"
+                    <a class="admidio-icon-link" target="'. $plg_link_target. '"
                         href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php', array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '"><i
                         class="fas fa-plus-circle" aria-hidden="true"></i>'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_MORE').'</a>';
                 $textPrev = pluginAnnouncementsCloseTags($textPrev);
-    
+
                 echo '<div>'.$textPrev.'</div>';
             }
-    
-            echo '<div><em>('. $plgAnnouncement->getValue('ann_timestamp_create', $gSettingsManager->getString('system_date')). ')</em></div>';
-    
-            echo '<hr />';
-    
+
+            echo '
+            <div><em>('. $plgAnnouncement->getValue('ann_timestamp_create', $gSettingsManager->getString('system_date')). ')</em></div>
+            <hr />';
+
         }
-    
+
         echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $plg_headline)).'" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES').'</a>';
     }
     echo '</div>';

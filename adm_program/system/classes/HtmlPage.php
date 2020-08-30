@@ -26,7 +26,8 @@
  * $page->show();
  * ```
  */
-class HtmlPage
+
+class HtmlPage extends \Smarty
 {
     /**
      * @var string The title for the html page and the headline for the Admidio content.
@@ -45,25 +46,13 @@ class HtmlPage
      */
     protected $pageContent = '';
     /**
-     * @var HtmlNavbar An object of the menu of this page
+     * @var MenuNode An object that represents all functions of the current page that should be shown in the default menu
      */
-    protected $mainNavbar;
-    /**
-     * @var bool If set to true then the custom html code of the theme for each page will be included.
-     */
-    protected $showThemeHtml = true;
-    /**
-     * @var bool If set to true then the menu will be included.
-     */
-    protected $showMenu = true;
+    protected $menuNodePageFunctions;
     /**
      * @var bool Flag if the current page has a navbar.
      */
     protected $hasNavbar = false;
-    /**
-     * @var bool If set to true then html code for a modal window will be included.
-     */
-    protected $showModal = false;
     /**
      * @var array<int,string> An array with all necessary cascading style sheets files for the html page.
      */
@@ -79,7 +68,7 @@ class HtmlPage
     /**
      * @var bool A flag that indicates if the page should be styled in print mode then no colors will be shown
      */
-    protected $printMode = false;
+    protected $printView = false;
     /**
      * @var string Contains the custom javascript of the current page. This will be added to the header part of the page.
      */
@@ -89,17 +78,17 @@ class HtmlPage
      */
     protected $javascriptContentExecute = '';
     /**
-     * @var string Contains the custom html code of the header theme file. This will be added to the header part of the page.
+     * @var bool If set to true then a page without header menue and sidebar menu will be created. The main template file will be index_inline.tpl
      */
-    protected $htmlMyHeader = '';
+    protected $modeInline = false;
     /**
-     * @var string Contains the custom html code of the top body theme file. This will be added to the top of the body part of the page.
+     * @var string Name of an additional template file that should be loaded within the current page.
      */
-    protected $htmlMyBodyTop = '';
+    protected $templateFile = '';
     /**
-     * @var string Contains the custom html code of the bottom body theme file. This will be added to the end of thebody part of the page.
+     * @var string Contains the url to the previous page. If a url is set than a link to this page will be shown under the headline
      */
-    protected $htmlMyBodyBottom = '';
+    protected $urlPreviousPage = '';
 
 
     /**
@@ -108,17 +97,33 @@ class HtmlPage
      */
     public function __construct($headline = '')
     {
-        $this->mainNavbar = new HtmlNavbar('menu_main_script', $headline, $this);
+        global $gSettingsManager;
 
-        $this->setHeadline($headline);
+        $this->menuNodePageFunctions = new MenuNode('admidio-menu-page-functions', $headline);
 
-        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/css/bootstrap.css');
-        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/fontawesome.css');
-        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/solid.css');
-        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/brands.css');
-        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery/dist/jquery.js');
-        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/js/bootstrap.bundle.js');
-        $this->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/common_functions.js');
+        if($headline !== '')
+        {
+            $this->setHeadline($headline);
+        }
+
+        parent::__construct();
+
+        // initialize php template engine smarty
+        if(defined('THEME_PATH'))
+        {
+            $this->setTemplateDir(THEME_PATH . '/templates/');
+        }
+
+        $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
+        $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
+        $this->setConfigDir(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/configs/');
+        $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
+
+        if(is_object($gSettingsManager) && $gSettingsManager->has('system_browser_update_check')
+        && $gSettingsManager->getBool('system_browser_update_check'))
+        {
+            $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/browser-update/browser-update.js');
+        }
     }
 
     /**
@@ -215,112 +220,32 @@ class HtmlPage
     }
 
     /**
-     * adds the main necessary files
+     * Add a new menu item to the page menu part. This is only the menu that will show functions of the
+     * current page. The menu header will automatically the name of the page. If a dropdown menu item should
+     * be created than $parentMenuItemId must be set to each entry of the dropdown. If a badge should
+     * be shown at this menu item than set the $badgeCount.
+     * @param string $id.         Id of the menu item that will be the html id of the <a> tag
+     * @param string $name        Name of the menu node that will also shown in the menu
+     * @param string $url         The url of this menu item that will be called if someone click the menu item
+     * @param string $icon        An icon that will be shown together with the name in the menu
+     * @param string $parentMenuItemId The id of the parent item to which this item will be added.
+     * @param string $badgeCount  If set > 0 than a small badge with the number will be shown after the menu item name
+     * @param string $description A optional description of the menu node that could be shown in some output cases
      */
-    private function addMainFilesAndContent()
+    public function addPageFunctionsMenuItem($id, $name, $url, $icon, $parentMenuItemId = '', $badgeCount = 0, $description = '')
     {
-        global $gSettingsManager;
-
-        // add admidio css file at last because there the user can redefine all css
-        $this->addCssFile(THEME_URL.'/css/admidio.css');
-
-        // if print mode is set then add a print specific css file
-        if ($this->printMode)
-        {
-            $this->addCssFile(THEME_URL.'/css/print.css');
-        }
-
-        // add custom css file if it exists to add own css styles without edit the original admidio css
-        if (is_file(THEME_URL.'/css/custom.css'))
-        {
-            $this->addCssFile(THEME_URL.'/css/custom.css');
-        }
-
-        if ($gSettingsManager->has('system_browser_update_check') && $gSettingsManager->getBool('system_browser_update_check'))
-        {
-            $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/browser-update/browser-update.js');
-        }
-
-        // add code for a modal window
-        if ($this->showModal)
-        {
-            $this->addJavascript('
-                $("#admidio_modal").on("show.bs.modal", function (event) {
-                  var link = $(event.relatedTarget);
-                  var url  = link.attr("href");
-                  if(typeof(url) != "undefined")
-                      $(this).find(".modal-content").load(url);
-                });
-
-                $("body").on("hidden.bs.modal", ".modal", function() {
-                    $(this).removeData("bs.modal");
-                });',
-                true
-            );
-            $this->addHtml('
-                <div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">Test</div>
-                    </div>
-                </div>'
-            );
-        }
-
-        // load content of theme files at this point so that files could add css and js files
-        if ($this->showThemeHtml)
-        {
-            $this->htmlMyHeader     = $this->getFileContent('my_header.php');
-            $this->htmlMyBodyTop    = $this->getFileContent('my_body_top.php');
-            $this->htmlMyBodyBottom = $this->getFileContent('my_body_bottom.php');
-        }
+        $this->menuNodePageFunctions->addItem($id, $name, $url, $icon, $parentMenuItemId, $badgeCount, $description);
     }
 
     /**
-     * Adds the modal menu to the navbar
+     * This method add a specific template file of the themes folder to the current page. The default
+     * template will be loaded and this file will be included after the main page content.
+     * @param string $templateFile The name of the template file in the templates folder of
+     *                             the current theme that should be loaded within the current page.
      */
-    public function addModalMenu()
+    public function addTemplateFile($templateFile)
     {
-        global $gL10n, $gValidLogin, $gDb, $gCurrentUser, $gMenu;
-
-        // add database menu as dropdown to the navbar
-        $gMenu->addToNavbar($this->mainNavbar);
-
-        if ($gValidLogin)
-        {
-            // show link to own profile
-            $this->mainNavbar->addItem(
-                'menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'),
-                'fa-user', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-            // show logout link
-            $this->mainNavbar->addItem(
-                'menu_item_logout', ADMIDIO_URL . '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'),
-                'fa-sign-out-alt', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-        }
-        else
-        {
-            // show registration link
-            $this->mainNavbar->addItem(
-                'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
-                'fa-address-card', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-
-            // show login link
-            $this->mainNavbar->addItem(
-                'menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),
-                'fa-key', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-        }
-    }
-
-    /**
-     * Adds the html code for a modal window to the current script.
-     * The link must have the following attributes: data-toggle="modal" data-target="#admidio_modal"
-     */
-    public function enableModal()
-    {
-        $this->showModal = true;
+        $this->templateFile = $templateFile;
     }
 
     /**
@@ -358,201 +283,60 @@ class HtmlPage
         return $this->headline;
     }
 
-    /**
-     * Loads the content of the given theme file
-     * @param string $filename Filename to load out of the theme directory
-     * @return string
+    /* Add page specific javascript files, css files or rss files to the header. Also specific header
+     * informations will also be added
+     * @return string Html string with all additional header informations
      */
-    private function getFileContent($filename)
+    public function getHtmlAdditionalHeader()
     {
-        global $gLogger, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
-        global $gValidLogin, $gProfileFields, $gHomepage, $gSettingsManager, $gMenu;
-
-        $filePath = THEME_PATH . '/' . $filename;
-        if (!is_file($filePath))
-        {
-            $gLogger->error('THEME: Theme file "' . $filename . '" not found!', array('filePath' => $filePath));
-
-            return '';
-        }
-
-        ob_start();
-        require($filePath);
-        $fileContent = ob_get_contents();
-        ob_end_clean();
-
-        return $fileContent;
+        $this->header .= $this->getHtmlCssFiles() . $this->getHtmlJsFiles() . $this->getHtmlRssFiles();
+        return $this->header;
     }
 
-    /**
-     * Builds the HTML-Header content
-     * @return string
-     */
-    private function getHtmlHeader()
+    // add css files to page
+    public function getHtmlCssFiles()
     {
-        global $gL10n, $gSettingsManager, $gSetCookieForDomain;
+        $html = '';
 
-        $headerContent = '';
-
-        // add css files to page
         foreach ($this->cssFiles as $cssFile)
         {
-            $headerContent .= '<link rel="stylesheet" type="text/css" href="' . $cssFile . '" />';
+            $html .= '<link rel="stylesheet" type="text/css" href="' . $cssFile . '" />'."\n";
         }
 
-        // add javascript files to page
+        return $html;
+    }
+
+    // add javascript files to page
+    public function getHtmlJsFiles()
+    {
+        $html = '';
+
         foreach ($this->jsFiles as $jsFile)
         {
-            $headerContent .= '<script type="text/javascript" src="' . $jsFile . '"></script>';
+            $html .= '<script type="text/javascript" src="' . $jsFile . '"></script>'."\n";
         }
 
-        // add rss feed files to page
+        return $html;
+    }
+
+    // add rss feed files to page
+    public function getHtmlRssFiles()
+    {
+        $html = '';
+
         foreach ($this->rssFiles as $title => $rssFile)
         {
             if (!is_numeric($title))
             {
-                $headerContent .= '<link rel="alternate" type="application/rss+xml" title="' . $title . '" href="' . $rssFile . '" />';
+                $html .= '<link rel="alternate" type="application/rss+xml" title="' . $title . '" href="' . $rssFile . '" />'."\n";
             }
             else
             {
-                $headerContent .= '<link rel="alternate" type="application/rss+xml" href="' . $rssFile . '" />';
+                $html .= '<link rel="alternate" type="application/rss+xml" href="' . $rssFile . '" />'."\n";
             }
         }
 
-        // add javascript code to page
-        if ($this->javascriptContent !== '')
-        {
-            $headerContent .= '<script type="text/javascript">' . $this->javascriptContent . '</script>';
-        }
-
-        // add javascript code to page that will be executed after page is fully loaded
-        if ($this->javascriptContentExecute !== '')
-        {
-            $headerContent .= '<script type="text/javascript">
-                $(function() {
-                    $("[data-toggle=\'popover\']").popover();
-                    $("[data-toggle=tooltip]").tooltip();
-                    ' . $this->javascriptContentExecute . '
-                });
-            </script>';
-        }
-
-        if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note'))
-        {
-            if ($gSetCookieForDomain)
-            {
-                $path = '/';
-            }
-            else
-            {
-                $path = ADMIDIO_URL_PATH . '/';
-            }
-
-            // add cookie approval to the page
-            $headerContent .= '<link rel="stylesheet" type="text/css" href="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/cookieconsent/cookieconsent.min.css" />
-            <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/cookieconsent/cookieconsent.min.js"></script>
-            <script>
-                window.addEventListener("load", function() {
-                    window.cookieconsent.initialise({
-                        "cookie": {
-                            "name": "' . COOKIE_PREFIX . '_cookieconsent_status",
-                            "domain": "' . DOMAIN .'",
-                            "path": "' . $path .'"
-                        },
-                        "content": {
-                            "message": "' . $gL10n->get('SYS_COOKIE_DESC') . '",
-                            "dismiss": "' . $gL10n->get('SYS_OK') . '",';
-                            if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0)
-                            {
-                                $headerContent .= ' "href": "'. $gSettingsManager->getString('system_url_data_protection') .'", ';
-                            }
-                            $headerContent .= '"link": "' . $gL10n->get('SYS_FURTHER_INFORMATIONS') . '"
-                        },
-                        "position": "bottom",
-                        "theme": "classic",
-                        "palette": {
-                            "popup": {
-                                "background": "#252e39"
-                            },
-                            "button": {
-                                "background": "#409099"
-                            }
-                        }
-                    });
-                });
-            </script>';
-        }
-
-        $htmlHeader = '<head>
-            <!-- (c) 2004 - 2019 The Admidio Team - ' . ADMIDIO_HOMEPAGE . ' -->
-
-            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-            <title>' . $this->title . '</title>
-
-            <script type="text/javascript">
-                var gRootPath  = "' . ADMIDIO_URL . '";
-                var gThemePath = "' . THEME_URL . '";
-            </script>';
-
-        $htmlHeader .= $headerContent;
-        $htmlHeader .= $this->header;
-        $htmlHeader .= $this->htmlMyHeader;
-        $htmlHeader .= '</head>';
-
-        return $htmlHeader;
-    }
-
-    /**
-     * Builds the HTML-Body content
-     * @return string
-     */
-    private function getHtmlBody()
-    {
-        $htmlMenu     = '';
-        $htmlHeadline = '';
-
-        if ($this->showMenu)
-        {
-            // add mobile menu
-            $this->addModalMenu();
-            $htmlMenu = $this->mainNavbar->show();
-        }
-
-        if ($this->headline !== '')
-        {
-            if ($this->hasNavbar)
-            {
-                $htmlHeadline = '<h1 class="admidio-module-headline hidden-xs">' . $this->headline . '</h1>';
-            }
-            else
-            {
-                $htmlHeadline = '<h1 class="admidio-module-headline">' . $this->headline . '</h1>';
-            }
-        }
-
-        $htmlBody = '<body>';
-        $htmlBody .= $this->htmlMyBodyTop;
-        $htmlBody .= '<div class="admidio-content">';
-        $htmlBody .= $htmlHeadline;
-        $htmlBody .= $htmlMenu;
-        $htmlBody .= $this->pageContent;
-        $htmlBody .= '</div>';
-        $htmlBody .= $this->htmlMyBodyBottom;
-        $htmlBody .= '</body>';
-
-        return $htmlBody;
-    }
-
-    /**
-     * Returns the menu object of this html page.
-     * @return HtmlNavbar Returns the menu object of this html page.
-     */
-    public function getMenu()
-    {
-        return $this->mainNavbar;
+        return $html;
     }
 
     /**
@@ -565,54 +349,12 @@ class HtmlPage
     }
 
     /**
-     * Get a badge with the unread messages count
-     * @return string
-     */
-    private static function getUnreadMessagesBadge()
-    {
-        global $gDb, $gCurrentUser;
-
-        // get number of unread messages for user
-        $message = new TableMessage($gDb);
-        $unread = $message->countUnreadMessageRecords((int) $gCurrentUser->getValue('usr_id'));
-
-        if ($unread > 0)
-        {
-            return '<span class="badge">' . $unread . '</span>';
-        }
-
-        return '';
-    }
-
-    /**
      * Flag if the current page has a navbar.
      * @return void
      */
     public function hasNavbar()
     {
         $this->hasNavbar = true;
-    }
-
-    /**
-     * Every html page of Admidio contains a menu.
-     * If the menu should not be included in the current page, than this method must be called.
-     * @return void
-     */
-    public function hideMenu()
-    {
-        $this->showMenu = false;
-    }
-
-    /**
-     * Every html page of Admidio contains three files of the custom theme.
-     * my_header.php, my_body_top.php and my_body_bottom.php
-     * With these files the administrator can contain custom layout to Admidio.
-     * If these files should not be included in the current page, than this method must be called.
-     * @return void
-     */
-    public function hideThemeHtml()
-    {
-        $this->showThemeHtml = false;
     }
 
     /**
@@ -629,7 +371,14 @@ class HtmlPage
         }
 
         $this->headline = $headline;
-        $this->mainNavbar->setName($headline);
+    }
+
+    /** If set to true then a page without header menue and sidebar menu will be created.
+     *  The main template file will be **index_reduced.tpl** instead of index.tpl.
+     */
+    public function setInlineMode()
+    {
+        $this->modeInline = true;
     }
 
     /**
@@ -652,29 +401,114 @@ class HtmlPage
     }
 
     /**
-     * If print mode is set then a print specific css file will be loaded.
-     * All styles will be more print compatible and are only black, grey and white.
+     * If print mode is set then the reduced template file **index_reduced.tpl** will be loaded with
+     * a print specific css file **print.css**. All styles will be more print compatible and are
+     * only black, grey and white.
      * @return void
      */
     public function setPrintMode()
     {
-        $this->printMode = true;
+        $this->setInlineMode();
+        $this->printView = true;
     }
 
     /**
-     * This method send the whole html code of the page to the browser.
+     * Set a url to the previous page that will be shown as link on the page after the headline.
+     * @param string $url The url to the previous page. This must be a valid url.
+     */
+    public function setUrlPreviousPage($url)
+    {
+        if(admFuncCheckUrl($url) === false)
+        {
+            throw new \UnexpectedValueException('Invalid url!');
+        }
+
+        $this->urlPreviousPage = $url;
+    }
+
+    /**
+     * This method will set all variables for the Smarty engine and than send the whole html
+     * content also to the template engine which will generate the html page.
      * Call this method if you have finished your page layout.
      */
     public function show()
     {
-        $this->addMainFilesAndContent();
+        global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager, $gSetCookieForDomain;
 
-        // now show the complete html of the page
-        header('Content-type: text/html; charset=utf-8');
+        $urlImprint = '';
+        $urlDataProtection = '';
 
-        echo '<!DOCTYPE html><html>';
-        echo $this->getHtmlHeader();
-        echo $this->getHtmlBody();
-        echo '</html>';
+        // add page functions menu to global menu
+        $gMenu->addFunctionsNode($this->menuNodePageFunctions);
+
+        $this->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
+        $this->assign('title', $this->title);
+        $this->assign('headline', $this->headline);
+        $this->assign('urlPreviousPage', $this->urlPreviousPage);
+        $this->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
+        $this->assign('urlAdmidio', ADMIDIO_URL);
+        $this->assign('urlTheme', THEME_URL);
+        $this->assign('javascriptContent', $this->javascriptContent);
+        $this->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
+
+        $this->assign('userId', $gCurrentUser->getValue('usr_id'));
+        $this->assign('validLogin', $gValidLogin);
+        $this->assign('debug', $gDebug);
+        $this->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
+
+        $this->assign('printView', $this->printView);
+        $this->assign('menuSidebar', $gMenu->getHtml());
+        $this->assign('templateFile', $this->templateFile);
+        $this->assign('content', $this->pageContent);
+
+        // add imprint and data protection
+        if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0)
+        {
+            $urlImprint = $gSettingsManager->getString('system_url_imprint');
+        }
+        if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0)
+        {
+            $urlDataProtection = $gSettingsManager->getString('system_url_data_protection');
+        }
+        $this->assign('urlImprint', $urlImprint);
+        $this->assign('urlDataProtection', $urlDataProtection);
+
+        // show cookie note
+        if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note'))
+        {
+            $this->assign('cookieNote', $gSettingsManager->getBool('system_cookie_note'));
+            $this->assign('cookieDomain', DOMAIN);
+            $this->assign('cookiePrefix', COOKIE_PREFIX);
+
+            if ($gSetCookieForDomain)
+            {
+                $this->assign('cookiePath', '/');
+            }
+            else
+            {
+                $this->assign('cookiePath', ADMIDIO_URL_PATH . '/');
+            }
+
+            if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0)
+            {
+                $this->assign('cookieDataProtectionUrl', '"href": "'. $gSettingsManager->getString('system_url_data_protection') .'", ');
+            }
+            else
+            {
+                $this->assign('cookieDataProtectionUrl', '');
+            }
+        }
+
+        // add translation object
+        $this->assign('l10n', $gL10n);
+
+        if($this->modeInline)
+        {
+            $this->display('index_reduced.tpl');
+        }
+        else
+        {
+            $this->display('index.tpl');
+        }
     }
 }

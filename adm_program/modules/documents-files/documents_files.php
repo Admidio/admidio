@@ -62,20 +62,18 @@ $navigationBar = $currentFolder->getNavigationForDownload();
 // create html page object
 $page = new HtmlPage($headline);
 
-$page->enableModal();
 $page->addJavascript('
     $("body").on("hidden.bs.modal", ".modal", function() {
         $(this).removeData("bs.modal");
         location.reload();
     });
-    $("#menu_item_upload_files").attr("data-toggle", "modal");
-    $("#menu_item_upload_files").attr("data-target", "#admidio_modal");
+
+    $("#menu_item_documents_upload_files").attr("href", "javascript:void(0);");
+    $("#menu_item_documents_upload_files").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)).'");
+    $("#menu_item_documents_upload_files").attr("class", "nav-link openPopup");
     ',
     true
 );
-
-// get module menu
-$documentsFilesMenu = $page->getMenu();
 
 if ($currentFolder->hasUploadRight())
 {
@@ -83,33 +81,21 @@ if ($currentFolder->hasUploadRight())
     if ($gSettingsManager->getInt('max_file_upload_size') > 0)
     {
         // show links for upload, create folder and folder configuration
-        $documentsFilesMenu->addItem(
-            'menu_item_create_folder', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_id' => $getFolderId)),
-            $gL10n->get('SYS_CREATE_FOLDER'), 'fa-plus-circle'
-        );
+        $page->addPageFunctionsMenuItem('menu_item_documents_create_folder', $gL10n->get('SYS_CREATE_FOLDER'), 
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_id' => $getFolderId)), 
+            'fa-plus-circle');
 
-        $documentsFilesMenu->addItem(
-            'menu_item_upload_files', SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)),
-            $gL10n->get('SYS_UPLOAD_FILES'), 'fa-upload'
-        );
+        $page->addPageFunctionsMenuItem('menu_item_documents_upload_files', $gL10n->get('SYS_UPLOAD_FILES'), 
+            SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)), 
+            'fa-upload');
     }
 
     if($gCurrentUser->editDownloadRight())
     {
-        $documentsFilesMenu->addItem(
-            'menu_item_config_folder', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_id' => $getFolderId)),
-            $gL10n->get('SYS_PERMISSIONS'), 'fa-lock'
-        );
+        $page->addPageFunctionsMenuItem('menu_item_documents_permissions', $gL10n->get('SYS_PERMISSIONS'), 
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_id' => $getFolderId)), 
+            'fa-lock');
     }
-}
-
-if($gCurrentUser->isAdministrator())
-{
-    // show link to system preferences of weblinks
-    $documentsFilesMenu->addItem(
-        'admMenuItemPreferencesLinks', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'documents-files')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
-    );
 }
 
 // Create table object
@@ -178,10 +164,10 @@ if (isset($folderContent['folders']))
             }
 
             $columnValues[] = $additionalFolderFunctions.'
-                                <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                    href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fol', 'element_id' => 'row_folder_'.$nextFolder['fol_id'],
+                                <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fol', 'element_id' => 'row_folder_'.$nextFolder['fol_id'],
                                     'name' => $nextFolder['fol_name'], 'database_id' => $nextFolder['fol_id'])).'">
-                                    <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                                    <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FOLDER').'"></i></a>';
         }
         $downloadOverview->addRowByArray($columnValues, 'row_folder_'.$nextFolder['fol_id']);
     }
@@ -250,10 +236,10 @@ if (isset($folderContent['files']))
                     title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('SYS_FILE_NOT_EXIST_DELETE_FROM_DB').'"></i>';
             }
             $additionalFileFunctions .= '
-            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fil', 'element_id' => 'row_file_'.$fileId,
+            <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fil', 'element_id' => 'row_file_'.$fileId,
                 'name' => $file->getValue('fil_name'), 'database_id' => $fileId, 'database_id_2' => $getFolderId)).'">
-                <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
+                <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FILE').'"></i></a>';
         }
         $columnValues[] = $additionalFileFunctions;
         $downloadOverview->addRowByArray($columnValues, 'row_file_'.$fileId);

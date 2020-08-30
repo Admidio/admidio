@@ -33,7 +33,6 @@ $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManag
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
 
 $showOptionValidModules = array(
     'announcements', 'documents-files', 'guestbook', 'ecards', 'lists',
@@ -124,8 +123,7 @@ if($showOption !== '')
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // add back link to module menu
-    $preferencesMenu = $page->getMenu();
-    $preferencesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fas fa-arrow-circle-left');
+    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 }
 else
 {
@@ -159,7 +157,7 @@ function getPreferencePanel($group, $id, $title, $icon, $body)
     $html = '
         <div class="card" id="panel_' . $id . '">
             <div class="card-header">
-                <a class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_' . $id . '">
+                <a type="button" data-toggle="collapse" data-target="#collapse_' . $id . '">
                     <i class="' . $icon . ' fa-fw"></i>' . $title . '
                 </a>
             </div>
@@ -933,7 +931,7 @@ $formUserManagement->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'user_administration', $gL10n->get('MEM_USER_MANAGEMENT'), 'fas fa-user-friends', $formUserManagement->show()));
+$page->addHtml(getPreferencePanel('modules', 'user_administration', $gL10n->get('MEM_USER_MANAGEMENT'), 'fas fa-users-cog', $formUserManagement->show()));
 
 // PANEL: DOCUMENTS-FILES
 
@@ -1027,7 +1025,7 @@ $formPhotos->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'photos', $gL10n->get('PHO_PHOTOS'), 'fas fa-image', $formPhotos->show()));
+$page->addHtml(getPreferencePanel('modules', 'photos', $gL10n->get('SYS_PHOTOS'), 'fas fa-image', $formPhotos->show()));
 
 // PANEL: GUESTBOOK
 
@@ -1146,10 +1144,6 @@ $formLists->addSelectBox(
     'lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries,
     array('defaultValue' => $formValues['lists_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC')
 );
-$formLists->addCheckbox(
-    'lists_hide_overview_details', $gL10n->get('LST_HIDE_DETAILS'), (bool) $formValues['lists_hide_overview_details'],
-    array('helpTextIdInline' => 'LST_HIDE_DETAILS_DESC')
-);
 // read all global lists
 $sqlData = array();
 $sqlData['query'] = 'SELECT lst_id, lst_name
@@ -1180,7 +1174,7 @@ $formLists->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('LST_LISTS'), 'fas fa-list', $formLists->show()));
+$page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('SYS_GROUPS_ROLES'), 'fas fa-users', $formLists->show()));
 
 // PANEL: MESSAGES
 

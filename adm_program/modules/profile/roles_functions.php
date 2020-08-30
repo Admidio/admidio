@@ -148,7 +148,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
 
                             if($gCurrentUser->hasRightViewRole((int) $member->getValue('mem_rol_id')))
                             {
-                                $roleMemHTML .= '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => (int) $member->getValue('mem_rol_id'))). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
+                                $roleMemHTML .= '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => (int) $member->getValue('mem_rol_id'))). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
                             }
                             else
                             {
@@ -180,25 +180,25 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                                 // do not edit administrator role
                                 if ($row['rol_administrator'] == 0)
                                 {
-                                    $roleMemHTML .= '<a class="admidio-icon-link" style="cursor:pointer;" onclick="profileJS.toggleDetailsOn('.$memberId.')" href="#"><i
+                                    $roleMemHTML .= '<a class="admidio-icon-link" style="cursor:pointer;" href="javascript:profileJS.toggleDetailsOn('.$memberId.')"><i
                                         class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('PRO_CHANGE_DATE').'"></i></a>';
                                 }
                                 else
                                 {
-                                    $roleMemHTML .= '<i class="fas fa-trash admidio-opacity-0"></i>';
+                                    $roleMemHTML .= '<i class="fas fa-trash invisible"></i>';
                                 }
 
                                 // You are not allowed to delete your own administrator membership, other roles could be deleted
                                 if (($role->getValue('rol_administrator') == 1 && (int) $gCurrentUser->getValue('usr_id') !== (int) $user->getValue('usr_id'))
                                 || ($role->getValue('rol_administrator') == 0))
                                 {
-                                    $roleMemHTML .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.(int) $role->getValue('rol_id'), 'database_id' => $memberId, 'name' => $role->getValue('rol_name'))).'"><i
-                                            class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'"></i></a>';
+                                    $roleMemHTML .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
+                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.(int) $role->getValue('rol_id'), 'database_id' => $memberId, 'name' => $role->getValue('rol_name'))).'"><i
+                                        class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'"></i></a>';
                                 }
                                 else
                                 {
-                                    $roleMemHTML .= '<i class="fas fa-trash admidio-opacity-0"></i>';
+                                    $roleMemHTML .= '<i class="fas fa-trash invisible"></i>';
                                 }
                             }
 
@@ -210,7 +210,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                             }
                         $roleMemHTML .= '</span>
                     </li>
-                    <li class="list-group-item" id="membership_period_'.$memberId.'" style="visibility: hidden; display: none;"><div class="collapse navbar-collapse">';
+                    <li class="list-group-item" id="membership_period_'.$memberId.'" style="visibility: hidden; display: none;">';
                         $form = new HtmlForm('membership_period_form_'.$memberId, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '7', 'user_id' => (int) $user->getValue('usr_id'), 'mem_id' => $row['mem_id'])), null, array('type' => 'navbar', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
                         $form->addInput(
                             'membership_start_date_'.$memberId, $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gSettingsManager->getString('system_date')),
@@ -222,10 +222,10 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                         );
                         $form->addButton(
                             'btn_send_'.$memberId, $gL10n->get('SYS_OK'),
-                            array('class' => 'button-membership-period-form', 'data-admidio' => $memberId)
+                            array('class' => 'btn btn-primary button-membership-period-form', 'data-admidio' => $memberId)
                         );
                         $roleMemHTML .= $form->show();
-                    $roleMemHTML .= '</div></li>
+                    $roleMemHTML .= '</li>
                     <li class="list-group-item" id="member_info_'.$memberId.'_Content" style="display: none;">';
                         // show information about user who creates the recordset and changed it
                         $roleMemHTML .= admFuncShowCreateChangeInfoById(

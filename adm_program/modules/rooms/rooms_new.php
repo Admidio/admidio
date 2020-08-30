@@ -58,10 +58,7 @@ if (isset($_SESSION['rooms_request']))
 
 // create html page object
 $page = new HtmlPage($headline);
-
-// add back link to module menu
-$roomsMenu = $page->getMenu();
-$roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('rooms_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_function.php', array('room_id' => $getRoomId, 'mode' => '1')), $page);

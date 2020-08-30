@@ -10,41 +10,7 @@
  */
 
 /**
- * A method to create a simple html page that shows a custom text and a navigation button.
- * This should be used to show notices or errors during installation or update.
- * @param string $message    A (html) message that should be displayed.
- * @param string $url        The url to which the user should be navigated if he clicks the button.
- * @param string $buttonText The text of the button.
- * @param string $buttonIcon The icon of the button.
- * @param bool   $update
- */
-function showNotice($message, $url, $buttonText, $buttonIcon, $update = false)
-{
-    global $gL10n;
-
-    $onClickText = '';
-
-    // show dialog with success notification
-    $form = new HtmlFormInstallation('installation-form', $url);
-
-    if ($update)
-    {
-        $form->setUpdateModus();
-    }
-
-    if ($buttonText === $gL10n->get('INS_UPDATE_DATABASE'))
-    {
-        $onClickText = $gL10n->get('INS_DATABASE_IS_UPDATED');
-    }
-
-    $form->setFormDescription($message);
-    $form->addSubmitButton('next_page', $buttonText, array('icon' => $buttonIcon, 'onClickText' => $onClickText));
-    echo $form->show();
-    exit();
-}
-
-/**
- * prueft, ob die Mindestvoraussetzungen bei PHP und MySQL eingehalten werden
+ * checks whether the minimum requirements for PHP and MySQL are met
  * @param Database $database
  * @return string
  */
@@ -73,7 +39,7 @@ function querySqlFile(Database $db, $sqlFileName)
 {
     global $gL10n;
 
-    $sqlPath = ADMIDIO_PATH . '/adm_program/installation/db_scripts/';
+    $sqlPath = ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/';
     $sqlFilePath = $sqlPath . $sqlFileName;
 
     if (!is_file($sqlFilePath))

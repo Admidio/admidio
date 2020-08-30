@@ -31,10 +31,7 @@ $roleAdministrator = new TableRoles($gDb, $pdoStatement->fetchColumn());
 
 // create html page object
 $page = new HtmlPage($headline);
-
-// add back link to module menu
-$loginMenu = $page->getMenu();
-$loginMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('login_form', ADMIDIO_URL.'/adm_program/system/login_check.php', $page, array('showRequiredFields' => false));
@@ -56,7 +53,7 @@ if($gSettingsManager->getBool('system_organization_select'))
           ORDER BY org_longname ASC, org_shortname ASC';
     $form->addSelectBoxFromSql(
         'org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $gCurrentOrganization->getValue('org_id'))
+        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $gCurrentOrganization->getValue('org_id'), 'class' => 'form-control-small')
     );
 }
 
@@ -64,7 +61,7 @@ if($gSettingsManager->getBool('enable_auto_login'))
 {
     $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
 }
-$form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key'));
+$form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key', 'class' => ' offset-sm-3'));
 $page->addHtml($form->show());
 
 if($gSettingsManager->getBool('registration_enable_module'))

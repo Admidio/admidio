@@ -179,7 +179,7 @@ switch($getMode)
                     break;
 
                 case 'lists':
-                    $checkboxes = array('lists_enable_module', 'lists_hide_overview_details');
+                    $checkboxes = array('lists_enable_module');
                     break;
 
                 case 'messages':
@@ -292,13 +292,10 @@ switch($getMode)
 
         // create html page object
         $page = new HtmlPage($headline);
+        $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
         // add current url to navigation stack
         $gNavigation->addUrl(CURRENT_URL, $headline);
-
-        // add back link to module menu
-        $organizationNewMenu = $page->getMenu();
-        $organizationNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
         $page->addHtml('<p class="lead">'.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'</p>');
 
@@ -367,7 +364,7 @@ switch($getMode)
         $newOrganization->save();
 
         // write all preferences from preferences.php in table adm_preferences
-        require_once(__DIR__ . '/../../installation/db_scripts/preferences.php');
+        require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
 
         // set some specific preferences whose values came from user input of the installation wizard
         $defaultOrgPreferences['email_administrator'] = $_POST['orgaEmail'];

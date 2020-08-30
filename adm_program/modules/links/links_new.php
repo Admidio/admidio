@@ -76,10 +76,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage($headline);
-
-// add back link to module menu
-$linksCreateMenu = $page->getMenu();
-$linksCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // Html des Modules ausgeben
 if($getLinkId > 0)

@@ -134,10 +134,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
 
 // create html page object
 $page = new HtmlPage($headline);
-
-// add back link to module menu
-$guestbookCommentCreateMenu = $page->getMenu();
-$guestbookCommentCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('guestbook_comment_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('id' => $id, 'headline' => $getHeadline, 'mode' => $mode)), $page);

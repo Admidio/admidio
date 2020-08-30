@@ -151,12 +151,11 @@ class Message
         {
             // create html page object
             $page = new HtmlPage($headline);
-            $page->hideMenu();
 
             if(!$this->includeThemeBody)
             {
                 // don't show custom html of the current theme
-                $page->hideThemeHtml();
+                $page->setInlineMode();
             }
 
             // forward to next page after x seconds
@@ -184,11 +183,11 @@ class Message
                 if($this->showYesNoButtons)
                 {
                     $htmlButtons .= '
-                        <button id="admButtonYes" class="btn" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'">
+                        <button id="admButtonYes" class="btn btn-primary" type="button" onclick="self.location.href=\'' . $this->forwardUrl . '\'">
                             <i class="fas fa-check-circle"></i>
                             &nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;
                         </button>
-                        <button id="admButtonNo" class="btn" type="button" onclick="history.back()">
+                        <button id="admButtonNo" class="btn btn-secondary" type="button" onclick="history.back()">
                             <i class="fas fa-minus-circle"></i>
                             &nbsp;'.$gL10n->get('SYS_NO').'
                         </button>';
@@ -197,9 +196,9 @@ class Message
                 {
                     // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
                     $htmlButtons .= '
-                        <a class="btn" href="'. $this->forwardUrl. '">'.$gL10n->get('SYS_NEXT').'
+                        <button class="btn btn-primary admidio-margin-bottom" onclick="self.location.href=\'' . $this->forwardUrl . '\'">'.$gL10n->get('SYS_NEXT').'
                             <i class="fas fa-arrow-circle-right"></i>
-                        </a>';
+                        </button>';
                 }
             }
             else
@@ -209,10 +208,10 @@ class Message
                 if(!$this->modalWindowMode)
                 {
                     $htmlButtons .= '
-                        <a class="btn" href="javascript:void(0)" onclick="history.back()">
+                        <button class="btn btn-primary admidio-margin-bottom" onclick="history.back()">
                             <i class="fas fa-arrow-circle-left"></i>'.
                             $gL10n->get('SYS_BACK').
-                        '</a>';
+                        '</button>';
                 }
             }
         }
@@ -222,7 +221,7 @@ class Message
             $html .= '
                 <div class="modal-header">
                     <h3 class="modal-title">'.$headline.'</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button class="btn btn-primary" type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

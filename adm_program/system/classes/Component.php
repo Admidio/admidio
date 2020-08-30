@@ -78,7 +78,7 @@ class Component extends TableAccess
             );
 
             throw new AdmException('SYS_DATABASE_VERSION_INVALID', array($dbVersion, ADMIDIO_VERSION_TEXT,
-                                   '<a href="' . ADMIDIO_URL . '/adm_program/installation/update.php">', '</a>'));
+                                   '<a href="' . ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php">', '</a>'));
         }
         if ($returnCode === 1) // filesystem has minor version
         {
@@ -153,7 +153,7 @@ class Component extends TableAccess
                 }
                 break;
 
-            case 'LISTS':
+            case 'GROUPS-ROLES':
                 if($gSettingsManager->getBool('lists_enable_module') && $gValidLogin)
                 {
                     return true;

@@ -117,7 +117,7 @@ unset($_SESSION['categories_request']);
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascript('
     /**
@@ -171,17 +171,10 @@ $page->addJavascript('
     }
 ');
 
-// get module menu
-$categoriesMenu = $page->getMenu();
-
-// show back link
-$categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
-
 // define link to create new category
-$categoriesMenu->addItem(
-    'admMenuItemNewCategory', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType, 'title' => $getTitle)),
-    $gL10n->get('SYS_CREATE_VAR', array($addButtonText)), 'fa-plus-circle'
-);
+$page->addPageFunctionsMenuItem('menu_item_categories_add', $gL10n->get('SYS_CREATE_VAR', array($addButtonText)), 
+    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType, 'title' => $getTitle)), 
+    'fa-plus-circle');
 
 // Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
@@ -329,18 +322,18 @@ while($catRow = $categoryStatement->fetch())
 
         if($category->getValue('cat_system') == 1)
         {
-            $categoryAdministration .= '<i class="fas fa-trash admidio-opacity-0"></i>';
+            $categoryAdministration .= '<i class="fas fa-trash invisible"></i>';
         }
         else
         {
-            $categoryAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                            href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. (int) $category->getValue('cat_id'), 'name' => $category->getValue('cat_name'), 'database_id' => $catId, 'database_id_2' => $getType)).'">'.
+            $categoryAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. (int) $category->getValue('cat_id'), 'name' => $category->getValue('cat_name'), 'database_id' => $catId, 'database_id_2' => $getType)).'">'.
                                             '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
     }
     else
     {
-        $categoryAdministration = '<i class="fas fa-trash admidio-opacity-0"></i><i class="fas fa-trash admidio-opacity-0"></i>';
+        $categoryAdministration = '<i class="fas fa-trash invisible"></i><i class="fas fa-trash invisible"></i>';
     }
 
     // create array with all column values

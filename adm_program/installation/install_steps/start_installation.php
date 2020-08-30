@@ -16,12 +16,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php')
 // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
 if (!is_file($configPath))
 {
-    showNotice(
-        $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),
-        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')),
-        $gL10n->get('SYS_BACK'),
-        'fa-arrow-circle-left'
-    );
+    $page = new HtmlPageInstallation();
+    $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')), $gL10n->get('SYS_BACK'),
+        'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config')));
     // => EXIT
 }
 
@@ -37,12 +34,9 @@ if (isset($_SESSION['table_prefix'])
     || $_SESSION['table_prefix']   !== TABLE_PREFIX
     || $_SESSION['orga_shortname'] !== $g_organization))
 {
-    showNotice(
-        $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
-        SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
-        $gL10n->get('SYS_BACK'),
-        'fa-arrow-circle-left'
-    );
+    $page = new HtmlPageInstallation();
+    $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')), $gL10n->get('SYS_BACK'),
+        'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database')));
     // => EXIT
 }
 
@@ -54,7 +48,9 @@ $sqlQueryResult = querySqlFile($db, 'db.sql');
 
 if (is_string($sqlQueryResult))
 {
-    showNotice($sqlQueryResult, SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $page = new HtmlPageInstallation();
+    $page->showMessage('error', $gL10n->get('SYS_NOTE'), $sqlQueryResult, $gL10n->get('SYS_BACK'),
+        'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config')));
     // => EXIT
 }
 
@@ -89,15 +85,14 @@ $sql = 'INSERT INTO '.TBL_COMPONENTS.'
              , (\'MODULE\', \'SYS_DOCUMENTS_FILES\',     \'DOCUMENTS-FILES\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'GBO_GUESTBOOK\',           \'GUESTBOOK\',      \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'LNK_WEBLINKS\',            \'LINKS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'LST_LISTS\',               \'LISTS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_GROUPS_ROLES\',        \'GROUPS-ROLES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'MEM_USER_MANAGEMENT\',     \'MEMBERS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_MESSAGES\',            \'MESSAGES\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_MENU\',                \'MENU\',           \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'PHO_PHOTOS\',              \'PHOTOS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_PHOTOS\',              \'PHOTOS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_SETTINGS\',            \'PREFERENCES\',    \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'PRO_PROFILE\',             \'PROFILE\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_REGISTRATION\',        \'REGISTRATION\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'ROL_ROLE_ADMINISTRATION\', \'ROLES\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_ROOM_MANAGEMENT\',     \'ROOMS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
 $db->query($sql); // TODO add more params
 
@@ -255,12 +250,11 @@ $sql = 'INSERT INTO '.TBL_MENU.'
         VALUES (NULL, NULL, 1, 1, 1, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
              , (NULL, NULL, 1, 2, 1, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
              , (NULL, NULL, 1, 3, 1, \'plugins\', NULL, \'\', \'MEN_PLUGIN\', \'\')
-             , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/index.php\', \'fa-home\', \'SYS_OVERVIEW\', \'\')
+             , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/overview.php\', \'fa-home\', \'SYS_OVERVIEW\', \'\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOCUMENTS-FILES\'), 1, 0, 3, 1, \'documents-files\', \''.FOLDER_MODULES.'/documents-files/documents_files.php\', \'fa-file-download\', \'SYS_DOCUMENTS_FILES\', \'SYS_DOCUMENTS_FILES_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 7, 1, \'lists\', \''.FOLDER_MODULES.'/lists/lists.php\', \'fa-list\', \'LST_LISTS\', \'LST_LISTS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 8, 1, \'mylist\', \''.FOLDER_MODULES.'/lists/mylist.php\', \'fa-list-alt\', \'LST_MY_LIST\', \'SYS_MYLIST_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GROUPS-ROLES\'), 1, 0, 7, 1, \'groups-roles\', \''.FOLDER_MODULES.'/groups-roles/groups_roles.php\', \'fa-users\', \'SYS_GROUPS_ROLES\', \'SYS_GROUPS_ROLES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, 0, 2, 1, \'announcements\', \''.FOLDER_MODULES.'/announcements/announcements.php\', \'fa-newspaper\', \'ANN_ANNOUNCEMENTS\', \'ANN_ANNOUNCEMENTS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'fa-image\', \'PHO_PHOTOS\', \'PHO_PHOTOS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'fa-image\', \'SYS_PHOTOS\', \'PHO_PHOTOS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GUESTBOOK\'), 1, 0, 6, 1, \'guestbook\', \''.FOLDER_MODULES.'/guestbook/guestbook.php\', \'fa-book\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DATES\'), 1, 0, 8, 1, \'dates\', \''.FOLDER_MODULES.'/dates/dates.php\', \'fa-calendar-alt\', \'DAT_DATES\', \'DAT_DATES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, 0, 9, 1, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'fa-link\', \'LNK_WEBLINKS\', \'LNK_WEBLINKS_DESC\')
@@ -268,8 +262,7 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, 0, 6, 1, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'fa-cog\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, 0, 4, 1, \'mail\', \''.FOLDER_MODULES.'/messages/messages_write.php\', \'fa-envelope\', \'SYS_EMAIL\', \'MAI_EMAIL_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, 0, 1, 1, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'fa-address-card\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'fa-user-friends\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ROLES\'), 2, 0, 3, 1, \'roladm\', \''.FOLDER_MODULES.'/roles/roles.php\', \'fa-user-tie\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'fa-users-cog\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'fa-stream\', \'SYS_MENU\', \'SYS_MENU_DESC\')';
 $db->query($sql);
 
@@ -277,33 +270,20 @@ $db->query($sql);
 session_unset();
 session_destroy();
 
-// text for dialog
-$text = $gL10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
-if (!is_writable(ADMIDIO_PATH . FOLDER_DATA))
-{
-    $text = $text.'
-        <div class="alert alert-warning alert-small" role="alert">
-            <i class="fas fa-exclamation-triangle"></i>
-            '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', array('adm_my_files')).'
-        </div>';
-}
-
 $gLogger->info('INSTALLATION: Installation successfully complete');
 
 // show dialog with success notification
-$form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE.'donate.php');
-$form->setFormDescription(
-    $text,
-    '<div class="alert alert-success form-alert">
-        <i class="fas fa-check"></i>
-        <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong>
-    </div>'
-);
-$form->openButtonGroup();
-$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
+$page = new HtmlPageInstallation();
+$page->addTemplateFile('installation_successful.tpl');
+$page->addJavascript('$("#next_page").focus();', true);
+
+$form = new HtmlForm('installation-form', ADMIDIO_HOMEPAGE.'donate.php', null, array('setFocus' => false));
 $form->addButton(
     'main_page', $gL10n->get('SYS_LATER'),
-    array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/index.php')
+    array('icon' => 'fa-home', 'class' => 'admidio-margin-bottom',
+        'link' => ADMIDIO_URL . '/adm_program/overview.php')
 );
-$form->closeButtonGroup();
-echo $form->show();
+$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
+
+$page->addHtml($form->show());
+$page->show();

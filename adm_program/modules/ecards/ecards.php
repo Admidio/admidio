@@ -109,7 +109,7 @@ else
 
 // create html page object
 $page = new HtmlPage($headline);
-$page->enableModal();
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.min.js');
 
@@ -117,10 +117,6 @@ $page->addJavascript('
     $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) {
         event.preventDefault();
         $(this).ekkoLightbox();
-    });
-
-    $("#admidio_modal").on("show.bs.modal", function() {
-        $(this).find(".modal-dialog").css({width: "800px"});
     });
 
     $("#btn_ecard_preview").click(function(event) {
@@ -132,6 +128,7 @@ $page->addJavascript('
             data: $("#ecard_form").serialize(), // get the form data
             url: "ecard_preview.php", // the file to call
             success: function(response) { // on success..
+                $(".modal-dialog").attr("class", "modal-dialog modal-lg");
                 $(".modal-content").html(response);
                 $("#admidio_modal").modal();
             }
@@ -142,24 +139,11 @@ $page->addJavascript('
     true
 );
 
-// add back link to module menu
-$ecardMenu = $page->getMenu();
-$ecardMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
-
-if($gCurrentUser->isAdministrator())
-{
-    // show link to system preferences of announcements
-    $ecardMenu->addItem(
-        'menu_item_preferences', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'ecards')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
-    );
-}
-
 // show form
 $form = new HtmlForm('ecard_form', 'ecard_send.php', $page);
-$form->addInput('submit_action', '', '', array('type' => 'hidden'));
-$form->addInput('photo_id', '', $getPhotoId, array('type' => 'hidden'));
-$form->addInput('photo_nr', '', $getPhotoNr, array('type' => 'hidden'));
+$form->addInput('submit_action', '', '', array('property' => HtmlForm::FIELD_HIDDEN));
+$form->addInput('photo_id', '', $getPhotoId, array('property' => HtmlForm::FIELD_HIDDEN));
+$form->addInput('photo_nr', '', $getPhotoNr, array('property' => HtmlForm::FIELD_HIDDEN));
 
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
 $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
@@ -177,7 +161,7 @@ if (!is_array($templates))
 // create new array without file extension in visual value
 $newTemplateArray = array();
 foreach($templates as $templateName)
-{  
+{
     $newTemplateArray[$templateName] = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
 }
 unset($templateName);
@@ -268,7 +252,7 @@ $form->addEditor(
 );
 $form->closeGroupBox();
 $form->openButtonGroup();
-$form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'fa-eye'));
+$form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'fa-eye', 'class' => 'admidio-margin-bottom'));
 $form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
 $form->closeButtonGroup();
 

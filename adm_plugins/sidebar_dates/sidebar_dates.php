@@ -33,7 +33,7 @@ if(!isset($plg_dates_count) || !is_numeric($plg_dates_count))
 
 if(!isset($plg_dates_show_preview) || !is_numeric($plg_dates_show_preview))
 {
-    $plg_dates_show_preview = 0;
+    $plg_dates_show_preview = 70;
 }
 
 if(!isset($plgShowFullDescription) || !is_numeric($plgShowFullDescription))
@@ -81,20 +81,20 @@ if(Component::isVisible('DATES'))
 {
     // create Object
     $plgDates = new ModuleDates();
-    
+
     // read events for output
     $plgDates->setDateRange();
     $plgDates->setCalendarNames($plg_kal_cat);
     $plgDatesResult = $plgDates->getDataSet(0, $plg_dates_count);
-    
+
     $plgDate = new TableDate($gDb);
-    
+
     echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
     if($plg_show_headline)
     {
         echo '<h3>'.$gL10n->get('PLG_DATES_HEADLINE').'</h3>';
     }
-    
+
     if($plgDatesResult['numResults'] > 0)
     {
         foreach($plgDatesResult['recordset'] as $plgRow)
@@ -102,41 +102,19 @@ if(Component::isVisible('DATES'))
             $plgDate->clear();
             $plgDate->setArray($plgRow);
             $plgHtmlEndDate = '';
-    
-            echo '<h4>'.$plgDate->getValue('dat_begin', $gSettingsManager->getString('system_date')). '&nbsp;&nbsp;';
-    
-            if ($plgDate->getValue('dat_all_day') != 1)
-            {
-                echo $plgDate->getValue('dat_begin', $gSettingsManager->getString('system_time'));
-            }
-    
-            // Bis-Datum und Uhrzeit anzeigen
-            if($plg_show_date_end)
-            {
-                if($plgDate->getValue('dat_begin', $gSettingsManager->getString('system_date')) !== $plgDate->getValue('dat_end', $gSettingsManager->getString('system_date')))
-                {
-                    $plgHtmlEndDate .= $plgDate->getValue('dat_end', $gSettingsManager->getString('system_date'));
-                }
-                if ($plgDate->getValue('dat_all_day') != 1)
-                {
-                    $plgHtmlEndDate .= ' '. $plgDate->getValue('dat_end', $gSettingsManager->getString('system_time'));
-                }
-                if($plgHtmlEndDate !== '')
-                {
-                    $plgHtmlEndDate = ' - '. $plgHtmlEndDate;
-                }
-            }
-    
-            // ?ber $plg_link_url wird die Verbindung zum Date-Modul hergestellt.
-            echo $plgHtmlEndDate. '<br /><a href="'. SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '" target="'. $plg_link_target. '">';
-    
+
+            echo '<h5>'.$plgDate->getDateTimePeriod($plg_show_date_end);
+
+            // create a link to date module
+            echo '<br /><a href="'. SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '" target="'. $plg_link_target. '">';
+
             if($plg_max_char_per_word > 0)
             {
                 $plgNewHeadline = '';
-    
-                // Woerter unterbrechen, wenn sie zu lang sind
+
+                // Pause words if they are too long
                 $plgWords = explode(' ', $plgDate->getValue('dat_headline'));
-    
+
                 foreach($plgWords as $plgValue)
                 {
                     if(strlen($plgValue) > $plg_max_char_per_word)
@@ -149,13 +127,13 @@ if(Component::isVisible('DATES'))
                         $plgNewHeadline .= ' '. $plgValue;
                     }
                 }
-                echo $plgNewHeadline. '</a></h4>';
+                echo $plgNewHeadline. '</a></h5>';
             }
             else
             {
-                echo $plgDate->getValue('dat_headline'). '</a></h4>';
+                echo $plgDate->getValue('dat_headline'). '</a></h5>';
             }
-    
+
             // show preview text
             if($plgShowFullDescription === 1)
             {
@@ -164,22 +142,22 @@ if(Component::isVisible('DATES'))
             elseif($plg_dates_show_preview > 0)
             {
                 // remove all html tags except some format tags
-                $textPrev = strip_tags($plgDate->getValue('dat_description'), '<p></p><br><br/><br /><i></i><b></b><strong></strong><em></em>');
-    
+                $textPrev = strip_tags($plgDate->getValue('dat_description'), '<br><br/><br /><i></i><b></b><strong></strong><em></em>');
+
                 // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
                 $textPrev = substr($textPrev, 0, $plg_dates_show_preview + 15);
                 $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
-                    <a target="'. $plg_link_target. '"
+                    <a class="admidio-icon-link" target="'. $plg_link_target. '"
                         href="'.SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '"><i
                         class="fas fa-plus-circle" aria-hidden="true"></i>'.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a>';
                 $textPrev = pluginDatesCloseTags($textPrev);
-    
+
                 echo '<div>'.$textPrev.'</div>';
             }
-    
+
             echo '<hr />';
         }
-    
+
         // forward to $plg_link_url without any additional parameters
         echo '<a href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_DATES_ALL_EVENTS').'</a>';
     }
@@ -187,7 +165,7 @@ if(Component::isVisible('DATES'))
     {
         echo $gL10n->get('SYS_NO_ENTRIES');
     }
-    
+
     echo '</div>';
 }
 
