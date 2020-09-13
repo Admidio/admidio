@@ -117,7 +117,8 @@ and sharing great software.
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP
 - [SecurImage](https://www.phpcaptcha.org/): PHP CAPTCHA script for generating complex images and CAPTCHA codes to protect forms from spam and abuse.
 - [Select2](https://select2.github.io/): jQuery replacement for select boxes
+- [Smarty](https://www.smarty.net/): PHP template engine
 - [zxcvbn](https://github.com/dropbox/zxcvbn): Add password strength indicator
 - [zxcvbn-php](https://github.com/bjeavons/zxcvbn-php): Test password strength in the backend
 
-Copyright (c) 2004 - 2019 The Admidio Team
+Copyright (c) 2004 - 2020 The Admidio Team
