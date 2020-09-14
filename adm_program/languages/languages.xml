@@ -43,6 +43,12 @@
         <datepicker>de</datepicker>
     </language>
     <language>
+        <code>el</code>
+        <isocode>el</isocode>
+        <name>Greek - Ελληνικά</name>
+        <datepicker>el</datepicker>
+    </language>
+    <language>
         <code>id</code>
         <isocode>id</isocode>
         <name>Indonesian - bahasa Indonesia</name>

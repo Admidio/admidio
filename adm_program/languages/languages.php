@@ -49,6 +49,11 @@ $gSupportedLanguages = array(
         'isocode' => 'de',
         'libs'    => 'de'
     ),
+    'el'    => array(
+        'name'    => 'Greek - Ελληνικά',
+        'isocode' => 'el',
+        'libs'    => 'el'
+    ),
     'id'    => array(
         'name'    => 'Indonesian - bahasa Indonesia',
         'isocode' => 'id',

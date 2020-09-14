@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">Ο/Η #VAR1# θα είναι #VAR3# ετών σε #VAR2# ημέρες, στις #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# έχει γενέθλια  σε #VAR2# ημέρες</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Γενέθλια</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Κ. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_USERS">Πλήθος χρηστών με γενέθλια σήμερα: #VAR1#</string>
+  <string name="PLG_BIRTHDAY_NO_USER">Κανένας με γενέθλια σήμερα</string>
+  <string name="PLG_BIRTHDAY_ONE_USER">Ένας με γενέθλια σήμερα!</string>
+  </resources>
