@@ -25,7 +25,7 @@ function admFuncAutoload($className)
         ADMIDIO_PATH . FOLDER_CLASSES . '/' . $className . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/monolog/src/' . str_replace('\\', '/', $className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/' . $className . '.class.php',
-        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/psr/log/' . str_replace('\\', '/', $className) . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/psr/' . str_replace('\\', '/', $className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpmailer/src/' . str_replace('\\', '/', substr($className, strlen('PHPMailer\\PHPMailer'))) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/zxcvbn-php/src/' . str_replace('\\', '/', substr($className, strlen('ZxcvbnPhp'))) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/' . strtolower($className) . '.php',
