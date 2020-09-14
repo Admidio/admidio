@@ -1,7 +1,7 @@
 <?php
 
 /*
-htmLawed 1.2.4.1, 12 September 2017
+htmLawed 1.2.5, 24 September 2019
 Copyright Santosh Patnaik
 Dual licensed with LGPL 3 and GPL 2+
 A PHP Labware internal utility - www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -9,12 +9,6 @@ A PHP Labware internal utility - www.bioinformatics.org/phplabware/internal_util
 See htmLawed_README.txt/htm
 */
 
-/**
- * @param string $t
- * @param int|array $C
- * @param array|string $S
- * @return string
- */
 function htmLawed($t, $C = 1, $S = array()) {
     $C = is_array($C) ? $C : array();
     if (!empty($C['valid_xhtml'])) {
@@ -22,7 +16,7 @@ function htmLawed($t, $C = 1, $S = array()) {
         $C['make_tag_strict'] = isset($C['make_tag_strict']) ? $C['make_tag_strict'] : 2;
         $C['xml:lang'] = isset($C['xml:lang']) ? $C['xml:lang'] : 2;
     }
-// config eles
+    // config eles
     $e = array('a' => 1, 'abbr' => 1, 'acronym' => 1, 'address' => 1, 'applet' => 1, 'area' => 1, 'article' => 1, 'aside' => 1, 'audio' => 1, 'b' => 1, 'bdi' => 1, 'bdo' => 1, 'big' => 1, 'blockquote' => 1, 'br' => 1, 'button' => 1, 'canvas' => 1, 'caption' => 1, 'center' => 1, 'cite' => 1, 'code' => 1, 'col' => 1, 'colgroup' => 1, 'command' => 1, 'data' => 1, 'datalist' => 1, 'dd' => 1, 'del' => 1, 'details' => 1, 'dfn' => 1, 'dir' => 1, 'div' => 1, 'dl' => 1, 'dt' => 1, 'em' => 1, 'embed' => 1, 'fieldset' => 1, 'figcaption' => 1, 'figure' => 1, 'font' => 1, 'footer' => 1, 'form' => 1, 'h1' => 1, 'h2' => 1, 'h3' => 1, 'h4' => 1, 'h5' => 1, 'h6' => 1, 'header' => 1, 'hgroup' => 1, 'hr' => 1, 'i' => 1, 'iframe' => 1, 'img' => 1, 'input' => 1, 'ins' => 1, 'isindex' => 1, 'kbd' => 1, 'keygen' => 1, 'label' => 1, 'legend' => 1, 'li' => 1, 'link' => 1, 'main' => 1, 'map' => 1, 'mark' => 1, 'menu' => 1, 'meta' => 1, 'meter' => 1, 'nav' => 1, 'noscript' => 1, 'object' => 1, 'ol' => 1, 'optgroup' => 1, 'option' => 1, 'output' => 1, 'p' => 1, 'param' => 1, 'pre' => 1, 'progress' => 1, 'q' => 1, 'rb' => 1, 'rbc' => 1, 'rp' => 1, 'rt' => 1, 'rtc' => 1, 'ruby' => 1, 's' => 1, 'samp' => 1, 'script' => 1, 'section' => 1, 'select' => 1, 'small' => 1, 'source' => 1, 'span' => 1, 'strike' => 1, 'strong' => 1, 'style' => 1, 'sub' => 1, 'summary' => 1, 'sup' => 1, 'table' => 1, 'tbody' => 1, 'td' => 1, 'textarea' => 1, 'tfoot' => 1, 'th' => 1, 'thead' => 1, 'time' => 1, 'tr' => 1, 'track' => 1, 'tt' => 1, 'u' => 1, 'ul' => 1, 'var' => 1, 'video' => 1, 'wbr' => 1); // 118 incl. deprecated & some Ruby
 
     if (!empty($C['safe'])) {
@@ -49,15 +43,15 @@ function htmLawed($t, $C = 1, $S = array()) {
             }
         }
     }
-    $C['elements'] =& $e;
-// config attrs
+    $C['elements'] = &$e;
+    // config attrs
     $x = !empty($C['deny_attribute']) ? strtolower(str_replace(array("\n", "\r", "\t", ' '), '', $C['deny_attribute'])) : '';
     $x = array_flip((isset($x[0]) && $x[0] == '*') ? str_replace('/', 'data-', explode('-', str_replace('data-', '/', $x))) : explode(',', $x.(!empty($C['safe']) ? ',on*' : '')));
     $C['deny_attribute'] = $x;
-// config URLs
+    // config URLs
     $x = (isset($C['schemes'][2]) && strpos($C['schemes'], ':')) ? strtolower($C['schemes']) : 'href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, tel, telnet'.(empty($C['safe']) ? ', app, javascript; *: data, javascript, ' : '; *:').'file, http, https';
     $C['schemes'] = array();
-    foreach (explode(';', str_replace(array(' ', "\t", "\r", "\n"), '', $x)) as $v) {
+    foreach (explode(';', trim(str_replace(array(' ', "\t", "\r", "\n"), '', $x), ';')) as $v) {
         $x = $x2 = null;
         list($x, $x2) = explode(':', $v, 2);
         if ($x2) {
@@ -77,7 +71,7 @@ function htmLawed($t, $C = 1, $S = array()) {
     if (!isset($C['base_url']) or !preg_match('`^[a-zA-Z\d.+\-]+://[^/]+/(.+?/)?$`', $C['base_url'])) {
         $C['base_url'] = $C['abs_url'] = 0;
     }
-// config rest
+    // config rest
     $C['and_mark'] = empty($C['and_mark']) ? 0 : 1;
     $C['anti_link_spam'] = (isset($C['anti_link_spam']) && is_array($C['anti_link_spam']) && count($C['anti_link_spam']) == 2 && (empty($C['anti_link_spam'][0]) or hl_regex($C['anti_link_spam'][0])) && (empty($C['anti_link_spam'][1]) or hl_regex($C['anti_link_spam'][1]))) ? $C['anti_link_spam'] : 0;
     $C['anti_mail_spam'] = isset($C['anti_mail_spam']) ? $C['anti_mail_spam'] : 0;
@@ -131,7 +125,7 @@ function htmLawed($t, $C = 1, $S = array()) {
     if ($C['show_setting'] && preg_match('`^[a-z][a-z0-9_]*$`i', $C['show_setting'])) {
         $GLOBALS[$C['show_setting']] = array('config' => $C, 'spec' => $S, 'time' => microtime());
     }
-// main
+    // main
     $t = preg_replace_callback('`<(?:(?:\s|$)|(?:[^>]*(?:>|$)))|>`m', 'hl_tag', $t);
     $t = $C['balance'] ? hl_bal($t, $C['keep_bad'], $C['parent']) : $t;
     $t = (($C['cdata'] or $C['comment']) && strpos($t, "\x01") !== false) ? str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05"), array('', '', '&', '<', '>'), $t) : $t;
@@ -143,81 +137,82 @@ function htmLawed($t, $C = 1, $S = array()) {
     if (isset($reS)) {
         $GLOBALS['S'] = $reS;
     }
+
     return $t;
 }
 
 function hl_attrval($a, $t, $p) {
-// check attr val against $S
+    // check attr val against $S
     static $ma = array('accesskey', 'class', 'itemtype', 'rel');
     $s = in_array($a, $ma) ? ' ' : ($a == 'srcset' ? ',' : '');
     $r = array();
     $t = !empty($s) ? explode($s, $t) : array($t);
     foreach ($t as $tk => $tv) {
-    $o = 1;
+        $o = 1;
         $tv = trim($tv);
         $l = strlen($tv);
-    foreach ($p as $k => $v) {
+        foreach ($p as $k => $v) {
             if (!$l) {
                 continue;
             }
-        switch ($k) {
-            case 'maxlen':
-                if ($l > $v) {
-                    $o = 0;
-                }
-                break;
-            case 'minlen':
-                if ($l < $v) {
-                    $o = 0;
-                }
-                break;
-            case 'maxval':
+            switch ($k) {
+                case 'maxlen':
+                    if ($l > $v) {
+                        $o = 0;
+                    }
+                    break;
+                case 'minlen':
+                    if ($l < $v) {
+                        $o = 0;
+                    }
+                    break;
+                case 'maxval':
                     if ((float)($tv) > $v) {
-                    $o = 0;
-                }
-                break;
-            case 'minval':
+                        $o = 0;
+                    }
+                    break;
+                case 'minval':
                     if ((float)($tv) < $v) {
-                    $o = 0;
-                }
-                break;
-            case 'match':
+                        $o = 0;
+                    }
+                    break;
+                case 'match':
                     if (!preg_match($v, $tv)) {
-                    $o = 0;
-                }
-                break;
-            case 'nomatch':
+                        $o = 0;
+                    }
+                    break;
+                case 'nomatch':
                     if (preg_match($v, $tv)) {
-                    $o = 0;
-                }
-                break;
-            case 'oneof':
-                $m = 0;
-                foreach (explode('|', $v) as $n) {
-                        if ($tv == $n) {
-                        $m = 1;
-                        break;
+                        $o = 0;
                     }
-                }
-                $o = $m;
-                break;
-            case 'noneof':
-                $m = 1;
-                foreach (explode('|', $v) as $n) {
+                    break;
+                case 'oneof':
+                    $m = 0;
+                    foreach (explode('|', $v) as $n) {
                         if ($tv == $n) {
-                        $m = 0;
-                        break;
+                            $m = 1;
+                            break;
+                        }
                     }
-                }
-                $o = $m;
+                    $o = $m;
+                    break;
+                case 'noneof':
+                    $m = 1;
+                    foreach (explode('|', $v) as $n) {
+                        if ($tv == $n) {
+                            $m = 0;
+                            break;
+                        }
+                    }
+                    $o = $m;
+                    break;
+                default:
+                    break;
+            }
+            if (!$o) {
                 break;
-            default:
-                break;
+            }
         }
-        if (!$o) {
-            break;
-        }
-    }
         if ($o) {
             $r[] = $tv;
         }
@@ -226,23 +221,24 @@ function hl_attrval($a, $t, $p) {
         $s = ', ';
     }
     $r = implode($s, $r);
-    return (isset($r[0]) ? $r : (isset($p['default']) ? $p['default'] : 0));
+
+    return isset($r[0]) ? $r : (isset($p['default']) ? $p['default'] : 0);
 }
 
 function hl_bal($t, $do = 1, $in = 'div') {
-// balance tags
+    // balance tags
 // by content
     $cB = array('form' => 1, 'map' => 1, 'noscript' => 1); // Block
     $cE = array('area' => 1, 'br' => 1, 'col' => 1, 'command' => 1, 'embed' => 1, 'hr' => 1, 'img' => 1, 'input' => 1, 'isindex' => 1, 'keygen' => 1, 'link' => 1, 'meta' => 1, 'param' => 1, 'source' => 1, 'track' => 1, 'wbr' => 1); // Empty
     $cF = array('a' => 1, 'article' => 1, 'aside' => 1, 'audio' => 1, 'button' => 1, 'blockquote' => 1, 'canvas' => 1, 'del' => 1, 'details' => 1, 'div' => 1, 'dd' => 1, 'fieldset' => 1, 'figure' => 1, 'footer' => 1, 'header' => 1, 'iframe' => 1, 'ins' => 1, 'li' => 1, 'main' => 1, 'menu' => 1, 'nav' => 1, 'noscript' => 1, 'object' => 1, 'section' => 1, 'style' => 1, 'td' => 1, 'th' => 1, 'video' => 1); // Flow; later context-wise dynamic move of ins & del to $cI
     $cI = array('abbr' => 1, 'acronym' => 1, 'address' => 1, 'b' => 1, 'bdi' => 1, 'bdo' => 1, 'big' => 1, 'caption' => 1, 'cite' => 1, 'code' => 1, 'data' => 1, 'datalist' => 1, 'dfn' => 1, 'dt' => 1, 'em' => 1, 'figcaption' => 1, 'font' => 1, 'h1' => 1, 'h2' => 1, 'h3' => 1, 'h4' => 1, 'h5' => 1, 'h6' => 1, 'hgroup' => 1, 'i' => 1, 'kbd' => 1, 'label' => 1, 'legend' => 1, 'mark' => 1, 'meter' => 1, 'output' => 1, 'p' => 1, 'pre' => 1, 'progress' => 1, 'q' => 1, 'rb' => 1, 'rt' => 1, 's' => 1, 'samp' => 1, 'small' => 1, 'span' => 1, 'strike' => 1, 'strong' => 1, 'sub' => 1, 'summary' => 1, 'sup' => 1, 'time' => 1, 'tt' => 1, 'u' => 1, 'var' => 1); // Inline
-    $cN = array('a' => array('a' => 1, 'address' => 1, 'button' => 1, 'details' => 1, 'embed' => 1, 'keygen' => 1, 'label' => 1, 'select' => 1, 'textarea' => 1), 'address' => array('address' => 1, 'article' => 1, 'aside' => 1, 'header' => 1, 'keygen' => 1, 'footer' => 1, 'nav' => 1, 'section' => 1), 'button' => array('a' => 1, 'address' => 1, 'button' => 1, 'details' => 1, 'embed' => 1, 'fieldset' => 1, 'form' => 1, 'iframe' => 1, 'input' => 1, 'keygen' => 1, 'label' => 1, 'select' => 1, 'textarea' => 1), 'fieldset' => array('fieldset' => 1), 'footer' => array('header' => 1, 'footer' => 1), 'form' => array('form' => 1), 'header' => array('header' => 1, 'footer' => 1), 'label' => array('label' => 1), 'main' => array('main' => 1), 'meter' => array('meter' => 1), 'noscript' => array('script' => 1), 'pre' => array('big' => 1, 'font' => 1, 'img' => 1, 'object' => 1, 'script' => 1, 'small' => 1, 'sub' => 1, 'sup' => 1), 'progress' => array('progress' => 1), 'rb' => array('ruby' => 1), 'rt' => array('ruby' => 1), 'time' => array('time' => 1),); // Illegal
+    $cN = array('a' => array('a' => 1, 'address' => 1, 'button' => 1, 'details' => 1, 'embed' => 1, 'keygen' => 1, 'label' => 1, 'select' => 1, 'textarea' => 1), 'address' => array('address' => 1, 'article' => 1, 'aside' => 1, 'header' => 1, 'keygen' => 1, 'footer' => 1, 'nav' => 1, 'section' => 1), 'button' => array('a' => 1, 'address' => 1, 'button' => 1, 'details' => 1, 'embed' => 1, 'fieldset' => 1, 'form' => 1, 'iframe' => 1, 'input' => 1, 'keygen' => 1, 'label' => 1, 'select' => 1, 'textarea' => 1), 'fieldset' => array('fieldset' => 1), 'footer' => array('header' => 1, 'footer' => 1), 'form' => array('form' => 1), 'header' => array('header' => 1, 'footer' => 1), 'label' => array('label' => 1), 'main' => array('main' => 1), 'meter' => array('meter' => 1), 'noscript' => array('script' => 1), 'pre' => array('big' => 1, 'font' => 1, 'img' => 1, 'object' => 1, 'script' => 1, 'small' => 1, 'sub' => 1, 'sup' => 1), 'progress' => array('progress' => 1), 'rb' => array('ruby' => 1), 'rt' => array('ruby' => 1), 'time' => array('time' => 1)); // Illegal
     $cN2 = array_keys($cN);
     $cS = array('colgroup' => array('col' => 1), 'datalist' => array('option' => 1), 'dir' => array('li' => 1), 'dl' => array('dd' => 1, 'dt' => 1), 'hgroup' => array('h1' => 1, 'h2' => 1, 'h3' => 1, 'h4' => 1, 'h5' => 1, 'h6' => 1), 'menu' => array('li' => 1), 'ol' => array('li' => 1), 'optgroup' => array('option' => 1), 'option' => array('#pcdata' => 1), 'rbc' => array('rb' => 1), 'rp' => array('#pcdata' => 1), 'rtc' => array('rt' => 1), 'ruby' => array('rb' => 1, 'rbc' => 1, 'rp' => 1, 'rt' => 1, 'rtc' => 1), 'select' => array('optgroup' => 1, 'option' => 1), 'script' => array('#pcdata' => 1), 'table' => array('caption' => 1, 'col' => 1, 'colgroup' => 1, 'tfoot' => 1, 'tbody' => 1, 'tr' => 1, 'thead' => 1), 'tbody' => array('tr' => 1), 'tfoot' => array('tr' => 1), 'textarea' => array('#pcdata' => 1), 'thead' => array('tr' => 1), 'tr' => array('td' => 1, 'th' => 1), 'ul' => array('li' => 1)); // Specific - immediate parent-child
     if ($GLOBALS['C']['direct_list_nest']) {
         $cS['ol'] = $cS['ul'] = $cS['menu'] += array('menu' => 1, 'ol' => 1, 'ul' => 1);
     }
-    $cO = array('address' => array('p' => 1), 'applet' => array('param' => 1), 'audio' => array('source' => 1, 'track' => 1), 'blockquote' => array('script' => 1), 'details' => array('summary' => 1), 'fieldset' => array('legend' => 1, '#pcdata' => 1), 'figure' => array('figcaption' => 1), 'form' => array('script' => 1), 'map' => array('area' => 1), 'object' => array('param' => 1, 'embed' => 1), 'video' => array('source' => 1, 'track' => 1)); // Other
+    $cO = array('address' => array('p' => 1), 'applet' => array('param' => 1), 'audio' => array('source' => 1, 'track' => 1), 'blockquote' => array('script' => 1), 'details' => array('summary' => 1), 'fieldset' => array('legend' => 1, '#pcdata' => 1),  'figure' => array('figcaption' => 1), 'form' => array('script' => 1), 'map' => array('area' => 1), 'object' => array('param' => 1, 'embed' => 1), 'video' => array('source' => 1, 'track' => 1)); // Other
     $cT = array('colgroup' => 1, 'dd' => 1, 'dt' => 1, 'li' => 1, 'option' => 1, 'p' => 1, 'td' => 1, 'tfoot' => 1, 'th' => 1, 'thead' => 1, 'tr' => 1); // Omitable closing
 // block/inline type; a/ins/del both type; #pcdata: text
     $eB = array('a' => 1, 'address' => 1, 'article' => 1, 'aside' => 1, 'blockquote' => 1, 'center' => 1, 'del' => 1, 'details' => 1, 'dir' => 1, 'dl' => 1, 'div' => 1, 'fieldset' => 1, 'figure' => 1, 'footer' => 1, 'form' => 1, 'ins' => 1, 'h1' => 1, 'h2' => 1, 'h3' => 1, 'h4' => 1, 'h5' => 1, 'h6' => 1, 'header' => 1, 'hr' => 1, 'isindex' => 1, 'main' => 1, 'menu' => 1, 'nav' => 1, 'noscript' => 1, 'ol' => 1, 'p' => 1, 'pre' => 1, 'section' => 1, 'style' => 1, 'table' => 1, 'ul' => 1);
@@ -251,10 +247,10 @@ function hl_bal($t, $do = 1, $in = 'div') {
     $eO = array('area' => 1, 'caption' => 1, 'col' => 1, 'colgroup' => 1, 'command' => 1, 'dd' => 1, 'dt' => 1, 'hgroup' => 1, 'keygen' => 1, 'legend' => 1, 'li' => 1, 'optgroup' => 1, 'option' => 1, 'param' => 1, 'rb' => 1, 'rbc' => 1, 'rp' => 1, 'rt' => 1, 'rtc' => 1, 'script' => 1, 'source' => 1, 'tbody' => 1, 'td' => 1, 'tfoot' => 1, 'thead' => 1, 'th' => 1, 'tr' => 1, 'track' => 1); // Missing in $eB & $eI
     $eF = $eB + $eI;
 
-// $in sets allowed child
+    // $in sets allowed child
     $in = ((isset($eF[$in]) && $in != '#pcdata') or isset($eO[$in])) ? $in : 'div';
     if (isset($cE[$in])) {
-        return (!$do ? '' : str_replace(array('<', '>'), array('&lt;', '&gt;'), $t));
+        return !$do ? '' : str_replace(array('<', '>'), array('&lt;', '&gt;'), $t);
     }
     if (isset($cS[$in])) {
         $inOk = $cS[$in];
@@ -319,7 +315,7 @@ function hl_bal($t, $do = 1, $in = 'div') {
                 echo $x;
             } elseif (strpos($x, "\x02\x04")) {
                 foreach (preg_split('`(\x01\x02[^\x01\x02]+\x02\x01)`', $x, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $v) {
-                    echo(substr($v, 0, 2) == "\x01\x02" ? $v : ($do > 4 ? preg_replace('`\S`', '', $v) : ''));
+                    echo substr($v, 0, 2) == "\x01\x02" ? $v : ($do > 4 ? preg_replace('`\S`', '', $v) : '');
                 }
             } elseif ($do > 4) {
                 echo preg_replace('`\S`', '', $x);
@@ -442,7 +438,7 @@ function hl_bal($t, $do = 1, $in = 'div') {
         continue;
     }
 
-// end
+    // end
     if ($ql = count($q)) {
         $p = array_pop($q);
         $q[] = $p;
@@ -479,7 +475,7 @@ function hl_bal($t, $do = 1, $in = 'div') {
             echo $x;
         } elseif (strpos($x, "\x02\x04")) {
             foreach (preg_split('`(\x01\x02[^\x01\x02]+\x02\x01)`', $x, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $v) {
-                echo(substr($v, 0, 2) == "\x01\x02" ? $v : ($do > 4 ? preg_replace('`\S`', '', $v) : ''));
+                echo substr($v, 0, 2) == "\x01\x02" ? $v : ($do > 4 ? preg_replace('`\S`', '', $v) : '');
             }
         } elseif ($do > 4) {
             echo preg_replace('`\S`', '', $x);
@@ -490,11 +486,12 @@ function hl_bal($t, $do = 1, $in = 'div') {
     }
     $o = ob_get_contents();
     ob_end_clean();
+
     return $o;
 }
 
 function hl_cmtcd($t) {
-// comment/CDATA sec handler
+    // comment/CDATA sec handler
     $t = $t[0];
     global $C;
     if (!($v = $C[$n = $t[3] == '-' ? 'comment' : 'cdata'])) {
@@ -511,26 +508,28 @@ function hl_cmtcd($t) {
         $t = substr($t, 1, -1);
     }
     $t = $v == 2 ? str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $t) : $t;
+
     return str_replace(array('&', '<', '>'), array("\x03", "\x04", "\x05"), ($n == 'comment' ? "\x01\x02\x04!--$t--\x05\x02\x01" : "\x01\x01\x04$t\x05\x01\x01"));
 }
 
 function hl_ent($t) {
-// entitity handler
+    // entitity handler
     global $C;
     $t = $t[1];
     static $U = array('quot' => 1, 'amp' => 1, 'lt' => 1, 'gt' => 1);
-    static $N = array('fnof' => '402', 'Alpha' => '913', 'Beta' => '914', 'Gamma' => '915', 'Delta' => '916', 'Epsilon' => '917', 'Zeta' => '918', 'Eta' => '919', 'Theta' => '920', 'Iota' => '921', 'Kappa' => '922', 'Lambda' => '923', 'Mu' => '924', 'Nu' => '925', 'Xi' => '926', 'Omicron' => '927', 'Pi' => '928', 'Rho' => '929', 'Sigma' => '931', 'Tau' => '932', 'Upsilon' => '933', 'Phi' => '934', 'Chi' => '935', 'Psi' => '936', 'Omega' => '937', 'alpha' => '945', 'beta' => '946', 'gamma' => '947', 'delta' => '948', 'epsilon' => '949', 'zeta' => '950', 'eta' => '951', 'theta' => '952', 'iota' => '953', 'kappa' => '954', 'lambda' => '955', 'mu' => '956', 'nu' => '957', 'xi' => '958', 'omicron' => '959', 'pi' => '960', 'rho' => '961', 'sigmaf' => '962', 'sigma' => '963', 'tau' => '964', 'upsilon' => '965', 'phi' => '966', 'chi' => '967', 'psi' => '968', 'omega' => '969', 'thetasym' => '977', 'upsih' => '978', 'piv' => '982', 'bull' => '8226', 'hellip' => '8230', 'prime' => '8242', 'Prime' => '8243', 'oline' => '8254', 'frasl' => '8260', 'weierp' => '8472', 'image' => '8465', 'real' => '8476', 'trade' => '8482', 'alefsym' => '8501', 'larr' => '8592', 'uarr' => '8593', 'rarr' => '8594', 'darr' => '8595', 'harr' => '8596', 'crarr' => '8629', 'lArr' => '8656', 'uArr' => '8657', 'rArr' => '8658', 'dArr' => '8659', 'hArr' => '8660', 'forall' => '8704', 'part' => '8706', 'exist' => '8707', 'empty' => '8709', 'nabla' => '8711', 'isin' => '8712', 'notin' => '8713', 'ni' => '8715', 'prod' => '8719', 'sum' => '8721', 'minus' => '8722', 'lowast' => '8727', 'radic' => '8730', 'prop' => '8733', 'infin' => '8734', 'ang' => '8736', 'and' => '8743', 'or' => '8744', 'cap' => '8745', 'cup' => '8746', 'int' => '8747', 'there4' => '8756', 'sim' => '8764', 'cong' => '8773', 'asymp' => '8776', 'ne' => '8800', 'equiv' => '8801', 'le' => '8804', 'ge' => '8805', 'sub' => '8834', 'sup' => '8835', 'nsub' => '8836', 'sube' => '8838', 'supe' => '8839', 'oplus' => '8853', 'otimes' => '8855', 'perp' => '8869', 'sdot' => '8901', 'lceil' => '8968', 'rceil' => '8969', 'lfloor' => '8970', 'rfloor' => '8971', 'lang' => '9001', 'rang' => '9002', 'loz' => '9674', 'spades' => '9824', 'clubs' => '9827', 'hearts' => '9829', 'diams' => '9830', 'apos' => '39', 'OElig' => '338', 'oelig' => '339', 'Scaron' => '352', 'scaron' => '353', 'Yuml' => '376', 'circ' => '710', 'tilde' => '732', 'ensp' => '8194', 'emsp' => '8195', 'thinsp' => '8201', 'zwnj' => '8204', 'zwj' => '8205', 'lrm' => '8206', 'rlm' => '8207', 'ndash' => '8211', 'mdash' => '8212', 'lsquo' => '8216', 'rsquo' => '8217', 'sbquo' => '8218', 'ldquo' => '8220', 'rdquo' => '8221', 'bdquo' => '8222', 'dagger' => '8224', 'Dagger' => '8225', 'permil' => '8240', 'lsaquo' => '8249', 'rsaquo' => '8250', 'euro' => '8364', 'nbsp' => '160', 'iexcl' => '161', 'cent' => '162', 'pound' => '163', 'curren' => '164', 'yen' => '165', 'brvbar' => '166', 'sect' => '167', 'uml' => '168', 'copy' => '169', 'ordf' => '170', 'laquo' => '171', 'not' => '172', 'shy' => '173', 'reg' => '174', 'macr' => '175', 'deg' => '176', 'plusmn' => '177', 'sup2' => '178', 'sup3' => '179', 'acute' => '180', 'micro' => '181', 'para' => '182', 'middot' => '183', 'cedil' => '184', 'sup1' => '185', 'ordm' => '186', 'raquo' => '187', 'frac14' => '188', 'frac12' => '189', 'frac34' => '190', 'iquest' => '191', 'Agrave' => '192', 'Aacute' => '193', 'Acirc' => '194', 'Atilde' => '195', 'Auml' => '196', 'Aring' => '197', 'AElig' => '198', 'Ccedil' => '199', 'Egrave' => '200', 'Eacute' => '201', 'Ecirc' => '202', 'Euml' => '203', 'Igrave' => '204', 'Iacute' => '205', 'Icirc' => '206', 'Iuml' => '207', 'ETH' => '208', 'Ntilde' => '209', 'Ograve' => '210', 'Oacute' => '211', 'Ocirc' => '212', 'Otilde' => '213', 'Ouml' => '214', 'times' => '215', 'Oslash' => '216', 'Ugrave' => '217', 'Uacute' => '218', 'Ucirc' => '219', 'Uuml' => '220', 'Yacute' => '221', 'THORN' => '222', 'szlig' => '223', 'agrave' => '224', 'aacute' => '225', 'acirc' => '226', 'atilde' => '227', 'auml' => '228', 'aring' => '229', 'aelig' => '230', 'ccedil' => '231', 'egrave' => '232', 'eacute' => '233', 'ecirc' => '234', 'euml' => '235', 'igrave' => '236', 'iacute' => '237', 'icirc' => '238', 'iuml' => '239', 'eth' => '240', 'ntilde' => '241', 'ograve' => '242', 'oacute' => '243', 'ocirc' => '244', 'otilde' => '245', 'ouml' => '246', 'divide' => '247', 'oslash' => '248', 'ugrave' => '249', 'uacute' => '250', 'ucirc' => '251', 'uuml' => '252', 'yacute' => '253', 'thorn' => '254', 'yuml' => '255');
+    static $N = array('fnof' => '402', 'Alpha' => '913', 'Beta' => '914', 'Gamma' => '915', 'Delta' => '916', 'Epsilon' => '917', 'Zeta' => '918', 'Eta' => '919', 'Theta' => '920', 'Iota' => '921', 'Kappa' => '922', 'Lambda' => '923', 'Mu' => '924', 'Nu' => '925', 'Xi' => '926', 'Omicron' => '927', 'Pi' => '928', 'Rho' => '929', 'Sigma' => '931', 'Tau' => '932', 'Upsilon' => '933', 'Phi' => '934', 'Chi' => '935', 'Psi' => '936', 'Omega' => '937', 'alpha' => '945', 'beta' => '946', 'gamma' => '947', 'delta' => '948', 'epsilon' => '949', 'zeta' => '950', 'eta' => '951', 'theta' => '952', 'iota' => '953', 'kappa' => '954', 'lambda' => '955', 'mu' => '956', 'nu' => '957', 'xi' => '958', 'omicron' => '959', 'pi' => '960', 'rho' => '961', 'sigmaf' => '962', 'sigma' => '963', 'tau' => '964', 'upsilon' => '965', 'phi' => '966', 'chi' => '967', 'psi' => '968', 'omega' => '969', 'thetasym' => '977', 'upsih' => '978', 'piv' => '982', 'bull' => '8226', 'hellip' => '8230', 'prime' => '8242', 'Prime' => '8243', 'oline' => '8254', 'frasl' => '8260', 'weierp' => '8472', 'image' => '8465', 'real' => '8476', 'trade' => '8482', 'alefsym' => '8501', 'larr' => '8592', 'uarr' => '8593', 'rarr' => '8594', 'darr' => '8595', 'harr' => '8596', 'crarr' => '8629', 'lArr' => '8656', 'uArr' => '8657', 'rArr' => '8658', 'dArr' => '8659', 'hArr' => '8660', 'forall' => '8704', 'part' => '8706', 'exist' => '8707', 'empty' => '8709', 'nabla' => '8711', 'isin' => '8712', 'notin' => '8713', 'ni' => '8715', 'prod' => '8719', 'sum' => '8721', 'minus' => '8722', 'lowast' => '8727', 'radic' => '8730', 'prop' => '8733', 'infin' => '8734', 'ang' => '8736', 'and' => '8743', 'or' => '8744', 'cap' => '8745', 'cup' => '8746', 'int' => '8747', 'there4' => '8756', 'sim' => '8764', 'cong' => '8773', 'asymp' => '8776', 'ne' => '8800', 'equiv' => '8801', 'le' => '8804', 'ge' => '8805', 'sub' => '8834', 'sup' => '8835', 'nsub' => '8836', 'sube' => '8838', 'supe' => '8839', 'oplus' => '8853', 'otimes' => '8855', 'perp' => '8869', 'sdot' => '8901', 'lceil' => '8968', 'rceil' => '8969', 'lfloor' => '8970', 'rfloor' => '8971', 'lang' => '9001', 'rang' => '9002', 'loz' => '9674', 'spades' => '9824', 'clubs' => '9827', 'hearts' => '9829', 'diams' => '9830', 'apos' => '39',  'OElig' => '338', 'oelig' => '339', 'Scaron' => '352', 'scaron' => '353', 'Yuml' => '376', 'circ' => '710', 'tilde' => '732', 'ensp' => '8194', 'emsp' => '8195', 'thinsp' => '8201', 'zwnj' => '8204', 'zwj' => '8205', 'lrm' => '8206', 'rlm' => '8207', 'ndash' => '8211', 'mdash' => '8212', 'lsquo' => '8216', 'rsquo' => '8217', 'sbquo' => '8218', 'ldquo' => '8220', 'rdquo' => '8221', 'bdquo' => '8222', 'dagger' => '8224', 'Dagger' => '8225', 'permil' => '8240', 'lsaquo' => '8249', 'rsaquo' => '8250', 'euro' => '8364', 'nbsp' => '160', 'iexcl' => '161', 'cent' => '162', 'pound' => '163', 'curren' => '164', 'yen' => '165', 'brvbar' => '166', 'sect' => '167', 'uml' => '168', 'copy' => '169', 'ordf' => '170', 'laquo' => '171', 'not' => '172', 'shy' => '173', 'reg' => '174', 'macr' => '175', 'deg' => '176', 'plusmn' => '177', 'sup2' => '178', 'sup3' => '179', 'acute' => '180', 'micro' => '181', 'para' => '182', 'middot' => '183', 'cedil' => '184', 'sup1' => '185', 'ordm' => '186', 'raquo' => '187', 'frac14' => '188', 'frac12' => '189', 'frac34' => '190', 'iquest' => '191', 'Agrave' => '192', 'Aacute' => '193', 'Acirc' => '194', 'Atilde' => '195', 'Auml' => '196', 'Aring' => '197', 'AElig' => '198', 'Ccedil' => '199', 'Egrave' => '200', 'Eacute' => '201', 'Ecirc' => '202', 'Euml' => '203', 'Igrave' => '204', 'Iacute' => '205', 'Icirc' => '206', 'Iuml' => '207', 'ETH' => '208', 'Ntilde' => '209', 'Ograve' => '210', 'Oacute' => '211', 'Ocirc' => '212', 'Otilde' => '213', 'Ouml' => '214', 'times' => '215', 'Oslash' => '216', 'Ugrave' => '217', 'Uacute' => '218', 'Ucirc' => '219', 'Uuml' => '220', 'Yacute' => '221', 'THORN' => '222', 'szlig' => '223', 'agrave' => '224', 'aacute' => '225', 'acirc' => '226', 'atilde' => '227', 'auml' => '228', 'aring' => '229', 'aelig' => '230', 'ccedil' => '231', 'egrave' => '232', 'eacute' => '233', 'ecirc' => '234', 'euml' => '235', 'igrave' => '236', 'iacute' => '237', 'icirc' => '238', 'iuml' => '239', 'eth' => '240', 'ntilde' => '241', 'ograve' => '242', 'oacute' => '243', 'ocirc' => '244', 'otilde' => '245', 'ouml' => '246', 'divide' => '247', 'oslash' => '248', 'ugrave' => '249', 'uacute' => '250', 'ucirc' => '251', 'uuml' => '252', 'yacute' => '253', 'thorn' => '254', 'yuml' => '255');
     if ($t[0] != '#') {
         return ($C['and_mark'] ? "\x06" : '&').(isset($U[$t]) ? $t : (isset($N[$t]) ? (!$C['named_entity'] ? '#'.($C['hexdec_entity'] > 1 ? 'x'.dechex($N[$t]) : $N[$t]) : $t) : 'amp;'.$t)).';';
     }
     if (($n = ctype_digit($t = substr($t, 1)) ? intval($t) : hexdec(substr($t, 1))) < 9 or ($n > 13 && $n < 32) or $n == 11 or $n == 12 or ($n > 126 && $n < 160 && $n != 133) or ($n > 55295 && ($n < 57344 or ($n > 64975 && $n < 64992) or $n == 65534 or $n == 65535 or $n > 1114111))) {
         return ($C['and_mark'] ? "\x06" : '&')."amp;#{$t};";
     }
+
     return ($C['and_mark'] ? "\x06" : '&').'#'.(((ctype_digit($t) && $C['hexdec_entity'] < 2) or !$C['hexdec_entity']) ? $n : 'x'.dechex($n)).';';
 }
 
 function hl_prot($p, $c = null) {
-// check URL scheme
+    // check URL scheme
     global $C;
     $b = $a = '';
     if ($c == null) {
@@ -570,11 +569,12 @@ function hl_prot($p, $c = null) {
             }
         }
     }
+
     return "{$b}{$p}{$a}";
 }
 
 function hl_regex($p) {
-// check regex
+    // check regex
     if (empty($p)) {
         return 0;
     }
@@ -605,15 +605,16 @@ function hl_regex($p) {
     if ($d) {
         ini_set('display_errors', 1);
     }
+
     return $r;
 }
 
 function hl_spec($t) {
-// final $spec
+    // final $spec
     $s = array();
     if (!function_exists('hl_aux1')) {
         function hl_aux1($m) {
-            return substr(str_replace(array(";", "|", "~", " ", ",", "/", "(", ")", '`"'), array("\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", '"'), $m[0]), 1, -1);
+            return substr(str_replace(array(';', '|', '~', ' ', ',', '/', '(', ')', '`"'), array("\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", '"'), $m[0]), 1, -1);
         }
     }
     $t = str_replace(array("\t", "\r", "\n", ' '), '', preg_replace_callback('/"(?>(`.|[^"])*)"/sm', 'hl_aux1', trim($t)));
@@ -644,7 +645,7 @@ function hl_spec($t) {
                     $y[$x] = 1;
                     continue;
                 }
-                $y[$x][strtolower(substr($m, 0, $p))] = str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08"), array(";", "|", "~", " ", ",", "/", "(", ")"), substr($m, $p + 1));
+                $y[$x][strtolower(substr($m, 0, $p))] = str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08"), array(';', '|', '~', ' ', ',', '/', '(', ')'), substr($m, $p + 1));
             }
             if (isset($y[$x]['match']) && !hl_regex($y[$x]['match'])) {
                 unset($y[$x]['match']);
@@ -662,28 +663,29 @@ function hl_spec($t) {
             }
             if (count($y)) {
                 if (!isset($s[$v])) {
-                $s[$v] = $y;
+                    $s[$v] = $y;
                 } else {
                     $s[$v] = array_merge($s[$v], $y);
                 }
             }
             if (count($n)) {
                 if (!isset($s[$v]['n'])) {
-                $s[$v]['n'] = $n;
+                    $s[$v]['n'] = $n;
                 } else {
                     $s[$v]['n'] = array_merge($s[$v]['n'], $n);
                 }
             }
         }
     }
+
     return $s;
 }
 
 function hl_tag($t) {
-// tag/attribute handler
+    // tag/attribute handler
     global $C;
     $t = $t[0];
-// invalid < >
+    // invalid < >
     if ($t == '< ') {
         return '&lt; ';
     }
@@ -693,25 +695,25 @@ function hl_tag($t) {
     if (!preg_match('`^<(/?)([a-zA-Z][a-zA-Z1-6]*)([^>]*?)\s?>$`m', $t, $m)) {
         return str_replace(array('<', '>'), array('&lt;', '&gt;'), $t);
     } elseif (!isset($C['elements'][($e = strtolower($m[2]))])) {
-        return (($C['keep_bad'] % 2) ? str_replace(array('<', '>'), array('&lt;', '&gt;'), $t) : '');
+        return ($C['keep_bad'] % 2) ? str_replace(array('<', '>'), array('&lt;', '&gt;'), $t) : '';
     }
-// attr string
+    // attr string
     $a = str_replace(array("\n", "\r", "\t"), ' ', trim($m[3]));
-// tag transform
+    // tag transform
     static $eD = array('acronym' => 1, 'applet' => 1, 'big' => 1, 'center' => 1, 'dir' => 1, 'font' => 1, 'isindex' => 1, 's' => 1, 'strike' => 1, 'tt' => 1); // Deprecated
     if ($C['make_tag_strict'] && isset($eD[$e])) {
         $trt = hl_tag2($e, $a, $C['make_tag_strict']);
         if (!$e) {
-            return (($C['keep_bad'] % 2) ? str_replace(array('<', '>'), array('&lt;', '&gt;'), $t) : '');
+            return ($C['keep_bad'] % 2) ? str_replace(array('<', '>'), array('&lt;', '&gt;'), $t) : '';
         }
     }
-// close tag
+    // close tag
     static $eE = array('area' => 1, 'br' => 1, 'col' => 1, 'command' => 1, 'embed' => 1, 'hr' => 1, 'img' => 1, 'input' => 1, 'isindex' => 1, 'keygen' => 1, 'link' => 1, 'meta' => 1, 'param' => 1, 'source' => 1, 'track' => 1, 'wbr' => 1); // Empty ele
     if (!empty($m[1])) {
-        return (!isset($eE[$e]) ? (empty($C['hook_tag']) ? "</$e>" : $C['hook_tag']($e)) : (($C['keep_bad']) % 2 ? str_replace(array('<', '>'), array('&lt;', '&gt;'), $t) : ''));
+        return !isset($eE[$e]) ? (empty($C['hook_tag']) ? "</$e>" : $C['hook_tag']($e)) : (($C['keep_bad']) % 2 ? str_replace(array('<', '>'), array('&lt;', '&gt;'), $t) : '');
     }
 
-// open tag & attr
+    // open tag & attr
     static $aN = array('abbr' => array('td' => 1, 'th' => 1), 'accept' => array('form' => 1, 'input' => 1), 'accept-charset' => array('form' => 1), 'action' => array('form' => 1), 'align' => array('applet' => 1, 'caption' => 1, 'col' => 1, 'colgroup' => 1, 'div' => 1, 'embed' => 1, 'h1' => 1, 'h2' => 1, 'h3' => 1, 'h4' => 1, 'h5' => 1, 'h6' => 1, 'hr' => 1, 'iframe' => 1, 'img' => 1, 'input' => 1, 'legend' => 1, 'object' => 1, 'p' => 1, 'table' => 1, 'tbody' => 1, 'td' => 1, 'tfoot' => 1, 'th' => 1, 'thead' => 1, 'tr' => 1), 'allowfullscreen' => array('iframe' => 1), 'alt' => array('applet' => 1, 'area' => 1, 'img' => 1, 'input' => 1), 'archive' => array('applet' => 1, 'object' => 1), 'async' => array('script' => 1), 'autocomplete' => array('form' => 1, 'input' => 1), 'autofocus' => array('button' => 1, 'input' => 1, 'keygen' => 1, 'select' => 1, 'textarea' => 1), 'autoplay' => array('audio' => 1, 'video' => 1), 'axis' => array('td' => 1, 'th' => 1), 'bgcolor' => array('embed' => 1, 'table' => 1, 'td' => 1, 'th' => 1, 'tr' => 1), 'border' => array('img' => 1, 'object' => 1, 'table' => 1), 'bordercolor' => array('table' => 1, 'td' => 1, 'tr' => 1), 'cellpadding' => array('table' => 1), 'cellspacing' => array('table' => 1), 'challenge' => array('keygen' => 1), 'char' => array('col' => 1, 'colgroup' => 1, 'tbody' => 1, 'td' => 1, 'tfoot' => 1, 'th' => 1, 'thead' => 1, 'tr' => 1), 'charoff' => array('col' => 1, 'colgroup' => 1, 'tbody' => 1, 'td' => 1, 'tfoot' => 1, 'th' => 1, 'thead' => 1, 'tr' => 1), 'charset' => array('a' => 1, 'script' => 1), 'checked' => array('command' => 1, 'input' => 1), 'cite' => array('blockquote' => 1, 'del' => 1, 'ins' => 1, 'q' => 1), 'classid' => array('object' => 1), 'clear' => array('br' => 1), 'code' => array('applet' => 1), 'codebase' => array('applet' => 1, 'object' => 1), 'codetype' => array('object' => 1), 'color' => array('font' => 1), 'cols' => array('textarea' => 1), 'colspan' => array('td' => 1, 'th' => 1), 'compact' => array('dir' => 1, 'dl' => 1, 'menu' => 1, 'ol' => 1, 'ul' => 1), 'content' => array('meta' => 1), 'controls' => array('audio' => 1, 'video' => 1), 'coords' => array('a' => 1, 'area' => 1), 'crossorigin' => array('img' => 1), 'data' => array('object' => 1), 'datetime' => array('del' => 1, 'ins' => 1, 'time' => 1), 'declare' => array('object' => 1), 'default' => array('track' => 1), 'defer' => array('script' => 1), 'dirname' => array('input' => 1, 'textarea' => 1), 'disabled' => array('button' => 1, 'command' => 1, 'fieldset' => 1, 'input' => 1, 'keygen' => 1, 'optgroup' => 1, 'option' => 1, 'select' => 1, 'textarea' => 1), 'download' => array('a' => 1), 'enctype' => array('form' => 1), 'face' => array('font' => 1), 'flashvars' => array('embed' => 1), 'for' => array('label' => 1, 'output' => 1), 'form' => array('button' => 1, 'fieldset' => 1, 'input' => 1, 'keygen' => 1, 'label' => 1, 'object' => 1, 'output' => 1, 'select' => 1, 'textarea' => 1), 'formaction' => array('button' => 1, 'input' => 1), 'formenctype' => array('button' => 1, 'input' => 1), 'formmethod' => array('button' => 1, 'input' => 1), 'formnovalidate' => array('button' => 1, 'input' => 1), 'formtarget' => array('button' => 1, 'input' => 1), 'frame' => array('table' => 1), 'frameborder' => array('iframe' => 1), 'headers' => array('td' => 1, 'th' => 1), 'height' => array('applet' => 1, 'canvas' => 1, 'embed' => 1, 'iframe' => 1, 'img' => 1, 'input' => 1, 'object' => 1, 'td' => 1, 'th' => 1, 'video' => 1), 'high' => array('meter' => 1), 'href' => array('a' => 1, 'area' => 1, 'link' => 1), 'hreflang' => array('a' => 1, 'area' => 1, 'link' => 1), 'hspace' => array('applet' => 1, 'embed' => 1, 'img' => 1, 'object' => 1), 'icon' => array('command' => 1), 'ismap' => array('img' => 1, 'input' => 1), 'keyparams' => array('keygen' => 1), 'keytype' => array('keygen' => 1), 'kind' => array('track' => 1), 'label' => array('command' => 1, 'menu' => 1, 'option' => 1, 'optgroup' => 1, 'track' => 1), 'language' => array('script' => 1), 'list' => array('input' => 1), 'longdesc' => array('img' => 1, 'iframe' => 1), 'loop' => array('audio' => 1, 'video' => 1), 'low' => array('meter' => 1), 'marginheight' => array('iframe' => 1), 'marginwidth' => array('iframe' => 1), 'max' => array('input' => 1, 'meter' => 1, 'progress' => 1), 'maxlength' => array('input' => 1, 'textarea' => 1), 'media' => array('a' => 1, 'area' => 1, 'link' => 1, 'source' => 1, 'style' => 1), 'mediagroup' => array('audio' => 1, 'video' => 1), 'method' => array('form' => 1), 'min' => array('input' => 1, 'meter' => 1), 'model' => array('embed' => 1), 'multiple' => array('input' => 1, 'select' => 1), 'muted' => array('audio' => 1, 'video' => 1), 'name' => array('a' => 1, 'applet' => 1, 'button' => 1, 'embed' => 1, 'fieldset' => 1, 'form' => 1, 'iframe' => 1, 'img' => 1, 'input' => 1, 'keygen' => 1, 'map' => 1, 'object' => 1, 'output' => 1, 'param' => 1, 'select' => 1, 'textarea' => 1), 'nohref' => array('area' => 1), 'noshade' => array('hr' => 1), 'novalidate' => array('form' => 1), 'nowrap' => array('td' => 1, 'th' => 1), 'object' => array('applet' => 1), 'open' => array('details' => 1), 'optimum' => array('meter' => 1), 'pattern' => array('input' => 1), 'ping' => array('a' => 1, 'area' => 1), 'placeholder' => array('input' => 1, 'textarea' => 1), 'pluginspage' => array('embed' => 1), 'pluginurl' => array('embed' => 1), 'poster' => array('video' => 1), 'pqg' => array('keygen' => 1), 'preload' => array('audio' => 1, 'video' => 1), 'prompt' => array('isindex' => 1), 'pubdate' => array('time' => 1), 'radiogroup' => array('command' => 1), 'readonly' => array('input' => 1, 'textarea' => 1), 'rel' => array('a' => 1, 'area' => 1, 'link' => 1), 'required' => array('input' => 1, 'select' => 1, 'textarea' => 1), 'rev' => array('a' => 1), 'reversed' => array('ol' => 1), 'rows' => array('textarea' => 1), 'rowspan' => array('td' => 1, 'th' => 1), 'rules' => array('table' => 1), 'sandbox' => array('iframe' => 1), 'scope' => array('td' => 1, 'th' => 1), 'scoped' => array('style' => 1), 'scrolling' => array('iframe' => 1), 'seamless' => array('iframe' => 1), 'selected' => array('option' => 1), 'shape' => array('a' => 1, 'area' => 1), 'size' => array('font' => 1, 'hr' => 1, 'input' => 1, 'select' => 1), 'sizes' => array('link' => 1), 'span' => array('col' => 1, 'colgroup' => 1), 'src' => array('audio' => 1, 'embed' => 1, 'iframe' => 1, 'img' => 1, 'input' => 1, 'script' => 1, 'source' => 1, 'track' => 1, 'video' => 1), 'srcdoc' => array('iframe' => 1), 'srclang' => array('track' => 1), 'srcset' => array('img' => 1), 'standby' => array('object' => 1), 'start' => array('ol' => 1), 'step' => array('input' => 1), 'summary' => array('table' => 1), 'target' => array('a' => 1, 'area' => 1, 'form' => 1), 'type' => array('a' => 1, 'area' => 1, 'button' => 1, 'command' => 1, 'embed' => 1, 'input' => 1, 'li' => 1, 'link' => 1, 'menu' => 1, 'object' => 1, 'ol' => 1, 'param' => 1, 'script' => 1, 'source' => 1, 'style' => 1, 'ul' => 1), 'typemustmatch' => array('object' => 1), 'usemap' => array('img' => 1, 'input' => 1, 'object' => 1), 'valign' => array('col' => 1, 'colgroup' => 1, 'tbody' => 1, 'td' => 1, 'tfoot' => 1, 'th' => 1, 'thead' => 1, 'tr' => 1), 'value' => array('button' => 1, 'data' => 1, 'input' => 1, 'li' => 1, 'meter' => 1, 'option' => 1, 'param' => 1, 'progress' => 1), 'valuetype' => array('param' => 1), 'vspace' => array('applet' => 1, 'embed' => 1, 'img' => 1, 'object' => 1), 'width' => array('applet' => 1, 'canvas' => 1, 'col' => 1, 'colgroup' => 1, 'embed' => 1, 'hr' => 1, 'iframe' => 1, 'img' => 1, 'input' => 1, 'object' => 1, 'pre' => 1, 'table' => 1, 'td' => 1, 'th' => 1, 'video' => 1), 'wmode' => array('embed' => 1), 'wrap' => array('textarea' => 1)); // Ele-specific
     static $aNA = array('aria-activedescendant' => 1, 'aria-atomic' => 1, 'aria-autocomplete' => 1, 'aria-busy' => 1, 'aria-checked' => 1, 'aria-controls' => 1, 'aria-describedby' => 1, 'aria-disabled' => 1, 'aria-dropeffect' => 1, 'aria-expanded' => 1, 'aria-flowto' => 1, 'aria-grabbed' => 1, 'aria-haspopup' => 1, 'aria-hidden' => 1, 'aria-invalid' => 1, 'aria-label' => 1, 'aria-labelledby' => 1, 'aria-level' => 1, 'aria-live' => 1, 'aria-multiline' => 1, 'aria-multiselectable' => 1, 'aria-orientation' => 1, 'aria-owns' => 1, 'aria-posinset' => 1, 'aria-pressed' => 1, 'aria-readonly' => 1, 'aria-relevant' => 1, 'aria-required' => 1, 'aria-selected' => 1, 'aria-setsize' => 1, 'aria-sort' => 1, 'aria-valuemax' => 1, 'aria-valuemin' => 1, 'aria-valuenow' => 1, 'aria-valuetext' => 1); // ARIA
     static $aNE = array('allowfullscreen' => 1, 'checkbox' => 1, 'checked' => 1, 'command' => 1, 'compact' => 1, 'declare' => 1, 'defer' => 1, 'default' => 1, 'disabled' => 1, 'hidden' => 1, 'inert' => 1, 'ismap' => 1, 'itemscope' => 1, 'multiple' => 1, 'nohref' => 1, 'noresize' => 1, 'noshade' => 1, 'nowrap' => 1, 'open' => 1, 'radio' => 1, 'readonly' => 1, 'required' => 1, 'reversed' => 1, 'selected' => 1); // Empty
@@ -734,7 +736,7 @@ function hl_tag($t) {
         $depTr = isset($eAD[$e]) ? 1 : 0;
     }
 
-// attr name-vals
+    // attr name-vals
     if (strpos($a, "\x01") !== false) {
         $a = preg_replace('`\x01[^\x01]*\x01`', '', $a);
     } // No comment/CDATA sec
@@ -782,7 +784,7 @@ function hl_tag($t) {
         $aA[$nm] = '';
     }
 
-// clean attrs
+    // clean attrs
     global $S;
     $rl = isset($S[$e]) ? $S[$e] : array();
     $a = array();
@@ -803,7 +805,7 @@ function hl_tag($t) {
                 $v = preg_replace_callback('`(url(?:\()(?: )*(?:\'|"|&(?:quot|apos);)?)(.+?)((?:\'|"|&(?:quot|apos);)?(?: )*(?:\)))`iS', 'hl_prot', $v);
                 $v = !$C['css_expression'] ? preg_replace('`expression`i', ' ', preg_replace('`\\\\\S|(/|(%2f))(\*|(%2a))`i', ' ', $v)) : $v;
             } elseif (isset($aNP[$k]) or isset($aNO[$k])) {
-                $v = str_replace("­", ' ', (strpos($v, '&') !== false ? str_replace(array('&#xad;', '&#173;', '&shy;'), ' ', $v) : $v)); # double-quoted char: soft-hyphen; appears here as "­" or hyphen or something else depending on viewing software
+                $v = str_replace('­', ' ', (strpos($v, '&') !== false ? str_replace(array('&#xad;', '&#173;', '&shy;'), ' ', $v) : $v)); // double-quoted char: soft-hyphen; appears here as "­" or hyphen or something else depending on viewing software
                 if ($k == 'srcset') {
                     $v2 = '';
                     foreach (explode(',', $v) as $k1 => $v1) {
@@ -825,7 +827,7 @@ function hl_tag($t) {
                     }
                     $v = trim($v2, ' ');
                 } else {
-                $v = hl_prot($v, $k);
+                    $v = hl_prot($v, $k);
                 }
                 if ($k == 'href') { // X-spam
                     if ($C['anti_mail_spam'] && strpos($v, 'mailto:') === 0) {
@@ -862,7 +864,7 @@ function hl_tag($t) {
         $a['rel'] = isset($a['rel']) ? $a['rel'].' nofollow' : 'nofollow';
     }
 
-// rqd attr
+    // rqd attr
     static $eAR = array('area' => array('alt' => 'area'), 'bdo' => array('dir' => 'ltr'), 'command' => array('label' => ''), 'form' => array('action' => ''), 'img' => array('src' => '', 'alt' => 'image'), 'map' => array('name' => ''), 'optgroup' => array('label' => ''), 'param' => array('name' => ''), 'style' => array('scoped' => ''), 'textarea' => array('rows' => '10', 'cols' => '50'));
     if (isset($eAR[$e])) {
         foreach ($eAR[$e] as $k => $v) {
@@ -872,7 +874,7 @@ function hl_tag($t) {
         }
     }
 
-// depr attr
+    // depr attr
     if ($depTr) {
         $c = array();
         foreach ($a as $k => $v) {
@@ -942,7 +944,7 @@ function hl_tag($t) {
             $a['style'] = isset($a['style']) ? rtrim($a['style'], ' ;').'; '.$c.';' : $c.';';
         }
     }
-// unique ID
+    // unique ID
     if ($C['unique_ids'] && isset($a['id'])) {
         if (preg_match('`\s`', ($id = $a['id'])) or (isset($GLOBALS['hl_Ids'][$id]) && $C['unique_ids'] == 1)) {
             unset($a['id']);
@@ -953,23 +955,24 @@ function hl_tag($t) {
             $GLOBALS['hl_Ids'][($a['id'] = $id)] = 1;
         }
     }
-// xml:lang
+    // xml:lang
     if ($C['xml:lang'] && isset($a['lang'])) {
         $a['xml:lang'] = isset($a['xml:lang']) ? $a['xml:lang'] : $a['lang'];
         if ($C['xml:lang'] == 2) {
             unset($a['lang']);
         }
     }
-// for transformed tag
+    // for transformed tag
     if (!empty($trt)) {
         $a['style'] = isset($a['style']) ? rtrim($a['style'], ' ;').'; '.$trt : $trt;
     }
-// return with empty ele /
+    // return with empty ele /
     if (empty($C['hook_tag'])) {
         $aA = '';
         foreach ($a as $k => $v) {
             $aA .= " {$k}=\"{$v}\"";
         }
+
         return "<{$e}{$aA}".(isset($eE[$e]) ? ' /' : '').'>';
     } else {
         return $C['hook_tag']($e, $a);
@@ -977,21 +980,25 @@ function hl_tag($t) {
 }
 
 function hl_tag2(&$e, &$a, $t = 1) {
-// transform tag
+    // transform tag
     if ($e == 'big') {
         $e = 'span';
+
         return 'font-size: larger;';
     }
     if ($e == 's' or $e == 'strike') {
         $e = 'span';
+
         return 'text-decoration: line-through;';
     }
     if ($e == 'tt') {
         $e = 'code';
+
         return '';
     }
     if ($e == 'center') {
         $e = 'div';
+
         return 'text-align: center;';
     }
     static $fs = array('0' => 'xx-small', '1' => 'xx-small', '2' => 'small', '3' => 'medium', '4' => 'large', '5' => 'x-large', '6' => 'xx-large', '7' => '300%', '-1' => 'smaller', '-2' => '60%', '+1' => 'larger', '+2' => '150%', '+3' => '200%', '+4' => '300%');
@@ -999,38 +1006,43 @@ function hl_tag2(&$e, &$a, $t = 1) {
         $a2 = '';
         while (preg_match('`(^|\s)(color|size)\s*=\s*(\'|")?(.+?)(\\3|\s|$)`i', $a, $m)) {
             $a = str_replace($m[0], ' ', $a);
-            $a2 .= strtolower($m[2]) == 'color' ? (' color: '.str_replace('"', '\'', trim($m[4])).';') : (isset($fs[($m = trim($m[4]))]) ? ($a2 .= ' font-size: '.str_replace('"', '\'', $fs[$m]).';') : '');
+            $a2 .= strtolower($m[2]) == 'color' ? (' color: '.str_replace(array('"', ';', ':'), '\'', trim($m[4])).';') : (isset($fs[($m = trim($m[4]))]) ? (' font-size: '.$fs[$m].';') : '');
         }
         while (preg_match('`(^|\s)face\s*=\s*(\'|")?([^=]+?)\\2`i', $a, $m) or preg_match('`(^|\s)face\s*=(\s*)(\S+)`i', $a, $m)) {
             $a = str_replace($m[0], ' ', $a);
-            $a2 .= ' font-family: '.str_replace('"', '\'', trim($m[3])).';';
+            $a2 .= ' font-family: '.str_replace(array('"', ';', ':'), '\'', trim($m[3])).';';
         }
         $e = 'span';
+
         return ltrim(str_replace('<', '', $a2));
     }
     if ($e == 'acronym') {
         $e = 'abbr';
+
         return '';
     }
     if ($e == 'dir') {
         $e = 'ul';
+
         return '';
     }
     if ($t == 2) {
         $e = 0;
+
         return 0;
     }
+
     return '';
 }
 
 function hl_tidy($t, $w, $p) {
-// tidy/compact HTM
+    // tidy/compact HTM
     if (strpos(' pre,script,textarea', "$p,")) {
         return $t;
     }
     if (!function_exists('hl_aux2')) {
         function hl_aux2($m) {
-            return $m[1].str_replace(array("<", ">", "\n", "\r", "\t", ' '), array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), $m[3]).$m[4];
+            return $m[1].str_replace(array('<', '>', "\n", "\r", "\t", ' '), array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), $m[3]).$m[4];
         }
     }
     $t = preg_replace(array('`(<\w[^>]*(?<!/)>)\s+`', '`\s+`', '`(<\w[^>]*(?<!/)>) `'), array(' $1', ' ', '$1'), preg_replace_callback(array('`(<(!\[CDATA\[))(.+?)(\]\]>)`sm', '`(<(!--))(.+?)(-->)`sm', '`(<(pre|script|textarea)[^>]*?>)(.+?)(</\2>)`sm'), 'hl_aux2', $t));
@@ -1099,10 +1111,11 @@ function hl_tidy($t, $w, $p) {
     if (($l = strpos(" $w", 'r') ? (strpos(" $w", 'n') ? "\r\n" : "\r") : 0)) {
         $t = str_replace("\n", $l, $t);
     }
+
     return str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), array('<', '>', "\n", "\r", "\t", ' '), $t);
 }
 
 function hl_version() {
-// version
-    return '1.2.4.1';
+    // version
+    return '1.2.5';
 }

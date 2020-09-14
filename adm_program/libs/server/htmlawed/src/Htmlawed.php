@@ -76,7 +76,7 @@ class Htmlawed {
             'elements' => '*-applet-form-input-textarea-iframe-script-style-object-embed-comment-link-listing-meta-noscript-plaintext-xmp',
             'keep_bad' => 0,
             'schemes' => 'classid:clsid; href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, telnet; style: nil; *:file, http, https', // clsid allowed in class
-            'valid_xml' => 2,
+            'valid_xhtml' => 1,
             'balance' => 1
         );
         $spec = static::$defaultSpec;
