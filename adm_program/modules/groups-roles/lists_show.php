@@ -373,7 +373,7 @@ if ($getMode !== 'csv')
         $pdf->setFooterMargin(0);
 
         // headline for PDF
-        $pdf->setHeaderData('', '', $headline);
+        $pdf->setHeaderData('', 0, $headline);
 
         // set font
         $pdf->SetFont('times', '', 10);
