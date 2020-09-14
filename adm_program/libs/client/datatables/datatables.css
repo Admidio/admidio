@@ -4,10 +4,10 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#bs4/dt-1.10.18/fh-3.1.4/r-2.2.2/rg-1.1.0
+ *   https://datatables.net/download/#bs4/dt-1.10.21/fh-3.1.7/r-2.2.5
  *
  * Included libraries:
- *   DataTables 1.10.18, FixedHeader 3.1.4, Responsive 2.2.2, RowGroup 1.1.0
+ *   DataTables 1.10.21, FixedHeader 3.1.7, Responsive 2.2.5
  */
 
 table.dataTable {
@@ -173,8 +173,11 @@ div.dataTables_scrollFoot > .dataTables_scrollFootInner > table {
   div.dataTables_wrapper div.dataTables_paginate {
     text-align: center;
   }
+  div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    justify-content: center !important;
+  }
 }
-table.dataTable.table-sm > thead > tr > th {
+table.dataTable.table-sm > thead > tr > th :not(.sorting_disabled) {
   padding-right: 20px;
 }
 table.dataTable.table-sm .sorting:before,
@@ -189,6 +192,9 @@ table.dataTable.table-sm .sorting_desc:after {
   top: 5px;
 }
 
+table.table-bordered.dataTable {
+  border-right-width: 0;
+}
 table.table-bordered.dataTable th,
 table.table-bordered.dataTable td {
   border-left-width: 0;
@@ -196,7 +202,7 @@ table.table-bordered.dataTable td {
 table.table-bordered.dataTable th:last-child, table.table-bordered.dataTable th:last-child,
 table.table-bordered.dataTable td:last-child,
 table.table-bordered.dataTable td:last-child {
-  border-right-width: 0;
+  border-right-width: 1px;
 }
 table.table-bordered.dataTable tbody th,
 table.table-bordered.dataTable tbody td {
@@ -250,18 +256,19 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th.child:before,
 table.dataTable.dtr-inline.collapsed > tbody > tr > td.dataTables_empty:before {
   display: none !important;
 }
-table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child,
-table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child {
+table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td.dtr-control,
+table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th.dtr-control {
   position: relative;
   padding-left: 30px;
   cursor: pointer;
 }
-table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:before,
-table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:before {
-  top: 12px;
-  left: 4px;
+table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th.dtr-control:before {
+  top: 50%;
+  left: 5px;
   height: 14px;
   width: 14px;
+  margin-top: -9px;
   display: block;
   position: absolute;
   color: white;
@@ -276,18 +283,17 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:b
   content: '+';
   background-color: #0275d8;
 }
-table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before,
-table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before {
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.dtr-control:before {
   content: '-';
   background-color: #d33333;
 }
-table.dataTable.dtr-inline.collapsed.compact > tbody > tr > td:first-child,
-table.dataTable.dtr-inline.collapsed.compact > tbody > tr > th:first-child {
+table.dataTable.dtr-inline.collapsed.compact > tbody > tr > td.dtr-control,
+table.dataTable.dtr-inline.collapsed.compact > tbody > tr > th.dtr-control {
   padding-left: 27px;
 }
-table.dataTable.dtr-inline.collapsed.compact > tbody > tr > td:first-child:before,
-table.dataTable.dtr-inline.collapsed.compact > tbody > tr > th:first-child:before {
-  top: 5px;
+table.dataTable.dtr-inline.collapsed.compact > tbody > tr > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed.compact > tbody > tr > th.dtr-control:before {
   left: 4px;
   height: 14px;
   width: 14px;
@@ -421,26 +427,9 @@ div.dtr-bs-modal table.table tr:first-child td {
   border-top: none;
 }
 
-
-table.dataTable tr.dtrg-group td {
-  background-color: #e0e0e0;
-}
-
-table.dataTable tr.dtrg-group.dtrg-level-0 td {
-  font-weight: bold;
-}
-
-table.dataTable tr.dtrg-group.dtrg-level-1 td,
-table.dataTable tr.dtrg-group.dtrg-level-2 td {
-  background-color: #f0f0f0;
-  padding-top: 0.25em;
-  padding-bottom: 0.25em;
-  padding-left: 2em;
-  font-size: 0.9em;
-}
-
-table.dataTable tr.dtrg-group.dtrg-level-2 td {
-  background-color: #f3f3f3;
+table.dataTable.dtr-inline.collapsed.table-sm > tbody > tr > td:first-child:before,
+table.dataTable.dtr-inline.collapsed.table-sm > tbody > tr > th:first-child:before {
+  top: 5px;
 }
 
 
