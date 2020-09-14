@@ -44,11 +44,6 @@ $gSupportedLanguages = array(
         'isocode' => 'de',
         'libs'    => 'de'
     ),
-    'de-CH' => array(
-        'name'    => 'German (Switzerland) - Deutsch (Schweiz)',
-        'isocode' => 'de',
-        'libs'    => 'de'
-    ),
     'el'    => array(
         'name'    => 'Greek - Ελληνικά',
         'isocode' => 'el',
