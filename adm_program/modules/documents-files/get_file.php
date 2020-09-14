@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Read a file from the adm_my_files folder
  *
- * @copyright 2004-2019 The Admidio Team
+ * @copyright 2004-2020 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *

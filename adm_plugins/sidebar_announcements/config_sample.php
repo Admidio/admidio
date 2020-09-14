@@ -6,7 +6,7 @@
  * Rename this file to config.php if you want to change some of the preferences below. The plugin
  * will only read the parameters from config.php and not the example file.
  *
- * @copyright 2004-2019 The Admidio Team
+ * @copyright 2004-2020 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
