@@ -497,6 +497,7 @@ class HtmlForm extends HtmlFormBasic
                 toolbar: "' . $optionsAll['toolbar'] . '",
                 language: "' . $gL10n->getLanguageLibs() . '",
                 uiColor: "' . $gSettingsManager->getString('system_js_editor_color') . '",
+                filebrowserUploadMethod: "form",
                 filebrowserImageUploadUrl: "' . ADMIDIO_URL . '/adm_program/system/ckeditor_upload_handler.php"
             });
             CKEDITOR.config.height = "' . $optionsAll['height'] . '";';
