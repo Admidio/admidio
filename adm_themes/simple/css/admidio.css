@@ -78,7 +78,7 @@
 }
 
 .admidio-menu-list a {
-    color: #cccccc;
+    color: #dddddd;
 }
 
 .admidio-menu-list .dropdown-item {
@@ -110,15 +110,7 @@
     text-transform: uppercase;
     padding: 8px 16px;
     margin: 0px;
-    color: #959e9e;
-}
-
-a.bg-light {
-    background-color: #263340 !important;
-}
-
-a.bg-light:hover {
-    background-color: #959e9e !important;
+    color: rgba(222, 222, 222, 0.65);
 }
 
 /***********************************/
@@ -238,8 +230,8 @@ label img, .form-control-static img, .admidio-icon-link .fas {
 .form-control:focus, .select2-container--bootstrap.select2-container--focus .select2-selection,
 input[type=checkbox]:focus, button:focus {
     border-color: #349aaa;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #349aaa !important;
-    outline: 0 none;
+    background-color: #e3f8fd;
+    box-shadow: none !important;
 }
 
 .btn-primary:focus {
@@ -470,9 +462,12 @@ label {
 #admidio-password-strength-minimum {
     position: absolute;
     border: 9px solid transparent;
-    border-left-color: #555555;
+    border-left-color: #263340;
     border-right-width: 0;
-    margin-top: 1px;
+}
+
+.progress {
+    background-color: #dddddd;
 }
 
 /***********************************/

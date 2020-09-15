@@ -296,9 +296,10 @@ form hr {
     }
 }
 
-.form-control:focus, .select2-container-active, .select2-choices, .select2-drop {
-    border-color: #409099 !important;
-    background-color: #fff8a0 !important;
+.form-control:focus, .select2-container--bootstrap.select2-container--focus .select2-selection,
+input[type=checkbox]:focus, button:focus {
+    border-color: #349aaa;
+    background-color: #e3f8fd;
     box-shadow: none !important;
 }
 
@@ -544,9 +545,12 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 #admidio-password-strength-minimum {
     position: absolute;
     border: 9px solid transparent;
-    border-left-color: #555555;
+    border-left-color: #263340;
     border-right-width: 0;
-    margin-top: 1px;
+}
+
+.progress {
+    background-color: #dddddd;
 }
 
 #system_language {
