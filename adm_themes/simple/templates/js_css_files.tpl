@@ -7,7 +7,7 @@
   <link rel="stylesheet" type="text/css" href="{$urlAdmidio}/adm_program/libs/client/fontawesome/css/solid.css" />
   <link rel="stylesheet" type="text/css" href="{$urlAdmidio}/adm_program/libs/client/fontawesome/css/brands.css" />
 {else}
-  <script type="text/javascript" src="{$urlAdmidio}/adm_program/libs/client/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="{$urlAdmidio}/adm_program/libs/client/jquery/jquery.min.js"></script>
   <script type="text/javascript" src="{$urlAdmidio}/adm_program/libs/client/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <link rel="stylesheet" type="text/css" href="{$urlAdmidio}/adm_program/libs/client/bootstrap/css/bootstrap.min.css" />

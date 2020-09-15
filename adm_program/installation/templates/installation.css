@@ -74,11 +74,6 @@ a:hover, .page-link:hover, a.btn:hover {
     font-size: 1.1rem;
 }
 
-.admidio-navbar-photo {
-    max-height: 30px;
-    max-width: 30px;
-}
-
 a.btn-primary {
     color: #ffffff !important;
 }
@@ -104,10 +99,6 @@ a.btn-primary {
 .navbar-filter, .table-responsive, .admidio-content-header,
 .dataTables_wrapper, .admidio-margin-bottom {
     margin-bottom: 40px;
-}
-
-.navbar button {
-    margin-bottom: 0px;
 }
 
 /* add 5px distance to all icons within a icon text combination */
@@ -161,13 +152,13 @@ label img, .form-control-static img {
 
 .form-control:focus, .select2-container--bootstrap.select2-container--focus .select2-selection,
 input[type=checkbox]:focus, button:focus {
-    border-color: #349aaa;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #349aaa !important;
-    outline: 0 none;
+    border-color: #349aaa !important;
+    background-color: #d6ebee !important;
+    box-shadow: none !important;
 }
 
 .btn-primary:focus {
-    background-color: #349aaa !important;
+    background-color: #25717d !important;
 }
 
 .btn-secondary {
@@ -272,41 +263,13 @@ label {
     font-size: 100% !important;
 }
 
-.admidio-blog-comment .card-header, .admidio-blog-comment .card-body, .admidio-blog-comment .card-footer {
-    background-color: #dddddd;
-}
-
-.admidio-blog-comment .card-header {
-    font-size: 120%;
-    padding-bottom: 0px;
-}
-
-.admidio-blog-comment {
-    margin-bottom: 20px;
-}
-
-.admidio-blog .card-body > .btn {
-    margin-top: 20px;
-    display: block;
-    text-align: left;
-}
-
-.admidio-roles {
-    border: none;
-    background-color: #eeeeee;
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
-.admidio-roles li {
-    padding-left: 0px;
-    padding-right: 0px;
-    background-color: #eeeeee;
-}
-
 /***********************************/
 /* Nav-Bars */
 /***********************************/
+
+.navbar button {
+    margin-bottom: 0px;
+}
 
 .navbar label {
     margin-right: 10px;
@@ -371,22 +334,6 @@ label {
     margin-left: 6px;
 }
 
-.admidio-profile-user-right {
-    cursor: help;
-}
-
-.admidio-btn-event-attend .fas {
-    color: #00b100 !important;
-}
-
-.admidio-btn-event-tentative .fas {
-    color: #9b009b !important;
-}
-
-.admidio-btn-event-cancel .fas {
-    color: #df2424 !important;
-}
-
 #admidio-password-strength {
     margin-top: 10px;
 }
@@ -394,6 +341,10 @@ label {
 #admidio-password-strength-minimum {
     position: absolute;
     border: 9px solid transparent;
-    border-left-color: #555555;
+    border-left-color: #263340;
     border-right-width: 0;
+}
+
+.progress {
+    background-color: #dddddd;
 }

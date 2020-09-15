@@ -102,7 +102,6 @@
             </ul>
           {/if}
       </div>
-      <!--<img id="admidio-navbar-photo" class="rounded-circle float-right" src="{$urlAdmidio}/adm_program/modules/profile/profile_photo_show.php?usr_id={$userId}" alt="Profile picture" />-->
     </nav>
 
     <div class="container-fluid">

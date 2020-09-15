@@ -138,11 +138,6 @@ a:hover, .page-link:hover, a.btn:hover {
     font-size: 1.1rem;
 }
 
-.admidio-navbar-photo {
-    max-height: 30px;
-    max-width: 30px;
-}
-
 a.btn-primary {
     color: #ffffff !important;
 }
@@ -172,10 +167,6 @@ a.btn-primary {
 
 .admidio-weblink-item {
     margin-bottom: 20px;
-}
-
-.navbar button {
-    margin-bottom: 0px;
 }
 
 /* add 5px distance to all icons within a icon text combination */
@@ -230,12 +221,12 @@ label img, .form-control-static img, .admidio-icon-link .fas {
 .form-control:focus, .select2-container--bootstrap.select2-container--focus .select2-selection,
 input[type=checkbox]:focus, button:focus {
     border-color: #349aaa;
-    background-color: #e3f8fd;
+    background-color: #d6ebee;
     box-shadow: none !important;
 }
 
 .btn-primary:focus {
-    background-color: #349aaa !important;
+    background-color: #25717d !important;
 }
 
 input[type=checkbox] {
@@ -375,6 +366,10 @@ label {
 /***********************************/
 /* Nav-Bars */
 /***********************************/
+
+.navbar button {
+    margin-bottom: 0px;
+}
 
 .navbar label {
     margin-right: 10px;
