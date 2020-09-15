@@ -119,7 +119,7 @@ echo '
                 echo '<hr />';
             }
             echo '<p>
-                <a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">
+                <a class="admidio-icon-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">
                     <i class="fas fa-user"></i>'.$row['first_name'].' '.$row['last_name'].'</a><br />';
 
                 if(strlen($row['street']) > 0)

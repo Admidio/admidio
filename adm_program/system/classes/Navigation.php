@@ -182,32 +182,6 @@ class Navigation
     }
 
     /**
-     * Returns html code that contain a link back to the previous url.
-     * @param string $id Optional you could set an id for the back link
-     * @return string Returns html code of the navigation back link.
-     */
-    public function getHtmlBackButton($id = 'adm-navigation-back')
-    {
-        global $gL10n;
-
-        // now get the "new" last url from the stack. This should be the last page
-        $url = $this->getPreviousUrl();
-
-        // if no page was found then show nothing
-        if ($url === null)
-        {
-            return '';
-        }
-
-        return '
-        <div id="'.$id.'" class="admNavigation admNavigationBack">
-            <a class="btn" href="'.$url.'">'.
-                '<i class="fas fa-arrow-circle-left"></i>'.$gL10n->get('SYS_BACK').
-            '</a>
-        </div>';
-    }
-
-    /**
      * Returns html code that contain links to all previous added urls from the stack.
      * The output will look like: `FirstPage > SecondPage > ThirdPage ...`
      * The last page of this list is always the current page.

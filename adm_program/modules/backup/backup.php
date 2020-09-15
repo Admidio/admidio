@@ -98,8 +98,8 @@ if($getMode === 'show_list')
     sort($existingBackupFiles);
 
     // show link to create new backup
-    $page->addPageFunctionsMenuItem('menu_item_backup_start', $gL10n->get('BAC_START_BACKUP'), 
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', array('mode' => 'create_backup')), 
+    $page->addPageFunctionsMenuItem('menu_item_backup_start', $gL10n->get('BAC_START_BACKUP'),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', array('mode' => 'create_backup')),
         'fa-database');
 
     // Define table
@@ -127,11 +127,11 @@ if($getMode === 'show_list')
 
         // create array with all column values
         $columnValues = array(
-            '<a class="btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php', array('job' => 'get_file', 'filename' => $oldBackupFile)). '">
+            '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php', array('job' => 'get_file', 'filename' => $oldBackupFile)). '">
                 <i class="fas fa-file-archive"></i>'. $oldBackupFile. '</a>',
             date($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'), filemtime($backupAbsolutePath.$oldBackupFile)),
             round($fileSize / 1024). ' kB',
-            '<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+            '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'bac', 'element_id' => 'row_file_'.$key, 'name' => $oldBackupFile, 'database_id' => $oldBackupFile)).'">
                 <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FILE').'"></i></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);

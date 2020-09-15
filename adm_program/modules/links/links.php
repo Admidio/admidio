@@ -78,17 +78,17 @@ if($weblinks->getId() === 0)
     if(count($gCurrentUser->getAllEditableCategories('LNK')) > 0)
     {
         // show link to create new weblink
-        $page->addPageFunctionsMenuItem('menu_item_links_add', $gL10n->get('LNK_CREATE_LINK'), 
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('headline' => $getHeadline)), 
-            'fa-plus-circle');        
+        $page->addPageFunctionsMenuItem('menu_item_links_add', $gL10n->get('LNK_CREATE_LINK'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('headline' => $getHeadline)),
+            'fa-plus-circle');
     }
 
     if($gCurrentUser->editWeblinksRight())
     {
         // show link to maintain categories
-        $page->addPageFunctionsMenuItem('menu_item_links_maintain_categories', $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK', 'title' => $getHeadline)), 
-            'fa-th-large');        
+        $page->addPageFunctionsMenuItem('menu_item_links_maintain_categories', $gL10n->get('SYS_MAINTAIN_CATEGORIES'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK', 'title' => $getHeadline)),
+            'fa-th-large');
     }
 
     $page->addJavascript('
@@ -97,7 +97,7 @@ if($weblinks->getId() === 0)
         });',
         true
     );
-    
+
     // create filter menu with elements for category
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
@@ -162,7 +162,7 @@ else
 
                 // show weblink
                 $page->addHtml('
-                <a class="btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('lnk_id' => $lnkId)).'" target="'. $gSettingsManager->getString('weblinks_target'). '">
+                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('lnk_id' => $lnkId)).'" target="'. $gSettingsManager->getString('weblinks_target'). '">
                     <i class="fas fa-link"></i>'.$lnkName.'</a>');
 
                 // change and delete only users with rights
@@ -171,7 +171,7 @@ else
                     $page->addHtml('
                     <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('lnk_id' => $lnkId, 'headline' => $getHeadline)). '">
                         <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
-                    <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                    <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'lnk',
                         'element_id' => 'lnk_'.$lnkId, 'name' => $weblink->getValue('lnk_name'), 'database_id' => $lnkId)).'">
                         <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
