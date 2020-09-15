@@ -6,7 +6,7 @@
   <string name="ANN_ANNOUNCEMENTS_DESC">Visa eller redigera annonseringar nyheter och annan information ..</string>
   <string name="ANN_EDIT_ANNOUNCEMENTS">Redigera annonseringar</string>
   <string name="ANN_EMAIL_NOTIFICATION_TITLE">En ny annonseringar är skapad</string>
-  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">En ny annonseringar är skapad i #VAR1# skapades \n\ nTitel: #VAR2# \n Skapad av: #VAR3# \n Skapad på: #VAR4#</string>
+  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">En ny annonseringar är skapad i #VAR1# skapades \n\nTitel: #VAR2# \n Skapad av: #VAR3# \n Skapad på: #VAR4#</string>
   <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Senaste annonseringen från organisationen #VAR1#</string>
   <!--Phrases only in Backupmodule-->
   <string name="BAC_BACK_TO_BACKUP_PAGE">Tillbaka till säkerhetskopior</string>
@@ -30,7 +30,7 @@
   <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alla administratörer av modulen i moderorganisationer</string>
   <string name="CAT_ALL_THIS_ORGANIZATION">Alla medlemmar i denna organisation</string>
   <string name="CAT_CATEGORY_EXIST">Kategorinamn finns redan i vald organisation.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Om alternativt är aktiverat visa profil är den här kategorin och kan redigeras i profilen för att följa organisationer: #VAR1# \n\ nDeaktivera om fält bara ska visas i din organisation. </string>
+  <string name="CAT_CATEGORY_GLOBAL">Om alternativt är aktiverat visa profil är den här kategorin och kan redigeras i profilen för att följa organisationer: #VAR1# \n\nDeaktivera om fält bara ska visas i din organisation. </string>
   <string name="CAT_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Vill du verkligen ta bort kategori #VAR1_BOLD#?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Det går inte att ta bort kategorin #VAR1_BOLD# på grund av #VAR2# beroende poster.</string>
@@ -67,12 +67,12 @@
   <string name="DAT_EDIT_ROOMS">Editera rum</string>
   <string name="DAT_EDIT_ROOMS_DESC">Här kan du skapa och redigera rum för evenemang.</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Ett evenemang ändrades</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">Ett evenemang #VAR1# har ändrats. \n\ nTitel: #VAR2# \ nDatum: #VAR3# \ nKalender: #VAR4# \n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Plattor: #VAR1# \n Rum: #VAR2# \n Deltagare: #VAR3# \ nFörändrat av: #VAR4# \n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">Ett evenemang #VAR1# har ändrats. \n\nTitel: #VAR2# \nDatum: #VAR3# \nKalender: #VAR4# \n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Plattor: #VAR1# \n Rum: #VAR2# \n Deltagare: #VAR3# \nFörändrat av: #VAR4# \n</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3">Ändrad: #VAR1#</string>
   <string name="DAT_EMAIL_NOTIFICATION_TITLE">Ett nytt evenemang skapades</string>
-  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">Ett nytt evenemang på #VAR1# skapades. \n\ nTitel: #VAR2# \ nDatum: #VAR3# \ nKalender: #VAR4# \n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Plattor: #VAR1# \n Rum: #VAR2# \n Deltagare: #VAR3# \ nFörändrat av: #VAR4# \n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">Ett nytt evenemang på #VAR1# skapades. \n\nTitel: #VAR2# \nDatum: #VAR3# \nKalender: #VAR4# \n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Plattor: #VAR1# \n Rum: #VAR2# \n Deltagare: #VAR3# \nFörändrat av: #VAR4# \n</string>
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Skapad: #VAR1#</string>
   <string name="DAT_ENABLE_ICAL">Aktivera iCal-funktion</string>
   <string name="DAT_ENABLE_ICAL_DESC">Om iCal är aktiverat kan enskilda händelser eller alla händelser inom och viss tidsperiod laddas ner. Dessutom kommer att användas för att kunna prenumerera på händelser med sitt eget kalenderprogram. (standard: ja)</string>
@@ -153,9 +153,9 @@
   <string name="GBO_CREATE_COMMENT">Lämna kommentar</string>
   <string name="GBO_EDIT_COMMENT">Redigera kommentar</string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">Ny gästbokkommentar skapades</string>
-  <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">Ny gästbokkommentar på #VAR1# skapades. \n\ nTekst: #VAR2# \n Skapad av: #VAR3# \n Skapad på: #VAR4#</string>
+  <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">Ny gästbokkommentar på #VAR1# skapades. \n\nTekst: #VAR2# \n Skapad av: #VAR3# \n Skapad på: #VAR4#</string>
   <string name="GBO_EMAIL_NOTIFICATION_TITLE">Ny gästbokpost skapades</string>
-  <string name="GBO_EMAIL_NOTIFICATION_MESSAGE">Nytt gästbokpost på #VAR1# skapades. \n\ nTekst: #VAR2# \n Skapat av: #VAR3# \n Skapat på: #VAR4#</string>
+  <string name="GBO_EMAIL_NOTIFICATION_MESSAGE">Nytt gästbokpost på #VAR1# skapades. \n\nTekst: #VAR2# \n Skapat av: #VAR3# \n Skapat på: #VAR4#</string>
   <string name="GBO_ENTRY_QUEUED">Inlägg sparat. Det kommer att visas efter moderering.</string>
   <string name="GBO_FLOODING_PROTECTION">Din senaste post skapades för mindre än #VAR1# sekunder sedan.</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Översvämningsskyddsintervall</string>
@@ -198,7 +198,7 @@
   <string name="INS_DATABASE_IS_UPDATED">Uppdaterar databas</string>
   <string name="INS_DATABASE_LOGIN">Databastillgång</string>
   <string name="INS_DATABASE_LOGIN_DESC">Ange din databasåtkomstinformation här. Tabellprefix kan anpassas vid behov. Anpassning är nödvändig om flera Admidio-installationer använder samma databas.</string>
-  <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Nuvarande databasversion: #VAR1# \n\ nDatabasversion efter uppdatering: #VAR2#</string>
+  <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Nuvarande databasversion: #VAR1# \n\nDatabasversion efter uppdatering: #VAR2#</string>
   <string name="INS_DATABASE_NAME_INVALID">Databasnamnet innehåller ogiltiga tecken!</string>
   <string name="INS_DATABASE_PORT_INFO">Om detta fält inte fylls, används standardporten för databasen (MySQL: 3306, PostgreSQL: 5432). Om du eller din webbhoster behöver en speciell port kan du skriva den här. </string>
   <string name="INS_DATABASE_PORT_INVALID">Den specificerade tiden Ã¤r ogiltig. För en giltig port, välj mellan 1 och 65535 eller lämna den tom.</string>
@@ -210,7 +210,7 @@
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Ladda ner konfigurationsfilen</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Konfigurationsfilen #VAR1_BOLD# kunde inte sparas i mappen #VAR2_BOLD#. Vänligen tilldela skrivåtkomst till mappen (ändra filattributet via FTP till 0777 respektive drwxrwxrwx) eller ladda ner konfigurationsfilen och kopiera den till Admidio-katalogen #VAR3_BOLD# med ett FTP-program. \n\n Efter att filen har tappats på den här platsen kan du fortsätta med installationen.</string>
   <string name="INS_DATA_DIR_RIGHTS">De nödvändiga mappbehörigheterna för \ &amp;quot;adm_my_files \&amp;quot; kunde inte ställas in automatiskt. För att fortsätta måste rättigheterna ställas in manuellt på \ &amp;quot;777 \&amp;quot;.</string>
-  <string name="INS_DATA_DO_NOT_MATCH">Data från #VAR1_BOLD# överensstämmer inte med informationen i installationsguiden. \n\ nCheck config.php och all annan information.</string>
+  <string name="INS_DATA_DO_NOT_MATCH">Data från #VAR1_BOLD# överensstämmer inte med informationen i installationsguiden. \n\nCheck config.php och all annan information.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Administratörsuppgifter</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Ange administratörens namn, e-post och åtkomstinformation. Logga in med administratörens referenser efter installationen.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Organisationens data</string>
@@ -263,12 +263,12 @@
   <string name="INS_UPDATE_TO_VERSION_SUCCESSFUL">Admidio-databasen har uppdaterats till version #VAR1#. \nDu är fritt att logga in och använda Admidio igen.</string>
   <string name="INS_UPDATE_VERSION">Uppdatera till version #VAR1#</string>
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Uppdateringsprocessen lyckades</string>
-  <string name="INS_WARNING_BETA_VERSION">Detta är en betaversion av Admidio. \n\ nAnvändning kan vara riskabelt på grund av möjlig instabilitet och dataförlust. Använd endast testmiljö!</string>
+  <string name="INS_WARNING_BETA_VERSION">Detta är en betaversion av Admidio. \n\nAnvändning kan vara riskabelt på grund av möjlig instabilitet och dataförlust. Använd endast testmiljö!</string>
   <string name="INS_WARNING_SAFE_MODE">Spara-läget på servern är aktivt. Detta kan orsaka senare problem när du använder vissa funktioner.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Välkommen till installationen av Admidio</string>
   <string name="INS_WELCOME_TO_UPDATE">Välkommen till Admidio-uppdateringen</string>
-  <string name="INS_WELCOME_TEXT">Denna assistent hjälper dig att konfigurera Admidio-ledningen. All nödvändig information kommer att begäras så att systemet kan konfigureras helt och du kan logga in som administratör. \n\ nOm du har frågor eller problem med installationen, vänligen kontrollera #VAR1# våra installationsinstruktioner #VAR2# eller kontakta oss på #VAR3# vårt supportforum #VAR4#.</string>
-  <string name="INS_WELCOME_TEXT_UPDATE">Du har redan uppdaterat Admidios kataloger med en ny version. Nu måste databasen uppdateras från den aktuella versionen #VAR2# till versionen #VAR1#, så Admidio kan köras med den nya versionen. \n\ nOm du har frågor eller problem med uppdateringen, vänligen kontrollera #VAR3# vår uppdatera instruktionen #VAR4# eller kontakta # VAR5 # vårt supportforum # VAR6 #.</string>
+  <string name="INS_WELCOME_TEXT">Denna assistent hjälper dig att konfigurera Admidio-ledningen. All nödvändig information kommer att begäras så att systemet kan konfigureras helt och du kan logga in som administratör. \n\nOm du har frågor eller problem med installationen, vänligen kontrollera #VAR1# våra installationsinstruktioner #VAR2# eller kontakta oss på #VAR3# vårt supportforum #VAR4#.</string>
+  <string name="INS_WELCOME_TEXT_UPDATE">Du har redan uppdaterat Admidios kataloger med en ny version. Nu måste databasen uppdateras från den aktuella versionen #VAR2# till versionen #VAR1#, så Admidio kan köras med den nya versionen. \n\nOm du har frågor eller problem med uppdateringen, vänligen kontrollera #VAR3# vår uppdatera instruktionen #VAR4# eller kontakta # VAR5 # vårt supportforum # VAR6 #.</string>
   <string name="INS_WINDOWS_LIVE">Windows Live</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# kräver minst MySQL-version #VAR2#. Försök att uppdatera din MySQL-databas eller använd en #VAR3# äldre Admidio-version #VAR4# för att säkerställa kompatibilitet.</string>
   <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# kräver minst PHP-version #VAR2#. Försök att uppdatera din PHP-version eller använd en #VAR3# äldre Admidio-version #VAR4# för att säkerställa kompatibilitet.</string>
@@ -314,7 +314,7 @@
   <string name="LNK_LINKS_FROM">Länkar till #VAR1#</string>
   <string name="LNK_NEW_WINDOW">Nytt fönster</string>
   <string name="LNK_REDIRECT">Omdirigera</string>
-  <string name="LNK_REDIRECT_DESC">Du lämnar webbplatsen för #VAR1_BOLD# och kommer att omdirigeras automatiskt till #VAR3# om #VAR2# sekunder. \n\ nOm den automatiska omdirigeringen inte fungerar, klicka #VAR4# här # VAR5 #!</string>
+  <string name="LNK_REDIRECT_DESC">Du lämnar webbplatsen för #VAR1_BOLD# och kommer att omdirigeras automatiskt till #VAR3# om #VAR2# sekunder. \n\nOm den automatiska omdirigeringen inte fungerar, klicka #VAR4# här # VAR5 #!</string>
   <string name="LNK_SAME_WINDOW">Samma fönster</string>
   <string name="LNK_WEBLINKS">webb-länkar</string>
   <string name="LNK_WEBLINKS_DESC">Skapa och organisera efter kategorier intressanta hyperlänkar.</string>
@@ -339,7 +339,7 @@
   <string name="LST_CREATE_OWN_LIST">Skapa en egen lista</string>
   <string name="LST_DEFAULT_CONFIGURATION">Förvald inställning</string>
   <string name="LST_DEFAULT_CONFIGURATION_DESC">En av de konfigurationer som anges här kan ställas in som standardkonfiguration för listor för denna organisation. Med den här konfigurationen visas medlemslistor över roller som inte har en listkonfiguration.</string>
-  <string name="LST_DEFAULT_LIST_NOT_SET_UP">Ingen standardlistkonfiguration som har definierats av administratören!\ n \ nKontakta systemadministratören för hjälp.</string>
+  <string name="LST_DEFAULT_LIST_NOT_SET_UP">Ingen standardlistkonfiguration som har definierats av administratören!\n \nKontakta systemadministratören för hjälp.</string>
   <string name="LST_DELETE_CONFIGURATION">Ta bort inställning</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-post till medlemmarna</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Hitta alla användare som inte har fyllt vägen</string>
@@ -489,7 +489,7 @@
   <string name="MEM_ASSIGN_FIELDS">Tilldela fält</string>
   <string name="MEM_ASSIGN_FIELDS_DESC">Om möjligt, tilldela databasfält en kolumn i en fil. \n\n På vänster sida kan du hitta alla typer av databasfält, till höger kan du hitta alla kolumner i den valda filen. Fält kan lämnas tomma när filen inte innehåller alla databasfält.</string>
   <string name="MEM_ASSIGN_ROLE">Tilldela användarroll</string>
-  <string name="MEM_ASSIGN_ROLE_FOR_IMPORT">Välj en roll för alla importerade användare. \n\ nTillgängliga är bara roller som du har användarrättighet för.</string>
+  <string name="MEM_ASSIGN_ROLE_FOR_IMPORT">Välj en roll för alla importerade användare. \n\nTillgängliga är bara roller som du har användarrättighet för.</string>
   <string name="MEM_ASSIGN_ROLES">Tilldela roller</string>
   <string name="MEM_CREATE_USER">Skapa användare</string>
   <string name="MEM_CODING">Kodning</string>
@@ -649,7 +649,7 @@
   <string name="ORG_FIELD_REGISTRATION">Fältet visas under registreringen</string>
   <string name="ORG_FIELD_REQUIRED">Obligatoriskt fält som alltid måste fyllas i.</string>
   <string name="ORG_FIELD_REQUIRED_DESC">Flaggade (obligatoriska) fält måste alltid fyllas i. Denna regel gäller för registreringar och för regelbundna profiländringar som utförs av användare.</string>
-  <string name="ORG_FIELD_URL_DESC">Den angivna URLen länkar senare i profilen till det innehåll som användaren har angett i det här fältet. Eventuellt kan även jokertecken # user_content # definieras i URL: en. Detta är innehållet som användaren har angett i fältet. \n\n Exempel: \ nUrl: https: //www.google.de/search? Q = # user_content # \ nfield_value: Admidio \ nLänka in profilen: https: //www.google.de/search?q=Admidio</string>
+  <string name="ORG_FIELD_URL_DESC">Den angivna URLen länkar senare i profilen till det innehåll som användaren har angett i det här fältet. Eventuellt kan även jokertecken # user_content # definieras i URL: en. Detta är innehållet som användaren har angett i fältet. \n\n Exempel: \nUrl: https: //www.google.de/search? Q = # user_content # \nfield_value: Admidio \nLänka in profilen: https: //www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Den här sidan visas när en användare är inloggad. Sökväg måste anges som relativ sökväg till Admidio-huvudmappen. \n (t.ex.: adm_program / index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Denna sida är standardsidan för Admidio för gäster. Sökväg måste anges som relativ sökväg till Admidio-huvudmappen. \n (t.ex.: adm_program / index.php)</string>
   <string name="ORG_INVALID_THEME">Det gick inte att hitta ett giltigt tema.</string>
@@ -670,7 +670,7 @@
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definiera antalet objekt som visas på en sida. Pagination tillhandahålls om antalet objekt överstiger det definierade värdet. Utskriftsförhandsgranskning och exportfunktioner påverkas inte. Om värdet är 0 kommer alla objekt att listas och paginering inaktiveras. (standard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">För inloggade användare endast</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Hantera allmänna organisationspreferenser eller modulpreferenser här.</string>
-  <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organisation #VAR1_BOLD# har lagts till. Det går nu att välja när du loggar in. \n\ nOm du har en separat hemsida för denna organisation, lägg till den i config.php på den separata hemsidan.</string>
+  <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organisation #VAR1_BOLD# har lagts till. Det går nu att välja när du loggar in. \n\nOm du har en separat hemsida för denna organisation, lägg till den i config.php på den separata hemsidan.</string>
   <string name="ORG_PARENT_ORGANIZATION">Överordnad organisation</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Definiera föräldraorganisation här. Föräldraorganisationer kan skapa evenemang och tillkännagivanden till exempel som kommer att visas i utvald (barn) organisation.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Lösenordsstyrka</string>
@@ -749,7 +749,7 @@
   <string name="PHP_DOWNLOAD_ZIP_ERROR">Ett fel inträffade när du skapade zip-filen.</string>
   <string name="PHO_EDIT_ALBUM">Redigera album</string>
   <string name="PHO_EMAIL_NOTIFICATION_TITLE">Ett nytt fotoalbum skapades</string>
-  <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Ett nytt fotoalbum på #VAR1# skapades. \n\ nTitel: #VAR2# \n Skapad av: #VAR3# \n Skapad på: #VAR4#</string>
+  <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Ett nytt fotoalbum på #VAR1# skapades. \n\nTitel: #VAR2# \n Skapad av: #VAR3# \n Skapad på: #VAR4#</string>
   <string name="PHO_FILE_UPLOADED">Fotot #VAR1_BOLD# laddades upp.</string>
   <string name="PHO_FOLDER_NOT_FOUND">Mappen kunde inte hittas. Om mappen raderades med hjälp av FTP eller för att vara otillgänglig, vänligen ta bort mappen i Admidio. \nGäster utan fotohanteringstillstånd kan inte visa valt album.</string>
   <string name="PHO_KEEP_ORIGINAL">Spara originalfiler dessutom</string>
@@ -876,7 +876,7 @@
   <string name="PRO_UPLOAD_HELP_1">Tryck på knappen #VAR1_BOLD# för att välja fotofiler på hårddisken för uppladdning.</string>
   <string name="PRO_UPLOAD_HELP_2">Tryck sedan på #VAR1_BOLD# och var tålamod.</string>
   <string name="PRO_UPLOAD_PHOTO">Ladda upp foto</string>
-  <string name="PRO_USERNAME_DESCRIPTION">Du kan logga in med det här användarnamnet. \n\ nDetta namn måste vara väl definierat. Om det valda namnet inte är tillgängligt längre, försök att använda kombinationer som Andi78 eller SteveT.</string>
+  <string name="PRO_USERNAME_DESCRIPTION">Du kan logga in med det här användarnamnet. \n\nDetta namn måste vara väl definierat. Om det valda namnet inte är tillgängligt längre, försök att använda kombinationer som Andi78 eller SteveT.</string>
   <string name="PRO_VIEW_ROLES_OTHER_ORGAS">Endast roller för andra organisationer som är synliga för alla registrerade användare visas. Om du är medlem i denna organisation får du också visa vilka roller du kan se med dina rättigheter inom organisationen.</string>
   <string name="PRO_WANT_DELETE_PHOTO">Vill du ta bort det valda fotot?</string>
   <string name="PRO_YEARS">År</string>
@@ -1015,7 +1015,7 @@
   <string name="SYS_COOKIE_NOTE">Visa meddelande om användning av cookies</string>
   <string name="SYS_COOKIE_NOTE_DESC">Besökare och registrerade användare får ett meddelande när de använder webbplatsen för första gången att denna webbplats använder cookies. Denna anteckning måste bekräftas en gång av användaren, efter att användaren inte längre får någon information om den här enheten och webbläsaren.</string>
   <string name="SYS_COOKIE_DESC">Vi använder cookies för att ge dig den bästa upplevelsen av vår webbplats Genom att använda denna webbplats godkänner du att vi använder cookies.</string>
-  <string name="SYS_COOKIE_NOT_SET">Inloggningsfel! Din webbläsare accepterar inte cookies!\n\ nFör en framgångsrik inloggning, konfigurera din webbläsare så att den accepterar cookies från #VAR1_BOLD#.</string>
+  <string name="SYS_COOKIE_NOT_SET">Inloggningsfel! Din webbläsare accepterar inte cookies!\n\nFör en framgångsrik inloggning, konfigurera din webbläsare så att den accepterar cookies från #VAR1_BOLD#.</string>
   <string name="SYS_COPY">Kopiera</string>
   <string name="SYS_COPY_VAR">Kopiera #VAR1#</string>
   <string name="SYS_COUNTRY">Land</string>
@@ -1095,7 +1095,7 @@
   <string name="SYS_FILE_TO_LARGE_SERVER">Storleken på den överförda filen överstiger serverdefinierad maximal filstorlek på #VAR1# MB.</string>
   <string name="SYS_FILE_UPLOADS">Filuppladdning</string>
   <string name="SYS_FILENAME_EMPTY">Filnamn saknas!</string>
-  <string name="SYS_FILENAME_INVALID">Det valda filnamnet #VAR1_BOLD# innehåller ogiltiga tecken. Kontrollera filnamnet. \n\ nFöljande specialtecken är inte tillåtna:? &quot;&quot; &lt; > |</string>
+  <string name="SYS_FILENAME_INVALID">Det valda filnamnet #VAR1_BOLD# innehåller ogiltiga tecken. Kontrollera filnamnet. \n\nFöljande specialtecken är inte tillåtna:? &quot;&quot; &lt; > |</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Databasversionen #VAR1# är högre än versionen av Admidio-skript #VAR2#. \n\n Uppdatera dina Admidio-filer på servern #VAR3# genom att använda en senare version av Admidio #VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">Förnamn</string>
@@ -1113,8 +1113,8 @@
   <string name="SYS_FULL_SCREEN">Helskärm</string>
   <string name="SYS_FURTHER_INFORMATIONS">Vidare information</string>
   <string name="SYS_GENDER">Kön</string>
-  <string name="SYS_GEN_RANDOM_ERROR">Ett oväntat fel inträffade vid generering av ett slumpmässigt nummer. \nFelkod: #VAR1# \ nFelmeddelande: #VAR2#</string>
-  <string name="SYS_GEN_RANDOM_EXCEPTION">Programmet kan inte generera slumpmässiga nummer. \nError Code: #VAR1# \ nError Message: #VAR2#</string>
+  <string name="SYS_GEN_RANDOM_ERROR">Ett oväntat fel inträffade vid generering av ett slumpmässigt nummer. \nFelkod: #VAR1# \nFelmeddelande: #VAR2#</string>
+  <string name="SYS_GEN_RANDOM_EXCEPTION">Programmet kan inte generera slumpmässiga nummer. \nError Code: #VAR1# \nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Programmet förväntar sig en sträng med minst 2 olika tecken.</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP-header har redan skickats!</string>
   <string name="SYS_HEADLINE">Rubrik</string>
@@ -1148,7 +1148,7 @@
   <string name="SYS_LOCKED">Låst</string>
   <string name="SYS_LOGIN">Logga in</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Du har försökt att logga in för många gånger nyligen med ett fel lösenord. \n Av säkerhetsskäl är ditt konto låst i 15 minuter.</string>
-  <string name="SYS_LOGIN_NOT_ACTIVATED">Ditt konto har inte aktiverats än. \n\ nDu kommer att informeras så snart åtkomst är möjlig.</string>
+  <string name="SYS_LOGIN_NOT_ACTIVATED">Ditt konto har inte aktiverats än. \n\nDu kommer att informeras så snart åtkomst är möjlig.</string>
   <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Dina inloggningsuppgifter var korrekta men uppdateringsprocessen aktiveras endast för administratörer av organisationen #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Dina inloggningsuppgifter var korrekta men du är inte en aktiv medlem i denna organisation #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Det angivna användarnamnet och / eller lösenordet är felaktigt.</string>
@@ -1310,11 +1310,11 @@
   <string name="SYS_STREET">Gata</string>
   <string name="SYS_SUNDAY">Söndag</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Byt till kategoriadministration</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#ämne# Ditt begärda lösenord för #organisation_shortnamn# webbplats \n #content# Hej #user_first_name#, \n\ nyou begärde ett nytt lösenord!\ n \ nDina inloggningsuppgifter är: \n Användarnamn: #user_login_name# \ nPassord: #variabel1# \n\ nFör att aktivera ditt lösenord, följ denna länk: \n\n #variabel2# \n\n Lösenordet genererades automatiskt, \ nDu bör ändra det efter att du har loggat in på #organization_homepage# i din profil. \n\n Hälsningar, \ nAdministratörerna</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#ämne# Intyg för #organization_long_name# \n #content# Hej #user_first_name#, \n\ nDu får dina referenser för webbplatsen #organization_homepage#. \n Användarnamn: #användare_loginnamn# \n Lösenord: #variabel1# \n\n Lösenordet var genereras automatiskt, \ nDu bör ändra det efter att du har loggat in på #organization_homepage# i din profil. \n\ nCheers, \ nAdministratörerna</string>
+  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#ämne# Ditt begärda lösenord för #organisation_shortnamn# webbplats \n #content# Hej #user_first_name#, \n\nyou begärde ett nytt lösenord!\n \nDina inloggningsuppgifter är: \n Användarnamn: #user_login_name# \nPassord: #variabel1# \n\nFör att aktivera ditt lösenord, följ denna länk: \n\n #variabel2# \n\n Lösenordet genererades automatiskt, \nDu bör ändra det efter att du har loggat in på #organization_homepage# i din profil. \n\n Hälsningar, \nAdministratörerna</string>
+  <string name="SYS_SYSMAIL_NEW_PASSWORD">#ämne# Intyg för #organization_long_name# \n #content# Hej #user_first_name#, \n\nDu får dina referenser för webbplatsen #organization_homepage#. \n Användarnamn: #användare_loginnamn# \n Lösenord: #variabel1# \n\n Lösenordet var genereras automatiskt, \nDu bör ändra det efter att du har loggat in på #organization_homepage# i din profil. \n\nCheers, \nAdministratörerna</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#ämne# vid registrering på #organization_long_name# avvisad. \n #content# Hej #user_first_name# din ansökan på #organization_homepage# avvisades. \n\n Registreringar accepteras i allmänhet av våra användare. Om du är medlem och din registrering fortfarande avvisades kan det bero på att du inte identifierades som medlem. \nFör att klargöra orsakerna till avslaget vänligen kontakta administratören #administrator_email# från #organization_homepage#. \n\n Regler, \n administratörer</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#ämne# Registrering på #organization_long_name# bekräftad \n #content# Hej #user_first_name#, \n\ ny registrering på #organization_homepage# har bekräftats. \n\ nDu kan nu logga in på hemsidan med ditt användarnamn # användare_login_namn # och ditt lösenord. \n\ nOm du har några frågor, skriv ett e-postmeddelande till #administrator_email #. \n\ nCheers, \n Administratörerna</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#ämne# Ny registrering på #organization_long_name# webbplats \n #content# En ny användare har registrerat sig på #organization_homepage #. \n\n Efternamn: #user_last_name# \ nFörsta namn: #user_first_name# \ nE-post: #user_email# \n\n \ nDetta meddelande genererades automatiskt.</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_USER">#ämne# Registrering på #organization_long_name# bekräftad \n #content# Hej #user_first_name#, \n\ny registrering på #organization_homepage# har bekräftats. \n\nDu kan nu logga in på hemsidan med ditt användarnamn # användare_login_namn # och ditt lösenord. \n\nOm du har några frågor, skriv ett e-postmeddelande till #administrator_email #. \n\nCheers, \n Administratörerna</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#ämne# Ny registrering på #organization_long_name# webbplats \n #content# En ny användare har registrerat sig på #organization_homepage #. \n\n Efternamn: #user_last_name# \nFörsta namn: #user_first_name# \nE-post: #user_email# \n\n \nDetta meddelande genererades automatiskt.</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_MAILS">System-aviseringar</string>
   <string name="SYS_TEXT">Text</string>

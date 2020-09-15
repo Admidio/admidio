@@ -181,7 +181,6 @@
   <string name="INS_ADDRESS_LIST">Liste des adresses</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Toutes les données n\'ont pas été saisies pour l\'administrateur !</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">Seul un administrateur est autorisé à mettre à jour la base de données. Saisis ici les données d\'accès d\'un administrateur.</string>
-  <string name="INS_AOL_INSTANT_MESSENGER">Messagerie instantanée AOL</string>
   <string name="INS_BOARD">Comité</string>
   <string name="INS_CONFERENCE_ROOM">Salle de conférence</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Le fichier #VAR1_BOLD# n\'est pas dans le répertoire principal Admidio!\n\nRetélécharge le fichier si nécessaire et copie le dans le répertoire correspondant.</string>
@@ -191,14 +190,11 @@
   <string name="INS_CREATE_CONFIGURATION_FILE">Générer le ficher de configuration</string>
   <string name="INS_DATA_FULLY_ENTERED">Tu as saisi toutes les données nécessaires pour l\'installation d\'Admidio.\n\nMaintenant la base de données doit être créée et remplie avec tes données.</string>
   <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">Les paramètres de la base de données n\'ont pas été entièrement saisis !</string>
-  <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Une mise à jour de la base de données n\'est pas nécessaire.</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">Le fichier #VAR1_BOLD# n\'a pas pu être trouvé dans le répertoire #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Introduit ici le nom du serveur de la base de données. Il peut s\'agir d\'une URL ou d\'un serveur local si la base de données fonctionne sur le même serveur que le site Web.</string>
-  <string name="SYS_DATABASE_IS_UP_TO_DATE">La base de données Admidio est à jour!</string>
   <string name="INS_DATABASE_IS_UPDATED">Mise à jour de la base de données en cours</string>
   <string name="INS_DATABASE_LOGIN">Données d\'accès à la base de données</string>
   <string name="INS_DATABASE_LOGIN_DESC">Saisis tes données d\'accès à la base de données dans ce formulaire. Tu peux changer le préfixe de la table si tu le souhaite. Ceci est nécessaire si tu souhaite configurer plusieurs installations Admidio dans la même base de données.</string>
-  <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Version actuelle de la base de données : #VAR1#\n\nVersion de la base de données après la mise à jour: #VAR2#</string>
   <string name="INS_DATABASE_NAME_INVALID">Le nom de la base de données contient des charactères non valides!</string>
   <string name="INS_DATABASE_PORT_INFO">Si ce champ n\'est pas rempli, le port par défaut de la base de données (MySQL: 3306, PostgreSQL: 5432) est utilisé. Si toi ou ton hébergeur utilise un port spécial, tu peux le saisir ici.</string>
   <string name="INS_DATABASE_PORT_INVALID">Le port spécifié n\'est pas valide. Pour saisir un port valide, choisis entre 1 et 65535 ou garde le port par défaut en laissant ce champ vide.</string>
@@ -223,8 +219,6 @@
   <string name="INS_FACEBOOK">Facebook</string>
   <string name="INS_FACEBOOK_DESC">Veux-tu créer ici un lien avec ton profil de Facebook? Pour ce faire tu as besoin de ton nom d\'utilisateurs à Facebook. Connecte toi à Facebook et affiche ton profil. Copie maintenant la ligne d\'adresse affiché dans ton navigateur internet dans ce champ et enregistre ton profil Admidio. Maintenant les visiteurs de ton profil peuvent directement consulter ton profil de Facebook.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Le dossier #VAR1_BOLD# n\'a pas les droits d\'écriture. Accorde les droits d\'écriture au dossier afin de pouvoir télécharger des photos et fichiers pour le module de téléchargement.</string>
-  <string name="INS_GOOGLE_PLUS">Google+</string>
-  <string name="INS_GOOGLE_PLUS_DESC">Veux-tu créer ici un lien avec ton profil de Google+? Pour ceci tu as beson du numéro de profil cryptique de Google+. Connecte toi à Google+ et affiche ton profil. Copie maintenant la ligne d\'adresse affiché dans ton navigateur internet dans ce champ et enregistre ton profil Admidio.  Maintenant les visiteurs de ton profil peuvent directement consulter ton profil de Google+.</string>
   <string name="INS_GROUPS">Groupes</string>
   <string name="INS_HOST_INVALID">Nom d\'hôte n\'est pas valide. Saisis un nom d\'hôte  ou une adresse IP valide.</string>
   <string name="INS_ICQ">ICQ</string>
@@ -233,7 +227,6 @@
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">Dans la base de données existe déjà une installation d\'Admidio. Une nouvelle installation n\'est pas possible.</string>
   <string name="INS_INSTALLATION_SUCCESSFUL">La base de données Admidio est maintenant installée et le fichier de configuration est configuré. Tu peux maintenant travailler avec Admidio et te connecter avec les données de l\'administrateur.</string>
-  <string name="INS_INSTALLATION_VERSION">Installation de la version #VAR1#</string>
   <string name="INS_INSTALLATION_WAS_SUCCESSFUL">L\'installation a été un succès</string>
   <string name="INS_INTERN">Interne</string>
   <string name="INS_LANGUAGE_NOT_CHOSEN">Aucun language n\'a été sélectionnée.</string>
@@ -242,7 +235,6 @@
   <string name="INS_NO_INSTALLED_VERSION_FOUND">La version installée n\'a pas pu être détéctée. Si tu utilise acteullement la version 1.x. d\'Admidio, actualise d\'abord vers la version 2.x et démarre après la mise à jours à la version #VAR1#. Si tu utilise actuellement la version 2.x ou une version plus récente, contrôle la cohérence de ta base de données.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Une organisation avec le nom #VAR1_BOLD# existe déjà. Choisis un autre nom.</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Le nom de l\'organisation n\'a pas été entré complètement !</string>
-  <string name="INS_PASSWORDS_NOT_EQUAL">Les mots de passe entrés non sont pas identique.</string>
   <string name="INS_PHONE_LIST">Liste des téléphones</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Choisis une langue</string>
   <string name="INS_SET_ORGANIZATION">Définir de l\'organisation</string>
@@ -264,17 +256,13 @@
   <string name="INS_UPDATE_VERSION">Mettre à jour à la version #VAR1#</string>
   <string name="INS_UPDATING_WAS_SUCCESSFUL">La mise à jour complétée</string>
   <string name="INS_WARNING_BETA_VERSION">Ceci est un version beta d\'Admidio.\n\nIl peut conduire à des problèmes de stabilité et à la perte de données et ne devrait donc être utilisé que dans un environnement de test !</string>
-  <string name="INS_WARNING_SAFE_MODE">Le mode sans échec est activé sur ton serveur. Si le mode sans échec est activé, des problèmes peuvent survenir plus tard lors de l\'utilisation de certaines fonctions.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Bienvenue à l\'installation d\'Admidio</string>
   <string name="INS_WELCOME_TO_UPDATE">Bienvenue à la mise à jours d\'Admidio</string>
   <string name="INS_WELCOME_TEXT">Cet assistant t\'aide à configurer Admidio. Si tu as des questions ou des problèmes avec l\'installation, consulte #VAR1#notre manuel d\'installation#VAR2# ou contacte #VAR3#notre forum de support#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">Tu as déjà mis à jours les répértoires d\'Admidio avec une nouvelle version. Maintenant la base de données doit être mise à jour de la version actuelle #VAR2# à la version #VAR1#, afin que Admidio puisse fonctionner avec la nouvelle version. Si tu as des questions ou des problèmes avec la mise à jour, consulte #VAR3#notre manuel de mise à jour#VAR4# ou contacte #VAR5#notre forum de support#VAR6#.</string>
-  <string name="INS_WINDOWS_LIVE">Windows Live</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# nécessite au moins la version MySQL #VAR2#. Tu dois essayer de mettre à jours la base de données MySQL ou utiliser #VAR3#version d\'Admidio plus ancienne#VAR4#, laquelle est compatible avec ta base de données.</string>
-  <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# nécessite au moins la version PHP #VAR2#. Tu dois essayer de mettre à jours PHP ou utiliser #VAR3#version d\'admidio plus ancienne#VAR4#, laquelle est compatible avec ta version PHP.</string>
   <string name="INS_XING">Xing</string>
   <string name="INS_XING_DESC">Veux-tu créer ici un lien avec ton profil de Xing? Pour ce faire tu as besoins de ton nom unique sur Xing. Connecte toi à Xing et affiche ton profil. Copie maintenant la ligne d\'adresse affiché dans ton navigateur internet dans ce champ et enregistre ton profil Admidio.  Maintenant les visiteurs de ton profil peuvent directement consulter ton profil sur Xing.</string>
-  <string name="INS_YAHOO_MESSENGER">Yahoo! Messenger</string>
   <string name="INS_BOYFRIEND">Ami</string>
   <string name="INS_BROTHER">Frère</string>
   <string name="INS_CHILD">Enfant</string>
@@ -322,10 +310,8 @@
   <string name="LST_A_TO_Z">A à Z</string>
   <string name="LST_ACTIVE_FORMER_MEMBERS">Membres actifs et anciens</string>
   <string name="LST_ACTIVE_MEMBERS">Membres actifs</string>
-  <string name="LST_ACTIVE_ROLES">Aperçu des rôles actifs</string>
   <string name="LST_ADD_COLUMN">Ajouter une colonne</string>
   <string name="LST_ADD_COLUMNS_DESC">Dans le tableau suivant, affecte des champs de profil à n\'importe quel nombre de colonnes. En outre, tu peux spécifier l\'ordre de tri par défaut et ajouter des conditions aux champs par lesquels les membres respectifs doivent être filtrés.</string>
-  <string name="LST_CHOOSE_LIST">Choisir la liste</string>
   <string name="LST_CHOOSE_ROLE">Choisis un rôle dans lequel tu peux sélectionner la liste des membres configurés. </string>
   <string name="LST_COLUMN">Colonne</string>
   <string name="LST_CONFIGURATION">Configuration</string>
@@ -342,7 +328,6 @@
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">Aucune liste par défaut n\'a été spécifiée par l\'administrateur !\n\nContacte un administrateur pour qu\'il déclare une liste comme liste par défaut de ses propres listes.</string>
   <string name="LST_DELETE_CONFIGURATION">Supprimer la configuration</string>
   <string name="LST_EMAIL_TO_MEMBERS">Envoyer un courriel aux membres</string>
-  <string name="LST_EMAIL_TO_LIST">Envoyer un courriel à une liste</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Cherche tous les utilisateurs qui n\'ont pas remplis le champ rue</string>
   <string name="LST_ENABLE_LISTS_MODULE">Activer le module de listes</string>
   <string name="LST_ENABLE_LISTS_MODULE_DESC">Tu peux activer ou désactiver l\'affichage des listes et la configuration de tes propres listes à l\'aide de ce paramètre. Ce module n\'est généralement disponible que pour les utilisateurs enregistrés. (Par défaut : oui)</string>
@@ -353,16 +338,10 @@
   <string name="LST_FORMER_MEMBERS">Anciens membres</string>
   <string name="LST_FROM_TO">de #VAR1# à #VAR2#</string>
   <string name="LST_GENERAL_LISTS">Listes générales</string>
-  <string name="LST_HIDE_DETAILS">Cacher les détails dans la vue d\'ensemble</string>
-  <string name="LST_HIDE_DETAILS_DESC">Si cette option est activée, les détails de l\'aperçu de liste sont comprimés par défaut. Si tu le souhaite, les détails peuvent toujours être affichés. (Par défaut : non)</string>
-  <string name="LST_INACTIVE_ROLES">Aperçu des rôles inactifs</string>
   <string name="LST_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="LST_KONFIGURATION_OWN_LIST">Configuration de sa propre liste</string>
   <string name="LST_LIST">Liste</string>
-  <string name="LST_LISTS">Listes</string>
-  <string name="LST_LISTS_DESC">Vue d\'ensemble de tous les rôles avec la possibilité d\'afficher différentes listes. Les listes peuvent être imprimées et exportées.</string>
   <string name="LST_LIST_VIEW">Afficher l\'aperçu des liste</string>
-  <string name="LST_MAX">à partir de max. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Attribution des membres</string>
   <string name="LST_MEMBERS_BETWEEN_PERIOD">Membres entre #VAR1# et #VAR2#</string>
   <string name="LST_MEMBERS_PER_PAGE">Nombre de participants par page</string>
@@ -444,11 +423,6 @@
   <string name="MAI_DELIVERY_CONFIRMATION">Demander une confirmation de lecture</string>
   <string name="MAI_DELIVERY_CONFIRMATION_DESC">Si cette option est activée, l\'auteur d\'un courriel peut demander une confirmation de lecture. Toutefois, l\'envoi d\'une confirmation de lecture dépend des paramètres du programme de messagerie du destinataire. Le destinataire peut bloquer l\'envoie de confirmations de lecture.</string>
   <string name="MAI_EMAIL_DESC">Les courriels peuvent être envoyé à différents rôles, qu\'il sagisse de groupes, de cours ou de départements.</string>
-  <string name="MAI_EMAIL_SEND_TO_RECEIVER">#VAR1# a envoyé le courriel aux destinataires: #VAR3# von #VAR2# le courriel suivant:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_ACTIVE">#VAR1# a envoyé aux membres actifs du rôle #VAR3# von #VAR2# le courriel suivant:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# a envoyé aux anciens membres du rôle #VAR3# von #VAR2# le courriel suivant:</string>
-  <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# a envoyé aux membres actifs et aux anciens membres du rôle #VAR3# von #VAR2# le courriel suivant:</string>
-  <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# t\'as envoyé #VAR2# le courriel suivant:</string>
   <string name="MAI_HIDDEN">Caché</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS">Courriels HTML</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">La création et l\'envoi de courriels HTML peuvent être activés pour les utilisateurs connectés. Au lieu du champ de texte normal, un editeur Javascript est alors affiché, via lequel le texte peut être édité confortablement. Pour des raisons de sécurité, cette fonction n\'est pas disponible pour les visiteurs.</string>
@@ -475,11 +449,6 @@
   <string name="MAI_SMTP">SMTP</string>
   <string name="MAI_SMTP_AUTH">Authentification SMTP</string>
   <string name="MAI_SMTP_AUTH_DESC">Si l\'authentification doit avoir lieu sur le serveur SMTP, les champs nom d\'utilisateur et mot de passe doivent également être remplis. (Par défaut: oui)</string>
-  <string name="MAI_SMTP_AUTH_LOGIN">Login</string>
-  <string name="MAI_SMTP_AUTH_NTLM">NTLM</string>
-  <string name="MAI_SMTP_AUTH_PLAIN">Plain</string>
-  <string name="MAI_SMTP_AUTH_TYPE">Type d\'authentification SMTP</string>
-  <string name="MAI_SMTP_AUTH_TYPE_DESC">SMTP connait différentes méthodes d\'authentification. Celui séléctionné ici est utilisé par Admidio. (Par défaut: Login)</string>
   <string name="MAI_SMTP_HOST">Hôte SMTP</string>
   <string name="MAI_SMTP_HOST_DESC">Adresse du serveur SMTP à utiliser.</string>
   <string name="MAI_SMTP_PASSWORD">Mot de passe SMTP</string>
@@ -603,7 +572,6 @@
   <string name="ORG_ADD_ORGANIZATION_DESC">Ajoute une nouvelle organisation avec ces données de bases. L\'utilisateur actuel est automatiquement nommé administrateur et peut effectuer les autres configurations. Les utilisateurs qui se connectent à partir de maintenant au système doivent indiquer le nom de l\'organisation.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Variables supplémentaires</string>
   <string name="ORG_ADMIDIO_THEME">Thèmes Admidio</string>
-  <string name="ORG_ADMIDIO_THEME_DESC">La mise en page Admidio actuelle peut être sélectionnée ici. Tous les modèles du dossier adm_themes sont affichés. (Par défaut : moderne)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Déconnexion automatique après</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Cette valeur indique après combien de minutes un utilisateur inactif est automatiquement déconnecté. Un utilisateur est inactif tant qu\'il n\'appelle aucune page du système Admidio. Ce paramètre est ignoré si l\'utilisateur a #VAR1_BOLD# sélectionné. (Par défaut : 20 minutes)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Message de mis à jour pour les navigateurs désuet</string>
@@ -663,8 +631,6 @@
   <string name="ORG_FIELD_REQUIRED">Champ obligatoire, doit toujours être rempli.</string>
   <string name="ORG_FIELD_REQUIRED_DESC">Les champs marqués comme obligatoire doivent toujours être remplis. Ceci s\'applique non seulement à l\'inscription mais aussi lors du traitement normal des données de profil.</string>
   <string name="ORG_FIELD_URL_DESC">L\'URL saisie renvoie ultérieurement dans le profil au contenu que l\'utilisateur a saisi dans ce champ. En option, même le caractère générique #user_content# peut être défini dans l\'URL. C\'est alors le contenu que l\'utilisateur a entré dans le champ.\n\nExemple:\nUrl : https://www.google.de/search?q=#user_content#\nContenu du champ : Admidio\nLien dans le profil : https://www.google.de/search?q=Admidio</string>
-  <string name="ORG_HOMEPAGE_REGISTERED_USERS">L\'utilisateur est dirigé vers cette page dès qu\'il s\'est connecté. Le chemin d\'accès à la page doit être spécifié par rapport au répertoire Admidio.\n(Exemple : adm_program/index.php)</string>
-  <string name="ORG_HOMEPAGE_VISITORS">Cette page est la page d\'accueil par défaut d\'Admidio vers laquelle les visiteurs sont dirigés. Le chemin d\'accès à la page doit être spécifié par rapport au répertoire Admidio.\n(Exemple : adm_program/index.php)</string>
   <string name="ORG_INVALID_THEME">Aucun thème valide n\'a été sélectionné.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Couleur de l\'éditeur Javascript</string>
   <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">La couleur de fond de l\'éditeur Javascript est spécifiée ici. Cela peut être une valeur de couleur hexadécimale, par exemple #ffa500 ou une valeur RGB, par exemple rgb(255, 185,0).</string>
@@ -751,7 +717,6 @@
   <string name="PHO_ALBUM_NOT_APPROVED">L\'album est verrouillé et ne sera pas affiché aux visiteurs pour cette raison. Tu peux déverrouiller l\'album avec l\'icône de la clé dans la ligne d\'édition.</string>
   <string name="PHO_ALBUM_UNLOCK">Déverrouiller l\'album</string>
   <string name="PHO_ALBUM_WRITE_SUCCESS">L\'album a été créé / modifié avec succès.</string>
-  <string name="PHO_BACK_TO_ALBUM">Retour à l\'album</string>
   <string name="PHO_CAPTION_SIZE">Taille du texte de l\'image</string>
   <string name="PHO_CAPTION_SIZE_DESC">La taille du texte de l\'image est calculée proportionnellement à la taille de l\'image, selon la formule \"Grandeur de l\'image/Diviseur\". Augmenter le diviseur réduit la taille de la police. (Par défaut: 40)</string>
   <string name="PHO_CREATE_ALBUM">Créer un album</string>
@@ -791,9 +756,7 @@
   <string name="PHO_PHOTO_UPLOAD_DESC">Séléctionne toutes les photos que tu aimerais télécharger dans l\'album #VAR1_BOLD#.</string>
   <string name="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL">Pas toutes les photos ont pu être téléchargées.</string>
   <string name="PHO_PHOTO_UPLOAD_SUCCESSFUL">Toutes les photos ont été téléchargées avec succès.\n\nLa fenêtre de dialogue peut maintenant être fermée.</string>
-  <string name="PHO_PHOTO">Photo</string>
   <string name="PHO_PHOTOGRAPHER">Photos de</string>
-  <string name="PHO_PHOTOS">Photos</string>
   <string name="PHO_PHOTOS_DESC">Les photos des événements peuvent être téléchargées et visualisées. Les photos sont réunis dans des albums, qui peuvent être imbriqués à volonté.</string>
   <string name="PHO_POPUP_WINDOW">Fenêtre pop-up</string>
   <string name="PHO_PREVIOUS_PHOTO">Photo précédente</string>
@@ -861,7 +824,6 @@
   <string name="PRO_PASSWORD_DESCRIPTION">Le mot de passe doit comporter au moins 8 caractères. Il devrait contenir des chiffres, des lettres et ainsi que des caractères spéciaux.\n\nLa force de ton mot de passe choisi est indiqué par une barre coloré. La force minimale exigée est indique par une flèche dans la barre.</string>
   <string name="PRO_PASSWORD_LENGTH">Le mot de passe doit comporter au moins 8 caractères.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">L\'ancien mot de passe est incorrect.</string>
-  <string name="PRO_PASSWORDS_NOT_EQUAL">Le mot de passe initial est différent de celui de la répétition.</string>
   <string name="PRO_PASSWORD_NOT_STRONG_ENOUGH">Le mot de passe n\'est pas assez sûre.</string>
   <string name="PRO_PHOTO_DELETED">La photo de profil a été supprimée.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">La photo téléchargée dépasse la taille de fichier autorisée par le serveur de #VAR1# B.</string>
@@ -902,7 +864,6 @@
   <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symétrique</string>
   <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirectionnel</string>
   <!--Phrases only in Rolesmodule-->
-  <string name="ROL_ACTIV_ROLES">Rôles actifs</string>
   <string name="ROL_ANNUALLY">Annuel</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Assigner et éditer les membres</string>
   <string name="ROL_DELETE_NO_DEFAULT_ROLE">Tu ne peux pas supprimer le rôle #VAR1_BOLD#. Au moins un rôle doit avoir le paramètre #VAR2_BOLD#.</string>
@@ -919,8 +880,6 @@
   <string name="ROL_EDIT_ROLE">Modifier le rôle</string>
   <string name="ROL_ENABLE_ROLE">Activer le rôle</string>
   <string name="ROL_ENABLE_ROLE_DESC">Si tu réactives le rôle #VAR1_BOLD#, les membres du rôle se voient attribuer à nouveau les droits et le rôle apparaît dans toutes les listes.\n\nVeux-tu réactiver ce rôle?</string>
-  <string name="ROL_INACTIV_ROLE">Rôle inactif</string>
-  <string name="ROL_INACTIV_ROLES">Rôles inactifs</string>
   <string name="ROL_LEADER_NO_ADDITIONAL_RIGHTS">Les chefs de ce rôle n\'ont pas de droits distincts. Ils ne sont mis en évidence que dans les vues de liste.</string>
   <string name="ROL_LEADER_EDIT_MEMBERS">Les chefs de ce rôle peuvent modifier les données de profil pour tous les membres du rôle.</string>
   <string name="ROL_LEADER_ASSIGN_MEMBERS">Les chefs de ce rôle peuvent ajouter de nouveaux membres ou retirer des membres existants.</string>
@@ -953,8 +912,6 @@
   <string name="ROL_RIGHT_PROFILE">Modifier mon propre profil</string>
   <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Ce paramètre contrôle qui a le droit d\'envoyer des courriels à ce rôle à l\'aide du module de message. Cependant, le droit du rôle  #VAR1_BOLD# est toujours au-dessus de ce paramètre.</string>
   <string name="ROL_RIGHT_WEBLINKS">Gérer les liens Web</string>
-  <string name="ROL_ROLE_ADMINISTRATION">Administration des rôles</string>
-  <string name="ROL_ROLE_ADMINISTRATION_DESC">Les rôles, qui peuvent être des groupes, des formations ou des départements, peuvent être créés et traités ici. Les droits des rôles individuels sont également définis ici.</string>
   <string name="ROL_ROLE_DELETE">Supprimer le rôle</string>
   <string name="ROL_ROLE_DELETE_DESC">Veux-tu vraiment supprimer le rôle #VAR1_BOLD#?\n\nTous les adhésions seront supprimés définitvement.</string>
   <string name="ROL_ROLE_DEPENDENCIES">Un membre des rôles dépendants devrait également être automatiquement membre de #VAR1#!\n\nEn définissant cette dépendance, les membres existants du rôle dépendant deviennent également membre de #VAR1#. Les adhésions ne sont pas annulées lorsqu\'une dépendance est supprimée !</string>
@@ -966,7 +923,6 @@
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Afficher l\'adhésion aux rôle </string>
   <string name="ROL_SEMIYEARLY">Semestriel</string>
   <string name="ROL_SEND_MAILS">Envoyer des courriels</string>
-  <string name="ROL_SHOW_MEMBERS">Afficher les membres</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">Liste standard à l\'échelle du système</string>
   <string name="ROL_UNIQUELY">Unique</string>
   <string name="ROL_VALID_FROM" description="Date valid from">Valable du</string>
@@ -984,7 +940,6 @@
   <string name="SYS_ADDITIONAL_FILES">Cette liste vise à fournir un aperçu des fichiers et dossiers qui ne sont pas encore gérés dans la base de données. Celles-ci peuvent maintenant être ajoutées à la base de données. Les permissions du dossier courant sont automatiquement reprises.</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Changer à la page de téléchargement d\'Admidio</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Le système de gestion en ligne pour les associations, les groupes et les organisations</string>
-  <string name="SYS_ADMIDIO_TEAM">Équipe Admidio</string>
   <string name="SYS_ADMIDIO_UPDATE">Mise à jour d\'Admidio</string>
   <string name="SYS_ADMIDIO_VERSION">Version Admidio</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
@@ -1022,7 +977,6 @@
   <string name="SYS_CITY">Ville</string>
   <string name="SYS_CLOCK">Heures</string>
   <string name="SYS_CLOSE">Fermer</string>
-  <string name="SYS_CLOSE_WINDOW">Fermer la fenêtre</string>
   <string name="SYS_COMMENT">Commentaire</string>
   <string name="SYS_COMMON">Général</string>
   <string name="SYS_CONDITION">Condition</string>
@@ -1086,7 +1040,7 @@
   <string name="SYS_DIRECTORY_SEPARATOR">Séparateur de dossiers</string>
   <string name="SYS_DISK_SPACE">Espace disque</string>
   <string name="SYS_DISK_SPACE_ERROR"> L\'utilisation de l\'espace disque n\'a pas pu être déterminée.\n\nMessage d\'erreur:\n#VAR1#.</string>
-  <string name="SYS_DOCUMENTS_FILES">Documents & amp; Des dossiers</string>
+  <string name="SYS_DOCUMENTS_FILES">Documents &amp; Dossiers</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Différents documents et fichiers peuvent être visualisés ou fournis pour téléchargement. Ces fichiers peuvent être classés dans des dossiers avec différents niveaux d\'autorisation d\'accès.</string>
   <string name="SYS_DONATE">Don</string>
   <string name="SYS_DONT_SHOW">Ne pas afficher</string>
@@ -1119,7 +1073,6 @@
   <string name="SYS_EXAMPLES">Exemples</string>
   <string name="SYS_FADE_IN">Afficher</string>
   <string name="SYS_FAX">Télécopieur</string>
-  <string name="SYS_FEATURES">Fonctionnalités</string>
   <string name="SYS_FEMALE">Féminin</string>
   <string name="SYS_FIELD">Champ</string>
   <string name="SYS_FIELD_EMPTY">Le champ #VAR1_BOLD# n\'est pas rempli.</string>
@@ -1159,13 +1112,11 @@
   <string name="SYS_FOLDER_RENAME">Le dossier #VAR1# a été renommé.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Une erreur s\'est produite quand le dossier #VAR1# a été renommé..</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Le dossier #VAR1_BOLD# ne peut pas être créé avec les droits d\'écriture.\n\nContacte l\'administrateur #VAR2#Administrateur#VAR3#, afin qu\'il puisse vérifier les droits d\'écriture (définis les attributs du fichier à 0777 ou drwxrwxrwx via FTP).</string>
-  <string name="SYS_FONT_AWESOME_DESC">Tu peux créer une icône de différentes manières:\n1. une icône de la police web \"Font Awesome\". Va à #VAR1##http://fontawesome.com#VAR2# et sélectionne une icône gratuite dans la collection Solid ou Brands. En tant que préfixe, tu dois mettre fa- devant l\'icône. Donc si tuvsélectionne l\'icône \"user\", tu dois saisir \"fa-user\" ici.\n2. Une icône JPEG ou PNG. Saisis l\'URL complète ainsi que le nom de fichier de l\'icône. Alternativement, tu peux placer l\'icône dans le thème dans le dossier \"icônes\", alors tu as qu\'à saisir le nom du fichier.</string>
   <string name="SYS_FORMER">Ancien</string>
   <string name="SYS_FORMER_PL">Anciens</string>
   <string name="SYS_FONT">Police</string>
   <string name="SYS_FORGOT_MY_PASSWORD">J\'ai oublié mon mot de passe!</string>
   <string name="SYS_FRIDAY">vendredi</string>
-  <string name="SYS_FULL_SCREEN">Image pleine</string>
   <string name="SYS_FURTHER_INFORMATIONS">Plus d\'informations</string>
   <string name="SYS_GENDER">Sexe</string>
   <string name="SYS_GEN_RANDOM_ERROR">Une erreur inattendue s\'est produite lors de la génération d\'un nombre aléatoire.\nCode d\'erreur : #VAR1#\nMessage d\'erreur : #VAR2#</string>
@@ -1186,7 +1137,6 @@
   <string name="SYS_INFORMATIONS">Informations</string>
   <string name="SYS_INTERNAL_NAME">Nom interne</string>
   <string name="SYS_INTERNAL_NAME_DESC">Le nom interne est utilisé pour l\'accès unique à cet objet dans la base de données. Ceci n\'est pas pertinent pour l\'utilisation du programme. Pendant le développement, cependant, ce nom doit toujours être utilisé pour adresser le champ avec getValue(), par exemple. Le nom interne est automatiquement rempli lorsqu\'un enregistrement de données est créé.</string>
-  <string name="SYS_INVALID_FONT_AWESOME">Le nom de l\'icône saisie ne correspond pas à la syntaxe de Font Awesome. Vérifie si ce nom est aussi une icône.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Afficher la page invalide</string>
   <string name="SYS_IO_ERROR">Erreur d\'E/S</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
@@ -1244,11 +1194,9 @@
   <string name="SYS_MINUTES">Minutes</string>
   <string name="SYS_MOBILE">Mobile</string>
   <string name="SYS_MODULE_DISABLED">Ce module est désactivé.</string>
-  <string name="SYS_MODULE_PREFERENCES">Paramètres du module</string>
   <string name="SYS_MODULES">Modules</string>
   <string name="SYS_MONDAY">Lundi</string>
   <string name="SYS_MORE_FEATURES">Fonctions supplémentaires</string>
-  <string name="SYS_MYLIST_DESC">De nouvelles configurations de listes peuvent être créées et sauvegardées ici. Tu peux également afficher des listes pour plusieurs rôles.</string>
   <string name="SYS_NAME">Nom</string>
   <string name="SYS_NAME_ABBREVIATION">Nom (abréviation)</string>
   <string name="SYS_NEW_NAME">Nouveau nom</string>
@@ -1263,7 +1211,6 @@
   <string name="SYS_NO_RIGHTS">Tu n\'as pas l\'autorisation requise pour effectuer cette action.</string>
   <string name="SYS_NOBODY">Personne</string>
   <string name="SYS_NONE">Aucun</string>
-  <string name="SYS_NORMAL_PICTURE">Image normale</string>
   <string name="SYS_NOT_EMPTY">Non vide</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Pas membre de l\'organisation #VAR1#</string>
   <string name="SYS_NOT_REGISTERED">Non enregistré</string>
