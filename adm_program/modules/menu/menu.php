@@ -71,7 +71,7 @@ $page->addJavascript('
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // define link to create new menu
-$page->addPageFunctionsMenuItem('menu_item_menu_new', $gL10n->get('SYS_CREATE_ENTRY'), 
+$page->addPageFunctionsMenuItem('menu_item_menu_new', $gL10n->get('SYS_CREATE_ENTRY'),
     ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', 'fa-plus-circle');
 
 // Create table object
@@ -115,7 +115,7 @@ while ($mainMen = $mainMenStatement->fetch())
 
             $menuOverview->addTableBody();
             $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
-            $menuOverview->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.$gL10n->get($mainMen['men_name']),
+            $menuOverview->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.Language::translateIfTranslationStrId($mainMen['men_name']),
                               array('id' => 'group_'.$blockId, 'colspan' => '8'));
             $menuOverview->addTableBody('id', $blockId);
 
@@ -152,7 +152,7 @@ while ($mainMen = $mainMenStatement->fetch())
         // don't allow delete for standard menus
         if(!$menuRow['men_standard'])
         {
-            $menuAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+            $menuAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'men', 'element_id' => 'row_men_'.
                                         $menuRow['men_id'], 'name' => $menuName, 'database_id' => $menuRow['men_id'])).'">'.
                                         '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
