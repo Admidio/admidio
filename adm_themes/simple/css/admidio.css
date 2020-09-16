@@ -466,6 +466,43 @@ label {
 }
 
 /***********************************/
+/* Chat module */
+/***********************************/
+
+#chat-area {
+    height: 350px;
+    overflow: auto;
+    border: 1px solid #666;
+    padding: 20px;
+    background: white;
+}
+
+#chat-area span {
+    color: #ffffff;
+    background: #263340;
+    padding: 4px 8px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#chat-area time {
+    font-size: 75%;
+    padding: 4px 0px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#chat-area p {
+    padding: 10px 0;
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 0px;
+}
+
+#sendie_group {
+    margin-top: 20px;
+}
+
+/***********************************/
 /* Overview page */
 /***********************************/
 

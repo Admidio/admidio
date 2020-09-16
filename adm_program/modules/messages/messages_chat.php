@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * easy chat system
+ * Easy chat system
  *
  * @copyright 2004-2020 The Admidio Team
  * @see https://www.admidio.org/
@@ -25,7 +25,7 @@ if (!$gSettingsManager->getBool('enable_chat_module'))
     // => EXIT
 }
 
-$headline = 'Admidio Chat';
+$headline = $gCurrentOrganization->getValue('org_shortname') . ' - ' . $gL10n->get('MSG_CHAT');
 
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -34,7 +34,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage($headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
-$page->addCssFile(THEME_URL.'/css/chat.css');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/messages/chat.js');
 
 $page->addJavascript('
