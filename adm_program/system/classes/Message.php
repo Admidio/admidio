@@ -121,33 +121,32 @@ class Message
 
     /**
      * Create a html page if necessary and show the message with the configured buttons.
+     * The message is presented depending on the settings. By default, this is an HTML page with
+     * title, message and buttons. The message can also be displayed in a modal window.
+     * Alternatively there is the possibility to display only the message text.
      * @param string $content  The message text that should be shown. The content could have html.
      * @param string $headline Optional a headline for the message. Default will be SYS_NOTE.
      */
     public function show($content, $headline = '')
     {
-        // noetig, da dies bei den includes benoetigt wird
         global $gDb, $gL10n, $page;
-
-        $html = '';
 
         // first perform a rollback in database if there is an open transaction
         $gDb->rollback();
 
-        // Ueberschrift setzen, falls diese vorher nicht explizit gesetzt wurde
+        // Set caption, if it was not set explicitly before
         if($headline === '')
         {
             $headline = $gL10n->get('SYS_NOTE');
         }
 
-        // Variablen angeben
         if(!$this->inline)
         {
-            // nur pruefen, wenn vorher nicht schon auf true gesetzt wurde
+            // check only if not already set to true
             $this->inline = headers_sent();
         }
 
-        if(!$this->inline)
+        if(!isset($page))
         {
             // create html page object
             $page = new HtmlPage($headline);
@@ -168,74 +167,6 @@ class Message
                 );
             }
         }
-        elseif(!$this->modalWindowMode)
-        {
-            $html .= '<h1>'.$headline.'</h1>';
-        }
-
-        // create html for buttons
-        $htmlButtons = '';
-
-        if($this->showButtons)
-        {
-            if($this->forwardUrl !== '')
-            {
-                if($this->showYesNoButtons)
-                {
-                    $htmlButtons .= '
-                        <button id="admButtonYes" class="btn btn-primary" type="button" onclick="self.location.href=\'' . $this->forwardUrl . '\'">
-                            <i class="fas fa-check-circle"></i>
-                            &nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;
-                        </button>
-                        <button id="admButtonNo" class="btn btn-secondary" type="button" onclick="history.back()">
-                            <i class="fas fa-minus-circle"></i>
-                            &nbsp;'.$gL10n->get('SYS_NO').'
-                        </button>';
-                }
-                else
-                {
-                    // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
-                    $htmlButtons .= '
-                        <button class="btn btn-primary admidio-margin-bottom" onclick="self.location.href=\'' . $this->forwardUrl . '\'">'.$gL10n->get('SYS_NEXT').'
-                            <i class="fas fa-arrow-circle-right"></i>
-                        </button>';
-                }
-            }
-            else
-            {
-                // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen
-                // bzw. ggf. einen Fenster-Schließen-Button
-                if(!$this->modalWindowMode)
-                {
-                    $htmlButtons .= '
-                        <button class="btn btn-primary admidio-margin-bottom" onclick="history.back()">
-                            <i class="fas fa-arrow-circle-left"></i>'.
-                            $gL10n->get('SYS_BACK').
-                        '</button>';
-                }
-            }
-        }
-
-        if($this->modalWindowMode)
-        {
-            $html .= '
-                <div class="modal-header">
-                    <h3 class="modal-title">'.$headline.'</h3>
-                    <button class="btn btn-primary" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">'.$content.'</div>
-                <div class="modal-footer">'.$htmlButtons.'</div>';
-        }
-        else
-        {
-            $html .= '
-                <div class="message">
-                    <p class="lead">'. $content.'</p>
-                    '.$htmlButtons.'
-                </div>';
-        }
 
         if($this->showTextOnly)
         {
@@ -250,12 +181,19 @@ class Message
         elseif($this->inline)
         {
             // show the message in html but without the theme specific header and body
-            echo $html;
+            $page->assign('message', $content);
+            $page->assign('messageHeadline', $headline);
+            $page->assign('forwardUrl', $this->forwardUrl);
+            $page->assign('showYesNoButtons', $this->showYesNoButtons);
+            $page->display('message_modal.tpl');
         }
         else
         {
             // show a Admidio html page with complete theme header and body
-            $page->addHtml($html);
+            $page->assign('message', $content);
+            $page->assign('forwardUrl', $this->forwardUrl);
+            $page->assign('showYesNoButtons', $this->showYesNoButtons);
+            $page->addTemplateFile('message.tpl');
             $page->show();
         }
         exit();
