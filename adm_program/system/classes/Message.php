@@ -58,10 +58,6 @@ class Message
      */
     private $showHtmlTextOnly = false;
     /**
-     * @var bool Buttons werden angezeigt
-     */
-    private $showButtons = true;
-    /**
      * @var bool Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
      */
     private $showYesNoButtons = false;
@@ -76,14 +72,6 @@ class Message
     public function __construct()
     {
 
-    }
-
-    /**
-     * No button will be shown in the message window.
-     */
-    public function hideButtons()
-    {
-        $this->showButtons = false;
     }
 
     /**

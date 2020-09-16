@@ -255,7 +255,7 @@ try
 catch(AdmException $e)
 {
     $gMessage->showThemeBody(false);
-    $gMessage->hideButtons();
+    $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php');
     $gMessage->show($e->getText(), 'Admidio - '.$gL10n->get('INS_UPDATE'));
 }
 
