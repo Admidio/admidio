@@ -1,42 +1,50 @@
 /**
- * @license Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or http://ckeditor.com/license
+ * @license Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see https://ckeditor.com/legal/ckeditor-oss-license
  */
 
 CKEDITOR.editorConfig = function( config ) {
-    // Define changes to default configuration here. For example:
-    // config.language = 'fr';
-    // config.uiColor = '#AADC6E';
+	// Define changes to default configuration here.
+	// For complete reference see:
+	// https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html
 
+    config.extraPlugins = 'font, button, panelbutton, floatpanel, colorbutton, justify, smiley'
+
+	// The toolbar groups arrangement, optimized for two toolbar rows.
     config.toolbar_AdmidioDefault =
     [
-        ['Format', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-',
-        'NumberedList', 'BulletedList', '-','Image', 'Link', 'Unlink', 'Table', '-', 'Maximize']
-    ];
+        { name: 'styles', items: [ 'Format', 'FontSize' ] },
+		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'TextColor' ] },
+		{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+		{ name: 'insert', items: [ 'Image', 'Link', 'Unlink', 'Table'] },
+		{ name: 'tools', items: [ 'Maximize' ] }
+	];
 
     config.toolbar_AdmidioGuestbook =
     [
-        ['Font','FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft','JustifyCenter','JustifyRight', '-',
-        'Smiley', 'Link', 'Unlink', '-', 'NumberedList', 'BulletedList', '-', 'Maximize']
+        { name: 'styles', items: [ 'Font', 'FontSize' ] },
+		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'TextColor' ] },
+		{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+		{ name: 'insert', items: [ 'Smiley', 'Link', 'Unlink'] },
+		{ name: 'tools', items: [ 'Maximize' ] }
     ];
 
     config.toolbar_AdmidioPlugin_WC =
     [
-        ['Format', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-',
-        'NumberedList', 'BulletedList', '-','-', '-', '-', 'Table', '-', 'Maximize']
+        { name: 'styles', items: [ 'Format', 'FontSize' ] },
+		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'TextColor' ] },
+		{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+		{ name: 'insert', items: [ 'Table'] },
+		{ name: 'tools', items: [ 'Maximize' ] }
     ];
+
+	// Remove some buttons provided by the standard plugins, which are
+	// not needed in the Standard(s) toolbar.
+	config.removeButtons = 'Underline,Subscript,Superscript';
+
+	// Set the most common block elements.
+	config.format_tags = 'p;h1;h2;h3;pre';
+
+	// Simplify the dialog windows.
+	config.removeDialogTabs = 'image:advanced;link:advanced';
 };
-
-/* Set default width of table to 100% instead of 500%. This fits better with a responsive design. */
-CKEDITOR.on('dialogDefinition', function( ev ) {
-
-      var diagName = ev.data.name;
-      var diagDefn = ev.data.definition;
-
-      if(diagName === 'table') {
-        var infoTab = diagDefn.getContents('info');
-
-        var width = infoTab.get('txtWidth');
-        width['default'] = "100%";
-      }
-});

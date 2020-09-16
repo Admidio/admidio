@@ -1,0 +1,8 @@
+Short description to update the current lib
+
+1. Go to https://ckeditor.com/ckeditor-4/download/
+2. Download the standard package and unzip that file
+3. Copy all files except the config.js into this folder
+4. Delete the folders vendor and samples
+4. Download the following plugins and install them: Font (FontSize), ColorButton (TextColor), UI Button, PanelButton, Floating Panel. Justify, InsertSmiley
+5. Change within that file the string a.fn.datepicker.dates["zh-CN"] to a.fn.datepicker.dates["zh"]

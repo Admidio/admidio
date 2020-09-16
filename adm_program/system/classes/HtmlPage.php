@@ -370,6 +370,7 @@ class HtmlPage extends \Smarty
             $this->setTitle($headline);
         }
 
+        $this->menuNodePageFunctions->setName($headline);
         $this->headline = $headline;
     }
 

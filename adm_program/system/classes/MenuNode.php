@@ -203,33 +203,6 @@ class MenuNode
     }
 
     /**
-     * This method checks if a special menu item of the current node is visible for the current user.
-     * Therefor this method checks if roles are assigned to the menu item and if the current
-     * user is a member of at least one of this roles.
-     * @param menuId The id of the menu item that should be checked if it's visible.
-     * @return bool Return true if the menu item is visible to the current user.
-     */
-    public function menuItemIsVisible($menuId)
-    {
-        global $gDb, $gCurrentUser;
-
-        if($menuId > 0)
-        {
-            // Read current roles rights of the menu
-            $displayMenu = new RolesRights($gDb, 'menu_view', $menuId);
-            $rolesDisplayRight = $displayMenu->getRolesIds();
-
-            // check for right to show the menu
-            if (count($rolesDisplayRight) === 0 || $displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Load all entries of that node from the database table **adm_menu**. Therefore each entry
      * must have stored the $nodeId as the mem_mem_id_parent. The entries will be stored within
      * the internal array $nodeEntries.
@@ -285,5 +258,41 @@ class MenuNode
         {
             $this->nodeEntries = array();
         }
+    }
+
+    /**
+     * This method checks if a special menu item of the current node is visible for the current user.
+     * Therefor this method checks if roles are assigned to the menu item and if the current
+     * user is a member of at least one of this roles.
+     * @param menuId The id of the menu item that should be checked if it's visible.
+     * @return bool Return true if the menu item is visible to the current user.
+     */
+    public function menuItemIsVisible($menuId)
+    {
+        global $gDb, $gCurrentUser;
+
+        if($menuId > 0)
+        {
+            // Read current roles rights of the menu
+            $displayMenu = new RolesRights($gDb, 'menu_view', $menuId);
+            $rolesDisplayRight = $displayMenu->getRolesIds();
+
+            // check for right to show the menu
+            if (count($rolesDisplayRight) === 0 || $displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Sets the translated name of this node.
+     * @param string $name Translated name of the node.
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 }
