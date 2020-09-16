@@ -101,7 +101,14 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
 
                 if($usfNameIntern === 'COUNTRY')
                 {
-                    $user->setValue($usfNameIntern, $gL10n->getCountryIsoCode($columnValue));
+                    try
+                    {
+                        $user->setValue($usfNameIntern, $gL10n->getCountryIsoCode($columnValue));
+                    }
+                    catch(Exception $e)
+                    {
+                        $gLogger->info($e->getMessage());
+                    }
                 }
                 else
                 {
