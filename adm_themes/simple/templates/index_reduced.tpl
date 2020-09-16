@@ -42,13 +42,19 @@
         <div class="admidio-content-header">
             <h1 class="admidio-module-headline">{$headline}</h1>
 
-            <!-- Add link to previous page -->
             {if $urlPreviousPage != ''}
+                <!-- Add link to previous page -->
                 <a class="" href="{$urlPreviousPage}"><i class="fas fa-arrow-circle-left fa-fw"></i> {$l10n->get('SYS_BACK')}</a>
             {/if}
         </div>
 
+        {* The main content of the page that will be generated through the Admidio scripts *}
         {$content}
+
+        {* Additional template file that will be loaded if the file was set through $page->setTemplateFile() *}
+        {if $templateFile != ''}
+            {include file=$templateFile}
+        {/if}
     </div>
 </body>
 </html>
