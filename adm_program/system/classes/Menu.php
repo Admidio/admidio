@@ -6,14 +6,14 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
- 
+
  /**
  * Create menu from database and serve several output formats
  *
- * This class will read the menu structure from the database table **adm_menu** and stores each main 
- * node as a MenuNode object within an internal array. There are severel output methods to use the 
+ * This class will read the menu structure from the database table **adm_menu** and stores each main
+ * node as a MenuNode object within an internal array. There are severel output methods to use the
  * menu within the layout. You can create a simple html list, a bootstrap media object list or
- * add it to an existing navbar. 
+ * add it to an existing navbar.
  *
  * **Code examples**
  * ```
@@ -34,22 +34,22 @@ class Menu
      * @var array Array with the main nodes and their entries
      */
     protected $menuNodes;
-    
+
     /**
      * @var bool Flag to remember if the menu must be reloaded from database
      */
-    protected $menuLoaded;    
+    protected $menuLoaded;
 
     /**
      * @var bool Flag to remember if the function node was already added to the menu
      */
-    protected $functionsNodeAdded;    
+    protected $functionsNodeAdded;
 
     public function __construct()
     {
         $this->initialize();
     }
-    
+
     /**
      * Adds an additional menu node with page specific functions to the first place of this menu
      * @param MenuNode $node A object of the class MenuNode
@@ -98,7 +98,8 @@ class Menu
     }
 
     /**
-     * Initialise the member parameters of this class
+     * Initialise the member parameters of this class. This method should also be called if
+     * the menu structure should be reladed from database.
      */
     public function initialize()
     {
@@ -157,7 +158,7 @@ class Menu
             $this->menuNodes[$countMenuNodes]->loadFromDatabase($mainNodes['men_id']);
         }
     }
-    
+
     /**
      * Removes the functions node from the current menu
      */

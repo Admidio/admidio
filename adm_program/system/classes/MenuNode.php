@@ -42,12 +42,13 @@ class MenuNode
 
     /**
      * constructor
-     * @param string $nodeName The name of this menu node
+     * @param string $nodeTextId A unique id for this menu node.
+     * @param string $nodeName   The name of this menu node that should be displayed for the user
      */
     public function __construct($nodeTextId, $nodeName)
     {
         $this->textId = $nodeTextId;
-        $this->name   = $nodeName;
+        $this->name   = Language::translateIfTranslationStrId($nodeName);
     }
 
     /**
