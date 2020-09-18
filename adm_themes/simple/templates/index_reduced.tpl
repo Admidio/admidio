@@ -37,7 +37,7 @@
         });
     </script>
 </head>
-<body class="admidio-reduced">
+<body class="admidio admidio-reduced">
     <div class="admidio-content" id="content" role="main">
         <div class="admidio-content-header">
             <h1 class="admidio-module-headline">{$headline}</h1>

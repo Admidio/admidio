@@ -212,11 +212,16 @@ label img, .form-control-static img, .admidio-icon-link .fas {
     text-align: right;
     width: 100%;
     display: inline-block;
+    max-width: 1000px;
 }
 
 /***********************************/
 /* Forms */
 /***********************************/
+
+form {
+    max-width: 1000px;
+}
 
 .form-control:focus, .select2-container--bootstrap.select2-container--focus .select2-selection,
 input[type=checkbox]:focus, button:focus {
@@ -283,6 +288,7 @@ label {
 
 .admidio-blog, .admidio-field-group {
     border: none;
+    max-width: 1000px;
 }
 
 .admidio-blog .card-header, .admidio-blog .card-body, .admidio-blog .card-footer,
@@ -475,6 +481,7 @@ label {
     border: 1px solid #666;
     padding: 20px;
     background: white;
+    max-width: 1000px;
 }
 
 #chat-area span {
