@@ -156,7 +156,7 @@ if($fieldHistoryStatement->rowCount() === 0)
 }
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-profile-fields-history', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // create filter menu with input elements for Startdate and Enddate

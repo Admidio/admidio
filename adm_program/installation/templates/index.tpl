@@ -31,7 +31,7 @@
         });
     </script>
 </head>
-<body>
+<body id="{$id}" class="admidio">
     <div id="installation-header" class="admidio-area">
         <div class="admidio-container container">
             <img id="admidio-logo" src="{$urlAdmidio}/adm_program/system/logo/admidio_writing_white_150.png" alt="Logo" />

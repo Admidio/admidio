@@ -30,7 +30,7 @@ $pdoStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR')
 $roleAdministrator = new TableRoles($gDb, $pdoStatement->fetchColumn());
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-login', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form

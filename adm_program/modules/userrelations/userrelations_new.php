@@ -58,7 +58,7 @@ $headline = $gL10n->get('PRO_ADD_USER_RELATION');
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-userrelations-edit', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form

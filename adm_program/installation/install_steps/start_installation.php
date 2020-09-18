@@ -16,7 +16,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php')
 // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
 if (!is_file($configPath))
 {
-    $page = new HtmlPageInstallation();
+    $page = new HtmlPageInstallation('admidio-installation-message');
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')), $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config')));
     // => EXIT
@@ -34,7 +34,7 @@ if (isset($_SESSION['table_prefix'])
     || $_SESSION['table_prefix']   !== TABLE_PREFIX
     || $_SESSION['orga_shortname'] !== $g_organization))
 {
-    $page = new HtmlPageInstallation();
+    $page = new HtmlPageInstallation('admidio-installation-message');
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')), $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database')));
     // => EXIT
@@ -48,7 +48,7 @@ $sqlQueryResult = querySqlFile($db, 'db.sql');
 
 if (is_string($sqlQueryResult))
 {
-    $page = new HtmlPageInstallation();
+    $page = new HtmlPageInstallation('admidio-installation-message');
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $sqlQueryResult, $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config')));
     // => EXIT
@@ -273,7 +273,7 @@ session_destroy();
 $gLogger->info('INSTALLATION: Installation successfully complete');
 
 // show dialog with success notification
-$page = new HtmlPageInstallation();
+$page = new HtmlPageInstallation('admidio-installation-successful');
 $page->addTemplateFile('installation_successful.tpl');
 $page->addJavascript('$("#next_page").focus();', true);
 

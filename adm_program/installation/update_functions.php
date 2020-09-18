@@ -34,7 +34,7 @@ function checkLogin()
     if ($userStatement->rowCount() === 0)
     {
         // show message that username or password is incorrect
-        $page = new HtmlPageInstallation();
+        $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT'), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', 'update.php');
         // => EXIT
@@ -55,7 +55,7 @@ function checkLogin()
         catch (AdmException $e)
         {
             // show message with the error of the exception
-            $page = new HtmlPageInstallation();
+            $page = new HtmlPageInstallation('admidio-update-message');
             $page->setUpdateModus();
             $page->showMessage('error', $gL10n->get('SYS_NOTE'), $e->getText(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', 'update.php');
             // => EXIT

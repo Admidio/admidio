@@ -25,7 +25,7 @@ $pluginUrl = ADMIDIO_URL . FOLDER_PLUGINS . '/calendar/calendar.php';
 $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU')));
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-plugin-calendar-install', $headline);
 
 $sql = 'SELECT *
           FROM '.TBL_MENU.'

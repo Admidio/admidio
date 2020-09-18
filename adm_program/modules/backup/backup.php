@@ -55,7 +55,7 @@ catch (\RuntimeException $exception)
 $headline = $gL10n->get('BAC_DATABASE_BACKUP');
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-backup', $headline);
 
 $backupAbsolutePath = ADMIDIO_PATH . FOLDER_DATA . '/backup/'; // make sure to include trailing slash
 

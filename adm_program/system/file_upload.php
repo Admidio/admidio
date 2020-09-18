@@ -146,7 +146,7 @@ if($getMode === 'choose_files')
     }
 
     // create html page object
-    $page = new HtmlPage();
+    $page = new HtmlPage('admidio-file-upload');
     $page->setInlineMode();
 
     $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/css/jquery.fileupload.css');

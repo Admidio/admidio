@@ -28,7 +28,7 @@ if (filter_var($getUrl, FILTER_VALIDATE_URL) === false)
 }
 
 // create html page object
-$page = new HtmlPage($gL10n->get('LNK_REDIRECT'));
+$page = new HtmlPage('admidio-redirect', $gL10n->get('LNK_REDIRECT'));
 
 // add special header for automatic redirection after x seconds
 $page->addHeader('<meta http-equiv="refresh" content="' . $gSettingsManager->getInt('weblinks_redirect_seconds') . '; url=' . $getUrl . '">');

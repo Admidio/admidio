@@ -88,7 +88,7 @@ if(isset($_SESSION['fields_request']))
 }
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-profile-fields-edit', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascript('

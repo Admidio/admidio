@@ -21,7 +21,7 @@
  * **Code example**
  * ```
  * // create a simple html page with some text
- * $page = new HtmlPageInstallation();
+ * $page = new HtmlPageInstallation('admidio-example');
  * $page->addTemplateFile('update.tpl');
  * $page->setUpdateModus();
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
@@ -37,12 +37,14 @@
 class HtmlPageInstallation extends HtmlPage
 {
     /**
-     * Constructor creates the page object and initialized all parameters
-     * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag.
+     * Constructor creates the page object and initialized all parameters.
+     * @param string $id       Id of the page. This id will be set in the html <body> tag.
+     * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
+     *                         and also set the title of the page.
      */
-    public function __construct($headline = '')
+    public function __construct($id, $headline = '')
     {
-        parent::__construct($headline);
+        parent::__construct($id, $headline);
 
         // initialize php template engine smarty
         $this->addTemplateDir(ADMIDIO_PATH . FOLDER_INSTALLATION . '/templates/', 'inst');

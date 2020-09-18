@@ -58,7 +58,7 @@ $announcementsCount = $announcements->getDataSetCount();
 $gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
 
 // create html page object
-$page = new HtmlPage($getHeadline);
+$page = new HtmlPage('admidio-announcements', $getHeadline);
 
 // add rss feed to announcements
 if($gSettingsManager->getBool('enable_rss'))

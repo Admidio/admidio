@@ -291,7 +291,7 @@ switch($getMode)
         $headline = $gL10n->get('INS_ADD_ORGANIZATION');
 
         // create html page object
-        $page = new HtmlPage($headline);
+        $page = new HtmlPage('admidio-new-organization', $headline);
         $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
         // add current url to navigation stack
@@ -391,7 +391,7 @@ switch($getMode)
         $gDb->endTransaction();
 
         // create html page object
-        $page = new HtmlPage($gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
+        $page = new HtmlPage('admidio-new-organization-successful', $gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
 
         $page->addHtml('<p class="lead">'.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULLY_ADDED', array($_POST['orgaLongName'])).'</p>');
 

@@ -53,7 +53,7 @@ catch (AdmException $e)
     $gLanguageData = new LanguageData('en');
     $gL10n = new Language($gLanguageData);
 
-    $page = new HtmlPageInstallation();
+    $page = new HtmlPageInstallation('admidio-update-message');
     $page->setUpdateModus();
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
         $gL10n->get('SYS_RELOAD'), 'fa-arrow-circle-right', ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
@@ -115,7 +115,7 @@ if (FileSystemUtils::isUnixWithPosix() && (!is_executable(ADMIDIO_PATH . FOLDER_
 
         $gLogger->error('FILESYSTEM: Could not set the necessary directory mode!', $pathPermissions);
 
-        $page = new HtmlPageInstallation();
+        $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_DATA_DIR_RIGHTS'),
             $gL10n->get('SYS_RELOAD'), 'fa-arrow-circle-right', ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
@@ -133,7 +133,7 @@ if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA 
     }
     catch (\RuntimeException $exception)
     {
-        $page = new HtmlPageInstallation();
+        $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL)),
             $gL10n->get('SYS_RELOAD'), 'fa-arrow-circle-right', ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
@@ -146,7 +146,7 @@ $message = checkDatabaseVersion($gDb);
 
 if ($message !== '')
 {
-    $page = new HtmlPageInstallation();
+    $page = new HtmlPageInstallation('admidio-update-message');
     $page->setUpdateModus();
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $message,
         $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
@@ -193,7 +193,7 @@ if ($installedDbBetaVersion > 0)
 // if database version is not set then show notice
 if ($installedDbVersion === '')
 {
-    $page = new HtmlPageInstallation();
+    $page = new HtmlPageInstallation('admidio-update-message');
     $page->setUpdateModus();
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_UPDATE_NOT_POSSIBLE') . '<p>' . $gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', array(ADMIDIO_VERSION_TEXT)) . '</p>',
         $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
@@ -210,7 +210,7 @@ if ($getMode === 1)
     || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep))
     {
         // create a page with the notice that the installation must be configured on the next pages
-        $page = new HtmlPageInstallation();
+        $page = new HtmlPageInstallation('admidio-update');
         $page->addTemplateFile('update.tpl');
         $page->setUpdateModus();
         $page->addJavascript('
@@ -263,7 +263,7 @@ if ($getMode === 1)
     // if versions are equal > no update
     elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep)
     {
-        $page = new HtmlPageInstallation();
+        $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
         $page->showMessage('success', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_DATABASE_IS_UP_TO_DATE') . '<br />' . $gL10n->get('SYS_DATABASE_DOESNOT_NEED_UPDATED'),
             $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
@@ -272,7 +272,7 @@ if ($getMode === 1)
     // if source version smaller then database -> show error
     else
     {
-        $page = new HtmlPageInstallation();
+        $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get(
                 'SYS_FILESYSTEM_VERSION_INVALID', array($installedDbVersion,
@@ -301,7 +301,7 @@ elseif ($getMode === 2)
     session_destroy();
 
     // show notice that update was successful
-    $page = new HtmlPageInstallation();
+    $page = new HtmlPageInstallation('admidio-update-successful');
     $page->addTemplateFile('update_successful.tpl');
     $page->setUpdateModus();
     $page->addJavascript('$("#next_page").focus();', true);

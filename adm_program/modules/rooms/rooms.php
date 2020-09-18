@@ -28,12 +28,12 @@ $textRoom = $gL10n->get('SYS_ROOM');
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-rooms', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show link to create new room
-$page->addPageFunctionsMenuItem('menu_item_new_room', $gL10n->get('SYS_CREATE_VAR', array($textRoom)), 
-    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('headline' => $textRoom)), 
+$page->addPageFunctionsMenuItem('menu_item_new_room', $gL10n->get('SYS_CREATE_VAR', array($textRoom)),
+    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('headline' => $textRoom)),
     'fa-plus-circle');
 
 if((int) $gSettingsManager->get('system_show_create_edit') === 1)
@@ -108,7 +108,7 @@ else
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_id' => (int) $room->getValue('room_id'), 'headline' => $textRoom)).'">
                             <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
-                        <a class="dropdown-item btn openPopup" href="javascript:void(0);" 
+                        <a class="dropdown-item btn openPopup" href="javascript:void(0);"
                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.(int) $room->getValue('room_id'), 'name' => $room->getValue('room_name'), 'database_id' => (int) $room->getValue('room_id'))).'">
                             <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                     </div>

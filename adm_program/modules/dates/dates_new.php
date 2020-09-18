@@ -151,7 +151,7 @@ else
 }
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-events-edit', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/date-functions.js');

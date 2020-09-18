@@ -114,7 +114,7 @@ if($usrStatement->rowCount() === 0)
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-registration-assign', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addHtml('

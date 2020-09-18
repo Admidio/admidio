@@ -35,7 +35,7 @@ elseif ((int) $gSettingsManager->get('enable_photo_module') === 2)
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
-// get album data if it's not already stored in session 
+// get album data if it's not already stored in session
 if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_id') === $getPhotoId)
 {
     $photoAlbum =& $_SESSION['photo_album'];
@@ -70,7 +70,7 @@ if ($nextImage <= $photoAlbum->getValue('pho_quantity'))
 }
 
 // create html page object
-$page = new HtmlPage($photoAlbum->getValue('pho_name'));
+$page = new HtmlPage('admidio-photos-presenter', $photoAlbum->getValue('pho_name'));
 
 if ((int) $gSettingsManager->get('photo_show_mode') === PHOTO_SHOW_PAGE)
 {
@@ -92,7 +92,7 @@ if ((int) $gSettingsManager->get('photo_show_mode') !== PHOTO_SHOW_MODAL)
     {
         $datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'));
     }
-    
+
     $page->addHtml('<p class="lead">' . $datePeriod . '<br />' . $gL10n->get('SYS_PHOTO_OF_VAR', array($photoAlbum->getValue('pho_photographers'))) . '</p>');
 }
 
@@ -110,7 +110,7 @@ else
 if ((int) $gSettingsManager->get('photo_show_mode') !== PHOTO_SHOW_MODAL)
 {
     $page->addHtml('<div class="btn-group">');
-    
+
     if ($previousImage > 0)
     {
         $page->addHtml('

@@ -137,7 +137,7 @@ class Message
         if(!isset($page))
         {
             // create html page object
-            $page = new HtmlPage($headline);
+            $page = new HtmlPage('admidio-message', $headline);
 
             if(!$this->includeThemeBody)
             {

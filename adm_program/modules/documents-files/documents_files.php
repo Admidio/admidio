@@ -60,7 +60,7 @@ $folderContent = $currentFolder->getFolderContentsForDownload();
 $navigationBar = $currentFolder->getNavigationForDownload();
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-documents-files', $headline);
 
 $page->addJavascript('
     $("body").on("hidden.bs.modal", ".modal", function() {
@@ -81,19 +81,19 @@ if ($currentFolder->hasUploadRight())
     if ($gSettingsManager->getInt('max_file_upload_size') > 0)
     {
         // show links for upload, create folder and folder configuration
-        $page->addPageFunctionsMenuItem('menu_item_documents_create_folder', $gL10n->get('SYS_CREATE_FOLDER'), 
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_id' => $getFolderId)), 
+        $page->addPageFunctionsMenuItem('menu_item_documents_create_folder', $gL10n->get('SYS_CREATE_FOLDER'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_id' => $getFolderId)),
             'fa-plus-circle');
 
-        $page->addPageFunctionsMenuItem('menu_item_documents_upload_files', $gL10n->get('SYS_UPLOAD_FILES'), 
-            SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)), 
+        $page->addPageFunctionsMenuItem('menu_item_documents_upload_files', $gL10n->get('SYS_UPLOAD_FILES'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)),
             'fa-upload');
     }
 
     if($gCurrentUser->editDownloadRight())
     {
-        $page->addPageFunctionsMenuItem('menu_item_documents_permissions', $gL10n->get('SYS_PERMISSIONS'), 
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_id' => $getFolderId)), 
+        $page->addPageFunctionsMenuItem('menu_item_documents_permissions', $gL10n->get('SYS_PERMISSIONS'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_id' => $getFolderId)),
             'fa-lock');
     }
 }
@@ -164,7 +164,7 @@ if (isset($folderContent['folders']))
             }
 
             $columnValues[] = $additionalFolderFunctions.'
-                                <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+                                <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                     data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fol', 'element_id' => 'row_folder_'.$nextFolder['fol_id'],
                                     'name' => $nextFolder['fol_name'], 'database_id' => $nextFolder['fol_id'])).'">
                                     <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FOLDER').'"></i></a>';
@@ -236,7 +236,7 @@ if (isset($folderContent['files']))
                     title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('SYS_FILE_NOT_EXIST_DELETE_FROM_DB').'"></i>';
             }
             $additionalFileFunctions .= '
-            <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+            <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fil', 'element_id' => 'row_file_'.$fileId,
                 'name' => $file->getValue('fil_name'), 'database_id' => $fileId, 'database_id_2' => $getFolderId)).'">
                 <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FILE').'"></i></a>';
@@ -297,7 +297,7 @@ if ($gCurrentUser->editDownloadRight())
         if (isset($folderContent['additionalFiles']))
         {
             $file = new TableFile($gDb);
-            
+
             foreach ($folderContent['additionalFiles'] as $nextFile)
             {
                 $file->clear();

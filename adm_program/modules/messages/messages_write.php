@@ -203,7 +203,7 @@ else
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-messages-write', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
@@ -660,7 +660,7 @@ if (isset($messageStatement))
         $page->addHtml('
         <div class="card admidio-blog">
             <div class="card-header">
-                <i class="fas fa-comment-alt"></i>' . 
+                <i class="fas fa-comment-alt"></i>' .
                 $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($sentUser, $date->format($gSettingsManager->getString('system_date')), $date->format($gSettingsManager->getString('system_time')))) . '
             </div>
             <div class="card-body">'.

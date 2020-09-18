@@ -86,7 +86,7 @@ $childRoles = RoleDependency::getChildRoles($gDb, $getRoleId);
 $childRoleObjects = array();
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-groups-roles-edit', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascript('

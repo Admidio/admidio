@@ -164,7 +164,7 @@ elseif($getMode === 'html')
                         passwordFormAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
                         passwordFormAlert.fadeIn("slow");
                         setTimeout(function() {
-                            $("#admidio_modal").modal("hide");
+                            $("#admidio-modal").modal("hide");
                         }, 2000);
                     } else {
                         passwordFormAlert.attr("class", "alert alert-danger form-alert");

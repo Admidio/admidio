@@ -147,7 +147,7 @@ if(isset($_SESSION['profile_request']))
 }
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-profile-edit', $headline);
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
@@ -254,7 +254,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                           && (strlen($user->getValue('usr_login_name')) === 0 || strlen($user->getValue('EMAIL')) === 0))))
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
-                            <a id="password_link" class="btn openPopup" href="javascript:void(0);" 
+                            <a id="password_link" class="btn openPopup" href="javascript:void(0);"
                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $getUserId)).'">
                                 <i class="fas fa-key"></i>'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }

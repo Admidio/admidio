@@ -133,7 +133,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
 }
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-guestbook-comment-new', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
