@@ -208,7 +208,7 @@
   <!--Phrases only in Profilemodule-->
   <!--Phrases only in Relationssmodule-->
   <!--Phrases only in Rolesmodule-->
-  <string name="ROL_ROLE_NAME_EXISTS">在这个类别中已经有相同角色。</string>
+  <string name="SYS_ROLE_NAME_EXISTS">在这个类别中已经有相同角色。</string>
   <!--Phrases only in Roommodule-->
   <!--System-Phrases for use in every module-->
   <string name="SYS_ALL_ORGANIZATIONS">所有部门</string>

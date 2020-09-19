@@ -102,30 +102,30 @@ switch ($getType)
         break;
     case 'pro_role':
         $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 2, 'mem_id' => $getDatabaseId));
-        $text = 'ROL_MEMBERSHIP_DEL';
+        $text = 'SYS_MEMBERSHIP_DELETE';
         $callbackFunction = 'callbackRoles';
         break;
     case 'pro_future':
         $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'mem_id' => $getDatabaseId));
-        $text = 'ROL_LINK_MEMBERSHIP_DEL';
+        $text = 'SYS_LINK_MEMBERSHIP_DELETE';
         $callbackFunction = 'callbackFutureRoles';
         break;
     case 'pro_former':
         $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'mem_id' => $getDatabaseId));
-        $text = 'ROL_LINK_MEMBERSHIP_DEL';
+        $text = 'SYS_LINK_MEMBERSHIP_DELETE';
         $callbackFunction = 'callbackFormerRoles';
         break;
     case 'rol':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('mode' => 4, 'rol_id' => $getDatabaseId));
-        $text = 'ROL_ROLE_DELETE_DESC';
+        $text = 'SYS_DELETE_ROLE_DESC';
         break;
     case 'rol_enable':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('mode' => 5, 'rol_id' => $getDatabaseId));
-        $text = 'ROL_ENABLE_ROLE_DESC';
+        $text = 'SYS_ACTIVATE_ROLE_DESC';
         break;
     case 'rol_disable':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles_function.php', array('mode' => 3, 'rol_id' => $getDatabaseId));
-        $text = 'ROL_DISABLE_ROLE_DESC';
+        $text = 'SYS_DEACTIVATE_ROLE_DESC';
         break;
     case 'room':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 2, 'room_id' => $getDatabaseId));

@@ -404,7 +404,7 @@ $formRegistration->addCheckbox(
 );
 $formRegistration->addCheckbox(
     'enable_registration_admin_mail', $gL10n->get('ORG_EMAIL_ALERTS'), (bool) $formValues['enable_registration_admin_mail'],
-    array('helpTextIdInline' => array('ORG_EMAIL_ALERTS_DESC', array('ROL_RIGHT_APPROVE_USERS')))
+    array('helpTextIdInline' => array('ORG_EMAIL_ALERTS_DESC', array('SYS_RIGHT_APPROVE_USERS')))
 );
 $formRegistration->addSubmitButton(
     'btn_save_registration', $gL10n->get('SYS_SAVE'),
@@ -1158,12 +1158,12 @@ $formLists->addSelectBoxFromSql(
 );
 $selectBoxEntries = array(
     '0' => $gL10n->get('SYS_NOBODY'),
-    '1' => preg_replace('/<\/?strong>/', '"', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_ASSIGN_ROLES')))),
-    '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_EDIT_USER'))))
+    '1' => preg_replace('/<\/?strong>/', '"', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_ASSIGN_ROLES')))),
+    '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
 );
 $formLists->addSelectBox(
     'lists_show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
-    array('defaultValue' => $formValues['lists_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_EDIT_USER'))))))
+    array('defaultValue' => $formValues['lists_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
 );
 $html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';

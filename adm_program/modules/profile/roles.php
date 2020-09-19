@@ -42,7 +42,7 @@ if(!$gCurrentUser->assignRoles())
 $user = new User($gDb, $gProfileFields, $getUserId);
 
 // set headline of the script
-$headline = $gL10n->get('ROL_ROLE_ASSIGNMENT', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
+$headline = $gL10n->get('SYS_ROLE_ASSIGNMENT_FOR', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
 
 if(!$getInline)
 {
@@ -262,7 +262,7 @@ while($row = $statement->fetch())
     // show icon that leaders have no additional rights
     if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_NO_RIGHTS)
     {
-        $leaderRights .= '<i class="fas fa-info-circle" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
+        $leaderRights .= '<i class="fas fa-info-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
                           <i class="fas fa-trash invisible"></i>';
     }
 
@@ -270,14 +270,14 @@ while($row = $statement->fetch())
     if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_EDIT
     || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $leaderRights .= '<i class="fas fa-user-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'"></i>';
+        $leaderRights .= '<i class="fas fa-user-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_EDIT_MEMBERS').'"></i>';
     }
 
     // show icon with assign role right if leader has this right
     if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN
     || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $leaderRights .= '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'"></i>';
+        $leaderRights .= '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_ASSIGN_MEMBERS').'"></i>';
     }
 
     // show dummy icon if leader has not all rights

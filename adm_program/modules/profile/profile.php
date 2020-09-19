@@ -105,8 +105,8 @@ $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 
 $page->addJavascript('
     var profileJS = new ProfileJS(gRootPath);
-    profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('ROL_MEMBERSHIP_DEL', array('[rol_name]')).'";
-    profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', array('[rol_name]')).'";
+    profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('SYS_MEMBERSHIP_DELETE', array('[rol_name]')).'";
+    profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('SYS_LINK_MEMBERSHIP_DELETE', array('[rol_name]')).'";
     profileJS.userId                  = '.$userId.';
 
     /**
@@ -261,7 +261,7 @@ $page->addPageFunctionsMenuItem('menu_item_profile_vcard', $gL10n->get('PRO_EXPO
 // if you have the right to assign roles then show the link to assign new roles to this user
 if($gCurrentUser->assignRoles())
 {
-    $page->addPageFunctionsMenuItem('menu_item_profile_role_memberships_change', $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'),
+    $page->addPageFunctionsMenuItem('menu_item_profile_role_memberships_change', $gL10n->get('SYS_ROLE_MEMBERSHIPS_CHANGE'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId)),
         'fa-users');
 }
@@ -590,7 +590,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_assign_roles'],
-                'right' => $gL10n->get('ROL_RIGHT_ASSIGN_ROLES'),
+                'right' => $gL10n->get('SYS_RIGHT_ASSIGN_ROLES'),
                 'icon'  => 'fa-users'
             );
         }
@@ -598,7 +598,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_approve_users'],
-                'right' => $gL10n->get('ROL_RIGHT_APPROVE_USERS'),
+                'right' => $gL10n->get('SYS_RIGHT_APPROVE_USERS'),
                 'icon'  => 'fa-address-card'
             );
         }
@@ -606,7 +606,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_edit_user'],
-                'right' => $gL10n->get('ROL_RIGHT_EDIT_USER'),
+                'right' => $gL10n->get('SYS_RIGHT_EDIT_USER'),
                 'icon'  => 'fa-users-cog'
             );
         }
@@ -615,7 +615,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_mail_to_all'],
-                'right' => $gL10n->get('ROL_RIGHT_MAIL_TO_ALL'),
+                'right' => $gL10n->get('SYS_RIGHT_MAIL_TO_ALL'),
                 'icon'  => 'fa-envelope'
             );
         }
@@ -623,7 +623,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_profile'],
-                'right' => $gL10n->get('ROL_RIGHT_PROFILE'),
+                'right' => $gL10n->get('SYS_RIGHT_PROFILE'),
                 'icon'  => 'fa-user'
             );
         }
@@ -631,7 +631,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_announcements'],
-                'right' => $gL10n->get('ROL_RIGHT_ANNOUNCEMENTS'),
+                'right' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
                 'icon'  => 'fa-newspaper'
             );
         }
@@ -639,7 +639,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_dates'],
-                'right' => $gL10n->get('ROL_RIGHT_DATES'),
+                'right' => $gL10n->get('SYS_RIGHT_DATES'),
                 'icon'  => 'fa-calendar-alt'
             );
         }
@@ -647,7 +647,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_photo'],
-                'right' => $gL10n->get('ROL_RIGHT_PHOTO'),
+                'right' => $gL10n->get('SYS_RIGHT_PHOTOS'),
                 'icon'  => 'fa-image'
             );
         }
@@ -655,7 +655,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_download'],
-                'right' => $gL10n->get('ROL_RIGHT_DOWNLOAD'),
+                'right' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
                 'icon'  => 'fa-download'
             );
         }
@@ -663,7 +663,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_guestbook'],
-                'right' => $gL10n->get('ROL_RIGHT_GUESTBOOK'),
+                'right' => $gL10n->get('SYS_RIGHT_GUESTBOOK'),
                 'icon'  => 'fa-book'
             );
         }
@@ -671,7 +671,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_guestbook_comments'],
-                'right' => $gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS'),
+                'right' => $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'),
                 'icon'  => 'fa-comment'
             );
         }
@@ -679,7 +679,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_weblinks'],
-                'right' => $gL10n->get('ROL_RIGHT_WEBLINKS'),
+                'right' => $gL10n->get('SYS_RIGHT_WEBLINKS'),
                 'icon'  => 'fa-link'
             );
         }
@@ -687,7 +687,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_all_lists_view'],
-                'right' => $gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW'),
+                'right' => $gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'),
                 'icon'  => 'fa-list'
             );
         }
@@ -720,13 +720,13 @@ if($gSettingsManager->getBool('profile_show_roles'))
     // Ausgabe
     $page->addHtml('
     <div class="card admidio-field-group" id="profile_roles_box">
-        <div class="card-header">'.$gL10n->get('ROL_ROLE_MEMBERSHIPS'));
+        <div class="card-header">'.$gL10n->get('SYS_ROLE_MEMBERSHIPS'));
             // if you have the right to assign roles then show the link to assign new roles to this user
             if($gCurrentUser->assignRoles())
             {
                 $page->addHtml('<a class="admidio-icon-link float-right openPopup" id="profile_role_memberships_change" data-class="modal-lg"
                     href="javascript:void(0);" data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId, 'inline' => '1')).'">
-                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'"></i></a>');
+                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_ROLE_MEMBERSHIPS_CHANGE').'"></i></a>');
             }
         $page->addHtml('</div>
         <div class="card-body" id="profile_roles_box_body">

@@ -259,21 +259,21 @@ else
     // show icon that leaders have no additional rights
     if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_NO_RIGHTS)
     {
-        $htmlLeaderText .= $gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS');
+        $htmlLeaderText .= $gL10n->get('SYS_LEADER_NO_ADDITIONAL_RIGHTS');
     }
 
     // show icon with edit user right if leader has this right
     if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_EDIT
     || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $htmlLeaderText .= $gL10n->get('ROL_LEADER_EDIT_MEMBERS');
+        $htmlLeaderText .= $gL10n->get('SYS_LEADER_EDIT_MEMBERS');
     }
 
     // show icon with assign role right if leader has this right
     if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN
     || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $htmlLeaderText .= $gL10n->get('ROL_LEADER_ASSIGN_MEMBERS');
+        $htmlLeaderText .= $gL10n->get('SYS_LEADER_ASSIGN_MEMBERS');
     }
 
     $htmlLeaderColumn .= '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"

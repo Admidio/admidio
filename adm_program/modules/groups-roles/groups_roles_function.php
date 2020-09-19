@@ -93,7 +93,7 @@ if($getMode === 2)
 
         if($pdoStatement->fetchColumn() > 0)
         {
-            $gMessage->show($gL10n->get('ROL_ROLE_NAME_EXISTS'));
+            $gMessage->show($gL10n->get('SYS_ROLE_NAME_EXISTS'));
             // => EXIT
         }
     }
@@ -154,7 +154,7 @@ if($getMode === 2)
         $validFromDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $_POST['rol_start_date']);
         if(!$validFromDate)
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('ROL_VALID_FROM'), $gSettingsManager->getString('system_date'))));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_FROM'), $gSettingsManager->getString('system_date'))));
             // => EXIT
         }
         else
@@ -169,7 +169,7 @@ if($getMode === 2)
         $validToDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $_POST['rol_end_date']);
         if(!$validToDate)
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('ROL_VALID_TO'), $gSettingsManager->getString('system_date'))));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_TO'), $gSettingsManager->getString('system_date'))));
             // => EXIT
         }
         else

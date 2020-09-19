@@ -40,34 +40,34 @@ switch ($getType)
         $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('LNK_WEBLINKS')));
         $rolesRightEditName = 'LNK_EDIT_WEBLINKS';
         $rolesRightsColumn  = 'rol_weblinks';
-        $rolesRightsName    = 'ROL_RIGHT_WEBLINKS';
+        $rolesRightsName    = 'SYS_RIGHT_WEBLINKS';
         break;
 
     case 'ANN':
         $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
         $rolesRightEditName = 'ANN_EDIT_ANNOUNCEMENTS';
         $rolesRightsColumn  = 'rol_announcements';
-        $rolesRightsName    = 'ROL_RIGHT_ANNOUNCEMENTS';
+        $rolesRightsName    = 'SYS_RIGHT_ANNOUNCEMENTS';
         break;
 
     case 'USF':
         $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
         $rolesRightEditName = 'PRO_EDIT_PROFILE_FIELDS';
         $rolesRightsColumn  = 'rol_edit_user';
-        $rolesRightsName    = 'ROL_RIGHT_EDIT_USER';
+        $rolesRightsName    = 'SYS_RIGHT_EDIT_USER';
         break;
 
     case 'DAT':
         $rolesRightEditName = 'DAT_EDIT_EVENTS';
         $rolesRightsColumn  = 'rol_dates';
-        $rolesRightsName    = 'ROL_RIGHT_DATES';
+        $rolesRightsName    = 'SYS_RIGHT_DATES';
         break;
 
     case 'AWA':
         $headline = $gL10n->get('SYS_CATEGORY_VAR', 'Awards');
         $rolesRightEditName = 'Not used, leave empty';
         $rolesRightsColumn  = 'rol_edit_user';
-        $rolesRightsName    = 'ROL_RIGHT_EDIT_USER';
+        $rolesRightsName    = 'SYS_RIGHT_EDIT_USER';
         break;
 
     default:

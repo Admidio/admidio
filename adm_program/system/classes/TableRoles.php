@@ -219,18 +219,18 @@ class TableRoles extends TableAccess
 
             if ((int) $countRolesStatement->fetchColumn() === 0)
             {
-                throw new AdmException('ROL_DELETE_NO_DEFAULT_ROLE', array($this->getValue('rol_name'), $gL10n->get('ROL_DEFAULT_REGISTRATION')));
+                throw new AdmException('SYS_DELETE_NO_DEFAULT_ROLE', array($this->getValue('rol_name'), $gL10n->get('SYS_DEFAULT_ASSIGNMENT_REGISTRATION')));
             }
         }
 
         // users are not allowed to delete system roles
         if ((int) $this->getValue('rol_system') === 1)
         {
-            throw new AdmException('ROL_DELETE_SYSTEM_ROLE', array($this->getValue('rol_name')));
+            throw new AdmException('SYS_DELETE_SYSTEM_ROLE', array($this->getValue('rol_name')));
         }
         if ((int) $this->getValue('rol_administrator') === 1)
         {
-            throw new AdmException('ROL_DELETE_ROLE', array($gL10n->get('SYS_ADMINISTRATOR')));
+            throw new AdmException('SYS_CANT_DELETE_ROLE', array($gL10n->get('SYS_ADMINISTRATOR')));
         }
 
         $this->db->startTransaction();
@@ -278,11 +278,11 @@ class TableRoles extends TableAccess
         global $gL10n;
 
         $costPeriods = array(
-            -1 => $gL10n->get('ROL_UNIQUELY'),
-            1  => $gL10n->get('ROL_ANNUALLY'),
-            2  => $gL10n->get('ROL_SEMIYEARLY'),
-            4  => $gL10n->get('ROL_QUARTERLY'),
-            12 => $gL10n->get('ROL_MONTHLY')
+            -1 => $gL10n->get('SYS_ONE_TIME'),
+            1  => $gL10n->get('SYS_ANNUALLY'),
+            2  => $gL10n->get('SYS_HALF_YEARLY'),
+            4  => $gL10n->get('SYS_QUARTERLY'),
+            12 => $gL10n->get('SYS_MONTHLY')
         );
 
         if ($costPeriod !== null)
@@ -500,7 +500,7 @@ class TableRoles extends TableAccess
 
                 if ((int) $pdoStatement->fetchColumn() === 0)
                 {
-                    throw new AdmException('ROL_NO_DEFAULT_ROLE', array($gL10n->get('ROL_DEFAULT_REGISTRATION')));
+                    throw new AdmException('SYS_NO_DEFAULT_ROLE', array($gL10n->get('SYS_DEFAULT_ASSIGNMENT_REGISTRATION')));
                 }
             }
         }
