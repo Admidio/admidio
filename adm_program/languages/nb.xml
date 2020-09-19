@@ -24,11 +24,11 @@
   <string name="BAC_START_BACKUP">Start sikkerhetskopiering</string>
   <string name="BAC_SUM">Total</string>
   <string name="BAC_SECONDS_VAR">#VAR1# sekunder</string>
-  <string name="CAT_ALL_THIS_ORGANIZATION">Alle medlemmer av denne organisasjonen</string>
-  <string name="CAT_CATEGORY_EXIST">Det er allerede en kategori i denne organisasjonen med dette navnet.</string>
-  <string name="CAT_DEFAULT_VAR">Standard-#VAR1#</string>
-  <string name="CAT_MOVE_DOWN">Flytt ned #VAR1\"</string>
-  <string name="CAT_MOVE_UP">Flytt opp #VAR1#</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">Alle medlemmer av denne organisasjonen</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Det er allerede en kategori i denne organisasjonen med dette navnet.</string>
+  <string name="SYS_DEFAULT_VAR">Standard-#VAR1#</string>
+  <string name="SYS_MOVE_DOWN">Flytt ned #VAR1\"</string>
+  <string name="SYS_MOVE_UP">Flytt opp #VAR1#</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Legg til hendelse i kalender</string>
   <string name="DAT_ALL_DAY">Fulltid</string>
@@ -170,9 +170,9 @@
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Organisasjonsnavn</string>
   <string name="ORG_VARIABLE_NEW_PASSWORD">Nytt brukerpassord</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_BETA_VERSION">Tilgjengelig Beta</string>
-  <string name="UPD_CURRENT_VERSION">Installert</string>
-  <string name="UPD_STABLE_VERSION">Tilgjengelig</string>
+  <string name="SYS_AVAILABLE_BETA">Tilgjengelig Beta</string>
+  <string name="SYS_INSTALLED">Installert</string>
+  <string name="SYS_AVAILABLE">Tilgjengelig</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Slett album</string>

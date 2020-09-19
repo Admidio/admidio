@@ -66,7 +66,7 @@ class TableCategory extends TableAccess
      * the category couldn't be deleted.
      * @throws AdmException SYS_DELETE_SYSTEM_CATEGORY
      *                      SYS_DELETE_LAST_CATEGORY
-     *                      CAT_DONT_DELETE_CATEGORY
+     *                      SYS_DONT_DELETE_CATEGORY
      * @return bool **true** if no error occurred
      */
     public function delete()
@@ -115,7 +115,7 @@ class TableCategory extends TableAccess
 
         if ($recordsetsStatement->rowCount() > 0)
         {
-            throw new AdmException('CAT_DONT_DELETE_CATEGORY', array($this->getValue('cat_name'), $this->getNumberElements()));
+            throw new AdmException('SYS_DONT_DELETE_CATEGORY', array($this->getValue('cat_name'), $this->getNumberElements()));
         }
 
         // delete all roles assignments that have the right to view this category

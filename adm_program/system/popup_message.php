@@ -57,7 +57,7 @@ switch ($getType)
         }
         else
         {
-            $text = 'CAT_DELETE_CATEGORY';
+            $text = 'SYS_WANT_DELETE_CATEGORY';
         }
         break;
     case 'dat':
@@ -135,7 +135,7 @@ switch ($getType)
         break;
     case 'urt':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 2, 'urt_id' => $getDatabaseId));
-        $text = 'REL_USER_RELATION_TYPE_DEL';
+        $text = 'SYS_RELATIONSHIP_TYPE_DELETE';
         break;
     case 'ure':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_function.php', array('mode' => 2, 'ure_id' => $getDatabaseId));

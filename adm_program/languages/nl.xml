@@ -26,18 +26,18 @@
   <string name="BAC_SUM">Totaal</string>
   <string name="BAC_SECONDS_VAR">#VAR1# seconden</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_ADMINISTRATORS_DESC">Leden van deze rol zijn beheerders van de module en hebben toegang tot alles. U kunt data maken, bewerken, verwijderen en categorieën en hun rechten bewerken. Een rol kan een beheerder worden als deze het recht #VAR1_BOLD# toegewezen wordt.</string>
-  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle beheerders van de module van de hoofdorganisatie.</string>
-  <string name="CAT_ALL_THIS_ORGANIZATION">Alle medewerkers van deze organisatie</string>
-  <string name="CAT_CATEGORY_EXIST">Naam van categorie bestaat al in de geselecteerde organisatie.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Als deze optie is geactiveerd, zullen profielvelden van deze categorie verschijnen die kunnen worden bewerkt in het profiel van de volgende organisaties: #VAR1#.\n\nSvp deactiveren als velden alleen in uw eigen organisatie getoond moeten worden.</string>
-  <string name="CAT_DEFAULT_VAR">Standaard #VAR1#</string>
-  <string name="CAT_DELETE_CATEGORY">Bent u zeker dat u categorie #VAR1_BOLD# wenst te verwijderen?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">Kon categorie #VAR1_BOLD# niet verwijderen omdat die nog #VAR2# afhankelijke berichten bevat.</string>
-  <string name="CAT_MOVE_DOWN">Plaats #VAR1# omlaag</string>
-  <string name="CAT_MOVE_UP">Plaats #VAR1# omhoog</string>
-  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Deze instelling kan alleen ingesteld worden door de hoofdorganisatie.</string>
-  <string name="CAT_PROFILE_FIELDS_VISIBILITY">De zichtbaarheid van de profielvelden in deze categorie kan voor andere gebruikers afgeschermd worden, maar de profielvelden blijven zichtbaar in hun eigen profiel en kunnen daar bewerkt worden.</string>
+  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Leden van deze rol zijn beheerders van de module en hebben toegang tot alles. U kunt data maken, bewerken, verwijderen en categorieën en hun rechten bewerken. Een rol kan een beheerder worden als deze het recht #VAR1_BOLD# toegewezen wordt.</string>
+  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle beheerders van de module van de hoofdorganisatie.</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">Alle medewerkers van deze organisatie</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Naam van categorie bestaat al in de geselecteerde organisatie.</string>
+  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Als deze optie is geactiveerd, zullen profielvelden van deze categorie verschijnen die kunnen worden bewerkt in het profiel van de volgende organisaties: #VAR1#.\n\nSvp deactiveren als velden alleen in uw eigen organisatie getoond moeten worden.</string>
+  <string name="SYS_DEFAULT_VAR">Standaard #VAR1#</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">Bent u zeker dat u categorie #VAR1_BOLD# wenst te verwijderen?</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">Kon categorie #VAR1_BOLD# niet verwijderen omdat die nog #VAR2# afhankelijke berichten bevat.</string>
+  <string name="SYS_MOVE_DOWN">Plaats #VAR1# omlaag</string>
+  <string name="SYS_MOVE_UP">Plaats #VAR1# omhoog</string>
+  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Deze instelling kan alleen ingesteld worden door de hoofdorganisatie.</string>
+  <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">De zichtbaarheid van de profielvelden in deze categorie kan voor andere gebruikers afgeschermd worden, maar de profielvelden blijven zichtbaar in hun eigen profiel en kunnen daar bewerkt worden.</string>
   <string name="CAT_ONLY_PARENT_ORGANIZATION">Deze categorie is zichtbaar voor alle organisaties en kan daarom alleen bewerkt worden door de hoofdorganisatie.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Plaats evenement op kalender</string>
@@ -518,13 +518,13 @@
   <string name="MEM_USERS_PER_PAGE">Aantal gebruikers per pagina</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Aantal gebruikers die op een pagina in een lijst weergegeven worden. Zijn er meer gebruikers, dan kan er gebladerd worden. (Standaard: 25)</string>
   <!--Phrases only in Menu-->
-  <string name="MEN_NAME_DESC">De naam van het item in het menu. Hier kunt u ook de naam van een vertaalstring invoeren.</string>
-  <string name="MEN_MENU_ITEM">Menu item</string>
-  <string name="MEN_MENU_LEVEL">Menu level</string>
-  <string name="MEN_MENU_LEVEL_DESC">Een menu-item is altijd ondergeschikt aan een ander menu-item. Selecteer in de selectielijst een menu level waarin het nieuwe menu-item zichtbaar moet zijn.</string>
-  <string name="MEN_MODULE_RIGHTS">Modulerechten</string>
-  <string name="MEN_MODULE_RIGHTS_DESC">Als u hier een module opgeeft, wordt het menu-item alleen weergegeven als de gebruiker ook het recht heeft om deze module te bekijken.</string>
-  <string name="MEN_PLUGIN">Plugins</string>
+  <string name="SYS_MENU_NAME_DESC">De naam van het item in het menu. Hier kunt u ook de naam van een vertaalstring invoeren.</string>
+  <string name="SYS_MENU_ITEM">Menu item</string>
+  <string name="SYS_MENU_LEVEL">Menu level</string>
+  <string name="SYS_MENU_LEVEL_DESC">Een menu-item is altijd ondergeschikt aan een ander menu-item. Selecteer in de selectielijst een menu level waarin het nieuwe menu-item zichtbaar moet zijn.</string>
+  <string name="SYS_MODULE_RIGHTS">Modulerechten</string>
+  <string name="SYS_MENU_MODULE_RIGHTS_DESC">Als u hier een module opgeeft, wordt het menu-item alleen weergegeven als de gebruiker ook het recht heeft om deze module te bekijken.</string>
+  <string name="SYS_PLUGINS">Plugins</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Chat activeren</string>
   <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">De chat module kan in- of uitgeschakeld worden via deze instelling. De module laadt dynamisch iedere 3 seconden data van de database. Er worden maximaal 99 items opgeslagen. Bij 100 berichten worden de eerste 50 items verwijderd. (Standaard: uitgeschakeld)</string>
@@ -706,14 +706,14 @@
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Website URL van de organisatie</string>
   <string name="ORG_VARIABLE_USERNAME">Gebruikersnaam van de gebruiker uit de respectieve e-mailcontext</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_BETA_VERSION">Beschikbare Beta</string>
-  <string name="UPD_CONNECTION_ERROR">Verbinding met Admidio update pagina niet gelukt. Check svp uw internet verbinding of probeer het later opnieuw. U kunt ook de #VAR1# website bezoeken voor een handmatige update.</string>
-  <string name="UPD_CURRENT_VERSION">Geïnstalleerd</string>
-  <string name="UPD_NEW">Een nieuwe stabiele versie is beschikbaar!</string>
-  <string name="UPD_NEW_BETA">Een nieuwe beta versie is beschikbaar!</string>
-  <string name="UPD_NEW_BOTH">Een nieuwe stabiele versie en beta versie zijn beschikbaar!</string>
-  <string name="UPD_NO_NEW">U gebruikt momenteel een #VAR1#versie van Admidio!</string>
-  <string name="UPD_STABLE_VERSION">Beschikbaar</string>
+  <string name="SYS_AVAILABLE_BETA">Beschikbare Beta</string>
+  <string name="SYS_CONNECTION_ERROR">Verbinding met Admidio update pagina niet gelukt. Check svp uw internet verbinding of probeer het later opnieuw. U kunt ook de #VAR1# website bezoeken voor een handmatige update.</string>
+  <string name="SYS_INSTALLED">Geïnstalleerd</string>
+  <string name="SYS_NEW_VERSION_AVAILABLE">Een nieuwe stabiele versie is beschikbaar!</string>
+  <string name="SYS_NEW_BETA_AVAILABLE">Een nieuwe beta versie is beschikbaar!</string>
+  <string name="SYS_NEW_BOTH_AVAILABLE">Een nieuwe stabiele versie en beta versie zijn beschikbaar!</string>
+  <string name="SYS_USING_CURRENT_VERSION">U gebruikt momenteel een #VAR1#versie van Admidio!</string>
+  <string name="SYS_AVAILABLE">Beschikbaar</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Verwijder album</string>
@@ -861,13 +861,13 @@
   <string name="PRO_WANT_DELETE_PHOTO">Wilt u de geselecteerde foto verwijderen?</string>
   <string name="PRO_YEARS">Jaren</string>
   <!--Phrases only in Relationssmodule-->
-  <string name="REL_EDIT_USER_DESC">Als deze instelling is ingesteld, kan een gebruiker het profiel van een andere gebruiker bewerken als hij in relatie staat tot deze andere gebruiker. Bij een asymmetrische relatie wordt het recht afzonderlijk toegewezen, bij een symmetrische relatie mogen beide gebruikers het andere profiel bewerken en bij een unidirectionele relatie mag alleen de gebruiker met de opgeslagen relatie het andere profiel bewerken.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Als deze instelling is ingesteld, kan een gebruiker het profiel van een andere gebruiker bewerken als hij in relatie staat tot deze andere gebruiker. Bij een asymmetrische relatie wordt het recht afzonderlijk toegewezen, bij een symmetrische relatie mogen beide gebruikers het andere profiel bewerken en bij een unidirectionele relatie mag alleen de gebruiker met de opgeslagen relatie het andere profiel bewerken.</string>
   <string name="REL_NO_USER_RELATION_TYPES_FOUND">Er zijn nog geen relatie typen. Relatie typen kunnen worden gemaakt in de gebruikersadministratie.</string>
-  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
-  <string name="REL_USER_RELATION_TYPE_DEL">Wilt u het relatie type #VAR1_BOLD# verwijderen? Let op: hiermee worden alle bestaande relaties van dit type verwijderd.</string>
-  <string name="REL_USER_RELATION_TYPE_DESC">Een asymmetrische relatie kan b.v. worden gebruikt voor ouder / kind, terwijl een symmetrische relatie b.v. kan worden gebruikt voor broers en zussen. Deze zijn altijd tweezijdig, terwijl unidirectionele relaties slechts in één richting wijzen.</string>
-  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
-  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirectional</string>
+  <string name="SYS_ASYMMETRICAL">asymmetrisch</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DELETE">Wilt u het relatie type #VAR1_BOLD# verwijderen? Let op: hiermee worden alle bestaande relaties van dit type verwijderd.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DESC">Een asymmetrische relatie kan b.v. worden gebruikt voor ouder / kind, terwijl een symmetrische relatie b.v. kan worden gebruikt voor broers en zussen. Deze zijn altijd tweezijdig, terwijl unidirectionele relaties slechts in één richting wijzen.</string>
+  <string name="SYS_SYMMETRICAL">symmetrisch</string>
+  <string name="SYS_UNIDIRECTIONAL">unidirectional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ANNUALLY">Jaarlijks</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Leden toewijzen en bewerken</string>

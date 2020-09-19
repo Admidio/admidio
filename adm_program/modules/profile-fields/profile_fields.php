@@ -239,9 +239,9 @@ while($row = $statement->fetch())
     $columnValues = array(
         '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_id' => $usfId)).'">'.$userField->getValue('usf_name').'</a>',
         '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_UP.'\', '.$usfId.')">'.
-            '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('CAT_MOVE_UP', array('MEM_PROFILE_FIELD')) . '"></i></a>
+            '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('MEM_PROFILE_FIELD')) . '"></i></a>
         <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_DOWN.'\', '.$usfId.')">'.
-            '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('CAT_MOVE_DOWN', array('MEM_PROFILE_FIELD')) . '"></i></a>',
+            '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('MEM_PROFILE_FIELD')) . '"></i></a>',
         $description,
         $hidden,
         $disable,

@@ -26,18 +26,18 @@
   <string name="BAC_SUM">Σύνολο</string>
   <string name="BAC_SECONDS_VAR">#VAR1# δευτερόλεπτα</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_ADMINISTRATORS_DESC">Μέλη αυτού του ρόλου είναι διαχειριστές της ενότητας και έχουν πρόσβαση παντού. Μπορείτε να δημιουργήσετε, να επεξεργαστείτε, να διαγράψετε δεδομένα και να επεξεργαστείτε κατηγορίες και τα δικαιώματά τους. Ένας ρόλος μπορεί να γίνει διαχειριστής εκχωρώντας τον σωστό #VAR1_BOLD#.</string>
-  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Όλοι οι διαχειριστές της ενότητας του γονικού οργανισμού</string>
-  <string name="CAT_ALL_THIS_ORGANIZATION">Όλα τα μέλη του οργανισμού</string>
-  <string name="CAT_CATEGORY_EXIST">Το όνομα της κατηγορίας υπάρχει ήδη στον επιλεγμένο οργανισμό.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Εάν ενεργοποιηθεί η επιλογή, τα πεδία προφίλ αυτής της κατηγορίας θα εμφανιστούν και μπορούν να επεξεργαστούν στην προβολή προφίλ των ακόλουθων οργανισμών: #VAR1#\n\nΠαρακαλούμε, απενεργοποιήστε, εάν τα πεδία πρέπει να εμφανίζονται μόνο στον οργανισμό σας.</string>
-  <string name="CAT_DEFAULT_VAR">Στάνταρντ #VAR1#</string>
-  <string name="CAT_DELETE_CATEGORY">Θέλεις να διαγραφεί η κατηγορία #VAR1_BOLD# ?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">Δεν είναι εφικτή η διαγραφή της κατηγορίας  #VAR1_BOLD# λόγω #VAR2# εξαρτώμενων οντοτήτων.</string>
-  <string name="CAT_MOVE_DOWN">Μετακίνηση κάτω #VAR1#</string>
-  <string name="CAT_MOVE_UP">Μετακίνηση επάνω #VAR1#</string>
-  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Αυτή η επιλογή μπορεί να ρυθμιστεί από τον γονικό οργανισμό</string>
-  <string name="CAT_PROFILE_FIELDS_VISIBILITY">Η εμφάνιση των πεδίων του προφίλ σε αυτήν την κατηγορία μπορεί να μην είναι δυνατή για άλλους χρήστες. Τα πεδία του προφίλ παραμένουν ορατά μόνο στο δικό τους προφίλ και η επεξεργασία γίνεται εκεί.</string>
+  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Μέλη αυτού του ρόλου είναι διαχειριστές της ενότητας και έχουν πρόσβαση παντού. Μπορείτε να δημιουργήσετε, να επεξεργαστείτε, να διαγράψετε δεδομένα και να επεξεργαστείτε κατηγορίες και τα δικαιώματά τους. Ένας ρόλος μπορεί να γίνει διαχειριστής εκχωρώντας τον σωστό #VAR1_BOLD#.</string>
+  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Όλοι οι διαχειριστές της ενότητας του γονικού οργανισμού</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">Όλα τα μέλη του οργανισμού</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Το όνομα της κατηγορίας υπάρχει ήδη στον επιλεγμένο οργανισμό.</string>
+  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Εάν ενεργοποιηθεί η επιλογή, τα πεδία προφίλ αυτής της κατηγορίας θα εμφανιστούν και μπορούν να επεξεργαστούν στην προβολή προφίλ των ακόλουθων οργανισμών: #VAR1#\n\nΠαρακαλούμε, απενεργοποιήστε, εάν τα πεδία πρέπει να εμφανίζονται μόνο στον οργανισμό σας.</string>
+  <string name="SYS_DEFAULT_VAR">Στάνταρντ #VAR1#</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">Θέλεις να διαγραφεί η κατηγορία #VAR1_BOLD# ?</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">Δεν είναι εφικτή η διαγραφή της κατηγορίας  #VAR1_BOLD# λόγω #VAR2# εξαρτώμενων οντοτήτων.</string>
+  <string name="SYS_MOVE_DOWN">Μετακίνηση κάτω #VAR1#</string>
+  <string name="SYS_MOVE_UP">Μετακίνηση επάνω #VAR1#</string>
+  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Αυτή η επιλογή μπορεί να ρυθμιστεί από τον γονικό οργανισμό</string>
+  <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Η εμφάνιση των πεδίων του προφίλ σε αυτήν την κατηγορία μπορεί να μην είναι δυνατή για άλλους χρήστες. Τα πεδία του προφίλ παραμένουν ορατά μόνο στο δικό τους προφίλ και η επεξεργασία γίνεται εκεί.</string>
   <string name="CAT_ONLY_PARENT_ORGANIZATION">Αυτή η κατηγορία είναι ορατή σε όλους τους οργανισμούς και για αυτόν τον λόγο η επεξεργασία μπορεί να γίνεται μόνο από τον γονικό οργανισμό.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Πρόσθεσε εκδήλωση στο ημερολόγιο</string>
@@ -138,11 +138,11 @@
   <string name="ORG_CAPTCHA_BACKGROUND_IMAGE_DESC">Μπορείτε να επιλέξετε μια εικόνα φόντου που θα χρησιμοποιηθεί ως Captcha. Το χρώμα της γραμματοσειράς θα πρέπει να ταιριάζει με την εικόνα για να είναι ευανάγνωστη. (προεπιλογή: χωρίς εικόνα).</string>
   <string name="ORG_CAPTCHA_COLOR_DESC">Το χρώμα του φόντου πρέπει να είναι σε καλή αντίθεση με το χρώμα του χαρακτήρα. Αν το χρώμα γραμμής και του χαρακτήρα είναι το ίδιο, τότε είναι πιο δύσκολο τα scripts και τα bots να διαβάσουν το Captcha. Όλα τα χρώματα πρέπει να καθοριστούν ως #VAR1#δεκαεξαδική τιμή#VAR2#.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Ορίστε εδώ το χρώμα φόντου του JavaScript editor. Η τιμή μπορεί να είναι μια δεκαεξαδική τιμή χρώματος όπως #ffa500 ή μαι τιμή RGB όπως (255, 185, 0).</string>
-  <string name="UPD_NEW">Είναι διαθέσιμη μια νέα σταθερή έκδοση</string>
-  <string name="UPD_NEW_BETA">Είναι διαθέσιμη μια νέα beta έκδοση</string>
-  <string name="UPD_NEW_BOTH">Είναι διαθέσιμες μια σταθερή και μια beta έκδοση</string>
-  <string name="UPD_NO_NEW">Χρησιμοποιείται η τρέχουσα έκδοση #VAR1# του Admidio!</string>
-  <string name="UPD_STABLE_VERSION">Διαθέσιμο</string>
+  <string name="SYS_NEW_VERSION_AVAILABLE">Είναι διαθέσιμη μια νέα σταθερή έκδοση</string>
+  <string name="SYS_NEW_BETA_AVAILABLE">Είναι διαθέσιμη μια νέα beta έκδοση</string>
+  <string name="SYS_NEW_BOTH_AVAILABLE">Είναι διαθέσιμες μια σταθερή και μια beta έκδοση</string>
+  <string name="SYS_USING_CURRENT_VERSION">Χρησιμοποιείται η τρέχουσα έκδοση #VAR1# του Admidio!</string>
+  <string name="SYS_AVAILABLE">Διαθέσιμο</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Άλμπουμ</string>
   <string name="PHO_ALBUM_DELETE">Διαγραφή άλμπουμ</string>

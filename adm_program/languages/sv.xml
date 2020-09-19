@@ -26,18 +26,18 @@
   <string name="BAC_SUM">Totalt</string>
   <string name="BAC_SECONDS_VAR">#VAR1# sekunder</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_ADMINISTRATORS_DESC">Medlemmar i denna roll är administratörer av moduler och har tillgång till allt. Du kan skapa, redigera, radera data och redigera kategorier och deras rättigheter. En roll kan göras till en administratör genom att tilldela den rätt #VAR1_BOLD#.</string>
-  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alla administratörer av modulen i moderorganisationer</string>
-  <string name="CAT_ALL_THIS_ORGANIZATION">Alla medlemmar i denna organisation</string>
-  <string name="CAT_CATEGORY_EXIST">Kategorinamn finns redan i vald organisation.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Om alternativt är aktiverat visa profil är den här kategorin och kan redigeras i profilen för att följa organisationer: #VAR1# \n\nDeaktivera om fält bara ska visas i din organisation. </string>
-  <string name="CAT_DEFAULT_VAR">Standard #VAR1#</string>
-  <string name="CAT_DELETE_CATEGORY">Vill du verkligen ta bort kategori #VAR1_BOLD#?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">Det går inte att ta bort kategorin #VAR1_BOLD# på grund av #VAR2# beroende poster.</string>
-  <string name="CAT_MOVE_DOWN">Flytta ner #VAR1#</string>
-  <string name="CAT_MOVE_UP">Flytta upp #VAR1#</string>
-  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Denna inställning kan endast ställas i av moderorganisationer.</string>
-  <string name="CAT_PROFILE_FIELDS_VISIBILITY">Synligheten för profilgrupper i denna kategori kan förhindras för andra användare, men profilgrupper förblivande synliga i sin egen profil och kan redigeras där.</string>
+  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Medlemmar i denna roll är administratörer av moduler och har tillgång till allt. Du kan skapa, redigera, radera data och redigera kategorier och deras rättigheter. En roll kan göras till en administratör genom att tilldela den rätt #VAR1_BOLD#.</string>
+  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alla administratörer av modulen i moderorganisationer</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">Alla medlemmar i denna organisation</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Kategorinamn finns redan i vald organisation.</string>
+  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Om alternativt är aktiverat visa profil är den här kategorin och kan redigeras i profilen för att följa organisationer: #VAR1# \n\nDeaktivera om fält bara ska visas i din organisation. </string>
+  <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">Vill du verkligen ta bort kategori #VAR1_BOLD#?</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">Det går inte att ta bort kategorin #VAR1_BOLD# på grund av #VAR2# beroende poster.</string>
+  <string name="SYS_MOVE_DOWN">Flytta ner #VAR1#</string>
+  <string name="SYS_MOVE_UP">Flytta upp #VAR1#</string>
+  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Denna inställning kan endast ställas i av moderorganisationer.</string>
+  <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Synligheten för profilgrupper i denna kategori kan förhindras för andra användare, men profilgrupper förblivande synliga i sin egen profil och kan redigeras där.</string>
   <string name="CAT_ONLY_PARENT_ORGANIZATION">Denna kategori är synlig för alla organisationer och får endast endast redigeras av moderorganisationer.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Lägg till händelse i kelendern</string>
@@ -536,13 +536,13 @@
   <string name="MEM_USERS_PER_PAGE">Antal användare per sida</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Antal användare som listas på varje sida. Om det finns flera medlemmar i denna grupp kan sidor vändas. (Standard: 25)</string>
   <!--Phrases only in Menu-->
-  <string name="MEN_NAME_DESC">Namnet på posten i menyn. Här kan du också ange namnet på en översättningssträng.</string>
-  <string name="MEN_MENU_ITEM">Menyval</string>
-  <string name="MEN_MENU_LEVEL">menynivå</string>
-  <string name="MEN_MENU_LEVEL_DESC">Ett menyalternativ är alltid underordnat ett annat menyalternativ. I vallistan väljer du en menynivå där det nya menyalternativet ska vara synligt. </string>
-  <string name="MEN_MODULE_RIGHTS">Modulrättigheter</string>
-  <string name="MEN_MODULE_RIGHTS_DESC">Om du anger en modul här, kommer menyalternativet endast att visas om användaren också har rätt att se den här modulen.</string>
-  <string name="MEN_PLUGIN">Plugins</string>
+  <string name="SYS_MENU_NAME_DESC">Namnet på posten i menyn. Här kan du också ange namnet på en översättningssträng.</string>
+  <string name="SYS_MENU_ITEM">Menyval</string>
+  <string name="SYS_MENU_LEVEL">menynivå</string>
+  <string name="SYS_MENU_LEVEL_DESC">Ett menyalternativ är alltid underordnat ett annat menyalternativ. I vallistan väljer du en menynivå där det nya menyalternativet ska vara synligt. </string>
+  <string name="SYS_MODULE_RIGHTS">Modulrättigheter</string>
+  <string name="SYS_MENU_MODULE_RIGHTS_DESC">Om du anger en modul här, kommer menyalternativet endast att visas om användaren också har rätt att se den här modulen.</string>
+  <string name="SYS_PLUGINS">Plugins</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Aktivera</string>
   <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Chattmodulen kan aktiveras eller inaktiveras med den här inställningen. Modulen laddar dynamiskt data från databasen var tredje sekund. Högst 99 poster sparas. För 100 meddelanden raderas de första 50 posterna. (Standard: Inaktiverad)</string>
@@ -722,14 +722,14 @@
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Organisationens webbadress</string>
   <string name="ORG_VARIABLE_USERNAME">Användarnamn för användaren från respektive e-postkontext</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_BETA_VERSION">Tillgänglig</string>
-  <string name="UPD_CONNECTION_ERROR">Anslutning till Admidio-uppdateringssidan kunde inte upprättas. Vänligen kontrollera din anslutning och försök igen. Du kan också kontrollera webbplatsen #VAR1# för manuell uppdatering.</string>
-  <string name="UPD_CURRENT_VERSION">Installerad</string>
-  <string name="UPD_NEW">En ny version tillgänglig</string>
-  <string name="UPD_NEW_BETA">En ny version tillgänglig</string>
-  <string name="UPD_NEW_BOTH">En ny stabil version och en ny beta-version är tillgängliga!</string>
-  <string name="UPD_NO_NEW">Du använder en aktuell version #VAR1# av Admidio!</string>
-  <string name="UPD_STABLE_VERSION">Tillgänglig</string>
+  <string name="SYS_AVAILABLE_BETA">Tillgänglig</string>
+  <string name="SYS_CONNECTION_ERROR">Anslutning till Admidio-uppdateringssidan kunde inte upprättas. Vänligen kontrollera din anslutning och försök igen. Du kan också kontrollera webbplatsen #VAR1# för manuell uppdatering.</string>
+  <string name="SYS_INSTALLED">Installerad</string>
+  <string name="SYS_NEW_VERSION_AVAILABLE">En ny version tillgänglig</string>
+  <string name="SYS_NEW_BETA_AVAILABLE">En ny version tillgänglig</string>
+  <string name="SYS_NEW_BOTH_AVAILABLE">En ny stabil version och en ny beta-version är tillgängliga!</string>
+  <string name="SYS_USING_CURRENT_VERSION">Du använder en aktuell version #VAR1# av Admidio!</string>
+  <string name="SYS_AVAILABLE">Tillgänglig</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Radera album</string>
@@ -881,13 +881,13 @@
   <string name="PRO_WANT_DELETE_PHOTO">Vill du ta bort det valda fotot?</string>
   <string name="PRO_YEARS">År</string>
   <!--Phrases only in Relationssmodule-->
-  <string name="REL_EDIT_USER_DESC">Om den är inställd kan en användare redigera profilen för en annan användare som han är relaterad till. För en asymmetrisk relation tilldelas rätten separat för varje relation, och för en symmetrisk relation kan båda användarna redigera den andra profilen, och i händelse av en enkelriktad relation kan bara användaren med det lagrade förhållandet redigera den andra profilen.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Om den är inställd kan en användare redigera profilen för en annan användare som han är relaterad till. För en asymmetrisk relation tilldelas rätten separat för varje relation, och för en symmetrisk relation kan båda användarna redigera den andra profilen, och i händelse av en enkelriktad relation kan bara användaren med det lagrade förhållandet redigera den andra profilen.</string>
   <string name="REL_NO_USER_RELATION_TYPES_FOUND">Det finns inga relationstyper. Relationstyper kan skapas i användarhanteringen.</string>
-  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">Asymmetrisk</string>
-  <string name="REL_USER_RELATION_TYPE_DEL">Vill du ta bort den här typen av relation #VAR1_BOLD#? Varning: Detta kommer att ta bort alla befintliga relationer av denna typ.</string>
-  <string name="REL_USER_RELATION_TYPE_DESC">En asymmetrisk relation används tex för förälder / barn medan symmetriska förhållanden t.ex. kan användas för syskon. Dessa är alltid dubbelriktade, men ensriktade relationer markerar bara i en riktning.</string>
-  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">Symmetri</string>
-  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">Envägs</string>
+  <string name="SYS_ASYMMETRICAL">Asymmetrisk</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DELETE">Vill du ta bort den här typen av relation #VAR1_BOLD#? Varning: Detta kommer att ta bort alla befintliga relationer av denna typ.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DESC">En asymmetrisk relation används tex för förälder / barn medan symmetriska förhållanden t.ex. kan användas för syskon. Dessa är alltid dubbelriktade, men ensriktade relationer markerar bara i en riktning.</string>
+  <string name="SYS_SYMMETRICAL">Symmetri</string>
+  <string name="SYS_UNIDIRECTIONAL">Envägs</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Aktiva roller</string>
   <string name="ROL_ANNUALLY">Årligen</string>

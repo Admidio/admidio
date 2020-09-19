@@ -25,14 +25,14 @@
   <string name="BAC_SUM">Totale</string>
   <string name="BAC_SECONDS_VAR">#VAR1# secondi</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_ALL_THIS_ORGANIZATION">Tutti i membri di questa organizzazione</string>
-  <string name="CAT_CATEGORY_EXIST">Il nome della categoria esiste già nell\'organizzazione selezionata.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Se questa opzione è attiva, i campi del profilo di questa categoria compariranno e potranno essere gestiti anche nelle seguenti organizzazioni:\n\n#VAR1#.\n\nSe desideri che i dati vengano mostrati solamente nella tua organizzazione, l\'opzione dev\'essere disattivata.</string>
-  <string name="CAT_DEFAULT_VAR">#VAR1# standard</string>
-  <string name="CAT_DELETE_CATEGORY">Vuoi davvero cancellare la categoria #VAR1_BOLD# ?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">Non è possibile cancellare la categoria #VAR1_BOLD# perché a #VAR2# sono associati degli inserimenti.</string>
-  <string name="CAT_MOVE_DOWN">Sposta sotto #VAR1#</string>
-  <string name="CAT_MOVE_UP">Sposta sopra #VAR1#</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">Tutti i membri di questa organizzazione</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Il nome della categoria esiste già nell\'organizzazione selezionata.</string>
+  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Se questa opzione è attiva, i campi del profilo di questa categoria compariranno e potranno essere gestiti anche nelle seguenti organizzazioni:\n\n#VAR1#.\n\nSe desideri che i dati vengano mostrati solamente nella tua organizzazione, l\'opzione dev\'essere disattivata.</string>
+  <string name="SYS_DEFAULT_VAR">#VAR1# standard</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">Vuoi davvero cancellare la categoria #VAR1_BOLD# ?</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">Non è possibile cancellare la categoria #VAR1_BOLD# perché a #VAR2# sono associati degli inserimenti.</string>
+  <string name="SYS_MOVE_DOWN">Sposta sotto #VAR1#</string>
+  <string name="SYS_MOVE_UP">Sposta sopra #VAR1#</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Aggiungi evento al calendario</string>
   <string name="DAT_ALL_DAY">Tempo totale</string>
@@ -553,14 +553,14 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Nome breve dell\'organization</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Sito web dell\'organization</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_BETA_VERSION">Beta disponibile</string>
-  <string name="UPD_CONNECTION_ERROR">Impossibile stabilire il collegamento alla pagina di aggiornamento di Admidio. Verifica la tua connessione internet o riprova in seguito. È inoltre possibile controllare il sito web #VAR1# per l\'aggiornamento manuale.</string>
-  <string name="UPD_CURRENT_VERSION">Installato</string>
-  <string name="UPD_NEW">Una nuova versione stabile è disponibile!</string>
-  <string name="UPD_NEW_BETA">Una nuova versione beta è disponibile!</string>
-  <string name="UPD_NEW_BOTH">Una nuova versione stabile e una nuova versione beta sono disponibili!</string>
-  <string name="UPD_NO_NEW">Stai usando la versione corrente #VAR1# di Admidio!</string>
-  <string name="UPD_STABLE_VERSION">Disponibile</string>
+  <string name="SYS_AVAILABLE_BETA">Beta disponibile</string>
+  <string name="SYS_CONNECTION_ERROR">Impossibile stabilire il collegamento alla pagina di aggiornamento di Admidio. Verifica la tua connessione internet o riprova in seguito. È inoltre possibile controllare il sito web #VAR1# per l\'aggiornamento manuale.</string>
+  <string name="SYS_INSTALLED">Installato</string>
+  <string name="SYS_NEW_VERSION_AVAILABLE">Una nuova versione stabile è disponibile!</string>
+  <string name="SYS_NEW_BETA_AVAILABLE">Una nuova versione beta è disponibile!</string>
+  <string name="SYS_NEW_BOTH_AVAILABLE">Una nuova versione stabile e una nuova versione beta sono disponibili!</string>
+  <string name="SYS_USING_CURRENT_VERSION">Stai usando la versione corrente #VAR1# di Admidio!</string>
+  <string name="SYS_AVAILABLE">Disponibile</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Cancella album</string>

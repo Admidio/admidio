@@ -183,7 +183,7 @@ $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
-    '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)) . '"></i>',
+    '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)) . '"></i>',
     $visibleHeadline,
     $editableHeadline,
     '&nbsp;'
@@ -239,15 +239,15 @@ while($catRow = $categoryStatement->fetch())
     if($category->getValue('cat_system') == 0 || $getType !== 'USF')
     {
         $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableCategory::MOVE_UP.'\', '.$catId.')">'.
-                            '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('CAT_MOVE_UP', array($addButtonText)) . '"></i></a>
+                            '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($addButtonText)) . '"></i></a>
                         <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableCategory::MOVE_DOWN.'\', '.$catId.')">'.
-                            '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('CAT_MOVE_DOWN', array($addButtonText)) . '"></i></a>';
+                            '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($addButtonText)) . '"></i></a>';
     }
 
     $htmlDefaultCategory = '&nbsp;';
     if($category->getValue('cat_default') == 1)
     {
-        $htmlDefaultCategory = '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)) . '"></i>';
+        $htmlDefaultCategory = '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)) . '"></i>';
     }
 
     // create list with all roles that could view the category
@@ -274,7 +274,7 @@ while($catRow = $categoryStatement->fetch())
                 }
                 else
                 {
-                    $htmlViewRolesNames = $gL10n->get('CAT_ALL_THIS_ORGANIZATION');
+                    $htmlViewRolesNames = $gL10n->get('SYS_ALL_THIS_ORGANIZATION');
                 }
 
                 if($getType !== 'USF')
@@ -286,7 +286,7 @@ while($catRow = $categoryStatement->fetch())
             {
                 if($getType === 'USF')
                 {
-                    $htmlViewRolesNames = $gL10n->get('CAT_ALL_THIS_ORGANIZATION');
+                    $htmlViewRolesNames = $gL10n->get('SYS_ALL_THIS_ORGANIZATION');
                 }
                 else
                 {
@@ -306,7 +306,7 @@ while($catRow = $categoryStatement->fetch())
 
         if((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->isChildOrganization())
         {
-            $htmlEditRolesNames = $gL10n->get('CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA');
+            $htmlEditRolesNames = $gL10n->get('SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA');
         }
         else
         {

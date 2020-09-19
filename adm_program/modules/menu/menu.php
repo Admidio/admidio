@@ -82,7 +82,7 @@ $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
     $gL10n->get('ORG_URL'),
-    '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))) . '"></i>',
+    '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>',
     '&nbsp;'
 );
 $menuOverview->setColumnAlignByArray(array('left', 'left', 'left', 'center', 'right'));
@@ -136,14 +136,14 @@ while ($mainMen = $mainMenStatement->fetch())
         }
 
         $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'UP\', '.$menuRow['men_id'].')">'.
-                            '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('CAT_MOVE_UP', array($headline)) . '"></i></a>
+                            '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($headline)) . '"></i></a>
                         <a class="admidio-icon-link" href="javascript:moveMenu(\'DOWN\', '.$menuRow['men_id'].')">'.
-                            '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('CAT_MOVE_DOWN', array($headline)) . '"></i></a>';
+                            '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($headline)) . '"></i></a>';
 
         $htmlStandardMenu = '&nbsp;';
         if($menuRow['men_standard'])
         {
-            $htmlStandardMenu = '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))) . '"></i>';
+            $htmlStandardMenu = '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>';
         }
 
         $menuAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', array('men_id' => $menuRow['men_id'])). '">'.

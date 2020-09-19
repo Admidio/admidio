@@ -25,20 +25,6 @@
   <string name="BAC_START_BACKUP">Start backup process</string>
   <string name="BAC_SUM">Total</string>
   <string name="BAC_SECONDS_VAR">#VAR1# seconds</string>
-  <!--Phrases only in Category-Administration-->
-  <string name="CAT_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
-  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">All administrators of the module of the parent organization</string>
-  <string name="CAT_ALL_THIS_ORGANIZATION">All members of this organization</string>
-  <string name="CAT_CATEGORY_EXIST">Category name already exists in selected organization.</string>
-  <string name="CAT_CATEGORY_GLOBAL">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
-  <string name="CAT_DEFAULT_VAR">Standard #VAR1#</string>
-  <string name="CAT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">Could not delete category #VAR1_BOLD# because of #VAR2# depending entries.</string>
-  <string name="CAT_MOVE_DOWN">Move down #VAR1#</string>
-  <string name="CAT_MOVE_UP">Move up #VAR1#</string>
-  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">This preference can only be set by the parent organization.</string>
-  <string name="CAT_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
-  <string name="CAT_ONLY_PARENT_ORGANIZATION">This category is visible to all organizations and for this reason may only be edited by the parent organization.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Add event to calendar</string>
   <string name="DAT_ALL_DAY">Full time</string>
@@ -517,14 +503,6 @@
   <string name="MEM_USER_MANAGEMENT_DESC">Display and organize all active and former members here. New users can be imported or created.</string>
   <string name="MEM_USERS_PER_PAGE">Number of users per page</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Number of users listed on each page. If there are multiple members in this group pages can be turned. (Default: 25)</string>
-  <!--Phrases only in Menu-->
-  <string name="MEN_NAME_DESC">The name of the entry in the menu. Here you can also enter the name of a translation string.</string>
-  <string name="MEN_MENU_ITEM">Menu item</string>
-  <string name="MEN_MENU_LEVEL">Menu level</string>
-  <string name="MEN_MENU_LEVEL_DESC">A menu item is always subordinate to another menu item. In the selection list, select a menu level in which the new menu item should be visible.</string>
-  <string name="MEN_MODULE_RIGHTS">Module rights</string>
-  <string name="MEN_MODULE_RIGHTS_DESC">If you specify a module here, the menu item will only be displayed if the user also has the right to see this module.</string>
-  <string name="MEN_PLUGIN">Plugins</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Activate chat</string>
   <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">The chat module can be enabled or disabled using this setting. The module dynamically loads data from the database every 3 seconds. A maximum of 99 entries are saved. For 100 messages, the first 50 entries are deleted. (Default: Disabled)</string>
@@ -705,15 +683,6 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Short name of the organization</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Website URL of the organization</string>
   <string name="ORG_VARIABLE_USERNAME">Username of the user from the respective e-mail context</string>
-  <!--Phrases only in Updatecheck-->
-  <string name="UPD_BETA_VERSION">Available Beta</string>
-  <string name="UPD_CONNECTION_ERROR">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the #VAR1# website for manual update.</string>
-  <string name="UPD_CURRENT_VERSION">Installed</string>
-  <string name="UPD_NEW">A new stable version is available!</string>
-  <string name="UPD_NEW_BETA">A new beta version is available!</string>
-  <string name="UPD_NEW_BOTH">A new stable version and a new beta version are available!</string>
-  <string name="UPD_NO_NEW">You are using a current #VAR1#version of Admidio!</string>
-  <string name="UPD_STABLE_VERSION">Available</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Delete album</string>
@@ -860,14 +829,6 @@
   <string name="PRO_VIEW_ROLES_OTHER_ORGAS">Only roles of other organizations which are visible to all registered users are displayed. If you are a member of this organization, you will also be shown the roles that you may see with your rights within the organization.</string>
   <string name="PRO_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
   <string name="PRO_YEARS">Years</string>
-  <!--Phrases only in Relationssmodule-->
-  <string name="REL_EDIT_USER_DESC">If set, then a user can edit the profile of another user to which he is related to. For an asymmetric relationship, the right is assigned separately for each relationship, and for a symmetric relationship, both users can edit the other profile, and in case of a unidirectional relationship, only the user with the relationship stored can edit the other profile.</string>
-  <string name="REL_NO_USER_RELATION_TYPES_FOUND">No relationship types exists. Relationship types can be created in the user management.</string>
-  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">Asymmetrical</string>
-  <string name="REL_USER_RELATION_TYPE_DEL">Do you want to remove this type of relationship #VAR1_BOLD#? Warning: This will delete all existing relationships of this type.</string>
-  <string name="REL_USER_RELATION_TYPE_DESC">An asymmetrical relationship is e.g. used for parent / child while symmetrical relations e.g. can be used for siblings. These are always bidirectional, however,  unidirectional relations only mark in one direction.</string>
-  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">Symmetrical</string>
-  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">Unidirectional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ANNUALLY">Annually</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
@@ -956,10 +917,14 @@
   <string name="SYS_ALL">All</string>
   <string name="SYS_ALL_ORGANIZATIONS">All organizations</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">The selected category is shared for all organizations.\nThe current object (event, announcement, profile field, weblink, etc.) will be visible not only in this organization but also in all the following organizations: #VAR1#.</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">All members of this organization</string>
   <string name="SYS_ALSO_VISITORS">Also visitors</string>
   <string name="SYS_APPLY">Apply</string>
   <string name="SYS_ASSIGN_MEMBERS">Assigning members</string>
+  <string name="SYS_ASYMMETRICAL">Asymmetrical</string>
   <string name="SYS_AUTOMATICALLY">Automatically</string>
+  <string name="SYS_AVAILABLE">Available</string>
+  <string name="SYS_AVAILABLE_BETA">Available Beta</string>
   <string name="SYS_BACK">Back</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Back to module overview</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
@@ -972,8 +937,13 @@
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Authentication code</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">The authentication code is part of a captcha. A captcha is used for spam detection. The picture is used to detect if a user or a script (or spambot) filled the form.\nPlease fill the result of the authentication code into the form.</string>
   <string name="SYS_CATEGORIES">Categories</string>
+  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
+  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">All administrators of the module of the parent organization</string>
   <string name="SYS_CATEGORIES_VAR">#VAR1#-categories</string>
   <string name="SYS_CATEGORY">Category</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Category name already exists in selected organization.</string>
+  <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
+  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-category</string>
   <string name="SYS_CHANGE_PASSWORD">Change password</string>
   <string name="SYS_CHANGED_AT">Last review</string>
@@ -990,6 +960,7 @@
   <string name="SYS_CONFIGURE_RELATIONSHIPS">Configure relationships</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirm password</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirm value</string>
+  <string name="SYS_CONNECTION_ERROR">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the #VAR1# website for manual update.</string>
   <string name="SYS_CONTACT_DETAILS">Contact information</string>
   <string name="SYS_CONTENT">Content</string>
   <string name="SYS_CONTRIBUTION">Contribution</string>
@@ -1041,6 +1012,7 @@
   <string name="SYS_DEACTIVATED">Inactive</string>
   <string name="SYS_DEBUG_MODE">Debug mode</string>
   <string name="SYS_DECIMAL_NUMBER">Decimal number</string>
+  <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="SYS_DELETE">Delete</string>
   <string name="SYS_DELETE_FILE">Delete file</string>
   <string name="SYS_DELETE_FOLDER">Delete folder</string>
@@ -1058,6 +1030,7 @@
   <string name="SYS_DOCUMENTS_FILES">Documents &amp; Files</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Different documents and files can be viewed or provided for download. These files can be categorized in folders with different access permission levels.</string>
   <string name="SYS_DONATE">Donate</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">Could not delete category #VAR1_BOLD# because of #VAR2# depending entries.</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
@@ -1160,6 +1133,7 @@
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation successful</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">The Admidio database is now installed and completely set up. The configuration file with the access data to the database has been created and stored. You can now work with Admidio and log in with the administrator data.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">The installation and setup of the database was successfully completed.</string>
+  <string name="SYS_INSTALLED">Installed</string>
   <string name="SYS_INTERNAL_NAME">Internal name</string>
   <string name="SYS_INTERNAL_NAME_DESC">The internal name is used to uniquely access this data object. This is not relevant for program use. In development, however, this name must always be used to identify the field, e.g. to address with getValue (). The internal name is automatically filled when creating a data record.</string>
   <string name="SYS_INVALID_FONT_AWESOME">The entered icon name does not correspond to the expected syntax. An icon of font Awesome must correspond to the schema fa-iconname. A file must be stored in the images theme folder and have a png or jpg extension.</string>
@@ -1216,18 +1190,29 @@
   <string name="SYS_MEMORY_LIMIT">Memory limit</string>
   <string name="SYS_MENU">Menu</string>
   <string name="SYS_MENU_DESC">The menu can be configured here. Beside the URL a description and an icon can be deposited. In addition, it can be determined who is allowed to view the menu entry.</string>
+  <string name="SYS_MENU_LEVEL">Menu level</string>
+  <string name="SYS_MENU_LEVEL_DESC">A menu item is always subordinate to another menu item. In the selection list, select a menu level in which the new menu item should be visible.</string>
+  <string name="SYS_MENU_ITEM">Menu item</string>
+  <string name="SYS_MENU_MODULE_RIGHTS_DESC">If you specify a module here, the menu item will only be displayed if the user also has the right to see this module.</string>
+  <string name="SYS_MENU_NAME_DESC">The name of the entry in the menu. Here you can also enter the name of a translation string.</string>
   <string name="SYS_MESSAGE">Message</string>
   <string name="SYS_MESSAGES">Messages</string>
   <string name="SYS_MINUTES">Minutes</string>
   <string name="SYS_MOBILE">Mobile</string>
   <string name="SYS_MODULE_DISABLED">This module is disabled.</string>
+  <string name="SYS_MODULE_RIGHTS">Module rights</string>
   <string name="SYS_MODULES">Modules</string>
   <string name="SYS_MONDAY">Monday</string>
   <string name="SYS_MORE_FEATURES">Additional functions</string>
+  <string name="SYS_MOVE_DOWN">Move down #VAR1#</string>
+  <string name="SYS_MOVE_UP">Move up #VAR1#</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Short name</string>
+  <string name="SYS_NEW_BETA_AVAILABLE">A new beta version is available!</string>
+  <string name="SYS_NEW_BOTH_AVAILABLE">A new stable version and a new beta version are available!</string>
   <string name="SYS_NEW_NAME">New name</string>
   <string name="SYS_NEW_VALUE">New value</string>
+  <string name="SYS_NEW_VERSION_AVAILABLE">A new stable version is available!</string>
   <string name="SYS_NEXT">Next</string>
   <string name="SYS_NO">No</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">No additional permissions set</string>
@@ -1249,6 +1234,7 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">On</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Online membership management</string>
+  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">This preference can only be set by the parent organization.</string>
   <string name="SYS_OPERATING_SYSTEM">Operating system</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Opposite relationship</string>
   <string name="SYS_OPTIONAL">Optional</string>
@@ -1282,6 +1268,7 @@
   <string name="SYS_PHP_VERSION_EOL">PHP version is no longer officially supported by PHP (End of Life). (#VAR1#)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
   <string name="SYS_PLEASE_WAIT">Please wait</string>
+  <string name="SYS_PLUGINS">Plugins</string>
   <string name="SYS_PM">Private message</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
@@ -1309,6 +1296,9 @@
   <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationship configuration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relationship configurations</string>
+  <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">If set, then a user can edit the profile of another user to which he is related to. For an asymmetric relationship, the right is assigned separately for each relationship, and for a symmetric relationship, both users can edit the other profile, and in case of a unidirectional relationship, only the user with the relationship stored can edit the other profile.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DELETE">Do you want to remove this type of relationship #VAR1_BOLD#? Warning: This will delete all existing relationships of this type.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DESC">An asymmetrical relationship is e.g. used for parent / child while symmetrical relations e.g. can be used for siblings. These are always bidirectional, however,  unidirectional relations only mark in one direction.</string>
   <string name="SYS_RELOAD">Reload</string>
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
   <string name="SYS_REMOVE">Remove</string>
@@ -1370,6 +1360,7 @@
   <string name="SYS_STREET">Street</string>
   <string name="SYS_SUNDAY">Sunday</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
+  <string name="SYS_SYMMETRICAL">Symmetrical</string>
   <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Your requested password for #organization_short_name# website\n#content# Hello #user_first_name#,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: #user_login_name#\nPassword: #variable1#\n\nTo activate your password, please follow this link:\n\n#variable2#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nGreetings,\nThe administrators</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Credentials for #organization_long_name#\n#content# Hello #user_first_name#,\n\nYou receive your credentials for the website #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nCheers,\nThe administrators</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in registration at #organization_long_name# rejected.\n#content#Hello #user_first_name# your application at #organization_homepage# was rejected.\n\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\nTo clarify the reasons for the rejection please contact the administrator #administrator_email# from #organization_homepage#.\n\nRegards,\nThe administrators</string>
@@ -1391,6 +1382,7 @@
   <string name="SYS_UNKNOWN">Unidentified</string>
   <string name="SYS_UNLIMITED">Unlimited</string>
   <string name="SYS_UNLOCK">Unlock</string>
+  <string name="SYS_UNIDIRECTIONAL">Unidirectional</string>
   <string name="SYS_UNMANAGED_FILES">Unmanaged files</string>
   <string name="SYS_UPDATE">Update</string>
   <string name="SYS_UPLOAD_FILES">Upload files</string>
@@ -1408,6 +1400,7 @@
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
   <string name="SYS_USERS_FOUND">User found</string>
+  <string name="SYS_USING_CURRENT_VERSION">You are using a current #VAR1#version of Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VIEW">View</string>
@@ -1415,6 +1408,7 @@
   <string name="SYS_VISIBLE_FOR">Visible for</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# visible only to logged in users</string>
   <string name="SYS_VISITORS">Guests</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="SYS_WANT_REGISTER">I want to register!</string>
   <string name="SYS_WARNING">Warning</string>
   <string name="SYS_WEBMASTER">Webmaster</string>

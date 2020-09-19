@@ -26,18 +26,18 @@
   <string name="BAC_SUM">Total</string>
   <string name="BAC_SECONDS_VAR">#VAR1# detik</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_ADMINISTRATORS_DESC">Anggota aturan ini adalah administrator modul dan memiliki akses terhadap semuanya. Anda dapat membuat, mengedit, menghapus data dan mengedit kategori dan hak-haknya. Peran dapat dilakukan administrator dengan menugaskannya dengan benar #VAR1_BOLD#.</string>
-  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Semua administrator modul organisasi induk</string>
-  <string name="CAT_ALL_THIS_ORGANIZATION">Semua anggota organisasi ini</string>
-  <string name="CAT_CATEGORY_EXIST">Nama kategori sudah ada di organisasi yang dipilih.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Jika opsi diaktifkan, kolom profil kategori ini akan muncul dan dapat diedit pada tampilan profil organisasi berikut: #VAR1#\n\nHarap dinonaktif, jika kolom hanya ditampilkan di organisasi Anda.</string>
-  <string name="CAT_DEFAULT_VAR">Standar #VAR1#</string>
-  <string name="CAT_DELETE_CATEGORY">Apakah Anda benar-benar ingin menghapus kategori #VAR1_BOLD# ?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">Tidak dapat menghapus kategori #VAR1_BOLD# karena #VAR2# tergantung entri</string>
-  <string name="CAT_MOVE_DOWN">Pindah ke bawah #VAR1#</string>
-  <string name="CAT_MOVE_UP">Pindah ke atas #VAR1#</string>
-  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Pengaturan ini hanya bisa ditentukan oleh organisasi induk.</string>
-  <string name="CAT_PROFILE_FIELDS_VISIBILITY">Visibilitas bidang profil dalam Kategori ini dapat dicegah untuk Pengguna lain, namun bidang profil tetap terlihat di profil mereka sendiri dan dapat diedit di sana.</string>
+  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Anggota aturan ini adalah administrator modul dan memiliki akses terhadap semuanya. Anda dapat membuat, mengedit, menghapus data dan mengedit kategori dan hak-haknya. Peran dapat dilakukan administrator dengan menugaskannya dengan benar #VAR1_BOLD#.</string>
+  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Semua administrator modul organisasi induk</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">Semua anggota organisasi ini</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Nama kategori sudah ada di organisasi yang dipilih.</string>
+  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Jika opsi diaktifkan, kolom profil kategori ini akan muncul dan dapat diedit pada tampilan profil organisasi berikut: #VAR1#\n\nHarap dinonaktif, jika kolom hanya ditampilkan di organisasi Anda.</string>
+  <string name="SYS_DEFAULT_VAR">Standar #VAR1#</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">Apakah Anda benar-benar ingin menghapus kategori #VAR1_BOLD# ?</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">Tidak dapat menghapus kategori #VAR1_BOLD# karena #VAR2# tergantung entri</string>
+  <string name="SYS_MOVE_DOWN">Pindah ke bawah #VAR1#</string>
+  <string name="SYS_MOVE_UP">Pindah ke atas #VAR1#</string>
+  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Pengaturan ini hanya bisa ditentukan oleh organisasi induk.</string>
+  <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Visibilitas bidang profil dalam Kategori ini dapat dicegah untuk Pengguna lain, namun bidang profil tetap terlihat di profil mereka sendiri dan dapat diedit di sana.</string>
   <string name="CAT_ONLY_PARENT_ORGANIZATION">Kategori ini dapat dilihat oleh semua organisasi dan karena alasan ini hanya dapat diedit oleh organisasi induk.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Tambahkan Acara ke kalender</string>

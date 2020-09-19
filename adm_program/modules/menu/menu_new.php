@@ -154,7 +154,7 @@ subMenu($menuList, 1, (int) $menu->getValue('men_id'));
 
 $form->addInput(
     'men_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_name', 'database'),
-    array('maxLength' => 100, 'property'=> HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'MEN_NAME_DESC')
+    array('maxLength' => 100, 'property'=> HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_MENU_NAME_DESC')
 );
 
 if($getMenId > 0)
@@ -171,11 +171,11 @@ $form->addMultilineTextInput(
 );
 
 $form->addSelectBox(
-    'men_men_id_parent', $gL10n->get('MEN_MENU_LEVEL'), $menuList,
+    'men_men_id_parent', $gL10n->get('SYS_MENU_LEVEL'), $menuList,
     array(
         'property'        => HtmlForm::FIELD_REQUIRED,
         'defaultValue'    => (int) $menu->getValue('men_men_id_parent'),
-        'helpTextIdLabel' => 'MEN_MENU_LEVEL_DESC'
+        'helpTextIdLabel' => 'SYS_MENU_LEVEL_DESC'
     )
 );
 
@@ -183,11 +183,11 @@ $sql = 'SELECT com_id, com_name
           FROM '.TBL_COMPONENTS.'
       ORDER BY com_name';
 $form->addSelectBoxFromSql(
-    'men_com_id', $gL10n->get('MEN_MODULE_RIGHTS'), $gDb, $sql,
+    'men_com_id', $gL10n->get('SYS_MODULE_RIGHTS'), $gDb, $sql,
     array(
         'property'        => $fieldDefault,
         'defaultValue'    => (int) $menu->getValue('men_com_id'),
-        'helpTextIdLabel' => 'MEN_MODULE_RIGHTS_DESC'
+        'helpTextIdLabel' => 'SYS_MENU_MODULE_RIGHTS_DESC'
     )
 );
 

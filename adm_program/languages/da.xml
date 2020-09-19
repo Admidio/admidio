@@ -26,18 +26,18 @@
   <string name="BAC_SUM">Total</string>
   <string name="BAC_SECONDS_VAR">#VAR1# sekunder</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_ADMINISTRATORS_DESC">Medlemmer af denne rolle er administratorer af dette modul og har adgang til alt. Du kan oprette, redigere og slette data og redigere kategorier og deres rettigheder. En rolle kan gøres til administrator ved at tildele den rettigheden #VAR1_BOLD#.</string>
-  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle administratorer af modulet i moderorganisationen</string>
-  <string name="CAT_ALL_THIS_ORGANIZATION">Alle medlemmer af denne organisation</string>
-  <string name="CAT_CATEGORY_EXIST">Kategori navn eksisterer allerede i den valgte organisation.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Hvis indstillingen er aktiveret, vises profilfelterne i denne kategori og kan redigeres i profilvisningen af følgende organisationer:#VAR1#\n\nDeaktiver venligst, hvis felter kun skal vises i din organisation.</string>
-  <string name="CAT_DEFAULT_VAR">Standard #VAR1#</string>
-  <string name="CAT_DELETE_CATEGORY">Vil du virkelig slette kategorien #VAR1_BOLD# ?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">Kunne ikke slette kategorien #VAR1_BOLD# fordi den indeholder #VAR2# afhængige data.</string>
-  <string name="CAT_MOVE_DOWN">Flyt ned #VAR1#</string>
-  <string name="CAT_MOVE_UP">Flyt op #VAR1#</string>
-  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Denne præference kan kun indstilles af moderorganisationen.</string>
-  <string name="CAT_PROFILE_FIELDS_VISIBILITY">Synligheden af profil felterne i denne kategori kan hæmmes for andre brugere, men profil felterne er synlige i brugerens egen profil og kan ændres derfra.</string>
+  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Medlemmer af denne rolle er administratorer af dette modul og har adgang til alt. Du kan oprette, redigere og slette data og redigere kategorier og deres rettigheder. En rolle kan gøres til administrator ved at tildele den rettigheden #VAR1_BOLD#.</string>
+  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle administratorer af modulet i moderorganisationen</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">Alle medlemmer af denne organisation</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Kategori navn eksisterer allerede i den valgte organisation.</string>
+  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Hvis indstillingen er aktiveret, vises profilfelterne i denne kategori og kan redigeres i profilvisningen af følgende organisationer:#VAR1#\n\nDeaktiver venligst, hvis felter kun skal vises i din organisation.</string>
+  <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">Vil du virkelig slette kategorien #VAR1_BOLD# ?</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">Kunne ikke slette kategorien #VAR1_BOLD# fordi den indeholder #VAR2# afhængige data.</string>
+  <string name="SYS_MOVE_DOWN">Flyt ned #VAR1#</string>
+  <string name="SYS_MOVE_UP">Flyt op #VAR1#</string>
+  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Denne præference kan kun indstilles af moderorganisationen.</string>
+  <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Synligheden af profil felterne i denne kategori kan hæmmes for andre brugere, men profil felterne er synlige i brugerens egen profil og kan ændres derfra.</string>
   <string name="CAT_ONLY_PARENT_ORGANIZATION">Denne kategori er synlig for alle organisationer og kan derfor kun redigeres af moderorganisationen.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Tilføj aktivitet til kalender</string>
@@ -542,13 +542,13 @@
   <string name="MEM_USERS_PER_PAGE">Antal brugere pr. side</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Antal brugere vist på hver side. Hvis der er flere medlemmer i denne gruppe så kan siderne vendes. (Standard: 25)</string>
   <!--Phrases only in Menu-->
-  <string name="MEN_NAME_DESC">Navnet på posten i menuen. Her kan du også indtaste navnet på en oversættelsestreng.</string>
-  <string name="MEN_MENU_ITEM">Menupunkt</string>
-  <string name="MEN_MENU_LEVEL">Menuniveau</string>
-  <string name="MEN_MENU_LEVEL_DESC">Et menupunkt er altid underordnet et andet menupunkt. I valglisten skal du vælge et menuniveau, hvor det nye menupunkt skal være synligt.</string>
-  <string name="MEN_MODULE_RIGHTS">Modulrettigheder</string>
-  <string name="MEN_MODULE_RIGHTS_DESC">Hvis du specificerer et modul her, vises menupunktet kun, hvis brugeren også har ret til at se dette modul.</string>
-  <string name="MEN_PLUGIN">Plugins</string>
+  <string name="SYS_MENU_NAME_DESC">Navnet på posten i menuen. Her kan du også indtaste navnet på en oversættelsestreng.</string>
+  <string name="SYS_MENU_ITEM">Menupunkt</string>
+  <string name="SYS_MENU_LEVEL">Menuniveau</string>
+  <string name="SYS_MENU_LEVEL_DESC">Et menupunkt er altid underordnet et andet menupunkt. I valglisten skal du vælge et menuniveau, hvor det nye menupunkt skal være synligt.</string>
+  <string name="SYS_MODULE_RIGHTS">Modulrettigheder</string>
+  <string name="SYS_MENU_MODULE_RIGHTS_DESC">Hvis du specificerer et modul her, vises menupunktet kun, hvis brugeren også har ret til at se dette modul.</string>
+  <string name="SYS_PLUGINS">Plugins</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Aktiver chat</string>
   <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Chatmodulet kan aktiveres eller deaktiveres ved hjælp af denne indstilling. Modulet indlæser dynamisk data fra databasen hvert 3. sekund. Der gemmes maksimalt 99 poster. For 100 meddelelser slettes de første 50 poster. (Standard: Deaktiveret)</string>
@@ -730,14 +730,14 @@
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Organisationens hjemmeside URL</string>
   <string name="ORG_VARIABLE_USERNAME">Brugernavn for brugeren fra den respektive e-mail-kontekst</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_BETA_VERSION">Tilgængelig Beta</string>
-  <string name="UPD_CONNECTION_ERROR">Forbindelse til Admidio opdaterings side kunne ikke etableres. Check din internetforbindelse og prøv igen senere. Du kan også checke #VAR1# hjemmesiden for manuelle opdateringer.</string>
-  <string name="UPD_CURRENT_VERSION">Installeret</string>
-  <string name="UPD_NEW">En ny stabil version er tilgængelig!</string>
-  <string name="UPD_NEW_BETA">En ny beta version er tilgængelig!</string>
-  <string name="UPD_NEW_BOTH">En ny stabil version og en ny beta version er tilgængelig!</string>
-  <string name="UPD_NO_NEW">Du bruger den nyeste version af Admidio!</string>
-  <string name="UPD_STABLE_VERSION">Tilgængelig</string>
+  <string name="SYS_AVAILABLE_BETA">Tilgængelig Beta</string>
+  <string name="SYS_CONNECTION_ERROR">Forbindelse til Admidio opdaterings side kunne ikke etableres. Check din internetforbindelse og prøv igen senere. Du kan også checke #VAR1# hjemmesiden for manuelle opdateringer.</string>
+  <string name="SYS_INSTALLED">Installeret</string>
+  <string name="SYS_NEW_VERSION_AVAILABLE">En ny stabil version er tilgængelig!</string>
+  <string name="SYS_NEW_BETA_AVAILABLE">En ny beta version er tilgængelig!</string>
+  <string name="SYS_NEW_BOTH_AVAILABLE">En ny stabil version og en ny beta version er tilgængelig!</string>
+  <string name="SYS_USING_CURRENT_VERSION">Du bruger den nyeste version af Admidio!</string>
+  <string name="SYS_AVAILABLE">Tilgængelig</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Slet album</string>
@@ -889,13 +889,13 @@
   <string name="PRO_WANT_DELETE_PHOTO">Vil du slette det valgte billede?</string>
   <string name="PRO_YEARS">År</string>
   <!--Phrases only in Relationssmodule-->
-  <string name="REL_EDIT_USER_DESC">Hvis det er indstillet, kan en bruger redigere profilen til en anden bruger, som han er relateret til. For et asymmetrisk forhold tildeles rettigheden separat for hvert forhold, og for et symmetrisk forhold kan begge brugere redigere den anden profil, og i tilfælde af et ensrettet forhold kan kun brugeren der har relationen på sin profil, redigere den anden profil.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Hvis det er indstillet, kan en bruger redigere profilen til en anden bruger, som han er relateret til. For et asymmetrisk forhold tildeles rettigheden separat for hvert forhold, og for et symmetrisk forhold kan begge brugere redigere den anden profil, og i tilfælde af et ensrettet forhold kan kun brugeren der har relationen på sin profil, redigere den anden profil.</string>
   <string name="REL_NO_USER_RELATION_TYPES_FOUND">Ingen findes ingen relations typer. Relations typer kan oprettes i bruger administrationen </string>
-  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">Asymmetrisk</string>
-  <string name="REL_USER_RELATION_TYPE_DEL">Vil du fjerne denne type relation? #VAR1_BOLD#? Advarsel: Dette vil slette alle eksisterende relationer af denne type.</string>
-  <string name="REL_USER_RELATION_TYPE_DESC">En asymmetrisk relation bruges i relationen forældre / barn, imens symmetriske relationer kan bruges imellem søskende. Disse er dog altid to-vejs relationer, hvor, en-vejs relationer kun peger i én retning.</string>
-  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">Symmetrisk</string>
-  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">En-vejs</string>
+  <string name="SYS_ASYMMETRICAL">Asymmetrisk</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DELETE">Vil du fjerne denne type relation? #VAR1_BOLD#? Advarsel: Dette vil slette alle eksisterende relationer af denne type.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DESC">En asymmetrisk relation bruges i relationen forældre / barn, imens symmetriske relationer kan bruges imellem søskende. Disse er dog altid to-vejs relationer, hvor, en-vejs relationer kun peger i én retning.</string>
+  <string name="SYS_SYMMETRICAL">Symmetrisk</string>
+  <string name="SYS_UNIDIRECTIONAL">En-vejs</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Aktive roller</string>
   <string name="ROL_ANNUALLY">Årligt</string>

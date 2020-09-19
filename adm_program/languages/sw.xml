@@ -25,12 +25,12 @@
   <string name="BAC_SUM">Jumla</string>
   <string name="BAC_SECONDS_VAR">Sekunde #VAR1#</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_CATEGORY_EXIST">Jina la kategoria tayari lipo kwenye shirika lililochaguliwa.</string>
-  <string name="CAT_DEFAULT_VAR">Kiwango #VAR1#</string>
-  <string name="CAT_DELETE_CATEGORY">Je kweli unataka kufuta kategoria #VAR1_BOLD#?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">Haiwezekani kufuta kategoria #VAR1_BOLD# kwa sababu ya vitu #VAR2# vinavyotegemeana.</string>
-  <string name="CAT_MOVE_DOWN">Sogeza chini #VAR1#</string>
-  <string name="CAT_MOVE_UP">Sogeza juu #VAR1#</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Jina la kategoria tayari lipo kwenye shirika lililochaguliwa.</string>
+  <string name="SYS_DEFAULT_VAR">Kiwango #VAR1#</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">Je kweli unataka kufuta kategoria #VAR1_BOLD#?</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">Haiwezekani kufuta kategoria #VAR1_BOLD# kwa sababu ya vitu #VAR2# vinavyotegemeana.</string>
+  <string name="SYS_MOVE_DOWN">Sogeza chini #VAR1#</string>
+  <string name="SYS_MOVE_UP">Sogeza juu #VAR1#</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Ongeza tukio kwenye kalenda</string>
   <string name="DAT_ALL_DAY">Muda kamili</string>

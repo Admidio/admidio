@@ -26,16 +26,16 @@
   <string name="BAC_SUM">总共</string>
   <string name="BAC_SECONDS_VAR">#VAR1# 秒</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">上级部门模块的所有管理员</string>
-  <string name="CAT_ALL_THIS_ORGANIZATION">这个部门的所有会员</string>
-  <string name="CAT_CATEGORY_EXIST">类别名称已存在于所选部门中。</string>
-  <string name="CAT_CATEGORY_GLOBAL">如果激活选项，此类别的配置文件字段将出现，并且可在以下部门的配置文件视图中进行编辑：#VAR1#.\n\n如果字段只应显示在您的部门中，请停用。</string>
-  <string name="CAT_DEFAULT_VAR">标准 #VAR1#</string>
-  <string name="CAT_DELETE_CATEGORY">你真的想删除部门 #VAR1_BOLD# 么?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">无法删除类别 #VAR1_BOLD# 因为其含有子类别#VAR2# 。</string>
-  <string name="CAT_MOVE_DOWN">下移 #VAR1#</string>
-  <string name="CAT_MOVE_UP">上移 #VAR1#</string>
-  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">此首选项只能由上级部门设置。</string>
+  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">上级部门模块的所有管理员</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">这个部门的所有会员</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">类别名称已存在于所选部门中。</string>
+  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">如果激活选项，此类别的配置文件字段将出现，并且可在以下部门的配置文件视图中进行编辑：#VAR1#.\n\n如果字段只应显示在您的部门中，请停用。</string>
+  <string name="SYS_DEFAULT_VAR">标准 #VAR1#</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">你真的想删除部门 #VAR1_BOLD# 么?</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">无法删除类别 #VAR1_BOLD# 因为其含有子类别#VAR2# 。</string>
+  <string name="SYS_MOVE_DOWN">下移 #VAR1#</string>
+  <string name="SYS_MOVE_UP">上移 #VAR1#</string>
+  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">此首选项只能由上级部门设置。</string>
   <string name="CAT_ONLY_PARENT_ORGANIZATION">此类别对所有部门都可见, 因此可能只能由上级部门编辑。</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">将活动添加到日程表</string>

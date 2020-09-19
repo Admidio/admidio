@@ -26,18 +26,18 @@
   <string name="BAC_SUM">Summe</string>
   <string name="BAC_SECONDS_VAR">#VAR1# Sekunden</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechte bearbeiten. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
-  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle Administratoren des Moduls der Elternorganisation</string>
-  <string name="CAT_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
-  <string name="CAT_CATEGORY_EXIST">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\nMöchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
-  <string name="CAT_DEFAULT_VAR">Standard-#VAR1#</string>
-  <string name="CAT_DELETE_CATEGORY">Möchtest du die Kategorie #VAR1_BOLD# wirklich löschen?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
-  <string name="CAT_MOVE_DOWN">#VAR1# nach unten verschieben</string>
-  <string name="CAT_MOVE_UP">#VAR1# nach oben verschieben</string>
-  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Diese Einstellung kann nur von der Mutterorganisation gesetzt werden.</string>
-  <string name="CAT_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
+  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechte bearbeiten. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
+  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle Administratoren des Moduls der Elternorganisation</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
+  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\nMöchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
+  <string name="SYS_DEFAULT_VAR">Standard-#VAR1#</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">Möchtest du die Kategorie #VAR1_BOLD# wirklich löschen?</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
+  <string name="SYS_MOVE_DOWN">#VAR1# nach unten verschieben</string>
+  <string name="SYS_MOVE_UP">#VAR1# nach oben verschieben</string>
+  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Diese Einstellung kann nur von der Mutterorganisation gesetzt werden.</string>
+  <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
   <string name="CAT_ONLY_PARENT_ORGANIZATION">Diese Kategorie ist für alle Organisationen sichtbar und darf aus diesem Grund nur von der Elternorganisation bearbeitet werden.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
@@ -529,13 +529,13 @@
   <string name="MEM_USERS_PER_PAGE">Anzahl Benutzer pro Seite</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Anzahl der Benutzer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer zu der Organisation, so kann man in der Liste blättern. (Standard: 25)</string>
   <!--Phrases only in Menu-->
-  <string name="MEN_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
-  <string name="MEN_MENU_ITEM">Menüeintrag</string>
-  <string name="MEN_MENU_LEVEL">Menüebene</string>
-  <string name="MEN_MENU_LEVEL_DESC">Ein Menüpunkt ist immer einem anderen Menüpunkt untergeordnet. Wähle dazu in der Auswahlliste eine Menüebene aus in dieser der neue Menüpunkt sichtbar sein soll.</string>
-  <string name="MEN_MODULE_RIGHTS">Modulrechte</string>
-  <string name="MEN_MODULE_RIGHTS_DESC">Wenn du hier ein Modul angibst, dann wird der Menüpunkt nur angezeigt, wenn der Benutzer auch das Recht hat, dieses Modul zu sehen.</string>
-  <string name="MEN_PLUGIN">Plugins</string>
+  <string name="SYS_MENU_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
+  <string name="SYS_MENU_ITEM">Menüeintrag</string>
+  <string name="SYS_MENU_LEVEL">Menüebene</string>
+  <string name="SYS_MENU_LEVEL_DESC">Ein Menüpunkt ist immer einem anderen Menüpunkt untergeordnet. Wähle dazu in der Auswahlliste eine Menüebene aus in dieser der neue Menüpunkt sichtbar sein soll.</string>
+  <string name="SYS_MODULE_RIGHTS">Modulrechte</string>
+  <string name="SYS_MENU_MODULE_RIGHTS_DESC">Wenn du hier ein Modul angibst, dann wird der Menüpunkt nur angezeigt, wenn der Benutzer auch das Recht hat, dieses Modul zu sehen.</string>
+  <string name="SYS_PLUGINS">Plugins</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Chat aktivieren</string>
   <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Das Chat-Modul kann über diese Einstellung aktiviert oder deaktiviert werden. Das Modul lädt alle 3 Sekunden dynamisch Daten aus der Datenbank. Es werden maximal 99 Einträge gespeichert. Bei 100 Meldungen werden die ersten 50 Einträge wieder gelöscht. (Standard: Deaktiviert)</string>
@@ -717,14 +717,14 @@
   <string name="ORG_VARIABLE_URL_ORGANIZATION">URL der Webseite der Organisation</string>
   <string name="ORG_VARIABLE_USERNAME">Benutzername des Benutzers aus dem jeweiligen E-Mailkontext</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_BETA_VERSION">Verfügbare Beta</string>
-  <string name="UPD_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. Alternativ kannst Du auch manuell auf der Webseite von #VAR1# prüfen ob ein Update vorliegt.</string>
-  <string name="UPD_CURRENT_VERSION">Installiert</string>
-  <string name="UPD_NEW">Eine neue stabile Version ist verfügbar!</string>
-  <string name="UPD_NEW_BETA">Eine neue Beta Version ist verfügbar!</string>
-  <string name="UPD_NEW_BOTH">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</string>
-  <string name="UPD_NO_NEW">Du benutzt eine aktuelle #VAR1#Version von Admidio!</string>
-  <string name="UPD_STABLE_VERSION">Verfügbar</string>
+  <string name="SYS_AVAILABLE_BETA">Verfügbare Beta</string>
+  <string name="SYS_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. Alternativ kannst Du auch manuell auf der Webseite von #VAR1# prüfen ob ein Update vorliegt.</string>
+  <string name="SYS_INSTALLED">Installiert</string>
+  <string name="SYS_NEW_VERSION_AVAILABLE">Eine neue stabile Version ist verfügbar!</string>
+  <string name="SYS_NEW_BETA_AVAILABLE">Eine neue Beta Version ist verfügbar!</string>
+  <string name="SYS_NEW_BOTH_AVAILABLE">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</string>
+  <string name="SYS_USING_CURRENT_VERSION">Du benutzt eine aktuelle #VAR1#Version von Admidio!</string>
+  <string name="SYS_AVAILABLE">Verfügbar</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Album Löschen</string>
@@ -875,13 +875,13 @@
   <string name="PRO_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
   <string name="PRO_YEARS">Jahre</string>
   <!--Phrases only in Relationssmodule-->
-  <string name="REL_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein Benutzer das Profil eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein Benutzer das Profil eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
   <string name="REL_NO_USER_RELATION_TYPES_FOUND">Es existieren noch keine Beziehungstypen. Beziehungstypen können in der Benutzerverwaltung erstellt werden.</string>
-  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
-  <string name="REL_USER_RELATION_TYPE_DEL">Willst du den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
-  <string name="REL_USER_RELATION_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen z.B. für Geschwister verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
-  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
-  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
+  <string name="SYS_ASYMMETRICAL">asymmetrisch</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DELETE">Willst du den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen z.B. für Geschwister verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
+  <string name="SYS_SYMMETRICAL">symmetrisch</string>
+  <string name="SYS_UNIDIRECTIONAL">unidirektional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ANNUALLY">Jährlich</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Mitglieder zuordnen und bearbeiten</string>

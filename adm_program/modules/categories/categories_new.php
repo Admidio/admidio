@@ -157,7 +157,7 @@ $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 $roleViewDescription = '';
 if($getType === 'USF')
 {
-    $roleViewDescription = 'CAT_PROFILE_FIELDS_VISIBILITY';
+    $roleViewDescription = 'SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY';
 }
 
 if($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1)
@@ -260,7 +260,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
     if($gCurrentOrganization->isChildOrganization())
     {
         $fieldProperty   = HtmlForm::FIELD_DISABLED;
-        $helpTextIdLabel = 'CAT_ONLY_SET_BY_MOTHER_ORGANIZATION';
+        $helpTextIdLabel = 'SYS_ONLY_SET_BY_MOTHER_ORGANIZATION';
     }
     else
     {
@@ -270,7 +270,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
         $fieldProperty = HtmlForm::FIELD_DEFAULT;
         if($getType === 'USF')
         {
-            $helpTextIdLabel = $gL10n->get('CAT_CATEGORY_GLOBAL', array($organizations));
+            $helpTextIdLabel = $gL10n->get('SYS_CATEGORY_VISIBLE_ALL_ORGA', array($organizations));
         }
         else
         {
@@ -298,7 +298,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
 
     $form->addStaticControl(
         'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
-        array('helpTextIdLabel' => $gL10n->get('CAT_ADMINISTRATORS_DESC', array($rolesRightsName)))
+        array('helpTextIdLabel' => $gL10n->get('SYS_CATEGORIES_ADMINISTRATORS_DESC', array($rolesRightsName)))
     );
 
     $checked = false;
@@ -314,7 +314,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
 }
 
 $form->addCheckbox(
-    'cat_default', $gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)), (bool) $category->getValue('cat_default'),
+    'cat_default', $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)), (bool) $category->getValue('cat_default'),
     array('icon' => 'fa-star')
 );
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));

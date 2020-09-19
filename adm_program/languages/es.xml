@@ -26,18 +26,18 @@
   <string name="BAC_SUM">Suma</string>
   <string name="BAC_SECONDS_VAR">#VAR1# segundos</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_ADMINISTRATORS_DESC">Los miembros de este rol son administradores, y tienen acceso a todo. Usted puede crear, editar, borrar información y editar categorías y sus respectivos derechos. Un rol puede convertir a alguien en administrador asignándole el derecho #VAR1_BOLD#.</string>
-  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Todos los administradores del módulo, de la organización superior.</string>
-  <string name="CAT_ALL_THIS_ORGANIZATION">Todos los miembros de esta organización.</string>
-  <string name="CAT_CATEGORY_EXIST">Ya existe una categoría en esta organización con este nombre.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Si la opción está activada, aparecerán los campos de perfil de esta categoría, y pueden ser editados en la vista de perfil de las siguientes organizaciones: #VAR1#\n\nPor favor no lo marque si desea que estos campos solo sean visibles en su organización.</string>
-  <string name="CAT_DEFAULT_VAR">Estándar #VAR1#</string>
-  <string name="CAT_DELETE_CATEGORY">Quieres realmente eliminar la categoría #VAR1_BOLD#?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">No se pudo borrar la categoría  #VAR1_BOLD# porque hay entradas dependientes en  #VAR2#.</string>
-  <string name="CAT_MOVE_DOWN">#VAR1# Mover hacia abajo</string>
-  <string name="CAT_MOVE_UP">#VAR1# Mover hacia arriba</string>
-  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Esta preferencia solo puede ser modificada por la organización superior.</string>
-  <string name="CAT_PROFILE_FIELDS_VISIBILITY">Los campos de perfil en esta categoría pueden ocultarse de otros usuarios, pero son visibles y pueden ser editados en sus propios perfiles.</string>
+  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Los miembros de este rol son administradores, y tienen acceso a todo. Usted puede crear, editar, borrar información y editar categorías y sus respectivos derechos. Un rol puede convertir a alguien en administrador asignándole el derecho #VAR1_BOLD#.</string>
+  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Todos los administradores del módulo, de la organización superior.</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">Todos los miembros de esta organización.</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Ya existe una categoría en esta organización con este nombre.</string>
+  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Si la opción está activada, aparecerán los campos de perfil de esta categoría, y pueden ser editados en la vista de perfil de las siguientes organizaciones: #VAR1#\n\nPor favor no lo marque si desea que estos campos solo sean visibles en su organización.</string>
+  <string name="SYS_DEFAULT_VAR">Estándar #VAR1#</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">Quieres realmente eliminar la categoría #VAR1_BOLD#?</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">No se pudo borrar la categoría  #VAR1_BOLD# porque hay entradas dependientes en  #VAR2#.</string>
+  <string name="SYS_MOVE_DOWN">#VAR1# Mover hacia abajo</string>
+  <string name="SYS_MOVE_UP">#VAR1# Mover hacia arriba</string>
+  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Esta preferencia solo puede ser modificada por la organización superior.</string>
+  <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Los campos de perfil en esta categoría pueden ocultarse de otros usuarios, pero son visibles y pueden ser editados en sus propios perfiles.</string>
   <string name="CAT_ONLY_PARENT_ORGANIZATION">Esta categoría es visible a todas las organizaciones, y por tal razón solo puede ser editada por la organización superior.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Transmitir la fecha en el calendario</string>

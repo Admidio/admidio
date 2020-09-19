@@ -40,15 +40,15 @@ $page->addPageFunctionsMenuItem('menu_item_relation_type_add', $gL10n->get('SYS_
 $relationTypesOverview = new HtmlTable('tbl_relationtypes', $page, true);
 
 $relationTypes = array(
-    'asymmetrical'   => $gL10n->get('REL_USER_RELATION_TYPE_ASYMMETRICAL'),
-    'symmetrical'    => $gL10n->get('REL_USER_RELATION_TYPE_SYMMETRICAL'),
-    'unidirectional' => $gL10n->get('REL_USER_RELATION_TYPE_UNIDIRECTIONAL')
+    'asymmetrical'   => $gL10n->get('SYS_ASYMMETRICAL'),
+    'symmetrical'    => $gL10n->get('SYS_SYMMETRICAL'),
+    'unidirectional' => $gL10n->get('SYS_UNIDIRECTIONAL')
 );
 
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_USER_RELATION'),
-    $gL10n->get('SYS_USER_RELATION_TYPE').HtmlForm::getHelpTextIcon('REL_USER_RELATION_TYPE_DESC'),
+    $gL10n->get('SYS_USER_RELATION_TYPE').HtmlForm::getHelpTextIcon('SYS_RELATIONSHIP_TYPE_DESC'),
     '&nbsp;'
 );
 $relationTypesOverview->setColumnAlignByArray(array('left', 'left', 'right'));

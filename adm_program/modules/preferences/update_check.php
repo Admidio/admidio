@@ -139,20 +139,20 @@ if ($getMode === 2)
 
     if ($versionUpdate === 1)
     {
-        $versionsText = $gL10n->get('UPD_NEW');
+        $versionsText = $gL10n->get('SYS_NEW_VERSION_AVAILABLE');
     }
     elseif ($versionUpdate === 2)
     {
-        $versionsText = $gL10n->get('UPD_NEW_BETA');
+        $versionsText = $gL10n->get('SYS_NEW_BETA_AVAILABLE');
     }
     elseif ($versionUpdate === 3)
     {
-        $versionsText = $gL10n->get('UPD_NEW_BOTH');
+        $versionsText = $gL10n->get('SYS_NEW_BOTH_AVAILABLE');
     }
     elseif ($versionUpdate === 99)
     {
         $admidioLink = '<a href="' . ADMIDIO_HOMEPAGE . 'download.php" target="_blank">Admidio</a>';
-        $versionsText = $gL10n->get('UPD_CONNECTION_ERROR', array($admidioLink));
+        $versionsText = $gL10n->get('SYS_CONNECTION_ERROR', array($admidioLink));
     }
     else
     {
@@ -162,17 +162,17 @@ if ($getMode === 2)
             $versionsTextBeta = 'Beta ';
         }
 
-        $versionsText = $gL10n->get('UPD_NO_NEW', array($versionsTextBeta));
+        $versionsText = $gL10n->get('SYS_USING_CURRENT_VERSION', array($versionsTextBeta));
     }
 
     echo '
-        <p>' . $gL10n->get('UPD_CURRENT_VERSION') . ':&nbsp;' . ADMIDIO_VERSION_TEXT . '</p>
-        <p>' . $gL10n->get('UPD_STABLE_VERSION') . ':&nbsp;
+        <p>' . $gL10n->get('SYS_INSTALLED') . ':&nbsp;' . ADMIDIO_VERSION_TEXT . '</p>
+        <p>' . $gL10n->get('SYS_AVAILABLE') . ':&nbsp;
             <a class="btn" href="' . ADMIDIO_HOMEPAGE . 'download.php" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">'.
                 '<i class="fas fa-link"></i>' . $stableVersion . '
             </a>
             <br />
-            ' . $gL10n->get('UPD_BETA_VERSION') . ': &nbsp;';
+            ' . $gL10n->get('SYS_AVAILABLE_BETA') . ': &nbsp;';
 
     if ($versionUpdate !== 99 && $betaVersion !== 'n/a')
     {

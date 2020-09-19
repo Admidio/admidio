@@ -416,7 +416,7 @@ final class ComponentUpdateSteps
                        (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
                 VALUES (NULL, NULL, 1, 1, 1, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
                      , (NULL, NULL, 1, 2, 1, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
-                     , (NULL, NULL, 1, 3, 1, \'plugins\', NULL, \'\', \'MEN_PLUGIN\', \'\')
+                     , (NULL, NULL, 1, 3, 1, \'plugins\', NULL, \'\', \'SYS_PLUGINS\', \'\')
                      , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/overview.php\', \'home.png\', \'SYS_OVERVIEW\', \'\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOCUMENTS-FILES\'), 1, 0, 3, 1, \'documents-files\', \''.FOLDER_MODULES.'/documents-files/documents_files.php\', \'fa-file-download\', \'SYS_DOCUMENTS_FILES\', \'SYS_DOCUMENTS_FILES_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GROUPS-ROLES\'), 1, 0, 7, 1, \'groups-roles\', \''.FOLDER_MODULES.'/groups-roles/groups_roles.php\', \'fa-user-tie\', \'SYS_GROUPS_ROLES\', \'SYS_GROUPS_ROLES_DESC\')

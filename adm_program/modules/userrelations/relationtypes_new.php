@@ -66,10 +66,10 @@ $form->addInput(
 );
 $form->addCheckbox(
     'urt_edit_user', $gL10n->get('SYS_EDIT_USER_IN_RELATION'), (bool) $relationType1->getValue('urt_edit_user'),
-    array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
+    array('helpTextIdLabel' => 'SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC')
 );
 
-$options = array('defaultValue' => $relationType1->getRelationTypeString(), 'helpTextIdLabel' => 'REL_USER_RELATION_TYPE_DESC');
+$options = array('defaultValue' => $relationType1->getRelationTypeString(), 'helpTextIdLabel' => 'SYS_RELATIONSHIP_TYPE_DESC');
 if (!$relationType1->isNewRecord())
 {
     $options['property'] = HtmlForm::FIELD_DISABLED;
@@ -78,9 +78,9 @@ if (!$relationType1->isNewRecord())
 $form->addRadioButton(
     'relation_type', $gL10n->get('SYS_USER_RELATION_TYPE'),
     array(
-        'asymmetrical'   => $gL10n->get('REL_USER_RELATION_TYPE_ASYMMETRICAL'),
-        'symmetrical'    => $gL10n->get('REL_USER_RELATION_TYPE_SYMMETRICAL'),
-        'unidirectional' => $gL10n->get('REL_USER_RELATION_TYPE_UNIDIRECTIONAL')
+        'asymmetrical'   => $gL10n->get('SYS_ASYMMETRICAL'),
+        'symmetrical'    => $gL10n->get('SYS_SYMMETRICAL'),
+        'unidirectional' => $gL10n->get('SYS_UNIDIRECTIONAL')
     ),
     $options
 );
@@ -140,7 +140,7 @@ $form->addInput(
 );
 $form->addCheckbox(
     'urt_edit_user_inverse', $gL10n->get('SYS_EDIT_USER_IN_RELATION'), (bool) $relationType2->getValue('urt_edit_user'),
-    array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
+    array('helpTextIdLabel' => 'SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC')
 );
 $form->closeGroupBox();
 

@@ -50,5 +50,6 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="430">DELETE FROM %PREFIX%_menu WHERE men_name_intern = 'roladm'</step>
     <step id="440">DELETE FROM %PREFIX%_components WHERE com_name_intern = 'ROLES'</step>
     <step id="450">UPDATE %PREFIX%_preferences SET prf_value = '#eeeeee' WHERE prf_name = 'system_js_editor_color'</step>
+    <step id="460">UPDATE %PREFIX%_menu SET men_name = 'SYS_PLUGINS' WHERE men_name_intern = 'plugins'</step>
     <step>stop</step>
 </update>

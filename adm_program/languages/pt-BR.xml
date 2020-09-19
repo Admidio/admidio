@@ -26,18 +26,18 @@
   <string name="BAC_SUM">Total</string>
   <string name="BAC_SECONDS_VAR">#VAR1# segundos</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_ADMINISTRATORS_DESC">Membros deste cargo são administradores do módulo e possuem acesso total. É possivel criar, editar e apagar dados; editar categorias e suas permissões. Um cargo pode ser um administrador atribuindo-lhe a permissão #VAR1_BOLD#. </string>
-  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Todos os administradores do módulo da organização pai</string>
-  <string name="CAT_ALL_THIS_ORGANIZATION">Todos os membros desta organização</string>
-  <string name="CAT_CATEGORY_EXIST">Já existe uma categoria com esse nome nesta organização.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Esta opção fará com que os campos de perfil desta categoria apareçam para visualização e edição na exibição de perfil das seguintes organizações:#VAR1#\n\nDesative se deseja que estes campos apareçam somente na sua organização.</string>
-  <string name="CAT_DEFAULT_VAR">Predefinição #VAR1#</string>
-  <string name="CAT_DELETE_CATEGORY">Deseja excluir a categoria #VAR1_BOLD#?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">Não foi possível excluir a categoria #VAR1_BOLD# devido às dependências de #VAR2#.</string>
-  <string name="CAT_MOVE_DOWN">Mover #VAR1# para baixo</string>
-  <string name="CAT_MOVE_UP">Mover #VAR1# para cima</string>
-  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Esta configuração só poder ser modificada pela organização pai </string>
-  <string name="CAT_PROFILE_FIELDS_VISIBILITY">Os campos de perfil nessa categoria podem ser ocultados para outros usuários, mas ainda continuarão visíveis e editáveis a partir de seus próprios perfis.</string>
+  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Membros deste cargo são administradores do módulo e possuem acesso total. É possivel criar, editar e apagar dados; editar categorias e suas permissões. Um cargo pode ser um administrador atribuindo-lhe a permissão #VAR1_BOLD#. </string>
+  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Todos os administradores do módulo da organização pai</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">Todos os membros desta organização</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Já existe uma categoria com esse nome nesta organização.</string>
+  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Esta opção fará com que os campos de perfil desta categoria apareçam para visualização e edição na exibição de perfil das seguintes organizações:#VAR1#\n\nDesative se deseja que estes campos apareçam somente na sua organização.</string>
+  <string name="SYS_DEFAULT_VAR">Predefinição #VAR1#</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">Deseja excluir a categoria #VAR1_BOLD#?</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">Não foi possível excluir a categoria #VAR1_BOLD# devido às dependências de #VAR2#.</string>
+  <string name="SYS_MOVE_DOWN">Mover #VAR1# para baixo</string>
+  <string name="SYS_MOVE_UP">Mover #VAR1# para cima</string>
+  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Esta configuração só poder ser modificada pela organização pai </string>
+  <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Os campos de perfil nessa categoria podem ser ocultados para outros usuários, mas ainda continuarão visíveis e editáveis a partir de seus próprios perfis.</string>
   <string name="CAT_ONLY_PARENT_ORGANIZATION">Esta categoria é visível para todas as organizações. Por isso, só pode ser editada pela organização pai.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Adicionar evento ao calendário</string>
@@ -516,13 +516,13 @@
   <string name="MEM_USERS_PER_PAGE">Número de usuários por página</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Número de usuários listados em cada página. (padrão: 25)</string>
   <!--Phrases only in Menu-->
-  <string name="MEN_NAME_DESC">O nome da entrada no menu. Aqui também pode inserir o nome de uma cadeia de tradução.</string>
-  <string name="MEN_MENU_ITEM">Item de menu</string>
-  <string name="MEN_MENU_LEVEL">Nível de menu</string>
-  <string name="MEN_MENU_LEVEL_DESC">Um item de menu está sempre subordinado à outro item de menu. Na lista de seleção, selecione o nível de menu em que o novo item de menu deve ser visível.</string>
-  <string name="MEN_MODULE_RIGHTS">Permissões do módulo</string>
-  <string name="MEN_MODULE_RIGHTS_DESC">Se especificar um módulo aqui, o item de menu apenas será mostrado se o usuário também tem permissão para ver este módulo.</string>
-  <string name="MEN_PLUGIN">Plugins</string>
+  <string name="SYS_MENU_NAME_DESC">O nome da entrada no menu. Aqui também pode inserir o nome de uma cadeia de tradução.</string>
+  <string name="SYS_MENU_ITEM">Item de menu</string>
+  <string name="SYS_MENU_LEVEL">Nível de menu</string>
+  <string name="SYS_MENU_LEVEL_DESC">Um item de menu está sempre subordinado à outro item de menu. Na lista de seleção, selecione o nível de menu em que o novo item de menu deve ser visível.</string>
+  <string name="SYS_MODULE_RIGHTS">Permissões do módulo</string>
+  <string name="SYS_MENU_MODULE_RIGHTS_DESC">Se especificar um módulo aqui, o item de menu apenas será mostrado se o usuário também tem permissão para ver este módulo.</string>
+  <string name="SYS_PLUGINS">Plugins</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Ativar bate-papo</string>
   <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">O módulo de bate-papo pode ser ativado ou desativado usando essa configuração. O módulo dinamicamente carrega dados do banco de dados a cada 3 segundos. Um limite de máximo de 99 mensagens são salvas. Ao atingir 100 mensagens, as primeiras 50 são apagadas. (padrão: desativado)</string>
@@ -701,14 +701,14 @@
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Endereço para o sítio web da organização</string>
   <string name="ORG_VARIABLE_USERNAME">Nome de usuário do usuário do contexto do respectivo e-mail</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_BETA_VERSION">Beta disponível</string>
-  <string name="UPD_CONNECTION_ERROR">Não foi possível conectar à página de atualizações do Admidio. Verifique tua conexão de internet ou tente novamente mais tarde. Também pode visitar a página #VAR1# e atualizar o Admidio manualmente.</string>
-  <string name="UPD_CURRENT_VERSION">Instalado</string>
-  <string name="UPD_NEW">Uma nova versão está disponível!</string>
-  <string name="UPD_NEW_BETA">Uma nova versão beta está disponível!</string>
-  <string name="UPD_NEW_BOTH">Uma nova versão estável e uma beta estão disponíveis!</string>
-  <string name="UPD_NO_NEW">Usando a versão #VAR1# do Admidio!</string>
-  <string name="UPD_STABLE_VERSION">Disponível</string>
+  <string name="SYS_AVAILABLE_BETA">Beta disponível</string>
+  <string name="SYS_CONNECTION_ERROR">Não foi possível conectar à página de atualizações do Admidio. Verifique tua conexão de internet ou tente novamente mais tarde. Também pode visitar a página #VAR1# e atualizar o Admidio manualmente.</string>
+  <string name="SYS_INSTALLED">Instalado</string>
+  <string name="SYS_NEW_VERSION_AVAILABLE">Uma nova versão está disponível!</string>
+  <string name="SYS_NEW_BETA_AVAILABLE">Uma nova versão beta está disponível!</string>
+  <string name="SYS_NEW_BOTH_AVAILABLE">Uma nova versão estável e uma beta estão disponíveis!</string>
+  <string name="SYS_USING_CURRENT_VERSION">Usando a versão #VAR1# do Admidio!</string>
+  <string name="SYS_AVAILABLE">Disponível</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Álbum</string>
   <string name="PHO_ALBUM_DELETE">Remover álbum</string>
@@ -856,13 +856,13 @@
   <string name="PRO_WANT_DELETE_PHOTO">Remover a foto selecionada?</string>
   <string name="PRO_YEARS">Anos</string>
   <!--Phrases only in Relationssmodule-->
-  <string name="REL_EDIT_USER_DESC">Se definida, um usuário pode editar o perfil de outro usuário com o qual possua relação. Para um relacionamento assimétrico, a permissão é atribuída separadamente para cada relacionamento, e para relacionamentos simétricos, ambos usuários podem editar o perfil do outro. No caso de relacionamentos unidirecionais, apenas o usuário com a relação gravada pode editar o perfil do outro.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Se definida, um usuário pode editar o perfil de outro usuário com o qual possua relação. Para um relacionamento assimétrico, a permissão é atribuída separadamente para cada relacionamento, e para relacionamentos simétricos, ambos usuários podem editar o perfil do outro. No caso de relacionamentos unidirecionais, apenas o usuário com a relação gravada pode editar o perfil do outro.</string>
   <string name="REL_NO_USER_RELATION_TYPES_FOUND">Não há tipos de relação. Eles podem ser criados na Gestão de Usuários.</string>
-  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">Assimétrica</string>
-  <string name="REL_USER_RELATION_TYPE_DEL">Queres apagar o tipo de relação #VAR1_BOLD#? Aviso: Serão apagados todos os relacionamentos deste tipo.</string>
-  <string name="REL_USER_RELATION_TYPE_DESC">Uma relação assimétrica é usada, por exemplo, para pai / filho; enquanto uma simétrica é usada por exemplo, para irmãos. Relações simétricas são sempre bidirecionais, entretanto, relações unidirecionais apenas marcam em uma direção.</string>
-  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">Simétrica</string>
-  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">Unidirecional</string>
+  <string name="SYS_ASYMMETRICAL">Assimétrica</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DELETE">Queres apagar o tipo de relação #VAR1_BOLD#? Aviso: Serão apagados todos os relacionamentos deste tipo.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DESC">Uma relação assimétrica é usada, por exemplo, para pai / filho; enquanto uma simétrica é usada por exemplo, para irmãos. Relações simétricas são sempre bidirecionais, entretanto, relações unidirecionais apenas marcam em uma direção.</string>
+  <string name="SYS_SYMMETRICAL">Simétrica</string>
+  <string name="SYS_UNIDIRECTIONAL">Unidirecional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ANNUALLY">Anualmente</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Atribuir e editar membros</string>

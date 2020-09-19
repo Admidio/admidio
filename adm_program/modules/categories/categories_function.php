@@ -115,7 +115,7 @@ if($getMode === 1)
 
         if($categoriesStatement->fetchColumn() > 0)
         {
-            $gMessage->show($gL10n->get('CAT_CATEGORY_EXIST'));
+            $gMessage->show($gL10n->get('SYS_CATEGORY_EXISTS_IN_ORGA'));
             // => EXIT
         }
     }
