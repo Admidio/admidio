@@ -1049,7 +1049,7 @@
   <string name="SYS_FOLDER_CREATED">Der Ordner #VAR1_BOLD# wurde angelegt.</string>
   <string name="SYS_FOLDER_EXISTS">Der Ordner #VAR1# existiert bereits!\n\nBitte wählen Sie einen anderen Namen für den Ordner aus.</string>
   <string name="SYS_FOLDER_NO_FILES">Der Ordner enthält keine Dateien.</string>
-  <string name="SYS_FOLDER_NO_RIGHTS">Sie besitzen keine Rechte den gewählten Downloadordner zu sehen.</string>
+  <string name="SYS_FOLDER_NO_RIGHTS">Sie besitzen keine Rechte den gewählten Ordner zu sehen.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWenden Sie Sich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Der gesuchte Ordner konnte nicht gefunden werden.</string>

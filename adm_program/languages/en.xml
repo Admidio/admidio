@@ -204,7 +204,7 @@
   <string name="INS_ERROR_OPEN_FILE">File #VAR1_BOLD# could not be opened.</string>
   <string name="INS_FACEBOOK">Facebook</string>
   <string name="INS_FACEBOOK_DESC">Would you like to set a link to your Facebook profile? Your Facebook login name is required. Log in to your Facebook account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Facebook profile directly.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Folder #VAR1_BOLD# is not writeable. Please grant write access in order to upload photos and files to download module.</string>
+  <string name="INS_FOLDER_NOT_WRITABLE">The folder #VAR1_BOLD# has no write permissions. Without write permissions, no files or photos can be uploaded by users.</string>
   <string name="INS_GROUPS">Groups</string>
   <string name="INS_HOST_INVALID">Hostname is not valid. Enter a valid host name or IP address.</string>
   <string name="INS_ICQ">ICQ</string>
@@ -848,7 +848,7 @@
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_ADMINISTRATORS">Administrators</string>
-  <string name="SYS_ADMINISTRATORS_DESC">These roles are administrators of the download module and have access to all folders and files. You can upload, download and configure access rights. A role can be set as administrator by assigning the permission #VAR1_BOLD#.</string>
+  <string name="SYS_ADMINISTRATORS_DESC">These roles are administrators of the Documents and Files module and therefore have access to all folders and files. They can upload and download files and assign access rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax request error.\nError Details: #VAR1#</string>
   <string name="SYS_ALL">All</string>
   <string name="SYS_ALL_ORGANIZATIONS">All organizations</string>

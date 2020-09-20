@@ -204,7 +204,7 @@
   <string name="INS_ERROR_OPEN_FILE">Die Datei #VAR1_BOLD# konnte nicht geöffnet werden.</string>
   <string name="INS_FACEBOOK">Facebook</string>
   <string name="INS_FACEBOOK_DESC">Willst du dein Facebook-Profil hier verlinken? Dazu benötigst du deinen Nutzernamen bei Facebook. Melde dich bei Facebook an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Facebook-Profil aufrufen.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Der Ordner #VAR1_BOLD# besitzt noch keine Schreibrechte. Diese solltest du noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien für das Downloadmodul hochgeladen werden können.</string>
+  <string name="INS_FOLDER_NOT_WRITABLE">Der Ordner #VAR1_BOLD# besitzt keine Schreibrechte. Ohne Schreibrechte können keine Dateien oder Fotos von den Anwendern hochgeladen werden.</string>
   <string name="INS_GROUPS">Gruppen</string>
   <string name="INS_HOST_INVALID">Hostname ist nicht gültig. Gib einen gültigen Hostnamen oder IP-Adresse ein.</string>
   <string name="INS_ICQ">ICQ</string>
@@ -848,7 +848,7 @@
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_ADMINISTRATORS">Administratoren</string>
-  <string name="SYS_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Downloadmoduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
+  <string name="SYS_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Dokumente und Dateien Moduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle Organisationen</string>
@@ -1049,7 +1049,7 @@
   <string name="SYS_FOLDER_CREATED">Der Ordner #VAR1_BOLD# wurde angelegt.</string>
   <string name="SYS_FOLDER_EXISTS">Der Ordner #VAR1# existiert bereits!\n\nWähle bitte einen anderen Namen für den Ordner aus.</string>
   <string name="SYS_FOLDER_NO_FILES">Der Ordner enthält keine Dateien.</string>
-  <string name="SYS_FOLDER_NO_RIGHTS">Du besitzt keine Rechte den gewählten Downloadordner zu sehen.</string>
+  <string name="SYS_FOLDER_NO_RIGHTS">Du besitzt keine Rechte den gewählten Ordner zu sehen.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWende dich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Der Ordner (ID #VAR1#) konnte nicht gefunden werden.</string>
