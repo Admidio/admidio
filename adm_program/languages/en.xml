@@ -1097,6 +1097,7 @@
   <string name="SYS_ITEMNAME">Item name</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landscape</string>
   <string name="SYS_LANGUAGE">Language</string>
+  <string name="SYS_LANGUAGE_HELP_TRANSLATION">Is your language missing or do you want to translate more texts or improve existing translations? Then have a look at #VAR1#Wiki page of Admidio#VAR2# to see how you can help with the translation.</string>
   <string name="SYS_LAST_EDITED_BY">Last edited by #VAR1# on #VAR2#</string>
   <string name="SYS_LASTNAME">Surname</string>
   <string name="SYS_LATER">Later</string>

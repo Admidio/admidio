@@ -362,7 +362,7 @@ $formRegionalSettings->addInput(
 );
 $formRegionalSettings->addSelectBox(
     'system_language', $gL10n->get('SYS_LANGUAGE'), $gL10n->getAvailableLanguages(),
-    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['system_language'])
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['system_language'], 'helpTextIdInline' => array('SYS_LANGUAGE_HELP_TRANSLATION', array('<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen">', '</a>')))
 );
 $formRegionalSettings->addSelectBox(
     'default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(),
