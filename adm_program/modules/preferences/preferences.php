@@ -32,7 +32,7 @@ if(!$gCurrentUser->isAdministrator())
 $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManager->getAll());
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-preferences', $headline);
 
 $showOptionValidModules = array(
     'announcements', 'documents-files', 'guestbook', 'ecards', 'lists',

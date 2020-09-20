@@ -83,7 +83,7 @@ if($getCatId > 0)
 }
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-groups-roles', $headline);
 
 if($getShow === 'card')
 {

@@ -45,7 +45,7 @@ else
 }
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-members-import', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form

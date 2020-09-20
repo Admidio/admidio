@@ -87,7 +87,7 @@ if ($getPhotoId === 0)
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-photos', $headline);
 
 // add rss feed to photos
 if ($gSettingsManager->getBool('enable_rss'))

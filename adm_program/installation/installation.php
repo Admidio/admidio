@@ -97,7 +97,7 @@ if (is_file($configPath))
     }
     catch (AdmException $e)
     {
-        $page = new HtmlPageInstallation();
+        $page = new HtmlPageInstallation('admidio-installation-message');
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_DATABASE_NO_LOGIN_CONFIG_FILE', array($e->getText())), $gL10n->get('INS_CONTINUE_INSTALLATION'),
             'fa-arrow-circle-right', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database')));
         // => EXIT
@@ -111,7 +111,7 @@ if (is_file($configPath))
     if ($pdoStatement !== false && $pdoStatement->rowCount() > 0)
     {
         // valid installation exists -> exit installation
-        $page = new HtmlPageInstallation();
+        $page = new HtmlPageInstallation('admidio-installation-message');
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_INSTALLATION_EXISTS'), $gL10n->get('SYS_OVERVIEW'),
             'fa-home', '../index.php');
         // => EXIT

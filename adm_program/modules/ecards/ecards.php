@@ -108,7 +108,7 @@ else
 }
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-ecards', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.min.js');
@@ -130,7 +130,7 @@ $page->addJavascript('
             success: function(response) { // on success..
                 $(".modal-dialog").attr("class", "modal-dialog modal-lg");
                 $(".modal-content").html(response);
-                $("#admidio_modal").modal();
+                $("#admidio-modal").modal();
             }
         });
 

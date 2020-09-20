@@ -60,7 +60,7 @@ $folderContent = $currentFolder->getFolderContentsForDownload();
 $navigationBar = $currentFolder->getNavigationForDownload();
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-documents-files', $headline);
 
 $page->addJavascript('
     $("body").on("hidden.bs.modal", ".modal", function() {

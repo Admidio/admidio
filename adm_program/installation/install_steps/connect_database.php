@@ -20,7 +20,7 @@ if (isset($_POST['system_language']) && trim($_POST['system_language']) !== '')
 }
 elseif (!isset($_SESSION['language']))
 {
-    $page = new HtmlPageInstallation();
+    $page = new HtmlPageInstallation('admidio-installation-message');
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'), $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome')));
     // => EXIT
@@ -54,7 +54,7 @@ else
 }
 
 // create a page to enter all necessary database connection information
-$page = new HtmlPageInstallation();
+$page = new HtmlPageInstallation('admidio-installation-connect-database');
 $page->addTemplateFile('installation.tpl');
 $page->assign('subHeadline', $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
 $page->assign('text', $gL10n->get('INS_DATABASE_LOGIN_DESC'));

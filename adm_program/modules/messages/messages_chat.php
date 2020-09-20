@@ -31,7 +31,7 @@ $headline = $gCurrentOrganization->getValue('org_shortname') . ' - ' . $gL10n->g
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-messages-chat', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/messages/chat.js');

@@ -125,7 +125,7 @@ while($row = $statementAdminRoles->fetch())
 }
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-documents-files-config-folder', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addHtml('<p class="lead">'.$gL10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))).'</p>');

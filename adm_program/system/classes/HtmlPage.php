@@ -8,18 +8,19 @@
  */
 
 /**
- * Creates an Admidio specific complete html page
+ * Creates an Admidio specific complete html page with the template engine Smarty.
  *
  * This class creates a html page with head and body and integrates some Admidio
- * specific elements like css files, javascript files and javascript code. It
- * also provides some methods to easily add new html data to the page. The generated
- * page will automatically integrate the chosen theme. You can optional disable the
- * integration of the theme files.
+ * specific elements like css files, javascript files and javascript code. The class is derived
+ * from the Smarty class. It provides method to add new html data to the page and also set or
+ * choose the necessary template files. The generated page will automatically integrate the
+ * chosen theme. You can also create a html reduces page without menu header and footer
+ * informations.
  *
  * **Code example**
  * ```
  * // create a simple html page with some text
- * $page = new HtmlPage();
+ * $page = new HtmlPage('admidio-example');
  * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery/jquery.min.js');
  * $page->setHeadline('A simple Html page');
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
@@ -29,6 +30,10 @@
 
 class HtmlPage extends \Smarty
 {
+    /**
+     * @var string The id of the html page that will be set within the <body> tag.
+     */
+    protected $id = '';
     /**
      * @var string The title for the html page and the headline for the Admidio content.
      */
@@ -92,14 +97,18 @@ class HtmlPage extends \Smarty
 
 
     /**
-     * Constructor creates the page object and initialized all parameters
-     * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag.
+     * Constructor creates the page object and initialized all parameters.
+     * @param string $id       Id of the page. This id will be set in the html <body> tag.
+     * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
+     *                         and also set the title of the page.
      */
-    public function __construct($headline = '')
+    public function __construct($id, $headline = '')
     {
         global $gSettingsManager;
 
         $this->menuNodePageFunctions = new MenuNode('admidio-menu-page-functions', $headline);
+
+        $this->id = $id;
 
         if($headline !== '')
         {
@@ -443,6 +452,7 @@ class HtmlPage extends \Smarty
         $gMenu->addFunctionsNode($this->menuNodePageFunctions);
 
         $this->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
+        $this->assign('id', $this->id);
         $this->assign('title', $this->title);
         $this->assign('headline', $this->headline);
         $this->assign('urlPreviousPage', $this->urlPreviousPage);

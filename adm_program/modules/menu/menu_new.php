@@ -110,7 +110,7 @@ if(isset($_SESSION['menu_request']))
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-menu-edit', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // alle aus der DB aus lesen

@@ -894,7 +894,7 @@ class Database
         if (isset($gSettingsManager) && defined('THEME_ADMIDIO_PATH') && !headers_sent())
         {
             // create html page object
-            $page = new HtmlPage($gL10n->get('SYS_DATABASE_ERROR'));
+            $page = new HtmlPage('admidio-error', $gL10n->get('SYS_DATABASE_ERROR'));
             $page->addHtml($htmlOutput);
             $page->show();
         }

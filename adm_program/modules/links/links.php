@@ -59,7 +59,7 @@ $headline = $weblinks->getHeadline($getHeadline);
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-weblinks', $headline);
 
 if($gSettingsManager->getBool('enable_rss'))
 {

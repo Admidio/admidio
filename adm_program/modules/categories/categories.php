@@ -116,7 +116,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 unset($_SESSION['categories_request']);
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-categories', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascript('
@@ -172,8 +172,8 @@ $page->addJavascript('
 ');
 
 // define link to create new category
-$page->addPageFunctionsMenuItem('menu_item_categories_add', $gL10n->get('SYS_CREATE_VAR', array($addButtonText)), 
-    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType, 'title' => $getTitle)), 
+$page->addPageFunctionsMenuItem('menu_item_categories_add', $gL10n->get('SYS_CREATE_VAR', array($addButtonText)),
+    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType, 'title' => $getTitle)),
     'fa-plus-circle');
 
 // Create table object
@@ -326,7 +326,7 @@ while($catRow = $categoryStatement->fetch())
         }
         else
         {
-            $categoryAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+            $categoryAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. (int) $category->getValue('cat_id'), 'name' => $category->getValue('cat_name'), 'database_id' => $catId, 'database_id_2' => $getType)).'">'.
                                             '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }

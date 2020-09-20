@@ -117,7 +117,7 @@ catch(AdmException $e)
 }
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-documents-files-rename', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // create html form

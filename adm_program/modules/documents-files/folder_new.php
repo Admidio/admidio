@@ -63,7 +63,7 @@ catch(AdmException $e)
 $parentFolderName = $folder->getValue('fol_name');
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-documents-files-new-folder', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addHtml('<p class="lead">'.$gL10n->get('SYS_CREATE_FOLDER_DESC', array($parentFolderName)).'</p>');

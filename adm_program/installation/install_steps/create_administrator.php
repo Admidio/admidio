@@ -26,7 +26,7 @@ if (isset($_POST['orga_shortname']))
     ||  $_SESSION['orga_email']     === ''
     ||  !in_array($_SESSION['orga_timezone'], \DateTimeZone::listIdentifiers(), true))
     {
-        $page = new HtmlPageInstallation();
+        $page = new HtmlPageInstallation('admidio-installation-message');
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')));
         // => EXIT
@@ -35,7 +35,7 @@ if (isset($_POST['orga_shortname']))
     // allow only letters, numbers and special characters like .-_+@
     if(!StringUtils::strValidCharacters($_SESSION['orga_shortname'], 'noSpecialChar'))
     {
-        $page = new HtmlPageInstallation();
+        $page = new HtmlPageInstallation('admidio-installation-message');
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION')), $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')));
         // => EXIT
@@ -61,7 +61,7 @@ else
 $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
 
 // create a page to enter all necessary data to create a administrator user
-$page = new HtmlPageInstallation();
+$page = new HtmlPageInstallation('admidio-installation-create-administrator');
 $page->addTemplateFile('installation.tpl');
 $page->assign('subHeadline', $gL10n->get('INS_CREATE_ADMINISTRATOR'));
 $page->assign('text', $gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'));

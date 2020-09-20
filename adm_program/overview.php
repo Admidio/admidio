@@ -24,7 +24,7 @@ $headline = $gL10n->get('SYS_OVERVIEW');
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // create html page object and load template file
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-overview', $headline);
 $page->addTemplateFile('overview.tpl');
 
 $page->show();

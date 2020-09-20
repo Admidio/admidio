@@ -88,7 +88,7 @@ if($getInline)
                             rolesFormAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                             rolesFormAlert.fadeIn("slow");
                             setTimeout(function() {
-                                $("#admidio_modal").modal("hide");
+                                $("#admidio-modal").modal("hide");
                             }, 2000);
 
                             profileJS.reloadRoleMemberships();
@@ -115,7 +115,7 @@ if($getInline)
 else
 {
     // create html page object
-    $page = new HtmlPage($headline);
+    $page = new HtmlPage('admidio-profile-roles', $headline);
     $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 

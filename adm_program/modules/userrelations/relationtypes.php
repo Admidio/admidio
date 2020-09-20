@@ -28,7 +28,7 @@ $headline = $gL10n->get('SYS_RELATIONSHIP_CONFIGURATIONS');
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
-$page = new HtmlPage($headline);
+$page = new HtmlPage('admidio-relationtypes', $headline);
 $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // define link to create new category

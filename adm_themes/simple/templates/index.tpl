@@ -43,7 +43,7 @@
             $('.openPopup').on('click',function(){
                 $('.modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
                 $('.modal-content').load($(this).attr('data-href'),function(){
-                    $('#admidio_modal').modal({
+                    $('#admidio-modal').modal({
                         show:true
                     });
                 });
@@ -61,8 +61,8 @@
         {include file="cookie_note.tpl"}
     {/if}
 </head>
-<body class="admidio">
-    <div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
+<body id="{$id}" class="admidio">
+    <div id="admidio-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">Test</div>
         </div>
@@ -79,7 +79,7 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
+      <div id="navbarNav" class="collapse navbar-collapse">
           {if $validLogin}
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
@@ -117,7 +117,7 @@
                 {$menuSidebar}
             </div>
 
-            <div class="col-12 col-md-9 col-xl-10 admidio-content" id="content" role="main">
+            <div id="content" class="col-12 col-md-9 col-xl-10 admidio-content" role="main">
                 <div class="admidio-content-header">
                     <h1 class="admidio-module-headline">{$headline}</h1>
 

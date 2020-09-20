@@ -142,7 +142,7 @@ else
     }
 
     // create html page object
-    $page = new HtmlPage($headline);
+    $page = new HtmlPage('admidio-members-assignement', $headline);
     $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
     $javascriptCode = '';

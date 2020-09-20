@@ -343,10 +343,9 @@ if ($getMode !== 'csv')
     if ($getMode === 'print')
     {
         // create html page object without the custom theme files
-        $page = new HtmlPage();
+        $page = new HtmlPage('admidio-lists-show', $headline);
         $page->setPrintMode();
         $page->setTitle($title);
-        $page->setHeadline($headline);
         $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
     }
@@ -391,11 +390,9 @@ if ($getMode !== 'csv')
         $hoverRows = true;
 
         // create html page object
-        $page = new HtmlPage();
+        $page = new HtmlPage('admidio-lists-show', $headline);
         $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
-
         $page->setTitle($title);
-        $page->setHeadline($headline);
 
         // create selectbox with all list configurations
         $sql = 'SELECT lst_id, lst_name, lst_global
