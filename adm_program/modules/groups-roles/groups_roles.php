@@ -432,7 +432,7 @@ foreach($listsResult['recordset'] as $row)
         {
             $assignRoles .= '<i class="admidio-icon-chain fas fa-image" data-toggle="tooltip" title="'.$gL10n->get('SYS_RIGHT_PHOTOS').'"></i>';
         }
-        if($role->getValue('rol_download') == 1 && (int) $gSettingsManager->getBool('enable_download_module'))
+        if($role->getValue('rol_documents_files') == 1 && (int) $gSettingsManager->getBool('documents_files_enable_module'))
         {
             $assignRoles .= '<i class="admidio-icon-chain fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('SYS_RIGHT_DOCUMENTS_FILES').'"></i>';
         }

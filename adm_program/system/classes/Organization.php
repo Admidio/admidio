@@ -235,7 +235,7 @@ class Organization extends TableAccess
         $roleAdministrator->setValue('rol_approve_users', 1);
         $roleAdministrator->setValue('rol_announcements', 1);
         $roleAdministrator->setValue('rol_dates', 1);
-        $roleAdministrator->setValue('rol_download', 1);
+        $roleAdministrator->setValue('rol_documents_files', 1);
         $roleAdministrator->setValue('rol_guestbook', 1);
         $roleAdministrator->setValue('rol_guestbook_comments', 1);
         $roleAdministrator->setValue('rol_photo', 1);

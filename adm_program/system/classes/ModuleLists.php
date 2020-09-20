@@ -42,7 +42,7 @@
  *                          [8] => 0
  *                          [rol_dates] => 0
  *                          [9] => 0
- *                          [rol_download] => 0
+ *                          [rol_documents_files] => 0
  *                          [10] => 0
  *                          [rol_edit_user] => 0
  *                          [11] => 0

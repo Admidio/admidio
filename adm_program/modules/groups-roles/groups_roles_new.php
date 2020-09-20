@@ -288,10 +288,10 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
             array('icon' => 'fa-image')
         );
     }
-    if($gSettingsManager->getBool('enable_download_module'))
+    if($gSettingsManager->getBool('documents_files_enable_module'))
     {
         $form->addCheckbox(
-            'rol_download', $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'), (bool) $role->getValue('rol_download'),
+            'rol_documents_files', $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'), (bool) $role->getValue('rol_documents_files'),
             array('helpTextIdLabel' => 'SYS_RIGHT_DOCUMENTS_FILES_DESC', 'icon' => 'fa-download')
         );
     }

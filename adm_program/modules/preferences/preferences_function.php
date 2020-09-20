@@ -166,7 +166,7 @@ switch($getMode)
                     break;
 
                 case 'documents-files':
-                    $checkboxes = array('enable_download_module');
+                    $checkboxes = array('documents_files_enable_module');
                     break;
 
                 case 'guestbook':

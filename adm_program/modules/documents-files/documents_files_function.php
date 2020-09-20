@@ -23,7 +23,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('enable_download_module'))
+if (!$gSettingsManager->getBool('documents_files_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -35,7 +35,7 @@ $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
 $getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'int');
 $getName     = admFuncVariableIsValid($_GET, 'name',      'file');
 
-$_SESSION['download_request'] = $_POST;
+$_SESSION['documents_files_request'] = $_POST;
 
 // Pfad in adm_my_files pruefen und ggf. anlegen
 try
@@ -88,7 +88,7 @@ if ($getMode === 2)
         // => EXIT
     }
 
-    unset($_SESSION['download_request']);
+    unset($_SESSION['documents_files_request']);
 }
 
 // create folder
@@ -319,7 +319,7 @@ elseif ($getMode === 5)
         }
     }
 
-    unset($_SESSION['download_request']);
+    unset($_SESSION['documents_files_request']);
 }
 
 // Datei / Ordner zur DB hinzufeuegen

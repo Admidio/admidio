@@ -81,7 +81,7 @@ if($getModule === 'photos')
 }
 elseif($getModule === 'downloads')
 {
-    if (!$gSettingsManager->getBool('enable_download_module'))
+    if (!$gSettingsManager->getBool('documents_files_enable_module'))
     {
         $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
         // => EXIT

@@ -21,7 +21,7 @@ $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int', array('requireV
 $headline = $gL10n->get('SYS_SET_FOLDER_PERMISSIONS');
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('enable_download_module'))
+if (!$gSettingsManager->getBool('documents_files_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -113,7 +113,7 @@ $sqlAdminRoles = 'SELECT rol_name
               INNER JOIN '.TBL_CATEGORIES.'
                       ON cat_id = rol_cat_id
                    WHERE rol_valid    = 1
-                     AND rol_download = 1
+                     AND rol_documents_files = 1
                      AND cat_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
                 ORDER BY cat_sequence, rol_name';
 $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array((int) $gCurrentOrganization->getValue('org_id')));

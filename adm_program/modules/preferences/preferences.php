@@ -941,7 +941,7 @@ $formDownloads = new HtmlForm(
 );
 
 $formDownloads->addCheckbox(
-    'enable_download_module', $gL10n->get('SYS_ENABLE_DOCUMENTS_FILES_MODULE'), (bool) $formValues['enable_download_module'],
+    'documents_files_enable_module', $gL10n->get('SYS_ENABLE_DOCUMENTS_FILES_MODULE'), (bool) $formValues['documents_files_enable_module'],
     array('helpTextIdInline' => 'SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC')
 );
 $formDownloads->addInput(

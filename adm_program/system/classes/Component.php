@@ -131,7 +131,7 @@ class Component extends TableAccess
                 break;
 
             case 'DOCUMENTS-FILES':
-                if($gSettingsManager->getBool('enable_download_module'))
+                if($gSettingsManager->getBool('documents_files_enable_module'))
                 {
                     return true;
                 }

@@ -503,7 +503,7 @@ CREATE TABLE %PREFIX%_roles
     rol_approve_users           boolean             NOT NULL    DEFAULT '0',
     rol_announcements           boolean             NOT NULL    DEFAULT '0',
     rol_dates                   boolean             NOT NULL    DEFAULT '0',
-    rol_download                boolean             NOT NULL    DEFAULT '0',
+    rol_documents_files         boolean             NOT NULL    DEFAULT '0',
     rol_edit_user               boolean             NOT NULL    DEFAULT '0',
     rol_guestbook               boolean             NOT NULL    DEFAULT '0',
     rol_guestbook_comments      boolean             NOT NULL    DEFAULT '0',

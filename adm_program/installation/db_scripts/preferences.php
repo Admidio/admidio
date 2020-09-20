@@ -84,8 +84,8 @@ $defaultOrgPreferences = array(
     'members_show_all_users'        => '1',
     'members_enable_user_relations' => '1',
 
-    // Downloads
-    'enable_download_module' => '1',
+    // Documents and files
+    'documents_files_enable_module' => '1',
     'max_file_upload_size'   => '3',
 
     // Photos

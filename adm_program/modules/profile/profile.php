@@ -532,7 +532,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         'rol_approve_users',
         'rol_assign_roles',
         'rol_dates',
-        'rol_download',
+        'rol_documents_files',
         'rol_edit_user',
         'rol_guestbook',
         'rol_guestbook_comments',
@@ -651,10 +651,10 @@ if($gSettingsManager->getBool('profile_show_roles'))
                 'icon'  => 'fa-image'
             );
         }
-        if($user->checkRolesRight('rol_download') && (int) $gSettingsManager->getBool('enable_download_module'))
+        if($user->checkRolesRight('rol_documents_files') && (int) $gSettingsManager->getBool('documents_files_enable_module'))
         {
             $profileRightsArray[] = array(
-                'roles' => $rightsOrigin['rol_download'],
+                'roles' => $rightsOrigin['rol_documents_files'],
                 'right' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
                 'icon'  => 'fa-download'
             );

@@ -31,7 +31,7 @@ else
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('enable_download_module'))
+if (!$gSettingsManager->getBool('documents_files_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -39,10 +39,10 @@ if (!$gSettingsManager->getBool('enable_download_module'))
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-if(isset($_SESSION['download_request']))
+if(isset($_SESSION['documents_files_request']))
 {
-    $formValues = $_SESSION['download_request'];
-    unset($_SESSION['download_request']);
+    $formValues = $_SESSION['documents_files_request'];
+    unset($_SESSION['documents_files_request']);
 }
 else
 {

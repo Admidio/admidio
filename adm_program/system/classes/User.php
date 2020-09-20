@@ -393,7 +393,7 @@ class User extends TableAccess
                 'rol_approve_users'      => false,
                 'rol_assign_roles'       => false,
                 'rol_dates'              => false,
-                'rol_download'           => false,
+                'rol_documents_files'    => false,
                 'rol_edit_user'          => false,
                 'rol_guestbook'          => false,
                 'rol_guestbook_comments' => false,
@@ -2035,7 +2035,7 @@ class User extends TableAccess
      */
     public function editDownloadRight()
     {
-        return $this->checkRolesRight('rol_download');
+        return $this->checkRolesRight('rol_documents_files');
     }
 
     /**
