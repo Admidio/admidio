@@ -77,7 +77,6 @@ CREATE TABLE %PREFIX%_auto_login
     atl_org_id                  integer unsigned    NOT NULL,
     atl_usr_id                  integer unsigned    NOT NULL,
     atl_last_login              timestamp           NULL        DEFAULT NULL,
-    atl_ip_address              varchar(39)         NOT NULL,
     atl_number_invalid          smallint            NOT NULL    DEFAULT 0,
     PRIMARY KEY (atl_id)
 )

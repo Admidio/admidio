@@ -1753,7 +1753,7 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (720, 261, 6, 'DEU'),
 (721, 261, 7, '0934-2255773'),
 (722, 261, 8, '0229-457412'),
-(723, 261, 10, '1988-02-29'),
+(723, 261, 10, '1988-05-29'),
 (724, 261, 11, '2'),
 (725, 261, 12, 'dettenborn.della@example.com'),
 (727, 262, 1, 'Dibbern'),
