@@ -289,7 +289,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (94081, 1, 'password_min_strength', '1'),
 (94082, 1, 'system_browser_update_check', '0'),
 (94083, 1, 'system_hashing_cost', '10'),
-(94084, 1, 'mail_recipients_with_roles', '0'),
+(94084, 1, 'mail_recipients_with_roles', '1'),
 (94085, 1, 'captcha_lines_numbers', '5'),
 (94086, 1, 'captcha_perturbation', '0.75'),
 (94087, 1, 'captcha_background_image', ''),
@@ -297,7 +297,17 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (94089, 1, 'captcha_line_color', '#707070'),
 (94090, 1, 'captcha_charset', '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxy'),
 (94091, 1, 'members_enable_user_relations', '1'),
-(94093, 2, 'system_hashing_cost', '10');
+(94181, 2, 'password_min_strength', '1'),
+(94182, 2, 'system_browser_update_check', '0'),
+(94183, 2, 'system_hashing_cost', '10'),
+(94184, 2, 'mail_recipients_with_roles', '1'),
+(94185, 2, 'captcha_lines_numbers', '5'),
+(94186, 2, 'captcha_perturbation', '0.75'),
+(94187, 2, 'captcha_background_image', ''),
+(94188, 2, 'captcha_text_color', '#707070'),
+(94189, 2, 'captcha_line_color', '#707070'),
+(94190, 2, 'captcha_charset', '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxy'),
+(94191, 2, 'members_enable_user_relations', '1');
 
 
 --

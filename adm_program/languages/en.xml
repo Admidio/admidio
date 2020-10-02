@@ -421,8 +421,6 @@
   <string name="MAI_MAX_RECEIVER_DESC">This value defines the maximum amount of mail recipients. A role counts as one recipient.</string>
   <string name="MAI_MESSAGE_WENT_TO">Message was sent to</string>
   <string name="MAI_PHP_MAIL">PHP mail()</string>
-  <string name="MAI_RECIPIENTS_WITH_ROLES">Receiver in roles</string>
-  <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">E-mails to roles contain all recipients in the BCC field. The TO field is then usually filled with \"Undisclosed Recipients\". If this leads to problems, this setting can be used to fill the recipient field (TO) with the sender address or the administrator address from the system notifications. All mails to any roles will be sent in addition to these recipients. The role members are still written to the BCC field. (Default: Hidden)</string>
   <string name="MAI_SEND_COPY">Send copy of e-mail to my address</string>
   <string name="MAI_SEND_EMAIL">Send e-mail</string>
   <string name="MAI_SEND_MAIL_TO_ROLE">Your e-mail will be sent to all members with an e-mail address of the selected role or the selected recipients .\n\nFurther roles and recipients are available for logged in users only.</string>
@@ -1169,6 +1167,8 @@
   <string name="SYS_MORE_FEATURES">Additional functions</string>
   <string name="SYS_MOVE_DOWN">Move down #VAR1#</string>
   <string name="SYS_MOVE_UP">Move up #VAR1#</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS">Multiple recipients</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-mails to multiple recipients contain all recipients in the BCC field. This ensures that nobody sees the e-mail addresses of the other recipients. However, the TO field must also be filled. This setting can be used to define what is entered in the recipient (TO) field. This could be a hidden value "Undisclosed Recipients", but this causes problems with some providers. Alternatively the recipient field (TO) can be filled with the sender address or the administrator address from the system notifications. Note: All emails to multiple recipients will then also be sent to the email address in the recipient field (TO). (Default: Sender)</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Short name</string>
   <string name="SYS_NEW_BETA_AVAILABLE">A new beta version is available!</string>

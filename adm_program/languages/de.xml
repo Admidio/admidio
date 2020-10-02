@@ -421,8 +421,6 @@
   <string name="MAI_MAX_RECEIVER_DESC">Dieser Wert gibt an, wieviele Empfänger man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden.</string>
   <string name="MAI_MESSAGE_WENT_TO">Diese Nachricht ging an</string>
   <string name="MAI_PHP_MAIL">PHP mail()</string>
-  <string name="MAI_RECIPIENTS_WITH_ROLES">Empfänger bei Rollen</string>
-  <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit \"Undisclosed Recipients\" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administratoradresse aus den Systembenachrichtigungen gefüllt werden. Alle Emails an beliebige Rollen werden dann allerdings auch an diese Empfänger zusätzlich geschickt. Die Rollenmitglieder werden dabei weiterhin in das BCC-Feld geschrieben. (Standard: Versteckt)</string>
   <string name="MAI_SEND_COPY">Kopie der E-Mail an mich senden</string>
   <string name="MAI_SEND_EMAIL">E-Mail senden</string>
   <string name="MAI_SEND_MAIL_TO_ROLE">Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn du eingeloggt bist stehen dir weitere Rollen und Empfänger zur Verfügung, an die du E-Mails schreiben kannst.</string>
@@ -1169,6 +1167,8 @@
   <string name="SYS_MORE_FEATURES">Weitere Funktionen</string>
   <string name="SYS_MOVE_DOWN">#VAR1# nach unten verschieben</string>
   <string name="SYS_MOVE_UP">#VAR1# nach oben verschieben</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Empfänger enthalten alle Empfänger im BCC-Feld. Damit ist sichergestellt, dass keiner die E-Mail-Adressen der anderen Empfänger sieht. Das TO-Feld muss allerdings auch befüllt werden. Über diese Einstellung kann festgelegt werden, was im Empfängerfeld (TO) hinterlegt wird. Dies kein ein versteckter Wert "Undisclosed Recipients" sein, was aber bei manchen Providern zu Problemen führt. Alternativ kann das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administratoradresse aus den Systembenachrichtigungen gefüllt werden. Hinweis: Alle Emails an mehrere Empfänger werden dann auch an die E-Mail-Adresse im Empfängerfeld (TO) geschickt. (Standard: Absender)</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Name (Abkürzung)</string>
   <string name="SYS_NEW_BETA_AVAILABLE">Eine neue Beta Version ist verfügbar!</string>
