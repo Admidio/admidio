@@ -204,7 +204,7 @@
   <string name="INS_ERROR_OPEN_FILE">Die Datei #VAR1_BOLD# konnte nicht geöffnet werden.</string>
   <string name="INS_FACEBOOK">Facebook</string>
   <string name="INS_FACEBOOK_DESC">Wollen Sie Ihr Facebook-Profil hier verlinken? Dazu benötigen Sie Ihren Nutzernamen bei Facebook. Melden Sie sich bei Facebook an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher aus Ihrem Profil direkt Ihr Facebook-Profil aufrufen.</string>
-  <string name="INS_FOLDER_NOT_WRITABLE">Der Ordner #VAR1_BOLD# besitzt noch keine Schreibrechte. Diese sollten Sie noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien für das Downloadmodul hochgeladen werden können.</string>
+  <string name="INS_FOLDER_NOT_WRITABLE">Der Ordner #VAR1_BOLD# besitzt keine Schreibrechte. Ohne Schreibrechte können keine Dateien oder Fotos von den Anwendern hochgeladen werden.</string>
   <string name="INS_GROUPS">Gruppen</string>
   <string name="INS_HOST_INVALID">Hostname ist nicht gültig. Geben Sie einen gültigen Hostnamen oder IP-Adresse ein.</string>
   <string name="INS_ICQ">ICQ</string>
@@ -421,8 +421,6 @@
   <string name="MAI_MAX_RECEIVER_DESC">Dieser Wert gibt an, wieviele Empfänger man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden.</string>
   <string name="MAI_MESSAGE_WENT_TO">Diese Nachricht ging an</string>
   <string name="MAI_PHP_MAIL">PHP mail()</string>
-  <string name="MAI_RECIPIENTS_WITH_ROLES">Empfänger bei Rollen</string>
-  <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit \"Undisclosed Recipients\" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administratoradresse aus den Systembenachrichtigungen gefüllt werden. Alle Emails an beliebige Rollen werden dann allerdings auch an diese Empfänger zusätzlich geschickt. Die Rollenmitglieder werden dabei weiterhin in das BCC-Feld geschrieben. (Standard: Versteckt)</string>
   <string name="MAI_SEND_COPY">Kopie der E-Mail an mich senden</string>
   <string name="MAI_SEND_EMAIL">E-Mail senden</string>
   <string name="MAI_SEND_MAIL_TO_ROLE">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen und Empfänger zur Verfügung, an die Sie E-Mails schreiben können.</string>
@@ -848,7 +846,7 @@
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_ADMINISTRATORS">Administratoren</string>
-  <string name="SYS_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Downloadmoduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
+  <string name="SYS_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Dokumente und Dateien Moduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle Organisationen</string>
@@ -1097,6 +1095,7 @@
   <string name="SYS_ITEMNAME">Artikelname</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Querformat</string>
   <string name="SYS_LANGUAGE">Sprache</string>
+  <string name="SYS_LANGUAGE_HELP_TRANSLATION">Fehlt Ihre Sprache oder möchten Sie weitere Texte übersetzen oder vorhandene Übersetzungen verbessern? Dann schauen Sie auf #VAR1#Wiki-Seite von Admidio#VAR2# nach, wie Sie bei der Übersetzung mitarbeiten können.</string>
   <string name="SYS_LAST_EDITED_BY">Zuletzt bearbeitet von #VAR1# am #VAR2#</string>
   <string name="SYS_LASTNAME">Nachname</string>
   <string name="SYS_LATER">Später</string>
@@ -1168,6 +1167,8 @@
   <string name="SYS_MORE_FEATURES">Weitere Funktionen</string>
   <string name="SYS_MOVE_DOWN">#VAR1# nach unten verschieben</string>
   <string name="SYS_MOVE_UP">#VAR1# nach oben verschieben</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Empfänger enthalten alle Empfänger im BCC-Feld. Damit ist sichergestellt, dass keiner die E-Mail-Adressen der anderen Empfänger sieht. Das TO-Feld muss allerdings auch befüllt werden. Über diese Einstellung kann festgelegt werden, was im Empfängerfeld (TO) hinterlegt wird. Dies kein ein versteckter Wert \"Undisclosed Recipients\" sein, was aber bei manchen Providern zu Problemen führt. Alternativ kann das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administratoradresse aus den Systembenachrichtigungen gefüllt werden. Hinweis: Alle Emails an mehrere Empfänger werden dann auch an die E-Mail-Adresse im Empfängerfeld (TO) geschickt. (Standard: Absender)</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Name (Abkürzung)</string>
   <string name="SYS_NEW_BETA_AVAILABLE">Eine neue Beta Version ist verfügbar!</string>
