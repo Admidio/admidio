@@ -277,19 +277,6 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 
                 if ($statement->rowCount() > 0)
                 {
-                    // normally we need no To-address and set "undisclosed recipients", but if
-                    // that won't work than the following address will be set
-                    if ((int) $gSettingsManager->get('mail_recipients_with_roles') === 1)
-                    {
-                        // fill recipient with sender address to prevent problems with provider
-                        $email->addRecipient($postFrom, $postName);
-                    }
-                    elseif ((int) $gSettingsManager->get('mail_recipients_with_roles') === 2)
-                    {
-                        // fill recipient with administrators address to prevent problems with provider
-                        $email->addRecipient($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
-                    }
-
                     // all role members will be attached as BCC
                     while ($row = $statement->fetch())
                     {
@@ -473,6 +460,22 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
             $email->addBlindCopy($address[0], $address[1]);
         }
     }
+
+    if($receivers > 1)
+    {
+        // normally we need no To-address and set "undisclosed recipients", but if
+        // that won't work than the following address will be set
+        if ((int) $gSettingsManager->get('mail_recipients_with_roles') === 1)
+        {
+            // fill recipient with sender address to prevent problems with provider
+            $email->addRecipient($postFrom, $postName);
+        }
+        elseif ((int) $gSettingsManager->get('mail_recipients_with_roles') === 2)
+        {
+            // fill recipient with administrators address to prevent problems with provider
+            $email->addRecipient($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
+        }
+    }
 
     // add confirmation mail to the sender
     if ($postDeliveryConfirmation)

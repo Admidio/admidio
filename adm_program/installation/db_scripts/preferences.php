@@ -46,7 +46,7 @@ $defaultOrgPreferences = array(
     // E-mail dispatch
     'mail_send_method'               => 'phpmail',
     'mail_bcc_count'                 => '50',
-    'mail_recipients_with_roles'     => '0',
+    'mail_recipients_with_roles'     => '1',
     'mail_character_encoding'        => 'utf-8',
     'mail_smtp_host'                 => '',
     'mail_smtp_auth'                 => '1',
