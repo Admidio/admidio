@@ -271,7 +271,7 @@ final class FileSystemUtils
      * @param bool   $onlyDirectories If true, only directories gets chmod. If false all content gets chmod
      * @throws \UnexpectedValueException Throws if process is not directory owner
      * @throws \RuntimeException         Throws if the chmod or opendir process fails
-     * @see https://secure.php.net/manual/en/function.chmod.php
+     * @see https://www.php.net/manual/en/function.chmod.php
      */
     public static function chmodDirectory($directoryPath, $mode = self::DEFAULT_MODE_DIRECTORY, $recursive = false, $onlyDirectories = true)
     {
@@ -321,7 +321,7 @@ final class FileSystemUtils
      * @param int    $mode     The mode to set in octal notation (e.g. 0664)
      * @throws \UnexpectedValueException Throws if the file does not exist or is not chmod-able
      * @throws \RuntimeException         Throws if the chmod process fails
-     * @see https://secure.php.net/manual/en/function.chmod.php
+     * @see https://www.php.net/manual/en/function.chmod.php
      */
     public static function chmodFile($filePath, $mode = self::DEFAULT_MODE_FILE)
     {
@@ -358,7 +358,7 @@ final class FileSystemUtils
      * Convert file permissions to string representation
      * @param int $perms The file permissions
      * @return string Returns file permissions in string representation
-     * @see https://secure.php.net/manual/en/function.fileperms.php
+     * @see https://www.php.net/manual/en/function.fileperms.php
      */
     private static function convertPermsToString($perms)
     {
@@ -439,7 +439,7 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
      * @throws \RuntimeException         Throws if the copy process fails
      * @return bool Returns true if the destination path was overwritten
-     * @see https://secure.php.net/manual/en/function.copy.php
+     * @see https://www.php.net/manual/en/function.copy.php
      */
     public static function copyFile($oldFilePath, $newFilePath, array $options = array())
     {
@@ -461,7 +461,7 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if the parent directory is not writable
      * @throws \RuntimeException         Throws if the mkdir process fails
      * @return bool Returns true if directory was successfully created or false if directory did already exist
-     * @see https://secure.php.net/manual/en/function.mkdir.php
+     * @see https://www.php.net/manual/en/function.mkdir.php
      */
     public static function createDirectoryIfNotExists($directoryPath, array $options = array())
     {
@@ -527,8 +527,8 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if directory is not writable and readable
      * @throws \RuntimeException         Throws if the unlink, rmdir or opendir process fails
      * @return bool Returns true if directory content was successfully deleted or false if directory was already empty
-     * @see https://secure.php.net/manual/en/function.opendir.php
-     * @see https://secure.php.net/manual/en/function.readdir.php
+     * @see https://www.php.net/manual/en/function.opendir.php
+     * @see https://www.php.net/manual/en/function.readdir.php
      */
     public static function deleteDirectoryContentIfExists($directoryPath)
     {
@@ -589,7 +589,7 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if the parent directory is not writable
      * @throws \RuntimeException         Throws if the rmdir or opendir process fails
      * @return bool Returns true if directory was successfully deleted or false if directory already did not exist
-     * @see https://secure.php.net/manual/en/function.rmdir.php
+     * @see https://www.php.net/manual/en/function.rmdir.php
      */
     public static function deleteDirectoryIfExists($directoryPath, $deleteWithContent = false)
     {
@@ -642,7 +642,7 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if the file is not writable
      * @throws \RuntimeException         Throws if the delete process fails
      * @return bool Returns true if file was successfully deleted or false if file already did not exist
-     * @see https://secure.php.net/manual/en/function.unlink.php
+     * @see https://www.php.net/manual/en/function.unlink.php
      */
     public static function deleteFileIfExists($filePath)
     {
@@ -709,8 +709,8 @@ final class FileSystemUtils
      * @param string $path Path of the filesystem
      * @throws \RuntimeException Throws if the given path is not in an allowed directory or disk-space could not be determined
      * @return array<string,float> Returns the total, free and used disk space in bytes
-     * @see https://secure.php.net/manual/en/function.disk-total-space.php
-     * @see https://secure.php.net/manual/en/function.disk-free-space.php
+     * @see https://www.php.net/manual/en/function.disk-total-space.php
+     * @see https://www.php.net/manual/en/function.disk-free-space.php
      * @example array("total" => 10737418240, "free" => 2147483648, "used" => 8589934592)
      */
     public static function getDiskSpace($path = self::ROOT_FOLDER)
@@ -766,7 +766,7 @@ final class FileSystemUtils
      * @param string $path The path to normalize
      * @throws \UnexpectedValueException Throws if the given path is higher than root
      * @return string Returns the normalized path
-     * @see https://secure.php.net/manual/en/function.realpath.php
+     * @see https://www.php.net/manual/en/function.realpath.php
      * @example "/path/to/test/.././..//..///..///../one/two/../three/filename" => "../../one/three/filename"
      */
     public static function getNormalizedPath($path)
@@ -853,8 +853,8 @@ final class FileSystemUtils
      * Gets info about the php-process owner
      * @throws \RuntimeException Throws if system does not support POSIX
      * @return array<string,string|int> Returns info about the php-process owner
-     * @see https://secure.php.net/manual/en/function.posix-geteuid.php
-     * @see https://secure.php.net/manual/en/function.posix-getpwuid.php
+     * @see https://www.php.net/manual/en/function.posix-geteuid.php
+     * @see https://www.php.net/manual/en/function.posix-getpwuid.php
      * @example
      * array(
      *     "name" => "max", "passwd" => "x", "uid" => 1000, "gid" => 1000,
@@ -875,8 +875,8 @@ final class FileSystemUtils
      * Gets info about the php-process group
      * @throws \RuntimeException Throws if system does not support POSIX
      * @return array<string,string|int|array> Returns info about the php-process group
-     * @see https://secure.php.net/manual/en/function.posix-getegid.php
-     * @see https://secure.php.net/manual/en/function.posix-getgrgid.php
+     * @see https://www.php.net/manual/en/function.posix-getegid.php
+     * @see https://www.php.net/manual/en/function.posix-getgrgid.php
      * @example array("name" => "max", "passwd" => "x", "members" => array(), "gid" => 1000)
      */
     public static function getProcessGroupInfo()
@@ -895,7 +895,7 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if path does not exist
      * @throws \RuntimeException         Throws if the fileowner determination fails or system does not support POSIX
      * @return array<string,string|int> Returns info about the path owner
-     * @see https://secure.php.net/manual/en/function.fileowner.php
+     * @see https://www.php.net/manual/en/function.fileowner.php
      */
     public static function getPathOwnerInfo($path)
     {
@@ -923,7 +923,7 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if path does not exist
      * @throws \RuntimeException         Throws if the groupowner determination fails or system does not support POSIX
      * @return array<string,string|int|array> Returns info about the path group
-     * @see https://secure.php.net/manual/en/function.filegroup.php
+     * @see https://www.php.net/manual/en/function.filegroup.php
      */
     public static function getPathGroupInfo($path)
     {
@@ -951,9 +951,9 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if path does not exist
      * @throws \RuntimeException         Throws if the fileowner determination fails or system does not support POSIX
      * @return bool Returns true if php-process is the path owner
-     * @see https://secure.php.net/manual/en/function.posix-geteuid.php
-     * @see https://secure.php.net/manual/en/function.posix-getpwuid.php
-     * @see https://secure.php.net/manual/en/function.fileowner.php
+     * @see https://www.php.net/manual/en/function.posix-geteuid.php
+     * @see https://www.php.net/manual/en/function.posix-getpwuid.php
+     * @see https://www.php.net/manual/en/function.fileowner.php
      */
     public static function hasPathOwnerRight($path)
     {
@@ -977,7 +977,7 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if path does not exist
      * @throws \RuntimeException         Throws if the permissions determination fails
      * @return string Returns the mode permissions of a path in octal or string representation
-     * @see https://secure.php.net/manual/en/function.fileperms.php
+     * @see https://www.php.net/manual/en/function.fileperms.php
      * @example "drwxrwxr-x" or "0775"
      */
     public static function getPathMode($path, $octal = false)
@@ -1006,9 +1006,9 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if path does not exist
      * @throws \RuntimeException         Throws if a info determination fails
      * @return array<string,string> Returns owner, group and mode info from a path
-     * @see https://secure.php.net/manual/en/function.fileowner.php
-     * @see https://secure.php.net/manual/en/function.filegroup.php
-     * @see https://secure.php.net/manual/en/function.fileperms.php
+     * @see https://www.php.net/manual/en/function.fileowner.php
+     * @see https://www.php.net/manual/en/function.filegroup.php
+     * @see https://www.php.net/manual/en/function.fileperms.php
      * @example array("owner" => "www-data", "group" => "www", "mode" => "drwxrwxr-x")
      */
     public static function getPathPermissions($path)
@@ -1045,8 +1045,8 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if directory is not readable
      * @throws \RuntimeException         Throws if the opendir process fails
      * @return array<string,string|array> The content of the directory (and all the subdirectories)
-     * @see https://secure.php.net/manual/en/function.opendir.php
-     * @see https://secure.php.net/manual/en/function.readdir.php
+     * @see https://www.php.net/manual/en/function.opendir.php
+     * @see https://www.php.net/manual/en/function.readdir.php
      */
     public static function getDirectoryContent($directoryPath, $recursive = false, $fullPath = true, array $includedContentTypes = array(self::CONTENT_TYPE_DIRECTORY, self::CONTENT_TYPE_FILE, self::CONTENT_TYPE_LINK))
     {
@@ -1110,8 +1110,8 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if the directory is not readable
      * @throws \RuntimeException         Throws if the opendir process fails
      * @return bool Returns true if the directory is empty
-     * @see https://secure.php.net/manual/en/function.opendir.php
-     * @see https://secure.php.net/manual/en/function.readdir.php
+     * @see https://www.php.net/manual/en/function.opendir.php
+     * @see https://www.php.net/manual/en/function.readdir.php
      */
     public static function isDirectoryEmpty($directoryPath)
     {
@@ -1174,7 +1174,7 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
      * @throws \RuntimeException         Throws if the move process fails
      * @return bool Returns true if the destination path was overwritten
-     * @see https://secure.php.net/manual/en/function.rename.php
+     * @see https://www.php.net/manual/en/function.rename.php
      */
     public static function moveFile($oldFilePath, $newFilePath, array $options = array())
     {
@@ -1194,7 +1194,7 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if the file does not exist or is not readable
      * @throws \RuntimeException         Throws if the read process fails
      * @return string Returns the file content
-     * @see https://secure.php.net/manual/en/function.file-get-contents.php
+     * @see https://www.php.net/manual/en/function.file-get-contents.php
      */
     public static function readFile($filePath)
     {
@@ -1269,7 +1269,7 @@ final class FileSystemUtils
      * @throws \UnexpectedValueException Throws if the file or parent directory is not writable
      * @throws \RuntimeException         Throws if the write process fails
      * @return int Returns the written bytes
-     * @see https://secure.php.net/manual/en/function.file-put-contents.php
+     * @see https://www.php.net/manual/en/function.file-put-contents.php
      */
     public static function writeFile($filePath, $data, $append = false)
     {

@@ -268,7 +268,7 @@ class Database
      * Note: This method will add a high comma at the beginning and the end of the $string.
      * @param string $string The string to be quoted.
      * @return string Returns a quoted string that is theoretically safe to pass into an SQL statement.
-     * @see <a href="https://secure.php.net/manual/en/pdo.quote.php">PDO::quote</a>
+     * @see <a href="https://www.php.net/manual/en/pdo.quote.php">PDO::quote</a>
      */
     public function escapeString($string)
     {
@@ -447,7 +447,7 @@ class Database
      * @param string $table Name of the database table for which the columns-properties should be loaded.
      *
      * TODO: Links for improvements
-     *       https://secure.php.net/manual/en/pdostatement.getcolumnmeta.php
+     *       https://www.php.net/manual/en/pdostatement.getcolumnmeta.php
      *       https://www.postgresql.org/docs/9.5/static/infoschema-columns.html
      *       https://wiki.postgresql.org/wiki/Retrieve_primary_key_columns
      *       https://dev.mysql.com/doc/refman/5.7/en/columns-table.html
@@ -618,7 +618,7 @@ class Database
      * @param bool   $showError  Default will be **true** and if an error the script will be terminated and
      *                           occurred the error with a backtrace will be send to the browser. If set to
      *                           **false** no error will be shown and the script will be continued.
-     * @return \PDOStatement|false For **SELECT** statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
+     * @return \PDOStatement|false For **SELECT** statements an object of <a href="https://www.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
      */
     public function query($sql, $showError = true)
@@ -676,7 +676,7 @@ class Database
      * @param bool             $showError  Default will be **true** and if an error the script will be terminated and
      *                                     occurred the error with a backtrace will be send to the browser. If set to
      *                                     **false** no error will be shown and the script will be continued.
-     * @return \PDOStatement|false For **SELECT** statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
+     * @return \PDOStatement|false For **SELECT** statements an object of <a href="https://www.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
      */
     public function queryPrepared($sql, array $params = array(), $showError = true)

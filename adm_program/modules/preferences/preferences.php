@@ -370,11 +370,11 @@ $formRegionalSettings->addSelectBox(
 );
 $formRegionalSettings->addInput(
     'system_date', $gL10n->get('ORG_DATE_FORMAT'), $formValues['system_date'],
-    array('maxLength' => 20, 'helpTextIdInline' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://secure.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+    array('maxLength' => 20, 'helpTextIdInline' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
 );
 $formRegionalSettings->addInput(
     'system_time', $gL10n->get('ORG_TIME_FORMAT'), $formValues['system_time'],
-    array('maxLength' => 20, 'helpTextIdInline' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://secure.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+    array('maxLength' => 20, 'helpTextIdInline' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
 );
 $formRegionalSettings->addInput(
     'system_currency', $gL10n->get('ORG_CURRENCY'), $formValues['system_currency'],
@@ -668,7 +668,7 @@ if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
 }
 elseif (version_compare(PHP_VERSION, '5.6', '<'))
 {
-    $html = getStaticText('warning', PHP_VERSION, ' &rarr; '.$gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://secure.php.net/supported-versions.php" target="_blank">Supported Versions</a>')));
+    $html = getStaticText('warning', PHP_VERSION, ' &rarr; '.$gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://www.php.net/supported-versions.php" target="_blank">Supported Versions</a>')));
 }
 else
 {

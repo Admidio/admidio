@@ -22,7 +22,7 @@ final class PhpIniUtils
     /**
      * Returns the disabled function names
      * @return array<int,string> Returns the disabled function names
-     * @see https://secure.php.net/manual/en/ini.core.php#ini.disable-functions
+     * @see https://www.php.net/manual/en/ini.core.php#ini.disable-functions
      */
     public static function getDisabledFunctions()
     {
@@ -79,7 +79,7 @@ final class PhpIniUtils
     /**
      * Returns the allowed base-dirs
      * @return array<string,string>
-     * @see https://secure.php.net/manual/en/ini.core.php#ini.open-basedir
+     * @see https://www.php.net/manual/en/ini.core.php#ini.open-basedir
      */
     public static function getBaseDirs()
     {
@@ -89,7 +89,7 @@ final class PhpIniUtils
     /**
      * Returns the memory limit
      * @return int
-     * @see https://secure.php.net/manual/en/ini.core.php#ini.memory-limit
+     * @see https://www.php.net/manual/en/ini.core.php#ini.memory-limit
      */
     public static function getMemoryLimit()
     {
@@ -99,7 +99,7 @@ final class PhpIniUtils
     /**
      * Returns the maximum post size
      * @return int
-     * @see https://secure.php.net/manual/en/ini.core.php#ini.post-max-size
+     * @see https://www.php.net/manual/en/ini.core.php#ini.post-max-size
      */
     public static function getPostMaxSize()
     {
@@ -109,7 +109,7 @@ final class PhpIniUtils
     /**
      * Returns the file upload temporary directory
      * @return string
-     * @see https://secure.php.net/manual/en/ini.core.php#ini.upload-tmp-dir
+     * @see https://www.php.net/manual/en/ini.core.php#ini.upload-tmp-dir
      */
     public static function getFileUploadTmpDir()
     {
@@ -119,7 +119,7 @@ final class PhpIniUtils
     /**
      * Returns the maximum upload filesize
      * @return int
-     * @see https://secure.php.net/manual/en/ini.core.php#ini.upload-max-filesize
+     * @see https://www.php.net/manual/en/ini.core.php#ini.upload-max-filesize
      */
     public static function getFileUploadMaxFileSize()
     {
@@ -129,7 +129,7 @@ final class PhpIniUtils
     /**
      * Returns the maximum file upload count
      * @return int
-     * @see https://secure.php.net/manual/en/ini.core.php#ini.max-file-uploads
+     * @see https://www.php.net/manual/en/ini.core.php#ini.max-file-uploads
      */
     public static function getFileUploadMaxFileCount()
     {
@@ -148,7 +148,7 @@ final class PhpIniUtils
     /**
      * Returns if file-upload is enabled
      * @return bool
-     * @see https://secure.php.net/manual/en/ini.core.php#ini.file-uploads
+     * @see https://www.php.net/manual/en/ini.core.php#ini.file-uploads
      */
     public static function isFileUploadEnabled()
     {
@@ -206,7 +206,7 @@ final class PhpIniUtils
      * @throws \UnexpectedValueException Throws if a given directory does not exist
      * @throws \RuntimeException         Throws if a given directory is not in the base-directories
      * @return bool|string
-     * @see https://secure.php.net/manual/en/ini.core.php#ini.open-basedir
+     * @see https://www.php.net/manual/en/ini.core.php#ini.open-basedir
      */
     public static function setBaseDirs(array $directoryPaths = array())
     {
@@ -225,7 +225,7 @@ final class PhpIniUtils
      * @throws \UnexpectedValueException Throws if a given directory does not exist
      * @throws \RuntimeException         Throws if a given directory is not in the base-directories
      * @return bool|string
-     * @see https://secure.php.net/manual/en/ini.core.php#ini.upload-tmp-dir
+     * @see https://www.php.net/manual/en/ini.core.php#ini.upload-tmp-dir
      */
     public static function setUploadTmpDir($directoryPath)
     {
@@ -238,8 +238,8 @@ final class PhpIniUtils
      * Starts a new execution time limit
      * @param int $seconds Execution time limit in seconds
      * @throws \RuntimeException Throws if starting a new execution time limit failed
-     * @see https://secure.php.net/manual/en/function.set-time-limit.php
-     * @see https://secure.php.net/manual/en/info.configuration.php#ini.max-execution-time
+     * @see https://www.php.net/manual/en/function.set-time-limit.php
+     * @see https://www.php.net/manual/en/info.configuration.php#ini.max-execution-time
      */
     public static function startNewExecutionTimeLimit($seconds)
     {

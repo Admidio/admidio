@@ -450,7 +450,7 @@ class Session extends TableAccess
         if ($domain === '')
         {
             $domain = DOMAIN;
-            // https://secure.php.net/manual/en/function.setcookie.php#73107
+            // https://www.php.net/manual/en/function.setcookie.php#73107
             if ($domain === 'localhost')
             {
                 $domain = false;
@@ -511,7 +511,7 @@ class Session extends TableAccess
             $domain = DOMAIN;
 
             // TODO: Test if this is necessary
-            // https://secure.php.net/manual/en/function.setcookie.php#73107
+            // https://www.php.net/manual/en/function.setcookie.php#73107
             if ($domain === 'localhost')
             {
                 $domain = false;

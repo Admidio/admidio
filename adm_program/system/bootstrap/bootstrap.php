@@ -23,7 +23,7 @@ require_once($rootPath . '/adm_program/languages/languages.php');
 
 // ERROR REPORTING
 // http://www.phptherightway.com/#error_reporting
-// https://secure.php.net/manual/en/errorfunc.configuration.php
+// https://www.php.net/manual/en/errorfunc.configuration.php
 ini_set('error_reporting', '-1');
 ini_set('log_errors', '1');
 
