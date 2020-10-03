@@ -462,7 +462,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     }
 
     if($receivers > 1)
-    {
+    {
         // normally we need no To-address and set "undisclosed recipients", but if
         // that won't work than the following address will be set
         if ((int) $gSettingsManager->get('mail_recipients_with_roles') === 1)
@@ -475,7 +475,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
             // fill recipient with administrators address to prevent problems with provider
             $email->addRecipient($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
         }
-    }
+    }
 
     // add confirmation mail to the sender
     if ($postDeliveryConfirmation)
