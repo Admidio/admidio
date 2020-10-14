@@ -77,7 +77,7 @@ switch($getNewUser)
         }
         break;
 
-    case 2:
+    case 2: // fallthrough
     case 3:
         // Registrierung deaktiviert, also auch diesen Modus sperren
         if(!$gSettingsManager->getBool('registration_enable_module'))
@@ -208,7 +208,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                         $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($field->getValue('usf_name'))));
                         // => EXIT
                         break;
-                    case 'NUMBER':
+                    case 'NUMBER': // fallthrough
                     case 'DECIMAL':
                         $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', array($field->getValue('usf_name'))));
                         // => EXIT

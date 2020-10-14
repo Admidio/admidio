@@ -205,10 +205,10 @@ class Component extends TableAccess
                 }
                 break;
 
-            case 'BACKUP':
-            case 'CATEGORIES':
-            case 'MENU':
-            case 'PREFERENCES':
+            case 'BACKUP': // fallthrough
+            case 'CATEGORIES': // fallthrough
+            case 'MENU': // fallthrough
+            case 'PREFERENCES': // fallthrough
             case 'ROOMS':
                 if($gCurrentUser->isAdministrator())
                 {

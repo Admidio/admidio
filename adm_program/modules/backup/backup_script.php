@@ -97,7 +97,7 @@ $starttime = getmicrotime();
 // Start original backupDB
 switch (OUTPUT_COMPRESSION_TYPE)
 {
-    case 'gzip':
+    case 'gzip': // fallthrough
     case 'none':
         // great
         break;
@@ -205,13 +205,13 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                     }
                     switch (strtoupper($row['Null']))
                     {
-                        case '1':
+                        case '1': // fallthrough
                         case 'YES':
                             $field_is_null = true;
                             break;
-                        case '':
-                        case '0':
-                        case 'NO':
+                        case '': // fallthrough
+                        case '0': // fallthrough
+                        case 'NO': // fallthrough
                         default:
                             $field_is_null = false;
                             break;
@@ -401,9 +401,9 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                             switch ($RowTypes[$dbname][$SelectedTables[$dbname][$t]][$val])
                             {
                                 // binary data dump, two hex characters per byte
-                                case 'tinyblob':
-                                case 'blob':
-                                case 'mediumblob':
+                                case 'tinyblob': // fallthrough
+                                case 'blob': // fallthrough
+                                case 'mediumblob': // fallthrough
                                 case 'longblob':
                                     $data = $row[$key];
                                     $data_len = strlen($data);
@@ -423,31 +423,31 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                                     break;
 
                                 // just the (numeric) value, not surrounded by quotes
-                                case 'tinyint':
-                                case 'smallint':
-                                case 'mediumint':
-                                case 'int':
-                                case 'bigint':
-                                case 'float':
-                                case 'double':
-                                case 'decimal':
+                                case 'tinyint': // fallthrough
+                                case 'smallint': // fallthrough
+                                case 'mediumint': // fallthrough
+                                case 'int': // fallthrough
+                                case 'bigint': // fallthrough
+                                case 'float': // fallthrough
+                                case 'double': // fallthrough
+                                case 'decimal': // fallthrough
                                 case 'year':
                                     $valuevalues[] = $row[$key];
                                     break;
 
                                 // value surrounded by quotes
-                                case 'varchar':
-                                case 'char':
-                                case 'tinytext':
-                                case 'text':
-                                case 'mediumtext':
-                                case 'longtext':
-                                case 'enum':
-                                case 'set':
-                                case 'date':
-                                case 'datetime':
-                                case 'time':
-                                case 'timestamp':
+                                case 'varchar': // fallthrough
+                                case 'char': // fallthrough
+                                case 'tinytext': // fallthrough
+                                case 'text': // fallthrough
+                                case 'mediumtext': // fallthrough
+                                case 'longtext': // fallthrough
+                                case 'enum': // fallthrough
+                                case 'set': // fallthrough
+                                case 'date': // fallthrough
+                                case 'datetime': // fallthrough
+                                case 'time': // fallthrough
+                                case 'timestamp': // fallthrough
                                 default:
                                     $valuevalues[] = $gDb->escapeString($row[$key]);
                                     break;

@@ -335,15 +335,15 @@ $page->addHtml('
                 {
                     switch($field->getValue('usf_name_intern'))
                     {
-                        case 'LAST_NAME':
-                        case 'FIRST_NAME':
+                        case 'LAST_NAME': // fallthrough
+                        case 'FIRST_NAME': // fallthrough
                         case 'GENDER':
                             // don't show these fields in default profile list
                             break;
 
-                        case 'STREET':
-                        case 'POSTCODE':
-                        case 'CITY':
+                        case 'STREET': // fallthrough
+                        case 'POSTCODE': // fallthrough
+                        case 'CITY': // fallthrough
                         case 'COUNTRY':
                             $street   = $user->getValue('STREET');
                             $postcode = $user->getValue('POSTCODE');

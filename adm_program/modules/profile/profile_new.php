@@ -107,7 +107,7 @@ switch($getNewUser)
         $user->setValue('FIRST_NAME', $getFirstname);
         break;
 
-    case 2:
+    case 2: // fallthrough
     case 3:
         // Registrierung deaktiviert, also auch diesen Modus sperren
         if(!$gSettingsManager->getBool('registration_enable_module'))

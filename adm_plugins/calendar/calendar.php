@@ -280,7 +280,7 @@ if($plg_geb_aktiv)
         case 2:
             $sqlOrderName = 'last_name';
             break;
-        case 0:
+        case 0: // fallthrough
         default:
             $sqlOrderName = 'last_name, first_name';
     }
@@ -339,7 +339,7 @@ if($plg_geb_aktiv)
             case 2:
                 $name = $row['last_name'];
                 break;
-            case 0:
+            case 0: // fallthrough
             default:
                 $name = $row['last_name'] . ($row['last_name'] ? ', ' : '') . $row['first_name'];
         }

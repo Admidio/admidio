@@ -265,7 +265,7 @@ class ListConfiguration extends TableLists
                             $value = str_replace(array_map('StringUtils::strToLower', $arrCheckboxValues), $arrCheckboxKeys, StringUtils::strToLower($value));
                             break;
 
-                        case 'DROPDOWN':
+                        case 'DROPDOWN': // fallthrough
                         case 'RADIO_BUTTON':
                             $type = 'int';
 
@@ -274,7 +274,7 @@ class ListConfiguration extends TableLists
                             $value = array_search(StringUtils::strToLower($value), array_map('StringUtils::strToLower', $arrListValues), true);
                             break;
 
-                        case 'NUMBER':
+                        case 'NUMBER': // fallthrough
                         case 'DECIMAL':
                             $type = 'int';
                             break;
@@ -291,7 +291,7 @@ class ListConfiguration extends TableLists
                 {
                     switch ($listColumn->getValue('lsc_special_field'))
                     {
-                        case 'mem_begin':
+                        case 'mem_begin': // fallthrough
                         case 'mem_end':
                             $type = 'date';
                             break;

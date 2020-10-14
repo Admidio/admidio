@@ -222,7 +222,7 @@ class ProfileFields
                         }
                     }
                     break;
-                case 'DROPDOWN':
+                case 'DROPDOWN': // fallthrough
                 case 'RADIO_BUTTON':
                     $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
 
@@ -395,7 +395,7 @@ class ProfileFields
                             }
                         }
                         break;
-                    case 'DROPDOWN':
+                    case 'DROPDOWN': // fallthrough
                     case 'RADIO_BUTTON':
                         // the value in db is only the position, now search for the text
                         if ($value > 0 && $format !== 'html')

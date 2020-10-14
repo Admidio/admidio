@@ -194,7 +194,7 @@ class TableUserField extends TableAccess
         {
             switch ($columnName)
             {
-                case 'usf_name':
+                case 'usf_name': // fallthrough
                 case 'cat_name':
                     // if text is a translation-id then translate it
                     $value = Language::translateIfTranslationStrId($value);

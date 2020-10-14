@@ -417,7 +417,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             }
             break;
 
-        case 'bool':
+        case 'bool': // fallthrough
         case 'boolean':
             $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
             if ($valid === null)
@@ -427,8 +427,8 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             $value = $valid;
             break;
 
-        case 'int':
-        case 'float':
+        case 'int': // fallthrough
+        case 'float': // fallthrough
         case 'numeric':
             // numeric datatype should only contain numbers
             if (!is_numeric($value))

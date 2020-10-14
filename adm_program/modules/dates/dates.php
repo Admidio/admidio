@@ -847,7 +847,7 @@ else
 
             switch ($getView)
             {
-                case 'compact':
+                case 'compact': // fallthrough
                 case 'room':
                     if ($dateRolId > 0)
                     {

@@ -124,7 +124,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                                 $user->setValue($usfNameIntern, '0');
                             }
                             break;
-                        case 'DROPDOWN':
+                        case 'DROPDOWN': // fallthrough
                         case 'RADIO_BUTTON':
                             // save position of combobox
                             $arrListValues = $field->getValue('usf_value_list', 'text');

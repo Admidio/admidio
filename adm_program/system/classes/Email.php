@@ -299,13 +299,13 @@ class Email extends PHPMailer
 
         switch ($sizeUnit)
         {
-            case self::SIZE_UNIT_TEBIBYTE:
+            case self::SIZE_UNIT_TEBIBYTE: // fallthrough
                 $attachmentSize /= 1024;
-            case self::SIZE_UNIT_GIBIBYTE:
+            case self::SIZE_UNIT_GIBIBYTE: // fallthrough
                 $attachmentSize /= 1024;
-            case self::SIZE_UNIT_MEBIBYTE:
+            case self::SIZE_UNIT_MEBIBYTE: // fallthrough
                 $attachmentSize /= 1024;
-            case self::SIZE_UNIT_KIBIBYTE:
+            case self::SIZE_UNIT_KIBIBYTE: // fallthrough
                 $attachmentSize /= 1024;
             default:
         }

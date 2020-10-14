@@ -247,8 +247,8 @@ class TableAccess
             switch ($this->columnsInfos[$columnName]['type'])
             {
                 // String
-                case 'char':
-                case 'varchar':
+                case 'char': // fallthrough
+                case 'varchar': // fallthrough
                 case 'text':
                     if ($format !== 'database')
                     {
@@ -263,8 +263,8 @@ class TableAccess
                     $columnValue = pack('H*', pack('H*', substr($columnValue, 2)));
                     break;
 
-                case 'timestamp':
-                case 'date':
+                case 'timestamp': // fallthrough
+                case 'date': // fallthrough
                 case 'time':
                     if ($columnValue !== '' && $columnValue !== null)
                     {
@@ -631,7 +631,7 @@ class TableAccess
             switch ($this->columnsInfos[$columnName]['type'])
             {
                 // Numeric
-                case 'integer':
+                case 'integer': // fallthrough
                 case 'smallint':
                     if (!is_numeric($newValue))
                     {
@@ -647,8 +647,8 @@ class TableAccess
                     break;
 
                 // String
-                case 'char':
-                case 'varchar':
+                case 'char': // fallthrough
+                case 'varchar': // fallthrough
                 case 'text':
                     $newValue = StringUtils::strStripTags($newValue);
                     break;

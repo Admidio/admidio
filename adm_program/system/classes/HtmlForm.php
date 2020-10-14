@@ -716,11 +716,11 @@ class HtmlForm extends HtmlFormBasic
         // set min/max input length
         switch ($optionsAll['type'])
         {
-            case 'text':
-            case 'search':
-            case 'email':
-            case 'url':
-            case 'tel':
+            case 'text': // fallthrough
+            case 'search': // fallthrough
+            case 'email': // fallthrough
+            case 'url': // fallthrough
+            case 'tel': // fallthrough
             case 'password':
                 $attributes['pattern'] = $optionsAll['pattern'];
 
