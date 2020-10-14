@@ -142,7 +142,6 @@ switch ($getType)
         break;
     default:
         $url = '';
-        break;
 }
 
 if($callbackFunction !== '')

@@ -756,15 +756,11 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
     {
         case 'file':
             return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-            break;
         case 'dir':
             return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
-            break;            
         case 'both':
             return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false));
-            break;            
         case 'all':
             return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false));
-            break;            
     }
 }

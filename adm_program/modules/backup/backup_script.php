@@ -109,7 +109,6 @@ switch (OUTPUT_COMPRESSION_TYPE)
         break;
     default:
         exit('ERROR: OUTPUT_COMPRESSION_TYPE ('.SecurityUtils::encodeHTML(OUTPUT_COMPRESSION_TYPE).') must be one of "bzip2", "gzip", "none"');
-        break;
 }
 if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$tempbackupfilename, 'wb'.OUTPUT_COMPRESSION_LEVEL))) ||
     (OUTPUT_COMPRESSION_TYPE === 'bzip2' && ($bp = @bzopen($backupabsolutepath.$tempbackupfilename, 'w'))) ||
@@ -214,7 +213,6 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                         case 'NO': // fallthrough
                         default:
                             $field_is_null = false;
-                            break;
                     }
                     if (!preg_match('#^(tiny|medium|long)?(text|blob)#i', $row['Type']))
                     {
@@ -450,7 +448,6 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                                 case 'timestamp': // fallthrough
                                 default:
                                     $valuevalues[] = $gDb->escapeString($row[$key]);
-                                    break;
                             }
 
                         }

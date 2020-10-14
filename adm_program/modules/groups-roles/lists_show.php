@@ -231,7 +231,6 @@ switch ($getMode)
         $classTable  = 'table table-condensed table-striped';
         break;
     default:
-        break;
 }
 
 // Array to assign names to tables

@@ -431,7 +431,6 @@ $page->addHtml('
                             {
                                 $form->addStaticControl(strtolower($fieldNameIntern), $field['label'], $field['value']);
                             }
-                            break;
                     }
                 }
             }

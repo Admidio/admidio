@@ -72,7 +72,6 @@ switch ($getType)
 
     default:
         $headline = $gL10n->get('SYS_CATEGORY');
-        break;
 }
 
 // set module headline and other strings

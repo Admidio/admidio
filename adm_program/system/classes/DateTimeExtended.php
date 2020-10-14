@@ -88,7 +88,6 @@ class DateTimeExtended extends DateTime
                     break;
                 default:
                     $destFormat .= $formatChar;
-                    break;
             }
         }
 

@@ -94,7 +94,6 @@ function SafeExec($command)
                 //ob_start();
                 $returnvalue = $execfunction($command);
                 //ob_end_clean();
-                break;
         }
         return $returnvalue;
     }

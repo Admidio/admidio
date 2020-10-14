@@ -487,7 +487,6 @@ else
                     default:
                         $buttonText = $gL10n->get('DAT_ATTEND');
                         $iconParticipationStatus = '<i class="fas fa-edit"></i>';
-                        break;
                 }
 
                 if ($getView !== 'detail')
