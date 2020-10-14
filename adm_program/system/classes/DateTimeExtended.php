@@ -52,42 +52,28 @@ class DateTimeExtended extends DateTime
         $destFormat  = '';
         $formatArray = str_split($format);
 
+        $characterMapping = array(
+            'd' => 'dd',
+            'j' => 'd',
+            'l' => 'DD',
+            'D' => 'D',
+            'm' => 'mm',
+            'n' => 'm',
+            'F' => 'MM',
+            'M' => 'M',
+            'Y' => 'yyyy',
+            'y' => 'yy'
+        );
+
         foreach ($formatArray as $formatChar)
         {
-            switch ($formatChar)
+            if (array_key_exists($formatChar, $characterMapping))
             {
-                case 'd':
-                    $destFormat .= 'dd';
-                    break;
-                case 'j':
-                    $destFormat .= 'd';
-                    break;
-                case 'l':
-                    $destFormat .= 'DD';
-                    break;
-                case 'D':
-                    $destFormat .= 'D';
-                    break;
-                case 'm':
-                    $destFormat .= 'mm';
-                    break;
-                case 'n':
-                    $destFormat .= 'm';
-                    break;
-                case 'F':
-                    $destFormat .= 'MM';
-                    break;
-                case 'M':
-                    $destFormat .= 'M';
-                    break;
-                case 'Y':
-                    $destFormat .= 'yyyy';
-                    break;
-                case 'y':
-                    $destFormat .= 'yy';
-                    break;
-                default:
-                    $destFormat .= $formatChar;
+                $destFormat .= $characterMapping[$formatChar];
+            }
+            else
+            {
+                $destFormat .= $formatChar;
             }
         }
 
