@@ -236,7 +236,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     $queryParams[] = DATE_NOW;
                 }
 
-                $sql = 'SELECT first_name.usd_value AS firstName, last_name.usd_value AS lastName, email.usd_value AS email
+                $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
                           FROM ' . TBL_MEMBERS . '
                     INNER JOIN ' . TBL_ROLES . '
                             ON rol_id = mem_rol_id
@@ -280,7 +280,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     {
                         if (strValidCharacters($row['email'], 'email'))
                         {
-                            $receiver[] = array($row['email'], $row['firstName'] . ' ' . $row['lastName']);
+                            $receiver[] = array($row['email'], $row['firstname'] . ' ' . $row['lastname']);
                         }
                     }
                 }
@@ -293,7 +293,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 // only send email to user if current user is allowed to view this user and he has a valid email address
                 if ($gCurrentUser->hasRightViewProfile($user) && strValidCharacters($user->getValue('EMAIL'), 'email'))
                 {
-                    $sql = 'SELECT first_name.usd_value AS firstName, last_name.usd_value AS lastName, email.usd_value AS email
+                    $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
                               FROM ' . TBL_USERS . '
                         INNER JOIN ' . TBL_USER_DATA . ' AS email
                                 ON email.usd_usr_id = usr_id
@@ -316,7 +316,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     {
                         if (strValidCharacters($row['email'], 'email'))
                         {
-                            $receiver[] = array($row['email'], $row['firstName'] . ' ' . $row['lastName']);
+                            $receiver[] = array($row['email'], $row['firstname'] . ' ' . $row['lastname']);
                         }
                     }
                 }
