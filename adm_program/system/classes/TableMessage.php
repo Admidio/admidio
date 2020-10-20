@@ -115,11 +115,22 @@ class TableMessage extends TableAccess
      */
     public function getConversationPartner($usrId)
     {
+        global $gDbType;
+
+        if($gDbType === Database::PDO_ENGINE_PGSQL)
+        {
+            $messageSender = 'msg_usr_id_sender::varchar(255)';
+        }
+        else
+        {
+            $messageSender = 'CONVERT(msg_usr_id_sender, CHAR)';
+        }
+
         $sql = 'SELECT
                   CASE
                   WHEN msg_usr_id_sender = ? -- $usrId
                   THEN msg_usr_id_receiver
-                  ELSE msg_usr_id_sender
+                  ELSE ' . $messageSender . '
                    END AS user
                   FROM '.TBL_MESSAGES.'
                  WHERE msg_type = \'PM\'

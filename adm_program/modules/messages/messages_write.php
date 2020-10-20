@@ -656,7 +656,8 @@ if (isset($messageStatement))
             $receiverName = '<div class="card-footer">'.$gL10n->get('MSG_OPPOSITE').': ' . prepareRecipients($receivers, true) . '</div>';
         }
 
-        $date = \DateTime::createFromFormat('Y-m-d H:i:s', $row['msc_timestamp']);
+        $date = new \DateTime($row['msc_timestamp']);
+
         $page->addHtml('
         <div class="card admidio-blog">
             <div class="card-header">
