@@ -427,10 +427,10 @@
   <string name="MAI_SEND_METHOD">Stuur via</string>
   <string name="MAI_SEND_METHOD_DESC">De PHP mail() functie word door sommige provider beperkt en kan af en toe leiden tot mogelijke spam. Daarom wordt het aangeraden om e-mail te versturen via een bestaand e-mailadres en SMTP server. De SMTP instellingen kunnen hieronder worden opgegeven. (Standaard: PHP mail())</string>
   <string name="MAI_SENDER_EMAIL">E-mailadres afzender</string>
-  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Sommige providers accepteren geen onbekende afzenders. Geef daarom een e-mailadres op wat als standaard e-mailadres wordt gebruik in deze e-mail module (b.v. noreply@#VAR1#).\nAls dit veld leeg blijft zal het e-mailadres van de verstuurder gebruikt worden. (Standaard: leeg)</string>
+  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Sommige providers accepteren geen onbekend e-mailadres als afzender. Geef daarom een e-mailadres op dat als standaard e-mailadres wordt gebruik in de e-mail module (b.v. noreply@#VAR1#).\nAls dit veld leeg blijft zal het e-mailadres van de afzender gebruikt worden. (Standaard: leeg)</string>
   <string name="MAI_SENDER_NAME">Afzender</string>
   <string name="MAI_SENDER_NAME_DESC">Naam afzender van het gebruikte e-mailadres. Dit veld hoeft alleen ingevuld te worden als er ook een e-mailadres van de afzender is ingevuld. (Standaard: leeg)</string>
-  <string name="MAI_SENDER_NOT_LOGGED_IN">(Verstuurder is uitgelogd. Daarom kan de informatie van verstuurder onjuist zijn.)</string>
+  <string name="MAI_SENDER_NOT_LOGGED_IN">(Afzender is uitgelogd. Daarom kan de informatie van afzender onjuist zijn.)</string>
   <string name="MAI_SHOW_CAPTCHA_DESC">Voor niet-ingelogde gebruikers zal een alfanumerieke code weergegeven worden bij het contactformulier, als de captcha is geactiveerd. Dit moet correct worden ingevoerd door de gebruiker voordat de inhoud van het formulier wordt ingediend. Dit is om ervoor te zorgen dat het formulier niet kan worden misbruikt door spammers. (Standaard: ja)</string>
   <string name="MAI_SMTP">SMTP</string>
   <string name="MAI_SMTP_AUTH">SMTP authenticatie</string>
@@ -1167,6 +1167,8 @@
   <string name="SYS_MORE_FEATURES">Aanvullende functies</string>
   <string name="SYS_MOVE_DOWN">Plaats #VAR1# omlaag</string>
   <string name="SYS_MOVE_UP">Plaats #VAR1# omhoog</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS">Meerdere ontvangers</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-mails naar meerdere ontvangers bevatten alle ontvangers in het BCC-veld. Dit zorgt ervoor dat niemand de e-mailadressen van de andere ontvangers ziet. Echter, het TO-veld moet ook worden ingevuld. Deze instelling kan worden gebruikt om te bepalen wat er in het ontvangerveld (TO) is ingevoerd. Dit kan een verborgen waarde zijn \"Undisclosed Recipients\", maar dit veroorzaakt problemen bij sommige providers. Als alternatief kan het ontvangerveld (TO) worden gevuld met het afzenderadres of het beheerdersadres van de systeemmeldingen. Let op: alle e-mails naar meerdere ontvangers worden dan ook naar het e-mailadres in het ontvangerveld (TO) gestuurd. (Standaard: afzender)</string>
   <string name="SYS_NAME">Naam</string>
   <string name="SYS_NAME_ABBREVIATION">Naam (afkorting)</string>
   <string name="SYS_NEW_BETA_AVAILABLE">Een nieuwe beta versie is beschikbaar!</string>
