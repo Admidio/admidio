@@ -208,8 +208,10 @@ $defaultOrgPreferences['email_administrator'] = $_SESSION['orga_email'];
 $defaultOrgPreferences['system_language']     = $language;
 
 // calculate the best cost value for your server performance
-$benchmarkResults = PasswordUtils::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
-$defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['cost'];
+$benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
+if (is_float($benchmarkResults['options']['time'])) {
+    $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['options']['cost'];
+}
 
 // create all necessary data for this organization
 $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
