@@ -341,4 +341,4 @@ $databaseVersion = getInstalledDbVersion();
 echo '<p>Database and test-data have the Admidio version '.$databaseVersion.'.<br />
  Your files have Admidio version '.ADMIDIO_VERSION.'.<br /><br />
  Please perform an <a href="'.ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php">update of your database</a>.</p>
- <p style="font-size: 9pt;">&copy; 2004 - 2019&nbsp;&nbsp;The Admidio team</p>';
+ <p style="font-size: 9pt;">&copy; 2004 - 2020&nbsp;&nbsp;The Admidio team</p>';
