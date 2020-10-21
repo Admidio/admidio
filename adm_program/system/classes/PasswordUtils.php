@@ -19,7 +19,7 @@ use Hautelook\Phpass\PasswordHash;
  * verify()             verify if the given password belongs to the given hash
  * needsRehash()        checks if the given hash is generated from the given options
  * passwordInfo()       provides infos about the given password (length, number, lowerCase, upperCase, symbol)
- * hashInfo()           provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
+ * hashInfo()           provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, UNKNOWN)
  * passwordStrength()   shows the strength of the given password
  * costBenchmark()      run a benchmark to get the best fitting cost value
  */
@@ -176,7 +176,7 @@ final class PasswordUtils
     }
 
     /**
-     * Provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
+     * Provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, UNKNOWN)
      * @param string $hash The hash you want the get infos about
      * @return string|array<string,mixed> Returns an array or string with infos about the given hash
      */
@@ -193,11 +193,6 @@ final class PasswordUtils
         elseif (StringUtils::strStartsWith($hash, self::HASH_INDICATOR_PORTABLE))
         {
             return 'PRIVATE/PORTABLE_HASH';
-        }
-        // MD5 Hashes are 32 chars long and consists out of HEX values (digits and a-f)
-        elseif (preg_match('/^[\dA-Fa-f]{32}$/', $hash))
-        {
-            return 'MD5';
         }
 
         return 'UNKNOWN';
@@ -318,11 +313,6 @@ final class PasswordUtils
         {
             $passwordHasher = new PasswordHash(9, true);
             return $passwordHasher->CheckPassword($password, $hash);
-        }
-        // MD5 Hashes are 32 chars long and consists out of HEX values (digits and a-f)
-        elseif (preg_match('/^[\dA-Fa-f]{32}$/', $hash))
-        {
-            return md5($password) === $hash;
         }
 
         return false;
