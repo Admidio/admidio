@@ -11,7 +11,7 @@
  *
  * ann_id    - ID of the announcement that should be edited
  * headline  - Title of the announcements module. This will be shown in the whole module.
- *             (Default) ANN_ANNOUNCEMENTS
+ *             (Default) SYS_ANNOUNCEMENTS
  * copy : true - The announcement of the ann_id will be copied and the base for this new announcement
  ***********************************************************************************************
  */
@@ -27,7 +27,7 @@ if ((int) $gSettingsManager->get('enable_announcements_module') === 0)
 
 // Initialize and check the parameters
 $getAnnId    = admFuncVariableIsValid($_GET, 'ann_id',   'int');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('ANN_ANNOUNCEMENTS')));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
 $getCopy     = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
 // set headline of the script

@@ -894,7 +894,7 @@ $formAnnouncements->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'announcements', $gL10n->get('ANN_ANNOUNCEMENTS'), 'fas fa-newspaper', $formAnnouncements->show()));
+$page->addHtml(getPreferencePanel('modules', 'announcements', $gL10n->get('SYS_ANNOUNCEMENTS'), 'fas fa-newspaper', $formAnnouncements->show()));
 
 // PANEL: USER MANAGEMENT
 

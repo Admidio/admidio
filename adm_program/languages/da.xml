@@ -1,30 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in Announcementmodule-->
-  <string name="ANN_ANNOUNCEMENT">Meddelelse</string>
-  <string name="ANN_ANNOUNCEMENTS">Meddelelser</string>
-  <string name="ANN_ANNOUNCEMENTS_DESC">Vis eller rediger meddelelser, nyheder og anden information.</string>
-  <string name="ANN_EDIT_ANNOUNCEMENTS">Rediger meddelelser</string>
-  <string name="ANN_EMAIL_NOTIFICATION_TITLE">En ny meddelelse blev oprettet</string>
-  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">En ny meddelelse i #VAR1# blev oprettet\n\nTitel: #VAR2#\nSkrevet af: #VAR3#\nSkrevet den: #VAR4#</string>
-  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Sidste nye meddelelse fra organisationen #VAR1#</string>
+  <string name="SYS_ANNOUNCEMENT">Meddelelse</string>
+  <string name="SYS_ANNOUNCEMENTS">Meddelelser</string>
+  <string name="SYS_ANNOUNCEMENTS_DESC">Vis eller rediger meddelelser, nyheder og anden information.</string>
+  <string name="SYS_EDIT_ANNOUNCEMENTS">Rediger meddelelser</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">En ny meddelelse blev oprettet</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">En ny meddelelse i #VAR1# blev oprettet\n\nTitel: #VAR2#\nSkrevet af: #VAR3#\nSkrevet den: #VAR4#</string>
+  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Sidste nye meddelelse fra organisationen #VAR1#</string>
   <!--Phrases only in Backupmodule-->
-  <string name="BAC_BACK_TO_BACKUP_PAGE">Tilbage til backup forside</string>
-  <string name="BAC_BACKUP_COMPLETED">Backup oprettet på #VAR1#</string>
-  <string name="BAC_BACKUP_FILE">Backup fil</string>
-  <string name="BAC_BACKUP_FROM">Backup oprettet på #VAR1# i #VAR2#</string>
-  <string name="BAC_CREATION_DATE">Oprettet den</string>
-  <string name="BAC_DATABASE_BACKUP">Database-Backup</string>
-  <string name="BAC_DATABASE_BACKUP_DESC">Opret og download database backups af Admidio tabeller.</string>
-  <string name="BAC_DAYS_VAR">#VAR1# Dage</string>
-  <string name="BAC_HOURS_VAR">#VAR1# timer</string>
-  <string name="BAC_MINUTES_VAR">#VAR1# minutter</string>
-  <string name="BAC_NO_BACKUP_FILE_EXISTS">Ingen backup fil fundet!</string>
-  <string name="BAC_ONLY_MYSQL">Backup modulet kan kun anvendes sammen med en MySQL database.</string>
+  <string name="SYS_BACK_TO_BACKUP_PAGE">Tilbage til backup forside</string>
+  <string name="SYS_BACKUP_COMPLETED">Backup oprettet på #VAR1#</string>
+  <string name="SYS_BACKUP_FILE">Backup fil</string>
+  <string name="SYS_BACKUP_FROM">Backup oprettet på #VAR1# i #VAR2#</string>
+  <string name="SYS_CREATION_DATE">Oprettet den</string>
+  <string name="SYS_DATABASE_BACKUP">Database-Backup</string>
+  <string name="SYS_DATABASE_BACKUP_DESC">Opret og download database backups af Admidio tabeller.</string>
+  <string name="SYS_DAYS_VAR">#VAR1# Dage</string>
+  <string name="SYS_HOURS_VAR">#VAR1# timer</string>
+  <string name="SYS_MINUTES_VAR">#VAR1# minutter</string>
+  <string name="SYS_NO_BACKUP_FILE_EXISTS">Ingen backup fil fundet!</string>
+  <string name="SYS_BACKUP_ONLY_MYSQL">Backup modulet kan kun anvendes sammen med en MySQL database.</string>
   <string name="BAC_OVERALL_PROGRESS">Status</string>
-  <string name="BAC_START_BACKUP">Start backup processen</string>
-  <string name="BAC_SUM">Total</string>
-  <string name="BAC_SECONDS_VAR">#VAR1# sekunder</string>
+  <string name="SYS_START_BACKUP">Start backup processen</string>
+  <string name="SYS_TOTAL">Total</string>
+  <string name="SYS_SECONDS_VAR">#VAR1# sekunder</string>
   <!--Phrases only in Category-Administration-->
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Medlemmer af denne rolle er administratorer af dette modul og har adgang til alt. Du kan oprette, redigere og slette data og redigere kategorier og deres rettigheder. En rolle kan gøres til administrator ved at tildele den rettigheden #VAR1_BOLD#.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle administratorer af modulet i moderorganisationen</string>
@@ -1102,8 +1102,8 @@
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_INVALID">E-mail adressen i feltet #VAR1_BOLD# mangler eller indeholder ugyldige karakterer.</string>
   <string name="SYS_EMAIL_NOT_SEND">E-mailen kunne ikke sendes til #VAR1_BOLD#.\n\nDen følgende fejl opstod:\n#VAR2#</string>
-  <string name="SYS_EMAIL_NOTIFICATION_TITLE">En ny fil blev overført</string>
-  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">En ny fil blev overført til #VAR1#\n\nFil: #VAR2#\nOverført af: #VAR3#\nOverført den: #VAR4#</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">En ny fil blev overført</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">En ny fil blev overført til #VAR1#\n\nFil: #VAR2#\nOverført af: #VAR3#\nOverført den: #VAR4#</string>
   <string name="SYS_EMAIL_SEND">Mailen er afsendt</string>
   <string name="SYS_EMAIL_TEMPLATE">E-mail skabelon</string>
   <string name="SYS_EMAIL_TEMPLATE_DESC">Her kan du vælge en HTML-skabelonfil fra mappen #VAR1_BOLD#. Når du sender en e-mail, kopieres indholdet af denne fil til e-mailen, og de følgende variabler erstattes: #afsender#, #meddelelse#, #modtagere#, #organisationsnavn#, #organisation_kortnavn#, #organisation_website#. For mere information om brug af e-mail-skabeloner, se #VAR2# dokumentation #VAR3#.</string>

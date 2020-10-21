@@ -1,30 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in Announcementmodule-->
-  <string name="ANN_ANNOUNCEMENT">Anuncio</string>
-  <string name="ANN_ANNOUNCEMENTS">Anuncios</string>
-  <string name="ANN_ANNOUNCEMENTS_DESC">Publicar o editar anuncios, novedades, u otra información.</string>
-  <string name="ANN_EDIT_ANNOUNCEMENTS">Editar anuncios</string>
-  <string name="ANN_EMAIL_NOTIFICATION_TITLE">Un nuevo anuncio ha sido creado</string>
-  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Fue creado un nuevo anuncio en #VAR1# .\n\ntitulo: #VAR2#\ncreado por: #VAR3#\ncreado el: #VAR4#</string>
-  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Últimos anuncios de la organización #VAR1#</string>
+  <string name="SYS_ANNOUNCEMENT">Anuncio</string>
+  <string name="SYS_ANNOUNCEMENTS">Anuncios</string>
+  <string name="SYS_ANNOUNCEMENTS_DESC">Publicar o editar anuncios, novedades, u otra información.</string>
+  <string name="SYS_EDIT_ANNOUNCEMENTS">Editar anuncios</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Un nuevo anuncio ha sido creado</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Fue creado un nuevo anuncio en #VAR1# .\n\ntitulo: #VAR2#\ncreado por: #VAR3#\ncreado el: #VAR4#</string>
+  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Últimos anuncios de la organización #VAR1#</string>
   <!--Phrases only in Backupmodule-->
-  <string name="BAC_BACK_TO_BACKUP_PAGE">Volver a la página de respaldo</string>
-  <string name="BAC_BACKUP_COMPLETED">Archivo de respaldo creado en #VAR1#</string>
-  <string name="BAC_BACKUP_FILE">Archivo de respaldo</string>
-  <string name="BAC_BACKUP_FROM">Archivo de respaldo creado en #VAR1# a las #VAR2#</string>
-  <string name="BAC_CREATION_DATE">Fecha de creación</string>
-  <string name="BAC_DATABASE_BACKUP">Respaldo (backup) de la base de datos.</string>
-  <string name="BAC_DATABASE_BACKUP_DESC">Copias de respaldo de bases de datos de las tablas Admidio se pueden crear y descargar aquí.</string>
-  <string name="BAC_DAYS_VAR">#VAR1# días</string>
-  <string name="BAC_HOURS_VAR">#VAR1# Horas</string>
-  <string name="BAC_MINUTES_VAR">#VAR1# Minutos</string>
-  <string name="BAC_NO_BACKUP_FILE_EXISTS">¡No se encontró un archivo de backup!</string>
-  <string name="BAC_ONLY_MYSQL">El módulo de backup sólo se puede utilizar en una base de datos MySQL.</string>
+  <string name="SYS_BACK_TO_BACKUP_PAGE">Volver a la página de respaldo</string>
+  <string name="SYS_BACKUP_COMPLETED">Archivo de respaldo creado en #VAR1#</string>
+  <string name="SYS_BACKUP_FILE">Archivo de respaldo</string>
+  <string name="SYS_BACKUP_FROM">Archivo de respaldo creado en #VAR1# a las #VAR2#</string>
+  <string name="SYS_CREATION_DATE">Fecha de creación</string>
+  <string name="SYS_DATABASE_BACKUP">Respaldo (backup) de la base de datos.</string>
+  <string name="SYS_DATABASE_BACKUP_DESC">Copias de respaldo de bases de datos de las tablas Admidio se pueden crear y descargar aquí.</string>
+  <string name="SYS_DAYS_VAR">#VAR1# días</string>
+  <string name="SYS_HOURS_VAR">#VAR1# Horas</string>
+  <string name="SYS_MINUTES_VAR">#VAR1# Minutos</string>
+  <string name="SYS_NO_BACKUP_FILE_EXISTS">¡No se encontró un archivo de backup!</string>
+  <string name="SYS_BACKUP_ONLY_MYSQL">El módulo de backup sólo se puede utilizar en una base de datos MySQL.</string>
   <string name="BAC_OVERALL_PROGRESS">Progreso total</string>
-  <string name="BAC_START_BACKUP">Iniciar backup</string>
-  <string name="BAC_SUM">Suma</string>
-  <string name="BAC_SECONDS_VAR">#VAR1# segundos</string>
+  <string name="SYS_START_BACKUP">Iniciar backup</string>
+  <string name="SYS_TOTAL">Suma</string>
+  <string name="SYS_SECONDS_VAR">#VAR1# segundos</string>
   <!--Phrases only in Category-Administration-->
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Los miembros de este rol son administradores, y tienen acceso a todo. Usted puede crear, editar, borrar información y editar categorías y sus respectivos derechos. Un rol puede convertir a alguien en administrador asignándole el derecho #VAR1_BOLD#.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Todos los administradores del módulo, de la organización superior.</string>
@@ -136,8 +136,8 @@
   <string name="DOW_DOWNLOADS_DESC">Se pueden ofrecer para descarga varios archivos de datos y tipos de archivo. Estas descargas pueden ser categorizadas en carpetas con diferentes privilegios de acceso.</string>
   <string name="SYS_EDIT_FILE">Editar archivo</string>
   <string name="SYS_EDIT_FOLDER">editar carpeta</string>
-  <string name="SYS_EMAIL_NOTIFICATION_TITLE">Un nuevo archivo se ha subido</string>
-  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">Un nuevo archivo fue cargado en #VAR1#\n\nArchivo: #VAR2#\nSubido por: #VAR3#\nFecha: #VAR4#</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">Un nuevo archivo se ha subido</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">Un nuevo archivo fue cargado en #VAR1#\n\nArchivo: #VAR2#\nSubido por: #VAR3#\nFecha: #VAR4#</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activando modulo de descargas</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">El módulo de descarga puede ser activado o desactivado en esta configuración (Predeterminado: sí)</string>
   <string name="SYS_FILE_EXIST">El archivo #VAR1# ya existe.\n\nPor favor use un nombre diferente.</string>

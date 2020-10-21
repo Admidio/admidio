@@ -41,8 +41,8 @@
     <step id="120" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_name varchar(50) NOT NULL</step>
     <step id="130" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_name TYPE varchar(50)</step>
     <step id="160">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
-                         VALUES ('MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.0.0', 0)
-                              , ('MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.0.0', 0)
+                         VALUES ('MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.0.0', 0)
+                              , ('MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '3.0.0', 0)
                               , ('MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.0.0', 0)
                               , ('MODULE', 'DAT_DATES', 'DATES', '3.0.0', 0)
                               , ('MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.0.0', 0)

@@ -11,7 +11,7 @@
  *
  * start     - Position of query recordset where the visual output should start
  * headline  - Title of the announcements module. This will be shown in the whole module.
- *             (Default) ANN_ANNOUNCEMENTS
+ *             (Default) SYS_ANNOUNCEMENTS
  * cat_id    : Show only announcements of this category id, if id is not set than show all announcements.
  * id        - Id of a single announcement that should be shown.
  * date_from - is set to 01.01.1970,
@@ -26,7 +26,7 @@ unset($_SESSION['announcements_request']);
 
 // Initialize and check the parameters
 $getStart    = admFuncVariableIsValid($_GET, 'start',     'int');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('ANN_ANNOUNCEMENTS')));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
 $getId       = admFuncVariableIsValid($_GET, 'id',        'int');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');

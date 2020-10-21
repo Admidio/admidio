@@ -1,30 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in Announcementmodule-->
-  <string name="ANN_ANNOUNCEMENT">Anúncio</string>
-  <string name="ANN_ANNOUNCEMENTS">Anúncios</string>
-  <string name="ANN_ANNOUNCEMENTS_DESC">Os anúncios, notícias e informação podem ser publicados e vistos aqui.</string>
-  <string name="ANN_EDIT_ANNOUNCEMENTS">Editar anúncios</string>
-  <string name="ANN_EMAIL_NOTIFICATION_TITLE">Foi criado um novo anúncio</string>
-  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Foi criado um novo anúncio em #VAR1#\n\nTítulo: #VAR2#\nCriado por: #VAR3#\nCriado em: #VAR4#</string>
-  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Últimos anúncios da organização #VAR1#</string>
+  <string name="SYS_ANNOUNCEMENT">Anúncio</string>
+  <string name="SYS_ANNOUNCEMENTS">Anúncios</string>
+  <string name="SYS_ANNOUNCEMENTS_DESC">Os anúncios, notícias e informação podem ser publicados e vistos aqui.</string>
+  <string name="SYS_EDIT_ANNOUNCEMENTS">Editar anúncios</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Foi criado um novo anúncio</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Foi criado um novo anúncio em #VAR1#\n\nTítulo: #VAR2#\nCriado por: #VAR3#\nCriado em: #VAR4#</string>
+  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Últimos anúncios da organização #VAR1#</string>
   <!--Phrases only in Backupmodule-->
-  <string name="BAC_BACK_TO_BACKUP_PAGE">Voltar à página de Backup</string>
-  <string name="BAC_BACKUP_COMPLETED">Backup criado em #VAR1#</string>
-  <string name="BAC_BACKUP_FILE">Arquivo de backup</string>
-  <string name="BAC_BACKUP_FROM">Backup criado em #VAR1# às #VAR2#</string>
-  <string name="BAC_CREATION_DATE">Criada em</string>
-  <string name="BAC_DATABASE_BACKUP">Backup do banco de dados</string>
-  <string name="BAC_DATABASE_BACKUP_DESC">Os backup\'s do banco de dados das tabelas do Admidio podem ser criados e baixados.</string>
-  <string name="BAC_DAYS_VAR">#VAR1# dias</string>
-  <string name="BAC_HOURS_VAR">#VAR1# horas</string>
-  <string name="BAC_MINUTES_VAR">#VAR1# minutos</string>
-  <string name="BAC_NO_BACKUP_FILE_EXISTS">Não há nenhum arquivo de backup!</string>
-  <string name="BAC_ONLY_MYSQL">O módulo de backup só pode ser utilizado num banco de dados do MySQL.</string>
+  <string name="SYS_BACK_TO_BACKUP_PAGE">Voltar à página de Backup</string>
+  <string name="SYS_BACKUP_COMPLETED">Backup criado em #VAR1#</string>
+  <string name="SYS_BACKUP_FILE">Arquivo de backup</string>
+  <string name="SYS_BACKUP_FROM">Backup criado em #VAR1# às #VAR2#</string>
+  <string name="SYS_CREATION_DATE">Criada em</string>
+  <string name="SYS_DATABASE_BACKUP">Backup do banco de dados</string>
+  <string name="SYS_DATABASE_BACKUP_DESC">Os backup\'s do banco de dados das tabelas do Admidio podem ser criados e baixados.</string>
+  <string name="SYS_DAYS_VAR">#VAR1# dias</string>
+  <string name="SYS_HOURS_VAR">#VAR1# horas</string>
+  <string name="SYS_MINUTES_VAR">#VAR1# minutos</string>
+  <string name="SYS_NO_BACKUP_FILE_EXISTS">Não há nenhum arquivo de backup!</string>
+  <string name="SYS_BACKUP_ONLY_MYSQL">O módulo de backup só pode ser utilizado num banco de dados do MySQL.</string>
   <string name="BAC_OVERALL_PROGRESS">Progresso Geral</string>
-  <string name="BAC_START_BACKUP">Iniciar backup</string>
-  <string name="BAC_SUM">Total</string>
-  <string name="BAC_SECONDS_VAR">#VAR1# segundos</string>
+  <string name="SYS_START_BACKUP">Iniciar backup</string>
+  <string name="SYS_TOTAL">Total</string>
+  <string name="SYS_SECONDS_VAR">#VAR1# segundos</string>
   <!--Phrases only in Category-Administration-->
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Membros deste cargo são administradores do módulo e possuem acesso total. É possivel criar, editar e apagar dados; editar categorias e suas permissões. Um cargo pode ser um administrador atribuindo-lhe a permissão #VAR1_BOLD#. </string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Todos os administradores do módulo da organização pai</string>
@@ -1060,8 +1060,8 @@
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_INVALID">O endereço de e-mail no campo #VAR1_BOLD# contém caracteres inválidos ou está incompleto.</string>
   <string name="SYS_EMAIL_NOT_SEND">Não foi possível enviar o e-mail para #VAR1_BOLD#.\n\nDetalhes:\n#VAR2#</string>
-  <string name="SYS_EMAIL_NOTIFICATION_TITLE">Um novo arquivo foi enviado</string>
-  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">Um novo arquivo foi enviado para #VAR1#\n\nArquivo: #VAR2#\nEnviado por: #VAR3#Enviado às #VAR4#</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">Um novo arquivo foi enviado</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">Um novo arquivo foi enviado para #VAR1#\n\nArquivo: #VAR2#\nEnviado por: #VAR3#Enviado às #VAR4#</string>
   <string name="SYS_EMAIL_SEND">O e-mail foi enviado com sucesso</string>
   <string name="SYS_EMAIL_TEMPLATE">Modelo de e-mail</string>
   <string name="SYS_EMAIL_TEMPLATE_DESC">Aqui você pode selecionar um arquivo no formato HTML da pasta #VAR1_BOLD#. Quando ao enviar um e-mail, o conteúdo deste arquivo será copiado para o e-mail e as seguintes variáveis serão substituídas: #remetente#, #mensagem#, #destinatários#, #nome_organização#, #organização_nome abreviado#, #organização_website#, Para mais informações sobre como utilizar formulários de e-mail, veja a #VAR2#documentação#VAR3#. </string>

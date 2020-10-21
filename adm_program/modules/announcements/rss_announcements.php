@@ -24,7 +24,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('ANN_ANNOUNCEMENTS')));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if (!$gSettingsManager->getBool('enable_rss'))
@@ -52,7 +52,7 @@ $orgLongname = $gCurrentOrganization->getValue('org_longname');
 $rss = new RssFeed(
     $orgLongname.' - '.$getHeadline,
     $gCurrentOrganization->getValue('org_homepage'),
-    $gL10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', array($orgLongname)),
+    $gL10n->get('SYS_RECENT_ANNOUNCEMENTS_OF_ORGA', array($orgLongname)),
     $orgLongname
 );
 

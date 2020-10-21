@@ -5,8 +5,8 @@
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
                          VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.17', 0, 730)
-                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.17', 0, 0)
-                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.17', 0, 0)
+                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.17', 0, 0)
+                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '3.3.17', 0, 0)
                               , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.17', 0, 0)
                               , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.17', 0, 0)
                               , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.17', 0, 0)
@@ -43,12 +43,12 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (60, 1, 0, 3, 1, 'download', '/adm_program/modules/downloads/downloads.php', 'download.png', 'DOW_DOWNLOADS', 'DOW_DOWNLOADS_DESC'),
 (90, 1, 0, 7, 1, 'lists', '/adm_program/modules/lists/lists.php', 'lists.png', 'LST_LISTS', 'LST_LISTS_DESC'),
 (90, 1, 0, 8, 1, 'mylist', '/adm_program/modules/lists/mylist.php', 'mylist.png', 'LST_MY_LIST', 'SYS_MYLIST_DESC'),
-(20, 1, 0, 2, 1, 'announcements', '/adm_program/modules/announcements/announcements.php', 'announcements.png', 'ANN_ANNOUNCEMENTS', 'ANN_ANNOUNCEMENTS_DESC'),
+(20, 1, 0, 2, 1, 'announcements', '/adm_program/modules/announcements/announcements.php', 'announcements.png', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC'),
 (130, 1, 0, 5, 1, 'photo', '/adm_program/modules/photos/photos.php', 'photo.png', 'SYS_PHOTOS', 'PHO_PHOTOS_DESC'),
 (70, 1, 0, 6, 1, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'guestbook.png', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC'),
 (50, 1, 0, 8, 1, 'dates', '/adm_program/modules/dates/dates.php', 'dates.png', 'DAT_DATES', 'DAT_DATES_DESC'),
 (80, 1, 0, 9, 1, 'weblinks', '/adm_program/modules/links/links.php', 'weblinks.png', 'LNK_WEBLINKS', 'LNK_WEBLINKS_DESC'),
-(30, 2, 0, 4, 1, 'dbback', '/adm_program/modules/backup/backup.php', 'backup.png', 'BAC_DATABASE_BACKUP', 'BAC_DATABASE_BACKUP_DESC'),
+(30, 2, 0, 4, 1, 'dbback', '/adm_program/modules/backup/backup.php', 'backup.png', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC'),
 (140, 2, 0, 6, 1, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'options.png', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC'),
 (120, 1, 0, 4, 1, 'mail', '/adm_program/modules/messages/messages_write.php', 'email.png', 'SYS_EMAIL', 'MAI_EMAIL_DESC'),
 (160, 2, 0, 1, 1, 'newreg', '/adm_program/modules/registration/registration.php', 'new_registrations.png', 'NWU_NEW_REGISTRATIONS', 'NWU_MANAGE_NEW_REGISTRATIONS_DESC'),

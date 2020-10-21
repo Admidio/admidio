@@ -29,7 +29,7 @@ if(!$gCurrentUser->isAdministrator())
 // module not available for other databases except MySQL
 if(DB_ENGINE !== Database::PDO_ENGINE_MYSQL)
 {
-    $gMessage->show($gL10n->get('BAC_ONLY_MYSQL'));
+    $gMessage->show($gL10n->get('SYS_BACKUP_ONLY_MYSQL'));
     // => EXIT
 }
 
@@ -116,7 +116,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
 {
 
     $fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION_TEXT.' (https://www.admidio.org)'.LINE_TERMINATOR;
-    $fileheaderline .= '-- '.$gL10n->get('BAC_BACKUP_FROM', array(date('d.m.Y'), date('G:i:s'))).LINE_TERMINATOR.LINE_TERMINATOR;
+    $fileheaderline .= '-- '.$gL10n->get('SYS_BACKUP_FROM', array(date('d.m.Y'), date('G:i:s'))).LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('SYS_DATABASE').': '.DB_NAME.LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('SYS_USER').': '.$gCurrentUser->getValue('FIRST_NAME', 'database'). ' '. $gCurrentUser->getValue('LAST_NAME', 'database').LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= 'SET FOREIGN_KEY_CHECKS=0;'.LINE_TERMINATOR.LINE_TERMINATOR;
@@ -571,9 +571,9 @@ else
 // End original backupDB
 
 echo '<div class="alert alert-success form-alert"><i class="fas fa-check"></i><strong>'.
-    $gL10n->get('BAC_BACKUP_COMPLETED', array(FormattedTimeRemaining(getmicrotime() - $starttime, 2))).'.</strong><br /><br />
+    $gL10n->get('SYS_BACKUP_COMPLETED', array(FormattedTimeRemaining(getmicrotime() - $starttime, 2))).'.</strong><br /><br />
 
-'.$gL10n->get('BAC_BACKUP_FILE').'
+'.$gL10n->get('SYS_BACKUP_FILE').'
 <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php', array('job' => 'get_file', 'filename' => basename($newfullfilename))).'">
     <i class="fas fa-file-archive"></i>'.basename($newfullfilename).'</a>
 ('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</div>';

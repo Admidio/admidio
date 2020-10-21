@@ -44,8 +44,8 @@ switch ($getType)
         break;
 
     case 'ANN':
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
-        $rolesRightEditName = 'ANN_EDIT_ANNOUNCEMENTS';
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('SYS_ANNOUNCEMENTS')));
+        $rolesRightEditName = 'SYS_EDIT_ANNOUNCEMENTS';
         $rolesRightsColumn  = 'rol_announcements';
         $rolesRightsName    = 'SYS_RIGHT_ANNOUNCEMENTS';
         break;

@@ -57,8 +57,8 @@ switch ($getType)
 
     case 'ANN':
         $rolesRightsColumn = 'rol_announcements';
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
-        $editableHeadline = $gL10n->get('ANN_EDIT_ANNOUNCEMENTS');
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('SYS_ANNOUNCEMENTS')));
+        $editableHeadline = $gL10n->get('SYS_EDIT_ANNOUNCEMENTS');
         break;
 
     case 'DAT':

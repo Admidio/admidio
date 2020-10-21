@@ -1,30 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in Announcementmodule-->
-  <string name="ANN_ANNOUNCEMENT">Annonce</string>
-  <string name="ANN_ANNOUNCEMENTS">Annonces</string>
-  <string name="ANN_ANNOUNCEMENTS_DESC">Les annonces, les nouvelles ou les informations peuvent être publiées et consultées ici.</string>
-  <string name="ANN_EDIT_ANNOUNCEMENTS">Editer les annonces</string>
-  <string name="ANN_EMAIL_NOTIFICATION_TITLE">Une nouvelle annonce a été créée</string>
-  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Une nouvelle annonce à #VAR1# a été créée\n\nTitre: #VAR2#\nCréé par: #VAR3#\nCréé à: #VAR4#</string>
-  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Les dernières annonces de l\'organisation #VAR1#</string>
+  <string name="SYS_ANNOUNCEMENT">Annonce</string>
+  <string name="SYS_ANNOUNCEMENTS">Annonces</string>
+  <string name="SYS_ANNOUNCEMENTS_DESC">Les annonces, les nouvelles ou les informations peuvent être publiées et consultées ici.</string>
+  <string name="SYS_EDIT_ANNOUNCEMENTS">Editer les annonces</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Une nouvelle annonce a été créée</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Une nouvelle annonce à #VAR1# a été créée\n\nTitre: #VAR2#\nCréé par: #VAR3#\nCréé à: #VAR4#</string>
+  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Les dernières annonces de l\'organisation #VAR1#</string>
   <!--Phrases only in Backupmodule-->
-  <string name="BAC_BACK_TO_BACKUP_PAGE">Retour à la page de sauvegarde</string>
-  <string name="BAC_BACKUP_COMPLETED">Sauvegarde terminée en #VAR1#</string>
-  <string name="BAC_BACKUP_FILE">Fichier de sauvegarde</string>
-  <string name="BAC_BACKUP_FROM">Fichier de sauvegarde créé le #VAR1# à #VAR2#</string>
-  <string name="BAC_CREATION_DATE">Date de création</string>
-  <string name="BAC_DATABASE_BACKUP">Sauvegarde de la base de données</string>
-  <string name="BAC_DATABASE_BACKUP_DESC">Les sauvegardes des bases de données des tables Admidio peuvent être créées et téléchargées ici.</string>
-  <string name="BAC_DAYS_VAR">#VAR1# Jours</string>
-  <string name="BAC_HOURS_VAR">#VAR1# heures</string>
-  <string name="BAC_MINUTES_VAR">#VAR1# minutes</string>
-  <string name="BAC_NO_BACKUP_FILE_EXISTS">Aucun fichier de sauvegarde disponible !</string>
-  <string name="BAC_ONLY_MYSQL">Le module de sauvegarde ne peut être utilisé uniquement pour des bases de données MySQL.</string>
+  <string name="SYS_BACK_TO_BACKUP_PAGE">Retour à la page de sauvegarde</string>
+  <string name="SYS_BACKUP_COMPLETED">Sauvegarde terminée en #VAR1#</string>
+  <string name="SYS_BACKUP_FILE">Fichier de sauvegarde</string>
+  <string name="SYS_BACKUP_FROM">Fichier de sauvegarde créé le #VAR1# à #VAR2#</string>
+  <string name="SYS_CREATION_DATE">Date de création</string>
+  <string name="SYS_DATABASE_BACKUP">Sauvegarde de la base de données</string>
+  <string name="SYS_DATABASE_BACKUP_DESC">Les sauvegardes des bases de données des tables Admidio peuvent être créées et téléchargées ici.</string>
+  <string name="SYS_DAYS_VAR">#VAR1# Jours</string>
+  <string name="SYS_HOURS_VAR">#VAR1# heures</string>
+  <string name="SYS_MINUTES_VAR">#VAR1# minutes</string>
+  <string name="SYS_NO_BACKUP_FILE_EXISTS">Aucun fichier de sauvegarde disponible !</string>
+  <string name="SYS_BACKUP_ONLY_MYSQL">Le module de sauvegarde ne peut être utilisé uniquement pour des bases de données MySQL.</string>
   <string name="BAC_OVERALL_PROGRESS">Progression globale</string>
-  <string name="BAC_START_BACKUP">Démarrer la sauvegarde</string>
-  <string name="BAC_SUM">Total</string>
-  <string name="BAC_SECONDS_VAR">#VAR1# secondes</string>
+  <string name="SYS_START_BACKUP">Démarrer la sauvegarde</string>
+  <string name="SYS_TOTAL">Total</string>
+  <string name="SYS_SECONDS_VAR">#VAR1# secondes</string>
   <!--Phrases only in Category-Administration-->
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Ces rôles sont des administrateurs du module et ont accès à tout. Tu peux créer, modifier, supprimer des données et éditer des catégories avec tes droits. Tu peux faire d\'un rôle un administrateur en lui assignant le droit #VAR1_BOLD#.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Tous les administrateurs du module de l\'organisation mère</string>
@@ -1058,8 +1058,8 @@
   <string name="SYS_EMAIL">Courriel</string>
   <string name="SYS_EMAIL_INVALID">L\'adresse courriel dans le champ #VAR1_BOLD# contient des caractères non valides ou n\'a pas été saisie complètement.</string>
   <string name="SYS_EMAIL_NOT_SEND"> Le courriel n\'a pas pu être envoyé à #VAR1_BOLD#.\n\nL\'erreur suivante s\'est produite:\n#VAR2#.</string>
-  <string name="SYS_EMAIL_NOTIFICATION_TITLE">Un nouveau fichier a été téléchargé</string>
-  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">Un nouveau fichier a été télécharger vers #VAR1#\n\nFile: #VAR2#\nTéléchargé par: #VAR3#\nTéléchargé à: #VAR4#</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">Un nouveau fichier a été téléchargé</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">Un nouveau fichier a été télécharger vers #VAR1#\n\nFile: #VAR2#\nTéléchargé par: #VAR3#\nTéléchargé à: #VAR4#</string>
   <string name="SYS_EMAIL_SEND">Le courriel a été envoyé.</string>
   <string name="SYS_EMPTY">Vide</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activer le module de téléchargement</string>

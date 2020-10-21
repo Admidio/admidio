@@ -1,30 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in Announcementmodule-->
-  <string name="ANN_ANNOUNCEMENT">公告</string>
-  <string name="ANN_ANNOUNCEMENTS">公告</string>
-  <string name="ANN_ANNOUNCEMENTS_DESC">显示或编辑公告，新闻和其他信息</string>
-  <string name="ANN_EDIT_ANNOUNCEMENTS">编辑公告</string>
-  <string name="ANN_EMAIL_NOTIFICATION_TITLE">已创建新公告</string>
-  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">在#VAR1#创建了新公告\n\n标题: #VAR2#\n创建者: #VAR3#\n创建于: #VAR4#</string>
-  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">部门最新公告 #VAR1#</string>
+  <string name="SYS_ANNOUNCEMENT">公告</string>
+  <string name="SYS_ANNOUNCEMENTS">公告</string>
+  <string name="SYS_ANNOUNCEMENTS_DESC">显示或编辑公告，新闻和其他信息</string>
+  <string name="SYS_EDIT_ANNOUNCEMENTS">编辑公告</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">已创建新公告</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">在#VAR1#创建了新公告\n\n标题: #VAR2#\n创建者: #VAR3#\n创建于: #VAR4#</string>
+  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">部门最新公告 #VAR1#</string>
   <!--Phrases only in Backupmodule-->
-  <string name="BAC_BACK_TO_BACKUP_PAGE">返回备份页面</string>
-  <string name="BAC_BACKUP_COMPLETED">已在 #VAR1# 中创建备份</string>
-  <string name="BAC_BACKUP_FILE">备份文件</string>
-  <string name="BAC_BACKUP_FROM">在 #VAR1# 上创建备份于 #VAR2#</string>
-  <string name="BAC_CREATION_DATE">创建于</string>
-  <string name="BAC_DATABASE_BACKUP">数据库备份</string>
-  <string name="BAC_DATABASE_BACKUP_DESC">创建和下载系统表的数据库备份。</string>
-  <string name="BAC_DAYS_VAR">#VAR1# 天</string>
-  <string name="BAC_HOURS_VAR">#VAR1# 小时</string>
-  <string name="BAC_MINUTES_VAR">#VAR1# 分钟</string>
-  <string name="BAC_NO_BACKUP_FILE_EXISTS">找不到备份文件！</string>
-  <string name="BAC_ONLY_MYSQL">备份模块只能与MySQL数据库结合使用。</string>
+  <string name="SYS_BACK_TO_BACKUP_PAGE">返回备份页面</string>
+  <string name="SYS_BACKUP_COMPLETED">已在 #VAR1# 中创建备份</string>
+  <string name="SYS_BACKUP_FILE">备份文件</string>
+  <string name="SYS_BACKUP_FROM">在 #VAR1# 上创建备份于 #VAR2#</string>
+  <string name="SYS_CREATION_DATE">创建于</string>
+  <string name="SYS_DATABASE_BACKUP">数据库备份</string>
+  <string name="SYS_DATABASE_BACKUP_DESC">创建和下载系统表的数据库备份。</string>
+  <string name="SYS_DAYS_VAR">#VAR1# 天</string>
+  <string name="SYS_HOURS_VAR">#VAR1# 小时</string>
+  <string name="SYS_MINUTES_VAR">#VAR1# 分钟</string>
+  <string name="SYS_NO_BACKUP_FILE_EXISTS">找不到备份文件！</string>
+  <string name="SYS_BACKUP_ONLY_MYSQL">备份模块只能与MySQL数据库结合使用。</string>
   <string name="BAC_OVERALL_PROGRESS">进度</string>
-  <string name="BAC_START_BACKUP">开始备份</string>
-  <string name="BAC_SUM">总共</string>
-  <string name="BAC_SECONDS_VAR">#VAR1# 秒</string>
+  <string name="SYS_START_BACKUP">开始备份</string>
+  <string name="SYS_TOTAL">总共</string>
+  <string name="SYS_SECONDS_VAR">#VAR1# 秒</string>
   <!--Phrases only in Category-Administration-->
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">上级部门模块的所有管理员</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">这个部门的所有会员</string>
@@ -103,7 +103,7 @@
   <string name="DOW_DOWNLOADS_DESC">可以提供不同的数据文件和文件类型以供下载。此下载可以分类在具有不同访问权限级别的文件夹中。</string>
   <string name="SYS_EDIT_FILE">编辑文件</string>
   <string name="SYS_EDIT_FOLDER">编辑文件夹</string>
-  <string name="SYS_EMAIL_NOTIFICATION_TITLE">上传了一个新文件</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">上传了一个新文件</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">激活下载模块</string>
   <string name="SYS_FILE_EXTENSION_INVALID">不被允许的文件类型。</string>
   <string name="SYS_FILE_NAME_RULES">文件名应表示文件内容。文件名影响列表的顺序。例如，包含程序的文件夹中的文件名应以日期(yyyy-mm-tt)开头。</string>

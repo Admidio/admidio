@@ -1,30 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in Announcementmodule-->
-  <string name="ANN_ANNOUNCEMENT">Announcement</string>
-  <string name="ANN_ANNOUNCEMENTS">Announcements</string>
-  <string name="ANN_ANNOUNCEMENTS_DESC">Display or edit announcements, news and other information.</string>
-  <string name="ANN_EDIT_ANNOUNCEMENTS">Edit announcements</string>
-  <string name="ANN_EMAIL_NOTIFICATION_TITLE">A new announcement was created</string>
-  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">A new announcement at #VAR1# was created\n\nTitle: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
-  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Latest announcements from organization #VAR1#</string>
-  <!--Phrases only in Backupmodule-->
-  <string name="BAC_BACK_TO_BACKUP_PAGE">Back to backup page</string>
-  <string name="BAC_BACKUP_COMPLETED">Backup created in #VAR1#</string>
-  <string name="BAC_BACKUP_FILE">Backup file</string>
-  <string name="BAC_BACKUP_FROM">Backup created on #VAR1# at #VAR2#</string>
-  <string name="BAC_CREATION_DATE">Created on</string>
-  <string name="BAC_DATABASE_BACKUP">Database backup</string>
-  <string name="BAC_DATABASE_BACKUP_DESC">Create and download database backups of Admidio tables.</string>
-  <string name="BAC_DAYS_VAR">#VAR1# days</string>
-  <string name="BAC_HOURS_VAR">#VAR1# hours</string>
-  <string name="BAC_MINUTES_VAR">#VAR1# minutes</string>
-  <string name="BAC_NO_BACKUP_FILE_EXISTS">No Backup file found!</string>
-  <string name="BAC_ONLY_MYSQL">The backup module can only be used in combination with a MySQL database.</string>
-  <string name="BAC_OVERALL_PROGRESS">Progress</string>
-  <string name="BAC_START_BACKUP">Start backup process</string>
-  <string name="BAC_SUM">Total</string>
-  <string name="BAC_SECONDS_VAR">#VAR1# seconds</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Add event to calendar</string>
   <string name="DAT_ALL_DAY">Full time</string>
@@ -853,6 +828,9 @@
   <string name="SYS_ALL_ORGANIZATIONS_DESC">The selected category is shared for all organizations.\nThe current object (event, announcement, profile field, weblink, etc.) will be visible not only in this organization but also in all the following organizations: #VAR1#.</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">All members of this organization</string>
   <string name="SYS_ALSO_VISITORS">Also visitors</string>
+  <string name="SYS_ANNOUNCEMENT">Announcement</string>
+  <string name="SYS_ANNOUNCEMENTS">Announcements</string>
+  <string name="SYS_ANNOUNCEMENTS_DESC">Display or edit announcements, news and other information.</string>
   <string name="SYS_APPLY">Apply</string>
   <string name="SYS_ANNUALLY">Annually</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
@@ -862,7 +840,12 @@
   <string name="SYS_AVAILABLE">Available</string>
   <string name="SYS_AVAILABLE_BETA">Available Beta</string>
   <string name="SYS_BACK">Back</string>
+  <string name="SYS_BACK_TO_BACKUP_PAGE">Back to backup page</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Back to module overview</string>
+  <string name="SYS_BACKUP_COMPLETED">Backup created in #VAR1#</string>
+  <string name="SYS_BACKUP_FILE">Backup file</string>
+  <string name="SYS_BACKUP_FROM">Backup created on #VAR1# at #VAR2#</string>
+  <string name="SYS_BACKUP_ONLY_MYSQL">The backup module can only be used in combination with a MySQL database.</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
   <string name="SYS_CANT_DELETE_ROLE">You can not delete the role #VAR1_BOLD#.</string>
   <string name="SYS_CAPACITY">Capacity</string>
@@ -923,6 +906,7 @@
   <string name="SYS_CREATE_ROLE">Create role</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATED_BY">Created by #VAR1# on #VAR2#</string>
+  <string name="SYS_CREATION_DATE">Created on</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Current database version</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your #VAR1#profile#VAR1#.</string>
@@ -931,6 +915,8 @@
   <string name="SYS_DATA_PROTECTION">Data protection</string>
   <string name="SYS_DATA_PROTECTION_DESC">Here, the URL to your page with the privacy policy can be deposited. This page is linked to the use of cookies for further information. If the selected theme supports this, a link will also be displayed on the Admidio pages. (Example: https://www.example.com/data_protection.html)</string>
   <string name="SYS_DATABASE">Database</string>
+  <string name="SYS_DATABASE_BACKUP">Database backup</string>
+  <string name="SYS_DATABASE_BACKUP_DESC">Create and download database backups of Admidio tables.</string>
   <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">It is not necessary to update the database.</string>
   <string name="SYS_DATABASE_ERROR">Database error</string>
   <string name="SYS_DATABASE_IS_UP_TO_DATE">Admidio\'s database is up to date.</string>
@@ -946,6 +932,7 @@
   <string name="SYS_DATE_INVALID">Invalid date in field #VAR1_BOLD#.\n\nDate has to comply with this formatting: #VAR2_BOLD#.</string>
   <string name="SYS_DATE_MODIFIED">Date of modification</string>
   <string name="SYS_DATE_TO">to</string>
+  <string name="SYS_DAYS_VAR">#VAR1# days</string>
   <string name="SYS_DEACTIVATE_ROLE">Deactivate role</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">If you deactivate role #VAR1_BOLD#, the role can no longer be used and assigned to objects. Likewise, all rights of this role are no longer effective. However, the role with its setting and all member mappings remains and can be reactivated at a later date.</string>
   <string name="SYS_DEACTIVATED">Inactive</string>
@@ -987,6 +974,7 @@
   <string name="SYS_DOWNLOAD_FILE">Download file</string>
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
   <string name="SYS_EDIT">Edit</string>
+  <string name="SYS_EDIT_ANNOUNCEMENTS">Edit announcements</string>
   <string name="SYS_EDIT_ENTRY">Edit entry</string>
   <string name="SYS_EDIT_FILE">Edit file</string>
   <string name="SYS_EDIT_FOLDER">Edit folder</string>
@@ -996,10 +984,12 @@
   <string name="SYS_EDIT_VAR">Edit #VAR1#</string>
   <string name="SYS_EDITED_BY">Last edited by</string>
   <string name="SYS_EMAIL">E-mail</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">A new announcement was created</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">A new announcement at #VAR1# was created\n\nTitle: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">A new file was uploaded</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">A new file was uploaded at #VAR1#\n\nFile: #VAR2#\nUploaded by: #VAR3#\nUploaded at: #VAR4#</string>
   <string name="SYS_EMAIL_INVALID">E-mail address in field #VAR1_BOLD# includes invalid characters or is incomplete.</string>
   <string name="SYS_EMAIL_NOT_SEND">The email could not be sent to #VAR1_BOLD#.\n\nThe following error occurred:\n#VAR2#</string>
-  <string name="SYS_EMAIL_NOTIFICATION_TITLE">A new file was uploaded</string>
-  <string name="SYS_EMAIL_NOTIFICATION_MESSAGE">A new file was uploaded at #VAR1#\n\nFile: #VAR2#\nUploaded by: #VAR3#\nUploaded at: #VAR4#</string>
   <string name="SYS_EMAIL_SEND">Mail has been send successfully</string>
   <string name="SYS_EMAIL_TEMPLATE">E-mail template</string>
   <string name="SYS_EMAIL_TEMPLATE_DESC">Here you can select an HTML template file from the folder #VAR1_BOLD#. When sending an e-mail, the contents of this file will be copied to the e-mail and the following variables will be replaced: #sender#, #message#, #recipients#, #organization_name#, #organization_shortname#, #organization_website#. For more information on using email templates, see the #VAR2#documentation#VAR3#.</string>
@@ -1074,6 +1064,7 @@
   <string name="SYS_HIDE">Hide</string>
   <string name="SYS_HOMEPAGE">Homepage</string>
   <string name="SYS_HOST">Host</string>
+  <string name="SYS_HOURS_VAR">#VAR1# hours</string>
   <string name="SYS_ICAL_DISABLED">iCal has been disabled by the system administrator.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IMPORTANT">Important</string>
@@ -1157,7 +1148,7 @@
   <string name="SYS_MENU_NAME_DESC">The name of the entry in the menu. Here you can also enter the name of a translation string.</string>
   <string name="SYS_MESSAGE">Message</string>
   <string name="SYS_MESSAGES">Messages</string>
-  <string name="SYS_MINUTES">Minutes</string>
+  <string name="SYS_MINUTES_VAR">#VAR1# minutes</string>
   <string name="SYS_MOBILE">Mobile</string>
   <string name="SYS_MODULE_DISABLED">This module is disabled.</string>
   <string name="SYS_MODULE_RIGHTS">Module rights</string>
@@ -1181,6 +1172,7 @@
   <string name="SYS_NO">No</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">No additional permissions set</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">No additional rights</string>
+  <string name="SYS_NO_BACKUP_FILE_EXISTS">No backup file found!</string>
   <string name="SYS_NO_DATA_FOUND">No data found!</string>
   <string name="SYS_NO_DEFAULT_ROLE">You can not remove the setting #VAR1_BOLD#, because at least one role must be stored as the default assignment.</string>
   <string name="SYS_NO_ENTRY">Requested entry does not exist in the database.</string>
@@ -1251,13 +1243,13 @@
   <string name="SYS_PRNG_INSECURE">Admidio/PHP can not generate secure pseudo-random numbers! Please contact the Admidio team with the following information:</string>
   <string name="SYS_PROCESS_CANCELED">Process canceled.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing the data.</string>
-  <string name="SYS_PROGRESSBAR">Progress bar</string>
   <string name="SYS_PROPERTIES">Properties</string>
   <string name="SYS_PWACT_PW_SAVED">New password saved!</string>
   <string name="SYS_PWACT_CODE_INVALID">The new password has already been activated or the activation code is incorrect!</string>
   <string name="SYS_QUANTITY">Amount</string>
   <string name="SYS_QUARTERLY">Quarterly</string>
   <string name="SYS_RADIO_BUTTON">Radio button</string>
+  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Latest announcements from organization #VAR1#</string>
   <string name="SYS_RECIPIENT">Recipient</string>
   <string name="SYS_REDIRECT_URL_INVALID">The specified redirect URL is not valid.</string>
   <string name="SYS_REGISTERED_AS">Logged in as</string>
@@ -1316,7 +1308,7 @@
   <string name="SYS_SAVE_DATA">Data has been saved.</string>
   <string name="SYS_SEARCH">Search</string>
   <string name="SYS_SEATING">Seating</string>
-  <string name="SYS_SECONDS">Seconds</string>
+  <string name="SYS_SECONDS_VAR">#VAR1# seconds</string>
   <string name="SYS_SECURE">Secure</string>
   <string name="SYS_SECURITY">Security</string>
   <string name="SYS_SECURITY_ERROR">Security error</string>
@@ -1349,6 +1341,7 @@
   <string name="SYS_SMTP_AUTH_TYPE_DESC">SMTP knows different authentication methods. Enter here the authentication method that your SMTP server supports. If you are not sure which method is supported, select #VAR1_BOLD#. Admidio will then try the different authentication methods one after the other until a login was successful. (Default: Automatically)</string>
   <string name="SYS_SOCIAL_NETWORKS">Social media</string>
   <string name="SYS_START" description="Start of a date">Start</string>
+  <string name="SYS_START_BACKUP">Start backup process</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
   <string name="SYS_STILL_X_CHARACTERS">still #VAR1# characters</string>
   <string name="SYS_STOP">Stop</string>
@@ -1372,6 +1365,7 @@
   <string name="SYS_TIME_TO">Time to</string>
   <string name="SYS_TITLE">Title</string>
   <string name="SYS_TO" description="E-Mail">To</string>
+  <string name="SYS_TOTAL">Total</string>
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TYPE">Type</string>
   <string name="SYS_UNIX">UNIX</string>

@@ -75,7 +75,7 @@ class UploadHandlerDownload extends UploadHandler
                 // Benachrichtigungs-Email für neue Einträge
                 $fullName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
                 $message = $gL10n->get(
-                    'SYS_EMAIL_NOTIFICATION_MESSAGE',
+                    'SYS_EMAIL_FILE_NOTIFICATION_MESSAGE',
                     array(
                         $gCurrentOrganization->getValue('org_longname'),
                         $file->name,
@@ -85,7 +85,7 @@ class UploadHandlerDownload extends UploadHandler
                 );
                 $notification = new Email();
                 $notification->adminNotification(
-                    $gL10n->get('SYS_EMAIL_NOTIFICATION_TITLE'),
+                    $gL10n->get('SYS_EMAIL_FILE_NOTIFICATION_TITLE'),
                     $message,
                     $fullName,
                     $gCurrentUser->getValue('EMAIL')

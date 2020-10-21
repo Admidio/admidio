@@ -37,7 +37,7 @@ if(!$gCurrentUser->isAdministrator())
 // module not available for other databases except MySQL
 if(DB_ENGINE !== Database::PDO_ENGINE_MYSQL)
 {
-    $gMessage->show($gL10n->get('BAC_ONLY_MYSQL'));
+    $gMessage->show($gL10n->get('SYS_BACKUP_ONLY_MYSQL'));
     // => EXIT
 }
 
@@ -52,7 +52,7 @@ catch (\RuntimeException $exception)
     // => EXIT
 }
 
-$headline = $gL10n->get('BAC_DATABASE_BACKUP');
+$headline = $gL10n->get('SYS_DATABASE_BACKUP');
 
 // create html page object
 $page = new HtmlPage('admidio-backup', $headline);
@@ -98,18 +98,18 @@ if($getMode === 'show_list')
     sort($existingBackupFiles);
 
     // show link to create new backup
-    $page->addPageFunctionsMenuItem('menu_item_backup_start', $gL10n->get('BAC_START_BACKUP'),
+    $page->addPageFunctionsMenuItem('menu_item_backup_start', $gL10n->get('SYS_START_BACKUP'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', array('mode' => 'create_backup')),
         'fa-database');
 
     // Define table
     $table = new HtmlTable('tableList', $page, true, true);
-    $table->setMessageIfNoRowsFound('BAC_NO_BACKUP_FILE_EXISTS');
+    $table->setMessageIfNoRowsFound('SYS_NO_BACKUP_FILE_EXISTS');
 
     // create array with all column heading values
     $columnHeading = array(
-        $gL10n->get('BAC_BACKUP_FILE'),
-        $gL10n->get('BAC_CREATION_DATE'),
+        $gL10n->get('SYS_BACKUP_FILE'),
+        $gL10n->get('SYS_CREATION_DATE'),
         $gL10n->get('SYS_SIZE'),
         '&nbsp;'
     );
@@ -139,7 +139,7 @@ if($getMode === 'show_list')
 
     if(count($existingBackupFiles) > 0)
     {
-        $columnValues = array('&nbsp;', $gL10n->get('BAC_SUM'), round($backupSizeSum / 1024) .' kB', '&nbsp;');
+        $columnValues = array('&nbsp;', $gL10n->get('SYS_TOTAL'), round($backupSizeSum / 1024) .' kB', '&nbsp;');
         $table->addRowFooterByArray($columnValues);
     }
 
@@ -157,7 +157,7 @@ elseif($getMode === 'create_backup')
     // show button with link to backup list
     $form = new HtmlForm('show_backup_list_form', ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', $page);
     $form->addSubmitButton(
-        'btn_update_overview', $gL10n->get('BAC_BACK_TO_BACKUP_PAGE'),
+        'btn_update_overview', $gL10n->get('SYS_BACK_TO_BACKUP_PAGE'),
         array('icon' => 'fa-arrow-circle-left')
     );
     $page->addHtml($form->show());
