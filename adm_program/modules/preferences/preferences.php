@@ -1102,20 +1102,26 @@ $formEcards->addInput(
     'ecard_card_picture_height', $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'), $formValues['ecard_card_picture_height'],
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'ECA_MAX_PHOTO_SIZE_DESC')
 );
-$templates = array_keys(FileSystemUtils::getDirectoryContent(THEME_PATH.'/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-if (!is_array($templates))
+
+try
 {
-    $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
-    // => EXIT
+    // get all ecard templates from the theme folder ecard_templates
+    $ecardTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(THEME_PATH.'/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 }
-foreach($templates as &$templateName)
+catch (\UnexpectedValueException $e)
+{
+    $ecardTemplatesFiles = array();
+}
+
+foreach($ecardTemplatesFiles as &$templateName)
 {
     $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
 }
 unset($templateName);
+
 $formEcards->addSelectBox(
-    'ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates,
-    array('defaultValue' => $formValues['ecard_template'], 'showContextDependentFirstEntry' => false, 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'ECA_TEMPLATE_DESC')
+    'ecard_template', $gL10n->get('ECA_TEMPLATE'), $ecardTemplatesFiles,
+    array('defaultValue' => $formValues['ecard_template'], 'showContextDependentFirstEntry' => false, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'ECA_TEMPLATE_DESC')
 );
 $formEcards->addSubmitButton(
     'btn_save_ecards', $gL10n->get('SYS_SAVE'),
@@ -1199,8 +1205,17 @@ $formMessages->addCheckbox(
     'enable_mail_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), (bool) $formValues['enable_mail_captcha'],
     array('helpTextIdInline' => 'MAI_SHOW_CAPTCHA_DESC')
 );
-// search all available email templates in folder of adm_my_files
-$emailTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+
+try
+{
+    // search all available email templates in folder of adm_my_files
+    $emailTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+}
+catch (\UnexpectedValueException $e)
+{
+    $emailTemplatesFiles = array();
+}
+
 $formMessages->addSelectBox(
     'mail_template', $gL10n->get('SYS_EMAIL_TEMPLATE'), $emailTemplatesFiles,
     array('defaultValue' => $formValues['mail_template'], 'showContextDependentFirstEntry' => true, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true,
