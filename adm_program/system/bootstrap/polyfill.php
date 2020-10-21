@@ -15,3 +15,15 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'polyfill.php')
 
 // provide forward compatibility with the random_* functions that ship with PHP 7.0
 require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/random_compat/lib/random.php');
+
+// For PHP <7.2
+if (!defined('PASSWORD_ARGON2I')) {
+    define('PASSWORD_ARGON2I', 2); // PHP 7.4: "argon2i"
+    define('PASSWORD_ARGON2_DEFAULT_MEMORY_COST', 65536);
+    define('PASSWORD_ARGON2_DEFAULT_TIME_COST', 4);
+    define('PASSWORD_ARGON2_DEFAULT_THREADS', 1);
+}
+// For PHP <7.3
+if (!defined('PASSWORD_ARGON2ID')) {
+    define('PASSWORD_ARGON2ID', 3); // PHP 7.4: "argon2id"
+}
