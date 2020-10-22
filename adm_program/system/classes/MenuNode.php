@@ -224,12 +224,12 @@ class MenuNode
 
         while ($node = $nodesStatement->fetch(PDO::FETCH_ASSOC))
         {
-            $badgeCount = 0;
-
             if ((int) $node['men_com_id'] === 0 || Component::isVisible($node['com_name_intern']))
             {
                 if($this->menuItemIsVisible($node['men_id']))
                 {
+                    $badgeCount = 0;
+
                     // special case because there are different links if you are logged in or out for mail
                     if ($gValidLogin && $node['men_name_intern'] === 'mail')
                     {
