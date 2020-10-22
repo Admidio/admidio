@@ -30,7 +30,7 @@
  * $languageData = $session->getObject('languageData')
  * $language = new Language($languageData);
  * ```
- */ 
+ */
 class LanguageData
 {
     const REFERENCE_LANGUAGE = 'en'; // The ISO code of the default language that should be read if in the current language the text id is not translated
@@ -40,7 +40,7 @@ class LanguageData
      */
     private $language;
     /**
-     * @var string The ISO 639-1 code of the language 
+     * @var string The ISO 639-1 code of the language
      */
     private $languageIsoCode;
     /**
@@ -66,23 +66,20 @@ class LanguageData
      * @param string $language The ISO code of the language for which the texts should be read e.g. **'de'**
      *                         If no language is set than the browser language will be determined.
      * @param array $languageInfos An array with additional necessary informations such as iso code, name etc.
-     *                             The array must have the following keys 'isocode' and 'libs'. 
+     *                             The array must have the following keys 'isocode' and 'libs'.
      * @throws \UnexpectedValueException
      */
     public function __construct($language = '', $languageInfos = array())
     {
-        global $gSupportedLanguages;
-
         if ($language === '')
         {
             // get browser language and set this language as default
             $language = static::determineBrowserLanguage(self::REFERENCE_LANGUAGE);
         }
-        $this->language = $language;
-        $this->languageLibs = $gSupportedLanguages[$language]['libs'];
-        $this->languageIsoCode = $gSupportedLanguages[$language]['isocode'];
 
+        $this->setLanguage($language);
         $this->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_LANGUAGES);
+
         foreach (self::getPluginLanguageFolderPaths() as $pluginLanguageFolderPath)
         {
             $this->addLanguageFolderPath($pluginLanguageFolderPath);
@@ -263,6 +260,8 @@ class LanguageData
      */
     public function setLanguage($language)
     {
+        global $gSupportedLanguages;
+
         if ($language === $this->language)
         {
             return false;
@@ -273,6 +272,8 @@ class LanguageData
         $this->textCache = array();
 
         $this->language = $language;
+        $this->languageLibs = $gSupportedLanguages[$language]['libs'];
+        $this->languageIsoCode = $gSupportedLanguages[$language]['isocode'];
 
         return true;
     }
