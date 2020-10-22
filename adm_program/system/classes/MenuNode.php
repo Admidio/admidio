@@ -213,9 +213,6 @@ class MenuNode
     {
         global $gDb, $gCurrentUser, $gValidLogin, $gL10n;
 
-        $countMenuNodes = 0;
-        $badgeCount = 0;
-
         $sql = 'SELECT men_id, men_com_id, men_name_intern, men_name, men_description, men_url, men_icon, com_name_intern
                   FROM '.TBL_MENU.'
              LEFT JOIN '.TBL_COMPONENTS.'
@@ -227,6 +224,8 @@ class MenuNode
 
         while ($node = $nodesStatement->fetch(PDO::FETCH_ASSOC))
         {
+            $badgeCount = 0;
+
             if ((int) $node['men_com_id'] === 0 || Component::isVisible($node['com_name_intern']))
             {
                 if($this->menuItemIsVisible($node['men_id']))
