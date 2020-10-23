@@ -12,50 +12,73 @@
  ***********************************************************************************************
  */
 
-// Einblenden per Ajaxbox (1) oder als normaler Link-Title (0)
+// Show the calendar in an integrated ajax box or as static link. The ajax box will dynamically
+// update only the month, the normal link will always load the whole page.
+// 0 - Integrate as a static link
+// 1 - Integrate with an ajax box (recommended)
 $plg_ajaxbox = 1;
 
-// Monatswechsel per Ajax aktiviert (1) oder deaktiviert (0)
-$plg_ajax_change = 1;
-
-// Angabe des Zielframes für Termine
+// Specification of the target for events in which the contents of the links are to be opened
+// You can insert specified values of the html target attribute
 $plg_link_target_termin = '_self';
 
-// Angabe des Zielframes für Geburtstage
+// Specification of the target for birthdays in which the contents of the links are to be opened
+// You can insert specified values of the html target attribute
 $plg_link_target_geb = '_self';
 
-// Anzeige der Termine aktiviert (1) oder deaktiviert (0)
+// Show events within the month view. Therefore every day with an event gets a link
+// and a small dialog if you hover over the link.
+// 0 - Don't show events
+// 1 - Show events (recommended)
 $plg_ter_aktiv = 1;
 
-// Anzeige der Termine nur für Mitglieder (eingeloggt) (1) oder alle (0)
+// Show events only for registered members that have a valid login.
+// 0 - Show events to guests (default)
+// 1 - Don't show events to guests only to members
 $plg_ter_login = 0;
 
-// Anzeige der Geburtstage aktiviert (1) oder deaktiviert (0)
+// Show birthdays within the month view. Therefore every day with a birthday gets a link
+// and a small dialog if you hover over the link.
+// 0 - Don't show birthdays
+// 1 - Show birthdays (default)
 $plg_geb_aktiv = 1;
 
-// Anzeige der Geburtstage nur für Mitglieder (eingeloggt) (1) oder alle (0)
+// Show birthdays only for registered members that have a valid login.
+// 0 - Show birthdays to guests
+// 1 - Don't show birthdays to guests only to members (recommended)
 $plg_geb_login = 1;
 
-// Anzeige der Geburtstage mit Icon (1) oder ohne Icon (0)
+// Show birthdays with an icon in the month view.
+// 0 - Don't show birthday icon
+// 1 - Show birthday icon (default)
 $plg_geb_icon = 1;
 
-// Anzeige des "Nachname, Vorname" (0) oder "Vorname" (1) oder "Nachname" (2)
+// Flag that controls how the name of the person who has birthday should be shown
+// 0 - "Lastname, Firstname"
+// 1 - "Firstname" (Default)
+// 2 - "Lastname"
 $plg_geb_displayNames = 1;
 
-// Welche Kalender sollen ausgegeben werden: Alle (all), Kalender xyz (xyz)
-// Mehrere Einträge: $plg_kal_cat = array('abc','cdf')
-// Achtung: Seit Admidio 2.2 und dermit verbundenen Mehrsprachigkeit haben die Standardkalender
-// folgende interne Bezeichnungen: "Allgemein" = "SYS_COMMON", "Training" = "INS_TRAINING", "Kurse" = "INS_COURSES"
+// Here you can define which calendars should be shown. Within the default events
+// of all calendars will be shown but you could limit it to only a few calendars.
+// Therefore you must add the name of the calendar to an array. Be careful that translatable
+// calendar names have a different name e.g. "Common" has the name "SYS_COMMON".
+// If you want to limit to some calendars use the following syntax:
+// $plg_kal_cat = array('SYS_COMMON', 'My new own calendar', 'Maybe another calendar');
 $plg_kal_cat = array('all');
 
-// Soll die Kategorie des Kalenders mit ausgegeben werden (1) Ja oder (0) Nein
+// Should the calendar name also be shown at each event?
+// 0 - Only the the event name (Default)
+// 1 - Also show the calendar to each event
 $plg_kal_cat_show = 0;
 
-// Angabe welche Rollen (ID) selektiert werden sollen
-// Alle Rollen (Standard)  = array();
-// Nur Rollenids 2 und 5   = array(2, 5);
+// Here you can define of which roles users must have to show their birthdays. Within the default
+// setting birthdays of all users will be shown. Fill the array with ids of the roles to only
+// allow birthdays of members of these roles.
+// Therefore the following syntax should be used:
+// $plg_rolle_sql = array(2, 4, 10);
 $plg_rolle_sql = array();
 
-// Angabe der Prefix-Url für den Aufruf in Joomla
-// wenn keine Angabe erfolgt dann wird die Standard-URL von Admidio verwendet
+// Specification of the prefix URL for the call in Joomla
+// if not specified then the default URL of Admidio is used
 $plg_link_url = '';
