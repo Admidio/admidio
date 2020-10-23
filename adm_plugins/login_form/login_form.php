@@ -40,7 +40,7 @@ if(!isset($plg_show_email_link) || !is_numeric($plg_show_email_link))
 
 if(!isset($plg_show_logout_link) || !is_numeric($plg_show_logout_link))
 {
-    $plg_show_logout_link = 1;
+    $plg_show_logout_link = 0;
 }
 
 if(isset($plg_link_target))
@@ -149,10 +149,13 @@ if($gValidLogin)
     $form->addStaticControl('plg_number_of_logins', $gL10n->get('PLG_LOGIN_NUMBER_OF_LOGINS'), (int) $gCurrentUser->getValue('usr_number_login').$htmlUserRank);
     echo $form->show();
 
-    // show link for logout
-    echo '<div class="btn-group-vertical" role="group">
-        <a id="adm_logout_link" class="btn admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/system/logout.php"><i class="fas fa-sign-out-alt"></i>'.$gL10n->get('SYS_LOGOUT').'</a>
-    </div>';
+    if($plg_show_logout_link)
+    {
+        // show link for logout
+        echo '<div class="btn-group-vertical" role="group">
+            <a id="adm_logout_link" class="btn admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/system/logout.php"><i class="fas fa-sign-out-alt"></i>'.$gL10n->get('SYS_LOGOUT').'</a>
+        </div>';
+    }
 }
 else
 {

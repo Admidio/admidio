@@ -12,30 +12,28 @@
  ***********************************************************************************************
  */
 
-// Zeigt einen Link zum Registrieren unter dem Loginbutton an
-// 1 = (Default) Link wird angezeigt
-// 0 = Link wird nicht angezeigt
+// Show a link to register after the login dialog
+// 0 - Don't show the link to register
+// 1 - Show the link to register (Default)
 $plg_show_register_link = 1;
 
-// Zeigt einen Link um eine E-Mail an den Webmaster zu schreiben,
-// falls es Probleme beim Login gibt
-// 1 = (Default) Link wird angezeigt
-// 0 = Link wird nicht angezeigt
+// Show a link to send an email to the administrator if you have login problems
+// 0 - Don't show the link to send an email
+// 1 - Show the link to send an email (Default)
 $plg_show_email_link = 1;
 
-// Zeigt nach dem Einloggen einen Link zum Ausloggen an
-// 1 = (Default) Link wird angezeigt
-// 0 = Link wird nicht angezeigt
-$plg_show_logout_link = 1;
+// After login a link to logout will be shown
+// 0 - Don't show link to logout (Default)
+// 1 - Show link to logout
+$plg_show_logout_link = 0;
 
-// Angabe des Ziels (target) in dem die Inhalte der Links geöffnet werden sollen
-// Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
+// Specification of the target in which the contents of the links are to be opened
+// You can insert specified values of the html target attribute
 $plg_link_target = '_self';
 
-// eine kleine Spielerei
-// hier kann man Raenge eingeben, der Benutzer sieht nach dem Einloggen dann seinen Rang
-// in der Seitenleiste und kann sich daran erfreuen :)
-// Falls dies nicht gewuenscht ist, einfach alle Zeilen mit den Raengen loeschen
+// A little gimmick
+// Here you can define ranks depending on the number of logins. The rank will be shown
+// after the username. If you don't want this feature just leave a empty array.
 $plg_rank = array(
     '0'   => $gL10n->get('PLG_LOGIN_NEW_ONLINE_MEMBER'),
     '50'  => $gL10n->get('PLG_LOGIN_ONLINE_MEMBER'),
