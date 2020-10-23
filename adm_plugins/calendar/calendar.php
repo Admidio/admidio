@@ -7,7 +7,7 @@
  * coming. This plugin can be used to show the Admidio events andbirthdays in a
  * sidebar within Admidio or in an external website.
  *
- * Compatible with Admidio version 3.3
+ * Compatible with Admidio version 4.0
  *
  * @copyright 2004-2020 The Admidio Team
  * @see https://www.admidio.org/
@@ -33,10 +33,6 @@ $getDateId = admFuncVariableIsValid($_GET, 'date_id', 'string');
 if(!isset($plg_ajaxbox))
 {
     $plg_ajaxbox = 1;
-}
-if(!isset($plg_ajax_change))
-{
-    $plg_ajax_change = 1;
 }
 if(!isset($plg_link_target_termin))
 {
@@ -93,7 +89,7 @@ else
 }
 
 // add header content type if in ajax mode
-if($plg_ajax_change)
+if($plg_ajaxbox)
 {
     header('Content-Type: text/html; charset=utf-8');
 }
@@ -366,22 +362,22 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
 
 <table border="0" id="plgCalendarTable">
     <tr>';
-        if($plg_ajax_change)
+        if($plg_ajaxbox)
         {
             echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
                 url: \'' . ADMIDIO_URL . FOLDER_PLUGINS . '/' . $pluginFolder . '/calendar.php\',
                 cache: false,
-                data: \'ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear)).'\',
+                data: \'date_id='.date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear)).'\',
                 success: function(html) {
                     $(\'#plgCalendarContent\').replaceWith(html);
                     $(\'.admidio-calendar-link\').popover();
                 }
-            }); return false;">&laquo;</a></th>';
-            echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
-            echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
+            }); return false;">&laquo;</a></th>
+            <th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>
+            <th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
                 url: \'' . ADMIDIO_URL . FOLDER_PLUGINS . '/' . $pluginFolder . '/calendar.php\',
                 cache: false,
-                data: \'ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear)).'\',
+                data: \'date_id='.date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear)).'\',
                 success: function(html) {
                     $(\'#plgCalendarContent\').replaceWith(html);
                     $(\'.admidio-calendar-link\').popover();
@@ -664,9 +660,10 @@ if($currentMonth.$currentYear !== date('mY'))
             }
         }); return false;">'.$gL10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
 }
-echo '</div>';
-echo '<script type="text/javascript"><!--
+echo '</div>
+
+<script type="text/javascript"><!--
     $(document).ready(function() {
         $(".admidio-calendar-link").popover();
     });
-    --></script>';
+--></script>';
