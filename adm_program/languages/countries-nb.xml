@@ -118,7 +118,6 @@
   <string name="MRT">Mauretania</string>
   <string name="MUS">Mauritius</string>
   <string name="MYT">Mayotte</string>
-  <string name="MKD">Makedonia</string>
   <string name="MEX">Mexico</string>
   <string name="FSM">Mikronesia</string>
   <string name="MDA">Moldavia</string>
@@ -140,6 +139,7 @@
   <string name="NIU">Niue</string>
   <string name="PRK">Nord-Korea</string>
   <string name="NFK">Norfolkøyene</string>
+  <string name="MKD">Nord-Makedonia</string>
   <string name="NOR">Norge</string>
   <string name="OMN">Oman</string>
   <string name="AUT">Østerrike</string>
