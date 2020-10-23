@@ -213,9 +213,6 @@ class MenuNode
     {
         global $gDb, $gCurrentUser, $gValidLogin, $gL10n;
 
-        $countMenuNodes = 0;
-        $badgeCount = 0;
-
         $sql = 'SELECT men_id, men_com_id, men_name_intern, men_name, men_description, men_url, men_icon, com_name_intern
                   FROM '.TBL_MENU.'
              LEFT JOIN '.TBL_COMPONENTS.'
@@ -231,6 +228,8 @@ class MenuNode
             {
                 if($this->menuItemIsVisible($node['men_id']))
                 {
+                    $badgeCount = 0;
+
                     // special case because there are different links if you are logged in or out for mail
                     if ($gValidLogin && $node['men_name_intern'] === 'mail')
                     {
