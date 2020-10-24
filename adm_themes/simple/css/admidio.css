@@ -414,6 +414,10 @@ label {
     font-size: 80%;
 }
 
+.breadcrumb-item {
+    display: block;
+}
+
 /* Style for popover */
 .popover-header {
     color: white;
