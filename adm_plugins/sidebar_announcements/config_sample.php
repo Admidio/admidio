@@ -12,31 +12,31 @@
  ***********************************************************************************************
  */
 
-// Anzahl der Termine, die angezeigt werden sollen (Default = 2)
+// Number of announcements to be displayed (Default = 2)
 $plg_announcements_count = 2;
 
-// Soll ein Vorschau-Text der Ankündigung gezeigt werden?
-// 0 = keine Voranzeige
-// 70 = Anzahl Zeichen des Vorschau-Textes
+// Shows a short preview text of the announcement.
+// 0  - no short preview
+// 70 - Number of characters of the preview text
 $plg_show_preview = 70;
 
 // If this option is set to true (1) than the full content of the
 // description will be shown. Also images and other html content.
-// 0 = only show text preview of description
-// 1 = show full html content of description
+// 0 - only show text preview of description
+// 1 - show full html content of description
 $plgShowFullDescription = 0;
 
-// Angabe des Ziels (target) in dem die Inhalte der Links geöffnet werden sollen
-// Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
+// Specification of the target in which the contents of the links are to be opened
+// You can insert specified values of the html target attribute
 $plg_link_target = '_self';
 
-// Maximale Anzahl von Zeichen in einem Wort,
-// bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert))
+// Maximum number of characters in a word before a line break should be performed.
+// Value 0 deactivates a line break.
 $plg_max_char_per_word = 0;
 
-// Soll die Überschrift des Plugins angezeigt werden
-// 1 = (Default) Überschrift wird angezeigt
-// 0 = Überschrift wird nicht angezeigt
+// Should the headline of the plugin be displayed
+// 0 - Headline is not displayed
+// 1 - Headline is displayed (Default)
 $plg_show_headline = 1;
 
 // Set a custom headline for the plugin and also for the announcements module.

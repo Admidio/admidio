@@ -12,35 +12,37 @@
  ***********************************************************************************************
  */
 
-// Maximale Anzahl von Zeichen in einem Wort,
-// bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert))
+// Maximum number of characters in a word before a line break should be performed.
+// Value 0 deactivates a line break.
 $plg_max_char_per_word = 0;
 
-// Maximale Photobreite
-// Angabe in px, (Default = 220)
+// Maximum photo width of the preview image in pixels (Default 220)
 $plg_photos_max_width = 220;
 
-// Maximale Photohoehe
-// Angabe in px, (Default = 220)
+// Maximum photo height of the preview image in pixels (Default 220)
 $plg_photos_max_height = 220;
 
-// Zahl der Alben aus denen das Foto kommen darf, gezählt wird ab dem Aktuellsten
-// Default = 0 (Keine Einschraenkung)
+// Number of albums the photo may come from.
+// Counts from the most recent album in descending order.
+// Default = 0 (No restriction)
 $plg_photos_albums = 0;
 
-// Bildauswahl
-// 0 : (Default) Zufallsbild
-// 1 : erstes Bild etc.
+// Number of the image from the album to be displayed.
+// 0 - Random picture (Default)
+// 1 - first picture of the album
+// 2 - second picture etc.
 $plg_photos_picnr = 0;
 
-// Soll der Link zum Album unter dem Bild angezeigt werden?
+// Displays a link with the album name below the photo.
+// false - Link will not be shown
+// true  - Link will be shown (Default)
 $plg_photos_show_link = true;
 
-// Angabe des Ziels (target) in dem die Inhalte der Links geöffnet werden sollen
-// Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
+// Specification of the target in which the contents of the links are to be opened
+// You can insert specified values of the html target attribute
 $plg_link_target = '_self';
 
-// Soll die Überschrift des Plugins angezeigt werden
-// 1 = (Default) Überschrift wird angezeigt
-// 0 = Überschrift wird nicht angezeigt
+// Should the headline of the plugin be displayed
+// 0 - Headline is not displayed
+// 1 - Headline is displayed (Default)
 $plg_show_headline = 1;

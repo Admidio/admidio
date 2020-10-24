@@ -13,15 +13,15 @@
  */
 
 // What should visitors of the page see?
-// 0 = (Default) Visitors will only see the number of persons who have birthday today, nothing more.
-// 1 = Visitors will see all names (not the age) of birthday persons today, in the future and in the past
+// 0 - (Default) Visitors will only see the number of persons who have birthday today, nothing more.
+// 1 - Visitors will see all names (not the age) of birthday persons today, in the future and in the past
 $plg_show_names_extern = 0;
 
 // How should the name of the birthday child be displayed?
-// 1 = (Default) First name Last name  (John Doe)
-// 2 = Last name, First name (Doe, John)
-// 3 = First name (John)
-// 4 = Loginname (Johni)
+// 1 - (Default) First name Last name  (John Doe)
+// 2 - Last name, First name (Doe, John)
+// 3 - First name (John)
+// 4 - Loginname (Johni)
 $plg_show_names = 1;
 
 // Show the age of the birthday person (only for registered users)
@@ -31,13 +31,13 @@ $plg_show_age = 0;
 
 // From which age of the birthday children the first name will be replaced
 // by the salutation for visitors?
-// 18 = (Default)
+// 18 - (Default)
 // If you don't want to use this function set the value to 99
 $plg_show_alter_anrede = 18;
 
 // Should the reference to the fact that there are no birthday children be omitted?
-// 0 = (Default) The reference will be shown
-// 1 = The reference will not be shown
+// 0 - (Default) The reference will be shown
+// 1 - The reference will not be shown
 $plg_show_hinweis_keiner = 0;
 
 // Show all birthdays in the last x days
@@ -48,9 +48,9 @@ $plg_show_future = 10;
 
 // Should the e-mail address be linked to visitors?
 // Registered users always have a link to the mail module
-// 0 = (Default) Only the name of visitors without e-mail will be shown
-// 1 = Name with e-mail will be shown for visitors
-// 2 = Only the name without e-mail will be shown for visitors and registered users
+// 0 - (Default) Only the name of visitors without e-mail will be shown
+// 1 - Name with e-mail will be shown for visitors
+// 2 - Only the name without e-mail will be shown for visitors and registered users
 $plg_show_email_extern = 0;
 
 // Specification of the target in which the contents of the links are to be opened
@@ -67,6 +67,6 @@ $plg_rolle_sql = array();
 $plg_sort_sql = 'DESC';
 
 // Should the header of the plugin be displayed?
-// 1 = (Default) Header should be shown
-// 0 = Header should not be shown
+// 1 - (Default) Header should be shown
+// 0 - Header should not be shown
 $plg_show_headline = 1;

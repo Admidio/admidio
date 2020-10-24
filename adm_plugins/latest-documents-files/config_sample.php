@@ -24,6 +24,6 @@ $plgMaxCharsFilename = 0;
 $plg_show_upload_timestamp = true;
 
 // Should the headline of the plugin be shown
-// 1 = (Default) Headline should be shown
-// 0 = Headline should not be shown
+// 1 - (Default) Headline should be shown
+// 0 - Headline should not be shown
 $plg_show_headline = 1;
