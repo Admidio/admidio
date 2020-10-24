@@ -75,11 +75,11 @@ if(Component::isVisible('DOCUMENTS-FILES'))
 
     if($filesStatement->rowCount() > 0)
     {
+        echo '<div class="btn-group-vertical" role="group">';
+
         while($rowFile = $filesStatement->fetch())
         {
             $errorCode = '';
-
-            echo '<div class="btn-group-vertical" role="group">';
 
             try
             {
@@ -131,9 +131,9 @@ if(Component::isVisible('DOCUMENTS-FILES'))
                     break;
                 }
             }
-
-            echo '</div>';
         }
+
+        echo '</div>';
     }
 
     if($countVisibleDownloads === 0)
