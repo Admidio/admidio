@@ -56,5 +56,9 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="490" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_download_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'documents_files_enable_module'</step>
     <step id="500" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_download_module' AND pr1.prf_name = 'documents_files_enable_module'</step>
     <step id="510">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_download_module'</step>
+    <step id="520">UPDATE %PREFIX%_menu SET men_name = 'SYS_ANNOUNCEMENTS', men_description = 'SYS_ANNOUNCEMENTS_DESC' WHERE men_name_intern = 'announcements'</step>
+    <step id="530">UPDATE %PREFIX%_components SET com_name = 'SYS_ANNOUNCEMENTS' WHERE com_name_intern = 'ANNOUNCEMENTS'</step>
+    <step id="540">UPDATE %PREFIX%_menu SET men_name = 'SYS_DATABASE_BACKUP', men_description = 'SYS_DATABASE_BACKUP_DESC' WHERE men_name_intern = 'dbback'</step>
+    <step id="550">UPDATE %PREFIX%_components SET com_name = 'SYS_DATABASE_BACKUP' WHERE com_name_intern = 'BACKUP'</step>
     <step>stop</step>
 </update>
