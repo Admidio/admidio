@@ -231,6 +231,7 @@ if ($getMode === 1)
                 {
                     $(this).prop("disabled", true);
                     $(this).html("<i class=\"fas fa-sync fa-spin\"></i> ' . $gL10n->get('INS_DATABASE_IS_UPDATED') . '");
+                    $("#update_login_form").submit();
                 }
             });', true);
         $page->assign('installedDbVersion', $installedDbVersion);
@@ -252,9 +253,9 @@ if ($getMode === 1)
             );
         }
 
-        $form->addSubmitButton(
+        $form->addButton(
             'next_page', $gL10n->get('INS_UPDATE_DATABASE'),
-            array('icon' => 'fa-sync')
+            array('icon' => 'fa-sync', 'class' => 'btn-primary')
         );
 
         $page->addHtml($form->show());
