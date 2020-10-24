@@ -65,6 +65,7 @@ class HtmlPageInstallation extends HtmlPage
         global $gDebug, $gCurrentOrganization, $gValidLogin, $gL10n;
 
         $this->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
+        $this->assign('id', $this->id);
         $this->assign('title', $this->title);
         $this->assign('headline', $this->headline);
         $this->assign('urlPreviousPage', $this->urlPreviousPage);
