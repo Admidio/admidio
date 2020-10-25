@@ -46,6 +46,9 @@ $plg_show_zeitraum = 5;
 // Show all birthdays of the next x days
 $plg_show_future = 10;
 
+// How many birthdays should bei displayed as a maximum?
+$plg_show_display_limit = 200;
+
 // Should the e-mail address be linked to visitors?
 // Registered users always have a link to the mail module
 // 0 - (Default) Only the name of visitors without e-mail will be shown
