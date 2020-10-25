@@ -26,8 +26,8 @@ require_once(__DIR__ . '/../../system/common.php');
 // Initialize and check the parameters
 $getPhotoId   = admFuncVariableIsValid($_GET, 'pho_id',     'int', array('requireValue' => true));
 $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',   'int');
-$getMaxWidth  = admFuncVariableIsValid($_GET, 'max_width',  'int');
-$getMaxHeight = admFuncVariableIsValid($_GET, 'max_height', 'int');
+$getMaxWidth  = admFuncVariableIsValid($_GET, 'max_width',  'int', array('defaultValue' => 0));
+$getMaxHeight = admFuncVariableIsValid($_GET, 'max_height', 'int', array('defaultValue' => 0));
 $getThumbnail = admFuncVariableIsValid($_GET, 'thumb',      'bool');
 
 // check if the module is enabled and disallow access if it's disabled
@@ -126,9 +126,18 @@ else
     {
         $picPath = THEME_PATH . '/images/no_photo_found.png';
     }
-    // Bild einlesen und scalieren
+
+    // read image from filesystem and scale it if necessary
     $image = new Image($picPath);
-    $image->scale($getMaxWidth, $getMaxHeight);
+    if($getMaxWidth > 0 || $getMaxHeight > 0)
+    {
+        $image->scale($getMaxWidth, $getMaxHeight);
+    }
+    else
+    {
+        // image should not be scaled so read the size of the image
+        list($getMaxWidth, $getMaxHeight) = $image->getImageSize();
+    }
 }
 
 if ($image !== null)

@@ -305,7 +305,7 @@ function admFuncProcessableImageSize()
  *                                          Datatype **date** expects a date that has the Admidio default format from the
  *                                          preferences or the english date format **Y-m-d**
  * @param array<string,mixed> $options      (optional) An array with the following possible entries:
- *                                          - Value : A value that will be set if the variable has no value
+ *                                          - defaultValue : A value that will be set if the variable has no value
  *                                          - **requireValue** : If set to **true** than a value is required otherwise the function
  *                                                              returns an error
  *                                          - **validValues** :  An array with all values that the variable could have. If another

@@ -16,11 +16,15 @@
 // Value 0 deactivates a line break.
 $plg_max_char_per_word = 0;
 
-// Maximum photo width of the preview image in pixels (Default 220)
-$plg_photos_max_width = 220;
+// Maximum photo width of the preview image in pixels (Default 0)
+// If it's set to 0 then the image will be dynamically scaled by the html container in
+// which this plugin is placed.
+$plg_photos_max_width = 0;
 
-// Maximum photo height of the preview image in pixels (Default 220)
-$plg_photos_max_height = 220;
+// Maximum photo height of the preview image in pixels (Default 0)
+// If it's set to 0 then the image will be dynamically scaled by the html container in
+// which this plugin is placed.
+$plg_photos_max_height = 0;
 
 // Number of albums the photo may come from.
 // Counts from the most recent album in descending order.
