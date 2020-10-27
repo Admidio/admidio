@@ -267,6 +267,8 @@ switch($getMode)
         if($gL10n->getLanguage() !== $gSettingsManager->getString('system_language'))
         {
             $gL10n->setLanguage($gSettingsManager->getString('system_language'));
+            // reload menu with new language
+            $gMenu->initialize();
         }
 
         // clean up
