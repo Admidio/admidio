@@ -260,7 +260,10 @@ if($numberBirthdays > 0)
     {
         echo '<ul id="plgBirthdayNameList">';
 
-            while($row = $birthdayStatement->fetch())
+        // how many birthdays should be displayed (as a maximum)
+        $birthdayCount = null; 
+
+            while($row = $birthdayStatement->fetch() AND $birthdayCount < $plg_show_display_limit)
             {
                 // the display type of the name
                 switch ($plg_show_names)
@@ -363,6 +366,9 @@ if($numberBirthdays > 0)
                 echo '<li><span id="'.$plgCssClass.'">'.
                     $gL10n->get($birthdayText, array($plgShowName, $plgDays, $row['age'], $birthdayDate->format($gSettingsManager->getString('system_date')))).
                 '</span></li>';
+
+                // counting displayed birthdays
+                $birthdayCount++;
             }
         echo '</ul>';
     }
