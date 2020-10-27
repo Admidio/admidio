@@ -74,6 +74,10 @@ if(!isset($plg_show_future) || !is_numeric($plg_show_future))
 {
     $plg_show_future = 10;
 }
+if(!isset($plg_show_display_limit) || !is_numeric($plg_show_display_limit))
+{
+    $plg_show_display_limit = 200;
+}
 // Prüfen, ob die Rollenbedingung gesetzt wurde
 if(isset($plg_rolle_sql) && count($plg_rolle_sql) > 0)
 {
@@ -261,7 +265,7 @@ if($numberBirthdays > 0)
         echo '<ul id="plgBirthdayNameList">';
 
         // how many birthdays should be displayed (as a maximum)
-        $birthdayCount = null; 
+        $birthdayCount = null;
 
             while($row = $birthdayStatement->fetch() AND $birthdayCount < $plg_show_display_limit)
             {
