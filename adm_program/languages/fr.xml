@@ -1055,7 +1055,7 @@
   <string name="SYS_GEN_RANDOM_ERROR">Une erreur inattendue s\'est produite lors de la génération d\'un nombre aléatoire.\nCode d\'erreur : #VAR1#\nMessage d\'erreur : #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">Le programme ne peut pas générer des nombres aléatoires.\nCode d\'erreur : #VAR1#\nMessage d\'erreur : #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Le programme attend une chaîne de caractères avec au moins 2 caractères différents.</string>
-  <string name="SYS_GROUPS_ROLES">Groupes & amp; rôles.</string>
+  <string name="SYS_GROUPS_ROLES">Groupes &amp; rôles.</string>
   <string name="SYS_GROUPS_ROLES_DESC">Vue d\'ensemble et gestion de tous les groupes et rôles de l\'organisation. Différentes listes de membres peuvent être affichées, exportées et des listes propres peuvent être créées.</string>
   <string name="SYS_HALF_YEARLY">Semestriel</string>
   <string name="SYS_HEADER_ALREADY_SENT">Les en-têtes HTTP ont déjà été envoyés !</string>
