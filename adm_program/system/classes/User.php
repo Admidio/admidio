@@ -1825,13 +1825,13 @@ class User extends TableAccess
         }
 
         // get the saved cost value that fits your server performance best and rehash your password
-        $cost = 10;
+        $options = array('cost' => 10);
         if (isset($gSettingsManager) && $gSettingsManager->has('system_hashing_cost'))
         {
-            $cost = (int) $gSettingsManager->getInt('system_hashing_cost');
+            $options['cost'] = $gSettingsManager->getInt('system_hashing_cost');
         }
 
-        $newPasswordHash = PasswordUtils::hash($newPassword, $gPasswordHashAlgorithm, array('cost' => $cost));
+        $newPasswordHash = PasswordUtils::hash($newPassword, $gPasswordHashAlgorithm, $options);
 
         if ($newPasswordHash === false)
         {

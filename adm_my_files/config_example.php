@@ -50,5 +50,5 @@ $gTimezone = 'Europe/Berlin';
 $gLoginForUpdate = 1;
 
 // Set the preferred password hashing algorithm.
-// Possible values are: 'DEFAULT', 'BCRYPT', 'SHA512'
+// Possible values are: 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT', 'SHA512'
 $gPasswordHashAlgorithm = 'DEFAULT';
