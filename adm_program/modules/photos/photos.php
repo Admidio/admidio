@@ -231,7 +231,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
     }
 
     // create thumbnail container
-    $page->addHtml('<div class="row admidio-album-container mb-5">');
+    $page->addHtml('<div class="row admidio-row">');
 
     for ($actThumbnail = $firstPhotoNr; $actThumbnail <= $lastPhotoNr && $actThumbnail <= $photoAlbum->getValue('pho_quantity'); ++$actThumbnail)
     {
@@ -252,7 +252,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
                 elseif ((int) $gSettingsManager->get('photo_show_mode') === 1)
                 {
                     $photoThumbnailTable .= '
-                        <a data-gallery="admidio-gallery" data-type="image" data-parent=".admidio-album-container" data-toggle="lightbox" data-title="'.$headline.'"
+                        <a data-gallery="admidio-gallery" data-type="image" data-parent=".admidio-row" data-toggle="lightbox" data-title="'.$headline.'"
                             href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $actThumbnail, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
                             class="rounded" id="img_'.$actThumbnail.'" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" alt="'.$actThumbnail.'" /></a>';
                 }
@@ -388,128 +388,128 @@ $sql .= '
 
 $albumStatement = $gDb->queryPrepared($sql, $queryParams);
 $albumList      = $albumStatement->fetchAll();
+$albumsCount    = $albumStatement->rowCount();
 
-// Gesamtzahl der auszugebenden Alben
-$albumsCount = $albumStatement->rowCount();
-
-// falls zum aktuellen Album Fotos und Unteralben existieren,
-// dann einen Trennstrich zeichnen
-if ($albumsCount > 0 && $photoAlbum->getValue('pho_quantity') > 0)
+if($albumsCount > 0)
 {
-    $page->addHtml('<hr />');
-}
-
-$childPhotoAlbum = new TablePhotos($gDb);
-
-$page->addHtml('<div class="row">');
-
-for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_per_page') - 1 && $x < $albumsCount; ++$x)
-{
-    $htmlLock = '';
-    // Daten in ein Photo-Objekt uebertragen
-    $childPhotoAlbum->clear();
-    $childPhotoAlbum->setArray($albumList[$x]);
-
-    // folder of the album
-    $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $childPhotoAlbum->getValue('pho_id');
-
-    // show album if album is not locked or it has child albums or the user has the photo module edit right
-    if ((is_dir($albumFolder) && $childPhotoAlbum->getValue('pho_locked') == 0)
-    || $childPhotoAlbum->hasChildAlbums() || $gCurrentUser->editPhotoRight())
+    // if there are photos in the current album and sub albums exists, than show a separator
+    if ($photoAlbum->getValue('pho_quantity') > 0)
     {
-        // Zufallsbild fuer die Vorschau ermitteln
-        $shuffleImage = $childPhotoAlbum->shuffleImage();
+        $page->addHtml('<hr />');
+    }
 
-        // Album angaben
-        if (is_dir($albumFolder) || $childPhotoAlbum->hasChildAlbums())
+    $childPhotoAlbum = new TablePhotos($gDb);
+
+    $page->addHtml('<div class="row admidio-row">');
+
+    for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_per_page') - 1 && $x < $albumsCount; ++$x)
+    {
+        $htmlLock = '';
+        // Daten in ein Photo-Objekt uebertragen
+        $childPhotoAlbum->clear();
+        $childPhotoAlbum->setArray($albumList[$x]);
+
+        // folder of the album
+        $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $childPhotoAlbum->getValue('pho_id');
+
+        // show album if album is not locked or it has child albums or the user has the photo module edit right
+        if ((is_dir($albumFolder) && $childPhotoAlbum->getValue('pho_locked') == 0)
+        || $childPhotoAlbum->hasChildAlbums() || $gCurrentUser->editPhotoRight())
         {
-            $albumTitle = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">'.$childPhotoAlbum->getValue('pho_name').'</a>';
-        }
-        else
-        {
-            $albumTitle = $childPhotoAlbum->getValue('pho_name');
-        }
+            // Zufallsbild fuer die Vorschau ermitteln
+            $shuffleImage = $childPhotoAlbum->shuffleImage();
 
-        $albumDate = $childPhotoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
-        if ($childPhotoAlbum->getValue('pho_end') !== $childPhotoAlbum->getValue('pho_begin'))
-        {
-            $albumDate .= ' '.$gL10n->get('SYS_DATE_TO').' '.$childPhotoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'));
-        }
+            // Album angaben
+            if (is_dir($albumFolder) || $childPhotoAlbum->hasChildAlbums())
+            {
+                $albumTitle = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">'.$childPhotoAlbum->getValue('pho_name').'</a>';
+            }
+            else
+            {
+                $albumTitle = $childPhotoAlbum->getValue('pho_name');
+            }
 
-        $page->addHtml('
-            <div class="col-sm-6 col-lg-4 col-xl-3" id="panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id').'">
-                <div class="card admidio-album">
-                    <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'"><img
-                        class="card-img-top" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $shuffleImage['shuffle_pho_id'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)).'" alt="'.$gL10n->get('SYS_PHOTOS').'" /></a>
-                    <div class="card-body">
-                        <h5 class="card-title">'.$albumTitle);
+            $albumDate = $childPhotoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
+            if ($childPhotoAlbum->getValue('pho_end') !== $childPhotoAlbum->getValue('pho_begin'))
+            {
+                $albumDate .= ' '.$gL10n->get('SYS_DATE_TO').' '.$childPhotoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'));
+            }
 
-                            // if user has admin rights for photo module then show some functions
-                            if ($gCurrentUser->editPhotoRight())
-                            {
-                                if ($childPhotoAlbum->getValue('pho_locked') != 1)
+            $page->addHtml('
+                <div class="col-sm-6 col-lg-4 col-xl-3" id="panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id').'">
+                    <div class="card admidio-album">
+                        <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'"><img
+                            class="card-img-top" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $shuffleImage['shuffle_pho_id'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)).'" alt="'.$gL10n->get('SYS_PHOTOS').'" /></a>
+                        <div class="card-body">
+                            <h5 class="card-title">'.$albumTitle);
+
+                                // if user has admin rights for photo module then show some functions
+                                if ($gCurrentUser->editPhotoRight())
                                 {
-                                    $htmlLock = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'lock')).'">
-                                        <i class="fas fa-lock" data-toggle="tooltip" title="'.$gL10n->get('PHO_ALBUM_LOCK').'"></i></a>';
+                                    if ($childPhotoAlbum->getValue('pho_locked') != 1)
+                                    {
+                                        $htmlLock = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'lock')).'">
+                                            <i class="fas fa-lock" data-toggle="tooltip" title="'.$gL10n->get('PHO_ALBUM_LOCK').'"></i></a>';
+                                    }
+
+                                    $page->addHtml('<div class="float-right">
+                                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'change')).'">
+                                            <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
+                                        ' . $htmlLock . '
+                                        <a class="admidio-icon-link openPopup" href="javascript:void(0);"
+                                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id'),
+                                            'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">
+                                            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>
+                                        </div>
+                                    ');
                                 }
 
-                                $page->addHtml('<div class="float-right">
-                                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'change')).'">
-                                        <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
-                                    ' . $htmlLock . '
-                                    <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id'),
-                                        'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">
-                                        <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>
-                                    </div>
-                                ');
-                            }
 
+                            $page->addHtml('</h5>
 
-                        $page->addHtml('</h5>
+                            <p class="card-text">' . $albumDate . '</p>');
 
-                        <p class="card-text">' . $albumDate . '</p>');
-
-                        if (strlen($childPhotoAlbum->getValue('pho_description')) > 0)
-                        {
-                            $description = $childPhotoAlbum->getValue('pho_description');
-
-                            if(strlen($description) > 400)
+                            if (strlen($childPhotoAlbum->getValue('pho_description')) > 0)
                             {
-                                $description = substr($description, 0, 400) . ' ...';
+                                $description = $childPhotoAlbum->getValue('pho_description');
+
+                                if(strlen($description) > 400)
+                                {
+                                    $description = substr($description, 0, 400) . ' ...';
+                                }
+                                $page->addHtml('<p class="card-text">' . $description . '</p>');
                             }
-                            $page->addHtml('<p class="card-text">' . $description . '</p>');
-                        }
 
-                        $page->addHtml('<p class="card-text">' . $childPhotoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $childPhotoAlbum->getValue('pho_photographers') . '</p>');
+                            $page->addHtml('<p class="card-text">' . $childPhotoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $childPhotoAlbum->getValue('pho_photographers') . '</p>');
 
-                        // Notice for users with foto edit rights that the folder of the album doesn't exists
-                        if (!is_dir($albumFolder) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight())
-                        {
-                            $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('PHO_FOLDER_NOT_FOUND').'</div></p>');
-                        }
+                            // Notice for users with foto edit rights that the folder of the album doesn't exists
+                            if (!is_dir($albumFolder) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight())
+                            {
+                                $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('PHO_FOLDER_NOT_FOUND').'</div></p>');
+                            }
 
-                        // Notice for users with foto edit right that this album is locked
-                        if ($childPhotoAlbum->getValue('pho_locked') == 1)
-                        {
-                            $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div></p>');
-                        }
+                            // Notice for users with foto edit right that this album is locked
+                            if ($childPhotoAlbum->getValue('pho_locked') == 1)
+                            {
+                                $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div></p>');
+                            }
 
-                        if ($gCurrentUser->editPhotoRight() && $childPhotoAlbum->getValue('pho_locked') == 1)
-                        {
-                            $page->addHtml('<button class="btn btn-primary" style="width: 50%;" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'unlock')).'\'">
-                                '.$gL10n->get('PHO_ALBUM_UNLOCK').'
-                            </button>');
-                        }
+                            if ($gCurrentUser->editPhotoRight() && $childPhotoAlbum->getValue('pho_locked') == 1)
+                            {
+                                $page->addHtml('<button class="btn btn-primary" style="width: 50%;" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'unlock')).'\'">
+                                    '.$gL10n->get('PHO_ALBUM_UNLOCK').'
+                                </button>');
+                            }
 
-                        $page->addHtml('</div>
+                            $page->addHtml('</div>
+                    </div>
                 </div>
-            </div>
-        ');
-    }//Ende wenn Ordner existiert
-}//for
+            ');
+        }//Ende wenn Ordner existiert
+    }//for
 
-$page->addHtml('</div>');
+    $page->addHtml('</div>');
+}
 
 /****************************Leeres Album****************/
 // Falls das Album weder Fotos noch Unterordner enthaelt

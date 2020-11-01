@@ -220,7 +220,7 @@ foreach($listsResult['recordset'] as $row)
                 $page->addHtml('</div>');
             }
             $page->addHtml('<h2>' . $role->getValue('cat_name') . '</h2>
-            <div class="row mb-5">');
+            <div class="row admidio-row">');
             $previousCategoryId = $catId;
         }
 

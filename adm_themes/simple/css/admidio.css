@@ -161,7 +161,7 @@ a.btn-primary {
 .admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, .admidio-img-presenter,
 .navbar-filter, .table-responsive, .admidio-content-header,
-.dataTables_wrapper, .admidio-margin-bottom {
+.dataTables_wrapper, .admidio-margin-bottom, .admidio-row {
     margin-bottom: 40px;
 }
 
