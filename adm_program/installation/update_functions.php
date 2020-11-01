@@ -77,7 +77,7 @@ function updateOrgPreferences()
     $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
     $updateOrgPreferences = array();
 
-    if (is_float($benchmarkResults['options']['time'])) {
+    if (is_int($benchmarkResults['options']['cost'])) {
         $updateOrgPreferences = array('system_hashing_cost' => $benchmarkResults['options']['cost']);
     }
 
