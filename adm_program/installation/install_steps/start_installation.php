@@ -209,7 +209,7 @@ $defaultOrgPreferences['system_language']     = $language;
 
 // calculate the best cost value for your server performance
 $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
-if (is_float($benchmarkResults['options']['time'])) {
+if (is_int($benchmarkResults['options']['cost'])) {
     $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['options']['cost'];
 }
 

@@ -75,7 +75,9 @@ function updateOrgPreferences()
 
     // calculate the best cost value for your server performance
     $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
-    if (is_float($benchmarkResults['options']['time'])) {
+    $updateOrgPreferences = array();
+
+    if (is_int($benchmarkResults['options']['cost'])) {
         $updateOrgPreferences = array('system_hashing_cost' => $benchmarkResults['options']['cost']);
     }
 
