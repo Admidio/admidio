@@ -165,10 +165,6 @@ a.btn-primary {
     margin-bottom: 40px;
 }
 
-.admidio-weblink-item {
-    margin-bottom: 20px;
-}
-
 /* add 5px distance to all icons within a icon text combination */
 .admidio-icon-chain, .nav-link .fas, .btn .fas, .alert .fas,
 .admidio-profile-user-right .fas, .checkbox .fas, input[type="radio"],

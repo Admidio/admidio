@@ -158,7 +158,7 @@ else
                     <div class="card-body">');
             }
 
-            $page->addHtml('<div class="admidio-weblink-item" id="lnk_'.$lnkId.'">');
+            $page->addHtml('<div class="mb-4" id="lnk_'.$lnkId.'">');
 
                 // show weblink
                 $page->addHtml('
