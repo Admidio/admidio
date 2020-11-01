@@ -48,8 +48,16 @@ else
     $headline = $gL10n->get('SYS_DOCUMENTS_FILES').' - '.$currentFolder->getValue('fol_name');
 }
 
-// Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline);
+if($getFolderId > 0)
+{
+    // URL auf Navigationstack ablegen
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+}
+else
+{
+    // Navigation of the module starts here
+    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+}
 
 $getFolderId = (int) $currentFolder->getValue('fol_id');
 
@@ -62,19 +70,6 @@ $navigationBar = $currentFolder->getNavigationForDownload();
 // create html page object
 $page = new HtmlPage('admidio-documents-files', $headline);
 
-$page->addJavascript('
-    $("body").on("hidden.bs.modal", ".modal", function() {
-        $(this).removeData("bs.modal");
-        location.reload();
-    });
-
-    $("#menu_item_documents_upload_files").attr("href", "javascript:void(0);");
-    $("#menu_item_documents_upload_files").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)).'");
-    $("#menu_item_documents_upload_files").attr("class", "nav-link openPopup");
-    ',
-    true
-);
-
 if ($currentFolder->hasUploadRight())
 {
     // upload only possible if upload filesize > 0
@@ -86,7 +81,7 @@ if ($currentFolder->hasUploadRight())
             'fa-plus-circle');
 
         $page->addPageFunctionsMenuItem('menu_item_documents_upload_files', $gL10n->get('SYS_UPLOAD_FILES'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'downloads', 'id' => $getFolderId)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'documents_files', 'id' => $getFolderId)),
             'fa-upload');
     }
 
@@ -99,7 +94,7 @@ if ($currentFolder->hasUploadRight())
 }
 
 // Create table object
-$downloadOverview = new HtmlTable('tbl_downloads', $page, true, true);
+$downloadOverview = new HtmlTable('tbl_documents_files', $page, true, true);
 
 // create array with all column heading values
 $columnHeading = array(
@@ -264,7 +259,7 @@ if ($gCurrentUser->editDownloadRight())
         $htmlAdminTableHeadline = '<h2>'.$gL10n->get('SYS_UNMANAGED_FILES').HtmlForm::getHelpTextIcon('SYS_ADDITIONAL_FILES').'</h2>';
 
         // Create table object
-        $adminTable = new HtmlTable('tbl_downloads', $page, true);
+        $adminTable = new HtmlTable('tbl_documents_files', $page, true);
         $adminTable->setColumnAlignByArray(array('left', 'left', 'left', 'right'));
 
         // create array with all column heading values

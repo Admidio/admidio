@@ -702,7 +702,6 @@
   <string name="PHO_PHOTO_SEND_ECARD">Send photo as greeting card</string>
   <string name="PHO_PHOTO_UPLOAD_DESC">Please select the images which you want to upload to album #VAR1_BOLD#.</string>
   <string name="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL">Not all photos were successfully uploaded.</string>
-  <string name="PHO_PHOTO_UPLOAD_SUCCESSFUL">All photos were successfully uploaded.\n\nYou can close the dialog now.</string>
   <string name="PHO_PHOTOGRAPHER">Photos of</string>
   <string name="PHO_PHOTOS_DESC">Pictures of events can be uploaded and displayed. Pictures can be organized in albums which can be interlinked.</string>
   <string name="PHO_POPUP_WINDOW">Popup window</string>
@@ -840,7 +839,9 @@
   <string name="SYS_AVAILABLE">Available</string>
   <string name="SYS_AVAILABLE_BETA">Available Beta</string>
   <string name="SYS_BACK">Back</string>
+  <string name="SYS_BACK_TO_ALBUM">Back to album</string>
   <string name="SYS_BACK_TO_BACKUP_PAGE">Back to backup page</string>
+  <string name="SYS_BACK_TO_FOLDER">Back to folder</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Back to module overview</string>
   <string name="SYS_BACKUP_COMPLETED">Backup created in #VAR1#</string>
   <string name="SYS_BACKUP_FILE">Backup file</string>
@@ -1022,7 +1023,7 @@
   <string name="SYS_FILE_TYPE">File type</string>
   <string name="SYS_FILE_UPLOADED">File #VAR1_BOLD# was uploaded.</string>
   <string name="SYS_FILE_UPLOADS">File uploads</string>
-  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">All files were uploaded successfully.\n\nDialog can be closed.</string>
+  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">All files were uploaded successfully.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Not all files were uploaded successfully.</string>
   <string name="SYS_FILES_UPLOAD_DESC">Please select all files to be uploaded into the folder #VAR1_BOLD#</string>
   <string name="SYS_FILENAME_EMPTY">Filename is missing!</string>
@@ -1219,6 +1220,7 @@
   <string name="SYS_PHONE">Phone</string>
   <string name="SYS_PHONE_INVALID_CHAR">The phone number in the field #VAR1_BOLD# has invalid characters.\n\nAllowed are only numbers 0-9 and the special characters +-/ ().</string>
   <string name="SYS_PHOTO">Photo</string>
+  <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">All photos were successfully uploaded.</string>
   <string name="SYS_PHOTOS">Photos</string>
   <string name="SYS_PHOTO_OF_VAR">Photo of #VAR1#</string>
   <string name="SYS_PHP">PHP</string>

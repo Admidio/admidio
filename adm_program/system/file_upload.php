@@ -20,19 +20,14 @@ require_once(__DIR__ . '/common.php');
 require(__DIR__ . '/login_valid.php');
 
 // Initialize and check the parameters
-$getModule = admFuncVariableIsValid($_GET, 'module', 'string', array('validValues' => array('photos', 'downloads')));
+$getModule = admFuncVariableIsValid($_GET, 'module', 'string', array('validValues' => array('photos', 'documents_files')));
 $getMode   = admFuncVariableIsValid($_GET, 'mode',   'string', array('defaultValue' => 'choose_files', 'validValues' => array('choose_files', 'upload_files')));
 $getId     = admFuncVariableIsValid($_GET, 'id',     'int',    array('requireValue' => true));
 
 // Initialize variables
+$destinationName         = '';
 $uploadDir               = '';
 $uploadUrl               = '';
-$headline                = '';
-$textFileUploaded        = '';
-$textUploadSuccessful    = '';
-$textUploadNotSuccessful = '';
-$textUploadDescription   = '';
-$textSelectFiles         = '';
 
 // module specific checks
 if($getModule === 'photos')
@@ -71,15 +66,9 @@ if($getModule === 'photos')
 
     $uploadDir = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/';
     $uploadUrl = ADMIDIO_URL . FOLDER_DATA . '/photos/upload/';
-
-    $headline = $gL10n->get('PHO_UPLOAD_PHOTOS');
-    $textFileUploaded = $gL10n->get('PHO_FILE_UPLOADED');
-    $textUploadSuccessful = $gL10n->get('PHO_PHOTO_UPLOAD_SUCCESSFUL');
-    $textUploadNotSuccessful = $gL10n->get('PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL');
-    $textUploadDescription = $gL10n->get('PHO_PHOTO_UPLOAD_DESC', array($photoAlbum->getValue('pho_name')));
-    $textSelectFiles = $gL10n->get('PHO_SELECT_FOTOS');
+    $destinationName = $photoAlbum->getValue('pho_name');
 }
-elseif($getModule === 'downloads')
+elseif($getModule === 'documents_files')
 {
     if (!$gSettingsManager->getBool('documents_files_enable_module'))
     {
@@ -110,19 +99,13 @@ elseif($getModule === 'downloads')
         $folderPath = $folder->getFolderPath() . '/';
         $uploadDir = ADMIDIO_PATH . $folderPath;
         $uploadUrl = ADMIDIO_URL . $folderPath;
+        $destinationName = $folder->getValue('fol_name');
     }
     catch(AdmException $e)
     {
         $e->showHtml();
         // => EXIT
     }
-
-    $headline = $gL10n->get('SYS_UPLOAD_FILES');
-    $textFileUploaded = $gL10n->get('SYS_FILE_UPLOADED');
-    $textUploadSuccessful = $gL10n->get('SYS_FILES_UPLOAD_SUCCESSFUL');
-    $textUploadNotSuccessful = $gL10n->get('SYS_FILES_UPLOAD_NOT_SUCCESSFUL');
-    $textUploadDescription = $gL10n->get('SYS_FILES_UPLOAD_DESC', array($folder->getValue('fol_name')));
-    $textSelectFiles = $gL10n->get('SYS_SELECT_FILES');
 }
 
 // check if the server allow file uploads
@@ -145,84 +128,16 @@ if($getMode === 'choose_files')
         // TODO
     }
 
+    $gNavigation->addUrl(CURRENT_URL);
+
     // create html page object
     $page = new HtmlPage('admidio-file-upload');
-    $page->setInlineMode();
+    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
-    $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/css/jquery.fileupload.css');
-    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/js/vendor/jquery.ui.widget.js');
-    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/js/jquery.iframe-transport.js');
-    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/js/jquery.fileupload.js');
+    $fileUpload = new FileUpload($page, $getModule, $getId);
+    $fileUpload->setHeaderData();
 
-    $page->addJavascript('
-        var countErrorFiles = 0;
-        var countFiles      = 0;
-
-        $(function() {
-            "use strict";
-            $("#fileupload").fileupload({
-                url: "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => $getModule, 'mode' => 'upload_files', 'id' => $getId)).'",
-                sequentialUploads: true,
-                dataType: "json",
-                add: function(e, data) {
-                    $("#files").html("");
-                    countErrorFiles = 0;
-                    countFiles = 0;
-                    data.submit();
-                },
-                done: function(e, data) {
-                    $.each(data.result.files, function(index, file) {
-                        if (typeof file.error !== "undefined") {
-                            $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"fas fa-exclamation-circle\"></i>"
-                                + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
-                            countErrorFiles++;
-                        } else {
-                            var message = "'.$textFileUploaded.'";
-                            var newMessage = message.replace("#VAR1_BOLD#", "<strong>" + file.name + "</strong>");
-                            $("<p/>").html(newMessage).appendTo("#files");
-                            countFiles++
-                        }
-                    });
-                },
-                progressall: function(e, data) {
-                    var progress = parseInt(data.loaded / data.total * 100, 10);
-                    $("#progress .progress-bar").css(
-                        "width",
-                        progress + "%"
-                    );
-                },
-                stop: function(e, data) {
-                    if (countErrorFiles === 0 && countFiles > 0) {
-                        $("<p/>").html("<div class=\"alert alert-success\"><i class=\"fas fa-check\"></i>'.$textUploadSuccessful.'</div>").appendTo("#files");
-                    } else {
-                        $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"fas fa-exclamation-circle\"></i>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
-                    }
-                }
-            }).prop("disabled", !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : "disabled");
-        });',
-        true
-    );
-
-    $page->addHtml('
-        <div class="modal-header">
-            <h3 class="modal-title">'.$headline.'</h3>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="modal-body">
-            <p class="lead">'.$textUploadDescription.'</p>
-
-            <span class="btn btn-primary fileinput-button">
-                <i class="fas fa-upload"></i>'.$textSelectFiles.'
-                <input id="fileupload" type="file" name="files[]" multiple>
-            </span>
-            <br />
-            <br />
-            <div id="progress" class="progress">
-                <div class="progress-bar progress-bar-success"></div>
-            </div>
-            <div id="files" class="files"></div>
-        </div>
-    ');
+    $page->addHtml($fileUpload->getHtml($destinationName));
     $page->show();
 }
 elseif($getMode === 'upload_files')
@@ -241,7 +156,7 @@ elseif($getMode === 'upload_files')
             array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID'))
         );
     }
-    elseif($getModule === 'downloads')
+    elseif($getModule === 'documents_files')
     {
         $uploadHandler = new UploadHandlerDownload(array(
             'upload_dir'     => $uploadDir,

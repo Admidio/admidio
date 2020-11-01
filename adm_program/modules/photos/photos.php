@@ -77,14 +77,16 @@ else
     $headline = $getHeadline;
 }
 
-// Wurde keine Album uebergeben kann das Navigationsstack zurueckgesetzt werden
-if ($getPhotoId === 0)
-{
-    $gNavigation->clear();
+if($getPhotoId > 0)
+{
+    // URL auf Navigationstack ablegen
+    $gNavigation->addUrl(CURRENT_URL, $headline);
 }
-
-// URL auf Navigationstack ablegen
-$gNavigation->addUrl(CURRENT_URL, $headline);
+else
+{
+    // Navigation of the module starts here
+    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+}
 
 // create html page object
 $page = new HtmlPage('admidio-photos', $headline);
@@ -130,18 +132,6 @@ if ((int) $gSettingsManager->get('photo_show_mode') === 1)
         true
     );
 }
-
-$page->addJavascript('
-    $("body").on("hidden.bs.modal", ".modal", function() {
-        $(this).removeData("bs.modal");
-        location.reload();
-    });
-
-    $("#menu_item_photos_upload_photo").attr("href", "javascript:void(0);");
-    $("#menu_item_photos_upload_photo").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'photos', 'id' => $getPhotoId)). '");
-    $("#menu_item_photos_upload_photo").attr("class", "nav-link openPopup");',
-    true
-);
 
 // if a photo number was committed then simulate a left mouse click
 if ($getPhotoNr > 0)
