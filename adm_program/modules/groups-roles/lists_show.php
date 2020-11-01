@@ -390,7 +390,6 @@ if ($getMode !== 'csv')
 
         // create html page object
         $page = new HtmlPage('admidio-lists-show', $headline);
-        $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
         $page->setTitle($title);
 
         // create selectbox with all list configurations

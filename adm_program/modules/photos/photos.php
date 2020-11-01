@@ -139,11 +139,6 @@ if ($getPhotoNr > 0)
     $page->addJavascript('$("#img_'.$getPhotoNr.'").trigger("click");', true);
 }
 
-if ($photoAlbum->getValue('pho_id') > 0)
-{
-    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
-}
-
 if ($gCurrentUser->editPhotoRight())
 {
     // show link to create new album

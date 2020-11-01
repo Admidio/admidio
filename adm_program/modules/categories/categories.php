@@ -117,7 +117,6 @@ unset($_SESSION['categories_request']);
 
 // create html page object
 $page = new HtmlPage('admidio-categories', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascript('
     /**

@@ -111,7 +111,6 @@ else
 
 // create html page object
 $page = new HtmlPage('admidio-mylist', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // within MySql it's only possible to join 61 tables therefore show a message if user
 // want's to join more than 57 columns

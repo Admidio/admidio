@@ -72,12 +72,7 @@ if ($nextImage <= $photoAlbum->getValue('pho_quantity'))
 // create html page object
 $page = new HtmlPage('admidio-photos-presenter', $photoAlbum->getValue('pho_name'));
 
-if ((int) $gSettingsManager->get('photo_show_mode') === PHOTO_SHOW_PAGE)
-{
-    // if you have no popup or colorbox then show a button back to the album
-    $page->setUrlPreviousPage(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $getPhotoId)));
-}
-else
+if ((int) $gSettingsManager->get('photo_show_mode') !== PHOTO_SHOW_PAGE)
 {
     // if popup or colorbox than don't show default html layout with menu and sidebar
     $page->setInlineMode();

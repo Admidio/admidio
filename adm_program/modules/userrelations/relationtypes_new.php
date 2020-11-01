@@ -44,7 +44,6 @@ if($getUrtId > 0)
 
 // create html page object
 $page = new HtmlPage('admidio-relationtypes-edit', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('relationtype_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_function.php', array('urt_id' => $getUrtId, 'mode' => '1')), $page);

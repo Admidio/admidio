@@ -89,7 +89,6 @@ if(isset($_SESSION['fields_request']))
 
 // create html page object
 $page = new HtmlPage('admidio-profile-fields-edit', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascript('
     $("#usf_type").click(function() {

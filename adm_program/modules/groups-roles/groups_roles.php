@@ -94,7 +94,6 @@ else
 {
     // In permission mode the navigation should continue
     $gNavigation->addUrl(CURRENT_URL, $headline);
-    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 }
 
 

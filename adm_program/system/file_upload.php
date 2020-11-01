@@ -132,7 +132,6 @@ if($getMode === 'choose_files')
 
     // create html page object
     $page = new HtmlPage('admidio-file-upload');
-    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
     $fileUpload = new FileUpload($page, $getModule, $getId);
     $fileUpload->setHeaderData();

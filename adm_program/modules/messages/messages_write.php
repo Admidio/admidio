@@ -204,7 +204,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage('admidio-messages-write', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {

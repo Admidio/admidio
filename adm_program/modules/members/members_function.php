@@ -40,7 +40,6 @@ if ($getMode === 1)
 {
     // create html page object
     $page = new HtmlPage('admidio-members-message', $gL10n->get('MEM_REMOVE_USER'));
-    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
     $page->addHtml('
     <div class="message">

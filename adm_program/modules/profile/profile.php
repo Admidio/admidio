@@ -204,12 +204,6 @@ $page->addJavascript('
     true
 );
 
-// show back link
-if($gNavigation->count() > 1)
-{
-    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
-}
-
 // if user has right then show link to edit profile
 if($gCurrentUser->hasRightEditProfile($user))
 {

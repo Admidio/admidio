@@ -116,7 +116,6 @@ else
 {
     // create html page object
     $page = new HtmlPage('admidio-profile-roles', $headline);
-    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 
     $page->addJavascript('var profileJS = new ProfileJS(gRootPath);');

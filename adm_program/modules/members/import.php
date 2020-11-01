@@ -46,7 +46,6 @@ else
 
 // create html page object
 $page = new HtmlPage('admidio-members-import', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_function.php', $page, array('enableFileUpload' => true));

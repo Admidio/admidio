@@ -118,7 +118,6 @@ catch(AdmException $e)
 
 // create html page object
 $page = new HtmlPage('admidio-documents-files-rename', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // create html form
 $form = new HtmlForm('edit_download_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '4', 'folder_id' => $getFolderId, 'file_id' => $getFileId)), $page);

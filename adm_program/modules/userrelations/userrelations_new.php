@@ -59,7 +59,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage('admidio-userrelations-edit', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('relation_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php', array('usr_id' => $getUsrId, 'mode' => '1')), $page);

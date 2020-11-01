@@ -111,7 +111,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage('admidio-menu-edit', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // alle aus der DB aus lesen
 $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name

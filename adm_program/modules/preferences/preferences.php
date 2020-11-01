@@ -121,9 +121,6 @@ if($showOption !== '')
 {
     // add current url to navigation stack
     $gNavigation->addUrl(CURRENT_URL, $headline);
-
-    // add back link to module menu
-    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 }
 else
 {

@@ -31,7 +31,6 @@ $roleAdministrator = new TableRoles($gDb, $pdoStatement->fetchColumn());
 
 // create html page object
 $page = new HtmlPage('admidio-login', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('login_form', ADMIDIO_URL.'/adm_program/system/login_check.php', $page, array('showRequiredFields' => false));

@@ -109,7 +109,6 @@ else
 
 // create html page object
 $page = new HtmlPage('admidio-ecards', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.min.js');
 

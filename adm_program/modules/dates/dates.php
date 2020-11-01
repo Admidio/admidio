@@ -129,7 +129,6 @@ if($getViewMode === 'html')
     if($getId > 0)
     {
         // add back link to module menu
-        $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
         $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('LST_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
     }
 

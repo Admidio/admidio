@@ -158,7 +158,6 @@ else
 
     // create html page object
     $page = new HtmlPage('admidio-lost-password', $headline);
-    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
     $page->addHtml('<p class="lead">'.$gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION').'</p>');
 

@@ -294,7 +294,6 @@ switch($getMode)
 
         // create html page object
         $page = new HtmlPage('admidio-new-organization', $headline);
-        $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
         // add current url to navigation stack
         $gNavigation->addUrl(CURRENT_URL, $headline);

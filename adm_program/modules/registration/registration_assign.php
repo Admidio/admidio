@@ -115,7 +115,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage('admidio-registration-assign', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addHtml('
     <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', array($newUser->getValue('FIRST_NAME'). ' '. $newUser->getValue('LAST_NAME'))).'</p>

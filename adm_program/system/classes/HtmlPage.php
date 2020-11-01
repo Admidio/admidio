@@ -90,11 +90,6 @@ class HtmlPage extends \Smarty
      * @var string Name of an additional template file that should be loaded within the current page.
      */
     protected $templateFile = '';
-    /**
-     * @var string Contains the url to the previous page. If a url is set than a link to this page will be shown under the headline
-     */
-    protected $urlPreviousPage = '';
-
 
     /**
      * Constructor creates the page object and initialized all parameters.
@@ -423,30 +418,23 @@ class HtmlPage extends \Smarty
     }
 
     /**
-     * Set a url to the previous page that will be shown as link on the page after the headline.
-     * @param string $url The url to the previous page. This must be a valid url.
-     */
-    public function setUrlPreviousPage($url)
-    {
-        if(admFuncCheckUrl($url) === false)
-        {
-            throw new \UnexpectedValueException('Invalid url!');
-        }
-
-        $this->urlPreviousPage = $url;
-    }
-
-    /**
      * This method will set all variables for the Smarty engine and than send the whole html
      * content also to the template engine which will generate the html page.
      * Call this method if you have finished your page layout.
      */
     public function show()
     {
-        global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager, $gSetCookieForDomain;
+        global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager, $gSetCookieForDomain, $gNavigation;
 
         $urlImprint = '';
         $urlDataProtection = '';
+        $hasPreviousUrl = false;
+
+        // if there is more than 1 url in the stack than show the back button
+        if($gNavigation->count() > 1)
+        {
+            $hasPreviousUrl = true;
+        }
 
         // add page functions menu to global menu
         $gMenu->addFunctionsNode($this->menuNodePageFunctions);
@@ -455,7 +443,7 @@ class HtmlPage extends \Smarty
         $this->assign('id', $this->id);
         $this->assign('title', $this->title);
         $this->assign('headline', $this->headline);
-        $this->assign('urlPreviousPage', $this->urlPreviousPage);
+        $this->assign('hasPreviousUrl', $hasPreviousUrl);
         $this->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
         $this->assign('urlAdmidio', ADMIDIO_URL);
         $this->assign('urlTheme', THEME_URL);

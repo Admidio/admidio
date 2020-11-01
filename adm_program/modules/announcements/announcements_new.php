@@ -86,7 +86,6 @@ if(isset($_SESSION['announcements_request']))
 
 // create html page object
 $page = new HtmlPage('admidio-announcements-edit', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_id' => $getAnnId, 'headline' => $getHeadline, 'mode' => '1')), $page);

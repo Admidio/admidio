@@ -200,7 +200,6 @@ if($getMode === 'choose')
 
     // create html page object
     $page = new HtmlPage('admidio-profile-photo-edit', $headline);
-    $page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
     // show form
     $form = new HtmlForm('upload_files_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'upload', 'usr_id' => $getUserId)), $page, array('enableFileUpload' => true));

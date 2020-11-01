@@ -42,9 +42,9 @@
         <div class="admidio-content-header">
             <h1 class="admidio-module-headline">{$headline}</h1>
 
-            {if $urlPreviousPage != ''}
+            {if $hasPreviousUrl}
                 <!-- Add link to previous page -->
-                <a class="" href="{$urlPreviousPage}"><i class="fas fa-arrow-circle-left fa-fw"></i> {$l10n->get('SYS_BACK')}</a>
+                <a class="" href="{$urlAdmidio}/adm_program/system/back.php"><i class="fas fa-arrow-circle-left fa-fw"></i> {$l10n->get('SYS_BACK')}</a>
             {/if}
         </div>
 

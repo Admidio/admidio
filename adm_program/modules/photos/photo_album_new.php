@@ -113,7 +113,6 @@ function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
 
 // create html page object
 $page = new HtmlPage('admidio-photo-album-edit', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 if ($getMode === 'new')
 {

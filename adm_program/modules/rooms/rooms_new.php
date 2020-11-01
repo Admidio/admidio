@@ -58,7 +58,6 @@ if (isset($_SESSION['rooms_request']))
 
 // create html page object
 $page = new HtmlPage('admidio-rooms-edit', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show form
 $form = new HtmlForm('rooms_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_function.php', array('room_id' => $getRoomId, 'mode' => '1')), $page);

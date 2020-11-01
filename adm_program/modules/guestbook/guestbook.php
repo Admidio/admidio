@@ -168,12 +168,6 @@ if($getGboId === 0 && !$getModeration)
         'fa-pencil-alt');
 }
 
-if($getGboId > 0 || $getModeration)
-{
-    // show link to navigate back to guestbook
-    $page->setUrlPreviousPage(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('headline' => $getHeadline)));
-}
-
 if(!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsManager->get('enable_guestbook_moderation') > 0)
 {
     // show link to moderation with number of entries that must be moderated

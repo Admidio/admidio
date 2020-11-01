@@ -29,7 +29,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage('admidio-relationtypes', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // define link to create new category
 $page->addPageFunctionsMenuItem('menu_item_relation_type_add', $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('LST_CONFIGURATION'))),

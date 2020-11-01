@@ -87,7 +87,6 @@ $childRoleObjects = array();
 
 // create html page object
 $page = new HtmlPage('admidio-groups-roles-edit', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 $page->addJavascript('
     checkMaxMemberCount();

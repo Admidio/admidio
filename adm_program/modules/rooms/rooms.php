@@ -29,7 +29,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage('admidio-rooms', $headline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
 
 // show link to create new room
 $page->addPageFunctionsMenuItem('menu_item_new_room', $gL10n->get('SYS_CREATE_VAR', array($textRoom)),
