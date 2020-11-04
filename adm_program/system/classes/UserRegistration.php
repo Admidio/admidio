@@ -119,17 +119,13 @@ class UserRegistration extends User
     {
         global $gSettingsManager;
 
-        $userEmail     = $this->getValue('EMAIL');
-        $userFirstName = $this->getValue('FIRST_NAME');
-        $userLastName  = $this->getValue('LAST_NAME');
-
         // only send mail if systemmails are enabled and user has email address
         // mail must be send before user data is removed from this object
-        if($gSettingsManager->getBool('enable_system_mails') && $this->sendEmail && $userEmail !== '')
+        if($gSettingsManager->getBool('enable_system_mails') && $this->sendEmail && $this->getValue('EMAIL') !== '')
         {
             // send mail to user that his registration was rejected
             $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipient($userEmail, $userFirstName. ' '. $userLastName);
+            $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME'). ' '. $this->getValue('LAST_NAME'));
             $sysmail->sendSystemMail('SYSMAIL_REFUSE_REGISTRATION', $this); // TODO Exception handling
         }
 
