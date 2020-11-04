@@ -422,7 +422,7 @@ if ($getMode !== 'csv')
         unset($rowConfigurations);
 
         // add list item for own list
-        $listConfigurations[] = array('mylist', $gL10n->get('LST_CREATE_OWN_LIST'), $gL10n->get('LST_CONFIGURATION'));
+        $listConfigurations[] = array('mylist', $gL10n->get('SYS_CONFIGURE_LISTS'), $gL10n->get('LST_CONFIGURATION'));
 
         // add navbar with filter elements and the selectbox with all lists configuraitons
         $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');

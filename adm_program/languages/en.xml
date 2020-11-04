@@ -284,7 +284,6 @@
   <string name="LST_CONFIGURATION_SAVE">Please select name for configuration set?</string>
   <string name="LST_COUNTRY_ISO" translation="edited">The country needs to be specified as Code ISO 3166 ALPHA-3 (3 characters)</string>
   <string name="LST_CREATE_NEW_CONFIGURATION">Create a new configuration</string>
-  <string name="LST_CREATE_OWN_LIST">Create own list</string>
   <string name="LST_DEFAULT_CONFIGURATION">Default configuration</string>
   <string name="LST_DEFAULT_CONFIGURATION_DESC">One of the configurations given here can be set as the default configuration for lists of this organization. Member lists of roles not having a list configuration are displayed with this configuration.</string>
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">No default list configuration set defined by the administrator!\n\nContact system administrator for help.</string>
@@ -302,7 +301,6 @@
   <string name="LST_FROM_TO">from #VAR1# to #VAR2#</string>
   <string name="LST_GENERAL_LISTS">General lists</string>
   <string name="LST_INFOBOX" description="A small html box that will show additional informations">Info box</string>
-  <string name="LST_KONFIGURATION_OWN_LIST">Configuration of own listings</string>
   <string name="LST_LIST">List</string>
   <string name="LST_LIST_VIEW">List overview</string>
   <string name="LST_MEMBER_ASSIGNMENT">Member assignment</string>
@@ -313,7 +311,6 @@
   <string name="LST_MEMBERSHIP_START">Start of membership</string>
   <string name="LST_MICROSOFT_EXCEL">Microsoft Excel</string>
   <string name="LST_MUST_HAVE_ADMINISTRATOR">The role \'administrator\' must have at least one member assigned!</string>
-  <string name="LST_MY_LIST">Own list</string>
   <string name="LST_MYLIST_CONDITION_DESC">Define requirements of all fields used in your new list configuration. Requirements of selected role will be limited by your own requirements.</string>
   <string name="LST_NEW_DEFAULT_CONFIGURATION">Configuration will be defined as default configuration</string>
   <string name="LST_NO_MORE_COLUMN">For technical reasons, no more column can be added.</string>
@@ -878,6 +875,7 @@
   <string name="SYS_COMMENT">Comment</string>
   <string name="SYS_COMMON">General</string>
   <string name="SYS_CONDITION">Requirement</string>
+  <string name="SYS_CONFIGURE_LISTS">Configure lists</string>
   <string name="SYS_CONFIGURE_RELATIONSHIPS">Configure relationships</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirm password</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirm value</string>

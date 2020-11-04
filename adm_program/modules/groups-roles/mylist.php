@@ -42,7 +42,7 @@ if(!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 }
 
 // set headline of the script
-$headline = $gL10n->get('LST_MY_LIST').' - '.$gL10n->get('LST_CONFIGURATION');
+$headline = $gL10n->get('LST_CONFIGURATION_LIST');
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
@@ -519,7 +519,7 @@ $page->addJavascript('$(function() {
 
 // show form
 $form = new HtmlForm('mylist_configuration_form', ADMIDIO_URL. FOLDER_MODULES.'/groups-roles/mylist_prepare.php', $page);
-$form->openGroupBox('gb_configuration_list', $gL10n->get('LST_CONFIGURATION_LIST'));
+$form->openGroupBox('gb_configuration_list', $gL10n->get('LST_CONFIGURATION'));
 
 // read all relevant configurations from database and create an array
 $yourLastConfigurationsGroup = false;

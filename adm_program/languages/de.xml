@@ -894,6 +894,7 @@
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Allgemein</string>
   <string name="SYS_CONDITION">Bedingung</string>
+  <string name="SYS_CONFIGURE_LISTS">Listen konfigurieren</string>
   <string name="SYS_CONFIGURE_RELATIONSHIPS">Beziehungen konfigurieren</string>
   <string name="SYS_CONFIRM_PASSWORD">Passwort bestätigen</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bestätigung der Eingaben</string>

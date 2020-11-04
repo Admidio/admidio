@@ -118,7 +118,7 @@ if($gCurrentUser->manageRoles())
 }
 
 // show link to create own list
-$page->addPageFunctionsMenuItem('menu_item_groups_own_list', $gL10n->get('LST_CREATE_OWN_LIST'),
+$page->addPageFunctionsMenuItem('menu_item_groups_own_list', $gL10n->get('SYS_CONFIGURE_LISTS'),
     ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/mylist.php', 'fa-list-alt');
 
 // add filter navbar
