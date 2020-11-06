@@ -1,30 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in Announcementmodule-->
-  <string name="SYS_ANNOUNCEMENT">Ankündigung</string>
-  <string name="SYS_ANNOUNCEMENTS">Ankündigungen</string>
-  <string name="SYS_ANNOUNCEMENTS_DESC">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</string>
-  <string name="SYS_EDIT_ANNOUNCEMENTS">Ankündigungen bearbeiten</string>
-  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Eine neue Ankündigung wurde angelegt</string>
-  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Es wurde eine neue Ankündigung bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
-  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Neueste Ankündigungen der Organisation #VAR1#</string>
-  <!--Phrases only in Backupmodule-->
-  <string name="SYS_BACK_TO_BACKUP_PAGE">Zurück zur Backupseite</string>
-  <string name="SYS_BACKUP_COMPLETED">Backup fertiggestellt in #VAR1#</string>
-  <string name="SYS_BACKUP_FILE">Backupdatei</string>
-  <string name="SYS_BACKUP_FROM">Backup vom #VAR1# um #VAR2#</string>
-  <string name="SYS_CREATION_DATE">Erstellungsdatum</string>
-  <string name="SYS_DATABASE_BACKUP">Datenbank-Backup</string>
-  <string name="SYS_DATABASE_BACKUP_DESC">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</string>
-  <string name="SYS_DAYS_VAR">#VAR1# Tagen</string>
-  <string name="SYS_HOURS_VAR">#VAR1# Stunden</string>
-  <string name="SYS_MINUTES_VAR">#VAR1# Minuten</string>
-  <string name="SYS_NO_BACKUP_FILE_EXISTS">Keine Backupdatei vorhanden!</string>
-  <string name="SYS_BACKUP_ONLY_MYSQL">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</string>
-  <string name="BAC_OVERALL_PROGRESS">Gesamtfortschritt</string>
-  <string name="SYS_START_BACKUP">Backup starten</string>
-  <string name="SYS_TOTAL">Summe</string>
-  <string name="SYS_SECONDS_VAR">#VAR1# Sekunden</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
   <string name="DAT_ALL_DAY">Ganztägig</string>
@@ -309,7 +284,6 @@
   <string name="LST_CONFIGURATION_SAVE">Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden?</string>
   <string name="LST_COUNTRY_ISO" translation="edited">Das Land muss im Code ISO 3166 ALPHA-3 (3 Zeichen) angegeben werden</string>
   <string name="LST_CREATE_NEW_CONFIGURATION">Neue Konfiguration erstellen</string>
-  <string name="LST_CREATE_OWN_LIST">Eigene Liste erstellen</string>
   <string name="LST_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
   <string name="LST_DEFAULT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
@@ -327,7 +301,6 @@
   <string name="LST_FROM_TO">von #VAR1# bis #VAR2#</string>
   <string name="LST_GENERAL_LISTS">Allgemeine Listen</string>
   <string name="LST_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
-  <string name="LST_KONFIGURATION_OWN_LIST">Konfiguration eigene Liste</string>
   <string name="LST_LIST">Liste</string>
   <string name="LST_LIST_VIEW">Listenübersicht</string>
   <string name="LST_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
@@ -338,7 +311,6 @@
   <string name="LST_MEMBERSHIP_START">Mitgliedschaftsbeginn</string>
   <string name="LST_MICROSOFT_EXCEL">Microsoft Excel</string>
   <string name="LST_MUST_HAVE_ADMINISTRATOR">Die Rolle Administrator muss mindestens ein Mitglied haben!</string>
-  <string name="LST_MY_LIST">Eigene Liste</string>
   <string name="LST_MYLIST_CONDITION_DESC">Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben. Damit wird die ausgewählte Rolle noch einmal nach deinen Bedingungen eingeschränkt.</string>
   <string name="LST_NEW_DEFAULT_CONFIGURATION">Konfiguration wird zur neuen Standardkonfiguration</string>
   <string name="LST_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
@@ -727,7 +699,6 @@
   <string name="PHO_PHOTO_SEND_ECARD">Foto als Grußkarte versenden</string>
   <string name="PHO_PHOTO_UPLOAD_DESC">Wähle bitte alle Fotos aus, die du in das Album #VAR1_BOLD# hochladen möchtest.</string>
   <string name="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Fotos erfolgreich hochgeladen.</string>
-  <string name="PHO_PHOTO_UPLOAD_SUCCESSFUL">Alle Fotos wurden erfolgreich hochgeladen.\n\nDer Dialog kann jetzt geschlossen werden.</string>
   <string name="PHO_PHOTOGRAPHER">Fotos von</string>
   <string name="PHO_PHOTOS_DESC">Fotos zu Veranstaltungen können hochgeladen und betrachtet werden. Die Fotos werden in Alben zusammengefasst, welche wiederum beliebig verschachtelt werden können.</string>
   <string name="PHO_POPUP_WINDOW">Popup-Fenster</string>
@@ -853,6 +824,9 @@
   <string name="SYS_ALL_ORGANIZATIONS_DESC">Die ausgewählte Kategorie ist für alle Organisationen freigegeben.\nDas gerade bearbeitete Objekt (Termin, Ankündigung, Profilfeld, Weblink ...) wird also nicht nur in dieser Organisation sichtbar sein, sondern in allen folgenden Organisationen ebenfalls angezeigt: #VAR1#.</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
   <string name="SYS_ALSO_VISITORS">auch Besucher</string>
+  <string name="SYS_ANNOUNCEMENT">Ankündigung</string>
+  <string name="SYS_ANNOUNCEMENTS">Ankündigungen</string>
+  <string name="SYS_ANNOUNCEMENTS_DESC">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</string>
   <string name="SYS_APPLY">Übernehmen</string>
   <string name="SYS_ANNUALLY">Jährlich</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Mitglieder zuordnen und bearbeiten</string>
@@ -862,7 +836,14 @@
   <string name="SYS_AVAILABLE">Verfügbar</string>
   <string name="SYS_AVAILABLE_BETA">Verfügbare Beta</string>
   <string name="SYS_BACK">Zurück</string>
+  <string name="SYS_BACK_TO_ALBUM">Zurück zum Album</string>
+  <string name="SYS_BACK_TO_BACKUP_PAGE">Zurück zur Backupseite</string>
+  <string name="SYS_BACK_TO_FOLDER">Zurück zum Ordner</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Zurück zur Modulübersicht</string>
+  <string name="SYS_BACKUP_COMPLETED">Backup fertiggestellt in #VAR1#</string>
+  <string name="SYS_BACKUP_FILE">Backupdatei</string>
+  <string name="SYS_BACKUP_FROM">Backup vom #VAR1# um #VAR2#</string>
+  <string name="SYS_BACKUP_ONLY_MYSQL">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
   <string name="SYS_CANT_DELETE_ROLE">Du kannst die Rolle #VAR1_BOLD# nicht löschen.</string>
   <string name="SYS_CAPACITY">Kapazität</string>
@@ -924,6 +905,7 @@
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
+  <string name="SYS_CREATION_DATE">Erstellungsdatum</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Aktuelle Datenbankversion</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du hast keine gültige E-Mail-Adresse hinterlegt!\n\nTrage bitte in deinem #VAR1#Profil#VAR1# eine E-Mail-Adresse ein.</string>
@@ -932,6 +914,8 @@
   <string name="SYS_DATA_PROTECTION">Datenschutz</string>
   <string name="SYS_DATA_PROTECTION_DESC">Hier kann die URL zu deiner Seite mit den Datenschutzhinweisen hinterlegt werden. Diese Seite wird innerhalb des Hinweises auf die Verwendung von Cookies für weitere Informationen verlinkt. Sofern das gewählte Theme dies unterstützt, wird auch ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/data_protection.html)</string>
   <string name="SYS_DATABASE">Datenbank</string>
+  <string name="SYS_DATABASE_BACKUP">Datenbank-Backup</string>
+  <string name="SYS_DATABASE_BACKUP_DESC">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</string>
   <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Eine Aktualisierung der Datenbank ist nicht erforderlich.</string>
   <string name="SYS_DATABASE_ERROR">Datenbankfehler</string>
   <string name="SYS_DATABASE_IS_UP_TO_DATE">Die Admidio-Datenbank ist aktuell.</string>
@@ -947,6 +931,7 @@
   <string name="SYS_DATE_INVALID">Es wurde kein gültiges Datum in das Feld #VAR1_BOLD# eingegeben.\n\nDas Datum muss dem folgenden Format #VAR2_BOLD# entsprechen.</string>
   <string name="SYS_DATE_MODIFIED">Änderungsdatum</string>
   <string name="SYS_DATE_TO">bis</string>
+  <string name="SYS_DAYS_VAR">#VAR1# Tagen</string>
   <string name="SYS_DEACTIVATE_ROLE">Rolle deaktivieren</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# deaktivierst, kann die Rolle nicht mehr genutzt und Objekten zugeordnet werden. Ebenso sind sämtliche Rechte dieser Rolle nicht mehr wirksam. Die Rolle mit ihren Einstellung und allen Mitgliedszuordnungen bleibt allerdings bestehen und kann zu einem späteren Zeitpunkt wieder aktiviert werden.</string>
   <string name="SYS_DEACTIVATED">Deaktiviert</string>
@@ -988,6 +973,7 @@
   <string name="SYS_DOWNLOAD_FILE">Datei herunterladen</string>
   <string name="SYS_DOWNLOAD_PHOTO">Foto herunterladen</string>
   <string name="SYS_EDIT">Bearbeiten</string>
+  <string name="SYS_EDIT_ANNOUNCEMENTS">Ankündigungen bearbeiten</string>
   <string name="SYS_EDIT_ENTRY">Eintrag bearbeiten</string>
   <string name="SYS_EDIT_FILE">Datei bearbeiten</string>
   <string name="SYS_EDIT_FOLDER">Ordner bearbeiten</string>
@@ -997,10 +983,12 @@
   <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
   <string name="SYS_EDITED_BY">Geändert von</string>
   <string name="SYS_EMAIL">E-Mail</string>
-  <string name="SYS_EMAIL_INVALID">Die E-Mail-Adresse im Feld #VAR1_BOLD# enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</string>
-  <string name="SYS_EMAIL_NOT_SEND">Die E-Mail konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Eine neue Ankündigung wurde angelegt</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Es wurde eine neue Ankündigung bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">Eine neue Datei wurde hochgeladen</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">Es wurde eine neue Datei bei #VAR1# hochgeladen.\n\nDatei: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
+  <string name="SYS_EMAIL_INVALID">Die E-Mail-Adresse im Feld #VAR1_BOLD# enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</string>
+  <string name="SYS_EMAIL_NOT_SEND">Die E-Mail konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
   <string name="SYS_EMAIL_SEND">Die E-Mail wurde versendet.</string>
   <string name="SYS_EMAIL_TEMPLATE">E-Mail-Vorlage</string>
   <string name="SYS_EMAIL_TEMPLATE_DESC">Hier kann eine HTML-Vorlagendatei aus dem Ordner #VAR1_BOLD# ausgewählt werden. Beim Versand einer E-Mail wird der Inhalt dieser Datei in die E-Mail kopiert und folgende Variablen ersetzt: #sender#, #message#, #recipients#, #organization_name#, #organization_shortname#, #organization_website#. Weitere Informationen zu der Nutzung von E-Mail-Vorlagen findest du in der #VAR2#Dokumentation#VAR3#.</string>
@@ -1033,7 +1021,7 @@
   <string name="SYS_FILE_TYPE">Dateityp</string>
   <string name="SYS_FILE_UPLOADED">Die Datei #VAR1_BOLD# wurde hochgeladen.</string>
   <string name="SYS_FILE_UPLOADS">Dateiuploads</string>
-  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle Dateien wurden erfolgreich hochgeladen.\n\nDer Dialog kann jetzt geschlossen werden.</string>
+  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle Dateien wurden erfolgreich hochgeladen.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Dateien erfolgreich hochgeladen.</string>
   <string name="SYS_FILES_UPLOAD_DESC">Wähle bitte alle Dateien aus, die du in den Ordner #VAR1_BOLD# hochladen möchtest.</string>
   <string name="SYS_FILENAME_EMPTY">Es wurde kein Dateiname angegeben!</string>
@@ -1075,6 +1063,7 @@
   <string name="SYS_HIDE">Ausblenden</string>
   <string name="SYS_HOMEPAGE">Startseite</string>
   <string name="SYS_HOST">Host</string>
+  <string name="SYS_HOURS_VAR">#VAR1# Stunden</string>
   <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Administrator deaktiviert.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IMPORTANT">Wichtig</string>
@@ -1158,7 +1147,7 @@
   <string name="SYS_MENU_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
   <string name="SYS_MESSAGE">Nachricht</string>
   <string name="SYS_MESSAGES">Nachrichten</string>
-  <string name="SYS_MINUTES">Minuten</string>
+  <string name="SYS_MINUTES_VAR">#VAR1# Minuten</string>
   <string name="SYS_MOBILE">Handy</string>
   <string name="SYS_MODULE_DISABLED">Dieses Modul ist nicht freigegeben.</string>
   <string name="SYS_MODULE_RIGHTS">Modulrechte</string>
@@ -1182,6 +1171,7 @@
   <string name="SYS_NO">Nein</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Keine zusätzlichen Berechtigungen gesetzt</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">Keine zusätzlichen Rechte</string>
+  <string name="SYS_NO_BACKUP_FILE_EXISTS">Keine Backupdatei vorhanden!</string>
   <string name="SYS_NO_DATA_FOUND">Es wurden keine Daten gefunden.</string>
   <string name="SYS_NO_DEFAULT_ROLE">Du kannst die Einstellung #VAR1_BOLD# nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</string>
   <string name="SYS_NO_ENTRY">Der angeforderte Eintrag existiert nicht in der Datenbank.</string>
@@ -1228,6 +1218,7 @@
   <string name="SYS_PHONE">Telefon</string>
   <string name="SYS_PHONE_INVALID_CHAR">Die Telefonnummer im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</string>
   <string name="SYS_PHOTO">Foto</string>
+  <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">Alle Fotos wurden erfolgreich hochgeladen.</string>
   <string name="SYS_PHOTOS">Fotos</string>
   <string name="SYS_PHOTO_OF_VAR">Foto von #VAR1#</string>
   <string name="SYS_PHP">PHP</string>
@@ -1252,13 +1243,13 @@
   <string name="SYS_PRNG_INSECURE">Admidio/PHP kann keine sicheren Pseudo-Zufallszahlen generieren! Bitte um Kontaktaufnahme mit dem Admidio-Team mit folgenden Informationen:</string>
   <string name="SYS_PROCESS_CANCELED">Der Vorgang wurde abgebrochen.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Bei der Verarbeitung der Daten ist folgendes Problem aufgetreten.</string>
-  <string name="SYS_PROGRESSBAR">Ladebalken</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
   <string name="SYS_PWACT_PW_SAVED">Das neue Passwort wurde nun übernommen!</string>
   <string name="SYS_PWACT_CODE_INVALID">Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!</string>
   <string name="SYS_QUANTITY">Menge</string>
   <string name="SYS_QUARTERLY">Vierteljährlich</string>
   <string name="SYS_RADIO_BUTTON">Optionsfeld</string>
+  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Neueste Ankündigungen der Organisation #VAR1#</string>
   <string name="SYS_RECIPIENT">Empfänger</string>
   <string name="SYS_REDIRECT_URL_INVALID">Die angegebene Weiterleitungs-URL ist nicht gültig.</string>
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
@@ -1317,7 +1308,7 @@
   <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>
   <string name="SYS_SEARCH">Suche</string>
   <string name="SYS_SEATING">Sitzplätze</string>
-  <string name="SYS_SECONDS">Sekunden</string>
+  <string name="SYS_SECONDS_VAR">#VAR1# Sekunden</string>
   <string name="SYS_SECURE">Sicher</string>
   <string name="SYS_SECURITY">Sicherheit</string>
   <string name="SYS_SECURITY_ERROR">Sicherheitsfehler</string>
@@ -1350,6 +1341,7 @@
   <string name="SYS_SMTP_AUTH_TYPE_DESC">SMTP kennt verschiedene Authentifizierungsmethoden. Gib hier die Authentifizierungsmethode ein, die dein SMTP-Server unterstützt. Wenn du dir nicht sicher bist, welche Methode unterstützt wird, wähle #VAR1_BOLD#. Admidio wird dann nacheinander die verschiedenen Authentifizierungsmethoden ausprobieren, bis eine Anmeldung erfolgreich war. (Voreinstellung: automatisch)</string>
   <string name="SYS_SOCIAL_NETWORKS">Soziale Netzwerke</string>
   <string name="SYS_START" description="Start of a date">Beginn</string>
+  <string name="SYS_START_BACKUP">Backup starten</string>
   <string name="SYS_STATUS_CODE_INVALID">Ungültiger Status-Code!</string>
   <string name="SYS_STILL_X_CHARACTERS">noch #VAR1# Zeichen</string>
   <string name="SYS_STOP">Stop</string>
@@ -1374,6 +1366,7 @@
   <string name="SYS_TIME_TO">Uhrzeit bis</string>
   <string name="SYS_TITLE">Titel</string>
   <string name="SYS_TO" description="E-Mail">An</string>
+  <string name="SYS_TOTAL">Summe</string>
   <string name="SYS_TUESDAY">Dienstag</string>
   <string name="SYS_TYPE">Typ</string>
   <string name="SYS_UNIX">UNIX</string>

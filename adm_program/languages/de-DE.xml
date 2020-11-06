@@ -284,7 +284,6 @@
   <string name="LST_CONFIGURATION_SAVE">Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden?</string>
   <string name="LST_COUNTRY_ISO" translation="edited">Das Land muss im Code ISO 3166 ALPHA-3 (3 Zeichen) angegeben werden</string>
   <string name="LST_CREATE_NEW_CONFIGURATION">Neue Konfiguration erstellen</string>
-  <string name="LST_CREATE_OWN_LIST">Eigene Liste erstellen</string>
   <string name="LST_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
   <string name="LST_DEFAULT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWenden Sie sich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
@@ -302,7 +301,6 @@
   <string name="LST_FROM_TO">von #VAR1# bis #VAR2#</string>
   <string name="LST_GENERAL_LISTS">Allgemeine Listen</string>
   <string name="LST_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
-  <string name="LST_KONFIGURATION_OWN_LIST">Konfiguration eigene Liste</string>
   <string name="LST_LIST">Liste</string>
   <string name="LST_LIST_VIEW">Listenübersicht</string>
   <string name="LST_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
@@ -313,7 +311,6 @@
   <string name="LST_MEMBERSHIP_START">Mitgliedschaftsbeginn</string>
   <string name="LST_MICROSOFT_EXCEL">Microsoft Excel</string>
   <string name="LST_MUST_HAVE_ADMINISTRATOR">Die Rolle Administrator muss mindestens ein Mitglied haben!</string>
-  <string name="LST_MY_LIST">Eigene Liste</string>
   <string name="LST_MYLIST_CONDITION_DESC">Hier können Sie Bedingungen zu jedem Feld in Ihrer neuen Liste eingeben. Damit wird die ausgewählte Rolle noch einmal nach Ihren Bedingungen eingeschränkt.</string>
   <string name="LST_NEW_DEFAULT_CONFIGURATION">Konfiguration wird zur neuen Standardkonfiguration</string>
   <string name="LST_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
@@ -702,7 +699,6 @@
   <string name="PHO_PHOTO_SEND_ECARD">Foto als Grußkarte versenden</string>
   <string name="PHO_PHOTO_UPLOAD_DESC">Wählen Sie bitte alle Fotos aus, die Sie in das Album #VAR1_BOLD# hochladen möchten.</string>
   <string name="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Fotos erfolgreich hochgeladen.</string>
-  <string name="PHO_PHOTO_UPLOAD_SUCCESSFUL">Alle Fotos wurden erfolgreich hochgeladen.\n\nSie können den Dialog jetzt schließen.</string>
   <string name="PHO_PHOTOGRAPHER">Fotos von</string>
   <string name="PHO_PHOTOS_DESC">Fotos zu Veranstaltungen können hochgeladen und betrachtet werden. Die Fotos werden in Alben zusammengefasst, welche wiederum beliebig verschachtelt werden können.</string>
   <string name="PHO_POPUP_WINDOW">Popup-Fenster</string>
@@ -840,7 +836,9 @@
   <string name="SYS_AVAILABLE">Verfügbar</string>
   <string name="SYS_AVAILABLE_BETA">Verfügbare Beta</string>
   <string name="SYS_BACK">Zurück</string>
+  <string name="SYS_BACK_TO_ALBUM">Zurück zum Album</string>
   <string name="SYS_BACK_TO_BACKUP_PAGE">Zurück zur Backupseite</string>
+  <string name="SYS_BACK_TO_FOLDER">Zurück zum Ordner</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Zurück zur Modulübersicht</string>
   <string name="SYS_BACKUP_COMPLETED">Backup fertiggestellt in #VAR1#</string>
   <string name="SYS_BACKUP_FILE">Backupdatei</string>
@@ -877,6 +875,7 @@
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Allgemein</string>
   <string name="SYS_CONDITION">Bedingung</string>
+  <string name="SYS_CONFIGURE_LISTS">Listen konfigurieren</string>
   <string name="SYS_CONFIGURE_RELATIONSHIPS">Beziehungen konfigurieren</string>
   <string name="SYS_CONFIRM_PASSWORD">Passwort bestätigen</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bestätigung der Eingaben</string>
@@ -1022,7 +1021,7 @@
   <string name="SYS_FILE_TYPE">Dateityp</string>
   <string name="SYS_FILE_UPLOADED">Die Datei #VAR1_BOLD# wurde hochgeladen</string>
   <string name="SYS_FILE_UPLOADS">Dateiuploads</string>
-  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle Dateien wurden erfolgreich hochgeladen.\n\nDer Dialog kann jetzt geschlossen werden.</string>
+  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle Dateien wurden erfolgreich hochgeladen.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Dateien erfolgreich hochgeladen.</string>
   <string name="SYS_FILES_UPLOAD_DESC">Wählen Sie bitte alle Dateien aus, die Sie in den Ordner #VAR1_BOLD# hochladen möchten.</string>
   <string name="SYS_FILENAME_EMPTY">Es wurde kein Dateiname angegeben!</string>
@@ -1219,6 +1218,7 @@
   <string name="SYS_PHONE">Telefon</string>
   <string name="SYS_PHONE_INVALID_CHAR">Die Telefonnummer im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</string>
   <string name="SYS_PHOTO">Foto</string>
+  <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">Alle Fotos wurden erfolgreich hochgeladen.</string>
   <string name="SYS_PHOTOS">Fotos</string>
   <string name="SYS_PHOTO_OF_VAR">Foto von #VAR1#</string>
   <string name="SYS_PHP">PHP</string>
@@ -1347,11 +1347,12 @@
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_STREET">Straße</string>
   <string name="SYS_SUNDAY">Sonntag</string>
+  <string name="SYS_SUPPORT_ADMIDIO">Admidio unterstützen</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorienverwaltung</string>
   <string name="SYS_SYMMETRICAL">symmetrisch</string>
   <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Ihr angefordertes Passwort für #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie haben ein neues Passwort angefordert!\n\nHier sind Ihre Daten:\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDamit Sie Ihr neues Passwort benutzen können, müssen Sie es über den folgenden Link freischalten:\n\n#variable2#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Anmeldedaten für #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie erhalten Ihre Anmeldedaten für die Webseite #organization_homepage#.\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
-  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name# #user_first_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls Sie Mitglied sind und Ihre Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass Sie als Mitglied nicht identifiziert wurden.\nZur Klärung der Gründe für die Ablehnung wenden Sie sich bitte an den Administrator #administrator_email# von #organization_homepage#.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
+  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls Sie Mitglied sind und Ihre Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass Sie als Mitglied nicht identifiziert wurden.\nZur Klärung der Gründe für die Ablehnung wenden Sie sich bitte an den Administrator #administrator_email# von #organization_homepage#.\n\nViele Grüße\nDie Administratoren</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name# bestätigt\n#content# Hallo #user_first_name# #user_last_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun können Sie sich mit Ihrem Benutzernamen #user_login_name# und Ihrem Passwort auf der Homepage anmelden.\n\nSollten Sie noch Fragen haben, schreiben Sie eine E-Mail an #administrator_email#.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname: #user_first_name#\nE-Mail: #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
   <string name="SYS_SYSTEM">System</string>
