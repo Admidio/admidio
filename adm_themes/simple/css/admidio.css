@@ -168,7 +168,7 @@ a.btn-primary {
 /* add 5px distance to all icons within a icon text combination */
 .admidio-icon-chain, .nav-link .fas, .btn .fas, .alert .fas,
 .admidio-profile-user-right .fas, .checkbox .fas, input[type="radio"],
-label img, .form-control-static img, .admidio-icon-link .fas {
+label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
     margin-right: 5px;
 }
 

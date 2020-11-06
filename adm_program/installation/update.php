@@ -312,7 +312,7 @@ elseif ($getMode === 2)
         'main_page', $gL10n->get('SYS_LATER'),
         array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/overview.php', 'class' => 'admidio-margin-bottom')
     );
-    $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
+    $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-heart'));
 
     $page->addHtml($form->show());
     $page->show();

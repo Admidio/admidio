@@ -152,7 +152,7 @@ function getStaticText($type, $text, $info = '')
 function getPreferencePanel($group, $id, $title, $icon, $body)
 {
     $html = '
-        <div class="card" id="panel_' . $id . '">
+        <div id="admidio-panel-' . $id . '" class="card">
             <div class="card-header">
                 <a type="button" data-toggle="collapse" data-target="#collapse_' . $id . '">
                     <i class="' . $icon . ' fa-fw"></i>' . $title . '
@@ -169,7 +169,7 @@ function getPreferencePanel($group, $id, $title, $icon, $body)
 }
 
 $page->addHtml('
-<ul id="preferences_tabs" class="nav nav-tabs" role="tablist">
+<ul id="admidio-preferences-tabs" class="nav nav-tabs" role="tablist">
     <li class="nav-item">
         <a id="tabs_nav_common" class="nav-link" href="#tabs-common" data-toggle="tab" role="tab">'.$gL10n->get('SYS_COMMON').'</a>
     </li>
@@ -178,7 +178,7 @@ $page->addHtml('
     </li>
 </ul>
 
-<div class="tab-content">
+<div id="admidio-preferences-tab-content" class="tab-content">
     <div class="tab-pane fade" id="tabs-common" role="tabpanel">
         <div class="accordion" id="accordion_preferences">');
 
@@ -335,7 +335,7 @@ if($gCurrentOrganization->countAllRecords() > 1)
     );
 }
 
-$html = '<a id="add_another_organization" class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '2')).'">
+$html = '<a id="add_another_organization" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '2')).'">
             <i class="fas fa-plus-circle"></i>'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
 $htmlDesc = $gL10n->get('ORG_ADD_ORGANIZATION_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formOrganization->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -653,6 +653,10 @@ else
 }
 $formAdmidioUpdate->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $html);
 
+$html = '<a id="donate" href="'. ADMIDIO_HOMEPAGE . 'donate.php" target="_blank">
+            <i class="fas fa-heart"></i>'.$gL10n->get('SYS_DONATE').'</a>';
+$formAdmidioUpdate->addCustomContent($gL10n->get('SYS_SUPPORT_ADMIDIO'), $html, array('helpTextIdInline' => $gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT')));
+
 $page->addHtml(getPreferencePanel('common', 'admidio_update', $gL10n->get('SYS_ADMIDIO_UPDATE'), 'fas fa-cloud-download-alt', $formAdmidioUpdate->show()));
 
 // PANEL: PHP
@@ -879,7 +883,7 @@ $formAnnouncements->addInput(
     'announcements_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $formValues['announcements_per_page'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
-$html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')).'">
+$html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formAnnouncements->addCustomContent(
@@ -918,7 +922,7 @@ $formUserManagement->addCheckbox(
     array('helpTextIdInline' => 'MEM_ENABLE_USER_RELATIONS_DESC')
 );
 
-$html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/userrelations/relationtypes.php">
+$html = '<a href="'. ADMIDIO_URL. FOLDER_MODULES.'/userrelations/relationtypes.php">
             <i class="fas fa-users-cog"></i>'.$gL10n->get('SYS_CONFIGURE_RELATIONSHIPS').'</a>';
 $htmlDesc = $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formUserManagement->addCustomContent($gL10n->get('SYS_CONFIGURE_RELATIONSHIPS'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -1168,7 +1172,7 @@ $formLists->addSelectBox(
     'lists_show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
     array('defaultValue' => $formValues['lists_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
 );
-$html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
+$html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formLists->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -1265,7 +1269,7 @@ $formProfile = new HtmlForm(
     $page, array('class' => 'form-preferences')
 );
 
-$html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/profile-fields/profile_fields.php">
+$html = '<a href="'. ADMIDIO_URL. FOLDER_MODULES.'/profile-fields/profile_fields.php">
             <i class="fas fa-th-list"></i>'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
 $htmlDesc = $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formProfile->addCustomContent($gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -1384,7 +1388,7 @@ $formEvents->addCheckbox(
     'dates_may_take_part', $gL10n->get('SYS_MAYBE_PARTICIPATE'), (bool) $formValues['dates_may_take_part'],
     array('helpTextIdInline' => $gL10n->get('SYS_MAYBE_PARTICIPATE_DESC', array('DAT_ATTEND', 'DAT_CANCEL', 'DAT_USER_TENTATIVE')))
 );
-$html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))).'">
+$html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_EDIT_CALENDAR_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formEvents->addCustomContent($gL10n->get('DAT_MANAGE_CALENDARS'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -1392,7 +1396,7 @@ $formEvents->addCheckbox(
     'dates_show_rooms', $gL10n->get('DAT_ROOM_SELECTABLE'), (bool) $formValues['dates_show_rooms'],
     array('helpTextIdInline' => 'DAT_ROOM_SELECTABLE_DESC')
 );
-$html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/rooms/rooms.php">
+$html = '<a href="'. ADMIDIO_URL. FOLDER_MODULES.'/rooms/rooms.php">
             <i class="fas fa-home"></i>'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formEvents->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -1432,7 +1436,7 @@ $formWeblinks->addInput(
     'weblinks_redirect_seconds', $gL10n->get('LNK_DISPLAY_REDIRECT'), $formValues['weblinks_redirect_seconds'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'LNK_DISPLAY_REDIRECT_DESC')
 );
-$html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK')).'">
+$html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formWeblinks->addCustomContent(

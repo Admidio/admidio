@@ -1347,6 +1347,7 @@
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_STREET">Street</string>
   <string name="SYS_SUNDAY">Sunday</string>
+  <string name="SYS_SUPPORT_ADMIDIO">Support Admidio</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
   <string name="SYS_SYMMETRICAL">Symmetrical</string>
   <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Your requested password for #organization_short_name# website\n#content# Hello #user_first_name#,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: #user_login_name#\nPassword: #variable1#\n\nTo activate your password, please follow this link:\n\n#variable2#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nGreetings,\nThe administrators</string>

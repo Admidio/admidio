@@ -285,7 +285,7 @@ $form->addButton(
     array('icon' => 'fa-home', 'class' => 'admidio-margin-bottom',
         'link' => ADMIDIO_URL . '/adm_program/overview.php')
 );
-$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
+$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-heart'));
 
 $page->addHtml($form->show());
 $page->show();
