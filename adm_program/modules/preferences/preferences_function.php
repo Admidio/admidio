@@ -179,7 +179,7 @@ switch($getMode)
                     break;
 
                 case 'lists':
-                    $checkboxes = array('lists_enable_module');
+                    $checkboxes = array('groups_roles_enable_module');
                     break;
 
                 case 'messages':

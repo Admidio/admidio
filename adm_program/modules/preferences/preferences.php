@@ -35,7 +35,7 @@ $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManag
 $page = new HtmlPage('admidio-preferences', $headline);
 
 $showOptionValidModules = array(
-    'announcements', 'documents-files', 'guestbook', 'ecards', 'lists',
+    'announcements', 'documents-files', 'guestbook', 'ecards', 'groups-roles',
     'messages', 'photos', 'profile', 'events', 'links', 'user_management'
 );
 
@@ -1131,25 +1131,25 @@ $formEcards->addSubmitButton(
 
 $page->addHtml(getPreferencePanel('modules', 'ecards', $gL10n->get('ECA_GREETING_CARDS'), 'fas fa-file-image', $formEcards->show()));
 
-// PANEL: LISTS
+// PANEL: GROUPS AND ROLES
 
 $formLists = new HtmlForm(
-    'lists_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'lists')),
+    'groups_roles_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'groups-roles')),
     $page, array('class' => 'form-preferences')
 );
 
 $formLists->addCheckbox(
-    'lists_enable_module', $gL10n->get('LST_ENABLE_LISTS_MODULE'), (bool) $formValues['lists_enable_module'],
+    'groups_roles_enable_module', $gL10n->get('LST_ENABLE_LISTS_MODULE'), (bool) $formValues['groups_roles_enable_module'],
     array('helpTextIdInline' => 'LST_ENABLE_LISTS_MODULE_DESC')
 );
 $formLists->addInput(
-    'lists_roles_per_page', $gL10n->get('LST_NUMBER_OF_ROLES_PER_PAGE'), $formValues['lists_roles_per_page'],
+    'groups_roles_roles_per_page', $gL10n->get('LST_NUMBER_OF_ROLES_PER_PAGE'), $formValues['groups_roles_roles_per_page'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formLists->addSelectBox(
-    'lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries,
-    array('defaultValue' => $formValues['lists_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC')
+    'groups_roles_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries,
+    array('defaultValue' => $formValues['groups_roles_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC')
 );
 // read all global lists
 $sqlData = array();
@@ -1160,8 +1160,8 @@ $sqlData['query'] = 'SELECT lst_id, lst_name
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($orgId);
 $formLists->addSelectBoxFromSql(
-    'lists_default_configuration', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
-    array('defaultValue' => $formValues['lists_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC')
+    'groups_roles_default_configuration', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
+    array('defaultValue' => $formValues['groups_roles_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC')
 );
 $selectBoxEntries = array(
     '0' => $gL10n->get('SYS_NOBODY'),
@@ -1169,8 +1169,8 @@ $selectBoxEntries = array(
     '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
 );
 $formLists->addSelectBox(
-    'lists_show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
-    array('defaultValue' => $formValues['lists_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
+    'groups_roles_show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
+    array('defaultValue' => $formValues['groups_roles_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
 );
 $html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';

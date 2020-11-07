@@ -301,7 +301,7 @@ class Organization extends TableAccess
         $sql = 'UPDATE '.TBL_PREFERENCES.'
                    SET prf_value  = ? -- $addressList->getValue(\'lst_id\')
                  WHERE prf_org_id = ? -- $orgId
-                   AND prf_name   = \'lists_default_configuration\'';
+                   AND prf_name   = \'groups_roles_default_configuration\'';
         $this->db->queryPrepared($sql, array((int) $addressList->getValue('lst_id'), $orgId));
 
         $phoneList = new ListConfiguration($this->db);

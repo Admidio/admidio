@@ -112,11 +112,11 @@ $defaultOrgPreferences = array(
     'enable_guestbook_moderation'    => '0',
 
     // Lists
-    'lists_enable_module'         => '1',
-    'lists_roles_per_page'        => '10',
-    'lists_members_per_page'      => '25',
-    'lists_default_configuration' => '',
-    'lists_show_former_members'   => '2',
+    'groups_roles_enable_module'         => '1',
+    'groups_roles_roles_per_page'        => '10',
+    'groups_roles_members_per_page'      => '25',
+    'groups_roles_default_configuration' => '',
+    'groups_roles_show_former_members'   => '2',
 
     // Messages
     'enable_mail_module'          => '1',
@@ -132,7 +132,7 @@ $defaultOrgPreferences = array(
     'mail_html_registered_users'  => '1',
     'mail_delivery_confirmation'  => '0',
     'mail_send_to_all_addresses'  => '1',
-    'mail_template'               => 'template_default.html',
+    'mail_template'               => 'default.html',
 
     // E-Cards
     'enable_ecard_module'       => '1',

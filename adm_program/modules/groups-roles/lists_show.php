@@ -34,7 +34,7 @@ $getShowFormerMembers = admFuncVariableIsValid($_GET, 'show_former_members', 'bo
 $getRelationTypeIds   = admFuncVariableIsValid($_GET, 'urt_ids',             'string'); // could be int or int[], so string is necessary
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('lists_enable_module'))
+if (!$gSettingsManager->getBool('groups_roles_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -509,7 +509,7 @@ if ($getMode !== 'csv')
         }
 
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
-        $table->setDatatablesRowsPerPage($gSettingsManager->getInt('lists_members_per_page'));
+        $table->setDatatablesRowsPerPage($gSettingsManager->getInt('groups_roles_members_per_page'));
     }
     else
     {
