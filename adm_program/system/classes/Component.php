@@ -154,7 +154,7 @@ class Component extends TableAccess
                 break;
 
             case 'GROUPS-ROLES':
-                if($gSettingsManager->getBool('lists_enable_module') && $gValidLogin)
+                if($gSettingsManager->getBool('groups_roles_enable_module') && $gValidLogin)
                 {
                     return true;
                 }
@@ -193,13 +193,6 @@ class Component extends TableAccess
 
             case 'REGISTRATION':
                 if($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->approveUsers())
-                {
-                    return true;
-                }
-                break;
-
-            case 'ROLES':
-                if($gCurrentUser->manageRoles())
                 {
                     return true;
                 }

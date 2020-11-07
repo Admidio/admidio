@@ -320,7 +320,7 @@ class TableRoles extends TableAccess
             try
             {
                 // read system default list configuration
-                $defaultListConfiguration = $gSettingsManager->getInt('lists_default_configuration');
+                $defaultListConfiguration = $gSettingsManager->getInt('groups_roles_default_configuration');
             }
             catch (\InvalidArgumentException $exception)
             {

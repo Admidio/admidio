@@ -32,7 +32,7 @@ define('ROLE_TYPE_ACTIVE', 1);
 define('ROLE_TYPE_EVENT_PARTICIPATION', 2);
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('lists_enable_module'))
+if (!$gSettingsManager->getBool('groups_roles_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -542,6 +542,6 @@ else
 
 // If necessary show links to navigate to next and previous recordsets of the query
 $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('cat_id' => $getCatId, 'role_type' => (int) $getRoleType));
-$page->addHtml(admFuncGeneratePagination($baseUrl, $listsResult['totalCount'], $gSettingsManager->getInt('lists_roles_per_page'), $getStart));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $listsResult['totalCount'], $gSettingsManager->getInt('groups_roles_roles_per_page'), $getStart));
 
 $page->show();

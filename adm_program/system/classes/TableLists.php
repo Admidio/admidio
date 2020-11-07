@@ -43,7 +43,7 @@ class TableLists extends TableAccess
         $lstId = (int) $this->getValue('lst_id');
 
         // if this list is the default configuration than it couldn't be deleted
-        if ($lstId === $gSettingsManager->getInt('lists_default_configuration'))
+        if ($lstId === $gSettingsManager->getInt('groups_roles_default_configuration'))
         {
             throw new AdmException('LST_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
         }
