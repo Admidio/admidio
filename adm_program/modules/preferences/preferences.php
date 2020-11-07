@@ -1139,17 +1139,17 @@ $formGroupsRoles = new HtmlForm(
 );
 
 $formGroupsRoles->addCheckbox(
-    'groups_roles_enable_module', $gL10n->get('LST_ENABLE_LISTS_MODULE'), (bool) $formValues['groups_roles_enable_module'],
-    array('helpTextIdInline' => 'LST_ENABLE_LISTS_MODULE_DESC')
+    'groups_roles_enable_module', $gL10n->get('SYS_ENABLE_GROUPS_ROLES_MODULE'), (bool) $formValues['groups_roles_enable_module'],
+    array('helpTextIdInline' => 'SYS_ENABLE_GROUPS_ROLES_MODULE_DESC')
 );
 $formGroupsRoles->addInput(
-    'groups_roles_roles_per_page', $gL10n->get('LST_NUMBER_OF_ROLES_PER_PAGE'), $formValues['groups_roles_roles_per_page'],
+    'groups_roles_roles_per_page', $gL10n->get('SYS_NUMBER_OF_ROLES_PER_PAGE'), $formValues['groups_roles_roles_per_page'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formGroupsRoles->addSelectBox(
-    'groups_roles_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries,
-    array('defaultValue' => $formValues['groups_roles_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC')
+    'groups_roles_members_per_page', $gL10n->get('SYS_MEMBERS_PER_PAGE'), $selectBoxEntries,
+    array('defaultValue' => $formValues['groups_roles_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MEMBERS_PER_PAGE_DESC')
 );
 // read all global lists
 $sqlData = array();
@@ -1160,17 +1160,17 @@ $sqlData['query'] = 'SELECT lst_id, lst_name
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($orgId);
 $formGroupsRoles->addSelectBoxFromSql(
-    'groups_roles_default_configuration', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
-    array('defaultValue' => $formValues['groups_roles_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC')
+    'groups_roles_default_configuration', $gL10n->get('SYS_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
+    array('defaultValue' => $formValues['groups_roles_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_DEFAULT_CONFIGURATION_DESC')
 );
 $selectBoxEntries = array(
     '0' => $gL10n->get('SYS_NOBODY'),
-    '1' => preg_replace('/<\/?strong>/', '"', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_ASSIGN_ROLES')))),
-    '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
+    '1' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_ASSIGN_ROLES')))),
+    '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
 );
 $formGroupsRoles->addSelectBox(
-    'groups_roles_show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
-    array('defaultValue' => $formValues['groups_roles_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
+    'groups_roles_show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
+    array('defaultValue' => $formValues['groups_roles_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
 );
 $html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';

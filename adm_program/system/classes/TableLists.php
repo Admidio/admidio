@@ -33,7 +33,7 @@ class TableLists extends TableAccess
     /**
      * Deletes the selected list with all associated fields.
      * After that the class will be initialize.
-     * @throws AdmException LST_ERROR_DELETE_DEFAULT_LIST
+     * @throws AdmException SYS_ERROR_DELETE_DEFAULT_LIST
      * @return bool **true** if no error occurred
      */
     public function delete()
@@ -45,7 +45,7 @@ class TableLists extends TableAccess
         // if this list is the default configuration than it couldn't be deleted
         if ($lstId === $gSettingsManager->getInt('groups_roles_default_configuration'))
         {
-            throw new AdmException('LST_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
+            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
         }
         // if this list is the default configuration for particpation list than it couldn't be deleted
         if ($lstId === $gSettingsManager->getInt('dates_default_list_configuration'))

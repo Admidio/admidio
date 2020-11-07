@@ -210,7 +210,7 @@ class TableMembers extends TableAccess
 
                     if ($memberStatement->rowCount() === 0)
                     {
-                        throw new AdmException('LST_MUST_HAVE_ADMINISTRATOR');
+                        throw new AdmException('SYS_MUST_HAVE_ADMINISTRATOR');
                     }
                 }
 

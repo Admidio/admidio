@@ -12,7 +12,7 @@ INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, co
                               , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.17', 0, 0)
                               , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.17', 0, 0)
                               , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.17', 0, 0)
-                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.17', 0, 0)
+                              , (90, 'MODULE', 'SYS_LISTS', 'LISTS', '3.3.17', 0, 0)
                               , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.17', 0, 0)
                               , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.17', 0, 0)
                               , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.17', 0, 0)

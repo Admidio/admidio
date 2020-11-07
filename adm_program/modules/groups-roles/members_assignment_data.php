@@ -82,7 +82,7 @@ if(!$role->allowedToAssignMembers($gCurrentUser))
 
 if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
 {
-    echo json_encode(array('error' => $gL10n->get('LST_NO_RIGHTS_VIEW_LIST')));
+    echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS_VIEW_LIST')));
     exit();
 }
 

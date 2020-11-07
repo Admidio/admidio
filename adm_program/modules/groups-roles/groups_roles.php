@@ -161,7 +161,7 @@ if($listsResult['totalCount'] === 0)
         // If login valid, than show message for non available roles
         if($getRoleType === ROLE_TYPE_ACTIVE)
         {
-            $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
             // => EXIT
         }
         else
@@ -238,7 +238,7 @@ foreach($listsResult['recordset'] as $row)
                     {
                         $html .= '
                         <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $rolId)).'">'.
-                            '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'"></i></a>';
+                            '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_EMAIL_TO_MEMBERS').'"></i></a>';
                     }
 
                     // show link to export vCard if user is allowed to see members and the role has members
@@ -310,7 +310,7 @@ foreach($listsResult['recordset'] as $row)
                                 }
                                 if(strlen($role->getValue('rol_start_time')) > 0)
                                 {
-                                    $html .= $gL10n->get('LST_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
+                                    $html .= $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
                                 }
                                 $page->addHtml('<span class="d-block">'.$html.'</span>');
                             }

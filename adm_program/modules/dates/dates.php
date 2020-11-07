@@ -129,7 +129,7 @@ if($getViewMode === 'html')
     if($getId > 0)
     {
         // add back link to module menu
-        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('LST_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
+        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
     }
 
     // Add new event
@@ -143,7 +143,7 @@ if($getViewMode === 'html')
     if($getId === 0)
     {
         // show print button
-        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('LST_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
+        $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
 
         // ical Download
         if($gSettingsManager->getBool('enable_dates_ical'))

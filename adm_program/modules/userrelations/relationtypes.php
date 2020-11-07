@@ -31,7 +31,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage('admidio-relationtypes', $headline);
 
 // define link to create new category
-$page->addPageFunctionsMenuItem('menu_item_relation_type_add', $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('LST_CONFIGURATION'))),
+$page->addPageFunctionsMenuItem('menu_item_relation_type_add', $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_CONFIGURATION'))),
     ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', 'fa-plus-circle');
 
 

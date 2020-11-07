@@ -68,7 +68,7 @@ switch ($getMessageId)
     // mylist condition description
     case 'mylist_condition':
         echo '
-            <p>'.$gL10n->get('LST_MYLIST_CONDITION_DESC').'</p>
+            <p>'.$gL10n->get('SYS_MYLIST_CONDITION_DESC').'</p>
             <p>'.$gL10n->get('SYS_EXAMPLES').':</p>
             <table class="table table-condensed">
                 <thead>
@@ -81,63 +81,63 @@ switch ($getMessageId)
                 <tbody>
                     <tr>
                         <td>'.$gL10n->get('SYS_LASTNAME').'</td>
-                        <td><strong>'.$gL10n->get('LST_SEARCH_LASTNAME_EXAMPLE').'</strong></td>
-                        <td>'.$gL10n->get('LST_SEARCH_LASTNAME_DESC').'</td>
+                        <td><strong>'.$gL10n->get('SYS_SEARCH_LASTNAME_EXAMPLE').'</strong></td>
+                        <td>'.$gL10n->get('SYS_SEARCH_LASTNAME_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_LASTNAME').'</td>
-                        <td><strong>'.$gL10n->get('LST_SEARCH_LASTNAME_BEGINS_EXAMPLE').'</strong></td>
-                        <td>'.$gL10n->get('LST_SEARCH_LASTNAME_BEGINS_DESC').'</td>
+                        <td><strong>'.$gL10n->get('SYS_SEARCH_LASTNAME_BEGINS_EXAMPLE').'</strong></td>
+                        <td>'.$gL10n->get('SYS_SEARCH_LASTNAME_BEGINS_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_BIRTHDAY').'</td>
-                        <td><strong>&gt; '.$gL10n->get('LST_SEARCH_DATE_EXAMPLE').'</strong></td>
-                        <td>'.$gL10n->get('LST_SEARCH_DATE_DESC').'</td>
+                        <td><strong>&gt; '.$gL10n->get('SYS_SEARCH_DATE_EXAMPLE').'</strong></td>
+                        <td>'.$gL10n->get('SYS_SEARCH_DATE_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_BIRTHDAY').'</td>
-                        <td><strong>&gt; '.$gL10n->get('LST_SEARCH_AGE_EXAMPLE').'</strong></td>
-                        <td>'.$gL10n->get('LST_SEARCH_AGE_DESC').'</td>
+                        <td><strong>&gt; '.$gL10n->get('SYS_SEARCH_AGE_EXAMPLE').'</strong></td>
+                        <td>'.$gL10n->get('SYS_SEARCH_AGE_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_GENDER').'</td>
                         <td><strong>'.$gL10n->get('SYS_MALE').'</strong></td>
-                        <td>'.$gL10n->get('LST_SEARCH_GENDER_DESC').'</td>
+                        <td>'.$gL10n->get('SYS_SEARCH_GENDER_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_LOCATION').'</td>
-                        <td><strong>'.$gL10n->get('LST_SEARCH_LOCATION_EXAMPLE').'</strong></td>
-                        <td>'.$gL10n->get('LST_SEARCH_LOCATION_DESC').'</td>
+                        <td><strong>'.$gL10n->get('SYS_SEARCH_LOCATION_EXAMPLE').'</strong></td>
+                        <td>'.$gL10n->get('SYS_SEARCH_LOCATION_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_PHONE').'</td>
-                        <td><strong>'.$gL10n->get('LST_SEARCH_TELEFON_EXAMPLE').'</strong></td>
-                        <td>'.$gL10n->get('LST_SEARCH_TELEFON_DESC').'</td>
+                        <td><strong>'.$gL10n->get('SYS_SEARCH_TELEFON_EXAMPLE').'</strong></td>
+                        <td>'.$gL10n->get('SYS_SEARCH_TELEFON_DESC').'</td>
                     </tr>
                     <tr>
-                        <td>'.$gL10n->get('LST_SEARCH_YES_NO_FIELD').'</td>
+                        <td>'.$gL10n->get('SYS_SEARCH_YES_NO_FIELD').'</td>
                         <td><strong>'.$gL10n->get('SYS_YES').'</strong></td>
-                        <td>'.$gL10n->get('LST_SEARCH_YES_NO_FIELD_DESC').'</td>
+                        <td>'.$gL10n->get('SYS_SEARCH_YES_NO_FIELD_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_FIRSTNAME').'</td>
-                        <td><strong>&lt;&gt; '.$gL10n->get('LST_EXCLUDE_EXAMPLE').'</strong></td>
-                        <td>'.$gL10n->get('LST_EXCLUDE_EXAMPLE_DESC').'</td>
+                        <td><strong>&lt;&gt; '.$gL10n->get('SYS_SEARCH_EXCLUDE_EXAMPLE').'</strong></td>
+                        <td>'.$gL10n->get('SYS_SEARCH_EXCLUDE_EXAMPLE_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_STREET').'</td>
                         <td><strong>'.$gL10n->get('SYS_EMPTY').'</strong></td>
-                        <td>'.$gL10n->get('LST_EMPTY_EXAMPLE_DESC').'</td>
+                        <td>'.$gL10n->get('SYS_SEARCH_EMPTY_EXAMPLE_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_STREET').'</td>
                         <td><strong>'.$gL10n->get('SYS_NOT_EMPTY').'</strong></td>
-                        <td>'.$gL10n->get('LST_NOT_EMPTY_EXAMPLE_DESC').'</td>
+                        <td>'.$gL10n->get('SYS_SEARCH_NOT_EMPTY_EXAMPLE_DESC').'</td>
                     </tr>
                     <tr>
                         <td>'.$gL10n->get('SYS_COUNTRY').'</td>
                         <td><strong>'.$gL10n->get('SYS_COUNTRY_EG').'</strong></td>
-                        <td>'.$gL10n->get('LST_COUNTRY_ISO').'</td>
+                        <td>'.$gL10n->get('SYS_COUNTRY_ISO').'</td>
                     </tr>
                 </tbody>
             </table>';

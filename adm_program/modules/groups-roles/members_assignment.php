@@ -59,7 +59,7 @@ if($getMembersShowAll)
 
 if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
 {
-    $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
     // => EXIT
 }
 
@@ -133,7 +133,7 @@ else
     // show html list with all users and their membership to this role
 
     // set headline of the script
-    $headline = $gL10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
+    $headline = $gL10n->get('SYS_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 
     // add current url to navigation stack if last url was not the same page
     if(!StringUtils::strContains($gNavigation->getUrl(), 'members_assignment.php'))
