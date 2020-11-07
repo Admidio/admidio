@@ -1133,21 +1133,21 @@ $page->addHtml(getPreferencePanel('modules', 'ecards', $gL10n->get('ECA_GREETING
 
 // PANEL: GROUPS AND ROLES
 
-$formLists = new HtmlForm(
+$formGroupsRoles = new HtmlForm(
     'groups_roles_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'groups-roles')),
     $page, array('class' => 'form-preferences')
 );
 
-$formLists->addCheckbox(
+$formGroupsRoles->addCheckbox(
     'groups_roles_enable_module', $gL10n->get('LST_ENABLE_LISTS_MODULE'), (bool) $formValues['groups_roles_enable_module'],
     array('helpTextIdInline' => 'LST_ENABLE_LISTS_MODULE_DESC')
 );
-$formLists->addInput(
+$formGroupsRoles->addInput(
     'groups_roles_roles_per_page', $gL10n->get('LST_NUMBER_OF_ROLES_PER_PAGE'), $formValues['groups_roles_roles_per_page'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
-$formLists->addSelectBox(
+$formGroupsRoles->addSelectBox(
     'groups_roles_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries,
     array('defaultValue' => $formValues['groups_roles_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC')
 );
@@ -1159,7 +1159,7 @@ $sqlData['query'] = 'SELECT lst_id, lst_name
                         AND lst_global = 1
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($orgId);
-$formLists->addSelectBoxFromSql(
+$formGroupsRoles->addSelectBoxFromSql(
     'groups_roles_default_configuration', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
     array('defaultValue' => $formValues['groups_roles_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC')
 );
@@ -1168,20 +1168,20 @@ $selectBoxEntries = array(
     '1' => preg_replace('/<\/?strong>/', '"', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_ASSIGN_ROLES')))),
     '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
 );
-$formLists->addSelectBox(
+$formGroupsRoles->addSelectBox(
     'groups_roles_show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
     array('defaultValue' => $formValues['groups_roles_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
 );
 $html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
-$formLists->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
-$formLists->addSubmitButton(
+$formGroupsRoles->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
+$formGroupsRoles->addSubmitButton(
     'btn_save_lists', $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('SYS_GROUPS_ROLES'), 'fas fa-users', $formLists->show()));
+$page->addHtml(getPreferencePanel('modules', 'groups-roles', $gL10n->get('SYS_GROUPS_ROLES'), 'fas fa-users', $formGroupsRoles->show()));
 
 // PANEL: MESSAGES
 
