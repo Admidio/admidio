@@ -38,7 +38,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (NULL, NULL, 1, 1, 1, 'modules', NULL, '', 'SYS_MODULES', ''),
 (NULL, NULL, 1, 2, 1, 'administration', NULL, '', 'SYS_ADMINISTRATION', ''),
 (NULL, NULL, 1, 3, 1, 'plugins', NULL, '', 'SYS_PLUGINS', ''),
-(NULL, 1, 0, 1, 1, 'overview', '/adm_program/overview.php', 'home.png', 'SYS_OVERVIEW', ''),
+(NULL, 1, 0, 1, 1, 'overview', '/adm_program/overview.php', 'fa-home', 'SYS_OVERVIEW', ''),
 (60, 1, 0, 3, 1, 'documents-files', '/adm_program/modules/documents-files/documents_files.php', 'fa-file-download', 'SYS_DOCUMENTS_FILES', 'SYS_DOCUMENTS_FILES_DESC'),
 (90, 1, 0, 7, 1, 'groups-roles', '/adm_program/modules/groups-roles/groups_roles.php', 'fa-users', 'SYS_GROUPS_ROLES', 'SYS_GROUPS_ROLES_DESC'),
 (20, 1, 0, 2, 1, 'announcements', '/adm_program/modules/announcements/announcements.php', 'fa-newspaper', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC'),
