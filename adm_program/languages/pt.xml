@@ -351,7 +351,6 @@
   <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">Encontrar todos os utilizadores que não se chamam Steve</string>
   <string name="SYS_EXPORT_TO">Exportar para</string>
   <string name="SYS_FORMER_MEMBERS">Ex-membros</string>
-  <string name="SYS_FROM_TO">de #VAR1# a #VAR2#</string>
   <string name="SYS_GENERAL_LISTS">Listas gerais</string>
   <string name="LST_HIDE_DETAILS">Esconder detalhes na visão geral</string>
   <string name="LST_HIDE_DETAILS_DESC">Ative esta opção para esconder os detalhes na visão geral das listas por padrão. Os detalhes serão exibidos após ativação do usuário. (padrão: não)</string>

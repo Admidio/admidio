@@ -299,7 +299,6 @@
   <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">Cherche tous les utilisateurs qui ne s\'appellent pas Stéphane</string>
   <string name="SYS_EXPORT_TO">Exporter vers</string>
   <string name="SYS_FORMER_MEMBERS">Anciens membres</string>
-  <string name="SYS_FROM_TO">de #VAR1# à #VAR2#</string>
   <string name="SYS_GENERAL_LISTS">Listes générales</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="LST_KONFIGURATION_OWN_LIST">Configuration de sa propre liste</string>

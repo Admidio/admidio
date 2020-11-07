@@ -208,7 +208,6 @@
   <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">Trova tutti gli utenti che non si chiamano Steve</string>
   <string name="SYS_EXPORT_TO">Esporta per</string>
   <string name="SYS_FORMER_MEMBERS">Ex membri</string>
-  <string name="SYS_FROM_TO">da #VAR1# a #VAR2#</string>
   <string name="SYS_GENERAL_LISTS">Elenchi generali</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Spazio informazioni</string>
   <string name="LST_KONFIGURATION_OWN_LIST">Configurazione dei propri elenchi</string>

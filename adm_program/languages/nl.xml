@@ -324,7 +324,6 @@
   <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">Zoek alle gebruikers met de naam Stefan</string>
   <string name="SYS_EXPORT_TO">Exporteer</string>
   <string name="SYS_FORMER_MEMBERS">Voormalige leden</string>
-  <string name="SYS_FROM_TO">van #VAR1# tot #VAR2#</string>
   <string name="SYS_GENERAL_LISTS">Algemene lijsten</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="LST_KONFIGURATION_OWN_LIST">Instellingen van eigen lijsten</string>

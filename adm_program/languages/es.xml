@@ -393,7 +393,6 @@
   <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">Busca todos los usuarios que no se llaman Estefan</string>
   <string name="SYS_EXPORT_TO">Exportar a</string>
   <string name="SYS_FORMER_MEMBERS">Ex miembros</string>
-  <string name="SYS_FROM_TO">de #VAR1# hasta #VAR2#</string>
   <string name="SYS_GENERAL_LISTS">Listas generales</string>
   <string name="LST_HIDE_DETAILS">Plegar detalles de la vista general </string>
   <string name="LST_HIDE_DETAILS_DESC">Active esta opción para contraer de manera predeterminada los detalles de la lista. Serán visibles nuevamente cuando el usuario los active. (Predeterminado: No)</string>

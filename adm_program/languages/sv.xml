@@ -350,7 +350,6 @@
   <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">Hitta alla användare som inte heter Steve</string>
   <string name="SYS_EXPORT_TO">Exportera till</string>
   <string name="SYS_FORMER_MEMBERS">Förändringar</string>
-  <string name="SYS_FROM_TO">från #VAR1# till #VAR2#</string>
   <string name="SYS_GENERAL_LISTS">Allmänna listor</string>
   <string name="LST_HIDE_DETAILS">Dölj detaljer i översikten</string>
   <string name="LST_HIDE_DETAILS_DESC">Aktivera det här alternativet för att dölja detaljer i listöversikten som standard. Detaljer kommer att visas efter användarens aktivering. (standard: nej)</string>

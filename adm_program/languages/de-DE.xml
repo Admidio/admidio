@@ -298,7 +298,6 @@
   <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">Sucht alle Benutzer, die nicht Stefan heißen</string>
   <string name="SYS_EXPORT_TO">Exportieren nach</string>
   <string name="SYS_FORMER_MEMBERS">Ehemalige Mitglieder</string>
-  <string name="SYS_FROM_TO">von #VAR1# bis #VAR2#</string>
   <string name="SYS_GENERAL_LISTS">Allgemeine Listen</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="SYS_LIST">Liste</string>
