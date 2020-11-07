@@ -40,8 +40,10 @@
     <string name="DEMO_LNK_DOCUMENTATION">Dokumentation</string>
     <string name="DEMO_LNK_DOCUMENTATION_CONTENT">Die Dokumentation zu Admidio mit wertvollen Hilfen und Tipps.</string>
     <string name="DEMO_PHO_CROATIA">Kroatien</string>
+    <string name="DEMO_PHO_CROATIA_DESC">Ein unvergesslicher Urlaub in Kroatien bei schönstem Sonnenschein und viel Natur.</string>
     <string name="DEMO_PHO_STEVEN_SMITH">Karl Müller und andere</string>
     <string name="DEMO_PHO_PLITVICE_LAKES">Plitwitzer Seen</string>
+    <string name="DEMO_PHO_MACHU_PICCHU_DESC">Eine Reise zu der legendären Inca Stadt Machu Picchu in den Bergen von Peru.</string>
     <string name="DEMO_PRO_MEMBERSHIP_NUMBER">Mitgliedsnummer</string>
     <string name="DEMO_PRO_FAVORITE_COLOR">Lieblingsfarbe</string>
     <string name="DEMO_PRO_FAVORITE_COLOR_CONTENT">Hier kann jedes Mitglied seine Lieblingsfarbe eintragen</string>

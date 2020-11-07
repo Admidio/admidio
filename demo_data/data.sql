@@ -4,24 +4,23 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.17', 0, 730)
-                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.17', 0, 0)
-                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '3.3.17', 0, 0)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.17', 0, 0)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.17', 0, 0)
-                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.17', 0, 0)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.17', 0, 0)
-                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.17', 0, 0)
-                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.17', 0, 0)
-                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.17', 0, 0)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.17', 0, 0)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.17', 0, 0)
-                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '3.3.17', 0, 0)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.17', 0, 0)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.17', 0, 0)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.17', 0, 0)
-                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.17', 0, 0)
-                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '3.3.17', 0, 0);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.0.0', 0, 730)
+                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.0.0', 0, 0)
+                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.0.0', 0, 0)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.0.0', 0, 0)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.0.0', 0, 0)
+                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.0.0', 0, 0)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.0', 0, 0)
+                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '4.0.0', 0, 0)
+                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.0', 0, 0)
+                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '4.0.0', 0, 0)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.0', 0, 0)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.0.0', 0, 0)
+                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.0.0', 0, 0)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.0.0', 0, 0)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.0.0', 0, 0)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.0.0', 0, 0)
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.0.0', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -39,22 +38,20 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (NULL, NULL, 1, 1, 1, 'modules', NULL, '', 'SYS_MODULES', ''),
 (NULL, NULL, 1, 2, 1, 'administration', NULL, '', 'SYS_ADMINISTRATION', ''),
 (NULL, NULL, 1, 3, 1, 'plugins', NULL, '', 'SYS_PLUGINS', ''),
-(NULL, 1, 0, 1, 1, 'overview', '/adm_program/index.php', 'home.png', 'SYS_OVERVIEW', ''),
-(60, 1, 0, 3, 1, 'download', '/adm_program/modules/downloads/downloads.php', 'download.png', 'DOW_DOWNLOADS', 'DOW_DOWNLOADS_DESC'),
-(90, 1, 0, 7, 1, 'lists', '/adm_program/modules/lists/lists.php', 'lists.png', 'LST_LISTS', 'LST_LISTS_DESC'),
-(90, 1, 0, 8, 1, 'mylist', '/adm_program/modules/lists/mylist.php', 'mylist.png', 'LST_MY_LIST', 'SYS_MYLIST_DESC'),
-(20, 1, 0, 2, 1, 'announcements', '/adm_program/modules/announcements/announcements.php', 'announcements.png', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC'),
-(130, 1, 0, 5, 1, 'photo', '/adm_program/modules/photos/photos.php', 'photo.png', 'SYS_PHOTOS', 'PHO_PHOTOS_DESC'),
-(70, 1, 0, 6, 1, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'guestbook.png', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC'),
-(50, 1, 0, 8, 1, 'dates', '/adm_program/modules/dates/dates.php', 'dates.png', 'DAT_DATES', 'DAT_DATES_DESC'),
-(80, 1, 0, 9, 1, 'weblinks', '/adm_program/modules/links/links.php', 'weblinks.png', 'LNK_WEBLINKS', 'LNK_WEBLINKS_DESC'),
-(30, 2, 0, 4, 1, 'dbback', '/adm_program/modules/backup/backup.php', 'backup.png', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC'),
-(140, 2, 0, 6, 1, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'options.png', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC'),
-(120, 1, 0, 4, 1, 'mail', '/adm_program/modules/messages/messages_write.php', 'email.png', 'SYS_EMAIL', 'MAI_EMAIL_DESC'),
-(160, 2, 0, 1, 1, 'newreg', '/adm_program/modules/registration/registration.php', 'new_registrations.png', 'NWU_NEW_REGISTRATIONS', 'NWU_MANAGE_NEW_REGISTRATIONS_DESC'),
-(100, 2, 0, 2, 1, 'usrmgt', '/adm_program/modules/members/members.php', 'user_administration.png', 'MEM_USER_MANAGEMENT', 'MEM_USER_MANAGEMENT_DESC'),
-(170, 2, 0, 3, 1, 'roladm', '/adm_program/modules/roles/roles.php', 'roles.png', 'ROL_ROLE_ADMINISTRATION', 'ROL_ROLE_ADMINISTRATION_DESC'),
-(110, 2, 0, 5, 1, 'menu', '/adm_program/modules/menu/menu.php', 'application_view_tile.png', 'SYS_MENU', 'SYS_MENU_DESC');
+(NULL, 1, 0, 1, 1, 'overview', '/adm_program/overview.php', 'home.png', 'SYS_OVERVIEW', ''),
+(60, 1, 0, 3, 1, 'documents-files', '/adm_program/modules/documents-files/documents_files.php', 'fa-file-download', 'SYS_DOCUMENTS_FILES', 'SYS_DOCUMENTS_FILES_DESC'),
+(90, 1, 0, 7, 1, 'groups-roles', '/adm_program/modules/groups-roles/groups_roles.php', 'fa-users', 'SYS_GROUPS_ROLES', 'SYS_GROUPS_ROLES_DESC'),
+(20, 1, 0, 2, 1, 'announcements', '/adm_program/modules/announcements/announcements.php', 'fa-newspaper', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC'),
+(130, 1, 0, 5, 1, 'photo', '/adm_program/modules/photos/photos.php', 'fa-image', 'SYS_PHOTOS', 'PHO_PHOTOS_DESC'),
+(70, 1, 0, 6, 1, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'fa-book', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC'),
+(50, 1, 0, 8, 1, 'dates', '/adm_program/modules/dates/dates.php', 'fa-calendar-alt', 'DAT_DATES', 'DAT_DATES_DESC'),
+(80, 1, 0, 9, 1, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'LNK_WEBLINKS', 'LNK_WEBLINKS_DESC'),
+(30, 2, 0, 4, 1, 'dbback', '/adm_program/modules/backup/backup.php', 'fa-database', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC'),
+(140, 2, 0, 6, 1, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'fa-cog', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC'),
+(120, 1, 0, 4, 1, 'mail', '/adm_program/modules/messages/messages_write.php', 'fa-envelope', 'SYS_EMAIL', 'MAI_EMAIL_DESC'),
+(160, 2, 0, 1, 1, 'newreg', '/adm_program/modules/registration/registration.php', 'fa-address-card', 'NWU_NEW_REGISTRATIONS', 'NWU_MANAGE_NEW_REGISTRATIONS_DESC'),
+(100, 2, 0, 2, 1, 'usrmgt', '/adm_program/modules/members/members.php', 'fa-users-cog', 'MEM_USER_MANAGEMENT', 'MEM_USER_MANAGEMENT_DESC'),
+(110, 2, 0, 5, 1, 'menu', '/adm_program/modules/menu/menu.php', 'fa-stream', 'SYS_MENU', 'SYS_MENU_DESC');
 
 
 --
@@ -72,7 +69,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (2300, 1, 'enable_auto_login', '1'),
 (2400, 1, 'enable_dates_ical', '1'),
 (2500, 1, 'enable_dates_module', '1'),
-(2600, 1, 'enable_download_module', '1'),
+(2600, 1, 'documents_files_enable_module', '1'),
 (2700, 1, 'enable_ecard_module', '1'),
 (2950, 1, 'enable_email_notification', '0'),
 (3100, 1, 'enable_gbook_comments4all', '0'),
@@ -103,10 +100,9 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (4900, 1, 'default_country', 'DEU'),
 (5000, 1, 'flooding_protection_time', '60'),
 (6200, 1, 'guestbook_entries_per_page', '10'),
-(6300, 1, 'homepage_logout', 'adm_program/modules/announcements/announcements.php'),
-(6400, 1, 'homepage_login', 'adm_program/index.php'),
+(6300, 1, 'homepage_logout', 'adm_program/overview.php'),
+(6400, 1, 'homepage_login', 'adm_program/overview.php'),
 (6450, 1, 'lists_enable_module', '1'),
-(6500, 1, 'lists_hide_overview_details', '0'),
 (6600, 1, 'lists_members_per_page', '25'),
 (6700, 1, 'lists_roles_per_page', '10'),
 (6705, 1, 'lists_default_configuration', '1'),
@@ -126,7 +122,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (7040, 1, 'mail_smtp_auth', '1'),
 (7050, 1, 'mail_smtp_port', '25'),
 (7060, 1, 'mail_smtp_secure', ''),
-(7070, 1, 'mail_smtp_authentication_type', 'LOGIN'),
+(7070, 1, 'mail_smtp_authentication_type', ''),
 (7080, 1, 'mail_smtp_user', ''),
 (7090, 1, 'mail_smtp_password', ''),
 (7095, 1, 'mail_send_to_all_addresses', '1'),
@@ -142,7 +138,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (7500, 1, 'photo_show_width', '640'),
 (7600, 1, 'photo_show_height', '480'),
 (7700, 1, 'photo_show_mode', '1'),
-(7800, 1, 'photo_thumbs_scale', '160'),
+(7800, 1, 'photo_thumbs_scale', '200'),
 (7900, 1, 'photo_thumbs_page', '16'),
 (8000, 1, 'photo_keep_original', '0'),
 (8100, 1, 'photo_download_enabled', '1'),
@@ -153,7 +149,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (8600, 1, 'profile_show_former_roles', '1'),
 (8700, 1, 'profile_show_extern_roles', '1'),
 (8800, 1, 'registration_enable_module', '1'),
-(8900, 1, 'theme', 'modern'),
+(8900, 1, 'theme', 'simple'),
 (9000, 1, 'weblinks_per_page', '0'),
 (9100, 1, 'weblinks_redirect_seconds', '10'),
 (9200, 1, 'weblinks_target', '_blank'),
@@ -161,7 +157,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (9305, 1, 'system_cookie_note', '1'),
 (9310, 1, 'system_date', 'd.m.Y'),
 (9320, 1, 'system_js_editor_enabled', '1'),
-(9330, 1, 'system_js_editor_color', '#96c4cb'),
+(9330, 1, 'system_js_editor_color', '#eeeeee'),
 (9340, 1, 'system_language', 'de'),
 (9350, 1, 'system_organization_select', '1'),
 (9360, 1, 'system_search_similar', '1'),
@@ -184,7 +180,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (23001, 2, 'enable_auto_login', '1'),
 (24001, 2, 'enable_dates_ical', '1'),
 (25001, 2, 'enable_dates_module', '1'),
-(26001, 2, 'enable_download_module', '1'),
+(26001, 2, 'documents_files_enable_module', '1'),
 (27001, 2, 'enable_ecard_module', '1'),
 (29501, 2, 'enable_email_notification', '0'),
 (31001, 2, 'enable_gbook_comments4all', '0'),
@@ -218,7 +214,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (63001, 2, 'homepage_logout', 'adm_program/modules/announcements/announcements.php'),
 (64001, 2, 'homepage_login', 'adm_program/index.php'),
 (64050, 2, 'lists_enable_module', '1'),
-(65001, 2, 'lists_hide_overview_details', '0'),
 (66001, 2, 'lists_members_per_page', '25'),
 (67001, 2, 'lists_roles_per_page', '10'),
 (67005, 2, 'lists_default_configuration', '9'),
@@ -238,7 +233,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (70040, 2, 'mail_smtp_auth', '1'),
 (70050, 2, 'mail_smtp_port', '25'),
 (70060, 2, 'mail_smtp_secure', ''),
-(70070, 2, 'mail_smtp_authentication_type', 'LOGIN'),
+(70070, 2, 'mail_smtp_authentication_type', ''),
 (70080, 2, 'mail_smtp_user', ''),
 (70090, 2, 'mail_smtp_password', ''),
 (70095, 2, 'mail_send_to_all_addresses', '1'),
@@ -254,7 +249,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (75001, 2, 'photo_show_width', '640'),
 (76001, 2, 'photo_show_height', '480'),
 (77001, 2, 'photo_show_mode', '1'),
-(78001, 2, 'photo_thumbs_scale', '160'),
+(78001, 2, 'photo_thumbs_scale', '200'),
 (79001, 2, 'photo_thumbs_page', '16'),
 (80001, 2, 'photo_keep_original', '0'),
 (81001, 2, 'photo_download_enabled', '0'),
@@ -265,7 +260,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (86001, 2, 'profile_show_former_roles', '1'),
 (87001, 2, 'profile_show_extern_roles', '1'),
 (88001, 2, 'registration_enable_module', '1'),
-(89001, 2, 'theme', 'modern'),
+(89001, 2, 'theme', 'simple'),
 (90001, 2, 'weblinks_per_page', '0'),
 (91001, 2, 'weblinks_redirect_seconds', '10'),
 (92001, 2, 'weblinks_target', '_blank'),
@@ -273,7 +268,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (93015, 2, 'system_cookie_note', '1'),
 (93020, 2, 'system_date', 'd.m.Y'),
 (93030, 2, 'system_js_editor_enabled', '1'),
-(93040, 2, 'system_js_editor_color', '#96c4cb'),
+(93040, 2, 'system_js_editor_color', '#eeeeee'),
 (93050, 2, 'system_language', 'de'),
 (93060, 2, 'system_organization_select', '1'),
 (93070, 2, 'system_search_similar', '1'),
@@ -516,7 +511,7 @@ INSERT INTO %PREFIX%_categories (cat_id, cat_org_id, cat_type, cat_name_intern, 
 -- Data for table adm_roles
 --
 
-INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_download, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_this_list_view, rol_all_lists_view, rol_leader_rights, rol_default_registration, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_administrator) VALUES
+INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_documents_files, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_this_list_view, rol_all_lists_view, rol_leader_rights, rol_default_registration, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_administrator) VALUES
 (1, 3, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', 1, 0, 1),
 (2, 3, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', 1, 0, 0),
 (3, 3, 'INS_BOARD', 'INS_DESCRIPTION_BOARD', 0, 0, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 2, 1, 1, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', 1, 0, 0),
@@ -589,15 +584,15 @@ Thüringen', NULL, NULL, 0, 0, 0, 0, 1, 6, 1, '2013-11-27T17:50:14', 1, '2013-11
 (8, 1, 'PHONE', 'MOBILE', 'SYS_MOBILE', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 1, 9, 1, '2012-01-08 11:12:05', NULL, NULL),
 (9, 1, 'PHONE', 'FAX', 'SYS_FAX', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 1, 10, 1, '2012-01-08 11:12:05', NULL, NULL),
 (10, 1, 'DATE', 'BIRTHDAY', 'SYS_BIRTHDAY', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 1, 11, 1, '2012-01-08 11:12:05', NULL, NULL),
-(11, 1, 'RADIO_BUTTON', 'GENDER', 'SYS_GENDER', NULL, 'male.png|SYS_MALE
-female.png|SYS_FEMALE', NULL, NULL, 0, 0, 0, 0, 1, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
+(11, 1, 'RADIO_BUTTON', 'GENDER', 'SYS_GENDER', NULL, 'fa-mars|SYS_MALE
+fa-venus|SYS_FEMALE', NULL, NULL, 0, 0, 0, 0, 1, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
 (12, 1, 'EMAIL', 'EMAIL', 'SYS_EMAIL', NULL, NULL, NULL, NULL, 1, 0, 0, 1, 1, 13, 1, '2012-01-08 11:12:05', NULL, NULL),
 (13, 1, 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 1, 14, 1, '2012-01-08 11:12:05', NULL, NULL),
-(22, 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'INS_FACEBOOK_DESC', NULL, 'facebook.png', 'https://www.facebook.com/#user_content#', 0, 0, 0, 0, 0, 1, 1, '2012-01-08 11:11:40', NULL, NULL),
+(22, 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'INS_FACEBOOK_DESC', NULL, 'fab fa-facebook', 'https://www.facebook.com/#user_content#', 0, 0, 0, 0, 0, 1, 1, '2012-01-08 11:11:40', NULL, NULL),
 (16, 2, 'TEXT', 'ICQ', 'INS_ICQ', 'INS_ICQ_DESC', NULL, 'icq.png', 'https://www.icq.com/people/#user_content#', 0, 0, 0, 0, 0, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
-(18, 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'INS_SKYPE_DESC', NULL, 'skype.png', NULL, 0, 0, 0, 0, 0, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
-(23, 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'INS_TWITTER_DESC', NULL, 'twitter.png', 'https://twitter.com/#user_content#', 0, 0, 0, 0, 0, 4, 1, '2012-01-08 11:11:40', NULL, NULL),
-(24, 2, 'TEXT', 'XING', 'INS_XING', 'INS_XING_DESC', NULL, 'xing.png', 'https://www.xing.com/profile/#user_content#', 0, 0, 0, 0, 0, 5, 1, '2012-01-08 11:11:40', NULL, NULL),
+(18, 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'INS_SKYPE_DESC', NULL, 'fab fa-skype', NULL, 0, 0, 0, 0, 0, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
+(23, 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'INS_TWITTER_DESC', NULL, 'fab fa-twitter', 'https://twitter.com/#user_content#', 0, 0, 0, 0, 0, 4, 1, '2012-01-08 11:11:40', NULL, NULL),
+(24, 2, 'TEXT', 'XING', 'INS_XING', 'INS_XING_DESC', NULL, 'fab fa-xing', 'https://www.xing.com/profile/#user_content#', 0, 0, 0, 0, 0, 5, 1, '2012-01-08 11:11:40', NULL, NULL),
 (20, 8, 'NUMBER', 'MEMBERSHIP_NUMBER', 'DEMO_PRO_MEMBERSHIP_NUMBER', NULL, NULL, NULL, NULL, 0, 1, 0, 0, 0, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
 (21, 8, 'TEXT', 'FAVORITE_COLOR', 'DEMO_PRO_FAVORITE_COLOR', 'DEMO_PRO_FAVORITE_COLOR_CONTENT', NULL, NULL, NULL, 0, 0, 0, 0, 0, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
 
@@ -1052,11 +1047,11 @@ INSERT INTO %PREFIX%_registrations (reg_id, reg_org_id, reg_usr_id, reg_timestam
 -- Data for table adm_photos
 --
 
-INSERT INTO %PREFIX%_photos (pho_id, pho_org_id, pho_quantity, pho_name, pho_begin, pho_end, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
-(1, 1, 0, 'DEMO_PHO_CROATIA', '2009-10-05', '2009-10-11', 'DEMO_PHO_STEVEN_SMITH', 0, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
-(2, 1, 3, 'DEMO_PHO_PLITVICE_LAKES', '2009-10-05', '2009-10-07', 'DEMO_PHO_STEVEN_SMITH', 0, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
-(3, 1, 3, 'Krka', '2009-10-08', '2009-10-11', 'DEMO_PHO_STEVEN_SMITH', 0, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
-(4, 1, 5, 'Machu Picchu', '2009-09-14', '2009-09-17', 'Admin', 0, NULL, 1, '2009-10-23 18:20:50', NULL, NULL);
+INSERT INTO %PREFIX%_photos (pho_id, pho_org_id, pho_quantity, pho_name, pho_begin, pho_end, pho_description, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
+(1, 1, 0, 'DEMO_PHO_CROATIA', '2009-10-05', '2009-10-11', 'DEMO_PHO_CROATIA_DESC', 'DEMO_PHO_STEVEN_SMITH', 0, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
+(2, 1, 3, 'DEMO_PHO_PLITVICE_LAKES', '2009-10-05', '2009-10-07', NULL, 'DEMO_PHO_STEVEN_SMITH', 0, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
+(3, 1, 3, 'Krka', '2009-10-08', '2009-10-11', NULL, 'DEMO_PHO_STEVEN_SMITH', 0, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
+(4, 1, 5, 'Machu Picchu', '2009-09-14', '2009-09-17', 'DEMO_PHO_MACHU_PICCHU_DESC', 'Admin', 0, NULL, 1, '2009-10-23 18:20:50', NULL, NULL);
 
 
 --

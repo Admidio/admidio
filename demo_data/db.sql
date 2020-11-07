@@ -423,13 +423,14 @@ CREATE TABLE %PREFIX%_photos
 (
     pho_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     pho_org_id                  integer unsigned    NOT NULL,
+    pho_pho_id_parent           integer unsigned,
     pho_quantity                integer unsigned    NOT NULL    DEFAULT 0,
     pho_name                    varchar(50)         NOT NULL,
     pho_begin                   date                NOT NULL,
     pho_end                     date                NOT NULL,
+    pho_description             varchar(4000),
     pho_photographers           varchar(100),
     pho_locked                  boolean             NOT NULL    DEFAULT '0',
-    pho_pho_id_parent           integer unsigned,
     pho_usr_id_create           integer unsigned,
     pho_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     pho_usr_id_change           integer unsigned,
@@ -502,7 +503,7 @@ CREATE TABLE %PREFIX%_roles
     rol_approve_users           boolean             NOT NULL    DEFAULT '0',
     rol_announcements           boolean             NOT NULL    DEFAULT '0',
     rol_dates                   boolean             NOT NULL    DEFAULT '0',
-    rol_download                boolean             NOT NULL    DEFAULT '0',
+    rol_documents_files         boolean             NOT NULL    DEFAULT '0',
     rol_edit_user               boolean             NOT NULL    DEFAULT '0',
     rol_guestbook               boolean             NOT NULL    DEFAULT '0',
     rol_guestbook_comments      boolean             NOT NULL    DEFAULT '0',
@@ -702,7 +703,7 @@ COLLATE = utf8_unicode_ci;
 CREATE TABLE %PREFIX%_users
 (
     usr_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    usr_login_name              varchar(35),
+    usr_login_name              varchar(254),
     usr_password                varchar(255),
     usr_new_password            varchar(255),
     usr_photo                   blob,
@@ -750,7 +751,7 @@ COLLATE = utf8_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_name ON %PREFIX%_user_relation_types (urt_name);
 
 /*==============================================================*/
-/* Table: adm_user_relation_types                               */
+/* Table: adm_user_relations                                    */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_user_relations
 (
