@@ -171,6 +171,7 @@ input[type=checkbox] {
 
 label {
     font-weight: bold;
+    padding-right: 0px !important;
 }
 
 @media (min-width: 768px) {
