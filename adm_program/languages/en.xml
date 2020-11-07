@@ -958,8 +958,6 @@
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">First name</string>
   <string name="SYS_FIRSTNAME_LASTNAME">First name and lastname</string>
-  <string name="SYS_FROM">from #VAR1#</string>
-  <string name="SYS_FROM_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_FOLDER">Folder</string>
   <string name="SYS_FOLDER_CREATED">Folder #VAR1_BOLD# was created.</string>
   <string name="SYS_FOLDER_EXISTS">Folder #VAR1# already exists!\n\nPlease select different folder name.</string>
@@ -978,6 +976,7 @@
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FORGOT_MY_PASSWORD">I forgot my password!</string>
   <string name="SYS_FRIDAY">Friday</string>
+  <string name="SYS_FROM">from #VAR1#</string>
   <string name="SYS_FROM_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_FURTHER_INFORMATIONS">Further informations</string>
   <string name="SYS_GENERAL_LISTS">General lists</string>
