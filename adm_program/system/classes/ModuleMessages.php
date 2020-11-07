@@ -62,11 +62,11 @@ class ModuleMessages
         switch ($groupInfo['status'])
         {
 //            case 'active':
-//                return $roleName . ' (' . $gL10n->get('LST_ACTIVE_MEMBERS') . ')';
+//                return $roleName . ' (' . $gL10n->get('SYS_ACTIVE_MEMBERS') . ')';
             case 'former':
-                return $roleName . ' (' . $gL10n->get('LST_FORMER_MEMBERS') . ')';
+                return $roleName . ' (' . $gL10n->get('SYS_FORMER_MEMBERS') . ')';
             case 'active_former':
-                return $roleName . ' (' . $gL10n->get('LST_ACTIVE_FORMER_MEMBERS') . ')';
+                return $roleName . ' (' . $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')';
             default:
                 return $roleName;
         }

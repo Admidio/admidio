@@ -45,12 +45,12 @@ $numberRoles = count($roleIds);
 
 if ($numberRoles === 0)
 {
-    $gMessage->show($gL10n->get('LST_NO_ROLE_GIVEN'));
+    $gMessage->show($gL10n->get('SYS_NO_ROLE_GIVEN'));
     // => EXIT
 }
 
 // determine all roles relevant data
-$roleName        = $gL10n->get('LST_VARIOUS_ROLES');
+$roleName        = $gL10n->get('SYS_VARIOUS_ROLES');
 $htmlSubHeadline = '';
 $showLinkMailToList = true;
 $hasRightViewFormerMembers = true;
@@ -188,7 +188,7 @@ if ($numberRoles === 1 && $getListId === 0)
 
     if ($getListId === 0)
     {
-        $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
+        $gMessage->show($gL10n->get('SYS_DEFAULT_LIST_NOT_SET_UP'));
         // => EXIT
     }
 }
@@ -240,11 +240,11 @@ $arrColName = array(
     'mem_begin'            => $gL10n->get('SYS_START'),
     'mem_end'              => $gL10n->get('SYS_END'),
     'mem_leader'           => $gL10n->get('SYS_LEADERS'),
-    'mem_approved'         => $gL10n->get('LST_PARTICIPATION_STATUS'),
-    'mem_usr_id_change'    => $gL10n->get('LST_USER_CHANGED'),
+    'mem_approved'         => $gL10n->get('SYS_PARTICIPATION_STATUS'),
+    'mem_usr_id_change'    => $gL10n->get('SYS_CHANGED_BY'),
     'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
     'mem_comment'          => $gL10n->get('SYS_COMMENT'),
-    'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT')
+    'mem_count_guests'     => $gL10n->get('SYS_SEAT_AMOUNT')
 );
 
 // Array for valid columns visible for current user.
@@ -285,7 +285,7 @@ foreach ($membersList as $member)
 }
 
 // define title (html) and headline
-$title = $gL10n->get('LST_LIST').' - '.$roleName;
+$title = $gL10n->get('SYS_LIST').' - '.$roleName;
 if (strlen($list->getValue('lst_name')) > 0)
 {
     $headline = $roleName.' - '.$list->getValue('lst_name');
@@ -301,7 +301,7 @@ if (count($relationTypeIds) === 1)
 }
 elseif (count($relationTypeIds) > 1)
 {
-    $headline .= ' - '.$gL10n->get('LST_VARIOUS_USER_RELATION_TYPES');
+    $headline .= ' - '.$gL10n->get('SYS_VARIOUS_USER_RELATION_TYPES');
 }
 
 // if html mode and last url was not a list view then save this url to navigation stack
@@ -319,17 +319,17 @@ if ($getMode !== 'csv')
     {
         if ($getShowFormerMembers === 1)
         {
-            $htmlSubHeadline .= ' - '.$gL10n->get('LST_FORMER_MEMBERS');
+            $htmlSubHeadline .= ' - '.$gL10n->get('SYS_FORMER_MEMBERS');
         }
         else
         {
             if ($getDateFrom === DATE_NOW && $getDateTo === DATE_NOW)
             {
-                $htmlSubHeadline .= ' - '.$gL10n->get('LST_ACTIVE_MEMBERS');
+                $htmlSubHeadline .= ' - '.$gL10n->get('SYS_ACTIVE_MEMBERS');
             }
             else
             {
-                $htmlSubHeadline .= ' - '.$gL10n->get('LST_MEMBERS_BETWEEN_PERIOD', array($dateFrom, $dateTo));
+                $htmlSubHeadline .= ' - '.$gL10n->get('SYS_MEMBERS_BETWEEN_PERIOD', array($dateFrom, $dateTo));
             }
         }
     }
@@ -412,23 +412,23 @@ if ($getMode !== 'csv')
         {
             if($rowConfigurations[2] == 0)
             {
-                $rowConfigurations[2] = $gL10n->get('LST_YOUR_LISTS');
+                $rowConfigurations[2] = $gL10n->get('SYS_YOUR_LISTS');
             }
             else
             {
-                $rowConfigurations[2] = $gL10n->get('LST_GENERAL_LISTS');
+                $rowConfigurations[2] = $gL10n->get('SYS_GENERAL_LISTS');
             }
         }
         unset($rowConfigurations);
 
         // add list item for own list
-        $listConfigurations[] = array('mylist', $gL10n->get('SYS_CONFIGURE_LISTS'), $gL10n->get('LST_CONFIGURATION'));
+        $listConfigurations[] = array('mylist', $gL10n->get('SYS_CONFIGURE_LISTS'), $gL10n->get('SYS_CONFIGURATION'));
 
         // add navbar with filter elements and the selectbox with all lists configuraitons
         $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
         $form->addSelectBox(
-            'list_configurations', $gL10n->get('LST_CONFIGURATION_LIST'), $listConfigurations,
+            'list_configurations', $gL10n->get('SYS_CONFIGURATION_LIST'), $listConfigurations,
             array('defaultValue' => $getListId)
         );
 
@@ -437,11 +437,11 @@ if ($getMode !== 'csv')
         if ($hasRightViewFormerMembers)
         {
             // create filter menu with elements for start-/enddate
-            $form->addInput('date_from', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('date_to', $gL10n->get('LST_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
+            $form->addInput('date_from', $gL10n->get('SYS_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
+            $form->addInput('date_to', $gL10n->get('SYS_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('lst_id', '', $getListId, array('property' => HtmlForm::FIELD_HIDDEN));
             $form->addInput('rol_ids', '', $getRoleIds, array('property' => HtmlForm::FIELD_HIDDEN));
-            $form->addCheckbox('show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
+            $form->addCheckbox('show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
         }
 
@@ -473,11 +473,11 @@ if ($getMode !== 'csv')
         );
 
         // link to print overlay and exports
-        $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('LST_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
+        $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
 
         // dropdown menu item with all export possibilities
-        $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('LST_EXPORT_TO'), '#', 'fa-file-download');
-        $page->addPageFunctionsMenuItem('menu_item_lists_csv_ms', $gL10n->get('LST_MICROSOFT_EXCEL'),
+        $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
+        $page->addPageFunctionsMenuItem('menu_item_lists_csv_ms', $gL10n->get('SYS_MICROSOFT_EXCEL'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-ms')),
             'fa-file-excel', 'menu_item_lists_export');
         $page->addPageFunctionsMenuItem('menu_item_lists_pdf', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
@@ -504,7 +504,7 @@ if ($getMode !== 'csv')
         // link to email-module
         if($showLinkMailToList)
         {
-            $page->addPageFunctionsMenuItem('menu_item_mail_to_list', $gL10n->get('LST_EMAIL_TO_LIST'),
+            $page->addPageFunctionsMenuItem('menu_item_mail_to_list', $gL10n->get('SYS_EMAIL_TO_LIST'),
                 'javascript:void(0);', 'fa-envelope');
         }
 
@@ -534,7 +534,7 @@ else
 if ($numMembers === 0)
 {
     // Es sind keine Daten vorhanden !
-    $page->addHtml('<div class="alert alert-warning" role="alert">' . $gL10n->get('LST_NO_USER_FOUND') . '</div>');
+    $page->addHtml('<div class="alert alert-warning" role="alert">' . $gL10n->get('SYS_NO_USER_FOUND') . '</div>');
     $page->show();
     // => EXIT
 }
@@ -749,11 +749,11 @@ foreach ($membersList as $member)
                 // show user photo
                 if ($getMode === 'html' || $getMode === 'print')
                 {
-                    $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $member['usr_id'])).'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
+                    $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $member['usr_id'])).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_USER_PHOTO').'" />';
                 }
                 if ($getMode === 'csv' && $member[$sqlColumnNumber] != null)
                 {
-                    $content = $gL10n->get('LST_USER_PHOTO');
+                    $content = $gL10n->get('SYS_USER_PHOTO');
                 }
             }
             elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
@@ -971,7 +971,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
         {
             $htmlBox = '
             <div class="card admidio-blog" id="adm_lists_infobox">
-                <div class="card-header">'.$gL10n->get('LST_INFOBOX').': '.$role->getValue('rol_name').'</div>
+                <div class="card-header">'.$gL10n->get('SYS_INFOBOX').': '.$role->getValue('rol_name').'</div>
                 <div class="card-body">';
             $form = new HtmlForm('list_infobox_items');
             $form->addStaticControl('infobox_category', $gL10n->get('SYS_CATEGORY'), $role->getValue('cat_name'));
@@ -996,7 +996,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             }
             if (strlen($role->getValue('rol_start_time')) > 0)
             {
-                $value = $gL10n->get('LST_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
+                $value = $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
             }
             if ($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
             {

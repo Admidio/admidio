@@ -365,14 +365,14 @@ elseif (!isset($messageStatement))
                 // Rollenobjekt anlegen
                 $role = new TableRoles($gDb);
                 $role->setArray($roleArray);
-                $list[] = array('groupID: '.$roleArray['rol_id'], $roleArray['rol_name'], $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')');
+                $list[] = array('groupID: '.$roleArray['rol_id'], $roleArray['rol_name'], $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_MEMBERS') . ')');
                 $listRoleIdsArray[] = $roleArray['rol_id'];
                 if($role->hasFormerMembers() > 0 && $gSettingsManager->getBool('mail_show_former'))
                 {
                     // list role with former members
-                    $listFormer[] = array('groupID: '.$roleArray['rol_id'].'-1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_FORMER_MEMBERS') . ')');
+                    $listFormer[] = array('groupID: '.$roleArray['rol_id'].'-1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_FORMER_MEMBERS') . ')');
                     // list role with active and former members
-                    $listActiveAndFormer[] = array('groupID: '.$roleArray['rol_id'].'-2', $roleArray['rol_name'].' '.'('.$gL10n->get('MSG_ACTIVE_FORMER_SHORT').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_ACTIVE_FORMER_MEMBERS') . ')');
+                    $listActiveAndFormer[] = array('groupID: '.$roleArray['rol_id'].'-2', $roleArray['rol_name'].' '.'('.$gL10n->get('MSG_ACTIVE_FORMER_SHORT').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
                 }
             }
 
@@ -435,12 +435,12 @@ elseif (!isset($messageStatement))
                     // if membership is active then show them as active members
                     if($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW)
                     {
-                        $activeList[]  = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
+                        $activeList[]  = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('SYS_ACTIVE_MEMBERS'));
                         $currentUserId = $usrId;
                     }
                     elseif($gSettingsManager->getBool('mail_show_former'))
                     {
-                        $passiveList[] = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
+                        $passiveList[] = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('SYS_FORMER_MEMBERS'));
                         $currentUserId = $usrId;
                     }
                 }
@@ -474,7 +474,7 @@ elseif (!isset($messageStatement))
     {
         $preloadData = 'dummy';
         $showlist = new ListConfiguration($gDb, $postListId);
-        $list = array('dummy' => $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : ''));
+        $list = array('dummy' => $gL10n->get('SYS_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : ''));
         $form->addInput('userIdList', '', $postUserIdList, array('property' => HtmlForm::FIELD_HIDDEN));
         $form->addInput('lst_id', '', $postListId, array('property' => HtmlForm::FIELD_HIDDEN));
     }

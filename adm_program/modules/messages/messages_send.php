@@ -489,7 +489,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     {
         $showList = new ListConfiguration($gDb, $postListId);
         $listName = $showList->getValue('lst_name');
-        $receiverString = 'list ' . $gL10n->get('LST_LIST') . ($listName === '' ? '' : ' - ' . $listName);
+        $receiverString = 'list ' . $gL10n->get('SYS_LIST') . ($listName === '' ? '' : ' - ' . $listName);
     }
 
     if($gSettingsManager->getBool('mail_into_to'))

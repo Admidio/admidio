@@ -157,18 +157,18 @@
   <string name="LNK_WEBLINKS">网页链接</string>
   <string name="LNK_WEBLINKS_DESC">按类别创建和组织有兴趣的超链接。</string>
   <!--Phrases only in Listsmodule-->
-  <string name="LST_A_TO_Z">A到Z</string>
-  <string name="LST_CONFIGURATION_DEFAULT">是否将选定的配置标记为该部门的默认配置？</string>
-  <string name="LST_DEFAULT_CONFIGURATION">默认配置</string>
-  <string name="LST_DEFAULT_CONFIGURATION_DESC">此处给出的配置之一可以设置为该部门列表的默认配置。此配置将显示没有列表配置的角色的成员列表。</string>
-  <string name="LST_DELETE_CONFIGURATION">删除配置</string>
-  <string name="LST_EMAIL_TO_MEMBERS">向成员发送电子邮件</string>
-  <string name="LST_EMAIL_TO_LIST">向列表发送电子邮件</string>
-  <string name="LST_EXCLUDE_EXAMPLE">Steve</string>
-  <string name="LST_EXCLUDE_EXAMPLE_DESC">查找所有不叫Steve的用户</string>
-  <string name="LST_EXPORT_TO">导出到</string>
-  <string name="LST_FORMER_MEMBERS">前 </string>
-  <string name="LST_GENERAL_LISTS">一般列表</string>
+  <string name="SYS_A_TO_Z">A到Z</string>
+  <string name="SYS_CONFIGURATION_DEFAULT">是否将选定的配置标记为该部门的默认配置？</string>
+  <string name="SYS_DEFAULT_CONFIGURATION">默认配置</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_DESC">此处给出的配置之一可以设置为该部门列表的默认配置。此配置将显示没有列表配置的角色的成员列表。</string>
+  <string name="SYS_DELETE_CONFIGURATION">删除配置</string>
+  <string name="SYS_EMAIL_TO_MEMBERS">向成员发送电子邮件</string>
+  <string name="SYS_EMAIL_TO_LIST">向列表发送电子邮件</string>
+  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE">Steve</string>
+  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">查找所有不叫Steve的用户</string>
+  <string name="SYS_EXPORT_TO">导出到</string>
+  <string name="SYS_FORMER_MEMBERS">前 </string>
+  <string name="SYS_GENERAL_LISTS">一般列表</string>
   <!--Phrases only in Mailmodule-->
   <!--Phrases only in Membersadministration-->
   <string name="MEM_CREATE_USER">创建用户</string>

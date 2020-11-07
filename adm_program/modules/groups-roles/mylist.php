@@ -42,7 +42,7 @@ if(!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 }
 
 // set headline of the script
-$headline = $gL10n->get('LST_CONFIGURATION_LIST');
+$headline = $gL10n->get('SYS_CONFIGURATION_LIST');
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
@@ -118,7 +118,7 @@ if(DB_ENGINE === Database::PDO_ENGINE_MYSQL)
 {
     $mySqlMaxColumnAlert = '
     if (fieldNumberIntern >= 57) {
-        alert("'.$gL10n->get('LST_NO_MORE_COLUMN').'");
+        alert("'.$gL10n->get('SYS_NO_MORE_COLUMN').'");
         return;
     }';
 }
@@ -142,7 +142,7 @@ $javascriptCode = '
         newTableRow.setAttribute("id", "row" + fieldNumberShow)
         //$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
         var newCellCount = newTableRow.insertCell(-1);
-        newCellCount.textContent = (fieldNumberShow) + ". '.$gL10n->get('LST_COLUMN').' :";
+        newCellCount.textContent = (fieldNumberShow) + ". '.$gL10n->get('SYS_COLUMN').' :";
 
         // neue Spalte zur Auswahl des Profilfeldes
         var newCellField = newTableRow.insertCell(-1);
@@ -196,8 +196,8 @@ $javascriptCode = '
         var newCellOrder = newTableRow.insertCell(-1);
         newCellOrder.innerHTML = "<select class=\"form-control\" size=\"1\" id=\"sort" + fieldNumberShow + "\" name=\"sort" + fieldNumberShow + "\">" +
                 "<option value=\"\">&nbsp;</option>" +
-                "<option value=\"ASC\" " + selectAsc + ">'.$gL10n->get('LST_A_TO_Z').'</option>" +
-                "<option value=\"DESC\" " + selectDesc + ">'.$gL10n->get('LST_Z_TO_A').'</option>" +
+                "<option value=\"ASC\" " + selectAsc + ">'.$gL10n->get('SYS_A_TO_Z').'</option>" +
+                "<option value=\"DESC\" " + selectDesc + ">'.$gL10n->get('SYS_Z_TO_A').'</option>" +
             "</select>";
 
         // neue Spalte fuer Bedingungen
@@ -231,11 +231,11 @@ $i = 1;
 $oldCategoryNameIntern = '';
 $posEndOfMasterData = 0;
 $arrParticipientsInformation = array(
-    'mem_approved'         => $gL10n->get('LST_PARTICIPATION_STATUS'),
-    'mem_usr_id_change'    => $gL10n->get('LST_USER_CHANGED'),
+    'mem_approved'         => $gL10n->get('SYS_PARTICIPATION_STATUS'),
+    'mem_usr_id_change'    => $gL10n->get('SYS_CHANGED_BY'),
     'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
     'mem_comment'          => $gL10n->get('SYS_COMMENT'),
-    'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT')
+    'mem_count_guests'     => $gL10n->get('SYS_SEAT_AMOUNT')
 );
 
 foreach($gProfileFields->getProfileFields() as $field)
@@ -309,20 +309,20 @@ foreach($gProfileFields->getProfileFields() as $field)
 
         userFields[' . $i . '] = {
             "cat_id": -1,
-            "cat_name": "'.$gL10n->get('LST_ROLE_INFORMATION').'",
+            "cat_name": "'.$gL10n->get('SYS_ROLE_INFORMATION').'",
             "usf_id": "mem_begin",
-            "usf_name": "'.$gL10n->get('LST_MEMBERSHIP_START').'",
-            "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_START').'"
+            "usf_name": "'.$gL10n->get('SYS_MEMBERSHIP_START').'",
+            "usf_name_intern": "'.$gL10n->get('SYS_MEMBERSHIP_START').'"
         };';
 
     ++$i;
     $javascriptCode .= '
         userFields[' . $i . '] = {
             "cat_id": -1,
-            "cat_name": "'.$gL10n->get('LST_ROLE_INFORMATION').'",
+            "cat_name": "'.$gL10n->get('SYS_ROLE_INFORMATION').'",
             "usf_id": "mem_end",
-            "usf_name": "'.$gL10n->get('LST_MEMBERSHIP_END').'",
-            "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_END').'"
+            "usf_name": "'.$gL10n->get('SYS_MEMBERSHIP_END').'",
+            "usf_name_intern": "'.$gL10n->get('SYS_MEMBERSHIP_END').'"
         };';
 
     // add new category with participant information of events
@@ -332,7 +332,7 @@ foreach($gProfileFields->getProfileFields() as $field)
         $javascriptCode .= '
             userFields['. $i . '] = {
                 "cat_id"   : -1,
-                "cat_name" : "'.$gL10n->get('LST_PARTICIPATION_INFORMATION').'",
+                "cat_name" : "'.$gL10n->get('SYS_PARTICIPATION_INFORMATION').'",
                 "usf_id"   : "'.$memberStatus.'",
                 "usf_name" : "'.$columnName.'",
                 "usf_name_intern" : "'.$columnName.'",
@@ -478,7 +478,7 @@ $javascriptCode .= '
 
             case "save_as":
                 var listName = "";
-                listName = prompt("'.$gL10n->get('LST_CONFIGURATION_SAVE').'");
+                listName = prompt("'.$gL10n->get('SYS_CONFIGURATION_SAVE').'");
                 if (listName !== "") {
                     myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('mode' => 1)) . '&name=" + listName;
                     myListConfigForm.submit();
@@ -486,7 +486,7 @@ $javascriptCode .= '
                 break;
 
             case "delete":
-                var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DELETE').'");
+                var msg_result = confirm("'.$gL10n->get('SYS_CONFIGURATION_DELETE').'");
                 if (msg_result) {
                     myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('lst_id' => $getListId, 'mode' => 3)).'";
                     myListConfigForm.submit();
@@ -494,7 +494,7 @@ $javascriptCode .= '
                 break;
 
             case "system":
-                var msg_result = confirm("'.$gL10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
+                var msg_result = confirm("'.$gL10n->get('SYS_WANT_CONFIGURATION_FOR_ALL_USERS').'");
                 if (msg_result) {
                     myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('lst_id' => $getListId, 'mode' => 4)).'";
                     myListConfigForm.submit();
@@ -519,14 +519,14 @@ $page->addJavascript('$(function() {
 
 // show form
 $form = new HtmlForm('mylist_configuration_form', ADMIDIO_URL. FOLDER_MODULES.'/groups-roles/mylist_prepare.php', $page);
-$form->openGroupBox('gb_configuration_list', $gL10n->get('LST_CONFIGURATION'));
+$form->openGroupBox('gb_configuration_list', $gL10n->get('SYS_CONFIGURATION'));
 
 // read all relevant configurations from database and create an array
 $yourLastConfigurationsGroup = false;
 $yourConfigurationsGroup     = false;
 $presetConfigurationsGroup   = false;
 $actualGroup                 = '';
-$configurationsArray[]       = array(0, $gL10n->get('LST_CREATE_NEW_CONFIGURATION'), null);
+$configurationsArray[]       = array(0, $gL10n->get('SYS_CREATE_NEW_CONFIGURATION'), null);
 $numberLastConfigurations    = 0;
 
 $sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp
@@ -543,17 +543,17 @@ foreach($configurations as $configuration)
 {
     if($configuration['lst_global'] == 0 && !$yourLastConfigurationsGroup && strlen($configuration['lst_name']) === 0)
     {
-        $actualGroup = $gL10n->get('LST_YOUR_LAST_CONFIGURATION');
+        $actualGroup = $gL10n->get('SYS_YOUR_LAST_CONFIGURATION');
         $yourLastConfigurationsGroup = true;
     }
     elseif($configuration['lst_global'] == 0 && !$yourConfigurationsGroup && strlen($configuration['lst_name']) > 0)
     {
-        $actualGroup = $gL10n->get('LST_YOUR_CONFIGURATION');
+        $actualGroup = $gL10n->get('SYS_YOUR_CONFIGURATION');
         $yourConfigurationsGroup = true;
     }
     elseif($configuration['lst_global'] == 1 && !$presetConfigurationsGroup)
     {
-        $actualGroup = $gL10n->get('LST_PRESET_CONFIGURATION');
+        $actualGroup = $gL10n->get('SYS_PRESET_CONFIGURATION');
         $presetConfigurationsGroup = true;
     }
 
@@ -584,17 +584,17 @@ foreach($configurations as $configuration)
 
 }
 
-$form->addSelectBox('sel_select_configuration', $gL10n->get('LST_SELECT_CONFIGURATION'), $configurationsArray,
+$form->addSelectBox('sel_select_configuration', $gL10n->get('SYS_SELECT_CONFIGURATION'), $configurationsArray,
     array('defaultValue' => $formValues['sel_select_configuration'], 'showContextDependentFirstEntry' => false));
 
 // Administrators could upgrade a configuration to a global configuration that is visible to all users
 if($gCurrentUser->isAdministrator())
 {
-    $form->addCheckbox('cbx_global_configuration', $gL10n->get('LST_CONFIGURATION_ALL_USERS'), (bool) $list->getValue('lst_global'),
-        array('defaultValue' => $formValues['cbx_global_configuration'], 'helpTextIdLabel' => 'LST_PRESET_CONFIGURATION_DESC'));
+    $form->addCheckbox('cbx_global_configuration', $gL10n->get('SYS_CONFIGURATION_ALL_USERS'), (bool) $list->getValue('lst_global'),
+        array('defaultValue' => $formValues['cbx_global_configuration'], 'helpTextIdLabel' => 'SYS_PRESET_CONFIGURATION_DESC'));
 }
 
-    $form->addDescription($gL10n->get('LST_ADD_COLUMNS_DESC'));
+    $form->addDescription($gL10n->get('SYS_ADD_COLUMNS_DESC'));
     $form->addHtml('
     <div class="table-responsive">
     <table class="table table-condensed" id="mylist_fields_table">
@@ -617,26 +617,26 @@ if($gCurrentUser->isAdministrator())
     </div>');
 
 $form->openButtonGroup();
-$form->addButton('btn_add_column', $gL10n->get('LST_ADD_COLUMN'), array('icon' => 'fa-plus-circle'));
+$form->addButton('btn_add_column', $gL10n->get('SYS_ADD_COLUMN'), array('icon' => 'fa-plus-circle'));
 if($getListId > 0 && $list->getValue('lst_name') !== '')
 {
-    $form->addButton('btn_save_changes', $gL10n->get('LST_SAVE_CHANGES'), array('icon' => 'fa-check'));
+    $form->addButton('btn_save_changes', $gL10n->get('SYS_SAVE_CHANGES'), array('icon' => 'fa-check'));
 }
 else
 {
-    $form->addButton('btn_save', $gL10n->get('LST_SAVE_CONFIGURATION'), array('icon' => 'fa-check'));
+    $form->addButton('btn_save', $gL10n->get('SYS_SAVE_CONFIGURATION'), array('icon' => 'fa-check'));
 }
 // your lists could be deleted, administrators are allowed to delete system configurations
 if(($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
 || ((int) $gCurrentUser->getValue('usr_id') === (int) $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
 {
-    $form->addButton('btn_delete', $gL10n->get('LST_DELETE_CONFIGURATION'), array('icon' => 'fa-trash-alt'));
+    $form->addButton('btn_delete', $gL10n->get('SYS_DELETE_CONFIGURATION'), array('icon' => 'fa-trash-alt'));
 }
 // current configuration can be duplicated and saved with another name
 if(strlen($list->getValue('lst_name')) > 0)
 {
     $form->addButton(
-        'btn_copy', $gL10n->get('SYS_COPY_VAR', array($gL10n->get('LST_CONFIGURATION'))),
+        'btn_copy', $gL10n->get('SYS_COPY_VAR', array($gL10n->get('SYS_CONFIGURATION'))),
         array('icon' => 'fa-clone')
     );
 }
@@ -644,7 +644,7 @@ $form->closeButtonGroup();
 
 $form->closeGroupBox();
 
-$form->openGroupBox('gb_select_members', $gL10n->get('LST_SELECT_MEMBERS'));
+$form->openGroupBox('gb_select_members', $gL10n->get('SYS_SELECT_MEMBERS'));
 
 // show all roles where the user has the right to view them
 $sqlData = array();
@@ -655,7 +655,7 @@ if($getActiveRole)
     // check if there are roles that the current user could view
     if(count($allVisibleRoles) === 0)
     {
-        $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
         // => EXIT
     }
 
@@ -706,7 +706,7 @@ if ($gSettingsManager->getBool('members_enable_user_relations'))
 $form->closeGroupBox();
 
 $form->addButton(
-    'btn_show_list', $gL10n->get('LST_SHOW_LIST'),
+    'btn_show_list', $gL10n->get('SYS_SHOW_LIST'),
     array('icon' => 'fa-list-alt', 'class' => 'btn-primary admidio-margin-bottom')
 );
 

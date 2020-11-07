@@ -20,7 +20,7 @@
  * {
  *    if($bla == 1)
  *    {
- *        throw new AdmException(LST_NOT_VALID_DATE_FORMAT);
+ *        throw new AdmException(SYS_NOT_VALID_DATE_FORMAT);
  *    }
  *    ..
  *

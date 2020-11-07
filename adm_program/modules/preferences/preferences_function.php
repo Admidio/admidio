@@ -178,7 +178,7 @@ switch($getMode)
                     $checkboxes = array('enable_ecard_module');
                     break;
 
-                case 'lists':
+                case 'groups-roles':
                     $checkboxes = array('groups_roles_enable_module');
                     break;
 
