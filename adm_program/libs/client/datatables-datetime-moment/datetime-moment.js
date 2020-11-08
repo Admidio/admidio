@@ -40,7 +40,7 @@ $.fn.dataTable.moment = function ( format, locale, reverseEmpties ) {
 			}
 
 			// Strip out surrounding white space
-			d = d.trim();
+			d = $.trim( d );
 		}
 
 		// Null and empty values are acceptable
@@ -62,7 +62,7 @@ $.fn.dataTable.moment = function ( format, locale, reverseEmpties ) {
 			}
 
 			// Strip out surrounding white space
-			d = d.trim();
+			d = $.trim( d );
 		}
 
 		return !moment(d, format, locale, true).isValid() ?
