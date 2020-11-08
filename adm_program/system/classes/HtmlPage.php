@@ -471,11 +471,11 @@ class HtmlPage extends \Smarty
         }
         $this->assign('urlImprint', $urlImprint);
         $this->assign('urlDataProtection', $urlDataProtection);
+        $this->assign('cookieNote', $gSettingsManager->getBool('system_cookie_note'));
 
         // show cookie note
         if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note'))
         {
-            $this->assign('cookieNote', $gSettingsManager->getBool('system_cookie_note'));
             $this->assign('cookieDomain', DOMAIN);
             $this->assign('cookiePrefix', COOKIE_PREFIX);
 
