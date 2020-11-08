@@ -16,7 +16,6 @@
  *         ANN = Categories for announcements
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
- * title : Parameter for the synonym of the categorie
  ****************************************************************************/
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
@@ -24,75 +23,80 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'int');
 $getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'AWA')));
-$getTitle = admFuncVariableIsValid($_GET, 'title',  'string');
 
 $roleViewSet = array(0);
 $roleEditSet = array(0);
+$addButtonText = $gL10n->get('SYS_CATEGORY');
+
+// set headline of the script
+if($getCatId > 0)
+{
+    if($getType == 'DAT')
+    {
+        $headlineSuffix = $gL10n->get('SYS_EDIT_CALENDAR');
+    }
+    else
+    {
+        $headlineSuffix = $gL10n->get('SYS_EDIT_CATEGORY');
+    }
+}
+else
+{
+    if($getType == 'DAT')
+    {
+        $headlineSuffix = $gL10n->get('SYS_CREATE_CALENDAR');
+    }
+    else
+    {
+        $headlineSuffix = $gL10n->get('SYS_CREATE_CATEGORY');
+    }
+}
 
 // set text strings for the different modules
 switch ($getType)
 {
     case 'ROL':
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('SYS_ROLES')));
+        $headline = $gL10n->get('SYS_ROLES') . ' - ' . $headlineSuffix;
         break;
 
     case 'LNK':
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('LNK_WEBLINKS')));
+        $headline = $gL10n->get('LNK_WEBLINKS') . ' - ' . $headlineSuffix;
         $rolesRightEditName = 'LNK_EDIT_WEBLINKS';
         $rolesRightsColumn  = 'rol_weblinks';
         $rolesRightsName    = 'SYS_RIGHT_WEBLINKS';
         break;
 
     case 'ANN':
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('SYS_ANNOUNCEMENTS')));
+        $headline = $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headlineSuffix;
         $rolesRightEditName = 'SYS_EDIT_ANNOUNCEMENTS';
         $rolesRightsColumn  = 'rol_announcements';
         $rolesRightsName    = 'SYS_RIGHT_ANNOUNCEMENTS';
         break;
 
     case 'USF':
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
+        $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $headlineSuffix;
         $rolesRightEditName = 'PRO_EDIT_PROFILE_FIELDS';
         $rolesRightsColumn  = 'rol_edit_user';
         $rolesRightsName    = 'SYS_RIGHT_EDIT_USER';
         break;
 
     case 'DAT':
+        $headline = $gL10n->get('DAT_DATES') . ' - ' . $headlineSuffix;
         $rolesRightEditName = 'DAT_EDIT_EVENTS';
         $rolesRightsColumn  = 'rol_dates';
         $rolesRightsName    = 'SYS_RIGHT_DATES';
+        $addButtonText      = $gL10n->get('DAT_CALENDAR');
         break;
 
     case 'AWA':
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', 'Awards');
+        $headline = $gL10n->get('Awards') . ' - ' . $headlineSuffix;
         $rolesRightEditName = 'Not used, leave empty';
         $rolesRightsColumn  = 'rol_edit_user';
         $rolesRightsName    = 'SYS_RIGHT_EDIT_USER';
         break;
 
     default:
-        $headline = $gL10n->get('SYS_CATEGORY');
-}
-
-// set module headline and other strings
-if($getTitle === '')
-{
-    $addButtonText = $gL10n->get('SYS_CATEGORY');
-}
-else
-{
-    $headline      = $getTitle;
-    $addButtonText = $getTitle;
-}
-
-// set headline of the script
-if($getCatId > 0)
-{
-    $headline = $gL10n->get('SYS_EDIT_VAR', array($headline));
-}
-else
-{
-    $headline = $gL10n->get('SYS_CREATE_VAR', array($headline));
+        $headline = $headlineSuffix;
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);

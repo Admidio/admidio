@@ -887,7 +887,7 @@ $html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/cate
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formAnnouncements->addCustomContent(
-    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html,
+    $gL10n->get('SYS_EDIT_CATEGORIES'), $html,
     array('helpTextIdInline' => $htmlDesc)
 );
 $formAnnouncements->addSubmitButton(
@@ -923,9 +923,9 @@ $formUserManagement->addCheckbox(
 );
 
 $html = '<a href="'. ADMIDIO_URL. FOLDER_MODULES.'/userrelations/relationtypes.php">
-            <i class="fas fa-users-cog"></i>'.$gL10n->get('SYS_CONFIGURE_RELATIONSHIPS').'</a>';
+            <i class="fas fa-people-arrows"></i>'.$gL10n->get('SYS_EDIT_RELATIONSHIPS').'</a>';
 $htmlDesc = $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
-$formUserManagement->addCustomContent($gL10n->get('SYS_CONFIGURE_RELATIONSHIPS'), $html, array('helpTextIdInline' => $htmlDesc));
+$formUserManagement->addCustomContent($gL10n->get('SYS_EDIT_RELATIONSHIPS'), $html, array('helpTextIdInline' => $htmlDesc));
 
 $formUserManagement->addSubmitButton(
     'btn_save_user_management', $gL10n->get('SYS_SAVE'),
@@ -1175,7 +1175,7 @@ $formGroupsRoles->addSelectBox(
 $html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
-$formGroupsRoles->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
+$formGroupsRoles->addCustomContent($gL10n->get('SYS_EDIT_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
 $formGroupsRoles->addSubmitButton(
     'btn_save_lists', $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
@@ -1272,7 +1272,7 @@ $formProfile = new HtmlForm(
 $html = '<a href="'. ADMIDIO_URL. FOLDER_MODULES.'/profile-fields/profile_fields.php">
             <i class="fas fa-th-list"></i>'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
 $htmlDesc = $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
-$formProfile->addCustomContent($gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), $html, array('helpTextIdInline' => $htmlDesc));
+$formProfile->addCustomContent($gL10n->get('SYS_EDIT_PROFILE_FIELDS'), $html, array('helpTextIdInline' => $htmlDesc));
 $formProfile->addCheckbox(
     'profile_log_edit_fields', $gL10n->get('PRO_LOG_EDIT_FIELDS'), (bool) $formValues['profile_log_edit_fields'],
     array('helpTextIdInline' => 'PRO_LOG_EDIT_FIELDS_DESC')
@@ -1388,10 +1388,10 @@ $formEvents->addCheckbox(
     'dates_may_take_part', $gL10n->get('SYS_MAYBE_PARTICIPATE'), (bool) $formValues['dates_may_take_part'],
     array('helpTextIdInline' => $gL10n->get('SYS_MAYBE_PARTICIPATE_DESC', array('DAT_ATTEND', 'DAT_CANCEL', 'DAT_USER_TENTATIVE')))
 );
-$html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))).'">
+$html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_EDIT_CALENDAR_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
-$formEvents->addCustomContent($gL10n->get('DAT_MANAGE_CALENDARS'), $html, array('helpTextIdInline' => $htmlDesc));
+$formEvents->addCustomContent($gL10n->get('SYS_EDIT_CALENDARS'), $html, array('helpTextIdInline' => $htmlDesc));
 $formEvents->addCheckbox(
     'dates_show_rooms', $gL10n->get('DAT_ROOM_SELECTABLE'), (bool) $formValues['dates_show_rooms'],
     array('helpTextIdInline' => 'DAT_ROOM_SELECTABLE_DESC')
@@ -1440,7 +1440,7 @@ $html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/cate
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formWeblinks->addCustomContent(
-    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html,
+    $gL10n->get('SYS_EDIT_CATEGORIES'), $html,
     array('helpTextIdInline' => $htmlDesc)
 );
 $formWeblinks->addSubmitButton(

@@ -78,7 +78,7 @@ else
 }
 
 if($getPhotoId > 0)
-{
+{
     // URL auf Navigationstack ablegen
     $gNavigation->addUrl(CURRENT_URL, $headline);
 }

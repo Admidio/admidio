@@ -112,13 +112,13 @@ if($gCurrentUser->manageRoles())
     }
 
      // show link to maintain categories
-    $page->addPageFunctionsMenuItem('menu_item_groups_roles_maintain_categories', $gL10n->get('SYS_MAINTAIN_CATEGORIES'),
+    $page->addPageFunctionsMenuItem('menu_item_groups_roles_maintain_categories', $gL10n->get('SYS_EDIT_CATEGORIES'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
         'fa-th-large');
 }
 
 // show link to create own list
-$page->addPageFunctionsMenuItem('menu_item_groups_own_list', $gL10n->get('SYS_CONFIGURE_LISTS'),
+$page->addPageFunctionsMenuItem('menu_item_groups_own_list', $gL10n->get('SYS_EDIT_LISTS'),
     ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/mylist.php', 'fa-list-alt');
 
 // add filter navbar

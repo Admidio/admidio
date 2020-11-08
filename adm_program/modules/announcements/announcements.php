@@ -90,7 +90,7 @@ if(count($gCurrentUser->getAllEditableCategories('ANN')) > 0)
 
 if($gCurrentUser->editAnnouncements())
 {
-    $page->addPageFunctionsMenuItem('menu_item_announcement_categories', $gL10n->get('SYS_MAINTAIN_CATEGORIES'),
+    $page->addPageFunctionsMenuItem('menu_item_announcement_categories', $gL10n->get('SYS_EDIT_CATEGORIES'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')),
         'fa-th-large');
 }

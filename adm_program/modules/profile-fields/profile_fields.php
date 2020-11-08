@@ -92,7 +92,7 @@ $page->addPageFunctionsMenuItem('menu_item_new_field', $gL10n->get('ORG_CREATE_P
     ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', 'fa-plus-circle');
 
 // define link to maintain categories
-$page->addPageFunctionsMenuItem('menu_item_maintain_category', $gL10n->get('SYS_MAINTAIN_CATEGORIES'),
+$page->addPageFunctionsMenuItem('menu_item_maintain_category', $gL10n->get('SYS_EDIT_CATEGORIES'),
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'USF')),
     'fa-th-large');
 

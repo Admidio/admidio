@@ -156,8 +156,8 @@ if($getViewMode === 'html')
         if($gCurrentUser->editDates())
         {
             // if no calendar selectbox is shown, then show link to edit calendars
-            $page->addPageFunctionsMenuItem('menu_item_event_categories', $gL10n->get('DAT_MANAGE_CALENDARS'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))),
+            $page->addPageFunctionsMenuItem('menu_item_event_categories', $gL10n->get('SYS_EDIT_CALENDARS'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT')),
                 'fa-th-large');
         }
     }
