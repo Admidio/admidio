@@ -48,7 +48,6 @@
   <string name="DAT_LOCATION_LINK">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</string>
   <string name="DAT_LOGIN_POSSIBLE">Hier kann ausgewählt werden, ob eine Anmeldung zu dem angegebenen Termin möglich sein soll oder nicht.\nFalls die Anmeldung nachträglich gelöscht wird, werden auch alle bisherigen Teilnehmer vom Termin entfernt.\nWenn man hingegen nur die Anmeldung für neue Teilnehmer beenden möchte, so kann man die derzeitige Teilnehmerzahl als Teilnahmebegrenzung eintragen.</string>
   <string name="DAT_MAINTAIN_CATEGORIES_DESC">Hier können Kategorien angelegt und bearbeitet werden.</string>
-  <string name="DAT_MANAGE_CALENDARS">Kalender verwalten</string>
   <string name="DAT_MAX_MEMBERS">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</string>
   <string name="DAT_PARTICIPANTS_LIMIT">Teilnehmerbegrenzung</string>
   <string name="DAT_PARTICIPATE_NO_RIGHTS">Sie besitzen nicht das Recht sich für diesen Termin anzumelden.</string>
@@ -628,7 +627,6 @@
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Neues Profilfoto übernehmen</string>
   <string name="PRO_ADD_USER">Benutzer anlegen</string>
-  <string name="PRO_ADD_USER_RELATION">Beziehung erstellen</string>
   <string name="PRO_ASSIGNED_BY_ROLES">Vergeben durch die Rollen</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
@@ -659,7 +657,6 @@
   <string name="PRO_LOG_EDIT_FIELDS_DESC">Änderungen in Profilfeldern werden für jeden Benutzer und jedes Feld mitgeschrieben. Dabei wird der bisherige und der neue Wert, sowie der Benutzer, der die Änderung durchgeführt hat, mit Zeitstempel gespeichert. (Voreinstellung: ja)</string>
   <string name="PRO_LOGIN_NAME_EXIST">Der gewählte Benutzername existiert schon.\n\nWähle bitte einen anderen Namen.</string>
   <string name="PRO_MAINTAIN_ITEM_FIELDS">Artikelfelder verwalten</string>
-  <string name="PRO_MAINTAIN_PROFILE_FIELDS">Profilfelder pflegen</string>
   <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">Neue Profilfelder und deren Eigenschaften können definiert, sowie von vorhandenen Profilfelder verändert werden. Die Felder können Kategorien zugeordnet und mit Rechten versehen werden, welche Rollen welche Profilfelder sehen oder bearbeiten können.</string>
   <string name="PRO_MY_PROFILE">Mein Profil</string>
   <string name="PRO_NEW_PASSWORD">Neues Passwort</string>
@@ -754,6 +751,7 @@
   <string name="SYS_BACKUP_FROM">Backup vom #VAR1# um #VAR2#</string>
   <string name="SYS_BACKUP_ONLY_MYSQL">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
+  <string name="SYS_CALENDARS">Kalender</string>
   <string name="SYS_CANT_DELETE_ROLE">Sie können die Rolle #VAR1_BOLD# nicht löschen.</string>
   <string name="SYS_CAPACITY">Kapazität</string>
   <string name="SYS_CAPTCHA">Captcha</string>
@@ -766,7 +764,6 @@
   <string name="SYS_CATEGORIES">Kategorien</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechte bearbeiten. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle Administratoren des Moduls der Elternorganisation</string>
-  <string name="SYS_CATEGORIES_VAR">#VAR1#-Kategorien</string>
   <string name="SYS_CATEGORY">Kategorie</string>
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
@@ -791,8 +788,6 @@
   <string name="SYS_CONFIGURATION_DELETE">Wollne Sie aktuelle Listenkonfiguration wirklich löschen?</string>
   <string name="SYS_CONFIGURATION_LIST">Listenkonfiguration</string>
   <string name="SYS_CONFIGURATION_SAVE">Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden?</string>
-  <string name="SYS_CONFIGURE_LISTS">Listen konfigurieren</string>
-  <string name="SYS_CONFIGURE_RELATIONSHIPS">Beziehungen konfigurieren</string>
   <string name="SYS_CONFIRM_PASSWORD">Passwort bestätigen</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bestätigung der Eingaben</string>
   <string name="SYS_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfen Sie Ihre Internetverbindung oder versuchn Sie es zu einem späteren Zeitpunkt nocheinmal. Alternativ können Sie auch manuell auf der Webseite von #VAR1# prüfen ob ein Update vorliegt.</string>
@@ -813,6 +808,8 @@
   <string name="SYS_COUNTRY_EG" translation="edited">DEU</string>
   <string name="SYS_COUNTRY_ISO">Das Land muss im Code ISO 3166 ALPHA-3 (3 Zeichen) angegeben werden</string>
   <string name="SYS_CREATE">Anlegen</string>
+  <string name="SYS_CREATE_CALENDAR">Kalender anlegen</string>
+  <string name="SYS_CREATE_CATEGORY">Kategorie anlegen</string>
   <string name="SYS_CREATE_ENTRY">Eintrag anlegen</string>
   <string name="SYS_CREATE_FOLDER">Ordner anlegen</string>
   <string name="SYS_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
@@ -820,6 +817,7 @@
   <string name="SYS_CREATE_NEW_CONFIGURATION">Neue Konfiguration erstellen</string>
   <string name="SYS_CREATE_NEW_USER">Neuen Benutzer anlegen</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, können Sie diesen neu anlegen.</string>
+  <string name="SYS_CREATE_RELATIONSHIP">Beziehung anlegen</string>
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
@@ -896,11 +894,19 @@
   <string name="SYS_DOWNLOAD_PHOTO">Foto herunterladen</string>
   <string name="SYS_EDIT">Bearbeiten</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Ankündigungen bearbeiten</string>
+  <string name="SYS_EDIT_CALENDAR">Kalender bearbeiten</string>
+  <string name="SYS_EDIT_CALENDARS">Kalender bearbeiten</string>
+  <string name="SYS_EDIT_CATEGORIES">Kategorien bearbeiten</string>
+  <string name="SYS_EDIT_CATEGORY">Kategorie bearbeiten</string>
   <string name="SYS_EDIT_ENTRY">Eintrag bearbeiten</string>
   <string name="SYS_EDIT_FILE">Datei bearbeiten</string>
   <string name="SYS_EDIT_FOLDER">Ordner bearbeiten</string>
+  <string name="SYS_EDIT_LISTS">Listen bearbeiten</string>
   <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS">Profilfelder bearbeiten</string>
+  <string name="SYS_EDIT_RELATIONSHIPS">Beziehungen bearbeiten</string>
   <string name="SYS_EDIT_ROLE">Rolle bearbeiten</string>
+  <string name="SYS_EDIT_ROLE_MEMBERSHIPS">Rollenmitgliedschaft bearbeiten</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Benutzerprofil dieser Beziehung kann bearbeitet werden</string>
   <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
   <string name="SYS_EDITED_BY">Geändert von</string>
@@ -1047,7 +1053,6 @@
   <string name="SYS_LOSTPW_SEND_USERNAME">Das neue Passwort wurde an den Benutzer #VAR1_BOLD# geschickt!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">Die E-Mail-Adresse #VAR1_BOLD# wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</string>
   <string name="SYS_MAIL_DISPATCH">E-Mailversand</string>
-  <string name="SYS_MAINTAIN_CATEGORIES">Kategorien pflegen</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">Es können Beziehungstypen (Elternteil - Kind) definiert werden. Zu jeder definierten Beziehung wird der Typ (asymmetrisch, symmetrisch oder unidirektional) hinterlegt, sowie die Profilbearbeitungsrechte innerhalb der Beziehung festgelegt.</string>
   <string name="SYS_MALE">Männlich</string>
   <string name="SYS_MANDATORY_FIELD">Pflichtfeld</string>
