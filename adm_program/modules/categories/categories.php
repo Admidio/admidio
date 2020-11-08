@@ -18,7 +18,6 @@
  *         ANN = Categories for announcements
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
- * title : Parameter for the synonym of the categorie
  *
  ****************************************************************************/
 
@@ -27,7 +26,6 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getType  = admFuncVariableIsValid($_GET, 'type',  'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'AWA')));
-$getTitle = admFuncVariableIsValid($_GET, 'title', 'string');
 
 // Modus und Rechte pruefen
 if (($getType === 'ROL' && !$gCurrentUser->manageRoles())
@@ -43,7 +41,7 @@ if (($getType === 'ROL' && !$gCurrentUser->manageRoles())
 
 // set module headline
 $headline         = $gL10n->get('SYS_CATEGORIES');
-$addButtonText    = $gL10n->get('SYS_CATEGORY');
+$addButtonText    = $gL10n->get('SYS_CREATE_CATEGORY');
 $visibleHeadline  = $gL10n->get('SYS_VISIBLE_FOR');
 $editableHeadline = '';
 
@@ -51,47 +49,43 @@ switch ($getType)
 {
     case 'ROL':
         $rolesRightsColumn = 'rol_assign_roles';
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('SYS_ROLES')));
+        $headline = $gL10n->get('SYS_ROLES') . ' - ' . $gL10n->get('SYS_CATEGORIES');
         $visibleHeadline = '';
         break;
 
     case 'ANN':
         $rolesRightsColumn = 'rol_announcements';
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('SYS_ANNOUNCEMENTS')));
+        $headline = $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
         $editableHeadline = $gL10n->get('SYS_EDIT_ANNOUNCEMENTS');
         break;
 
     case 'DAT':
         $rolesRightsColumn = 'rol_dates';
+        $headline = $gL10n->get('DAT_DATES') . ' - ' . $gL10n->get('SYS_CALENDARS');
         $editableHeadline = $gL10n->get('DAT_EDIT_EVENTS');
+        $addButtonText    = $gL10n->get('SYS_CREATE_CALENDAR');
         break;
 
     case 'LNK':
         $rolesRightsColumn = 'rol_weblinks';
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('LNK_WEBLINKS')));
+        $headline = $gL10n->get('LNK_WEBLINKS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
         $editableHeadline = $gL10n->get('LNK_EDIT_WEBLINKS');
         break;
 
     case 'USF':
         $rolesRightsColumn = 'rol_edit_user';
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
+        $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
         $editableHeadline = $gL10n->get('PRO_EDIT_PROFILE_FIELDS');
         break;
 
     case 'AWA':
         $rolesRightsColumn = 'rol_edit_user';
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', 'Awards');
+        $headline = $gL10n->get('Awards') . ' - ' . $gL10n->get('SYS_CATEGORIES');
         break;
 
     default:
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT
-}
-
-if($getTitle !== '')
-{
-    $headline      = $getTitle;
-    $addButtonText = $getTitle;
 }
 
 // read all administrator roles
@@ -171,8 +165,8 @@ $page->addJavascript('
 ');
 
 // define link to create new category
-$page->addPageFunctionsMenuItem('menu_item_categories_add', $gL10n->get('SYS_CREATE_VAR', array($addButtonText)),
-    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType, 'title' => $getTitle)),
+$page->addPageFunctionsMenuItem('menu_item_categories_add', $addButtonText,
+    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType)),
     'fa-plus-circle');
 
 // Create table object
@@ -316,7 +310,7 @@ while($catRow = $categoryStatement->fetch())
 
     if($category->isEditable())
     {
-        $categoryAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType, 'title' => $getTitle)).'">'.
+        $categoryAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType)).'">'.
                                     '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
         if($category->getValue('cat_system') == 1)
@@ -337,7 +331,7 @@ while($catRow = $categoryStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType, 'title' => $getTitle)).'">'. $category->getValue('cat_name'). '</a>',
+        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType)).'">'. $category->getValue('cat_name'). '</a>',
         $htmlMoveRow,
         $htmlDefaultCategory,
         $htmlViewRolesNames,

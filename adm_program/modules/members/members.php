@@ -83,14 +83,14 @@ $page->addPageFunctionsMenuItem('menu_item_members_import_users', $gL10n->get('M
 if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
-    $page->addPageFunctionsMenuItem('menu_item_members_profile_fields', $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'),
+    $page->addPageFunctionsMenuItem('menu_item_members_profile_fields', $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
         ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php', 'fa-th-list');
 
     if($gSettingsManager->getBool('members_enable_user_relations'))
     {
         // show link to relation types
-        $page->addPageFunctionsMenuItem('menu_item_members_user_relation_types', $gL10n->get('SYS_CONFIGURE_RELATIONSHIPS'),
-            ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes.php', 'fa-users-cog');
+        $page->addPageFunctionsMenuItem('menu_item_members_user_relation_types', $gL10n->get('SYS_EDIT_RELATIONSHIPS'),
+            ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes.php', 'fa-people-arrows');
     }
 }
 

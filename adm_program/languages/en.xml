@@ -48,7 +48,6 @@
   <string name="DAT_LOCATION_LINK">If enough information regarding location is provided (street, city, location), Google Maps is able to calculate route to location.</string>
   <string name="DAT_LOGIN_POSSIBLE">Do you want to enable event registration?\nIf event is deleted, all registered participants will be removed, too.\nWould you like to block further registrations, please reduce number of allowed participants.</string>
   <string name="DAT_MAINTAIN_CATEGORIES_DESC">Here you can create and edit categories.</string>
-  <string name="DAT_MANAGE_CALENDARS">Manage calendars</string>
   <string name="DAT_MAX_MEMBERS">Reduce number of participants for this event. Please leave field empty for unlimited participants.</string>
   <string name="DAT_PARTICIPANTS_LIMIT">Limited number of participants</string>
   <string name="DAT_PARTICIPATE_NO_RIGHTS">You do not have the right to sign up for this appointment.</string>
@@ -628,7 +627,6 @@
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Confirm new profile picture</string>
   <string name="PRO_ADD_USER">Add user</string>
-  <string name="PRO_ADD_USER_RELATION">Create relationship</string>
   <string name="PRO_ASSIGNED_BY_ROLES">Set by the roles</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Registration has been confirmed. The user can now log on to the system.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Cancel membership</string>
@@ -659,7 +657,6 @@
   <string name="PRO_LOG_EDIT_FIELDS_DESC">Changes in profil fields are recorded for each user and each field. The previous and the new value will be logged as well as the user who performed the change and the time stamp. (Default: yes)</string>
   <string name="PRO_LOGIN_NAME_EXIST">Selected username already exists.\n\nPlease select another name.</string>
   <string name="PRO_MAINTAIN_ITEM_FIELDS">Maintain article fields</string>
-  <string name="PRO_MAINTAIN_PROFILE_FIELDS">Manage profile fields</string>
   <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">New profile fields and their properties can be defined as well as changes to existing profile fields. The fields can be assigned to categories and provided with rights, which roles can see or edit which profile fields.</string>
   <string name="PRO_MY_PROFILE">My profile</string>
   <string name="PRO_NEW_PASSWORD">New password</string>
@@ -754,6 +751,7 @@
   <string name="SYS_BACKUP_FROM">Backup created on #VAR1# at #VAR2#</string>
   <string name="SYS_BACKUP_ONLY_MYSQL">The backup module can only be used in combination with a MySQL database.</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
+  <string name="SYS_CALENDARS">Calendars</string>
   <string name="SYS_CANT_DELETE_ROLE">You can not delete the role #VAR1_BOLD#.</string>
   <string name="SYS_CAPACITY">Capacity</string>
   <string name="SYS_CAPTCHA">Captcha</string>
@@ -766,7 +764,6 @@
   <string name="SYS_CATEGORIES">Categories</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">All administrators of the module of the parent organization</string>
-  <string name="SYS_CATEGORIES_VAR">#VAR1#-categories</string>
   <string name="SYS_CATEGORY">Category</string>
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Category name already exists in selected organization.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
@@ -791,8 +788,6 @@
   <string name="SYS_CONFIGURATION_DELETE">Would you like to delete selected list configuration?</string>
   <string name="SYS_CONFIGURATION_LIST">List configuration</string>
   <string name="SYS_CONFIGURATION_SAVE">Please select name for configuration set?</string>
-  <string name="SYS_CONFIGURE_LISTS">Configure lists</string>
-  <string name="SYS_CONFIGURE_RELATIONSHIPS">Configure relationships</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirm password</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirm value</string>
   <string name="SYS_CONNECTION_ERROR">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the #VAR1# website for manual update.</string>
@@ -813,6 +808,8 @@
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
   <string name="SYS_COUNTRY_ISO">The country needs to be specified as Code ISO 3166 ALPHA-3 (3 characters)</string>
   <string name="SYS_CREATE">Create</string>
+  <string name="SYS_CREATE_CALENDAR">Create calendar</string>
+  <string name="SYS_CREATE_CATEGORY">Create category</string>
   <string name="SYS_CREATE_ENTRY">Add entry</string>
   <string name="SYS_CREATE_FOLDER">Create folder</string>
   <string name="SYS_CREATE_FOLDER_DESC">A new folder will be created in folder #VAR1_BOLD#.</string>
@@ -820,6 +817,7 @@
   <string name="SYS_CREATE_NEW_CONFIGURATION">Create a new configuration</string>
   <string name="SYS_CREATE_NEW_USER">Add new user</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">If the new user is not listed among the users found, you can create it.</string>
+  <string name="SYS_CREATE_RELATIONSHIP">Create relationship</string>
   <string name="SYS_CREATE_ROLE">Create role</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATED_BY">Created by #VAR1# on #VAR2#</string>
@@ -896,11 +894,19 @@
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
   <string name="SYS_EDIT">Edit</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Edit announcements</string>
+  <string name="SYS_EDIT_CALENDAR">Edit calendar</string>
+  <string name="SYS_EDIT_CALENDARS">Edit calendars</string>
+  <string name="SYS_EDIT_CATEGORIES">Edit categories</string>
+  <string name="SYS_EDIT_CATEGORY">Edit category</string>
   <string name="SYS_EDIT_ENTRY">Edit entry</string>
   <string name="SYS_EDIT_FILE">Edit file</string>
   <string name="SYS_EDIT_FOLDER">Edit folder</string>
+  <string name="SYS_EDIT_LISTS">Edit lists</string>
   <string name="SYS_EDIT_MEMBERS">Edit members</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS">Edit profile fields</string>
+  <string name="SYS_EDIT_RELATIONSHIPS">Edit relationships</string>
   <string name="SYS_EDIT_ROLE">Edit role</string>
+  <string name="SYS_EDIT_ROLE_MEMBERSHIPS">Edit role membership</string>
   <string name="SYS_EDIT_USER_IN_RELATION">User profile of this relationship can be edited</string>
   <string name="SYS_EDIT_VAR">Edit #VAR1#</string>
   <string name="SYS_EDITED_BY">Last edited by</string>
@@ -1047,7 +1053,6 @@
   <string name="SYS_LOSTPW_SEND_USERNAME">The new password has been sent to the user #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-mail address #VAR1_BOLD# has been assigned to multiple registrations. A unique user registration could not be identified.</string>
   <string name="SYS_MAIL_DISPATCH">Email delivery</string>
-  <string name="SYS_MAINTAIN_CATEGORIES">Manage categories</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">You can define relationship types (parent - child). For each defined relationship, the type (asymmetric, symmetric or unidirectional) is defined and the profile editing rights are defined within the relationship.</string>
   <string name="SYS_MALE">Male</string>
   <string name="SYS_MANDATORY_FIELD">Mandatory field</string>
