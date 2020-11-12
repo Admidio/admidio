@@ -481,7 +481,7 @@ class TableFolder extends TableAccess
         // Check if a dataset is found
         if ((int) $this->getValue('fol_id') === 0)
         {
-            throw new AdmException('SYS_FOLDER_NOT_FOUND', $folderId);
+            throw new AdmException('SYS_FOLDER_NOT_FOUND', array($folderId));
         }
 
         // If current user has download-admin-rights => allow
