@@ -399,7 +399,7 @@ class TableUserField extends TableAccess
 
                     if ($newValue === false)
                     {
-                        throw new AdmException('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL'));
+                        throw new AdmException('SYS_URL_INVALID_CHAR', array($gL10n->get('ORG_URL')));
                     }
                 }
 

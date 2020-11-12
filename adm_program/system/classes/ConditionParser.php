@@ -163,7 +163,7 @@ class ConditionParser
      * a condition with EMPTY or NOT EMPTY is used.
      * @param string $sqlStatement String with the full subselect
      * **Code example:**
-     * ``` 
+     * ```
      * $parser->setNotExistsStatement('SELECT 1 FROM adm_user_data WHERE usd_usr_id = 1 AND usd_usf_id = 9');
      * ```
      */
@@ -351,7 +351,7 @@ class ConditionParser
                         }
                         else
                         {
-                            throw new AdmException('SYS_NOT_VALID_DATE_FORMAT', $fieldName);
+                            throw new AdmException('SYS_NOT_VALID_DATE_FORMAT', array($fieldName));
                         }
                         $date = '';
                     }
@@ -405,7 +405,7 @@ class ConditionParser
                 elseif ($columnType === 'int' && !is_numeric($character))
                 {
                     // if numeric field than only numeric characters are allowed
-                    throw new AdmException('SYS_NOT_NUMERIC', $fieldName);
+                    throw new AdmException('SYS_NOT_NUMERIC', array($fieldName));
                 }
                 else
                 {
@@ -428,7 +428,7 @@ class ConditionParser
             }
             else
             {
-                throw new AdmException('SYS_NOT_VALID_DATE_FORMAT', $fieldName);
+                throw new AdmException('SYS_NOT_VALID_DATE_FORMAT', array($fieldName));
             }
         }
 

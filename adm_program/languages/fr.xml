@@ -48,7 +48,6 @@
   <string name="DAT_LOCATION_LINK">Si suffisamment d\'informations (rue, ville, lieu) sur le lieu de l\'événement sont saisies, un lien resp. un itinéraire vers ce point de rencontre peut être créé via Google Maps.</string>
   <string name="DAT_LOGIN_POSSIBLE">Ici, tu peux choisir si une inscription pour l\'événement spécifié doit être possible ou non. Si la possibilité de s\'inscrire est ensuite supprimée, tous les anciens participants seront supprimés de l\'événement. Si tu souhaite mettre fin à l\'inscription que pour les nouveaux participants, tu peux saisir le nombre actuel de participants comme limite de participation.</string>
   <string name="DAT_MAINTAIN_CATEGORIES_DESC">Les catégories peuvent être créées et éditées ici.</string>
-  <string name="DAT_MANAGE_CALENDARS">Gérer les calendriers</string>
   <string name="DAT_MAX_MEMBERS">Ici, tu peux limiter le nombre de participants pour cet événement. Si le nombre ne doit pas être limité, ce champ peut être laissé vide.</string>
   <string name="DAT_PARTICIPANTS_LIMIT">Nombre limite de participants</string>
   <string name="DAT_PARTICIPATE_NO_RIGHTS">Tu n\'as pas le droit de t\'inscrire pour cet événement.</string>
@@ -628,7 +627,6 @@
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Confirmer la nouvelle photo de profil</string>
   <string name="PRO_ADD_USER">Création d\'un utilisateur</string>
-  <string name="PRO_ADD_USER_RELATION">Créer une relation</string>
   <string name="PRO_ASSIGNED_BY_ROLES">Attribué par les rôles</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">L\'inscription a été confirmé avec succès. L\'utilisateur peut maintenant se connecter au système.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Mettre fin à l\'adhésion</string>
@@ -659,7 +657,6 @@
   <string name="PRO_LOG_EDIT_FIELDS_DESC">Les changements dans les champs de profil sont protocolés pour chaque utilisateur et chaque champ. La valeur précédente, la nouvelle valeur et l\'utilisateur qui a effectué la modification sont sauvegardés avec un horodatage. (Par défaut : oui)</string>
   <string name="PRO_LOGIN_NAME_EXIST">Le nom d\'utilisateur sélectionné existe déjà. \n\nSélectionne un autre nom.</string>
   <string name="PRO_MAINTAIN_ITEM_FIELDS">Gérer les champs d\'articles</string>
-  <string name="PRO_MAINTAIN_PROFILE_FIELDS">Gérer les champs de profil</string>
   <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">Les nouveaux champs de profil et leurs propriétés peuvent être définis et modifiés à partir des champs de profil existants. Les champs peuvent être attribués à des catégories et des droits assignés, quels rôles peuvent voir ou modifier quels champs de profil.</string>
   <string name="PRO_MY_PROFILE">Mon profil</string>
   <string name="PRO_NEW_PASSWORD">Nouveau mot de passe</string>
@@ -754,6 +751,7 @@
   <string name="SYS_BACKUP_FROM">Fichier de sauvegarde créé le #VAR1# à #VAR2#</string>
   <string name="SYS_BACKUP_ONLY_MYSQL">Le module de sauvegarde ne peut être utilisé uniquement pour des bases de données MySQL.</string>
   <string name="SYS_BIRTHDAY">Anniversaire</string>
+  <string name="SYS_CALENDARS">Calendrier</string>
   <string name="SYS_CANT_DELETE_ROLE">Tu ne peux pas supprimer le rôle #VAR1_BOLD#.</string>
   <string name="SYS_CAPACITY">Capacité</string>
   <string name="SYS_CAPTCHA">Captcha</string>
@@ -766,7 +764,6 @@
   <string name="SYS_CATEGORIES">Catégories</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Ces rôles sont des administrateurs du module et ont accès à tout. Tu peux créer, modifier, supprimer des données et éditer des catégories avec tes droits. Tu peux faire d\'un rôle un administrateur en lui assignant le droit #VAR1_BOLD#.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Tous les administrateurs du module de l\'organisation mère</string>
-  <string name="SYS_CATEGORIES_VAR">#VAR1#-catégories</string>
   <string name="SYS_CATEGORY">Catégorie</string>
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Il y a déjà une catégorie dans cette organisation avec ce nom.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">La visibilité des champs de profil de cette catégorie peut être désactivée pour les autres utilisateurs, mais les champs de profil restent visibles dans ton propre profil et peuvent également y être édités.</string>
@@ -791,8 +788,6 @@
   <string name="SYS_CONFIGURATION_DELETE">Veux-tu vraiment supprimer la configuration actuelle de la liste ?</string>
   <string name="SYS_CONFIGURATION_LIST">Configuration des listes</string>
   <string name="SYS_CONFIGURATION_SAVE">Sous quel nom cette configuration doit-elle être sauvegardée ?</string>
-  <string name="SYS_CONFIGURE_LISTS">Configurer les listes</string>
-  <string name="SYS_CONFIGURE_RELATIONSHIPS">Configurer les relations</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirmer le mot de passe</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirmation des saisies</string>
   <string name="SYS_CONNECTION_ERROR">La connexion au serveur de mise à jour Admidio n\'a pas pu être établie ! Vérifie ta connexion Internet ou réessaye plus tard. Alternativement, tu peux vérifier manuellement sur la page Web de #VAR1# si une mise à jour est disponible.</string>
@@ -813,6 +808,8 @@
   <string name="SYS_COUNTRY_EG" translation="edited">FRA</string>
   <string name="SYS_COUNTRY_ISO">Le pays doit être spécifié avec le code ISO 3166 ALPHA-3 (3 caractères)</string>
   <string name="SYS_CREATE">Création</string>
+  <string name="SYS_CREATE_CALENDAR">Créer calendrier</string>
+  <string name="SYS_CREATE_CATEGORY">Créer catégorie</string>
   <string name="SYS_CREATE_ENTRY">Création d\'une entrée</string>
   <string name="SYS_CREATE_FOLDER">Créer un dossier</string>
   <string name="SYS_CREATE_FOLDER_DESC">Le nouveau dossier est créé dans le dossier existant #VAR1_BOLD#.</string>
@@ -820,6 +817,7 @@
   <string name="SYS_CREATE_NEW_CONFIGURATION">Créer une nouvelle configuration</string>
   <string name="SYS_CREATE_NEW_USER">Créer un nouvel utilisateur</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Si le nouvel utilisateur ne figure pas dans la liste des utilisateurs trouvés, tu peux créer un nouvel utilisateur.</string>
+  <string name="SYS_CREATE_RELATIONSHIP">Créer relation</string>
   <string name="SYS_CREATE_ROLE">Création de rôles</string>
   <string name="SYS_CREATE_VAR">Créer #VAR1#</string>
   <string name="SYS_CREATED_BY">Créé par #VAR1# le #VAR2#</string>
@@ -858,13 +856,13 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Assignation standard pour l\'enregistrement</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Si un nouvel utilisateur est créé ou si un nouvelle inscription est accepté, ce rôle est automatiquement attribué au nouvel utilisateur. Si le créateur a le droit d\'affecter des rôles, toutes les affectations de rôles sont affichées et peuvent être ajustées en conséquence.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Configuration par défaut</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_DESC">L\'une des configurations spécifiées ici peut devenir la configuration par défaut pour les listes de cette organisation. Les listes de membres des rôles qui n\'ont pas défini de configuration de liste sont affichées avec cette configuration.</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_DESC">L\'une des configurations spécifiées ici peut devenir la configuration par défaut pour les listes de cette organisation. Les listes de membres des rôles qui n\'ont pas de listes configurés sont affichées avec cette configuration.</string>
   <string name="SYS_DEFAULT_LIST">Liste par défaut</string>
   <string name="SYS_DEFAULT_LIST_DESC">Si une liste de membres doit être affichée pour ce rôle et qu\'aucune configuration de liste n\'est spécifiée pour ce rôle, la liste est affichée avec la configuration de liste standard du système. Tu peux utiliser ce champ pour sélectionner une configuration de liste différente pour chaque rôle individuellement, qui s\'affiche si aucune configuration de liste n\'est spécifiée.</string>
-  <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Aucune liste par défaut n\'a été spécifiée par l\'administrateur !\n\nContacte un administrateur pour qu\'il déclare une liste comme liste par défaut de ses propres listes.</string>
+  <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Aucune liste par défaut n\'a été spécifiée par l\'administrateur !\n\nContacte un administrateur pour qu\'il déclare une liste comme liste par défaut.</string>
   <string name="SYS_DEFAULT_VAR">#VAR1# par défaut</string>
   <string name="SYS_DELETE">Supprimer</string>
-  <string name="SYS_DELETE_CONFIGURATION">Supprimer la configuration</string>
+  <string name="SYS_DELETE_CONFIGURATION">Supprimer configuration</string>
   <string name="SYS_DELETE_FILE">Supprimer le fichier</string>
   <string name="SYS_DELETE_FOLDER">Supprimer le dossier</string>
   <string name="SYS_DELETE_DATA">Les données ont été supprimées.</string>
@@ -896,11 +894,19 @@
   <string name="SYS_DOWNLOAD_PHOTO">Télécharger la photo</string>
   <string name="SYS_EDIT">Editer</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Editer les annonces</string>
+  <string name="SYS_EDIT_CALENDAR">Editer calendrier</string>
+  <string name="SYS_EDIT_CALENDARS">Editer calendriers</string>
+  <string name="SYS_EDIT_CATEGORIES">Editer catégories</string>
+  <string name="SYS_EDIT_CATEGORY">Editer catégorie</string>
   <string name="SYS_EDIT_ENTRY">Editer la saisie</string>
   <string name="SYS_EDIT_FILE">Éditer le fichier</string>
   <string name="SYS_EDIT_FOLDER">Éditer le dossier</string>
+  <string name="SYS_EDIT_LISTS">Editer listes</string>
   <string name="SYS_EDIT_MEMBERS">Editer les membres</string>
+  <string name="SYS_EDIT_PROFILE_FIELDS">Editer champs du profile</string>
+  <string name="SYS_EDIT_RELATIONSHIPS">Editer relations</string>
   <string name="SYS_EDIT_ROLE">Modifier le rôle</string>
+  <string name="SYS_EDIT_ROLE_MEMBERSHIPS">Editer adhésions aux rôles</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Le profil utilisateur de cette relation peut être modifié.</string>
   <string name="SYS_EDIT_VAR">#VAR1# éditer</string>
   <string name="SYS_EDITED_BY">Modifié par</string>
@@ -914,13 +920,13 @@
   <string name="SYS_EMAIL_SEND">Le courriel a été envoyé.</string>
   <string name="SYS_EMAIL_TEMPLATE">Modèle d\'e-mail</string>
   <string name="SYS_EMAIL_TEMPLATE_DESC">Ici, vous pouvez sélectionner un fichier de modèle HTML dans le dossier # VAR1_BOLD #. Lors de l\'envoi d\'un e-mail, le contenu de ce fichier sera copié dans l\'e-mail et les variables suivantes seront remplacées: # expéditeur #, # message #, # destinataires #, # organisation_name #, # organization_shortname #, #organization_website #. Pour plus d\'informations sur l\'utilisation des modèles de courrier électronique, consultez la # documentation VAR2 # # VAR3 #.</string>
-  <string name="SYS_EMAIL_TO_MEMBERS">Envoyer un courriel aux membres</string>
-  <string name="SYS_EMAIL_TO_LIST">Envoyer à la liste</string>
+  <string name="SYS_EMAIL_TO_MEMBERS">Envoyer courriel aux membres</string>
+  <string name="SYS_EMAIL_TO_LIST">Courriel à la liste</string>
   <string name="SYS_EMPTY">Vide</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activer le module de téléchargement</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Le module de téléchargement peut être activé ou désactivé. (Par défaut: oui)</string>
-  <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Activer les groupes & amp; module de rôles</string>
-  <string name="SYS_ENABLE_GROUPS_ROLES_MODULE_DESC">Affiche les groupes et les rôles de l\'organisation et permet la configuration gratuite des groupes et des rôles. La propre liste peut être configurée et appliquée. Ce module n\'est généralement disponible que pour les utilisateurs connectés. (Par défaut: oui)</string>
+  <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Activer les groupes &amp; module de rôles</string>
+  <string name="SYS_ENABLE_GROUPS_ROLES_MODULE_DESC">Affiche les groupes et les rôles de l\'organisation et permet la configuration libre des groupes et des rôles. Propres listes peuvent être configurée et appliquée. Ce module n\'est généralement disponible que pour les utilisateurs connectés. (Par défaut: oui)</string>
   <string name="SYS_END" description="End of a date">Fin</string>
   <string name="SYS_ERROR">Erreur</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">L\'erreur suivante s\'est produite lors de l\'accès à la base de données:\n\n#VAR1#</string>
@@ -1047,7 +1053,6 @@
   <string name="SYS_LOSTPW_SEND_USERNAME">Le nouveau mot de passe a été envoyé à l\'utilisateur #VAR1_BOLD# !</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL"> L\'adresse courriel #VAR1_BOLD# a été assignée plus d\'une fois. Aucun utilisateur unique n\'a pu être trouvé.</string>
   <string name="SYS_MAIL_DISPATCH">Envoi par courriel</string>
-  <string name="SYS_MAINTAIN_CATEGORIES">Gérer les catégories</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">Les types de relations (parent - enfant) peuvent être définis. Le type (asymétrique, symétrique ou unidirectionnel) et les droits d\'édition de profil dans la relation sont stockés pour chaque relation définie.</string>
   <string name="SYS_MALE">Masculin</string>
   <string name="SYS_MANDATORY_FIELD">Champ obligatoire</string>
@@ -1070,7 +1075,7 @@
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Membres de l\'organisation #VAR1#</string>
   <string name="SYS_MEMBERS">Membres</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Membres entre #VAR1# et #VAR2#</string>
-  <string name="SYS_MEMBERS_PER_PAGE">Nombre de participants par page</string>
+  <string name="SYS_MEMBERS_PER_PAGE">Nombre de membres par page</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Nombre de membres affichés dans la vue HTML. D\'autres membres peuvent être trouvés en naviguant. L\'aperçu avant impression et l\'exportation ne sont pas affectés par cette valeur. (Valeur par défaut : 25)</string>
   <string name="SYS_MEMBERSHIP_END">Fin de l\'adhésion</string>
   <string name="SYS_MEMBERSHIP_DELETE">Veux-tu vraiment mettre fin à l\'adhésion au rôle #VAR1_BOLD# ?</string>
@@ -1099,7 +1104,7 @@
   <string name="SYS_MULTIPLE_RECIPIENTS">Plusieurs destinataires</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">Les e-mails adressés à plusieurs destinataires contiennent tous les destinataires dans le champ Cci. Cela garantit que personne ne voit les adresses e-mail des autres destinataires. Cependant, le champ TO doit également être rempli. Ce paramètre peut être utilisé pour définir ce qui est entré dans le champ destinataire (TO). Il peut s\'agir d\'une valeur masquée «Destinataires non divulgués», mais cela pose des problèmes avec certains fournisseurs. Alternativement, le champ du destinataire (TO) peut être rempli avec l\'adresse de l\'expéditeur ou l\'adresse de l\'administrateur à partir des notifications système. Remarque: tous les e-mails adressés à plusieurs destinataires seront également envoyés à l\'adresse e-mail dans le champ du destinataire (TO).</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">Au moins un membre doit avoir le rôle d\'administrateur !</string>
-  <string name="SYS_MYLIST_CONDITION_DESC">Tu peux saisir ici les conditions pour chaque champ de ta nouvelle liste. Ceci limite le rôle sélectionné en plus en fonction de tes conditions définis.</string>
+  <string name="SYS_MYLIST_CONDITION_DESC">Tu peux saisir ici les conditions pour chaque champ de ta nouvelle liste. Les conditions du rôle sélectionné sera limité en fonction de tes propres conditions.</string>
   <string name="SYS_NAME">Nom</string>
   <string name="SYS_NAME_ABBREVIATION">Nom (abréviation)</string>
   <string name="SYS_NEW_BETA_AVAILABLE">Une nouvelle version bêta est disponible !</string>
@@ -1124,7 +1129,7 @@
   <string name="SYS_NO_RIGHTS_VIEW_LIST">Tu n\'as pas le droit de consulter les listes de rôles.</string>
   <string name="SYS_NO_ROLE_GIVEN">Aucun rôle a été indiqué.</string>
   <string name="SYS_NO_TEMPLATE">Aucun modèle</string>
-  <string name="SYS_NO_USER_FOUND">Aucun utilisateur correspondant aux critères sélectionnés n\'a été trouvé.</string>
+  <string name="SYS_NO_USER_FOUND">Aucun membre correspondant aux critères sélectionnés n\'a été trouvé.</string>
   <string name="SYS_NOBODY">Personne</string>
   <string name="SYS_NONE">Aucun</string>
   <string name="SYS_NOT_EMPTY">Non vide</string>
@@ -1266,18 +1271,18 @@
   <string name="SYS_SAVE_DATA">Les données ont été enregistrées.</string>
   <string name="SYS_SEARCH">Recherche</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18j</string>
-  <string name="SYS_SEARCH_AGE_DESC">Recherche des utilisateurs de moins de 18 ans</string>
+  <string name="SYS_SEARCH_AGE_DESC">Recherche des utilisateurs de plus de 18 ans</string>
   <string name="SYS_SEARCH_DATE_EXAMPLE">01.03.1986</string>
   <string name="SYS_SEARCH_DATE_DESC">Recherche des utilisateurs nés après le 01.03.1986</string>
   <string name="SYS_SEARCH_EMPTY_EXAMPLE_DESC">Cherche tous les utilisateurs qui n\'ont pas remplis le champ rue</string>
-  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE">Stéphane</string>
-  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">Cherche tous les utilisateurs qui ne s\'appellent pas Stéphane</string>
+  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE">Stéphan</string>
+  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">Cherche tous les utilisateurs qui ne s\'appellent pas Stéphan</string>
   <string name="SYS_SEARCH_GENDER_DESC">Recherche tous les utilisateurs masculins</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_EXAMPLE">Mei*</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_DESC">Recherche des utilisateurs dont le nom commençant par \'Mei\'</string>
   <string name="SYS_SEARCH_LASTNAME_EXAMPLE">Schmitz</string>
   <string name="SYS_SEARCH_LASTNAME_DESC">Recherche des utilisateurs avec le nom de famille \'Schmitz\'</string>
-  <string name="SYS_SEARCH_LOCATION_EXAMPLE">Cologne or Berlin</string>
+  <string name="SYS_SEARCH_LOCATION_EXAMPLE">Cologne ou Berlin</string>
   <string name="SYS_SEARCH_LOCATION_DESC">Recherche des utilisateurs provenant de Cologne ou de Berlin</string>
   <string name="SYS_SEARCH_NOT_EMPTY_EXAMPLE_DESC">Recherche tous les utilisateurs qui ont le champ rue rempli.</string>
   <string name="SYS_SEARCH_TELEFON_EXAMPLE">*241* *54</string>

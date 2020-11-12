@@ -66,13 +66,13 @@ function createUserObjectFromPost()
 
     if ($loginname === '')
     {
-        throw new AdmException('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME'));
+        throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_USERNAME')));
         // => EXIT
     }
 
     if ($password === '')
     {
-        throw new AdmException('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD'));
+        throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_PASSWORD')));
         // => EXIT
     }
 

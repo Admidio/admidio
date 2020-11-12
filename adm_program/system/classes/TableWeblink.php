@@ -149,7 +149,7 @@ class TableWeblink extends TableAccess
 
                 if ($newValue === false)
                 {
-                    throw new AdmException('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE'));
+                    throw new AdmException('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_WEBSITE')));
                 }
             }
         }

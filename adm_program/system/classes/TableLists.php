@@ -45,12 +45,12 @@ class TableLists extends TableAccess
         // if this list is the default configuration than it couldn't be deleted
         if ($lstId === $gSettingsManager->getInt('groups_roles_default_configuration'))
         {
-            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
+            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name')));
         }
         // if this list is the default configuration for particpation list than it couldn't be deleted
         if ($lstId === $gSettingsManager->getInt('dates_default_list_configuration'))
         {
-            throw new AdmException('DAT_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
+            throw new AdmException('DAT_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name')));
         }
 
         $this->db->startTransaction();
