@@ -1965,7 +1965,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $html = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover"
-            data-html="true" data-trigger="hover" data-placement="auto"
+            data-html="true" data-trigger="hover click" data-placement="auto"
             title="'.$gL10n->get('SYS_NOTE').'" data-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
 
         return $html;

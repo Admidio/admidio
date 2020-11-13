@@ -26,7 +26,7 @@
         {$javascriptContent}
 
         $(function() {
-            $("[data-toggle=\'popover\']").popover();
+            $("[data-toggle=popover]").popover();
             {$javascriptContentExecuteAtPageLoad}
         });
     </script>

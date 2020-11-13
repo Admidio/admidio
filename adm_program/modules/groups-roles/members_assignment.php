@@ -275,7 +275,7 @@ else
         $htmlLeaderText .= $gL10n->get('SYS_LEADER_ASSIGN_MEMBERS');
     }
 
-    $htmlLeaderColumn .= '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
+    $htmlLeaderColumn .= '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-html="true" data-trigger="hover click" data-placement="auto"
             title="'.$gL10n->get('SYS_NOTE').'" data-content="' . SecurityUtils::encodeHTML($htmlLeaderText) . '"></i>';
 
     // create array with all column heading values
