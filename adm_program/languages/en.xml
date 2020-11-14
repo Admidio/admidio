@@ -563,7 +563,6 @@
   <string name="PHO_ALBUM_LOCK_DESC">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</string>
   <string name="PHO_ALBUM_NOT_APPROVED">The album is currently locked and will not be shown to visitors for this reason.</string>
   <string name="PHO_ALBUM_UNLOCK">Unlock album</string>
-  <string name="PHO_ALBUM_WRITE_SUCCESS">Album has been successfully created / changed.</string>
   <string name="PHO_CAPTION_SIZE">Caption size</string>
   <string name="PHO_CAPTION_SIZE_DESC">The size of the caption is proportional to the image size, calculated by the formula \"Image size / Devisor\". By increasing the devisor, the font size will be reduced. (Default: 40)</string>
   <string name="PHO_CREATE_ALBUM">Create album</string>
@@ -585,16 +584,11 @@
   <string name="PHO_MODAL_WINDOW">Modal window</string>
   <string name="PHO_NEXT_PHOTO">Next picture</string>
   <string name="PHO_NO_ALBUM_CONTENT">Album contains no photos.</string>
-  <string name="PHO_NO_FILES_OR_TO_LARGE">Illegal page view or file could not be uploaded.\nFile size possibly exceeded allowed server defined upload size of #VAR1#B!</string>
-  <string name="PHO_NO_FILES_SELECTED">No photos selected to be added.</string>
   <string name="PHO_NO_RIGHTS">You have no permissions to perform this action.\n\nOnly logged in users with photo management permissions are enabled to manage photos.</string>
   <string name="PHO_NUMBER_OF_ALBUMS_PER_PAGE">Number of albums per page</string>
   <string name="PHO_PARENT_ALBUM">Parent album</string>
   <string name="PHO_PARENT_ALBUM_DESC">One album can be part of another album. Please select a parent album from the selection list. If you want to display the album on the highest level then select #VAR1_BOLD#.</string>
   <string name="PHO_PHOTO_ALBUMS">Photo albums</string>
-  <string name="PHO_PHOTO_DELETE">Delete photo</string>
-  <string name="PHO_PHOTO_DESTINATION">Photos will be added to album #VAR1_BOLD#.</string>
-  <string name="PHO_PHOTO_FILES_TO_LARGE">Total file size of one or more photos possibly exceed allowed server defined upload size of #VAR1# MB.</string>
   <string name="PHO_PHOTO_FORMAT_INVALID">Only JPG and PNG photos are allowed.</string>
   <string name="PHO_PHOTO_PROCESSING_ERROR">Photo processing error</string>
   <string name="PHO_PHOTO_ROTATE_LEFT">Rotate photo left</string>
@@ -609,8 +603,6 @@
   <string name="PHO_RECENT_ALBUMS_OF_ORGA">Latest photo album of organization #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Resolution greater than</string>
   <string name="PHO_SAME_WINDOW">Same window</string>
-  <string name="PHO_SAVE_ORIGINALS">Save originals</string>
-  <string name="PHO_SAVE_ORIGINALS_DESC">Images can be archived or provided as download as long as there is enough space available.</string>
   <string name="PHO_SCALE_AT_UPLOAD">Upload scaling</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">Photos will be resized during upload. Pixel value defines long edge of portrait and landscape format photos. Other side remains proportional to long edge. (default: 640 pixels)</string>
   <string name="PHO_SCALE_THUMBNAILS">Thumbnail scaling</string>
@@ -621,7 +613,6 @@
   <string name="PHO_SHOWN_ON_READY">Photos have been successfully added to album if they appear on this page.</string>
   <string name="PHO_THUMBNAILS_PER_PAGE">Thumbnails per page</string>
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">This option defines how many thumbnail previews will be displayed on each page. If there are more images in this album a page navigation will be added automatically. (Default: 16)</string>
-  <string name="PHO_UPLOAD_MORE">Upload more photos</string>
   <string name="PHO_UPLOAD_PHOTOS">Upload photos</string>
   <string name="PHO_WANT_DELETE_PHOTO">Selected photo will be deleted. Are you sure?</string>
   <!--Phrases only in Profilemodule-->
