@@ -509,7 +509,7 @@ if($albumsCount > 0)
 
                             if ($gCurrentUser->editPhotoRight() && $childPhotoAlbum->getValue('pho_locked') == 1)
                             {
-                                $page->addHtml('<button class="btn btn-primary" style="width: 50%;" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'unlock')).'\'">
+                                $page->addHtml('<button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'unlock')).'\'">
                                     '.$gL10n->get('PHO_ALBUM_UNLOCK').'
                                 </button>');
                             }
