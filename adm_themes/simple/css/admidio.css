@@ -384,6 +384,7 @@ label {
 .accordion .card-header:hover {
     color: #eeeeee;
     background-color: #263340;
+    cursor: pointer;
 }
 
 .accordion .card-header {
