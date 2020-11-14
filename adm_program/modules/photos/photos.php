@@ -148,6 +148,11 @@ if ($gCurrentUser->editPhotoRight())
 
     if ($getPhotoId > 0)
     {
+        // show link to edit album
+        $page->addPageFunctionsMenuItem('menu_item_photos_edit_album', $gL10n->get('PHO_EDIT_ALBUM'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('mode' => 'change', 'pho_id' => $getPhotoId)),
+            'fa-edit');
+
         // show link to upload photos
         $page->addPageFunctionsMenuItem('menu_item_photos_upload_photo', $gL10n->get('PHO_UPLOAD_PHOTOS'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'photos', 'id' => $getPhotoId)),
@@ -201,8 +206,15 @@ if ($getPhotoId > 0)
             $navilink.'
             <li class="breadcrumb-item active" aria-current="page">'.$photoAlbum->getValue('pho_name').'</li>
         </ol>
-    </nav>
+    </nav>');
 
+    // Notice for users with foto edit right that this album is locked
+    if ($photoAlbum->getValue('pho_locked') == 1)
+    {
+        $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div></p>');
+    }
+
+    $page->addHtml('
     <p class="lead">
         <p class="font-weight-bold">' . $datePeriod . '</p>
         <p>' . $photoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $photoAlbum->getValue('pho_photographers') . '</p>');
@@ -237,7 +249,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
     {
         if ($actThumbnail <= $photoAlbum->getValue('pho_quantity'))
         {
-            $photoThumbnailTable .= '<div class="col-sm-6 col-md-3 admidio-album-thumbnail text-center" id="div_image_'.$actThumbnail.'">';
+            $photoThumbnailTable .= '<div class="col-sm-6 col-lg-4 col-xl-3 admidio-album-thumbnail text-center" id="div_image_'.$actThumbnail.'">';
 
                 // Popup window
                 if ((int) $gSettingsManager->get('photo_show_mode') === 0)
@@ -442,29 +454,30 @@ if($albumsCount > 0)
                             class="card-img-top" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $shuffleImage['shuffle_pho_id'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)).'" alt="'.$gL10n->get('SYS_PHOTOS').'" /></a>
                         <div class="card-body">
                             <h5 class="card-title">'.$albumTitle);
-
                                 // if user has admin rights for photo module then show some functions
                                 if ($gCurrentUser->editPhotoRight())
                                 {
-                                    if ($childPhotoAlbum->getValue('pho_locked') != 1)
+                                    if ($childPhotoAlbum->getValue('pho_locked') !== 1)
                                     {
-                                        $htmlLock = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'lock')).'">
-                                            <i class="fas fa-lock" data-toggle="tooltip" title="'.$gL10n->get('PHO_ALBUM_LOCK').'"></i></a>';
+                                        $htmlLock = '<a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'lock')).'">
+                                            <i class="fas fa-lock" data-toggle="tooltip"></i> '.$gL10n->get('PHO_ALBUM_LOCK').'</a>';
                                     }
 
-                                    $page->addHtml('<div class="float-right">
-                                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'change')).'">
-                                            <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
-                                        ' . $htmlLock . '
-                                        <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id'),
+                                    $page->addHtml('
+                                    <div class="dropdown float-right">
+                                        <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'change')).'">
+                                                <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('PHO_EDIT_ALBUM').'</a>
+                                            ' .$htmlLock . '
+                                            <a class="dropdown-item btn openPopup" href="javascript:void(0);"
+                                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id'),
                                             'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">
-                                            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>
+                                                <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('PHO_ALBUM_DELETE').'</a>
                                         </div>
-                                    ');
+                                    </div>');
                                 }
-
-
                             $page->addHtml('</h5>
 
                             <p class="card-text">' . $albumDate . '</p>');
@@ -496,7 +509,7 @@ if($albumsCount > 0)
 
                             if ($gCurrentUser->editPhotoRight() && $childPhotoAlbum->getValue('pho_locked') == 1)
                             {
-                                $page->addHtml('<button class="btn btn-primary" style="width: 50%;" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'unlock')).'\'">
+                                $page->addHtml('<button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'unlock')).'\'">
                                     '.$gL10n->get('PHO_ALBUM_UNLOCK').'
                                 </button>');
                             }

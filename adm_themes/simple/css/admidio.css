@@ -352,7 +352,7 @@ label {
     text-align: left;
 }
 
-.admidio-roles {
+.admidio-roles, .admidio-album {
     border: none;
     background-color: #eeeeee;
     margin-top: 15px;
