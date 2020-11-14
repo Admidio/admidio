@@ -558,7 +558,7 @@
   <string name="ORG_VARIABLE_USERNAME">Benutzername des Benutzers aus dem jeweiligen E-Mailkontext</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
-  <string name="PHO_ALBUM_DELETE">Album Löschen</string>
+  <string name="PHO_ALBUM_DELETE">Album löschen</string>
   <string name="PHO_ALBUM_LOCK">Album sperren</string>
   <string name="PHO_ALBUM_LOCK_DESC">Gesperrte Alben können von Besuchern und Mitgliedern nicht eingesehen werden. Sie können zum Beispiel ein Album vorübergehen sperren, während Sie gerade alle Bilder des Albums hochladen.</string>
   <string name="PHO_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt.</string>
@@ -572,7 +572,7 @@
   <string name="PHO_DOWNLOAD_ENABLED">Download aktivieren</string>
   <string name="PHO_DOWNLOAD_ENABLED_DESC">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-Datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option #VAR1_BOLD# aktiviert, dann werden nur die Originalfotos heruntergeladen.</string>
   <string name="PHP_DOWNLOAD_ZIP_ERROR">Bei der Erstellung der Zip-Datei ist ein Fehler aufgetreten.</string>
-  <string name="PHO_EDIT_ALBUM">Album Bearbeiten</string>
+  <string name="PHO_EDIT_ALBUM">Album bearbeiten</string>
   <string name="PHO_EMAIL_NOTIFICATION_TITLE">Ein neues Fotoalbum wurde angelegt</string>
   <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neues Fotoalbum bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
   <string name="PHO_FILE_UPLOADED">Das Bild #VAR1_BOLD# wurde hochgeladen.</string>
