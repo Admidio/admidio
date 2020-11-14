@@ -142,7 +142,7 @@ if(Component::isVisible('DATES'))
             elseif($plg_dates_show_preview > 0)
             {
                 // remove all html tags except some format tags
-                $textPrev = strip_tags($plgDate->getValue('dat_description'), '<br><br/><br /><i></i><b></b><strong></strong><em></em>');
+                $textPrev = strip_tags($plgDate->getValue('dat_description'));
 
                 // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
                 $textPrev = substr($textPrev, 0, $plg_dates_show_preview + 15);
