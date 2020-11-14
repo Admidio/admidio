@@ -125,7 +125,7 @@ if (isset($folderContent['folders']))
         $folderDescription = '';
         if($nextFolder['fol_description'] !== null)
         {
-            $folderDescription = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-trigger="hover"
+            $folderDescription = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-trigger="hover click"
                 data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFolder['fol_description'].'"></i>';
         }
 
@@ -154,7 +154,7 @@ if (isset($folderContent['folders']))
             elseif($gCurrentUser->editDownloadRight())
             {
                 $additionalFolderFunctions = '
-                <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover" data-placement="left"
+                <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover click" data-placement="left"
                     title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('SYS_FOLDER_NOT_EXISTS').'"></i>';
             }
 
@@ -193,7 +193,7 @@ if (isset($folderContent['files']))
         $fileDescription = '';
         if($file->getValue('fil_description') !== '')
         {
-            $fileDescription = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-trigger="hover"
+            $fileDescription = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-trigger="hover click"
                 data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$file->getValue('fil_description').'"></i>';
         }
 
@@ -227,7 +227,7 @@ if (isset($folderContent['files']))
             elseif($gCurrentUser->editDownloadRight())
             {
                 $additionalFileFunctions .= '
-                <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover" data-placement="left"
+                <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover click" data-placement="left"
                     title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('SYS_FILE_NOT_EXIST_DELETE_FROM_DB').'"></i>';
             }
             $additionalFileFunctions .= '

@@ -10,6 +10,8 @@
  */
 require_once(__DIR__ . '/common.php');
 
+$gValidLogin = false;
+
 // remove user from session
 $gCurrentSession->logout();
 

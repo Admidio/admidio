@@ -688,7 +688,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
         foreach($profileRightsArray as $profileRight)
         {
             $page->addHtml('<div class="col-sm-6 col-md-4 admidio-profile-user-right" data-toggle="popover" data-html="true"
-                data-trigger="hover" data-placement="auto" data-content="'.$gL10n->get('PRO_ASSIGNED_BY_ROLES'). ':
+                data-trigger="hover click" data-placement="auto" data-content="'.$gL10n->get('PRO_ASSIGNED_BY_ROLES'). ':
                 <strong>'. $profileRight['roles'].'</strong>"><i class="fas ' . $profileRight['icon'] . '"></i>'. $profileRight['right']. '</div>');
         }
     }

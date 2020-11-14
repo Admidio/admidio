@@ -436,7 +436,7 @@ label {
 
 .admidio-info-icon {
     color: #4496dd;
-    cursor: help;
+    cursor: pointer;
     margin-left: 6px;
 }
 
