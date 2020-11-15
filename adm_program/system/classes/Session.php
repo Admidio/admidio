@@ -454,7 +454,21 @@ class Session extends TableAccess
 
         $gLogger->info('Set Cookie!', array('name' => $name, 'value' => $value, 'expire' => $expire, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly));
 
-        return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+        if (PHP_VERSION_ID < 70300)
+        {
+            return setcookie($name, $value, $expire, $path. ';samesite=lax', $domain, $secure, $httpOnly);
+        }
+        else
+        {
+            return setcookie($name, $value, array(
+                'expires'  => $expire,
+                'path'     => $path,
+                'domain'   => $domain,
+                'secure'   => $secure,
+                'httponly' => $httpOnly,
+                'samesite' => 'lax'
+            ));
+        }
     }
 
     /**
@@ -512,7 +526,22 @@ class Session extends TableAccess
         {
             $secure = HTTPS;
         }
-        session_set_cookie_params($limit, $path, $domain, $secure, $httpOnly);
+
+        if (PHP_VERSION_ID < 70300)
+        {
+            session_set_cookie_params($limit, $path. ';samesite=lax', $domain, $secure, $httpOnly);
+        }
+        else
+        {
+            session_set_cookie_params(array(
+                'lifetime' => $limit,
+                'path'     => $path,
+                'domain'   => $domain,
+                'secure'   => $secure,
+                'httponly' => $httpOnly,
+                'samesite' => 'lax'
+            ));
+        }
 
         if (session_id() !== '') // PHP 5.4+ => (session_status() === PHP_SESSION_ACTIVE)
         {
