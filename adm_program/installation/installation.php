@@ -21,6 +21,20 @@
 
 $rootPath = dirname(dirname(__DIR__));
 
+function getAdmidioUrl( $s, $use_forwarded_host = false )
+{
+    $ssl      = ( ! empty( $s['HTTPS'] ) && $s['HTTPS'] == 'on' );
+    $sp       = strtolower( $s['SERVER_PROTOCOL'] );
+    $protocol = substr( $sp, 0, strpos( $sp, '/' ) ) . ( ( $ssl ) ? 's' : '' );
+    $port     = $s['SERVER_PORT'];
+    $port     = ( ( ! $ssl && $port=='80' ) || ( $ssl && $port=='443' ) ) ? '' : ':'.$port;
+    $host     = ( $use_forwarded_host && isset( $s['HTTP_X_FORWARDED_HOST'] ) ) ? $s['HTTP_X_FORWARDED_HOST'] : ( isset( $s['HTTP_HOST'] ) ? $s['HTTP_HOST'] : null );
+    $host     = isset( $host ) ? $host : $s['SERVER_NAME'] . $port;
+    $fullUrl  = $protocol . '://' . $host . $s['REQUEST_URI'];
+    $admidioPath = substr($fullUrl, 0, strpos($fullUrl, 'adm_program'));
+    return $admidioPath;
+}
+
 // if config file already exists then load file with their variables
 $configPath = $rootPath . '/adm_my_files/config.php';
 if (is_file($configPath))
@@ -36,7 +50,7 @@ elseif (is_file($rootPath . '/config.php'))
 else
 {
     $g_organization = '';
-    $g_root_path    = '../..';
+    $g_root_path    = getAdmidioUrl($_SERVER);
 }
 
 require_once($rootPath . '/adm_program/system/bootstrap.php');
