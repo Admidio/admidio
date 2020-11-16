@@ -103,7 +103,7 @@ $defaultOrgPreferences = array(
     'photo_download_enabled' => '0',
 
     // Guestbook
-    'enable_guestbook_module'        => '1',
+    'enable_guestbook_module'        => '0',
     'guestbook_entries_per_page'     => '10',
     'enable_guestbook_captcha'       => '1',
     'flooding_protection_time'       => '60',
