@@ -31,7 +31,7 @@ function getAdmidioUrl( $s, $use_forwarded_host = false )
     $host     = ( $use_forwarded_host && isset( $s['HTTP_X_FORWARDED_HOST'] ) ) ? $s['HTTP_X_FORWARDED_HOST'] : ( isset( $s['HTTP_HOST'] ) ? $s['HTTP_HOST'] : null );
     $host     = isset( $host ) ? $host : $s['SERVER_NAME'] . $port;
     $fullUrl  = $protocol . '://' . $host . $s['REQUEST_URI'];
-    $admidioPath = substr($fullUrl, 0, strpos($fullUrl, 'adm_program'));
+    $admidioPath = substr($fullUrl, 0, strpos($fullUrl, 'adm_program')-1);
     return $admidioPath;
 }
 
