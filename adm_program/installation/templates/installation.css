@@ -196,9 +196,12 @@ label {
     margin-right: 15px;
 }
 
+input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
+    width: 200px;
+}
+
 .datetime-date-control {
     display: inline;
-    width: 200px;
 }
 
 .datetime-time-control {
