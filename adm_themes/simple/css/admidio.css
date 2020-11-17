@@ -264,9 +264,12 @@ label {
     margin-right: 15px;
 }
 
+input[data-provide=datepicker] {
+    width: 200px;
+}
+
 .datetime-date-control {
     display: inline;
-    width: 200px;
 }
 
 .datetime-time-control {
