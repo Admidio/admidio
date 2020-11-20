@@ -264,13 +264,13 @@ foreach($listsResult['recordset'] as $row)
                         {
                             $html .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'role_details_panel_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.
-                                            '<i class="fas fa-users-tie" data-toggle="tooltip" title="'.$gL10n->get('SYS_ACTIVATE_ROLE').'"></i></a>';
+                                            '<i class="fas fa-check-square" data-toggle="tooltip" title="'.$gL10n->get('SYS_ACTIVATE_ROLE').'"></i></a>';
                         }
                         elseif($getRoleType === ROLE_TYPE_ACTIVE)
                         {
                             $html .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'role_details_panel_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $rolId)).'">'.
-                                            '<i class="fas fa-user-secret" data-toggle="tooltip" title="'.$gL10n->get('SYS_DEACTIVATE_ROLE').'"></i></a>';
+                                            '<i class="fas fa-ban" data-toggle="tooltip" title="'.$gL10n->get('SYS_DEACTIVATE_ROLE').'"></i></a>';
                         }
 
                         $html .= '

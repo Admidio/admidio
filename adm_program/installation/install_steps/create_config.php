@@ -106,21 +106,6 @@ if ($_SESSION['db_port'])
     $port = $_SESSION['db_port'];
 }
 
-// detect root path
-$rootPath = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-$rootPath = substr($rootPath, 0, strpos($rootPath, '/adm_program'));
-if (!StringUtils::strStartsWith($rootPath, 'http://') && !StringUtils::strStartsWith($rootPath, 'https://'))
-{
-    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-    {
-        $rootPath = 'https://' . $rootPath;
-    }
-    else
-    {
-        $rootPath = 'http://' . $rootPath;
-    }
-}
-
 // replace placeholders in configuration file structure with data of installation wizard
 $replaces = array(
     '%DB_ENGINE%'    => $_SESSION['db_engine'],
@@ -130,7 +115,7 @@ $replaces = array(
     '%DB_USERNAME%'  => $_SESSION['db_username'],
     '%DB_PASSWORD%'  => $_SESSION['db_password'],
     '%TABLE_PREFIX%' => $_SESSION['table_prefix'],
-    '%ROOT_PATH%'    => $rootPath,
+    '%ROOT_PATH%'    => $g_root_path,
     '%ORGANIZATION%' => $_SESSION['orga_shortname'],
     '%TIMEZONE%'     => $_SESSION['orga_timezone']
 );

@@ -20,9 +20,11 @@
  */
 
 $rootPath = dirname(dirname(__DIR__));
+require_once($rootPath . '/adm_program/system/classes/FileSystemUtils.php');
 
 // if config file already exists then load file with their variables
 $configPath = $rootPath . '/adm_my_files/config.php';
+
 if (is_file($configPath))
 {
     require_once($configPath);
@@ -34,7 +36,7 @@ elseif (is_file($rootPath . '/config.php'))
 else
 {
     $g_organization = '';
-    $g_root_path    = '../..';
+    $g_root_path    = FileSystemUtils::getAdmidioUrl();
 }
 
 require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
