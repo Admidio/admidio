@@ -816,13 +816,13 @@ INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, l
 (127, 13, 1, 1, NULL, 'ASC', NULL),
 (128, 13, 2, 2, NULL, NULL, NULL),
 (129, 13, 3, NULL, 'mem_approved', NULL, NULL),
-(130, 13, 3, NULL, 'mem_comment', NULL, NULL),
-(131, 13, 3, NULL, 'mem_count_guests', NULL, NULL),
+(130, 13, 4, NULL, 'mem_comment', NULL, NULL),
+(131, 13, 5, NULL, 'mem_count_guests', NULL, NULL),
 (132, 14, 1, 1, NULL, 'ASC', NULL),
 (133, 14, 2, 2, NULL, NULL, NULL),
 (134, 14, 3, NULL, 'mem_approved', NULL, NULL),
-(135, 14, 3, NULL, 'mem_comment', NULL, NULL),
-(136, 14, 3, NULL, 'mem_count_guests', NULL, NULL);
+(135, 14, 4, NULL, 'mem_comment', NULL, NULL),
+(136, 14, 5, NULL, 'mem_count_guests', NULL, NULL);
 
 --
 -- Data for table adm_members
