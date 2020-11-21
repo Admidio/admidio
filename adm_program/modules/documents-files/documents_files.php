@@ -85,7 +85,7 @@ if ($currentFolder->hasUploadRight())
             'fa-upload');
     }
 
-    if($gCurrentUser->editDownloadRight())
+    if($gCurrentUser->editDocumentsFiles())
     {
         $page->addPageFunctionsMenuItem('menu_item_documents_permissions', $gL10n->get('SYS_PERMISSIONS'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_id' => $getFolderId)),
@@ -151,7 +151,7 @@ if (isset($folderContent['folders']))
                 <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_id' => $nextFolder['fol_id'])). '">
                     <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
             }
-            elseif($gCurrentUser->editDownloadRight())
+            elseif($gCurrentUser->editDocumentsFiles())
             {
                 $additionalFolderFunctions = '
                 <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover click" data-placement="left"
@@ -224,7 +224,7 @@ if (isset($folderContent['files']))
                 <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_id' => $getFolderId, 'file_id' => $fileId)). '">
                     <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
             }
-            elseif($gCurrentUser->editDownloadRight())
+            elseif($gCurrentUser->editDocumentsFiles())
             {
                 $additionalFileFunctions .= '
                 <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover click" data-placement="left"
@@ -251,7 +251,7 @@ $htmlDownloadOverview = $downloadOverview->show();
 /**************************************************************************/
 
 // If user is download Admin show further files contained in this folder.
-if ($gCurrentUser->editDownloadRight())
+if ($gCurrentUser->editDocumentsFiles())
 {
     // Check whether additional content was found in the folder
     if (isset($folderContent['additionalFolders']) || isset($folderContent['additionalFiles']))

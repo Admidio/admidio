@@ -28,7 +28,7 @@ if (!$gSettingsManager->getBool('documents_files_enable_module'))
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
-if (!$gCurrentUser->editDownloadRight())
+if (!$gCurrentUser->editDocumentsFiles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT

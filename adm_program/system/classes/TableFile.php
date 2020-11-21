@@ -160,7 +160,7 @@ class TableFile extends TableAccess
         }
 
         // If current user has download-admin-rights => allow
-        if ($gCurrentUser->editDownloadRight())
+        if ($gCurrentUser->editDocumentsFiles())
         {
             return true;
         }

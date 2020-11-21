@@ -2033,7 +2033,7 @@ class User extends TableAccess
      * Funktion prueft, ob der angemeldete User Downloads hochladen und verwalten darf
      * @return bool
      */
-    public function editDownloadRight()
+    public function editDocumentsFiles()
     {
         return $this->checkRolesRight('rol_documents_files');
     }

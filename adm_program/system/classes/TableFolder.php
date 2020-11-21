@@ -47,8 +47,8 @@ class TableFolder extends TableAccess
     {
         global $gCurrentUser;
 
-        // If user hasn't editDownloadRight, don't add more data
-        if (!$gCurrentUser->editDownloadRight())
+        // If user hasn't editDocumentsFiles, don't add more data
+        if (!$gCurrentUser->editDocumentsFiles())
         {
             return $completeFolder;
         }
@@ -60,7 +60,7 @@ class TableFolder extends TableAccess
             return $completeFolder;
         }
 
-        // User has editDownloadRight and folder exists, so lookup the physical directory for items that aren't in the DB
+        // User has editDocumentsFiles and folder exists, so lookup the physical directory for items that aren't in the DB
         $dirHandle = @opendir($folderPath);
         if ($dirHandle)
         {
@@ -409,8 +409,8 @@ class TableFolder extends TableAccess
 
             $addToArray = false;
 
-            // If file exists and file isn't locked or user has editDownloadRight, show it
-            if (($fileExists && !$rowFiles['fil_locked']) || $gCurrentUser->editDownloadRight())
+            // If file exists and file isn't locked or user has editDocumentsFiles, show it
+            if (($fileExists && !$rowFiles['fil_locked']) || $gCurrentUser->editDocumentsFiles())
             {
                 $addToArray = true;
             }
@@ -485,7 +485,7 @@ class TableFolder extends TableAccess
         }
 
         // If current user has download-admin-rights => allow
-        if ($gCurrentUser->editDownloadRight())
+        if ($gCurrentUser->editDocumentsFiles())
         {
             return true;
         }
@@ -651,12 +651,12 @@ class TableFolder extends TableAccess
 
             $addToArray = false;
 
-            // If user has editDownloadRight, show it
-            if ($gCurrentUser->editDownloadRight())
+            // If user has editDocumentsFiles, show it
+            if ($gCurrentUser->editDocumentsFiles())
             {
                 $addToArray = true;
             }
-            // If user hasn't editDownloadRight, only show if folder exists
+            // If user hasn't editDocumentsFiles, only show if folder exists
             elseif ($folderExists)
             {
                 // If folder is public and not locked, show it
@@ -724,7 +724,7 @@ class TableFolder extends TableAccess
     {
         global $gCurrentUser;
 
-        return $this->folderUploadRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->editDownloadRight();
+        return $this->folderUploadRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->editDocumentsFiles();
     }
 
     /**
@@ -735,7 +735,7 @@ class TableFolder extends TableAccess
     {
         global $gCurrentUser;
 
-        return $this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->editDownloadRight();
+        return $this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->editDocumentsFiles();
     }
 
     /**
