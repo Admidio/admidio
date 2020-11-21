@@ -333,7 +333,7 @@ elseif ($getMode === 6)
     }
 
     // only users with download administration rights should set new roles rights
-    if(!$gCurrentUser->editDocumentsFiles())
+    if(!$gCurrentUser->adminDocumentsFiles())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -423,7 +423,7 @@ elseif ($getMode === 7)
     }
 
     // only users with download administration rights should set new roles rights
-    if(!$gCurrentUser->editDocumentsFiles())
+    if(!$gCurrentUser->adminDocumentsFiles())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
