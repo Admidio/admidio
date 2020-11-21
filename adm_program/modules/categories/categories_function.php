@@ -30,6 +30,41 @@ $getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValu
 $getMode  = admFuncVariableIsValid($_GET, 'mode',   'int',    array('requireValue' => true));
 $getTitle = admFuncVariableIsValid($_GET, 'title',  'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
 
+// set text strings for the different modules
+switch ($getType)
+{
+    case 'ANN':
+        $component = 'ANNOUNCEMENTS';
+        break;
+
+    case 'DAT':
+        $component = 'DATES';
+        break;
+
+    case 'LNK':
+        $component = 'LINKS';
+        break;
+
+    case 'ROL':
+        $component = 'GROUPS-ROLES';
+        break;
+
+    case 'USF': // fallthrough
+    case 'AWA':
+        $component = 'CORE';
+        break;
+
+    default:
+        $component = '';
+}
+
+// check if the current user has the right to
+if(!Component::isAdministrable($component))
+{
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
+}
+
 // create category object
 $category = new TableCategory($gDb);
 $currOrgId = (int) $gCurrentOrganization->getValue('org_id');

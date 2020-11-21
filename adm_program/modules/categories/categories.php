@@ -48,18 +48,21 @@ $editableHeadline = '';
 switch ($getType)
 {
     case 'ROL':
+        $component = 'GROUPS-ROLES';
         $rolesRightsColumn = 'rol_assign_roles';
         $headline = $gL10n->get('SYS_ROLES') . ' - ' . $gL10n->get('SYS_CATEGORIES');
         $visibleHeadline = '';
         break;
 
     case 'ANN':
+        $component = 'ANNOUNCEMENTS';
         $rolesRightsColumn = 'rol_announcements';
         $headline = $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
         $editableHeadline = $gL10n->get('SYS_EDIT_ANNOUNCEMENTS');
         break;
 
     case 'DAT':
+        $component = 'DATES';
         $rolesRightsColumn = 'rol_dates';
         $headline = $gL10n->get('DAT_DATES') . ' - ' . $gL10n->get('SYS_CALENDARS');
         $editableHeadline = $gL10n->get('DAT_EDIT_EVENTS');
@@ -67,23 +70,33 @@ switch ($getType)
         break;
 
     case 'LNK':
+        $component = 'LINKS';
         $rolesRightsColumn = 'rol_weblinks';
         $headline = $gL10n->get('LNK_WEBLINKS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
         $editableHeadline = $gL10n->get('LNK_EDIT_WEBLINKS');
         break;
 
     case 'USF':
+        $component = 'CORE';
         $rolesRightsColumn = 'rol_edit_user';
         $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
         $editableHeadline = $gL10n->get('PRO_EDIT_PROFILE_FIELDS');
         break;
 
     case 'AWA':
+        $component = 'CORE';
         $rolesRightsColumn = 'rol_edit_user';
         $headline = $gL10n->get('Awards') . ' - ' . $gL10n->get('SYS_CATEGORIES');
         break;
 
     default:
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
+}
+
+// check if the current user has the right to
+if(!Component::isAdministrable($component))
+{
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT
 }
