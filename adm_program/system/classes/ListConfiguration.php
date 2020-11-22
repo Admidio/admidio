@@ -174,14 +174,20 @@ class ListConfiguration extends TableLists
     }
 
     /**
-     * prepare SQL to list configuration
-     * @param array<int,int> $roleIds           Array with all roles, which members are shown
+     * Prepare SQL of the current list configuration. Therefore all roles of the array and there users will be selected
+     * and joined with the columns of the list configuration. The time period of the membership will be considered and
+     * could be influenced with parameters. There is also a possiblity to join users of a relationship and hide special
+     * columns of event roles.
+     * @param array<int,int> $roleIds           Array with all roles of which members should be shown.
      * @param bool           $showFormerMembers false - Only active members of a role
      *                                          true  - Only former members
-     * @param string         $startDate
-     * @param string         $endDate
-     * @param array<int,int> $relationTypeIds
-     * @return string
+     * @param string         $startDate         The start date if memberships that should be considered. The time period of
+     *                                          the membership must be at least one day after this date.
+     * @param string         $endDate           The end date if memberships that should be considered.The time period of
+     *                                          the membership must be at least one day before this date.
+     * @param array<int,int> $relationTypeIds   An array with relation types. The sql will be expanded with all users who
+     *                                          are in such a relationship to the selected role users.
+     * @return string Returns a valid sql that represents all users with the columns of the list configuration.
      */
     public function getSQL(array $roleIds, $showFormerMembers = false, $startDate = null, $endDate = null, array $relationTypeIds = array())
     {
@@ -405,6 +411,34 @@ class ListConfiguration extends TableLists
             $lscNumber = (int) $lscRow['lsc_number'];
             $this->columns[$lscNumber] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
             $this->columns[$lscNumber]->setArray($lscRow);
+        }
+    }
+
+    /* Removes a column from the list configuration array, but only in the memory and not in database.
+     * @param string $columnNameOrUsfId Accept the usfId or the name of the special field that should be removed.
+     */
+    public function removeColumn($columnNameOrUsfId)
+    {
+        $currentNumber = 1;
+
+        // check for every column if the number is expected otherwise set new number
+        foreach($this->columns as $number => $listColumn)
+        {
+            if($listColumn->getValue('lsc_special_field') === $columnNameOrUsfId
+            || $listColumn->getValue('lsc_usf_id') === (int) $columnNameOrUsfId)
+            {
+                unset($this->columns[$number]);
+            }
+            else
+            {
+                // set new number to the columns after the removed column
+                if($currentNumber < $number)
+                {
+                    $this->columns[$currentNumber] = $listColumn;
+                    unset($this->columns[$number]);
+                }
+                $currentNumber++;
+            }
         }
     }
 

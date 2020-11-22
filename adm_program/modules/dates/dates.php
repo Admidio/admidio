@@ -470,17 +470,17 @@ else
                         break;
                     case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
                         $buttonText = $gL10n->get('DAT_USER_ATTEND');
-                        $buttonClass = 'admidio-btn-event-attend';
+                        $buttonClass = 'admidio-event-approval-state-attend';
                         $iconParticipationStatus = '<i class="fas fa-check-circle"></i>';
                         break;
                     case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
                         $buttonText = $gL10n->get('DAT_USER_TENTATIVE');
-                        $buttonClass = 'admidio-btn-event-tentative';
+                        $buttonClass = 'admidio-event-approval-state-tentative';
                         $iconParticipationStatus = '<i class="fas fa-question-circle"></i>';
                         break;
                     case ModuleDates::MEMBER_APPROVAL_STATE_REFUSED:
                         $buttonText = $gL10n->get('DAT_USER_REFUSED');
-                        $buttonClass = 'admidio-btn-event-cancel';
+                        $buttonClass = 'admidio-event-approval-state-cancel';
                         $iconParticipationStatus = '<i class="fas fa-times-circle"></i>';
                         break;
                     default:
@@ -535,20 +535,20 @@ else
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="btn admidio-btn-event-attend" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '3', 'dat_id' => $dateId)) . '"' . $disableStatusAttend . '>
+                                        <a class="btn admidio-event-approval-state-attend" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '3', 'dat_id' => $dateId)) . '"' . $disableStatusAttend . '>
                                             <i class="fas fa-check-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>' . $gL10n->get('DAT_ATTEND') . '
                                         </a>
                                     </li>';
                                     if ($gSettingsManager->getBool('dates_may_take_part'))
                                     {
                                         $outputButtonParticipation .= '<li>
-                                            <a class="btn admidio-btn-event-tentative" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_id' => $dateId)) . '"' . $disableStatusTentative . '>
+                                            <a class="btn admidio-event-approval-state-tentative" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_id' => $dateId)) . '"' . $disableStatusTentative . '>
                                                 <i class="fas fa-question-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_USER_TENTATIVE').'"></i>' . $gL10n->get('DAT_USER_TENTATIVE') . '
                                             </a>
                                         </li>';
                                     }
                                     $outputButtonParticipation .= '<li>
-                                        <a class="btn admidio-btn-event-cancel" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '4', 'dat_id' => $dateId)) . '">
+                                        <a class="btn admidio-event-approval-state-cancel" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '4', 'dat_id' => $dateId)) . '">
                                             <i class="fas fa-times-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_CANCEL').'"></i>' . $gL10n->get('DAT_CANCEL') . '
                                         </a>
                                     </li>

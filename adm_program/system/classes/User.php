@@ -2011,9 +2011,9 @@ class User extends TableAccess
     }
 
     /**
-     * Checks if the user has the right to manage roles. Therefore he must be a member
-     * of a role with the right **rol_manage_roles**.
-     * @return bool Return **true** if the user can manage roles.
+     * Method checks if the current user is allowed to manage roles and therefore has
+     * admin access to the groups and roles module.
+     * @return bool Return true if the user is admin of the module otherwise false
      */
     public function manageRoles()
     {
@@ -2021,8 +2021,8 @@ class User extends TableAccess
     }
 
     /**
-     * Funktion prueft, ob der angemeldete User Termine anlegen und bearbeiten darf
-     * @return bool
+     * Method checks if the current user is allowed to administrate the event module.
+     * @return bool Return true if the user is admin of the module otherwise false
      */
     public function editDates()
     {
@@ -2030,17 +2030,18 @@ class User extends TableAccess
     }
 
     /**
-     * Funktion prueft, ob der angemeldete User Downloads hochladen und verwalten darf
-     * @return bool
+     * Method checks if the current user is allowed to administrate the documents and files module.
+     * @return bool Return true if the user is admin of the module otherwise false
      */
-    public function editDownloadRight()
+    public function adminDocumentsFiles()
     {
         return $this->checkRolesRight('rol_documents_files');
     }
 
     /**
-     * Funktion prueft, ob der angemeldete User fremde Benutzerdaten bearbeiten darf
-     * @return bool
+     * Method checks if the current user is allowed to administrate other user profiles and therefore
+     * has access to the user management module.
+     * @return bool Return true if the user is admin of the module otherwise false
      */
     public function editUsers()
     {
@@ -2048,8 +2049,8 @@ class User extends TableAccess
     }
 
     /**
-     * Funktion prueft, ob der angemeldete User Gaestebucheintraege loeschen und editieren darf
-     * @return bool
+     * Method checks if the current user is allowed to administrate the guestbook module.
+     * @return bool Return true if the user is admin of the module otherwise false
      */
     public function editGuestbookRight()
     {
@@ -2057,8 +2058,8 @@ class User extends TableAccess
     }
 
     /**
-     * Funktion prueft, ob der angemeldete User Gaestebucheintraege kommentieren darf
-     * @return bool
+     * Method checks if the current user is allowed to comment guestbook entries.
+     * @return bool Return true if the user is admin of the module otherwise false
      */
     public function commentGuestbookRight()
     {
@@ -2066,8 +2067,8 @@ class User extends TableAccess
     }
 
     /**
-     * Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
-     * @return bool
+     * Method checks if the current user is allowed to administrate the photos module.
+     * @return bool Return true if the user is admin of the module otherwise false
      */
     public function editPhotoRight()
     {
@@ -2075,8 +2076,8 @@ class User extends TableAccess
     }
 
     /**
-     * Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
-     * @return bool
+     * Method checks if the current user is allowed to administrate the weblinks module.
+     * @return bool Return true if the user is admin of the module otherwise false
      */
     public function editWeblinksRight()
     {

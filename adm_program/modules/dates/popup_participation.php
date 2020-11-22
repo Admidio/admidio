@@ -21,6 +21,7 @@ $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue'
 // Initialize local variables
 $disableAdditionalGuests = HtmlForm::FIELD_HIDDEN;
 $disableComments         = HtmlForm::FIELD_HIDDEN;
+$gMessage->showThemeBody(false);
 
 // Get the date object
 $date = new TableDate($gDb, $getDateId);
@@ -35,7 +36,7 @@ if ((int) $gCurrentUser->getValue('usr_id') === $getUserId)
 }
 else
 {
-    if (!$gCurrentUser->isAdministrator() || !$gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id')))
+    if (!$gCurrentUser->isAdministrator() && !$gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id')))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -115,20 +116,20 @@ $participationForm->addHtml('</div><div class="modal-footer">');
 $participationForm->openButtonGroup();
 $participationForm->addButton(
     'btn_attend_' . $getDateId, $gL10n->get('DAT_ATTEND'),
-    array('icon' => 'fa-check-circle', 'class' => 'admidio-btn-event-attend')
+    array('icon' => 'fa-check-circle', 'class' => 'admidio-event-approval-state-attend')
 );
 
 if ($gSettingsManager->getBool('dates_may_take_part'))
 {
     $participationForm->addButton(
         'btn_tentative_' . $getDateId, $gL10n->get('DAT_USER_TENTATIVE'),
-        array('icon' => 'fa-question-circle', 'class' => 'admidio-btn-event-tentative')
+        array('icon' => 'fa-question-circle', 'class' => 'admidio-event-approval-state-tentative')
     );
 }
 
 $participationForm->addButton(
     'btn_refuse_' . $getDateId, $gL10n->get('DAT_CANCEL'),
-    array('icon' => 'fa-times-circle', 'class' => 'admidio-btn-event-cancel')
+    array('icon' => 'fa-times-circle', 'class' => 'admidio-event-approval-state-cancel')
 );
 $participationForm->closeButtonGroup();
 $participationForm->addHtml('</div></div>');

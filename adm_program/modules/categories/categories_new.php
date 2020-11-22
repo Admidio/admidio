@@ -55,32 +55,16 @@ else
 // set text strings for the different modules
 switch ($getType)
 {
-    case 'ROL':
-        $headline = $gL10n->get('SYS_ROLES') . ' - ' . $headlineSuffix;
-        break;
-
-    case 'LNK':
-        $headline = $gL10n->get('LNK_WEBLINKS') . ' - ' . $headlineSuffix;
-        $rolesRightEditName = 'LNK_EDIT_WEBLINKS';
-        $rolesRightsColumn  = 'rol_weblinks';
-        $rolesRightsName    = 'SYS_RIGHT_WEBLINKS';
-        break;
-
     case 'ANN':
+        $component = 'ANNOUNCEMENTS';
         $headline = $gL10n->get('SYS_ANNOUNCEMENTS') . ' - ' . $headlineSuffix;
         $rolesRightEditName = 'SYS_EDIT_ANNOUNCEMENTS';
         $rolesRightsColumn  = 'rol_announcements';
         $rolesRightsName    = 'SYS_RIGHT_ANNOUNCEMENTS';
         break;
 
-    case 'USF':
-        $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $headlineSuffix;
-        $rolesRightEditName = 'PRO_EDIT_PROFILE_FIELDS';
-        $rolesRightsColumn  = 'rol_edit_user';
-        $rolesRightsName    = 'SYS_RIGHT_EDIT_USER';
-        break;
-
     case 'DAT':
+        $component = 'DATES';
         $headline = $gL10n->get('DAT_DATES') . ' - ' . $headlineSuffix;
         $rolesRightEditName = 'DAT_EDIT_EVENTS';
         $rolesRightsColumn  = 'rol_dates';
@@ -88,7 +72,29 @@ switch ($getType)
         $addButtonText      = $gL10n->get('DAT_CALENDAR');
         break;
 
+    case 'LNK':
+        $component = 'LINKS';
+        $headline = $gL10n->get('LNK_WEBLINKS') . ' - ' . $headlineSuffix;
+        $rolesRightEditName = 'LNK_EDIT_WEBLINKS';
+        $rolesRightsColumn  = 'rol_weblinks';
+        $rolesRightsName    = 'SYS_RIGHT_WEBLINKS';
+        break;
+
+    case 'ROL':
+        $component = 'GROUPS-ROLES';
+        $headline = $gL10n->get('SYS_ROLES') . ' - ' . $headlineSuffix;
+        break;
+
+    case 'USF':
+        $component = 'CORE';
+        $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $headlineSuffix;
+        $rolesRightEditName = 'PRO_EDIT_PROFILE_FIELDS';
+        $rolesRightsColumn  = 'rol_edit_user';
+        $rolesRightsName    = 'SYS_RIGHT_EDIT_USER';
+        break;
+
     case 'AWA':
+        $component = 'CORE';
         $headline = $gL10n->get('Awards') . ' - ' . $headlineSuffix;
         $rolesRightEditName = 'Not used, leave empty';
         $rolesRightsColumn  = 'rol_edit_user';
@@ -97,6 +103,13 @@ switch ($getType)
 
     default:
         $headline = $headlineSuffix;
+}
+
+// check if the current user has the right to
+if(!Component::isAdministrable($component))
+{
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);

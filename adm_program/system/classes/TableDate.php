@@ -412,6 +412,24 @@ class TableDate extends TableAccess
         return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('DAT'), true);
     }
 
+    /* Read an event that has the given role has stored as participant role.
+     * @param $roleId Id of the participants role of the event.
+     */
+    public function readDataByRoleId($roleId)
+    {
+        // initialize the object, so that all fields are empty
+        $this->clear();
+
+        // add id to sql condition
+        if ($roleId > 0)
+        {
+            // call method to read data out of database
+            return $this->readData(' AND dat_rol_id = ? ', array($roleId));
+        }
+
+        return false;
+    }
+
     /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database

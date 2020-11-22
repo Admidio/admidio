@@ -435,6 +435,31 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method add all roles to the role right category_view if the role had set the flag cat_hidden = 1
+     */
+    public static function updateStepRenameParticipationRoles()
+    {
+        $sql = 'SELECT *
+                  FROM ' . TBL_ROLES . '
+            INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                 WHERE cat_name_intern = \'EVENTS\' ';
+        $rolesStatement = self::$db->queryPrepared($sql);
+
+        while($row = $rolesStatement->fetch())
+        {
+            $role = new TableRoles(self::$db);
+            $role->setArray($row);
+
+            $date = new TableDate(self::$db);
+            $date->readDataByRoleId($role->getValue('rol_id'));
+
+            $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
+            $role->setValue('rol_description', $date->getValue('dat_description'));
+            $role->save();
+        }
+    }
+
+    /**
      * This method renames the webmaster role to administrator.
      */
     public static function updateStepRenameWebmasterToAdministrator()

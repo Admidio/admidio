@@ -396,26 +396,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
 
     if($returnCode === true && $gSettingsManager->getBool('enable_email_notification'))
     {
-        // Benachrichtigungs-Email für neue Einträge
-
-        // Daten für Benachrichtigung zusammenstellen
-        if($_POST['date_from'] === $_POST['date_to'])
-        {
-            $datum = $_POST['date_from'];
-        }
-        else
-        {
-            $datum = $_POST['date_from'] . ' - ' . $_POST['date_to'];
-        }
-
-        if($_POST['dat_all_day'] != 0)
-        {
-            $zeit = $gL10n->get('DAT_ALL_DAY');
-        }
-        else
-        {
-            $zeit = $_POST['date_from_time']. ' - '. $_POST['date_to_time'];
-        }
+        // Notification email for new entries
 
         $sqlCal = 'SELECT cat_name
                      FROM '.TBL_CATEGORIES.'
@@ -452,7 +433,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
 
             if($getMode === 1)
             {
-                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar))
+                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $date->getDateTimePeriod(), $calendar))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message,
@@ -460,7 +441,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             }
             else
             {
-                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar))
+                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $date->getDateTimePeriod(), $calendar))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message,
@@ -473,9 +454,9 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
     }
 
-    // ----------------------------------------
-    // ggf. Rolle fuer Anmeldungen wegschreiben
-    // ----------------------------------------
+    // ----------------------------------------------
+    // if necessary write away role for participation
+    // ----------------------------------------------
 
     if($_POST['date_registration_possible'] == 1 && strlen($date->getValue('dat_rol_id')) === 0)
     {
@@ -493,7 +474,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
         else
         {
-            // Kategorie fuer Terminbestaetigungen einlesen
+            // Read category for event participation
             $sql = 'SELECT cat_id
                       FROM '.TBL_CATEGORIES.'
                      WHERE cat_name_intern = \'EVENTS\'';
@@ -510,8 +491,8 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             $role->setValue('rol_max_members', (int) $_POST['dat_max_members']);
         }
 
-        $role->setValue('rol_name', $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$datId);
-        $role->setValue('rol_description', $date->getValue('dat_headline'));
+        $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
+        $role->setValue('rol_description', $date->getValue('dat_description'));
 
         // save role in database
         $returnCode2 = $role->save();

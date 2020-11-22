@@ -138,19 +138,19 @@ CREATE TABLE %PREFIX%_dates
     dat_begin                   timestamp           NULL        DEFAULT NULL,
     dat_end                     timestamp           NULL        DEFAULT NULL,
     dat_all_day                 boolean             NOT NULL    DEFAULT '0',
-    dat_highlight               boolean             NOT NULL    DEFAULT '0',
+    dat_headline                varchar(100)        NOT NULL,
     dat_description             text,
+    dat_highlight               boolean             NOT NULL    DEFAULT '0',
     dat_location                varchar(100),
     dat_country                 varchar(100),
     dat_deadline                timestamp           NULL        DEFAULT NULL,
-    dat_headline                varchar(100)        NOT NULL,
     dat_max_members             integer             NOT NULL    DEFAULT 0,
     dat_usr_id_create           integer unsigned,
     dat_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     dat_usr_id_change           integer unsigned,
     dat_timestamp_change        timestamp           NULL        DEFAULT NULL,
-    dat_allow_comments          integer             NOT NULL    DEFAULT 0,
-    dat_additional_guests       integer             NOT NULL    DEFAULT 0,
+    dat_allow_comments          boolean             NOT NULL    DEFAULT 0,
+    dat_additional_guests       boolean             NOT NULL    DEFAULT 0,
     PRIMARY KEY (dat_id)
 )
 ENGINE = InnoDB

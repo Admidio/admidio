@@ -92,11 +92,114 @@ class Component extends TableAccess
         }
     }
 
+    /**
+     * This method checks if the current user is allowed to edit and administrate the component. Therefore
+     * special checks for each component were done.
+     * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. GROUPS-ROLES
+     * @throws \UnexpectedValueException
+     * @throws \InvalidArgumentException
+     * @return bool Return true if the current user is allowed to view the component
+     */
+    public static function isAdministrable($componentName)
+    {
+        global $gValidLogin, $gCurrentUser, $gSettingsManager;
+
+        if(Component::isVisible($componentName))
+        {
+            switch($componentName)
+            {
+                case 'ANNOUNCEMENTS':
+                    if($gCurrentUser->editAnnouncements())
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 'DATES':
+                    if($gCurrentUser->editDates())
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 'DOCUMENTS-FILES':
+                    if($gCurrentUser->adminDocumentsFiles())
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 'GUESTBOOK':
+                    if($gCurrentUser->editGuestbookRight())
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 'LINKS':
+                    if($gCurrentUser->editWeblinksRight())
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 'GROUPS-ROLES':
+                    if($gCurrentUser->manageRoles())
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 'MEMBERS':
+                    if($gCurrentUser->editUsers())
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 'PHOTOS':
+                    if($gCurrentUser->editPhotoRight())
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 'PROFILE':
+                    if($gCurrentUser->hasRightEditProfile($gCurrentUser))
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 'REGISTRATION':
+                    if($gCurrentUser->approveUsers())
+                    {
+                        return true;
+                    }
+                    break;
+
+                case 'CORE': // fallthrough
+                case 'BACKUP': // fallthrough
+                case 'CATEGORIES': // fallthrough
+                case 'MENU': // fallthrough
+                case 'MESSAGES': // fallthrough
+                case 'PREFERENCES': // fallthrough
+                case 'ROOMS':
+                    if($gCurrentUser->isAdministrator())
+                    {
+                        return true;
+                    }
+                    break;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * This method checks if the current user is allowed to view the component. Therefore
      * special checks for each component were done.
-     * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. LISTS
+     * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. GROUPS-ROLES
      * @throws \UnexpectedValueException
      * @throws \InvalidArgumentException
      * @return bool Return true if the current user is allowed to view the component
