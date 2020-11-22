@@ -54,6 +54,8 @@ $roleName        = $gL10n->get('SYS_VARIOUS_ROLES');
 $htmlSubHeadline = '';
 $showLinkMailToList = true;
 $hasRightViewFormerMembers = true;
+$showComment = true;
+$showCountGuests = true;
 
 if ($numberRoles > 1)
 {
@@ -98,14 +100,17 @@ else
     $role = new TableRoles($gDb, $roleIds[0]);
 
     // If its an event list and user has right to edit user states then a additional column with edit link is shown
-    if ($getMode === 'html')
+    if ($role->getValue('cat_name_intern') === 'EVENTS')
     {
-        if ($role->getValue('cat_name_intern') === 'EVENTS')
+        $event = new TableDate($gDb);
+        $event->readDataByRoleId($roleIds[0]);
+
+        $showComment = $event->getValue('dat_allow_comments');
+        $showCountGuests = $event->getValue('dat_additional_guests');
+
+        if ($getMode === 'html' && ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleIds[0])))
         {
-            if ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleIds[0]))
-            {
-                $editUserStatus = true;
-            }
+            $editUserStatus = true;
         }
     }
 
@@ -259,6 +264,18 @@ try
 {
     // create list configuration object and create a sql statement out of it
     $list = new ListConfiguration($gDb, $getListId);
+
+    // remove columns that are not necessary for the selected role
+    if(!$showComment)
+    {
+        $list->removeColumn('mem_comment');
+    }
+    if(!$showCountGuests)
+    {
+        $list->removeColumn('mem_count_guests');
+    }
+
+    // create the main sql
     $mainSql = $list->getSQL($roleIds, $getShowFormerMembers, $startDateEnglishFormat, $endDateEnglishFormat, $relationTypeIds);
 }
 catch (AdmException $e)
@@ -801,15 +818,41 @@ foreach ($membersList as $member)
                 // Assign Integer to Language strings
                 switch ((int) $content)
                 {
-                    case 1:
-                        $content = $gL10n->get('DAT_USER_TENTATIVE');
+                    case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
+                        $text = $gL10n->get('DAT_USER_INVITED');
+                        $htmlText = '<i class="fas fa-calendar-check admidio-icon-chain"></i>' . $text;
                         break;
-                    case 2:
-                        $content = $gL10n->get('DAT_USER_WILL_ATTEND');
+                    case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
+                        $text = $gL10n->get('DAT_USER_ATTEND');
+                        $htmlText = '<i class="fas fa-check-circle admidio-icon-chain"></i>' . $text;
+                        $buttonClass = 'admidio-event-approval-state-attend';
                         break;
-                    case 3:
-                        $content = $gL10n->get('DAT_USER_REFUSED');
+                    case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
+                        $text = $gL10n->get('DAT_USER_TENTATIVE');
+                        $htmlText = '<i class="fas fa-question-circle admidio-icon-chain"></i>' . $text;
+                        $buttonClass = 'admidio-event-approval-state-tentative';
                         break;
+                    case ModuleDates::MEMBER_APPROVAL_STATE_REFUSED:
+                        $text = $gL10n->get('DAT_USER_REFUSED');
+                        $htmlText = '<i class="fas fa-times-circle admidio-icon-chain"></i>' . $text;
+                        $buttonClass = 'admidio-event-approval-state-cancel';
+                        break;
+                }
+
+                if($getMode === 'csv')
+                {
+                    $content = $text;
+                }
+                else
+                {
+                    if($getMode === 'html')
+                    {
+                        $content = '<span class="' . $buttonClass . '">' . $htmlText . '</span>';
+                    }
+                    else
+                    {
+                        $content = $htmlText;
+                    }
                 }
             }
             elseif ($column->getValue('lsc_special_field') === 'mem_usr_id_change' && (int) $content)

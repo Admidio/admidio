@@ -457,15 +457,15 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
     cursor: help;
 }
 
-.admidio-btn-event-attend .fas {
+.admidio-event-approval-state-attend .fas {
     color: #00b100 !important;
 }
 
-.admidio-btn-event-tentative .fas {
+.admidio-event-approval-state-tentative .fas {
     color: #9b009b !important;
 }
 
-.admidio-btn-event-cancel .fas {
+.admidio-event-approval-state-cancel .fas {
     color: #df2424 !important;
 }
 

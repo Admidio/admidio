@@ -149,8 +149,8 @@ CREATE TABLE %PREFIX%_dates
     dat_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     dat_usr_id_change           integer unsigned,
     dat_timestamp_change        timestamp           NULL        DEFAULT NULL,
-    dat_allow_comments          integer             NOT NULL    DEFAULT 0,
-    dat_additional_guests       integer             NOT NULL    DEFAULT 0,
+    dat_allow_comments          boolean             NOT NULL    DEFAULT 0,
+    dat_additional_guests       boolean             NOT NULL    DEFAULT 0,
     PRIMARY KEY (dat_id)
 )
 ENGINE = InnoDB
