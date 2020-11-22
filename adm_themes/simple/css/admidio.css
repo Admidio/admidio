@@ -380,6 +380,10 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
     margin-right: 10px;
 }
 
+.navbar-filter {
+    background-color: #eeeeee;
+}
+
 .navbar-filter .form-group {
     margin-top: 5px;
     margin-bottom: 5px;

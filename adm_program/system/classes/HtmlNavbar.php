@@ -324,7 +324,7 @@ class HtmlNavbar
 
         // add html for navbar
         $html = '
-            <nav class="navbar navbar-expand-md bg-light ' . $cssClassNavbar . $this->customCssClass . '">
+            <nav class="navbar navbar-expand-md ' . $cssClassNavbar . $this->customCssClass . '">
                 <a class="navbar-brand ' . $cssClassBrand . '" href="#">' . $this->name . '</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#' . $this->id . '" aria-controls="' . $this->id . '" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon fas fa-bars"></span>
