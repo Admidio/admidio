@@ -396,26 +396,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
 
     if($returnCode === true && $gSettingsManager->getBool('enable_email_notification'))
     {
-        // Benachrichtigungs-Email für neue Einträge
-
-        // Daten für Benachrichtigung zusammenstellen
-        if($_POST['date_from'] === $_POST['date_to'])
-        {
-            $datum = $_POST['date_from'];
-        }
-        else
-        {
-            $datum = $_POST['date_from'] . ' - ' . $_POST['date_to'];
-        }
-
-        if($_POST['dat_all_day'] != 0)
-        {
-            $zeit = $gL10n->get('DAT_ALL_DAY');
-        }
-        else
-        {
-            $zeit = $_POST['date_from_time']. ' - '. $_POST['date_to_time'];
-        }
+        // Notification email for new entries
 
         $sqlCal = 'SELECT cat_name
                      FROM '.TBL_CATEGORIES.'
@@ -452,7 +433,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
 
             if($getMode === 1)
             {
-                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar))
+                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $date->getDateTimePeriod(), $calendar))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message,
@@ -460,7 +441,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             }
             else
             {
-                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar))
+                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $date->getDateTimePeriod(), $calendar))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message,
