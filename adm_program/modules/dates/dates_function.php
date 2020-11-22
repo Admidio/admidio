@@ -454,9 +454,9 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
     }
 
-    // ----------------------------------------
-    // ggf. Rolle fuer Anmeldungen wegschreiben
-    // ----------------------------------------
+    // ----------------------------------------------
+    // if necessary write away role for participation
+    // ----------------------------------------------
 
     if($_POST['date_registration_possible'] == 1 && strlen($date->getValue('dat_rol_id')) === 0)
     {
@@ -474,7 +474,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
         else
         {
-            // Kategorie fuer Terminbestaetigungen einlesen
+            // Read category for event participation
             $sql = 'SELECT cat_id
                       FROM '.TBL_CATEGORIES.'
                      WHERE cat_name_intern = \'EVENTS\'';
@@ -491,8 +491,8 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             $role->setValue('rol_max_members', (int) $_POST['dat_max_members']);
         }
 
-        $role->setValue('rol_name', $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$datId);
-        $role->setValue('rol_description', $date->getValue('dat_headline'));
+        $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
+        $role->setValue('rol_description', $date->getValue('dat_description'));
 
         // save role in database
         $returnCode2 = $role->save();

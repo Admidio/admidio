@@ -828,7 +828,7 @@ INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, l
 -- Data for table adm_members
 --
 
-INSERT INTO `adm_members` (`mem_id`, `mem_rol_id`, `mem_usr_id`, `mem_begin`, `mem_end`, `mem_leader`, `mem_usr_id_create`, `mem_timestamp_create`, `mem_usr_id_change`, `mem_timestamp_change`, `mem_approved`, `mem_comment`, `mem_count_guests`) VALUES
+INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader, mem_usr_id_create, mem_timestamp_create, mem_usr_id_change, mem_timestamp_change, mem_approved, mem_comment, mem_count_guests) VALUES
 (1, 1, 1, '2008-04-20', '9999-12-31', 0, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
 (2, 2, 1, '2008-04-20', '9999-12-31', 0, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
 (3, 4, 1, '2008-04-20', '2009-10-31', 0, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
