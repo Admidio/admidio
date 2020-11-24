@@ -266,16 +266,20 @@ class ModuleLists extends Modules
         $sqlConditions = $this->getCategorySql() . $this->getRoleTypeSql() . $this->getVisibleRolesSql();
 
         $sql = 'SELECT rol.*, cat.*,
+                       (SELECT COUNT(*) + SUM(mem_count_guests) AS count
+                          FROM '.TBL_MEMBERS.' AS mem
+                         WHERE mem.mem_rol_id = rol.rol_id
+                           AND mem.mem_begin  <= ? -- DATE_NOW
+                           AND mem.mem_end     > ? -- DATE_NOW
+                           AND (mem.mem_approved IS NULL
+                            OR mem.mem_approved < 3)
+                           AND mem.mem_leader = 0) AS num_members,
                        (SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
-                           AND ? BETWEEN mem_begin AND mem_end
-                           AND mem_leader = 0) AS num_members,
-                       (SELECT COUNT(*) AS count
-                          FROM '.TBL_MEMBERS.' AS mem
-                         WHERE mem.mem_rol_id = rol.rol_id
-                           AND ? BETWEEN mem_begin AND mem_end
-                           AND mem_leader = 1) AS num_leader,
+                           AND mem.mem_begin  <= ? -- DATE_NOW
+                           AND mem.mem_end     > ? -- DATE_NOW
+                           AND mem.mem_leader = 1) AS num_leader,
                        (SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
@@ -298,7 +302,7 @@ class ModuleLists extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $listsStatement = $gDb->queryPrepared($sql, array(DATE_NOW, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $listsStatement = $gDb->queryPrepared($sql, array(DATE_NOW, DATE_NOW, DATE_NOW, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         // array for results
         return array(

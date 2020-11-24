@@ -249,7 +249,7 @@ class Participants
             if ($participant['usrId'] === (int) $userId)
             {
                 // is member of the event
-                if ($participant['usrId']['approved'] !== 3)
+                if ($participant['approved'] !== 3)
                 {
                     return true;
                 }
