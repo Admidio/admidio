@@ -459,7 +459,7 @@ class TableFolder extends TableAccess
      */
     public function getFolderForDownload($folderId)
     {
-        global $gCurrentOrganization, $gCurrentUser;
+        global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
 
         if ($folderId > 0)
         {
@@ -510,7 +510,14 @@ class TableFolder extends TableAccess
         }
 
         $this->clear();
-        throw new AdmException('SYS_FOLDER_NO_RIGHTS');
+        if($gValidLogin)
+        {
+            throw new AdmException('SYS_FOLDER_NO_RIGHTS');
+        }
+        else
+        {
+            throw new AdmException('SYS_FOLDER_NO_FILES_VISITOR');
+        }
     }
 
     /**

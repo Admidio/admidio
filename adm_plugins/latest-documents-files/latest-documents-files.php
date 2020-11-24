@@ -138,7 +138,14 @@ if(Component::isVisible('DOCUMENTS-FILES'))
 
     if($countVisibleDownloads === 0)
     {
-        echo $gL10n->get('PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE');
+        if($gValidLogin)
+        {
+            echo $gL10n->get('PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE');
+        }
+        else
+        {
+            echo $gL10n->get('SYS_FOLDER_NO_FILES_VISITOR');
+        }
     }
     else
     {
