@@ -492,7 +492,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
 
         $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
-        $role->setValue('rol_description', $date->getValue('dat_description'));
+        $role->setValue('rol_description', substr($date->getValue('dat_description'), 0, 3999));
 
         // save role in database
         $returnCode2 = $role->save();

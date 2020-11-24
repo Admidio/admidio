@@ -137,7 +137,9 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * Method determines the number of active members (without leaders) of this role
+     * Method determines the number of active members (without leaders) of this role.
+     * If it's an event role than the approved state will be considered and also the
+     * additional guests.
      * @param int $exceptUserId UserId witch shouldn't be counted
      * @return int Returns the number of members of this role
      */
@@ -145,7 +147,7 @@ class TableRoles extends TableAccess
     {
         if ($this->countMembers === -1)
         {
-            $sql = 'SELECT COUNT(*) AS count
+            $sql = 'SELECT COUNT(*) + SUM(mem_count_guests) AS count
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id  = ? -- $this->getValue(\'rol_id\')
                        AND mem_usr_id <> ? -- $exceptUserId

@@ -435,7 +435,7 @@ final class ComponentUpdateSteps
     }
 
     /**
-     * This method add all roles to the role right category_view if the role had set the flag cat_hidden = 1
+     * This method will migrate all names of the event roles from the former technical name to the name of the event
      */
     public static function updateStepRenameParticipationRoles()
     {
@@ -454,7 +454,7 @@ final class ComponentUpdateSteps
             $date->readDataByRoleId($role->getValue('rol_id'));
 
             $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
-            $role->setValue('rol_description', $date->getValue('dat_description'));
+            $role->setValue('rol_description', substr($date->getValue('dat_description'), 0, 3999));
             $role->save();
         }
     }
