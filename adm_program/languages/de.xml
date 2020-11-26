@@ -563,7 +563,6 @@
   <string name="PHO_ALBUM_LOCK_DESC">Gesperrte Alben können von Besuchern und Mitgliedern nicht eingesehen werden. Du kannst zum Beispiel ein Album vorübergehen sperren, während du gerade alle Bilder des Albums hochlädst.</string>
   <string name="PHO_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt.</string>
   <string name="PHO_ALBUM_UNLOCK">Album entsperren</string>
-  <string name="PHO_ALBUM_WRITE_SUCCESS">Das Album wurde erfolgreich angelegt / geändert</string>
   <string name="PHO_CAPTION_SIZE">Größe des Bildtextes</string>
   <string name="PHO_CAPTION_SIZE_DESC">Die Größe des Bildtextes wird proportional zur Bildgröße, nach der Formel \"Bildgröße/Devisor\" berechnet. Durch Erhöhung des Devisors verringert sich die Schriftgröße. (Voreinstellung: 40)</string>
   <string name="PHO_CREATE_ALBUM">Album anlegen</string>
@@ -585,16 +584,11 @@
   <string name="PHO_MODAL_WINDOW">Modales Fenster</string>
   <string name="PHO_NEXT_PHOTO">Nächstes Bild</string>
   <string name="PHO_NO_ALBUM_CONTENT">Dieses Album enthält leider noch keine Fotos.</string>
-  <string name="PHO_NO_FILES_OR_TO_LARGE">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von #VAR1#B. übersteigen!</string>
-  <string name="PHO_NO_FILES_SELECTED">Du hast keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</string>
   <string name="PHO_NO_RIGHTS">Du hast keine Rechte, diese Aktion auszuführen.\n\nNur angemeldete Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</string>
   <string name="PHO_NUMBER_OF_ALBUMS_PER_PAGE">Anzahl Alben pro Seite</string>
   <string name="PHO_PARENT_ALBUM">Elternalbum</string>
   <string name="PHO_PARENT_ALBUM_DESC">Ein Album kann einem anderen Album untergeordnet sein. Wähle dazu in der Auswahlliste das Elternalbum zum aktuellen Album aus. Willst du das Album auf der obersten Ebene anzeigen, dann wähle #VAR1_BOLD# aus.</string>
   <string name="PHO_PHOTO_ALBUMS">Fotoalben</string>
-  <string name="PHO_PHOTO_DELETE">dieses Foto löschen</string>
-  <string name="PHO_PHOTO_DESTINATION">Die Fotos werden zu dem Album #VAR1_BOLD# hinzugefügt.</string>
-  <string name="PHO_PHOTO_FILES_TO_LARGE">Die Dateigröße eines oder aller Fotos übersteigt die vom Server zugelassene Uploadgröße von #VAR1# MB.</string>
   <string name="PHO_PHOTO_FORMAT_INVALID">Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.</string>
   <string name="PHO_PHOTO_PROCESSING_ERROR">Fehler bei der Bildverarbeitung</string>
   <string name="PHO_PHOTO_ROTATE_LEFT">Foto gegen den Uhrzeigersinn drehen</string>
@@ -609,8 +603,6 @@
   <string name="PHO_RECENT_ALBUMS_OF_ORGA">Neuesten Fotoalben der Organisation #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Auflösung größer als</string>
   <string name="PHO_SAME_WINDOW">Gleiches Fenster</string>
-  <string name="PHO_SAVE_ORIGINALS">Originale speichern</string>
-  <string name="PHO_SAVE_ORIGINALS_DESC">Steht genug Speicherplatz zur Verfügung, können hochgeladene Bilder auf dem Server archiviert und z.B. zum Download zur Verfügung gestellt werden.</string>
   <string name="PHO_SCALE_AT_UPLOAD">Skalierung beim Hochladen</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">Beim Hochladen werden alle Fotos neu skaliert. Der eingegebene Pixelwert ist der Parameter für die längere Seite des Fotos, egal ob das Foto im Hoch- oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet. (Voreinstellung: 640 Pixel)</string>
   <string name="PHO_SCALE_THUMBNAILS">Skalierung Vorschaubild</string>
@@ -621,7 +613,6 @@
   <string name="PHO_SHOWN_ON_READY">Die Fotos wurden dem Album erfolgreich hinzugefügt, wenn sie hier angezeigt werden.</string>
   <string name="PHO_THUMBNAILS_PER_PAGE">Vorschaubilder pro Seite</string>
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">Der angegebene Wert bestimmt wieviele kleine Vorschaubilder auf einer Seite angezeigt werden. Hat ein Album mehr Bilder, so wird automatisch eine Seitennavigation hinzugefügt. (Voreinstellung: 16)</string>
-  <string name="PHO_UPLOAD_MORE">Weitere Fotos hochladen</string>
   <string name="PHO_UPLOAD_PHOTOS">Fotos hochladen</string>
   <string name="PHO_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
   <!--Phrases only in Profilemodule-->
