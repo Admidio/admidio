@@ -104,7 +104,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (6400, 1, 'homepage_login', 'adm_program/overview.php'),
 (6450, 1, 'groups_roles_enable_module', '1'),
 (6600, 1, 'groups_roles_members_per_page', '25'),
-(6700, 1, 'groups_roles_roles_per_page', '10'),
+(6700, 1, 'groups_roles_roles_per_page', '24'),
 (6705, 1, 'groups_roles_default_configuration', '1'),
 (6710, 1, 'groups_roles_show_former_members', '2'),
 (6800, 1, 'logout_minutes', '20'),
@@ -133,7 +133,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (7252, 1, 'members_show_all_users', '1'),
 (7300, 1, 'photo_image_text', '© demo.admidio.org'),
 (7305, 1, 'photo_image_text_size', '40'),
-(7350, 1, 'photo_albums_per_page', '16'),
+(7350, 1, 'photo_albums_per_page', '24'),
 (7400, 1, 'photo_save_scale', '640'),
 (7500, 1, 'photo_show_width', '640'),
 (7600, 1, 'photo_show_height', '480'),
@@ -215,7 +215,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (64001, 2, 'homepage_login', 'adm_program/index.php'),
 (64050, 2, 'groups_roles_enable_module', '1'),
 (66001, 2, 'groups_roles_members_per_page', '25'),
-(67001, 2, 'groups_roles_roles_per_page', '10'),
+(67001, 2, 'groups_roles_roles_per_page', '24'),
 (67005, 2, 'groups_roles_default_configuration', '9'),
 (67010, 2, 'groups_roles_show_former_members', '2'),
 (68001, 2, 'logout_minutes', '20'),
@@ -242,7 +242,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (72500, 2, 'members_users_per_page', '25'),
 (72510, 2, 'members_days_field_history', '365'),
 (72520, 2, 'members_show_all_users', '0'),
-(73000, 2, 'photo_albums_per_page', '16'),
+(73000, 2, 'photo_albums_per_page', '24'),
 (73025, 2, 'photo_image_text', '© demo.admidio.org'),
 (73050, 2, 'photo_image_text_size', '40'),
 (74001, 2, 'photo_save_scale', '640'),
@@ -519,11 +519,11 @@ INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_a
 (5, 6, 'DEMO_ROL_2_YOUTH_TEAM', 'DEMO_ROL_2_YOUTH_TEAM_CONTENT', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, 3, 0, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', 1, 0, 0),
 (6, 100, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', 1, 0, 1),
 (7, 100, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 16:26:36', 1, '2010-12-22 06:34:06', 1, 0, 0),
-(8, 200, 'DAT_DATE 2017-02-06 19:00 - 4', 'DEMO_DAT_BARBECUE', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0),
-(9, 200, 'DAT_DATE 2017-04-13 13:00 - 14', 'DEMO_DAT_YOGA', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 12:08:23', NULL, NULL, 1, 0, 0),
-(10, 200, 'DAT_DATE 2017-05-15 19:00 - 15', 'DEMO_DAT_BOARD_MEETING', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0),
-(11, 200, 'DAT_DATE 2017-05-26 19:00 - 16', 'DEMO_DAT_BOARD_MEETING', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0),
-(12, 200, 'DAT_DATE 2017-05-26 20:00 - 17', 'DEMO_DAT_TEAM_EVENING', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 18:38:18', NULL, NULL, 1, 0, 0);
+(8, 200, '2017-02-06 19:00 DEMO_DAT_BARBECUE', 'DEMO_DAT_BARBECUE_CONTENT', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0),
+(9, 200, '2017-04-13 13:00 DEMO_DAT_YOGA', 'DEMO_DAT_YOGA_CONTENT', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 12:08:23', NULL, NULL, 1, 0, 0),
+(10, 200, '2017-05-15 19:00 DEMO_DAT_BOARD_MEETING', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0),
+(11, 200, '2017-05-26 19:00 DEMO_DAT_BOARD_MEETING', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0),
+(12, 200, '2017-05-26 20:00 DEMO_DAT_TEAM_EVENING', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 18:38:18', NULL, NULL, 1, 0, 0);
 
 --
 -- Data for table adm_roles_rights
