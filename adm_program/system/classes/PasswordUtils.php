@@ -160,6 +160,7 @@ final class PasswordUtils
         }
         else
         {
+            $options['cost'] = null;
             return $options;
         }
 
