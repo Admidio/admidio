@@ -91,7 +91,7 @@ $defaultOrgPreferences = array(
     // Photos
     'enable_photo_module'    => '1',
     'photo_show_mode'        => '1',
-    'photo_albums_per_page'  => '10',
+    'photo_albums_per_page'  => '24',
     'photo_save_scale'       => '800',
     'photo_thumbs_page'      => '16',
     'photo_thumbs_scale'     => '200',
@@ -113,7 +113,7 @@ $defaultOrgPreferences = array(
 
     // Lists
     'groups_roles_enable_module'         => '1',
-    'groups_roles_roles_per_page'        => '10',
+    'groups_roles_roles_per_page'        => '24',
     'groups_roles_members_per_page'      => '25',
     'groups_roles_default_configuration' => '',
     'groups_roles_show_former_members'   => '2',
