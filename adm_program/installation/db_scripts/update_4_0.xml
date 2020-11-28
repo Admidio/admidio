@@ -80,5 +80,7 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="730" database="mysql">ALTER TABLE %PREFIX%_dates MODIFY COLUMN dat_additional_guests boolean NOT NULL default 0</step>
     <step id="740" database="pgsql">ALTER TABLE %PREFIX%_dates ALTER COLUMN dat_additional_guests TYPE boolean</step>
     <step id="750">ComponentUpdateSteps::updateStepRenameParticipationRoles</step>
+    <step id="760">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'groups_roles_roles_per_page' AND prf_value = '10'</step>
+    <step id="770">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'photo_albums_per_page' AND prf_value = '10'</step>
     <step>stop</step>
 </update>

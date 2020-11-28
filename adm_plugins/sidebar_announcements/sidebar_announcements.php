@@ -147,7 +147,7 @@ if(Component::isVisible('ANNOUNCEMENTS'))
                 $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
                     <a class="admidio-icon-link" target="'. $plg_link_target. '"
                         href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php', array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '"><i
-                        class="fas fa-plus-circle" aria-hidden="true"></i>'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_MORE').'</a>';
+                        class="fas fa-plus-circle" aria-hidden="true"></i>'.$gL10n->get('SYS_MORE').'</a>';
                 $textPrev = pluginAnnouncementsCloseTags($textPrev);
 
                 echo '<div>'.$textPrev.'</div>';

@@ -417,7 +417,7 @@ if($albumsCount > 0)
     for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_per_page') - 1 && $x < $albumsCount; ++$x)
     {
         $htmlLock = '';
-        // Daten in ein Photo-Objekt uebertragen
+
         $childPhotoAlbum->clear();
         $childPhotoAlbum->setArray($albumList[$x]);
 
@@ -428,10 +428,10 @@ if($albumsCount > 0)
         if ((is_dir($albumFolder) && $childPhotoAlbum->getValue('pho_locked') == 0)
         || $childPhotoAlbum->hasChildAlbums() || $gCurrentUser->editPhotoRight())
         {
-            // Zufallsbild fuer die Vorschau ermitteln
+            // Get random image for preview
             $shuffleImage = $childPhotoAlbum->shuffleImage();
 
-            // Album angaben
+            // album title
             if (is_dir($albumFolder) || $childPhotoAlbum->hasChildAlbums())
             {
                 $albumTitle = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">'.$childPhotoAlbum->getValue('pho_name').'</a>';
@@ -484,13 +484,19 @@ if($albumsCount > 0)
 
                             if (strlen($childPhotoAlbum->getValue('pho_description')) > 0)
                             {
-                                $description = $childPhotoAlbum->getValue('pho_description');
+                                $albumDescription = $childPhotoAlbum->getValue('pho_description', 'html');
 
-                                if(strlen($description) > 400)
+                                if(strlen($albumDescription) > 200)
                                 {
-                                    $description = substr($description, 0, 400) . ' ...';
+                                    // read first 200 chars of text, then search for last space and cut the text there. After that add a "more" link
+                                    $textPrev = substr($albumDescription, 0, 200);
+                                    $maxPosPrev = strrpos($textPrev, ' ');
+                                    $albumDescription = substr($textPrev, 0, $maxPosPrev).
+                                        ' <span class="collapse" id="viewdetails'.$childPhotoAlbum->getValue('pho_id').'">'.substr($albumDescription, $maxPosPrev).'.
+                                        </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$childPhotoAlbum->getValue('pho_id').'">'.$gL10n->get('SYS_MORE').'... </a>';
                                 }
-                                $page->addHtml('<p class="card-text">' . $description . '</p>');
+
+                                $page->addHtml('<p class="card-text">' . $albumDescription . '</p>');
                             }
 
                             $page->addHtml('<p class="card-text">' . $childPhotoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $childPhotoAlbum->getValue('pho_photographers') . '</p>');

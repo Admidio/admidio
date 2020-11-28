@@ -287,10 +287,19 @@ class ModuleLists extends Modules
                   FROM '.TBL_ROLES.' AS rol
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = rol_cat_id
+             LEFT JOIN '.TBL_DATES.' ON dat_rol_id = rol_id
                  WHERE (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
-                       '.$sqlConditions.'
-              ORDER BY cat_sequence, rol_name';
+                       '.$sqlConditions;
+
+        if($this->roleType === ROLE_TYPE_EVENT_PARTICIPATION)
+        {
+            $sql .= ' ORDER BY cat_sequence, dat_begin DESC, rol_name ';
+        }
+        else
+        {
+            $sql .= ' ORDER BY cat_sequence, rol_name ';
+        }
 
         // If is there a limit then specify one
         if($limit > 0)

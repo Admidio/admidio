@@ -176,6 +176,7 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
     margin-left: 0px;
     padding-left: 0px;
     text-align: left;
+    cursor: pointer;
 }
 
 .admidio-reduced {
