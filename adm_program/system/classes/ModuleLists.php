@@ -266,24 +266,24 @@ class ModuleLists extends Modules
         $sqlConditions = $this->getCategorySql() . $this->getRoleTypeSql() . $this->getVisibleRolesSql();
 
         $sql = 'SELECT rol.*, cat.*,
-                       (SELECT COUNT(*) + SUM(mem_count_guests) AS count
+                       COALESCE((SELECT COUNT(*) + SUM(mem_count_guests) AS count
                           FROM '.TBL_MEMBERS.' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
                            AND mem.mem_begin  <= ? -- DATE_NOW
                            AND mem.mem_end     > ? -- DATE_NOW
                            AND (mem.mem_approved IS NULL
                             OR mem.mem_approved < 3)
-                           AND mem.mem_leader = 0) AS num_members,
-                       (SELECT COUNT(*) AS count
+                           AND mem.mem_leader = 0), 0) AS num_members,
+                       COALESCE((SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
                            AND mem.mem_begin  <= ? -- DATE_NOW
                            AND mem.mem_end     > ? -- DATE_NOW
-                           AND mem.mem_leader = 1) AS num_leader,
-                       (SELECT COUNT(*) AS count
+                           AND mem.mem_leader = 1), 0) AS num_leader,
+                       COALESCE((SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
-                           AND mem_end < ?) AS num_former -- DATE_NOW
+                           AND mem_end < ?), 0) AS num_former -- DATE_NOW
                   FROM '.TBL_ROLES.' AS rol
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = rol_cat_id
