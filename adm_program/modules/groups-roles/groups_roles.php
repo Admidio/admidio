@@ -288,7 +288,19 @@ foreach($listsResult['recordset'] as $row)
 
                     if(strlen($role->getValue('rol_description')) > 0)
                     {
-                        $page->addHtml('<li class="list-group-item">' . $role->getValue('rol_description') . '</li>');
+                        $roleDescription = $role->getValue('rol_description');
+
+                        if(strlen($roleDescription) > 200)
+                        {
+                            // read first 200 chars of text, then search for last space and cut the text there. After that add a "more" link
+                            $textPrev = substr($roleDescription, 0, 200);
+                            $maxPosPrev = strrpos($textPrev, ' ');
+                            $roleDescription = substr($textPrev, 0, $maxPosPrev).
+                                ' <span class="collapse" id="viewdetails'.$rolId.'">'.substr($roleDescription, $maxPosPrev).'.
+                                </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$rolId.'">'.$gL10n->get('SYS_MORE').'... </a>';
+                        }
+
+                        $page->addHtml('<li class="list-group-item">' . $roleDescription . '</li>');
                     }
 
                     // block with informations about events and meeting-point

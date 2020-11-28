@@ -218,6 +218,7 @@
   <string name="SYS_CATEGORY_VAR">#VAR1# - 类别</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">你不能删除系统类别</string>
   <string name="SYS_MAINTAIN_CATEGORIES">管理类别</string>
+  <string name="SYS_MORE">更多</string>
   <string name="SYS_ORGANIZATION">部门</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">切换到类别管理</string>
   <string name="SYS_SYSTEM">系统</string>

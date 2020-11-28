@@ -149,7 +149,7 @@ if(Component::isVisible('DATES'))
                 $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
                     <a class="admidio-icon-link" target="'. $plg_link_target. '"
                         href="'.SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '"><i
-                        class="fas fa-plus-circle" aria-hidden="true"></i>'.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a>';
+                        class="fas fa-plus-circle" aria-hidden="true"></i>'.$gL10n->get('SYS_MORE').'</a>';
                 $textPrev = pluginDatesCloseTags($textPrev);
 
                 echo '<div>'.$textPrev.'</div>';

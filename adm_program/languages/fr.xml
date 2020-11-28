@@ -1098,6 +1098,7 @@
   <string name="SYS_MODULES">Modules</string>
   <string name="SYS_MONDAY">Lundi</string>
   <string name="SYS_MONTHLY">Mensuel</string>
+  <string name="SYS_MORE">Plus</string>
   <string name="SYS_MORE_FEATURES">Fonctions supplémentaires</string>
   <string name="SYS_MOVE_DOWN">#VAR1# déplacer vers le bas</string>
   <string name="SYS_MOVE_UP">Monter #VAR1#</string>
