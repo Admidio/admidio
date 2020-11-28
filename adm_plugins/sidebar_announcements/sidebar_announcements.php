@@ -144,10 +144,10 @@ if(Component::isVisible('ANNOUNCEMENTS'))
 
                 // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
                 $textPrev = substr($textPrev, 0, $plg_show_preview + 15);
-                $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
+                $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).'
                     <a class="admidio-icon-link" target="'. $plg_link_target. '"
-                        href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php', array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '"><i
-                        class="fas fa-plus-circle" aria-hidden="true"></i>'.$gL10n->get('SYS_MORE').'</a>';
+                        href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php',
+                            array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '">'.$gL10n->get('SYS_MORE').'...</a>';
                 $textPrev = pluginAnnouncementsCloseTags($textPrev);
 
                 echo '<div>'.$textPrev.'</div>';
