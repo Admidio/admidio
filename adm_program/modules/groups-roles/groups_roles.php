@@ -288,7 +288,7 @@ foreach($listsResult['recordset'] as $row)
 
                     if(strlen($role->getValue('rol_description')) > 0)
                     {
-                        $roleDescription = $role->getValue('rol_description');
+                        $roleDescription = $role->getValue('rol_description', 'html');
 
                         if(strlen($roleDescription) > 200)
                         {

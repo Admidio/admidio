@@ -344,8 +344,11 @@ class TableRoles extends TableAccess
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
-     *                           For text columns the format can be **database** that would return the original database value without any transformations
+     * @param string $format          Returns the field value in a special format **text**, **html**, **database**
+     *                                or datetime (detailed description in method description)
+     *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function
+     *                                * 'html'  : returns the value in html-format if this is necessary for that field type.
+     *                                * 'database' : returns the value that is stored in database with no format applied
      * @return int|float|string|bool Returns the value of the database column.
      *                               If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
@@ -353,7 +356,14 @@ class TableRoles extends TableAccess
     {
         global $gL10n;
 
-        $value = parent::getValue($columnName, $format);
+        if ($columnName === 'rol_description' && $format === 'html')
+        {
+            $value = nl2br(parent::getValue($columnName));
+        }
+        else
+        {
+            $value = parent::getValue($columnName, $format);
+        }
 
         // if text is a translation-id then translate it
         if ($columnName === 'cat_name' && $format !== 'database' && Language::isTranslationStringId($value))

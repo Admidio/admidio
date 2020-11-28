@@ -221,7 +221,7 @@ if ($getPhotoId > 0)
 
         if (strlen($photoAlbum->getValue('pho_description')) > 0)
         {
-            $page->addHtml('<p>' . $photoAlbum->getValue('pho_description') . '</p>');
+            $page->addHtml('<p>' . $photoAlbum->getValue('pho_description', 'html') . '</p>');
         }
 
     $page->addHtml('</p>');
