@@ -138,6 +138,7 @@ class Message
         {
             // create html page object
             $page = new HtmlPage('admidio-message', $headline);
+            $page->hideBackLink();
 
             if(!$this->includeThemeBody)
             {
