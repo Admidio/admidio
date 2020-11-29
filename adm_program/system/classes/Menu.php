@@ -51,11 +51,17 @@ class Menu
     }
 
     /**
-     * Adds an additional menu node with page specific functions to the first place of this menu
+     * Adds an additional menu node with page specific functions to the first place of this menu.
+     * An existing page specific functions menu will be removed before the new one is added.
      * @param MenuNode $node A object of the class MenuNode
      */
     public function addFunctionsNode(MenuNode &$node)
     {
+        if($this->functionsNodeAdded)
+        {
+            array_shift($this->menuNodes);
+        }
+
         $this->functionsNodeAdded = true;
         array_unshift($this->menuNodes, $node);
     }
