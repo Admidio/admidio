@@ -458,6 +458,10 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
     cursor: help;
 }
 
+.admidio-event-highlight .card-header, tr.admidio-event-highlight {
+    background-color: #cccccc;
+}
+
 .admidio-event-approval-state-attend .fas {
     color: #00b100 !important;
 }
