@@ -297,7 +297,7 @@ foreach($listsResult['recordset'] as $row)
                             $maxPosPrev = strrpos($textPrev, ' ');
                             $roleDescription = substr($textPrev, 0, $maxPosPrev).
                                 ' <span class="collapse" id="viewdetails'.$rolId.'">'.substr($roleDescription, $maxPosPrev).'.
-                                </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$rolId.'">'.$gL10n->get('SYS_MORE').'... </a>';
+                                </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$rolId.'"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
                         }
 
                         $page->addHtml('<li class="list-group-item">' . $roleDescription . '</li>');

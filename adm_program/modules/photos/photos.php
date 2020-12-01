@@ -493,7 +493,7 @@ if($albumsCount > 0)
                                     $maxPosPrev = strrpos($textPrev, ' ');
                                     $albumDescription = substr($textPrev, 0, $maxPosPrev).
                                         ' <span class="collapse" id="viewdetails'.$childPhotoAlbum->getValue('pho_id').'">'.substr($albumDescription, $maxPosPrev).'.
-                                        </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$childPhotoAlbum->getValue('pho_id').'">'.$gL10n->get('SYS_MORE').'... </a>';
+                                        </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$childPhotoAlbum->getValue('pho_id').'"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
                                 }
 
                                 $page->addHtml('<p class="card-text">' . $albumDescription . '</p>');
