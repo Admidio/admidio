@@ -35,58 +35,6 @@ $page->addJavascript('
     });',
     true
 );
-$page->addJavascript('
-    /**
-     * @param {string} direction
-     * @param {int}    usfID
-     */
-    function moveCategory(direction, usfID) {
-        var actRow = document.getElementById("row_usf_" + usfID);
-        var childs = actRow.parentNode.childNodes;
-        var prevNode    = null;
-        var nextNode    = null;
-        var actRowCount = 0;
-        var actSequence = 0;
-        var secondSequence = 0;
-        $(".admidio-icon-link .fas").tooltip("hide");
-
-        // first determine current sequence and previous/next node
-        for (var i = 0; i < childs.length; i++) {
-            if (childs[i].tagName === "TR") {
-                actRowCount++;
-                if (actSequence > 0 && nextNode === null) {
-                    nextNode = childs[i];
-                }
-
-                if (childs[i].id === "row_usf_" + usfID) {
-                    actSequence = actRowCount;
-                }
-
-                if (actSequence === 0) {
-                    prevNode = childs[i];
-                }
-            }
-        }
-
-        // determine corresponding values for moving up and down
-        if (direction === "UP") {
-            if (prevNode !== null) {
-                actRow.parentNode.insertBefore(actRow, prevNode);
-                secondSequence = actSequence - 1;
-            }
-        } else {
-            if (nextNode !== null) {
-                actRow.parentNode.insertBefore(nextNode, actRow);
-                secondSequence = actSequence + 1;
-            }
-        }
-
-        if (secondSequence > 0) {
-            // Now first update the new position of the selected field
-            $.get("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4)) . '&usf_id=" + usfID + "&sequence=" + direction);
-        }
-    }
-');
 
 // define link to create new profile field
 $page->addPageFunctionsMenuItem('menu_item_new_field', $gL10n->get('ORG_CREATE_PROFILE_FIELD'),
@@ -241,9 +189,11 @@ while($row = $statement->fetch())
     // create array with all column values
     $columnValues = array(
         '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_id' => $usfId)).'">'.$userField->getValue('usf_name').'</a>',
-        '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_UP.'\', '.$usfId.')">'.
+        '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableUserField::MOVE_UP.'\', \'row_usf_'.$usfId.'\',
+            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4, 'usf_id' => $usfId, 'sequence' => TableUserField::MOVE_UP)) . '\')">'.
             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('MEM_PROFILE_FIELD')) . '"></i></a>
-        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_DOWN.'\', '.$usfId.')">'.
+        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableUserField::MOVE_DOWN.'\', \'row_usf_'.$usfId.'\',
+            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4, 'usf_id' => $usfId, 'sequence' => TableUserField::MOVE_DOWN)) . '\')">'.
             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('MEM_PROFILE_FIELD')) . '"></i></a>',
         $fieldDescription,
         $hidden,

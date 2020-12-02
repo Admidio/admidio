@@ -21,54 +21,6 @@ $headline = $gL10n->get('SYS_MENU');
 // create html page object
 $page = new HtmlPage('admidio-menu', $headline);
 
-$page->addJavascript('
-    function moveMenu(direction, menID) {
-        var actRow = document.getElementById("row_men_" + menID);
-        var childs = actRow.parentNode.childNodes;
-        var prevNode    = null;
-        var nextNode    = null;
-        var actRowCount = 0;
-        var actSequence = 0;
-        var secondSequence = 0;
-        $(".admidio-icon-link .fas").tooltip("hide");
-
-        // first determine current sequence and previous/next node
-        for (i = 0; i < childs.length; i++) {
-            if (childs[i].tagName === "TR") {
-                actRowCount++;
-                if (actSequence > 0 && nextNode === null) {
-                    nextNode = childs[i];
-                }
-
-                if (childs[i].id === "row_men_" + menID) {
-                    actSequence = actRowCount;
-                }
-
-                if (actSequence === 0) {
-                    prevNode = childs[i];
-                }
-            }
-        }
-
-        // determine corresponding values for moving up and down
-        if (direction === "UP") {
-            if (prevNode !== null) {
-                actRow.parentNode.insertBefore(actRow, prevNode);
-                secondSequence = actSequence - 1;
-            }
-        } else {
-            if (nextNode !== null) {
-                actRow.parentNode.insertBefore(nextNode, actRow);
-                secondSequence = actSequence + 1;
-            }
-        }
-
-        if (secondSequence > 0) {
-            // Now first update the new position of the selected category
-            $.get("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3)) . '&men_id=" + menID + "&sequence=" + direction);
-        }
-    }');
-
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // define link to create new menu
@@ -136,9 +88,11 @@ while ($mainMen = $mainMenStatement->fetch())
             $menuLink = $menuRow['men_url'];
         }
 
-        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'UP\', '.$menuRow['men_id'].')">'.
+        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveTableRow(\'UP\', \'row_men_'.$menuRow['men_id'].'\',
+                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'men_id' => $menuRow['men_id'], 'sequence' => 'UP')) . '\')">'.
                             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($headline)) . '"></i></a>
-                        <a class="admidio-icon-link" href="javascript:moveMenu(\'DOWN\', '.$menuRow['men_id'].')">'.
+                        <a class="admidio-icon-link" href="javascript:moveTableRow(\'DOWN\', \'row_men_'.$menuRow['men_id'].'\',
+                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'men_id' => $menuRow['men_id'], 'sequence' => 'DOWN')) . '\')">'.
                             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($headline)) . '"></i></a>';
 
         $htmlStandardMenu = '&nbsp;';
