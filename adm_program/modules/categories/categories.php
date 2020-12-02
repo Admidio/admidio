@@ -138,8 +138,9 @@ $page->addJavascript('
         var actRowCount = 0;
         var actSequence = 0;
         var secondSequence = 0;
+        $(".admidio-icon-link .fas").tooltip("hide");
 
-        // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
+        // first determine current sequence and previous/next node
         for (var i = 0; i < childs.length; i++) {
             if (childs[i].tagName === "TR") {
                 actRowCount++;
@@ -157,7 +158,7 @@ $page->addJavascript('
             }
         }
 
-        // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
+        // determine corresponding values for moving up and down
         if (direction === "UP") {
             if (prevNode !== null) {
                 actRow.parentNode.insertBefore(actRow, prevNode);
@@ -171,7 +172,7 @@ $page->addJavascript('
         }
 
         if (secondSequence > 0) {
-            // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
+            // Now first update the new position of the selected category
             $.get("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4)) . '&cat_id=" + catId + "&sequence=" + direction);
         }
     }
