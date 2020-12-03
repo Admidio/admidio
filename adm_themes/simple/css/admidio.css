@@ -416,6 +416,10 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
     margin-left: 5px;
 }
 
+.list-unstyled li {
+    padding-top: 7px;
+}
+
 .admidio-info-created {
     display: block;
 }
