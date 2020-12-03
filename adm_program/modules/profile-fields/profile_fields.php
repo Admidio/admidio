@@ -30,7 +30,7 @@ unset($_SESSION['fields_request']);
 $page = new HtmlPage('admidio-profile-fields', $headline);
 
 $page->addJavascript('
-    $(".admidio-group-heading").click(function() {
+    $(".admidio-open-close-caret").click(function() {
         showHideBlock($(this).attr("id"));
     });',
     true
@@ -92,15 +92,14 @@ while($row = $statement->fetch())
 
     if($categoryId !== (int) $userField->getValue('cat_id'))
     {
-        $blockId = 'admCategory'.(int) $userField->getValue('usf_cat_id');
+        $categoryId = (int) $userField->getValue('usf_cat_id');
+        $blockId = 'admCategory'.$categoryId;
 
         $table->addTableBody();
-        $table->addRow('', array('class' => 'admidio-group-heading'));
-        $table->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.$userField->getValue('cat_name'),
+        $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'admidio-group-row-'.$categoryId));
+        $table->addColumn('<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.$userField->getValue('cat_name'),
                           array('id' => 'group_'.$blockId, 'colspan' => '9'));
         $table->addTableBody('id', $blockId);
-
-        $categoryId = (int) $userField->getValue('usf_cat_id');
     }
 
     if($userField->getValue('usf_description') === '')

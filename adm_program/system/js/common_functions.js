@@ -15,17 +15,14 @@
  *                           The elements have the same id but the element to click has a prefix **group_**
  */
 function showHideBlock(elementId) {
-    var showHideElementId = elementId.substring(6);
-    var showHideElementIdObject = $("#" + showHideElementId);
-    var caretIdObject = $("#caret_" + showHideElementId);
+    var showHideElementId = $('#'+elementId).attr("id").substring(6);
 
-    showHideElementIdObject.show("slow");
-    if (caretIdObject.length > 0) {
-        if (showHideElementIdObject.css("display") === "none") {
-            caretIdObject.attr("class", "caret");
-        } else {
-            caretIdObject.attr("class", "caret-right");
-        }
+    if($("#"+showHideElementId).is(":hidden")) {
+        $("#"+showHideElementId).show("slow");
+        $('#'+elementId+" .fas").attr("class", "fas fa-caret-down")
+    } else {
+        $("#"+showHideElementId).hide("slow");
+        $('#'+elementId+" .fas").attr("class", "fas fa-caret-right")
     }
 }
 

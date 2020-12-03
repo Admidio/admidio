@@ -67,7 +67,7 @@ if($getInline)
 
     $html .= '<script type="text/javascript">
         $(function() {
-            $(".admidio-group-heading").click(function() {
+            $(".admidio-open-close-caret").click(function() {
                 showHideBlock($(this).attr("id"));
             });
 
@@ -249,7 +249,7 @@ while($row = $statement->fetch())
         $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'group_'.$blockId));
         $table->addColumn();
         $table->addAttribute('colspan', '4', 'td');
-        $table->addData('<span id="caret_'.$blockId.'" class="caret"></span>'.$role->getValue('cat_name'));
+        $table->addData('<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.$role->getValue('cat_name'));
         $table->addTableBody('id', $blockId);
 
         $category = (int) $role->getValue('cat_id');
