@@ -23,6 +23,13 @@ $page = new HtmlPage('admidio-menu', $headline);
 
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
+$page->addJavascript('
+    $(".admidio-open-close-caret").click(function() {
+        showHideBlock($(this).attr("id"));
+    });',
+    true
+);
+
 // define link to create new menu
 $page->addPageFunctionsMenuItem('menu_item_menu_new', $gL10n->get('SYS_CREATE_ENTRY'),
     ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', 'fa-plus-circle');
@@ -68,7 +75,7 @@ while ($mainMen = $mainMenStatement->fetch())
 
             $menuOverview->addTableBody();
             $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
-            $menuOverview->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.Language::translateIfTranslationStrId($mainMen['men_name']),
+            $menuOverview->addColumn('<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.Language::translateIfTranslationStrId($mainMen['men_name']),
                               array('id' => 'group_'.$blockId, 'colspan' => '8'));
             $menuOverview->addTableBody('id', $blockId);
 
