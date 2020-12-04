@@ -1436,7 +1436,7 @@ class HtmlForm extends HtmlFormBasic
 
         if($optionsAll['infoAlert'] !== '')
         {
-            $this->addHtml('<div id="' . $id . '_alert" class="alert alert-info" role="alert">'.$optionsAll['infoAlert'].'</div>');
+            $this->addHtml('<div id="' . $id . '_alert" class="alert alert-warning mt-3" role="alert">'.$optionsAll['infoAlert'].'</div>');
         }
 
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
