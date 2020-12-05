@@ -30,62 +30,11 @@ unset($_SESSION['fields_request']);
 $page = new HtmlPage('admidio-profile-fields', $headline);
 
 $page->addJavascript('
-    $(".admidio-group-heading").click(function() {
+    $(".admidio-open-close-caret").click(function() {
         showHideBlock($(this).attr("id"));
     });',
     true
 );
-$page->addJavascript('
-    /**
-     * @param {string} direction
-     * @param {int}    usfID
-     */
-    function moveCategory(direction, usfID) {
-        var actRow = document.getElementById("row_usf_" + usfID);
-        var childs = actRow.parentNode.childNodes;
-        var prevNode    = null;
-        var nextNode    = null;
-        var actRowCount = 0;
-        var actSequence = 0;
-        var secondSequence = 0;
-
-        // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
-        for (var i = 0; i < childs.length; i++) {
-            if (childs[i].tagName === "TR") {
-                actRowCount++;
-                if (actSequence > 0 && nextNode === null) {
-                    nextNode = childs[i];
-                }
-
-                if (childs[i].id === "row_usf_" + usfID) {
-                    actSequence = actRowCount;
-                }
-
-                if (actSequence === 0) {
-                    prevNode = childs[i];
-                }
-            }
-        }
-
-        // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-        if (direction === "UP") {
-            if (prevNode !== null) {
-                actRow.parentNode.insertBefore(actRow, prevNode);
-                secondSequence = actSequence - 1;
-            }
-        } else {
-            if (nextNode !== null) {
-                actRow.parentNode.insertBefore(nextNode, actRow);
-                secondSequence = actSequence + 1;
-            }
-        }
-
-        if (secondSequence > 0) {
-            // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
-            $.get("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4)) . '&usf_id=" + usfID + "&sequence=" + direction);
-        }
-    }
-');
 
 // define link to create new profile field
 $page->addPageFunctionsMenuItem('menu_item_new_field', $gL10n->get('ORG_CREATE_PROFILE_FIELD'),
@@ -139,34 +88,38 @@ while($row = $statement->fetch())
     $userField->clear();
     $userField->setArray($row);
 
+    $usfId = (int) $userField->getValue('usf_id');
+
     if($categoryId !== (int) $userField->getValue('cat_id'))
     {
-        $blockId = 'admCategory'.(int) $userField->getValue('usf_cat_id');
+        $categoryId = (int) $userField->getValue('usf_cat_id');
+        $blockId = 'admCategory'.$categoryId;
 
         $table->addTableBody();
-        $table->addRow('', array('class' => 'admidio-group-heading'));
-        $table->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.$userField->getValue('cat_name'),
-                          array('id' => 'group_'.$blockId, 'colspan' => '8'));
+        $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'admidio-group-row-'.$categoryId));
+        $table->addColumn('<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.$userField->getValue('cat_name'),
+                          array('id' => 'group_'.$blockId, 'colspan' => '9'));
         $table->addTableBody('id', $blockId);
-
-        $categoryId = (int) $userField->getValue('usf_cat_id');
     }
 
-    // cut long text strings and provide tooltip
-    if(strlen($userField->getValue('usf_description')) > 22)
+    if($userField->getValue('usf_description') === '')
     {
-        $description = substr($userField->getValue('usf_description', 'database'), 0, 22).'
-            <a class="openPopup" href="javascript:void(0);"
-                data-href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'user_field_description', 'message_var1' => $userField->getValue('usf_name_intern'), 'inline' => 'true')).'"><span
-                data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
-    }
-    elseif($userField->getValue('usf_description') === '')
-    {
-        $description = '&nbsp;';
+        $fieldDescription = '&nbsp;';
     }
     else
     {
-        $description = $userField->getValue('usf_description');
+        $fieldDescription = $userField->getValue('usf_description', 'database');
+
+        if(strlen($fieldDescription) > 30)
+        {
+            // read first 30 chars of text, then search for last space and cut the text there. After that add a "more" link
+            $textPrev = substr($fieldDescription, 0, 30);
+            $maxPosPrev = strrpos($textPrev, ' ');
+            $fieldDescription = substr($textPrev, 0, $maxPosPrev).
+                ' <span class="collapse" id="viewdetails'.$usfId.'">'.substr($fieldDescription, $maxPosPrev).'.
+                </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$usfId.'"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
+        }
+
     }
 
     if($userField->getValue('usf_hidden') == 1)
@@ -217,8 +170,6 @@ while($row = $statement->fetch())
                            'NUMBER'       => $gL10n->get('SYS_NUMBER'),
                            'DECIMAL'      => $gL10n->get('SYS_DECIMAL_NUMBER'));
 
-    $usfId = (int) $userField->getValue('usf_id');
-
     $usfSystem = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_id' => $usfId)).'">'.
                     '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
@@ -237,11 +188,13 @@ while($row = $statement->fetch())
     // create array with all column values
     $columnValues = array(
         '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_id' => $usfId)).'">'.$userField->getValue('usf_name').'</a>',
-        '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_UP.'\', '.$usfId.')">'.
+        '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableUserField::MOVE_UP.'\', \'row_usf_'.$usfId.'\',
+            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4, 'usf_id' => $usfId, 'sequence' => TableUserField::MOVE_UP)) . '\')">'.
             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('MEM_PROFILE_FIELD')) . '"></i></a>
-        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_DOWN.'\', '.$usfId.')">'.
+        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableUserField::MOVE_DOWN.'\', \'row_usf_'.$usfId.'\',
+            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4, 'usf_id' => $usfId, 'sequence' => TableUserField::MOVE_DOWN)) . '\')">'.
             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('MEM_PROFILE_FIELD')) . '"></i></a>',
-        $description,
+        $fieldDescription,
         $hidden,
         $disable,
         $mandatory,

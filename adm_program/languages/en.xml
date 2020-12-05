@@ -1091,7 +1091,6 @@
   <string name="SYS_MONDAY">Monday</string>
   <string name="SYS_MONTHLY">Monthly</string>
   <string name="SYS_MORE">More</string>
-  <string name="SYS_MORE_FEATURES">Additional functions</string>
   <string name="SYS_MOVE_DOWN">Move down #VAR1#</string>
   <string name="SYS_MOVE_UP">Move up #VAR1#</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Multiple recipients</string>
@@ -1115,7 +1114,6 @@
   <string name="SYS_NO_DEFAULT_ROLE">You can not remove the setting #VAR1_BOLD#, because at least one role must be stored as the default assignment.</string>
   <string name="SYS_NO_ENTRY">Requested entry does not exist in the database.</string>
   <string name="SYS_NO_ENTRIES">No entries available.</string>
-  <string name="SYS_NO_ENTRIES_FOUND">No entries found.</string>
   <string name="SYS_NO_LEADER">No leader</string>
   <string name="SYS_NO_MORE_COLUMN">For technical reasons, no more column can be added.</string>
   <string name="SYS_NO_RIGHTS">You do not have the required permission to perform this action.</string>

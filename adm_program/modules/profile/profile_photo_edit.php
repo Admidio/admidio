@@ -287,7 +287,7 @@ elseif($getMode === 'upload')
     }
 
     // create html page object
-    $page = new HtmlPage($headline);
+    $page = new HtmlPage('admidio-profile-photo-edit', $headline);
     $page->addJavascript('$("#btn_cancel").click(function() {
         self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'dont_save', 'usr_id' => $getUserId)).'\';
     });', true);
@@ -297,8 +297,7 @@ elseif($getMode === 'upload')
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $getUserId)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addCustomContent($gL10n->get('PRO_NEW_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $getUserId, 'new_photo' => 1)).'" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" />');
     $form->addLine();
-    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => 'fa-upload'));
-    $form->addButton('btn_cancel', $gL10n->get('SYS_ABORT'), array('icon' => 'fa-cancel'));
+    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => 'fa-upload', 'class' => ' offset-sm-3'));
 
     // add form to html page and show page
     $page->addHtml($form->show());

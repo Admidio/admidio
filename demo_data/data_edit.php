@@ -115,8 +115,8 @@ $sqlQueries[] = 'UPDATE '.TBL_DATES.'
                   WHERE dat_id = 6 ';
 
 $sqlQueries[] = 'UPDATE '.TBL_DATES.'
-                    SET dat_begin = \''.addDaysToDate(2, true).' 05:30:00\'
-                      , dat_end   = \''.addDaysToDate(1, true).' 15:00:00\'
+                    SET dat_begin = \''.addDaysToDate(2, true).' 00:00:00\'
+                      , dat_end   = \''.addDaysToDate(2, true).' 00:00:00\'
                   WHERE dat_id = 7 ';
 
 $sqlQueries[] = 'UPDATE '.TBL_DATES.'

@@ -416,6 +416,10 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
     margin-left: 5px;
 }
 
+.list-unstyled li {
+    padding-top: 7px;
+}
+
 .admidio-info-created {
     display: block;
 }
@@ -456,6 +460,10 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
 
 .admidio-profile-user-right {
     cursor: help;
+}
+
+.admidio-event-highlight .card-header, tr.admidio-event-highlight {
+    background-color: #cccccc;
 }
 
 .admidio-event-approval-state-attend .fas {

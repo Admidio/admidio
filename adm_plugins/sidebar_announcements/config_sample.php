@@ -26,13 +26,18 @@ $plg_show_preview = 70;
 // 1 - show full html content of description
 $plgShowFullDescription = 0;
 
-// Specification of the target in which the contents of the links are to be opened
-// You can insert specified values of the html target attribute
-$plg_link_target = '_self';
-
 // Maximum number of characters in a word before a line break should be performed.
 // Value 0 deactivates a line break.
 $plg_max_char_per_word = 0;
+
+// If you only want to show announcements of a special category you can list the categories in this parameter
+// just use the following syntax $plg_categories = array('category-name-1','category-name-2')
+// If you want to view all announcements just set $plg_categories = array();
+$plg_categories = array();
+
+// Specification of the target in which the contents of the links are to be opened
+// You can insert specified values of the html target attribute
+$plg_link_target = '_self';
 
 // Should the headline of the plugin be displayed
 // 0 - Headline is not displayed

@@ -288,7 +288,7 @@ foreach($listsResult['recordset'] as $row)
 
                     if(strlen($role->getValue('rol_description')) > 0)
                     {
-                        $roleDescription = $role->getValue('rol_description');
+                        $roleDescription = $role->getValue('rol_description', 'html');
 
                         if(strlen($roleDescription) > 200)
                         {
@@ -297,7 +297,7 @@ foreach($listsResult['recordset'] as $row)
                             $maxPosPrev = strrpos($textPrev, ' ');
                             $roleDescription = substr($textPrev, 0, $maxPosPrev).
                                 ' <span class="collapse" id="viewdetails'.$rolId.'">'.substr($roleDescription, $maxPosPrev).'.
-                                </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$rolId.'">'.$gL10n->get('SYS_MORE').'... </a>';
+                                </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$rolId.'"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
                         }
 
                         $page->addHtml('<li class="list-group-item">' . $roleDescription . '</li>');
@@ -381,7 +381,7 @@ foreach($listsResult['recordset'] as $row)
                             $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                         }
 
-                        $html .= '&nbsp;&nbsp;('.$row['num_former'].' '.$textFormerMembers.') ';
+                        $html .= '&nbsp;&nbsp;(<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('rol_ids' => $rolId, 'show_former_members' => 1)) . '">'.$row['num_former'].' '.$textFormerMembers.'</a>) ';
                     }
 
                     if($row['num_leader'] > 0)
@@ -393,7 +393,7 @@ foreach($listsResult['recordset'] as $row)
                     <li class="list-group-item"><span class="d-block">' . $html . '</span>' . $htmlLeader . '</li>
                 </ul>
 
-                <a class="btn btn-primary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)) . '">' . $gL10n->get('SYS_SHOW_MEMBER_LIST') . '</a>
+                <a class="btn btn-primary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('rol_ids' => $rolId)) . '">' . $gL10n->get('SYS_SHOW_MEMBER_LIST') . '</a>
             </div>
         </div>
         </div>');

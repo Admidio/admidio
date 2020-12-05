@@ -249,7 +249,7 @@ else
 
     // create table object
     $table = new HtmlTable('tbl_assign_role_membership', $page, true, true, 'table table-condensed');
-    $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES_FOUND');
+    $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
     // create column header to assign role leaders
     $htmlLeaderColumn = $gL10n->get('SYS_LEADER');

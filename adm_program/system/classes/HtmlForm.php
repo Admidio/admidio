@@ -1436,7 +1436,7 @@ class HtmlForm extends HtmlFormBasic
 
         if($optionsAll['infoAlert'] !== '')
         {
-            $this->addHtml('<div id="' . $id . '_alert" class="alert alert-info" role="alert">'.$optionsAll['infoAlert'].'</div>');
+            $this->addHtml('<div id="' . $id . '_alert" class="alert alert-warning mt-3" role="alert">'.$optionsAll['infoAlert'].'</div>');
         }
 
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
@@ -1767,7 +1767,8 @@ class HtmlForm extends HtmlFormBasic
         while ($row = $pdoStatement->fetch())
         {
             // if several categories exist than select default category
-            if ($optionsAll['defaultValue'] === 0 && ($countCategories === 1 || $row['cat_default'] === 1))
+            if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $optionsAll['defaultValue'] === 0
+            && ($countCategories === 1 || $row['cat_default'] === 1))
             {
                 $optionsAll['defaultValue'] = $row['cat_id'];
             }

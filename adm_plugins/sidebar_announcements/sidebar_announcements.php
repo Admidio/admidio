@@ -35,9 +35,10 @@ if(!isset($plg_announcements_count) || !is_numeric($plg_announcements_count))
 {
     $plg_announcements_count = 2;
 }
-if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
+
+if(!isset($plg_show_preview) || !is_numeric($plg_show_preview))
 {
-    $plg_max_char_per_word = 0;
+    $plg_show_preview = 70;
 }
 
 if(!isset($plgShowFullDescription) || !is_numeric($plgShowFullDescription))
@@ -54,9 +55,14 @@ else
     $plg_link_target = '_self';
 }
 
-if(!isset($plg_show_preview) || !is_numeric($plg_show_preview))
+if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
 {
-    $plg_show_preview = 70;
+    $plg_max_char_per_word = 0;
+}
+
+if(!isset($plg_categories))
+{
+    $plg_categories = array();
 }
 
 if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
@@ -81,6 +87,7 @@ if(Component::isVisible('ANNOUNCEMENTS'))
     $plgAnnouncements->setParameter('id', $getId);
     $plgAnnouncements->setParameter('cat_id', $getCatId);
     $plgAnnouncements->setDateRange($getDateFrom, $getDateTo);
+    $plgAnnouncements->setCategoriesNames($plg_categories);
 
     echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
 
@@ -144,10 +151,10 @@ if(Component::isVisible('ANNOUNCEMENTS'))
 
                 // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
                 $textPrev = substr($textPrev, 0, $plg_show_preview + 15);
-                $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
+                $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).'
                     <a class="admidio-icon-link" target="'. $plg_link_target. '"
-                        href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php', array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '"><i
-                        class="fas fa-plus-circle" aria-hidden="true"></i>'.$gL10n->get('SYS_MORE').'</a>';
+                        href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php',
+                            array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
                 $textPrev = pluginAnnouncementsCloseTags($textPrev);
 
                 echo '<div>'.$textPrev.'</div>';

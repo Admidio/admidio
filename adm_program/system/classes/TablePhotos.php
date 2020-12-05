@@ -168,6 +168,34 @@ class TablePhotos extends TableAccess
     }
 
     /**
+     * Get the value of a column of the database table.
+     * If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @param string $columnName The name of the database column whose value should be read
+     * @param string $format          Returns the field value in a special format **text**, **html**, **database**
+     *                                or datetime (detailed description in method description)
+     *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function
+     *                                * 'html'  : returns the value in html-format if this is necessary for that field type.
+     *                                * 'database' : returns the value that is stored in database with no format applied
+     * @return int|string|bool Returns the value of the database column.
+     *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
+     */
+    public function getValue($columnName, $format = '')
+    {
+        global $gL10n;
+
+        if ($columnName === 'pho_description' && $format === 'html')
+        {
+            $value = nl2br(parent::getValue($columnName));
+        }
+        else
+        {
+            $value = parent::getValue($columnName, $format);
+        }
+
+        return $value;
+    }
+
+    /**
      * Check if this album has one or more child albums.
      * @return bool Return **true** if child albums exists.
      */

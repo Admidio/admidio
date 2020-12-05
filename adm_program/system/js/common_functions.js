@@ -15,17 +15,14 @@
  *                           The elements have the same id but the element to click has a prefix **group_**
  */
 function showHideBlock(elementId) {
-    var showHideElementId = elementId.substring(6);
-    var showHideElementIdObject = $("#" + showHideElementId);
-    var caretIdObject = $("#caret_" + showHideElementId);
+    var showHideElementId = $('#'+elementId).attr("id").substring(6);
 
-    showHideElementIdObject.show("slow");
-    if (caretIdObject.length > 0) {
-        if (showHideElementIdObject.css("display") === "none") {
-            caretIdObject.attr("class", "caret");
-        } else {
-            caretIdObject.attr("class", "caret-right");
-        }
+    if($("#"+showHideElementId).is(":hidden")) {
+        $("#"+showHideElementId).show("slow");
+        $('#'+elementId+" .fas").attr("class", "fas fa-caret-down")
+    } else {
+        $("#"+showHideElementId).hide("slow");
+        $('#'+elementId+" .fas").attr("class", "fas fa-caret-right")
     }
 }
 
@@ -48,11 +45,11 @@ function callUrlHideElement(elementId, url, callback) {
             if (callback === 'callbackRoles') {
                 $(entryDeleted).fadeOut("slow", callbackRoles);
             } else if (callback === 'callbackFormerRoles') {
-                $(entryDeleted).fadeOut("slow", callbackFormerRoles);                
+                $(entryDeleted).fadeOut("slow", callbackFormerRoles);
             } else if (callback === 'callbackFutureRoles') {
-                $(entryDeleted).fadeOut("slow", callbackFutureRoles);                
+                $(entryDeleted).fadeOut("slow", callbackFutureRoles);
             } else if (callback === 'callbackProfilePhoto') {
-                callbackProfilePhoto();                
+                callbackProfilePhoto();
             } else {
                 $(entryDeleted).fadeOut("slow");
             }
@@ -154,4 +151,25 @@ function redirectPost(url, data) {
         }
     }
     form.submit();
+}
+
+/**
+ * The function will move a table row one step up or down in the current table.
+ * After that an url is called that should update the database with the new sequence of the row object.
+ * @param {string} direction The direction in which the row should be moved.
+ *                 Valid values are UP or DOWN.
+ * @param {string} elementId Id of the row that should be moved
+ * @param {string} updateSequenceUrl Url to update the sequence of the element in the database
+ */
+function moveTableRow(direction, elementId, updateSequenceUrl) {
+    var id = "#"+elementId;
+    $(".admidio-icon-link .fas").tooltip("hide");
+
+    if (direction === "UP") {
+        $(id).prev().before($(id));
+    } else {
+        $(id).next().after($(id));
+    }
+
+    $.get(updateSequenceUrl);
 }

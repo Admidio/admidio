@@ -233,7 +233,7 @@ class HtmlNavbar
                     $html .= '
                         <li class="nav-item dropdown ' . $menuEntry['class'] . '">
                             <a id="' . $menuEntry['id'] . '" href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bars"></i>' . $menuEntry['text'] . '<span class="caret"></span>
+                                <i class="fas fa-bars"></i>' . $menuEntry['text'] . '
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">';
 

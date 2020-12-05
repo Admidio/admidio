@@ -90,6 +90,10 @@ class HtmlPage extends \Smarty
      * @var string Name of an additional template file that should be loaded within the current page.
      */
     protected $templateFile = '';
+    /**
+     * @var string Flag that will be responsible of a back button with the url to the previous page will be shown.
+     */
+    protected $showBackLink = '';
 
     /**
      * Constructor creates the page object and initialized all parameters.
@@ -104,6 +108,7 @@ class HtmlPage extends \Smarty
         $this->menuNodePageFunctions = new MenuNode('admidio-menu-page-functions', $headline);
 
         $this->id = $id;
+        $this->showBackLink = true;
 
         if($headline !== '')
         {
@@ -362,6 +367,14 @@ class HtmlPage extends \Smarty
     }
 
     /**
+     * If this method is called than the back link to the previous page will not be shown.
+     */
+    public function hideBackLink()
+    {
+        $this->showBackLink = false;
+    }
+
+    /**
      * Set the h1 headline of the current html page. If the title of the page
      * was not set until now than this will also be the title.
      * @param string $headline A string that contains the headline for the page.
@@ -431,7 +444,7 @@ class HtmlPage extends \Smarty
         $hasPreviousUrl = false;
 
         // if there is more than 1 url in the stack than show the back button
-        if($gNavigation->count() > 1)
+        if($this->showBackLink && $gNavigation->count() > 1)
         {
             $hasPreviousUrl = true;
         }

@@ -530,9 +530,7 @@ else
                     {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-secondary dropdown-toggle ' . $buttonClass . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'
-                                    <span class="caret"></span>
-                                </button>
+                                <button class="btn btn-secondary dropdown-toggle ' . $buttonClass . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'</button>
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a class="btn admidio-event-approval-state-attend" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '3', 'dat_id' => $dateId)) . '"' . $disableStatusAttend . '>

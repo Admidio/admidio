@@ -125,58 +125,6 @@ unset($_SESSION['categories_request']);
 // create html page object
 $page = new HtmlPage('admidio-categories', $headline);
 
-$page->addJavascript('
-    /**
-     * @param {string} direction
-     * @param {int}    catId
-     */
-    function moveCategory(direction, catId) {
-        var actRow = document.getElementById("row_" + catId);
-        var childs = actRow.parentNode.childNodes;
-        var prevNode    = null;
-        var nextNode    = null;
-        var actRowCount = 0;
-        var actSequence = 0;
-        var secondSequence = 0;
-
-        // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
-        for (var i = 0; i < childs.length; i++) {
-            if (childs[i].tagName === "TR") {
-                actRowCount++;
-                if (actSequence > 0 && nextNode === null) {
-                    nextNode = childs[i];
-                }
-
-                if (childs[i].id === "row_" + catId) {
-                    actSequence = actRowCount;
-                }
-
-                if (actSequence === 0) {
-                    prevNode = childs[i];
-                }
-            }
-        }
-
-        // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-        if (direction === "UP") {
-            if (prevNode !== null) {
-                actRow.parentNode.insertBefore(actRow, prevNode);
-                secondSequence = actSequence - 1;
-            }
-        } else {
-            if (nextNode !== null) {
-                actRow.parentNode.insertBefore(nextNode, actRow);
-                secondSequence = actSequence + 1;
-            }
-        }
-
-        if (secondSequence > 0) {
-            // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-            $.get("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4)) . '&cat_id=" + catId + "&sequence=" + direction);
-        }
-    }
-');
-
 // define link to create new category
 $page->addPageFunctionsMenuItem('menu_item_categories_add', $addButtonText,
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType)),
@@ -244,9 +192,11 @@ while($catRow = $categoryStatement->fetch())
     $htmlMoveRow = '&nbsp;';
     if($category->getValue('cat_system') == 0 || $getType !== 'USF')
     {
-        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableCategory::MOVE_UP.'\', '.$catId.')">'.
+        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableCategory::MOVE_UP.'\', \'row_'.$catId.'\',
+                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4, 'cat_id' => $catId, 'sequence' => TableCategory::MOVE_UP)) . '\')">'.
                             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($addButtonText)) . '"></i></a>
-                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableCategory::MOVE_DOWN.'\', '.$catId.')">'.
+                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableCategory::MOVE_DOWN.'\', \'row_'.$catId.'\',
+                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4, 'cat_id' => $catId, 'sequence' => TableCategory::MOVE_DOWN)) . '\')">'.
                             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($addButtonText)) . '"></i></a>';
     }
 

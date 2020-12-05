@@ -21,54 +21,14 @@ $headline = $gL10n->get('SYS_MENU');
 // create html page object
 $page = new HtmlPage('admidio-menu', $headline);
 
-$page->addJavascript('
-    function moveMenu(direction, menID) {
-        var actRow = document.getElementById("row_men_" + menID);
-        var childs = actRow.parentNode.childNodes;
-        var prevNode    = null;
-        var nextNode    = null;
-        var actRowCount = 0;
-        var actSequence = 0;
-        var secondSequence = 0;
-
-        // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
-        for (i = 0; i < childs.length; i++) {
-            if (childs[i].tagName === "TR") {
-                actRowCount++;
-                if (actSequence > 0 && nextNode === null) {
-                    nextNode = childs[i];
-                }
-
-                if (childs[i].id === "row_men_" + menID) {
-                    actSequence = actRowCount;
-                }
-
-                if (actSequence === 0) {
-                    prevNode = childs[i];
-                }
-            }
-        }
-
-        // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-        if (direction === "UP") {
-            if (prevNode !== null) {
-                actRow.parentNode.insertBefore(actRow, prevNode);
-                secondSequence = actSequence - 1;
-            }
-        } else {
-            if (nextNode !== null) {
-                actRow.parentNode.insertBefore(nextNode, actRow);
-                secondSequence = actSequence + 1;
-            }
-        }
-
-        if (secondSequence > 0) {
-            // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-            $.get("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3)) . '&men_id=" + menID + "&sequence=" + direction);
-        }
-    }');
-
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
+
+$page->addJavascript('
+    $(".admidio-open-close-caret").click(function() {
+        showHideBlock($(this).attr("id"));
+    });',
+    true
+);
 
 // define link to create new menu
 $page->addPageFunctionsMenuItem('menu_item_menu_new', $gL10n->get('SYS_CREATE_ENTRY'),
@@ -115,7 +75,7 @@ while ($mainMen = $mainMenStatement->fetch())
 
             $menuOverview->addTableBody();
             $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
-            $menuOverview->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.Language::translateIfTranslationStrId($mainMen['men_name']),
+            $menuOverview->addColumn('<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.Language::translateIfTranslationStrId($mainMen['men_name']),
                               array('id' => 'group_'.$blockId, 'colspan' => '8'));
             $menuOverview->addTableBody('id', $blockId);
 
@@ -135,9 +95,11 @@ while ($mainMen = $mainMenStatement->fetch())
             $menuLink = $menuRow['men_url'];
         }
 
-        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'UP\', '.$menuRow['men_id'].')">'.
+        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveTableRow(\'UP\', \'row_men_'.$menuRow['men_id'].'\',
+                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'men_id' => $menuRow['men_id'], 'sequence' => 'UP')) . '\')">'.
                             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($headline)) . '"></i></a>
-                        <a class="admidio-icon-link" href="javascript:moveMenu(\'DOWN\', '.$menuRow['men_id'].')">'.
+                        <a class="admidio-icon-link" href="javascript:moveTableRow(\'DOWN\', \'row_men_'.$menuRow['men_id'].'\',
+                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'men_id' => $menuRow['men_id'], 'sequence' => 'DOWN')) . '\')">'.
                             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($headline)) . '"></i></a>';
 
         $htmlStandardMenu = '&nbsp;';
