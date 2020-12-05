@@ -31,6 +31,11 @@ if(!isset($plg_dates_count) || !is_numeric($plg_dates_count))
     $plg_dates_count = 2;
 }
 
+if(!isset($plg_show_date_end) || !is_numeric($plg_show_date_end))
+{
+    $plg_show_date_end = 1;
+}
+
 if(!isset($plg_dates_show_preview) || !is_numeric($plg_dates_show_preview))
 {
     $plg_dates_show_preview = 70;
@@ -41,14 +46,14 @@ if(!isset($plgShowFullDescription) || !is_numeric($plgShowFullDescription))
     $plgShowFullDescription = 1;
 }
 
-if(!isset($plg_show_date_end) || !is_numeric($plg_show_date_end))
-{
-    $plg_show_date_end = 1;
-}
-
 if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
 {
     $plg_max_char_per_word = 0;
+}
+
+if(!isset($plg_kal_cat) || (isset($plg_kal_cat[0]) && $plg_kal_cat[0] === 'all'))
+{
+    $plg_kal_cat = array();
 }
 
 if(isset($plg_link_target))
@@ -58,11 +63,6 @@ if(isset($plg_link_target))
 else
 {
     $plg_link_target = '_self';
-}
-
-if(!isset($plg_kal_cat) || (isset($plg_kal_cat[0]) && $plg_kal_cat[0] === 'all'))
-{
-    $plg_kal_cat = array();
 }
 
 if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))

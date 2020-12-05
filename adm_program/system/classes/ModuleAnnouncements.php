@@ -80,6 +80,11 @@
 class ModuleAnnouncements extends Modules
 {
     /**
+     * @var array An array with all names of the categories whose announcements should be shown
+     */
+    protected $categoriesNames = array();
+
+    /**
      * Get all records and push it to the array
      * @param int $startElement
      * @param int $limit
@@ -185,12 +190,27 @@ class ModuleAnnouncements extends Modules
                 $params[] = $this->getParameter('dateStartFormatEnglish') . ' 00:00:00';
                 $params[] = $this->getParameter('dateEndFormatEnglish')   . ' 23:59:59';
             }
+
+            // add valid calendars
+            if(count($this->categoriesNames) > 0)
+            {
+                $sqlConditions .= ' AND cat_name IN (\''. implode($this->categoriesNames) . '\')';
+            }
         }
 
         return array(
             'sql'    => $sqlConditions,
             'params' => $params
         );
+    }
+
+    /**
+     * Method will set an array with all names of the categories whose announcements should be shown
+     * @param array $arrCategoriesNames An array with all names of the categories whose announcements should be shown
+     */
+    public function setCategoriesNames($arrCategoriesNames)
+    {
+        $this->categoriesNames = $arrCategoriesNames;
     }
 
     /**
