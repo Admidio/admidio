@@ -65,7 +65,7 @@ if(Component::isVisible('DOCUMENTS-FILES'))
     $rootFolder = new TableFolder($gDb);
     $rootFolder->readDataByColumns(array('fol_org_id' => $gCurrentOrganization->getValue('org_id'),
                                          'fol_fol_id_parent' => 'NULL',
-                                         'fol_type' => 'DOWNLOAD'));
+                                         'fol_type' => 'DOCUMENTS'));
     $downloadFolder = $rootFolder->getValue('fol_path') . '/' . $rootFolder->getValue('fol_name');
 
     // read all downloads from database and then check the rights for each download

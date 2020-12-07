@@ -5,7 +5,7 @@ organizations and groups. The system has a flexible role model so that
 it’s possible to reflect the structure and permissions of your organization.
 You can create an individual profile for your members by adding or removing
 fields. Additional to these functions the system contains several modules
-like member lists, event manager, guestbook, photo album or download area.
+like member lists, event manager, guestbook, photo album or a documents & files area.
 
 ## Table of contents
 

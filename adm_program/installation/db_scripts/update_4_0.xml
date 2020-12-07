@@ -82,5 +82,6 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="750">ComponentUpdateSteps::updateStepRenameParticipationRoles</step>
     <step id="760">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'groups_roles_roles_per_page' AND prf_value = '10'</step>
     <step id="770">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'photo_albums_per_page' AND prf_value = '10'</step>
+    <step id="780">UPDATE %PREFIX%_folders SET fol_type = 'DOCUMENTS' WHERE fol_type = 'DOWNLOAD'</step>
     <step>stop</step>
 </update>
