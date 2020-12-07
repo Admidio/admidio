@@ -157,7 +157,7 @@ if ($image !== null)
         $fontX = $fontSize;
         $fontY = $imageSize[1] - $fontSize;
         $fontColor = imagecolorallocate($image->getImageResource(), 255, 255, 255);
-        $fontTtf = THEME_PATH.'/font.ttf';
+        $fontTtf = ADMIDIO_PATH . '/adm_program/system/fonts/mrphone.ttf';
 
         // show name of photograph if set otherwise show name of organization
         if(strlen($photoAlbum->getValue('pho_photographers')) > 0)
