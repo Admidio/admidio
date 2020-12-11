@@ -62,6 +62,12 @@ if(Component::isVisible('DOCUMENTS-FILES'))
         $sqlCondition = ' AND fol_public = 1 ';
     }
 
+    $rootFolder = new TableFolder($gDb);
+    $rootFolder->readDataByColumns(array('fol_org_id' => $gCurrentOrganization->getValue('org_id'),
+                                         'fol_fol_id_parent' => 'NULL',
+                                         'fol_type' => 'DOCUMENTS'));
+    $downloadFolder = $rootFolder->getValue('fol_path') . '/' . $rootFolder->getValue('fol_name');
+
     // read all downloads from database and then check the rights for each download
     $sql = 'SELECT fil_timestamp, fil_name, fil_usr_id, fol_name, fol_path, fil_id, fil_fol_id
               FROM '.TBL_FILES.'
@@ -104,7 +110,7 @@ if(Component::isVisible('DOCUMENTS-FILES'))
                 // get filename without extension and extension separatly
                 $fileName      = pathinfo($rowFile['fil_name'], PATHINFO_FILENAME);
                 $fullFolderFileName = $rowFile['fol_path']. '/'. $rowFile['fol_name']. '/'.$rowFile['fil_name'];
-                $tooltip            = $fullFolderFileName;
+                $tooltip            = str_replace($downloadFolder, $gL10n->get('SYS_DOCUMENTS_FILES'), $fullFolderFileName);
                 ++$countVisibleDownloads;
 
                 // if max chars are set then limit characters of shown filename
@@ -119,7 +125,7 @@ if(Component::isVisible('DOCUMENTS-FILES'))
                     // Vorname und Nachname abfragen (Upload der Datei)
                     $user = new User($gDb, $gProfileFields, $rowFile['fil_usr_id']);
 
-                    $tooltip .= '<br />'. $gL10n->get('PLG_LATEST_FILES_UPLOAD_FROM_AT', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $rowFile['fil_timestamp']));
+                    $tooltip .= '<br />'. $gL10n->get('PLG_LATEST_FILES_UPLOAD_FROM_AT', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $file->getValue('fil_timestamp')));
                 }
 
                 echo '

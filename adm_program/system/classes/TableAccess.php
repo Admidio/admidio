@@ -414,6 +414,7 @@ class TableAccess
     /**
      * Reads a record out of the table in database selected by different columns in the table.
      * The columns are commited with an array where every element index is the column name and the value is the column value.
+     * If you want a column to be null than set the value to **NULL**
      * The columns and values must be selected so that they identify only one record.
      * If the sql will find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
@@ -440,15 +441,24 @@ class TableAccess
         }
 
         $sqlWhereCondition = '';
+        $sqlParams = array();
 
         // add every array element as a sql condition to the condition string
         foreach ($columnArray as $columnName => $columnValue)
         {
-            $sqlWhereCondition .= ' AND ' . $columnName . ' = ? ';
+            if($columnValue === 'NULL')
+            {
+                $sqlWhereCondition .= ' AND ' . $columnName . ' IS NULL ';
+            }
+            else
+            {
+                $sqlWhereCondition .= ' AND ' . $columnName . ' = ? ';
+                $sqlParams[] = $columnValue;
+            }
         }
 
         // call method to read data out of database
-        $returnCode = $this->readData($sqlWhereCondition, array_values($columnArray));
+        $returnCode = $this->readData($sqlWhereCondition, array_values($sqlParams));
 
         // save the array fields in the object
         if (!$returnCode)

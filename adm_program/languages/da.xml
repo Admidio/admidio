@@ -563,7 +563,6 @@
   <string name="PHO_ALBUM_LOCK_DESC">Låste albummer kan ikke ses af gæster eller medlemmer, f.eks. kan du låse et album imens alle billeder er ved at blive lagt op.</string>
   <string name="PHO_ALBUM_NOT_APPROVED">Albummet er i øjeblikket låst og vises ikke til besøgende af denne grund.</string>
   <string name="PHO_ALBUM_UNLOCK">Lås album op</string>
-  <string name="PHO_ALBUM_WRITE_SUCCESS">Albummet er blevet oprettet / redigeret.</string>
   <string name="PHO_CAPTION_SIZE">Størrelse på billedtekst</string>
   <string name="PHO_CAPTION_SIZE_DESC">Størrelsen på billedteksten er proportional med billedstørrelsen, beregnet med formlen \"Billedstørrelse / Devisor\". Ved at øge devisor reduceres skriftstørrelsen. (Standard: 40)</string>
   <string name="PHO_CREATE_ALBUM">Opret album</string>
@@ -585,16 +584,11 @@
   <string name="PHO_MODAL_WINDOW">Ekstra vindue</string>
   <string name="PHO_NEXT_PHOTO">Næste billede</string>
   <string name="PHO_NO_ALBUM_CONTENT">Albummet indeholder ingen billeder.</string>
-  <string name="PHO_NO_FILES_OR_TO_LARGE">Ulovlig side visning eller også så kunne filen ikke overføres.\nFormodentlig på grund af at størrelsen overstiger det definere maximum på #VAR1#B!</string>
-  <string name="PHO_NO_FILES_SELECTED">Der er ikke valgt nogen billeder som skal tilføjes.</string>
   <string name="PHO_NO_RIGHTS">Du har ingen tilladelser til at udføre denne handling.\n\n Kun tilmeldte brugere med tilladelse til fotoadministration har tilladelse til at administrere fotos.</string>
   <string name="PHO_NUMBER_OF_ALBUMS_PER_PAGE">Antal albums pr. side</string>
   <string name="PHO_PARENT_ALBUM">Forældre album</string>
   <string name="PHO_PARENT_ALBUM_DESC">Et album kan være en del af et andet album. Vælg venligst et forældre album fra listen. Hvis du vil vise albummet i højeste niveau så skal du vælge #VAR1_BOLD#.</string>
   <string name="PHO_PHOTO_ALBUMS">Billede albums</string>
-  <string name="PHO_PHOTO_DELETE">slet billede</string>
-  <string name="PHO_PHOTO_DESTINATION">Billeder vil blive tilføjet til albummet: #VAR1_BOLD#.</string>
-  <string name="PHO_PHOTO_FILES_TO_LARGE">Den totale fil størrelse for et eller flere billeder overskrider muligvis den max tilladte server definerede overførsels størrelse på #VAR1# MB.</string>
   <string name="PHO_PHOTO_FORMAT_INVALID">Kun JPG og PNG billeder er tilladt.</string>
   <string name="PHO_PHOTO_PROCESSING_ERROR">Billede behandlings fejl</string>
   <string name="PHO_PHOTO_ROTATE_LEFT">Rotér billede mod venstre</string>
@@ -609,8 +603,6 @@
   <string name="PHO_RECENT_ALBUMS_OF_ORGA">Seneste fotoalbum for organisationen #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Opløsning større end</string>
   <string name="PHO_SAME_WINDOW">Samme vindue</string>
-  <string name="PHO_SAVE_ORIGINALS">Bevar originaler</string>
-  <string name="PHO_SAVE_ORIGINALS_DESC">Billeder kan blive arkiveret eller tilbudt som downloads så længe der er plads nok tilgængeligt.</string>
   <string name="PHO_SCALE_AT_UPLOAD">Overførsels skalering</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">Billeder vil blive skaleret imens de overføres. Pixel værdien definerer den lange kant på portrætter og landskab billeder. Den korte side bliver proportionel til den lange. (Standard: 640 pixels)</string>
   <string name="PHO_SCALE_THUMBNAILS">Minibillede skalering</string>
@@ -621,7 +613,6 @@
   <string name="PHO_SHOWN_ON_READY">Billeder er blevet tilføjet til albummet hvis de vises på denne side.</string>
   <string name="PHO_THUMBNAILS_PER_PAGE">Minibilleder pr. side</string>
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">Denne indstilling definerer hvor mange thumbnail billeder der vil blive vist pr. side. Hvis der er flere billeder i albummet, vil der automatisk blive tilføjet side navigation. (Standard: 16)</string>
-  <string name="PHO_UPLOAD_MORE">Overfør flere billeder</string>
   <string name="PHO_UPLOAD_PHOTOS">Overfør billede</string>
   <string name="PHO_WANT_DELETE_PHOTO">Det valgte billede bliver slettet. Er du sikker?</string>
   <!--Phrases only in Profilemodule-->
@@ -969,6 +960,7 @@
   <string name="SYS_FOLDER_EXISTS">Folderen #VAR1# eksisterer allerede!\n\nVenligst vælg et andet navn til folderen.</string>
   <string name="SYS_FOLDER_NO_FILES">Folderen indeholder ikke nogen filer.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Du har ikke ret til at se den valgte folder.</string>
+  <string name="SYS_FOLDER_NO_FILES_VISITOR">Der er ikke nogen dokumenter eller filer tilgængelige for gæster.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folderen #VAR1_BOLD# kan ikke oprettes.\n\nVenligst snak med en #VAR2#administrator#VAR3# for at få hjælp til at undersøge skrive rettigheder på forældre folderen.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Folderen eksisterer ikke længere på serveren. Den bør slettes i databasen også.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Folder (ID #VAR1#) ikke fundet.</string>
@@ -1099,7 +1091,6 @@
   <string name="SYS_MONDAY">mandag</string>
   <string name="SYS_MONTHLY">Månedlig</string>
   <string name="SYS_MORE">Mere</string>
-  <string name="SYS_MORE_FEATURES">Yderligere funktioner</string>
   <string name="SYS_MOVE_DOWN">Flyt ned #VAR1#</string>
   <string name="SYS_MOVE_UP">Flyt op #VAR1#</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Flere modtagere</string>
@@ -1123,7 +1114,6 @@
   <string name="SYS_NO_DEFAULT_ROLE">Du kan ikke fjerne indstillingen #VAR1_BOLD#, fordi mindst én rolle skal bestå som standard tildelt.</string>
   <string name="SYS_NO_ENTRY">Den efterspurgte post eksisterer ikke i databasen.</string>
   <string name="SYS_NO_ENTRIES">Ingen poster tilgængelige.</string>
-  <string name="SYS_NO_ENTRIES_FOUND">Ingen poster fundet.</string>
   <string name="SYS_NO_LEADER">Ingen leder</string>
   <string name="SYS_NO_MORE_COLUMN">Af tekniske grunde, kan der ikke tilføjes flere kolonner.</string>
   <string name="SYS_NO_RIGHTS">Du har ikke rettigheder til at udføre denne handling.</string>

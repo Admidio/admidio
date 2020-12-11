@@ -465,7 +465,7 @@ class TableFolder extends TableAccess
         {
             // get folder of the parameter
             $condition = ' fol_id   = ? -- $folderId
-                       AND fol_type = \'DOWNLOAD\' ';
+                       AND fol_type = \'DOCUMENTS\' ';
             $queryParams = array($folderId);
         }
         else
@@ -473,7 +473,7 @@ class TableFolder extends TableAccess
             // get first folder of current organization
             $condition = ' fol_fol_id_parent IS NULL
                        AND fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       AND fol_type   = \'DOWNLOAD\' ';
+                       AND fol_type   = \'DOCUMENTS\' ';
             $queryParams = array((int) $gCurrentOrganization->getValue('org_id'));
         }
         $this->readData($condition, $queryParams);
@@ -522,16 +522,17 @@ class TableFolder extends TableAccess
 
     /**
      * Create a unique folder name for the root folder of the download module that contains
-     * the shortname of the current organization
+     * the shortname of the current organization.
+     * @param string $type The folder type of which the root should be determined.
      * @return string Returns the root foldername for the download module.
      */
-    public static function getRootFolderName()
+    public static function getRootFolderName($type = 'documents')
     {
         global $gCurrentOrganization;
 
         $orgName = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_shortname'));
 
-        return 'download_' . strtolower($orgName);
+        return StringUtils::strToLower($type) . '_' . strtolower($orgName);
     }
 
     /**
@@ -578,7 +579,7 @@ class TableFolder extends TableAccess
         // If the folder has a parent folder we need the root folder
         $sqlRootFolder = 'SELECT fol_id
                             FROM '.TBL_FOLDERS.'
-                           WHERE fol_type   = \'DOWNLOAD\'
+                           WHERE fol_type   = \'DOCUMENTS\'
                              AND fol_fol_id_parent IS NULL
                              AND fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
         $rootFolderStatement = $this->db->queryPrepared($sqlRootFolder, array((int) $gCurrentOrganization->getValue('org_id')));
@@ -644,7 +645,7 @@ class TableFolder extends TableAccess
         // Get all subfolder of the current folder
         $sqlFolders = 'SELECT *
                          FROM '.TBL_FOLDERS.'
-                        WHERE fol_type          = \'DOWNLOAD\'
+                        WHERE fol_type          = \'DOCUMENTS\'
                           AND fol_fol_id_parent = ? -- $this->getValue(\'fol_id\')
                           AND fol_org_id        = ? -- $gCurrentOrganization->getValue(\'org_id\')
                      ORDER BY fol_name';

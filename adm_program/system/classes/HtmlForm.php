@@ -313,6 +313,8 @@ class HtmlForm extends HtmlFormBasic
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
+     *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
@@ -373,7 +375,7 @@ class HtmlForm extends HtmlFormBasic
         $this->addHtml('<div class="' . $cssClasses . '"><label>');
         $this->addSimpleInput('checkbox', $id, $id, '1', $attributes);
         $this->addHtml($htmlIcon . $label . $htmlHelpIcon . '</label></div>');
-        $this->closeControlStructure($optionsAll['helpTextIdInline']);
+        $this->closeControlStructure($optionsAll);
     }
 
     /**
@@ -393,6 +395,8 @@ class HtmlForm extends HtmlFormBasic
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
+     *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
@@ -416,7 +420,7 @@ class HtmlForm extends HtmlFormBasic
             $optionsAll['helpTextIdLabel'], $optionsAll['icon'], 'form-custom-content ' . $optionsAll['class']
         );
         $this->addHtml($content);
-        $this->closeControlStructure($optionsAll['helpTextIdInline']);
+        $this->closeControlStructure($optionsAll);
     }
 
     /**
@@ -521,7 +525,7 @@ class HtmlForm extends HtmlFormBasic
                 <textarea id="' . $id . '" name="' . $id . '" style="width: 100%;">' . $value . '</textarea>
             </div>'
         );
-        $this->closeControlStructure($optionsAll['helpTextIdInline']);
+        $this->closeControlStructure($optionsAll);
 
         $this->type = $flagLabelVertical;
     }
@@ -647,7 +651,7 @@ class HtmlForm extends HtmlFormBasic
                 </button>'
             );
         }
-        $this->closeControlStructure($optionsAll['helpTextIdInline']);
+        $this->closeControlStructure($optionsAll);
     }
 
     /**
@@ -678,6 +682,8 @@ class HtmlForm extends HtmlFormBasic
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
+     *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
@@ -927,7 +933,7 @@ class HtmlForm extends HtmlFormBasic
 
         if ($optionsAll['property'] !== self::FIELD_HIDDEN)
         {
-            $this->closeControlStructure($optionsAll['helpTextIdInline']);
+            $this->closeControlStructure($optionsAll);
         }
     }
 
@@ -1058,7 +1064,7 @@ class HtmlForm extends HtmlFormBasic
                 ')</small>'
             );
         }
-        $this->closeControlStructure($optionsAll['helpTextIdInline']);
+        $this->closeControlStructure($optionsAll);
     }
 
     /**
@@ -1086,6 +1092,8 @@ class HtmlForm extends HtmlFormBasic
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
+     *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
@@ -1153,7 +1161,7 @@ class HtmlForm extends HtmlFormBasic
             $this->addHtml($value . '</label>');
         }
 
-        $this->closeControlStructure($optionsAll['helpTextIdInline']);
+        $this->closeControlStructure($optionsAll);
     }
 
     /**
@@ -1192,8 +1200,6 @@ class HtmlForm extends HtmlFormBasic
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
      *                          onother array with the combination of attributes name and attributes value.
-     *                        - **infoAlert** : Add a bootstrap info alert box after the select box. The value of this option will be the
-     *                          text of the alertbox
      *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
@@ -1203,6 +1209,8 @@ class HtmlForm extends HtmlFormBasic
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
+     *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
@@ -1228,7 +1236,7 @@ class HtmlForm extends HtmlFormBasic
             'placeholder'                    => '',
             'maximumSelectionNumber'         => 0,
             'valueAttributes'                => '',
-            'infoAlert'                      => '',
+            'alertWarning'                   => '',
             'helpTextIdLabel'                => '',
             'helpTextIdInline'               => '',
             'icon'                           => '',
@@ -1434,12 +1442,7 @@ class HtmlForm extends HtmlFormBasic
 
         $this->closeSelect();
 
-        if($optionsAll['infoAlert'] !== '')
-        {
-            $this->addHtml('<div id="' . $id . '_alert" class="alert alert-warning mt-3" role="alert">'.$optionsAll['infoAlert'].'</div>');
-        }
-
-        $this->closeControlStructure($optionsAll['helpTextIdInline']);
+        $this->closeControlStructure($optionsAll);
     }
 
     /**
@@ -1477,8 +1480,6 @@ class HtmlForm extends HtmlFormBasic
      *                                 of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                               - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
      *                                 onother array with the combination of attributes name and attributes value.
-     *                               - **infoAlert** : Add a bootstrap info alert box after the select box. The value of this option will be the
-     *                                 text of the alertbox
      *                               - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
      *                                 e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                                 the user can see the text if he hover over the icon. If you need an additional parameter
@@ -1488,6 +1489,8 @@ class HtmlForm extends HtmlFormBasic
      *                                 e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                                 If you need an additional parameter for the text you can add an array. The first entry must
      *                                 be the unique text id and the second entry will be a parameter of the text id.
+     *                               - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
+     *                                 will be the text of the alertbox
      *                               - **icon** : An icon can be set. This will be placed in front of the label.
      *                               - **class** : An additional css classname. The class **admSelectbox**
      *                                 is set as default and need not set with this parameter.
@@ -1566,8 +1569,6 @@ class HtmlForm extends HtmlFormBasic
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
      *                          onother array with the combination of attributes name and attributes value.
-     *                        - **infoAlert** : Add a bootstrap info alert box after the select box. The value of this option will be the
-     *                          text of the alertbox
      *                        - **helpTextIdLabel** : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
@@ -1577,6 +1578,8 @@ class HtmlForm extends HtmlFormBasic
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
+     *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
@@ -1645,6 +1648,8 @@ class HtmlForm extends HtmlFormBasic
      *                                   e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                                   If you need an additional parameter for the text you can add an array. The first entry must
      *                                   be the unique text id and the second entry will be a parameter of the text id.
+     *                                 - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
+     *                                   will be the text of the alertbox
      *                                 - **icon** : An icon can be set. This will be placed in front of the label.
      *                                 - **class** : An additional css classname. The class **admSelectbox**
      *                                   is set as default and need not set with this parameter.
@@ -1661,7 +1666,7 @@ class HtmlForm extends HtmlFormBasic
             'showContextDependentFirstEntry' => true,
             'multiselect'                    => false,
             'showSystemCategory'             => true,
-            'infoAlert'                      => '',
+            'alertWarning'                   => '',
             'helpTextIdLabel'                => '',
             'helpTextIdInline'               => '',
             'icon'                           => '',
@@ -1671,7 +1676,7 @@ class HtmlForm extends HtmlFormBasic
 
         if($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $gCurrentOrganization->countAllRecords() > 1)
         {
-            $optionsAll['infoAlert'] = $gL10n->get('SYS_ALL_ORGANIZATIONS_DESC', array(implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true))));
+            $optionsAll['alertWarning'] = $gL10n->get('SYS_ALL_ORGANIZATIONS_DESC', array(implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true))));
 
             $this->addJavascriptCode('
                 $("#'.$id.'").change(function() {
@@ -1811,6 +1816,8 @@ class HtmlForm extends HtmlFormBasic
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **alertWarning** : Add a bootstrap info alert box after the select box. The value of this option
+     *                          will be the text of the alertbox
      *                        - **icon** : An icon can be set. This will be placed in front of the label.
      *                        - **class** : An additional css classname. The class **admSelectbox**
      *                          is set as default and need not set with this parameter.
@@ -1833,7 +1840,7 @@ class HtmlForm extends HtmlFormBasic
         // now create html for the field
         $this->openControlStructure('', $label, self::FIELD_DEFAULT, $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         $this->addHtml('<p class="' . $attributes['class'] . '">' . $value . '</p>');
-        $this->closeControlStructure($optionsAll['helpTextIdInline']);
+        $this->closeControlStructure($optionsAll);
     }
 
     /**
@@ -1881,18 +1888,25 @@ class HtmlForm extends HtmlFormBasic
 
     /**
      * Closes a field structure that was added with the method openControlStructure.
-     * @param string|array $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
-     *                                 If set the complete text will be shown after the form element.
+     * @param array $options (optional) An array with the following possible entries:
+     *                        - **helpTextIdInline** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
+     *                          If you need an additional parameter for the text you can add an array. The first entry must
+     *                          be the unique text id and the second entry will be a parameter of the text id.
+     *                        - **alertWarning** : Add a bootstrap warning alert box after the select box. The value of this option
+     *                          will be the text of the alertbox
      */
-    protected function closeControlStructure($helpTextId = '')
+    protected function closeControlStructure(array $options = array())
     {
         global $gL10n;
 
         $parameters = array();
-        if (is_array($helpTextId))
+        $helpTextId = $options['helpTextIdInline'];
+
+        if (is_array($options['helpTextIdInline']))
         {
-            $parameters = $helpTextId[1];
-            $helpTextId = $helpTextId[0];
+            $parameters = $options['helpTextIdInline'][1];
+            $helpTextId = $options['helpTextIdInline'][0];
         }
 
         if ($helpTextId !== '')
@@ -1918,6 +1932,14 @@ class HtmlForm extends HtmlFormBasic
             }
 
             $this->addHtml('<div class="help-block">' . $helpText . '</div>');
+        }
+
+        // add block with warning alert
+        if(isset($options['alertWarning']) && $options['alertWarning'] !== '')
+        {
+            $this->addHtml('<div class="alert alert-warning mt-3" role="alert">
+                <i class="fas fa-exclamation-triangle"></i>'.$options['alertWarning'].'
+            </div>');
         }
 
         if ($this->type === 'vertical' || $this->type === 'navbar')

@@ -18,7 +18,7 @@
  *
  * **Code examples**
  * ```
- * // check if the current user has the right to view a folder of the download module
+ * // check if the current user has the right to view a folder of the documents & files module
  * $folderViewRolesObject = new RolesRights($gDb, 'folder_view', $folderId);
  * if($folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
  * {

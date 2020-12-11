@@ -9,10 +9,10 @@
  *
  * Parameters:
  *
- * module : photos       - Upload of photos for the albums
- *          downloads    - Upload of files for the download folder
- * mode   : choose_files - (Default) Show a dialog with controls to select files to upload
- *          upload_files - Upload the selected files
+ * module : photos          - Upload of photos for the albums
+ *          documents_files - Upload of files for the documents & files folder
+ * mode   : choose_files    - (Default) Show a dialog with controls to select files to upload
+ *          upload_files    - Upload the selected files
  * id     : Id of the current object (folder, album) where the files should be uploaded
  ***********************************************************************************************
  */

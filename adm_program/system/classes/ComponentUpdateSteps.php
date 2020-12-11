@@ -401,6 +401,62 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * Rename the existing folder of the old download module to the new documents and files module
+     * with the prefix 'documents' and the shortname of the current organization.
+     */
+    public static function updateStepRenameDownloadRootFolder()
+    {
+        global $gCurrentOrganization, $gLogger, $g_organization;
+
+        $tempOrganization = $gCurrentOrganization;
+
+        $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+
+        while($row = $organizationStatement->fetch())
+        {
+            $rowId = (int) $row['org_id'];
+
+            $gCurrentOrganization->readDataById($rowId);
+
+            $sql = 'SELECT fol_id, fol_name
+                      FROM '.TBL_FOLDERS.'
+                     WHERE fol_fol_id_parent IS NULL
+                       AND fol_org_id = ? -- $rowId';
+            $folderStatement = self::$db->queryPrepared($sql, array($rowId));
+
+            if($rowFolder = $folderStatement->fetch())
+            {
+                $folder = new TableFolder(self::$db, $rowFolder['fol_id']);
+                $folderOldName = $folder->getFullFolderPath();
+                $folder->setValue('fol_name', TableFolder::getRootFolderName('documents'));
+                $folder->save();
+
+                $sql = 'UPDATE '.TBL_FOLDERS.'
+                           SET fol_path = REPLACE(fol_path, \'/'.$rowFolder['fol_name'].'\', \'/'.TableFolder::getRootFolderName().'\')
+                         WHERE fol_org_id = '.$rowId;
+                self::$db->query($sql); // TODO add more params
+
+                if(is_dir($folderOldName))
+                {
+                    try
+                    {
+                        rename($folderOldName, $folder->getFullFolderPath());
+                        //FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath());
+                    }
+                    catch (\RuntimeException $exception)
+                    {
+                        $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath()));
+                        // TODO
+                    }
+                }
+            }
+        }
+
+        $gCurrentOrganization = $tempOrganization;
+    }
+
+    /**
      * This method update the security settings for menus to standard values
      */
     public static function updateStepMigrateToStandardMenu()

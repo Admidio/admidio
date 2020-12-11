@@ -217,10 +217,10 @@ class Organization extends TableAccess
             $categoryWeblinks->save();
         }
 
-        // insert root folder name for download module
+        // insert root folder name for documents & files module
         $sql = 'INSERT INTO '.TBL_FOLDERS.'
                        (fol_org_id, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp)
-                VALUES (?, \'DOWNLOAD\', ?, ?, 0, 1, ?, ?)';
+                VALUES (?, \'DOCUMENTS\', ?, ?, 0, 1, ?, ?)';
         $queryParams = array($orgId, TableFolder::getRootFolderName(), FOLDER_DATA, $systemUserId, DATETIME_NOW);
         $this->db->queryPrepared($sql, $queryParams);
 
