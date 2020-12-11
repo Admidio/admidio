@@ -147,7 +147,7 @@ class HtmlTable extends HtmlTableBasic
      * @param int                  $colspanOffset   (optional) Number of column where the colspan should start.
      *                                              The first column of a table will be 1.
      */
-    private function addRowTypeByArray($type = 'td', array $arrColumnValues, $id = null, array $arrAttributes = null, $colspan = 1, $colspanOffset = 1)
+    private function addRowTypeByArray($type, array $arrColumnValues, $id = null, array $arrAttributes = null, $colspan = 1, $colspanOffset = 1)
     {
         // set an id to the column
         if ($id !== null)
