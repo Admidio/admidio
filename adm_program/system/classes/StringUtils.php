@@ -53,10 +53,10 @@ final class StringUtils
     {
         if ($caseSensitive)
         {
-            return strpos($string, $contains) !== false;
+            return str_contains($string, $contains);
         }
 
-        return stripos($string, $contains) !== false;
+        return $contains === '' || stripos($string, $contains) !== false;
     }
 
     /**
@@ -70,10 +70,10 @@ final class StringUtils
     {
         if ($caseSensitive)
         {
-            return strpos($string, $start) === 0;
+            return str_starts_with($string, $start);
         }
 
-        return stripos($string, $start) === 0;
+        return substr_compare($string, $start, 0, strlen($start), true) === 0;
     }
 
     /**
@@ -87,10 +87,10 @@ final class StringUtils
     {
         if ($caseSensitive)
         {
-            return strrpos($string, $end) === strlen($string) - strlen($end);
+            return str_ends_with($string, $end);
         }
 
-        return strripos($string, $end) === strlen($string) - strlen($end);
+        return $end === '' || ($string !== '' && substr_compare($string, $end, -strlen($end), true) === 0);
     }
 
     /**

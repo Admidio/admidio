@@ -322,7 +322,7 @@ elseif (count($relationTypeIds) > 1)
 }
 
 // if html mode and last url was not a list view then save this url to navigation stack
-if ($getMode === 'html' && !StringUtils::strContains($gNavigation->getUrl(), 'lists_show.php'))
+if ($getMode === 'html' && !str_contains($gNavigation->getUrl(), 'lists_show.php'))
 {
     $gNavigation->addUrl(CURRENT_URL);
 }

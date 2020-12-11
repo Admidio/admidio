@@ -88,7 +88,7 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
         // POST Variablen in das Ankuendigungs-Objekt schreiben
         foreach($_POST as $key => $value) // TODO possible security issue
         {
-            if(StringUtils::strStartsWith($key, 'lnk_'))
+            if(str_starts_with($key, 'lnk_'))
             {
                 $link->setValue($key, $value);
             }

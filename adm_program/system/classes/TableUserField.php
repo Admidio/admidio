@@ -218,7 +218,7 @@ class TableUserField extends TableAccess
                                 || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false)) // TODO: simplify check for images
                                 {
                                     // if there is imagefile and text separated by | then explode them
-                                    if (StringUtils::strContains($listValue, '|'))
+                                    if (str_contains($listValue, '|'))
                                     {
                                         list($listValueImage, $listValueText) = explode('|', $listValue);
                                     }
@@ -234,7 +234,7 @@ class TableUserField extends TableAccess
                                     if ($format === 'text')
                                     {
                                         // if no image is wanted then return the text part or only the position of the entry
-                                        if (StringUtils::strContains($listValue, '|'))
+                                        if (str_contains($listValue, '|'))
                                         {
                                             $listValue = $listValueText;
                                         }

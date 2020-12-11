@@ -183,15 +183,15 @@ final class PasswordUtils
      */
     public static function hashInfo($hash)
     {
-        if (StringUtils::strStartsWith($hash, self::HASH_INDICATOR_ARGON2ID) || StringUtils::strStartsWith($hash, self::HASH_INDICATOR_ARGON2I) || StringUtils::strStartsWith($hash, self::HASH_INDICATOR_BCRYPT))
+        if (str_starts_with($hash, self::HASH_INDICATOR_ARGON2ID) || str_starts_with($hash, self::HASH_INDICATOR_ARGON2I) || str_starts_with($hash, self::HASH_INDICATOR_BCRYPT))
         {
             return password_get_info($hash);
         }
-        elseif (StringUtils::strStartsWith($hash, self::HASH_INDICATOR_SHA512))
+        elseif (str_starts_with($hash, self::HASH_INDICATOR_SHA512))
         {
             return 'SHA512';
         }
-        elseif (StringUtils::strStartsWith($hash, self::HASH_INDICATOR_PORTABLE))
+        elseif (str_starts_with($hash, self::HASH_INDICATOR_PORTABLE))
         {
             return 'PRIVATE/PORTABLE_HASH';
         }
@@ -220,19 +220,19 @@ final class PasswordUtils
         {
             $algorithmPhpConstant = PASSWORD_DEFAULT;
         }
-        elseif ($algorithm === self::HASH_ALGORITHM_ARGON2ID && StringUtils::strStartsWith($hash, self::HASH_INDICATOR_ARGON2ID))
+        elseif ($algorithm === self::HASH_ALGORITHM_ARGON2ID && str_starts_with($hash, self::HASH_INDICATOR_ARGON2ID))
         {
             $algorithmPhpConstant = PASSWORD_ARGON2ID;
         }
-        elseif ($algorithm === self::HASH_ALGORITHM_ARGON2I && StringUtils::strStartsWith($hash, self::HASH_INDICATOR_ARGON2I))
+        elseif ($algorithm === self::HASH_ALGORITHM_ARGON2I && str_starts_with($hash, self::HASH_INDICATOR_ARGON2I))
         {
             $algorithmPhpConstant = PASSWORD_ARGON2I;
         }
-        elseif ($algorithm === self::HASH_ALGORITHM_BCRYPT && StringUtils::strStartsWith($hash, self::HASH_INDICATOR_BCRYPT))
+        elseif ($algorithm === self::HASH_ALGORITHM_BCRYPT && str_starts_with($hash, self::HASH_INDICATOR_BCRYPT))
         {
             $algorithmPhpConstant = PASSWORD_BCRYPT;
         }
-        elseif ($algorithm === self::HASH_ALGORITHM_SHA512 && StringUtils::strStartsWith($hash, self::HASH_INDICATOR_SHA512))
+        elseif ($algorithm === self::HASH_ALGORITHM_SHA512 && str_starts_with($hash, self::HASH_INDICATOR_SHA512))
         {
             $hashParts = explode('$', $hash);
             $cost = (int) substr($hashParts[2], 7);
@@ -276,7 +276,7 @@ final class PasswordUtils
         {
             $passwordInfo['upperCase'] = true;
         }
-        if (preg_match('/\W/', $password) === 1 || StringUtils::strContains($password, '_')) // Note: \W = ![\da-zA-Z_]
+        if (preg_match('/\W/', $password) === 1 || str_contains($password, '_')) // Note: \W = ![\da-zA-Z_]
         {
             $passwordInfo['symbol'] = true;
         }
@@ -306,16 +306,16 @@ final class PasswordUtils
      */
     public static function verify($password, $hash)
     {
-        if (StringUtils::strStartsWith($hash, self::HASH_INDICATOR_ARGON2ID) || StringUtils::strStartsWith($hash, self::HASH_INDICATOR_ARGON2I) || StringUtils::strStartsWith($hash, self::HASH_INDICATOR_BCRYPT))
+        if (str_starts_with($hash, self::HASH_INDICATOR_ARGON2ID) || str_starts_with($hash, self::HASH_INDICATOR_ARGON2I) || str_starts_with($hash, self::HASH_INDICATOR_BCRYPT))
         {
             return password_verify($password, $hash);
         }
-        elseif (StringUtils::strStartsWith($hash, self::HASH_INDICATOR_SHA512))
+        elseif (str_starts_with($hash, self::HASH_INDICATOR_SHA512))
         {
             $passwordHash = crypt($password, $hash);
             return hash_equals($passwordHash, $hash);
         }
-        elseif (StringUtils::strStartsWith($hash, self::HASH_INDICATOR_PORTABLE))
+        elseif (str_starts_with($hash, self::HASH_INDICATOR_PORTABLE))
         {
             $passwordHasher = new PasswordHash(9, true);
             return $passwordHasher->CheckPassword($password, $hash);

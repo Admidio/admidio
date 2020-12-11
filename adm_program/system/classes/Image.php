@@ -163,7 +163,7 @@ class Image
 
         if(self::isFontAwesomeIcon($icon))
         {
-            if(StringUtils::strStartsWith($icon, 'fa-'))
+            if(str_starts_with($icon, 'fa-'))
             {
                 $icon = 'fas ' . $icon;
             }
@@ -239,7 +239,7 @@ class Image
      */
     public static function isFontAwesomeIcon($icon)
     {
-        return StringUtils::strStartsWith($icon, 'fa-') || StringUtils::strStartsWith($icon, 'fas fa-') || StringUtils::strStartsWith($icon, 'fab fa-');
+        return str_starts_with($icon, 'fa-') || str_starts_with($icon, 'fas fa-') || str_starts_with($icon, 'fab fa-');
     }
 
     /**

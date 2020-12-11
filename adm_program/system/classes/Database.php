@@ -469,18 +469,18 @@ class Database
                     'null'     => $properties['Null'] === 'YES',
                     'key'      => $properties['Key'] === 'PRI' || $properties['Key'] === 'MUL',
                     'default'  => $properties['Default'],
-                    'unsigned' => StringUtils::strContains($properties['Type'], 'unsigned')
+                    'unsigned' => str_contains($properties['Type'], 'unsigned')
                 );
 
-                if (StringUtils::strContains($properties['Type'], 'tinyint(1)'))
+                if (str_contains($properties['Type'], 'tinyint(1)'))
                 {
                     $props['type'] = 'boolean';
                 }
-                elseif (StringUtils::strContains($properties['Type'], 'smallint'))
+                elseif (str_contains($properties['Type'], 'smallint'))
                 {
                     $props['type'] = 'smallint';
                 }
-                elseif (StringUtils::strContains($properties['Type'], 'int'))
+                elseif (str_contains($properties['Type'], 'int'))
                 {
                     $props['type'] = 'integer';
                 }
@@ -503,18 +503,18 @@ class Database
             foreach ($columnsList as $properties)
             {
                 $props = array(
-                    'serial'   => StringUtils::strContains($properties['column_default'], 'nextval'),
+                    'serial'   => str_contains($properties['column_default'], 'nextval'),
                     'null'     => $properties['is_nullable'] === 'YES',
                     'key'      => null,
                     'default'  => $properties['column_default'],
                     'unsigned' => null
                 );
 
-                if (StringUtils::strContains($properties['data_type'], 'timestamp'))
+                if (str_contains($properties['data_type'], 'timestamp'))
                 {
                     $props['type'] = 'timestamp';
                 }
-                elseif (StringUtils::strContains($properties['data_type'], 'time'))
+                elseif (str_contains($properties['data_type'], 'time'))
                 {
                     $props['type'] = 'time';
                 }

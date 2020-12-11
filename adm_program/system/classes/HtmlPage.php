@@ -143,7 +143,7 @@ class HtmlPage extends \Smarty
     {
         if (!in_array($cssFile, $this->cssFiles, true))
         {
-            if (StringUtils::strStartsWith($cssFile, 'http'))
+            if (str_starts_with($cssFile, 'http'))
             {
                 $this->cssFiles[] = $cssFile;
             }
@@ -179,7 +179,7 @@ class HtmlPage extends \Smarty
     {
         if (!in_array($jsFile, $this->jsFiles, true))
         {
-            if (StringUtils::strStartsWith($jsFile, 'http'))
+            if (str_starts_with($jsFile, 'http'))
             {
                 $this->jsFiles[] = $jsFile;
             }

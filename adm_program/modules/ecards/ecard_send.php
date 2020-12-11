@@ -69,7 +69,7 @@ $receiverString = implode(' | ', $_POST['ecard_recipients']);
 
 foreach($_POST['ecard_recipients'] as $value)
 {
-    if(StringUtils::strContains($value, 'groupID'))
+    if(str_contains($value, 'groupID'))
     {
         $roleId = (int) substr($value, 9);
         if($gCurrentUser->hasRightSendMailToRole($roleId))

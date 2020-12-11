@@ -161,7 +161,7 @@ class ComponentUpdate extends Component
 
         // if a method of this class was set in the update step
         // then call this function and don't execute a SQL statement
-        if (StringUtils::strStartsWith($updateStepContent, 'ComponentUpdateSteps::'))
+        if (str_starts_with($updateStepContent, 'ComponentUpdateSteps::'))
         {
             $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
 

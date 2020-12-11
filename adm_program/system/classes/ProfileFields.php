@@ -120,7 +120,7 @@ class ProfileFields
         }
 
         // if id-field not exists then return zero
-        if (StringUtils::strContains($column, '_id'))
+        if (str_contains($column, '_id'))
         {
             return 0;
         }
@@ -237,7 +237,7 @@ class ProfileFields
                         || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false))) // TODO: simplify check for images
                         {
                             // if there is imagefile and text separated by | then explode them
-                            if (StringUtils::strContains($listValue, '|'))
+                            if (str_contains($listValue, '|'))
                             {
                                 list($listValueImage, $listValueText) = explode('|', $listValue);
                             }
@@ -275,7 +275,7 @@ class ProfileFields
                         $displayValue = $value;
 
                         // trim "http://", "https://", "//"
-                        if (StringUtils::strContains($displayValue, '//'))
+                        if (str_contains($displayValue, '//'))
                         {
                             $displayValue = substr($displayValue, strpos($displayValue, '//') + 2);
                         }
@@ -308,7 +308,7 @@ class ProfileFields
                 }
 
                 // replace a variable in url with user value
-                if (StringUtils::strContains($usfUrl, '#user_content#'))
+                if (str_contains($usfUrl, '#user_content#'))
                 {
                     $htmlValue = str_replace('#user_content#', $value, $htmlValue);
                 }

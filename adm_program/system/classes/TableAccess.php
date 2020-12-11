@@ -270,11 +270,11 @@ class TableAccess
                     {
                         if ($format === '' && isset($gSettingsManager))
                         {
-                            if (StringUtils::strContains($this->columnsInfos[$columnName]['type'], 'timestamp'))
+                            if (str_contains($this->columnsInfos[$columnName]['type'], 'timestamp'))
                             {
                                 $format = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
                             }
-                            elseif (StringUtils::strContains($this->columnsInfos[$columnName]['type'], 'date'))
+                            elseif (str_contains($this->columnsInfos[$columnName]['type'], 'date'))
                             {
                                 $format = $gSettingsManager->getString('system_date');
                             }
@@ -522,7 +522,7 @@ class TableAccess
         {
             // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
             // Felder anderer Tabellen auch nicht
-            if (StringUtils::strStartsWith($key, $this->columnPrefix . '_')
+            if (str_starts_with($key, $this->columnPrefix . '_')
             && !$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed'])
             {
                 if ($this->newRecord)

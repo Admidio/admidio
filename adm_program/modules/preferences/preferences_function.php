@@ -235,11 +235,11 @@ switch($getMode)
             // Elmente, die nicht in adm_preferences gespeichert werden hier aussortieren
             if($key !== 'save')
             {
-                if(StringUtils::strStartsWith($key, 'org_'))
+                if(str_starts_with($key, 'org_'))
                 {
                     $gCurrentOrganization->setValue($key, $value);
                 }
-                elseif(StringUtils::strStartsWith($key, 'SYSMAIL_'))
+                elseif(str_starts_with($key, 'SYSMAIL_'))
                 {
                     $text = new TableText($gDb);
                     $text->readDataByColumns(array('txt_org_id' => (int) $gCurrentOrganization->getValue('org_id'), 'txt_name' => $key));

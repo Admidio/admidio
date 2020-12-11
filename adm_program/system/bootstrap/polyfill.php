@@ -27,3 +27,20 @@ if (!defined('PASSWORD_ARGON2I')) {
 if (!defined('PASSWORD_ARGON2ID')) {
     define('PASSWORD_ARGON2ID', 3); // PHP 7.4: "argon2id"
 }
+
+// For PHP <8.0
+if (!function_exists('str_contains')) {
+    function str_contains($haystack, $needle) {
+        return $needle === '' || \strpos($haystack, $needle) !== false;
+    }
+}
+if (!function_exists('str_starts_with')) {
+    function str_starts_with($haystack, $needle) {
+        return \strncmp($haystack, $needle, \strlen($needle)) === 0;
+    }
+}
+if (!function_exists('str_ends_with')) {
+    function str_ends_with($haystack, $needle) {
+        return $needle === '' || ($haystack !== '' && \substr_compare($haystack, $needle, -\strlen($needle)) === 0);
+    }
+}

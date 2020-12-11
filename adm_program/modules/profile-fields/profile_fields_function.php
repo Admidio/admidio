@@ -171,7 +171,7 @@ if($getMode === 1)
         // POST Variablen in das UserField-Objekt schreiben
         foreach($_POST as $key => $value)
         {
-            if(StringUtils::strStartsWith($key, 'usf_')) // TODO possible security issue
+            if(str_starts_with($key, 'usf_')) // TODO possible security issue
             {
                 $userField->setValue($key, $value);
             }

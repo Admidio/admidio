@@ -201,7 +201,7 @@ class HtmlForm extends HtmlFormBasic
         {
             if (Image::isFontAwesomeIcon($optionsAll['icon']))
             {
-                if (StringUtils::strStartsWith($optionsAll['icon'], 'fa-'))
+                if (str_starts_with($optionsAll['icon'], 'fa-'))
                 {
                     $optionsAll['icon'] = 'fas ' . $optionsAll['icon'];
                 }

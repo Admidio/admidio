@@ -25,7 +25,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getType  = admFuncVariableIsValid($_GET, 'type',  'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'AWA')));
+$getType = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'AWA')));
 
 // Modus und Rechte pruefen
 if (($getType === 'ROL' && !$gCurrentUser->manageRoles())
