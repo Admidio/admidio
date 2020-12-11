@@ -102,7 +102,7 @@ class User extends TableAccess
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
      */
-    public function allowedEditProfileField(User $user, $fieldNameIntern)
+    public function allowedEditProfileField(self $user, $fieldNameIntern)
     {
         return $this->hasRightEditProfile($user) && $user->mProfileFieldsData->isEditable($fieldNameIntern, $this->hasRightEditProfile($user));
     }
@@ -116,7 +116,7 @@ class User extends TableAccess
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
      */
-    public function allowedViewProfileField(User $user, $fieldNameIntern)
+    public function allowedViewProfileField(self $user, $fieldNameIntern)
     {
         return $user->mProfileFieldsData->isVisible($fieldNameIntern, $this->hasRightEditProfile($user));
     }
@@ -1260,7 +1260,7 @@ class User extends TableAccess
      * @param bool  $checkOwnProfile If set to **false** than this method don't check the role right to edit the own profile.
      * @return bool Return **true** if the current user is allowed to edit the profile of the user from **$user**.
      */
-    public function hasRightEditProfile(User $user, $checkOwnProfile = true)
+    public function hasRightEditProfile(self $user, $checkOwnProfile = true)
     {
         if (!$user instanceof self)
         {
@@ -1396,7 +1396,7 @@ class User extends TableAccess
      * @param User $user User object of the user that should be checked if the current user can view his profile.
      * @return bool Return **true** if the current user is allowed to view the profile of the user from **$user**.
      */
-    public function hasRightViewProfile(User $user)
+    public function hasRightViewProfile(self $user)
     {
         global $gValidLogin;
 
