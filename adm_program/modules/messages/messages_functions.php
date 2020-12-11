@@ -133,7 +133,7 @@ function getAdministrationLink($rowIndex, $msgId, $msgSubject)
     global $gL10n;
 
     return '
-        <a class="admidio-icon-link openPopup" href="javascript:void(0);" 
+        <a class="admidio-icon-link openPopup" href="javascript:void(0);"
             data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $rowIndex, 'name' => $msgSubject, 'database_id' => $msgId)) . '">
             <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('MSG_REMOVE').'"></i>
         </a>';
