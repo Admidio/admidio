@@ -441,8 +441,8 @@ class ProfileFields
     {
         global $gCurrentUser;
 
-        return($this->isVisible($fieldNameIntern, $allowedToEditProfile)
-        && ($gCurrentUser->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0));
+        return $this->isVisible($fieldNameIntern, $allowedToEditProfile)
+        && ($gCurrentUser->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0);
     }
 
     /**

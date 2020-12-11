@@ -321,7 +321,7 @@ class Language
     {
         global $gSupportedLanguages;
 
-        return array_map(function($languageInfos) { return $languageInfos['name']; }, $gSupportedLanguages);
+        return array_map(function ($languageInfos) { return $languageInfos['name']; }, $gSupportedLanguages);
     }
 
     /**
