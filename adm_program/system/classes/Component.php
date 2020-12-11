@@ -104,7 +104,7 @@ class Component extends TableAccess
     {
         global $gValidLogin, $gCurrentUser, $gSettingsManager;
 
-        if(Component::isVisible($componentName))
+        if(self::isVisible($componentName))
         {
             switch($componentName)
             {
