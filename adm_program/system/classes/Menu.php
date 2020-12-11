@@ -7,7 +7,7 @@
  ***********************************************************************************************
  */
 
- /**
+/**
  * Create menu from database and serve several output formats
  *
  * This class will read the menu structure from the database table **adm_menu** and stores each main

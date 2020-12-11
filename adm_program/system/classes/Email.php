@@ -445,10 +445,10 @@ class Email extends PHPMailer
         $emailHtmlText = StringUtils::strMultiReplace($emailTemplateText, $replaces);
 
         // now remove html und css from template
-        $emailText = strip_tags($emailHtmlText,'<style>');
+        $emailText = strip_tags($emailHtmlText, '<style>');
         $substring = substr($emailText, strpos($emailText, '<style'), strpos($emailText, '</style>') + 6);
         $emailText = str_replace($substring, '', $emailText);
-        $emailText = str_replace(array("\t","\r","\n"), '', $emailText);
+        $emailText = str_replace(array("\t", "\r", "\n"), '', $emailText);
         $emailText = trim($emailText);
 
         $this->emText = $emailText;

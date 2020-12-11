@@ -7,7 +7,7 @@
  ***********************************************************************************************
  */
 
- /**
+/**
  * Create a menu node from database and serve several output formats
  *
  * This class will create a menu node. The data will be read from the database table **adm_menu**.

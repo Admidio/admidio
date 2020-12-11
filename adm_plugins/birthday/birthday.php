@@ -267,7 +267,7 @@ if($numberBirthdays > 0)
         // how many birthdays should be displayed (as a maximum)
         $birthdayCount = null;
 
-            while($row = $birthdayStatement->fetch() AND $birthdayCount < $plg_show_display_limit)
+            while($row = $birthdayStatement->fetch() && $birthdayCount < $plg_show_display_limit)
             {
                 // the display type of the name
                 switch ($plg_show_names)
