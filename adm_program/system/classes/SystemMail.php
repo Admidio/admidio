@@ -112,7 +112,7 @@ class SystemMail extends Email
         }
 
         // Betreff und Inhalt anhand von Kennzeichnungen splitten oder ggf. Default-Inhalte nehmen
-        if(StringUtils::strContains($mailSrcText, '#subject#'))
+        if(str_contains($mailSrcText, '#subject#'))
         {
             $this->smMailHeader = trim(substr($mailSrcText, strpos($mailSrcText, '#subject#') + 9, strpos($mailSrcText, '#content#') - 9));
         }
@@ -121,7 +121,7 @@ class SystemMail extends Email
             $this->smMailHeader = 'Systemmail von '.$this->smOrganization->getValue('org_homepage');
         }
 
-        if(StringUtils::strContains($mailSrcText, '#content#'))
+        if(str_contains($mailSrcText, '#content#'))
         {
             $this->smMailText = trim(substr($mailSrcText, strpos($mailSrcText, '#content#') + 9));
         }

@@ -66,7 +66,7 @@ class TableFolder extends TableAccess
         {
             while (($entry = readdir($dirHandle)) !== false)
             {
-                if ($entry === '.' || $entry === '..' || StringUtils::strStartsWith($entry, '.'))
+                if ($entry === '.' || $entry === '..' || str_starts_with($entry, '.'))
                 {
                     continue;
                 }

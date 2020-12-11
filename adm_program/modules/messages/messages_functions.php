@@ -50,11 +50,11 @@ function prepareRecipients($recipientsString, $showFullUserNames = false)
 
     foreach ($recipientsSplit as $recipients)
     {
-        if (StringUtils::strStartsWith($recipients, 'list '))
+        if (str_starts_with($recipients, 'list '))
         {
             $recipientName .= '; ' . substr($recipients, 5);
         }
-        elseif (StringUtils::strContains($recipients, ':'))
+        elseif (str_contains($recipients, ':'))
         {
             $moduleMessages = new ModuleMessages();
             $recipientName .= '; ' . $moduleMessages->msgGroupNameSplit($recipients);

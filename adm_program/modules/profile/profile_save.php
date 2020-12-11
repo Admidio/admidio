@@ -165,7 +165,7 @@ foreach($gProfileFields->getProfileFields() as $field)
             // if social network then extract username from url
             if(in_array($field->getValue('usf_name_intern'), array('FACEBOOK', 'GOOGLE_PLUS', 'TWITTER', 'XING'), true))
             {
-                if(StringUtils::strValidCharacters($_POST[$postId], 'url') && StringUtils::strContains($_POST[$postId], '/'))
+                if(StringUtils::strValidCharacters($_POST[$postId], 'url') && str_contains($_POST[$postId], '/'))
                 {
                     if(strrpos($_POST[$postId], '/profile.php?id=') > 0)
                     {

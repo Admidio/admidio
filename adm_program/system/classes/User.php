@@ -1087,7 +1087,7 @@ class User extends TableAccess
     {
         global $gSettingsManager;
 
-        if (!StringUtils::strStartsWith($columnName, 'usr_'))
+        if (!str_starts_with($columnName, 'usr_'))
         {
             return $this->mProfileFieldsData->getValue($columnName, $format);
         }
@@ -1882,7 +1882,7 @@ class User extends TableAccess
         global $gCurrentUser, $gSettingsManager;
 
         // users data from adm_users table
-        if (StringUtils::strStartsWith($columnName, 'usr_'))
+        if (str_starts_with($columnName, 'usr_'))
         {
             // don't change user password; use $user->setPassword()
             if ($columnName === 'usr_password' || $columnName === 'usr_new_password')

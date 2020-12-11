@@ -183,7 +183,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
             }
 
             // check if role or user is given
-            if (StringUtils::strContains($value, ':'))
+            if (str_contains($value, ':'))
             {
                 $moduleMessages = new ModuleMessages();
                 $group = $moduleMessages->msgGroupSplit($value);

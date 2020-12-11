@@ -263,7 +263,7 @@ if($getNewUser > 0 && $assignedCount === 0)
 }
 
 // zur Ausgangsseite zurueck
-if(StringUtils::strContains($gNavigation->getUrl(), 'new_user_assign.php'))
+if(str_contains($gNavigation->getUrl(), 'new_user_assign.php'))
 {
     // von hier aus direkt zur Registrierungsuebersicht zurueck
     $gNavigation->deleteLastUrl();
