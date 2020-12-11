@@ -60,8 +60,8 @@ if ($getGbcGboId > 0)
             echo '
             <div class="card admidio-blog-comment" id="gbc_'.$gbcId.'">
                 <div class="card-header">
-                    <i class="fas fa-comment"></i>' . 
-                        $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($gbComment->getValue('gbc_name'), $gbComment->getValue('gbc_timestamp_create', 
+                    <i class="fas fa-comment"></i>' .
+                        $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($gbComment->getValue('gbc_name'), $gbComment->getValue('gbc_timestamp_create',
                             $gSettingsManager->getString('system_date')), $gbComment->getValue('gbc_timestamp_create', $gSettingsManager->getString('system_time'))));
 
                     // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
@@ -70,7 +70,7 @@ if ($getGbcGboId > 0)
                         echo '<a class="admidio-icon-link" href="mailto:'.$gbcEmail.'">
                             <i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'"></i></a>';
                     }
-        
+
                     // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
                     if ($gCurrentUser->editGuestbookRight())
                     {
@@ -81,17 +81,17 @@ if ($getGbcGboId > 0)
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('cid' => $gbcId)).'">
                                     <i class="fas fa-edit"></i> '.$gL10n->get('SYS_EDIT').'</a>
-                                <a class="dropdown-item btn openPopup" href="javascript:void(0);" 
+                                <a class="dropdown-item btn openPopup" href="javascript:void(0);"
                                     data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbc', 'element_id' => 'gbc_'.$gbcId, 'database_id' => $gbcId, 'database_id_2' => (int) $gbComment->getValue('gbo_id'), 'name' => $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name'))))).'">
                                     <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE').'</a>
                             </div>
                         </div>';
                     }
                 echo '</div>
-    
+
                 <div class="card-body">'.
                     $gbComment->getValue('gbc_text');
-    
+
                     // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
                     if($getModeration)
                     {
@@ -104,7 +104,7 @@ if ($getGbcGboId > 0)
                         </div>';
                     }
                 echo '</div>';
-    
+
                 // show information about user who edit the recordset
                 if(strlen($gbComment->getValue('gbc_usr_id_change')) > 0)
                 {

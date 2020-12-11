@@ -9,7 +9,14 @@ $rules = array(
 //    '@Symfony:risky'  => false, // [@Symfony:risky]
 //    '@PHP56Migration' => false, // [@PHP56Migration]
 //    '@PHP70Migration' => false, // [@PHP70Migration]
+//    '@PHP70Migration:risky' => false, // [@PHP70Migration:risky]
 //    '@PHP71Migration' => false, // [@PHP71Migration]
+//    '@PHP71Migration:risky' => false, // [@PHP71Migration:risky]
+//    '@PHP73Migration' => false, // [@PHP73Migration]
+//    '@PHP74Migration' => false, // [@PHP74Migration]
+//    '@PHP74Migration:risky' => false, // [@PHP74Migration:risky]
+//    '@PHP80Migration' => false, // [@PHP80Migration]
+//    '@PHP80Migration:risky' => false, // [@PHP80Migration:risky]
 
     'array_syntax'                                => array('syntax' => 'long'), // [@] TODO: PHP >= 5.4 => array('syntax' => 'short')
 //    'binary_operator_spaces'                    => false, // [@Symfony]

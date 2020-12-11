@@ -25,7 +25,7 @@ class TableFile extends TableAccess
 {
     /**
      * @var array<string,string> Array with file extensions and the best Font Awesome icon that should be used
-     */    
+     */
     protected $iconFileExtension = array(
         'bmp'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/bmp', 'viewable' => true),
         'gif'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/gif', 'viewable' => true),
@@ -255,7 +255,7 @@ class TableFile extends TableAccess
         {
             $returnCode = $this->iconFileExtension[$this->getFileExtension()]['viewable'];
         }
-        
+
         return $returnCode;
     }
 
