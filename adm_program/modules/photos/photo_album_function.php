@@ -191,8 +191,7 @@ if ($getMode === 'new' || $getMode === 'change')
         $photoAlbum->save();
     }
 
-    unset($_SESSION['photo_album_request']);
-    unset($_SESSION['photo_album']);
+    unset($_SESSION['photo_album_request'], $_SESSION['photo_album']);
 
     $gNavigation->deleteLastUrl();
 
