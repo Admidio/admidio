@@ -78,3 +78,24 @@ function disableSoundexSearchIfPgSql(Database $db)
         $db->queryPrepared($sql);
     }
 }
+
+/**
+ * Get the url of the Admidio installation with all subdirectories, a forwarded host
+ * and a port. e.g. https://www.admidio.org/playground
+ * @param bool $checkForwardedHost If set to true the script will check if a forwarded host is set and add him to the url
+ * @return string The url of the Admidio installation
+ */
+function getAdmidioUrl($checkForwardedHost = true)
+{
+    $ssl      = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+    $sp       = strtolower($_SERVER['SERVER_PROTOCOL']);
+    $protocol = substr($sp, 0, strpos($sp, '/')) . ($ssl ? 's' : '');
+    $port     = (int) $_SERVER['SERVER_PORT'];
+    $port     = ((!$ssl && $port === 80) || ($ssl && $port === 443)) ? '' : ':' . $port;
+    $host     = ($checkForwardedHost && isset($_SERVER['HTTP_X_FORWARDED_HOST'])) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null);
+    $host     = isset($host) ? $host : $_SERVER['SERVER_NAME'] . $port;
+    $fullUrl  = $protocol . '://' . $host . $_SERVER['REQUEST_URI'];
+    $admidioPath = substr($fullUrl, 0, strpos($fullUrl, 'adm_program') - 1);
+    error_log(':666:' . $admidioPath);
+    return $admidioPath;
+}

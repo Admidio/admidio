@@ -20,7 +20,7 @@
  */
 
 $rootPath = dirname(dirname(__DIR__));
-require_once($rootPath . '/adm_program/system/classes/FileSystemUtils.php');
+require_once($rootPath . '/adm_program/installation/install_functions.php');
 
 // if config file already exists then load file with their variables
 $configPath = $rootPath . '/adm_my_files/config.php';
@@ -36,11 +36,10 @@ elseif (is_file($rootPath . '/config.php'))
 else
 {
     $g_organization = '';
-    $g_root_path    = FileSystemUtils::getAdmidioUrl();
+    $g_root_path = getAdmidioUrl();
 }
 
 require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
-require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
 
 $availableSteps = array('welcome', 'connect_database', 'create_organization', 'create_administrator', 'create_config', 'download_config', 'start_installation');
 
