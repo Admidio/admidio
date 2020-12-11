@@ -153,7 +153,7 @@ class Database
      * @param array  $options
      * @throws AdmException
      */
-    public function __construct($engine, $host, $port = null, $dbName, $username = null, $password = null, array $options = array())
+    public function __construct($engine, $host, $port, $dbName, $username = null, $password = null, array $options = array())
     {
         global $gLogger;
 
