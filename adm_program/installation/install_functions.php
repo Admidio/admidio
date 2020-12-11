@@ -96,6 +96,6 @@ function getAdmidioUrl($checkForwardedHost = true)
     $host     = isset($host) ? $host : $_SERVER['SERVER_NAME'] . $port;
     $fullUrl  = $protocol . '://' . $host . $_SERVER['REQUEST_URI'];
     $admidioPath = substr($fullUrl, 0, strpos($fullUrl, 'adm_program') - 1);
-    error_log(':666:' . $admidioPath);
+
     return $admidioPath;
 }
