@@ -353,7 +353,7 @@ class ModuleDates extends Modules
         // add valid calendars
         if(count($this->calendarNames) > 0)
         {
-            $sqlConditions .= ' AND cat_name IN (\''. implode($this->calendarNames) . '\')';
+            $sqlConditions .= ' AND cat_name IN (\''. implode('', $this->calendarNames) . '\')';
         }
 
         return array(
