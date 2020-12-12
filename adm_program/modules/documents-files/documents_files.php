@@ -103,15 +103,11 @@ $columnHeading = array(
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_DATE_MODIFIED'),
     $gL10n->get('SYS_SIZE'),
-    $gL10n->get('SYS_COUNTER')
+    $gL10n->get('SYS_COUNTER'),
+    '&nbsp;'
 );
 
-if ($currentFolder->hasUploadRight())
-{
-    $columnHeading[] = '&nbsp;';
-    $downloadOverview->disableDatatablesColumnsSort(array(7));
-}
-
+$downloadOverview->disableDatatablesColumnsSort(array(7));
 $downloadOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right', 'right', 'right'));
 $downloadOverview->addRowHeadingByArray($columnHeading);
 $downloadOverview->setMessageIfNoRowsFound('SYS_FOLDER_NO_FILES', 'warning');
@@ -164,6 +160,11 @@ if (isset($folderContent['folders']))
                                     'name' => $nextFolder['fol_name'], 'database_id' => $nextFolder['fol_id'])).'">
                                     <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FOLDER').'"></i></a>';
         }
+        else
+        {
+            $columnValues[] = '&nbsp;';
+        }
+
         $downloadOverview->addRowByArray($columnValues, 'row_folder_'.$nextFolder['fol_id']);
     }
 }
