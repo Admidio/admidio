@@ -94,7 +94,7 @@ if ($currentFolder->hasUploadRight())
 }
 
 // Create table object
-$downloadOverview = new HtmlTable('tbl_documents_files', $page, true, true);
+$documentsFilesOverview = new HtmlTable('tbl_documents_files', $page, true, true);
 
 // create array with all column heading values
 $columnHeading = array(
@@ -103,18 +103,14 @@ $columnHeading = array(
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_DATE_MODIFIED'),
     $gL10n->get('SYS_SIZE'),
-    $gL10n->get('SYS_COUNTER')
+    $gL10n->get('SYS_COUNTER'),
+    '&nbsp;'
 );
 
-if ($currentFolder->hasUploadRight())
-{
-    $columnHeading[] = '&nbsp;';
-    $downloadOverview->disableDatatablesColumnsSort(array(7));
-}
-
-$downloadOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right', 'right', 'right'));
-$downloadOverview->addRowHeadingByArray($columnHeading);
-$downloadOverview->setMessageIfNoRowsFound('SYS_FOLDER_NO_FILES', 'warning');
+$documentsFilesOverview->disableDatatablesColumnsSort(array(7));
+$documentsFilesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right', 'right', 'right'));
+$documentsFilesOverview->addRowHeadingByArray($columnHeading);
+$documentsFilesOverview->setMessageIfNoRowsFound('SYS_FOLDER_NO_FILES', 'warning');
 
 // Get folder content
 if (isset($folderContent['folders']))
@@ -164,7 +160,12 @@ if (isset($folderContent['folders']))
                                     'name' => $nextFolder['fol_name'], 'database_id' => $nextFolder['fol_id'])).'">
                                     <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FOLDER').'"></i></a>';
         }
-        $downloadOverview->addRowByArray($columnValues, 'row_folder_'.$nextFolder['fol_id']);
+        else
+        {
+            $columnValues[] = '&nbsp;';
+        }
+
+        $documentsFilesOverview->addRowByArray($columnValues, 'row_folder_'.$nextFolder['fol_id']);
     }
 }
 
@@ -237,14 +238,14 @@ if (isset($folderContent['files']))
                 <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FILE').'"></i></a>';
         }
         $columnValues[] = $additionalFileFunctions;
-        $downloadOverview->addRowByArray($columnValues, 'row_file_'.$fileId);
+        $documentsFilesOverview->addRowByArray($columnValues, 'row_file_'.$fileId);
     }
 }
 
 // Create download table
-$downloadOverview->setDatatablesColumnsHide(array(1));
-$downloadOverview->setDatatablesOrderColumns(array(1, 3));
-$htmlDownloadOverview = $downloadOverview->show();
+$documentsFilesOverview->setDatatablesColumnsHide(array(1));
+$documentsFilesOverview->setDatatablesOrderColumns(array(1, 3));
+$htmlDocumentsFilesOverview = $documentsFilesOverview->show();
 
 /**************************************************************************/
 // Add Admin table to html page
@@ -317,7 +318,7 @@ if ($gCurrentUser->adminDocumentsFiles())
 
 $page->addHtml($navigationBar);
 
-$page->addHtml($htmlDownloadOverview);
+$page->addHtml($htmlDocumentsFilesOverview);
 
 // if user has admin download rights, then show admin table for undefined files in folders
 if(isset($htmlAdminTable))

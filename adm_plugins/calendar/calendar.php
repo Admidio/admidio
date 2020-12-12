@@ -52,15 +52,19 @@ if(!isset($plg_ter_login))
 }
 if(!isset($plg_geb_aktiv))
 {
-    $plg_geb_aktiv = 0;
+    $plg_geb_aktiv = 1;
 }
 if(!isset($plg_geb_login))
 {
-    $plg_geb_login = 0;
+    $plg_geb_login = 1;
 }
 if(!isset($plg_geb_icon))
 {
-    $plg_geb_icon = 0;
+    $plg_geb_icon = 1;
+}
+if(!isset($plg_geb_displayNames))
+{
+    $plg_geb_displayNames = 1;
 }
 if(!isset($plg_kal_cat))
 {
@@ -71,13 +75,6 @@ if(!isset($plg_kal_cat_show))
     $plg_kal_cat_show = 1;
 }
 
-// check if the link url was set or is empty
-// otherwise the defaut url to the Admidio event module will be set
-if(!isset($plg_link_url) || $plg_link_url === '')
-{
-    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
-}
-
 // check if role conditions where set
 if(isset($plg_rolle_sql) && count($plg_rolle_sql) > 0)
 {
@@ -86,6 +83,13 @@ if(isset($plg_rolle_sql) && count($plg_rolle_sql) > 0)
 else
 {
     $sqlRoleIds = 'IS NOT NULL';
+}
+
+// check if the link url was set or is empty
+// otherwise the defaut url to the Admidio event module will be set
+if(!isset($plg_link_url) || $plg_link_url === '')
+{
+    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
 }
 
 // add header content type if in ajax mode

@@ -441,8 +441,8 @@ final class ComponentUpdateSteps
                 {
                     try
                     {
-                        rename($folderOldName, $folder->getFullFolderPath());
-                        //FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath());
+                        //rename($folderOldName, $folder->getFullFolderPath());
+                        FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath());
                     }
                     catch (\RuntimeException $exception)
                     {

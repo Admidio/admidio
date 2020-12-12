@@ -174,7 +174,7 @@ if($gDbType === 'pgsql')
            AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
          WHERE usr_valid = 1
            AND mem_rol_id '.$sqlRol.'
-      /*ORDER BY days_to_bdate '.$sqlSort.', last_name, first_name*/';
+      ORDER BY days_to_bdate '.$sqlSort.', last_name, first_name';
 }
 else
 {
@@ -267,7 +267,7 @@ if($numberBirthdays > 0)
         // how many birthdays should be displayed (as a maximum)
         $birthdayCount = null;
 
-            while($row = $birthdayStatement->fetch() && $birthdayCount < $plg_show_display_limit)
+            while(($row = $birthdayStatement->fetch()) && $birthdayCount < $plg_show_display_limit)
             {
                 // the display type of the name
                 switch ($plg_show_names)
