@@ -261,9 +261,9 @@ if($plg_geb_aktiv)
 {
     if(DB_ENGINE === Database::PDO_ENGINE_PGSQL)
     {
-        $sqlYearOfBirthday  = ' date_part(\'year\', timestamp birthday.usd_value) ';
-        $sqlMonthOfBirthday = ' date_part(\'month\', timestamp birthday.usd_value) ';
-        $sqlDayOfBirthday   = ' date_part(\'day\', timestamp birthday.usd_value) ';
+        $sqlYearOfBirthday  = ' EXTRACT(YEAR FROM TO_TIMESTAMP(birthday.usd_value, \'YYYY-MM-DD\')) ';
+        $sqlMonthOfBirthday = ' EXTRACT(MONTH FROM TO_TIMESTAMP(birthday.usd_value, \'YYYY-MM-DD\')) ';
+        $sqlDayOfBirthday   = ' EXTRACT(DAY FROM TO_TIMESTAMP(birthday.usd_value, \'YYYY-MM-DD\')) ';
     }
     else
     {
@@ -287,7 +287,9 @@ if($plg_geb_aktiv)
 
     // database query for all birthdays of this month
     $sql = 'SELECT DISTINCT
-                   usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, birthday.usd_value AS birthday
+                   usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, birthday.usd_value AS birthday,
+                   ' . $sqlYearOfBirthday . ' AS birthday_year, ' . $sqlMonthOfBirthday . ' AS birthday_month,
+                   ' . $sqlDayOfBirthday . ' AS birthday_day
               FROM '.TBL_MEMBERS.'
         INNER JOIN '.TBL_ROLES.'
                 ON rol_id = mem_rol_id
@@ -310,11 +312,7 @@ if($plg_geb_aktiv)
                AND rol_id '.$sqlRoleIds.'
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
-          ORDER BY ' .
-        $sqlYearOfBirthday . ' DESC,' .
-        $sqlMonthOfBirthday . ' DESC, ' .
-        $sqlDayOfBirthday . ' DESC, ' .
-        $sqlOrderName;
+             ORDER BY birthday_year DESC, birthday_month DESC, birthday_day DESC, ' . $sqlOrderName;
 
     $queryParams = array(
         $gProfileFields->getProperty('BIRTHDAY', 'usf_id'),
