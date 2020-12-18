@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Various functions for download module
+ * Various functions for documents & files module
  *
  * @copyright 2004-2020 The Admidio Team
  * @see https://www.admidio.org/
@@ -128,7 +128,7 @@ elseif ($getMode === 3)
                 $newFolder = new TableFolder($gDb);
 
                 $newFolder->setValue('fol_fol_id_parent', $folId);
-                $newFolder->setValue('fol_type', 'DOWNLOAD');
+                $newFolder->setValue('fol_type', 'DOCUMENTS');
                 $newFolder->setValue('fol_name', $newFolderName);
                 $newFolder->setValue('fol_description', $newFolderDescription);
                 $newFolder->setValue('fol_path', $folder->getFolderPath());
@@ -379,7 +379,7 @@ elseif ($getMode === 6)
         // Ordner der DB hinzufuegen
         $newFolder = new TableFolder($gDb);
         $newFolder->setValue('fol_fol_id_parent', $folId);
-        $newFolder->setValue('fol_type', 'DOWNLOAD');
+        $newFolder->setValue('fol_type', 'DOCUMENTS');
         $newFolder->setValue('fol_name', $getName);
         $newFolder->setValue('fol_path', $folder->getFolderPath());
         $newFolder->setValue('fol_locked', $folder->getValue('fol_locked'));
@@ -410,7 +410,7 @@ elseif ($getMode === 7)
     }
     if(!isset($_POST['adm_roles_upload_right']))
     {
-        // upload right need not to be set because download module administrators still
+        // upload right need not to be set because documents & files module administrators still
         // have the right, so initialize the parameter
         $_POST['adm_roles_upload_right'] = array();
     }
@@ -422,7 +422,7 @@ elseif ($getMode === 7)
         // => EXIT
     }
 
-    // only users with download administration rights should set new roles rights
+    // only users with documents & files administration rights should set new roles rights
     if(!$gCurrentUser->adminDocumentsFiles())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
