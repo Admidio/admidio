@@ -150,7 +150,6 @@ if(Component::isVisible('DATES'))
                     <a class="admidio-icon-link" target="'. $plg_link_target. '"
                         href="'.SecurityUtils::encodeUrl($plg_link_url,
                             array('view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
-                $textPrev = pluginDatesCloseTags($textPrev);
 
                 echo '<div>'.$textPrev.'</div>';
             }
@@ -167,35 +166,4 @@ if(Component::isVisible('DATES'))
     }
 
     echo '</div>';
-}
-
-/**
- * Function will analyse a html string and close open html tags at the end of the string.
- * @param string $html The html string to parse.
- * @return string Returns the parsed html string with all tags closed.
- */
-function pluginDatesCloseTags($html)
-{
-    preg_match_all('#<(?!meta|img|br|hr|input\b)\b([a-z]+)(?: .*)?(?<![/|/ ])>#iU', $html, $result);
-    $openedTags = $result[1];
-    preg_match_all('#</([a-z]+)>#iU', $html, $result);
-    $closedTags = $result[1];
-    $lenOpened = count($openedTags);
-    if (count($closedTags) === $lenOpened)
-    {
-        return $html;
-    }
-    $openedTags = array_reverse($openedTags);
-    for ($i = 0; $i < $lenOpened; ++$i)
-    {
-        if (!in_array($openedTags[$i], $closedTags, true))
-        {
-            $html .= '</'.$openedTags[$i].'>';
-        }
-        else
-        {
-            unset($closedTags[array_search($openedTags[$i], $closedTags, true)]);
-        }
-    }
-    return $html;
 }
