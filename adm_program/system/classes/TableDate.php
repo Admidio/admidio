@@ -412,6 +412,22 @@ class TableDate extends TableAccess
         return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('DAT'), true);
     }
 
+    /**
+     * Checks if there are more places available than the current count of participiants is set. Also the deadline for registration
+     * will be checked. If the deadline is reached the method returns false.
+     * @param int $currentCountParticipations Number of participiants that participate to the current event.
+     * @return Returns true if still users can participate to the event or false if it's not possible any more.
+     */
+    public function participationPossible($currentCountParticipations)
+    {
+        if(!$this->deadlineExceeded()
+        && ($this->getValue('dat_max_members') > 0 && $currentCountParticipations >= $this->getValue('dat_max_members')))
+        {
+            return true;
+        }
+        return false;
+    }
+
     /* Read an event that has the given role has stored as participant role.
      * @param $roleId Id of the participants role of the event.
      */
