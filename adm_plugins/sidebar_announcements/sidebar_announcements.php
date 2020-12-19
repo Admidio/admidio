@@ -155,7 +155,6 @@ if(Component::isVisible('ANNOUNCEMENTS'))
                     <a class="admidio-icon-link" target="'. $plg_link_target. '"
                         href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php',
                             array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
-                $textPrev = pluginAnnouncementsCloseTags($textPrev);
 
                 echo '<div>'.$textPrev.'</div>';
             }
@@ -169,35 +168,4 @@ if(Component::isVisible('ANNOUNCEMENTS'))
         echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $plg_headline)).'" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES').'</a>';
     }
     echo '</div>';
-}
-
-/**
- * Function will analyse a html string and close open html tags at the end of the string.
- * @param string $html The html string to parse.
- * @return string Returns the parsed html string with all tags closed.
- */
-function pluginAnnouncementsCloseTags($html)
-{
-    preg_match_all('#<(?!meta|img|br|hr|input\b)\b([a-z]+)(?: .*)?(?<![/|/ ])>#iU', $html, $result);
-    $openedTags = $result[1];
-    preg_match_all('#</([a-z]+)>#iU', $html, $result);
-    $closedTags = $result[1];
-    $lenOpened = count($openedTags);
-    if (count($closedTags) === $lenOpened)
-    {
-        return $html;
-    }
-    $openedTags = array_reverse($openedTags);
-    for ($i = 0; $i < $lenOpened; ++$i)
-    {
-        if (!in_array($openedTags[$i], $closedTags, true))
-        {
-            $html .= '</'.$openedTags[$i].'>';
-        }
-        else
-        {
-            unset($closedTags[array_search($openedTags[$i], $closedTags, true)]);
-        }
-    }
-    return $html;
 }
