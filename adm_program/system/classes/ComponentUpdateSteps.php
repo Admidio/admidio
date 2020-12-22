@@ -338,9 +338,7 @@ final class ComponentUpdateSteps
      */
     public static function updateStepNewDownloadRootFolderName()
     {
-        global $gCurrentOrganization, $gLogger, $g_organization;
-
-        $tempOrganization = $gCurrentOrganization;
+        global $gLogger, $g_organization;
 
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = self::$db->queryPrepared($sql);
@@ -349,7 +347,7 @@ final class ComponentUpdateSteps
         {
             $rowId = (int) $row['org_id'];
 
-            $gCurrentOrganization->readDataById($rowId);
+            $organization = new Organization(self::$db, $rowId);
 
             $sql = 'SELECT fol_id, fol_name
                       FROM '.TBL_FOLDERS.'
@@ -360,12 +358,12 @@ final class ComponentUpdateSteps
             if($rowFolder = $folderStatement->fetch())
             {
                 $folder = new TableFolder(self::$db, $rowFolder['fol_id']);
-                $folderOldName = $folder->getFullFolderPath();
-                $folder->setValue('fol_name', TableFolder::getRootFolderName());
+                $folderOldName = $folder->getFullFolderPath('documents');
+                $folder->setValue('fol_name', TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')));
                 $folder->save();
 
                 $sql = 'UPDATE '.TBL_FOLDERS.'
-                           SET fol_path = REPLACE(fol_path, \'/'.$rowFolder['fol_name'].'\', \'/'.TableFolder::getRootFolderName().'\')
+                           SET fol_path = REPLACE(fol_path, \'/'.$rowFolder['fol_name'].'\', \'/'.TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')).'\')
                          WHERE fol_org_id = '.$rowId;
                 self::$db->query($sql); // TODO add more params
 
@@ -373,11 +371,11 @@ final class ComponentUpdateSteps
                 {
                     try
                     {
-                        FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath());
+                        FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath('documents'));
                     }
                     catch (\RuntimeException $exception)
                     {
-                        $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath()));
+                        $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath('documents')));
                         // TODO
                     }
                 }
@@ -389,15 +387,13 @@ final class ComponentUpdateSteps
                         VALUES (?, \'DOWNLOAD\', ?, ?, 0, 1, ?) -- $rowId, TableFolder::getRootFolderName(), FOLDER_DATA, DATETIME_NOW';
                 $params = array(
                     $rowId,
-                    TableFolder::getRootFolderName(),
+                    TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')),
                     FOLDER_DATA,
                     DATETIME_NOW
                 );
                 self::$db->queryPrepared($sql, $params);
             }
         }
-
-        $gCurrentOrganization = $tempOrganization;
     }
 
     /**
@@ -406,9 +402,7 @@ final class ComponentUpdateSteps
      */
     public static function updateStepRenameDownloadRootFolder()
     {
-        global $gCurrentOrganization, $gLogger, $g_organization;
-
-        $tempOrganization = $gCurrentOrganization;
+        global $gLogger;
 
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = self::$db->queryPrepared($sql);
@@ -417,7 +411,7 @@ final class ComponentUpdateSteps
         {
             $rowId = (int) $row['org_id'];
 
-            $gCurrentOrganization->readDataById($rowId);
+            $organization = new Organization(self::$db, $rowId);
 
             $sql = 'SELECT fol_id, fol_name
                       FROM '.TBL_FOLDERS.'
@@ -428,12 +422,12 @@ final class ComponentUpdateSteps
             if($rowFolder = $folderStatement->fetch())
             {
                 $folder = new TableFolder(self::$db, $rowFolder['fol_id']);
-                $folderOldName = $folder->getFullFolderPath();
-                $folder->setValue('fol_name', TableFolder::getRootFolderName('documents'));
+                $folderOldName = $folder->getFullFolderPath('documents');
+                $folder->setValue('fol_name', TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')));
                 $folder->save();
 
                 $sql = 'UPDATE '.TBL_FOLDERS.'
-                           SET fol_path = REPLACE(fol_path, \'/'.$rowFolder['fol_name'].'\', \'/'.TableFolder::getRootFolderName().'\')
+                           SET fol_path = REPLACE(fol_path, \'/'.$rowFolder['fol_name'].'\', \'/'.TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')).'\')
                          WHERE fol_org_id = '.$rowId;
                 self::$db->query($sql); // TODO add more params
 
@@ -442,18 +436,16 @@ final class ComponentUpdateSteps
                     try
                     {
                         //rename($folderOldName, $folder->getFullFolderPath());
-                        FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath());
+                        FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath('documents'));
                     }
                     catch (\RuntimeException $exception)
                     {
-                        $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath()));
+                        $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath('documents')));
                         // TODO
                     }
                 }
             }
         }
-
-        $gCurrentOrganization = $tempOrganization;
     }
 
     /**
