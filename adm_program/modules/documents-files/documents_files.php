@@ -83,6 +83,13 @@ if ($currentFolder->hasUploadRight())
         $page->addPageFunctionsMenuItem('menu_item_documents_upload_files', $gL10n->get('SYS_UPLOAD_FILES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'documents_files', 'id' => $getFolderId)),
             'fa-upload');
+
+        if($currentFolder->getValue('fol_fol_id_parent') > 0)
+        {
+            $page->addPageFunctionsMenuItem('menu_item_documents_edit_folder', $gL10n->get('SYS_EDIT_FOLDER'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_id' => $getFolderId)),
+                'fa-edit');
+        }
     }
 
     if($gCurrentUser->adminDocumentsFiles())
@@ -141,20 +148,27 @@ if (isset($folderContent['folders']))
             // Links for change and delete
             $additionalFolderFunctions = '';
 
+            if($gCurrentUser->adminDocumentsFiles())
+            {
+                $additionalFolderFunctions .= '
+                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_id' => $nextFolder['fol_id'])) . '">
+                    <i class="fas fa-lock" data-toggle="tooltip" title="'.$gL10n->get('SYS_PERMISSIONS').'"></i></a>';
+            }
+
             if($nextFolder['fol_exists'] === true)
             {
-                $additionalFolderFunctions = '
-                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_id' => $nextFolder['fol_id'])). '">
-                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
+                $additionalFolderFunctions .= '
+                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_id' => $nextFolder['fol_id'])) . '">
+                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_FOLDER').'"></i></a>';
             }
             elseif($gCurrentUser->adminDocumentsFiles())
             {
-                $additionalFolderFunctions = '
+                $additionalFolderFunctions .= '
                 <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover click" data-placement="left"
                     title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('SYS_FOLDER_NOT_EXISTS').'"></i>';
             }
 
-            $columnValues[] = $additionalFolderFunctions.'
+            $columnValues[] = $additionalFolderFunctions . '
                                 <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                     data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fol', 'element_id' => 'row_folder_'.$nextFolder['fol_id'],
                                     'name' => $nextFolder['fol_name'], 'database_id' => $nextFolder['fol_id'])).'">
