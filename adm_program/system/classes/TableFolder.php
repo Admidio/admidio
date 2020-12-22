@@ -523,16 +523,24 @@ class TableFolder extends TableAccess
     /**
      * Create a unique folder name for the root folder of the download module that contains
      * the shortname of the current organization.
-     * @param string $type The folder type of which the root should be determined.
+     * @param string $type                  The folder type of which the root should be determined.
+     *                                      If no type is set than **documents** will be set.
+     * @param string $organizationShortname The shortname of the organization for which the folder name should be returned
+     *                                      If no shortname is set than shortname of the current organization will be set.
      * @return string Returns the root foldername for the download module.
      */
-    public static function getRootFolderName($type = 'documents')
+    public static function getRootFolderName($type = 'documents', $organizationShortname = '')
     {
         global $gCurrentOrganization;
 
-        $orgName = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_shortname'));
+        if($organizationShortname === '')
+        {
+            $organizationShortname = $gCurrentOrganization->getValue('org_shortname');
+        }
 
-        return StringUtils::strToLower($type) . '_' . strtolower($orgName);
+        $organizationShortname = FileSystemUtils::getSanitizedPathEntry($organizationShortname);
+
+        return StringUtils::strToLower($type) . '_' . strtolower($organizationShortname);
     }
 
     /**
