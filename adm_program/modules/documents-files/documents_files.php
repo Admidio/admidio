@@ -76,13 +76,13 @@ if ($currentFolder->hasUploadRight())
     if ($gSettingsManager->getInt('max_file_upload_size') > 0)
     {
         // show links for upload, create folder and folder configuration
-        $page->addPageFunctionsMenuItem('menu_item_documents_create_folder', $gL10n->get('SYS_CREATE_FOLDER'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_id' => $getFolderId)),
-            'fa-plus-circle');
-
         $page->addPageFunctionsMenuItem('menu_item_documents_upload_files', $gL10n->get('SYS_UPLOAD_FILES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'documents_files', 'id' => $getFolderId)),
             'fa-upload');
+
+        $page->addPageFunctionsMenuItem('menu_item_documents_create_folder', $gL10n->get('SYS_CREATE_FOLDER'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_id' => $getFolderId)),
+            'fa-plus-circle');
 
         if($currentFolder->getValue('fol_fol_id_parent') > 0)
         {
