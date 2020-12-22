@@ -48,9 +48,18 @@ catch (\RuntimeException $exception)
     // => EXIT
 }
 
-// check the rights of the current folder
-// user must be administrator or must have the right to upload files
-$folder = new TableFolder($gDb, $getFolderId);
+try
+{
+    // check the rights of the current folder
+    // user must be administrator or must have the right to upload files
+    $folder = new TableFolder($gDb);
+    $folder->getFolderForDownload($getFolderId);
+}
+catch(AdmException $e)
+{
+    $e->showHtml();
+    // => EXIT
+}
 
 if (!$folder->hasUploadRight())
 {
@@ -105,9 +114,6 @@ elseif ($getMode === 3)
     {
         $newFolderName = admFuncVariableIsValid($_POST, 'new_folder', 'file', array('requireValue' => true));
         $newFolderDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
-
-        // get recordset of current folder from database
-        $folder->getFolderForDownload($getFolderId);
 
         // Test ob der Ordner schon existiert im Filesystem
         if (is_dir($folder->getFullFolderPath() . '/' . $newFolderName))
@@ -231,8 +237,12 @@ elseif ($getMode === 4)
         }
         elseif($getFolderId > 0)
         {
-            // get recordset of current folder from database and throw exception if necessary
-            $folder->getFolderForDownload($getFolderId);
+            // main folder could not be renamed
+            if ($folder->getValue('fol_fol_id_parent') === '')
+            {
+                $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                // => EXIT
+            }
 
             $oldFolder = $folder->getFullFolderPath();
             $newFolder = $newName;
@@ -301,17 +311,6 @@ elseif ($getMode === 5)
     }
     elseif ($getFolderId > 0)
     {
-        try
-        {
-            // get recordset of current folder from database
-            $folder->getFolderForDownload($getFolderId);
-        }
-        catch(AdmException $e)
-        {
-            $e->showText();
-            // => EXIT
-        }
-
         if ($folder->delete())
         {
             // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
@@ -339,22 +338,9 @@ elseif ($getMode === 6)
         // => EXIT
     }
 
-    try
-    {
-        $getName = urldecode($getName);
-
-        // get recordset of current folder from database
-        $folder->getFolderForDownload($getFolderId);
-    }
-    catch(AdmException $e)
-    {
-        $e->showHtml();
-        // => EXIT
-    }
-
+    $getName       = urldecode($getName);
     $newObjectPath = $folder->getFullFolderPath() . '/' . $getName;
-
-    $folId = (int) $folder->getValue('fol_id');
+    $folId         = (int) $folder->getValue('fol_id');
 
     // Pruefen ob das neue Element eine Datei order ein Ordner ist.
     if (is_file($newObjectPath))
@@ -433,9 +419,6 @@ elseif ($getMode === 7)
     {
         $postIntRolesViewRight   = array_map('intval', $_POST['adm_roles_view_right']);
         $postIntRolesUploadRight = array_map('intval', $_POST['adm_roles_upload_right']);
-
-        // get recordset of current folder from database
-        $folder->getFolderForDownload($getFolderId);
 
         if ($folder->getValue('fol_fol_id_parent'))
         {

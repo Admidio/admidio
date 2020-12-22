@@ -50,9 +50,18 @@ else
     $formValues['new_description'] = null;
 }
 
-// check the rights of the current folder
-// user must be administrator or must have the right to upload files
-$targetFolder = new TableFolder($gDb, $getFolderId);
+try
+{
+    // check the rights of the current folder
+    // user must be administrator or must have the right to upload files
+    $targetFolder = new TableFolder($gDb);
+    $targetFolder->getFolderForDownload($getFolderId);
+}
+catch(AdmException $e)
+{
+    $e->showHtml();
+    // => EXIT
+}
 
 if (!$targetFolder->hasUploadRight())
 {
@@ -91,13 +100,17 @@ try
     }
     else
     {
-        // get recordset of current folder from databases
-        $folder = new TableFolder($gDb);
-        $folder->getFolderForDownload($getFolderId);
+        // main folder should not be renamed
+        if ($targetFolder->getValue('fol_fol_id_parent') === '')
+        {
+            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+            // => EXIT
+        }
 
-        $originalName    = $folder->getValue('fol_name');
-        $createUserId    = (int) $folder->getValue('fol_usr_id');
-        $createTimestamp = $folder->getValue('fol_timestamp');
+        // read folder data to rename the folder
+        $originalName    = $targetFolder->getValue('fol_name');
+        $createUserId    = (int) $targetFolder->getValue('fol_usr_id');
+        $createTimestamp = $targetFolder->getValue('fol_timestamp');
 
         if ($formValues['new_name'] == null)
         {
@@ -106,7 +119,7 @@ try
 
         if ($formValues['new_description'] == null)
         {
-            $formValues['new_description'] = $folder->getValue('fol_description');
+            $formValues['new_description'] = $targetFolder->getValue('fol_description');
         }
     }
 }
