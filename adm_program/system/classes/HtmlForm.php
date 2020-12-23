@@ -284,7 +284,7 @@ class HtmlForm extends HtmlFormBasic
         $this->addHtml('<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
                         <a class="admidio-icon-link" href="javascript:void(0)" onclick="' . $onClickCode . '">
                             <i class="fas fa-sync-alt fa-lg" data-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>');
-        $this->closeControlStructure();
+        $this->closeControlStructure(array('helpTextIdInline' => ''));
 
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addInput(
