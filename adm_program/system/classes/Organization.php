@@ -221,7 +221,7 @@ class Organization extends TableAccess
         $sql = 'INSERT INTO '.TBL_FOLDERS.'
                        (fol_org_id, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp)
                 VALUES (?, \'DOCUMENTS\', ?, ?, 0, 1, ?, ?)';
-        $queryParams = array($orgId, TableFolder::getRootFolderName(), FOLDER_DATA, $systemUserId, DATETIME_NOW);
+        $queryParams = array($orgId, TableFolder::getRootFolderName('documents', $this->getValue('org_shortname')), FOLDER_DATA, $systemUserId, DATETIME_NOW);
         $this->db->queryPrepared($sql, $queryParams);
 
         // now create default roles

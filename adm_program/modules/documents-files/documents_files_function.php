@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Various functions for download module
+ * Various functions for documents & files module
  *
  * @copyright 2004-2020 The Admidio Team
  * @see https://www.admidio.org/
@@ -48,9 +48,18 @@ catch (\RuntimeException $exception)
     // => EXIT
 }
 
-// check the rights of the current folder
-// user must be administrator or must have the right to upload files
-$folder = new TableFolder($gDb, $getFolderId);
+try
+{
+    // check the rights of the current folder
+    // user must be administrator or must have the right to upload files
+    $folder = new TableFolder($gDb);
+    $folder->getFolderForDownload($getFolderId);
+}
+catch(AdmException $e)
+{
+    $e->showHtml();
+    // => EXIT
+}
 
 if (!$folder->hasUploadRight())
 {
@@ -106,9 +115,6 @@ elseif ($getMode === 3)
         $newFolderName = admFuncVariableIsValid($_POST, 'new_folder', 'file', array('requireValue' => true));
         $newFolderDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
 
-        // get recordset of current folder from database
-        $folder->getFolderForDownload($getFolderId);
-
         // Test ob der Ordner schon existiert im Filesystem
         if (is_dir($folder->getFullFolderPath() . '/' . $newFolderName))
         {
@@ -128,7 +134,7 @@ elseif ($getMode === 3)
                 $newFolder = new TableFolder($gDb);
 
                 $newFolder->setValue('fol_fol_id_parent', $folId);
-                $newFolder->setValue('fol_type', 'DOWNLOAD');
+                $newFolder->setValue('fol_type', 'DOCUMENTS');
                 $newFolder->setValue('fol_name', $newFolderName);
                 $newFolder->setValue('fol_description', $newFolderDescription);
                 $newFolder->setValue('fol_path', $folder->getFolderPath());
@@ -231,8 +237,12 @@ elseif ($getMode === 4)
         }
         elseif($getFolderId > 0)
         {
-            // get recordset of current folder from database and throw exception if necessary
-            $folder->getFolderForDownload($getFolderId);
+            // main folder could not be renamed
+            if ($folder->getValue('fol_fol_id_parent') === '')
+            {
+                $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                // => EXIT
+            }
 
             $oldFolder = $folder->getFullFolderPath();
             $newFolder = $newName;
@@ -301,17 +311,6 @@ elseif ($getMode === 5)
     }
     elseif ($getFolderId > 0)
     {
-        try
-        {
-            // get recordset of current folder from database
-            $folder->getFolderForDownload($getFolderId);
-        }
-        catch(AdmException $e)
-        {
-            $e->showText();
-            // => EXIT
-        }
-
         if ($folder->delete())
         {
             // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
@@ -339,22 +338,9 @@ elseif ($getMode === 6)
         // => EXIT
     }
 
-    try
-    {
-        $getName = urldecode($getName);
-
-        // get recordset of current folder from database
-        $folder->getFolderForDownload($getFolderId);
-    }
-    catch(AdmException $e)
-    {
-        $e->showHtml();
-        // => EXIT
-    }
-
+    $getName       = urldecode($getName);
     $newObjectPath = $folder->getFullFolderPath() . '/' . $getName;
-
-    $folId = (int) $folder->getValue('fol_id');
+    $folId         = (int) $folder->getValue('fol_id');
 
     // Pruefen ob das neue Element eine Datei order ein Ordner ist.
     if (is_file($newObjectPath))
@@ -379,7 +365,7 @@ elseif ($getMode === 6)
         // Ordner der DB hinzufuegen
         $newFolder = new TableFolder($gDb);
         $newFolder->setValue('fol_fol_id_parent', $folId);
-        $newFolder->setValue('fol_type', 'DOWNLOAD');
+        $newFolder->setValue('fol_type', 'DOCUMENTS');
         $newFolder->setValue('fol_name', $getName);
         $newFolder->setValue('fol_path', $folder->getFolderPath());
         $newFolder->setValue('fol_locked', $folder->getValue('fol_locked'));
@@ -410,7 +396,7 @@ elseif ($getMode === 7)
     }
     if(!isset($_POST['adm_roles_upload_right']))
     {
-        // upload right need not to be set because download module administrators still
+        // upload right need not to be set because documents & files module administrators still
         // have the right, so initialize the parameter
         $_POST['adm_roles_upload_right'] = array();
     }
@@ -422,7 +408,7 @@ elseif ($getMode === 7)
         // => EXIT
     }
 
-    // only users with download administration rights should set new roles rights
+    // only users with documents & files administration rights should set new roles rights
     if(!$gCurrentUser->adminDocumentsFiles())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -433,9 +419,6 @@ elseif ($getMode === 7)
     {
         $postIntRolesViewRight   = array_map('intval', $_POST['adm_roles_view_right']);
         $postIntRolesUploadRight = array_map('intval', $_POST['adm_roles_upload_right']);
-
-        // get recordset of current folder from database
-        $folder->getFolderForDownload($getFolderId);
 
         if ($folder->getValue('fol_fol_id_parent'))
         {

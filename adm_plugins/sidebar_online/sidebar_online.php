@@ -129,14 +129,12 @@ if($onlineUsersStatement->rowCount() > 0)
     {
         if($countMembers > 1)
         {
-            $allVisibleOnlineUsers[] = $gL10n->get('PLG_ONLINE_VAR_NUM_MEMBERS', $countMembers);
+            $allVisibleOnlineUsers[] = $gL10n->get('PLG_ONLINE_VAR_NUM_MEMBERS', array($countMembers));
         }
         else
         {
-            $allVisibleOnlineUsers[] = $gL10n->get('PLG_ONLINE_VAR_NUM_MEMBER', $countMembers);
+            $allVisibleOnlineUsers[] = $gL10n->get('PLG_ONLINE_VAR_NUM_MEMBER', array($countMembers));
         }
-
-        $usrIdMerker = (int) $row['ses_usr_id'];
     }
 
     if($plg_show_visitors && $countVisitors > 0)
