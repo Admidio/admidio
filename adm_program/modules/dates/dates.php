@@ -303,12 +303,13 @@ else
         $outputButtonParticipantsAssign = '';
         $outputLinkLocation    = '';
         $outputLinkRoom        = '';
-        $outputNumberMembers   = 0;
+        $outputNumberMembers   = '';
         $outputNumberLeaders   = '';
         $outputDeadline        = '';
         $dateElements          = array();
         $participantsArray     = array();
         $participateModalForm  = false;
+        $participationPossible = true;
 
         // If extended options for participation are allowed then use a modal form instead the dropdown button
         if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1)
@@ -497,15 +498,11 @@ else
                 $disableStatusAttend    = '';
                 $disableStatusTentative = '';
 
-                // Check limit of participants and deadline
-                if (!$date->participationPossible($outputNumberMembers))
+                // Check limit of participants
+                if ($date->getValue('dat_max_members') > 0 && $outputNumberMembers >= $date->getValue('dat_max_members'))
                 {
-                    // Check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
-                    if (!$participants->isMemberOfEvent($usrId) && $date->getValue('dat_max_members') > 0)
-                    {
-                        $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
-                        $iconParticipationStatus = '';
-                    }
+                    // No further members allowed
+                    $participationPossible = false;
 
                     // Check current user. If user is member of the event role then get his current approval status and set the options
                     if (in_array($usrId, $participantsArray, true))
@@ -574,6 +571,16 @@ else
                             <div class="alert alert-warning" role="alert">
                                 <strong>' .$gL10n->get('DAT_DEADLINE') . '! </strong>' . $gL10n->get('DAT_DEADLINE_ATTENTION') . '
                             </div>';
+                    }
+                }
+
+                if ($participationPossible === false)
+                {
+                    // Check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
+                    if (!$participants->isMemberOfEvent($usrId) && $date->getValue('dat_max_members') > 0)
+                    {
+                        $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
+                        $iconParticipationStatus = '';
                     }
                 }
 
