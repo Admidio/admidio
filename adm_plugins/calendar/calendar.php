@@ -76,7 +76,7 @@ if(!isset($plg_kal_cat_show))
 }
 
 // check if role conditions where set
-if(isset($plg_rolle_sql) && count($plg_rolle_sql) > 0)
+if(isset($plg_rolle_sql) && is_array($plg_rolle_sql) && count($plg_rolle_sql) > 0)
 {
     $sqlRoleIds = 'IN (' . implode(',', $plg_rolle_sql) . ')';
 }
