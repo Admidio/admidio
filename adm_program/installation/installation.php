@@ -31,7 +31,7 @@ if (is_file($configPath))
 }
 elseif (is_file($rootPath . '/config.php'))
 {
-    exit('<div style="color: #cc0000;">Old v1.x or v2.x Config-File detected! Please update first to the latest v3.3 Version!</div>');
+    exit('<div style="color: #cc0000;">Old Admidio version 1.x or 2.x config file detected! Please update first to the latest version 3 of Admidio and after that you can perform an update to version 4!<br /><br />Please view <a href="https://www.admidio.org/dokuwiki/doku.php?id=de:2.0:update_von_2.x_auf_3.x">our documentation</a>.</div>');
 }
 else
 {

@@ -11,8 +11,15 @@
 // if config file doesn't exists, than show installation dialog
 if (!is_file(__DIR__ . '/adm_my_files/config.php'))
 {
-    header('Location: adm_program/installation/index.php');
-    exit();
+    if(is_file(__DIR__ . '/config.php'))
+    {
+        exit('<div style="color: #cc0000;">Old Admidio version 1.x or 2.x config file detected! Please update first to the latest version 3 of Admidio and after that you can perform an update to version 4!<br /><br />Please view <a href="https://www.admidio.org/dokuwiki/doku.php?id=de:2.0:update_von_2.x_auf_3.x">our documentation</a>.</div>');
+    }
+    else
+    {
+        header('Location: adm_program/installation/index.php');
+        exit();
+    }
 }
 
 require_once(__DIR__ . '/adm_program/system/common.php');
