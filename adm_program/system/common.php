@@ -137,7 +137,7 @@ $gL10n = new Language($gLanguageData);
 $orgId    = (int) $gCurrentOrganization->getValue('org_id');
 $sesUsrId = (int) $gCurrentSession->getValue('ses_usr_id');
 
-// now if auto login is done, read global user data und create the menu
+// now if auto login is done, read global user data
 if($gCurrentSession->hasObject('gCurrentUser'))
 {
     /**
@@ -155,11 +155,6 @@ if($gCurrentSession->hasObject('gCurrentUser'))
         $gCurrentUser->clear();
         $gCurrentSession->setValue('ses_usr_id', '');
     }
-    /**
-     * @var Menu $gMenu
-     */
-    $gMenu =& $gCurrentSession->getObject('gMenu');
-    $gMenu->removeFunctionsNode();
 }
 else
 {
@@ -175,12 +170,24 @@ else
         $gCurrentUser->updateLoginData();
     }
 
-    // read menu from database
-    $gMenu = new Menu();
-
     // save all data in session
     $gCurrentSession->addObject('gProfileFields', $gProfileFields);
     $gCurrentSession->addObject('gCurrentUser', $gCurrentUser);
+}
+
+// create a global menu object that reads the menu structure only once
+if($gCurrentSession->hasObject('gMenu'))
+{
+    /**
+     * @var Menu $gMenu
+     */
+    $gMenu =& $gCurrentSession->getObject('gMenu');
+    $gMenu->removeFunctionsNode();
+}
+else
+{
+    // read menu from database
+    $gMenu = new Menu();
     $gCurrentSession->addObject('gMenu', $gMenu);
 }
 

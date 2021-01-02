@@ -79,7 +79,7 @@ if(!isset($plg_show_display_limit) || !is_numeric($plg_show_display_limit))
     $plg_show_display_limit = 200;
 }
 // Prüfen, ob die Rollenbedingung gesetzt wurde
-if(isset($plg_rolle_sql) && count($plg_rolle_sql) > 0)
+if(isset($plg_rolle_sql) && is_array($plg_rolle_sql) && count($plg_rolle_sql) > 0)
 {
     $sqlRol = 'IN (' . implode(',', $plg_rolle_sql) . ')';
 }
