@@ -188,6 +188,20 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
     display: block;
 }
 
+/* show vertical btn group in mobile view */
+@media (max-width: 767px)
+{
+    .btn-group {
+        display: block;
+    }
+
+    .btn-group .btn {
+        display: block;
+        float: none;
+        width: 100%;
+    }
+}
+
 /***********************************/
 /* Mark mandatory fields */
 /***********************************/
