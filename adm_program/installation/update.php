@@ -60,6 +60,13 @@ catch (AdmException $e)
     // => EXIT
 }
 
+// check if adm_my_files has write privileges
+if (!is_writable(ADMIDIO_PATH . FOLDER_DATA))
+{
+    echo $gL10n->get('INS_FOLDER_NOT_WRITABLE', array('adm_my_files'));
+    exit();
+}
+
 // now check if a valid installation exists.
 $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
 $pdoStatement = $gDb->queryPrepared($sql, array(), false);
