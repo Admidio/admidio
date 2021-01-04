@@ -288,7 +288,7 @@ foreach($listsResult['recordset'] as $row)
 
                     if(strlen($role->getValue('rol_description')) > 0)
                     {
-                        $roleDescription = $role->getValue('rol_description', 'html');
+                        $roleDescription = strip_tags($role->getValue('rol_description'));
 
                         if(strlen($roleDescription) > 200)
                         {
