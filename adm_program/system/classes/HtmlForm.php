@@ -54,7 +54,7 @@ class HtmlForm extends HtmlFormBasic
      */
     protected $htmlPage;
     /**
-     * @var int Number of elements in this form
+     * @var int Number of visible elements in this form. Hidden elements are not count because no interaction is possible.
      */
     protected $countElements = 0;
     /**
@@ -178,11 +178,10 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addButton($id, $text, array $options = array())
     {
-        ++$this->countElements;
-
         // create array with all options
         $optionsDefault = array('icon' => '', 'link' => '', 'class' => '', 'type' => 'button', 'data-admidio' => '');
         $optionsAll     = array_replace($optionsDefault, $options);
+        ++$this->countElements;
 
         // add text and icon to button
         $value = $text;
@@ -270,7 +269,6 @@ class HtmlForm extends HtmlFormBasic
         global $gL10n;
 
         $attributes = array('class' => 'captcha');
-        ++$this->countElements;
 
         // set specific css class for this field
         if ($class !== '')
@@ -325,7 +323,6 @@ class HtmlForm extends HtmlFormBasic
         $htmlIcon     = '';
         $htmlHelpIcon = '';
         $cssClasses   = 'checkbox';
-        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array(
@@ -403,8 +400,6 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addCustomContent($label, $content, array $options = array())
     {
-        ++$this->countElements;
-
         // create array with all options
         $optionsDefault = array(
             'referenceId'      => '',
@@ -463,7 +458,6 @@ class HtmlForm extends HtmlFormBasic
     {
         global $gSettingsManager, $gL10n;
 
-        ++$this->countElements;
         $attributes = array('class' => 'editor');
         $flagLabelVertical = $this->type;
 
@@ -568,7 +562,6 @@ class HtmlForm extends HtmlFormBasic
         global $gSettingsManager;
 
         $attributes = array('class' => 'form-control');
-        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array(
@@ -694,7 +687,6 @@ class HtmlForm extends HtmlFormBasic
         global $gL10n, $gSettingsManager, $gLogger;
 
         $attributes = array('class' => 'form-control');
-        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array(
@@ -997,7 +989,6 @@ class HtmlForm extends HtmlFormBasic
         global $gL10n;
 
         $attributes = array('class' => 'form-control');
-        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array(
@@ -1101,7 +1092,6 @@ class HtmlForm extends HtmlFormBasic
     public function addRadioButton($id, $label, array $values, array $options = array())
     {
         $attributes = array('class' => '');
-        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array(
@@ -1221,8 +1211,6 @@ class HtmlForm extends HtmlFormBasic
 
         $attributes = array('class' => 'form-control');
         $name = $id;
-
-        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array(
@@ -1825,7 +1813,6 @@ class HtmlForm extends HtmlFormBasic
     public function addStaticControl($id, $label, $value, array $options = array())
     {
         $attributes = array('class' => 'form-control-static');
-        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
@@ -2026,6 +2013,11 @@ class HtmlForm extends HtmlFormBasic
         $htmlIcon     = '';
         $htmlHelpIcon = '';
         $htmlIdFor    = '';
+
+        if ($property !== self::FIELD_HIDDEN)
+        {
+            ++$this->countElements;
+        }
 
         // set specific css class for this row
         if ($class !== '')
