@@ -21,6 +21,11 @@
  */
 class Participants
 {
+    const PARTICIPATION_UNKNOWN = 0;
+    const PARTICIPATION_MAYBE   = 1;
+    const PARTICIPATION_YES     = 2;
+    const PARTICIPATION_NO      = 3;
+
     /**
      * @var int Counter of participants of the date in current object.
      */
@@ -249,7 +254,7 @@ class Participants
             if ($participant['usrId'] === (int) $userId)
             {
                 // is member of the event
-                if ($participant['approved'] !== 3)
+                if ($participant['approved'] != Participants::PARTICIPATION_NO)
                 {
                     return true;
                 }
