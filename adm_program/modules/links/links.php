@@ -93,7 +93,7 @@ if($weblinks->getId() === 0)
 
     $page->addJavascript('
         $("#cat_id").change(function() {
-            $("#navbar_cat_id_form").submit();
+            $("#navbar_filter_form").submit();
         });',
         true
     );
