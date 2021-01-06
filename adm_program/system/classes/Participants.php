@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2020 The Admidio Team
+ * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -21,6 +21,11 @@
  */
 class Participants
 {
+    const PARTICIPATION_UNKNOWN = 0;
+    const PARTICIPATION_MAYBE   = 1;
+    const PARTICIPATION_YES     = 2;
+    const PARTICIPATION_NO      = 3;
+
     /**
      * @var int Counter of participants of the date in current object.
      */
@@ -249,7 +254,7 @@ class Participants
             if ($participant['usrId'] === (int) $userId)
             {
                 // is member of the event
-                if ($participant['approved'] !== 3)
+                if ($participant['approved'] != Participants::PARTICIPATION_NO)
                 {
                     return true;
                 }

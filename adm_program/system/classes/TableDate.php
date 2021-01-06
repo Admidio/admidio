@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2020 The Admidio Team
+ * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -421,7 +421,8 @@ class TableDate extends TableAccess
     public function participationPossible($currentCountParticipations)
     {
         if(!$this->deadlineExceeded()
-        && ($this->getValue('dat_max_members') > 0 && $currentCountParticipations >= $this->getValue('dat_max_members')))
+        && $this->getValue('dat_max_members') > 0
+        && $currentCountParticipations < $this->getValue('dat_max_members'))
         {
             return true;
         }

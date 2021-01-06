@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Show a list of all events
  *
- * @copyright 2004-2020 The Admidio Team
+ * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -309,7 +309,6 @@ else
         $dateElements          = array();
         $participantsArray     = array();
         $participateModalForm  = false;
-        $participationPossible = true;
 
         // If extended options for participation are allowed then use a modal form instead the dropdown button
         if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1)
@@ -501,21 +500,18 @@ else
                 // Check limit of participants
                 if ($date->getValue('dat_max_members') > 0 && $outputNumberMembers >= $date->getValue('dat_max_members'))
                 {
-                    // No further members allowed
-                    $participationPossible = false;
-
                     // Check current user. If user is member of the event role then get his current approval status and set the options
                     if (in_array($usrId, $participantsArray, true))
                     {
                         switch ($participantsArray[$usrId]['approved'])
                         {
-                            case 1:
+                            case Participants::PARTICIPATION_MAYBE:
                                 $disableStatusTentative = 'disabled';
                                 break;
-                            case 2:
+                            case Participants::PARTICIPATION_YES:
                                 $disableStatusAttend    = 'disabled';
                                 break;
-                            case 3:
+                            case Participants::PARTICIPATION_NO:
                                 $disableStatusAttend    = 'disabled';
                                 $disableStatusTentative = 'disabled';
                                 break;
@@ -574,14 +570,11 @@ else
                     }
                 }
 
-                if ($participationPossible === false)
+                // Check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
+                if (!$participants->isMemberOfEvent($usrId) && !$date->participationPossible($outputNumberMembers))
                 {
-                    // Check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
-                    if (!$participants->isMemberOfEvent($usrId) && $date->getValue('dat_max_members') > 0)
-                    {
-                        $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
-                        $iconParticipationStatus = '';
-                    }
+                    $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
+                    $iconParticipationStatus = '';
                 }
 
                 // Link to participants list
