@@ -553,6 +553,12 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
     width: 100%;
 }
 
+#plgCalendarTable td.plgCalendarToday {
+    background-color: #324b64;
+    border-radius: 5px;
+    color: white;
+}
+
 #plugin-login-form .btn {
     margin-bottom: 15px;
 }
