@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Handle update of Admidio database to a new version
  *
- * @copyright 2004-2020 The Admidio Team
+ * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -58,6 +58,13 @@ catch (AdmException $e)
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
         $gL10n->get('SYS_RELOAD'), 'fa-arrow-circle-right', ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
     // => EXIT
+}
+
+// check if adm_my_files has write privileges
+if (!is_writable(ADMIDIO_PATH . FOLDER_DATA))
+{
+    echo $gL10n->get('INS_FOLDER_NOT_WRITABLE', array('adm_my_files'));
+    exit();
 }
 
 // now check if a valid installation exists.

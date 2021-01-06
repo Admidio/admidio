@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Verschiedene Funktionen fuer Termine
  *
- * @copyright 2004-2020 The Admidio Team
+ * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -655,7 +655,7 @@ if (in_array($getMode, array(3, 4, 7), true))
                 case 3:  // User attends to the event
                     if ($participationPossible)
                     {
-                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 2);
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, Participants::PARTICIPATION_MAYBE);
                         $outputMessage = $gL10n->get('DAT_ATTEND_DATE', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));
                         // => EXIT
                     }
@@ -665,7 +665,7 @@ if (in_array($getMode, array(3, 4, 7), true))
                     if ($gSettingsManager->getBool('dates_save_all_confirmations'))
                     {
                         // Set user status to refused
-                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 3);
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, Participants::PARTICIPATION_NO);
                     }
                     else
                     {
@@ -680,7 +680,7 @@ if (in_array($getMode, array(3, 4, 7), true))
                 case 7:  // User may participate in the event
                     if ($participationPossible)
                     {
-                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 1);
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, Participants::PARTICIPATION_YES);
                         $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));
                         // => EXIT
                     }
