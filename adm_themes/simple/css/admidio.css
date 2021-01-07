@@ -64,6 +64,8 @@
 }
 
 .admidio-headline-mobile-menu {
+    width: 100%;
+    font-size: 1.1rem;
     color: #eeeeee;
     letter-spacing: 2px;
 }
@@ -130,11 +132,6 @@ a, .btn-link, .page-link, a.btn {
 
 a:hover, .page-link:hover, a.btn:hover {
     color: #25717d;
-}
-
-.admidio-headline-mobile-menu {
-    width: 100%;
-    font-size: 1.1rem;
 }
 
 a.btn-primary {
