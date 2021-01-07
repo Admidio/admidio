@@ -416,7 +416,7 @@ class TableDate extends TableAccess
      * Checks if it's still possible to participate to an event. Therefore the participation deadline of the should not be expired.
      * Also the maximum of allowed members for the event should not be exceeded or there is no maximum of allowed members set.
      * @param int $currentCountParticipations Number of participiants that participate to the current event.
-     * @return Returns true if still users can participate to the event or false if it's not possible any more.
+     * @return bool Returns true if still users can participate to the event or false if it's not possible any more.
      */
     public function participationPossible($currentCountParticipations)
     {
