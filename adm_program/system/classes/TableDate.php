@@ -413,16 +413,16 @@ class TableDate extends TableAccess
     }
 
     /**
-     * Checks if there are more places available than the current count of participiants is set. Also the deadline for registration
-     * will be checked. If the deadline is reached the method returns false.
+     * Checks if it's still possible to participate to an event. Therefore the participation deadline of the should not be expired.
+     * Also the maximum of allowed members for the event should not be exceeded or there is no maximum of allowed members set.
      * @param int $currentCountParticipations Number of participiants that participate to the current event.
-     * @return Returns true if still users can participate to the event or false if it's not possible any more.
+     * @return bool Returns true if still users can participate to the event or false if it's not possible any more.
      */
     public function participationPossible($currentCountParticipations)
     {
         if(!$this->deadlineExceeded()
-        && $this->getValue('dat_max_members') > 0
-        && $currentCountParticipations < $this->getValue('dat_max_members'))
+        && (  $this->getValue('dat_max_members') === 0
+           || ($this->getValue('dat_max_members') > 0 && $currentCountParticipations < $this->getValue('dat_max_members'))))
         {
             return true;
         }

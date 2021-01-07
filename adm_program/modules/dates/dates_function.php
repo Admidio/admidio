@@ -655,7 +655,7 @@ if (in_array($getMode, array(3, 4, 7), true))
                 case 3:  // User attends to the event
                     if ($participationPossible)
                     {
-                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, Participants::PARTICIPATION_MAYBE);
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, Participants::PARTICIPATION_YES);
                         $outputMessage = $gL10n->get('DAT_ATTEND_DATE', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));
                         // => EXIT
                     }
@@ -680,7 +680,7 @@ if (in_array($getMode, array(3, 4, 7), true))
                 case 7:  // User may participate in the event
                     if ($participationPossible)
                     {
-                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, Participants::PARTICIPATION_YES);
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, Participants::PARTICIPATION_MAYBE);
                         $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));
                         // => EXIT
                     }
