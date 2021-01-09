@@ -44,7 +44,7 @@ $page->addHtml('<div id="chat-wrap"><div id="chat-area"></div></div>');
 // show form
 $form = new HtmlForm('send-message-area', '', $page, array('enableFileUpload' => true));
 
-$form->addMultilineTextInput('sendie', 'Enter Message:', '', 2, array('maxLength' => 100));
+$form->addMultilineTextInput('sendie', $gL10n->get('SYS_WRITE_MESSAGE'), '', 2, array('maxLength' => 100));
 
 // add form to html page
 $page->addHtml($form->show());
