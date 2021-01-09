@@ -1399,6 +1399,7 @@
   <string name="SYS_WIDTH">Breite</string>
   <string name="SYS_WRITE_EMAIL">E-Mail schreiben</string>
   <string name="SYS_WRITE_ENTRY">Eintrag schreiben</string>
+  <string name="SYS_WRITE_MESSAGE">Nachricht schreiben</string>
   <string name="SYS_WRITE_PM">Private Nachricht schreiben</string>
   <string name="SYS_YES">Ja</string>
   <string name="SYS_YOUR_CONFIGURATION">Deine Konfigurationen</string>

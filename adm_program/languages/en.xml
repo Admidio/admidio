@@ -1397,6 +1397,7 @@
   <string name="SYS_WIDTH">Width</string>
   <string name="SYS_WRITE_EMAIL">Write e-mail</string>
   <string name="SYS_WRITE_ENTRY">Write entry</string>
+  <string name="SYS_WRITE_MESSAGE">Write message</string>
   <string name="SYS_WRITE_PM">Write private message</string>
   <string name="SYS_YES">Yes</string>
   <string name="SYS_YOUR_CONFIGURATION">Your configuration</string>

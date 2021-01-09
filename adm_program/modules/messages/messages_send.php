@@ -293,7 +293,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 $user = new User($gDb, $gProfileFields, $value);
 
                 // only send email to user if current user is allowed to view this user and he has a valid email address
-                if ($gCurrentUser->hasRightViewProfile($user) && StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email'))
+                if ($gCurrentUser->hasRightViewProfile($user))
                 {
                     $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
                               FROM ' . TBL_USERS . '
