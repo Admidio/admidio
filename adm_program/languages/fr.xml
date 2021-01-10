@@ -824,7 +824,7 @@
   <string name="SYS_CREATION_DATE">Date de création</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Version actuelle de la base de données</string>
-  <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Tu n\'as pas entré d\'adresse courriel valide ! \n\nEntre une adresse courriel dans ton #VAR1#Profile#VAR1#.</string>
+  <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Tu n\'as pas entré d\'adresse courriel valide ! \n\nEntre une adresse courriel dans ton #VAR1#Profile#VAR2#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Si cette option est activée, les objets (événements, annonces, liens web...) de cette catégorie sont également visibles sur les sites web des organisations suivantes:\n#VAR1_BOLD#.</string>
   <string name="SYS_DATA_MULTI_ORGA">Données visibles pour plusieurs organisations</string>
   <string name="SYS_DATA_PROTECTION">Confidentialité des données</string>

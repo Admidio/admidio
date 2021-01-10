@@ -815,7 +815,7 @@
   <string name="SYS_CREATION_DATE">Gemaakt op</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Huidige database-versie</string>
-  <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Ongeldig e-mailadres doorgegeven!\n\nGeef svp een e-mailadres door in uw #VAR1#profiel#VAR1#.</string>
+  <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Ongeldig e-mailadres doorgegeven!\n\nGeef svp een e-mailadres door in uw #VAR1#profiel#VAR2#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Als deze optie is geactiveerd, zijn de objecten (evenementen, mededelingen, weblinks ...) van deze categorie ook zichtbaar op de websites van de volgende organisaties:\n #VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Gegevens zichtbaar voor meerdere organisaties</string>
   <string name="SYS_DATA_PROTECTION">Privacy Policy</string>

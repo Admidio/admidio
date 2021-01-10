@@ -1213,12 +1213,36 @@ class User extends TableAccess
     }
 
     /**
-     * returns true if a column of user table or profile fields has changed
-     * @return bool
+     * Returns true if a column of user table or profile fields has changed
+     * @return bool Returns true if a column of user table or profile fields has changed
      */
     public function hasColumnsValueChanged()
     {
         return parent::hasColumnsValueChanged() || $this->mProfileFieldsData->hasColumnsValueChanged();
+    }
+
+    /**
+     * Check if the user has deposited an email. Therefore at least one profile field from type EMAIL
+     * must have a value.
+     * @return bool Return true if the user has deposited an email.
+     */
+    public function hasEmail()
+    {
+        if($this->getValue('EMAIL') !== '')
+        {
+            return true;
+        }
+
+        foreach($this->mProfileFieldsData->getProfileFields() as $profileField)// => $profileFieldConfig)
+        {
+            if($profileField->getValue('usf_type') === 'EMAIL'
+            && $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern')) !== '')
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
