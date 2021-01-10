@@ -805,7 +805,7 @@
   <string name="SYS_CREATED_BY">Skapad av #VAR1# på #VAR2#</string>
   <string name="SYS_CREATION_DATE">Skapad</string>
   <string name="SYS_CSV">CSV</string>
-  <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Ingen giltig e-postadress har angetts!\n\n Ange en e-postadress i din #VAR1# -profil #VAR1#.</string>
+  <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Ingen giltig e-postadress har angetts!\n\n Ange en e-postadress i din #VAR1# -profil #VAR2#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Om det här alternativet är aktiverat visas data (Händelser, tillkännagivanden, webblänkar ...) i denna kategori också på webbplatserna för följande organisationer: \n #VAR1_BOLD# </string>
   <string name="SYS_DATA_MULTI_ORGA">Data synliga för flera organisationer</string>
   <string name="SYS_DATA_PROTECTION">Dataskydd</string>

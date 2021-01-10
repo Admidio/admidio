@@ -815,7 +815,7 @@
   <string name="SYS_CREATION_DATE">Oprettet den</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Nuværende database version</string>
-  <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du har ikke indtastet en gyldig e-mail adresse!\n\nIndtast en gyldig e-mail adresse i din #VAR1#profil#VAR1#.</string>
+  <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du har ikke indtastet en gyldig e-mail adresse!\n\nIndtast en gyldig e-mail adresse i din #VAR1#profil#VAR2#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Hvis denne indstilling er aktiveret, vises dataene (Begivenheder, meddelelser, weblinks ...) i denne kategori også på følgende organisationers websteder:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Data er synlig for flere organisationer</string>
   <string name="SYS_DATA_PROTECTION">Data beskyttelse</string>
