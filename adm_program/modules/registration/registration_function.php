@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Neuen User zuordnen - Funktionen
+ * Approve new users - functions
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -10,14 +10,14 @@
  */
 
 /******************************************************************************
- * mode: 1 - Registrierung einem Benutzer zuordnen, der bereits Mitglied der Orga ist
- *       2 - Registrierung einem Benutzer zuordnen, der noch KEIN Mitglied der Orga ist
- *       3 - Benachrichtigung an den User, dass er nun fuer die aktuelle Orga freigeschaltet wurde
- *       4 - User-Account loeschen
+ * mode: 1 - Assign registration to a user who is already a member of the Orga
+ *       2 - Assign registration to a user who is NOT yet a member of the Orga
+ *       3 - Notification to the user that he/she is now unlocked for the current orga
+ *       4 - Delete user account
  *       5 - Create new user and assign roles automatically without dialog
- *       6 - Registrierung muss nicht zugeordnet werden, einfach Logindaten verschicken
- * new_user_id: Id des Logins, das verarbeitet werden soll
- * user_id:     Id des Benutzers, dem das neue Login zugeordnet werden soll
+ *       6 - Registration does not need to be assigned, simply send login data
+ * new_user_id: Id of the new registered user to be processed
+ * user_id:     Id of the user to whom the new login should be assigned
  *
  *****************************************************************************/
 
@@ -36,7 +36,7 @@ if(!$gCurrentUser->approveUsers())
     // => EXIT
 }
 
-// pruefen, ob Modul aufgerufen werden darf
+// module must be enabled in the settings
 if(!$gSettingsManager->getBool('registration_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));

@@ -1217,6 +1217,8 @@
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REQUIRED_FIELDS">Pflichtfelder</string>
   <string name="SYS_RESTRICTIONS">Einschränkungen</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer übernehmen</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">All data from the registration of an existing user will be adopted. If this setting is not set, only the username and password will be used for an existing user. In the case of new users, all data from the registration are always adopted. (Default: yes)</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen einsehen</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Ankündigungen verwalten</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Registrierungen verwalten und zuordnen</string>
