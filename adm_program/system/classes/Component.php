@@ -21,7 +21,7 @@
  * {
  *     $systemComponent = new Component($gDb);
  *     $systemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
- *     $systemComponent->checkDatabaseVersion(true, 'webmaster@example.com');
+ *     $systemComponent->checkDatabaseVersion(true, 'administrator@example.com');
  * }
  * catch(AdmException $e)
  * {

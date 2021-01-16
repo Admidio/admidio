@@ -130,7 +130,7 @@ final class StringUtils
     }
 
     /**
-     * removes html, php code and whitespaces at beginning and end of string or all elements of array
+     * removes html, php code and empty spaces at beginning and end of string or all elements of array
      * @param string|array<mixed,string> $value
      * @return string|array<mixed,string>
      */
@@ -143,7 +143,7 @@ final class StringUtils
         }
         else
         {
-            // remove whitespaces at beginning and end
+            // remove empty spaces at beginning and end
             $value = trim($value);
             // removes html and php code
             $value = strip_tags($value);

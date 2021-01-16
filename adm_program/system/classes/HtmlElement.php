@@ -114,20 +114,20 @@
  * HtmlElement::addAttribute('type', 'text');
  * HtmlElement::addAttribute('name', 'input');
  * HtmlElement::addHtml('Inputfield:');
- * // pass a whitespace because element has no content
+ * // pass a empty space because element has no content
  * HtmlElement::addData(' ', true); // true for self closing element (default: false)
  * // add a checkbox
  * HtmlElement::addElement('input');
  * HtmlElement::addAttribute('type', 'checkbox');
  * HtmlElement::addAttribute('name', 'checkbox');
  * HtmlElement::addHtml('Checkbox:');
- * // pass a whitespace because element has no content
+ * // pass a empty space because element has no content
  * HtmlElement::addData(' ', true); // true for self closing element (default: false)
  * // add a submit button
  * HtmlElement::addElement('input');
  * HtmlElement::addAttribute('type', 'submit');
  * HtmlElement::addAttribute('value', 'submit');
- * // pass a whitespace because element has no content
+ * // pass a empty space because element has no content
  * HtmlElement::addData(' ', true);
  *
  * echo HtmlElement::getHtmlElement();
@@ -481,7 +481,7 @@ abstract class HtmlElement
         }
         else
         {
-            // close last tag and delete whitespaces in log array
+            // close last tag and delete empty spaces in log array
             $this->htmlString .= '</' . $this->arrParentElements[$totalCount - 1] . '>';
             unset($this->arrParentElements[$totalCount - 1]);
         }

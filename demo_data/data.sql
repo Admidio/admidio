@@ -64,7 +64,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (1300, 1, 'ecard_card_picture_width', '400'),
 (1400, 1, 'ecard_card_picture_height', '250'),
 (2000, 1, 'ecard_template', 'postcard.tpl'),
-(2100, 1, 'email_administrator', 'webmaster@admidio.org'),
+(2100, 1, 'email_administrator', 'administrator@admidio.org'),
 (2200, 1, 'enable_announcements_module', '1'),
 (2300, 1, 'enable_auto_login', '1'),
 (2400, 1, 'enable_dates_ical', '1'),
@@ -175,7 +175,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (13001, 2, 'ecard_card_picture_width', '400'),
 (14001, 2, 'ecard_card_picture_height', '250'),
 (20001, 2, 'ecard_template', 'postcard.tpl'),
-(21001, 2, 'email_administrator', 'webmaster@admidio.org'),
+(21001, 2, 'email_administrator', 'administrator@admidio.org'),
 (22001, 2, 'enable_announcements_module', '1'),
 (23001, 2, 'enable_auto_login', '1'),
 (24001, 2, 'enable_dates_ical', '1'),
@@ -693,7 +693,7 @@ INSERT INTO %PREFIX%_files (fil_id, fil_fol_id, fil_name, fil_description, fil_l
 --
 
 INSERT INTO %PREFIX%_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_email, gbo_homepage, gbo_ip_address, gbo_locked, gbo_usr_id_create, gbo_timestamp_create, gbo_usr_id_change, gbo_timestamp_change) VALUES
-(1, 1, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_WELCOME', 'webmaster@admidio.org', 'https://www.admidio.org/', '84.63.38.55', 0, 1, '2011-12-25 12:14:42', NULL, NULL),
+(1, 1, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_WELCOME', 'administrator@admidio.org', 'https://www.admidio.org/', '84.63.38.55', 0, 1, '2011-12-25 12:14:42', NULL, NULL),
 (2, 1, 'Sepp Mayerchen', 'DEMO_GBO_GUEST_ENTRY1', NULL, NULL, '84.63.38.55', 0, NULL, '2012-01-03 20:16:42', NULL, NULL);
 
 --
@@ -701,7 +701,7 @@ INSERT INTO %PREFIX%_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_emai
 --
 
 INSERT INTO %PREFIX%_guestbook_comments (gbc_id, gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_ip_address, gbc_locked, gbc_usr_id_create, gbc_timestamp_create, gbc_usr_id_change, gbc_timestamp_change) VALUES
-(1, 2, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_COMMENT1', 'webmaster@admidio.org', '84.63.38.55', 0, 1, '2012-01-04 16:23:12', NULL, NULL);
+(1, 2, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_COMMENT1', 'administrator@admidio.org', '84.63.38.55', 0, 1, '2012-01-04 16:23:12', NULL, NULL);
 
 --
 -- Data for table adm_links
@@ -1109,7 +1109,7 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (7, 1, 7, '0211-85858585'),
 (8, 1, 10, '1968-04-16'),
 (9, 1, 11, '1'),
-(10, 1, 12, 'webmaster@admidio.org'),
+(10, 1, 12, 'administrator@admidio.org'),
 (11, 1, 13, 'https://www.admidio.org/'),
 (12, 1, 20, '001'),
 (13, 1, 21, 'blau'),
