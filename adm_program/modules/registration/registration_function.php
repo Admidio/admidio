@@ -6,10 +6,9 @@
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/******************************************************************************
+ *
+ * Parameters:
+ *
  * mode: 1 - Assign registration to a user who is already a member of the Orga
  *       2 - Assign registration to a user who is NOT yet a member of the Orga
  *       3 - Notification to the user that he/she is now unlocked for the current orga
@@ -102,7 +101,7 @@ if($getMode === 1 || $getMode === 3)
         {
             // Mail an den User schicken, um die Anmeldung bwz. die Zuordnung zur neuen Orga zu bestaetigen
             $systemMail = new SystemMail($gDb);
-            $systemMail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
+            $systemMail->addRecipientByUserId($getUserId);
             $systemMail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user);
 
             $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_EMAIL', array($user->getValue('EMAIL'))));
