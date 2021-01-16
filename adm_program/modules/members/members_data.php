@@ -193,7 +193,7 @@ if($gCurrentOrganization->countAllRecords() > 1)
 }
 
 // show all members (not accepted users should not be shown)
-$mainSql = 'SELECT usr_id, last_name.usd_value || \', \' || first_name.usd_value AS name,
+$mainSql = 'SELECT usr_id, CONCAT(last_name.usd_value, \', \', first_name.usd_value) AS name,
                    email.usd_value AS email, gender.usd_value AS gender, birthday.usd_value AS birthday,
                    usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) AS timestamp,
                    '.$memberOfThisOrganizationSelect.' AS member_this_orga,

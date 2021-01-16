@@ -45,30 +45,26 @@ if(!$gSettingsManager->getBool('registration_enable_module'))
 // create user objects
 $registrationUser = new UserRegistration($gDb, $gProfileFields, $getNewUserId);
 
-if($getUserId > 0)
-{
-    $user = new User($gDb, $gProfileFields, $getUserId);
-}
-
 if($getMode === 1 || $getMode === 2)
 {
-    // add new registration to an existing user account
-    $user->setValue('EMAIL', $registrationUser->getValue('EMAIL'));
-
-    // copy login data only if they do not already exists
-    if($user->getValue('usr_login_name') === '')
-    {
-        $user->setValue('usr_login_name', $registrationUser->getValue('usr_login_name'));
-        $user->setPassword($registrationUser->getValue('usr_password'), false, false);
-    }
-
     try
     {
-        // zuerst den neuen Usersatz loeschen, dann den alten Updaten,
-        // damit kein Duplicate-Key wegen dem Loginnamen entsteht
+        $user = new User($gDb, $gProfileFields, $getUserId);
+
+        // adopt the data of the registration user to the existing user account
+        $registrationUser->adoptUser($user);
+
+        // first delete the new user set, then update the old one to avoid a
+        // duplicate key because of the login name
         $registrationUser->notSendEmail();
         $registrationUser->delete();
         $user->save();
+
+        // every new user to the organization will get the default roles for registration
+        if($getMode === 1)
+        {
+            $user->assignDefaultRoles();
+        }
     }
     catch(AdmException $e)
     {
@@ -79,27 +75,34 @@ if($getMode === 1 || $getMode === 2)
         $e->showHtml();
         // => EXIT
     }
-}
 
-if($getMode === 2)
-{
-    // User existiert bereits, ist aber bisher noch kein Mitglied der aktuellen Orga,
-    // deshalb erst einmal Rollen zuordnen und dann spaeter eine Mail schicken
-    $gNavigation->addUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_id' => $getUserId, 'new_user_id' => $getNewUserId)));
-    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $getUserId)));
-    // => EXIT
+    // if current user has the right to assign roles then show roles dialog
+    // otherwise go to previous url (default roles are assigned automatically)
+    if($gCurrentUser->manageRoles())
+    {
+        // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
+        $gNavigation->addUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_id' => $getUserId, 'new_user_id' => $getNewUserId)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $getUserId)));
+        // => EXIT
+    }
+    else
+    {
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_id' => $getUserId, 'new_user_id' => $getNewUserId)));
+        // => EXIT
+    }
 }
-
-if($getMode === 1 || $getMode === 3)
+elseif($getMode === 3)
 {
+    $user = new User($gDb, $gProfileFields, $getUserId);
+
     $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
 
-    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
+    // execute only if system mails are supported
     if($gSettingsManager->getBool('enable_system_mails'))
     {
         try
         {
-            // Mail an den User schicken, um die Anmeldung bwz. die Zuordnung zur neuen Orga zu bestaetigen
+            // Send mail to the user to confirm the registration or the assignment to the new organization
             $systemMail = new SystemMail($gDb);
             $systemMail->addRecipientByUserId($getUserId);
             $systemMail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user);
