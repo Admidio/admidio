@@ -286,7 +286,7 @@ $page->addHtml('
         <div class="row">
         <div class="col-sm-8">');
             // create a static form
-            $form = new HtmlForm('profile_master_data_form');
+            $form = new HtmlForm('profile_basic_data_form');
 
             // add lastname and firstname
             if(strlen($user->getValue('GENDER')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'GENDER'))
@@ -462,7 +462,7 @@ $page->addHtml('
 </div>');
 
 // *******************************************************************************
-// Loop over all categories and profile fields except the master data
+// Loop over all categories and profile fields except the basic data
 // *******************************************************************************
 
 $category = '';

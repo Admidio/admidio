@@ -40,8 +40,8 @@
  *                     [ann_usr_id_change] =>
  *                     [8] =>
  *                     [ann_timestamp_change] =>
- *                     [9] => Paul Webmaster
- *                     [create_name] => Paul Webmaster
+ *                     [9] => Paul Smith
+ *                     [create_name] => Paul Smith
  *                     [10] =>
  *                     [change_name] =>
  *                 )

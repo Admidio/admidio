@@ -240,7 +240,7 @@ $arrParticipientsInformation = array(
 
 foreach($gProfileFields->getProfileFields() as $field)
 {
-    // at the end of category master data save positions for loginname and username
+    // at the end of category basic data save positions for loginname and username
     // they will be added after profile fields loop
     if($oldCategoryNameIntern === 'BASIC_DATA' && $field->getValue('cat_name_intern') !== 'BASIC_DATA')
     {
@@ -283,7 +283,7 @@ foreach($gProfileFields->getProfileFields() as $field)
     $oldCategoryNameIntern = $field->getValue('cat_name_intern');
 }
 
-    // Add loginname and photo at the end of category master data
+    // Add loginname and photo at the end of category basic data
     // add new category with start and end date of role membership
     if($posEndOfMasterData === 0)
     {
