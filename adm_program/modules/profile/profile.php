@@ -281,7 +281,7 @@ if($gCurrentUser->isAdministrator())
 
 $page->addHtml('
 <div class="card admidio-field-group" id="user_data_panel">
-    <div class="card-header">'.$gL10n->get('SYS_MASTER_DATA').'</div>
+    <div class="card-header">'.$gL10n->get('SYS_BASIC_DATA').'</div>
     <div class="card-body">
         <div class="row">
         <div class="col-sm-8">');
@@ -324,8 +324,8 @@ $page->addHtml('
 
             foreach($gProfileFields->getProfileFields() as $field)
             {
-                // nur Felder der Stammdaten anzeigen
-                if($field->getValue('cat_name_intern') === 'MASTER_DATA' && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern')))
+                // Display only fields of the basic data
+                if($field->getValue('cat_name_intern') === 'BASIC_DATA' && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern')))
                 {
                     switch($field->getValue('usf_name_intern'))
                     {
@@ -470,9 +470,9 @@ foreach($gProfileFields->getProfileFields() as $field)
 {
     $fieldNameIntern = $field->getValue('usf_name_intern');
 
-    // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
-    // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
-    if($field->getValue('cat_name_intern') !== 'MASTER_DATA' && $gCurrentUser->allowedViewProfileField($user, $fieldNameIntern))
+    // Fields of the category basic data was already shown, now show all other hidden
+    // fields only if you have the right to edit this profile
+    if($field->getValue('cat_name_intern') !== 'BASIC_DATA' && $gCurrentUser->allowedViewProfileField($user, $fieldNameIntern))
     {
         // show new category header if new category and field has value or is a checkbox field
         if($category !== $field->getValue('cat_name')

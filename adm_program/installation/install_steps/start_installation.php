@@ -99,7 +99,7 @@ $db->query($sql); // TODO add more params
 // create organization independent categories
 $sql = 'INSERT INTO '.TBL_CATEGORIES.'
                (cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 1, 1, ?, ?) -- $currUsrId, DATETIME_NOW';
+        VALUES (NULL, \'USF\', \'BASIC_DATA\', \'SYS_BASIC_DATA\', 1, 1, ?, ?) -- $currUsrId, DATETIME_NOW';
 $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
 $categoryIdMasterData = $db->lastInsertId();
 

@@ -741,6 +741,7 @@
   <string name="SYS_BACKUP_FILE">Backupdatei</string>
   <string name="SYS_BACKUP_FROM">Backup vom #VAR1# um #VAR2#</string>
   <string name="SYS_BACKUP_ONLY_MYSQL">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</string>
+  <string name="SYS_BASIC_DATA">Basic data</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
   <string name="SYS_CALENDARS">Kalender</string>
   <string name="SYS_CANT_DELETE_ROLE">Du kannst die Rolle #VAR1_BOLD# nicht löschen.</string>
@@ -1051,7 +1052,6 @@
   <string name="SYS_MAP">Karte</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Zeigt den Wohnort bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt eine Route vom eigenen Wohnort zum Wohnort dieses Benutzers bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
-  <string name="SYS_MASTER_DATA">Stammdaten</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmer</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# von max. #VAR2# Teilnehmern</string>
   <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
