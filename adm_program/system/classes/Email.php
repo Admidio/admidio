@@ -175,9 +175,10 @@ class Email extends PHPMailer
     }
 
     /**
-     * Add the name and email address of the given user id to the email. If the system setting **mail_send_to_all_addresses**
-     * is set than all email addresses of the given user id will be added.
+     * Add the name and email address of the given user id to the email as a normal recipient. If the system setting
+     * **mail_send_to_all_addresses** is set than all email addresses of the given user id will be added.
      * @param int $userId Id of an user who should be the recipient of the email.
+     * @return Returns true if recipients could be added to the email.
      * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
      *                     Possible reasons: MSG_NO_VALID_RECIPIENTS
      */
@@ -186,6 +187,7 @@ class Email extends PHPMailer
         global $gSettingsManager, $gProfileFields, $gL10n, $gDb;
 
         $sqlEmailField = '';
+        $numberRecipientsAdded = 0;
 
         // set condition if email should only send to the email address of the user field
         // with the internal name 'EMAIL'
@@ -219,6 +221,7 @@ class Email extends PHPMailer
                 if (StringUtils::strValidCharacters($row['email'], 'email'))
                 {
                     $this->addRecipient($row['email'], $row['firstname'] . ' ' . $row['lastname']);
+                    ++$numberRecipientsAdded;
                 }
             }
         }
@@ -226,6 +229,8 @@ class Email extends PHPMailer
         {
             throw new AdmException($gL10n->get('MSG_NO_VALID_RECIPIENTS'));
         }
+
+        return ($numberRecipientsAdded > 0 ? true : false)
     }
 
     /**

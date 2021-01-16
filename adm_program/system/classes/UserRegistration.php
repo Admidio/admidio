@@ -102,7 +102,7 @@ class UserRegistration extends User
         {
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipientByUserId($this->getValue('usr_id'));
+            $sysmail->addRecipientByUserId((int) $this->getValue('usr_id'));
             $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $this); // TODO Exception handling
         }
 
@@ -115,8 +115,9 @@ class UserRegistration extends User
      * be adopted otherwise only username and password will be added to the existing user. The adopted data of the
      * user will not be saved. That must be done in the calling method because of duplicate **usr_login_name**.
      * @param User $user Object of the existing user that should be adopted.
+     * @return Return true if all data could be adopted.
      */
-    function adoptUser(User $user)
+    public function adoptUser(User $user)
     {
         global $gSettingsManager, $gProfileFields;
 
@@ -135,6 +136,8 @@ class UserRegistration extends User
                 }
             }
         }
+
+        return true;
     }
 
     /**
@@ -153,7 +156,7 @@ class UserRegistration extends User
         {
             // send mail to user that his registration was rejected
             $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipientByUserId($this->getValue('usr_id'));
+            $sysmail->addRecipientByUserId((int) $this->getValue('usr_id'));
             $sysmail->sendSystemMail('SYSMAIL_REFUSE_REGISTRATION', $this); // TODO Exception handling
         }
 

@@ -17,7 +17,6 @@
  *       6 - Registration does not need to be assigned, simply send login data
  * new_user_id: Id of the new registered user to be processed
  * user_id:     Id of the user to whom the new login should be assigned
- *
  *****************************************************************************/
 
 require_once(__DIR__ . '/../../system/common.php');
