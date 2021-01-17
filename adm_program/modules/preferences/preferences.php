@@ -413,7 +413,9 @@ $formEmailDispatch = new HtmlForm(
     'email_dispatch_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'email_dispatch')),
     $page, array('class' => 'form-preferences')
 );
-
+$html = '<a id="send_test_mail" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '5')).'">
+            <i class="fas fa-envelope"></i>'.$gL10n->get('SYS_SEND_TEST_MAIL').'</a>';
+$formEmailDispatch->addCustomContent($gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextIdInline' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
 $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
 $formEmailDispatch->addSelectBox(
     'mail_send_method', $gL10n->get('MAI_SEND_METHOD'), $selectBoxEntries,
@@ -811,7 +813,7 @@ else
 {
     $html = getStaticText('success', $gL10n->get('SYS_OFF'));
 }
-$formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_MODE'), $html);
+$formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_OUTPUT'), $html);
 
 if(isset($gImportDemoData) && $gImportDemoData)
 {

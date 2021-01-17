@@ -842,7 +842,7 @@
   <string name="SYS_DEACTIVATE_ROLE">Deactivate role</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">If you deactivate role #VAR1_BOLD#, the role can no longer be used and assigned to objects. Likewise, all rights of this role are no longer effective. However, the role with its setting and all member mappings remains and can be reactivated at a later date.</string>
   <string name="SYS_DEACTIVATED">Inactive</string>
-  <string name="SYS_DEBUG_MODE">Debug mode</string>
+  <string name="SYS_DEBUG_OUTPUT">Debug output</string>
   <string name="SYS_DECIMAL_NUMBER">Decimal number</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Default assignment of registering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">If a new user is created or a new registration is accepted, then this role is automatically assigned to the new user. When the creator has the right to assign roles, all role mappings are displayed and can be changed accordingly.</string>
@@ -906,6 +906,8 @@
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">A new announcement at #VAR1# was created\n\nTitle: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">A new file was uploaded</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">A new file was uploaded at #VAR1#\n\nFile: #VAR2#\nUploaded by: #VAR3#\nUploaded at: #VAR4#</string>
+  <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# function test email</string>
+  <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">This email was sent via the #VAR1# website of the #VAR2# organization with the email settings stored there.</string>
   <string name="SYS_EMAIL_INVALID">E-mail address in field #VAR1_BOLD# includes invalid characters or is incomplete.</string>
   <string name="SYS_EMAIL_NOT_SEND">The email could not be sent to #VAR1_BOLD#.\n\nThe following error occurred:\n#VAR2#</string>
   <string name="SYS_EMAIL_SEND">Mail has been send successfully</string>
@@ -1296,6 +1298,7 @@
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, e-mails will be sent to all user e-mail addresses stored in the profile. If the setting is deactivated, e-mails will only be sent to the e-mail address from the profile field with the internal name EMAIL. (Default: enabled)</string>
   <string name="SYS_SEND_MAILS">Send e-mails</string>
   <string name="SYS_SEND_NEW_PW">Send new password</string>
+  <string name="SYS_SEND_TEST_MAIL">Send test mail</string>
   <string name="SYS_SENDER">Sender</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server settings do not allow files uploads.</string>
@@ -1339,6 +1342,8 @@
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">System-wide default list</string>
   <string name="SYS_SYSTEM_MAILS">System notifications</string>
+  <string name="SYS_TEST_MAIL">Test mail</string>
+  <string name="SYS_TEST_MAIL_DESC">Before you call this function, all settings for email sending must be saved!\n\nA simple email with the subject #VAR1_BOLD# will be sent to the email address of the logged in user based on the saved email settings. In the process, a dispatch log is output during SMTP dispatch, which can help in case of problems.</string>
   <string name="SYS_TEXT">Text</string>
   <string name="SYS_THURSDAY">Thursday</string>
   <string name="SYS_TIME">Time</string>

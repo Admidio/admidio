@@ -109,7 +109,7 @@ class Email extends PHPMailer
     public function __construct()
     {
         // Übername Einstellungen
-        global $gL10n, $gSettingsManager, $gDebug, $gLogger;
+        global $gL10n, $gSettingsManager, $gDebug;
 
         parent::__construct(true); // enable exceptions in PHPMailer
 
@@ -134,8 +134,7 @@ class Email extends PHPMailer
 
             if ($gDebug)
             {
-                $this->SMTPDebug = SMTP::DEBUG_SERVER;
-                $this->Debugoutput = $gLogger;
+                $this->setDebugMode();
             }
         }
         else
@@ -314,6 +313,55 @@ class Email extends PHPMailer
     }
 
     /**
+     * Set a debug modus for sending emails. This will only be useful if you use smtp for sending
+     * emails. If you still use PHP mail() there fill be no debug output. With the parameter
+     * **$outputGlobalVar** you have the option to put the output in a global variable
+     * **$GLOBALS['phpmailer_output_debug']**. Otherwise the output will go the the Admidio log files.
+     * @param bool $outputGlobalVar Put the output in a global variable **$GLOBALS['phpmailer_output_debug']**.
+     */
+    public function setDebugMode($outputGlobalVar = false)
+    {
+        global $gLogger;
+
+        if($outputGlobalVar)
+        {
+            $this->SMTPDebug = SMTP::DEBUG_CLIENT;
+            $this->Debugoutput = function($str, $level) {
+                $GLOBALS['phpmailer_output_debug'] .= $level . ': ' . $str . '<br />';
+            };
+        }
+        else
+        {
+            $this->SMTPDebug = SMTP::DEBUG_SERVER;
+            $this->Debugoutput = $gLogger;
+        }
+    }
+
+    /**
+     * Funktion um das Flag zu setzen, dass eine Kopie verschickt werden soll...
+     */
+    public function setCopyToSenderFlag()
+    {
+        $this->emCopyToSender = true;
+    }
+
+    /**
+     * The mail will be send as html email
+     */
+    public function setHtmlMail()
+    {
+        $this->emSendAsHTML = true;
+    }
+
+    /**
+     * Funktion um das Flag zu setzen, dass in der Kopie alle Empfaenger der Mail aufgelistet werden
+     */
+    public function setListRecipientsFlag()
+    {
+        $this->emListRecipients = true;
+    }
+
+    /**
      * method adds sender to mail
      * @param string $address
      * @param string $name
@@ -359,30 +407,6 @@ class Email extends PHPMailer
         }
 
         return true;
-    }
-
-    /**
-     * Funktion um das Flag zu setzen, dass eine Kopie verschickt werden soll...
-     */
-    public function setCopyToSenderFlag()
-    {
-        $this->emCopyToSender = true;
-    }
-
-    /**
-     * The mail will be send as html email
-     */
-    public function setHtmlMail()
-    {
-        $this->emSendAsHTML = true;
-    }
-
-    /**
-     * Funktion um das Flag zu setzen, dass in der Kopie alle Empfaenger der Mail aufgelistet werden
-     */
-    public function setListRecipientsFlag()
-    {
-        $this->emListRecipients = true;
     }
 
     /**

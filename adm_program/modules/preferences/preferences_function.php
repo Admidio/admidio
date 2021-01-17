@@ -11,9 +11,10 @@
  *
  * mode     : 1 - Save organization preferences
  *            2 - show welcome dialog for new organization
- *            3 - create new organization
- *            4 - show phpinfo()
- * form         - The name of the form preferences that were submitted.
+ *            3 - Create basic data for new organization in database
+ *            4 - set directory protection, write htaccess
+ *            5 - send test email
+ * form     : The name of the form preferences that were submitted.
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -277,6 +278,7 @@ switch($getMode)
         echo 'success';
         break;
 
+    // show welcome dialog for new organization
     case 2:
         if(isset($_SESSION['add_organization_request']))
         {
@@ -324,10 +326,8 @@ switch($getMode)
         $page->show();
         break;
 
+    // Create basic data for new organization in database
     case 3:
-        /******************************************************/
-        /* Create basic data for new organization in database */
-        /******************************************************/
         $_SESSION['add_organization_request'] = $_POST;
 
         // form fields are not filled
@@ -408,6 +408,7 @@ switch($getMode)
         unset($_SESSION['add_organization_request']);
         break;
 
+    // set directory protection, write htaccess
     case 4:
         if (is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess'))
         {
@@ -426,5 +427,51 @@ switch($getMode)
         $gLogger->warning('htaccess file could not be created!');
 
         echo $gL10n->get('SYS_OFF');
+        break;
+
+    // send test email
+    case 5:
+        $debugOutput = '';
+
+        $email = new Email();
+        $email->setDebugMode(true);
+
+        if ($gSettingsManager->getBool('mail_html_registered_users'))
+        {
+            $email->setHtmlMail();
+        }
+
+        // set email data
+        $email->setSender($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
+        //$email->addRecipientByUserId($gCurrentUser->getValue('usr_id'));
+        $email->addRecipient($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRSTNAME') . ' ' . $gCurrentUser->getValue('LASTNAME'));
+        $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname'))));
+        $email->setTemplateText(
+            $gL10n->get('SYS_EMAIL_FUNCTION_TEST_CONTENT', array($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'))),
+            $gCurrentUser->getValue('FIRSTNAME') . ' ' . $gCurrentUser->getValue('LASTNAME'),
+            $gCurrentUser->getValue('EMAIL'),
+            $gL10n->get('SYS_ADMINISTRATOR')
+        );
+
+        // finally send the mail
+        $sendResult = $email->sendEmail();
+
+        if(isset($GLOBALS['phpmailer_output_debug']))
+        {
+            $debugOutput .= '<br /><br /><h3>' . $gL10n->get('SYS_DEBUG_OUTPUT') . '</h3>' . $GLOBALS['phpmailer_output_debug'];
+        }
+
+        // message if send/save is OK
+        if ($sendResult === true) // don't remove check === true. ($sendResult) won't work
+        {
+            $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'email_dispatch')));
+            $gMessage->show($gL10n->get('SYS_EMAIL_SEND') . $debugOutput);
+            // => EXIT
+        }
+        else
+        {
+            $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', array($gL10n->get('SYS_RECIPIENT'), $sendResult)) . $debugOutput);
+            // => EXIT
+        }
         break;
 }
