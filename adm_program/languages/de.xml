@@ -1345,7 +1345,7 @@
   <string name="SYS_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
   <string name="SYS_SYSTEM_MAILS">Systembenachrichtigungen</string>
   <string name="SYS_TEST_MAIL">Testmail</string>
-  <string name="SYS_TEST_MAIL_DESC">Bevor du diese Funktion aufrufst, müssen alle Einstellungen für den E-Mail-Versand gespeichert werden!\n\nEs wird eine einfache E-Mail mit dem Betreff #VAR1_BOLD# an die E-Mail-Adresse des angemeldeten Benutzers auf Grundlage der gespeicherten E-Mail-Einstellungen versendet. Dabei wird beim SMTP-Versand ein Versandprotokoll ausgegeben, welches bei Problemen helfen kann.</string>
+  <string name="SYS_TEST_MAIL_DESC">Bevor du diese Funktion aufrufst, müssen alle Einstellungen für den E-Mail-Versand gespeichert werden!\nEs wird eine einfache E-Mail mit dem Betreff #VAR1_BOLD# an die E-Mail-Adresse des angemeldeten Benutzers auf Grundlage der gespeicherten E-Mail-Einstellungen versendet. Dabei wird beim SMTP-Versand ein Versandprotokoll ausgegeben, welches bei Problemen helfen kann.</string>
   <string name="SYS_TEXT">Text</string>
   <string name="SYS_THURSDAY">Donnerstag</string>
   <string name="SYS_TIME">Uhrzeit</string>
