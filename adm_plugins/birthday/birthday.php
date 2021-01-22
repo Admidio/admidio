@@ -72,7 +72,7 @@ if(!isset($plg_show_zeitraum) || !is_numeric($plg_show_zeitraum))
 
 if(!isset($plg_show_future) || !is_numeric($plg_show_future))
 {
-    $plg_show_future = 10;
+    $plg_show_future = 5;
 }
 if(!isset($plg_show_display_limit) || !is_numeric($plg_show_display_limit))
 {
