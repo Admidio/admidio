@@ -73,7 +73,7 @@
         <img class="d-none d-md-block align-top" src="{$urlTheme}/images/admidio_logo.png"
             alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
       </a>
-      <span id="headline-membership" class="d-block d-lg-none">{$organizationName}</span>
+      <span id="headline-organization" class="d-block d-lg-none">{$organizationName}</span>
       <span id="headline-membership" class="d-none d-lg-block">{$l10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION')} - {$organizationName}</span>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
