@@ -44,7 +44,7 @@ $plg_show_hinweis_keiner = 0;
 $plg_show_zeitraum = 5;
 
 // Show all birthdays of the next x days
-$plg_show_future = 10;
+$plg_show_future = 5;
 
 // How many birthdays should bei displayed as a maximum?
 $plg_show_display_limit = 200;
