@@ -213,7 +213,7 @@ final class StringUtils
      * In addition the function checks if the name contains .. or a . at the beginning.
      * @param string $filename     Name of the file that should be checked.
      * @param bool $checkExtension If set to **true** then the extension will be checked against a block-list of extensions:
-     *                             php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi
+     *                             php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi, phar
      * @throws AdmException SYS_FILENAME_EMPTY : Filename was empty
      *                      SYS_FILENAME_INVALID : Filename contains invalid characters
      *                      SYS_FILE_EXTENSION_INVALID : Filename contains invalid extension
@@ -240,7 +240,7 @@ final class StringUtils
             // check if the extension is not listed as blocked
             $extensionBlocklist = array('php', 'php3', 'php4', 'php5', 'pht', 'html', 'htm', 'phtml',
                 'shtml', 'htaccess', 'htpasswd', 'pl', 'js', 'vbs', 'asp',
-                'asa', 'cer', 'asax', 'swf', 'xap', 'cgi', 'ssi');
+                'asa', 'cer', 'asax', 'swf', 'xap', 'cgi', 'ssi', 'phar');
             $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
             if (in_array($fileExtension, $extensionBlocklist, true))
