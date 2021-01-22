@@ -27,7 +27,7 @@ if (is_file(__DIR__ . '/config.php'))
 // set default values if there no value has been stored in the config.php
 if(!isset($plgCountFiles) || !is_numeric($plgCountFiles))
 {
-    $plgCountFiles = 10;
+    $plgCountFiles = 5;
 }
 
 if(!isset($plgMaxCharsFilename) || !is_numeric($plgMaxCharsFilename))
