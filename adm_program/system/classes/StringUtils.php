@@ -221,6 +221,8 @@ final class StringUtils
      */
     public static function strIsValidFileName($filename, $checkExtension = true)
     {
+        $filename = urldecode($filename);
+
         // If the filename was not empty
         if (trim($filename) === '')
         {
@@ -228,7 +230,7 @@ final class StringUtils
         }
 
         // filename should only contains valid characters and don't start with a dot
-        if (basename($filename) !== $filename || self::strStartsWith($filename, '.')
+        if (basename($filename) !== $filename || self::strStartsWith($filename, '.' || self::strContains($filename, '//') || self::strContains($filename, '\\'))
         || (!self::strValidCharacters($filename, 'file') && $checkExtension)
         || (!self::strValidCharacters($filename, 'folder') && !$checkExtension))
         {
