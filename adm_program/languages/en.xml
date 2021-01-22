@@ -527,7 +527,7 @@
   <string name="ORG_SEND_PASSWORD_DESC">If the user has forgotten his/her password, he/she can automatically send a newly generated password. If this option is disabled, the user can only send a request to the administrator by e-mail, so that he can create a new password. For the password to be sent, the setting #VAR1_BOLD# must also be set. (Default: yes)</string>
   <string name="ORG_SEND_NEW_PASSWORD">Send new password</string>
   <string name="ORG_SHOW_CREATE_EDIT">Show creator and timestamp of creation</string>
-  <string name="ORG_SHOW_CREATE_EDIT_DESC">A field is normally visible to all users. If this function is not selected, the data can only be seen by users who have the right to edit all users. In own profile, the user can see and edit the data.</string>
+  <string name="ORG_SHOW_CREATE_EDIT_DESC">In some places the creator and the user with the last change to a record is displayed together with a timestamp. This setting can be used to determine whether this information is displayed at all and whether the user should be displayed with the user name or with their first and last name.</string>
   <string name="ORG_SHOW_ALL_USERS">Optional show all users</string>
   <string name="ORG_SHOW_ALL_USERS_DESC">If this option is enabled, former members and members of other organizations will be displayed in addition to the active members of the current organization. Otherwise only members of the current organization will be displayed. When creating new users or assigning registrations all organizations will still be checked for existing users.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
