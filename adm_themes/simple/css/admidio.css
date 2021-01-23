@@ -555,6 +555,10 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
     color: white;
 }
 
+#plgCalendarTable td {
+    text-align: center;
+}
+
 #plugin-login-form .btn {
     margin-bottom: 15px;
 }

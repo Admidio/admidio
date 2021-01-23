@@ -409,8 +409,6 @@ $boolNewStart = false;
 
 while($currentDay <= $lastDayCurrentMonth)
 {
-    $terValid = false;
-    $gebValid = false;
     $terLink  = '';
     $gebLink  = '';
     $htmlContent  = '';
@@ -425,12 +423,9 @@ while($currentDay <= $lastDayCurrentMonth)
     if($plg_ter_aktiv)
     {
         // only show events in dependence of the events module view settings
-        if($gSettingsManager->getInt('enable_dates_module') === 1
-        || ($gSettingsManager->getInt('enable_dates_module') === 2 && $gValidLogin))        {
-            $terValid = true;
-        }
-
-        if($terValid && array_key_exists($currentDay, $eventsMonthDayArray))
+        if(array_key_exists($currentDay, $eventsMonthDayArray)
+        && ($gSettingsManager->getInt('enable_dates_module') === 1
+           || ($gSettingsManager->getInt('enable_dates_module') === 2 && $gValidLogin)))
         {
             $hasEvents = true;
 
@@ -486,16 +481,8 @@ while($currentDay <= $lastDayCurrentMonth)
     // add users birthdays to the calendar
     if($plg_geb_aktiv)
     {
-        if(!$plg_geb_login)
-        {
-            $gebValid = true;
-        }
-        if($plg_geb_login && $gValidLogin)
-        {
-            $gebValid = true;
-        }
-
-        if($gebValid && array_key_exists($currentDay, $birthdaysMonthDayArray))
+        if(array_key_exists($currentDay, $birthdaysMonthDayArray)
+        && (!$plg_geb_login || ($plg_geb_login && $gValidLogin)))
         {
             foreach($birthdaysMonthDayArray[$currentDay] as $birthdayArray)
             {
@@ -534,27 +521,27 @@ while($currentDay <= $lastDayCurrentMonth)
     if(!$hasEvents && $hasBirthdays) // no events but birthdays
     {
         $plgLinkClass = 'geb';
-        $plgLinkClassSaturday = 'plgCalendarBirthSaturday';
-        $plgLinkClassSunday   = 'plgCalendarBirthSunday';
-        $plgLinkClassWeekday  = 'plgCalendarBirthDay';
+        $plgLinkClassSaturday .= ' plgCalendarBirthDay';
+        $plgLinkClassSunday   .= ' plgCalendarBirthDay';
+        $plgLinkClassWeekday  .= ' plgCalendarBirthDay';
 
     }
 
     if($hasEvents && !$hasBirthdays) // events but no birthdays
     {
         $plgLinkClass = 'date';
-        $plgLinkClassSaturday = 'plgCalendarDateSaturday';
-        $plgLinkClassSunday   = 'plgCalendarDateSunday';
-        $plgLinkClassWeekday  = 'plgCalendarDateDay';
+        $plgLinkClassSaturday .= ' plgCalendarDateDay';
+        $plgLinkClassSunday   .= ' plgCalendarDateDay';
+        $plgLinkClassWeekday  .= ' plgCalendarDateDay';
 
     }
 
     if($hasEvents && $hasBirthdays) // events and birthdays
     {
         $plgLinkClass = 'merge';
-        $plgLinkClassSaturday = 'plgCalendarMergeSaturday';
-        $plgLinkClassSunday   = 'plgCalendarMergeSunday';
-        $plgLinkClassWeekday  = 'plgCalendarMergeDay';
+        $plgLinkClassSaturday .= ' plgCalendarMergeDay';
+        $plgLinkClassSunday   .= ' plgCalendarMergeDay';
+        $plgLinkClassWeekday  .= ' plgCalendarMergeDay';
 
     }
     // Ende der Linklassenbestimmung
@@ -567,21 +554,21 @@ while($currentDay <= $lastDayCurrentMonth)
     $rest = ($currentDay + $firstWeekdayOfMonth - 1) % 7;
     if($currentDay === $today)
     {
-        echo '<td align="center" class="plgCalendarToday">';
+        echo '<td class="plgCalendarToday">';
     }
     elseif($rest === 6)
     {
         // CSS aus der Linkklassenbestimmung verwenden
-        echo '<td align="center" class="'.$plgLinkClassSaturday.'">';
+        echo '<td class="'.$plgLinkClassSaturday.'">';
     }
     elseif($rest === 0)
     {
         // CSS aus der Linkklassenbestimmung verwenden
-        echo '<td align="center" class="'.$plgLinkClassSunday.'">';
+        echo '<td class="'.$plgLinkClassSunday.'">';
     }
     else
     {
-        echo '<td align="center" class="'.$plgLinkClassWeekday.'">';
+        echo '<td class="'.$plgLinkClassWeekday.'">';
     }
 
     if($currentDay === $today || $hasEvents || $hasBirthdays)
