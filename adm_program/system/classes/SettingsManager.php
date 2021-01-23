@@ -27,6 +27,10 @@ class SettingsManager
      * @var bool Indicator if settings was already full loaded
      */
     private $initFullLoad = false;
+    /**
+     * @var bool Indicator if exceptions should be thrown when reading settings
+     */
+    private $throwExceptions = true;
 
     /**
      * SettingsManager constructor.
@@ -89,16 +93,26 @@ class SettingsManager
      */
     public function del($name)
     {
-        if (!self::isValidName($name))
+        if (!self::isValidName($name) && $this->throwExceptions)
         {
             throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
-        if (!$this->has($name))
+        if (!$this->has($name) && $this->throwExceptions)
         {
             throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
 
         $this->delete($name);
+    }
+
+    /**
+     * If this method is called than this object will not throw any exception when reading settings. This is
+     * useful before an Admidio update started because not all settings are available before update.
+     * When writing a setting to the database exceptions will still be thrown.
+     */
+    public function disableExceptions()
+    {
+        $this->throwExceptions = false;
     }
 
     /**
@@ -125,11 +139,11 @@ class SettingsManager
      */
     public function get($name, $update = false)
     {
-        if (!self::isValidName($name))
+        if (!self::isValidName($name) && $this->throwExceptions)
         {
             throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
-        if (!$this->has($name, $update))
+        if (!$this->has($name, $update) && $this->throwExceptions)
         {
             throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
@@ -150,7 +164,7 @@ class SettingsManager
         $value = $this->get($name, $update);
         $value = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
-        if ($value === null)
+        if ($value === null && $this->throwExceptions)
         {
             throw new \InvalidArgumentException('Settings value of name "' . $name . '" is not of type bool!');
         }
@@ -171,7 +185,7 @@ class SettingsManager
         $value = $this->get($name, $update);
         $value = filter_var($value, FILTER_VALIDATE_INT);
 
-        if ($value === false)
+        if ($value === false && $this->throwExceptions)
         {
             throw new \InvalidArgumentException('Settings value of name "' . $name . '" is not of type int!');
         }
@@ -192,7 +206,7 @@ class SettingsManager
         $value = $this->get($name, $update);
         $value = filter_var($value, FILTER_VALIDATE_FLOAT);
 
-        if ($value === false)
+        if ($value === false && $this->throwExceptions)
         {
             throw new \InvalidArgumentException('Settings value of name "' . $name . '" is not of type float!');
         }
@@ -221,7 +235,7 @@ class SettingsManager
      */
     public function has($name, $update = false)
     {
-        if (!self::isValidName($name))
+        if (!self::isValidName($name) && $this->throwExceptions)
         {
             throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
@@ -298,7 +312,7 @@ class SettingsManager
                    AND prf_name   = ? -- $name';
         $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId, $name));
 
-        if ($pdoStatement->rowCount() === 0)
+        if ($pdoStatement->rowCount() === 0 && $this->throwExceptions)
         {
             throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
@@ -343,7 +357,7 @@ class SettingsManager
             {
                 throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
             }
-            if (!self::isValidValue($value))
+            if (!self::isValidValue($value) && $this->throwExceptions)
             {
                 throw new \UnexpectedValueException('Settings value "' . $value . '" is an invalid value!');
             }
