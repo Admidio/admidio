@@ -409,8 +409,10 @@ $boolNewStart = false;
 
 while($currentDay <= $lastDayCurrentMonth)
 {
-    $terLink = '';
-    $gebLink = '';
+    $terValid = false;
+    $gebValid = false;
+    $terLink  = '';
+    $gebLink  = '';
     $htmlContent  = '';
     $textContent  = '';
     $hasEvents    = false;
@@ -422,8 +424,6 @@ while($currentDay <= $lastDayCurrentMonth)
     // add events to the calendar
     if($plg_ter_aktiv)
     {
-        $terValid = false;
-
         // only show events in dependence of the events module view settings
         if($gSettingsManager->getInt('enable_dates_module') === 1
         || ($gSettingsManager->getInt('enable_dates_module') === 2 && $gValidLogin))        {
@@ -486,8 +486,6 @@ while($currentDay <= $lastDayCurrentMonth)
     // add users birthdays to the calendar
     if($plg_geb_aktiv)
     {
-        $gebValid = false;
-
         if(!$plg_geb_login)
         {
             $gebValid = true;
