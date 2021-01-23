@@ -46,10 +46,6 @@ if(!isset($plg_ter_aktiv))
 {
     $plg_ter_aktiv = 1;
 }
-if(!isset($plg_ter_login))
-{
-    $plg_ter_login = 0;
-}
 if(!isset($plg_geb_aktiv))
 {
     $plg_geb_aktiv = 1;
@@ -98,24 +94,23 @@ if($plg_ajaxbox)
     header('Content-Type: text/html; charset=utf-8');
 }
 
-// Nun noch einige Variablen initialisieren
-
+// initialize some variables
 $gebLink = '';
 $plgLink = '';
 $currentMonth = '';
 $currentYear  = '';
 $today        = 0;
 
-// Date ID auslesen oder aktuellen Monat und Jahr erzeugen
 if($getDateId !== '')
 {
+    // Read Date ID or generate current month and year
     $currentMonth = substr($getDateId, 0, 2);
     $currentYear  = substr($getDateId, 2, 4);
     $_SESSION['plugin_calendar_last_month'] = $currentMonth.$currentYear;
 }
 elseif(isset($_SESSION['plugin_calendar_last_month']))
 {
-    // Zuletzt gewählten Monat anzeigen
+    // Show last selected month
     $currentMonth = substr($_SESSION['plugin_calendar_last_month'], 0, 2);
     $currentYear  = substr($_SESSION['plugin_calendar_last_month'], 2, 4);
 }
@@ -424,16 +419,14 @@ while($currentDay <= $lastDayCurrentMonth)
 
     $dateObj = \DateTime::createFromFormat('Y-m-j', $currentYear.'-'.$currentMonth.'-'.$currentDay);
 
-    // Terminanzeige generieren
+    // add events to the calendar
     if($plg_ter_aktiv)
     {
         $terValid = false;
-        if(!$plg_ter_login)
-        {
-            $terValid = true;
-        }
-        if($plg_ter_login && $gValidLogin)
-        {
+
+        // only show events in dependence of the events module view settings
+        if($gSettingsManager->getInt('enable_dates_module') === 1
+        || ($gSettingsManager->getInt('enable_dates_module') === 2 && $gValidLogin))        {
             $terValid = true;
         }
 
@@ -490,7 +483,7 @@ while($currentDay <= $lastDayCurrentMonth)
         }
     }
 
-    // Geburtstagsanzeige generieren
+    // add users birthdays to the calendar
     if($plg_geb_aktiv)
     {
         $gebValid = false;
