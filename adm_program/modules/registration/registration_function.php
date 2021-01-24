@@ -103,7 +103,7 @@ elseif($getMode === 3)
         {
             // Send mail to the user to confirm the registration or the assignment to the new organization
             $systemMail = new SystemMail($gDb);
-            $systemMail->addRecipientByUserId($getUserId);
+            $systemMail->addRecipientsByUserId($getUserId);
             $systemMail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user);
 
             $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_EMAIL', array($user->getValue('EMAIL'))));

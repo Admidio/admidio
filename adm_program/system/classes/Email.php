@@ -182,7 +182,7 @@ class Email extends PHPMailer
      * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
      *                     Possible reasons: MSG_NO_VALID_RECIPIENTS
      */
-    public function addRecipientByUserId($userId)
+    public function addRecipientsByUserId($userId)
     {
         global $gSettingsManager, $gProfileFields, $gL10n, $gDb;
 
@@ -230,7 +230,7 @@ class Email extends PHPMailer
             throw new AdmException($gL10n->get('MSG_NO_VALID_RECIPIENTS'));
         }
 
-        return ($numberRecipientsAdded > 0 ? true : false)
+        return $numberRecipientsAdded > 0;
     }
 
     /**
