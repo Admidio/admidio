@@ -413,7 +413,6 @@ $formEmailDispatch = new HtmlForm(
     'email_dispatch_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'email_dispatch')),
     $page, array('class' => 'form-preferences')
 );
-
 $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
 $formEmailDispatch->addSelectBox(
     'mail_send_method', $gL10n->get('MAI_SEND_METHOD'), $selectBoxEntries,
@@ -480,6 +479,9 @@ $formEmailDispatch->addInput(
     'mail_smtp_password', $gL10n->get('MAI_SMTP_PASSWORD'), $formValues['mail_smtp_password'],
     array('type' => 'password', 'maxLength' => 50, 'helpTextIdInline' => 'MAI_SMTP_PASSWORD_DESC')
 );
+$html = '<a id="send_test_mail" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '5')).'">
+            <i class="fas fa-envelope"></i>'.$gL10n->get('SYS_SEND_TEST_MAIL').'</a>';
+$formEmailDispatch->addCustomContent($gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextIdInline' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
 $formEmailDispatch->addSubmitButton(
     'btn_save_email_dispatch', $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
@@ -811,7 +813,7 @@ else
 {
     $html = getStaticText('success', $gL10n->get('SYS_OFF'));
 }
-$formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_MODE'), $html);
+$formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_OUTPUT'), $html);
 
 if(isset($gImportDemoData) && $gImportDemoData)
 {
