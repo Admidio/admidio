@@ -45,12 +45,15 @@ if($getModeration && !$gCurrentUser->editGuestbookRight())
     // => EXIT
 }
 
-// Navigation faengt hier im Modul an, wenn keine Eintrag direkt aufgerufen wird
-if($getGboId === 0)
+// add url to navigation stack
+if($getGboId > 0)
 {
-    $gNavigation->clear();
+    $gNavigation->addUrl(CURRENT_URL, $getHeadline);
 }
-$gNavigation->addUrl(CURRENT_URL);
+else
+{
+    $gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
+}
 
 // create html page object
 $page = new HtmlPage('admidio-guestbook');

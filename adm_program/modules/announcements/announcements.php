@@ -54,8 +54,15 @@ $announcements->setDateRange($getDateFrom, $getDateTo);
 // get parameters and number of recordsets
 $announcementsCount = $announcements->getDataSetCount();
 
-// Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
+// add url to navigation stack
+if($getId > 0)
+{
+    $gNavigation->addUrl(CURRENT_URL, $getHeadline);
+}
+else
+{
+    $gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
+}
 
 // create html page object
 $page = new HtmlPage('admidio-announcements', $getHeadline);
@@ -103,15 +110,17 @@ $page->addJavascript('
     true
 );
 
-// create filter menu with elements for category
-$filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
-$form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
-$form->addSelectBoxForCategories(
-    'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', HtmlForm::SELECT_BOX_MODUS_FILTER,
-    array('defaultValue' => $getCatId));
-$filterNavbar->addForm($form->show());
-$page->addHtml($filterNavbar->show());
-
+if($getId === 0)
+{
+    // create filter menu with elements for category
+    $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
+    $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
+    $form->addSelectBoxForCategories(
+        'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', HtmlForm::SELECT_BOX_MODUS_FILTER,
+        array('defaultValue' => $getCatId));
+    $filterNavbar->addForm($form->show());
+    $page->addHtml($filterNavbar->show());
+}
 
 if($announcementsCount === 0)
 {

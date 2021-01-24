@@ -55,8 +55,15 @@ else
 // Output head
 $headline = $weblinks->getHeadline($getHeadline);
 
-// Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline);
+// add url to navigation stack
+if($getLinkId > 0)
+{
+    $gNavigation->addUrl(CURRENT_URL, $getHeadline);
+}
+else
+{
+    $gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
+}
 
 // create html page object
 $page = new HtmlPage('admidio-weblinks', $headline);
