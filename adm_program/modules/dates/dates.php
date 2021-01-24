@@ -93,10 +93,17 @@ else
 // read relevant events from database
 $datesResult = $dates->getDataSet($getStart, $datesPerPage);
 
-if($getViewMode === 'html' && $getId === 0)
+if($getViewMode === 'html')
 {
-    // Navigation of the module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $dates->getHeadline($getHeadline));
+    if($getId > 0)
+    {
+        $gNavigation->addUrl(CURRENT_URL, $dates->getHeadline($getHeadline));
+    }
+    else
+    {
+        // Navigation of the module starts here
+        $gNavigation->addStartUrl(CURRENT_URL, $dates->getHeadline($getHeadline));
+    }
 }
 
 // create html page object
@@ -160,50 +167,50 @@ if($getViewMode === 'html')
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT')),
                 'fa-th-large');
         }
-    }
 
-    // create filter menu with elements for calendar and start-/enddate
-    $filterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
-    $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('headline' => $getHeadline, 'view' => $getView)), $page, array('type' => 'navbar', 'setFocus' => false));
-    if($gSettingsManager->getBool('dates_show_rooms'))
-    {
-        $selectBoxEntries = array(
-            'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
-            'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
-            'room'         => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_ROOM'),
-            'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
-            'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
+        // create filter menu with elements for calendar and start-/enddate
+        $filterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
+        $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('headline' => $getHeadline, 'view' => $getView)), $page, array('type' => 'navbar', 'setFocus' => false));
+        if($gSettingsManager->getBool('dates_show_rooms'))
+        {
+            $selectBoxEntries = array(
+                'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
+                'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
+                'room'         => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_ROOM'),
+                'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
+                'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
+            );
+        }
+        else
+        {
+            $selectBoxEntries = array(
+                'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
+                'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
+                'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
+                'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
+            );
+        }
+        $form->addSelectBox(
+            'sel_change_view', $gL10n->get('SYS_VIEW'), $selectBoxEntries,
+            array('defaultValue' => $getView, 'showContextDependentFirstEntry' => false)
         );
-    }
-    else
-    {
-        $selectBoxEntries = array(
-            'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
-            'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
-            'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
-            'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
+        $form->addSelectBoxForCategories(
+            'cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', HtmlForm::SELECT_BOX_MODUS_FILTER,
+            array('defaultValue' => (int) $dates->getParameter('cat_id'))
         );
+        $form->addInput(
+            'date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'),
+            array('type' => 'date', 'maxLength' => 10)
+        );
+        $form->addInput(
+            'date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'),
+            array('type' => 'date', 'maxLength' => 10)
+        );
+        $form->addInput('view', '', $getView, array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
+        $filterNavbar->addForm($form->show());
+        $page->addHtml($filterNavbar->show());
     }
-    $form->addSelectBox(
-        'sel_change_view', $gL10n->get('SYS_VIEW'), $selectBoxEntries,
-        array('defaultValue' => $getView, 'showContextDependentFirstEntry' => false)
-    );
-    $form->addSelectBoxForCategories(
-        'cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', HtmlForm::SELECT_BOX_MODUS_FILTER,
-        array('defaultValue' => (int) $dates->getParameter('cat_id'))
-    );
-    $form->addInput(
-        'date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'),
-        array('type' => 'date', 'maxLength' => 10)
-    );
-    $form->addInput(
-        'date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'),
-        array('type' => 'date', 'maxLength' => 10)
-    );
-    $form->addInput('view', '', $getView, array('property' => HtmlForm::FIELD_HIDDEN));
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-    $filterNavbar->addForm($form->show());
-    $page->addHtml($filterNavbar->show());
 }
 else // $getViewMode = 'print'
 {

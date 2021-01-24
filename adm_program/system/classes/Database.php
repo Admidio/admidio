@@ -891,7 +891,7 @@ class Database
              </div>';
 
         // display database error to user
-        if (isset($gSettingsManager) && defined('THEME_ADMIDIO_PATH') && !headers_sent())
+        if (isset($gSettingsManager) && defined('THEME_PATH') && !headers_sent())
         {
             // create html page object
             $page = new HtmlPage('admidio-error', $gL10n->get('SYS_DATABASE_ERROR'));
