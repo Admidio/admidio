@@ -174,6 +174,65 @@ class Email extends PHPMailer
     }
 
     /**
+     * Add the name and email address of the given user id to the email as a normal recipient. If the system setting
+     * **mail_send_to_all_addresses** is set than all email addresses of the given user id will be added.
+     * @param int $userId Id of an user who should be the recipient of the email.
+     * @return Returns true if recipients could be added to the email.
+     * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
+     *                     Possible reasons: MSG_NO_VALID_RECIPIENTS
+     */
+    public function addRecipientsByUserId($userId)
+    {
+        global $gSettingsManager, $gProfileFields, $gL10n, $gDb;
+
+        $sqlEmailField = '';
+        $numberRecipientsAdded = 0;
+
+        // set condition if email should only send to the email address of the user field
+        // with the internal name 'EMAIL'
+        if (!$gSettingsManager->getBool('mail_send_to_all_addresses'))
+        {
+            $sqlEmailField = ' AND field.usf_name_intern = \'EMAIL\' ';
+        }
+
+        $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
+                  FROM ' . TBL_USER_DATA . ' AS email
+            INNER JOIN ' . TBL_USER_FIELDS . ' AS field
+                    ON field.usf_id = email.usd_usf_id
+                   AND field.usf_type = \'EMAIL\'
+                       ' . $sqlEmailField . '
+            INNER JOIN ' . TBL_USER_DATA . ' AS last_name
+                    ON last_name.usd_usr_id = email.usd_usr_id
+                   AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+            INNER JOIN ' . TBL_USER_DATA . ' AS first_name
+                    ON first_name.usd_usr_id = email.usd_usr_id
+                   AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+                 WHERE email.usd_usr_id = ? -- userId
+                   AND LENGTH(email.usd_value) > 0 ';
+
+        $statement = $gDb->queryPrepared($sql, array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $userId));
+
+        if ($statement->rowCount() > 0)
+        {
+            // all email addresses will be attached as BCC
+            while ($row = $statement->fetch())
+            {
+                if (StringUtils::strValidCharacters($row['email'], 'email'))
+                {
+                    $this->addRecipient($row['email'], $row['firstname'] . ' ' . $row['lastname']);
+                    ++$numberRecipientsAdded;
+                }
+            }
+        }
+        else
+        {
+            throw new AdmException($gL10n->get('MSG_NO_VALID_RECIPIENTS'));
+        }
+
+        return $numberRecipientsAdded > 0;
+    }
+
+    /**
      * method adds CC recipients to mail
      * @param string $address
      * @param string $name

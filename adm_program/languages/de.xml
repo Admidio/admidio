@@ -1219,6 +1219,8 @@
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REQUIRED_FIELDS">Pflichtfelder</string>
   <string name="SYS_RESTRICTIONS">Einschränkungen</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer übernehmen</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Existiert ein neu registrierter Benutzer bereits in der Datenbank, so werden bei gesetzter Einstellung alle Daten aus der Registrierung in den bestehenden Benutzer übernommen. Wenn diese Einstellung nicht gesetzt ist, werden nur der Benutzername und das Passwort übernommen. Bei Benutzern, welche bisher noch nicht vorhanden waren, werden unabhängig von dieser Einstellung immer alle Daten aus der Registrierung übernommen. (Voreinstellung: ja)</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen einsehen</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Ankündigungen verwalten</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Registrierungen verwalten und zuordnen</string>

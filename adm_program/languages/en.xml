@@ -1206,6 +1206,8 @@
   <string name="SYS_REGISTERED_AS">Logged in as</string>
   <string name="SYS_REGISTRATION">Registration</string>
   <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Adopt all data from the registration for the existing user</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">If a newly registered user already exists in the database, all data from the registration will be transferred to the existing user if this setting is set. If this setting is not set, only the user name and the password are taken over. In case of users, which did not exist before, all data from the registration will always be taken over, independent of this setting. (Default: yes)</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationship configuration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relationship configurations</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">If set, then a user can edit the profile of another user to which he is related to. For an asymmetric relationship, the right is assigned separately for each relationship, and for a symmetric relationship, both users can edit the other profile, and in case of a unidirectional relationship, only the user with the relationship stored can edit the other profile.</string>

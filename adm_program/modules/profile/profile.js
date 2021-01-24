@@ -17,7 +17,7 @@ function ProfileJS(gRootPath) {
     this.deleteFRole_ConfirmText = "";
     this.errorID                 = 0;
 
-    this.reloadRoleMemberships = function() {
+    this.reloadRoleMemberships = function () {
         $.get({
             url: this.url + "?mode=4&user_id=" + this.userId,
             dataType: "html",
@@ -30,34 +30,38 @@ function ProfileJS(gRootPath) {
             }
         });
     };
-    this.reloadFormerRoleMemberships = function() {
-        $.get({
-            url: this.url + "?mode=5&user_id=" + this.userId,
-            dataType: "html",
-            success: function(responseText) {
-                $("#profile_former_roles_box_body").html(responseText);
-                formSubmitEvent();
+    this.reloadFormerRoleMemberships = function () {
+        $.get(
+            {
+                url: this.url + "?mode=5&user_id=" + this.userId,
+                dataType: "html",
+                success: function(responseText) {
+                    $("#profile_former_roles_box_body").html(responseText);
+                    formSubmitEvent();
+                }
             }
-        });
+        );
     };
-    this.reloadFutureRoleMemberships = function() {
-        $.get({
-            url: this.url + "?mode=6&user_id=" + this.userId,
-            dataType: "html",
-            success: function(responseText) {
-                $("#profile_future_roles_box_body").html(responseText);
-                formSubmitEvent();
+    this.reloadFutureRoleMemberships = function () {
+        $.get(
+            {
+                url: this.url + "?mode=6&user_id=" + this.userId,
+                dataType: "html",
+                success: function(responseText) {
+                    $("#profile_future_roles_box_body").html(responseText);
+                    formSubmitEvent();
+                }
             }
-        });
+        );
     };
 
-    this.markLeader = function(element) {
+    this.markLeader = function (element) {
         if (element.checked) {
             var roleName = getRoleName(element);
             $("#" + roleName).attr("checked", true);
         }
     };
-    this.unMarkLeader = function(element) {
+    this.unMarkLeader = function (element) {
         if (!element.checked) {
             var roleName = getRoleName(element);
             $("#" + roleName).attr("checked", false);
@@ -70,11 +74,11 @@ function ProfileJS(gRootPath) {
         return "leader-" + number;
     }
 
-    this.toggleDetailsOn = function(memberId) {
+    this.toggleDetailsOn = function (memberId) {
         $("#membership_period_" + memberId).css({"visibility": "visible", "display": "block"});
     };
 
-    this.toggleDetailsOff = function(memberId) {
+    this.toggleDetailsOff = function (memberId) {
         $("#membership_period_" + memberId).css({"visibility": "hidden", "display": "none"});
     };
 }

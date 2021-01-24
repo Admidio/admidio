@@ -122,7 +122,7 @@ switch($getMode)
                     break;
 
                 case 'registration':
-                    $checkboxes = array('registration_enable_module', 'enable_registration_captcha', 'enable_registration_admin_mail');
+                    $checkboxes = array('registration_enable_module', 'enable_registration_captcha', 'registration_adopt_all_data', 'enable_registration_admin_mail');
                     break;
 
                 case 'email_dispatch':
