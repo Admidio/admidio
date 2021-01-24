@@ -443,8 +443,7 @@ switch($getMode)
 
         // set email data
         $email->setSender($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
-        //$email->addRecipientByUserId($gCurrentUser->getValue('usr_id'));
-        $email->addRecipient($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRSTNAME') . ' ' . $gCurrentUser->getValue('LASTNAME'));
+        $email->addRecipientsByUserId((int) $gCurrentUser->getValue('usr_id'));
         $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname'))));
         $email->setTemplateText(
             $gL10n->get('SYS_EMAIL_FUNCTION_TEST_CONTENT', array($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'))),
