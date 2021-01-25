@@ -188,7 +188,7 @@ class FunctionClass
             {
                 // anstelle der URL muss nun noch der Server-Pfad gesetzt werden
                 $replaces = array(
-                    THEME_URL   => THEME_ADMIDIO_PATH,
+                    THEME_URL   => THEME_PATH,
                     ADMIDIO_URL => ADMIDIO_PATH
                 );
                 $imgServerPath = StringUtils::strMultiReplace($match, $replaces);

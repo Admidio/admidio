@@ -261,6 +261,7 @@ try
 }
 catch(AdmException $e)
 {
+    $gSettingsManager->disableExceptions();
     $gMessage->showThemeBody(false);
     $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php');
     $gMessage->show($e->getText(), 'Admidio - '.$gL10n->get('INS_UPDATE'));

@@ -42,6 +42,7 @@ $defaultOrgPreferences = array(
     'registration_enable_module'     => '1',
     'enable_registration_captcha'    => '1',
     'enable_registration_admin_mail' => '1',
+    'registration_adopt_all_data'    => '1',
 
     // E-mail dispatch
     'mail_send_method'               => 'phpmail',

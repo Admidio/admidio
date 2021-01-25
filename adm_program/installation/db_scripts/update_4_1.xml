@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
+    <step id="10">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_name = 'registration_adopt_all_data'</step>
     <step id="20">UPDATE %PREFIX%_categories SET cat_name = 'SYS_BASIC_DATA' WHERE cat_name LIKE 'SYS_MASTER_DATA'</step>
     <step id="30">UPDATE %PREFIX%_categories SET cat_name_INTERN = 'BASIC_DATA' WHERE cat_name_intern LIKE 'MASTER_DATA'</step>
     <step>stop</step>
