@@ -114,7 +114,7 @@ if(!empty($_POST['recipient_email']))
             $user->setValue('usr_activation_code', $activationId);
 
             $sysmail = new SystemMail($gDb);
-            $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME', 'database').' '.$user->getValue('LAST_NAME', 'database'));
+            $sysmail->addRecipientsByUserId((int) $user->getValue('usr_id'));
             $sysmail->setVariable(1, $newPassword);
             $sysmail->setVariable(2, SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/password_activation.php', array('usr_id' => (int) $user->getValue('usr_id'), 'aid' => $activationId)));
             $sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user);

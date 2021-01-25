@@ -1,24 +1,22 @@
 <?php
 /**
  ***********************************************************************************************
- * Neuen User zuordnen - Funktionen
+ * Approve new users - functions
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/******************************************************************************
- * mode: 1 - Registrierung einem Benutzer zuordnen, der bereits Mitglied der Orga ist
- *       2 - Registrierung einem Benutzer zuordnen, der noch KEIN Mitglied der Orga ist
- *       3 - Benachrichtigung an den User, dass er nun fuer die aktuelle Orga freigeschaltet wurde
- *       4 - User-Account loeschen
- *       5 - Create new user and assign roles automatically without dialog
- *       6 - Registrierung muss nicht zugeordnet werden, einfach Logindaten verschicken
- * new_user_id: Id des Logins, das verarbeitet werden soll
- * user_id:     Id des Benutzers, dem das neue Login zugeordnet werden soll
  *
+ * Parameters:
+ *
+ * mode: 1 - Assign registration to a user who is already a member of the Orga
+ *       2 - Assign registration to a user who is NOT yet a member of the Orga
+ *       3 - Notification to the user that he/she is now unlocked for the current orga
+ *       4 - Delete user account
+ *       5 - Create new user and assign roles automatically without dialog
+ *       6 - Registration does not need to be assigned, simply send login data
+ * new_user_id: Id of the new registered user to be processed
+ * user_id:     Id of the user to whom the new login should be assigned
  *****************************************************************************/
 
 require_once(__DIR__ . '/../../system/common.php');
@@ -36,7 +34,7 @@ if(!$gCurrentUser->approveUsers())
     // => EXIT
 }
 
-// pruefen, ob Modul aufgerufen werden darf
+// module must be enabled in the settings
 if(!$gSettingsManager->getBool('registration_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -46,30 +44,26 @@ if(!$gSettingsManager->getBool('registration_enable_module'))
 // create user objects
 $registrationUser = new UserRegistration($gDb, $gProfileFields, $getNewUserId);
 
-if($getUserId > 0)
-{
-    $user = new User($gDb, $gProfileFields, $getUserId);
-}
-
 if($getMode === 1 || $getMode === 2)
 {
-    // add new registration to an existing user account
-    $user->setValue('EMAIL', $registrationUser->getValue('EMAIL'));
-
-    // copy login data only if they do not already exists
-    if($user->getValue('usr_login_name') === '')
-    {
-        $user->setValue('usr_login_name', $registrationUser->getValue('usr_login_name'));
-        $user->setPassword($registrationUser->getValue('usr_password'), false, false);
-    }
-
     try
     {
-        // zuerst den neuen Usersatz loeschen, dann den alten Updaten,
-        // damit kein Duplicate-Key wegen dem Loginnamen entsteht
+        $user = new User($gDb, $gProfileFields, $getUserId);
+
+        // adopt the data of the registration user to the existing user account
+        $registrationUser->adoptUser($user);
+
+        // first delete the new user set, then update the old one to avoid a
+        // duplicate key because of the login name
         $registrationUser->notSendEmail();
         $registrationUser->delete();
         $user->save();
+
+        // every new user to the organization will get the default roles for registration
+        if($getMode === 1)
+        {
+            $user->assignDefaultRoles();
+        }
     }
     catch(AdmException $e)
     {
@@ -80,29 +74,36 @@ if($getMode === 1 || $getMode === 2)
         $e->showHtml();
         // => EXIT
     }
-}
 
-if($getMode === 2)
-{
-    // User existiert bereits, ist aber bisher noch kein Mitglied der aktuellen Orga,
-    // deshalb erst einmal Rollen zuordnen und dann spaeter eine Mail schicken
-    $gNavigation->addUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_id' => $getUserId, 'new_user_id' => $getNewUserId)));
-    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $getUserId)));
-    // => EXIT
+    // if current user has the right to assign roles then show roles dialog
+    // otherwise go to previous url (default roles are assigned automatically)
+    if($gCurrentUser->manageRoles())
+    {
+        // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
+        $gNavigation->addUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_id' => $getUserId, 'new_user_id' => $getNewUserId)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $getUserId)));
+        // => EXIT
+    }
+    else
+    {
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_id' => $getUserId, 'new_user_id' => $getNewUserId)));
+        // => EXIT
+    }
 }
-
-if($getMode === 1 || $getMode === 3)
+elseif($getMode === 3)
 {
+    $user = new User($gDb, $gProfileFields, $getUserId);
+
     $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
 
-    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
+    // execute only if system mails are supported
     if($gSettingsManager->getBool('enable_system_mails'))
     {
         try
         {
-            // Mail an den User schicken, um die Anmeldung bwz. die Zuordnung zur neuen Orga zu bestaetigen
+            // Send mail to the user to confirm the registration or the assignment to the new organization
             $systemMail = new SystemMail($gDb);
-            $systemMail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
+            $systemMail->addRecipientsByUserId($getUserId);
             $systemMail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user);
 
             $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_EMAIL', array($user->getValue('EMAIL'))));

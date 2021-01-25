@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Diese Klasse dient dazu Systemmails zu verschicken
+ * This class is used to send system mails
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/

@@ -77,7 +77,7 @@ if(!isset($plg_link_url) || $plg_link_url === '')
     $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
 }
 
-if(Component::isVisible('DATES'))
+if($gSettingsManager->getInt('enable_dates_module') > 0)
 {
     // create Object
     $plgDates = new ModuleDates();
@@ -95,74 +95,82 @@ if(Component::isVisible('DATES'))
         echo '<h3>'.$gL10n->get('PLG_DATES_HEADLINE').'</h3>';
     }
 
-    if($plgDatesResult['numResults'] > 0)
+    if($gSettingsManager->getInt('enable_dates_module') === 1
+    || ($gSettingsManager->getInt('enable_dates_module') === 2 && $gValidLogin))
     {
-        foreach($plgDatesResult['recordset'] as $plgRow)
+        if($plgDatesResult['numResults'] > 0)
         {
-            $plgDate->clear();
-            $plgDate->setArray($plgRow);
-            $plgHtmlEndDate = '';
-
-            echo '<h5>'.$plgDate->getDateTimePeriod($plg_show_date_end);
-
-            // create a link to date module
-            echo '<br /><a href="'. SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '" target="'. $plg_link_target. '">';
-
-            if($plg_max_char_per_word > 0)
+            foreach($plgDatesResult['recordset'] as $plgRow)
             {
-                $plgNewHeadline = '';
+                $plgDate->clear();
+                $plgDate->setArray($plgRow);
+                $plgHtmlEndDate = '';
 
-                // Pause words if they are too long
-                $plgWords = explode(' ', $plgDate->getValue('dat_headline'));
+                echo '<h5>'.$plgDate->getDateTimePeriod($plg_show_date_end);
 
-                foreach($plgWords as $plgValue)
+                // create a link to date module
+                echo '<br /><a href="'. SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '" target="'. $plg_link_target. '">';
+
+                if($plg_max_char_per_word > 0)
                 {
-                    if(strlen($plgValue) > $plg_max_char_per_word)
+                    $plgNewHeadline = '';
+
+                    // Pause words if they are too long
+                    $plgWords = explode(' ', $plgDate->getValue('dat_headline'));
+
+                    foreach($plgWords as $plgValue)
                     {
-                        $plgNewHeadline .= ' '. substr($plgValue, 0, $plg_max_char_per_word). '-<br />'.
-                                            substr($plgValue, $plg_max_char_per_word);
+                        if(strlen($plgValue) > $plg_max_char_per_word)
+                        {
+                            $plgNewHeadline .= ' '. substr($plgValue, 0, $plg_max_char_per_word). '-<br />'.
+                                                substr($plgValue, $plg_max_char_per_word);
+                        }
+                        else
+                        {
+                            $plgNewHeadline .= ' '. $plgValue;
+                        }
                     }
-                    else
-                    {
-                        $plgNewHeadline .= ' '. $plgValue;
-                    }
+                    echo $plgNewHeadline. '</a></h5>';
                 }
-                echo $plgNewHeadline. '</a></h5>';
-            }
-            else
-            {
-                echo $plgDate->getValue('dat_headline'). '</a></h5>';
+                else
+                {
+                    echo $plgDate->getValue('dat_headline'). '</a></h5>';
+                }
+
+                // show preview text
+                if($plgShowFullDescription === 1)
+                {
+                    echo '<div>'.$plgDate->getValue('dat_description').'</div>';
+                }
+                elseif($plg_dates_show_preview > 0)
+                {
+                    // remove all html tags except some format tags
+                    $textPrev = strip_tags($plgDate->getValue('dat_description'));
+
+                    // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
+                    $textPrev = substr($textPrev, 0, $plg_dates_show_preview + 15);
+                    $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).'
+                        <a class="admidio-icon-link" target="'. $plg_link_target. '"
+                            href="'.SecurityUtils::encodeUrl($plg_link_url,
+                                array('view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
+
+                    echo '<div>'.$textPrev.'</div>';
+                }
+
+                echo '<hr />';
             }
 
-            // show preview text
-            if($plgShowFullDescription === 1)
-            {
-                echo '<div>'.$plgDate->getValue('dat_description').'</div>';
-            }
-            elseif($plg_dates_show_preview > 0)
-            {
-                // remove all html tags except some format tags
-                $textPrev = strip_tags($plgDate->getValue('dat_description'));
-
-                // read first x chars of text and additional 15 chars. Then search for last space and cut the text there
-                $textPrev = substr($textPrev, 0, $plg_dates_show_preview + 15);
-                $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).'
-                    <a class="admidio-icon-link" target="'. $plg_link_target. '"
-                        href="'.SecurityUtils::encodeUrl($plg_link_url,
-                            array('view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
-
-                echo '<div>'.$textPrev.'</div>';
-            }
-
-            echo '<hr />';
+            // forward to $plg_link_url without any additional parameters
+            echo '<a href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_DATES_ALL_EVENTS').'</a>';
         }
-
-        // forward to $plg_link_url without any additional parameters
-        echo '<a href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_DATES_ALL_EVENTS').'</a>';
+        else
+        {
+            echo $gL10n->get('SYS_NO_ENTRIES');
+        }
     }
     else
     {
-        echo $gL10n->get('SYS_NO_ENTRIES');
+        echo $gL10n->get('PLG_DATES_NO_ENTRIES_VISITORS');
     }
 
     echo '</div>';

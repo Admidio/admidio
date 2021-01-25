@@ -621,12 +621,12 @@ else
 {
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
-        $gMessage->show($sendResult . '<br />' . $gL10n->get('MSG_PM_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult)));
+        $gMessage->show($gL10n->get('MSG_PM_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult)));
         // => EXIT
     }
     else
     {
-        $gMessage->show($sendResult . '<br />' . $gL10n->get('SYS_EMAIL_NOT_SEND', array($gL10n->get('SYS_RECIPIENT'), $sendResult)));
+        $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', array($gL10n->get('SYS_RECIPIENT'), $sendResult)));
         // => EXIT
     }
 }

@@ -32,11 +32,6 @@ $plg_link_target_geb = '_self';
 // 1 - Show events (recommended)
 $plg_ter_aktiv = 1;
 
-// Show events only for registered members that have a valid login.
-// 0 - Show events to guests (default)
-// 1 - Don't show events to guests only to members
-$plg_ter_login = 0;
-
 // Show birthdays within the month view. Therefore every day with a birthday gets a link
 // and a small dialog if you hover over the link.
 // 0 - Don't show birthdays

@@ -102,11 +102,39 @@ class UserRegistration extends User
         {
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME', 'database').' '.$this->getValue('LAST_NAME', 'database'));
+            $sysmail->addRecipientsByUserId((int) $this->getValue('usr_id'));
             $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $this); // TODO Exception handling
         }
 
         return true;
+    }
+
+    /**
+     * Method will adopt the profile fields data of this user object to the user object of the parameters.
+     * If the system setting **registration_adopt_all_data** is set than all data of the registration process will
+     * be adopted otherwise only username and password will be added to the existing user. The adopted data of the
+     * user will not be saved. That must be done in the calling method because of duplicate **usr_login_name**.
+     * @param User $user Object of the existing user that should be adopted.
+     */
+    public function adoptUser(User $user)
+    {
+        global $gSettingsManager, $gProfileFields;
+
+        // always adopt loginname and password to the destination user
+        $user->setValue('usr_login_name', $this->getValue('usr_login_name'));
+        $user->setPassword($this->getValue('usr_password'), false, false);
+
+        // adopt all registration fields to the user if this is enabled in the settings
+        if($gSettingsManager->getBool('registration_adopt_all_data'))
+        {
+            foreach($this->mProfileFieldsData->getProfileFields() as $profileField)
+            {
+                if($profileField->getValue('usf_registration') && $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern')) !== '')
+                {
+                    $user->setValue($profileField->getValue('usf_name_intern'), $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern'), 'database'));
+                }
+            }
+        }
     }
 
     /**
@@ -125,7 +153,7 @@ class UserRegistration extends User
         {
             // send mail to user that his registration was rejected
             $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME'). ' '. $this->getValue('LAST_NAME'));
+            $sysmail->addRecipientsByUserId((int) $this->getValue('usr_id'));
             $sysmail->sendSystemMail('SYSMAIL_REFUSE_REGISTRATION', $this); // TODO Exception handling
         }
 
