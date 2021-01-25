@@ -232,3 +232,117 @@ docker run --detach -it --name "Admidio" \
     admidio/admidio:latest
 ```
 * look at admidio update page and follow the instructions for the specified version [Admidio Wiki Update](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update).
+
+
+# Docker Compose usage
+
+## Docker Compose Example (docker-compose.yaml)
+```yaml
+version: '3.9'
+
+services:
+  db:
+    restart: always
+    image: mariadb:10.5.8
+    contaner_name: Admidio-MariaDB
+    volumes:
+      - "Admidio-MariaDB-confd:/etc/mysql/conf.d"
+      - "Admidio-MariaDB-data:/var/lib/mysql"
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret-password
+      - MYSQL_DATABASE=admidio
+      - MYSQL_USER=admidio
+      - MYSQL_PASSWORD=secret-password
+
+  admidio:
+    restart: always
+    image: admidio/admidio:v4.0.4
+    contaner_name: Admidio
+    depends_on:
+      - db
+    volumes:
+      - Admidio-files:/var/www/admidio/adm_my_files
+      - Admidio-themes:/var/www/admidio/adm_themes
+      - Admidio-plugins:/var/www/admidio/adm_plugins
+    ports:
+      - 8080:8080
+    environment:
+      - ADMIDIO_DB_TYPE: "mysql"
+      - ADMIDIO_DB_HOST: "db:3306"
+      - ADMIDIO_DB_NAME: "admidio"
+      - ADMIDIO_DB_USER: "admidio"
+      - ADMIDIO_DB_PASSWORD: "secret-password"
+      # - ADMIDIO_DB_TABLE_PRAEFIX: "adm"
+      # - ADMIDIO_MAIL_RELAYHOST: "hostname.domain.at:25"
+      # - ADMIDIO_LOGIN_FOR_UPDATE: "1"
+      # - ADMIDIO_ORGANISATION: "ADMIDIO"
+      # - ADMIDIO_PASSWORD_HASH_ALGORITHM: "DEFAULT"
+      # - ADMIDIO_ROOT_PATH: "https://www.mydomain.at/admidio"
+      # - TZ: "Europe/Vienna"
+      # - HTTPD_START_SERVERS: "8"
+      # - DOCUMENTROOT: "/"
+      # - PHP_MEMORY_LIMIT: "256M"
+      # - ERROR_REPORTING: "E_ALL & ~E_NOTICE"
+      # - DISPLAY_ERRORS: "ON"
+      # - DISPLAY_STARTUP_ERRORS: "OFF"
+      # - TRACK_ERRORS: "OFF"
+      # - HTML_ERRORS: "ON"
+```
+
+## Docker Compose Example with local build (docker-compose.yaml)
+```yaml
+version: '3.9'
+
+services:
+  db:
+    restart: always
+    image: mariadb:10.5.8
+    contaner_name: Admidio-MariaDB
+    volumes:
+      - "Admidio-MariaDB-confd:/etc/mysql/conf.d"
+      - "Admidio-MariaDB-data:/var/lib/mysql"
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret-password
+      - MYSQL_DATABASE=admidio
+      - MYSQL_USER=admidio
+      - MYSQL_PASSWORD=secret-password
+
+  admidio:
+    build: .
+    image: yourUsername/admidio:v4.0.4
+    contaner_name: Admidio
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - Admidio-files:/var/www/admidio/adm_my_files
+      - Admidio-themes:/var/www/admidio/adm_themes
+      - Admidio-plugins:/var/www/admidio/adm_plugins
+    ports:
+      - 8080:8080
+    environment:
+      - ADMIDIO_DB_TYPE: "mysql"
+      - ADMIDIO_DB_HOST: "db:3306"
+      - ADMIDIO_DB_NAME: "admidio"
+      - ADMIDIO_DB_USER: "admidio"
+      - ADMIDIO_DB_PASSWORD: "secret-password"
+      # - ADMIDIO_DB_TABLE_PRAEFIX: "adm"
+      # - ADMIDIO_MAIL_RELAYHOST: "hostname.domain.at:25"
+      # - ADMIDIO_LOGIN_FOR_UPDATE: "1"
+      # - ADMIDIO_ORGANISATION: "ADMIDIO"
+      # - ADMIDIO_PASSWORD_HASH_ALGORITHM: "DEFAULT"
+      # - ADMIDIO_ROOT_PATH: "https://www.mydomain.at/admidio"
+      # - TZ: "Europe/Vienna"
+      # - HTTPD_START_SERVERS: "8"
+      # - DOCUMENTROOT: "/"
+      # - PHP_MEMORY_LIMIT: "256M"
+      # - ERROR_REPORTING: "E_ALL & ~E_NOTICE"
+      # - DISPLAY_ERRORS: "ON"
+      # - DISPLAY_STARTUP_ERRORS: "OFF"
+      # - TRACK_ERRORS: "OFF"
+      # - HTML_ERRORS: "ON"
+```
