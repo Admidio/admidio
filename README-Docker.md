@@ -1,4 +1,4 @@
-# ![logo](https://www.admidio.org/images/admidio_logo_white_200.png)
+# Admidio
 
 Admidio is a free open source user management system for websites of
 organizations and groups. The system has a flexible role model so that
@@ -11,6 +11,11 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 
 
 # Supported tags and respective `Dockerfile` links
+![Docker Pulls](https://img.shields.io/docker/pulls/admidio/admidio)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/admidio/admidio/latest)
+![MicroBadger Layers (tag)](https://img.shields.io/microbadger/layers/admidio/admidio/latest)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/admidio/admidio)
+![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/v/tag/admidio/admidio?include_prereleases)
 
 -	[`latest`](https://github.com/Admidio/admidio/blob/master/Dockerfile)
 -	[`branch-v4.0`](https://github.com/Admidio/admidio/blob/v4.0/Dockerfile)
@@ -38,7 +43,7 @@ docker run --detach -it --name "Admidio-MariaDB" \
   mariadb:10.5.8
 ```
 
-## Start a `admidio` server instance
+## Start an `admidio` server instance
 Starting a admidio instance is simple:
 
 ```bash
@@ -54,7 +59,7 @@ docker run --detach -it --name "Admidio" \
 
 ... where `Admidio` is the name you want to assign to your container.
 
-## Start a `admidio` server instance with advanced options
+## Start an `admidio` server instance with advanced options
 ```bash
 docker run --detach -it --name "Admidio" \
   --memory="1024m" \

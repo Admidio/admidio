@@ -1,4 +1,4 @@
-# ![logo](https://www.admidio.org/images/admidio_logo_white_200.png)
+# Admidio
 
 Admidio is a free open source user management system for websites of
 organizations and groups. The system has a flexible role model so that
