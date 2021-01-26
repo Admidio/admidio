@@ -59,7 +59,7 @@ $defaultOrgPreferences = array(
 
     // System notifications
     'enable_system_mails'         => '1',
-    'email_administrator'         => 'webmaster@'. DOMAIN,
+    'email_administrator'         => 'administrator@'. DOMAIN,
     'enable_email_notification'   => '0',
 
     // Captcha

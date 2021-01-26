@@ -18,7 +18,7 @@
  *    "recordsTotal":"147",
  *    "data": [  [ 1,
  *                 "Link to profile",
- *                 "Webmaster, Heinz",
+ *                 "Smith, Heinz",
  *                 "Admin",
  *                 "Gender",
  *                 "16.06.1991",

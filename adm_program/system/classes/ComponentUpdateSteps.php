@@ -508,7 +508,7 @@ final class ComponentUpdateSteps
     }
 
     /**
-     * This method renames the webmaster role to administrator.
+     * This method renames the role 'webmaster' to 'administrator'.
      */
     public static function updateStepRenameWebmasterToAdministrator()
     {

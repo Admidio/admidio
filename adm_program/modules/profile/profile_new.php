@@ -174,8 +174,7 @@ foreach($gProfileFields->getProfileFields() as $field)
         $showField = true;
     }
 
-    // Kategorienwechsel den Kategorienheader anzeigen
-    // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
+    // Show the category header when changing the category
     if($category !== $field->getValue('cat_name') && $showField)
     {
         if($category !== '')
@@ -188,7 +187,7 @@ foreach($gProfileFields->getProfileFields() as $field)
         $form->addHtml('<a id="cat-'. (int) $field->getValue('cat_id'). '"></a>');
         $form->openGroupBox('gb_category_'.$field->getValue('cat_name_intern'), $field->getValue('cat_name'));
 
-        if($field->getValue('cat_name_intern') === 'MASTER_DATA')
+        if($field->getValue('cat_name_intern') === 'BASIC_DATA')
         {
             if($getUserId > 0 || $getNewUser === 2)
             {

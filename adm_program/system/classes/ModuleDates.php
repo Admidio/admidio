@@ -85,8 +85,8 @@
  *                     [member_date_role] =>
  *                     [32] =>
  *                     [mem_leader] =>
- *                     [33] => Paul Webmaster
- *                     [create_name] => Paul Webmaster
+ *                     [33] => Paul Smith
+ *                     [create_name] => Paul Smith
  *                     [34] =>
  *                     [change_name] =>
  *                 )

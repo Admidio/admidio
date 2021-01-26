@@ -741,6 +741,7 @@
   <string name="SYS_BACKUP_FILE">Backup file</string>
   <string name="SYS_BACKUP_FROM">Backup created on #VAR1# at #VAR2#</string>
   <string name="SYS_BACKUP_ONLY_MYSQL">The backup module can only be used in combination with a MySQL database.</string>
+  <string name="SYS_BASIC_DATA">Basic data</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
   <string name="SYS_CALENDARS">Calendars</string>
   <string name="SYS_CANT_DELETE_ROLE">You can not delete the role #VAR1_BOLD#.</string>
@@ -1053,7 +1054,6 @@
   <string name="SYS_MAP">Map</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Displays the location on Google Maps. The street, postal code, city and country are transferred to Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Displays a route from your own place of residence to the location of this user on Google Maps. The street, postal code, city and country are transferred to Google.</string>
-  <string name="SYS_MASTER_DATA">Basic information</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. participants</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# of max. #VAR2# participants</string>
   <string name="SYS_MAX_PATH_LENGTH">Max path length</string>

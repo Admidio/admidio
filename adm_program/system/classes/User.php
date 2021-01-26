@@ -1898,7 +1898,7 @@ class User extends TableAccess
      * // set data of adm_users column
      * $gCurrentUser->getValue('usr_login_name', 'Admidio');
      * // reads data of adm_user_fields
-     * $gCurrentUser->getValue('EMAIL', 'webmaster@admidio.org');
+     * $gCurrentUser->getValue('EMAIL', 'administrator@admidio.org');
      * ```
      */
     public function setValue($columnName, $newValue, $checkValue = true)

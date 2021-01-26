@@ -99,7 +99,7 @@ $db->query($sql); // TODO add more params
 // create organization independent categories
 $sql = 'INSERT INTO '.TBL_CATEGORIES.'
                (cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 1, 1, ?, ?) -- $currUsrId, DATETIME_NOW';
+        VALUES (NULL, \'USF\', \'BASIC_DATA\', \'SYS_BASIC_DATA\', 1, 1, ?, ?) -- $currUsrId, DATETIME_NOW';
 $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
 $categoryIdMasterData = $db->lastInsertId();
 
@@ -130,7 +130,7 @@ $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
         VALUES (\'category_edit\', \'adm_categories\', (SELECT rr.ror_id FROM '.TBL_ROLES_RIGHTS.' rr WHERE rr.ror_name_intern = \'category_view\'))';
 $db->queryPrepared($sql);
 
-// create profile fields of category master data
+// create profile fields of category basic data
 $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
                (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_registration, usf_sequence, usf_usr_id_create, usf_timestamp_create)
         VALUES ('.$categoryIdMasterData.', \'TEXT\',         \'LAST_NAME\',  \'SYS_LASTNAME\',  NULL, NULL, 1, 1, 1, 1, 1,  '.$currUsrId.', \''. DATETIME_NOW.'\')
