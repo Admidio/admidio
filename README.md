@@ -7,11 +7,22 @@ You can create an individual profile for your members by adding or removing
 fields. Additional to these functions the system contains several modules
 like member lists, event manager, guestbook, photo album or a documents & files area.
 
+![logo](https://www.admidio.org/images/mainpage_flying_icons.png)
+
+
+[![GitHub issues](https://img.shields.io/github/issues/Admidio/admidio)](https://github.com/Admidio/admidio/issues)
+[![GitHub forks](https://img.shields.io/github/forks/Admidio/admidio)](https://github.com/Admidio/admidio/network)
+[![GitHub stars](https://img.shields.io/github/stars/Admidio/admidio)](https://github.com/Admidio/admidio/stargazers)
+![GitHub top language](https://img.shields.io/github/languages/top/admidio/admidio)
+[![GitHub license](https://img.shields.io/github/license/Admidio/admidio)](https://github.com/Admidio/admidio/blob/master/LICENSE.txt)
+
+
 ## Table of contents
 
 - [Features](#features)
 - [Installation](#installation)
 - [Update](#update)
+- [Docker](#docker)
 - [Contributing](#contributing)
 - [Changelog](#changelog)
 - [Donation](#donation)
@@ -38,6 +49,7 @@ or higher is available. Admidio also needs a [MySQL](https://www.mysql.com/) (ve
 For a successful installation please follow our [online instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation).
 There we describe step by step the installation process.
 
+
 ## Update
 
 Please follow our [online instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update) for a successful
@@ -51,6 +63,27 @@ Short update description:
 - Update all installed plugins in the folder adm_plugins.
 
 If you perform an update from version 2.x or 3.x to version 4.x please read our [special update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update_to_version_4).
+
+
+## Docker
+Admidio could also be used within a docker enviroment. \
+We provide a Dockerfile that allows you to easily create and use your own Docker image.
+
+The easiest way is to use our prebuilt images from Dockerhub. You can start an admidio docker container with the following command:
+
+```bash
+docker run --detach -it --name Admidio \
+  --memory="1024m" --cpu-quota="80000" --cpuset-cpus="0-1" \
+  -p 8080:8080 \
+  --restart="unless-stopped" \
+  -v Admidio-files:/var/www/admidio/adm_my_files \
+  -v Admidio-themes:/var/www/admidio/adm_themes \
+  -v Admidio-plugins:/var/www/admidio/adm_plugins \
+  --link Admidio-MariaDB:mysql \
+  admidio/admidio:latest
+```
+For detailed docker usage see [README-Docker.md](README-Docker.md)
+
 
 ## Contributing
 
@@ -124,4 +157,4 @@ and sharing great software.
 - [zxcvbn](https://github.com/dropbox/zxcvbn): Add password strength indicator
 - [zxcvbn-php](https://github.com/bjeavons/zxcvbn-php): Test password strength in the backend
 
-Copyright (c) 2004 - 2020 The Admidio Team
+Copyright (c) 2004 - 2021 The Admidio Team

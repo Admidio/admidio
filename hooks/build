@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# set -euf -o pipefail
+set -e  # If a command fails, set -e will make the whole script exit
+# set -u  # Treat unset variables as an error, and immediately exit.
+set -f  # Disable filename expansion (globbing) upon seeing *, ?, etc.
+set -o pipefail  # causes a pipeline (for example, curl -s https://sipb.mit.edu/ | grep foo) to produce a failure return code if any command errors.
+
+
+
+
+# https://docs.docker.com/docker-hub/builds/advanced/
+# $IMAGE_NAME var is injected into the build so the tag is correct.
+
+# docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+#              --build-arg VCS_REF=`git rev-parse --short HEAD` \
+#              --build-arg VERSION=`cat VERSION` .
+
+
+
+
+# example usage:
+#   IMAGE_NAME="yourUsername/admidio:v4.0.4" ./hooks/build
+
+echo "Build hook running"
+docker build \
+  --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+  --build-arg VCS_REF="$(git describe --always --abbrev=7 --tags --long)" \
+  --build-arg VERSION="$(git describe --always --abbrev=0 --tags)" \
+  --rm --force-rm \
+  -f "Dockerfile" \
+  -t "${IMAGE_NAME}" .
