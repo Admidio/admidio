@@ -66,6 +66,10 @@ If you perform an update from version 2.x or 3.x to version 4.x please read our 
 
 
 ## Docker
+Admidio could also be used within a docker enviroment. \
+We provide a Dockerfile that allows you to easily create and use your own Docker image.
+
+The easiest way is to use our prebuilt images from Dockerhub. You can start an admidio docker container with the following command:
 
 ```bash
 docker run --detach -it --name Admidio \
