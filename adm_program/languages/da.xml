@@ -425,7 +425,7 @@
   <string name="ORG_ADD_ORGANIZATION_DESC">En ny organisation vil blive tilføjet til databasen inklusiv dens masterdata. Den nuværende bruger vil blive annonceret som administrator og kan administrere datasættet. Brugere som logger på systemet skal vælge den respektive organisation.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Yderligere variabler</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Tema</string>
-  <string name="ORG_ADMIDIO_THEME_DESC">Vælg layout for Admidio. Alle temaer gemt i folderen adm_themes bliver vist. (Standard: simple)</string>
+  <string name="ORG_ADMIDIO_THEME_DESC">Vælg layout for Admidio. Alle temaer gemt i folderen adm_themes bliver vist. (Standard: modern)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatisk logud efter</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Denne værdi angiver, efter hvor mange minutter en inaktiv bruger automatisk logges ud. En bruger er inaktiv, så længe han ikke kalder nogen side i Admidio-systemet. Denne indstilling ignoreres, hvis brugeren har valgt #VAR1_BOLD#. (Standard: 20 minutter)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Opdaterings besked for gamle browsere</string>
@@ -527,7 +527,7 @@
   <string name="ORG_SEND_PASSWORD_DESC">Hvis brugeren har glemt sin adgangskode, kan han/hun automatisk sende en mail med en ny genereret adgangskode. Hvis denne indstilling er deaktiveret, kan brugeren kun sende en anmodning til administratoren via e-mail, så han kan oprette en ny adgangskode for brugeren. For at adgangskoden skal sendes, skal indstillingen #VAR1_BOLD# også indstilles. (Standard: ja)</string>
   <string name="ORG_SEND_NEW_PASSWORD">Send nyt kodeord</string>
   <string name="ORG_SHOW_CREATE_EDIT">Vis opretter og tidspunktet for oprettelsen</string>
-  <string name="ORG_SHOW_CREATE_EDIT_DESC">Et felt er normalt synligt for alle brugere. Hvis denne funktion ikke er valgt, så vil dataene KUN være synlige for brugere der har rettighed til at redigere alle brugere. I deres egen profil, kan brugeren se og redigere disse data.</string>
+  <string name="ORG_SHOW_CREATE_EDIT_DESC">Nogle steder vises skaberen og brugeren med den sidste ændring til en post sammen med et tidsstempel. Denne indstilling kan bruges til at bestemme, om denne information overhovedet vises, og om brugeren skal vises med brugernavnet eller med deres for- og efternavn.</string>
   <string name="ORG_SHOW_ALL_USERS">Valgfrit: vis alle brugere</string>
   <string name="ORG_SHOW_ALL_USERS_DESC">Hvis denne mulighed er aktiveret, vil tidligere medlemmer og medlemmer af andre organisationer blive vist sammen med de aktive medlemmer af den nuværende organisation/forening. Ellers så vil kun medlemmer af den nuværende organisation/forening blive vist. Når der oprettes nye brugere eller der tildeles registreringer vil alle organisationer/foreninger blive checket for eksisterende brugere.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Vis organisations vælger</string>
@@ -741,6 +741,7 @@
   <string name="SYS_BACKUP_FILE">Backup fil</string>
   <string name="SYS_BACKUP_FROM">Backup oprettet på #VAR1# i #VAR2#</string>
   <string name="SYS_BACKUP_ONLY_MYSQL">Backup modulet kan kun anvendes sammen med en MySQL database.</string>
+  <string name="SYS_BASIC_DATA">Stamdata</string>
   <string name="SYS_BIRTHDAY">Fødselsdag</string>
   <string name="SYS_CALENDARS">Kalendere</string>
   <string name="SYS_CANT_DELETE_ROLE">Du kan ikke slette rollen #VAR1_BOLD#.</string>
@@ -906,6 +907,8 @@
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">En ny meddelelse i #VAR1# blev oprettet\n\nTitel: #VAR2#\nSkrevet af: #VAR3#\nSkrevet den: #VAR4#</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">En ny fil blev overført</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">En ny fil blev overført til #VAR1#\n\nFil: #VAR2#\nOverført af: #VAR3#\nOverført den: #VAR4#</string>
+  <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# funktion test e-mail</string>
+  <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Denne e-mail blev sendt via #VAR1# webstedet for #VAR2# organisationen med de e-mail indstillinger der er gemt der.</string>
   <string name="SYS_EMAIL_INVALID">E-mail adressen i feltet #VAR1_BOLD# mangler eller indeholder ugyldige karakterer.</string>
   <string name="SYS_EMAIL_NOT_SEND">E-mailen kunne ikke sendes til #VAR1_BOLD#.\n\nDen følgende fejl opstod:\n#VAR2#</string>
   <string name="SYS_EMAIL_SEND">Mailen er afsendt</string>
@@ -1204,6 +1207,8 @@
   <string name="SYS_REGISTERED_AS">Logget ind som</string>
   <string name="SYS_REGISTRATION">Registrering</string>
   <string name="SYS_REGISTRATION_SAVED">Dine data er blevet gemt.\n\nDu kan logge ind efter de er godkendt. Du vil blive informeret via e-mail når dine data er godkendt.</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Overfør alle data fra registreringen for den eksisterende bruger</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Hvis der allerede findes en nyregistreret bruger i databasen, overføres alle data fra registreringen til den eksisterende bruger, hvis denne indstilling er sat. Hvis denne indstilling ikke er indstillet, overføres kun brugernavnet og adgangskoden. I tilfælde af brugere, der ikke eksisterede før, vil alle data fra registreringen altid blive overført uafhængigt af denne indstilling. (Standard: Ja)</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relations konfiguration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relations konfigurationer</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Hvis det er indstillet, kan en bruger redigere profilen til en anden bruger, som han er relateret til. For et asymmetrisk forhold tildeles rettigheden separat for hvert forhold, og for et symmetrisk forhold kan begge brugere redigere den anden profil, og i tilfælde af et ensrettet forhold kan kun brugeren der har relationen på sin profil, redigere den anden profil.</string>
@@ -1296,6 +1301,7 @@
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Hvis denne indstilling er aktiveret, sendes e-mails til alle brugerens e-mail-adresser, der er gemt i profilen. Hvis indstillingen er deaktiveret, sendes e-mails kun til e-mail-adressen fra profilfeltet med det interne navn EMAIL. (Standard: aktiveret)</string>
   <string name="SYS_SEND_MAILS">Send e-mails</string>
   <string name="SYS_SEND_NEW_PW">Send nyt kodeord</string>
+  <string name="SYS_SEND_TEST_MAIL">Send test e-mail</string>
   <string name="SYS_SENDER">Afsender</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server indstillinger tillader ikke fil overførsler.</string>
@@ -1339,6 +1345,8 @@
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">System Standard liste</string>
   <string name="SYS_SYSTEM_MAILS">System beskeder</string>
+  <string name="SYS_TEST_MAIL">Test e-mail</string>
+  <string name="SYS_TEST_MAIL_DESC">Før du kan anvende denne funktion, skal alle indstillinger til afsendelse af e-mail gemmes!\N En simpel e-mail med emnet #VAR1_BOLD# vil blive sendt til e-mail adressen for den indloggede bruger baseret på de gemte e-mail indstillinger. I processen skrives en afsendelseslog under SMTP-afsendelse, som måske kan hjælpe i tilfælde af problemer.</string>
   <string name="SYS_TEXT">Tekst</string>
   <string name="SYS_THURSDAY">torsdag</string>
   <string name="SYS_TIME">Tid</string>
@@ -1397,6 +1405,7 @@
   <string name="SYS_WIDTH">Bredde</string>
   <string name="SYS_WRITE_EMAIL">Skriv e-mail</string>
   <string name="SYS_WRITE_ENTRY">Skriv opslag</string>
+  <string name="SYS_WRITE_MESSAGE">Skriv besked</string>
   <string name="SYS_WRITE_PM">Skriv privat besked</string>
   <string name="SYS_YES">Ja</string>
   <string name="SYS_YOUR_CONFIGURATION">Din konfiguration</string>
