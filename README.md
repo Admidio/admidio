@@ -22,6 +22,7 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 - [Features](#features)
 - [Installation](#installation)
 - [Update](#update)
+- [Docker](#docker)
 - [Contributing](#contributing)
 - [Changelog](#changelog)
 - [Donation](#donation)
@@ -49,21 +50,6 @@ For a successful installation please follow our [online instructions](https://ww
 There we describe step by step the installation process.
 
 
-### Docker usage
-```bash
-docker run --detach -it --name Admidio \
-  --memory="1024m" --cpu-quota="80000" --cpuset-cpus="0-1" \
-  -p 8080:8080 \
-  --restart="unless-stopped" \
-  -v Admidio-files:/var/www/admidio/adm_my_files \
-  -v Admidio-themes:/var/www/admidio/adm_themes \
-  -v Admidio-plugins:/var/www/admidio/adm_plugins \
-  --link Admidio-MariaDB:mysql \
-  admidio/admidio:latest
-```
-For detailed docker usage see [README-Docker.md](https://github.com/Admidio/admidio/blob/master/README-Docker.md#how-to-use-this-image)
-
-
 ## Update
 
 Please follow our [online instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update) for a successful
@@ -78,8 +64,21 @@ Short update description:
 
 If you perform an update from version 2.x or 3.x to version 4.x please read our [special update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update_to_version_4).
 
-### Docker usage
-For detailed upgrade instuctions on docker see [README-Docker.md](https://github.com/Admidio/admidio/blob/master/README-Docker.md#admidio-update)
+
+## Docker
+
+```bash
+docker run --detach -it --name Admidio \
+  --memory="1024m" --cpu-quota="80000" --cpuset-cpus="0-1" \
+  -p 8080:8080 \
+  --restart="unless-stopped" \
+  -v Admidio-files:/var/www/admidio/adm_my_files \
+  -v Admidio-themes:/var/www/admidio/adm_themes \
+  -v Admidio-plugins:/var/www/admidio/adm_plugins \
+  --link Admidio-MariaDB:mysql \
+  admidio/admidio:latest
+```
+For detailed docker usage see [README-Docker.md](README-Docker.md)
 
 
 ## Contributing
