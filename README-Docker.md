@@ -11,11 +11,14 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 
 
 # Supported tags and respective `Dockerfile` links
-![Docker Pulls](https://img.shields.io/docker/pulls/admidio/admidio)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/admidio/admidio/latest)
-![MicroBadger Layers (tag)](https://img.shields.io/microbadger/layers/admidio/admidio/latest)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/admidio/admidio)
-![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/v/tag/admidio/admidio?include_prereleases)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/admidio/admidio?label=current%20release&style=plastic)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/admidio/admidio?label=latest%20tag&style=plastic)
+
+![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/admidio/admidio?style=plastic)
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/admidio/admidio?style=plastic)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/admidio/admidio/latest?style=plastic)
+![MicroBadger Layers (tag)](https://img.shields.io/microbadger/layers/admidio/admidio/latest?style=plastic)
+![Docker Pulls](https://img.shields.io/docker/pulls/admidio/admidio?style=plastic)
 
 -	[`latest`](https://github.com/Admidio/admidio/blob/master/Dockerfile)
 -	[`branch-v4.0`](https://github.com/Admidio/admidio/blob/v4.0/Dockerfile)
