@@ -25,8 +25,7 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 - `vN.N.N` (e.g.: `v4.0.4`)
 - see https://hub.docker.com/r/admidio/admidio/tags for all available tags
 
-You can find the release notes at https://github.com/Admidio/admidio/releases.
-
+You can find the releasenotes on Github [admidio/releases](https://github.com/Admidio/admidio/releases) and the Docker images on Dockerhub [admidio/admidio](https://hub.docker.com/r/admidio/admidio/).
 
 # How to use this image
 
