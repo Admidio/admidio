@@ -82,7 +82,7 @@ docker run --detach -it --name Admidio \
   --link Admidio-MariaDB:mysql \
   admidio/admidio:latest
 ```
-For detailed docker usage see [README-Docker.md](README-Docker.md)
+For detailed docker usage see [README-Docker.md](https://github.com/Admidio/admidio/blob/master/README-Docker.md)
 
 
 ## Contributing
