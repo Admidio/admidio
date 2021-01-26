@@ -10,3 +10,4 @@
 /demo_data/ export-ignore
 /hooks/ export-ignore
 /dockerscripts/ export-ignore
+/Dockerfile export-ignore
