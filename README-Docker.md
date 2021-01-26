@@ -292,6 +292,8 @@ services:
 ```
 
 ## Docker Compose Example with local build (docker-compose.yaml)
+We also deliver a Dockerfile and you can easily build and use your own docker image.
+
 ```yaml
 version: '3.9'
 
