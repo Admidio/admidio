@@ -31,14 +31,15 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 
 ## Features
 
-- create roles that reflects the structure of your organization
-- add custom fields to the user profiles
+- create roles and groups that reflects the structure of your organization
+- customize the user profile with your own profile fields
 - create individual membership lists of your roles
 - publish all your events online and let the members participate
 - create photo albums and let the users send ecards
+- send html emails to your users, roles and groups
 - export all lists to csv, excel or pdf
 - import users from csv
-- send html mails to your roles
+- and much more ...
 
 ## Installation
 
