@@ -33,6 +33,7 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 
 - create roles and groups that reflects the structure of your organization
 - customize the user profile with your own profile fields
+- relate your members to each other (e.g. spouse, mother - son)
 - create individual membership lists of your roles
 - publish all your events online and let the members participate
 - create photo albums and let the users send ecards
