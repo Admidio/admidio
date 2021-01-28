@@ -843,7 +843,7 @@
   <string name="SYS_DEACTIVATE_ROLE">Deaktiver rolle</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Hvis du deaktiverer rolle #VAR1_BOLD#, kan rollen ikke længere anvendes og tildeles til objekter. Samtidigt, så er rettighederne for denne rolle ikke længere aktive. Rollen, med alle indstillinger og medlemmer forbliver dog og kan reaktiveres igen.</string>
   <string name="SYS_DEACTIVATED">Inaktiv</string>
-  <string name="SYS_DEBUG_MODE">Debug tilstand</string>
+  <string name="SYS_DEBUG_OUTPUT">Debug resultat</string>
   <string name="SYS_DECIMAL_NUMBER">Decimal nummer</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standard tildeling ved registrering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Hvis en ny bruger bliver oprettet eller en ny registrering accepteret, så bliver denne rolle automatisk tildelt den nye bruger. Når opretteren har ret til at tildele roller så vises listen med roller og tildelingen kan ændres med det samme.</string>
@@ -1054,7 +1054,6 @@
   <string name="SYS_MAP">Kort</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Viser placeringen på Google Maps. Gaden, postnummer, by og land overføres til Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Viser en rute fra dit eget bopæl til denne brugers placering på Google Maps. Gaden, postnummer, by og land overføres til Google.</string>
-  <string name="SYS_MASTER_DATA">Stamdata</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. antal deltagere</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# af max. #VAR2# deltagere</string>
   <string name="SYS_MAX_PATH_LENGTH">Maksimal sti længde</string>

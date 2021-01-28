@@ -741,6 +741,7 @@
   <string name="SYS_BACKUP_FILE">Backupdatei</string>
   <string name="SYS_BACKUP_FROM">Backup vom #VAR1# um #VAR2#</string>
   <string name="SYS_BACKUP_ONLY_MYSQL">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</string>
+  <string name="SYS_BASIC_DATA">Basisdaten</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
   <string name="SYS_CALENDARS">Kalender</string>
   <string name="SYS_CANT_DELETE_ROLE">Sie können die Rolle #VAR1_BOLD# nicht löschen.</string>
@@ -842,7 +843,7 @@
   <string name="SYS_DEACTIVATE_ROLE">Rolle deaktivieren</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Wenn Sie die Rolle #VAR1_BOLD# deaktivieren, kann die Rolle nicht mehr genutzt und Objekten zugeordnet werden. Ebenso sind sämtliche Rechte dieser Rolle nicht mehr wirksam. Die Rolle mit ihren Einstellung und allen Mitgliedszuordnungen bleibt allerdings bestehen und kann zu einem späteren Zeitpunkt wieder aktiviert werden.</string>
   <string name="SYS_DEACTIVATED">Deaktiviert</string>
-  <string name="SYS_DEBUG_MODE">Debugmodus</string>
+  <string name="SYS_DEBUG_OUTPUT">Debug-Ausgabe</string>
   <string name="SYS_DECIMAL_NUMBER">Dezimalzahl</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardzuordnung bei Registrierung</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Wird ein neuer Benutzer angelegt bzw. eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zu zuordnen, so werden ihm alle Rollenzuordnung angezeigt und er kann sie entsprechend anpassen.</string>
@@ -906,6 +907,8 @@
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Es wurde eine neue Ankündigung bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">Eine neue Datei wurde hochgeladen</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">Es wurde eine neue Datei bei #VAR1# hochgeladen.\n\nDatei: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
+  <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# Funktionstest E-Mail</string>
+  <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Diese E-Mail wurde über die Webseite #VAR1# der Organisation #VAR2# mit den dort hinterlegten E-Mail-Einstellungen versendet.</string>
   <string name="SYS_EMAIL_INVALID">Die E-Mail-Adresse im Feld #VAR1_BOLD# enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</string>
   <string name="SYS_EMAIL_NOT_SEND">Die E-Mail konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
   <string name="SYS_EMAIL_SEND">Die E-Mail wurde versendet.</string>
@@ -1051,7 +1054,6 @@
   <string name="SYS_MAP">Karte</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Zeigt den Wohnort bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt eine Route vom eigenen Wohnort zum Wohnort dieses Benutzers bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
-  <string name="SYS_MASTER_DATA">Stammdaten</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmer</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# von max. #VAR2# Teilnehmern</string>
   <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
@@ -1091,7 +1093,6 @@
   <string name="SYS_MONDAY">Montag</string>
   <string name="SYS_MONTHLY">Monatlich</string>
   <string name="SYS_MORE">Mehr</string>
-  <string name="SYS_MORE_FEATURES">Weitere Funktionen</string>
   <string name="SYS_MOVE_DOWN">#VAR1# nach unten verschieben</string>
   <string name="SYS_MOVE_UP">#VAR1# nach oben verschieben</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger</string>
@@ -1115,7 +1116,6 @@
   <string name="SYS_NO_DEFAULT_ROLE">Sie können die Einstellung #VAR1_BOLD# nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</string>
   <string name="SYS_NO_ENTRY">Der angeforderte Eintrag existiert nicht in der Datenbank.</string>
   <string name="SYS_NO_ENTRIES">Es sind keine Einträge vorhanden.</string>
-  <string name="SYS_NO_ENTRIES_FOUND">Es wurden keine Einträge gefunden.</string>
   <string name="SYS_NO_LEADER">Ohne Leiter</string>
   <string name="SYS_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
   <string name="SYS_NO_RIGHTS">Sie haben kein Recht, diese Aktion auszuführen.</string>
@@ -1206,6 +1206,8 @@
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
   <string name="SYS_REGISTRATION">Registrierung</string>
   <string name="SYS_REGISTRATION_SAVED">Ihre Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Ihre Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung werden Sie per E-Mail benachrichtigt.</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer übernehmen</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Existiert ein neu registrierter Benutzer bereits in der Datenbank, so werden bei gesetzter Einstellung alle Daten aus der Registrierung in den bestehenden Benutzer übernommen. Wenn diese Einstellung nicht gesetzt ist, werden nur der Benutzername und das Passwort übernommen. Bei Benutzern, welche bisher noch nicht vorhanden waren, werden unabhängig von dieser Einstellung immer alle Daten aus der Registrierung übernommen. (Voreinstellung: ja)</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Beziehungskonfigurationen</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein Benutzer das Profil eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
@@ -1298,6 +1300,7 @@
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen des Benutzer gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_SEND_MAILS">E-Mails zusenden</string>
   <string name="SYS_SEND_NEW_PW">Neues Passwort zusenden</string>
+  <string name="SYS_SEND_TEST_MAIL">Testmail verschicken</string>
   <string name="SYS_SENDER">Absender</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
@@ -1341,6 +1344,8 @@
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
   <string name="SYS_SYSTEM_MAILS">Systembenachrichtigungen</string>
+  <string name="SYS_TEST_MAIL">Testmail</string>
+  <string name="SYS_TEST_MAIL_DESC">Bevor Sie diese Funktion aufrufen, müssen alle Einstellungen für den E-Mail-Versand gespeichert werden!\nEs wird eine einfache E-Mail mit dem Betreff #VAR1_BOLD# an die E-Mail-Adresse des angemeldeten Benutzers auf Grundlage der gespeicherten E-Mail-Einstellungen versendet. Dabei wird beim SMTP-Versand ein Versandprotokoll ausgegeben, welches bei Problemen helfen kann.</string>
   <string name="SYS_TEXT">Text</string>
   <string name="SYS_THURSDAY">Donnerstag</string>
   <string name="SYS_TIME">Uhrzeit</string>
@@ -1399,7 +1404,7 @@
   <string name="SYS_WIDTH">Breite</string>
   <string name="SYS_WRITE_EMAIL">E-Mail schreiben</string>
   <string name="SYS_WRITE_ENTRY">Eintrag schreiben</string>
-  <string name="SYS_WRITE_MESSAGE">Nachricht schreiben</string>
+  <string name="SYS_WRITE_MESSAGE">Schreibe Nachricht</string>
   <string name="SYS_WRITE_PM">Private Nachricht schreiben</string>
   <string name="SYS_YES">Ja</string>
   <string name="SYS_YOUR_CONFIGURATION">Deine Konfigurationen</string>

@@ -1093,7 +1093,6 @@
   <string name="SYS_MONDAY">Montag</string>
   <string name="SYS_MONTHLY">Monatlich</string>
   <string name="SYS_MORE">Mehr</string>
-  <string name="SYS_MORE_FEATURES">Weitere Funktionen</string>
   <string name="SYS_MOVE_DOWN">#VAR1# nach unten verschieben</string>
   <string name="SYS_MOVE_UP">#VAR1# nach oben verschieben</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger</string>
@@ -1117,7 +1116,6 @@
   <string name="SYS_NO_DEFAULT_ROLE">Du kannst die Einstellung #VAR1_BOLD# nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</string>
   <string name="SYS_NO_ENTRY">Der angeforderte Eintrag existiert nicht in der Datenbank.</string>
   <string name="SYS_NO_ENTRIES">Es sind keine Einträge vorhanden.</string>
-  <string name="SYS_NO_ENTRIES_FOUND">Es wurden keine Einträge gefunden.</string>
   <string name="SYS_NO_LEADER">Ohne Leiter</string>
   <string name="SYS_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
   <string name="SYS_NO_RIGHTS">Du hast kein Recht, diese Aktion auszuführen.</string>
@@ -1208,6 +1206,8 @@
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
   <string name="SYS_REGISTRATION">Registrierung</string>
   <string name="SYS_REGISTRATION_SAVED">Deine Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Deine Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung wirst du per E-Mail benachrichtigt.</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer übernehmen</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Existiert ein neu registrierter Benutzer bereits in der Datenbank, so werden bei gesetzter Einstellung alle Daten aus der Registrierung in den bestehenden Benutzer übernommen. Wenn diese Einstellung nicht gesetzt ist, werden nur der Benutzername und das Passwort übernommen. Bei Benutzern, welche bisher noch nicht vorhanden waren, werden unabhängig von dieser Einstellung immer alle Daten aus der Registrierung übernommen. (Voreinstellung: ja)</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Beziehungskonfigurationen</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein Benutzer das Profil eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
@@ -1219,8 +1219,6 @@
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REQUIRED_FIELDS">Pflichtfelder</string>
   <string name="SYS_RESTRICTIONS">Einschränkungen</string>
-  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer übernehmen</string>
-  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Existiert ein neu registrierter Benutzer bereits in der Datenbank, so werden bei gesetzter Einstellung alle Daten aus der Registrierung in den bestehenden Benutzer übernommen. Wenn diese Einstellung nicht gesetzt ist, werden nur der Benutzername und das Passwort übernommen. Bei Benutzern, welche bisher noch nicht vorhanden waren, werden unabhängig von dieser Einstellung immer alle Daten aus der Registrierung übernommen. (Voreinstellung: ja)</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen einsehen</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Ankündigungen verwalten</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Registrierungen verwalten und zuordnen</string>
@@ -1406,7 +1404,7 @@
   <string name="SYS_WIDTH">Breite</string>
   <string name="SYS_WRITE_EMAIL">E-Mail schreiben</string>
   <string name="SYS_WRITE_ENTRY">Eintrag schreiben</string>
-  <string name="SYS_WRITE_MESSAGE">Nachricht schreiben</string>
+  <string name="SYS_WRITE_MESSAGE">Schreibe Nachricht</string>
   <string name="SYS_WRITE_PM">Private Nachricht schreiben</string>
   <string name="SYS_YES">Ja</string>
   <string name="SYS_YOUR_CONFIGURATION">Deine Konfigurationen</string>
