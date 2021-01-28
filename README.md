@@ -59,10 +59,11 @@ update to a new version of Admidio.
 
 Short update description:
 
-- Delete the folder adm_program of the previous version.
-- Copy folder adm_program from the new version to this place.
+- Delete the folder adm_program and the index.php of the previous version.
+- Copy folder adm_program and the index.php from the new version to this place.
+- Update the folder adm_plugins with the new delivered plugins.
 - Call the index.php in your Admidio folder and start the update.
-- Update all installed plugins in the folder adm_plugins.
+- Maybe changes to the theme in the folder adm_theme are necessary.
 
 If you perform an update from version 2.x or 3.x to version 4.x please read our [special update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update_to_version_4).
 
