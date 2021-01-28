@@ -16,9 +16,16 @@ set -o pipefail  # causes a pipeline (for example, curl -s https://sipb.mit.edu/
 # configure apache
 sed -i "s/#ServerName.*/ServerName \$\{HOSTNAME\}/g" /etc/httpd/conf/httpd.conf
 
+if [ "${ADMIDIO_NO_IPV6}" != "" ]; then
+  sed -i "s/inet_interfaces = all/#inet_interfaces = all/g" /etc/postfix/main.cf
+  sed -i "s/inet_protocols = .*/inet_protocols = ipv4/g" /etc/postfix/main.cf
+fi
+
 # configure postfix
 if [ "${ADMIDIO_MAIL_RELAYHOST}" != "" ]; then
-  postconf -e "inet_interfaces = all"
+  if [ "${ADMIDIO_NO_IPV6}" == "" ]; then
+    postconf -e "inet_interfaces = all"
+  fi
   postconf -e "relayhost = ${ADMIDIO_MAIL_RELAYHOST}"  # RELAYHOST=hostname.domain.at:25
 fi
 
@@ -26,9 +33,6 @@ fi
 postfix start
 postfix status
 mailq
-
-
-
 
 # generate admidio config.php
 ADMIDIO_CONFIG_TEMPLATE="/opt/app-root/src/adm_my_files/config_example.php"
