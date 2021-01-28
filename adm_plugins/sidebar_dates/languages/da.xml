@@ -2,4 +2,5 @@
 <resources>
   <string name="PLG_DATES_ALL_EVENTS">Alle aktiviteter</string>
   <string name="PLG_DATES_HEADLINE">Aktivitet</string>
+  <string name="PLG_DATES_NO_ENTRIES_VISITORS">Der er ingen arrangementer tilgængelige for besøgende. Log ind for at se begivenhederne.</string>
 </resources>
