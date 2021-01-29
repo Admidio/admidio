@@ -10,7 +10,7 @@
   <string name="DAT_ASSIGN_PARTICIPANTS">Voeg deelnemers toe</string>
   <string name="DAT_ATTEND">Deelnemen</string>
   <string name="DAT_ATTEND_DATE">U heeft zich aangemeld voor het evenement #VAR1_BOLD# op #VAR2#.</string>
-  <string name="DAT_ATTEND_POSSIBLY">U heeft uw deelname voor eventment #VAR1_BOLD# op #VAR2# onder voorbehoud toegezegd.</string>
+  <string name="DAT_ATTEND_POSSIBLY">U heeft uw deelname voor evenement #VAR1_BOLD# op #VAR2# onder voorbehoud toegezegd.</string>
   <string name="DAT_CALENDAR">Kalender</string>
   <string name="DAT_CANCEL">Annuleer</string>
   <string name="DAT_CANCEL_DATE">U heeft uw deelname voor evenement #VAR1_BOLD# op #VAR2# geannuleerd.</string>
@@ -28,7 +28,7 @@
   <string name="DAT_EDIT_ROOMS">Bewerk zalen</string>
   <string name="DAT_EDIT_ROOMS_DESC">Hier kunnen zalen voor evenementen gemaakt en aangepast worden.</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Een evenement werd gewijzigd</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">Er werd een eventment bij #VAR1# gewijzigd.\n\nTitel: #VAR2#\nDatum: #VAR3#\nKalender: #VAR4#\n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">Een evenement op #VAR1# is gewijzigd.\n\nTitel: #VAR2#\nDatum: #VAR3#\nKalender: #VAR4#\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Plaats: #VAR1#\nZaal: #VAR2#\nDeelnemers: #VAR3#\nGewijzigd door: #VAR4#\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3">Gewijzigd op: #VAR1#</string>
   <string name="DAT_EMAIL_NOTIFICATION_TITLE">Een nieuw evenement is gemaakt</string>
@@ -63,7 +63,7 @@
   <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Deelnemers mogen alle andere deelnemers berichten sturen</string>
   <string name="DAT_ROLES_DIFFERENT">U heeft een rol aan deelnemers toegekend, die geen toestemming hebben om de data in de geselecteerde categorie te zien. Kies svp één van de volgende rollen voor de deelnemers: #VAR1_BOLD#.</string>
   <string name="DAT_ROOM_INFORMATIONS">Zaal informatie</string>
-  <string name="DAT_ROOM_OVERHANG">Als er verder nog ruimte beschikbaar is, zoals extra stoelen of staanplaaten, kunnen deze extra plaatsen hier worden opgegeven.</string>
+  <string name="DAT_ROOM_OVERHANG">Als er verder nog ruimte beschikbaar is (zoals extra stoelen of staanplaatsen), dan kunnen deze extra plaatsen hier worden opgegeven.</string>
   <string name="DAT_ROOM_RESERVED">Geselecteerde zaal is in dit tijdvlak al in gebruik.</string>
   <string name="DAT_ROOM_SELECTABLE">Zaal is beschikbaar</string>
   <string name="DAT_ROOM_SELECTABLE_DESC">Keuzeveld beschikbaar voor beschikbare zalen. Selecteer zaal en maak evenement voor deze zaal. (Standaard: nee)</string>
@@ -81,7 +81,7 @@
   <string name="DAT_USER_INVITED">Uitgenodigd</string>
   <string name="DAT_USER_REFUSED">Geannuleerd</string>
   <string name="DAT_USER_WILL_ATTEND">Neemt deel</string>
-  <string name="DAT_VIEW_MODE_DESC">Weergave van evenementen. In modus #VAR1_BOLD# wordt alle informatie van het evenement in een box getoond. In modus #VAR2_BOLD# wordt de meest belangrijke informatie van het event in een compacte lijst getoond. (Standaard: gedetailleerd)</string>
+  <string name="DAT_VIEW_MODE_DESC">Weergave van evenementen. In modus #VAR1_BOLD# wordt alle informatie van het evenement in een box getoond. In modus #VAR2_BOLD# wordt de meest belangrijke informatie van het evenement in een compacte lijst getoond. (Standaard: gedetailleerd)</string>
   <string name="DAT_VIEW_MODE_DETAIL">Gedetailleerd</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Zichtbaarheid</string>
@@ -276,7 +276,7 @@
   <string name="MAI_ATTACHMENT_SIZE_DESC">Gebruikers kunnen een bestand bijvoegen die kleiner is dan de grootte die hier ingesteld is. Als waarde 0 is, zijn geen bijlagen in de e-mail module mogelijk. (Standaard: 1MB)</string>
   <string name="MAI_ATTACHMENT_TO_LARGE">Uploaden bijlage is mislukt.\nWaarschijnlijk is het bestand te groot!</string>
   <string name="MAI_CAPTCHA_DESC">Voor niet-ingelogde gebruikers zal een alfanumerieke code weergegeven worden bij het contactformulier, als de captcha is geactiveerd. Dit moet correct worden ingevoerd door de gebruiker voordat de inhoud van het formulier wordt ingediend. Dit is om ervoor te zorgen dat het formulier niet kan worden misbruikt door spammers. (Standaard: ja)</string>
-  <string name="MAI_CARBON_COPY">Kopie</string>
+  <string name="MAI_CARBON_COPY">Kopie (CC)</string>
   <string name="MAI_CHARACTER_ENCODING">Karakter codering</string>
   <string name="MAI_CHARACTER_ENCODING_DESC">Er wordt codering van karakters gebruikt bij het versturen van Admidio e-mails. Niet alle e-mail clients ondersteunen UTF-8. ISO-8859-1 kan als alternatief gebruikt worden.</string>
   <string name="MAI_CHOOSE_ROLE">Selecteer svp rol als ontvanger van de e-mail!</string>
@@ -413,7 +413,7 @@
   <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">Gebruiker is geen lid van organisatie #VAR1# en er is geen inlog informatie toegewezen.</string>
   <string name="NWU_NO_REGISTRATIONS">Geen nieuwe registraties beschikbaar.</string>
   <string name="NWU_REGISTERED_ON">Geregistreerd op #VAR1#</string>
-  <string name="NWU_REMINDER_SEND_LOGIN">Wilt u de gebruiker zijn gebruikersnaam en wachtwoord ter herinnering sturen?</string>
+  <string name="NWU_REMINDER_SEND_LOGIN">Wilt u de gebruiker inloggegevens (inclusief wachtwoord) ter herinnering sturen?</string>
   <string name="NWU_SEND_LOGIN">Verstuur inlog informatie</string>
   <string name="NWU_USER_NO_VALID_LOGIN">Gebruiker heeft nog geen inlog gegevens.\nWilt u de informatie over deze registratie toewijzen aan de gebruiker?</string>
   <string name="NWU_USER_VALID_LOGIN">Gebruiker heeft al geldige inlog informatie.</string>
@@ -507,7 +507,7 @@
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Hier kunt u algemene voorkeuren en voorkeuren per module beheren.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">De organisatie #VAR1_BOLD# is toegevoegd. Bij de aanmelding kunt u deze nu kiezen.\n\nAls u voor deze organisatie een afzonderlijke homepage hebt gemaakt, moet u de nieuwe organisatie aan de config.php van deze pagina toevoegen.</string>
   <string name="ORG_PARENT_ORGANIZATION">Hoofdorganisatie</string>
-  <string name="ORG_PARENT_ORGANIZATION_DESC">Bepaal hier de bovenliggende organisatie. Deze kan bijvoorbeeld evenementen en mededelingen aanmaken, die ook worden getoond in de huidige organisatie.</string>
+  <string name="ORG_PARENT_ORGANIZATION_DESC">Bepaal hier de hoofdorganisatie. Hoofdorganisaties kunnen bijvoorbeeld evenementen en mededelingen aanmaken, die ook worden getoond in de geselecteerde (onderliggende) organisatie.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Wachtwoord sterkte</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kunt u aangeven hoe veilig en ingewikkeld wachtwoorden op zijn minst moeten zijn.\nDe waarde tussen haakjes geeft aan hoeveel pogingen gemiddeld vereist zijn totdat het wachtwoord is bepaald.\n\nGeen: riskant wachtwoord. (&lt;10^3)\nLaag: bescherming tegen beperkte online aanvallen. (&lt;10^6)\nMidden: bescherming tegen onbeperkte online aanvallen.(&lt;10^8)\nHoog: matige beveiliging tegen offline hash-aanvallen. (&lt;10^10)\nZeer hoog: sterke bescherming tegen offline hash-aanvallen. (&gt;=10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Geen</string>
@@ -527,7 +527,7 @@
   <string name="ORG_SEND_PASSWORD_DESC">Als de gebruiker zijn wachtwoord is vergeten, kan hij automatisch een nieuw gegenereerd wachtwoord laten sturen. Als deze optie is gedeactiveerd, kan de gebruiker alleen een verzoek via e-mail verzenden naar de beheerder, die vervolgens een nieuw wachtwoord kan maken. Om het wachtwoord te kunnen verzenden, moet ook de instelling #VAR1_BOLD# ingesteld zijn. (Standaard: ja)</string>
   <string name="ORG_SEND_NEW_PASSWORD">Stuur nieuw wachtwoord</string>
   <string name="ORG_SHOW_CREATE_EDIT">Toon maker en tijdstip</string>
-  <string name="ORG_SHOW_CREATE_EDIT_DESC">Een veld is normaal zichtbaar voor alle gebruikers. Indien deze functie niet is geselecteerd, zijn de gegevens alleen zichtbaar voor gebruikers die de rechten hebben om alle gebruikers te bewerken. Gebruikers kunnen de gegevens zien en aanpassen in hun eigen profiel.</string>
+  <string name="ORG_SHOW_CREATE_EDIT_DESC">Op sommige plaatsen worden de maker en de gebruiker met de laatste wijziging samen in een record weergegeven met een tijdstempel. Deze instelling kan worden gebruikt om te bepalen of deze informatie überhaupt wordt weergegeven en of de gebruiker moet worden weergegeven met gebruikersnaam of met zijn voor- en achternaam.</string>
   <string name="ORG_SHOW_ALL_USERS">Optioneel alle gebruikers tonen</string>
   <string name="ORG_SHOW_ALL_USERS_DESC">Indien geactiveerd, zullen naast de actieve leden van de huidige organisatie ook de voormalige leden en leden van andere organisaties getoond worden. Anders worden alleen leden van de huidige organisatie weergegeven. Tijdens het aanmaken van nieuwe gebruikers of bij het toewijzen van nieuwe registraties, zullen alle organisaties gecontroleerd worden op bestaande gebruikers.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Toon selectie van organisatie</string>
@@ -560,7 +560,7 @@
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Verwijder album</string>
   <string name="PHO_ALBUM_LOCK">Album vergrendelen</string>
-  <string name="PHO_ALBUM_LOCK_DESC">Leden en bezoekers kunnen gesloten albums niet inzien. U kunt bijvoorbeeld een album tijdelijk sluiten terwijl u de foto\'s voor het album upload.</string>
+  <string name="PHO_ALBUM_LOCK_DESC">Leden en bezoekers kunnen gesloten albums niet inzien. U kunt bijvoorbeeld een album tijdelijk sluiten tijdens het uploaden van foto\'s.</string>
   <string name="PHO_ALBUM_NOT_APPROVED">Het album is momenteel vergrendeld en wordt daarom niet aan bezoekers getoond.</string>
   <string name="PHO_ALBUM_UNLOCK">Album ontgrendelen</string>
   <string name="PHO_CAPTION_SIZE">Caption grootte</string>
@@ -586,8 +586,8 @@
   <string name="PHO_NO_ALBUM_CONTENT">Geen foto\'s in album.</string>
   <string name="PHO_NO_RIGHTS">U heeft geen rechten om dit te doen.\n\nAlleen ingelogde gebruikers met foto rechten mogen foto\'s beheren.</string>
   <string name="PHO_NUMBER_OF_ALBUMS_PER_PAGE">Aantal albums per pagina</string>
-  <string name="PHO_PARENT_ALBUM">Hoofd album</string>
-  <string name="PHO_PARENT_ALBUM_DESC">Een album kan ondergeschikt zijn aan een ander album. Selecteer in de selectielijst het bovenliggende album voor het huidige album. Als u het album op het hoogste niveau wilt weergeven, selecteer #VAR1_BOLD#.</string>
+  <string name="PHO_PARENT_ALBUM">Hoofdalbum</string>
+  <string name="PHO_PARENT_ALBUM_DESC">Een album kan onderdeel van een ander album zijn. Selecteer svp het hoofdalbum in de selectielijst. Als u het album op het hoogste niveau wilt weergeven, selecteer #VAR1_BOLD#.</string>
   <string name="PHO_PHOTO_ALBUMS">Foto albums</string>
   <string name="PHO_PHOTO_FORMAT_INVALID">Alleen JPG en PNG foto\'s zijn toegestaan.</string>
   <string name="PHO_PHOTO_PROCESSING_ERROR">Fout tijdens verwerken van foto</string>
@@ -597,14 +597,14 @@
   <string name="PHO_PHOTO_UPLOAD_DESC">Kies de afbeeldingen die u naar het album #VAR1_BOLD# wilt uploaden.</string>
   <string name="PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL">Niet alle foto\'s werden succesvol geüpload.</string>
   <string name="PHO_PHOTOGRAPHER">Foto\'s van</string>
-  <string name="PHO_PHOTOS_DESC">Hier kunnen foto\'s geupload en getoond worden. Deze foto\'s kunnen in mappen verdeeld worden. </string>
+  <string name="PHO_PHOTOS_DESC">Hier kunnen foto\'s geüpload en getoond worden. Deze foto\'s kunnen in mappen verdeeld worden. </string>
   <string name="PHO_POPUP_WINDOW">Popup venster</string>
   <string name="PHO_PREVIOUS_PHOTO">Vorige foto</string>
   <string name="PHO_RECENT_ALBUMS_OF_ORGA">Nieuwste foto album van organisatie #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Resolutie groter dan</string>
   <string name="PHO_SAME_WINDOW">Hetzelfde venster</string>
   <string name="PHO_SCALE_AT_UPLOAD">Upload schalen</string>
-  <string name="PHO_SCALE_AT_UPLOAD_DESC">Foto\'s worden herschaald tijdens upload. Opgegeven pixels betreft de lange zijde van de foto. De korte zijde blijft in verhouding gelijk aan de lange zijde. (Standaard: 640 pixels)</string>
+  <string name="PHO_SCALE_AT_UPLOAD_DESC">Foto\'s worden herschaald tijdens uploaden. Opgegeven pixels betreft de lange zijde van de foto. De korte zijde blijft in verhouding gelijk aan de lange zijde. (Standaard: 640 pixels)</string>
   <string name="PHO_SCALE_THUMBNAILS">Miniatuur schalen</string>
   <string name="PHO_SCALE_THUMBNAILS_DESC">Hier kan worden ingesteld op welke grootte de langere zijde van de miniatuurafbeelding moet worden geschaald. Let op: als de miniaturen te breed zijn, passen er minder naast elkaar. Indien nodig, stel minder kolommen in. (Standaard: 160 pixels)</string>
   <string name="PHO_SELECT_FOTOS">Foto\'s kiezen</string>
@@ -613,7 +613,7 @@
   <string name="PHO_SHOWN_ON_READY">Foto\'s zijn succesvol toegevoegd aan album als ze op deze pagina getoond worden. </string>
   <string name="PHO_THUMBNAILS_PER_PAGE">Miniaturen per pagina</string>
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">De ingevoerde waarde bepaalt hoeveel miniaturen op een pagina te zien zijn. Als een album meer foto\'s heeft dan wordt er automatisch een paginanavigatie toegevoegd. (Standaard: 16)</string>
-  <string name="PHO_UPLOAD_PHOTOS">Upload foto\'s</string>
+  <string name="PHO_UPLOAD_PHOTOS">Foto\'s uploaden</string>
   <string name="PHO_WANT_DELETE_PHOTO">Geselecteerde foto wordt verwijderd. Doorgaan?</string>
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Bevestig nieuwe profielfoto</string>
@@ -661,17 +661,17 @@
   <string name="PRO_PASSWORD_OLD_WRONG">Oude wachtwoord is onjuist.</string>
   <string name="PRO_PASSWORD_NOT_STRONG_ENOUGH">Het wachtwoord is niet sterk genoeg.</string>
   <string name="PRO_PHOTO_DELETED">Profielfoto is verwijderd.</string>
-  <string name="PRO_PHOTO_FILE_TO_LARGE">Grootte van geuploade foto is groter dan toegestane grootte van #VAR1# B.</string>
+  <string name="PRO_PHOTO_FILE_TO_LARGE">Grootte van geüploade foto is groter dan toegestane grootte van #VAR1# B.</string>
   <string name="PRO_PHOTO_FORMAT_INVALID">Alleen foto\'s in JPG en PNG formaat zijn toegestaan.</string>
   <string name="PRO_PHOTO_NOT_CHOSEN">Geen fotobestand geselecteerd.</string>
-  <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">Grootte van geuploade foto is groter dan toegestane resolutie van #VAR1# megapixels.</string>
+  <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">Grootte van geüploade foto is groter dan toegestane resolutie van #VAR1# megapixels.</string>
   <string name="PRO_PHOTO_SAVED">Nieuwe profielfoto is succesvol opgeslagen.</string>
   <string name="PRO_PROFILE">Profiel</string>
   <string name="PRO_PROFILE_FROM">Profiel van #VAR1# #VAR2#</string>
   <string name="PRO_RESTRICTIONS_HELP_1">U moet zelf op de foto staan.</string>
   <string name="PRO_RESTRICTIONS_HELP_2">Foto moet opgeslagen worden als JPG of PNG.</string>
   <string name="PRO_RESTRICTIONS_HELP_3">De server accepteert foto\'s met een maximale afmeting van #VAR1# megapixels.</string>
-  <string name="PRO_RESTRICTIONS_HELP_4">Geuploade bestanden mogen niet groter zijn dan #VAR1# MB.</string>
+  <string name="PRO_RESTRICTIONS_HELP_4">Geüploade bestanden mogen niet groter zijn dan #VAR1# MB.</string>
   <string name="PRO_ROLE_MEMBERSHIP_OTHER_ORG">Rol lidmaatschappen van andere organisaties</string>
   <string name="PRO_ROLE_NOT_ASSIGNED">Gegevens niet opgeslagen.\nEr is geen rol aan gebruiker toegewezen.</string>
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP">Toon voormalige rol lidmaatschappen</string>
@@ -685,8 +685,8 @@
   <string name="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS">ga naar profiel voorkeuren</string>
   <string name="PRO_UPLOAD_HELP_1">Klik op de knop #VAR1_BOLD# om foto\'s te selecteren die u vanaf uw harde schijf wilt uploaden.</string>
   <string name="PRO_UPLOAD_HELP_2">Klik dan op #VAR1_BOLD# en wacht rustig af.</string>
-  <string name="PRO_UPLOAD_PHOTO">Upload foto</string>
-  <string name="PRO_USERNAME_DESCRIPTION">Middels deze gebruikersnaam kunt u inloggen.\n\nAls de gewenste gebruikersnaam niet meer beschikbaar is, probeer svp een alternatief zoals Andi78 of StefanT.</string>
+  <string name="PRO_UPLOAD_PHOTO">Foto uploaden</string>
+  <string name="PRO_USERNAME_DESCRIPTION">Middels deze gebruikersnaam kunt u inloggen.\n\nAls de gewenste gebruikersnaam niet meer beschikbaar is, probeer svp een alternatief zoals Andi78 of SteveT.</string>
   <string name="PRO_VIEW_ROLES_OTHER_ORGAS">Er worden hier alleen rollen van andere organisaties weergegeven, die voor alle geregistreerd gebruikers zichtbaar zijn. Als u lid bent van deze organisatie, zullen ook de rollen getoond worden die u kunt zien met uw rechten binnen de organisatie.</string>
   <string name="PRO_WANT_DELETE_PHOTO">Wilt u de geselecteerde foto verwijderen?</string>
   <string name="PRO_YEARS">Jaren</string>
@@ -741,6 +741,7 @@
   <string name="SYS_BACKUP_FILE">Backup bestand</string>
   <string name="SYS_BACKUP_FROM">Backup gemaakt op #VAR1# om #VAR2#</string>
   <string name="SYS_BACKUP_ONLY_MYSQL">De backup-module kan alleen bij een MySQL-database gebruikt worden.</string>
+  <string name="SYS_BASIC_DATA">Basisgegevens</string>
   <string name="SYS_BIRTHDAY">Geboortedatum</string>
   <string name="SYS_CALENDARS">Kalenders</string>
   <string name="SYS_CANT_DELETE_ROLE">U kunt de rol #VAR1_BOLD# niet verwijderen.</string>
@@ -748,10 +749,10 @@
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Resultaat van berekening</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Het resultaat van de berekening is onjuist</string>
-  <string name="SYS_CAPTCHA_CALC_DESCRIPTION">De berekening is onderdeel van Captcha. Een Captcha wordt gebruikt voor spam preventie. De berekening wordt gebruikt om vast te stellen of een gebruiker of een script / spambot het formulier heeft ingevuld.\nVoer de oplossing van de berekening in het formulierveld in.</string>
+  <string name="SYS_CAPTCHA_CALC_DESCRIPTION">De berekening is onderdeel van Captcha. Een Captcha wordt gebruikt voor spam preventie. De berekening wordt gebruikt om vast te stellen of een gebruiker of een script (of spambot) het formulier heeft ingevuld.\nVoer svp de uitkomst van de berekening in het formulierveld in.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">De identificatiecode is ongeldig.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Identificatiecode</string>
-  <string name="SYS_CAPTCHA_DESCRIPTION">Deze code is onderdeel van Captcha. Een Captcha wordt gebruikt tegen spam preventie. De afbeelding wordt gebruikt om vast te stellen of een mens of script / spambot het formulier heeft ingevuld.\nVoer de 4- tot 6-cijferige code van de afbeelding in het formulierveld in.</string>
+  <string name="SYS_CAPTCHA_DESCRIPTION">De authenticatiecode is onderdeel van Captcha. Een Captcha wordt gebruikt voor spam preventie. De afbeelding wordt gebruikt om vast te stellen of een gebruiker of script (of spambot) het formulier heeft ingevuld.\nVoer svp de uitkomst van de authenticatiecode in het formulierveld in.</string>
   <string name="SYS_CATEGORIES">Categoriën</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Leden van deze rol zijn beheerders van de module en hebben toegang tot alles. U kunt data maken, bewerken, verwijderen en categorieën en hun rechten bewerken. Een rol kan een beheerder worden als deze het recht #VAR1_BOLD# toegewezen wordt.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle beheerders van de module van de hoofdorganisatie.</string>
@@ -842,6 +843,7 @@
   <string name="SYS_DEACTIVATE_ROLE">Rol deactiveren</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Als u rol #VAR1_BOLD# uitschakelt, kan de rol niet langer worden gebruikt en toegewezen worden aan objecten. Evenzo zijn alle rechten van deze rol niet langer effectief. De rol met zijn instellingen en lid toewijzingen blijft echter bestaan en kan later worden opnieuw worden geactiveerd.</string>
   <string name="SYS_DEACTIVATED">Gedeactiveerd</string>
+  <string name="SYS_DEBUG_OUTPUT">Uitvoer debuggen</string>
   <string name="SYS_DEBUG_MODE">Debug mode</string>
   <string name="SYS_DECIMAL_NUMBER">Decimaal cijfer</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standaard toewijzing bij registratie</string>
@@ -904,8 +906,10 @@
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Een nieuwe mededeling is gemaakt</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Nieuwe mededeling op #VAR1#.\n\nTitel: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
-  <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">Nieuw bestand geupload</string>
-  <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">Nieuw bestand geupload op #VAR1#\n\nBestand: #VAR2#\nGeupload door: #VAR3#\nGeupload op: #VAR4#</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">Een nieuw bestand is geüpload</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">Nieuw bestand geüpload op #VAR1#\n\nBestand: #VAR2#\nGeüpload door: #VAR3#\nGeüpload op: #VAR4#</string>
+  <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# functie test e-mail</string>
+  <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Deze e-mail is verzonden via de website #VAR1# van de organisatie #VAR2# met de e-mailinstellingen hier opgeslagen.</string>
   <string name="SYS_EMAIL_INVALID">Het e-mailadres in veld #VAR1_BOLD# bevat onjuiste karakters of is niet compleet.</string>
   <string name="SYS_EMAIL_NOT_SEND">De e-mail kon niet worden verzonden naar #VAR1_BOLD#.\n\nDe volgende fout heeft plaatsgevonden:\n#VAR2#</string>
   <string name="SYS_EMAIL_SEND">De e-mail is verstuurd.</string>
@@ -942,10 +946,10 @@
   <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Bestand is niet meer beschikbaar op de server. Het moet uit de database verwijderd worden.</string>
   <string name="SYS_FILE_RENAME">Bestand #VAR1# is hernoemd.</string>
   <string name="SYS_FILE_RENAME_ERROR">Foutmelding tijdens hernoemen van bestand #VAR1#.</string>
-  <string name="SYS_FILE_TO_LARGE_SERVER">Grootte van geuploade bestand is groter dan door server gedefinieerde maximale grootte #VAR1# MB.</string>
+  <string name="SYS_FILE_TO_LARGE_SERVER">Grootte van geüploade bestand is groter dan de door server gedefinieerde maximale grootte van #VAR1# MB.</string>
   <string name="SYS_FILE_TYPE">Type bestand</string>
-  <string name="SYS_FILE_UPLOADED">Bestand #VAR1_BOLD# is geupload.</string>
-  <string name="SYS_FILE_UPLOADS">Bestand uploads</string>
+  <string name="SYS_FILE_UPLOADED">Bestand #VAR1_BOLD# is geüpload.</string>
+  <string name="SYS_FILE_UPLOADS">Geüploade bestanden</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle bestanden werden succesvol geüpload.\n\nDit venster kan nu gesloten worden.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Niet alle bestanden werden succesvol geüpload.</string>
   <string name="SYS_FILES_UPLOAD_DESC">Selecteer svp alle bestanden die u naar de map #VAR1_BOLD# wilt uploaden.</string>
@@ -961,7 +965,7 @@
   <string name="SYS_FOLDER_NO_FILES">Niets gevonden.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">U heeft geen toegang tot de geselecteerde map.</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Er zijn geen documenten of bestanden beschikbaar voor bezoekers.</string>
-  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden.\n\nVraag svp hulp bij een  #VAR2#beheerder#VAR3# om de schrijfrechten van de bovenliggende map na te kijken.</string>
+  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden.\n\nVraag svp hulp bij een  #VAR2#beheerder#VAR3# om de schrijfrechten van de hoofdmap na te kijken.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">De map is niet meer beschikbaar op de server. Het moet uit de database verwijderd worden.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Map (ID #VAR1#) is niet gevonden.</string>
   <string name="SYS_FOLDER_RENAME">Map #VAR1# is hernoemd.</string>
@@ -1204,6 +1208,8 @@
   <string name="SYS_REGISTERED_AS">Ingelogd als</string>
   <string name="SYS_REGISTRATION">Registratie</string>
   <string name="SYS_REGISTRATION_SAVED">Uw gegevens zijn opgeslagen.\n\nNa goedkeuring kunt u inloggen. U zult per e-mail hierover worden geinformeerd.</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Neem alle gegevens van de registratie over voor de bestaande gebruiker</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Als een nieuw geregistreerde gebruiker al in de database bestaat, worden alle gegevens van de registratie overgedragen naar de bestaande gebruiker, als deze instelling is ingesteld. Als deze instelling niet is ingesteld, worden alleen de gebruikersnaam en het wachtwoord overgenomen. Als de gebruiker niet eerder bestond, worden altijd alle gegevens uit de registratie overgenomen, onafhankelijk van deze instelling. (Standaard: ja)</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relatie configuratie</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relatie configuraties</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Als deze instelling is ingesteld, kan een gebruiker het profiel van een andere gebruiker bewerken als hij in relatie staat tot deze andere gebruiker. Bij een asymmetrische relatie wordt het recht afzonderlijk toegewezen, bij een symmetrische relatie mogen beide gebruikers het andere profiel bewerken en bij een unidirectionele relatie mag alleen de gebruiker met de opgeslagen relatie het andere profiel bewerken.</string>
@@ -1234,8 +1240,8 @@
   <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">Bepaal wie lijsten en gebruikersprofielen kan zien van leden van huidige rol. Rol met rechten #VAR1_BOLD# staat boven deze instelling.</string>
   <string name="SYS_RIGHT_WEBLINKS">Weblinks beheren</string>
   <string name="SYS_ROLE">Rol</string>
-  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Op deze pagina kunt u instellen wie de map #VAR1_BOLD# kan zien, bestanden kan downloaden of bestanden kan uploaden. De ingestelde rechten worden overgenomen door alle submappen en bestaande rechten in submappen worden overschreven. Alleen rollen die toegang hebben tot de bovenliggende map zijn voor u beschikbaar. Beheerders hebben alle rechten voor de map.</string>
-  <string name="SYS_ROLE_ASSIGNMENT_FOR">Roltoewijzing</string>
+  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Op deze pagina kunt u instellen wie de map #VAR1_BOLD# kan zien, bestanden kan downloaden of bestanden kan uploaden. De ingestelde rechten worden overgenomen door alle submappen en bestaande rechten in submappen worden overschreven. Alleen rollen die toegang hebben tot de hoofdmap zijn beschikbaar. Beheerders hebben alle rechten voor de map.</string>
+  <string name="SYS_ROLE_ASSIGNMENT_FOR">Roltoewijzing voor #VAR1# #VAR2#</string>
   <string name="SYS_ROLE_DEPENDENCIES_DESC">Een lid van een afhankelijke rol zal automatisch lid worden van #VAR1#.\n\nAls deze afhankelijkheid is ingesteld zullen alle bestaande leden met deze rol lid worden van #VAR1#. Als de afhankelijkheid verwijderd wordt, zullen lidmaatschappen hetzelfde blijven.</string>
   <string name="SYS_ROLE_INFORMATION">Rol informatie</string>
   <string name="SYS_ROLE_MAX_MEMBERS">Opslaan is niet mogelijk. Voor rol #VAR1_BOLD# wordt het maximale aantal leden overschreden.</string>
@@ -1266,8 +1272,8 @@
   <string name="SYS_SEARCH_DATE_EXAMPLE">01.03.1986</string>
   <string name="SYS_SEARCH_DATE_DESC">Leden zoeken die na 01.03.1986 geboren zijn</string>
   <string name="SYS_SEARCH_EMPTY_EXAMPLE_DESC">Zoek alle gebruikers die het Straat veld niet hebben ingevuld</string>
-  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE">Stefan</string>
-  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">Zoek alle gebruikers met de naam Stefan</string>
+  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE">Steve</string>
+  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">Zoek alle gebruikers met de naam Steve</string>
   <string name="SYS_SEARCH_GENDER_DESC">Zoekt alle mannelijke gebruikers</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_EXAMPLE">Mei*</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_DESC">Leden zoeken waarbij achternaam begint met Mei</string>
@@ -1279,7 +1285,7 @@
   <string name="SYS_SEARCH_TELEFON_EXAMPLE">*241* *54</string>
   <string name="SYS_SEARCH_TELEFON_DESC">Leden zoeken met telefoonnummer waarin 241 voorkomt en die eindigt met 54</string>
   <string name="SYS_SEARCH_YES_NO_FIELD">Ja/nee veld</string>
-  <string name="SYS_SEARCH_YES_NO_FIELD_DESC">Zoekt alle gemarkeerde gebruikers</string>
+  <string name="SYS_SEARCH_YES_NO_FIELD_DESC">Zoekt naar alle gemarkeerde (aangevinkte) gebruikers</string>
   <string name="SYS_SEAT_AMOUNT">Extra plaatsen</string>
   <string name="SYS_SEATING">Zitplaatsen</string>
   <string name="SYS_SECONDS_VAR">#VAR1# seconden</string>
@@ -1296,6 +1302,7 @@
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Als deze instelling is ingeschakeld, worden e-mails naar alle e-mailadressen gestuurd die in het profiel staan. Als deze instelling is uitgeschakeld, worden e-mails alleen gestuurd naar het e-mailadres van het profielveld met de interne naam EMAIL. (Standaard: ingeschakeld)</string>
   <string name="SYS_SEND_MAILS">Stuur e-mails</string>
   <string name="SYS_SEND_NEW_PW">Stuur nieuw wachtwoord</string>
+  <string name="SYS_SEND_TEST_MAIL">Verstuur test e-mail</string>
   <string name="SYS_SENDER">Afzender</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server instellingen staan niet toe dat bestanden geupload worden.</string>
@@ -1339,6 +1346,8 @@
   <string name="SYS_SYSTEM">Systeem</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">Standaard lijst voor het hele systeem</string>
   <string name="SYS_SYSTEM_MAILS">Systeemberichten</string>
+  <string name="SYS_TEST_MAIL">Test e-mail</string>
+  <string name="SYS_TEST_MAIL_DESC">Voordat u deze functie uitvoert, moeten alle instellingen voor het verzenden van e-mail worden opgeslagen!\nEen eenvoudige e-mail met het onderwerp #VAR1_BOLD# wordt verzonden naar het e-mailadres van de ingelogde gebruiker, op basis van de opgeslagen e-mailinstellingen. Gedurende het proces wordt een verzendlog weergegeven tijdens de SMTP-verzending, wat kan helpen bij problemen.</string>
   <string name="SYS_TEXT">Tekst</string>
   <string name="SYS_THURSDAY">Donderdag</string>
   <string name="SYS_TIME">Tijd</string>
@@ -1397,6 +1406,7 @@
   <string name="SYS_WIDTH">Breedte</string>
   <string name="SYS_WRITE_EMAIL">E-mail schrijven</string>
   <string name="SYS_WRITE_ENTRY">Bericht schrijven</string>
+  <string name="SYS_WRITE_MESSAGE">Schrijf bericht</string>
   <string name="SYS_WRITE_PM">Privé bericht schrijven</string>
   <string name="SYS_YES">Ja</string>
   <string name="SYS_YOUR_CONFIGURATION">Eigen instellingen</string>
