@@ -75,8 +75,8 @@ if($gSettingsManager->getInt('enable_photo_module') > 0)
         echo '<h3>'.$gL10n->get('SYS_PHOTOS').'</h3>';
     }
 
-    if($gSettingsManager->getInt('enable_announcements_module') === 1
-    || ($gSettingsManager->getInt('enable_announcements_module') === 2 && $gValidLogin))
+    if($gSettingsManager->getInt('enable_photo_module') === 1
+    || ($gSettingsManager->getInt('enable_photo_module') === 2 && $gValidLogin))
     {
         // call photo albums
         $sql = 'SELECT *
