@@ -304,7 +304,7 @@ class ModuleDates extends Modules
             }
 
             // add 1 second to end date because full time events to until next day
-            $sqlConditions .= ' AND dat_begin <= ? AND dat_end > ? '; // $this->getParameter('dateEndFormatEnglish') . ' 23:59:59' AND $this->getParameter('dateStartFormatEnglish') . ' 00:00:00'
+            $sqlConditions .= ' AND dat_begin <= ? AND dat_end >= ? '; // $this->getParameter('dateEndFormatEnglish') . ' 23:59:59' AND $this->getParameter('dateStartFormatEnglish') . ' 00:00:00'
             $params[] = $this->getParameter('dateEndFormatEnglish')   . ' 23:59:59';
             $params[] = $this->getParameter('dateStartFormatEnglish') . ' 00:00:00';
 
