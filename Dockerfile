@@ -35,6 +35,7 @@ RUN yum update -y --setopt=tsflags=nodocs && \
     yum -y clean all --enablerepo='*'
 
 COPY . .
+RUN mkdir provisioning && cp -a adm_plugins adm_themes adm_my_files provisioning/ && rm -rf adm_plugins adm_themes adm_my_files
 
 RUN chown -R default:root .
 
