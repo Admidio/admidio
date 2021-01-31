@@ -13,6 +13,16 @@ set -o pipefail  # causes a pipeline (for example, curl -s https://sipb.mit.edu/
 #     check for db connection and existing tables instead
 
 
+
+
+# check for existing admidio directories in docker volumes
+for dir in "adm_plugins" "adm_themes" "adm_my_files" ; do
+    if [ ! -d "${dir}" -o "$(find "${dir}" -maxdepth 0 -type d -empty 2>/dev/null)" != "" ]; then
+        echo "[INFO ] provisioning missing directory ${dir}"
+        cp -a "provisioning/${dir}" .
+    fi
+done
+
 # configure apache
 echo "[INFO ] configure ServerName in /etc/httpd/conf/httpd.conf"
 sed -i "s/#ServerName.*/ServerName \$\{HOSTNAME\}/g" /etc/httpd/conf/httpd.conf
