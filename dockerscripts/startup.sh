@@ -14,17 +14,26 @@ set -o pipefail  # causes a pipeline (for example, curl -s https://sipb.mit.edu/
 
 
 # configure apache
+echo "[INFO ] configure ServerName in /etc/httpd/conf/httpd.conf"
 sed -i "s/#ServerName.*/ServerName \$\{HOSTNAME\}/g" /etc/httpd/conf/httpd.conf
 
 # configure postfix
 if [ "${ADMIDIO_MAIL_RELAYHOST}" != "" ]; then
-  postconf -e "inet_interfaces = all"
-  postconf -e "relayhost = ${ADMIDIO_MAIL_RELAYHOST}"  # RELAYHOST=hostname.domain.at:25
+    echo "[INFO ] configure postfix for ADMIDIO_MAIL_RELAYHOST=${ADMIDIO_MAIL_RELAYHOST}"
+    if [ "$(sysctl --values net.ipv6.conf.all.disable_ipv6 2>/dev/null)" == "1" ]; then
+        echo "[INFO ] configure postfix set inet_protocols to ipv4 since ipv6 is disabled (net.ipv6.conf.all.disable_ipv6=1)"
+        postconf -e "inet_protocols = ipv4"
+    fi
+    postconf -e "inet_interfaces = all"
+    postconf -e "relayhost = ${ADMIDIO_MAIL_RELAYHOST}"
 fi
 
 # start postfix to allow mail delivery
+echo "[INFO ] execute postfix start"
 postfix start
+echo "[INFO ] execute postfix status"
 postfix status
+echo "[INFO ] execute mailq"
 mailq
 
 
@@ -33,6 +42,7 @@ mailq
 # generate admidio config.php
 ADMIDIO_CONFIG_TEMPLATE="/opt/app-root/src/adm_my_files/config_example.php"
 ADMIDIO_CONFIG="/opt/app-root/src/adm_my_files/config.php"
+echo "[INFO ] generate admidio config.php file"
 cp --preserve=mode,ownership,timestamps "${ADMIDIO_CONFIG_TEMPLATE}" "${ADMIDIO_CONFIG}"
 # chown default.root "${ADMIDIO_CONFIG}"
 # chmod 664 "${ADMIDIO_CONFIG}"
@@ -50,18 +60,18 @@ sed -i "s/^\$g_tbl_praefix.*/\$g_tbl_praefix = '${ADMIDIO_DB_TABLE_PRAEFIX:-adm}
 # // Access to the database of the MySQL-Server
 # $g_adm_srv  = 'URL_to_your_MySQL-Server';    // Server
 if [ "${ADMIDIO_DB_HOST}" != "" ]; then
-  sed -i "s/^\$g_adm_srv.*/\$g_adm_srv = '${ADMIDIO_DB_HOST%%:*}';/g" "${ADMIDIO_CONFIG}"
+    sed -i "s/^\$g_adm_srv.*/\$g_adm_srv = '${ADMIDIO_DB_HOST%%:*}';/g" "${ADMIDIO_CONFIG}"
 else
-  sed -i "s/^\$g_adm_srv.*/\$g_adm_srv = 'localhost';/g" "${ADMIDIO_CONFIG}"
+    sed -i "s/^\$g_adm_srv.*/\$g_adm_srv = 'localhost';/g" "${ADMIDIO_CONFIG}"
 fi
 
 # $g_adm_port = null;                          // Port
 if [ "${ADMIDIO_DB_PORT}" != "" ]; then
-  sed -i "s/^\$g_adm_port.*/\$g_adm_port = ${ADMIDIO_DB_PORT};/g" "${ADMIDIO_CONFIG}"
+    sed -i "s/^\$g_adm_port.*/\$g_adm_port = ${ADMIDIO_DB_PORT};/g" "${ADMIDIO_CONFIG}"
 elif [ "${ADMIDIO_DB_HOST}" != "" ]; then
-  sed -i "s/^\$g_adm_port.*/\$g_adm_port = ${ADMIDIO_DB_HOST##*:};/g" "${ADMIDIO_CONFIG}"
+    sed -i "s/^\$g_adm_port.*/\$g_adm_port = ${ADMIDIO_DB_HOST##*:};/g" "${ADMIDIO_CONFIG}"
 else
-  sed -i "s/^\$g_adm_port.*/\$g_adm_port = null;/g" "${ADMIDIO_CONFIG}"
+    sed -i "s/^\$g_adm_port.*/\$g_adm_port = null;/g" "${ADMIDIO_CONFIG}"
 fi
 # $g_adm_db   = 'Databasename';                // Database
 sed -i "s/^\$g_adm_db.*/\$g_adm_db = '${ADMIDIO_DB_NAME:-admidio}';/g" "${ADMIDIO_CONFIG}"
@@ -74,7 +84,7 @@ sed -i "s/^\$g_adm_pw.*/\$g_adm_pw = '${ADMIDIO_DB_PASSWORD:-admidio}';/g" "${AD
 # // Example: 'https://www.admidio.org/example'
 # $g_root_path = 'https://www.your-website.de/admidio';
 if [ "${ADMIDIO_ROOT_PATH}" != "" ]; then
-  sed -i "s#^\$g_root_path.*#\$g_root_path = '${ADMIDIO_ROOT_PATH}';#g" "${ADMIDIO_CONFIG}"
+    sed -i "s#^\$g_root_path.*#\$g_root_path = '${ADMIDIO_ROOT_PATH}';#g" "${ADMIDIO_CONFIG}"
 fi
 
 # // Short description of the organization that is running Admidio
@@ -83,7 +93,7 @@ fi
 # // Maximum of 10 characters !!!
 # $g_organization = 'Shortcut';
 if [ "${ADMIDIO_ORGANISATION}" != "" ]; then
-  sed -i "s/^\$g_organization.*/\$g_organization = '${ADMIDIO_ORGANISATION}';/g" "${ADMIDIO_CONFIG}"
+    sed -i "s/^\$g_organization.*/\$g_organization = '${ADMIDIO_ORGANISATION}';/g" "${ADMIDIO_CONFIG}"
 fi
 
 # // The name of the timezone in which your organization is located.
@@ -91,7 +101,7 @@ fi
 # // Example: 'Europe/Berlin'
 # $gTimezone = 'Europe/Berlin';
 if [ "${TZ}" != "" ]; then
-  sed -i "s#^\$gTimezone.*#\$gTimezone = '${TZ}';#g" "${ADMIDIO_CONFIG}"
+    sed -i "s#^\$gTimezone.*#\$gTimezone = '${TZ}';#g" "${ADMIDIO_CONFIG}"
 fi
 
 # // If this flag is set = 1 then you must enter your loginname and password
@@ -107,4 +117,5 @@ sed -i "s/^\$gPasswordHashAlgorithm.*/\$gPasswordHashAlgorithm = '${ADMIDIO_PASS
 
 
 # run apache with php enabled as user default
+echo "[INFO ] run apache with php enabled (/usr/libexec/s2i/run)"
 /usr/libexec/s2i/run
