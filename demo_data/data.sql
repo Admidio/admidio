@@ -1042,6 +1042,38 @@ INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end
 (541, 11, 354, '2018-06-05', '9999-12-31', 0, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
 (542, 11, 240, '2018-06-05', '9999-12-31', 0, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0);
 
+
+--
+-- Data for table adm_messages
+--
+
+INSERT INTO `adm_messages` (`msg_id`, `msg_type`, `msg_subject`, `msg_usr_id_sender`, `msg_usr_id_receiver`, `msg_timestamp`, `msg_read`) VALUES
+(1, 'EMAIL', 'DEMO_MSG_EVENTS_HOMEPAGE', 1, '313 | 332 | 355 | 354', '2021-01-20 14:58:16', 0),
+(2, 'EMAIL', 'DEMO_MSG_NEW_MODULE', 1, 'groupID: 3', '2021-02-01 16:07:01', 0),
+(3, 'EMAIL', 'DEMO_MSG_NEW_TRAINING_TIMES', 1, 'groupID: 4 | groupID: 5 | 354', '2021-02-03 12:08:02', 0),
+(4, 'EMAIL', 'DEMO_MSG_INVITATION_MEMBERS_MEETING', 354, 'groupID: 2 | 1', '2021-02-03 05:11:37', 0),
+(5, 'PM', 'DEMO_MSG_RESERVE_ROOM', 354, '1', '2021-02-02 09:12:35', 1),
+(6, 'PM', 'DEMO_MSG_MEMBERSHIP_FEE_MISSING', 354, '355', '2021-02-03 05:14:22', 1),
+(7, 'EMAIL', 'DEMO_MSG_TRAINING', 355, '216 | 227', '2021-02-03 05:16:19', 0),
+(8, 'PM', 'DEMO_MSG_NO_ACCESS_DOCUMENTS', 1, '355', '2021-02-03 05:18:18', 1);
+
+
+--
+-- Data for table adm_messages_content
+--
+
+INSERT INTO `adm_messages_content` (`msc_id`, `msc_msg_id`, `msc_part_id`, `msc_usr_id`, `msc_message`, `msc_timestamp`) VALUES
+(1, 1, 1, 1, 'DEMO_MSG_EVENTS_HOMEPAGE_CONTENT', '2021-02-03 04:58:16'),
+(2, 2, 1, 1, 'DEMO_MSG_NEW_MODULE_CONTENT', '2021-02-03 05:07:01'),
+(3, 3, 1, 1, 'DEMO_MSG_NEW_TRAINING_TIMES_CONTENT', '2021-02-03 05:08:02'),
+(4, 4, 1, 354, 'DEMO_MSG_INVITATION_MEMBERS_MEETING_CONTENT', '2021-02-03 05:11:37'),
+(5, 5, 1, 354, 'DEMO_MSG_RESERVE_ROOM_CONTENT', '2021-02-03 05:12:35'),
+(6, 6, 1, 354, 'DEMO_MSG_MEMBERSHIP_FEE_MISSING_CONTENT', '2021-02-03 05:14:22'),
+(7, 7, 1, 355, 'DEMO_MSG_TRAINING_CONTENT', '2021-02-03 05:16:19'),
+(8, 8, 1, 355, 'DEMO_MSG_NO_ACCESS_DOCUMENTS_CONTENT1', '2021-02-03 05:17:23'),
+(9, 8, 2, 1, 'DEMO_MSG_NO_ACCESS_DOCUMENTS_CONTENT2', '2021-02-03 05:18:18');
+
+
 --
 -- Data for table adm_registrations
 --
