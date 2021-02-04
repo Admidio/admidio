@@ -4,23 +4,23 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.0.0', 0, 730)
-                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.0.0', 0, 0)
-                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.0.0', 0, 0)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.0.0', 0, 0)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.0.0', 0, 0)
-                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.0.0', 0, 0)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.0', 0, 0)
-                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '4.0.0', 0, 0)
-                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.0', 0, 0)
-                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '4.0.0', 0, 0)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.0', 0, 0)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.0.0', 0, 0)
-                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.0.0', 0, 0)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.0.0', 0, 0)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.0.0', 0, 0)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.0.0', 0, 0)
-                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.0.0', 0, 0);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.0.4', 0, 730)
+                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.0.4', 0, 0)
+                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.0.4', 0, 0)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.0.4', 0, 0)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.0.4', 0, 0)
+                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.0.4', 0, 0)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.4', 0, 0)
+                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '4.0.4', 0, 0)
+                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.4', 0, 0)
+                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '4.0.4', 0, 0)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.4', 0, 0)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.0.4', 0, 0)
+                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.0.4', 0, 0)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.0.4', 0, 0)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.0.4', 0, 0)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.0.4', 0, 0)
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.0.4', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -1047,7 +1047,7 @@ INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end
 -- Data for table adm_messages
 --
 
-INSERT INTO `adm_messages` (`msg_id`, `msg_type`, `msg_subject`, `msg_usr_id_sender`, `msg_usr_id_receiver`, `msg_timestamp`, `msg_read`) VALUES
+INSERT INTO %PREFIX%_messages (`msg_id`, `msg_type`, `msg_subject`, `msg_usr_id_sender`, `msg_usr_id_receiver`, `msg_timestamp`, `msg_read`) VALUES
 (1, 'EMAIL', 'DEMO_MSG_EVENTS_HOMEPAGE', 1, '313 | 332 | 355 | 354', '2021-01-20 14:58:16', 0),
 (2, 'EMAIL', 'DEMO_MSG_NEW_MODULE', 1, 'groupID: 3', '2021-02-01 16:07:01', 0),
 (3, 'EMAIL', 'DEMO_MSG_NEW_TRAINING_TIMES', 1, 'groupID: 4 | groupID: 5 | 354', '2021-02-03 12:08:02', 0),
@@ -1062,7 +1062,7 @@ INSERT INTO `adm_messages` (`msg_id`, `msg_type`, `msg_subject`, `msg_usr_id_sen
 -- Data for table adm_messages_content
 --
 
-INSERT INTO `adm_messages_content` (`msc_id`, `msc_msg_id`, `msc_part_id`, `msc_usr_id`, `msc_message`, `msc_timestamp`) VALUES
+INSERT INTO %PREFIX%_messages_content (`msc_id`, `msc_msg_id`, `msc_part_id`, `msc_usr_id`, `msc_message`, `msc_timestamp`) VALUES
 (1, 1, 1, 1, 'DEMO_MSG_EVENTS_HOMEPAGE_CONTENT', '2021-02-03 04:58:16'),
 (2, 2, 1, 1, 'DEMO_MSG_NEW_MODULE_CONTENT', '2021-02-03 05:07:01'),
 (3, 3, 1, 1, 'DEMO_MSG_NEW_TRAINING_TIMES_CONTENT', '2021-02-03 05:08:02'),
