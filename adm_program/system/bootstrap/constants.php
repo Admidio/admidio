@@ -134,6 +134,7 @@ define('TBL_MEMBERS',             TABLE_PREFIX . '_members');
 define('TBL_MENU',                TABLE_PREFIX . '_menu');
 define('TBL_MESSAGES',            TABLE_PREFIX . '_messages');
 define('TBL_MESSAGES_CONTENT',    TABLE_PREFIX . '_messages_content');
+define('TBL_MESSAGES_RECIPIENTS', TABLE_PREFIX . '_messages_recipients');
 define('TBL_ORGANIZATIONS',       TABLE_PREFIX . '_organizations');
 define('TBL_PHOTOS',              TABLE_PREFIX . '_photos');
 define('TBL_PREFERENCES',         TABLE_PREFIX . '_preferences');

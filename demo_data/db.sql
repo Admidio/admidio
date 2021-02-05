@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS %PREFIX%_links               CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_members             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages            CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages_content    CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_recipients CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_photos              CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_preferences         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_registrations       CASCADE;

@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS %PREFIX%_links               CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_members             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages            CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages_content    CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_recipients CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_photos              CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_preferences         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_registrations       CASCADE;
@@ -397,6 +398,22 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE INDEX %PREFIX%_idx_msc_part_id ON %PREFIX%_messages_content (msc_part_id);
+
+/*==============================================================*/
+/* Table: adm_messages_recipients                                */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_messages_recipients
+(
+    msr_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    msr_msg_id                  integer unsigned    NOT NULL,
+    msr_rol_id                  integer unsigned,
+    msr_usr_id                  integer unsigned,
+    msr_role_mode               smallint            NOT NULL    DEFAULT 0,
+    PRIMARY KEY (msr_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */
@@ -847,6 +864,11 @@ ALTER TABLE %PREFIX%_messages
 ALTER TABLE %PREFIX%_messages_content
     ADD CONSTRAINT %PREFIX%_fk_msc_msg_id      FOREIGN KEY (msc_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_msc_usr_id      FOREIGN KEY (msc_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_messages_recipients
+    ADD CONSTRAINT %PREFIX%_fk_msr_msg_id      FOREIGN KEY (msr_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_msr_rol_id      FOREIGN KEY (msr_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_msr_usr_id      FOREIGN KEY (msr_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_organizations
     ADD CONSTRAINT %PREFIX%_fk_org_org_parent  FOREIGN KEY (org_org_id_parent)  REFERENCES %PREFIX%_organizations (org_id)       ON DELETE SET NULL ON UPDATE RESTRICT;

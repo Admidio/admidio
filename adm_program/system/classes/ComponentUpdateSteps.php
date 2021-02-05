@@ -24,6 +24,51 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method will migrate the recipients of messages from the database column msg_usr_id_receiver
+     * to the new table adm_messages_recipients. There each recipient will be add in a separate row that
+     * reference to the message.
+     */
+	public static function updateStep41MigrateMessageRecipients()
+	{
+        $sql = 'SELECT msg_id, msg_usr_id_receiver FROM ' . TBL_MESSAGES;
+        $messagesStatement = self::$db->queryPrepared($sql);
+
+        while($row = $messagesStatement->fetch())
+        {
+            $messageRecipient = new TableAccess(self::$db, TBL_MESSAGES_RECIPIENTS, 'msr');
+            $recipientsSplit  = explode('|', $row['msg_usr_id_receiver']);
+
+            foreach ($recipientsSplit as $recipients)
+            {
+                $messageRecipient->clear();
+                $messageRecipient->setValue('msr_msg_id', $row['msg_id']);
+
+                if (str_contains($recipients, ':'))
+                {
+                    $groupSplit = explode(':', $recipients);
+                    $groupIdAndStatus = explode('-', trim($groupSplit[1]));
+                    $messageRecipient->setValue('msr_rol_id', $groupIdAndStatus[0]);
+
+                    // set mode of the role (active, former, former and active)
+                    if (count($groupIdAndStatus) === 1)
+                    {
+                        $messageRecipient->setValue('msr_role_mode', 0);
+                    }
+                    else
+                    {
+                        $messageRecipient->setValue('msr_role_mode', $groupIdAndStatus[1]);
+                    }
+                }
+                else
+                {
+                    $messageRecipient->setValue('msr_usr_id', (int) trim($recipients));
+                }
+                $messageRecipient->save();
+            }
+	    }
+	}
+
+    /**
      * This method add new categories for announcements to the database.
      */
     public static function updateStepAddAnnouncementsCategories()

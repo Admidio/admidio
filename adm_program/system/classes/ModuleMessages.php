@@ -77,7 +77,7 @@ class ModuleMessages
      * @param string $groupString (e.g: "groupID: 4-2")
      * @return array<string,string|int> Returns the groupId and status
      */
-    public function msgGroupSplit($groupString)
+    public static function msgGroupSplit($groupString)
     {
         $groupSplit = explode(':', $groupString);
         $groupIdAndStatus = explode('-', trim($groupSplit[1]));
