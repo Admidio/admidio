@@ -107,7 +107,7 @@ while ($row = $allEmailsStatement->fetch())
         array(
             getMessageIcon($msgId, 'fa-envelope', $gL10n->get('SYS_EMAIL')),
             getMessageLink($msgId, $msgSubject),
-            prepareRecipients($row['user'], true),
+            $message->getRecipientsNamesString(),
             $message->getValue('msg_timestamp'),
             getAdministrationLink($rowIndex, $msgId, $msgSubject)
         ),
@@ -128,7 +128,7 @@ while ($row = $pmUnreadStatement->fetch())
         array(
             getMessageIcon($msgId, 'fa-comment-alt', $gL10n->get('PMS_MESSAGE')),
             getMessageLink($msgId, $msgSubject),
-            getReceiverName($row, $usrId),
+            $message->getRecipientsNamesString(),
             $message->getValue('msg_timestamp'),
             getAdministrationLink($rowIndex, $msgId, $msgSubject)
         ),
@@ -150,7 +150,7 @@ while ($row = $pwReadOrOwnStatement->fetch())
         array(
             getMessageIcon($msgId, 'fa-comment-alt', $gL10n->get('PMS_MESSAGE')),
             getMessageLink($msgId, $msgSubject),
-            getReceiverName($row, $usrId),
+            $message->getRecipientsNamesString(),
             $message->getValue('msg_timestamp'),
             getAdministrationLink($rowIndex, $msgId, $msgSubject)
         ),

@@ -23,6 +23,11 @@ class TableMessage extends TableAccess
     protected $msgId;
 
     /**
+     * @var array
+     */
+    protected $msgRecipients = array();
+
+    /**
      * Constructor that will create an object of a recordset of the table adm_messages.
      * If the id is set than the specific message will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
@@ -138,6 +143,103 @@ class TableMessage extends TableAccess
         $partnerStatement = $this->db->queryPrepared($sql, array($usrId, $this->msgId));
 
         return (int) $partnerStatement->fetchColumn();
+    }
+
+    /**
+     * Reads all recipients to the message and returns an array. The array has the following structure:
+     * array('type' => 'role', 'id' => '4711', 'name' => 'Administrator', 'mode' => '0')
+     * Type could be **role** or **user**, the id will be the database id of role or user and the
+     * mode will be only used with roles and the following values are used:
+     + 0 = active members, 1 = former members, 2 = active and former members
+     * @return array Returns an array with all recipients (users and roles)
+     */
+    public function getRecipientsArray()
+    {
+        global $gProfileFields;
+
+        if(count($this->msgRecipients) === 0)
+        {
+            $sql = 'SELECT msr_rol_id, msr_usr_id, msr_role_mode, rol_name, first_name.usd_value AS firstname, last_name.usd_value AS lastname
+                      FROM ' . TBL_MESSAGES_RECIPIENTS . '
+                      LEFT JOIN ' . TBL_ROLES . ' ON rol_id = msr_rol_id
+                      LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
+                             ON last_name.usd_usr_id = msr_usr_id
+                            AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+                      LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
+                             ON first_name.usd_usr_id = msr_usr_id
+                            AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+                    WHERE msr_msg_id = ? -- $this->getValue(\'msg_id\') ';
+            $messagesRecipientsStatement = $this->db->queryPrepared($sql,
+                array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $this->getValue('msg_id')));
+
+            while($row = $messagesRecipientsStatement->fetch())
+            {
+                if($row['msr_rol_id'] > 0)
+                {
+                    // add role to recipients
+                    $this->msgRecipients[] =
+                        array('type' => 'user',
+                              'id'   => (int) $row['msr_usr_id'],
+                              'name' => $row['rol_name'],
+                              'mode' => 0
+                        );
+                }
+                else
+                {
+                    // add user to recipients
+                    $this->msgRecipients[] =
+                        array('type' => 'role',
+                              'id'   => (int) $row['msr_rol_id'],
+                              'name' => $row['firstname'] . ' ' . $row['lastname'],
+                              'mode' => (int) $row['msr_role_mode']
+                        );
+                }
+            }
+        }
+
+        return $this->msgRecipients;
+    }
+
+    /**
+     * Build a string with all role names and firstname and lastname of the users.
+     * The names will be semicolon separated.
+     * @return string Returns a string with all role names and firstname and lastname of the users.
+     */
+    public function getRecipientsNamesString()
+    {
+        global $gCurrentUser, $gProfileFields;
+
+        $recipients = $this->getRecipientsArray();
+        $recipientsString = '';
+
+        if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM)
+        {
+            // PM has the conversation initiator and the receiver. Here we must check which
+            // role the current user has and show the name of the other user.
+            if((int) $this->getValue('msg_usr_id_sender') === (int) $gCurrentUser->getValue('usr_id'))
+            {
+                $recipientsString = $recipients[0]['name'];
+            }
+            else
+            {
+                $user = new User($this->db, $gProfileFields, $this->getValue('msg_usr_id_sender'));
+                $recipientsString = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
+            }
+        }
+        else
+        {
+            // email receivers are all stored in the recipients array
+            foreach($recipients as $recipient)
+            {
+                if(strlen($recipientsString) > 0)
+                {
+                    $recipientsString .= '; ';
+                }
+                $recipientsString .= $recipient['name'];
+            }
+        }
+
+        return $recipientsString;
     }
 
     /**

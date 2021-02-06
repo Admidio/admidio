@@ -102,27 +102,6 @@ function prepareRecipients($recipientsString, $showFullUserNames = false)
 }
 
 /**
- * @param array<string,mixed> $row
- * @param int                 $usrId
- * @return string
- */
-function getReceiverName(array $row, $usrId)
-{
-    global $gDb, $gProfileFields;
-
-    if ((int) $row['msg_usr_id_sender'] === $usrId)
-    {
-        $user = new User($gDb, $gProfileFields, $row['msg_usr_id_receiver']);
-    }
-    else
-    {
-        $user = new User($gDb, $gProfileFields, $row['msg_usr_id_sender']);
-    }
-
-    return $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
-}
-
-/**
  * @param int    $rowIndex
  * @param int    $msgId
  * @param string $msgSubject
