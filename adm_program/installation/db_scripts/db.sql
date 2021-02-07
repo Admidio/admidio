@@ -387,7 +387,6 @@ CREATE TABLE %PREFIX%_messages_content
 (
     msc_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     msc_msg_id                  integer unsigned    NOT NULL,
-    msc_part_id                 integer unsigned    NOT NULL,
     msc_usr_id                  integer unsigned,
     msc_message                 text                NOT NULL,
     msc_timestamp               timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,

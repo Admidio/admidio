@@ -170,8 +170,8 @@ if($ecardSendResult)
     $getMsgId = $gDb->lastInsertId();
 
     $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. '
-                   (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-            VALUES (?, 1, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $currUsrId, $postBodySQL';
+                   (msc_msg_id, msc_usr_id, msc_message, msc_timestamp)
+            VALUES (?, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $currUsrId, $postBodySQL';
     $gDb->queryPrepared($sql, array($getMsgId, (int) $gCurrentUser->getValue('usr_id'), $ecardHtmlData));
 
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());

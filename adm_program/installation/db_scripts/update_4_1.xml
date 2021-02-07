@@ -20,5 +20,6 @@
 	    ADD CONSTRAINT %PREFIX%_fk_msr_rol_id      FOREIGN KEY (msr_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
 	    ADD CONSTRAINT %PREFIX%_fk_msr_usr_id      FOREIGN KEY (msr_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
     <step id="60">ComponentUpdateSteps::updateStep41MigrateMessageRecipients</step>
+    <step id="70">ALTER TABLE %PREFIX%_messages_content DROP COLUMN msc_part_id</step>
     <step>stop</step>
 </update>

@@ -195,7 +195,7 @@ class TableMessage extends TableAccess
         $sql = 'SELECT msc_usr_id, msc_message, msc_timestamp
                   FROM '. TBL_MESSAGES_CONTENT. '
                  WHERE msc_msg_id = ? -- $msgId
-              ORDER BY msc_part_id DESC';
+              ORDER BY msc_id DESC';
 
         return $this->db->queryPrepared($sql, array($msgId));
     }
