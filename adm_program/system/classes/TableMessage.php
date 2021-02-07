@@ -93,7 +93,7 @@ class TableMessage extends TableAccess
     {
         $this->msgContentObject = new TableAccess($this->db, TBL_MESSAGES_CONTENT, 'msc');
         $this->msgContentObject->setValue('msc_msg_id', $this->getValue('msg_id'));
-        $this->msgContentObject->setValue('msc_message', $content);
+        $this->msgContentObject->setValue('msc_message', $content, false);
         $this->msgContentObject->setValue('msc_timestamp', DATETIME_NOW);
     }
 

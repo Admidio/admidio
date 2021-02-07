@@ -66,6 +66,7 @@ if($ecardDataToParse === null)
 $arrayRoles = array();
 $arrayUsers = array();
 $receiverString = implode(' | ', $_POST['ecard_recipients']);
+$sqlEmailField  = '';
 
 foreach($_POST['ecard_recipients'] as $value)
 {
@@ -92,6 +93,19 @@ else
     $ecardSendResult = true;
 }
 
+// object to handle the current message in the database
+$message = new TableMessage($gDb);
+$message->setValue('msg_type', TableMessage::MESSAGE_TYPE_EMAIL);
+$message->setValue('msg_subject', $gL10n->get('ECA_GREETING_CARD').': '.$gL10n->get('ECA_NEW_MESSAGE_RECEIVED'));
+$message->setValue('msg_usr_id_sender', $gCurrentUser->getValue('usr_id'));
+
+// set condition if email should only send to the email address of the user field
+// with the internal name 'EMAIL'
+if (!$gSettingsManager->getBool('mail_send_to_all_addresses'))
+{
+    $sqlEmailField = ' AND field.usf_name_intern = \'EMAIL\' ';
+}
+
 if(count($arrayRoles) > 0)
 // Wenn schon dann alle Namen und die dazugehörigen Emails auslesen und in die versand Liste hinzufügen
 {
@@ -103,14 +117,17 @@ if(count($arrayRoles) > 0)
                 ON cat_id = rol_cat_id
         INNER JOIN '.TBL_USERS.'
                 ON usr_id = mem_usr_id
-        RIGHT JOIN '.TBL_USER_DATA.' AS email
+        INNER JOIN ' . TBL_USER_DATA . ' AS email
                 ON email.usd_usr_id = usr_id
-               AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
                AND LENGTH(email.usd_value) > 0
-         LEFT JOIN '.TBL_USER_DATA.' AS last_name
+        INNER JOIN ' . TBL_USER_FIELDS . ' AS field
+                ON field.usf_id = email.usd_usf_id
+               AND field.usf_type = \'EMAIL\'
+                   ' . $sqlEmailField . '
+        INNER JOIN '.TBL_USER_DATA.' AS last_name
                 ON last_name.usd_usr_id = usr_id
                AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-         LEFT JOIN '.TBL_USER_DATA.' AS first_name
+        INNER JOIN '.TBL_USER_DATA.' AS first_name
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
              WHERE rol_id           IN ('.implode(',', $arrayRoles).')
@@ -118,10 +135,8 @@ if(count($arrayRoles) > 0)
                AND mem_begin       <= ? -- DATE_NOW
                AND mem_end          > ? -- DATE_NOW
                AND usr_valid        = 1
-               AND email.usd_usr_id = email.usd_usr_id
           ORDER BY last_name, first_name';
     $queryParams = array(
-        $gProfileFields->getProperty('EMAIL', 'usf_id'),
         $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
         $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
         $gCurrentOrganization->getValue('org_id'),
@@ -139,40 +154,62 @@ if(count($arrayRoles) > 0)
             $ecardSendResult = $funcClass->sendEcard($senderName, $senderEmail, $ecardHtmlData, $row['first_name'].' '.$row['last_name'], $row['email'], $imageServerPath);
         }
     }
+
+    // add roles to message object
+    foreach($arrayRoles as $roleId)
+    {
+        $message->addRole($roleId, 0);
+    }
 }
 
 if(count($arrayUsers) > 0)
 {
-    foreach($arrayUsers as $userId)
+    $sql = 'SELECT DISTINCT first_name.usd_value AS first_name, last_name.usd_value AS last_name, email.usd_value AS email
+              FROM '.TBL_USERS.'
+        INNER JOIN ' . TBL_USER_DATA . ' AS email
+                ON email.usd_usr_id = usr_id
+               AND LENGTH(email.usd_value) > 0
+        INNER JOIN ' . TBL_USER_FIELDS . ' AS field
+                ON field.usf_id = email.usd_usf_id
+               AND field.usf_type = \'EMAIL\'
+                   ' . $sqlEmailField . '
+        INNER JOIN '.TBL_USER_DATA.' AS last_name
+                ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+        INNER JOIN '.TBL_USER_DATA.' AS first_name
+                ON first_name.usd_usr_id = usr_id
+               AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+             WHERE usr_id           IN ('.implode(',', $arrayUsers).')
+               AND usr_valid        = 1
+          ORDER BY last_name, first_name';
+    $queryParams = array(
+        $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+        $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
+    );
+    $usersStatement = $gDb->queryPrepared($sql, $queryParams);
+
+    while($row = $usersStatement->fetch())
     {
         if($ecardSendResult)
         {
-            $user = new User($gDb, $gProfileFields, $userId);
-
-            if($gCurrentUser->hasRightViewProfile($user))
-            {
-                // create and send ecard
-                $ecardHtmlData   = $funcClass->parseEcardTemplate($imageUrl, $_POST['ecard_message'], $ecardDataToParse, $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $user->getValue('EMAIL'));
-                $ecardSendResult = $funcClass->sendEcard($senderName, $senderEmail, $ecardHtmlData, $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $user->getValue('EMAIL'), $imageServerPath);
-            }
+            // create and send ecard
+            $ecardHtmlData   = $funcClass->parseEcardTemplate($imageUrl, $_POST['ecard_message'], $ecardDataToParse, $row['first_name'].' '.$row['last_name'], $row['email']);
+            $ecardSendResult = $funcClass->sendEcard($senderName, $senderEmail, $ecardHtmlData, $row['first_name'].' '.$row['last_name'], $row['email'], $imageServerPath);
         }
+    }
+
+    // add roles to message object
+    foreach($arrayUsers as $userId)
+    {
+        $message->addUser($userId);
     }
 }
 
 // show result
 if($ecardSendResult)
 {
-    // save ecard in database
-    $sql = 'INSERT INTO '. TBL_MESSAGES. '
-                   (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-            VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, 0) -- $getMsgType, $postSubjectSQL, $currUsrId, $receiverString';
-    $gDb->queryPrepared($sql, array(TableMessage::MESSAGE_TYPE_EMAIL, $gL10n->get('ECA_GREETING_CARD').': '.$gL10n->get('ECA_NEW_MESSAGE_RECEIVED'), (int) $gCurrentUser->getValue('usr_id'), $receiverString));
-    $getMsgId = $gDb->lastInsertId();
-
-    $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. '
-                   (msc_msg_id, msc_usr_id, msc_message, msc_timestamp)
-            VALUES (?, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $currUsrId, $postBodySQL';
-    $gDb->queryPrepared($sql, array($getMsgId, (int) $gCurrentUser->getValue('usr_id'), $ecardHtmlData));
+    $message->addContent($ecardHtmlData);
+    $message->save();
 
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
     $gMessage->show($gL10n->get('ECA_SUCCESSFULLY_SEND'));
