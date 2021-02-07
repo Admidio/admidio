@@ -85,6 +85,7 @@ class ModuleMessages
         if (count($groupIdAndStatus) === 1)
         {
             $status = 'active';
+            $groupIdAndStatus[] = 0;
         }
         elseif ($groupIdAndStatus[1] === '1')
         {
@@ -100,8 +101,9 @@ class ModuleMessages
         }
 
         return array(
-            'id'     => (int) $groupIdAndStatus[0],
-            'status' => $status
+            'id'        => (int) $groupIdAndStatus[0],
+            'status'    => $status,
+            'role_mode' => $groupIdAndStatus[1]
         );
     }
 
