@@ -25,6 +25,10 @@ if (!$gSettingsManager->getBool('enable_chat_module'))
     // => EXIT
 }
 
+// initialize chat timestamp
+$datetimeYesterday = mktime(date('H'), date('i'), date('s'), date('m'), date('d')-1, date('y'));
+$_SESSION['chat_timestamp'] = date('Y-m-d H:i:s', $datetimeYesterday);
+
 $headline = $gCurrentOrganization->getValue('org_shortname') . ' - ' . $gL10n->get('MSG_CHAT');
 
 // add current url to navigation stack
