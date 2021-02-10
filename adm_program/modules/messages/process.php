@@ -39,46 +39,54 @@ $log = array();
 
 // open some additional functions for messages
 $moduleMessages = new ModuleMessages();
-// find ID of the admidio Chat
-$msgId = $moduleMessages->msgGetChatId();
 
-$sql = 'SELECT COUNT(1) AS count_msg
-          FROM '.TBL_MESSAGES_CONTENT.'
-         WHERE msc_msg_id = ?';
-$pdoStatement = $gDb->queryPrepared($sql, array($msgId));
-$msgPart = $pdoStatement->fetchColumn();
-
-if(!$msgPart)
+if(!isset($_SESSION['chat_msg_id']))
 {
-    $msgPart = 0;
+    // find ID of the admidio Chat
+    $msgId = $moduleMessages->msgGetChatId();
+    $_SESSION['chat_msg_id'] = $msgId;
+
+    // delete entries older than 1 day
+    $datetimeYesterday = mktime(date('H'), date('i'), date('s'), date('m'), date('d')-1, date('y'));
+    $_SESSION['chat_timestamp'] = date('Y-m-d H:i:s', $datetimeYesterday);
+
+    $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+             WHERE msc_msg_id = ? -- $msgId
+               AND msc_timestamp <= ? -- date(\'Y-m-d H:i:s\', $datetimeYesterday) ';
+    $gDb->queryPrepared($sql, array($msgId, $_SESSION['chat_timestamp']));
+}
+else
+{
+    $msgId = $_SESSION['chat_msg_id'];
 }
 
 switch($postFunction)
 {
     case 'update':
-        // delete entries older than 1 day
-        $datetimeYesterday = mktime(date('H'), date('i'), date('s'), date('m'), date('d')-1, date('y'));
-
-        $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
-                 WHERE msc_msg_id = ? -- $msgId
-                   AND msc_timestamp <= ? -- date(\'Y-m-d H:i:s\', $datetimeYesterday) ';
-        $gDb->queryPrepared($sql, array($msgId, date('Y-m-d H:i:s', $datetimeYesterday)));
-
         $text = array();
 
-        $sql = 'SELECT msc_id, msc_usr_id, msc_message, msc_timestamp
+        $sql = 'SELECT msc_id, msc_usr_id, msc_message, msc_timestamp, usr_login_name, first_name.usd_value AS first_name, last_name.usd_value AS last_name
                   FROM '.TBL_MESSAGES_CONTENT.'
+                 INNER JOIN '.TBL_USERS.'
+                         ON usr_id = msc_usr_id
+                  LEFT JOIN '.TBL_USER_DATA.' AS last_name
+                         ON last_name.usd_usr_id = usr_id
+                        AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+                  LEFT JOIN '.TBL_USER_DATA.' AS first_name
+                         ON first_name.usd_usr_id = usr_id
+                        AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                  WHERE msc_msg_id  = ? -- $msgId
+                   AND msc_timestamp >= ? -- $_SESSION[\'chat_timestamp\']
               ORDER BY msc_id';
 
-        $statement = $gDb->queryPrepared($sql, array($msgId, $postLines));
+        $statement = $gDb->queryPrepared($sql, array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $msgId, $_SESSION['chat_timestamp']));
         while($row = $statement->fetch())
         {
-            $user = new User($gDb, $gProfileFields, $row['msc_usr_id']);
             $date = \DateTime::createFromFormat('Y-m-d H:i:s', $row['msc_timestamp']);
-            $text[] = '<time>'.$date->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')).'</time><span>'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'</span>'.$row['msc_message'];
+            $text[] = '<time>'.$date->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')).'</time><span>'.$row['first_name'].' '.$row['last_name'].'</span>'.$row['msc_message'];
         }
 
+        $_SESSION['chat_timestamp'] = date('Y-m-d H:i:s', time());
         $log['state'] = 1;
         $log['text']  = $text;
         break;
@@ -102,14 +110,12 @@ switch($postFunction)
             $msgId = $moduleMessages->msgGetChatId();
         }
 
-        $msgPart = $msgPart + 1;
-
         $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. '
                        (msc_msg_id, msc_usr_id, msc_message, msc_timestamp)
                 VALUES (?, ?, ?, CURRENT_TIMESTAMP) -- $msgId, $gCurrentUser->getValue(\'usr_id\'), $postMessage';
-        $gDb->queryPrepared($sql, array($msgId, $msgPart, (int) $gCurrentUser->getValue('usr_id'), $postMessage));
+        $gDb->queryPrepared($sql, array($msgId, (int) $gCurrentUser->getValue('usr_id'), $postMessage));
 
-        $log['state'] = $msgPart;
+        $log['state'] = 1;
         break;
 
     case 'delete':
