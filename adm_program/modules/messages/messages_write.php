@@ -75,7 +75,7 @@ if ($getMsgId > 0)
     $message->setReadValue($currUsrId);
 
     $getSubject = $message->getValue('msg_subject');
-    $getUserId  = $message->getConversationPartner($currUsrId);
+    $getUserId  = $message->getConversationPartner();
 
     $messageStatement = $message->getConversation($getMsgId);
 }
@@ -648,11 +648,8 @@ if (isset($messageStatement))
         }
         else
         {
-            $message = new TableMessage($gDb, $getMsgId);
-            $receivers = $message->getValue('msg_usr_id_receiver');
-            // open some additional functions for messages
-
-            $receiverName = '<div class="card-footer">'.$gL10n->get('MSG_OPPOSITE').': ' . prepareRecipients($receivers, true) . '</div>';
+            // within email show all recipients in footer
+            $receiverName = '<div class="card-footer">'.$gL10n->get('MSG_OPPOSITE').': ' . $message->getRecipientsNamesString() . '</div>';
         }
 
         $date = new \DateTime($row['msc_timestamp']);

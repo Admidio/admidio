@@ -105,9 +105,10 @@ class TableMessage extends TableAccess
     public function countUnreadMessageRecords($usrId)
     {
         $sql = 'SELECT COUNT(*) AS count
-                  FROM '.$this->tableName.'
+                  FROM ' . TBL_MESSAGES . '
+                 INNER JOIN ' . TBL_MESSAGES_RECIPIENTS . ' ON msr_msg_id = msg_id
                  WHERE msg_read = 1
-                   AND msg_usr_id_receiver = ? -- $usrId';
+                   AND msr_usr_id = ? -- $usrId';
         $countStatement = $this->db->queryPrepared($sql, array($usrId));
 
         return (int) $countStatement->fetchColumn();
@@ -159,25 +160,18 @@ class TableMessage extends TableAccess
                      WHERE msc_msg_id = ? -- $msgId';
             $this->db->queryPrepared($sql, array($msgId));
 
+            $sql = 'DELETE FROM '.TBL_MESSAGES_RECIPIENTS.'
+                     WHERE msr_msg_id = ? -- $msgId';
+            $this->db->queryPrepared($sql, array($msgId));
+
             parent::delete();
         }
         else
         {
-            $currUsrId = (int) $gCurrentUser->getValue('usr_id');
-
-            $other = (int) $this->getValue('msg_usr_id_sender');
-            if ($other === $currUsrId)
-            {
-                $other = (int) $this->getValue('msg_usr_id_receiver');
-            }
-
             $sql = 'UPDATE '.TBL_MESSAGES.'
                        SET msg_read = 2
-                         , msg_usr_id_sender   = ? -- $currUsrId
-                         , msg_usr_id_receiver = ? -- $other
-                         , msg_timestamp = CURRENT_TIMESTAMP
                      WHERE msg_id = ? -- $msgId';
-            $this->db->queryPrepared($sql, array($currUsrId, $other, $msgId));
+            $this->db->queryPrepared($sql, array($currUsrId, $msgId));
         }
 
         $this->db->endTransaction();
@@ -201,36 +195,21 @@ class TableMessage extends TableAccess
     }
 
     /**
-     * Set a new value for a column of the database table.
-     * The value is only saved in the object. You must call the method **save** to store the new value to the database
+     * If the message type is PM this method will return the conversation partner of the PM.
      * @param int $usrId
-     * @return int Returns **ID** of the user that is partner in the actual conversation
+     * @return int Returns **ID** of the user that is partner in the actual conversation or false if its not a message.
      */
-    public function getConversationPartner($usrId)
+    public function getConversationPartner()
     {
-        global $gDbType;
-
-        if($gDbType === Database::PDO_ENGINE_PGSQL)
+        global $gLogger;
+        if(TableMessage::MESSAGE_TYPE_PM)
         {
-            $messageSender = 'msg_usr_id_sender::varchar(255)';
-        }
-        else
-        {
-            $messageSender = 'CONVERT(msg_usr_id_sender, CHAR)';
+            $recipients = $this->readRecipientsData();
+            $gLogger->error(print_r($recipients, true));
+            return $recipients[0]['id'];
         }
 
-        $sql = 'SELECT
-                  CASE
-                  WHEN msg_usr_id_sender = ? -- $usrId
-                  THEN msg_usr_id_receiver
-                  ELSE ' . $messageSender . '
-                   END AS user
-                  FROM '.TBL_MESSAGES.'
-                 WHERE msg_type = \'PM\'
-                   AND msg_id = ? -- $this->msgId';
-        $partnerStatement = $this->db->queryPrepared($sql, array($usrId, $this->msgId));
-
-        return (int) $partnerStatement->fetchColumn();
+        return false;
     }
 
     /**
@@ -285,12 +264,13 @@ class TableMessage extends TableAccess
      */
     public function readRecipientsData()
     {
-        global $gProfileFields;
+        global $gCurrentUser, $gProfileFields;
 
         if(count($this->msgRecipientsArray) === 0)
         {
-            $sql = 'SELECT msr_id, msr_rol_id, msr_usr_id, msr_role_mode, rol_name, first_name.usd_value AS firstname, last_name.usd_value AS lastname
-                      FROM ' . TBL_MESSAGES_RECIPIENTS . '
+            $sql = 'SELECT msg_usr_id_sender, msr_id, msr_rol_id, msr_usr_id, msr_role_mode, rol_name, first_name.usd_value AS firstname, last_name.usd_value AS lastname
+                      FROM ' . TBL_MESSAGES . '
+                     INNER JOIN ' . TBL_MESSAGES_RECIPIENTS . ' ON msr_msg_id = msg_id
                       LEFT JOIN ' . TBL_ROLES . ' ON rol_id = msr_rol_id
                       LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
                              ON last_name.usd_usr_id = msr_usr_id
@@ -298,7 +278,7 @@ class TableMessage extends TableAccess
                       LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
                              ON first_name.usd_usr_id = msr_usr_id
                             AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                    WHERE msr_msg_id = ? -- $this->getValue(\'msg_id\') ';
+                    WHERE msg_id = ? -- $this->getValue(\'msg_id\') ';
             $messagesRecipientsStatement = $this->db->queryPrepared($sql,
                 array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $this->getValue('msg_id')));
 
@@ -310,13 +290,22 @@ class TableMessage extends TableAccess
                 $this->msgRecipientsObjectArray[] = $messageRecipient;
 
                 // now save message recipient into an simple array
-                if($row['msr_rol_id'] > 0)
+                if($row['msr_usr_id'] > 0)
                 {
+                    $recipientUsrId = (int) $row['msr_usr_id'];
+
+                    // PMs could have the current user as recipient than the sender is the recipient for this user
+                    if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM
+                    && $recipientUsrId == $gCurrentUser->getValue('usr_id'))
+                    {
+                        $recipientUsrId = (int) $row['msg_usr_id_sender'];
+                    }
+
                     // add role to recipients
                     $this->msgRecipientsArray[] =
                         array('type'   => 'user',
-                              'id'     => (int) $row['msr_usr_id'],
-                              'name'   => $row['rol_name'],
+                              'id'     => $recipientUsrId,
+                              'name'   => $row['firstname'] . ' ' . $row['lastname'],
                               'mode'   => 0,
                               'msr_id' => (int) $row['msr_id']
                         );
@@ -327,7 +316,7 @@ class TableMessage extends TableAccess
                     $this->msgRecipientsArray[] =
                         array('type'   => 'role',
                               'id'     => (int) $row['msr_rol_id'],
-                              'name'   => $row['firstname'] . ' ' . $row['lastname'],
+                              'name'   => $row['rol_name'],
                               'mode'   => (int) $row['msr_role_mode'],
                               'msr_id' => (int) $row['msr_id']
                         );
@@ -390,8 +379,7 @@ class TableMessage extends TableAccess
     {
         $sql = 'UPDATE '.TBL_MESSAGES.'
                    SET msg_read = 0
-                 WHERE msg_id   = ? -- $this->msgId
-                   AND msg_usr_id_receiver = ? -- $usrId';
+                 WHERE msg_id   = ? -- $this->msgId ';
 
         return $this->db->queryPrepared($sql, array($this->msgId, $usrId));
     }

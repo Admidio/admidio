@@ -104,8 +104,8 @@ switch($postFunction)
         if($msgId === 0)
         {
             $sql = 'INSERT INTO '. TBL_MESSAGES. '
-                           (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                    VALUES (\'CHAT\', \'DUMMY\', 1, 1, CURRENT_TIMESTAMP, 0)';
+                           (msg_type, msg_subject, msg_usr_id_sender, msg_timestamp, msg_read)
+                    VALUES (\'CHAT\', \'DUMMY\', 1, CURRENT_TIMESTAMP, 0)';
             $gDb->queryPrepared($sql);
             $msgId = $moduleMessages->msgGetChatId();
         }
