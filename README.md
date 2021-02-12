@@ -79,7 +79,6 @@ docker run --detach -it --name Admidio \
   -v Admidio-files:/var/www/admidio/adm_my_files \
   -v Admidio-themes:/var/www/admidio/adm_themes \
   -v Admidio-plugins:/var/www/admidio/adm_plugins \
-  --link Admidio-MariaDB:mysql \
   admidio/admidio:latest
 ```
 For detailed docker usage see [README-Docker.md](https://github.com/Admidio/admidio/blob/master/README-Docker.md)
