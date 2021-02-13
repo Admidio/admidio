@@ -148,8 +148,6 @@ class TableMessage extends TableAccess
      */
     public function delete()
     {
-        global $gCurrentUser;
-
         $this->db->startTransaction();
 
         $msgId = (int) $this->getValue('msg_id');
@@ -171,7 +169,7 @@ class TableMessage extends TableAccess
             $sql = 'UPDATE '.TBL_MESSAGES.'
                        SET msg_read = 2
                      WHERE msg_id = ? -- $msgId';
-            $this->db->queryPrepared($sql, array($currUsrId, $msgId));
+            $this->db->queryPrepared($sql, array($msgId));
         }
 
         $this->db->endTransaction();

@@ -71,6 +71,11 @@ class HtmlTable extends HtmlTableBasic
      */
     protected $datatablesColumnDefs = array();
     /**
+     * @var array<int,string> Array that contains the internal names used for each column. This is useful if you
+     *                        work with server side processing and need row ids.
+     */
+    protected $datatablesColumnsInternalNames = array();
+    /**
      * @var string The text that should be shown if no row was added to the table
      */
     protected $messageNoRowsFound;
@@ -280,6 +285,21 @@ class HtmlTable extends HtmlTableBasic
             $this->datatablesInitParameters[] = '"processing": true';
             $this->datatablesInitParameters[] = '"serverSide": true';
             $this->datatablesInitParameters[] = '"ajax": "'.$this->serverSideFile.'"';
+
+            // add a callback function to link openPopup to the modal window. This will be used
+            // e.g. for the delete button or other things that need a modal window.
+            $this->datatablesInitParameters[] = '
+                "fnDrawCallback": function( oSettings ) {
+                    $(".openPopup").on("click",function(){
+                        $(".modal-dialog").attr("class", "modal-dialog " + $(this).attr("data-class"));
+                        $(".modal-content").load($(this).attr("data-href"),function(){
+                            $("#admidio-modal").modal({
+                                show:true
+                            });
+                        });
+                    });
+                }
+            ';
         }
 
         $javascriptGroup = '';
@@ -319,6 +339,12 @@ class HtmlTable extends HtmlTableBasic
         if (count($this->datatablesColumnDefs) > 0)
         {
             $this->datatablesInitParameters[] = '"columnDefs": [' . implode(',', $this->datatablesColumnDefs) . ']';
+        }
+
+        // if ColumnsInternalNames were defined then create a comma separated string with all elements of the array
+        if (count($this->datatablesColumnsInternalNames) > 0)
+        {
+            $this->datatablesInitParameters[] = '"columns": [' . implode(',', $this->datatablesColumnsInternalNames) . ']';
         }
 
         $this->htmlPage->addJavascript('
@@ -435,6 +461,20 @@ class HtmlTable extends HtmlTableBasic
         foreach ($columnsHide as $columnHide)
         {
             $this->datatablesColumnDefs[] = '{ "visible": false, "targets": ' . ($columnHide - 1) . ' }';
+        }
+    }
+
+    /**
+     * Add an array that contains the internal names used for each column. This is useful if you
+     * work with server side processing and need row ids.
+     * @param array<int,string> $columnsNames An array which contain the internal columns names.
+     */
+    public function setDatatablesColumnsInternalNames(array $columnsNames)
+    {
+        // internal datatable columns starts with 0
+        foreach ($columnsNames as $columnName)
+        {
+            $this->datatablesColumnsInternalNames[] = '{ "data": "' . $columnName . '" }';
         }
     }
 

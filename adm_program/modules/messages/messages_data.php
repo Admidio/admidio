@@ -187,11 +187,12 @@ while($message = $messageStatement->fetch())
         $icon = 'fa-comment-alt';
         $iconText = $gL10n->get('PMS_MESSAGE');
     }
-    $arrContent[] = '<i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
-    $arrContent[] = $messageObject->getValue('msg_subject');
-    $arrContent[] = $messageObject->getRecipientsNamesString();
-    $arrContent[] = $messageObject->getValue('msg_timestamp');
-    $arrContent[] = '
+    $arrContent['DT_RowId'] = 'row_message_' . $message['msg_id'];
+    $arrContent['msg_type'] = '<i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
+    $arrContent['msg_subject'] = $messageObject->getValue('msg_subject');
+    $arrContent['msg_receiver'] = $messageObject->getRecipientsNamesString();
+    $arrContent['msg_timestamp'] = $messageObject->getValue('msg_timestamp');
+    $arrContent['msg_function'] = '
         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
             data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $messageObject->getValue('msg_id'), 'name' => $messageObject->getValue('msg_subject'), 'database_id' => $messageObject->getValue('msg_id'))) . '">
             <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('MSG_REMOVE').'"></i>
