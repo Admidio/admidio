@@ -114,6 +114,7 @@ $columnHeading = array(
 $membersTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_data.php', array('members' => $getMembers)));
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $membersTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
+$membersTable->setDatatablesColumnsInternalNames(array('mem_no', 'mem_member_orga', 'mem_name', 'mem_loginname', 'mem_gender', 'mem_birthday', 'mem_timestamp', 'mem_function'));
 $membersTable->addRowHeadingByArray($columnHeading);
 $membersTable->setDatatablesRowsPerPage($gSettingsManager->getInt('members_users_per_page'));
 $membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');

@@ -80,6 +80,7 @@ class Message
     public function showInModalWindow()
     {
         $this->modalWindowMode = true;
+        $this->includeThemeBody = false;
         $this->inline = true;
     }
 
@@ -174,6 +175,7 @@ class Message
             $page->assign('messageHeadline', $headline);
             $page->assign('forwardUrl', $this->forwardUrl);
             $page->assign('showYesNoButtons', $this->showYesNoButtons);
+            $page->assign('l10n', $gL10n);
             $page->display('message_modal.tpl');
         }
         else

@@ -38,15 +38,16 @@ if (!$gCurrentUser->editUsers())
 
 if ($getMode === 1)
 {
-    // create html page object
-    $page = new HtmlPage('admidio-members-message', $gL10n->get('MEM_REMOVE_USER'));
+    // ask if user should only be removed from organization or completly deleted
 
-    $page->addHtml('
-    <div class="message">
-        <p class="lead">
-            <i class="fas fa-user-clock"></i>&nbsp;'.$gL10n->get('MEM_MAKE_FORMER').'<br /><br />
-            <i class="fas fa-trash-alt"></i>&nbsp;'.$gL10n->get('MEM_REMOVE_USER_DESC', array($gL10n->get('SYS_DELETE'))).'
-        </p>
+    echo '
+    <div class="modal-header">
+        <h3 class="modal-title">'.$gL10n->get('MEM_REMOVE_USER').'</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <p><i class="fas fa-user-clock"></i>&nbsp;'.$gL10n->get('MEM_MAKE_FORMER').'</p>
+        <p><i class="fas fa-trash-alt"></i>&nbsp;'.$gL10n->get('MEM_REMOVE_USER_DESC', array($gL10n->get('SYS_DELETE'))).'</p>
 
         <button id="btnFormer" type="button" class="btn btn-primary"
             onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 2)).'\'">
@@ -55,9 +56,8 @@ if ($getMode === 1)
         <button id="btnDelete" type="button" class="btn btn-primary"
             onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 3)).'\'">
             <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_DELETE').'</button>
-    </div>');
+    </div>';
 
-    $page->show();
     exit();
 }
 
@@ -184,6 +184,8 @@ elseif ($getMode === 5)
 }
 elseif ($getMode === 6)
 {
+    $gMessage->showInModalWindow();
+
     if (!$isAlsoInOtherOrgas && $gCurrentUser->isAdministrator())
     {
         if (isMember($getUserId))
