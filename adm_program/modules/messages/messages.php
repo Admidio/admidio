@@ -76,7 +76,8 @@ if ($gSettingsManager->getBool('enable_chat_module'))
         ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_chat.php', 'fa-comments');
 }
 
-$table = new HtmlTable('adm_lists_table', $page, true, true);
+$table = new HtmlTable('adm_message_table', $page, true, true);
+$table->setServerSideProcessing(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_data.php');
 
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 
@@ -93,7 +94,7 @@ $table->disableDatatablesColumnsSort(array(5));
 $moduleMessages = new ModuleMessages();
 $usrId = (int) $gCurrentUser->getValue('usr_id');
 $rowIndex = 0;
-
+/*
 // find all own Email messages
 $allEmailsStatement = $moduleMessages->msgGetUserEmails($usrId);
 while ($row = $allEmailsStatement->fetch())
@@ -157,7 +158,7 @@ while ($row = $pwReadOrOwnStatement->fetch())
         'row_message_'.$rowIndex
     );
 }
-
+*/
 // special settings for the table
 $table->setDatatablesOrderColumns(array(array(4, 'desc')));
 

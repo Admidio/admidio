@@ -32,7 +32,6 @@
  *
  * Parameters:
  *
- * filter_rol_id - If set only users from this role will be shown in list.
  * draw          - Number to validate the right inquiry from DataTables.
  * start         - Paging first record indicator. This is the start point in the current data set
  *                 (0 index based - i.e. 0 is the first record).
@@ -46,7 +45,6 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
 $getDraw   = admFuncVariableIsValid($_GET, 'draw',   'int', array('requireValue' => true));
 $getStart  = admFuncVariableIsValid($_GET, 'start',  'int', array('requireValue' => true));
 $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
@@ -111,34 +109,20 @@ if($getSearch !== '' && count($searchColumns) > 0)
     $searchCondition = ' WHERE ' . substr($searchCondition, 4);
 }
 
-$filterRoleCondition = '';
-if($getMembersShowAll)
-{
-    $getFilterRoleId = 0;
-}
-else
-{
-    // show only members of current organization
-    if($getFilterRoleId > 0)
-    {
-        $filterRoleCondition = ' AND mem_rol_id = '.$getFilterRoleId.' ';
-    }
-}
-
 // get count of all found users
-$sql = 'SELECT COUNT(*) AS count_total
-          FROM '.TBL_USERS.'
-    INNER JOIN '.TBL_USER_DATA.' AS last_name
-            ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-    INNER JOIN '.TBL_USER_DATA.' AS first_name
-            ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-         WHERE usr_valid = 1
-               '.$memberOfThisOrganizationCondition;
+$sql = 'SELECT COUNT(*)
+          FROM ' . TBL_MESSAGES . '
+         WHERE (  msg_usr_id_sender = ? -- $gCurrentUser->getValue(\'usr_id\')
+                  OR EXISTS (
+                      SELECT 1
+                        FROM ' . TBL_MESSAGES_RECIPIENTS . '
+                       WHERE msr_msg_id = msg_id
+                         AND msr_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
+                  )
+                )';
 $queryParams = array(
-    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-    $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
+    $gCurrentUser->getValue('usr_id'),
+    $gCurrentUser->getValue('usr_id')
 );
 $countTotalStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
 
@@ -188,102 +172,30 @@ while($message = $messageStatement->fetch())
 {
     ++$rowNumber;
     $arrContent  = array();
-    $addressText = '';
+
+    $messageObject = new TableMessage($gDb);
+    $messageObject->setArray($message);
 
     // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
-    if($message['member_this_orga'] > 0)
+    if($message['msg_type'] === TableMessage::MESSAGE_TYPE_EMAIL)
     {
-        $icon = 'fa-user';
-        $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname')));
+        $icon = 'fa-envelope';
+        $iconText = $gL10n->get('SYS_EMAIL');
     }
     else
     {
-        $icon = 'fa-user-times';
-        $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname')));
+        $icon = 'fa-comment-alt';
+        $iconText = $gL10n->get('PMS_MESSAGE');
     }
     $arrContent[] = '<i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
-
-    // set flag if user is member of the current organization or not
-    if($message['member_this_role'])
-    {
-        $arrContent[] = '<input type="checkbox" id="member_'.$message['usr_id'].'" name="member_'.$message['usr_id'].'" checked="checked" class="memlist_checkbox memlist_member" />';
-    }
-    else
-    {
-        $arrContent[] = '<input type="checkbox" id="member_'.$message['usr_id'].'" name="member_'.$message['usr_id'].'" class="memlist_checkbox memlist_member" />';
-    }
-
-    if($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers()))
-    {
-        $arrContent[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $message['usr_id'])).'">'.$message['last_name'].'</a>';
-    }
-
-    if($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->editUsers()))
-    {
-        $arrContent[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $message['usr_id'])).'">'.$message['first_name'].'</a>';
-    }
-
-    // create string with user address
-    if(strlen($message['country']) > 0 && $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers()))
-    {
-        $addressText .= $gL10n->getCountryName($message['country']);
-    }
-    if((strlen($message['zip_code']) > 0 && $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers()))
-    || (strlen($message['city']) > 0 && $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())))
-    {
-        // some countries have the order postcode city others have city postcode
-        if((int) $gProfileFields->getProperty('CITY', 'usf_sequence') > (int) $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
-        {
-            $addressText .= ' - '. $message['zip_code']. ' '. $message['city'];
-        }
-        else
-        {
-            $addressText .= ' - '. $message['city']. ' '. $message['zip_code'];
-        }
-    }
-    if(strlen($message['street']) > 0 && $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers()))
-    {
-        $addressText .= ' - '. $message['street'];
-    }
-
-    if($gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())
-    || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers())
-    || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
-    || $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers()))
-    {
-        if(strlen($addressText) > 0)
-        {
-            $arrContent[] = '<i class="fas fa-map-marker-alt" data-toggle="tooltip" title="' . trim($addressText, ' -') . '"></i>';
-        }
-        else
-        {
-            $arrContent[] = '&nbsp;';
-        }
-    }
-
-    if($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers()))
-    {
-        // show birthday if it's known
-        if(strlen($message['birthday']) > 0)
-        {
-            $birthdayDate = \DateTime::createFromFormat('Y-m-d', $message['birthday']);
-            $arrContent[] = $birthdayDate->format($gSettingsManager->getString('system_date'));
-        }
-        else
-        {
-            $arrContent[] = '&nbsp;';
-        }
-    }
-
-    // set flag if user is a leader of the current role or not
-    if($message['leader_this_role'])
-    {
-        $arrContent[] = '<input type="checkbox" id="leader_'.$message['usr_id'].'" name="leader_'.$message['usr_id'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
-    }
-    else
-    {
-        $arrContent[] = '<input type="checkbox" id="leader_'.$message['usr_id'].'" name="leader_'.$message['usr_id'].'" class="memlist_checkbox memlist_leader" />';
-    }
+    $arrContent[] = $messageObject->getValue('msg_subject');
+    $arrContent[] = $messageObject->getRecipientsNamesString();
+    $arrContent[] = $messageObject->getValue('msg_timestamp');
+    $arrContent[] = '
+        <a class="admidio-icon-link openPopup" href="javascript:void(0);"
+            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $messageObject->getValue('msg_id'), 'name' => $messageObject->getValue('msg_subject'), 'database_id' => $messageObject->getValue('msg_id'))) . '">
+            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('MSG_REMOVE').'"></i>
+        </a>';
 
     // create array with all column values and add it to the json array
     $jsonArray['data'][] = $arrContent;
