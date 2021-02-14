@@ -93,8 +93,7 @@ else
 $searchCondition = '';
 $queryParamsSearch = array();
 $searchColumns = array(
-    'COALESCE(msg_subject, \' \')',
-    'COALESCE(recipients, \' \')'
+    'COALESCE(msg_subject, \' \')'
 );
 
 if($getSearch !== '' && count($searchColumns) > 0)
@@ -129,7 +128,7 @@ $countTotalStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more
 $jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 
  // SQL-Statement zusammensetzen
-$mainSql = 'SELECT msg_id, msg_type, msg_subject, msg_timestamp
+$mainSql = 'SELECT msg_id, msg_type, msg_subject, msg_usr_id_sender, msg_timestamp, msg_read
               FROM ' . TBL_MESSAGES . '
              WHERE (  msg_usr_id_sender = ? -- $gCurrentUser->getValue(\'usr_id\')
                    OR EXISTS (
@@ -190,7 +189,7 @@ while($message = $messageStatement->fetch())
     $arrContent['DT_RowId'] = 'row_message_' . $message['msg_id'];
     $arrContent['msg_type'] = '<i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
     $arrContent['msg_subject'] = $messageObject->getValue('msg_subject');
-    $arrContent['msg_receiver'] = $messageObject->getRecipientsNamesString();
+    $arrContent['msg_recipients'] = $messageObject->getRecipientsNamesString();
     $arrContent['msg_timestamp'] = $messageObject->getValue('msg_timestamp');
     $arrContent['msg_function'] = '
         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
