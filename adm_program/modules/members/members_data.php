@@ -258,7 +258,7 @@ while($row = $mglStatement->fetch())
     $memberOfOtherOrganization = (bool) $row['member_other_orga'];
 
     // Create row and add first column "Rownumber"
-    $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_id'], 'mem_no' => $rowNumber);
+    $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_id'], '0' => $rowNumber);
 
     // Add icon for "Orgamitglied" or "Nichtmitglied"
     if($memberOfThisOrganization)
@@ -272,20 +272,20 @@ while($row = $mglStatement->fetch())
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($orgName));
     }
 
-    $columnValues['mem_member_orga'] = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">
+    $columnValues['1'] = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">
         <i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
 
     // Add "Lastname" and "Firstname"
-    $columnValues['mem_name'] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">'.$row['name'].'</a>';
+    $columnValues['2'] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">'.$row['name'].'</a>';
 
     // Add "Loginname"
     if(strlen($row['usr_login_name']) > 0)
     {
-        $columnValues['mem_loginname'] = $row['usr_login_name'];
+        $columnValues['3'] = $row['usr_login_name'];
     }
     else
     {
-        $columnValues['mem_loginname'] = '';
+        $columnValues['3'] = '';
     }
 
     // Add icon for "gender"
@@ -293,11 +293,11 @@ while($row = $mglStatement->fetch())
     {
         // show selected text of optionfield or combobox
         $arrListValues  = $gProfileFields->getProperty('GENDER', 'usf_value_list');
-        $columnValues['mem_gender'] = $arrListValues[$row['gender']];
+        $columnValues['4'] = $arrListValues[$row['gender']];
     }
     else
     {
-        $columnValues['mem_gender'] = '';
+        $columnValues['4'] = '';
     }
 
     // Add "birthday"
@@ -305,16 +305,16 @@ while($row = $mglStatement->fetch())
     {
         // date must be formated
         $date = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
-        $columnValues['mem_birthday'] = $date->format($gSettingsManager->getString('system_date'));
+        $columnValues['5'] = $date->format($gSettingsManager->getString('system_date'));
     }
     else
     {
-        $columnValues['mem_birthday'] = '';
+        $columnValues['5'] = '';
     }
 
     // Add "change date"
     $timestampChange = \DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
-    $columnValues['mem_timestamp']  = $timestampChange->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
+    $columnValues['6']  = $timestampChange->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
 
     // Add "user-administration icons"
     $userAdministration = '';
@@ -374,7 +374,7 @@ while($row = $mglStatement->fetch())
             </a>';
     }
 
-    $columnValues['mem_function'] = $userAdministration;
+    $columnValues['7'] = $userAdministration;
 
     // add current row to json array
     $jsonArray['data'][] = $columnValues;

@@ -253,6 +253,28 @@ class TableMessage extends TableAccess
     }
 
     /**
+     * Method will return true if the PM was sent to the current user and not is still unread.
+     * Email will always have the status read.
+     * @return bool Returns true if the PM was not read from the current user.
+     */
+    public function isUnread()
+    {
+        global $gCurrentUser;
+
+        if(TableMessage::MESSAGE_TYPE_PM && $this->getValue('msg_read') === 1)
+        {
+            $recipients = $this->readRecipientsData();
+
+            if($gCurrentUser->getValue('usr_id') === $recipients[0]['id'])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Reads all recipients to the message and returns an array. The array has the following structure:
      * array('type' => 'role', 'id' => '4711', 'name' => 'Administrator', 'mode' => '0')
      * Type could be **role** or **user**, the id will be the database id of role or user and the

@@ -71,11 +71,6 @@ class HtmlTable extends HtmlTableBasic
      */
     protected $datatablesColumnDefs = array();
     /**
-     * @var array<int,string> Array that contains the internal names used for each column. This is useful if you
-     *                        work with server side processing and need row ids.
-     */
-    protected $datatablesColumnsInternalNames = array();
-    /**
      * @var string The text that should be shown if no row was added to the table
      */
     protected $messageNoRowsFound;
@@ -341,12 +336,6 @@ class HtmlTable extends HtmlTableBasic
             $this->datatablesInitParameters[] = '"columnDefs": [' . implode(',', $this->datatablesColumnDefs) . ']';
         }
 
-        // if ColumnsInternalNames were defined then create a comma separated string with all elements of the array
-        if (count($this->datatablesColumnsInternalNames) > 0)
-        {
-            $this->datatablesInitParameters[] = '"columns": [' . implode(',', $this->datatablesColumnsInternalNames) . ']';
-        }
-
         $this->htmlPage->addJavascript('
             $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->getString('system_date') . '"));
             $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time') . '"));
@@ -461,20 +450,6 @@ class HtmlTable extends HtmlTableBasic
         foreach ($columnsHide as $columnHide)
         {
             $this->datatablesColumnDefs[] = '{ "visible": false, "targets": ' . ($columnHide - 1) . ' }';
-        }
-    }
-
-    /**
-     * Add an array that contains the internal names used for each column. This is useful if you
-     * work with server side processing and need row ids.
-     * @param array<int,string> $columnsNames An array which contain the internal columns names.
-     */
-    public function setDatatablesColumnsInternalNames(array $columnsNames)
-    {
-        // internal datatable columns starts with 0
-        foreach ($columnsNames as $columnName)
-        {
-            $this->datatablesColumnsInternalNames[] = '{ "data": "' . $columnName . '" }';
         }
     }
 

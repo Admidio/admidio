@@ -80,7 +80,6 @@ $table = new HtmlTable('adm_message_table', $page, true, true);
 $table->setServerSideProcessing(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_data.php');
 
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
-$table->setDatatablesColumnsInternalNames(array('msg_type', 'msg_subject', 'msg_recipients', 'msg_timestamp', 'msg_function'));
 $table->addRowHeadingByArray(array(
     '<i class="fas fa-envelope" data-toggle="tooltip" title="' . $gL10n->get('SYS_CATEGORY') . '"></i>',
     $gL10n->get('MAI_SUBJECT'),

@@ -170,7 +170,8 @@ $rowNumber = $getStart; // count for every row
 while($message = $messageStatement->fetch())
 {
     ++$rowNumber;
-    $arrContent  = array();
+    $arrContent = array();
+    $cssClass   = 'font-weight-normal';
 
     $messageObject = new TableMessage($gDb);
     $messageObject->setArray($message);
@@ -186,12 +187,19 @@ while($message = $messageStatement->fetch())
         $icon = 'fa-comment-alt';
         $iconText = $gL10n->get('PMS_MESSAGE');
     }
+
+    if($messageObject->isUnread())
+    {
+        $cssClass = 'font-weight-bold';
+    }
+
     $arrContent['DT_RowId'] = 'row_message_' . $message['msg_id'];
-    $arrContent['msg_type'] = '<i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
-    $arrContent['msg_subject'] = $messageObject->getValue('msg_subject');
-    $arrContent['msg_recipients'] = $messageObject->getRecipientsNamesString();
-    $arrContent['msg_timestamp'] = $messageObject->getValue('msg_timestamp');
-    $arrContent['msg_function'] = '
+    $arrContent['DT_RowClass'] = $cssClass;
+    $arrContent['0'] = '<i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
+    $arrContent['1'] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_id' => $message['msg_id'])) . '">' . $messageObject->getValue('msg_subject') . '</a>';
+    $arrContent['2'] = $messageObject->getRecipientsNamesString();
+    $arrContent['3'] = $messageObject->getValue('msg_timestamp');
+    $arrContent['4'] = '
         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
             data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $messageObject->getValue('msg_id'), 'name' => $messageObject->getValue('msg_subject'), 'database_id' => $messageObject->getValue('msg_id'))) . '">
             <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('MSG_REMOVE').'"></i>
