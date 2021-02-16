@@ -541,6 +541,7 @@ else
 
     // add user to the message object
     $message->addUser((int) $user->getValue('usr_id'));
+    $message->setValue('msg_read', 1);
 
     // check if it is allowed to send to this user
     if ((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || $user->getValue('usr_id') === '')

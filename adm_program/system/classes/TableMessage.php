@@ -28,7 +28,7 @@ class TableMessage extends TableAccess
     /**
      * @var Array with TableAcess objects
      */
-    protected $msgRecipientsObjectArray;
+    protected $msgRecipientsObjectArray = array();
     /**
      * @var Object of TableAcess for the current content of the message.
      */
@@ -49,6 +49,17 @@ class TableMessage extends TableAccess
 
     public function addRole($roleId, $roleMode)
     {
+        // first search if role already exists in recipients list
+        foreach($this->msgRecipientsObjectArray as $messageRecipientObject)
+        {
+            if($messageRecipientObject->getValue('msr_rol_id') === $roleId)
+            {
+                // if object found than update role mode and exist function
+                $messageRecipientObject->setValue('msr_role_mode', $roleMode);
+                return;
+            }
+        }
+
         // save message recipient as TableAcess object to the array
         $messageRecipient = new TableAccess($this->db, TBL_MESSAGES_RECIPIENTS, 'msr');
         $messageRecipient->setValue('msr_msg_id', $this->getValue('msg_id'));
@@ -68,7 +79,28 @@ class TableMessage extends TableAccess
 
     public function addUser($userId)
     {
-        // save message recipient as TableAcess object to the array
+        // PM always update the recipient if the message exists
+        if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM)
+        {
+            if(count($this->msgRecipientsObjectArray) === 1)
+            {
+                $this->msgRecipientsObjectArray->setValue('msr_usr_id', $userId);
+                return;
+            }
+        }
+        else // EMAIL
+        {
+            // first search if user already exists in recipients list and than exist function
+            foreach($this->msgRecipientsObjectArray as $messageRecipientObject)
+            {
+                if($messageRecipientObject->getValue('msr_usr_id') === $userId)
+                {
+                    return;
+                }
+            }
+        }
+
+        // if user doesn't exists in recipient list than save recipient as TableAcess object to the array
         $messageRecipient = new TableAccess($this->db, TBL_MESSAGES_RECIPIENTS, 'msr');
         $messageRecipient->setValue('msr_msg_id', $this->getValue('msg_id'));
         $messageRecipient->setValue('msr_usr_id', $userId);
@@ -200,10 +232,9 @@ class TableMessage extends TableAccess
     public function getConversationPartner()
     {
         global $gLogger;
-        if(TableMessage::MESSAGE_TYPE_PM)
+        if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM)
         {
             $recipients = $this->readRecipientsData();
-            $gLogger->error(print_r($recipients, true));
             return $recipients[0]['id'];
         }
 
@@ -253,7 +284,8 @@ class TableMessage extends TableAccess
     }
 
     /**
-     * Method will return true if the PM was sent to the current user and not is still unread.
+     * Method will return true if the PM was sent to the current user and not is already unread.
+     * Therefore the current user is not the sender of the PM and the flag **msg_read** is set to 1.
      * Email will always have the status read.
      * @return bool Returns true if the PM was not read from the current user.
      */
@@ -261,14 +293,10 @@ class TableMessage extends TableAccess
     {
         global $gCurrentUser;
 
-        if(TableMessage::MESSAGE_TYPE_PM && $this->getValue('msg_read') === 1)
+        if(TableMessage::MESSAGE_TYPE_PM && $this->getValue('msg_read') === 1
+        && $this->getValue('msg_usr_id_sender') != $gCurrentUser->getValue('usr_id'))
         {
-            $recipients = $this->readRecipientsData();
-
-            if($gCurrentUser->getValue('usr_id') === $recipients[0]['id'])
-            {
-                return true;
-            }
+            return true;
         }
 
         return false;
