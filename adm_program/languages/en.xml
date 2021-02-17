@@ -1235,7 +1235,7 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">Send e-mails to all roles</string>
   <string name="SYS_RIGHT_PHOTOS">Upload and edit photos</string>
   <string name="SYS_RIGHT_PROFILE">Edit own profile</string>
-  <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">Define which user should be able to see several lists and certain user profiles of members of the current role. Role permission #VAR1_BOLD# is parent configuration is the current permission level.</string>
+  <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">This setting controls which users have the right to view various lists and the individual user profiles of the role members. However, the role right #VAR1_BOLD# is still above this setting.</string>
   <string name="SYS_RIGHT_WEBLINKS">Manage web links</string>
   <string name="SYS_ROLE">Role</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">On this page you can configure who can view the folder #VAR1_BOLD#, download files or upload files. The permissions are inherited to all subfolders, and existing permissions in subfolders are overwritten. Only roles with access to the parent folder are selectable. Administrators have all permissions for the folder.</string>
