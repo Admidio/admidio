@@ -625,45 +625,37 @@ elseif (!isset($messageStatement))
 
 if (isset($messageStatement))
 {
-    require_once(__DIR__ . '/messages_functions.php');
-
-    $page->addHtml('<br />');
     while ($row = $messageStatement->fetch())
     {
-        if ((int) $row['msc_usr_id'] === $currUsrId)
-        {
-            $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
-        }
-        else
-        {
-            $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-        }
-
-        $receiverName = '';
+        $date = new \DateTime($row['msc_timestamp']);
         $messageText = htmlspecialchars_decode(stripslashes($row['msc_message']));
+
         if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
         {
-            // list history of this PM
-            $messageText = nl2br($row['msc_message']);
+            if ((int) $row['msc_usr_id'] === $currUsrId)
+            {
+                $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
+            }
+            else
+            {
+                $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+            }
+
+            $messageHeader = $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($sentUser, $date->format($gSettingsManager->getString('system_date')), $date->format($gSettingsManager->getString('system_time'))));
+            $messageIcon   = 'fa-comment-alt';
         }
         else
         {
-            // within email show all recipients in footer
-            $receiverName = '<div class="card-footer">'.$gL10n->get('MSG_OPPOSITE').': ' . $message->getRecipientsNamesString() . '</div>';
+            $messageHeader = $date->format($gSettingsManager->getString('system_date')) . ' ' . $date->format($gSettingsManager->getString('system_time')) .'<br />' . $gL10n->get('SYS_TO') . ': ' . $message->getRecipientsNamesString();
+            $messageIcon   = 'fa-envelope';
         }
-
-        $date = new \DateTime($row['msc_timestamp']);
 
         $page->addHtml('
         <div class="card admidio-blog">
             <div class="card-header">
-                <i class="fas fa-comment-alt"></i>' .
-                $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($sentUser, $date->format($gSettingsManager->getString('system_date')), $date->format($gSettingsManager->getString('system_time')))) . '
+                <i class="fas ' . $messageIcon . '"></i>' . $messageHeader . '
             </div>
-            <div class="card-body">'.
-                $messageText.'
-            </div>
-            '.$receiverName.'
+            <div class="card-body">' . $messageText . '</div>
         </div>');
     }
 }
