@@ -940,7 +940,7 @@
   <string name="SYS_FILE">File</string>
   <string name="SYS_FILE_EXIST">File #VAR1# already exists!\n\nPlease select different file name.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">File type is not allowed on this server.</string>
-  <string name="SYS_FILE_NAME_RULES">File name should indicate the file content. The file name affects to the listing order. E.g. file names in folders with proceedings should begin with date (yyyy-mm-tt).</string>
+  <string name="SYS_FILE_NAME_RULES">File name should indicate the file content. The file name affects to the listing order. E.g. file names in folders with proceedings should begin with date (yyyy-mm-dd).</string>
   <string name="SYS_FILE_NOT_EXIST">Selected file does not exist on the server.</string>
   <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">The file is physically not available anymore on the server. It should be deleted from the database.</string>
   <string name="SYS_FILE_RENAME">File #VAR1# was renamed.</string>
@@ -979,7 +979,7 @@
   <string name="SYS_FRIDAY">Friday</string>
   <string name="SYS_FROM">from #VAR1#</string>
   <string name="SYS_FROM_TO">from #VAR1# to #VAR2#</string>
-  <string name="SYS_FURTHER_INFORMATIONS">Further informations</string>
+  <string name="SYS_FURTHER_INFORMATIONS">Further information</string>
   <string name="SYS_GENERAL_LISTS">General lists</string>
   <string name="SYS_GENDER">Gender</string>
   <string name="SYS_GEN_RANDOM_ERROR">An unexpected error occurred while generating a random number.\nError Code: #VAR1#\nError Message: #VAR2#</string>
@@ -1119,7 +1119,7 @@
   <string name="SYS_NO_LEADER">No leader</string>
   <string name="SYS_NO_MORE_COLUMN">For technical reasons, no more column can be added.</string>
   <string name="SYS_NO_RIGHTS">You do not have the required permission to perform this action.</string>
-  <string name="SYS_NO_RIGHTS_VIEW_LIST">You are not permitted to display a list of defined roles.</string>
+  <string name="SYS_NO_RIGHTS_VIEW_LIST">You do not have the right to view the list of the selected roles.</string>
   <string name="SYS_NO_ROLE_GIVEN">No role has been specified.</string>
   <string name="SYS_NO_TEMPLATE">No template</string>
   <string name="SYS_NO_USER_FOUND">No member of your criteria could be found.</string>
@@ -1336,7 +1336,7 @@
   <string name="SYS_SUPPORT_ADMIDIO">Support Admidio</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
   <string name="SYS_SYMMETRICAL">Symmetrical</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Your requested password for #organization_short_name# website\n#content# Hello #user_first_name#,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: #user_login_name#\nPassword: #variable1#\n\nTo activate your password, please follow this link:\n\n#variable2#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nGreetings,\nThe administrators</string>
+  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Your requested password for #organization_long_name# website\n#content# Hello #user_first_name#,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: #user_login_name#\nPassword: #variable1#\n\nTo activate your password, please follow this link:\n\n#variable2#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nGreetings,\nThe administrators</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Credentials for #organization_long_name#\n#content# Hello #user_first_name#,\n\nYou receive your credentials for the website #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nCheers,\nThe administrators</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in registration at #organization_long_name# rejected.\n#content#Hello #user_first_name#,\n\nyour registration at #organization_homepage# was rejected.\n\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\nTo clarify the reasons for the rejection please contact the administrator #administrator_email# from #organization_homepage#.\n\nRegards,\nThe administrators</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration at #organization_long_name# confirmed\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# has been confirmed.\n\nYou can now log in to the homepage with your username #user_login_name# and your password.\n\nIf you have any questions, write an email to #administrator_email#.\n\nCheers,\nThe administrators</string>
