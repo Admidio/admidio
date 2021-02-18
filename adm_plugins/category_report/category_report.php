@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Kategoriereport
+ * Category_Report
  *
  * Version 3.1.1
  *
@@ -29,7 +29,7 @@ require_once(__DIR__ . '/common_function.php');
 require_once(__DIR__ . '/classes/configtable.php');
 require_once(__DIR__ . '/classes/genreport.php');
 
-//$scriptName ist der Name wie er im Menue eingetragen werden muss, also ohne evtl. vorgelagerte Ordner wie z.B. /playground/adm_plugins/kategoriereport...
+//$scriptName ist der Name wie er im Menue eingetragen werden muss, also ohne evtl. vorgelagerte Ordner wie z.B. /playground/adm_plugins/category_report...
 $scriptName = substr($_SERVER['SCRIPT_NAME'], strpos($_SERVER['SCRIPT_NAME'], FOLDER_PLUGINS));
 
 // only authorized user are allowed to start this module
@@ -39,7 +39,7 @@ if (!isUserAuthorized($scriptName))
 }
 
 // Konfiguration einlesen          
-$pPreferences = new ConfigTablePKR();
+$pPreferences = new ConfigTablePCR();
 if ($pPreferences->checkforupdate())
 {
 	$pPreferences->init();
@@ -51,11 +51,11 @@ else
 
 // Initialize and check the parameters
 $validValues = array();
-foreach ($pPreferences->config['Konfigurationen']['col_desc'] as $key => $dummy)
+foreach ($pPreferences->config['configurations']['col_desc'] as $key => $dummy)
 {
 	$validValues[] = 'X'.$key.'X';
 }
-$getConfig          = admFuncVariableIsValid($_GET, 'config', 'string', array('defaultValue' => 'X'.$pPreferences->config['Optionen']['config_default'].'X', 'validValues' => $validValues) );
+$getConfig          = admFuncVariableIsValid($_GET, 'config', 'string', array('defaultValue' => 'X'.$pPreferences->config['options']['config_default'].'X', 'validValues' => $validValues) );
 $getMode            = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl' )));
 $getFilter          = admFuncVariableIsValid($_GET, 'filter', 'string');
 $getExportAndFilter = admFuncVariableIsValid($_GET, 'export_and_filter', 'bool', array('defaultValue' => false));
@@ -121,9 +121,9 @@ if ($numMembers == 0)
 $columnCount = count($report->headerData);
     
 // define title (html) and headline
-$title       = $gL10n->get('PLG_KATEGORIEREPORT_CATEGORY_REPORT');
-$headline    = $gL10n->get('PLG_KATEGORIEREPORT_CATEGORY_REPORT');
-$subheadline = $pPreferences->config['Konfigurationen']['col_desc'][trim($getConfig,'X')];   
+$title       = $gL10n->get('PLG_CATEGORY_REPORT_HEADLINE');
+$headline    = $gL10n->get('PLG_CATEGORY_REPORT_HEADLINE');
+$subheadline = $pPreferences->config['configurations']['col_desc'][trim($getConfig,'X')];   
 
 $filename    = $g_organization.'-'.$headline.'-'.$subheadline;
 
@@ -139,7 +139,7 @@ if ($getMode !== 'csv')
 
     if ($getMode === 'print')
     {
-        $page = new HtmlPage('plg-kategoriereport-main-print');
+        $page = new HtmlPage('plg-category-report-main-print');
         $page->setPrintMode();
         $page->setTitle($title);
         $page->setHeadline($headline);
@@ -206,14 +206,14 @@ if ($getMode !== 'csv')
         $hoverRows = true;
 
         // create html page object
-        $page = new HtmlPage('plg-kategoriereport-main-html');
+        $page = new HtmlPage('plg-category-report-main-html');
         $page->setTitle($title);
         $page->setHeadline($headline);
         $page->addHtml('<h5>'.$subheadline.'</h5>');
         
         $page->addJavascript('
             $("#menu_item_lists_print_view").click(function() {
-                window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/kategoriereport.php', array(
+                window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php', array(
                     'mode'              => 'print',
                     'filter'            => $getFilter, 
                     'export_and_filter' => $getExportAndFilter,
@@ -231,28 +231,28 @@ if ($getMode !== 'csv')
             // dropdown menu item with all export possibilities
             $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
             $page->addPageFunctionsMenuItem('menu_item_lists_csv_ms', $gL10n->get('SYS_MICROSOFT_EXCEL'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/kategoriereport.php', array(
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php', array(
                     'config'            => $getConfig,
                     'filter'            => $getFilter, 
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'csv-ms')),
                 'fa-file-excel', 'menu_item_lists_export');
             $page->addPageFunctionsMenuItem('menu_item_lists_pdf', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/kategoriereport.php', array(
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php', array(
                     'config'            => $getConfig,
                     'filter'            => $getFilter, 
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'pdf')),
                 'fa-file-pdf', 'menu_item_lists_export');
             $page->addPageFunctionsMenuItem('menu_item_lists_pdfl', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/kategoriereport.php', array(
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php', array(
                     'config'            => $getConfig,
                     'filter'            => $getFilter, 
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'pdfl')),
                 'fa-file-pdf', 'menu_item_lists_export');
             $page->addPageFunctionsMenuItem('menu_item_lists_csv', $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/kategoriereport.php', array(
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php', array(
                     'config'            => $getConfig,
                     'filter'            => $getFilter, 
                     'export_and_filter' => $getExportAndFilter,
@@ -268,7 +268,7 @@ if ($getMode !== 'csv')
         if ($gCurrentUser->isAdministrator())
 		{
     		// show link to pluginpreferences 
-    		$page->addPageFunctionsMenuItem('admMenuItemPreferencesLists', $gL10n->get('PLG_KATEGORIEREPORT_SETTINGS'),
+    		$page->addPageFunctionsMenuItem('admMenuItemPreferencesLists', $gL10n->get('PLG_CATEGORY_REPORT_SETTINGS'),
     		    ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences.php',  'fa-cog');
 		}
 
@@ -283,19 +283,19 @@ if ($getMode !== 'csv')
 		    true
 		);
 		
-		foreach ($pPreferences->config['Konfigurationen']['col_desc'] as $key => $item)
+		foreach ($pPreferences->config['configurations']['col_desc'] as $key => $item)
 		{
 		    $selectBoxEntries['X'.$key.'X'] = $item;
 		}
 	
-		$form = new HtmlForm('navbar_catreport_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/kategoriereport.php', array('headline' => $headline)), $page, array('type' => 'navbar', 'setFocus' => false));
-		$form->addSelectBox('config', $gL10n->get('PLG_KATEGORIEREPORT_SELECT_CONFIGURATION'), $selectBoxEntries, array('showContextDependentFirstEntry' => false,'defaultValue' => $getConfig));
+		$form = new HtmlForm('navbar_catreport_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php', array('headline' => $headline)), $page, array('type' => 'navbar', 'setFocus' => false));
+		$form->addSelectBox('config', $gL10n->get('PLG_CATEGORY_REPORT_SELECT_CONFIGURATION'), $selectBoxEntries, array('showContextDependentFirstEntry' => false,'defaultValue' => $getConfig));
 		
         if ($getExportAndFilter)
         {
             $form->addInput('filter', $gL10n->get('SYS_FILTER'), $getFilter);
         }
-        $form->addCheckbox('export_and_filter', $gL10n->get('PLG_KATEGORIEREPORT_EXPORT_AND_FILTER'), $getExportAndFilter);
+        $form->addCheckbox('export_and_filter', $gL10n->get('PLG_CATEGORY_REPORT_EXPORT_AND_FILTER'), $getExportAndFilter);
 
 		$page->addHtml($form->show());
 		

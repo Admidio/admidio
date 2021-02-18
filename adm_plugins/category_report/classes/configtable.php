@@ -24,12 +24,12 @@
  *
  *****************************************************************************/
      	
-class ConfigTablePKR
+class ConfigTablePCR
 {
 	public $config = array();     ///< Array mit allen Konfigurationsdaten
 
 	protected $table_name;
-	protected static $shortcut = 'PKR';
+	protected static $shortcut = 'PCR';
 	protected static $version;
 	protected static $stand;
 	protected static $dbtoken;
@@ -37,7 +37,7 @@ class ConfigTablePKR
 	public $config_default = array();	
 	
     /**
-     * ConfigTablePKR constructor
+     * ConfigTablePCR constructor
      */
 	public function __construct()
 	{
@@ -97,20 +97,20 @@ class ConfigTablePKR
 		$this->read();
 	
 		// Updateroutine 2.1.0 -> 2.1.1
-   		if (isset($this->config['Konfigurationen']['col_desc']))
+   		if (isset($this->config['configurations']['col_desc']))
     	{
-			foreach ($this->config['Konfigurationen']['col_desc'] as $key => $dummy)
+			foreach ($this->config['configurations']['col_desc'] as $key => $dummy)
 			{
-				if (!isset($this->config['Konfigurationen']['number_col'][$key]))
+				if (!isset($this->config['configurations']['number_col'][$key]))
     			{
-					$this->config['Konfigurationen']['number_col'][$key] = 0;
+					$this->config['configurations']['number_col'][$key] = 0;
     			}
 			}
 		} 
 		// Ende Updateroutine 2.1.0 -> 2.1.1		
 		
-		$this->config['Plugininformationen']['version'] = self::$version;
-		$this->config['Plugininformationen']['stand'] = self::$stand;
+		$this->config['plugin_information']['version'] = self::$version;
+		$this->config['plugin_information']['stand'] = self::$stand;
 	
 		// die eingelesenen Konfigurationsdaten in ein Arbeitsarray kopieren
 		$config_ist = $this->config;
@@ -261,7 +261,7 @@ class ConfigTablePKR
     
     	if ($tableExistStatement->rowCount())
     	{
-			$plp_name = self::$shortcut.'__Plugininformationen__version';
+			$plp_name = self::$shortcut.'__plugin_information__version';
           
     		$sql = 'SELECT plp_value 
             		  FROM '.$this->table_name.' 
@@ -277,7 +277,7 @@ class ConfigTablePKR
     			$ret = true;    
     		}
 	
-    		$plp_name = self::$shortcut.'__Plugininformationen__stand';
+    		$plp_name = self::$shortcut.'__plugin_information__stand';
           
     		$sql = 'SELECT plp_value 
             		  FROM '.$this->table_name.' 
@@ -337,9 +337,9 @@ class ConfigTablePKR
         	$result_db = $gDb->queryPrepared($sql);
     	}
     	
-    	$result  = ($result_data ? $gL10n->get('PLG_KATEGORIEREPORT_DEINST_DATA_DELETE_SUCCESS') : $gL10n->get('PLG_KATEGORIEREPORT_DEINST_DATA_DELETE_ERROR') );
-		$result .= ($result_db ? $gL10n->get('PLG_KATEGORIEREPORT_DEINST_TABLE_DELETE_SUCCESS') : $gL10n->get('PLG_KATEGORIEREPORT_DEINST_TABLE_DELETE_ERROR') );
-    	$result .= ($result_data ? $gL10n->get('PLG_KATEGORIEREPORT_DEINST_ENDMESSAGE') : '' );
+    	$result  = ($result_data ? $gL10n->get('PLG_CATEGORY_REPORT_DEINST_DATA_DELETE_SUCCESS') : $gL10n->get('PLG_CATEGORY_REPORT_DEINST_DATA_DELETE_ERROR') );
+		$result .= ($result_db ? $gL10n->get('PLG_CATEGORY_REPORT_DEINST_TABLE_DELETE_SUCCESS') : $gL10n->get('PLG_CATEGORY_REPORT_DEINST_TABLE_DELETE_ERROR') );
+    	$result .= ($result_data ? $gL10n->get('PLG_CATEGORY_REPORT_DEINST_ENDMESSAGE') : '' );
 		
 		return $result;
 	}

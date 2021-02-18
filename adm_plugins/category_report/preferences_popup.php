@@ -20,7 +20,7 @@ if (!$gCurrentUser->isAdministrator())
 }
 
 // set headline of the script
-$headline = $gL10n->get('PLG_KATEGORIEREPORT_CONFIGURATIONS');
+$headline = $gL10n->get('PLG_CATEGORY_REPORT_CONFIGURATIONS');
 
 header('Content-type: text/html; charset=utf-8');
 
@@ -29,18 +29,18 @@ echo '
     <h4 class="modal-title">'.$headline.'</h4>
 </div>
 <div class="modal-body">
-	<strong>'.$gL10n->get('PLG_KATEGORIEREPORT_COL_DESC').'</strong><br/>
-    '.$gL10n->get('PLG_KATEGORIEREPORT_COL_DESC_DESC').'<br/><br/>
-    <strong>'.$gL10n->get('PLG_KATEGORIEREPORT_COLUMN_SELECTION').'</strong><br/>
-	'.$gL10n->get('PLG_KATEGORIEREPORT_COLUMN_SELECTION_DESC').'<br/><br/>		
-    <strong>'.$gL10n->get('PLG_KATEGORIEREPORT_DISPLAY_TEXT_MEMBERSHIP_YES').'</strong><br/>
-	'.$gL10n->get('PLG_KATEGORIEREPORT_DISPLAY_TEXT_MEMBERSHIP_YES_DESC').'<br/><br/>
-    <strong>'.$gL10n->get('PLG_KATEGORIEREPORT_DISPLAY_TEXT_MEMBERSHIP_NO').'</strong><br/>
-	'.$gL10n->get('PLG_KATEGORIEREPORT_DISPLAY_TEXT_MEMBERSHIP_NO_DESC').'<br/><br/>
-    <strong>'.$gL10n->get('PLG_KATEGORIEREPORT_ROLE_SELECTION').'</strong><br/>
-	'.$gL10n->get('PLG_KATEGORIEREPORT_ROLE_SELECTION_CONF_DESC').'<br/><br/>
-	<strong>'.$gL10n->get('PLG_KATEGORIEREPORT_CAT_SELECTION').'</strong><br/>
-	'.$gL10n->get('PLG_KATEGORIEREPORT_CAT_SELECTION_CONF_DESC').'<br/><br/>	
-    <strong>'.$gL10n->get('PLG_KATEGORIEREPORT_NUMBER_COL').'</strong><br/>
-	'.$gL10n->get('PLG_KATEGORIEREPORT_NUMBER_COL_DESC').'
+	<strong>'.$gL10n->get('PLG_CATEGORY_REPORT_COL_DESC').'</strong><br/>
+    '.$gL10n->get('PLG_CATEGORY_REPORT_COL_DESC_DESC').'<br/><br/>
+    <strong>'.$gL10n->get('PLG_CATEGORY_REPORT_COLUMN_SELECTION').'</strong><br/>
+	'.$gL10n->get('PLG_CATEGORY_REPORT_COLUMN_SELECTION_DESC').'<br/><br/>		
+    <strong>'.$gL10n->get('PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_YES').'</strong><br/>
+	'.$gL10n->get('PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_YES_DESC').'<br/><br/>
+    <strong>'.$gL10n->get('PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_NO').'</strong><br/>
+	'.$gL10n->get('PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_NO_DESC').'<br/><br/>
+    <strong>'.$gL10n->get('PLG_CATEGORY_REPORT_ROLE_SELECTION').'</strong><br/>
+	'.$gL10n->get('PLG_CATEGORY_REPORT_ROLE_SELECTION_CONF_DESC').'<br/><br/>
+	<strong>'.$gL10n->get('PLG_CATEGORY_REPORT_CAT_SELECTION').'</strong><br/>
+	'.$gL10n->get('PLG_CATEGORY_REPORT_CAT_SELECTION_CONF_DESC').'<br/><br/>	
+    <strong>'.$gL10n->get('PLG_CATEGORY_REPORT_NUMBER_COL').'</strong><br/>
+	'.$gL10n->get('PLG_CATEGORY_REPORT_NUMBER_COL_DESC').'
 </div>';

@@ -48,7 +48,7 @@ class GenReport
 		$number_row_pos = -1;
 		$number_col     = array();		
 		
-		$colfields = explode(',', $pPreferences->config['Konfigurationen']['col_fields'][$this->conf]);
+		$colfields = explode(',', $pPreferences->config['configurations']['col_fields'][$this->conf]);
 		// die gespeicherten Konfigurationen durchlaufen
 		foreach ($colfields as $key => $data)
         {
@@ -186,7 +186,7 @@ class GenReport
         	}
         }  
 
-        $number_col[1] = $gL10n->get('PLG_KATEGORIEREPORT_NUMBER_COL');
+        $number_col[1] = $gL10n->get('PLG_CATEGORY_REPORT_NUMBER_COL');
         
 		// alle Mitglieder der aktuellen Organisation einlesen
         $sql = ' SELECT mem_usr_id
@@ -221,18 +221,18 @@ class GenReport
 	   		
 			// bestehen Rollen- und/oder Kategorieeinschraenkungen?
         	$rolecatmarker = true;
-        	if ($pPreferences->config['Konfigurationen']['selection_role'][$this->conf] <> ' '
-        	 || $pPreferences->config['Konfigurationen']['selection_cat'][$this->conf] <> ' ')
+        	if ($pPreferences->config['configurations']['selection_role'][$this->conf] <> ' '
+        	 || $pPreferences->config['configurations']['selection_cat'][$this->conf] <> ' ')
         	{
         		$rolecatmarker = false;	
-        		foreach (explode(',', $pPreferences->config['Konfigurationen']['selection_role'][$this->conf]) as $rol)
+        		foreach (explode(',', $pPreferences->config['configurations']['selection_role'][$this->conf]) as $rol)
         		{
         			if ($user->isMemberOfRole((int) $rol))
         			{
         				$rolecatmarker = true;
         			}
         		}	
-				foreach (explode(',', $pPreferences->config['Konfigurationen']['selection_cat'][$this->conf]) as $cat)
+				foreach (explode(',', $pPreferences->config['configurations']['selection_cat'][$this->conf]) as $cat)
         		{
         			if (isMemberOfCategorie($cat, $member))
         			{
@@ -280,13 +280,13 @@ class GenReport
 				{
 					if (isset($data['usr_id']) AND in_array($member,$data['usr_id']))
                 	{
-                    	$this->listData[$member][$key] = $pPreferences->config['Konfigurationen']['col_yes'][$this->conf];
+                    	$this->listData[$member][$key] = $pPreferences->config['configurations']['col_yes'][$this->conf];
                     	$number_row_count++;
                     	$number_col[$key]++;
             		}
                 	else
                 	{
-                    	$this->listData[$member][$key] = $pPreferences->config['Konfigurationen']['col_no'][$this->conf];
+                    	$this->listData[$member][$key] = $pPreferences->config['configurations']['col_no'][$this->conf];
                 	}
 				}
 			}
@@ -296,7 +296,7 @@ class GenReport
 			}
 		}
 
-		if ($pPreferences->config['Konfigurationen']['number_col'][$this->conf] == 1)
+		if ($pPreferences->config['configurations']['number_col'][$this->conf] == 1)
 		{
 			$this->listData[max(array_keys($this->listData))+1] = $number_col;
 		}
@@ -337,7 +337,7 @@ class GenReport
 		while ($row = $statement->fetch())
 		{
 			// ueberpruefen, ob der Kategoriename mittels der Sprachdatei uebersetzt werden kann
-        	if (check_languagePKR($row['cat_name']))
+        	if (check_languagePCR($row['cat_name']))
         	{
         		$row['cat_name'] = $gL10n->get($row['cat_name']);
         	}
@@ -376,7 +376,7 @@ class GenReport
 				
        			$this->headerSelection[$i]['id']   	   = 'w'.$row['rol_id'];		//w wie without (Leader)
         		$this->headerSelection[$i]['cat_name'] = $data['cat_name'];
-				$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLE').' '.$gL10n->get('PLG_KATEGORIEREPORT_WITHOUT').' '.$gL10n->get('SYS_LEADER').': '.$row['rol_name'].$marker;
+				$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLE').' '.$gL10n->get('PLG_CATEGORY_REPORT_WITHOUT').' '.$gL10n->get('SYS_LEADER').': '.$row['rol_name'].$marker;
 				$i++;				
         		
 				$this->headerSelection[$i]['id']   	   = 'l'.$row['rol_id'];		//l wie leader
@@ -387,14 +387,14 @@ class GenReport
     	}
     	//Zusatzspalte fuer die Gesamtrollenuebersicht erzeugen
     	$this->headerSelection[$i]['id']   	   = 'adummy';          //a wie additional
-        $this->headerSelection[$i]['cat_name'] = $gL10n->get('PLG_KATEGORIEREPORT_ADDITIONAL_COLS');
-		$this->headerSelection[$i]['data']	   = $gL10n->get('PLG_KATEGORIEREPORT_ROLEMEMBERSHIPS');
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('PLG_CATEGORY_REPORT_ADDITIONAL_COLS');
+		$this->headerSelection[$i]['data']	   = $gL10n->get('PLG_CATEGORY_REPORT_ROLEMEMBERSHIPS');
 		$i++;
 		
 		//Zusatzspalte fuer die Anzahl erzeugen
     	$this->headerSelection[$i]['id']   	   = 'ndummy';          //n wie number 
-        $this->headerSelection[$i]['cat_name'] = $gL10n->get('PLG_KATEGORIEREPORT_ADDITIONAL_COLS');
-		$this->headerSelection[$i]['data']	   = $gL10n->get('PLG_KATEGORIEREPORT_NUMBER_ROW');
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('PLG_CATEGORY_REPORT_ADDITIONAL_COLS');
+		$this->headerSelection[$i]['data']	   = $gL10n->get('PLG_CATEGORY_REPORT_NUMBER_ROW');
 	}
 	
     /**

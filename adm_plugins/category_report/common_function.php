@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Gemeinsame Funktionen fuer das Admidio-Plugin Kategoriereport
+ * Gemeinsame Funktionen fuer das Admidio-Plugin Category_Report
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -45,7 +45,7 @@ function isUserAuthorized($scriptName)
 	{
 		$gLogger->notice('CategoryReport: Error with menu entry: Found rows: '. $menuStatement->rowCount() );
 		$gLogger->notice('CategoryReport: Error with menu entry: ScriptName: '. $scriptName);
-		$gMessage->show($gL10n->get('PLG_KATEGORIEREPORT_MENU_URL_ERROR', array($scriptName)), $gL10n->get('SYS_ERROR'));
+		$gMessage->show($gL10n->get('PLG_CATEGORY_REPORT_MENU_URL_ERROR', array($scriptName)), $gL10n->get('SYS_ERROR'));
 	}
 	else
 	{
@@ -91,7 +91,7 @@ function isUserAuthorized($scriptName)
  * @param   string  $field_name
  * @return  bool
  */
-function check_languagePKR($field_name)
+function check_languagePCR($field_name)
 {
     $ret = false;
  
@@ -171,7 +171,7 @@ function createColDescConfig($name)
 {
     global $pPreferences, $gL10n;
     
-    while (in_array($name, $pPreferences->config['Konfigurationen']['col_desc']))
+    while (in_array($name, $pPreferences->config['configurations']['col_desc']))
     {
         $name .= ' - '.$gL10n->get('MAI_CARBON_COPY');
     }

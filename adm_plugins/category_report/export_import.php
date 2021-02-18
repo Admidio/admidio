@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Exportieren und Importieren von Konfigurationen des Admidio-Plugins Kategoriereport
+ * Exportieren und Importieren von Konfigurationen des Admidio-Plugins Category_Report
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -26,7 +26,7 @@ if (!$gCurrentUser->isAdministrator())
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$pPreferences = new ConfigTablePKR();
+$pPreferences = new ConfigTablePCR();
 $pPreferences->read();
 
 // Initialize and check the parameters
@@ -36,20 +36,20 @@ switch ($getMode)
 {
 	case 1:
 	
-		$headline = $gL10n->get('PLG_KATEGORIEREPORT_EXPORT_IMPORT');
+		$headline = $gL10n->get('PLG_CATEGORY_REPORT_EXPORT_IMPORT');
 	 
 	    // create html page object
-    	$page = new HtmlPage('plg-kategoriereport-export-import', $headline);
+    	$page = new HtmlPage('plg-category-report-export-import', $headline);
     
     	$gNavigation->addUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences.php', array('show_option' => 'options')));
     	$gNavigation->addUrl(CURRENT_URL);
 
     	// show form
     	$form = new HtmlForm('export_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/export_import.php', array('mode' => 2)), $page);
-		$form->openGroupBox('export', $headline = $gL10n->get('PLG_KATEGORIEREPORT_EXPORT'));
-    	$form->addDescription($gL10n->get('PLG_KATEGORIEREPORT_EXPORT_DESC'));
-    	$form->addSelectBox('conf_id', $gL10n->get('PLG_FORMFILLER_CONFIGURATION').':', $pPreferences->config['Konfigurationen']['col_desc'], array( 'showContextDependentFirstEntry' => false));
-		$form->addSubmitButton('btn_export', $gL10n->get('PLG_KATEGORIEREPORT_EXPORT'), array('icon' => 'fa-file-export', 'class' => ' col-sm-offset-3'));
+		$form->openGroupBox('export', $headline = $gL10n->get('PLG_CATEGORY_REPORT_EXPORT'));
+    	$form->addDescription($gL10n->get('PLG_CATEGORY_REPORT_EXPORT_DESC'));
+    	$form->addSelectBox('conf_id', $gL10n->get('PLG_FORMFILLER_CONFIGURATION').':', $pPreferences->config['configurations']['col_desc'], array( 'showContextDependentFirstEntry' => false));
+		$form->addSubmitButton('btn_export', $gL10n->get('PLG_CATEGORY_REPORT_EXPORT'), array('icon' => 'fa-file-export', 'class' => ' col-sm-offset-3'));
     	$form->closeGroupBox();
     	 
       	// add form to html page and show page
@@ -57,10 +57,10 @@ switch ($getMode)
     
     	// show form
     	$form = new HtmlForm('import_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/export_import.php', array('mode' => 3)), $page, array('enableFileUpload' => true));
-    	$form->openGroupBox('import', $headline = $gL10n->get('PLG_KATEGORIEREPORT_IMPORT'));
-    	$form->addDescription($gL10n->get('PLG_KATEGORIEREPORT_IMPORT_DESC'));
-    	$form->addFileUpload('importfile', $gL10n->get('SYS_FILE').':', array( 'allowedMimeTypes' => array('application/octet-stream,text/plain'), 'helpTextIdLabel' => 'PLG_KATEGORIEREPORT_IMPORT_INFO'));
-		$form->addSubmitButton('btn_import', $gL10n->get('PLG_KATEGORIEREPORT_IMPORT'), array('icon' => 'fa-file-import', 'class' => ' col-sm-offset-3'));
+    	$form->openGroupBox('import', $headline = $gL10n->get('PLG_CATEGORY_REPORT_IMPORT'));
+    	$form->addDescription($gL10n->get('PLG_CATEGORY_REPORT_IMPORT_DESC'));
+    	$form->addFileUpload('importfile', $gL10n->get('SYS_FILE').':', array( 'allowedMimeTypes' => array('application/octet-stream,text/plain'), 'helpTextIdLabel' => 'PLG_CATEGORY_REPORT_IMPORT_INFO'));
+		$form->addSubmitButton('btn_import', $gL10n->get('PLG_CATEGORY_REPORT_IMPORT'), array('icon' => 'fa-file-import', 'class' => ' col-sm-offset-3'));
     	$form->closeGroupBox(); 
     
     	// add form to html page and show page
@@ -72,7 +72,7 @@ switch ($getMode)
 	case 2:
 		$exportArray = array();
 
-		foreach ($pPreferences->config['Konfigurationen'] as $key => $data)
+		foreach ($pPreferences->config['configurations'] as $key => $data)
 		{
 			$exportArray[$key] = $data[$_POST['conf_id']];
 		} 
@@ -91,7 +91,7 @@ switch ($getMode)
 		header('Content-Disposition: attachment; filename="'.$exportArray['col_desc'].'.cfg"');
 	
 		echo ';### ' . $exportArray['col_desc'].'.cfg' . ' ### ' . date('Y-m-d H:i:s') . ' ### utf-8 ###'."\r\n";
-		echo ';### This is a configuration file of a configuration of the plugin Kategoriereport ###'."\r\n";
+		echo ';### This is a configuration file of a configuration of the plugin category_report ###'."\r\n";
     	echo ';### ATTENTION: ADD NO LINES - DELETE NO LINES ###'."\r\n\r\n";
         
     	// der Abschnitt 'columns', der hier zusammengesetzt wird, dient in der Export-Datei nur der Information
@@ -155,7 +155,7 @@ switch ($getMode)
 		if (!isset($_FILES['userfile']['name']))
 		{
 		    $gNavigation->clear();
-    		$gMessage->show($gL10n->get('PLG_KATEGORIEREPORT_IMPORT_ERROR_OTHER'), $gL10n->get('SYS_ERROR'));	
+    		$gMessage->show($gL10n->get('PLG_CATEGORY_REPORT_IMPORT_ERROR_OTHER'), $gL10n->get('SYS_ERROR'));	
 		}
 		elseif (strlen($_FILES['userfile']['name'][0]) === 0)
 		{
@@ -165,7 +165,7 @@ switch ($getMode)
 		elseif (strtolower(substr($_FILES['userfile']['name'][0],-4)) <> '.cfg')
 		{
 		    $gNavigation->clear();
-			$gMessage->show($gL10n->get('PLG_KATEGORIEREPORT_IMPORT_ERROR_FILE'), $gL10n->get('SYS_ERROR'));	
+			$gMessage->show($gL10n->get('PLG_CATEGORY_REPORT_IMPORT_ERROR_FILE'), $gL10n->get('SYS_ERROR'));	
 		}
 		
 		$parsedArray = parse_ini_file ( $_FILES['userfile']['tmp_name'][0], TRUE );
@@ -177,14 +177,14 @@ switch ($getMode)
 			||  !(count($parsedArray['columns']) == count($parsedArray['name']))  )
 		{
 		    $gNavigation->clear();
-			$gMessage->show($gL10n->get('PLG_KATEGORIEREPORT_IMPORT_ERROR_FILE'), $gL10n->get('SYS_ERROR'));
+			$gMessage->show($gL10n->get('PLG_CATEGORY_REPORT_IMPORT_ERROR_FILE'), $gL10n->get('SYS_ERROR'));
 		}
 	
 		$importArray = array();
 	
 		//alle Werte der eingelesenen Datei, die kein Array sind, in $importArray überfuehren
 		//dabei werden nur Werte eingelesen, die in der aktuellen $pPreferences->config vorhanden sind
-		foreach ($pPreferences->config['Konfigurationen'] as $key => $data)
+		foreach ($pPreferences->config['configurations'] as $key => $data)
 		{
 			if (isset($parsedArray[$key]))
 			{
@@ -202,16 +202,16 @@ switch ($getMode)
 			}
 		}
 			
-		$pointer = count($pPreferences->config['Konfigurationen']['col_desc']);
+		$pointer = count($pPreferences->config['configurations']['col_desc']);
     	foreach ($importArray as $key => $data)	
     	{
-        	$pPreferences->config['Konfigurationen'][$key][$pointer] = $data;
+        	$pPreferences->config['configurations'][$key][$pointer] = $data;
     	}		
 
 		$pPreferences->save();
 
 		$gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences.php', array('show_option' => 'options')));
-		$gMessage->show($gL10n->get('PLG_KATEGORIEREPORT_IMPORT_SUCCESS'));
+		$gMessage->show($gL10n->get('PLG_CATEGORY_REPORT_IMPORT_SUCCESS'));
 		
    		break;
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Konfigurationsdaten fuer das Admidio-Plugin Kategoriereport
+ * Konfigurationsdaten fuer das Admidio-Plugin Category_Report
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -14,7 +14,7 @@ global $gL10n, $gProfileFields;
 
 //Standardwerte einer Neuinstallation oder beim Anfuegen einer zusaetzlichen Konfiguration
 
-$config_default['Konfigurationen'] = array(	'col_desc' 		=> array($gL10n->get('PLG_KATEGORIEREPORT_PATTERN')),
+$config_default['configurations'] = array(	'col_desc' 		=> array($gL10n->get('PLG_CATEGORY_REPORT_PATTERN')),
 											'col_fields' 	=> array(	'p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
 																		'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
 																		'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
@@ -25,10 +25,10 @@ $config_default['Konfigurationen'] = array(	'col_desc' 		=> array($gL10n->get('P
 											'selection_cat'	=> array(' '),
 											'number_col'	=> array(0)  );
 
-$config_default['Optionen']['config_default'] = 0; 
+$config_default['options']['config_default'] = 0; 
 															
-$config_default['Plugininformationen']['version'] = '';
-$config_default['Plugininformationen']['stand'] = '';
+$config_default['plugin_information']['version'] = '';
+$config_default['plugin_information']['stand'] = '';
 
 /*
  *  Mittels dieser Zeichenkombination werden Konfigurationsdaten, die zur Laufzeit als Array verwaltet werden,

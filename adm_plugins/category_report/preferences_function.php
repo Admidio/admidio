@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Verarbeiten der Einstellungen des Admidio-Plugins Kategoriereport
+ * Verarbeiten der Einstellungen des Admidio-Plugins Category_Report
  * 
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -27,7 +27,7 @@ if (!$gCurrentUser->isAdministrator())
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$pPreferences = new ConfigTablePKR();
+$pPreferences = new ConfigTablePCR();
 $pPreferences->read();
 
 // Initialize and check the parameters
@@ -48,16 +48,16 @@ case 1:
 		switch ($getForm)
     	{
     		case 'configurations':
-				unset($pPreferences->config['Konfigurationen']);
+				unset($pPreferences->config['configurations']);
     			
 				for ($conf = 0; isset($_POST['col_desc'. $conf]); $conf++)
     			{  				
-    				$pPreferences->config['Konfigurationen']['col_desc'][]       = $_POST['col_desc'. $conf];
-    				$pPreferences->config['Konfigurationen']['col_yes'][]        = $_POST['col_yes'. $conf];
-    				$pPreferences->config['Konfigurationen']['col_no'][]         = $_POST['col_no'. $conf];
-    				$pPreferences->config['Konfigurationen']['selection_role'][] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]),',') : ' ';
-    				$pPreferences->config['Konfigurationen']['selection_cat'][]  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]),',') : ' ';
-    				$pPreferences->config['Konfigurationen']['number_col'][]     = isset($_POST['number_col'. $conf]) ? 1 : 0 ;
+    				$pPreferences->config['configurations']['col_desc'][]       = $_POST['col_desc'. $conf];
+    				$pPreferences->config['configurations']['col_yes'][]        = $_POST['col_yes'. $conf];
+    				$pPreferences->config['configurations']['col_no'][]         = $_POST['col_no'. $conf];
+    				$pPreferences->config['configurations']['selection_role'][] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]),',') : ' ';
+    				$pPreferences->config['configurations']['selection_cat'][]  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]),',') : ' ';
+    				$pPreferences->config['configurations']['number_col'][]     = isset($_POST['number_col'. $conf]) ? 1 : 0 ;
 
     				$allColumnsEmpty = true;
 
@@ -73,15 +73,15 @@ case 1:
     				
     				if ($allColumnsEmpty)
     				{
-    					$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('PLG_KATEGORIEREPORT_COLUMN')));
+    					$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('PLG_CATEGORY_REPORT_COLUMN')));
     				}
     				
-					$pPreferences->config['Konfigurationen']['col_fields'][] = substr($fields,0,-1);
+					$pPreferences->config['configurations']['col_fields'][] = substr($fields,0,-1);
     			}	
             	break; 
             	
        		case 'options':
- 	        	$pPreferences->config['Optionen']['config_default'] = $_POST['config_default'];	
+ 	        	$pPreferences->config['options']['config_default'] = $_POST['config_default'];	
             	break;  
             
         	default:
@@ -100,21 +100,21 @@ case 1:
 
 case 2:
 	
-	$headline = $gL10n->get('PLG_KATEGORIEREPORT_DEINSTALLATION');
+	$headline = $gL10n->get('PLG_CATEGORY_REPORT_DEINSTALLATION');
 	 
 	// create html page object
-    $page = new HtmlPage('plg-kategoriereport-deinstallation', $headline);
+    $page = new HtmlPage('plg-category-report-deinstallation', $headline);
     
     // add current url to navigation stack
     $gNavigation->addUrl(CURRENT_URL, $headline);
     
-    $page->addHtml('<p class="lead">'.$gL10n->get('PLG_KATEGORIEREPORT_DEINSTALLATION_FORM_DESC').'</p>');
+    $page->addHtml('<p class="lead">'.$gL10n->get('PLG_CATEGORY_REPORT_DEINSTALLATION_FORM_DESC').'</p>');
 
     // show form
     $form = new HtmlForm('deinstallation_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences_function.php', array('mode' => 3)), $page);
-    $radioButtonEntries = array('0' => $gL10n->get('PLG_KATEGORIEREPORT_DEINST_ACTORGONLY'), '1' => $gL10n->get('PLG_KATEGORIEREPORT_DEINST_ALLORG') );
-    $form->addRadioButton('deinst_org_select',$gL10n->get('PLG_KATEGORIEREPORT_ORG_CHOICE'), $radioButtonEntries);    
-    $form->addSubmitButton('btn_deinstall', $gL10n->get('PLG_KATEGORIEREPORT_DEINSTALLATION'), array('icon' => 'fa-trash-alt', 'class' => 'col-sm-offset-3'));
+    $radioButtonEntries = array('0' => $gL10n->get('PLG_CATEGORY_REPORT_DEINST_ACTORGONLY'), '1' => $gL10n->get('PLG_CATEGORY_REPORT_DEINST_ALLORG') );
+    $form->addRadioButton('deinst_org_select',$gL10n->get('PLG_CATEGORY_REPORT_ORG_CHOICE'), $radioButtonEntries);    
+    $form->addSubmitButton('btn_deinstall', $gL10n->get('PLG_CATEGORY_REPORT_DEINSTALLATION'), array('icon' => 'fa-trash-alt', 'class' => 'col-sm-offset-3'));
     
     // add form to html page and show page
     $page->addHtml($form->show(false));
@@ -126,6 +126,6 @@ case 3:
 	$gNavigation->clear();
 	$gMessage->setForwardUrl($gHomepage);		
 
-	$gMessage->show($gL10n->get('PLG_KATEGORIEREPORT_DEINST_STARTMESSAGE').$pPreferences->delete($_POST['deinst_org_select']) );
+	$gMessage->show($gL10n->get('PLG_CATEGORY_REPORT_DEINST_STARTMESSAGE').$pPreferences->delete($_POST['deinst_org_select']) );
    	break;
 }

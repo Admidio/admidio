@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Versionsdatei fuer das Admidio-Plugin Kategoriereport
+ * Versionsdatei fuer das Admidio-Plugin Category_Report
  * 
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -10,5 +10,5 @@
  ***********************************************************************************************
  */
 
-$plugin_version = '3.1.1';
-$plugin_stand   = '15.02.2021';
+$plugin_version = '4.0.0';
+$plugin_stand   = '18.02.2021';
