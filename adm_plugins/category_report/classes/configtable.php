@@ -94,20 +94,7 @@ class ConfigTablePCR
             $gDb->queryPrepared($sql);
     	} 
     
-		$this->read();
-	
-		// Updateroutine 2.1.0 -> 2.1.1
-   		if (isset($this->config['configurations']['col_desc']))
-    	{
-			foreach ($this->config['configurations']['col_desc'] as $key => $dummy)
-			{
-				if (!isset($this->config['configurations']['number_col'][$key]))
-    			{
-					$this->config['configurations']['number_col'][$key] = 0;
-    			}
-			}
-		} 
-		// Ende Updateroutine 2.1.0 -> 2.1.1		
+		$this->read();		
 		
 		$this->config['plugin_information']['version'] = self::$version;
 		$this->config['plugin_information']['stand'] = self::$stand;
