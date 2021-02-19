@@ -3,8 +3,6 @@
  ***********************************************************************************************
  * Category_Report
  *
- * Version 3.1.1
- *
  * Dieses Plugin erzeugt eine Auflistung aller Rollenzugehoerigkeiten eines Mitglieds.
  * 
  * Author: rmb

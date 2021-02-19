@@ -55,10 +55,8 @@
     <string name="PLG_CATEGORY_REPORT_OPTIONS">Optionen</string>
     <string name="PLG_CATEGORY_REPORT_ORG_CHOICE">Organisationswahl</string>
     <string name="PLG_CATEGORY_REPORT_PATTERN">Beispielkonfiguration</string>
-    <string name="PLG_CATEGORY_REPORT_PLUGIN_DATE">Stand</string>
     <string name="PLG_CATEGORY_REPORT_PLUGIN_INFORMATION">Plugininformationen</string>
     <string name="PLG_CATEGORY_REPORT_PLUGIN_NAME">Name des Plugins</string>
-    <string name="PLG_CATEGORY_REPORT_PLUGIN_VERSION">Version</string>
     <string name="PLG_CATEGORY_REPORT_ROLE_SELECTION">Rollenwahl</string>
     <string name="PLG_CATEGORY_REPORT_ROLE_SELECTION_CONF_DESC">Über Rollenwahl kann eine Konfiguration auf die Angehörigen der gewählten Rollen eingeschränkt werden.\n\n Soll keine Einschränkung erfolgen, so sind beide Felder (Rollenwahl und Kategoriewahl) leer zu lassen.</string>
     <string name="PLG_CATEGORY_REPORT_ROLEMEMBERSHIPS">Rollenmitgliedschaften</string>

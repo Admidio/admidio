@@ -28,7 +28,7 @@ $config_default['configurations'] = array(	'col_desc' 		=> array($gL10n->get('PL
 $config_default['options']['config_default'] = 0; 
 															
 $config_default['plugin_information']['version'] = '';
-$config_default['plugin_information']['stand'] = '';
+$config_default['plugin_information']['beta'] = '';
 
 /*
  *  Mittels dieser Zeichenkombination werden Konfigurationsdaten, die zur Laufzeit als Array verwaltet werden,

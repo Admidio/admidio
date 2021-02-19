@@ -384,8 +384,6 @@ $formPluginInformations = new HtmlForm(
 );
 
 $formPluginInformations->addStaticControl('plg_name', $gL10n->get('PLG_CATEGORY_REPORT_PLUGIN_NAME'), $gL10n->get('PLG_CATEGORY_REPORT_HEADLINE'));
-$formPluginInformations->addStaticControl('plg_version', $gL10n->get('PLG_CATEGORY_REPORT_PLUGIN_VERSION'), $pPreferences->config['plugin_information']['version']);
-$formPluginInformations->addStaticControl('plg_date', $gL10n->get('PLG_CATEGORY_REPORT_PLUGIN_DATE'), $pPreferences->config['plugin_information']['stand']);
 
 $html = '<a class="icon-text-link" href="https://www.admidio.org/dokuwiki/doku.php?id=de:plugins:kategoriereport#kategoriereport" target="_blank">
     <i class="fas fa-external-link-square-alt"></i> '.$gL10n->get('PLG_CATEGORY_REPORT_DOCUMENTATION_OPEN').'</a>';

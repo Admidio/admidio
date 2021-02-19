@@ -55,10 +55,8 @@
     <string name="PLG_CATEGORY_REPORT_OPTIONS">Options</string>
     <string name="PLG_CATEGORY_REPORT_ORG_CHOICE">Choix de l\'organisation</string>
     <string name="PLG_CATEGORY_REPORT_PATTERN">Exemple de configuration</string>
-    <string name="PLG_CATEGORY_REPORT_PLUGIN_DATE">État</string>
     <string name="PLG_CATEGORY_REPORT_PLUGIN_INFORMATION">Informations sur le plug-in</string>
     <string name="PLG_CATEGORY_REPORT_PLUGIN_NAME">Nom du plug-in</string>
-    <string name="PLG_CATEGORY_REPORT_PLUGIN_VERSION">Version</string>
     <string name="PLG_CATEGORY_REPORT_ROLE_SELECTION">Sélection des rôles</string>
     <string name="PLG_CATEGORY_REPORT_ROLE_SELECTION_CONF_DESC">Une configuration peut être limitée aux membres des rôles sélectionnés via la sélection de rôle.\n\n Si aucune restriction ne doit être faite, les deux champs (sélection de rôle et sélection de catégorie) doivent être laissées vides.</string>
     <string name="PLG_CATEGORY_REPORT_ROLEMEMBERSHIPS">Appartenances aux rôles</string>

@@ -30,8 +30,6 @@ class ConfigTablePCR
 
 	protected $table_name;
 	protected static $shortcut = 'PCR';
-	protected static $version;
-	protected static $stand;
 	protected static $dbtoken;
 	
 	public $config_default = array();	
@@ -43,19 +41,10 @@ class ConfigTablePCR
 	{
 		global $gDb, $g_tbl_praefix;
 
-		require_once(__DIR__ . '/../version.php');
 		include(__DIR__ . '/../configdata.php');
 		
 		$this->table_name = $g_tbl_praefix.'_plugin_preferences';
 
-		if (isset($plugin_version))
-		{
-			self::$version = $plugin_version;
-		}
-		if (isset($plugin_stand))
-		{
-			self::$stand = $plugin_stand;
-		}
 		if (isset($dbtoken))
 		{
 			self::$dbtoken = $dbtoken;
@@ -96,8 +85,8 @@ class ConfigTablePCR
     
 		$this->read();		
 		
-		$this->config['plugin_information']['version'] = self::$version;
-		$this->config['plugin_information']['stand'] = self::$stand;
+		$this->config['plugin_information']['version'] = ADMIDIO_VERSION;
+		$this->config['plugin_information']['beta'] = ADMIDIO_VERSION_BETA;
 	
 		// die eingelesenen Konfigurationsdaten in ein Arbeitsarray kopieren
 		$config_ist = $this->config;
@@ -234,7 +223,9 @@ class ConfigTablePCR
 	}
 
     /**
-     * Vergleicht die Daten in der version.php mit den Daten in der DB
+     * Prüft, ob die Updateroutine durchlaufen werden sollte
+     * Prüfung 1: existiert die Konfigurationstabelle?
+     * Prüfung 2: gibt es einen Unterschied in der Admidioversion mit dem gespeicherten Stand in der DB?
      * @return bool
      */
 	public function checkforupdate()
@@ -242,6 +233,10 @@ class ConfigTablePCR
 	 	global $gL10n, $gDb;
 	 	$ret = false;
  	
+	 	// todo: checkforupdate() und init() überarbeiten
+	 	// --> das Anlegen der Konfigurationstabelle sollte Admidio übernehmen
+	 	// --> evtl. checkforupdate() komplett streichen und nur init() ausführen
+	 	
 	 	// pruefen, ob es die Tabelle ueberhaupt gibt
 		$sql = 'SHOW TABLES LIKE \''.$this->table_name.'\' ';
 		$tableExistStatement = $gDb->queryPrepared($sql);
@@ -259,12 +254,12 @@ class ConfigTablePCR
     		$row = $statement->fetchObject();
 
     		// Vergleich Version.php  ./. DB (hier: version)
-    		if (!isset($row->plp_value) || strlen($row->plp_value) === 0 || $row->plp_value<>self::$version)
+    		if (!isset($row->plp_value) || strlen($row->plp_value) === 0 || $row->plp_value<>ADMIDIO_VERSION)
     		{
     			$ret = true;    
     		}
 	
-    		$plp_name = self::$shortcut.'__plugin_information__stand';
+    		$plp_name = self::$shortcut.'__plugin_information__beta';
           
     		$sql = 'SELECT plp_value 
             		  FROM '.$this->table_name.' 
@@ -275,7 +270,7 @@ class ConfigTablePCR
     		$row = $statement->fetchObject();
 
     		// Vergleich Version.php  ./. DB (hier: stand)
-    		if (!isset($row->plp_value) || strlen($row->plp_value) === 0 || $row->plp_value<>self::$stand)
+    		if (!isset($row->plp_value) || strlen($row->plp_value) === 0 || $row->plp_value<>ADMIDIO_VERSION_BETA)
     		{
     			$ret = true;    
     		}
