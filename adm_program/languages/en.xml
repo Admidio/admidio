@@ -940,7 +940,7 @@
   <string name="SYS_FILE">File</string>
   <string name="SYS_FILE_EXIST">File #VAR1# already exists!\n\nPlease select different file name.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">File type is not allowed on this server.</string>
-  <string name="SYS_FILE_NAME_RULES">File name should indicate the file content. The file name affects to the listing order. E.g. file names in folders with proceedings should begin with date (yyyy-mm-dd).</string>
+  <string name="SYS_FILE_NAME_RULES">The file should be named in such a way that you can infer the content from the name. The file name has an influence on the display order. In a folder where, for example, meeting minutes are stored, the file names should always begin with the date (yyyy-mm-dd).</string>
   <string name="SYS_FILE_NOT_EXIST">Selected file does not exist on the server.</string>
   <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">The file is physically not available anymore on the server. It should be deleted from the database.</string>
   <string name="SYS_FILE_RENAME">File #VAR1# was renamed.</string>
