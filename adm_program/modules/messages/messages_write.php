@@ -72,7 +72,7 @@ $currOrgId = (int) $gCurrentOrganization->getValue('org_id');
 if ($getMsgId > 0)
 {
     // update the read-status
-    $message->setReadValue($currUsrId);
+    $message->setReadValue();
 
     $getSubject = $message->getValue('msg_subject');
     $getUserId  = $message->getConversationPartner();

@@ -419,16 +419,22 @@ class TableMessage extends TableAccess
     }
 
     /**
-     * Set a new value for a column of the database table.
-     * @param int $usrId of the receiver - just for security reasons.
+     * Set the status of the message to read. Also the global menu will be initalize to update
+     * the read badge of messages.
      * @return false|\PDOStatement Returns **answer** of the SQL execution
      */
-    public function setReadValue($usrId)
+    public function setReadValue()
     {
-        $sql = 'UPDATE '.TBL_MESSAGES.'
-                   SET msg_read = 0
-                 WHERE msg_id   = ? -- $this->msgId ';
+        global $gMenu;
 
-        return $this->db->queryPrepared($sql, array($this->msgId, $usrId));
+        if($this->getValue('msg_read') > 0)
+        {
+            $sql = 'UPDATE '.TBL_MESSAGES.'
+                       SET msg_read = 0
+                     WHERE msg_id   = ? -- $this->msgId ';
+
+            $gMenu->initialize();
+            return $this->db->queryPrepared($sql, array($this->msgId));
+        }
     }
 }
