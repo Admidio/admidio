@@ -233,8 +233,9 @@ class ConfigTablePCR
 	 	global $gL10n, $gDb;
 	 	$ret = false;
  	
-	 	// todo: checkforupdate() und init() überarbeiten
+	 	// todo: checkforupdate(), init() und delete() überarbeiten
 	 	// --> das Anlegen der Konfigurationstabelle sollte Admidio übernehmen
+	 	// --> ein Löschen der Konfigurationstabelle sollte entfallen (generell in allen Plugins?)
 	 	// --> evtl. checkforupdate() komplett streichen und nur init() ausführen
 	 	
 	 	// pruefen, ob es die Tabelle ueberhaupt gibt
@@ -253,7 +254,7 @@ class ConfigTablePCR
     		$statement = $gDb->queryPrepared($sql, array($plp_name, ORG_ID));
     		$row = $statement->fetchObject();
 
-    		// Vergleich Version.php  ./. DB (hier: version)
+    		// Vergleich Admidio Version
     		if (!isset($row->plp_value) || strlen($row->plp_value) === 0 || $row->plp_value<>ADMIDIO_VERSION)
     		{
     			$ret = true;    
@@ -269,7 +270,7 @@ class ConfigTablePCR
             $statement = $gDb->queryPrepared($sql, array($plp_name, ORG_ID));
     		$row = $statement->fetchObject();
 
-    		// Vergleich Version.php  ./. DB (hier: stand)
+    		// Vergleich Admidio Version Beta
     		if (!isset($row->plp_value) || strlen($row->plp_value) === 0 || $row->plp_value<>ADMIDIO_VERSION_BETA)
     		{
     			$ret = true;    
