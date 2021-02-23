@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Gemeinsame Funktionen fuer das Admidio-Plugin Category_Report
+ * Various common functions for the admidio plugin Category Report
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/

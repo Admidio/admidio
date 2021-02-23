@@ -1,20 +1,17 @@
 <?php
 /**
  ***********************************************************************************************
- * Modul Preferences (Einstellungen) fuer das Admidio-Plugin Category_Report
+ * Modul Preferences of the admidio plugin Category Report
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- *
- * Hinweis:  preferences.php ist eine modifizierte Kombination der Dateien
- *           .../modules/lists/mylist.php und .../modules/preferences/preferences.php
  * 
  * Parameters:
  *
- * add_delete : -1 - Erzeugen einer Konfiguration
- * 				>0 - Löschen einer Konfiguration
- * show_option: direktes Öffnen eines Panels des Accordeon-Menüs
+ * add_delete : -1 - Generate a configuration
+ * 				>0 - Deleting a configuration
+ * show_option: direct opening of a panel of the accordion menu
  *
  ***********************************************************************************************
  */

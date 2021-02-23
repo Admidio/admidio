@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Exportieren und Importieren von Konfigurationen des Admidio-Plugins Category_Report
+ * Exporting and importing configurations of the admidio plugin Category_Report
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/

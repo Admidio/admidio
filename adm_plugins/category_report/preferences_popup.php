@@ -1,12 +1,12 @@
 <?php
 /**
- * Zeigt im Menue Einstellungen ein Popup-Fenster mit Hinweisen an
+ * Displays a pop-up window with instructions in the Preferences module
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
- * Parameters:	keine
+ * Parameters:	none
  *
  ***********************************************************************************************
  */

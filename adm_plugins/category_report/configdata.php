@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Konfigurationsdaten fuer das Admidio-Plugin Category_Report
+ * Configuration data for the admidio plugin Category Report
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/

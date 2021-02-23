@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Verarbeiten der Einstellungen des Admidio-Plugins Category_Report
+ * Functions for the Preferences module of the admidio plugin Category Report
  * 
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/

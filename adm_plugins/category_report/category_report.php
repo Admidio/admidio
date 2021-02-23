@@ -1,11 +1,9 @@
 <?php
 /**
  ***********************************************************************************************
- * Category_Report
+ * Category Report
  *
- * Dieses Plugin erzeugt eine Auflistung aller Rollenzugehoerigkeiten eines Mitglieds.
- * 
- * Author: rmb
+ * This plugin creates a list of all roles and categories a member has.
  *
  * Compatible with Admidio version 4
  *
