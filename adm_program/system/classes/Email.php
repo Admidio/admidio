@@ -492,7 +492,7 @@ class Email extends PHPMailer
      */
     public function setTemplateText($text, $senderName, $senderEmail, $recipients)
     {
-        global $gValidLogin, $gCurrentOrganization, $gSettingsManager;
+        global $gValidLogin, $gCurrentOrganization, $gSettingsManager, $gL10n;
 
 
         // load the template and set the new email body with template

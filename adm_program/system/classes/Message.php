@@ -79,7 +79,7 @@ class Message
      */
     public function showInModalWindow()
     {
-        $this->modalWindowMode = true;
+        $this->modalWindowMode  = true;
         $this->includeThemeBody = false;
         $this->inline = true;
     }
