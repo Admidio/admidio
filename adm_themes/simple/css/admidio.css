@@ -366,14 +366,15 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
     text-align: left;
 }
 
-.admidio-roles, .admidio-album {
+.admidio-card {
     border: none;
     background-color: #eeeeee;
     margin-top: 15px;
     margin-bottom: 15px;
+    height: 95%;
 }
 
-.admidio-roles li {
+.admidio-card li {
     padding-left: 0px;
     padding-right: 0px;
     background-color: #eeeeee;
