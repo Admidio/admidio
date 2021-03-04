@@ -18,6 +18,7 @@
  * rol_id    - Statt einem Rollennamen/Kategorienamen kann auch eine RollenId uebergeben werden
  * carbon_copy - false - (Default) Checkbox "Kopie an mich senden" ist NICHT gesetzt
  *             - true  - Checkbox "Kopie an mich senden" ist gesetzt
+ * forward : true - The message of the msg_id will be copied and the base for this new message
  *
  *****************************************************************************/
 
@@ -31,14 +32,17 @@ $getMsgId      = admFuncVariableIsValid($_GET, 'msg_id',      'int');
 $getRoleId     = admFuncVariableIsValid($_GET, 'rol_id',      'int');
 $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
+$getForward    = admFuncVariableIsValid($_GET, 'forward',     'bool');
 
 // Check form values
 $postUserIdList = admFuncVariableIsValid($_POST, 'userIdList', 'string');
 $postListId     = admFuncVariableIsValid($_POST, 'lst_id',     'int');
 
+
+$message = new TableMessage($gDb, $getMsgId);
+
 if ($getMsgId > 0)
 {
-    $message = new TableMessage($gDb, $getMsgId);
     $getMsgType = $message->getValue('msg_type');
 }
 
@@ -73,6 +77,11 @@ if ($getMsgId > 0)
 {
     // update the read-status
     $message->setReadValue();
+
+    if($getForward === true)
+    {
+        $getMsgId = 0;
+    }
 
     $getSubject = $message->getValue('msg_subject');
     $getUserId  = $message->getConversationPartner();
@@ -170,10 +179,12 @@ else
     }
 }
 
-// Wenn die letzte URL in der Zuruecknavigation die des Scriptes message_send.php ist,
-// dann soll das Formular gefuellt werden mit den Werten aus der Session
+// If the last URL in the back navigation is the one of the script message_send.php,
+// then the form should be filled with the values from the session
 if (str_contains($gNavigation->getUrl(), 'messages_send.php') && isset($_SESSION['message_request']))
 {
+    $message->setArray($_SESSION['message_request']);
+    unset($_SESSION['message_request']);
     // Das Formular wurde also schon einmal ausgefüllt,
     // da der User hier wieder gelandet ist nach der Mailversand-Seite
     $formValues = $_SESSION['message_request'];
@@ -190,9 +201,10 @@ if (str_contains($gNavigation->getUrl(), 'messages_send.php') && isset($_SESSION
 }
 else
 {
+    $message->setValue('msg_subject', $getSubject);
     $formValues['namefrom']    = '';
     $formValues['mailfrom']    = '';
-    $formValues['subject']     = $getSubject;
+    //$formValues['subject']     = $getSubject;
     $formValues['msg_body']    = '';
     $formValues['msg_to']      = '';
     $formValues['carbon_copy'] = $getCarbonCopy;
@@ -242,13 +254,13 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     if($getSubject === '')
     {
         $form->addInput(
-            'subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'],
+            'msg_subject', $gL10n->get('MAI_SUBJECT'), $message->getValue('msg_subject'),
             array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
         );
     }
     else
     {
-        $form->addInput('subject', '', $formValues['subject'], array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addInput('msg_subject', '', $message->getValue('msg_subject'), array('property' => HtmlForm::FIELD_HIDDEN));
     }
 
     $form->addMultilineTextInput(
@@ -297,10 +309,10 @@ elseif (!isset($messageStatement))
     $formParams = array();
 
     // if subject was set as param then send this subject to next script
-    if ($getSubject !== '')
+    /*if ($getSubject !== '')
     {
         $formParams['subject'] = $getSubject;
-    }
+    }*/
 
     // show form
     $form = new HtmlForm('mail_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
@@ -574,7 +586,7 @@ elseif (!isset($messageStatement))
 
     $form->openGroupBox('gb_mail_message', $gL10n->get('SYS_MESSAGE'));
     $form->addInput(
-        'subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'],
+        'msg_subject', $gL10n->get('MAI_SUBJECT'), $message->getValue('msg_subject'),
         array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 
