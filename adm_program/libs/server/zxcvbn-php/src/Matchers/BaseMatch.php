@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Matchers;
 
-abstract class Match implements MatchInterface
+abstract class BaseMatch implements MatchInterface
 {
 
     /**

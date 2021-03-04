@@ -12,7 +12,7 @@ namespace ZxcvbnPhp\Matchers;
  *
  * Intentionally not named with Match suffix to prevent autoloading from Matcher.
  */
-class Bruteforce extends Match
+class Bruteforce extends BaseMatch
 {
 
     /**
