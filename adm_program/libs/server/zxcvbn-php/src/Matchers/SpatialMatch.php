@@ -6,7 +6,7 @@ namespace ZxcvbnPhp\Matchers;
  * Class SpatialMatch.
  * @package ZxcvbnPhp\Matchers
  */
-class SpatialMatch extends Match
+class SpatialMatch extends BaseMatch
 {
 
     /**

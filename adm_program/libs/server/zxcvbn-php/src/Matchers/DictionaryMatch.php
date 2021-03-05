@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Matchers;
 
-class DictionaryMatch extends Match
+class DictionaryMatch extends BaseMatch
 {
 
     /**
