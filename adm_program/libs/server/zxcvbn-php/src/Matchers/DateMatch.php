@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Matchers;
 
-class DateMatch extends Match
+class DateMatch extends BaseMatch
 {
 
     const NUM_YEARS = 119; // Years match against 1900 - 2019

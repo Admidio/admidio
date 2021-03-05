@@ -133,7 +133,7 @@
                     {include file=$templateFile}
                 {/if}
 
-                <div id="imprint">&copy; 2004 - 2020&nbsp;&nbsp;<a href="https://www.admidio.org">Admidio</a>
+                <div id="imprint">&copy; 2004 - 2021&nbsp;&nbsp;<a href="https://www.admidio.org">Admidio</a>
                     {if $urlImprint != ''}
                         &nbsp;&nbsp;-&nbsp;&nbsp;<a href="{$urlImprint}">{$l10n->get('SYS_IMPRINT')}</a>
                     {/if}
