@@ -185,9 +185,6 @@ else
 if (str_contains($gNavigation->getUrl(), 'messages_send.php') && isset($_SESSION['message_request']))
 {
     $message->setArray($_SESSION['message_request']);
-    unset($_SESSION['message_request']);
-    // Das Formular wurde also schon einmal ausgefüllt,
-    // da der User hier wieder gelandet ist nach der Mailversand-Seite
     $formValues = $_SESSION['message_request'];
     unset($_SESSION['message_request']);
 
@@ -218,14 +215,8 @@ $page = new HtmlPage('admidio-messages-write', $headline);
 
 if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {
-    $formParams = array('msg_type' => 'PM');
-    if ($getMsgId > 0)
-    {
-        $formParams['msg_id'] = $getMsgId;
-    }
-
     // show form
-    $form = new HtmlForm('pm_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('pm_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', array('msg_type' => 'PM', 'msg_id' => $getMsgId)), $page, array('enableFileUpload' => true));
 
     if ($getUserId === 0)
     {
