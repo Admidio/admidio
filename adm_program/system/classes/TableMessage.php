@@ -45,6 +45,8 @@ class TableMessage extends TableAccess
         $this->msgId = $msgId;
 
         parent::__construct($database, TBL_MESSAGES, 'msg', $this->msgId);
+
+        $this->getContent();
     }
 
     public function addRole($roleId, $roleMode)
@@ -216,24 +218,30 @@ class TableMessage extends TableAccess
      */
     public function getContent()
     {
-        if(!is_object($this->msgContentObject))
+        $content = '';
+
+        if($this->msgId > 0)
         {
-            $sql = 'SELECT msc_id, msc_msg_id, msc_usr_id, msc_message, msc_timestamp
-                      FROM '. TBL_MESSAGES_CONTENT. ' msc1
-                     WHERE msc_msg_id = ? -- $msgId
-                       AND NOT EXISTS (
-                           SELECT 1
-                             FROM '. TBL_MESSAGES_CONTENT. ' msc2
-                            WHERE msc2.msc_msg_id = msc1.msc_msg_id
-                              AND msc2.msc_timestamp > msc1.msc_timestamp
-                           )';
-            $this->db->queryPrepared($sql, array($msgId));
+            if(!is_object($this->msgContentObject))
+            {
+                $sql = 'SELECT msc_id, msc_msg_id, msc_usr_id, msc_message, msc_timestamp
+                          FROM '. TBL_MESSAGES_CONTENT. ' msc1
+                         WHERE msc_msg_id = ? -- $msgId
+                           AND NOT EXISTS (
+                               SELECT 1
+                                 FROM '. TBL_MESSAGES_CONTENT. ' msc2
+                                WHERE msc2.msc_msg_id = msc1.msc_msg_id
+                                  AND msc2.msc_timestamp > msc1.msc_timestamp
+                               )';
+                $messageContentStatement = $this->db->queryPrepared($sql, array($this->msgId));
+
+                $this->msgContentObject = new TableAccess($this->db, TBL_MESSAGES_CONTENT, 'msc');
+                $this->msgContentObject->setArray($messageContentStatement->fetch());
+            }
+
+            $content = $this->msgContentObject->getValue('msc_message', 'database');
         }
-        $this->msgContentObject = new TableAccess($this->db, TBL_MESSAGES_CONTENT, 'msc');
-        $this->msgContentObject->setValue('msc_msg_id', $this->getValue('msg_id'));
-        $this->msgContentObject->setValue('msc_message', $content, false);
-        $this->msgContentObject->setValue('msc_timestamp', DATETIME_NOW);
-        return $this->msgContentObject->getValue('msc_message');
+        return $content;
     }
 
     /**

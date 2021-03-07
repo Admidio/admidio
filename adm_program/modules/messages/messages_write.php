@@ -12,12 +12,13 @@
 /******************************************************************************
  * Parameters:
  *
+ * msg_tpye  - This could be EMAIL if you want to write an email or PM if you want to write a private Message
  * usr_id    - send message to the given user ID
  * subject   - subject of the message
  * msg_id    - ID of the message -> just for answers
- * rol_id    - Statt einem Rollennamen/Kategorienamen kann auch eine RollenId uebergeben werden
- * carbon_copy - false - (Default) Checkbox "Kopie an mich senden" ist NICHT gesetzt
- *             - true  - Checkbox "Kopie an mich senden" ist gesetzt
+ * rol_id    - ID of a role to which an email should be send
+ * carbon_copy - false - (Default) "Send copy to me" checkbox is NOT set
+ *             - true  - "Send copy to me" checkbox is set
  * forward : true - The message of the msg_id will be copied and the base for this new message
  *
  *****************************************************************************/
@@ -25,7 +26,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getMsgType    = admFuncVariableIsValid($_GET, 'msg_type',    'string');
+$getMsgType    = admFuncVariableIsValid($_GET, 'msg_type',    'string', array('defaultValue' => TableMessage::MESSAGE_TYPE_EMAIL));
 $getUserId     = admFuncVariableIsValid($_GET, 'usr_id',      'int');
 $getSubject    = admFuncVariableIsValid($_GET, 'subject',     'html');
 $getMsgId      = admFuncVariableIsValid($_GET, 'msg_id',      'int');
@@ -204,8 +205,6 @@ else
     $message->setValue('msg_subject', $getSubject);
     $formValues['namefrom']    = '';
     $formValues['mailfrom']    = '';
-    //$formValues['subject']     = $getSubject;
-    $formValues['msg_body']    = '';
     $formValues['msg_to']      = '';
     $formValues['carbon_copy'] = $getCarbonCopy;
     $formValues['delivery_confirmation'] = $getDeliveryConfirmation;
@@ -264,7 +263,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     }
 
     $form->addMultilineTextInput(
-        'msg_body', $gL10n->get('SYS_PM'), $formValues['msg_body'], 10,
+        'msg_body', $gL10n->get('SYS_PM'), $message->getContent(), 10,
         array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 
@@ -275,7 +274,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     // add form to html page
     $page->addHtml($form->show());
 }
-elseif (!isset($messageStatement))
+elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
 {
     if ($getUserId > 0)
     {
@@ -306,16 +305,8 @@ elseif (!isset($messageStatement))
         $rollenName = $role->getValue('rol_name');
     }
 
-    $formParams = array();
-
-    // if subject was set as param then send this subject to next script
-    /*if ($getSubject !== '')
-    {
-        $formParams['subject'] = $getSubject;
-    }*/
-
     // show form
-    $form = new HtmlForm('mail_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('mail_send_form', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
     $sqlRoleIds = array();
@@ -609,12 +600,12 @@ elseif (!isset($messageStatement))
     // add textfield or ckeditor to form
     if($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users'))
     {
-        $form->addEditor('msg_body', '', $formValues['msg_body'], array('property' => HtmlForm::FIELD_REQUIRED));
+        $form->addEditor('msg_body', '', $message->getContent(), array('property' => HtmlForm::FIELD_REQUIRED));
     }
     else
     {
         $form->addMultilineTextInput(
-            'msg_body', $gL10n->get('SYS_TEXT'), $formValues['msg_body'], 10,
+            'msg_body', $gL10n->get('SYS_TEXT'), $message->getContent(), 10,
             array('property' => HtmlForm::FIELD_REQUIRED)
         );
     }

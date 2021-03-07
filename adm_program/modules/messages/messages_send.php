@@ -24,8 +24,8 @@ $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 // Check form values
 $postFrom       = admFuncVariableIsValid($_POST, 'mailfrom', 'string');
 $postName       = admFuncVariableIsValid($_POST, 'namefrom', 'string');
-$postSubject    = StringUtils::strStripTags($_POST['subject']); // Subject should be send without html conversations
-$postSubjectSQL = admFuncVariableIsValid($_POST, 'subject',  'string');
+$postSubject    = StringUtils::strStripTags($_POST['msg_subject']); // Subject should be send without html conversations
+$postSubjectSQL = admFuncVariableIsValid($_POST, 'msg_subject',  'string');
 $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
