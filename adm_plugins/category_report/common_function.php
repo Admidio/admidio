@@ -25,6 +25,8 @@ if(!defined('ORG_ID'))
  * Funktion prueft, ob der Nutzer berechtigt ist das Plugin aufzurufen.
  * Zur Prüfung werden die Einstellungen von 'Modulrechte' und 'Sichtbar für' 
  * verwendet, die im Modul Menü für dieses Plugin gesetzt wurden.
+ * Zusätzlich muss der Nutzer immer mindestens einer Rolle mit der Berechtigung
+ * 'Mitgliederlisten aller Rollen einsehen' angehören.
  * @param   string  $scriptName   Der Scriptname des Plugins
  * @return  bool    true, wenn der User berechtigt ist
  */
@@ -73,7 +75,7 @@ function isUserAuthorized($scriptName)
 			$rolesDisplayRight = $displayMenu->getRolesIds();
 			
 			// check for right to show the menu
-			if (count($rolesDisplayRight) === 0 || $displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+			if ((count($rolesDisplayRight) === 0 || $displayMenu->hasRight($gCurrentUser->getRoleMemberships())) && $gCurrentUser->checkRolesRight('rol_all_lists_view'))
 			{
 				$userIsAuthorized = true;
 			}
