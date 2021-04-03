@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Matchers;
 
-class YearMatch extends Match
+class YearMatch extends BaseMatch
 {
 
     const NUM_YEARS = 119;

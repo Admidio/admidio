@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Matchers;
 
-class DigitMatch extends Match
+class DigitMatch extends BaseMatch
 {
 
     /**

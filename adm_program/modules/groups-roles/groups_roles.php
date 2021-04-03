@@ -226,8 +226,8 @@ foreach($listsResult['recordset'] as $row)
 
         $page->addHtml('
         <div class="col-sm-6 col-lg-4 col-xl-3">
-        <div class="card admidio-roles" id="role_details_panel_'.$rolId.'">
-            <div class="card-body" id="admRoleDetails'.$rolId.'">
+        <div class="card admidio-card" id="role_details_panel_'.$rolId.'">
+            <div class="card-body d-flex flex-column" id="admRoleDetails'.$rolId.'">
                 <h5 class="card-title">'. $role->getValue('rol_name'). '</h5>');
 
                 $page->addHtml('<ul class="list-group list-group-flush">');
@@ -393,7 +393,7 @@ foreach($listsResult['recordset'] as $row)
                     <li class="list-group-item"><span class="d-block">' . $html . '</span>' . $htmlLeader . '</li>
                 </ul>
 
-                <a class="btn btn-primary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('rol_ids' => $rolId)) . '">' . $gL10n->get('SYS_SHOW_MEMBER_LIST') . '</a>
+                <a class="btn btn-primary mt-auto" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('rol_ids' => $rolId)) . '">' . $gL10n->get('SYS_SHOW_MEMBER_LIST') . '</a>
             </div>
         </div>
         </div>');

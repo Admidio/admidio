@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Matchers;
 
-class SequenceMatch extends Match
+class SequenceMatch extends BaseMatch
 {
 
     const LOWER = 'abcdefghijklmnopqrstuvwxyz';

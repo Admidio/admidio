@@ -2,7 +2,7 @@
 
 namespace ZxcvbnPhp\Matchers;
 
-class RepeatMatch extends Match
+class RepeatMatch extends BaseMatch
 {
 
     /**
