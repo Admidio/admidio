@@ -19,7 +19,6 @@
 require_once(__DIR__ . '/../../adm_program/system/common.php');
 require_once(__DIR__ . '/../../adm_program/system/login_valid.php');
 require_once(__DIR__ . '/common_function.php');
-require_once(__DIR__ . '/classes/configtable.php');
 require_once(__DIR__ . '/classes/genreport.php');
 
 // only authorized user are allowed to start this module
@@ -32,32 +31,34 @@ if (!$gCurrentUser->isAdministrator())
 $getAddDelete = admFuncVariableIsValid($_GET, 'add_delete', 'numeric', array('defaultValue' => 0));
 $showOption   = admFuncVariableIsValid($_GET, 'show_option', 'string');
 
-$pPreferences = new ConfigTablePCR();
-$pPreferences->read();
+$config = getConfigArray(); 
 
 $headline = $gL10n->get('PLG_CATEGORY_REPORT_HEADLINE');
 
 if ($getAddDelete === -1)
 {
-    foreach($pPreferences->config['configurations'] as $key => $dummy)
+    $default_config = initConfigArray();
+    foreach($config as $key => $dummy)
     {
-        $pPreferences->config['configurations'][$key][] = $pPreferences->config_default['configurations'][$key][0];
+        $config[$key][] = $default_config[$key][0];
     }
+    unset($default_config);
+    saveConfigArray();
 }
 elseif ($getAddDelete > 0)
 {
-    foreach($pPreferences->config['configurations'] as $key => $dummy)
+    foreach($config as $key => $dummy)
     {
-        array_splice($pPreferences->config['configurations'][$key], $getAddDelete-1, 1);
+        array_splice($config[$key], $getAddDelete-1, 1);
     }
     
     // durch das Loeschen einer Konfiguration kann der Fall eintreten, dass es die eingestellte Standardkonfiguration nicht mehr gibt
     // daher die Standardkonfiguration auf die erste Konfiguration im Array setzen
-    $pPreferences->config['options']['config_default'] = 0;
+    $gSettingsManager->set('category_report_default_configuration', 0);
+    saveConfigArray();
 }
 
-$num_configs = count($pPreferences->config['configurations']['col_desc']);
-$pPreferences->save();
+$num_configs = count($config['col_desc']);
 
 $report = new GenReport();
 
@@ -187,7 +188,7 @@ for ($conf=0;$conf<$num_configs;$conf++)
     	function createColumnsArray'.$conf.'()
     	{
         	var default_fields = new Array(); ';
-    $fields = explode(',', $pPreferences->config['configurations']['col_fields'][$conf]);
+    $fields = explode(',', $config['col_fields'][$conf]);
     for ($number = 0; $number < count($fields); $number++)
     {
         // das ist nur zur Überprüfung, ob diese Freigabe noch existent ist
@@ -233,7 +234,7 @@ $javascriptCode = '$(document).ready(function() { ';
 for ($conf = 0; $conf < $num_configs; $conf++)
 {
     $javascriptCode .= '
-    	for(var counter = 0; counter < '. count(explode(',', $pPreferences->config['configurations']['col_fields'][$conf])). '; counter++) {
+    	for(var counter = 0; counter < '. count(explode(',', $config['col_fields'][$conf])). '; counter++) {
         	addColumn'. $conf. '();
     	}
     	';
@@ -279,7 +280,6 @@ $page->addHtml('
     <div class="tab-pane fade" id="tabs-common" role="tabpanel">
         <div class="accordion" id="accordion_preferences">');
 
-
 // PANEL: CONFIGURATIONS
 
 $formConfigurations = new HtmlForm(
@@ -297,7 +297,7 @@ $formConfigurations->addDescription('<div style="width:100%; height:550px; overf
 for ($conf=0;$conf<$num_configs;$conf++)
 {
     $formConfigurations->openGroupBox('configurations_group',($conf+1).'. '.$gL10n->get('PLG_CATEGORY_REPORT_CONFIGURATION'));
-    $formConfigurations->addInput('col_desc'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_COL_DESC'), $pPreferences->config['configurations']['col_desc'][$conf], array('property' => HtmlForm::FIELD_REQUIRED));
+    $formConfigurations->addInput('col_desc'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_COL_DESC'), $config['col_desc'][$conf], array('property' => HtmlForm::FIELD_REQUIRED));
     $html = '
 	   <div class="table-responsive">
     		<table class="table table-condensed" id="mylist_fields_table">
@@ -317,23 +317,23 @@ for ($conf=0;$conf<$num_configs;$conf++)
     		</table>
     	</div>';
     $formConfigurations->addCustomContent($gL10n->get('PLG_CATEGORY_REPORT_COLUMN_SELECTION'), $html);
-    $formConfigurations->addInput('col_yes'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_YES'), $pPreferences->config['configurations']['col_yes'][$conf], array('maxLength' => 10));
-    $formConfigurations->addInput('col_no'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_NO'), $pPreferences->config['configurations']['col_no'][$conf], array('maxLength' => 10));
+    $formConfigurations->addInput('col_yes'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_YES'), $config['col_yes'][$conf], array('maxLength' => 10));
+    $formConfigurations->addInput('col_no'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_NO'), $config['col_no'][$conf], array('maxLength' => 10));
     
     $sql = 'SELECT rol_id, rol_name, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
              WHERE cat_id = rol_cat_id
                AND ( cat_org_id = '.ORG_ID.'
                 OR cat_org_id IS NULL )';
-    $formConfigurations->addSelectBoxFromSql('selection_role'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_ROLE_SELECTION'), $gDb, $sql, array('defaultValue' => explode(',',$pPreferences->config['configurations']['selection_role'][$conf]),'multiselect' => true));
+    $formConfigurations->addSelectBoxFromSql('selection_role'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_ROLE_SELECTION'), $gDb, $sql, array('defaultValue' => explode(',',$config['selection_role'][$conf]),'multiselect' => true));
     
     $sql = 'SELECT cat_id, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
              WHERE cat_id = rol_cat_id
                AND ( cat_org_id = '.ORG_ID.'
                 OR cat_org_id IS NULL )';
-    $formConfigurations->addSelectBoxFromSql('selection_cat'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_CAT_SELECTION'), $gDb, $sql, array('defaultValue' => explode(',',$pPreferences->config['configurations']['selection_cat'][$conf]),'multiselect' => true));
-    $formConfigurations->addCheckbox('number_col'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_NUMBER_COL'), $pPreferences->config['configurations']['number_col'][$conf]);
+    $formConfigurations->addSelectBoxFromSql('selection_cat'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_CAT_SELECTION'), $gDb, $sql, array('defaultValue' => explode(',',$config['selection_cat'][$conf]),'multiselect' => true));
+    $formConfigurations->addCheckbox('number_col'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_NUMBER_COL'), $config['number_col'][$conf]);
     if($num_configs != 1)
     {
         $html = '<a id="delete_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences.php', array('add_delete' => $conf+1)).'">
@@ -362,13 +362,10 @@ $formOptions = new HtmlForm(
     'options_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences_function.php', array('form' => 'options')),
     $page, array('class' => 'form-preferences')
 );
-$formOptions->addSelectBox('config_default', $gL10n->get('PLG_CATEGORY_REPORT_CONFIGURATION'),$pPreferences->config['configurations']['col_desc'], array('defaultValue' => $pPreferences->config['options']['config_default'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'PLG_CATEGORY_REPORT_CONFIGURATION_DEFAULT_DESC'));
+$formOptions->addSelectBox('default_config', $gL10n->get('PLG_CATEGORY_REPORT_CONFIGURATION'),$config['col_desc'], array('defaultValue' => $gSettingsManager->get('category_report_default_configuration'), 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'PLG_CATEGORY_REPORT_CONFIGURATION_DEFAULT_DESC'));
 $html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/export_import.php', array('mode' => 1)).'">
     <i class="fas fa-exchange-alt"></i> '.$gL10n->get('PLG_CATEGORY_REPORT_LINK_TO_EXPORT_IMPORT').'</a>';
 $formOptions->addCustomContent($gL10n->get('PLG_CATEGORY_REPORT_EXPORT_IMPORT'), $html, array('helpTextIdInline' => 'PLG_CATEGORY_REPORT_EXPORT_IMPORT_DESC'));
-$html = '<a id="deinstallation" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences_function.php', array('mode' => 2)).'">
-    <i class="fas fa-trash-alt"></i> '.$gL10n->get('PLG_CATEGORY_REPORT_LINK_TO_DEINSTALLATION').'</a>';
-$formOptions->addCustomContent($gL10n->get('PLG_CATEGORY_REPORT_DEINSTALLATION'), $html, array('helpTextIdInline' => 'PLG_CATEGORY_REPORT_DEINSTALLATION_DESC'));
 $formOptions->addSubmitButton('btn_save_options', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));
 
 $page->addHtml(getPreferencePanel('common', 'options', $gL10n->get('PLG_CATEGORY_REPORT_OPTIONS'), 'fas fa-cog', $formOptions->show()));

@@ -15,17 +15,6 @@
     <string name="PLG_CATEGORY_REPORT_CONFIGURATION_DEFAULT_DESC">Paramètres de configuration par défaut</string>
     <string name="PLG_CATEGORY_REPORT_CONFIGURATIONS">Configurations</string>
     <string name="PLG_CATEGORY_REPORT_CONFIGURATIONS_HEADER">Ici tu peux créer autant de configuration pour les rapports par catégories que nécessaires. Dans l\'affichage à l\'écran, l\'une de ces configurations sert de base à l\'affichage par "Sélectionner configuration...".</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_ACTORGONLY">Supprimer uniquement les données de l\'organisation actuelle.</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_ALLORG">Supprimer les données de toutes les organisations.</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_DATA_DELETE_ERROR">- Une erreur s\'est produite lors de la suppression des données.\n</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_DATA_DELETE_SUCCESS">- Les données créées par le plugin ont été supprimées.\n</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_ENDMESSAGE">\nPour supprimer complètement le plugin, les fichiers du programme et l\'entrée de menu doivent encore être supprimés.</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_STARTMESSAGE">Les suppressions suivantes ont été executées:\n\n</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_TABLE_DELETE_ERROR">- La table "adm_plugin_preferences" n\'a pas pu être supprimée car elle contient encore des données d\'un autre plugin.\n</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_TABLE_DELETE_SUCCESS">- La table "adm_plugin_preferences" créée par le plugin a été supprimée.\n</string>
-    <string name="PLG_CATEGORY_REPORT_DEINSTALLATION">Désinstallation</string>
-    <string name="PLG_CATEGORY_REPORT_DEINSTALLATION_DESC">En désinstallant le plugin, les entrées créées par le plugin peuvent être supprimées de la base de données.</string>
-    <string name="PLG_CATEGORY_REPORT_DEINSTALLATION_FORM_DESC">Sélectionne l\'étendue de l\'installation.\n\n***Attention: Cette routine ne supprime que les entrées de la base de données Admidio. Les fichiers de programme et le lien dans le menu ne sont pas effacés ! ***</string>
     <string name="PLG_CATEGORY_REPORT_DELETE_CONFIG">Supprimer cette configuration</string>
     <string name="PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_NO">Texte si pas membre</string>
     <string name="PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_NO_DESC">Texte si membre d\'aucun rôle ou d\'aucune catégorie.\n(p.ex. non ou false).</string>

@@ -18,7 +18,6 @@
 
 require_once(__DIR__ . '/../../adm_program/system/common.php');
 require_once(__DIR__ . '/common_function.php');
-require_once(__DIR__ . '/classes/configtable.php');
 
 // only authorized user are allowed to start this module
 if (!$gCurrentUser->isAdministrator())
@@ -26,8 +25,7 @@ if (!$gCurrentUser->isAdministrator())
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$pPreferences = new ConfigTablePCR();
-$pPreferences->read();
+$config = getConfigArray();          
 
 // Initialize and check the parameters
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('defaultValue' => 1));
@@ -48,7 +46,7 @@ switch ($getMode)
     	$form = new HtmlForm('export_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/export_import.php', array('mode' => 2)), $page);
 		$form->openGroupBox('export', $headline = $gL10n->get('PLG_CATEGORY_REPORT_EXPORT'));
     	$form->addDescription($gL10n->get('PLG_CATEGORY_REPORT_EXPORT_DESC'));
-    	$form->addSelectBox('conf_id', $gL10n->get('PLG_FORMFILLER_CONFIGURATION').':', $pPreferences->config['configurations']['col_desc'], array( 'showContextDependentFirstEntry' => false));
+    	$form->addSelectBox('conf_id', $gL10n->get('PLG_CATEGORY_REPORT_CONFIGURATION').':', $config['col_desc'], array( 'showContextDependentFirstEntry' => false));
 		$form->addSubmitButton('btn_export', $gL10n->get('PLG_CATEGORY_REPORT_EXPORT'), array('icon' => 'fa-file-export', 'class' => ' col-sm-offset-3'));
     	$form->closeGroupBox();
     	 
@@ -72,7 +70,7 @@ switch ($getMode)
 	case 2:
 		$exportArray = array();
 
-		foreach ($pPreferences->config['configurations'] as $key => $data)
+		foreach ($config as $key => $data)
 		{
 			$exportArray[$key] = $data[$_POST['conf_id']];
 		} 
@@ -183,8 +181,8 @@ switch ($getMode)
 		$importArray = array();
 	
 		//alle Werte der eingelesenen Datei, die kein Array sind, in $importArray überfuehren
-		//dabei werden nur Werte eingelesen, die in der aktuellen $pPreferences->config vorhanden sind
-		foreach ($pPreferences->config['configurations'] as $key => $data)
+		//dabei werden nur Werte eingelesen, die in der aktuellen $config vorhanden sind
+		foreach ($config as $key => $data)
 		{
 			if (isset($parsedArray[$key]))
 			{
@@ -202,13 +200,13 @@ switch ($getMode)
 			}
 		}
 			
-		$pointer = count($pPreferences->config['configurations']['col_desc']);
+		$pointer = count($config['col_desc']);
     	foreach ($importArray as $key => $data)	
     	{
-        	$pPreferences->config['configurations'][$key][$pointer] = $data;
+        	$config[$key][$pointer] = $data;
     	}		
 
-		$pPreferences->save();
+		saveConfigArray();
 
 		$gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences.php', array('show_option' => 'options')));
 		$gMessage->show($gL10n->get('PLG_CATEGORY_REPORT_IMPORT_SUCCESS'));

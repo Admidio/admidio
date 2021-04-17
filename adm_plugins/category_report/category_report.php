@@ -22,7 +22,6 @@
 
 require_once(__DIR__ . '/../../adm_program/system/common.php');
 require_once(__DIR__ . '/common_function.php');
-require_once(__DIR__ . '/classes/configtable.php');
 require_once(__DIR__ . '/classes/genreport.php');
 
 //$scriptName ist der Name wie er im Menue eingetragen werden muss, also ohne evtl. vorgelagerte Ordner wie z.B. /playground/adm_plugins/category_report...
@@ -34,24 +33,28 @@ if (!isUserAuthorized($scriptName))
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Konfiguration einlesen          
-$pPreferences = new ConfigTablePCR();
-if ($pPreferences->checkforupdate())
+if (!$gSettingsManager->has('category_report_col_desc'))
 {
-	$pPreferences->init();
+    $config = initConfigArray();
+    saveConfigArray();
 }
 else
 {
-	$pPreferences->read();
+    $config = getConfigArray();
+}
+
+if (!$gSettingsManager->has('category_report_default_configuration'))
+{
+    $gSettingsManager->set('category_report_default_configuration', 0);
 }
 
 // Initialize and check the parameters
 $validValues = array();
-foreach ($pPreferences->config['configurations']['col_desc'] as $key => $dummy)
+foreach ($config['col_desc'] as $key => $dummy)
 {
 	$validValues[] = 'X'.$key.'X';
 }
-$getConfig          = admFuncVariableIsValid($_GET, 'config', 'string', array('defaultValue' => 'X'.$pPreferences->config['options']['config_default'].'X', 'validValues' => $validValues) );
+$getConfig          = admFuncVariableIsValid($_GET, 'config', 'string', array('defaultValue' => 'X'.$gSettingsManager->get('category_report_default_configuration').'X', 'validValues' => $validValues) );
 $getMode            = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl' )));
 $getFilter          = admFuncVariableIsValid($_GET, 'filter', 'string');
 $getExportAndFilter = admFuncVariableIsValid($_GET, 'export_and_filter', 'bool', array('defaultValue' => false));
@@ -118,8 +121,8 @@ $columnCount = count($report->headerData);
     
 // define title (html) and headline
 $title       = $gL10n->get('PLG_CATEGORY_REPORT_HEADLINE');
-$headline    = $gL10n->get('PLG_CATEGORY_REPORT_HEADLINE');
-$subheadline = $pPreferences->config['configurations']['col_desc'][trim($getConfig,'X')];   
+$headline    = $gL10n->get('PLG_CATEGORY_REPORT_HEADLINE');  
+$subheadline = $config['col_desc'][trim($getConfig,'X')];   
 
 $filename    = $g_organization.'-'.$headline.'-'.$subheadline;
 
@@ -279,7 +282,7 @@ if ($getMode !== 'csv')
 		    true
 		);
 		
-		foreach ($pPreferences->config['configurations']['col_desc'] as $key => $item)
+		foreach ($config['col_desc'] as $key => $item)
 		{
 		    $selectBoxEntries['X'.$key.'X'] = $item;
 		}

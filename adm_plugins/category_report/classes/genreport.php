@@ -42,13 +42,13 @@ class GenReport
      */
 	public function generate_listData()
 	{
-		global $gDb, $gProfileFields, $pPreferences, $gL10n;
+		global $gDb, $gProfileFields, $config, $gL10n;
 		
 		$workarray      = array();
 		$number_row_pos = -1;
 		$number_col     = array();		
 		
-		$colfields = explode(',', $pPreferences->config['configurations']['col_fields'][$this->conf]);
+		$colfields = explode(',', $config['col_fields'][$this->conf]);
 		// die gespeicherten Konfigurationen durchlaufen
 		foreach ($colfields as $key => $data)
         {
@@ -221,18 +221,18 @@ class GenReport
 	   		
 			// bestehen Rollen- und/oder Kategorieeinschraenkungen?
         	$rolecatmarker = true;
-        	if ($pPreferences->config['configurations']['selection_role'][$this->conf] <> ' '
-        	 || $pPreferences->config['configurations']['selection_cat'][$this->conf] <> ' ')
+        	if ($config['selection_role'][$this->conf] <> ' '
+        	 || $config['selection_cat'][$this->conf] <> ' ')
         	{
         		$rolecatmarker = false;	
-        		foreach (explode(',', $pPreferences->config['configurations']['selection_role'][$this->conf]) as $rol)
+        		foreach (explode(',', $config['selection_role'][$this->conf]) as $rol)
         		{
         			if ($user->isMemberOfRole((int) $rol))
         			{
         				$rolecatmarker = true;
         			}
         		}	
-				foreach (explode(',', $pPreferences->config['configurations']['selection_cat'][$this->conf]) as $cat)
+				foreach (explode(',', $config['selection_cat'][$this->conf]) as $cat)
         		{
         			if (isMemberOfCategorie($cat, $member))
         			{
@@ -280,13 +280,13 @@ class GenReport
 				{
 					if (isset($data['usr_id']) AND in_array($member,$data['usr_id']))
                 	{
-                    	$this->listData[$member][$key] = $pPreferences->config['configurations']['col_yes'][$this->conf];
+                    	$this->listData[$member][$key] = $config['col_yes'][$this->conf];
                     	$number_row_count++;
                     	$number_col[$key]++;
             		}
                 	else
                 	{
-                    	$this->listData[$member][$key] = $pPreferences->config['configurations']['col_no'][$this->conf];
+                    	$this->listData[$member][$key] = $config['col_no'][$this->conf];
                 	}
 				}
 			}
@@ -296,7 +296,7 @@ class GenReport
 			}
 		}
 
-		if ($pPreferences->config['configurations']['number_col'][$this->conf] == 1)
+		if ($config['number_col'][$this->conf] == 1)
 		{
 			$this->listData[max(array_keys($this->listData))+1] = $number_col;
 		}

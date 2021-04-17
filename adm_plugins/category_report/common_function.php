@@ -167,16 +167,82 @@ function isMemberOfCategorie($cat_id, $user_id = 0)
  * Funktion prüft, ob es eine Konfiguration mit dem übergebenen Namen bereits gibt
  * wenn ja: wird "- Kopie" angehängt und rekursiv überprüft
  * @param   string  $name
- * @return  string
+ * @return  string  
  */
 function createColDescConfig($name)
 {
-    global $pPreferences, $gL10n;
+  //  global $pPreferences, $gL10n;
+    global $config, $gL10n;
     
-    while (in_array($name, $pPreferences->config['configurations']['col_desc']))
+    
+    while (in_array($name, $config['col_desc']))
     {
         $name .= ' - '.$gL10n->get('MAI_CARBON_COPY');
     }
 
     return $name;
 }
+
+/**
+ * Funktion initialisiert das Konfigurationsarray
+ * @param   none
+ * @return  Array $config  das Konfigurationsarray 
+ */
+function initConfigArray()
+{
+    global $gL10n, $gProfileFields;
+    
+    $config = array(	'col_desc' 		=> array($gL10n->get('PLG_CATEGORY_REPORT_PATTERN')),
+                        'col_fields' 	=> array(	'p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
+                                                    'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
+                                                    'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
+                                                    'p'.$gProfileFields->getProperty('CITY', 'usf_id')),
+                        'col_yes'		=> array('ja'),
+                        'col_no'		=> array('nein'),
+                        'selection_role'=> array(' '),
+                        'selection_cat'	=> array(' '),
+                        'number_col'	=> array(0)  );
+        
+    return $config;
+}
+
+/**
+ * Funktion liest das Konfigurationsarray ein
+ * @param   none
+ * @return  Array $config  das Konfigurationsarray
+ */
+function getConfigArray()
+{
+    global  $gSettingsManager;
+    $dbtoken  = '#_#';  
+    
+    $config = array();
+    $config['col_desc']       = explode($dbtoken, $gSettingsManager->get('category_report_col_desc')); 
+    $config['col_fields']     = explode($dbtoken, $gSettingsManager->get('category_report_col_fields')); 
+    $config['col_yes']        = explode($dbtoken, $gSettingsManager->get('category_report_col_yes')); 
+    $config['col_no']         = explode($dbtoken, $gSettingsManager->get('category_report_col_no')); 
+    $config['selection_role'] = explode($dbtoken, $gSettingsManager->get('category_report_selection_role')); 
+    $config['selection_cat']  = explode($dbtoken, $gSettingsManager->get('category_report_selection_cat')); 
+    $config['number_col']     = explode($dbtoken, $gSettingsManager->get('category_report_number_col')); 
+    $config['col_desc']       = explode($dbtoken, $gSettingsManager->get('category_report_col_desc')); 
+    
+    return $config;
+}
+
+/**
+ * Funktion speichert das Konfigurationsarray
+ * @param   none
+ */
+function saveConfigArray()
+{
+    global  $gSettingsManager, $config;
+    $dbtoken  = '#_#';
+    
+    foreach ($config as $name => $value)
+    {
+        $gSettingsManager->set('category_report_'.$name, implode($dbtoken,$value));
+    }
+    
+    return;
+}
+

@@ -15,17 +15,6 @@
     <string name="PLG_CATEGORY_REPORT_CONFIGURATION_DEFAULT_DESC">Standardeinstellung der Konfigurationen</string>
     <string name="PLG_CATEGORY_REPORT_CONFIGURATIONS">Konfigurationen</string>
     <string name="PLG_CATEGORY_REPORT_CONFIGURATIONS_HEADER">Hier können beliebig viele Konfigurationen für den Kategoriereport erstellt werden. In der Bildschirmanzeige wird jeweils eine dieser Konfigurationen über "Konfiguration wählen..." als Grundlage für die Anzeige verwendet.</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_ACTORGONLY">Nur Daten der aktuellen Organisation löschen.</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_ALLORG">Daten in allen Organisationen löschen.</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_DATA_DELETE_ERROR">- Beim Löschen der Daten ist ein Fehler aufgetreten.\n</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_DATA_DELETE_SUCCESS">- Die vom Plugin angelegten Daten wurden gelöscht.\n</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_ENDMESSAGE">\nUm das Plugin vollständig zu entfernen, müssen noch die Programmdateien und der Menü-Eintrag gelöscht werden.</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_STARTMESSAGE">Folgende Löschvorgänge wurden durchgeführt:\n\n</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_TABLE_DELETE_ERROR">- Die Tabelle "adm_plugin_preferences" konnte nicht gelöscht werden, da sich darin noch Daten eines anderen Plugins befinden.\n</string>
-    <string name="PLG_CATEGORY_REPORT_DEINST_TABLE_DELETE_SUCCESS">- Die vom Plugin angelegte Tabelle "adm_plugin_preferences" wurde gelöscht.\n</string>
-    <string name="PLG_CATEGORY_REPORT_DEINSTALLATION">Deinstallation</string>
-    <string name="PLG_CATEGORY_REPORT_DEINSTALLATION_DESC">Über die Deinstallation können vom Plugin erzeugte Einträge in der Datenbank gelöscht werden.</string>
-    <string name="PLG_CATEGORY_REPORT_DEINSTALLATION_FORM_DESC">Wähle den Installationsumfang aus.\n\n***ACHTUNG: Diese Routine löscht nur Einträge in der Admidio-Datenbank. Programmdateien und der Link im Menü werden nicht gelöscht! ***</string>
     <string name="PLG_CATEGORY_REPORT_DELETE_CONFIG">Diese Konfiguration löschen</string>
     <string name="PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_NO">Anzeigetext bei keiner Mitgliedschaft</string>
     <string name="PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_NO_DESC">Text bei keiner Mitgliedschaft in einer Rolle oder Kategorie. \n(z.B. Nein oder False).</string>
