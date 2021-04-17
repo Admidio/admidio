@@ -79,9 +79,9 @@ class Email extends PHPMailer
      */
     private $emHtmlText = '';
     /**
-     * @var array<int,string> Hier werden noch mal alle Empfaenger der Mail reingeschrieben, fuer den Fall das eine Kopie der Mail angefordert wird...
+     * @var array<int,string> Array with all recipients names
      */
-    private $emAddresses = array();
+    private $emRecipientsNames = array();
     /**
      * @var array<string,string> Mail sender address and Name
      */
@@ -168,7 +168,7 @@ class Email extends PHPMailer
             return $e->getMessage();
         }
 
-        $this->emAddresses[] = $name;
+        $this->emRecipientsNames[] = $name;
 
         return true;
     }
@@ -253,7 +253,7 @@ class Email extends PHPMailer
             return $e->getMessage();
         }
 
-        $this->emAddresses[] = $name;
+        $this->emRecipientsNames[] = $name;
 
         return true;
     }
@@ -273,7 +273,7 @@ class Email extends PHPMailer
         if (StringUtils::strValidCharacters($address, 'email'))
         {
             $this->emBccArray[] = array('name' => $asciiName, 'address' => $address);
-            $this->emAddresses[] = $name;
+            $this->emRecipientsNames[] = $name;
             return true;
         }
         return false;
@@ -633,7 +633,7 @@ class Email extends PHPMailer
         if ($this->emListRecipients)
         {
             $copyHeader = $gL10n->get('MAI_MESSAGE_WENT_TO').':' . static::$LE . static::$LE .
-                implode(static::$LE, $this->emAddresses) . static::$LE . static::$LE . $copyHeader;
+                implode(static::$LE, $this->emRecipientsNames) . static::$LE . static::$LE . $copyHeader;
         }
 
         $this->emText = $copyHeader . $this->emText;
@@ -709,7 +709,7 @@ class Email extends PHPMailer
         }
 
         // initialize recipient addresses so same email could be send to other recipients
-        $this->emAddresses = array();
+        $this->emRecipientsNames = array();
         $this->clearAddresses();
 
         return true;

@@ -416,10 +416,11 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                             $_FILES['userfile']['type'][$currentAttachmentNo] = 'application/octet-stream';
                         }
 
-                        // add the attachment to the mail
+                        // add the attachment to the email and message object
                         try
                         {
                             $email->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo], $encoding = 'base64', $_FILES['userfile']['type'][$currentAttachmentNo]);
+                            $message->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo]);
                         }
                         catch (Exception $e)
                         {

@@ -1262,6 +1262,8 @@
   <string name="SYS_SAFE_MODE_PROBLEM">problematisch bei Dateiuploads</string>
   <string name="SYS_SATURDAY">Samstag</string>
   <string name="SYS_SAVE">Speichern</string>
+  <string name="SYS_SAVE_ATTACHMENTS">Anhänge speichern</string>
+  <string name="SYS_SAVE_ATTACHMENTS_DESC">E-Mail-Anhänge werden auf dem Webspace gespeichert und können nach dem Versand weiterhin in der gespeicherten E-Mail aufgerufen werden. (Voreinstellung: aktiviert)</string>
   <string name="SYS_SAVE_CHANGES">Änderungen speichern</string>
   <string name="SYS_SAVE_CONFIGURATION">Konfiguration speichern</string>
   <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>

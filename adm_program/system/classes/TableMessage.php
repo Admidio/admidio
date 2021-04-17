@@ -22,6 +22,10 @@ class TableMessage extends TableAccess
      */
     protected $msgId;
     /**
+     * @var array<int,string> This array has all the file names of the attachments. First element is the path and second element is the file name.
+     */
+    private $msgAttachments = array();
+    /**
      * @var array Array with all recipients of the message.
      */
     protected $msgRecipientsArray = array();
@@ -47,6 +51,16 @@ class TableMessage extends TableAccess
         parent::__construct($database, TBL_MESSAGES, 'msg', $this->msgId);
 
         $this->getContent();
+    }
+
+    /**
+     * Add an attachment from a path on the filesystem.
+     * @param string $path        Path to the attachment
+     * @param string $name        Overrides the attachment name
+     */
+    public function addAttachment($path, $name = '')
+    {
+        $this->msgAttachments[] = array($path, $name);
     }
 
     public function addRole($roleId, $roleMode)
@@ -416,7 +430,8 @@ class TableMessage extends TableAccess
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
      * For new records the name intern will be set per default.
-     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
+     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if
+     *                                table has columns like **usr_id_create** or **usr_id_changed**
      * @throws AdmException
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
@@ -448,9 +463,46 @@ class TableMessage extends TableAccess
                 $this->msgContentObject->setValue('msc_usr_id', $gCurrentUser->getValue('usr_id'));
                 $returnValue = $this->msgContentObject->save();
             }
+
+            $this->saveAttachements();
         }
 
         return $returnValue;
+    }
+
+    /**
+     * Saves the files of the stored filenames in the array **$msgAttachments** within the filesystem folder
+     * adm_my_files/messages/attachments. Therefore the filename will get the prefix with the id of this
+     * message.
+     * @throw RuntimeException Folder could not be created
+     */
+    protected function saveAttachements()
+    {
+        try
+        {
+            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/messages/attachements');
+        }
+        catch (\RuntimeException $exception)
+        {
+            return array(
+                'text' => 'SYS_FOLDER_NOT_CREATED',
+                'path' => 'adm_my_files/photos/' . $folderName
+            );
+        }
+
+        foreach($this->msgAttachments as $attachement)
+        {
+            $file_name = $this->getValue('msg_id').'_'.$attachement[1];
+
+            FileSystemUtils::copyFile($attachement[0], ADMIDIO_PATH . FOLDER_DATA . '/messages/attachements/' . $file_name);
+
+            // save message recipient as TableAcess object to the array
+            $messageAttachement = new TableAccess($this->db, TBL_MESSAGES_ATTACHMENTS, 'msa');
+            $messageAttachement->setValue('msa_msg_id', $this->getValue('msg_id'));
+            $messageAttachement->setValue('msa_file_name', $file_name);
+            $messageAttachement->setValue('msr_original_file_name', $attachement[1]);
+            $messageAttachement->save();
+        }
     }
 
     /**

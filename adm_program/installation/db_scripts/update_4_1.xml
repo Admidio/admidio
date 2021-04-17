@@ -21,5 +21,18 @@
 	    ADD CONSTRAINT %PREFIX%_fk_msr_usr_id      FOREIGN KEY (msr_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
     <step id="60">ComponentUpdateSteps::updateStep41MigrateMessageRecipients</step>
     <step id="70">ALTER TABLE %PREFIX%_messages_content DROP COLUMN msc_part_id</step>
+    <step id="80">CREATE TABLE %PREFIX%_messages_attachments
+        (
+            msa_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+            msa_msg_id                  integer unsigned    NOT NULL,
+            msa_file_name               varchar(256)        NOT NULL,
+            msa_original_file_name      varchar(256)        NOT NULL,
+            PRIMARY KEY (msa_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="90">ALTER TABLE %PREFIX%_messages_attachments
+    ADD CONSTRAINT %PREFIX%_fk_msa_msg_id      FOREIGN KEY (msa_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT</step>
     <step>stop</step>
 </update>

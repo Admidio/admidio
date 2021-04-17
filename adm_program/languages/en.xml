@@ -1262,6 +1262,8 @@
   <string name="SYS_SAFE_MODE_PROBLEM">Might cause problems with file uploads</string>
   <string name="SYS_SATURDAY">Saturday</string>
   <string name="SYS_SAVE">Save</string>
+  <string name="SYS_SAVE_ATTACHMENTS">Save attachments</string>
+  <string name="SYS_SAVE_ATTACHMENTS_DESC">Email attachments are saved on the web space and can still be accessed in the saved email after sending. (Default: enabled)</string>
   <string name="SYS_SAVE_CHANGES">Save changes</string>
   <string name="SYS_SAVE_CONFIGURATION">Save configuration</string>
   <string name="SYS_SAVE_DATA">Data has been saved.</string>

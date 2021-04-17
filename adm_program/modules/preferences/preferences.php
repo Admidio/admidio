@@ -1243,6 +1243,10 @@ $formMessages->addInput(
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999, 'step' => 1, 'helpTextIdInline' => 'MAI_ATTACHMENT_SIZE_DESC')
 );
 $formMessages->addCheckbox(
+    'mail_save_attachments', $gL10n->get('SYS_SAVE_ATTACHMENTS'), (bool) $formValues['mail_save_attachments'],
+    array('helpTextIdInline' => 'SYS_SAVE_ATTACHMENTS_DESC')
+);
+$formMessages->addCheckbox(
     'mail_html_registered_users', $gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS'), (bool) $formValues['mail_html_registered_users'],
     array('helpTextIdInline' => 'MAI_HTML_MAILS_REGISTERED_USERS_DESC')
 );
