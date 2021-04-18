@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Various common functions for the admidio plugin Category Report
+ * Various common functions for the admidio module CategoryReport
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -9,12 +9,7 @@
  ***********************************************************************************************
  */
 
-require_once(__DIR__ . '/../../adm_program/system/common.php');
-
-if(!defined('PLUGIN_FOLDER'))
-{
-	define('PLUGIN_FOLDER', '/'.substr(__DIR__,strrpos(__DIR__,DIRECTORY_SEPARATOR)+1));
-}
+require_once(__DIR__ . '/../../system/common.php');
 
 if(!defined('ORG_ID'))
 {
@@ -47,7 +42,7 @@ function isUserAuthorized($scriptName)
 	{
 		$gLogger->notice('CategoryReport: Error with menu entry: Found rows: '. $menuStatement->rowCount() );
 		$gLogger->notice('CategoryReport: Error with menu entry: ScriptName: '. $scriptName);
-		$gMessage->show($gL10n->get('PLG_CATEGORY_REPORT_MENU_URL_ERROR', array($scriptName)), $gL10n->get('SYS_ERROR'));
+		$gMessage->show($gL10n->get('CRT_MENU_URL_ERROR', array($scriptName)), $gL10n->get('SYS_ERROR'));
 	}
 	else
 	{
@@ -192,7 +187,7 @@ function initConfigArray()
 {
     global $gL10n, $gProfileFields;
     
-    $config = array(	'col_desc' 		=> array($gL10n->get('PLG_CATEGORY_REPORT_PATTERN')),
+    $config = array(	'col_desc' 		=> array($gL10n->get('CRT_PATTERN')),
                         'col_fields' 	=> array(	'p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
                                                     'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
                                                     'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.

@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Modul Preferences of the admidio plugin Category Report
+ * Modul Preferences of the admidio module CategoryReport
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -16,10 +16,9 @@
  ***********************************************************************************************
  */
  
-require_once(__DIR__ . '/../../adm_program/system/common.php');
-require_once(__DIR__ . '/../../adm_program/system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/../../system/login_valid.php');
 require_once(__DIR__ . '/common_function.php');
-require_once(__DIR__ . '/classes/genreport.php');
 
 // only authorized user are allowed to start this module
 if (!$gCurrentUser->isAdministrator())
@@ -33,7 +32,7 @@ $showOption   = admFuncVariableIsValid($_GET, 'show_option', 'string');
 
 $config = getConfigArray(); 
 
-$headline = $gL10n->get('PLG_CATEGORY_REPORT_HEADLINE');
+$headline = $gL10n->get('CRT_HEADLINE');
 
 if ($getAddDelete === -1)
 {
@@ -60,7 +59,7 @@ elseif ($getAddDelete > 0)
 
 $num_configs = count($config['col_desc']);
 
-$report = new GenReport();
+$report = new CategoryReport();
 
 if ($getAddDelete)
 {
@@ -68,7 +67,7 @@ if ($getAddDelete)
 }
 
 $gNavigation->clear();
-$gNavigation->addUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php');
+$gNavigation->addUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php');
 $gNavigation->addUrl(CURRENT_URL);
 
 // create html page object
@@ -283,21 +282,21 @@ $page->addHtml('
 // PANEL: CONFIGURATIONS
 
 $formConfigurations = new HtmlForm(
-    'configurations_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences_function.php', array('form' => 'configurations')),
+    'configurations_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences_function.php', array('form' => 'configurations')),
     $page, array('class' => 'form-preferences')
 );
 
 $html = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences_popup.php').'">'.
+                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences_popup.php').'">'.
                 '<i class="fas fa-info" data-toggle="tooltip" title="' . $gL10n->get('SYS_HELP') . '"></i> '.$gL10n->get('SYS_HELP').'</a>';
-$formConfigurations->addDescription($gL10n->get('PLG_CATEGORY_REPORT_CONFIGURATIONS_HEADER').' '.$html);
+$formConfigurations->addDescription($gL10n->get('CRT_CONFIGURATIONS_HEADER').' '.$html);
 $formConfigurations->addLine();
 $formConfigurations->addDescription('<div style="width:100%; height:550px; overflow:auto; border:20px;">');
 
 for ($conf=0;$conf<$num_configs;$conf++)
 {
-    $formConfigurations->openGroupBox('configurations_group',($conf+1).'. '.$gL10n->get('PLG_CATEGORY_REPORT_CONFIGURATION'));
-    $formConfigurations->addInput('col_desc'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_COL_DESC'), $config['col_desc'][$conf], array('property' => HtmlForm::FIELD_REQUIRED));
+    $formConfigurations->openGroupBox('configurations_group',($conf+1).'. '.$gL10n->get('CRT_CONFIGURATION'));
+    $formConfigurations->addInput('col_desc'.$conf, $gL10n->get('CRT_COL_DESC'), $config['col_desc'][$conf], array('property' => HtmlForm::FIELD_REQUIRED));
     $html = '
 	   <div class="table-responsive">
     		<table class="table table-condensed" id="mylist_fields_table">
@@ -310,34 +309,34 @@ for ($conf=0;$conf<$num_configs;$conf++)
         		<tbody id="mylist_fields_tbody'.$conf.'">
             		<tr id="table_row_button">
                 		<td colspan="2">
-                    		<a class="icon-text-link" href="javascript:addColumn'.$conf.'()"><i class="fas fa-plus-circle"></i> '.$gL10n->get('PLG_CATEGORY_REPORT_ADD_ANOTHER_COLUMN').'</a>
+                    		<a class="icon-text-link" href="javascript:addColumn'.$conf.'()"><i class="fas fa-plus-circle"></i> '.$gL10n->get('CRT_ADD_ANOTHER_COLUMN').'</a>
                 		</td>
             		</tr>
         		</tbody>
     		</table>
     	</div>';
-    $formConfigurations->addCustomContent($gL10n->get('PLG_CATEGORY_REPORT_COLUMN_SELECTION'), $html);
-    $formConfigurations->addInput('col_yes'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_YES'), $config['col_yes'][$conf], array('maxLength' => 10));
-    $formConfigurations->addInput('col_no'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_DISPLAY_TEXT_MEMBERSHIP_NO'), $config['col_no'][$conf], array('maxLength' => 10));
+    $formConfigurations->addCustomContent($gL10n->get('CRT_COLUMN_SELECTION'), $html);
+    $formConfigurations->addInput('col_yes'.$conf, $gL10n->get('CRT_DISPLAY_TEXT_MEMBERSHIP_YES'), $config['col_yes'][$conf], array('maxLength' => 10));
+    $formConfigurations->addInput('col_no'.$conf, $gL10n->get('CRT_DISPLAY_TEXT_MEMBERSHIP_NO'), $config['col_no'][$conf], array('maxLength' => 10));
     
     $sql = 'SELECT rol_id, rol_name, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
              WHERE cat_id = rol_cat_id
                AND ( cat_org_id = '.ORG_ID.'
                 OR cat_org_id IS NULL )';
-    $formConfigurations->addSelectBoxFromSql('selection_role'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_ROLE_SELECTION'), $gDb, $sql, array('defaultValue' => explode(',',$config['selection_role'][$conf]),'multiselect' => true));
+    $formConfigurations->addSelectBoxFromSql('selection_role'.$conf, $gL10n->get('CRT_ROLE_SELECTION'), $gDb, $sql, array('defaultValue' => explode(',',$config['selection_role'][$conf]),'multiselect' => true));
     
     $sql = 'SELECT cat_id, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
              WHERE cat_id = rol_cat_id
                AND ( cat_org_id = '.ORG_ID.'
                 OR cat_org_id IS NULL )';
-    $formConfigurations->addSelectBoxFromSql('selection_cat'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_CAT_SELECTION'), $gDb, $sql, array('defaultValue' => explode(',',$config['selection_cat'][$conf]),'multiselect' => true));
-    $formConfigurations->addCheckbox('number_col'.$conf, $gL10n->get('PLG_CATEGORY_REPORT_NUMBER_COL'), $config['number_col'][$conf]);
+    $formConfigurations->addSelectBoxFromSql('selection_cat'.$conf, $gL10n->get('CRT_CAT_SELECTION'), $gDb, $sql, array('defaultValue' => explode(',',$config['selection_cat'][$conf]),'multiselect' => true));
+    $formConfigurations->addCheckbox('number_col'.$conf, $gL10n->get('CRT_NUMBER_COL'), $config['number_col'][$conf]);
     if($num_configs != 1)
     {
-        $html = '<a id="delete_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences.php', array('add_delete' => $conf+1)).'">
-            <i class="fas fa-trash-alt"></i> '.$gL10n->get('PLG_CATEGORY_REPORT_DELETE_CONFIG').'</a>';
+        $html = '<a id="delete_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('add_delete' => $conf+1)).'">
+            <i class="fas fa-trash-alt"></i> '.$gL10n->get('CRT_DELETE_CONFIG').'</a>';
         $formConfigurations->addCustomContent('', $html);
     }
     
@@ -345,8 +344,8 @@ for ($conf=0;$conf<$num_configs;$conf++)
 }
 $formConfigurations->addDescription('</div>');
 $formConfigurations->addLine();
-$html = '<a id="add_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences.php', array('add_delete' => -1)).'">
-            <i class="fas fa-clone"></i> '.$gL10n->get('PLG_CATEGORY_REPORT_ADD_ANOTHER_CONFIG').'
+$html = '<a id="add_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('add_delete' => -1)).'">
+            <i class="fas fa-clone"></i> '.$gL10n->get('CRT_ADD_ANOTHER_CONFIG').'
         </a>';
 $htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
                 <i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'
@@ -354,36 +353,21 @@ $htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
 $formConfigurations->addCustomContent('', $html, array('helpTextIdInline' => $htmlDesc));   
 $formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));
 
-$page->addHtml(getPreferencePanel('common', 'configurations', $gL10n->get('PLG_CATEGORY_REPORT_CONFIGURATIONS'), 'fas fa-cogs', $formConfigurations->show()));
+$page->addHtml(getPreferencePanel('common', 'configurations', $gL10n->get('CRT_CONFIGURATIONS'), 'fas fa-cogs', $formConfigurations->show()));
 
 // PANEL: OPTIONS
 
 $formOptions = new HtmlForm(
-    'options_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences_function.php', array('form' => 'options')),
+    'options_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences_function.php', array('form' => 'options')),
     $page, array('class' => 'form-preferences')
 );
-$formOptions->addSelectBox('default_config', $gL10n->get('PLG_CATEGORY_REPORT_CONFIGURATION'),$config['col_desc'], array('defaultValue' => $gSettingsManager->get('category_report_default_configuration'), 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'PLG_CATEGORY_REPORT_CONFIGURATION_DEFAULT_DESC'));
-$html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/export_import.php', array('mode' => 1)).'">
-    <i class="fas fa-exchange-alt"></i> '.$gL10n->get('PLG_CATEGORY_REPORT_LINK_TO_EXPORT_IMPORT').'</a>';
-$formOptions->addCustomContent($gL10n->get('PLG_CATEGORY_REPORT_EXPORT_IMPORT'), $html, array('helpTextIdInline' => 'PLG_CATEGORY_REPORT_EXPORT_IMPORT_DESC'));
+$formOptions->addSelectBox('default_config', $gL10n->get('CRT_CONFIGURATION'),$config['col_desc'], array('defaultValue' => $gSettingsManager->get('category_report_default_configuration'), 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'CRT_CONFIGURATION_DEFAULT_DESC'));
+$html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/export_import.php', array('mode' => 1)).'">
+    <i class="fas fa-exchange-alt"></i> '.$gL10n->get('CRT_LINK_TO_EXPORT_IMPORT').'</a>';
+$formOptions->addCustomContent($gL10n->get('CRT_EXPORT_IMPORT'), $html, array('helpTextIdInline' => 'CRT_EXPORT_IMPORT_DESC'));
 $formOptions->addSubmitButton('btn_save_options', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));
 
-$page->addHtml(getPreferencePanel('common', 'options', $gL10n->get('PLG_CATEGORY_REPORT_OPTIONS'), 'fas fa-cog', $formOptions->show()));
-
-// PANEL: PLUGIN INFORMATIONS
-
-$formPluginInformations = new HtmlForm(
-    'plugin_informations_preferences_form', null,
-    $page, array('class' => 'form-preferences')
-);
-
-$formPluginInformations->addStaticControl('plg_name', $gL10n->get('PLG_CATEGORY_REPORT_PLUGIN_NAME'), $gL10n->get('PLG_CATEGORY_REPORT_HEADLINE'));
-
-$html = '<a class="icon-text-link" href="https://www.admidio.org/dokuwiki/doku.php?id=de:plugins:kategoriereport#kategoriereport" target="_blank">
-    <i class="fas fa-external-link-square-alt"></i> '.$gL10n->get('PLG_CATEGORY_REPORT_DOCUMENTATION_OPEN').'</a>';
-$formPluginInformations->addCustomContent($gL10n->get('PLG_CATEGORY_REPORT_DOCUMENTATION'), $html, array('helpTextIdInline' => 'PLG_CATEGORY_REPORT_DOCUMENTATION_OPEN_DESC'));
-
-$page->addHtml(getPreferencePanel('common', 'plugin_informations', $gL10n->get('PLG_CATEGORY_REPORT_PLUGIN_INFORMATION'), 'fas fa-info-circle', $formPluginInformations->show()));
+$page->addHtml(getPreferencePanel('common', 'options', $gL10n->get('CRT_OPTIONS'), 'fas fa-cog', $formOptions->show()));
 
 $page->addHtml('
         </div>

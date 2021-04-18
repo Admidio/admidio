@@ -3,9 +3,7 @@
  ***********************************************************************************************
  * Category Report
  *
- * This plugin creates a list of all roles and categories a member has.
- *
- * Compatible with Admidio version 4
+ * Creates a list of all roles and categories a member has.
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -20,9 +18,8 @@
  ***********************************************************************************************
  */
 
-require_once(__DIR__ . '/../../adm_program/system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 require_once(__DIR__ . '/common_function.php');
-require_once(__DIR__ . '/classes/genreport.php');
 
 //$scriptName ist der Name wie er im Menue eingetragen werden muss, also ohne evtl. vorgelagerte Ordner wie z.B. /playground/adm_plugins/category_report...
 $scriptName = substr($_SERVER['SCRIPT_NAME'], strpos($_SERVER['SCRIPT_NAME'], FOLDER_PLUGINS));
@@ -104,7 +101,7 @@ switch ($getMode)
 $csvStr = ''; 
 
 //die Anzeigeliste erzeugen 
-$report = new GenReport();
+$report = new CategoryReport();
 $report->conf = trim($getConfig,'X');
 $report->generate_listData();
 
@@ -120,8 +117,8 @@ if ($numMembers == 0)
 $columnCount = count($report->headerData);
     
 // define title (html) and headline
-$title       = $gL10n->get('PLG_CATEGORY_REPORT_HEADLINE');
-$headline    = $gL10n->get('PLG_CATEGORY_REPORT_HEADLINE');  
+$title       = $gL10n->get('CRT_HEADLINE');
+$headline    = $gL10n->get('CRT_HEADLINE');  
 $subheadline = $config['col_desc'][trim($getConfig,'X')];   
 
 $filename    = $g_organization.'-'.$headline.'-'.$subheadline;
@@ -212,7 +209,7 @@ if ($getMode !== 'csv')
         
         $page->addJavascript('
             $("#menu_item_lists_print_view").click(function() {
-                window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php', array(
+                window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'mode'              => 'print',
                     'filter'            => $getFilter, 
                     'export_and_filter' => $getExportAndFilter,
@@ -230,28 +227,28 @@ if ($getMode !== 'csv')
             // dropdown menu item with all export possibilities
             $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
             $page->addPageFunctionsMenuItem('menu_item_lists_csv_ms', $gL10n->get('SYS_MICROSOFT_EXCEL'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php', array(
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'config'            => $getConfig,
                     'filter'            => $getFilter, 
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'csv-ms')),
                 'fa-file-excel', 'menu_item_lists_export');
             $page->addPageFunctionsMenuItem('menu_item_lists_pdf', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php', array(
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'config'            => $getConfig,
                     'filter'            => $getFilter, 
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'pdf')),
                 'fa-file-pdf', 'menu_item_lists_export');
             $page->addPageFunctionsMenuItem('menu_item_lists_pdfl', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php', array(
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'config'            => $getConfig,
                     'filter'            => $getFilter, 
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'pdfl')),
                 'fa-file-pdf', 'menu_item_lists_export');
             $page->addPageFunctionsMenuItem('menu_item_lists_csv', $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php', array(
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'config'            => $getConfig,
                     'filter'            => $getFilter, 
                     'export_and_filter' => $getExportAndFilter,
@@ -267,8 +264,8 @@ if ($getMode !== 'csv')
         if ($gCurrentUser->isAdministrator())
 		{
     		// show link to pluginpreferences 
-    		$page->addPageFunctionsMenuItem('admMenuItemPreferencesLists', $gL10n->get('PLG_CATEGORY_REPORT_SETTINGS'),
-    		    ADMIDIO_URL . FOLDER_PLUGINS . PLUGIN_FOLDER .'/preferences.php',  'fa-cog');
+    		$page->addPageFunctionsMenuItem('admMenuItemPreferencesLists', $gL10n->get('CRT_SETTINGS'),
+    		    ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php',  'fa-cog');
 		}
 
 		// process changes in the navbar form with javascript submit
@@ -287,14 +284,14 @@ if ($getMode !== 'csv')
 		    $selectBoxEntries['X'.$key.'X'] = $item;
 		}
 	
-		$form = new HtmlForm('navbar_catreport_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_PLUGINS . PLUGIN_FOLDER .'/category_report.php', array('headline' => $headline)), $page, array('type' => 'navbar', 'setFocus' => false));
-		$form->addSelectBox('config', $gL10n->get('PLG_CATEGORY_REPORT_SELECT_CONFIGURATION'), $selectBoxEntries, array('showContextDependentFirstEntry' => false,'defaultValue' => $getConfig));
+		$form = new HtmlForm('navbar_catreport_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array('headline' => $headline)), $page, array('type' => 'navbar', 'setFocus' => false));
+		$form->addSelectBox('config', $gL10n->get('CRT_SELECT_CONFIGURATION'), $selectBoxEntries, array('showContextDependentFirstEntry' => false,'defaultValue' => $getConfig));
 		
         if ($getExportAndFilter)
         {
             $form->addInput('filter', $gL10n->get('SYS_FILTER'), $getFilter);
         }
-        $form->addCheckbox('export_and_filter', $gL10n->get('PLG_CATEGORY_REPORT_EXPORT_AND_FILTER'), $getExportAndFilter);
+        $form->addCheckbox('export_and_filter', $gL10n->get('CRT_EXPORT_AND_FILTER'), $getExportAndFilter);
 
 		$page->addHtml($form->show());
 		

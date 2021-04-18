@@ -1,5 +1,53 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--Phrases only in CategoryReportmodule-->
+  <string name="CRT_ADD_ANOTHER_COLUMN">Ajouter une colonne supplémentaire</string>
+  <string name="CRT_ADD_ANOTHER_CONFIG">Ajouter une configuration supplémentaire</string>
+  <string name="CRT_ADDITIONAL_COLS">Colonnes supplémentaires</string>
+  <string name="CRT_CAT_SELECTION">Sélection de catégorie</string>
+  <string name="CRT_CAT_SELECTION_CONF_DESC">Par la sélection de catégorie, une configuration peut être limitée aux membres des rôles des catégories sélectionnées.\n\n Si aucune restriction ne doit être faite, les deux champs (sélection de rôle et sélection de catégorie) doivent être laissées vides.</string>
+  <string name="CRT_COL_DESC">Nom</string>
+  <string name="CRT_COL_DESC_DESC">Le nom saisi ici apparaît dans "Sélectionner configuration...".\n\nUne configuration peut être supprimée en supprimant le contenu du champ Nom.</string>
+  <string name="CRT_COLUMN">Colonne</string>
+  <string name="CRT_COLUMN_SELECTION">Sélection de colonne</string>
+  <string name="CRT_COLUMN_SELECTION_DESC">Sélectionne les colonnes à afficher dans la liste. Les rôles inactifs sont marqués avec (*).</string>
+  <string name="CRT_COLUMNS">Colonnes</string>
+  <string name="CRT_CONFIGURATION">Configuration</string>
+  <string name="CRT_CONFIGURATION_DEFAULT_DESC">Paramètres de configuration par défaut</string>
+  <string name="CRT_CONFIGURATIONS">Configurations</string>
+  <string name="CRT_CONFIGURATIONS_HEADER">Ici tu peux créer autant de configuration pour les rapports par catégories que nécessaires. Dans l\'affichage à l\'écran, l\'une de ces configurations sert de base à l\'affichage par "Sélectionner configuration...".</string>
+  <string name="CRT_DELETE_CONFIG">Supprimer cette configuration</string>
+  <string name="CRT_DISPLAY_TEXT_MEMBERSHIP_NO">Texte si pas membre</string>
+  <string name="CRT_DISPLAY_TEXT_MEMBERSHIP_NO_DESC">Texte si membre d\'aucun rôle ou d\'aucune catégorie.\n(p.ex. non ou false).</string>
+  <string name="CRT_DISPLAY_TEXT_MEMBERSHIP_YES">Texte si membre</string>
+  <string name="CRT_DISPLAY_TEXT_MEMBERSHIP_YES_DESC">Texte si membre d\'un rôle ou d\'une catégorie.\n(p.ex. oui ou true ou X).</string>
+  <string name="CRT_EXPORT">Export</string>
+  <string name="CRT_EXPORT_AND_FILTER">Exporter et filtrer</string>
+  <string name="CRT_EXPORT_DESC">Sélectionnez la configuration à exporter. L\'export crée un fichier avec l\'extension .cfg et le nom de la configuration.</string>
+  <string name="CRT_EXPORT_IMPORT">Export/Import</string>
+  <string name="CRT_EXPORT_IMPORT_DESC">Ceci peut être utilisé pour la sauvegarde ou pour exporter et importer des configurations pour le transfert de données.</string>
+  <string name="CRT_HEADLINE">Rapport par catégorie</string>
+  <string name="CRT_IMPORT">Import</string>
+  <string name="CRT_IMPORT_DESC">Sélectionnez la configuration à importer (Note : Seuls les fichiers avec l\'extension .cfg peuvent être importés).</string>
+  <string name="CRT_IMPORT_ERROR_FILE">Le fichier sélectionné ne contient pas de données de configuration valides.</string>
+  <string name="CRT_IMPORT_ERROR_OTHER">Une erreur générale s\'est produite lors du téléchargement et de la vérification du fichier. La cause de l\'erreur peut être, par exemple, une extension de fichier incorrecte ou un fichier trop volumineux.</string>
+  <string name="CRT_IMPORT_INFO">La fonction d'exportation / importation est principalement destinée à enregistrer une configuration et à la restaurer dans le même environnement. Si le fichier de sauvegarde est importé dans une autre installation Admidio, des ID de rôle différents (par exemple, le membre de rôle a l'ID 23 dans la 1ère installation et l'ID 25 dans la 2ème installation) pourrait conduire à une importation incorrecte.</string>
+  <string name="CRT_IMPORT_SUCCESS">La configuration a été ajoutée.</string>
+  <string name="CRT_LINK_TO_DEINSTALLATION">Aller à la désinstallation</string>
+  <string name="CRT_LINK_TO_EXPORT_IMPORT">Changer à l\'export/import</string>       
+  <string name="CRT_MENU_URL_ERROR">Le contrôle d\'autorisation du plugin a échoué. Plus d\'un élément de menu est défini avec la même URL.\n\n=> #VAR1_BOLD#</string> 
+  <string name="CRT_NUMBER_COL">Nombre (Colonne)</string> 
+  <string name="CRT_NUMBER_COL_DESC">Si une ligne avec le nombre de membres doit être affichée à la fin du rapport, la coche doit être cochée.</string>
+  <string name="CRT_NUMBER_ROW">Nombre (Ligne)</string>             
+  <string name="CRT_OPTIONS">Options</string>
+  <string name="CRT_ORG_CHOICE">Choix de l\'organisation</string>
+  <string name="CRT_PATTERN">Exemple de configuration</string>
+  <string name="CRT_ROLE_SELECTION">Sélection des rôles</string>
+  <string name="CRT_ROLE_SELECTION_CONF_DESC">Une configuration peut être limitée aux membres des rôles sélectionnés via la sélection de rôle.\n\n Si aucune restriction ne doit être faite, les deux champs (sélection de rôle et sélection de catégorie) doivent être laissées vides.</string>
+  <string name="CRT_ROLEMEMBERSHIPS">Appartenances aux rôles</string>
+  <string name="CRT_SELECT_CONFIGURATION">Sélectionner configuration</string>
+  <string name="CRT_SETTINGS">Configurations</string>  
+  <string name="CRT_WITHOUT">sans</string>  
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Ajouter un événement à l\'agenda</string>
   <string name="DAT_ALL_DAY">Plein temps</string>

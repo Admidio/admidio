@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Functions for the Preferences module of the admidio plugin Category Report
+ * Preferences functions for the admidio module CategoryReport
  * 
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -14,7 +14,7 @@
  ***********************************************************************************************
  */
 
-require_once(__DIR__ . '/../../adm_program/system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 require_once(__DIR__ . '/common_function.php');
 
 // only authorized user are allowed to start this module
@@ -60,7 +60,7 @@ try
    				
    				if ($allColumnsEmpty)
    				{
-   					$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('PLG_CATEGORY_REPORT_COLUMN')));
+   					$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('CRT_COLUMN')));
    				}
    				
    				$config['col_fields'][] = substr($fields,0,-1);
