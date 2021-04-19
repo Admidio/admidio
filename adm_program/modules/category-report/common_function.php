@@ -17,69 +17,6 @@ if(!defined('ORG_ID'))
 }
 
 /**
- * Funktion prueft, ob der Nutzer berechtigt ist das Plugin aufzurufen.
- * Zur Prüfung werden die Einstellungen von 'Modulrechte' und 'Sichtbar für' 
- * verwendet, die im Modul Menü für dieses Plugin gesetzt wurden.
- * Zusätzlich muss der Nutzer immer mindestens einer Rolle mit der Berechtigung
- * 'Mitgliederlisten aller Rollen einsehen' angehören.
- * @param   string  $scriptName   Der Scriptname des Plugins
- * @return  bool    true, wenn der User berechtigt ist
- */
-function isUserAuthorized($scriptName)
-{
-	global $gDb, $gCurrentUser, $gMessage, $gL10n, $gLogger;
-	
-	$userIsAuthorized = false;
-	$menId = 0;
-	
-	$sql = 'SELECT men_id
-              FROM '.TBL_MENU.'
-             WHERE men_url = ? -- $scriptName ';
-	
-	$menuStatement = $gDb->queryPrepared($sql, array($scriptName));
-	
-	if ( $menuStatement->rowCount() === 0 || $menuStatement->rowCount() > 1)
-	{
-		$gLogger->notice('CategoryReport: Error with menu entry: Found rows: '. $menuStatement->rowCount() );
-		$gLogger->notice('CategoryReport: Error with menu entry: ScriptName: '. $scriptName);
-		$gMessage->show($gL10n->get('CRT_MENU_URL_ERROR', array($scriptName)), $gL10n->get('SYS_ERROR'));
-	}
-	else
-	{
-		while ($row = $menuStatement->fetch())
-		{
-			$menId = (int) $row['men_id'];
-		}
-	}
-	
-	$sql = 'SELECT men_id, men_com_id, com_name_intern
-              FROM '.TBL_MENU.'
-         LEFT JOIN '.TBL_COMPONENTS.'
-                ON com_id = men_com_id
-             WHERE men_id = ? -- $menId
-          ORDER BY men_men_id_parent DESC, men_order';
-	
-	$menuStatement = $gDb->queryPrepared($sql, array($menId));
-	
-	while ($row = $menuStatement->fetch())
-	{
-		if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
-		{
-			// Read current roles rights of the menu
-			$displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
-			$rolesDisplayRight = $displayMenu->getRolesIds();
-			
-			// check for right to show the menu
-			if ((count($rolesDisplayRight) === 0 || $displayMenu->hasRight($gCurrentUser->getRoleMemberships())) && $gCurrentUser->checkRolesRight('rol_all_lists_view'))
-			{
-				$userIsAuthorized = true;
-			}
-		}
-	}
-	return $userIsAuthorized;
-}
-
-/**
  * Funktion überprueft den übergebenen Namen, ob er gemaess den Namenskonventionen für
  * Profilfelder und Kategorien zum Uebersetzen durch eine Sprachdatei geeignet ist
  * Bsp: SYS_COMMON --> Rueckgabe true

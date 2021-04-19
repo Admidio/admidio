@@ -26,7 +26,6 @@
   <string name="CRT_EXPORT_DESC">Wählen Sie die zu exportierende Konfiguration aus. Export erstellt dabei eine Datei mit der Endung .cfg und dem Namen der Konfiguration.</string>
   <string name="CRT_EXPORT_IMPORT">Export/Import</string>
   <string name="CRT_EXPORT_IMPORT_DESC">Hiermit können Konfigurationen zur Datensicherung oder zur Weitergabe sowohl exportiert als auch importiert werden.</string>
-  <string name="CRT_HEADLINE">Kategoriereport</string>
   <string name="CRT_IMPORT">Import</string>
   <string name="CRT_IMPORT_DESC">Wählen Sie die zu importierende Konfiguration aus (Hinweis: Es können nur Dateien mit der Endung .cfg importiert werden).</string>
   <string name="CRT_IMPORT_ERROR_FILE">Die ausgewählte Datei enthält keine gültigen Konfigurationsdaten.</string>
@@ -34,8 +33,7 @@
   <string name="CRT_IMPORT_INFO">Die Funktion Export/Import ist vorrangig dafür gedacht, eine Konfiguration zu sichern und in dieselbe Umgebung wieder einzuspielen. Wird die Sicherungsdatei in eine andere Admidio-Installation importiert könnten unterschiedliche Rollen-IDs (z.B. Rolle Mitglied besitzt in der 1. Installation die ID 23 und in der 2. Installation die ID 25) zu einem fehlerhaften Import führen.</string> 
   <string name="CRT_IMPORT_SUCCESS">Die Konfiguration wurde hinzugefügt.</string>
   <string name="CRT_LINK_TO_DEINSTALLATION">Zur Deinstallation wechseln</string>
-  <string name="CRT_LINK_TO_EXPORT_IMPORT">Zu Export/Import wechseln</string>    
-  <string name="CRT_MENU_URL_ERROR">Die Authorisierungsprüfung des Plugins ist fehlgeschlagen. Es ist mehr als ein Menüpunkt mit derselben URL definiert.\n\n=> #VAR1_BOLD#</string>     
+  <string name="CRT_LINK_TO_EXPORT_IMPORT">Zu Export/Import wechseln</string>        
   <string name="CRT_NUMBER_COL">Anzahl (Spalte)</string> 
   <string name="CRT_NUMBER_COL_DESC">Soll am Ende des Reports eine Zeile mit der Anzahl der Mitgliedschaften angezeigt werden, so ist der Haken zu setzen.</string>
   <string name="CRT_NUMBER_ROW">Anzahl (Zeile)</string>       
@@ -807,6 +805,7 @@
   <string name="SYS_CATEGORY">Kategorie</string>
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
+  <string name="SYS_CATEGORY_REPORT">Kategoriereport</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\nMöchten Sie die Daten nur in Ihrer Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-Kategorie</string>
   <string name="SYS_CHANGE_PASSWORD">Passwort ändern</string>
@@ -965,6 +964,8 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
   <string name="SYS_EMAIL_TO_LIST">E-Mail an Liste</string>
   <string name="SYS_EMPTY">Leer</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE">Modul Kategoriereport aktivieren</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE_DESC">Das Modul Kategoriereport erzeugt eine Auflistung von Rollen- und Kategoriezugehörigkeiten eines Mitglieds. Zum Betrieb ist die Berechtigung "Mitgliederlisten aller Rollen einsehen" erforderlich. (Voreinstellung: ja)</string>  
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Downloadmodul aktivieren</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Downloadmodul kann über diese Einstellung aktiviert oder deaktiviert werden. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Gruppen &amp; Rollen aktivieren</string>

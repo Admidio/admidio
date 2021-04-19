@@ -21,15 +21,28 @@
 require_once(__DIR__ . '/../../system/common.php');
 require_once(__DIR__ . '/common_function.php');
 
-//$scriptName ist der Name wie er im Menue eingetragen werden muss, also ohne evtl. vorgelagerte Ordner wie z.B. /playground/adm_plugins/category_report...
-$scriptName = substr($_SERVER['SCRIPT_NAME'], strpos($_SERVER['SCRIPT_NAME'], FOLDER_PLUGINS));
-
-// only authorized user are allowed to start this module
-if (!isUserAuthorized($scriptName))
+//diese IF-Abfrage ist nur während der Umstellungsphase erforderlich 
+//die Default-Einstellung von 'category_report_enable_module' soll später bei der Admidio-Installation (oder Update) gesetzt werden
+if (!$gSettingsManager->has('category_report_enable_module'))
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gSettingsManager->set('category_report_enable_module', 0);
 }
 
+// check if the module is enabled and disallow access if it's disabled
+if (!$gSettingsManager->getBool('category_report_enable_module'))
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
+// user must have the permission "rol_assign_roles"
+if (!$gCurrentUser->checkRolesRight('rol_assign_roles'))
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
+}
+
+// ----> toDo      ---    Speicherung der Konfigurationen in eigenen Tabellen
 if (!$gSettingsManager->has('category_report_col_desc'))
 {
     $config = initConfigArray();
@@ -40,6 +53,8 @@ else
     $config = getConfigArray();
 }
 
+//diese IF-Abfrage ist nur während der Umstellungsphase erforderlich
+//die Default-Einstellung von 'category_report_default_configuration' soll später bei der Admidio-Installation (oder Update) gesetzt werden
 if (!$gSettingsManager->has('category_report_default_configuration'))
 {
     $gSettingsManager->set('category_report_default_configuration', 0);
@@ -117,8 +132,8 @@ if ($numMembers == 0)
 $columnCount = count($report->headerData);
     
 // define title (html) and headline
-$title       = $gL10n->get('CRT_HEADLINE');
-$headline    = $gL10n->get('CRT_HEADLINE');  
+$title       = $gL10n->get('SYS_CATEGORY_REPORT');
+$headline    = $gL10n->get('SYS_CATEGORY_REPORT');  
 $subheadline = $config['col_desc'][trim($getConfig,'X')];   
 
 $filename    = $g_organization.'-'.$headline.'-'.$subheadline;

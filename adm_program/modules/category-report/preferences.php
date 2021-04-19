@@ -32,7 +32,7 @@ $showOption   = admFuncVariableIsValid($_GET, 'show_option', 'string');
 
 $config = getConfigArray(); 
 
-$headline = $gL10n->get('CRT_HEADLINE');
+$headline = $gL10n->get('SYS_CATEGORY_REPORT');
 
 if ($getAddDelete === -1)
 {

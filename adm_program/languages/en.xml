@@ -26,7 +26,6 @@
   <string name="CRT_EXPORT_DESC">Choose from the configuration that is to be exported. Export creates a file with the extension .cfg and the name of the configuration.</string>
   <string name="CRT_EXPORT_IMPORT">Export/Import</string>
   <string name="CRT_EXPORT_IMPORT_DESC">This configuration can be imported and exported for backup or distribution.</string>
-  <string name="CRT_HEADLINE">Category report</string>
   <string name="CRT_IMPORT">Import</string>
   <string name="CRT_IMPORT_DESC">Choose the configuration that is to be imported (Note: It can be imported with the extension .cfg files only).</string>
   <string name="CRT_IMPORT_ERROR_FILE">The selected file does not contain valid configuration data.</string>
@@ -35,7 +34,6 @@
   <string name="CRT_IMPORT_SUCCESS">The configuration has been added.</string>
   <string name="CRT_LINK_TO_DEINSTALLATION">Skip to uninstall</string>
   <string name="CRT_LINK_TO_EXPORT_IMPORT">Skip zu export/import</string>       
-  <string name="CRT_MENU_URL_ERROR">The authorization check of the plugin failed. There is more than one menu item with the same URL defined.\n\n=> #VAR1_BOLD#</string> 
   <string name="CRT_NUMBER_COL">Number (Column)</string> 
   <string name="CRT_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
   <string name="CRT_NUMBER_ROW">Number (Row)</string>       
@@ -807,6 +805,7 @@
   <string name="SYS_CATEGORY">Category</string>
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Category name already exists in selected organization.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
+  <string name="SYS_CATEGORY_REPORT">Category report</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-category</string>
   <string name="SYS_CHANGE_PASSWORD">Change password</string>
@@ -965,6 +964,8 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-mail to members</string>
   <string name="SYS_EMAIL_TO_LIST">E-mail to list</string>
   <string name="SYS_EMPTY">Empty</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE">Activate category report module</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE_DESC">Category report creates a list of all roles and categories a member has. The authorization "View membership lists of all roles" is required for operation. (Default: yes)</string>  
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activate documents &amp; files module</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">The documents &amp; files module can be activated or deactivated via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Enable groups &amp; roles module</string>
