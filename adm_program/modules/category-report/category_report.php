@@ -21,11 +21,15 @@
 require_once(__DIR__ . '/../../system/common.php');
 require_once(__DIR__ . '/common_function.php');
 
-//diese IF-Abfrage ist nur während der Umstellungsphase erforderlich 
-//die Default-Einstellung von 'category_report_enable_module' soll später bei der Admidio-Installation (oder Update) gesetzt werden
+// initCategoryReportTable() ist nur während der Umstellungsphase erforderlich
+// die erforderliche Tabelle soll später bei der Admidio-Installation (oder Update) erzeugt werden
+initCategoryReportTable();
+
+// diese IF-Abfrage ist nur während der Umstellungsphase erforderlich 
+// die Default-Einstellung von 'category_report_enable_module' soll später bei der Admidio-Installation (oder Update) gesetzt werden
 if (!$gSettingsManager->has('category_report_enable_module'))
 {
-    $gSettingsManager->set('category_report_enable_module', 0);
+    $gSettingsManager->set('category_report_enable_module', 1);
 }
 
 // check if the module is enabled and disallow access if it's disabled
@@ -42,19 +46,19 @@ if (!$gCurrentUser->checkRolesRight('rol_assign_roles'))
     // => EXIT
 }
 
-// ----> toDo      ---    Speicherung der Konfigurationen in eigenen Tabellen
-if (!$gSettingsManager->has('category_report_col_desc'))
+// das Konfigurationsarray einlesen
+$config = getConfigArray();
+
+// wenn $config jetzt noch leer ist, dann ist das der erste Aufruf des Moduls
+// $config mit Default-Werten initialisieren und anschließend in DB speichern
+if (empty($config))
 {
     $config = initConfigArray();
     saveConfigArray();
 }
-else
-{
-    $config = getConfigArray();
-}
 
-//diese IF-Abfrage ist nur während der Umstellungsphase erforderlich
-//die Default-Einstellung von 'category_report_default_configuration' soll später bei der Admidio-Installation (oder Update) gesetzt werden
+// diese IF-Abfrage ist nur während der Umstellungsphase erforderlich
+// die Default-Einstellung von 'category_report_default_configuration' soll später bei der Admidio-Installation (oder Update) gesetzt werden
 if (!$gSettingsManager->has('category_report_default_configuration'))
 {
     $gSettingsManager->set('category_report_default_configuration', 0);

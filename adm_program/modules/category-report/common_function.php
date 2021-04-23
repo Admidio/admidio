@@ -103,9 +103,7 @@ function isMemberOfCategorie($cat_id, $user_id = 0)
  */
 function createColDescConfig($name)
 {
-  //  global $pPreferences, $gL10n;
     global $config, $gL10n;
-    
     
     while (in_array($name, $config['col_desc']))
     {
@@ -124,16 +122,16 @@ function initConfigArray()
 {
     global $gL10n, $gProfileFields;
     
-    $config = array(	'col_desc' 		=> array($gL10n->get('CRT_PATTERN')),
-                        'col_fields' 	=> array(	'p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
-                                                    'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
-                                                    'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
-                                                    'p'.$gProfileFields->getProperty('CITY', 'usf_id')),
-                        'col_yes'		=> array('ja'),
-                        'col_no'		=> array('nein'),
-                        'selection_role'=> array(' '),
-                        'selection_cat'	=> array(' '),
-                        'number_col'	=> array(0)  );
+    $config = array('col_desc' 		=> array($gL10n->get('CRT_PATTERN')),
+                    'col_fields' 	=> array('p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
+                                             'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
+                                             'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
+                                             'p'.$gProfileFields->getProperty('CITY', 'usf_id')),
+                    'col_yes'		=> array('ja'),
+                    'col_no'		=> array('nein'),
+                    'selection_role'=> array(' '),
+                    'selection_cat'	=> array(' '),
+                    'number_col'	=> array(0)  );
         
     return $config;
 }
@@ -145,19 +143,30 @@ function initConfigArray()
  */
 function getConfigArray()
 {
-    global  $gSettingsManager;
-    $dbtoken  = '#_#';  
-    
+    global  $gDb; 
+
     $config = array();
-    $config['col_desc']       = explode($dbtoken, $gSettingsManager->get('category_report_col_desc')); 
-    $config['col_fields']     = explode($dbtoken, $gSettingsManager->get('category_report_col_fields')); 
-    $config['col_yes']        = explode($dbtoken, $gSettingsManager->get('category_report_col_yes')); 
-    $config['col_no']         = explode($dbtoken, $gSettingsManager->get('category_report_col_no')); 
-    $config['selection_role'] = explode($dbtoken, $gSettingsManager->get('category_report_selection_role')); 
-    $config['selection_cat']  = explode($dbtoken, $gSettingsManager->get('category_report_selection_cat')); 
-    $config['number_col']     = explode($dbtoken, $gSettingsManager->get('category_report_number_col')); 
-    $config['col_desc']       = explode($dbtoken, $gSettingsManager->get('category_report_col_desc')); 
+    $i = 0;
     
+    $tableName = TABLE_PREFIX . '_category_report';
+
+    $sql = ' SELECT *
+               FROM '.$tableName.'
+              WHERE ( crt_org_id = ?
+                 OR crt_org_id IS NULL ) ';
+    $statement = $gDb->queryPrepared($sql, array( ORG_ID));
+        
+    while($row = $statement->fetch())
+    {
+        $config['col_desc'][$i]       = $row['crt_col_desc'];
+        $config['col_fields'][$i]     = $row['crt_col_fields'];
+        $config['col_yes'][$i]        = $row['crt_col_yes'];
+        $config['col_no'][$i]         = $row['crt_col_no'];
+        $config['selection_role'][$i] = $row['crt_selection_role'];
+        $config['selection_cat'][$i]  = $row['crt_selection_cat'];
+        $config['number_col'][$i]     = $row['crt_number_col'];
+        ++$i;
+    }
     return $config;
 }
 
@@ -167,14 +176,83 @@ function getConfigArray()
  */
 function saveConfigArray()
 {
-    global  $gSettingsManager, $config;
-    $dbtoken  = '#_#';
+    global  $config, $gDb;
     
-    foreach ($config as $name => $value)
+    $tableName = TABLE_PREFIX . '_category_report';
+    $numConfig = count($config['col_desc']);
+    $crtDb = array();
+        
+    $sql = ' SELECT crt_id
+               FROM '.$tableName.'
+              WHERE ( crt_org_id = ?
+                 OR crt_org_id IS NULL ) ';
+    $statement = $gDb->queryPrepared($sql, array( ORG_ID));
+        
+    while($row = $statement->fetch())
     {
-        $gSettingsManager->set('category_report_'.$name, implode($dbtoken,$value));
+        $crtDb[] = $row['crt_id'];
     }
     
+    $numCrtDb = count($crtDb);
+        
+    for($i = $numConfig; $i < $numCrtDb; ++$i)
+    {
+        $categoryReport = new TableAccess($gDb, TABLE_PREFIX . '_category_report', 'crt', $crtDb[$i]);
+        $categoryReport->delete();
+        unset($crtDb[$i]);
+    }
+        
+    foreach ($config['col_desc'] as $i => $dummy)
+    {
+        $categoryReport = new TableAccess($gDb, TABLE_PREFIX . '_category_report', 'crt');
+        if (isset($crtDb[$i]))
+        {
+            $categoryReport->readDataById($crtDb[$i]);
+        }
+            
+        $categoryReport->setValue('crt_org_id', ORG_ID);
+        $categoryReport->setValue('crt_col_desc', $config['col_desc'][$i]);
+        $categoryReport->setValue('crt_col_fields', $config['col_fields'][$i]);
+        $categoryReport->setValue('crt_col_yes', $config['col_yes'][$i]);
+        $categoryReport->setValue('crt_col_no', $config['col_no'][$i]);
+        $categoryReport->setValue('crt_selection_role', $config['selection_role'][$i]);
+        $categoryReport->setValue('crt_selection_cat', $config['selection_cat'][$i]);
+        $categoryReport->setValue('crt_number_col', $config['number_col'][$i]);
+        $categoryReport->save();
+    }
+    return;
+}
+
+/**
+ * Funktion legt die Tabelle adm_category_report an
+ * @param   none
+ */
+function initCategoryReportTable()
+{
+    global  $gDb;
+    
+    $tableName =  TABLE_PREFIX . '_category_report';
+    
+    // pruefen, ob es die Tabelle bereits gibt
+    $sql = 'SHOW TABLES LIKE \''.$tableName.'\' ';
+    $statement = $gDb->query($sql);
+    
+    // Tabelle anlegen, wenn es sie noch nicht gibt
+    if (!$statement->rowCount())
+    {
+        $sql='CREATE TABLE '.$tableName.'
+				(crt_id int(10) unsigned NOT NULL AUTO_INCREMENT,
+	  			crt_org_id int(10) unsigned NOT NULL,
+	  			crt_col_desc varchar(100)   NOT NULL,
+	  			crt_col_fields text,
+				crt_col_yes varchar(100)   NOT NULL,
+				crt_col_no varchar(100)   NOT NULL,
+                crt_selection_role varchar(100)   NOT NULL,
+                crt_selection_cat varchar(100)   NOT NULL,
+				crt_number_col boolean  NOT NULL DEFAULT \'0\',
+	  			PRIMARY KEY (crt_id) ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
+        $gDb->query($sql);
+    }
     return;
 }
 
