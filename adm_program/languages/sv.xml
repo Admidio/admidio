@@ -271,11 +271,11 @@
   <!--Phrases only in Mailmodule-->
   <string name="MAI_ACTIVATE_EMAIL_MODULE">Aktivering av e-postmodul</string>
   <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">E-postmodulen kan aktiveras eller inaktiveras via denna inställning. Om servern inte stöder e-post bör modulen vara inaktiverad. (Standard: aktiverad)</string>
-  <string name="MAI_ADD_ATTACHEMENT">Bifoga fil</string>
-  <string name="MAI_ATTACHEMENT">Bilaga</string>
-  <string name="MAI_ATTACHMENT_SIZE">Maximal storlek på e-postbilagor</string>
-  <string name="MAI_ATTACHMENT_SIZE_DESC">Användare kan bara bifoga filer där filstorleken är mindre än det värde som anges här. Om det finns 0 här är inga bilagor möjliga i e-postmodulen. (Standard: 1 MB)</string>
-  <string name="MAI_ATTACHMENT_TO_LARGE">Uppladdningsfel för e-postbilaga. \n Filstorlek är troligtvis stort!</string>
+  <string name="SYS_ADD_ATTACHMENT">Bifoga fil</string>
+  <string name="SYS_ATTACHMENT">Bilaga</string>
+  <string name="SYS_ATTACHMENT_SIZE">Maximal storlek på e-postbilagor</string>
+  <string name="SYS_ATTACHMENT_SIZE_DESC">Användare kan bara bifoga filer där filstorleken är mindre än det värde som anges här. Om det finns 0 här är inga bilagor möjliga i e-postmodulen. (Standard: 1 MB)</string>
+  <string name="SYS_ATTACHMENT_TO_LARGE">Uppladdningsfel för e-postbilaga. \n Filstorlek är troligtvis stort!</string>
   <string name="MAI_CAPTCHA_DESC">När alternativet är aktiverat kommer inloggade användare att få en bild med en captcha-kod eller en enkel beräkning. Det är nödvändigt att fylla i rätt kod eller resultat för att skicka e-post. Captcha är en del av antispam-lösningen i Admidio. (standard: ja)</string>
   <string name="MAI_CARBON_COPY">Kopia (CC)</string>
   <string name="MAI_CHARACTER_ENCODING">Teckenkodning</string>

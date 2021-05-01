@@ -464,7 +464,7 @@ class TableMessage extends TableAccess
                 $returnValue = $this->msgContentObject->save();
             }
 
-            $this->saveAttachements();
+            $this->saveAttachments();
         }
 
         return $returnValue;
@@ -476,7 +476,7 @@ class TableMessage extends TableAccess
      * message.
      * @throw RuntimeException Folder could not be created
      */
-    protected function saveAttachements()
+    protected function saveAttachments()
     {
         try
         {
@@ -497,11 +497,11 @@ class TableMessage extends TableAccess
             FileSystemUtils::copyFile($attachement[0], ADMIDIO_PATH . FOLDER_DATA . '/messages/attachements/' . $file_name);
 
             // save message recipient as TableAcess object to the array
-            $messageAttachement = new TableAccess($this->db, TBL_MESSAGES_ATTACHMENTS, 'msa');
-            $messageAttachement->setValue('msa_msg_id', $this->getValue('msg_id'));
-            $messageAttachement->setValue('msa_file_name', $file_name);
-            $messageAttachement->setValue('msr_original_file_name', $attachement[1]);
-            $messageAttachement->save();
+            $messageAttachment = new TableAccess($this->db, TBL_MESSAGES_ATTACHMENTS, 'msa');
+            $messageAttachment->setValue('msa_msg_id', $this->getValue('msg_id'));
+            $messageAttachment->setValue('msa_file_name', $file_name);
+            $messageAttachment->setValue('msr_original_file_name', $attachement[1]);
+            $messageAttachment->save();
         }
     }
 

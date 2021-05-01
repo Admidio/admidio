@@ -270,11 +270,11 @@
   <!--Phrases only in Mailmodule-->
   <string name="MAI_ACTIVATE_EMAIL_MODULE">Aktiver e-mail modul</string>
   <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">E-mail-modulet kan aktiveres eller deaktiveres via denne indstilling. Hvis serveren ikke understøtter e-mail, skal modulet være deaktiveret. (Standard: aktiveret)</string>
-  <string name="MAI_ADD_ATTACHEMENT">Vedhæft fil</string>
-  <string name="MAI_ATTACHEMENT">Vedhæftet:</string>
-  <string name="MAI_ATTACHMENT_SIZE">Maximum størrelse af vedhæftede filer (tilsammen)</string>
-  <string name="MAI_ATTACHMENT_SIZE_DESC">Brugere kan kun vedhæfte filer, hvor filstørrelsen er mindre end den her angivne værdi. Hvis der er 0 her, er der ingen mulighed for vedhæftede filer i e-mail-modulet. (Standard: 1 MB)</string>
-  <string name="MAI_ATTACHMENT_TO_LARGE">Filerne vedhæftet e-mailen kunne ikke overføres.\nFilen er sikkert for stor!</string>
+  <string name="SYS_ADD_ATTACHMENT">Vedhæft fil</string>
+  <string name="SYS_ATTACHMENT">Vedhæftet:</string>
+  <string name="SYS_ATTACHMENT_SIZE">Maximum størrelse af vedhæftede filer (tilsammen)</string>
+  <string name="SYS_ATTACHMENT_SIZE_DESC">Brugere kan kun vedhæfte filer, hvor filstørrelsen er mindre end den her angivne værdi. Hvis der er 0 her, er der ingen mulighed for vedhæftede filer i e-mail-modulet. (Standard: 1 MB)</string>
+  <string name="SYS_ATTACHMENT_TO_LARGE">Filerne vedhæftet e-mailen kunne ikke overføres.\nFilen er sikkert for stor!</string>
   <string name="MAI_CAPTCHA_DESC">Når indstillingen er aktiveret, vil de indloggede brugere modtage et billede med en captcha-kode eller en simpel beregning. Det er nødvendigt at udfylde den korrekte kode eller resultat for at sende mailen. Captcha er en del af antispam-løsning i Admidio. (standard: ja)</string>
   <string name="MAI_CARBON_COPY">Karbon Kopi(CC)</string>
   <string name="MAI_CHARACTER_ENCODING">Karakter kodning</string>

@@ -270,11 +270,11 @@
   <!--Phrases only in Mailmodule-->
   <string name="MAI_ACTIVATE_EMAIL_MODULE">E-mail module activeren</string>
   <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">De e-mail module kan geactiveerd en gedeactiveerd worden via deze instelling. Als de server het versturen van e-mails niet ondersteunt, deze module svp deactiveren. (Standaard: geactiveerd)</string>
-  <string name="MAI_ADD_ATTACHEMENT">Bestand bijvoegen</string>
-  <string name="MAI_ATTACHEMENT">Bijlage</string>
-  <string name="MAI_ATTACHMENT_SIZE">Maximale grootte van bijlagen</string>
-  <string name="MAI_ATTACHMENT_SIZE_DESC">Gebruikers kunnen een bestand bijvoegen die kleiner is dan de grootte die hier ingesteld is. Als waarde 0 is, zijn geen bijlagen in de e-mail module mogelijk. (Standaard: 1MB)</string>
-  <string name="MAI_ATTACHMENT_TO_LARGE">Uploaden bijlage is mislukt.\nWaarschijnlijk is het bestand te groot!</string>
+  <string name="SYS_ADD_ATTACHMENT">Bestand bijvoegen</string>
+  <string name="SYS_ATTACHMENT">Bijlage</string>
+  <string name="SYS_ATTACHMENT_SIZE">Maximale grootte van bijlagen</string>
+  <string name="SYS_ATTACHMENT_SIZE_DESC">Gebruikers kunnen een bestand bijvoegen die kleiner is dan de grootte die hier ingesteld is. Als waarde 0 is, zijn geen bijlagen in de e-mail module mogelijk. (Standaard: 1MB)</string>
+  <string name="SYS_ATTACHMENT_TO_LARGE">Uploaden bijlage is mislukt.\nWaarschijnlijk is het bestand te groot!</string>
   <string name="MAI_CAPTCHA_DESC">Als deze optie is geactiveerd, krijgen gebruikers die zijn ingelogd een afbeelding met een captcha-code of een eenvoudige berekening. Het is noodzakelijk om de juiste code of resultaat in te vullen om het bericht te versturen. De captcha is onderdeel van de anti-spam oplossing in Admidio. (Standaard: ja)</string>
   <string name="MAI_CARBON_COPY">Kopie (CC)</string>
   <string name="MAI_CHARACTER_ENCODING">Karakter codering</string>

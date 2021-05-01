@@ -389,7 +389,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     if (($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_OK)
                     &&  ($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_NO_FILE))
                     {
-                        $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
+                        $gMessage->show($gL10n->get('SYS_ATTACHMENT_TO_LARGE'));
                         // => EXIT
                     }
 
@@ -406,7 +406,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                         $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
                         if ($attachmentSize > Email::getMaxAttachmentSize())
                         {
-                            $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
+                            $gMessage->show($gL10n->get('SYS_ATTACHMENT_TO_LARGE'));
                             // => EXIT
                         }
 

@@ -468,11 +468,11 @@
   <!--Phrases only in Mailmodule-->
   <string name="MAI_ACTIVATE_EMAIL_MODULE">Activar el módulo de correo</string>
   <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">El módulo de correo electrónico puede ser habilitado o deshabilitado a través de este campo. Si el servidor no soporta el servicio de correo electrónico, este módulo deberá ser desactivado. (Predeterminado: habilitado)</string>
-  <string name="MAI_ADD_ATTACHEMENT">Añadir un anexo</string>
-  <string name="MAI_ATTACHEMENT">Anexo</string>
-  <string name="MAI_ATTACHMENT_SIZE">Tamaño máximo de archivos adjuntos</string>
-  <string name="MAI_ATTACHMENT_SIZE_DESC">Los usuarios solo pueden adjuntar archivos cuyo tamaño sea inferior al valor especificado en este campo. Si el valor es 0, no se podrán adjuntar archivos. (Predeterminado: 1MB)</string>
-  <string name="MAI_ATTACHMENT_TO_LARGE">Error al cargar archivo adjunto al e-mail.\n¡Probablemente el archivo sea demasiado grande!</string>
+  <string name="SYS_ADD_ATTACHMENT">Añadir un anexo</string>
+  <string name="SYS_ATTACHMENT">Anexo</string>
+  <string name="SYS_ATTACHMENT_SIZE">Tamaño máximo de archivos adjuntos</string>
+  <string name="SYS_ATTACHMENT_SIZE_DESC">Los usuarios solo pueden adjuntar archivos cuyo tamaño sea inferior al valor especificado en este campo. Si el valor es 0, no se podrán adjuntar archivos. (Predeterminado: 1MB)</string>
+  <string name="SYS_ATTACHMENT_TO_LARGE">Error al cargar archivo adjunto al e-mail.\n¡Probablemente el archivo sea demasiado grande!</string>
   <string name="MAI_CAPTCHA_DESC">Si esta opción está activada, los usuarios que no hayan iniciado sesión obtendrán una imagen con un código captcha o un cálculo simple. Es necesario escribir correctamente el código suministrado, o el resultado del cálculo presentado para poder ingresar. El captcha es parte de la solución antispam en Admidio. (Predeterminado: sí) </string>
   <string name="MAI_CARBON_COPY">Copia</string>
   <string name="MAI_CHARACTER_ENCODING">Codificación de caracteres</string>

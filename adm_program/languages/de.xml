@@ -270,11 +270,6 @@
   <!--Phrases only in Mailmodule-->
   <string name="MAI_ACTIVATE_EMAIL_MODULE">Mailmodul aktivieren</string>
   <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">Das E-Mailmodul kann über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. (Voreinstellung: Aktiviert)</string>
-  <string name="MAI_ADD_ATTACHEMENT">Anhang hinzufügen</string>
-  <string name="MAI_ATTACHEMENT">Anhang</string>
-  <string name="MAI_ATTACHMENT_SIZE">Maximale Dateigröße für Anhänge</string>
-  <string name="MAI_ATTACHMENT_SIZE_DESC">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im E-Mailmodul möglich. (Voreinstellung: 1MB)</string>
-  <string name="MAI_ATTACHMENT_TO_LARGE">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</string>
   <string name="MAI_CAPTCHA_DESC">Für nicht angemeldeten Benutzer wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Voreinstellung: ja)</string>
   <string name="MAI_CARBON_COPY">Kopie</string>
   <string name="MAI_CHARACTER_ENCODING">Zeichenkodierung</string>
@@ -701,6 +696,7 @@
   <string name="SYS_ACTIVATE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# wieder aktivierst, bekommen die Rollenmitglieder wieder die Rechte zugeordnet und die Rolle erscheint in sämtlichen Listen.\n\nMöchtest du die Rollen wieder aktivieren?</string>
   <string name="SYS_ACTIVATED">Aktiviert</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Aktive Gruppen und Rollen</string>
+  <string name="SYS_ADD_ATTACHMENT">Anhang hinzufügen</string>
   <string name="SYS_ADD_COLUMN">Spalte hinzufügen</string>
   <string name="SYS_ADD_COLUMNS_DESC">Ordne in der folgenden Tabelle beliebig vielen Spalten entsprechende Profilfelder zu. Zusätzlich kannst du die Standardsortierung vorgeben und Bedingungen zu Feldern hinzufügen, nach denen die jeweiligen Mitglieder gefiltert werden sollen.</string>
   <string name="SYS_ADD_RECIPIENTS">Empfänger hinzufügen</string>
@@ -729,6 +725,12 @@
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Mitglieder zuordnen und bearbeiten</string>
   <string name="SYS_ASSIGN_MEMBERS">Mitglieder zuordnen</string>
   <string name="SYS_ASYMMETRICAL">asymmetrisch</string>
+  <string name="SYS_ATTACHMENT">Anhang</string>
+  <string name="SYS_ATTACHMENT_ONE">1 Anhang</string>
+  <string name="SYS_ATTACHMENT_SIZE">Maximale Dateigröße für Anhänge</string>
+  <string name="SYS_ATTACHMENT_SIZE_DESC">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im E-Mailmodul möglich. (Voreinstellung: 1MB)</string>
+  <string name="SYS_ATTACHMENT_TO_LARGE">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</string>
+  <string name="SYS_ATTACHMENTS_VAR">#VAR1# Anhänge</string>
   <string name="SYS_AUTOMATICALLY">Automatisch</string>
   <string name="SYS_AVAILABLE">Verfügbar</string>
   <string name="SYS_AVAILABLE_BETA">Verfügbare Beta</string>

@@ -270,11 +270,11 @@
   <!--Phrases only in Mailmodule-->
   <string name="MAI_ACTIVATE_EMAIL_MODULE">Activer le module de courriel</string>
   <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">Le module courriel peut être activé ou désactivé avec cette option. Si le serveur n\'autorise pas d\'envoi de mail, le module doit être désactivé. (par défaut: Activé)</string>
-  <string name="MAI_ADD_ATTACHEMENT">Ajouter une pièce jointe</string>
-  <string name="MAI_ATTACHEMENT">Annexes</string>
-  <string name="MAI_ATTACHMENT_SIZE">Taille maximale du fichier pour les pièces jointes</string>
-  <string name="MAI_ATTACHMENT_SIZE_DESC">Les utilisateurs ne peuvent joindre que des fichiers dont la taille est plus inférieure à la valeur spécifiée ici. Si la valeur est 0, il n\'est pas possible de joindre des fichiers dans ce module. (standard: 1MB)</string>
-  <string name="MAI_ATTACHMENT_TO_LARGE">Ton fichier joint n\'a pas pu être téléchargé.\nProbablement il est trop grand!</string>
+  <string name="SYS_ADD_ATTACHMENT">Ajouter une pièce jointe</string>
+  <string name="SYS_ATTACHMENT">Annexes</string>
+  <string name="SYS_ATTACHMENT_SIZE">Taille maximale du fichier pour les pièces jointes</string>
+  <string name="SYS_ATTACHMENT_SIZE_DESC">Les utilisateurs ne peuvent joindre que des fichiers dont la taille est plus inférieure à la valeur spécifiée ici. Si la valeur est 0, il n\'est pas possible de joindre des fichiers dans ce module. (standard: 1MB)</string>
+  <string name="SYS_ATTACHMENT_TO_LARGE">Ton fichier joint n\'a pas pu être téléchargé.\nProbablement il est trop grand!</string>
   <string name="MAI_CAPTCHA_DESC">Pour les utilisateurs non connectésun, un code alphanumérique est affiché dans le formulaire de courriel lorsque Captcha est activé. L\'utilisateur doit le saisir correctement avant d\'envoyer le courriel. Ceci afin de s\'assurer que le formulaire ne peut pas être utilisé à mauvais escient par les spammeurs. (Par défaut : oui)</string>
   <string name="MAI_CARBON_COPY">Copie</string>
   <string name="MAI_CHARACTER_ENCODING">Encodage des caractères</string>

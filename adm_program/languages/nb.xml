@@ -75,8 +75,8 @@
   <string name="SYS_USER_PHOTO">Brukerbilde</string>
   <string name="SYS_VARIOUS_ROLES">Diverse roller</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Diverse relasjoner</string>
-  <string name="MAI_ADD_ATTACHEMENT">Legg ved fil</string>
-  <string name="MAI_ATTACHEMENT">Vedlegg</string>
+  <string name="SYS_ADD_ATTACHMENT">Legg ved fil</string>
+  <string name="SYS_ATTACHMENT">Vedlegg</string>
   <string name="MAI_HIDDEN">Skjult</string>
   <string name="MAI_SMTP_HOST">SMTP Vert</string>
   <string name="MAI_SMTP_HOST_DESC">Adresse til SMTP-server.</string>

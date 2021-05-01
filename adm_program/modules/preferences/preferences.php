@@ -1239,8 +1239,8 @@ $formMessages->addCheckbox(
     array('helpTextIdInline' => 'MAI_INTO_TO_DESC')
 );
 $formMessages->addInput(
-    'max_email_attachment_size', $gL10n->get('MAI_ATTACHMENT_SIZE').' (MB)', $formValues['max_email_attachment_size'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999, 'step' => 1, 'helpTextIdInline' => 'MAI_ATTACHMENT_SIZE_DESC')
+    'max_email_attachment_size', $gL10n->get('SYS_ATTACHMENT_SIZE').' (MB)', $formValues['max_email_attachment_size'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999, 'step' => 1, 'helpTextIdInline' => 'SYS_ATTACHMENT_SIZE_DESC')
 );
 $formMessages->addCheckbox(
     'mail_save_attachments', $gL10n->get('SYS_SAVE_ATTACHMENTS'), (bool) $formValues['mail_save_attachments'],

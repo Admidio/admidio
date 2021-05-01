@@ -427,11 +427,11 @@
   <!--Phrases only in Mailmodule-->
   <string name="MAI_ACTIVATE_EMAIL_MODULE">A ativar o módulo de e-mail</string>
   <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">O módulo de e-mail pode ser ativado ou desativado por esta configuração. Se o servidor não possui suporte à e-mail, o módulo deve ficar desativado. (Padrão: ativado)</string>
-  <string name="MAI_ADD_ATTACHEMENT">Anexar ficheiro</string>
-  <string name="MAI_ATTACHEMENT">Anexo</string>
-  <string name="MAI_ATTACHMENT_SIZE">Tamanho máximo dos anexos de e-mail</string>
-  <string name="MAI_ATTACHMENT_SIZE_DESC">Usuários podem anexar arquivos apenas quando o tamanho do arquivo é menor que o valor definido aqui. Se for definido 0, nenhum anexo será permitido no módulo de e-mail. (Padrão: 1MB)</string>
-  <string name="MAI_ATTACHMENT_TO_LARGE">Erro ao carregar ficheiro como anexo.\nProvavelmente, ele excede o tamanho máximo permitido!</string>
+  <string name="SYS_ADD_ATTACHMENT">Anexar ficheiro</string>
+  <string name="SYS_ATTACHMENT">Anexo</string>
+  <string name="SYS_ATTACHMENT_SIZE">Tamanho máximo dos anexos de e-mail</string>
+  <string name="SYS_ATTACHMENT_SIZE_DESC">Usuários podem anexar arquivos apenas quando o tamanho do arquivo é menor que o valor definido aqui. Se for definido 0, nenhum anexo será permitido no módulo de e-mail. (Padrão: 1MB)</string>
+  <string name="SYS_ATTACHMENT_TO_LARGE">Erro ao carregar ficheiro como anexo.\nProvavelmente, ele excede o tamanho máximo permitido!</string>
   <string name="MAI_CAPTCHA_DESC">Quando ativada, usuários em sessão deverão resolver um CAPTCHA ou cálculo simples para enviar o e-mail. Isto é parte de uma solução anti-spam do Admidio. (padrão: sim)</string>
   <string name="MAI_CARBON_COPY">Cópia carbono (CC)</string>
   <string name="MAI_CHARACTER_ENCODING">Codificação de caracteres</string>

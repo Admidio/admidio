@@ -79,15 +79,16 @@ if ($gSettingsManager->getBool('enable_chat_module'))
 $table = new HtmlTable('adm_message_table', $page, true, true);
 $table->setServerSideProcessing(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_data.php');
 
-$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
+$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
 $table->addRowHeadingByArray(array(
     '<i class="fas fa-envelope" data-toggle="tooltip" title="' . $gL10n->get('SYS_CATEGORY') . '"></i>',
     $gL10n->get('MAI_SUBJECT'),
     $gL10n->get('MSG_OPPOSITE'),
+    '<i class="fas fa-paperclip" data-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENT') . '"></i>',
     $gL10n->get('SYS_DATE'),
     ''
 ));
-$table->disableDatatablesColumnsSort(array(3, 5));
+$table->disableDatatablesColumnsSort(array(3, 6));
 
 // open some additional functions for messages
 $moduleMessages = new ModuleMessages();

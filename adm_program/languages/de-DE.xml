@@ -270,11 +270,11 @@
   <!--Phrases only in Mailmodule-->
   <string name="MAI_ACTIVATE_EMAIL_MODULE">Mailmodul aktivieren</string>
   <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">Das E-Mailmodul kann über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. (Voreinstellung: Aktiviert)</string>
-  <string name="MAI_ADD_ATTACHEMENT">Anhang hinzufügen</string>
-  <string name="MAI_ATTACHEMENT">Anhang</string>
-  <string name="MAI_ATTACHMENT_SIZE">Maximale Dateigröße für Anhänge</string>
-  <string name="MAI_ATTACHMENT_SIZE_DESC">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im E-Mailmodul möglich. (Voreinstellung: 1MB)</string>
-  <string name="MAI_ATTACHMENT_TO_LARGE">Ihr Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</string>
+  <string name="SYS_ADD_ATTACHMENT">Anhang hinzufügen</string>
+  <string name="SYS_ATTACHMENT">Anhang</string>
+  <string name="SYS_ATTACHMENT_SIZE">Maximale Dateigröße für Anhänge</string>
+  <string name="SYS_ATTACHMENT_SIZE_DESC">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im E-Mailmodul möglich. (Voreinstellung: 1MB)</string>
+  <string name="SYS_ATTACHMENT_TO_LARGE">Ihr Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</string>
   <string name="MAI_CAPTCHA_DESC">Für nicht angemeldeten Benutzer wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Voreinstellung: ja)</string>
   <string name="MAI_CARBON_COPY">Kopie</string>
   <string name="MAI_CHARACTER_ENCODING">Zeichenkodierung</string>

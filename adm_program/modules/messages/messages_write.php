@@ -576,11 +576,11 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
     if ($gValidLogin && ($gSettingsManager->getInt('max_email_attachment_size') > 0) && PhpIniUtils::isFileUploadEnabled())
     {
         $form->addFileUpload(
-            'btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'),
+            'btn_add_attachment', $gL10n->get('SYS_ATTACHMENT'),
             array(
                 'enableMultiUploads' => true,
                 'maxUploadSize'      => Email::getMaxAttachmentSize(),
-                'multiUploadLabel'   => $gL10n->get('MAI_ADD_ATTACHEMENT'),
+                'multiUploadLabel'   => $gL10n->get('SYS_ADD_ATTACHMENT'),
                 'hideUploadField'    => true,
                 'helpTextIdLabel'    => $gL10n->get('MAI_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
                 'icon'               => 'fa-paperclip'
