@@ -157,7 +157,7 @@ if($getSearch === '')
 }
 else
 {
-    $sql = 'SELECT msg_id, msg_type, msg_subject, msg_timestamp
+    $sql = 'SELECT msg_id, msg_type, msg_subject, attachments, msg_timestamp
               FROM ('.$mainSql.') AS members
                '.$searchCondition
                 .$orderCondition
