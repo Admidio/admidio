@@ -72,7 +72,7 @@ if ($gSettingsManager->getBool('enable_pm_module'))
 // link to Chat
 if ($gSettingsManager->getBool('enable_chat_module'))
 {
-    $page->addPageFunctionsMenuItem('menu_item_messages_chat', $gL10n->get('MSG_CHAT'),
+    $page->addPageFunctionsMenuItem('menu_item_messages_chat', $gL10n->get('SYS_CHAT'),
         ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_chat.php', 'fa-comments');
 }
 
@@ -83,7 +83,7 @@ $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'rig
 $table->addRowHeadingByArray(array(
     '<i class="fas fa-envelope" data-toggle="tooltip" title="' . $gL10n->get('SYS_CATEGORY') . '"></i>',
     $gL10n->get('MAI_SUBJECT'),
-    $gL10n->get('MSG_OPPOSITE'),
+    $gL10n->get('SYS_CONVERSATION_PARTNER'),
     '<i class="fas fa-paperclip" data-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENT') . '"></i>',
     $gL10n->get('SYS_DATE'),
     ''
@@ -127,7 +127,7 @@ while ($row = $pmUnreadStatement->fetch())
 
     $table->addRowByArray(
         array(
-            getMessageIcon($msgId, 'fa-comment-alt', $gL10n->get('PMS_MESSAGE')),
+            getMessageIcon($msgId, 'fa-comment-alt', $gL10n->get('SYS_PRIVATE_MESSAGES')),
             getMessageLink($msgId, $msgSubject),
             $message->getRecipientsNamesString(),
             $message->getValue('msg_timestamp'),
@@ -149,7 +149,7 @@ while ($row = $pwReadOrOwnStatement->fetch())
 
     $table->addRowByArray(
         array(
-            getMessageIcon($msgId, 'fa-comment-alt', $gL10n->get('PMS_MESSAGE')),
+            getMessageIcon($msgId, 'fa-comment-alt', $gL10n->get('SYS_PRIVATE_MESSAGES')),
             getMessageLink($msgId, $msgSubject),
             $message->getRecipientsNamesString(),
             $message->getValue('msg_timestamp'),

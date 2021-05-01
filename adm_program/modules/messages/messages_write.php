@@ -149,7 +149,7 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
     // no roles or users found then show message
     if(count($list) === 0)
     {
-        $gMessage->show($gL10n->get('MSG_NO_ROLES_AND_USERS'));
+        $gMessage->show($gL10n->get('SYS_NO_ROLES_AND_USERS'));
         // => EXIT
     }
 }
@@ -176,7 +176,7 @@ else
     $headline = $gL10n->get('MAI_SEND_EMAIL');
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
-        $headline = $gL10n->get('PMS_SEND_PM');
+        $headline = $gL10n->get('SYS_SEND_PRIVATE_MESSAGE');
     }
 }
 
@@ -227,7 +227,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
                 'property'               => HtmlForm::FIELD_REQUIRED,
                 'multiselect'            => true,
                 'maximumSelectionNumber' => $maxNumberRecipients,
-                'helpTextIdLabel'        => 'MSG_SEND_PM'
+                'helpTextIdLabel'        => 'SYS_SEND_PRIVATE_MESSAGE_DESC'
             )
         );
         $form->closeGroupBox();
@@ -254,7 +254,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     }
 
     $form->addMultilineTextInput(
-        'msg_body', $gL10n->get('SYS_PM'), $message->getContent(), 10,
+        'msg_body', $gL10n->get('SYS_MESSAGE'), $message->getContent(), 10,
         array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 
@@ -366,7 +366,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
                     // list role with former members
                     $listFormer[] = array('groupID: '.$roleArray['rol_id'].'-1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_FORMER_MEMBERS') . ')');
                     // list role with active and former members
-                    $listActiveAndFormer[] = array('groupID: '.$roleArray['rol_id'].'-2', $roleArray['rol_name'].' '.'('.$gL10n->get('MSG_ACTIVE_FORMER_SHORT').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
+                    $listActiveAndFormer[] = array('groupID: '.$roleArray['rol_id'].'-2', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS_SHORT').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
                 }
             }
 
@@ -476,7 +476,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
     // no roles or users found then show message
     if(count($list) === 0)
     {
-        $gMessage->show($gL10n->get('MSG_NO_ROLES_AND_USERS'));
+        $gMessage->show($gL10n->get('SYS_NO_ROLES_AND_USERS'));
         // => EXIT
     }
 

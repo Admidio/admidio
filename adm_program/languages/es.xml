@@ -590,26 +590,26 @@
   <string name="MEM_USERS_PER_PAGE_DESC">Número de usuarios listados por página. Si hay más usuarios en la organización, se puede desplazar por la lista. (Predeterminado: 25)</string>
   <!--Phrases only in Menu-->
   <!--Phrases only in Messagemodule-->
-  <string name="MSG_ACTIVATE_CHAT_MODULE">Activar chat</string>
-  <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">El módulo de chat se puede habilitar o deshabilitar a través de este ajuste. El módulo carga dinámicamente información de la base de datos cada 3 segundos. Se almacena un máximo de 99 entradas. Para 100 mensajes, se eliminan las primeras 50 entradas. (Predeterminado: deshabilitado)</string>
-  <string name="MSG_ACTIVATE_PM_MODULE">Activar mensajes privados</string>
-  <string name="MSG_ACTIVATE_PM_MODULE_DESC">Los mensajes privados pueden ser habilitados o deshabilitados mediante este ajuste. (Predeterminado: habilitados)</string>
-  <string name="MSG_ACTIVE_FORMER_SHORT">Activos y ex</string>
-  <string name="MSG_CHAT">Chat</string>
-  <string name="MSG_DELETE_DESC">¿Debería eliminarse ahora el mensaje #VAR1_BOLD#?</string>
+  <string name="SYS_ACTIVATE_CHAT_MODULE">Activar chat</string>
+  <string name="SYS_ACTIVATE_CHAT_MODULE_DESC">El módulo de chat se puede habilitar o deshabilitar a través de este ajuste. El módulo carga dinámicamente información de la base de datos cada 3 segundos. Se almacena un máximo de 99 entradas. Para 100 mensajes, se eliminan las primeras 50 entradas. (Predeterminado: deshabilitado)</string>
+  <string name="SYS_ACTIVATE_PM_MODULE">Activar mensajes privados</string>
+  <string name="SYS_ACTIVATE_PM_MODULE_DESC">Los mensajes privados pueden ser habilitados o deshabilitados mediante este ajuste. (Predeterminado: habilitados)</string>
+  <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Activos y ex</string>
+  <string name="SYS_CHAT">Chat</string>
+  <string name="SYS_DELETE_MESSAGE">¿Debería eliminarse ahora el mensaje #VAR1_BOLD#?</string>
   <string name="MSG_DELETE_PM">Por tratarse de un mensaje privado, el mensaje solo se marca para su eliminación y está esperando una acción del interlocutor de la llamada.</string>
   <string name="MSG_FORMER_MEMBERS">Ex miembros</string>
-  <string name="MSG_NO_ROLES_AND_USERS">No hay roles compartidos o usuarios a los que usted pueda enviar mensajes.</string>
-  <string name="MSG_NO_VALID_RECIPIENTS">Los roles y usuarios seleccionados no tienen direcciones válidas de correo electrónico. Por esta razón, el correo electrónico no puede ser enviado.</string>
-  <string name="MSG_OPPOSITE">Interlocutor</string>
-  <string name="MSG_PM_SEND">El mensaje privado ha sido enviado a #VAR1_BOLD#.</string>
-  <string name="MSG_PM_NOT_SEND">El mensaje privado no se pudo enviar a #VAR1_BOLD#.\n\nOcurrió el siguiente error:\n#VAR2#</string>
-  <string name="MSG_REMOVE">Eliminar mensaje</string>
-  <string name="MSG_SEND_PM">Su PM será enviado al recipiente seleccionado.</string>
-  <string name="MSG_SHOW_FORMER">Enviar correos electrónicos a los miembros.</string>
-  <string name="MSG_SHOW_FORMER_DESC">Si se establece esta configuración, los correos electrónicos se pueden enviar a los miembros individuales, así como a todos los antiguos miembros de un rol. (Predeterminado: habilitado)</string>
-  <string name="PMS_MESSAGE">Mensaje privado</string>
-  <string name="PMS_SEND_PM">Enviar mensaje privado</string>
+  <string name="SYS_NO_ROLES_AND_USERS">No hay roles compartidos o usuarios a los que usted pueda enviar mensajes.</string>
+  <string name="SYS_NO_VALID_RECIPIENTS">Los roles y usuarios seleccionados no tienen direcciones válidas de correo electrónico. Por esta razón, el correo electrónico no puede ser enviado.</string>
+  <string name="SYS_CONVERSATION_PARTNER">Interlocutor</string>
+  <string name="SYS_PRIVATE_MESSAGE_SEND">El mensaje privado ha sido enviado a #VAR1_BOLD#.</string>
+  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">El mensaje privado no se pudo enviar a #VAR1_BOLD#.\n\nOcurrió el siguiente error:\n#VAR2#</string>
+  <string name="SYS_REMOVE_MESSAGE">Eliminar mensaje</string>
+  <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Su PM será enviado al recipiente seleccionado.</string>
+  <string name="SYS_SHOW_FORMER">Enviar correos electrónicos a los miembros.</string>
+  <string name="SYS_SEND_EMAIL_FORMER_DESC">Si se establece esta configuración, los correos electrónicos se pueden enviar a los miembros individuales, así como a todos los antiguos miembros de un rol. (Predeterminado: habilitado)</string>
+  <string name="SYS_PRIVATE_MESSAGES">Mensaje privado</string>
+  <string name="SYS_SEND_PRIVATE_MESSAGE">Enviar mensaje privado</string>
   <string name="PMS_WAS_SENT_TO">El mensaje fue enviado a:</string>
   <string name="PMS_WAS_NOT_SENT_TO">Error - el mensaje no fue enviado a:</string>
   <!--Phrases only in New-User-Registration-->

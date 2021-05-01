@@ -190,7 +190,7 @@ while($message = $messageStatement->fetch())
     else
     {
         $icon = 'fa-comment-alt';
-        $iconText = $gL10n->get('PMS_MESSAGE');
+        $iconText = $gL10n->get('SYS_PRIVATE_MESSAGES');
         $links = '';
     }
 
@@ -218,7 +218,7 @@ while($message = $messageStatement->fetch())
     $arrContent['5'] = $links . '
         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
             data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $messageObject->getValue('msg_id'), 'name' => $messageObject->getValue('msg_subject'), 'database_id' => $messageObject->getValue('msg_id'))) . '">
-            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('MSG_REMOVE').'"></i>
+            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_REMOVE_MESSAGE').'"></i>
         </a>';
 
     // create array with all column values and add it to the json array

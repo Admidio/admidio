@@ -351,16 +351,16 @@
   <string name="MEM_USERS_PER_PAGE">Numero di utenti per pagina</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Numero di utenti elencati su ogni pagina. Se ci sono più membri in questo gruppo le relative pagine possono essere attivate. (Predefinito: 25)</string>
   <!--Phrases only in Messagemodule-->
-  <string name="MSG_ACTIVATE_CHAT_MODULE">Attiva chat</string>
-  <string name="MSG_ACTIVATE_PM_MODULE">Attiva i messaggi privati</string>
-  <string name="MSG_CHAT">Chat</string>
+  <string name="SYS_ACTIVATE_CHAT_MODULE">Attiva chat</string>
+  <string name="SYS_ACTIVATE_PM_MODULE">Attiva i messaggi privati</string>
+  <string name="SYS_CHAT">Chat</string>
   <string name="MSG_FORMER_MEMBERS">Ex membri</string>
-  <string name="MSG_OPPOSITE">Business partner</string>
-  <string name="MSG_PM_SEND">In messaggio privato è stato inviato a #VAR1_BOLD#.</string>
-  <string name="MSG_PM_NOT_SEND">Il messaggio privato non può essere inviato a #VAR1_BOLD#.\n\nSi è verificato il seguente errore:\n#VAR2#</string>
-  <string name="MSG_REMOVE">Rimuovi il messaggio</string>
-  <string name="PMS_MESSAGE">Messaggi privati</string>
-  <string name="PMS_SEND_PM">Invia messaggio privato</string>
+  <string name="SYS_CONVERSATION_PARTNER">Business partner</string>
+  <string name="SYS_PRIVATE_MESSAGE_SEND">In messaggio privato è stato inviato a #VAR1_BOLD#.</string>
+  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">Il messaggio privato non può essere inviato a #VAR1_BOLD#.\n\nSi è verificato il seguente errore:\n#VAR2#</string>
+  <string name="SYS_REMOVE_MESSAGE">Rimuovi il messaggio</string>
+  <string name="SYS_PRIVATE_MESSAGES">Messaggi privati</string>
+  <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Invia messaggio privato</string>
   <string name="PMS_WAS_SENT_TO">Il messaggio è stato inviato a:</string>
   <string name="PMS_WAS_NOT_SENT_TO">Errore - Il messaggio non è stato inviato a:</string>
   <!--Phrases only in New-User-Registration-->

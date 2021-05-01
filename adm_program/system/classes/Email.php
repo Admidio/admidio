@@ -179,7 +179,7 @@ class Email extends PHPMailer
      * @param int $userId Id of an user who should be the recipient of the email.
      * @return Returns true if recipients could be added to the email.
      * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
-     *                     Possible reasons: MSG_NO_VALID_RECIPIENTS
+     *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
      */
     public function addRecipientsByUserId($userId)
     {
@@ -226,7 +226,7 @@ class Email extends PHPMailer
         }
         else
         {
-            throw new AdmException($gL10n->get('MSG_NO_VALID_RECIPIENTS'));
+            throw new AdmException($gL10n->get('SYS_NO_VALID_RECIPIENTS'));
         }
 
         return $numberRecipientsAdded > 0;

@@ -349,7 +349,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     // if no valid recipients exists show message
     if (count($receiver) === 0)
     {
-        $gMessage->show($gL10n->get('MSG_NO_VALID_RECIPIENTS'));
+        $gMessage->show($gL10n->get('SYS_NO_VALID_RECIPIENTS'));
         // => EXIT
     }
 
@@ -589,7 +589,7 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
 
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
-        $gMessage->show($gL10n->get('MSG_PM_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))));
+        $gMessage->show($gL10n->get('SYS_PRIVATE_MESSAGE_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))));
         // => EXIT
     }
     else
@@ -602,7 +602,7 @@ else
 {
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
-        $gMessage->show($gL10n->get('MSG_PM_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult)));
+        $gMessage->show($gL10n->get('SYS_PRIVATE_MESSAGE_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult)));
         // => EXIT
     }
     else

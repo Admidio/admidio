@@ -1195,12 +1195,12 @@ $formMessages->addCheckbox(
     array('helpTextIdInline' => 'MAI_ACTIVATE_EMAIL_MODULE_DESC')
 );
 $formMessages->addCheckbox(
-    'enable_pm_module', $gL10n->get('MSG_ACTIVATE_PM_MODULE'), (bool) $formValues['enable_pm_module'],
-    array('helpTextIdInline' => 'MSG_ACTIVATE_PM_MODULE_DESC')
+    'enable_pm_module', $gL10n->get('SYS_ACTIVATE_PM_MODULE'), (bool) $formValues['enable_pm_module'],
+    array('helpTextIdInline' => 'SYS_ACTIVATE_PM_MODULE_DESC')
 );
 $formMessages->addCheckbox(
-    'enable_chat_module', $gL10n->get('MSG_ACTIVATE_CHAT_MODULE'), (bool) $formValues['enable_chat_module'],
-    array('helpTextIdInline' => 'MSG_ACTIVATE_CHAT_MODULE_DESC')
+    'enable_chat_module', $gL10n->get('SYS_ACTIVATE_CHAT_MODULE'), (bool) $formValues['enable_chat_module'],
+    array('helpTextIdInline' => 'SYS_ACTIVATE_CHAT_MODULE_DESC')
 );
 $formMessages->addCheckbox(
     'enable_mail_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), (bool) $formValues['enable_mail_captcha'],
@@ -1231,8 +1231,8 @@ $formMessages->addCheckbox(
     array('helpTextIdInline' => 'SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC')
 );
 $formMessages->addCheckbox(
-    'mail_show_former', $gL10n->get('MSG_SHOW_FORMER'), (bool) $formValues['mail_show_former'],
-    array('helpTextIdInline' => 'MSG_SHOW_FORMER_DESC')
+    'mail_show_former', $gL10n->get('SYS_SEND_EMAIL_FORMER'), (bool) $formValues['mail_show_former'],
+    array('helpTextIdInline' => 'SYS_SEND_EMAIL_FORMER_DESC')
 );
 $formMessages->addCheckbox(
     'mail_into_to', $gL10n->get('MAI_INTO_TO'), (bool) $formValues['mail_into_to'],

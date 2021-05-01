@@ -112,14 +112,14 @@
   <string name="MEM_USER_MANAGEMENT">Brukerhåndtering</string>
   <string name="MEM_USERS_PER_PAGE">Antall brukere pr. side</string>
   <!--Phrases only in Messagemodule-->
-  <string name="MSG_ACTIVATE_CHAT_MODULE">Aktiver chat</string>
-  <string name="MSG_ACTIVATE_PM_MODULE">Aktiver private meldinger</string>
-  <string name="MSG_ACTIVE_FORMER_SHORT">Aktive og tidligere</string>
-  <string name="MSG_CHAT">Chat</string>
+  <string name="SYS_ACTIVATE_CHAT_MODULE">Aktiver chat</string>
+  <string name="SYS_ACTIVATE_PM_MODULE">Aktiver private meldinger</string>
+  <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Aktive og tidligere</string>
+  <string name="SYS_CHAT">Chat</string>
   <string name="MSG_FORMER_MEMBERS">Tidligere medlemmer</string>
-  <string name="MSG_OPPOSITE">Forretningspartner</string>
-  <string name="MSG_REMOVE">Fjern melding</string>
-  <string name="MSG_SEND_PM">Din PM vil bli sendt til valgt mottaker</string>
+  <string name="SYS_CONVERSATION_PARTNER">Forretningspartner</string>
+  <string name="SYS_REMOVE_MESSAGE">Fjern melding</string>
+  <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Din PM vil bli sendt til valgt mottaker</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Tema</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Etter aktivering vil brukere med utdaterte nettlesere rådes til å kjøre en oppdatering. Nyere nettlesere garanterer en bedre beskyttelse mot svindel, virus, trojanere, identitetstyveri og andre trusler mot personvern og sikkerhet. Hver ny nettlesergenerasjon forbedrer hastigheten og støtter flere og flere nye web-teknologier, noe som fører til en bedre nettopplevelse . Til dette formålet blir https://browser-update.org/ anvendt.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Bakgrunnsfarge</string>
