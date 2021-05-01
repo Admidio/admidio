@@ -472,7 +472,7 @@ class TableMessage extends TableAccess
 
     /**
      * Saves the files of the stored filenames in the array **$msgAttachments** within the filesystem folder
-     * adm_my_files/messages/attachments. Therefore the filename will get the prefix with the id of this
+     * adm_my_files/messages_attachments. Therefore the filename will get the prefix with the id of this
      * message.
      * @throw RuntimeException Folder could not be created
      */
@@ -480,7 +480,7 @@ class TableMessage extends TableAccess
     {
         try
         {
-            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/messages/attachements');
+            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments');
         }
         catch (\RuntimeException $exception)
         {
@@ -494,7 +494,7 @@ class TableMessage extends TableAccess
         {
             $file_name = $this->getValue('msg_id').'_'.$attachement[1];
 
-            FileSystemUtils::copyFile($attachement[0], ADMIDIO_PATH . FOLDER_DATA . '/messages/attachements/' . $file_name);
+            FileSystemUtils::copyFile($attachement[0], ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $file_name);
 
             // save message recipient as TableAcess object to the array
             $messageAttachment = new TableAccess($this->db, TBL_MESSAGES_ATTACHMENTS, 'msa');
