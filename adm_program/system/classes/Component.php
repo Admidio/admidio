@@ -115,6 +115,13 @@ class Component extends TableAccess
                     }
                     break;
 
+                case 'CATEGORY-REPORT':
+                    if($gCurrentUser->checkRolesRight('rol_assign_roles'))
+                    {
+                        return true;
+                    }
+                    break;
+
                 case 'DATES':
                     if($gCurrentUser->editDates())
                     {
@@ -220,6 +227,13 @@ class Component extends TableAccess
             case 'ANNOUNCEMENTS':
                 if((int) $gSettingsManager->get('enable_announcements_module') === 1
                 || ((int) $gSettingsManager->get('enable_announcements_module') === 2 && $gValidLogin))
+                {
+                    return true;
+                }
+                break;
+
+            case 'CATEGORY-REPORT':
+                if($gCurrentUser->checkRolesRight('rol_assign_roles'))
                 {
                     return true;
                 }

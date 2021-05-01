@@ -3,5 +3,9 @@
     <step id="10">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_name = 'registration_adopt_all_data'</step>
     <step id="20">UPDATE %PREFIX%_categories SET cat_name = 'SYS_BASIC_DATA' WHERE cat_name LIKE 'SYS_MASTER_DATA'</step>
     <step id="30">UPDATE %PREFIX%_categories SET cat_name_INTERN = 'BASIC_DATA' WHERE cat_name_intern LIKE 'MASTER_DATA'</step>
+    <step id="40">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
+                         VALUES ('MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.1.0', 0)</step>
+    <step id="50">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
+                         VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'CATEGORY-REPORT'), 1, 0, 9, 1, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_DOCUMENTS_FILES_DESC')</step>
     <step>stop</step>
 </update>
