@@ -160,7 +160,7 @@ while ($row = $pwReadOrOwnStatement->fetch())
 }
 */
 // special settings for the table
-$table->setDatatablesOrderColumns(array(array(4, 'desc')));
+$table->setDatatablesOrderColumns(array(array(5, 'desc')));
 
 // add table to the form
 $page->addHtml($table->show());
