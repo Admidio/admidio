@@ -226,6 +226,28 @@ class TableMessage extends TableAccess
     }
 
     /**
+     * Read all attachments from the database and will return an array with all neccessary informations about
+     * the attachments. The array contains for each attachment a subarray with the following elements:
+     * **msa_id** and **file_name**.
+     * @return Returns an array with all attachments and the following elements: **msa_id** and **file_name**
+     */
+    public function getAttachmentsInformations()
+    {
+        $attachments = array();
+
+        $sql = 'SELECT msa_id, msa_original_file_name FROM ' . TBL_MESSAGES_ATTACHMENTS .'
+                 WHERE msa_msg_id = ? -- $this->getValue(\'msg_id\')';
+        $attachmentsStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
+
+        while($row = $attachmentsStatement->fetch())
+        {
+            $attachments[] = array('msa_id' => $row['msa_id'], 'file_name' => $row['msa_original_file_name']);
+	    }
+
+	    return $attachments;
+    }
+
+    /**
      * Get the content of the message or email. If it's a message conversation than only
      * the last content will be returned.
      * @return string Returns the content of the message.
@@ -500,7 +522,7 @@ class TableMessage extends TableAccess
             $messageAttachment = new TableAccess($this->db, TBL_MESSAGES_ATTACHMENTS, 'msa');
             $messageAttachment->setValue('msa_msg_id', $this->getValue('msg_id'));
             $messageAttachment->setValue('msa_file_name', $file_name);
-            $messageAttachment->setValue('msr_original_file_name', $attachement[1]);
+            $messageAttachment->setValue('msa_original_file_name', $attachement[1]);
             $messageAttachment->save();
         }
     }

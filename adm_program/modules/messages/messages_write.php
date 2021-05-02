@@ -623,6 +623,7 @@ if (isset($messageStatement))
     {
         $date = new \DateTime($row['msc_timestamp']);
         $messageText = htmlspecialchars_decode(stripslashes($row['msc_message']));
+        $messageFooter = '';
 
         if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
         {
@@ -642,6 +643,23 @@ if (isset($messageStatement))
         {
             $messageHeader = $date->format($gSettingsManager->getString('system_date')) . ' ' . $date->format($gSettingsManager->getString('system_time')) .'<br />' . $gL10n->get('SYS_TO') . ': ' . $message->getRecipientsNamesString();
             $messageIcon   = 'fa-envelope';
+            $attachments   = $message->getAttachmentsInformations();
+
+            if(count($attachments) > 0)
+            {
+                $messageFooter .= '<div class="card-footer"><i class="fas fa-paperclip"></i> ' . $gL10n->get('SYS_ATTACHMENT');
+            }
+
+            foreach($attachments as $attachment)
+            {
+
+                $messageFooter .= '<a class="admidio-attachment" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/get_attachment.php', array('msa_id' => $attachment['msa_id'])) . '">' . $attachment['file_name'] . '</a>';
+            }
+
+            if(count($attachments) > 0)
+            {
+                $messageFooter .= '</div>';
+            }
         }
 
         $page->addHtml('
@@ -650,6 +668,7 @@ if (isset($messageStatement))
                 <i class="fas ' . $messageIcon . '"></i>' . $messageHeader . '
             </div>
             <div class="card-body">' . $messageText . '</div>
+            ' . $messageFooter . '
         </div>');
     }
 }
