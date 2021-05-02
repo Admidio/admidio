@@ -144,30 +144,34 @@ elseif ($getMode === 3)
 elseif ($getMode === 4)
 {
     // User must be member of this organization
-    // Only administrators are allowed to send new login data
     // E-Mail support must be enabled
-    if (!isMember($getUserId) || !$gCurrentUser->isAdministrator() || !$gSettingsManager->getBool('enable_system_mails'))
+    // Only administrators are allowed to send new login data or users who want to approve login data
+    if (isMember($getUserId)
+    && $gSettingsManager->getBool('enable_system_mails')
+    && ($gCurrentUser->isAdministrator() || $gCurrentUser->approveUsers()))
+    {
+        try
+        {
+            // Generate new secure-random password and save it
+            $password = SecurityUtils::getRandomString(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
+            $user->setPassword($password);
+            $user->save();
+
+            // Send mail with login data to user
+            $sysMail = new SystemMail($gDb);
+            $sysMail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
+            $sysMail->setVariable(1, $password);
+            $sysMail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user);
+        }
+        catch (AdmException $e)
+        {
+            $e->showText();
+            // => EXIT
+        }
+    }
+    else
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-
-    try
-    {
-        // Generate new secure-random password and save it
-        $password = SecurityUtils::getRandomString(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
-        $user->setPassword($password);
-        $user->save();
-
-        // Send mail with login data to user
-        $sysMail = new SystemMail($gDb);
-        $sysMail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
-        $sysMail->setVariable(1, $password);
-        $sysMail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user);
-    }
-    catch (AdmException $e)
-    {
-        $e->showText();
         // => EXIT
     }
 
