@@ -256,27 +256,30 @@ class TableMessage extends TableAccess
     {
         $content = '';
 
-        if($this->msgId > 0)
+        // if content was not set until now than read it from the database if message was already stored there
+        if(!is_object($this->msgContentObject) && $this->msgId > 0)
         {
-            if(!is_object($this->msgContentObject))
-            {
-                $sql = 'SELECT msc_id, msc_msg_id, msc_usr_id, msc_message, msc_timestamp
-                          FROM '. TBL_MESSAGES_CONTENT. ' msc1
-                         WHERE msc_msg_id = ? -- $msgId
-                           AND NOT EXISTS (
-                               SELECT 1
-                                 FROM '. TBL_MESSAGES_CONTENT. ' msc2
-                                WHERE msc2.msc_msg_id = msc1.msc_msg_id
-                                  AND msc2.msc_timestamp > msc1.msc_timestamp
-                               )';
-                $messageContentStatement = $this->db->queryPrepared($sql, array($this->msgId));
+            $sql = 'SELECT msc_id, msc_msg_id, msc_usr_id, msc_message, msc_timestamp
+                      FROM '. TBL_MESSAGES_CONTENT. ' msc1
+                     WHERE msc_msg_id = ? -- $msgId
+                       AND NOT EXISTS (
+                           SELECT 1
+                             FROM '. TBL_MESSAGES_CONTENT. ' msc2
+                            WHERE msc2.msc_msg_id = msc1.msc_msg_id
+                              AND msc2.msc_timestamp > msc1.msc_timestamp
+                           )';
+            $messageContentStatement = $this->db->queryPrepared($sql, array($this->msgId));
 
-                $this->msgContentObject = new TableAccess($this->db, TBL_MESSAGES_CONTENT, 'msc');
-                $this->msgContentObject->setArray($messageContentStatement->fetch());
-            }
+            $this->msgContentObject = new TableAccess($this->db, TBL_MESSAGES_CONTENT, 'msc');
+            $this->msgContentObject->setArray($messageContentStatement->fetch());
+        }
 
+        // read content of the content object
+        if(is_object($this->msgContentObject))
+        {
             $content = $this->msgContentObject->getValue('msc_message', 'database');
         }
+
         return $content;
     }
 

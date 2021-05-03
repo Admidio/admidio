@@ -185,6 +185,7 @@ else
 if (str_contains($gNavigation->getUrl(), 'messages_send.php') && isset($_SESSION['message_request']))
 {
     $message->setArray($_SESSION['message_request']);
+    $message->addContent($_SESSION['message_request']['msg_body']);
     $formValues = $_SESSION['message_request'];
     unset($_SESSION['message_request']);
 
@@ -200,6 +201,7 @@ if (str_contains($gNavigation->getUrl(), 'messages_send.php') && isset($_SESSION
 else
 {
     $message->setValue('msg_subject', $getSubject);
+    $message->addContent('');
     $formValues['namefrom']    = '';
     $formValues['mailfrom']    = '';
     $formValues['msg_to']      = '';
