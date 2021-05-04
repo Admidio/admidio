@@ -10,7 +10,6 @@
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/messages_functions.php');
 
 // check for valid login
 if (!$gValidLogin)
@@ -94,71 +93,7 @@ $table->disableDatatablesColumnsSort(array(3, 6));
 $moduleMessages = new ModuleMessages();
 $usrId = (int) $gCurrentUser->getValue('usr_id');
 $rowIndex = 0;
-/*
-// find all own Email messages
-$allEmailsStatement = $moduleMessages->msgGetUserEmails($usrId);
-while ($row = $allEmailsStatement->fetch())
-{
-    ++$rowIndex;
-    $msgId = (int) $row['msg_id'];
-    $message = new TableMessage($gDb, $msgId);
-    $msgSubject = $message->getValue('msg_subject');
 
-    $table->addRowByArray(
-        array(
-            getMessageIcon($msgId, 'fa-envelope', $gL10n->get('SYS_EMAIL')),
-            getMessageLink($msgId, $msgSubject),
-            $message->getRecipientsNamesString(),
-            $message->getValue('msg_timestamp'),
-            getAdministrationLink($rowIndex, $msgId, $msgSubject)
-        ),
-        'row_message_'.$rowIndex
-    );
-}
-
-// find all unread PM messages
-$pmUnreadStatement = $moduleMessages->msgGetUserUnread($usrId);
-while ($row = $pmUnreadStatement->fetch())
-{
-    ++$rowIndex;
-    $msgId = (int) $row['msg_id'];
-    $message = new TableMessage($gDb, $msgId);
-    $msgSubject = $message->getValue('msg_subject');
-
-    $table->addRowByArray(
-        array(
-            getMessageIcon($msgId, 'fa-comment-alt', $gL10n->get('SYS_PRIVATE_MESSAGES')),
-            getMessageLink($msgId, $msgSubject),
-            $message->getRecipientsNamesString(),
-            $message->getValue('msg_timestamp'),
-            getAdministrationLink($rowIndex, $msgId, $msgSubject)
-        ),
-        'row_message_'.$rowIndex,
-        array('style' => 'font-weight: bold')
-    );
-}
-
-// find all read or own PM messages
-$pwReadOrOwnStatement = $moduleMessages->msgGetUser($usrId);
-while ($row = $pwReadOrOwnStatement->fetch())
-{
-    ++$rowIndex;
-    $msgId = (int) $row['msg_id'];
-    $message = new TableMessage($gDb, $msgId);
-    $msgSubject = $message->getValue('msg_subject');
-
-    $table->addRowByArray(
-        array(
-            getMessageIcon($msgId, 'fa-comment-alt', $gL10n->get('SYS_PRIVATE_MESSAGES')),
-            getMessageLink($msgId, $msgSubject),
-            $message->getRecipientsNamesString(),
-            $message->getValue('msg_timestamp'),
-            getAdministrationLink($rowIndex, $msgId, $msgSubject)
-        ),
-        'row_message_'.$rowIndex
-    );
-}
-*/
 // special settings for the table
 $table->setDatatablesOrderColumns(array(array(5, 'desc')));
 

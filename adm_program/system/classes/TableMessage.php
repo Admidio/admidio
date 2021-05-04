@@ -63,7 +63,18 @@ class TableMessage extends TableAccess
         $this->msgAttachments[] = array($path, $name);
     }
 
-    public function addRole($roleId, $roleMode)
+    /**
+     * A role could be added to the class to which the email was send. This information will
+     * later be stored in the database. If you need the role name within the class before the
+     * data is stored in database than you should set the role name with the parameter $roleName.
+     * @param $roleId   Id the role to which the message was send
+     * @param $roleMode This parameter has the following values:
+     *                  0 - only active members of the role
+     *                  1 - only former members of the role
+     *                  2 - active and former members of the role
+     * @param $roleName Optional the name of the role. Should be set if the name should be used within the class.
+     */
+    public function addRole($roleId, $roleMode, $roleName = '')
     {
         // first search if role already exists in recipients list
         foreach($this->msgRecipientsObjectArray as $messageRecipientObject)
@@ -87,13 +98,20 @@ class TableMessage extends TableAccess
         $this->msgRecipientsArray[] =
             array('type'   => 'role',
                   'id'     => $roleId,
-                  'name'   => null,
+                  'name'   => $roleName,
                   'mode'   => $roleMode,
                   'msr_id' => null
             );
     }
 
-    public function addUser($userId)
+    /**
+     * A user could be added to the class to which the email was send. This information will
+     * later be stored in the database. If you need the user name within the class before the
+     * data is stored in database than you should set the user name with the parameter $fullName.
+     * @param $userId   Id the user to which the message was send
+     * @param $fullName Optional the name of the user. Should be set if the name should be used within the class.
+     */
+    public function addUser($userId, $fullName = '')
     {
         // PM always update the recipient if the message exists
         if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM)
@@ -126,7 +144,7 @@ class TableMessage extends TableAccess
         $this->msgRecipientsArray[] =
             array('type'   => 'user',
                   'id'     => $userId,
-                  'name'   => null,
+                  'name'   => $fullName,
                   'mode'   => null,
                   'msr_id' => null
             );
@@ -317,15 +335,18 @@ class TableMessage extends TableAccess
 
     /**
      * Build a string with all role names and firstname and lastname of the users.
-     * The names will be semicolon separated.
+     * The names will be semicolon separated. If $showFullUserNames is set to false only a
+     * number of recipients users will be shown.
+     * @param $showFullUserNames If set to true the first and last name of each user will be shown.
      * @return string Returns a string with all role names and firstname and lastname of the users.
      */
-    public function getRecipientsNamesString()
+    public function getRecipientsNamesString($showFullUserNames = true)
     {
-        global $gCurrentUser, $gProfileFields;
+        global $gCurrentUser, $gProfileFields, $gL10n;
 
         $recipients = $this->readRecipientsData();
         $recipientsString = '';
+        $singleRecipientsCount = 0;
 
         if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM)
         {
@@ -346,11 +367,41 @@ class TableMessage extends TableAccess
             // email receivers are all stored in the recipients array
             foreach($recipients as $recipient)
             {
+                if($recipient['type'] === 'user' && !$showFullUserNames)
+                {
+                    $singleRecipientsCount++;
+                }
+                else
+                {
+                    if(strlen($recipientsString) > 0)
+                    {
+                        $recipientsString .= '; ';
+                    }
+
+                    $recipientsString .= $recipient['name'];
+                }
+            }
+
+            // if full user names should not be shown than create a text with the number of individual recipients
+            if(!$showFullUserNames && $singleRecipientsCount > 0)
+            {
+                if($singleRecipientsCount === 1)
+                {
+                    $textIndividualRecipients = $gL10n->get('SYS_COUNT_INDIVIDUAL_RECIPIENT', array($singleRecipientsCount));
+                }
+                else
+                {
+                    $textIndividualRecipients = $gL10n->get('SYS_COUNT_INDIVIDUAL_RECIPIENTS', array($singleRecipientsCount));
+                }
+
                 if(strlen($recipientsString) > 0)
                 {
-                    $recipientsString .= '; ';
+                    $recipientsString = $gL10n->get('SYS_PARAMETER1_AND_PARAMETER2', array($recipientsString, $textIndividualRecipients));
                 }
-                $recipientsString .= $recipient['name'];
+                else
+                {
+                    $recipientsString = $textIndividualRecipients;
+                }
             }
         }
 

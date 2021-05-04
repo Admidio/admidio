@@ -166,7 +166,6 @@ $message->addContent($postBody);
 if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 {
     $receiver = array();
-    $receiverString = '';
     $sqlConditions  = '';
     $sqlEmailField  = '';
 
@@ -195,11 +194,8 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 $moduleMessages = new ModuleMessages();
                 $group = $moduleMessages->msgGroupSplit($value);
 
-                // add role to the message object
-                $message->addRole($group['id'], $group['role_mode']);
-
                 // check if role rights are granted to the User
-                $sql = 'SELECT rol_mail_this_role, rol_id
+                $sql = 'SELECT rol_mail_this_role, rol_id, rol_name
                           FROM ' . TBL_ROLES . '
                     INNER JOIN ' . TBL_CATEGORIES . '
                             ON cat_id = rol_cat_id
@@ -208,6 +204,9 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                          WHERE rol_id = ? -- $group[\'id\']';
                 $statement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), $group['id']));
                 $row = $statement->fetch();
+
+                // add role to the message object
+                $message->addRole($group['id'], $group['role_mode'], $row['rol_name']);
 
                 // logged out ones just to role with permission level "all visitors"
                 // logged in user is just allowed to send to role with permission
@@ -306,7 +305,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 if ($gCurrentUser->hasRightViewProfile($user))
                 {
                     // add user to the message object
-                    $message->addUser((int) $user->getValue('usr_id'));
+                    $message->addUser((int) $user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
 
                     $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
                               FROM ' . TBL_USERS . '
@@ -337,7 +336,6 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 }
             }
         }
-        $receiverString = implode(' | ', $postTo);
     }
     else
     {
@@ -497,22 +495,19 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         $email->ConfirmReadingTo = $gCurrentUser->getValue('EMAIL');
     }
 
-    require_once(__DIR__ . '/messages_functions.php');
-
     if ($postListId > 0)
     {
         $showList = new ListConfiguration($gDb, $postListId);
         $listName = $showList->getValue('lst_name');
-        $receiverString = 'list ' . $gL10n->get('SYS_LIST') . ($listName === '' ? '' : ' - ' . $listName);
+        $receiverName = $gL10n->get('SYS_LIST') . ($listName === '' ? '' : ' - ' . $listName);
     }
-
-    if($gSettingsManager->getBool('mail_into_to'))
+    elseif($gSettingsManager->getBool('mail_into_to'))
     {
-        $receiverName = prepareRecipients($receiverString, true);
+        $receiverName = $message->getRecipientsNamesString(true);
     }
     else
     {
-        $receiverName = prepareRecipients($receiverString, false);
+        $receiverName = $message->getRecipientsNamesString(false);
     }
 
     // load mail template and replace text
