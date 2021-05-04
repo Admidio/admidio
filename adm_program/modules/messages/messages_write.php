@@ -201,12 +201,16 @@ if (str_contains($gNavigation->getUrl(), 'messages_send.php') && isset($_SESSION
 else
 {
     $message->setValue('msg_subject', $getSubject);
-    $message->addContent('');
     $formValues['namefrom']    = '';
     $formValues['mailfrom']    = '';
     $formValues['msg_to']      = '';
     $formValues['carbon_copy'] = $getCarbonCopy;
     $formValues['delivery_confirmation'] = $getDeliveryConfirmation;
+
+    if ($getForward === false)
+    {
+        $message->addContent('');
+    }
 }
 
 // add current url to navigation stack
