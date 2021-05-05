@@ -814,6 +814,7 @@
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Il y a déjà une catégorie dans cette organisation avec ce nom.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">La visibilité des champs de profil de cette catégorie peut être désactivée pour les autres utilisateurs, mais les champs de profil restent visibles dans ton propre profil et peuvent également y être édités.</string>
   <string name="SYS_CATEGORY_REPORT">Rapport par catégorie</string>
+  <string name="SYS_CATEGORY_REPORT_DESC">Crée une liste de tous les rôles et catégories d'un membre.</string>  
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Si cette option est activée, les champs du profil de cette catégorie apparaissent également dans le profil des organisations suivantes et peuvent aussi être gérés: #VAR1#.\n\nEst-ce que tu aimerait voir ces données uniquement de ton organisation, cette option devrait être désactivée.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-catégorie</string>
   <string name="SYS_CHANGE_PASSWORD">Changer le mot de passe</string>

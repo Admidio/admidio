@@ -806,6 +806,7 @@
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Category name already exists in selected organization.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
   <string name="SYS_CATEGORY_REPORT">Category report</string>
+  <string name="SYS_CATEGORY_REPORT_DESC">Creates a list of all roles and categories a member has.</string>  
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-category</string>
   <string name="SYS_CHANGE_PASSWORD">Change password</string>

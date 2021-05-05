@@ -806,6 +806,7 @@
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
   <string name="SYS_CATEGORY_REPORT">Kategoriereport</string>
+  <string name="SYS_CATEGORY_REPORT_DESC">Erzeugt eine Auflistung der Rollen- und Kategoriezugehörigkeiten eines Mitglieds.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\nMöchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-Kategorie</string>
   <string name="SYS_CHANGE_PASSWORD">Passwort ändern</string>

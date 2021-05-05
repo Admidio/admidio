@@ -21,17 +21,6 @@
 require_once(__DIR__ . '/../../system/common.php');
 require_once(__DIR__ . '/common_function.php');
 
-// initCategoryReportTable() ist nur während der Umstellungsphase erforderlich
-// die erforderliche Tabelle soll später bei der Admidio-Installation (oder Update) erzeugt werden
-initCategoryReportTable();
-
-// diese IF-Abfrage ist nur während der Umstellungsphase erforderlich 
-// die Default-Einstellung von 'category_report_enable_module' soll später bei der Admidio-Installation (oder Update) gesetzt werden
-if (!$gSettingsManager->has('category_report_enable_module'))
-{
-    $gSettingsManager->set('category_report_enable_module', 1);
-}
-
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('category_report_enable_module'))
 {
@@ -55,13 +44,6 @@ if (empty($config))
 {
     $config = initConfigArray();
     saveConfigArray();
-}
-
-// diese IF-Abfrage ist nur während der Umstellungsphase erforderlich
-// die Default-Einstellung von 'category_report_default_configuration' soll später bei der Admidio-Installation (oder Update) gesetzt werden
-if (!$gSettingsManager->has('category_report_default_configuration'))
-{
-    $gSettingsManager->set('category_report_default_configuration', 0);
 }
 
 // Initialize and check the parameters

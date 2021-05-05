@@ -806,6 +806,7 @@
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
   <string name="SYS_CATEGORY_REPORT">Kategoriereport</string>
+  <string name="SYS_CATEGORY_REPORT_DESC">Erzeugt eine Auflistung der Rollen- und Kategoriezugehörigkeiten eines Mitglieds.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\nMöchten Sie die Daten nur in Ihrer Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-Kategorie</string>
   <string name="SYS_CHANGE_PASSWORD">Passwort ändern</string>
@@ -824,7 +825,7 @@
   <string name="SYS_CONDITION">Bedingung</string>
   <string name="SYS_CONFIGURATION">Konfiguration</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Konfiguration allen Benutzern zur Verfügung stellen</string>
-  <string name="SYS_CONFIGURATION_DELETE">Wollne Sie aktuelle Listenkonfiguration wirklich löschen?</string>
+  <string name="SYS_CONFIGURATION_DELETE">Wollen Sie die aktuelle Listenkonfiguration wirklich löschen?</string>
   <string name="SYS_CONFIGURATION_LIST">Listenkonfiguration</string>
   <string name="SYS_CONFIGURATION_SAVE">Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden?</string>
   <string name="SYS_CONFIRM_PASSWORD">Passwort bestätigen</string>

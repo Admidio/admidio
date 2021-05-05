@@ -182,6 +182,10 @@ switch($getMode)
                 case 'groups-roles':
                     $checkboxes = array('groups_roles_enable_module');
                     break;
+                    
+                case 'category-report':
+                    $checkboxes = array('category_report_enable_module');
+                    break;
 
                 case 'messages':
                     $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_chat_module', 'enable_mail_captcha',

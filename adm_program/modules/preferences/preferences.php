@@ -36,7 +36,7 @@ $page = new HtmlPage('admidio-preferences', $headline);
 
 $showOptionValidModules = array(
     'announcements', 'documents-files', 'guestbook', 'ecards', 'groups-roles',
-    'messages', 'photos', 'profile', 'events', 'links', 'user_management'
+    'messages', 'photos', 'profile', 'events', 'links', 'user_management', 'category-report'
 );
 
 // open the modules tab if the options of a module should be shown
@@ -1182,6 +1182,24 @@ $formGroupsRoles->addSubmitButton(
 );
 
 $page->addHtml(getPreferencePanel('modules', 'groups-roles', 'accordion_modules', $gL10n->get('SYS_GROUPS_ROLES'), 'fas fa-users', $formGroupsRoles->show()));
+
+// PANEL: CATEGORY-REPORT
+
+$formCategoryReport = new HtmlForm(
+    'category_report_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'category-report')),
+    $page, array('class' => 'form-preferences')
+    );
+
+$formCategoryReport->addCheckbox(
+    'category_report_enable_module', $gL10n->get('SYS_ENABLE_CATEGORY_REPORT_MODULE'), (bool) $formValues['category_report_enable_module'],
+    array('helpTextIdInline' => 'SYS_ENABLE_CATEGORY_REPORT_MODULE_DESC')
+    );
+$formCategoryReport->addSubmitButton(
+    'btn_save_documents_files', $gL10n->get('SYS_SAVE'),
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
+    );
+
+$page->addHtml(getPreferencePanel('modules', 'category-report', 'accordion_modules', $gL10n->get('SYS_CATEGORY_REPORT'), 'fas fa-list', $formCategoryReport->show()));
 
 // PANEL: MESSAGES
 

@@ -163,6 +163,10 @@ $defaultOrgPreferences = array(
     'dates_save_all_confirmations'      => '1',
     'dates_may_take_part'               => '0',
 
+    // Category-Report
+    'category_report_enable_module'         => '1',
+    'category_report_default_configuration' => '0',
+    
     // Weblinks
     'enable_weblinks_module'    => '1',
     'weblinks_per_page'         => '0',

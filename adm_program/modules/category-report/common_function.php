@@ -223,36 +223,5 @@ function saveConfigArray()
     return;
 }
 
-/**
- * Funktion legt die Tabelle adm_category_report an
- * @param   none
- */
-function initCategoryReportTable()
-{
-    global  $gDb;
-    
-    $tableName =  TABLE_PREFIX . '_category_report';
-    
-    // pruefen, ob es die Tabelle bereits gibt
-    $sql = 'SHOW TABLES LIKE \''.$tableName.'\' ';
-    $statement = $gDb->query($sql);
-    
-    // Tabelle anlegen, wenn es sie noch nicht gibt
-    if (!$statement->rowCount())
-    {
-        $sql='CREATE TABLE '.$tableName.'
-				(crt_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-	  			crt_org_id int(10) unsigned NOT NULL,
-	  			crt_col_desc varchar(100)   NOT NULL,
-	  			crt_col_fields text,
-				crt_col_yes varchar(100)   NOT NULL,
-				crt_col_no varchar(100)   NOT NULL,
-                crt_selection_role varchar(100)   NOT NULL,
-                crt_selection_cat varchar(100)   NOT NULL,
-				crt_number_col boolean  NOT NULL DEFAULT \'0\',
-	  			PRIMARY KEY (crt_id) ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
-        $gDb->query($sql);
-    }
-    return;
-}
+
 
