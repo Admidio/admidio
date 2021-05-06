@@ -783,6 +783,13 @@ class User extends TableAccess
         $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
                           WHERE msg_usr_id_sender = '.$usrId;
 
+        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_RECIPIENTS.'
+                          WHERE msr_usr_id = '.$usrId;
+
+        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
+                          WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
+                                            WHERE msr_msg_id = msg_id)';
+
         $sqlQueries[] = 'DELETE FROM '.TBL_REGISTRATIONS.'
                           WHERE reg_usr_id = '.$usrId;
 

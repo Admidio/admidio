@@ -24,8 +24,8 @@ $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 // Check form values
 $postFrom       = admFuncVariableIsValid($_POST, 'mailfrom', 'string');
 $postName       = admFuncVariableIsValid($_POST, 'namefrom', 'string');
-$postSubject    = StringUtils::strStripTags($_POST['subject']); // Subject should be send without html conversations
-$postSubjectSQL = admFuncVariableIsValid($_POST, 'subject',  'string');
+$postSubject    = StringUtils::strStripTags($_POST['msg_subject']); // Subject should be send without html conversations
+$postSubjectSQL = admFuncVariableIsValid($_POST, 'msg_subject',  'string');
 $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
@@ -52,7 +52,7 @@ else
 if ($postSubjectSQL === '')
 {
     // message when no subject is given
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('MAI_SUBJECT'))));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_SUBJECT'))));
     // => EXIT
 }
 
@@ -138,12 +138,12 @@ else
 {
     if ($postName === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('MAI_YOUR_NAME'))));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_YOUR_NAME'))));
         // => EXIT
     }
     if (!StringUtils::strValidCharacters($postFrom, 'email'))
     {
-        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('MAI_YOUR_EMAIL'))));
+        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_YOUR_EMAIL'))));
         // => EXIT
     }
 }
@@ -155,11 +155,17 @@ if (!($currUsrId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation
     $postDeliveryConfirmation = false;
 }
 
+// object to handle the current message in the database
+$message = new TableMessage($gDb, $getMsgId);
+$message->setValue('msg_type', $getMsgType);
+$message->setValue('msg_subject', $postSubject);
+$message->setValue('msg_usr_id_sender', $gCurrentUser->getValue('usr_id'));
+$message->addContent($postBody);
+
 // check if PM or Email and to steps:
 if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 {
     $receiver = array();
-    $receiverString = '';
     $sqlConditions  = '';
     $sqlEmailField  = '';
 
@@ -189,7 +195,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 $group = $moduleMessages->msgGroupSplit($value);
 
                 // check if role rights are granted to the User
-                $sql = 'SELECT rol_mail_this_role, rol_id
+                $sql = 'SELECT rol_mail_this_role, rol_id, rol_name
                           FROM ' . TBL_ROLES . '
                     INNER JOIN ' . TBL_CATEGORIES . '
                             ON cat_id = rol_cat_id
@@ -198,6 +204,9 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                          WHERE rol_id = ? -- $group[\'id\']';
                 $statement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), $group['id']));
                 $row = $statement->fetch();
+
+                // add role to the message object
+                $message->addRole($group['id'], $group['role_mode'], $row['rol_name']);
 
                 // logged out ones just to role with permission level "all visitors"
                 // logged in user is just allowed to send to role with permission
@@ -295,6 +304,9 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 // only send email to user if current user is allowed to view this user and he has a valid email address
                 if ($gCurrentUser->hasRightViewProfile($user))
                 {
+                    // add user to the message object
+                    $message->addUser((int) $user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
+
                     $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
                               FROM ' . TBL_USERS . '
                         INNER JOIN ' . TBL_USER_DATA . ' AS email
@@ -324,7 +336,6 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 }
             }
         }
-        $receiverString = implode(' | ', $postTo);
     }
     else
     {
@@ -336,7 +347,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     // if no valid recipients exists show message
     if (count($receiver) === 0)
     {
-        $gMessage->show($gL10n->get('MSG_NO_VALID_RECIPIENTS'));
+        $gMessage->show($gL10n->get('SYS_NO_VALID_RECIPIENTS'));
         // => EXIT
     }
 
@@ -376,7 +387,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     if (($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_OK)
                     &&  ($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_NO_FILE))
                     {
-                        $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
+                        $gMessage->show($gL10n->get('SYS_ATTACHMENT_TO_LARGE'));
                         // => EXIT
                     }
 
@@ -393,7 +404,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                         $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
                         if ($attachmentSize > Email::getMaxAttachmentSize())
                         {
-                            $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
+                            $gMessage->show($gL10n->get('SYS_ATTACHMENT_TO_LARGE'));
                             // => EXIT
                         }
 
@@ -403,10 +414,11 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                             $_FILES['userfile']['type'][$currentAttachmentNo] = 'application/octet-stream';
                         }
 
-                        // add the attachment to the mail
+                        // add the attachment to the email and message object
                         try
                         {
                             $email->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo], $encoding = 'base64', $_FILES['userfile']['type'][$currentAttachmentNo]);
+                            $message->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo]);
                         }
                         catch (Exception $e)
                         {
@@ -424,7 +436,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('MAI_SUBJECT'))));
+            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_SUBJECT'))));
             // => EXIT
         }
     }
@@ -483,22 +495,19 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         $email->ConfirmReadingTo = $gCurrentUser->getValue('EMAIL');
     }
 
-    require_once(__DIR__ . '/messages_functions.php');
-
     if ($postListId > 0)
     {
         $showList = new ListConfiguration($gDb, $postListId);
         $listName = $showList->getValue('lst_name');
-        $receiverString = 'list ' . $gL10n->get('SYS_LIST') . ($listName === '' ? '' : ' - ' . $listName);
+        $receiverName = $gL10n->get('SYS_LIST') . ($listName === '' ? '' : ' - ' . $listName);
     }
-
-    if($gSettingsManager->getBool('mail_into_to'))
+    elseif($gSettingsManager->getBool('mail_into_to'))
     {
-        $receiverName = prepareRecipients($receiverString, true);
+        $receiverName = $message->getRecipientsNamesString(true);
     }
     else
     {
-        $receiverName = prepareRecipients($receiverString, false);
+        $receiverName = $message->getRecipientsNamesString(false);
     }
 
     // load mail template and replace text
@@ -514,8 +523,8 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         $gMessage->showHtmlTextOnly(true);
     }
 }
-// ***** PM *****
 else
+// ***** PM *****
 {
     // if $postTo is not an Array, it is send from the hidden field.
     if (!is_array($postTo))
@@ -525,6 +534,10 @@ else
 
     // get user data from Database
     $user = new User($gDb, $gProfileFields, $postTo[0]);
+
+    // add user to the message object
+    $message->addUser((int) $user->getValue('usr_id'));
+    $message->setValue('msg_read', 1);
 
     // check if it is allowed to send to this user
     if ((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || $user->getValue('usr_id') === '')
@@ -543,53 +556,16 @@ else
     // save page in navigation - to have a check for a navigation back.
     $gNavigation->addUrl(CURRENT_URL);
 
-    if ($getMsgId === 0)
-    {
-        $sql = 'INSERT INTO '. TBL_MESSAGES. '
-                       (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, 1) -- $getMsgType, $postSubjectSQL, $currUsrId, $postTo[0]';
-        $gDb->queryPrepared($sql, array($getMsgType, $postSubjectSQL, $currUsrId, $postTo[0]));
-        $getMsgId = $gDb->lastInsertId();
-    }
-    else
-    {
-        $sql = 'UPDATE '. TBL_MESSAGES. '
-                   SET msg_read = 1
-                     , msg_timestamp = CURRENT_TIMESTAMP
-                     , msg_usr_id_sender = ? -- $currUsrId
-                     , msg_usr_id_receiver = ? -- $postTo[0]
-                 WHERE msg_id = ? -- $getMsgId';
-        $gDb->queryPrepared($sql, array($currUsrId, $postTo[0], $getMsgId));
-    }
-
-    $messagePartNr = $message->countMessageParts() + 1;
-
-    $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. '
-                   (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-            VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $messagePartNr, $currUsrId, $postBody';
-
-    if ($gDb->queryPrepared($sql, array($getMsgId, $messagePartNr, $currUsrId, $postBody)))
-    {
-        $sendResult = true;
-    }
+    $sendResult = true;
 }
 
 // message if send/save is OK
 if ($sendResult === true) // don't remove check === true. ($sendResult) won't work
 {
-    // save mail also to database
-    if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $gValidLogin)
+    if($gValidLogin)
     {
-        $sql = 'INSERT INTO '. TBL_MESSAGES. '
-                       (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, 0) -- $getMsgType, $postSubjectSQL, $currUsrId, $receiverString';
-        $gDb->queryPrepared($sql, array($getMsgType, $postSubjectSQL, $currUsrId, $receiverString));
-        $getMsgId = $gDb->lastInsertId();
-
-        $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. '
-                       (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-                VALUES (?, 1, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $currUsrId, $postBody';
-        $gDb->queryPrepared($sql, array($getMsgId, $currUsrId, $postBody));
+        // save mail or message to database
+        $message->save();
     }
 
     // after sending remove the actual Page from the NaviObject and remove also the send-page
@@ -608,7 +584,7 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
 
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
-        $gMessage->show($gL10n->get('MSG_PM_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))));
+        $gMessage->show($gL10n->get('SYS_PRIVATE_MESSAGE_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))));
         // => EXIT
     }
     else
@@ -621,7 +597,7 @@ else
 {
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
-        $gMessage->show($gL10n->get('MSG_PM_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult)));
+        $gMessage->show($gL10n->get('SYS_PRIVATE_MESSAGE_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult)));
         // => EXIT
     }
     else

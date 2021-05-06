@@ -11,40 +11,42 @@
 /*==============================================================*/
 /* Table Cleanup                                                */
 /*==============================================================*/
-DROP TABLE IF EXISTS %PREFIX%_announcements       CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_auto_login          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_components          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_dates               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_files               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_folders             CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_guestbook_comments  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_guestbook           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_links               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_members             CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages            CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages_content    CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_photos              CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_preferences         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_registrations       CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_role_dependencies   CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_roles               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_roles_rights        CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_roles_rights_data   CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_list_columns        CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_lists               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_rooms               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_sessions            CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_texts               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_relations      CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_relation_types CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_log            CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_data           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_fields         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_categories          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_users               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_organizations       CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_ids                 CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_menu                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_announcements        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_auto_login           CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_components           CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_dates                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_files                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_folders              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_guestbook_comments   CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_guestbook            CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_links                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_members              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_attachments CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_content     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_recipients  CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_photos               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_preferences          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_registrations        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_role_dependencies    CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_roles                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_roles_rights         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_roles_rights_data    CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_list_columns         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_lists                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_rooms                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_sessions             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_texts                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_relations       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_relation_types  CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_log             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_data            CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_fields          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_categories           CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_users                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_organizations        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_ids                  CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
 
 
 /*==============================================================*/
@@ -380,13 +382,27 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
+/* Table: adm_messages_attachments                              */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_messages_attachments
+(
+    msa_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    msa_msg_id                  integer unsigned    NOT NULL,
+    msa_file_name               varchar(256)        NOT NULL,
+    msa_original_file_name      varchar(256)        NOT NULL,
+    PRIMARY KEY (msa_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+/*==============================================================*/
 /* Table: adm_messages_content                                  */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_messages_content
 (
     msc_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     msc_msg_id                  integer unsigned    NOT NULL,
-    msc_part_id                 integer unsigned    NOT NULL,
     msc_usr_id                  integer unsigned,
     msc_message                 text                NOT NULL,
     msc_timestamp               timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
@@ -396,7 +412,21 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE INDEX %PREFIX%_idx_msc_part_id ON %PREFIX%_messages_content (msc_part_id);
+/*==============================================================*/
+/* Table: adm_messages_recipients                                */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_messages_recipients
+(
+    msr_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    msr_msg_id                  integer unsigned    NOT NULL,
+    msr_rol_id                  integer unsigned,
+    msr_usr_id                  integer unsigned,
+    msr_role_mode               smallint            NOT NULL    DEFAULT 0,
+    PRIMARY KEY (msr_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */
@@ -844,9 +874,17 @@ ALTER TABLE %PREFIX%_menu
 ALTER TABLE %PREFIX%_messages
     ADD CONSTRAINT %PREFIX%_fk_msg_usr_sender  FOREIGN KEY (msg_usr_id_sender)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
 
+ALTER TABLE %PREFIX%_messages_attachments
+    ADD CONSTRAINT %PREFIX%_fk_msa_msg_id      FOREIGN KEY (msa_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 ALTER TABLE %PREFIX%_messages_content
     ADD CONSTRAINT %PREFIX%_fk_msc_msg_id      FOREIGN KEY (msc_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_msc_usr_id      FOREIGN KEY (msc_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_messages_recipients
+    ADD CONSTRAINT %PREFIX%_fk_msr_msg_id      FOREIGN KEY (msr_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_msr_rol_id      FOREIGN KEY (msr_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_msr_usr_id      FOREIGN KEY (msr_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_organizations
     ADD CONSTRAINT %PREFIX%_fk_org_org_parent  FOREIGN KEY (org_org_id_parent)  REFERENCES %PREFIX%_organizations (org_id)       ON DELETE SET NULL ON UPDATE RESTRICT;

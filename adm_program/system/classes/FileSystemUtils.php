@@ -34,6 +34,58 @@ final class FileSystemUtils
     private static $allowedDirectories = array();
 
     /**
+     * @var array<string,string> Array with file extensions and the best Font Awesome icon that should be used
+     */
+    protected static $iconFileExtension = array(
+        'bmp'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/bmp', 'viewable' => true),
+        'gif'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/gif', 'viewable' => true),
+        'jpg'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/jpeg', 'viewable' => true),
+        'jpeg' => array('icon' => 'fa-file-image', 'mime-type' => 'image/jpeg', 'viewable' => true),
+        'png'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/png', 'viewable' => true),
+        'svg'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/svg+xml', 'viewable' => true),
+        'tiff' => array('icon' => 'fa-file-image', 'mime-type' => 'image/tiff', 'viewable' => true),
+        'doc'  => array('icon' => 'fa-file-word', 'mime-type' => 'application/msword', 'viewable' => false),
+        'docx' => array('icon' => 'fa-file-word', 'mime-type' => 'application/msword', 'viewable' => false),
+        'dot'  => array('icon' => 'fa-file-word', 'mime-type' => 'application/msword', 'viewable' => false),
+        'dotx' => array('icon' => 'fa-file-word', 'mime-type' => 'application/msword', 'viewable' => false),
+        'odt'  => array('icon' => 'fa-file-word', 'mime-type' => 'application/vnd.oasis.opendocument.text', 'viewable' => false),
+        'csv'  => array('icon' => 'fa-file-excel', 'mime-type' => 'text/comma-separated-values', 'viewable' => false),
+        'xls'  => array('icon' => 'fa-file-excel', 'mime-type' => 'application/msexcel', 'viewable' => false),
+        'xlsx' => array('icon' => 'fa-file-excel', 'mime-type' => 'application/msexcel', 'viewable' => false),
+        'xlt'  => array('icon' => 'fa-file-excel', 'mime-type' => 'application/msexcel', 'viewable' => false),
+        'xltx' => array('icon' => 'fa-file-excel', 'mime-type' => 'application/msexcel', 'viewable' => false),
+        'ods'  => array('icon' => 'fa-file-excel', 'mime-type' => 'application/vnd.oasis.opendocument.spreadsheet', 'viewable' => false),
+        'pps'  => array('icon' => 'fa-file-powerpoint', 'mime-type' => 'application/mspowerpoint', 'viewable' => false),
+        'ppsx' => array('icon' => 'fa-file-powerpoint', 'mime-type' => 'application/mspowerpoint', 'viewable' => false),
+        'ppt'  => array('icon' => 'fa-file-powerpoint', 'mime-type' => 'application/mspowerpoint', 'viewable' => false),
+        'pptx' => array('icon' => 'fa-file-powerpoint', 'mime-type' => 'application/mspowerpoint', 'viewable' => false),
+        'odp'  => array('icon' => 'fa-file-powerpoint', 'mime-type' => 'application/vnd.oasis.opendocument.presentation', 'viewable' => false),
+        'css'  => array('icon' => 'fa-file-alt', 'mime-type' => 'text/css', 'viewable' => true),
+        'log'  => array('icon' => 'fa-file-alt', 'mime-type' => 'text/plain', 'viewable' => true),
+        'md'   => array('icon' => 'fa-file-alt', 'mime-type' => 'text/plain', 'viewable' => true),
+        'rtf'  => array('icon' => 'fa-file-alt', 'mime-type' => 'text/rtf', 'viewable' => false),
+        'sql'  => array('icon' => 'fa-file-alt', 'mime-type' => 'text/plain', 'viewable' => true),
+        'txt'  => array('icon' => 'fa-file-alt', 'mime-type' => 'text/plain', 'viewable' => true),
+        'pdf'  => array('icon' => 'fa-file-pdf', 'mime-type' => 'application/pdf', 'viewable' => true),
+        'gz'   => array('icon' => 'fa-file-archive', 'mime-type' => 'application/gzip', 'viewable' => false),
+        'tar'  => array('icon' => 'fa-file-archive', 'mime-type' => 'application/x-tar', 'viewable' => false),
+        'zip'  => array('icon' => 'fa-file-archive', 'mime-type' => 'application/zip', 'viewable' => false),
+        'avi'  => array('icon' => 'fa-file-video', 'mime-type' => 'video/x-msvideo', 'viewable' => true),
+        'flv'  => array('icon' => 'fa-file-video', 'mime-type' => 'video/x-flv', 'viewable' => true),
+        'mov'  => array('icon' => 'fa-file-video', 'mime-type' => 'video/quicktime', 'viewable' => true),
+        'mp4'  => array('icon' => 'fa-file-video', 'mime-type' => 'video/mp4', 'viewable' => true),
+        'mpeg' => array('icon' => 'fa-file-video', 'mime-type' => 'video/mpeg', 'viewable' => true),
+        'mpg'  => array('icon' => 'fa-file-video', 'mime-type' => 'video/mpeg', 'viewable' => true),
+        'webm' => array('icon' => 'fa-file-video', 'mime-type' => 'video/webm', 'viewable' => true),
+        'wmv'  => array('icon' => 'fa-file-video', 'mime-type' => 'video/x-ms-wmv', 'viewable' => true),
+        'aac'  => array('icon' => 'fa-file-audio', 'mime-type' => 'audio/aac', 'viewable' => true),
+        'midi' => array('icon' => 'fa-file-audio', 'mime-type' => 'audio/x-midi', 'viewable' => true),
+        'mp3'  => array('icon' => 'fa-file-audio', 'mime-type' => 'audio/mpeg3', 'viewable' => true),
+        'wav'  => array('icon' => 'fa-file-audio', 'mime-type' => 'audio/x-midi', 'viewable' => true),
+        'wma'  => array('icon' => 'fa-file-audio', 'mime-type' => 'audio/x-ms-wma', 'viewable' => true)
+    );
+
+    /**
      * Checks if file-system is UNIX
      * @return bool Returns true if file-system is UNIX
      */
@@ -734,6 +786,42 @@ final class FileSystemUtils
         return array('total' => $total, 'free' => $free, 'used' => $used);
     }
 
+
+    /**
+     * Get the relevant Font Awesome icon for the current file
+     * @return string Returns the name of the Font Awesome icon
+     */
+    public static function getFileFontAwesomeIcon($filename)
+    {
+        $iconFile = 'fa-file';
+        $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+
+        if(array_key_exists($fileExtension, self::$iconFileExtension))
+        {
+            $iconFile = self::$iconFileExtension[$fileExtension]['icon'];
+        }
+
+        return $iconFile;
+    }
+
+    /**
+     * Get the MIME type of the current file e.g. 'image/jpeg'
+     * @return string MIME type of the current file
+     */
+    public static function getFileMimeType($filename)
+    {
+        $mimeType = 'application/octet-stream';
+        $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        if(array_key_exists($fileExtension, self::$iconFileExtension))
+        {
+            $mimeType = self::$iconFileExtension[$fileExtension]['mime-type'];
+        }
+
+        return $mimeType;
+    }
+
     /**
      * Get a generated filename with a timestamp and a secure random identifier
      * @param string $filename The original filename
@@ -1144,6 +1232,23 @@ final class FileSystemUtils
         closedir($dirHandle);
 
         return true;
+    }
+
+    /**
+     * Check if the current file format could be viewed within a browser.
+     * @return bool Return true if the file could be viewed in the browser otherwise false.
+     */
+    public static function isViewableFileInBrowser($filename)
+    {
+        $returnCode = false;
+        $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        if(array_key_exists($fileExtension, self::$iconFileExtension))
+        {
+            $returnCode = self::$iconFileExtension[$fileExtension]['viewable'];
+        }
+
+        return $returnCode;
     }
 
     /**

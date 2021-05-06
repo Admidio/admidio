@@ -77,7 +77,7 @@ class ModuleMessages
      * @param string $groupString (e.g: "groupID: 4-2")
      * @return array<string,string|int> Returns the groupId and status
      */
-    public function msgGroupSplit($groupString)
+    public static function msgGroupSplit($groupString)
     {
         $groupSplit = explode(':', $groupString);
         $groupIdAndStatus = explode('-', trim($groupSplit[1]));
@@ -85,6 +85,7 @@ class ModuleMessages
         if (count($groupIdAndStatus) === 1)
         {
             $status = 'active';
+            $groupIdAndStatus[] = 0;
         }
         elseif ($groupIdAndStatus[1] === '1')
         {
@@ -100,8 +101,9 @@ class ModuleMessages
         }
 
         return array(
-            'id'     => (int) $groupIdAndStatus[0],
-            'status' => $status
+            'id'        => (int) $groupIdAndStatus[0],
+            'status'    => $status,
+            'role_mode' => $groupIdAndStatus[1]
         );
     }
 
@@ -114,7 +116,7 @@ class ModuleMessages
     {
         global $gDb;
 
-        $sql = 'SELECT msg_id, msg_usr_id_receiver AS user
+        $sql = 'SELECT msg_id
                   FROM ' . TBL_MESSAGES . '
                  WHERE msg_type = \'EMAIL\'
                    AND msg_usr_id_sender = ? -- $userId
@@ -132,10 +134,11 @@ class ModuleMessages
     {
         global $gDb;
 
-        $sql = 'SELECT msg_id, msg_usr_id_sender, msg_usr_id_receiver
+        $sql = 'SELECT msg_id
                   FROM ' . TBL_MESSAGES . '
+                 INNER JOIN ' . TBL_MESSAGES_RECIPIENTS . ' ON msr_msg_id = msg_id
                  WHERE msg_type = \'PM\'
-                   AND msg_usr_id_receiver = ? -- $userId
+                   AND msr_usr_id = ? -- $userId
                    AND msg_read = 1
               ORDER BY msg_id DESC';
 
@@ -151,10 +154,11 @@ class ModuleMessages
     {
         global $gDb;
 
-        $sql = 'SELECT msg_id, msg_usr_id_sender, msg_usr_id_receiver
+        $sql = 'SELECT msg_id
                   FROM ' . TBL_MESSAGES . '
+                 INNER JOIN ' . TBL_MESSAGES_RECIPIENTS . ' ON msr_msg_id = msg_id
                  WHERE msg_type = \'PM\'
-                   AND ( (msg_usr_id_receiver = ? AND msg_read <> 1) -- $userId
+                   AND ( (msr_usr_id = ? AND msg_read <> 1) -- $userId
                        OR (msg_usr_id_sender  = ? AND msg_read < 2)) -- $userId
               ORDER BY msg_id DESC';
 

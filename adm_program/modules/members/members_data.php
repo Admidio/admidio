@@ -258,7 +258,7 @@ while($row = $mglStatement->fetch())
     $memberOfOtherOrganization = (bool) $row['member_other_orga'];
 
     // Create row and add first column "Rownumber"
-    $columnValues = array($rowNumber);
+    $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_id'], '0' => $rowNumber);
 
     // Add icon for "Orgamitglied" or "Nichtmitglied"
     if($memberOfThisOrganization)
@@ -272,20 +272,20 @@ while($row = $mglStatement->fetch())
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($orgName));
     }
 
-    $columnValues[] = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">
+    $columnValues['1'] = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">
         <i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
 
     // Add "Lastname" and "Firstname"
-    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">'.$row['name'].'</a>';
+    $columnValues['2'] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">'.$row['name'].'</a>';
 
     // Add "Loginname"
     if(strlen($row['usr_login_name']) > 0)
     {
-        $columnValues[] = $row['usr_login_name'];
+        $columnValues['3'] = $row['usr_login_name'];
     }
     else
     {
-        $columnValues[] = '';
+        $columnValues['3'] = '';
     }
 
     // Add icon for "gender"
@@ -293,11 +293,11 @@ while($row = $mglStatement->fetch())
     {
         // show selected text of optionfield or combobox
         $arrListValues  = $gProfileFields->getProperty('GENDER', 'usf_value_list');
-        $columnValues[] = $arrListValues[$row['gender']];
+        $columnValues['4'] = $arrListValues[$row['gender']];
     }
     else
     {
-        $columnValues[] = '';
+        $columnValues['4'] = '';
     }
 
     // Add "birthday"
@@ -305,16 +305,16 @@ while($row = $mglStatement->fetch())
     {
         // date must be formated
         $date = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
-        $columnValues[] = $date->format($gSettingsManager->getString('system_date'));
+        $columnValues['5'] = $date->format($gSettingsManager->getString('system_date'));
     }
     else
     {
-        $columnValues[] = '';
+        $columnValues['5'] = '';
     }
 
     // Add "change date"
     $timestampChange = \DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
-    $columnValues[]  = $timestampChange->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
+    $columnValues['6']  = $timestampChange->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
 
     // Add "user-administration icons"
     $userAdministration = '';
@@ -368,11 +368,13 @@ while($row = $mglStatement->fetch())
         || $memberOfThisOrganization)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
         && (int) $row['usr_id'] !== (int) $gCurrentUser->getValue('usr_id')) // das eigene Profil darf keiner entfernen
     {
-        $userAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $row['usr_id'], 'mode' => 6)).'">'.
-            '<i class="fas fa-trash-alt" data-toggle="tooltip" title="' . $gL10n->get('MEM_REMOVE_USER') . '"></i></a>';
+        $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
+                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $row['usr_id'], 'mode' => 6)) . '">'.
+                '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('MEM_REMOVE_USER').'"></i>
+            </a>';
     }
 
-    $columnValues[] = $userAdministration;
+    $columnValues['7'] = $userAdministration;
 
     // add current row to json array
     $jsonArray['data'][] = $columnValues;

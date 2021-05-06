@@ -3,5 +3,40 @@
     <step id="10">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_name = 'registration_adopt_all_data'</step>
     <step id="20">UPDATE %PREFIX%_categories SET cat_name = 'SYS_BASIC_DATA' WHERE cat_name LIKE 'SYS_MASTER_DATA'</step>
     <step id="30">UPDATE %PREFIX%_categories SET cat_name_INTERN = 'BASIC_DATA' WHERE cat_name_intern LIKE 'MASTER_DATA'</step>
+    <step id="33">DELETE FROM %PREFIX%_messages_content WHERE msc_msg_id IN (SELECT msg_id FROM %PREFIX%_messages WHERE msg_type = 'CHAT')</step>
+    <step id="35">DELETE FROM %PREFIX%_messages WHERE msg_type = 'CHAT'</step>
+    <step id="40">CREATE TABLE %PREFIX%_messages_recipients
+		(
+		    msr_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+		    msr_msg_id                  integer unsigned    NOT NULL,
+		    msr_rol_id                  integer unsigned,
+		    msr_usr_id                  integer unsigned,
+            msr_role_mode               smallint            NOT NULL    DEFAULT 0,
+		    PRIMARY KEY (msr_id)
+		)
+		ENGINE = InnoDB
+		DEFAULT character SET = utf8
+		COLLATE = utf8_unicode_ci</step>
+    <step id="50">ALTER TABLE %PREFIX%_messages_recipients
+	    ADD CONSTRAINT %PREFIX%_fk_msr_msg_id      FOREIGN KEY (msr_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT,
+	    ADD CONSTRAINT %PREFIX%_fk_msr_rol_id      FOREIGN KEY (msr_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+	    ADD CONSTRAINT %PREFIX%_fk_msr_usr_id      FOREIGN KEY (msr_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="60">ComponentUpdateSteps::updateStep41MigrateMessageRecipients</step>
+    <step id="70">ALTER TABLE %PREFIX%_messages_content DROP COLUMN msc_part_id</step>
+    <step id="80">CREATE TABLE %PREFIX%_messages_attachments
+        (
+            msa_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+            msa_msg_id                  integer unsigned    NOT NULL,
+            msa_file_name               varchar(256)        NOT NULL,
+            msa_original_file_name      varchar(256)        NOT NULL,
+            PRIMARY KEY (msa_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="90">ALTER TABLE %PREFIX%_messages_attachments
+    ADD CONSTRAINT %PREFIX%_fk_msa_msg_id      FOREIGN KEY (msa_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="100">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('enable_chat_module')</step>
+    <step id="110">UPDATE %PREFIX%_menu SET men_description = 'SYS_EMAIL_DESC' WHERE men_description = 'MAI_EMAIL_DESC'</step>
     <step>stop</step>
 </update>

@@ -272,8 +272,7 @@ class Component extends TableAccess
 
             case 'MESSAGES':
                 if ($gSettingsManager->getBool('enable_mail_module')
-                || ($gSettingsManager->getBool('enable_pm_module') && $gValidLogin)
-                || $gSettingsManager->getBool('enable_chat_module') && $gValidLogin)
+                || ($gSettingsManager->getBool('enable_pm_module') && $gValidLogin))
                 {
                     return true;
                 }
