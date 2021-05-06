@@ -123,7 +123,6 @@ $defaultOrgPreferences = array(
     // Messages
     'enable_mail_module'          => '1',
     'enable_pm_module'            => '1',
-    'enable_chat_module'          => '0',
     'enable_mail_captcha'         => '1',
     'mail_max_receiver'           => '10',
     'mail_show_former'            => '1',

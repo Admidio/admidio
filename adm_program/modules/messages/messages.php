@@ -19,7 +19,7 @@ if (!$gValidLogin)
 }
 
 // check if the call of the page was allowed
-if (!$gSettingsManager->getBool('enable_pm_module') && !$gSettingsManager->getBool('enable_mail_module') && !$gSettingsManager->getBool('enable_chat_module'))
+if (!$gSettingsManager->getBool('enable_pm_module') && !$gSettingsManager->getBool('enable_mail_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -66,13 +66,6 @@ if ($gSettingsManager->getBool('enable_pm_module'))
     $page->addPageFunctionsMenuItem('menu_item_messages_new_pm', $gL10n->get('SYS_WRITE_PM'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM')),
         'fa-comment-alt');
-}
-
-// link to Chat
-if ($gSettingsManager->getBool('enable_chat_module'))
-{
-    $page->addPageFunctionsMenuItem('menu_item_messages_chat', $gL10n->get('SYS_CHAT'),
-        ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_chat.php', 'fa-comments');
 }
 
 $table = new HtmlTable('adm_message_table', $page, true, true);

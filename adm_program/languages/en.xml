@@ -670,8 +670,6 @@
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Active and former members</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Active and former</string>
   <string name="SYS_ACTIVE_MEMBERS">Active Members</string>
-  <string name="SYS_ACTIVATE_CHAT_MODULE">Activate chat</string>
-  <string name="SYS_ACTIVATE_CHAT_MODULE_DESC">The chat module can be enabled or disabled using this setting. The module dynamically loads data from the database every 3 seconds. A maximum of 99 entries are saved. For 100 messages, the first 50 entries are deleted. (Default: Disabled)</string>
   <string name="SYS_ACTIVATE_PM_MODULE">Activate private messages</string>
   <string name="SYS_ACTIVATE_PM_MODULE_DESC">Private messages can be enabled or disabled using this setting. (Default: enabled)</string>
   <string name="SYS_ACTIVATE_ROLE">Activate role</string>
@@ -749,7 +747,6 @@
   <string name="SYS_CHANGED_AT">Last review</string>
   <string name="SYS_CHANGED_BY">Changed by</string>
   <string name="SYS_CHARACTERS">Characters</string>
-  <string name="SYS_CHAT">Chat</string>
   <string name="SYS_CHECK_FOR_UPDATE">Check for update</string>
   <string name="SYS_CHECKBOX">Checkbox</string>
   <string name="SYS_CHECKBOX_AUTOSAVE">Checkbox status is saved automatically after marking.</string>
@@ -1403,7 +1400,6 @@
   <string name="SYS_WIDTH">Width</string>
   <string name="SYS_WRITE_EMAIL">Write e-mail</string>
   <string name="SYS_WRITE_ENTRY">Write entry</string>
-  <string name="SYS_WRITE_MESSAGE">Write message</string>
   <string name="SYS_WRITE_PM">Write private message</string>
   <string name="SYS_YES">Yes</string>
   <string name="SYS_YOUR_CONFIGURATION">Your configuration</string>

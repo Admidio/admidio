@@ -1199,10 +1199,6 @@ $formMessages->addCheckbox(
     array('helpTextIdInline' => 'SYS_ACTIVATE_PM_MODULE_DESC')
 );
 $formMessages->addCheckbox(
-    'enable_chat_module', $gL10n->get('SYS_ACTIVATE_CHAT_MODULE'), (bool) $formValues['enable_chat_module'],
-    array('helpTextIdInline' => 'SYS_ACTIVATE_CHAT_MODULE_DESC')
-);
-$formMessages->addCheckbox(
     'enable_mail_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), (bool) $formValues['enable_mail_captcha'],
     array('helpTextIdInline' => 'MAI_SHOW_CAPTCHA_DESC')
 );
