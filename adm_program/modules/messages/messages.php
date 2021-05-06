@@ -74,7 +74,7 @@ $table->setServerSideProcessing(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_d
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
 $table->addRowHeadingByArray(array(
     '<i class="fas fa-envelope" data-toggle="tooltip" title="' . $gL10n->get('SYS_CATEGORY') . '"></i>',
-    $gL10n->get('MAI_SUBJECT'),
+    $gL10n->get('SYS_SUBJECT'),
     $gL10n->get('SYS_CONVERSATION_PARTNER'),
     '<i class="fas fa-paperclip" data-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENT') . '"></i>',
     $gL10n->get('SYS_DATE'),

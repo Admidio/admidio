@@ -52,7 +52,7 @@ else
 if ($postSubjectSQL === '')
 {
     // message when no subject is given
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('MAI_SUBJECT'))));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_SUBJECT'))));
     // => EXIT
 }
 
@@ -138,12 +138,12 @@ else
 {
     if ($postName === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('MAI_YOUR_NAME'))));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_YOUR_NAME'))));
         // => EXIT
     }
     if (!StringUtils::strValidCharacters($postFrom, 'email'))
     {
-        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('MAI_YOUR_EMAIL'))));
+        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_YOUR_EMAIL'))));
         // => EXIT
     }
 }
@@ -436,7 +436,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('MAI_SUBJECT'))));
+            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_SUBJECT'))));
             // => EXIT
         }
     }

@@ -132,7 +132,7 @@ switch($getMode)
                     {
                         if(!StringUtils::strValidCharacters($_POST['mail_sendmail_address'], 'email'))
                         {
-                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('MAI_SENDER_EMAIL'))));
+                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_SENDER_EMAIL'))));
                             // => EXIT
                         }
                     }

@@ -507,7 +507,7 @@ class Email extends PHPMailer
 
         if (!$gValidLogin)
         {
-            $senderName .= ' (' . $gL10n->get('MAI_SENDER_NOT_LOGGED_IN') . ') ';
+            $senderName .= ' (' . $gL10n->get('SYS_SENDER_NOT_LOGGED_IN') . ') ';
         }
 
         // replace all line feeds within the mailtext into simple breaks because only those are valid within mails
@@ -614,17 +614,17 @@ class Email extends PHPMailer
         // remove all recipients
         $this->clearAllRecipients();
 
-        $this->Subject = $gL10n->get('MAI_CARBON_COPY') . ': ' . $this->Subject;
+        $this->Subject = $gL10n->get('SYS_CARBON_COPY') . ': ' . $this->Subject;
 
         // add a separate header with info of the copy mail
         if($this->emSendAsHTML)
         {
-            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . static::$LE . '<hr style="border: 1px solid;" />' .
+            $copyHeader = $gL10n->get('SYS_COPY_OF_YOUR_EMAIL') . ':' . static::$LE . '<hr style="border: 1px solid;" />' .
                 static::$LE . static::$LE;
         }
         else
         {
-            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . static::$LE .
+            $copyHeader = $gL10n->get('SYS_COPY_OF_YOUR_EMAIL') . ':' . static::$LE .
                 '*****************************************************************************************************************************' .
                 static::$LE . static::$LE;
         }
@@ -632,7 +632,7 @@ class Email extends PHPMailer
         // if the flag emListRecipients is set than list all recipients of the mail
         if ($this->emListRecipients)
         {
-            $copyHeader = $gL10n->get('MAI_MESSAGE_WENT_TO').':' . static::$LE . static::$LE .
+            $copyHeader = $gL10n->get('SYS_MESSAGE_WENT_TO').':' . static::$LE . static::$LE .
                 implode(static::$LE, $this->emRecipientsNames) . static::$LE . static::$LE . $copyHeader;
         }
 

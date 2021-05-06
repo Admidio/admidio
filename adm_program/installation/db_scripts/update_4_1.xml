@@ -37,5 +37,6 @@
     <step id="90">ALTER TABLE %PREFIX%_messages_attachments
     ADD CONSTRAINT %PREFIX%_fk_msa_msg_id      FOREIGN KEY (msa_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT</step>
     <step id="100">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('enable_chat_module')</step>
+    <step id="110">UPDATE %PREFIX%_menu SET men_description = 'SYS_EMAIL_DESC' WHERE men_description = 'MAI_EMAIL_DESC'</step>
     <step>stop</step>
 </update>

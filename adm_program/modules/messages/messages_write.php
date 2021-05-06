@@ -169,11 +169,11 @@ if ($getUserId > 0)
 
 if ($getSubject !== '')
 {
-    $headline = $gL10n->get('MAI_SUBJECT').': '.$getSubject;
+    $headline = $gL10n->get('SYS_SUBJECT').': '.$getSubject;
 }
 else
 {
-    $headline = $gL10n->get('MAI_SEND_EMAIL');
+    $headline = $gL10n->get('SYS_SEND_EMAIL');
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
         $headline = $gL10n->get('SYS_SEND_PRIVATE_MESSAGE');
@@ -250,7 +250,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     if($getSubject === '')
     {
         $form->addInput(
-            'msg_subject', $gL10n->get('MAI_SUBJECT'), $message->getValue('msg_subject'),
+            'msg_subject', $gL10n->get('SYS_SUBJECT'), $message->getValue('msg_subject'),
             array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
         );
     }
@@ -492,7 +492,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
             'property'               => HtmlForm::FIELD_REQUIRED,
             'multiselect'            => true,
             'maximumSelectionNumber' => $maxNumberRecipients,
-            'helpTextIdLabel'        => 'MAI_SEND_MAIL_TO_ROLE',
+            'helpTextIdLabel'        => 'SYS_SEND_MAIL_TO_ROLE',
             'defaultValue'           => $preloadData
         )
     );
@@ -513,7 +513,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
         $possibleEmails = $pdoStatement->fetchColumn();
 
         $form->addInput(
-            'name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
+            'name', $gL10n->get('SYS_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
             array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
         );
 
@@ -534,14 +534,14 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
             $sqlData['params'] = array($currUsrId);
 
             $form->addSelectBoxFromSql(
-                'mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sqlData,
+                'mailfrom', $gL10n->get('SYS_YOUR_EMAIL'), $gDb, $sqlData,
                 array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false)
             );
         }
         else
         {
             $form->addInput(
-                'mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'),
+                'mailfrom', $gL10n->get('SYS_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'),
                 array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
             );
         }
@@ -549,11 +549,11 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
     else
     {
         $form->addInput(
-            'namefrom', $gL10n->get('MAI_YOUR_NAME'), $formValues['namefrom'],
+            'namefrom', $gL10n->get('SYS_YOUR_NAME'), $formValues['namefrom'],
             array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
         );
         $form->addInput(
-            'mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $formValues['mailfrom'],
+            'mailfrom', $gL10n->get('SYS_YOUR_EMAIL'), $formValues['mailfrom'],
             array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
         );
     }
@@ -561,20 +561,20 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
     // show option to send a copy to your email address only for registered users because of spam abuse
     if($gValidLogin)
     {
-        $form->addCheckbox('carbon_copy', $gL10n->get('MAI_SEND_COPY'), $formValues['carbon_copy']);
+        $form->addCheckbox('carbon_copy', $gL10n->get('SYS_SEND_COPY'), $formValues['carbon_copy']);
     }
 
     // if preference is set then show a checkbox where the user can request a delivery confirmation for the email
     if (($currUsrId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation') === 2) || (int) $gSettingsManager->get('mail_delivery_confirmation') === 1)
     {
-        $form->addCheckbox('delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
+        $form->addCheckbox('delivery_confirmation', $gL10n->get('SYS_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
     }
 
     $form->closeGroupBox();
 
     $form->openGroupBox('gb_mail_message', $gL10n->get('SYS_MESSAGE'));
     $form->addInput(
-        'msg_subject', $gL10n->get('MAI_SUBJECT'), $message->getValue('msg_subject'),
+        'msg_subject', $gL10n->get('SYS_SUBJECT'), $message->getValue('msg_subject'),
         array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 
@@ -588,7 +588,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
                 'maxUploadSize'      => Email::getMaxAttachmentSize(),
                 'multiUploadLabel'   => $gL10n->get('SYS_ADD_ATTACHMENT'),
                 'hideUploadField'    => true,
-                'helpTextIdLabel'    => $gL10n->get('MAI_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
+                'helpTextIdLabel'    => $gL10n->get('SYS_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
                 'icon'               => 'fa-paperclip'
             )
         );

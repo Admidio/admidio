@@ -230,11 +230,11 @@ $form->addSelectBox(
 );
 $form->addLine();
 $form->addInput(
-    'name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
+    'name_from', $gL10n->get('SYS_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
     array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
 );
 $form->addInput(
-    'mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'),
+    'mail_from', $gL10n->get('SYS_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'),
     array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
 );
 $form->closeGroupBox();

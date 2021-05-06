@@ -417,53 +417,53 @@ $formEmailDispatch = new HtmlForm(
     'email_dispatch_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'email_dispatch')),
     $page, array('class' => 'form-preferences')
 );
-$selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
+$selectBoxEntries = array('phpmail' => $gL10n->get('SYS_PHP_MAIL'), 'SMTP' => $gL10n->get('SYS_SMTP'));
 $formEmailDispatch->addSelectBox(
-    'mail_send_method', $gL10n->get('MAI_SEND_METHOD'), $selectBoxEntries,
-    array('defaultValue' => $formValues['mail_send_method'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MAI_SEND_METHOD_DESC')
+    'mail_send_method', $gL10n->get('SYS_SEND_METHOD'), $selectBoxEntries,
+    array('defaultValue' => $formValues['mail_send_method'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_SEND_METHOD_DESC')
 );
 $formEmailDispatch->addInput(
-    'mail_sendmail_address', $gL10n->get('MAI_SENDER_EMAIL'), $formValues['mail_sendmail_address'],
-    array('maxLength' => 50, 'helpTextIdInline' => array('MAI_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
+    'mail_sendmail_address', $gL10n->get('SYS_SENDER_EMAIL'), $formValues['mail_sendmail_address'],
+    array('maxLength' => 50, 'helpTextIdInline' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
 );
 $formEmailDispatch->addInput(
-    'mail_sendmail_name', $gL10n->get('MAI_SENDER_NAME'), $formValues['mail_sendmail_name'],
-    array('maxLength' => 50, 'helpTextIdInline' => 'MAI_SENDER_NAME_DESC')
+    'mail_sendmail_name', $gL10n->get('SYS_SENDER_NAME'), $formValues['mail_sendmail_name'],
+    array('maxLength' => 50, 'helpTextIdInline' => 'SYS_SENDER_NAME_DESC')
 );
-$selectBoxEntries = array(0 => $gL10n->get('MAI_HIDDEN'), 1 => $gL10n->get('SYS_SENDER'), 2 => $gL10n->get('SYS_ADMINISTRATOR'));
+$selectBoxEntries = array(0 => $gL10n->get('SYS_HIDDEN'), 1 => $gL10n->get('SYS_SENDER'), 2 => $gL10n->get('SYS_ADMINISTRATOR'));
 $formEmailDispatch->addSelectBox(
     'mail_recipients_with_roles', $gL10n->get('SYS_MULTIPLE_RECIPIENTS'), $selectBoxEntries,
     array('defaultValue' => $formValues['mail_recipients_with_roles'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MULTIPLE_RECIPIENTS_DESC')
 );
 $formEmailDispatch->addInput(
-    'mail_bcc_count', $gL10n->get('MAI_COUNT_BCC'), $formValues['mail_bcc_count'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'MAI_COUNT_BCC_DESC')
+    'mail_bcc_count', $gL10n->get('SYS_COUNT_BCC'), $formValues['mail_bcc_count'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_COUNT_BCC_DESC')
 );
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
 $formEmailDispatch->addSelectBox(
-    'mail_character_encoding', $gL10n->get('MAI_CHARACTER_ENCODING'), $selectBoxEntries,
-    array('defaultValue' => $formValues['mail_character_encoding'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MAI_CHARACTER_ENCODING_DESC')
+    'mail_character_encoding', $gL10n->get('SYS_CHARACTER_ENCODING'), $selectBoxEntries,
+    array('defaultValue' => $formValues['mail_character_encoding'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_CHARACTER_ENCODING_DESC')
 );
 $formEmailDispatch->addInput(
-    'mail_smtp_host', $gL10n->get('MAI_SMTP_HOST'), $formValues['mail_smtp_host'],
-    array('maxLength' => 50, 'helpTextIdInline' => 'MAI_SMTP_HOST_DESC')
+    'mail_smtp_host', $gL10n->get('SYS_SMTP_HOST'), $formValues['mail_smtp_host'],
+    array('maxLength' => 50, 'helpTextIdInline' => 'SYS_SMTP_HOST_DESC')
 );
 $formEmailDispatch->addCheckbox(
-    'mail_smtp_auth', $gL10n->get('MAI_SMTP_AUTH'), (bool) $formValues['mail_smtp_auth'],
-    array('helpTextIdInline' => 'MAI_SMTP_AUTH_DESC')
+    'mail_smtp_auth', $gL10n->get('SYS_SMTP_AUTH'), (bool) $formValues['mail_smtp_auth'],
+    array('helpTextIdInline' => 'SYS_SMTP_AUTH_DESC')
 );
 $formEmailDispatch->addInput(
-    'mail_smtp_port', $gL10n->get('MAI_SMTP_PORT'), $formValues['mail_smtp_port'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'MAI_SMTP_PORT_DESC')
+    'mail_smtp_port', $gL10n->get('SYS_SMTP_PORT'), $formValues['mail_smtp_port'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_SMTP_PORT_DESC')
 );
 $selectBoxEntries = array(
-    ''    => $gL10n->get('MAI_SMTP_SECURE_NO'),
-    'ssl' => $gL10n->get('MAI_SMTP_SECURE_SSL'),
-    'tls' => $gL10n->get('MAI_SMTP_SECURE_TLS')
+    ''    => $gL10n->get('SYS_SMTP_SECURE_NO'),
+    'ssl' => $gL10n->get('SYS_SMTP_SECURE_SSL'),
+    'tls' => $gL10n->get('SYS_SMTP_SECURE_TLS')
 );
 $formEmailDispatch->addSelectBox(
-    'mail_smtp_secure', $gL10n->get('MAI_SMTP_SECURE'), $selectBoxEntries,
-    array('defaultValue' => $formValues['mail_smtp_secure'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MAI_SMTP_SECURE_DESC')
+    'mail_smtp_secure', $gL10n->get('SYS_SMTP_SECURE'), $selectBoxEntries,
+    array('defaultValue' => $formValues['mail_smtp_secure'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_SMTP_SECURE_DESC')
 );
 $selectBoxEntries = array(
     ''         => $gL10n->get('SYS_AUTOMATICALLY'),
@@ -476,12 +476,12 @@ $formEmailDispatch->addSelectBox(
     array('defaultValue' => $formValues['mail_smtp_authentication_type'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_SMTP_AUTH_TYPE_DESC', array('SYS_AUTOMATICALLY')))
 );
 $formEmailDispatch->addInput(
-    'mail_smtp_user', $gL10n->get('MAI_SMTP_USER'), $formValues['mail_smtp_user'],
-    array('maxLength' => 100, 'helpTextIdInline' => 'MAI_SMTP_USER_DESC')
+    'mail_smtp_user', $gL10n->get('SYS_SMTP_USER'), $formValues['mail_smtp_user'],
+    array('maxLength' => 100, 'helpTextIdInline' => 'SYS_SMTP_USER_DESC')
 );
 $formEmailDispatch->addInput(
-    'mail_smtp_password', $gL10n->get('MAI_SMTP_PASSWORD'), $formValues['mail_smtp_password'],
-    array('type' => 'password', 'maxLength' => 50, 'helpTextIdInline' => 'MAI_SMTP_PASSWORD_DESC')
+    'mail_smtp_password', $gL10n->get('SYS_SMTP_PASSWORD'), $formValues['mail_smtp_password'],
+    array('type' => 'password', 'maxLength' => 50, 'helpTextIdInline' => 'SYS_SMTP_PASSWORD_DESC')
 );
 $html = '<a id="send_test_mail" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '5')).'">
             <i class="fas fa-envelope"></i>'.$gL10n->get('SYS_SEND_TEST_MAIL').'</a>';
@@ -1191,8 +1191,8 @@ $formMessages = new HtmlForm(
 );
 
 $formMessages->addCheckbox(
-    'enable_mail_module', $gL10n->get('MAI_ACTIVATE_EMAIL_MODULE'), (bool) $formValues['enable_mail_module'],
-    array('helpTextIdInline' => 'MAI_ACTIVATE_EMAIL_MODULE_DESC')
+    'enable_mail_module', $gL10n->get('SYS_ACTIVATE_EMAIL_MODULE'), (bool) $formValues['enable_mail_module'],
+    array('helpTextIdInline' => 'SYS_ACTIVATE_EMAIL_MODULE_DESC')
 );
 $formMessages->addCheckbox(
     'enable_pm_module', $gL10n->get('SYS_ACTIVATE_PM_MODULE'), (bool) $formValues['enable_pm_module'],
@@ -1200,7 +1200,7 @@ $formMessages->addCheckbox(
 );
 $formMessages->addCheckbox(
     'enable_mail_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), (bool) $formValues['enable_mail_captcha'],
-    array('helpTextIdInline' => 'MAI_SHOW_CAPTCHA_DESC')
+    array('helpTextIdInline' => 'SYS_SHOW_CAPTCHA_DESC')
 );
 
 try
@@ -1219,8 +1219,8 @@ $formMessages->addSelectBox(
         'helpTextIdInline' => array('SYS_EMAIL_TEMPLATE_DESC', array('adm_my_files/mail_templates', '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:e-mail-templates">', '</a>')))
 );
 $formMessages->addInput(
-    'mail_max_receiver', $gL10n->get('MAI_MAX_RECEIVER'), $formValues['mail_max_receiver'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'MAI_MAX_RECEIVER_DESC')
+    'mail_max_receiver', $gL10n->get('SYS_MAX_RECEIVER'), $formValues['mail_max_receiver'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_MAX_RECEIVER_DESC')
 );
 $formMessages->addCheckbox(
     'mail_send_to_all_addresses', $gL10n->get('SYS_SEND_EMAIL_TO_ALL_ADDRESSES'), (bool) $formValues['mail_send_to_all_addresses'],
@@ -1231,8 +1231,8 @@ $formMessages->addCheckbox(
     array('helpTextIdInline' => 'SYS_SEND_EMAIL_FORMER_DESC')
 );
 $formMessages->addCheckbox(
-    'mail_into_to', $gL10n->get('MAI_INTO_TO'), (bool) $formValues['mail_into_to'],
-    array('helpTextIdInline' => 'MAI_INTO_TO_DESC')
+    'mail_into_to', $gL10n->get('SYS_INTO_TO'), (bool) $formValues['mail_into_to'],
+    array('helpTextIdInline' => 'SYS_INTO_TO_DESC')
 );
 $formMessages->addInput(
     'max_email_attachment_size', $gL10n->get('SYS_ATTACHMENT_SIZE').' (MB)', $formValues['max_email_attachment_size'],
@@ -1243,8 +1243,8 @@ $formMessages->addCheckbox(
     array('helpTextIdInline' => 'SYS_SAVE_ATTACHMENTS_DESC')
 );
 $formMessages->addCheckbox(
-    'mail_html_registered_users', $gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS'), (bool) $formValues['mail_html_registered_users'],
-    array('helpTextIdInline' => 'MAI_HTML_MAILS_REGISTERED_USERS_DESC')
+    'mail_html_registered_users', $gL10n->get('SYS_HTML_MAILS_REGISTERED_USERS'), (bool) $formValues['mail_html_registered_users'],
+    array('helpTextIdInline' => 'SYS_HTML_MAILS_REGISTERED_USERS_DESC')
 );
 $selectBoxEntries = array(
     '0' => $gL10n->get('SYS_DEACTIVATED'),
@@ -1252,8 +1252,8 @@ $selectBoxEntries = array(
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formMessages->addSelectBox(
-    'mail_delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $selectBoxEntries,
-    array('defaultValue' => $formValues['mail_delivery_confirmation'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MAI_DELIVERY_CONFIRMATION_DESC')
+    'mail_delivery_confirmation', $gL10n->get('SYS_DELIVERY_CONFIRMATION'), $selectBoxEntries,
+    array('defaultValue' => $formValues['mail_delivery_confirmation'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_DELIVERY_CONFIRMATION_DESC')
 );
 $formMessages->addSubmitButton(
     'btn_save_messages', $gL10n->get('SYS_SAVE'),
