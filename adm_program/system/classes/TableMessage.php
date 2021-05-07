@@ -220,6 +220,21 @@ class TableMessage extends TableAccess
 
         if ($this->getValue('msg_type') === self::MESSAGE_TYPE_EMAIL || (int) $this->getValue('msg_read') === 2)
         {
+            // first delete attachments files and the database entry
+            $attachments   = $this->getAttachmentsInformations();
+
+            foreach($attachments as $attachment)
+            {
+                if(!FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name']))
+                {
+                    throw new AdmException('INS_DATABASE_FILE_NOT_FOUND', array(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments', $attachment['admidio_file_name']));
+                }
+            }
+
+            $sql = 'DELETE FROM '.TBL_MESSAGES_ATTACHMENTS.'
+                     WHERE msa_msg_id = ? -- $msgId';
+            $this->db->queryPrepared($sql, array($msgId));
+
             $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
                      WHERE msc_msg_id = ? -- $msgId';
             $this->db->queryPrepared($sql, array($msgId));
@@ -246,20 +261,21 @@ class TableMessage extends TableAccess
     /**
      * Read all attachments from the database and will return an array with all neccessary informations about
      * the attachments. The array contains for each attachment a subarray with the following elements:
-     * **msa_id** and **file_name**.
+     * **msa_id** and **file_name** and **admidio_file_name**.
      * @return Returns an array with all attachments and the following elements: **msa_id** and **file_name**
      */
     public function getAttachmentsInformations()
     {
         $attachments = array();
 
-        $sql = 'SELECT msa_id, msa_original_file_name FROM ' . TBL_MESSAGES_ATTACHMENTS .'
+        $sql = 'SELECT msa_id, msa_original_file_name, msa_file_name
+                  FROM ' . TBL_MESSAGES_ATTACHMENTS .'
                  WHERE msa_msg_id = ? -- $this->getValue(\'msg_id\')';
         $attachmentsStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
 
         while($row = $attachmentsStatement->fetch())
         {
-            $attachments[] = array('msa_id' => $row['msa_id'], 'file_name' => $row['msa_original_file_name']);
+            $attachments[] = array('msa_id' => $row['msa_id'], 'file_name' => $row['msa_original_file_name'], 'admidio_file_name' => $row['msa_file_name']);
 	    }
 
 	    return $attachments;

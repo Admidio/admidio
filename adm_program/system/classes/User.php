@@ -656,6 +656,17 @@ class User extends TableAccess
         $usrId     = (int) $this->getValue('usr_id');
         $currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
+        // first delete send messages from the user
+        $sql = 'SELECT msg_id FROM ' . TBL_MESSAGES . ' WHERE msg_usr_id_sender = ? -- $usrId';
+        $messagesStatement = $this->db->queryPrepared($sql, array($usrId));
+
+        while($row = $messagesStatement->fetch())
+        {
+            $message = new TableMessage($this->db, $row['msg_id']);
+            $message->delete();
+	    }
+
+        // now delete every database entry where the user id is used
         $sqlQueries = array();
 
         $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.'
@@ -767,6 +778,11 @@ class User extends TableAccess
                                                  FROM '.TBL_IDS.'
                                                 WHERE ids_usr_id = '.$currUsrId.')';
 
+        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_RECIPIENTS.'
+                          WHERE msr_msg_id IN (SELECT ids_reference_id
+                                                 FROM '.TBL_IDS.'
+                                                WHERE ids_usr_id = '.$currUsrId.')';
+
         $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
                           WHERE msg_id IN (SELECT ids_reference_id
                                              FROM '.TBL_IDS.'
@@ -775,16 +791,12 @@ class User extends TableAccess
         $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
                           WHERE ids_usr_id = '.$currUsrId;
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
-                          WHERE msc_msg_id IN (SELECT msg_id
-                                                 FROM '.TBL_MESSAGES.'
-                                                WHERE msg_usr_id_sender = '.$usrId.')';
-
-        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
-                          WHERE msg_usr_id_sender = '.$usrId;
-
         $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_RECIPIENTS.'
                           WHERE msr_usr_id = '.$usrId;
+
+        $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+                          WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
+                                            WHERE msr_msg_id = msc_msg_id)';
 
         $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
                           WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
