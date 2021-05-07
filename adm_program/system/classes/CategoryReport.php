@@ -186,7 +186,7 @@ class CategoryReport
         	}
         }  
 
-        $number_col[1] = $gL10n->get('CRT_NUMBER_COL');
+        $number_col[1] = $gL10n->get('SYS_NUMBER_COL');
         
 		// alle Mitglieder der aktuellen Organisation einlesen
         $sql = ' SELECT mem_usr_id
@@ -376,7 +376,7 @@ class CategoryReport
 				
        			$this->headerSelection[$i]['id']   	   = 'w'.$row['rol_id'];		//w wie without (Leader)
         		$this->headerSelection[$i]['cat_name'] = $data['cat_name'];
-				$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLE').' '.$gL10n->get('CRT_WITHOUT').' '.$gL10n->get('SYS_LEADER').': '.$row['rol_name'].$marker;
+				$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLE').' '.$gL10n->get('SYS_WITHOUT').' '.$gL10n->get('SYS_LEADER').': '.$row['rol_name'].$marker;
 				$i++;				
         		
 				$this->headerSelection[$i]['id']   	   = 'l'.$row['rol_id'];		//l wie leader
@@ -387,14 +387,14 @@ class CategoryReport
     	}
     	//Zusatzspalte fuer die Gesamtrollenuebersicht erzeugen
     	$this->headerSelection[$i]['id']   	   = 'adummy';          //a wie additional
-        $this->headerSelection[$i]['cat_name'] = $gL10n->get('CRT_ADDITIONAL_COLS');
-		$this->headerSelection[$i]['data']	   = $gL10n->get('CRT_ROLEMEMBERSHIPS');
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLS');
+		$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLEMEMBERSHIPS');
 		$i++;
 		
 		//Zusatzspalte fuer die Anzahl erzeugen
     	$this->headerSelection[$i]['id']   	   = 'ndummy';          //n wie number 
-        $this->headerSelection[$i]['cat_name'] = $gL10n->get('CRT_ADDITIONAL_COLS');
-		$this->headerSelection[$i]['data']	   = $gL10n->get('CRT_NUMBER_ROW');
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLS');
+		$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_NUMBER_ROW');
 	}
 	
     /**

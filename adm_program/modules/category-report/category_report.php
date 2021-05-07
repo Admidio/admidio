@@ -265,7 +265,7 @@ if ($getMode !== 'csv')
         if ($gCurrentUser->isAdministrator())
 		{
     		// show link to pluginpreferences 
-    		$page->addPageFunctionsMenuItem('admMenuItemPreferencesLists', $gL10n->get('CRT_SETTINGS'),
+    		$page->addPageFunctionsMenuItem('admMenuItemPreferencesLists', $gL10n->get('SYS_SETTINGS'),
     		    ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php',  'fa-cog');
 		}
 
@@ -286,13 +286,13 @@ if ($getMode !== 'csv')
 		}
 	
 		$form = new HtmlForm('navbar_catreport_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array('headline' => $headline)), $page, array('type' => 'navbar', 'setFocus' => false));
-		$form->addSelectBox('config', $gL10n->get('CRT_SELECT_CONFIGURATION'), $selectBoxEntries, array('showContextDependentFirstEntry' => false,'defaultValue' => $getConfig));
+		$form->addSelectBox('config', $gL10n->get('SYS_SELECT_CONFIGURATION'), $selectBoxEntries, array('showContextDependentFirstEntry' => false,'defaultValue' => $getConfig));
 		
         if ($getExportAndFilter)
         {
             $form->addInput('filter', $gL10n->get('SYS_FILTER'), $getFilter);
         }
-        $form->addCheckbox('export_and_filter', $gL10n->get('CRT_EXPORT_AND_FILTER'), $getExportAndFilter);
+        $form->addCheckbox('export_and_filter', $gL10n->get('SYS_EXPORT_AND_FILTER'), $getExportAndFilter);
 
 		$page->addHtml($form->show());
 		

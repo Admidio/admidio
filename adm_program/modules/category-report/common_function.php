@@ -122,7 +122,7 @@ function initConfigArray()
 {
     global $gL10n, $gProfileFields;
     
-    $config = array('col_desc' 		=> array($gL10n->get('CRT_PATTERN')),
+    $config = array('col_desc' 		=> array($gL10n->get('SYS_PATTERN')),
                     'col_fields' 	=> array('p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
                                              'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
                                              'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.

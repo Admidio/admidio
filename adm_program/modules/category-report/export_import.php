@@ -34,7 +34,7 @@ switch ($getMode)
 {
 	case 1:
 	
-		$headline = $gL10n->get('CRT_EXPORT_IMPORT');
+		$headline = $gL10n->get('SYS_EXPORT_IMPORT');
 	 
 	    // create html page object
     	$page = new HtmlPage('plg-category-report-export-import', $headline);
@@ -44,10 +44,10 @@ switch ($getMode)
 
     	// show form
     	$form = new HtmlForm('export_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/export_import.php', array('mode' => 2)), $page);
-		$form->openGroupBox('export', $headline = $gL10n->get('CRT_EXPORT'));
-    	$form->addDescription($gL10n->get('CRT_EXPORT_DESC'));
-    	$form->addSelectBox('conf_id', $gL10n->get('CRT_CONFIGURATION').':', $config['col_desc'], array( 'showContextDependentFirstEntry' => false));
-		$form->addSubmitButton('btn_export', $gL10n->get('CRT_EXPORT'), array('icon' => 'fa-file-export', 'class' => ' col-sm-offset-3'));
+		$form->openGroupBox('export', $headline = $gL10n->get('SYS_EXPORT'));
+    	$form->addDescription($gL10n->get('SYS_EXPORT_DESC'));
+    	$form->addSelectBox('conf_id', $gL10n->get('SYS_CONFIGURATION').':', $config['col_desc'], array( 'showContextDependentFirstEntry' => false));
+		$form->addSubmitButton('btn_export', $gL10n->get('SYS_EXPORT'), array('icon' => 'fa-file-export', 'class' => ' col-sm-offset-3'));
     	$form->closeGroupBox();
     	 
       	// add form to html page and show page
@@ -55,10 +55,10 @@ switch ($getMode)
     
     	// show form
     	$form = new HtmlForm('import_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/export_import.php', array('mode' => 3)), $page, array('enableFileUpload' => true));
-    	$form->openGroupBox('import', $headline = $gL10n->get('CRT_IMPORT'));
-    	$form->addDescription($gL10n->get('CRT_IMPORT_DESC'));
-    	$form->addFileUpload('importfile', $gL10n->get('SYS_FILE').':', array( 'allowedMimeTypes' => array('application/octet-stream,text/plain'), 'helpTextIdLabel' => 'CRT_IMPORT_INFO'));
-		$form->addSubmitButton('btn_import', $gL10n->get('CRT_IMPORT'), array('icon' => 'fa-file-import', 'class' => ' col-sm-offset-3'));
+    	$form->openGroupBox('import', $headline = $gL10n->get('SYS_IMPORT_2'));
+    	$form->addDescription($gL10n->get('SYS_IMPORT_DESC'));
+    	$form->addFileUpload('importfile', $gL10n->get('SYS_FILE').':', array( 'allowedMimeTypes' => array('application/octet-stream,text/plain'), 'helpTextIdLabel' => 'SYS_IMPORT_INFO'));
+		$form->addSubmitButton('btn_import', $gL10n->get('SYS_IMPORT_2'), array('icon' => 'fa-file-import', 'class' => ' col-sm-offset-3'));
     	$form->closeGroupBox(); 
     
     	// add form to html page and show page
@@ -153,7 +153,7 @@ switch ($getMode)
 		if (!isset($_FILES['userfile']['name']))
 		{
 		    $gNavigation->clear();
-    		$gMessage->show($gL10n->get('CRT_IMPORT_ERROR_OTHER'), $gL10n->get('SYS_ERROR'));	
+    		$gMessage->show($gL10n->get('SYS_IMPORT_ERROR_OTHER'), $gL10n->get('SYS_ERROR'));	
 		}
 		elseif (strlen($_FILES['userfile']['name'][0]) === 0)
 		{
@@ -163,7 +163,7 @@ switch ($getMode)
 		elseif (strtolower(substr($_FILES['userfile']['name'][0],-4)) <> '.cfg')
 		{
 		    $gNavigation->clear();
-			$gMessage->show($gL10n->get('CRT_IMPORT_ERROR_FILE'), $gL10n->get('SYS_ERROR'));	
+			$gMessage->show($gL10n->get('SYS_IMPORT_ERROR_FILE'), $gL10n->get('SYS_ERROR'));	
 		}
 		
 		$parsedArray = parse_ini_file ( $_FILES['userfile']['tmp_name'][0], TRUE );
@@ -175,7 +175,7 @@ switch ($getMode)
 			||  !(count($parsedArray['columns']) == count($parsedArray['name']))  )
 		{
 		    $gNavigation->clear();
-			$gMessage->show($gL10n->get('CRT_IMPORT_ERROR_FILE'), $gL10n->get('SYS_ERROR'));
+			$gMessage->show($gL10n->get('SYS_IMPORT_ERROR_FILE'), $gL10n->get('SYS_ERROR'));
 		}
 	
 		$importArray = array();
@@ -209,7 +209,7 @@ switch ($getMode)
 		saveConfigArray();
 
 		$gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('show_option' => 'options')));
-		$gMessage->show($gL10n->get('CRT_IMPORT_SUCCESS'));
+		$gMessage->show($gL10n->get('SYS_IMPORT_SUCCESS'));
 		
    		break;
 }

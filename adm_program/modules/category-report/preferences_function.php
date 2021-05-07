@@ -60,7 +60,7 @@ try
    				
    				if ($allColumnsEmpty)
    				{
-   					$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('CRT_COLUMN')));
+   					$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_COLUMN')));
    				}
    				
    				$config['col_fields'][] = substr($fields,0,-1);
