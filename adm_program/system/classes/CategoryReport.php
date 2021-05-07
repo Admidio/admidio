@@ -298,7 +298,7 @@ class CategoryReport
 
 		if ($config['number_col'][$this->conf] == 1)
 		{
-			$this->listData[max(array_keys($this->listData))+1] = $number_col;
+			$this->listData[] = $number_col;
 		}
 	}	
 		
