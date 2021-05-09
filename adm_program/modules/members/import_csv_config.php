@@ -130,31 +130,42 @@ $htmlFieldTable = '
                     $htmlFieldTable .= '</label></td>
                 <td>
                     <select class="form-control" size="1" id="usf-'. $usfId. '" name="usf-'. $usfId. '" style="width: 90%;">';
-                        if(isset($formValues['usf-'.$usfId]) && $formValues['usf-'. $usfId] > 0)
-                        {
-                            $htmlFieldTable .= '<option value=""></option>';
-                        }
-                        else
-                        {
-                            $htmlFieldTable .= '<option value="" selected="selected"></option>';
-                        }
 
+                        $selectEntries = '';
                         // Alle Spalten aus der Datei in Combobox auflisten
+                        $found = FALSE;
                         foreach($arrayCsvColumns as $colKey => $colValue)
                         {
                             $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
 
-                            if(isset($formValues['usf-'. $usfId])
-                            && strlen($formValues['usf-'. $usfId]) > 0
-                            && $formValues['usf-'. $usfId] == $colKey)
+                            $selected = '';
+                            // If the user is returned to the form (e.g. a required
+                            // field was not selected), the $formValues['usf-#']
+                            // array is populated, so use the assignments from the previous
+                            // config page, so the config is preserved:
+                            if(isset($formValues['usf-'. $usfId]))
                             {
-                                $htmlFieldTable .= '<option value="'.$colKey.'" selected="selected">'.$colValue.'</option>';
+                                if (strlen($formValues['usf-'. $usfId]) > 0 && $formValues['usf-'. $usfId] == $colKey)
+                                {
+                                    $selected .= ' selected="selected"';
+                                    $found = TRUE;
+                                }
                             }
-                            else
+                            // Otherwise, detect the entry where the column header
+                            // matches the Admidio field name or internal field name (case-insensitive)
+                            else if (strtolower($colValue) == strtolower($field->getValue('usf_name'))
+                                || strtolower($colValue) == strtolower($field->getValue('usf_name_field')))
                             {
-                                $htmlFieldTable .= '<option value="'.$colKey.'">'.$colValue.'</option>';
+                                $selected .= ' selected="selected"';
+                                $found = TRUE;
                             }
+                            $selectEntries .= '<option value="'.$colKey.'"'.$selected.'>'.$colValue.'</option>';
                         }
+                        # Insert default (empty) entry and select if if no other item is selected
+                        $htmlFieldTable .= '<option value=""'.($found ? ' selected="selected"' : '').'></option>';
+                        $htmlFieldTable .= $selectEntries;
+
+
                     $htmlFieldTable .= '</select>
                 </td>
             </tr>';
