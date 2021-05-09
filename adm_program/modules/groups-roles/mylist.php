@@ -479,7 +479,7 @@ $javascriptCode .= '
             case "save_as":
                 var listName = "";
                 listName = prompt("'.$gL10n->get('SYS_CONFIGURATION_SAVE').'");
-                if (listName !== "") {
+                if (listName !== null) {
                     myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('mode' => 1)) . '&name=" + listName;
                     myListConfigForm.submit();
                 }
