@@ -1416,4 +1416,5 @@
   <string name="SYS_YOUR_LAST_CONFIGURATION">Deine letzten Konfigurationen</string>
   <string name="SYS_YOUR_LISTS">Deine Listen</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
+  <string name="MEM_POSSIBLE_FIELDNAMES">Spaltennamen für automatische Erkennung: #VAR1#, #VAR2#</string>
 </resources>

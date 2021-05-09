@@ -1403,4 +1403,5 @@
   <string name="SYS_YOUR_LISTS">Own lists</string>
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
+  <string name="MEM_POSSIBLE_FIELDNAMES">Column names for autodetection: #VAR1#, #VAR2#</string>
 </resources>

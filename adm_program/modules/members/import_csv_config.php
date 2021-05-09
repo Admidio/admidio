@@ -120,8 +120,12 @@ $htmlFieldTable = '
                 $categoryId = $catId;
             }
             $usfId = (int) $field->getValue('usf_id');
+            $tooltip = trim($gL10n->get('MEM_POSSIBLE_FIELDNAMES',
+                array(
+                    $field->getValue('usf_name'),
+                    $field->getValue('usf_name_intern'))));
             $htmlFieldTable .= '<tr>
-                <td><label for="usf-'. $usfId. '">'.$field->getValue('usf_name');
+                <td><label for="usf-'. $usfId. '" title="'.$tooltip.'">'.$field->getValue('usf_name');
                     // Lastname und first name are mandatory fields
                     if($field->getValue('usf_name_intern') === 'LAST_NAME' || $field->getValue('usf_name_intern') === 'FIRST_NAME')
                     {
