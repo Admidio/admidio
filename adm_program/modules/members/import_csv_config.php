@@ -154,7 +154,7 @@ $htmlFieldTable = '
                             // Otherwise, detect the entry where the column header
                             // matches the Admidio field name or internal field name (case-insensitive)
                             else if (strtolower($colValue) == strtolower($field->getValue('usf_name'))
-                                || strtolower($colValue) == strtolower($field->getValue('usf_name_field')))
+                                || strtolower($colValue) == strtolower($field->getValue('usf_name_intern')))
                             {
                                 $selected .= ' selected="selected"';
                                 $found = TRUE;
