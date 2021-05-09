@@ -44,7 +44,11 @@ if(!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 // set headline of the script
 $headline = $gL10n->get('SYS_CONFIGURATION_LIST');
 
-$gNavigation->addUrl(CURRENT_URL, $headline);
+// add current url to navigation stack if last url was not the same page
+if(!str_contains($gNavigation->getUrl(), 'mylist.php'))
+{
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+}
 
 $defaultColumnRows   = 6;    // number of columns that should be shown
 $mySqlMaxColumnAlert = '';
