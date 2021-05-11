@@ -18,7 +18,7 @@ if(!$gCurrentUser->editUsers())
     // => EXIT
 }
 
-if(count($_SESSION['file_lines']) === 0)
+if(count($_SESSION['import_data']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
     // => EXIT
@@ -28,37 +28,6 @@ $headline = $gL10n->get('MEM_ASSIGN_FIELDS');
 
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
-
-// feststellen, welches Trennzeichen in der Datei verwendet wurde
-$countComma     = 0;
-$countSemicolon = 0;
-$countTabulator = 0;
-
-$line = reset($_SESSION['file_lines']);
-for($i = 0, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
-{
-    $count = substr_count($line, ',');
-    $countComma += $count;
-    $count = substr_count($line, ';');
-    $countSemicolon += $count;
-    $count = substr_count($line, "\t");
-    $countTabulator += $count;
-
-    $line = next($_SESSION['file_lines']);
-}
-
-if($countSemicolon > $countComma && $countSemicolon > $countTabulator)
-{
-    $_SESSION['value_separator'] = ';';
-}
-elseif($countTabulator > $countSemicolon && $countTabulator > $countComma)
-{
-    $_SESSION['value_separator'] = "\t";
-}
-else
-{
-    $_SESSION['value_separator'] = ',';
-}
 
 if(isset($_SESSION['import_csv_request']))
 {
@@ -74,8 +43,6 @@ if(isset($_SESSION['import_csv_request']))
 else
 {
     $formValues['first_row'] = true;
-    $formValues['import_coding']  = 'iso-8859-1';
-    $formValues['import_role_id'] = 0;
 }
 
 // create html page object
@@ -123,8 +90,7 @@ $htmlFieldTable = '
             </tr>
         </thead>';
 
-        $line = reset($_SESSION['file_lines']);
-        $arrayCsvColumns = explode($_SESSION['value_separator'], $line);
+        $arrayCsvColumns = $_SESSION['import_data'][0];
         $categoryId = null;
 
         // jedes Benutzerfeld aus der Datenbank auflisten

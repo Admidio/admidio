@@ -38,17 +38,10 @@ if(strlen($_POST['usf-'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]) =
     // => EXIT
 }
 
-if(array_key_exists('first_row', $_POST))
-{
-    $firstRowTitle = true;
-}
-else
-{
-    $firstRowTitle = false;
-}
+$firstRowTitle = array_key_exists('first_row', $_POST);
 
 // jede Zeile aus der Datei einzeln durchgehen und den Benutzer in der DB anlegen
-$line = reset($_SESSION['file_lines']);
+$line = reset($_SESSION['import_data']);
 $user = new User($gDb, $gProfileFields);
 $startRow = 0;
 $countImportNewUser  = 0;
@@ -62,19 +55,18 @@ $depRoles = RoleDependency::getParentRoles($gDb, (int) $_SESSION['rol_id']);
 if($firstRowTitle)
 {
     // erste Zeile ueberspringen, da hier die Spaltenbezeichnungen stehen
-    $line = next($_SESSION['file_lines']);
+    $line = next($_SESSION['import_data']);
     $startRow = 1;
 }
 
 // set execution time to 10 minutes because we have a lot to do
 PhpIniUtils::startNewExecutionTimeLimit(600);
 
-for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
+for($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i)
 {
     $user->clear();
-    $columnArray = str_getcsv($line, $_SESSION['value_separator']);
 
-    foreach($columnArray as $columnKey => $columnValue)
+    foreach($line as $columnKey => $columnValue)
     {
         // remove spaces and html tags
         $columnValue = trim(strip_tags($columnValue));
@@ -270,14 +262,13 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
         }
     }
 
-    $line = next($_SESSION['file_lines']);
+    $line = next($_SESSION['import_data']);
 }
 
 // initialize session parameters
 $_SESSION['role']             = '';
 $_SESSION['user_import_mode'] = '';
-$_SESSION['file_lines']       = '';
-$_SESSION['value_separator']  = '';
+$_SESSION['import_data']      = '';
 
 $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members.php');
 $gMessage->show($gL10n->get('MEM_IMPORT_SUCCESSFUL', array($countImportNewUser, $countImportEditUser, $countImportEditRole)));

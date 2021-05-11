@@ -348,6 +348,7 @@
   <string name="MEM_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Benutzer wurden angelegt.\n#VAR2# Benutzer wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.</string>
   <string name="MEM_IMPORT_UNUSED_HEAD">Folgende Spalten der Importdatei sind keinen Feldern in Admidio zugeordnet:</string>
   <string name="MEM_IMPORT_USERS">Benutzer importieren</string>
+  <string name="MEM_IMPORT_SHEET_NOT_EXISTS">Das Arbeitsblatt #VAR1# existiert in der Importdatei nicht!</string>
   <string name="MEM_INPUT_FIRSTNAME_LASTNAME">Gib bitte den Vor- und Nachnamen des neuen Benutzers ein. Bevor der Benutzer angelegt wird, wird geprüft, ob ein Benutzer mit ähnlichem Namen bereits in der Datenbank existiert.</string>
   <string name="MEM_MAKE_FORMER">Du kannst den Benutzer zu einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und du später immer wieder sehen kannst, welchen Rollen diese Person zugeordnet war.</string>
   <string name="MEM_NO_CHANGES">Es sind keine Änderungen protokolliert.</string>
@@ -733,6 +734,7 @@
   <string name="SYS_ATTACHMENT_SIZE_DESC">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im E-Mailmodul möglich. (Voreinstellung: 1MB)</string>
   <string name="SYS_ATTACHMENT_TO_LARGE">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</string>
   <string name="SYS_ATTACHMENTS_VAR">#VAR1# Anhänge</string>
+  <string name="SYS_AUTO_DETECT">Automatische Erkennung</string>
   <string name="SYS_AUTOMATICALLY">Automatisch</string>
   <string name="SYS_AVAILABLE">Verfügbar</string>
   <string name="SYS_AVAILABLE_BETA">Verfügbare Beta</string>
@@ -776,6 +778,8 @@
   <string name="SYS_CLOCK">Uhr</string>
   <string name="SYS_CLOSE">Schließen</string>
   <string name="SYS_COLUMN">Spalte</string>
+  <string name="SYS_COMMA">Komma (,)</string>
+  <string name="SYS_COMMA_SEPARATED_FILE">Komma-/Tab-getrennte Datei (*.csv)</string>
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Allgemein</string>
   <string name="SYS_CONDITION">Bedingung</string>
@@ -884,6 +888,7 @@
   <string name="SYS_DONATE">Spenden</string>
   <string name="SYS_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
   <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
+  <string name="SYS_DQUOTE">Anführungszeichen (")</string>
   <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>
   <string name="SYS_DOWNLOAD_ALBUM">Album herunterladen</string>
   <string name="SYS_DOWNLOAD_FILE">Datei herunterladen</string>
@@ -933,12 +938,15 @@
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Termine - Teilnahmebestätigung</string>
   <string name="SYS_EXAMPLE">Beispiel</string>
   <string name="SYS_EXAMPLES">Beispiele</string>
+  <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx)</string>
+  <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls)</string>
   <string name="SYS_EXPORT_TO">Exportieren nach</string>
   <string name="SYS_FADE_IN">Einblenden</string>
   <string name="SYS_FAX">Fax</string>
   <string name="SYS_FEMALE">Weiblich</string>
   <string name="SYS_FIELD">Feld</string>
   <string name="SYS_FIELD_EMPTY">Das Feld #VAR1_BOLD# ist nicht gefüllt.</string>
+  <string name="SYS_FIELD_ENCLOSURE">Zeichenketten-Abgrenzung</string>
   <string name="SYS_FIELD_INVALID_CHAR">Das Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</string>
   <string name="SYS_FIELDS_EMPTY">Es sind nicht alle Felder gefüllt worden.</string>
   <string name="SYS_FILE">Datei</string>
@@ -1000,6 +1008,7 @@
   <string name="SYS_HOMEPAGE">Startseite</string>
   <string name="SYS_HOST">Host</string>
   <string name="SYS_HOURS_VAR">#VAR1# Stunden</string>
+  <string name="SYS_HTML_TABLE">HTML-Tabelle</string>
   <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Administrator deaktiviert.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IMPORTANT">Wichtig</string>
@@ -1123,6 +1132,7 @@
   <string name="SYS_NO_ENTRIES">Es sind keine Einträge vorhanden.</string>
   <string name="SYS_NO_LEADER">Ohne Leiter</string>
   <string name="SYS_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
+  <string name="SYS_NO_QUOTATION">Kein Anführungszeichen</string>
   <string name="SYS_NO_RIGHTS">Du hast kein Recht, diese Aktion auszuführen.</string>
   <string name="SYS_NO_RIGHTS_VIEW_LIST">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</string>
   <string name="SYS_NO_ROLE_GIVEN">Es wurde keine Rolle angegeben.</string>
@@ -1139,6 +1149,7 @@
   <string name="SYS_NOTE">Hinweis</string>
   <string name="SYS_NUMBER">Zahl</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Anzahl Rollen pro Seite</string>
+  <string name="SYS_ODF_SPREADSHEET">ODF Tabellendokument (*.ods)</string>
   <string name="SYS_OFF">aus</string>
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">an</string>
@@ -1167,6 +1178,7 @@
   <string name="SYS_PATH_SEPARATOR">Pfad Trenner</string>
   <string name="SYS_PERIOD">Zeitraum</string>
   <string name="SYS_PERMISSIONS">Berechtigungen</string>
+  <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PDF">PDF</string>
   <string name="SYS_PHONE">Telefon</string>
   <string name="SYS_PHONE_INVALID_CHAR">Die Telefonnummer im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</string>
@@ -1204,6 +1216,7 @@
   <string name="SYS_PWACT_CODE_INVALID">Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!</string>
   <string name="SYS_QUANTITY">Menge</string>
   <string name="SYS_QUARTERLY">Vierteljährlich</string>
+  <string name="SYS_QUOTE">einfaches Anführungszeichen (')</string>
   <string name="SYS_RADIO_BUTTON">Optionsfeld</string>
   <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Neueste Ankündigungen der Organisation #VAR1#</string>
   <string name="SYS_RECIPIENT">Empfänger</string>
@@ -1301,6 +1314,7 @@
   <string name="SYS_SELECT_FILES">Dateien auswählen</string>
   <string name="SYS_SELECT_FROM_LIST">Aus Liste auswählen</string>
   <string name="SYS_SELECT_MEMBERS">Mitglieder auswählen</string>
+  <string name="SYS_SEMICOLON">Strichpunkt (;)</string>
   <string name="SYS_SEND">Abschicken</string>
   <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Sende E-Mails an alle E-Mail Adressen des Benutzers</string>
@@ -1309,6 +1323,7 @@
   <string name="SYS_SEND_NEW_PW">Neues Passwort zusenden</string>
   <string name="SYS_SEND_TEST_MAIL">Testmail verschicken</string>
   <string name="SYS_SENDER">Absender</string>
+  <string name="SYS_SEPARATOR_FOR_CSV_FILE">Feldtrenner</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
@@ -1351,6 +1366,7 @@
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
   <string name="SYS_SYSTEM_MAILS">Systembenachrichtigungen</string>
+  <string name="SYS_TAB">Tabulator</string>
   <string name="SYS_TEST_MAIL">Testmail</string>
   <string name="SYS_TEST_MAIL_DESC">Bevor du diese Funktion aufrufst, müssen alle Einstellungen für den E-Mail-Versand gespeichert werden!\nEs wird eine einfache E-Mail mit dem Betreff #VAR1_BOLD# an die E-Mail-Adresse des angemeldeten Benutzers auf Grundlage der gespeicherten E-Mail-Einstellungen versendet. Dabei wird beim SMTP-Versand ein Versandprotokoll ausgegeben, welches bei Problemen helfen kann.</string>
   <string name="SYS_TEXT">Text</string>
@@ -1409,6 +1425,7 @@
   <string name="SYS_WEEKDAY">Wochentag</string>
   <string name="SYS_WHAT_TO_DO">Was ist zu tun?</string>
   <string name="SYS_WIDTH">Breite</string>
+  <string name="SYS_WORKSHEET_NAMEINDEX">Arbeitsblatt (Index oder Name)</string>
   <string name="SYS_WRITE_EMAIL">E-Mail schreiben</string>
   <string name="SYS_WRITE_ENTRY">Eintrag schreiben</string>
   <string name="SYS_WRITE_MESSAGE">Schreibe Nachricht</string>
