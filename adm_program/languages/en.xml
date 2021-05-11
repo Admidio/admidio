@@ -292,6 +292,7 @@
   <string name="MEM_IDENTIFY_USERS">Identification of existing users is made by means of first name and surname.</string>
   <string name="MEM_IMPORT">Import</string>
   <string name="MEM_IMPORT_SUCCESSFUL">Import was successful..\n\n#VAR1# new users have been created.\n#VAR2# users have been edited.\n#VAR3# role memberships have been assigned.</string>
+  <string name="MEM_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned any profile fields:</string>
   <string name="MEM_IMPORT_USERS">Import user(s)</string>
   <string name="MEM_INPUT_FIRSTNAME_LASTNAME">Please provide first name and surname of the new user. A database check will be performed if same user with same or similar name already exists.</string>
   <string name="MEM_MAKE_FORMER">A user can be changed to status former member. This will preserve all user information including role memberships for later use.</string>

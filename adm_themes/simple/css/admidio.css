@@ -547,6 +547,21 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
 }
 
 /***********************************/
+/* Import settings */
+/***********************************/
+
+#import-unused {
+    background-color: #a9cdd2;
+    padding: 3pt;
+}
+#import-unused p {
+    margin-bottom: 0;
+}
+#import-unused-fields {
+    padding-left: 2em;
+}
+
+/***********************************/
 /* Overview page */
 /***********************************/
 

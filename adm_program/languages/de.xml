@@ -346,6 +346,7 @@
   <string name="MEM_IDENTIFY_USERS">Existierende Benutzer werden anhand von Vornamen und Nachnamen erkannt.</string>
   <string name="MEM_IMPORT">Importieren</string>
   <string name="MEM_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Benutzer wurden angelegt.\n#VAR2# Benutzer wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.</string>
+  <string name="MEM_IMPORT_UNUSED_HEAD">Folgende Spalten der Importdatei sind keinen Feldern in Admidio zugeordnet:</string>
   <string name="MEM_IMPORT_USERS">Benutzer importieren</string>
   <string name="MEM_INPUT_FIRSTNAME_LASTNAME">Gib bitte den Vor- und Nachnamen des neuen Benutzers ein. Bevor der Benutzer angelegt wird, wird geprüft, ob ein Benutzer mit ähnlichem Namen bereits in der Datenbank existiert.</string>
   <string name="MEM_MAKE_FORMER">Du kannst den Benutzer zu einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und du später immer wieder sehen kannst, welchen Rollen diese Person zugeordnet war.</string>
