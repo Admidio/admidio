@@ -32,7 +32,8 @@ function admFuncAutoload($className)
         ADMIDIO_PATH . FOLDER_LIBS_CLIENT . '/jquery-file-upload/server/php/' . $className . '.php', // PHP files in the client folder
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/tcpdf/' . strtolower($className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/src/' . $className . '.php',
-        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/src/' . str_replace('\\', '/', $className) . '.php' // old phpass password hashing lib for backward compatibility
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/src/' . str_replace('\\', '/', $className) . '.php', // old phpass password hashing lib for backward compatibility
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/vendor/autoload.php' // All libraries provided by composer (e.g. phpSpreadsheet)
     );
 
     foreach ($libFiles as $libFile)
