@@ -44,7 +44,11 @@ if(!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 // set headline of the script
 $headline = $gL10n->get('SYS_CONFIGURATION_LIST');
 
-$gNavigation->addUrl(CURRENT_URL, $headline);
+// add current url to navigation stack if last url was not the same page
+if(!str_contains($gNavigation->getUrl(), 'mylist.php'))
+{
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+}
 
 $defaultColumnRows   = 6;    // number of columns that should be shown
 $mySqlMaxColumnAlert = '';
@@ -479,7 +483,7 @@ $javascriptCode .= '
             case "save_as":
                 var listName = "";
                 listName = prompt("'.$gL10n->get('SYS_CONFIGURATION_SAVE').'");
-                if (listName !== "") {
+                if (listName !== null) {
                     myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('mode' => 1)) . '&name=" + listName;
                     myListConfigForm.submit();
                 }
