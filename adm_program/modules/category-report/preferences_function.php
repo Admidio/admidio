@@ -42,8 +42,8 @@ try
    				$config['col_desc'][]       = $_POST['col_desc'. $conf];
    				$config['col_yes'][]        = $_POST['col_yes'. $conf];
    				$config['col_no'][]         = $_POST['col_no'. $conf];
-   				$config['selection_role'][] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]),',') : ' ';
-   				$config['selection_cat'][]  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]),',') : ' ';
+   				$config['selection_role'][] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]),',') : '';
+   				$config['selection_cat'][]  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]),',') : '';
    				$config['number_col'][]     = isset($_POST['number_col'. $conf]) ? 1 : 0 ;
 
    				$allColumnsEmpty = true;
@@ -60,7 +60,7 @@ try
    				
    				if ($allColumnsEmpty)
    				{
-   					$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_COLUMN')));
+   					$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_COLUMN'))));
    				}
    				
    				$config['col_fields'][] = substr($fields,0,-1);

@@ -89,7 +89,7 @@ switch ($getMode)
 		header('Content-Disposition: attachment; filename="'.$exportArray['col_desc'].'.cfg"');
 	
 		echo ';### ' . $exportArray['col_desc'].'.cfg' . ' ### ' . date('Y-m-d H:i:s') . ' ### utf-8 ###'."\r\n";
-		echo ';### This is a configuration file of a configuration of the plugin category_report ###'."\r\n";
+		echo ';### This is a configuration file of a configuration of the module category_report ###'."\r\n";
     	echo ';### ATTENTION: ADD NO LINES - DELETE NO LINES ###'."\r\n\r\n";
         
     	// der Abschnitt 'columns', der hier zusammengesetzt wird, dient in der Export-Datei nur der Information
@@ -194,6 +194,14 @@ switch ($getMode)
 				    }
 				    else
 				    {
+				        // Abwärtskompatibilität zu Kategoriereport
+				        // in Kategoriereport wurden leere 'selection_role' und 'selection_cat' Variablen mit ' ' gekennzeichnet
+				        // in Category Report aber mit ''
+				        if (($key == 'selection_role' || $key == 'selection_cat') && $parsedArray[$key] == ' ')
+				        {
+				            $parsedArray[$key] = '';
+				        }
+				        
 				        $importArray[$key] = $parsedArray[$key];
 				    }					
 				}

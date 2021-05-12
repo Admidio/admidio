@@ -36,13 +36,10 @@ $headline = $gL10n->get('SYS_CATEGORY_REPORT');
 
 if ($getAddDelete === -1)
 {
-    $default_config = initConfigArray();
     foreach($config as $key => $dummy)
     {
-        $config[$key][] = $default_config[$key][0];
+        $config[$key][] = '';
     }
-    unset($default_config);
-    saveConfigArray();
 }
 elseif ($getAddDelete > 0)
 {

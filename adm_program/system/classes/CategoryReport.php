@@ -221,8 +221,8 @@ class CategoryReport
 	   		
 			// bestehen Rollen- und/oder Kategorieeinschraenkungen?
         	$rolecatmarker = true;
-        	if ($config['selection_role'][$this->conf] <> ' '
-        	 || $config['selection_cat'][$this->conf] <> ' ')
+        	if ($config['selection_role'][$this->conf] <> ''
+        	 || $config['selection_cat'][$this->conf] <> '')
         	{
         		$rolecatmarker = false;	
         		foreach (explode(',', $config['selection_role'][$this->conf]) as $rol)

@@ -127,11 +127,24 @@ function initConfigArray()
                                              'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
                                              'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
                                              'p'.$gProfileFields->getProperty('CITY', 'usf_id')),
-                    'col_yes'		=> array('ja'),
-                    'col_no'		=> array('nein'),
-                    'selection_role'=> array(' '),
-                    'selection_cat'	=> array(' '),
+                    'col_yes'		=> array('X'),
+                    'col_no'		=> array(''),
+                    'selection_role'=> array(''),
+                    'selection_cat'	=> array(''),
                     'number_col'	=> array(0)  );
+                    
+    if (getRoleID($gL10n->get('SYS_ADMINISTRATOR')) > 0)
+    {
+        $config['col_fields'][0] .= ','.'r'.getRoleID($gL10n->get('SYS_ADMINISTRATOR'));
+    }
+    if (getRoleID($gL10n->get('INS_BOARD')) > 0)
+    {
+        $config['col_fields'][0] .= ','.'r'.getRoleID($gL10n->get('INS_BOARD'));
+    }
+    if (getRoleID($gL10n->get('SYS_MEMBER')) > 0)
+    {
+        $config['col_fields'][0] .= ','.'r'.getRoleID($gL10n->get('SYS_MEMBER'));
+    }
         
     return $config;
 }
@@ -154,7 +167,7 @@ function getConfigArray()
                FROM '.$tableName.'
               WHERE ( crt_org_id = ?
                  OR crt_org_id IS NULL ) ';
-    $statement = $gDb->queryPrepared($sql, array( ORG_ID));
+    $statement = $gDb->queryPrepared($sql, array(ORG_ID));
         
     while($row = $statement->fetch())
     {
@@ -186,7 +199,7 @@ function saveConfigArray()
                FROM '.$tableName.'
               WHERE ( crt_org_id = ?
                  OR crt_org_id IS NULL ) ';
-    $statement = $gDb->queryPrepared($sql, array( ORG_ID));
+    $statement = $gDb->queryPrepared($sql, array(ORG_ID));
         
     while($row = $statement->fetch())
     {
@@ -223,5 +236,26 @@ function saveConfigArray()
     return;
 }
 
+/**
+ * Funktion liest die Rollen-ID einer Rolle aus
+ * @param   string  $role_name Name der zu pruefenden Rolle
+ * @return  int     rol_id  Rollen-ID der Rolle; 0, wenn nicht gefunden
+ */
+function getRoleID($role_name)
+{
+    global $gDb;
+    
+    $sql = 'SELECT rol_id
+              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+             WHERE rol_name   = ? -- $role_name
+               AND rol_valid  = 1
+               AND rol_cat_id = cat_id
+               AND ( cat_org_id = ? -- ORG_ID
+                OR cat_org_id IS NULL ) ';
 
+    $statement = $gDb->queryPrepared($sql, array($role_name, ORG_ID));
+    $row = $statement->fetchObject();
+    
+    return (isset($row->rol_id) ? $row->rol_id : 0);
+}
 
