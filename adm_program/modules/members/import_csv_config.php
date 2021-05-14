@@ -86,17 +86,17 @@ $page->addHtml('<p class="lead">'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>');
 // show form
 $form = new HtmlForm('import_assign_fields_form', ADMIDIO_URL. FOLDER_MODULES.'/members/import_csv.php', $page, array('type' => 'vertical'));
 $form->addCheckbox('first_row', $gL10n->get('MEM_FIRST_LINE_COLUMN_NAME'), $formValues['first_row']);
-$form->addHtml('<div class="alert alert-warning alert-small" id="import-unused"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('MEM_IMPORT_UNUSED_HEAD').'<div id="import-unused-fields">-</div></div>');
+$form->addHtml('<div class="alert alert-warning alert-small" id="admidio-import-unused"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('MEM_IMPORT_UNUSED_HEAD').'<div id="admidio-import-unused-fields">-</div></div>');
 $page->addJavascript('
-    $(".import-field").change(function() {
+    $(".admidio-import-field").change(function() {
         var available = [];
-        $("#import_assign_fields_form .import-field").first().children("option").each(function() {
+        $("#import_assign_fields_form .admidio-import-field").first().children("option").each(function() {
             if ($(this).text() != "") {
                 available.push($(this).text());
             }
         });
         var used = [];
-        $("#import_assign_fields_form .import-field").children("option:selected").each(function() {
+        $("#import_assign_fields_form .admidio-import-field").children("option:selected").each(function() {
             if ($(this).text() != "") {
                 used.push($(this).text());
             }
@@ -104,13 +104,13 @@ $page->addJavascript('
         var outstr = $(available).not(used).get().join(", ");
         if (outstr == "") {
             outstr = "-";
-//             $("#import-unused").hide();
+//             $("#admidio-import-unused").hide();
         } else {
-//             $("#import-unused").show();
+//             $("#admidio-import-unused").show();
         }
-        $("#import-unused #import-unused-fields").html(outstr);
+        $("#admidio-import-unused #admidio-import-unused-fields").html(outstr);
     });
-    $(".import-field").trigger("change");',
+    $(".admidio-import-field").trigger("change");',
     true
 );
 
@@ -161,7 +161,7 @@ $htmlFieldTable = '
                     }
                     $htmlFieldTable .= '</label></td>
                 <td>
-                    <select class="form-control import-field" size="1" id="usf-'. $usfId. '" name="usf-'. $usfId. '" style="width: 90%;">';
+                    <select class="form-control admidio-import-field" size="1" id="usf-'. $usfId. '" name="usf-'. $usfId. '" style="width: 90%;">';
 
                         $selectEntries = '';
                         // Alle Spalten aus der Datei in Combobox auflisten

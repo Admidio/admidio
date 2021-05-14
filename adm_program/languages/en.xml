@@ -300,6 +300,7 @@
   <string name="MEM_NO_CHANGES_PROFIL">No changes are logged for #VAR1_BOLD# .</string>
   <string name="MEM_NO_MEMBERSHIP">This user is not a member of organization #VAR1# yet.</string>
   <string name="MEM_NOT_EDIT">Do not edit</string>
+  <string name="MEM_POSSIBLE_FIELDNAMES">Column names for autodetection: #VAR1#, #VAR2#</string>
   <string name="MEM_PROFILE_FIELD">Profile field</string>
   <string name="MEM_REMOVE_MEMBERSHIP">Would you like to end membership of user #VAR1# in #VAR2#?</string>
   <string name="MEM_REMOVE_MEMBERSHIP_OK">The membership of user #VAR1_BOLD# at #VAR2_BOLD# was finished successfully!</string>
@@ -1404,5 +1405,4 @@
   <string name="SYS_YOUR_LISTS">Own lists</string>
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
-  <string name="MEM_POSSIBLE_FIELDNAMES">Column names for autodetection: #VAR1#, #VAR2#</string>
 </resources>
