@@ -86,8 +86,36 @@ $page->addHtml('<p class="lead">'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>');
 // show form
 $form = new HtmlForm('import_assign_fields_form', ADMIDIO_URL. FOLDER_MODULES.'/members/import_csv.php', $page, array('type' => 'vertical'));
 $form->addCheckbox('first_row', $gL10n->get('MEM_FIRST_LINE_COLUMN_NAME'), $formValues['first_row']);
+$form->addHtml('<div class="alert alert-warning alert-small" id="admidio-import-unused"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('MEM_IMPORT_UNUSED_HEAD').'<div id="admidio-import-unused-fields">-</div></div>');
+$page->addJavascript('
+    $(".admidio-import-field").change(function() {
+        var available = [];
+        $("#import_assign_fields_form .admidio-import-field").first().children("option").each(function() {
+            if ($(this).text() != "") {
+                available.push($(this).text());
+            }
+        });
+        var used = [];
+        $("#import_assign_fields_form .admidio-import-field").children("option:selected").each(function() {
+            if ($(this).text() != "") {
+                used.push($(this).text());
+            }
+        });
+        var outstr = $(available).not(used).get().join(", ");
+        if (outstr == "") {
+            outstr = "-";
+//             $("#admidio-import-unused").hide();
+        } else {
+//             $("#admidio-import-unused").show();
+        }
+        $("#admidio-import-unused #admidio-import-unused-fields").html(outstr);
+    });
+    $(".admidio-import-field").trigger("change");',
+    true
+);
+
 $htmlFieldTable = '
-    <table class="table table-condensed">
+    <table class="table table-condensed import-config import-config-csv">
         <thead>
             <tr>
                 <th>'.$gL10n->get('MEM_PROFILE_FIELD').'</th>
@@ -120,8 +148,12 @@ $htmlFieldTable = '
                 $categoryId = $catId;
             }
             $usfId = (int) $field->getValue('usf_id');
+            $tooltip = trim($gL10n->get('MEM_POSSIBLE_FIELDNAMES',
+                array(
+                    $field->getValue('usf_name'),
+                    $field->getValue('usf_name_intern'))));
             $htmlFieldTable .= '<tr>
-                <td><label for="usf-'. $usfId. '">'.$field->getValue('usf_name');
+                <td><label for="usf-'. $usfId. '" title="'.$tooltip.'">'.$field->getValue('usf_name');
                     // Lastname und first name are mandatory fields
                     if($field->getValue('usf_name_intern') === 'LAST_NAME' || $field->getValue('usf_name_intern') === 'FIRST_NAME')
                     {
@@ -129,32 +161,43 @@ $htmlFieldTable = '
                     }
                     $htmlFieldTable .= '</label></td>
                 <td>
-                    <select class="form-control" size="1" id="usf-'. $usfId. '" name="usf-'. $usfId. '" style="width: 90%;">';
-                        if(isset($formValues['usf-'.$usfId]) && $formValues['usf-'. $usfId] > 0)
-                        {
-                            $htmlFieldTable .= '<option value=""></option>';
-                        }
-                        else
-                        {
-                            $htmlFieldTable .= '<option value="" selected="selected"></option>';
-                        }
+                    <select class="form-control admidio-import-field" size="1" id="usf-'. $usfId. '" name="usf-'. $usfId. '" style="width: 90%;">';
 
+                        $selectEntries = '';
                         // Alle Spalten aus der Datei in Combobox auflisten
+                        $found = FALSE;
                         foreach($arrayCsvColumns as $colKey => $colValue)
                         {
                             $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
 
-                            if(isset($formValues['usf-'. $usfId])
-                            && strlen($formValues['usf-'. $usfId]) > 0
-                            && $formValues['usf-'. $usfId] == $colKey)
+                            $selected = '';
+                            // If the user is returned to the form (e.g. a required
+                            // field was not selected), the $formValues['usf-#']
+                            // array is populated, so use the assignments from the previous
+                            // config page, so the config is preserved:
+                            if(isset($formValues['usf-'. $usfId]))
                             {
-                                $htmlFieldTable .= '<option value="'.$colKey.'" selected="selected">'.$colValue.'</option>';
+                                if (strlen($formValues['usf-'. $usfId]) > 0 && $formValues['usf-'. $usfId] == $colKey)
+                                {
+                                    $selected .= ' selected="selected"';
+                                    $found = TRUE;
+                                }
                             }
-                            else
+                            // Otherwise, detect the entry where the column header
+                            // matches the Admidio field name or internal field name (case-insensitive)
+                            else if (strtolower($colValue) == strtolower($field->getValue('usf_name'))
+                                || strtolower($colValue) == strtolower($field->getValue('usf_name_intern')))
                             {
-                                $htmlFieldTable .= '<option value="'.$colKey.'">'.$colValue.'</option>';
+                                $selected .= ' selected="selected"';
+                                $found = TRUE;
                             }
+                            $selectEntries .= '<option value="'.$colKey.'"'.$selected.'>'.$colValue.'</option>';
                         }
+                        # Insert default (empty) entry and select if if no other item is selected
+                        $htmlFieldTable .= '<option value=""'.($found ? ' selected="selected"' : '').'></option>';
+                        $htmlFieldTable .= $selectEntries;
+
+
                     $htmlFieldTable .= '</select>
                 </td>
             </tr>';
