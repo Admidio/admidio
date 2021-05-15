@@ -775,7 +775,7 @@ foreach ($membersList as $member)
             }
             elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
             {
-                if ($getMode === 'csv')
+                if (in_array($getMode, array('csv', 'pdf'), true))
                 {
                     if ($content == 1)
                     {
@@ -802,7 +802,7 @@ foreach ($membersList as $member)
                     $content = $date->format($gSettingsManager->getString('system_date'));
                 }
             }
-            elseif ($getMode === 'csv'
+            elseif (in_array($getMode, array('csv', 'pdf'), true)
             &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN'
                 || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON'))
             {
@@ -867,6 +867,11 @@ foreach ($membersList as $member)
             if ($getMode === 'csv')
             {
                 $csvStr .= $separator.$valueQuotes.$content.$valueQuotes;
+            }
+            // pdf should show only text and not much html content
+            elseif ($getMode === 'pdf')
+            {
+                $columnValues[] = $content;
             }
             // create output in html layout
             else

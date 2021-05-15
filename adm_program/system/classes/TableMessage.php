@@ -21,6 +21,22 @@ class TableMessage extends TableAccess
      * @var int
      */
     protected $msgId;
+    /**
+     * @var array<int,string> This array has all the file names of the attachments. First element is the path and second element is the file name.
+     */
+    private $msgAttachments = array();
+    /**
+     * @var array Array with all recipients of the message.
+     */
+    protected $msgRecipientsArray = array();
+    /**
+     * @var Array with TableAcess objects
+     */
+    protected $msgRecipientsObjectArray = array();
+    /**
+     * @var Object of TableAcess for the current content of the message.
+     */
+    protected $msgContentObject;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_messages.
@@ -33,6 +49,118 @@ class TableMessage extends TableAccess
         $this->msgId = $msgId;
 
         parent::__construct($database, TBL_MESSAGES, 'msg', $this->msgId);
+
+        $this->getContent();
+    }
+
+    /**
+     * Add an attachment from a path on the filesystem.
+     * @param string $path        Path to the attachment
+     * @param string $name        Overrides the attachment name
+     */
+    public function addAttachment($path, $name = '')
+    {
+        $this->msgAttachments[] = array($path, $name);
+    }
+
+    /**
+     * A role could be added to the class to which the email was send. This information will
+     * later be stored in the database. If you need the role name within the class before the
+     * data is stored in database than you should set the role name with the parameter $roleName.
+     * @param $roleId   Id the role to which the message was send
+     * @param $roleMode This parameter has the following values:
+     *                  0 - only active members of the role
+     *                  1 - only former members of the role
+     *                  2 - active and former members of the role
+     * @param $roleName Optional the name of the role. Should be set if the name should be used within the class.
+     */
+    public function addRole($roleId, $roleMode, $roleName = '')
+    {
+        // first search if role already exists in recipients list
+        foreach($this->msgRecipientsObjectArray as $messageRecipientObject)
+        {
+            if($messageRecipientObject->getValue('msr_rol_id') === $roleId)
+            {
+                // if object found than update role mode and exist function
+                $messageRecipientObject->setValue('msr_role_mode', $roleMode);
+                return;
+            }
+        }
+
+        // save message recipient as TableAcess object to the array
+        $messageRecipient = new TableAccess($this->db, TBL_MESSAGES_RECIPIENTS, 'msr');
+        $messageRecipient->setValue('msr_msg_id', $this->getValue('msg_id'));
+        $messageRecipient->setValue('msr_rol_id', $roleId);
+        $messageRecipient->setValue('msr_role_mode', $roleMode);
+        $this->msgRecipientsObjectArray[] = $messageRecipient;
+
+        // now save message recipient into an simple array
+        $this->msgRecipientsArray[] =
+            array('type'   => 'role',
+                  'id'     => $roleId,
+                  'name'   => $roleName,
+                  'mode'   => $roleMode,
+                  'msr_id' => null
+            );
+    }
+
+    /**
+     * A user could be added to the class to which the email was send. This information will
+     * later be stored in the database. If you need the user name within the class before the
+     * data is stored in database than you should set the user name with the parameter $fullName.
+     * @param $userId   Id the user to which the message was send
+     * @param $fullName Optional the name of the user. Should be set if the name should be used within the class.
+     */
+    public function addUser($userId, $fullName = '')
+    {
+        // PM always update the recipient if the message exists
+        if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM)
+        {
+            if(count($this->msgRecipientsObjectArray) === 1)
+            {
+                $this->msgRecipientsObjectArray->setValue('msr_usr_id', $userId);
+                return;
+            }
+        }
+        else // EMAIL
+        {
+            // first search if user already exists in recipients list and than exist function
+            foreach($this->msgRecipientsObjectArray as $messageRecipientObject)
+            {
+                if($messageRecipientObject->getValue('msr_usr_id') === $userId)
+                {
+                    return;
+                }
+            }
+        }
+
+        // if user doesn't exists in recipient list than save recipient as TableAcess object to the array
+        $messageRecipient = new TableAccess($this->db, TBL_MESSAGES_RECIPIENTS, 'msr');
+        $messageRecipient->setValue('msr_msg_id', $this->getValue('msg_id'));
+        $messageRecipient->setValue('msr_usr_id', $userId);
+        $this->msgRecipientsObjectArray[] = $messageRecipient;
+
+        // now save message recipient into an simple array
+        $this->msgRecipientsArray[] =
+            array('type'   => 'user',
+                  'id'     => $userId,
+                  'name'   => $fullName,
+                  'mode'   => null,
+                  'msr_id' => null
+            );
+    }
+
+    /**
+     * Add the content of the message or email. The content will than
+     * be saved if the message will be saved.
+     * @param string $content Current content of the message.
+     */
+    public function addContent($content)
+    {
+        $this->msgContentObject = new TableAccess($this->db, TBL_MESSAGES_CONTENT, 'msc');
+        $this->msgContentObject->setValue('msc_msg_id', $this->getValue('msg_id'));
+        $this->msgContentObject->setValue('msc_message', $content, false);
+        $this->msgContentObject->setValue('msc_timestamp', DATETIME_NOW);
     }
 
     /**
@@ -43,9 +171,10 @@ class TableMessage extends TableAccess
     public function countUnreadMessageRecords($usrId)
     {
         $sql = 'SELECT COUNT(*) AS count
-                  FROM '.$this->tableName.'
+                  FROM ' . TBL_MESSAGES . '
+                 INNER JOIN ' . TBL_MESSAGES_RECIPIENTS . ' ON msr_msg_id = msg_id
                  WHERE msg_read = 1
-                   AND msg_usr_id_receiver = ? -- $usrId';
+                   AND msr_usr_id = ? -- $usrId';
         $countStatement = $this->db->queryPrepared($sql, array($usrId));
 
         return (int) $countStatement->fetchColumn();
@@ -78,18 +207,114 @@ class TableMessage extends TableAccess
     }
 
     /**
-     * Set a new value for a column of the database table.
-     * @param int $usrId of the receiver - just for security reasons.
-     * @return false|\PDOStatement Returns **answer** of the SQL execution
+     * Deletes the selected message with all associated fields.
+     * After that the class will be initialize.
+     * @return bool **true** if message is deleted or message with additional information if it is marked
+     *         for other user to delete. On error it is false
      */
-    public function setReadValue($usrId)
+    public function delete()
     {
-        $sql = 'UPDATE '.TBL_MESSAGES.'
-                   SET msg_read = 0
-                 WHERE msg_id   = ? -- $this->msgId
-                   AND msg_usr_id_receiver = ? -- $usrId';
+        $this->db->startTransaction();
 
-        return $this->db->queryPrepared($sql, array($this->msgId, $usrId));
+        $msgId = (int) $this->getValue('msg_id');
+
+        if ($this->getValue('msg_type') === self::MESSAGE_TYPE_EMAIL || (int) $this->getValue('msg_read') === 2)
+        {
+            // first delete attachments files and the database entry
+            $attachments   = $this->getAttachmentsInformations();
+
+            foreach($attachments as $attachment)
+            {
+                if(!FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name']))
+                {
+                    throw new AdmException('INS_DATABASE_FILE_NOT_FOUND', array(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments', $attachment['admidio_file_name']));
+                }
+            }
+
+            $sql = 'DELETE FROM '.TBL_MESSAGES_ATTACHMENTS.'
+                     WHERE msa_msg_id = ? -- $msgId';
+            $this->db->queryPrepared($sql, array($msgId));
+
+            $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+                     WHERE msc_msg_id = ? -- $msgId';
+            $this->db->queryPrepared($sql, array($msgId));
+
+            $sql = 'DELETE FROM '.TBL_MESSAGES_RECIPIENTS.'
+                     WHERE msr_msg_id = ? -- $msgId';
+            $this->db->queryPrepared($sql, array($msgId));
+
+            parent::delete();
+        }
+        else
+        {
+            $sql = 'UPDATE '.TBL_MESSAGES.'
+                       SET msg_read = 2
+                     WHERE msg_id = ? -- $msgId';
+            $this->db->queryPrepared($sql, array($msgId));
+        }
+
+        $this->db->endTransaction();
+
+        return true;
+    }
+
+    /**
+     * Read all attachments from the database and will return an array with all neccessary informations about
+     * the attachments. The array contains for each attachment a subarray with the following elements:
+     * **msa_id** and **file_name** and **admidio_file_name**.
+     * @return Returns an array with all attachments and the following elements: **msa_id** and **file_name**
+     */
+    public function getAttachmentsInformations()
+    {
+        $attachments = array();
+
+        $sql = 'SELECT msa_id, msa_original_file_name, msa_file_name
+                  FROM ' . TBL_MESSAGES_ATTACHMENTS .'
+                 WHERE msa_msg_id = ? -- $this->getValue(\'msg_id\')';
+        $attachmentsStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
+
+        while($row = $attachmentsStatement->fetch())
+        {
+            $attachments[] = array('msa_id' => $row['msa_id'], 'file_name' => $row['msa_original_file_name'], 'admidio_file_name' => $row['msa_file_name']);
+	    }
+
+	    return $attachments;
+    }
+
+    /**
+     * Get the content of the message or email. If it's a message conversation than only
+     * the last content will be returned.
+     * @return string Returns the content of the message.
+     */
+    public function getContent()
+    {
+        $content = '';
+
+        // if content was not set until now than read it from the database if message was already stored there
+        if(!is_object($this->msgContentObject) && $this->msgId > 0)
+        {
+            $sql = 'SELECT msc_id, msc_msg_id, msc_usr_id, msc_message, msc_timestamp
+                      FROM '. TBL_MESSAGES_CONTENT. ' msc1
+                     WHERE msc_msg_id = ? -- $msgId
+                       AND NOT EXISTS (
+                           SELECT 1
+                             FROM '. TBL_MESSAGES_CONTENT. ' msc2
+                            WHERE msc2.msc_msg_id = msc1.msc_msg_id
+                              AND msc2.msc_timestamp > msc1.msc_timestamp
+                           )';
+            $messageContentStatement = $this->db->queryPrepared($sql, array($this->msgId));
+
+            $this->msgContentObject = new TableAccess($this->db, TBL_MESSAGES_CONTENT, 'msc');
+            $this->msgContentObject->setArray($messageContentStatement->fetch());
+        }
+
+        // read content of the content object
+        if(is_object($this->msgContentObject))
+        {
+            $content = $this->msgContentObject->getValue('msc_message', 'database');
+        }
+
+        return $content;
     }
 
     /**
@@ -102,87 +327,293 @@ class TableMessage extends TableAccess
         $sql = 'SELECT msc_usr_id, msc_message, msc_timestamp
                   FROM '. TBL_MESSAGES_CONTENT. '
                  WHERE msc_msg_id = ? -- $msgId
-              ORDER BY msc_part_id DESC';
+              ORDER BY msc_id DESC';
 
         return $this->db->queryPrepared($sql, array($msgId));
     }
 
     /**
-     * Set a new value for a column of the database table.
-     * The value is only saved in the object. You must call the method **save** to store the new value to the database
+     * If the message type is PM this method will return the conversation partner of the PM.
      * @param int $usrId
-     * @return int Returns **ID** of the user that is partner in the actual conversation
+     * @return int Returns **ID** of the user that is partner in the actual conversation or false if its not a message.
      */
-    public function getConversationPartner($usrId)
+    public function getConversationPartner()
     {
-        global $gDbType;
-
-        if($gDbType === Database::PDO_ENGINE_PGSQL)
+        global $gLogger;
+        if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM)
         {
-            $messageSender = 'msg_usr_id_sender::varchar(255)';
-        }
-        else
-        {
-            $messageSender = 'CONVERT(msg_usr_id_sender, CHAR)';
+            $recipients = $this->readRecipientsData();
+            return $recipients[0]['id'];
         }
 
-        $sql = 'SELECT
-                  CASE
-                  WHEN msg_usr_id_sender = ? -- $usrId
-                  THEN msg_usr_id_receiver
-                  ELSE ' . $messageSender . '
-                   END AS user
-                  FROM '.TBL_MESSAGES.'
-                 WHERE msg_type = \'PM\'
-                   AND msg_id = ? -- $this->msgId';
-        $partnerStatement = $this->db->queryPrepared($sql, array($usrId, $this->msgId));
-
-        return (int) $partnerStatement->fetchColumn();
+        return false;
     }
 
     /**
-     * Deletes the selected message with all associated fields.
-     * After that the class will be initialize.
-     * @return bool **true** if message is deleted or message with additional information if it is marked
-     *         for other user to delete. On error it is false
+     * Build a string with all role names and firstname and lastname of the users.
+     * The names will be semicolon separated. If $showFullUserNames is set to false only a
+     * number of recipients users will be shown.
+     * @param $showFullUserNames If set to true the first and last name of each user will be shown.
+     * @return string Returns a string with all role names and firstname and lastname of the users.
      */
-    public function delete()
+    public function getRecipientsNamesString($showFullUserNames = true)
     {
-        global $gCurrentUser;
+        global $gCurrentUser, $gProfileFields, $gL10n;
 
-        $this->db->startTransaction();
+        $recipients = $this->readRecipientsData();
+        $recipientsString = '';
+        $singleRecipientsCount = 0;
 
-        $msgId = (int) $this->getValue('msg_id');
-
-        if ($this->getValue('msg_type') === self::MESSAGE_TYPE_EMAIL || (int) $this->getValue('msg_read') === 2)
+        if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM)
         {
-            $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
-                     WHERE msc_msg_id = ? -- $msgId';
-            $this->db->queryPrepared($sql, array($msgId));
-
-            parent::delete();
+            // PM has the conversation initiator and the receiver. Here we must check which
+            // role the current user has and show the name of the other user.
+            if((int) $this->getValue('msg_usr_id_sender') === (int) $gCurrentUser->getValue('usr_id'))
+            {
+                $recipientsString = $recipients[0]['name'];
+            }
+            else
+            {
+                $user = new User($this->db, $gProfileFields, $this->getValue('msg_usr_id_sender'));
+                $recipientsString = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
+            }
         }
         else
         {
-            $currUsrId = (int) $gCurrentUser->getValue('usr_id');
-
-            $other = (int) $this->getValue('msg_usr_id_sender');
-            if ($other === $currUsrId)
+            // email receivers are all stored in the recipients array
+            foreach($recipients as $recipient)
             {
-                $other = (int) $this->getValue('msg_usr_id_receiver');
+                if($recipient['type'] === 'user' && !$showFullUserNames)
+                {
+                    $singleRecipientsCount++;
+                }
+                else
+                {
+                    if(strlen($recipientsString) > 0)
+                    {
+                        $recipientsString .= '; ';
+                    }
+
+                    $recipientsString .= $recipient['name'];
+                }
             }
 
-            $sql = 'UPDATE '.TBL_MESSAGES.'
-                       SET msg_read = 2
-                         , msg_usr_id_sender   = ? -- $currUsrId
-                         , msg_usr_id_receiver = ? -- $other
-                         , msg_timestamp = CURRENT_TIMESTAMP
-                     WHERE msg_id = ? -- $msgId';
-            $this->db->queryPrepared($sql, array($currUsrId, $other, $msgId));
+            // if full user names should not be shown than create a text with the number of individual recipients
+            if(!$showFullUserNames && $singleRecipientsCount > 0)
+            {
+                if($singleRecipientsCount === 1)
+                {
+                    $textIndividualRecipients = $gL10n->get('SYS_COUNT_INDIVIDUAL_RECIPIENT', array($singleRecipientsCount));
+                }
+                else
+                {
+                    $textIndividualRecipients = $gL10n->get('SYS_COUNT_INDIVIDUAL_RECIPIENTS', array($singleRecipientsCount));
+                }
+
+                if(strlen($recipientsString) > 0)
+                {
+                    $recipientsString = $gL10n->get('SYS_PARAMETER1_AND_PARAMETER2', array($recipientsString, $textIndividualRecipients));
+                }
+                else
+                {
+                    $recipientsString = $textIndividualRecipients;
+                }
+            }
         }
 
-        $this->db->endTransaction();
+        return $recipientsString;
+    }
 
-        return true;
+    /**
+     * Method will return true if the PM was sent to the current user and not is already unread.
+     * Therefore the current user is not the sender of the PM and the flag **msg_read** is set to 1.
+     * Email will always have the status read.
+     * @return bool Returns true if the PM was not read from the current user.
+     */
+    public function isUnread()
+    {
+        global $gCurrentUser;
+
+        if(TableMessage::MESSAGE_TYPE_PM && $this->getValue('msg_read') === 1
+        && $this->getValue('msg_usr_id_sender') != $gCurrentUser->getValue('usr_id'))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Reads all recipients to the message and returns an array. The array has the following structure:
+     * array('type' => 'role', 'id' => '4711', 'name' => 'Administrator', 'mode' => '0')
+     * Type could be **role** or **user**, the id will be the database id of role or user and the
+     * mode will be only used with roles and the following values are used:
+     + 0 = active members, 1 = former members, 2 = active and former members
+     * @return array Returns an array with all recipients (users and roles)
+     */
+    public function readRecipientsData()
+    {
+        global $gCurrentUser, $gProfileFields;
+
+        if(count($this->msgRecipientsArray) === 0)
+        {
+            $sql = 'SELECT msg_usr_id_sender, msr_id, msr_rol_id, msr_usr_id, msr_role_mode, rol_name, first_name.usd_value AS firstname, last_name.usd_value AS lastname
+                      FROM ' . TBL_MESSAGES . '
+                     INNER JOIN ' . TBL_MESSAGES_RECIPIENTS . ' ON msr_msg_id = msg_id
+                      LEFT JOIN ' . TBL_ROLES . ' ON rol_id = msr_rol_id
+                      LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
+                             ON last_name.usd_usr_id = msr_usr_id
+                            AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+                      LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
+                             ON first_name.usd_usr_id = msr_usr_id
+                            AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+                    WHERE msg_id = ? -- $this->getValue(\'msg_id\') ';
+            $messagesRecipientsStatement = $this->db->queryPrepared($sql,
+                array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $this->getValue('msg_id')));
+
+            while($row = $messagesRecipientsStatement->fetch())
+            {
+                // save message recipient as TableAcess object to the array
+                $messageRecipient = new TableAccess($this->db, TBL_MESSAGES_RECIPIENTS, 'msr');
+                $messageRecipient->setArray($row);
+                $this->msgRecipientsObjectArray[] = $messageRecipient;
+
+                // now save message recipient into an simple array
+                if($row['msr_usr_id'] > 0)
+                {
+                    $recipientUsrId = (int) $row['msr_usr_id'];
+
+                    // PMs could have the current user as recipient than the sender is the recipient for this user
+                    if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM
+                    && $recipientUsrId == $gCurrentUser->getValue('usr_id'))
+                    {
+                        $recipientUsrId = (int) $row['msg_usr_id_sender'];
+                    }
+
+                    // add role to recipients
+                    $this->msgRecipientsArray[] =
+                        array('type'   => 'user',
+                              'id'     => $recipientUsrId,
+                              'name'   => $row['firstname'] . ' ' . $row['lastname'],
+                              'mode'   => 0,
+                              'msr_id' => (int) $row['msr_id']
+                        );
+                }
+                else
+                {
+                    // add user to recipients
+                    $this->msgRecipientsArray[] =
+                        array('type'   => 'role',
+                              'id'     => (int) $row['msr_rol_id'],
+                              'name'   => $row['rol_name'],
+                              'mode'   => (int) $row['msr_role_mode'],
+                              'msr_id' => (int) $row['msr_id']
+                        );
+                }
+            }
+        }
+
+        return $this->msgRecipientsArray;
+    }
+
+    /**
+     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * a new record or if only an update is necessary. The update statement will only update
+     * the changed columns. If the table has columns for creator or editor than these column
+     * with their timestamp will be updated.
+     * For new records the name intern will be set per default.
+     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if
+     *                                table has columns like **usr_id_create** or **usr_id_changed**
+     * @throws AdmException
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
+     */
+    public function save($updateFingerPrint = true)
+    {
+        global $gCurrentUser;
+
+        if ($this->newRecord)
+        {
+            // Insert
+            $this->setValue('msg_timestamp', DATETIME_NOW);
+        }
+
+        $returnValue = parent::save($updateFingerPrint);
+
+        if($returnValue)
+        {
+            // now save every recipient
+            foreach($this->msgRecipientsObjectArray as $msgRecipientsObject)
+            {
+                $msgRecipientsObject->setValue('msr_msg_id', $this->getValue('msg_id'));
+                $msgRecipientsObject->save();
+            }
+
+            if(is_object($this->msgContentObject))
+            {
+                // now save the message to the database
+                $this->msgContentObject->setValue('msc_msg_id', $this->getValue('msg_id'));
+                $this->msgContentObject->setValue('msc_usr_id', $gCurrentUser->getValue('usr_id'));
+                $returnValue = $this->msgContentObject->save();
+            }
+
+            $this->saveAttachments();
+        }
+
+        return $returnValue;
+    }
+
+    /**
+     * Saves the files of the stored filenames in the array **$msgAttachments** within the filesystem folder
+     * adm_my_files/messages_attachments. Therefore the filename will get the prefix with the id of this
+     * message.
+     * @throw RuntimeException Folder could not be created
+     */
+    protected function saveAttachments()
+    {
+        try
+        {
+            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments');
+        }
+        catch (\RuntimeException $exception)
+        {
+            return array(
+                'text' => 'SYS_FOLDER_NOT_CREATED',
+                'path' => 'adm_my_files/photos/' . $folderName
+            );
+        }
+
+        foreach($this->msgAttachments as $attachement)
+        {
+            $file_name = $this->getValue('msg_id').'_'.$attachement[1];
+
+            FileSystemUtils::copyFile($attachement[0], ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $file_name);
+
+            // save message recipient as TableAcess object to the array
+            $messageAttachment = new TableAccess($this->db, TBL_MESSAGES_ATTACHMENTS, 'msa');
+            $messageAttachment->setValue('msa_msg_id', $this->getValue('msg_id'));
+            $messageAttachment->setValue('msa_file_name', $file_name);
+            $messageAttachment->setValue('msa_original_file_name', $attachement[1]);
+            $messageAttachment->save();
+        }
+    }
+
+    /**
+     * Set the status of the message to read. Also the global menu will be initalize to update
+     * the read badge of messages.
+     * @return false|\PDOStatement Returns **answer** of the SQL execution
+     */
+    public function setReadValue()
+    {
+        global $gMenu;
+
+        if($this->getValue('msg_read') > 0)
+        {
+            $sql = 'UPDATE '.TBL_MESSAGES.'
+                       SET msg_read = 0
+                     WHERE msg_id   = ? -- $this->msgId ';
+
+            $gMenu->initialize();
+            return $this->db->queryPrepared($sql, array($this->msgId));
+        }
     }
 }

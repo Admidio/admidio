@@ -79,9 +79,9 @@ class Email extends PHPMailer
      */
     private $emHtmlText = '';
     /**
-     * @var array<int,string> Hier werden noch mal alle Empfaenger der Mail reingeschrieben, fuer den Fall das eine Kopie der Mail angefordert wird...
+     * @var array<int,string> Array with all recipients names
      */
-    private $emAddresses = array();
+    private $emRecipientsNames = array();
     /**
      * @var array<string,string> Mail sender address and Name
      */
@@ -168,7 +168,7 @@ class Email extends PHPMailer
             return $e->getMessage();
         }
 
-        $this->emAddresses[] = $name;
+        $this->emRecipientsNames[] = $name;
 
         return true;
     }
@@ -179,7 +179,7 @@ class Email extends PHPMailer
      * @param int $userId Id of an user who should be the recipient of the email.
      * @return Returns true if recipients could be added to the email.
      * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
-     *                     Possible reasons: MSG_NO_VALID_RECIPIENTS
+     *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
      */
     public function addRecipientsByUserId($userId)
     {
@@ -226,7 +226,7 @@ class Email extends PHPMailer
         }
         else
         {
-            throw new AdmException($gL10n->get('MSG_NO_VALID_RECIPIENTS'));
+            throw new AdmException($gL10n->get('SYS_NO_VALID_RECIPIENTS'));
         }
 
         return $numberRecipientsAdded > 0;
@@ -253,7 +253,7 @@ class Email extends PHPMailer
             return $e->getMessage();
         }
 
-        $this->emAddresses[] = $name;
+        $this->emRecipientsNames[] = $name;
 
         return true;
     }
@@ -273,7 +273,7 @@ class Email extends PHPMailer
         if (StringUtils::strValidCharacters($address, 'email'))
         {
             $this->emBccArray[] = array('name' => $asciiName, 'address' => $address);
-            $this->emAddresses[] = $name;
+            $this->emRecipientsNames[] = $name;
             return true;
         }
         return false;
@@ -507,7 +507,7 @@ class Email extends PHPMailer
 
         if (!$gValidLogin)
         {
-            $senderName .= ' (' . $gL10n->get('MAI_SENDER_NOT_LOGGED_IN') . ') ';
+            $senderName .= ' (' . $gL10n->get('SYS_SENDER_NOT_LOGGED_IN') . ') ';
         }
 
         // replace all line feeds within the mailtext into simple breaks because only those are valid within mails
@@ -614,17 +614,17 @@ class Email extends PHPMailer
         // remove all recipients
         $this->clearAllRecipients();
 
-        $this->Subject = $gL10n->get('MAI_CARBON_COPY') . ': ' . $this->Subject;
+        $this->Subject = $gL10n->get('SYS_CARBON_COPY') . ': ' . $this->Subject;
 
         // add a separate header with info of the copy mail
         if($this->emSendAsHTML)
         {
-            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . static::$LE . '<hr style="border: 1px solid;" />' .
+            $copyHeader = $gL10n->get('SYS_COPY_OF_YOUR_EMAIL') . ':' . static::$LE . '<hr style="border: 1px solid;" />' .
                 static::$LE . static::$LE;
         }
         else
         {
-            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . static::$LE .
+            $copyHeader = $gL10n->get('SYS_COPY_OF_YOUR_EMAIL') . ':' . static::$LE .
                 '*****************************************************************************************************************************' .
                 static::$LE . static::$LE;
         }
@@ -632,8 +632,8 @@ class Email extends PHPMailer
         // if the flag emListRecipients is set than list all recipients of the mail
         if ($this->emListRecipients)
         {
-            $copyHeader = $gL10n->get('MAI_MESSAGE_WENT_TO').':' . static::$LE . static::$LE .
-                implode(static::$LE, $this->emAddresses) . static::$LE . static::$LE . $copyHeader;
+            $copyHeader = $gL10n->get('SYS_MESSAGE_WENT_TO').':' . static::$LE . static::$LE .
+                implode(static::$LE, $this->emRecipientsNames) . static::$LE . static::$LE . $copyHeader;
         }
 
         $this->emText = $copyHeader . $this->emText;
@@ -709,7 +709,7 @@ class Email extends PHPMailer
         }
 
         // initialize recipient addresses so same email could be send to other recipients
-        $this->emAddresses = array();
+        $this->emRecipientsNames = array();
         $this->clearAddresses();
 
         return true;

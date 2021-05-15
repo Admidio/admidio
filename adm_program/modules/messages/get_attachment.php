@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Read a file from the adm_my_files folder
+ * Read an attachment file from the adm_my_files folder messages_attachments
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -9,37 +9,36 @@
  *
  * Parameters:
  *
- * file_id  :  The id of the file that should be returned
- * view     :  If set to true than the output will not be send as attachement
+ * msa_id  :  The id of the attachment file that should be returned
+ * view    :  If set to true than the output will be shown in the browser
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getFileId = admFuncVariableIsValid($_GET, 'file_id', 'int', array('requireValue' => true));
-$getView   = admFuncVariableIsValid($_GET, 'view', 'bool');
+$getMsaId = admFuncVariableIsValid($_GET, 'msa_id', 'int', array('requireValue' => true));
+$getView  = admFuncVariableIsValid($_GET, 'view', 'bool');
 
-// check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('documents_files_enable_module'))
+// check if the call of the page was allowed
+if (!$gSettingsManager->getBool('enable_mail_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-try
+// read data from database
+$attachment = new TableAccess($gDb, TBL_MESSAGES_ATTACHMENTS, 'msa', $getMsaId);
+$message    = new TableMessage($gDb, $attachment->getValue('msa_msg_id'));
+
+// user of message is not current user than he is not allowed to view the attachment
+if($gCurrentUser->getValue('usr_id') !== $message->getValue('msg_usr_id_sender'))
 {
-    // get recordset of current file from database
-    $file = new TableFile($gDb);
-    $file->getFileForDownload($getFileId);
-}
-catch(AdmException $e)
-{
-    $e->showHtml();
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
-// get complete path with filename of the file
-$completePath = $file->getFullFilePath();
+// get complete path with filename of the attachment
+$completePath = ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment->getValue('msa_file_name');
 
 // check if the file already exists
 if (!is_file($completePath))
@@ -48,13 +47,9 @@ if (!is_file($completePath))
     // => EXIT
 }
 
-// Increment download counter
-$file->setValue('fil_counter', (int) $file->getValue('fil_counter') + 1);
-$file->save();
-
 // determine filesize
 $fileSize = filesize($completePath);
-$filename = FileSystemUtils::getSanitizedPathEntry($file->getValue('fil_name'));
+$filename = FileSystemUtils::getSanitizedPathEntry($attachment->getValue('msa_file_name'));
 
 if($getView)
 {
@@ -66,7 +61,7 @@ else
 }
 
 // Create appropriate header information of the file
-header('Content-Type: ' . $file->getMimeType());
+header('Content-Type: ' . FileSystemUtils::getFileMimeType($filename));
 header('Content-Length: ' . $fileSize);
 header('Content-Disposition: ' . $content . '; filename="' . $filename . '"');
 

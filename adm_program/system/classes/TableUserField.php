@@ -286,7 +286,7 @@ class TableUserField extends TableAccess
 
         $usrId = (int) $gCurrentUser->getValue('usr_id');
 
-        if ($this->mViewUserField === null || $this->mViewUserFieldUserId !== $usrId)
+        if ($this->mViewUserField === null)
         {
             $this->mViewUserFieldUserId = $usrId;
 

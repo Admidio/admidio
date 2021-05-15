@@ -24,6 +24,51 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method will migrate the recipients of messages from the database column msg_usr_id_receiver
+     * to the new table adm_messages_recipients. There each recipient will be add in a separate row that
+     * reference to the message.
+     */
+	public static function updateStep41MigrateMessageRecipients()
+	{
+        $sql = 'SELECT msg_id, msg_usr_id_receiver FROM ' . TBL_MESSAGES;
+        $messagesStatement = self::$db->queryPrepared($sql);
+
+        while($row = $messagesStatement->fetch())
+        {
+            $messageRecipient = new TableAccess(self::$db, TBL_MESSAGES_RECIPIENTS, 'msr');
+            $recipientsSplit  = explode('|', $row['msg_usr_id_receiver']);
+
+            foreach ($recipientsSplit as $recipients)
+            {
+                $messageRecipient->clear();
+                $messageRecipient->setValue('msr_msg_id', $row['msg_id']);
+
+                if (str_contains($recipients, ':'))
+                {
+                    $groupSplit = explode(':', $recipients);
+                    $groupIdAndStatus = explode('-', trim($groupSplit[1]));
+                    $messageRecipient->setValue('msr_rol_id', $groupIdAndStatus[0]);
+
+                    // set mode of the role (active, former, former and active)
+                    if (count($groupIdAndStatus) === 1)
+                    {
+                        $messageRecipient->setValue('msr_role_mode', 0);
+                    }
+                    else
+                    {
+                        $messageRecipient->setValue('msr_role_mode', $groupIdAndStatus[1]);
+                    }
+                }
+                else
+                {
+                    $messageRecipient->setValue('msr_usr_id', (int) trim($recipients));
+                }
+                $messageRecipient->save();
+            }
+	    }
+	}
+
+    /**
      * This method add new categories for announcements to the database.
      */
     public static function updateStepAddAnnouncementsCategories()
@@ -475,7 +520,7 @@ final class ComponentUpdateSteps
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, 0, 9, 1, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'weblinks.png\', \'LNK_WEBLINKS\', \'LNK_WEBLINKS_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'BACKUP\'), 2, 0, 4, 1, \'dbback\', \''.FOLDER_MODULES.'/backup/backup.php\', \'backup.png\', \'SYS_DATABASE_BACKUP\', \'SYS_DATABASE_BACKUP_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, 0, 6, 1, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, 0, 4, 1, \'mail\', \''.FOLDER_MODULES.'/messages/messages_write.php\', \'email.png\', \'SYS_EMAIL\', \'MAI_EMAIL_DESC\')
+                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, 0, 4, 1, \'mail\', \''.FOLDER_MODULES.'/messages/messages_write.php\', \'email.png\', \'SYS_EMAIL\', \'SYS_EMAIL_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, 0, 1, 1, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'new_registrations.png\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\')';

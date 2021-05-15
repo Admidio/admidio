@@ -49,6 +49,7 @@ $defaultOrgPreferences = array(
     'mail_bcc_count'                 => '50',
     'mail_recipients_with_roles'     => '1',
     'mail_character_encoding'        => 'utf-8',
+    'mail_save_attachments'          => '1',
     'mail_smtp_host'                 => '',
     'mail_smtp_auth'                 => '1',
     'mail_smtp_port'                 => '25',
@@ -122,7 +123,6 @@ $defaultOrgPreferences = array(
     // Messages
     'enable_mail_module'          => '1',
     'enable_pm_module'            => '1',
-    'enable_chat_module'          => '0',
     'enable_mail_captcha'         => '1',
     'mail_max_receiver'           => '10',
     'mail_show_former'            => '1',

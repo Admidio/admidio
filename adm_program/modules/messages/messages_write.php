@@ -12,33 +12,38 @@
 /******************************************************************************
  * Parameters:
  *
+ * msg_tpye  - This could be EMAIL if you want to write an email or PM if you want to write a private Message
  * usr_id    - send message to the given user ID
  * subject   - subject of the message
  * msg_id    - ID of the message -> just for answers
- * rol_id    - Statt einem Rollennamen/Kategorienamen kann auch eine RollenId uebergeben werden
- * carbon_copy - false - (Default) Checkbox "Kopie an mich senden" ist NICHT gesetzt
- *             - true  - Checkbox "Kopie an mich senden" ist gesetzt
+ * rol_id    - ID of a role to which an email should be send
+ * carbon_copy - false - (Default) "Send copy to me" checkbox is NOT set
+ *             - true  - "Send copy to me" checkbox is set
+ * forward : true - The message of the msg_id will be copied and the base for this new message
  *
  *****************************************************************************/
 
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getMsgType    = admFuncVariableIsValid($_GET, 'msg_type',    'string');
+$getMsgType    = admFuncVariableIsValid($_GET, 'msg_type',    'string', array('defaultValue' => TableMessage::MESSAGE_TYPE_EMAIL));
 $getUserId     = admFuncVariableIsValid($_GET, 'usr_id',      'int');
 $getSubject    = admFuncVariableIsValid($_GET, 'subject',     'html');
 $getMsgId      = admFuncVariableIsValid($_GET, 'msg_id',      'int');
 $getRoleId     = admFuncVariableIsValid($_GET, 'rol_id',      'int');
 $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
+$getForward    = admFuncVariableIsValid($_GET, 'forward',     'bool');
 
 // Check form values
 $postUserIdList = admFuncVariableIsValid($_POST, 'userIdList', 'string');
 $postListId     = admFuncVariableIsValid($_POST, 'lst_id',     'int');
 
+
+$message = new TableMessage($gDb, $getMsgId);
+
 if ($getMsgId > 0)
 {
-    $message = new TableMessage($gDb, $getMsgId);
     $getMsgType = $message->getValue('msg_type');
 }
 
@@ -72,10 +77,15 @@ $currOrgId = (int) $gCurrentOrganization->getValue('org_id');
 if ($getMsgId > 0)
 {
     // update the read-status
-    $message->setReadValue($currUsrId);
+    $message->setReadValue();
+
+    if($getForward === true)
+    {
+        $getMsgId = 0;
+    }
 
     $getSubject = $message->getValue('msg_subject');
-    $getUserId  = $message->getConversationPartner($currUsrId);
+    $getUserId  = $message->getConversationPartner();
 
     $messageStatement = $message->getConversation($getMsgId);
 }
@@ -139,7 +149,7 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
     // no roles or users found then show message
     if(count($list) === 0)
     {
-        $gMessage->show($gL10n->get('MSG_NO_ROLES_AND_USERS'));
+        $gMessage->show($gL10n->get('SYS_NO_ROLES_AND_USERS'));
         // => EXIT
     }
 }
@@ -159,23 +169,23 @@ if ($getUserId > 0)
 
 if ($getSubject !== '')
 {
-    $headline = $gL10n->get('MAI_SUBJECT').': '.$getSubject;
+    $headline = $gL10n->get('SYS_SUBJECT').': '.$getSubject;
 }
 else
 {
-    $headline = $gL10n->get('MAI_SEND_EMAIL');
+    $headline = $gL10n->get('SYS_SEND_EMAIL');
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
-        $headline = $gL10n->get('PMS_SEND_PM');
+        $headline = $gL10n->get('SYS_SEND_PRIVATE_MESSAGE');
     }
 }
 
-// Wenn die letzte URL in der Zuruecknavigation die des Scriptes message_send.php ist,
-// dann soll das Formular gefuellt werden mit den Werten aus der Session
+// If the last URL in the back navigation is the one of the script message_send.php,
+// then the form should be filled with the values from the session
 if (str_contains($gNavigation->getUrl(), 'messages_send.php') && isset($_SESSION['message_request']))
 {
-    // Das Formular wurde also schon einmal ausgefüllt,
-    // da der User hier wieder gelandet ist nach der Mailversand-Seite
+    $message->setArray($_SESSION['message_request']);
+    $message->addContent($_SESSION['message_request']['msg_body']);
     $formValues = $_SESSION['message_request'];
     unset($_SESSION['message_request']);
 
@@ -190,13 +200,17 @@ if (str_contains($gNavigation->getUrl(), 'messages_send.php') && isset($_SESSION
 }
 else
 {
+    $message->setValue('msg_subject', $getSubject);
     $formValues['namefrom']    = '';
     $formValues['mailfrom']    = '';
-    $formValues['subject']     = $getSubject;
-    $formValues['msg_body']    = '';
     $formValues['msg_to']      = '';
     $formValues['carbon_copy'] = $getCarbonCopy;
     $formValues['delivery_confirmation'] = $getDeliveryConfirmation;
+
+    if ($getForward === false)
+    {
+        $message->addContent('');
+    }
 }
 
 // add current url to navigation stack
@@ -207,14 +221,8 @@ $page = new HtmlPage('admidio-messages-write', $headline);
 
 if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {
-    $formParams = array('msg_type' => 'PM');
-    if ($getMsgId > 0)
-    {
-        $formParams['msg_id'] = $getMsgId;
-    }
-
     // show form
-    $form = new HtmlForm('pm_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('pm_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', array('msg_type' => 'PM', 'msg_id' => $getMsgId)), $page, array('enableFileUpload' => true));
 
     if ($getUserId === 0)
     {
@@ -225,7 +233,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
                 'property'               => HtmlForm::FIELD_REQUIRED,
                 'multiselect'            => true,
                 'maximumSelectionNumber' => $maxNumberRecipients,
-                'helpTextIdLabel'        => 'MSG_SEND_PM'
+                'helpTextIdLabel'        => 'SYS_SEND_PRIVATE_MESSAGE_DESC'
             )
         );
         $form->closeGroupBox();
@@ -242,17 +250,17 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     if($getSubject === '')
     {
         $form->addInput(
-            'subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'],
+            'msg_subject', $gL10n->get('SYS_SUBJECT'), $message->getValue('msg_subject'),
             array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
         );
     }
     else
     {
-        $form->addInput('subject', '', $formValues['subject'], array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addInput('msg_subject', '', $message->getValue('msg_subject'), array('property' => HtmlForm::FIELD_HIDDEN));
     }
 
     $form->addMultilineTextInput(
-        'msg_body', $gL10n->get('SYS_PM'), $formValues['msg_body'], 10,
+        'msg_body', $gL10n->get('SYS_MESSAGE'), $message->getContent(), 10,
         array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 
@@ -263,7 +271,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     // add form to html page
     $page->addHtml($form->show());
 }
-elseif (!isset($messageStatement))
+elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
 {
     if ($getUserId > 0)
     {
@@ -294,16 +302,8 @@ elseif (!isset($messageStatement))
         $rollenName = $role->getValue('rol_name');
     }
 
-    $formParams = array();
-
-    // if subject was set as param then send this subject to next script
-    if ($getSubject !== '')
-    {
-        $formParams['subject'] = $getSubject;
-    }
-
     // show form
-    $form = new HtmlForm('mail_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('mail_send_form', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
     $sqlRoleIds = array();
@@ -372,7 +372,7 @@ elseif (!isset($messageStatement))
                     // list role with former members
                     $listFormer[] = array('groupID: '.$roleArray['rol_id'].'-1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_FORMER_MEMBERS') . ')');
                     // list role with active and former members
-                    $listActiveAndFormer[] = array('groupID: '.$roleArray['rol_id'].'-2', $roleArray['rol_name'].' '.'('.$gL10n->get('MSG_ACTIVE_FORMER_SHORT').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
+                    $listActiveAndFormer[] = array('groupID: '.$roleArray['rol_id'].'-2', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS_SHORT').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
                 }
             }
 
@@ -482,7 +482,7 @@ elseif (!isset($messageStatement))
     // no roles or users found then show message
     if(count($list) === 0)
     {
-        $gMessage->show($gL10n->get('MSG_NO_ROLES_AND_USERS'));
+        $gMessage->show($gL10n->get('SYS_NO_ROLES_AND_USERS'));
         // => EXIT
     }
 
@@ -492,7 +492,7 @@ elseif (!isset($messageStatement))
             'property'               => HtmlForm::FIELD_REQUIRED,
             'multiselect'            => true,
             'maximumSelectionNumber' => $maxNumberRecipients,
-            'helpTextIdLabel'        => 'MAI_SEND_MAIL_TO_ROLE',
+            'helpTextIdLabel'        => 'SYS_SEND_MAIL_TO_ROLE',
             'defaultValue'           => $preloadData
         )
     );
@@ -513,7 +513,7 @@ elseif (!isset($messageStatement))
         $possibleEmails = $pdoStatement->fetchColumn();
 
         $form->addInput(
-            'name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
+            'name', $gL10n->get('SYS_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
             array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
         );
 
@@ -534,14 +534,14 @@ elseif (!isset($messageStatement))
             $sqlData['params'] = array($currUsrId);
 
             $form->addSelectBoxFromSql(
-                'mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sqlData,
+                'mailfrom', $gL10n->get('SYS_YOUR_EMAIL'), $gDb, $sqlData,
                 array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false)
             );
         }
         else
         {
             $form->addInput(
-                'mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'),
+                'mailfrom', $gL10n->get('SYS_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'),
                 array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
             );
         }
@@ -549,11 +549,11 @@ elseif (!isset($messageStatement))
     else
     {
         $form->addInput(
-            'namefrom', $gL10n->get('MAI_YOUR_NAME'), $formValues['namefrom'],
+            'namefrom', $gL10n->get('SYS_YOUR_NAME'), $formValues['namefrom'],
             array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
         );
         $form->addInput(
-            'mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $formValues['mailfrom'],
+            'mailfrom', $gL10n->get('SYS_YOUR_EMAIL'), $formValues['mailfrom'],
             array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
         );
     }
@@ -561,20 +561,20 @@ elseif (!isset($messageStatement))
     // show option to send a copy to your email address only for registered users because of spam abuse
     if($gValidLogin)
     {
-        $form->addCheckbox('carbon_copy', $gL10n->get('MAI_SEND_COPY'), $formValues['carbon_copy']);
+        $form->addCheckbox('carbon_copy', $gL10n->get('SYS_SEND_COPY'), $formValues['carbon_copy']);
     }
 
     // if preference is set then show a checkbox where the user can request a delivery confirmation for the email
     if (($currUsrId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation') === 2) || (int) $gSettingsManager->get('mail_delivery_confirmation') === 1)
     {
-        $form->addCheckbox('delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
+        $form->addCheckbox('delivery_confirmation', $gL10n->get('SYS_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
     }
 
     $form->closeGroupBox();
 
     $form->openGroupBox('gb_mail_message', $gL10n->get('SYS_MESSAGE'));
     $form->addInput(
-        'subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'],
+        'msg_subject', $gL10n->get('SYS_SUBJECT'), $message->getValue('msg_subject'),
         array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 
@@ -582,13 +582,13 @@ elseif (!isset($messageStatement))
     if ($gValidLogin && ($gSettingsManager->getInt('max_email_attachment_size') > 0) && PhpIniUtils::isFileUploadEnabled())
     {
         $form->addFileUpload(
-            'btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'),
+            'btn_add_attachment', $gL10n->get('SYS_ATTACHMENT'),
             array(
                 'enableMultiUploads' => true,
                 'maxUploadSize'      => Email::getMaxAttachmentSize(),
-                'multiUploadLabel'   => $gL10n->get('MAI_ADD_ATTACHEMENT'),
+                'multiUploadLabel'   => $gL10n->get('SYS_ADD_ATTACHMENT'),
                 'hideUploadField'    => true,
-                'helpTextIdLabel'    => $gL10n->get('MAI_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
+                'helpTextIdLabel'    => $gL10n->get('SYS_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
                 'icon'               => 'fa-paperclip'
             )
         );
@@ -597,12 +597,12 @@ elseif (!isset($messageStatement))
     // add textfield or ckeditor to form
     if($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users'))
     {
-        $form->addEditor('msg_body', '', $formValues['msg_body'], array('property' => HtmlForm::FIELD_REQUIRED));
+        $form->addEditor('msg_body', '', $message->getContent(), array('property' => HtmlForm::FIELD_REQUIRED));
     }
     else
     {
         $form->addMultilineTextInput(
-            'msg_body', $gL10n->get('SYS_TEXT'), $formValues['msg_body'], 10,
+            'msg_body', $gL10n->get('SYS_TEXT'), $message->getContent(), 10,
             array('property' => HtmlForm::FIELD_REQUIRED)
         );
     }
@@ -625,48 +625,56 @@ elseif (!isset($messageStatement))
 
 if (isset($messageStatement))
 {
-    require_once(__DIR__ . '/messages_functions.php');
-
-    $page->addHtml('<br />');
     while ($row = $messageStatement->fetch())
     {
-        if ((int) $row['msc_usr_id'] === $currUsrId)
-        {
-            $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
-        }
-        else
-        {
-            $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-        }
-
-        $receiverName = '';
+        $date = new \DateTime($row['msc_timestamp']);
         $messageText = htmlspecialchars_decode(stripslashes($row['msc_message']));
+        $messageFooter = '';
+
         if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
         {
-            // list history of this PM
-            $messageText = nl2br($row['msc_message']);
+            if ((int) $row['msc_usr_id'] === $currUsrId)
+            {
+                $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
+            }
+            else
+            {
+                $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+            }
+
+            $messageHeader = $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($sentUser, $date->format($gSettingsManager->getString('system_date')), $date->format($gSettingsManager->getString('system_time'))));
+            $messageIcon   = 'fa-comment-alt';
         }
         else
         {
-            $message = new TableMessage($gDb, $getMsgId);
-            $receivers = $message->getValue('msg_usr_id_receiver');
-            // open some additional functions for messages
+            $messageHeader = $date->format($gSettingsManager->getString('system_date')) . ' ' . $date->format($gSettingsManager->getString('system_time')) .'<br />' . $gL10n->get('SYS_TO') . ': ' . $message->getRecipientsNamesString();
+            $messageIcon   = 'fa-envelope';
+            $attachments   = $message->getAttachmentsInformations();
 
-            $receiverName = '<div class="card-footer">'.$gL10n->get('MSG_OPPOSITE').': ' . prepareRecipients($receivers, true) . '</div>';
+            if(count($attachments) > 0)
+            {
+                $messageFooter .= '<div class="card-footer"><i class="fas fa-paperclip"></i> ' . $gL10n->get('SYS_ATTACHMENT');
+            }
+
+            foreach($attachments as $attachment)
+            {
+
+                $messageFooter .= '<a class="admidio-attachment" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/get_attachment.php', array('msa_id' => $attachment['msa_id'])) . '">' . $attachment['file_name'] . '</a>';
+            }
+
+            if(count($attachments) > 0)
+            {
+                $messageFooter .= '</div>';
+            }
         }
-
-        $date = new \DateTime($row['msc_timestamp']);
 
         $page->addHtml('
         <div class="card admidio-blog">
             <div class="card-header">
-                <i class="fas fa-comment-alt"></i>' .
-                $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($sentUser, $date->format($gSettingsManager->getString('system_date')), $date->format($gSettingsManager->getString('system_time')))) . '
+                <i class="fas ' . $messageIcon . '"></i>' . $messageHeader . '
             </div>
-            <div class="card-body">'.
-                $messageText.'
-            </div>
-            '.$receiverName.'
+            <div class="card-body">' . $messageText . '</div>
+            ' . $messageFooter . '
         </div>');
     }
 }

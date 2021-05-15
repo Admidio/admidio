@@ -504,6 +504,10 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
     background-color: #dddddd;
 }
 
+.admidio-attachment {
+    margin-left: 20px;
+}
+
 /***********************************/
 /* Chat module */
 /***********************************/

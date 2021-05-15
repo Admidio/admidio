@@ -132,7 +132,7 @@ switch($getMode)
                     {
                         if(!StringUtils::strValidCharacters($_POST['mail_sendmail_address'], 'email'))
                         {
-                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('MAI_SENDER_EMAIL'))));
+                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_SENDER_EMAIL'))));
                             // => EXIT
                         }
                     }
@@ -188,8 +188,8 @@ switch($getMode)
                     break;
 
                 case 'messages':
-                    $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_chat_module', 'enable_mail_captcha',
-                                        'mail_send_to_all_addresses', 'mail_html_registered_users', 'mail_into_to', 'mail_show_former');
+                    $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha',
+                                        'mail_send_to_all_addresses', 'mail_html_registered_users', 'mail_into_to', 'mail_show_former', 'mail_save_attachments');
                     break;
 
                 case 'photos':
