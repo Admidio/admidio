@@ -9,39 +9,10 @@
  ***********************************************************************************************
  */
 
-require_once(__DIR__ . '/../../system/common.php');
-
 if(!defined('ORG_ID'))
 {
 	define('ORG_ID', (int) $gCurrentOrganization->getValue('org_id'));
 }
-
-/**
- * Funktion überprueft den übergebenen Namen, ob er gemaess den Namenskonventionen für
- * Profilfelder und Kategorien zum Uebersetzen durch eine Sprachdatei geeignet ist
- * Bsp: SYS_COMMON --> Rueckgabe true
- * Bsp: Mitgliedsbeitrag --> Rueckgabe false
- *
- * @param   string  $field_name
- * @return  bool
- */
-function check_languagePCR($field_name)
-{
-    $ret = false;
- 
-    //pruefen, ob die ersten 3 Zeichen von $field_name Grußbuchstaben sind
-    //pruefen, ob das vierte Zeichen von $field_name ein _ ist
-
-    //Prüfung entfaellt: pruefen, ob die restlichen Zeichen von $field_name Grußbuchstaben sind
-    //if ((ctype_upper(substr($field_name,0,3))) && ((substr($field_name,3,1))=='_')  && (ctype_upper(substr($field_name,4)))   )
-
-    if ((ctype_upper(substr($field_name,0,3))) && ((substr($field_name,3,1)) == '_')   )
-    {
-      $ret = true;
-    }
-    return $ret;
-}
- 
 
 /**
  * Funktion prueft, ob ein User Angehoeriger einer bestimmten Kategorie ist
@@ -74,7 +45,7 @@ function isMemberOfCategorie($cat_id, $user_id = 0)
                   AND rol_cat_id = cat_id
                   AND (  cat_org_id = ? -- ORG_ID
                    OR cat_org_id IS NULL ) ';
-    
+
     $queryParams = array(
         $user_id,
         DATE_NOW,
@@ -92,19 +63,19 @@ function isMemberOfCategorie($cat_id, $user_id = 0)
     else
     {
         return 0;
-    }   
+    }
 }
 
 /**
  * Funktion prüft, ob es eine Konfiguration mit dem übergebenen Namen bereits gibt
  * wenn ja: wird "- Kopie" angehängt und rekursiv überprüft
  * @param   string  $name
- * @return  string  
+ * @return  string
  */
 function createColDescConfig($name)
 {
     global $config, $gL10n;
-    
+
     while (in_array($name, $config['col_desc']))
     {
         $name .= ' - '.$gL10n->get('MAI_CARBON_COPY');
@@ -116,12 +87,12 @@ function createColDescConfig($name)
 /**
  * Funktion initialisiert das Konfigurationsarray
  * @param   none
- * @return  Array $config  das Konfigurationsarray 
+ * @return  Array $config  das Konfigurationsarray
  */
 function initConfigArray()
 {
     global $gL10n, $gProfileFields;
-    
+
     $config = array('col_desc' 		=> array($gL10n->get('SYS_PATTERN')),
                     'col_fields' 	=> array('p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
                                              'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
@@ -132,7 +103,7 @@ function initConfigArray()
                     'selection_role'=> array(''),
                     'selection_cat'	=> array(''),
                     'number_col'	=> array(0)  );
-                    
+
     if (getRoleID($gL10n->get('SYS_ADMINISTRATOR')) > 0)
     {
         $config['col_fields'][0] .= ','.'r'.getRoleID($gL10n->get('SYS_ADMINISTRATOR'));
@@ -145,7 +116,7 @@ function initConfigArray()
     {
         $config['col_fields'][0] .= ','.'r'.getRoleID($gL10n->get('SYS_MEMBER'));
     }
-        
+
     return $config;
 }
 
@@ -156,11 +127,11 @@ function initConfigArray()
  */
 function getConfigArray()
 {
-    global  $gDb; 
+    global  $gDb;
 
     $config = array();
     $i = 0;
-    
+
     $tableName = TABLE_PREFIX . '_category_report';
 
     $sql = ' SELECT *
@@ -168,7 +139,7 @@ function getConfigArray()
               WHERE ( crt_org_id = ?
                  OR crt_org_id IS NULL ) ';
     $statement = $gDb->queryPrepared($sql, array(ORG_ID));
-        
+
     while($row = $statement->fetch())
     {
         $config['col_desc'][$i]       = $row['crt_col_desc'];
@@ -190,31 +161,31 @@ function getConfigArray()
 function saveConfigArray()
 {
     global  $config, $gDb;
-    
+
     $tableName = TABLE_PREFIX . '_category_report';
     $numConfig = count($config['col_desc']);
     $crtDb = array();
-        
+
     $sql = ' SELECT crt_id
                FROM '.$tableName.'
               WHERE ( crt_org_id = ?
                  OR crt_org_id IS NULL ) ';
     $statement = $gDb->queryPrepared($sql, array(ORG_ID));
-        
+
     while($row = $statement->fetch())
     {
         $crtDb[] = $row['crt_id'];
     }
-    
+
     $numCrtDb = count($crtDb);
-        
+
     for($i = $numConfig; $i < $numCrtDb; ++$i)
     {
         $categoryReport = new TableAccess($gDb, TABLE_PREFIX . '_category_report', 'crt', $crtDb[$i]);
         $categoryReport->delete();
         unset($crtDb[$i]);
     }
-        
+
     foreach ($config['col_desc'] as $i => $dummy)
     {
         $categoryReport = new TableAccess($gDb, TABLE_PREFIX . '_category_report', 'crt');
@@ -222,7 +193,7 @@ function saveConfigArray()
         {
             $categoryReport->readDataById($crtDb[$i]);
         }
-            
+
         $categoryReport->setValue('crt_org_id', ORG_ID);
         $categoryReport->setValue('crt_col_desc', $config['col_desc'][$i]);
         $categoryReport->setValue('crt_col_fields', $config['col_fields'][$i]);
@@ -244,7 +215,7 @@ function saveConfigArray()
 function getRoleID($role_name)
 {
     global $gDb;
-    
+
     $sql = 'SELECT rol_id
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              WHERE rol_name   = ? -- $role_name
@@ -255,7 +226,7 @@ function getRoleID($role_name)
 
     $statement = $gDb->queryPrepared($sql, array($role_name, ORG_ID));
     $row = $statement->fetchObject();
-    
+
     return (isset($row->rol_id) ? $row->rol_id : 0);
 }
 

@@ -21,7 +21,7 @@
  *****************************************************************************/
 
 class CategoryReport
-{    
+{
     public	  $headerData      = array();          ///< Array mit allen Spaltenueberschriften
     public	  $listData        = array();          ///< Array mit den Daten für den Report
     public	  $headerSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
@@ -31,7 +31,7 @@ class CategoryReport
      * CategoryReport constructor
      */
     public function __construct()
-    {   	
+    {
 		// die HeaderSelection-Daten werden bei jedem Aufruf der Klasse benoetigt
 		$this->generate_headerSelection();
     }
@@ -43,11 +43,11 @@ class CategoryReport
 	public function generate_listData()
 	{
 		global $gDb, $gProfileFields, $config, $gL10n;
-		
+
 		$workarray      = array();
 		$number_row_pos = -1;
-		$number_col     = array();		
-		
+		$number_col     = array();
+
 		$colfields = explode(',', $config['col_fields'][$this->conf]);
 		// die gespeicherten Konfigurationen durchlaufen
 		foreach ($colfields as $key => $data)
@@ -57,23 +57,23 @@ class CategoryReport
         	$found = $this->isInHeaderSelection($data);
             if ($found == 0)
             {
-            	continue;	
+            	continue;
             }
-            else 
+            else
             {
             	$workarray[$key+1] = array();
             }
-            
+
         	//$data splitten in Typ und ID
         	$type = substr($data, 0, 1);
         	$id = (int) substr($data, 1);
-        	
+
         	$workarray[$key+1]['type'] = $type;
         	$workarray[$key+1]['id'] = $id;
-        	
+
         	$this->headerData[$key+1]['id'] = 0;
         	$this->headerData[$key+1]['data'] = $this->headerSelection[$found]['data'];
-        	
+
         	switch ($type)
         	{
         		case 'p':                    //p=profileField
@@ -82,10 +82,10 @@ class CategoryReport
         			$number_col[$key+1] = '';
         			break;
         		case 'c':                    //c=categorie
-        			
+
         			$sql = 'SELECT DISTINCT mem_usr_id
-             				           FROM '.TBL_MEMBERS.', '.TBL_CATEGORIES.', '.TBL_ROLES.' 
-             				          WHERE cat_type = \'ROL\' 
+             				           FROM '.TBL_MEMBERS.', '.TBL_CATEGORIES.', '.TBL_ROLES.'
+             				          WHERE cat_type = \'ROL\'
              				            AND cat_id = rol_cat_id
              				            AND mem_rol_id = rol_id
              				            AND mem_begin <= ? -- DATE_NOW
@@ -110,7 +110,7 @@ class CategoryReport
         		case 'r':                    //r=role
 
                     $sql = 'SELECT mem_usr_id
-             				  FROM '.TBL_MEMBERS.', '.TBL_ROLES.' 
+             				  FROM '.TBL_MEMBERS.', '.TBL_ROLES.'
              				 WHERE mem_rol_id = rol_id
              				   AND mem_begin <= ? -- DATE_NOW
            					   AND mem_end    > ? -- DATE_NOW
@@ -131,11 +131,11 @@ class CategoryReport
         		case 'w':                    //w=without (Leader)
 
         			$sql = 'SELECT mem_usr_id
-             				  FROM '.TBL_MEMBERS.', '.TBL_ROLES.' 
+             				  FROM '.TBL_MEMBERS.', '.TBL_ROLES.'
              				 WHERE mem_rol_id = rol_id
              				   AND mem_begin <= ? -- DATE_NOW
            					   AND mem_end    > ? -- DATE_NOW
-             				   AND rol_id = ? -- $id 
+             				   AND rol_id = ? -- $id
              				   AND mem_leader = 0 ';
 					$queryParams = array(
 					    DATE_NOW,
@@ -149,15 +149,15 @@ class CategoryReport
 						$workarray[$key+1]['usr_id'][] = $row['mem_usr_id'];
 					}
 					$number_col[$key+1] = 0;
-        			break;        			
+        			break;
         		case 'l':                    //l=leader
-        			
+
         			$sql = 'SELECT mem_usr_id
-             				  FROM '.TBL_MEMBERS.', '.TBL_ROLES.' 
+             				  FROM '.TBL_MEMBERS.', '.TBL_ROLES.'
              				 WHERE mem_rol_id = rol_id
              				   AND mem_begin <= ? -- DATE_NOW
            					   AND mem_end    > ? -- DATE_NOW
-             				   AND rol_id = ? -- $id 
+             				   AND rol_id = ? -- $id
              				   AND mem_leader = 1 ';
 					$queryParams = array(
 					    DATE_NOW,
@@ -184,15 +184,15 @@ class CategoryReport
         			$number_col[$key+1] = '';
         			break;
         	}
-        }  
+        }
 
         $number_col[1] = $gL10n->get('SYS_NUMBER_COL');
-        
+
 		// alle Mitglieder der aktuellen Organisation einlesen
         $sql = ' SELECT mem_usr_id
-             	   FROM '.TBL_MEMBERS.', '.TBL_ROLES.', '.TBL_CATEGORIES. ' 
+             	   FROM '.TBL_MEMBERS.', '.TBL_ROLES.', '.TBL_CATEGORIES. '
              	  WHERE mem_rol_id = rol_id
-             	    AND rol_valid  = 1   
+             	    AND rol_valid  = 1
              	    AND rol_cat_id = cat_id
              	    AND ( cat_org_id = ? -- ORG_ID
                		 OR cat_org_id IS NULL )
@@ -204,34 +204,34 @@ class CategoryReport
 		    DATE_NOW
 		);
 		$statement = $gDb->queryPrepared($sql, $queryParams);
-        
+
 		while ($row = $statement->fetch())
 		{
 			$this->listData[$row['mem_usr_id']] = array();
 		}
-		
+
 		$user = new User($gDb, $gProfileFields);
-		
+
 		// alle Mitlieder durchlaufen   ...
     	foreach ($this->listData as $member => $dummy)
-		{     	
+		{
 			$user->readDataById($member);
 			$memberShips = $user->getRoleMemberships();
 			$number_row_count = 0;
-	   		
+
 			// bestehen Rollen- und/oder Kategorieeinschraenkungen?
         	$rolecatmarker = true;
         	if ($config['selection_role'][$this->conf] <> ''
         	 || $config['selection_cat'][$this->conf] <> '')
         	{
-        		$rolecatmarker = false;	
+        		$rolecatmarker = false;
         		foreach (explode(',', $config['selection_role'][$this->conf]) as $rol)
         		{
         			if ($user->isMemberOfRole((int) $rol))
         			{
         				$rolecatmarker = true;
         			}
-        		}	
+        		}
 				foreach (explode(',', $config['selection_cat'][$this->conf]) as $cat)
         		{
         			if (isMemberOfCategorie($cat, $member))
@@ -239,23 +239,23 @@ class CategoryReport
         				$rolecatmarker = true;
         			}
         		}
-        	} 			
+        	}
 			if (!$rolecatmarker)
         	{
         		unset($this->listData[$member]);
         		continue;
         	}
-        	
+
 			foreach ($workarray as $key => $data)
 			{
 				if ($data['type'] == 'p')
-				{				
+				{
                     if ( ($gProfileFields->getPropertyById($data['id'], 'usf_type') == 'DROPDOWN'
                        	|| $gProfileFields->getPropertyById($data['id'], 'usf_type') == 'RADIO_BUTTON') )
     				{
     					$this->listData[$member][$key] = $user->getValue($gProfileFields->getPropertyById($data['id'], 'usf_name_intern'), 'database');
     				}
-    				else 
+    				else
     				{
     					$this->listData[$member][$key] = $user->getValue($gProfileFields->getPropertyById($data['id'], 'usf_name_intern'));
     				}
@@ -263,7 +263,7 @@ class CategoryReport
 				elseif ($data['type'] == 'a')              //Sonderfall: Rollengesamtuebersicht erstellen
 				{
 					$role = new TableRoles($gDb);
-					
+
 					$this->listData[$member][$key] = '';
 					foreach ($memberShips as $rol_id)
 					{
@@ -276,7 +276,7 @@ class CategoryReport
 				{
 					$this->listData[$member][$key] = '';
 				}
-				else 
+				else
 				{
 					if (isset($data['usr_id']) AND in_array($member,$data['usr_id']))
                 	{
@@ -300,8 +300,8 @@ class CategoryReport
 		{
 			$this->listData[] = $number_col;
 		}
-	}	
-		
+	}
+
     /**
      * Erzeugt die Auswahlliste fuer die Spaltenauswahl
      * @return void
@@ -309,35 +309,35 @@ class CategoryReport
 	private function generate_headerSelection()
 	{
 		global $gDb, $gL10n, $gProfileFields, $gCurrentUser;
-	    
-        $categories = array();   
-        
+
+        $categories = array();
+
         $i 	= 1;
         foreach ($gProfileFields->getProfileFields() as $field)
-        {               
+        {
             if ($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers())
-            {   
+            {
                 $this->headerSelection[$i]['id']       = 'p'.$field->getValue('usf_id');
                 $this->headerSelection[$i]['cat_name'] = $field->getValue('cat_name');
                 $this->headerSelection[$i]['data']     = addslashes($field->getValue('usf_name'));
                 $i++;
             }
         }
-        
+
 		// alle (Rollen-)Kategorien der aktuellen Organisation einlesen
         $sql = ' SELECT DISTINCT cat.cat_name, cat.cat_id
              	            FROM '.TBL_CATEGORIES.' AS cat, '.TBL_ROLES.' AS rol
-             	           WHERE cat.cat_type = \'ROL\' 
+             	           WHERE cat.cat_type = \'ROL\'
              	             AND cat.cat_id = rol.rol_cat_id
-             	             AND ( cat.cat_org_id = ? 
+             	             AND ( cat.cat_org_id = ?
                	              OR cat.cat_org_id IS NULL )';
 		$statement = $gDb->queryPrepared($sql, array(ORG_ID));
 
 		$k = 0;
 		while ($row = $statement->fetch())
 		{
-			// ueberpruefen, ob der Kategoriename mittels der Sprachdatei uebersetzt werden kann
-        	if (check_languagePCR($row['cat_name']))
+			// check if the category name must be translated
+        	if (Language::isTranslationStringId($row['cat_name']))
         	{
         		$row['cat_name'] = $gL10n->get($row['cat_name']);
         	}
@@ -346,7 +346,7 @@ class CategoryReport
 			$categories[$k]['data'] 	= $gL10n->get('SYS_CATEGORY').': '.$row['cat_name'];
 			$k++;
 		}
- 
+
 		// alle eingelesenen Kategorien durchlaufen und die Rollen dazu einlesen
   		foreach ($categories as $data)
 		{
@@ -357,10 +357,10 @@ class CategoryReport
 
        	    $sql = 'SELECT DISTINCT rol.rol_name, rol.rol_id, rol.rol_valid
                 	           FROM '.TBL_CATEGORIES.' AS cat, '.TBL_ROLES.' AS rol
-                	          WHERE cat.cat_id = ? 
+                	          WHERE cat.cat_id = ?
                 	            AND cat.cat_id = rol.rol_cat_id';
     		$statement = $gDb->queryPrepared($sql, array($data['cat_id']));
-    		
+
         	while ($row = $statement->fetch())
         	{
         		$marker = '';
@@ -368,35 +368,35 @@ class CategoryReport
         		{
         			$marker = ' (' .  ($row['rol_valid'] == 0 ? '*' : '') . ')';
         		}
-        			
+
         		$this->headerSelection[$i]['id']   	   = 'r'.$row['rol_id'];       //r wie role
         		$this->headerSelection[$i]['cat_name'] = $data['cat_name'];
 				$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLE').': '.$row['rol_name'].$marker;
 				$i++;
-				
+
        			$this->headerSelection[$i]['id']   	   = 'w'.$row['rol_id'];		//w wie without (Leader)
         		$this->headerSelection[$i]['cat_name'] = $data['cat_name'];
 				$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLE').' '.$gL10n->get('SYS_WITHOUT').' '.$gL10n->get('SYS_LEADER').': '.$row['rol_name'].$marker;
-				$i++;				
-        		
+				$i++;
+
 				$this->headerSelection[$i]['id']   	   = 'l'.$row['rol_id'];		//l wie leader
         		$this->headerSelection[$i]['cat_name'] = $data['cat_name'];
 				$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_LEADER').': '.$row['rol_name'].$marker;
 				$i++;
-        	}	
+        	}
     	}
     	//Zusatzspalte fuer die Gesamtrollenuebersicht erzeugen
     	$this->headerSelection[$i]['id']   	   = 'adummy';          //a wie additional
         $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLS');
 		$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLEMEMBERSHIPS');
 		$i++;
-		
+
 		//Zusatzspalte fuer die Anzahl erzeugen
-    	$this->headerSelection[$i]['id']   	   = 'ndummy';          //n wie number 
+    	$this->headerSelection[$i]['id']   	   = 'ndummy';          //n wie number
         $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLS');
 		$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_NUMBER_ROW');
 	}
-	
+
     /**
      * Prueft, ob es den uebergebenen Wert in der Spaltenauswahlliste gibt
      * Hinweis: die Spaltenauswahlliste ist immer aktuell, da sie neu generiert wird,
