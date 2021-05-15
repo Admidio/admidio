@@ -38,7 +38,7 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="310">UPDATE %PREFIX%_components SET com_name = 'SYS_ROOM_MANAGEMENT' WHERE com_name_intern = 'ROOMS'</step>
     <step id="320">UPDATE %PREFIX%_preferences SET prf_value = '200' WHERE prf_name = 'photo_thumbs_scale'</step>
     <step id="330">ALTER TABLE %PREFIX%_photos ADD COLUMN pho_description varchar(4000)</step>
-    <step id="340">ComponentUpdateSteps::updateStepAddEmailTemplate</step>
+    <step id="340">ComponentUpdateSteps::updateStep40AddEmailTemplate</step>
     <step id="350" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_send_method' AND pr2.prf_value = 'phpmail' AND pr1.prf_org_id = pr2.prf_org_id SET pr1.prf_value = '' WHERE pr1.prf_name = 'mail_smtp_authentication_type'</step>
     <step id="360" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = '' FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_send_method' AND pr2.prf_value = 'phpmail' AND pr1.prf_name = 'mail_smtp_authentication_type' AND pr1.prf_org_id = pr2.prf_org_id</step>
     <step id="370">UPDATE %PREFIX%_components SET com_name = 'SYS_PHOTOS' WHERE com_name = 'PHO_PHOTOS'</step>
@@ -79,11 +79,11 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="720" database="pgsql">ALTER TABLE %PREFIX%_dates ALTER COLUMN dat_allow_comments TYPE boolean</step>
     <step id="730" database="mysql">ALTER TABLE %PREFIX%_dates MODIFY COLUMN dat_additional_guests boolean NOT NULL default 0</step>
     <step id="740" database="pgsql">ALTER TABLE %PREFIX%_dates ALTER COLUMN dat_additional_guests TYPE boolean</step>
-    <step id="750">ComponentUpdateSteps::updateStepRenameParticipationRoles</step>
+    <step id="750">ComponentUpdateSteps::updateStep40RenameParticipationRoles</step>
     <step id="760">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'groups_roles_roles_per_page' AND prf_value = '10'</step>
     <step id="770">UPDATE %PREFIX%_preferences SET prf_value = '24' WHERE prf_name = 'photo_albums_per_page' AND prf_value = '10'</step>
     <step id="780">UPDATE %PREFIX%_folders SET fol_type = 'DOCUMENTS' WHERE fol_type = 'DOWNLOAD'</step>
-    <step id="790">ComponentUpdateSteps::updateStepRenameDownloadRootFolder</step>
+    <step id="790">ComponentUpdateSteps::updateStep40RenameDownloadRootFolder</step>
     <step id="800">DELETE FROM %PREFIX%_folders WHERE fol_type = 'DOWNLOAD'</step>
     <step>stop</step>
 </update>

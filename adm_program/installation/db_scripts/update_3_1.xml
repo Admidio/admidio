@@ -7,7 +7,7 @@
     <step id="50" database="pgsql">ALTER TABLE %PREFIX%_users ALTER COLUMN usr_password TYPE varchar(255)</step>
     <step id="60" database="pgsql">ALTER TABLE %PREFIX%_users ALTER COLUMN usr_new_password TYPE varchar(255)</step>
     <step id="70">UPDATE %PREFIX%_user_fields SET usf_type = 'PHONE' WHERE usf_name_intern IN ('PHONE', 'MOBILE', 'FAX')</step>
-    <step id="80">ComponentUpdateSteps::updateStepSetDefaultConfiguration</step>
+    <step id="80">ComponentUpdateSteps::updateStep31SetDefaultConfiguration</step>
     <step id="90">ALTER TABLE %PREFIX%_lists DROP COLUMN lst_default</step>
     <step id="100">ALTER TABLE %PREFIX%_announcements ADD COLUMN ann_org_id integer unsigned</step>
     <step id="110">UPDATE %PREFIX%_announcements SET ann_org_id = (SELECT org_id FROM %PREFIX%_organizations WHERE org_shortname = ann_org_shortname) WHERE ann_org_shortname IS NOT NULL</step>
