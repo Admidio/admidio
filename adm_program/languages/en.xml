@@ -1175,6 +1175,7 @@
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
   <string name="SYS_REMOVE">Remove</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
+  <string name="SYS_REORDER">Move #VAR1#</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REQUIRED_FIELDS">Required fields</string>
   <string name="SYS_RESTRICTIONS">Restrictions</string>
