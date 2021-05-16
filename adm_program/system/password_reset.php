@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Show form where user who can send a request to reset their password
+ * Show form where user can request a new password and handle the request
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -9,11 +9,6 @@
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/common.php');
-
-$headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
-
-// save url to navigation stack
-$gNavigation->addUrl(CURRENT_URL, $headline);
 
 // "systemmail" and "request password" must be activated
 if(!$gSettingsManager->getBool('enable_system_mails') || !$gSettingsManager->getBool('enable_password_recovery'))
@@ -115,9 +110,8 @@ if(!empty($_POST['recipient_email']))
 
             $sysmail = new SystemMail($gDb);
             $sysmail->addRecipientsByUserId((int) $user->getValue('usr_id'));
-            $sysmail->setVariable(1, $newPassword);
-            $sysmail->setVariable(2, SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/password_activation.php', array('usr_id' => (int) $user->getValue('usr_id'), 'aid' => $activationId)));
-            $sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user);
+            $sysmail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/password_activation.php', array('usr_id' => (int) $user->getValue('usr_id'), 'id' => $activationId)));
+            $sysmail->sendSystemMail('SYSMAIL_PASSWORD_RESET', $user);
 
             $user->saveChangesWithoutRights();
             $user->save(false);
@@ -156,8 +150,13 @@ else
 {
     /*********************HTML_PART*******************************/
 
+    $headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
+
+    // save url to navigation stack
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+
     // create html page object
-    $page = new HtmlPage('admidio-lost-password', $headline);
+    $page = new HtmlPage('admidio-password-reset', $headline);
 
     $page->addHtml('<p class="lead">'.$gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION').'</p>');
 

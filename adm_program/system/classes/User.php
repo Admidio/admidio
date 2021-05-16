@@ -1847,24 +1847,16 @@ class User extends TableAccess
      * Set a new value for a password column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $newPassword   The new value that should be stored in the database field
-     * @param bool   $isNewPassword Should the column password or new_password be set
      * @param bool   $doHashing     Should the password get hashed before inserted. Default is true
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      */
-    public function setPassword($newPassword, $isNewPassword = false, $doHashing = true)
+    public function setPassword($newPassword, $doHashing = true)
     {
         global $gSettingsManager, $gPasswordHashAlgorithm;
 
-        $columnName = 'usr_password';
-
-        if ($isNewPassword)
-        {
-            $columnName = 'usr_new_password';
-        }
-
         if (!$doHashing)
         {
-            return parent::setValue($columnName, $newPassword, false);
+            return parent::setValue('usr_password', $newPassword, false);
         }
 
         // get the saved cost value that fits your server performance best and rehash your password
@@ -1881,7 +1873,7 @@ class User extends TableAccess
             return false;
         }
 
-        return parent::setValue($columnName, $newPasswordHash, false);
+        return parent::setValue('usr_password', $newPasswordHash, false);
     }
 
     /**
@@ -1928,7 +1920,7 @@ class User extends TableAccess
         if (str_starts_with($columnName, 'usr_'))
         {
             // don't change user password; use $user->setPassword()
-            if ($columnName === 'usr_password' || $columnName === 'usr_new_password')
+            if ($columnName === 'usr_password')
             {
                 return false;
             }

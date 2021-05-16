@@ -417,7 +417,6 @@
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Users are able to define at login if login information and session should be saved on their computers. This way, they will be logged in at their visit automatically. However this can lead to unwanted access and misuse of unauthorized persons. (default: yes)</string>
   <string name="ORG_NEW_ORGANIZATION">New organization</string>
   <string name="ORG_NEW_ORGANIZATION_DESC">Enter the abbreviation, the official name and the email address for the organization you want to add. The email address should be a general one. It will be used as sender address when sending automatic system notifications.</string>
-  <string name="ORG_NEW_PASSWORD_ACTIVATION_LINK">New password and activation link.</string>
   <string name="ORG_NO_FIELD_CREATED">No organization specific field has been created yet!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">When changing the view all unsaved changes will be lost.</string>
   <string name="ORG_NOTIFY_ADMINISTRATOR">Notification for the administrator about new registrations</string>
@@ -1110,8 +1109,8 @@
   <string name="SYS_PARTICIPATION_INFORMATION">Participant information</string>
   <string name="SYS_PARTICIPATION_STATUS">Participant Status</string>
   <string name="SYS_PASSWORD">Password</string>
-  <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">If you have forgotten your password, the system can create a new password and send it to your email address. Please type in, your user name or e-mail address used for registration in the system. The new password will be sent immediately to the registred e-mail address.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten?</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Please enter the email address you registered with. We will then send you a link where you can reset your password and then set a new one.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Login failed due to incorrect password.\n\nPlease check your password and try again.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">The password entered does not match the repeat.</string>
   <string name="SYS_PATH_SEPARATOR">Path separator</string>
@@ -1329,8 +1328,8 @@
   <string name="SYS_SUPPORT_ADMIDIO">Support Admidio</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
   <string name="SYS_SYMMETRICAL">Symmetrical</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Your requested password for #organization_long_name# website\n#content# Hello #user_first_name#,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: #user_login_name#\nPassword: #variable1#\n\nTo activate your password, please follow this link:\n\n#variable2#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nGreetings,\nThe administrators</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Credentials for #organization_long_name#\n#content# Hello #user_first_name#,\n\nYou receive your credentials for the website #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nCheers,\nThe administrators</string>
+  <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Reset password for #organization_long_name#\n#content# Hello #user_first_name#,\n\nWe have received a request to reset your password on #organization_homepage#.\n\nIf the request came from you, you can use the following link to reset your password and set a new one: \n#variable1#\n\nBest regards\nThe administrators</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in registration at #organization_long_name# rejected.\n#content#Hello #user_first_name#,\n\nyour registration at #organization_homepage# was rejected.\n\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\nTo clarify the reasons for the rejection please contact the administrator #administrator_email# from #organization_homepage#.\n\nRegards,\nThe administrators</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration at #organization_long_name# confirmed\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# has been confirmed.\n\nYou can now log in to the homepage with your username #user_login_name# and your password.\n\nIf you have any questions, write an email to #administrator_email#.\n\nCheers,\nThe administrators</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# New registration at #organization_long_name# website\n#content# A new user has registered on #organization_homepage#.\n\nSurname: #user_last_name#\nFirst Name: #user_first_name#\nE-Mail: #user_email#\n\n\nThis message was generated automatically.</string>

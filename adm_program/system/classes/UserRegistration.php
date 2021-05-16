@@ -122,7 +122,7 @@ class UserRegistration extends User
 
         // always adopt loginname and password to the destination user
         $user->setValue('usr_login_name', $this->getValue('usr_login_name'));
-        $user->setPassword($this->getValue('usr_password'), false, false);
+        $user->setPassword($this->getValue('usr_password'), false);
 
         // adopt all registration fields to the user if this is enabled in the settings
         if($gSettingsManager->getBool('registration_adopt_all_data'))

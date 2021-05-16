@@ -220,11 +220,11 @@ else
 
         $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 
-        // Link bei Loginproblemen
+        // show link if user has login problems
         if($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('enable_system_mails'))
         {
-            // neues Passwort zusenden
-            $linkUrl  = ADMIDIO_URL.'/adm_program/system/lost_password.php';
+            // request to reset the password
+            $linkUrl  = ADMIDIO_URL.'/adm_program/system/password_reset.php';
             $linkText = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
         }
         elseif($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3)

@@ -1157,8 +1157,8 @@
   <string name="SYS_PARTICIPATION_INFORMATION">Teilnehmerinformationen</string>
   <string name="SYS_PARTICIPATION_STATUS">Teilnehmerstatus</string>
   <string name="SYS_PASSWORD">Passwort</string>
-  <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Solltest du dein Passwort vergessen haben, kann das System ein neues Passwort erstellen und an deine E-Mail-Adresse senden. Gib dazu bitte deinen Benutzernamen oder die E-Mail-Adresse an, unter der du dich in diesem System registriert hast. Das neue Passwort wird dann unverzüglich an diese E-Mail-Adresse gesendet.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen?</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Bitte gib deine E-Mail-Adresse ein, mit der du dich angemeldet hast. Wir werden dir dann einen Link schicken, mit dem du dein Passwort zurücksetzen und anschließend ein neues Passwort vergeben kannst.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Sie haben ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfen Sie bitte Ihr Passwort und geben Sie dieses dann erneut ein.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">Das eingegebene Passwort stimmt nicht mit der Wiederholung überein.</string>
   <string name="SYS_PATH_SEPARATOR">Pfad Trenner</string>
