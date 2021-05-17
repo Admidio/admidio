@@ -379,8 +379,6 @@ class User extends TableAccess
      */
     public function checkRolesRight($right = null)
     {
-        global $gCurrentUser;
-
         if ((int) $this->getValue('usr_id') === 0)
         {
             return false;
@@ -476,21 +474,16 @@ class User extends TableAccess
                     }
                 }
 
-                // Remember list view setting
+                // Listenansichtseinstellung merken
+                // Leiter duerfen die Rolle sehen
                 if ($row['mem_usr_id'] > 0 && ($row['rol_this_list_view'] > 0 || $memLeader))
                 {
-                    // Membership to the role and this is not locked, then look at it
-                    // Leaders are allowed to see the role
+                    // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
                     $this->listViewRights[$rolId] = true;
                 }
                 elseif ((int) $row['rol_this_list_view'] === 2)
                 {
-                    // look at other roles when everyone is allowed to see them
-                    $this->listViewRights[$rolId] = true;
-                }
-                elseif ((int) $row['rol_this_list_view'] === 0 && $row['mem_usr_id'] == $gCurrentUser->getValue('usr_id'))
-                {
-                    // own role membership could be viewed
+                    // andere Rollen anschauen, wenn jeder sie sehen darf
                     $this->listViewRights[$rolId] = true;
                 }
                 else
@@ -498,16 +491,16 @@ class User extends TableAccess
                     $this->listViewRights[$rolId] = false;
                 }
 
-                // Remember mail permissions
+                // Mailrechte setzen
+                // Leiter duerfen der Rolle Mails schreiben
                 if ($row['mem_usr_id'] > 0 && ($row['rol_mail_this_role'] > 0 || $memLeader))
                 {
-                    // Membership to the role and emails could be send, then set permission
-                    // Leaders are allowed to write mails to the role
+                    // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
                     $this->listMailRights[$rolId] = true;
                 }
                 elseif ($row['rol_mail_this_role'] >= 2)
                 {
-                    // visitors or all users are allowed to write emails
+                    // andere Rollen anschauen, wenn jeder sie sehen darf
                     $this->listMailRights[$rolId] = true;
                 }
                 else
