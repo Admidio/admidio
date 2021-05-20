@@ -431,28 +431,53 @@ foreach ($report->listData as $member => $memberdata)
         {
             $columnValues[] = $content;
         }
-        else                   // create output in html layout
+        else                   // create output in html layout for getMode = html or print
         {            
-        	if ($usf_id !== 0)     //only profileFields
+        	if ($usf_id !== 0)     // profile fields
         	{
-        		$content = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member);
         		if ($getMode === 'html'
         			&&    ($usf_id === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
         				|| $usf_id === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
         		{
-        			$content = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $member)).'">'.$content.'</a>';
+        		    $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member);
+        		    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $member)).'">'.$htmlValue.'</a>';
+        		}
+        		else
+        		{
+        		    // within print mode no links should be set
+        		    if ($getMode === 'print'
+        		        &&    ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'EMAIL'
+        		            || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
+        		            || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'URL'))
+        		    {
+        		        $columnValues[] = $content;
+        		    }
+        		    else
+        		    {
+        		        // checkbox must set a sorting value
+        		        if($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')
+        		        {
+        		            $columnValues[] = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member), 'order' => $content);
+        		        }
+        		        else
+        		        {
+        		            $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member);
+        		        }
+        		    }
         		}
         	}
-       	
-            // if empty string pass a whitespace
-			if (strlen($content) > 0)
-            {
-            	$columnValues[] = $content;
-			}
-            else
-            {
-            	$columnValues[] = '&nbsp;';
-            }
+       	    else            // all other fields except profile fields
+       	    {
+                // if empty string pass a whitespace
+                if (strlen($content) > 0)
+                {
+            	   $columnValues[] = $content;
+			    }
+                else
+                {
+            	   $columnValues[] = '&nbsp;';
+                }
+       	    }
 		}
 		$columnNumber++;
     }
