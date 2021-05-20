@@ -78,7 +78,7 @@ function createColDescConfig($name)
 
     while (in_array($name, $config['col_desc']))
     {
-        $name .= ' - '.$gL10n->get('MAI_CARBON_COPY');
+        $name .= ' - '.$gL10n->get('SYS_CARBON_COPY');
     }
 
     return $name;
@@ -98,8 +98,6 @@ function initConfigArray()
                                              'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
                                              'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
                                              'p'.$gProfileFields->getProperty('CITY', 'usf_id')),
-                    'col_yes'		=> array('X'),
-                    'col_no'		=> array(''),
                     'selection_role'=> array(''),
                     'selection_cat'	=> array(''),
                     'number_col'	=> array(0)  );
@@ -144,8 +142,6 @@ function getConfigArray()
     {
         $config['col_desc'][$i]       = $row['crt_col_desc'];
         $config['col_fields'][$i]     = $row['crt_col_fields'];
-        $config['col_yes'][$i]        = $row['crt_col_yes'];
-        $config['col_no'][$i]         = $row['crt_col_no'];
         $config['selection_role'][$i] = $row['crt_selection_role'];
         $config['selection_cat'][$i]  = $row['crt_selection_cat'];
         $config['number_col'][$i]     = $row['crt_number_col'];
@@ -197,8 +193,6 @@ function saveConfigArray()
         $categoryReport->setValue('crt_org_id', ORG_ID);
         $categoryReport->setValue('crt_col_desc', $config['col_desc'][$i]);
         $categoryReport->setValue('crt_col_fields', $config['col_fields'][$i]);
-        $categoryReport->setValue('crt_col_yes', $config['col_yes'][$i]);
-        $categoryReport->setValue('crt_col_no', $config['col_no'][$i]);
         $categoryReport->setValue('crt_selection_role', $config['selection_role'][$i]);
         $categoryReport->setValue('crt_selection_cat', $config['selection_cat'][$i]);
         $categoryReport->setValue('crt_number_col', $config['number_col'][$i]);

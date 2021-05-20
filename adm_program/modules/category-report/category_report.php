@@ -396,12 +396,11 @@ foreach ($report->listData as $member => $memberdata)
         // create output format
        	/*****************************************************************/
         
-        // format value for csv export
         $usf_id = 0;
         $usf_id = $report->headerData[$key]['id'];
       
         if ($usf_id !== 0 
-         && $getMode == 'csv'
+         && in_array($getMode, array('csv', 'pdf'), true)
          && $content > 0
          && ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
               || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON') )
@@ -411,9 +410,26 @@ foreach ($report->listData as $member => $memberdata)
             $content       = $arrListValues[$content];
         }
 
+        if ($usf_id === 0 && $content === true)       // alle Spalten außer Profilfelder
+        {
+            if (in_array($getMode, array('csv', 'pdf'), true))
+            {
+                $content = 'X';
+            }
+            else
+            {
+                $content = '<i class="fas fa-check"</i>';
+            }
+        }
+        
         if ($getMode == 'csv')
         {
         	$tmp_csv .= $separator. $valueQuotes. $content. $valueQuotes;
+        }
+        // pdf should show only text and not much html content
+        elseif ($getMode === 'pdf')
+        {
+            $columnValues[] = $content;
         }
         else                   // create output in html layout
         {            

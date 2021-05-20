@@ -119,8 +119,6 @@ CREATE TABLE %PREFIX%_category_report
     crt_org_id                  integer unsigned,
     crt_col_desc                varchar(100)        NOT NULL,
     crt_col_fields              text,
-    crt_col_yes                 varchar(100)        NOT NULL,
-    crt_col_no                  varchar(100)        NOT NULL,
     crt_selection_role          varchar(100)        NOT NULL,
     crt_selection_cat           varchar(100)        NOT NULL,
     crt_number_col              boolean             NOT NULL    DEFAULT '0',

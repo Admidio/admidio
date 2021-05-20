@@ -313,8 +313,6 @@ for ($conf=0;$conf<$num_configs;$conf++)
     		</table>
     	</div>';
     $formConfigurations->addCustomContent($gL10n->get('SYS_COLUMN_SELECTION'), $html);
-    $formConfigurations->addInput('col_yes'.$conf, $gL10n->get('SYS_DISPLAY_TEXT_MEMBERSHIP_YES'), $config['col_yes'][$conf], array('maxLength' => 10));
-    $formConfigurations->addInput('col_no'.$conf, $gL10n->get('SYS_DISPLAY_TEXT_MEMBERSHIP_NO'), $config['col_no'][$conf], array('maxLength' => 10));
     
     $sql = 'SELECT rol_id, rol_name, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'

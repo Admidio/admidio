@@ -12,10 +12,6 @@
   <string name="SYS_CONFIGURATION_DEFAULT_DESC">Default setting for configurations</string>
   <string name="SYS_CONFIGURATIONS">Configurations</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Here any number of configurations can be created for the category report. In the display of the category report one of these configurations is selected using "Select configuration" as the basis for the presentation.</string>
-  <string name="SYS_DISPLAY_TEXT_MEMBERSHIP_NO">Displayed text in case of no membership</string>
-  <string name="SYS_DISPLAY_TEXT_MEMBERSHIP_NO_DESC">Text on no membership in a role or category. \n(e.g. No or False).</string>
-  <string name="SYS_DISPLAY_TEXT_MEMBERSHIP_YES">Displayed text in case of membership</string>
-  <string name="SYS_DISPLAY_TEXT_MEMBERSHIP_YES_DESC">Text on membership in a role or category. \n(e.g. Yes or True or X).</string>
   <string name="SYS_EXPORT">Export</string>
   <string name="SYS_EXPORT_AND_FILTER">Export and filter</string>
   <string name="SYS_EXPORT_DESC">Choose from the configuration that is to be exported. Export creates a file with the extension .cfg and the name of the configuration.</string>

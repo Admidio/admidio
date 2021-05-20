@@ -12,10 +12,6 @@
   <string name="SYS_CONFIGURATION_DEFAULT_DESC">Paramètres de configuration par défaut</string>
   <string name="SYS_CONFIGURATIONS">Configurations</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Ici tu peux créer autant de configuration pour les rapports par catégories que nécessaires. Dans l\'affichage à l\'écran, l\'une de ces configurations sert de base à l\'affichage par "Sélectionner une configuration".</string>
-  <string name="SYS_DISPLAY_TEXT_MEMBERSHIP_NO">Texte si pas membre</string>
-  <string name="SYS_DISPLAY_TEXT_MEMBERSHIP_NO_DESC">Texte si membre d\'aucun rôle ou d\'aucune catégorie.\n(p.ex. non ou false).</string>
-  <string name="SYS_DISPLAY_TEXT_MEMBERSHIP_YES">Texte si membre</string>
-  <string name="SYS_DISPLAY_TEXT_MEMBERSHIP_YES_DESC">Texte si membre d\'un rôle ou d\'une catégorie.\n(p.ex. oui ou true ou X).</string>
   <string name="SYS_EXPORT">Export</string>
   <string name="SYS_EXPORT_AND_FILTER">Exporter et filtrer</string>
   <string name="SYS_EXPORT_DESC">Sélectionnez la configuration à exporter. L\'export crée un fichier avec l\'extension .cfg et le nom de la configuration.</string>

@@ -32,11 +32,7 @@ echo '
 	<strong>'.$gL10n->get('SYS_DESIGNATION').'</strong><br/>
     '.$gL10n->get('SYS_COL_DESC').'<br/><br/>
     <strong>'.$gL10n->get('SYS_COLUMN_SELECTION').'</strong><br/>
-	'.$gL10n->get('SYS_COLUMN_SELECTION_DESC').'<br/><br/>		
-    <strong>'.$gL10n->get('SYS_DISPLAY_TEXT_MEMBERSHIP_YES').'</strong><br/>
-	'.$gL10n->get('SYS_DISPLAY_TEXT_MEMBERSHIP_YES_DESC').'<br/><br/>
-    <strong>'.$gL10n->get('SYS_DISPLAY_TEXT_MEMBERSHIP_NO').'</strong><br/>
-	'.$gL10n->get('SYS_DISPLAY_TEXT_MEMBERSHIP_NO_DESC').'<br/><br/>
+	'.$gL10n->get('SYS_COLUMN_SELECTION_DESC').'<br/><br/>		  
     <strong>'.$gL10n->get('SYS_ROLE_SELECTION').'</strong><br/>
 	'.$gL10n->get('SYS_ROLE_SELECTION_CONF_DESC').'<br/><br/>
 	<strong>'.$gL10n->get('SYS_CAT_SELECTION').'</strong><br/>
