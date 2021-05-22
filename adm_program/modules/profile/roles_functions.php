@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Funktionen zum Verwalten der Rollenmitgliedschaft im Profil
+ * Functions for managing role membership in the profile
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -106,7 +106,9 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
 
     while($row = $roleStatement->fetch())
     {
-        if($gCurrentUser->hasRightViewRole($row['mem_rol_id']))
+        // you must have the right to view memberships of the role or it must be your own profile
+        if($gCurrentUser->hasRightViewRole($row['mem_rol_id'])
+        || (int) $gCurrentUser->getValue('usr_id') === (int) $user->getValue('usr_id'))
         {
             $futureMembership = false;
             $showRoleEndDate  = false;
@@ -152,7 +154,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                             }
                             else
                             {
-                                echo $role->getValue('rol_name');
+                                $roleMemHTML .= $role->getValue('rol_name');
                             }
                             if($member->getValue('mem_leader') == 1)
                             {
