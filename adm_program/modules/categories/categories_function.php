@@ -205,9 +205,14 @@ if($getMode === 1)
             $rightCategoryView->delete();
         }
 
-        // until now we don't use edit rights for profile fields
-        if ($getType !== 'USF')
+        if ($getType === 'USF')
         {
+            // delete cache with profile categories rights
+            $gProfileFields = new ProfileFields($gDb, $orgId);
+        }
+        else
+        {
+            // until now we don't use edit rights for profile fields
             $rightCategoryEdit = new RolesRights($gDb, 'category_edit', (int) $category->getValue('cat_id'));
             $rightCategoryEdit->saveRoles(array_map('intval', $_POST['adm_categories_edit_right']));
         }
