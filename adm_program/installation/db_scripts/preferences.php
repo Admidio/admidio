@@ -114,10 +114,11 @@ $defaultOrgPreferences = array(
     'enable_guestbook_moderation'    => '0',
 
     // Lists
-    'groups_roles_enable_module'         => '1',
-    'groups_roles_roles_per_page'        => '24',
-    'groups_roles_members_per_page'      => '25',
     'groups_roles_default_configuration' => '',
+    'groups_roles_enable_module'         => '1',
+    'groups_roles_export'                => '1',
+    'groups_roles_members_per_page'      => '25',
+    'groups_roles_roles_per_page'        => '24',
     'groups_roles_show_former_members'   => '2',
 
     // Messages

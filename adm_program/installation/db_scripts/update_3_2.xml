@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
-    <step id="10">ComponentUpdateSteps::updateStepRenameWebmasterToAdministrator</step>
+    <step id="10">ComponentUpdateSteps::updateStep32RenameWebmasterToAdministrator</step>
     <step id="20">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_administrator boolean not null default '0'</step>
     <step id="30">UPDATE %PREFIX%_roles SET rol_administrator = rol_webmaster</step>
     <step id="40">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_webmaster</step>
@@ -32,7 +32,7 @@
     <step id="90">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
                   VALUES ('folder_view', 'adm_folders'),
                          ('folder_upload', 'adm_folders')</step>
-    <step id="100">ComponentUpdateSteps::updateStepMigrateToFolderRights</step>
+    <step id="100">ComponentUpdateSteps::updateStep32MigrateToFolderRights</step>
     <step id="110">DROP TABLE %PREFIX%_folder_roles</step>
     <step id="120">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_ROR foreign key (rrd_ror_id)
         references %PREFIX%_roles_rights (ror_id) on delete restrict on update restrict</step>
@@ -40,7 +40,7 @@
         references %PREFIX%_roles (rol_id) on delete restrict on update restrict</step>
     <step id="140">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_USR_CREATE foreign key (rrd_usr_id_create)
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
-    <step id="150">ComponentUpdateSteps::updateStepNewDownloadRootFolderName</step>
+    <step id="150">ComponentUpdateSteps::updateStep32NewDownloadRootFolderName</step>
     <step id="160">UPDATE %PREFIX%_preferences SET prf_value = 'AHGBold.ttf' WHERE prf_name = 'captcha_fonts'</step>
     <step id="170">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_font_size'</step>
     <step id="180">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_signature_font_size'</step>
@@ -98,7 +98,7 @@
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
     <step id="330">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CREATE foreign key (ure_usr_id_create)
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
-    <step id="340">ComponentUpdateSteps::updateStepInstallDefaultUserRelationTypes</step>
+    <step id="340">ComponentUpdateSteps::updateStep32InstallDefaultUserRelationTypes</step>
     <step id="350" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_sender_into_to' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_recipients_with_roles'</step>
     <step id="360" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_sender_into_to' AND pr1.prf_name = 'mail_recipients_with_roles'</step>
     <step id="370">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_sender_into_to'</step>
@@ -106,7 +106,7 @@
     <step id="390" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'lists_default_configuation' AND pr1.prf_name = 'lists_default_configuration'</step>
     <step id="400">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'lists_default_configuation'</step>
     <step id="410">ALTER TABLE %PREFIX%_announcements ADD COLUMN ann_cat_id integer unsigned</step>
-    <step id="420">ComponentUpdateSteps::updateStepAddAnnouncementsCategories</step>
+    <step id="420">ComponentUpdateSteps::updateStep32AddAnnouncementsCategories</step>
     <step id="430" database="mysql">ALTER TABLE %PREFIX%_announcements MODIFY COLUMN ann_cat_id integer unsigned NOT NULL</step>
     <step id="440" database="pgsql">ALTER TABLE %PREFIX%_announcements ALTER COLUMN ann_cat_id SET NOT NULL</step>
     <step id="450">alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_CAT foreign key (ann_cat_id)
@@ -115,7 +115,7 @@
     <step id="470" database="mysql" error="ignore">ALTER TABLE %PREFIX%_announcements DROP INDEX %PREFIX%_FK_ANN_ORG</step>
     <step id="480" database="pgsql">ALTER TABLE %PREFIX%_announcements DROP CONSTRAINT %PREFIX%_FK_ANN_ORG</step>
     <step id="490">ALTER TABLE %PREFIX%_announcements DROP COLUMN ann_org_id</step>
-    <step id="500">ComponentUpdateSteps::updateStepRewriteFolderRights</step>
+    <step id="500">ComponentUpdateSteps::updateStep32RewriteFolderRights</step>
     <step id="510" database="pgsql">UPDATE %PREFIX%_user_fields SET usf_value_list = E'male.png|SYS_MALE\nfemale.png|SYS_FEMALE' WHERE usf_name_intern = 'GENDER'</step>
     <step id="520">UPDATE %PREFIX%_roles SET rol_administrator = 1 WHERE rol_name = 'Administrator'</step>
     <step id="530" error="ignore">alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_CAT foreign key (ann_cat_id)
