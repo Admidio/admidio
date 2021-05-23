@@ -6,9 +6,18 @@
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ *
+ * Parameters:
+ *
+ * id      : Validation id for the link if this is a valid password reset request
+ * usr_id  : Id of the user who wants a reset his password
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/common.php');
+
+// Initialize and check the parameters
+$getResetId = admFuncVariableIsValid($_GET, 'id',    'string');
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'int');
 
 // "systemmail" and "request password" must be activated
 if(!$gSettingsManager->getBool('enable_system_mails') || !$gSettingsManager->getBool('enable_password_recovery'))
@@ -24,8 +33,31 @@ if($gValidLogin)
     // => EXIT
 }
 
-if(!empty($_POST['recipient_email']))
+if($getUserId > 0)
 {
+    // user has clicked the link in his email and now we must check if it's a valid request and then show password form
+
+    // search for user with the email address that have a valid login and membership to a role
+    $sql = 'SELECT usr_id, usr_pw_reset_timestamp
+              FROM '.TBL_USERS.'
+             WHERE usr_id = ? -- $getUserId
+               AND usr_pw_reset_id = ? -- $getResetId
+               AND usr_valid  = 1 ';
+    $queryParams = array(
+        $getUserId,
+        $getResetId
+    );
+    $userStatement = $gDb->queryPrepared($sql, $queryParams);
+
+    if($userStatement->rowCount() !== 1)
+    {
+        $gMessage->show($gL10n->get('SYS_PASSWORD_RESET_INVALID', array('<a href="'.ADMIDIO_URL.'/adm_program/system/password_reset.php">'.$gL10n->get('SYS_PASSWORD_FORGOTTEN').'</a>')));
+        // => EXIT
+    }
+}
+elseif(!empty($_POST['recipient_email']))
+{
+    // password reset form was send and now we should create an email for the user
     try
     {
         // if user is not logged in and captcha is activated then check captcha
@@ -102,7 +134,7 @@ if(!empty($_POST['recipient_email']))
             $user = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
 
             // create an activation id
-            $passwordResetId = SecurityUtils::getRandomString(30);
+            $passwordResetId = SecurityUtils::getRandomString(50);
 
             $user->setValue('usr_pw_reset_id', $passwordResetId);
             $user->setValue('usr_pw_reset_timestamp', DATETIME_NOW);

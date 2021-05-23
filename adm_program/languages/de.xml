@@ -521,7 +521,6 @@
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">Beim Anlegen neuer Benutzer oder bei der Zuordnung von Registrierungen sucht Admidio nach existierenden Benutzern, die einen ähnlichen Vor- und Nachnamen haben, um doppelte Datensätze zu vermeiden. Wird diese Funktion abgeschaltet, dann wird nur nach identischen Namen gesucht. (Voreinstellung: ja)</string>
   <string name="ORG_SECONDS">Sekunden</string>
   <string name="ORG_SEND_PASSWORD">Passwort zusenden</string>
-  <string name="ORG_SEND_PASSWORD_DESC">Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage per E-Mail an den Administrator stellen, damit dieser ein neues Passwort hinterlegt. Damit das Passwort zugesendet werden kann, muss zusätzlich die Einstellung #VAR1_BOLD# gesetzt sein. (Voreinstellung: ja)</string>
   <string name="ORG_SEND_NEW_PASSWORD">Neues Passwort zuschicken</string>
   <string name="ORG_SHOW_CREATE_EDIT">Ersteller und Zeitstempel anzeigen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">An einigen Stellen wird der Ersteller und der Benutzer mit der letzten Änderung zu einem Datensatz zusammen mit einem Zeitstempel angezeigt. Mit dieser Einstellung kann festgelegt werden, ob diese Informationen überhaupt angezeigt werden und ob der Benutzer mit dem Benutzernamen oder mit ihrem Vor- und Nachnamen angezeigt werden soll.</string>
@@ -1164,6 +1163,8 @@
   <string name="SYS_PASSWORD">Passwort</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen?</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Bitte gib deine E-Mail-Adresse ein, mit der du dich angemeldet hast. Wir werden dir dann einen Link schicken, mit dem du dein Passwort zurücksetzen und anschließend ein neues Passwort vergeben kannst.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Hat der Benutzer sein Passwort vergessen, kann er es sich einen Link zuschicken lassen, über den er auf dieser Webseite ein neues Passwort für seinen Benutzer vergeben kann. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage per E-Mail an den Administrator stellen, damit dieser ein neues Passwort hinterlegt. Damit das Passwort zugesendet werden kann, muss zusätzlich die Einstellung #VAR1_BOLD# gesetzt sein. (Voreinstellung: ja)</string>
+  <string name="SYS_PASSWORD_RESET_INVALID">Du hast einen ungültigen Link zum Zurücksetzen deines Passworts aufgerufen. Falls du dein Passwort noch nicht zurückgesetzt hast, fordere bitte einen neuen Link über die Funktion #VAR1# an.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfe bitte dein Passwort und gib dieses erneut ein.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">Das eingegebene Passwort stimmt nicht mit der Wiederholung überein.</string>
   <string name="SYS_PATH_SEPARATOR">Pfad Trenner</string>

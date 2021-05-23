@@ -277,8 +277,8 @@ $formSecurity->addCheckbox(
     array('helpTextIdInline' => 'ORG_LOGIN_AUTOMATICALLY_DESC')
 );
 $formSecurity->addCheckbox(
-    'enable_password_recovery', $gL10n->get('ORG_SEND_PASSWORD'), (bool) $formValues['enable_password_recovery'],
-    array('helpTextIdInline' => array('ORG_SEND_PASSWORD_DESC', array('ORG_ACTIVATE_SYSTEM_MAILS')))
+    'enable_password_recovery', $gL10n->get('SYS_PASSWORD_FORGOTTEN'), (bool) $formValues['enable_password_recovery'],
+    array('helpTextIdInline' => array('SYS_PASSWORD_FORGOTTEN_PREF_DESC', array('ORG_ACTIVATE_SYSTEM_MAILS')))
 );
 
 
