@@ -737,7 +737,7 @@ CREATE TABLE %PREFIX%_users
     usr_password                varchar(255),
     usr_photo                   blob,
     usr_text                    text,
-    usr_pw_reset_id             varchar(20),
+    usr_pw_reset_id             varchar(30),
     usr_pw_reset_timestamp      timestamp           NULL        DEFAULT NULL,
     usr_last_login              timestamp           NULL        DEFAULT NULL,
     usr_actual_login            timestamp           NULL        DEFAULT NULL,

@@ -30,7 +30,7 @@ try
 {
     $user = new User($gDb, $gProfileFields, $getUserId);
 
-    if ($user->getValue('usr_activation_code') === $getActivationId)
+    if ($user->getValue('usr_pw_reset_id') === $getActivationId)
     {
         // activate the new password
         $user->saveChangesWithoutRights();
@@ -38,7 +38,7 @@ try
         $user->setPassword($user->getValue('usr_new_password'), false, false);
         // reset the column usr_new_password
         $user->setPassword('', true, false);
-        $user->setValue('usr_activation_code', '');
+        $user->setValue('usr_pw_reset_id', '');
         $user->save(false);
 
         // if user has tried login several times we should reset the invalid counter,

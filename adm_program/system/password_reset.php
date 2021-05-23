@@ -20,7 +20,7 @@ if(!$gSettingsManager->getBool('enable_system_mails') || !$gSettingsManager->get
 if($gValidLogin)
 {
     $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/', 2000);
-    $gMessage->show($gL10n->get('SYS_LOSTPW_AREADY_LOGGED_ID'));
+    $gMessage->show($gL10n->get('SYS_RESET_PW_AREADY_LOGGED_IN'));
     // => EXIT
 }
 
@@ -101,16 +101,15 @@ if(!empty($_POST['recipient_email']))
             // a valid username or email was found then send new password
             $user = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
 
-            // create and save new password and activation id
-            $newPassword  = SecurityUtils::getRandomString(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
-            $activationId = SecurityUtils::getRandomString(10);
+            // create an activation id
+            $passwordResetId = SecurityUtils::getRandomString(30);
 
-            $user->setPassword($newPassword, true);
-            $user->setValue('usr_activation_code', $activationId);
+            $user->setValue('usr_pw_reset_id', $passwordResetId);
+            $user->setValue('usr_pw_reset_timestamp', DATETIME_NOW);
 
             $sysmail = new SystemMail($gDb);
             $sysmail->addRecipientsByUserId((int) $user->getValue('usr_id'));
-            $sysmail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/password_activation.php', array('usr_id' => (int) $user->getValue('usr_id'), 'id' => $activationId)));
+            $sysmail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/password_reset.php', array('usr_id' => (int) $user->getValue('usr_id'), 'id' => $passwordResetId)));
             $sysmail->sendSystemMail('SYSMAIL_PASSWORD_RESET', $user);
 
             $user->saveChangesWithoutRights();
@@ -135,9 +134,9 @@ if(!empty($_POST['recipient_email']))
     {
         if($user instanceof User)
         {
-            // reset the column usr_new_password
-            $user->setPassword('', true, false);
-            $user->setValue('usr_activation_code', '');
+            // initialize password reset columns
+            $user->setValue('usr_pw_reset_id', '');
+            $user->setValue('usr_pw_reset_timestamp', '');
             $user->saveChangesWithoutRights();
             $user->save(false);
         }
@@ -161,7 +160,7 @@ else
     $page->addHtml('<p class="lead">'.$gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION').'</p>');
 
     // show form
-    $form = new HtmlForm('lost_password_form', ADMIDIO_URL.'/adm_program/system/lost_password.php', $page);
+    $form = new HtmlForm('password_reset_form', ADMIDIO_URL.'/adm_program/system/password_reset.php', $page);
     $form->addInput(
         'recipient_email', $gL10n->get('SYS_USERNAME_OR_EMAIL'), '',
         array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)

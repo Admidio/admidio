@@ -1178,6 +1178,7 @@
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REQUIRED_FIELDS">Required fields</string>
+  <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESTRICTIONS">Restrictions</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">View membership lists of all roles</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Manage announcements</string>

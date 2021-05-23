@@ -1050,7 +1050,7 @@
   <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
   <string name="SYS_LOGOUT">Abmelden</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Du wurdest erfolgreich abgemeldet.</string>
-  <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Du bist am System angemeldet, folglich kennst du ja dein Passwort!</string>
+  <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Du bist bereits im System angemeldet. Das Anfordern eines neuen Passworts ist nicht notwendig.</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">Das neue Passwort wurde an die E-Mail-Adresse #VAR1_BOLD# geschickt!</string>
   <string name="SYS_LOSTPW_SEND_USERNAME">Das neue Passwort wurde an den Benutzer #VAR1_BOLD# geschickt!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">Die E-Mail-Adresse #VAR1_BOLD# wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</string>
