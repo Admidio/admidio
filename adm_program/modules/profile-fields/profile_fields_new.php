@@ -91,7 +91,7 @@ if(isset($_SESSION['fields_request']))
 $page = new HtmlPage('admidio-profile-fields-edit', $headline);
 
 $page->addJavascript('
-    $("#usf_type").click(function() {
+    $("#usf_type").change(function() {
         if ($("#usf_type").val() === "DROPDOWN" || $("#usf_type").val() === "RADIO_BUTTON") {
             $("#usf_value_list_group").show("slow");
             $("#usf_value_list").attr("required", "required");
