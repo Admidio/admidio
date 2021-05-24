@@ -178,20 +178,35 @@ class ListConfiguration extends TableLists
      * and joined with the columns of the list configuration. The time period of the membership will be considered and
      * could be influenced with parameters. There is also a possiblity to join users of a relationship and hide special
      * columns of event roles.
-     * @param array<int,int> $roleIds           Array with all roles of which members should be shown.
-     * @param bool           $showFormerMembers false - Only active members of a role
-     *                                          true  - Only former members
-     * @param string         $startDate         The start date if memberships that should be considered. The time period of
-     *                                          the membership must be at least one day after this date.
-     * @param string         $endDate           The end date if memberships that should be considered.The time period of
-     *                                          the membership must be at least one day before this date.
+     * @param array<int,int> $roleIds  Array with all roles of which members should be shown.
+     * @param array          $options  (optional) An array with the following possible entries:
+     *                                 - **showFormerMembers** : false - Only active members of a role
+     *                                                           true  - Only former members
+     *                                 - **useConditions** : false - Don't add additional conditions to the SQL
+     *                                                       true  - Conditions will be added as stored in the settings
+     *                                 - **useSort** : false - Don't add the sorting to the SQL
+     *                                                 true  - Sorting is added as stored in the settings
+     *                                 - **startDate** : The start date if memberships that should be considered. The time period of
+     *                                   the membership must be at least one day after this date.
+     *                                 - **endDate** : The end date if memberships that should be considered.The time period of
+     *                                   the membership must be at least one day before this date.
      * @param array<int,int> $relationTypeIds   An array with relation types. The sql will be expanded with all users who
      *                                          are in such a relationship to the selected role users.
      * @return string Returns a valid sql that represents all users with the columns of the list configuration.
      */
-    public function getSQL(array $roleIds, $showFormerMembers = false, $startDate = null, $endDate = null, array $relationTypeIds = array())
+    public function getSQL(array $roleIds, array $options = array(), array $relationTypeIds = array())
     {
         global $gL10n, $gProfileFields, $gCurrentOrganization;
+
+        // create array with all options
+        $optionsDefault = array(
+            'showFormerMembers' => false,
+            'useConditions'     => true,
+            'useSort'           => true,
+            'startDate'         => null,
+            'endDate'           => null
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
 
         $sqlColumnNames = array();
         $sqlOrderBys    = array();
@@ -228,7 +243,7 @@ class ListConfiguration extends TableLists
 
             // create a valid sort
             $lscSort = $listColumn->getValue('lsc_sort');
-            if($lscSort != '')
+            if($optionsAll['useSort'] && $lscSort != '')
             {
                 if($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL')
                 {
@@ -252,7 +267,7 @@ class ListConfiguration extends TableLists
             }
 
             // Handle the conditions for the columns
-            if($listColumn->getValue('lsc_filter') != '')
+            if($optionsAll['useConditions'] && $listColumn->getValue('lsc_filter') != '')
             {
                 $value = $listColumn->getValue('lsc_filter');
                 $type = '';
@@ -333,28 +348,28 @@ class ListConfiguration extends TableLists
         $sqlRoleIds     = implode(', ', $roleIds);
 
         // Set state of membership
-        if ($showFormerMembers)
+        if ($optionsAll['showFormerMembers'])
         {
             $sqlMemberStatus = 'AND mem_end < \''.DATE_NOW.'\'';
         }
         else
         {
-            if ($startDate === null)
+            if ($optionsAll['startDate'] === null)
             {
                 $sqlMemberStatus = 'AND mem_begin <= \''.DATE_NOW.'\'';
             }
             else
             {
-                $sqlMemberStatus = 'AND mem_begin <= \''.$endDate.' 23:59:59\'';
+                $sqlMemberStatus = 'AND mem_begin <= \''.$optionsAll['endDate'].' 23:59:59\'';
             }
 
-            if ($endDate === null)
+            if ($optionsAll['endDate'] === null)
             {
                 $sqlMemberStatus .= ' AND mem_end >= \''.DATE_NOW.'\'';
             }
             else
             {
-                $sqlMemberStatus .= ' AND mem_end >= \''.$startDate.' 00:00:00\'';
+                $sqlMemberStatus .= ' AND mem_end >= \''.$optionsAll['startDate'].' 00:00:00\'';
             }
         }
 

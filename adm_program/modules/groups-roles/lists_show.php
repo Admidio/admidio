@@ -285,7 +285,11 @@ try
     }
 
     // create the main sql
-    $mainSql = $list->getSQL($roleIds, $getShowFormerMembers, $startDateEnglishFormat, $endDateEnglishFormat, $relationTypeIds);
+    $mainSql = $list->getSQL($roleIds,
+        array('showFormerMembers' => $getShowFormerMembers,
+              'startDate' => $startDateEnglishFormat,
+              'endDate' => $endDateEnglishFormat),
+        $relationTypeIds);
 }
 catch (AdmException $e)
 {
