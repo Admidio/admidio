@@ -27,8 +27,8 @@ INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, co
 --
 
 INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org_id_parent, org_homepage) VALUES
-(1, 'Demo-Organisation', 'DEMO', NULL, 'https://demo.admidio.org/'),
-(2, 'Test-Organisation', 'TEST', 1, 'https://demo.admidio.org/');
+(1, 'Demo-Organisation', 'DEMO', NULL, 'https://www.admidio.org/demo/'),
+(2, 'Test-Organisation', 'TEST', 1, 'https://www.admidio.org/demo/');
 
 --
 -- Data for table adm_menu
@@ -2777,7 +2777,7 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1787, 351, 10, '1973-12-24'),
 (1788, 351, 11, '1'),
 (1789, 351, 12, 'demo@admidio.org'),
-(1790, 351, 13, 'https://demo.admidio.org/'),
+(1790, 351, 13, 'https://www.admidio.org/demo'),
 (1792, 351, 20, '4711'),
 (17921, 351, 25, '3'),
 (1793, 352, 1, 'Suppenkasper'),
