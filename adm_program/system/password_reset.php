@@ -51,11 +51,9 @@ if($getUserId > 0)
 
     if($userStatement->rowCount() === 1)
     {
-        $row = $userStatement->fetch();
-
         // if the reset id was requested for more than 20 minutes -> show invalid page view
+        $row = $userStatement->fetch();
         $timeGap = time() - strtotime($row['usr_pw_reset_timestamp']);
-        $gLogger->error('timegap::'.$timeGap.'::'.(20 * 60));
 
         if ($timeGap > 20 * 60)
         {
