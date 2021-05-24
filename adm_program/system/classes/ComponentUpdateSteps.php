@@ -24,6 +24,30 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method will add a new systemmail text to the database table **adm_texts** for each
+     * organization in the database.
+     */
+	public static function updateStep41AddSystemmailText()
+	{
+    	global $gL10n;
+
+        $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+
+        while($row = $organizationStatement->fetch())
+        {
+            // convert <br /> to a normal line feed
+            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET'));
+
+        	$textPasswordReset = new TableAccess(self::$db, TBL_TEXTS, 'txt');
+        	$textPasswordReset->setValue('txt_org_id', $row['org_id']);
+        	$textPasswordReset->setValue('txt_name', 'SYSMAIL_PASSWORD_RESET');
+        	$textPasswordReset->setValue('txt_text', $value);
+        	$textPasswordReset->save();
+        }
+	}
+
+    /**
      * This method will migrate the recipients of messages from the database column msg_usr_id_receiver
      * to the new table adm_messages_recipients. There each recipient will be add in a separate row that
      * reference to the message.

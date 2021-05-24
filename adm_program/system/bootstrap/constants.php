@@ -79,6 +79,7 @@ define('CURRENT_URL', (strlen(ADMIDIO_URL_PATH) > 0 && strpos($_SERVER['REQUEST_
 
 // FOLDERS
 define('FOLDER_DATA', '/adm_my_files');
+define('FOLDER_SYSTEM', '/adm_program/system');
 define('FOLDER_CLASSES', '/adm_program/system/classes');
 define('FOLDER_INSTALLATION', '/adm_program/installation');
 define('FOLDER_LIBS_SERVER', '/adm_program/libs/server'); // PHP libs

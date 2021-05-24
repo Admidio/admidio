@@ -141,7 +141,7 @@ class Organization extends TableAccess
             'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
             'SYSMAIL_REFUSE_REGISTRATION'    => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
             'SYSMAIL_NEW_PASSWORD'           => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
-            'SYSMAIL_ACTIVATION_LINK'        => $gL10n->get('SYS_SYSMAIL_ACTIVATION_LINK')
+            'SYSMAIL_PASSWORD_RESET'         => $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET')
         );
         $text = new TableText($this->db);
 

@@ -521,7 +521,6 @@
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">Beim Anlegen neuer Benutzer oder bei der Zuordnung von Registrierungen sucht Admidio nach existierenden Benutzern, die einen ähnlichen Vor- und Nachnamen haben, um doppelte Datensätze zu vermeiden. Wird diese Funktion abgeschaltet, dann wird nur nach identischen Namen gesucht. (Voreinstellung: ja)</string>
   <string name="ORG_SECONDS">Sekunden</string>
   <string name="ORG_SEND_PASSWORD">Passwort zusenden</string>
-  <string name="ORG_SEND_PASSWORD_DESC">Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage per E-Mail an den Administrator stellen, damit dieser ein neues Passwort hinterlegt. Damit das Passwort zugesendet werden kann, muss zusätzlich die Einstellung #VAR1_BOLD# gesetzt sein. (Voreinstellung: ja)</string>
   <string name="ORG_SEND_NEW_PASSWORD">Neues Passwort zuschicken</string>
   <string name="ORG_SHOW_CREATE_EDIT">Ersteller und Zeitstempel anzeigen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">An einigen Stellen wird der Ersteller und der Benutzer mit der letzten Änderung zu einem Datensatz zusammen mit einem Zeitstempel angezeigt. Mit dieser Einstellung kann festgelegt werden, ob diese Informationen überhaupt angezeigt werden und ob der Benutzer mit dem Benutzernamen oder mit ihrem Vor- und Nachnamen angezeigt werden soll.</string>
@@ -1050,7 +1049,7 @@
   <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
   <string name="SYS_LOGOUT">Abmelden</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Du wurdest erfolgreich abgemeldet.</string>
-  <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Du bist am System angemeldet, folglich kennst du ja dein Passwort!</string>
+  <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Du bist bereits im System angemeldet. Das Anfordern eines neuen Passworts ist nicht notwendig.</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">Das neue Passwort wurde an die E-Mail-Adresse #VAR1_BOLD# geschickt!</string>
   <string name="SYS_LOSTPW_SEND_USERNAME">Das neue Passwort wurde an den Benutzer #VAR1_BOLD# geschickt!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">Die E-Mail-Adresse #VAR1_BOLD# wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</string>
@@ -1162,8 +1161,10 @@
   <string name="SYS_PARTICIPATION_INFORMATION">Teilnehmerinformationen</string>
   <string name="SYS_PARTICIPATION_STATUS">Teilnehmerstatus</string>
   <string name="SYS_PASSWORD">Passwort</string>
-  <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Solltest du dein Passwort vergessen haben, kann das System ein neues Passwort erstellen und an deine E-Mail-Adresse senden. Gib dazu bitte deinen Benutzernamen oder die E-Mail-Adresse an, unter der du dich in diesem System registriert hast. Das neue Passwort wird dann unverzüglich an diese E-Mail-Adresse gesendet.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen?</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Bitte gib deine E-Mail-Adresse ein, mit der du dich angemeldet hast. Wir werden dir dann einen Link schicken, mit dem du dein Passwort zurücksetzen und anschließend ein neues Passwort vergeben kannst.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Hat der Benutzer sein Passwort vergessen, kann er es sich einen Link zuschicken lassen, über den er auf dieser Webseite ein neues Passwort für seinen Benutzer vergeben kann. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage per E-Mail an den Administrator stellen, damit dieser ein neues Passwort hinterlegt. Damit das Passwort zugesendet werden kann, muss zusätzlich die Einstellung #VAR1_BOLD# gesetzt sein. (Voreinstellung: ja)</string>
+  <string name="SYS_PASSWORD_RESET_INVALID">Du hast einen ungültigen Link zum Zurücksetzen deines Passworts aufgerufen. Falls du dein Passwort noch nicht zurückgesetzt hast, fordere bitte einen neuen Link über die Funktion #VAR1# an.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfe bitte dein Passwort und gib dieses erneut ein.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">Das eingegebene Passwort stimmt nicht mit der Wiederholung überein.</string>
   <string name="SYS_PATH_SEPARATOR">Pfad Trenner</string>
@@ -1202,7 +1203,7 @@
   <string name="SYS_PROCESS_CANCELED">Der Vorgang wurde abgebrochen.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Bei der Verarbeitung der Daten ist folgendes Problem aufgetreten.</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
-  <string name="SYS_PWACT_PW_SAVED">Das neue Passwort wurde nun übernommen!</string>
+  <string name="SYS_PASSWORD_RESET_SAVED">Das neue Passwort wurde nun übernommen!</string>
   <string name="SYS_PWACT_CODE_INVALID">Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!</string>
   <string name="SYS_QUANTITY">Menge</string>
   <string name="SYS_QUARTERLY">Vierteljährlich</string>
@@ -1347,6 +1348,7 @@
   <string name="SYS_SYMMETRICAL">symmetrisch</string>
   <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Dein angefordertes Passwort für #organization_long_name#\n#content# Hallo #user_first_name#,\n\ndu hast ein neues Passwort angefordert!\n\nHier sind deine Daten:\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDamit du dein neues Passwort benutzen kannst, musst du es über den folgenden Link freischalten:\n\n#variable2#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Administratoren</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Anmeldedaten für #organization_long_name#\n#content# Hallo #user_first_name#,\n\ndu erhältst deine Anmeldedaten für die Webseite #organization_homepage#.\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Administratoren</string>
+  <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Passwort zurücksetzen für #organization_long_name#\n#content# Hallo #user_first_name#,\n\nwir haben eine Anfrage zum Zurücksetzen deines Passwortes auf #organization_homepage# erhalten.\n\nFalls die Anfrage von dir gekommen ist, kannst du über den folgenden Link dein Passwort zurücksetzen und ein neues Passwort vergeben: \n#variable1#\n\nViele Grüße\nDie Administratoren</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an den Administrator #administrator_email# von #organization_homepage#.\n\nViele Grüße\nDie Administratoren</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name# bestätigt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen #user_login_name# und deinem Passwort auf der Homepage anmelden.\n\nSolltest du noch Fragen haben, schreib eine E-Mail an #administrator_email#.\n\nViele Grüße\nDie Administratoren</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname:  #user_first_name#\nE-Mail:   #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
