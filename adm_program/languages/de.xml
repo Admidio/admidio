@@ -1203,7 +1203,7 @@
   <string name="SYS_PROCESS_CANCELED">Der Vorgang wurde abgebrochen.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Bei der Verarbeitung der Daten ist folgendes Problem aufgetreten.</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
-  <string name="SYS_PWACT_PW_SAVED">Das neue Passwort wurde nun übernommen!</string>
+  <string name="SYS_PASSWORD_RESET_SAVED">Das neue Passwort wurde nun übernommen!</string>
   <string name="SYS_PWACT_CODE_INVALID">Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!</string>
   <string name="SYS_QUANTITY">Menge</string>
   <string name="SYS_QUARTERLY">Vierteljährlich</string>

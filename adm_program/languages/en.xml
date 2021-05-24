@@ -1113,6 +1113,7 @@
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Please enter the email address you registered with. We will then send you a link where you can reset your password and then set a new one.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">If the user has forgotten his password, he can have it sent to him a link that will allow him to set a new password for his user on this website. If this option is deactivated, the user can only send a request by e-mail to the administrator, so that he deposits a new password.In order for the password to be sent, the setting #VAR1_BOLD# must also be set.  (Default: yes)</string>
   <string name="SYS_PASSWORD_RESET_INVALID">You have requested an invalid password reset link. If you haven't reset your password yet, please request a new link using the #VAR1# function.</string>
+  <string name="SYS_PASSWORD_RESET_SAVED">The new password has now been applied!</string>
   <string name="SYS_PASSWORD_UNKNOWN">Login failed due to incorrect password.\n\nPlease check your password and try again.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">The password entered does not match the repeat.</string>
   <string name="SYS_PATH_SEPARATOR">Path separator</string>
@@ -1154,8 +1155,6 @@
   <string name="SYS_PROCESS_CANCELED">Process canceled.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing the data.</string>
   <string name="SYS_PROPERTIES">Properties</string>
-  <string name="SYS_PWACT_PW_SAVED">New password saved!</string>
-  <string name="SYS_PWACT_CODE_INVALID">The new password has already been activated or the activation code is incorrect!</string>
   <string name="SYS_QUANTITY">Amount</string>
   <string name="SYS_QUARTERLY">Quarterly</string>
   <string name="SYS_RADIO_BUTTON">Radio button</string>

@@ -49,10 +49,114 @@ if($getUserId > 0)
     );
     $userStatement = $gDb->queryPrepared($sql, $queryParams);
 
-    if($userStatement->rowCount() !== 1)
+    if($userStatement->rowCount() === 1)
     {
-        $gMessage->show($gL10n->get('SYS_PASSWORD_RESET_INVALID', array('<a href="'.ADMIDIO_URL.'/adm_program/system/password_reset.php">'.$gL10n->get('SYS_PASSWORD_FORGOTTEN').'</a>')));
+        $row = $userStatement->fetch();
+
+        // if the reset id was requested for more than 20 minutes -> show invalid page view
+        $timeGap = time() - strtotime($row['usr_pw_reset_timestamp']);
+        $gLogger->error('timegap::'.$timeGap.'::'.(20 * 60));
+
+        if ($timeGap > 20 * 60)
+        {
+            $gMessage->show($gL10n->get('SYS_PASSWORD_RESET_INVALID', array('<a href="'.ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php">'.$gL10n->get('SYS_PASSWORD_FORGOTTEN').'</a>')));
+            // => EXIT
+        }
+    }
+    else
+    {
+        $gMessage->show($gL10n->get('SYS_PASSWORD_RESET_INVALID', array('<a href="'.ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php">'.$gL10n->get('SYS_PASSWORD_FORGOTTEN').'</a>')));
         // => EXIT
+    }
+
+    $user = new User($gDb, $gProfileFields, $row['usr_id']);
+    $gNavigation->clear();
+
+    if(!empty($_POST['new_password']))
+    {
+        // check password and save new password in database
+
+        $newPassword        = $_POST['new_password'];
+        $newPasswordConfirm = $_POST['new_password_confirm'];
+
+        /***********************************************************************/
+        /* Handle form input */
+        /***********************************************************************/
+        if($newPassword !== '' && $newPasswordConfirm !== '')
+        {
+            if(strlen($newPassword) >= PASSWORD_MIN_LENGTH)
+            {
+                if (PasswordUtils::passwordStrength($newPassword, $user->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength'))
+                {
+                    if ($newPassword === $newPasswordConfirm)
+                    {
+                        $user->saveChangesWithoutRights();
+                        $user->setPassword($newPassword);
+                        $user->setValue('usr_pw_reset_id', '');
+                        $user->setValue('usr_pw_reset_timestamp', '');
+                        $user->save();
+
+                        // if user has tried login several times we should reset the invalid counter,
+                        // so he could login with the new password immediately
+                        $user->resetInvalidLogins();
+
+                        $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/login.php', 2000);
+                        $gMessage->show($gL10n->get('SYS_PASSWORD_RESET_SAVED'));
+                        // => EXIT
+                    }
+                    else
+                    {
+                        $phrase = $gL10n->get('SYS_PASSWORDS_NOT_EQUAL');
+                    }
+                }
+                else
+                {
+                    $phrase = $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH');
+                }
+            }
+            else
+            {
+                $phrase = $gL10n->get('PRO_PASSWORD_LENGTH');
+            }
+        }
+        else
+        {
+            $phrase = $gL10n->get('SYS_FIELDS_EMPTY');
+        }
+
+        $gMessage->show($phrase);
+        // => EXIT
+    }
+    else
+    {
+        // show dialog to change password
+
+        $page = new HtmlPage('admidio-profile-photo-edit', $gL10n->get('SYS_CHANGE_PASSWORD'));
+
+        // show form
+        $form = new HtmlForm('password_form', SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_SYSTEM.'/password_reset.php', array('usr_id' => $getUserId, 'id' => $getResetId)), $page);
+        $form->addInput(
+            'new_password', $gL10n->get('PRO_NEW_PASSWORD'), '',
+            array(
+                'type'             => 'password',
+                'property'         => HtmlForm::FIELD_REQUIRED,
+                'minLength'        => PASSWORD_MIN_LENGTH,
+                'passwordStrength' => true,
+                'passwordUserData' => $user->getPasswordUserData(),
+                'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'
+            )
+        );
+        $form->addInput(
+            'new_password_confirm', $gL10n->get('SYS_REPEAT'), '',
+            array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
+        );
+        $form->addSubmitButton(
+            'btn_save', $gL10n->get('SYS_SAVE'),
+            array('icon' => 'fa-check', 'class' => ' offset-sm-3')
+        );
+
+        $page->addHtml($form->show());
+        $page->show();
     }
 }
 elseif(!empty($_POST['recipient_email']))
@@ -141,7 +245,7 @@ elseif(!empty($_POST['recipient_email']))
 
             $sysmail = new SystemMail($gDb);
             $sysmail->addRecipientsByUserId((int) $user->getValue('usr_id'));
-            $sysmail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/password_reset.php', array('usr_id' => (int) $user->getValue('usr_id'), 'id' => $passwordResetId)));
+            $sysmail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php', array('usr_id' => (int) $user->getValue('usr_id'), 'id' => $passwordResetId)));
             $sysmail->sendSystemMail('SYSMAIL_PASSWORD_RESET', $user);
 
             $user->saveChangesWithoutRights();
@@ -192,7 +296,7 @@ else
     $page->addHtml('<p class="lead">'.$gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION').'</p>');
 
     // show form
-    $form = new HtmlForm('password_reset_form', ADMIDIO_URL.'/adm_program/system/password_reset.php', $page);
+    $form = new HtmlForm('password_reset_form', ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php', $page);
     $form->addInput(
         'recipient_email', $gL10n->get('SYS_USERNAME_OR_EMAIL'), '',
         array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
