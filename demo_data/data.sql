@@ -4,23 +4,23 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.0.4', 0, 730)
-                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.0.4', 0, 0)
-                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.0.4', 0, 0)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.0.4', 0, 0)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.0.4', 0, 0)
-                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.0.4', 0, 0)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.4', 0, 0)
-                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '4.0.4', 0, 0)
-                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.4', 0, 0)
-                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '4.0.4', 0, 0)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.4', 0, 0)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.0.4', 0, 0)
-                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.0.4', 0, 0)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.0.4', 0, 0)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.0.4', 0, 0)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.0.4', 0, 0)
-                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.0.4', 0, 0);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.0.7', 0, 730)
+                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.0.7', 0, 0)
+                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.0.7', 0, 0)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.0.7', 0, 0)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.0.7', 0, 0)
+                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.0.7', 0, 0)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.7', 0, 0)
+                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '4.0.7', 0, 0)
+                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.7', 0, 0)
+                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '4.0.7', 0, 0)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.7', 0, 0)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.0.7', 0, 0)
+                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.0.7', 0, 0)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.0.7', 0, 0)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.0.7', 0, 0)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.0.7', 0, 0)
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.0.7', 0, 0);
 
 --
 -- Data for table adm_organizations
