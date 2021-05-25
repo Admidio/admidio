@@ -178,10 +178,19 @@ class ListConfiguration extends TableLists
      * and joined with the columns of the list configuration. The time period of the membership will be considered and
      * could be influenced with parameters. There is also a possiblity to join users of a relationship and hide special
      * columns of event roles.
-     * @param array<int,int> $roleIds  Array with all roles of which members should be shown.
      * @param array          $options  (optional) An array with the following possible entries:
-     *                                 - **showFormerMembers** : false - Only active members of a role
-     *                                                           true  - Only former members
+     *                                 - **showAllMembersThisOrga** : Set to true all users with an active membership
+     *                                   to at least one role of the current organization will be shown.
+     *                                   This setting could be combined with **showFormerMembers** or **showRelationTypes**.
+     *                                 - **showAllMembersDatabase** : Set to true all users of the database will be shown
+     *                                   independent of the membership to roles or organizations
+     *                                 - **showRolesMembers** : An array with all roles ids could be set and only members
+     *                                   of this roles will be shown.
+     *                                   This setting could be combined with **showFormerMembers** or **showRelationTypes**.
+     *                                 - **showFormerMembers** : Set to true if roles members or members of the organization
+     *                                   should be shown and also former members should be listed
+     *                                 - **showRelationTypes** : An array with relation types. The sql will be expanded with
+     *                                   all users who are in such a relationship to the selected role users.
      *                                 - **useConditions** : false - Don't add additional conditions to the SQL
      *                                                       true  - Conditions will be added as stored in the settings
      *                                 - **useSort** : false - Don't add the sorting to the SQL
@@ -190,17 +199,19 @@ class ListConfiguration extends TableLists
      *                                   the membership must be at least one day after this date.
      *                                 - **endDate** : The end date if memberships that should be considered.The time period of
      *                                   the membership must be at least one day before this date.
-     * @param array<int,int> $relationTypeIds   An array with relation types. The sql will be expanded with all users who
-     *                                          are in such a relationship to the selected role users.
      * @return string Returns a valid sql that represents all users with the columns of the list configuration.
      */
-    public function getSQL(array $roleIds, array $options = array(), array $relationTypeIds = array())
+    public function getSQL(array $options = array())
     {
         global $gL10n, $gProfileFields, $gCurrentOrganization;
 
         // create array with all options
         $optionsDefault = array(
+            'showAllMembersThisOrga' => false,
+            'showAllMembersDatabase' => false,
+            'showRolesMembers'  => array(),
             'showFormerMembers' => false,
+            'showRelationTypes' => array(),
             'useConditions'     => true,
             'useSort'           => true,
             'startDate'         => null,
@@ -243,7 +254,7 @@ class ListConfiguration extends TableLists
 
             // create a valid sort
             $lscSort = $listColumn->getValue('lsc_sort');
-            if($optionsAll['useSort'] && $lscSort != '')
+            if($lscSort != '')
             {
                 if($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL')
                 {
@@ -344,8 +355,44 @@ class ListConfiguration extends TableLists
         }
 
         $sqlColumnNames = implode(', ', $sqlColumnNames);
-        $sqlOrderBys    = implode(', ', $sqlOrderBys);
-        $sqlRoleIds     = implode(', ', $roleIds);
+
+        // add sorting if option is set and sorting columns are stored
+        if($optionsAll['useSort'])
+        {
+            $sqlOrderBys = implode(', ', $sqlOrderBys);
+
+            // if roles should be shown than sort by leaders
+            if(count($optionsAll['showRolesMembers']) > 0)
+            {
+                if(strlen($sqlOrderBys) > 0)
+                {
+                    $sqlOrderBys = 'mem_leader DESC, ' . $sqlOrderBys;
+                }
+                else
+                {
+                    $sqlOrderBys = 'mem_leader DESC';
+                }
+            }
+
+            if(strlen($sqlOrderBys) > 0)
+            {
+                $sqlOrderBys = ' ORDER BY ' . $sqlOrderBys;
+            }
+        }
+
+        if(count($optionsAll['showRolesMembers']) > 0)
+        {
+            $sqlRoleIds = implode(', ', $optionsAll['showRolesMembers']);
+        }
+        else
+        {
+            $sqlRoleIds = '(SELECT rol_id
+                              FROM ' . TBL_CATEGORIES . '
+                             INNER JOIN ' . TBL_ROLES . ' ON rol_cat_id = cat_id
+                             WHERE (  cat_org_id = '. (int) $gCurrentOrganization->getValue('org_id'). '
+                                   OR cat_org_id IS NULL )
+                            )';
+        }
 
         // Set state of membership
         if ($optionsAll['showFormerMembers'])
@@ -376,13 +423,13 @@ class ListConfiguration extends TableLists
         $sqlUserJoin = 'INNER JOIN '.TBL_USERS.'
                                 ON usr_id = mem_usr_id';
         $sqlRelationTypeWhere = '';
-        if (count($relationTypeIds) > 0)
+        if(count($optionsAll['showRelationTypes']) > 0)
         {
             $sqlUserJoin = 'INNER JOIN '.TBL_USER_RELATIONS.'
                                     ON ure_usr_id1 = mem_usr_id
                             INNER JOIN '.TBL_USERS.'
                                     ON usr_id = ure_usr_id2';
-            $sqlRelationTypeWhere = 'AND ure_urt_id IN ('.implode(', ', $relationTypeIds).')';
+            $sqlRelationTypeWhere = 'AND ure_urt_id IN ('.implode(', ', $optionsAll['showRelationTypes']).')';
         }
 
         // Set SQL-Statement
@@ -399,13 +446,9 @@ class ListConfiguration extends TableLists
                        '.$sqlRelationTypeWhere.'
                    AND (  cat_org_id = '. (int) $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
-                       '.$sqlMemberStatus.'
-                       '.$sqlWhere.'
-              ORDER BY mem_leader DESC';
-        if($sqlOrderBys !== '')
-        {
-            $sql .= ', '.$sqlOrderBys;
-        }
+                       '.$sqlMemberStatus.
+                       $sqlWhere.
+                       $sqlOrderBys;
 
         return $sql;
     }
