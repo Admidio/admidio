@@ -38,14 +38,6 @@ if (!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 // das Konfigurationsarray einlesen
 $config = getConfigArray();
 
-// wenn $config jetzt noch leer ist, dann ist das der erste Aufruf des Moduls
-// $config mit Default-Werten initialisieren und anschließend in DB speichern
-if (empty($config))
-{
-    $config = initConfigArray();
-    saveConfigArray();
-}
-
 // Initialize and check the parameters
 $validValues = array();
 foreach ($config['col_desc'] as $key => $dummy)

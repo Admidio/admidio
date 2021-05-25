@@ -57,5 +57,6 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci</step>
     <step id="150">ALTER TABLE %PREFIX%_category_report ADD CONSTRAINT %PREFIX%_fk_crt_org FOREIGN KEY (crt_org_id) REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="160">ComponentUpdateSteps::updateStep41CategoryReportMigration</step>
     <step>stop</step>
 </update>

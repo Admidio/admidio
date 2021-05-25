@@ -24,6 +24,98 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method will migrate the database entries 
+     * from plugin Kategoriereport (table adm_plugin_preferences)
+     * to module category report (table adm_category_report).
+     */
+    public static function updateStep41CategoryReportMigration()
+    {
+        global $gCurrentOrganization, $gL10n, $gProfileFields;
+        $config = array();
+        
+        // prüfen, ob vom Plugin Kategoriereport eine configdata.php existiert
+        $file = ADMIDIO_PATH . FOLDER_PLUGINS . '/kategoriereport/configdata.php';
+        if (file_exists($file))
+        {
+            include $file;                  // benötigt wird hier der Wert von $dbtoken
+              
+            // prüfen, ob die Tabelle 'adm_plugin_preferences' existiert
+            $tableName = TABLE_PREFIX.'_plugin_preferences';
+            $sql = 'SHOW TABLES LIKE \''.$tableName.'\' ';
+            $tableExistStatement = self::$db->queryPrepared($sql);
+        
+            if ($tableExistStatement->rowCount())
+            {
+                // Konfiguration(en) mit 'PKR_...' einlesen
+                $sql = 'SELECT plp_id, plp_name, plp_value
+             	          FROM '.$tableName.'
+             	         WHERE plp_name LIKE ?
+             	           AND (plp_org_id = ?
+                 	        OR plp_org_id IS NULL ) ';
+                $statement = self::$db->queryPrepared($sql, array('PKR__%', $gCurrentOrganization->getValue('org_id')));
+            
+                while ($row = $statement->fetch())
+                {
+                    $array = explode('__',$row['plp_name']);
+               
+                    if ((substr($row['plp_value'], 0, 2) == '((' ) && (substr($row['plp_value'], -2) == '))' ))
+                    {
+                        $row['plp_value'] = substr($row['plp_value'], 2, -2);
+                        $config[$array[2]] = explode($dbtoken,$row['plp_value']);
+                    }
+                    else
+                    {
+                        $config[$array[2]] = $row['plp_value'];
+                    }
+                }
+            }
+        }
+            
+        // wenn $config jetzt noch leer ist, dann gab es keine Konfigurationsdaten
+        // --> Beispielkonfiguration einlesen
+        if (empty($config))
+        {
+            $config['col_desc']       = array($gL10n->get('SYS_PATTERN'));
+            $config['col_fields']     = array('p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
+                                              'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
+                                              'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
+                                              'p'.$gProfileFields->getProperty('CITY', 'usf_id'));  
+            $config['selection_role'] = array('');  
+            $config['selection_cat']  = array(''); 
+            $config['number_col']  	  = array(0)  ;
+
+            // die Rollen-IDs der Rollen "Administrator", "Vorstand" und "Mitglied" auslesen                
+            $role = new TableRoles(self::$db);
+            if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_ADMINISTRATOR'), 'cat_org_id' => (int) $gCurrentOrganization->getValue('org_id') )))
+            {
+                $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
+            }
+            if ($role->readDataByColumns(array('rol_name' => $gL10n->get('INS_BOARD'), 'cat_org_id' => (int) $gCurrentOrganization->getValue('org_id') )))
+            {
+                $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
+            }
+            if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_MEMBER'), 'cat_org_id' => (int) $gCurrentOrganization->getValue('org_id') )))
+            {
+                $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
+            }   
+        }
+        
+        // Konfiguration(en) in Tabelle adm_category_report schreiben
+        foreach ($config['col_desc'] as $i => $dummy)
+        {
+            $categoryReport = new TableAccess(self::$db, TBL_CATEGORY_REPORT, 'crt');
+            
+            $categoryReport->setValue('crt_org_id', $gCurrentOrganization->getValue('org_id'));
+            $categoryReport->setValue('crt_col_desc', $config['col_desc'][$i]);
+            $categoryReport->setValue('crt_col_fields', $config['col_fields'][$i]);
+            $categoryReport->setValue('crt_selection_role', $config['selection_role'][$i]);
+            $categoryReport->setValue('crt_selection_cat', $config['selection_cat'][$i]);
+            $categoryReport->setValue('crt_number_col', $config['number_col'][$i]);
+            $categoryReport->save();
+        }
+    }
+    
+    /**
      * This method will migrate the recipients of messages from the database column msg_usr_id_receiver
      * to the new table adm_messages_recipients. There each recipient will be add in a separate row that
      * reference to the message.

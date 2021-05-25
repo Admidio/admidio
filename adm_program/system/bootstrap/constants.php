@@ -120,6 +120,7 @@ define('TABLE_PREFIX', $g_tbl_praefix);
 define('TBL_ANNOUNCEMENTS',        TABLE_PREFIX . '_announcements');
 define('TBL_AUTO_LOGIN',           TABLE_PREFIX . '_auto_login');
 define('TBL_CATEGORIES',           TABLE_PREFIX . '_categories');
+define('TBL_CATEGORY_REPORT',      TABLE_PREFIX . '_category_report');
 define('TBL_COMPONENTS',           TABLE_PREFIX . '_components');
 define('TBL_DATES',                TABLE_PREFIX . '_dates');
 define('TBL_FILES',                TABLE_PREFIX . '_files');
