@@ -29,7 +29,7 @@ ARG ADMIDIO_TRIVY_ENABLED="false"
 USER root
 
 # install package updates and required dependencies
-RUN yum update -y --setopt=tsflags=nodocs && \
+RUN yum update -y --allowerasing --skip-broken --nobest --setopt=tsflags=nodocs && \
     yum install -y postfix && \
     yum reinstall -y tzdata && \
     yum -y clean all --enablerepo='*'
