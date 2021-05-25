@@ -38,6 +38,13 @@ if (!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 // das Konfigurationsarray einlesen
 $config = getConfigArray();
 
+// security query if the configuration array is empty
+if (empty($config))
+{
+    $config = array('col_desc' => array(''), 'col_fields' => array(''), 'selection_role' => array(''), 'selection_cat' => array(''), 'number_col' => array(0));
+    saveConfigArray();
+}
+
 // Initialize and check the parameters
 $validValues = array();
 foreach ($config['col_desc'] as $key => $dummy)
