@@ -113,7 +113,7 @@ $defaultOrgPreferences = array(
     'enable_intial_comments_loading' => '0',
     'enable_guestbook_moderation'    => '0',
 
-    // Lists
+    // Groups and roles
     'groups_roles_default_configuration' => '',
     'groups_roles_enable_module'         => '1',
     'groups_roles_export'                => '1',
