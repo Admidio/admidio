@@ -27,6 +27,36 @@ final class ComponentUpdateSteps
      * This method will add a new systemmail text to the database table **adm_texts** for each
      * organization in the database.
      */
+	public static function updateStep41AddMembersManagementDefaultList()
+	{
+        $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
+        $organizationsStatement = self::$db->queryPrepared($sql);
+        $organizationsArray     = $organizationsStatement->fetchAll();
+
+        foreach($organizationsArray as $organization)
+        {
+            $orgId = (int) $organization['org_id'];
+
+            $sql = 'SELECT prf_value
+                      FROM '.TBL_PREFERENCES.'
+                     WHERE prf_name   = \'groups_roles_default_configuration\'
+                       AND prf_org_id  = ? -- $orgId';
+            $defaultListStatement = self::$db->queryPrepared($sql, array($orgId));
+            $listId = (int) $defaultListStatement->fetchColumn();
+
+            // save default list to preferences
+            $sql = 'UPDATE '.TBL_PREFERENCES.'
+                       SET prf_value  = ? -- $listId
+                     WHERE prf_name   = \'members_list_configuration\'
+                       AND prf_org_id = ? -- $orgId';
+            self::$db->queryPrepared($sql, array($listId, $orgId));
+        }
+	}
+
+    /**
+     * This method will add a new systemmail text to the database table **adm_texts** for each
+     * organization in the database.
+     */
 	public static function updateStep41AddSystemmailText()
 	{
     	global $gL10n;

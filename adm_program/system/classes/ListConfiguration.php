@@ -12,18 +12,8 @@
 /**
  * This class creates a list configuration object. With this object it's possible
  * to manage the configuration in the database. You can easily create new lists,
- * add new columns or remove columns.
- *
- * Beside the methods of the parent class there are the following additional methods:
- *
- * readColumns()         - Daten der zugehoerigen Spalten einlesen und in Objekten speichern
- * addColumn($number, $field, $sort = "", $condition = "")
- *                       - fuegt eine neue Spalte dem Spaltenarray hinzu
- * deleteColumn($number, $all = false)
- *                       - entfernt die entsprechende Spalte aus der Konfiguration
- * countColumns()        - Anzahl der Spalten der Liste zurueckgeben
- * getSQL($roleIds, $showFormerMembers = false)
- *                       - gibt das passende SQL-Statement zu der Liste zurueck
+ * add new columns or remove columns. The object will only list columns of the configuration
+ * which the current user is allowed to view.
  */
 class ListConfiguration extends TableLists
 {
@@ -146,6 +136,106 @@ class ListConfiguration extends TableLists
         }
 
         return true;
+    }
+
+    /**
+     * Returns an array with all alignments (center, left or right) from all columns of this list.
+     * @return array Array with alignments from all columns of this list configuration.
+     */
+    public function getColumnAlignments()
+    {
+        global $gProfileFields;
+
+        $arrColumnAlignments = array();
+
+        // Array to assign names to tables
+        $arrSpecialColumnNames = array(
+            'usr_login_name'       => 'left',
+            'usr_photo'            => 'left',
+            'mem_begin'            => 'left',
+            'mem_end'              => 'left',
+            'mem_leader'           => 'left',
+            'mem_approved'         => 'left',
+            'mem_usr_id_change'    => 'left',
+            'mem_timestamp_change' => 'left',
+            'mem_comment'          => 'left',
+            'mem_count_guests'     => 'right'
+        );
+
+        for ($columnNumber = 1, $iMax = $this->countColumns(); $columnNumber <= $iMax; ++$columnNumber)
+        {
+            $column = $this->getColumnObject($columnNumber);
+
+            // Find name of the field
+            if ($column->getValue('lsc_usf_id') > 0)
+            {
+                $usfId = (int) $column->getValue('lsc_usf_id');
+
+                if ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX'
+                ||  $gProfileFields->getPropertyById($usfId, 'usf_name_intern') === 'GENDER')
+                {
+                    $arrColumnAlignments[] = 'center';
+                }
+                elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'NUMBER'
+                ||      $gProfileFields->getPropertyById($usfId, 'usf_type') === 'DECIMAL')
+                {
+                    $arrColumnAlignments[] = 'right';
+                }
+                else
+                {
+                    $arrColumnAlignments[] = 'left';
+                }
+            }
+            else
+            {
+                $arrColumnAlignments[] = $arrSpecialColumnNames[$column->getValue('lsc_special_field')];
+            }
+        } // End-For
+
+        return $arrColumnAlignments;
+    }
+
+    /**
+     * Returns an array with all column names of this list. The names within the array are translated
+     * to the current language.
+     * @return array Array with all column names of this list configuration.
+     */
+    public function getColumnNames()
+    {
+        global $gL10n, $gProfileFields;
+
+        $arrColumnNames = array();
+
+        // Array to assign names to tables
+        $arrSpecialColumnNames = array(
+            'usr_login_name'       => $gL10n->get('SYS_USERNAME'),
+            'usr_photo'            => $gL10n->get('SYS_PHOTO'),
+            'mem_begin'            => $gL10n->get('SYS_START'),
+            'mem_end'              => $gL10n->get('SYS_END'),
+            'mem_leader'           => $gL10n->get('SYS_LEADERS'),
+            'mem_approved'         => $gL10n->get('SYS_PARTICIPATION_STATUS'),
+            'mem_usr_id_change'    => $gL10n->get('SYS_CHANGED_BY'),
+            'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
+            'mem_comment'          => $gL10n->get('SYS_COMMENT'),
+            'mem_count_guests'     => $gL10n->get('SYS_SEAT_AMOUNT')
+        );
+
+        for ($columnNumber = 1, $iMax = $this->countColumns(); $columnNumber <= $iMax; ++$columnNumber)
+        {
+            $column = $this->getColumnObject($columnNumber);
+
+            // Find name of the field
+            if ($column->getValue('lsc_usf_id') > 0)
+            {
+                $arrColumnNames[] = $gProfileFields->getPropertyById((int) $column->getValue('lsc_usf_id'), 'usf_name');
+            }
+            else
+            {
+                $arrColumnNames[] = $arrSpecialColumnNames[$column->getValue('lsc_special_field')];
+            }
+        } // End-For
+
+        return $arrColumnNames;
     }
 
     /**
@@ -454,10 +544,13 @@ class ListConfiguration extends TableLists
     }
 
     /**
-     * Read data of responsible columns and store in object
+     * Read data of responsible columns and store in object. Only columns of profile fields which the current
+     * user is allowed to view will be stored in the object.
      */
     public function readColumns()
     {
+        global $gCurrentUser, $gProfileFields;
+
         $sql = 'SELECT *
                   FROM '.TBL_LIST_COLUMNS.'
                  WHERE lsc_lst_id = ? -- $this->getValue(\'lst_id\')
@@ -466,9 +559,14 @@ class ListConfiguration extends TableLists
 
         while($lscRow = $lscStatement->fetch())
         {
-            $lscNumber = (int) $lscRow['lsc_number'];
-            $this->columns[$lscNumber] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
-            $this->columns[$lscNumber]->setArray($lscRow);
+            // only add columns to the array if the current user is allowed to view them
+            if ((int) $lscRow['lsc_usf_id'] === 0
+            || $gProfileFields->isVisible($gProfileFields->getPropertyById((int) $lscRow['lsc_usf_id'], 'usf_name_intern'), $gCurrentUser->editUsers()))
+            {
+                $lscNumber = (int) $lscRow['lsc_number'];
+                $this->columns[$lscNumber] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
+                $this->columns[$lscNumber]->setArray($lscRow);
+            }
         }
     }
 
