@@ -556,6 +556,7 @@ switch($getMode)
 
     case 'pdf':
         array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'));
+        array_unshift($arrColumnAlign, 'left');
         break;
 
     case 'html':
