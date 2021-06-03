@@ -70,6 +70,11 @@ if (!$gCurrentUser->editUsers())
     exit();
 }
 
+if(isset($_SESSION['members_list_config']))
+{
+    $membersListConfig &= $_SESSION['members_list_config'];
+}
+
 // create order statement
 $orderCondition = '';
 $orderColumns = array('no', 'member_this_orga', 'name', 'usr_login_name', 'gender', 'birthday', 'timestamp');
@@ -193,7 +198,8 @@ if($gCurrentOrganization->countAllRecords() > 1)
 }
 
 // show all members (not accepted users should not be shown)
-$mainSql = 'SELECT usr_id, CONCAT(last_name.usd_value, \', \', first_name.usd_value) AS name,
+$mainSql = $membersListConfig->getSql();
+/*$mainSql = 'SELECT usr_id, CONCAT(last_name.usd_value, \', \', first_name.usd_value) AS name,
                    email.usd_value AS email, gender.usd_value AS gender, birthday.usd_value AS birthday,
                    usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) AS timestamp,
                    '.$memberOfThisOrganizationSelect.' AS member_this_orga,
@@ -223,7 +229,7 @@ $queryParamsMain = array(
     $gProfileFields->getProperty('GENDER', 'usf_id'),
     $gProfileFields->getProperty('BIRTHDAY', 'usf_id')
 ); // TODO add more params
-
+*/
 $limitCondition = '';
 if($getLength > 0)
 {
