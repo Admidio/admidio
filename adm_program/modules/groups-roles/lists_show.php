@@ -546,38 +546,30 @@ if ($numMembers === 0)
 $arrColumnNames = $list->getColumnNames();
 $arrColumnAlign = $list->getColumnAlignments();
 
-// initialize array parameters for table and set the first column for the counter
-switch($getMode)
+// set the first column for the counter
+if($getMode === 'html')
 {
-    case 'csv':
-        $csvStr .= $valueQuotes.$gL10n->get('SYS_ABR_NO').$valueQuotes.$separator.$valueQuotes .
-                   implode($valueQuotes.$separator.$valueQuotes, $arrColumnNames) . $valueQuotes . "\n";
-        break;
+    // in html mode we group leaders. Therefore we need a special hidden column.
+    array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'), $gL10n->get('INS_GROUPS'));
+    array_unshift($arrColumnAlign, 'left', 'left');
 
-    case 'pdf':
-        array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'));
-        array_unshift($arrColumnAlign, 'left');
-        break;
-
-    case 'html':
-        // in html mode we group leaders. Therefore we need a special hidden column.
-        array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'), $gL10n->get('INS_GROUPS'));
-        array_unshift($arrColumnAlign, 'left', 'left');
-        break;
-
-    case 'print':
-        array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'));
-        array_unshift($arrColumnAlign, 'left');
-        break;
+    if ($editUserStatus)
+    {
+        // add column for edit link
+        $arrColumnNames[] .= '&nbsp;';
+    }
+}
+else
+{
+    array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'));
+    array_unshift($arrColumnAlign, 'left');
 }
 
-if ($editUserStatus)
+if ($getMode === 'csv')
 {
-    // add column for edit link
-    $arrColumnNames[] .= '&nbsp;';
+    $csvStr = $valueQuotes . implode($valueQuotes.$separator.$valueQuotes, $arrColumnNames) . $valueQuotes . "\n";
 }
-
-if ($getMode === 'html' || $getMode === 'print')
+elseif ($getMode === 'html' || $getMode === 'print')
 {
     $table->setColumnAlignByArray($arrColumnAlign);
     $table->addRowHeadingByArray($arrColumnNames);
