@@ -546,23 +546,22 @@ if ($numMembers === 0)
 $arrColumnNames = $list->getColumnNames();
 $arrColumnAlign = $list->getColumnAlignments();
 
+// add column with sequential number
+array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'));
+array_unshift($arrColumnAlign, 'left');
+
 // set the first column for the counter
 if($getMode === 'html')
 {
     // in html mode we group leaders. Therefore we need a special hidden column.
-    array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'), $gL10n->get('INS_GROUPS'));
-    array_unshift($arrColumnAlign, 'left', 'left');
+    array_unshift($arrColumnNames, $gL10n->get('INS_GROUPS'));
+    array_unshift($arrColumnAlign, 'left');
 
     if ($editUserStatus)
     {
         // add column for edit link
-        $arrColumnNames[] .= '&nbsp;';
+        $arrColumnNames[] = '&nbsp;';
     }
-}
-else
-{
-    array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'));
-    array_unshift($arrColumnAlign, 'left');
 }
 
 if ($getMode === 'csv')
