@@ -240,6 +240,7 @@ class ListConfiguration extends TableLists
 
     /**
      * Returns the column object with the corresponding number.
+     * The numbers will start with 1 and end with the count of all columns.
      * If that column doesn't exists the method try to repair the
      * column list. If that won't help then **null** will be returned.
      * @param int $number The internal number of the column.
@@ -310,7 +311,8 @@ class ListConfiguration extends TableLists
         $optionsAll = array_replace($optionsDefault, $options);
 
         $sqlColumnNames = array();
-        $sqlOrderBys    = array();
+        $arrOrderByColumns = array();
+        $sqlOrderBys = '';
         $sqlJoin  = '';
         $sqlWhere = '';
 
@@ -359,11 +361,11 @@ class ListConfiguration extends TableLists
                         // mysql
                         $columnType = 'unsigned';
                     }
-                    $sqlOrderBys[] = ' CAST('.$dbColumnName.' AS '.$columnType.') '.$lscSort;
+                    $arrOrderByColumns[] = ' CAST('.$dbColumnName.' AS '.$columnType.') '.$lscSort;
                 }
                 else
                 {
-                    $sqlOrderBys[] = $dbColumnName.' '.$lscSort;
+                    $arrOrderByColumns[] = $dbColumnName.' '.$lscSort;
                 }
             }
 
@@ -449,7 +451,7 @@ class ListConfiguration extends TableLists
         // add sorting if option is set and sorting columns are stored
         if($optionsAll['useSort'])
         {
-            $sqlOrderBys = implode(', ', $sqlOrderBys);
+            $sqlOrderBys = implode(', ', $arrOrderByColumns);
 
             // if roles should be shown than sort by leaders
             if(count($optionsAll['showRolesMembers']) > 0)
@@ -510,6 +512,16 @@ class ListConfiguration extends TableLists
             }
         }
 
+        // check if mem_leaders should be shown
+        if(count($optionsAll['showRolesMembers']) === 1)
+        {
+            $sqlMemLeader = ' mem_leader, ';
+        }
+        else
+        {
+            $sqlMemLeader = ' 0 AS mem_leader, ';
+        }
+
         $sqlUserJoin = 'INNER JOIN '.TBL_USERS.'
                                 ON usr_id = mem_usr_id';
         $sqlRelationTypeWhere = '';
@@ -523,7 +535,7 @@ class ListConfiguration extends TableLists
         }
 
         // Set SQL-Statement
-        $sql = 'SELECT DISTINCT mem_leader, usr_id, '.$sqlColumnNames.'
+        $sql = 'SELECT DISTINCT ' . $sqlMemLeader . ' usr_id, ' . $sqlColumnNames . '
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
                     ON rol_id = mem_rol_id
