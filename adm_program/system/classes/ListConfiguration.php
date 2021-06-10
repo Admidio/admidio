@@ -97,6 +97,186 @@ class ListConfiguration extends TableLists
     }
 
     /**
+     * Convert the content of the column independence of the output format.
+     * Therefore the method will check which datatype the column has and which format the
+     * ouput should have.
+     * @param int     $columnNumber Number of the column for which the content should be converted.
+     * @param string  $format       The following formats are possible 'html', 'print', 'csv' or 'pdf'
+     * @param string  $content      The content that should be converted.
+     * @param int     $userId       Id of the user for which the content should converted. This is not the login user.
+     * @return string Returns the converted content.
+     */
+    public function convertColumnContentForOutput($columnNumber, $format, $content, $userId)
+    {
+        global $gProfileFields, $gL10n, $gSettingsManager;
+
+        $column = $this->getColumnObject($columnNumber);
+
+        $usfId = 0;
+        if ($column->getValue('lsc_usf_id') > 0)
+        {
+            // check if customs field and remember
+            $usfId = (int) $column->getValue('lsc_usf_id');
+        }
+
+        // in some cases the content must have a special output format
+
+        if ($usfId > 0 && $usfId === (int) $gProfileFields->getProperty('COUNTRY', 'usf_id'))
+        {
+            $content = $gL10n->getCountryName($content);
+        }
+        elseif ($column->getValue('lsc_special_field') === 'usr_photo')
+        {
+            // show user photo
+            if (in_array($format, array('html', 'print'), true))
+            {
+                $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $userId)).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_USER_PHOTO').'" />';
+            }
+            if ($format === 'csv' && $content != null)
+            {
+                $content = $gL10n->get('SYS_USER_PHOTO');
+            }
+        }
+        elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
+        {
+            if (in_array($format, array('csv', 'pdf'), true))
+            {
+                if ($content == 1)
+                {
+                    $content = $gL10n->get('SYS_YES');
+                }
+                else
+                {
+                    $content = $gL10n->get('SYS_NO');
+                }
+            }
+            elseif($content != 1)
+            {
+                $content = 0;
+            }
+        }
+        elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DATE'
+        || $column->getValue('lsc_special_field') === 'mem_begin'
+        || $column->getValue('lsc_special_field') === 'mem_end')
+        {
+            if (strlen($content) > 0)
+            {
+                // date must be formated
+                $date = \DateTime::createFromFormat('Y-m-d', $content);
+                $content = $date->format($gSettingsManager->getString('system_date'));
+            }
+        }
+        elseif (in_array($format, array('csv', 'pdf'), true)
+        &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN'
+            || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON'))
+        {
+            if (strlen($content) > 0)
+            {
+                // show selected text of optionfield or combobox
+                $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
+                $content = $arrListValues[$content];
+            }
+        }
+        elseif ($column->getValue('lsc_special_field') === 'mem_approved')
+        {
+            // Assign Integer to Language strings
+            switch ((int) $content)
+            {
+                case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
+                    $text = $gL10n->get('DAT_USER_INVITED');
+                    $htmlText = '<i class="fas fa-calendar-check admidio-icon-chain"></i>' . $text;
+                    break;
+                case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
+                    $text = $gL10n->get('DAT_USER_ATTEND');
+                    $htmlText = '<i class="fas fa-check-circle admidio-icon-chain"></i>' . $text;
+                    $buttonClass = 'admidio-event-approval-state-attend';
+                    break;
+                case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
+                    $text = $gL10n->get('DAT_USER_TENTATIVE');
+                    $htmlText = '<i class="fas fa-question-circle admidio-icon-chain"></i>' . $text;
+                    $buttonClass = 'admidio-event-approval-state-tentative';
+                    break;
+                case ModuleDates::MEMBER_APPROVAL_STATE_REFUSED:
+                    $text = $gL10n->get('DAT_USER_REFUSED');
+                    $htmlText = '<i class="fas fa-times-circle admidio-icon-chain"></i>' . $text;
+                    $buttonClass = 'admidio-event-approval-state-cancel';
+                    break;
+            }
+
+            if($format === 'csv')
+            {
+                $content = $text;
+            }
+            else
+            {
+                if($format === 'html')
+                {
+                    $content = '<span class="' . $buttonClass . '">' . $htmlText . '</span>';
+                }
+                else
+                {
+                    $content = $htmlText;
+                }
+            }
+        }
+        elseif ($column->getValue('lsc_special_field') === 'mem_usr_id_change' && (int) $content)
+        {
+            // Get User Information
+            $user = new User($gDb, $gProfileFields, $content);
+
+            $content = $user->getValue('LAST_NAME').', '.$user->getValue('FIRST_NAME');
+        }
+
+        // format value for csv export
+        if ($format === 'csv')
+        {
+            $outputContent = $valueQuotes.$content.$valueQuotes;
+        }
+        // pdf should show only text and not much html content
+        elseif ($format === 'pdf')
+        {
+            $outputContent = $content;
+        }
+        // create output in html layout
+        else
+        {
+            // firstname and lastname get a link to the profile
+            if ($format === 'html'
+            &&    ($usfId === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
+                || $usfId === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
+            {
+                $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userId);
+                $outputContent = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $userId)).'">'.$htmlValue.'</a>';
+            }
+            else
+            {
+                // within print mode no links should be set
+                if ($format === 'print'
+                &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'EMAIL'
+                    || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'PHONE'
+                    || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'URL'))
+                {
+                    $outputContent = $content;
+                }
+                else
+                {
+                    // checkbox must set a sorting value
+                    if($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
+                    {
+                        $outputContent = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userId), 'order' => $content);
+                    }
+                    else
+                    {
+                        $outputContent = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userId);
+                    }
+                }
+            }
+        }
+
+        return $outputContent;
+    }
+
+    /**
      * Delete pointed columns out of configuration
      * @param int  $number
      * @param bool $all    Define all columns to be deleted
@@ -535,22 +715,34 @@ class ListConfiguration extends TableLists
         }
 
         // Set SQL-Statement
-        $sql = 'SELECT DISTINCT ' . $sqlMemLeader . ' usr_id, ' . $sqlColumnNames . '
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
-                    ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-                       '.$sqlUserJoin.'
-                       '.$sqlJoin.'
-                 WHERE usr_valid = 1
-                   AND rol_id IN ('.$sqlRoleIds.')
-                       '.$sqlRelationTypeWhere.'
-                   AND (  cat_org_id = '. (int) $gCurrentOrganization->getValue('org_id'). '
-                       OR cat_org_id IS NULL )
-                       '.$sqlMemberStatus.
-                       $sqlWhere.
-                       $sqlOrderBys;
+        if ($optionsAll['showAllMembersDatabase'])
+        {
+            $sql = 'SELECT DISTINCT 0 AS mem_leader, usr_id, ' . $sqlColumnNames . '
+                      FROM '.TBL_USERS.'
+                           '.$sqlJoin.'
+                     WHERE usr_valid = 1 '.
+                           $sqlWhere.
+                           $sqlOrderBys;
+        }
+        else
+        {
+            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . ' usr_id, ' . $sqlColumnNames . '
+                      FROM '.TBL_MEMBERS.'
+                INNER JOIN '.TBL_ROLES.'
+                        ON rol_id = mem_rol_id
+                INNER JOIN '.TBL_CATEGORIES.'
+                        ON cat_id = rol_cat_id
+                           '.$sqlUserJoin.'
+                           '.$sqlJoin.'
+                     WHERE usr_valid = 1
+                       AND rol_id IN ('.$sqlRoleIds.')
+                           '.$sqlRelationTypeWhere.'
+                       AND (  cat_org_id = '. (int) $gCurrentOrganization->getValue('org_id'). '
+                           OR cat_org_id IS NULL )
+                           '.$sqlMemberStatus.
+                           $sqlWhere.
+                           $sqlOrderBys;
+        }
 
         return $sql;
     }

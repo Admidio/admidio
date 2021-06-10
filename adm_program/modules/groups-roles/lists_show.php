@@ -653,6 +653,7 @@ foreach ($membersList as $member)
             $usfId = (int) $column->getValue('lsc_usf_id');
         }
 
+        // before adding the first column, add a column with the row number
         if ($columnNumber === 1)
         {
             if (in_array($getMode, array('html', 'print', 'pdf'), true))
@@ -682,161 +683,13 @@ foreach ($membersList as $member)
         }
 
         // fill content with data of database
-        $content = $member[$sqlColumnNumber];
-
-        /*****************************************************************/
-        // in some cases the content must have a special output format
-        /*****************************************************************/
-        if ($usfId > 0 && $usfId === (int) $gProfileFields->getProperty('COUNTRY', 'usf_id'))
-        {
-            $content = $gL10n->getCountryName($member[$sqlColumnNumber]);
-        }
-        elseif ($column->getValue('lsc_special_field') === 'usr_photo')
-        {
-            // show user photo
-            if ($getMode === 'html' || $getMode === 'print')
-            {
-                $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $member['usr_id'])).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_USER_PHOTO').'" />';
-            }
-            if ($getMode === 'csv' && $member[$sqlColumnNumber] != null)
-            {
-                $content = $gL10n->get('SYS_USER_PHOTO');
-            }
-        }
-        elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
-        {
-            if (in_array($getMode, array('csv', 'pdf'), true))
-            {
-                if ($content == 1)
-                {
-                    $content = $gL10n->get('SYS_YES');
-                }
-                else
-                {
-                    $content = $gL10n->get('SYS_NO');
-                }
-            }
-            elseif($content != 1)
-            {
-                $content = 0;
-            }
-        }
-        elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DATE'
-        || $column->getValue('lsc_special_field') === 'mem_begin'
-        || $column->getValue('lsc_special_field') === 'mem_end')
-        {
-            if (strlen($member[$sqlColumnNumber]) > 0)
-            {
-                // date must be formated
-                $date = \DateTime::createFromFormat('Y-m-d', $member[$sqlColumnNumber]);
-                $content = $date->format($gSettingsManager->getString('system_date'));
-            }
-        }
-        elseif (in_array($getMode, array('csv', 'pdf'), true)
-        &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN'
-            || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON'))
-        {
-            if (strlen($member[$sqlColumnNumber]) > 0)
-            {
-                // show selected text of optionfield or combobox
-                $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
-                $content = $arrListValues[$member[$sqlColumnNumber]];
-            }
-        }
-        elseif ($column->getValue('lsc_special_field') === 'mem_approved')
-        {
-            // Assign Integer to Language strings
-            switch ((int) $content)
-            {
-                case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
-                    $text = $gL10n->get('DAT_USER_INVITED');
-                    $htmlText = '<i class="fas fa-calendar-check admidio-icon-chain"></i>' . $text;
-                    break;
-                case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
-                    $text = $gL10n->get('DAT_USER_ATTEND');
-                    $htmlText = '<i class="fas fa-check-circle admidio-icon-chain"></i>' . $text;
-                    $buttonClass = 'admidio-event-approval-state-attend';
-                    break;
-                case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
-                    $text = $gL10n->get('DAT_USER_TENTATIVE');
-                    $htmlText = '<i class="fas fa-question-circle admidio-icon-chain"></i>' . $text;
-                    $buttonClass = 'admidio-event-approval-state-tentative';
-                    break;
-                case ModuleDates::MEMBER_APPROVAL_STATE_REFUSED:
-                    $text = $gL10n->get('DAT_USER_REFUSED');
-                    $htmlText = '<i class="fas fa-times-circle admidio-icon-chain"></i>' . $text;
-                    $buttonClass = 'admidio-event-approval-state-cancel';
-                    break;
-            }
-
-            if($getMode === 'csv')
-            {
-                $content = $text;
-            }
-            else
-            {
-                if($getMode === 'html')
-                {
-                    $content = '<span class="' . $buttonClass . '">' . $htmlText . '</span>';
-                }
-                else
-                {
-                    $content = $htmlText;
-                }
-            }
-        }
-        elseif ($column->getValue('lsc_special_field') === 'mem_usr_id_change' && (int) $content)
-        {
-            // Get User Information
-            $user = new User($gDb, $gProfileFields, $content);
-
-            $content = $user->getValue('LAST_NAME').', '.$user->getValue('FIRST_NAME');
-        }
-
-        // format value for csv export
         if ($getMode === 'csv')
         {
-            $csvStr .= $separator.$valueQuotes.$content.$valueQuotes;
+            $csvStr .= $separator.$valueQuotes . $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_id']) . $valueQuotes;
         }
-        // pdf should show only text and not much html content
-        elseif ($getMode === 'pdf')
-        {
-            $columnValues[] = $content;
-        }
-        // create output in html layout
         else
         {
-            // firstname and lastname get a link to the profile
-            if ($getMode === 'html'
-            &&    ($usfId === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
-                || $usfId === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
-            {
-                $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']);
-                $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $member['usr_id'])).'">'.$htmlValue.'</a>';
-            }
-            else
-            {
-                // within print mode no links should be set
-                if ($getMode === 'print'
-                &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'EMAIL'
-                    || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'PHONE'
-                    || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'URL'))
-                {
-                    $columnValues[] = $content;
-                }
-                else
-                {
-                    // checkbox must set a sorting value
-                    if($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
-                    {
-                        $columnValues[] = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']), 'order' => $content);
-                    }
-                    else
-                    {
-                        $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']);
-                    }
-                }
-            }
+            $columnValues[] = $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_id']);
         }
     }
 
