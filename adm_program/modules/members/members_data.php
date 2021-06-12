@@ -77,7 +77,7 @@ if(isset($_SESSION['members_list_config']))
 
 // create order statement
 $orderCondition = '';
-$orderColumns = array('no', 'member_this_orga', 'name', 'usr_login_name', 'gender', 'birthday', 'timestamp');
+$orderColumns = array_merge(array('no', 'member_this_orga'), $membersListConfig->getSqlColumnNames());
 
 if(array_key_exists('order', $_GET))
 {
@@ -107,7 +107,7 @@ if(array_key_exists('order', $_GET))
 }
 else
 {
-    $orderCondition = ' ORDER BY name ASC ';
+    $orderCondition = ' ORDER BY ' . $orderColumns[2] . ' ASC, ' . $orderColumns[3] . ' ASC ';
 }
 
 // create search conditions
@@ -224,7 +224,7 @@ if($getLength > 0)
 if($getSearch === '')
 {
     // no search condition entered then return all records in dependence of order, limit and offset
-    $sql = $mainSql . /*$orderCondition .*/ $limitCondition;
+    $sql = $mainSql . $orderCondition . $limitCondition;
 }
 else
 {

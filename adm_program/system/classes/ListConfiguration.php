@@ -21,6 +21,10 @@ class ListConfiguration extends TableLists
      * @var array<int,TableAccess> Array with all Listenspaltenobjekte
      */
     protected $columns = array();
+    /**
+     * @var array<int,string> Array each column name within the sql statement e.g. LAST_NAME or mem_begin
+     */
+    protected $columnsSqlName = array();
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
@@ -83,6 +87,7 @@ class ListConfiguration extends TableLists
     public function clear()
     {
         $this->columns = array();
+        $this->columnsSqlNames = array();
 
         parent::clear();
     }
@@ -490,7 +495,7 @@ class ListConfiguration extends TableLists
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        $sqlColumnNames = array();
+        $arrSqlColumnNames = array();
         $arrOrderByColumns = array();
         $sqlOrderBys = '';
         $sqlJoin  = '';
@@ -512,7 +517,7 @@ class ListConfiguration extends TableLists
                                     AND '.$tableAlias.'.usd_usf_id = '.$lscUsfId;
 
                 // usf_id is prefix for the table
-                $dbColumnName = $tableAlias.'.usd_value';
+                $dbColumnName = $tableAlias . '.usd_value AS ' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern');
             }
             else
             {
@@ -520,7 +525,7 @@ class ListConfiguration extends TableLists
                 $dbColumnName = $listColumn->getValue('lsc_special_field');
             }
 
-            $sqlColumnNames[] = $dbColumnName;
+            $arrSqlColumnNames[] = $dbColumnName;
 
             $userFieldType = $gProfileFields->getPropertyById($lscUsfId, 'usf_type');
 
@@ -626,7 +631,7 @@ class ListConfiguration extends TableLists
             }
         }
 
-        $sqlColumnNames = implode(', ', $sqlColumnNames);
+        $sqlColumnNames = implode(', ', $arrSqlColumnNames);
 
         // add sorting if option is set and sorting columns are stored
         if($optionsAll['useSort'])
@@ -745,6 +750,36 @@ class ListConfiguration extends TableLists
         }
 
         return $sql;
+    }
+
+    /**
+     * Returns an array with all column names of the sql statement that belong to the select clause.
+     * This will be the internal profile field name e.g. **LAST_NAME** or the db column name
+     * of the special field e.g. **mem_begin**
+     * @return array Array with all column names of this sql select clause.
+     */
+    public function getSqlColumnNames()
+    {
+        global $gProfileFields;
+
+        if (count($this->columnsSqlNames) === 0)
+        {
+            foreach($this->columns as $listColumn)
+            {
+                if((int) $listColumn->getValue('lsc_usf_id') > 0)
+                {
+                    // get internal profile field name
+                    $this->columnsSqlNames[] = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name_intern');
+                }
+                else
+                {
+                    // Special fields like usr_photo, mem_begin ...
+                    $this->columnsSqlNames[] = $listColumn->getValue('lsc_special_field');
+                }
+            }
+        }
+
+        return $this->columnsSqlNames;
     }
 
     /**
