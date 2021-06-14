@@ -486,7 +486,7 @@ class ListConfiguration extends TableLists
      */
     public function getSearchConditions()
     {
-        global $gProfileFields;
+        global $gProfileFields, $gL10n;
 
         $arrSearchConditions = array();
 
@@ -500,17 +500,21 @@ class ListConfiguration extends TableLists
                 switch ($gProfileFields->getPropertyById($lscUsfId, 'usf_type'))
                 {
                     case 'CHECKBOX':
-                        if($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') === 'GENDER')
-                        {
-                            $arrSearchConditions[] = 'CASE WHEN gender = \'1\' THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = \'2\' THEN \''.$gL10n->get('SYS_FEMALE').'\' ELSE \' \' END ';
-                        }
                         break;
 
                     case 'DROPDOWN': // fallthrough
                     case 'RADIO_BUTTON':
-                        // replace all field values with their internal numbers
-                        //$arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
-                        //$value = array_search(StringUtils::strToLower($value), array_map('StringUtils::strToLower', $arrListValues), true);
+                        // create "case when" with all values of the profile field value list
+                        $condition = ' CASE ';
+                        $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
+
+                        foreach($arrListValues as $key => $value)
+                        {
+                            $condition .= ' WHEN ' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ' = \'' . $key . '\' THEN \''.$value.'\' ';
+                        }
+
+                        $condition .= ' ELSE \' \' END ';
+                        $arrSearchConditions[] = $condition;
                         break;
 
                     case 'NUMBER': // fallthrough
@@ -550,7 +554,8 @@ class ListConfiguration extends TableLists
      * Prepare SQL of the current list configuration. Therefore all roles of the array and there users will be selected
      * and joined with the columns of the list configuration. The time period of the membership will be considered and
      * could be influenced with parameters. There is also a possiblity to join users of a relationship and hide special
-     * columns of event roles.
+     * columns of event roles. Each profile field of the select list will have their internal profile field name as column
+     * name. The special field will still have their database column name.
      * @param array          $options  (optional) An array with the following possible entries:
      *                                 - **showAllMembersThisOrga** : Set to true all users with an active membership
      *                                   to at least one role of the current organization will be shown.
@@ -566,7 +571,7 @@ class ListConfiguration extends TableLists
      *                                   all users who are in such a relationship to the selected role users.
      *                                 - **useConditions** : false - Don't add additional conditions to the SQL
      *                                                       true  - Conditions will be added as stored in the settings
-     *                                 - **useSort** : false - Don't add the sorting to the SQL
+     *                                 - **useOrderBy** : false - Don't add the sorting to the SQL
      *                                                 true  - Sorting is added as stored in the settings
      *                                 - **startDate** : The start date if memberships that should be considered. The time period of
      *                                   the membership must be at least one day after this date.
@@ -586,7 +591,7 @@ class ListConfiguration extends TableLists
             'showFormerMembers' => false,
             'showRelationTypes' => array(),
             'useConditions'     => true,
-            'useSort'           => true,
+            'useOrderBy'           => true,
             'startDate'         => null,
             'endDate'           => null
         );
@@ -643,11 +648,11 @@ class ListConfiguration extends TableLists
                         // mysql
                         $columnType = 'unsigned';
                     }
-                    $arrOrderByColumns[] = ' CAST('.$dbColumnName.' AS '.$columnType.') '.$lscSort;
+                    $arrOrderByColumns[] = ' CAST('.$dbColumnName.') '.$lscSort;
                 }
                 else
                 {
-                    $arrOrderByColumns[] = $dbColumnName.' '.$lscSort;
+                    $arrOrderByColumns[] = substr($dbColumnName, 0, strpos($dbColumnName, ' AS')).' '.$lscSort;
                 }
             }
 
@@ -731,7 +736,7 @@ class ListConfiguration extends TableLists
         $sqlColumnNames = implode(', ', $arrSqlColumnNames);
 
         // add sorting if option is set and sorting columns are stored
-        if($optionsAll['useSort'])
+        if($optionsAll['useOrderBy'])
         {
             $sqlOrderBys = implode(', ', $arrOrderByColumns);
 

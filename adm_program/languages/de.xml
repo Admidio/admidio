@@ -927,7 +927,7 @@
   <string name="SYS_END" description="End of a date">Ende</string>
   <string name="SYS_ERROR">Fehler</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n#VAR1#</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist die Standardkonfiguration für Listen in dieser Organisation und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
+  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist als Standardkonfiguration für das Modul #VAR1# in dieser Organisation hinterlegt und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - Seite nicht gefunden!</string>
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Termine - Teilnahmebestätigung</string>
   <string name="SYS_EXAMPLE">Beispiel</string>

@@ -76,6 +76,7 @@ if(isset($_SESSION['members_list_config']))
 }
 
 // create order statement
+$useOrderBy = false;
 $orderCondition = '';
 $orderColumns = array_merge(array('no', 'member_this_orga'), $membersListConfig->getColumnNamesSql());
 
@@ -107,7 +108,7 @@ if(array_key_exists('order', $_GET))
 }
 else
 {
-    $orderCondition = ' ORDER BY ' . $orderColumns[2] . ' ASC, ' . $orderColumns[3] . ' ASC ';
+    $useOrderBy = true;
 }
 
 // create search conditions
@@ -193,11 +194,11 @@ if($gCurrentOrganization->countAllRecords() > 1)
 // create sql to show all members (not accepted users should not be shown)
 if($getMembers)
 {
-    $mainSql = $membersListConfig->getSql(array('showAllMembersThisOrga' => true, 'useConditions' => false, 'useSort' => false));
+    $mainSql = $membersListConfig->getSql(array('showAllMembersThisOrga' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
 }
 else
 {
-    $mainSql = $membersListConfig->getSql(array('showAllMembersDatabase' => true, 'useConditions' => false, 'useSort' => false));
+    $mainSql = $membersListConfig->getSql(array('showAllMembersDatabase' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
 }
 $mainSql = 'SELECT DISTINCT '.$memberOfThisOrganizationSelect.' AS member_this_orga, '.$memberOfOtherOrganizationSelect.' AS member_other_orga, usr_login_name as loginname,
                 (SELECT email.usd_value FROM '.TBL_USER_DATA.' email
