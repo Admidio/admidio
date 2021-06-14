@@ -87,15 +87,19 @@ switch($postImportFormat) {
         break;
     case 'CSV':
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-        if ($postImportCoding != 'AUTO') {
-            if ($postImportCoding == 'DETECT') {
-                $postImportCoding = \PhpOffice\PhpSpreadsheet\Reader\Csv::guessEncoding($importfile);
-            }
-            $reader->setInputEncoding($postImportCoding);
+        if ($postImportCoding === 'GUESS') {
+            $postImportCoding = \PhpOffice\PhpSpreadsheet\Reader\Csv::guessEncoding($importfile);
         }
+        elseif($postImportCoding === '')
+        {
+            $postImportCoding = 'UTF-8';
+        }
+        $reader->setInputEncoding($postImportCoding);
+
         if ($postSeparator != '') {
             $reader->setDelimiter($postSeparator);
         }
+
         if ($postEnclosure != 'AUTO') {
             $reader->setEnclosure($postEnclosure );
         }
@@ -119,7 +123,7 @@ if (isset($reader) and !is_null($reader)) {
         } else if (!empty($postWorksheet)) {
             $sheet = $spreadsheet->getSheetByName($postWorksheet);
         } else {
-            $sheet = $spreadsheet->getSheet(1);
+            $sheet = $spreadsheet->getActiveSheet();
         }
 
         if (empty($sheet)) {
