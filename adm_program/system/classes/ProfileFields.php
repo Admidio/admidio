@@ -335,7 +335,8 @@ class ProfileFields
     }
 
     /**
-     * Returns the user value for this column.
+     * Returns the user value for this column. Within a dropdown or radio button field the format could be set to **text** so
+     * an icon will not be shown.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field whose value should be read
      * @param string $format          Returns the field value in a special format **text**, **html**, **database**
      *                                or datetime (detailed description in method description)
@@ -462,7 +463,7 @@ class ProfileFields
         // check a special case where the field is only visible for users who can edit the profile but must therefore
         // have the right to edit all users
         if(!$gCurrentUser->editUsers()
-        && $this->mProfileFields[$fieldNameIntern]->getValue('usf_mandatory') == 1
+        && $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 1
         && $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 1)
         {
             return false;
@@ -471,8 +472,9 @@ class ProfileFields
         // check if the current user could view the category of the profile field
         // if it's the own profile than we check if user could edit his profile and if so he could view all fields
         // check if the profile field is only visible for users that could edit this
-        return (array_key_exists($fieldNameIntern, $this->mProfileFields) && $this->mProfileFields[$fieldNameIntern]->isVisible())
-            && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
+        return ((array_key_exists($fieldNameIntern, $this->mProfileFields) && $this->mProfileFields[$fieldNameIntern]->isVisible())
+            || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
+        && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
     }
 
     /**

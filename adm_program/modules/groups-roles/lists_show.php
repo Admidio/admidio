@@ -238,24 +238,14 @@ switch ($getMode)
     default:
 }
 
-// Array to assign names to tables
-$arrColName = array(
-    'usr_login_name'       => $gL10n->get('SYS_USERNAME'),
-    'usr_photo'            => $gL10n->get('SYS_PHOTO'),
-    'mem_begin'            => $gL10n->get('SYS_START'),
-    'mem_end'              => $gL10n->get('SYS_END'),
-    'mem_leader'           => $gL10n->get('SYS_LEADERS'),
-    'mem_approved'         => $gL10n->get('SYS_PARTICIPATION_STATUS'),
-    'mem_usr_id_change'    => $gL10n->get('SYS_CHANGED_BY'),
-    'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
-    'mem_comment'          => $gL10n->get('SYS_COMMENT'),
-    'mem_count_guests'     => $gL10n->get('SYS_SEAT_AMOUNT')
-);
-
-// Array for valid columns visible for current user.
-// Needed for PDF export to set the correct colspan for the layout
-// Maybe there are hidden fields.
-$arrValidColumns = array();
+// check if user has the right to export lists
+if(in_array($getMode, array('csv', 'pdf'), true)
+&& ($gSettingsManager->getInt('groups_roles_export') === 0 // no one should export lists
+   || ($gSettingsManager->getInt('groups_roles_export') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')))) // users who don't have the right to edit all profiles
+{
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+}
 
 $mainSql = ''; // Main SQL statement for lists
 $csvStr = ''; // CSV file as string
@@ -276,7 +266,13 @@ try
     }
 
     // create the main sql
-    $mainSql = $list->getSQL($roleIds, $getShowFormerMembers, $startDateEnglishFormat, $endDateEnglishFormat, $relationTypeIds);
+    $mainSql = $list->getSQL(
+        array('showRolesMembers'  => $roleIds,
+              'showFormerMembers' => $getShowFormerMembers,
+              'showRelationTypes' => $relationTypeIds,
+              'startDate' => $startDateEnglishFormat,
+              'endDate'   => $endDateEnglishFormat
+        ));
 }
 catch (AdmException $e)
 {
@@ -493,19 +489,23 @@ if ($getMode !== 'csv')
         $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
 
         // dropdown menu item with all export possibilities
-        $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
-        $page->addPageFunctionsMenuItem('menu_item_lists_csv_ms', $gL10n->get('SYS_MICROSOFT_EXCEL'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-ms')),
-            'fa-file-excel', 'menu_item_lists_export');
-        $page->addPageFunctionsMenuItem('menu_item_lists_pdf', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
-            'fa-file-pdf', 'menu_item_lists_export');
-        $page->addPageFunctionsMenuItem('menu_item_lists_pdfl', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
-            'fa-file-pdf', 'menu_item_lists_export');
-        $page->addPageFunctionsMenuItem('menu_item_lists_csv', $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-oo')),
-            'fa-file-csv', 'menu_item_lists_export');
+        if($gSettingsManager->getInt('groups_roles_export') === 1 // all users
+        || ($gSettingsManager->getInt('groups_roles_export') === 2 && $gCurrentUser->checkRolesRight('rol_edit_user'))) // users with the right to edit all profiles
+        {
+            $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
+            $page->addPageFunctionsMenuItem('menu_item_lists_csv_ms', $gL10n->get('SYS_MICROSOFT_EXCEL'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-ms')),
+                'fa-file-excel', 'menu_item_lists_export');
+            $page->addPageFunctionsMenuItem('menu_item_lists_pdf', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
+                'fa-file-pdf', 'menu_item_lists_export');
+            $page->addPageFunctionsMenuItem('menu_item_lists_pdfl', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
+                'fa-file-pdf', 'menu_item_lists_export');
+            $page->addPageFunctionsMenuItem('menu_item_lists_csv', $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv-oo')),
+                'fa-file-csv', 'menu_item_lists_export');
+        }
 
         if ($numberRoles === 1)
         {
@@ -534,20 +534,6 @@ if ($getMode !== 'csv')
     }
 }
 
-// initialize array parameters for table and set the first column for the counter
-if ($getMode === 'html')
-{
-    // in html mode we group leaders. Therefore we need a special hidden column.
-    $columnAlign  = array('left', 'left');
-    $columnValues = array($gL10n->get('SYS_ABR_NO'), $gL10n->get('INS_GROUPS'));
-}
-else
-{
-    $columnAlign  = array('left');
-    $columnValues = array($gL10n->get('SYS_ABR_NO'));
-}
-
-
 if ($numMembers === 0)
 {
     // Es sind keine Daten vorhanden !
@@ -556,103 +542,51 @@ if ($numMembers === 0)
     // => EXIT
 }
 
-// headlines for columns
-for ($columnNumber = 1, $iMax = $list->countColumns(); $columnNumber <= $iMax; ++$columnNumber)
+// read column informations from the list configuration
+$arrColumnNames = $list->getColumnNames();
+$arrColumnAlign = $list->getColumnAlignments();
+
+// add column with sequential number
+array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'));
+array_unshift($arrColumnAlign, 'left');
+
+// set the first column for the counter
+if($getMode === 'html')
 {
-    $column = $list->getColumnObject($columnNumber);
+    // in html mode we group leaders. Therefore we need a special hidden column.
+    array_unshift($arrColumnNames, $gL10n->get('INS_GROUPS'));
+    array_unshift($arrColumnAlign, 'left');
 
-    // Find name of the field
-    if ($column->getValue('lsc_usf_id') > 0)
+    if ($editUserStatus)
     {
-        // customs field
-        $usfId = (int) $column->getValue('lsc_usf_id');
-        $columnHeader = $gProfileFields->getPropertyById($usfId, 'usf_name');
-
-        if ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX'
-        ||  $gProfileFields->getPropertyById($usfId, 'usf_name_intern') === 'GENDER')
-        {
-            $columnAlign[] = 'center';
-        }
-        elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'NUMBER'
-        ||      $gProfileFields->getPropertyById($usfId, 'usf_type') === 'DECIMAL')
-        {
-            $columnAlign[] = 'right';
-        }
-        else
-        {
-            $columnAlign[] = 'left';
-        }
+        // add column for edit link
+        $arrColumnNames[] = '&nbsp;';
     }
-    else
-    {
-        $usfId = 0;
-        $columnHeader = $arrColName[$column->getValue('lsc_special_field')];
-        $columnAlign[] = 'left';
-    }
-
-    if ($getMode === 'csv' && $columnNumber === 1)
-    {
-        // add serial
-        $csvStr .= $valueQuotes.$gL10n->get('SYS_ABR_NO').$valueQuotes;
-    }
-
-    if ($getMode === 'pdf' && $columnNumber === 1)
-    {
-        // add serial
-        $arrValidColumns[] = $gL10n->get('SYS_ABR_NO');
-    }
-
-    // show hidden fields only for user with rights
-    if ($usfId === 0 || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers()))
-    {
-        if ($getMode === 'csv')
-        {
-            $csvStr .= $separator.$valueQuotes.$columnHeader.$valueQuotes;
-        }
-        elseif ($getMode === 'pdf')
-        {
-            $arrValidColumns[] = $columnHeader;
-        }
-        elseif ($getMode === 'html' || $getMode === 'print')
-        {
-            $columnValues[] = $columnHeader;
-        }
-    }
-} // End-For
-
-if ($editUserStatus)
-{
-    // add column for edit link
-    $columnValues[] .= '&nbsp;';
 }
 
 if ($getMode === 'csv')
 {
-    $csvStr .= "\n";
+    $csvStr = $valueQuotes . implode($valueQuotes.$separator.$valueQuotes, $arrColumnNames) . $valueQuotes . "\n";
 }
 elseif ($getMode === 'html' || $getMode === 'print')
 {
-    $table->setColumnAlignByArray($columnAlign);
-    $table->addRowHeadingByArray($columnValues);
+    $table->setColumnAlignByArray($arrColumnAlign);
+    $table->addRowHeadingByArray($arrColumnNames);
 }
 elseif ($getMode === 'pdf')
 {
-    $table->setColumnAlignByArray($columnAlign);
+    $table->setColumnAlignByArray($arrColumnAlign);
     $table->addTableHeader();
     $table->addRow();
     $table->addAttribute('align', 'center');
-    $table->addColumn($headline, array('colspan' => count($arrValidColumns)));
+    $table->addColumn($headline, array('colspan' => count($arrColumnNames)));
     $table->addRow();
 
     // Write valid column headings
-    for ($column = 0, $max = count($arrValidColumns); $column < $max; ++$column)
+    for ($column = 0, $max = count($arrColumnNames); $column < $max; ++$column)
     {
-        $table->addColumn($arrValidColumns[$column], array('style' => 'text-align: '.$columnAlign[$column].'; font-size: 14px; background-color: #c7c7c7;'), 'th');
+        $table->addColumn($arrColumnNames[$column], array('style' => 'text-align: '.$arrColumnAlign[$column].'; font-size: 14px; background-color: #c7c7c7;'), 'th');
     }
-}
-else
-{
-    $table->addTableBody();
 }
 
 $lastGroupHead = null; // Mark for change between leader and member
@@ -719,6 +653,7 @@ foreach ($membersList as $member)
             $usfId = (int) $column->getValue('lsc_usf_id');
         }
 
+        // before adding the first column, add a column with the row number
         if ($columnNumber === 1)
         {
             if (in_array($getMode, array('html', 'print', 'pdf'), true))
@@ -747,169 +682,17 @@ foreach ($membersList as $member)
             }
         }
 
-        // hidden fields are only for users with rights
-        if ($usfId === 0 || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers()))
+        // fill content with data of database
+        if ($getMode === 'csv')
         {
-
-            // fill content with data of database
-            $content = $member[$sqlColumnNumber];
-
-            /*****************************************************************/
-            // in some cases the content must have a special output format
-            /*****************************************************************/
-            if ($usfId > 0 && $usfId === (int) $gProfileFields->getProperty('COUNTRY', 'usf_id'))
-            {
-                $content = $gL10n->getCountryName($member[$sqlColumnNumber]);
-            }
-            elseif ($column->getValue('lsc_special_field') === 'usr_photo')
-            {
-                // show user photo
-                if ($getMode === 'html' || $getMode === 'print')
-                {
-                    $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $member['usr_id'])).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_USER_PHOTO').'" />';
-                }
-                if ($getMode === 'csv' && $member[$sqlColumnNumber] != null)
-                {
-                    $content = $gL10n->get('SYS_USER_PHOTO');
-                }
-            }
-            elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
-            {
-                if (in_array($getMode, array('csv', 'pdf'), true))
-                {
-                    if ($content == 1)
-                    {
-                        $content = $gL10n->get('SYS_YES');
-                    }
-                    else
-                    {
-                        $content = $gL10n->get('SYS_NO');
-                    }
-                }
-                elseif($content != 1)
-                {
-                    $content = 0;
-                }
-            }
-            elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DATE'
-            || $column->getValue('lsc_special_field') === 'mem_begin'
-            || $column->getValue('lsc_special_field') === 'mem_end')
-            {
-                if (strlen($member[$sqlColumnNumber]) > 0)
-                {
-                    // date must be formated
-                    $date = \DateTime::createFromFormat('Y-m-d', $member[$sqlColumnNumber]);
-                    $content = $date->format($gSettingsManager->getString('system_date'));
-                }
-            }
-            elseif (in_array($getMode, array('csv', 'pdf'), true)
-            &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN'
-                || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON'))
-            {
-                if (strlen($member[$sqlColumnNumber]) > 0)
-                {
-                    // show selected text of optionfield or combobox
-                    $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
-                    $content = $arrListValues[$member[$sqlColumnNumber]];
-                }
-            }
-            elseif ($column->getValue('lsc_special_field') === 'mem_approved')
-            {
-                // Assign Integer to Language strings
-                switch ((int) $content)
-                {
-                    case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
-                        $text = $gL10n->get('DAT_USER_INVITED');
-                        $htmlText = '<i class="fas fa-calendar-check admidio-icon-chain"></i>' . $text;
-                        break;
-                    case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
-                        $text = $gL10n->get('DAT_USER_ATTEND');
-                        $htmlText = '<i class="fas fa-check-circle admidio-icon-chain"></i>' . $text;
-                        $buttonClass = 'admidio-event-approval-state-attend';
-                        break;
-                    case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
-                        $text = $gL10n->get('DAT_USER_TENTATIVE');
-                        $htmlText = '<i class="fas fa-question-circle admidio-icon-chain"></i>' . $text;
-                        $buttonClass = 'admidio-event-approval-state-tentative';
-                        break;
-                    case ModuleDates::MEMBER_APPROVAL_STATE_REFUSED:
-                        $text = $gL10n->get('DAT_USER_REFUSED');
-                        $htmlText = '<i class="fas fa-times-circle admidio-icon-chain"></i>' . $text;
-                        $buttonClass = 'admidio-event-approval-state-cancel';
-                        break;
-                }
-
-                if($getMode === 'csv')
-                {
-                    $content = $text;
-                }
-                else
-                {
-                    if($getMode === 'html')
-                    {
-                        $content = '<span class="' . $buttonClass . '">' . $htmlText . '</span>';
-                    }
-                    else
-                    {
-                        $content = $htmlText;
-                    }
-                }
-            }
-            elseif ($column->getValue('lsc_special_field') === 'mem_usr_id_change' && (int) $content)
-            {
-                // Get User Information
-                $user = new User($gDb, $gProfileFields, $content);
-
-                $content = $user->getValue('LAST_NAME').', '.$user->getValue('FIRST_NAME');
-            }
-
-            // format value for csv export
-            if ($getMode === 'csv')
-            {
-                $csvStr .= $separator.$valueQuotes.$content.$valueQuotes;
-            }
-            // pdf should show only text and not much html content
-            elseif ($getMode === 'pdf')
-            {
-                $columnValues[] = $content;
-            }
-            // create output in html layout
-            else
-            {
-                // firstname and lastname get a link to the profile
-                if ($getMode === 'html'
-                &&    ($usfId === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
-                    || $usfId === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
-                {
-                    $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']);
-                    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $member['usr_id'])).'">'.$htmlValue.'</a>';
-                }
-                else
-                {
-                    // within print mode no links should be set
-                    if ($getMode === 'print'
-                    &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'EMAIL'
-                        || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'PHONE'
-                        || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'URL'))
-                    {
-                        $columnValues[] = $content;
-                    }
-                    else
-                    {
-                        // checkbox must set a sorting value
-                        if($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
-                        {
-                            $columnValues[] = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']), 'order' => $content);
-                        }
-                        else
-                        {
-                            $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']);
-                        }
-                    }
-                }
-            }
+            $csvStr .= $separator.$valueQuotes . $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_id']) . $valueQuotes;
+        }
+        else
+        {
+            $columnValues[] = $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_id']);
         }
     }
+
     if ($editUserStatus)
     {
         // Get the matching event

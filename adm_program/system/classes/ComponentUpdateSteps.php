@@ -24,6 +24,64 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method will add a new systemmail text to the database table **adm_texts** for each
+     * organization in the database.
+     */
+	public static function updateStep41AddMembersManagementDefaultList()
+	{
+    	global $gL10n, $gProfileFields, $gSettingsManager;
+
+        $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
+        $organizationsStatement = self::$db->queryPrepared($sql);
+        $organizationsArray     = $organizationsStatement->fetchAll();
+
+        foreach($organizationsArray as $organization)
+        {
+            $orgId = (int) $organization['org_id'];
+
+            // add default configuration
+            $userManagementList = new ListConfiguration(self::$db);
+            $userManagementList->setValue('lst_name', $gL10n->get('MEM_USER_MANAGEMENT'));
+            $userManagementList->setValue('lst_org_id', $orgId);
+            $userManagementList->setValue('lst_global', 1);
+            $userManagementList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+            $userManagementList->addColumn(2, (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+            $userManagementList->addColumn(3, 'usr_login_name');
+            $userManagementList->addColumn(4, (int) $gProfileFields->getProperty('GENDER', 'usf_id'));
+            $userManagementList->addColumn(5, (int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+            $userManagementList->addColumn(6, (int) $gProfileFields->getProperty('CITY', 'usf_id'));
+            $userManagementList->save();
+
+            // save default list to preferences
+            $gSettingsManager->set('members_list_configuration', $userManagementList->getValue('lst_id'));
+        }
+	}
+
+    /**
+     * This method will add a new systemmail text to the database table **adm_texts** for each
+     * organization in the database.
+     */
+	public static function updateStep41AddSystemmailText()
+	{
+    	global $gL10n;
+
+        $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+
+        while($row = $organizationStatement->fetch())
+        {
+            // convert <br /> to a normal line feed
+            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET'));
+
+        	$textPasswordReset = new TableAccess(self::$db, TBL_TEXTS, 'txt');
+        	$textPasswordReset->setValue('txt_org_id', $row['org_id']);
+        	$textPasswordReset->setValue('txt_name', 'SYSMAIL_PASSWORD_RESET');
+        	$textPasswordReset->setValue('txt_text', $value);
+        	$textPasswordReset->save();
+        }
+	}
+
+    /**
      * This method will migrate the recipients of messages from the database column msg_usr_id_receiver
      * to the new table adm_messages_recipients. There each recipient will be add in a separate row that
      * reference to the message.

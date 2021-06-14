@@ -286,7 +286,7 @@ class TableUserField extends TableAccess
 
         $usrId = (int) $gCurrentUser->getValue('usr_id');
 
-        if ($this->mViewUserField === null)
+        if ($this->mViewUserField === null || $this->mViewUserFieldUserId !== $usrId)
         {
             $this->mViewUserFieldUserId = $usrId;
 
@@ -326,6 +326,39 @@ class TableUserField extends TableAccess
         $this->db->queryPrepared($sql, array($usfSequence, $usfCatId, $newSequence));
 
         $this->setValue('usf_sequence', $newSequence);
+        $this->save();
+    }
+
+   /**
+     * Profile field will change the complete sequence.
+     * @param array $sequence the new sequence of profile fields (field IDs)
+     * @throws AdmException
+     */
+    public function setSequence($sequence)
+    {
+        $usfSequence = (int) $this->getValue('usf_sequence');
+        $usfCatId    = (int) $this->getValue('usf_cat_id');
+        $usfId       = (int) $this->getValue('usf_id');
+
+        $sql = 'UPDATE '.TBL_USER_FIELDS.'
+                   SET usf_sequence = ? -- new order sequence
+                 WHERE usf_id       = ? -- field ID;
+                   AND usf_cat_id   = ? -- $usfCatId;
+            ';
+
+        $newSequence = -1;
+        foreach ($sequence as $pos => $id) {
+            if ($id == $usfId) {
+                // Store position for later update
+                $newSequence = $pos + 1;
+            } else {
+                $this->db->queryPrepared($sql, array($pos + 1, $id, $usfCatId));
+            }
+        }
+
+        if ($newSequence > 0) {
+            $this->setValue('usf_sequence', $newSequence);
+        }
         $this->save();
     }
 

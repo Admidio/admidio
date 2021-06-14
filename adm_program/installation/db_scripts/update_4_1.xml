@@ -38,5 +38,12 @@
     ADD CONSTRAINT %PREFIX%_fk_msa_msg_id      FOREIGN KEY (msa_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT</step>
     <step id="100">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('enable_chat_module')</step>
     <step id="110">UPDATE %PREFIX%_menu SET men_description = 'SYS_EMAIL_DESC' WHERE men_description = 'MAI_EMAIL_DESC'</step>
+    <step id="120">ALTER TABLE %PREFIX%_users DROP COLUMN usr_new_password</step>
+    <step id="130">ALTER TABLE %PREFIX%_users DROP COLUMN usr_activation_code</step>
+    <step id="140">ALTER TABLE %PREFIX%_users ADD COLUMN usr_pw_reset_id varchar(50)</step>
+    <step id="150">ALTER TABLE %PREFIX%_users ADD COLUMN usr_pw_reset_timestamp timestamp NULL DEFAULT NULL</step>
+    <step id="160">ComponentUpdateSteps::updateStep41AddSystemmailText</step>
+    <step id="170">DELETE FROM %PREFIX%_texts WHERE txt_name = 'SYSMAIL_ACTIVATION_LINK'</step>
+    <step id="180">ComponentUpdateSteps::updateStep41AddMembersManagementDefaultList</step>
     <step>stop</step>
 </update>

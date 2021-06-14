@@ -39,6 +39,9 @@ $headline = $gL10n->get('MEM_USER_MANAGEMENT');
 // Navigation of the module starts here
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
+$membersListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('members_list_configuration'));
+$_SESSION['members_list_config'] = $membersListConfig;
+
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
 $flagShowMembers = !$getMembers;
 
@@ -100,19 +103,18 @@ $orgName = $gCurrentOrganization->getValue('org_longname');
 $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-condensed');
 
 // create array with all column heading values
-$columnHeading = array(
+$columnHeading = $membersListConfig->getColumnNames();
+array_unshift($columnHeading,
     $gL10n->get('SYS_ABR_NO'),
-    '<i class="fas fa-user" data-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>',
-    $gL10n->get('SYS_NAME'),
-    $gL10n->get('SYS_USER'),
-    '<i class="fas fa-fw fa-transgender" data-toggle="tooltip" title="' . $gL10n->get('SYS_GENDER') . '"></i>',
-    $gL10n->get('SYS_BIRTHDAY'),
-    $gL10n->get('MEM_UPDATED_ON'),
-    '&nbsp;'
-);
+    '<i class="fas fa-user" data-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>');
+array_push($columnHeading, '&nbsp;');
+
+$columnAlignment = $membersListConfig->getColumnAlignments();
+array_unshift($columnAlignment,'left', 'left');
+array_push($columnAlignment, 'right');
 
 $membersTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_data.php', array('members' => $getMembers)));
-$membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
+$membersTable->setColumnAlignByArray($columnAlignment);
 $membersTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
 $membersTable->addRowHeadingByArray($columnHeading);
 $membersTable->setDatatablesRowsPerPage($gSettingsManager->getInt('members_users_per_page'));

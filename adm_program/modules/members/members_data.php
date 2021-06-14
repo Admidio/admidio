@@ -70,9 +70,15 @@ if (!$gCurrentUser->editUsers())
     exit();
 }
 
+if(isset($_SESSION['members_list_config']))
+{
+    $membersListConfig = $_SESSION['members_list_config'];
+}
+
 // create order statement
+$useOrderBy = false;
 $orderCondition = '';
-$orderColumns = array('no', 'member_this_orga', 'name', 'usr_login_name', 'gender', 'birthday', 'timestamp');
+$orderColumns = array_merge(array('no', 'member_this_orga'), $membersListConfig->getColumnNamesSql());
 
 if(array_key_exists('order', $_GET))
 {
@@ -102,19 +108,12 @@ if(array_key_exists('order', $_GET))
 }
 else
 {
-    $orderCondition = ' ORDER BY name ASC ';
+    $useOrderBy = true;
 }
 
 // create search conditions
 $searchCondition = '';
-$queryParamsSearch = array();
-$searchColumns = array(
-    'COALESCE(name, \' \')',
-    'COALESCE(usr_login_name, \' \')',
-    'CASE WHEN gender = \'1\' THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = \'2\' THEN \''.$gL10n->get('SYS_FEMALE').'\' ELSE \' \' END ',
-    'COALESCE(birthday, \'1900-02-01\')',
-    'COALESCE(timestamp, \'1900-02-01\')'
-);
+$searchColumns = $membersListConfig->getSearchConditions();
 
 if($getSearch !== '' && count($searchColumns) > 0)
 {
@@ -192,38 +191,24 @@ if($gCurrentOrganization->countAllRecords() > 1)
             AND cat_org_id <> '.(int) $gCurrentOrganization->getValue('org_id').')';
 }
 
-// show all members (not accepted users should not be shown)
-$mainSql = 'SELECT usr_id, CONCAT(last_name.usd_value, \', \', first_name.usd_value) AS name,
-                   email.usd_value AS email, gender.usd_value AS gender, birthday.usd_value AS birthday,
-                   usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) AS timestamp,
-                   '.$memberOfThisOrganizationSelect.' AS member_this_orga,
-                   '.$memberOfOtherOrganizationSelect.' AS member_other_orga
-              FROM '.TBL_USERS.'
-        INNER JOIN '.TBL_USER_DATA.' AS last_name
-                ON last_name.usd_usr_id = usr_id
-               AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-        INNER JOIN '.TBL_USER_DATA.' AS first_name
-                ON first_name.usd_usr_id = usr_id
-               AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-         LEFT JOIN '.TBL_USER_DATA.' AS email
-                ON email.usd_usr_id = usr_id
-               AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
-         LEFT JOIN '.TBL_USER_DATA.' AS gender
-                ON gender.usd_usr_id = usr_id
-               AND gender.usd_usf_id = ? -- $gProfileFields->getProperty(\'GENDER\', \'usf_id\')
-         LEFT JOIN '.TBL_USER_DATA.' AS birthday
-                ON birthday.usd_usr_id = usr_id
-               AND birthday.usd_usf_id = ? -- $gProfileFields->getProperty(\'BIRTHDAY\', \'usf_id\')
-             WHERE usr_valid = 1
-                   '.$memberOfThisOrganizationCondition;
+// create sql to show all members (not accepted users should not be shown)
+if($getMembers)
+{
+    $mainSql = $membersListConfig->getSql(array('showAllMembersThisOrga' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
+}
+else
+{
+    $mainSql = $membersListConfig->getSql(array('showAllMembersDatabase' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
+}
+$mainSql = 'SELECT DISTINCT '.$memberOfThisOrganizationSelect.' AS member_this_orga, '.$memberOfOtherOrganizationSelect.' AS member_other_orga, usr_login_name as loginname,
+                (SELECT email.usd_value FROM '.TBL_USER_DATA.' email
+                  WHERE  email.usd_usr_id = usr_id
+                    AND email.usd_usf_id = ? /* $gProfileFields->getProperty(\'email\', \'usf_id\') */
+                 ) AS email, '.
+            substr($mainSql, 15);
 $queryParamsMain = array(
-    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-    $gProfileFields->getProperty('EMAIL', 'usf_id'),
-    $gProfileFields->getProperty('GENDER', 'usf_id'),
-    $gProfileFields->getProperty('BIRTHDAY', 'usf_id')
+    $gProfileFields->getProperty('EMAIL', 'usf_id')
 ); // TODO add more params
-
 $limitCondition = '';
 if($getLength > 0)
 {
@@ -233,26 +218,28 @@ if($getLength > 0)
 if($getSearch === '')
 {
     // no search condition entered then return all records in dependence of order, limit and offset
-    $sql = $mainSql . $orderCondition . $limitCondition;
+    $sql = $mainSql . $searchCondition . $orderCondition . $limitCondition;
 }
 else
 {
-    $sql = 'SELECT usr_id, name, email, gender, birthday, usr_login_name, timestamp, member_this_orga, member_other_orga
+    $sql = 'SELECT *
               FROM ('.$mainSql.') AS members
                '.$searchCondition
                 .$orderCondition
                 .$limitCondition;
 }
-$mglStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $queryParamsSearch)); // TODO add more params
+$mglStatement = $gDb->queryPrepared($sql, $queryParamsMain); // TODO add more params
 
 $orgName   = $gCurrentOrganization->getValue('org_longname');
 $rowNumber = $getStart; // count for every row
 
 $jsonArray['data'] = array();
 
-while($row = $mglStatement->fetch())
+while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
 {
     ++$rowNumber;
+    $ColumnNumberSql = 6;
+    $columnNumberJson = 2;
 
     $memberOfThisOrganization  = (bool) $row['member_this_orga'];
     $memberOfOtherOrganization = (bool) $row['member_other_orga'];
@@ -275,53 +262,29 @@ while($row = $mglStatement->fetch())
     $columnValues['1'] = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">
         <i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
 
-    // Add "Lastname" and "Firstname"
-    $columnValues['2'] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">'.$row['name'].'</a>';
+    // add all columns of the list configuration to the json array
+    // start columnNumber with 4 because the first 2 columns are not of the list configuration
+    for($columnNumber = 1; $columnNumber <= $membersListConfig->countColumns(); $columnNumber++)
+    {
+        if(strlen($row[$ColumnNumberSql]) > 0)
+        {
+            $columnValues[strval($columnNumberJson)] = $membersListConfig->convertColumnContentForOutput($columnNumber, 'html', $row[$ColumnNumberSql], $row['usr_id']);
+        }
+        else
+        {
+            $columnValues[strval($columnNumberJson)] = '';
+        }
 
-    // Add "Loginname"
-    if(strlen($row['usr_login_name']) > 0)
-    {
-        $columnValues['3'] = $row['usr_login_name'];
+        $columnNumberJson++;
+        $ColumnNumberSql++;
     }
-    else
-    {
-        $columnValues['3'] = '';
-    }
-
-    // Add icon for "gender"
-    if(strlen($row['gender']) > 0)
-    {
-        // show selected text of optionfield or combobox
-        $arrListValues  = $gProfileFields->getProperty('GENDER', 'usf_value_list');
-        $columnValues['4'] = $arrListValues[$row['gender']];
-    }
-    else
-    {
-        $columnValues['4'] = '';
-    }
-
-    // Add "birthday"
-    if(strlen($row['birthday']) > 0)
-    {
-        // date must be formated
-        $date = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
-        $columnValues['5'] = $date->format($gSettingsManager->getString('system_date'));
-    }
-    else
-    {
-        $columnValues['5'] = '';
-    }
-
-    // Add "change date"
-    $timestampChange = \DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
-    $columnValues['6']  = $timestampChange->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
 
     // Add "user-administration icons"
     $userAdministration = '';
 
     // Administrators can change or send password if login is configured and user is member of current organization
     if($memberOfThisOrganization && $gCurrentUser->isAdministrator()
-    && strlen($row['usr_login_name']) > 0 && (int) $row['usr_id'] !== (int) $gCurrentUser->getValue('usr_id'))
+    && strlen($row['loginname']) > 0 && (int) $row['usr_id'] !== (int) $gCurrentUser->getValue('usr_id'))
     {
         if(strlen($row['email']) > 0 && $gSettingsManager->getBool('enable_system_mails'))
         {
@@ -374,7 +337,7 @@ while($row = $mglStatement->fetch())
             </a>';
     }
 
-    $columnValues['7'] = $userAdministration;
+    $columnValues[strval($columnNumberJson)] = $userAdministration;
 
     // add current row to json array
     $jsonArray['data'][] = $columnValues;
@@ -393,7 +356,7 @@ if($getSearch !== '')
         $sql = 'SELECT COUNT(*) AS count
                   FROM ('.$mainSql.') AS members
                        '.$searchCondition;
-        $countFilteredStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $queryParamsSearch));
+        $countFilteredStatement = $gDb->queryPrepared($sql, $queryParamsMain);
 
         $jsonArray['recordsFiltered'] = (int) $countFilteredStatement->fetchColumn();
     }

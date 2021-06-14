@@ -226,7 +226,7 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
 /* Forms */
 /***********************************/
 
-form {
+form, .message {
     max-width: 1000px;
 }
 

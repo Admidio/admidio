@@ -78,12 +78,12 @@ if($gValidLogin)
 {
     if($plg_link_target === '' || str_starts_with($plg_link_target, '_'))
     {
-        $jsContentNextPage = 'self.location.href = \''. ADMIDIO_URL. '/adm_program/system/logout.php\';';
+        $jsContentNextPage = 'self.location.href = \'' . ADMIDIO_URL . FOLDER_SYSTEM . '/logout.php\';';
     }
     else
     {
         $jsContentNextPage = '
-        parent.'. $plg_link_target. '.location.href = \''. ADMIDIO_URL. '/adm_program/system/logout.php\';
+        parent.'. $plg_link_target. '.location.href = \'' . ADMIDIO_URL . FOLDER_SYSTEM . '/logout.php\';
         self.location.reload();';
     }
 
@@ -153,7 +153,7 @@ if($gValidLogin)
     {
         // show link for logout
         echo '<div class="btn-group-vertical" role="group">
-            <a id="adm_logout_link" class="btn admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/system/logout.php"><i class="fas fa-sign-out-alt"></i>'.$gL10n->get('SYS_LOGOUT').'</a>
+            <a id="adm_logout_link" class="btn admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_SYSTEM.'/logout.php"><i class="fas fa-sign-out-alt"></i>'.$gL10n->get('SYS_LOGOUT').'</a>
         </div>';
     }
 }
@@ -220,11 +220,11 @@ else
 
         $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 
-        // Link bei Loginproblemen
+        // show link if user has login problems
         if($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('enable_system_mails'))
         {
-            // neues Passwort zusenden
-            $linkUrl  = ADMIDIO_URL.'/adm_program/system/lost_password.php';
+            // request to reset the password
+            $linkUrl  = ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php';
             $linkText = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
         }
         elseif($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3)

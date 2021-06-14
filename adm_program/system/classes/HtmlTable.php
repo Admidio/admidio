@@ -47,10 +47,6 @@ class HtmlTable extends HtmlTableBasic
      */
     protected $rowsPerPage = 25;
     /**
-     * @var array<int,string> Array with entry for each column with the align of that column. Values are **right**, **left** or **center**.
-     */
-    protected $columnsAlign = array();
-    /**
      * @var array<int,string> Array with the column number as key and the 'asc' or 'desc' as value.
      */
     protected $columnsOrder = array();
@@ -368,11 +364,6 @@ class HtmlTable extends HtmlTableBasic
             $columnAttributes['colspan'] = $colspan;
         }
 
-        if (array_key_exists($key, $this->columnsAlign))
-        {
-            $columnAttributes['style'] = 'text-align: ' . $this->columnsAlign[$key] . ';';
-        }
-
         // if is array than check for sort or search values
         if (is_array($value))
         {
@@ -404,7 +395,10 @@ class HtmlTable extends HtmlTableBasic
      */
     public function setColumnAlignByArray(array $columnsAlign)
     {
-        $this->columnsAlign = $columnsAlign;
+        foreach ($columnsAlign as $columnNumber => $align)
+        {
+            $this->datatablesColumnDefs[] = '{ targets: ' . $columnNumber . ', className: \'text-'.$align.'\' }';
+        }
     }
 
     /**

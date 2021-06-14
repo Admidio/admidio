@@ -37,7 +37,6 @@
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Created at: #VAR1#</string>
   <string name="DAT_ENABLE_ICAL">Enable iCal function</string>
   <string name="DAT_ENABLE_ICAL_DESC">If iCal is enabled, individual events or all events within a given time period can be downloaded. Also, users will be able to subscribe to events by using their own calendar client software . (default: yes)</string>
-  <string name="DAT_ERROR_DELETE_DEFAULT_LIST">The list #VAR1_BOLD# is the default configuration for participants lists in this organization and can not be deleted. In the module settings, select a different configuration for the default configuration and then try to delete this configuration.</string>
   <string name="DAT_EXPORT_ICAL">Export (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Highlight date</string>
   <string name="DAT_ICAL_DAYS_FUTURE">Number of iCal days in the future</string>
@@ -418,7 +417,6 @@
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Users are able to define at login if login information and session should be saved on their computers. This way, they will be logged in at their visit automatically. However this can lead to unwanted access and misuse of unauthorized persons. (default: yes)</string>
   <string name="ORG_NEW_ORGANIZATION">New organization</string>
   <string name="ORG_NEW_ORGANIZATION_DESC">Enter the abbreviation, the official name and the email address for the organization you want to add. The email address should be a general one. It will be used as sender address when sending automatic system notifications.</string>
-  <string name="ORG_NEW_PASSWORD_ACTIVATION_LINK">New password and activation link.</string>
   <string name="ORG_NO_FIELD_CREATED">No organization specific field has been created yet!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">When changing the view all unsaved changes will be lost.</string>
   <string name="ORG_NOTIFY_ADMINISTRATOR">Notification for the administrator about new registrations</string>
@@ -444,8 +442,6 @@
   <string name="ORG_SEARCH_SIMILAR_NAMES">Search for similar names</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">At registration and assigning registrations Admidio is searching for similar surnames and first names in order to avoid double entries. Deactivation results search for identical names only. (default: yes)</string>
   <string name="ORG_SECONDS">seconds</string>
-  <string name="ORG_SEND_PASSWORD">Send password</string>
-  <string name="ORG_SEND_PASSWORD_DESC">If the user has forgotten his/her password, he/she can automatically send a newly generated password. If this option is disabled, the user can only send a request to the administrator by e-mail, so that he can create a new password. For the password to be sent, the setting #VAR1_BOLD# must also be set. (Default: yes)</string>
   <string name="ORG_SEND_NEW_PASSWORD">Send new password</string>
   <string name="ORG_SHOW_CREATE_EDIT">Show creator and timestamp of creation</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">In some places the creator and the user with the last change to a record is displayed together with a timestamp. This setting can be used to determine whether this information is displayed at all and whether the user should be displayed with the user name or with their first and last name.</string>
@@ -875,13 +871,15 @@
   <string name="SYS_END" description="End of a date">End</string>
   <string name="SYS_ERROR">Error</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Error occurred during database access:\n\n#VAR1#</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">The list configuration #VAR1_BOLD# is the default configuration for lists in this organization and can not be deleted. Choose a different configuration to the standard configuration in the module settings and try to delete this configuration afterwards.</string>
+  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">The list #VAR1_BOLD# is stored as default configuration for the module #VAR1# in this organization and cannot be deleted. Set another configuration to the default configuration in the module settings and try to delete this configuration afterwards.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - PAGE NOT FOUND!</string>
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Events - Confirmation of attendance</string>
   <string name="SYS_EXAMPLE">Example</string>
   <string name="SYS_EXAMPLES">Examples</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
+  <string name="SYS_EXPORT_LISTS">Export lists</string>
+  <string name="SYS_EXPORT_LISTS_DESC">Lists of groups and roles can be exported by users, provided that you have the right to view these lists. This setting can be used to restrict the export function. (Default: All)</string>
   <string name="SYS_EXPORT_TO">Export to</string>
   <string name="SYS_FADE_IN">Fade in</string>
   <string name="SYS_FAX">Fax</string>
@@ -1060,6 +1058,7 @@
   <string name="SYS_MORE">More</string>
   <string name="SYS_MOVE_DOWN">Move down #VAR1#</string>
   <string name="SYS_MOVE_UP">Move up #VAR1#</string>
+  <string name="SYS_MOVE_VAR">Move #VAR1#</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Multiple recipients</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-mails to multiple recipients contain all recipients in the BCC field. This ensures that nobody sees the e-mail addresses of the other recipients. However, the TO field must also be filled. This setting can be used to define what is entered in the recipient (TO) field. This could be a hidden value "Undisclosed Recipients", but this causes problems with some providers. Alternatively the recipient field (TO) can be filled with the sender address or the administrator address from the system notifications. Note: All emails to multiple recipients will then also be sent to the email address in the recipient field (TO). (Default: Sender)</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">The role \'administrator\' must have at least one member assigned!</string>
@@ -1124,8 +1123,11 @@
   <string name="SYS_PARTICIPATION_INFORMATION">Participant information</string>
   <string name="SYS_PARTICIPATION_STATUS">Participant Status</string>
   <string name="SYS_PASSWORD">Password</string>
-  <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">If you have forgotten your password, the system can create a new password and send it to your email address. Please type in, your user name or e-mail address used for registration in the system. The new password will be sent immediately to the registred e-mail address.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten?</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Please enter the email address you registered with. We will then send you a link where you can reset your password and then set a new one.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">If the user has forgotten his password, he can request a link to be sent to him, through which he can set a new password for his account on this website. If this option is deactivated, the user can only send a request by e-mail to the administrator to deposit a new password. In order for the password to be sent, the #VAR1_BOLD# setting must also be set. (Default: yes)</string>
+  <string name="SYS_PASSWORD_RESET_INVALID">You have requested an invalid password reset link. If you haven't reset your password yet, please request a new link using the #VAR1# function.</string>
+  <string name="SYS_PASSWORD_RESET_SAVED">The new password has now been applied!</string>
   <string name="SYS_PASSWORD_UNKNOWN">Login failed due to incorrect password.\n\nPlease check your password and try again.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">The password entered does not match the repeat.</string>
   <string name="SYS_PATH_SEPARATOR">Path separator</string>
@@ -1168,8 +1170,6 @@
   <string name="SYS_PROCESS_CANCELED">Process canceled.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing the data.</string>
   <string name="SYS_PROPERTIES">Properties</string>
-  <string name="SYS_PWACT_PW_SAVED">New password saved!</string>
-  <string name="SYS_PWACT_CODE_INVALID">The new password has already been activated or the activation code is incorrect!</string>
   <string name="SYS_QUANTITY">Amount</string>
   <string name="SYS_QUARTERLY">Quarterly</string>
   <string name="SYS_QUOTE">Single quote (')</string>
@@ -1193,6 +1193,7 @@
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REQUIRED_FIELDS">Required fields</string>
+  <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESTRICTIONS">Restrictions</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">View membership lists of all roles</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Manage announcements</string>
@@ -1347,8 +1348,8 @@
   <string name="SYS_SUPPORT_ADMIDIO">Support Admidio</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
   <string name="SYS_SYMMETRICAL">Symmetrical</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Your requested password for #organization_long_name# website\n#content# Hello #user_first_name#,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: #user_login_name#\nPassword: #variable1#\n\nTo activate your password, please follow this link:\n\n#variable2#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nGreetings,\nThe administrators</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Credentials for #organization_long_name#\n#content# Hello #user_first_name#,\n\nYou receive your credentials for the website #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nCheers,\nThe administrators</string>
+  <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Reset password for #organization_long_name#\n#content# Hello #user_first_name#,\n\nWe have received a request to reset your password on #organization_homepage#.\n\nIf the request came from you, you can use the following link to reset your password and set a new one: \n#variable1#\n\nBest regards\nThe administrators</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in registration at #organization_long_name# rejected.\n#content#Hello #user_first_name#,\n\nyour registration at #organization_homepage# was rejected.\n\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\nTo clarify the reasons for the rejection please contact the administrator #administrator_email# from #organization_homepage#.\n\nRegards,\nThe administrators</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration at #organization_long_name# confirmed\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# has been confirmed.\n\nYou can now log in to the homepage with your username #user_login_name# and your password.\n\nIf you have any questions, write an email to #administrator_email#.\n\nCheers,\nThe administrators</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# New registration at #organization_long_name# website\n#content# A new user has registered on #organization_homepage#.\n\nSurname: #user_last_name#\nFirst Name: #user_first_name#\nE-Mail: #user_email#\n\n\nThis message was generated automatically.</string>
@@ -1383,6 +1384,7 @@
   <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
   <string name="SYS_USER">User</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
+  <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">One of the configurations specified here can be used to display the user administration. The columns of the selected list configuration are then displayed in the user administration.</string>
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>
   <string name="SYS_USER_PHOTO">User picture</string>
   <string name="SYS_USER_RELATION">Relationship</string>

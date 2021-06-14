@@ -938,6 +938,8 @@
   <string name="SYS_EXAMPLES">Beispiele</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls)</string>
+  <string name="SYS_EXPORT_LISTS">Listen exportieren</string>
+  <string name="SYS_EXPORT_LISTS_DESC">Listen von Gruppen und Rollen können von Benutzern exportiert werden, sofern Sie das Recht haben diese Listen zu sehen. Mit dieser Einstellung kann die Exportfunktion eingeschränkt werden. (Voreinstellung: Alle)</string>
   <string name="SYS_EXPORT_TO">Exportieren nach</string>
   <string name="SYS_FADE_IN">Einblenden</string>
   <string name="SYS_FAX">Fax</string>
@@ -1168,8 +1170,8 @@
   <string name="SYS_PARTICIPATION_INFORMATION">Teilnehmerinformationen</string>
   <string name="SYS_PARTICIPATION_STATUS">Teilnehmerstatus</string>
   <string name="SYS_PASSWORD">Passwort</string>
-  <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Solltest du dein Passwort vergessen haben, kann das System ein neues Passwort erstellen und an deine E-Mail-Adresse senden. Gib dazu bitte deinen Benutzernamen oder die E-Mail-Adresse an, unter der du dich in diesem System registriert hast. Das neue Passwort wird dann unverzüglich an diese E-Mail-Adresse gesendet.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen?</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Bitte gib deine E-Mail-Adresse ein, mit der du dich angemeldet hast. Wir werden dir dann einen Link schicken, mit dem du dein Passwort zurücksetzen und anschließend ein neues Passwort vergeben kannst.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Sie haben ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfen Sie bitte Ihr Passwort und geben Sie dieses dann erneut ein.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">Das eingegebene Passwort stimmt nicht mit der Wiederholung überein.</string>
   <string name="SYS_PATH_SEPARATOR">Pfad Trenner</string>
@@ -1231,6 +1233,7 @@
   <string name="SYS_RELOAD">Neuladen</string>
   <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
   <string name="SYS_REMOVE">Entfernen</string>
+  <string name="SYS_REORDER">#VAR1# verschieben</string>
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REQUIRED_FIELDS">Pflichtfelder</string>
   <string name="SYS_RESTRICTIONS">Einschränkungen</string>

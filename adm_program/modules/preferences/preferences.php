@@ -277,8 +277,8 @@ $formSecurity->addCheckbox(
     array('helpTextIdInline' => 'ORG_LOGIN_AUTOMATICALLY_DESC')
 );
 $formSecurity->addCheckbox(
-    'enable_password_recovery', $gL10n->get('ORG_SEND_PASSWORD'), (bool) $formValues['enable_password_recovery'],
-    array('helpTextIdInline' => array('ORG_SEND_PASSWORD_DESC', array('ORG_ACTIVATE_SYSTEM_MAILS')))
+    'enable_password_recovery', $gL10n->get('SYS_PASSWORD_FORGOTTEN'), (bool) $formValues['enable_password_recovery'],
+    array('helpTextIdInline' => array('SYS_PASSWORD_FORGOTTEN_PREF_DESC', array('ORG_ACTIVATE_SYSTEM_MAILS')))
 );
 
 
@@ -536,10 +536,10 @@ $formSystemNotification->addMultilineTextInput(
     'SYSMAIL_NEW_PASSWORD', $gL10n->get('ORG_SEND_NEW_PASSWORD'), $text->getValue('txt_text'), 7,
     array('helpTextIdInline' => $htmlDesc)
 );
-$text->readDataByColumns(array('txt_name' => 'SYSMAIL_ACTIVATION_LINK', 'txt_org_id' => $orgId));
-$htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br /><strong>#variable2#</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK');
+$text->readDataByColumns(array('txt_name' => 'SYSMAIL_PASSWORD_RESET', 'txt_org_id' => $orgId));
+$htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK');
 $formSystemNotification->addMultilineTextInput(
-    'SYSMAIL_ACTIVATION_LINK', $gL10n->get('ORG_NEW_PASSWORD_ACTIVATION_LINK'), $text->getValue('txt_text'), 7,
+    'SYSMAIL_PASSWORD_RESET', $gL10n->get('SYS_PASSWORD_FORGOTTEN'), $text->getValue('txt_text'), 7,
     array('helpTextIdInline' => $htmlDesc)
 );
 
@@ -906,6 +906,18 @@ $formUserManagement = new HtmlForm(
     $page, array('class' => 'form-preferences')
 );
 
+// read all global lists
+$sqlData = array();
+$sqlData['query'] = 'SELECT lst_id, lst_name
+                       FROM '.TBL_LISTS.'
+                      WHERE lst_org_id = ? -- $orgId
+                        AND lst_global = 1
+                   ORDER BY lst_name ASC, lst_timestamp DESC';
+$sqlData['params'] = array($orgId);
+$formUserManagement->addSelectBoxFromSql(
+    'members_list_configuration', $gL10n->get('SYS_CONFIGURATION_LIST'), $gDb, $sqlData,
+    array('defaultValue' => $formValues['members_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_USER_MANAGEMENT_CONFIGURATION_DESC')
+);
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formUserManagement->addSelectBox(
     'members_users_per_page', $gL10n->get('MEM_USERS_PER_PAGE'), $selectBoxEntries,
@@ -1172,6 +1184,15 @@ $selectBoxEntries = array(
 $formGroupsRoles->addSelectBox(
     'groups_roles_show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
     array('defaultValue' => $formValues['groups_roles_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
+);
+$selectBoxEntries = array(
+    '0' => $gL10n->get('SYS_NOBODY'),
+    '1' => $gL10n->get('SYS_ALL'),
+    '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
+);
+$formGroupsRoles->addSelectBox(
+    'groups_roles_export', $gL10n->get('SYS_EXPORT_LISTS'), $selectBoxEntries,
+    array('defaultValue' => $formValues['groups_roles_export'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_EXPORT_LISTS_DESC', array($gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
 );
 $html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
