@@ -424,6 +424,36 @@ class ListConfiguration extends TableLists
     }
 
     /**
+     * Returns an array with all column names of the sql statement that belong to the select clause.
+     * This will be the internal profile field name e.g. **LAST_NAME** or the db column name
+     * of the special field e.g. **mem_begin**
+     * @return array Array with all column names of this sql select clause.
+     */
+    public function getColumnNamesSql()
+    {
+        global $gProfileFields;
+
+        if (count($this->columnsSqlNames) === 0)
+        {
+            foreach($this->columns as $listColumn)
+            {
+                if((int) $listColumn->getValue('lsc_usf_id') > 0)
+                {
+                    // get internal profile field name
+                    $this->columnsSqlNames[] = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name_intern');
+                }
+                else
+                {
+                    // Special fields like usr_photo, mem_begin ...
+                    $this->columnsSqlNames[] = $listColumn->getValue('lsc_special_field');
+                }
+            }
+        }
+
+        return $this->columnsSqlNames;
+    }
+
+    /**
      * Returns the column object with the corresponding number.
      * The numbers will start with 1 and end with the count of all columns.
      * If that column doesn't exists the method try to repair the
@@ -447,6 +477,73 @@ class ListConfiguration extends TableLists
         }
 
         return null;
+    }
+
+    /**
+     * Returns an array with all list columns and a search condition for each column. Especially the null value
+     * will be replaced with a default value. This array can than be used to add it to the main sql statement.
+     * @return array<int,string> Returns an array with all list columns and a search condition for each column.
+     */
+    public function getSearchConditions()
+    {
+        global $gProfileFields;
+
+        $arrSearchConditions = array();
+
+        foreach($this->columns as $listColumn)
+        {
+            $lscUsfId = (int) $listColumn->getValue('lsc_usf_id');
+
+            // custom profile field
+            if($lscUsfId > 0)
+            {
+                switch ($gProfileFields->getPropertyById($lscUsfId, 'usf_type'))
+                {
+                    case 'CHECKBOX':
+                        if($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') === 'GENDER')
+                        {
+                            $arrSearchConditions[] = 'CASE WHEN gender = \'1\' THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = \'2\' THEN \''.$gL10n->get('SYS_FEMALE').'\' ELSE \' \' END ';
+                        }
+                        break;
+
+                    case 'DROPDOWN': // fallthrough
+                    case 'RADIO_BUTTON':
+                        // replace all field values with their internal numbers
+                        //$arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
+                        //$value = array_search(StringUtils::strToLower($value), array_map('StringUtils::strToLower', $arrListValues), true);
+                        break;
+
+                    case 'NUMBER': // fallthrough
+                    case 'DECIMAL':
+                        $arrSearchConditions[] = 'COALESCE(' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ', 0)';
+                        break;
+
+                    case 'DATE':
+                        $arrSearchConditions[] = 'COALESCE(' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ', \'1900-02-01\')';
+                        break;
+
+                    default:
+                        $arrSearchConditions[] = 'COALESCE(' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ', \'\')';
+                }
+            }
+            else
+            {
+                switch ($listColumn->getValue('lsc_special_field'))
+                {
+                    case 'mem_begin': // fallthrough
+                    case 'mem_end':
+                        $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'1900-02-01\')';
+                        break;
+
+                    case 'usr_login_name':
+                    case 'usr_photo':
+                        $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'\')';
+                        break;
+                }
+            }
+        }
+
+        return $arrSearchConditions;
     }
 
     /**
@@ -750,36 +847,6 @@ class ListConfiguration extends TableLists
         }
 
         return $sql;
-    }
-
-    /**
-     * Returns an array with all column names of the sql statement that belong to the select clause.
-     * This will be the internal profile field name e.g. **LAST_NAME** or the db column name
-     * of the special field e.g. **mem_begin**
-     * @return array Array with all column names of this sql select clause.
-     */
-    public function getSqlColumnNames()
-    {
-        global $gProfileFields;
-
-        if (count($this->columnsSqlNames) === 0)
-        {
-            foreach($this->columns as $listColumn)
-            {
-                if((int) $listColumn->getValue('lsc_usf_id') > 0)
-                {
-                    // get internal profile field name
-                    $this->columnsSqlNames[] = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name_intern');
-                }
-                else
-                {
-                    // Special fields like usr_photo, mem_begin ...
-                    $this->columnsSqlNames[] = $listColumn->getValue('lsc_special_field');
-                }
-            }
-        }
-
-        return $this->columnsSqlNames;
     }
 
     /**

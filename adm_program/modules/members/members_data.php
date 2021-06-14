@@ -77,7 +77,7 @@ if(isset($_SESSION['members_list_config']))
 
 // create order statement
 $orderCondition = '';
-$orderColumns = array_merge(array('no', 'member_this_orga'), $membersListConfig->getSqlColumnNames());
+$orderColumns = array_merge(array('no', 'member_this_orga'), $membersListConfig->getColumnNamesSql());
 
 if(array_key_exists('order', $_GET))
 {
@@ -112,14 +112,7 @@ else
 
 // create search conditions
 $searchCondition = '';
-$queryParamsSearch = array();
-$searchColumns = array(
-    'COALESCE(name, \' \')',
-    'COALESCE(usr_login_name, \' \')',
-    'CASE WHEN gender = \'1\' THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = \'2\' THEN \''.$gL10n->get('SYS_FEMALE').'\' ELSE \' \' END ',
-    'COALESCE(birthday, \'1900-02-01\')',
-    'COALESCE(timestamp, \'1900-02-01\')'
-);
+$searchColumns = $membersListConfig->getSearchConditions();
 
 if($getSearch !== '' && count($searchColumns) > 0)
 {
@@ -224,17 +217,17 @@ if($getLength > 0)
 if($getSearch === '')
 {
     // no search condition entered then return all records in dependence of order, limit and offset
-    $sql = $mainSql . $orderCondition . $limitCondition;
+    $sql = $mainSql . $searchCondition . $orderCondition . $limitCondition;
 }
 else
 {
-    $sql = 'SELECT usr_id, name, email, gender, birthday, usr_login_name, timestamp, member_this_orga, member_other_orga
+    $sql = 'SELECT *
               FROM ('.$mainSql.') AS members
                '.$searchCondition
                 .$orderCondition
                 .$limitCondition;
 }
-$mglStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $queryParamsSearch)); // TODO add more params
+$mglStatement = $gDb->queryPrepared($sql, $queryParamsMain); // TODO add more params
 
 $orgName   = $gCurrentOrganization->getValue('org_longname');
 $rowNumber = $getStart; // count for every row
@@ -362,7 +355,7 @@ if($getSearch !== '')
         $sql = 'SELECT COUNT(*) AS count
                   FROM ('.$mainSql.') AS members
                        '.$searchCondition;
-        $countFilteredStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $queryParamsSearch));
+        $countFilteredStatement = $gDb->queryPrepared($sql, $queryParamsMain);
 
         $jsonArray['recordsFiltered'] = (int) $countFilteredStatement->fetchColumn();
     }
