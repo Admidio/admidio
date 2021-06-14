@@ -207,7 +207,7 @@ while($row = $statement->fetch())
             \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4, 'usf_id' => $usfId, 'sequence' => TableUserField::MOVE_DOWN)) . '\')">'.
             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('MEM_PROFILE_FIELD')) . '"></i></a>
         <a class="admidio-icon-link">'.
-            '<i class="fas fa-arrows-alt handle" title="' . $gL10n->get('SYS_REORDER', array('MEM_PROFILE_FIELD')) . '"></i></a>
+            '<i class="fas fa-arrows-alt handle" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_VAR', array('MEM_PROFILE_FIELD')) . '"></i></a>
             ',
         $fieldDescription,
         $hidden,
