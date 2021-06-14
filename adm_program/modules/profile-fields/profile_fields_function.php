@@ -27,6 +27,8 @@ require(__DIR__ . '/../../system/login_valid.php');
 $getUsfId    = admFuncVariableIsValid($_GET, 'usf_id',   'int');
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
+$getOrder    = admFuncVariableIsValid($_GET, 'order',    'array');
+
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isAdministrator())
@@ -219,6 +221,12 @@ elseif($getMode === 2)
 elseif($getMode === 4)
 {
     // Feldreihenfolge aktualisieren
-    $userField->moveSequence($getSequence);
+    if (!empty($getOrder)) {
+        // set new order (drag'n'drop)
+        $userField->setSequence($getOrder);
+    } else {
+        // move field up/down by one
+        $userField->moveSequence($getSequence);
+    }
     exit();
 }

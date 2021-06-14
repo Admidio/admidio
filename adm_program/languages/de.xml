@@ -1224,6 +1224,7 @@
   <string name="SYS_RELOAD">Neuladen</string>
   <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
   <string name="SYS_REMOVE">Entfernen</string>
+  <string name="SYS_REORDER">#VAR1# verschieben</string>
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REQUIRED_FIELDS">Pflichtfelder</string>
   <string name="SYS_RESTRICTIONS">Einschränkungen</string>

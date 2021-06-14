@@ -1046,6 +1046,7 @@
   <string name="SYS_MORE">More</string>
   <string name="SYS_MOVE_DOWN">Move down #VAR1#</string>
   <string name="SYS_MOVE_UP">Move up #VAR1#</string>
+  <string name="SYS_MOVE_VAR">Move #VAR1#</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Multiple recipients</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-mails to multiple recipients contain all recipients in the BCC field. This ensures that nobody sees the e-mail addresses of the other recipients. However, the TO field must also be filled. This setting can be used to define what is entered in the recipient (TO) field. This could be a hidden value "Undisclosed Recipients", but this causes problems with some providers. Alternatively the recipient field (TO) can be filled with the sender address or the administrator address from the system notifications. Note: All emails to multiple recipients will then also be sent to the email address in the recipient field (TO). (Default: Sender)</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">The role \'administrator\' must have at least one member assigned!</string>
