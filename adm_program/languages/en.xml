@@ -293,6 +293,7 @@
   <string name="MEM_IMPORT_SUCCESSFUL">Import was successful..\n\n#VAR1# new users have been created.\n#VAR2# users have been edited.\n#VAR3# role memberships have been assigned.</string>
   <string name="MEM_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned any profile fields:</string>
   <string name="MEM_IMPORT_USERS">Import user(s)</string>
+  <string name="MEM_IMPORT_SHEET_NOT_EXISTS">The worksheet #VAR1# does not exist in the imported file!</string>
   <string name="MEM_INPUT_FIRSTNAME_LASTNAME">Please provide first name and surname of the new user. A database check will be performed if same user with same or similar name already exists.</string>
   <string name="MEM_MAKE_FORMER">A user can be changed to status former member. This will preserve all user information including role memberships for later use.</string>
   <string name="MEM_NO_CHANGES">There are no changes logged.</string>
@@ -657,6 +658,7 @@
   <string name="SYS_ATTACHMENT_SIZE_DESC">Users can only attach files where the file size is less than the value specified here. If there is 0 here, no attachments are possible in the e-mail module. (Default: 1MB)</string>
   <string name="SYS_ATTACHMENT_TO_LARGE">E-mail attachment upload error.\nFile size is most likely to large!</string>
   <string name="SYS_ATTACHMENTS_VAR">#VAR1# attachments</string>
+  <string name="SYS_AUTO_DETECT">Auto-detect</string>
   <string name="SYS_AUTOMATICALLY">Automatically</string>
   <string name="SYS_AVAILABLE">Available</string>
   <string name="SYS_AVAILABLE_BETA">Available Beta</string>
@@ -703,6 +705,8 @@
   <string name="SYS_CLOCK">o\'clock</string>
   <string name="SYS_CLOSE">Close</string>
   <string name="SYS_COLUMN">Column</string>
+  <string name="SYS_COMMA">Comma (,)</string>
+  <string name="SYS_COMMA_SEPARATED_FILE">Comma-/tab-separated file (*.csv)</string>
   <string name="SYS_COMMENT">Comment</string>
   <string name="SYS_COMMON">General</string>
   <string name="SYS_CONDITION">Requirement</string>
@@ -734,6 +738,7 @@
   <string name="SYS_COUNTRY">Country</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
   <string name="SYS_COUNTRY_ISO">The country needs to be specified as Code ISO 3166 ALPHA-3 (3 characters)</string>
+  <string name="SYS_CP1252">CP1252</string>
   <string name="SYS_CREATE">Create</string>
   <string name="SYS_CREATE_CALENDAR">Create calendar</string>
   <string name="SYS_CREATE_CATEGORY">Create category</string>
@@ -818,6 +823,7 @@
   <string name="SYS_DONATE">Donate</string>
   <string name="SYS_DONT_DELETE_CATEGORY">Could not delete category #VAR1_BOLD# because of #VAR2# depending entries.</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
+  <string name="SYS_DQUOTE">Double quote (")</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
   <string name="SYS_DOWNLOAD_FILE">Download file</string>
@@ -860,6 +866,8 @@
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">The documents &amp; files module can be activated or deactivated via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Enable groups &amp; roles module</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE_DESC">Displays the groups and roles of the organization and allows free configuration of groups and roles. Own list can be configured and applied. This module is generally only available for logged in users. (Default: yes)</string>
+  <string name="SYS_DEFAULT_ENCODING_UTF8">Default encoding (UTF-8)</string>
+  <string name="SYS_ENCODING_GUESS">Try to detect the encoding</string>
   <string name="SYS_END" description="End of a date">End</string>
   <string name="SYS_ERROR">Error</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Error occurred during database access:\n\n#VAR1#</string>
@@ -868,6 +876,8 @@
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Events - Confirmation of attendance</string>
   <string name="SYS_EXAMPLE">Example</string>
   <string name="SYS_EXAMPLES">Examples</string>
+  <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
+  <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXPORT_LISTS">Export lists</string>
   <string name="SYS_EXPORT_LISTS_DESC">Lists of groups and roles can be exported by users, provided that you have the right to view these lists. This setting can be used to restrict the export function. (Default: All)</string>
   <string name="SYS_EXPORT_TO">Export to</string>
@@ -876,6 +886,7 @@
   <string name="SYS_FEMALE">Female</string>
   <string name="SYS_FIELD">Field</string>
   <string name="SYS_FIELD_EMPTY">Field #VAR1_BOLD# is empty.</string>
+  <string name="SYS_FIELD_ENCLOSURE">Quotation character for the fields</string>
   <string name="SYS_FIELD_INVALID_CHAR">Field #VAR1_BOLD# contains illegal characters.\n\nAllowed characters are letters from \'a\' to \'z\' and \'A\' to \'Z\', numbers from 0 to 9 and special characters like .-_+@ .</string>
   <string name="SYS_FIELDS_EMPTY">Some fields are empty.</string>
   <string name="SYS_FILE">File</string>
@@ -940,6 +951,7 @@
   <string name="SYS_HOURS_VAR">#VAR1# hours</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Creating and sending HTML based e-mails can be enabled for registered users. A JavaScript editor will be displayed for comfortable editing, instead of the standard text field. The current option is for guests due security reasons unavailable.</string>
+  <string name="SYS_HTML_TABLE">HTML table</string>
   <string name="SYS_ICAL_DISABLED">iCal has been disabled by the system administrator.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IMPORTANT">Important</string>
@@ -1070,6 +1082,7 @@
   <string name="SYS_NO_ENTRIES">No entries available.</string>
   <string name="SYS_NO_LEADER">No leader</string>
   <string name="SYS_NO_MORE_COLUMN">For technical reasons, no more column can be added.</string>
+  <string name="SYS_NO_QUOTATION">No quotation</string>
   <string name="SYS_NO_RIGHTS">You do not have the required permission to perform this action.</string>
   <string name="SYS_NO_RIGHTS_VIEW_LIST">You do not have the right to view the list of the selected roles.</string>
   <string name="SYS_NO_ROLE_GIVEN">No role has been specified.</string>
@@ -1088,6 +1101,7 @@
   <string name="SYS_NOTE">Note</string>
   <string name="SYS_NUMBER">Number</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Number of roles per page</string>
+  <string name="SYS_ODF_SPREADSHEET">ODF Spreadsheet (*.ods)</string>
   <string name="SYS_OFF">Off</string>
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">On</string>
@@ -1132,6 +1146,7 @@
   <string name="SYS_PHP_VERSION">PHP version</string>
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio requires #VAR1# or higher</string>
   <string name="SYS_PHP_VERSION_EOL">PHP version is no longer officially supported by PHP (End of Life). (#VAR1#)</string>
+  <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
   <string name="SYS_PLEASE_WAIT">Please wait</string>
   <string name="SYS_PLUGINS">Plugins</string>
@@ -1157,6 +1172,7 @@
   <string name="SYS_PROPERTIES">Properties</string>
   <string name="SYS_QUANTITY">Amount</string>
   <string name="SYS_QUARTERLY">Quarterly</string>
+  <string name="SYS_QUOTE">Single quote (')</string>
   <string name="SYS_RADIO_BUTTON">Radio button</string>
   <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Latest announcements from organization #VAR1#</string>
   <string name="SYS_RECIPIENT">Recipient</string>
@@ -1256,6 +1272,7 @@
   <string name="SYS_SELECT_FILES">Select files</string>
   <string name="SYS_SELECT_FROM_LIST">Select from list</string>
   <string name="SYS_SELECT_MEMBERS">Select members</string>
+  <string name="SYS_SEMICOLON">Semicolon (;)</string>
   <string name="SYS_SEND">Send</string>
   <string name="SYS_SEND_COPY">Send copy of e-mail to my address</string>
   <string name="SYS_SEND_EMAIL">Send e-mail</string>
@@ -1278,6 +1295,7 @@
   <string name="SYS_SENDER_NAME">Name of sender</string>
   <string name="SYS_SENDER_NAME_DESC">Name of the sender\'s mail address. This field has to be maintained if the field for sender\'s mail address is not empty (default: empty).</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">(Sender was logged out. Due to that sender\'s information might be incorrect.)</string>
+  <string name="SYS_SEPARATOR_FOR_CSV_FILE">Separator for CSV-file</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server settings do not allow files uploads.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
@@ -1338,6 +1356,7 @@
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">System-wide default list</string>
   <string name="SYS_SYSTEM_MAILS">System notifications</string>
+  <string name="SYS_TAB">Tab</string>
   <string name="SYS_TEST_MAIL">Test mail</string>
   <string name="SYS_TEST_MAIL_DESC">Before you call this function, all settings for email sending must be saved!\nA simple email with the subject #VAR1_BOLD# will be sent to the email address of the logged in user based on the saved email settings. In the process, a dispatch log is output during SMTP dispatch, which can help in case of problems.</string>
   <string name="SYS_TEXT">Text</string>
@@ -1377,6 +1396,10 @@
   <string name="SYS_USERS_FOUND">User found</string>
   <string name="SYS_USING_CURRENT_VERSION">You are using a current #VAR1#version of Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
+  <string name="SYS_UTF16BE">UTF-16BE</string>
+  <string name="SYS_UTF16LE">UTF-16LE</string>
+  <string name="SYS_UTF32BE">UTF-32BE</string>
+  <string name="SYS_UTF32LE">UTF-32LE</string>
   <string name="SYS_VALID_FROM" description="Date valid from">Valid starting from</string>
   <string name="SYS_VALID_TO" description="Date valid to">Valid until</string>
   <string name="SYS_VARIOUS_ROLES">Various roles</string>
@@ -1397,6 +1420,7 @@
   <string name="SYS_WEEKDAY">Weekday</string>
   <string name="SYS_WHAT_TO_DO">What to do?</string>
   <string name="SYS_WIDTH">Width</string>
+  <string name="SYS_WORKSHEET_NAMEINDEX">Worksheet (index or name)</string>
   <string name="SYS_WRITE_EMAIL">Write e-mail</string>
   <string name="SYS_WRITE_ENTRY">Write entry</string>
   <string name="SYS_WRITE_PM">Write private message</string>
@@ -1408,3 +1432,4 @@
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
 </resources>
+

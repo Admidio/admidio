@@ -36,12 +36,28 @@ if(isset($_SESSION['import_request']))
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
     $formValues = $_SESSION['import_request'];
     unset($_SESSION['import_request']);
+};
+# Make sure all potential form values have either a value from the previous request or the default
+if (!isset($formValues['format'])) {
+    $formValues['format'] = '';
 }
-else
-{
+if (!isset($formValues['import_sheet'])) {
+    $formValues['import_sheet'] = '';
+}
+if (!isset($formValues['import_coding'])) {
+    $formValues['import_coding'] = '';
+}
+if (!isset($formValues['import_separator'])) {
+    $formValues['import_separator'] = '';
+}
+if (!isset($formValues['import_enclosure'])) {
+    $formValues['import_enclosure'] = 'AUTO';
+}
+if (!isset($formValues['user_import_mode'])) {
     $formValues['user_import_mode'] = 1;
-    $formValues['import_coding']    = 'iso-8859-1';
-    $formValues['import_role_id']   = 0;
+}
+if (!isset($formValues['import_role_id'])) {
+    $formValues['import_role_id'] = 0;
 }
 
 // create html page object
@@ -49,16 +65,78 @@ $page = new HtmlPage('admidio-members-import', $headline);
 
 // show form
 $form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_function.php', $page, array('enableFileUpload' => true));
-$form->addStaticControl('format', $gL10n->get('MEM_FORMAT'), 'CSV');
+$formats = array(
+    '' => $gL10n->get('SYS_AUTO_DETECT'),
+    'XLSX' => $gL10n->get('SYS_EXCEL_2007_365'),
+    'XLS' => $gL10n->get('SYS_EXCEL_97_2003'),
+    'ODS' => $gL10n->get('SYS_ODF_SPREADSHEET'),
+    'CSV' => $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
+    'HTML' => $gL10n->get('SYS_HTML_TABLE')
+);
+$form->addSelectBox(
+    'format',$gL10n->get('MEM_FORMAT'), $formats,
+    array('showContextDependentFirstEntry' => FALSE, 'property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['format'])
+);
+$page->addJavascript('
+    $("#format").change(function() {
+        var format = $(this).children("option:selected").val();
+         $(".import-setting").prop("disabled", true).parents("div.form-group").hide();
+         $(".import-"+format).prop("disabled", false).parents("div.form-group").show("slow");
+    });
+    $("#format").trigger("change");',
+    true
+);
+
 $form->addFileUpload(
     'userfile', $gL10n->get('MEM_CHOOSE_FILE'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values'))
 );
-$selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
+
+# Add format-specific settings (if specific format is selected)
+# o) Worksheet: AUTO, XLSX, XLS, ODS, HTML (not CSV)
+# o) Encoding (Default/Detect/UTF-8/ISO-8859-1/CP1252): CSV, HTML
+# o) Delimiter (Detect/Comma/Tab/Semicolon): CSV
+$form->addInput('import_sheet', $gL10n->get('SYS_WORKSHEET_NAMEINDEX'), '', array('class' => 'import-setting import-XLSX import-XLS import-ODS import-HTML import-AUTO'));
+
+$selectBoxEntries = array(
+    '' => $gL10n->get('SYS_DEFAULT_ENCODING_UTF8'),
+    'GUESS' => $gL10n->get('SYS_ENCODING_GUESS'),
+    'UTF-8' => $gL10n->get('SYS_UTF8'),
+    'UTF-16BE' => $gL10n->get('SYS_UTF16BE'),
+    'UTF-16LE' => $gL10n->get('SYS_UTF16LE'),
+    'UTF-32BE' => $gL10n->get('SYS_UTF32BE'),
+    'UTF-32LE' => $gL10n->get('SYS_UTF32LE'),
+    'CP1252' => $gL10n->get('SYS_CP1252'),
+    'ISO-8859-1' => $gL10n->get('SYS_ISO_8859_1')
+);
 $form->addSelectBox(
     'import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntries,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['import_coding'])
+    array('showContextDependentFirstEntry' => FALSE, 'defaultValue' => $formValues['import_coding'], 'class' => 'import-setting import-CSV import-HTML')
 );
+
+$selectBoxEntries = array(
+    '' => $gL10n->get('SYS_AUTO_DETECT'),
+    ',' => $gL10n->get('SYS_COMMA'),
+    ';' => $gL10n->get('SYS_SEMICOLON'),
+    '\t' => $gL10n->get('SYS_TAB'),
+    '|' => $gL10n->get('SYS_PIPE')
+);
+$form->addSelectBox(
+    'import_separator', $gL10n->get('SYS_SEPARATOR_FOR_CSV_FILE'), $selectBoxEntries,
+    array('showContextDependentFirstEntry' => FALSE, 'defaultValue' => $formValues['import_separator'], 'class' => 'import-setting import-CSV')
+);
+
+$selectBoxEntries = array(
+    'AUTO' => $gL10n->get('SYS_AUTO_DETECT'),
+    '' => $gL10n->get('SYS_NO_QUOTATION'),
+    '"' => $gL10n->get('SYS_DQUOTE'),
+    '\'' => $gL10n->get('SYS_QUOTE')
+);
+$form->addSelectBox(
+    'import_enclosure', $gL10n->get('SYS_FIELD_ENCLOSURE'), $selectBoxEntries,
+    array('showContextDependentFirstEntry' => FALSE, 'defaultValue' => $formValues['import_enclosure'], 'class' => 'import-setting import-CSV')
+);
+
 
 // add a selectbox to the form where the user can choose a role from all roles he could see
 // first read all relevant roles from database and create an array with them

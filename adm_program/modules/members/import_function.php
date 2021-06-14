@@ -12,7 +12,16 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$postImportCoding   = admFuncVariableIsValid($_POST, 'import_coding',    'string', array('requireValue' => true, 'validValues' => array('iso-8859-1', 'utf-8')));
+$postImportFormat   = admFuncVariableIsValid($_POST, 'format',    'string',
+        array('requireValue' => true,
+        'validValues' => array('', 'XLSX', 'XLS', 'ODS', 'CSV', 'HTML')));
+$postImportCoding   = admFuncVariableIsValid($_POST, 'import_coding', 'string',
+        array('validValues' => array('', 'GUESS', 'UTF-8', 'UTF-16BE', 'UTF-16LE', 'UTF-32BE', 'UTF-32LE', 'CP1252', 'ISO-8859-1')));
+$postSeparator      = admFuncVariableIsValid($_POST, 'import_separator', 'string',
+        array('validValues' => array('', ',', ';', '\t', '|')));
+$postEnclosure      = admFuncVariableIsValid($_POST, 'import_enclosure', 'string',
+        array('validValues' => array('', 'AUTO', '"', '\|')));
+$postWorksheet      = admFuncVariableIsValid($_POST, 'import_sheet', 'string');
 $postRoleId         = admFuncVariableIsValid($_POST, 'import_role_id',   'int');
 $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'int', array('requireValue' => true));
 
@@ -26,7 +35,8 @@ if(!$gCurrentUser->editUsers())
     // => EXIT
 }
 
-if(strlen($_FILES['userfile']['tmp_name'][0]) === 0)
+$importfile = $_FILES['userfile']['tmp_name'][0];
+if(strlen($importfile) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_FILE'))));
     // => EXIT
@@ -37,7 +47,7 @@ elseif($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE)
     $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('max_file_upload_size'))));
     // => EXIT
 }
-elseif(!file_exists($_FILES['userfile']['tmp_name'][0]) || !is_uploaded_file($_FILES['userfile']['tmp_name'][0]))
+elseif(!file_exists($importfile) || !is_uploaded_file($importfile))
 {
     // check if a file was really uploaded
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
@@ -60,18 +70,76 @@ if(!$gCurrentUser->hasRightViewRole((int) $role->getValue('rol_id'))
     // => EXIT
 }
 
-// read file in an array; auto-detect the line endings of different os
-ini_set('auto_detect_line_endings', '1');
-$_SESSION['file_lines']       = file($_FILES['userfile']['tmp_name'][0]);
+// read file using the phpSpreadsheet library
 $_SESSION['rol_id']           = (int) $role->getValue('rol_id');
 $_SESSION['user_import_mode'] = $postUserImportMode;
 
-if($postImportCoding === 'iso-8859-1')
-{
-    // Daten der Datei erst einmal in UTF8 konvertieren, damit es damit spaeter keine Probleme gibt
-    $_SESSION['file_lines'] = array_map('utf8_encode', $_SESSION['file_lines']);
+include ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/vendor/autoload.php';
+switch($postImportFormat) {
+    case 'XLSX':
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        break;
+    case 'XLS':
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+        break;
+    case 'ODS':
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Ods();
+        break;
+    case 'CSV':
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+        if ($postImportCoding === 'GUESS') {
+            $postImportCoding = \PhpOffice\PhpSpreadsheet\Reader\Csv::guessEncoding($importfile);
+        }
+        elseif($postImportCoding === '')
+        {
+            $postImportCoding = 'UTF-8';
+        }
+        $reader->setInputEncoding($postImportCoding);
+
+        if ($postSeparator != '') {
+            $reader->setDelimiter($postSeparator);
+        }
+
+        if ($postEnclosure != 'AUTO') {
+            $reader->setEnclosure($postEnclosure );
+        }
+        break;
+    case 'HTML':
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Html();
+        break;
+    case '':
+    default:
+        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($importfile);
+        break;
 }
 
-// CSV-Import (im Moment gibt es nur diesen, spaeter muss hier dann unterschieden werden)
+# TODO: Better error handling if file cannot be loaded (phpSpreadsheet apparently does not always use exceptions)
+if (isset($reader) and !is_null($reader)) {
+    try {
+        $spreadsheet = $reader->load($importfile);
+        # Read specified sheet (passed as argument/param)
+        if (is_numeric($postWorksheet)) {
+            $sheet = $spreadsheet->getSheet($postWorksheet);
+        } else if (!empty($postWorksheet)) {
+            $sheet = $spreadsheet->getSheetByName($postWorksheet);
+        } else {
+            $sheet = $spreadsheet->getActiveSheet();
+        }
+
+        if (empty($sheet)) {
+            $gMessage->show($gL10n->get('MEM_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet)));
+            // => EXIT
+        } else {
+            $_SESSION['import_data']       = $sheet->toArray();
+        }
+    } catch(\PhpOffice\PhpSpreadsheet\Exception | \Exception $e) {
+        $gMessage->show($e->getMessage());
+        // => EXIT
+    } catch (AdmException $e) {
+        $e->showText();
+        // => EXIT
+    }
+}
+
 admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/members/import_csv_config.php');
 // => EXIT
