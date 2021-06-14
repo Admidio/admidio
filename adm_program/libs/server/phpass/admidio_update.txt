@@ -1,6 +1,0 @@
-Short description to update the current lib
-
-1. Go to https://github.com/hautelook/phpass
-2. Download latest release and unzip the file
-3. Copy all files and subfolders of the main folder to the lib folder
-4. Delete the lib folder

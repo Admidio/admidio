@@ -22,8 +22,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'autoload.php')
 function admFuncAutoload($className)
 {
     $libFiles = array(
-        ADMIDIO_PATH . FOLDER_CLASSES . '/' . $className . '.php',
-        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/monolog/src/' . str_replace('\\', '/', $className) . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/autoload.php' // All libraries provided by composer (e.g. phpSpreadsheet)
+        /*ADMIDIO_PATH . FOLDER_CLASSES . '/' . $className . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/monolog/monolog/src/' . str_replace('\\', '/', $className) . '.php'
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/smarty/' . $className . '.class.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/psr/' . str_replace('\\', '/', $className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpmailer/src/' . str_replace('\\', '/', substr($className, strlen('PHPMailer\\PHPMailer'))) . '.php',
@@ -33,7 +34,7 @@ function admFuncAutoload($className)
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/tcpdf/' . strtolower($className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/src/' . $className . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/src/' . str_replace('\\', '/', $className) . '.php', // old phpass password hashing lib for backward compatibility
-        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/vendor/autoload.php' // All libraries provided by composer (e.g. phpSpreadsheet)
+        */
     );
 
     foreach ($libFiles as $libFile)
