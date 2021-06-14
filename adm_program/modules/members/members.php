@@ -112,16 +112,6 @@ array_push($columnHeading, '&nbsp;');
 $columnAlignment = $membersListConfig->getColumnAlignments();
 array_unshift($columnAlignment,'left', 'left');
 array_push($columnAlignment, 'right');
-/*$columnHeading = array(
-    $gL10n->get('SYS_ABR_NO'),
-    '<i class="fas fa-user" data-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>',
-    $gL10n->get('SYS_NAME'),
-    $gL10n->get('SYS_USER'),
-    '<i class="fas fa-fw fa-transgender" data-toggle="tooltip" title="' . $gL10n->get('SYS_GENDER') . '"></i>',
-    $gL10n->get('SYS_BIRTHDAY'),
-    $gL10n->get('MEM_UPDATED_ON'),
-    '&nbsp;'
-);*/
 
 $membersTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_data.php', array('members' => $getMembers)));
 $membersTable->setColumnAlignByArray($columnAlignment);
