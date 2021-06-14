@@ -235,7 +235,7 @@ class ListConfiguration extends TableLists
         // format value for csv export
         if ($format === 'csv')
         {
-            $outputContent = $valueQuotes.$content.$valueQuotes;
+            $outputContent = $content;
         }
         // pdf should show only text and not much html content
         elseif ($format === 'pdf')
