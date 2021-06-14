@@ -38,19 +38,22 @@ class TableLists extends TableAccess
      */
     public function delete()
     {
-        global $gSettingsManager;
+        global $gSettingsManager, $gL10n;
 
         $lstId = (int) $this->getValue('lst_id');
 
-        // if this list is the default configuration than it couldn't be deleted
+        // if this list is the default configuration of a module than it couldn't be deleted
         if ($lstId === $gSettingsManager->getInt('groups_roles_default_configuration'))
         {
-            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name')));
+            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_GROUPS_ROLES')));
         }
-        // if this list is the default configuration for particpation list than it couldn't be deleted
         if ($lstId === $gSettingsManager->getInt('dates_default_list_configuration'))
         {
-            throw new AdmException('DAT_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name')));
+            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('DAT_DATES')));
+        }
+        if ($lstId === $gSettingsManager->getInt('members_list_configuration'))
+        {
+            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('MEM_USER_MANAGEMENT')));
         }
 
         $this->db->startTransaction();

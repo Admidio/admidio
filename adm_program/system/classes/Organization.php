@@ -353,6 +353,18 @@ class Organization extends TableAccess
         $participantList->addColumn(5, 'mem_count_guests');
         $participantList->save();
 
+        $userManagementList = new ListConfiguration($this->db);
+        $userManagementList->setValue('lst_name', $gL10n->get('MEM_USER_MANAGEMENT'));
+        $userManagementList->setValue('lst_org_id', $orgId);
+        $userManagementList->setValue('lst_global', 1);
+        $userManagementList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $userManagementList->addColumn(2, (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+        $userManagementList->addColumn(3, 'usr_login_name');
+        $userManagementList->addColumn(4, (int) $gProfileFields->getProperty('GENDER', 'usf_id'));
+        $userManagementList->addColumn(5, (int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $userManagementList->addColumn(6, (int) $gProfileFields->getProperty('CITY', 'usf_id'));
+        $userManagementList->save();
+
         // set participant list to default configuration in date module settings
         $sql = 'UPDATE '.TBL_PREFERENCES.'
                    SET prf_value = ? -- $participantList->getValue(\'lst_id\')

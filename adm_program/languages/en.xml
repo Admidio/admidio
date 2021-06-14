@@ -37,7 +37,6 @@
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Created at: #VAR1#</string>
   <string name="DAT_ENABLE_ICAL">Enable iCal function</string>
   <string name="DAT_ENABLE_ICAL_DESC">If iCal is enabled, individual events or all events within a given time period can be downloaded. Also, users will be able to subscribe to events by using their own calendar client software . (default: yes)</string>
-  <string name="DAT_ERROR_DELETE_DEFAULT_LIST">The list #VAR1_BOLD# is the default configuration for participants lists in this organization and can not be deleted. In the module settings, select a different configuration for the default configuration and then try to delete this configuration.</string>
   <string name="DAT_EXPORT_ICAL">Export (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Highlight date</string>
   <string name="DAT_ICAL_DAYS_FUTURE">Number of iCal days in the future</string>
@@ -864,7 +863,7 @@
   <string name="SYS_END" description="End of a date">End</string>
   <string name="SYS_ERROR">Error</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Error occurred during database access:\n\n#VAR1#</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">The list configuration #VAR1_BOLD# is the default configuration for lists in this organization and can not be deleted. Choose a different configuration to the standard configuration in the module settings and try to delete this configuration afterwards.</string>
+  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">The list #VAR1_BOLD# is stored as default configuration for the module #VAR1# in this organization and cannot be deleted. Set another configuration to the default configuration in the module settings and try to delete this configuration afterwards.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - PAGE NOT FOUND!</string>
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Events - Confirmation of attendance</string>
   <string name="SYS_EXAMPLE">Example</string>
@@ -1365,6 +1364,7 @@
   <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
   <string name="SYS_USER">User</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
+  <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">One of the configurations specified here can be used to display the user administration. The columns of the selected list configuration are then displayed in the user administration.</string>
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>
   <string name="SYS_USER_PHOTO">User picture</string>
   <string name="SYS_USER_RELATION">Relationship</string>

@@ -906,6 +906,18 @@ $formUserManagement = new HtmlForm(
     $page, array('class' => 'form-preferences')
 );
 
+// read all global lists
+$sqlData = array();
+$sqlData['query'] = 'SELECT lst_id, lst_name
+                       FROM '.TBL_LISTS.'
+                      WHERE lst_org_id = ? -- $orgId
+                        AND lst_global = 1
+                   ORDER BY lst_name ASC, lst_timestamp DESC';
+$sqlData['params'] = array($orgId);
+$formUserManagement->addSelectBoxFromSql(
+    'members_list_configuration', $gL10n->get('SYS_CONFIGURATION_LIST'), $gDb, $sqlData,
+    array('defaultValue' => $formValues['members_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_USER_MANAGEMENT_CONFIGURATION_DESC')
+);
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formUserManagement->addSelectBox(
     'members_users_per_page', $gL10n->get('MEM_USERS_PER_PAGE'), $selectBoxEntries,

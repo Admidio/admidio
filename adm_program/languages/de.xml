@@ -927,7 +927,7 @@
   <string name="SYS_END" description="End of a date">Ende</string>
   <string name="SYS_ERROR">Fehler</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n#VAR1#</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist die Standardkonfiguration für Listen in dieser Organisation und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
+  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist als Standardkonfiguration für das Modul #VAR1# in dieser Organisation hinterlegt und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - Seite nicht gefunden!</string>
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Termine - Teilnahmebestätigung</string>
   <string name="SYS_EXAMPLE">Beispiel</string>
@@ -1382,6 +1382,7 @@
   <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-+_:/#?= .</string>
   <string name="SYS_USER">Benutzer</string>
   <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</string>
+  <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann für die Anzeige der Benutzerverwaltung genutzt werden. Es werden anschließend in der Benutzerverwaltung die Spalten der ausgewählten Listenkonfiguration angezeigt.</string>
   <string name="SYS_USER_NO_EMAIL">Der Benutzer #VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
   <string name="SYS_USER_PHOTO">Benutzerfoto</string>
   <string name="SYS_USER_RELATION">Beziehung</string>
