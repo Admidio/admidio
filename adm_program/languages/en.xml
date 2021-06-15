@@ -659,7 +659,6 @@
   <string name="SYS_ATTACHMENT_TO_LARGE">E-mail attachment upload error.\nFile size is most likely to large!</string>
   <string name="SYS_ATTACHMENTS_VAR">#VAR1# attachments</string>
   <string name="SYS_AUTO_DETECT">Auto-detect</string>
-  <string name="SYS_AUTOMATICALLY">Automatically</string>
   <string name="SYS_AVAILABLE">Available</string>
   <string name="SYS_AVAILABLE_BETA">Available Beta</string>
   <string name="SYS_BACK">Back</string>
