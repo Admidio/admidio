@@ -74,7 +74,6 @@ if(!$gCurrentUser->hasRightViewRole((int) $role->getValue('rol_id'))
 $_SESSION['rol_id']           = (int) $role->getValue('rol_id');
 $_SESSION['user_import_mode'] = $postUserImportMode;
 
-include ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/vendor/autoload.php';
 switch($postImportFormat) {
     case 'XLSX':
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();

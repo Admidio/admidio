@@ -278,8 +278,8 @@ class HtmlForm extends HtmlFormBasic
 
         // add a row with the captcha puzzle
         $this->openControlStructure('captcha_puzzle', '', self::FIELD_DEFAULT, '', '', $attributes['class']);
-        $onClickCode = 'document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/securimage/securimage_show.php?\' + Math.random(); return false;';
-        $this->addHtml('<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
+        $onClickCode = 'document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/dapphp/securimage/securimage_show.php?\' + Math.random(); return false;';
+        $this->addHtml('<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/dapphp/securimage/securimage_show.php" alt="CAPTCHA Image" />
                         <a class="admidio-icon-link" href="javascript:void(0)" onclick="' . $onClickCode . '">
                             <i class="fas fa-sync-alt fa-lg" data-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>');
         $this->closeControlStructure(array('helpTextIdInline' => ''));
