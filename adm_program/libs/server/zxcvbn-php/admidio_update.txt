@@ -1,6 +1,0 @@
-Short description to update the current lib
-
-1. Go to https://github.com/bjeavons/zxcvbn-php
-2. Download latest release and unzip the file
-3. Copy all files into this lib folder
-4. Folder test/ could be removed
