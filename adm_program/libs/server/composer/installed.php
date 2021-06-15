@@ -101,12 +101,12 @@
             'dev_requirement' => false,
         ),
         'myclabs/php-enum' => array(
-            'pretty_version' => '1.8.0',
-            'version' => '1.8.0.0',
+            'pretty_version' => '1.7.7',
+            'version' => '1.7.7.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../myclabs/php-enum',
             'aliases' => array(),
-            'reference' => '46cf3d8498b095bd33727b13fd5707263af99421',
+            'reference' => 'd178027d1e679832db9f38248fcc7200647dc2b7',
             'dev_requirement' => false,
         ),
         'phpmailer/phpmailer' => array(
