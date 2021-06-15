@@ -18,10 +18,9 @@
         "dapphp/securimage": "^3.6",
         "hautelook/phpass": "^1.0",
         "htmlawed/htmlawed": "^1.1",
-        "ircmaxell/password-compat": "^1.0",
         "monolog/monolog": "^1.21",
         "phpmailer/phpmailer": "^6.4",
-        "phpoffice/phpspreadsheet": "^1.17",
+        "phpoffice/phpspreadsheet": "^1.18",
         "smarty/smarty": "^3.1",
         "tecnickcom/tcpdf": "^6.2"
     },
