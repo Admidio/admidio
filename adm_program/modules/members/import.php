@@ -66,11 +66,11 @@ $page = new HtmlPage('admidio-members-import', $headline);
 // show form
 $form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_function.php', $page, array('enableFileUpload' => true));
 $formats = array(
-    '' => $gL10n->get('SYS_AUTO_DETECT'),
+    'AUTO' => $gL10n->get('SYS_AUTO_DETECT'),
     'XLSX' => $gL10n->get('SYS_EXCEL_2007_365'),
-    'XLS' => $gL10n->get('SYS_EXCEL_97_2003'),
-    'ODS' => $gL10n->get('SYS_ODF_SPREADSHEET'),
-    'CSV' => $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
+    'XLS'  => $gL10n->get('SYS_EXCEL_97_2003'),
+    'ODS'  => $gL10n->get('SYS_ODF_SPREADSHEET'),
+    'CSV'  => $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
     'HTML' => $gL10n->get('SYS_HTML_TABLE')
 );
 $form->addSelectBox(
