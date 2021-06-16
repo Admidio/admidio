@@ -364,17 +364,17 @@
   <string name="PMS_WAS_SENT_TO">Il messaggio è stato inviato a:</string>
   <string name="PMS_WAS_NOT_SENT_TO">Errore - Il messaggio non è stato inviato a:</string>
   <!--Phrases only in New-User-Registration-->
-  <string name="NWU_ASSIGN_LOGIN">Assegnazione informazioni per l\'accesso</string>
-  <string name="NWU_ASSIGN_MEMBERSHIP">Assegnazione membership</string>
-  <string name="NWU_ASSIGN_REGISTRATION">Assegnazione registrazione</string>
+  <string name="SYS_ASSIGN_LOGIN_INFORMATION">Assegnazione informazioni per l\'accesso</string>
+  <string name="SYS_ASSIGN_MEMBERSHIP">Assegnazione membership</string>
+  <string name="SYS_ASSIGN_REGISTRATION">Assegnazione registrazione</string>
   <string name="NWU_DELETE_REGISTRATION">Cancellazione registrazione</string>
-  <string name="NWU_MANAGE_NEW_REGISTRATIONS_DESC">Le nuove registrazioni dei visitatori possono essere elencate, approvate o rifiutate qui.</string>
-  <string name="NWU_NEW_REGISTRATIONS">Nuove registrazioni</string>
-  <string name="NWU_NO_REGISTRATIONS">Non sono disponibili nuove registrazioni.</string>
+  <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Le nuove registrazioni dei visitatori possono essere elencate, approvate o rifiutate qui.</string>
+  <string name="SYS_NEW_REGISTRATIONS">Nuove registrazioni</string>
+  <string name="SYS_NO_NEW_REGISTRATIONS">Non sono disponibili nuove registrazioni.</string>
   <string name="NWU_REGISTERED_ON">Registrato il #VAR1#</string>
-  <string name="NWU_SEND_LOGIN">Invia le informazioni per l\'accesso</string>
-  <string name="NWU_USER_NO_VALID_LOGIN">L\'utente non ha ancora l\'accesso.\nTi piacerebbe assegnare le informazioni della registrazione selezionata all\'utente?</string>
-  <string name="NWU_USER_VALID_LOGIN">L\'utente possiede già le informazioni valide per l\'accesso.</string>
+  <string name="SYS_SEND_LOGIN_INFORMATION">Invia le informazioni per l\'accesso</string>
+  <string name="SYS_USER_NO_VALID_LOGIN">L\'utente non ha ancora l\'accesso.\nTi piacerebbe assegnare le informazioni della registrazione selezionata all\'utente?</string>
+  <string name="SYS_USER_VALID_LOGIN">L\'utente possiede già le informazioni valide per l\'accesso.</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Modulo per l\'accesso</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Abilita le notifiche di sistema</string>

@@ -319,24 +319,6 @@
   <string name="MEM_USER_MANAGEMENT_DESC">Display and organize all active and former members here. New users can be imported or created.</string>
   <string name="MEM_USERS_PER_PAGE">Number of users per page</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Number of users listed on each page. If there are multiple members in this group pages can be turned. (Default: 25)</string>
-  <!--Phrases only in New-User-Registration-->
-  <string name="NWU_ASSIGN_LOGIN">Assigning login information</string>
-  <string name="NWU_ASSIGN_LOGIN_SUCCESSFUL">Login information has been successfully assigned.</string>
-  <string name="NWU_ASSIGN_LOGIN_EMAIL">Login information has been successfully assigned and user has been informed via e-mail.</string>
-  <string name="NWU_ASSIGN_MEMBERSHIP">Assigning membership</string>
-  <string name="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN">Assigning membership and login information to selected user.</string>
-  <string name="NWU_ASSIGN_REGISTRATION">Assigning registration</string>
-  <string name="NWU_DELETE_REGISTRATION">Deleting registration</string>
-  <string name="NWU_MANAGE_NEW_REGISTRATIONS_DESC">New registrations of visitors can be listed, approved or refused here.</string>
-  <string name="NWU_NEW_REGISTRATIONS">New registrations</string>
-  <string name="NWU_NO_MEMBERSHIP">User is not a member of organization #VAR1# but has already login information assigned.</string>
-  <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">User is not a member of organization #VAR1# and has no login information registered.</string>
-  <string name="NWU_NO_REGISTRATIONS">No new registrations available.</string>
-  <string name="NWU_REGISTERED_ON">Registered on #VAR1#</string>
-  <string name="NWU_REMINDER_SEND_LOGIN">Do you want to send the user credentials (incl. password!) as a reminder?</string>
-  <string name="NWU_SEND_LOGIN">Send login information</string>
-  <string name="NWU_USER_NO_VALID_LOGIN">User has no login yet.\nWould you like to assign the information of the selected registration to the user?</string>
-  <string name="NWU_USER_VALID_LOGIN">User already has valid login information.</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be deactivated or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
@@ -650,7 +632,13 @@
   <string name="SYS_APPLY">Apply</string>
   <string name="SYS_ANNUALLY">Annually</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
+  <string name="SYS_ASSIGN_LOGIN_INFORMATION">Assigning login information</string>
+  <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Login information has been successfully assigned.</string>
+  <string name="SYS_ASSIGN_LOGIN_EMAIL">Login information has been successfully assigned and user has been informed via e-mail.</string>
   <string name="SYS_ASSIGN_MEMBERS">Assigning members</string>
+  <string name="SYS_ASSIGN_MEMBERSHIP">Assigning membership</string>
+  <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Assigning membership and login information to selected user.</string>
+  <string name="SYS_ASSIGN_REGISTRATION">Assigning registration</string>
   <string name="SYS_ASYMMETRICAL">Asymmetrical</string>
   <string name="SYS_ATTACHMENT">Attachment</string>
   <string name="SYS_ATTACHMENT_ONE">1 attachment</string>
@@ -1008,6 +996,7 @@
   <string name="SYS_MAIL_DISPATCH">Email delivery</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">You can define relationship types (parent - child). For each defined relationship, the type (asymmetric, symmetric or unidirectional) is defined and the profile editing rights are defined within the relationship.</string>
   <string name="SYS_MALE">Male</string>
+  <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">New registrations of visitors can be listed, approved or refused here.</string>
   <string name="SYS_MANDATORY_FIELD">Mandatory field</string>
   <string name="SYS_MAP">Map</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Displays the location on Google Maps. The street, postal code, city and country are transferred to Google.</string>
@@ -1067,6 +1056,7 @@
   <string name="SYS_NEW_BETA_AVAILABLE">A new beta version is available!</string>
   <string name="SYS_NEW_BOTH_AVAILABLE">A new stable version and a new beta version are available!</string>
   <string name="SYS_NEW_NAME">New name</string>
+  <string name="SYS_NEW_REGISTRATIONS">New registrations</string>
   <string name="SYS_NEW_ROLE">New role</string>
   <string name="SYS_NEW_VALUE">New value</string>
   <string name="SYS_NEW_VERSION_AVAILABLE">A new stable version is available!</string>
@@ -1081,6 +1071,7 @@
   <string name="SYS_NO_ENTRIES">No entries available.</string>
   <string name="SYS_NO_LEADER">No leader</string>
   <string name="SYS_NO_MORE_COLUMN">For technical reasons, no more column can be added.</string>
+  <string name="SYS_NO_NEW_REGISTRATIONS">No new registrations available.</string>
   <string name="SYS_NO_QUOTATION">No quotation</string>
   <string name="SYS_NO_RIGHTS">You do not have the required permission to perform this action.</string>
   <string name="SYS_NO_RIGHTS_VIEW_LIST">You do not have the right to view the list of the selected roles.</string>
@@ -1188,6 +1179,7 @@
   <string name="SYS_RELATIONSHIP_TYPE_DESC">An asymmetrical relationship is e.g. used for parent / child while symmetrical relations e.g. can be used for siblings. These are always bidirectional, however,  unidirectional relations only mark in one direction.</string>
   <string name="SYS_RELOAD">Reload</string>
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
+  <string name="SYS_REMINDER_SEND_LOGIN">Do you want to send the user credentials (incl. password!) as a reminder?</string>
   <string name="SYS_REMOVE">Remove</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REPEAT">Repeat</string>
@@ -1280,6 +1272,7 @@
   <string name="SYS_SEND_EMAIL_TO">Send e-mail to #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send e-mails to all e-mail addresses of the user</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, e-mails will be sent to all user e-mail addresses stored in the profile. If the setting is deactivated, e-mails will only be sent to the e-mail address from the profile field with the internal name EMAIL. (Default: enabled)</string>
+  <string name="SYS_SEND_LOGIN_INFORMATION">Send login information</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Your e-mail will be sent to all members with an e-mail address of the selected role or the selected recipients .\n\nFurther roles and recipients are available for logged in users only.</string>
   <string name="SYS_SEND_MAILS">Send e-mails</string>
   <string name="SYS_SEND_METHOD">Send via</string>
@@ -1385,10 +1378,14 @@
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
   <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">One of the configurations specified here can be used to display the user administration. The columns of the selected list configuration are then displayed in the user administration.</string>
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>
+  <string name="SYS_USER_NO_MEMBERSHIP">User is not a member of organization #VAR1# but has already login information assigned.</string>
+  <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">User is not a member of organization #VAR1# and has no login information registered.</string>
+  <string name="SYS_USER_NO_VALID_LOGIN">User has no login yet.\nWould you like to assign the information of the selected registration to the user?</string>
   <string name="SYS_USER_PHOTO">User picture</string>
   <string name="SYS_USER_RELATION">Relationship</string>
   <string name="SYS_USER_RELATIONS">Relationships</string>
   <string name="SYS_USER_RELATION_TYPE">Relationship type</string>
+  <string name="SYS_USER_VALID_LOGIN">User already has valid login information.</string>
   <string name="SYS_USERNAME">Username</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
