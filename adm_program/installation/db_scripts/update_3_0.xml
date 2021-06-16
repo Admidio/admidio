@@ -49,7 +49,7 @@
                               , ('MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.0.0', 0)
                               , ('MODULE', 'LNK_WEBLINKS', 'LINKS', '3.0.0', 0)
                               , ('MODULE', 'LST_LISTS', 'LISTS', '3.0.0', 0)
-                              , ('MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.0.0', 0)
+                              , ('MODULE', 'SYS_USER_MANAGEMENT', 'MEMBERS', '3.0.0', 0)
                               , ('MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.0.0', 0)
                               , ('MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.0.0', 0)
                               , ('MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.0.0', 0)

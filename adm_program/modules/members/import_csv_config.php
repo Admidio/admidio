@@ -24,7 +24,7 @@ if(count($_SESSION['import_data']) === 0)
     // => EXIT
 }
 
-$headline = $gL10n->get('MEM_ASSIGN_FIELDS');
+$headline = $gL10n->get('SYS_ASSIGN_FIELDS');
 
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -48,12 +48,12 @@ else
 // create html page object
 $page = new HtmlPage('admidio-members-import-csv', $headline);
 
-$page->addHtml('<p class="lead">'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>');
+$page->addHtml('<p class="lead">'.$gL10n->get('SYS_ASSIGN_FIELDS_DESC').'</p>');
 
 // show form
 $form = new HtmlForm('import_assign_fields_form', ADMIDIO_URL. FOLDER_MODULES.'/members/import_csv.php', $page, array('type' => 'vertical'));
-$form->addCheckbox('first_row', $gL10n->get('MEM_FIRST_LINE_COLUMN_NAME'), $formValues['first_row']);
-$form->addHtml('<div class="alert alert-warning alert-small" id="admidio-import-unused"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('MEM_IMPORT_UNUSED_HEAD').'<div id="admidio-import-unused-fields">-</div></div>');
+$form->addCheckbox('first_row', $gL10n->get('SYS_FIRST_LINE_COLUMN_NAME'), $formValues['first_row']);
+$form->addHtml('<div class="alert alert-warning alert-small" id="admidio-import-unused"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('SYS_IMPORT_UNUSED_HEAD').'<div id="admidio-import-unused-fields">-</div></div>');
 $page->addJavascript('
     $(".admidio-import-field").change(function() {
         var available = [];
@@ -85,8 +85,8 @@ $htmlFieldTable = '
     <table class="table table-condensed import-config import-config-csv">
         <thead>
             <tr>
-                <th>'.$gL10n->get('MEM_PROFILE_FIELD').'</th>
-                <th>'.$gL10n->get('MEM_FILE_COLUMN').'</th>
+                <th>'.$gL10n->get('SYS_PROFILE_FIELD').'</th>
+                <th>'.$gL10n->get('SYS_FILE_COLUMN').'</th>
             </tr>
         </thead>';
 
@@ -114,7 +114,7 @@ $htmlFieldTable = '
                 $categoryId = $catId;
             }
             $usfId = (int) $field->getValue('usf_id');
-            $tooltip = trim($gL10n->get('MEM_POSSIBLE_FIELDNAMES',
+            $tooltip = trim($gL10n->get('SYS_POSSIBLE_FIELDNAMES',
                 array(
                     $field->getValue('usf_name'),
                     $field->getValue('usf_name_intern'))));
@@ -171,7 +171,7 @@ $htmlFieldTable = '
     $htmlFieldTable .= '</tbody>
     </table>';
 $form->addHtml($htmlFieldTable);
-$form->addSubmitButton('btn_forward', $gL10n->get('MEM_IMPORT'), array('icon' => 'fa-upload'));
+$form->addSubmitButton('btn_forward', $gL10n->get('SYS_IMPORT'), array('icon' => 'fa-upload'));
 
 // add form to html page and show page
 $page->addHtml($form->show());

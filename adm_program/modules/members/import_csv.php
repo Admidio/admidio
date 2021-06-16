@@ -271,5 +271,5 @@ $_SESSION['user_import_mode'] = '';
 $_SESSION['import_data']      = '';
 
 $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members.php');
-$gMessage->show($gL10n->get('MEM_IMPORT_SUCCESSFUL', array($countImportNewUser, $countImportEditUser, $countImportEditRole)));
+$gMessage->show($gL10n->get('SYS_IMPORT_SUCCESSFUL', array($countImportNewUser, $countImportEditUser, $countImportEditRole)));
 // => EXIT

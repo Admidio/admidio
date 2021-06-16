@@ -86,7 +86,7 @@ $sql = 'INSERT INTO '.TBL_COMPONENTS.'
              , (\'MODULE\', \'GBO_GUESTBOOK\',           \'GUESTBOOK\',      \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'LNK_WEBLINKS\',            \'LINKS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_GROUPS_ROLES\',        \'GROUPS-ROLES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'MEM_USER_MANAGEMENT\',     \'MEMBERS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_USER_MANAGEMENT\',     \'MEMBERS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_MESSAGES\',            \'MESSAGES\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_MENU\',                \'MENU\',           \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_PHOTOS\',              \'PHOTOS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
@@ -264,7 +264,7 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, 0, 6, 1, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'fa-cog\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, 0, 4, 1, \'mail\', \''.FOLDER_MODULES.'/messages/messages_write.php\', \'fa-envelope\', \'SYS_EMAIL\', \'SYS_EMAIL_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, 0, 1, 1, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'fa-address-card\', \'SYS_NEW_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'fa-users-cog\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'fa-users-cog\', \'SYS_USER_MANAGEMENT\', \'SYS_USER_MANAGEMENT_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'fa-stream\', \'SYS_MENU\', \'SYS_MENU_DESC\')';
 $db->query($sql);
 

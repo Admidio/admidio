@@ -66,7 +66,7 @@ $role = new TableRoles($gDb, $postRoleId);
 if(!$gCurrentUser->hasRightViewRole((int) $role->getValue('rol_id'))
 || (!$gCurrentUser->manageRoles() && $role->getValue('rol_assign_roles') == false))
 {
-    $gMessage->show($gL10n->get('MEM_ROLE_SELECT_RIGHT', array($role->getValue('rol_name'))));
+    $gMessage->show($gL10n->get('SYS_ROLE_SELECT_RIGHT', array($role->getValue('rol_name'))));
     // => EXIT
 }
 
@@ -126,7 +126,7 @@ if (isset($reader) and !is_null($reader)) {
         }
 
         if (empty($sheet)) {
-            $gMessage->show($gL10n->get('MEM_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet)));
+            $gMessage->show($gL10n->get('SYS_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet)));
             // => EXIT
         } else {
             $_SESSION['import_data']       = $sheet->toArray();

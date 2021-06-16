@@ -290,7 +290,7 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
         {
             // if email is set and systemmails are activated then administrators can send a new password to user
             $userAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $row['usr_id'], 'mode' => 5)).'">'.
-                '<i class="fas fa-key" data-toggle="tooltip" title="' . $gL10n->get('MEM_SEND_USERNAME_PASSWORD') . '"></i></a>';
+                '<i class="fas fa-key" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
         }
         else
         {
@@ -323,7 +323,7 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
     if($memberOfThisOrganization || !$memberOfOtherOrganization)
     {
         $userAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_id' => $row['usr_id'])).'">'.
-            '<i class="fas fa-edit" data-toggle="tooltip" title="' . $gL10n->get('MEM_EDIT_USER') . '"></i></a>';
+            '<i class="fas fa-edit" data-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT_USER') . '"></i></a>';
     }
 
     // add link to delete user btw. remove user from the current organization
@@ -333,7 +333,7 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
     {
         $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $row['usr_id'], 'mode' => 6)) . '">'.
-                '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('MEM_REMOVE_USER').'"></i>
+                '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_REMOVE_USER').'"></i>
             </a>';
     }
 

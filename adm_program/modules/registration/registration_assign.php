@@ -119,7 +119,7 @@ $page = new HtmlPage('admidio-registration-assign', $headline);
 $page->addHtml('
     <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', array($newUser->getValue('FIRST_NAME'). ' '. $newUser->getValue('LAST_NAME'))).'</p>
     <div class="card admidio-blog">
-        <div class="card-header">'.$gL10n->get('SYS_USERS_FOUND').'</div>
+        <div class="card-header">'.$gL10n->get('SYS_USER_FOUND').'</div>
         <div class="card-body">'
 );
 
@@ -188,7 +188,7 @@ while($row = $usrStatement->fetch())
         if($row['usr_login_name'] !== '')
         {
             // Logindaten sind bereits vorhanden
-            $page->addHtml('<p>'.$gL10n->get('SYS_USER_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
+            $page->addHtml('<p>'.$gL10n->get('SYS_USER_NO_MEMBERSHIP_LOGIN', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
 
             <button class="btn btn-primary" onclick="window.location.href=\''.$link.'\'">
                 <i class="fas fa-user-check"></i>'.$gL10n->get('SYS_ASSIGN_MEMBERSHIP_AND_LOGIN').'</button>');

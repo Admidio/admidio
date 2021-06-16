@@ -354,7 +354,7 @@ class Organization extends TableAccess
         $participantList->save();
 
         $userManagementList = new ListConfiguration($this->db);
-        $userManagementList->setValue('lst_name', $gL10n->get('MEM_USER_MANAGEMENT'));
+        $userManagementList->setValue('lst_name', $gL10n->get('SYS_USER_MANAGEMENT'));
         $userManagementList->setValue('lst_org_id', $orgId);
         $userManagementList->setValue('lst_global', 1);
         $userManagementList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');

@@ -266,59 +266,6 @@
   <string name="LNK_SAME_WINDOW">Same window</string>
   <string name="LNK_WEBLINKS">Web links</string>
   <string name="LNK_WEBLINKS_DESC">Create and organize by categories interesting hyperlinks.</string>
-  <!--Phrases only in Membersadministration-->
-  <string name="MEM_ASSIGN_FIELDS">Assign fields</string>
-  <string name="MEM_ASSIGN_FIELDS_DESC">If possible, assign to database fields one column of a file.\n\nOn the left side you are able to find all types of database fields, on the right side you can find all columns of the selected file. Fields may be left empty when the file does not include every database field.</string>
-  <string name="MEM_ASSIGN_ROLE">Assign role</string>
-  <string name="MEM_ASSIGN_ROLE_FOR_IMPORT">Select a role for all imported users.\n\nAvailable are only roles which you have user permission for.</string>
-  <string name="MEM_ASSIGN_ROLES">Assign roles</string>
-  <string name="MEM_CREATE_USER">Create user</string>
-  <string name="MEM_CODING">Coding</string>
-  <string name="MEM_CHANGE_HISTORY">Change history</string>
-  <string name="MEM_CHANGE_HISTORY_OF">Change history of #VAR1#</string>
-  <string name="MEM_CHOOSE_FILE">Select file</string>
-  <string name="MEM_COMPLEMENT">Complement</string>
-  <string name="MEM_DAYS_FIELD_HISTORY">Default time period for field history (days)</string>
-  <string name="MEM_DAYS_FIELD_HISTORY_DESC">Changes in profile fields will be listed for the given period of time in days. This is the default filter option which can be changed by the user later on. For huge databases this option is used to limit the change history list. (Default: 365)</string>
-  <string name="MEM_DUPLICATE">Duplicate</string>
-  <string name="MEM_EDIT_USER">Edit user</string>
-  <string name="MEM_ENABLE_USER_RELATIONS">Maintain and show relationships</string>
-  <string name="MEM_ENABLE_USER_RELATIONS_DESC">If set active, relationships between users can be maintained and displayed. (Default: yes)</string>
-  <string name="MEM_EXISTING_USERS">Existing user</string>
-  <string name="MEM_FILE_COLUMN">File column</string>
-  <string name="MEM_FIRST_LINE_COLUMN_NAME">First line contains the column name</string>
-  <string name="MEM_FORMAT">Format</string>
-  <string name="MEM_IDENTIFY_USERS">Identification of existing users is made by means of first name and surname.</string>
-  <string name="MEM_IMPORT">Import</string>
-  <string name="MEM_IMPORT_SUCCESSFUL">Import was successful..\n\n#VAR1# new users have been created.\n#VAR2# users have been edited.\n#VAR3# role memberships have been assigned.</string>
-  <string name="MEM_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned any profile fields:</string>
-  <string name="MEM_IMPORT_USERS">Import user(s)</string>
-  <string name="MEM_IMPORT_SHEET_NOT_EXISTS">The worksheet #VAR1# does not exist in the imported file!</string>
-  <string name="MEM_INPUT_FIRSTNAME_LASTNAME">Please provide first name and surname of the new user. A database check will be performed if same user with same or similar name already exists.</string>
-  <string name="MEM_MAKE_FORMER">A user can be changed to status former member. This will preserve all user information including role memberships for later use.</string>
-  <string name="MEM_NO_CHANGES">There are no changes logged.</string>
-  <string name="MEM_NO_CHANGES_PROFIL">No changes are logged for #VAR1_BOLD# .</string>
-  <string name="MEM_NO_MEMBERSHIP">This user is not a member of organization #VAR1# yet.</string>
-  <string name="MEM_NOT_EDIT">Do not edit</string>
-  <string name="MEM_POSSIBLE_FIELDNAMES">Column names for autodetection: #VAR1#, #VAR2#</string>
-  <string name="MEM_PROFILE_FIELD">Profile field</string>
-  <string name="MEM_REMOVE_MEMBERSHIP">Would you like to end membership of user #VAR1# in #VAR2#?</string>
-  <string name="MEM_REMOVE_MEMBERSHIP_OK">The membership of user #VAR1_BOLD# at #VAR2_BOLD# was finished successfully!</string>
-  <string name="MEM_REMOVE_USER">Remove user</string>
-  <string name="MEM_REMOVE_USER_DESC">By choosing #VAR1_BOLD#, all data will be deleted and this information wont be available anymore.</string>
-  <string name="MEM_REPLACE">Replace</string>
-  <string name="MEM_ROLE_SELECT_RIGHT">You do not have permission to select role #VAR1#.\nPlease try to select another role.</string>
-  <string name="MEM_SEND_NEW_LOGIN">Do you want to send #VAR1_BOLD# an email with the current username and a new password?</string>
-  <string name="MEM_SEND_USERNAME_PASSWORD">Send e-mail with username and password.</string>
-  <string name="MEM_SHOW_ALL_USERS">Display all users</string>
-  <string name="MEM_SHOW_USERS_DESC">Only active members of this organization will be listed if this option is not set. Otherwise all users of the database will be listed.</string>
-  <string name="MEM_UPDATED_ON">Updated on</string>
-  <string name="MEM_USER_COULD_BE_CREATED">User could be created.</string>
-  <string name="MEM_USER_DELETE">Would you like to delete #VAR1_BOLD#?\n\nUser is going to be physically deleted in the database which makes later access impossible.</string>
-  <string name="MEM_USER_MANAGEMENT">User management</string>
-  <string name="MEM_USER_MANAGEMENT_DESC">Display and organize all active and former members here. New users can be imported or created.</string>
-  <string name="MEM_USERS_PER_PAGE">Number of users per page</string>
-  <string name="MEM_USERS_PER_PAGE_DESC">Number of users listed on each page. If there are multiple members in this group pages can be turned. (Default: 25)</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be deactivated or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
@@ -632,6 +579,8 @@
   <string name="SYS_APPLY">Apply</string>
   <string name="SYS_ANNUALLY">Annually</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
+  <string name="SYS_ASSIGN_FIELDS">Assign fields</string>
+  <string name="SYS_ASSIGN_FIELDS_DESC">If possible, assign to database fields one column of a file.\n\nOn the left side you are able to find all types of database fields, on the right side you can find all columns of the selected file. Fields may be left empty when the file does not include every database field.</string>
   <string name="SYS_ASSIGN_LOGIN_INFORMATION">Assigning login information</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Login information has been successfully assigned.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Login information has been successfully assigned and user has been informed via e-mail.</string>
@@ -639,6 +588,9 @@
   <string name="SYS_ASSIGN_MEMBERSHIP">Assigning membership</string>
   <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Assigning membership and login information to selected user.</string>
   <string name="SYS_ASSIGN_REGISTRATION">Assigning registration</string>
+  <string name="SYS_ASSIGN_ROLE">Assign role</string>
+  <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Select a role for all imported users.\n\nAvailable are only roles which you have user permission for.</string>
+  <string name="SYS_ASSIGN_ROLES">Assign roles</string>
   <string name="SYS_ASYMMETRICAL">Asymmetrical</string>
   <string name="SYS_ATTACHMENT">Attachment</string>
   <string name="SYS_ATTACHMENT_ONE">1 attachment</string>
@@ -679,6 +631,8 @@
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-category</string>
+  <string name="SYS_CHANGE_HISTORY">Change history</string>
+  <string name="SYS_CHANGE_HISTORY_OF">Change history of #VAR1#</string>
   <string name="SYS_CHANGE_PASSWORD">Change password</string>
   <string name="SYS_CHANGED_AT">Last review</string>
   <string name="SYS_CHANGED_BY">Changed by</string>
@@ -688,14 +642,17 @@
   <string name="SYS_CHECK_FOR_UPDATE">Check for update</string>
   <string name="SYS_CHECKBOX">Checkbox</string>
   <string name="SYS_CHECKBOX_AUTOSAVE">Checkbox status is saved automatically after marking.</string>
+  <string name="SYS_CHOOSE_FILE">Select file</string>
   <string name="SYS_CITY">City</string>
   <string name="SYS_CLOCK">o\'clock</string>
   <string name="SYS_CLOSE">Close</string>
+  <string name="SYS_CODING">Coding</string>
   <string name="SYS_COLUMN">Column</string>
   <string name="SYS_COMMA">Comma (,)</string>
   <string name="SYS_COMMA_SEPARATED_FILE">Comma-/tab-separated file (*.csv)</string>
   <string name="SYS_COMMENT">Comment</string>
   <string name="SYS_COMMON">General</string>
+  <string name="SYS_COMPLEMENT">Complement</string>
   <string name="SYS_CONDITION">Requirement</string>
   <string name="SYS_CONFIGURATION">Configuration</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Permission to use configuration for all members</string>
@@ -738,6 +695,7 @@
   <string name="SYS_CREATE_NOT_FOUND_USER">If the new user is not listed among the users found, you can create it.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Create relationship</string>
   <string name="SYS_CREATE_ROLE">Create role</string>
+  <string name="SYS_CREATE_USER">Create user</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATED_BY">Created by #VAR1# on #VAR2#</string>
   <string name="SYS_CREATION_DATE">Created on</string>
@@ -766,6 +724,8 @@
   <string name="SYS_DATE_INVALID">Invalid date in field #VAR1_BOLD#.\n\nDate has to comply with this formatting: #VAR2_BOLD#.</string>
   <string name="SYS_DATE_MODIFIED">Date of modification</string>
   <string name="SYS_DATE_TO">to</string>
+  <string name="SYS_DAYS_FIELD_HISTORY">Default time period for field history (days)</string>
+  <string name="SYS_DAYS_FIELD_HISTORY_DESC">Changes in profile fields will be listed for the given period of time in days. This is the default filter option which can be changed by the user later on. For huge databases this option is used to limit the change history list. (Default: 365)</string>
   <string name="SYS_DAYS_VAR">#VAR1# days</string>
   <string name="SYS_DEACTIVATE_ROLE">Deactivate role</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">If you deactivate role #VAR1_BOLD#, the role can no longer be used and assigned to objects. Likewise, all rights of this role are no longer effective. However, the role with its setting and all member mappings remains and can be reactivated at a later date.</string>
@@ -776,6 +736,7 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">If a new user is created or a new registration is accepted, then this role is automatically assigned to the new user. When the creator has the right to assign roles, all role mappings are displayed and can be changed accordingly.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Default configuration</string>
   <string name="SYS_DEFAULT_CONFIGURATION_DESC">One of the configurations given here can be set as the default configuration for lists of this organization. Member lists of roles not having a list configuration are displayed with this configuration.</string>
+  <string name="SYS_DEFAULT_ENCODING_UTF8">Default encoding (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Default list</string>
   <string name="SYS_DEFAULT_LIST_DESC">In case there is a member list for this role to be displayed and no list configuration is specified, the list is displayed in the system-wide selected standard list configuration. Using this field for an individual role, a different configuration list can be selected which is displayed when no configuration list is preset.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">No default list configuration set defined by the administrator!\n\nContact system administrator for help.</string>
@@ -805,6 +766,7 @@
   <string name="SYS_DISK_SPACE">Disk space</string>
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
   <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Display role memberships</string>
+  <string name="SYS_DO_NOT_EDIT">Do not edit</string>
   <string name="SYS_DOCUMENTS_FILES">Documents &amp; Files</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Different documents and files can be viewed or provided for download. These files can be categorized in folders with different access permission levels.</string>
   <string name="SYS_DONATE">Donate</string>
@@ -815,6 +777,7 @@
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
   <string name="SYS_DOWNLOAD_FILE">Download file</string>
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
+  <string name="SYS_DUPLICATE">Duplicate</string>
   <string name="SYS_EDIT">Edit</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Edit announcements</string>
   <string name="SYS_EDIT_CALENDAR">Edit calendar</string>
@@ -830,6 +793,7 @@
   <string name="SYS_EDIT_RELATIONSHIPS">Edit relationships</string>
   <string name="SYS_EDIT_ROLE">Edit role</string>
   <string name="SYS_EDIT_ROLE_MEMBERSHIPS">Edit role membership</string>
+  <string name="SYS_EDIT_USER">Edit user</string>
   <string name="SYS_EDIT_USER_IN_RELATION">User profile of this relationship can be edited</string>
   <string name="SYS_EDIT_VAR">Edit #VAR1#</string>
   <string name="SYS_EDITED_BY">Last edited by</string>
@@ -853,9 +817,12 @@
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">The documents &amp; files module can be activated or deactivated via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Enable groups &amp; roles module</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE_DESC">Displays the groups and roles of the organization and allows free configuration of groups and roles. Own list can be configured and applied. This module is generally only available for logged in users. (Default: yes)</string>
-  <string name="SYS_DEFAULT_ENCODING_UTF8">Default encoding (UTF-8)</string>
+  <string name="SYS_ENABLE_USER_RELATIONS">Maintain and show relationships</string>
+  <string name="SYS_ENABLE_USER_RELATIONS_DESC">If set active, relationships between users can be maintained and displayed. (Default: yes)</string>
   <string name="SYS_ENCODING_GUESS">Try to detect the encoding</string>
   <string name="SYS_END" description="End of a date">End</string>
+  <string name="SYS_END_MEMBERSHIP_OF_USER">Would you like to end membership of user #VAR1# in #VAR2#?</string>
+  <string name="SYS_END_MEMBERSHIP_OF_USER_OK">The membership of user #VAR1_BOLD# at #VAR2_BOLD# was finished successfully!</string>
   <string name="SYS_ERROR">Error</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Error occurred during database access:\n\n#VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">The list #VAR1_BOLD# is stored as default configuration for the module #VAR1# in this organization and cannot be deleted. Set another configuration to the default configuration in the module settings and try to delete this configuration afterwards.</string>
@@ -865,6 +832,7 @@
   <string name="SYS_EXAMPLES">Examples</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
+  <string name="SYS_EXISTING_USERS">Existing user</string>
   <string name="SYS_EXPORT_LISTS">Export lists</string>
   <string name="SYS_EXPORT_LISTS_DESC">Lists of groups and roles can be exported by users, provided that you have the right to view these lists. This setting can be used to restrict the export function. (Default: All)</string>
   <string name="SYS_EXPORT_TO">Export to</string>
@@ -877,6 +845,7 @@
   <string name="SYS_FIELD_INVALID_CHAR">Field #VAR1_BOLD# contains illegal characters.\n\nAllowed characters are letters from \'a\' to \'z\' and \'A\' to \'Z\', numbers from 0 to 9 and special characters like .-_+@ .</string>
   <string name="SYS_FIELDS_EMPTY">Some fields are empty.</string>
   <string name="SYS_FILE">File</string>
+  <string name="SYS_FILE_COLUMN">File column</string>
   <string name="SYS_FILE_EXIST">File #VAR1# already exists!\n\nPlease select different file name.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">File type is not allowed on this server.</string>
   <string name="SYS_FILE_NAME_RULES">The file should be named in such a way that you can infer the content from the name. The file name has an influence on the display order. In a folder where, for example, meeting minutes are stored, the file names should always begin with the date (yyyy-mm-dd).</string>
@@ -895,6 +864,7 @@
   <string name="SYS_FILENAME_INVALID">The selected file name #VAR1_BOLD# contains invalid characters. Please check the file name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is higher than the version of the Admidio scripts #VAR2#.\n\nPlease update your Admidio files on the server #VAR3# by using a later version of Admidio#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
+  <string name="SYS_FIRST_LINE_COLUMN_NAME">First line contains the column name</string>
   <string name="SYS_FIRSTNAME">First name</string>
   <string name="SYS_FIRSTNAME_LASTNAME">First name and lastname</string>
   <string name="SYS_FOLDER">Folder</string>
@@ -912,6 +882,7 @@
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FONT_AWESOME_DESC">You can store an icon in different ways:\n1. An icon of the web font \"Font Awesome\". Go to #VAR1#http://fontawesome.com#VAR2# and select a free icon from the \"Solid\" or \"Brands\" collection. As a prefix you have to put a fa- in front of it. So if you choose the icon \"user\", you have to enter \"fa-user\" here.\n2. A JPEG or PNG icon. To do this, enter the complete URL together with the file name of the icon. Alternatively, you can put the icon in the theme in the folder \"images\", then you only need to specify the file name.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">I forgot my password!</string>
+  <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
   <string name="SYS_FORMER_MEMBERS">Former members</string>
   <string name="SYS_FORMER_PL">Former</string>
@@ -941,13 +912,20 @@
   <string name="SYS_HTML_TABLE">HTML table</string>
   <string name="SYS_ICAL_DISABLED">iCal has been disabled by the system administrator.</string>
   <string name="SYS_ICON">Icon</string>
+  <string name="SYS_IDENTIFY_USERS">Identification of existing users is made by means of first name and surname.</string>
   <string name="SYS_IMPORTANT">Important</string>
+  <string name="SYS_IMPORT">Import</string>
   <string name="SYS_IMPORT_MODE">Import mode</string>
+  <string name="SYS_IMPORT_SHEET_NOT_EXISTS">The worksheet #VAR1# does not exist in the imported file!</string>
+  <string name="SYS_IMPORT_SUCCESSFUL">Import was successful..\n\n#VAR1# new users have been created.\n#VAR2# users have been edited.\n#VAR3# role memberships have been assigned.</string>
+  <string name="SYS_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned any profile fields:</string>
+  <string name="SYS_IMPORT_USERS">Import user(s)</string>
   <string name="SYS_IMPRINT">Imprint</string>
   <string name="SYS_IMPRINT_DESC">Here the URL for the imprint of your page can be deposited. If the selected theme supports this, a link will be displayed on the Admidio pages. (Example: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inactive groups and roles</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Info box</string>
   <string name="SYS_INFORMATIONS">information</string>
+  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please provide first name and surname of the new user. A database check will be performed if same user with same or similar name already exists.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation successful</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">The Admidio database is now installed and completely set up. The configuration file with the access data to the database has been created and stored. You can now work with Admidio and log in with the administrator data.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">The installation and setup of the database was successfully completed.</string>
@@ -995,6 +973,7 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-mail address #VAR1_BOLD# has been assigned to multiple registrations. A unique user registration could not be identified.</string>
   <string name="SYS_MAIL_DISPATCH">Email delivery</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">You can define relationship types (parent - child). For each defined relationship, the type (asymmetric, symmetric or unidirectional) is defined and the profile editing rights are defined within the relationship.</string>
+  <string name="SYS_MAKE_FORMER">A user can be changed to status former member. This will preserve all user information including role memberships for later use.</string>
   <string name="SYS_MALE">Male</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">New registrations of visitors can be listed, approved or refused here.</string>
   <string name="SYS_MANDATORY_FIELD">Mandatory field</string>
@@ -1065,6 +1044,8 @@
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">No additional permissions set</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">No additional rights</string>
   <string name="SYS_NO_BACKUP_FILE_EXISTS">No backup file found!</string>
+  <string name="SYS_NO_CHANGES_LOGGED">There are no changes logged.</string>
+  <string name="SYS_NO_CHANGES_LOGGED_PROFIL">No changes are logged for #VAR1_BOLD# .</string>
   <string name="SYS_NO_DATA_FOUND">No data found!</string>
   <string name="SYS_NO_DEFAULT_ROLE">You can not remove the setting #VAR1_BOLD#, because at least one role must be stored as the default assignment.</string>
   <string name="SYS_NO_ENTRY">Requested entry does not exist in the database.</string>
@@ -1142,6 +1123,7 @@
   <string name="SYS_PLUGINS">Plugins</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
+  <string name="SYS_POSSIBLE_FIELDNAMES">Column names for autodetection: #VAR1#, #VAR2#</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST size</string>
   <string name="SYS_POSTCODE">Postal code</string>
   <string name="SYS_PRESENTATION">Display</string>
@@ -1159,6 +1141,7 @@
   <string name="SYS_PRNG_INSECURE">Admidio/PHP can not generate secure pseudo-random numbers! Please contact the Admidio team with the following information:</string>
   <string name="SYS_PROCESS_CANCELED">Process canceled.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing the data.</string>
+  <string name="SYS_PROFILE_FIELD">Profile field</string>
   <string name="SYS_PROPERTIES">Properties</string>
   <string name="SYS_QUANTITY">Amount</string>
   <string name="SYS_QUARTERLY">Quarterly</string>
@@ -1182,7 +1165,10 @@
   <string name="SYS_REMINDER_SEND_LOGIN">Do you want to send the user credentials (incl. password!) as a reminder?</string>
   <string name="SYS_REMOVE">Remove</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
+  <string name="SYS_REMOVE_USER">Remove user</string>
+  <string name="SYS_REMOVE_USER_DESC">By choosing #VAR1_BOLD#, all data will be deleted and this information wont be available anymore.</string>
   <string name="SYS_REPEAT">Repeat</string>
+  <string name="SYS_REPLACE">Replace</string>
   <string name="SYS_REQUIRED_FIELDS">Required fields</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESTRICTIONS">Restrictions</string>
@@ -1216,6 +1202,7 @@
   <string name="SYS_ROLE_MEMBERSHIP_IN_PERIOD">Members in period:</string>
   <string name="SYS_ROLE_MEMBERSHIP_TO">to</string>
   <string name="SYS_ROLE_NAME_EXISTS">Role with same name already exists in this category.</string>
+  <string name="SYS_ROLE_SELECT_RIGHT">You do not have permission to select role #VAR1#.\nPlease try to select another role.</string>
   <string name="SYS_ROLE_TYPES">Role types</string>
   <string name="SYS_ROLES">Roles</string>
   <string name="SYS_ROLES_CONFIRMATION_OF_PARTICIPATION">Roles - Confirmation of attendance</string>
@@ -1277,10 +1264,12 @@
   <string name="SYS_SEND_MAILS">Send e-mails</string>
   <string name="SYS_SEND_METHOD">Send via</string>
   <string name="SYS_SEND_METHOD_DESC">PHP\'s mail() method might be restricted by some providers and can be a reason for spam suspicion. Hence it is recommended to send mails by using an existing mail address and SMTP server. You can configure the SMTP settings below (default: PHP mail()).</string>
+  <string name="SYS_SEND_NEW_LOGIN">Do you want to send #VAR1_BOLD# an email with the current username and a new password?</string>
   <string name="SYS_SEND_NEW_PW">Send new password</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Send private message</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Your PM will be sent to the selected recipient.</string>
   <string name="SYS_SEND_TEST_MAIL">Send test mail</string>
+  <string name="SYS_SEND_USERNAME_PASSWORD">Send e-mail with username and password.</string>
   <string name="SYS_SENDER">Sender</string>
   <string name="SYS_SENDER_EMAIL">Sender mail address</string>
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Using an unknown mail address as a sender address is not allowed by some providers. In this case you can add an email address which will be used as sender address within the mail module (e.g. noreply@#VAR1#).\nIf the field remains empty the sender\'s mail address will be used (default: empty).</string>
@@ -1292,6 +1281,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Server settings do not allow files uploads.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
   <string name="SYS_SETTINGS">Preferences</string>
+  <string name="SYS_SHOW_ALL_USERS">Show all users</string>
+  <string name="SYS_SHOW_ALL_USERS_DESC">Only active members of this organization will be listed if this option is not set. Otherwise all users of the database will be listed.</string>
   <string name="SYS_SHOW_CALENDAR">Display calendar</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For logged out users an alphanumeric text will appear when captcha module is activated. The provided text has to be entered into the proper field. This should prevent abuse of the form by spammers. (default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Show former members</string>
@@ -1375,10 +1366,16 @@
   <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
   <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
   <string name="SYS_USER">User</string>
+  <string name="SYS_USER_COULD_BE_CREATED">User could be created.</string>
+  <string name="SYS_USER_DELETE_DESC">Would you like to delete #VAR1_BOLD#?\n\nUser is going to be physically deleted in the database which makes later access impossible.</string>
+  <string name="SYS_USER_FOUND">User found</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
+  <string name="SYS_USER_MANAGEMENT">User management</string>
   <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">One of the configurations specified here can be used to display the user administration. The columns of the selected list configuration are then displayed in the user administration.</string>
+  <string name="SYS_USER_MANAGEMENT_DESC">Display and organize all active and former members here. New users can be imported or created.</string>
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>
-  <string name="SYS_USER_NO_MEMBERSHIP">User is not a member of organization #VAR1# but has already login information assigned.</string>
+  <string name="SYS_USER_NO_MEMBERSHIP">This user is not a member of organization #VAR1# yet.</string>
+  <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">User is not a member of organization #VAR1# but has already login information assigned.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">User is not a member of organization #VAR1# and has no login information registered.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">User has no login yet.\nWould you like to assign the information of the selected registration to the user?</string>
   <string name="SYS_USER_PHOTO">User picture</string>
@@ -1389,7 +1386,8 @@
   <string name="SYS_USERNAME">Username</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
-  <string name="SYS_USERS_FOUND">User found</string>
+  <string name="SYS_USERS_PER_PAGE">Number of users per page</string>
+  <string name="SYS_USERS_PER_PAGE_DESC">Number of users listed on each page. If there are multiple members in this group pages can be turned. (Default: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">You are using a current #VAR1#version of Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>

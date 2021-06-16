@@ -920,20 +920,20 @@ $formUserManagement->addSelectBoxFromSql(
 );
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formUserManagement->addSelectBox(
-    'members_users_per_page', $gL10n->get('MEM_USERS_PER_PAGE'), $selectBoxEntries,
-    array('defaultValue' => $formValues['members_users_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MEM_USERS_PER_PAGE_DESC')
+    'members_users_per_page', $gL10n->get('SYS_USERS_PER_PAGE'), $selectBoxEntries,
+    array('defaultValue' => $formValues['members_users_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_USERS_PER_PAGE_DESC')
 );
 $formUserManagement->addInput(
-    'members_days_field_history', $gL10n->get('MEM_DAYS_FIELD_HISTORY'), $formValues['members_days_field_history'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextIdInline' => 'MEM_DAYS_FIELD_HISTORY_DESC')
+    'members_days_field_history', $gL10n->get('SYS_DAYS_FIELD_HISTORY'), $formValues['members_days_field_history'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextIdInline' => 'SYS_DAYS_FIELD_HISTORY_DESC')
 );
 $formUserManagement->addCheckbox(
     'members_show_all_users', $gL10n->get('ORG_SHOW_ALL_USERS'), (bool) $formValues['members_show_all_users'],
     array('helpTextIdInline' => 'ORG_SHOW_ALL_USERS_DESC')
 );
 $formUserManagement->addCheckbox(
-    'members_enable_user_relations', $gL10n->get('MEM_ENABLE_USER_RELATIONS'), (bool) $formValues['members_enable_user_relations'],
-    array('helpTextIdInline' => 'MEM_ENABLE_USER_RELATIONS_DESC')
+    'members_enable_user_relations', $gL10n->get('SYS_ENABLE_USER_RELATIONS'), (bool) $formValues['members_enable_user_relations'],
+    array('helpTextIdInline' => 'SYS_ENABLE_USER_RELATIONS_DESC')
 );
 
 $html = '<a href="'. ADMIDIO_URL. FOLDER_MODULES.'/userrelations/relationtypes.php">
@@ -945,7 +945,7 @@ $formUserManagement->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'user_administration', 'accordion_modules', $gL10n->get('MEM_USER_MANAGEMENT'), 'fas fa-users-cog', $formUserManagement->show()));
+$page->addHtml(getPreferencePanel('modules', 'user_administration', 'accordion_modules', $gL10n->get('SYS_USER_MANAGEMENT'), 'fas fa-users-cog', $formUserManagement->show()));
 
 // PANEL: DOCUMENTS-FILES
 

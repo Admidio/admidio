@@ -13,7 +13,7 @@ INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, co
                               , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.7', 0, 0)
                               , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '4.0.7', 0, 0)
                               , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.7', 0, 0)
-                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '4.0.7', 0, 0)
+                              , (100, 'MODULE', 'SYS_USER_MANAGEMENT', 'MEMBERS', '4.0.7', 0, 0)
                               , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.7', 0, 0)
                               , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.0.7', 0, 0)
                               , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.0.7', 0, 0)
@@ -50,7 +50,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (140, 2, 0, 6, 1, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'fa-cog', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC'),
 (120, 1, 0, 4, 1, 'mail', '/adm_program/modules/messages/messages_write.php', 'fa-envelope', 'SYS_EMAIL', 'SYS_EMAIL_DESC'),
 (160, 2, 0, 1, 1, 'newreg', '/adm_program/modules/registration/registration.php', 'fa-address-card', 'SYS_NEW_REGISTRATIONS', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC'),
-(100, 2, 0, 2, 1, 'usrmgt', '/adm_program/modules/members/members.php', 'fa-users-cog', 'MEM_USER_MANAGEMENT', 'MEM_USER_MANAGEMENT_DESC'),
+(100, 2, 0, 2, 1, 'usrmgt', '/adm_program/modules/members/members.php', 'fa-users-cog', 'SYS_USER_MANAGEMENT', 'SYS_USER_MANAGEMENT_DESC'),
 (110, 2, 0, 5, 1, 'menu', '/adm_program/modules/menu/menu.php', 'fa-stream', 'SYS_MENU', 'SYS_MENU_DESC');
 
 

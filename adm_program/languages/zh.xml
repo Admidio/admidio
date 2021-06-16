@@ -171,33 +171,33 @@
   <string name="SYS_GENERAL_LISTS">一般列表</string>
   <!--Phrases only in Mailmodule-->
   <!--Phrases only in Membersadministration-->
-  <string name="MEM_CREATE_USER">创建用户</string>
-  <string name="MEM_CODING">编码</string>
-  <string name="MEM_CHANGE_HISTORY">更改历史</string>
-  <string name="MEM_CHANGE_HISTORY_OF">#VAR1# 的更改历史</string>
-  <string name="MEM_CHOOSE_FILE">选择文件</string>
-  <string name="MEM_COMPLEMENT">补充</string>
-  <string name="MEM_DAYS_FIELD_HISTORY">字段历史记录的默认时间段(天)</string>
-  <string name="MEM_DAYS_FIELD_HISTORY_DESC"> 配置文件字段的更改将以指定的时间段（以天为单位）列出。这是过滤器的默认选项，用户以后可以更改。对于大型数据库，此选项用于限制更改历史列表。(默认值: 365)</string>
-  <string name="MEM_DUPLICATE">重复</string>
-  <string name="MEM_EDIT_USER">编辑用户</string>
-  <string name="MEM_ENABLE_USER_RELATIONS">保持和显示关系</string>
-  <string name="MEM_ENABLE_USER_RELATIONS_DESC">如果设置为有效的，则可以保持和显示用户之间的关系。(默认值：是)</string>
-  <string name="MEM_EXISTING_USERS">现有用户</string>
-  <string name="MEM_FILE_COLUMN">文件列</string>
-  <string name="MEM_FIRST_LINE_COLUMN_NAME">第一行包含列的名称</string>
-  <string name="MEM_FORMAT">格式</string>
-  <string name="MEM_IDENTIFY_USERS">现有用户的通过姓氏和名字进行识别。</string>
-  <string name="MEM_IMPORT">导入</string>
-  <string name="MEM_IMPORT_USERS">导入用户</string>
-  <string name="MEM_INPUT_FIRSTNAME_LASTNAME">请提供新用户的姓和名字。如果已存在有相同或相似名称的同一用户，将执行数据库检查。</string>
-  <string name="MEM_MAKE_FORMER">用户可以更改为形式成员，将保留包括成员角色资格的所有用户信息，以供以后使用。</string>
-  <string name="MEM_NO_CHANGES">没有记录被更改。</string>
-  <string name="MEM_NOT_EDIT">不要编辑</string>
-  <string name="MEM_PROFILE_FIELD">配置文件字段</string>
-  <string name="MEM_REMOVE_USER">删除用户</string>
-  <string name="MEM_REPLACE">替换</string>
-  <string name="MEM_SEND_USERNAME_PASSWORD">发送电子邮件（使用用户名和密码）。</string>
+  <string name="SYS_CREATE_USER">创建用户</string>
+  <string name="SYS_CODING">编码</string>
+  <string name="SYS_CHANGE_HISTORY">更改历史</string>
+  <string name="SYS_CHANGE_HISTORY_OF">#VAR1# 的更改历史</string>
+  <string name="SYS_CHOOSE_FILE">选择文件</string>
+  <string name="SYS_COMPLEMENT">补充</string>
+  <string name="SYS_DAYS_FIELD_HISTORY">字段历史记录的默认时间段(天)</string>
+  <string name="SYS_DAYS_FIELD_HISTORY_DESC"> 配置文件字段的更改将以指定的时间段（以天为单位）列出。这是过滤器的默认选项，用户以后可以更改。对于大型数据库，此选项用于限制更改历史列表。(默认值: 365)</string>
+  <string name="SYS_DUPLICATE">重复</string>
+  <string name="SYS_EDIT_USER">编辑用户</string>
+  <string name="SYS_ENABLE_USER_RELATIONS">保持和显示关系</string>
+  <string name="SYS_ENABLE_USER_RELATIONS_DESC">如果设置为有效的，则可以保持和显示用户之间的关系。(默认值：是)</string>
+  <string name="SYS_EXISTING_USERS">现有用户</string>
+  <string name="SYS_FILE_COLUMN">文件列</string>
+  <string name="SYS_FIRST_LINE_COLUMN_NAME">第一行包含列的名称</string>
+  <string name="SYS_FORMAT">格式</string>
+  <string name="SYS_IDENTIFY_USERS">现有用户的通过姓氏和名字进行识别。</string>
+  <string name="SYS_IMPORT">导入</string>
+  <string name="SYS_IMPORT_USERS">导入用户</string>
+  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">请提供新用户的姓和名字。如果已存在有相同或相似名称的同一用户，将执行数据库检查。</string>
+  <string name="SYS_MAKE_FORMER">用户可以更改为形式成员，将保留包括成员角色资格的所有用户信息，以供以后使用。</string>
+  <string name="SYS_NO_CHANGES_LOGGED">没有记录被更改。</string>
+  <string name="SYS_DO_NOT_EDIT">不要编辑</string>
+  <string name="SYS_PROFILE_FIELD">配置文件字段</string>
+  <string name="SYS_REMOVE_USER">删除用户</string>
+  <string name="SYS_REPLACE">替换</string>
+  <string name="SYS_SEND_USERNAME_PASSWORD">发送电子邮件（使用用户名和密码）。</string>
   <!--Phrases only in Menu-->
   <!--Phrases only in Messagemodule-->
   <!--Phrases only in New-User-Registration-->
@@ -246,7 +246,7 @@
   <string name="SYS_USER_RELATION_TYPE">关系类型</string>
   <string name="SYS_USERNAME">用户名</string>
   <string name="SYS_USERNAME_OR_EMAIL">用户名或电子邮件</string>
-  <string name="SYS_USERS_FOUND">查找用户</string>
+  <string name="SYS_USER_FOUND">查找用户</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VIEW">视图</string>

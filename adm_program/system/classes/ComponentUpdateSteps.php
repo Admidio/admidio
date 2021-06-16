@@ -41,7 +41,7 @@ final class ComponentUpdateSteps
 
             // add default configuration
             $userManagementList = new ListConfiguration(self::$db);
-            $userManagementList->setValue('lst_name', $gL10n->get('MEM_USER_MANAGEMENT'));
+            $userManagementList->setValue('lst_name', $gL10n->get('SYS_USER_MANAGEMENT'));
             $userManagementList->setValue('lst_org_id', $orgId);
             $userManagementList->setValue('lst_global', 1);
             $userManagementList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
@@ -441,7 +441,7 @@ final class ComponentUpdateSteps
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, 0, 6, 1, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, 0, 4, 1, \'mail\', \''.FOLDER_MODULES.'/messages/messages_write.php\', \'email.png\', \'SYS_EMAIL\', \'SYS_EMAIL_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, 0, 1, 1, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'new_registrations.png\', \'SYS_NEW_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\')
+                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'user_administration.png\', \'SYS_USER_MANAGEMENT\', \'SYS_USER_MANAGEMENT_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\')';
         self::$db->query($sql);
     }

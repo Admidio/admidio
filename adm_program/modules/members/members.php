@@ -34,7 +34,7 @@ if (!$gCurrentUser->editUsers())
 }
 
 // set headline of the script
-$headline = $gL10n->get('MEM_USER_MANAGEMENT');
+$headline = $gL10n->get('SYS_USER_MANAGEMENT');
 
 // Navigation of the module starts here
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
@@ -58,13 +58,13 @@ $page->addJavascript('
         window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members.php', array('members' => $flagShowMembers)).'");
     });', true);
 
-$page->addPageFunctionsMenuItem('menu_item_members_create_user', $gL10n->get('MEM_CREATE_USER'),
+$page->addPageFunctionsMenuItem('menu_item_members_create_user', $gL10n->get('SYS_CREATE_USER'),
     ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', 'fa-plus-circle');
 
 if($gSettingsManager->getBool('profile_log_edit_fields'))
 {
     // show link to view profile field change history
-    $page->addPageFunctionsMenuItem('menu_item_members_change_history', $gL10n->get('MEM_CHANGE_HISTORY'),
+    $page->addPageFunctionsMenuItem('menu_item_members_change_history', $gL10n->get('SYS_CHANGE_HISTORY'),
         ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', 'fa-history');
 }
 
@@ -74,13 +74,13 @@ if($gSettingsManager->getBool('members_show_all_users'))
     // create filter menu with elements for category
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-    $form->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), $flagShowMembers, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
+    $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL_USERS'), $flagShowMembers, array('helpTextIdLabel' => 'SYS_SHOW_ALL_USERS_DESC'));
     $filterNavbar->addForm($form->show());
     $page->addHtml($filterNavbar->show());
 }
 
 // show link to import users
-$page->addPageFunctionsMenuItem('menu_item_members_import_users', $gL10n->get('MEM_IMPORT_USERS'),
+$page->addPageFunctionsMenuItem('menu_item_members_import_users', $gL10n->get('SYS_IMPORT_USERS'),
     ADMIDIO_URL.FOLDER_MODULES.'/members/import.php', 'fa-upload');
 
 if($gCurrentUser->isAdministrator())

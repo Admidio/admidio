@@ -25,7 +25,7 @@ if (!PhpIniUtils::isFileUploadEnabled())
     // => EXIT
 }
 
-$headline = $gL10n->get('MEM_IMPORT_USERS');
+$headline = $gL10n->get('SYS_IMPORT_USERS');
 
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -74,7 +74,7 @@ $formats = array(
     'HTML' => $gL10n->get('SYS_HTML_TABLE')
 );
 $form->addSelectBox(
-    'format',$gL10n->get('MEM_FORMAT'), $formats,
+    'format',$gL10n->get('SYS_FORMAT'), $formats,
     array('showContextDependentFirstEntry' => FALSE, 'property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['format'])
 );
 $page->addJavascript('
@@ -88,7 +88,7 @@ $page->addJavascript('
 );
 
 $form->addFileUpload(
-    'userfile', $gL10n->get('MEM_CHOOSE_FILE'),
+    'userfile', $gL10n->get('SYS_CHOOSE_FILE'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values'))
 );
 
@@ -110,7 +110,7 @@ $selectBoxEntries = array(
     'ISO-8859-1' => $gL10n->get('SYS_ISO_8859_1')
 );
 $form->addSelectBox(
-    'import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntries,
+    'import_coding', $gL10n->get('SYS_CODING'), $selectBoxEntries,
     array('showContextDependentFirstEntry' => FALSE, 'defaultValue' => $formValues['import_coding'], 'class' => 'import-setting import-CSV import-HTML')
 );
 
@@ -171,27 +171,27 @@ while($row = $statement->fetch())
     $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
 }
 $form->addSelectBox(
-    'import_role_id', $gL10n->get('MEM_ASSIGN_ROLE'), $roles,
+    'import_role_id', $gL10n->get('SYS_ASSIGN_ROLE'), $roles,
     array(
         'property'        => HtmlForm::FIELD_REQUIRED,
         'defaultValue'    => $formValues['import_role_id'],
-        'helpTextIdLabel' => 'MEM_ASSIGN_ROLE_FOR_IMPORT'
+        'helpTextIdLabel' => 'SYS_ASSIGN_ROLE_FOR_IMPORT'
     )
 );
 
 $selectBoxEntries = array(
     1 => $gL10n->get('MEM_NOT_EDIT'),
-    2 => $gL10n->get('MEM_DUPLICATE'),
-    3 => $gL10n->get('MEM_REPLACE'),
-    4 => $gL10n->get('MEM_COMPLEMENT')
+    2 => $gL10n->get('SYS_DUPLICATE'),
+    3 => $gL10n->get('SYS_REPLACE'),
+    4 => $gL10n->get('SYS_COMPLEMENT')
 );
 $form->addSelectBox(
-    'user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $selectBoxEntries,
+    'user_import_mode', $gL10n->get('SYS_EXISTING_USERS'), $selectBoxEntries,
     array(
         'property'                       => HtmlForm::FIELD_REQUIRED,
         'defaultValue'                   => $formValues['user_import_mode'],
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => 'MEM_IDENTIFY_USERS'
+        'helpTextIdLabel'                => 'SYS_IDENTIFY_USERS'
     )
 );
 $form->addSubmitButton(
