@@ -65,7 +65,7 @@ if (!isset($formValues['import_role_id'])) {
 $page = new HtmlPage('admidio-members-import', $headline);
 
 // show form
-$form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_function.php', $page, array('enableFileUpload' => true));
+$form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_read_file.php', $page, array('enableFileUpload' => true));
 $formats = array(
     'AUTO' => $gL10n->get('SYS_AUTO_DETECT'),
     'XLSX' => $gL10n->get('SYS_EXCEL_2007_365'),

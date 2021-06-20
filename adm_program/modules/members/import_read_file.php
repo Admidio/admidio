@@ -59,8 +59,8 @@ elseif($postRoleId === 0)
     // => EXIT
 }
 
-// Rolle einlesen und pruefen, ob der User diese selektieren kann und dadurch nicht
-// evtl. ein Rollenzuordnungsrecht bekommt, wenn er es vorher nicht hatte
+// Read in the role and check whether the user can select it and thereby not possibly
+// get a role assignment right if he did not have it before.
 $role = new TableRoles($gDb, $postRoleId);
 
 if(!$gCurrentUser->hasRightViewRole((int) $role->getValue('rol_id'))
@@ -78,12 +78,15 @@ switch($postImportFormat) {
     case 'XLSX':
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
         break;
+
     case 'XLS':
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
         break;
+
     case 'ODS':
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Ods();
         break;
+
     case 'CSV':
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
         if ($postImportCoding === 'GUESS') {
@@ -103,38 +106,54 @@ switch($postImportFormat) {
             $reader->setEnclosure($postEnclosure );
         }
         break;
+
     case 'HTML':
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Html();
         break;
+
     case 'AUTO':
     default:
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($importfile);
         break;
 }
 
-# TODO: Better error handling if file cannot be loaded (phpSpreadsheet apparently does not always use exceptions)
-if (isset($reader) and !is_null($reader)) {
-    try {
+// TODO: Better error handling if file cannot be loaded (phpSpreadsheet apparently does not always use exceptions)
+if (isset($reader) and !is_null($reader))
+{
+    try
+    {
         $spreadsheet = $reader->load($importfile);
-        # Read specified sheet (passed as argument/param)
-        if (is_numeric($postWorksheet)) {
+        // Read specified sheet (passed as argument/param)
+        if (is_numeric($postWorksheet))
+        {
             $sheet = $spreadsheet->getSheet($postWorksheet);
-        } else if (!empty($postWorksheet)) {
+        }
+        elseif (!empty($postWorksheet))
+        {
             $sheet = $spreadsheet->getSheetByName($postWorksheet);
-        } else {
+        }
+        else
+        {
             $sheet = $spreadsheet->getActiveSheet();
         }
 
-        if (empty($sheet)) {
+        if (empty($sheet))
+        {
             $gMessage->show($gL10n->get('SYS_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet)));
             // => EXIT
-        } else {
+        }
+        else
+        {
             $_SESSION['import_data']       = $sheet->toArray();
         }
-    } catch(\PhpOffice\PhpSpreadsheet\Exception | \Exception $e) {
+    }
+    catch(\PhpOffice\PhpSpreadsheet\Exception | \Exception $e)
+    {
         $gMessage->show($e->getMessage());
         // => EXIT
-    } catch (AdmException $e) {
+    }
+    catch (AdmException $e)
+    {
         $e->showText();
         // => EXIT
     }
