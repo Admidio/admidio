@@ -140,5 +140,5 @@ if (isset($reader) and !is_null($reader)) {
     }
 }
 
-admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/members/import_csv_config.php');
+admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/members/import_column_config.php');
 // => EXIT
