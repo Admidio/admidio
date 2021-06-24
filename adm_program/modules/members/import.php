@@ -203,7 +203,7 @@ $form->addSelectBox(
     )
 );
 $form->addSubmitButton(
-    'btn_forward', $gL10n->get('SYS_NEXT'),
+    'btn_forward', $gL10n->get('SYS_ASSIGN_FIELDS'),
     array('icon' => 'fa-arrow-circle-right', 'class' => ' offset-sm-3')
 );
 
