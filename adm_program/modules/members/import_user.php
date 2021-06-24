@@ -48,9 +48,15 @@ $importProfileFields = array();
 // create array with all profile fields that where assigned to columns of the import file
 foreach($_POST as $formFieldId => $importFileColumn)
 {
+    // normal profile fields
     if(strpos($formFieldId, 'usf-') !== false && $importFileColumn !== '')
     {
         $importProfileFields[(int) substr($formFieldId, 4)] = (int) $importFileColumn;
+    }
+    // username and password
+    elseif(strpos($formFieldId, 'usr_') !== false && $importFileColumn !== '')
+    {
+        $importProfileFields[$formFieldId] = $importFileColumn;
     }
 }
 
@@ -69,7 +75,9 @@ PhpIniUtils::startNewExecutionTimeLimit(600);
 
 for($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i)
 {
-    $userCounted = false;
+    $userCounted   = false;
+    $userLoginName = '';
+    $userPassword  = '';
     $userImport->clear();
 
     $userImport->setImportMode((int) $_SESSION['user_import_mode']);
@@ -79,10 +87,33 @@ for($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i)
 
     foreach($line as $columnKey => $columnValue)
     {
+        // get usf id or database column name
+        $assignedFieldColumnId = array_search($columnKey, $importProfileFields);
         // remove spaces and html tags
         $columnValue = trim(strip_tags($columnValue));
 
-        $userImport->setValue($gProfileFields->getPropertyById(array_search($columnKey, $importProfileFields), 'usf_name_intern'), $columnValue);
+        if(is_int($assignedFieldColumnId))
+        {
+            $userImport->setValue($gProfileFields->getPropertyById($assignedFieldColumnId, 'usf_name_intern'), $columnValue);
+        }
+        else
+        {
+            // remember username and password and add it later to the user
+            if($assignedFieldColumnId === 'usr_login_name')
+            {
+                $userLoginName = $columnValue;
+            }
+            elseif($assignedFieldColumnId === 'usr_password')
+            {
+                $userPassword = $columnValue;
+            }
+        }
+    }
+
+    // add login data to the user
+    if($userLoginName !== '' && $userPassword !== '')
+    {
+        $userImport->setLoginData($userLoginName, $userPassword);
     }
 
     if($userImport->isNewRecord())

@@ -160,6 +160,33 @@ class UserImport extends User
     }
 
     /**
+     * Method will set username and password for the import user.
+     * Therefore the current user must be an administrator and if the import user already exists he should
+     * not have username and password. The password must have the min length and should also have the
+     * necessary password strength. If the login data meet all these criteria than the login data will
+     * be added to the import user.
+     * @param string $loginName The loginname for the import user that should later be used to login to this system.
+     * @param string $password  The password for the import user that should later be used to login to this system.
+     * @return bool Return **true** if the login data could be added to the import user otherwise **false**.
+     */
+    public function setLoginData($loginName, $password)
+    {
+        global $gCurrentUser, $gSettingsManager;
+
+        if($gCurrentUser->isAdministrator()
+        && strlen($this->getValue('usr_login_name')) === 0
+        && strlen($password) >= PASSWORD_MIN_LENGTH
+        && PasswordUtils::passwordStrength($password, $this->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength'))
+        {
+            $this->setValue('usr_login_name', $loginName);
+            $this->setPassword($password);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Set a new value for a column of the database table if the column has the prefix **usr_**
      * otherwise the value of the profile field of the table adm_user_data will set.
      * If the user log is activated than the change of the value will be logged in **adm_user_log**.
