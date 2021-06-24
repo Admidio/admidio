@@ -11,14 +11,14 @@
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
-// nur berechtigte User duerfen User importieren
+// only authorized users can import users
 if(!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
-// pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
+// check if file_uploads is set to ON in the current server settings...
 if (!PhpIniUtils::isFileUploadEnabled())
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
@@ -32,12 +32,13 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 if(isset($_SESSION['import_request']))
 {
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    // due to incorrect input the user has returned to this form
+    // now write the previously entered contents into the object
     $formValues = $_SESSION['import_request'];
     unset($_SESSION['import_request']);
 };
-# Make sure all potential form values have either a value from the previous request or the default
+
+// Make sure all potential form values have either a value from the previous request or the default
 if (!isset($formValues['format'])) {
     $formValues['format'] = '';
 }
@@ -64,7 +65,7 @@ if (!isset($formValues['import_role_id'])) {
 $page = new HtmlPage('admidio-members-import', $headline);
 
 // show form
-$form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_function.php', $page, array('enableFileUpload' => true));
+$form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_read_file.php', $page, array('enableFileUpload' => true));
 $formats = array(
     'AUTO' => $gL10n->get('SYS_AUTO_DETECT'),
     'XLSX' => $gL10n->get('SYS_EXCEL_2007_365'),
@@ -89,13 +90,20 @@ $page->addJavascript('
 
 $form->addFileUpload(
     'userfile', $gL10n->get('SYS_CHOOSE_FILE'),
-    array('property' => HtmlForm::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values'))
+    array('property' => HtmlForm::FIELD_REQUIRED, 'allowedMimeTypes' =>
+        array('text/comma-separated-values',
+              'text/html',
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+              'application/vnd.ms-excel',
+              'application/vnd.oasis.opendocument.spreadsheet'
+        )
+    )
 );
 
-# Add format-specific settings (if specific format is selected)
-# o) Worksheet: AUTO, XLSX, XLS, ODS, HTML (not CSV)
-# o) Encoding (Default/Detect/UTF-8/ISO-8859-1/CP1252): CSV, HTML
-# o) Delimiter (Detect/Comma/Tab/Semicolon): CSV
+// Add format-specific settings (if specific format is selected)
+// o) Worksheet: AUTO, XLSX, XLS, ODS, HTML (not CSV)
+// o) Encoding (Default/Detect/UTF-8/ISO-8859-1/CP1252): CSV, HTML
+// o) Delimiter (Detect/Comma/Tab/Semicolon): CSV
 $form->addInput('import_sheet', $gL10n->get('SYS_WORKSHEET_NAMEINDEX'), '', array('class' => 'import-setting import-XLSX import-XLS import-ODS import-HTML import-AUTO'));
 
 $selectBoxEntries = array(
@@ -180,7 +188,7 @@ $form->addSelectBox(
 );
 
 $selectBoxEntries = array(
-    1 => $gL10n->get('MEM_NOT_EDIT'),
+    1 => $gL10n->get('SYS_DO_NOT_EDIT'),
     2 => $gL10n->get('SYS_DUPLICATE'),
     3 => $gL10n->get('SYS_REPLACE'),
     4 => $gL10n->get('SYS_COMPLEMENT')
@@ -195,7 +203,7 @@ $form->addSelectBox(
     )
 );
 $form->addSubmitButton(
-    'btn_forward', $gL10n->get('SYS_NEXT'),
+    'btn_forward', $gL10n->get('SYS_ASSIGN_FIELDS'),
     array('icon' => 'fa-arrow-circle-right', 'class' => ' offset-sm-3')
 );
 

@@ -581,9 +581,9 @@
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
   <string name="SYS_ASSIGN_FIELDS">Assign fields</string>
   <string name="SYS_ASSIGN_FIELDS_DESC">If possible, assign to database fields one column of a file.\n\nOn the left side you are able to find all types of database fields, on the right side you can find all columns of the selected file. Fields may be left empty when the file does not include every database field.</string>
-  <string name="SYS_ASSIGN_LOGIN_INFORMATION">Assigning login information</string>
-  <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Login information has been successfully assigned.</string>
-  <string name="SYS_ASSIGN_LOGIN_EMAIL">Login information has been successfully assigned and user has been informed via e-mail.</string>
+  <string name="SYS_ASSIGN_LOGIN_INFORMATION">Assigning login data</string>
+  <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Login data has been successfully assigned.</string>
+  <string name="SYS_ASSIGN_LOGIN_EMAIL">Login data has been successfully assigned and user has been informed via e-mail.</string>
   <string name="SYS_ASSIGN_MEMBERS">Assigning members</string>
   <string name="SYS_ASSIGN_MEMBERSHIP">Assigning membership</string>
   <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Assigning membership and login information to selected user.</string>
@@ -915,6 +915,7 @@
   <string name="SYS_IDENTIFY_USERS">Identification of existing users is made by means of first name and surname.</string>
   <string name="SYS_IMPORTANT">Important</string>
   <string name="SYS_IMPORT">Import</string>
+  <string name="SYS_IMPORT_LOGIN_DATA_DESC">Login data can only be imported by an administrator. The rules of the organization must be observed (e.g. password length and password strength). Users with already existing login data keep them. No login data will be overwritten by the import.</string>
   <string name="SYS_IMPORT_MODE">Import mode</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">The worksheet #VAR1# does not exist in the imported file!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Import was successful..\n\n#VAR1# new users have been created.\n#VAR2# users have been edited.\n#VAR3# role memberships have been assigned.</string>
@@ -961,8 +962,8 @@
   <string name="SYS_LOGIN">Sign in</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">You have tried to login too many times recently using a wrong password.\nFor security reasons your account has been locked for 15 minutes.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Your account has not been activated yet.\n\nYou will be informed as soon as access is possible.</string>
-  <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Your login credentials were correct but the update process is only activated for administrators of the organization #VAR1_BOLD#.</string>
-  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Your login credentials were correct but you are not an active member of this organization #VAR1_BOLD#.</string>
+  <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Your login data were correct but the update process is only activated for administrators of the organization #VAR1_BOLD#.</string>
+  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Your login data were correct but you are not an active member of this organization #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">The given username and/or password is incorrect.</string>
   <string name="SYS_LOGIN_PROBLEMS">Login problems</string>
   <string name="SYS_LOGOUT">Sign out</string>
@@ -1123,7 +1124,7 @@
   <string name="SYS_PLUGINS">Plugins</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
-  <string name="SYS_POSSIBLE_FIELDNAMES">Column names for autodetection: #VAR1#, #VAR2#</string>
+  <string name="SYS_POSSIBLE_FIELDNAMES">Column names for autodetection: #VAR1#</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST size</string>
   <string name="SYS_POSTCODE">Postal code</string>
   <string name="SYS_PRESENTATION">Display</string>
@@ -1162,7 +1163,7 @@
   <string name="SYS_RELATIONSHIP_TYPE_DESC">An asymmetrical relationship is e.g. used for parent / child while symmetrical relations e.g. can be used for siblings. These are always bidirectional, however,  unidirectional relations only mark in one direction.</string>
   <string name="SYS_RELOAD">Reload</string>
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
-  <string name="SYS_REMINDER_SEND_LOGIN">Do you want to send the user credentials (incl. password!) as a reminder?</string>
+  <string name="SYS_REMINDER_SEND_LOGIN">Would you like to send the user their login data with a new password as a reminder?</string>
   <string name="SYS_REMOVE">Remove</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REMOVE_USER">Remove user</string>
@@ -1331,7 +1332,7 @@
   <string name="SYS_SUPPORT_ADMIDIO">Support Admidio</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
   <string name="SYS_SYMMETRICAL">Symmetrical</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Credentials for #organization_long_name#\n#content# Hello #user_first_name#,\n\nYou receive your credentials for the website #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nCheers,\nThe administrators</string>
+  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Login data for #organization_long_name#\n#content# Hello #user_first_name#,\n\nYou receive your login data for the website #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nCheers,\nThe administrators</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Reset password for #organization_long_name#\n#content# Hello #user_first_name#,\n\nWe have received a request to reset your password on #organization_homepage#.\n\nIf the request came from you, you can use the following link to reset your password and set a new one: \n#variable1#\n\nBest regards\nThe administrators</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in registration at #organization_long_name# rejected.\n#content#Hello #user_first_name#,\n\nyour registration at #organization_homepage# was rejected.\n\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\nTo clarify the reasons for the rejection please contact the administrator #administrator_email# from #organization_homepage#.\n\nRegards,\nThe administrators</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration at #organization_long_name# confirmed\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# has been confirmed.\n\nYou can now log in to the homepage with your username #user_login_name# and your password.\n\nIf you have any questions, write an email to #administrator_email#.\n\nCheers,\nThe administrators</string>
@@ -1375,8 +1376,8 @@
   <string name="SYS_USER_MANAGEMENT_DESC">Display and organize all active and former members here. New users can be imported or created.</string>
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">This user is not a member of organization #VAR1# yet.</string>
-  <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">User is not a member of organization #VAR1# but has already login information assigned.</string>
-  <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">User is not a member of organization #VAR1# and has no login information registered.</string>
+  <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">User is not a member of organization #VAR1# but has already login data assigned.</string>
+  <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">User is not a member of organization #VAR1# and has no login data registered.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">User has no login yet.\nWould you like to assign the information of the selected registration to the user?</string>
   <string name="SYS_USER_PHOTO">User picture</string>
   <string name="SYS_USER_RELATION">Relationship</string>

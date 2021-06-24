@@ -300,7 +300,8 @@
   <string name="SYS_NO_CHANGES_LOGGED_PROFIL">Bei #VAR1_BOLD# wurden bisher keine Änderungen protokolliert.</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1#.</string>
   <string name="SYS_DO_NOT_EDIT">Nicht bearbeiten</string>
-  <string name="SYS_POSSIBLE_FIELDNAMES">Spaltennamen für automatische Erkennung: #VAR1#, #VAR2#</string>
+  <string name="SYS_POSSIBLE_FIELDNAMES">Spaltennamen für automatische Erkennung: #VAR1#</string>
+  <string name="SYS_IMPORT_LOGIN_DATA_DESC">Zugangsdaten können nur von einem Administrator importiert werden. Es müssen dabei die Regeln der Organisation eingehalten werden (z.B. die Passwortlänge und Passwortstärke). Benutzer mit bereits vorhandenen Zugangsdaten behalten diese. Es werden keine Zugangsdaten durch den Import überschrieben.</string>
   <string name="SYS_PROFILE_FIELD">Profilfeld</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER">Willst du die Mitgliedschaft des Benutzers #VAR1# bei #VAR2# beenden?</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER_OK">Die Mitgliedschaft des Benutzers #VAR1_BOLD# bei #VAR2_BOLD# wurde erfolgreich beendet!</string>
