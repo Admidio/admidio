@@ -436,6 +436,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'UploadHandlerDownload' => __DIR__ . '/../../../..' . '/adm_program/system/classes/UploadHandlerDownload.php',
         'UploadHandlerPhoto' => __DIR__ . '/../../../..' . '/adm_program/system/classes/UploadHandlerPhoto.php',
         'User' => __DIR__ . '/../../../..' . '/adm_program/system/classes/User.php',
+        'UserImport' => __DIR__ . '/../../../..' . '/adm_program/system/classes/UserImport.php',
         'UserRegistration' => __DIR__ . '/../../../..' . '/adm_program/system/classes/UserRegistration.php',
     );
 

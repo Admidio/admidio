@@ -270,5 +270,6 @@ return array(
     'UploadHandlerDownload' => $baseDir . '/adm_program/system/classes/UploadHandlerDownload.php',
     'UploadHandlerPhoto' => $baseDir . '/adm_program/system/classes/UploadHandlerPhoto.php',
     'User' => $baseDir . '/adm_program/system/classes/User.php',
+    'UserImport' => $baseDir . '/adm_program/system/classes/UserImport.php',
     'UserRegistration' => $baseDir . '/adm_program/system/classes/UserRegistration.php',
 );

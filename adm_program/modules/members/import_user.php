@@ -13,13 +13,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 $_SESSION['import_csv_request'] = $_POST;
 
-// create readable constants for user import mode
-define('USER_IMPORT_NOT_EDIT', '1');
-define('USER_IMPORT_DUPLICATE', '2');
-define('USER_IMPORT_DISPLACE', '3');
-define('USER_IMPORT_COMPLETE', '4');
-
-// nur berechtigte User duerfen User importieren
+// only authorized users can import users
 if(!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -38,23 +32,34 @@ if(strlen($_POST['usf-'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]) =
     // => EXIT
 }
 
-$firstRowTitle = array_key_exists('first_row', $_POST);
-
-// jede Zeile aus der Datei einzeln durchgehen und den Benutzer in der DB anlegen
+// go through each line from the file one by one and create the user in the DB
 $line = reset($_SESSION['import_data']);
-$user = new User($gDb, $gProfileFields);
+$userImport = new UserImport($gDb, $gProfileFields);
+$firstRowTitle = array_key_exists('first_row', $_POST);
 $startRow = 0;
 $countImportNewUser  = 0;
 $countImportEditUser = 0;
 $countImportEditRole = 0;
+$userCounted = false;
 $importedFields = array();
+// array matches the profile field ids with the columns of the import file
+$importProfileFields = array();
 
-// Abhängige Rollen ermitteln
+// create array with all profile fields that where assigned to columns of the import file
+foreach($_POST as $formFieldId => $importFileColumn)
+{
+    if(strpos($formFieldId, 'usf-') !== false && $importFileColumn !== '')
+    {
+        $importProfileFields[(int) substr($formFieldId, 4)] = (int) $importFileColumn;
+    }
+}
+
+// Determine dependent roles
 $depRoles = RoleDependency::getParentRoles($gDb, (int) $_SESSION['rol_id']);
 
 if($firstRowTitle)
 {
-    // erste Zeile ueberspringen, da hier die Spaltenbezeichnungen stehen
+    // skip first line, because here are the column names
     $line = next($_SESSION['import_data']);
     $startRow = 1;
 }
@@ -64,202 +69,44 @@ PhpIniUtils::startNewExecutionTimeLimit(600);
 
 for($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i)
 {
-    $user->clear();
+    $userCounted = false;
+    $userImport->clear();
+
+    $userImport->setImportMode((int) $_SESSION['user_import_mode']);
+    $userImport->readDataByFirstnameLastName(
+        $line[$importProfileFields[$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]],
+        $line[$importProfileFields[$gProfileFields->getProperty('LAST_NAME', 'usf_id')]]);
 
     foreach($line as $columnKey => $columnValue)
     {
         // remove spaces and html tags
         $columnValue = trim(strip_tags($columnValue));
 
-        // now go through all user fields and see, at which the corresponding
-        // file column was selected then assign the value to this
-        /**
-         * @var TableUserField $field
-         */
-        foreach($gProfileFields->getProfileFields() as $field)
-        {
-            $usfId = (int) $field->getValue('usf_id');
-
-            if(strlen($_POST['usf-'. $usfId]) > 0 && $columnKey == $_POST['usf-'. $usfId])
-            {
-                $usfNameIntern = $field->getValue('usf_name_intern');
-
-                // remember imported field
-                if(!isset($importedFields[$usfId]))
-                {
-                    $importedFields[$usfId] = $usfNameIntern;
-                }
-
-                if($usfNameIntern === 'COUNTRY')
-                {
-                    try
-                    {
-                        $user->setValue($usfNameIntern, $gL10n->getCountryIsoCode($columnValue));
-                    }
-                    catch(Exception $e)
-                    {
-                        $gLogger->info($e->getMessage());
-                    }
-                }
-                else
-                {
-                    switch ($field->getValue('usf_type'))
-                    {
-                        case 'CHECKBOX':
-                            $columnValueToLower = StringUtils::strToLower($columnValue);
-                            if(in_array($columnValueToLower, array('y', 'yes', '1', 'j', StringUtils::strToLower($gL10n->get('SYS_YES'))), true))
-                            {
-                                $user->setValue($usfNameIntern, '1');
-                            }
-                            if(in_array($columnValueToLower, array('n', 'no', '0', '', StringUtils::strToLower($gL10n->get('SYS_NO'))), true))
-                            {
-                                $user->setValue($usfNameIntern, '0');
-                            }
-                            break;
-                        case 'DROPDOWN': // fallthrough
-                        case 'RADIO_BUTTON':
-                            // save position of combobox
-                            $arrListValues = $field->getValue('usf_value_list', 'text');
-                            $position = 1;
-
-                            foreach($arrListValues as $value)
-                            {
-                                if(StringUtils::strToLower($columnValue) === StringUtils::strToLower(trim($arrListValues[$position])))
-                                {
-                                    // if col_value is text than save position if text is equal to text of position
-                                    $user->setValue($usfNameIntern, $position);
-                                }
-                                elseif(is_numeric($columnValue) && !is_numeric($arrListValues[$position]) && $columnValue > 0 && $columnValue < 1000)
-                                {
-                                    // if col_value is numeric than save position if col_value is equal to position
-                                    $user->setValue($usfNameIntern, $columnValue);
-                                }
-                                ++$position;
-                            }
-                            break;
-                        case 'EMAIL':
-                            if(StringUtils::strValidCharacters($columnValue, 'email'))
-                            {
-                                $user->setValue($usfNameIntern, substr($columnValue, 0, 255));
-                            }
-                            break;
-                        case 'INTEGER':
-                            // number could contain dot and comma
-                            if(is_numeric(strtr($columnValue, ',.', '00')))
-                            {
-                                $user->setValue($usfNameIntern, $columnValue);
-                            }
-                            break;
-                        case 'TEXT':
-                            $user->setValue($usfNameIntern, substr($columnValue, 0, 100));
-                            break;
-                        default:
-                            $user->setValue($usfNameIntern, substr($columnValue, 0, 4000));
-                    }
-                }
-            }
-        }
+        $userImport->setValue($gProfileFields->getPropertyById(array_search($columnKey, $importProfileFields), 'usf_name_intern'), $columnValue);
     }
 
-    // create new user only if firstname and lastname are filled
-    if(strlen($user->getValue('LAST_NAME')) > 0 && strlen($user->getValue('FIRST_NAME')) > 0)
+    if($userImport->isNewRecord())
     {
-        // search for existing user with same name and read user data
-        $sql = 'SELECT MAX(usr_id) AS usr_id
-                  FROM '.TBL_USERS.'
-            INNER JOIN '.TBL_USER_DATA.' AS last_name
-                    ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-                   AND last_name.usd_value  = ? -- $user->getValue(\'LAST_NAME\', \'database\')
-            INNER JOIN '.TBL_USER_DATA.' AS first_name
-                    ON first_name.usd_usr_id = usr_id
-                   AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                   AND first_name.usd_value  = ? -- $user->getValue(\'FIRST_NAME\', \'database\')
-                 WHERE usr_valid = 1';
-        $queryParams = array(
-            $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-            $user->getValue('LAST_NAME', 'database'),
-            $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-            $user->getValue('FIRST_NAME', 'database')
-        );
-        $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
-        $maxUserId = (int) $pdoStatement->fetchColumn();
-        if($maxUserId > 0)
-        {
-            $duplicateUser = new User($gDb, $gProfileFields, $maxUserId);
-        }
+        ++$countImportNewUser;
+        $userCounted = true;
+    }
 
-        if($maxUserId > 0)
-        {
-            if($_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
-            {
-                // delete all user data of profile fields
-                $duplicateUser->deleteUserFieldData();
-            }
+    if($userImport->save() && !$userCounted)
+    {
+        ++$countImportEditUser;
+        $userCounted = true;
+    }
 
-            if($_SESSION['user_import_mode'] == USER_IMPORT_COMPLETE
-            || $_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
-            {
-                // edit data of user, if user already exists
-                foreach($importedFields as $fieldNameIntern)
-                {
-                    if($duplicateUser->getValue($fieldNameIntern) != $user->getValue($fieldNameIntern))
-                    {
-                        if($gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'DATE')
-                        {
-                            // the date must be formated
-                            $duplicateUser->setValue($fieldNameIntern, $user->getValue($fieldNameIntern, $gSettingsManager->getString('system_date')));
-                        }
-                        elseif($fieldNameIntern === 'COUNTRY')
-                        {
-                            // we need the iso-code and not the name of the country
-                            $duplicateUser->setValue($fieldNameIntern, $gL10n->getCountryIsoCode($user->getValue($fieldNameIntern)));
-                        }
-                        elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'DROPDOWN'
-                            || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'RADIO_BUTTON')
-                        {
-                            // get number and not value of entry
-                            $duplicateUser->setValue($fieldNameIntern, $user->getValue($fieldNameIntern, 'database'));
-                        }
-                        else
-                        {
-                            $duplicateUser->setValue($fieldNameIntern, $user->getValue($fieldNameIntern));
-                        }
-                    }
-                }
-                $user = $duplicateUser;
-            }
-        }
+    // assign role membership to user
+    if($userImport->setRoleMembership((int) $_SESSION['rol_id']))
+    {
+        ++$countImportEditRole;
+    }
 
-        if($maxUserId === 0 || ($maxUserId > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT))
-        {
-            // if user doesn't exists or should be duplicated then count as new user
-            if($maxUserId === 0 || $_SESSION['user_import_mode'] == USER_IMPORT_DUPLICATE)
-            {
-                ++$countImportNewUser;
-            }
-            // existing users count as edited if mode is displace or complete
-            elseif($maxUserId > 0 && $user->hasColumnsValueChanged())
-            {
-                ++$countImportEditUser;
-            }
-
-            // save user data
-            $user->save();
-
-            // assign role membership to user
-            if($user->setRoleMembership((int) $_SESSION['rol_id']))
-            {
-                ++$countImportEditRole;
-            }
-
-            // assign dependent role memberships to user
-            foreach($depRoles as $depRole)
-            {
-                $user->setRoleMembership($depRole);
-            }
-
-        }
+    // assign dependent role memberships to user
+    foreach($depRoles as $depRole)
+    {
+        $userImport->setRoleMembership($depRole);
     }
 
     $line = next($_SESSION['import_data']);
