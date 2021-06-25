@@ -45,5 +45,11 @@
     <step id="160">ComponentUpdateSteps::updateStep41AddSystemmailText</step>
     <step id="170">DELETE FROM %PREFIX%_texts WHERE txt_name = 'SYSMAIL_ACTIVATION_LINK'</step>
     <step id="180">ComponentUpdateSteps::updateStep41AddMembersManagementDefaultList</step>
+    <step id="190">UPDATE %PREFIX%_components SET com_name = 'SYS_WEBLINKS' WHERE com_name = 'LNK_WEBLINKS'</step>
+    <step id="200">UPDATE %PREFIX%_menu SET men_name = 'SYS_WEBLINKS', men_description = 'SYS_WEBLINKS_DESC' WHERE men_name_intern = 'weblinks'</step>
+    <step id="210">UPDATE %PREFIX%_components SET com_name = 'SYS_USER_MANAGEMENT' WHERE com_name = 'MEM_USER_MANAGEMENT'</step>
+    <step id="220">UPDATE %PREFIX%_menu SET men_name = 'SYS_USER_MANAGEMENT', men_description = 'SYS_USER_MANAGEMENT_DESC' WHERE men_name_intern = 'usrmgt'</step>
+    <step id="230">UPDATE %PREFIX%_menu SET men_name = 'SYS_EMAIL', men_description = 'SYS_EMAIL_DESC' WHERE men_name_intern = 'mail'</step>
+    <step id="240">UPDATE %PREFIX%_menu SET men_name = 'SYS_NEW_REGISTRATIONS', men_description = 'SYS_MANAGE_NEW_REGISTRATIONS_DESC' WHERE men_name_intern = 'newreg'</step>
     <step>stop</step>
 </update>
