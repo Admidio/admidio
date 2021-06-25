@@ -174,6 +174,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
     public static $classMap = array (
         'AdmException' => __DIR__ . '/../../../..' . '/adm_program/system/classes/AdmException.php',
         'AutoLogin' => __DIR__ . '/../../../..' . '/adm_program/system/classes/AutoLogin.php',
+        'CategoryReport' => __DIR__ . '/../../../..' . '/adm_program/system/classes/CategoryReport.php',
         'Component' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Component.php',
         'ComponentUpdate' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ComponentUpdate.php',
         'ComponentUpdateSteps' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ComponentUpdateSteps.php',
