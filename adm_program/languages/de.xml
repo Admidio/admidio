@@ -228,24 +228,6 @@
   <string name="INS_SON">Sohn</string>
   <string name="INS_SPOUSE">Ehepartner/-in</string>
   <string name="INS_WIFE">Ehefrau</string>
-  <!--Phrases only in Linkmodule-->
-  <string name="SYS_CREATE_LINK">Link anlegen</string>
-  <string name="SYS_DISPLAY_REDIRECT">Anzeige Weiterleitung</string>
-  <string name="SYS_DISPLAY_REDIRECT_DESC">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Voreinstellung: 10 Sekunden)</string>
-  <string name="SYS_EDIT_WEBLINKS">Weblinks bearbeiten</string>
-  <string name="SYS_LINK_EMAIL_NOTIFICATION_TITLE">Ein neuer Weblink wurde angelegt</string>
-  <string name="SYS_LINK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei #VAR1# angelegt.\n\nLink: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
-  <string name="SYS_LINK_ADDRESS">Linkadresse</string>
-  <string name="SYS_LINK_NAME">Linkname</string>
-  <string name="SYS_LINK_TARGET">Linkziel</string>
-  <string name="SYS_LINK_TARGET_DESC">Hier wird angegeben, ob die ausgewählte Webseite im selben Browserfenster wie Admidio oder in einem neuen Browserfenster angezeigt werden soll.</string>
-  <string name="SYS_LINK_COLLECTION_FROM">Linksammlung von #VAR1#</string>
-  <string name="SYS_NEW_WINDOW">Neues Fenster</string>
-  <string name="SYS_REDIRECT">Weiterleitung</string>
-  <string name="SYS_REDIRECT_DESC">Du verlässt jetzt das Webangebot von #VAR1_BOLD# und wirst in #VAR2# Sekunden automatisch zu #VAR3# weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicke bitte #VAR4#hier#VAR5#!</string>
-  <string name="SYS_SAME_WINDOW">Gleiches Fenster</string>
-  <string name="SYS_WEBLINKS">Weblinks</string>
-  <string name="SYS_WEBLINKS_DESC">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>
@@ -672,6 +654,7 @@
   <string name="SYS_CREATE_FOLDER">Ordner anlegen</string>
   <string name="SYS_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
   <string name="SYS_CREATE_HTACCESS">.htaccess erstellen</string>
+  <string name="SYS_CREATE_LINK">Link anlegen</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Neue Konfiguration erstellen</string>
   <string name="SYS_CREATE_NEW_USER">Neuen Benutzer anlegen</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, kannst du diesen neu anlegen.</string>
@@ -747,6 +730,8 @@
   <string name="SYS_DIRECTORY_SEPARATOR">Verzeichnis Trenner</string>
   <string name="SYS_DISK_SPACE">Speicherplatz</string>
   <string name="SYS_DISK_SPACE_ERROR">Die Belegung des Speicherplatzes konnte nicht ermittelt werden.\n\nFehlermeldung:\n#VAR1#</string>
+  <string name="SYS_DISPLAY_REDIRECT">Anzeige Weiterleitung</string>
+  <string name="SYS_DISPLAY_REDIRECT_DESC">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Voreinstellung: 10 Sekunden)</string>
   <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
   <string name="SYS_DO_NOT_EDIT">Nicht bearbeiten</string>
   <string name="SYS_DOCUMENTS_FILES">Dokumente &amp; Dateien</string>
@@ -782,6 +767,7 @@
   <string name="SYS_EDIT_USER">Benutzer bearbeiten</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Benutzerprofil dieser Beziehung kann bearbeitet werden</string>
   <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
+  <string name="SYS_EDIT_WEBLINKS">Weblinks bearbeiten</string>
   <string name="SYS_EDITED_BY">Geändert von</string>
   <string name="SYS_EMAIL">E-Mail</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Eine neue Ankündigung wurde angelegt</string>
@@ -942,7 +928,14 @@
   <string name="SYS_LEADER_ASSIGN_MEMBERS">Leiter dieser Rolle können neue Rollenmitglieder hinzufügen oder vorhandene Mitglieder entfernen.</string>
   <string name="SYS_LEADER_RIGHTS_DESC">Rollenmitglieder können zu Leitern einer Rolle ernannt werden und optional erweiterte Rechte bekommen.\nSie können das Recht bekommen Profildaten aller Rollenmitglieder zu bearbeiten und/oder das Recht Mitglieder der Rolle hinzuzufügen oder zu entfernen. Bekommen sie beide Rechte zugewiesen wären sie dadurch allerdings indirekt in der Lage Profildaten aller Mitglieder zu bearbeiten.</string>
   <string name="SYS_LEADERS">Leiter</string>
+  <string name="SYS_LINK_COLLECTION_FROM">Linksammlung von #VAR1#</string>
+  <string name="SYS_LINK_EMAIL_NOTIFICATION_TITLE">Ein neuer Weblink wurde angelegt</string>
+  <string name="SYS_LINK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei #VAR1# angelegt.\n\nLink: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
+  <string name="SYS_LINK_ADDRESS">Linkadresse</string>
   <string name="SYS_LINK_MEMBERSHIP_DELETE">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle #VAR1_BOLD# wirklich entfernen?</string>
+  <string name="SYS_LINK_NAME">Linkname</string>
+  <string name="SYS_LINK_TARGET">Linkziel</string>
+  <string name="SYS_LINK_TARGET_DESC">Hier wird angegeben, ob die ausgewählte Webseite im selben Browserfenster wie Admidio oder in einem neuen Browserfenster angezeigt werden soll.</string>
   <string name="SYS_LINK_TO">Link auf #VAR1#</string>
   <string name="SYS_LIST">Liste</string>
   <string name="SYS_LOADING_CONTENT">Inhalt wird geladen ...</string>
@@ -1031,6 +1024,7 @@
   <string name="SYS_NEW_ROLE">Neue Rolle</string>
   <string name="SYS_NEW_VALUE">Neuer Wert</string>
   <string name="SYS_NEW_VERSION_AVAILABLE">Eine neue stabile Version ist verfügbar!</string>
+  <string name="SYS_NEW_WINDOW">Neues Fenster</string>
   <string name="SYS_NEXT">Weiter</string>
   <string name="SYS_NO">Nein</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Keine zusätzlichen Berechtigungen gesetzt</string>
@@ -1143,6 +1137,8 @@
   <string name="SYS_RECIPIENT">Empfänger</string>
   <string name="SYS_RECIPIENT_EMAIL">Empfänger E-Mail</string>
   <string name="SYS_RECIPIENT_NAME">Empfänger Name</string>
+  <string name="SYS_REDIRECT">Weiterleitung</string>
+  <string name="SYS_REDIRECT_DESC">Du verlässt jetzt das Webangebot von #VAR1_BOLD# und wirst in #VAR2# Sekunden automatisch zu #VAR3# weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicke bitte #VAR4#hier#VAR5#!</string>
   <string name="SYS_REDIRECT_URL_INVALID">Die angegebene Weiterleitungs-URL ist nicht gültig.</string>
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
   <string name="SYS_REGISTRATION">Registrierung</string>
@@ -1207,6 +1203,7 @@
   <string name="SYS_RSS_FEED_FOR_VAR">Web-Feed für #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
   <string name="SYS_SAFE_MODE_PROBLEM">problematisch bei Dateiuploads</string>
+  <string name="SYS_SAME_WINDOW">Gleiches Fenster</string>
   <string name="SYS_SATURDAY">Samstag</string>
   <string name="SYS_SAVE">Speichern</string>
   <string name="SYS_SAVE_ATTACHMENTS">Anhänge speichern</string>
@@ -1407,6 +1404,8 @@
   <string name="SYS_WANT_DELETE_CATEGORY">Möchtest du die Kategorie #VAR1_BOLD# wirklich löschen?</string>
   <string name="SYS_WANT_REGISTER">Ich möchte mich registrieren!</string>
   <string name="SYS_WARNING">Warnung</string>
+  <string name="SYS_WEBLINKS">Weblinks</string>
+  <string name="SYS_WEBLINKS_DESC">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</string>
   <string name="SYS_WEBMASTER">Webmaster</string>
   <string name="SYS_WEBSITE">Webseite</string>
   <string name="SYS_WEDNESDAY">Mittwoch</string>
