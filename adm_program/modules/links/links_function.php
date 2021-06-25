@@ -60,12 +60,12 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
 {
     if(strlen(StringUtils::strStripTags($_POST['lnk_name'])) === 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('LNK_LINK_NAME'))));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LINK_NAME'))));
         // => EXIT
     }
     if(strlen(StringUtils::strStripTags($_POST['lnk_url'])) === 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('LNK_LINK_ADDRESS'))));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LINK_ADDRESS'))));
         // => EXIT
     }
     if(strlen($_POST['lnk_cat_id']) === 0)
@@ -117,11 +117,11 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     if($returnCode === true && $getMode === 1)
     {
         // Benachrichtigungs-Email für neue Einträge
-        $message = $gL10n->get('LNK_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
+        $message = $gL10n->get('SYS_LINK_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
         try
         {
             $notification = new Email();
-            $notification->adminNotification($gL10n->get('LNK_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+            $notification->adminNotification($gL10n->get('SYS_LINK_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
         }
         catch(AdmException $e)
         {

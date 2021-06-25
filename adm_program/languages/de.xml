@@ -84,25 +84,6 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detailliert</string>
   <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
   <string name="DAT_VISIBILITY">Sichtbarkeit</string>
-  <!--Phrases only in Ecardsmodule-->
-  <string name="ECA_A_ECARD_FROM">Eine Grußkarte von</string>
-  <string name="ECA_ACTIVATE_GREETING_CARDS">Grußkarten aktivieren</string>
-  <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">Das Grußkartenmodul kann über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. Dieses Modul steht generell nur angemeldeten Benutzern zur Verfügung. (Voreinstellung: ja)</string>
-  <string name="ECA_GREETING_CARD">Grußkarte</string>
-  <string name="ECA_GREETING_CARDS">Grußkarten</string>
-  <string name="ECA_GREETING_CARD_EDIT">Grußkarte bearbeiten</string>
-  <string name="ECA_LAYOUT">Layout</string>
-  <string name="ECA_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Grußkarte haben darf. (Voreinstellung: 400 x 250 Pixel)</string>
-  <string name="ECA_NEW_MESSAGE_RECEIVED">Neue Nachricht erhalten</string>
-  <string name="ECA_NOT_SUCCESSFULLY_SEND">Deine Grußkarte wurde leider nicht erfolgreich versendet!</string>
-  <string name="ECA_RECIPIENT_EMAIL">Empfänger E-Mail</string>
-  <string name="ECA_RECIPIENT_NAME">Empfänger Name</string>
-  <string name="ECA_SCALE_THUMBNAILS_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite des Vorschaubildes skaliert werden soll. (Voreinstellung: 250 Pixel)</string>
-  <string name="ECA_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</string>
-  <string name="ECA_TEMPLATE">Template</string>
-  <string name="ECA_TEMPLATE_DESC">Hier wird das Standard Template festgelegt. (Voreinstellung: Postcard)</string>
-  <string name="ECA_VIEW_PICTURE_FULL_SIZED">Bild in voller Größe anzeigen</string>
-  <string name="ECA_TEMPLATE_FOLDER_OPEN">Template Ordner konnte nicht geöffnet/gelesen werden.</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Zurück zum Gästebuch</string>
   <string name="GBO_CAPTCHA_DESC">Für nicht angemeldete Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Voreinstellung: ja)</string>
@@ -248,24 +229,23 @@
   <string name="INS_SPOUSE">Ehepartner/-in</string>
   <string name="INS_WIFE">Ehefrau</string>
   <!--Phrases only in Linkmodule-->
-  <string name="LNK_COUNTER">Zähler</string>
-  <string name="LNK_CREATE_LINK">Link anlegen</string>
-  <string name="LNK_DISPLAY_REDIRECT">Anzeige Weiterleitung</string>
-  <string name="LNK_DISPLAY_REDIRECT_DESC">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Voreinstellung: 10 Sekunden)</string>
-  <string name="LNK_EDIT_WEBLINKS">Weblinks bearbeiten</string>
-  <string name="LNK_EMAIL_NOTIFICATION_TITLE">Ein neuer Weblink wurde angelegt</string>
-  <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei #VAR1# angelegt.\n\nLink: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
-  <string name="LNK_LINK_ADDRESS">Linkadresse</string>
-  <string name="LNK_LINK_NAME">Linkname</string>
-  <string name="LNK_LINK_TARGET">Linkziel</string>
-  <string name="LNK_LINK_TARGET_DESC">Hier wird angegeben, ob die ausgewählte Webseite im selben Browserfenster wie Admidio oder in einem neuen Browserfenster angezeigt werden soll.</string>
-  <string name="LNK_LINKS_FROM">Linksammlung von #VAR1#</string>
-  <string name="LNK_NEW_WINDOW">Neues Fenster</string>
-  <string name="LNK_REDIRECT">Weiterleitung</string>
-  <string name="LNK_REDIRECT_DESC">Du verlässt jetzt das Webangebot von #VAR1_BOLD# und wirst in #VAR2# Sekunden automatisch zu #VAR3# weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicke bitte #VAR4#hier#VAR5#!</string>
-  <string name="LNK_SAME_WINDOW">Gleiches Fenster</string>
-  <string name="LNK_WEBLINKS">Weblinks</string>
-  <string name="LNK_WEBLINKS_DESC">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</string>
+  <string name="SYS_CREATE_LINK">Link anlegen</string>
+  <string name="SYS_DISPLAY_REDIRECT">Anzeige Weiterleitung</string>
+  <string name="SYS_DISPLAY_REDIRECT_DESC">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Voreinstellung: 10 Sekunden)</string>
+  <string name="SYS_EDIT_WEBLINKS">Weblinks bearbeiten</string>
+  <string name="SYS_LINK_EMAIL_NOTIFICATION_TITLE">Ein neuer Weblink wurde angelegt</string>
+  <string name="SYS_LINK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei #VAR1# angelegt.\n\nLink: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
+  <string name="SYS_LINK_ADDRESS">Linkadresse</string>
+  <string name="SYS_LINK_NAME">Linkname</string>
+  <string name="SYS_LINK_TARGET">Linkziel</string>
+  <string name="SYS_LINK_TARGET_DESC">Hier wird angegeben, ob die ausgewählte Webseite im selben Browserfenster wie Admidio oder in einem neuen Browserfenster angezeigt werden soll.</string>
+  <string name="SYS_LINK_COLLECTION_FROM">Linksammlung von #VAR1#</string>
+  <string name="SYS_NEW_WINDOW">Neues Fenster</string>
+  <string name="SYS_REDIRECT">Weiterleitung</string>
+  <string name="SYS_REDIRECT_DESC">Du verlässt jetzt das Webangebot von #VAR1_BOLD# und wirst in #VAR2# Sekunden automatisch zu #VAR3# weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicke bitte #VAR4#hier#VAR5#!</string>
+  <string name="SYS_SAME_WINDOW">Gleiches Fenster</string>
+  <string name="SYS_WEBLINKS">Weblinks</string>
+  <string name="SYS_WEBLINKS_DESC">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>
@@ -546,6 +526,8 @@
   <string name="SYS_ACTIVE_MEMBERS">Aktive Mitglieder</string>
   <string name="SYS_ACTIVATE_EMAIL_MODULE">Mailmodul aktivieren</string>
   <string name="SYS_ACTIVATE_EMAIL_MODULE_DESC">Das E-Mailmodul kann über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. (Voreinstellung: Aktiviert)</string>
+  <string name="SYS_ACTIVATE_GREETING_CARDS">Grußkarten aktivieren</string>
+  <string name="SYS_ACTIVATE_GREETING_CARDS_DESC">Das Grußkartenmodul kann über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. Dieses Modul steht generell nur angemeldeten Benutzern zur Verfügung. (Voreinstellung: ja)</string>
   <string name="SYS_ACTIVATE_PM_MODULE">Private Nachrichten aktivieren</string>
   <string name="SYS_ACTIVATE_PM_MODULE_DESC">Private Nachrichten können über diese Einstellung aktiviert oder deaktiviert werden. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_ACTIVATE_ROLE">Rolle aktivieren</string>
@@ -778,6 +760,10 @@
   <string name="SYS_DOWNLOAD_FILE">Datei herunterladen</string>
   <string name="SYS_DOWNLOAD_PHOTO">Foto herunterladen</string>
   <string name="SYS_DUPLICATE">Duplizieren</string>
+  <string name="SYS_ECARD_FROM">Eine Grußkarte von</string>
+  <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Grußkarte haben darf. (Voreinstellung: 400 x 250 Pixel)</string>
+  <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Deine Grußkarte wurde leider nicht erfolgreich versendet!</string>
+  <string name="SYS_ECARD_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</string>
   <string name="SYS_EDIT">Bearbeiten</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Ankündigungen bearbeiten</string>
   <string name="SYS_EDIT_CALENDAR">Kalender bearbeiten</string>
@@ -896,6 +882,9 @@
   <string name="SYS_GEN_RANDOM_ERROR">Es ist ein unerwarteter Fehler bei der Generierung einer zufälligen Zahl aufgetreten.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">Das Programm kann keine zufälligen Zahlen erzeugen.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Das Programm erwartet eine Zeichenkette mit mindestens 2 unterschiedlichen Zeichen.</string>
+  <string name="SYS_GREETING_CARD">Grußkarte</string>
+  <string name="SYS_GREETING_CARDS">Grußkarten</string>
+  <string name="SYS_GREETING_CARD_EDIT">Grußkarte bearbeiten</string>
   <string name="SYS_GROUPS_ROLES">Gruppen &amp; Rollen</string>
   <string name="SYS_GROUPS_ROLES_DESC">Übersicht und Verwaltung aller Gruppen und Rollen der Organisation. Es können verschiedene Mitgliederlisten angezeigt, exportiert und eigene Listen erstellt werden.</string>
   <string name="SYS_HALF_YEARLY">Halbjährlich</string>
@@ -946,6 +935,7 @@
   <string name="SYS_LAST_EDITED_BY">Zuletzt bearbeitet von #VAR1# am #VAR2#</string>
   <string name="SYS_LASTNAME">Nachname</string>
   <string name="SYS_LATER">Später</string>
+  <string name="SYS_LAYOUT">Layout</string>
   <string name="SYS_LEADER">Leiter</string>
   <string name="SYS_LEADER_NO_ADDITIONAL_RIGHTS">Leiter dieser Rolle haben keine gesonderten Rechte. Sie werden in Listenansichten nur hervorgehoben dargestellt.</string>
   <string name="SYS_LEADER_EDIT_MEMBERS">Leiter dieser Rolle können Profildaten aller Rollenmitglieder bearbeiten.</string>
@@ -1035,6 +1025,7 @@
   <string name="SYS_NAME_ABBREVIATION">Name (Abkürzung)</string>
   <string name="SYS_NEW_BETA_AVAILABLE">Eine neue Beta Version ist verfügbar!</string>
   <string name="SYS_NEW_BOTH_AVAILABLE">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</string>
+  <string name="SYS_NEW_MESSAGE_RECEIVED">Neue Nachricht erhalten</string>
   <string name="SYS_NEW_NAME">Neuer Name</string>
   <string name="SYS_NEW_REGISTRATIONS">Neue Registrierungen</string>
   <string name="SYS_NEW_ROLE">Neue Rolle</string>
@@ -1150,6 +1141,8 @@
   <string name="SYS_RADIO_BUTTON">Optionsfeld</string>
   <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Neueste Ankündigungen der Organisation #VAR1#</string>
   <string name="SYS_RECIPIENT">Empfänger</string>
+  <string name="SYS_RECIPIENT_EMAIL">Empfänger E-Mail</string>
+  <string name="SYS_RECIPIENT_NAME">Empfänger Name</string>
   <string name="SYS_REDIRECT_URL_INVALID">Die angegebene Weiterleitungs-URL ist nicht gültig.</string>
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
   <string name="SYS_REGISTRATION">Registrierung</string>
@@ -1221,6 +1214,7 @@
   <string name="SYS_SAVE_CHANGES">Änderungen speichern</string>
   <string name="SYS_SAVE_CONFIGURATION">Konfiguration speichern</string>
   <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>
+  <string name="SYS_SCALE_THUMBNAILS_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite des Vorschaubildes skaliert werden soll. (Voreinstellung: 250 Pixel)</string>
   <string name="SYS_SEARCH">Suche</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18j</string>
   <string name="SYS_SEARCH_AGE_DESC">Sucht alle Benutzer, die älter als 18 Jahre sind</string>
@@ -1341,6 +1335,9 @@
   <string name="SYS_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
   <string name="SYS_SYSTEM_MAILS">Systembenachrichtigungen</string>
   <string name="SYS_TAB">Tabulator</string>
+  <string name="SYS_TEMPLATE">Template</string>
+  <string name="SYS_TEMPLATE_DESC">Hier wird das Standard Template festgelegt. (Voreinstellung: Postcard)</string>
+  <string name="SYS_TEMPLATE_FOLDER_OPEN">Template Ordner konnte nicht geöffnet/gelesen werden.</string>
   <string name="SYS_TEST_MAIL">Testmail</string>
   <string name="SYS_TEST_MAIL_DESC">Bevor du diese Funktion aufrufst, müssen alle Einstellungen für den E-Mail-Versand gespeichert werden!\nEs wird eine einfache E-Mail mit dem Betreff #VAR1_BOLD# an die E-Mail-Adresse des angemeldeten Benutzers auf Grundlage der gespeicherten E-Mail-Einstellungen versendet. Dabei wird beim SMTP-Versand ein Versandprotokoll ausgegeben, welches bei Problemen helfen kann.</string>
   <string name="SYS_TEXT">Text</string>
@@ -1401,6 +1398,7 @@
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VIEW">Ansicht</string>
+  <string name="SYS_VIEW_PICTURE_FULL_SIZED">Bild in voller Größe anzeigen</string>
   <string name="SYS_VISIBLE">Sichtbar</string>
   <string name="SYS_VISIBLE_FOR">Sichtbar für</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# nur für angemeldete Benutzer sichtbar</string>

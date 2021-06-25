@@ -204,7 +204,7 @@ switch($getMode)
                 case 'links':
                     if(!is_numeric($_POST['weblinks_redirect_seconds']) || $_POST['weblinks_redirect_seconds'] < 0)
                     {
-                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('LNK_DISPLAY_REDIRECT'))));
+                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_DISPLAY_REDIRECT'))));
                         // => EXIT
                     }
                     break;

@@ -24,12 +24,12 @@ class FunctionClass
      */
     public function __construct(Language $gL10n)
     {
-        $this->nameRecipientString      = $gL10n->get('ECA_RECIPIENT_NAME');
-        $this->emailRecipientString     = $gL10n->get('ECA_RECIPIENT_EMAIL');
+        $this->nameRecipientString      = $gL10n->get('SYS_RECIPIENT_NAME');
+        $this->emailRecipientString     = $gL10n->get('SYS_RECIPIENT_EMAIL');
         $this->yourMessageString        = $gL10n->get('SYS_MESSAGE');
-        $this->newMessageReceivedString = $gL10n->get('ECA_NEW_MESSAGE_RECEIVED');
-        $this->greetingCardFrom         = $gL10n->get('ECA_A_ECARD_FROM');
-        $this->greetingCardString       = $gL10n->get('ECA_GREETING_CARD');
+        $this->newMessageReceivedString = $gL10n->get('SYS_NEW_MESSAGE_RECEIVED');
+        $this->greetingCardFrom         = $gL10n->get('SYS_ECARD_FROM');
+        $this->greetingCardString       = $gL10n->get('SYS_GREETING_CARD');
         $this->sendToString             = $gL10n->get('SYS_TO');
         $this->emailString              = $gL10n->get('SYS_EMAIL');
     }

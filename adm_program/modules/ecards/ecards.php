@@ -28,7 +28,7 @@ $showPage   = admFuncVariableIsValid($_GET, 'show_page', 'int', array('defaultVa
 $funcClass = new FunctionClass($gL10n);
 $templates = $funcClass->getFileNames(THEME_PATH. '/ecard_templates/');
 $template  = THEME_PATH. '/ecard_templates/';
-$headline  = $gL10n->get('ECA_GREETING_CARD_EDIT');
+$headline  = $gL10n->get('SYS_GREETING_CARD_EDIT');
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('enable_ecard_module'))
@@ -144,17 +144,17 @@ $form->addInput('submit_action', '', '', array('property' => HtmlForm::FIELD_HID
 $form->addInput('photo_id', '', $getPhotoId, array('property' => HtmlForm::FIELD_HIDDEN));
 $form->addInput('photo_nr', '', $getPhotoNr, array('property' => HtmlForm::FIELD_HIDDEN));
 
-$form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
+$form->openGroupBox('gb_layout', $gL10n->get('SYS_LAYOUT'));
 $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
     <a data-toggle="lightbox" data-type="image" data-title="'.$gL10n->get('SYS_PREVIEW').'"
         href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
         src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale'))).'"
-        class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
+        class="imageFrame" alt="'.$gL10n->get('SYS_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('SYS_VIEW_PICTURE_FULL_SIZED').'" />
     </a>');
 $templates = array_keys(FileSystemUtils::getDirectoryContent(THEME_PATH.'/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 if (!is_array($templates))
 {
-    $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
+    $gMessage->show($gL10n->get('SYS_TEMPLATE_FOLDER_OPEN'));
     // => EXIT
 }
 // create new array without file extension in visual value
@@ -165,7 +165,7 @@ foreach($templates as $templateName)
 }
 unset($templateName);
 $form->addSelectBox(
-    'ecard_template', $gL10n->get('ECA_TEMPLATE'), $newTemplateArray,
+    'ecard_template', $gL10n->get('SYS_TEMPLATE'), $newTemplateArray,
     array('defaultValue' => $template, 'property' => HtmlForm::FIELD_REQUIRED, 'showContextDependentFirstEntry' => false)
 );
 $form->closeGroupBox();

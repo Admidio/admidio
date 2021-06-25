@@ -11,7 +11,7 @@ INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, co
                               , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.0.7', 0, 0)
                               , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.0.7', 0, 0)
                               , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.7', 0, 0)
-                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '4.0.7', 0, 0)
+                              , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.0.7', 0, 0)
                               , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.7', 0, 0)
                               , (100, 'MODULE', 'SYS_USER_MANAGEMENT', 'MEMBERS', '4.0.7', 0, 0)
                               , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.7', 0, 0)
@@ -45,7 +45,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (130, 1, 0, 5, 1, 'photo', '/adm_program/modules/photos/photos.php', 'fa-image', 'SYS_PHOTOS', 'PHO_PHOTOS_DESC'),
 (70, 1, 0, 6, 1, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'fa-book', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC'),
 (50, 1, 0, 8, 1, 'dates', '/adm_program/modules/dates/dates.php', 'fa-calendar-alt', 'DAT_DATES', 'DAT_DATES_DESC'),
-(80, 1, 0, 9, 1, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'LNK_WEBLINKS', 'LNK_WEBLINKS_DESC'),
+(80, 1, 0, 9, 1, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC'),
 (30, 2, 0, 4, 1, 'dbback', '/adm_program/modules/backup/backup.php', 'fa-database', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC'),
 (140, 2, 0, 6, 1, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'fa-cog', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC'),
 (120, 1, 0, 4, 1, 'mail', '/adm_program/modules/messages/messages_write.php', 'fa-envelope', 'SYS_EMAIL', 'SYS_EMAIL_DESC'),

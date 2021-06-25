@@ -126,20 +126,20 @@
   <string name="SYS_UNMANAGED_FILES">非托管文件</string>
   <string name="SYS_UPLOAD_FILES">上传文件</string>
   <!--Phrases only in Ecardsmodule-->
-  <string name="ECA_A_ECARD_FROM">贺卡发送自：</string>
-  <string name="ECA_ACTIVATE_GREETING_CARDS">激活贺卡模块</string>
-  <string name="ECA_GREETING_CARD">贺卡</string>
-  <string name="ECA_GREETING_CARDS">贺卡</string>
-  <string name="ECA_GREETING_CARD_EDIT">编辑贺卡</string>
-  <string name="ECA_LAYOUT">布局</string>
-  <string name="ECA_MAX_PHOTO_SIZE_DESC">这个值定义贺卡中图像的最大大小(标准：400 x 250像素)。</string>
-  <string name="ECA_NEW_MESSAGE_RECEIVED">收到新消息</string>
-  <string name="ECA_NOT_SUCCESSFULLY_SEND">您的贺卡无法发送！</string>
-  <string name="ECA_RECIPIENT_EMAIL">E-mail 收件人</string>
-  <string name="ECA_RECIPIENT_NAME">收件人姓名</string>
-  <string name="ECA_SUCCESSFULLY_SEND">您的贺卡已发送。</string>
-  <string name="ECA_TEMPLATE">模板</string>
-  <string name="ECA_VIEW_PICTURE_FULL_SIZED">显示原图</string>
+  <string name="SYS_ECARD_FROM">贺卡发送自：</string>
+  <string name="SYS_ACTIVATE_GREETING_CARDS">激活贺卡模块</string>
+  <string name="SYS_GREETING_CARD">贺卡</string>
+  <string name="SYS_GREETING_CARDS">贺卡</string>
+  <string name="SYS_GREETING_CARD_EDIT">编辑贺卡</string>
+  <string name="SYS_LAYOUT">布局</string>
+  <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">这个值定义贺卡中图像的最大大小(标准：400 x 250像素)。</string>
+  <string name="SYS_NEW_MESSAGE_RECEIVED">收到新消息</string>
+  <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">您的贺卡无法发送！</string>
+  <string name="SYS_RECIPIENT_EMAIL">E-mail 收件人</string>
+  <string name="SYS_RECIPIENT_NAME">收件人姓名</string>
+  <string name="SYS_ECARD_SUCCESSFULLY_SEND">您的贺卡已发送。</string>
+  <string name="SYS_TEMPLATE">模板</string>
+  <string name="SYS_VIEW_PICTURE_FULL_SIZED">显示原图</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">返回留言板</string>
   <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">部门的最新留言条目 #VAR1#</string>
@@ -153,9 +153,9 @@
   <string name="INS_SET_ORGANIZATION">定义部门</string>
   <string name="INS_SET_UP_ORGANIZATION">设置部门</string>
   <!--Phrases only in Linkmodule-->
-  <string name="LNK_SAME_WINDOW">相同的窗口</string>
-  <string name="LNK_WEBLINKS">网页链接</string>
-  <string name="LNK_WEBLINKS_DESC">按类别创建和组织有兴趣的超链接。</string>
+  <string name="SYS_SAME_WINDOW">相同的窗口</string>
+  <string name="SYS_WEBLINKS">网页链接</string>
+  <string name="SYS_WEBLINKS_DESC">按类别创建和组织有兴趣的超链接。</string>
   <!--Phrases only in Listsmodule-->
   <string name="SYS_A_TO_Z">A到Z</string>
   <string name="SYS_CONFIGURATION_DEFAULT">是否将选定的配置标记为该部门的默认配置？</string>

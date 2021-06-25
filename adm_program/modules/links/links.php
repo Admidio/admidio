@@ -20,7 +20,7 @@ unset($_SESSION['links_request']);
 
 // Initialize and check the parameters
 $getStart    = admFuncVariableIsValid($_GET, 'start',    'int');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('LNK_WEBLINKS')));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_WEBLINKS')));
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
 $getLinkId   = admFuncVariableIsValid($_GET, 'id',       'int');
 
@@ -85,7 +85,7 @@ if($weblinks->getId() === 0)
     if(count($gCurrentUser->getAllEditableCategories('LNK')) > 0)
     {
         // show link to create new weblink
-        $page->addPageFunctionsMenuItem('menu_item_links_add', $gL10n->get('LNK_CREATE_LINK'),
+        $page->addPageFunctionsMenuItem('menu_item_links_add', $gL10n->get('SYS_CREATE_LINK'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('headline' => $getHeadline)),
             'fa-plus-circle');
     }
@@ -190,7 +190,7 @@ else
                     $page->addHtml('<div class="admidio-weblink-description">'.$lnkDescription.'</div>');
                 }
 
-                $page->addHtml('<div class="weblink-counter"><small>'.$gL10n->get('LNK_COUNTER'). ': '.(int) $weblink->getValue('lnk_counter').'</small></div>
+                $page->addHtml('<div class="weblink-counter"><small>'.$gL10n->get('SYS_COUNTER'). ': '.(int) $weblink->getValue('lnk_counter').'</small></div>
             </div>');
 
             ++$j;

@@ -191,7 +191,7 @@ $formCommon = new HtmlForm(
 $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
 if (count($themes) === 0)
 {
-    $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
+    $gMessage->show($gL10n->get('SYS_TEMPLATE_FOLDER_OPEN'));
     // => EXIT
 }
 $formCommon->addSelectBox(
@@ -1101,12 +1101,12 @@ $formEcards = new HtmlForm(
 );
 
 $formEcards->addCheckbox(
-    'enable_ecard_module', $gL10n->get('ECA_ACTIVATE_GREETING_CARDS'), (bool) $formValues['enable_ecard_module'],
-    array('helpTextIdInline' => 'ECA_ACTIVATE_GREETING_CARDS_DESC')
+    'enable_ecard_module', $gL10n->get('SYS_ACTIVATE_GREETING_CARDS'), (bool) $formValues['enable_ecard_module'],
+    array('helpTextIdInline' => 'SYS_ACTIVATE_GREETING_CARDS_DESC')
 );
 $formEcards->addInput(
     'ecard_thumbs_scale', $gL10n->get('PHO_SCALE_THUMBNAILS'), $formValues['ecard_thumbs_scale'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'ECA_SCALE_THUMBNAILS_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_SCALE_THUMBNAILS_DESC')
 );
 $formEcards->addInput(
     'ecard_card_picture_width', $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'), $formValues['ecard_card_picture_width'],
@@ -1114,7 +1114,7 @@ $formEcards->addInput(
 );
 $formEcards->addInput(
     'ecard_card_picture_height', $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'), $formValues['ecard_card_picture_height'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'ECA_MAX_PHOTO_SIZE_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_ECARD_MAX_PHOTO_SIZE_DESC')
 );
 
 try
@@ -1134,15 +1134,15 @@ foreach($ecardTemplatesFiles as &$templateName)
 unset($templateName);
 
 $formEcards->addSelectBox(
-    'ecard_template', $gL10n->get('ECA_TEMPLATE'), $ecardTemplatesFiles,
-    array('defaultValue' => $formValues['ecard_template'], 'showContextDependentFirstEntry' => false, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'ECA_TEMPLATE_DESC')
+    'ecard_template', $gL10n->get('SYS_TEMPLATE'), $ecardTemplatesFiles,
+    array('defaultValue' => $formValues['ecard_template'], 'showContextDependentFirstEntry' => false, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'SYS_TEMPLATE_DESC')
 );
 $formEcards->addSubmitButton(
     'btn_save_ecards', $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'ecards', 'accordion_modules', $gL10n->get('ECA_GREETING_CARDS'), 'fas fa-file-image', $formEcards->show()));
+$page->addHtml(getPreferencePanel('modules', 'ecards', 'accordion_modules', $gL10n->get('SYS_GREETING_CARDS'), 'fas fa-file-image', $formEcards->show()));
 
 // PANEL: GROUPS AND ROLES
 
@@ -1445,14 +1445,14 @@ $formWeblinks->addInput(
     'weblinks_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $formValues['weblinks_per_page'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(0)))
 );
-$selectBoxEntries = array('_self' => $gL10n->get('LNK_SAME_WINDOW'), '_blank' => $gL10n->get('LNK_NEW_WINDOW'));
+$selectBoxEntries = array('_self' => $gL10n->get('SYS_SAME_WINDOW'), '_blank' => $gL10n->get('SYS_NEW_WINDOW'));
 $formWeblinks->addSelectBox(
-    'weblinks_target', $gL10n->get('LNK_LINK_TARGET'), $selectBoxEntries,
-    array('defaultValue' => $formValues['weblinks_target'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LNK_LINK_TARGET_DESC')
+    'weblinks_target', $gL10n->get('SYS_LINK_TARGET'), $selectBoxEntries,
+    array('defaultValue' => $formValues['weblinks_target'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_LINK_TARGET_DESC')
 );
 $formWeblinks->addInput(
-    'weblinks_redirect_seconds', $gL10n->get('LNK_DISPLAY_REDIRECT'), $formValues['weblinks_redirect_seconds'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'LNK_DISPLAY_REDIRECT_DESC')
+    'weblinks_redirect_seconds', $gL10n->get('SYS_DISPLAY_REDIRECT'), $formValues['weblinks_redirect_seconds'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_DISPLAY_REDIRECT_DESC')
 );
 $html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
@@ -1465,7 +1465,7 @@ $formWeblinks->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'links', 'accordion_modules', $gL10n->get('LNK_WEBLINKS'), 'fas fa-link', $formWeblinks->show()));
+$page->addHtml(getPreferencePanel('modules', 'links', 'accordion_modules', $gL10n->get('SYS_WEBLINKS'), 'fas fa-link', $formWeblinks->show()));
 
 $page->addHtml('
         </div>

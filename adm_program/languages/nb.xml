@@ -13,8 +13,8 @@
   <string name="DAT_EDIT_CALENDAR_DESC">Her kan du opprette og endre kalendere.</string>
   <string name="DAT_LOCATION">By</string>
   <string name="DAT_MANAGE_CALENDARS">Administrer kalendere</string>
-  <string name="ECA_VIEW_PICTURE_FULL_SIZED">Vis bilde i full størrelse</string>
-  <string name="ECA_TEMPLATE_FOLDER_OPEN">Mal-mappen kunne ikke leses/åpnes.</string>
+  <string name="SYS_VIEW_PICTURE_FULL_SIZED">Vis bilde i full størrelse</string>
+  <string name="SYS_TEMPLATE_FOLDER_OPEN">Mal-mappen kunne ikke leses/åpnes.</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tilbake til gjesteboken</string>
   <string name="GBO_COMMENTS4ALL">Tillat anonyme kommentarer</string>

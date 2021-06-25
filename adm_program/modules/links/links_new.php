@@ -11,7 +11,7 @@
  *
  * lnk_id    - ID of the weblink that should be edited
  * headline  - Title of the weblink module. This will be shown in the whole module.
- *             (Default) LNK_WEBLINKS
+ *             (Default) SYS_WEBLINKS
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -19,7 +19,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getLinkId   = admFuncVariableIsValid($_GET, 'lnk_id',   'int');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('LNK_WEBLINKS')));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_WEBLINKS')));
 
 // check if the module is enabled for use
 if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
@@ -90,11 +90,11 @@ else
 // show form
 $form = new HtmlForm('weblinks_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php', array('lnk_id' => $getLinkId, 'headline' => $getHeadline, 'mode' => $modeEditOrCreate)), $page);
 $form->addInput(
-    'lnk_name', $gL10n->get('LNK_LINK_NAME'), SecurityUtils::encodeHTML($link->getValue('lnk_name')),
+    'lnk_name', $gL10n->get('SYS_LINK_NAME'), SecurityUtils::encodeHTML($link->getValue('lnk_name')),
     array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'lnk_url', $gL10n->get('LNK_LINK_ADDRESS'), $link->getValue('lnk_url'),
+    'lnk_url', $gL10n->get('SYS_LINK_ADDRESS'), $link->getValue('lnk_url'),
     array('maxLength' => 2000, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addSelectBoxForCategories(

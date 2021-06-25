@@ -96,7 +96,7 @@ else
 // object to handle the current message in the database
 $message = new TableMessage($gDb);
 $message->setValue('msg_type', TableMessage::MESSAGE_TYPE_EMAIL);
-$message->setValue('msg_subject', $gL10n->get('ECA_GREETING_CARD').': '.$gL10n->get('ECA_NEW_MESSAGE_RECEIVED'));
+$message->setValue('msg_subject', $gL10n->get('SYS_GREETING_CARD').': '.$gL10n->get('SYS_NEW_MESSAGE_RECEIVED'));
 $message->setValue('msg_usr_id_sender', $gCurrentUser->getValue('usr_id'));
 
 // set condition if email should only send to the email address of the user field
@@ -212,11 +212,11 @@ if($ecardSendResult)
     $message->save();
 
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
-    $gMessage->show($gL10n->get('ECA_SUCCESSFULLY_SEND'));
+    $gMessage->show($gL10n->get('SYS_ECARD_SUCCESSFULLY_SEND'));
     // => EXIT
 }
 else
 {
-    $gMessage->show($gL10n->get('ECA_NOT_SUCCESSFULLY_SEND'));
+    $gMessage->show($gL10n->get('SYS_ECARD_NOT_SUCCESSFULLY_SEND'));
     // => EXIT
 }

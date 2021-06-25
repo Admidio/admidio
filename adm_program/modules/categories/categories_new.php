@@ -74,8 +74,8 @@ switch ($getType)
 
     case 'LNK':
         $component = 'LINKS';
-        $headline = $gL10n->get('LNK_WEBLINKS') . ' - ' . $headlineSuffix;
-        $rolesRightEditName = 'LNK_EDIT_WEBLINKS';
+        $headline = $gL10n->get('SYS_WEBLINKS') . ' - ' . $headlineSuffix;
+        $rolesRightEditName = 'SYS_EDIT_WEBLINKS';
         $rolesRightsColumn  = 'rol_weblinks';
         $rolesRightsName    = 'SYS_RIGHT_WEBLINKS';
         break;
