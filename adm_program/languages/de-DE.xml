@@ -266,77 +266,6 @@
   <string name="LNK_SAME_WINDOW">Gleiches Fenster</string>
   <string name="LNK_WEBLINKS">Weblinks</string>
   <string name="LNK_WEBLINKS_DESC">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</string>
-  <!--Phrases only in Membersadministration-->
-  <string name="SYS_ASSIGN_FIELDS">Felder zuordnen</string>
-  <string name="SYS_ASSIGN_FIELDS_DESC">Ordne den Datenbankfeldern, wenn möglich eine Spalte aus der Datei zu.\n\nAuf der linken Seite stehen alle möglichen Datenbankfelder und auf der rechten Seite sind jeweils alle Spalten aus der ausgewählten Datei aufgelistet. Falls nicht alle Datenbankfelder in der Datei vorhanden sind, können diese Felder einfach leer gelassen werden.</string>
-  <string name="SYS_ASSIGN_ROLE">Rolle zuordnen</string>
-  <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.\n\nIhnen stehen nur Rollen zur Auswahl, die Sie sehen dürfen und keine Rollenzuordnungsberechtigung besitzen, falls Sie diese selber nicht besitzt.</string>
-  <string name="SYS_ASSIGN_ROLES">Rollen zuordnen</string>
-  <string name="SYS_CREATE_USER">Benutzer anlegen</string>
-  <string name="SYS_CODING">Kodierung</string>
-  <string name="SYS_CHANGE_HISTORY">Änderungshistorie</string>
-  <string name="SYS_CHANGE_HISTORY_OF">Änderungshistorie von #VAR1#</string>
-  <string name="SYS_CHOOSE_FILE">Datei auswählen</string>
-  <string name="SYS_COMPLEMENT">Ergänzen</string>
-  <string name="SYS_DAYS_FIELD_HISTORY">Standardzeitraum in der Änderungshistorie (Tage)</string>
-  <string name="SYS_DAYS_FIELD_HISTORY_DESC">Zeitraum in Tagen in denen in der Änderungshistorie der Profilfelder die Veränderungen angezeigt werden. Dies ist der Standardfilter, welcher durch den Benutzer nachher beliebig geändert werden kann. Bei großen Datenbanken dient dies dazu die Datenmenge bei normalen Aufruf der Änderungshistorie einzuschränken. (Voreinstellung: 365)</string>
-  <string name="SYS_DUPLICATE">Duplizieren</string>
-  <string name="SYS_EDIT_USER">Benutzer bearbeiten</string>
-  <string name="SYS_ENABLE_USER_RELATIONS">Beziehungen pflegen und anzeigen</string>
-  <string name="SYS_ENABLE_USER_RELATIONS_DESC">Wenn diese Einstellung gesetzt ist, können Beziehungen zwischen den Benutzern gepflegt und angezeigt werden. (Voreinstellung: ja)</string>
-  <string name="SYS_EXISTING_USERS">Existierende Benutzer</string>
-  <string name="SYS_FILE_COLUMN">Dateispalte</string>
-  <string name="SYS_FIRST_LINE_COLUMN_NAME">Erste Zeile beinhaltet die Spaltenbezeichnungen</string>
-  <string name="SYS_FORMAT">Format</string>
-  <string name="SYS_IDENTIFY_USERS">Existierende Benutzer werden anhand von Vornamen und Nachnamen erkannt.</string>
-  <string name="SYS_IMPORT">Importieren</string>
-  <string name="SYS_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Benutzer wurden angelegt.\n#VAR2# Benutzer wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.</string>
-  <string name="SYS_IMPORT_UNUSED_HEAD">Folgende Spalten der Importdatei sind keinen Feldern in Admidio zugeordnet:</string>
-  <string name="SYS_IMPORT_USERS">Benutzer importieren</string>
-  <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Das Arbeitsblatt #VAR1# existiert in der importierten Datei nicht!</string>
-  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Gib bitte den Vor- und Nachnamen des neuen Benutzers ein. Bevor der Benutzer angelegt wird, wird geprüft, ob ein Benutzer mit ähnlichem Namen bereits in der Datenbank existiert.</string>
-  <string name="SYS_MAKE_FORMER">Sie können den Benutzer zu einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und Sie sie später immer wieder sehen können, welchen Rollen diese Person zugeordnet war.</string>
-  <string name="SYS_NO_CHANGES_LOGGED">Es sind keine Änderungen protokolliert.</string>
-  <string name="SYS_NO_CHANGES_LOGGED_PROFIL">Bei #VAR1_BOLD# wurden bisher keine Änderungen protokolliert. </string>
-  <string name="SYS_USER_NO_MEMBERSHIP">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1#.</string>
-  <string name="SYS_DO_NOT_EDIT">Nicht bearbeiten</string>
-  <string name="SYS_POSSIBLE_FIELDNAMES">Spaltennamen für automatische Erkennung: #VAR1#, #VAR2#</string>
-  <string name="SYS_PROFILE_FIELD">Profilfeld</string>
-  <string name="SYS_END_MEMBERSHIP_OF_USER">Wollen Sie die Mitgliedschaft des Benutzers #VAR1# bei #VAR2# beenden?</string>
-  <string name="SYS_END_MEMBERSHIP_OF_USER_OK">Die Mitgliedschaft des Benutzers #VAR1_BOLD# bei #VAR2_BOLD# wurde erfolgreich beendet! </string>
-  <string name="SYS_REMOVE_USER">Benutzer entfernen</string>
-  <string name="SYS_REMOVE_USER_DESC">Wenn Sie #VAR1_BOLD# auswählen, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</string>
-  <string name="SYS_REPLACE">Ersetzen</string>
-  <string name="SYS_ROLE_SELECT_RIGHT">Sie Haben keine Berechtigung, die Rolle #VAR1# auszuwählen.\nBitte wählen Sie eine andere Rolle aus.</string>
-  <string name="SYS_SEND_NEW_LOGIN">Möchten Sie #VAR1_BOLD# eine E-Mail mit dem aktuellen Benutzernamen und einem neuen Passwort mailen?</string>
-  <string name="SYS_SEND_USERNAME_PASSWORD">E-Mail mit Benutzernamen und neuem Passwort zuschicken</string>
-  <string name="SYS_SHOW_ALL_USERS">Alle Benutzer anzeigen</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Ist die Einstellung nicht gesetzt werden nur die aktiven Mitglieder dieser Organisation angezeigt. ist die Einstellung aktiviert werden alle Benutzer der Datenbank angezeigt.</string>
-  <string name="MEM_UPDATED_ON">Aktualisiert am</string>
-  <string name="SYS_USER_COULD_BE_CREATED">Der Benutzer kann angelegt werden.</string>
-  <string name="SYS_USER_DELETE_DESC">Wollen Sie #VAR1_BOLD# wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
-  <string name="SYS_USER_MANAGEMENT">Benutzerverwaltung</string>
-  <string name="SYS_USER_MANAGEMENT_DESC">Alle aktiven und ehemaligen Benutzer können hier eingesehen und verwaltet werden. Neue Benutzer können angelegt oder importiert werden.</string>
-  <string name="SYS_USERS_PER_PAGE">Anzahl Benutzer pro Seite</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">Anzahl der Benutzer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer zu der Organisation, so kann man in der Liste blättern. (Voreinstellung: 25)</string>
-  <!--Phrases only in New-User-Registration-->
-  <string name="SYS_ASSIGN_LOGIN_INFORMATION">Zugangsdaten zuordnen</string>
-  <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Die Anmeldedaten wurden erfolgreich zugeordnet.</string>
-  <string name="SYS_ASSIGN_LOGIN_EMAIL">Die Anmeldedaten wurden erfolgreich zugeordnet und der Benutzer ist darüber per E-Mail benachrichtigt worden.</string>
-  <string name="SYS_ASSIGN_MEMBERSHIP">Mitgliedschaft zuweisen</string>
-  <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Mitgliedschaft und Anmeldedaten diesem Benutzer zuordnen</string>
-  <string name="SYS_ASSIGN_REGISTRATION">Registrierung zuordnen</string>
-  <string name="NWU_DELETE_REGISTRATION">Registrierung löschen</string>
-  <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Besucher, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
-  <string name="SYS_NEW_REGISTRATIONS">Neue Registrierungen</string>
-  <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Anmeldedaten.</string>
-  <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1# und besitzt auch keine Anmeldedaten.</string>
-  <string name="SYS_NO_NEW_REGISTRATIONS">Es sind keine Registrierungen vorhanden.</string>
-  <string name="NWU_REGISTERED_ON">Registriert am #VAR1#</string>
-  <string name="SYS_REMINDER_SEND_LOGIN">Möchten Sie dem Benutzer seinen Anmeldenamen mit Passwort als Erinnerung zuschicken?</string>
-  <string name="SYS_SEND_LOGIN_INFORMATION">Zugangsdaten zuschicken</string>
-  <string name="SYS_USER_NO_VALID_LOGIN">Dieser Benutzer besitzt noch kein Login.\nMöchten Sie ihm die Daten dieser Registrierung zuordnen?</string>
-  <string name="SYS_USER_VALID_LOGIN">Dieser Benutzer besitzt schon ein gültiges Login.</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>
@@ -650,7 +579,18 @@
   <string name="SYS_APPLY">Übernehmen</string>
   <string name="SYS_ANNUALLY">Jährlich</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Mitglieder zuordnen und bearbeiten</string>
+  <string name="SYS_ASSIGN_FIELDS">Felder zuordnen</string>
+  <string name="SYS_ASSIGN_FIELDS_DESC">Ordne den Datenbankfeldern, wenn möglich eine Spalte aus der Datei zu.\n\nAuf der linken Seite stehen alle möglichen Datenbankfelder und auf der rechten Seite sind jeweils alle Spalten aus der ausgewählten Datei aufgelistet. Falls nicht alle Datenbankfelder in der Datei vorhanden sind, können diese Felder einfach leer gelassen werden.</string>
+  <string name="SYS_ASSIGN_LOGIN_INFORMATION">Zugangsdaten zuordnen</string>
+  <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Die Zugangsdaten wurden erfolgreich zugeordnet.</string>
+  <string name="SYS_ASSIGN_LOGIN_EMAIL">Die Zugangsdaten wurden erfolgreich zugeordnet und der Benutzer ist darüber per E-Mail benachrichtigt worden.</string>
   <string name="SYS_ASSIGN_MEMBERS">Mitglieder zuordnen</string>
+  <string name="SYS_ASSIGN_MEMBERSHIP">Mitgliedschaft zuweisen</string>
+  <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Mitgliedschaft und Zugangsdaten diesem Benutzer zuordnen</string>
+  <string name="SYS_ASSIGN_REGISTRATION">Registrierung zuordnen</string>
+  <string name="SYS_ASSIGN_ROLE">Rolle zuordnen</string>
+  <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.\n\nIhnen stehen nur Rollen zur Auswahl, die Sie sehen dürfen und keine Rollenzuordnungsberechtigung besitzen, falls Sie diese selber nicht besitzt.</string>
+  <string name="SYS_ASSIGN_ROLES">Rollen zuordnen</string>
   <string name="SYS_ASYMMETRICAL">asymmetrisch</string>
   <string name="SYS_ATTACHMENT">Anhang</string>
   <string name="SYS_ATTACHMENT_ONE">1 Anhang</string>
@@ -691,6 +631,8 @@
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\nMöchten Sie die Daten nur in Ihrer Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-Kategorie</string>
+  <string name="SYS_CHANGE_HISTORY">Änderungshistorie</string>
+  <string name="SYS_CHANGE_HISTORY_OF">Änderungshistorie von #VAR1#</string>
   <string name="SYS_CHANGE_PASSWORD">Passwort ändern</string>
   <string name="SYS_CHANGED_AT">Geändert am</string>
   <string name="SYS_CHANGED_BY">Geändert von</string>
@@ -700,14 +642,17 @@
   <string name="SYS_CHECK_FOR_UPDATE">nach Update suchen</string>
   <string name="SYS_CHECKBOX">Checkbox</string>
   <string name="SYS_CHECKBOX_AUTOSAVE">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</string>
+  <string name="SYS_CHOOSE_FILE">Datei auswählen</string>
   <string name="SYS_CITY">Ort</string>
   <string name="SYS_CLOCK">Uhr</string>
   <string name="SYS_CLOSE">Schließen</string>
+  <string name="SYS_CODING">Kodierung</string>
   <string name="SYS_COLUMN">Spalte</string>
   <string name="SYS_COMMA">Komma (,)</string>
   <string name="SYS_COMMA_SEPARATED_FILE">Komma-/Tab-getrennte Datei (*.csv)</string>
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Allgemein</string>
+  <string name="SYS_COMPLEMENT">Ergänzen</string>
   <string name="SYS_CONDITION">Bedingung</string>
   <string name="SYS_CONFIGURATION">Konfiguration</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Konfiguration allen Benutzern zur Verfügung stellen</string>
@@ -750,6 +695,7 @@
   <string name="SYS_CREATE_NOT_FOUND_USER">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, können Sie diesen neu anlegen.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Beziehung anlegen</string>
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
+  <string name="SYS_CREATE_USER">Benutzer anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
   <string name="SYS_CREATION_DATE">Erstellungsdatum</string>
@@ -778,6 +724,8 @@
   <string name="SYS_DATE_INVALID">Es wurde kein gültiges Datum in das Feld #VAR1_BOLD# eingegeben.\n\nDas Datum muss dem folgenden Format #VAR2_BOLD# entsprechen.</string>
   <string name="SYS_DATE_MODIFIED">Änderungsdatum</string>
   <string name="SYS_DATE_TO">bis</string>
+  <string name="SYS_DAYS_FIELD_HISTORY">Standardzeitraum in der Änderungshistorie (Tage)</string>
+  <string name="SYS_DAYS_FIELD_HISTORY_DESC">Zeitraum in Tagen in denen in der Änderungshistorie der Profilfelder die Veränderungen angezeigt werden. Dies ist der Standardfilter, welcher durch den Benutzer nachher beliebig geändert werden kann. Bei großen Datenbanken dient dies dazu die Datenmenge bei normalen Aufruf der Änderungshistorie einzuschränken. (Voreinstellung: 365)</string>
   <string name="SYS_DAYS_VAR">#VAR1# Tagen</string>
   <string name="SYS_DEACTIVATE_ROLE">Rolle deaktivieren</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Wenn Sie die Rolle #VAR1_BOLD# deaktivieren, kann die Rolle nicht mehr genutzt und Objekten zugeordnet werden. Ebenso sind sämtliche Rechte dieser Rolle nicht mehr wirksam. Die Rolle mit ihren Einstellung und allen Mitgliedszuordnungen bleibt allerdings bestehen und kann zu einem späteren Zeitpunkt wieder aktiviert werden.</string>
@@ -788,6 +736,7 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Wird ein neuer Benutzer angelegt bzw. eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zu zuordnen, so werden ihm alle Rollenzuordnung angezeigt und er kann sie entsprechend anpassen.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
   <string name="SYS_DEFAULT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
+  <string name="SYS_DEFAULT_ENCODING_UTF8">Standardkodierung (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Standardliste</string>
   <string name="SYS_DEFAULT_LIST_DESC">Soll eine Mitgliederliste zu dieser Rolle angezeigt werden und wird keine Listenkonfiguration vorgegeben, so wird die Liste in der systemweit eingestellten Standardlistenkonfiguration dargestellt. Über dieses Feld kann für die einzelne Rolle eine andere Listenkonfiguration ausgewählt werden, die angezeigt wird, wenn keine Listenkonfiguration vorgegeben ist.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWenden Sie sich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
@@ -817,6 +766,7 @@
   <string name="SYS_DISK_SPACE">Speicherplatz</string>
   <string name="SYS_DISK_SPACE_ERROR">Die Belegung des Speicherplatzes konnte nicht ermittelt werden.\n\nFehlermeldung:\n#VAR1#</string>
   <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
+  <string name="SYS_DO_NOT_EDIT">Nicht bearbeiten</string>
   <string name="SYS_DOCUMENTS_FILES">Dokumente &amp; Dateien</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Unterschiedliche Dokumente und Dateien können hier zur Ansicht oder zum Download angeboten werden. Diese können in Ordnern mit individuellen Zugriffsrechten zusammengefasst werden.</string>
   <string name="SYS_DONATE">Spenden</string>
@@ -827,6 +777,7 @@
   <string name="SYS_DOWNLOAD_ALBUM">Album herunterladen</string>
   <string name="SYS_DOWNLOAD_FILE">Datei herunterladen</string>
   <string name="SYS_DOWNLOAD_PHOTO">Foto herunterladen</string>
+  <string name="SYS_DUPLICATE">Duplizieren</string>
   <string name="SYS_EDIT">Bearbeiten</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Ankündigungen bearbeiten</string>
   <string name="SYS_EDIT_CALENDAR">Kalender bearbeiten</string>
@@ -842,6 +793,7 @@
   <string name="SYS_EDIT_RELATIONSHIPS">Beziehungen bearbeiten</string>
   <string name="SYS_EDIT_ROLE">Rolle bearbeiten</string>
   <string name="SYS_EDIT_ROLE_MEMBERSHIPS">Rollenmitgliedschaft bearbeiten</string>
+  <string name="SYS_EDIT_USER">Benutzer bearbeiten</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Benutzerprofil dieser Beziehung kann bearbeitet werden</string>
   <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
   <string name="SYS_EDITED_BY">Geändert von</string>
@@ -865,9 +817,12 @@
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Downloadmodul kann über diese Einstellung aktiviert oder deaktiviert werden. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Gruppen &amp; Rollen aktivieren</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE_DESC">Zeigt die Gruppen und Rollen der Organisation an und ermöglicht die freie Konfiguration von Gruppen und Rollen. Eigene Liste können konfiguriert und angewendet werden. Dieses Modul ist generell nur für angemeldete Benutzer verfügbar. (Voreinstellung: ja)</string>
-  <string name="SYS_DEFAULT_ENCODING_UTF8">Standardkodierung (UTF-8)</string>
+  <string name="SYS_ENABLE_USER_RELATIONS">Beziehungen pflegen und anzeigen</string>
+  <string name="SYS_ENABLE_USER_RELATIONS_DESC">Wenn diese Einstellung gesetzt ist, können Beziehungen zwischen den Benutzern gepflegt und angezeigt werden. (Voreinstellung: ja)</string>
   <string name="SYS_ENCODING_GUESS">Versuche die Kodierung zu erkennen</string>
   <string name="SYS_END" description="End of a date">Ende</string>
+  <string name="SYS_END_MEMBERSHIP_OF_USER">Wollen Sie die Mitgliedschaft des Benutzers #VAR1# bei #VAR2# beenden?</string>
+  <string name="SYS_END_MEMBERSHIP_OF_USER_OK">Die Mitgliedschaft des Benutzers #VAR1_BOLD# bei #VAR2_BOLD# wurde erfolgreich beendet! </string>
   <string name="SYS_ERROR">Fehler</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n#VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist als Standardkonfiguration für das Modul #VAR1# in dieser Organisation hinterlegt und kann nicht gelöscht werden. Wählen Sie in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuchen Sie danach diese Konfiguration zu löschen.</string>
@@ -877,6 +832,7 @@
   <string name="SYS_EXAMPLES">Beispiele</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
+  <string name="SYS_EXISTING_USERS">Existierende Benutzer</string>
   <string name="SYS_EXPORT_LISTS">Listen exportieren</string>
   <string name="SYS_EXPORT_LISTS_DESC">Listen von Gruppen und Rollen können von Benutzern exportiert werden, sofern sie das Recht haben diese Listen zu sehen. Mit dieser Einstellung kann die Exportfunktion eingeschränkt werden. (Voreinstellung: Alle)</string>
   <string name="SYS_EXPORT_TO">Exportieren nach</string>
@@ -889,6 +845,7 @@
   <string name="SYS_FIELD_INVALID_CHAR">Das Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</string>
   <string name="SYS_FIELDS_EMPTY">Es sind nicht alle Felder gefüllt worden.</string>
   <string name="SYS_FILE">Datei</string>
+  <string name="SYS_FILE_COLUMN">Dateispalte</string>
   <string name="SYS_FILE_EXIST">Die Datei #VAR1# existiert bereits!\n\nBitte wählen Sie einen anderen Dateinamen aus.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</string>
   <string name="SYS_FILE_NAME_RULES">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</string>
@@ -907,6 +864,7 @@
   <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfen Sie den Dateinamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisieren Sie bitte Ihre Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
+  <string name="SYS_FIRST_LINE_COLUMN_NAME">Erste Zeile beinhaltet die Spaltenbezeichnungen</string>
   <string name="SYS_FIRSTNAME">Vorname</string>
   <string name="SYS_FIRSTNAME_LASTNAME">Vorname und Nachname</string>
   <string name="SYS_FOLDER">Ordner</string>
@@ -924,6 +882,7 @@
   <string name="SYS_FONT">Schriftart</string>
   <string name="SYS_FONT_AWESOME_DESC">Sie können auf unterschiedliche Arten ein Icon hinterlegen:\n1. Ein Icon des Webfonts \"Font Awesome\". Gehen Sie dazu auf #VAR1#http://fontawesome.com#VAR2# und wählen Sie ein kostenloses Icon der Sammlung \"Solid\" oder \"Brands\" aus. Als Präfix müssen Sie noch fa- davor setzen. Wählen Sie also das Icon \"user\" aus, müssen Sie hier \"fa-user\" eintragen.\n2. Ein JPEG oder PNG Icon. Tragen Sie dazu die vollständige URL zusammen mit dem Dateinamen des Icons ein. Alternativ können Sie das Icon auch im Theme im Ordner \"icons\" ablegen, dann brauchen Sie nur den Dateinamen anzugeben.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Ich habe mein Passwort vergessen!</string>
+  <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Ehemaliger</string>
   <string name="SYS_FORMER_MEMBERS">Ehemalige Mitglieder</string>
   <string name="SYS_FORMER_PL">Ehemalige</string>
@@ -953,13 +912,21 @@
   <string name="SYS_HTML_TABLE">HTML-Tabelle</string>
   <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Administrator deaktiviert.</string>
   <string name="SYS_ICON">Icon</string>
+  <string name="SYS_IDENTIFY_USERS">Existierende Benutzer werden anhand von Vornamen und Nachnamen erkannt.</string>
   <string name="SYS_IMPORTANT">Wichtig</string>
+  <string name="SYS_IMPORT">Importieren</string>
+  <string name="SYS_IMPORT_LOGIN_DATA_DESC">Zugangsdaten können nur von einem Administrator importiert werden. Es müssen dabei die Regeln der Organisation eingehalten werden (z.B. die Passwortlänge und Passwortstärke). Benutzer mit bereits vorhandenen Zugangsdaten behalten diese. Es werden keine Zugangsdaten durch den Import überschrieben.</string>
   <string name="SYS_IMPORT_MODE">Import Modus</string>
+  <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Das Arbeitsblatt #VAR1# existiert in der importierten Datei nicht!</string>
+  <string name="SYS_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Benutzer wurden angelegt.\n#VAR2# Benutzer wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.</string>
+  <string name="SYS_IMPORT_UNUSED_HEAD">Folgende Spalten der Importdatei sind keinen Feldern in Admidio zugeordnet:</string>
+  <string name="SYS_IMPORT_USERS">Benutzer importieren</string>
   <string name="SYS_IMPRINT">Impressum</string>
   <string name="SYS_IMPRINT_DESC">Hier kann die URL zum Impressum deiner Seite hinterlegt werden. Sofern das gewählte Theme dies unterstützt, wird ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inaktive Gruppen und Rollen</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
+  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Gib bitte den Vor- und Nachnamen des neuen Benutzers ein. Bevor der Benutzer angelegt wird, wird geprüft, ob ein Benutzer mit ähnlichem Namen bereits in der Datenbank existiert.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation erfolgreich</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Die Admidio-Datenbank ist nun installiert und fertig eingerichtet. Die Konfigurationsdatei mit den Zugangsdaten zur Datenbank wurde erstellt und hinterlegt. Sie können jetzt mit Admidio arbeiten und sich mit den Daten des Administrators anmelden.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">Die Installation und Einrichtung der Datenbank wurde erfolgreich durchgeführt.</string>
@@ -995,8 +962,8 @@
   <string name="SYS_LOGIN">Anmelden</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Sie haben mehrmals innerhalb kurzer Zeit versucht, sich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist Ihr Zugang für 15 Minuten gesperrt.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Ihre Anmeldung wurde noch nicht freigeschaltet.\n\nSie werden benachrichtigt, sobald Ihre Anmeldung freigeschaltet wurde und ein Login möglich ist.</string>
-  <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Die Anmeldedaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Administratoren der Organisation #VAR1_BOLD# freigeschaltet.</string>
-  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Anmeldedaten wurden richtig eingegeben, allerdings sind Sie kein aktives Mitglied dieser Organisation #VAR1_BOLD#.</string>
+  <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Die Zugangsdaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Administratoren der Organisation #VAR1_BOLD# freigeschaltet.</string>
+  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Zugangsdaten wurden richtig eingegeben, allerdings bist du kein aktives Mitglied der Organisation #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der eingegebene Benutzername und/oder das Passwort ist falsch.</string>
   <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
   <string name="SYS_LOGOUT">Abmelden</string>
@@ -1007,7 +974,9 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">Die E-Mail-Adresse #VAR1_BOLD# wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</string>
   <string name="SYS_MAIL_DISPATCH">E-Mailversand</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">Es können Beziehungstypen (Elternteil - Kind) definiert werden. Zu jeder definierten Beziehung wird der Typ (asymmetrisch, symmetrisch oder unidirektional) hinterlegt, sowie die Profilbearbeitungsrechte innerhalb der Beziehung festgelegt.</string>
+  <string name="SYS_MAKE_FORMER">Sie können den Benutzer zu einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und Sie sie später immer wieder sehen können, welchen Rollen diese Person zugeordnet war.</string>
   <string name="SYS_MALE">Männlich</string>
+  <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Besucher, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
   <string name="SYS_MANDATORY_FIELD">Pflichtfeld</string>
   <string name="SYS_MAP">Karte</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Zeigt den Wohnort bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
@@ -1067,6 +1036,7 @@
   <string name="SYS_NEW_BETA_AVAILABLE">Eine neue Beta Version ist verfügbar!</string>
   <string name="SYS_NEW_BOTH_AVAILABLE">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</string>
   <string name="SYS_NEW_NAME">Neuer Name</string>
+  <string name="SYS_NEW_REGISTRATIONS">Neue Registrierungen</string>
   <string name="SYS_NEW_ROLE">Neue Rolle</string>
   <string name="SYS_NEW_VALUE">Neuer Wert</string>
   <string name="SYS_NEW_VERSION_AVAILABLE">Eine neue stabile Version ist verfügbar!</string>
@@ -1075,12 +1045,15 @@
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Keine zusätzlichen Berechtigungen gesetzt</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">Keine zusätzlichen Rechte</string>
   <string name="SYS_NO_BACKUP_FILE_EXISTS">Keine Backupdatei vorhanden!</string>
+  <string name="SYS_NO_CHANGES_LOGGED">Es sind keine Änderungen protokolliert.</string>
+  <string name="SYS_NO_CHANGES_LOGGED_PROFIL">Bei #VAR1_BOLD# wurden bisher keine Änderungen protokolliert. </string>
   <string name="SYS_NO_DATA_FOUND">Es wurden keine Daten gefunden.</string>
   <string name="SYS_NO_DEFAULT_ROLE">Sie können die Einstellung #VAR1_BOLD# nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</string>
   <string name="SYS_NO_ENTRY">Der angeforderte Eintrag existiert nicht in der Datenbank.</string>
   <string name="SYS_NO_ENTRIES">Es sind keine Einträge vorhanden.</string>
   <string name="SYS_NO_LEADER">Ohne Leiter</string>
   <string name="SYS_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
+  <string name="SYS_NO_NEW_REGISTRATIONS">Es sind keine Registrierungen vorhanden.</string>
   <string name="SYS_NO_QUOTATION">Kein Anführungszeichen</string>
   <string name="SYS_NO_RIGHTS">Sie haben kein Recht, diese Aktion auszuführen.</string>
   <string name="SYS_NO_RIGHTS_VIEW_LIST">Sie besitzen keine Rechte Listen der hinterlegten Rollen anzuschauen.</string>
@@ -1151,6 +1124,7 @@
   <string name="SYS_PLUGINS">Plugins</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Hochformat</string>
+  <string name="SYS_POSSIBLE_FIELDNAMES">Spaltennamen für automatische Erkennung: #VAR1#</string>
   <string name="SYS_POST_MAX_SIZE">max. POST-Größe</string>
   <string name="SYS_POSTCODE">PLZ</string>
   <string name="SYS_PRESENTATION">Darstellung</string>
@@ -1168,6 +1142,7 @@
   <string name="SYS_PRNG_INSECURE">Admidio/PHP kann keine sicheren Pseudo-Zufallszahlen generieren! Bitte um Kontaktaufnahme mit dem Admidio-Team mit folgenden Informationen:</string>
   <string name="SYS_PROCESS_CANCELED">Der Vorgang wurde abgebrochen.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Bei der Verarbeitung der Daten ist folgendes Problem aufgetreten.</string>
+  <string name="SYS_PROFILE_FIELD">Profilfeld</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
   <string name="SYS_QUANTITY">Menge</string>
   <string name="SYS_QUARTERLY">Vierteljährlich</string>
@@ -1188,9 +1163,13 @@
   <string name="SYS_RELATIONSHIP_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen, z.B. für Geschwister, verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
   <string name="SYS_RELOAD">Neuladen</string>
   <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
+  <string name="SYS_REMINDER_SEND_LOGIN">Möchten Sie dem Benutzer seine Zugangsdaten mit Passwort als Erinnerung zuschicken?</string>
   <string name="SYS_REMOVE">Entfernen</string>
   <string name="SYS_REMOVE_MESSAGE">Nachricht entfernen</string>
+  <string name="SYS_REMOVE_USER">Benutzer entfernen</string>
+  <string name="SYS_REMOVE_USER_DESC">Wenn Sie #VAR1_BOLD# auswählen, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</string>
   <string name="SYS_REPEAT">Wiederholen</string>
+  <string name="SYS_REPLACE">Ersetzen</string>
   <string name="SYS_REQUIRED_FIELDS">Pflichtfelder</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Sie sind bereits im System angemeldet. Das Anfordern eines neuen Passworts ist nicht notwendig.</string>
   <string name="SYS_RESTRICTIONS">Einschränkungen</string>
@@ -1224,6 +1203,7 @@
   <string name="SYS_ROLE_MEMBERSHIP_IN_PERIOD">Mitglieder im Zeitraum:</string>
   <string name="SYS_ROLE_MEMBERSHIP_TO">bis</string>
   <string name="SYS_ROLE_NAME_EXISTS">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</string>
+  <string name="SYS_ROLE_SELECT_RIGHT">Sie Haben keine Berechtigung, die Rolle #VAR1# auszuwählen.\nBitte wählen Sie eine andere Rolle aus.</string>
   <string name="SYS_ROLE_TYPES">Rollentypen</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROLES_CONFIRMATION_OF_PARTICIPATION">Rollen - Teilnahmebestätigung</string>
@@ -1280,14 +1260,17 @@
   <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Sende E-Mails an alle E-Mail Adressen des Benutzers</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen des Benutzer gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: Aktiviert)</string>
+  <string name="SYS_SEND_LOGIN_INFORMATION">Zugangsdaten zuschicken</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen und Empfänger zur Verfügung, an die Sie E-Mails schreiben können.</string>
   <string name="SYS_SEND_MAILS">E-Mails zusenden</string>
   <string name="SYS_SEND_METHOD">Versandmethode</string>
   <string name="SYS_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden E-Mail-Adresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Voreinstellung: PHP mail())</string>
+  <string name="SYS_SEND_NEW_LOGIN">Möchten Sie #VAR1_BOLD# eine E-Mail mit dem aktuellen Benutzernamen und einem neuen Passwort mailen?</string>
   <string name="SYS_SEND_NEW_PW">Neues Passwort zusenden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Private Nachricht senden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Ihre PM wird an den ausgewählten Empfänger gesendet</string>
   <string name="SYS_SEND_TEST_MAIL">Testmail verschicken</string>
+  <string name="SYS_SEND_USERNAME_PASSWORD">E-Mail mit Benutzernamen und neuem Passwort zuschicken</string>
   <string name="SYS_SENDER">Absender</string>
   <string name="SYS_SENDER_EMAIL">Absender E-Mail-Adresse</string>
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter E-Mail-Adressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle E-Mails aus dem E-Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Voreinstellung: leer)</string>
@@ -1299,6 +1282,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
   <string name="SYS_SETTINGS">Einstellungen</string>
+  <string name="SYS_SHOW_ALL_USERS">Alle Benutzer anzeigen</string>
+  <string name="SYS_SHOW_ALL_USERS_DESC">Ist die Einstellung nicht gesetzt werden nur die aktiven Mitglieder dieser Organisation angezeigt. ist die Einstellung aktiviert werden alle Benutzer der Datenbank angezeigt.</string>
   <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Für nicht angemeldete Benutzer wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Zeige ehemalige Mitglieder</string>
@@ -1347,7 +1332,7 @@
   <string name="SYS_SUPPORT_ADMIDIO">Admidio unterstützen</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorienverwaltung</string>
   <string name="SYS_SYMMETRICAL">symmetrisch</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Anmeldedaten für #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie erhalten Ihre Anmeldedaten für die Webseite #organization_homepage#.\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
+  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Zugangsdaten für #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie erhalten Ihre Zugangsdaten für die Webseite #organization_homepage#.\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Passwort zurücksetzen für #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nwir haben eine Anfrage zum Zurücksetzen Ihres Passwortes auf #organization_homepage# erhalten.\n\nFalls die Anfrage von Ihnen gekommen ist, können Sie über den folgenden Link Ihr Passwort zurücksetzen und ein neues Passwort vergeben: \n#variable1#\n\nMit freundlichen Grüßen\nDie Administratoren</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls Sie Mitglied sind und Ihre Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass Sie als Mitglied nicht identifiziert wurden.\nZur Klärung der Gründe für die Ablehnung wenden Sie sich bitte an den Administrator #administrator_email# von #organization_homepage#.\n\nViele Grüße\nDie Administratoren</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name# bestätigt\n#content# Hallo #user_first_name# #user_last_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun können Sie sich mit Ihrem Benutzernamen #user_login_name# und Ihrem Passwort auf der Homepage anmelden.\n\nSollten Sie noch Fragen haben, schreiben Sie eine E-Mail an #administrator_email#.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
@@ -1382,17 +1367,28 @@
   <string name="SYS_UPDATE_SUCCESSFUL">Aktualisierung erfolgreich</string>
   <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-+_:/#?= .</string>
   <string name="SYS_USER">Benutzer</string>
+  <string name="SYS_USER_COULD_BE_CREATED">Der Benutzer kann angelegt werden.</string>
+  <string name="SYS_USER_DELETE_DESC">Wollen Sie #VAR1_BOLD# wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
+  <string name="SYS_USER_FOUND">Gefundene Benutzer</string>
   <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</string>
+  <string name="SYS_USER_MANAGEMENT">Benutzerverwaltung</string>
   <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann für die Anzeige der Benutzerverwaltung genutzt werden. Es werden anschließend in der Benutzerverwaltung die Spalten der ausgewählten Listenkonfiguration angezeigt.</string>
+  <string name="SYS_USER_MANAGEMENT_DESC">Alle aktiven und ehemaligen Benutzer können hier eingesehen und verwaltet werden. Neue Benutzer können angelegt oder importiert werden.</string>
   <string name="SYS_USER_NO_EMAIL">Der Benutzer #VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
+  <string name="SYS_USER_NO_MEMBERSHIP">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1#.</string>
+  <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Zugangsdaten.</string>
+  <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1# und besitzt auch keine Zugangsdaten.</string>
+  <string name="SYS_USER_NO_VALID_LOGIN">Dieser Benutzer besitzt noch kein Login.\nMöchten Sie ihm die Daten dieser Registrierung zuordnen?</string>
   <string name="SYS_USER_PHOTO">Benutzerfoto</string>
   <string name="SYS_USER_RELATION">Beziehung</string>
   <string name="SYS_USER_RELATIONS">Beziehungen</string>
   <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
+  <string name="SYS_USER_VALID_LOGIN">Dieser Benutzer besitzt schon ein gültiges Login.</string>
   <string name="SYS_USERNAME">Benutzername</string>
   <string name="SYS_USERNAME_OR_EMAIL">Benutzername oder E-Mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# am #VAR2# um #VAR3#</string>
-  <string name="SYS_USER_FOUND">Gefundene Benutzer</string>
+  <string name="SYS_USERS_PER_PAGE">Anzahl Benutzer pro Seite</string>
+  <string name="SYS_USERS_PER_PAGE_DESC">Anzahl der Benutzer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer zu der Organisation, so kann man in der Liste blättern. (Voreinstellung: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">Sie benutzen eine aktuelle #VAR1#Version von Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
@@ -1431,4 +1427,3 @@
   <string name="SYS_YOUR_NAME">Ihr Name</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
 </resources>
-
