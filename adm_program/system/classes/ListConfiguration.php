@@ -12,18 +12,8 @@
 /**
  * This class creates a list configuration object. With this object it's possible
  * to manage the configuration in the database. You can easily create new lists,
- * add new columns or remove columns.
- *
- * Beside the methods of the parent class there are the following additional methods:
- *
- * readColumns()         - Daten der zugehoerigen Spalten einlesen und in Objekten speichern
- * addColumn($number, $field, $sort = "", $condition = "")
- *                       - fuegt eine neue Spalte dem Spaltenarray hinzu
- * deleteColumn($number, $all = false)
- *                       - entfernt die entsprechende Spalte aus der Konfiguration
- * countColumns()        - Anzahl der Spalten der Liste zurueckgeben
- * getSQL($roleIds, $showFormerMembers = false)
- *                       - gibt das passende SQL-Statement zu der Liste zurueck
+ * add new columns or remove columns. The object will only list columns of the configuration
+ * which the current user is allowed to view.
  */
 class ListConfiguration extends TableLists
 {
@@ -31,6 +21,10 @@ class ListConfiguration extends TableLists
      * @var array<int,TableAccess> Array with all Listenspaltenobjekte
      */
     protected $columns = array();
+    /**
+     * @var array<int,string> Array each column name within the sql statement e.g. LAST_NAME or mem_begin
+     */
+    protected $columnsSqlName = array();
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
@@ -93,6 +87,7 @@ class ListConfiguration extends TableLists
     public function clear()
     {
         $this->columns = array();
+        $this->columnsSqlNames = array();
 
         parent::clear();
     }
@@ -104,6 +99,186 @@ class ListConfiguration extends TableLists
     public function countColumns()
     {
         return count($this->columns);
+    }
+
+    /**
+     * Convert the content of the column independence of the output format.
+     * Therefore the method will check which datatype the column has and which format the
+     * ouput should have.
+     * @param int     $columnNumber Number of the column for which the content should be converted.
+     * @param string  $format       The following formats are possible 'html', 'print', 'csv' or 'pdf'
+     * @param string  $content      The content that should be converted.
+     * @param int     $userId       Id of the user for which the content should converted. This is not the login user.
+     * @return string Returns the converted content.
+     */
+    public function convertColumnContentForOutput($columnNumber, $format, $content, $userId)
+    {
+        global $gProfileFields, $gL10n, $gSettingsManager;
+
+        $column = $this->getColumnObject($columnNumber);
+
+        $usfId = 0;
+        if ($column->getValue('lsc_usf_id') > 0)
+        {
+            // check if customs field and remember
+            $usfId = (int) $column->getValue('lsc_usf_id');
+        }
+
+        // in some cases the content must have a special output format
+
+        if ($usfId > 0 && $usfId === (int) $gProfileFields->getProperty('COUNTRY', 'usf_id'))
+        {
+            $content = $gL10n->getCountryName($content);
+        }
+        elseif ($column->getValue('lsc_special_field') === 'usr_photo')
+        {
+            // show user photo
+            if (in_array($format, array('html', 'print'), true))
+            {
+                $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $userId)).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_USER_PHOTO').'" />';
+            }
+            if ($format === 'csv' && $content != null)
+            {
+                $content = $gL10n->get('SYS_USER_PHOTO');
+            }
+        }
+        elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
+        {
+            if (in_array($format, array('csv', 'pdf'), true))
+            {
+                if ($content == 1)
+                {
+                    $content = $gL10n->get('SYS_YES');
+                }
+                else
+                {
+                    $content = $gL10n->get('SYS_NO');
+                }
+            }
+            elseif($content != 1)
+            {
+                $content = 0;
+            }
+        }
+        elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DATE'
+        || $column->getValue('lsc_special_field') === 'mem_begin'
+        || $column->getValue('lsc_special_field') === 'mem_end')
+        {
+            if (strlen($content) > 0)
+            {
+                // date must be formated
+                $date = \DateTime::createFromFormat('Y-m-d', $content);
+                $content = $date->format($gSettingsManager->getString('system_date'));
+            }
+        }
+        elseif (in_array($format, array('csv', 'pdf'), true)
+        &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN'
+            || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON'))
+        {
+            if (strlen($content) > 0)
+            {
+                // show selected text of optionfield or combobox
+                $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
+                $content = $arrListValues[$content];
+            }
+        }
+        elseif ($column->getValue('lsc_special_field') === 'mem_approved')
+        {
+            // Assign Integer to Language strings
+            switch ((int) $content)
+            {
+                case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
+                    $text = $gL10n->get('DAT_USER_INVITED');
+                    $htmlText = '<i class="fas fa-calendar-check admidio-icon-chain"></i>' . $text;
+                    break;
+                case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
+                    $text = $gL10n->get('DAT_USER_ATTEND');
+                    $htmlText = '<i class="fas fa-check-circle admidio-icon-chain"></i>' . $text;
+                    $buttonClass = 'admidio-event-approval-state-attend';
+                    break;
+                case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
+                    $text = $gL10n->get('DAT_USER_TENTATIVE');
+                    $htmlText = '<i class="fas fa-question-circle admidio-icon-chain"></i>' . $text;
+                    $buttonClass = 'admidio-event-approval-state-tentative';
+                    break;
+                case ModuleDates::MEMBER_APPROVAL_STATE_REFUSED:
+                    $text = $gL10n->get('DAT_USER_REFUSED');
+                    $htmlText = '<i class="fas fa-times-circle admidio-icon-chain"></i>' . $text;
+                    $buttonClass = 'admidio-event-approval-state-cancel';
+                    break;
+            }
+
+            if($format === 'csv')
+            {
+                $content = $text;
+            }
+            else
+            {
+                if($format === 'html')
+                {
+                    $content = '<span class="' . $buttonClass . '">' . $htmlText . '</span>';
+                }
+                else
+                {
+                    $content = $htmlText;
+                }
+            }
+        }
+        elseif ($column->getValue('lsc_special_field') === 'mem_usr_id_change' && (int) $content)
+        {
+            // Get User Information
+            $user = new User($gDb, $gProfileFields, $content);
+
+            $content = $user->getValue('LAST_NAME').', '.$user->getValue('FIRST_NAME');
+        }
+
+        // format value for csv export
+        if ($format === 'csv')
+        {
+            $outputContent = $content;
+        }
+        // pdf should show only text and not much html content
+        elseif ($format === 'pdf')
+        {
+            $outputContent = $content;
+        }
+        // create output in html layout
+        else
+        {
+            // firstname and lastname get a link to the profile
+            if ($format === 'html'
+            &&    ($usfId === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
+                || $usfId === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
+            {
+                $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userId);
+                $outputContent = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $userId)).'">'.$htmlValue.'</a>';
+            }
+            else
+            {
+                // within print mode no links should be set
+                if ($format === 'print'
+                &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'EMAIL'
+                    || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'PHONE'
+                    || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'URL'))
+                {
+                    $outputContent = $content;
+                }
+                else
+                {
+                    // checkbox must set a sorting value
+                    if($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
+                    {
+                        $outputContent = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userId), 'order' => $content);
+                    }
+                    else
+                    {
+                        $outputContent = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userId);
+                    }
+                }
+            }
+        }
+
+        return $outputContent;
     }
 
     /**
@@ -149,7 +324,138 @@ class ListConfiguration extends TableLists
     }
 
     /**
+     * Returns an array with all alignments (center, left or right) from all columns of this list.
+     * @return array Array with alignments from all columns of this list configuration.
+     */
+    public function getColumnAlignments()
+    {
+        global $gProfileFields;
+
+        $arrColumnAlignments = array();
+
+        // Array to assign names to tables
+        $arrSpecialColumnNames = array(
+            'usr_login_name'       => 'left',
+            'usr_photo'            => 'left',
+            'mem_begin'            => 'left',
+            'mem_end'              => 'left',
+            'mem_leader'           => 'left',
+            'mem_approved'         => 'left',
+            'mem_usr_id_change'    => 'left',
+            'mem_timestamp_change' => 'left',
+            'mem_comment'          => 'left',
+            'mem_count_guests'     => 'right'
+        );
+
+        for ($columnNumber = 1, $iMax = $this->countColumns(); $columnNumber <= $iMax; ++$columnNumber)
+        {
+            $column = $this->getColumnObject($columnNumber);
+
+            // Find name of the field
+            if ($column->getValue('lsc_usf_id') > 0)
+            {
+                $usfId = (int) $column->getValue('lsc_usf_id');
+
+                if ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX'
+                ||  $gProfileFields->getPropertyById($usfId, 'usf_name_intern') === 'GENDER')
+                {
+                    $arrColumnAlignments[] = 'center';
+                }
+                elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'NUMBER'
+                ||      $gProfileFields->getPropertyById($usfId, 'usf_type') === 'DECIMAL')
+                {
+                    $arrColumnAlignments[] = 'right';
+                }
+                else
+                {
+                    $arrColumnAlignments[] = 'left';
+                }
+            }
+            else
+            {
+                $arrColumnAlignments[] = $arrSpecialColumnNames[$column->getValue('lsc_special_field')];
+            }
+        } // End-For
+
+        return $arrColumnAlignments;
+    }
+
+    /**
+     * Returns an array with all column names of this list. The names within the array are translated
+     * to the current language.
+     * @return array Array with all column names of this list configuration.
+     */
+    public function getColumnNames()
+    {
+        global $gL10n, $gProfileFields;
+
+        $arrColumnNames = array();
+
+        // Array to assign names to tables
+        $arrSpecialColumnNames = array(
+            'usr_login_name'       => $gL10n->get('SYS_USERNAME'),
+            'usr_photo'            => $gL10n->get('SYS_PHOTO'),
+            'mem_begin'            => $gL10n->get('SYS_START'),
+            'mem_end'              => $gL10n->get('SYS_END'),
+            'mem_leader'           => $gL10n->get('SYS_LEADERS'),
+            'mem_approved'         => $gL10n->get('SYS_PARTICIPATION_STATUS'),
+            'mem_usr_id_change'    => $gL10n->get('SYS_CHANGED_BY'),
+            'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
+            'mem_comment'          => $gL10n->get('SYS_COMMENT'),
+            'mem_count_guests'     => $gL10n->get('SYS_SEAT_AMOUNT')
+        );
+
+        for ($columnNumber = 1, $iMax = $this->countColumns(); $columnNumber <= $iMax; ++$columnNumber)
+        {
+            $column = $this->getColumnObject($columnNumber);
+
+            // Find name of the field
+            if ($column->getValue('lsc_usf_id') > 0)
+            {
+                $arrColumnNames[] = $gProfileFields->getPropertyById((int) $column->getValue('lsc_usf_id'), 'usf_name');
+            }
+            else
+            {
+                $arrColumnNames[] = $arrSpecialColumnNames[$column->getValue('lsc_special_field')];
+            }
+        } // End-For
+
+        return $arrColumnNames;
+    }
+
+    /**
+     * Returns an array with all column names of the sql statement that belong to the select clause.
+     * This will be the internal profile field name e.g. **LAST_NAME** or the db column name
+     * of the special field e.g. **mem_begin**
+     * @return array Array with all column names of this sql select clause.
+     */
+    public function getColumnNamesSql()
+    {
+        global $gProfileFields;
+
+        if (count($this->columnsSqlNames) === 0)
+        {
+            foreach($this->columns as $listColumn)
+            {
+                if((int) $listColumn->getValue('lsc_usf_id') > 0)
+                {
+                    // get internal profile field name
+                    $this->columnsSqlNames[] = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name_intern');
+                }
+                else
+                {
+                    // Special fields like usr_photo, mem_begin ...
+                    $this->columnsSqlNames[] = $listColumn->getValue('lsc_special_field');
+                }
+            }
+        }
+
+        return $this->columnsSqlNames;
+    }
+
+    /**
      * Returns the column object with the corresponding number.
+     * The numbers will start with 1 and end with the count of all columns.
      * If that column doesn't exists the method try to repair the
      * column list. If that won't help then **null** will be returned.
      * @param int $number The internal number of the column.
@@ -174,27 +480,126 @@ class ListConfiguration extends TableLists
     }
 
     /**
+     * Returns an array with all list columns and a search condition for each column. Especially the null value
+     * will be replaced with a default value. This array can than be used to add it to the main sql statement.
+     * @return array<int,string> Returns an array with all list columns and a search condition for each column.
+     */
+    public function getSearchConditions()
+    {
+        global $gProfileFields, $gL10n;
+
+        $arrSearchConditions = array();
+
+        foreach($this->columns as $listColumn)
+        {
+            $lscUsfId = (int) $listColumn->getValue('lsc_usf_id');
+
+            // custom profile field
+            if($lscUsfId > 0)
+            {
+                switch ($gProfileFields->getPropertyById($lscUsfId, 'usf_type'))
+                {
+                    case 'CHECKBOX':
+                        break;
+
+                    case 'DROPDOWN': // fallthrough
+                    case 'RADIO_BUTTON':
+                        // create "case when" with all values of the profile field value list
+                        $condition = ' CASE ';
+                        $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
+
+                        foreach($arrListValues as $key => $value)
+                        {
+                            $condition .= ' WHEN ' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ' = \'' . $key . '\' THEN \''.$value.'\' ';
+                        }
+
+                        $condition .= ' ELSE \' \' END ';
+                        $arrSearchConditions[] = $condition;
+                        break;
+
+                    case 'NUMBER': // fallthrough
+                    case 'DECIMAL':
+                        $arrSearchConditions[] = 'COALESCE(' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ', 0)';
+                        break;
+
+                    case 'DATE':
+                        $arrSearchConditions[] = 'COALESCE(' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ', \'1900-02-01\')';
+                        break;
+
+                    default:
+                        $arrSearchConditions[] = 'COALESCE(' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ', \'\')';
+                }
+            }
+            else
+            {
+                switch ($listColumn->getValue('lsc_special_field'))
+                {
+                    case 'mem_begin': // fallthrough
+                    case 'mem_end':
+                        $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'1900-02-01\')';
+                        break;
+
+                    case 'usr_login_name':
+                    case 'usr_photo':
+                        $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'\')';
+                        break;
+                }
+            }
+        }
+
+        return $arrSearchConditions;
+    }
+
+    /**
      * Prepare SQL of the current list configuration. Therefore all roles of the array and there users will be selected
      * and joined with the columns of the list configuration. The time period of the membership will be considered and
      * could be influenced with parameters. There is also a possiblity to join users of a relationship and hide special
-     * columns of event roles.
-     * @param array<int,int> $roleIds           Array with all roles of which members should be shown.
-     * @param bool           $showFormerMembers false - Only active members of a role
-     *                                          true  - Only former members
-     * @param string         $startDate         The start date if memberships that should be considered. The time period of
-     *                                          the membership must be at least one day after this date.
-     * @param string         $endDate           The end date if memberships that should be considered.The time period of
-     *                                          the membership must be at least one day before this date.
-     * @param array<int,int> $relationTypeIds   An array with relation types. The sql will be expanded with all users who
-     *                                          are in such a relationship to the selected role users.
+     * columns of event roles. Each profile field of the select list will have their internal profile field name as column
+     * name. The special field will still have their database column name.
+     * @param array          $options  (optional) An array with the following possible entries:
+     *                                 - **showAllMembersThisOrga** : Set to true all users with an active membership
+     *                                   to at least one role of the current organization will be shown.
+     *                                   This setting could be combined with **showFormerMembers** or **showRelationTypes**.
+     *                                 - **showAllMembersDatabase** : Set to true all users of the database will be shown
+     *                                   independent of the membership to roles or organizations
+     *                                 - **showRolesMembers** : An array with all roles ids could be set and only members
+     *                                   of this roles will be shown.
+     *                                   This setting could be combined with **showFormerMembers** or **showRelationTypes**.
+     *                                 - **showFormerMembers** : Set to true if roles members or members of the organization
+     *                                   should be shown and also former members should be listed
+     *                                 - **showRelationTypes** : An array with relation types. The sql will be expanded with
+     *                                   all users who are in such a relationship to the selected role users.
+     *                                 - **useConditions** : false - Don't add additional conditions to the SQL
+     *                                                       true  - Conditions will be added as stored in the settings
+     *                                 - **useOrderBy** : false - Don't add the sorting to the SQL
+     *                                                 true  - Sorting is added as stored in the settings
+     *                                 - **startDate** : The start date if memberships that should be considered. The time period of
+     *                                   the membership must be at least one day after this date.
+     *                                 - **endDate** : The end date if memberships that should be considered.The time period of
+     *                                   the membership must be at least one day before this date.
      * @return string Returns a valid sql that represents all users with the columns of the list configuration.
      */
-    public function getSQL(array $roleIds, $showFormerMembers = false, $startDate = null, $endDate = null, array $relationTypeIds = array())
+    public function getSQL(array $options = array())
     {
         global $gL10n, $gProfileFields, $gCurrentOrganization;
 
-        $sqlColumnNames = array();
-        $sqlOrderBys    = array();
+        // create array with all options
+        $optionsDefault = array(
+            'showAllMembersThisOrga' => false,
+            'showAllMembersDatabase' => false,
+            'showRolesMembers'  => array(),
+            'showFormerMembers' => false,
+            'showRelationTypes' => array(),
+            'useConditions'     => true,
+            'useOrderBy'           => true,
+            'startDate'         => null,
+            'endDate'           => null
+        );
+        $optionsAll = array_replace($optionsDefault, $options);
+
+        $arrSqlColumnNames = array();
+        $arrOrderByColumns = array();
+        $sqlOrderBys = '';
         $sqlJoin  = '';
         $sqlWhere = '';
 
@@ -214,7 +619,7 @@ class ListConfiguration extends TableLists
                                     AND '.$tableAlias.'.usd_usf_id = '.$lscUsfId;
 
                 // usf_id is prefix for the table
-                $dbColumnName = $tableAlias.'.usd_value';
+                $dbColumnName = $tableAlias . '.usd_value AS ' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern');
             }
             else
             {
@@ -222,7 +627,7 @@ class ListConfiguration extends TableLists
                 $dbColumnName = $listColumn->getValue('lsc_special_field');
             }
 
-            $sqlColumnNames[] = $dbColumnName;
+            $arrSqlColumnNames[] = $dbColumnName;
 
             $userFieldType = $gProfileFields->getPropertyById($lscUsfId, 'usf_type');
 
@@ -243,16 +648,16 @@ class ListConfiguration extends TableLists
                         // mysql
                         $columnType = 'unsigned';
                     }
-                    $sqlOrderBys[] = ' CAST('.$dbColumnName.' AS '.$columnType.') '.$lscSort;
+                    $arrOrderByColumns[] = ' CAST('.$dbColumnName.') '.$lscSort;
                 }
                 else
                 {
-                    $sqlOrderBys[] = $dbColumnName.' '.$lscSort;
+                    $arrOrderByColumns[] = substr($dbColumnName, 0, strpos($dbColumnName, ' AS')).' '.$lscSort;
                 }
             }
 
             // Handle the conditions for the columns
-            if($listColumn->getValue('lsc_filter') != '')
+            if($optionsAll['useConditions'] && $listColumn->getValue('lsc_filter') != '')
             {
                 $value = $listColumn->getValue('lsc_filter');
                 $type = '';
@@ -328,78 +733,135 @@ class ListConfiguration extends TableLists
             }
         }
 
-        $sqlColumnNames = implode(', ', $sqlColumnNames);
-        $sqlOrderBys    = implode(', ', $sqlOrderBys);
-        $sqlRoleIds     = implode(', ', $roleIds);
+        $sqlColumnNames = implode(', ', $arrSqlColumnNames);
+
+        // add sorting if option is set and sorting columns are stored
+        if($optionsAll['useOrderBy'])
+        {
+            $sqlOrderBys = implode(', ', $arrOrderByColumns);
+
+            // if roles should be shown than sort by leaders
+            if(count($optionsAll['showRolesMembers']) > 0)
+            {
+                if(strlen($sqlOrderBys) > 0)
+                {
+                    $sqlOrderBys = 'mem_leader DESC, ' . $sqlOrderBys;
+                }
+                else
+                {
+                    $sqlOrderBys = 'mem_leader DESC';
+                }
+            }
+
+            if(strlen($sqlOrderBys) > 0)
+            {
+                $sqlOrderBys = ' ORDER BY ' . $sqlOrderBys;
+            }
+        }
+
+        if(count($optionsAll['showRolesMembers']) > 0)
+        {
+            $sqlRoleIds = implode(', ', $optionsAll['showRolesMembers']);
+        }
+        else
+        {
+            $sqlRoleIds = '(SELECT rol_id
+                              FROM ' . TBL_CATEGORIES . '
+                             INNER JOIN ' . TBL_ROLES . ' ON rol_cat_id = cat_id
+                             WHERE (  cat_org_id = '. (int) $gCurrentOrganization->getValue('org_id'). '
+                                   OR cat_org_id IS NULL )
+                            )';
+        }
 
         // Set state of membership
-        if ($showFormerMembers)
+        if ($optionsAll['showFormerMembers'])
         {
             $sqlMemberStatus = 'AND mem_end < \''.DATE_NOW.'\'';
         }
         else
         {
-            if ($startDate === null)
+            if ($optionsAll['startDate'] === null)
             {
                 $sqlMemberStatus = 'AND mem_begin <= \''.DATE_NOW.'\'';
             }
             else
             {
-                $sqlMemberStatus = 'AND mem_begin <= \''.$endDate.' 23:59:59\'';
+                $sqlMemberStatus = 'AND mem_begin <= \''.$optionsAll['endDate'].' 23:59:59\'';
             }
 
-            if ($endDate === null)
+            if ($optionsAll['endDate'] === null)
             {
                 $sqlMemberStatus .= ' AND mem_end >= \''.DATE_NOW.'\'';
             }
             else
             {
-                $sqlMemberStatus .= ' AND mem_end >= \''.$startDate.' 00:00:00\'';
+                $sqlMemberStatus .= ' AND mem_end >= \''.$optionsAll['startDate'].' 00:00:00\'';
             }
+        }
+
+        // check if mem_leaders should be shown
+        if(count($optionsAll['showRolesMembers']) === 1)
+        {
+            $sqlMemLeader = ' mem_leader, ';
+        }
+        else
+        {
+            $sqlMemLeader = ' 0 AS mem_leader, ';
         }
 
         $sqlUserJoin = 'INNER JOIN '.TBL_USERS.'
                                 ON usr_id = mem_usr_id';
         $sqlRelationTypeWhere = '';
-        if (count($relationTypeIds) > 0)
+        if(count($optionsAll['showRelationTypes']) > 0)
         {
             $sqlUserJoin = 'INNER JOIN '.TBL_USER_RELATIONS.'
                                     ON ure_usr_id1 = mem_usr_id
                             INNER JOIN '.TBL_USERS.'
                                     ON usr_id = ure_usr_id2';
-            $sqlRelationTypeWhere = 'AND ure_urt_id IN ('.implode(', ', $relationTypeIds).')';
+            $sqlRelationTypeWhere = 'AND ure_urt_id IN ('.implode(', ', $optionsAll['showRelationTypes']).')';
         }
 
         // Set SQL-Statement
-        $sql = 'SELECT DISTINCT mem_leader, usr_id, '.$sqlColumnNames.'
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
-                    ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-                       '.$sqlUserJoin.'
-                       '.$sqlJoin.'
-                 WHERE usr_valid = 1
-                   AND rol_id IN ('.$sqlRoleIds.')
-                       '.$sqlRelationTypeWhere.'
-                   AND (  cat_org_id = '. (int) $gCurrentOrganization->getValue('org_id'). '
-                       OR cat_org_id IS NULL )
-                       '.$sqlMemberStatus.'
-                       '.$sqlWhere.'
-              ORDER BY mem_leader DESC';
-        if($sqlOrderBys !== '')
+        if ($optionsAll['showAllMembersDatabase'])
         {
-            $sql .= ', '.$sqlOrderBys;
+            $sql = 'SELECT DISTINCT 0 AS mem_leader, usr_id, ' . $sqlColumnNames . '
+                      FROM '.TBL_USERS.'
+                           '.$sqlJoin.'
+                     WHERE usr_valid = 1 '.
+                           $sqlWhere.
+                           $sqlOrderBys;
+        }
+        else
+        {
+            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . ' usr_id, ' . $sqlColumnNames . '
+                      FROM '.TBL_MEMBERS.'
+                INNER JOIN '.TBL_ROLES.'
+                        ON rol_id = mem_rol_id
+                INNER JOIN '.TBL_CATEGORIES.'
+                        ON cat_id = rol_cat_id
+                           '.$sqlUserJoin.'
+                           '.$sqlJoin.'
+                     WHERE usr_valid = 1
+                       AND rol_id IN ('.$sqlRoleIds.')
+                           '.$sqlRelationTypeWhere.'
+                       AND (  cat_org_id = '. (int) $gCurrentOrganization->getValue('org_id'). '
+                           OR cat_org_id IS NULL )
+                           '.$sqlMemberStatus.
+                           $sqlWhere.
+                           $sqlOrderBys;
         }
 
         return $sql;
     }
 
     /**
-     * Read data of responsible columns and store in object
+     * Read data of responsible columns and store in object. Only columns of profile fields which the current
+     * user is allowed to view will be stored in the object.
      */
     public function readColumns()
     {
+        global $gCurrentUser, $gProfileFields;
+
         $sql = 'SELECT *
                   FROM '.TBL_LIST_COLUMNS.'
                  WHERE lsc_lst_id = ? -- $this->getValue(\'lst_id\')
@@ -408,9 +870,14 @@ class ListConfiguration extends TableLists
 
         while($lscRow = $lscStatement->fetch())
         {
-            $lscNumber = (int) $lscRow['lsc_number'];
-            $this->columns[$lscNumber] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
-            $this->columns[$lscNumber]->setArray($lscRow);
+            // only add columns to the array if the current user is allowed to view them
+            if ((int) $lscRow['lsc_usf_id'] === 0
+            || $gProfileFields->isVisible($gProfileFields->getPropertyById((int) $lscRow['lsc_usf_id'], 'usf_name_intern'), $gCurrentUser->editUsers()))
+            {
+                $lscNumber = (int) $lscRow['lsc_number'];
+                $this->columns[$lscNumber] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
+                $this->columns[$lscNumber]->setArray($lscRow);
+            }
         }
     }
 

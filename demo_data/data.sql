@@ -4,31 +4,31 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.0.4', 0, 730)
-                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.0.4', 0, 0)
-                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.0.4', 0, 0)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.0.4', 0, 0)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.0.4', 0, 0)
-                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.0.4', 0, 0)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.4', 0, 0)
-                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '4.0.4', 0, 0)
-                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.4', 0, 0)
-                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '4.0.4', 0, 0)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.4', 0, 0)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.0.4', 0, 0)
-                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.0.4', 0, 0)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.0.4', 0, 0)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.0.4', 0, 0)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.0.4', 0, 0)
-                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.0.4', 0, 0);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.0.7', 0, 730)
+                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.0.7', 0, 0)
+                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.0.7', 0, 0)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.0.7', 0, 0)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.0.7', 0, 0)
+                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.0.7', 0, 0)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.7', 0, 0)
+                              , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.0.7', 0, 0)
+                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.7', 0, 0)
+                              , (100, 'MODULE', 'SYS_USER_MANAGEMENT', 'MEMBERS', '4.0.7', 0, 0)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.7', 0, 0)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.0.7', 0, 0)
+                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.0.7', 0, 0)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.0.7', 0, 0)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.0.7', 0, 0)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.0.7', 0, 0)
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.0.7', 0, 0);
 
 --
 -- Data for table adm_organizations
 --
 
 INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org_id_parent, org_homepage) VALUES
-(1, 'Demo-Organisation', 'DEMO', NULL, 'https://demo.admidio.org/'),
-(2, 'Test-Organisation', 'TEST', 1, 'https://demo.admidio.org/');
+(1, 'Demo-Organisation', 'DEMO', NULL, 'https://www.admidio.org/demo/'),
+(2, 'Test-Organisation', 'TEST', 1, 'https://www.admidio.org/demo/');
 
 --
 -- Data for table adm_menu
@@ -45,12 +45,12 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (130, 1, 0, 5, 1, 'photo', '/adm_program/modules/photos/photos.php', 'fa-image', 'SYS_PHOTOS', 'PHO_PHOTOS_DESC'),
 (70, 1, 0, 6, 1, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'fa-book', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC'),
 (50, 1, 0, 8, 1, 'dates', '/adm_program/modules/dates/dates.php', 'fa-calendar-alt', 'DAT_DATES', 'DAT_DATES_DESC'),
-(80, 1, 0, 9, 1, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'LNK_WEBLINKS', 'LNK_WEBLINKS_DESC'),
+(80, 1, 0, 9, 1, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC'),
 (30, 2, 0, 4, 1, 'dbback', '/adm_program/modules/backup/backup.php', 'fa-database', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC'),
 (140, 2, 0, 6, 1, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'fa-cog', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC'),
 (120, 1, 0, 4, 1, 'mail', '/adm_program/modules/messages/messages_write.php', 'fa-envelope', 'SYS_EMAIL', 'SYS_EMAIL_DESC'),
-(160, 2, 0, 1, 1, 'newreg', '/adm_program/modules/registration/registration.php', 'fa-address-card', 'NWU_NEW_REGISTRATIONS', 'NWU_MANAGE_NEW_REGISTRATIONS_DESC'),
-(100, 2, 0, 2, 1, 'usrmgt', '/adm_program/modules/members/members.php', 'fa-users-cog', 'MEM_USER_MANAGEMENT', 'MEM_USER_MANAGEMENT_DESC'),
+(160, 2, 0, 1, 1, 'newreg', '/adm_program/modules/registration/registration.php', 'fa-address-card', 'SYS_NEW_REGISTRATIONS', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC'),
+(100, 2, 0, 2, 1, 'usrmgt', '/adm_program/modules/members/members.php', 'fa-users-cog', 'SYS_USER_MANAGEMENT', 'SYS_USER_MANAGEMENT_DESC'),
 (110, 2, 0, 5, 1, 'menu', '/adm_program/modules/menu/menu.php', 'fa-stream', 'SYS_MENU', 'SYS_MENU_DESC');
 
 
@@ -103,6 +103,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (6300, 1, 'homepage_logout', 'adm_program/modules/announcements/announcements.php'),
 (6400, 1, 'homepage_login', 'adm_program/overview.php'),
 (6450, 1, 'groups_roles_enable_module', '1'),
+(6455, 1, 'groups_roles_export', '1'),
 (6600, 1, 'groups_roles_members_per_page', '25'),
 (6700, 1, 'groups_roles_roles_per_page', '24'),
 (6705, 1, 'groups_roles_default_configuration', '1'),
@@ -214,6 +215,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (63001, 2, 'homepage_logout', 'adm_program/modules/announcements/announcements.php'),
 (64001, 2, 'homepage_login', 'adm_program/overview.php'),
 (64050, 2, 'groups_roles_enable_module', '1'),
+(64055, 2, 'groups_roles_export', '1'),
 (66001, 2, 'groups_roles_members_per_page', '25'),
 (67001, 2, 'groups_roles_roles_per_page', '24'),
 (67005, 2, 'groups_roles_default_configuration', '9'),
@@ -500,10 +502,10 @@ INSERT INTO %PREFIX%_categories (cat_id, cat_org_id, cat_type, cat_name_intern, 
 (108, 2, 'DAT', 'TRAINING', 'INS_TRAINING', 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
 (109, 2, 'ANN', 'COMMON', 'SYS_COMMON', 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (110, 2, 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', 0, 0, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
-(200, 1, 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', 1, 0, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
-(201, 2, 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', 1, 0, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
+(200, 1, 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', 1, 0, 5, 1, '2012-01-08 11:12:05', NULL, NULL),
+(201, 2, 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', 1, 0, 5, 1, '2012-01-08 11:12:05', NULL, NULL),
 (300, NULL, 'ANN', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(301, NULL, 'DAT', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
+(301, NULL, 'DAT', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', 0, 0, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
 (302, NULL, 'LNK', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL);
 
 
@@ -2777,7 +2779,7 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1787, 351, 10, '1973-12-24'),
 (1788, 351, 11, '1'),
 (1789, 351, 12, 'demo@admidio.org'),
-(1790, 351, 13, 'https://demo.admidio.org/'),
+(1790, 351, 13, 'https://www.admidio.org/demo'),
 (1792, 351, 20, '4711'),
 (17921, 351, 25, '3'),
 (1793, 352, 1, 'Suppenkasper'),

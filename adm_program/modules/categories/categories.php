@@ -72,8 +72,8 @@ switch ($getType)
     case 'LNK':
         $component = 'LINKS';
         $rolesRightsColumn = 'rol_weblinks';
-        $headline = $gL10n->get('LNK_WEBLINKS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
-        $editableHeadline = $gL10n->get('LNK_EDIT_WEBLINKS');
+        $headline = $gL10n->get('SYS_WEBLINKS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
+        $editableHeadline = $gL10n->get('SYS_EDIT_WEBLINKS');
         break;
 
     case 'USF':

@@ -78,7 +78,7 @@ $page->addJavascript('
                 if (data === "success") {
                     if (id === "captcha_preferences_form") {
                         // reload captcha if form is saved
-                        $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php?" + Math.random());
+                        $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/dapphp/securimage/securimage_show.php?" + Math.random());
                     }
                     formAlert.attr("class", "alert alert-success form-alert");
                     formAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
@@ -191,7 +191,7 @@ $formCommon = new HtmlForm(
 $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
 if (count($themes) === 0)
 {
-    $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
+    $gMessage->show($gL10n->get('SYS_TEMPLATE_FOLDER_OPEN'));
     // => EXIT
 }
 $formCommon->addSelectBox(
@@ -277,8 +277,8 @@ $formSecurity->addCheckbox(
     array('helpTextIdInline' => 'ORG_LOGIN_AUTOMATICALLY_DESC')
 );
 $formSecurity->addCheckbox(
-    'enable_password_recovery', $gL10n->get('ORG_SEND_PASSWORD'), (bool) $formValues['enable_password_recovery'],
-    array('helpTextIdInline' => array('ORG_SEND_PASSWORD_DESC', array('ORG_ACTIVATE_SYSTEM_MAILS')))
+    'enable_password_recovery', $gL10n->get('SYS_PASSWORD_FORGOTTEN'), (bool) $formValues['enable_password_recovery'],
+    array('helpTextIdInline' => array('SYS_PASSWORD_FORGOTTEN_PREF_DESC', array('ORG_ACTIVATE_SYSTEM_MAILS')))
 );
 
 
@@ -466,14 +466,14 @@ $formEmailDispatch->addSelectBox(
     array('defaultValue' => $formValues['mail_smtp_secure'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_SMTP_SECURE_DESC')
 );
 $selectBoxEntries = array(
-    ''         => $gL10n->get('SYS_AUTOMATICALLY'),
+    ''         => $gL10n->get('SYS_AUTO_DETECT'),
     'LOGIN'    => $gL10n->get('SYS_SMTP_AUTH_LOGIN'),
     'PLAIN'    => $gL10n->get('SYS_SMTP_AUTH_PLAIN'),
     'CRAM-MD5' => $gL10n->get('SYS_SMTP_AUTH_CRAM_MD5')
 );
 $formEmailDispatch->addSelectBox(
     'mail_smtp_authentication_type', $gL10n->get('SYS_SMTP_AUTH_TYPE'), $selectBoxEntries,
-    array('defaultValue' => $formValues['mail_smtp_authentication_type'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_SMTP_AUTH_TYPE_DESC', array('SYS_AUTOMATICALLY')))
+    array('defaultValue' => $formValues['mail_smtp_authentication_type'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_SMTP_AUTH_TYPE_DESC', array('SYS_AUTO_DETECT')))
 );
 $formEmailDispatch->addInput(
     'mail_smtp_user', $gL10n->get('SYS_SMTP_USER'), $formValues['mail_smtp_user'],
@@ -536,10 +536,10 @@ $formSystemNotification->addMultilineTextInput(
     'SYSMAIL_NEW_PASSWORD', $gL10n->get('ORG_SEND_NEW_PASSWORD'), $text->getValue('txt_text'), 7,
     array('helpTextIdInline' => $htmlDesc)
 );
-$text->readDataByColumns(array('txt_name' => 'SYSMAIL_ACTIVATION_LINK', 'txt_org_id' => $orgId));
-$htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br /><strong>#variable2#</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK');
+$text->readDataByColumns(array('txt_name' => 'SYSMAIL_PASSWORD_RESET', 'txt_org_id' => $orgId));
+$htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK');
 $formSystemNotification->addMultilineTextInput(
-    'SYSMAIL_ACTIVATION_LINK', $gL10n->get('ORG_NEW_PASSWORD_ACTIVATION_LINK'), $text->getValue('txt_text'), 7,
+    'SYSMAIL_PASSWORD_RESET', $gL10n->get('SYS_PASSWORD_FORGOTTEN'), $text->getValue('txt_text'), 7,
     array('helpTextIdInline' => $htmlDesc)
 );
 
@@ -585,7 +585,7 @@ $formCaptcha->addInput(
     'captcha_perturbation', $gL10n->get('ORG_CAPTCHA_DISTORTION'), $formValues['captcha_perturbation'],
     array('type' => 'string', 'helpTextIdInline' => 'ORG_CAPTCHA_DISTORTION_DESC', 'class' => 'form-control-small')
 );
-$backgrounds = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/backgrounds/', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+$backgrounds = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/dapphp/securimage/backgrounds/', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 asort($backgrounds);
 $formCaptcha->addSelectBox(
     'captcha_background_image', $gL10n->get('ORG_CAPTCHA_BACKGROUND_IMAGE'), $backgrounds,
@@ -607,8 +607,8 @@ $formCaptcha->addInput(
     'captcha_signature', $gL10n->get('ORG_CAPTCHA_SIGNATURE'), $formValues['captcha_signature'],
     array('maxLength' => 60, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNATURE_TEXT')
 );
-$html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
-         <a class="admidio-icon-link" href="#" onclick="document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/securimage/securimage_show.php?\' + Math.random(); return false">
+$html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/dapphp/securimage/securimage_show.php" alt="CAPTCHA Image" />
+         <a class="admidio-icon-link" href="#" onclick="document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/dapphp/securimage/securimage_show.php?\' + Math.random(); return false">
             <i class="fas fa-sync-alt fa-lg" data-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>';
 $formCaptcha->addCustomContent(
     $gL10n->get('ORG_CAPTCHA_PREVIEW'), $html,
@@ -906,22 +906,34 @@ $formUserManagement = new HtmlForm(
     $page, array('class' => 'form-preferences')
 );
 
+// read all global lists
+$sqlData = array();
+$sqlData['query'] = 'SELECT lst_id, lst_name
+                       FROM '.TBL_LISTS.'
+                      WHERE lst_org_id = ? -- $orgId
+                        AND lst_global = 1
+                   ORDER BY lst_name ASC, lst_timestamp DESC';
+$sqlData['params'] = array($orgId);
+$formUserManagement->addSelectBoxFromSql(
+    'members_list_configuration', $gL10n->get('SYS_CONFIGURATION_LIST'), $gDb, $sqlData,
+    array('defaultValue' => $formValues['members_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_USER_MANAGEMENT_CONFIGURATION_DESC')
+);
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formUserManagement->addSelectBox(
-    'members_users_per_page', $gL10n->get('MEM_USERS_PER_PAGE'), $selectBoxEntries,
-    array('defaultValue' => $formValues['members_users_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MEM_USERS_PER_PAGE_DESC')
+    'members_users_per_page', $gL10n->get('SYS_USERS_PER_PAGE'), $selectBoxEntries,
+    array('defaultValue' => $formValues['members_users_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_USERS_PER_PAGE_DESC')
 );
 $formUserManagement->addInput(
-    'members_days_field_history', $gL10n->get('MEM_DAYS_FIELD_HISTORY'), $formValues['members_days_field_history'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextIdInline' => 'MEM_DAYS_FIELD_HISTORY_DESC')
+    'members_days_field_history', $gL10n->get('SYS_DAYS_FIELD_HISTORY'), $formValues['members_days_field_history'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextIdInline' => 'SYS_DAYS_FIELD_HISTORY_DESC')
 );
 $formUserManagement->addCheckbox(
     'members_show_all_users', $gL10n->get('ORG_SHOW_ALL_USERS'), (bool) $formValues['members_show_all_users'],
     array('helpTextIdInline' => 'ORG_SHOW_ALL_USERS_DESC')
 );
 $formUserManagement->addCheckbox(
-    'members_enable_user_relations', $gL10n->get('MEM_ENABLE_USER_RELATIONS'), (bool) $formValues['members_enable_user_relations'],
-    array('helpTextIdInline' => 'MEM_ENABLE_USER_RELATIONS_DESC')
+    'members_enable_user_relations', $gL10n->get('SYS_ENABLE_USER_RELATIONS'), (bool) $formValues['members_enable_user_relations'],
+    array('helpTextIdInline' => 'SYS_ENABLE_USER_RELATIONS_DESC')
 );
 
 $html = '<a href="'. ADMIDIO_URL. FOLDER_MODULES.'/userrelations/relationtypes.php">
@@ -933,7 +945,7 @@ $formUserManagement->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'user_administration', 'accordion_modules', $gL10n->get('MEM_USER_MANAGEMENT'), 'fas fa-users-cog', $formUserManagement->show()));
+$page->addHtml(getPreferencePanel('modules', 'user_administration', 'accordion_modules', $gL10n->get('SYS_USER_MANAGEMENT'), 'fas fa-users-cog', $formUserManagement->show()));
 
 // PANEL: DOCUMENTS-FILES
 
@@ -1089,12 +1101,12 @@ $formEcards = new HtmlForm(
 );
 
 $formEcards->addCheckbox(
-    'enable_ecard_module', $gL10n->get('ECA_ACTIVATE_GREETING_CARDS'), (bool) $formValues['enable_ecard_module'],
-    array('helpTextIdInline' => 'ECA_ACTIVATE_GREETING_CARDS_DESC')
+    'enable_ecard_module', $gL10n->get('SYS_ACTIVATE_GREETING_CARDS'), (bool) $formValues['enable_ecard_module'],
+    array('helpTextIdInline' => 'SYS_ACTIVATE_GREETING_CARDS_DESC')
 );
 $formEcards->addInput(
     'ecard_thumbs_scale', $gL10n->get('PHO_SCALE_THUMBNAILS'), $formValues['ecard_thumbs_scale'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'ECA_SCALE_THUMBNAILS_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_SCALE_THUMBNAILS_DESC')
 );
 $formEcards->addInput(
     'ecard_card_picture_width', $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'), $formValues['ecard_card_picture_width'],
@@ -1102,7 +1114,7 @@ $formEcards->addInput(
 );
 $formEcards->addInput(
     'ecard_card_picture_height', $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'), $formValues['ecard_card_picture_height'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'ECA_MAX_PHOTO_SIZE_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_ECARD_MAX_PHOTO_SIZE_DESC')
 );
 
 try
@@ -1122,15 +1134,15 @@ foreach($ecardTemplatesFiles as &$templateName)
 unset($templateName);
 
 $formEcards->addSelectBox(
-    'ecard_template', $gL10n->get('ECA_TEMPLATE'), $ecardTemplatesFiles,
-    array('defaultValue' => $formValues['ecard_template'], 'showContextDependentFirstEntry' => false, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'ECA_TEMPLATE_DESC')
+    'ecard_template', $gL10n->get('SYS_TEMPLATE'), $ecardTemplatesFiles,
+    array('defaultValue' => $formValues['ecard_template'], 'showContextDependentFirstEntry' => false, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'SYS_TEMPLATE_DESC')
 );
 $formEcards->addSubmitButton(
     'btn_save_ecards', $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'ecards', 'accordion_modules', $gL10n->get('ECA_GREETING_CARDS'), 'fas fa-file-image', $formEcards->show()));
+$page->addHtml(getPreferencePanel('modules', 'ecards', 'accordion_modules', $gL10n->get('SYS_GREETING_CARDS'), 'fas fa-file-image', $formEcards->show()));
 
 // PANEL: GROUPS AND ROLES
 
@@ -1451,14 +1463,14 @@ $formWeblinks->addInput(
     'weblinks_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $formValues['weblinks_per_page'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(0)))
 );
-$selectBoxEntries = array('_self' => $gL10n->get('LNK_SAME_WINDOW'), '_blank' => $gL10n->get('LNK_NEW_WINDOW'));
+$selectBoxEntries = array('_self' => $gL10n->get('SYS_SAME_WINDOW'), '_blank' => $gL10n->get('SYS_NEW_WINDOW'));
 $formWeblinks->addSelectBox(
-    'weblinks_target', $gL10n->get('LNK_LINK_TARGET'), $selectBoxEntries,
-    array('defaultValue' => $formValues['weblinks_target'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LNK_LINK_TARGET_DESC')
+    'weblinks_target', $gL10n->get('SYS_LINK_TARGET'), $selectBoxEntries,
+    array('defaultValue' => $formValues['weblinks_target'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_LINK_TARGET_DESC')
 );
 $formWeblinks->addInput(
-    'weblinks_redirect_seconds', $gL10n->get('LNK_DISPLAY_REDIRECT'), $formValues['weblinks_redirect_seconds'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'LNK_DISPLAY_REDIRECT_DESC')
+    'weblinks_redirect_seconds', $gL10n->get('SYS_DISPLAY_REDIRECT'), $formValues['weblinks_redirect_seconds'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_DISPLAY_REDIRECT_DESC')
 );
 $html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
@@ -1471,7 +1483,7 @@ $formWeblinks->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'links', 'accordion_modules', $gL10n->get('LNK_WEBLINKS'), 'fas fa-link', $formWeblinks->show()));
+$page->addHtml(getPreferencePanel('modules', 'links', 'accordion_modules', $gL10n->get('SYS_WEBLINKS'), 'fas fa-link', $formWeblinks->show()));
 
 $page->addHtml('
         </div>

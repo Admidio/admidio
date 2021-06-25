@@ -32,7 +32,18 @@ $page = new HtmlPage('admidio-profile-fields', $headline);
 $page->addJavascript('
     $(".admidio-open-close-caret").click(function() {
         showHideBlock($(this).attr("id"));
-    });',
+    });
+    $("tbody.admidio-sortable").sortable({
+        axis: "y",
+        handle: ".handle",
+        stop: function(event, ui) {
+            var order = $(this).sortable("toArray", {attribute: "data-id"});
+            var uid = ui.item.attr("data-id");
+            $.get("'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4)).'",
+            {usf_id: uid, order: order});
+        }
+    });
+    ',
     true
 );
 
@@ -100,6 +111,7 @@ while($row = $statement->fetch())
         $table->addColumn('<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.$userField->getValue('cat_name'),
                           array('id' => 'group_'.$blockId, 'colspan' => '9'));
         $table->addTableBody('id', $blockId);
+        $table->addAttribute('class', 'admidio-sortable');
     }
 
     if($userField->getValue('usf_description') === '')
@@ -190,10 +202,13 @@ while($row = $statement->fetch())
         '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_id' => $usfId)).'">'.$userField->getValue('usf_name').'</a>',
         '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableUserField::MOVE_UP.'\', \'row_usf_'.$usfId.'\',
             \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4, 'usf_id' => $usfId, 'sequence' => TableUserField::MOVE_UP)) . '\')">'.
-            '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('MEM_PROFILE_FIELD')) . '"></i></a>
+            '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('SYS_PROFILE_FIELD')) . '"></i></a>
         <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableUserField::MOVE_DOWN.'\', \'row_usf_'.$usfId.'\',
             \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4, 'usf_id' => $usfId, 'sequence' => TableUserField::MOVE_DOWN)) . '\')">'.
-            '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('MEM_PROFILE_FIELD')) . '"></i></a>',
+            '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('SYS_PROFILE_FIELD')) . '"></i></a>
+        <a class="admidio-icon-link">'.
+            '<i class="fas fa-arrows-alt handle" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_VAR', array('SYS_PROFILE_FIELD')) . '"></i></a>
+            ',
         $fieldDescription,
         $hidden,
         $disable,
@@ -202,7 +217,7 @@ while($row = $statement->fetch())
         $userFieldText[$userField->getValue('usf_type')],
         $usfSystem
     );
-    $table->addRowByArray($columnValues, 'row_usf_'.$usfId);
+    $table->addRowByArray($columnValues, 'row_usf_'.$usfId, array('data-id' => $usfId));
 }
 
 $page->addHtml($table->show());

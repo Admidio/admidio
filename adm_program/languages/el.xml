@@ -109,18 +109,18 @@
   <string name="DAT_VIEW_MODE_COMPACT">Συμπαγής</string>
   <string name="DAT_VISIBILITY">Ορατότης</string>
   <!--Phrases only in Ecardsmodule-->
-  <string name="ECA_A_ECARD_FROM">Η κάρτα χαιρετισμού εστάλη από</string>
-  <string name="ECA_ACTIVATE_GREETING_CARDS">Ενεργοποίηση μονάδας κάρτας χαιρετισμού</string>
-  <string name="ECA_GREETING_CARD">Κάρτα χαιρετισμού</string>
-  <string name="ECA_GREETING_CARDS">Κάρτες χαιρετισμού</string>
-  <string name="ECA_GREETING_CARD_EDIT">Επεξεργασία κάρτας χαιρετισμού</string>
-  <string name="ECA_LAYOUT">Μορφότυπος</string>
-  <string name="ECA_NEW_MESSAGE_RECEIVED">Έχει ληφθεί νέο μήνυμα</string>
-  <string name="ECA_NOT_SUCCESSFULLY_SEND">Η κάρτα χαιρετισμού δεν μπορεί να σταλθεί!</string>
-  <string name="ECA_RECIPIENT_EMAIL">Ηλεκτρονική διεύθυνση (e-mail) παραλήπτη</string>
-  <string name="ECA_RECIPIENT_NAME">Όνομα παραλήπτη</string>
-  <string name="ECA_SUCCESSFULLY_SEND">Η κάρτα χαιρετισμού στάλθηκε!</string>
-  <string name="ECA_VIEW_PICTURE_FULL_SIZED">Εμφάνιση εικόνας πλήρους μεγέθους</string>
+  <string name="SYS_ECARD_FROM">Η κάρτα χαιρετισμού εστάλη από</string>
+  <string name="SYS_ACTIVATE_GREETING_CARDS">Ενεργοποίηση μονάδας κάρτας χαιρετισμού</string>
+  <string name="SYS_GREETING_CARD">Κάρτα χαιρετισμού</string>
+  <string name="SYS_GREETING_CARDS">Κάρτες χαιρετισμού</string>
+  <string name="SYS_GREETING_CARD_EDIT">Επεξεργασία κάρτας χαιρετισμού</string>
+  <string name="SYS_LAYOUT">Μορφότυπος</string>
+  <string name="SYS_NEW_MESSAGE_RECEIVED">Έχει ληφθεί νέο μήνυμα</string>
+  <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Η κάρτα χαιρετισμού δεν μπορεί να σταλθεί!</string>
+  <string name="SYS_RECIPIENT_EMAIL">Ηλεκτρονική διεύθυνση (e-mail) παραλήπτη</string>
+  <string name="SYS_RECIPIENT_NAME">Όνομα παραλήπτη</string>
+  <string name="SYS_ECARD_SUCCESSFULLY_SEND">Η κάρτα χαιρετισμού στάλθηκε!</string>
+  <string name="SYS_VIEW_PICTURE_FULL_SIZED">Εμφάνιση εικόνας πλήρους μεγέθους</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Πίσω στο βιβλίο επισκεπτών</string>
   <string name="GBO_COMMENT_BY">Σχόλια από #VAR1#</string>
@@ -129,10 +129,10 @@
   <string name="GBO_EDIT_COMMENT">Τροποποίηση σχολίων</string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">Δημιουργήθηκε νέο βιβλίο επισκεπτών για σχόλια</string>
   <string name="GBO_GUESTBOOK">Βιβλίο επισκεπτών</string>
-  <string name="LNK_LINK_TARGET_DESC">Επιλέξτε εάν ο επιλεγμένος ιστότοπος θα πρέπει να εμφανίζεται στο παράθυρο του Admidio ή σε νέο παράθυρο.</string>
-  <string name="LNK_NEW_WINDOW">Νέο παράθυρο</string>
-  <string name="LNK_SAME_WINDOW">Ίδιο παράθυρο</string>
-  <string name="LNK_WEBLINKS_DESC">Δημιουργήστε και οργανώστε ανά κατηγορίες υπερσυνδέσμους που ενδιαφέρουν.</string>
+  <string name="SYS_LINK_TARGET_DESC">Επιλέξτε εάν ο επιλεγμένος ιστότοπος θα πρέπει να εμφανίζεται στο παράθυρο του Admidio ή σε νέο παράθυρο.</string>
+  <string name="SYS_NEW_WINDOW">Νέο παράθυρο</string>
+  <string name="SYS_SAME_WINDOW">Ίδιο παράθυρο</string>
+  <string name="SYS_WEBLINKS_DESC">Δημιουργήστε και οργανώστε ανά κατηγορίες υπερσυνδέσμους που ενδιαφέρουν.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Χρώμα του φόντου</string>
   <string name="ORG_CAPTCHA_BACKGROUND_IMAGE">Εικόνα του φόντου</string>
   <string name="ORG_CAPTCHA_BACKGROUND_IMAGE_DESC">Μπορείτε να επιλέξετε μια εικόνα φόντου που θα χρησιμοποιηθεί ως Captcha. Το χρώμα της γραμματοσειράς θα πρέπει να ταιριάζει με την εικόνα για να είναι ευανάγνωστη. (προεπιλογή: χωρίς εικόνα).</string>

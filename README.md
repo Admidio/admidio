@@ -138,6 +138,7 @@ and sharing great software.
 - [Bootstrap](https://getbootstrap.com/): HTML, CSS and JS framework
 - [Bootstrap-Datepicker](https://github.com/eternicode/bootstrap-datepicker): Datepicker for Bootstrap
 - [CKEditor](http://ckeditor.com/): Javascript-Editor
+- [Composer](https://getcomposer.org/): A Dependency Manager for PHP.
 - [Cookie Consent](https://cookieconsent.insites.com/): The most popular solution to the EU cookie law
 - [Datatables](https://www.datatables.net/): Table plugin for jQuery
 - [Font Awesome](https://fontawesome.com/): Vector icons and social logos
@@ -149,13 +150,14 @@ and sharing great software.
 - [Moment](https://github.com/Seldaek/monolog/): Parse, validate, manipulate, and display dates in JavaScript
 - [Monolog](http://momentjs.com/): Logging for PHP
 - [NobleCount](https://tpgblog.com/NobleCount/): NobleCount… for a more ‘proper’ count of the characters remaining.
-- [random_compat](https://github.com/paragonie/random_compat/): PHP 5.x polyfill for random_bytes() and random_int()
 - [phpass](https://github.com/hautelook/phpass/): Portable PHP password hashing framework
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP
+- [PHPSpreadsheet](https://phpspreadsheet.readthedocs.io): PhpSpreadsheet offers a set of classes that allow you to read and write various spreadsheet file formats.
 - [PSR Log](https://github.com/php-fig/log): An interface that describes a logger
 - [SecurImage](https://www.phpcaptcha.org/): PHP CAPTCHA script for generating complex images and CAPTCHA codes to protect forms from spam and abuse.
 - [Select2](https://select2.github.io/): jQuery replacement for select boxes
 - [Smarty](https://www.smarty.net/): PHP template engine
+- [TCPDF](https://tcpdf.org/): Open Source PHP class for generating PDF documents.
 - [zxcvbn](https://github.com/dropbox/zxcvbn): Add password strength indicator
 - [zxcvbn-php](https://github.com/bjeavons/zxcvbn-php): Test password strength in the backend
 

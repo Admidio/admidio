@@ -335,7 +335,8 @@ class ProfileFields
     }
 
     /**
-     * Returns the user value for this column.
+     * Returns the user value for this column. Within a dropdown or radio button field the format could be set to **text** so
+     * an icon will not be shown.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field whose value should be read
      * @param string $format          Returns the field value in a special format **text**, **html**, **database**
      *                                or datetime (detailed description in method description)

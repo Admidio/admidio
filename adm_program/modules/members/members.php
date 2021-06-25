@@ -34,10 +34,13 @@ if (!$gCurrentUser->editUsers())
 }
 
 // set headline of the script
-$headline = $gL10n->get('MEM_USER_MANAGEMENT');
+$headline = $gL10n->get('SYS_USER_MANAGEMENT');
 
 // Navigation of the module starts here
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
+
+$membersListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('members_list_configuration'));
+$_SESSION['members_list_config'] = $membersListConfig;
 
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
 $flagShowMembers = !$getMembers;
@@ -55,13 +58,13 @@ $page->addJavascript('
         window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members.php', array('members' => $flagShowMembers)).'");
     });', true);
 
-$page->addPageFunctionsMenuItem('menu_item_members_create_user', $gL10n->get('MEM_CREATE_USER'),
+$page->addPageFunctionsMenuItem('menu_item_members_create_user', $gL10n->get('SYS_CREATE_USER'),
     ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', 'fa-plus-circle');
 
 if($gSettingsManager->getBool('profile_log_edit_fields'))
 {
     // show link to view profile field change history
-    $page->addPageFunctionsMenuItem('menu_item_members_change_history', $gL10n->get('MEM_CHANGE_HISTORY'),
+    $page->addPageFunctionsMenuItem('menu_item_members_change_history', $gL10n->get('SYS_CHANGE_HISTORY'),
         ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', 'fa-history');
 }
 
@@ -71,13 +74,13 @@ if($gSettingsManager->getBool('members_show_all_users'))
     // create filter menu with elements for category
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-    $form->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), $flagShowMembers, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
+    $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL_USERS'), $flagShowMembers, array('helpTextIdLabel' => 'SYS_SHOW_ALL_USERS_DESC'));
     $filterNavbar->addForm($form->show());
     $page->addHtml($filterNavbar->show());
 }
 
 // show link to import users
-$page->addPageFunctionsMenuItem('menu_item_members_import_users', $gL10n->get('MEM_IMPORT_USERS'),
+$page->addPageFunctionsMenuItem('menu_item_members_import_users', $gL10n->get('SYS_IMPORT_USERS'),
     ADMIDIO_URL.FOLDER_MODULES.'/members/import.php', 'fa-upload');
 
 if($gCurrentUser->isAdministrator())
@@ -100,19 +103,18 @@ $orgName = $gCurrentOrganization->getValue('org_longname');
 $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-condensed');
 
 // create array with all column heading values
-$columnHeading = array(
+$columnHeading = $membersListConfig->getColumnNames();
+array_unshift($columnHeading,
     $gL10n->get('SYS_ABR_NO'),
-    '<i class="fas fa-user" data-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>',
-    $gL10n->get('SYS_NAME'),
-    $gL10n->get('SYS_USER'),
-    '<i class="fas fa-fw fa-transgender" data-toggle="tooltip" title="' . $gL10n->get('SYS_GENDER') . '"></i>',
-    $gL10n->get('SYS_BIRTHDAY'),
-    $gL10n->get('MEM_UPDATED_ON'),
-    '&nbsp;'
-);
+    '<i class="fas fa-user" data-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>');
+array_push($columnHeading, '&nbsp;');
+
+$columnAlignment = $membersListConfig->getColumnAlignments();
+array_unshift($columnAlignment,'left', 'left');
+array_push($columnAlignment, 'right');
 
 $membersTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_data.php', array('members' => $getMembers)));
-$membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
+$membersTable->setColumnAlignByArray($columnAlignment);
 $membersTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
 $membersTable->addRowHeadingByArray($columnHeading);
 $membersTable->setDatatablesRowsPerPage($gSettingsManager->getInt('members_users_per_page'));

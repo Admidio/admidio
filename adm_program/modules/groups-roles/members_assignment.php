@@ -221,7 +221,7 @@ else
 
     if ($gCurrentUser->editUsers())
     {
-        $page->addPageFunctionsMenuItem('menu_item_members_assign_create_user', $gL10n->get('MEM_CREATE_USER'),
+        $page->addPageFunctionsMenuItem('menu_item_members_assign_create_user', $gL10n->get('SYS_CREATE_USER'),
             ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', 'fa-plus-circle');
     }
 
@@ -243,7 +243,7 @@ else
         'filter_rol_id', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
         array('defaultValue' => $getFilterRoleId, 'firstEntry' => $gL10n->get('SYS_ALL'))
     );
-    $form->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), false, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
+    $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL_USERS'), false, array('helpTextIdLabel' => 'SYS_SHOW_ALL_USERS_DESC'));
     $filterNavbar->addForm($form->show());
     $page->addHtml($filterNavbar->show());
 

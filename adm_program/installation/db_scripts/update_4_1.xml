@@ -38,11 +38,24 @@
     ADD CONSTRAINT %PREFIX%_fk_msa_msg_id      FOREIGN KEY (msa_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT</step>
     <step id="100">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('enable_chat_module')</step>
     <step id="110">UPDATE %PREFIX%_menu SET men_description = 'SYS_EMAIL_DESC' WHERE men_description = 'MAI_EMAIL_DESC'</step>
-    <step id="120">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
+    <step id="120">ALTER TABLE %PREFIX%_users DROP COLUMN usr_new_password</step>
+    <step id="130">ALTER TABLE %PREFIX%_users DROP COLUMN usr_activation_code</step>
+    <step id="140">ALTER TABLE %PREFIX%_users ADD COLUMN usr_pw_reset_id varchar(50)</step>
+    <step id="150">ALTER TABLE %PREFIX%_users ADD COLUMN usr_pw_reset_timestamp timestamp NULL DEFAULT NULL</step>
+    <step id="160">ComponentUpdateSteps::updateStep41AddSystemmailText</step>
+    <step id="170">DELETE FROM %PREFIX%_texts WHERE txt_name = 'SYSMAIL_ACTIVATION_LINK'</step>
+    <step id="180">ComponentUpdateSteps::updateStep41AddMembersManagementDefaultList</step>
+    <step id="190">UPDATE %PREFIX%_components SET com_name = 'SYS_WEBLINKS' WHERE com_name = 'LNK_WEBLINKS'</step>
+    <step id="200">UPDATE %PREFIX%_menu SET men_name = 'SYS_WEBLINKS', men_description = 'SYS_WEBLINKS_DESC' WHERE men_name_intern = 'weblinks'</step>
+    <step id="210">UPDATE %PREFIX%_components SET com_name = 'SYS_USER_MANAGEMENT' WHERE com_name = 'MEM_USER_MANAGEMENT'</step>
+    <step id="220">UPDATE %PREFIX%_menu SET men_name = 'SYS_USER_MANAGEMENT', men_description = 'SYS_USER_MANAGEMENT_DESC' WHERE men_name_intern = 'usrmgt'</step>
+    <step id="230">UPDATE %PREFIX%_menu SET men_name = 'SYS_EMAIL', men_description = 'SYS_EMAIL_DESC' WHERE men_name_intern = 'mail'</step>
+    <step id="240">UPDATE %PREFIX%_menu SET men_name = 'SYS_NEW_REGISTRATIONS', men_description = 'SYS_MANAGE_NEW_REGISTRATIONS_DESC' WHERE men_name_intern = 'newreg'</step>
+    <step id="250">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
                          VALUES ('MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.1.0', 0)</step>
-    <step id="130">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
+    <step id="260">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
                          VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'CATEGORY-REPORT'), 1, 0, 9, 1, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC')</step>
-    <step id="140">CREATE TABLE %PREFIX%_category_report
+    <step id="270">CREATE TABLE %PREFIX%_category_report
 (
     crt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     crt_org_id                  integer unsigned,
@@ -56,7 +69,7 @@
 ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci</step>
-    <step id="150">ALTER TABLE %PREFIX%_category_report ADD CONSTRAINT %PREFIX%_fk_crt_org FOREIGN KEY (crt_org_id) REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
-    <step id="160">ComponentUpdateSteps::updateStep41CategoryReportMigration</step>
+    <step id="280">ALTER TABLE %PREFIX%_category_report ADD CONSTRAINT %PREFIX%_fk_crt_org FOREIGN KEY (crt_org_id) REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="290">ComponentUpdateSteps::updateStep41CategoryReportMigration</step>
     <step>stop</step>
 </update>

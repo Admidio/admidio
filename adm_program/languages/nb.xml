@@ -13,8 +13,8 @@
   <string name="DAT_EDIT_CALENDAR_DESC">Her kan du opprette og endre kalendere.</string>
   <string name="DAT_LOCATION">By</string>
   <string name="DAT_MANAGE_CALENDARS">Administrer kalendere</string>
-  <string name="ECA_VIEW_PICTURE_FULL_SIZED">Vis bilde i full størrelse</string>
-  <string name="ECA_TEMPLATE_FOLDER_OPEN">Mal-mappen kunne ikke leses/åpnes.</string>
+  <string name="SYS_VIEW_PICTURE_FULL_SIZED">Vis bilde i full størrelse</string>
+  <string name="SYS_TEMPLATE_FOLDER_OPEN">Mal-mappen kunne ikke leses/åpnes.</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tilbake til gjesteboken</string>
   <string name="GBO_COMMENTS4ALL">Tillat anonyme kommentarer</string>
@@ -91,26 +91,26 @@
   <string name="SYS_YOUR_EMAIL">Din epost</string>
   <string name="SYS_YOUR_NAME">Ditt navn</string>
   <!--Phrases only in Membersadministration-->
-  <string name="MEM_ASSIGN_FIELDS">Tildel felter</string>
-  <string name="MEM_ASSIGN_ROLE">Tildel rolle</string>
-  <string name="MEM_ASSIGN_ROLES">Tildel roller</string>
-  <string name="MEM_CREATE_USER">Opprett bruker</string>
-  <string name="MEM_CODING">Koding</string>
-  <string name="MEM_CHANGE_HISTORY">Endringshistorikk</string>
-  <string name="MEM_CHOOSE_FILE">Velg fil</string>
-  <string name="MEM_DUPLICATE">Klon</string>
-  <string name="MEM_EDIT_USER">Endre bruker</string>
-  <string name="MEM_EXISTING_USERS">Eksisterende bruker</string>
-  <string name="MEM_FORMAT">Format</string>
-  <string name="MEM_IMPORT">Import</string>
-  <string name="MEM_IMPORT_USERS">Brukerimport</string>
-  <string name="MEM_REMOVE_USER">Fjern bruker</string>
-  <string name="MEM_REPLACE">Erstatt</string>
-  <string name="MEM_SHOW_ALL_USERS">Vi alle brukere</string>
+  <string name="SYS_ASSIGN_FIELDS">Tildel felter</string>
+  <string name="SYS_ASSIGN_ROLE">Tildel rolle</string>
+  <string name="SYS_ASSIGN_ROLES">Tildel roller</string>
+  <string name="SYS_CREATE_USER">Opprett bruker</string>
+  <string name="SYS_CODING">Koding</string>
+  <string name="SYS_CHANGE_HISTORY">Endringshistorikk</string>
+  <string name="SYS_CHOOSE_FILE">Velg fil</string>
+  <string name="SYS_DUPLICATE">Klon</string>
+  <string name="SYS_EDIT_USER">Endre bruker</string>
+  <string name="SYS_EXISTING_USERS">Eksisterende bruker</string>
+  <string name="SYS_FORMAT">Format</string>
+  <string name="SYS_IMPORT">Import</string>
+  <string name="SYS_IMPORT_USERS">Brukerimport</string>
+  <string name="SYS_REMOVE_USER">Fjern bruker</string>
+  <string name="SYS_REPLACE">Erstatt</string>
+  <string name="SYS_SHOW_ALL_USERS">Vi alle brukere</string>
   <string name="MEM_UPDATED_ON">Oppdatert den</string>
-  <string name="MEM_USER_COULD_BE_CREATED">Bruker kunne opprettes</string>
-  <string name="MEM_USER_MANAGEMENT">Brukerhåndtering</string>
-  <string name="MEM_USERS_PER_PAGE">Antall brukere pr. side</string>
+  <string name="SYS_USER_COULD_BE_CREATED">Bruker kunne opprettes</string>
+  <string name="SYS_USER_MANAGEMENT">Brukerhåndtering</string>
+  <string name="SYS_USERS_PER_PAGE">Antall brukere pr. side</string>
   <!--Phrases only in Messagemodule-->
   <string name="SYS_ACTIVATE_CHAT_MODULE">Aktiver chat</string>
   <string name="SYS_ACTIVATE_PM_MODULE">Aktiver private meldinger</string>
@@ -383,7 +383,7 @@
   <string name="SYS_USER_ID_NOT_FOUND">Ingen brukere med denne ID\'en ble funnet!</string>
   <string name="SYS_USERNAME">Brukernavn</string>
   <string name="SYS_USERNAME_OR_EMAIL">Brukernavn eller epost</string>
-  <string name="SYS_USERS_FOUND">Bruker funnet</string>
+  <string name="SYS_USER_FOUND">Bruker funnet</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_VERSION">Versjon</string>
   <string name="SYS_VIEW">Visning</string>

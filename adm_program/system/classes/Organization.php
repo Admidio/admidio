@@ -141,7 +141,7 @@ class Organization extends TableAccess
             'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
             'SYSMAIL_REFUSE_REGISTRATION'    => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
             'SYSMAIL_NEW_PASSWORD'           => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
-            'SYSMAIL_ACTIVATION_LINK'        => $gL10n->get('SYS_SYSMAIL_ACTIVATION_LINK')
+            'SYSMAIL_PASSWORD_RESET'         => $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET')
         );
         $text = new TableText($this->db);
 
@@ -352,6 +352,18 @@ class Organization extends TableAccess
         $participantList->addColumn(4, 'mem_comment');
         $participantList->addColumn(5, 'mem_count_guests');
         $participantList->save();
+
+        $userManagementList = new ListConfiguration($this->db);
+        $userManagementList->setValue('lst_name', $gL10n->get('SYS_USER_MANAGEMENT'));
+        $userManagementList->setValue('lst_org_id', $orgId);
+        $userManagementList->setValue('lst_global', 1);
+        $userManagementList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $userManagementList->addColumn(2, (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+        $userManagementList->addColumn(3, 'usr_login_name');
+        $userManagementList->addColumn(4, (int) $gProfileFields->getProperty('GENDER', 'usf_id'));
+        $userManagementList->addColumn(5, (int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $userManagementList->addColumn(6, (int) $gProfileFields->getProperty('CITY', 'usf_id'));
+        $userManagementList->save();
 
         // set participant list to default configuration in date module settings
         $sql = 'UPDATE '.TBL_PREFERENCES.'

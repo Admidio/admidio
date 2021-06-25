@@ -24,7 +24,7 @@ final class ComponentUpdateSteps
     }
 
     /**
-     * This method will migrate the database entries 
+     * This method will migrate the database entries
      * from plugin Kategoriereport (table adm_plugin_preferences)
      * to module category report (table adm_category_report).
      */
@@ -32,18 +32,18 @@ final class ComponentUpdateSteps
     {
         global $gCurrentOrganization, $gL10n, $gProfileFields;
         $config = array();
-        
+
         // prüfen, ob vom Plugin Kategoriereport eine configdata.php existiert
         $file = ADMIDIO_PATH . FOLDER_PLUGINS . '/kategoriereport/configdata.php';
         if (file_exists($file))
         {
             include $file;                  // benötigt wird hier der Wert von $dbtoken
-              
+
             // prüfen, ob die Tabelle 'adm_plugin_preferences' existiert
             $tableName = TABLE_PREFIX.'_plugin_preferences';
             $sql = 'SHOW TABLES LIKE \''.$tableName.'\' ';
             $tableExistStatement = self::$db->queryPrepared($sql);
-        
+
             if ($tableExistStatement->rowCount())
             {
                 // Konfiguration(en) mit 'PKR_...' einlesen
@@ -53,11 +53,11 @@ final class ComponentUpdateSteps
              	           AND (plp_org_id = ?
                  	        OR plp_org_id IS NULL ) ';
                 $statement = self::$db->queryPrepared($sql, array('PKR__%', $gCurrentOrganization->getValue('org_id')));
-            
+
                 while ($row = $statement->fetch())
                 {
                     $array = explode('__',$row['plp_name']);
-               
+
                     if ((substr($row['plp_value'], 0, 2) == '((' ) && (substr($row['plp_value'], -2) == '))' ))
                     {
                         $row['plp_value'] = substr($row['plp_value'], 2, -2);
@@ -70,7 +70,7 @@ final class ComponentUpdateSteps
                 }
             }
         }
-            
+
         // wenn $config jetzt noch leer ist, dann gab es keine Konfigurationsdaten
         // --> Beispielkonfiguration einlesen
         if (empty($config))
@@ -79,12 +79,12 @@ final class ComponentUpdateSteps
             $config['col_fields']     = array('p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
                                               'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
                                               'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
-                                              'p'.$gProfileFields->getProperty('CITY', 'usf_id'));  
-            $config['selection_role'] = array('');  
-            $config['selection_cat']  = array(''); 
+                                              'p'.$gProfileFields->getProperty('CITY', 'usf_id'));
+            $config['selection_role'] = array('');
+            $config['selection_cat']  = array('');
             $config['number_col']  	  = array(0)  ;
 
-            // die Rollen-IDs der Rollen "Administrator", "Vorstand" und "Mitglied" auslesen                
+            // die Rollen-IDs der Rollen "Administrator", "Vorstand" und "Mitglied" auslesen
             $role = new TableRoles(self::$db);
             if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_ADMINISTRATOR'), 'cat_org_id' => (int) $gCurrentOrganization->getValue('org_id') )))
             {
@@ -97,14 +97,14 @@ final class ComponentUpdateSteps
             if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_MEMBER'), 'cat_org_id' => (int) $gCurrentOrganization->getValue('org_id') )))
             {
                 $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
-            }   
+            }
         }
-        
+
         // Konfiguration(en) in Tabelle adm_category_report schreiben
         foreach ($config['col_desc'] as $i => $dummy)
         {
             $categoryReport = new TableAccess(self::$db, TBL_CATEGORY_REPORT, 'crt');
-            
+
             $categoryReport->setValue('crt_org_id', $gCurrentOrganization->getValue('org_id'));
             $categoryReport->setValue('crt_col_desc', $config['col_desc'][$i]);
             $categoryReport->setValue('crt_col_fields', $config['col_fields'][$i]);
@@ -114,7 +114,65 @@ final class ComponentUpdateSteps
             $categoryReport->save();
         }
     }
-    
+
+    /**
+     * This method will add a new systemmail text to the database table **adm_texts** for each
+     * organization in the database.
+     */
+	public static function updateStep41AddMembersManagementDefaultList()
+	{
+    	global $gL10n, $gProfileFields, $gSettingsManager;
+
+        $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
+        $organizationsStatement = self::$db->queryPrepared($sql);
+        $organizationsArray     = $organizationsStatement->fetchAll();
+
+        foreach($organizationsArray as $organization)
+        {
+            $orgId = (int) $organization['org_id'];
+
+            // add default configuration
+            $userManagementList = new ListConfiguration(self::$db);
+            $userManagementList->setValue('lst_name', $gL10n->get('SYS_USER_MANAGEMENT'));
+            $userManagementList->setValue('lst_org_id', $orgId);
+            $userManagementList->setValue('lst_global', 1);
+            $userManagementList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+            $userManagementList->addColumn(2, (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+            $userManagementList->addColumn(3, 'usr_login_name');
+            $userManagementList->addColumn(4, (int) $gProfileFields->getProperty('GENDER', 'usf_id'));
+            $userManagementList->addColumn(5, (int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+            $userManagementList->addColumn(6, (int) $gProfileFields->getProperty('CITY', 'usf_id'));
+            $userManagementList->save();
+
+            // save default list to preferences
+            $gSettingsManager->set('members_list_configuration', $userManagementList->getValue('lst_id'));
+        }
+	}
+
+    /**
+     * This method will add a new systemmail text to the database table **adm_texts** for each
+     * organization in the database.
+     */
+	public static function updateStep41AddSystemmailText()
+	{
+    	global $gL10n;
+
+        $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+
+        while($row = $organizationStatement->fetch())
+        {
+            // convert <br /> to a normal line feed
+            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET'));
+
+        	$textPasswordReset = new TableAccess(self::$db, TBL_TEXTS, 'txt');
+        	$textPasswordReset->setValue('txt_org_id', $row['org_id']);
+        	$textPasswordReset->setValue('txt_name', 'SYSMAIL_PASSWORD_RESET');
+        	$textPasswordReset->setValue('txt_text', $value);
+        	$textPasswordReset->save();
+        }
+	}
+
     /**
      * This method will migrate the recipients of messages from the database column msg_usr_id_receiver
      * to the new table adm_messages_recipients. There each recipient will be add in a separate row that
@@ -470,12 +528,12 @@ final class ComponentUpdateSteps
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'photo.png\', \'SYS_PHOTOS\', \'PHO_PHOTOS_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GUESTBOOK\'), 1, 0, 6, 1, \'guestbook\', \''.FOLDER_MODULES.'/guestbook/guestbook.php\', \'guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DATES\'), 1, 0, 8, 1, \'dates\', \''.FOLDER_MODULES.'/dates/dates.php\', \'dates.png\', \'DAT_DATES\', \'DAT_DATES_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, 0, 9, 1, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'weblinks.png\', \'LNK_WEBLINKS\', \'LNK_WEBLINKS_DESC\')
+                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, 0, 9, 1, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'weblinks.png\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'BACKUP\'), 2, 0, 4, 1, \'dbback\', \''.FOLDER_MODULES.'/backup/backup.php\', \'backup.png\', \'SYS_DATABASE_BACKUP\', \'SYS_DATABASE_BACKUP_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, 0, 6, 1, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, 0, 4, 1, \'mail\', \''.FOLDER_MODULES.'/messages/messages_write.php\', \'email.png\', \'SYS_EMAIL\', \'SYS_EMAIL_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, 0, 1, 1, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'new_registrations.png\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\')
+                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, 0, 1, 1, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'new_registrations.png\', \'SYS_NEW_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
+                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'user_administration.png\', \'SYS_USER_MANAGEMENT\', \'SYS_USER_MANAGEMENT_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\')';
         self::$db->query($sql);
     }

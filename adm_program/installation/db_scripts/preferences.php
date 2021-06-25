@@ -81,14 +81,15 @@ $defaultOrgPreferences = array(
     'announcements_per_page'      => '10',
 
     // User management
-    'members_users_per_page'        => '25',
-    'members_days_field_history'    => '365',
-    'members_show_all_users'        => '1',
     'members_enable_user_relations' => '1',
+    'members_days_field_history'    => '365',
+    'members_list_configuration'    => '',
+    'members_show_all_users'        => '1',
+    'members_users_per_page'        => '25',
 
     // Documents and files
     'documents_files_enable_module' => '1',
-    'max_file_upload_size'   => '3',
+    'max_file_upload_size'          => '3',
 
     // Photos
     'enable_photo_module'    => '1',
@@ -113,7 +114,7 @@ $defaultOrgPreferences = array(
     'enable_intial_comments_loading' => '0',
     'enable_guestbook_moderation'    => '0',
 
-    // Lists
+    // Groups and roles
     'groups_roles_default_configuration' => '',
     'groups_roles_enable_module'         => '1',
     'groups_roles_export'                => '1',

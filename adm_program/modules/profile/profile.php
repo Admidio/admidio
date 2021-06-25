@@ -100,7 +100,6 @@ $page = new HtmlPage('admidio-profile', $headline);
 $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/css/bootstrap-datepicker3.css');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/js/bootstrap-datepicker.js');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/locales/bootstrap-datepicker.'.$gL10n->getLanguageLibs().'.min.js');
-$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 
 $page->addJavascript('
@@ -242,7 +241,7 @@ elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->ge
 // show link to view profile field change history
 if($gSettingsManager->getBool('profile_log_edit_fields') && $gCurrentUser->hasRightEditProfile($user))
 {
-    $page->addPageFunctionsMenuItem('menu_item_profile_change_history', $gL10n->get('MEM_CHANGE_HISTORY'),
+    $page->addPageFunctionsMenuItem('menu_item_profile_change_history', $gL10n->get('SYS_CHANGE_HISTORY'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', array('usr_id' => $userId)),
         'fa-history');
 }

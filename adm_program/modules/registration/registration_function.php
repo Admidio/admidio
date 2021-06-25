@@ -106,7 +106,7 @@ elseif($getMode === 3)
             $systemMail->addRecipientsByUserId($getUserId);
             $systemMail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user);
 
-            $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_EMAIL', array($user->getValue('EMAIL'))));
+            $gMessage->show($gL10n->get('SYS_ASSIGN_LOGIN_EMAIL', array($user->getValue('EMAIL'))));
             // => EXIT
         }
         catch(AdmException $e)
@@ -117,7 +117,7 @@ elseif($getMode === 3)
     }
     else
     {
-        $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_SUCCESSFUL'));
+        $gMessage->show($gL10n->get('SYS_ASSIGN_LOGIN_SUCCESSFUL'));
         // => EXIT
     }
 }

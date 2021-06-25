@@ -107,7 +107,7 @@ echo '
 <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', array($getFirstname. ' '. $getLastname)).'</p>
 
 <div class="card">
-    <div class="card-header">'.$gL10n->get('SYS_USERS_FOUND').'</div>
+    <div class="card-header">'.$gL10n->get('SYS_USER_FOUND').'</div>
     <div class="card-body">';
 
         // show all found users with their address who have a similar name and show link for further handling
@@ -157,10 +157,10 @@ echo '
                 $link = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $row['usr_id']));
 
                 // KEINE Logindaten vorhanden
-                echo '<p>'.$gL10n->get('MEM_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
+                echo '<p>'.$gL10n->get('SYS_USER_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
 
                 <button class="btn btn-primary" onclick="window.location.href=\''.$link.'\'">
-                    <i class="fas fa-user-plus"></i>'.$gL10n->get('MEM_ASSIGN_ROLES').'</button>';
+                    <i class="fas fa-user-plus"></i>'.$gL10n->get('SYS_ASSIGN_ROLES').'</button>';
             }
             ++$i;
         }
