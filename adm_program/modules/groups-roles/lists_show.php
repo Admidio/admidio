@@ -777,13 +777,19 @@ foreach ($membersList as $member)
             elseif ($column->getValue('lsc_special_field') === 'usr_photo')
             {
                 // show user photo
-                if ($getMode === 'html' || $getMode === 'print')
+                if (in_array($getMode, array('html', 'print'), true))
                 {
                     $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $member['usr_id'])).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_USER_PHOTO').'" />';
                 }
-                if ($getMode === 'csv' && $member[$sqlColumnNumber] != null)
+                elseif (in_array($getMode, array('csv', 'pdf'), true) && $member[$sqlColumnNumber] != null)
                 {
                     $content = $gL10n->get('SYS_USER_PHOTO');
+                }
+                else
+                {
+                    // if photo is stored in database than a blob value will be within the sql
+                    // we should return a empty string so there are no problems
+                    $content = '';
                 }
             }
             elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
