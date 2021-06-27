@@ -137,7 +137,7 @@ class ListConfiguration extends TableLists
             {
                 $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $userId)).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_USER_PHOTO').'" />';
             }
-            if ($format === 'csv' && $content != null)
+            if (in_array($format, array('csv', 'pdf'), true) && $content != null)
             {
                 $content = $gL10n->get('SYS_USER_PHOTO');
             }
