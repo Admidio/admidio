@@ -6,7 +6,7 @@
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- * 
+ *
  * Parameters:
  *
  * add_delete : -1 - Generate a configuration
@@ -15,7 +15,7 @@
  *
  ***********************************************************************************************
  */
- 
+
 require_once(__DIR__ . '/../../system/common.php');
 require_once(__DIR__ . '/../../system/login_valid.php');
 require_once(__DIR__ . '/common_function.php');
@@ -30,7 +30,7 @@ if (!$gCurrentUser->isAdministrator())
 $getAddDelete = admFuncVariableIsValid($_GET, 'add_delete', 'numeric', array('defaultValue' => 0));
 $showOption   = admFuncVariableIsValid($_GET, 'show_option', 'string');
 
-$config = getConfigArray(); 
+$config = getConfigArray();
 
 $headline = $gL10n->get('SYS_CATEGORY_REPORT');
 
@@ -47,7 +47,7 @@ elseif ($getAddDelete > 0)
     {
         array_splice($config[$key], $getAddDelete-1, 1);
     }
-    
+
     // durch das Loeschen einer Konfiguration kann der Fall eintreten, dass es die eingestellte Standardkonfiguration nicht mehr gibt
     // daher die Standardkonfiguration auf die erste Konfiguration im Array setzen
     $gSettingsManager->set('category_report_default_configuration', 0);
@@ -85,7 +85,7 @@ else
 {
     $page->addJavascript('
         $("#tabs_nav_common").attr("class", "active");
-        $("#tabs-common").attr("class", "tab-pane active");', 
+        $("#tabs-common").attr("class", "tab-pane active");',
         true
     );
 }
@@ -128,10 +128,10 @@ $javascriptCode = 'var arr_user_fields = createProfileFieldsArray();';
 for ($conf=0;$conf<$num_configs;$conf++)
 {
     $javascriptCode .= '
-        
+
         var arr_default_fields'.$conf.' = createColumnsArray'.$conf.'();
         var fieldNumberIntern'.$conf.'  = 0;
-            
+
     	// Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
     	function addColumn'.$conf.'()
     	{
@@ -143,7 +143,7 @@ for ($conf=0;$conf<$num_configs;$conf++)
         	//$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
         	var newCellCount = newTableRow.insertCell(-1);
         	newCellCount.innerHTML = (fieldNumberShow) + ".&nbsp;'.$gL10n->get('SYS_COLUMN').':";
-        	    
+
         	// neue Spalte zur Auswahl des Profilfeldes
         	var newCellField = newTableRow.insertCell(-1);
         	htmlCboFields = "<select class=\"form-control\"  size=\"1\" id=\"column" + fieldNumberShow + "\" class=\"ListProfileField\" name=\"column'.$conf.'_" + fieldNumberShow + "\">" +
@@ -159,9 +159,9 @@ for ($conf=0;$conf<$num_configs;$conf++)
                 	htmlCboFields += "<optgroup label=\"" + arr_user_fields[counter]["cat_name"] + "\">";
                 	category = arr_user_fields[counter]["cat_name"];
             	}
-        	    
+
             	var selected = "";
-        	    
+
             	// bei gespeicherten Listen das entsprechende Profilfeld selektieren
             	// und den Feldnamen dem Listenarray hinzufuegen
             	if(arr_default_fields'.$conf.'[fieldNumberIntern'.$conf.'])
@@ -176,11 +176,11 @@ for ($conf=0;$conf<$num_configs;$conf++)
         	}
         	htmlCboFields += "</select>";
         	newCellField.innerHTML = htmlCboFields;
-                   	     
+
         	$(newTableRow).fadeIn("slow");
         	fieldNumberIntern'.$conf.'++;
     	}
-        	    
+
     	function createColumnsArray'.$conf.'()
     	{
         	var default_fields = new Array(); ';
@@ -236,7 +236,7 @@ for ($conf = 0; $conf < $num_configs; $conf++)
     	';
 }
 $javascriptCode .= ' }); ';
-$page->addJavascript($javascriptCode, true);  
+$page->addJavascript($javascriptCode, true);
 
 /**
  * @param string $group
@@ -313,14 +313,14 @@ for ($conf=0;$conf<$num_configs;$conf++)
     		</table>
     	</div>';
     $formConfigurations->addCustomContent($gL10n->get('SYS_COLUMN_SELECTION'), $html);
-    
+
     $sql = 'SELECT rol_id, rol_name, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
              WHERE cat_id = rol_cat_id
                AND ( cat_org_id = '.ORG_ID.'
                 OR cat_org_id IS NULL )';
     $formConfigurations->addSelectBoxFromSql('selection_role'.$conf, $gL10n->get('SYS_ROLE_SELECTION'), $gDb, $sql, array('defaultValue' => explode(',',$config['selection_role'][$conf]),'multiselect' => true));
-    
+
     $sql = 'SELECT cat_id, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
              WHERE cat_id = rol_cat_id
@@ -334,7 +334,7 @@ for ($conf=0;$conf<$num_configs;$conf++)
             <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE_CONFIGURATION').'</a>';
         $formConfigurations->addCustomContent('', $html);
     }
-    
+
     $formConfigurations->closeGroupBox();
 }
 $formConfigurations->addDescription('</div>');
@@ -345,7 +345,7 @@ $html = '<a id="add_config" class="icon-text-link" href="'. SecurityUtils::encod
 $htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
                 <i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'
             </div>';
-$formConfigurations->addCustomContent('', $html, array('helpTextIdInline' => $htmlDesc));   
+$formConfigurations->addCustomContent('', $html, array('helpTextIdInline' => $htmlDesc));
 $formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));
 
 $page->addHtml(getPreferencePanel('common', 'configurations', $gL10n->get('SYS_CONFIGURATIONS'), 'fas fa-cogs', $formConfigurations->show()));
@@ -362,7 +362,7 @@ $html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MOD
 $formOptions->addCustomContent($gL10n->get('SYS_EXPORT_IMPORT'), $html, array('helpTextIdInline' => 'SYS_EXPORT_IMPORT_DESC'));
 $formOptions->addSubmitButton('btn_save_options', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));
 
-$page->addHtml(getPreferencePanel('common', 'options', $gL10n->get('SYS_OPTIONS'), 'fas fa-cog', $formOptions->show()));
+$page->addHtml(getPreferencePanel('common', 'options', $gL10n->get('SYS_SETTINGS'), 'fas fa-cog', $formOptions->show()));
 
 $page->addHtml('
         </div>

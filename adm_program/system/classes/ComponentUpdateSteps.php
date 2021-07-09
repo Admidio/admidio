@@ -75,7 +75,7 @@ final class ComponentUpdateSteps
         // --> Beispielkonfiguration einlesen
         if (empty($config))
         {
-            $config['col_desc']       = array($gL10n->get('SYS_PATTERN'));
+            $config['col_desc']       = array($gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
             $config['col_fields']     = array('p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
                                               'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
                                               'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.

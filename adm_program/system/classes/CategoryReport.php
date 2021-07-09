@@ -376,7 +376,7 @@ class CategoryReport
 
        			$this->headerSelection[$i]['id']   	   = 'w'.$row['rol_id'];		//w wie without (Leader)
         		$this->headerSelection[$i]['cat_name'] = $data['cat_name'];
-				$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLE').' '.$gL10n->get('SYS_WITHOUT').' '.$gL10n->get('SYS_LEADER').': '.$row['rol_name'].$marker;
+				$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLE_WITHOUT_LEADER').': '.$row['rol_name'].$marker;
 				$i++;
 
 				$this->headerSelection[$i]['id']   	   = 'l'.$row['rol_id'];		//l wie leader

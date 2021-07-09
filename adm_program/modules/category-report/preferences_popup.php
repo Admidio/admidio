@@ -30,7 +30,7 @@ echo '
 </div>
 <div class="modal-body">
 	<strong>'.$gL10n->get('SYS_DESIGNATION').'</strong><br/>
-    '.$gL10n->get('SYS_COL_DESC').'<br/><br/>
+    '.$gL10n->get('SYS_CAT_SELECTION_COL_DESC').'<br/><br/>
     <strong>'.$gL10n->get('SYS_COLUMN_SELECTION').'</strong><br/>
 	'.$gL10n->get('SYS_COLUMN_SELECTION_DESC').'<br/><br/>		  
     <strong>'.$gL10n->get('SYS_ROLE_SELECTION').'</strong><br/>

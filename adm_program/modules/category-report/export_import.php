@@ -25,7 +25,7 @@ if (!$gCurrentUser->isAdministrator())
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$config = getConfigArray();          
+$config = getConfigArray();
 
 // Initialize and check the parameters
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('defaultValue' => 1));
@@ -33,12 +33,12 @@ $getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('defaultValue'
 switch ($getMode)
 {
 	case 1:
-	
+
 		$headline = $gL10n->get('SYS_EXPORT_IMPORT');
-	 
+
 	    // create html page object
     	$page = new HtmlPage('plg-category-report-export-import', $headline);
-    
+
     	$gNavigation->addUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('show_option' => 'options')));
     	$gNavigation->addUrl(CURRENT_URL);
 
@@ -49,34 +49,34 @@ switch ($getMode)
     	$form->addSelectBox('conf_id', $gL10n->get('SYS_CONFIGURATION').':', $config['col_desc'], array( 'showContextDependentFirstEntry' => false));
 		$form->addSubmitButton('btn_export', $gL10n->get('SYS_EXPORT'), array('icon' => 'fa-file-export', 'class' => ' col-sm-offset-3'));
     	$form->closeGroupBox();
-    	 
+
       	// add form to html page and show page
     	$page->addHtml($form->show(false));
-    
+
     	// show form
     	$form = new HtmlForm('import_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/export_import.php', array('mode' => 3)), $page, array('enableFileUpload' => true));
-    	$form->openGroupBox('import', $headline = $gL10n->get('SYS_IMPORT_2'));
+    	$form->openGroupBox('import', $headline = $gL10n->get('SYS_IMPORT'));
     	$form->addDescription($gL10n->get('SYS_IMPORT_DESC'));
     	$form->addFileUpload('importfile', $gL10n->get('SYS_FILE').':', array( 'allowedMimeTypes' => array('application/octet-stream,text/plain'), 'helpTextIdLabel' => 'SYS_IMPORT_INFO'));
-		$form->addSubmitButton('btn_import', $gL10n->get('SYS_IMPORT_2'), array('icon' => 'fa-file-import', 'class' => ' col-sm-offset-3'));
-    	$form->closeGroupBox(); 
-    
+		$form->addSubmitButton('btn_import', $gL10n->get('SYS_IMPORT'), array('icon' => 'fa-file-import', 'class' => ' col-sm-offset-3'));
+    	$form->closeGroupBox();
+
     	// add form to html page and show page
     	$page->addHtml($form->show(false));
-    	
+
     	$page->show();
     	break;
-    
+
 	case 2:
 		$exportArray = array();
 
 		foreach ($config as $key => $data)
 		{
 			$exportArray[$key] = $data[$_POST['conf_id']];
-		} 
-    
+		}
+
     	// Dateityp, der immer abgespeichert wird
-		header('Content-Type: text/plain; Charset=utf-8');    
+		header('Content-Type: text/plain; Charset=utf-8');
 
 		// noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
 		header('Cache-Control: private');
@@ -87,18 +87,18 @@ switch ($getMode)
 		// Zwischenspeichern auf Proxies verhindern
 		header("Cache-Control: post-check=0, pre-check=0");
 		header('Content-Disposition: attachment; filename="'.$exportArray['col_desc'].'.cfg"');
-	
+
 		echo ';### ' . $exportArray['col_desc'].'.cfg' . ' ### ' . date('Y-m-d H:i:s') . ' ### utf-8 ###'."\r\n";
 		echo ';### This is a configuration file of a configuration of the module category_report ###'."\r\n";
     	echo ';### ATTENTION: ADD NO LINES - DELETE NO LINES ###'."\r\n\r\n";
-        
+
     	// der Abschnitt 'columns', der hier zusammengesetzt wird, dient in der Export-Datei nur der Information
     	// er wird beim Import nicht ausgewertet
     	$exportArray['columns'] = explode(',', $exportArray['col_fields']);
-	
+
     	$cat = new TableAccess($gDb, TBL_CATEGORIES, 'cat');
     	$role = new TableRoles($gDb);
-    	
+
     	foreach ($exportArray['columns'] as $key => $data)
 		{
 		    $type = substr($data, 0, 1);
@@ -107,33 +107,33 @@ switch ($getMode)
 		        case 'p':                    //p=profileField
 		            $exportArray['name'][] = $gProfileFields->getPropertyById((int) substr($data, 1), 'usf_name_intern');
 		            break;
-		            
+
 		        case 'c':                    //c=categorie
 		            $cat->readDataById((int) substr($data, 1));
 		            $exportArray['name'][] = $cat->getValue('cat_name_intern');
 		            break;
-		            
+
 		        case 'r':                    //r=role
 		        case 'w':                    //w=without (Leader)
 		        case 'l':                    //l=leader
 		            $role->readDataById((int) substr($data, 1));
 		            $exportArray['name'][]  = $role->getValue('rol_name');
 		            break;
-		            
+
 		        case 'n':                    //n=number
 		        case 'a':                    //a=additional
 		            $exportArray['name'][]  = '';
 		            break;
-		    }        
+		    }
 		}
-		
+
 		foreach ($exportArray as $key => $data)
 		{
 			if (!is_array($data))
 			{
 				echo $key." = '".$data."'\r\n";
 			}
-		} 
+		}
 		foreach ($exportArray as $key => $data)
 		{
 			if (is_array($data))
@@ -145,15 +145,15 @@ switch ($getMode)
 					echo $subkey." = '".$subdata."'\r\n";
 				}
 			}
-		} 		
+		}
 		break;
-   	
+
 	case 3:
 
 		if (!isset($_FILES['userfile']['name']))
 		{
 		    $gNavigation->clear();
-    		$gMessage->show($gL10n->get('SYS_IMPORT_ERROR_OTHER'), $gL10n->get('SYS_ERROR'));	
+    		$gMessage->show($gL10n->get('SYS_IMPORT_ERROR_OTHER'), $gL10n->get('SYS_ERROR'));
 		}
 		elseif (strlen($_FILES['userfile']['name'][0]) === 0)
 		{
@@ -163,23 +163,23 @@ switch ($getMode)
 		elseif (strtolower(substr($_FILES['userfile']['name'][0],-4)) <> '.cfg')
 		{
 		    $gNavigation->clear();
-			$gMessage->show($gL10n->get('SYS_IMPORT_ERROR_FILE'), $gL10n->get('SYS_ERROR'));	
+			$gMessage->show($gL10n->get('SYS_IMPORT_ERROR_FILE'), $gL10n->get('SYS_ERROR'));
 		}
-		
+
 		$parsedArray = parse_ini_file ( $_FILES['userfile']['tmp_name'][0], TRUE );
-	
+
 		//pruefen, ob die eingelesene Datei eine Formularkonfiguration enthaelt
 		if (	!(isset($parsedArray['col_desc']) && $parsedArray['col_desc'] <> '')
-			||  !(isset($parsedArray['columns']) && is_array($parsedArray['columns']))			
-			||  !(isset($parsedArray['name']) && is_array($parsedArray['name']))		
+			||  !(isset($parsedArray['columns']) && is_array($parsedArray['columns']))
+			||  !(isset($parsedArray['name']) && is_array($parsedArray['name']))
 			||  !(count($parsedArray['columns']) == count($parsedArray['name']))  )
 		{
 		    $gNavigation->clear();
 			$gMessage->show($gL10n->get('SYS_IMPORT_ERROR_FILE'), $gL10n->get('SYS_ERROR'));
 		}
-	
+
 		$importArray = array();
-	
+
 		//alle Werte der eingelesenen Datei, die kein Array sind, in $importArray überfuehren
 		//dabei werden nur Werte eingelesen, die in der aktuellen $config vorhanden sind
 		foreach ($config as $key => $data)
@@ -201,23 +201,23 @@ switch ($getMode)
 				        {
 				            $parsedArray[$key] = '';
 				        }
-				        
+
 				        $importArray[$key] = $parsedArray[$key];
-				    }					
+				    }
 				}
 			}
 		}
-			
+
 		$pointer = count($config['col_desc']);
-    	foreach ($importArray as $key => $data)	
+    	foreach ($importArray as $key => $data)
     	{
         	$config[$key][$pointer] = $data;
-    	}		
+    	}
 
 		saveConfigArray();
 
 		$gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('show_option' => 'options')));
 		$gMessage->show($gL10n->get('SYS_IMPORT_SUCCESS'));
-		
+
    		break;
 }
