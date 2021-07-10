@@ -168,7 +168,7 @@ $defaultOrgPreferences = array(
     // Category-Report
     'category_report_enable_module'         => '1',
     'category_report_default_configuration' => '0',
-    
+
     // Weblinks
     'enable_weblinks_module'    => '1',
     'weblinks_per_page'         => '0',

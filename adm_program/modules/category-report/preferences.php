@@ -283,17 +283,15 @@ $formConfigurations = new HtmlForm(
     $page, array('class' => 'form-preferences')
 );
 
-$html = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences_popup.php').'">'.
-                '<i class="fas fa-info" data-toggle="tooltip" title="' . $gL10n->get('SYS_HELP') . '"></i> '.$gL10n->get('SYS_HELP').'</a>';
-$formConfigurations->addDescription($gL10n->get('SYS_CONFIGURATIONS_HEADER').' '.$html);
+$formConfigurations->addDescription($gL10n->get('SYS_CONFIGURATIONS_HEADER'));
 $formConfigurations->addLine();
 $formConfigurations->addDescription('<div style="width:100%; height:550px; overflow:auto; border:20px;">');
 
 for ($conf=0;$conf<$num_configs;$conf++)
 {
     $formConfigurations->openGroupBox('configurations_group',($conf+1).'. '.$gL10n->get('SYS_CONFIGURATION'));
-    $formConfigurations->addInput('col_desc'.$conf, $gL10n->get('SYS_DESIGNATION'), $config['col_desc'][$conf], array('property' => HtmlForm::FIELD_REQUIRED));
+    $formConfigurations->addInput('col_desc'.$conf, $gL10n->get('SYS_DESIGNATION'), $config['col_desc'][$conf],
+        array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_COL_DESC'));
     $html = '
 	   <div class="table-responsive">
     		<table class="table table-condensed" id="mylist_fields_table">
@@ -312,22 +310,24 @@ for ($conf=0;$conf<$num_configs;$conf++)
         		</tbody>
     		</table>
     	</div>';
-    $formConfigurations->addCustomContent($gL10n->get('SYS_COLUMN_SELECTION'), $html);
+    $formConfigurations->addCustomContent($gL10n->get('SYS_COLUMN_SELECTION'), $html, array('helpTextIdLabel' => 'SYS_COLUMN_SELECTION_DESC'));
 
     $sql = 'SELECT rol_id, rol_name, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
              WHERE cat_id = rol_cat_id
                AND ( cat_org_id = '.ORG_ID.'
                 OR cat_org_id IS NULL )';
-    $formConfigurations->addSelectBoxFromSql('selection_role'.$conf, $gL10n->get('SYS_ROLE_SELECTION'), $gDb, $sql, array('defaultValue' => explode(',',$config['selection_role'][$conf]),'multiselect' => true));
+    $formConfigurations->addSelectBoxFromSql('selection_role'.$conf, $gL10n->get('SYS_ROLE_SELECTION'), $gDb, $sql,
+        array('defaultValue' => explode(',',$config['selection_role'][$conf]),'multiselect' => true, 'helpTextIdLabel' => 'SYS_ROLE_SELECTION_CONF_DESC'));
 
     $sql = 'SELECT cat_id, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
              WHERE cat_id = rol_cat_id
                AND ( cat_org_id = '.ORG_ID.'
                 OR cat_org_id IS NULL )';
-    $formConfigurations->addSelectBoxFromSql('selection_cat'.$conf, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql, array('defaultValue' => explode(',',$config['selection_cat'][$conf]),'multiselect' => true));
-    $formConfigurations->addCheckbox('number_col'.$conf, $gL10n->get('SYS_NUMBER_COL'), $config['number_col'][$conf]);
+    $formConfigurations->addSelectBoxFromSql('selection_cat'.$conf, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
+        array('defaultValue' => explode(',',$config['selection_cat'][$conf]),'multiselect' => true, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_CONF_DESC'));
+    $formConfigurations->addCheckbox('number_col'.$conf, $gL10n->get('SYS_NUMBER_COL'), $config['number_col'][$conf], array('helpTextIdLabel' => 'SYS_NUMBER_COL_DESC'));
     if($num_configs != 1)
     {
         $html = '<a id="delete_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('add_delete' => $conf+1)).'">
