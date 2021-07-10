@@ -104,7 +104,7 @@ function getConfigArray()
 
     while($row = $statement->fetch())
     {
-        $config['col_desc'][$i]       = $row['crt_col_desc'];
+        $config['col_desc'][$i]       = $row['crt_name'];
         $config['col_fields'][$i]     = $row['crt_col_fields'];
         $config['selection_role'][$i] = $row['crt_selection_role'];
         $config['selection_cat'][$i]  = $row['crt_selection_cat'];
@@ -154,7 +154,7 @@ function saveConfigArray()
         }
 
         $categoryReport->setValue('crt_org_id', ORG_ID);
-        $categoryReport->setValue('crt_col_desc', $config['col_desc'][$i]);
+        $categoryReport->setValue('crt_name', $config['col_desc'][$i]);
         $categoryReport->setValue('crt_col_fields', $config['col_fields'][$i]);
         $categoryReport->setValue('crt_selection_role', $config['selection_role'][$i]);
         $categoryReport->setValue('crt_selection_cat', $config['selection_cat'][$i]);

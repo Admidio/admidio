@@ -71,8 +71,8 @@ final class ComponentUpdateSteps
             }
         }
 
-        // wenn $config jetzt noch leer ist, dann gab es keine Konfigurationsdaten
-        // --> Beispielkonfiguration einlesen
+        // if $config is still empty now, then there was no configuration data of the plugin
+        // --> create sample configuration
         if (empty($config))
         {
             $config['col_desc']       = array($gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
@@ -84,7 +84,7 @@ final class ComponentUpdateSteps
             $config['selection_cat']  = array('');
             $config['number_col']  	  = array(0)  ;
 
-            // die Rollen-IDs der Rollen "Administrator", "Vorstand" und "Mitglied" auslesen
+            // Read out the role IDs of the "Administrator", "Board" and "Member" roles
             $role = new TableRoles(self::$db);
             if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_ADMINISTRATOR'), 'cat_org_id' => (int) $gCurrentOrganization->getValue('org_id') )))
             {
@@ -100,13 +100,13 @@ final class ComponentUpdateSteps
             }
         }
 
-        // Konfiguration(en) in Tabelle adm_category_report schreiben
+        // Write sample configuration into adm_category_report table
         foreach ($config['col_desc'] as $i => $dummy)
         {
             $categoryReport = new TableAccess(self::$db, TBL_CATEGORY_REPORT, 'crt');
 
             $categoryReport->setValue('crt_org_id', $gCurrentOrganization->getValue('org_id'));
-            $categoryReport->setValue('crt_col_desc', $config['col_desc'][$i]);
+            $categoryReport->setValue('crt_name', $config['col_desc'][$i]);
             $categoryReport->setValue('crt_col_fields', $config['col_fields'][$i]);
             $categoryReport->setValue('crt_selection_role', $config['selection_role'][$i]);
             $categoryReport->setValue('crt_selection_cat', $config['selection_cat'][$i]);
