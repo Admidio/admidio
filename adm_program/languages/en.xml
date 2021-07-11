@@ -12,7 +12,7 @@
   <string name="SYS_CONFIGURATIONS">Configurations</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Here any number of configurations can be created for the category report. In the display of the category report one of these configurations is selected using "Select configuration" as the basis for the presentation.</string>
   <string name="SYS_EXPORT">Export</string>
-  <string name="SYS_EXPORT_AND_FILTER">Export and filter</string>
+  <string name="SYS_FILTER_TO_EXPORT">Filter to export</string>
   <string name="SYS_EXPORT_DESC">Choose from the configuration that is to be exported. Export creates a file with the extension .cfg and the name of the configuration.</string>
   <string name="SYS_EXPORT_IMPORT">Export/Import</string>
   <string name="SYS_EXPORT_IMPORT_DESC">This configuration can be imported and exported for backup or distribution.</string>

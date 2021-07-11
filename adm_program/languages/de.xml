@@ -12,7 +12,7 @@
   <string name="SYS_CONFIGURATIONS">Konfigurationen</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Hier können beliebig viele Konfigurationen für den Kategoriereport erstellt werden. In der Bildschirmanzeige wird jeweils eine dieser Konfigurationen über "Konfiguration auswählen" als Grundlage für die Anzeige verwendet.</string>
   <string name="SYS_EXPORT">Exportieren</string>
-  <string name="SYS_EXPORT_AND_FILTER">Export und Filter</string>
+  <string name="SYS_FILTER_TO_EXPORT">Filter zum Exportieren</string>
   <string name="SYS_EXPORT_DESC">Wähle die zu exportierende Konfiguration aus. Export erstellt dabei eine Datei mit der Endung .cfg und dem Namen der Konfiguration.</string>
   <string name="SYS_EXPORT_IMPORT">Export/Import</string>
   <string name="SYS_EXPORT_IMPORT_DESC">Hiermit können Konfigurationen zur Datensicherung oder zur Weitergabe sowohl exportiert als auch importiert werden.</string>

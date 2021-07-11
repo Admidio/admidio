@@ -358,7 +358,7 @@ if ($getMode !== 'csv')
         $page = new HtmlPage('admidio-lists-show', $headline);
         $page->setPrintMode();
         $page->setTitle($title);
-        $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
+        $page->addHtml('<h5 class="admidio-content-subheader">'.$htmlSubHeadline.'</h5>');
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
     }
     elseif ($getMode === 'pdf')
@@ -461,7 +461,7 @@ if ($getMode !== 'csv')
         $filterNavbar->addForm($form->show());
         $page->addHtml($filterNavbar->show());
 
-        $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
+        $page->addHtml('<h5 class="admidio-content-subheader">'.$htmlSubHeadline.'</h5>');
         $page->addJavascript('
             $("#list_configurations").change(function() {
                 elementId = $(this).attr("id");

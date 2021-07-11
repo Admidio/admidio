@@ -8,7 +8,7 @@
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- *   
+ *
  * Parameters:
  *
  * mode   		    : Output (html, print, csv-ms, csv-oo, pdf, pdfl)
@@ -98,9 +98,9 @@ switch ($getMode)
 }
 
 // CSV file as string
-$csvStr = ''; 
+$csvStr = '';
 
-//die Anzeigeliste erzeugen 
+//die Anzeigeliste erzeugen
 $report = new CategoryReport();
 $report->conf = trim($getConfig,'X');
 $report->generate_listData();
@@ -115,11 +115,11 @@ if ($numMembers == 0)
 
 //die Spaltenanzahl bestimmen
 $columnCount = count($report->headerData);
-    
+
 // define title (html) and headline
 $title       = $gL10n->get('SYS_CATEGORY_REPORT');
-$headline    = $gL10n->get('SYS_CATEGORY_REPORT');  
-$subheadline = $config['col_desc'][trim($getConfig,'X')];   
+$headline    = $gL10n->get('SYS_CATEGORY_REPORT');
+$subheadline = $config['col_desc'][trim($getConfig,'X')];
 
 $filename    = $g_organization.'-'.$headline.'-'.$subheadline;
 
@@ -139,7 +139,7 @@ if ($getMode !== 'csv')
         $page->setPrintMode();
         $page->setTitle($title);
         $page->setHeadline($headline);
-        $page->addHtml('<h5>'.$subheadline.'</h5>');
+        $page->addHtml('<h5 class="admidio-content-subheader">'.$subheadline.'</h5>');
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
     }
     elseif ($getMode === 'pdf')
@@ -181,7 +181,7 @@ if ($getMode !== 'csv')
         // Create table object for display
         $table = new HtmlTable('adm_lists_table', null, $hoverRows, $datatable, $classTable);
         $table->addAttribute('border', '1');
-        
+
         $table->addTableHeader();
         $table->addRow();
         $table->addAttribute('align', 'center');
@@ -198,20 +198,19 @@ if ($getMode !== 'csv')
         {
             $datatable = true;
         }
-        
+
         $hoverRows = true;
 
         // create html page object
         $page = new HtmlPage('plg-category-report-main-html');
         $page->setTitle($title);
         $page->setHeadline($headline);
-        $page->addHtml('<h5>'.$subheadline.'</h5>');
-        
+
         $page->addJavascript('
             $("#menu_item_lists_print_view").click(function() {
                 window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'mode'              => 'print',
-                    'filter'            => $getFilter, 
+                    'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'config'            => $getConfig
                 )).'", "_blank");
@@ -229,28 +228,28 @@ if ($getMode !== 'csv')
             $page->addPageFunctionsMenuItem('menu_item_lists_csv_ms', $gL10n->get('SYS_MICROSOFT_EXCEL'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'config'            => $getConfig,
-                    'filter'            => $getFilter, 
+                    'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'csv-ms')),
                 'fa-file-excel', 'menu_item_lists_export');
             $page->addPageFunctionsMenuItem('menu_item_lists_pdf', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'config'            => $getConfig,
-                    'filter'            => $getFilter, 
+                    'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'pdf')),
                 'fa-file-pdf', 'menu_item_lists_export');
             $page->addPageFunctionsMenuItem('menu_item_lists_pdfl', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'config'            => $getConfig,
-                    'filter'            => $getFilter, 
+                    'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'pdfl')),
                 'fa-file-pdf', 'menu_item_lists_export');
             $page->addPageFunctionsMenuItem('menu_item_lists_csv', $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'config'            => $getConfig,
-                    'filter'            => $getFilter, 
+                    'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'csv-oo')),
                 'fa-file-csv', 'menu_item_lists_export');
@@ -260,10 +259,10 @@ if ($getMode !== 'csv')
             // if filter is not enabled, reset filterstring
             $getFilter = '';
         }
-        
+
         if ($gCurrentUser->isAdministrator())
 		{
-    		// show link to pluginpreferences 
+    		// show link to pluginpreferences
     		$page->addPageFunctionsMenuItem('admMenuItemPreferencesLists', $gL10n->get('SYS_SETTINGS'),
     		    ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php',  'fa-cog');
 		}
@@ -271,30 +270,34 @@ if ($getMode !== 'csv')
 		// process changes in the navbar form with javascript submit
 		$page->addJavascript('
             $("#export_and_filter").change(function() {
-                $("#navbar_catreport_form").submit();
+                $("#navbar_filter_form_category_report").submit();
             });
             $("#config").change(function() {
-                $("#navbar_catreport_form").submit();
+                $("#navbar_filter_form_category_report").submit();
             });',
 		    true
 		);
-		
+
 		foreach ($config['col_desc'] as $key => $item)
 		{
 		    $selectBoxEntries['X'.$key.'X'] = $item;
 		}
-	
-		$form = new HtmlForm('navbar_catreport_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array('headline' => $headline)), $page, array('type' => 'navbar', 'setFocus' => false));
-		$form->addSelectBox('config', $gL10n->get('SYS_SELECT_CONFIGURATION'), $selectBoxEntries, array('showContextDependentFirstEntry' => false,'defaultValue' => $getConfig));
-		
+
+        // create filter menu with elements for role
+        $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
+        $form = new HtmlForm('navbar_filter_form_category_report', '', $page, array('type' => 'navbar', 'setFocus' => false));
+		$form->addSelectBox('config', $gL10n->get('SYS_SELECT_CONFIGURATION'), $selectBoxEntries,
+		    array('showContextDependentFirstEntry' => false,'defaultValue' => $getConfig));
         if ($getExportAndFilter)
         {
             $form->addInput('filter', $gL10n->get('SYS_FILTER'), $getFilter);
         }
-        $form->addCheckbox('export_and_filter', $gL10n->get('SYS_EXPORT_AND_FILTER'), $getExportAndFilter);
+        $form->addCheckbox('export_and_filter', $gL10n->get('SYS_FILTER_TO_EXPORT'), $getExportAndFilter);
+        $filterNavbar->addForm($form->show());
+        $page->addHtml($filterNavbar->show());
 
-		$page->addHtml($form->show());
-		
+        $page->addHtml('<h5 class="admidio-content-subheader">'.$subheadline.'</h5>');
+
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
         $table->setDatatablesRowsPerPage($gSettingsManager->getInt('groups_roles_members_per_page'));
     }
@@ -306,13 +309,13 @@ if ($getMode !== 'csv')
 
 $columnAlign  = array('center');
 $columnValues = array($gL10n->get('SYS_ABR_NO'));
-$columnNumber = 1;  
- 
-foreach ($report->headerData as $columnHeader) 
+$columnNumber = 1;
+
+foreach ($report->headerData as $columnHeader)
 {
 	// bei Profilfeldern ist in 'id' die usf_id, ansonsten 0
 	$usf_id = $columnHeader['id'];
-	
+
     if ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'NUMBER'
         || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DECIMAL_NUMBER')
     {
@@ -320,9 +323,9 @@ foreach ($report->headerData as $columnHeader)
     }
     else
     {
-    	$columnAlign[] = 'center';    
+    	$columnAlign[] = 'center';
     }
-	 
+
     if ($getMode == 'csv')
     {
     	if ($columnNumber === 1)
@@ -345,7 +348,7 @@ foreach ($report->headerData as $columnHeader)
     	$columnValues[] = $columnHeader['data'];
     }
     $columnNumber++;
-} 
+}
 
 if ($getMode === 'csv')
 {
@@ -365,21 +368,21 @@ else
 $listRowNumber = 1;
 
 // die Daten einlesen
-foreach ($report->listData as $member => $memberdata) 
+foreach ($report->listData as $member => $memberdata)
 {
 	$columnValues = array();
     $tmp_csv = '';
 
     // Felder zu Datensatz
     $columnNumber = 1;
-    foreach ($memberdata as $key => $content) 
-    {         
+    foreach ($memberdata as $key => $content)
+    {
     	if ($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf')
-        {    
+        {
         	if ($columnNumber === 1)
             {
             	// die Laufende Nummer noch davorsetzen
-                $columnValues[] = $listRowNumber;  
+                $columnValues[] = $listRowNumber;
             }
         }
         else
@@ -390,15 +393,15 @@ foreach ($report->listData as $member => $memberdata)
                 $tmp_csv .= $valueQuotes. $listRowNumber. $valueQuotes;
             }
         }
-         
+
         /*****************************************************************/
         // create output format
        	/*****************************************************************/
-        
+
         $usf_id = 0;
         $usf_id = $report->headerData[$key]['id'];
-      
-        if ($usf_id !== 0 
+
+        if ($usf_id !== 0
          && in_array($getMode, array('csv', 'pdf'), true)
          && $content > 0
          && ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
@@ -420,7 +423,7 @@ foreach ($report->listData as $member => $memberdata)
                 $content = '<i class="fas fa-check"</i>';
             }
         }
-        
+
         if ($getMode == 'csv')
         {
         	$tmp_csv .= $separator. $valueQuotes. $content. $valueQuotes;
@@ -431,7 +434,7 @@ foreach ($report->listData as $member => $memberdata)
             $columnValues[] = $content;
         }
         else                   // create output in html layout for getMode = html or print
-        {            
+        {
         	if ($usf_id !== 0)     // profile fields
         	{
         		if ($getMode === 'html'
@@ -553,12 +556,12 @@ elseif ($getMode == 'html' && $getExportAndFilter)
     $page->addHtml('<div style="width:100%; height: 500px; overflow:auto; border:20px;">');
     $page->addHtml($table->show(false));
     $page->addHtml('</div><br/>');
-    
+
     $page->show();
 }
 elseif (($getMode == 'html' && !$getExportAndFilter) || $getMode == 'print')
 {
     $page->addHtml($table->show(false));
-    
+
     $page->show();
 }
