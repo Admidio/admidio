@@ -30,7 +30,9 @@ if (!$gCurrentUser->isAdministrator())
 $getAddDelete = admFuncVariableIsValid($_GET, 'add_delete', 'numeric', array('defaultValue' => 0));
 $showOption   = admFuncVariableIsValid($_GET, 'show_option', 'string');
 
-$config = getConfigArray();
+$report = new CategoryReport();
+$config = $report->getConfigArray();
+$catReportConfigs = array();
 
 $headline = $gL10n->get('SYS_CATEGORY_REPORT');
 
@@ -38,7 +40,7 @@ if ($getAddDelete === -1)
 {
     foreach($config as $key => $dummy)
     {
-        $config[$key][] = '';
+        $config[] = array('name' => '', 'col_fields' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '');
     }
 }
 elseif ($getAddDelete > 0)
@@ -51,12 +53,8 @@ elseif ($getAddDelete > 0)
     // durch das Loeschen einer Konfiguration kann der Fall eintreten, dass es die eingestellte Standardkonfiguration nicht mehr gibt
     // daher die Standardkonfiguration auf die erste Konfiguration im Array setzen
     $gSettingsManager->set('category_report_default_configuration', 0);
-    saveConfigArray();
+    saveConfigArray($config);
 }
-
-$num_configs = count($config['col_desc']);
-
-$report = new CategoryReport();
 
 if ($getAddDelete)
 {
@@ -125,28 +123,29 @@ $page->addJavascript('
 $javascriptCode = 'var arr_user_fields = createProfileFieldsArray();';
 
 // create an array with the necessary data
-for ($conf=0;$conf<$num_configs;$conf++)
+foreach($config as $key => $value)
 {
+    $catReportConfigs[$key] = $value['name'];
     $javascriptCode .= '
 
-        var arr_default_fields'.$conf.' = createColumnsArray'.$conf.'();
-        var fieldNumberIntern'.$conf.'  = 0;
+        var arr_default_fields'.$key.' = createColumnsArray'.$key.'();
+        var fieldNumberIntern'.$key.'  = 0;
 
     	// Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
-    	function addColumn'.$conf.'()
+    	function addColumn'.$key.'()
     	{
         	var category = "";
-        	var fieldNumberShow  = fieldNumberIntern'.$conf.' + 1;
-        	var table = document.getElementById("mylist_fields_tbody'.$conf.'");
-        	var newTableRow = table.insertRow(fieldNumberIntern'.$conf.');
-        	newTableRow.setAttribute("id", "row" + (fieldNumberIntern'.$conf.' + 1))
+        	var fieldNumberShow  = fieldNumberIntern'.$key.' + 1;
+        	var table = document.getElementById("mylist_fields_tbody'.$key.'");
+        	var newTableRow = table.insertRow(fieldNumberIntern'.$key.');
+        	newTableRow.setAttribute("id", "row" + (fieldNumberIntern'.$key.' + 1))
         	//$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
         	var newCellCount = newTableRow.insertCell(-1);
         	newCellCount.innerHTML = (fieldNumberShow) + ".&nbsp;'.$gL10n->get('SYS_COLUMN').':";
 
         	// neue Spalte zur Auswahl des Profilfeldes
         	var newCellField = newTableRow.insertCell(-1);
-        	htmlCboFields = "<select class=\"form-control\"  size=\"1\" id=\"column" + fieldNumberShow + "\" class=\"ListProfileField\" name=\"column'.$conf.'_" + fieldNumberShow + "\">" +
+        	htmlCboFields = "<select class=\"form-control\"  size=\"1\" id=\"column" + fieldNumberShow + "\" class=\"ListProfileField\" name=\"column'.$key.'_" + fieldNumberShow + "\">" +
                 "<option value=\"\"></option>";
         	for(var counter = 1; counter < arr_user_fields.length; counter++)
         	{
@@ -164,12 +163,12 @@ for ($conf=0;$conf<$num_configs;$conf++)
 
             	// bei gespeicherten Listen das entsprechende Profilfeld selektieren
             	// und den Feldnamen dem Listenarray hinzufuegen
-            	if(arr_default_fields'.$conf.'[fieldNumberIntern'.$conf.'])
+            	if(arr_default_fields'.$key.'[fieldNumberIntern'.$key.'])
             	{
-                	if(arr_user_fields[counter]["id"] == arr_default_fields'.$conf.'[fieldNumberIntern'.$conf.']["id"])
+                	if(arr_user_fields[counter]["id"] == arr_default_fields'.$key.'[fieldNumberIntern'.$key.']["id"])
                 	{
                     	selected = " selected=\"selected\" ";
-                   	 arr_default_fields'.$conf.'[fieldNumberIntern'.$conf.']["data"] = arr_user_fields[counter]["data"];
+                   	 arr_default_fields'.$key.'[fieldNumberIntern'.$key.']["data"] = arr_user_fields[counter]["data"];
                 	}
             	}
              	htmlCboFields += "<option value=\"" + arr_user_fields[counter]["id"] + "\" " + selected + ">" + arr_user_fields[counter]["data"] + "</option>";
@@ -178,13 +177,13 @@ for ($conf=0;$conf<$num_configs;$conf++)
         	newCellField.innerHTML = htmlCboFields;
 
         	$(newTableRow).fadeIn("slow");
-        	fieldNumberIntern'.$conf.'++;
+        	fieldNumberIntern'.$key.'++;
     	}
 
-    	function createColumnsArray'.$conf.'()
+    	function createColumnsArray'.$key.'()
     	{
         	var default_fields = new Array(); ';
-    $fields = explode(',', $config['col_fields'][$conf]);
+    $fields = explode(',', $value['col_fields']);
     for ($number = 0; $number < count($fields); $number++)
     {
         // das ist nur zur Überprüfung, ob diese Freigabe noch existent ist
@@ -211,14 +210,13 @@ $javascriptCode .= '
         var user_fields = new Array(); ';
 
 // create an array for all columns with the necessary data
-$i = 1;
-for ($i = 1; $i < count($report->headerSelection)+1; $i++)
+foreach($report->headerSelection as $key => $value)
 {
     $javascriptCode .= '
-                user_fields['. $i. '] 				= new Object();
-                user_fields['. $i. ']["id"]   		= "'. $report->headerSelection[$i]['id'] . '";
-                user_fields['. $i. ']["cat_name"] 	= "'. $report->headerSelection[$i]['cat_name']. '";
-                user_fields['. $i. ']["data"]   	= "'. $report->headerSelection[$i]['data'] . '";
+                user_fields['. $key. '] 			= new Object();
+                user_fields['. $key. ']["id"]   	= "'. $report->headerSelection[$key]['id'] . '";
+                user_fields['. $key. ']["cat_name"] = "'. $report->headerSelection[$key]['cat_name']. '";
+                user_fields['. $key. ']["data"]   	= "'. $report->headerSelection[$key]['data'] . '";
                 ';
 }
 $javascriptCode .= '
@@ -227,11 +225,12 @@ $javascriptCode .= '
 ';
 $page->addJavascript($javascriptCode);
 $javascriptCode = '$(document).ready(function() { ';
-for ($conf = 0; $conf < $num_configs; $conf++)
+
+foreach($config as $key => $value)
 {
     $javascriptCode .= '
-    	for(var counter = 0; counter < '. count(explode(',', $config['col_fields'][$conf])). '; counter++) {
-        	addColumn'. $conf. '();
+    	for(var counter = 0; counter < '. count(explode(',', $value['col_fields'])). '; counter++) {
+        	addColumn'. $key. '();
     	}
     	';
 }
@@ -286,11 +285,12 @@ $formConfigurations = new HtmlForm(
 $formConfigurations->addDescription($gL10n->get('SYS_CONFIGURATIONS_HEADER'));
 $formConfigurations->addLine();
 $formConfigurations->addDescription('<div style="width:100%; height:550px; overflow:auto; border:20px;">');
+$currentNumberConf = 0;
 
-for ($conf=0;$conf<$num_configs;$conf++)
+foreach($config as $key => $value)
 {
-    $formConfigurations->openGroupBox('configurations_group',($conf+1).'. '.$gL10n->get('SYS_CONFIGURATION'));
-    $formConfigurations->addInput('col_desc'.$conf, $gL10n->get('SYS_DESIGNATION'), $config['col_desc'][$conf],
+    $formConfigurations->openGroupBox('configurations_group',++$currentNumberConf.'. '.$gL10n->get('SYS_CONFIGURATION'));
+    $formConfigurations->addInput('name'.$key, $gL10n->get('SYS_DESIGNATION'), $value['name'],
         array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_COL_DESC'));
     $html = '
 	   <div class="table-responsive">
@@ -301,10 +301,10 @@ for ($conf=0;$conf<$num_configs;$conf++)
                 		<th style="width: 37%;">'.$gL10n->get('SYS_CONTENT').'</th>
             		</tr>
         		</thead>
-        		<tbody id="mylist_fields_tbody'.$conf.'">
+        		<tbody id="mylist_fields_tbody'.$key.'">
             		<tr id="table_row_button">
                 		<td colspan="2">
-                    		<a class="icon-text-link" href="javascript:addColumn'.$conf.'()"><i class="fas fa-plus-circle"></i> '.$gL10n->get('SYS_ADD_COLUMN').'</a>
+                    		<a class="icon-text-link" href="javascript:addColumn'.$key.'()"><i class="fas fa-plus-circle"></i> '.$gL10n->get('SYS_ADD_COLUMN').'</a>
                 		</td>
             		</tr>
         		</tbody>
@@ -315,22 +315,22 @@ for ($conf=0;$conf<$num_configs;$conf++)
     $sql = 'SELECT rol_id, rol_name, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
              WHERE cat_id = rol_cat_id
-               AND ( cat_org_id = '.ORG_ID.'
+               AND ( cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                 OR cat_org_id IS NULL )';
-    $formConfigurations->addSelectBoxFromSql('selection_role'.$conf, $gL10n->get('SYS_ROLE_SELECTION'), $gDb, $sql,
-        array('defaultValue' => explode(',',$config['selection_role'][$conf]),'multiselect' => true, 'helpTextIdLabel' => 'SYS_ROLE_SELECTION_CONF_DESC'));
+    $formConfigurations->addSelectBoxFromSql('selection_role'.$key, $gL10n->get('SYS_ROLE_SELECTION'), $gDb, $sql,
+        array('defaultValue' => explode(',',$value['selection_role']),'multiselect' => true, 'helpTextIdLabel' => 'SYS_ROLE_SELECTION_CONF_DESC'));
 
     $sql = 'SELECT cat_id, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
              WHERE cat_id = rol_cat_id
-               AND ( cat_org_id = '.ORG_ID.'
+               AND ( cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                 OR cat_org_id IS NULL )';
-    $formConfigurations->addSelectBoxFromSql('selection_cat'.$conf, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
-        array('defaultValue' => explode(',',$config['selection_cat'][$conf]),'multiselect' => true, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_CONF_DESC'));
-    $formConfigurations->addCheckbox('number_col'.$conf, $gL10n->get('SYS_NUMBER_COL'), $config['number_col'][$conf], array('helpTextIdLabel' => 'SYS_NUMBER_COL_DESC'));
-    if($num_configs != 1)
+    $formConfigurations->addSelectBoxFromSql('selection_cat'.$key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
+        array('defaultValue' => explode(',',$value['selection_cat']),'multiselect' => true, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_CONF_DESC'));
+    $formConfigurations->addCheckbox('number_col'.$key, $gL10n->get('SYS_NUMBER_COL'), $value['number_col'], array('helpTextIdLabel' => 'SYS_NUMBER_COL_DESC'));
+    if(count($config) > 1)
     {
-        $html = '<a id="delete_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('add_delete' => $conf+1)).'">
+        $html = '<a id="delete_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('add_delete' => $key+1)).'">
             <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE_CONFIGURATION').'</a>';
         $formConfigurations->addCustomContent('', $html);
     }
@@ -356,7 +356,7 @@ $formOptions = new HtmlForm(
     'options_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences_function.php', array('form' => 'options')),
     $page, array('class' => 'form-preferences')
 );
-$formOptions->addSelectBox('default_config', $gL10n->get('SYS_CONFIGURATION'),$config['col_desc'], array('defaultValue' => $gSettingsManager->get('category_report_default_configuration'), 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_CONFIGURATION_DEFAULT_DESC'));
+$formOptions->addSelectBox('default_config', $gL10n->get('SYS_CONFIGURATION'),$catReportConfigs, array('defaultValue' => $gSettingsManager->get('category_report_default_configuration'), 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_CONFIGURATION_DEFAULT_DESC'));
 $html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/export_import.php', array('mode' => 1)).'">
     <i class="fas fa-exchange-alt"></i> '.$gL10n->get('SYS_LINK_TO_EXPORT_IMPORT').'</a>';
 $formOptions->addCustomContent($gL10n->get('SYS_EXPORT_IMPORT'), $html, array('helpTextIdInline' => 'SYS_EXPORT_IMPORT_DESC'));

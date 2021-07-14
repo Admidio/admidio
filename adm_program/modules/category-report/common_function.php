@@ -9,11 +9,6 @@
  ***********************************************************************************************
  */
 
-if(!defined('ORG_ID'))
-{
-	define('ORG_ID', (int) $gCurrentOrganization->getValue('org_id'));
-}
-
 /**
  * Funktion prueft, ob ein User Angehoeriger einer bestimmten Kategorie ist
  *
@@ -23,7 +18,7 @@ if(!defined('ORG_ID'))
  */
 function isMemberOfCategorie($cat_id, $user_id = 0)
 {
-    global $gCurrentUser, $gDb;
+    global $gCurrentUser, $gDb, $gCurrentOrganization;
 
     if ($user_id == 0)
     {
@@ -43,7 +38,7 @@ function isMemberOfCategorie($cat_id, $user_id = 0)
                   AND cat_id   = ? -- $cat_id
                   AND rol_valid  = 1
                   AND rol_cat_id = cat_id
-                  AND (  cat_org_id = ? -- ORG_ID
+                  AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL ) ';
 
     $queryParams = array(
@@ -51,7 +46,7 @@ function isMemberOfCategorie($cat_id, $user_id = 0)
         DATE_NOW,
         DATE_NOW,
         $cat_id,
-        ORG_ID
+        $gCurrentOrganization->getValue('org_id')
     );
     $statement = $gDb->queryPrepared($sql, $queryParams);
     $user_found = $statement->rowCount();
@@ -76,7 +71,7 @@ function createColDescConfig($name)
 {
     global $config, $gL10n;
 
-    while (in_array($name, $config['col_desc']))
+    while (in_array($name, $config['name']))
     {
         $name .= ' - '.$gL10n->get('SYS_CARBON_COPY');
     }
@@ -85,83 +80,47 @@ function createColDescConfig($name)
 }
 
 /**
- * Funktion liest das Konfigurationsarray ein
- * @param   none
- * @return  Array $config  das Konfigurationsarray
- */
-function getConfigArray()
-{
-    global  $gDb;
-
-    $config = array();
-    $i = 0;
-
-    $sql = ' SELECT *
-               FROM '. TBL_CATEGORY_REPORT .'
-              WHERE ( crt_org_id = ?
-                 OR crt_org_id IS NULL ) ';
-    $statement = $gDb->queryPrepared($sql, array(ORG_ID));
-
-    while($row = $statement->fetch())
-    {
-        $config['col_desc'][$i]       = $row['crt_name'];
-        $config['col_fields'][$i]     = $row['crt_col_fields'];
-        $config['selection_role'][$i] = $row['crt_selection_role'];
-        $config['selection_cat'][$i]  = $row['crt_selection_cat'];
-        $config['number_col'][$i]     = $row['crt_number_col'];
-        ++$i;
-    }
-    return $config;
-}
-
-/**
  * Funktion speichert das Konfigurationsarray
  * @param   none
  */
-function saveConfigArray()
+function saveConfigArray(array $arrConfiguration)
 {
-    global  $config, $gDb;
+    global  $gDb, $gCurrentOrganization, $gSettingsManager;
 
-    $numConfig = count($config['col_desc']);
     $crtDb = array();
+    $defaultConfiguration = 0;
 
-    $sql = ' SELECT crt_id
-               FROM '. TBL_CATEGORY_REPORT .'
-              WHERE ( crt_org_id = ?
-                 OR crt_org_id IS NULL ) ';
-    $statement = $gDb->queryPrepared($sql, array(ORG_ID));
+    $gDb->startTransaction();
 
-    while($row = $statement->fetch())
-    {
-        $crtDb[] = $row['crt_id'];
-    }
+    // delete all existing configurations from the current organization
+    $sql = 'DELETE FROM '.TBL_CATEGORY_REPORT.'
+             WHERE crt_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\') ';
+    $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
 
-    $numCrtDb = count($crtDb);
-
-    for($i = $numConfig; $i < $numCrtDb; ++$i)
-    {
-        $categoryReport = new TableAccess($gDb, TBL_CATEGORY_REPORT, 'crt', $crtDb[$i]);
-        $categoryReport->delete();
-        unset($crtDb[$i]);
-    }
-
-    foreach ($config['col_desc'] as $i => $dummy)
+    // write all existing configurations
+    foreach ($arrConfiguration as $key => $values)
     {
         $categoryReport = new TableAccess($gDb, TBL_CATEGORY_REPORT, 'crt');
-        if (isset($crtDb[$i]))
-        {
-            $categoryReport->readDataById($crtDb[$i]);
-        }
-
-        $categoryReport->setValue('crt_org_id', ORG_ID);
-        $categoryReport->setValue('crt_name', $config['col_desc'][$i]);
-        $categoryReport->setValue('crt_col_fields', $config['col_fields'][$i]);
-        $categoryReport->setValue('crt_selection_role', $config['selection_role'][$i]);
-        $categoryReport->setValue('crt_selection_cat', $config['selection_cat'][$i]);
-        $categoryReport->setValue('crt_number_col', $config['number_col'][$i]);
+        $categoryReport->setValue('crt_org_id', $gCurrentOrganization->getValue('org_id'));
+        $categoryReport->setValue('crt_name',       $values['name']);
+        $categoryReport->setValue('crt_col_fields', $values['col_fields']);
+        $categoryReport->setValue('crt_selection_role', $values['selection_role']);
+        $categoryReport->setValue('crt_selection_cat', $values['selection_cat']);
+        $categoryReport->setValue('crt_number_col', $values['number_col']);
         $categoryReport->save();
+
+        if($values['default_conf'] === true || $defaultConfiguration === 0)
+        {
+            $defaultConfiguration = $categoryReport->getValue('crt_id');
+        }
     }
-    return;
+
+    // set default configuration
+    $gSettingsManager->set('category_report_default_configuration', $defaultConfiguration);
+
+    $gDb->endTransaction();
+
+    return true;
 }
 
 

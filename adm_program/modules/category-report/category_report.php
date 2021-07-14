@@ -36,22 +36,17 @@ if (!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 }
 
 // das Konfigurationsarray einlesen
-$config = getConfigArray();
+$report = new CategoryReport();
+$config = $report->getConfigArray();
 
 // security query if the configuration array is empty
 if (empty($config))
 {
-    $config = array('col_desc' => array(''), 'col_fields' => array(''), 'selection_role' => array(''), 'selection_cat' => array(''), 'number_col' => array(0));
-    saveConfigArray();
+    $config = array('name' => array(''), 'col_fields' => array(''), 'selection_role' => array(''), 'selection_cat' => array(''), 'number_col' => array(0));
+    saveConfigArray($config);
 }
 
-// Initialize and check the parameters
-$validValues = array();
-foreach ($config['col_desc'] as $key => $dummy)
-{
-	$validValues[] = 'X'.$key.'X';
-}
-$getConfig          = admFuncVariableIsValid($_GET, 'config', 'string', array('defaultValue' => 'X'.$gSettingsManager->get('category_report_default_configuration').'X', 'validValues' => $validValues) );
+$getCrtId           = admFuncVariableIsValid($_GET, 'crt_id', 'int', array('defaultValue' => $gSettingsManager->get('category_report_default_configuration')) );
 $getMode            = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl' )));
 $getFilter          = admFuncVariableIsValid($_GET, 'filter', 'string');
 $getExportAndFilter = admFuncVariableIsValid($_GET, 'export_and_filter', 'bool', array('defaultValue' => false));
@@ -101,8 +96,7 @@ switch ($getMode)
 $csvStr = '';
 
 //die Anzeigeliste erzeugen
-$report = new CategoryReport();
-$report->conf = trim($getConfig,'X');
+$report->setConfiguration($getCrtId);
 $report->generate_listData();
 
 $numMembers = count($report->listData);
@@ -119,7 +113,7 @@ $columnCount = count($report->headerData);
 // define title (html) and headline
 $title       = $gL10n->get('SYS_CATEGORY_REPORT');
 $headline    = $gL10n->get('SYS_CATEGORY_REPORT');
-$subheadline = $config['col_desc'][trim($getConfig,'X')];
+$subheadline = $config[$report->getConfiguration()]['name'];
 
 $filename    = $g_organization.'-'.$headline.'-'.$subheadline;
 
@@ -212,7 +206,7 @@ if ($getMode !== 'csv')
                     'mode'              => 'print',
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
-                    'config'            => $getConfig
+                    'crt_id'            => $getCrtId
                 )).'", "_blank");
             });',
             true
@@ -227,28 +221,28 @@ if ($getMode !== 'csv')
             $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
             $page->addPageFunctionsMenuItem('menu_item_lists_csv_ms', $gL10n->get('SYS_MICROSOFT_EXCEL'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
-                    'config'            => $getConfig,
+                    'crt_id'            => $getCrtId,
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'csv-ms')),
                 'fa-file-excel', 'menu_item_lists_export');
             $page->addPageFunctionsMenuItem('menu_item_lists_pdf', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
-                    'config'            => $getConfig,
+                    'crt_id'            => $getCrtId,
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'pdf')),
                 'fa-file-pdf', 'menu_item_lists_export');
             $page->addPageFunctionsMenuItem('menu_item_lists_pdfl', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
-                    'config'            => $getConfig,
+                    'crt_id'            => $getCrtId,
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'pdfl')),
                 'fa-file-pdf', 'menu_item_lists_export');
             $page->addPageFunctionsMenuItem('menu_item_lists_csv', $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
-                    'config'            => $getConfig,
+                    'crt_id'            => $getCrtId,
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'csv-oo')),
@@ -272,22 +266,22 @@ if ($getMode !== 'csv')
             $("#export_and_filter").change(function() {
                 $("#navbar_filter_form_category_report").submit();
             });
-            $("#config").change(function() {
+            $("#crt_id").change(function() {
                 $("#navbar_filter_form_category_report").submit();
             });',
 		    true
 		);
 
-		foreach ($config['col_desc'] as $key => $item)
+		foreach ($config as $key => $item)
 		{
-		    $selectBoxEntries['X'.$key.'X'] = $item;
+		    $selectBoxEntries[$item['id']] = $item['name'];
 		}
 
         // create filter menu with elements for role
         $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form_category_report', '', $page, array('type' => 'navbar', 'setFocus' => false));
-		$form->addSelectBox('config', $gL10n->get('SYS_SELECT_CONFIGURATION'), $selectBoxEntries,
-		    array('showContextDependentFirstEntry' => false,'defaultValue' => $getConfig));
+		$form->addSelectBox('crt_id', $gL10n->get('SYS_SELECT_CONFIGURATION'), $selectBoxEntries,
+		    array('showContextDependentFirstEntry' => false,'defaultValue' => $getCrtId));
         if ($getExportAndFilter)
         {
             $form->addInput('filter', $gL10n->get('SYS_FILTER'), $getFilter);

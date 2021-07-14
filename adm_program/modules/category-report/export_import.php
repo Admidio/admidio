@@ -46,7 +46,7 @@ switch ($getMode)
     	$form = new HtmlForm('export_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/export_import.php', array('mode' => 2)), $page);
 		$form->openGroupBox('export', $headline = $gL10n->get('SYS_EXPORT'));
     	$form->addDescription($gL10n->get('SYS_EXPORT_DESC'));
-    	$form->addSelectBox('conf_id', $gL10n->get('SYS_CONFIGURATION').':', $config['col_desc'], array( 'showContextDependentFirstEntry' => false));
+    	$form->addSelectBox('conf_id', $gL10n->get('SYS_CONFIGURATION').':', $config['name'], array( 'showContextDependentFirstEntry' => false));
 		$form->addSubmitButton('btn_export', $gL10n->get('SYS_EXPORT'), array('icon' => 'fa-file-export', 'class' => ' col-sm-offset-3'));
     	$form->closeGroupBox();
 
@@ -86,9 +86,9 @@ switch ($getMode)
 
 		// Zwischenspeichern auf Proxies verhindern
 		header("Cache-Control: post-check=0, pre-check=0");
-		header('Content-Disposition: attachment; filename="'.$exportArray['col_desc'].'.cfg"');
+		header('Content-Disposition: attachment; filename="'.$exportArray['name'].'.cfg"');
 
-		echo ';### ' . $exportArray['col_desc'].'.cfg' . ' ### ' . date('Y-m-d H:i:s') . ' ### utf-8 ###'."\r\n";
+		echo ';### ' . $exportArray['name'].'.cfg' . ' ### ' . date('Y-m-d H:i:s') . ' ### utf-8 ###'."\r\n";
 		echo ';### This is a configuration file of a configuration of the module category_report ###'."\r\n";
     	echo ';### ATTENTION: ADD NO LINES - DELETE NO LINES ###'."\r\n\r\n";
 
@@ -169,7 +169,7 @@ switch ($getMode)
 		$parsedArray = parse_ini_file ( $_FILES['userfile']['tmp_name'][0], TRUE );
 
 		//pruefen, ob die eingelesene Datei eine Formularkonfiguration enthaelt
-		if (	!(isset($parsedArray['col_desc']) && $parsedArray['col_desc'] <> '')
+		if (	!(isset($parsedArray['name']) && $parsedArray['name'] <> '')
 			||  !(isset($parsedArray['columns']) && is_array($parsedArray['columns']))
 			||  !(isset($parsedArray['name']) && is_array($parsedArray['name']))
 			||  !(count($parsedArray['columns']) == count($parsedArray['name']))  )
@@ -188,7 +188,7 @@ switch ($getMode)
 			{
 				if (!is_array($parsedArray[$key]))
 				{
-				    if($key == 'col_desc')
+				    if($key == 'name')
 				    {
 				        $importArray[$key] = createColDescConfig($parsedArray[$key]);
 				    }
@@ -208,13 +208,13 @@ switch ($getMode)
 			}
 		}
 
-		$pointer = count($config['col_desc']);
+		$pointer = count($config['name']);
     	foreach ($importArray as $key => $data)
     	{
         	$config[$key][$pointer] = $data;
     	}
 
-		saveConfigArray();
+		saveConfigArray($config);
 
 		$gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('show_option' => 'options')));
 		$gMessage->show($gL10n->get('SYS_IMPORT_SUCCESS'));

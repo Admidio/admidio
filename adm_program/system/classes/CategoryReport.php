@@ -25,7 +25,8 @@ class CategoryReport
     public	  $headerData      = array();          ///< Array mit allen Spaltenueberschriften
     public	  $listData        = array();          ///< Array mit den Daten für den Report
     public	  $headerSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
-    public	  $conf;							   ///< die gewaehlte Konfiguration
+    protected $conf;							   ///< die gewaehlte Konfiguration
+    protected $arrConfiguration = array();         ///< Array with the all configurations from the database
 
     /**
      * CategoryReport constructor
@@ -42,13 +43,13 @@ class CategoryReport
      */
 	public function generate_listData()
 	{
-		global $gDb, $gProfileFields, $config, $gL10n;
+		global $gDb, $gProfileFields, $gL10n, $gCurrentOrganization;
 
 		$workarray      = array();
 		$number_row_pos = -1;
 		$number_col     = array();
 
-		$colfields = explode(',', $config['col_fields'][$this->conf]);
+		$colfields = explode(',', $this->arrConfiguration[$this->conf]['col_fields']);
 		// die gespeicherten Konfigurationen durchlaufen
 		foreach ($colfields as $key => $data)
         {
@@ -91,13 +92,13 @@ class CategoryReport
              				            AND mem_begin <= ? -- DATE_NOW
            					            AND mem_end    > ? -- DATE_NOW
              				            AND cat_id = ? -- $id
-             				            AND ( cat_org_id = ? -- ORG_ID
+             				            AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                				             OR cat_org_id IS NULL )';
 					$queryParams = array(
 					    DATE_NOW,
 					    DATE_NOW,
 					    $id,
-					    ORG_ID
+					    $gCurrentOrganization->getValue('org_id')
 					);
 					$statement = $gDb->queryPrepared($sql, $queryParams);
 
@@ -194,12 +195,12 @@ class CategoryReport
              	  WHERE mem_rol_id = rol_id
              	    AND rol_valid  = 1
              	    AND rol_cat_id = cat_id
-             	    AND ( cat_org_id = ? -- ORG_ID
+             	    AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                		 OR cat_org_id IS NULL )
              	    AND mem_begin <= ? -- DATE_NOW
            		    AND mem_end    > ? -- DATE_NOW ';
 		$queryParams = array(
-		    ORG_ID,
+		    $gCurrentOrganization->getValue('org_id'),
 		    DATE_NOW,
 		    DATE_NOW
 		);
@@ -221,18 +222,18 @@ class CategoryReport
 
 			// bestehen Rollen- und/oder Kategorieeinschraenkungen?
         	$rolecatmarker = true;
-        	if ($config['selection_role'][$this->conf] <> ''
-        	 || $config['selection_cat'][$this->conf] <> '')
+        	if ($this->arrConfiguration[$this->conf]['selection_role'] <> ''
+        	 || $this->arrConfiguration[$this->conf]['selection_cat'] <> '')
         	{
         		$rolecatmarker = false;
-        		foreach (explode(',', $config['selection_role'][$this->conf]) as $rol)
+        		foreach (explode(',', $this->arrConfiguration[$this->conf]['selection_role']) as $rol)
         		{
         			if ($user->isMemberOfRole((int) $rol))
         			{
         				$rolecatmarker = true;
         			}
         		}
-				foreach (explode(',', $config['selection_cat'][$this->conf]) as $cat)
+				foreach (explode(',', $this->arrConfiguration[$this->conf]['selection_cat']) as $cat)
         		{
         			if (isMemberOfCategorie($cat, $member))
         			{
@@ -296,7 +297,7 @@ class CategoryReport
 			}
 		}
 
-		if ($config['number_col'][$this->conf] == 1)
+		if ($this->arrConfiguration[$this->conf]['number_col'] == 1)
 		{
 			$this->listData[] = $number_col;
 		}
@@ -308,7 +309,7 @@ class CategoryReport
      */
 	private function generate_headerSelection()
 	{
-		global $gDb, $gL10n, $gProfileFields, $gCurrentUser;
+		global $gDb, $gL10n, $gProfileFields, $gCurrentUser, $gCurrentOrganization;
 
         $categories = array();
 
@@ -331,7 +332,7 @@ class CategoryReport
              	             AND cat.cat_id = rol.rol_cat_id
              	             AND ( cat.cat_org_id = ?
                	              OR cat.cat_org_id IS NULL )';
-		$statement = $gDb->queryPrepared($sql, array(ORG_ID));
+		$statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
 
 		$k = 0;
 		while ($row = $statement->fetch())
@@ -398,6 +399,52 @@ class CategoryReport
 	}
 
     /**
+     * Funktion liest das Konfigurationsarray ein
+     * @param   none
+     * @return  Array $config  das Konfigurationsarray
+     */
+    function getConfigArray()
+    {
+        global  $gDb, $gSettingsManager, $gCurrentOrganization;
+
+        if(count($this->arrConfiguration) === 0)
+        {
+            $sql = ' SELECT *
+                       FROM '. TBL_CATEGORY_REPORT .'
+                      WHERE ( crt_org_id = ?
+                         OR crt_org_id IS NULL ) ';
+            $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+
+            while($row = $statement->fetch())
+            {
+                $values = array();
+                $values['id']             = $row['crt_id'];
+                $values['name']           = $row['crt_name'];
+                $values['col_fields']     = $row['crt_col_fields'];
+                $values['selection_role'] = $row['crt_selection_role'];
+                $values['selection_cat']  = $row['crt_selection_cat'];
+                $values['number_col']     = $row['crt_number_col'];
+                $values['default_conf']   = false;
+                if($gSettingsManager->getInt('category_report_default_configuration') == $row['crt_id'])
+                {
+                    $values['default_conf']   = true;
+                }
+                $this->arrConfiguration[] = $values;
+            }
+        }
+
+        return $this->arrConfiguration;
+    }
+
+    /**
+     * get the active configuration
+     */
+	public function getConfiguration()
+	{
+        return $this->conf;
+	}
+
+    /**
      * Prueft, ob es den uebergebenen Wert in der Spaltenauswahlliste gibt
      * Hinweis: die Spaltenauswahlliste ist immer aktuell, da sie neu generiert wird,
      * der zu pruefende Wert koennte jedoch veraltet sein, da er aus der Konfigurationstabelle stammt
@@ -416,5 +463,19 @@ class CategoryReport
 			}
 		}
 		return $ret;
+	}
+
+    /**
+     * set the internal active configuration to the crtId of the parameter
+     */
+	public function setConfiguration($crtId)
+	{
+    	foreach($this->arrConfiguration as $key => $values)
+    	{
+        	if($values['id'] == $crtId)
+        	{
+            	$this->conf = $key;
+        	}
+    	}
 	}
 }

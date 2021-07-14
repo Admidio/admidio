@@ -2,15 +2,15 @@
 /**
  ***********************************************************************************************
  * Preferences functions for the admidio module CategoryReport
- * 
+ *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- * 
+ *
  * Parameters:
  *
  * form     - The name of the form preferences that were submitted.
- * 
+ *
  ***********************************************************************************************
  */
 
@@ -23,7 +23,8 @@ if (!$gCurrentUser->isAdministrator())
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$config = getConfigArray();
+$report = new CategoryReport();
+$config = $report->getConfigArray();
 
 // Initialize and check the parameters
 $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
@@ -36,13 +37,14 @@ try
    	{
    		case 'configurations':
    		    unset($config);
-   			
-			for ($conf = 0; isset($_POST['col_desc'. $conf]); $conf++)
-   			{  				
-   				$config['col_desc'][]       = $_POST['col_desc'. $conf];
-   				$config['selection_role'][] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]),',') : '';
-   				$config['selection_cat'][]  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]),',') : '';
-   				$config['number_col'][]     = isset($_POST['number_col'. $conf]) ? 1 : 0 ;
+
+			for ($conf = 0; isset($_POST['name'. $conf]); $conf++)
+   			{
+   				$values['name']           = $_POST['name'. $conf];
+   				$values['selection_role'] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]),',') : '';
+   				$values['selection_cat']  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]),',') : '';
+   				$values['number_col']     = isset($_POST['number_col'. $conf]) ? 1 : 0 ;
+   				$values['default_conf']   = false;
 
    				$allColumnsEmpty = true;
 
@@ -54,22 +56,23 @@ try
        					$allColumnsEmpty = false;
            				$fields .= $_POST['column'.$conf.'_'.$number].',';
        				}
-   				}	
-   				
+   				}
+
    				if ($allColumnsEmpty)
    				{
    					$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_COLUMN'))));
    				}
-   				
-   				$config['col_fields'][] = substr($fields,0,-1);
+
+   				$values['col_fields'] = substr($fields,0,-1);
+   				$config[] = $values;
    			}
-   			saveConfigArray();
-           	break; 
-           	
-      	case 'options':	
+   			saveConfigArray($config);
+           	break;
+
+      	case 'options':
 	        	$gSettingsManager->set('category_report_default_configuration', $_POST['default_config']);
-           	break;  
-           
+           	break;
+
        	default:
           		$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
    	}
@@ -77,7 +80,7 @@ try
 catch(AdmException $e)
 {
 	$e->showText();
-}    
+}
 
 echo 'success';
 
