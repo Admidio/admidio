@@ -847,7 +847,7 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standard tildeling ved registrering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Hvis en ny bruger bliver oprettet eller en ny registrering accepteret, så bliver denne rolle automatisk tildelt den nye bruger. Når opretteren har ret til at tildele roller så vises listen med roller og tildelingen kan ændres med det samme.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standard konfiguration</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_DESC">En af de her givne konfigurationer kan indstilles som standardkonfiguration for lister over denne organisation. Medlemslister over roller, der ikke har en listekonfiguration, vises med denne konfiguration.</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">En af de her givne konfigurationer kan indstilles som standardkonfiguration for lister over denne organisation. Medlemslister over roller, der ikke har en listekonfiguration, vises med denne konfiguration.</string>
   <string name="SYS_DEFAULT_LIST">Standard Liste</string>
   <string name="SYS_DEFAULT_LIST_DESC">I tilfælde af at der er en medlemsliste for denne rolle som skal vises og ingen liste konfiguration er specificeret, så vises listen i system standard konfigurationen. Ved at bruge dette felt til en individuel rolle, kan du vælge en anden liste konfiguration som kan bruges når der ikke ellers er en liste konfiguration til rådighed.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Der er ikke defineret et standard liste indstillings sæt af administratoren!\n\nKontakt systemadministratoren for at få hjælp.</string>

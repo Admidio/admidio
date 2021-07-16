@@ -11,7 +11,6 @@
  *
  * add_delete : -1 - Generate a configuration
  * 				>0 - Deleting a configuration
- * show_option: direct opening of a panel of the accordion menu
  *
  ***********************************************************************************************
  */
@@ -34,7 +33,7 @@ $report = new CategoryReport();
 $config = $report->getConfigArray();
 $catReportConfigs = array();
 
-$headline = $gL10n->get('SYS_CATEGORY_REPORT');
+$headline = $gL10n->get('SYS_CATEGORY_REPORT') . ' - ' . $gL10n->get('SYS_CONFIGURATIONS');
 
 if ($getAddDelete === -1)
 {
@@ -67,26 +66,6 @@ $gNavigation->addUrl(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage('plg-category-report-preferences', $headline);
-
-// open the module configurations if a new configuration is added or deleted
-if ($showOption <> '')
-{
-    $page->addJavascript('
-        $("#tabs_nav_common").attr("class", "nav-link active");
-        $("#tabs-common").attr("class", "tab-pane fade show active");
-        $("#collapse_'.$showOption.'").attr("class", "collapse show");
-        location.hash = "#" + "panel_'.$showOption.'";',
-        true
-    );
-}
-else
-{
-    $page->addJavascript('
-        $("#tabs_nav_common").attr("class", "active");
-        $("#tabs-common").attr("class", "tab-pane active");',
-        true
-    );
-}
 
 $page->addJavascript('
     $(".form-preferences").submit(function(event) {
@@ -237,46 +216,6 @@ foreach($config as $key => $value)
 $javascriptCode .= ' }); ';
 $page->addJavascript($javascriptCode, true);
 
-/**
- * @param string $group
- * @param string $id
- * @param string $title
- * @param string $icon
- * @param string $body
- * @return string
- */
-function getPreferencePanel($group, $id, $title, $icon, $body)
-{
-    $html = '
-        <div class="card" id="panel_' . $id . '">
-            <div class="card-header">
-                <a type="button" data-toggle="collapse" data-target="#collapse_' . $id . '">
-                    <i class="' . $icon . ' fa-fw"></i>' . $title . '
-                </a>
-            </div>
-            <div id="collapse_' . $id . '" class="collapse" aria-labelledby="headingOne" data-parent="#accordion_preferences">
-                <div class="card-body">
-                    ' . $body . '
-                </div>
-            </div>
-        </div>
-    ';
-    return $html;
-}
-
-$page->addHtml('
-<ul id="preferences_tabs" class="nav nav-tabs" role="tablist">
-    <li class="nav-item">
-        <a id="tabs_nav_common" class="nav-link" href="#tabs-common" data-toggle="tab" role="tab">'.$gL10n->get('SYS_SETTINGS').'</a>
-    </li>
-</ul>
-
-<div class="tab-content">
-    <div class="tab-pane fade" id="tabs-common" role="tabpanel">
-        <div class="accordion" id="accordion_preferences">');
-
-// PANEL: CONFIGURATIONS
-
 $formConfigurations = new HtmlForm(
     'configurations_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences_function.php', array('form' => 'configurations')),
     $page, array('class' => 'form-preferences')
@@ -284,7 +223,6 @@ $formConfigurations = new HtmlForm(
 
 $formConfigurations->addDescription($gL10n->get('SYS_CONFIGURATIONS_HEADER'));
 $formConfigurations->addLine();
-$formConfigurations->addDescription('<div style="width:100%; height:550px; overflow:auto; border:20px;">');
 $currentNumberConf = 0;
 
 foreach($config as $key => $value)
@@ -337,7 +275,7 @@ foreach($config as $key => $value)
 
     $formConfigurations->closeGroupBox();
 }
-$formConfigurations->addDescription('</div>');
+
 $formConfigurations->addLine();
 $html = '<a id="add_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('add_delete' => -1)).'">
             <i class="fas fa-clone"></i> '.$gL10n->get('SYS_ADD_ANOTHER_CONFIG').'
@@ -348,25 +286,6 @@ $htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
 $formConfigurations->addCustomContent('', $html, array('helpTextIdInline' => $htmlDesc));
 $formConfigurations->addSubmitButton('btn_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));
 
-$page->addHtml(getPreferencePanel('common', 'configurations', $gL10n->get('SYS_CONFIGURATIONS'), 'fas fa-cogs', $formConfigurations->show()));
-
-// PANEL: OPTIONS
-
-$formOptions = new HtmlForm(
-    'options_preferences_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences_function.php', array('form' => 'options')),
-    $page, array('class' => 'form-preferences')
-);
-$formOptions->addSelectBox('default_config', $gL10n->get('SYS_CONFIGURATION'),$catReportConfigs, array('defaultValue' => $gSettingsManager->get('category_report_default_configuration'), 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_CONFIGURATION_DEFAULT_DESC'));
-$html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/export_import.php', array('mode' => 1)).'">
-    <i class="fas fa-exchange-alt"></i> '.$gL10n->get('SYS_LINK_TO_EXPORT_IMPORT').'</a>';
-$formOptions->addCustomContent($gL10n->get('SYS_EXPORT_IMPORT'), $html, array('helpTextIdInline' => 'SYS_EXPORT_IMPORT_DESC'));
-$formOptions->addSubmitButton('btn_save_options', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));
-
-$page->addHtml(getPreferencePanel('common', 'options', $gL10n->get('SYS_SETTINGS'), 'fas fa-cog', $formOptions->show()));
-
-$page->addHtml('
-        </div>
-    </div>
-</div>');
+$page->addHtml($formConfigurations->show());
 
 $page->show();

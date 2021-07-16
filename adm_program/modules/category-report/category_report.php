@@ -257,7 +257,7 @@ if ($getMode !== 'csv')
         if ($gCurrentUser->isAdministrator())
 		{
     		// show link to pluginpreferences
-    		$page->addPageFunctionsMenuItem('admMenuItemPreferencesLists', $gL10n->get('SYS_SETTINGS'),
+    		$page->addPageFunctionsMenuItem('admMenuItemPreferencesLists', $gL10n->get('SYS_CONFIGURATIONS'),
     		    ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php',  'fa-cog');
 		}
 

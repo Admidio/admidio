@@ -1174,7 +1174,7 @@ $sqlData['query'] = 'SELECT lst_id, lst_name
 $sqlData['params'] = array($orgId);
 $formGroupsRoles->addSelectBoxFromSql(
     'groups_roles_default_configuration', $gL10n->get('SYS_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
-    array('defaultValue' => $formValues['groups_roles_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_DEFAULT_CONFIGURATION_DESC')
+    array('defaultValue' => $formValues['groups_roles_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_DEFAULT_CONFIGURATION_LISTS_DESC')
 );
 $selectBoxEntries = array(
     '0' => $gL10n->get('SYS_NOBODY'),
@@ -1215,6 +1215,21 @@ $formCategoryReport->addCheckbox(
     'category_report_enable_module', $gL10n->get('SYS_ENABLE_CATEGORY_REPORT_MODULE'), (bool) $formValues['category_report_enable_module'],
     array('helpTextIdInline' => 'SYS_ENABLE_CATEGORY_REPORT_MODULE_DESC')
     );
+// read all global lists
+$sqlData = array();
+$sqlData['query'] = 'SELECT crt_id, crt_name
+                       FROM '.TBL_CATEGORY_REPORT.'
+                      WHERE crt_org_id = ? -- $orgId
+                   ORDER BY crt_name ASC';
+$sqlData['params'] = array($orgId);
+$formCategoryReport->addSelectBoxFromSql(
+    'category_report_default_configuration', $gL10n->get('SYS_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
+    array('defaultValue' => $formValues['category_report_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC')
+    );
+$html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/export_import.php', array('mode' => 1)).'">
+    <i class="fas fa-exchange-alt"></i> '.$gL10n->get('SYS_LINK_TO_EXPORT_IMPORT').'</a>';
+$formCategoryReport->addCustomContent($gL10n->get('SYS_EXPORT_IMPORT'), $html, array('helpTextIdInline' => 'SYS_EXPORT_IMPORT_DESC'));
+
 $formCategoryReport->addSubmitButton(
     'btn_save_documents_files', $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')

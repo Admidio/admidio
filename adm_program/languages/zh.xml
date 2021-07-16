@@ -160,7 +160,7 @@
   <string name="SYS_A_TO_Z">A到Z</string>
   <string name="SYS_CONFIGURATION_DEFAULT">是否将选定的配置标记为该部门的默认配置？</string>
   <string name="SYS_DEFAULT_CONFIGURATION">默认配置</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_DESC">此处给出的配置之一可以设置为该部门列表的默认配置。此配置将显示没有列表配置的角色的成员列表。</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">此处给出的配置之一可以设置为该部门列表的默认配置。此配置将显示没有列表配置的角色的成员列表。</string>
   <string name="SYS_DELETE_CONFIGURATION">删除配置</string>
   <string name="SYS_EMAIL_TO_MEMBERS">向成员发送电子邮件</string>
   <string name="SYS_EMAIL_TO_LIST">向列表发送电子邮件</string>

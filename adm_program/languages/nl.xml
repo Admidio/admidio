@@ -783,7 +783,7 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standaard toewijzing bij registratie</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Deze rol wordt automatisch toegewezen. Indien de maker de rechten heeft om rollen toe te wijzen, worden alle beschikbare rollen weergegeven kunnen overeenkomstig worden aangepast.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standaard configuratie</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_DESC">Een van de hier getoonde configuraties kan als standaard configuratie ingesteld worden voor de lijsten van deze organisatie. Ledenlijsten van rollen die geen eigen configuratie hebben worden weergegeven met deze configuratie.</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Een van de hier getoonde configuraties kan als standaard configuratie ingesteld worden voor de lijsten van deze organisatie. Ledenlijsten van rollen die geen eigen configuratie hebben worden weergegeven met deze configuratie.</string>
   <string name="SYS_DEFAULT_LIST">Standaard lijst</string>
   <string name="SYS_DEFAULT_LIST_DESC">Als een ledenlijst van deze rol wordt weergegeven en geen lijst-configuratie is opgegeven, zal de lijst worden weergegeven met de standaard lijst-configuratie van het systeem. Dit veld kan worden gebruikt om een ​​andere lijst-configuratie voor de individuele rol te selecteren, die wordt weergegeven als er geen lijst-configuratie is ingesteld.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Geen standaard lijst-configuratie gedefinieerd door beheerder!\n\nNeem voor hulp contact met beheerder op.</string>

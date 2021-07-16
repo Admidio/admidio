@@ -25,7 +25,8 @@ if (!$gCurrentUser->isAdministrator())
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$config = getConfigArray();
+$report = new CategoryReport();
+$config = $report->getConfigArray();
 
 // Initialize and check the parameters
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('defaultValue' => 1));
@@ -46,7 +47,12 @@ switch ($getMode)
     	$form = new HtmlForm('export_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/export_import.php', array('mode' => 2)), $page);
 		$form->openGroupBox('export', $headline = $gL10n->get('SYS_EXPORT'));
     	$form->addDescription($gL10n->get('SYS_EXPORT_DESC'));
-    	$form->addSelectBox('conf_id', $gL10n->get('SYS_CONFIGURATION').':', $config['name'], array( 'showContextDependentFirstEntry' => false));
+        $configurations = array();
+        foreach($config as $key => $values)
+        {
+            $configurations[] = $values['name'];
+        }
+        $form->addSelectBox('conf_id', $gL10n->get('SYS_CONFIGURATION').':', $configurations, array( 'showContextDependentFirstEntry' => false));
 		$form->addSubmitButton('btn_export', $gL10n->get('SYS_EXPORT'), array('icon' => 'fa-file-export', 'class' => ' col-sm-offset-3'));
     	$form->closeGroupBox();
 
@@ -68,14 +74,10 @@ switch ($getMode)
     	break;
 
 	case 2:
-		$exportArray = array();
 
-		foreach ($config as $key => $data)
-		{
-			$exportArray[$key] = $data[$_POST['conf_id']];
-		}
+		$exportArray = $config[$_POST['conf_id']];
 
-    	// Dateityp, der immer abgespeichert wird
+     	// Dateityp, der immer abgespeichert wird
 		header('Content-Type: text/plain; Charset=utf-8');
 
 		// noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
