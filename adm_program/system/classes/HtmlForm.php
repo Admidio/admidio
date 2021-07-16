@@ -368,7 +368,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // now create html for the field
-        $this->openControlStructure($id, '');
+        $this->openControlStructure($id, '', $optionsAll['property']);
         $this->addHtml('<div class="' . $cssClasses . '"><label>');
         $this->addSimpleInput('checkbox', $id, $id, '1', $attributes);
         $this->addHtml($htmlIcon . $label . $htmlHelpIcon . '</label></div>');
