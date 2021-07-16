@@ -52,9 +52,9 @@ Starting a admidio instance is simple:
 docker run --detach -it --name "Admidio" \
   -p 8080:8080 \
   --restart="unless-stopped" \
-  -v "Admidio-files:/var/www/admidio/adm_my_files" \
-  -v "Admidio-themes:/var/www/admidio/adm_themes" \
-  -v "Admidio-plugins:/var/www/admidio/adm_plugins" \
+  -v "Admidio-files:/opt/app-root/src/adm_my_files" \
+  -v "Admidio-themes:/opt/app-root/src/adm_themes" \
+  -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
   --link "Admidio-MariaDB:mysql" \
   admidio/admidio:latest
 ```
@@ -67,9 +67,9 @@ docker run --detach -it --name "Admidio" \
   --memory="1024m" \
   -p 8080:8080 \
   --restart="unless-stopped" \
-  -v "Admidio-files:/var/www/admidio/adm_my_files" \
-  -v "Admidio-themes:/var/www/admidio/adm_themes" \
-  -v "Admidio-plugins:/var/www/admidio/adm_plugins" \
+  -v "Admidio-files:/opt/app-root/src/adm_my_files" \
+  -v "Admidio-themes:/opt/app-root/src/adm_themes" \
+  -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
   --link "Admidio-MariaDB:mysql" \
   -e ADMIDIO_DB_TYPE="mysql" \
   -e ADMIDIO_DB_HOST="db:3306" \
@@ -111,9 +111,9 @@ Use [MariaDB](https://hub.docker.com/_/mariadb/) or [PostgreSQL](https://hub.doc
 
 
 ## Volumes
-* **`-v "Admidio-files:/var/www/admidio/adm_my_files"`:** admidio config files and data uploads
-* **`-v "Admidio-themes:/var/www/admidio/adm_themes"`:** admidio themes
-* **`-v "Admidio-plugins:/var/www/admidio/adm_plugins"`:** admidio plugins
+* **`-v "Admidio-files:/opt/app-root/src/adm_my_files"`:** admidio config files and data uploads
+* **`-v "Admidio-themes:/opt/app-root/src/adm_themes"`:** admidio themes
+* **`-v "Admidio-plugins:/opt/app-root/src/adm_plugins"`:** admidio plugins
 
 See https://docs.docker.com/storage/volumes/ for detailed information.
 
@@ -227,9 +227,9 @@ docker rm Admidio
 docker run --detach -it --name "Admidio" \
     -p 8080:8080 \
     --restart="unless-stopped" \
-    -v "Admidio-files:/var/www/admidio/adm_my_files" \
-    -v "Admidio-themes:/var/www/admidio/adm_themes" \
-    -v "Admidio-plugins:/var/www/admidio/adm_plugins" \
+    -v "Admidio-files:/opt/app-root/src/adm_my_files" \
+    -v "Admidio-themes:/opt/app-root/src/adm_themes" \
+    -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
     --link "Admidio-MariaDB:mysql" \
     admidio/admidio:latest
 ```
@@ -265,9 +265,9 @@ services:
     depends_on:
       - db
     volumes:
-      - Admidio-files:/var/www/admidio/adm_my_files
-      - Admidio-themes:/var/www/admidio/adm_themes
-      - Admidio-plugins:/var/www/admidio/adm_plugins
+      - Admidio-files:/opt/app-root/src/adm_my_files
+      - Admidio-themes:/opt/app-root/src/adm_themes
+      - Admidio-plugins:/opt/app-root/src/adm_plugins
     ports:
       - 8080:8080
     environment:
@@ -323,9 +323,9 @@ services:
     depends_on:
       - db
     volumes:
-      - Admidio-files:/var/www/admidio/adm_my_files
-      - Admidio-themes:/var/www/admidio/adm_themes
-      - Admidio-plugins:/var/www/admidio/adm_plugins
+      - Admidio-files:/opt/app-root/src/adm_my_files
+      - Admidio-themes:/opt/app-root/src/adm_themes
+      - Admidio-plugins:/opt/app-root/src/adm_plugins
     ports:
       - 8080:8080
     environment:
