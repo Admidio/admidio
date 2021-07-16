@@ -24,6 +24,7 @@
         "monolog/monolog": "^1.21",
         "phpmailer/phpmailer": "^6.4",
         "phpoffice/phpspreadsheet": "^1.18",
+        "ramsey/uuid": "^4.1",
         "smarty/smarty": "^3.1",
         "tecnickcom/tcpdf": "^6.2"
     },
