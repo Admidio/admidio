@@ -459,7 +459,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
         case 'html':
             // check html string vor invalid tags and scripts
-            $value = Htmlawed::filter(stripslashes($value), array('safe' => 1));
+            $value = htmLawed(stripslashes($value), array('safe' => 1));
             break;
     }
 

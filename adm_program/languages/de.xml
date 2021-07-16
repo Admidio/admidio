@@ -725,6 +725,8 @@
   <string name="SYS_DEPENDENCIES">Abhängigkeiten</string>
   <string name="SYS_DEPENDENT">Abhängig</string>
   <string name="SYS_DESCRIPTION">Beschreibung</string>
+  <string name="SYS_DESCRIPTION_POPOVER_DESC">Die Beschreibung wird in einem kleinen Fenster angezeigt, welches über ein Fragezeichen-Icon neben der Feldbezeichnung aufgerufen werden kann.</string>
+  <string name="SYS_DESCRIPTION_INLINE_DESC">Zeige die Beschreibung unterhalb des Feldes direkt im Formular an.</string>
   <string name="SYS_DESIGNATION">Bezeichnung</string>
   <string name="SYS_DIRECTORY_PROTECTION">Verzeichnisschutz</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Verzeichnis Trenner</string>

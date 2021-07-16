@@ -670,6 +670,7 @@ CREATE TABLE %PREFIX%_user_fields
     usf_name_intern             varchar(110)        NOT NULL,
     usf_name                    varchar(100)        NOT NULL,
     usf_description             text,
+    usf_description_inline      boolean             NOT NULL    DEFAULT '0',
     usf_value_list              text,
     usf_icon                    varchar(2000),
     usf_url                     varchar(2000),
