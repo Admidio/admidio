@@ -7,6 +7,8 @@
  ***********************************************************************************************
  */
 
+use Ramsey\Uuid\Uuid;
+
 final class ComponentUpdateSteps
 {
     /**
@@ -22,6 +24,27 @@ final class ComponentUpdateSteps
     {
         self::$db = $database;
     }
+
+    /**
+     * This method will add a new systemmail text to the database table **adm_texts** for each
+     * organization in the database.
+     */
+	public static function updateStep41AddUuidToUsers()
+	{
+    	global $gL10n, $gProfileFields, $gSettingsManager;
+
+        $sql = 'SELECT usr_id FROM ' . TBL_USERS;
+        $usersStatement = self::$db->queryPrepared($sql);
+
+        while($row = $usersStatement->fetch())
+        {
+            $uuid = Uuid::uuid4();
+
+            $sql = 'UPDATE '.TBL_USERS.' SET usr_uuid = ? -- $uuid
+                     WHERE usr_id = ? -- $row[\'usr_id\']';
+            self::$db->queryPrepared($sql, array($uuid, $row['usr_id']));
+        }
+	}
 
     /**
      * This method will add a new systemmail text to the database table **adm_texts** for each

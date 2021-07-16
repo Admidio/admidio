@@ -51,5 +51,8 @@
     <step id="220">UPDATE %PREFIX%_menu SET men_name = 'SYS_USER_MANAGEMENT', men_description = 'SYS_USER_MANAGEMENT_DESC' WHERE men_name_intern = 'usrmgt'</step>
     <step id="230">UPDATE %PREFIX%_menu SET men_name = 'SYS_EMAIL', men_description = 'SYS_EMAIL_DESC' WHERE men_name_intern = 'mail'</step>
     <step id="240">UPDATE %PREFIX%_menu SET men_name = 'SYS_NEW_REGISTRATIONS', men_description = 'SYS_MANAGE_NEW_REGISTRATIONS_DESC' WHERE men_name_intern = 'newreg'</step>
+    <step id="250">ALTER TABLE %PREFIX%_users ADD COLUMN usr_uuid varchar(36)</step>
+    <step id="260">ComponentUpdateSteps::updateStep41AddUuidToUsers</step>
+    <step id="270" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_uuid varchar(36) NOT NULL</step>
     <step>stop</step>
 </update>

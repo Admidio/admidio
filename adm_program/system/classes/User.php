@@ -12,6 +12,9 @@
 /**
  * Handles all the user data and the rights. This is used for the current login user and for other users of the database.
  */
+
+use Ramsey\Uuid\Uuid;
+
 class User extends TableAccess
 {
     const MAX_INVALID_LOGINS = 3;
@@ -1778,12 +1781,17 @@ class User extends TableAccess
 
         $this->db->startTransaction();
 
-        // if new user then set create id
+        // if new user then set create id and the uuid
         $updateCreateUserId = false;
-        if ($usrId === 0 && (int) $gCurrentUser->getValue('usr_id') === 0)
+        if ($usrId === 0)
         {
-            $updateCreateUserId = true;
-            $updateFingerPrint  = false;
+            $this->setValue('usr_uuid', Uuid::uuid4());
+
+            if((int) $gCurrentUser->getValue('usr_id') === 0)
+            {
+                $updateCreateUserId = true;
+                $updateFingerPrint  = false;
+            }
         }
 
         // if value of a field changed then update timestamp of user object

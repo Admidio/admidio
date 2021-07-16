@@ -733,6 +733,7 @@ COLLATE = utf8_unicode_ci;
 CREATE TABLE %PREFIX%_users
 (
     usr_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    usr_uuid                    varchar(36)         NOT NULL,
     usr_login_name              varchar(254),
     usr_password                varchar(255),
     usr_photo                   blob,
