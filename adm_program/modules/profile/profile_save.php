@@ -153,8 +153,8 @@ foreach($gProfileFields->getProfileFields() as $field)
     {
         if(isset($_POST[$postId]))
         {
-            // Pflichtfelder muessen gefuellt sein
-            // E-Mail bei Registrierung immer !!!
+            // Mandatory fields must be filled
+            // Email must always be filled at registration !!!
             if((strlen($_POST[$postId]) === 0 && $field->getValue('usf_mandatory') == 1)
             || (strlen($_POST[$postId]) === 0 && $field->getValue('usf_name_intern') === 'EMAIL' && $getNewUser === 2))
             {
@@ -226,8 +226,8 @@ foreach($gProfileFields->getProfileFields() as $field)
         }
         else
         {
-            // Checkboxen uebergeben bei 0 keinen Wert, deshalb diesen hier setzen
-            if($field->getValue('usf_type') === 'CHECKBOX')
+            // Checkboxes do not pass a value at 0, so set it here if it is not a required field.
+            if($field->getValue('usf_type') === 'CHECKBOX' && $field->getValue('usf_mandatory') == 0)
             {
                 $user->setValue($field->getValue('usf_name_intern'), '0');
             }
