@@ -32,7 +32,6 @@ final class ComponentUpdateSteps
     {
         global $gSettingsManager, $gL10n, $gProfileFields;
 
-
         $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
         $organizationsStatement = self::$db->queryPrepared($sql);
         $organizationsArray     = $organizationsStatement->fetchAll();
@@ -84,14 +83,15 @@ final class ComponentUpdateSteps
             // --> create sample configuration
             if (empty($config))
             {
-                $config['name']       = array($gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
+                $config['col_desc']       = array($gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
                 $config['col_fields']     = array('p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
                                                   'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
                                                   'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
                                                   'p'.$gProfileFields->getProperty('CITY', 'usf_id'));
                 $config['selection_role'] = array('');
                 $config['selection_cat']  = array('');
-                $config['number_col']  	  = array(0)  ;
+                $config['number_col']  	  = array(0) ;
+                $config['config_default'] = 0;
 
                 // Read out the role IDs of the "Administrator", "Board" and "Member" roles
                 $role = new TableRoles(self::$db);
@@ -109,25 +109,27 @@ final class ComponentUpdateSteps
                 }
             }
 
-            // Write sample configuration into adm_category_report table
-            foreach ($config['name'] as $i => $dummy)
+            // Write "Kategoriereport" configurations or sample configuration into adm_category_report table
+            foreach ($config['col_desc'] as $i => $dummy)
             {
                 $categoryReport = new TableAccess(self::$db, TBL_CATEGORY_REPORT, 'crt');
 
                 $categoryReport->setValue('crt_org_id', $orgId);
-                $categoryReport->setValue('crt_name', $config['name'][$i]);
+                $categoryReport->setValue('crt_name', $config['col_desc'][$i]);
                 $categoryReport->setValue('crt_col_fields', $config['col_fields'][$i]);
                 $categoryReport->setValue('crt_selection_role', $config['selection_role'][$i]);
                 $categoryReport->setValue('crt_selection_cat', $config['selection_cat'][$i]);
                 $categoryReport->setValue('crt_number_col', $config['number_col'][$i]);
                 $categoryReport->save();
 
-
-                $sql = 'UPDATE '.TBL_PREFERENCES.'
-                           SET prf_value  = ? -- $categoryReport->getValue(\'crt_id\')
-                         WHERE prf_org_id = ? -- $orgId
-                           AND prf_name   = \'category_report_default_configuration\'';
-                self::$db->queryPrepared($sql, array((int) $categoryReport->getValue('crt_id'), $orgId));
+                if ($config['config_default'] == $i)
+                {
+                    $sql = 'UPDATE '.TBL_PREFERENCES.'
+                               SET prf_value  = ? -- $categoryReport->getValue(\'crt_id\')
+                             WHERE prf_org_id = ? -- $orgId
+                               AND prf_name   = \'category_report_default_configuration\'';
+                    self::$db->queryPrepared($sql, array((int) $categoryReport->getValue('crt_id'), $orgId));
+                }
             }
         }
     }
