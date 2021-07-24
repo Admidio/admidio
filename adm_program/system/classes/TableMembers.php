@@ -42,6 +42,38 @@ class TableMembers extends TableAccess
     }
 
     /**
+     * Set a new value for a column of the database table. The value is only saved in the object.
+     * You must call the method **save** to store the new value to the database. If the unique key
+     * column is set to 0 than this record will be a new record and all other columns are marked as changed.
+     * This method also queues the changes to the field for admin notification
+     * messages. Apart from this, the parent's setValue is used to set the new value.
+     * @param string $columnName The name of the database column whose value should get a new value
+     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @see TableAccess#getValue
+     */
+    public function setValue($columnName, $newValue, $checkValue = true)
+    {
+        // New records will be logged in ::save, because their ID is only generated during first save
+        if (!$this->newRecord) {
+            global $gChangeNotification;
+            if (in_array($columnName, array('mem_begin', 'mem_end'))) {
+                $oldValue = $this->getValue($columnName, 'Y-m-d');
+            } else {
+                $oldValue = $this->getValue($columnName);
+            }
+            if ($oldValue != $newValue) {
+                $gChangeNotification->logRoleChange(
+                    $this->getValue('mem_usr_id'), $this->getValue('mem_id'), $this->getValue('rol_name'),
+                    $columnName, $oldValue, $newValue
+                );
+            }
+        }
+        return parent::setValue($columnName, $newValue, $checkValue);
+    }
+
+    /**
      * Deletes a membership for the assigned role and user. In opposite to removeMembership
      * this method will delete the entry and you can't see any history assignment.
      * If the user is the current user then initiate a refresh of his role cache.
@@ -76,6 +108,34 @@ class TableMembers extends TableAccess
     }
 
     /**
+     * Deletes the selected record of the table and optionally sends an admin notification if configured
+     * @return true Returns **true** if no error occurred
+     */
+    public function delete()
+    {
+        // Queue admin notification about membership deletion
+        global $gChangeNotification;
+
+        // If this is a new record that hasn't been written to the database, simply ignore it
+        if (!$this->newRecord) {
+            // Log begin, end and leader as changed (set to NULL)
+            $usrId = $this->getValue('mem_usr_id');
+            $memId = $this->getValue('mem_id');
+            $membership = $this->getValue('rol_name');
+            $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_begin',
+                $this->getValue('mem_begin', 'Y-m-d'), null, /*user=*/NULL, /*deleting=*/true);
+            $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_end',
+                $this->getValue('mem_end', 'Y-m-d'), null, /*user=*/NULL, /*deleting=*/true);
+            if ($this->getValue('mem_leader')) {
+                $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_leaderf',
+                    $this->getValue('mem_leader'), null, /*user=*/NULL, /*deleting=*/true);
+            }
+        }
+
+        return parent::delete();
+    }
+
+    /**
      * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update
      * the changed columns. If the table has columns for creator or editor than these column
@@ -87,12 +147,37 @@ class TableMembers extends TableAccess
     {
         global $gCurrentSession;
 
+        $newRecord = $this->newRecord;
+
         $returnStatus = parent::save($updateFingerPrint);
 
         if ($returnStatus && $gCurrentSession instanceof Session)
         {
             // renew user object of the affected user because of edited role assignment
             $gCurrentSession->renewUserObject((int) $this->getValue('mem_usr_id'));
+        }
+
+        if ($newRecord) {
+            // Queue admin notification about membership deletion
+            global $gChangeNotification;
+            // storing a record for the first time does NOT update the fields from
+            // the roles table => need to create a new object that loads the
+            // role name from the database, too!
+            $memId = $this->getValue('mem_id');
+
+            $obj = new TableMembers($this->db, $memId);
+
+            // Log begin, end and leader as changed (set to NULL)
+            $usrId = $obj->getValue('mem_usr_id');
+            $membership = $obj->getValue('rol_name');
+            $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_begin',
+                null, $obj->getValue('mem_begin', 'Y-m-d'), /*user=*/NULL, /*deleting=*/true);
+            $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_end',
+                null, $obj->getValue('mem_end', 'Y-m-d'), /*user=*/NULL, /*deleting=*/true);
+            if ($obj->getValue('mem_leader')) {
+                $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_leader',
+                    null, $obj->getValue('mem_leader'), /*user=*/NULL, /*deleting=*/true);
+            }
         }
 
         return $returnStatus;

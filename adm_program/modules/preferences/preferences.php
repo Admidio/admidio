@@ -512,6 +512,10 @@ $formSystemNotification->addCheckbox(
     'enable_email_notification', $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'), (bool) $formValues['enable_email_notification'],
     array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', array('<em>'.$gSettingsManager->getString('email_administrator').'</em>')))
 );
+$formSystemNotification->addCheckbox(
+    'enable_email_changenotification', $gL10n->get('ORG_SYSTEM_MAIL_CHANGES'), (bool) $formValues['enable_email_changenotification'],
+    array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_CHANGES_DESC', array('<em>'.$gSettingsManager->getString('email_administrator').'</em>')))
+);
 $formSystemNotification->addCustomContent($gL10n->get('SYS_SYSTEM_MAILS'),
     '<p>'.$gL10n->get('ORG_SYSTEM_MAIL_TEXTS_DESC').':</p>
     <p><strong>#user_first_name#</strong> - '.$gL10n->get('ORG_VARIABLE_FIRST_NAME').'<br />
