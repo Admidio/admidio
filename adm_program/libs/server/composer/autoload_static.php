@@ -67,7 +67,6 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         '8d37dad4703fab45bfec9dd0bbf3278e' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/Operations/multiply.php',
         '4888a6f58c08148ebe17682f9ce9b2a8' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/Operations/divideby.php',
         'eef6fa3879d3efa347cd24d5eb348f85' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/Operations/divideinto.php',
-        'ef836782e1b8d747e78815386b148139' => __DIR__ . '/..' . '/htmlawed/htmlawed/htmLawed.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -197,6 +196,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'HtmlPageInstallation' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlPageInstallation.php',
         'HtmlTable' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlTable.php',
         'HtmlTableBasic' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlTableBasic.php',
+        'Htmlawed' => __DIR__ . '/..' . '/vanilla/htmlawed/src/Htmlawed.php',
         'Image' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Image.php',
         'Language' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Language.php',
         'LanguageData' => __DIR__ . '/../../../..' . '/adm_program/system/classes/LanguageData.php',
