@@ -68,7 +68,6 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         '4888a6f58c08148ebe17682f9ce9b2a8' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/Operations/divideby.php',
         'eef6fa3879d3efa347cd24d5eb348f85' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/Operations/divideinto.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
-        'ef836782e1b8d747e78815386b148139' => __DIR__ . '/..' . '/htmlawed/htmlawed/htmLawed.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
     );
 
@@ -225,6 +224,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'HtmlPageInstallation' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlPageInstallation.php',
         'HtmlTable' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlTable.php',
         'HtmlTableBasic' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlTableBasic.php',
+        'Htmlawed' => __DIR__ . '/..' . '/vanilla/htmlawed/src/Htmlawed.php',
         'Image' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Image.php',
         'Language' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Language.php',
         'LanguageData' => __DIR__ . '/../../../..' . '/adm_program/system/classes/LanguageData.php',

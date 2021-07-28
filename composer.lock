@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "931e7ba63f4bafc259158958e325d995",
+    "content-hash": "1d40419cbba4dd1ad499d6c110347d8e",
     "packages": [
         {
             "name": "bjeavons/zxcvbn-php",
@@ -267,56 +267,6 @@
                 "source": "https://github.com/hautelook/phpass/tree/master"
             },
             "time": "2012-08-31T00:00:00+00:00"
-        },
-        {
-            "name": "htmlawed/htmlawed",
-            "version": "1.1.22",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kesar/HTMLawed.git",
-                "reference": "b270453ba016ee4c6dae585f047d1e4f3cc456a1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kesar/HTMLawed/zipball/b270453ba016ee4c6dae585f047d1e4f3cc456a1",
-                "reference": "b270453ba016ee4c6dae585f047d1e4f3cc456a1",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">4.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "htmLawed.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0+",
-                "LGPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Santosh Patnaik",
-                    "homepage": "http://www.bioinformatics.org/people/index.php?user_hash=558b661f92d0ff7b",
-                    "role": "Developer"
-                }
-            ],
-            "description": "htmLawed - Process text with HTML markup to make it more compliant with HTML standards and administrative policies",
-            "homepage": "http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/",
-            "keywords": [
-                "HTMLtidy",
-                "html",
-                "sanitize",
-                "strip",
-                "tags"
-            ],
-            "support": {
-                "issues": "https://github.com/kesar/HTMLawed/issues",
-                "source": "https://github.com/kesar/HTMLawed/tree/master"
-            },
-            "time": "2016-08-27T18:53:27+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -1538,16 +1488,16 @@
         },
         {
             "name": "tecnickcom/tcpdf",
-            "version": "6.4.1",
+            "version": "6.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "5ba838befdb37ef06a16d9f716f35eb03cb1b329"
+                "reference": "172540dcbfdf8dc983bc2fe78feff48ff7ec1c76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/5ba838befdb37ef06a16d9f716f35eb03cb1b329",
-                "reference": "5ba838befdb37ef06a16d9f716f35eb03cb1b329",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/172540dcbfdf8dc983bc2fe78feff48ff7ec1c76",
+                "reference": "172540dcbfdf8dc983bc2fe78feff48ff7ec1c76",
                 "shasum": ""
             },
             "require": {
@@ -1598,7 +1548,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tecnickcom/TCPDF/issues",
-                "source": "https://github.com/tecnickcom/TCPDF/tree/6.4.1"
+                "source": "https://github.com/tecnickcom/TCPDF/tree/6.4.2"
             },
             "funding": [
                 {
@@ -1606,7 +1556,50 @@
                     "type": "custom"
                 }
             ],
-            "time": "2021-03-27T16:00:33+00:00"
+            "time": "2021-07-20T14:43:20+00:00"
+        },
+        {
+            "name": "vanilla/htmlawed",
+            "version": "v2.2.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vanilla/htmlawed.git",
+                "reference": "b1fc7b3990796112387c08a132f85b7333022ec2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vanilla/htmlawed/zipball/b1fc7b3990796112387c08a132f85b7333022ec2",
+                "reference": "b1fc7b3990796112387c08a132f85b7333022ec2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "tburry/pquery": "~1.0.1"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/Htmlawed.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Todd Burry",
+                    "email": "todd@vanillaforums.com"
+                }
+            ],
+            "description": "A composer wrapper for the htmLawed library to purify & filter HTML. Tested with PHPUnit and PhantomJS!",
+            "support": {
+                "issues": "https://github.com/vanilla/htmlawed/issues",
+                "source": "https://github.com/vanilla/htmlawed/tree/master"
+            },
+            "time": "2019-10-16T15:36:02+00:00"
         }
     ],
     "packages-dev": [],

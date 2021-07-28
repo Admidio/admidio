@@ -1548,23 +1548,23 @@
         },
         {
             "name": "tecnickcom/tcpdf",
-            "version": "6.4.1",
-            "version_normalized": "6.4.1.0",
+            "version": "6.4.2",
+            "version_normalized": "6.4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "5ba838befdb37ef06a16d9f716f35eb03cb1b329"
+                "reference": "172540dcbfdf8dc983bc2fe78feff48ff7ec1c76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/5ba838befdb37ef06a16d9f716f35eb03cb1b329",
-                "reference": "5ba838befdb37ef06a16d9f716f35eb03cb1b329",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/172540dcbfdf8dc983bc2fe78feff48ff7ec1c76",
+                "reference": "172540dcbfdf8dc983bc2fe78feff48ff7ec1c76",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "2021-03-27T16:00:33+00:00",
+            "time": "2021-07-20T14:43:20+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1611,7 +1611,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tecnickcom/TCPDF/issues",
-                "source": "https://github.com/tecnickcom/TCPDF/tree/6.4.1"
+                "source": "https://github.com/tecnickcom/TCPDF/tree/6.4.2"
             },
             "funding": [
                 {
@@ -1623,17 +1623,17 @@
         },
         {
             "name": "vanilla/htmlawed",
-            "version": "v1.2.4",
-            "version_normalized": "1.2.4.0",
+            "version": "v2.2.5",
+            "version_normalized": "2.2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vanilla/htmlawed.git",
-                "reference": "7c717dc95b62a69d8c6757ea61410d080891496b"
+                "reference": "b1fc7b3990796112387c08a132f85b7333022ec2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vanilla/htmlawed/zipball/7c717dc95b62a69d8c6757ea61410d080891496b",
-                "reference": "7c717dc95b62a69d8c6757ea61410d080891496b",
+                "url": "https://api.github.com/repos/vanilla/htmlawed/zipball/b1fc7b3990796112387c08a132f85b7333022ec2",
+                "reference": "b1fc7b3990796112387c08a132f85b7333022ec2",
                 "shasum": ""
             },
             "require": {
@@ -1642,7 +1642,7 @@
             "require-dev": {
                 "tburry/pquery": "~1.0.1"
             },
-            "time": "2016-01-18T19:42:40+00:00",
+            "time": "2019-10-16T15:36:02+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
