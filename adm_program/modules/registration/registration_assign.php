@@ -9,14 +9,14 @@
  *
  * Parameters:
  *
- * new_user_id : ID of user who should be assigned
+ * new_user_uuid : UUID of user who should be assigned
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'int', array('requireValue' => true));
+$getNewUserUuid = admFuncVariableIsValid($_GET, 'new_user_uuid', 'string', array('requireValue' => true));
 
 // only administrators could approve new users
 if(!$gCurrentUser->approveUsers())
@@ -36,7 +36,8 @@ if(!$gSettingsManager->getBool('registration_enable_module'))
 $headline = $gL10n->get('SYS_ASSIGN_REGISTRATION');
 
 // create user object for new user
-$newUser = new User($gDb, $gProfileFields, $getNewUserId);
+$newUser = new User($gDb, $gProfileFields);
+$newuser->readDataByUuid($getNewUserUuid);
 
 $lastName  = $gDb->escapeString($newUser->getValue('LAST_NAME', 'database'));
 $firstName = $gDb->escapeString($newUser->getValue('FIRST_NAME', 'database'));
@@ -97,11 +98,11 @@ $usrStatement = $gDb->queryPrepared($sql, $queryParams);
 // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
 if($gCurrentUser->editUsers())
 {
-    $urlCreateNewUser = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_uuid' => $newUser->getValue('usr_uuid')));
+    $urlCreateNewUser = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_uuid' => $getNewUserUuid));
 }
 else
 {
-    $urlCreateNewUser = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '5', 'new_user_id' => $getNewUserId));
+    $urlCreateNewUser = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '5', 'new_user_uuid' => $getNewUserUuid));
 }
 
 if($usrStatement->rowCount() === 0)
@@ -167,7 +168,7 @@ while($row = $usrStatement->fetch())
             {
                 $page->addHtml('<br />'.$gL10n->get('SYS_REMINDER_SEND_LOGIN').'</p>
 
-                <button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '6')).'\'">
+                <button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $getNewUserUuid, 'user_id' => $row['usr_id'], 'mode' => '6')).'\'">
                     <i class="fas fa-key"></i>'.$gL10n->get('SYS_SEND_LOGIN_INFORMATION').'</button>');
             }
         }
@@ -176,14 +177,14 @@ while($row = $usrStatement->fetch())
             // Logindaten sind NICHT vorhanden -> diese nun zuordnen
             $page->addHtml('<p>'.$gL10n->get('SYS_USER_NO_VALID_LOGIN').'</p>
 
-            <button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '1')).'\'">
+            <button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $getNewUserUuid, 'user_id' => $row['usr_id'], 'mode' => '1')).'\'">
                 <i class="fas fa-user-check"></i>'.$gL10n->get('SYS_ASSIGN_LOGIN_INFORMATION').'</button>');
         }
     }
     else
     {
         // gefundene User ist noch KEIN Mitglied dieser Organisation
-        $link = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '2'));
+        $link = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $getNewUserUuid, 'user_id' => $row['usr_uuid'], 'mode' => '2'));
 
         if($row['usr_login_name'] !== '')
         {

@@ -25,7 +25,7 @@ $getDatabaseId  = admFuncVariableIsValid($_GET, 'database_id',   'string', array
 $getDatabaseId2 = admFuncVariableIsValid($_GET, 'database_id_2', 'string');
 $getName        = admFuncVariableIsValid($_GET, 'name',          'string');
 
-if (!in_array($getType, array('bac', 'pro_pho')))
+if (!in_array($getType, array('bac', 'nwu', 'pro_pho')))
 {
     $getDatabaseId = (int) $getDatabaseId;
 }
@@ -86,7 +86,7 @@ switch ($getType)
         $text = 'SYS_DELETE_MESSAGE';
         break;
     case 'nwu':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('mode' => 4, 'new_user_id' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('mode' => 4, 'new_user_uuid' => $getDatabaseId));
         break;
     case 'pho':
         $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('job' => 'delete', 'pho_id' => $getDatabaseId2, 'photo_nr' => $getDatabaseId));

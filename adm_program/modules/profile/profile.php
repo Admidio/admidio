@@ -242,7 +242,7 @@ elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->ge
     {
         // if email is set and systemmails are activated then administrator can send a new password to user
         $page->addPageFunctionsMenuItem('menu_item_profile_send_password', $gL10n->get('ORG_SEND_NEW_PASSWORD'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $userId, 'mode' => '5')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => '5')),
             'fa-key');
     }
     else
@@ -258,7 +258,7 @@ elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->ge
 if($gSettingsManager->getBool('profile_log_edit_fields') && $gCurrentUser->hasRightEditProfile($user))
 {
     $page->addPageFunctionsMenuItem('menu_item_profile_change_history', $gL10n->get('SYS_CHANGE_HISTORY'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', array('usr_id' => $userId)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', array('user_uuid' => $getUserUuid)),
         'fa-history');
 }
 

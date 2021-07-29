@@ -15,17 +15,17 @@
  *       4 - Delete user account
  *       5 - Create new user and assign roles automatically without dialog
  *       6 - Registration does not need to be assigned, simply send login data
- * new_user_id: Id of the new registered user to be processed
- * user_id:     Id of the user to whom the new login should be assigned
+ * new_user_uuid: UUID of the new registered user to be processed
+ * user_uuid:     UUID of the user to whom the new login should be assigned
  *****************************************************************************/
 
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMode      = admFuncVariableIsValid($_GET, 'mode',        'int', array('requireValue' => true));
-$getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'int', array('requireValue' => true));
-$getUserId    = admFuncVariableIsValid($_GET, 'user_id',     'int');
+$getMode        = admFuncVariableIsValid($_GET, 'mode',          'int', array('requireValue' => true));
+$getNewUserUuid = admFuncVariableIsValid($_GET, 'new_user_uuid', 'string', array('requireValue' => true));
+$getUserUuid    = admFuncVariableIsValid($_GET, 'user_uuid',     'string');
 
 // only administrators could approve new users
 if(!$gCurrentUser->approveUsers())
@@ -42,13 +42,15 @@ if(!$gSettingsManager->getBool('registration_enable_module'))
 }
 
 // create user objects
-$registrationUser = new UserRegistration($gDb, $gProfileFields, $getNewUserId);
+$registrationUser = new UserRegistration($gDb, $gProfileFields);
+$registrationUser->readDataByUuid($getNewUserUuid);
 
 if($getMode === 1 || $getMode === 2)
 {
     try
     {
-        $user = new User($gDb, $gProfileFields, $getUserId);
+        $user = new User($gDb, $gProfileFields);
+        $user->readDataByUuid($getUserUuid);
 
         // adopt the data of the registration user to the existing user account
         $registrationUser->adoptUser($user);
@@ -80,19 +82,20 @@ if($getMode === 1 || $getMode === 2)
     if($gCurrentUser->manageRoles())
     {
         // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
-        $gNavigation->addUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_id' => $getUserId, 'new_user_id' => $getNewUserId)));
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $user->getValue('usr_uuid'))));
+        $gNavigation->addUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_uuid' => $getUserUuid, 'new_user_uuid' => $getNewUserUuid)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid)));
         // => EXIT
     }
     else
     {
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_id' => $getUserId, 'new_user_id' => $getNewUserId)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_uuid' => $getUserUuid, 'new_user_uuid' => $getNewUserUuid)));
         // => EXIT
     }
 }
 elseif($getMode === 3)
 {
-    $user = new User($gDb, $gProfileFields, $getUserId);
+    $user = new User($gDb, $gProfileFields);
+    $user->readDataByUuid($getUserUuid);
 
     $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
 
@@ -155,7 +158,7 @@ elseif($getMode === 5)
     // otherwise go to previous url (default roles are assigned automatically)
     if($gCurrentUser->manageRoles())
     {
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('new_user' => '3', 'user_uuid' => $registrationUser->getValue('usr_uuid'))));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('new_user' => '3', 'user_uuid' => $getNewUserUuid)));
         // => EXIT
     }
     else
@@ -183,6 +186,6 @@ elseif($getMode === 6)
 
     // Zugangsdaten neu verschicken
     $gNavigation->addUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
-    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('mode' => '4', 'usr_id' => $getUserId)));
+    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('mode' => '4', 'user_uuid' => $getUserUuid)));
     // => EXIT
 }
