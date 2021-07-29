@@ -7,16 +7,16 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
- * $getDateId - ID of the date
- * $getUserId - ID of the User whose participation detail shall be set or changed
+ * dat_id    - ID of the date
+ * user_uuid - UUID of the user whose participation detail shall be set or changed
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'int', array('requireValue' => true));
-$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => (int) $gCurrentUser->getValue('usr_id')));
+$getDateId   = admFuncVariableIsValid($_GET, 'dat_id',    'int', array('requireValue' => true));
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 
 // Initialize local variables
 $disableAdditionalGuests = HtmlForm::FIELD_HIDDEN;
@@ -27,7 +27,7 @@ $gMessage->showThemeBody(false);
 $date = new TableDate($gDb, $getDateId);
 
 // Get the fingerprint of calling user. If is not the user itself check the requesting user whether it has the permission to edit the states
-if ((int) $gCurrentUser->getValue('usr_id') === $getUserId)
+if ($gCurrentUser->getValue('usr_uuid') === $getUserUuid)
 {
     if(!$date->allowedToParticipate())
     {
@@ -59,8 +59,11 @@ if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('
     }
 }
 
+$user = new User($gDb, $gProfileFields);
+$user->readDataByUuid($getUserUuid);
+
 $member = new TableMembers($gDb);
-$member->readDataByColumns(array('mem_rol_id' => (int) $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
+$member->readDataByColumns(array('mem_rol_id' => (int) $date->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
 
 // Write header with charset utf8
 header('Content-type: text/html; charset=utf-8');
@@ -95,7 +98,7 @@ echo '<script>
 </script>';
 
 // Define form
-$participationForm = new HtmlForm('participate_form_'. $getDateId, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $getDateId, 'usr_id' => $getUserId, 'mode' => '')), null, array('type' => 'default', 'method' => 'post', 'setFocus' => false));
+$participationForm = new HtmlForm('participate_form_'. $getDateId, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $getDateId, 'user_uuid' => $getUserUuid, 'mode' => '')), null, array('type' => 'default', 'method' => 'post', 'setFocus' => false));
 $participationForm->addHtml('
     <div class="modal-header">
         <h3 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h3>
