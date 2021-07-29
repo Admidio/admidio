@@ -269,7 +269,7 @@ if($getSearch === '')
 }
 else
 {
-    $sql = 'SELECT usr_id, last_name, first_name, birthday, city, street, zip_code, country, member_this_role, leader_this_role, member_this_orga
+    $sql = 'SELECT usr_id, usr_uuid, last_name, first_name, birthday, city, street, zip_code, country, member_this_role, leader_this_role, member_this_orga
               FROM ('.$mainSql.') AS members
                '.$searchCondition
                 .$orderCondition
@@ -302,11 +302,11 @@ while($user = $userStatement->fetch())
     // set flag if user is member of the current organization or not
     if($user['member_this_role'])
     {
-        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_member" />';
+        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_uuid'].'" name="member_'.$user['usr_uuid'].'" checked="checked" class="memlist_checkbox memlist_member" />';
     }
     else
     {
-        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox memlist_member" />';
+        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_uuid'].'" name="member_'.$user['usr_uuid'].'" class="memlist_checkbox memlist_member" />';
     }
 
     if($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers()))

@@ -12,7 +12,7 @@
  * mode        - html   : Default mode to show a html list with all users to add them to the role
  *               assign : Add membership of a specific user to the role.
  * rol_id               : Id of role to which members should be assigned or removed
- * usr_id               : Id of the user whose membership should be assigned or removed
+ * user_uuid            : UUID of the user whose membership should be assigned or removed
  * filter_rol_id        : If set only users from this role will be shown in list.
  * mem_show_all - true  : (Default) Show active and inactive members of all organizations in database
  *                false : Show only active members of the current organization
@@ -29,7 +29,7 @@ if(isset($_GET['mode']) && $_GET['mode'] === 'assign')
 // Initialize and check the parameters
 $getMode           = admFuncVariableIsValid($_GET, 'mode',          'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
 $getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'int',    array('requireValue' => true, 'directOutput' => true));
-$getUserId         = admFuncVariableIsValid($_GET, 'usr_id',        'int',    array('directOutput' => true));
+$getUserUuid       = admFuncVariableIsValid($_GET, 'user_uuid',     'string', array('directOutput' => true));
 $getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool',   array('defaultValue' => false));
 
@@ -80,26 +80,29 @@ if($getMode === 'assign')
             $memberApproved = 2;
         }
 
-        if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId] === 'true')
+        if(isset($_POST['member_'.$getUserUuid]) && $_POST['member_'.$getUserUuid] === 'true')
         {
             $membership = true;
         }
-        if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId] === 'true')
+        if(isset($_POST['leader_'.$getUserUuid]) && $_POST['leader_'.$getUserUuid] === 'true')
         {
             $membership = true;
             $leadership = true;
         }
 
+        $user = new User($gDb, $gProfileFields);
+        $user->readDataByUuid($getUserUuid);
+
         // Member
         $member = new TableMembers($gDb);
 
         // Datensatzupdate
-        $memCount = $role->countMembers($getUserId);
+        $memCount = $role->countMembers($user->getValue('usr_id'));
 
         // Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
         if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $memCount || (int) $role->getValue('rol_max_members') === 0)))
         {
-            $member->startMembership((int) $role->getValue('rol_id'), $getUserId, $leadership, $memberApproved);
+            $member->startMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'), $leadership, $memberApproved);
 
             // find the parent roles and assign user to parent roles
             $dependencies = RoleDependency::getParentRoles($gDb, (int) $role->getValue('rol_id'));
@@ -107,13 +110,13 @@ if($getMode === 'assign')
 
             foreach($dependencies as $tmpRole)
             {
-                $member->startMembership($tmpRole, $getUserId, null, $memberApproved);
+                $member->startMembership($tmpRole, $user->getValue('usr_id'), null, $memberApproved);
             }
             echo 'success';
         }
         elseif(!$leadership && !$membership)
         {
-            $member->stopMembership((int) $role->getValue('rol_id'), $getUserId);
+            $member->stopMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'));
             echo 'success';
         }
         else
@@ -176,26 +179,26 @@ else
             // get user id
             var rowId = $(this).attr("id");
             var pos = rowId.search("_");
-            var userId = rowId.substring(pos + 1);
+            var userUuid = rowId.substring(pos + 1);
 
-            var memberChecked = $("input[type=checkbox]#member_" + userId).prop("checked");
-            var leaderChecked = $("input[type=checkbox]#leader_" + userId).prop("checked");
+            var memberChecked = $("input[type=checkbox]#member_" + userUuid).prop("checked");
+            var leaderChecked = $("input[type=checkbox]#leader_" + userUuid).prop("checked");
 
             // Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
             if (checkbox.hasClass("memlist_leader") && leaderChecked) {
-                $("input[type=checkbox]#member_" + userId).prop("checked", true);
+                $("input[type=checkbox]#member_" + userUuid).prop("checked", true);
                 memberChecked = true;
             }
 
             // Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
             if (checkbox.hasClass("memlist_member") && !memberChecked) {
-                $("input[type=checkbox]#leader_" + userId).prop("checked", false);
+                $("input[type=checkbox]#leader_" + userUuid).prop("checked", false);
                 leaderChecked = false;
             }
 
             // change data in database
-            $.post("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('mode' => 'assign', 'rol_id' => $getRoleId)).'&usr_id=" + userId,
-                "member_" + userId + "=" + memberChecked + "&leader_" + userId + "=" + leaderChecked,
+            $.post("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('mode' => 'assign', 'rol_id' => $getRoleId)).'&user_uuid=" + userUuid,
+                "member_" + userUuid + "=" + memberChecked + "&leader_" + userUuid + "=" + leaderChecked,
                 function(data) {
                     // check if error occurs
                     if (data !== "success") {
@@ -203,7 +206,7 @@ else
                         if (checkbox.prop("checked")) {
                             checkbox.prop("checked", false);
                             if (checkbox.hasClass("memlist_leader")) {
-                                $("input[type=checkbox]#member_" + userId).prop("checked", false);
+                                $("input[type=checkbox]#member_" + userUuid).prop("checked", false);
                             }
                         } else {
                             checkbox.prop("checked", true);
