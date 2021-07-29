@@ -631,7 +631,7 @@ else
                 // Link for managing new participants
                 if($row['mem_leader'])
                 {
-                    $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('rol_id' => $dateRolId));
+                    $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $date->getValue('rol_uuid')));
 
                     if ($getView === 'detail')
                     {

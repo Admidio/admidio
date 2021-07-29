@@ -49,7 +49,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'int', array('requireValue' => true, 'directOutput' => true));
+$getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid',     'string', array('requireValue' => true, 'directOutput' => true));
 $getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool', array('defaultValue' => false));
 $getDraw   = admFuncVariableIsValid($_GET, 'draw',   'int', array('requireValue' => true));
@@ -64,7 +64,8 @@ $jsonArray = array('draw' => $getDraw);
 header('Content-Type: application/json');
 
 // create object of the commited role
-$role = new TableRoles($gDb, $getRoleId);
+$role = new TableRoles($gDb);
+$role->readDataByUuid($getRoleUuid);
 
 // roles of other organizations can't be edited
 if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
@@ -235,7 +236,7 @@ $mainSql = 'SELECT DISTINCT usr_id, usr_uuid, last_name.usd_value AS last_name, 
                AND country.usd_usf_id = ? -- $gProfileFields->getProperty(\'COUNTRY\', \'usf_id\')
          LEFT JOIN '.TBL_ROLES.' AS rol
                 ON rol.rol_valid   = 1
-               AND rol.rol_id      = ? -- $getRoleId
+               AND rol.rol_id      = ? -- $role->getValue(\'rol_id\')
          LEFT JOIN '.TBL_MEMBERS.' AS mem
                 ON mem.mem_rol_id  = rol.rol_id
                AND mem.mem_begin  <= ? -- DATE_NOW
@@ -251,7 +252,7 @@ $queryParamsMain = array(
     $gProfileFields->getProperty('STREET', 'usf_id'),
     $gProfileFields->getProperty('POSTCODE', 'usf_id'),
     $gProfileFields->getProperty('COUNTRY', 'usf_id'),
-    $getRoleId,
+    $role->getValue('rol_id'),
     DATE_NOW,
     DATE_NOW
 ); // TODO add more params

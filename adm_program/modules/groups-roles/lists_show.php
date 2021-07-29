@@ -513,7 +513,7 @@ if ($getMode !== 'csv')
             if ($role->allowedToAssignMembers($gCurrentUser))
             {
                 $page->addPageFunctionsMenuItem('menu_item_lists_assign_members', $gL10n->get('SYS_ASSIGN_MEMBERS'),
-                    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('rol_id' => (int) $role->getValue('rol_id'))),
+                    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $role->getValue('rol_uuid'))),
                     'fa-user-plus');
             }
         }

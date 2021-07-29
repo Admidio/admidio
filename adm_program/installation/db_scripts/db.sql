@@ -527,6 +527,7 @@ CREATE TABLE %PREFIX%_roles
     rol_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     rol_cat_id                  integer unsigned    NOT NULL,
     rol_lst_id                  integer unsigned,
+    rol_uuid                    varchar(36)         NOT NULL,
     rol_name                    varchar(50)         NOT NULL,
     rol_description             varchar(4000),
     rol_assign_roles            boolean             NOT NULL    DEFAULT '0',
@@ -567,6 +568,8 @@ CREATE TABLE %PREFIX%_roles
 ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_rol_uuid ON %PREFIX%_roles (rol_uuid);
 
 /*==============================================================*/
 /* Table: adm_roles_rights                                      */
@@ -757,6 +760,7 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_usr_login_name ON %PREFIX%_users (usr_login_name);
+CREATE UNIQUE INDEX %PREFIX%_idx_usr_uuid ON %PREFIX%_users (usr_uuid);
 
 /*==============================================================*/
 /* Table: adm_user_relation_types                               */

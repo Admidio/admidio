@@ -560,7 +560,10 @@ class ProfileFields
                     $this->mUserData[$row['usd_usf_id']] = new TableAccess($this->db, TBL_USER_DATA, 'usd');
                 }
                 $this->mUserData[$row['usd_usf_id']]->setArray($row);
-                $this->mUserUuid = $row['usr_uuid'];
+                if(isset($row['usr_uuid']))
+                {
+                    $this->mUserUuid = $row['usr_uuid'];
+                }
             }
         }
     }
