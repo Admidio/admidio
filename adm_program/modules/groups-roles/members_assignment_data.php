@@ -207,7 +207,7 @@ $countTotalStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more
 $jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 
  // SQL-Statement zusammensetzen
-$mainSql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
+$mainSql = 'SELECT DISTINCT usr_id, usr_uuid, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
                    birthday.usd_value AS birthday, city.usd_value AS city, street.usd_value AS street,
                    zip_code.usd_value AS zip_code, country.usd_value AS country, mem_usr_id AS member_this_role,
                    mem_leader AS leader_this_role, '.$memberOfThisOrganizationSelect.' AS member_this_orga
@@ -311,12 +311,12 @@ while($user = $userStatement->fetch())
 
     if($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers()))
     {
-        $arrContent[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $user['usr_id'])).'">'.$user['last_name'].'</a>';
+        $arrContent[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $user['usr_uuid'])).'">'.$user['last_name'].'</a>';
     }
 
     if($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->editUsers()))
     {
-        $arrContent[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $user['usr_id'])).'">'.$user['first_name'].'</a>';
+        $arrContent[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $user['usr_uuid'])).'">'.$user['first_name'].'</a>';
     }
 
     // create string with user address

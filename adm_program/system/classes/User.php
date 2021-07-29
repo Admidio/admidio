@@ -1706,6 +1706,28 @@ class User extends TableAccess
     }
 
     /**
+     * Reads a record out of the table in database selected by the unique uuid column in the table.
+     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
+     * Per default all columns of the default table will be read and stored in the object.
+     * Not every Admidio table has a uuid. Please check the database structure before you use this method.
+     * @param int $uuid Unique uuid that should be searched.
+     * @return bool Returns **true** if one record is found
+     * @see TableAccess#readData
+     * @see TableAccess#readDataByColumns
+     */
+    public function readDataByUuid($uuid)
+    {
+        if (parent::readDataByUuid($uuid))
+        {
+            // read data of all user fields from current user
+            $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Rehashes the password of the user if necessary.
      * @param string $password The password for the current user. This should not be encoded.
      * @return bool Returns true if password was rehashed.

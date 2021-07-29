@@ -60,7 +60,7 @@ else
 }
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
-$sql = 'SELECT usr_id, usr_login_name, last_name.usd_value AS last_name,
+$sql = 'SELECT usr_id, usr_uuid, usr_login_name, last_name.usd_value AS last_name,
                first_name.usd_value AS first_name, street.usd_value AS street,
                zip_code.usd_value AS zip_code, city.usd_value AS city, email.usd_value AS email
           FROM '.TBL_USERS.'
@@ -97,7 +97,7 @@ $usrStatement = $gDb->queryPrepared($sql, $queryParams);
 // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
 if($gCurrentUser->editUsers())
 {
-    $urlCreateNewUser = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_id' => $getNewUserId));
+    $urlCreateNewUser = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_uuid' => $newUser->getValue('usr_uuid')));
 }
 else
 {
@@ -132,7 +132,7 @@ while($row = $usrStatement->fetch())
         $page->addHtml('<hr />');
     }
     $page->addHtml('<p>
-        <a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">
+        <a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])).'" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">
             <i class="fas fa-user"></i>'.$row['first_name'].' '.$row['last_name'].'</a><br />');
 
         if($row['street'] !== '')

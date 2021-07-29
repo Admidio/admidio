@@ -9,8 +9,11 @@
  *
  * Parameters:
  *
- * user_id : Show profile of the user with this is. If this parameter is not set then
- *           the profile of the current log will be shown.
+ * user_uuid : Show profile of the user with this uuid. If this parameter is not set then
+ *             the profile of the current user will be shown.
+ * user_id : This parameter is deprecated and should not be used. Use user_uuid instead.
+ *           Show profile of the user with this id. If this parameter is not set then
+ *           the profile of the current user will be shown.
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -18,10 +21,21 @@ require_once(__DIR__ . '/roles_functions.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId = admFuncVariableIsValid($_GET, 'user_id', 'int', array('defaultValue' => (int) $gCurrentUser->getValue('usr_id')));
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
+$getUserId = admFuncVariableIsValid($_GET, 'user_id', 'int', array('defaultValue' => 0));
 
 // create user object
-$user = new User($gDb, $gProfileFields, $getUserId);
+if($getUserId > 0)
+{
+    // DEPRECATED: Remove parameter user_id within version 5.1
+    $gLogger->warning('DEPRECATED: Do not use the parameter user_id anymore. Instead use the new parameter user_uuid. This will be more safe against CSRF.');
+    $user = new User($gDb, $gProfileFields, $getUserId);
+}
+else
+{
+    $user = new User($gDb, $gProfileFields);
+    $user->readDataByUuid($getUserUuid);
+}
 
 // Testen ob Recht besteht Profil einzusehn
 if(!$gCurrentUser->hasRightViewProfile($user))
@@ -88,7 +102,7 @@ else
 }
 
 // if user id was not set and own profile should be shown then initialize navigation
-if(!isset($_GET['user_id']))
+if(!isset($_GET['user_id']) && !isset($_GET['user_uuid']))
 {
     $gNavigation->clear();
 }
@@ -207,7 +221,7 @@ $page->addJavascript('
 if($gCurrentUser->hasRightEditProfile($user))
 {
     $page->addPageFunctionsMenuItem('menu_item_profile_edit', $gL10n->get('PRO_EDIT_PROFILE'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_id' => $userId)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $user->getValue('usr_uuid'))),
         'fa-edit');
 }
 
@@ -942,13 +956,13 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
 
             if($gCurrentUser->hasRightEditProfile($otherUser))
             {
-                $editUserIcon = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_id' => (int) $otherUser->getValue('usr_id'))) . '"><i
+                $editUserIcon = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $otherUser->getValue('usr_uuid'))) . '"><i
                     class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i></a>';
             }
 
             $page->addHtml('<li id="row_ure_'.(int) $relation->getValue('ure_id').'" class="list-group-item">');
             $page->addHtml('<div>');
-            $page->addHtml('<span>'.$relationName.' - <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => (int) $otherUser->getValue('usr_id'))).
+            $page->addHtml('<span>'.$relationName.' - <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => (int) $otherUser->getValue('usr_uuid'))).
                            '">'.$otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME').'</a> ' . $editUserIcon . '<span>');
             $page->addHtml('<span class="float-right text-right">');
 

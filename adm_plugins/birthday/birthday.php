@@ -121,7 +121,7 @@ $fieldBirthday = $gProfileFields->getProperty('BIRTHDAY', 'usf_id');
 
 if($gDbType === 'pgsql')
 {
-    $sql = 'SELECT DISTINCT usr_id, usr_login_name,
+    $sql = 'SELECT DISTINCT usr_id, usr_uuid, usr_login_name,
                         last_name.usd_value AS last_name, first_name.usd_value AS first_name,
                         birthday.bday AS birthday, birthday.bdate,
                         EXTRACT(DAY FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\') - birthday.bdate) AS days_to_bdate, -- DATE_NOW
@@ -178,7 +178,7 @@ if($gDbType === 'pgsql')
 }
 else
 {
-    $sql = 'SELECT DISTINCT usr_id, usr_login_name,
+    $sql = 'SELECT DISTINCT usr_id, usr_uuid, usr_login_name,
                         last_name.usd_value AS last_name, first_name.usd_value AS first_name,
                         birthday.bday AS birthday, birthday.bdate,
                         DATEDIFF(birthday.bdate, ?) AS days_to_bdate, -- DATE_NOW
@@ -304,7 +304,7 @@ if($numberBirthdays > 0)
                 // show name and e-mail link for registered users
                 if($gValidLogin)
                 {
-                    $plgShowName = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => $row['usr_id'])) . '"
+                    $plgShowName = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '"
                         target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $plgShowName. '</a>';
 
                     // E-Mail-Adresse ist hinterlegt und soll auch bei eingeloggten Benutzern verlinkt werden

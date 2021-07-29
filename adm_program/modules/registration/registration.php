@@ -38,7 +38,7 @@ $headline = $gL10n->get('SYS_NEW_REGISTRATIONS');
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // Select new Members of the group
-$sql = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value AS last_name,
+$sql = 'SELECT usr_id, usr_uuid, usr_login_name, reg_timestamp, last_name.usd_value AS last_name,
                first_name.usd_value AS first_name, email.usd_value AS email
           FROM '.TBL_REGISTRATIONS.'
     INNER JOIN '.TBL_USERS.'
@@ -102,7 +102,7 @@ while($row = $usrStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">'.$row['last_name'].', '.$row['first_name'].'</a>',
+        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])).'">'.$row['last_name'].', '.$row['first_name'].'</a>',
         $datetimeCreate,
         $row['usr_login_name'],
         $mailLink,

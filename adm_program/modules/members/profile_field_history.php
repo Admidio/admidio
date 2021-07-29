@@ -108,10 +108,12 @@ $pdoStatement = $gDb->queryPrepared($sql, $queryParamsConditions);
 $countChanges = (int) $pdoStatement->fetchColumn();
 
 // create select statement with all necessary data
-$sql = 'SELECT usl_usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, usl_usf_id,
-               usl_value_old, usl_value_new, usl_usr_id_create, create_last_name.usd_value AS create_last_name,
+$sql = 'SELECT usl_usr_id, usr.usr_uuid as uuid_usr, last_name.usd_value AS last_name, first_name.usd_value AS first_name, usl_usf_id,
+               usl_value_old, usl_value_new, usl_usr_id_create, usr_create.usr_uuid as uuid_usr_create, create_last_name.usd_value AS create_last_name,
                create_first_name.usd_value AS create_first_name, usl_timestamp_create
           FROM '.TBL_USER_LOG.'
+    INNER JOIN '.TBL_USERS.' usr_create ON usr_create.usr_id = usl_usr_id_create
+    INNER JOIN '.TBL_USERS.' usr ON usr.usr_id = usl_usr_id
     INNER JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usl_usr_id
            AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
@@ -197,7 +199,7 @@ while($row = $fieldHistoryStatement->fetch())
 
     if($getUserId === 0)
     {
-        $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usl_usr_id'])).'">'.$row['last_name'].', '.$row['first_name'].'</a>';
+        $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr'])).'">'.$row['last_name'].', '.$row['first_name'].'</a>';
     }
 
     $columnValues[] = $gProfileFields->getPropertyById((int) $row['usl_usf_id'], 'usf_name');
@@ -221,7 +223,7 @@ while($row = $fieldHistoryStatement->fetch())
         $columnValues[] = '&nbsp;';
     }
 
-    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usl_usr_id_create'])).'">'.$row['create_last_name'].', '.$row['create_first_name'].'</a>';
+    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr_create'])).'">'.$row['create_last_name'].', '.$row['create_first_name'].'</a>';
     $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
     $table->addRowByArray($columnValues);
 }

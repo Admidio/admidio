@@ -140,7 +140,7 @@ if($gValidLogin)
     $form = new HtmlForm('plugin-login-static-form', '#', null, array('type' => 'vertical', 'setFocus' => false));
     $form->addStaticControl(
         'plg_user', $gL10n->get('SYS_MEMBER'),
-        '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => (int) $gCurrentUser->getValue('usr_id'))). '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'
+        '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_uuid' => $gCurrentUser->getValue('usr_uuid'))). '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'
         . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') .
         '</a>'
     );

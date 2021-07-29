@@ -238,7 +238,7 @@ $jsonArray['data'] = array();
 while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
 {
     ++$rowNumber;
-    $ColumnNumberSql = 6;
+    $ColumnNumberSql = 7;
     $columnNumberJson = 2;
 
     $memberOfThisOrganization  = (bool) $row['member_this_orga'];
@@ -259,7 +259,7 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($orgName));
     }
 
-    $columnValues['1'] = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">
+    $columnValues['1'] = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])).'">
         <i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
 
     // add all columns of the list configuration to the json array
@@ -268,7 +268,7 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
     {
         if(strlen($row[$ColumnNumberSql]) > 0)
         {
-            $columnValues[strval($columnNumberJson)] = $membersListConfig->convertColumnContentForOutput($columnNumber, 'html', $row[$ColumnNumberSql], $row['usr_id']);
+            $columnValues[strval($columnNumberJson)] = $membersListConfig->convertColumnContentForOutput($columnNumber, 'html', $row[$ColumnNumberSql], $row['usr_id'], $row['usr_uuid']);
         }
         else
         {
@@ -316,13 +316,13 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
             '<i class="fas fa-envelope" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_EMAIL_TO', array($row['email'])) . '"></i></a>';
     }
 
-    $userAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_id' => $row['usr_id'], 'copy' => 1)).'">'.
+    $userAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'], 'copy' => 1)).'">'.
         '<i class="fas fa-clone" data-toggle="tooltip" title="' . $gL10n->get('SYS_COPY') . '"></i></a>';
 
     // add link to edit user, but only edit users who are members of the current organization
     if($memberOfThisOrganization || !$memberOfOtherOrganization)
     {
-        $userAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_id' => $row['usr_id'])).'">'.
+        $userAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'])).'">'.
             '<i class="fas fa-edit" data-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT_USER') . '"></i></a>';
     }
 

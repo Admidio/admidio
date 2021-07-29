@@ -12,7 +12,7 @@
 /******************************************************************************
  * Parameters:
  *
- * user_id    : ID of the user who should be edited
+ * user_uuid  : Uuid of the user who should be edited
  * new_user   : 0 - Edit user of the user id
  *              1 - Create a new user
  *              2 - Create a registration
@@ -26,7 +26,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getUserId    = admFuncVariableIsValid($_GET, 'user_id',  'int');
+$getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid',  'string');
 $getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'int');
 $getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname',  'string'));
 $getFirstname = stripslashes(admFuncVariableIsValid($_GET, 'firstname', 'string'));
@@ -41,27 +41,29 @@ if(!$gValidLogin)
 }
 
 // if new_user isn't set and no user id is set then show dialog to create a user
-if($getUserId === 0 && $getNewUser === 0)
+if($getUserUuid === '' && $getNewUser === 0)
 {
     $getNewUser = 1;
 }
 
 // User-ID nur uebernehmen, wenn ein vorhandener Benutzer auch bearbeitet wird
-if($getUserId > 0 && $getNewUser !== 0 && $getNewUser !== 3)
+if($getUserUuid !== '' && $getNewUser !== 0 && $getNewUser !== 3)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }
 
 // read user data
-$user = new User($gDb, $gProfileFields, $getUserId);
+$user = new User($gDb, $gProfileFields);
+$user->readDataByUuid($getUserUuid);
+$userId = $user->getValue('usr_id');
 
 // set headline of the script
 if($getCopy)
 {
     // if we want to copy the user than set id = 0
     $user->setValue('usr_id', 0);
-    $getUserId = 0;
+    $userId = 0;
     $getNewUser = 1;
     $headline = $gL10n->get('SYS_COPY_VAR', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
 }
@@ -73,7 +75,7 @@ elseif($getNewUser === 2)
 {
     $headline = $gL10n->get('SYS_REGISTRATION');
 }
-elseif($getUserId === (int) $gCurrentUser->getValue('usr_id'))
+elseif($userId === (int) $gCurrentUser->getValue('usr_id'))
 {
     $headline = $gL10n->get('PRO_EDIT_MY_PROFILE');
 }
@@ -150,7 +152,7 @@ if(isset($_SESSION['profile_request']))
 $page = new HtmlPage('admidio-profile-edit', $headline);
 
 // create html form
-$form = new HtmlForm('edit_profile_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_save.php', array('user_id' => $getUserId, 'new_user' => $getNewUser)), $page);
+$form = new HtmlForm('edit_profile_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_save.php', array('user_id' => $userId, 'new_user' => $getNewUser)), $page);
 
 // *******************************************************************************
 // Loop over all categories and profile fields
@@ -188,7 +190,7 @@ foreach($gProfileFields->getProfileFields() as $field)
 
         if($field->getValue('cat_name_intern') === 'BASIC_DATA')
         {
-            if($getUserId > 0 || $getNewUser === 2)
+            if($userId > 0 || $getNewUser === 2)
             {
                 // add username to form
                 $fieldProperty = HtmlForm::FIELD_DEFAULT;
@@ -252,7 +254,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
                             <a id="password_link" class="btn openPopup" href="javascript:void(0);"
-                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $getUserId)).'">
+                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $userId)).'">
                                 <i class="fas fa-key"></i>'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
                 }
