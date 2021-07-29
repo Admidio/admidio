@@ -611,7 +611,7 @@ else
                 {
                     if($outputNumberMembers > 0 || $outputNumberLeaders > 0)
                     {
-                        $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $dateRolId));
+                        $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $date->getValue('rol_uuid')));
 
                         if ($getView === 'detail')
                         {

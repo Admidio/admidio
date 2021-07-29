@@ -16,7 +16,7 @@
  * user_uuid - send message to the given user UUID
  * subject   - subject of the message
  * msg_id    - ID of the message -> just for answers
- * rol_id    - ID of a role to which an email should be send
+ * role_uuid - ID of a role to which an email should be send
  * carbon_copy - false - (Default) "Send copy to me" checkbox is NOT set
  *             - true  - "Send copy to me" checkbox is set
  * forward : true - The message of the msg_id will be copied and the base for this new message
@@ -30,7 +30,7 @@ $getMsgType    = admFuncVariableIsValid($_GET, 'msg_type',    'string', array('d
 $getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid',   'string');
 $getSubject    = admFuncVariableIsValid($_GET, 'subject',     'html');
 $getMsgId      = admFuncVariableIsValid($_GET, 'msg_id',      'int');
-$getRoleId     = admFuncVariableIsValid($_GET, 'rol_id',      'int');
+$getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid',   'string');
 $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
 $getForward    = admFuncVariableIsValid($_GET, 'forward',     'bool');
@@ -285,17 +285,17 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
             // => EXIT
         }
     }
-    elseif ($getRoleId > 0)
+    elseif ($getRoleUuid !== '')
     {
         // wird eine bestimmte Rolle aufgerufen, dann pruefen, ob die Rechte dazu vorhanden sind
         $role = new TableRoles($gDb);
-        $role->readDataById($getRoleId);
+        $role->readDataByUuid($getRoleUuid);
 
         // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
         // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
         // Rollen muessen zur aktuellen Organisation gehoeren
         if((!$gValidLogin && $role->getValue('rol_mail_this_role') != 3)
-        || ($gValidLogin  && !$gCurrentUser->hasRightSendMailToRole($getRoleId))
+        || ($gValidLogin  && !$gCurrentUser->hasRightSendMailToRole($role->getValue('rol_id')))
         || $role->getValue('rol_id') == null)
         {
            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -319,11 +319,11 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
         $preloadData = $user->getValue('usr_id');
         $sqlUserIds  = ' AND usr_id = ? -- $user->getValue(\'usr_id\')';
     }
-    elseif ($getRoleId > 0)
+    elseif ($getRoleUuid !== '')
     {
         // role id was committed then write email to this role
-        $preloadData = 'groupID: '.$getRoleId;
-        $sqlRoleIds  = array($getRoleId);
+        $preloadData = 'groupID: '.$role->getValue('rol_id');
+        $sqlRoleIds  = array($role->getValue('rol_id'));
     }
     else
     {
@@ -383,7 +383,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
             $listVisibleRoleArray = array_intersect($listRoleIdsArray, $gCurrentUser->getAllVisibleRoles());
         }
 
-        if($getRoleId === 0 && count($listVisibleRoleArray) > 0)
+        if($getRoleUuid === '' && count($listVisibleRoleArray) > 0)
         {
             // if no special role was preselected then list users
             $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, rol_id, mem_begin, mem_end

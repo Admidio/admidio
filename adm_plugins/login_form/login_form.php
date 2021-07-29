@@ -230,7 +230,7 @@ else
         elseif($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3)
         {
             // show link of message module to send mail to administrator role
-            $linkUrl = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('rol_id' => (int) $roleAdministrator->getValue('rol_id'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+            $linkUrl = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         }
         else
         {
