@@ -25,7 +25,7 @@ $getDatabaseId  = admFuncVariableIsValid($_GET, 'database_id',   'string', array
 $getDatabaseId2 = admFuncVariableIsValid($_GET, 'database_id_2', 'string');
 $getName        = admFuncVariableIsValid($_GET, 'name',          'string');
 
-if ($getType !== 'bac')
+if (!in_array($getType, array('bac', 'pro_pho')))
 {
     $getDatabaseId = (int) $getDatabaseId;
 }
