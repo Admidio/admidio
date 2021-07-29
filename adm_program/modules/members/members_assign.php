@@ -154,7 +154,7 @@ echo '
             if(!isMember($row['usr_id']))
             {
                 // gefundene User ist noch KEIN Mitglied dieser Organisation
-                $link = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $row['usr_id']));
+                $link = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $row['usr_uuid']));
 
                 // KEINE Logindaten vorhanden
                 echo '<p>'.$gL10n->get('SYS_USER_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname'))).'</p>

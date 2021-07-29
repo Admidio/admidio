@@ -30,6 +30,7 @@ if($getUserId > 0)
     // DEPRECATED: Remove parameter user_id within version 5.1
     $gLogger->warning('DEPRECATED: Do not use the parameter user_id anymore. Instead use the new parameter user_uuid. This will be more safe against CSRF.');
     $user = new User($gDb, $gProfileFields, $getUserId);
+    $getUserUuid = $user->getValue('usr_uuid');
 }
 else
 {
@@ -270,7 +271,7 @@ $page->addPageFunctionsMenuItem('menu_item_profile_vcard', $gL10n->get('PRO_EXPO
 if($gCurrentUser->assignRoles())
 {
     $page->addPageFunctionsMenuItem('menu_item_profile_role_memberships_change', $gL10n->get('SYS_EDIT_ROLE_MEMBERSHIPS'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid)),
         'fa-users');
 }
 
@@ -734,7 +735,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
             if($gCurrentUser->assignRoles())
             {
                 $page->addHtml('<a class="admidio-icon-link float-right openPopup" id="profile_role_memberships_change" data-class="modal-lg"
-                    href="javascript:void(0);" data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $userId, 'inline' => '1')).'">
+                    href="javascript:void(0);" data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => '1')).'">
                     <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_ROLE_MEMBERSHIPS').'"></i></a>');
             }
         $page->addHtml('</div>

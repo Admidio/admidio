@@ -81,7 +81,7 @@ if($getMode === 1 || $getMode === 2)
     {
         // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
         $gNavigation->addUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_id' => $getUserId, 'new_user_id' => $getNewUserId)));
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $getUserId)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $user->getValue('usr_uuid'))));
         // => EXIT
     }
     else
@@ -155,7 +155,7 @@ elseif($getMode === 5)
     // otherwise go to previous url (default roles are assigned automatically)
     if($gCurrentUser->manageRoles())
     {
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('new_user' => '3', 'usr_id' => (int) $registrationUser->getValue('usr_id'))));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('new_user' => '3', 'user_uuid' => $registrationUser->getValue('usr_uuid'))));
         // => EXIT
     }
     else

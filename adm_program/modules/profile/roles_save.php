@@ -12,13 +12,13 @@
 /******************************************************************************
  * Parameters:
  *
- * usr_id   : ID of the user whose roles should be edited
- * new_user : 0 - (Default) Edit roles of an existing user
- *            1 - Edit roles of a new user
- *            2 - (not relevant)
- *            3 - Edit roles of a registration
- * inline   : false - Ausgaben werden als eigene Seite angezeigt
- *            true  - nur "body" HTML Code
+ * user_uuid : UUID of the user whose roles should be edited
+ * new_user  : 0 - (Default) Edit roles of an existing user
+ *             1 - Edit roles of a new user
+ *             2 - (not relevant)
+ *             3 - Edit roles of a registration
+ * inline    : false - Ausgaben werden als eigene Seite angezeigt
+ *             true  - nur "body" HTML Code
  *
  *****************************************************************************/
 
@@ -26,9 +26,9 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id',   'int');
-$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'int');
-$getInline  = admFuncVariableIsValid($_GET, 'inline',   'bool');
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getNewUser  = admFuncVariableIsValid($_GET, 'new_user',  'int');
+$getInline   = admFuncVariableIsValid($_GET, 'inline',    'bool');
 
 // in ajax mode only return simple text on error
 if($getInline)
@@ -70,6 +70,9 @@ if($getNewUser > 0)
     }
 }
 
+$user = new User($gDb, $gProfileFields);
+$user->readDataByUuid($getUserUuid);
+
 if($gCurrentUser->manageRoles())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
@@ -79,7 +82,7 @@ if($gCurrentUser->manageRoles())
                 ON cat_id = rol_cat_id
          LEFT JOIN '.TBL_MEMBERS.'
                 ON mem_rol_id = rol_id
-               AND mem_usr_id = ? -- $getUserId
+               AND mem_usr_id = ? -- $user->getValue(\'usr_id\')
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
              WHERE rol_valid   = 1
@@ -87,7 +90,7 @@ if($gCurrentUser->manageRoles())
                AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';
-    $queryParams = array($getUserId, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'));
+    $queryParams = array($user->getValue('usr_id'), DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'));
 }
 else
 {
@@ -100,7 +103,7 @@ else
                 ON cat_id = rol_cat_id
          LEFT JOIN '.TBL_MEMBERS.' AS mgl
                 ON rol_id         = mgl.mem_rol_id
-               AND mgl.mem_usr_id = ? -- $getUserId
+               AND mgl.mem_usr_id = ? -- $user->getValue(\'usr_id\')
                AND mgl.mem_begin <= ? -- DATE_NOW
                AND mgl.mem_end    > ? -- DATE_NOW
              WHERE bm.mem_usr_id  = ? -- $gCurrentUser->getValue(\'usr_id\')
@@ -113,7 +116,7 @@ else
                AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';
-    $queryParams = array($getUserId, DATE_NOW, DATE_NOW, (int) $gCurrentUser->getValue('usr_id'), DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'));
+    $queryParams = array($user->getValue('usr_id'), DATE_NOW, DATE_NOW, (int) $gCurrentUser->getValue('usr_id'), DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'));
 }
 $rolesStatement = $gDb->queryPrepared($sql, $queryParams);
 $rolesList      = $rolesStatement->fetchAll();
@@ -130,11 +133,11 @@ foreach($rolesList as $row)
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = ? -- $row[\'rol_id\']
-                   AND mem_usr_id = ? -- $getUserId
+                   AND mem_usr_id = ? -- $user->getValue(\'usr_id\')
                    AND mem_leader = 0
                    AND mem_begin <= ? -- DATE_NOW
                    AND mem_end    > ? -- DATE_NOW';
-        $pdoStatement = $gDb->queryPrepared($sql, array($row['rol_id'], $getUserId, DATE_NOW, DATE_NOW));
+        $pdoStatement = $gDb->queryPrepared($sql, array($row['rol_id'], $user->getValue('usr_id'), DATE_NOW, DATE_NOW));
 
         if((int) $pdoStatement->fetchColumn() === 0)
         {
@@ -166,8 +169,6 @@ foreach($rolesList as $row)
     }
 }
 
-$user = new User($gDb, $gProfileFields, $getUserId);
-
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
 foreach($rolesList as $row)
 {
@@ -175,7 +176,7 @@ foreach($rolesList as $row)
     // but don't change their own membership, because there must be at least one administrator
     if($row['rol_administrator'] == 0
     || ($row['rol_administrator'] == 1 && $gCurrentUser->isAdministrator()
-        && $getUserId !== (int) $gCurrentUser->getValue('usr_id')))
+        && (int) $user->getValue('usr_id') !== (int) $gCurrentUser->getValue('usr_id')))
     {
         $roleAssign = false;
         if(isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1)
