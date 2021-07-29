@@ -37,7 +37,7 @@ $headline = $gL10n->get('SYS_ASSIGN_REGISTRATION');
 
 // create user object for new user
 $newUser = new User($gDb, $gProfileFields);
-$newuser->readDataByUuid($getNewUserUuid);
+$newUser->readDataByUuid($getNewUserUuid);
 
 $lastName  = $gDb->escapeString($newUser->getValue('LAST_NAME', 'database'));
 $firstName = $gDb->escapeString($newUser->getValue('FIRST_NAME', 'database'));
@@ -148,7 +148,7 @@ while($row = $usrStatement->fetch())
         {
             if($gSettingsManager->getBool('enable_mail_module'))
             {
-                $page->addHtml('<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('usr_id' => $row['usr_id'])).'">'.$row['email'].'</a><br />');
+                $page->addHtml('<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['usr_uuid'])).'">'.$row['email'].'</a><br />');
             }
             else
             {

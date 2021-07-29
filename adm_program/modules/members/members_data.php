@@ -310,7 +310,7 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
         }
         else
         {
-            $mailLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('usr_id' => $row['usr_id']));
+            $mailLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['usr_uuid']));
         }
         $userAdministration .= '<a class="admidio-icon-link" href="'.$mailLink.'">'.
             '<i class="fas fa-envelope" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_EMAIL_TO', array($row['email'])) . '"></i></a>';

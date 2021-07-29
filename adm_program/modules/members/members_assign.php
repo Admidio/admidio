@@ -142,7 +142,7 @@ echo '
                 {
                     if($gSettingsManager->getBool('enable_mail_module'))
                     {
-                        echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('usr_id' => $row['usr_id'])).'">'.$row['email'].'</a><br />';
+                        echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['usr_uuid'])).'">'.$row['email'].'</a><br />';
                     }
                     else
                     {

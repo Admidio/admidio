@@ -12,9 +12,10 @@
 /******************************************************************************
  * Parameters:
  *
- * ure_id: Id of the user relation that should be edited
- * mode  : 1 - Create relation
- *         2 - Delete relation
+ * ure_id.   : Id of the user relation that should be edited
+ * user_uuid : UUID of the first user in the new relation
+ * mode      : 1 - Create relation
+ *             2 - Delete relation
  *
  *****************************************************************************/
 
@@ -56,8 +57,8 @@ if($getUreId > 0)
 
 if($getMode === 1)
 {
-    $getUsrId = admFuncVariableIsValid($_GET, 'usr_id', 'int');
-    $user1->readDataById($getUsrId);
+    $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+    $user1->readDataByUuid($getUserUuid);
 
     if($user1->isNewRecord())
     {

@@ -13,7 +13,7 @@
  * Parameters:
  *
  * msg_tpye  - This could be EMAIL if you want to write an email or PM if you want to write a private Message
- * usr_id    - send message to the given user ID
+ * user_uuid - send message to the given user UUID
  * subject   - subject of the message
  * msg_id    - ID of the message -> just for answers
  * rol_id    - ID of a role to which an email should be send
@@ -27,7 +27,7 @@ require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getMsgType    = admFuncVariableIsValid($_GET, 'msg_type',    'string', array('defaultValue' => TableMessage::MESSAGE_TYPE_EMAIL));
-$getUserId     = admFuncVariableIsValid($_GET, 'usr_id',      'int');
+$getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid',   'string');
 $getSubject    = admFuncVariableIsValid($_GET, 'subject',     'html');
 $getMsgId      = admFuncVariableIsValid($_GET, 'msg_id',      'int');
 $getRoleId     = admFuncVariableIsValid($_GET, 'rol_id',      'int');
@@ -57,7 +57,7 @@ if ((!$gSettingsManager->getBool('enable_mail_module') && $getMsgType !== TableM
 }
 
 // check for valid login
-if (!$gValidLogin && $getUserId === 0 && $getMsgType === TableMessage::MESSAGE_TYPE_PM)
+if (!$gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
@@ -85,9 +85,15 @@ if ($getMsgId > 0)
     }
 
     $getSubject = $message->getValue('msg_subject');
-    $getUserId  = $message->getConversationPartner();
+    $user = new User($gDb, $gProfileFields, $message->getConversationPartner());
+    $getUserUuid = $user->getValue('usr_uuid');
 
     $messageStatement = $message->getConversation($getMsgId);
+}
+elseif($getUserUuid !== '')
+{
+    $user = new User($gDb, $gProfileFields);
+    $user->readDataByUuid($getUserUuid);
 }
 
 $maxNumberRecipients = 1;
@@ -154,11 +160,8 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
     }
 }
 
-if ($getUserId > 0)
+if ($getUserUuid !== '')
 {
-    // usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($gDb, $gProfileFields, $getUserId);
-
     // if an User ID is given, we need to check if the actual user is allowed to contact this user
     if ((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || $user->getValue('usr_id') === '')
     {
@@ -224,7 +227,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     // show form
     $form = new HtmlForm('pm_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', array('msg_type' => 'PM', 'msg_id' => $getMsgId)), $page, array('enableFileUpload' => true));
 
-    if ($getUserId === 0)
+    if ($getUserUuid === '')
     {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
         $form->addSelectBox(
@@ -241,7 +244,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     }
     else
     {
-        $form->addInput('msg_to', '', $getUserId, array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addInput('msg_to', '', $user->getValue('usr_id'), array('property' => HtmlForm::FIELD_HIDDEN));
         $sendto = ' ' . $gL10n->get('SYS_TO') . ' ' .$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').' ('.$user->getValue('usr_login_name').')';
     }
 
@@ -273,7 +276,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 }
 elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
 {
-    if ($getUserId > 0)
+    if ($getUserUuid !== '')
     {
         // check if the user has email address for receiving an email
         if (!$user->hasEmail())
@@ -310,11 +313,11 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
     $sqlUserIds = '';
     $sqlParticipationRoles = '';
 
-    if ($getUserId > 0)
+    if ($getUserUuid !== '')
     {
         // usr_id was committed then write email to this user
-        $preloadData = $getUserId;
-        $sqlUserIds  = ' AND usr_id = ? -- $getUserId';
+        $preloadData = $user->getValue('usr_id');
+        $sqlUserIds  = ' AND usr_id = ? -- $user->getValue(\'usr_id\')';
     }
     elseif ($getRoleId > 0)
     {
@@ -418,7 +421,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
             );
             if ($sqlUserIds !== '')
             {
-                $queryParams[] = $getUserId;
+                $queryParams[] = $user->getValue('usr_id');
             }
             $statement = $gDb->queryPrepared($sql, $queryParams);
 

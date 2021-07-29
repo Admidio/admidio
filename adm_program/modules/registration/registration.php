@@ -93,7 +93,7 @@ while($row = $usrStatement->fetch())
 
     if($gSettingsManager->getBool('enable_mail_module'))
     {
-        $mailLink = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('usr_id' => $row['usr_id'])).'">'.$row['email'].'</a>';
+        $mailLink = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['usr_uuid'])).'">'.$row['email'].'</a>';
     }
     else
     {

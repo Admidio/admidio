@@ -311,7 +311,7 @@ if($numberBirthdays > 0)
                     if(strlen($row['email']) > 0 && $plg_show_email_extern < 2)
                     {
                         $plgShowName .= '
-                            <a class="admidio-icon-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('usr_id' => $row['usr_id'])) . '">'.
+                            <a class="admidio-icon-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('user_uuid' => $row['usr_uuid'])) . '">'.
                                 '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_WRITE_EMAIL').'"></i></a>';
                     }
                 }

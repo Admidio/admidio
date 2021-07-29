@@ -279,7 +279,7 @@ if($gCurrentUser->assignRoles())
 if($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser->editUsers())
 {
     $page->addPageFunctionsMenuItem('menu_item_profile_user_relation_types', $gL10n->get('SYS_CREATE_RELATIONSHIP'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('usr_id' => $userId)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)),
         'fa-people-arrows');
 }
 
@@ -320,7 +320,7 @@ $page->addHtml('
                 if ($userId !== $currUsrId && $gSettingsManager->getBool('enable_pm_module'))
                 {
                     $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'),
-                        '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM', 'usr_id' => $userId)).'" title="' . $gL10n->get('SYS_WRITE_PM') . '">'.
+                        '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)).'" title="' . $gL10n->get('SYS_WRITE_PM') . '">'.
                             '<i class="fas fa-comment-alt"></i>'.$user->getValue('usr_login_name').'</a>');
                 }
                 else
@@ -913,7 +913,7 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
                 if($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser->editUsers())
                 {
                     $page->addHtml('
-                        <a class="admidio-icon-link float-right" id="profile_relations_new_entry" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('usr_id' => $userId)).'">
+                        <a class="admidio-icon-link float-right" id="profile_relations_new_entry" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)).'">
                             <i class="fas fa-plus-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_CREATE_RELATIONSHIP').'"></i></a>');
                 }
             $page->addHtml('</div>
