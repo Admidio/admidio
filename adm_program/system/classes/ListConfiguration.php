@@ -136,7 +136,7 @@ class ListConfiguration extends TableLists
             // show user photo
             if (in_array($format, array('html', 'print'), true))
             {
-                $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $userId)).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_USER_PHOTO').'" />';
+                $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $userUuid)).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_USER_PHOTO').'" />';
             }
             if (in_array($format, array('csv', 'pdf'), true) && $content != null)
             {

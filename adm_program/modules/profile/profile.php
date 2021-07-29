@@ -120,7 +120,7 @@ $page->addJavascript('
     var profileJS = new ProfileJS(gRootPath);
     profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('SYS_MEMBERSHIP_DELETE', array('[rol_name]')).'";
     profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('SYS_LINK_MEMBERSHIP_DELETE', array('[rol_name]')).'";
-    profileJS.userId                  = '.$userId.';
+    profileJS.userUuid                = "'.$getUserUuid.'";
 
     /**
      * @param {object} element
@@ -204,7 +204,7 @@ $page->addJavascript('
     });
 
     $("#menu_item_profile_password").attr("href", "javascript:void(0);");
-    $("#menu_item_profile_password").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $userId)).'");
+    $("#menu_item_profile_password").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)).'");
     $("#menu_item_profile_password").attr("class", "nav-link openPopup");
 
     $("input[data-provide=\'datepicker\']").datepicker({
@@ -229,7 +229,7 @@ if($gCurrentUser->hasRightEditProfile($user))
 if($userId === $currUsrId)
 {
     $page->addPageFunctionsMenuItem('menu_item_profile_password', $gL10n->get('SYS_CHANGE_PASSWORD'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $userId)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)),
         'fa-key');
 }
 elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0)
@@ -247,7 +247,7 @@ elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->ge
     {
         // if user has no email or send email is disabled then administrator could set a new password
         $page->addPageFunctionsMenuItem('menu_item_profile_password', $gL10n->get('SYS_CHANGE_PASSWORD'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $userId)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)),
             'fa-key');
     }
 }
@@ -262,7 +262,7 @@ if($gSettingsManager->getBool('profile_log_edit_fields') && $gCurrentUser->hasRi
 
 // show link to export the profile as vCard
 $page->addPageFunctionsMenuItem('menu_item_profile_vcard', $gL10n->get('PRO_EXPORT_VCARD'),
-    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '1', 'user_id' => $userId)),
+    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '1', 'user_uuid' => $getUserUuid)),
     'fa-file-export');
 
 // if you have the right to assign roles then show the link to assign new roles to this user
@@ -449,14 +449,14 @@ $page->addHtml('
             // Profile photo
             // *******************************************************************************
 
-            $page->addHtml('<img id="profile_photo" class="rounded" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $userId)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
+            $page->addHtml('<img id="profile_photo" class="rounded" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
 
             // Only authorized users are allowed to edit the profile photo
             if($gCurrentUser->hasRightEditProfile($user))
             {
                 $page->addHtml('
                 <ul id="profile_picture_links" class="list-unstyled">
-                    <li><a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('usr_id' => $userId)).'">
+                    <li><a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('user_uuid' => $getUserUuid)).'">
                         <i class="fas fa-upload"></i>'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a></li>');
 
                     // the image can only be deleted if corresponding rights exist
@@ -464,7 +464,7 @@ $page->addHtml('
                         || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/'.$userId.'.jpg') && (int) $gSettingsManager->get('profile_photo_storage') === 1)
                     {
                         $page->addHtml('<li><a id="btn_delete_photo" class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pro_pho', 'element_id' => 'no_element', 'database_id' => $userId)).
+                                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pro_pho', 'element_id' => 'no_element', 'database_id' => $getUserUuid)).
                                         '"><i class="fas fa-trash-alt"></i>'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a></li>');
                     }
                 $page->addHtml('</ul>');

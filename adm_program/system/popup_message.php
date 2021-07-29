@@ -96,7 +96,7 @@ switch ($getType)
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('mode' => 'delete', 'pho_id' => $getDatabaseId));
         break;
     case 'pro_pho':
-        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'delete', 'usr_id' => $getDatabaseId));
+        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'delete', 'user_uuid' => $getDatabaseId));
         $text = 'PRO_WANT_DELETE_PHOTO';
         $callbackFunction = 'callbackProfilePhoto';
         break;

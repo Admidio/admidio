@@ -9,7 +9,7 @@
  *
  * Parameters:
  *
- * usr_id           : id of user whose photo should be changed
+ * user_uuid        : Uuid of user whose photo should be changed
  * mode - choose    : default mode to choose the photo file you want to upload
  *        save      : save new photo in user recordset
  *        dont_save : delete photo in session and show message
@@ -21,8 +21,8 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int',    array('requireValue' => true));
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'string', array('defaultValue' => 'choose', 'validValues' => array('choose', 'save', 'dont_save', 'upload', 'delete')));
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('requireValue' => true));
+$getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defaultValue' => 'choose', 'validValues' => array('choose', 'save', 'dont_save', 'upload', 'delete')));
 
 // in ajax mode only return simple text on error
 if($getMode === 'delete')
@@ -38,7 +38,8 @@ if (!PhpIniUtils::isFileUploadEnabled())
 }
 
 // read user data and show error if user doesn't exists
-$user = new User($gDb, $gProfileFields, $getUserId);
+$user = new User($gDb, $gProfileFields);
+$user->readDataByUuid($getUserUuid);
 
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 if(!$gCurrentUser->hasRightEditProfile($user))
@@ -77,10 +78,10 @@ if($getMode === 'save')
         // Foto im Dateisystem speichern
 
         // Nachsehen ob fuer den User ein Photo gespeichert war
-        $fileOld = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg';
+        $fileOld = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '_new.jpg';
         if(is_file($fileOld))
         {
-            $fileNew = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg';
+            $fileNew = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '.jpg';
             try
             {
                 FileSystemUtils::deleteFileIfExists($fileNew);
@@ -116,13 +117,13 @@ if($getMode === 'save')
             // Foto aus Session entfernen und neues Einlesen des Users veranlassen
             $gCurrentSession->setValue('ses_binary', '');
             $gCurrentSession->save();
-            $gCurrentSession->renewUserObject($getUserId);
+            $gCurrentSession->renewUserObject($user->getValue('usr_id'));
         }
     }
 
     // zur Ausgangsseite zurueck
     $gNavigation->deleteLastUrl();
-    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile.php', array('user_id' => $getUserId)));
+    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $getUserUuid)));
     // => EXIT
 }
 elseif($getMode === 'dont_save')
@@ -131,7 +132,7 @@ elseif($getMode === 'dont_save')
     // Ordnerspeicherung
     if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
-        $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg';
+        $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '_new.jpg';
         try
         {
             FileSystemUtils::deleteFileIfExists($file);
@@ -149,7 +150,7 @@ elseif($getMode === 'dont_save')
         $gCurrentSession->save();
     }
     // zur Ausgangsseite zurueck
-    $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $getUserId)), 2000);
+    $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $getUserUuid)), 2000);
     $gMessage->show($gL10n->get('SYS_PROCESS_CANCELED'));
     // => EXIT
 }
@@ -159,7 +160,7 @@ elseif($getMode === 'delete')
     // Ordnerspeicherung, Datei löschen
     if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
-        $filePath = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg';
+        $filePath = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '.jpg';
         try
         {
             FileSystemUtils::deleteFileIfExists($filePath);
@@ -175,7 +176,7 @@ elseif($getMode === 'delete')
     {
         $user->setValue('usr_photo', '');
         $user->save();
-        $gCurrentSession->renewUserObject($getUserId);
+        $gCurrentSession->renewUserObject($user->getValue('usr_id'));
     }
 
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
@@ -187,7 +188,7 @@ elseif($getMode === 'delete')
 if($getMode === 'choose')
 {
     // set headline
-    if($getUserId === (int) $gCurrentUser->getValue('usr_id'))
+    if((int) $user->getValue('usr_id') === (int) $gCurrentUser->getValue('usr_id'))
     {
         $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
     }
@@ -202,8 +203,8 @@ if($getMode === 'choose')
     $page = new HtmlPage('admidio-profile-photo-edit', $headline);
 
     // show form
-    $form = new HtmlForm('upload_files_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'upload', 'usr_id' => $getUserId)), $page, array('enableFileUpload' => true));
-    $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $getUserId)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
+    $form = new HtmlForm('upload_files_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'upload', 'user_uuid' => $getUserUuid)), $page, array('enableFileUpload' => true));
+    $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addFileUpload(
         'foto_upload_file', $gL10n->get('PRO_CHOOSE_PHOTO'),
         array('allowedMimeTypes' => array('image/jpeg', 'image/png'), 'helpTextIdLabel' => 'profile_photo_up_help')
@@ -259,7 +260,7 @@ elseif($getMode === 'upload')
     // Ordnerspeicherung
     if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
-        $userImage->copyToFile(null, ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg');
+        $userImage->copyToFile(null, ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '_new.jpg');
     }
     // Datenbankspeicherung
     else
@@ -277,7 +278,7 @@ elseif($getMode === 'upload')
     // Image-Objekt löschen
     $userImage->delete();
 
-    if($getUserId === (int) $gCurrentUser->getValue('usr_id'))
+    if((int) $user->getValue('usr_id') === (int) $gCurrentUser->getValue('usr_id'))
     {
         $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
     }
@@ -289,13 +290,13 @@ elseif($getMode === 'upload')
     // create html page object
     $page = new HtmlPage('admidio-profile-photo-edit', $headline);
     $page->addJavascript('$("#btn_cancel").click(function() {
-        self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'dont_save', 'usr_id' => $getUserId)).'\';
+        self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'dont_save', 'user_uuid' => $getUserUuid)).'\';
     });', true);
 
     // show form
-    $form = new HtmlForm('show_new_profile_picture_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'save', 'usr_id' => $getUserId)), $page);
-    $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $getUserId)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
-    $form->addCustomContent($gL10n->get('PRO_NEW_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $getUserId, 'new_photo' => 1)).'" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" />');
+    $form = new HtmlForm('show_new_profile_picture_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'save', 'user_uuid' => $getUserUuid)), $page);
+    $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
+    $form->addCustomContent($gL10n->get('PRO_NEW_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'new_photo' => 1)).'" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" />');
     $form->addLine();
     $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => 'fa-upload', 'class' => ' offset-sm-3'));
 

@@ -12,7 +12,7 @@
 /******************************************************************************
  * Parameters:
  *
- * user_id    : ID of the user who should be edited
+ * user_uuid  : Uuid of the user who should be edited
  * new_user   : 0 - Edit user of the user id
  *              1 - Create a new user
  *              2 - Create a registration
@@ -23,7 +23,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'user_id',  'int');
+$getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'int');
 
 // if current user has no login then only show registration dialog
@@ -48,12 +48,14 @@ if(!isset($_POST['reg_org_id']))
 if($getNewUser === 2 || $getNewUser === 3)
 {
     // create user registration object and set requested organization
-    $user = new UserRegistration($gDb, $gProfileFields, $getUserId);
+    $user = new UserRegistration($gDb, $gProfileFields);
+    $user->readDataByUuid($getUserUuid);
     $user->setOrganization((int) $_POST['reg_org_id']);
 }
 else
 {
-    $user = new User($gDb, $gProfileFields, $getUserId);
+    $user = new User($gDb, $gProfileFields);
+    $user->readDataByUuid($getUserUuid);
 }
 
 // pruefen, ob Modul aufgerufen werden darf
@@ -248,12 +250,12 @@ if($gCurrentUser->isAdministrator() || $getNewUser > 0)
         if(strlen($_POST['usr_login_name']) > 0)
         {
             // pruefen, ob der Benutzername bereits vergeben ist
-            $sql = 'SELECT usr_id
+            $sql = 'SELECT usr_uuid
                       FROM '.TBL_USERS.'
                      WHERE usr_login_name = ?';
             $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usr_login_name']));
 
-            if($pdoStatement->rowCount() > 0 && $pdoStatement->fetchColumn() !== $getUserId)
+            if($pdoStatement->rowCount() > 0 && $pdoStatement->fetchColumn() !== $getUserUuid)
             {
                 $gMessage->show($gL10n->get('PRO_LOGIN_NAME_EXIST'));
                 // => EXIT
