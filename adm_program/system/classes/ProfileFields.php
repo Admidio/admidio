@@ -181,11 +181,17 @@ class ProfileFields
                 case 'CHECKBOX':
                     if ($value == 1)
                     {
-                        $htmlValue = '<i class="fas fa-check-square"></i>';
+                        $htmlValue = '<span class="fa-stack">
+                            <i class="fas fa-square-full fa-stack-1x"></i>
+                            <i class="fas fa-check-square fa-stack-1x fa-inverse"></i>
+                        </span>';
                     }
                     else
                     {
-                        $htmlValue = '<i class="fas fa-square"></i>';
+                        $htmlValue = '<span class="fa-stack">
+                            <i class="fas fa-square-full fa-stack-1x"></i>
+                            <i class="fas fa-square fa-stack-1x fa-inverse"></i>
+                        </span>';
                     }
                     break;
                 case 'DATE':
@@ -325,7 +331,10 @@ class ProfileFields
         {
             if ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX')
             {
-                $value = '<i class="fas fa-square"></i>';
+                $value = '<span class="fa-stack">
+                    <i class="fas fa-square-full fa-stack-1x"></i>
+                    <i class="fas fa-square fa-stack-1x fa-inverse"></i>
+                </span>';
 
                 // if field has url then create a link
                 $usfUrl = $this->mProfileFields[$fieldNameIntern]->getValue('usf_url');
