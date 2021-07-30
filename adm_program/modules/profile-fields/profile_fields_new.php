@@ -100,7 +100,7 @@ $page->addJavascript('
             $("#usf_value_list_group").hide();
         }
     });
-    $("#usf_type").trigger("click");',
+    $("#usf_type").trigger("change");',
     true
 );
 
