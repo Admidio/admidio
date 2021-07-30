@@ -170,9 +170,11 @@ class ModuleDates extends Modules
         $sqlConditions = $this->getSqlConditions();
 
         // read dates from database
-        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_approved AS member_approval_state,
+        $sql = 'SELECT DISTINCT cat.*, dat.*, rol_uuid, mem.mem_usr_id AS member_date_role, mem.mem_approved AS member_approval_state,
                        mem.mem_leader, mem.mem_comment AS comment, mem.mem_count_guests AS additional_guests,' . $additional['fields'] . '
                   FROM ' . TBL_DATES . ' AS dat
+            INNER JOIN ' . TBL_ROLES . ' AS rol
+                    ON rol_id = dat_rol_id
             INNER JOIN ' . TBL_CATEGORIES . ' AS cat
                     ON cat_id = dat_cat_id
                        ' . $additional['tables'] . '
@@ -472,14 +474,19 @@ class ModuleDates extends Modules
             // show firstname and lastname of create and last change user
             $additionalFields = '
                 cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
-                cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name ';
+                cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name,
+                cre_user.usr_uuid AS create_uuid, cha_user.usr_uuid AS change_uuid ';
             $additionalTables = '
+                LEFT JOIN ' . TBL_USERS . ' AS cre_user
+                       ON cre_user.usr_id = dat_usr_id_create
                 LEFT JOIN '.TBL_USER_DATA.' AS cre_surname
                        ON cre_surname.usd_usr_id = dat_usr_id_create
                       AND cre_surname.usd_usf_id = ? -- $lastNameUsfId
                 LEFT JOIN '.TBL_USER_DATA.' AS cre_firstname
                        ON cre_firstname.usd_usr_id = dat_usr_id_create
                       AND cre_firstname.usd_usf_id = ? -- $firstNameUsfId
+                LEFT JOIN ' . TBL_USERS . ' AS cha_user
+                       ON cha_user.usr_id = dat_usr_id_change
                 LEFT JOIN '.TBL_USER_DATA.' AS cha_surname
                        ON cha_surname.usd_usr_id = dat_usr_id_change
                       AND cha_surname.usd_usf_id = ? -- $lastNameUsfId
@@ -492,12 +499,13 @@ class ModuleDates extends Modules
         {
             // show username of create and last change user
             $additionalFields = '
-                cre_username.usr_login_name AS create_name,
-                cha_username.usr_login_name AS change_name ';
+                cre_user.usr_login_name AS create_name,
+                cha_user.usr_login_name AS change_name,
+                cre_user.usr_uuid AS create_uuid, cha_user.usr_uuid AS change_uuid ';
             $additionalTables = '
-                LEFT JOIN '.TBL_USERS.' AS cre_username
+                LEFT JOIN '.TBL_USERS.' AS cre_user
                        ON cre_username.usr_id = dat_usr_id_create
-                LEFT JOIN '.TBL_USERS.' AS cha_username
+                LEFT JOIN '.TBL_USERS.' AS cha_user
                        ON cha_username.usr_id = dat_usr_id_change ';
             $additionalParams = array();
         }

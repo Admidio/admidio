@@ -17,9 +17,8 @@
  *          5 - Edit an existing event
  *          6 - Export event in ical format
  *          7 - User may participate in the event
- * rol_id : vorselektierte Rolle der Rollenauswahlbox
- * copy   : true - The event of the dat_id will be copied and the base for this new event
- * number_role_select : Nummer der Rollenauswahlbox, die angezeigt werden soll
+ * user_uuid : UUID of the user membership to an event should be edited
+ * copy      : true - The event of the dat_id will be copied and the base for this new event
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -32,10 +31,8 @@ if($_GET['mode'] == 2)
 // Initialize and check the parameters
 $getDateId              = admFuncVariableIsValid($_GET, 'dat_id', 'int');
 $getMode                = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
-$getRoleId              = admFuncVariableIsValid($_GET, 'rol_id', 'int');
 $getCopy                = admFuncVariableIsValid($_GET, 'copy',   'bool');
-$getNumberRoleSelect    = admFuncVariableIsValid($_GET, 'number_role_select', 'int');
-$getUserId              = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => (int) $gCurrentUser->getValue('usr_id')));
+$getUserUuid            = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => (int) $gCurrentUser->getValue('usr_id')));
 $postAdditionalGuests   = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
 $postUserComment        = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
@@ -65,6 +62,13 @@ if($getCopy)
 // create event object
 $date = new TableDate($gDb);
 $date->readDataById($getDateId);
+
+// read user data
+$user = User($gDb, $gProfileFields);
+if($getUserUuid !== '')
+{
+    $user->readDataByUuid($getUserUuid);
+}
 
 if (in_array($getMode, array(1, 2, 5), true))
 {
@@ -553,7 +557,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     {
         // user wants to participate -> add him to date and set approval state to 2 ( user attend )
         $member = new TableMembers($gDb);
-        $member->startMembership((int) $role->getValue('rol_id'), (int) $getUserId, true, 2);
+        $member->startMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'), true, 2);
     }
     elseif(!isset($_POST['date_current_user_assigned'])
     && $gCurrentUser->isMemberOfRole((int) $date->getValue('dat_rol_id')))
@@ -561,7 +565,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         // user does't want to participate as leader -> remove his participation as leader from the event,
         // dont remove the participation itself!
         $member = new TableMembers($gDb);
-        $member->readDataByColumns(array('mem_rol_id' => (int) $role->getValue('rol_id'), 'mem_usr_id' => $getUserId));
+        $member->readDataByColumns(array('mem_rol_id' => (int) $role->getValue('rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
         $member->setValue('mem_leader', 0);
         $member->save();
     }
@@ -605,7 +609,7 @@ if (in_array($getMode, array(3, 4, 7), true))
     // Check participation deadline and update user inputs if possible
     if ($date->allowedToParticipate() && !$date->deadlineExceeded())
     {
-        $member->readDataByColumns(array('mem_rol_id' => (int) $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
+        $member->readDataByColumns(array('mem_rol_id' => (int) $date->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
         $member->setValue('mem_comment', $postUserComment); // Comments will be saved in any case. Maybe it is a documentation afterwards by a leader or admin
 
         if ($member->isNewRecord())
@@ -630,7 +634,7 @@ if (in_array($getMode, array(3, 4, 7), true))
 
             $outputMessage = $gL10n->get('SYS_ROLE_MAX_MEMBERS', array($date->getValue('dat_headline')));
 
-            if ($date->getValue('dat_max_members') === $totalMembers && !$participants->isMemberOfEvent($getUserId))
+            if ($date->getValue('dat_max_members') === $totalMembers && !$participants->isMemberOfEvent($user->getValue('usr_id')))
             {
                 $participationPossible = false; // Participation Limit exceeded and user refused
             }
@@ -655,7 +659,7 @@ if (in_array($getMode, array(3, 4, 7), true))
                 case 3:  // User attends to the event
                     if ($participationPossible)
                     {
-                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, Participants::PARTICIPATION_YES);
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_YES);
                         $outputMessage = $gL10n->get('DAT_ATTEND_DATE', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));
                         // => EXIT
                     }
@@ -665,12 +669,12 @@ if (in_array($getMode, array(3, 4, 7), true))
                     if ($gSettingsManager->getBool('dates_save_all_confirmations'))
                     {
                         // Set user status to refused
-                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, Participants::PARTICIPATION_NO);
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_NO);
                     }
                     else
                     {
                         // Delete entry
-                        $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId);
+                        $member->deleteMembership((int) $date->getValue('dat_rol_id'), $user->getValue('usr_id');
                     }
 
                     $outputMessage = $gL10n->get('DAT_CANCEL_DATE', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));
@@ -680,7 +684,7 @@ if (in_array($getMode, array(3, 4, 7), true))
                 case 7:  // User may participate in the event
                     if ($participationPossible)
                     {
-                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, Participants::PARTICIPATION_MAYBE);
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_MAYBE);
                         $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));
                         // => EXIT
                     }

@@ -510,11 +510,13 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
 
     // compose name of user who create the recordset
     $htmlCreateName = '';
+    $userUuidCreated = '';
     if ($timestampCreate)
     {
         if ($userIdCreated > 0)
         {
             $userCreate = new User($gDb, $gProfileFields, $userIdCreated);
+            $userUuidCreated = $userCreate->getValue('usr_uuid');
 
             if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
             {
@@ -533,11 +535,13 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
 
     // compose name of user who edit the recordset
     $htmlEditName = '';
+    $userUuidEdited = '';
     if ($timestampEdited)
     {
         if ($userIdEdited > 0)
         {
             $userEdit = new User($gDb, $gProfileFields, $userIdEdited);
+            $userUuidEdited = $userEdit->getValue('usr_uuid');
 
             if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
             {
@@ -563,7 +567,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
     return admFuncShowCreateChangeInfoByName(
         $htmlCreateName, $timestampCreate,
         $htmlEditName, $timestampEdited,
-        $userIdCreated, $userIdEdited
+        $userUuidCreated, $userUuidEdited
     );
 }
 
@@ -575,13 +579,13 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
  * @param string      $timestampCreate Date and time of the moment when the user create the recordset.
  * @param string|null $userNameEdited  Id of the user last changed the recordset.
  * @param string|null $timestampEdited Date and time of the moment when the user last changed the recordset
- * @param int         $userIdCreated   (optional) The id of the user who create the recordset.
- *                                     If id is set than a link to the user profile will be created
- * @param int         $userIdEdited    (optional) The id of the user last changed the recordset.
- *                                     If id is set than a link to the user profile will be created
+ * @param string      $userUuidCreated  (optional) The uuid of the user who create the recordset.
+ *                                      If uuid is set than a link to the user profile will be created
+ * @param string      $userUuidEdited   (optional) The uuid of the user last changed the recordset.
+ *                                      If uuid is set than a link to the user profile will be created
  * @return string Returns a html string with usernames who creates item and edit item the last time
  */
-function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $userNameEdited = null, $timestampEdited = null, $userIdCreated = 0, $userIdEdited = 0)
+function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $userNameEdited = null, $timestampEdited = null, $userUuidCreated = '', $userUuidEdited = '')
 {
     global $gL10n, $gValidLogin, $gSettingsManager;
 
@@ -600,20 +604,13 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
 
         if ($userNameCreated === '')
         {
-            if($userIdCreated === 1)
-            {
-                $userNameCreated = $gL10n->get('SYS_SYSTEM');
-            }
-            else
-            {
-                $userNameCreated = $gL10n->get('SYS_DELETED_USER');
-            }
+            $userNameCreated = $gL10n->get('SYS_DELETED_USER');
         }
 
         // if valid login and a user id is given than create a link to the profile of this user
-        if ($gValidLogin && $userIdCreated > 0 && $userNameCreated !== $gL10n->get('SYS_SYSTEM'))
+        if ($gValidLogin && $userUuidCreated !== '' && $userNameCreated !== $gL10n->get('SYS_SYSTEM'))
         {
-            $userNameCreated = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_id' => $userIdCreated)) .
+            $userNameCreated = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $userUuidCreated)) .
                                '">' . $userNameCreated . '</a>';
         }
 
@@ -627,20 +624,13 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
 
         if ($userNameEdited === '')
         {
-            if($userIdEdited === 1)
-            {
-                $userNameEdited = $gL10n->get('SYS_SYSTEM');
-            }
-            else
-            {
-                $userNameEdited = $gL10n->get('SYS_DELETED_USER');
-            }
+            $userNameEdited = $gL10n->get('SYS_DELETED_USER');
         }
 
         // if valid login and a user id is given than create a link to the profile of this user
-        if ($gValidLogin && $userIdEdited > 0 && $userNameEdited !== $gL10n->get('SYS_SYSTEM'))
+        if ($gValidLogin && $userUuidEdited !== '' && $userNameEdited !== $gL10n->get('SYS_SYSTEM'))
         {
-            $userNameEdited = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_id' => $userIdEdited)) .
+            $userNameEdited = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $userUuidEdited)) .
                               '">' . $userNameEdited . '</a>';
         }
 

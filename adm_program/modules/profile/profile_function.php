@@ -17,8 +17,9 @@
  *           6 - reload future role memberships
  *           7 - save membership data
  *           8 - Export vCard of role
- * user_id : Id of the user to be edited
- * mem_id  : Id of role membership to should be edited
+ * user_uuid : UUID of the user to be edited
+ * mem_id    : Id of role membership to should be edited
+ * role_uuid : UUID of role from which the user vcards should be exported
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -26,8 +27,8 @@ require_once(__DIR__ . '/roles_functions.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId   = admFuncVariableIsValid($_GET, 'user_id', 'int');
-$getRoleId   = admFuncVariableIsValid($_GET, 'rol_id',  'int');
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
 $getMemberId = admFuncVariableIsValid($_GET, 'mem_id',  'int');
 $getMode     = admFuncVariableIsValid($_GET, 'mode',    'int');
 
@@ -38,7 +39,8 @@ if($getMode === 7)
 }
 
 // create user object
-$user = new User($gDb, $gProfileFields, $getUserId);
+$user = new User($gDb, $gProfileFields);
+$user->readDataByUuid($getUserUuid);
 
 if($getMode === 1)
 {
@@ -100,14 +102,14 @@ elseif($getMode === 3)
 elseif($getMode === 4)
 {
     // reload role memberships
-    $roleStatement  = getRolesFromDatabase($getUserId);
+    $roleStatement  = getRolesFromDatabase($user->getValue('usr_id'));
     $countRole      = $roleStatement->rowCount();
     echo getRoleMemberships('role_list', $user, $roleStatement);
 }
 elseif($getMode === 5)
 {
     // reload former role memberships
-    $roleStatement  = getFormerRolesFromDatabase($getUserId);
+    $roleStatement  = getFormerRolesFromDatabase($user->getValue('usr_id'));
     $countRole      = $roleStatement->rowCount();
     echo getRoleMemberships('former_role_list', $user, $roleStatement);
 
@@ -123,7 +125,7 @@ elseif($getMode === 5)
 elseif($getMode === 6)
 {
     // reload future role memberships
-    $roleStatement  = getFutureRolesFromDatabase($getUserId);
+    $roleStatement  = getFutureRolesFromDatabase($user->getValue('usr_id'));
     $countRole      = $roleStatement->rowCount();
     echo getRoleMemberships('future_role_list', $user, $roleStatement);
 
@@ -199,10 +201,13 @@ elseif($getMode === 7)
 elseif ($getMode === 8)
 {
     // Export every member of a role into one vCard file
-    if($gCurrentUser->hasRightViewRole($getRoleId))
+
+    $role = new TableRoles($gDb);
+    $role->readDataByUuid($getRoleUuid);
+
+    if($gCurrentUser->hasRightViewRole($role->getValue('rol_id')))
     {
         // create filename of organization name and role name
-        $role     = new TableRoles($gDb, $getRoleId);
         $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.vcf';
 
         $filename = FileSystemUtils::getSanitizedPathEntry($filename);
@@ -217,10 +222,10 @@ elseif ($getMode === 8)
         // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
         $sql = 'SELECT mem_usr_id
                   FROM '.TBL_MEMBERS.'
-                 WHERE mem_rol_id = ? -- $getRoleId
+                 WHERE mem_rol_id = ? -- $role->getValue(\'rol_id\')
                    AND mem_begin <= ? -- DATE_NOW
                    AND mem_end    > ? -- DATE_NOW';
-        $pdoStatement = $gDb->queryPrepared($sql, array($getRoleId, DATE_NOW, DATE_NOW));
+        $pdoStatement = $gDb->queryPrepared($sql, array($role->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
         while($memberUserId = $pdoStatement->fetchColumn())
         {

@@ -611,7 +611,7 @@ else
                 {
                     if($outputNumberMembers > 0 || $outputNumberLeaders > 0)
                     {
-                        $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $dateRolId));
+                        $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $date->getValue('rol_uuid')));
 
                         if ($getView === 'detail')
                         {
@@ -631,7 +631,7 @@ else
                 // Link for managing new participants
                 if($row['mem_leader'])
                 {
-                    $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('rol_id' => $dateRolId));
+                    $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $date->getValue('rol_uuid')));
 
                     if ($getView === 'detail')
                     {
@@ -782,7 +782,7 @@ else
                     admFuncShowCreateChangeInfoByName(
                         $row['create_name'], $date->getValue('dat_timestamp_create'),
                         $row['change_name'], $date->getValue('dat_timestamp_change'),
-                        (int) $date->getValue('dat_usr_id_create'), (int) $date->getValue('dat_usr_id_change')
+                        $row['create_uuid'], $row['change_uuid']
                     ).'
                     </div>
                 </div>');

@@ -7,6 +7,8 @@
  ***********************************************************************************************
  */
 
+use Ramsey\Uuid\Uuid;
+
 final class ComponentUpdateSteps
 {
     /**
@@ -22,6 +24,36 @@ final class ComponentUpdateSteps
     {
         self::$db = $database;
     }
+
+    /**
+     * This method will add a uuid to each row of the tables adm_users and adm_roles
+     */
+	public static function updateStep41AddUuid()
+	{
+        $sql = 'SELECT usr_id FROM ' . TBL_USERS;
+        $usersStatement = self::$db->queryPrepared($sql);
+
+        while($row = $usersStatement->fetch())
+        {
+            $uuid = Uuid::uuid4();
+
+            $sql = 'UPDATE '.TBL_USERS.' SET usr_uuid = ? -- $uuid
+                     WHERE usr_id = ? -- $row[\'usr_id\']';
+            self::$db->queryPrepared($sql, array($uuid, $row['usr_id']));
+        }
+
+        $sql = 'SELECT rol_id FROM ' . TBL_ROLES;
+        $rolesStatement = self::$db->queryPrepared($sql);
+
+        while($row = $rolesStatement->fetch())
+        {
+            $uuid = Uuid::uuid4();
+
+            $sql = 'UPDATE '.TBL_ROLES.' SET rol_uuid = ? -- $uuid
+                     WHERE rol_id = ? -- $row[\'rol_id\']';
+            self::$db->queryPrepared($sql, array($uuid, $row['rol_id']));
+        }
+	}
 
     /**
      * This method will add a new systemmail text to the database table **adm_texts** for each

@@ -284,14 +284,19 @@ class ModuleAnnouncements extends Modules
             // show firstname and lastname of create and last change user
             $additionalFields = '
                 cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
-                cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name ';
+                cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name,
+                cre_user.usr_uuid AS create_uuid, cha_user.usr_uuid AS change_uuid ';
             $additionalTables = '
+                LEFT JOIN ' . TBL_USERS . ' AS cre_user
+                       ON cre_user.usr_id = ann_usr_id_create
                 LEFT JOIN '.TBL_USER_DATA.' AS cre_surname
                        ON cre_surname.usd_usr_id = ann_usr_id_create
                       AND cre_surname.usd_usf_id = ? -- $lastNameUsfId
                 LEFT JOIN '.TBL_USER_DATA.' AS cre_firstname
                        ON cre_firstname.usd_usr_id = ann_usr_id_create
                       AND cre_firstname.usd_usf_id = ? -- $firstNameUsfId
+                LEFT JOIN ' . TBL_USERS . ' AS cha_user
+                       ON cha_user.usr_id = ann_usr_id_change
                 LEFT JOIN '.TBL_USER_DATA.' AS cha_surname
                        ON cha_surname.usd_usr_id = ann_usr_id_change
                       AND cha_surname.usd_usf_id = ? -- $lastNameUsfId
@@ -304,13 +309,14 @@ class ModuleAnnouncements extends Modules
         {
             // show username of create and last change user
             $additionalFields = '
-                cre_username.usr_login_name AS create_name,
-                cha_username.usr_login_name AS change_name ';
+                cre_user.usr_login_name AS create_name,
+                cha_user.usr_login_name AS change_name,
+                cre_user.usr_uuid AS create_uuid, cha_user.usr_uuid AS change_uuid ';
             $additionalTables = '
-                LEFT JOIN '.TBL_USERS.' AS cre_username
-                       ON cre_username.usr_id = ann_usr_id_create
-                LEFT JOIN '.TBL_USERS.' AS cha_username
-                       ON cha_username.usr_id = ann_usr_id_change ';
+                LEFT JOIN '.TBL_USERS.' AS cre_user
+                       ON cre_user.usr_id = ann_usr_id_create
+                LEFT JOIN '.TBL_USERS.' AS cha_user
+                       ON cha_user.usr_id = ann_usr_id_change ';
             $additionalParams = array();
         }
 

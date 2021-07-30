@@ -9,14 +9,14 @@
  *
  * Parameters:
  *
- * rol_id: ID of role, that should be edited
+ * role_uuid: UUID of role, that should be edited
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'int');
+$getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
 
 // Initialize local parameters
 $showSystemCategory = false;
@@ -28,7 +28,7 @@ if(!$gCurrentUser->manageRoles())
     // => EXIT
 }
 
-if($getRoleId > 0)
+if($getRoleUuid !== '')
 {
     $headline = $gL10n->get('SYS_EDIT_ROLE');
 }
@@ -42,9 +42,9 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // Rollenobjekt anlegen
 $role = new TableRoles($gDb);
 
-if($getRoleId > 0)
+if($getRoleUuid !== '')
 {
-    $role->readDataById($getRoleId);
+    $role->readDataByUuid($getRoleUuid);
 
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
     if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
@@ -81,7 +81,7 @@ if(isset($_SESSION['roles_request']))
 }
 
 // holt eine Liste der ausgewaehlten abhaengigen Rolen
-$childRoles = RoleDependency::getChildRoles($gDb, $getRoleId);
+$childRoles = RoleDependency::getChildRoles($gDb, $role->getValue('rol_id'));
 
 $childRoleObjects = array();
 
@@ -138,7 +138,7 @@ $page->addJavascript('
 ');
 
 // show form
-$form = new HtmlForm('roles_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_function.php', array('rol_id' => $getRoleId, 'mode' => '2')), $page);
+$form = new HtmlForm('roles_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_function.php', array('role_uuid' => $getRoleUuid, 'mode' => '2')), $page);
 $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->get('SYS_CATEGORY'));
 if($role->getValue('rol_administrator') == 1)
 {
