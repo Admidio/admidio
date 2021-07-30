@@ -12,13 +12,13 @@
 /******************************************************************************
  * Parameters:
  *
- * usr_id   : ID of the user whose roles should be edited
- * new_user : 0 - (Default) Edit roles of an existing user
- *            1 - Edit roles of a new user
- *            2 - (not relevant)
- *            3 - Edit roles of a registration
- * inline   : false - wird als eigene Seite angezeigt
- *            true  - nur "body" HTML Code
+ * user_uuid : UUID of the user whose roles should be edited
+ * new_user  : 0 - (Default) Edit roles of an existing user
+ *             1 - Edit roles of a new user
+ *             2 - (not relevant)
+ *             3 - Edit roles of a registration
+ * inline    : false - wird als eigene Seite angezeigt
+ *             true  - nur "body" HTML Code
  *
  *****************************************************************************/
 
@@ -26,9 +26,9 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id',   'int');
-$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'int');
-$getInline  = admFuncVariableIsValid($_GET, 'inline',   'bool');
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getNewUser  = admFuncVariableIsValid($_GET, 'new_user',  'int');
+$getInline   = admFuncVariableIsValid($_GET, 'inline',    'bool');
 
 $html = '';
 
@@ -39,7 +39,8 @@ if(!$gCurrentUser->assignRoles())
     // => EXIT
 }
 
-$user = new User($gDb, $gProfileFields, $getUserId);
+$user = new User($gDb, $gProfileFields);
+$user->readDataByUuid($getUserUuid);
 
 // set headline of the script
 $headline = $gL10n->get('SYS_ROLE_ASSIGNMENT_FOR', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
@@ -122,7 +123,7 @@ else
 }
 
 // show headline of module
-$html .= '<form id="roles_assignment_form" action="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles_save.php', array('usr_id' => $getUserId, 'new_user' => $getNewUser, 'inline' => $getInline)).'" method="post">';
+$html .= '<form id="roles_assignment_form" action="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles_save.php', array('user_uuid' => $getUserUuid, 'new_user' => $getNewUser, 'inline' => $getInline)).'" method="post">';
 
 // Create table
 $table = new HtmlTable('role_assignment_table');
@@ -145,7 +146,7 @@ if($gCurrentUser->manageRoles())
                 ON cat_id = rol_cat_id
          LEFT JOIN '.TBL_MEMBERS.'
                 ON rol_id      = mem_rol_id
-               AND mem_usr_id  = ? -- $getUserId
+               AND mem_usr_id  = ? -- $user->getValue(\'usr_id\')
                AND mem_begin  <= ? -- DATE_NOW
                AND mem_end     > ? -- DATE_NOW
              WHERE rol_valid   = 1
@@ -153,7 +154,12 @@ if($gCurrentUser->manageRoles())
                AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, cat_id, rol_name';
-    $queryParams = array($getUserId, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'));
+    $queryParams = array(
+        $user->getValue('usr_id'),
+        DATE_NOW,
+        DATE_NOW,
+        (int) $gCurrentOrganization->getValue('org_id')
+    );
 }
 else
 {
@@ -167,7 +173,7 @@ else
                 ON cat_id = rol_cat_id
          LEFT JOIN '.TBL_MEMBERS.' AS mgl
                 ON rol_id         = mgl.mem_rol_id
-               AND mgl.mem_usr_id = ? -- $getUserId
+               AND mgl.mem_usr_id = ? -- $user->getValue(\'usr_id\')
                AND mgl.mem_begin <= ? -- DATE_NOW
                AND mgl.mem_end    > ? -- DATE_NOW
              WHERE bm.mem_usr_id  = ? -- $gCurrentUser->getValue(\'usr_id\')
@@ -181,7 +187,7 @@ else
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, cat_id, rol_name';
     $queryParams = array(
-        $getUserId,
+        $user->getValue('usr_id'),
         DATE_NOW,
         DATE_NOW,
         $gCurrentUser->getValue('usr_id'),
@@ -216,7 +222,7 @@ while($row = $statement->fetch())
     // but don't change their own membership, because there must be at least one administrator
     if($role->getValue('rol_administrator') == 1
     && (!$gCurrentUser->isAdministrator()
-    || ($gCurrentUser->isAdministrator() && $getUserId === (int) $gCurrentUser->getValue('usr_id'))))
+    || ($gCurrentUser->isAdministrator() && (int) $user->getValue('usr_id') === (int) $gCurrentUser->getValue('usr_id'))))
     {
         $memberDisabled = ' disabled="disabled" ';
     }

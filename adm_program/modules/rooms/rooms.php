@@ -40,18 +40,23 @@ if((int) $gSettingsManager->get('system_show_create_edit') === 1)
     // show firstname and lastname of create and last change user
     $additionalFields = '
         cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
-        cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name ';
+        cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name,
+        cre_user.usr_uuid AS create_uuid, cha_user.usr_uuid AS change_uuid ';
     $additionalTables = '
-        LEFT JOIN '. TBL_USER_DATA .' AS cre_surname
+        LEFT JOIN ' . TBL_USERS . ' AS cre_user
+               ON cre_user.usr_id = room_usr_id_create
+        LEFT JOIN ' . TBL_USER_DATA .' AS cre_surname
                ON cre_surname.usd_usr_id = room_usr_id_create
               AND cre_surname.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-        LEFT JOIN '. TBL_USER_DATA .' AS cre_firstname
+        LEFT JOIN ' . TBL_USER_DATA .' AS cre_firstname
                ON cre_firstname.usd_usr_id = room_usr_id_create
               AND cre_firstname.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-        LEFT JOIN '. TBL_USER_DATA .' AS cha_surname
+        LEFT JOIN ' . TBL_USERS . ' AS cha_user
+               ON cha_user.usr_id = room_usr_id_change
+        LEFT JOIN ' . TBL_USER_DATA .' AS cha_surname
                ON cha_surname.usd_usr_id = room_usr_id_change
               AND cha_surname.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-        LEFT JOIN '. TBL_USER_DATA .' AS cha_firstname
+        LEFT JOIN ' . TBL_USER_DATA .' AS cha_firstname
                ON cha_firstname.usd_usr_id = room_usr_id_change
               AND cha_firstname.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')';
     $queryParams = array(
@@ -65,12 +70,13 @@ else
 {
     // show username of create and last change user
     $additionalFields = '
-        cre_username.usr_login_name AS create_name,
-        cha_username.usr_login_name AS change_name ';
+        cre_user.usr_login_name AS create_name,
+        cha_user.usr_login_name AS change_name,
+        cre_user.usr_uuid AS create_uuid, cha_user.usr_uuid AS change_uuid ';
     $additionalTables = '
-        LEFT JOIN '. TBL_USERS .' AS cre_username
+        LEFT JOIN '. TBL_USERS .' AS cre_user
                ON cre_username.usr_id = room_usr_id_create
-        LEFT JOIN '. TBL_USERS .' AS cha_username
+        LEFT JOIN '. TBL_USERS .' AS cha_user
                ON cha_username.usr_id = room_usr_id_change ';
     $queryParams = array();
 }
@@ -142,7 +148,7 @@ else
                 admFuncShowCreateChangeInfoByName(
                     $row['create_name'], $room->getValue('room_timestamp_create'),
                     $row['change_name'], $room->getValue('room_timestamp_change'),
-                    (int) $room->getValue('room_usr_id_create'), (int) $room->getValue('room_usr_id_change')
+                    $room->getValue('create_uuid'), $room->getValue('change_uuid')
                 ).'
             </div>
         </div>');

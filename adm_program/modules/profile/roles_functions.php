@@ -213,7 +213,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                         $roleMemHTML .= '</span>
                     </li>
                     <li class="list-group-item" id="membership_period_'.$memberId.'" style="visibility: hidden; display: none;">';
-                        $form = new HtmlForm('membership_period_form_'.$memberId, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '7', 'user_id' => (int) $user->getValue('usr_id'), 'mem_id' => $row['mem_id'])), null, array('type' => 'navbar', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
+                        $form = new HtmlForm('membership_period_form_'.$memberId, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '7', 'user_uuid' => $user->getValue('usr_uuid'), 'mem_id' => $row['mem_id'])), null, array('type' => 'navbar', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
                         $form->addInput(
                             'membership_start_date_'.$memberId, $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gSettingsManager->getString('system_date')),
                             array('type' => 'date', 'maxLength' => 10)

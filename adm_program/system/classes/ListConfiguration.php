@@ -109,9 +109,10 @@ class ListConfiguration extends TableLists
      * @param string  $format       The following formats are possible 'html', 'print', 'csv' or 'pdf'
      * @param string  $content      The content that should be converted.
      * @param int     $userId       Id of the user for which the content should converted. This is not the login user.
+     * @param string  $userUuid     Uuid of the user for which the content should converted. This is not the login user.
      * @return string Returns the converted content.
      */
-    public function convertColumnContentForOutput($columnNumber, $format, $content, $userId)
+    public function convertColumnContentForOutput($columnNumber, $format, $content, $userId, $userUuid)
     {
         global $gProfileFields, $gL10n, $gSettingsManager;
 
@@ -135,7 +136,7 @@ class ListConfiguration extends TableLists
             // show user photo
             if (in_array($format, array('html', 'print'), true))
             {
-                $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $userId)).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_USER_PHOTO').'" />';
+                $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $userUuid)).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_USER_PHOTO').'" />';
             }
             if (in_array($format, array('csv', 'pdf'), true) && $content != null)
             {
@@ -251,7 +252,7 @@ class ListConfiguration extends TableLists
                 || $usfId === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
             {
                 $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userId);
-                $outputContent = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $userId)).'">'.$htmlValue.'</a>';
+                $outputContent = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $userUuid)).'">'.$htmlValue.'</a>';
             }
             else
             {
@@ -824,7 +825,7 @@ class ListConfiguration extends TableLists
         // Set SQL-Statement
         if ($optionsAll['showAllMembersDatabase'])
         {
-            $sql = 'SELECT DISTINCT 0 AS mem_leader, usr_id, ' . $sqlColumnNames . '
+            $sql = 'SELECT DISTINCT 0 AS mem_leader, usr_id, usr_uuid, ' . $sqlColumnNames . '
                       FROM '.TBL_USERS.'
                            '.$sqlJoin.'
                      WHERE usr_valid = 1 '.
@@ -833,7 +834,7 @@ class ListConfiguration extends TableLists
         }
         else
         {
-            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . ' usr_id, ' . $sqlColumnNames . '
+            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . ' usr_id, usr_uuid, ' . $sqlColumnNames . '
                       FROM '.TBL_MEMBERS.'
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id

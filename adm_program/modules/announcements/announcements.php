@@ -182,7 +182,7 @@ else
                 admFuncShowCreateChangeInfoByName(
                     $row['create_name'], $announcement->getValue('ann_timestamp_create'),
                     $row['change_name'], $announcement->getValue('ann_timestamp_change'),
-                    (int) $announcement->getValue('ann_usr_id_create'), (int) $announcement->getValue('ann_usr_id_change')
+                    $row['create_uuid'], $row['change_uuid']
                 ) .
                 '<div class="admidio-info-category">' .
                     $gL10n->get('SYS_CATEGORY') .

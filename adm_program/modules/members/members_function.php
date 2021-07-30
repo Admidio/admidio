@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * User-Funktionen
+ * Various user functions
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
@@ -12,13 +12,13 @@
 /******************************************************************************
  * Parameters:
  *
- * mode: 1 - MsgBox, in der erklaert wird, welche Auswirkungen das Loeschen hat
- *       2 - User NUR aus der Gliedgemeinschaft entfernen
- *       3 - User aus der Datenbank loeschen
- *       4 - User E-Mail mit neuen Zugangsdaten schicken
- *       5 - Frage, ob Zugangsdaten geschickt werden soll
- *       6 - Frage, ob Mitglied geloescht werden soll
- * usr_id :  Id des Benutzers, der bearbeitet werden soll
+ * mode: 1 - MsgBox explaining what effect the deletion has.
+ *       2 - remove user ONLY from the member community
+ *       3 - delete user from database
+ *       4 - send user e-mail with new access data
+ *       5 - Ask if access data should be sent
+ *       6 - Ask if member should be deleted
+ * user_uuid : UUID of the user, who should be edited
  *
  *****************************************************************************/
 
@@ -26,8 +26,8 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('requireValue' => true));
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
+$getMode   = admFuncVariableIsValid($_GET, 'mode',      'int',    array('requireValue' => true));
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('requireValue' => true));
 
 // Only users with user-edit rights are allowed
 if (!$gCurrentUser->editUsers())
@@ -50,11 +50,11 @@ if ($getMode === 1)
         <p><i class="fas fa-trash-alt"></i>&nbsp;'.$gL10n->get('SYS_REMOVE_USER_DESC', array($gL10n->get('SYS_DELETE'))).'</p>
 
         <button id="btnFormer" type="button" class="btn btn-primary"
-            onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 2)).'\'">
+            onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => 2)).'\'">
             <i class="fas fa-user-clock"></i>'.$gL10n->get('SYS_FORMER').'</button>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <button id="btnDelete" type="button" class="btn btn-primary"
-            onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 3)).'\'">
+            onclick="self.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => 3)).'\'">
             <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_DELETE').'</button>
     </div>';
 
@@ -62,6 +62,10 @@ if ($getMode === 1)
 }
 
 $orgId = (int) $gCurrentOrganization->getValue('org_id');
+
+// Create user-object
+$user = new User($gDb, $gProfileFields);
+$user->readDataByUuid($getUserUuid);
 
 if ($getMode === 3 || $getMode === 6)
 {
@@ -76,20 +80,17 @@ if ($getMode === 3 || $getMode === 6)
                AND cat_org_id <> ? -- $orgId
                AND mem_begin  <= ? -- DATE_NOW
                AND mem_end     > ? -- DATE_NOW
-               AND mem_usr_id  = ? -- $getUserId';
-    $pdoStatement = $gDb->queryPrepared($sql, array($orgId, DATE_NOW, DATE_NOW, $getUserId));
+               AND mem_usr_id  = ? -- $user->getValue(\'usr_id\')';
+    $pdoStatement = $gDb->queryPrepared($sql, array($orgId, DATE_NOW, DATE_NOW, $user->getValue('usr_id')));
     $isAlsoInOtherOrgas = $pdoStatement->fetchColumn() > 0;
 }
-
-// Create user-object
-$user = new User($gDb, $gProfileFields, $getUserId);
 
 if ($getMode === 2)
 {
     // User has to be a member of this organization
     // User could not delete himself
     // Administrators could not be deleted
-    if (!isMember($getUserId) || (int) $gCurrentUser->getValue('usr_id') === $getUserId
+    if (!isMember($user->getValue('usr_id')) || (int) $gCurrentUser->getValue('usr_id') === (int) $user->getValue('usr_id')
     || (!$gCurrentUser->isAdministrator() && $user->isAdministrator()))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -109,8 +110,8 @@ if ($getMode === 2)
                    OR cat_org_id IS NULL )
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
-               AND mem_usr_id = ? -- $getUserId';
-    $pdoStatement = $gDb->queryPrepared($sql, array($orgId, DATE_NOW, DATE_NOW, $getUserId));
+               AND mem_usr_id = ? -- $user->getValue(\'usr_id\')';
+    $pdoStatement = $gDb->queryPrepared($sql, array($orgId, DATE_NOW, DATE_NOW, $user->getValue('usr_id')));
 
     while ($row = $pdoStatement->fetch())
     {
@@ -128,7 +129,7 @@ elseif ($getMode === 3)
     // User must not be in any other organization
     // User could not delete himself
     // Only administrators are allowed to do this
-    if ($isAlsoInOtherOrgas || (int) $gCurrentUser->getValue('usr_id') === $getUserId || !$gCurrentUser->isAdministrator())
+    if ($isAlsoInOtherOrgas || (int) $gCurrentUser->getValue('usr_id') === (int) $user->getValue('usr_id') || !$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -146,7 +147,7 @@ elseif ($getMode === 4)
     // User must be member of this organization
     // E-Mail support must be enabled
     // Only administrators are allowed to send new login data or users who want to approve login data
-    if (isMember($getUserId)
+    if (isMember($user->getValue('usr_id'))
     && $gSettingsManager->getBool('enable_system_mails')
     && ($gCurrentUser->isAdministrator() || $gCurrentUser->approveUsers()))
     {
@@ -182,7 +183,7 @@ elseif ($getMode === 4)
 elseif ($getMode === 5)
 {
     // Ask to send new login-data
-    $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 4)));
+    $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => 4)));
     $gMessage->show($gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))));
     // => EXIT
 }
@@ -192,16 +193,16 @@ elseif ($getMode === 6)
 
     if (!$isAlsoInOtherOrgas && $gCurrentUser->isAdministrator())
     {
-        if (isMember($getUserId))
+        if (isMember($user->getValue('usr_id')))
         {
             // User is ONLY member of this organization -> ask if make to former member or delete completely
-            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 1)));
+            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => 1)));
             // => EXIT
         }
         else
         {
             // User is not member of any organization -> ask if delete completely
-            $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 3)));
+            $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => 3)));
             $gMessage->show($gL10n->get('SYS_USER_DELETE_DESC', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))), $gL10n->get('SYS_DELETE'));
             // => EXIT
         }
@@ -209,7 +210,7 @@ elseif ($getMode === 6)
     else
     {
         // User could only be removed from this organization -> ask so
-        $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 2)));
+        $gMessage->setForwardYesNo(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => 2)));
         $gMessage->show($gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))), $gL10n->get('SYS_REMOVE'));
         // => EXIT
     }
