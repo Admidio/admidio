@@ -140,7 +140,7 @@ if($gValidLogin)
     $form = new HtmlForm('plugin-login-static-form', '#', null, array('type' => 'vertical', 'setFocus' => false));
     $form->addStaticControl(
         'plg_user', $gL10n->get('SYS_MEMBER'),
-        '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => (int) $gCurrentUser->getValue('usr_id'))). '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'
+        '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_uuid' => $gCurrentUser->getValue('usr_uuid'))). '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'
         . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') .
         '</a>'
     );
@@ -230,7 +230,7 @@ else
         elseif($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3)
         {
             // show link of message module to send mail to administrator role
-            $linkUrl = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('rol_id' => (int) $roleAdministrator->getValue('rol_id'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+            $linkUrl = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         }
         else
         {

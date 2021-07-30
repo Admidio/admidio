@@ -147,13 +147,14 @@ and sharing great software.
 - [jQuery](https://jquery.com/): JavaScript-Library
 - [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin
 - [Lightbox](https://ashleydw.github.io/lightbox/): Lightbox for Bootstrap
-- [Moment](https://github.com/Seldaek/monolog/): Parse, validate, manipulate, and display dates in JavaScript
-- [Monolog](http://momentjs.com/): Logging for PHP
+- [Moment](http://momentjs.com/): Parse, validate, manipulate, and display dates in JavaScript
+- [Monolog](https://github.com/Seldaek/monolog/): Logging for PHP
 - [NobleCount](https://tpgblog.com/NobleCount/): NobleCount… for a more ‘proper’ count of the characters remaining.
 - [phpass](https://github.com/hautelook/phpass/): Portable PHP password hashing framework
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP
 - [PHPSpreadsheet](https://phpspreadsheet.readthedocs.io): PhpSpreadsheet offers a set of classes that allow you to read and write various spreadsheet file formats.
-- [PSR Log](https://github.com/php-fig/log): An interface that describes a logger
+- [PSR Log](https://github.com/php-fig/log): An interface that describes a logger.
+- [ramsey/uuid](https://github.com/ramsey/uuid): A PHP library for generating and working with UUIDs.
 - [SecurImage](https://www.phpcaptcha.org/): PHP CAPTCHA script for generating complex images and CAPTCHA codes to protect forms from spam and abuse.
 - [Select2](https://select2.github.io/): jQuery replacement for select boxes
 - [Smarty](https://www.smarty.net/): PHP template engine

@@ -70,7 +70,7 @@ $minutesOffset = new \DateInterval('PT' . $plg_time_online . 'M');
 $refDate = $now->sub($minutesOffset)->format('Y-m-d H:i:s');
 
 // User IDs alles Sessons finden, die in genannter aktueller und referenz Zeit sind
-$sql = 'SELECT ses_usr_id, usr_login_name
+$sql = 'SELECT ses_usr_id, usr_uuid, usr_login_name
           FROM '.TBL_SESSIONS.'
      LEFT JOIN '.TBL_USERS.'
             ON usr_id = ses_usr_id
@@ -114,7 +114,7 @@ if($onlineUsersStatement->rowCount() > 0)
             && ($plg_show_members == 1 || $gValidLogin))
             {
                 $allVisibleOnlineUsers[] = '<strong><a target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'"
-                    href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => $row['ses_usr_id'])). '">'. $row['usr_login_name']. '</a></strong>';
+                    href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])). '">'. $row['usr_login_name']. '</a></strong>';
                 $usrIdMerker = (int) $row['ses_usr_id'];
             }
             ++$countMembers;

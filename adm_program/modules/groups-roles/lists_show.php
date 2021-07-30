@@ -513,7 +513,7 @@ if ($getMode !== 'csv')
             if ($role->allowedToAssignMembers($gCurrentUser))
             {
                 $page->addPageFunctionsMenuItem('menu_item_lists_assign_members', $gL10n->get('SYS_ASSIGN_MEMBERS'),
-                    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('rol_id' => (int) $role->getValue('rol_id'))),
+                    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $role->getValue('rol_uuid'))),
                     'fa-user-plus');
             }
         }
@@ -642,9 +642,9 @@ foreach ($membersList as $member)
     {
         $column = $list->getColumnObject($columnNumber);
 
-        // in the SQL mem_leader and usr_id starts before the column
-        // the Index to the row must be set to 2 directly
-        $sqlColumnNumber = $columnNumber + 1;
+        // in the SQL mem_leader, usr_id and usr_uuid starts before the column
+        // the Index to the row must be set to 3 directly
+        $sqlColumnNumber = $columnNumber + 2;
 
         $usfId = 0;
         if ($column->getValue('lsc_usf_id') > 0)
@@ -685,11 +685,11 @@ foreach ($membersList as $member)
         // fill content with data of database
         if ($getMode === 'csv')
         {
-            $csvStr .= $separator.$valueQuotes . $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_id']) . $valueQuotes;
+            $csvStr .= $separator.$valueQuotes . $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_id'], $member['usr_uuid']) . $valueQuotes;
         }
         else
         {
-            $columnValues[] = $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_id']);
+            $columnValues[] = $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_id'], $member['usr_uuid']);
         }
     }
 

@@ -12,14 +12,14 @@ function ProfileJS(gRootPath) {
     this.url                     = gRootPath + "/adm_program/modules/profile/profile_function.php";
     this.formerRoleCount         = 0;
     this.futureRoleCount         = 0;
-    this.userId                  = 0;
+    this.userUuid                = "";
     this.deleteRole_ConfirmText  = "";
     this.deleteFRole_ConfirmText = "";
     this.errorID                 = 0;
 
     this.reloadRoleMemberships = function () {
         $.get({
-            url: this.url + "?mode=4&user_id=" + this.userId,
+            url: this.url + "?mode=4&user_uuid=" + this.userUuid,
             dataType: "html",
             success: function(responseText) {
                 $("#profile_roles_box_body").html(responseText);
@@ -33,7 +33,7 @@ function ProfileJS(gRootPath) {
     this.reloadFormerRoleMemberships = function () {
         $.get(
             {
-                url: this.url + "?mode=5&user_id=" + this.userId,
+                url: this.url + "?mode=5&user_uuid=" + this.userUuid,
                 dataType: "html",
                 success: function(responseText) {
                     $("#profile_former_roles_box_body").html(responseText);
@@ -45,7 +45,7 @@ function ProfileJS(gRootPath) {
     this.reloadFutureRoleMemberships = function () {
         $.get(
             {
-                url: this.url + "?mode=6&user_id=" + this.userId,
+                url: this.url + "?mode=6&user_uuid=" + this.userUuid,
                 dataType: "html",
                 success: function(responseText) {
                     $("#profile_future_roles_box_body").html(responseText);

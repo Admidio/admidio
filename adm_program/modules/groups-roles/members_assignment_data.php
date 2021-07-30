@@ -49,7 +49,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'int', array('requireValue' => true, 'directOutput' => true));
+$getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid',     'string', array('requireValue' => true, 'directOutput' => true));
 $getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool', array('defaultValue' => false));
 $getDraw   = admFuncVariableIsValid($_GET, 'draw',   'int', array('requireValue' => true));
@@ -64,7 +64,8 @@ $jsonArray = array('draw' => $getDraw);
 header('Content-Type: application/json');
 
 // create object of the commited role
-$role = new TableRoles($gDb, $getRoleId);
+$role = new TableRoles($gDb);
+$role->readDataByUuid($getRoleUuid);
 
 // roles of other organizations can't be edited
 if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
@@ -207,7 +208,7 @@ $countTotalStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more
 $jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 
  // SQL-Statement zusammensetzen
-$mainSql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
+$mainSql = 'SELECT DISTINCT usr_id, usr_uuid, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
                    birthday.usd_value AS birthday, city.usd_value AS city, street.usd_value AS street,
                    zip_code.usd_value AS zip_code, country.usd_value AS country, mem_usr_id AS member_this_role,
                    mem_leader AS leader_this_role, '.$memberOfThisOrganizationSelect.' AS member_this_orga
@@ -235,7 +236,7 @@ $mainSql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name
                AND country.usd_usf_id = ? -- $gProfileFields->getProperty(\'COUNTRY\', \'usf_id\')
          LEFT JOIN '.TBL_ROLES.' AS rol
                 ON rol.rol_valid   = 1
-               AND rol.rol_id      = ? -- $getRoleId
+               AND rol.rol_id      = ? -- $role->getValue(\'rol_id\')
          LEFT JOIN '.TBL_MEMBERS.' AS mem
                 ON mem.mem_rol_id  = rol.rol_id
                AND mem.mem_begin  <= ? -- DATE_NOW
@@ -251,7 +252,7 @@ $queryParamsMain = array(
     $gProfileFields->getProperty('STREET', 'usf_id'),
     $gProfileFields->getProperty('POSTCODE', 'usf_id'),
     $gProfileFields->getProperty('COUNTRY', 'usf_id'),
-    $getRoleId,
+    $role->getValue('rol_id'),
     DATE_NOW,
     DATE_NOW
 ); // TODO add more params
@@ -269,7 +270,7 @@ if($getSearch === '')
 }
 else
 {
-    $sql = 'SELECT usr_id, last_name, first_name, birthday, city, street, zip_code, country, member_this_role, leader_this_role, member_this_orga
+    $sql = 'SELECT usr_id, usr_uuid, last_name, first_name, birthday, city, street, zip_code, country, member_this_role, leader_this_role, member_this_orga
               FROM ('.$mainSql.') AS members
                '.$searchCondition
                 .$orderCondition
@@ -302,21 +303,21 @@ while($user = $userStatement->fetch())
     // set flag if user is member of the current organization or not
     if($user['member_this_role'])
     {
-        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_member" />';
+        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_uuid'].'" name="member_'.$user['usr_uuid'].'" checked="checked" class="memlist_checkbox memlist_member" />';
     }
     else
     {
-        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox memlist_member" />';
+        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_uuid'].'" name="member_'.$user['usr_uuid'].'" class="memlist_checkbox memlist_member" />';
     }
 
     if($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers()))
     {
-        $arrContent[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $user['usr_id'])).'">'.$user['last_name'].'</a>';
+        $arrContent[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $user['usr_uuid'])).'">'.$user['last_name'].'</a>';
     }
 
     if($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->editUsers()))
     {
-        $arrContent[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $user['usr_id'])).'">'.$user['first_name'].'</a>';
+        $arrContent[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $user['usr_uuid'])).'">'.$user['first_name'].'</a>';
     }
 
     // create string with user address

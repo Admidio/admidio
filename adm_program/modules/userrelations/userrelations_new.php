@@ -9,14 +9,14 @@
  *
  * Parameters:
  *
- * usr_id : user id of the first user in the new relation
+ * user_uuid : UUID of the first user in the new relation
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUsrId = admFuncVariableIsValid($_GET, 'usr_id', 'int');
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 
 if (!$gSettingsManager->getBool('members_enable_user_relations'))
 {
@@ -31,13 +31,14 @@ if(!$gCurrentUser->editUsers())
     // => EXIT
 }
 
-if($getUsrId <= 0)
+if($getUserUuid === '')
 {
     $gMessage->show($gL10n->get('SYS_NO_ENTRY'));
     // => EXIT
 }
 
-$user = new User($gDb, $gProfileFields, $getUsrId);
+$user = new User($gDb, $gProfileFields);
+$user->readDataByUuid($getUserUuid);
 
 if($user->isNewRecord())
 {
@@ -61,7 +62,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage('admidio-userrelations-edit', $headline);
 
 // show form
-$form = new HtmlForm('relation_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php', array('usr_id' => $getUsrId, 'mode' => '1')), $page);
+$form = new HtmlForm('relation_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php', array('user_uuid' => $getUserUuid, 'mode' => '1')), $page);
 
 $form->addInput(
     'usr_id', $gL10n->get('SYS_USER'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'),

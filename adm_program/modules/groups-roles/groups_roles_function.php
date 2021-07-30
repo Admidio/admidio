@@ -12,7 +12,7 @@
 /******************************************************************************
  * Parameters:
  *
- * rol_id: ID of role, that should be edited
+ * role_uuid : UUID of role, that should be edited
  * mode :  2 - create or edit role
  *         3 - set role inaktive
  *         4 - delete role
@@ -25,8 +25,8 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'int');
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
+$getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',      'int', array('requireValue' => true));
 
 // only members who are allowed to create and edit roles should have access to
 // most of these functions
@@ -39,9 +39,9 @@ if($getMode !== 9 && !$gCurrentUser->manageRoles())
 // Rollenobjekt anlegen
 $role = new TableRoles($gDb);
 
-if($getRoleId > 0)
+if($getRoleUuid !== '')
 {
-    $role->readDataById($getRoleId);
+    $role->readDataByUuid($getRoleUuid);
 
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
     if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
@@ -80,13 +80,13 @@ if($getMode === 2)
                     ON cat_id = rol_cat_id
                  WHERE rol_name   = ? -- $_POST[\'rol_name\']
                    AND rol_cat_id = ? -- $_POST[\'rol_cat_id\']
-                   AND rol_id    <> ? -- $getRoleId
+                   AND rol_id    <> ? -- $role->getValue(\'rol_id\')
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )';
         $queryParams = array(
             $_POST['rol_name'],
             (int) $_POST['rol_cat_id'],
-            $getRoleId,
+            $role->getValue('rol_id'),
             (int) $gCurrentOrganization->getValue('org_id')
         );
         $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
@@ -226,7 +226,7 @@ if($getMode === 2)
     }
 
     // Kontrollieren ob bei nachtraeglicher Senkung der maximalen Mitgliederzahl diese nicht bereits ueberschritten wurde
-    if($getRoleId > 0 && (int) $_POST['rol_max_members'] !== (int) $role->getValue('rol_max_members'))
+    if($getRoleUuid !== '' && (int) $_POST['rol_max_members'] !== (int) $role->getValue('rol_max_members'))
     {
         // Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
         $role->setValue('rol_max_members', (int) $_POST['rol_max_members']);
@@ -264,12 +264,6 @@ if($getMode === 2)
         // => EXIT
     }
 
-    // holt die Role ID des letzten Insert Statements
-    if($getRoleId === 0)
-    {
-        $getRoleId = (int) $role->getValue('rol_id');
-    }
-
     // save role dependencies in database
     if(array_key_exists('dependent_roles', $_POST) && $role->getValue('cat_name_intern') !== 'EVENTS')
     {
@@ -278,7 +272,7 @@ if($getMode === 2)
         $roleDep = new RoleDependency($gDb);
 
         // holt eine Liste der ausgewählten Rolen
-        $dbChildRoles = RoleDependency::getChildRoles($gDb, $getRoleId);
+        $dbChildRoles = RoleDependency::getChildRoles($gDb, $role->getValue('rol_id'));
 
         // entferne alle Rollen die nicht mehr ausgewählt sind
         if(count($dbChildRoles) > 0)
@@ -287,7 +281,7 @@ if($getMode === 2)
             {
                 if(!in_array($dbChildRole, $sentChildRoles, true))
                 {
-                    $roleDep->get($dbChildRole, $getRoleId);
+                    $roleDep->get($dbChildRole, $role->getValue('rol_id'));
                     $roleDep->delete();
                 }
             }
@@ -302,7 +296,7 @@ if($getMode === 2)
                 {
                     $roleDep->clear();
                     $roleDep->setChild($sentChildRole);
-                    $roleDep->setParent($getRoleId);
+                    $roleDep->setParent($role->getValue('rol_id'));
                     $roleDep->insert((int) $gCurrentUser->getValue('usr_id'));
 
                     // füge alle Mitglieder der ChildRole der ParentRole zu
@@ -313,7 +307,7 @@ if($getMode === 2)
     }
     else
     {
-        RoleDependency::removeChildRoles($gDb, $getRoleId);
+        RoleDependency::removeChildRoles($gDb, $role->getValue('rol_id'));
     }
 
     $gNavigation->deleteLastUrl();

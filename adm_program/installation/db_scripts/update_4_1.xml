@@ -51,11 +51,18 @@
     <step id="220">UPDATE %PREFIX%_menu SET men_name = 'SYS_USER_MANAGEMENT', men_description = 'SYS_USER_MANAGEMENT_DESC' WHERE men_name_intern = 'usrmgt'</step>
     <step id="230">UPDATE %PREFIX%_menu SET men_name = 'SYS_EMAIL', men_description = 'SYS_EMAIL_DESC' WHERE men_name_intern = 'mail'</step>
     <step id="240">UPDATE %PREFIX%_menu SET men_name = 'SYS_NEW_REGISTRATIONS', men_description = 'SYS_MANAGE_NEW_REGISTRATIONS_DESC' WHERE men_name_intern = 'newreg'</step>
-    <step id="250">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
+    <step id="250">ALTER TABLE %PREFIX%_users ADD COLUMN usr_uuid varchar(36)</step>
+    <step id="255">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_uuid varchar(36)</step>
+    <step id="260">ComponentUpdateSteps::updateStep41AddUuid</step>
+    <step id="270" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_uuid varchar(36) NOT NULL</step>
+    <step id="280">CREATE UNIQUE INDEX %PREFIX%_idx_usr_uuid ON %PREFIX%_users (usr_uuid)</step>
+    <step id="290" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_uuid varchar(36) NOT NULL</step>
+    <step id="300">CREATE UNIQUE INDEX %PREFIX%_idx_rol_uuid ON %PREFIX%_roles (rol_uuid)</step>
+    <step id="310">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
                          VALUES ('MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.1.0', 0)</step>
-    <step id="260">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
+    <step id="320">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
                          VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'CATEGORY-REPORT'), 1, 0, 9, 1, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC')</step>
-    <step id="270">CREATE TABLE %PREFIX%_category_report
+    <step id="330">CREATE TABLE %PREFIX%_category_report
 (
     crt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     crt_org_id                  integer unsigned,
@@ -69,7 +76,7 @@
 ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci</step>
-    <step id="280">ALTER TABLE %PREFIX%_category_report ADD CONSTRAINT %PREFIX%_fk_crt_org FOREIGN KEY (crt_org_id) REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
-    <step id="290">ComponentUpdateSteps::updateStep41CategoryReportMigration</step>
+    <step id="340">ALTER TABLE %PREFIX%_category_report ADD CONSTRAINT %PREFIX%_fk_crt_org FOREIGN KEY (crt_org_id) REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="350">ComponentUpdateSteps::updateStep41CategoryReportMigration</step>
     <step>stop</step>
 </update>

@@ -35,6 +35,10 @@ class ProfileFields
      */
     protected $mUserId = 0;
     /**
+     * @var string UUID of the current user of this object
+     */
+    protected $mUserUuid = '';
+    /**
      * @var bool if true, than no value will be checked if method setValue is called
      */
     protected $noValueCheck = false;
@@ -75,6 +79,7 @@ class ProfileFields
     {
         $this->mUserData = array();
         $this->mUserId = 0;
+        $this->mUserUuid = '';
         $this->columnsValueChanged = false;
     }
 
@@ -176,11 +181,17 @@ class ProfileFields
                 case 'CHECKBOX':
                     if ($value == 1)
                     {
-                        $htmlValue = '<i class="fas fa-check-square"></i>';
+                        $htmlValue = '<span class="fa-stack">
+                            <i class="fas fa-square-full fa-stack-1x"></i>
+                            <i class="fas fa-check-square fa-stack-1x fa-inverse"></i>
+                        </span>';
                     }
                     else
                     {
-                        $htmlValue = '<i class="fas fa-square"></i>';
+                        $htmlValue = '<span class="fa-stack">
+                            <i class="fas fa-square-full fa-stack-1x"></i>
+                            <i class="fas fa-square fa-stack-1x fa-inverse"></i>
+                        </span>';
                     }
                     break;
                 case 'DATE':
@@ -210,7 +221,7 @@ class ProfileFields
                                 $value2 = $this->mUserId;
                             }
 
-                            $emailLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('usr_id' => $value2));
+                            $emailLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $value2));
                         }
                         if (strlen($value) > 30)
                         {
@@ -320,7 +331,10 @@ class ProfileFields
         {
             if ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX')
             {
-                $value = '<i class="fas fa-square"></i>';
+                $value = '<span class="fa-stack">
+                    <i class="fas fa-square-full fa-stack-1x"></i>
+                    <i class="fas fa-square fa-stack-1x fa-inverse"></i>
+                </span>';
 
                 // if field has url then create a link
                 $usfUrl = $this->mProfileFields[$fieldNameIntern]->getValue('usf_url');
@@ -540,10 +554,12 @@ class ProfileFields
 
             // read all user data of user
             $sql = 'SELECT *
-                      FROM '.TBL_USER_DATA.'
+                      FROM '.TBL_USERS.'
+                INNER JOIN '.TBL_USER_DATA.'
+                        ON usd_usr_id = usr_id
                 INNER JOIN '.TBL_USER_FIELDS.'
                         ON usf_id = usd_usf_id
-                     WHERE usd_usr_id = ? -- $userId';
+                     WHERE usr_id = ? -- $userId';
             $userDataStatement = $this->db->queryPrepared($sql, array($userId));
 
             while ($row = $userDataStatement->fetch())
@@ -553,6 +569,10 @@ class ProfileFields
                     $this->mUserData[$row['usd_usf_id']] = new TableAccess($this->db, TBL_USER_DATA, 'usd');
                 }
                 $this->mUserData[$row['usd_usf_id']]->setArray($row);
+                if(isset($row['usr_uuid']))
+                {
+                    $this->mUserUuid = $row['usr_uuid'];
+                }
             }
         }
     }
