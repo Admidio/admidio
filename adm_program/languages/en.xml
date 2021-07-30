@@ -671,6 +671,8 @@
   <string name="SYS_DATA_MULTI_ORGA">Data visible to multiple organizations</string>
   <string name="SYS_DATA_PROTECTION">Data protection</string>
   <string name="SYS_DATA_PROTECTION_DESC">Here, the URL to your page with the privacy policy can be deposited. This page is linked to the use of cookies for further information. If the selected theme supports this, a link will also be displayed on the Admidio pages. (Example: https://www.example.com/data_protection.html)</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION">I consent to the processing of the data</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION_DESC">I have read the information provided by the organization. As far as the personal data provided by me are not necessary data for the fulfillment of the contract, I declare my consent to the processing of these data. My data will be stored exclusively for the purposes of the organization and treated confidentially.</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_BACKUP">Database backup</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Create and download database backups of Admidio tables.</string>
