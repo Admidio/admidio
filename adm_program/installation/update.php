@@ -101,6 +101,7 @@ if (!$gSettingsManager->has('system_language'))
 }
 $gLanguageData = new LanguageData($gSettingsManager->getString('system_language'));
 $gL10n = new Language($gLanguageData);
+$gChangeNotification = new ChangeNotification();
 
 if (FileSystemUtils::isUnixWithPosix() && (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FOLDER_DATA)))
 {
