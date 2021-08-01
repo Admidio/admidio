@@ -58,5 +58,6 @@
     <step id="280">CREATE UNIQUE INDEX %PREFIX%_idx_usr_uuid ON %PREFIX%_users (usr_uuid)</step>
     <step id="290" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_uuid varchar(36) NOT NULL</step>
     <step id="300">CREATE UNIQUE INDEX %PREFIX%_idx_rol_uuid ON %PREFIX%_roles (rol_uuid)</step>
+    <step id="310">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_description_inline boolean NOT NULL DEFAULT '0'</step>
     <step>stop</step>
 </update>
