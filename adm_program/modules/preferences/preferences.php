@@ -1226,9 +1226,6 @@ $formCategoryReport->addSelectBoxFromSql(
     'category_report_default_configuration', $gL10n->get('SYS_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
     array('defaultValue' => $formValues['category_report_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC')
     );
-$html = '<a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/export_import.php', array('mode' => 1)).'">
-    <i class="fas fa-exchange-alt"></i> '.$gL10n->get('SYS_LINK_TO_EXPORT_IMPORT').'</a>';
-$formCategoryReport->addCustomContent($gL10n->get('SYS_EXPORT_IMPORT'), $html, array('helpTextIdInline' => 'SYS_EXPORT_IMPORT_DESC'));
 
 $formCategoryReport->addSubmitButton(
     'btn_save_documents_files', $gL10n->get('SYS_SAVE'),
