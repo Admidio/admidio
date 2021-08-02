@@ -667,6 +667,7 @@
   <string name="SYS_COOKIE_DESC">This website uses cookies to ensure that you get the best experience on our website. By using this website you agree that we use cookies.</string>
   <string name="SYS_COOKIE_NOT_SET">Log-in error! Your browser does not accept cookies!\n\nFor successful log-in, please, configure your browser to accept cookies from #VAR1_BOLD#.</string>
   <string name="SYS_COPY">Copy</string>
+  <string name="SYS_COPY_CONFIGURATION">Copy configuration</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Your requested copy of the message</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
   <string name="SYS_COUNT_BCC">Number of BCC recipients</string>

@@ -673,6 +673,7 @@
   <string name="SYS_COOKIE_DESC">Diese Website verwendet Cookies, um sicherzustellen, dass Sie die beste Erfahrung auf unserer Website erhalten. Mit der Nutzung dieser Webseite erklären Sie sich einverstanden, dass wir Cookies verwenden.</string>
   <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da Ihr Browser das Setzen von Cookies verbietet!\n\nDamit Sie sich erfolgreich anmelden können, müssen Sie Ihren Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
   <string name="SYS_COPY">Kopieren</string>
+  <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist Ihre angeforderte Kopie der Nachricht</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
   <string name="SYS_COUNT_BCC">Anzahl der BCC Empfänger</string>

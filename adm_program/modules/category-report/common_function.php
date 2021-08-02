@@ -78,6 +78,36 @@ function createColDescConfig($name)
 
     return $name;
 }
+    
+/**
+* Funktion prüft, ob es eine Konfiguration mit dem übergebenen Namen bereits gibt
+* wenn ja: wird "- Kopie" angehängt und rekursiv überprüft
+* @param   string  $name
+* @return  string
+*/
+function createName($name)
+{
+    global $gDb, $gL10n, $gCurrentOrganization;
+    
+    $sql = ' SELECT crt_name
+               FROM '. TBL_CATEGORY_REPORT .'
+              WHERE ( crt_org_id = ?
+                 OR crt_org_id IS NULL ) ';
+    $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+    
+    $crtNames = array();
+    while($row = $statement->fetch())
+    {
+        $crtNames[] = $row['crt_name'];
+    }
+   
+    while (in_array($name, $crtNames))
+    {
+        $name .= ' - '.$gL10n->get('SYS_CARBON_COPY');
+    }
+    
+    return $name;
+}
 
 /**
  * Funktion speichert das Konfigurationsarray
