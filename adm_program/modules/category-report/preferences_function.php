@@ -44,7 +44,7 @@ try
    				$values['selection_role'] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]),',') : '';
    				$values['selection_cat']  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]),',') : '';
    				$values['number_col']     = isset($_POST['number_col'. $conf]) ? 1 : 0 ;
-   				$values['default_conf']   = false;
+   				$values['default_conf']   = (bool)$_POST['default_conf'. $conf];
 
    				$allColumnsEmpty = true;
 
