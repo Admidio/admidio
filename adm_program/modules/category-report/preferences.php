@@ -11,6 +11,7 @@
  *
  * add_delete : -1 - Generate a configuration
  * 				>0 - Deleting a configuration
+ * copy       : Copy a configuration
  *
  ***********************************************************************************************
  */
@@ -37,21 +38,12 @@ $headline = $gL10n->get('SYS_CATEGORY_REPORT') . ' - ' . $gL10n->get('SYS_CONFIG
 
 if ($getAddDelete === -1)
 {
-    foreach($config as $key => $dummy)
-    {
-        $config[] = array('name' => '', 'col_fields' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '');
-    }
+    $config[] = array('name' => '', 'col_fields' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'default_conf'   => false);
+    // ohne saveConfigArray(); ansonsten würden 'name' und 'col_fields' ohne Daten gespeichert sein
 }
 elseif ($getAddDelete > 0)
 {
-    foreach($config as $key => $dummy)
-    {
-        array_splice($config[$key], $getAddDelete-1, 1);
-    }
-
-    // durch das Loeschen einer Konfiguration kann der Fall eintreten, dass es die eingestellte Standardkonfiguration nicht mehr gibt
-    // daher die Standardkonfiguration auf die erste Konfiguration im Array setzen
-    $gSettingsManager->set('category_report_default_configuration', 0);
+    array_splice($config, $getAddDelete-1, 1);
     saveConfigArray($config);
 }
 
@@ -61,7 +53,8 @@ if ($getCopy > 0)
                       'col_fields'     => $config[$getCopy-1]['col_fields'],
                       'selection_role' => $config[$getCopy-1]['selection_role'],
                       'selection_cat'  => $config[$getCopy-1]['selection_cat'],
-                      'number_col'     => $config[$getCopy-1]['number_col']);
+                      'number_col'     => $config[$getCopy-1]['number_col'],
+                      'default_conf'   => false);
     saveConfigArray($config);
 }
 
@@ -273,7 +266,7 @@ foreach($config as $key => $value)
     $formConfigurations->addCheckbox('number_col'.$key, $gL10n->get('SYS_NUMBER_COL'), $value['number_col'], array('helpTextIdLabel' => 'SYS_NUMBER_COL_DESC'));
     $html = '<a id="copy_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('copy' => $key+1)).'">
             <i class="fas fa-clone"></i> '.$gL10n->get('SYS_COPY_CONFIGURATION').'</a>';
-    if(count($config) > 1)
+    if(count($config) > 1 && $value['default_conf'] == false)
     {
         $html .= '&nbsp;&nbsp;&nbsp;&nbsp;<a id="delete_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('add_delete' => $key+1)).'">
             <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE_CONFIGURATION').'</a>';

@@ -69,10 +69,6 @@ try
    			saveConfigArray($config);
            	break;
 
-      	case 'options':
-	        	$gSettingsManager->set('category_report_default_configuration', $_POST['default_config']);
-           	break;
-
        	default:
           		$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
    	}

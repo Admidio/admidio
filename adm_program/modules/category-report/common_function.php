@@ -60,24 +60,6 @@ function isMemberOfCategorie($cat_id, $user_id = 0)
         return 0;
     }
 }
-
-/**
- * Funktion prüft, ob es eine Konfiguration mit dem übergebenen Namen bereits gibt
- * wenn ja: wird "- Kopie" angehängt und rekursiv überprüft
- * @param   string  $name
- * @return  string
- */
-function createColDescConfig($name)
-{
-    global $config, $gL10n;
-
-    while (in_array($name, $config['name']))
-    {
-        $name .= ' - '.$gL10n->get('SYS_CARBON_COPY');
-    }
-
-    return $name;
-}
     
 /**
 * Funktion prüft, ob es eine Konfiguration mit dem übergebenen Namen bereits gibt
@@ -144,7 +126,7 @@ function saveConfigArray(array $arrConfiguration)
             $defaultConfiguration = $categoryReport->getValue('crt_id');
         }
     }
-
+    
     // set default configuration
     $gSettingsManager->set('category_report_default_configuration', $defaultConfiguration);
 
