@@ -40,6 +40,7 @@ try
 
 			for ($conf = 0; isset($_POST['name'. $conf]); $conf++)
    			{
+   			    $values['id']             = $_POST['id'. $conf];
    				$values['name']           = $_POST['name'. $conf];
    				$values['selection_role'] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]),',') : '';
    				$values['selection_cat']  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]),',') : '';
@@ -66,7 +67,7 @@ try
    				$values['col_fields'] = substr($fields,0,-1);
    				$config[] = $values;
    			}
-   			saveConfigArray($config);
+   			$config = $report->saveConfigArray($config);
            	break;
 
        	default:

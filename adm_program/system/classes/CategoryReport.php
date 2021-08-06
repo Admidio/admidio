@@ -435,6 +435,54 @@ class CategoryReport
 
         return $this->arrConfiguration;
     }
+    
+    /**
+     * Funktion speichert das Konfigurationsarray
+     * @param   $arrConfiguration
+     * @return  Array das Konfigurationsarray
+     */
+    function saveConfigArray(array $arrConfiguration)
+    {
+        global  $gDb, $gCurrentOrganization, $gSettingsManager;
+        
+        $defaultConfiguration = 0;
+        
+        $gDb->startTransaction();
+
+        foreach ($arrConfiguration as $key => $values)
+        {
+            if ($values['id'] === '' || $values['id'] > 0)                  // id > 0 (=edit a configuration) or '' (=append a configuration)
+            {
+                $categoryReport = new TableAccess($gDb, TBL_CATEGORY_REPORT, 'crt', $values['id']);
+                $categoryReport->setValue('crt_org_id', $gCurrentOrganization->getValue('org_id'));
+                $categoryReport->setValue('crt_name', $values['name']);
+                $categoryReport->setValue('crt_col_fields', $values['col_fields']);
+                $categoryReport->setValue('crt_selection_role', $values['selection_role']);
+                $categoryReport->setValue('crt_selection_cat', $values['selection_cat']);
+                $categoryReport->setValue('crt_number_col', $values['number_col']);
+                $categoryReport->save();
+                    
+                if($values['default_conf'] === true || $defaultConfiguration === 0)
+                {
+                    $defaultConfiguration = $categoryReport->getValue('crt_id');
+                }
+                // set default configuration
+                $gSettingsManager->set('category_report_default_configuration', $defaultConfiguration);
+            }
+            else                                                            // delete
+            {
+                $values['id'] = $values['id']*(-1);
+                $categoryReport = new TableAccess($gDb, TBL_CATEGORY_REPORT, 'crt', $values['id']);
+                $categoryReport->delete();
+            }
+        }
+        
+        $gDb->endTransaction();
+        
+        $this->arrConfiguration = array();
+        
+        return $this->getConfigArray();
+    }
 
     /**
      * get the active configuration

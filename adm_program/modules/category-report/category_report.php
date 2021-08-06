@@ -39,13 +39,6 @@ if (!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 $report = new CategoryReport();
 $config = $report->getConfigArray();
 
-// security query if the configuration array is empty
-if (empty($config))
-{
-    $config = array('name' => array(''), 'col_fields' => array(''), 'selection_role' => array(''), 'selection_cat' => array(''), 'number_col' => array(0));
-    saveConfigArray($config);
-}
-
 $getCrtId           = admFuncVariableIsValid($_GET, 'crt_id', 'int', array('defaultValue' => $gSettingsManager->get('category_report_default_configuration')) );
 $getMode            = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl' )));
 $getFilter          = admFuncVariableIsValid($_GET, 'filter', 'string');

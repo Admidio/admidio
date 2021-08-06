@@ -91,48 +91,5 @@ function createName($name)
     return $name;
 }
 
-/**
- * Funktion speichert das Konfigurationsarray
- * @param   none
- */
-function saveConfigArray(array $arrConfiguration)
-{
-    global  $gDb, $gCurrentOrganization, $gSettingsManager;
-
-    $crtDb = array();
-    $defaultConfiguration = 0;
-
-    $gDb->startTransaction();
-
-    // delete all existing configurations from the current organization
-    $sql = 'DELETE FROM '.TBL_CATEGORY_REPORT.'
-             WHERE crt_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\') ';
-    $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
-
-    // write all existing configurations
-    foreach ($arrConfiguration as $key => $values)
-    {
-        $categoryReport = new TableAccess($gDb, TBL_CATEGORY_REPORT, 'crt');
-        $categoryReport->setValue('crt_org_id', $gCurrentOrganization->getValue('org_id'));
-        $categoryReport->setValue('crt_name',       $values['name']);
-        $categoryReport->setValue('crt_col_fields', $values['col_fields']);
-        $categoryReport->setValue('crt_selection_role', $values['selection_role']);
-        $categoryReport->setValue('crt_selection_cat', $values['selection_cat']);
-        $categoryReport->setValue('crt_number_col', $values['number_col']);
-        $categoryReport->save();
-
-        if($values['default_conf'] === true || $defaultConfiguration === 0)
-        {
-            $defaultConfiguration = $categoryReport->getValue('crt_id');
-        }
-    }
-    
-    // set default configuration
-    $gSettingsManager->set('category_report_default_configuration', $defaultConfiguration);
-
-    $gDb->endTransaction();
-
-    return true;
-}
 
 

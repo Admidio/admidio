@@ -9,9 +9,9 @@
  *
  * Parameters:
  *
- * add_delete : -1 - Generate a configuration
- * 				>0 - Deleting a configuration
- * copy       : Copy a configuration
+ * add     : add a configuration
+ * delete  : delete a configuration
+ * copy    : copy a configuration
  *
  ***********************************************************************************************
  */
@@ -27,8 +27,9 @@ if (!$gCurrentUser->isAdministrator())
 }
 
 // Initialize and check the parameters
-$getAddDelete = admFuncVariableIsValid($_GET, 'add_delete', 'numeric', array('defaultValue' => 0));
-$getCopy      = admFuncVariableIsValid($_GET, 'copy', 'numeric', array('defaultValue' => 0));
+$getAdd    = admFuncVariableIsValid($_GET, 'add', 'bool');
+$getDelete = admFuncVariableIsValid($_GET, 'delete', 'numeric', array('defaultValue' => 0));
+$getCopy   = admFuncVariableIsValid($_GET, 'copy', 'numeric', array('defaultValue' => 0));
 
 $report = new CategoryReport();
 $config = $report->getConfigArray();
@@ -36,26 +37,28 @@ $catReportConfigs = array();
 
 $headline = $gL10n->get('SYS_CATEGORY_REPORT') . ' - ' . $gL10n->get('SYS_CONFIGURATIONS');
 
-if ($getAddDelete === -1)
+if ($getAdd)
 {
-    $config[] = array('name' => '', 'col_fields' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'default_conf'   => false);
-    // ohne saveConfigArray(); ansonsten würden 'name' und 'col_fields' ohne Daten gespeichert sein
+    $config[] = array('id' => '', 'name' => '', 'col_fields' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'default_conf'   => false);
+    // ohne $report->saveConfigArray(); ansonsten würden 'name' und 'col_fields' ohne Daten gespeichert sein
 }
-elseif ($getAddDelete > 0)
-{
-    array_splice($config, $getAddDelete-1, 1);
-    saveConfigArray($config);
+
+if ($getDelete > 0)
+{ 
+    $config[$getDelete-1]['id'] = $config[$getDelete-1]['id']*(-1);                   // id negieren, als Kennzeichen für "Deleted"
+    $config = $report->saveConfigArray($config);
 }
 
 if ($getCopy > 0)
 {
-    $config[] = array('name'           => createName($config[$getCopy-1]['name']),
+    $config[] = array('id'             => '',
+                      'name'           => createName($config[$getCopy-1]['name']),
                       'col_fields'     => $config[$getCopy-1]['col_fields'],
                       'selection_role' => $config[$getCopy-1]['selection_role'],
                       'selection_cat'  => $config[$getCopy-1]['selection_cat'],
                       'number_col'     => $config[$getCopy-1]['number_col'],
                       'default_conf'   => false);
-    saveConfigArray($config);
+    $config = $report->saveConfigArray($config);
 }
 
 $gNavigation->clear();
@@ -264,21 +267,24 @@ foreach($config as $key => $value)
     $formConfigurations->addSelectBoxFromSql('selection_cat'.$key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
         array('defaultValue' => explode(',',$value['selection_cat']),'multiselect' => true, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_CONF_DESC'));
     $formConfigurations->addCheckbox('number_col'.$key, $gL10n->get('SYS_NUMBER_COL'), $value['number_col'], array('helpTextIdLabel' => 'SYS_NUMBER_COL_DESC'));
+    $formConfigurations->addInput('id'.$key, '', $value['id'], array('property' => HtmlForm::FIELD_HIDDEN));
     $formConfigurations->addInput('default_conf'.$key, '', $value['default_conf'], array('property' => HtmlForm::FIELD_HIDDEN));
     $html = '<a id="copy_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('copy' => $key+1)).'">
             <i class="fas fa-clone"></i> '.$gL10n->get('SYS_COPY_CONFIGURATION').'</a>';
     if(count($config) > 1 && $value['default_conf'] == false)
     {
-        $html .= '&nbsp;&nbsp;&nbsp;&nbsp;<a id="delete_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('add_delete' => $key+1)).'">
+        $html .= '&nbsp;&nbsp;&nbsp;&nbsp;<a id="delete_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('delete' => $key+1)).'">
             <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE_CONFIGURATION').'</a>';
     }
-    $formConfigurations->addCustomContent('', $html);
-    
+    if(!empty($value['name']))
+    {
+        $formConfigurations->addCustomContent('', $html);
+    }
     $formConfigurations->closeGroupBox();
 }
 
 $formConfigurations->addLine();
-$html = '<a id="add_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('add_delete' => -1)).'">
+$html = '<a id="add_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('add' => 1)).'">
             <i class="fas fa-plus-circle"></i> '.$gL10n->get('SYS_ADD_ANOTHER_CONFIG').'
         </a>';
 $htmlDesc = '<div class="alert alert-warning alert-small" role="alert">
