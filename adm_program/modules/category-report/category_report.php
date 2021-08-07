@@ -19,7 +19,6 @@
  */
 
 require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/common_function.php');
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('category_report_enable_module'))

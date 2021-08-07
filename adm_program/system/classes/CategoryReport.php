@@ -17,6 +17,8 @@
  * generate_listData()					-	erzeugt die Arrays listData und headerData für den Report
  * generate_headerSelection() 			- 	erzeugt die Auswahlliste für die Spaltenauswahl
  * isInheaderSelection($search_value)	-	liest die Konfigurationsdaten aus der Datenbank
+ * setConfiguration()                   -   set the internal active configuration to the crtId of the parameter
+ * isMemberOfCategorie()                -   prueft, ob ein User Angehoeriger einer bestimmten Kategorie ist
  *
  *****************************************************************************/
 
@@ -235,7 +237,7 @@ class CategoryReport
         		}
 				foreach (explode(',', $this->arrConfiguration[$this->conf]['selection_cat']) as $cat)
         		{
-        			if (isMemberOfCategorie($cat, $member))
+        		    if ($this->isMemberOfCategorie($cat, $member))
         			{
         				$rolecatmarker = true;
         			}
@@ -525,5 +527,57 @@ class CategoryReport
             	$this->conf = $key;
         	}
     	}
+	}
+	
+	/**
+	 * Funktion prueft, ob ein User Angehoeriger einer bestimmten Kategorie ist
+	 *
+	 * @param   int  $cat_id    ID der zu pruefenden Kategorie
+	 * @param   int  $user_id   ID des Users, fuer den die Mitgliedschaft geprueft werden soll
+	 * @return  bool
+	 */
+	private function isMemberOfCategorie($cat_id, $user_id = 0)
+	{
+	    global $gCurrentUser, $gDb, $gCurrentOrganization;
+	    
+	    if ($user_id == 0)
+	    {
+	        $user_id = $gCurrentUser->getValue('usr_id');
+	    }
+	    elseif (is_numeric($user_id) == false)
+	    {
+	        return -1;
+	    }
+	    
+	    $sql = 'SELECT mem_id
+                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                 WHERE mem_usr_id = ? -- $user_id
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
+                   AND mem_rol_id = rol_id
+                   AND cat_id   = ? -- $cat_id
+                   AND rol_valid  = 1
+                   AND rol_cat_id = cat_id
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                    OR cat_org_id IS NULL ) ';
+	    
+	    $queryParams = array(
+	        $user_id,
+	        DATE_NOW,
+	        DATE_NOW,
+	        $cat_id,
+	        $gCurrentOrganization->getValue('org_id')
+	    );
+	    $statement = $gDb->queryPrepared($sql, $queryParams);
+	    $user_found = $statement->rowCount();
+	    
+	    if ($user_found == 1)
+	    {
+	        return 1;
+	    }
+	    else
+	    {
+	        return 0;
+	    }
 	}
 }
