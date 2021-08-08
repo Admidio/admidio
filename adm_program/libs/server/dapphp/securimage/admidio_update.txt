@@ -1,0 +1,7 @@
+Short description to update the current lib
+
+1. Update the library using composer
+2. Re-Apply the admidio-specific changes to the files:
+    securimage_show.php
+    config.inc.php
+3. Delete folder "audio" because we don’t implement it and it uses much space
