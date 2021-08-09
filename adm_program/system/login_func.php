@@ -52,7 +52,8 @@ function initLoginParams($prefix)
  */
 function createUserObjectFromPost()
 {
-    global $gLogger, $gCurrentUser, $gMenu, $loginname, $password, $gDb, $gL10n, $gCurrentOrganization, $bAutoLogin, $organizationId, $gProfileFields, $userStatement, $gCurrentSession;
+    global $gLogger, $gCurrentUser, $gSettingsManager, $gMenu, $loginname, $password, $gDb, $gL10n;
+    global $gCurrentOrganization, $bAutoLogin, $organizationId, $gProfileFields, $userStatement, $gCurrentSession;
 
     if (array_key_exists('usr_login_name', $_POST) && $_POST['usr_login_name'] !== '')
     {
@@ -105,6 +106,9 @@ function createUserObjectFromPost()
         // save new organization id to session
         $gCurrentSession->setValue('ses_org_id', $organizationId);
         $gCurrentSession->save();
+
+        // read all settings from the new organization
+        $gSettingsManager = new SettingsManager($gDb, $organizationId);
     }
 
     // remove all menu entries
