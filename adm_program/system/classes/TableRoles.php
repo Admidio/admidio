@@ -10,11 +10,14 @@
  */
 
 /**
- * Diese Klasse dient dazu einen Rollenobjekt zu erstellen.
- * Eine Rolle kann ueber diese Klasse in der Datenbank verwaltet werden.
- * Dazu werden die Informationen der Rolle sowie der zugehoerigen Kategorie
- * ausgelesen. Geschrieben werden aber nur die Rollendaten
+ * This class is used to create a role object.
+ * A role can be administered over this class in the data base.
+ * For this purpose the information of the role as well as the associated category
+ * are read out. But only the role data are written
  */
+
+use Ramsey\Uuid\Uuid;
+
 class TableRoles extends TableAccess
 {
     /**
@@ -440,6 +443,12 @@ class TableRoles extends TableAccess
         global $gCurrentSession;
 
         $fieldsChanged = $this->columnsValueChanged;
+
+        // if new role then set create the uuid
+        if ((int) $this->getValue('rol_id') === 0)
+        {
+            $this->setValue('rol_uuid', Uuid::uuid4());
+        }
 
         $returnValue = parent::save($updateFingerPrint);
 
