@@ -411,7 +411,7 @@ foreach($gProfileFields->getProfileFields() as $field)
             }
             else
             {
-                $maxlength = '50';
+                $maxlength = '100';
             }
 
             $form->addInput(
