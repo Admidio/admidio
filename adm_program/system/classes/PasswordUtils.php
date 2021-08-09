@@ -165,7 +165,13 @@ final class PasswordUtils
 
         if (!array_key_exists('cost', $options) || !is_int($options['cost']))
         {
-            $options['cost'] = $defaultCost;
+            global $gSettingsManager;
+            if (isset($gSettingsManager) && $gSettingsManager->has('system_hashing_cost'))
+            {
+                $options['cost'] = $gSettingsManager->getInt('system_hashing_cost');
+            } else {
+                $options['cost'] = $defaultCost;
+            }
         }
         elseif ($options['cost'] < $minCost) // https://paragonie.com/blog/2016/02/how-safely-store-password-in-2016
         {

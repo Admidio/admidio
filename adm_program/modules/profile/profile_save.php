@@ -190,10 +190,10 @@ foreach($gProfileFields->getProfileFields() as $field)
                 }
             }
 
-            // Wert aus Feld in das User-Klassenobjekt schreiben
+            // Write value from field to user class object
             $returnCode = $user->setValue($field->getValue('usf_name_intern'), $_POST[$postId]);
 
-            // Ausgabe der Fehlermeldung je nach Datentyp
+            // Output of the error message depending on the data type
             if(!$returnCode)
             {
                 switch ($field->getValue('usf_type'))

@@ -693,6 +693,8 @@
   <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
   <string name="SYS_DATA_PROTECTION">Datenschutz</string>
   <string name="SYS_DATA_PROTECTION_DESC">Hier kann die URL zu deiner Seite mit den Datenschutzhinweisen hinterlegt werden. Diese Seite wird innerhalb des Hinweises auf die Verwendung von Cookies für weitere Informationen verlinkt. Sofern das gewählte Theme dies unterstützt, wird auch ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/data_protection.html)</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION">Ich willige in die Verarbeitung der Daten ein</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION_DESC">Die von der Organisation bereitgestellten Informationen habe ich gelesen. Soweit die von mir angegebenen personenbezogenen Daten keine notwendigen Daten zur Vertragserfüllung sind, erkläre ich meine Einwilligung zur Verarbeitung dieser Daten. Meine Daten werden ausschließlich für die Zwecke der Organisation gespeichert und vertraulich behandelt.</string>
   <string name="SYS_DATABASE">Datenbank</string>
   <string name="SYS_DATABASE_BACKUP">Datenbank-Backup</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</string>
@@ -748,6 +750,8 @@
   <string name="SYS_DEPENDENCIES">Abhängigkeiten</string>
   <string name="SYS_DEPENDENT">Abhängig</string>
   <string name="SYS_DESCRIPTION">Beschreibung</string>
+  <string name="SYS_DESCRIPTION_POPOVER_DESC">Die Beschreibung wird in einem kleinen Fenster angezeigt, welches über ein Fragezeichen-Icon neben der Feldbezeichnung aufgerufen werden kann.</string>
+  <string name="SYS_DESCRIPTION_INLINE_DESC">Zeige die Beschreibung unterhalb des Feldes direkt im Formular an.</string>
   <string name="SYS_DESIGNATION">Bezeichnung</string>
   <string name="SYS_DIRECTORY_PROTECTION">Verzeichnisschutz</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Verzeichnis Trenner</string>

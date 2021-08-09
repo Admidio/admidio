@@ -114,6 +114,7 @@ $sql = 'INSERT INTO '.TBL_CATEGORIES.'
                (cat_org_id, cat_type, cat_name_intern, cat_name, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
         VALUES (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 3, ?, ?) -- $currUsrId, DATETIME_NOW';
 $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
+$categoryIdAddidionalData = $db->lastInsertId();
 
 // create roles rights
 $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
@@ -133,21 +134,22 @@ $db->queryPrepared($sql);
 
 // create profile fields of category basic data
 $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
-               (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_registration, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-        VALUES ('.$categoryIdMasterData.', \'TEXT\',         \'LAST_NAME\',  \'SYS_LASTNAME\',  NULL, NULL, 1, 1, 1, 1, 1,  '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'TEXT\',         \'FIRST_NAME\', \'SYS_FIRSTNAME\', NULL, NULL, 1, 1, 1, 1, 2,  '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'TEXT\',         \'STREET\',     \'SYS_STREET\',    NULL, NULL, 0, 0, 0, 0, 3,  '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'TEXT\',         \'POSTCODE\',   \'SYS_POSTCODE\',  NULL, NULL, 0, 0, 0, 0, 4,  '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'TEXT\',         \'CITY\',       \'SYS_CITY\',      NULL, NULL, 0, 0, 0, 0, 5,  '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'TEXT\',         \'COUNTRY\',    \'SYS_COUNTRY\',   NULL, NULL, 0, 0, 0, 0, 6,  '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'PHONE\',        \'PHONE\',      \'SYS_PHONE\',     NULL, NULL, 0, 0, 0, 0, 7,  '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, NULL, 0, 0, 0, 0, 8,  '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'PHONE\',        \'FAX\',        \'SYS_FAX\',       NULL, NULL, 0, 0, 0, 0, 9,  '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, NULL, 0, 0, 0, 0, 10, '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, \'fa-mars|SYS_MALE
+               (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_description_inline, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_registration, usf_sequence, usf_usr_id_create, usf_timestamp_create)
+        VALUES ('.$categoryIdMasterData.', \'TEXT\',         \'LAST_NAME\',  \'SYS_LASTNAME\',  NULL, 0, NULL, 1, 1, 1, 1, 1,  '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'TEXT\',         \'FIRST_NAME\', \'SYS_FIRSTNAME\', NULL, 0, NULL, 1, 1, 1, 1, 2,  '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'TEXT\',         \'STREET\',     \'SYS_STREET\',    NULL, 0, NULL, 0, 0, 0, 0, 3,  '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'TEXT\',         \'POSTCODE\',   \'SYS_POSTCODE\',  NULL, 0, NULL, 0, 0, 0, 0, 4,  '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'TEXT\',         \'CITY\',       \'SYS_CITY\',      NULL, 0, NULL, 0, 0, 0, 0, 5,  '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'TEXT\',         \'COUNTRY\',    \'SYS_COUNTRY\',   NULL, 0, NULL, 0, 0, 0, 0, 6,  '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'PHONE\',        \'PHONE\',      \'SYS_PHONE\',     NULL, 0, NULL, 0, 0, 0, 0, 7,  '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, 0, NULL, 0, 0, 0, 0, 8,  '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'PHONE\',        \'FAX\',        \'SYS_FAX\',       NULL, 0, NULL, 0, 0, 0, 0, 9,  '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, 0, NULL, 0, 0, 0, 0, 10, '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, 0, \'fa-mars|SYS_MALE
 fa-venus|SYS_FEMALE\', 0, 0, 0, 0, 11, '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, NULL, 1, 0, 1, 1, 12, '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, NULL, 0, 0, 0, 0, 13, '.$currUsrId.', \''. DATETIME_NOW.'\')';
+             , ('.$categoryIdMasterData.', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, 0, NULL, 1, 0, 1, 1, 12, '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, 0, NULL, 0, 0, 0, 0, 13, '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdAddidionalData.', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \''.$gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC').'\', 1, NULL, 0, 0, 1, 0, 14, '.$currUsrId.', \''. DATETIME_NOW.'\')';
 $db->query($sql); // TODO add more params
 
 // create profile fields of category social networks

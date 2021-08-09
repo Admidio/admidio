@@ -656,7 +656,12 @@ foreach ($membersList as $member)
         // before adding the first column, add a column with the row number
         if ($columnNumber === 1)
         {
-            if (in_array($getMode, array('html', 'print', 'pdf'), true))
+            if ($getMode === 'html')
+            {
+                // add serial
+                $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $member['usr_uuid'])).'">'.$listRowNumber.'</a>';
+            }
+            if (in_array($getMode, array('print', 'pdf'), true))
             {
                 // add serial
                 $columnValues[] = $listRowNumber;

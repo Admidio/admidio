@@ -49,6 +49,10 @@
 
 require_once dirname(__FILE__) . '/securimage.php';
 
+// ***** START ADMIDIO CODE *****
+require_once(__DIR__ . '/../../../../../adm_program/system/common.php');
+// ***** END ADMIDIO CODE *****
+
 $img = new Securimage();
 
 // You can customize the image by making changes below, some examples are included - remove the "//" to uncomment
@@ -74,6 +78,17 @@ $img = new Securimage();
 if (!empty($_GET['namespace'])) $img->setNamespace($_GET['namespace']);
 
 
-$img->show();  // outputs the image and content headers to the browser
+// ***** START ADMIDIO CODE *****
+$captchaBackgroundImage = $gSettingsManager->getString('captcha_background_image');
+if($captchaBackgroundImage !== '')
+{
+    $img->show(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/backgrounds/' . $captchaBackgroundImage);
+}
+else
+{
+    $img->show();  // outputs the image and content headers to the browser
+}
+// ***** END ADMIDIO CODE *****
+
 // alternate use:
 // $img->show('/path/to/background_image.jpg');
