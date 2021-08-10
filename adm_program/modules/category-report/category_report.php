@@ -134,7 +134,7 @@ if ($getMode !== 'csv')
     	{
     		ini_set('max_execution_time', 600); //600 seconds = 10 minutes
     	}
-        require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/tcpdf/tcpdf.php');
+
         $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
