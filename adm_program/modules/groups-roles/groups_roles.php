@@ -194,6 +194,7 @@ if($getShow === 'permissions')
     );
     $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'right'));
     $table->disableDatatablesColumnsSort(array(3, 7));
+    $table->setDatatablesColumnsNotHideResponsive(array(7));
     $table->setDatatablesGroupColumn(1);
     $table->addRowHeadingByArray($columnHeading);
 }

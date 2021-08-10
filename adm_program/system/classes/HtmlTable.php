@@ -439,6 +439,25 @@ class HtmlTable extends HtmlTableBasic
     }
 
     /**
+     * Datatables will automatically hide columns if the screen will be to small e.g. on smartphones. You must than click
+     * on a + button and will view the hidden columns. With this method you can remove specific columns from that feature.
+     * These columns will always be shown. But be careful if you remove to much columns datatables must hide some columns
+     * anyway.
+     * @param array<int,int> $columnsNotHideResponsive An array which contain the columns that should not be hidden.
+     *                                                 The columns of the table starts with 1 (not 0).
+     * @param int            $priority                 Optional set a priority so datatable will first hide columns with
+     *                                                 low priority and after that with higher priority
+     */
+    public function setDatatablesColumnsNotHideResponsive(array $columnsNotHideResponsive, $priority = 1)
+    {
+        // internal datatable columns starts with 0
+        foreach ($columnsNotHideResponsive as $columnNotHideResponsive)
+        {
+            $this->datatablesColumnDefs[] = '{ "responsivePriority": ' . $priority . ', "targets": ' . ($columnNotHideResponsive - 1) . ' }';
+        }
+    }
+
+    /**
      * Specify a column that should be used to group data. Everytime the value of this column
      * changed then a new subheader row will be created with the name of the new value.
      * @param int $columnNumber Number of the column that should be grouped. The first column starts with 1.

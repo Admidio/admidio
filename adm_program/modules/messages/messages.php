@@ -88,6 +88,7 @@ $table->addRowHeadingByArray(array(
     ''
 ));
 $table->disableDatatablesColumnsSort(array(5));
+$table->setDatatablesColumnsNotHideResponsive(array(5));
 
 // open some additional functions for messages
 $moduleMessages = new ModuleMessages();
