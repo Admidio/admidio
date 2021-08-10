@@ -5,7 +5,7 @@
   <string name="SYS_ADDITIONAL_COLS">Zusätzliche Spalten</string>
   <string name="SYS_CAT_SELECTION">Kategoriewahl</string>
   <string name="SYS_CAT_SELECTION_CONF_DESC">Über Kategoriewahl kann eine Konfiguration auf die Angehörigen von Rollen der gewählten Kategorien eingeschränkt werden.\n\n Soll keine Einschränkung erfolgen, so sind beide Felder (Rollenwahl und Kategoriewahl) leer zu lassen.</string>
-  <string name="SYS_CAT_SELECTION_COL_DESC">Die hier eingetragende Bezeichnung erscheint in der Bildschirmanzeige im Auswahlmenü "Konfiguration auswählen".\n\nEine Konfiguration kann gelöscht werden, indem der Inhalt des Feldes Bezeichnung gelöscht wird.</string>
+  <string name="SYS_CAT_SELECTION_COL_DESC">Die hier eingetragende Bezeichnung erscheint in der Bildschirmanzeige im Auswahlmenü "Konfiguration auswählen".</string>
   <string name="SYS_COLUMN_SELECTION">Spaltenauswahl</string>
   <string name="SYS_COLUMN_SELECTION_DESC">Wählt die Spalten aus, die in der Liste angezeigt werden sollen.\n\n Inaktive Rollen sind mit (*) gekennzeichnet.</string>
   <string name="SYS_CONFIGURATIONS">Konfigurationen</string>

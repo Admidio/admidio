@@ -5,7 +5,7 @@
   <string name="SYS_ADDITIONAL_COLS">Colonnes supplémentaires</string>
   <string name="SYS_CAT_SELECTION">Sélection de catégorie</string>
   <string name="SYS_CAT_SELECTION_CONF_DESC">Par la sélection de catégorie, une configuration peut être limitée aux membres des rôles des catégories sélectionnées.\n\n Si aucune restriction ne doit être faite, les deux champs (sélection de rôle et sélection de catégorie) doivent être laissées vides.</string>
-  <string name="SYS_CAT_SELECTION_COL_DESC">Le nom saisi ici apparaît dans "Sélectionner une configuration".\n\nUne configuration peut être supprimée en supprimant le contenu du champ Nom.</string>
+  <string name="SYS_CAT_SELECTION_COL_DESC">Le nom saisi ici apparaît dans "Sélectionner une configuration".</string>
   <string name="SYS_COLUMN_SELECTION">Sélection de colonne</string>
   <string name="SYS_COLUMN_SELECTION_DESC">Sélectionne les colonnes à afficher dans la liste. Les rôles inactifs sont marqués avec (*).</string>
   <string name="SYS_COLUMNS">Colonnes</string>
