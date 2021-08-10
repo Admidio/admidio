@@ -117,6 +117,7 @@ if($getMode === 'show_list')
     $table->addRowHeadingByArray($columnHeading);
     $table->setDatatablesOrderColumns(array(array(2, 'desc')));
     $table->disableDatatablesColumnsSort(array(4));
+    $table->setDatatablesColumnsNotHideResponsive(array(4));
 
     $backupSizeSum = 0;
 

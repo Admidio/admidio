@@ -255,22 +255,26 @@ else
                 $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('DAT_LOCATION'));
                 $columnAlign   = array('center', 'left', 'left', 'left', 'left');
                 $compactTable->disableDatatablesColumnsSort(array(6));
+                $compactTable->setDatatablesColumnsNotHideResponsive(array(6));
                 break;
             case 'room':
                 $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_ROOM'), $gL10n->get('SYS_LEADERS'), $gL10n->get('SYS_PARTICIPANTS'));
                 $columnAlign   = array('center', 'left', 'left', 'left', 'left', 'left');
                 $compactTable->disableDatatablesColumnsSort(array(7));
+                $compactTable->setDatatablesColumnsNotHideResponsive(array(7));
                 break;
             case 'participants':
                 $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'));
                 $columnAlign   = array('center', 'left', 'left', 'left');
                 $compactTable->disableDatatablesColumnsSort(array(5));
+                $compactTable->setDatatablesColumnsNotHideResponsive(array(5));
                 $compactTable->setColumnWidth(4, '35%');
                 break;
             case 'description':
                 $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_DESCRIPTION'));
                 $columnAlign   = array('center', 'left', 'left', 'left');
                 $compactTable->disableDatatablesColumnsSort(array(5));
+                $compactTable->setDatatablesColumnsNotHideResponsive(array(5));
                 $compactTable->setColumnWidth(4, '35%');
                 break;
         }

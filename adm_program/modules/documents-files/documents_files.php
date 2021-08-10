@@ -115,6 +115,7 @@ $columnHeading = array(
 );
 
 $documentsFilesOverview->disableDatatablesColumnsSort(array(7));
+$documentsFilesOverview->setDatatablesColumnsNotHideResponsive(array(7));
 $documentsFilesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right', 'right', 'right'));
 $documentsFilesOverview->addRowHeadingByArray($columnHeading);
 $documentsFilesOverview->setMessageIfNoRowsFound('SYS_FOLDER_NO_FILES', 'warning');
