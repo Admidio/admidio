@@ -363,7 +363,7 @@ class ChangeNotification
             if ($row['mem_end'] ) {
                 $this->logRoleChange($userId, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_END'), $row['mem_end'], null, $user, /*deleting=*/true);
             }
-            if ($row['mem_leaser'] ) {
+            if ($row['mem_leader'] ) {
                 $this->logRoleChange($userId, $row['rol_name'], $gL10n->get('SYS_LEADER'), $row['mem_leader'], null, $user, /*deleting=*/true);
             }
         }
