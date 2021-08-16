@@ -11,9 +11,6 @@
  *
  * user_uuid : Show profile of the user with this uuid. If this parameter is not set then
  *             the profile of the current user will be shown.
- * user_id : This parameter is deprecated and should not be used. Use user_uuid instead.
- *           Show profile of the user with this id. If this parameter is not set then
- *           the profile of the current user will be shown.
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -22,21 +19,10 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
-$getUserId = admFuncVariableIsValid($_GET, 'user_id', 'int', array('defaultValue' => 0));
 
 // create user object
-if($getUserId > 0)
-{
-    // DEPRECATED: Remove parameter user_id within version 5.1
-    $gLogger->warning('DEPRECATED: Do not use the parameter user_id anymore. Instead use the new parameter user_uuid. This will be more safe against CSRF.');
-    $user = new User($gDb, $gProfileFields, $getUserId);
-    $getUserUuid = $user->getValue('usr_uuid');
-}
-else
-{
-    $user = new User($gDb, $gProfileFields);
-    $user->readDataByUuid($getUserUuid);
-}
+$user = new User($gDb, $gProfileFields);
+$user->readDataByUuid($getUserUuid);
 
 // Testen ob Recht besteht Profil einzusehn
 if(!$gCurrentUser->hasRightViewProfile($user))
