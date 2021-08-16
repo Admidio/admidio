@@ -25,4 +25,4 @@
 
 # For custom configuration
 /.php_cs
-.DS_Store
+/.idea
