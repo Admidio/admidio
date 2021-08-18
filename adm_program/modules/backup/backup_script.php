@@ -82,7 +82,8 @@ unset($SelectedTables, $tables);
 $sql = 'SELECT table_name
           FROM information_schema.tables
          WHERE table_schema = ?
-           AND table_name LIKE ?';
+           AND table_name LIKE ?
+           AND table_type = "BASE TABLE"';
 $statement = $gDb->queryPrepared($sql, array(DB_NAME, TABLE_PREFIX . '_%'));
 $tables = array();
 while($tableName = $statement->fetchColumn())
@@ -90,7 +91,17 @@ while($tableName = $statement->fetchColumn())
     $tables[] = $tableName;
 }
 
+$sql = 'SELECT table_name
+          FROM information_schema.tables
+         WHERE table_schema = ?
+           AND table_name LIKE ?
+           AND table_type = "VIEW"';
+$statement = $gDb->queryPrepared($sql, array(DB_NAME, TABLE_PREFIX . '_%'));
+$views = $statement->fetchAll(PDO::FETCH_COLUMN, 0);
+
+
 $SelectedTables[DB_NAME] = $tables;
+$SelectedViews[DB_NAME] = $views;
 
 $starttime = getmicrotime();
 
@@ -155,6 +166,14 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
             $rows[$t] = $row['num'];
             $overallrows += $rows[$t];
             echo '<span id="rows_'.$dbname.'_'.$SelectedTables[$dbname][$t].'">'.SecurityUtils::encodeHTML($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records)</span><br />';
+        }
+        foreach ($SelectedViews[$dbname] as $view) {
+            if ($tablecounter++ >= TABLES_PER_COL)
+            {
+                echo '</td><td nowrap valign="top">';
+                $tablecounter = 1;
+            }
+            echo '<span id="view_'.$dbname.'_'.$view.'">'.SecurityUtils::encodeHTML($view).' (View)</span><br />';
         }
         echo '</td></tr></table><br />';
     }
@@ -340,6 +359,44 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
     {
         fwrite($fp, $alltablesstructure.LINE_TERMINATOR, strlen($alltablesstructure) + strlen(LINE_TERMINATOR));
     }
+
+    # For views, we only need to export the view creation command, no data is stored.
+    $allviewsstructure = '';
+    foreach ($SelectedViews as $dbname => $value)
+    {
+        foreach ($value as $view)
+        {
+            PhpIniUtils::startNewExecutionTimeLimit(60);
+
+            $SQLquery  = 'SHOW CREATE VIEW '.BACKTICKCHAR.$view.BACKTICKCHAR;
+            $showcreateviewStatement = $gDb->query($SQLquery);
+            if ($showcreateviewStatement->rowCount() === 1)
+            {
+                $row = $showcreateviewStatement->fetch();
+                $viewstructure = $row['Create View'];
+//                 echo '<span id="view_'.$dbname.'_'.$view.'">'.SecurityUtils::encodeHTML($view).' (View definition)</span><br />';
+                OutputInformation('view_'.$dbname.'_'.$view, SecurityUtils::encodeHTML($view).' (View definition)');
+            } else {
+                // TODO: When do we get more than one row for the view definition?
+            }
+            $viewstructure .= ';'.LINE_TERMINATOR.LINE_TERMINATOR;
+            $allviewsstructure .= $viewstructure;
+        }
+    }
+    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
+    {
+        bzwrite($bp, $allviewsstructure.LINE_TERMINATOR, strlen($allviewsstructure) + strlen(LINE_TERMINATOR));
+    }
+    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
+    {
+        gzwrite($zp, $allviewsstructure.LINE_TERMINATOR, strlen($allviewsstructure) + strlen(LINE_TERMINATOR));
+    }
+    else
+    {
+        fwrite($fp, $allviewsstructure.LINE_TERMINATOR, strlen($allviewsstructure) + strlen(LINE_TERMINATOR));
+    }
+
+
 
     $datastarttime = getmicrotime();
     OutputInformation('statusinfo', '');
