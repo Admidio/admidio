@@ -343,6 +343,8 @@
   <string name="ORG_SYSTEM_INFORMATION">System informations</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">Mail address</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">This field should contain the email address of an administrator as it will be used as sender address of system notifications, e.g. for registration confirmation.</string>
+  <string name="ORG_SYSTEM_MAIL_CHANGES">Notification for changed profile fields</string>
+  <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Enable this setting to send notifications for any changes to a user's profile fields. This way an administrator has the possibility to ensure a proper re data quality. Change notifications will be send to the following mail address #VAR1# (default: no).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notification for new entries</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Here you can activate system notifications for new module entries. These notifications will be used for internal monitoring of Admidio. This way an administrator has the possibility to get informed about new module entries (only new entries will be considered). System notifications will be send to the following mail address #VAR1# (default: no).</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Here you can justify the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime</string>
@@ -776,6 +778,12 @@
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">A new announcement was created</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">A new announcement at #VAR1# was created\n\nTitle: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
+  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was changed</string>
+  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">The profile data of the user #VAR1# #VAR2# (login: #VAR3#) was changed by #VAR4#:</string>
+  <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was created</string>
+  <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">The user #VAR1# #VAR2# (login: #VAR3#) was created by #VAR4#:</string>
+  <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was deleted</string>
+  <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">The profile of the user #VAR1# #VAR2# (login: #VAR3#) was deleted by #VAR4#:</string>
   <string name="SYS_EMAIL_DESC">E-mails can be sent to different roles like groups, courses or departments.</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">A new file was uploaded</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">A new file was uploaded at #VAR1#\n\nFile: #VAR2#\nUploaded by: #VAR3#\nUploaded at: #VAR4#</string>
