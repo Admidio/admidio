@@ -506,7 +506,7 @@ abstract class HtmlElement
         $attributes = array();
         foreach ($elementAttributes as $key => $value)
         {
-            $attributes[] = $key . '="' . $value . '"';
+            $attributes[] = $key . '="' . htmlspecialchars($value) . '"';
         }
 
         return ' ' . implode(' ', $attributes);
