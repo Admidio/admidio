@@ -55,6 +55,7 @@ DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
 CREATE TABLE %PREFIX%_announcements
 (
     ann_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ann_uuid                    varchar(36)         NOT NULL,
     ann_cat_id                  integer unsigned    NOT NULL,
     ann_headline                varchar(100)        NOT NULL,
     ann_description             text,
@@ -92,6 +93,7 @@ COLLATE = utf8_unicode_ci;
 CREATE TABLE %PREFIX%_categories
 (
     cat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    cat_uuid                    varchar(36)         NOT NULL,
     cat_org_id                  integer unsigned,
     cat_type                    varchar(10)         NOT NULL,
     cat_name_intern             varchar(110)        NOT NULL,

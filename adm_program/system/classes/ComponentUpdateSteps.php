@@ -53,6 +53,30 @@ final class ComponentUpdateSteps
                      WHERE rol_id = ? -- $row[\'rol_id\']';
             self::$db->queryPrepared($sql, array($uuid, $row['rol_id']));
         }
+
+        $sql = 'SELECT ann_id FROM ' . TBL_ANNOUNCEMENTS;
+        $rolesStatement = self::$db->queryPrepared($sql);
+
+        while($row = $rolesStatement->fetch())
+        {
+            $uuid = Uuid::uuid4();
+
+            $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_uuid = ? -- $uuid
+                     WHERE ann_id = ? -- $row[\'ann_id\']';
+            self::$db->queryPrepared($sql, array($uuid, $row['ann_id']));
+        }
+
+        $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES;
+        $rolesStatement = self::$db->queryPrepared($sql);
+
+        while($row = $rolesStatement->fetch())
+        {
+            $uuid = Uuid::uuid4();
+
+            $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_uuid = ? -- $uuid
+                     WHERE cat_id = ? -- $row[\'cat_id\']';
+            self::$db->queryPrepared($sql, array($uuid, $row['cat_id']));
+        }
 	}
 
     /**

@@ -16,8 +16,6 @@
  * are read out. But only the role data are written
  */
 
-use Ramsey\Uuid\Uuid;
-
 class TableRoles extends TableAccess
 {
     /**
@@ -443,12 +441,6 @@ class TableRoles extends TableAccess
         global $gCurrentSession;
 
         $fieldsChanged = $this->columnsValueChanged;
-
-        // if new role then set create the uuid
-        if ((int) $this->getValue('rol_id') === 0)
-        {
-            $this->setValue('rol_uuid', Uuid::uuid4());
-        }
 
         $returnValue = parent::save($updateFingerPrint);
 

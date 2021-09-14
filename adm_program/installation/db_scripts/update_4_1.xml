@@ -51,13 +51,19 @@
     <step id="220">UPDATE %PREFIX%_menu SET men_name = 'SYS_USER_MANAGEMENT', men_description = 'SYS_USER_MANAGEMENT_DESC' WHERE men_name_intern = 'usrmgt'</step>
     <step id="230">UPDATE %PREFIX%_menu SET men_name = 'SYS_EMAIL', men_description = 'SYS_EMAIL_DESC' WHERE men_name_intern = 'mail'</step>
     <step id="240">UPDATE %PREFIX%_menu SET men_name = 'SYS_NEW_REGISTRATIONS', men_description = 'SYS_MANAGE_NEW_REGISTRATIONS_DESC' WHERE men_name_intern = 'newreg'</step>
-    <step id="250">ALTER TABLE %PREFIX%_users ADD COLUMN usr_uuid varchar(36)</step>
-    <step id="255">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_uuid varchar(36)</step>
-    <step id="260">ComponentUpdateSteps::updateStep41AddUuid</step>
-    <step id="270" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_uuid varchar(36) NOT NULL</step>
-    <step id="280">CREATE UNIQUE INDEX %PREFIX%_idx_usr_uuid ON %PREFIX%_users (usr_uuid)</step>
-    <step id="290" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_uuid varchar(36) NOT NULL</step>
-    <step id="300">CREATE UNIQUE INDEX %PREFIX%_idx_rol_uuid ON %PREFIX%_roles (rol_uuid)</step>
-    <step id="310">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_description_inline boolean NOT NULL DEFAULT '0'</step>
+    <step id="250">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_description_inline boolean NOT NULL DEFAULT '0'</step>
+    <step id="260">ALTER TABLE %PREFIX%_users ADD COLUMN usr_uuid varchar(36)</step>
+    <step id="270">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_uuid varchar(36)</step>
+    <step id="280">ALTER TABLE %PREFIX%_announcements ADD COLUMN ann_uuid varchar(36)</step>
+    <step id="290">ALTER TABLE %PREFIX%_categories ADD COLUMN cat_uuid varchar(36)</step>
+    <step id="300">ComponentUpdateSteps::updateStep41AddUuid</step>
+    <step id="310" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_uuid varchar(36) NOT NULL</step>
+    <step id="320">CREATE UNIQUE INDEX %PREFIX%_idx_usr_uuid ON %PREFIX%_users (usr_uuid)</step>
+    <step id="330" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_uuid varchar(36) NOT NULL</step>
+    <step id="340">CREATE UNIQUE INDEX %PREFIX%_idx_rol_uuid ON %PREFIX%_roles (rol_uuid)</step>
+    <step id="350" database="mysql">ALTER TABLE %PREFIX%_announcements MODIFY COLUMN ann_uuid varchar(36) NOT NULL</step>
+    <step id="360">CREATE UNIQUE INDEX %PREFIX%_idx_ann_uuid ON %PREFIX%_announcements (ann_uuid)</step>
+    <step id="370" database="mysql">ALTER TABLE %PREFIX%_categories MODIFY COLUMN cat_uuid varchar(36) NOT NULL</step>
+    <step id="380">CREATE UNIQUE INDEX %PREFIX%_idx_cat_uuid ON %PREFIX%_categories (cat_uuid)</step>
     <step>stop</step>
 </update>
