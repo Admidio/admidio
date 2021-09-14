@@ -343,6 +343,8 @@
   <string name="ORG_SYSTEM_INFORMATION">Systeeminformatie</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">E-mailadres</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier moet het e-mailadres van een beheerder worden ingevoerd. Dit wordt gebruikt als afzender van systeemberichten, zoals van de registratiebevestiging.</string>
+  <string name="ORG_SYSTEM_MAIL_CHANGES">Notificatie voor gewijzigde profielvelden</string>
+  <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Schakel deze instelling in om notificaties te verzenden voor alle wijzigingen in de profielvelden van een gebruiker. Op deze manier heeft een beheerder de mogelijkheid om te zorgen voor een goede kwaliteit van de gegevens. Wijzigingsnotificaties worden verzonden naar het e-mailadres #VAR1# (standaard: nee).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notificatie voor nieuwe berichten</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kunnen systeemberichten worden geactiveerd voor nieuwe berichten in de modules. Deze notificaties hebben binnen Admidio een controlerende functie. Hierdoor heeft de beheerder de mogelijkheid om te worden geïnformeerd over nieuwe berichten in de modules (alleen nieuwe berichten komen in aanmerking). Systeemberichten worden gestuurd naar het e-mailadres #VAR1#. (Standaard: nee)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier kunnen alle systeemberichten aangepast worden. De berichten zijn verdeeld in 2 onderdelen (onderwerp en inhoud) en worden geïdentificeerd door #subject# en #content#. Daarna volgt de inhoud van deze onderdelen.\n\nIn elke e-mail kunnen de volgende placeholders worden gebruikt. Ze worden tijdens uitvoeren vervangen door de bijbehorende inhoud.</string>
@@ -671,6 +673,8 @@
   <string name="SYS_DATA_MULTI_ORGA">Gegevens zichtbaar voor meerdere organisaties</string>
   <string name="SYS_DATA_PROTECTION">Privacy Policy</string>
   <string name="SYS_DATA_PROTECTION_DESC">Hier kan de URL naar uw pagina met het privacybeleid worden ingesteld. Deze pagina is gekoppeld aan het bericht over Cookies, voor meer informatie. Als het geselecteerde thema dit ondersteunt, wordt er ook een link weergegeven op de Admidio-pagina\'s. (Voorbeeld: https://www.example.com/data_protection.html)</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION">Ik geef toestemming voor de verwerking van de gegevens</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION_DESC">Ik heb de informatie van de organisatie gelezen. Voor zover de door mij verstrekte persoonlijke gegevens geen noodzakelijke gegevens zijn voor de uitvoering van het contract, geef ik toestemming voor de verwerking van deze gegevens. Mijn gegevens worden uitsluitend ten behoeve van de organisatie bewaard en vertrouwelijk behandeld.</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_BACKUP">Backup database</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Hier kunt u een backup van de database maken of downloaden.</string>
@@ -725,6 +729,8 @@
   <string name="SYS_DEPENDENCIES">Afhankelijkheden</string>
   <string name="SYS_DEPENDENT">Afhankelijk</string>
   <string name="SYS_DESCRIPTION">Omschrijving</string>
+  <string name="SYS_DESCRIPTION_POPOVER_DESC">De beschrijving wordt weergegeven in een klein venster, dat toegankelijk is via een vraagtekenpictogram naast het veldlabel.</string>
+  <string name="SYS_DESCRIPTION_INLINE_DESC">Geef de beschrijving onder het veld direct in het formulier weer.</string>
   <string name="SYS_DESIGNATION">Naam</string>
   <string name="SYS_DIRECTORY_PROTECTION">Mapbescherming</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Map scheidingsteken</string>
@@ -772,6 +778,12 @@
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Een nieuwe mededeling is gemaakt</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Nieuwe mededeling op #VAR1#.\n\nTitel: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
+  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Gebruiker #VAR1# #VAR2# (login: #VAR3#) is gewijzigd</string>
+  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">De profielgegevens van de gebruiker #VAR1# #VAR2# (login: #VAR3#) zijn gewijzigd door #VAR4#:</string>
+  <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">Gebruiker #VAR1# #VAR2# (login: #VAR3#) is aangemaakt</string>
+  <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">De gebruiker #VAR1# #VAR2# (login: #VAR3#) is aangemaakt door #VAR4#:</string>
+  <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Gebruiker #VAR1# #VAR2# (login: #VAR3#) is verwijderd</string>
+  <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Het profiel van de gebruiker #VAR1# #VAR2# (login: #VAR3#) is verwijderd door #VAR4#:</string>
   <string name="SYS_EMAIL_DESC">Er kunnen e-mails gestuurd worden naar verschillende rollen, personen, groepen of afdelingen. </string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">Een nieuw bestand is geüpload</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">Nieuw bestand geüpload op #VAR1#\n\nBestand: #VAR2#\nGeüpload door: #VAR3#\nGeüpload op: #VAR4#</string>
