@@ -26,7 +26,6 @@ if (is_file(__DIR__ . '/config.php'))
 }
 
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
-$getId       = admFuncVariableIsValid($_GET, 'id',        'int');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 
@@ -84,7 +83,6 @@ if($gSettingsManager->getInt('enable_announcements_module') > 0)
 {
     // create announcements object
     $plgAnnouncements = new ModuleAnnouncements();
-    $plgAnnouncements->setParameter('id', $getId);
     $plgAnnouncements->setParameter('cat_id', $getCatId);
     $plgAnnouncements->setDateRange($getDateFrom, $getDateTo);
     $plgAnnouncements->setCategoriesNames($plg_categories);
