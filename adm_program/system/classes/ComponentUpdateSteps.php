@@ -77,6 +77,42 @@ final class ComponentUpdateSteps
                      WHERE cat_id = ? -- $row[\'cat_id\']';
             self::$db->queryPrepared($sql, array($uuid, $row['cat_id']));
         }
+
+        $sql = 'SELECT dat_id FROM ' . TBL_DATES;
+        $rolesStatement = self::$db->queryPrepared($sql);
+
+        while($row = $rolesStatement->fetch())
+        {
+            $uuid = Uuid::uuid4();
+
+            $sql = 'UPDATE '.TBL_DATES.' SET dat_uuid = ? -- $uuid
+                     WHERE dat_id = ? -- $row[\'dat_id\']';
+            self::$db->queryPrepared($sql, array($uuid, $row['dat_id']));
+        }
+
+        $sql = 'SELECT fil_id FROM ' . TBL_FILES;
+        $rolesStatement = self::$db->queryPrepared($sql);
+
+        while($row = $rolesStatement->fetch())
+        {
+            $uuid = Uuid::uuid4();
+
+            $sql = 'UPDATE '.TBL_FILES.' SET fil_uuid = ? -- $uuid
+                     WHERE fil_id = ? -- $row[\'fil_id\']';
+            self::$db->queryPrepared($sql, array($uuid, $row['fil_id']));
+        }
+
+        $sql = 'SELECT fol_id FROM ' . TBL_FOLDERS;
+        $rolesStatement = self::$db->queryPrepared($sql);
+
+        while($row = $rolesStatement->fetch())
+        {
+            $uuid = Uuid::uuid4();
+
+            $sql = 'UPDATE '.TBL_FOLDERS.' SET fol_uuid = ? -- $uuid
+                     WHERE fol_id = ? -- $row[\'fol_id\']';
+            self::$db->queryPrepared($sql, array($uuid, $row['fol_id']));
+        }
 	}
 
     /**

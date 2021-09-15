@@ -15,7 +15,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getDateId   = admFuncVariableIsValid($_GET, 'dat_id',    'int', array('requireValue' => true));
+$getDatUuid  = admFuncVariableIsValid($_GET, 'dat_uuid',  'string', array('requireValue' => true));
 $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 
 // Initialize local variables
@@ -24,7 +24,8 @@ $disableComments         = HtmlForm::FIELD_HIDDEN;
 $gMessage->showThemeBody(false);
 
 // Get the date object
-$date = new TableDate($gDb, $getDateId);
+$date = new TableDate($gDb);
+$date->readDataByUuid($getDatUuid);
 
 // Get the fingerprint of calling user. If is not the user itself check the requesting user whether it has the permission to edit the states
 if ($gCurrentUser->getValue('usr_uuid') === $getUserUuid)
@@ -98,7 +99,7 @@ echo '<script>
 </script>';
 
 // Define form
-$participationForm = new HtmlForm('participate_form_'. $getDateId, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $getDateId, 'user_uuid' => $getUserUuid, 'mode' => '')), null, array('type' => 'default', 'method' => 'post', 'setFocus' => false));
+$participationForm = new HtmlForm('participate_form_'. $getDatUuid, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_uuid' => $getDatUuid, 'user_uuid' => $getUserUuid, 'mode' => '')), null, array('type' => 'default', 'method' => 'post', 'setFocus' => false));
 $participationForm->addHtml('
     <div class="modal-header">
         <h3 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h3>
@@ -118,20 +119,20 @@ $participationForm->addInput(
 $participationForm->addHtml('</div><div class="modal-footer">');
 $participationForm->openButtonGroup();
 $participationForm->addButton(
-    'btn_attend_' . $getDateId, $gL10n->get('DAT_ATTEND'),
+    'btn_attend_' . $getDatUuid, $gL10n->get('DAT_ATTEND'),
     array('icon' => 'fa-check-circle', 'class' => 'admidio-event-approval-state-attend')
 );
 
 if ($gSettingsManager->getBool('dates_may_take_part'))
 {
     $participationForm->addButton(
-        'btn_tentative_' . $getDateId, $gL10n->get('DAT_USER_TENTATIVE'),
+        'btn_tentative_' . $getDatUuid, $gL10n->get('DAT_USER_TENTATIVE'),
         array('icon' => 'fa-question-circle', 'class' => 'admidio-event-approval-state-tentative')
     );
 }
 
 $participationForm->addButton(
-    'btn_refuse_' . $getDateId, $gL10n->get('DAT_CANCEL'),
+    'btn_refuse_' . $getDatUuid, $gL10n->get('DAT_CANCEL'),
     array('icon' => 'fa-times-circle', 'class' => 'admidio-event-approval-state-cancel')
 );
 $participationForm->closeButtonGroup();

@@ -12,8 +12,8 @@
  * start     - Position of query recordset where the visual output should start
  * headline  - Title of the announcement module. This will be shown in the whole module.
  *             (Default) SYS_ANNOUNCEMENTS
- * cat_id    : Show only announcements of this category id, if id is not set than show all announcements.
- * id        - Id of a single announcement that should be shown.
+ * cat_id    - Show only announcements of this category id, if id is not set than show all announcements.
+ * ann_uuid  - Uuid of a single announcement that should be shown.
  * date_from - is set to 01.01.1970,
  *             if no date information is delivered
  * date_to   - is set to actual date,

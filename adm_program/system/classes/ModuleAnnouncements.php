@@ -166,7 +166,7 @@ class ModuleAnnouncements extends Modules
 
         $uuid = $this->getParameter('ann_uuid');
         // In case ID was permitted and user has rights
-        if (isset($uuid))
+        if (!empty($uuid))
         {
             $sqlConditions .= ' AND ann_uuid = ? '; // $uuid
             $params[] = $uuid;

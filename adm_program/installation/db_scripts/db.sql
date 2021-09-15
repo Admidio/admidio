@@ -136,6 +136,7 @@ COLLATE = utf8_unicode_ci;
 CREATE TABLE %PREFIX%_dates
 (
     dat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    dat_uuid                    varchar(36)         NOT NULL,
     dat_cat_id                  integer unsigned    NOT NULL,
     dat_rol_id                  integer unsigned,
     dat_room_id                 integer unsigned,
@@ -167,6 +168,7 @@ COLLATE = utf8_unicode_ci;
 CREATE TABLE %PREFIX%_files
 (
     fil_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    fil_uuid                    varchar(36)         NOT NULL,
     fil_fol_id                  integer unsigned    NOT NULL,
     fil_name                    varchar(255)        NOT NULL,
     fil_description             text,
@@ -186,6 +188,7 @@ COLLATE = utf8_unicode_ci;
 CREATE TABLE %PREFIX%_folders
 (
     fol_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    fol_uuid                    varchar(36)         NOT NULL,
     fol_org_id                  integer unsigned    NOT NULL,
     fol_fol_id_parent           integer unsigned,
     fol_type                    varchar(10)         NOT NULL,
