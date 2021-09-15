@@ -7,11 +7,11 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
- * type        - Modulkuerzel in dem ein Eintrag geloescht werden soll
- * element_id  - ID des HTML-Elements, welches nach dem Loeschen entfernt werden soll
- * database_id - ID des Eintrags in der Datenbanktabelle
- * database_id_2 - weitere ID um ggf. den Eintrag aus der DB besser zu finden
- * name        - Name des Elements, der im Hinweis angezeigt wird
+ * type          - Module short code in which an entry should to be deleted
+ * element_id    - HTML id of the HTML element to be removed after deletion
+ * database_id   - ID of the entry in the database table
+ * database_id_2 - additional ID to better find the entry from the DB if necessary
+ * name          - Name of the element displayed in the modal window
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/common.php');
@@ -25,15 +25,6 @@ $getDatabaseId  = admFuncVariableIsValid($_GET, 'database_id',   'string', array
 $getDatabaseId2 = admFuncVariableIsValid($_GET, 'database_id_2', 'string');
 $getName        = admFuncVariableIsValid($_GET, 'name',          'string');
 
-if (!in_array($getType, array('bac', 'nwu', 'pro_pho', 'rol', 'rol_enable', 'rol_disable')))
-{
-    $getDatabaseId = (int) $getDatabaseId;
-}
-if ($getType !== 'cat')
-{
-    $getDatabaseId2 = (int) $getDatabaseId2;
-}
-
 // initialize local variables
 $text = 'SYS_DELETE_ENTRY';
 $callbackFunction = '';
@@ -42,13 +33,13 @@ $callbackFunction = '';
 switch ($getType)
 {
     case 'ann':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('mode' => 2, 'ann_id' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('mode' => 2, 'ann_uuid' => $getDatabaseId));
         break;
     case 'bac':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/backup/backup_file_function.php', array('job' => 'delete', 'filename' => $getDatabaseId));
         break;
     case 'cat':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('cat_id' => $getDatabaseId, 'mode' => 2, 'type' => $getDatabaseId2));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('cat_uuid' => $getDatabaseId, 'mode' => 2, 'type' => $getDatabaseId2));
 
         // get special message for calendars
         if($getDatabaseId2 === 'DAT')

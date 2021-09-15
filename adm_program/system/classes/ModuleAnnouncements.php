@@ -164,12 +164,12 @@ class ModuleAnnouncements extends Modules
         $sqlConditions = '';
         $params = array();
 
-        $id = (int) $this->getParameter('id');
+        $uuid = $this->getParameter('ann_uuid');
         // In case ID was permitted and user has rights
-        if ($id > 0)
+        if ($uuid !== '')
         {
-            $sqlConditions .= ' AND ann_id = ? '; // $id
-            $params[] = $id;
+            $sqlConditions .= ' AND ann_uuid = ? '; // $uuid
+            $params[] = $uuid;
         }
         // ...otherwise get all additional announcements for a group
         else
