@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_DATES_ALL_EVENTS">Kaikki tapahtumat</string>
+  <string name="PLG_DATES_HEADLINE">Tapahtumat</string>
+  <string name="PLG_DATES_NO_ENTRIES_VISITORS">Vierailijoille ei ole saatavilla tapahtumia. Kirjaudu sisään nähdäksesi tapahtumat.</string>
+</resources>

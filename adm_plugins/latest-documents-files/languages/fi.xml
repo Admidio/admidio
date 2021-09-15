@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_FILES_HEADLINE">Dokumentteja &amp; tiedostoja</string>
+  <string name="PLG_LATEST_FILES_MORE_DOWNLOADS">Lisää dokumentteja &amp; tiedostoja</string>
+  <string name="PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE">Asiakirjoja tai tiedostoja ei ole saatavilla.</string>
+  <string name="PLG_LATEST_FILES_UPLOAD_FROM_AT">Lataaja #VAR1# pävämäärällä #VAR2#</string>
+</resources>

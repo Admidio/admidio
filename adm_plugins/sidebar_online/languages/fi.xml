@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ONLINE_HEADLINE">Kuka on kirjautuneena?</string>
+  <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">Ei vieraita sivustolla..</string>
+  <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# Vieraita</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBER">#VAR1# jäsen</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBERS">#VAR1# jäsentä</string>
+  <string name="PLG_ONLINE_VAR_ONLINE_ARE"> #VAR1# linjoilla</string>
+  <string name="PLG_ONLINE_VAR_ONLINE_IS"> #VAR1# on linjoilla</string>
+</resources>
