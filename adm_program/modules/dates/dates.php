@@ -37,7 +37,7 @@ $getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defau
 $getStart    = admFuncVariableIsValid($_GET, 'start',     'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
-$getDatUuid  = admFuncVariableIsValid($_GET, 'dat_uuid',  'string');
+$getDateUuid = admFuncVariableIsValid($_GET, 'dat_uuid',  'string');
 $getShow     = admFuncVariableIsValid($_GET, 'show',      'string', array('defaultValue' => 'all', 'validValues' => array('all', 'maybe_participate', 'only_participate')));
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
@@ -64,7 +64,7 @@ try
     $dates = new ModuleDates();
     $dates->setParameter('mode', $getMode);
     $dates->setParameter('cat_id', $getCatId);
-    $dates->setParameter('dat_uuid', $getDatUuid);
+    $dates->setParameter('dat_uuid', $getDateUuid);
     $dates->setParameter('show', $getShow);
     $dates->setParameter('view_mode', $getViewMode);
     $dates->setDateRange($getDateFrom, $getDateTo);
@@ -95,7 +95,7 @@ $datesResult = $dates->getDataSet($getStart, $datesPerPage);
 
 if($getViewMode === 'html')
 {
-    if($getDatUuid !== '')
+    if($getDateUuid !== '')
     {
         $gNavigation->addUrl(CURRENT_URL, $dates->getHeadline($getHeadline));
     }
@@ -129,25 +129,25 @@ if($getViewMode === 'html')
         });
 
         $("#menu_item_event_print_view").click(function() {
-            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('view_mode' => 'print', 'view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_id' => $getCatId, 'dat_uuid' => $getDatUuid, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'))) . '", "_blank");
+            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('view_mode' => 'print', 'view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_id' => $getCatId, 'dat_uuid' => $getDateUuid, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'))) . '", "_blank");
         });', true);
 
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
-    if($getDatUuid !== '')
+    if($getDateUuid !== '')
     {
         // add back link to module menu
         $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
     }
 
     // Add new event
-    if(count($gCurrentUser->getAllEditableCategories('DAT')) > 0 && $getDatUuid === '')
+    if(count($gCurrentUser->getAllEditableCategories('DAT')) > 0 && $getDateUuid === '')
     {
         $page->addPageFunctionsMenuItem('menu_item_event_add', $gL10n->get('SYS_CREATE_VAR', array($getHeadline)),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('headline' => $getHeadline)),
             'fa-plus-circle');
     }
 
-    if($getDatUuid === '')
+    if($getDateUuid === '')
     {
         // show print button
         $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'fa-print');
@@ -221,7 +221,7 @@ else // $getViewMode = 'print'
     // create html page object without the custom theme files
     $page->setPrintMode();
 
-    if($getDatUuid === '')
+    if($getDateUuid === '')
     {
         $page->addHtml('<h3>' . $gL10n->get('DAT_PERIOD_FROM_TO', array($dates->getParameter('dateStartFormatAdmidio'), $dates->getParameter('dateEndFormatAdmidio'))) . '</h3>');
     }
@@ -230,7 +230,7 @@ else // $getViewMode = 'print'
 if($datesResult['totalCount'] === 0)
 {
     // No events found
-    if($getDatUuid !== '')
+    if($getDateUuid !== '')
     {
         $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRY') . '</p>');
     }

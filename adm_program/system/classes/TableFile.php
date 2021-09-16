@@ -90,16 +90,16 @@ class TableFile extends TableAccess
     /**
      * Reads the file recordset from database table **adm_folders** and throws an AdmException
      * if the user has no right to see the corresponding folder or the file id doesn't exists.
-     * @param int $fileId The id of the file.
+     * @param string $fileUuid The UUID of the file.
      * @throws AdmException SYS_FOLDER_NO_RIGHTS
      *                      SYS_INVALID_PAGE_VIEW
      * @return true Returns **true** if everything is ok otherwise an AdmException is thrown.
      */
-    public function getFileForDownload($fileId)
+    public function getFileForDownload($fileUuid)
     {
         global $gCurrentUser;
 
-        $this->readDataById($fileId);
+        $this->readDataByUuid($fileUuid);
 
         // Check if a dataset is found
         if ((int) $this->getValue('fil_id') === 0)

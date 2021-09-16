@@ -419,6 +419,7 @@ class TableFolder extends TableAccess
             {
                 $files[] = array(
                     'fil_id'          => $rowFiles['fil_id'],
+                    'fil_uuid'        => $rowFiles['fil_uuid'],
                     'fil_name'        => $rowFiles['fil_name'],
                     'fil_description' => $rowFiles['fil_description'],
                     'fil_timestamp'   => $rowFiles['fil_timestamp'],
@@ -453,20 +454,20 @@ class TableFolder extends TableAccess
     /**
      * Reads the folder recordset from database table **adm_folders** and throws an
      * AdmException if the user has no right to see the folder or the folder id doesn't exists.
-     * @param int $folderId The id of the folder. If the id is 0 then the root folder will be shown.
+     * @param string $folderUuid The UUID of the folder. If the UUID is empty then the root folder will be shown.
      * @throws AdmException
      * @return true Returns **true** if everything is ok otherwise an AdmException is thrown.
      */
-    public function getFolderForDownload($folderId)
+    public function getFolderForDownload($folderUuid)
     {
         global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
 
-        if ($folderId > 0)
+        if ($folderUuid !== '')
         {
             // get folder of the parameter
-            $condition = ' fol_id   = ? -- $folderId
+            $condition = ' fol_uuid   = ? -- $folderUuid
                        AND fol_type = \'DOCUMENTS\' ';
-            $queryParams = array($folderId);
+            $queryParams = array($folderUuid);
         }
         else
         {
@@ -481,7 +482,7 @@ class TableFolder extends TableAccess
         // Check if a dataset is found
         if ((int) $this->getValue('fol_id') === 0)
         {
-            throw new AdmException('SYS_FOLDER_NOT_FOUND', array($folderId));
+            throw new AdmException('SYS_FOLDER_NOT_FOUND', array($folderUuid));
         }
 
         // If current user has download-admin-rights => allow
@@ -696,6 +697,7 @@ class TableFolder extends TableAccess
             {
                 $folders[] = array(
                     'fol_id'          => $rowFolders['fol_id'],
+                    'fol_uuid'        => $rowFolders['fol_uuid'],
                     'fol_name'        => $rowFolders['fol_name'],
                     'fol_description' => $rowFolders['fol_description'],
                     'fol_path'        => $rowFolders['fol_path'],

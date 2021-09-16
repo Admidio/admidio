@@ -9,14 +9,14 @@
  *
  * Parameters:
  *
- * folder_id : Id of the current folder to configure the rights
+ * folder_uuid : UUID of the current folder to configure the rights
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int', array('requireValue' => true));
+$getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string', array('requireValue' => true));
 
 $headline = $gL10n->get('SYS_SET_FOLDER_PERMISSIONS');
 
@@ -44,20 +44,20 @@ try
 {
     // get recordset of current folder from database
     $folder = new TableFolder($gDb);
-    $folder->getFolderForDownload($getFolderId);
+    $folder->getFolderForDownload($getFolderUuid);
 
-    // Parentordner holen
+    // read parent folder
     if ($folder->getValue('fol_fol_id_parent'))
     {
         // get recordset of parent folder from database
-        $parentFolder = new TableFolder($gDb);
-        $parentFolder->getFolderForDownload((int) $folder->getValue('fol_fol_id_parent'));
+        $parentFolder = new TableFolder($gDb, (int) $folder->getValue('fol_fol_id_parent'));
+        $parentFolder->getFolderForDownload($parentFolder->getValue('fol_uuid'));
 
         // get assigned roles of the parent folder
         $rolesViewRightParentFolder = $parentFolder->getRoleViewArrayOfFolder();
         if(count($rolesViewRightParentFolder) > 0)
         {
-            $sqlRolesViewRight = ' AND rol_id IN ('.Database::getQmForValues($rolesViewRightParentFolder).')';
+            $sqlRolesViewRight = ' AND rol_id IN (' . Database::getQmForValues($rolesViewRightParentFolder) . ')';
         }
     }
 }
@@ -130,7 +130,7 @@ $page = new HtmlPage('admidio-documents-files-config-folder', $headline);
 $page->addHtml('<p class="lead">'.$gL10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))).'</p>');
 
 // show form
-$form = new HtmlForm('folder_rights_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '7', 'folder_id' => $getFolderId)), $page);
+$form = new HtmlForm('folder_rights_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '7', 'folder_uuid' => $getFolderUuid)), $page);
 $form->addSelectBoxFromSql(
     'adm_roles_view_right', $gL10n->get('SYS_VISIBLE_FOR'), $gDb, $sqlDataView,
     array(
