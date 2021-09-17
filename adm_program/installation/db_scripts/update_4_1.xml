@@ -53,12 +53,16 @@
     <step id="240">UPDATE %PREFIX%_menu SET men_name = 'SYS_NEW_REGISTRATIONS', men_description = 'SYS_MANAGE_NEW_REGISTRATIONS_DESC' WHERE men_name_intern = 'newreg'</step>
     <step id="250">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_description_inline boolean NOT NULL DEFAULT '0'</step>
     <step id="260">ALTER TABLE %PREFIX%_users ADD COLUMN usr_uuid varchar(36)</step>
-    <step id="270">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_uuid varchar(36)</step>
-    <step id="280">ALTER TABLE %PREFIX%_announcements ADD COLUMN ann_uuid varchar(36)</step>
-    <step id="290">ALTER TABLE %PREFIX%_categories ADD COLUMN cat_uuid varchar(36)</step>
-    <step id="300">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_uuid varchar(36)</step>
-    <step id="310">ALTER TABLE %PREFIX%_files ADD COLUMN fil_uuid varchar(36)</step>
-    <step id="320">ALTER TABLE %PREFIX%_folders ADD COLUMN fol_uuid varchar(36)</step>
+    <step id="265">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_uuid varchar(36)</step>
+    <step id="270">ALTER TABLE %PREFIX%_announcements ADD COLUMN ann_uuid varchar(36)</step>
+    <step id="275">ALTER TABLE %PREFIX%_categories ADD COLUMN cat_uuid varchar(36)</step>
+    <step id="280">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_uuid varchar(36)</step>
+    <step id="285">ALTER TABLE %PREFIX%_files ADD COLUMN fil_uuid varchar(36)</step>
+    <step id="290">ALTER TABLE %PREFIX%_folders ADD COLUMN fol_uuid varchar(36)</step>
+    <step id="295">ALTER TABLE %PREFIX%_guestbook ADD COLUMN gbo_uuid varchar(36)</step>
+    <step id="300">ALTER TABLE %PREFIX%_guestbook_comments ADD COLUMN gbc_uuid varchar(36)</step>
+    <step id="305">ALTER TABLE %PREFIX%_links ADD COLUMN lnk_uuid varchar(36)</step>
+    <step id="310">ALTER TABLE %PREFIX%_photos ADD COLUMN pho_uuid varchar(36)</step>
     <step id="400">ComponentUpdateSteps::updateStep41AddUuid</step>
     <step id="410" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_uuid varchar(36) NOT NULL</step>
     <step id="420">CREATE UNIQUE INDEX %PREFIX%_idx_usr_uuid ON %PREFIX%_users (usr_uuid)</step>
@@ -74,5 +78,13 @@
     <step id="520">CREATE UNIQUE INDEX %PREFIX%_idx_fil_uuid ON %PREFIX%_files (fil_uuid)</step>
     <step id="530" database="mysql">ALTER TABLE %PREFIX%_folders MODIFY COLUMN fol_uuid varchar(36) NOT NULL</step>
     <step id="540">CREATE UNIQUE INDEX %PREFIX%_idx_fol_uuid ON %PREFIX%_folders (fol_uuid)</step>
+    <step id="530" database="mysql">ALTER TABLE %PREFIX%_guestbook MODIFY COLUMN gbo_uuid varchar(36) NOT NULL</step>
+    <step id="540">CREATE UNIQUE INDEX %PREFIX%_idx_gbo_uuid ON %PREFIX%_guestbook (gbo_uuid)</step>
+    <step id="530" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments MODIFY COLUMN gbc_uuid varchar(36) NOT NULL</step>
+    <step id="540">CREATE UNIQUE INDEX %PREFIX%_idx_gbc_uuid ON %PREFIX%_guestbook_comments (gbc_uuid)</step>
+    <step id="530" database="mysql">ALTER TABLE %PREFIX%_links MODIFY COLUMN lnk_uuid varchar(36) NOT NULL</step>
+    <step id="540">CREATE UNIQUE INDEX %PREFIX%_idx_lnk_uuid ON %PREFIX%_links (lnk_uuid)</step>
+    <step id="530" database="mysql">ALTER TABLE %PREFIX%_photos MODIFY COLUMN pho_uuid varchar(36) NOT NULL</step>
+    <step id="540">CREATE UNIQUE INDEX %PREFIX%_idx_pho_uuid ON %PREFIX%_photos (pho_uuid)</step>
     <step>stop</step>
 </update>

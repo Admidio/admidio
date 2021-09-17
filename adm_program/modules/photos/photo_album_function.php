@@ -9,7 +9,7 @@
  *
  * Parameters:
  *
- * pho_id        : Id of photo album that should be edited
+ * photo_uuid    : UUID of photo album that should be edited
  * mode - new    : create a new photo album
  *      - change : edit a photo album
  *      - delete : delete a photo album
@@ -21,8 +21,8 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'int');
-$getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireValue' => true, 'validValues' => array('new', 'change', 'delete', 'lock', 'unlock')));
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
+$getMode      = admFuncVariableIsValid($_GET, 'mode',       'string', array('requireValue' => true, 'validValues' => array('new', 'change', 'delete', 'lock', 'unlock')));
 
 // check if the module is enabled and disallow access if it's disabled
 if ((int) $gSettingsManager->get('enable_photo_module') === 0)
@@ -38,9 +38,9 @@ $_SESSION['photo_album_request'] = $_POST;
 // create photo album object
 $photoAlbum = new TablePhotos($gDb);
 
-if ($getMode !== 'new' && $getPhotoId > 0)
+if ($getMode !== 'new' && $getPhotoUuid !== '')
 {
-    $photoAlbum->readDataById($getPhotoId);
+    $photoAlbum->readDataByUuid($getPhotoUuid);
 }
 
 // check if the user is allowed to edit this photo album
@@ -50,10 +50,8 @@ if (!$photoAlbum->isEditable())
     // => EXIT
 }
 
-$phoId = (int) $photoAlbum->getValue('pho_id');
-
 // Speicherort mit dem Pfad aus der Datenbank
-$albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $phoId;
+$albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
 if ($getMode === 'new' || $getMode === 'change')
@@ -164,15 +162,13 @@ if ($getMode === 'new' || $getMode === 'change')
                 $e->showHtml();
             }
         }
-
-        $getPhotoId = $phoId;
     }
     else
     {
         // if begin date changed than the folder must also be changed
-        if ($albumPath !== ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $getPhotoId)
+        if ($albumPath !== ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $photoAlbum->getValue('pho_id'))
         {
-            $newFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $phoId;
+            $newFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $photoAlbum->getValue('pho_id');
 
             // das komplette Album in den neuen Ordner verschieben
             try
@@ -197,7 +193,7 @@ if ($getMode === 'new' || $getMode === 'change')
 
     if ($getMode === 'new')
     {
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $getPhotoId)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $photoAlbum->getValue('pho_uuid'))));
         // => EXIT
     }
     else

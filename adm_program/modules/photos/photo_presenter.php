@@ -9,8 +9,8 @@
  *
  * Parameters:
  *
- * photo_nr : Number of the photo that should be shown
- * pho_id   : Id of the album of the photo that should be shown
+ * photo_uuid : Id of the album of the photo that should be shown
+ * photo_nr   : Number of the photo that should be shown
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -20,8 +20,8 @@ const PHOTO_SHOW_MODAL  = 1;
 const PHOTO_SHOW_PAGE   = 2;
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',   'int', array('requireValue' => true));
-$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'int', array('requireValue' => true));
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid','string', array('requireValue' => true));
+$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr', 'int', array('requireValue' => true));
 
 // check if the module is enabled and disallow access if it's disabled
 if ((int) $gSettingsManager->get('enable_photo_module') === 0)
@@ -36,13 +36,14 @@ elseif ((int) $gSettingsManager->get('enable_photo_module') === 2)
 }
 
 // get album data if it's not already stored in session
-if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_id') === $getPhotoId)
+if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid)
 {
     $photoAlbum =& $_SESSION['photo_album'];
 }
 else
 {
-    $photoAlbum = new TablePhotos($gDb, $getPhotoId);
+    $photoAlbum = new TablePhotos($gDb);
+    $photoAlbum->readDataByUuid($getPhotoUuid);
     $_SESSION['photo_album'] = $photoAlbum;
 }
 
@@ -58,15 +59,15 @@ $previousImage = $getPhotoNr - 1;
 $nextImage     = $getPhotoNr + 1;
 $urlPreviousImage = '#';
 $urlNextImage     = '#';
-$urlCurrentImage  = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height')));
+$urlCurrentImage  = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height')));
 
 if ($previousImage > 0)
 {
-    $urlPreviousImage = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $previousImage, 'pho_id' => $getPhotoId));
+    $urlPreviousImage = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $previousImage, 'photo_uuid' => $getPhotoUuid));
 }
 if ($nextImage <= $photoAlbum->getValue('pho_quantity'))
 {
-    $urlNextImage = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $nextImage, 'pho_id' => $getPhotoId));
+    $urlNextImage = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $nextImage, 'photo_uuid' => $getPhotoUuid));
 }
 
 // create html page object

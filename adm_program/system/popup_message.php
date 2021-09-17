@@ -80,11 +80,11 @@ switch ($getType)
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('mode' => 4, 'new_user_uuid' => $getDatabaseId));
         break;
     case 'pho':
-        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('job' => 'delete', 'pho_id' => $getDatabaseId2, 'photo_nr' => $getDatabaseId));
+        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('job' => 'delete', 'photo_uuid' => $getDatabaseId2, 'photo_nr' => $getDatabaseId));
         $text = 'PHO_WANT_DELETE_PHOTO';
         break;
     case 'pho_album':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('mode' => 'delete', 'pho_id' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('mode' => 'delete', 'photo_uuid' => $getDatabaseId));
         break;
     case 'pro_pho':
         $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'delete', 'user_uuid' => $getDatabaseId));

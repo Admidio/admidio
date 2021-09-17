@@ -14,8 +14,8 @@
  *
  * Parameters:
  *
- * pho_id   : id of album to download
- * photo_nr : Number of photo that should be downloaded
+ * photo_uuid : UUID of album to download
+ * photo_nr   : Number of photo that should be downloaded
  *
  *****************************************************************************/
 
@@ -23,8 +23,8 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',   'int');
-$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
+$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',   'int');
 
 // check if the module is enabled and disallow access if it's disabled
 if ((int) $gSettingsManager->get('enable_photo_module') === 0)
@@ -50,7 +50,7 @@ if (!$gSettingsManager->getBool('photo_download_enabled'))
 $photoAlbum = new TablePhotos($gDb);
 
 // get id of album
-$photoAlbum->readDataById($getPhotoId);
+$photoAlbum->readDataByUuid($getPhotoUuid);
 
 // check if the current user could view this photo album
 if(!$photoAlbum->isVisible())
@@ -125,17 +125,19 @@ if ($getPhotoNr == null)
               FROM '.TBL_PHOTOS.'
              WHERE pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
     $queryParams = array((int) $gCurrentOrganization->getValue('org_id'));
-    if ($getPhotoId === 0)
+
+    if ($getPhotoUuid !== '')
+    {
+        $sql .= '
+            AND pho_pho_id_parent = ? -- $photoAlbum->getValue(\'pho_id\')';
+        $queryParams[] = (int) $photoAlbum->getValue('pho_id');
+    }
+    else
     {
         $sql .= '
             AND (pho_pho_id_parent IS NULL)';
     }
-    if ($getPhotoId > 0)
-    {
-        $sql .= '
-            AND pho_pho_id_parent = ? -- $getPhotoId';
-        $queryParams[] = $getPhotoId;
-    }
+
     if (!$gCurrentUser->editPhotoRight())
     {
         $sql .= '

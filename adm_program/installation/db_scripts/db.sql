@@ -211,6 +211,7 @@ COLLATE = utf8_unicode_ci;
 CREATE TABLE %PREFIX%_guestbook
 (
     gbo_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    gbo_uuid                    varchar(36)         NOT NULL,
     gbo_org_id                  integer unsigned    NOT NULL,
     gbo_name                    varchar(60)         NOT NULL,
     gbo_text                    text                NOT NULL,
@@ -234,6 +235,7 @@ COLLATE = utf8_unicode_ci;
 CREATE TABLE %PREFIX%_guestbook_comments
 (
     gbc_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    gbc_uuid                    varchar(36)         NOT NULL,
     gbc_gbo_id                  integer unsigned    NOT NULL,
     gbc_name                    varchar(60)         NOT NULL,
     gbc_text                    text                NOT NULL,
@@ -268,6 +270,7 @@ COLLATE = utf8_unicode_ci;
 CREATE TABLE %PREFIX%_links
 (
     lnk_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    lnk_uuid                    varchar(36)         NOT NULL,
     lnk_cat_id                  integer unsigned    NOT NULL,
     lnk_name                    varchar(255)        NOT NULL,
     lnk_description             text,
@@ -457,6 +460,7 @@ CREATE UNIQUE INDEX %PREFIX%_idx_org_shortname ON %PREFIX%_organizations (org_sh
 CREATE TABLE %PREFIX%_photos
 (
     pho_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    pho_uuid                    varchar(36)         NOT NULL,
     pho_org_id                  integer unsigned    NOT NULL,
     pho_pho_id_parent           integer unsigned,
     pho_quantity                integer unsigned    NOT NULL    DEFAULT 0,

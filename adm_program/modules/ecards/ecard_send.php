@@ -12,14 +12,15 @@ require_once(__DIR__ . '/../../system/common.php');
 require_once(__DIR__ . '/ecard_function.php');
 
 // Initialize and check the parameters
-$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));
-$postPhotoId      = admFuncVariableIsValid($_POST, 'photo_id',       'int',  array('requireValue' => true));
-$postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr',       'int',  array('requireValue' => true));
+$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file',   array('requireValue' => true));
+$postPhotoUuid    = admFuncVariableIsValid($_POST, 'photo_uuid',     'string', array('requireValue' => true));
+$postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr',       'int',    array('requireValue' => true));
 
 $funcClass       = new FunctionClass($gL10n);
-$photoAlbum      = new TablePhotos($gDb, $postPhotoId);
-$imageUrl        = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $postPhotoId, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_card_picture_width'), 'max_height' => $gSettingsManager->getInt('ecard_card_picture_height')));
-$imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$postPhotoId.'/'.$postPhotoNr.'.jpg';
+$photoAlbum      = new TablePhotos($gDb);
+$photoAlbum->readDataByUuid($postPhotoUuid);
+$imageUrl        = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_card_picture_width'), 'max_height' => $gSettingsManager->getInt('ecard_card_picture_height')));
+$imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id').'/'.$postPhotoNr.'.jpg';
 
 $_SESSION['ecard_request'] = $_POST;
 

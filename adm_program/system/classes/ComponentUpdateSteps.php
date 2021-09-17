@@ -103,15 +103,63 @@ final class ComponentUpdateSteps
         }
 
         $sql = 'SELECT fol_id FROM ' . TBL_FOLDERS;
-        $rolesStatement = self::$db->queryPrepared($sql);
+        $foldersStatement = self::$db->queryPrepared($sql);
 
-        while($row = $rolesStatement->fetch())
+        while($row = $foldersStatement->fetch())
         {
             $uuid = Uuid::uuid4();
 
             $sql = 'UPDATE '.TBL_FOLDERS.' SET fol_uuid = ? -- $uuid
                      WHERE fol_id = ? -- $row[\'fol_id\']';
             self::$db->queryPrepared($sql, array($uuid, $row['fol_id']));
+        }
+
+        $sql = 'SELECT gbo_id FROM ' . TBL_GUESTBOOK;
+        $guestbookStatement = self::$db->queryPrepared($sql);
+
+        while($row = $guestbookStatement->fetch())
+        {
+            $uuid = Uuid::uuid4();
+
+            $sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_uuid = ? -- $uuid
+                     WHERE gbo_id = ? -- $row[\'gbo_id\']';
+            self::$db->queryPrepared($sql, array($uuid, $row['gbo_id']));
+        }
+
+        $sql = 'SELECT gbc_id FROM ' . TBL_GUESTBOOK_COMMENTS;
+        $commentsStatement = self::$db->queryPrepared($sql);
+
+        while($row = $commentsStatement->fetch())
+        {
+            $uuid = Uuid::uuid4();
+
+            $sql = 'UPDATE '.TBL_GUESTBOOK_COMMENTS.' SET gbc_uuid = ? -- $uuid
+                     WHERE gbc_id = ? -- $row[\'gbc_id\']';
+            self::$db->queryPrepared($sql, array($uuid, $row['gbc_id']));
+        }
+
+        $sql = 'SELECT lnk_id FROM ' . TBL_LINKS;
+        $linksStatement = self::$db->queryPrepared($sql);
+
+        while($row = $linksStatement->fetch())
+        {
+            $uuid = Uuid::uuid4();
+
+            $sql = 'UPDATE '.TBL_LINKS.' SET lnk_uuid = ? -- $uuid
+                     WHERE lnk_id = ? -- $row[\'lnk_id\']';
+            self::$db->queryPrepared($sql, array($uuid, $row['lnk_id']));
+        }
+
+        $sql = 'SELECT pho_id FROM ' . TBL_PHOTOS;
+        $photosStatement = self::$db->queryPrepared($sql);
+
+        while($row = $photosStatement->fetch())
+        {
+            $uuid = Uuid::uuid4();
+
+            $sql = 'UPDATE '.TBL_PHOTOS.' SET pho_uuid = ? -- $uuid
+                     WHERE pho_id = ? -- $row[\'pho_id\']';
+            self::$db->queryPrepared($sql, array($uuid, $row['pho_id']));
         }
 	}
 
