@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_DATES_ALL_EVENTS">Alla evenemang</string>
+  <string name="PLG_DATES_HEADLINE">Evenemang</string>
+  <string name="PLG_DATES_NO_ENTRIES_VISITORS">Det finns inga evenemang tillgängliga för besökare. Logga in för att se evenemangen.</string>
+</resources>

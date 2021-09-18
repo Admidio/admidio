@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ONLINE_HEADLINE">Vem är online?</string>
+  <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">Inga besökare på webbplatsen ..</string>
+  <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# besökare</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBER">#VAR1# medlem</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBERS">#VAR1# medlemmar</string>
+  <string name="PLG_ONLINE_VAR_ONLINE_ARE">Online är #VAR1#</string>
+  <string name="PLG_ONLINE_VAR_ONLINE_IS">Online är #VAR1#</string>
+</resources>
