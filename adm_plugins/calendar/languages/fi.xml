@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Nykyinen kuukausi</string>
+  <string name="PLG_CALENDAR_MONTH">Tammikuu,Helmikuu,Maaliskuu,Huhtikuu,Toukokuu,Kesäkuu,Heinäkuu,Elokuu,Syyskuu,Lokakuu,Marraskuu,Joulukuu</string>
+  <string name="PLG_CALENDAR_MORE">(... lisää)</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Ma</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Ti</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Ke</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">To</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">Pe</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">La</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Su</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Monta päivää</string>
+</resources>
