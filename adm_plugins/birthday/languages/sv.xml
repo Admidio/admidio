@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# blir #VAR3# år gammal om #VAR2# dagar, på #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# fyller år om #VAR2# dagar</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Födelsedagar</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Herr. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_USERS">Idag har #VAR1# användare födelsedag.</string>
+  <string name="PLG_BIRTHDAY_NO_USER">Ingen användare har födelsedag idag.</string>
+  <string name="PLG_BIRTHDAY_ONE_USER">En användare fyller år idag.</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# blev #VAR3# år gammal #VAR2# dagar innan, på #VAR4#</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# hade sin födelsedag #VAR2# dagar sedan</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# blir idag #VAR2#</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# fyller år idag</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# blir i morgon #VAR3# år gammal, på #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# fyller år imorgon</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Fru. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# blev #VAR3# år gammal igår på #VAR4#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# hade sin födelsedag igår</string>
+</resources>

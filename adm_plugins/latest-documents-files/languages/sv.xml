@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_FILES_HEADLINE">Dokument &amp; filer</string>
+  <string name="PLG_LATEST_FILES_MORE_DOWNLOADS">Fler dokument &amp; filer</string>
+  <string name="PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE">Det finns inga dokument eller filer tillgängliga.</string>
+  <string name="PLG_LATEST_FILES_UPLOAD_FROM_AT">Uppladdat av #VAR1# på #VAR2#</string>
+</resources>
