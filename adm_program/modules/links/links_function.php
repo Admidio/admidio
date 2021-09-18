@@ -9,18 +9,18 @@
  *
  * Parameters:
  *
- * lnk_id  - ID of the weblink that should be edited
- * mode    - 1 : Create new link
- *           2 : Delete link
- *           3 : Edit link
+ * link_uuid - UUID of the weblink that should be edited
+ * mode      - 1 : Create new link
+ *             2 : Delete link
+ *             3 : Edit link
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'int');
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
+$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid','string');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int', array('requireValue' => true));
 
 // check if the module is enabled for use
 if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
@@ -33,9 +33,9 @@ if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
 // create weblink object
 $link = new TableWeblink($gDb);
 
-if($getLinkId > 0)
+if($getLinkUuid !== '')
 {
-    $link->readDataById($getLinkId);
+    $link->readDataByUuid($getLinkUuid);
 
     // check if the current user could edit this weblink
     if(!$link->isEditable())
@@ -56,7 +56,7 @@ else
 
 $_SESSION['links_request'] = $_POST;
 
-if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
+if ($getMode === 1 || ($getMode === 3 && $getLinkUuid !== ''))
 {
     if(strlen(StringUtils::strStripTags($_POST['lnk_name'])) === 0)
     {
@@ -135,7 +135,7 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     admRedirect($gNavigation->getUrl());
     // => EXIT
 }
-elseif ($getMode === 2 && $getLinkId > 0)
+elseif ($getMode === 2 && $getLinkUuid !== '')
 {
     // delete current announcements, right checks were done before
     $link->delete();

@@ -11,7 +11,7 @@
  * headline  : Ueberschrift, die ueber den Links steht
  *             (Default) Links
  * cat_id    : show only links of this category id, if id is not set than show all links
- * id        : Show only one link.
+ * link_uuid : Uuid of a single link that should be shown.
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -22,7 +22,7 @@ unset($_SESSION['links_request']);
 $getStart    = admFuncVariableIsValid($_GET, 'start',    'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_WEBLINKS')));
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
-$getLinkId   = admFuncVariableIsValid($_GET, 'id',       'int');
+$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid','string');
 
 // check if the module is enabled for use
 if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
@@ -39,6 +39,7 @@ elseif((int) $gSettingsManager->get('enable_weblinks_module') === 2)
 
 // Create Link object
 $weblinks = new ModuleWeblinks();
+$weblinks->setParameter('lnk_uuid', $getLinkUuid);
 $weblinks->setParameter('cat_id', $getCatId);
 $weblinksCount = $weblinks->getDataSetCount();
 
@@ -56,7 +57,7 @@ else
 $headline = $weblinks->getHeadline($getHeadline);
 
 // add url to navigation stack
-if($getLinkId > 0)
+if($getLinkUuid  !== '')
 {
     $gNavigation->addUrl(CURRENT_URL, $getHeadline);
 }
@@ -147,7 +148,7 @@ else
             $weblink->clear();
             $weblink->setArray($row);
 
-            $lnkId    = (int) $weblink->getValue('lnk_id');
+            $lnkUuid  = $weblink->getValue('lnk_uuid');
             $lnkCatId = (int) $weblink->getValue('lnk_cat_id');
             $lnkName  = SecurityUtils::encodeHTML($weblink->getValue('lnk_name'));
             $lnkDescription = $weblink->getValue('lnk_description');
@@ -165,22 +166,22 @@ else
                     <div class="card-body">');
             }
 
-            $page->addHtml('<div class="mb-4" id="lnk_'.$lnkId.'">');
+            $page->addHtml('<div class="mb-4" id="lnk_'.$lnkUuid.'">');
 
                 // show weblink
                 $page->addHtml('
-                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('lnk_id' => $lnkId)).'" target="'. $gSettingsManager->getString('weblinks_target'). '">
+                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('link_uuid' => $lnkUuid)).'" target="'. $gSettingsManager->getString('weblinks_target'). '">
                     <i class="fas fa-link"></i>'.$lnkName.'</a>');
 
                 // change and delete only users with rights
                 if ($weblink->isEditable())
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('lnk_id' => $lnkId, 'headline' => $getHeadline)). '">
+                    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $lnkUuid, 'headline' => $getHeadline)). '">
                         <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
                     <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'lnk',
-                        'element_id' => 'lnk_'.$lnkId, 'name' => $weblink->getValue('lnk_name'), 'database_id' => $lnkId)).'">
+                        'element_id' => 'lnk_'.$lnkUuid, 'name' => $weblink->getValue('lnk_name'), 'database_id' => $lnkUuid)).'">
                         <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
                 }
 
