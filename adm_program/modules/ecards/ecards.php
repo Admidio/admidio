@@ -76,7 +76,7 @@ if ($getUserUuid !== '')
 {
     // usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
     $user = new User($gDb, $gProfileFields);
-    $user->readDataByUuid($getUserUuid)
+    $user->readDataByUuid($getUserUuid);
 
     // darf auf die User-Id zugegriffen werden
     if((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || strlen($user->getValue('usr_id')) === 0)

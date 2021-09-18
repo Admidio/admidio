@@ -100,11 +100,12 @@ if ($photoAlbum->isEditable())
          * @param {int}    img
          * @param {string} direction
          */
-        function imgrotate(img, direction) {
-            $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php", {photo_uuid: '.$getPhotoUuid.', photo_nr: img, job: "rotate", direction: direction}, function(data) {
-                // Anhängen der Zufallszahl ist nötig um den Browsercache zu überlisten
-                $("#img_" + img).attr("src", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'thumb' => 1)).'&photo_nr=" + img + "&rand=" + Math.random());
-                return false;
+        function imageRotate(img, direction) {
+            $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php", {photo_uuid: "'.$getPhotoUuid.'", photo_nr: img, job: "rotate", direction: direction}, function(data) {
+                // Appending the random number is necessary to trick the browser cache
+                $("#img_" + img).attr("src", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php',
+                    array('photo_uuid' => $getPhotoUuid, 'thumb' => 1)).'&photo_nr=" + img + "&rand=" + Math.random());
+                return true;
             });
         }'
     );
@@ -295,9 +296,9 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
                 if ($gCurrentUser->editPhotoRight())
                 {
                     $photoThumbnailTable .= '
-                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="return imgrotate('.$actThumbnail.', \'right\')">
+                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="return imageRotate('.$actThumbnail.', \'right\')">
                             <i class="fas fa-redo-alt" data-toggle="tooltip" title="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'"></i></a>
-                        <a class="admidio-icon-link"  href="javascript:void(0)" onclick="return imgrotate('.$actThumbnail.', \'left\')">
+                        <a class="admidio-icon-link"  href="javascript:void(0)" onclick="return imageRotate('.$actThumbnail.', \'left\')">
                             <i class="fas fa-undo-alt" data-toggle="tooltip" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'"></i></a>
                         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho', 'element_id' => 'div_image_'.$actThumbnail,
