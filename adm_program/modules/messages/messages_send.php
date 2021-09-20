@@ -30,7 +30,7 @@ $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
 $postUserIdList = admFuncVariableIsValid($_POST, 'userIdList',   'string');
-$postListId     = admFuncVariableIsValid($_POST, 'lst_id',       'int');
+$postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid',    'string');
 
 // save form data in session for back navigation
 $_SESSION['message_request'] = $_POST;
@@ -171,7 +171,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 
     if (isset($postTo))
     {
-        if ($postListId > 0) // the id of a list was passed
+        if ($postListUuid !== '') // the uuid of a list was passed
         {
             $postTo = explode(',', $postUserIdList);
         }
@@ -495,9 +495,10 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         $email->ConfirmReadingTo = $gCurrentUser->getValue('EMAIL');
     }
 
-    if ($postListId > 0)
+    if ($postListUuid !== '')
     {
-        $showList = new ListConfiguration($gDb, $postListId);
+        $showList = new ListConfiguration($gDb);
+        $showList->readDataByUuid($postListUuid);
         $listName = $showList->getValue('lst_name');
         $receiverName = $gL10n->get('SYS_LIST') . ($listName === '' ? '' : ' - ' . $listName);
     }

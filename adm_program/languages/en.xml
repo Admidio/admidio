@@ -1412,7 +1412,6 @@
   <string name="SYS_VISIBLE_FOR">Visible for</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# visible only to logged in users</string>
   <string name="SYS_VISITORS">Guests</string>
-  <string name="SYS_WANT_CONFIGURATION_FOR_ALL_USERS">Would you like to make selected list configuration available to all users?</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="SYS_WANT_REGISTER">I want to register!</string>
   <string name="SYS_WARNING">Warning</string>

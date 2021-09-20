@@ -37,7 +37,7 @@ $getForward    = admFuncVariableIsValid($_GET, 'forward',     'bool');
 
 // Check form values
 $postUserIdList = admFuncVariableIsValid($_POST, 'userIdList', 'string');
-$postListId     = admFuncVariableIsValid($_POST, 'lst_id',     'int');
+$postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid',  'string');
 
 
 $message = new TableMessage($gDb, $getMsgId);
@@ -473,13 +473,14 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
         }
     }
 
-    if($postListId > 0)
+    if($postListUuid !== '')
     {
         $preloadData = 'dummy';
-        $showlist = new ListConfiguration($gDb, $postListId);
+        $showlist = new ListConfiguration($gDb);
+        $showlist->readDataByUuid($postListUuid);
         $list = array('dummy' => $gL10n->get('SYS_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : ''));
         $form->addInput('userIdList', '', $postUserIdList, array('property' => HtmlForm::FIELD_HIDDEN));
-        $form->addInput('lst_id', '', $postListId, array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addInput('list_uuid', '', $postListUuid, array('property' => HtmlForm::FIELD_HIDDEN));
     }
 
     // no roles or users found then show message
