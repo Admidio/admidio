@@ -63,6 +63,13 @@
     <step id="300">ALTER TABLE %PREFIX%_guestbook_comments ADD COLUMN gbc_uuid varchar(36)</step>
     <step id="305">ALTER TABLE %PREFIX%_links ADD COLUMN lnk_uuid varchar(36)</step>
     <step id="310">ALTER TABLE %PREFIX%_photos ADD COLUMN pho_uuid varchar(36)</step>
+    <step id="315">ALTER TABLE %PREFIX%_lists ADD COLUMN lst_uuid varchar(36)</step>
+    <step id="320">ALTER TABLE %PREFIX%_menu ADD COLUMN men_uuid varchar(36)</step>
+    <step id="325">ALTER TABLE %PREFIX%_messages ADD COLUMN msg_uuid varchar(36)</step>
+    <step id="330">ALTER TABLE %PREFIX%_organizations ADD COLUMN org_uuid varchar(36)</step>
+    <step id="335">ALTER TABLE %PREFIX%_rooms ADD COLUMN room_uuid varchar(36)</step>
+    <step id="340">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_uuid varchar(36)</step>
+    <step id="350">ALTER TABLE %PREFIX%_user_relation_types ADD COLUMN urt_uuid varchar(36)</step>
     <step id="400">ComponentUpdateSteps::updateStep41AddUuid</step>
     <step id="410" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_uuid varchar(36) NOT NULL</step>
     <step id="420">CREATE UNIQUE INDEX %PREFIX%_idx_usr_uuid ON %PREFIX%_users (usr_uuid)</step>
@@ -78,13 +85,27 @@
     <step id="520">CREATE UNIQUE INDEX %PREFIX%_idx_fil_uuid ON %PREFIX%_files (fil_uuid)</step>
     <step id="530" database="mysql">ALTER TABLE %PREFIX%_folders MODIFY COLUMN fol_uuid varchar(36) NOT NULL</step>
     <step id="540">CREATE UNIQUE INDEX %PREFIX%_idx_fol_uuid ON %PREFIX%_folders (fol_uuid)</step>
-    <step id="530" database="mysql">ALTER TABLE %PREFIX%_guestbook MODIFY COLUMN gbo_uuid varchar(36) NOT NULL</step>
-    <step id="540">CREATE UNIQUE INDEX %PREFIX%_idx_gbo_uuid ON %PREFIX%_guestbook (gbo_uuid)</step>
-    <step id="530" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments MODIFY COLUMN gbc_uuid varchar(36) NOT NULL</step>
-    <step id="540">CREATE UNIQUE INDEX %PREFIX%_idx_gbc_uuid ON %PREFIX%_guestbook_comments (gbc_uuid)</step>
-    <step id="530" database="mysql">ALTER TABLE %PREFIX%_links MODIFY COLUMN lnk_uuid varchar(36) NOT NULL</step>
-    <step id="540">CREATE UNIQUE INDEX %PREFIX%_idx_lnk_uuid ON %PREFIX%_links (lnk_uuid)</step>
-    <step id="530" database="mysql">ALTER TABLE %PREFIX%_photos MODIFY COLUMN pho_uuid varchar(36) NOT NULL</step>
-    <step id="540">CREATE UNIQUE INDEX %PREFIX%_idx_pho_uuid ON %PREFIX%_photos (pho_uuid)</step>
+    <step id="550" database="mysql">ALTER TABLE %PREFIX%_guestbook MODIFY COLUMN gbo_uuid varchar(36) NOT NULL</step>
+    <step id="560">CREATE UNIQUE INDEX %PREFIX%_idx_gbo_uuid ON %PREFIX%_guestbook (gbo_uuid)</step>
+    <step id="570" database="mysql">ALTER TABLE %PREFIX%_guestbook_comments MODIFY COLUMN gbc_uuid varchar(36) NOT NULL</step>
+    <step id="580">CREATE UNIQUE INDEX %PREFIX%_idx_gbc_uuid ON %PREFIX%_guestbook_comments (gbc_uuid)</step>
+    <step id="590" database="mysql">ALTER TABLE %PREFIX%_links MODIFY COLUMN lnk_uuid varchar(36) NOT NULL</step>
+    <step id="600">CREATE UNIQUE INDEX %PREFIX%_idx_lnk_uuid ON %PREFIX%_links (lnk_uuid)</step>
+    <step id="610" database="mysql">ALTER TABLE %PREFIX%_photos MODIFY COLUMN pho_uuid varchar(36) NOT NULL</step>
+    <step id="620">CREATE UNIQUE INDEX %PREFIX%_idx_pho_uuid ON %PREFIX%_photos (pho_uuid)</step>
+    <step id="630" database="mysql">ALTER TABLE %PREFIX%_lists MODIFY COLUMN lst_uuid varchar(36) NOT NULL</step>
+    <step id="640">CREATE UNIQUE INDEX %PREFIX%_idx_lst_uuid ON %PREFIX%_lists (lst_uuid)</step>
+    <step id="650" database="mysql">ALTER TABLE %PREFIX%_menu MODIFY COLUMN men_uuid varchar(36) NOT NULL</step>
+    <step id="660">CREATE UNIQUE INDEX %PREFIX%_idx_men_uuid ON %PREFIX%_menu (men_uuid)</step>
+    <step id="670" database="mysql">ALTER TABLE %PREFIX%_messages MODIFY COLUMN msg_uuid varchar(36) NOT NULL</step>
+    <step id="680">CREATE UNIQUE INDEX %PREFIX%_idx_msg_uuid ON %PREFIX%_messages (msg_uuid)</step>
+    <step id="690" database="mysql">ALTER TABLE %PREFIX%_organizations MODIFY COLUMN org_uuid varchar(36) NOT NULL</step>
+    <step id="7ß0">CREATE UNIQUE INDEX %PREFIX%_idx_org_uuid ON %PREFIX%_organizations (org_uuid)</step>
+    <step id="710" database="mysql">ALTER TABLE %PREFIX%_rooms MODIFY COLUMN room_uuid varchar(36) NOT NULL</step>
+    <step id="720">CREATE UNIQUE INDEX %PREFIX%_idx_room_uuid ON %PREFIX%_rooms (room_uuid)</step>
+    <step id="730" database="mysql">ALTER TABLE %PREFIX%_user_fields MODIFY COLUMN usf_uuid varchar(36) NOT NULL</step>
+    <step id="740">CREATE UNIQUE INDEX %PREFIX%_idx_usf_uuid ON %PREFIX%_user_fields (usf_uuid)</step>
+    <step id="750" database="mysql">ALTER TABLE %PREFIX%_user_relation_types MODIFY COLUMN urt_uuid varchar(36) NOT NULL</step>
+    <step id="760">CREATE UNIQUE INDEX %PREFIX%_idx_urt_uuid ON %PREFIX%_user_relation_types (urt_uuid)</step>
     <step>stop</step>
 </update>

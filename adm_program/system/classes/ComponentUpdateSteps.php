@@ -30,136 +30,40 @@ final class ComponentUpdateSteps
      */
 	public static function updateStep41AddUuid()
 	{
-        $sql = 'SELECT usr_id FROM ' . TBL_USERS;
-        $usersStatement = self::$db->queryPrepared($sql);
+	    $updateTablesUuid = array(
+	        0 => array('table' => TBL_USERS, 'column_id' => 'usr_id', 'column_uuid' => 'usr_uuid'),
+            1 => array('table' => TBL_ROLES, 'column_id' => 'rol_id', 'column_uuid' => 'rol_uuid'),
+            2 => array('table' => TBL_ANNOUNCEMENTS, 'column_id' => 'ann_id', 'column_uuid' => 'ann_uuid'),
+            3 => array('table' => TBL_CATEGORIES, 'column_id' => 'cat_id', 'column_uuid' => 'cat_uuid'),
+            4 => array('table' => TBL_DATES, 'column_id' => 'dat_id', 'column_uuid' => 'dat_uuid'),
+            5 => array('table' => TBL_FILES, 'column_id' => 'fil_id', 'column_uuid' => 'fil_uuid'),
+            6 => array('table' => TBL_FOLDERS, 'column_id' => 'fol_id', 'column_uuid' => 'fol_uuid'),
+            7 => array('table' => TBL_GUESTBOOK, 'column_id' => 'gbo_id', 'column_uuid' => 'gbo_uuid'),
+            8 => array('table' => TBL_GUESTBOOK_COMMENTS, 'column_id' => 'gbc_id', 'column_uuid' => 'gbc_uuid'),
+            9 => array('table' => TBL_LINKS, 'column_id' => 'lnk_id', 'column_uuid' => 'lnk_uuid'),
+            10 => array('table' => TBL_PHOTOS, 'column_id' => 'pho_id', 'column_uuid' => 'pho_uuid'),
+            11 => array('table' => TBL_LISTS, 'column_id' => 'lst_id', 'column_uuid' => 'lst_uuid'),
+            12 => array('table' => TBL_MENU, 'column_id' => 'men_id', 'column_uuid' => 'men_uuid'),
+            13 => array('table' => TBL_MESSAGES, 'column_id' => 'msg_id', 'column_uuid' => 'msg_uuid'),
+            14 => array('table' => TBL_ORGANIZATIONS, 'column_id' => 'org_id', 'column_uuid' => 'org_uuid'),
+            15 => array('table' => TBL_ROOMS, 'column_id' => 'room_id', 'column_uuid' => 'room_uuid'),
+            16 => array('table' => TBL_USER_FIELDS, 'column_id' => 'usf_id', 'column_uuid' => 'usf_uuid'),
+            17 => array('table' => TBL_USER_RELATION_TYPES, 'column_id' => 'urt_id', 'column_uuid' => 'urt_uuid'),
+        );
 
-        while($row = $usersStatement->fetch())
+	    foreach($updateTablesUuid as $tableUuid)
         {
-            $uuid = Uuid::uuid4();
+            $sql = 'SELECT ' . $tableUuid['column_id'] . ' FROM ' . $tableUuid['table'];
+            $statement = self::$db->queryPrepared($sql);
 
-            $sql = 'UPDATE '.TBL_USERS.' SET usr_uuid = ? -- $uuid
-                     WHERE usr_id = ? -- $row[\'usr_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['usr_id']));
-        }
+            while($row = $statement->fetch())
+            {
+                $uuid = Uuid::uuid4();
 
-        $sql = 'SELECT rol_id FROM ' . TBL_ROLES;
-        $rolesStatement = self::$db->queryPrepared($sql);
-
-        while($row = $rolesStatement->fetch())
-        {
-            $uuid = Uuid::uuid4();
-
-            $sql = 'UPDATE '.TBL_ROLES.' SET rol_uuid = ? -- $uuid
-                     WHERE rol_id = ? -- $row[\'rol_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['rol_id']));
-        }
-
-        $sql = 'SELECT ann_id FROM ' . TBL_ANNOUNCEMENTS;
-        $rolesStatement = self::$db->queryPrepared($sql);
-
-        while($row = $rolesStatement->fetch())
-        {
-            $uuid = Uuid::uuid4();
-
-            $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_uuid = ? -- $uuid
-                     WHERE ann_id = ? -- $row[\'ann_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['ann_id']));
-        }
-
-        $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES;
-        $rolesStatement = self::$db->queryPrepared($sql);
-
-        while($row = $rolesStatement->fetch())
-        {
-            $uuid = Uuid::uuid4();
-
-            $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_uuid = ? -- $uuid
-                     WHERE cat_id = ? -- $row[\'cat_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['cat_id']));
-        }
-
-        $sql = 'SELECT dat_id FROM ' . TBL_DATES;
-        $rolesStatement = self::$db->queryPrepared($sql);
-
-        while($row = $rolesStatement->fetch())
-        {
-            $uuid = Uuid::uuid4();
-
-            $sql = 'UPDATE '.TBL_DATES.' SET dat_uuid = ? -- $uuid
-                     WHERE dat_id = ? -- $row[\'dat_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['dat_id']));
-        }
-
-        $sql = 'SELECT fil_id FROM ' . TBL_FILES;
-        $rolesStatement = self::$db->queryPrepared($sql);
-
-        while($row = $rolesStatement->fetch())
-        {
-            $uuid = Uuid::uuid4();
-
-            $sql = 'UPDATE '.TBL_FILES.' SET fil_uuid = ? -- $uuid
-                     WHERE fil_id = ? -- $row[\'fil_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['fil_id']));
-        }
-
-        $sql = 'SELECT fol_id FROM ' . TBL_FOLDERS;
-        $foldersStatement = self::$db->queryPrepared($sql);
-
-        while($row = $foldersStatement->fetch())
-        {
-            $uuid = Uuid::uuid4();
-
-            $sql = 'UPDATE '.TBL_FOLDERS.' SET fol_uuid = ? -- $uuid
-                     WHERE fol_id = ? -- $row[\'fol_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['fol_id']));
-        }
-
-        $sql = 'SELECT gbo_id FROM ' . TBL_GUESTBOOK;
-        $guestbookStatement = self::$db->queryPrepared($sql);
-
-        while($row = $guestbookStatement->fetch())
-        {
-            $uuid = Uuid::uuid4();
-
-            $sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_uuid = ? -- $uuid
-                     WHERE gbo_id = ? -- $row[\'gbo_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['gbo_id']));
-        }
-
-        $sql = 'SELECT gbc_id FROM ' . TBL_GUESTBOOK_COMMENTS;
-        $commentsStatement = self::$db->queryPrepared($sql);
-
-        while($row = $commentsStatement->fetch())
-        {
-            $uuid = Uuid::uuid4();
-
-            $sql = 'UPDATE '.TBL_GUESTBOOK_COMMENTS.' SET gbc_uuid = ? -- $uuid
-                     WHERE gbc_id = ? -- $row[\'gbc_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['gbc_id']));
-        }
-
-        $sql = 'SELECT lnk_id FROM ' . TBL_LINKS;
-        $linksStatement = self::$db->queryPrepared($sql);
-
-        while($row = $linksStatement->fetch())
-        {
-            $uuid = Uuid::uuid4();
-
-            $sql = 'UPDATE '.TBL_LINKS.' SET lnk_uuid = ? -- $uuid
-                     WHERE lnk_id = ? -- $row[\'lnk_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['lnk_id']));
-        }
-
-        $sql = 'SELECT pho_id FROM ' . TBL_PHOTOS;
-        $photosStatement = self::$db->queryPrepared($sql);
-
-        while($row = $photosStatement->fetch())
-        {
-            $uuid = Uuid::uuid4();
-
-            $sql = 'UPDATE '.TBL_PHOTOS.' SET pho_uuid = ? -- $uuid
-                     WHERE pho_id = ? -- $row[\'pho_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['pho_id']));
+                $sql = 'UPDATE ' . $tableUuid['table'] . ' SET ' . $tableUuid['column_uuid'] . ' = ? -- $uuid
+                     WHERE ' . $tableUuid['column_id'] . ' = ? -- $row[$tableUuid[\'column_id\']]';
+                self::$db->queryPrepared($sql, array($uuid, $row[$tableUuid['column_id']]));
+            }
         }
 	}
 
