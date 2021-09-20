@@ -9,7 +9,7 @@
  *
  * Parameters:
  *
- * cid        : Id of the corresponding guestbook entry
+ * gbo_uuid   : UUID of the corresponding guestbook entry
  * moderation : false - (Default) - Guestbookviww
  *              true  - Moderation mode, every entry could be released
  ***********************************************************************************************
@@ -17,10 +17,10 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getGbcGboId   = admFuncVariableIsValid($_GET, 'cid',        'int');
-$getModeration = admFuncVariableIsValid($_GET, 'moderation', 'bool');
+$getCommentGboUuid = admFuncVariableIsValid($_GET, 'gbo_uuid',   'string');
+$getModeration     = admFuncVariableIsValid($_GET, 'moderation', 'bool');
 
-if ($getGbcGboId > 0)
+if ($getCommentGboUuid !== '')
 {
     // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
     if((int) $gSettingsManager->get('enable_guestbook_moderation') > 0 && $getModeration)
@@ -36,11 +36,11 @@ if ($getGbcGboId > 0)
               FROM '.TBL_GUESTBOOK_COMMENTS.'
         INNER JOIN '.TBL_GUESTBOOK.'
                 ON gbo_id = gbc_gbo_id
-             WHERE gbo_id     = ? -- $getGbcGboId
+             WHERE gbo_uuid   = ? -- $getCommentGboUuid
                AND gbo_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    '.$conditions.'
           ORDER BY gbc_timestamp_create ASC';
-    $commentStatement = $gDb->queryPrepared($sql, array($getGbcGboId, (int) $gCurrentOrganization->getValue('org_id')));
+    $commentStatement = $gDb->queryPrepared($sql, array($getCommentGboUuid, (int) $gCurrentOrganization->getValue('org_id')));
 
     if($commentStatement->rowCount() > 0)
     {
@@ -54,7 +54,6 @@ if ($getGbcGboId > 0)
             $gbComment->setArray($row);
 
             $gbcId       = (int) $gbComment->getValue('gbc_id');
-            $getGbcGboId = (int) $gbComment->getValue('gbc_gbo_id');
             $gbcEmail    = $gbComment->getValue('gbc_email');
 
             echo '
@@ -120,7 +119,7 @@ if ($getGbcGboId > 0)
         {
             // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
             echo '
-            <button type="button" class="btn btn-secondary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('id' => $getGbcGboId)).'\'">
+            <button type="button" class="btn btn-secondary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbo_uuid' => $getGboUuid)).'\'">
                 <i class="fas fa-pencil-alt"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
         }
     }
