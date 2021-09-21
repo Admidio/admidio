@@ -119,7 +119,7 @@ switch ($getType)
         $text = 'SYS_DEACTIVATE_ROLE_DESC';
         break;
     case 'room':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 2, 'room_id' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 2, 'room_uuid' => $getDatabaseId));
         break;
     case 'usf':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 2, 'usf_id' => $getDatabaseId));
