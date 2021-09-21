@@ -12,19 +12,20 @@
 /******************************************************************************
  * Parameters:
  *
- * men_id: Id of the menu that should be edited
- * mode  : 1 - Create or edit menu
- *         2 - Delete menu
- *         3 - Change sequence for parameter men_id
- * sequence: New sequence for the parameter men_id
+ * menu_uuid : UUID of the menu that should be edited
+ * mode      : 1 - Create or edit menu
+ *             2 - Delete menu
+ *             3 - Change sequence for parameter men_id
+ * sequence  : New sequence for the parameter men_id
  *
  *****************************************************************************/
 
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getMenId = admFuncVariableIsValid($_GET, 'men_id', 'int');
-$getMode  = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
+$getMenuUuid = admFuncVariableIsValid($_GET, 'menu_uuid','string');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
+$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
 
 // check rights
 if(!$gCurrentUser->isAdministrator())
@@ -35,9 +36,9 @@ if(!$gCurrentUser->isAdministrator())
 // create menu object
 $menu = new TableMenu($gDb);
 
-if($getMenId > 0)
+if($getMenuUuid !== '')
 {
-    $menu->readDataById($getMenId);
+    $menu->readDataByUuid($getMenuUuid);
 }
 
 // create menu or update it
@@ -143,9 +144,7 @@ elseif($getMode === 2)
 }
 elseif($getMode === 3)
 {
-    // Kategoriereihenfolge aktualisieren
-    $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
-
+    // Update menu order
     $menu->moveSequence($getSequence);
     exit();
 }
