@@ -73,7 +73,7 @@ switch ($getType)
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 2, 'menu_uuid' => $getDatabaseId));
         break;
     case 'msg':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', array('msg_id' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', array('msg_uuid' => $getDatabaseId));
         $text = 'SYS_DELETE_MESSAGE';
         break;
     case 'nwu':

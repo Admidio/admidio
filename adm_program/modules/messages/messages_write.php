@@ -29,7 +29,7 @@ require_once(__DIR__ . '/../../system/common.php');
 $getMsgType    = admFuncVariableIsValid($_GET, 'msg_type',    'string', array('defaultValue' => TableMessage::MESSAGE_TYPE_EMAIL));
 $getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid',   'string');
 $getSubject    = admFuncVariableIsValid($_GET, 'subject',     'html');
-$getMsgId      = admFuncVariableIsValid($_GET, 'msg_id',      'int');
+$getMsgUuid    = admFuncVariableIsValid($_GET, 'msg_uuid',    'string');
 $getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid',   'string');
 $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
@@ -40,9 +40,10 @@ $postUserIdList = admFuncVariableIsValid($_POST, 'userIdList', 'string');
 $postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid',  'string');
 
 
-$message = new TableMessage($gDb, $getMsgId);
+$message = new TableMessage($gDb);
+$message->readDataByUuid($getMsgUuid);
 
-if ($getMsgId > 0)
+if ($getMsgUuid !== '')
 {
     $getMsgType = $message->getValue('msg_type');
 }
@@ -74,21 +75,21 @@ $currUsrId = (int) $gCurrentUser->getValue('usr_id');
 $currOrgId = (int) $gCurrentOrganization->getValue('org_id');
 
 // Update the read status of the message
-if ($getMsgId > 0)
+if ($getMsgUuid !== '')
 {
     // update the read-status
     $message->setReadValue();
 
     if($getForward === true)
     {
-        $getMsgId = 0;
+        $getMsgUuid = '';
     }
 
     $getSubject = $message->getValue('msg_subject');
     $user = new User($gDb, $gProfileFields, $message->getConversationPartner());
     $getUserUuid = $user->getValue('usr_uuid');
 
-    $messageStatement = $message->getConversation($getMsgId);
+    $messageStatement = $message->getConversation($message->getValue('msg_id'));
 }
 elseif($getUserUuid !== '')
 {
@@ -225,7 +226,7 @@ $page = new HtmlPage('admidio-messages-write', $headline);
 if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {
     // show form
-    $form = new HtmlForm('pm_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', array('msg_type' => 'PM', 'msg_id' => $getMsgId)), $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('pm_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', array('msg_type' => 'PM', 'msg_uuid' => $getMsgUuid)), $page, array('enableFileUpload' => true));
 
     if ($getUserUuid === '')
     {
@@ -274,7 +275,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     // add form to html page
     $page->addHtml($form->show());
 }
-elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgId === 0)
+elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
 {
     if ($getUserUuid !== '')
     {

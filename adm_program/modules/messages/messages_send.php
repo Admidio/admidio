@@ -18,7 +18,7 @@ require_once(__DIR__ . '/../../system/common.php');
 use PHPMailer\PHPMailer\Exception;
 
 // Initialize and check the parameters
-$getMsgId   = admFuncVariableIsValid($_GET, 'msg_id',   'int');
+$getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'string');
 $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 
 // Check form values
@@ -63,9 +63,10 @@ if ($postBody === '')
     // => EXIT
 }
 
-$message = new TableMessage($gDb, $getMsgId);
+$message = new TableMessage($gDb);
+$message->readDataByUuid($getMsgUuid);
 
-if ($getMsgId > 0)
+if ($getMsgUuid !== '')
 {
     $getMsgType = $message->getValue('msg_type');
 }
@@ -156,7 +157,6 @@ if (!($currUsrId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation
 }
 
 // object to handle the current message in the database
-$message = new TableMessage($gDb, $getMsgId);
 $message->setValue('msg_type', $getMsgType);
 $message->setValue('msg_subject', $postSubject);
 $message->setValue('msg_usr_id_sender', $gCurrentUser->getValue('usr_id'));

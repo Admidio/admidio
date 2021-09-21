@@ -128,7 +128,7 @@ $countTotalStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more
 $jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 
  // SQL-Statement zusammensetzen
-$mainSql = 'SELECT msg_id, msg_type, msg_subject, msg_usr_id_sender, msg_timestamp, msg_read,
+$mainSql = 'SELECT msg_id, msg_uuid, msg_type, msg_subject, msg_usr_id_sender, msg_timestamp, msg_read,
                     (SELECT count(1) FROM ' . TBL_MESSAGES_ATTACHMENTS . ' WHERE msa_msg_id = msg_id) AS attachments
               FROM ' . TBL_MESSAGES . '
              WHERE (  msg_usr_id_sender = ? -- $gCurrentUser->getValue(\'usr_id\')
@@ -157,7 +157,7 @@ if($getSearch === '')
 }
 else
 {
-    $sql = 'SELECT msg_id, msg_type, msg_subject, attachments, msg_timestamp
+    $sql = 'SELECT msg_id, msg_uuid, msg_type, msg_subject, attachments, msg_timestamp
               FROM ('.$mainSql.') AS members
                '.$searchCondition
                 .$orderCondition
@@ -183,7 +183,7 @@ while($message = $messageStatement->fetch())
     {
         $icon = 'fa-envelope';
         $iconText = $gL10n->get('SYS_EMAIL');
-        $links = '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_id' => $message['msg_id'], 'forward' => '1')) . '">
+        $links = '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_uuid' => $message['msg_uuid'], 'forward' => '1')) . '">
                     <i class="fas fa-share" data-toggle="tooltip" title="'.$gL10n->get('SYS_FORWARD').'"></i></a>';
 
     }
@@ -208,16 +208,16 @@ while($message = $messageStatement->fetch())
         $iconAttachments = '<i class="fas fa-paperclip" data-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENTS_VAR', array($message['attachments'])) . '"></i>';
     }
 
-    $arrContent['DT_RowId'] = 'row_message_' . $message['msg_id'];
+    $arrContent['DT_RowId'] = 'row_message_' . $message['msg_uuid'];
     $arrContent['DT_RowClass'] = $cssClass;
     $arrContent['0'] = '<i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
-    $arrContent['1'] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_id' => $message['msg_id'])) . '">' . $messageObject->getValue('msg_subject') . '</a>';
+    $arrContent['1'] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_uuid' => $message['msg_uuid'])) . '">' . $messageObject->getValue('msg_subject') . '</a>';
     $arrContent['2'] = $messageObject->getRecipientsNamesString();
     $arrContent['3'] = $iconAttachments;
     $arrContent['4'] = $messageObject->getValue('msg_timestamp');
     $arrContent['5'] = $links . '
         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $messageObject->getValue('msg_id'), 'name' => $messageObject->getValue('msg_subject'), 'database_id' => $messageObject->getValue('msg_id'))) . '">
+            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $message['msg_uuid'], 'name' => $messageObject->getValue('msg_subject'), 'database_id' => $message['msg_uuid'])) . '">
             <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_REMOVE_MESSAGE').'"></i>
         </a>';
 
