@@ -125,7 +125,7 @@ switch ($getType)
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 2, 'usf_uuid' => $getDatabaseId));
         break;
     case 'urt':
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 2, 'urt_id' => $getDatabaseId));
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 2, 'urt_uuid' => $getDatabaseId));
         $text = 'SYS_RELATIONSHIP_TYPE_DELETE';
         break;
     case 'ure':

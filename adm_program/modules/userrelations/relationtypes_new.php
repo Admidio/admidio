@@ -9,14 +9,14 @@
  *
  * Parameters:
  *
- * urt_id : Id of the relation type that should be edited
+ * urt_uuid : UUID of the relation type that should be edited
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUrtId = admFuncVariableIsValid($_GET, 'urt_id', 'int');
+$getUrtUuid = admFuncVariableIsValid($_GET, 'urt_uuid', 'string');
 
 if (!$gSettingsManager->getBool('members_enable_user_relations'))
 {
@@ -36,9 +36,9 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $relationType1 = new TableUserRelationType($gDb);
 $relationType2 = new TableUserRelationType($gDb);
 
-if($getUrtId > 0)
+if($getUrtUuid !== '')
 {
-    $relationType1->readDataById($getUrtId);
+    $relationType1->readDataByUuid($getUrtUuid);
     $relationType2->readDataById((int) $relationType1->getValue('urt_id_inverse'));
 }
 
@@ -46,7 +46,7 @@ if($getUrtId > 0)
 $page = new HtmlPage('admidio-relationtypes-edit', $headline);
 
 // show form
-$form = new HtmlForm('relationtype_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_function.php', array('urt_id' => $getUrtId, 'mode' => '1')), $page);
+$form = new HtmlForm('relationtype_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_function.php', array('urt_uuid' => $getUrtUuid, 'mode' => '1')), $page);
 
 $form->openGroupBox('gb_user_relationship', $gL10n->get('SYS_USER_RELATION'));
 $form->addInput(
