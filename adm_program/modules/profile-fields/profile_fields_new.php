@@ -9,14 +9,14 @@
  *
  * Parameters:
  *
- * usf_id : profile field id that should be edited
+ * usf_uuid : UUID of the profile field that should be edited
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUsfId = admFuncVariableIsValid($_GET, 'usf_id', 'int');
+$getUsfUuid = admFuncVariableIsValid($_GET, 'usf_uuid', 'string');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isAdministrator())
@@ -25,24 +25,14 @@ if (!$gCurrentUser->isAdministrator())
     // => EXIT
 }
 
-// set headline of the script
-if($getUsfId > 0)
-{
-    $headline = $gL10n->get('ORG_EDIT_PROFILE_FIELD');
-}
-else
-{
-    $headline = $gL10n->get('ORG_CREATE_PROFILE_FIELD');
-}
-
-$gNavigation->addUrl(CURRENT_URL, $headline);
-
 // benutzerdefiniertes Feldobjekt anlegen
 $userField = new TableUserField($gDb);
 
-if($getUsfId > 0)
+if($getUsfUuid !== '')
 {
-    $userField->readDataById($getUsfId);
+    $userField->readDataByUuid($getUsfUuid);
+
+    $headline = $gL10n->get('ORG_EDIT_PROFILE_FIELD');
 
     // hidden must be 0, if the flag should be set
     if($userField->getValue('usf_hidden') == 1)
@@ -64,10 +54,14 @@ if($getUsfId > 0)
 }
 else
 {
+    $headline = $gL10n->get('ORG_CREATE_PROFILE_FIELD');
+
     // default values for a new field
     $userField->setValue('usf_hidden', 1);
     $userField->setValue('usf_registration', 1);
 }
+
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 if(isset($_SESSION['fields_request']))
 {
@@ -105,7 +99,7 @@ $page->addJavascript('
 );
 
 // show form
-$form = new HtmlForm('profile_fields_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_function.php', array('usf_id' => $getUsfId, 'mode' => '1')), $page);
+$form = new HtmlForm('profile_fields_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_function.php', array('usf_uuid' => $getUsfUuid, 'mode' => '1')), $page);
 $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
 if($userField->getValue('usf_system') == 1)
 {
@@ -124,7 +118,7 @@ else
 
 $usfNameIntern = $userField->getValue('usf_name_intern');
 // show internal field name for information
-if($getUsfId > 0)
+if($getUsfUuid !== '')
 {
     $form->addInput(
         'usf_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $usfNameIntern,
