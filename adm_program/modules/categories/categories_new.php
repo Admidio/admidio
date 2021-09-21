@@ -9,19 +9,19 @@
  ******************************************************************************
  * Parameters:
  *
- * cat_id: Id of the category that should be edited
- * type  : Type of categories that could be maintained
- *         ROL = Categories for roles
- *         LNK = Categories for weblinks
- *         ANN = Categories for announcements
- *         USF = Categories for profile fields
- *         DAT = Calendars for events
+ * cat_uuid : Uuid of the category, that should be edited
+ * type     : Type of categories that could be maintained
+ *            ROL = Categories for roles
+ *            LNK = Categories for weblinks
+ *            ANN = Categories for announcements
+ *            USF = Categories for profile fields
+ *            DAT = Calendars for events
  ****************************************************************************/
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'int');
+$getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'AWA')));
 
 $roleViewSet = array(0);
@@ -29,9 +29,9 @@ $roleEditSet = array(0);
 $addButtonText = $gL10n->get('SYS_CATEGORY');
 
 // set headline of the script
-if($getCatId > 0)
+if($getCatUuid !== '')
 {
-    if($getType == 'DAT')
+    if($getType === 'DAT')
     {
         $headlineSuffix = $gL10n->get('SYS_EDIT_CALENDAR');
     }
@@ -42,7 +42,7 @@ if($getCatId > 0)
 }
 else
 {
-    if($getType == 'DAT')
+    if($getType === 'DAT')
     {
         $headlineSuffix = $gL10n->get('SYS_CREATE_CALENDAR');
     }
@@ -138,9 +138,9 @@ if(isset($_SESSION['categories_request']))
 }
 else
 {
-    if($getCatId > 0)
+    if($getCatUuid !== '')
     {
-        $category->readDataById($getCatId);
+        $category->readDataByUuid($getCatUuid);
         $catId = (int) $category->getValue('cat_id');
 
         // get assigned roles of this category
@@ -196,7 +196,7 @@ if($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1)
 }
 
 // show form
-$form = new HtmlForm('categories_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_function.php', array('cat_id' => $getCatId, 'type' => $getType, 'mode' => '1')), $page);
+$form = new HtmlForm('categories_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_function.php', array('cat_uuid' => $getCatUuid, 'type' => $getType, 'mode' => '1')), $page);
 
 // systemcategories should not be renamed
 $fieldPropertyCatName = HtmlForm::FIELD_REQUIRED;

@@ -10,10 +10,10 @@
  * Parameters:
  *
  * start     - Position of query recordset where the visual output should start
- * headline  - Title of the announcements module. This will be shown in the whole module.
+ * headline  - Title of the announcement module. This will be shown in the whole module.
  *             (Default) SYS_ANNOUNCEMENTS
- * cat_id    : Show only announcements of this category id, if id is not set than show all announcements.
- * id        - Id of a single announcement that should be shown.
+ * cat_id    - Show only announcements of this category id, if id is not set than show all announcements.
+ * ann_uuid  - Uuid of a single announcement that should be shown.
  * date_from - is set to 01.01.1970,
  *             if no date information is delivered
  * date_to   - is set to actual date,
@@ -28,7 +28,7 @@ unset($_SESSION['announcements_request']);
 $getStart    = admFuncVariableIsValid($_GET, 'start',     'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
-$getId       = admFuncVariableIsValid($_GET, 'id',        'int');
+$getAnnUuid  = admFuncVariableIsValid($_GET, 'ann_uuid',  'string');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 
@@ -47,7 +47,7 @@ elseif((int) $gSettingsManager->get('enable_announcements_module') === 2)
 
 // create object for announcements
 $announcements = new ModuleAnnouncements();
-$announcements->setParameter('id', $getId);
+$announcements->setParameter('ann_uuid', $getAnnUuid);
 $announcements->setParameter('cat_id', $getCatId);
 $announcements->setDateRange($getDateFrom, $getDateTo);
 
@@ -55,7 +55,7 @@ $announcements->setDateRange($getDateFrom, $getDateTo);
 $announcementsCount = $announcements->getDataSetCount();
 
 // add url to navigation stack
-if($getId > 0)
+if($getAnnUuid !== '')
 {
     $gNavigation->addUrl(CURRENT_URL, $getHeadline);
 }
@@ -110,7 +110,7 @@ $page->addJavascript('
     true
 );
 
-if($getId === 0)
+if($getAnnUuid === '')
 {
     // create filter menu with elements for category
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
@@ -125,7 +125,7 @@ if($getId === 0)
 if($announcementsCount === 0)
 {
     // no announcements found
-    if($getId > 0)
+    if($getAnnUuid !== '')
     {
         $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>');
     }
@@ -146,11 +146,11 @@ else
         $announcement->clear();
         $announcement->setArray($row);
 
-        $annId = (int) $announcement->getValue('ann_id');
+        $annUuid = $announcement->getValue('ann_uuid');
         $annHeadline = SecurityUtils::encodeHTML($announcement->getValue('ann_headline'));
 
         $page->addHtml('
-        <div class="card admidio-blog" id="ann_'.$annId.'">
+        <div class="card admidio-blog" id="ann_'.$annUuid.'">
             <div class="card-header">
                 <i class="fas fa-newspaper"></i>' . $annHeadline);
 
@@ -162,12 +162,12 @@ else
                         <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'copy' => '1', 'headline' => $getHeadline)).'">
+                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_uuid' => $annUuid, 'copy' => '1', 'headline' => $getHeadline)).'">
                                 <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('SYS_COPY').'</a>
-                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'headline' => $getHeadline)).'">
+                            <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_uuid' => $annUuid, 'headline' => $getHeadline)).'">
                                 <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
                             <a class="dropdown-item btn openPopup" href="javascript:void(0);"
-                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annId, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annId)).'">
+                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ann', 'element_id' => 'ann_'.$annUuid, 'name' => $announcement->getValue('ann_headline'), 'database_id' => $annUuid)).'">
                                 <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                         </div>
                     </div>');

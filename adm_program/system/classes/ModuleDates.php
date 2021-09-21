@@ -290,12 +290,12 @@ class ModuleDates extends Modules
         $sqlConditions = '';
         $params = array();
 
-        $id = (int) $this->getParameter('id');
+        $uuid = $this->getParameter('dat_uuid');
         // In case ID was permitted and user has rights
-        if ($id > 0)
+        if (!empty($uuid))
         {
-            $sqlConditions .= ' AND dat_id = ? '; // $id
-            $params[] = $id;
+            $sqlConditions .= ' AND dat_uuid = ? '; // $id
+            $params[] = $uuid;
         }
         // ...otherwise get all additional events for a group
         else

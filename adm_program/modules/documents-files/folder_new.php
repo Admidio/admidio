@@ -9,14 +9,14 @@
  *
  * Parameters:
  *
- * folder_id : Folder id of the parent folder
+ * folder_uuid : Folder UUID of the parent folder
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int', array('requireValue' => true));
+$getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string', array('requireValue' => true));
 
 $headline = $gL10n->get('SYS_CREATE_FOLDER');
 
@@ -27,7 +27,8 @@ if (!$gSettingsManager->getBool('documents_files_enable_module'))
     // => EXIT
 }
 
-$folder = new TableFolder($gDb, $getFolderId);
+$folder = new TableFolder($gDb);
+$folder->readDataByUuid($getFolderUuid);
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if (!$folder->hasUploadRight())
@@ -52,7 +53,7 @@ else
 try
 {
     // get recordset of current folder from database
-    $folder->getFolderForDownload($getFolderId);
+    $folder->getFolderForDownload($getFolderUuid);
 }
 catch(AdmException $e)
 {
@@ -68,7 +69,7 @@ $page = new HtmlPage('admidio-documents-files-new-folder', $headline);
 $page->addHtml('<p class="lead">'.$gL10n->get('SYS_CREATE_FOLDER_DESC', array($parentFolderName)).'</p>');
 
 // show form
-$form = new HtmlForm('new_folder_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '3', 'folder_id' => $getFolderId)), $page);
+$form = new HtmlForm('new_folder_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '3', 'folder_uuid' => $getFolderUuid)), $page);
 $form->addInput(
     'new_folder', $gL10n->get('SYS_NAME'), $formValues['new_folder'],
     array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED)

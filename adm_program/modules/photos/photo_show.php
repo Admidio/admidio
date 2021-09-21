@@ -12,11 +12,11 @@
 /******************************************************************************
  * Parameters:
  *
- * pho_id    : Id des Albums, aus dem das Bild kommen soll
- * photo_nr  : Nummer des Bildes, das angezeigt werden soll
- * max_width : maximale Breite auf die das Bild skaliert werden kann
- * max_height: maximale Hoehe auf die das Bild skaliert werden kann
- * thumb     : ist thumb === true wird ein Thumbnail in der Größe der
+ * photo_uuid : Id des Albums, aus dem das Bild kommen soll
+ * photo_nr   : Nummer des Bildes, das angezeigt werden soll
+ * max_width  : maximale Breite auf die das Bild skaliert werden kann
+ * max_height : maximale Hoehe auf die das Bild skaliert werden kann
+ * thumb      : ist thumb === true wird ein Thumbnail in der Größe der
  *             Voreinstellung zurückgegeben
  *
  *****************************************************************************/
@@ -24,7 +24,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getPhotoId   = admFuncVariableIsValid($_GET, 'pho_id',     'int', array('requireValue' => true));
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid','string', array('requireValue' => true));
 $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',   'int');
 $getMaxWidth  = admFuncVariableIsValid($_GET, 'max_width',  'int', array('defaultValue' => 0));
 $getMaxHeight = admFuncVariableIsValid($_GET, 'max_height', 'int', array('defaultValue' => 0));
@@ -46,13 +46,14 @@ elseif ((int) $gSettingsManager->get('enable_photo_module') === 2)
 $image = null;
 
 // read album data out of session or database
-if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_id') === $getPhotoId)
+if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid)
 {
     $photoAlbum =& $_SESSION['photo_album'];
 }
 else
 {
-    $photoAlbum = new TablePhotos($gDb, $getPhotoId);
+    $photoAlbum = new TablePhotos($gDb);
+    $photoAlbum->readDataByUuid($getPhotoUuid);
     $_SESSION['photo_album'] = $photoAlbum;
 }
 
@@ -64,7 +65,7 @@ if(!$photoAlbum->isVisible())
 }
 
 // Bildpfad zusammensetzten
-$albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $getPhotoId;
+$albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 $picPath      = $albumFolder . '/' . $getPhotoNr . '.jpg';
 $picThumbPath = $albumFolder . '/thumbnails/' . $getPhotoNr . '.jpg';
 

@@ -69,7 +69,7 @@ if(Component::isVisible('DOCUMENTS-FILES'))
     $downloadFolder = $rootFolder->getValue('fol_path') . '/' . $rootFolder->getValue('fol_name');
 
     // read all downloads from database and then check the rights for each download
-    $sql = 'SELECT fil_timestamp, fil_name, fil_usr_id, fol_name, fol_path, fil_id, fil_fol_id
+    $sql = 'SELECT fil_timestamp, fil_name, fil_usr_id, fol_name, fol_path, fil_id, fil_fol_id, fil_uuid
               FROM '.TBL_FILES.'
         INNER JOIN '.TBL_FOLDERS.'
                 ON fol_id = fil_fol_id
@@ -91,7 +91,7 @@ if(Component::isVisible('DOCUMENTS-FILES'))
             {
                 // get recordset of current file from database
                 $file = new TableFile($gDb);
-                $file->getFileForDownload($rowFile['fil_id']);
+                $file->getFileForDownload($rowFile['fil_uuid']);
             }
             catch(AdmException $e)
             {

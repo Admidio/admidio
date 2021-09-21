@@ -23,6 +23,9 @@
  *                                                  'image_versions' => array()));
  * ```
  */
+
+require_once(ADMIDIO_PATH . FOLDER_LIBS_CLIENT . '/jquery-file-upload/server/php/UploadHandler.php');
+
 class UploadHandlerDownload extends UploadHandler
 {
     /**

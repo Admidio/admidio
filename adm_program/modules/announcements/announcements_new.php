@@ -9,10 +9,10 @@
  *
  * Parameters:
  *
- * ann_id    - ID of the announcement that should be edited
- * headline  - Title of the announcements module. This will be shown in the whole module.
+ * ann_uuid  : UUID of the announcement that should be edited
+ * headline  : Title of the announcement module. This will be shown in the whole module.
  *             (Default) SYS_ANNOUNCEMENTS
- * copy : true - The announcement of the ann_id will be copied and the base for this new announcement
+ * copy = true : The announcement of the ann_id will be copied and the base for this new announcement
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -26,7 +26,7 @@ if ((int) $gSettingsManager->get('enable_announcements_module') === 0)
 }
 
 // Initialize and check the parameters
-$getAnnId    = admFuncVariableIsValid($_GET, 'ann_id',   'int');
+$getAnnUuid  = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
 $getCopy     = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
@@ -35,7 +35,7 @@ if($getCopy)
 {
     $headline = $gL10n->get('SYS_COPY_VAR', array($getHeadline));
 }
-elseif($getAnnId > 0)
+elseif($getAnnUuid !== '')
 {
     $headline = $getHeadline. ' - '. $gL10n->get('SYS_EDIT_ENTRY');
 }
@@ -50,13 +50,13 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // Create announcements object
 $announcement = new TableAnnouncement($gDb);
 
-if($getAnnId > 0)
+if($getAnnUuid !== '')
 {
-    $announcement->readDataById($getAnnId);
+    $announcement->readDataByUuid($getAnnUuid);
 
     if($getCopy === true)
     {
-        $getAnnId = 0;
+        $getAnnUuid = '';
     }
 
     // check if the current user could edit this announcement
@@ -78,8 +78,8 @@ else
 
 if(isset($_SESSION['announcements_request']))
 {
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    // due to incorrect input the user has returned to this form
+    // now write the previously entered contents into the object
     $announcement->setArray($_SESSION['announcements_request']);
     unset($_SESSION['announcements_request']);
 }
@@ -88,7 +88,7 @@ if(isset($_SESSION['announcements_request']))
 $page = new HtmlPage('admidio-announcements-edit', $headline);
 
 // show form
-$form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_id' => $getAnnId, 'headline' => $getHeadline, 'mode' => '1')), $page);
+$form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'headline' => $getHeadline, 'mode' => '1')), $page);
 $form->addInput(
     'ann_headline', $gL10n->get('SYS_TITLE'), SecurityUtils::encodeHTML($announcement->getValue('ann_headline')),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)

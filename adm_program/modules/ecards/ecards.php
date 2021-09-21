@@ -9,9 +9,9 @@
  *
  * Parameters:
  *
- * pho_id:      Id of photo album whose image you want to send
- * photo_nr:    Number of the photo of the chosen album
- * usr_id:      (optional) Id of the user who should receive the ecard
+ * photo_uuid: UUID of photo album whose image you want to send
+ * photo_nr:   Number of the photo of the chosen album
+ * user_uuid:  (optional) UUID of the user who should receive the ecard
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -19,10 +19,10 @@ require_once(__DIR__ . '/ecard_function.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',    'int', array('requireValue' => true));
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id',    'int');
-$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr',  'int', array('requireValue' => true));
-$showPage   = admFuncVariableIsValid($_GET, 'show_page', 'int', array('defaultValue' => 1));
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid',  'string');
+$getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid',  'string');
+$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',  'int', array('requireValue' => true));
+$showPage     = admFuncVariableIsValid($_GET, 'show_page', 'int', array('defaultValue' => 1));
 
 // Initialisierung lokaler Variablen
 $funcClass = new FunctionClass($gL10n);
@@ -41,7 +41,7 @@ if (!$gSettingsManager->getBool('enable_ecard_module'))
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_id') === $getPhotoId)
+if(isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid)
 {
     $photoAlbum =& $_SESSION['photo_album'];
 }
@@ -49,16 +49,16 @@ else
 {
     // einlesen des Albums falls noch nicht in Session gespeichert
     $photoAlbum = new TablePhotos($gDb);
-    if($getPhotoId > 0)
+    if($getPhotoUuid !== '')
     {
-        $photoAlbum->readDataById($getPhotoId);
+        $photoAlbum->readDataByUuid($getPhotoUuid);
     }
 
     $_SESSION['photo_album'] = $photoAlbum;
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
-if($getPhotoId > 0 && (int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+if($getPhotoUuid !== '' && (int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
@@ -72,10 +72,11 @@ if ($gValidLogin && $gCurrentUser->getValue('EMAIL') === '')
     // => EXIT
 }
 
-if ($getUserId > 0)
+if ($getUserUuid !== '')
 {
     // usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($gDb, $gProfileFields, $getUserId);
+    $user = new User($gDb, $gProfileFields);
+    $user->readDataByUuid($getUserUuid);
 
     // darf auf die User-Id zugegriffen werden
     if((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || strlen($user->getValue('usr_id')) === 0)
@@ -141,14 +142,14 @@ $page->addJavascript('
 // show form
 $form = new HtmlForm('ecard_form', 'ecard_send.php', $page);
 $form->addInput('submit_action', '', '', array('property' => HtmlForm::FIELD_HIDDEN));
-$form->addInput('photo_id', '', $getPhotoId, array('property' => HtmlForm::FIELD_HIDDEN));
+$form->addInput('photo_uuid', '', $getPhotoUuid, array('property' => HtmlForm::FIELD_HIDDEN));
 $form->addInput('photo_nr', '', $getPhotoNr, array('property' => HtmlForm::FIELD_HIDDEN));
 
 $form->openGroupBox('gb_layout', $gL10n->get('SYS_LAYOUT'));
 $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
     <a data-toggle="lightbox" data-type="image" data-title="'.$gL10n->get('SYS_PREVIEW').'"
-        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
-        src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale'))).'"
+        href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
+        src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale'))).'"
         class="imageFrame" alt="'.$gL10n->get('SYS_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('SYS_VIEW_PICTURE_FULL_SIZED').'" />
     </a>');
 $templates = array_keys(FileSystemUtils::getDirectoryContent(THEME_PATH.'/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));

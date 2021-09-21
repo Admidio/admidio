@@ -338,17 +338,17 @@ class TableUserField extends TableAccess
     {
         $usfSequence = (int) $this->getValue('usf_sequence');
         $usfCatId    = (int) $this->getValue('usf_cat_id');
-        $usfId       = (int) $this->getValue('usf_id');
+        $usfUuid     = $this->getValue('usf_uuid');
 
         $sql = 'UPDATE '.TBL_USER_FIELDS.'
                    SET usf_sequence = ? -- new order sequence
-                 WHERE usf_id       = ? -- field ID;
+                 WHERE usf_uuid     = ? -- field ID;
                    AND usf_cat_id   = ? -- $usfCatId;
             ';
 
         $newSequence = -1;
         foreach ($sequence as $pos => $id) {
-            if ($id == $usfId) {
+            if ($id == $usfUuid) {
                 // Store position for later update
                 $newSequence = $pos + 1;
             } else {

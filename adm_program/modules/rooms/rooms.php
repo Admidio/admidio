@@ -104,17 +104,17 @@ else
         $room->setArray($row);
 
         $page->addHtml('
-        <div class="card admidio-blog" id="room_'.(int) $room->getValue('room_id').'">
+        <div class="card admidio-blog" id="room_'.$room->getValue('room_uuid').'">
             <div class="card-header">
                 <i class="fas fa-home"></i>' . $room->getValue('room_name') . '
                 <div class="dropdown float-right">
                     <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_id' => (int) $room->getValue('room_id'), 'headline' => $textRoom)).'">
+                        <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $room->getValue('room_uuid'), 'headline' => $textRoom)).'">
                             <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('SYS_EDIT').'</a>
                         <a class="dropdown-item btn openPopup" href="javascript:void(0);"
-                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.(int) $room->getValue('room_id'), 'name' => $room->getValue('room_name'), 'database_id' => (int) $room->getValue('room_id'))).'">
+                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.$room->getValue('room_uuid'), 'name' => $room->getValue('room_name'), 'database_id' => $room->getValue('room_uuid'))).'">
                             <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                     </div>
                 </div>

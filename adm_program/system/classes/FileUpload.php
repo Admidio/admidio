@@ -22,18 +22,18 @@ class FileUpload
     /**
      * @var int Id of the destination object that could be the folder or the album
      */
-    protected $destinationId;
+    protected $destinationUuid;
 
     /**
      * Constructor that will create an object of FileUpload.
      * @param HtmlPage $page   Object that represents the current page where the upload should be integrated
      * @param string   $module Name module for which the upload should be done. Preferred modules are 'photos' and 'documents_files'
      */
-    public function __construct(HtmlPage $page, $module, $destinationId)
+    public function __construct(HtmlPage $page, $module, $destinationUuid)
     {
         $this->page = $page;
         $this->module = $module;
-        $this->destinationId = $destinationId;
+        $this->destinationUuid = $destinationUuid;
     }
 
     /**
@@ -110,7 +110,7 @@ class FileUpload
             });
 
             $("#fileupload").fileupload({
-                url: "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => $this->module, 'mode' => 'upload_files', 'id' => $this->destinationId)).'",
+                url: "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => $this->module, 'mode' => 'upload_files', 'uuid' => $this->destinationUuid)).'",
                 sequentialUploads: true,
                 dataType: "json",
                 add: function(e, data) {

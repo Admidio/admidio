@@ -15,9 +15,9 @@
  *           5 - Delete folder
  *           6 - Add file/folder to database
  *           7 - Save access to folder
- * folder_id : Id of the folder in the database
- * file_id   : Id of the file in the database
- * name      : Name of the file/folder that should be added to the database
+ * folder_uuid : UUID of the folder in the database
+ * file_uuid   : UUID of the file in the database
+ * name        : Name of the file/folder that should be added to the database
  ***********************************************************************************************/
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
@@ -30,10 +30,10 @@ if (!$gSettingsManager->getBool('documents_files_enable_module'))
 }
 
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode',      'int', array('requireValue' => true));
-$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
-$getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'int');
-$getName     = admFuncVariableIsValid($_GET, 'name',      'file');
+$getMode       = admFuncVariableIsValid($_GET, 'mode',        'int', array('requireValue' => true));
+$getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
+$getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid',   'string');
+$getName       = admFuncVariableIsValid($_GET, 'name',        'file');
 
 $_SESSION['documents_files_request'] = $_POST;
 
@@ -53,7 +53,7 @@ try
     // check the rights of the current folder
     // user must be administrator or must have the right to upload files
     $folder = new TableFolder($gDb);
-    $folder->getFolderForDownload($getFolderId);
+    $folder->getFolderForDownload($getFolderUuid);
 }
 catch(AdmException $e)
 {
@@ -70,13 +70,13 @@ if (!$folder->hasUploadRight())
 // Delete file
 if ($getMode === 2)
 {
-    if($getFileId > 0)
+    if($getFileUuid !== '')
     {
         try
         {
             // get recordset of current file from database
             $file = new TableFile($gDb);
-            $file->getFileForDownload($getFileId);
+            $file->getFileForDownload($getFileUuid);
         }
         catch(AdmException $e)
         {
@@ -103,7 +103,7 @@ if ($getMode === 2)
 // create folder
 elseif ($getMode === 3)
 {
-    if ($getFolderId === 0)
+    if ($getFolderUuid === '')
     {
         // FolderId ist zum Anlegen eines Unterordners erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -179,7 +179,7 @@ elseif ($getMode === 3)
 // Datei / Ordner umbenennen
 elseif ($getMode === 4)
 {
-    if (!$getFileId && !$getFolderId)
+    if (!$getFileUuid && !$getFolderUuid)
     {
         // fileid and/or folderid must be set
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -191,11 +191,11 @@ elseif ($getMode === 4)
         $newName = admFuncVariableIsValid($_POST, 'new_name', 'file', array('requireValue' => true));
         $newDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
 
-        if($getFileId > 0)
+        if($getFileUuid !== '')
         {
             // get recordset of current file from database and throw exception if necessary
             $file = new TableFile($gDb);
-            $file->getFileForDownload($getFileId);
+            $file->getFileForDownload($getFileUuid);
 
             $oldFile = $file->getFullFilePath();
             $newPath = $file->getFullFolderPath() . '/';
@@ -235,7 +235,7 @@ elseif ($getMode === 4)
                 // => EXIT
             }
         }
-        elseif($getFolderId > 0)
+        elseif($getFolderUuid !== '')
         {
             // main folder could not be renamed
             if ($folder->getValue('fol_fol_id_parent') === '')
@@ -291,7 +291,7 @@ elseif ($getMode === 4)
         {
             $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('SYS_NEW_NAME'));
         }
-        if($e->getMessage() === 'SYS_FILENAME_INVALID' && $getFolderId > 0)
+        if($e->getMessage() === 'SYS_FILENAME_INVALID' && $getFolderUuid !== '')
         {
             $e->setNewMessage('SYS_FOLDER_NAME_INVALID');
         }
@@ -303,13 +303,13 @@ elseif ($getMode === 4)
 // Folder loeschen
 elseif ($getMode === 5)
 {
-    if ($getFolderId === 0)
+    if ($getFolderUuid === '')
     {
         // Es muss eine FolderId uebergeben werden
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT
     }
-    elseif ($getFolderId > 0)
+    elseif ($getFolderUuid !== '')
     {
         if ($folder->delete())
         {
@@ -324,7 +324,7 @@ elseif ($getMode === 5)
 // Datei / Ordner zur DB hinzufeuegen
 elseif ($getMode === 6)
 {
-    if ($getFolderId === 0)
+    if ($getFolderUuid === '')
     {
         // FolderId ist zum hinzufuegen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -401,7 +401,7 @@ elseif ($getMode === 7)
         $_POST['adm_roles_upload_right'] = array();
     }
 
-    if ($getFolderId === 0 || !is_array($_POST['adm_roles_view_right']) || !is_array($_POST['adm_roles_upload_right']))
+    if ($getFolderUuid === '' || !is_array($_POST['adm_roles_view_right']) || !is_array($_POST['adm_roles_upload_right']))
     {
         // FolderId ist zum hinzufuegen erforderlich
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -423,16 +423,16 @@ elseif ($getMode === 7)
         if ($folder->getValue('fol_fol_id_parent'))
         {
             // get recordset of parent folder from database
-            $parentFolder = new TableFolder($gDb);
-            $parentFolder->getFolderForDownload((int) $folder->getValue('fol_fol_id_parent'));
+            $parentFolder = new TableFolder($gDb, (int) $folder->getValue('fol_fol_id_parent'));
+            $parentFolder->getFolderForDownload($parentFolder->getValue('fol_uuid'));
         }
 
         // Read current view roles rights of the folder
-        $rightFolderView = new RolesRights($gDb, 'folder_view', $getFolderId);
+        $rightFolderView = new RolesRights($gDb, 'folder_view', $folder->getValue('fol_id'));
         $rolesFolderView = $rightFolderView->getRolesIds();
 
         // Read current upload roles rights of the folder
-        $rightFolderUpload = new RolesRights($gDb, 'folder_upload', $getFolderId);
+        $rightFolderUpload = new RolesRights($gDb, 'folder_upload', $folder->getValue('fol_id'));
         $rolesFolderUpload = $rightFolderUpload->getRolesIds();
 
         // get new roles and removed roles

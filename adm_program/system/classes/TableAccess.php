@@ -30,6 +30,9 @@
  * $role->save();
  * ```
  */
+
+use Ramsey\Uuid\Uuid;
+
 class TableAccess
 {
     /**
@@ -54,7 +57,7 @@ class TableAccess
     protected $db;
 
     /**
-     * @var bool Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
+     * @var bool Flag whether a new data set or existing data set is being edited
      */
     protected $newRecord;
     /**
@@ -62,11 +65,11 @@ class TableAccess
      */
     protected $columnsValueChanged;
     /**
-     * @var array<string,mixed> Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
+     * @var array<string,mixed> Array over all fields of the corresponding table for the selected record
      */
     protected $dbColumns = array();
     /**
-     * @var array<string,array<string,mixed>> Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
+     * @var array<string,array<string,mixed>> Array which stores further information (changed yes/no, field type)
      */
     protected $columnsInfos = array();
 
@@ -501,6 +504,7 @@ class TableAccess
      * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
+     * For a new record if there is an uuid column a new uuid will be created and stored.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
@@ -512,6 +516,12 @@ class TableAccess
         if (!$this->columnsValueChanged && $this->dbColumns[$this->keyColumnName] !== '')
         {
             return false;
+        }
+
+        // if new role then set create the uuid
+        if ($this->isNewRecord() && array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns))
+        {
+            $this->setValue($this->columnPrefix . '_uuid', Uuid::uuid4());
         }
 
         // TODO check if "$gCurrentUser instanceof User"

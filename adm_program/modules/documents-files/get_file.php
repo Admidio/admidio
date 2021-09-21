@@ -9,15 +9,15 @@
  *
  * Parameters:
  *
- * file_id  :  The id of the file that should be returned
- * view     :  If set to true than the output will not be send as attachement
+ * file_uuid :  The UUID of the file that should be returned
+ * view      :  If set to true than the output will not be send as attachement
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getFileId = admFuncVariableIsValid($_GET, 'file_id', 'int', array('requireValue' => true));
-$getView   = admFuncVariableIsValid($_GET, 'view', 'bool');
+$getFileUuid = admFuncVariableIsValid($_GET, 'file_uuid', 'string', array('requireValue' => true));
+$getView     = admFuncVariableIsValid($_GET, 'view',      'bool');
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('documents_files_enable_module'))
@@ -30,7 +30,7 @@ try
 {
     // get recordset of current file from database
     $file = new TableFile($gDb);
-    $file->getFileForDownload($getFileId);
+    $file->getFileForDownload($getFileUuid);
 }
 catch(AdmException $e)
 {

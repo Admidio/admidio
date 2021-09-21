@@ -12,7 +12,7 @@
 /******************************************************************************
  * Parameters:
  *
- * usf_id   : profile field id
+ * usf_uuid : UUID of the profile field that should be edited
  * mode     : 1 - create or edit profile field
  *            2 - delete profile field
  *            4 - change sequence of profile field
@@ -24,7 +24,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUsfId    = admFuncVariableIsValid($_GET, 'usf_id',   'int');
+$getUsfUuid  = admFuncVariableIsValid($_GET, 'usf_uuid', 'string');
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
 $getOrder    = admFuncVariableIsValid($_GET, 'order',    'array');
@@ -40,9 +40,9 @@ if (!$gCurrentUser->isAdministrator())
 // create user field object
 $userField = new TableUserField($gDb);
 
-if($getUsfId > 0)
+if($getUsfUuid !== '')
 {
-    $userField->readDataById($getUsfId);
+    $userField->readDataByUuid($getUsfUuid);
 
     // check if profile field belongs to actual organization
     if($userField->getValue('cat_org_id') > 0
@@ -133,8 +133,8 @@ if($getMode === 1)
                   FROM '.TBL_USER_FIELDS.'
                  WHERE usf_name   = ? -- $_POST[\'usf_name\']
                    AND usf_cat_id = ? -- $_POST[\'usf_cat_id\']
-                   AND usf_id    <> ? -- $getUsfId';
-        $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usf_name'], (int) $_POST['usf_cat_id'], $getUsfId));
+                   AND usf_uuid  <> ? -- $getUsfUuid';
+        $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usf_name'], (int) $_POST['usf_cat_id'], $getUsfUuid));
 
         if($pdoStatement->fetchColumn() > 0)
         {

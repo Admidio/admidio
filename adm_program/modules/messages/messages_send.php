@@ -18,7 +18,7 @@ require_once(__DIR__ . '/../../system/common.php');
 use PHPMailer\PHPMailer\Exception;
 
 // Initialize and check the parameters
-$getMsgId   = admFuncVariableIsValid($_GET, 'msg_id',   'int');
+$getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'string');
 $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 
 // Check form values
@@ -30,7 +30,7 @@ $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
 $postUserIdList = admFuncVariableIsValid($_POST, 'userIdList',   'string');
-$postListId     = admFuncVariableIsValid($_POST, 'lst_id',       'int');
+$postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid',    'string');
 
 // save form data in session for back navigation
 $_SESSION['message_request'] = $_POST;
@@ -63,9 +63,10 @@ if ($postBody === '')
     // => EXIT
 }
 
-$message = new TableMessage($gDb, $getMsgId);
+$message = new TableMessage($gDb);
+$message->readDataByUuid($getMsgUuid);
 
-if ($getMsgId > 0)
+if ($getMsgUuid !== '')
 {
     $getMsgType = $message->getValue('msg_type');
 }
@@ -156,7 +157,6 @@ if (!($currUsrId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation
 }
 
 // object to handle the current message in the database
-$message = new TableMessage($gDb, $getMsgId);
 $message->setValue('msg_type', $getMsgType);
 $message->setValue('msg_subject', $postSubject);
 $message->setValue('msg_usr_id_sender', $gCurrentUser->getValue('usr_id'));
@@ -171,7 +171,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 
     if (isset($postTo))
     {
-        if ($postListId > 0) // the id of a list was passed
+        if ($postListUuid !== '') // the uuid of a list was passed
         {
             $postTo = explode(',', $postUserIdList);
         }
@@ -495,9 +495,10 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         $email->ConfirmReadingTo = $gCurrentUser->getValue('EMAIL');
     }
 
-    if ($postListId > 0)
+    if ($postListUuid !== '')
     {
-        $showList = new ListConfiguration($gDb, $postListId);
+        $showList = new ListConfiguration($gDb);
+        $showList->readDataByUuid($postListUuid);
         $listName = $showList->getValue('lst_name');
         $receiverName = $gL10n->get('SYS_LIST') . ($listName === '' ? '' : ' - ' . $listName);
     }

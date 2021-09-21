@@ -9,8 +9,9 @@
  *
  * Parameters:
  *
- * id       : Id of one guestbook entry that should be edited
- * mode:    1 - Neue Gaestebucheintrag anlegen
+ * gbo_uuid : UUID of one guestbook entry that should be edited
+ * gbc_uuid : UUID of one comment that should be edited
+ * mode :   1 - Neue Gaestebucheintrag anlegen
  *          2 - Gaestebucheintrag loeschen
  *          3 - Gaestebucheintrag editieren
  *          4 - Kommentar zu einem Eintrag anlegen
@@ -25,7 +26,8 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
+$getGboUuid  = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
+$getGbcUuid  = admFuncVariableIsValid($_GET, 'gbc_uuid', 'string');
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
@@ -44,6 +46,9 @@ elseif ((int) $gSettingsManager->get('enable_guestbook_module') === 2)
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
 if ($getMode === 4)
 {
+    $guestbook = new TableGuestbook($gDb);
+    $guestbook->readDataByUuid($getGboUuid);
+
     // Wenn nicht jeder kommentieren darf, muss man eingeloggt zu sein
     if (!$gSettingsManager->getBool('enable_gbook_comments4all'))
     {
@@ -76,11 +81,11 @@ if (in_array($getMode, array(1, 2, 3, 9), true))
     // Gaestebuchobjekt anlegen
     $guestbook = new TableGuestbook($gDb);
 
-    if ($getGboId > 0)
+    if ($getGboUuid !== '')
     {
-        $guestbook->readDataById($getGboId);
+        $guestbook->readDataByUuid($getGboUuid);
 
-        // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
+        // Check if the entry belongs to the current organization
         if ((int) $guestbook->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -93,11 +98,11 @@ elseif (in_array($getMode, array(4, 5, 8, 10), true))
     // Gaestebuchkommentarobjekt anlegen
     $gbComment = new TableGuestbookComment($gDb);
 
-    if ($getGboId > 0 && $getMode !== 4)
+    if ($getGbcUuid !== '' && $getMode !== 4)
     {
-        $gbComment->readDataById($getGboId);
+        $gbComment->readDataByUuid($getGbcUuid);
 
-        // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
+        // Check if the entry belongs to the current organization
         if ((int) $gbComment->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -348,7 +353,7 @@ elseif ($getMode === 4 || $getMode === 8)
 
     if ($getMode === 4)
     {
-        $gbComment->setValue('gbc_gbo_id', $getGboId);
+        $gbComment->setValue('gbc_gbo_id', $guestbook->getValue('gbo_id'));
     }
 
     if ($gbComment->getValue('gbc_name') === '')

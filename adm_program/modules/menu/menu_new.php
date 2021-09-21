@@ -6,13 +6,10 @@
  * @copyright 2004-2021 The Admidio Team
  * @see http://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/******************************************************************************
+ *
  * Parameters:
  *
- * men_id: Id of the menu that should be edited
+ * menu_uuid: UUID of the menu entry that should be edited
  *
  ****************************************************************************/
 
@@ -20,7 +17,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMenId = admFuncVariableIsValid($_GET, 'men_id', 'int');
+$getMenuUuid = admFuncVariableIsValid($_GET, 'menu_uuid',  'string');
 
 // Rechte pruefen
 if(!$gCurrentUser->isAdministrator())
@@ -74,29 +71,25 @@ function subMenu(&$menuList, $level, $menId, $parentId = null)
     }
 }
 
-// set module headline
-if($getMenId > 0)
-{
-    $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_MENU')));
-}
-else
-{
-    $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU')));
-}
-
 // create menu object
 $menu = new TableMenu($gDb);
 
 // systemcategories should not be renamed
 $roleViewSet[] = 0;
 
-if($getMenId > 0)
+if($getMenuUuid !== '')
 {
-    $menu->readDataById($getMenId);
+    $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_MENU')));
+
+    $menu->readDataByUuid($getMenuUuid);
 
     // Read current roles rights of the menu
-    $display = new RolesRights($gDb, 'menu_view', $getMenId);
+    $display = new RolesRights($gDb, 'menu_view', $menu->getValue('men_id'));
     $roleViewSet = $display->getRolesIds();
+}
+else
+{
+    $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU')));
 }
 
 if(isset($_SESSION['menu_request']))
@@ -137,7 +130,7 @@ while($rowViewRoles = $rolesViewStatement->fetch())
 }
 
 // show form
-$form = new HtmlForm('menu_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('men_id' => $getMenId, 'mode' => 1)), $page);
+$form = new HtmlForm('menu_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('menu_uuid' => $getMenuUuid, 'mode' => 1)), $page);
 
 $fieldRequired = HtmlForm::FIELD_REQUIRED;
 $fieldDefault  = HtmlForm::FIELD_DEFAULT;
@@ -156,7 +149,7 @@ $form->addInput(
     array('maxLength' => 100, 'property'=> HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_MENU_NAME_DESC')
 );
 
-if($getMenId > 0)
+if($getMenuUuid !== '')
 {
     $form->addInput(
         'men_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $menu->getValue('men_name_intern', 'database'),

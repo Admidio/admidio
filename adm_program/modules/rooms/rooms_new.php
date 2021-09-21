@@ -9,33 +9,23 @@
  *
  * Parameters:
  *
- * room_id  : ID of room, that should be shown
- * headline : headline for room module
- *            (Default) SYS_ROOM
+ * room_uuid : UUID of room, that should be shown
+ * headline  : headline for room module
+ *             (Default) SYS_ROOM
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getRoomId   = admFuncVariableIsValid($_GET, 'room_id',  'int');
+$getRoomUuid = admFuncVariableIsValid($_GET, 'room_uuid','string');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ROOM')));
 
-// nur berechtigte User duerfen die Profilfelder bearbeiten
+// only authorized users are allowed to edit the rooms
 if (!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
-}
-
-// set headline of the script
-if ($getRoomId > 0)
-{
-    $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
-}
-else
-{
-    $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
 }
 
 // add current url to navigation stack
@@ -43,15 +33,22 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Create room object
 $room = new TableRooms($gDb);
-if ($getRoomId > 0)
+
+if ($getRoomUuid !== '')
 {
-    $room->readDataById($getRoomId);
+    $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
+
+    $room->readDataByUuid($getRoomUuid);
+}
+else
+{
+    $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
 }
 
 if (isset($_SESSION['rooms_request']))
 {
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    // due to incorrect input the user has returned to this form
+    // now write the previously entered contents into the object
     $room->setArray($_SESSION['rooms_request']);
     unset($_SESSION['rooms_request']);
 }
@@ -60,7 +57,7 @@ if (isset($_SESSION['rooms_request']))
 $page = new HtmlPage('admidio-rooms-edit', $headline);
 
 // show form
-$form = new HtmlForm('rooms_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_function.php', array('room_id' => $getRoomId, 'mode' => '1')), $page);
+$form = new HtmlForm('rooms_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_function.php', array('room_uuid' => $getRoomUuid, 'mode' => '1')), $page);
 $form->openGroupBox('gb_name_properties', $gL10n->get('SYS_NAME').' &amp; '.$gL10n->get('SYS_PROPERTIES'));
 $form->addInput(
     'room_name', $gL10n->get('SYS_ROOM'), $room->getValue('room_name'),

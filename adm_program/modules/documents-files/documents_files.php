@@ -9,7 +9,7 @@
  *
  * Parameters:
  *
- * folder_id : Id of the current folder that should be shown
+ * folder_uuid : UUID of the current folder that should be shown
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -17,7 +17,7 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['documents_files_request']);
 
 // Initialize and check the parameters
-$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
+$getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid',  'string');
 
 // Check if module is activated
 if (!$gSettingsManager->getBool('documents_files_enable_module'))
@@ -30,7 +30,7 @@ try
 {
     // get recordset of current folder from database
     $currentFolder = new TableFolder($gDb);
-    $currentFolder->getFolderForDownload($getFolderId);
+    $currentFolder->getFolderForDownload($getFolderUuid);
 }
 catch(AdmException $e)
 {
@@ -48,7 +48,7 @@ else
     $headline = $gL10n->get('SYS_DOCUMENTS_FILES').' - '.$currentFolder->getValue('fol_name');
 }
 
-if($getFolderId > 0)
+if($getFolderUuid !== '')
 {
     // URL auf Navigationstack ablegen
     $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -59,7 +59,7 @@ else
     $gNavigation->addStartUrl(CURRENT_URL, $headline);
 }
 
-$getFolderId = (int) $currentFolder->getValue('fol_id');
+$getFolderUuid = $currentFolder->getValue('fol_uuid');
 
 // Get folder content for style
 $folderContent = $currentFolder->getFolderContentsForDownload();
@@ -77,17 +77,17 @@ if ($currentFolder->hasUploadRight())
     {
         // show links for upload, create folder and folder configuration
         $page->addPageFunctionsMenuItem('menu_item_documents_upload_files', $gL10n->get('SYS_UPLOAD_FILES'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'documents_files', 'id' => $getFolderId)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'documents_files', 'uuid' => $getFolderUuid)),
             'fa-upload');
 
         $page->addPageFunctionsMenuItem('menu_item_documents_create_folder', $gL10n->get('SYS_CREATE_FOLDER'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_id' => $getFolderId)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_uuid' => $getFolderUuid)),
             'fa-plus-circle');
 
         if($currentFolder->getValue('fol_fol_id_parent') > 0)
         {
             $page->addPageFunctionsMenuItem('menu_item_documents_edit_folder', $gL10n->get('SYS_EDIT_FOLDER'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_id' => $getFolderId)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_uuid' => $getFolderUuid)),
                 'fa-edit');
         }
     }
@@ -95,7 +95,7 @@ if ($currentFolder->hasUploadRight())
     if($gCurrentUser->adminDocumentsFiles())
     {
         $page->addPageFunctionsMenuItem('menu_item_documents_permissions', $gL10n->get('SYS_PERMISSIONS'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_id' => $getFolderId)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_uuid' => $getFolderUuid)),
             'fa-lock');
     }
 }
@@ -136,9 +136,9 @@ if (isset($folderContent['folders']))
         // create array with all column values
         $columnValues = array(
             1, // Type folder
-            '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_id' => $nextFolder['fol_id'])). '">
+            '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $nextFolder['fol_uuid'])). '">
                 <i class="fas fa-fw fa-folder" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').'"></i></a>',
-            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_id' => $nextFolder['fol_id'])). '">'. $nextFolder['fol_name']. '</a>'.$folderDescription,
+            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $nextFolder['fol_uuid'])). '">'. $nextFolder['fol_name']. '</a>'.$folderDescription,
             '',
             '',
             ''
@@ -152,14 +152,14 @@ if (isset($folderContent['folders']))
             if($gCurrentUser->adminDocumentsFiles())
             {
                 $additionalFolderFunctions .= '
-                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_id' => $nextFolder['fol_id'])) . '">
+                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_uuid' => $nextFolder['fol_uuid'])) . '">
                     <i class="fas fa-lock" data-toggle="tooltip" title="'.$gL10n->get('SYS_PERMISSIONS').'"></i></a>';
             }
 
             if($nextFolder['fol_exists'] === true)
             {
                 $additionalFolderFunctions .= '
-                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_id' => $nextFolder['fol_id'])) . '">
+                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_uuid' => $nextFolder['fol_uuid'])) . '">
                     <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_FOLDER').'"></i></a>';
             }
             elseif($gCurrentUser->adminDocumentsFiles())
@@ -171,8 +171,8 @@ if (isset($folderContent['folders']))
 
             $columnValues[] = $additionalFolderFunctions . '
                                 <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fol', 'element_id' => 'row_folder_'.$nextFolder['fol_id'],
-                                    'name' => $nextFolder['fol_name'], 'database_id' => $nextFolder['fol_id'])).'">
+                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fol', 'element_id' => 'row_folder_'.$nextFolder['fol_uuid'],
+                                    'name' => $nextFolder['fol_name'], 'database_id' => $nextFolder['fol_uuid'])).'">
                                     <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FOLDER').'"></i></a>';
         }
         else
@@ -180,7 +180,7 @@ if (isset($folderContent['folders']))
             $columnValues[] = '&nbsp;';
         }
 
-        $documentsFilesOverview->addRowByArray($columnValues, 'row_folder_'.$nextFolder['fol_id']);
+        $documentsFilesOverview->addRowByArray($columnValues, 'row_folder_'.$nextFolder['fol_uuid']);
     }
 }
 
@@ -194,8 +194,8 @@ if (isset($folderContent['files']))
         $file->clear();
         $file->setArray($nextFile);
 
-        $fileId   = $file->getValue('fil_id');
-        $fileLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_id' => $fileId, 'view' => 1));
+        $fileUuid   = $file->getValue('fil_uuid');
+        $fileLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $fileUuid, 'view' => 1));
         $target   = '';
 
         if($file->isViewableInBrowser())
@@ -228,7 +228,7 @@ if (isset($folderContent['files']))
 
         // add download link
         $additionalFileFunctions .= '
-        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_id' => $fileId)). '">
+        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $fileUuid)). '">
             <i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('SYS_DOWNLOAD_FILE').'"></i></a>';
 
         if ($currentFolder->hasUploadRight())
@@ -237,7 +237,7 @@ if (isset($folderContent['files']))
             if($file->getValue('fil_exists') === true)
             {
                 $additionalFileFunctions .= '
-                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_id' => $getFolderId, 'file_id' => $fileId)). '">
+                <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_uuid' => $getFolderUuid, 'file_uuid' => $fileUuid)). '">
                     <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
             }
             elseif($gCurrentUser->adminDocumentsFiles())
@@ -248,12 +248,12 @@ if (isset($folderContent['files']))
             }
             $additionalFileFunctions .= '
             <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fil', 'element_id' => 'row_file_'.$fileId,
-                'name' => $file->getValue('fil_name'), 'database_id' => $fileId, 'database_id_2' => $getFolderId)).'">
+                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fil', 'element_id' => 'row_file_'.$fileUuid,
+                'name' => $file->getValue('fil_name'), 'database_id' => $fileUuid, 'database_id_2' => $getFolderUuid)).'">
                 <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FILE').'"></i></a>';
         }
         $columnValues[] = $additionalFileFunctions;
-        $documentsFilesOverview->addRowByArray($columnValues, 'row_file_'.$fileId);
+        $documentsFilesOverview->addRowByArray($columnValues, 'row_file_'.$fileUuid);
     }
 }
 
@@ -296,7 +296,7 @@ if ($gCurrentUser->adminDocumentsFiles())
                     '<i class="fas fa-fw fa-folder" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').'"></i>',
                     $nextFolder['fol_name'],
                     '',
-                    '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '6', 'folder_id' => $getFolderId, 'name' => $nextFolder['fol_name'])). '">
+                    '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '6', 'folder_uuid' => $getFolderUuid, 'name' => $nextFolder['fol_name'])). '">
                         <i class="fas fa-plus-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_ADD_TO_DATABASE').'"></i>
                     </a>'
                 );
@@ -318,7 +318,7 @@ if ($gCurrentUser->adminDocumentsFiles())
                     '<i class="fas fa-fw ' . $file->getFontAwesomeIcon() . '" data-toggle="tooltip" title="'.$gL10n->get('SYS_FILE').'"></i>',
                     $file->getValue('fil_name'),
                     round($file->getValue('fil_size') / 1024). ' kB&nbsp;',
-                    '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '6', 'folder_id' => $getFolderId, 'name' => $file->getValue('fil_name'))). '">
+                    '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '6', 'folder_uuid' => $getFolderUuid, 'name' => $file->getValue('fil_name'))). '">
                         <i class="fas fa-plus-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_ADD_TO_DATABASE').'"></i>
                     </a>'
                 );
