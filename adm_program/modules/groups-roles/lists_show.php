@@ -252,6 +252,7 @@ try
         }
 
         $list = new ListConfiguration($gDb, $listId);
+        $getListUuid = $list->getValue('lst_uuid');
     }
     else
     {
