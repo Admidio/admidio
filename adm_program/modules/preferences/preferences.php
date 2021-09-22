@@ -1174,7 +1174,11 @@ $selectBoxEntries = array(
 );
 $formGroupsRoles->addSelectBox(
     'groups_roles_export', $gL10n->get('SYS_EXPORT_LISTS'), $selectBoxEntries,
-    array('defaultValue' => $formValues['groups_roles_export'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_EXPORT_LISTS_DESC', array($gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
+    array('defaultValue' => $formValues['groups_roles_export'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_EXPORT_LISTS_DESC')
+);
+$formGroupsRoles->addSelectBox(
+    'groups_roles_edit_lists', $gL10n->get('SYS_EDIT_LISTS'), $selectBoxEntries,
+    array('defaultValue' => $formValues['groups_roles_edit_lists'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_EDIT_LISTS_DESC')
 );
 $html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';

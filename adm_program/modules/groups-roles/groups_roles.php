@@ -118,8 +118,12 @@ if($gCurrentUser->manageRoles())
 }
 
 // show link to create own list
-$page->addPageFunctionsMenuItem('menu_item_groups_own_list', $gL10n->get('SYS_EDIT_LISTS'),
-    ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/mylist.php', 'fa-list-alt');
+if ($gSettingsManager->getInt('groups_roles_edit_lists') === 1 // everyone
+|| ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && $gCurrentUser->checkRolesRight('rol_edit_user'))) // users with the right to edit all profiles
+{
+    $page->addPageFunctionsMenuItem('menu_item_groups_own_list', $gL10n->get('SYS_EDIT_LISTS'),
+        ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php', 'fa-list-alt');
+}
 
 // add filter navbar
 $page->addJavascript('
