@@ -30,7 +30,6 @@ $_SESSION['mylist_request'] = $_POST;
 if (!$gSettingsManager->getBool('groups_roles_enable_module')
 || $gSettingsManager->getInt('groups_roles_edit_lists') === 0 // nobody
 || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user'))) // users with the right to edit all profiles
-)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
