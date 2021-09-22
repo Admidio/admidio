@@ -379,25 +379,26 @@ class ChangeNotification
     {
         global $gSettingsManager, $gL10n, $gCurrentUser;
 
-        $currfullname = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
-        $currname =  $currfullname . ' (login: ' . $gCurrentUser->getValue('usr_login_name') . ')';
-        if ($this->format == 'html') {
-            $format_hdr    = "<tr><th> %s </th><th> %s </th><th> %s </th></tr>\n";
-            $format_row    = "<tr><th> %s </th><td> %s </td><td> %s </td></tr>\n";
-            $format_rolhdr = "<tr><th> %s </th><th> %s </th><th> %s </th><th> %s </th></tr>\n";
-            $format_rolrow = "<tr><th> %s </th><td> %s </td><td> %s </td><td> %s </td></tr>\n";
-            $table_begin   = "<br><br><table border=\"1\">";
-            $table_end     = "</table><br>";
-        } else {
-            $format_hdr    = "%25s %25s -> %25s\n";
-            $format_row    = "%25.25s %25.25s -> %25s\n ";
-            $format_rolhdr = "%25s %25s %25s -> %25s\n";
-            $format_rolrow = "%25.25s %25s %25.25s -> %25s\n ";
-            $table_begin   = '\n';
-            $table_end     = '\n\n';
-        }
+        if($gSettingsManager->getBool('enable_email_changenotification') && is_object($gCurrentUser))
+        {
+            $currfullname = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
+            $currname = $currfullname . ' (login: ' . $gCurrentUser->getValue('usr_login_name') . ')';
+            if ($this->format == 'html') {
+                $format_hdr = "<tr><th> %s </th><th> %s </th><th> %s </th></tr>\n";
+                $format_row = "<tr><th> %s </th><td> %s </td><td> %s </td></tr>\n";
+                $format_rolhdr = "<tr><th> %s </th><th> %s </th><th> %s </th><th> %s </th></tr>\n";
+                $format_rolrow = "<tr><th> %s </th><td> %s </td><td> %s </td><td> %s </td></tr>\n";
+                $table_begin = "<br><br><table border=\"1\">";
+                $table_end = "</table><br>";
+            } else {
+                $format_hdr = "%25s %25s -> %25s\n";
+                $format_row = "%25.25s %25.25s -> %25s\n ";
+                $format_rolhdr = "%25s %25s %25s -> %25s\n";
+                $format_rolrow = "%25.25s %25s %25.25s -> %25s\n ";
+                $table_begin = '\n';
+                $table_end = '\n\n';
+            }
 
-        if ($gSettingsManager->getBool('enable_email_changenotification')) {
             $changes = $this->changes;
             if ($userId) {
                 $changes = array();
@@ -427,8 +428,8 @@ class ChangeNotification
                     $hasContent = true;
                     $message .= $table_begin .
                         sprintf($format_hdr, $gL10n->get('SYS_FIELD'),
-                                $gL10n->get('SYS_PREVIOUS_VALUE'),
-                                $gL10n->get('SYS_NEW_VALUE'));
+                            $gL10n->get('SYS_PREVIOUS_VALUE'),
+                            $gL10n->get('SYS_NEW_VALUE'));
                     foreach ($changes as $c) {
                         $message .= sprintf($format_row, $c[0], $c[1], $c[2]);
                     }
@@ -440,9 +441,9 @@ class ChangeNotification
                     $hasContent = true;
                     $message .= $table_begin .
                         sprintf($format_rolhdr,
-                                $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_FIELD'),
-                                $gL10n->get('SYS_PREVIOUS_VALUE'),
-                                $gL10n->get('SYS_NEW_VALUE'));
+                            $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_FIELD'),
+                            $gL10n->get('SYS_PREVIOUS_VALUE'),
+                            $gL10n->get('SYS_NEW_VALUE'));
                     foreach ($changes as $c) {
                         $message .= sprintf($format_rolrow, $c[0], $c[1], $c[2], $c[3]);
                     }
@@ -457,9 +458,7 @@ class ChangeNotification
                         $message,
                         $currfullname, $gCurrentUser->getValue('EMAIL'), 'enable_email_changenotification');
                 }
-
             }
-
         }
 
         $this->clearChanges($userId);
