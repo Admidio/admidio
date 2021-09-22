@@ -9,7 +9,7 @@
  *
  * Parameters:
  *
- * id         - Id of one guestbook entry that should be shown
+ * gbo_uuid   - UUID of one guestbook entry that should be shown
  * headline   - Title of the guestbook module. This will be shown in the whole module.
  *              (Default) GBO_GUESTBOOK
  ***********************************************************************************************
@@ -17,7 +17,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
+$getGboUuid  = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // check if the module is enabled and disallow access if it's disabled
@@ -33,7 +33,7 @@ elseif((int) $gSettingsManager->get('enable_guestbook_module') === 2)
 }
 
 // set headline of the script
-if ($getGboId > 0)
+if ($getGboUuid !== '')
 {
     $headline = $getHeadline . ' - ' . $gL10n->get('SYS_EDIT_ENTRY');
 }
@@ -48,7 +48,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // Gaestebuchobjekt anlegen
 $guestbook = new TableGuestbook($gDb);
 
-if($getGboId > 0)
+if($getGboUuid !== '')
 {
     // Falls ein Eintrag bearbeitet werden soll muss geprueft weden ob die Rechte gesetzt sind...
     require(__DIR__ . '/../../system/login_valid.php');
@@ -59,7 +59,7 @@ if($getGboId > 0)
         // => EXIT
     }
 
-    $guestbook->readDataById($getGboId);
+    $guestbook->readDataByUuid($getGboUuid);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
     if((int) $guestbook->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
@@ -71,7 +71,7 @@ if($getGboId > 0)
 
 // Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
 // Name, Emailadresse und Homepage vorbelegt werden...
-if ($getGboId === 0 && $gValidLogin)
+if ($getGboUuid === '' && $gValidLogin)
 {
     $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
     $guestbook->setValue('gbo_email', $gCurrentUser->getValue('EMAIL'));
@@ -113,7 +113,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
 $page = new HtmlPage('admidio-guestbook-new', $headline);
 
 // Html des Modules ausgeben
-if ($getGboId > 0)
+if ($getGboUuid !== '')
 {
     $mode = '3';
 }
@@ -123,7 +123,7 @@ else
 }
 
 // show form
-$form = new HtmlForm('guestbook_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('id' => $getGboId, 'headline' => $getHeadline, 'mode' => $mode)), $page);
+$form = new HtmlForm('guestbook_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'headline' => $getHeadline, 'mode' => $mode)), $page);
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     // registered users should not change their name

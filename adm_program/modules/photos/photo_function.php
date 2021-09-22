@@ -9,19 +9,19 @@
  *
  * Parameters:
  *
- * pho_id:   Id des Albums
- * job:      delete - loeschen eines Bildes
- *           rotate - drehen eines Bildes
- * direction: left  - Bild nach links drehen
- *            right - Bild nach rechts drehen
- * photo_nr:  Nr des Bildes welches verarbeitet werden soll
+ * photo_uuid: UUID of the photo album
+ * job:      delete - Delete the photo
+ *           rotate - Rotate the photo
+ * direction: left  - Rotate image to the left
+ *            right - Rotate image to the right
+ * photo_nr:  Number of the photo that should be shown
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId   = admFuncVariableIsValid($_GET, 'pho_id',    'int',    array('requireValue' => true));
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid','string', array('requireValue' => true));
 $getJob       = admFuncVariableIsValid($_GET, 'job',       'string', array('requireValue' => true, 'validValues' => array('delete', 'rotate')));
 $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',  'int',    array('requireValue' => true));
 $getDirection = admFuncVariableIsValid($_GET, 'direction', 'string', array('validValues' => array('left', 'right')));
@@ -150,7 +150,8 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
 }
 
 // create photo album object
-$photoAlbum = new TablePhotos($gDb, $getPhotoId);
+$photoAlbum = new TablePhotos($gDb);
+$photoAlbum->readDataByUuid($getPhotoUuid);
 
 // check if the user is allowed to edit this photo album
 if (!$photoAlbum->isEditable())

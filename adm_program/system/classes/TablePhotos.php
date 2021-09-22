@@ -287,6 +287,7 @@ class TablePhotos extends TableAccess
         {
             $phoId = (int) $this->getValue('pho_id');
             $shuffleImage['shuffle_pho_id']    = $phoId;
+            $shuffleImage['shuffle_pho_uuid']  = $this->getValue('pho_uuid');
             $shuffleImage['shuffle_img_begin'] = $this->getValue('pho_begin', 'Y-m-d');
 
             if ($this->getValue('pho_quantity') > 0)
@@ -298,7 +299,7 @@ class TablePhotos extends TableAccess
         if ($shuffleImage['shuffle_img_nr'] === 0)
         {
             // kein Bild vorhanden, dann in einem Unteralbum suchen
-            $sql = 'SELECT pho_id, pho_begin, pho_quantity
+            $sql = 'SELECT pho_id, pho_uuid, pho_begin, pho_quantity
                       FROM '.TBL_PHOTOS.'
                      WHERE pho_pho_id_parent = ? -- $phoId
                        AND pho_locked = 0
@@ -310,6 +311,7 @@ class TablePhotos extends TableAccess
                 if ($shuffleImage['shuffle_img_nr'] === 0)
                 {
                     $shuffleImage['shuffle_pho_id']    = (int) $phoRow['pho_id'];
+                    $shuffleImage['shuffle_pho_uuid']  = $phoRow['pho_uuid'];
                     $shuffleImage['shuffle_img_begin'] = $phoRow['pho_begin'];
 
                     if ($phoRow['pho_quantity'] > 0)

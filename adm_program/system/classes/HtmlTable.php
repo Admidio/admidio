@@ -47,6 +47,11 @@ class HtmlTable extends HtmlTableBasic
      */
     protected $rowsPerPage = 25;
     /**
+     * @var array<int,string> Array with entry for each column with the align of that column of datatables are not used.
+     * Values are **right**, **left** or **center**.
+     */
+    protected $columnsAlign = array();
+    /**
      * @var array<int,string> Array with the column number as key and the 'asc' or 'desc' as value.
      */
     protected $columnsOrder = array();
@@ -364,6 +369,11 @@ class HtmlTable extends HtmlTableBasic
             $columnAttributes['colspan'] = $colspan;
         }
 
+        if (!$this->datatables && array_key_exists($key, $this->columnsAlign))
+        {
+            $columnAttributes['style'] = 'text-align: ' . $this->columnsAlign[$key] . ';';
+        }
+
         // if is array than check for sort or search values
         if (is_array($value))
         {
@@ -395,9 +405,16 @@ class HtmlTable extends HtmlTableBasic
      */
     public function setColumnAlignByArray(array $columnsAlign)
     {
-        foreach ($columnsAlign as $columnNumber => $align)
+        if($this->datatables)
         {
-            $this->datatablesColumnDefs[] = '{ targets: ' . $columnNumber . ', className: \'text-'.$align.'\' }';
+            foreach ($columnsAlign as $columnNumber => $align)
+            {
+                $this->datatablesColumnDefs[] = '{ targets: ' . $columnNumber . ', className: \'text-'.$align.'\' }';
+            }
+        }
+        else
+        {
+            $this->columnsAlign = $columnsAlign;
         }
     }
 
@@ -444,6 +461,25 @@ class HtmlTable extends HtmlTableBasic
         foreach ($columnsHide as $columnHide)
         {
             $this->datatablesColumnDefs[] = '{ "visible": false, "targets": ' . ($columnHide - 1) . ' }';
+        }
+    }
+
+    /**
+     * Datatables will automatically hide columns if the screen will be to small e.g. on smartphones. You must than click
+     * on a + button and will view the hidden columns. With this method you can remove specific columns from that feature.
+     * These columns will always be shown. But be careful if you remove to much columns datatables must hide some columns
+     * anyway.
+     * @param array<int,int> $columnsNotHideResponsive An array which contain the columns that should not be hidden.
+     *                                                 The columns of the table starts with 1 (not 0).
+     * @param int            $priority                 Optional set a priority so datatable will first hide columns with
+     *                                                 low priority and after that with higher priority
+     */
+    public function setDatatablesColumnsNotHideResponsive(array $columnsNotHideResponsive, $priority = 1)
+    {
+        // internal datatable columns starts with 0
+        foreach ($columnsNotHideResponsive as $columnNotHideResponsive)
+        {
+            $this->datatablesColumnDefs[] = '{ "responsivePriority": ' . $priority . ', "targets": ' . ($columnNotHideResponsive - 1) . ' }';
         }
     }
 

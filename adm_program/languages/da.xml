@@ -343,6 +343,8 @@
   <string name="ORG_SYSTEM_INFORMATION">Systeminformation</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">E-mail adresse</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Dette felt skal indeholde e-mail adressen på en administrator, da den vil blive brugt som afsender adresse for system beskeder, som f.eks. registrerings bekræftelser.</string>
+  <string name="ORG_SYSTEM_MAIL_CHANGES">Meddelelse om ændrede profilfelter</string>
+  <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Aktiver denne indstilling for at sende meddelelser om ændringer i en brugers profilfelter. På denne måde har en administrator mulighed for at sikre en korrekt datakvalitet. Ændringsmeddelelser sendes til følgende mailadresse #VAR1# (standard: nej).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Besked om nye poster</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Denne funktion bliver brugt til at aktivere system beskeder for nye poster inde i moduler. Det anvendes som en monitorerings funktion inde i Admidio. Så administratoren kan blive gjort opmærksom på når nye poster bliver tilføjet inde i moduler (kun NYE poster vil blive taget i betragtning). Disse system beskeder vil blive sendt til e-mail adressen #VAR1#. (Standard: Nej)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Her kan du ændre teksten til hver enkelt system besked. Teksterne er delt i to dele(emne og indhold) og er identificeret med #subject# og #content#. Indholdet i hver sektion kommer lige efter overskriften.\n\nI hver mail kan de følgende wildcards bruges. Disse vil blive erstattet af indhold når systemet køres.</string>
@@ -671,6 +673,8 @@
   <string name="SYS_DATA_MULTI_ORGA">Data er synlig for flere organisationer</string>
   <string name="SYS_DATA_PROTECTION">Data beskyttelse</string>
   <string name="SYS_DATA_PROTECTION_DESC">Her kan URL\'en til din side med fortrolighedspolitikken indtastes. Denne side er knyttet til brugen af cookies til yderligere information. Hvis det valgte tema understøtter dette, vises et link også på Admidio-siderne. (Eksempel: https://www.example.com/data_protection.html)</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION">Jeg accepterer behandlingen af dataene</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION_DESC">Jeg har læst oplysningerne fra organisationen. For så vidt de personoplysninger, jeg har givet, ikke er nødvendige data til opfyldelse af kontrakten, erklærer jeg mit samtykke til behandling af disse data. Mine data gemmes udelukkende til organisationens formål og behandles fortroligt.</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_BACKUP">Database-Backup</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Opret og download database backups af Admidio tabeller.</string>
@@ -725,6 +729,8 @@
   <string name="SYS_DEPENDENCIES">Afhængigheder</string>
   <string name="SYS_DEPENDENT">Afhængig</string>
   <string name="SYS_DESCRIPTION">Beskrivelse</string>
+  <string name="SYS_DESCRIPTION_POPOVER_DESC">Beskrivelsen vises i et lille vindue, som kan tilgås via et spørgsmålstegnikon ved siden af feltetiketten.</string>
+  <string name="SYS_DESCRIPTION_INLINE_DESC">Vis beskrivelsen under feltet direkte i formularen.</string>
   <string name="SYS_DESIGNATION">Navn</string>
   <string name="SYS_DIRECTORY_PROTECTION">Folder beskyttelse</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Folder separator</string>
@@ -772,6 +778,12 @@
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">En ny meddelelse blev oprettet</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">En ny meddelelse i #VAR1# blev oprettet\n\nTitel: #VAR2#\nSkrevet af: #VAR3#\nSkrevet den: #VAR4#</string>
+  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev ændret</string>
+  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profildataene for brugeren #VAR1# #VAR2#(login: #VAR3#) blev ændret med #VAR4#:</string>
+  <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev oprettet</string>
+  <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">Brugeren #VAR1# #VAR2#(login: #VAR3#) blev oprettet af #VAR4#:</string>
+  <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev slettet</string>
+  <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Brugerens profil #VAR1# #VAR2#(login: #VAR3#) blev slettet af #VAR4#:</string>
   <string name="SYS_EMAIL_DESC">E-mails kan sendes til forskellige roller såsom grupper, kurser, afdelinger.</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">En ny fil blev overført</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">En ny fil blev overført til #VAR1#\n\nFil: #VAR2#\nOverført af: #VAR3#\nOverført den: #VAR4#</string>

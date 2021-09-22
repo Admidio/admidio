@@ -191,7 +191,7 @@ foreach($gProfileFields->getProfileFields() as $field)
 
         if($field->getValue('cat_name_intern') === 'BASIC_DATA')
         {
-            if($userId > 0 || $getNewUser === 2)
+            if($userId > 0 || $getNewUser === 2 || $getNewUser === 1)
             {
                 // add username to form
                 $fieldProperty = HtmlForm::FIELD_DEFAULT;
@@ -202,7 +202,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     $fieldProperty = HtmlForm::FIELD_DISABLED;
                     $fieldHelpId   = '';
                 }
-                elseif($getNewUser > 0)
+                elseif($getNewUser >= 2)
                 {
                     $fieldProperty = HtmlForm::FIELD_REQUIRED;
                 }

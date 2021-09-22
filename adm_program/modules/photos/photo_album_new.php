@@ -8,17 +8,17 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
  * Parameters:
- * pho_id : Id of the album that should be edited
- * mode   : - new (new album)
- *          - change (edit album)
+ * photo_uuid : UUID of the album that should be edited
+ * mode       : - new (new album)
+ *              - change (edit album)
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'int');
-$getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireValue' => true, 'validValues' => array('new', 'change')));
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
+$getMode      = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireValue' => true, 'validValues' => array('new', 'change')));
 
 $photoAlbumsArray = array(0 => $gL10n->get('PHO_PHOTO_ALBUMS'));
 
@@ -46,7 +46,7 @@ $photoAlbum = new TablePhotos($gDb);
 
 if ($getMode === 'change')
 {
-    $photoAlbum->readDataById($getPhotoId);
+    $photoAlbum->readDataByUuid($getPhotoUuid);
 }
 
 // check if the user is allowed to edit this photo album
@@ -116,7 +116,7 @@ $page = new HtmlPage('admidio-photo-album-edit', $headline);
 
 if ($getMode === 'new')
 {
-    $parentAlbumId = $getPhotoId;
+    $parentAlbumId = $photoAlbum->getValue('pho_id');
 }
 else
 {
@@ -124,12 +124,12 @@ else
 }
 
 // show form
-$form = new HtmlForm('photo_album_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => $getPhotoId, 'mode' => $getMode)), $page);
+$form = new HtmlForm('photo_album_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('photo_uuid' => $getPhotoUuid, 'mode' => $getMode)), $page);
 $form->addInput(
     'pho_name', $gL10n->get('PHO_ALBUM'), $photoAlbum->getValue('pho_name'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 50)
 );
-subfolder(0, '', $photoAlbum, $getPhotoId);
+subfolder(0, '', $photoAlbum, $photoAlbum->getValue('pho_id'));
 $form->addSelectBox(
     'pho_pho_id_parent', $gL10n->get('PHO_PARENT_ALBUM'), $photoAlbumsArray,
     array(

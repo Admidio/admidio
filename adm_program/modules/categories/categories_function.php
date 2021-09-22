@@ -9,26 +9,26 @@
  ***********************************************************************************************
  * Parameters:
  *
- * cat_id: Id of the category that should be edited
- * type  : Type of categories that could be maintained
- *         ROL = Categories for roles
- *         LNK = Categories for weblinks
- *         ANN = Categories for announcements
- *         USF = Categories for profile fields
- *         DAT = Calendars for events
- * mode  : 1 - Create or edit categories
- *         2 - Delete category
- *         4 - Change sequence for parameter cat_id
- * sequence: New sequence for the parameter cat_id
+ * cat_uuid : Uuid of the category, that should be edited
+ * type     : Type of categories that could be maintained
+ *            ROL = Categories for roles
+ *            LNK = Categories for weblinks
+ *            ANN = Categories for announcements
+ *            USF = Categories for profile fields
+ *            DAT = Calendars for events
+ * mode     : 1 - Create or edit categories
+ *            2 - Delete category
+ *            4 - Change sequence for parameter cat_id
+ * sequence : New sequence for the parameter cat_id
  *****************************************************************************/
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'int');
-$getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'DAT', 'AWA')));
-$getMode  = admFuncVariableIsValid($_GET, 'mode',   'int',    array('requireValue' => true));
-$getTitle = admFuncVariableIsValid($_GET, 'title',  'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
+$getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
+$getType    = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'DAT', 'AWA')));
+$getMode    = admFuncVariableIsValid($_GET, 'mode',   'int',    array('requireValue' => true));
+$getTitle   = admFuncVariableIsValid($_GET, 'title',  'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
 
 // set text strings for the different modules
 switch ($getType)
@@ -69,9 +69,9 @@ if(!Component::isAdministrable($component))
 $category = new TableCategory($gDb);
 $currOrgId = (int) $gCurrentOrganization->getValue('org_id');
 
-if($getCatId > 0)
+if($getCatUuid !== '')
 {
-    $category->readDataById($getCatId);
+    $category->readDataByUuid($getCatUuid);
 
     // if system category then set cat_name to default
     if($category->getValue('cat_system') == 1)
@@ -144,9 +144,9 @@ if($getMode === 1)
                   FROM '.TBL_CATEGORIES.'
                  WHERE cat_type = ? -- $getType
                    AND cat_name = ? -- $_POST[\'cat_name\']
-                   AND cat_id  <> ? -- $getCatId
+                   AND cat_uuid <> ? -- $getCatUuid
                        '.$sqlSearchOrga;
-        $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $_POST['cat_name'], $getCatId, $currOrgId));
+        $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $_POST['cat_name'], $getCatUuid, $currOrgId));
 
         if($categoriesStatement->fetchColumn() > 0)
         {

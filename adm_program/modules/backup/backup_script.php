@@ -82,7 +82,8 @@ unset($SelectedTables, $tables);
 $sql = 'SELECT table_name
           FROM information_schema.tables
          WHERE table_schema = ?
-           AND table_name LIKE ?';
+           AND table_name LIKE ?
+           AND table_type = "BASE TABLE"';
 $statement = $gDb->queryPrepared($sql, array(DB_NAME, TABLE_PREFIX . '_%'));
 $tables = array();
 while($tableName = $statement->fetchColumn())
@@ -90,7 +91,17 @@ while($tableName = $statement->fetchColumn())
     $tables[] = $tableName;
 }
 
+$sql = 'SELECT table_name
+          FROM information_schema.tables
+         WHERE table_schema = ?
+           AND table_name LIKE ?
+           AND table_type = "VIEW"';
+$statement = $gDb->queryPrepared($sql, array(DB_NAME, TABLE_PREFIX . '_%'));
+$views = $statement->fetchAll(PDO::FETCH_COLUMN, 0);
+
+
 $SelectedTables[DB_NAME] = $tables;
+$SelectedViews[DB_NAME] = $views;
 
 $starttime = getmicrotime();
 
@@ -110,9 +121,50 @@ switch (OUTPUT_COMPRESSION_TYPE)
     default:
         exit('ERROR: OUTPUT_COMPRESSION_TYPE ('.SecurityUtils::encodeHTML(OUTPUT_COMPRESSION_TYPE).') must be one of "bzip2", "gzip", "none"');
 }
-if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$tempbackupfilename, 'wb'.OUTPUT_COMPRESSION_LEVEL))) ||
-    (OUTPUT_COMPRESSION_TYPE === 'bzip2' && ($bp = @bzopen($backupabsolutepath.$tempbackupfilename, 'w'))) ||
-    (OUTPUT_COMPRESSION_TYPE === 'none'  && ($fp = @fopen($backupabsolutepath.$tempbackupfilename, 'wb'))))
+function open_backup_file($path) {
+    if (OUTPUT_COMPRESSION_TYPE === 'bzip2') {
+        return @bzopen($path, 'w');
+    }
+    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
+    {
+        return @gzopen($path, 'wb'.OUTPUT_COMPRESSION_LEVEL);
+    }
+    else
+    {
+        return @fopen($path, 'wb');
+    }
+}
+function write_backup_code($fp, $str) {
+    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
+    {
+        bzwrite($fp, $str, strlen($str));
+    }
+    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
+    {
+        gzwrite($fp, $str, strlen($str));
+    }
+    else
+    {
+        fwrite($fp, $str, strlen($str));
+    }
+}
+function close_backup_file($fp) {
+    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
+    {
+        bzclose($fp);
+    }
+    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
+    {
+        gzclose($fp);
+    }
+    else
+    {
+        fclose($fp);
+    }
+}
+
+
+if ($fp = open_backup_file($backupabsolutepath.$tempbackupfilename))
 {
 
     $fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION_TEXT.' (https://www.admidio.org)'.LINE_TERMINATOR;
@@ -120,18 +172,8 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
     $fileheaderline .= '-- '.$gL10n->get('SYS_DATABASE').': '.DB_NAME.LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('SYS_USER').': '.$gCurrentUser->getValue('FIRST_NAME', 'database'). ' '. $gCurrentUser->getValue('LAST_NAME', 'database').LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= 'SET FOREIGN_KEY_CHECKS=0;'.LINE_TERMINATOR.LINE_TERMINATOR;
-    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
-    {
-        bzwrite($bp, $fileheaderline, strlen($fileheaderline));
-    }
-    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
-    {
-        gzwrite($zp, $fileheaderline, strlen($fileheaderline));
-    }
-    else
-    {
-        fwrite($fp, $fileheaderline, strlen($fileheaderline));
-    }
+
+    write_backup_code($fp, $fileheaderline);
 
     // Begin original backupDB (removed table optimize and repair part because some user database had problems with this)
 
@@ -155,6 +197,14 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
             $rows[$t] = $row['num'];
             $overallrows += $rows[$t];
             echo '<span id="rows_'.$dbname.'_'.$SelectedTables[$dbname][$t].'">'.SecurityUtils::encodeHTML($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records)</span><br />';
+        }
+        foreach ($SelectedViews[$dbname] as $view) {
+            if ($tablecounter++ >= TABLES_PER_COL)
+            {
+                echo '</td><td nowrap valign="top">';
+                $tablecounter = 1;
+            }
+            echo '<span id="view_'.$dbname.'_'.$view.'">'.SecurityUtils::encodeHTML($view).' (View)</span><br />';
         }
         echo '</td></tr></table><br />';
     }
@@ -328,18 +378,8 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
 
         } // end table structure backup
     }
-    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
-    {
-        bzwrite($bp, $alltablesstructure.LINE_TERMINATOR, strlen($alltablesstructure) + strlen(LINE_TERMINATOR));
-    }
-    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
-    {
-        gzwrite($zp, $alltablesstructure.LINE_TERMINATOR, strlen($alltablesstructure) + strlen(LINE_TERMINATOR));
-    }
-    else
-    {
-        fwrite($fp, $alltablesstructure.LINE_TERMINATOR, strlen($alltablesstructure) + strlen(LINE_TERMINATOR));
-    }
+    write_backup_code($fp, $alltablesstructure);
+
 
     $datastarttime = getmicrotime();
     OutputInformation('statusinfo', '');
@@ -359,18 +399,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                 if ($rows[$t] > 0)
                 {
                     $tabledatadumpline = '# dumping data for '.$dbname.'.'.$SelectedTables[$dbname][$t].LINE_TERMINATOR;
-                    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
-                    {
-                        bzwrite($bp, $tabledatadumpline, strlen($tabledatadumpline));
-                    }
-                    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
-                    {
-                        gzwrite($zp, $tabledatadumpline, strlen($tabledatadumpline));
-                    }
-                    else
-                    {
-                        fwrite($fp, $tabledatadumpline, strlen($tabledatadumpline));
-                    }
+                    write_backup_code($fp, $tabledatadumpline);
                 }
                 unset($fieldnames);
                 $fieldnames = $gDb->getTableColumns($SelectedTables[$dbname][$t]);
@@ -456,18 +485,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
 
                     if (strlen($thistableinserts) >= BUFFER_SIZE)
                     {
-                        if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
-                        {
-                            bzwrite($bp, $thistableinserts, strlen($thistableinserts));
-                        }
-                        elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
-                        {
-                            gzwrite($zp, $thistableinserts, strlen($thistableinserts));
-                        }
-                        else
-                        {
-                            fwrite($fp, $thistableinserts, strlen($thistableinserts));
-                        }
+                        write_backup_code($fp, $thistableinserts);
                         $thistableinserts = '';
                     }
                     if ((++$currentrow % STATS_INTERVAL) == 0)
@@ -506,49 +524,83 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                     OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], SecurityUtils::encodeHTML($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, [100%])');
                     $processedrows += $rows[$t];
                 }
-                if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
-                {
-                    bzwrite($bp, $thistableinserts.LINE_TERMINATOR.LINE_TERMINATOR, strlen($thistableinserts) + strlen(LINE_TERMINATOR) + strlen(LINE_TERMINATOR));
-                }
-                elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
-                {
-                    gzwrite($zp, $thistableinserts.LINE_TERMINATOR.LINE_TERMINATOR, strlen($thistableinserts) + strlen(LINE_TERMINATOR) + strlen(LINE_TERMINATOR));
-                }
-                else
-                {
-                    fwrite($fp, $thistableinserts.LINE_TERMINATOR.LINE_TERMINATOR, strlen($thistableinserts) + strlen(LINE_TERMINATOR) + strlen(LINE_TERMINATOR));
-                }
+                write_backup_code($fp, $thistableinserts.LINE_TERMINATOR.LINE_TERMINATOR);
             }
         }
     }
 
+
+    // Since views can depend on each other in any order, we need to
+    // create temporary tables with the (potentially) required columns first,
+    // which will later be dropped again and replaced by the actual view.
+            # 1) Drop view from database
+            # 2) create surrogate table to have columns available in case another view depends on it
+            # After all surrogate tables are created:
+            # 3) remove surrogate table
+            # 4) Create actual view (CREATE VIEW command only, no data ex-/import required)
+    $allviewsstructure = '';
+    foreach ($SelectedViews as $dbname => $value)
+    {
+        foreach ($value as $view)
+        {
+            PhpIniUtils::startNewExecutionTimeLimit(60);
+            OutputInformation('view_'.$dbname.'_'.$view, SecurityUtils::encodeHTML($view).' (Surrogate Table structure for view)');
+            $viewstructure  = '-- ---------------------------------------------'.LINE_TERMINATOR;
+            $viewstructure .= "--   Surrogate table for view `$view` => will be replaced below by the view definition. ".LINE_TERMINATOR;
+            $viewstructure .= '--   This ensures that views can depend on each other.'.LINE_TERMINATOR;
+            $viewstructure .= '--   '.LINE_TERMINATOR;
+
+            $fieldnames = array();
+            $SQLquery  = 'SHOW FULL FIELDS';
+            $SQLquery .= ' FROM '.BACKTICKCHAR.$view.BACKTICKCHAR;
+            $showfieldsStatement = $gDb->query($SQLquery);
+            $structurelines = array();
+            while ($row = $showfieldsStatement->fetch())
+            {
+                $structurelines[] = BACKTICKCHAR.$row['Field'].BACKTICKCHAR.' '.$row['Type'];
+            }
+            $viewstructure .= 'DROP VIEW IF EXISTS '.($dbNameInCreate ? BACKTICKCHAR.$dbname.BACKTICKCHAR.'.' : '').BACKTICKCHAR.$view.BACKTICKCHAR.';'.LINE_TERMINATOR;
+            $viewstructure .= 'CREATE TABLE IF NOT EXISTS '.($dbNameInCreate ? BACKTICKCHAR.$dbname.BACKTICKCHAR.'.' : '').BACKTICKCHAR.$view.BACKTICKCHAR.' ('.LINE_TERMINATOR;
+            $viewstructure .= '  '.implode(','.LINE_TERMINATOR.'  ', $structurelines).LINE_TERMINATOR;
+            $viewstructure .= ');'.LINE_TERMINATOR.LINE_TERMINATOR;
+
+            $allviewsstructure .= $viewstructure;
+        }
+    }
+    foreach ($SelectedViews as $dbname => $value)
+    {
+        foreach ($value as $view)
+        {
+            OutputInformation('view_'.$dbname.'_'.$view, SecurityUtils::encodeHTML($view).' (View definition)');
+            $viewstructure  = '-- ---------------------------------------------'.LINE_TERMINATOR;
+            $viewstructure .= "--   Definition of View `$view`".LINE_TERMINATOR;
+            $viewstructure .= '--   '.LINE_TERMINATOR;
+
+            $viewstructure .= 'DROP TABLE IF EXISTS '.($dbNameInCreate ? BACKTICKCHAR.$dbname.BACKTICKCHAR.'.' : '').BACKTICKCHAR.$view.BACKTICKCHAR.';'.LINE_TERMINATOR;
+            $viewstructure .= 'DROP VIEW IF EXISTS '.($dbNameInCreate ? BACKTICKCHAR.$dbname.BACKTICKCHAR.'.' : '').BACKTICKCHAR.$view.BACKTICKCHAR.';'.LINE_TERMINATOR;
+
+            $SQLquery  = 'SHOW CREATE VIEW '.BACKTICKCHAR.$view.BACKTICKCHAR;
+            $showcreateviewStatement = $gDb->query($SQLquery);
+            if ($showcreateviewStatement->rowCount() === 1)
+            {
+                $row = $showcreateviewStatement->fetch();
+                $viewstructure .= $row['Create View'];
+//                 echo '<span id="view_'.$dbname.'_'.$view.'">'.SecurityUtils::encodeHTML($view).' (View definition)</span><br />';
+                OutputInformation('view_'.$dbname.'_'.$view, SecurityUtils::encodeHTML($view).' (View definition)');
+            } else {
+                // TODO: When do we get more than one row for the view definition?
+            }
+            $viewstructure .= ';'.LINE_TERMINATOR.LINE_TERMINATOR;
+            $allviewsstructure .= $viewstructure;
+        }
+    }
+    write_backup_code($fp, $allviewsstructure);
+
+
     $activateForeignKeys = 'SET FOREIGN_KEY_CHECKS=1;'.LINE_TERMINATOR.LINE_TERMINATOR;
+    write_backup_code($fp, $activateForeignKeys);
 
-    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
-    {
-        bzwrite($bp, $activateForeignKeys, strlen($activateForeignKeys));
-    }
-    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
-    {
-        gzwrite($zp, $activateForeignKeys, strlen($activateForeignKeys));
-    }
-    else
-    {
-        fwrite($fp, $activateForeignKeys, strlen($activateForeignKeys));
-    }
-
-    if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
-    {
-        bzclose($bp);
-    }
-    elseif (OUTPUT_COMPRESSION_TYPE === 'gzip')
-    {
-        gzclose($zp);
-    }
-    else
-    {
-        fclose($fp);
-    }
+    close_backup_file($fp);
 
     if (is_file($newfullfilename))
     {

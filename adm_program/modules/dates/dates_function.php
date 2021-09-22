@@ -29,15 +29,15 @@ if($_GET['mode'] == 2)
 }
 
 // Initialize and check the parameters
-$getDateId              = admFuncVariableIsValid($_GET, 'dat_id', 'int');
-$getMode                = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
-$getCopy                = admFuncVariableIsValid($_GET, 'copy',   'bool');
-$getUserUuid            = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => (int) $gCurrentUser->getValue('usr_id')));
-$postAdditionalGuests   = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
-$postUserComment        = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
+$getDateUuid          = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
+$getMode              = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
+$getCopy              = admFuncVariableIsValid($_GET, 'copy',   'bool');
+$getUserUuid          = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => (int) $gCurrentUser->getValue('usr_id')));
+$postAdditionalGuests = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
+$postUserComment      = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
-$participationPossible  = true;
-$originalDateId         = 0;
+$participationPossible = true;
+$originalDateUuid      = 0;
 
 // check if module is active
 if((int) $gSettingsManager->get('enable_dates_module') === 0)
@@ -55,13 +55,13 @@ if($getMode !== 6 || (int) $gSettingsManager->get('enable_dates_module') === 2)
 
 if($getCopy)
 {
-    $originalDateId = $getDateId;
-    $getDateId      = 0;
+    $originalDateUuid = $getDateUuid;
+    $getDateUuid      = 0;
 }
 
 // create event object
 $date = new TableDate($gDb);
-$date->readDataById($getDateId);
+$date->readDataByUuid($getDateUuid);
 
 // read user data
 $user = User($gDb, $gProfileFields);
@@ -72,7 +72,7 @@ if($getUserUuid !== '')
 
 if (in_array($getMode, array(1, 2, 5), true))
 {
-    if ($getDateId > 0)
+    if ($getDateUuid !== '')
     {
         // check if the current user has the right to edit this event
         if (!$date->isEditable())
@@ -337,12 +337,12 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
                      WHERE dat_begin  <= ? -- $endDateTime->format(\'Y-m-d H:i:s\')
                        AND dat_end    >= ? -- $startDateTime->format(\'Y-m-d H:i:s\')
                        AND dat_room_id = ? -- $datRoomId
-                       AND dat_id     <> ? -- $getDateId';
+                       AND dat_uuid    <> ? -- $getDateUuid';
             $queryParams = array(
                 $endDateTime->format('Y-m-d H:i:s'),
                 $startDateTime->format('Y-m-d H:i:s'),
                 $datRoomId,
-                $getDateId
+                $getDateUuid
             );
             $datesStatement = $gDb->queryPrepared($sql, $queryParams);
 
@@ -470,8 +470,8 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             // copy original role with their settings
             $sql = 'SELECT dat_rol_id
                       FROM '.TBL_DATES.'
-                     WHERE dat_id = ?';
-            $pdoStatement = $gDb->queryPrepared($sql, array($originalDateId));
+                     WHERE dat_uuid = ?';
+            $pdoStatement = $gDb->queryPrepared($sql, array($originalDateUuid));
 
             $role = new TableRoles($gDb, (int) $pdoStatement->fetchColumn());
             $role->setValue('rol_id', '0');

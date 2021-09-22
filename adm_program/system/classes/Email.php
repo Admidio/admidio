@@ -289,11 +289,11 @@ class Email extends PHPMailer
      * @throws AdmException 'SYS_EMAIL_NOT_SEND'
      * @return bool|string
      */
-    public function adminNotification($subject, $message, $editorName = '', $editorEmail = '')
+    public function adminNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'enable_email_notification')
     {
         global $gSettingsManager, $gCurrentOrganization;
 
-        if (!$gSettingsManager->getBool('enable_email_notification'))
+        if (!$gSettingsManager->getBool($enable_flag))
         {
             return false;
         }

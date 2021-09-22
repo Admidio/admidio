@@ -9,19 +9,19 @@
  *
  * Parameters:
  *
- * folder_id    :  Id of the folder that should be renamed
- * file_id      :  Id of the file that should be renamed
+ * folder_uuid :  UUID of the folder that should be renamed
+ * file_uuid   :  UUID of the file that should be renamed
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
-$getFileId   = admFuncVariableIsValid($_GET, 'file_id',   'int');
+$getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
+$getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid',   'string');
 
 // set headline of the script
-if($getFileId > 0)
+if($getFileUuid !== '')
 {
     $headline = $gL10n->get('SYS_EDIT_FILE');
 }
@@ -55,7 +55,7 @@ try
     // check the rights of the current folder
     // user must be administrator or must have the right to upload files
     $targetFolder = new TableFolder($gDb);
-    $targetFolder->getFolderForDownload($getFolderId);
+    $targetFolder->getFolderForDownload($getFolderUuid);
 }
 catch(AdmException $e)
 {
@@ -76,11 +76,11 @@ $createTimestamp = '';
 
 try
 {
-    if ($getFileId)
+    if ($getFileUuid !== '')
     {
         // get recordset of current file from database
         $file = new TableFile($gDb);
-        $file->getFileForDownload($getFileId);
+        $file->getFileForDownload($getFileUuid);
 
         $originalName    = pathinfo($file->getValue('fil_name'), PATHINFO_FILENAME);
         $fileType        = pathinfo($file->getValue('fil_name'), PATHINFO_EXTENSION);
@@ -133,8 +133,8 @@ catch(AdmException $e)
 $page = new HtmlPage('admidio-documents-files-rename', $headline);
 
 // create html form
-$form = new HtmlForm('edit_download_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '4', 'folder_id' => $getFolderId, 'file_id' => $getFileId)), $page);
-if ($getFileId)
+$form = new HtmlForm('edit_download_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '4', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)), $page);
+if ($getFileUuid !== '')
 {
     $form->addInput(
         'file_type', $gL10n->get('SYS_FILE_TYPE'), $fileType,

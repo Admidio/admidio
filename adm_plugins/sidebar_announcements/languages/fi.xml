@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES">Kaikki merkinnät</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE">Ilmoitukset</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_NO_ENTRIES_VISITORS">Vierailijoille ei ole saatavilla ilmoituksia. Kirjaudu sisään nähdäksesi ilmoitukset.</string>
+</resources>

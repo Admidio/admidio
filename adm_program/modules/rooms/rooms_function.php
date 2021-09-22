@@ -9,18 +9,18 @@
  *
  * Parameters:
  *
- * room_id : ID of room, that should be shown
- * mode :    1 - create or edit room
- *           2 - delete room
+ * room_uuid : UUID of room, that should be shown
+ * mode      : 1 - create or edit room
+ *             2 - delete room
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getRoomId = admFuncVariableIsValid($_GET, 'room_id', 'int');
-$getMode   = admFuncVariableIsValid($_GET, 'mode',    'int', array('requireValue' => true));
+$getRoomUuid = admFuncVariableIsValid($_GET, 'room_uuid','string');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int', array('requireValue' => true));
 
-// nur berechtigte User duerfen die Profilfelder bearbeiten
+// only authorized users are allowed to edit the rooms
 if (!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -29,9 +29,10 @@ if (!$gCurrentUser->isAdministrator())
 
 // Raumobjekt anlegen
 $room = new TableRooms($gDb);
-if ($getRoomId > 0)
+
+if ($getRoomUuid !== '')
 {
-    $room->readDataById($getRoomId);
+    $room->readDataByUuid($getRoomUuid);
 }
 
 if ($getMode === 1)
@@ -52,7 +53,7 @@ if ($getMode === 1)
     // make html in description secure
     $_POST['room_description'] = admFuncVariableIsValid($_POST, 'room_description', 'html');
 
-    // POST Variablen in das Termin-Objekt schreiben
+    // POST variables to the room object
     foreach ($_POST as $key => $value) // TODO possible security issue
     {
         if (str_starts_with($key, 'room_'))
@@ -60,7 +61,7 @@ if ($getMode === 1)
             $room->setValue($key, $value);
         }
     }
-    // Daten in Datenbank schreiben
+
     $room->save();
 
     unset($_SESSION['rooms_request']);
@@ -69,18 +70,18 @@ if ($getMode === 1)
     admRedirect($gNavigation->getUrl());
     // => EXIT
 }
-// Löschen des Raums
+// delete the room
 elseif ($getMode === 2)
 {
     $sql = 'SELECT 1
               FROM '.TBL_DATES.'
-             WHERE dat_room_id = ?';
-    $statement = $gDb->queryPrepared($sql, array($getRoomId));
+             WHERE dat_room_id = ? -- $room->getValue(\'room_id\') ';
+    $statement = $gDb->queryPrepared($sql, array($room->getValue('room_id')));
 
     if($statement->rowCount() === 0)
     {
         $room->delete();
         echo 'done';
+        // Delete successful -> return for XMLHttpRequest
     }
-    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
 }

@@ -26,7 +26,6 @@ if (is_file(__DIR__ . '/config.php'))
 }
 
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
-$getId       = admFuncVariableIsValid($_GET, 'id',        'int');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 
@@ -84,7 +83,6 @@ if($gSettingsManager->getInt('enable_announcements_module') > 0)
 {
     // create announcements object
     $plgAnnouncements = new ModuleAnnouncements();
-    $plgAnnouncements->setParameter('id', $getId);
     $plgAnnouncements->setParameter('cat_id', $getCatId);
     $plgAnnouncements->setDateRange($getDateFrom, $getDateTo);
     $plgAnnouncements->setCategoriesNames($plg_categories);
@@ -110,7 +108,7 @@ if($gSettingsManager->getInt('enable_announcements_module') > 0)
                 $plgAnnouncement->clear();
                 $plgAnnouncement->setArray($plgRow);
 
-                echo '<h5><a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php', array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '" target="'. $plg_link_target. '">';
+                echo '<h5><a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php', array('ann_uuid' => $plgAnnouncement->getValue('ann_uuid'), 'headline' => $plg_headline)). '" target="'. $plg_link_target. '">';
 
                 if($plg_max_char_per_word > 0)
                 {
@@ -153,7 +151,7 @@ if($gSettingsManager->getInt('enable_announcements_module') > 0)
                     $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).'
                         <a class="admidio-icon-link" target="'. $plg_link_target. '"
                             href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php',
-                                array('id' => (int) $plgAnnouncement->getValue('ann_id'), 'headline' => $plg_headline)). '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
+                                array('ann_uuid' => (int) $plgAnnouncement->getValue('ann_uuid'), 'headline' => $plg_headline)). '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
 
                     echo '<div>'.$textPrev.'</div>';
                 }

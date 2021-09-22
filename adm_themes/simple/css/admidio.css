@@ -503,6 +503,7 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
 
 .progress {
     background-color: #dddddd;
+    height: auto;
 }
 
 .admidio-attachment {

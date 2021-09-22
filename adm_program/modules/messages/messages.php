@@ -26,11 +26,12 @@ if (!$gSettingsManager->getBool('enable_pm_module') && !$gSettingsManager->getBo
 }
 
 // Initialize and check the parameters
-$getMsgId = admFuncVariableIsValid($_GET, 'msg_id', 'int', array('defaultValue' => 0));
+$getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'string');
 
-if ($getMsgId > 0)
+if ($getMsgUuid !== '')
 {
-    $delMessage = new TableMessage($gDb, $getMsgId);
+    $delMessage = new TableMessage($gDb);
+    $delMessage->readDataByUuid($getMsgUuid);
 
     // Function to delete message
     $delete = $delMessage->delete();
@@ -81,6 +82,7 @@ $table->addRowHeadingByArray(array(
     ''
 ));
 $table->disableDatatablesColumnsSort(array(3, 6));
+$table->setDatatablesColumnsNotHideResponsive(array(6));
 
 // open some additional functions for messages
 $moduleMessages = new ModuleMessages();

@@ -25,6 +25,9 @@
  *                                               'array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID')));
  * ```
  */
+
+require_once(ADMIDIO_PATH . FOLDER_LIBS_CLIENT . '/jquery-file-upload/server/php/UploadHandler.php');
+
 class UploadHandlerPhoto extends UploadHandler
 {
     /**
@@ -97,7 +100,7 @@ class UploadHandlerPhoto extends UploadHandler
                 $processableImageSize = admFuncProcessableImageSize();
                 if ($imageDimensions > $processableImageSize)
                 {
-                    throw new AdmException($gL10n->get('PHO_RESOLUTION_MORE_THAN') . ' ' . round($processableImageSize / 1000000, 2) . ' ' . $gL10n->get('MEGA_PIXEL'));
+                    throw new AdmException($gL10n->get('PHO_RESOLUTION_MORE_THAN') . ' ' . round($processableImageSize / 1000000, 2) . ' ' . $gL10n->get('SYS_MEGAPIXEL'));
                 }
 
                 // create image object and scale image to defined size of preferences

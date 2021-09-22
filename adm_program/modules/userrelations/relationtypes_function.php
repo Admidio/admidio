@@ -12,9 +12,9 @@
 /******************************************************************************
  * Parameters:
  *
- * urt_id: Id of the relation type that should be edited
- * mode  : 1 - Create or edit relationtype
- *         2 - Delete relationtype
+ * urt_uuid : UUID of the relation type that should be edited
+ * mode     : 1 - Create or edit relationtype
+ *            2 - Delete relationtype
  *
  *****************************************************************************/
 
@@ -22,8 +22,8 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUrtId = admFuncVariableIsValid($_GET, 'urt_id', 'int');
-$getMode  = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
+$getUrtUuid = admFuncVariableIsValid($_GET, 'urt_uuid', 'string');
+$getMode    = admFuncVariableIsValid($_GET, 'mode',     'int', array('requireValue' => true));
 
 if (!$gSettingsManager->getBool('members_enable_user_relations'))
 {
@@ -39,9 +39,9 @@ if (!$gCurrentUser->isAdministrator())
 
 $relationType = new TableUserRelationType($gDb);
 
-if($getUrtId > 0)
+if($getUrtUuid !== '')
 {
-    $relationType->readDataById($getUrtId);
+    $relationType->readDataByUuid($getUrtUuid);
 }
 
 if($getMode === 1)
@@ -59,7 +59,7 @@ if($getMode === 1)
     }
 
     $relationType2 = new TableUserRelationType($gDb);
-    if($getUrtId > 0)
+    if($getUrtUuid !== '')
     {
         $relationType2->readDataById((int) $relationType->getValue('urt_id_inverse'));
     }
@@ -95,14 +95,14 @@ if($getMode === 1)
 
     if ($postRelationType === 'asymmetrical')
     {
-        if($getUrtId <= 0)
+        if($getUrtUuid === '')
         {
             $relationType2->setValue('urt_id_inverse', (int) $relationType->getValue('urt_id'));
         }
 
         $relationType2->save();
 
-        if($getUrtId <= 0)
+        if($getUrtUuid === '')
         {
             $relationType->setValue('urt_id_inverse', (int) $relationType2->getValue('urt_id'));
             $relationType->save();

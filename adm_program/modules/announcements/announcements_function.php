@@ -9,9 +9,9 @@
  *
  * Parameters:
  *
- * ann_id  - ID of the announcement that should be edited
- * mode    - 1 : Create or edit announcement
- *           2 : Delete announcement
+ * ann_uuid - UUID of the announcement that should be edited
+ * mode     - 1 : Create or edit announcement
+ *            2 : Delete announcement
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -26,15 +26,15 @@ if ((int) $gSettingsManager->get('enable_announcements_module') === 0)
 }
 
 // Initialize and check the parameters
-$getAnnId = admFuncVariableIsValid($_GET, 'ann_id', 'int');
-$getMode  = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
+$getAnnUuid = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
+$getMode    = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
 
-// Ankuendigungsobjekt anlegen
+// create announcement object
 $announcement = new TableAnnouncement($gDb);
 
-if($getAnnId > 0)
+if($getAnnUuid !== '')
 {
-    $announcement->readDataById($getAnnId);
+    $announcement->readDataByUuid($getAnnUuid);
 
     // check if the user has the right to edit this announcement
     if(!$announcement->isEditable())
@@ -79,7 +79,7 @@ if($getMode === 1)
 
     try
     {
-        // POST Variablen in das Ankuendigungs-Objekt schreiben
+        // write POST parameters in announcement object
         foreach($_POST as $key => $value) // TODO possible security issue
         {
             if(str_starts_with($key, 'ann_'))
@@ -98,7 +98,7 @@ if($getMode === 1)
         }
         else
         {
-            if($getAnnId === 0)
+            if($getAnnUuid === '')
             {
                 $message = $gL10n->get('SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
 

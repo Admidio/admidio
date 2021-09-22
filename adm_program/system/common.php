@@ -137,6 +137,9 @@ $gL10n = new Language($gLanguageData);
 $orgId    = (int) $gCurrentOrganization->getValue('org_id');
 $sesUsrId = (int) $gCurrentSession->getValue('ses_usr_id');
 
+// Create a notification object to store and send change notifications to profile fields
+$gChangeNotification = new ChangeNotification();
+
 // now if auto login is done, read global user data
 if($gCurrentSession->hasObject('gCurrentUser'))
 {

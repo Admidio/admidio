@@ -9,7 +9,7 @@
  *
  * Parameters:
  *
- * lnk_id    - ID of the weblink that should be edited
+ * link_uuid - UUID of the weblink that should be edited
  * headline  - Title of the weblink module. This will be shown in the whole module.
  *             (Default) SYS_WEBLINKS
  ***********************************************************************************************
@@ -18,7 +18,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getLinkId   = admFuncVariableIsValid($_GET, 'lnk_id',   'int');
+$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid','string');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_WEBLINKS')));
 
 // check if the module is enabled for use
@@ -32,9 +32,9 @@ if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
 // create weblink object
 $link = new TableWeblink($gDb);
 
-if($getLinkId > 0)
+if($getLinkUuid !== '')
 {
-    $link->readDataById($getLinkId);
+    $link->readDataByUuid($getLinkUuid);
 
     // check if the current user could edit this weblink
     if(!$link->isEditable())
@@ -62,7 +62,7 @@ if(isset($_SESSION['links_request']))
 }
 
 // Html-Kopf ausgeben
-if($getLinkId > 0)
+if($getLinkUuid !== '')
 {
     $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
 }
@@ -78,7 +78,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage('admidio-weblinks-edit', $headline);
 
 // Html des Modules ausgeben
-if($getLinkId > 0)
+if($getLinkUuid !== '')
 {
     $modeEditOrCreate = '3';
 }
@@ -88,7 +88,7 @@ else
 }
 
 // show form
-$form = new HtmlForm('weblinks_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php', array('lnk_id' => $getLinkId, 'headline' => $getHeadline, 'mode' => $modeEditOrCreate)), $page);
+$form = new HtmlForm('weblinks_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php', array('link_uuid' => $getLinkUuid, 'headline' => $getHeadline, 'mode' => $modeEditOrCreate)), $page);
 $form->addInput(
     'lnk_name', $gL10n->get('SYS_LINK_NAME'), SecurityUtils::encodeHTML($link->getValue('lnk_name')),
     array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED)

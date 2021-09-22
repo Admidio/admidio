@@ -62,6 +62,7 @@ $defaultOrgPreferences = array(
     'enable_system_mails'         => '1',
     'email_administrator'         => 'administrator@'. DOMAIN,
     'enable_email_notification'   => '0',
+    'enable_email_changenotification'   => '0',
 
     // Captcha
     'captcha_type'                => 'pic',

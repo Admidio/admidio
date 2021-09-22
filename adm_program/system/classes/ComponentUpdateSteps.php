@@ -141,28 +141,40 @@ final class ComponentUpdateSteps
      */
 	public static function updateStep41AddUuid()
 	{
-        $sql = 'SELECT usr_id FROM ' . TBL_USERS;
-        $usersStatement = self::$db->queryPrepared($sql);
+	    $updateTablesUuid = array(
+	        array('table' => TBL_USERS, 'column_id' => 'usr_id', 'column_uuid' => 'usr_uuid'),
+            array('table' => TBL_ROLES, 'column_id' => 'rol_id', 'column_uuid' => 'rol_uuid'),
+            array('table' => TBL_ANNOUNCEMENTS, 'column_id' => 'ann_id', 'column_uuid' => 'ann_uuid'),
+            array('table' => TBL_CATEGORIES, 'column_id' => 'cat_id', 'column_uuid' => 'cat_uuid'),
+            array('table' => TBL_DATES, 'column_id' => 'dat_id', 'column_uuid' => 'dat_uuid'),
+            array('table' => TBL_FILES, 'column_id' => 'fil_id', 'column_uuid' => 'fil_uuid'),
+            array('table' => TBL_FOLDERS, 'column_id' => 'fol_id', 'column_uuid' => 'fol_uuid'),
+            array('table' => TBL_GUESTBOOK, 'column_id' => 'gbo_id', 'column_uuid' => 'gbo_uuid'),
+            array('table' => TBL_GUESTBOOK_COMMENTS, 'column_id' => 'gbc_id', 'column_uuid' => 'gbc_uuid'),
+            array('table' => TBL_LINKS, 'column_id' => 'lnk_id', 'column_uuid' => 'lnk_uuid'),
+            array('table' => TBL_PHOTOS, 'column_id' => 'pho_id', 'column_uuid' => 'pho_uuid'),
+            array('table' => TBL_LISTS, 'column_id' => 'lst_id', 'column_uuid' => 'lst_uuid'),
+            array('table' => TBL_MENU, 'column_id' => 'men_id', 'column_uuid' => 'men_uuid'),
+            array('table' => TBL_MESSAGES, 'column_id' => 'msg_id', 'column_uuid' => 'msg_uuid'),
+            array('table' => TBL_ORGANIZATIONS, 'column_id' => 'org_id', 'column_uuid' => 'org_uuid'),
+            array('table' => TBL_ROOMS, 'column_id' => 'room_id', 'column_uuid' => 'room_uuid'),
+            array('table' => TBL_USER_FIELDS, 'column_id' => 'usf_id', 'column_uuid' => 'usf_uuid'),
+            array('table' => TBL_USER_RELATION_TYPES, 'column_id' => 'urt_id', 'column_uuid' => 'urt_uuid'),
+        );
 
-        while($row = $usersStatement->fetch())
+	    foreach($updateTablesUuid as $tableUuid)
         {
-            $uuid = Uuid::uuid4();
+            $sql = 'SELECT ' . $tableUuid['column_id'] . ' FROM ' . $tableUuid['table'];
+            $statement = self::$db->queryPrepared($sql);
 
-            $sql = 'UPDATE '.TBL_USERS.' SET usr_uuid = ? -- $uuid
-                     WHERE usr_id = ? -- $row[\'usr_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['usr_id']));
-        }
+            while($row = $statement->fetch())
+            {
+                $uuid = Uuid::uuid4();
 
-        $sql = 'SELECT rol_id FROM ' . TBL_ROLES;
-        $rolesStatement = self::$db->queryPrepared($sql);
-
-        while($row = $rolesStatement->fetch())
-        {
-            $uuid = Uuid::uuid4();
-
-            $sql = 'UPDATE '.TBL_ROLES.' SET rol_uuid = ? -- $uuid
-                     WHERE rol_id = ? -- $row[\'rol_id\']';
-            self::$db->queryPrepared($sql, array($uuid, $row['rol_id']));
+                $sql = 'UPDATE ' . $tableUuid['table'] . ' SET ' . $tableUuid['column_uuid'] . ' = ? -- $uuid
+                     WHERE ' . $tableUuid['column_id'] . ' = ? -- $row[$tableUuid[\'column_id\']]';
+                self::$db->queryPrepared($sql, array($uuid, $row[$tableUuid['column_id']]));
+            }
         }
 	}
 

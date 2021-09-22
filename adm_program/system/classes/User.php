@@ -13,8 +13,6 @@
  * Handles all the user data and the rights. This is used for the current login user and for other users of the database.
  */
 
-use Ramsey\Uuid\Uuid;
-
 class User extends TableAccess
 {
     const MAX_INVALID_LOGINS = 3;
@@ -242,6 +240,9 @@ class User extends TableAccess
         {
             // one record found than update this record
             $row = $membershipStatement->fetch();
+            if (($mode === 'set') && ($row['mem_id'] > 0)) {
+                $member = new TableMembers($this->db, $row['mem_id']);
+            }
             $member->setArray($row);
 
             // save new start date if an earlier date exists
@@ -654,10 +655,13 @@ class User extends TableAccess
      */
     public function delete()
     {
-        global $gCurrentUser;
+        global $gCurrentUser, $gChangeNotification;
 
         $usrId     = (int) $this->getValue('usr_id');
         $currUsrId = (int) $gCurrentUser->getValue('usr_id');
+
+        // Register all non-empty fields for the notification
+        $gChangeNotification->logUserDeletion($usrId, $this);
 
         // first delete send messages from the user
         $sql = 'SELECT msg_id FROM ' . TBL_MESSAGES . ' WHERE msg_usr_id_sender = ? -- $usrId';
@@ -1001,6 +1005,7 @@ class User extends TableAccess
     {
         return $this->getAllRolesWithRight($this->listViewRights);
     }
+
 
     /**
      * Returns the id of the organization this user object has been assigned.
@@ -1789,7 +1794,7 @@ class User extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentSession, $gCurrentUser;
+        global $gCurrentSession, $gCurrentUser, $gChangeNotification;
 
         $usrId = (int) $this->getValue('usr_id');
 
@@ -1807,8 +1812,6 @@ class User extends TableAccess
         $updateCreateUserId = false;
         if ($usrId === 0)
         {
-            $this->setValue('usr_uuid', Uuid::uuid4());
-
             if((int) $gCurrentUser->getValue('usr_id') === 0)
             {
                 $updateCreateUserId = true;
@@ -1821,6 +1824,8 @@ class User extends TableAccess
         {
             $this->columnsValueChanged = true;
         }
+
+        $newRecord = $this->newRecord;
 
         $returnValue = parent::save($updateFingerPrint);
         $usrId = (int) $this->getValue('usr_id'); // if a new user was created get the new id
@@ -1845,6 +1850,13 @@ class User extends TableAccess
             // because he has new data and maybe new rights
             $gCurrentSession->renewUserObject($usrId);
         }
+        // The record is a new record, which was just stored to the database
+        // for the first time => record it as a user creation now
+        if ($newRecord) {
+            // Register all non-empty fields for the notification
+            $gChangeNotification->logUserCreation($usrId, $this);
+        }
+
         $this->db->endTransaction();
 
         return $returnValue;
@@ -1859,6 +1871,7 @@ class User extends TableAccess
     {
         $this->saveChangesWithoutRights = true;
     }
+
 
     /**
      * Set the id of the organization which should be used in this user object.
@@ -1882,10 +1895,15 @@ class User extends TableAccess
      */
     public function setPassword($newPassword, $doHashing = true)
     {
-        global $gSettingsManager, $gPasswordHashAlgorithm;
+        global $gSettingsManager, $gPasswordHashAlgorithm, $gChangeNotification;
 
         if (!$doHashing)
         {
+            $gChangeNotification->logUserChange(
+                (int)$this->getValue('usr_id'),
+                'usr_password',
+                $this->getValue('usr_password'), $newPassword, $this
+            );
             return parent::setValue('usr_password', $newPassword, false);
         }
 
@@ -1903,6 +1921,11 @@ class User extends TableAccess
             return false;
         }
 
+        $gChangeNotification->logUserChange(
+            (int)$this->getValue('usr_id'),
+            'usr_password',
+            $this->getValue('usr_password'), $newPasswordHash, $this
+        );
         return parent::setValue('usr_password', $newPasswordHash, false);
     }
 
@@ -1944,7 +1967,7 @@ class User extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        global $gCurrentUser, $gSettingsManager;
+        global $gCurrentUser, $gSettingsManager, $gChangeNotification;
 
         // users data from adm_users table
         if (str_starts_with($columnName, 'usr_'))
@@ -1961,11 +1984,24 @@ class User extends TableAccess
                 return false;
             }
 
+            // For new records, do not immediately queue all changes for notification,
+            // as the record might never be saved to the database (e.g. when
+            // doing a check for an existing user)! => For new records,
+            // log the changes only when $this->save is called!
+            if (!$this->newRecord) {
+                $gChangeNotification->logUserChange(
+                    (int)$this->getValue('usr_id'),
+                    $columnName,
+                    $this->getValue($columnName), $newValue, $this
+                );
+            }
+
             return parent::setValue($columnName, $newValue, $checkValue);
         }
 
-        // user data from adm_user_fields table
-        $oldFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
+        // user data from adm_user_fields table (human-readable text representation and raw database value)
+        $oldFieldValue = $this->mProfileFieldsData->getValue($columnName, 'text');
+        $oldFieldValue_db = $this->mProfileFieldsData->getValue($columnName, 'database');
         $newValue = (string) $newValue;
 
         // format of date will be local but database hase stored Y-m-d format must be changed for compare
@@ -1980,7 +2016,7 @@ class User extends TableAccess
         }
 
         // only to a update if value has changed
-        if ($oldFieldValue === $newValue)
+        if ($oldFieldValue_db === $newValue)
         {
             return true;
         }
@@ -2002,18 +2038,20 @@ class User extends TableAccess
         }
 
         // Nicht alle Aenderungen werden geloggt. Ausnahmen:
-        // Felder, die mit usr_ beginnen
-        // Felder, die sich nicht geändert haben
-        // Wenn usr_id ist 0 (der User neu angelegt wird; Das wird bereits dokumentiert)
-        if ($returnCode && $usrId > 0 && $gSettingsManager->getBool('profile_log_edit_fields'))
-        {
-            $logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');
-            $logEntry->setValue('usl_usr_id', $usrId);
-            $logEntry->setValue('usl_usf_id', $this->mProfileFieldsData->getProperty($columnName, 'usf_id'));
-            $logEntry->setValue('usl_value_old', $oldFieldValue);
-            $logEntry->setValue('usl_value_new', $newValue);
-            $logEntry->setValue('usl_comm', '');
-            $logEntry->save();
+        // Felder, die mit usr_ beginnen (special case above)
+        // Felder, die sich nicht geändert haben (check above)
+        // Wenn usr_id ist 0 (der User neu angelegt wird; Das wird bereits dokumentiert) (check in logProfileChange)
+
+        if ($returnCode && !$this->newRecord) {
+            $gChangeNotification->logProfileChange(
+                (int)$this->getValue('usr_id'),
+                $this->mProfileFieldsData->getProperty($columnName, 'usf_id'),
+                $columnName, // TODO: is $columnName the internal name or the human-readable?
+                // Old and new values in human-readable version:
+                $oldFieldValue, $this->mProfileFieldsData->getValue($columnName, 'text'),
+                // Old and new values in raw dtabase:
+                $oldFieldValue_db, $newValue, $this
+            );
         }
 
         return $returnCode;
@@ -2148,4 +2186,14 @@ class User extends TableAccess
     {
         return $this->checkRolesRight('rol_weblinks');
     }
+
+    /**
+     * Return the (internal) representation of this user's profile fields
+     * @return array All profile fields of the user
+     */
+    public function getProfileFieldsData()
+    {
+        return $this->mProfileFieldsData;
+    }
+
 }

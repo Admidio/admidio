@@ -9,17 +9,17 @@
  *
  * Parameters:
  *
- * id            - ID des Eintrages, dem ein Kommentar hinzugefuegt werden soll
- * cid           - ID des Kommentars der editiert werden soll
- * headline      - Ueberschrift, die ueber den Einraegen steht
- *                 (Default) Gaestebuch
+ * gbo_uuid      - UUID of the guestbook entry that should get a new comment
+ * gbc_uuid      - UUID of the comment that should be edited
+ * headline      - Title of the announcement module. This will be shown in the whole module.
+ *                 (Default) GBO_GUESTBOOK
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
-$getGbcId    = admFuncVariableIsValid($_GET, 'cid',      'int');
+$getGboUuid  = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
+$getGbcUuid  = admFuncVariableIsValid($_GET, 'gbc_uuid', 'string');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // check if the module is enabled and disallow access if it's disabled
@@ -29,29 +29,27 @@ if ((int) $gSettingsManager->get('enable_guestbook_module') === 0)
     // => EXIT
 }
 
-// Es muss ein (nicht zwei) Parameter uebergeben werden: Entweder id oder cid...
-if($getGboId > 0 && $getGbcId > 0)
+// One (not two) parameter must be passed: Either gbo_uuid or gbc_uuid...
+if($getGboUuid !== '' && $getGbcUuid !== '')
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }
 
 // set create or edit mode
-if($getGboId > 0)
+if($getGboUuid !== '')
 {
-    $id       = $getGboId;
     $mode     = '4';
     $headline = $gL10n->get('GBO_CREATE_COMMENT');
 }
 else
 {
-    $id       = $getGbcId;
     $mode     = '8';
     $headline = $gL10n->get('GBO_EDIT_COMMENT');
 }
 
 // Erst einmal die Rechte abklopfen...
-if(((int) $gSettingsManager->get('enable_guestbook_module') === 2 || !$gSettingsManager->getBool('enable_gbook_comments4all')) && $getGboId > 0)
+if(((int) $gSettingsManager->get('enable_guestbook_module') === 2 || !$gSettingsManager->getBool('enable_gbook_comments4all')) && $getGboUuid !== '')
 {
     // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein zum kommentieren
     require(__DIR__ . '/../../system/login_valid.php');
@@ -64,7 +62,7 @@ if(((int) $gSettingsManager->get('enable_guestbook_module') === 2 || !$gSettings
     }
 }
 
-if($getGbcId > 0)
+if($getGbcUuid !== '')
 {
     // Zum editieren von Kommentaren muss der User auch eingeloggt sein
     require(__DIR__ . '/../../system/login_valid.php');
@@ -83,9 +81,9 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // Gaestebuchkommentarobjekt anlegen
 $gbComment = new TableGuestbookComment($gDb);
 
-if($getGbcId > 0)
+if($getGbcUuid !== '')
 {
-    $gbComment->readDataById($getGbcId);
+    $gbComment->readDataByUuid($getGbcUuid);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
     if((int) $gbComment->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
@@ -105,7 +103,7 @@ if(isset($_SESSION['guestbook_comment_request']))
 
 // Wenn der User eingeloggt ist und keine cid uebergeben wurde
 // koennen zumindest Name und Emailadresse vorbelegt werden...
-if($getGbcId === 0 && $gValidLogin)
+if($getGbcUuid === '' && $gValidLogin)
 {
     $gbComment->setValue('gbc_name', $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
     $gbComment->setValue('gbc_email', $gCurrentUser->getValue('EMAIL'));
@@ -136,7 +134,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
 $page = new HtmlPage('admidio-guestbook-comment-new', $headline);
 
 // show form
-$form = new HtmlForm('guestbook_comment_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('id' => $id, 'headline' => $getHeadline, 'mode' => $mode)), $page);
+$form = new HtmlForm('guestbook_comment_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'gbc_uuid' => $getGbcUuid, 'headline' => $getHeadline, 'mode' => $mode)), $page);
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     // registered users should not change their name

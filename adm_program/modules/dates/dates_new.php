@@ -9,7 +9,7 @@
  *
  * Parameters:
  *
- * dat_id   - ID of the event that should be edited
+ * dat_uuid - UUID of the event that should be edited
  * headline - Headline for the event
  *            (Default) Events
  * copy : true - The event of the dat_id will be copied and the base for this new event
@@ -19,7 +19,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getDateId   = admFuncVariableIsValid($_GET, 'dat_id',   'int');
+$getDateUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
 $getCopy     = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
@@ -42,7 +42,7 @@ if($getCopy)
     $headline = $gL10n->get('SYS_COPY_VAR', array($getHeadline));
     $mode = 5;
 }
-elseif($getDateId > 0)
+elseif($getDateUuid !== '')
 {
     $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
     $mode = 5;
@@ -95,10 +95,10 @@ if(isset($_SESSION['dates_request']))
 }
 else
 {
-    if($getDateId > 0)
+    if($getDateUuid !== '')
     {
         // read data from database
-        $date->readDataById($getDateId);
+        $date->readDataByUuid($getDateUuid);
 
         // get assigned roles of this event
         $eventParticipationRolesObject = new RolesRights($gDb, 'event_participation', (int) $date->getValue('dat_id'));
@@ -250,7 +250,7 @@ $page->addJavascript('
 );
 
 // show form
-$form = new HtmlForm('dates_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $getDateId, 'mode' => $mode, 'copy' => $getCopy)), $page);
+$form = new HtmlForm('dates_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_uuid' => $getDateUuid, 'mode' => $mode, 'copy' => $getCopy)), $page);
 
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
 $form->addInput(
@@ -266,7 +266,7 @@ if($gSettingsManager->getBool('dates_show_map_link'))
         array('maxLength' => 100, 'helpTextIdLabel' => 'DAT_LOCATION_LINK')
     );
 
-    if(!$date->getValue('dat_country') && $getDateId === 0)
+    if(!$date->getValue('dat_country') && $getDateUuid === '')
     {
         $date->setValue('dat_country', $gSettingsManager->getString('default_country'));
     }

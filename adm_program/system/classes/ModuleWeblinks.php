@@ -200,14 +200,14 @@ class ModuleWeblinks extends Modules
         $sqlConditions = '';
         $params = array();
 
-        $id    = (int) $this->getParameter('id');
+        $uuid  = $this->getParameter('lnk_uuid');
         $catId = (int) $this->getParameter('cat_id');
 
         // In case ID was permitted and user has rights
-        if($id > 0)
+        if(!empty($uuid))
         {
-            $sqlConditions .= ' AND lnk_id = ? '; // $id
-            $params[] = $id;
+            $sqlConditions .= ' AND lnk_uuid = ? '; // $uuid
+            $params[] = $uuid;
         }
         // show all weblinks from category
         elseif($catId > 0)

@@ -194,6 +194,7 @@ if($getShow === 'permissions')
     );
     $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'right'));
     $table->disableDatatablesColumnsSort(array(3, 7));
+    $table->setDatatablesColumnsNotHideResponsive(array(7));
     $table->setDatatablesGroupColumn(1);
     $table->addRowHeadingByArray($columnHeading);
 }
@@ -208,6 +209,7 @@ foreach($listsResult['recordset'] as $row)
 
     $catId = (int) $role->getValue('cat_id');
     $rolId = (int) $role->getValue('rol_id');
+    $roleUuid = $role->getValue('rol_uuid');
 
     if($getShow === 'card')
     {
@@ -226,8 +228,8 @@ foreach($listsResult['recordset'] as $row)
 
         $page->addHtml('
         <div class="col-sm-6 col-lg-4 col-xl-3">
-        <div class="card admidio-card" id="role_details_panel_'.$rolId.'">
-            <div class="card-body d-flex flex-column" id="admRoleDetails'.$rolId.'">
+        <div class="card admidio-card" id="role_details_panel_'.$roleUuid.'">
+            <div class="card-body d-flex flex-column" id="admRoleDetails'.$roleUuid.'">
                 <h5 class="card-title">'. $role->getValue('rol_name'). '</h5>');
 
                 $page->addHtml('<ul class="list-group list-group-flush">');
@@ -237,7 +239,7 @@ foreach($listsResult['recordset'] as $row)
                     if($gCurrentUser->hasRightSendMailToRole($rolId) && $gSettingsManager->getBool('enable_mail_module'))
                     {
                         $html .= '
-                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $role->getValue('rol_uuid'))).'">'.
+                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $roleUuid)).'">'.
                             '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_EMAIL_TO_MEMBERS').'"></i></a>';
                     }
 
@@ -245,7 +247,7 @@ foreach($listsResult['recordset'] as $row)
                     if($row['num_members'] > 0 || $row['num_leader'] > 0)
                     {
                         $html .= '
-                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id' => $rolId)).'">'.
+                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_uuid' => $roleUuid)).'">'.
                             '<i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'"></i></a>';
                     }
 
@@ -253,7 +255,7 @@ foreach($listsResult['recordset'] as $row)
                     if($role->allowedToAssignMembers($gCurrentUser))
                     {
                         $html .= '
-                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $role->getValue('rol_uuid'))).'">'.
+                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('role_uuid' => $roleUuid)).'">'.
                             '<i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'"></i></a>';
                     }
 
@@ -263,13 +265,13 @@ foreach($listsResult['recordset'] as $row)
                         if($getRoleType === ROLE_TYPE_INACTIVE)
                         {
                             $html .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'role_details_panel_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $role->getValue('rol_uuid'))).'">'.
+                                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'role_details_panel_'.$roleUuid, 'name' => $role->getValue('rol_name'), 'database_id' => $roleUuid)).'">'.
                                             '<i class="fas fa-check-square" data-toggle="tooltip" title="'.$gL10n->get('SYS_ACTIVATE_ROLE').'"></i></a>';
                         }
                         elseif($getRoleType === ROLE_TYPE_ACTIVE)
                         {
                             $html .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'role_details_panel_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $role->getValue('rol_uuid'))).'">'.
+                                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'role_details_panel_'.$roleUuid, 'name' => $role->getValue('rol_name'), 'database_id' => $roleUuid)).'">'.
                                             '<i class="fas fa-ban" data-toggle="tooltip" title="'.$gL10n->get('SYS_DEACTIVATE_ROLE').'"></i></a>';
                         }
 
@@ -277,7 +279,7 @@ foreach($listsResult['recordset'] as $row)
                         <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $role->getValue('rol_uuid'))).'">'.
                             '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_ROLE').'"></i></a>
                         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'role_details_panel_'.$rolId, 'name' => $role->getValue('rol_name'), 'database_id' => $role->getValue('rol_uuid'))).'">'.
+                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'role_details_panel_'.$roleUuid, 'name' => $role->getValue('rol_name'), 'database_id' => $roleUuid)).'">'.
                             '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_ROLE').'"></i></a>';
                     }
 
@@ -296,8 +298,8 @@ foreach($listsResult['recordset'] as $row)
                             $textPrev = substr($roleDescription, 0, 200);
                             $maxPosPrev = strrpos($textPrev, ' ');
                             $roleDescription = substr($textPrev, 0, $maxPosPrev).
-                                ' <span class="collapse" id="viewdetails'.$rolId.'">'.substr($roleDescription, $maxPosPrev).'.
-                                </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$rolId.'"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
+                                ' <span class="collapse" id="viewdetails-'.$roleUuid.'">'.substr($roleDescription, $maxPosPrev).'.
+                                </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails-'.$roleUuid.'"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
                         }
 
                         $page->addHtml('<li class="list-group-item">' . $roleDescription . '</li>');
@@ -518,10 +520,10 @@ foreach($listsResult['recordset'] as $row)
         $rolId = (int) $role->getValue('rol_id');
         $rolName = $role->getValue('rol_name');
 
-        $linkAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $role->getValue('rol_uuid'))).'">'.
+        $linkAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $roleUuid)).'">'.
                                     '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_ROLE').'"></i></a>';
         $linkAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $role->getValue('rol_uuid'))).'">'.
+                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_'.$roleUuid, 'name' => $rolName, 'database_id' => $roleUuid)).'">'.
                                     '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_ROLE').'"></i></a>';
 
         // create array with all column values
@@ -535,7 +537,7 @@ foreach($listsResult['recordset'] as $row)
             $linkAdministration
         );
 
-        $table->addRowByArray($columnValues, 'row_'. $rolId);
+        $table->addRowByArray($columnValues, 'row_'. $roleUuid);
     }
 }
 

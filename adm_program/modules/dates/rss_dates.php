@@ -70,7 +70,7 @@ if ($datesResult['numResults'] > 0)
         $date->clear();
         $date->setArray($row);
 
-        $dateId       = (int) $date->getValue('dat_id');
+        $dateUuid     = $date->getValue('dat_uuid');
         $dateFrom     = $date->getValue('dat_begin', $gSettingsManager->getString('system_date'));
         $dateTo       = $date->getValue('dat_end', $gSettingsManager->getString('system_date'));
         $dateLocation = $date->getValue('dat_location');
@@ -115,13 +115,13 @@ if ($datesResult['numResults'] > 0)
         $description .= '<br /><br />' . $date->getValue('dat_description');
 
         // i-cal downloadlink
-        $description .= '<br /><br /><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates_function.php', array('dat_id' => $dateId, 'mode' => '6')).'">' . $gL10n->get('DAT_ADD_DATE_TO_CALENDAR') . '</a>';
+        $description .= '<br /><br /><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates_function.php', array('dat_uuid' => $dateUuid, 'mode' => '6')).'">' . $gL10n->get('DAT_ADD_DATE_TO_CALENDAR') . '</a>';
 
         // add entry to RSS feed
         $rss->addItem(
             $title,
             $description,
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php', array('id' => $dateId, 'view' => 'detail')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php', array('dat_uuid' => $dateUuid, 'view' => 'detail')),
             $row['create_name'],
             \DateTime::createFromFormat('Y-m-d H:i:s', $date->getValue('dat_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
             $date->getValue('cat_name')

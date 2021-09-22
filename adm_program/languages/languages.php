@@ -29,6 +29,11 @@ $gSupportedLanguages = array(
         'isocode' => 'en',
         'libs'    => 'en'
     ),
+    'fi'    => array(
+        'name'    => 'Finnish - Suomalainen',
+        'isocode' => 'fi',
+        'libs'    => 'fi'
+    ),
     'fr'    => array(
         'name'    => 'French - Français',
         'isocode' => 'fr',

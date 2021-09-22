@@ -72,22 +72,22 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
     );
 
     public static $prefixLengthsPsr4 = array (
-        'Z' => 
+        'Z' =>
         array (
             'ZxcvbnPhp\\' => 10,
             'ZipStream\\' => 10,
         ),
-        'S' => 
+        'S' =>
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
         ),
-        'R' => 
+        'R' =>
         array (
             'Ramsey\\Uuid\\' => 12,
             'Ramsey\\Collection\\' => 18,
         ),
-        'P' => 
+        'P' =>
         array (
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
@@ -96,102 +96,102 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
             'PhpOffice\\PhpSpreadsheet\\' => 25,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
-        'M' => 
+        'M' =>
         array (
             'MyCLabs\\Enum\\' => 13,
             'Monolog\\' => 8,
             'Matrix\\' => 7,
         ),
-        'C' => 
+        'C' =>
         array (
             'Complex\\' => 8,
         ),
-        'B' => 
+        'B' =>
         array (
             'Brick\\Math\\' => 11,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'ZxcvbnPhp\\' => 
+        'ZxcvbnPhp\\' =>
         array (
             0 => __DIR__ . '/..' . '/bjeavons/zxcvbn-php/src',
         ),
-        'ZipStream\\' => 
+        'ZipStream\\' =>
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
         ),
-        'Symfony\\Polyfill\\Mbstring\\' => 
+        'Symfony\\Polyfill\\Mbstring\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
-        'Symfony\\Polyfill\\Ctype\\' => 
+        'Symfony\\Polyfill\\Ctype\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
-        'Ramsey\\Uuid\\' => 
+        'Ramsey\\Uuid\\' =>
         array (
             0 => __DIR__ . '/..' . '/ramsey/uuid/src',
         ),
-        'Ramsey\\Collection\\' => 
+        'Ramsey\\Collection\\' =>
         array (
             0 => __DIR__ . '/..' . '/ramsey/collection/src',
         ),
-        'Psr\\SimpleCache\\' => 
+        'Psr\\SimpleCache\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
         ),
-        'Psr\\Log\\' => 
+        'Psr\\Log\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
-        'Psr\\Http\\Message\\' => 
+        'Psr\\Http\\Message\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-factory/src',
             1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'Psr\\Http\\Client\\' => 
+        'Psr\\Http\\Client\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-client/src',
         ),
-        'PhpOffice\\PhpSpreadsheet\\' => 
+        'PhpOffice\\PhpSpreadsheet\\' =>
         array (
             0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
         ),
-        'PHPMailer\\PHPMailer\\' => 
+        'PHPMailer\\PHPMailer\\' =>
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
-        'MyCLabs\\Enum\\' => 
+        'MyCLabs\\Enum\\' =>
         array (
             0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
-        'Monolog\\' => 
+        'Monolog\\' =>
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
-        'Matrix\\' => 
+        'Matrix\\' =>
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
         ),
-        'Complex\\' => 
+        'Complex\\' =>
         array (
             0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
         ),
-        'Brick\\Math\\' => 
+        'Brick\\Math\\' =>
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
         ),
     );
 
     public static $prefixesPsr0 = array (
-        'H' => 
+        'H' =>
         array (
-            'Hautelook' => 
+            'Hautelook' =>
             array (
                 0 => __DIR__ . '/..' . '/hautelook/phpass/src',
             ),
-            'HTMLPurifier' => 
+            'HTMLPurifier' =>
             array (
                 0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
             ),
@@ -202,6 +202,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'AdmException' => __DIR__ . '/../../../..' . '/adm_program/system/classes/AdmException.php',
         'AutoLogin' => __DIR__ . '/../../../..' . '/adm_program/system/classes/AutoLogin.php',
         'CategoryReport' => __DIR__ . '/../../../..' . '/adm_program/system/classes/CategoryReport.php',
+        'ChangeNotification' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ChangeNotification.php',
         'Component' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Component.php',
         'ComponentUpdate' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ComponentUpdate.php',
         'ComponentUpdateSteps' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ComponentUpdateSteps.php',

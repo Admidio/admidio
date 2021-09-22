@@ -6,20 +6,17 @@
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/******************************************************************************
+ *
  * Parameters:
  *
- * lnk_id    - ID of the weblink that should be redirected
+ * link_uuid   - UUID of the weblink that should be redirected
  *
  *****************************************************************************/
 
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'int', array('requireValue' => true));
+$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid','string');
 
 // check if the module is enabled for use
 if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
@@ -35,7 +32,8 @@ if((int) $gSettingsManager->get('enable_weblinks_module') === 2)
 }
 
 // read link from id
-$weblink = new TableWeblink($gDb, $getLinkId);
+$weblink = new TableWeblink($gDb);
+$weblink->readDataByUuid($getLinkUuid);
 $lnkUrl = $weblink->getValue('lnk_url');
 
 // if no link is set or the weblink is not visible to the user show error

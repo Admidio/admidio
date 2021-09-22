@@ -9,20 +9,20 @@
  *
  * Parameters:
  *
- * lst_id : Id of the list configuration that should be edited
- * mode   : 1 - Save list configuration
- *          2 - Save list configuration and show list
- *          3 - Delete list configuration
- * name   : (optional) Name of the list that should be used to save list
+ * list_uuid : UUID of the list configuration that should be edited
+ * mode      : 1 - Save list configuration
+ *             2 - Save list configuration and show list
+ *             3 - Delete list configuration
+ * name      : (optional) Name of the list that should be used to save list
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getListId = admFuncVariableIsValid($_GET, 'lst_id', 'int');
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
-$getName   = admFuncVariableIsValid($_GET, 'name',   'string');
+$getListUuid = admFuncVariableIsValid($_GET, 'list_uuid','string');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int', array('requireValue' => true));
+$getName     = admFuncVariableIsValid($_GET, 'name',     'string');
 
 $_SESSION['mylist_request'] = $_POST;
 
@@ -54,7 +54,8 @@ if(!isset($_POST['sel_relationtype_ids']))
 }
 
 // Listenobjekt anlegen
-$list = new ListConfiguration($gDb, $getListId);
+$list = new ListConfiguration($gDb);
+$list->readDataByUuid($getListUuid);
 
 // pruefen, ob Benutzer die Rechte hat, diese Liste zu bearbeiten
 if($getMode !== 2)
@@ -108,25 +109,26 @@ if ($getMode === 1 || $getMode === 2)
 
     $list->save();
 
-    $listId = (int) $list->getValue('lst_id');
+    $listUuid = $list->getValue('lst_uuid');
 
     if($getMode === 1)
     {
         // save new id to session so that we can restore the configuration with new list name
-        $_SESSION['mylist_request']['sel_select_configuration'] = $listId;
+        $_SESSION['mylist_request']['sel_select_configuration'] = $listUuid;
 
         // go back to mylist configuration
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/groups-roles/mylist.php', array('lst_id' => $listId)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/groups-roles/mylist.php', array('list_uuid' => $listUuid)));
         // => EXIT
     }
 
-    // weiterleiten zur allgemeinen Listeseite
+    // redirect to general list page
     admRedirect(SecurityUtils::encodeUrl(
         ADMIDIO_URL . FOLDER_MODULES.'/groups-roles/lists_show.php',
         array(
-            'lst_id' => $listId, 'mode' => 'html',
-            'rol_ids' => implode(',', array_map('intval', $_POST['sel_roles_ids'])),
-            'urt_ids' => implode(',', $_POST['sel_relationtype_ids'])
+            'list_uuid' => $listUuid,
+            'mode'      => 'html',
+            'rol_ids'   => implode(',', array_map('intval', $_POST['sel_roles_ids'])),
+            'urt_ids'   => implode(',', $_POST['sel_relationtype_ids'])
         )
     ));
     // => EXIT

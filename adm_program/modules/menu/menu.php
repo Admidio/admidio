@@ -48,7 +48,7 @@ $columnHeading = array(
 $menuOverview->setColumnAlignByArray(array('left', 'left', 'left', 'center', 'right'));
 $menuOverview->addRowHeadingByArray($columnHeading);
 
-$sql = 'SELECT men_id, men_name
+$sql = 'SELECT men_id, men_uuid, men_name
           FROM '.TBL_MENU.'
          WHERE men_men_id_parent IS NULL
       ORDER BY men_order';
@@ -56,7 +56,7 @@ $mainMenStatement = $gDb->queryPrepared($sql);
 
 while ($mainMen = $mainMenStatement->fetch())
 {
-    $sql = 'SELECT men_id, men_men_id_parent, men_name, men_description, men_standard, men_url
+    $sql = 'SELECT men_id, men_uuid, men_men_id_parent, men_name, men_description, men_standard, men_url
               FROM '.TBL_MENU.'
              WHERE men_men_id_parent = ? -- $mainMen[\'men_id\']
           ORDER BY men_men_id_parent DESC, men_order';
@@ -95,11 +95,11 @@ while ($mainMen = $mainMenStatement->fetch())
             $menuLink = $menuRow['men_url'];
         }
 
-        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveTableRow(\'UP\', \'row_men_'.$menuRow['men_id'].'\',
-                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'men_id' => $menuRow['men_id'], 'sequence' => 'UP')) . '\')">'.
+        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveTableRow(\'UP\', \'row_men_'.$menuRow['men_uuid'].'\',
+                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'menu_uuid' => $menuRow['men_uuid'], 'sequence' => 'UP')) . '\')">'.
                             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($headline)) . '"></i></a>
-                        <a class="admidio-icon-link" href="javascript:moveTableRow(\'DOWN\', \'row_men_'.$menuRow['men_id'].'\',
-                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'men_id' => $menuRow['men_id'], 'sequence' => 'DOWN')) . '\')">'.
+                        <a class="admidio-icon-link" href="javascript:moveTableRow(\'DOWN\', \'row_men_'.$menuRow['men_uuid'].'\',
+                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'menu_uuid' => $menuRow['men_uuid'], 'sequence' => 'DOWN')) . '\')">'.
                             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($headline)) . '"></i></a>';
 
         $htmlStandardMenu = '&nbsp;';
@@ -108,7 +108,7 @@ while ($mainMen = $mainMenStatement->fetch())
             $htmlStandardMenu = '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>';
         }
 
-        $menuAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', array('men_id' => $menuRow['men_id'])). '">'.
+        $menuAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', array('menu_uuid' => $menuRow['men_uuid'])). '">'.
                                 '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>';
 
         // don't allow delete for standard menus
@@ -116,19 +116,19 @@ while ($mainMen = $mainMenStatement->fetch())
         {
             $menuAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'men', 'element_id' => 'row_men_'.
-                                        $menuRow['men_id'], 'name' => $menuName, 'database_id' => $menuRow['men_id'])).'">'.
+                                        $menuRow['men_uuid'], 'name' => $menuName, 'database_id' => $menuRow['men_uuid'])).'">'.
                                         '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
 
         // create array with all column values
         $columnValues = array(
-            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php', array('men_id' => $menuRow['men_id'])). '" title="'.$menuNameDesc.'">'.$menuName.'</a>',
+            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php', array('menu_uuid' => $menuRow['men_uuid'])). '" title="'.$menuNameDesc.'">'.$menuName.'</a>',
             $htmlMoveRow,
             '<a href="'.$menuLink. '" title="'.$menuNameDesc.'">'. $menuRow['men_url']. '</a>',
             $htmlStandardMenu,
             $menuAdministration
         );
-        $menuOverview->addRowByArray($columnValues, 'row_men_'. $menuRow['men_id']);
+        $menuOverview->addRowByArray($columnValues, 'row_men_'. $menuRow['men_uuid']);
     }
 }
 

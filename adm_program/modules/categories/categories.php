@@ -165,6 +165,7 @@ while($catRow = $categoryStatement->fetch())
     $category->setArray($catRow);
 
     $catId = (int) $category->getValue('cat_id');
+    $categoryUuid = $category->getValue('cat_uuid');
 
     if($category->getValue('cat_system') == 1 && $getType === 'USF')
     {
@@ -192,11 +193,11 @@ while($catRow = $categoryStatement->fetch())
     $htmlMoveRow = '&nbsp;';
     if($category->getValue('cat_system') == 0 || $getType !== 'USF')
     {
-        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableCategory::MOVE_UP.'\', \'row_'.$catId.'\',
-                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4, 'cat_id' => $catId, 'sequence' => TableCategory::MOVE_UP)) . '\')">'.
+        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableCategory::MOVE_UP.'\', \'row_'.$categoryUuid.'\',
+                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4, 'cat_uuid' => $categoryUuid, 'sequence' => TableCategory::MOVE_UP)) . '\')">'.
                             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($addButtonText)) . '"></i></a>
-                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableCategory::MOVE_DOWN.'\', \'row_'.$catId.'\',
-                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4, 'cat_id' => $catId, 'sequence' => TableCategory::MOVE_DOWN)) . '\')">'.
+                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableCategory::MOVE_DOWN.'\', \'row_'.$categoryUuid.'\',
+                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4, 'cat_uuid' => $categoryUuid, 'sequence' => TableCategory::MOVE_DOWN)) . '\')">'.
                             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($addButtonText)) . '"></i></a>';
     }
 
@@ -273,7 +274,7 @@ while($catRow = $categoryStatement->fetch())
 
     if($category->isEditable())
     {
-        $categoryAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType)).'">'.
+        $categoryAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_uuid' => $categoryUuid, 'type' => $getType)).'">'.
                                     '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
         if($category->getValue('cat_system') == 1)
@@ -283,7 +284,7 @@ while($catRow = $categoryStatement->fetch())
         else
         {
             $categoryAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. (int) $category->getValue('cat_id'), 'name' => $category->getValue('cat_name'), 'database_id' => $catId, 'database_id_2' => $getType)).'">'.
+                                            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. $categoryUuid, 'name' => $category->getValue('cat_name'), 'database_id' => $categoryUuid, 'database_id_2' => $getType)).'">'.
                                             '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
     }
@@ -294,14 +295,14 @@ while($catRow = $categoryStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType)).'">'. $category->getValue('cat_name'). '</a>',
+        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_uuid' => $categoryUuid, 'type' => $getType)).'">'. $category->getValue('cat_name'). '</a>',
         $htmlMoveRow,
         $htmlDefaultCategory,
         $htmlViewRolesNames,
         $htmlEditRolesNames,
         $categoryAdministration
     );
-    $categoriesOverview->addRowByArray($columnValues, 'row_'. $catId);
+    $categoriesOverview->addRowByArray($columnValues, 'row_'. $categoryUuid);
 }
 
 $page->addHtml($categoriesOverview->show());
