@@ -765,6 +765,7 @@
   <string name="SYS_EDIT_FILE">Datei bearbeiten</string>
   <string name="SYS_EDIT_FOLDER">Ordner bearbeiten</string>
   <string name="SYS_EDIT_LISTS">Listen bearbeiten</string>
+    <string name="SYS_EDIT_LISTS_DESC">Eigene Listen mit ausgewählten Profilfeldern können von Benutzern erstellt und anschließend auf Gruppen und Rollen angewendet werden. Dabei stehen nur Profilfelder und Gruppen bzw. Rollen zur Verfügung, die der jeweilige Benutzer sehen darf. Mit dieser Einstellung kann festgelegt werden, wer solche Listen erstellen kann. (Voreinstellung: Alle)</string>
   <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Profilfelder bearbeiten</string>
   <string name="SYS_EDIT_RELATIONSHIPS">Beziehungen  bearbeiten</string>

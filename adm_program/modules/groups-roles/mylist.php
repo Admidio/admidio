@@ -28,7 +28,9 @@ $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('d
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('groups_roles_enable_module'))
+if (!$gSettingsManager->getBool('groups_roles_enable_module')
+    || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
+    || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && !$gCurrentUser->isAdministrator()))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
