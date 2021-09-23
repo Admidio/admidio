@@ -1167,17 +1167,22 @@ $formGroupsRoles->addSelectBox(
     'groups_roles_show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
     array('defaultValue' => $formValues['groups_roles_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
 );
-$selectBoxEntries = array(
+$selectBoxEntriesExport = array(
     '0' => $gL10n->get('SYS_NOBODY'),
     '1' => $gL10n->get('SYS_ALL'),
     '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
 );
 $formGroupsRoles->addSelectBox(
-    'groups_roles_export', $gL10n->get('SYS_EXPORT_LISTS'), $selectBoxEntries,
+    'groups_roles_export', $gL10n->get('SYS_EXPORT_LISTS'), $selectBoxEntriesExport,
     array('defaultValue' => $formValues['groups_roles_export'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_EXPORT_LISTS_DESC')
 );
+$selectBoxEntriesEditLists = array(
+    '1' => $gL10n->get('SYS_ALL'),
+    '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER')))),
+    '3' => $gL10n->get('SYS_ADMINISTRATORS')
+);
 $formGroupsRoles->addSelectBox(
-    'groups_roles_edit_lists', $gL10n->get('SYS_EDIT_LISTS'), $selectBoxEntries,
+    'groups_roles_edit_lists', $gL10n->get('SYS_EDIT_LISTS'), $selectBoxEntriesEditLists,
     array('defaultValue' => $formValues['groups_roles_edit_lists'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_EDIT_LISTS_DESC')
 );
 $html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
