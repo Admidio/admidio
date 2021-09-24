@@ -16,7 +16,7 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 ![GitHub top language](https://img.shields.io/github/languages/top/admidio/admidio)
 [![GitHub license](https://img.shields.io/github/license/Admidio/admidio)](https://github.com/Admidio/admidio/blob/master/LICENSE.txt)
 
-Supported languages: :gb: :de: :da:
+Supported languages: :gb: :de: :fr: :es: :portugal: :netherlands: :denmark: :sweden: :finland: :it: :indonesia: :norway: :cn: :greece:
 
 ## Table of contents
 
