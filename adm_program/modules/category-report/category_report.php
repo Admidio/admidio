@@ -352,6 +352,7 @@ else
 }
 
 $listRowNumber = 1;
+$user = new User($gDb, $gProfileFields);
 
 // die Daten einlesen
 foreach ($report->listData as $member => $memberdata)
@@ -427,8 +428,9 @@ foreach ($report->listData as $member => $memberdata)
         			&&    ($usf_id === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
         				|| $usf_id === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
         		{
+        		    $user->readDataById($member);
         		    $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member);
-        		    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $member)).'">'.$htmlValue.'</a>';
+        		    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))).'">'.$htmlValue.'</a>';
         		}
         		else
         		{
