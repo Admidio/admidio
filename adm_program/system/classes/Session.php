@@ -44,6 +44,10 @@ class Session extends TableAccess
      * @var string
      */
     protected $cookieAutoLoginId;
+    /**
+     * @var string a 30 character long CSRF token
+     */
+    protected $csrfToken = '';
 
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
@@ -109,6 +113,24 @@ class Session extends TableAccess
             $gCurrentUser->clear();
         }
         $this->setValue('ses_usr_id', '');
+    }
+
+    /**
+     * Returns a CSRF token from the session. If no CSRF token exists a new one will be
+     * generated and stored within the session. The next call of the method will than
+     * return the existing token. The CSRF token has 30 characters. A new token could
+     * be forced by the paramter **$newToken**
+     * @param bool $newToken If set to true, always a new token will be generated.
+     * @return string Returns the CSRF token
+     */
+    public function getCsrfToken($newToken = false)
+    {
+        if($this->csrfToken === '' || $newToken)
+        {
+            $this->csrfToken = SecurityUtils::getRandomString(30);
+        }
+
+        return $this->csrfToken;
     }
 
     /**

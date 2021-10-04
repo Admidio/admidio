@@ -79,6 +79,9 @@ if($getMode === 1)
 
     try
     {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         // write POST parameters in announcement object
         foreach($_POST as $key => $value) // TODO possible security issue
         {
