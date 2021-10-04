@@ -1316,9 +1316,9 @@
   <string name="SYS_SMTP_PASSWORD">SMTP password</string>
   <string name="SYS_SMTP_PASSWORD_DESC">Password used for SMTP authentication.</string>
   <string name="SYS_SMTP_PORT">SMTP port</string>
-  <string name="SYS_SMTP_PORT_DESC">Specifying the port which should be used for establishing a SMTP connection. (Default: 25)</string>
+  <string name="SYS_SMTP_PORT_DESC">Specifying the port which should be used for establishing a SMTP connection. (Default: 587)</string>
   <string name="SYS_SMTP_SECURE">SMTP encryption</string>
-  <string name="SYS_SMTP_SECURE_DESC">Here you can choose if and how the SMTP connection should be encrypted. (Default: no)</string>
+  <string name="SYS_SMTP_SECURE_DESC">Here you can choose if and how the SMTP connection should be encrypted. (Default: TLS)</string>
   <string name="SYS_SMTP_SECURE_NO">no</string>
   <string name="SYS_SMTP_SECURE_SSL">SSL</string>
   <string name="SYS_SMTP_SECURE_TLS">TLS</string>
