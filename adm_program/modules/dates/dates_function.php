@@ -64,7 +64,7 @@ $date = new TableDate($gDb);
 $date->readDataByUuid($getDateUuid);
 
 // read user data
-$user = User($gDb, $gProfileFields);
+$user = new User($gDb, $gProfileFields);
 if($getUserUuid !== '')
 {
     $user->readDataByUuid($getUserUuid);
@@ -95,6 +95,17 @@ if (in_array($getMode, array(1, 2, 5), true))
 if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing event
 {
     $_SESSION['dates_request'] = $_POST;
+
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $e)
+    {
+        $e->showHtml();
+        // => EXIT
+    }
 
     // ------------------------------------------------
     // check if all necessary fields are filled
@@ -674,7 +685,7 @@ if (in_array($getMode, array(3, 4, 7), true))
                     else
                     {
                         // Delete entry
-                        $member->deleteMembership((int) $date->getValue('dat_rol_id'), $user->getValue('usr_id');
+                        $member->deleteMembership((int) $date->getValue('dat_rol_id'), $user->getValue('usr_id'));
                     }
 
                     $outputMessage = $gL10n->get('DAT_CANCEL_DATE', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));

@@ -95,9 +95,20 @@ if(!$category->isEditable())
 
 if($getMode === 1)
 {
-    // Kategorie anlegen oder updaten
+    // create or edit category
 
     $_SESSION['categories_request'] = $_POST;
+
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $e)
+    {
+        $e->showHtml();
+        // => EXIT
+    }
 
     if((!array_key_exists('cat_name', $_POST) || $_POST['cat_name'] === '') && $category->getValue('cat_system') == 0)
     {
