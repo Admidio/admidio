@@ -9,15 +9,15 @@
  *
  * Parameters:
  *
- * id      : Validation id for the link if this is a valid password reset request
- * usr_id  : Id of the user who wants a reset his password
+ * id        : Validation id for the link if this is a valid password reset request
+ * user_uuid : UUID of the user who wants a reset his password
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/common.php');
 
 // Initialize and check the parameters
-$getResetId = admFuncVariableIsValid($_GET, 'id',    'string');
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'int');
+$getResetId  = admFuncVariableIsValid($_GET, 'id',        'string');
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 
 // "systemmail" and "request password" must be activated
 if(!$gSettingsManager->getBool('enable_system_mails') || !$gSettingsManager->getBool('enable_password_recovery'))
@@ -33,18 +33,18 @@ if($gValidLogin)
     // => EXIT
 }
 
-if($getUserId > 0)
+if($getUserUuid !== '')
 {
     // user has clicked the link in his email and now we must check if it's a valid request and then show password form
 
     // search for user with the email address that have a valid login and membership to a role
     $sql = 'SELECT usr_id, usr_pw_reset_timestamp
               FROM '.TBL_USERS.'
-             WHERE usr_id = ? -- $getUserId
+             WHERE usr_uuid = ? -- $getUserUuid
                AND usr_pw_reset_id = ? -- $getResetId
                AND usr_valid  = 1 ';
     $queryParams = array(
-        $getUserId,
+        $getUserUuid,
         $getResetId
     );
     $userStatement = $gDb->queryPrepared($sql, $queryParams);
@@ -72,54 +72,65 @@ if($getUserId > 0)
 
     if(!empty($_POST['new_password']))
     {
-        // check password and save new password in database
-
-        $newPassword        = $_POST['new_password'];
-        $newPasswordConfirm = $_POST['new_password_confirm'];
-
-        /***********************************************************************/
-        /* Handle form input */
-        /***********************************************************************/
-        if($newPassword !== '' && $newPasswordConfirm !== '')
+        try
         {
-            if(strlen($newPassword) >= PASSWORD_MIN_LENGTH)
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
+            // check password and save new password in database
+
+            $newPassword        = $_POST['new_password'];
+            $newPasswordConfirm = $_POST['new_password_confirm'];
+
+            /***********************************************************************/
+            /* Handle form input */
+            /***********************************************************************/
+            if($newPassword !== '' && $newPasswordConfirm !== '')
             {
-                if (PasswordUtils::passwordStrength($newPassword, $user->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength'))
+                if(strlen($newPassword) >= PASSWORD_MIN_LENGTH)
                 {
-                    if ($newPassword === $newPasswordConfirm)
+                    if (PasswordUtils::passwordStrength($newPassword, $user->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength'))
                     {
-                        $user->saveChangesWithoutRights();
-                        $user->setPassword($newPassword);
-                        $user->setValue('usr_pw_reset_id', '');
-                        $user->setValue('usr_pw_reset_timestamp', '');
-                        $user->save();
+                        if ($newPassword === $newPasswordConfirm)
+                        {
+                            $user->saveChangesWithoutRights();
+                            $user->setPassword($newPassword);
+                            $user->setValue('usr_pw_reset_id', '');
+                            $user->setValue('usr_pw_reset_timestamp', '');
+                            $user->save();
 
-                        // if user has tried login several times we should reset the invalid counter,
-                        // so he could login with the new password immediately
-                        $user->resetInvalidLogins();
+                            // if user has tried login several times we should reset the invalid counter,
+                            // so he could login with the new password immediately
+                            $user->resetInvalidLogins();
 
-                        $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/login.php', 2000);
-                        $gMessage->show($gL10n->get('SYS_PASSWORD_RESET_SAVED'));
-                        // => EXIT
+                            $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/login.php', 2000);
+                            $gMessage->show($gL10n->get('SYS_PASSWORD_RESET_SAVED'));
+                            // => EXIT
+                        }
+                        else
+                        {
+                            $phrase = $gL10n->get('SYS_PASSWORDS_NOT_EQUAL');
+                        }
                     }
                     else
                     {
-                        $phrase = $gL10n->get('SYS_PASSWORDS_NOT_EQUAL');
+                        $phrase = $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH');
                     }
                 }
                 else
                 {
-                    $phrase = $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH');
+                    $phrase = $gL10n->get('PRO_PASSWORD_LENGTH');
                 }
             }
             else
             {
-                $phrase = $gL10n->get('PRO_PASSWORD_LENGTH');
+                $phrase = $gL10n->get('SYS_FIELDS_EMPTY');
             }
         }
-        else
+        catch(AdmException $exception)
         {
-            $phrase = $gL10n->get('SYS_FIELDS_EMPTY');
+            $exception->showHtml();
+            // => EXIT
         }
 
         $gMessage->show($phrase);
@@ -132,7 +143,7 @@ if($getUserId > 0)
         $page = new HtmlPage('admidio-profile-photo-edit', $gL10n->get('SYS_CHANGE_PASSWORD'));
 
         // show form
-        $form = new HtmlForm('password_form', SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_SYSTEM.'/password_reset.php', array('usr_id' => $getUserId, 'id' => $getResetId)), $page);
+        $form = new HtmlForm('password_form', SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_SYSTEM.'/password_reset.php', array('user_uuid' => $getUserUuid, 'id' => $getResetId)), $page);
         $form->addInput(
             'new_password', $gL10n->get('PRO_NEW_PASSWORD'), '',
             array(
@@ -162,6 +173,9 @@ elseif(!empty($_POST['recipient_email']))
     // password reset form was send and now we should create an email for the user
     try
     {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         // if user is not logged in and captcha is activated then check captcha
         if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha'))
         {
@@ -243,7 +257,7 @@ elseif(!empty($_POST['recipient_email']))
 
             $sysmail = new SystemMail($gDb);
             $sysmail->addRecipientsByUserId((int) $user->getValue('usr_id'));
-            $sysmail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php', array('usr_id' => (int) $user->getValue('usr_id'), 'id' => $passwordResetId)));
+            $sysmail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php', array('user_uuid' => $user->getValue('usr_uuid'), 'id' => $passwordResetId)));
             $sysmail->sendSystemMail('SYSMAIL_PASSWORD_RESET', $user);
 
             $user->saveChangesWithoutRights();

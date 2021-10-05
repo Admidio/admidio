@@ -113,6 +113,7 @@ if($getMode === 1)
     catch(AdmException $e)
     {
         $e->showHtml();
+        // => EXIT
     }
 
     unset($_SESSION['announcements_request']);

@@ -1,10 +1,9 @@
 <?php
 /**
  ***********************************************************************************************
- * Dieses Script muss mit require() eingefuegt werden, wenn der User zum Aufruf
- * einer Seite eingeloggt sein MUSS
+ * This script must be inserted with require() if the user MUST be logged in to call a page.
  *
- * Ist der User nicht eingeloggt, wird er automatisch auf die Loginseite weitergeleitet
+ * If the user is not logged in, he will be automatically redirected to the login page.
  *
  * @copyright 2004-2021 The Admidio Team
  * @see https://www.admidio.org/
