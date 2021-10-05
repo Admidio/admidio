@@ -60,6 +60,38 @@ catch (AdmException $e)
     // => EXIT
 }
 
+// start PHP session
+try
+{
+    Session::start(COOKIE_PREFIX);
+}
+catch (\RuntimeException $exception)
+{
+    // TODO
+}
+
+// determine session id
+if(array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE))
+{
+    $gSessionId = $_COOKIE[COOKIE_PREFIX . '_SESSION_ID'];
+}
+else
+{
+    $gSessionId = session_id();
+}
+
+// create session object
+if(array_key_exists('gCurrentSession', $_SESSION))
+{
+    $gCurrentSession = $_SESSION['gCurrentSession'];
+}
+else
+{
+    // create new session object and store it in PHP session
+    $gCurrentSession = new Session($gDb, $gSessionId, COOKIE_PREFIX);
+    $_SESSION['gCurrentSession'] = $gCurrentSession;
+}
+
 // check if adm_my_files has write privileges
 if (!is_writable(ADMIDIO_PATH . FOLDER_DATA))
 {
@@ -292,20 +324,23 @@ if ($getMode === 1)
 }
 elseif ($getMode === 2)
 {
-    doAdmidioUpdate($installedDbVersion);
-
-    // start php session and remove session object with all data, so that
-    // all data will be read after the update
     try
     {
-        Session::start(COOKIE_PREFIX);
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
     }
-    catch (\RuntimeException $exception)
+    catch (AdmException $exception)
     {
-        // TODO
+        $page = new HtmlPageInstallation('admidio-update-message');
+        $page->setUpdateModus();
+        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $exception->getText(),
+            $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
     }
 
-    // delete session data
+    doAdmidioUpdate($installedDbVersion);
+
+    // remove session object with all data, so that
+    // all data will be read after the update
     session_unset();
     session_destroy();
 
