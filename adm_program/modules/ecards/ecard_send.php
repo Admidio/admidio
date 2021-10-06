@@ -24,6 +24,17 @@ $imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue
 
 $_SESSION['ecard_request'] = $_POST;
 
+try
+{
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception)
+{
+    $exception->showHtml();
+    // => EXIT
+}
+
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('enable_ecard_module'))
 {

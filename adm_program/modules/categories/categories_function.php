@@ -104,9 +104,9 @@ if($getMode === 1)
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
     }
-    catch(AdmException $e)
+    catch(AdmException $exception)
     {
-        $e->showHtml();
+        $exception->showHtml();
         // => EXIT
     }
 

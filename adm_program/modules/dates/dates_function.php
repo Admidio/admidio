@@ -101,9 +101,9 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
     }
-    catch(AdmException $e)
+    catch(AdmException $exception)
     {
-        $e->showHtml();
+        $exception->showHtml();
         // => EXIT
     }
 
@@ -615,6 +615,20 @@ elseif($getMode === 6)  // export event in ical format
 // If participation mode: Set status and write optional parameter from user and show current status message
 if (in_array($getMode, array(3, 4, 7), true))
 {
+    try
+    {
+        if($postAdditionalGuests > 0 || $postUserComment !== '')
+        {
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        }
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
+
     $member = new TableMembers($gDb);
 
     // Check participation deadline and update user inputs if possible

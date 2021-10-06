@@ -67,6 +67,20 @@ if (!$folder->hasUploadRight())
     // => EXIT
 }
 
+// check the CSRF token of the form against the session token
+if(in_array($getMode, array(3, 4, 7)))
+{
+    try
+    {
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
+}
+
 // Delete file
 if ($getMode === 2)
 {

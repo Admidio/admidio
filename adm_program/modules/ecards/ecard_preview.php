@@ -18,6 +18,17 @@ require_once(__DIR__ . '/ecard_function.php');
 $gMessage->showThemeBody(false);
 $gMessage->showInModalWindow();
 
+try
+{
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception)
+{
+    $exception->showHtml();
+    // => EXIT
+}
+
 if(strlen($_POST['ecard_template']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TEMPLATE'))));
