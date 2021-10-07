@@ -53,11 +53,11 @@ if ($getCommentGboUuid !== '')
             $gbComment->clear();
             $gbComment->setArray($row);
 
-            $gbcId       = (int) $gbComment->getValue('gbc_id');
-            $gbcEmail    = $gbComment->getValue('gbc_email');
+            $gbcUuid  = $gbComment->getValue('gbc_uuid');
+            $gbcEmail = $gbComment->getValue('gbc_email');
 
             echo '
-            <div class="card admidio-blog-comment" id="gbc_'.$gbcId.'">
+            <div class="card admidio-blog-comment" id="gbc_'.$gbcUuid.'">
                 <div class="card-header">
                     <i class="fas fa-comment"></i>' .
                         $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($gbComment->getValue('gbc_name'), $gbComment->getValue('gbc_timestamp_create',
@@ -78,10 +78,10 @@ if ($getCommentGboUuid !== '')
                             <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('cid' => $gbcId)).'">
+                                <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbc_uuid' => $gbcUuid)).'">
                                     <i class="fas fa-edit"></i> '.$gL10n->get('SYS_EDIT').'</a>
                                 <a class="dropdown-item btn openPopup" href="javascript:void(0);"
-                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbc', 'element_id' => 'gbc_'.$gbcId, 'database_id' => $gbcId, 'database_id_2' => (int) $gbComment->getValue('gbo_id'), 'name' => $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name'))))).'">
+                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbc', 'element_id' => 'gbc_'.$gbcUuid, 'database_id' => $gbcUuid, 'database_id_2' => (int) $gbComment->getValue('gbo_id'), 'name' => $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name'))))).'">
                                     <i class="fas fa-trash-alt"></i> '.$gL10n->get('SYS_DELETE').'</a>
                             </div>
                         </div>';
@@ -96,9 +96,9 @@ if ($getCommentGboUuid !== '')
                     {
                         echo '
                         <div class="btn-group" role="group">
-                            <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 10, 'id' => $gbcId)).'\')">
+                            <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbc_'.$gbcUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 10, 'gbc_uuid' => $gbcUuid)).'\')">
                                 <i class="fas fa-check"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
-                            <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 5, 'id' => $gbcId)).'\')">
+                            <button class="btn btn-secondary" onclick="callUrlHideElement(\'gbc_'.$gbcUuid.'\', \''.SecurityUtils::encodeUrl('guestbook_function.php', array('mode' => 5, 'gbc_uuid' => $gbcUuid)).'\')">
                                 <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_REMOVE').'</button>
                         </div>';
                     }
@@ -119,7 +119,7 @@ if ($getCommentGboUuid !== '')
         {
             // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
             echo '
-            <button type="button" class="btn btn-secondary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbo_uuid' => $getGboUuid)).'\'">
+            <button type="button" class="btn btn-secondary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('gbo_uuid' => $getCommentGboUuid)).'\'">
                 <i class="fas fa-pencil-alt"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
         }
     }

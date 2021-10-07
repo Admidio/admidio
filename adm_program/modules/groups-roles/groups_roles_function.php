@@ -56,24 +56,35 @@ $rolName = $role->getValue('rol_name');
 
 if($getMode === 2)
 {
-    // Rolle anlegen oder updaten
+    // create or edit role
+
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
 
     if(!array_key_exists('rol_name', $_POST) || $_POST['rol_name'] === '')
     {
-        // es sind nicht alle Felder gefuellt
+        // not all fields are filled
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
     }
     if((int) $_POST['rol_cat_id'] === 0)
     {
-        // es sind nicht alle Felder gefuellt
+        // not all fields are filled
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
         // => EXIT
     }
 
     if($rolName !== $_POST['rol_name'])
     {
-        // Schauen, ob die Rolle bereits existiert
+        // See if the role already exists
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'

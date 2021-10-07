@@ -112,8 +112,18 @@ elseif (in_array($getMode, array(4, 5, 8, 10), true))
 
 if ($getMode === 1 || $getMode === 3)
 {
-    // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_entry_request'] = $_POST;
+
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
 
     if ($getMode === 1)
     {
@@ -274,44 +284,53 @@ if ($getMode === 1 || $getMode === 3)
 }
 elseif ($getMode === 2)
 {
-    // den Gaestebucheintrag loeschen...
+    // delete guestbook entry
     $guestbook->delete();
 
-    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    // Delete successful -> return for XMLHttpRequest
     echo 'done';
 }
 elseif ($getMode === 5)
 {
-    // Gaestebuchkommentar loeschen...
+    // delete guestbook comment
     $gbComment->delete();
 
-    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    // Delete successful -> return for XMLHttpRequest
     echo 'done';
 }
-// Moderationsfunktion
 elseif ($getMode === 9)
 {
-    // den Gaestebucheintrag freischalten...
+    // unlock the guestbook entry
     $guestbook->moderate();
-    // Freischalten erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    // Activation successful -> Return for XMLHttpRequest
     echo 'done';
 }
 elseif ($getMode === 10)
 {
-    // den Gaestebuchkommentar freischalten...
+    // unlock the guestbook comment
     $gbComment->moderate();
-    // Freischalten erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    // Activation successful -> Return for XMLHttpRequest
     echo 'done';
 }
 elseif ($getMode === 4 || $getMode === 8)
 {
-    // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_comment_request'] = $_POST;
+
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
 
     if ($getMode === 4)
     {
         // if login then fill name with login user
-        if ($gCurrentUser->getValue('usr_id') > 0)
+        if ((int) $gCurrentUser->getValue('usr_id') > 0)
         {
             $_POST['gbc_name'] = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
         }
@@ -333,15 +352,15 @@ elseif ($getMode === 4 || $getMode === 8)
 
     // make html in description secure
     $_POST['gbc_text'] = admFuncVariableIsValid($_POST, 'gbc_text', 'html');
-
-    // POST Variablen in das Gaestebuchkommentarobjekt schreiben
+$gLogger->error(print_r($_POST, true));
+    // POST variables to the guestbook comment object
     foreach ($_POST as $key => $value) // TODO possible security issue
     {
         if (str_starts_with($key, 'gbc_'))
         {
             if (!$gbComment->setValue($key, $value))
             {
-                // Daten wurden nicht uebernommen, Hinweis ausgeben
+                // Data was not transferred, output note
                 if ($key === 'gbc_email')
                 {
                     $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL'))));
