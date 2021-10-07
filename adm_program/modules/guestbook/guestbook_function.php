@@ -352,7 +352,7 @@ elseif ($getMode === 4 || $getMode === 8)
 
     // make html in description secure
     $_POST['gbc_text'] = admFuncVariableIsValid($_POST, 'gbc_text', 'html');
-$gLogger->error(print_r($_POST, true));
+
     // POST variables to the guestbook comment object
     foreach ($_POST as $key => $value) // TODO possible security issue
     {
