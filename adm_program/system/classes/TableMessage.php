@@ -18,10 +18,6 @@ class TableMessage extends TableAccess
     const MESSAGE_TYPE_PM    = 'PM';
 
     /**
-     * @var int
-     */
-    protected $msgId;
-    /**
      * @var array<int,string> This array has all the file names of the attachments. First element is the path and second element is the file name.
      */
     private $msgAttachments = array();
