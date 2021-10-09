@@ -58,6 +58,17 @@ $_SESSION['links_request'] = $_POST;
 
 if ($getMode === 1 || ($getMode === 3 && $getLinkUuid !== ''))
 {
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
+
     if(strlen(StringUtils::strStripTags($_POST['lnk_name'])) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LINK_NAME'))));

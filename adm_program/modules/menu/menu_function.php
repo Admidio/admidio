@@ -46,6 +46,17 @@ if($getMode === 1)
 {
     $_SESSION['menu_request'] = $_POST;
 
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
+
     $postIdParent = admFuncVariableIsValid($_POST, 'men_men_id_parent', 'int');
     $postComId    = admFuncVariableIsValid($_POST, 'men_com_id',        'int');
     $postName     = admFuncVariableIsValid($_POST, 'men_name',          'string', array('default' => ''));
