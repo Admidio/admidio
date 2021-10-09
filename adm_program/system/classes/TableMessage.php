@@ -46,9 +46,7 @@ class TableMessage extends TableAccess
      */
     public function __construct(Database $database, $msgId = 0)
     {
-        $this->msgId = $msgId;
-
-        parent::__construct($database, TBL_MESSAGES, 'msg', $this->msgId);
+        parent::__construct($database, TBL_MESSAGES, 'msg', $msgId);
 
         $this->getContent();
     }
@@ -291,18 +289,18 @@ class TableMessage extends TableAccess
         $content = '';
 
         // if content was not set until now than read it from the database if message was already stored there
-        if(!is_object($this->msgContentObject) && $this->msgId > 0)
+        if(!is_object($this->msgContentObject) && $this->getValue('msg_id') > 0)
         {
             $sql = 'SELECT msc_id, msc_msg_id, msc_usr_id, msc_message, msc_timestamp
                       FROM '. TBL_MESSAGES_CONTENT. ' msc1
-                     WHERE msc_msg_id = ? -- $msgId
+                     WHERE msc_msg_id = ? -- $this->getValue(\'msg_id\')
                        AND NOT EXISTS (
                            SELECT 1
                              FROM '. TBL_MESSAGES_CONTENT. ' msc2
                             WHERE msc2.msc_msg_id = msc1.msc_msg_id
                               AND msc2.msc_timestamp > msc1.msc_timestamp
                            )';
-            $messageContentStatement = $this->db->queryPrepared($sql, array($this->msgId));
+            $messageContentStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
 
             $this->msgContentObject = new TableAccess($this->db, TBL_MESSAGES_CONTENT, 'msc');
             $this->msgContentObject->setArray($messageContentStatement->fetch());
@@ -610,10 +608,10 @@ class TableMessage extends TableAccess
         {
             $sql = 'UPDATE '.TBL_MESSAGES.'
                        SET msg_read = 0
-                     WHERE msg_id   = ? -- $this->msgId ';
+                     WHERE msg_id   = ? -- $this->getValue(\'msg_id\') ';
 
             $gMenu->initialize();
-            return $this->db->queryPrepared($sql, array($this->msgId));
+            return $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
         }
     }
 }
