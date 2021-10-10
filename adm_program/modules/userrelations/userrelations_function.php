@@ -57,6 +57,17 @@ if($getUreId > 0)
 
 if($getMode === 1)
 {
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
+
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
     $user1->readDataByUuid($getUserUuid);
 

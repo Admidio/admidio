@@ -48,6 +48,17 @@ if($getMode === 1)
 {
     // create or edit relationtype
 
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
+
     if(!isset($_POST['urt_edit_user']))
     {
         $_POST['urt_edit_user'] = 0;
