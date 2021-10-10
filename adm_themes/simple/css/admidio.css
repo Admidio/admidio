@@ -491,8 +491,6 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
 
 #admidio-password-strength {
     margin-top: 10px;
-    margin-bottom: 10px;
-    height: 20px;
 }
 
 #admidio-password-strength-minimum {
