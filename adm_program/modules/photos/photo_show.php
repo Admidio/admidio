@@ -12,12 +12,14 @@
 /******************************************************************************
  * Parameters:
  *
- * photo_uuid : Id des Albums, aus dem das Bild kommen soll
- * photo_nr   : Nummer des Bildes, das angezeigt werden soll
- * max_width  : maximale Breite auf die das Bild skaliert werden kann
- * max_height : maximale Hoehe auf die das Bild skaliert werden kann
- * thumb      : ist thumb === true wird ein Thumbnail in der Größe der
- *             Voreinstellung zurückgegeben
+ * photo_uuid : UUID of the album from which the image should be shown
+ * photo_nr   : Number of the image to be displayed
+ * max_width  : maximum width to which the image can be scaled,
+ *              if not set, the default size is taken
+ * max_height : maximum height to which the image can be scaled,
+ *              if not set, the default size is taken
+ * thumb      : If is set to true a thumbnail in the size of the default
+ *              size is returned
  *
  *****************************************************************************/
 
@@ -29,6 +31,7 @@ $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',   'int');
 $getMaxWidth  = admFuncVariableIsValid($_GET, 'max_width',  'int', array('defaultValue' => 0));
 $getMaxHeight = admFuncVariableIsValid($_GET, 'max_height', 'int', array('defaultValue' => 0));
 $getThumbnail = admFuncVariableIsValid($_GET, 'thumb',      'bool');
+$image        = null;
 
 // check if the module is enabled and disallow access if it's disabled
 if ((int) $gSettingsManager->get('enable_photo_module') === 0)
@@ -38,12 +41,9 @@ if ((int) $gSettingsManager->get('enable_photo_module') === 0)
 }
 elseif ((int) $gSettingsManager->get('enable_photo_module') === 2)
 {
-    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
+    // only logged in users can access the module
     require(__DIR__ . '/../../system/login_valid.php');
 }
-
-// lokale Variablen initialisieren
-$image = null;
 
 // read album data out of session or database
 if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid)
@@ -64,12 +64,12 @@ if(!$photoAlbum->isVisible())
     // => EXIT
 }
 
-// Bildpfad zusammensetzten
-$albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
+// compose image path
+$albumFolder  = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 $picPath      = $albumFolder . '/' . $getPhotoNr . '.jpg';
 $picThumbPath = $albumFolder . '/thumbnails/' . $getPhotoNr . '.jpg';
 
-// im Debug-Modus den ermittelten Bildpfad ausgeben
+// output the determined image path in debug mode
 $gLogger->info('ImagePath: ' . $picPath);
 
 if ($getThumbnail)
@@ -78,7 +78,7 @@ if ($getThumbnail)
     {
         $thumbLength = null;
 
-        // Wenn Thumbnail existiert laengere Seite ermitteln
+        // If thumbnail exists detect longer page
         if (is_file($picThumbPath))
         {
             $imageProperties = getimagesize($picThumbPath);
@@ -88,8 +88,7 @@ if ($getThumbnail)
             }
         }
 
-        // Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
-        // Wenn nicht anlegen
+        // Check whether the image is stored as a thumbnail in the appropriate size, if not, create it.
         if (!is_file($picThumbPath) || $thumbLength !== $gSettingsManager->getInt('photo_thumbs_scale'))
         {
             try
@@ -103,7 +102,7 @@ if ($getThumbnail)
                 // TODO
             }
 
-            // nun das Thumbnail anlegen
+            // now create thumbnail
             $image = new Image($picPath);
             $image->scaleLargerSide($gSettingsManager->getInt('photo_thumbs_scale'));
             $image->copyToFile(null, $picThumbPath);
@@ -116,7 +115,7 @@ if ($getThumbnail)
     }
     else
     {
-        // kein Bild uebergeben, dann NoPix anzeigen
+        // if no image was passed, then display NoPix
         $image = new Image(THEME_PATH . '/images/no_photo_found.png');
         $image->scaleLargerSide($gSettingsManager->getInt('photo_thumbs_scale'));
     }
@@ -173,7 +172,7 @@ if ($image !== null)
         imagettftext($image->getImageResource(), $fontSize, 0, $fontX, $fontY, $fontColor, $fontTtf, $text);
     }
 
-    // Rueckgabe des neuen Bildes
+    // Return of the new image
     header('Content-Type: '. $image->getMimeType());
     $image->copyToBrowser();
     $image->delete();
