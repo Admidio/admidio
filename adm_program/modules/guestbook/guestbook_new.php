@@ -28,7 +28,7 @@ if ((int) $gSettingsManager->get('enable_guestbook_module') === 0)
 }
 elseif((int) $gSettingsManager->get('enable_guestbook_module') === 2)
 {
-    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
+    // only logged in users can access the module
     require(__DIR__ . '/../../system/login_valid.php');
 }
 

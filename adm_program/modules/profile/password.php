@@ -51,6 +51,17 @@ if($currUsrId !== $userId
 
 if($getMode === 'change')
 {
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
+
     if($gCurrentUser->isAdministrator() && $currUsrId !== $userId)
     {
         $oldPassword = '';

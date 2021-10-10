@@ -65,6 +65,17 @@ if($getMode === 1)
 
     $_SESSION['fields_request'] = $_POST;
 
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
+
     // Check if mandatory fields are filled
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
     if($userField->getValue('usf_system') == 0 && $_POST['usf_name'] === '')

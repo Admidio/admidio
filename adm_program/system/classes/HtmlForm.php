@@ -100,6 +100,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function __construct($id, $action = null, HtmlPage $htmlPage = null, array $options = array())
     {
+        global $gCurrentSession;
         // create array with all options
         $optionsDefault = array(
             'type'               => 'default',
@@ -148,6 +149,13 @@ class HtmlForm extends HtmlFormBasic
         if ($optionsAll['enableFileUpload'])
         {
             $this->addAttribute('enctype', 'multipart/form-data');
+        }
+
+        if ($optionsAll['type'] !== 'navbar')
+        {
+            // add a hidden field with the csrf token to each form
+            $this->addInput('admidio-csrf-token', 'csrf-token', $gCurrentSession->getCsrfToken(),
+                array('property' => self::FIELD_HIDDEN));
         }
 
         if ($htmlPage instanceof HtmlPage)

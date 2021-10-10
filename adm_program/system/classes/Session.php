@@ -44,6 +44,10 @@ class Session extends TableAccess
      * @var string
      */
     protected $cookieAutoLoginId;
+    /**
+     * @var string a 30 character long CSRF token
+     */
+    protected $csrfToken = '';
 
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
@@ -87,7 +91,7 @@ class Session extends TableAccess
      * @param object $object     The object that should be stored in this class.
      * @return bool Return false if object isn't type object or objectName already exists
      */
-    public function addObject($objectName, &$object)
+    public function addObject(string $objectName, &$object): bool
     {
         if (is_object($object) && !array_key_exists($objectName, $this->mObjectArray))
         {
@@ -112,12 +116,30 @@ class Session extends TableAccess
     }
 
     /**
+     * Returns a CSRF token from the session. If no CSRF token exists a new one will be
+     * generated and stored within the session. The next call of the method will than
+     * return the existing token. The CSRF token has 30 characters. A new token could
+     * be forced by the paramter **$newToken**
+     * @param bool $newToken If set to true, always a new token will be generated.
+     * @return string Returns the CSRF token
+     */
+    public function getCsrfToken(bool $newToken = false): string
+    {
+        if($this->csrfToken === '' || $newToken)
+        {
+            $this->csrfToken = SecurityUtils::getRandomString(30);
+        }
+
+        return $this->csrfToken;
+    }
+
+    /**
      * Returns a reference of an object that is stored in the session.
      * This is necessary because the old database connection is not longer valid.
      * @param string $objectName Internal unique name of the object. The name was set with the method **addObject**
      * @return object|false Returns the reference to the object or false if the object was not found.
      */
-    public function &getObject($objectName)
+    public function &getObject(string $objectName)
     {
         if (!array_key_exists($objectName, $this->mObjectArray))
         {
@@ -136,7 +158,7 @@ class Session extends TableAccess
      * user had set the AutoLogin to a different organization.
      * @return int Returns the organization id of this session
      */
-    public function getOrganizationId()
+    public function getOrganizationId(): int
     {
         if ($this->mAutoLogin instanceof AutoLogin)
         {
@@ -151,7 +173,7 @@ class Session extends TableAccess
      * @param string $objectName Internal unique name of the object. The name was set with the method **addObject**
      * @return bool Returns **true** if the object exits otherwise **false**
      */
-    public function hasObject($objectName)
+    public function hasObject(string $objectName): bool
     {
         return array_key_exists($objectName, $this->mObjectArray);
     }
@@ -162,7 +184,7 @@ class Session extends TableAccess
      * @param int $userId The user id must be stored in this session and will be checked if valid.
      * @return bool Returns **true** if the user has a valid session login otherwise **false**;
      */
-    public function isValidLogin($userId)
+    public function isValidLogin(int $userId): bool
     {
         global $gSettingsManager;
 
@@ -348,7 +370,7 @@ class Session extends TableAccess
      * user perform the next action.
      * @param int $userId (optional) if a user id is set then only user objects of this user id will be renewed
      */
-    public function renewUserObject($userId = 0)
+    public function renewUserObject(int $userId = 0)
     {
         $sqlCondition = '';
         $queryParams = array();
@@ -373,7 +395,7 @@ class Session extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save($updateFingerPrint = true)
+    public function save($updateFingerPrint = true): bool
     {
         global $gCurrentOrganization;
 
@@ -423,16 +445,17 @@ class Session extends TableAccess
      * @param string $name     Name of the cookie.
      * @param string $value    Value of the cookie. If value is "empty string" or "false",
      *                         the cookie will be set as deleted (Expire is set to 1 year in the past).
-     * @param int    $expire   The Unix-Timestamp (Seconds) of the Date/Time when the cookie should expire.
+     * @param int $expire   The Unix-Timestamp (Seconds) of the Date/Time when the cookie should expire.
      *                         With "0" the cookie will expire if the session ends. (When Browser gets closed)
      * @param string $path     Specify the path where the cookie should be available. (Also in sub-paths)
      * @param string $domain   Specify the domain where the cookie should be available. (Set ".example.org" to allow sub-domains)
-     * @param bool   $secure   If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
-     * @param bool   $httpOnly If "true" cookie is accessible only via HTTP.
+     * @param bool|null $secure   If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
+     * @param bool $httpOnly If "true" cookie is accessible only via HTTP.
      *                         Set to "false" to allow access for JavaScript. (Possible XSS security leak)
      * @return bool Returns "true" if the cookie is successfully set.
      */
-    public static function setCookie($name, $value = '', $expire = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
+    public static function setCookie(string $name, string $value = '', int $expire = 0, string $path = '',
+                                     string $domain = '', bool $secure = null, bool $httpOnly = true): bool
     {
         global $gLogger, $gSetCookieForDomain;
 
@@ -482,16 +505,16 @@ class Session extends TableAccess
 
     /**
      * @param string $cookiePrefix The prefix name of the Cookie.
-     * @param int    $limit        The Lifetime (Seconds) of the cookie when it should expire.
+     * @param int $limit        The Lifetime (Seconds) of the cookie when it should expire.
      *                             With "0" the cookie will expire if the session ends. (When Browser gets closed)
      * @param string $path         Specify the path where the cookie should be available. (Also in sub-paths)
      * @param string $domain       Specify the domain where the cookie should be available. (Set ".example.org" to allow sub-domains)
-     * @param bool   $secure       If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
-     * @param bool   $httpOnly     If "true" cookie is accessible only via HTTP.
+     * @param bool|null $secure       If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
+     * @param bool $httpOnly     If "true" cookie is accessible only via HTTP.
      *                             Set to "false" to allow access for JavaScript. (Possible XSS security leak)
      * @throws \RuntimeException
      */
-    public static function start($cookiePrefix, $limit = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
+    public static function start(string $cookiePrefix, int $limit = 0, string $path = '', string $domain = '', bool $secure = null, bool $httpOnly = true)
     {
         global $gLogger, $gSetCookieForDomain;
 
@@ -567,7 +590,7 @@ class Session extends TableAccess
      * Deletes all sessions in table admSessions that are inactive since **$maxInactiveTime** minutes..
      * @param int $maxInactiveMinutes Time in Minutes after that a session will be deleted.
      */
-    public function tableCleanup($maxInactiveMinutes = 30)
+    public function tableCleanup(int $maxInactiveMinutes = 30)
     {
         $now = new \DateTime();
         $minutesBack = new \DateInterval('PT' . $maxInactiveMinutes . 'M');

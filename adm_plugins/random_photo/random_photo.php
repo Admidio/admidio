@@ -150,15 +150,15 @@ if($gSettingsManager->getInt('enable_photo_module') > 0)
         }
 
         // show the photo
-        $phoId = (int) $album->getValue('pho_id');
-        echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId, 'photo_nr' => $picNr)).'" target="'. $plg_link_target. '"><img
+        $photoUuid = $album->getValue('pho_uuid');
+        echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $photoUuid, 'photo_nr' => $picNr)).'" target="'. $plg_link_target. '"><img
             class="rounded d-block w-100" alt="'.$linkText.'" title="'.$linkText.'"
-            src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $phoId, 'photo_nr' => $picNr, 'pho_begin' => $album->getValue('pho_begin', 'Y-m-d'), 'max_width' => $plg_photos_max_width, 'max_height' => $plg_photos_max_height)).'" /></a>';
+            src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $photoUuid, 'photo_nr' => $picNr, 'pho_begin' => $album->getValue('pho_begin', 'Y-m-d'), 'max_width' => $plg_photos_max_width, 'max_height' => $plg_photos_max_height)).'" /></a>';
 
         // optional the linked name of the album
         if($plg_photos_show_link)
         {
-            echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId)).'" target="'.$plg_link_target.'">'.$linkText.'</a>';
+            echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $photoUuid)).'" target="'.$plg_link_target.'">'.$linkText.'</a>';
         }
     }
     else

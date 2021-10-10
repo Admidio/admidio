@@ -39,6 +39,17 @@ if ($getMode === 1)
 {
     $_SESSION['rooms_request'] = $_POST;
 
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
+
     if (!array_key_exists('room_name', $_POST) || $_POST['room_name'] === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ROOM'))));

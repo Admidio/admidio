@@ -15,8 +15,8 @@
  * msg_tpye  - This could be EMAIL if you want to write an email or PM if you want to write a private Message
  * user_uuid - send message to the given user UUID
  * subject   - subject of the message
- * msg_id    - ID of the message -> just for answers
- * role_uuid - ID of a role to which an email should be send
+ * msg_uuid  - UUID of the message -> just for answers
+ * role_uuid - UUID of a role to which an email should be send
  * carbon_copy - false - (Default) "Send copy to me" checkbox is NOT set
  *             - true  - "Send copy to me" checkbox is set
  * forward : true - The message of the msg_id will be copied and the base for this new message

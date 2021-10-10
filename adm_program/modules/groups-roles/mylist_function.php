@@ -79,6 +79,17 @@ if($getMode !== 2)
 // Liste speichern
 if ($getMode === 1 || $getMode === 2)
 {
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
+
     $globalConfiguration = admFuncVariableIsValid($_POST, 'cbx_global_configuration', 'bool', array('defaultValue' => false));
 
     // alle vorhandenen Spalten durchgehen

@@ -28,6 +28,17 @@ $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
 if($getMode === 1)
 {
     $gMessage->showHtmlTextOnly(true);
+
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
 }
 
 // only administrators are allowed to edit organization preferences or create new organizations
@@ -233,8 +244,8 @@ switch($getMode)
 
         foreach($_POST as $key => $value) // TODO possible security issue
         {
-            // Elmente, die nicht in adm_preferences gespeichert werden hier aussortieren
-            if($key !== 'save')
+            // Sort out elements that are not stored in adm_preferences here
+            if(!in_array($key, array('save', 'admidio-csrf-token')))
             {
                 if(str_starts_with($key, 'org_'))
                 {
@@ -329,6 +340,17 @@ switch($getMode)
     // Create basic data for new organization in database
     case 3:
         $_SESSION['add_organization_request'] = $_POST;
+
+        try
+        {
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+        }
+        catch(AdmException $exception)
+        {
+            $exception->showHtml();
+            // => EXIT
+        }
 
         // form fields are not filled
         if($_POST['orgaShortName'] === '' || $_POST['orgaLongName'] === '')
