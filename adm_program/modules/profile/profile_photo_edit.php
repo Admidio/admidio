@@ -73,6 +73,17 @@ if($getMode === 'save')
 {
     /*****************************Foto speichern*************************************/
 
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
+
     if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
         // Foto im Dateisystem speichern
@@ -221,6 +232,17 @@ if($getMode === 'choose')
 elseif($getMode === 'upload')
 {
     /*****************************Foto zwischenspeichern bestaetigen***********************************/
+
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
 
     // File size
     if ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE)

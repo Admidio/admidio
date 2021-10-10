@@ -30,6 +30,17 @@ $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 $getNewUser  = admFuncVariableIsValid($_GET, 'new_user',  'int');
 $getInline   = admFuncVariableIsValid($_GET, 'inline',    'bool');
 
+try
+{
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception)
+{
+    $exception->showHtml();
+    // => EXIT
+}
+
 // in ajax mode only return simple text on error
 if($getInline)
 {
