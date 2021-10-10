@@ -529,9 +529,13 @@ class Email extends PHPMailer
 
         // now remove html und css from template
         $emailText = strip_tags($emailHtmlText, '<style>');
-        $substring = substr($emailText, strpos($emailText, '<style'), strpos($emailText, '</style>') + 6);
-        $emailText = str_replace($substring, '', $emailText);
-        $emailText = str_replace(array("\t", "\r", "\n"), '', $emailText);
+        if(strpos($emailText, '</style>') > 0)
+        {
+            $substring = substr($emailText, strpos($emailText, '<style'), strpos($emailText, '</style>') + 6);
+            $emailText = str_replace($substring, '', $emailText);
+        }
+        // remove linefeeds from html \r\n but don't remove the linefeed from the message \n
+        $emailText = str_replace(array("\t", "\r\n"), '', $emailText);
         $emailText = trim($emailText);
 
         $this->emText = $emailText;
