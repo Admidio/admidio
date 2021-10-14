@@ -43,7 +43,7 @@ class UploadHandlerDownload extends UploadHandler
      */
     protected function handle_file_upload($uploadedFile, $name, $size, $type, $error, $index = null, $contentRange = null)
     {
-        global $gSettingsManager, $gL10n, $gDb, $getId, $gCurrentOrganization, $gCurrentUser, $gLogger;
+        global $gSettingsManager, $gL10n, $gDb, $gCurrentOrganization, $gCurrentUser, $gLogger;
 
         $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $contentRange);
 
@@ -65,7 +65,7 @@ class UploadHandlerDownload extends UploadHandler
 
                 // get recordset of current folder from database and throw exception if necessary
                 $targetFolder = new TableFolder($gDb);
-                $targetFolder->getFolderForDownload($getId);
+                $targetFolder->getFolderForDownload($GLOBALS['getUuid']);
 
                 // now add new file to database
                 $newFile = new TableFile($gDb);
@@ -113,5 +113,27 @@ class UploadHandlerDownload extends UploadHandler
         }
 
         return $file;
+    }
+
+    /**
+     * Override the default method to handle specific form data that will be set when creating the Javascript
+     * file upload object. Here we validate the CSRF token that will be set. If the check failed an error will
+     * be set and the file upload will be canceled.
+     * @param string $file
+     * @param int    $index
+     */
+    protected function handle_form_data($file, $index) {
+        // ADM Start
+        try
+        {
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_REQUEST['admidio-csrf-token']);
+        }
+        catch(AdmException $exception)
+        {
+            $file->error = $exception->getText();
+            // => EXIT
+        }
+        // ADM End
     }
 }
