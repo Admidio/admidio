@@ -58,7 +58,7 @@ class UploadHandlerDownload extends UploadHandler
                 }
 
                 // check filename and throw exception if something is wrong
-                StringUtils::strIsValidFileName($file->name);
+                StringUtils::strIsValidFileName($file->name, false);
 
                 // replace invalid characters in filename
                 $file->name = FileSystemUtils::removeInvalidCharsInFilename($file->name);
@@ -73,6 +73,12 @@ class UploadHandlerDownload extends UploadHandler
                 $newFile->setValue('fil_name', $file->name);
                 $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
                 $newFile->setValue('fil_counter', 0);
+
+                if(!$newFile->allowedFileExtension())
+                {
+                    throw new AdmException('SYS_FILE_EXTENSION_INVALID');
+                }
+
                 $newFile->save();
 
                 // Benachrichtigungs-Email für neue Einträge
