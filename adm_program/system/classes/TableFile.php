@@ -90,6 +90,21 @@ class TableFile extends TableAccess
     }
 
     /**
+     * Check if the file extension of the current file format is allowed for upload and the
+     * documents and files module.
+     * @return bool Return true if the file extension is allowed to be used within Admidio.
+     */
+    public function allowedFileExtension()
+    {
+        if(array_key_exists($this->getFileExtension(), $this->iconFileExtension))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Deletes the selected record of the table and the associated file in the file system.
      * After that the class will be initialize.
      * @return bool **true** if no error occurred
