@@ -674,7 +674,7 @@ if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
 {
     $html = getStaticText('danger', PHP_VERSION, ' &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION)));
 }
-elseif (version_compare(PHP_VERSION, '5.6', '<'))
+elseif (version_compare(PHP_VERSION, '7.2', '<'))
 {
     $html = getStaticText('warning', PHP_VERSION, ' &rarr; '.$gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://www.php.net/supported-versions.php" target="_blank">Supported Versions</a>')));
 }
