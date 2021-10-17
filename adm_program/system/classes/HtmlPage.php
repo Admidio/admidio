@@ -449,6 +449,9 @@ class HtmlPage extends \Smarty
             $hasPreviousUrl = true;
         }
 
+        // disallow iFrame integration from other domains to avoid clickjacking attacks
+        header('X-Frame-Options: SAMEORIGIN');
+
         // add page functions menu to global menu
         $gMenu->addFunctionsNode($this->menuNodePageFunctions);
 
