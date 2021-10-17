@@ -68,7 +68,7 @@ if (!$folder->hasUploadRight())
 }
 
 // check the CSRF token of the form against the session token
-if(in_array($getMode, array(3, 4, 7)))
+if(in_array($getMode, array(2, 3, 4, 5, 7)))
 {
     try
     {

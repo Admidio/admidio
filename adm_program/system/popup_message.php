@@ -159,7 +159,7 @@ echo '
     <div id="message_text" class="col-10">'.$gL10n->get($text, array($getName, '')).'</div>
 </div>
 <div class="modal-footer">
-    <button id="btn_yes" class="btn btn-primary" type="button" onclick="callUrlHideElement(\''.$getElementId.'\', \''.$url.'\''.$callbackFunction.')">
+    <button id="btn_yes" class="btn btn-primary" type="button" onclick="callUrlHideElement(\''.$getElementId.'\', \''.$url.'\', \''.$gCurrentSession->getCsrfToken().'\''.$callbackFunction.')">
         <i class="fas fa-check-circle"></i>'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;
     </button>
     <button id="btn_no" class="btn btn-secondary" type="button" data-dismiss="modal">

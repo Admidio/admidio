@@ -32,13 +32,14 @@ function showHideBlock(elementId) {
  * the element will be hidden otherwise the data will be shown in an error block.
  * @param {string}   elementId  This is the id of a html element that should be hidden.
  * @param {string}   url        This is the url that will be called.
+ * @param {string}   csrfToken  If this is set than it will be added to the post request.
  * @param {function} [callback] A name of a function that should be called if the return was positive.
  */
-function callUrlHideElement(elementId, url, callback) {
+function callUrlHideElement(elementId, url, csrfToken, callback) {
     var entryDeleted = document.getElementById(elementId);
 
     // send RequestObject and delete entry
-    $.get(url, function(data) {
+    $.post(url, {"admidio-csrf-token": csrfToken}, function(data) {
         if (data === "done") {
             $("#admidio-modal").modal("hide");
 
