@@ -75,6 +75,9 @@ if($getMode === 'assign')
         $leadership = false;
         $memberApproved = null;
 
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         // if its an event the user must attend to the event
         if($role->getValue('cat_name_intern') === 'EVENTS')
         {
@@ -199,7 +202,7 @@ else
 
             // change data in database
             $.post("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('mode' => 'assign', 'role_uuid' => $getRoleUuid)).'&user_uuid=" + userUuid,
-                "member_" + userUuid + "=" + memberChecked + "&leader_" + userUuid + "=" + leaderChecked,
+                "member_" + userUuid + "=" + memberChecked + "&leader_" + userUuid + "=" + leaderChecked + "&admidio-csrf-token='.$gCurrentSession->getCsrfToken().'",
                 function(data) {
                     // check if error occurs
                     if (data !== "success") {
