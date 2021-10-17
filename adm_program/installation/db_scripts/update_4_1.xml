@@ -107,5 +107,7 @@
     <step id="740">CREATE UNIQUE INDEX %PREFIX%_idx_usf_uuid ON %PREFIX%_user_fields (usf_uuid)</step>
     <step id="750" database="mysql">ALTER TABLE %PREFIX%_user_relation_types MODIFY COLUMN urt_uuid varchar(36) NOT NULL</step>
     <step id="760">CREATE UNIQUE INDEX %PREFIX%_idx_urt_uuid ON %PREFIX%_user_relation_types (urt_uuid)</step>
+    <step id="770" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_name varchar(100)</step>
+    <step id="780" database="pgsql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_name TYPE varchar(100)</step>
     <step>stop</step>
 </update>

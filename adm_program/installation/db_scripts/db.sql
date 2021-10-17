@@ -565,7 +565,7 @@ CREATE TABLE %PREFIX%_roles
     rol_cat_id                  integer unsigned    NOT NULL,
     rol_lst_id                  integer unsigned,
     rol_uuid                    varchar(36)         NOT NULL,
-    rol_name                    varchar(50)         NOT NULL,
+    rol_name                    varchar(100)        NOT NULL,
     rol_description             varchar(4000),
     rol_assign_roles            boolean             NOT NULL    DEFAULT '0',
     rol_approve_users           boolean             NOT NULL    DEFAULT '0',
