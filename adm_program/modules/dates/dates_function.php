@@ -543,17 +543,8 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         // if the data of the role must be changed
         $role = new TableRoles($gDb, (int) $date->getValue('dat_rol_id'));
 
-        // only change name of role if no custom name was set
-        if(str_contains($role->getValue('rol_name'), $gL10n->get('DAT_DATE')))
-        {
-            $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$datId;
-        }
-        else
-        {
-            $roleName = $role->getValue('rol_name');
-        }
-
-        $role->setValue('rol_name', $roleName);
+        $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
+        $role->setValue('rol_description', substr($date->getValue('dat_description'), 0, 3999));
         // role members are allowed to view lists
         $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? 1 : 0);
         // role members are allowed to send mail to this role
