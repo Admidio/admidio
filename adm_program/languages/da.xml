@@ -765,6 +765,7 @@
   <string name="SYS_EDIT_FILE">Rediger fil</string>
   <string name="SYS_EDIT_FOLDER">Rediger folder</string>
   <string name="SYS_EDIT_LISTS">Rediger lister</string>
+    <string name="SYS_EDIT_LISTS_DESC">Brugere kan oprette deres egne lister med udvalgte profilfelter og derefter anvende dem på grupper og roller. Kun profilfelter og grupper eller roller, som den aktuelle bruger har lov til at se, er tilgængelige. Denne indstilling kan bruges til at angive, hvem der kan oprette sådanne lister. (Standard: Alle)</string>
   <string name="SYS_EDIT_MEMBERS">Rediger medlemmer</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Rediger profil felter</string>
   <string name="SYS_EDIT_RELATIONSHIPS">Rediger relationer</string>
@@ -777,13 +778,13 @@
   <string name="SYS_EDITED_BY">Sidst ændret af</string>
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">En ny meddelelse blev oprettet</string>
-  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">En ny meddelelse i #VAR1# blev oprettet\n\nTitel: #VAR2#\nSkrevet af: #VAR3#\nSkrevet den: #VAR4#</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">En ny meddelelse på #VAR1# blev oprettet. \n\nTitel: #VAR2#\ nOprettet af: #VAR3#\nOprettet på: #VAR4#</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev ændret</string>
-  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profildataene for brugeren #VAR1# #VAR2#(login: #VAR3#) blev ændret med #VAR4#:</string>
+  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profildataene for brugeren #VAR1# #VAR2# (login: #VAR3#) blev ændret af #VAR4#.</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev oprettet</string>
-  <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">Brugeren #VAR1# #VAR2#(login: #VAR3#) blev oprettet af #VAR4#:</string>
+  <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">Brugeren #VAR1# #VAR2# (login: #VAR3#) blev oprettet af #VAR4#.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev slettet</string>
-  <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Brugerens profil #VAR1# #VAR2#(login: #VAR3#) blev slettet af #VAR4#:</string>
+  <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Brugerens profil #VAR1# #VAR2# (login: #VAR3#) blev slettet af #VAR4#.</string>
   <string name="SYS_EMAIL_DESC">E-mails kan sendes til forskellige roller såsom grupper, kurser, afdelinger.</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">En ny fil blev overført</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">En ny fil blev overført til #VAR1#\n\nFil: #VAR2#\nOverført af: #VAR3#\nOverført den: #VAR4#</string>
@@ -1315,9 +1316,9 @@
   <string name="SYS_SMTP_PASSWORD">SMTP kodeord</string>
   <string name="SYS_SMTP_PASSWORD_DESC">Det kodeord som anvendes til SMTP godkendelse.</string>
   <string name="SYS_SMTP_PORT">SMTP port</string>
-  <string name="SYS_SMTP_PORT_DESC">Specificer den port der skal anvendes til at etablere en SMTP forbindelse. (Standard: 25)</string>
+  <string name="SYS_SMTP_PORT_DESC">Angiver den port, der skal bruges til etablering af en SMTP -forbindelse. (Standard: 587)</string>
   <string name="SYS_SMTP_SECURE">SMTP kryptering</string>
-  <string name="SYS_SMTP_SECURE_DESC">Her kan du vælge om og hvordan SMTP forbindelsen skal krypteres. (Standard: Nej)</string>
+  <string name="SYS_SMTP_SECURE_DESC">Her kan du vælge, om og hvordan SMTP -forbindelsen skal krypteres. (Standard: TLS)</string>
   <string name="SYS_SMTP_SECURE_NO">Nej</string>
   <string name="SYS_SMTP_SECURE_SSL">SSL</string>
   <string name="SYS_SMTP_SECURE_TLS">TLS</string>
@@ -1412,7 +1413,6 @@
   <string name="SYS_VISIBLE_FOR">Synlig for</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# synlig kun for indloggede brugere</string>
   <string name="SYS_VISITORS">Gæster</string>
-  <string name="SYS_WANT_CONFIGURATION_FOR_ALL_USERS">Vil du gerne gøre den valgte liste konfiguration tilgængelig for alle brugere?</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Vil du virkelig slette kategorien #VAR1_BOLD# ?</string>
   <string name="SYS_WANT_REGISTER">Jeg vil registreres!</string>
   <string name="SYS_WARNING">Advarsel</string>
