@@ -54,10 +54,11 @@ else
     }
 }
 
-$_SESSION['links_request'] = $_POST;
-
-if ($getMode === 1 || ($getMode === 3 && $getLinkUuid !== ''))
+if ($getMode === 1)
 {
+    $_SESSION['links_request'] = $_POST;
+    $weblinkIsNew = $link->isNewRecord();
+
     try
     {
         // check the CSRF token of the form against the session token
@@ -96,7 +97,7 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkUuid !== ''))
 
     try
     {
-        // POST Variablen in das Ankuendigungs-Objekt schreiben
+        // POST variables to the announcements object
         foreach($_POST as $key => $value) // TODO possible security issue
         {
             if(str_starts_with($key, 'lnk_'))
@@ -110,13 +111,13 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkUuid !== ''))
         $e->showHtml();
     }
 
-    // Link-Counter auf 0 setzen
-    if ($getMode === 1)
+    // Set link counter to 0
+    if ($weblinkIsNew)
     {
         $link->setValue('lnk_counter', 0);
     }
 
-    // Daten in Datenbank schreiben
+    // save weblink data to database
     $returnCode = $link->save();
 
     if($returnCode === false)
@@ -125,9 +126,9 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkUuid !== ''))
         // => EXIT
     }
 
-    if($returnCode === true && $getMode === 1)
+    if($returnCode === true && $weblinkIsNew)
     {
-        // Benachrichtigungs-Email für neue Einträge
+        // Notification email for new entries
         $message = $gL10n->get('SYS_LINK_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
         try
         {
@@ -146,7 +147,7 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkUuid !== ''))
     admRedirect($gNavigation->getUrl());
     // => EXIT
 }
-elseif ($getMode === 2 && $getLinkUuid !== '')
+elseif ($getMode === 2)
 {
     // delete current announcements, right checks were done before
     $link->delete();
