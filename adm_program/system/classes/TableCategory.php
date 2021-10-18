@@ -277,7 +277,7 @@ class TableCategory extends TableAccess
     /**
      * Change the internal sequence of this category. It can be moved one place up or down
      * @param string $mode This could be **UP** or **DOWN**.
-     * @return Return true if the sequence of the category could be changed, otherwise false.
+     * @return bool Return true if the sequence of the category could be changed, otherwise false.
      */
     public function moveSequence($mode)
     {

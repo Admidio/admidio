@@ -174,6 +174,10 @@ function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
             } else {
                 $(id).next().after($(id));
             }
+        } else {
+            if(data.length > 0) {
+                alert(data);
+            }
         }
     });
 }
