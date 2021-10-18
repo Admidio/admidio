@@ -10,9 +10,8 @@
  * Parameters:
  *
  * link_uuid - UUID of the weblink that should be edited
- * mode      - 1 : Create new link
+ * mode      - 1 : Create or edit a weblink
  *             2 : Delete link
- *             3 : Edit link
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -21,6 +20,19 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid','string');
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int', array('requireValue' => true));
+
+try {
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception) {
+    if($getMode === 1) {
+        $exception->showHtml();
+    } else {
+        $exception->showText();
+    }
+    // => EXIT
+}
 
 // check if the module is enabled for use
 if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
@@ -58,17 +70,6 @@ if ($getMode === 1)
 {
     $_SESSION['links_request'] = $_POST;
     $weblinkIsNew = $link->isNewRecord();
-
-    try
-    {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch(AdmException $exception)
-    {
-        $exception->showHtml();
-        // => EXIT
-    }
 
     if(strlen(StringUtils::strStripTags($_POST['lnk_name'])) === 0)
     {

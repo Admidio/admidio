@@ -30,17 +30,24 @@ $getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'string');
 
 if ($getMsgUuid !== '')
 {
+    try {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception) {
+        $exception->showText();
+        // => EXIT
+    }
+
     $delMessage = new TableMessage($gDb);
     $delMessage->readDataByUuid($getMsgUuid);
 
     // Function to delete message
-    $delete = $delMessage->delete();
-    if ($delete)
-    {
+    $returnCode = $delMessage->delete();
+
+    if ($returnCode) {
         echo 'done';
-    }
-    else
-    {
+    } else {
         echo 'delete not OK';
     }
     exit();
