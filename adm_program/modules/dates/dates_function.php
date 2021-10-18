@@ -583,6 +583,15 @@ if($getMode === 1)  // Create a new event or edit an existing event
 }
 elseif($getMode === 2)
 {
+    try {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception) {
+        $exception->showText();
+        // => EXIT
+    }
+
     // delete current announcements, right checks were done before
     $date->delete();
 
