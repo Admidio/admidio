@@ -44,12 +44,7 @@ class TableFile extends TableAccess
      */
     public function allowedFileExtension()
     {
-        if(array_key_exists($this->getFileExtension(), $this->iconFileExtension))
-        {
-            return true;
-        }
-
-        return false;
+        return FileSystemUtils::allowedFileExtension($this->getFileExtension());
     }
 
     /**
