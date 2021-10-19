@@ -17,7 +17,6 @@
  *         3 - set role inaktive
  *         4 - delete role
  *         5 - set role active
- *         9 - return if role has former members ? Return: 1 und 0
  *
  *****************************************************************************/
 
@@ -30,20 +29,31 @@ $getMode     = admFuncVariableIsValid($_GET, 'mode',      'int', array('requireV
 
 // only members who are allowed to create and edit roles should have access to
 // most of these functions
-if($getMode !== 9 && !$gCurrentUser->manageRoles())
+if(!$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
-// Rollenobjekt anlegen
+try {
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+} catch (AdmException $exception) {
+    if ($getMode === 2) {
+        $exception->showHtml();
+    } else {
+        $exception->showText();
+    }
+    // => EXIT
+}
+
 $role = new TableRoles($gDb);
 
 if($getRoleUuid !== '')
 {
     $role->readDataByUuid($getRoleUuid);
 
-    // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
+    // Check if the role belongs to the current organization
     if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -57,17 +67,6 @@ $rolName = $role->getValue('rol_name');
 if($getMode === 2)
 {
     // create or edit role
-
-    try
-    {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch(AdmException $exception)
-    {
-        $exception->showHtml();
-        // => EXIT
-    }
 
     if(!array_key_exists('rol_name', $_POST) || $_POST['rol_name'] === '')
     {
@@ -333,12 +332,9 @@ elseif($getMode === 3) // set role inactive
     // event roles should not set inactive
     // all other roles could now set inactive
     if($role->getValue('cat_name_intern') !== 'EVENTS'
-    && $role->setInactive())
-    {
+    && $role->setInactive()) {
         echo 'done';
-    }
-    else
-    {
+    } else {
         echo $gL10n->get('SYS_NO_RIGHTS');
     }
     exit();
@@ -346,16 +342,13 @@ elseif($getMode === 3) // set role inactive
 elseif($getMode === 4)
 {
     // delete role from database
-    try
-    {
-        if($role->delete())
-        {
+    try {
+        if($role->delete()) {
             echo 'done';
         }
     }
-    catch(AdmException $e)
-    {
-        $e->showHtml();
+    catch(AdmException $e) {
+        $e->showText();
         // => EXIT
     }
     exit();
@@ -365,25 +358,10 @@ elseif($getMode === 5) // set role active
     // event roles should not set active
     // all other roles could now set active
     if($role->getValue('cat_name_intern') !== 'EVENTS'
-    && $role->setActive())
-    {
+    && $role->setActive()) {
         echo 'done';
-    }
-    else
-    {
+    } else {
         $gL10n->get('SYS_NO_RIGHTS');
-    }
-    exit();
-}
-elseif($getMode === 9)
-{
-    if($role->hasFormerMembers())
-    {
-        echo '1';
-    }
-    else
-    {
-        echo '0';
     }
     exit();
 }

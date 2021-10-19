@@ -38,6 +38,16 @@ if($getMode === 7)
     $gMessage->showHtmlTextOnly(true);
 }
 
+if(in_array($getMode, array(2, 3))) {
+    try {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    } catch (AdmException $exception) {
+        $exception->showText();
+        // => EXIT
+    }
+}
+
 // create user object
 $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
