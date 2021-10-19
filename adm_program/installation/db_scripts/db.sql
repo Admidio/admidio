@@ -348,6 +348,7 @@ CREATE TABLE %PREFIX%_members
     mem_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     mem_rol_id                  integer unsigned    NOT NULL,
     mem_usr_id                  integer unsigned    NOT NULL,
+    mem_uuid                    varchar(36)         NOT NULL,
     mem_begin                   date                NOT NULL,
     mem_end                     date                NOT NULL    DEFAULT '9999-12-31',
     mem_leader                  boolean             NOT NULL    DEFAULT '0',
@@ -365,6 +366,7 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE INDEX %PREFIX%_idx_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_usr_id);
+CREATE UNIQUE INDEX %PREFIX%_idx_mem_uuid ON %PREFIX%_members (mem_uuid);
 
 /*==============================================================*/
 /* Table: adm_menu                                             */

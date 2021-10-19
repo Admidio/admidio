@@ -70,6 +70,7 @@
     <step id="335">ALTER TABLE %PREFIX%_rooms ADD COLUMN room_uuid varchar(36)</step>
     <step id="340">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_uuid varchar(36)</step>
     <step id="350">ALTER TABLE %PREFIX%_user_relation_types ADD COLUMN urt_uuid varchar(36)</step>
+    <step id="360">ALTER TABLE %PREFIX%_members ADD COLUMN mem_uuid varchar(36)</step>
     <step id="400">ComponentUpdateSteps::updateStep41AddUuid</step>
     <step id="410" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_uuid varchar(36) NOT NULL</step>
     <step id="420">CREATE UNIQUE INDEX %PREFIX%_idx_usr_uuid ON %PREFIX%_users (usr_uuid)</step>
@@ -109,5 +110,7 @@
     <step id="760">CREATE UNIQUE INDEX %PREFIX%_idx_urt_uuid ON %PREFIX%_user_relation_types (urt_uuid)</step>
     <step id="770" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_name varchar(100)</step>
     <step id="780" database="pgsql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_name TYPE varchar(100)</step>
+    <step id="790" database="mysql">ALTER TABLE %PREFIX%_members MODIFY COLUMN mem_uuid varchar(36) NOT NULL</step>
+    <step id="800">CREATE UNIQUE INDEX %PREFIX%_idx_mem_uuid ON %PREFIX%_members (mem_uuid)</step>
     <step>stop</step>
 </update>

@@ -149,40 +149,42 @@ $page->addJavascript('
         }
     }
 
-    function formSubmitEvent() {
-        $(".button-membership-period-form").click(function(event) {
-            var memberId  = $(this).attr("data-admidio");
-            var dateStart = $("#membership_start_date_" + memberId).val();
-            var dateEnd   = $("#membership_end_date_" + memberId).val();
-            var action    = $("#membership_period_form_" + memberId).attr("action") + "&membership_start_date_" + memberId + "=" + dateStart + "&membership_end_date_" + memberId + "=" + dateEnd;
+    function formSubmitEvent(rolesAreaId = "") {
+        $(rolesAreaId + " .admidio-form-membership-period").submit(function(event) {
+            var memberUuid = $(this).attr("data-admidio");
+            var formAlert  = $("#membership_period_form_" + memberUuid + " .form-alert");
 
-            var formAlert = $("#membership_period_form_" + memberId + " .form-alert");
+            event.preventDefault(); // avoid to execute the actual submit of the form.
             formAlert.hide();
 
-            $.get({
-                url: action,
-                success: function(data) {
+            $.post({
+                url: $(this).attr("action"),
+                data: $(this).serialize(),
+                success: function(data)
+                {
                     if (data === "success") {
                         formAlert.attr("class", "alert alert-success form-alert");
                         formAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                         formAlert.fadeIn("slow");
-                        formAlert.animate({opacity: 1.0}, 2500);
+                        formAlert.animate({opacity: 1.0}, 5000);
                         formAlert.fadeOut("slow");
 
-                        var membershipPeriod = $("#membership_period_" + memberId);
-                        membershipPeriod.animate({opacity: 1.0}, 2500);
+                        var membershipPeriod = $("#membership_period_" + memberUuid);
+                        membershipPeriod.animate({opacity: 1.0}, 5000);
                         membershipPeriod.fadeOut("slow");
 
                         profileJS.reloadRoleMemberships();
                         profileJS.reloadFormerRoleMemberships();
                         profileJS.reloadFutureRoleMemberships();
+                        formSubmitEvent();
                     } else {
                         formAlert.attr("class", "alert alert-danger form-alert");
                         formAlert.fadeIn();
                         formAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
                     }
                 }
-            });
+             });
+            return false;
         });
     }
 ');
@@ -201,6 +203,7 @@ $page->addJavascript('
         todayHighlight: true,
         autoclose: true
     });
+
     formSubmitEvent();',
     true
 );
@@ -709,11 +712,10 @@ if($gSettingsManager->getBool('profile_show_roles'))
     // Roles block
     // *******************************************************************************
 
-    // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
+    // List all roles assigned to the member
     $roleStatement  = getRolesFromDatabase($userId);
     $countRole      = $roleStatement->rowCount();
 
-    // Ausgabe
     $page->addHtml('
     <div class="card admidio-field-group" id="profile_roles_box">
         <div class="card-header">'.$gL10n->get('SYS_ROLE_MEMBERSHIPS'));

@@ -379,7 +379,9 @@ class ChangeNotification
     {
         global $gSettingsManager, $gL10n, $gCurrentUser;
 
-        if($gSettingsManager->getBool('enable_email_changenotification') && is_object($gCurrentUser))
+        if($gSettingsManager->has('enable_email_changenotification')
+            && $gSettingsManager->getBool('enable_email_changenotification')
+            && is_object($gCurrentUser))
         {
             $currfullname = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
             $currname = $currfullname . ' (login: ' . $gCurrentUser->getValue('usr_login_name') . ')';
