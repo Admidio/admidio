@@ -37,7 +37,7 @@ $_SESSION['photo_album_request'] = $_POST;
 // create photo album object
 $photoAlbum = new TablePhotos($gDb);
 
-if ($getMode !== 'new' && $getPhotoUuid !== '')
+if ($getPhotoUuid !== '')
 {
     $photoAlbum->readDataByUuid($getPhotoUuid);
 }
@@ -55,13 +55,11 @@ $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('ph
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
 if ($getMode === 'new' || $getMode === 'change')
 {
-    try
-    {
+    try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
     }
-    catch(AdmException $exception)
-    {
+    catch(AdmException $exception) {
         $exception->showHtml();
         // => EXIT
     }
@@ -213,6 +211,15 @@ if ($getMode === 'new' || $getMode === 'change')
 // delete photo album
 elseif ($getMode === 'delete')
 {
+    try {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception) {
+        $exception->showText();
+        // => EXIT
+    }
+
     if ($photoAlbum->delete())
     {
         echo 'done';

@@ -17,9 +17,9 @@
  *           6 - reload future role memberships
  *           7 - save membership data
  *           8 - Export vCard of role
- * user_uuid : UUID of the user to be edited
- * mem_id    : Id of role membership to should be edited
- * role_uuid : UUID of role from which the user vcards should be exported
+ * user_uuid   : UUID of the user to be edited
+ * member_uuid : UUID of role membership that should be edited
+ * role_uuid   : UUID of role from which the user vcards should be exported
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -27,15 +27,22 @@ require_once(__DIR__ . '/roles_functions.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
-$getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
-$getMemberId = admFuncVariableIsValid($_GET, 'mem_id',  'int');
-$getMode     = admFuncVariableIsValid($_GET, 'mode',    'int');
+$getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid',  'string');
+$getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid',  'string');
+$getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid','string');
+$getMode       = admFuncVariableIsValid($_GET, 'mode',       'int');
 
-// in ajax mode only return simple text on error
-if($getMode === 7)
-{
-    $gMessage->showHtmlTextOnly(true);
+if(in_array($getMode, array(2, 3, 7))) {
+    try {
+        // in ajax mode only return simple text on error
+        $gMessage->showHtmlTextOnly(true);
+
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    } catch (AdmException $exception) {
+        $exception->showText();
+        // => EXIT
+    }
 }
 
 // create user object
@@ -63,7 +70,8 @@ if($getMode === 1)
 elseif($getMode === 2)
 {
     // Cancel membership of role
-    $member = new TableMembers($gDb, $getMemberId);
+    $member = new TableMembers($gDb);
+    $member->readDataByUuid($getMemberUuid);
     $role   = new TableRoles($gDb, (int) $member->getValue('mem_rol_id'));
 
     // if user has the right then cancel membership
@@ -92,7 +100,8 @@ elseif($getMode === 3)
     // Remove former membership of role
     if($gCurrentUser->isAdministrator())
     {
-        $member = new TableMembers($gDb, $getMemberId);
+        $member = new TableMembers($gDb);
+        $member->readDataByUuid($getMemberUuid);
         $member->delete();
 
         // Entfernen erfolgreich -> Rueckgabe fuer XMLHttpRequest
@@ -140,11 +149,14 @@ elseif($getMode === 6)
 }
 elseif($getMode === 7)
 {
+    $gLogger->error('::test::');
+    $gLogger->error(print_r($_POST, true));
     // save membership date changes
-    $getMembershipStart = admFuncVariableIsValid($_GET, 'membership_start_date_'.$getMemberId, 'date', array('requireValue' => true));
-    $getMembershipEnd   = admFuncVariableIsValid($_GET, 'membership_end_date_'.$getMemberId,   'date', array('requireValue' => true));
+    $postMembershipStart = admFuncVariableIsValid($_POST, 'membership_start_date_'.$getMemberUuid, 'date', array('requireValue' => true));
+    $postMembershipEnd   = admFuncVariableIsValid($_POST, 'membership_end_date_'.$getMemberUuid,   'date', array('requireValue' => true));
 
-    $member = new TableMembers($gDb, $getMemberId);
+    $member = new TableMembers($gDb);
+    $member->readDataByUuid($getMemberUuid);
     $role   = new TableRoles($gDb, (int) $member->getValue('mem_rol_id'));
 
     // check if user has the right to edit this membership
@@ -157,7 +169,7 @@ elseif($getMode === 7)
     $formatedEndDate   = '';
 
     // Check das Beginn Datum
-    $startDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getMembershipStart);
+    $startDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $postMembershipStart);
     if($startDate === false)
     {
         exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), $gSettingsManager->getString('system_date'))));
@@ -169,9 +181,9 @@ elseif($getMode === 7)
     }
 
     // Falls gesetzt wird das Enddatum gecheckt
-    if($getMembershipEnd !== '')
+    if($postMembershipEnd !== '')
     {
-        $endDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getMembershipEnd);
+        $endDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $postMembershipEnd);
         if($endDate === false)
         {
             exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), $gSettingsManager->getString('system_date'))));
@@ -194,7 +206,7 @@ elseif($getMode === 7)
     }
 
     // save role membership
-    $user->editRoleMembership($getMemberId, $formatedStartDate, $formatedEndDate);
+    $user->editRoleMembership($member->getValue('mem_id'), $formatedStartDate, $formatedEndDate);
 
     echo 'success';
 }

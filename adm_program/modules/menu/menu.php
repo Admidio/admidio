@@ -96,10 +96,12 @@ while ($mainMen = $mainMenStatement->fetch())
         }
 
         $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveTableRow(\'UP\', \'row_men_'.$menuRow['men_uuid'].'\',
-                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'menu_uuid' => $menuRow['men_uuid'], 'sequence' => 'UP')) . '\')">'.
+                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'menu_uuid' => $menuRow['men_uuid'], 'sequence' => 'UP')) . '\',
+                            \''.$gCurrentSession->getCsrfToken().'\')">'.
                             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array($headline)) . '"></i></a>
                         <a class="admidio-icon-link" href="javascript:moveTableRow(\'DOWN\', \'row_men_'.$menuRow['men_uuid'].'\',
-                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'menu_uuid' => $menuRow['men_uuid'], 'sequence' => 'DOWN')) . '\')">'.
+                            \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3, 'menu_uuid' => $menuRow['men_uuid'], 'sequence' => 'DOWN')) . '\',
+                            \''.$gCurrentSession->getCsrfToken().'\')">'.
                             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($headline)) . '"></i></a>';
 
         $htmlStandardMenu = '&nbsp;';

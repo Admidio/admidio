@@ -37,6 +37,18 @@ if (!$gCurrentUser->isAdministrator())
     // => EXIT
 }
 
+try {
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+} catch (AdmException $exception) {
+    if ($getMode === 1) {
+        $exception->showHtml();
+    } else {
+        $exception->showText();
+    }
+    // => EXIT
+}
+
 $relationType = new TableUserRelationType($gDb);
 
 if($getUrtUuid !== '')
@@ -47,17 +59,6 @@ if($getUrtUuid !== '')
 if($getMode === 1)
 {
     // create or edit relationtype
-
-    try
-    {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch(AdmException $exception)
-    {
-        $exception->showHtml();
-        // => EXIT
-    }
 
     if(!isset($_POST['urt_edit_user']))
     {

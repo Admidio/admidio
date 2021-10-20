@@ -30,6 +30,20 @@ if($getMode === 'delete')
     $gMessage->showHtmlTextOnly(true);
 }
 
+if(in_array($getMode, array('delete', 'save', 'upload'))) {
+    try {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    } catch (AdmException $exception) {
+        if ($getMode === 'delete') {
+            $exception->showText();
+        } else {
+            $exception->showHtml();
+        }
+        // => EXIT
+    }
+}
+
 // checks if the server settings for file_upload are set to ON
 if (!PhpIniUtils::isFileUploadEnabled())
 {

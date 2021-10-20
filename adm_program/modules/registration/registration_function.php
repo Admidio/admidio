@@ -128,6 +128,9 @@ elseif($getMode === 4)
 {
     try
     {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         // delete registration
         $registrationUser->delete();
     }

@@ -32,13 +32,14 @@ function showHideBlock(elementId) {
  * the element will be hidden otherwise the data will be shown in an error block.
  * @param {string}   elementId  This is the id of a html element that should be hidden.
  * @param {string}   url        This is the url that will be called.
+ * @param {string}   csrfToken  If this is set than it will be added to the post request.
  * @param {function} [callback] A name of a function that should be called if the return was positive.
  */
-function callUrlHideElement(elementId, url, callback) {
+function callUrlHideElement(elementId, url, csrfToken, callback) {
     var entryDeleted = document.getElementById(elementId);
 
     // send RequestObject and delete entry
-    $.get(url, function(data) {
+    $.post(url, {"admidio-csrf-token": csrfToken}, function(data) {
         if (data === "done") {
             $("#admidio-modal").modal("hide");
 
@@ -160,16 +161,23 @@ function redirectPost(url, data) {
  *                 Valid values are UP or DOWN.
  * @param {string} elementId Id of the row that should be moved
  * @param {string} updateSequenceUrl Url to update the sequence of the element in the database
+ * @param {string} csrfToken  If this is set than it will be added to the post request.
  */
-function moveTableRow(direction, elementId, updateSequenceUrl) {
-    var id = "#"+elementId;
-    $(".admidio-icon-link .fas").tooltip("hide");
+function moveTableRow(direction, elementId, updateSequenceUrl, csrfToken) {
+    $.post(updateSequenceUrl, {"admidio-csrf-token": csrfToken}, function(data) {
+        if (data === "done") {
+            var id = "#" + elementId;
+            $(".admidio-icon-link .fas").tooltip("hide");
 
-    if (direction === "UP") {
-        $(id).prev().before($(id));
-    } else {
-        $(id).next().after($(id));
-    }
-
-    $.get(updateSequenceUrl);
+            if (direction === "UP") {
+                $(id).prev().before($(id));
+            } else {
+                $(id).next().after($(id));
+            }
+        } else {
+            if(data.length > 0) {
+                alert(data);
+            }
+        }
+    });
 }

@@ -43,6 +43,21 @@ elseif ((int) $gSettingsManager->get('enable_guestbook_module') === 2)
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
+// check the CSRF token of the form against the session token
+if(in_array($getMode, array(1, 2, 3, 4, 5, 8))) {
+    try {
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception) {
+        if($getMode === 2 || $getMode === 5) {
+            $exception->showText();
+        } else {
+            $exception->showHtml();
+        }
+        // => EXIT
+    }
+}
+
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
 if ($getMode === 4)
 {
@@ -113,17 +128,6 @@ elseif (in_array($getMode, array(4, 5, 8, 10), true))
 if ($getMode === 1 || $getMode === 3)
 {
     $_SESSION['guestbook_entry_request'] = $_POST;
-
-    try
-    {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch(AdmException $exception)
-    {
-        $exception->showHtml();
-        // => EXIT
-    }
 
     if ($getMode === 1)
     {
@@ -315,17 +319,6 @@ elseif ($getMode === 10)
 elseif ($getMode === 4 || $getMode === 8)
 {
     $_SESSION['guestbook_comment_request'] = $_POST;
-
-    try
-    {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch(AdmException $exception)
-    {
-        $exception->showHtml();
-        // => EXIT
-    }
 
     if ($getMode === 4)
     {

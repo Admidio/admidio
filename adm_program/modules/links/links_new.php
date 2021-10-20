@@ -55,13 +55,12 @@ else
 
 if(isset($_SESSION['links_request']))
 {
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    // due to incorrect input the user has returned to this form
+    // now write the previously entered contents into the object
     $link->setArray($_SESSION['links_request']);
     unset($_SESSION['links_request']);
 }
 
-// Html-Kopf ausgeben
 if($getLinkUuid !== '')
 {
     $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
@@ -77,18 +76,8 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage('admidio-weblinks-edit', $headline);
 
-// Html des Modules ausgeben
-if($getLinkUuid !== '')
-{
-    $modeEditOrCreate = '3';
-}
-else
-{
-    $modeEditOrCreate = '1';
-}
-
 // show form
-$form = new HtmlForm('weblinks_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php', array('link_uuid' => $getLinkUuid, 'headline' => $getHeadline, 'mode' => $modeEditOrCreate)), $page);
+$form = new HtmlForm('weblinks_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php', array('link_uuid' => $getLinkUuid, 'headline' => $getHeadline, 'mode' => 1)), $page);
 $form->addInput(
     'lnk_name', $gL10n->get('SYS_LINK_NAME'), SecurityUtils::encodeHTML($link->getValue('lnk_name')),
     array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED)

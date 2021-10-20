@@ -10,11 +10,10 @@
  * Parameters:
  *
  * dat_id     - ID of the event that should be edited
- * mode   : 1 - Create a new event
+ * mode   : 1 - Create or edit an event
  *          2 - Delete the event
  *          3 - User attends to the event
  *          4 - User cancel the event
- *          5 - Edit an existing event
  *          6 - Export event in ical format
  *          7 - User may participate in the event
  * user_uuid : UUID of the user membership to an event should be edited
@@ -70,7 +69,7 @@ if($getUserUuid !== '')
     $user->readDataByUuid($getUserUuid);
 }
 
-if (in_array($getMode, array(1, 2, 5), true))
+if (in_array($getMode, array(1, 2), true))
 {
     if ($getDateUuid !== '')
     {
@@ -92,9 +91,10 @@ if (in_array($getMode, array(1, 2, 5), true))
     }
 }
 
-if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing event
+if($getMode === 1)  // Create a new event or edit an existing event
 {
     $_SESSION['dates_request'] = $_POST;
+    $dateIsNew = $date->isNewRecord();
 
     try
     {
@@ -446,7 +446,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         {
             $notification = new Email();
 
-            if($getMode === 1)
+            if($dateIsNew)
             {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $date->getDateTimePeriod(), $calendar))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
@@ -583,6 +583,15 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
 }
 elseif($getMode === 2)
 {
+    try {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception) {
+        $exception->showText();
+        // => EXIT
+    }
+
     // delete current announcements, right checks were done before
     $date->delete();
 

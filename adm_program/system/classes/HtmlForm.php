@@ -88,7 +88,7 @@ class HtmlForm extends HtmlFormBasic
      *                             + **navbar**   : A form that should be used in a navbar. The form content will
      *                               be send with the 'GET' method and this form should not get a default focus.
      *                           - **method** : Method how the values of the form are submitted.
-     *                             Possible values are **get** (default) and **post**.
+     *                             Possible values are **get** and **post** (default).
      *                           - **enableFileUpload** : Set specific parameters that are necessary for file upload with a form
      *                           - **showRequiredFields** : If this is set to **true** (default) then every required field got a special
      *                             css class and also the form got a **div** that explains the required layout.
@@ -100,7 +100,6 @@ class HtmlForm extends HtmlFormBasic
      */
     public function __construct($id, $action = null, HtmlPage $htmlPage = null, array $options = array())
     {
-        global $gCurrentSession;
         // create array with all options
         $optionsDefault = array(
             'type'               => 'default',
@@ -110,13 +109,13 @@ class HtmlForm extends HtmlFormBasic
             'class'              => '',
             'method'             => 'post'
         );
-        $optionsAll = array_replace($optionsDefault, $options);
 
-        // navbar forms should send the data as GET
-        if ($optionsAll['type'] === 'navbar')
-        {
-            $optionsAll['method'] = 'get';
+        // navbar forms should send the data as GET if it's not explicit set
+        if (isset($options['type']) && $options['type'] === 'navbar' && !isset($options['method'])) {
+            $options['method'] = 'get';
         }
+
+        $optionsAll = array_replace($optionsDefault, $options);
 
         parent::__construct($action, $id, $optionsAll['method']);
 
@@ -151,12 +150,9 @@ class HtmlForm extends HtmlFormBasic
             $this->addAttribute('enctype', 'multipart/form-data');
         }
 
-        if ($optionsAll['type'] !== 'navbar')
-        {
-            // add a hidden field with the csrf token to each form
-            $this->addInput('admidio-csrf-token', 'csrf-token', $gCurrentSession->getCsrfToken(),
-                array('property' => self::FIELD_HIDDEN));
-        }
+        // add a hidden field with the csrf token to each form
+        $this->addInput('admidio-csrf-token', 'csrf-token', $GLOBALS['gCurrentSession']->getCsrfToken(),
+            array('property' => self::FIELD_HIDDEN));
 
         if ($htmlPage instanceof HtmlPage)
         {
@@ -1860,8 +1856,11 @@ class HtmlForm extends HtmlFormBasic
         $optionsDefault = array('icon' => '', 'link' => '', 'class' => '', 'type' => 'submit');
         $optionsAll     = array_replace($optionsDefault, $options);
 
-        // add default css class
-        $optionsAll['class'] .= ' btn-primary admidio-margin-bottom';
+        // add default css classes
+        $optionsAll['class'] .= ' btn-primary';
+        if($this->type !== 'navbar') {
+            $optionsAll['class'] .= '  admidio-margin-bottom';
+        }
 
         // now add button to form
         $this->addButton($id, $text, $optionsAll);
