@@ -392,7 +392,6 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             {
                 if ($value !== '')
                 {
-                    $value = StringUtils::strStripTags(urldecode($value));
                     StringUtils::strIsValidFileName($value, false);
                 }
             }
