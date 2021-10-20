@@ -26,7 +26,7 @@ require_once(__DIR__ . '/../../system/common.php');
 // Initialize and check the parameters
 $getMsgType    = admFuncVariableIsValid($_GET, 'msg_type',    'string');
 $getUserId     = admFuncVariableIsValid($_GET, 'usr_id',      'int');
-$getSubject    = admFuncVariableIsValid($_GET, 'subject',     'html');
+$getSubject    = admFuncVariableIsValid($_GET, 'subject',     'string');
 $getMsgId      = admFuncVariableIsValid($_GET, 'msg_id',      'int');
 $getRoleId     = admFuncVariableIsValid($_GET, 'rol_id',      'int');
 $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));
