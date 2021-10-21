@@ -158,7 +158,7 @@ class HtmlForm extends HtmlFormBasic
         // if its not a navbar form and not a static form then first field of form should get focus
         if ($optionsAll['setFocus'])
         {
-            $this->addJavascriptCode('$(".form-dialog:first *:input:enabled:first").focus();', true);
+            $this->addJavascriptCode('$(".form-dialog:first *:input:enabled:visible:not([readonly]):first").focus();', true);
         }
     }
 
