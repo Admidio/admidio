@@ -179,6 +179,14 @@ class Session extends TableAccess
     }
 
     /**
+     * Initialize the array with all objects.
+     */
+    public function initializeObjects()
+    {
+        $this->mObjectArray = array();
+    }
+
+    /**
      * Check if the current session has a valid user login. Therefore the user id must be stored
      * within the session and the timestamps must be valid
      * @param int $userId The user id must be stored in this session and will be checked if valid.
@@ -293,33 +301,31 @@ class Session extends TableAccess
     }
 
     /**
-     * Reload session data from database table adm_sessions. Refresh AutoLogin with
-     * new auto_login_id. Check renew flag and reload organization object if necessary.
+     * Reload session data from database table adm_sessions. If IP address check is activated than check if the IP
+     * address has changed. Refresh AutoLogin with new auto_login_id.
      */
     public function refreshSession()
     {
-        global $gCheckIpAddress, $gLogger;
-
         // read session data from database to update the renew flag
         $this->readDataById((int) $this->getValue('ses_id'));
 
         // check if current connection has same ip address as of session initialization
         // if config parameter $gCheckIpAddress = 0 then don't check ip address
         $sesIpAddress = $this->getValue('ses_ip_address');
-        if (isset($gCheckIpAddress) && $gCheckIpAddress && $sesIpAddress !== '' && $sesIpAddress !== $_SERVER['REMOTE_ADDR'])
+        if (isset($GLOBALS['gCheckIpAddress']) && $GLOBALS['gCheckIpAddress'] && $sesIpAddress !== '' && $sesIpAddress !== $_SERVER['REMOTE_ADDR'])
         {
-            $gLogger->warning('Admidio stored session ip address: ' . $sesIpAddress . ' :: Remote ip address: ' . $_SERVER['REMOTE_ADDR']);
-            $gLogger->warning('The IP address does not match with the IP address the current session was started! For safety reasons the current session was closed.');
+            $GLOBALS['gLogger']->warning('Admidio stored session ip address: ' . $sesIpAddress . ' :: Remote ip address: ' . $_SERVER['REMOTE_ADDR']);
+            $GLOBALS['gLogger']->warning('The IP address does not match with the IP address the current session was started! For safety reasons the current session was closed.');
 
             unset($_SESSION['gCurrentSession']);
-            $this->mObjectArray = array();
+            $this->initializeObjects();
             $this->clear();
 
             exit('The IP address does not match with the IP address the current session was started! For safety reasons the current session was closed.');
         }
 
         // session in database could be deleted if user was some time inactive and another user
-        // clears the table. Therefore we must reset the user id
+        // clears the table. Therefor we must reset the user id
         if ($this->mAutoLogin instanceof AutoLogin)
         {
             if((int) $this->getValue('ses_usr_id') === 0)
@@ -331,59 +337,28 @@ class Session extends TableAccess
         {
             $this->refreshAutoLogin();
         }
-
-        // if flag for reload of organization is set than reload the organization data
-        $sesRenew = (int) $this->getValue('ses_renew');
-        if ($sesRenew === 2 || $sesRenew === 3)
-        {
-            $organization =& $this->getObject('gCurrentOrganization');
-            $organization->readDataById((int) $organization->getValue('org_id'));
-            $this->setValue('ses_renew', 0);
-        }
     }
 
     /**
-     * If you call this function than a flag is set so that all other active sessions
-     * know that they should renew the menu object. They will renew it when the
-     * user perform the next action.
+     * This method will reload all stored objects of all active sessions. The session will be
+     * reloaded if the user will open a new page.
      */
-    public function renewMenuObject()
+    public function reloadAllSessions()
     {
-        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 4';
+        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = 1 ';
         $this->db->queryPrepared($sql);
     }
 
     /**
-     * If you call this function than a flag is set so that all other active sessions
-     * know that they should renew the organization object. They will renew it when the
-     * user perform the next action.
+     * This method will reload the session of a specific user. All stored objects of the session will be initialized
+     * and reloaded if the user opens a new page.
+     * @param int $userId Id of the user whose session should be relaoded.
      */
-    public function renewOrganizationObject()
+    public function reloadSession(int $userId)
     {
-        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 2';
-        $this->db->queryPrepared($sql);
-    }
-
-    /**
-     * If you call this function than a flag is set so that all other active sessions
-     * know that they should renew their user object. They will renew it when the
-     * user perform the next action.
-     * @param int $userId (optional) if a user id is set then only user objects of this user id will be renewed
-     */
-    public function renewUserObject(int $userId = 0)
-    {
-        $sqlCondition = '';
-        $queryParams = array();
-        if ($userId > 0)
-        {
-            $sqlCondition = ' WHERE ses_usr_id = ? -- $userId';
-            $queryParams[] = $userId;
-        }
-
-        $sql = 'UPDATE ' . TBL_SESSIONS . '
-                   SET ses_renew = 1
-                       ' . $sqlCondition;
-        $this->db->queryPrepared($sql, $queryParams);
+        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = 1
+                 WHERE ses_id = ?  -- $this->getValue(\'ses_id\')';
+        $this->db->queryPrepared($sql, array($this->getValue('ses_id')));
     }
 
     /**

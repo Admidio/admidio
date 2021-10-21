@@ -1846,9 +1846,9 @@ class User extends TableAccess
 
         if ($this->columnsValueChanged && $gCurrentSession instanceof Session)
         {
-            // now set user object in session of that user to invalid,
+            // now set reload the session of the user,
             // because he has new data and maybe new rights
-            $gCurrentSession->renewUserObject($usrId);
+            $gCurrentSession->reloadSession($usrId);
         }
         // The record is a new record, which was just stored to the database
         // for the first time => record it as a user creation now

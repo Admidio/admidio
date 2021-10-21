@@ -132,6 +132,9 @@ class TableMembers extends TableAccess
             }
         }
 
+        // renew user object of the affected user because of edited role assignment
+        $GLOBALS['gCurrentSession']->reloadSession((int) $this->getValue('mem_usr_id'));
+
         return parent::delete();
     }
 
@@ -154,7 +157,7 @@ class TableMembers extends TableAccess
         if ($returnStatus && $gCurrentSession instanceof Session)
         {
             // renew user object of the affected user because of edited role assignment
-            $gCurrentSession->renewUserObject((int) $this->getValue('mem_usr_id'));
+            $gCurrentSession->reloadSession((int) $this->getValue('mem_usr_id'));
         }
 
         if ($newRecord) {

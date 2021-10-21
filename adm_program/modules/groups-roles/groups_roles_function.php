@@ -326,8 +326,6 @@ if($getMode === 2)
         RoleDependency::removeChildRoles($gDb, $role->getValue('rol_id'));
     }
 
-    // refresh all session user objects to update the user rights because of the new or changed role
-    $gCurrentSession->renewUserObject();
     $gDb->endTransaction();
 
     $gNavigation->deleteLastUrl();
@@ -353,9 +351,6 @@ elseif($getMode === 4)
     // delete role from database
     try {
         if($role->delete()) {
-            // refresh all session user objects to update the user rights because of the deleted role
-            $gCurrentSession->renewUserObject();
-
             echo 'done';
         }
     }

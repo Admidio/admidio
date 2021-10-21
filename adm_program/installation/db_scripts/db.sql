@@ -680,7 +680,7 @@ CREATE TABLE %PREFIX%_sessions
     ses_timestamp               timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ses_ip_address              varchar(39)         NOT NULL,
     ses_binary                  blob,
-    ses_renew                   smallint            NOT NULL    DEFAULT 0,
+    ses_reload                  boolean             NOT NULL    DEFAULT '0',
     PRIMARY KEY (ses_id)
 )
 ENGINE = InnoDB
