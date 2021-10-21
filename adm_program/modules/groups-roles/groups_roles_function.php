@@ -260,7 +260,7 @@ if($getMode === 2)
         $e->showHtml();
     }
 
-    // Daten in Datenbank schreiben
+    $gDb->startTransaction();
     $returnCode = $role->save();
 
     if($returnCode < 0)
@@ -282,10 +282,10 @@ if($getMode === 2)
 
         $roleDep = new RoleDependency($gDb);
 
-        // holt eine Liste der ausgewählten Rolen
+        // Fetches a list of the selected dependent roles
         $dbChildRoles = RoleDependency::getChildRoles($gDb, $getRoleId);
 
-        // entferne alle Rollen die nicht mehr ausgewählt sind
+        // remove all roles that are no longer selected
         if(count($dbChildRoles) > 0)
         {
             foreach ($dbChildRoles as $dbChildRole)
@@ -321,6 +321,10 @@ if($getMode === 2)
         RoleDependency::removeChildRoles($gDb, $getRoleId);
     }
 
+    // refresh all session user objects to update the user rights because of the new or changed role
+    $gCurrentSession->renewUserObject();
+    $gDb->endTransaction();
+
     $gNavigation->deleteLastUrl();
     unset($_SESSION['roles_request']);
 
@@ -349,6 +353,9 @@ elseif($getMode === 4)
     {
         if($role->delete())
         {
+            // refresh all session user objects to update the user rights because of the deleted role
+            $gCurrentSession->renewUserObject();
+
             echo 'done';
         }
     }
