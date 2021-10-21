@@ -97,13 +97,11 @@ if($getMode === 'assign')
         $user = new User($gDb, $gProfileFields);
         $user->readDataByUuid($getUserUuid);
 
-        // Member
+        $gDb->startTransaction();
         $member = new TableMembers($gDb);
-
-        // Datensatzupdate
         $memCount = $role->countMembers($user->getValue('usr_id'));
 
-        // Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
+        // If role would have less members than allowed or leader is to be added
         if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $memCount || (int) $role->getValue('rol_max_members') === 0)))
         {
             $member->startMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'), $leadership, $memberApproved);
@@ -128,6 +126,10 @@ if($getMode === 'assign')
             $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name'))));
             // => EXIT
         }
+
+        // refresh session user object to update the user rights because of the new or removed role
+        $gCurrentSession->renewUserObject($user->getValue('usr_id'));
+        $gDb->endTransaction();
     }
     catch(AdmException $e)
     {

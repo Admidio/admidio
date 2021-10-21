@@ -28,7 +28,7 @@ require_once(__DIR__ . '/../../system/common.php');
 // Initialize and check the parameters
 $getMsgType    = admFuncVariableIsValid($_GET, 'msg_type',    'string', array('defaultValue' => TableMessage::MESSAGE_TYPE_EMAIL));
 $getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid',   'string');
-$getSubject    = admFuncVariableIsValid($_GET, 'subject',     'html');
+$getSubject    = admFuncVariableIsValid($_GET, 'subject',     'string');
 $getMsgUuid    = admFuncVariableIsValid($_GET, 'msg_uuid',    'string');
 $getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid',   'string');
 $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));

@@ -79,7 +79,13 @@ elseif($getMode === 2)
     {
         try
         {
+            $gDb->startTransaction();
+
             $member->stopMembership();
+            // refresh session user object to update the user rights because of the removed role
+            $gCurrentSession->renewUserObject($member->getValue('mem_usr_id'));
+
+            $gDb->endTransaction();
         }
         catch(AdmException $e)
         {
@@ -205,8 +211,14 @@ elseif($getMode === 7)
         $formatedEndDate = DATE_MAX;
     }
 
+    $gDb->startTransaction();
+
     // save role membership
     $user->editRoleMembership($member->getValue('mem_id'), $formatedStartDate, $formatedEndDate);
+    // refresh session user object to update the user rights because of the possible changed role assignment
+    $gCurrentSession->renewUserObject($member->getValue('mem_usr_id'));
+
+    $gDb->endTransaction();
 
     echo 'success';
 }

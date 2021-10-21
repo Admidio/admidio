@@ -47,11 +47,13 @@ try {
     // => EXIT
 }
 
+$eventRole = false;
 $role = new TableRoles($gDb);
 
 if($getRoleUuid !== '')
 {
     $role->readDataByUuid($getRoleUuid);
+    $eventRole = $role->getValue('cat_name_intern') === 'EVENTS';
 
     // Check if the role belongs to the current organization
     if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
@@ -83,7 +85,7 @@ if($getMode === 2)
 
     if($rolName !== $_POST['rol_name'])
     {
-        // See if the role already exists
+        // check if the role already exists
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
@@ -111,16 +113,20 @@ if($getMode === 2)
     // Administrator role need some more flags
     if($role->getValue('rol_administrator') == 1)
     {
+        $_POST['rol_name']           = $role->getValue('rol_name');
         $_POST['rol_assign_roles']   = 1;
         $_POST['rol_all_lists_view'] = 1;
     }
 
-    if($role->getValue('cat_name_intern') === 'EVENTS')
+    if($eventRole)
     {
-        $_POST['rol_start_date'] = '';
-        $_POST['rol_start_time'] = '';
-        $_POST['rol_end_date'] = '';
-        $_POST['rol_end_time'] = '';
+        $_POST['rol_name']        = $role->getValue('rol_name');
+        $_POST['rol_description'] = $role->getValue('rol_description');
+        $_POST['rol_cat_id']      = $role->getValue('rol_cat_id');
+        $_POST['rol_start_date']  = '';
+        $_POST['rol_start_time']  = '';
+        $_POST['rol_end_date']    = '';
+        $_POST['rol_end_time']    = '';
         $_POST['rol_max_members'] = '';
     }
 
@@ -147,7 +153,7 @@ if($getMode === 2)
     foreach($checkboxes as $value)
     {
         // initialize the roles rights if value not set or not = 1 or its a event role
-        if(!isset($_POST[$value]) || $_POST[$value] != 1 || $role->getValue('cat_name_intern') === 'EVENTS')
+        if(!isset($_POST[$value]) || $_POST[$value] != 1 || $eventRole)
         {
             $_POST[$value] = 0;
         }
@@ -275,7 +281,7 @@ if($getMode === 2)
     }
 
     // save role dependencies in database
-    if(array_key_exists('dependent_roles', $_POST) && $role->getValue('cat_name_intern') !== 'EVENTS')
+    if(array_key_exists('dependent_roles', $_POST) && !$eventRole)
     {
         $sentChildRoles = array_map('intval', $_POST['dependent_roles']);
 
@@ -331,8 +337,7 @@ elseif($getMode === 3) // set role inactive
 {
     // event roles should not set inactive
     // all other roles could now set inactive
-    if($role->getValue('cat_name_intern') !== 'EVENTS'
-    && $role->setInactive()) {
+    if(!$eventRole && $role->setInactive()) {
         echo 'done';
     } else {
         echo $gL10n->get('SYS_NO_RIGHTS');
@@ -357,8 +362,7 @@ elseif($getMode === 5) // set role active
 {
     // event roles should not set active
     // all other roles could now set active
-    if($role->getValue('cat_name_intern') !== 'EVENTS'
-    && $role->setActive()) {
+    if(!$eventRole && $role->setActive()) {
         echo 'done';
     } else {
         $gL10n->get('SYS_NO_RIGHTS');
