@@ -20,6 +20,7 @@ $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'int');
 
 // Initialize local parameters
 $showSystemCategory = false;
+$eventRole = false;
 
 // only users with the special right are allowed to manage roles
 if(!$gCurrentUser->manageRoles())
@@ -45,8 +46,9 @@ $role = new TableRoles($gDb);
 if($getRoleId > 0)
 {
     $role->readDataById($getRoleId);
+    $eventRole = $role->getValue('cat_name_intern') === 'EVENTS';
 
-    // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
+    // check if the role belongs to the current organization
     if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -140,7 +142,7 @@ $page->addJavascript('
 // show form
 $form = new HtmlForm('roles_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_function.php', array('rol_id' => $getRoleId, 'mode' => '2')), $page);
 $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->get('SYS_CATEGORY'));
-if($role->getValue('rol_administrator') == 1)
+if($role->getValue('rol_administrator') === 1 || $eventRole)
 {
     $form->addInput(
         'rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'),
@@ -156,11 +158,11 @@ else
 }
 $form->addMultilineTextInput(
     'rol_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'), 3,
-    array('maxLength' => 4000)
+    array('property' => ($eventRole ? HtmlForm::FIELD_READONLY : HtmlForm::FIELD_REQUIRED), 'maxLength' => 4000)
 );
 $form->addSelectBoxForCategories(
     'rol_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', HtmlForm::SELECT_BOX_MODUS_EDIT,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $role->getValue('rol_cat_id'))
+    array('property' => ($eventRole ? HtmlForm::FIELD_READONLY : HtmlForm::FIELD_REQUIRED), 'defaultValue' => (int) $role->getValue('rol_cat_id'))
 );
 $form->closeGroupBox();
 $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
@@ -214,7 +216,7 @@ $form->addSelectBox(
     array('defaultValue' => (int) $role->getValue('rol_lst_id'), 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'SYS_DEFAULT_LIST_DESC')
 );
 
-if($role->getValue('cat_name_intern') !== 'EVENTS')
+if(!$eventRole)
 {
     $form->addCheckbox(
         'rol_default_registration', $gL10n->get('SYS_DEFAULT_ASSIGNMENT_REGISTRATION'), (bool) $role->getValue('rol_default_registration'),
@@ -236,7 +238,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
 $form->closeGroupBox();
 
 // event roles should not set rights, dates meetings and dependencies
-if($role->getValue('cat_name_intern') !== 'EVENTS')
+if(!$eventRole)
 {
     $form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
     $form->addCheckbox(

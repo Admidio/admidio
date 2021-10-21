@@ -752,7 +752,7 @@ class HtmlForm extends HtmlFormBasic
                 break;
         }
 
-        // disable field
+        // set field properties
         switch ($optionsAll['property'])
         {
             case self::FIELD_DISABLED:
@@ -1001,20 +1001,25 @@ class HtmlForm extends HtmlFormBasic
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        // disable field
-        if ($optionsAll['property'] === self::FIELD_DISABLED)
+        // set field properties
+        switch ($optionsAll['property'])
         {
-            $attributes['disabled'] = 'disabled';
-        }
-        elseif ($optionsAll['property'] === self::FIELD_REQUIRED)
-        {
-            $attributes['required'] = 'required';
-        }
-        elseif ($optionsAll['property'] === self::FIELD_HIDDEN)
-        {
-            $attributes['hidden'] = 'hidden';
-            $attributes['class']  = 'invisible';
-            $label                = '';
+            case self::FIELD_DISABLED:
+                $attributes['disabled'] = 'disabled';
+                break;
+
+            case self::FIELD_READONLY:
+                $attributes['readonly'] = 'readonly';
+                break;
+
+            case self::FIELD_REQUIRED:
+                $attributes['required'] = 'required';
+                break;
+
+            case self::FIELD_HIDDEN:
+                $attributes['hidden'] = 'hidden';
+                $attributes['class'] .= ' invisible';
+                break;
         }
 
         // set specific css class for this field
@@ -1232,16 +1237,25 @@ class HtmlForm extends HtmlFormBasic
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        // disable field
-        if ($optionsAll['property'] === self::FIELD_DISABLED ||
-            ($optionsAll['firstEntry'] === '' && !$optionsAll['showContextDependentFirstEntry'] && count($values) === 0))
+        // set field properties
+        switch ($optionsAll['property'])
         {
-            $attributes['disabled'] = 'disabled';
-        }
-        // multiselect couldn't handle the required property
-        elseif ($optionsAll['property'] === self::FIELD_REQUIRED && !$optionsAll['multiselect'])
-        {
-            $attributes['required'] = 'required';
+            case self::FIELD_DISABLED:
+                $attributes['disabled'] = 'disabled';
+                break;
+
+            case self::FIELD_READONLY:
+                $attributes['readonly'] = 'readonly';
+                break;
+
+            case self::FIELD_REQUIRED:
+                $attributes['required'] = 'required';
+                break;
+
+            case self::FIELD_HIDDEN:
+                $attributes['hidden'] = 'hidden';
+                $attributes['class'] .= ' invisible';
+                break;
         }
 
         if ($optionsAll['multiselect'])
