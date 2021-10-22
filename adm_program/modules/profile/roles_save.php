@@ -256,7 +256,7 @@ if(!$getInline)
 }
 
 // refresh session user object to update the user rights because of the new or removed role
-$gCurrentSession->renewUserObject($user->getValue('usr_id'));
+$gCurrentSession->reloadSession($user->getValue('usr_id'));
 
 // Check if a new user get's at least one role
 if($getNewUser > 0 && $assignedCount === 0)

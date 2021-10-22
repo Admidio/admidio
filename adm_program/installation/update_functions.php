@@ -167,7 +167,7 @@ function doAdmidioUpdate($installedDbVersion)
         $gLogger->warning('.htaccess file could not be created!');
     }
 
-    // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
-    $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 1';
+    // after the update first force the reload of the cache for all active sessions
+    $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = 1';
     $gDb->queryPrepared($sql);
 }

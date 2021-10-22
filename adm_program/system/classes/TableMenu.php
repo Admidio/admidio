@@ -52,7 +52,7 @@ class TableMenu extends TableAccess
         if ($gCurrentSession instanceof Session)
         {
             // now set menu object in session invalid because the menu has changed
-            $gCurrentSession->renewMenuObject();
+            $gCurrentSession->reloadAllSessions();
         }
 
         return parent::delete();
@@ -239,7 +239,7 @@ class TableMenu extends TableAccess
         if ($gCurrentSession instanceof Session)
         {
             // now set menu object in session invalid because the menu has changed
-            $gCurrentSession->renewMenuObject();
+            $gCurrentSession->reloadAllSessions();
         }
 
         $this->db->endTransaction();

@@ -106,7 +106,7 @@ class TableUserField extends TableAccess
         if(is_object($gCurrentSession))
         {
             // all active users must renew their user data because the user field structure has been changed
-            $gCurrentSession->renewUserObject();
+            $gCurrentSession->reloadAllSessions();
         }
 
         $return = parent::delete();
@@ -391,7 +391,7 @@ class TableUserField extends TableAccess
         if ($fieldsChanged && $gCurrentSession instanceof Session)
         {
             // all active users must renew their user data because the user field structure has been changed
-            $gCurrentSession->renewUserObject();
+            $gCurrentSession->reloadAllSessions();
         }
 
         return $returnValue;

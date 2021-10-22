@@ -97,7 +97,6 @@ if($getMode === 'assign')
         $user = new User($gDb, $gProfileFields);
         $user->readDataByUuid($getUserUuid);
 
-        $gDb->startTransaction();
         $member = new TableMembers($gDb);
         $memCount = $role->countMembers($user->getValue('usr_id'));
 
@@ -126,10 +125,6 @@ if($getMode === 'assign')
             $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name'))));
             // => EXIT
         }
-
-        // refresh session user object to update the user rights because of the new or removed role
-        $gCurrentSession->renewUserObject($user->getValue('usr_id'));
-        $gDb->endTransaction();
     }
     catch(AdmException $e)
     {
