@@ -357,8 +357,8 @@ class Session extends TableAccess
     public function reloadSession(int $userId)
     {
         $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = 1
-                 WHERE ses_id = ?  -- $this->getValue(\'ses_id\')';
-        $this->db->queryPrepared($sql, array($this->getValue('ses_id')));
+                 WHERE ses_usr_id = ?  -- $userId';
+        $this->db->queryPrepared($sql, array($userId));
     }
 
     /**

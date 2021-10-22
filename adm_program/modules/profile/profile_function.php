@@ -79,13 +79,7 @@ elseif($getMode === 2)
     {
         try
         {
-            $gDb->startTransaction();
-
             $member->stopMembership();
-            // refresh session user object to update the user rights because of the removed role
-            $gCurrentSession->reloadSession($member->getValue('mem_usr_id'));
-
-            $gDb->endTransaction();
         }
         catch(AdmException $e)
         {
@@ -155,8 +149,6 @@ elseif($getMode === 6)
 }
 elseif($getMode === 7)
 {
-    $gLogger->error('::test::');
-    $gLogger->error(print_r($_POST, true));
     // save membership date changes
     $postMembershipStart = admFuncVariableIsValid($_POST, 'membership_start_date_'.$getMemberUuid, 'date', array('requireValue' => true));
     $postMembershipEnd   = admFuncVariableIsValid($_POST, 'membership_end_date_'.$getMemberUuid,   'date', array('requireValue' => true));
@@ -211,14 +203,8 @@ elseif($getMode === 7)
         $formatedEndDate = DATE_MAX;
     }
 
-    $gDb->startTransaction();
-
     // save role membership
     $user->editRoleMembership($member->getValue('mem_id'), $formatedStartDate, $formatedEndDate);
-    // refresh session user object to update the user rights because of the possible changed role assignment
-    $gCurrentSession->reloadSession($member->getValue('mem_usr_id'));
-
-    $gDb->endTransaction();
 
     echo 'success';
 }
