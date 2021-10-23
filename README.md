@@ -45,7 +45,7 @@ Supported languages: :gb: :de: :fr: :es: :netherlands: :denmark: :sweden: :finla
 
 ## Installation
 
-You can install Admidio on your webspace if the script language [PHP](https://www.php.net/) in version 7.2.0
+You can install Admidio on your webspace if the script language [PHP](https://www.php.net/) in version 7.2
 or higher is available. Admidio also needs a [MySQL](https://www.mysql.com/) (version 5.0 or higher) or
 [PostgreSQL](https://www.postgresql.org/) (version 9.0 or higher) database to run.
 
