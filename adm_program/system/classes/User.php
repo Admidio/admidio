@@ -660,8 +660,10 @@ class User extends TableAccess
         $usrId     = (int) $this->getValue('usr_id');
         $currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
-        // Register all non-empty fields for the notification
-        $gChangeNotification->logUserDeletion($usrId, $this);
+        if(is_object($gChangeNotification)) {
+            // Register all non-empty fields for the notification
+            $gChangeNotification->logUserDeletion($usrId, $this);
+        }
 
         // first delete send messages from the user
         $sql = 'SELECT msg_id FROM ' . TBL_MESSAGES . ' WHERE msg_usr_id_sender = ? -- $usrId';
@@ -1852,7 +1854,7 @@ class User extends TableAccess
         }
         // The record is a new record, which was just stored to the database
         // for the first time => record it as a user creation now
-        if ($newRecord) {
+        if ($newRecord && is_object($gChangeNotification)) {
             // Register all non-empty fields for the notification
             $gChangeNotification->logUserCreation($usrId, $this);
         }
@@ -1897,35 +1899,36 @@ class User extends TableAccess
     {
         global $gSettingsManager, $gPasswordHashAlgorithm, $gChangeNotification;
 
-        if (!$doHashing)
-        {
-            $gChangeNotification->logUserChange(
-                (int)$this->getValue('usr_id'),
-                'usr_password',
-                $this->getValue('usr_password'), $newPassword, $this
-            );
+        if (!$doHashing) {
+            if(is_object($gChangeNotification)) {
+                $gChangeNotification->logUserChange(
+                    (int)$this->getValue('usr_id'),
+                    'usr_password',
+                    $this->getValue('usr_password'), $newPassword, $this
+                );
+            }
             return parent::setValue('usr_password', $newPassword, false);
         }
 
         // get the saved cost value that fits your server performance best and rehash your password
         $options = array('cost' => 10);
-        if (isset($gSettingsManager) && $gSettingsManager->has('system_hashing_cost'))
-        {
+        if (isset($gSettingsManager) && $gSettingsManager->has('system_hashing_cost')) {
             $options['cost'] = $gSettingsManager->getInt('system_hashing_cost');
         }
 
         $newPasswordHash = PasswordUtils::hash($newPassword, $gPasswordHashAlgorithm, $options);
 
-        if ($newPasswordHash === false)
-        {
+        if ($newPasswordHash === false) {
             return false;
         }
 
-        $gChangeNotification->logUserChange(
-            (int)$this->getValue('usr_id'),
-            'usr_password',
-            $this->getValue('usr_password'), $newPasswordHash, $this
-        );
+        if(is_object($gChangeNotification)) {
+            $gChangeNotification->logUserChange(
+                (int)$this->getValue('usr_id'),
+                'usr_password',
+                $this->getValue('usr_password'), $newPasswordHash, $this
+            );
+        }
         return parent::setValue('usr_password', $newPasswordHash, false);
     }
 
@@ -1988,7 +1991,7 @@ class User extends TableAccess
             // as the record might never be saved to the database (e.g. when
             // doing a check for an existing user)! => For new records,
             // log the changes only when $this->save is called!
-            if (!$this->newRecord) {
+            if (!$this->newRecord && is_object($gChangeNotification)) {
                 $gChangeNotification->logUserChange(
                     (int)$this->getValue('usr_id'),
                     $columnName,
@@ -2042,7 +2045,7 @@ class User extends TableAccess
         // Felder, die sich nicht geändert haben (check above)
         // Wenn usr_id ist 0 (der User neu angelegt wird; Das wird bereits dokumentiert) (check in logProfileChange)
 
-        if ($returnCode && !$this->newRecord) {
+        if ($returnCode && !$this->newRecord && is_object($gChangeNotification)) {
             $gChangeNotification->logProfileChange(
                 (int)$this->getValue('usr_id'),
                 $this->mProfileFieldsData->getProperty($columnName, 'usf_id'),

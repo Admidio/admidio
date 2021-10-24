@@ -55,9 +55,10 @@ class TableMembers extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
+        global $gChangeNotification;
+
         // New records will be logged in ::save, because their ID is only generated during first save
-        if (!$this->newRecord) {
-            global $gChangeNotification;
+        if (!$this->newRecord && $gCurrentSession instanceof Session) {
             if (in_array($columnName, array('mem_begin', 'mem_end'))) {
                 $oldValue = $this->getValue($columnName, 'Y-m-d');
             } else {
@@ -117,7 +118,7 @@ class TableMembers extends TableAccess
         global $gChangeNotification;
 
         // If this is a new record that hasn't been written to the database, simply ignore it
-        if (!$this->newRecord) {
+        if (!$this->newRecord && is_object($gChangeNotification)) {
             // Log begin, end and leader as changed (set to NULL)
             $usrId = $this->getValue('mem_usr_id');
             $memId = $this->getValue('mem_id');
@@ -148,21 +149,20 @@ class TableMembers extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentSession;
+        global $gCurrentSession, $gChangeNotification;
 
         $newRecord = $this->newRecord;
 
         $returnStatus = parent::save($updateFingerPrint);
 
-        if ($returnStatus && $gCurrentSession instanceof Session)
-        {
+        if ($returnStatus && $gCurrentSession instanceof Session) {
             // renew user object of the affected user because of edited role assignment
             $gCurrentSession->reloadSession((int) $this->getValue('mem_usr_id'));
         }
 
-        if ($newRecord) {
+        if ($newRecord && is_object($gChangeNotification)) {
             // Queue admin notification about membership deletion
-            global $gChangeNotification;
+
             // storing a record for the first time does NOT update the fields from
             // the roles table => need to create a new object that loads the
             // role name from the database, too!
@@ -174,12 +174,12 @@ class TableMembers extends TableAccess
             $usrId = $obj->getValue('mem_usr_id');
             $membership = $obj->getValue('rol_name');
             $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_begin',
-                null, $obj->getValue('mem_begin', 'Y-m-d'), /*user=*/NULL, /*deleting=*/true);
+                null, $obj->getValue('mem_begin', 'Y-m-d'), /*user=*/ NULL, /*deleting=*/ true);
             $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_end',
-                null, $obj->getValue('mem_end', 'Y-m-d'), /*user=*/NULL, /*deleting=*/true);
+                null, $obj->getValue('mem_end', 'Y-m-d'), /*user=*/ NULL, /*deleting=*/ true);
             if ($obj->getValue('mem_leader')) {
                 $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_leader',
-                    null, $obj->getValue('mem_leader'), /*user=*/NULL, /*deleting=*/true);
+                    null, $obj->getValue('mem_leader'), /*user=*/ NULL, /*deleting=*/ true);
             }
         }
 

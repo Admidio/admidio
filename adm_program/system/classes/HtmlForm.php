@@ -150,7 +150,7 @@ class HtmlForm extends HtmlFormBasic
             $this->addAttribute('enctype', 'multipart/form-data');
         }
 
-        if ($optionsAll['method'] == 'post') {
+        if ($optionsAll['method'] === 'post' && isset($GLOBALS['gCurrentSession'])) {
             // add a hidden field with the csrf token to each form
             $this->addInput('admidio-csrf-token', 'csrf-token', $GLOBALS['gCurrentSession']->getCsrfToken(),
                 array('property' => self::FIELD_HIDDEN));
