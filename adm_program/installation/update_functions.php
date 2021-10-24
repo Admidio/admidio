@@ -108,9 +108,26 @@ function toggleForeignKeyChecks($enable)
     }
 }
 
-function doVersion3Update()
+/**
+ * @param string $installedDbVersion
+ */
+function doAdmidioUpdate($installedDbVersion)
 {
-    global $gDb, $gL10n, $gProfileFields, $gCurrentUser;
+    global $gLogger, $gDb, $gL10n, $gProfileFields, $gCurrentUser;
+
+    $gLogger->info('UPDATE: Execute update');
+
+    checkLogin();
+
+    updateOrgPreferences();
+
+    // disable foreign key checks for mysql, so tables can easily deleted
+    toggleForeignKeyChecks(false);
+
+    disableSoundexSearchIfPgSql($gDb);
+
+    preg_match('/^(\d+)\.(\d+)\.(\d+)/', $installedDbVersion, $versionArray);
+    $versionArray = array_map('intval', $versionArray);
 
     // set execution time to 5 minutes because we have a lot to do
     PhpIniUtils::startNewExecutionTimeLimit(300);
@@ -127,34 +144,6 @@ function doVersion3Update()
     $componentUpdateHandle = new ComponentUpdate($gDb);
     $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
     $componentUpdateHandle->update(ADMIDIO_VERSION);
-}
-
-/**
- * @param string $installedDbVersion
- */
-function doAdmidioUpdate($installedDbVersion)
-{
-    global $gLogger, $gDb;
-
-    $gLogger->info('UPDATE: Execute update');
-
-    checkLogin();
-
-    updateOrgPreferences();
-
-    // disable foreign key checks for mysql, so tables can easily deleted
-    toggleForeignKeyChecks(false);
-
-    disableSoundexSearchIfPgSql($gDb);
-
-    preg_match('/^(\d+)\.(\d+)\.(\d+)/', $installedDbVersion, $versionArray);
-    $versionArray = array_map('intval', $versionArray);
-
-    // since version 3 we do the update with xml files and a new class model
-    if ($versionArray[0] >= 3)
-    {
-        doVersion3Update();
-    }
 
     // activate foreign key checks, so database is consistent
     toggleForeignKeyChecks(true);
