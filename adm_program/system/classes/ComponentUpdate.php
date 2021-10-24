@@ -138,7 +138,7 @@ class ComponentUpdate extends Component
      */
     private function executeUpdateSql($sql, $showError)
     {
-        $this->db->queryPrepared(Database::prepareSqlTablePrefix($sql), array(), $showError);
+        $this->db->queryPrepared(Database::prepareSqlAdmidioParameters($sql), array(), $showError);
     }
 
     /**

@@ -58,6 +58,8 @@
  * }
  * ```
  */
+use Ramsey\Uuid\Uuid;
+
 class Database
 {
     const PDO_ENGINE_MYSQL = 'mysql';
@@ -586,13 +588,23 @@ class Database
     }
 
     /**
-     * Replace the table prefixes in SQL statements
-     * @param string $sql
-     * @return string
+     * Replaces Admidio specific parameters within an SQL statement. The **%PREFIX%** parameter will be replaced
+     * with the configured table prefix of this installation. The **%UUID%** parameter will be replaced with an
+     * unique UUID. Therefor each occurrence of %UUID% will get their own UUID.
+     * @param string $sql The SQL statement with the parameters that should be replaced.
+     * @return string Returns the SQL statement with the replaced parameters.
      */
-    public static function prepareSqlTablePrefix($sql)
+    public static function prepareSqlAdmidioParameters($sql)
     {
-        return str_replace('%PREFIX%', TABLE_PREFIX, $sql);
+        // replace parameter %PREFIX% with the configured table prefix of this installation
+        $sql = str_replace('%PREFIX%', TABLE_PREFIX, $sql);
+
+        // replace parameter %UUID% with an unique UUID at each occurrence
+        while(($posUuid = strpos($sql, '%UUID%')) !== false) {
+            $sql = substr_replace($sql, '\'' . Uuid::uuid4() . '\'', $posUuid, strlen('%UUID%'));
+        }
+
+        return $sql;
     }
 
     /**
@@ -957,7 +969,7 @@ class Database
         $sqlStatements = array();
         foreach ($sqlArray as $sql)
         {
-            $sql = self::prepareSqlTablePrefix(trim($sql));
+            $sql = self::prepareSqlAdmidioParameters(trim($sql));
             if ($sql !== '')
             {
                 $sqlStatements[] = $sql;
