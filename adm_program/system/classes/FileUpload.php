@@ -82,19 +82,17 @@ class FileUpload
      */
     public function setHeaderData()
     {
-        global $gL10n, $gNavigation;
-
         if($this->module === 'photos')
         {
-            $textFileUploaded = $gL10n->get('PHO_FILE_UPLOADED');
-            $textUploadSuccessful = $gL10n->get('SYS_PHOTO_UPLOAD_SUCCESSFUL');
-            $textUploadNotSuccessful = $gL10n->get('PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL');
+            $textFileUploaded = $GLOBALS['gL10n']->get('PHO_FILE_UPLOADED');
+            $textUploadSuccessful = $GLOBALS['gL10n']->get('SYS_PHOTO_UPLOAD_SUCCESSFUL');
+            $textUploadNotSuccessful = $GLOBALS['gL10n']->get('PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL');
         }
         elseif($this->module === 'documents_files')
         {
-            $textFileUploaded = $gL10n->get('SYS_FILE_UPLOADED');
-            $textUploadSuccessful = $gL10n->get('SYS_FILES_UPLOAD_SUCCESSFUL');
-            $textUploadNotSuccessful = $gL10n->get('SYS_FILES_UPLOAD_NOT_SUCCESSFUL');
+            $textFileUploaded = $GLOBALS['gL10n']->get('SYS_FILE_UPLOADED');
+            $textUploadSuccessful = $GLOBALS['gL10n']->get('SYS_FILES_UPLOAD_SUCCESSFUL');
+            $textUploadNotSuccessful = $GLOBALS['gL10n']->get('SYS_FILES_UPLOAD_NOT_SUCCESSFUL');
         }
 
         $this->page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/css/jquery.fileupload.css');
@@ -106,13 +104,17 @@ class FileUpload
             var countFiles      = 0;
 
             $("#back").click(function () {
-                window.location.href = "' . $gNavigation->getPreviousUrl() . '";
+                window.location.href = "' . $GLOBALS['gNavigation']->getPreviousUrl() . '";
             });
 
             $("#fileupload").fileupload({
                 url: "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => $this->module, 'mode' => 'upload_files', 'uuid' => $this->destinationUuid)).'",
                 sequentialUploads: true,
                 dataType: "json",
+                formData: [{
+                    name: "admidio-csrf-token",
+                    value: "' . $GLOBALS['gCurrentSession']->getCsrfToken() . '"
+                }],
                 add: function(e, data) {
                     $("#files").html("");
                     countErrorFiles = 0;

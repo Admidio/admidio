@@ -92,17 +92,17 @@ switch ($getType)
         $callbackFunction = 'callbackProfilePhoto';
         break;
     case 'pro_role':
-        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 2, 'mem_id' => $getDatabaseId));
+        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 2, 'member_uuid' => $getDatabaseId));
         $text = 'SYS_MEMBERSHIP_DELETE';
         $callbackFunction = 'callbackRoles';
         break;
     case 'pro_future':
-        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'mem_id' => $getDatabaseId));
+        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'member_uuid' => $getDatabaseId));
         $text = 'SYS_LINK_MEMBERSHIP_DELETE';
         $callbackFunction = 'callbackFutureRoles';
         break;
     case 'pro_former':
-        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'mem_id' => $getDatabaseId));
+        $url  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'member_uuid' => $getDatabaseId));
         $text = 'SYS_LINK_MEMBERSHIP_DELETE';
         $callbackFunction = 'callbackFormerRoles';
         break;
@@ -159,7 +159,7 @@ echo '
     <div id="message_text" class="col-10">'.$gL10n->get($text, array($getName, '')).'</div>
 </div>
 <div class="modal-footer">
-    <button id="btn_yes" class="btn btn-primary" type="button" onclick="callUrlHideElement(\''.$getElementId.'\', \''.$url.'\''.$callbackFunction.')">
+    <button id="btn_yes" class="btn btn-primary" type="button" onclick="callUrlHideElement(\''.$getElementId.'\', \''.$url.'\', \''.$gCurrentSession->getCsrfToken().'\''.$callbackFunction.')">
         <i class="fas fa-check-circle"></i>'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;
     </button>
     <button id="btn_no" class="btn btn-secondary" type="button" data-dismiss="modal">

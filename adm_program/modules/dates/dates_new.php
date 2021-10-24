@@ -40,17 +40,14 @@ $roleViewSet              = array();
 if($getCopy)
 {
     $headline = $gL10n->get('SYS_COPY_VAR', array($getHeadline));
-    $mode = 5;
 }
 elseif($getDateUuid !== '')
 {
     $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
-    $mode = 5;
 }
 else
 {
     $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
-    $mode = 1;
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -250,7 +247,7 @@ $page->addJavascript('
 );
 
 // show form
-$form = new HtmlForm('dates_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_uuid' => $getDateUuid, 'mode' => $mode, 'copy' => $getCopy)), $page);
+$form = new HtmlForm('dates_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_uuid' => $getDateUuid, 'mode' => 1, 'copy' => $getCopy)), $page);
 
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
 $form->addInput(

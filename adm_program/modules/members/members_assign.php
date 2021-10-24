@@ -14,6 +14,17 @@ require(__DIR__ . '/../../system/login_valid.php');
 // this script should return errors in ajax mode
 $gMessage->showHtmlTextOnly(true);
 
+try
+{
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception)
+{
+    $exception->showText();
+    // => EXIT
+}
+
 // only legitimate users are allowed to call the user management
 if (!$gCurrentUser->editUsers())
 {

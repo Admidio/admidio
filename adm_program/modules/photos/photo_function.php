@@ -47,8 +47,6 @@ if (!$gCurrentUser->editPhotoRight())
  */
 function deleteThumbnail(TablePhotos $photoAlbum, $picNr)
 {
-    global $gLogger;
-
     // Ordnerpfad zusammensetzen
     $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id') . '/thumbnails/' . $picNr . '.jpg';
     try
@@ -57,7 +55,7 @@ function deleteThumbnail(TablePhotos $photoAlbum, $picNr)
     }
     catch (\RuntimeException $exception)
     {
-        $gLogger->error('Could not delete file!', array('filePath' => $photoPath));
+        $GLOBALS['gLogger']->error('Could not delete file!', array('filePath' => $photoPath));
         // TODO
     }
 }
@@ -69,9 +67,7 @@ function deleteThumbnail(TablePhotos $photoAlbum, $picNr)
  */
 function deletePhoto(TablePhotos $photoAlbum, $picNr)
 {
-    global $gLogger;
-
-    // Speicherort
+    // get album folder path
     $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id');
 
     // delete photos
@@ -83,7 +79,7 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
     }
     catch (\RuntimeException $exception)
     {
-        $gLogger->error(
+        $GLOBALS['gLogger']->error(
             'Could not delete file!',
             array('filePaths' => array(
                 $albumPath.'/'.$picNr.'.jpg',
@@ -94,7 +90,7 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
         // TODO
     }
 
-    // Umbenennen der Restbilder und Thumbnails loeschen
+    // Rename the remaining images and delete thumbnails
     $newPicNr = $picNr;
     $thumbnailDelete = false;
 
@@ -112,7 +108,7 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
                 }
                 catch (\RuntimeException $exception)
                 {
-                    $gLogger->error(
+                    $GLOBALS['gLogger']->error(
                         'Could not move file!',
                         array(
                             'from' => array(
@@ -139,12 +135,12 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
 
         if ($thumbnailDelete)
         {
-            // Alle Thumbnails ab dem geloeschten Bild loeschen
+            // Delete all thumbnails starting from the deleted image
             deleteThumbnail($photoAlbum, $actPicNr);
         }
     }//for
 
-    // Aendern der Datenbankeintaege
+    // change quantity of images within the album
     $photoAlbum->setValue('pho_quantity', (int) $photoAlbum->getValue('pho_quantity') - 1);
     $photoAlbum->save();
 }
@@ -163,16 +159,14 @@ if (!$photoAlbum->isEditable())
 // Rotate the photo by 90°
 if ($getJob === 'rotate')
 {
-    // nur bei gueltigen Uebergaben weiterarbeiten
     if ($getDirection !== '')
     {
-        // Thumbnail loeschen
         deleteThumbnail($photoAlbum, $getPhotoNr);
 
-        // Ordnerpfad zusammensetzen
+        // get album folder path with image file name
         $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id') . '/' . $getPhotoNr . '.jpg';
 
-        // Bild drehen
+        // rotate image
         $image = new Image($photoPath);
         $image->rotate($getDirection);
         $image->delete();
@@ -181,10 +175,19 @@ if ($getJob === 'rotate')
 // delete photo from filesystem and update photo album
 elseif ($getJob === 'delete')
 {
+    try {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception) {
+        $exception->showText();
+        // => EXIT
+    }
+
     deletePhoto($photoAlbum, $getPhotoNr);
 
     $_SESSION['photo_album'] = $photoAlbum;
 
-    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    // Delete successful -> return for XMLHttpRequest
     echo 'done';
 }

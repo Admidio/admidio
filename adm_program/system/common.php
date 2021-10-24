@@ -64,16 +64,20 @@ else
     $gSessionId = session_id();
 }
 
-// Session handling
-if(array_key_exists('gCurrentSession', $_SESSION) && $_SESSION['gCurrentSession']->hasObject('gCurrentOrganization'))
-{
+if(array_key_exists('gCurrentSession', $_SESSION)) {
     // read session object from PHP session
     /**
      * @var Session $gCurrentSession
      */
     $gCurrentSession = $_SESSION['gCurrentSession'];
-    // reload session data and if necessary the organization object
     $gCurrentSession->refreshSession();
+}
+
+// Session handling
+if(array_key_exists('gCurrentSession', $_SESSION)
+    && $_SESSION['gCurrentSession']->hasObject('gCurrentOrganization')
+    && $_SESSION['gCurrentSession']->getValue('ses_reload') === 0)
+{
     // read system component
     /**
      * @var Component $gSystemComponent
@@ -93,9 +97,13 @@ if(array_key_exists('gCurrentSession', $_SESSION) && $_SESSION['gCurrentSession'
 }
 else
 {
-    // create new session object and store it in PHP session
-    $gCurrentSession = new Session($gDb, $gSessionId, COOKIE_PREFIX);
-    $_SESSION['gCurrentSession'] = $gCurrentSession;
+    if(array_key_exists('gCurrentSession', $_SESSION)) {
+        $gCurrentSession->initializeObjects();
+    } else {
+        // create new session object and store it in PHP session
+        $gCurrentSession = new Session($gDb, $gSessionId, COOKIE_PREFIX);
+        $_SESSION['gCurrentSession'] = $gCurrentSession;
+    }
 
     // create system component
     $gSystemComponent = new Component($gDb);
@@ -194,28 +202,10 @@ else
     $gCurrentSession->addObject('gMenu', $gMenu);
 }
 
-$sesRenew = (int) $gCurrentSession->getValue('ses_renew');
-$usrId    = (int) $gCurrentUser->getValue('usr_id');
-
-// check if organization or user object must be renewed if data was changed by other users
-if($sesRenew === 1 || $sesRenew === 3)
-{
-    // read new field structure in object and than create new user object with new field structure
-    $gProfileFields->readProfileFields($orgId);
-    $gCurrentUser->readDataById($usrId);
-    $gCurrentSession->setValue('ses_renew', 0);
-}
-
-// if the renew flag is set than the menu must be reloaded
-if($sesRenew === 4)
-{
-    $gMenu->initialize();
-}
-
 // check session if user login is valid
 if($sesUsrId > 0)
 {
-    if($gCurrentSession->isValidLogin($usrId))
+    if($gCurrentSession->isValidLogin((int) $gCurrentUser->getValue('usr_id')))
     {
         $gValidLogin = true;
     }
@@ -226,6 +216,7 @@ if($sesUsrId > 0)
 }
 
 // update session recordset (i.a. refresh timestamp)
+$gCurrentSession->setValue('ses_reload', 0);
 $gCurrentSession->save();
 
 // create necessary objects and parameters

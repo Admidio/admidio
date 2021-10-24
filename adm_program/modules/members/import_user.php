@@ -13,6 +13,17 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 $_SESSION['import_csv_request'] = $_POST;
 
+try
+{
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception)
+{
+    $exception->showHtml();
+    // => EXIT
+}
+
 // only authorized users can import users
 if(!$gCurrentUser->editUsers())
 {

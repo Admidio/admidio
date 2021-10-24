@@ -258,14 +258,14 @@ class TableRoles extends TableAccess
 
         $return = parent::delete();
 
-        $this->db->endTransaction();
-
         if ($gCurrentSession instanceof Session)
         {
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role
-            $gCurrentSession->renewUserObject();
+            $gCurrentSession->reloadAllSessions();
         }
+
+        $this->db->endTransaction();
 
         return $return;
     }
@@ -449,7 +449,7 @@ class TableRoles extends TableAccess
         {
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role
-            $gCurrentSession->renewUserObject();
+            $gCurrentSession->reloadAllSessions();
         }
 
         return $returnValue;
@@ -539,7 +539,7 @@ class TableRoles extends TableAccess
 
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role
-            $gCurrentSession->renewUserObject();
+            $gCurrentSession->reloadAllSessions();
 
             return true;
         }

@@ -32,13 +32,12 @@ if ((int) $gSettingsManager->get('enable_photo_module') === 0)
     // => EXIT
 }
 
-// Gepostete Variablen in Session speichern
 $_SESSION['photo_album_request'] = $_POST;
 
 // create photo album object
 $photoAlbum = new TablePhotos($gDb);
 
-if ($getMode !== 'new' && $getPhotoUuid !== '')
+if ($getPhotoUuid !== '')
 {
     $photoAlbum->readDataByUuid($getPhotoUuid);
 }
@@ -50,27 +49,33 @@ if (!$photoAlbum->isEditable())
     // => EXIT
 }
 
-// Speicherort mit dem Pfad aus der Datenbank
+// Location with the path from the database
 $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
 if ($getMode === 'new' || $getMode === 'change')
 {
-    // Gesendete Variablen Uebernehmen und kontollieren
+    try {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception) {
+        $exception->showHtml();
+        // => EXIT
+    }
 
-    // Freigabe(muss zuerst gemacht werden da diese nicht gesetzt sein koennte)
+    // Release (must be done first as this may not be set)
     if (!isset($_POST['pho_locked']))
     {
         $_POST['pho_locked'] = 0;
     }
-    // Album
+
     if (strlen($_POST['pho_name']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('PHO_ALBUM'))));
         // => EXIT
     }
 
-    // Beginn
     if (strlen($_POST['pho_begin']) > 0)
     {
         $startDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $_POST['pho_begin']);
@@ -90,7 +95,6 @@ if ($getMode === 'new' || $getMode === 'change')
         // => EXIT
     }
 
-    // Ende
     if (strlen($_POST['pho_end']) > 0)
     {
         $endDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $_POST['pho_end']);
@@ -109,20 +113,19 @@ if ($getMode === 'new' || $getMode === 'change')
         $_POST['pho_end'] = $_POST['pho_begin'];
     }
 
-    // Anfang muss vor oder gleich Ende sein
+    // Start must be before or equal to end
     if (strlen($_POST['pho_end']) > 0 && $_POST['pho_end'] < $_POST['pho_begin'])
     {
         $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
         // => EXIT
     }
 
-    // Photographen
     if (strlen($_POST['pho_photographers']) === 0)
     {
         $_POST['pho_photographers'] = $gL10n->get('SYS_UNKNOWN');
     }
 
-    // POST Variablen in das Role-Objekt schreiben
+    //  POST Write variables to the Role object
     foreach ($_POST as $key => $value) // TODO possible security issue
     {
         if (str_starts_with($key, 'pho_'))
@@ -208,6 +211,15 @@ if ($getMode === 'new' || $getMode === 'change')
 // delete photo album
 elseif ($getMode === 'delete')
 {
+    try {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception) {
+        $exception->showText();
+        // => EXIT
+    }
+
     if ($photoAlbum->delete())
     {
         echo 'done';

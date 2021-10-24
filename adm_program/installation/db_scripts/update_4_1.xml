@@ -70,6 +70,7 @@
     <step id="335">ALTER TABLE %PREFIX%_rooms ADD COLUMN room_uuid varchar(36)</step>
     <step id="340">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_uuid varchar(36)</step>
     <step id="350">ALTER TABLE %PREFIX%_user_relation_types ADD COLUMN urt_uuid varchar(36)</step>
+    <step id="360">ALTER TABLE %PREFIX%_members ADD COLUMN mem_uuid varchar(36)</step>
     <step id="400">ComponentUpdateSteps::updateStep41AddUuid</step>
     <step id="410" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_uuid varchar(36) NOT NULL</step>
     <step id="420">CREATE UNIQUE INDEX %PREFIX%_idx_usr_uuid ON %PREFIX%_users (usr_uuid)</step>
@@ -107,25 +108,31 @@
     <step id="740">CREATE UNIQUE INDEX %PREFIX%_idx_usf_uuid ON %PREFIX%_user_fields (usf_uuid)</step>
     <step id="750" database="mysql">ALTER TABLE %PREFIX%_user_relation_types MODIFY COLUMN urt_uuid varchar(36) NOT NULL</step>
     <step id="760">CREATE UNIQUE INDEX %PREFIX%_idx_urt_uuid ON %PREFIX%_user_relation_types (urt_uuid)</step>
-    <step id="800">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
-                         VALUES ('MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.1.0', 0)</step>
-    <step id="810">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
-                         VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'CATEGORY-REPORT'), 1, 0, 9, 1, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC')</step>
-    <step id="820">CREATE TABLE %PREFIX%_category_report
-(
-    crt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    crt_org_id                  integer unsigned,
-    crt_name                    varchar(100)        NOT NULL,
-    crt_col_fields              text,
-    crt_selection_role          varchar(100)        NOT NULL,
-    crt_selection_cat           varchar(100)        NOT NULL,
-    crt_number_col              boolean             NOT NULL    DEFAULT '0',
-    PRIMARY KEY (crt_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci</step>
-    <step id="830">ALTER TABLE %PREFIX%_category_report ADD CONSTRAINT %PREFIX%_fk_crt_org FOREIGN KEY (crt_org_id) REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
-    <step id="840">ComponentUpdateSteps::updateStep41CategoryReportMigration</step>
+    <step id="770" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_name varchar(100)</step>
+    <step id="780" database="pgsql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_name TYPE varchar(100)</step>
+    <step id="790" database="mysql">ALTER TABLE %PREFIX%_members MODIFY COLUMN mem_uuid varchar(36) NOT NULL</step>
+    <step id="800">CREATE UNIQUE INDEX %PREFIX%_idx_mem_uuid ON %PREFIX%_members (mem_uuid)</step>
+    <step id="810">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_reload boolean NOT NULL DEFAULT '0'</step>
+    <step id="820">ALTER TABLE %PREFIX%_sessions DROP COLUMN ses_renew</step>
+    <step id="830">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
+        VALUES ('MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.1.0', 0)</step>
+    <step id="840">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
+        VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'CATEGORY-REPORT'), 1, %UUID%, 0, 9, 1, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC')</step>
+    <step id="850">CREATE TABLE %PREFIX%_category_report
+        (
+        crt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+        crt_org_id                  integer unsigned,
+        crt_name                    varchar(100)        NOT NULL,
+        crt_col_fields              text,
+        crt_selection_role          varchar(100)        NOT NULL,
+        crt_selection_cat           varchar(100)        NOT NULL,
+        crt_number_col              boolean             NOT NULL    DEFAULT '0',
+        PRIMARY KEY (crt_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci</step>
+    <step id="860">ALTER TABLE %PREFIX%_category_report ADD CONSTRAINT %PREFIX%_fk_crt_org FOREIGN KEY (crt_org_id) REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="870">ComponentUpdateSteps::updateStep41CategoryReportMigration</step>
     <step>stop</step>
 </update>

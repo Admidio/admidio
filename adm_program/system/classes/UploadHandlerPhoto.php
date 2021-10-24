@@ -57,7 +57,7 @@ class UploadHandlerPhoto extends UploadHandler
                 $albumFolder  = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id');
 
                 // check filename and throw exception if something is wrong
-                StringUtils::strIsValidFileName($file->name);
+                StringUtils::strIsValidFileName($file->name, false);
 
                 // replace invalid characters in filename
                 $file->name = FileSystemUtils::removeInvalidCharsInFilename($file->name);
@@ -185,5 +185,27 @@ class UploadHandlerPhoto extends UploadHandler
         }
 
         return $file;
+    }
+
+    /**
+     * Override the default method to handle specific form data that will be set when creating the Javascript
+     * file upload object. Here we validate the CSRF token that will be set. If the check failed an error will
+     * be set and the file upload will be canceled.
+     * @param string $file
+     * @param int    $index
+     */
+    protected function handle_form_data($file, $index) {
+        // ADM Start
+        try
+        {
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_REQUEST['admidio-csrf-token']);
+        }
+        catch(AdmException $exception)
+        {
+            $file->error = $exception->getText();
+            // => EXIT
+        }
+        // ADM End
     }
 }

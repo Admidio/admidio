@@ -29,8 +29,20 @@ $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requir
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
 $getOrder    = admFuncVariableIsValid($_GET, 'order',    'array');
 
+try {
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception) {
+    if($getMode === 1) {
+        $exception->showHtml();
+    } else {
+        $exception->showText();
+    }
+    // => EXIT
+}
 
-// nur berechtigte User duerfen die Profilfelder bearbeiten
+// only authorized users can edit the profile fields
 if (!$gCurrentUser->isAdministrator())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -64,6 +76,17 @@ if($getMode === 1)
     // Feld anlegen oder updaten
 
     $_SESSION['fields_request'] = $_POST;
+
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
 
     // Check if mandatory fields are filled
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
@@ -226,7 +249,11 @@ elseif($getMode === 4)
         $userField->setSequence($getOrder);
     } else {
         // move field up/down by one
-        $userField->moveSequence($getSequence);
+        if($userField->moveSequence($getSequence)) {
+            echo 'done';
+        } else {
+            echo 'Sequence could not be changed.';
+        }
     }
     exit();
 }

@@ -454,7 +454,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             break;
 
         case 'string':
-            $value = StringUtils::strStripTags(SecurityUtils::encodeHTML($value));
+            $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
             break;
 
         case 'html':

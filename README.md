@@ -16,6 +16,7 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 ![GitHub top language](https://img.shields.io/github/languages/top/admidio/admidio)
 [![GitHub license](https://img.shields.io/github/license/Admidio/admidio)](https://github.com/Admidio/admidio/blob/master/LICENSE.txt)
 
+Supported languages: :gb: :de: :fr: :es: :netherlands: :denmark: :sweden: :finland: :brazil: :portugal: :it: :indonesia: :norway: :cn: :greece:
 
 ## Table of contents
 
@@ -44,7 +45,7 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 
 ## Installation
 
-You can install Admidio on your webspace if the script language [PHP](https://www.php.net/) in version 5.6.0
+You can install Admidio on your webspace if the script language [PHP](https://www.php.net/) in version 7.2
 or higher is available. Admidio also needs a [MySQL](https://www.mysql.com/) (version 5.0 or higher) or
 [PostgreSQL](https://www.postgresql.org/) (version 9.0 or higher) database to run.
 

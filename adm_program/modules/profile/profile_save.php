@@ -35,6 +35,17 @@ if(!$gValidLogin)
 // save form data in session for back navigation
 $_SESSION['profile_request'] = $_POST;
 
+try
+{
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception)
+{
+    $exception->showHtml();
+    // => EXIT
+}
+
 if(!isset($_POST['usr_login_name']))
 {
     $_POST['usr_login_name'] = '';

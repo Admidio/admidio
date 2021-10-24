@@ -28,7 +28,6 @@ require(__DIR__ . '/../../system/login_valid.php');
 $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getType    = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'DAT', 'AWA')));
 $getMode    = admFuncVariableIsValid($_GET, 'mode',   'int',    array('requireValue' => true));
-$getTitle   = admFuncVariableIsValid($_GET, 'title',  'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
 
 // set text strings for the different modules
 switch ($getType)
@@ -56,6 +55,22 @@ switch ($getType)
 
     default:
         $component = '';
+}
+
+try
+{
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception)
+{
+    if($getMode === 1) {
+        $exception->showHtml();
+    }
+    else {
+        $exception->showText();
+    }
+    // => EXIT
 }
 
 // check if the current user has the right to
@@ -95,7 +110,7 @@ if(!$category->isEditable())
 
 if($getMode === 1)
 {
-    // Kategorie anlegen oder updaten
+    // create or edit category
 
     $_SESSION['categories_request'] = $_POST;
 
@@ -257,6 +272,7 @@ elseif($getMode === 2)
         if($category->delete())
         {
             echo 'done';
+            exit();
         }
     }
     catch(AdmException $e)
@@ -270,6 +286,11 @@ elseif($getMode === 4)
     // Kategoriereihenfolge aktualisieren
     $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableCategory::MOVE_UP, TableCategory::MOVE_DOWN)));
 
-    $category->moveSequence($getSequence);
+    if($category->moveSequence($getSequence)) {
+        echo 'done';
+    }
+    else {
+        echo 'Sequence could not be changed.';
+    }
     exit();
 }

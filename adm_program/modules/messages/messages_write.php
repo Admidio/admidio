@@ -15,8 +15,8 @@
  * msg_tpye  - This could be EMAIL if you want to write an email or PM if you want to write a private Message
  * user_uuid - send message to the given user UUID
  * subject   - subject of the message
- * msg_id    - ID of the message -> just for answers
- * role_uuid - ID of a role to which an email should be send
+ * msg_uuid  - UUID of the message -> just for answers
+ * role_uuid - UUID of a role to which an email should be send
  * carbon_copy - false - (Default) "Send copy to me" checkbox is NOT set
  *             - true  - "Send copy to me" checkbox is set
  * forward : true - The message of the msg_id will be copied and the base for this new message
@@ -28,7 +28,7 @@ require_once(__DIR__ . '/../../system/common.php');
 // Initialize and check the parameters
 $getMsgType    = admFuncVariableIsValid($_GET, 'msg_type',    'string', array('defaultValue' => TableMessage::MESSAGE_TYPE_EMAIL));
 $getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid',   'string');
-$getSubject    = admFuncVariableIsValid($_GET, 'subject',     'html');
+$getSubject    = admFuncVariableIsValid($_GET, 'subject',     'string');
 $getMsgUuid    = admFuncVariableIsValid($_GET, 'msg_uuid',    'string');
 $getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid',   'string');
 $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));

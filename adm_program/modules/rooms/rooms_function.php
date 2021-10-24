@@ -27,7 +27,18 @@ if (!$gCurrentUser->isAdministrator())
     // => EXIT
 }
 
-// Raumobjekt anlegen
+try {
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+} catch (AdmException $exception) {
+    if ($getMode === 1) {
+        $exception->showHtml();
+    } else {
+        $exception->showText();
+    }
+    // => EXIT
+}
+
 $room = new TableRooms($gDb);
 
 if ($getRoomUuid !== '')

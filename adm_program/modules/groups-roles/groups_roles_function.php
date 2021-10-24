@@ -17,7 +17,6 @@
  *         3 - set role inaktive
  *         4 - delete role
  *         5 - set role active
- *         9 - return if role has former members ? Return: 1 und 0
  *
  *****************************************************************************/
 
@@ -30,20 +29,33 @@ $getMode     = admFuncVariableIsValid($_GET, 'mode',      'int', array('requireV
 
 // only members who are allowed to create and edit roles should have access to
 // most of these functions
-if($getMode !== 9 && !$gCurrentUser->manageRoles())
+if(!$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
-// Rollenobjekt anlegen
+try {
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+} catch (AdmException $exception) {
+    if ($getMode === 2) {
+        $exception->showHtml();
+    } else {
+        $exception->showText();
+    }
+    // => EXIT
+}
+
+$eventRole = false;
 $role = new TableRoles($gDb);
 
 if($getRoleUuid !== '')
 {
     $role->readDataByUuid($getRoleUuid);
+    $eventRole = $role->getValue('cat_name_intern') === 'EVENTS';
 
-    // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
+    // Check if the role belongs to the current organization
     if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -56,24 +68,24 @@ $rolName = $role->getValue('rol_name');
 
 if($getMode === 2)
 {
-    // Rolle anlegen oder updaten
+    // create or edit role
 
     if(!array_key_exists('rol_name', $_POST) || $_POST['rol_name'] === '')
     {
-        // es sind nicht alle Felder gefuellt
+        // not all fields are filled
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
     }
     if((int) $_POST['rol_cat_id'] === 0)
     {
-        // es sind nicht alle Felder gefuellt
+        // not all fields are filled
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
         // => EXIT
     }
 
     if($rolName !== $_POST['rol_name'])
     {
-        // Schauen, ob die Rolle bereits existiert
+        // check if the role already exists
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
@@ -101,16 +113,20 @@ if($getMode === 2)
     // Administrator role need some more flags
     if($role->getValue('rol_administrator') == 1)
     {
+        $_POST['rol_name']           = $role->getValue('rol_name');
         $_POST['rol_assign_roles']   = 1;
         $_POST['rol_all_lists_view'] = 1;
     }
 
-    if($role->getValue('cat_name_intern') === 'EVENTS')
+    if($eventRole)
     {
-        $_POST['rol_start_date'] = '';
-        $_POST['rol_start_time'] = '';
-        $_POST['rol_end_date'] = '';
-        $_POST['rol_end_time'] = '';
+        $_POST['rol_name']        = $role->getValue('rol_name');
+        $_POST['rol_description'] = $role->getValue('rol_description');
+        $_POST['rol_cat_id']      = $role->getValue('rol_cat_id');
+        $_POST['rol_start_date']  = '';
+        $_POST['rol_start_time']  = '';
+        $_POST['rol_end_date']    = '';
+        $_POST['rol_end_time']    = '';
         $_POST['rol_max_members'] = '';
     }
 
@@ -137,7 +153,7 @@ if($getMode === 2)
     foreach($checkboxes as $value)
     {
         // initialize the roles rights if value not set or not = 1 or its a event role
-        if(!isset($_POST[$value]) || $_POST[$value] != 1 || $role->getValue('cat_name_intern') === 'EVENTS')
+        if(!isset($_POST[$value]) || $_POST[$value] != 1 || $eventRole)
         {
             $_POST[$value] = 0;
         }
@@ -255,7 +271,7 @@ if($getMode === 2)
         $e->showHtml();
     }
 
-    // Daten in Datenbank schreiben
+    $gDb->startTransaction();
     $returnCode = $role->save();
 
     if($returnCode < 0)
@@ -265,16 +281,16 @@ if($getMode === 2)
     }
 
     // save role dependencies in database
-    if(array_key_exists('dependent_roles', $_POST) && $role->getValue('cat_name_intern') !== 'EVENTS')
+    if(array_key_exists('dependent_roles', $_POST) && !$eventRole)
     {
         $sentChildRoles = array_map('intval', $_POST['dependent_roles']);
 
         $roleDep = new RoleDependency($gDb);
 
-        // holt eine Liste der ausgewählten Rolen
+        // Fetches a list of the selected dependent roles
         $dbChildRoles = RoleDependency::getChildRoles($gDb, $role->getValue('rol_id'));
 
-        // entferne alle Rollen die nicht mehr ausgewählt sind
+        // remove all roles that are no longer selected
         if(count($dbChildRoles) > 0)
         {
             foreach ($dbChildRoles as $dbChildRole)
@@ -310,6 +326,8 @@ if($getMode === 2)
         RoleDependency::removeChildRoles($gDb, $role->getValue('rol_id'));
     }
 
+    $gDb->endTransaction();
+
     $gNavigation->deleteLastUrl();
     unset($_SESSION['roles_request']);
 
@@ -321,13 +339,9 @@ elseif($getMode === 3) // set role inactive
 {
     // event roles should not set inactive
     // all other roles could now set inactive
-    if($role->getValue('cat_name_intern') !== 'EVENTS'
-    && $role->setInactive())
-    {
+    if(!$eventRole && $role->setInactive()) {
         echo 'done';
-    }
-    else
-    {
+    } else {
         echo $gL10n->get('SYS_NO_RIGHTS');
     }
     exit();
@@ -335,16 +349,13 @@ elseif($getMode === 3) // set role inactive
 elseif($getMode === 4)
 {
     // delete role from database
-    try
-    {
-        if($role->delete())
-        {
+    try {
+        if($role->delete()) {
             echo 'done';
         }
     }
-    catch(AdmException $e)
-    {
-        $e->showHtml();
+    catch(AdmException $e) {
+        $e->showText();
         // => EXIT
     }
     exit();
@@ -353,26 +364,10 @@ elseif($getMode === 5) // set role active
 {
     // event roles should not set active
     // all other roles could now set active
-    if($role->getValue('cat_name_intern') !== 'EVENTS'
-    && $role->setActive())
-    {
+    if(!$eventRole && $role->setActive()) {
         echo 'done';
-    }
-    else
-    {
+    } else {
         $gL10n->get('SYS_NO_RIGHTS');
-    }
-    exit();
-}
-elseif($getMode === 9)
-{
-    if($role->hasFormerMembers())
-    {
-        echo '1';
-    }
-    else
-    {
-        echo '0';
     }
     exit();
 }

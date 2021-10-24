@@ -30,6 +30,17 @@ $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 $getNewUser  = admFuncVariableIsValid($_GET, 'new_user',  'int');
 $getInline   = admFuncVariableIsValid($_GET, 'inline',    'bool');
 
+try
+{
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception)
+{
+    $exception->showHtml();
+    // => EXIT
+}
+
 // in ajax mode only return simple text on error
 if($getInline)
 {
@@ -75,7 +86,7 @@ $user->readDataByUuid($getUserUuid);
 
 if($gCurrentUser->manageRoles())
 {
-    // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
+    // User with role rights may assign ALL roles
     $sql = 'SELECT rol_id, rol_name, rol_max_members, rol_administrator, mem_id, mem_begin, mem_end
               FROM '.TBL_ROLES.'
         INNER JOIN '.TBL_CATEGORIES.'
@@ -94,7 +105,7 @@ if($gCurrentUser->manageRoles())
 }
 else
 {
-    // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
+    // A roll leader may only assign roles where he is also a leader
     $sql = 'SELECT rol_id, rol_name, rol_max_members, rol_administrator, mgl.mem_id, mgl.mem_begin, mgl.mem_end
               FROM '.TBL_MEMBERS.' AS bm
         INNER JOIN '.TBL_ROLES.'
@@ -124,12 +135,12 @@ $rolesList      = $rolesStatement->fetchAll();
 $assignedCount = 0;
 $parentRoles = array();
 
-// Ergebnisse durchlaufen und kontrollieren ob maximale Teilnehmerzahl ueberschritten wuerde
+// Run results and check if maximum number of participants would be exceeded
 foreach($rolesList as $row)
 {
     if($row['rol_max_members'] > 0)
     {
-        // erst einmal schauen, ob der Benutzer dieser Rolle bereits zugeordnet ist
+        // first check if the user is already assigned to this role
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = ? -- $row[\'rol_id\']
@@ -141,7 +152,7 @@ foreach($rolesList as $row)
 
         if((int) $pdoStatement->fetchColumn() === 0)
         {
-            // Benutzer ist der Rolle noch nicht zugeordnet, dann schauen, ob die Anzahl ueberschritten wird
+            // User is not yet assigned to the role, then see if the number is exceeded
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id = ? -- $row[\'rol_id\']
@@ -150,7 +161,7 @@ foreach($rolesList as $row)
                        AND mem_end    > ? -- DATE_NOW';
             $pdoStatement = $gDb->queryPrepared($sql, array($row['rol_id'], DATE_NOW, DATE_NOW));
 
-            // Bedingungen fuer Abbruch und Abbruch
+            // maximum number of participiants exceeded and it's not a role leader assignement
             if($pdoStatement->fetchColumn() >= $row['rol_max_members']
             && isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == false
             && isset($_POST['role-'.$row['rol_id']])   && $_POST['role-'.$row['rol_id']]   == true)
@@ -169,7 +180,7 @@ foreach($rolesList as $row)
     }
 }
 
-// Ergebnisse durchlaufen und Datenbankupdate durchfuehren
+// Run through results and perform database update
 foreach($rolesList as $row)
 {
     // if role is administrator than only administrator can add new user,
@@ -244,9 +255,8 @@ if(!$getInline)
     $gNavigation->deleteLastUrl();
 }
 
-// all active users must renew their user data because maybe their
-// rights have been changed if they where new members of this role
-$gCurrentSession->renewUserObject();
+// refresh session user object to update the user rights because of the new or removed role
+$gCurrentSession->reloadSession($user->getValue('usr_id'));
 
 // Check if a new user get's at least one role
 if($getNewUser > 0 && $assignedCount === 0)
@@ -263,10 +273,11 @@ if($getNewUser > 0 && $assignedCount === 0)
     }
 }
 
-// zur Ausgangsseite zurueck
+// back to the starting page
+
 if(str_contains($gNavigation->getUrl(), 'new_user_assign.php'))
 {
-    // von hier aus direkt zur Registrierungsuebersicht zurueck
+    // go directly back to the registration overview
     $gNavigation->deleteLastUrl();
 }
 

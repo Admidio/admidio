@@ -28,6 +28,17 @@ $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'int', 
 $_SESSION['import_request'] = $_POST;
 unset($_SESSION['import_csv_request']);
 
+try
+{
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception)
+{
+    $exception->showHtml();
+    // => EXIT
+}
+
 // only authorized users should import users
 if(!$gCurrentUser->editUsers())
 {

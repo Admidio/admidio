@@ -674,7 +674,7 @@ if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
 {
     $html = getStaticText('danger', PHP_VERSION, ' &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION)));
 }
-elseif (version_compare(PHP_VERSION, '5.6', '<'))
+elseif (version_compare(PHP_VERSION, '7.2', '<'))
 {
     $html = getStaticText('warning', PHP_VERSION, ' &rarr; '.$gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://www.php.net/supported-versions.php" target="_blank">Supported Versions</a>')));
 }
@@ -1189,14 +1189,23 @@ $formGroupsRoles->addSelectBox(
     'groups_roles_show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
     array('defaultValue' => $formValues['groups_roles_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
 );
-$selectBoxEntries = array(
+$selectBoxEntriesExport = array(
     '0' => $gL10n->get('SYS_NOBODY'),
     '1' => $gL10n->get('SYS_ALL'),
     '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
 );
 $formGroupsRoles->addSelectBox(
-    'groups_roles_export', $gL10n->get('SYS_EXPORT_LISTS'), $selectBoxEntries,
-    array('defaultValue' => $formValues['groups_roles_export'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_EXPORT_LISTS_DESC', array($gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))))
+    'groups_roles_export', $gL10n->get('SYS_EXPORT_LISTS'), $selectBoxEntriesExport,
+    array('defaultValue' => $formValues['groups_roles_export'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_EXPORT_LISTS_DESC')
+);
+$selectBoxEntriesEditLists = array(
+    '1' => $gL10n->get('SYS_ALL'),
+    '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER')))),
+    '3' => $gL10n->get('SYS_ADMINISTRATORS')
+);
+$formGroupsRoles->addSelectBox(
+    'groups_roles_edit_lists', $gL10n->get('SYS_EDIT_LISTS'), $selectBoxEntriesEditLists,
+    array('defaultValue' => $formValues['groups_roles_edit_lists'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_EDIT_LISTS_DESC')
 );
 $html = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';

@@ -30,6 +30,20 @@ if($getMode === 'delete')
     $gMessage->showHtmlTextOnly(true);
 }
 
+if(in_array($getMode, array('delete', 'save', 'upload'))) {
+    try {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    } catch (AdmException $exception) {
+        if ($getMode === 'delete') {
+            $exception->showText();
+        } else {
+            $exception->showHtml();
+        }
+        // => EXIT
+    }
+}
+
 // checks if the server settings for file_upload are set to ON
 if (!PhpIniUtils::isFileUploadEnabled())
 {
@@ -73,6 +87,17 @@ if($getMode === 'save')
 {
     /*****************************Foto speichern*************************************/
 
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
+
     if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
         // Foto im Dateisystem speichern
@@ -110,6 +135,7 @@ if($getMode === 'save')
         // Nachsehen ob fuer den User ein Photo gespeichert war
         if(strlen($gCurrentSession->getValue('ses_binary')) > 0)
         {
+            $gDb->startTransaction();
             // Fotodaten in User-Tabelle schreiben
             $user->setValue('usr_photo', $gCurrentSession->getValue('ses_binary'));
             $user->save();
@@ -117,7 +143,8 @@ if($getMode === 'save')
             // Foto aus Session entfernen und neues Einlesen des Users veranlassen
             $gCurrentSession->setValue('ses_binary', '');
             $gCurrentSession->save();
-            $gCurrentSession->renewUserObject($user->getValue('usr_id'));
+            $gCurrentSession->reloadSession($user->getValue('usr_id'));
+            $gDb->endTransaction();
         }
     }
 
@@ -176,7 +203,7 @@ elseif($getMode === 'delete')
     {
         $user->setValue('usr_photo', '');
         $user->save();
-        $gCurrentSession->renewUserObject($user->getValue('usr_id'));
+        $gCurrentSession->reloadSession($user->getValue('usr_id'));
     }
 
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
@@ -221,6 +248,17 @@ if($getMode === 'choose')
 elseif($getMode === 'upload')
 {
     /*****************************Foto zwischenspeichern bestaetigen***********************************/
+
+    try
+    {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    }
+    catch(AdmException $exception)
+    {
+        $exception->showHtml();
+        // => EXIT
+    }
 
     // File size
     if ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE)

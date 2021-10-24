@@ -765,6 +765,7 @@
   <string name="SYS_EDIT_FILE">Bewerk bestand</string>
   <string name="SYS_EDIT_FOLDER">Bewerk map</string>
   <string name="SYS_EDIT_LISTS">Bewerk lijsten</string>
+    <string name="SYS_EDIT_LISTS_DESC">Gebruikers kunnen hun eigen lijsten maken met geselecteerde profielvelden en deze vervolgens toepassen op groepen en rollen. Beschikbaar zijn alleen profielvelden en groepen of rollen die de huidige gebruiker mag zien. Deze instelling kan worden gebruikt om te bepalen wie dergelijke lijsten kan maken. (Standaard: Alle)</string>
   <string name="SYS_EDIT_MEMBERS">Bewerk gebruikers</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Bewerk profielvelden</string>
   <string name="SYS_EDIT_RELATIONSHIPS">Bewerk relaties</string>
@@ -777,13 +778,13 @@
   <string name="SYS_EDITED_BY">Laatst aangepast door</string>
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Een nieuwe mededeling is gemaakt</string>
-  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Nieuwe mededeling op #VAR1#.\n\nTitel: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Een nieuwe mededeling is gemaakt op #VAR1#.\n\nTitel: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Gebruiker #VAR1# #VAR2# (login: #VAR3#) is gewijzigd</string>
-  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">De profielgegevens van de gebruiker #VAR1# #VAR2# (login: #VAR3#) zijn gewijzigd door #VAR4#:</string>
+  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">De profielgegevens van de gebruiker #VAR1# #VAR2# (login: #VAR3#) zijn gewijzigd door #VAR4#.</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">Gebruiker #VAR1# #VAR2# (login: #VAR3#) is aangemaakt</string>
-  <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">De gebruiker #VAR1# #VAR2# (login: #VAR3#) is aangemaakt door #VAR4#:</string>
+  <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">De gebruiker #VAR1# #VAR2# (login: #VAR3#) is aangemaakt door #VAR4#.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Gebruiker #VAR1# #VAR2# (login: #VAR3#) is verwijderd</string>
-  <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Het profiel van de gebruiker #VAR1# #VAR2# (login: #VAR3#) is verwijderd door #VAR4#:</string>
+  <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Het profiel van de gebruiker #VAR1# #VAR2# (login: #VAR3#) is verwijderd door #VAR4#.</string>
   <string name="SYS_EMAIL_DESC">Er kunnen e-mails gestuurd worden naar verschillende rollen, personen, groepen of afdelingen. </string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">Een nieuw bestand is geüpload</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">Nieuw bestand geüpload op #VAR1#\n\nBestand: #VAR2#\nGeüpload door: #VAR3#\nGeüpload op: #VAR4#</string>
@@ -1315,9 +1316,9 @@
   <string name="SYS_SMTP_PASSWORD">SMTP-wachtwoord</string>
   <string name="SYS_SMTP_PASSWORD_DESC">Wachtwoord gebruikt voor  SMTP-authenticatie.</string>
   <string name="SYS_SMTP_PORT">SMTP-poort</string>
-  <string name="SYS_SMTP_PORT_DESC">Definieer de poort die gebruikt dient te worden voor het maken van de SMTP-verbinding. (Standaard: 25)</string>
+  <string name="SYS_SMTP_PORT_DESC">Specificeren van de poort die moet worden gebruikt voor het maken van een SMTP-verbinding. (Standaard: 587)</string>
   <string name="SYS_SMTP_SECURE">SMTP-versleuteling</string>
-  <string name="SYS_SMTP_SECURE_DESC">Hier kunt u kiezen of en hoe de SMTP-verbinding versleuteld moet worden. (Standaard: nee)</string>
+  <string name="SYS_SMTP_SECURE_DESC">Hier kun je kiezen of en hoe de SMTP-verbinding versleuteld moet worden. (Standaard: TLS)</string>
   <string name="SYS_SMTP_SECURE_NO">nee</string>
   <string name="SYS_SMTP_SECURE_SSL">SSL</string>
   <string name="SYS_SMTP_SECURE_TLS">TLS</string>
@@ -1412,7 +1413,6 @@
   <string name="SYS_VISIBLE_FOR">Zichtbaar voor</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# is alleen zichtbaar voor ingelogde gebruikers</string>
   <string name="SYS_VISITORS">Bezoekers</string>
-  <string name="SYS_WANT_CONFIGURATION_FOR_ALL_USERS">Wilt u de geselecteerde lijst-configuratie beschikbaar maken voor alle gebruikers?</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Bent u er zeker van dat u categorie #VAR1_BOLD# wilt verwijderen?</string>
   <string name="SYS_WANT_REGISTER">Ik wil me inschrijven!</string>
   <string name="SYS_WARNING">Waarschuwing</string>

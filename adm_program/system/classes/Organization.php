@@ -25,6 +25,8 @@
  * ```
  ***********************************************************************************************
  */
+use Ramsey\Uuid\Uuid;
+
 class Organization extends TableAccess
 {
     /**
@@ -161,37 +163,37 @@ class Organization extends TableAccess
 
         // create default category for roles, events and weblinks
         $sql = 'INSERT INTO '.TBL_CATEGORIES.'
-                       (cat_org_id, cat_type, cat_name_intern, cat_name, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                VALUES (?, \'ROL\', \'COMMON\', \'SYS_COMMON\', 1, 1, ?, ?)';
-        $queryParams = array($orgId, $systemUserId, DATETIME_NOW);
+                       (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                VALUES (?, ?, \'ROL\', \'COMMON\', \'SYS_COMMON\', 1, 1, ?, ?)';
+        $queryParams = array($orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW);
         $this->db->queryPrepared($sql, $queryParams);
         $categoryCommon = $this->db->lastInsertId();
 
         $sql = 'INSERT INTO '.TBL_CATEGORIES.'
-                       (cat_org_id, cat_type, cat_name_intern, cat_name, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                VALUES (?, \'ROL\', \'GROUPS\',    \'INS_GROUPS\',    0, 0, 2, ?, ?)
-                     , (?, \'ROL\', \'COURSES\',   \'INS_COURSES\',   0, 0, 3, ?, ?)
-                     , (?, \'ROL\', \'TEAMS\',     \'INS_TEAMS\',     0, 0, 4, ?, ?)
-                     , (?, \'ROL\', \'EVENTS\',    \'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION\', 0, 1, 5, ?, ?)
-                     , (?, \'LNK\', \'COMMON\',    \'SYS_COMMON\',    1, 0, 1, ?, ?)
-                     , (?, \'LNK\', \'INTERN\',    \'INS_INTERN\',    0, 0, 2, ?, ?)
-                     , (?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',    1, 0, 1, ?, ?)
-                     , (?, \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\', 0, 0, 2, ?, ?)
-                     , (?, \'DAT\', \'COMMON\',    \'SYS_COMMON\',    1, 0, 1, ?, ?)
-                     , (?, \'DAT\', \'TRAINING\',  \'INS_TRAINING\',  0, 0, 2, ?, ?)
-                     , (?, \'DAT\', \'COURSES\',   \'INS_COURSES\',   0, 0, 3, ?, ?)';
+                       (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                VALUES (?, ?, \'ROL\', \'GROUPS\',    \'INS_GROUPS\',    0, 0, 2, ?, ?)
+                     , (?, ?, \'ROL\', \'COURSES\',   \'INS_COURSES\',   0, 0, 3, ?, ?)
+                     , (?, ?, \'ROL\', \'TEAMS\',     \'INS_TEAMS\',     0, 0, 4, ?, ?)
+                     , (?, ?, \'ROL\', \'EVENTS\',    \'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION\', 0, 1, 5, ?, ?)
+                     , (?, ?, \'LNK\', \'COMMON\',    \'SYS_COMMON\',    1, 0, 1, ?, ?)
+                     , (?, ?, \'LNK\', \'INTERN\',    \'INS_INTERN\',    0, 0, 2, ?, ?)
+                     , (?, ?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',    1, 0, 1, ?, ?)
+                     , (?, ?, \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\', 0, 0, 2, ?, ?)
+                     , (?, ?, \'DAT\', \'COMMON\',    \'SYS_COMMON\',    1, 0, 1, ?, ?)
+                     , (?, ?, \'DAT\', \'TRAINING\',  \'INS_TRAINING\',  0, 0, 2, ?, ?)
+                     , (?, ?, \'DAT\', \'COURSES\',   \'INS_COURSES\',   0, 0, 3, ?, ?)';
         $queryParams = array(
-            $orgId, $systemUserId, DATETIME_NOW,
-            $orgId, $systemUserId, DATETIME_NOW,
-            $orgId, $systemUserId, DATETIME_NOW,
-            $orgId, $systemUserId, DATETIME_NOW,
-            $orgId, $systemUserId, DATETIME_NOW,
-            $orgId, $systemUserId, DATETIME_NOW,
-            $orgId, $systemUserId, DATETIME_NOW,
-            $orgId, $systemUserId, DATETIME_NOW,
-            $orgId, $systemUserId, DATETIME_NOW,
-            $orgId, $systemUserId, DATETIME_NOW,
-            $orgId, $systemUserId, DATETIME_NOW
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW
         );
         $this->db->queryPrepared($sql, $queryParams);
 
@@ -219,9 +221,9 @@ class Organization extends TableAccess
 
         // insert root folder name for documents & files module
         $sql = 'INSERT INTO '.TBL_FOLDERS.'
-                       (fol_org_id, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp)
-                VALUES (?, \'DOCUMENTS\', ?, ?, 0, 1, ?, ?)';
-        $queryParams = array($orgId, TableFolder::getRootFolderName('documents', $this->getValue('org_shortname')), FOLDER_DATA, $systemUserId, DATETIME_NOW);
+                       (fol_org_id, fol_uuid, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp)
+                VALUES (?, ?, \'DOCUMENTS\', ?, ?, 0, 1, ?, ?)';
+        $queryParams = array($orgId, Uuid::uuid4(), TableFolder::getRootFolderName('documents', $this->getValue('org_shortname')), FOLDER_DATA, $systemUserId, DATETIME_NOW);
         $this->db->queryPrepared($sql, $queryParams);
 
         // now create default roles

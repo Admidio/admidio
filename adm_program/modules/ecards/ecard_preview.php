@@ -18,6 +18,17 @@ require_once(__DIR__ . '/ecard_function.php');
 $gMessage->showThemeBody(false);
 $gMessage->showInModalWindow();
 
+try
+{
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception)
+{
+    $exception->showHtml();
+    // => EXIT
+}
+
 if(strlen($_POST['ecard_template']) === 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TEMPLATE'))));
@@ -31,11 +42,7 @@ $postPhotoUuid    = admFuncVariableIsValid($_POST, 'photo_uuid',      'string', 
 $postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr',        'int',    array('requireValue' => true));
 $nameRecipient    = admFuncVariableIsValid($_POST, 'name_recipient',  'string');
 $emailRecipient   = admFuncVariableIsValid($_POST, 'email_recipient', 'string');
-
-if(isset($_POST['ecard_message']))
-{
-    $ecardMessage = $_POST['ecard_message'];
-}
+$ecardMessage     = admFuncVariableIsValid($_POST, 'ecard_message',   'html');
 
 $imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale')));
 

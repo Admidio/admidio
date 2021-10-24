@@ -277,11 +277,10 @@ class TableCategory extends TableAccess
     /**
      * Change the internal sequence of this category. It can be moved one place up or down
      * @param string $mode This could be **UP** or **DOWN**.
+     * @return bool Return true if the sequence of the category could be changed, otherwise false.
      */
     public function moveSequence($mode)
     {
-        global $gCurrentOrganization;
-
         $catType = $this->getValue('cat_type');
 
         // count all categories that are organization independent because these categories should not
@@ -300,12 +299,12 @@ class TableCategory extends TableAccess
         $sql = 'UPDATE '.TBL_CATEGORIES.'
                    SET cat_sequence = ? -- $catSequence
                  WHERE cat_type     = ? -- $catType
-                   AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   AND ( cat_org_id = ? -- $GLOBALS[\'gCurrentOrganization\']->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                    AND cat_sequence = ? -- $catSequence';
-        $queryParams = array($catSequence, $catType, (int) $gCurrentOrganization->getValue('org_id'));
+        $queryParams = array($catSequence, $catType, (int) $GLOBALS['gCurrentOrganization']->getValue('org_id'));
 
-        // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
+        // the category is lowered by one number and is thus moved up in the list
         if ($mode === self::MOVE_UP)
         {
             if ($catOrgId === 0 || $catSequence > $rowCount + 1)
@@ -315,7 +314,7 @@ class TableCategory extends TableAccess
                 $this->setValue('cat_sequence', $catSequence - 1);
             }
         }
-        // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
+        // the category will be increased by one number and thus will be moved further down in the list
         elseif ($mode === self::MOVE_DOWN)
         {
             if ($catOrgId > 0 || $catSequence < $rowCount)
@@ -325,8 +324,12 @@ class TableCategory extends TableAccess
                 $this->setValue('cat_sequence', $catSequence + 1);
             }
         }
+        else
+        {
+            return false;
+        }
 
-        $this->save();
+        return $this->save();
     }
 
     /**
@@ -449,11 +452,10 @@ class TableCategory extends TableAccess
 
         $returnValue = parent::save($updateFingerPrint);
 
-        // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
         if ($fieldsChanged && $gCurrentSession instanceof Session && $this->getValue('cat_type') === 'USF')
         {
             // all active users must renew their user data because the user field structure has been changed
-            $gCurrentSession->renewUserObject();
+            $gCurrentSession->reloadAllSessions();
         }
 
         $this->db->endTransaction();

@@ -239,7 +239,7 @@ final class StringUtils
             (!self::strValidCharacters($filename, 'folder') && !$checkExtension)
         )
         {
-            throw new AdmException('SYS_FILENAME_INVALID', array($filename));
+            throw new AdmException('SYS_FILENAME_INVALID', array(StringUtils::strStripTags($filename)));
         }
 
         if ($checkExtension)
@@ -247,7 +247,7 @@ final class StringUtils
             // check if the extension is not listed as blocked
             $extensionBlocklist = array('php', 'php3', 'php4', 'php5', 'pht', 'html', 'htm', 'phtml',
                 'shtml', 'htaccess', 'htpasswd', 'pl', 'js', 'vbs', 'asp',
-                'asa', 'cer', 'asax', 'swf', 'xap', 'cgi', 'ssi', 'phar');
+                'asa', 'cer', 'asax', 'swf', 'xap', 'cgi', 'ssi', 'phar', 'svg');
             $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
             if (in_array($fileExtension, $extensionBlocklist, true))

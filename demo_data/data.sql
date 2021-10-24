@@ -4,7 +4,7 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.0.7', 0, 730)
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.0.7', 0, 1000)
                               , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.0.7', 0, 0)
                               , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.0.7', 0, 0)
                               , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.0.7', 0, 0)
@@ -121,8 +121,8 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (7020, 1, 'mail_send_method', 'phpmail'),
 (7030, 1, 'mail_smtp_host', ''),
 (7040, 1, 'mail_smtp_auth', '1'),
-(7050, 1, 'mail_smtp_port', '25'),
-(7060, 1, 'mail_smtp_secure', ''),
+(7050, 1, 'mail_smtp_port', '587'),
+(7060, 1, 'mail_smtp_secure', 'tls'),
 (7070, 1, 'mail_smtp_authentication_type', ''),
 (7080, 1, 'mail_smtp_user', ''),
 (7090, 1, 'mail_smtp_password', ''),
@@ -233,8 +233,8 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (70020, 2, 'mail_send_method', 'phpmail'),
 (70030, 2, 'mail_smtp_host', ''),
 (70040, 2, 'mail_smtp_auth', '1'),
-(70050, 2, 'mail_smtp_port', '25'),
-(70060, 2, 'mail_smtp_secure', ''),
+(70050, 2, 'mail_smtp_port', '587'),
+(70060, 2, 'mail_smtp_secure', 'tls'),
 (70070, 2, 'mail_smtp_authentication_type', ''),
 (70080, 2, 'mail_smtp_user', ''),
 (70090, 2, 'mail_smtp_password', ''),

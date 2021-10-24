@@ -123,7 +123,8 @@ else
 }
 
 // show headline of module
-$html .= '<form id="roles_assignment_form" action="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles_save.php', array('user_uuid' => $getUserUuid, 'new_user' => $getNewUser, 'inline' => $getInline)).'" method="post">';
+$html .= '<form id="roles_assignment_form" action="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles_save.php', array('user_uuid' => $getUserUuid, 'new_user' => $getNewUser, 'inline' => $getInline)).'" method="post">
+    <input type="text" name="admidio-csrf-token" id="admidio-csrf-token" value="' . $gCurrentSession->getCsrfToken() . '" class="form-control invisible" hidden="hidden">';
 
 // Create table
 $table = new HtmlTable('role_assignment_table');

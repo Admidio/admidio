@@ -42,7 +42,6 @@ final class FileSystemUtils
         'jpg'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/jpeg', 'viewable' => true),
         'jpeg' => array('icon' => 'fa-file-image', 'mime-type' => 'image/jpeg', 'viewable' => true),
         'png'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/png', 'viewable' => true),
-        'svg'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/svg+xml', 'viewable' => true),
         'tiff' => array('icon' => 'fa-file-image', 'mime-type' => 'image/tiff', 'viewable' => true),
         'doc'  => array('icon' => 'fa-file-word', 'mime-type' => 'application/msword', 'viewable' => false),
         'docx' => array('icon' => 'fa-file-word', 'mime-type' => 'application/msword', 'viewable' => false),
@@ -64,7 +63,6 @@ final class FileSystemUtils
         'log'  => array('icon' => 'fa-file-alt', 'mime-type' => 'text/plain', 'viewable' => true),
         'md'   => array('icon' => 'fa-file-alt', 'mime-type' => 'text/plain', 'viewable' => true),
         'rtf'  => array('icon' => 'fa-file-alt', 'mime-type' => 'text/rtf', 'viewable' => false),
-        'sql'  => array('icon' => 'fa-file-alt', 'mime-type' => 'text/plain', 'viewable' => true),
         'txt'  => array('icon' => 'fa-file-alt', 'mime-type' => 'text/plain', 'viewable' => true),
         'pdf'  => array('icon' => 'fa-file-pdf', 'mime-type' => 'application/pdf', 'viewable' => true),
         'gz'   => array('icon' => 'fa-file-archive', 'mime-type' => 'application/gzip', 'viewable' => false),
@@ -84,6 +82,21 @@ final class FileSystemUtils
         'wav'  => array('icon' => 'fa-file-audio', 'mime-type' => 'audio/x-midi', 'viewable' => true),
         'wma'  => array('icon' => 'fa-file-audio', 'mime-type' => 'audio/x-ms-wma', 'viewable' => true)
     );
+
+    /**
+     * Check if the file extension of the current file format is allowed for upload and the
+     * documents and files module.
+     * @param string $fileExtension The file extension that should be checked.
+     * @return bool Return true if the file extension is allowed to be used within Admidio.
+     */
+    public function allowedFileExtension($fileExtension)
+    {
+        if(array_key_exists($fileExtension, self::$iconFileExtension)) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * Checks if file-system is UNIX
@@ -785,7 +798,6 @@ final class FileSystemUtils
 
         return array('total' => $total, 'free' => $free, 'used' => $used);
     }
-
 
     /**
      * Get the relevant Font Awesome icon for the current file

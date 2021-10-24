@@ -35,6 +35,17 @@ $postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid',    'string');
 // save form data in session for back navigation
 $_SESSION['message_request'] = $_POST;
 
+try
+{
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception)
+{
+    $exception->showHtml();
+    // => EXIT
+}
+
 // save page in navigation - to have a check for a navigation back.
 $gNavigation->addUrl(CURRENT_URL);
 

@@ -26,7 +26,7 @@ function ProfileJS(gRootPath) {
                 $(".admMemberInfo").click(function() {
                     showHideMembershipInformation($(this));
                 });
-                formSubmitEvent();
+                formSubmitEvent('#profile_roles_box_body');
             }
         });
     };
@@ -37,7 +37,7 @@ function ProfileJS(gRootPath) {
                 dataType: "html",
                 success: function(responseText) {
                     $("#profile_former_roles_box_body").html(responseText);
-                    formSubmitEvent();
+                    formSubmitEvent('#profile_former_roles_box_body');
                 }
             }
         );
@@ -49,7 +49,7 @@ function ProfileJS(gRootPath) {
                 dataType: "html",
                 success: function(responseText) {
                     $("#profile_future_roles_box_body").html(responseText);
-                    formSubmitEvent();
+                    formSubmitEvent('#profile_future_roles_box_body');
                 }
             }
         );
@@ -74,11 +74,11 @@ function ProfileJS(gRootPath) {
         return "leader-" + number;
     }
 
-    this.toggleDetailsOn = function (memberId) {
-        $("#membership_period_" + memberId).css({"visibility": "visible", "display": "block"});
+    this.toggleDetailsOn = function (memberUuid) {
+        $("#membership_period_" + memberUuid).css({"visibility": "visible", "display": "block"});
     };
 
-    this.toggleDetailsOff = function (memberId) {
-        $("#membership_period_" + memberId).css({"visibility": "hidden", "display": "none"});
+    this.toggleDetailsOff = function (memberUuid) {
+        $("#membership_period_" + memberUuid).css({"visibility": "hidden", "display": "none"});
     };
 }

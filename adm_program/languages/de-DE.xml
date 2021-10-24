@@ -368,6 +368,8 @@
   <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">E-Mail-Adresse</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systembenachrichtigungen benutzt, z.B. bei der Registrierungsbestätigung.</string>
+  <string name="ORG_SYSTEM_MAIL_CHANGES">Benachrichtigung bei Profiländerungen</string>
+  <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Hier kann die Systembenachrichtigung für geänderte Profildaten aktiviert werden. Werden von einem Benutzer oder Administrator Profildaten geändert, Benutzer gelöscht oder erstellt, erfolgt eine Benachrichtigung an die angegebene E-Mail #VAR1# (Voreinstellung: nein).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mail-Adresse #VAR1# versendet. (Voreinstellung: nein)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</string>
@@ -699,6 +701,8 @@
   <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
   <string name="SYS_DATA_PROTECTION">Datenschutz</string>
   <string name="SYS_DATA_PROTECTION_DESC">Hier kann die URL zu deiner Seite mit den Datenschutzhinweisen hinterlegt werden. Diese Seite wird innerhalb des Hinweises auf die Verwendung von Cookies für weitere Informationen verlinkt. Sofern das gewählte Theme dies unterstützt, wird auch ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/data_protection.html)</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION">Ich willige in die Verarbeitung der Daten ein</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION_DESC">Die von der Organisation bereitgestellten Informationen habe ich gelesen. Soweit die von mir angegebenen personenbezogenen Daten keine notwendigen Daten zur Vertragserfüllung sind, erkläre ich meine Einwilligung zur Verarbeitung dieser Daten. Meine Daten werden ausschließlich für die Zwecke der Organisation gespeichert und vertraulich behandelt.</string>
   <string name="SYS_DATABASE">Datenbank</string>
   <string name="SYS_DATABASE_BACKUP">Datenbank-Backup</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</string>
@@ -753,6 +757,8 @@
   <string name="SYS_DEPENDENCIES">Abhängigkeiten</string>
   <string name="SYS_DEPENDENT">Abhängig</string>
   <string name="SYS_DESCRIPTION">Beschreibung</string>
+  <string name="SYS_DESCRIPTION_POPOVER_DESC">Die Beschreibung wird in einem kleinen Fenster angezeigt, welches über ein Fragezeichen-Icon neben der Feldbezeichnung aufgerufen werden kann.</string>
+  <string name="SYS_DESCRIPTION_INLINE_DESC">Zeige die Beschreibung unterhalb des Feldes direkt im Formular an.</string>
   <string name="SYS_DESIGNATION">Bezeichnung</string>
   <string name="SYS_DIRECTORY_PROTECTION">Verzeichnisschutz</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Verzeichnis Trenner</string>
@@ -787,6 +793,7 @@
   <string name="SYS_EDIT_FILE">Datei bearbeiten</string>
   <string name="SYS_EDIT_FOLDER">Ordner bearbeiten</string>
   <string name="SYS_EDIT_LISTS">Listen bearbeiten</string>
+    <string name="SYS_EDIT_LISTS_DESC">Eigene Listen mit ausgewählten Profilfeldern können von Benutzern erstellt und anschließend auf Gruppen und Rollen angewendet werden. Dabei stehen nur Profilfelder und Gruppen bzw. Rollen zur Verfügung, die der jeweilige Benutzer sehen darf. Mit dieser Einstellung kann festgelegt werden, wer solche Listen erstellen kann. (Voreinstellung: Alle)</string>
   <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Profilfelder bearbeiten</string>
   <string name="SYS_EDIT_RELATIONSHIPS">Beziehungen bearbeiten</string>
@@ -800,6 +807,12 @@
   <string name="SYS_EMAIL">E-Mail</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Eine neue Ankündigung wurde angelegt</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Es wurde eine neue Ankündigung bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
+  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Benutzer #VAR1# #VAR2# (Login: #VAR3#) wurde geändert</string>
+  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Benutzerdaten von #VAR1# #VAR2# (Login: #VAR3#) wurden geändert durch #VAR4#.</string>
+  <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">Benutzer #VAR1# #VAR2# (Login: #VAR3#) wurde erstellt</string>
+  <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">Der Benutzer #VAR1# #VAR2# (Login: #VAR3#) wurde von #VAR4# erstellt.</string>
+  <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Benutzer #VAR1# #VAR2# (Login: #VAR3#) wurde gelöscht</string>
+  <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Der Benutzer #VAR1# #VAR2# (Login: #VAR3#) wurde gelöscht von #VAR4#.</string>
   <string name="SYS_EMAIL_DESC">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">Eine neue Datei wurde hochgeladen</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">Es wurde eine neue Datei bei #VAR1# hochgeladen.\n\nDatei: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
@@ -1333,9 +1346,9 @@
   <string name="SYS_SMTP_PASSWORD">SMTP Passwort</string>
   <string name="SYS_SMTP_PASSWORD_DESC">Das Passwort, das bei der SMTP-Authentifizierung verwendet wird.</string>
   <string name="SYS_SMTP_PORT">SMTP Port</string>
-  <string name="SYS_SMTP_PORT_DESC">Angabe des Ports über den die SMTP-Verbindung aufgebaut werden soll. (Voreinstellung: 25)</string>
+  <string name="SYS_SMTP_PORT_DESC">Angabe des Ports über den die SMTP-Verbindung aufgebaut werden soll. (Voreinstellung: 587)</string>
   <string name="SYS_SMTP_SECURE">SMTP Verschlüsselung</string>
-  <string name="SYS_SMTP_SECURE_DESC">Hier kann ausgewählt werden, ob und wie die SMTP-Verbindung verschlüsselt werden soll. (Voreinstellung: ohne)</string>
+  <string name="SYS_SMTP_SECURE_DESC">Hier kann ausgewählt werden, ob und wie die SMTP-Verbindung verschlüsselt werden soll. (Voreinstellung: TLS)</string>
   <string name="SYS_SMTP_SECURE_NO">ohne</string>
   <string name="SYS_SMTP_SECURE_SSL">SSL</string>
   <string name="SYS_SMTP_SECURE_TLS">TLS</string>
@@ -1430,7 +1443,6 @@
   <string name="SYS_VISIBLE_FOR">Sichtbar für</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# nur für angemeldete Benutzer sichtbar</string>
   <string name="SYS_VISITORS">Besucher</string>
-  <string name="SYS_WANT_CONFIGURATION_FOR_ALL_USERS">Wollne Sie die aktuelle Listenkonfiguration allen Benutzern zur Verfügung stellen?</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Möchten Sie die Kategorie #VAR1_BOLD# wirklich löschen?</string>
   <string name="SYS_WANT_REGISTER">Ich möchte mich registrieren!</string>
   <string name="SYS_WARNING">Warnung</string>

@@ -75,6 +75,9 @@ if($getMode === 'assign')
         $leadership = false;
         $memberApproved = null;
 
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+
         // if its an event the user must attend to the event
         if($role->getValue('cat_name_intern') === 'EVENTS')
         {
@@ -94,13 +97,10 @@ if($getMode === 'assign')
         $user = new User($gDb, $gProfileFields);
         $user->readDataByUuid($getUserUuid);
 
-        // Member
         $member = new TableMembers($gDb);
-
-        // Datensatzupdate
         $memCount = $role->countMembers($user->getValue('usr_id'));
 
-        // Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
+        // If role would have less members than allowed or leader is to be added
         if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $memCount || (int) $role->getValue('rol_max_members') === 0)))
         {
             $member->startMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'), $leadership, $memberApproved);
@@ -199,7 +199,7 @@ else
 
             // change data in database
             $.post("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment.php', array('mode' => 'assign', 'role_uuid' => $getRoleUuid)).'&user_uuid=" + userUuid,
-                "member_" + userUuid + "=" + memberChecked + "&leader_" + userUuid + "=" + leaderChecked,
+                "member_" + userUuid + "=" + memberChecked + "&leader_" + userUuid + "=" + leaderChecked + "&admidio-csrf-token='.$gCurrentSession->getCsrfToken().'",
                 function(data) {
                     // check if error occurs
                     if (data !== "success") {

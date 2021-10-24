@@ -367,6 +367,7 @@ CREATE TABLE %PREFIX%_members
     mem_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     mem_rol_id                  integer unsigned    NOT NULL,
     mem_usr_id                  integer unsigned    NOT NULL,
+    mem_uuid                    varchar(36)         NOT NULL,
     mem_begin                   date                NOT NULL,
     mem_end                     date                NOT NULL    DEFAULT '9999-12-31',
     mem_leader                  boolean             NOT NULL    DEFAULT '0',
@@ -384,6 +385,7 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE INDEX %PREFIX%_idx_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_usr_id);
+CREATE UNIQUE INDEX %PREFIX%_idx_mem_uuid ON %PREFIX%_members (mem_uuid);
 
 /*==============================================================*/
 /* Table: adm_menu                                             */
@@ -584,7 +586,7 @@ CREATE TABLE %PREFIX%_roles
     rol_cat_id                  integer unsigned    NOT NULL,
     rol_lst_id                  integer unsigned,
     rol_uuid                    varchar(36)         NOT NULL,
-    rol_name                    varchar(50)         NOT NULL,
+    rol_name                    varchar(100)        NOT NULL,
     rol_description             varchar(4000),
     rol_assign_roles            boolean             NOT NULL    DEFAULT '0',
     rol_approve_users           boolean             NOT NULL    DEFAULT '0',
@@ -697,7 +699,7 @@ CREATE TABLE %PREFIX%_sessions
     ses_timestamp               timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ses_ip_address              varchar(39)         NOT NULL,
     ses_binary                  blob,
-    ses_renew                   smallint            NOT NULL    DEFAULT 0,
+    ses_reload                  boolean             NOT NULL    DEFAULT '0',
     PRIMARY KEY (ses_id)
 )
 ENGINE = InnoDB

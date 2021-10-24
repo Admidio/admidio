@@ -41,6 +41,19 @@ if($getMenuUuid !== '')
     $menu->readDataByUuid($getMenuUuid);
 }
 
+try {
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+}
+catch(AdmException $exception) {
+    if($getMode === 1) {
+        $exception->showHtml();
+    } else {
+        $exception->showText();
+    }
+    // => EXIT
+}
+
 // create menu or update it
 if($getMode === 1)
 {
@@ -141,10 +154,15 @@ elseif($getMode === 2)
     {
         echo 'done';
     }
+    exit();
 }
 elseif($getMode === 3)
 {
-    // Update menu order
-    $menu->moveSequence($getSequence);
+    // Update menu sequence
+    if($menu->moveSequence($getSequence)) {
+        echo 'done';
+    } else {
+        echo 'Sequence could not be changed.';
+    }
     exit();
 }

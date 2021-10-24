@@ -142,8 +142,6 @@ final class ComponentUpdateSteps
 	public static function updateStep41AddUuid()
 	{
 	    $updateTablesUuid = array(
-	        array('table' => TBL_USERS, 'column_id' => 'usr_id', 'column_uuid' => 'usr_uuid'),
-            array('table' => TBL_ROLES, 'column_id' => 'rol_id', 'column_uuid' => 'rol_uuid'),
             array('table' => TBL_ANNOUNCEMENTS, 'column_id' => 'ann_id', 'column_uuid' => 'ann_uuid'),
             array('table' => TBL_CATEGORIES, 'column_id' => 'cat_id', 'column_uuid' => 'cat_uuid'),
             array('table' => TBL_DATES, 'column_id' => 'dat_id', 'column_uuid' => 'dat_uuid'),
@@ -155,16 +153,21 @@ final class ComponentUpdateSteps
             array('table' => TBL_PHOTOS, 'column_id' => 'pho_id', 'column_uuid' => 'pho_uuid'),
             array('table' => TBL_LISTS, 'column_id' => 'lst_id', 'column_uuid' => 'lst_uuid'),
             array('table' => TBL_MENU, 'column_id' => 'men_id', 'column_uuid' => 'men_uuid'),
+            array('table' => TBL_MEMBERS, 'column_id' => 'mem_id', 'column_uuid' => 'mem_uuid'),
             array('table' => TBL_MESSAGES, 'column_id' => 'msg_id', 'column_uuid' => 'msg_uuid'),
             array('table' => TBL_ORGANIZATIONS, 'column_id' => 'org_id', 'column_uuid' => 'org_uuid'),
+            array('table' => TBL_ROLES, 'column_id' => 'rol_id', 'column_uuid' => 'rol_uuid'),
             array('table' => TBL_ROOMS, 'column_id' => 'room_id', 'column_uuid' => 'room_uuid'),
+            array('table' => TBL_USERS, 'column_id' => 'usr_id', 'column_uuid' => 'usr_uuid'),
             array('table' => TBL_USER_FIELDS, 'column_id' => 'usf_id', 'column_uuid' => 'usf_uuid'),
             array('table' => TBL_USER_RELATION_TYPES, 'column_id' => 'urt_id', 'column_uuid' => 'urt_uuid'),
         );
 
 	    foreach($updateTablesUuid as $tableUuid)
         {
-            $sql = 'SELECT ' . $tableUuid['column_id'] . ' FROM ' . $tableUuid['table'];
+            $sql = 'SELECT ' . $tableUuid['column_id'] . '
+                      FROM ' . $tableUuid['table'] . '
+                     WHERE ' . $tableUuid['column_uuid'] . ' IS NULL ';
             $statement = self::$db->queryPrepared($sql);
 
             while($row = $statement->fetch())

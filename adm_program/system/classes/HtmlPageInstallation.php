@@ -114,6 +114,9 @@ class HtmlPageInstallation extends HtmlPage
      */
     public function show()
     {
+        // disallow iFrame integration from other domains to avoid clickjacking attacks
+        header('X-Frame-Options: SAMEORIGIN');
+
         $this->assignDefaultVariables();
         $this->display('index.tpl');
     }
@@ -132,6 +135,9 @@ class HtmlPageInstallation extends HtmlPage
      */
     public function showMessage($outputMode, $headline, $text, $buttonText, $buttonIcon, $destinationUrl)
     {
+        // disallow iFrame integration from other domains to avoid clickjacking attacks
+        header('X-Frame-Options: SAMEORIGIN');
+
         $this->assign('outputMode', $outputMode);
         $this->assign('messageHeadline', $headline);
         $this->assign('messageText', $text);

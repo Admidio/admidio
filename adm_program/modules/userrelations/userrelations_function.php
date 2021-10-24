@@ -39,6 +39,18 @@ if(!$gCurrentUser->editUsers())
     // => EXIT
 }
 
+try {
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+} catch (AdmException $exception) {
+    if ($getMode === 1) {
+        $exception->showHtml();
+    } else {
+        $exception->showText();
+    }
+    // => EXIT
+}
+
 $relation = new TableUserRelation($gDb);
 $user1 = new User($gDb, $gProfileFields);
 $user2 = new User($gDb, $gProfileFields);

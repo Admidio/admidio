@@ -52,7 +52,7 @@ class TableMenu extends TableAccess
         if ($gCurrentSession instanceof Session)
         {
             // now set menu object in session invalid because the menu has changed
-            $gCurrentSession->renewMenuObject();
+            $gCurrentSession->reloadAllSessions();
         }
 
         return parent::delete();
@@ -116,11 +116,13 @@ class TableMenu extends TableAccess
     /**
      * Change the internal sequence of this category. It can be moved one place up or down
      * @param string $mode This could be **UP** or **DOWN**.
+     * @return bool Return true if the sequence of the menu could be changed, otherwise false.
      */
     public function moveSequence($mode)
     {
         $menOrder = (int) $this->getValue('men_order');
         $menIdParent = (int) $this->getValue('men_men_id_parent');
+        $returnCode = false;
 
         // die Sortierung wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if($mode === self::MOVE_UP)
@@ -133,7 +135,7 @@ class TableMenu extends TableAccess
                            AND men_order = ? -- $menOrder - 1';
                 $this->db->queryPrepared($sql, array($menOrder, $menIdParent, $menOrder - 1));
                 $this->setValue('men_order', $menOrder - 1);
-                $this->save();
+                $returnCode = $this->save();
             }
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
@@ -155,9 +157,10 @@ class TableMenu extends TableAccess
                            AND men_order = ? -- $menOrder + 1';
                 $this->db->queryPrepared($sql, array($menOrder, $menIdParent, $menOrder + 1));
                 $this->setValue('men_order', $menOrder + 1);
-                $this->save();
+                $returnCode = $this->save();
             }
         }
+        return $returnCode;
     }
 
     /**
@@ -236,7 +239,7 @@ class TableMenu extends TableAccess
         if ($gCurrentSession instanceof Session)
         {
             // now set menu object in session invalid because the menu has changed
-            $gCurrentSession->renewMenuObject();
+            $gCurrentSession->reloadAllSessions();
         }
 
         $this->db->endTransaction();

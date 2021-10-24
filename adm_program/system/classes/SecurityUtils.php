@@ -153,4 +153,20 @@ final class SecurityUtils
 
         return $randomString;
     }
+
+    /**
+     * Method will check the CSRF token from the parameter against the CSRF token of the
+     * current session. If these tokens doesn't match an exception will be thrown.
+     * @param string $csrfToken The CSRF token that should be validated.
+     * @throws AdmException Tokens doesn't match.
+     */
+    public static function validateCsrfToken($csrfToken)
+    {
+        global $gCurrentSession;
+
+        if($csrfToken !== $gCurrentSession->getCsrfToken())
+        {
+            throw new AdmException('Invalid or missing CSRF token!');
+        }
+    }
 }

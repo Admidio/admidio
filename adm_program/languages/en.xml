@@ -361,7 +361,7 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
   <string name="ORG_SYSTEM_INFORMATION">System informations</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">Mail address</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">This field should contain the email address of an administrator as it will be used as sender address of system notifications, e.g. for registration confirmation.</string>
+  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">The e-mail address of an administrator should be entered here. This is used as the recipient address for system notifications, e.g. for registration confirmation.</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES">Notification for changed profile fields</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Enable this setting to send notifications for any changes to a user's profile fields. This way an administrator has the possibility to ensure a proper re data quality. Change notifications will be send to the following mail address #VAR1# (default: no).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notification for new entries</string>
@@ -788,6 +788,7 @@
   <string name="SYS_EDIT_FILE">Edit file</string>
   <string name="SYS_EDIT_FOLDER">Edit folder</string>
   <string name="SYS_EDIT_LISTS">Edit lists</string>
+    <string name="SYS_EDIT_LISTS_DESC">Users can create their own lists with selected profile fields and then apply them to groups and roles. Only profile fields and groups or roles that the current user is allowed to see are available. This setting can be used to specify who can create such lists. (Default: All)</string>
   <string name="SYS_EDIT_MEMBERS">Edit members</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Edit profile fields</string>
   <string name="SYS_EDIT_RELATIONSHIPS">Edit relationships</string>
@@ -1340,9 +1341,9 @@
   <string name="SYS_SMTP_PASSWORD">SMTP password</string>
   <string name="SYS_SMTP_PASSWORD_DESC">Password used for SMTP authentication.</string>
   <string name="SYS_SMTP_PORT">SMTP port</string>
-  <string name="SYS_SMTP_PORT_DESC">Specifying the port which should be used for establishing a SMTP connection. (Default: 25)</string>
+  <string name="SYS_SMTP_PORT_DESC">Specifying the port which should be used for establishing a SMTP connection. (Default: 587)</string>
   <string name="SYS_SMTP_SECURE">SMTP encryption</string>
-  <string name="SYS_SMTP_SECURE_DESC">Here you can choose if and how the SMTP connection should be encrypted. (Default: no)</string>
+  <string name="SYS_SMTP_SECURE_DESC">Here you can choose if and how the SMTP connection should be encrypted. (Default: TLS)</string>
   <string name="SYS_SMTP_SECURE_NO">no</string>
   <string name="SYS_SMTP_SECURE_SSL">SSL</string>
   <string name="SYS_SMTP_SECURE_TLS">TLS</string>
