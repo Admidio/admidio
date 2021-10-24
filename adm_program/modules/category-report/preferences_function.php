@@ -22,9 +22,6 @@ if (!$gCurrentUser->isAdministrator())
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$report = new CategoryReport();
-$config = $report->getConfigArray();
-
 // Initialize and check the parameters
 $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
 
@@ -35,7 +32,16 @@ try
 	switch ($getForm)
    	{
    		case 'configurations':
-   		    unset($config);
+            try
+            {
+                // check the CSRF token of the form against the session token
+                SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+            }
+            catch(AdmException $exception)
+            {
+                $exception->showText();
+                // => EXIT
+            }
 
 			for ($conf = 0; isset($_POST['name'. $conf]); $conf++)
    			{
@@ -66,6 +72,8 @@ try
    				$values['col_fields'] = substr($fields,0,-1);
    				$config[] = $values;
    			}
+
+            $report = new CategoryReport();
    			$config = $report->saveConfigArray($config);
            	break;
 
