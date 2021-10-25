@@ -404,7 +404,6 @@ CREATE TABLE %PREFIX%_messages
     msg_type                    varchar(10)         NOT NULL,
     msg_subject                 varchar(256)        NOT NULL,
     msg_usr_id_sender           integer unsigned    NOT NULL,
-    msg_usr_id_receiver         varchar(256)        NOT NULL,
     msg_timestamp               timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     msg_read                    smallint            NOT NULL    DEFAULT 0,
     PRIMARY KEY (msg_id)
