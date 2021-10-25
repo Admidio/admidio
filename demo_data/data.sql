@@ -1049,7 +1049,7 @@ INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end
 -- Data for table adm_messages
 --
 
-INSERT INTO %PREFIX%_messages (`msg_id`, `msg_type`, `msg_subject`, `msg_usr_id_sender`, `msg_usr_id_receiver`, `msg_timestamp`, `msg_read`) VALUES
+INSERT INTO %PREFIX%_messages (msg_id, msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read) VALUES
 (1, 'EMAIL', 'DEMO_MSG_EVENTS_HOMEPAGE', 1, '313 | 332 | 355 | 354', '2021-01-20 14:58:16', 0),
 (2, 'EMAIL', 'DEMO_MSG_NEW_MODULE', 1, 'groupID: 3', '2021-02-01 16:07:01', 0),
 (3, 'EMAIL', 'DEMO_MSG_NEW_TRAINING_TIMES', 1, 'groupID: 4 | groupID: 5 | 354', '2021-02-03 12:08:02', 0),
@@ -1064,7 +1064,7 @@ INSERT INTO %PREFIX%_messages (`msg_id`, `msg_type`, `msg_subject`, `msg_usr_id_
 -- Data for table adm_messages_content
 --
 
-INSERT INTO %PREFIX%_messages_content (`msc_id`, `msc_msg_id`, `msc_part_id`, `msc_usr_id`, `msc_message`, `msc_timestamp`) VALUES
+INSERT INTO %PREFIX%_messages_content (msc_id, msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp) VALUES
 (1, 1, 1, 1, 'DEMO_MSG_EVENTS_HOMEPAGE_CONTENT', '2021-02-03 04:58:16'),
 (2, 2, 1, 1, 'DEMO_MSG_NEW_MODULE_CONTENT', '2021-02-03 05:07:01'),
 (3, 3, 1, 1, 'DEMO_MSG_NEW_TRAINING_TIMES_CONTENT', '2021-02-03 05:08:02'),
