@@ -157,6 +157,6 @@ function doAdmidioUpdate($installedDbVersion)
     }
 
     // after the update first force the reload of the cache for all active sessions
-    $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = 1';
+    $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = \'true\'';
     $gDb->queryPrepared($sql);
 }

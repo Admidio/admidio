@@ -569,7 +569,7 @@ class Database
                 // PostgreSQL doesn't know unsigned
                 'unsigned' => '',
                 // PostgreSQL interprets a boolean as string so transform it to a smallint
-                'boolean'  => 'smallint',
+                //'boolean'  => 'smallint',
                 // A blob is in PostgreSQL a bytea datatype
                 'blob'     => 'bytea'
             );

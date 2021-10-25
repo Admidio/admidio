@@ -134,5 +134,6 @@
     <step id="820">ALTER TABLE %PREFIX%_sessions DROP COLUMN ses_renew</step>
     <step id="825">ComponentUpdateSteps::updateStep41MoveEcardTemplates</step>
     <step id="830">ALTER TABLE %PREFIX%_messages DROP COLUMN msg_usr_id_receiver</step>
+    <step id="840">ComponentUpdateSteps::updateStep41PostgreSqlSetBoolean</step>
     <step>stop</step>
 </update>

@@ -528,8 +528,8 @@ class TableAccess
         // see "start_installation.php"
         if ($updateFingerPrint && $gCurrentUser instanceof self && $gCurrentUser->getValue('usr_id') > 0)
         {
-            // besitzt die Tabelle Felder zum Speichern des Erstellers und der letzten Aenderung,
-            // dann diese hier automatisiert fuellen
+            // if the table has fields to store the creator and the last change,
+            // then fill them here automatically
             if ($this->newRecord && array_key_exists($this->columnPrefix . '_usr_id_create', $this->dbColumns))
             {
                 $this->setValue($this->columnPrefix . '_timestamp_create', DATETIME_NOW);
@@ -537,7 +537,7 @@ class TableAccess
             }
             elseif (array_key_exists($this->columnPrefix . '_usr_id_change', $this->dbColumns))
             {
-                // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
+                // Do not update data if the same user has done so within 15 minutes
                 if ((int) $gCurrentUser->getValue('usr_id') !== (int) $this->getValue($this->columnPrefix . '_usr_id_create')
                 || time() > (strtotime($this->getValue($this->columnPrefix . '_timestamp_create')) + 900))
                 {
@@ -547,33 +547,39 @@ class TableAccess
             }
         }
 
-        // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
         $sqlFieldArray = array();
         $sqlSetArray = array();
         $queryParams = array();
 
-        // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen
+        // Loop over all DB fields and add them to the update
         foreach ($this->dbColumns as $key => $value)
         {
-            // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
-            // Felder anderer Tabellen auch nicht
+            if($this->columnsInfos[$key]['type'] === 'boolean' && DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+                if($value === 1 || $value === '1') {
+                    $value = 'true';
+                } else {
+                    $value = 'false';
+                }
+            }
+
+            // Auto-increment fields and fields of other tables must not appear in insert/update
             if (str_starts_with($key, $this->columnPrefix . '_')
             && !$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed'])
             {
                 if ($this->newRecord)
                 {
+                    // Prepare data for an insert
                     if ($value !== '')
                     {
-                        // Daten fuer ein Insert aufbereiten
                         $sqlFieldArray[] = $key;
                         $queryParams[] = $value;
                     }
                 }
                 else
                 {
+                    // Prepare data for an update
                     $sqlSetArray[] = $key . ' = ?';
 
-                    // Daten fuer ein Update aufbereiten
                     if ($value === '' || $value === null)
                     {
                         $queryParams[] = null;

@@ -24,6 +24,30 @@ final class ComponentUpdateSteps
         self::$db = $database;
     }
 
+
+    /**
+     * This method will add a uuid to each row of the tables adm_users and adm_roles
+     */
+    public static function updateStep41PostgreSqlSetBoolean()
+    {
+        $updateColumnsBoolean = array(
+            array('table' => TBL_CATEGORIES, 'column' => 'cat_system'),
+            array('table' => TBL_CATEGORIES, 'column' => 'cat_default')
+        );
+
+        foreach($updateColumnsBoolean as $columnsBoolean)
+        {
+            $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' drop default';
+            self::$db->queryPrepared($sql);
+
+            $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DATA TYPE boolean using ' . $columnsBoolean['column'] . '::integer::boolean';
+            self::$db->queryPrepared($sql);
+
+            $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DEFAULT false';
+            self::$db->queryPrepared($sql);
+        }
+    }
+
     /**
      * This method will move the folder with the ecard templates to the adm_my_files folder
      */
@@ -43,7 +67,8 @@ final class ComponentUpdateSteps
 
         }
     }
-        /**
+
+    /**
      * This method will add a uuid to each row of the tables adm_users and adm_roles
      */
 	public static function updateStep41AddUuid()
