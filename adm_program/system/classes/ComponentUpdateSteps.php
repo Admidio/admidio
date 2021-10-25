@@ -20,12 +20,30 @@ final class ComponentUpdateSteps
      * Set the database
      * @param Database $database The database instance
      */
-    public static function setDatabase(Database $database)
-    {
+    public static function setDatabase(Database $database) {
         self::$db = $database;
     }
 
     /**
+     * This method will move the folder with the ecard templates to the adm_my_files folder
+     */
+    public static function updateStep41MoveEcardTemplates()
+    {
+        $ecardThemeFolder   = ADMIDIO_PATH . FOLDER_THEMES . '/' . $GLOBALS['gSettingsManager']->getString('theme') . '/ecard_templates';
+        $ecardMyFilesFolder = ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates';
+
+        if(is_dir($ecardThemeFolder)) {
+            try {
+                FileSystemUtils::moveDirectory($ecardThemeFolder, $ecardMyFilesFolder);
+            }
+            catch (\RuntimeException $exception) {
+                $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath('documents')));
+                // => EXIT
+            }
+
+        }
+    }
+        /**
      * This method will add a uuid to each row of the tables adm_users and adm_roles
      */
 	public static function updateStep41AddUuid()

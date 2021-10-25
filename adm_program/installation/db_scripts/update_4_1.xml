@@ -114,5 +114,6 @@
     <step id="800">CREATE UNIQUE INDEX %PREFIX%_idx_mem_uuid ON %PREFIX%_members (mem_uuid)</step>
     <step id="810">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_reload boolean NOT NULL DEFAULT '0'</step>
     <step id="820">ALTER TABLE %PREFIX%_sessions DROP COLUMN ses_renew</step>
+    <step id="825">ComponentUpdateSteps::updateStep41MoveEcardTemplates</step>
     <step>stop</step>
 </update>

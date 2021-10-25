@@ -1124,7 +1124,7 @@ $formEcards->addInput(
 try
 {
     // get all ecard templates from the theme folder ecard_templates
-    $ecardTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(THEME_PATH.'/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+    $ecardTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 }
 catch (\UnexpectedValueException $e)
 {
