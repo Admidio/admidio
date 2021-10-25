@@ -76,7 +76,7 @@ if(array_key_exists('gCurrentSession', $_SESSION)) {
 // Session handling
 if(array_key_exists('gCurrentSession', $_SESSION)
     && $_SESSION['gCurrentSession']->hasObject('gCurrentOrganization')
-    && $_SESSION['gCurrentSession']->getValue('ses_reload') === 0)
+    && (bool) $_SESSION['gCurrentSession']->getValue('ses_reload') === false)
 {
     // read system component
     /**
