@@ -76,7 +76,7 @@ if(array_key_exists('gCurrentSession', $_SESSION)) {
 // Session handling
 if(array_key_exists('gCurrentSession', $_SESSION)
     && $_SESSION['gCurrentSession']->hasObject('gCurrentOrganization')
-    && (bool) $_SESSION['gCurrentSession']->getValue('ses_reload') === false)
+    && $_SESSION['gCurrentSession']->getValue('ses_reload') === false)
 {
     // read system component
     /**
@@ -142,8 +142,8 @@ else
 
 $gL10n = new Language($gLanguageData);
 
-$orgId    = (int) $gCurrentOrganization->getValue('org_id');
-$sesUsrId = (int) $gCurrentSession->getValue('ses_usr_id');
+$orgId    = $gCurrentOrganization->getValue('org_id');
+$sesUsrId = $gCurrentSession->getValue('ses_usr_id');
 
 // Create a notification object to store and send change notifications to profile fields
 $gChangeNotification = new ChangeNotification();
@@ -161,7 +161,7 @@ if($gCurrentSession->hasObject('gCurrentUser'))
     $gCurrentUser =& $gCurrentSession->getObject('gCurrentUser');
 
     // checks if user in database session is the same as in php session
-    if((int) $gCurrentUser->getValue('usr_id') !== $sesUsrId)
+    if($gCurrentUser->getValue('usr_id') !== $sesUsrId)
     {
         $gCurrentUser->clear();
         $gCurrentSession->setValue('ses_usr_id', '');

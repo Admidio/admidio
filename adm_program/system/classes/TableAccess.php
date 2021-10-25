@@ -328,7 +328,7 @@ class TableAccess
 
     /**
      * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
-     * If the sql will find more than one record the method returns **false**.
+     * If the sql find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string           $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
@@ -341,43 +341,37 @@ class TableAccess
         $sqlAdditionalTables = '';
 
         // create sql to connect additional tables to the select statement
-        if (count($this->additionalTables) > 0)
-        {
-            foreach ($this->additionalTables as $arrAdditionalTable)
-            {
+        if (count($this->additionalTables) > 0) {
+            foreach ($this->additionalTables as $arrAdditionalTable) {
                 $sqlAdditionalTables .= ', '.$arrAdditionalTable['table'];
                 $sqlWhereCondition   .= ' AND '.$arrAdditionalTable['columnNameAdditionalTable'].' = '.$arrAdditionalTable['columnNameClassTable'].' ';
             }
         }
 
         // if condition starts with AND then remove this
-        if (StringUtils::strStartsWith(ltrim($sqlWhereCondition), 'AND', false))
-        {
+        if (StringUtils::strStartsWith(ltrim($sqlWhereCondition), 'AND', false)) {
             $sqlWhereCondition = substr($sqlWhereCondition, 4);
         }
 
-        if ($sqlWhereCondition !== '')
-        {
+        if ($sqlWhereCondition !== '') {
             $sql = 'SELECT *
                       FROM '.$this->tableName.'
                            '.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
             $readDataStatement = $this->db->queryPrepared($sql, $queryParams); // TODO add more params
 
-            if ($readDataStatement->rowCount() === 1)
-            {
+            if ($readDataStatement->rowCount() === 1) {
                 $row = $readDataStatement->fetch();
                 $this->newRecord = false;
 
-                // Daten in das Klassenarray schieben
-                foreach ($row as $key => $value)
-                {
-                    if ($value === null)
-                    {
-                        $this->dbColumns[$key] = ''; // TODO: remove
-                    }
-                    else
-                    {
+                // move data to class column value array
+                foreach ($row as $key => $value) {
+                    if($this->columnsInfos[$key]['type'] === 'boolean') {
+                        $this->dbColumns[$key] = (bool) $value;
+                    } elseif($this->columnsInfos[$key]['type'] === 'integer'
+                    || $this->columnsInfos[$key]['type'] === 'smallint') {
+                        $this->dbColumns[$key] = (int) $value;
+                    } else {
                         $this->dbColumns[$key] = $value;
                     }
                 }
