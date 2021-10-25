@@ -112,7 +112,7 @@ $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
                  ON cat_id = rol_cat_id
          INNER JOIN '.TBL_ORGANIZATIONS.'
                  ON org_id = cat_org_id
-              WHERE rol_valid  = 1
+              WHERE rol_valid  = \'1\'
                 AND rol_system = 0
                 AND cat_name_intern <> \'EVENTS\'
            ORDER BY cat_name, rol_name';

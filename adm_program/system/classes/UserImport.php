@@ -98,7 +98,7 @@ class UserImport extends User
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                    AND first_name.usd_value  = ? -- $user->getValue(\'FIRST_NAME\', \'database\')
-                 WHERE usr_valid = 1';
+                 WHERE usr_valid = \'1\'';
         $queryParams = array(
             $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_id'),
             $lastName,

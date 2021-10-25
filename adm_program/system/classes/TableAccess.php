@@ -554,43 +554,37 @@ class TableAccess
         // Loop over all DB fields and add them to the update
         foreach ($this->dbColumns as $key => $value)
         {
-            if($this->columnsInfos[$key]['type'] === 'boolean' && DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
-                if($value === 1 || $value === '1') {
-                    $value = 'true';
-                } else {
-                    $value = 'false';
-                }
-            }
-
-            // Auto-increment fields and fields of other tables must not appear in insert/update
-            if (str_starts_with($key, $this->columnPrefix . '_')
-            && !$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed'])
-            {
-                if ($this->newRecord)
-                {
-                    // Prepare data for an insert
-                    if ($value !== '')
-                    {
-                        $sqlFieldArray[] = $key;
-                        $queryParams[] = $value;
-                    }
-                }
-                else
-                {
-                    // Prepare data for an update
-                    $sqlSetArray[] = $key . ' = ?';
-
-                    if ($value === '' || $value === null)
-                    {
-                        $queryParams[] = null;
-                    }
-                    else
-                    {
-                        $queryParams[] = $value;
+            // fields of other tables must not appear in insert/update
+            if(str_starts_with($key, $this->columnPrefix . '_')) {
+                if ($this->columnsInfos[$key]['type'] === 'boolean' && DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+                    if ($value === 1 || $value === '1') {
+                        $value = 'true';
+                    } else {
+                        $value = 'false';
                     }
                 }
 
-                $this->columnsInfos[$key]['changed'] = false;
+                // Auto-increment fields must not appear in insert/update
+                if (!$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed']) {
+                    if ($this->newRecord) {
+                        // Prepare data for an insert
+                        if ($value !== '') {
+                            $sqlFieldArray[] = $key;
+                            $queryParams[] = $value;
+                        }
+                    } else {
+                        // Prepare data for an update
+                        $sqlSetArray[] = $key . ' = ?';
+
+                        if ($value === '' || $value === null) {
+                            $queryParams[] = null;
+                        } else {
+                            $queryParams[] = $value;
+                        }
+                    }
+
+                    $this->columnsInfos[$key]['changed'] = false;
+                }
             }
         }
 

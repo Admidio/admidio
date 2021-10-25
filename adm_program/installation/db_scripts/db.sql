@@ -158,8 +158,8 @@ CREATE TABLE %PREFIX%_dates
     dat_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     dat_usr_id_change           integer unsigned,
     dat_timestamp_change        timestamp           NULL        DEFAULT NULL,
-    dat_allow_comments          boolean             NOT NULL    DEFAULT 0,
-    dat_additional_guests       boolean             NOT NULL    DEFAULT 0,
+    dat_allow_comments          boolean             NOT NULL    DEFAULT '0',
+    dat_additional_guests       boolean             NOT NULL    DEFAULT '0',
     PRIMARY KEY (dat_id)
 )
 ENGINE = InnoDB
@@ -816,7 +816,7 @@ CREATE TABLE %PREFIX%_user_relation_types
     urt_name                    varchar(100)        NOT NULL,
     urt_name_male               varchar(100)        NOT NULL,
     urt_name_female             varchar(100)        NOT NULL,
-    urt_edit_user               boolean             NOT NULL    DEFAULT '0',
+    urt_edit_userurt_edit_user               boolean             NOT NULL    DEFAULT '0',
     urt_id_inverse              integer unsigned    NULL        DEFAULT NULL,
     urt_usr_id_create           integer unsigned    NULL        DEFAULT NULL,
     urt_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,

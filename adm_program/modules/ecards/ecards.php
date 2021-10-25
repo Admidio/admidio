@@ -205,7 +205,7 @@ $sql = 'SELECT DISTINCT usr_id, first_name.usd_value AS first_name, last_name.us
      LEFT JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-         WHERE usr_valid  = 1
+         WHERE usr_valid  = \'1\'
            AND mem_begin <= ? -- DATE_NOW
            AND mem_end    > ? -- DATE_NOW
            AND mem_rol_id IN ('.implode(',', $arrayUniqueRoles).')

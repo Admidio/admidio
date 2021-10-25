@@ -147,7 +147,7 @@ if(count($arrayRoles) > 0)
                AND cat_org_id       = ? -- $gCurrentOrganization->getValue(\'org_id\')
                AND mem_begin       <= ? -- DATE_NOW
                AND mem_end          > ? -- DATE_NOW
-               AND usr_valid        = 1
+               AND usr_valid        = \'1\'
           ORDER BY last_name, first_name';
     $queryParams = array(
         $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
@@ -193,7 +193,7 @@ if(count($arrayUsers) > 0)
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
              WHERE usr_id           IN ('.implode(',', $arrayUsers).')
-               AND usr_valid        = 1
+               AND usr_valid        = \'1\'
           ORDER BY last_name, first_name';
     $queryParams = array(
         $gProfileFields->getProperty('LAST_NAME', 'usf_id'),

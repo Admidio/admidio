@@ -220,8 +220,8 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
                        FROM '.TBL_ROLES.'
                  INNER JOIN '.TBL_CATEGORIES.'
                          ON cat_id = rol_cat_id
-                      WHERE rol_valid  = 1
-                        AND rol_system = 0
+                      WHERE rol_valid  = \'1\'
+                        AND rol_system = \'0\'
                         AND cat_name_intern <> \'EVENTS\'
                         AND cat_org_id = ? -- $orgId
                    ORDER BY cat_sequence, rol_name';
@@ -299,8 +299,8 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
                         FROM '.TBL_ROLES.'
                   INNER JOIN '.TBL_CATEGORIES.'
                           ON cat_id = rol_cat_id
-                       WHERE rol_valid    = 1
-                         AND '. $rolesRightsColumn .' = 1
+                       WHERE rol_valid    = \'1\'
+                         AND '. $rolesRightsColumn .' = \'1\'
                          AND cat_org_id   = ? -- $orgId
                     ORDER BY cat_sequence, rol_name';
     $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($orgId));
