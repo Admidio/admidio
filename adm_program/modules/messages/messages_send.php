@@ -46,9 +46,6 @@ catch(AdmException $exception)
     // => EXIT
 }
 
-// save page in navigation - to have a check for a navigation back.
-$gNavigation->addUrl(CURRENT_URL);
-
 if (isset($_POST['msg_to']))
 {
     $postTo = $_POST['msg_to'];
@@ -565,9 +562,6 @@ else
         // => EXIT
     }
 
-    // save page in navigation - to have a check for a navigation back.
-    $gNavigation->addUrl(CURRENT_URL);
-
     $sendResult = true;
 }
 
@@ -580,8 +574,7 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
         $message->save();
     }
 
-    // after sending remove the actual Page from the NaviObject and remove also the send-page
-    $gNavigation->deleteLastUrl();
+    // after sending remove the send page from navigation stack
     $gNavigation->deleteLastUrl();
 
     // message if sending was OK

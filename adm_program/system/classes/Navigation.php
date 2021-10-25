@@ -90,21 +90,19 @@ class Navigation
      * Add a new url to the navigation stack. If a html navigation bar should be created later
      * than you should fill the text and maybe the icon. Before the url will be added to the stack
      * the method checks if the current url was already added to the url.
-     * @param string $url  The url that should be added to the navigation stack.
+     * @param string $url The url that should be added to the navigation stack.
      * @param string $text A text that should be shown in the html navigation stack and
      *                     would be linked with the $url.
      * @param string $icon A url to the icon that should be shown in the html navigation stack
      *                     together with the text and would be linked with the $url.
      * @return bool Returns true if the navigation-stack got changed and false if not.
+     * @throws AdmException Throws an exception if the url has invalid characters.
      */
     public function addUrl($url, $text = null, $icon = null)
     {
-        global $gLogger;
-
         if (!StringUtils::strValidCharacters($url, 'url'))
         {
-            // TODO throw Exception or return false
-            $gLogger->notice('NAVIGATION: Invalid URL added to navigation-stack!', array('url' => $url, 'text' => $text, 'icon' => $icon));
+            throw new AdmException('SYS_URL_INVALID_CHAR', array($url));
         }
 
         $count = count($this->urlStack);
@@ -147,15 +145,14 @@ class Navigation
     /**
      * Get the last added url from the stack.
      * @return string|null Returns the last added url. If the stack is empty returns null
+     * @throws AdmException Throws an exception if no url is in the navigation stack.
      */
     public function getUrl()
     {
         $count = count($this->urlStack);
 
-        if ($count === 0)
-        {
-            // TODO throw Exception
-            return null;
+        if ($count === 0) {
+            throw new AdmException('No url within the navigation stack.');
         }
 
         return $this->urlStack[$count - 1]['url'];
@@ -164,15 +161,14 @@ class Navigation
     /**
      * Get the previous url from the stack. This is not the last url that was added to the stack!
      * @return string|null Returns the previous added url. If only one url is added it returns this one. If no url is added returns null
+     * @throws AdmException Throws an exception if no previous url is in the navigation stack.
      */
     public function getPreviousUrl()
     {
         $count = count($this->urlStack);
 
-        if ($count === 0)
-        {
-            // TODO throw Exception
-            return null;
+        if ($count === 0) {
+            throw new AdmException('No previous url within the navigation stack.');
         }
 
         // Only one url, take this one

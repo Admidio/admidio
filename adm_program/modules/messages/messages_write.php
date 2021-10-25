@@ -80,16 +80,15 @@ if ($getMsgUuid !== '')
     // update the read-status
     $message->setReadValue();
 
-    if($getForward === true)
-    {
+    if($getForward === true) {
         $getMsgUuid = '';
+    } else {
+        $messageStatement = $message->getConversation($message->getValue('msg_id'));
     }
 
     $getSubject = $message->getValue('msg_subject');
     $user = new User($gDb, $gProfileFields, $message->getConversationPartner());
     $getUserUuid = $user->getValue('usr_uuid');
-
-    $messageStatement = $message->getConversation($message->getValue('msg_id'));
 }
 elseif($getUserUuid !== '')
 {
