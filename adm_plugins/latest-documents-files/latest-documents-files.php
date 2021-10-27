@@ -59,7 +59,7 @@ if(Component::isVisible('DOCUMENTS-FILES'))
 
     if(!$gValidLogin)
     {
-        $sqlCondition = ' AND fol_public = 1 ';
+        $sqlCondition = ' AND fol_public = \'1\' ';
     }
 
     $rootFolder = new TableFolder($gDb);

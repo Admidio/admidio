@@ -511,18 +511,18 @@ class TableCategory extends TableAccess
 
         if($checkValue)
         {
-            // Systemkategorien duerfen nicht umbenannt werden
+            // System categories should not be renamed
             if ($columnName === 'cat_name' && (int) $this->getValue('cat_system') === 1)
             {
                 return false;
             }
             elseif ($columnName === 'cat_default' && $newValue == '1')
             {
-                // es darf immer nur eine Default-Kategorie je Bereich geben
+                // there should only be one default category per organization and category type at a time
                 $sql = 'UPDATE '.TBL_CATEGORIES.'
-                           SET cat_default = 0
+                           SET cat_default = \'0\'
                          WHERE cat_type    = ? -- $this->getValue(\'cat_type\')
-                           AND (  cat_org_id IS NOT NULL
+                           AND (  cat_org_id IS NULL
                                OR cat_org_id = ?) -- $gCurrentOrganization->getValue(\'org_id\')';
                 $this->db->queryPrepared($sql, array($this->getValue('cat_type'), (int) $gCurrentOrganization->getValue('org_id')));
             }

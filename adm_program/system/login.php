@@ -21,7 +21,7 @@ $sql = 'SELECT rol_id
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
          WHERE rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
-           AND rol_administrator = 1
+           AND rol_administrator = \'1\'
            AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                OR cat_org_id IS NULL )';
 $pdoStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), (int) $gCurrentOrganization->getValue('org_id')));

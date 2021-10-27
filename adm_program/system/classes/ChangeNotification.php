@@ -353,7 +353,7 @@ class ChangeNotification
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
                  WHERE mem_usr_id  = ? -- $userId
-                   AND rol_valid   = 1
+                   AND rol_valid   = \'1\'
                    AND cat_name_intern <> \'EVENTS\'
                  ORDER BY cat_org_id, cat_sequence, rol_name';
         $query = $gDb->queryPrepared($sql, array($userId));

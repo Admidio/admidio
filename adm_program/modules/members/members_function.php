@@ -76,7 +76,7 @@ if ($getMode === 3 || $getMode === 6)
                 ON rol_id = mem_rol_id
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
-             WHERE rol_valid   = 1
+             WHERE rol_valid   = \'1\'
                AND cat_org_id <> ? -- $orgId
                AND mem_begin  <= ? -- DATE_NOW
                AND mem_end     > ? -- DATE_NOW
@@ -105,7 +105,7 @@ if ($getMode === 2)
                 ON rol_id = mem_rol_id
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
-             WHERE rol_valid  = 1
+             WHERE rol_valid  = \'1\'
                AND (  cat_org_id = ? -- $orgId
                    OR cat_org_id IS NULL )
                AND mem_begin <= ? -- DATE_NOW

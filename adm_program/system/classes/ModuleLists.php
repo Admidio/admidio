@@ -273,13 +273,13 @@ class ModuleLists extends Modules
                            AND mem.mem_end     > ? -- DATE_NOW
                            AND (mem.mem_approved IS NULL
                             OR mem.mem_approved < 3)
-                           AND mem.mem_leader = 0), 0) AS num_members,
+                           AND mem.mem_leader = \'0\'), 0) AS num_members,
                        COALESCE((SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
                            AND mem.mem_begin  <= ? -- DATE_NOW
                            AND mem.mem_end     > ? -- DATE_NOW
-                           AND mem.mem_leader = 1), 0) AS num_leader,
+                           AND mem.mem_leader = \'1\'), 0) AS num_leader,
                        COALESCE((SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
