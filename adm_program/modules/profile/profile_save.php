@@ -382,7 +382,7 @@ elseif($getNewUser === 2)
     $gMessage->show($gL10n->get('SYS_REGISTRATION_SAVED'));
     // => EXIT
 }
-elseif($getNewUser === 0 && $user->getValue('usr_valid') == 0)
+elseif($getNewUser === 0 && !$user->getValue('usr_valid'))
 {
     // a registration was edited then go back to profile view
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
