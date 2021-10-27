@@ -45,7 +45,7 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 $sql = 'SELECT *
           FROM '.TBL_GUESTBOOK.'
          WHERE gbo_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-           AND gbo_locked = \'0\'
+           AND gbo_locked = false
       ORDER BY gbo_timestamp_create DESC
          LIMIT 10';
 $statement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));

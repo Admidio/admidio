@@ -133,11 +133,11 @@ if ((int) $gSettingsManager->get('enable_guestbook_moderation') > 0)
 {
     if($getModeration)
     {
-        $conditionsSpecial .= ' AND (  gbo_locked = \'1\'
+        $conditionsSpecial .= ' AND (  gbo_locked = true
                                     OR EXISTS (SELECT 1
                                                  FROM '.TBL_GUESTBOOK_COMMENTS.'
                                                 WHERE gbc_gbo_id = gbo_id
-                                                  AND gbc_locked = \'1\')) ';
+                                                  AND gbc_locked = true)) ';
     }
     else
     {
@@ -177,13 +177,13 @@ if(!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsMan
     $sql = 'SELECT (SELECT COUNT(*) AS count
                       FROM '.TBL_GUESTBOOK.'
                      WHERE gbo_org_id = ? -- $currOrgId
-                       AND gbo_locked = \'1\') AS count_locked_guestbook,
+                       AND gbo_locked = true) AS count_locked_guestbook,
                    (SELECT COUNT(*) AS count
                       FROM '.TBL_GUESTBOOK_COMMENTS.'
                 INNER JOIN '.TBL_GUESTBOOK.'
                         ON gbo_id = gbc_gbo_id
                      WHERE gbo_org_id = ? -- $currOrgId
-                       AND gbc_locked = \'1\') AS count_locked_comments
+                       AND gbc_locked = true) AS count_locked_comments
               FROM '.TBL_ORGANIZATIONS.'
              WHERE org_id = ? -- $currOrgId';
     $pdoStatement = $gDb->queryPrepared($sql, array($currOrgId, $currOrgId, $currOrgId));
@@ -302,11 +302,11 @@ else
                 // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
                 if ((int) $gSettingsManager->get('enable_guestbook_moderation') > 0 && $getModeration)
                 {
-                    $conditions = ' AND gbc_locked = \'1\' ';
+                    $conditions = ' AND gbc_locked = true ';
                 }
                 else
                 {
-                    $conditions = ' AND gbc_locked = \'0\' ';
+                    $conditions = ' AND gbc_locked = false ';
                 }
 
                 // Alle Kommentare zu diesem Eintrag werden nun aus der DB geholt...

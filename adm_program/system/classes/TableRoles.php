@@ -126,7 +126,7 @@ class TableRoles extends TableAccess
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
-                       AND mem_leader = \'0\'
+                       AND mem_leader = false
                        AND mem_begin <= ? -- DATE_NOW
                        AND mem_end    > ? -- DATE_NOW';
             $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), DATE_NOW, DATE_NOW));
@@ -152,7 +152,7 @@ class TableRoles extends TableAccess
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id  = ? -- $this->getValue(\'rol_id\')
                        AND mem_usr_id <> ? -- $exceptUserId
-                       AND mem_leader  = \'0\'
+                       AND mem_leader  = false
                        AND mem_begin  <= ? -- DATE_NOW
                        AND mem_end     > ? -- DATE_NOW
                        AND (mem_approved IS NULL
@@ -189,7 +189,7 @@ class TableRoles extends TableAccess
         if (!$countLeaders)
         {
             $sql .= '
-                AND mem_leader = \'0\' ';
+                AND mem_leader = false ';
         }
         $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
@@ -331,7 +331,7 @@ class TableRoles extends TableAccess
                 $sql = 'SELECT MIN(lst_id) as lst_id
                           FROM '.TBL_LISTS.'
                          WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                           AND lst_global = \'1\' ';
+                           AND lst_global = true ';
                 $statement = $this->db->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
                 $row = $statement->fetch();
                 $defaultListConfiguration = $row['lst_id'];

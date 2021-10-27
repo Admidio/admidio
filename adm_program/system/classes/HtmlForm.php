@@ -1730,7 +1730,7 @@ class HtmlForm extends HtmlFormBasic
 
         if (!$optionsAll['showSystemCategory'])
         {
-            $sqlConditions .= ' AND cat_system = \'0\' ';
+            $sqlConditions .= ' AND cat_system = false ';
         }
 
         // within edit dialogs child organizations are not allowed to assign categories of all organizations

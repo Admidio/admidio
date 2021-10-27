@@ -168,11 +168,11 @@ if($gDbType === 'pgsql')
            AND mem_end    > ? -- DATE_NOW
     INNER JOIN '.TBL_ROLES.'
             ON mem_rol_id = rol_id
-           AND rol_valid  = \'1\'
+           AND rol_valid  = true
     INNER JOIN '.TBL_CATEGORIES.'
             ON rol_cat_id = cat_id
            AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-         WHERE usr_valid = \'1\'
+         WHERE usr_valid = true
            AND mem_rol_id '.$sqlRol.'
       ORDER BY days_to_bdate '.$sqlSort.', last_name, first_name';
 }
@@ -225,11 +225,11 @@ else
            AND mem_end    > ? -- DATE_NOW
     INNER JOIN '.TBL_ROLES.'
             ON mem_rol_id = rol_id
-           AND rol_valid  = \'1\'
+           AND rol_valid  = true
     INNER JOIN '.TBL_CATEGORIES.'
             ON rol_cat_id = cat_id
            AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-         WHERE usr_valid = \'1\'
+         WHERE usr_valid = true
            AND mem_rol_id '.$sqlRol.'
       ORDER BY days_to_bdate '.$sqlSort.', last_name, first_name';
 }

@@ -89,7 +89,7 @@ $sql = 'SELECT usr_id, usr_uuid, usr_login_name, last_name.usd_value AS last_nam
      LEFT JOIN '.TBL_USER_DATA.' AS email
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
-         WHERE usr_valid = \'1\'
+         WHERE usr_valid = true
            AND '.$sqlSimilarName;
 $queryParams = array(
     $gProfileFields->getProperty('LAST_NAME', 'usf_id'),

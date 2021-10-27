@@ -98,13 +98,13 @@ if($gCurrentUser->editUsers())
                             AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                           WHERE usr_id <> ? -- $user->getValue(\'usr_id\')
                             AND rol_id IN ('.Database::getQmForValues($gCurrentUser->getAllVisibleRoles()).')
-                            AND rol_valid   = \'1\'
+                            AND rol_valid   = true
                             AND cat_name_intern <> \'EVENTS\'
                             AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                 OR cat_org_id IS NULL )
                             AND mem_begin <= ? -- DATE_NOW
                             AND mem_end   >= ? -- DATE_NOW
-                            AND usr_valid  = \'1\'
+                            AND usr_valid  = true
                        ORDER BY last_name.usd_value, first_name.usd_value, usr_id';
     $sqlData['params'] = array_merge(
         array(
@@ -143,15 +143,15 @@ else
                                                 WHERE mem_usr_id  = ? -- $gCurrentUser->getValue(\'usr_id\')
                                                   AND mem_begin  <= ? -- DATE_NOW
                                                   AND mem_end     > ? -- DATE_NOW
-                                                  AND mem_leader  = \'1\'
-                                                  AND rol_valid   = \'1\'
+                                                  AND mem_leader  = true
+                                                  AND rol_valid   = true
                                                   AND cat_name_intern <> \'EVENTS\'
                                                   AND rol_leader_rights IN (?,?) -- ROLE_LEADER_MEMBERS_EDIT, ROLE_LEADER_MEMBERS_ASSIGN_EDIT
                                                   AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                                       OR cat_org_id IS NULL ))
                             AND mem_begin <= ? -- DATE_NOW
                             AND mem_end   >= ? -- DATE_NOW
-                            AND usr_valid  = \'1\'
+                            AND usr_valid  = true
                        ORDER BY last_name.usd_value, first_name.usd_value, usr_id';
     $sqlData['params'] = array(
         $gProfileFields->getProperty('LAST_NAME', 'usf_id'),

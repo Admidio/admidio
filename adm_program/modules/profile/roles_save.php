@@ -96,7 +96,7 @@ if($gCurrentUser->manageRoles())
                AND mem_usr_id = ? -- $user->getValue(\'usr_id\')
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
-             WHERE rol_valid   = \'1\'
+             WHERE rol_valid   = true
                AND cat_name_intern <> \'EVENTS\'
                AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
@@ -120,9 +120,9 @@ else
              WHERE bm.mem_usr_id  = ? -- $gCurrentUser->getValue(\'usr_id\')
                AND bm.mem_begin  <= ? -- DATE_NOW
                AND bm.mem_end     > ? -- DATE_NOW
-               AND bm.mem_leader  = \'1\'
+               AND bm.mem_leader  = true
                AND rol_leader_rights IN (1,3)
-               AND rol_valid      = \'1\'
+               AND rol_valid      = true
                AND cat_name_intern <> \'EVENTS\'
                AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )

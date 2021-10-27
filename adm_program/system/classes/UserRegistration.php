@@ -158,7 +158,7 @@ class UserRegistration extends User
 
         // if user is not valid and has no other registrations
         // than delete user because he has no use for the system
-        if($this->getValue('usr_valid') == 0)
+        if(!$this->getValue('usr_valid'))
         {
             $sql = 'SELECT reg_id
                       FROM '.TBL_REGISTRATIONS.'
@@ -256,8 +256,8 @@ class UserRegistration extends User
                      LEFT JOIN '.TBL_USER_DATA.' AS last_name
                             ON last_name.usd_usr_id = usr_id
                            AND last_name.usd_usf_id = ? -- $this->mProfileFieldsData->getProperty(\'LAST_NAME\', \'usf_id\')
-                         WHERE rol_approve_users = \'1\'s
-                           AND usr_valid  = \'1\'
+                         WHERE rol_approve_users = true
+                           AND usr_valid  = true
                            AND cat_org_id = ? -- $this->organizationId
                            AND mem_begin <= ? -- DATE_NOW
                            AND mem_end    > ? -- DATE_NOW';

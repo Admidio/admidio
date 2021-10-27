@@ -531,7 +531,7 @@ $sql = 'SELECT lst_id, lst_uuid, lst_name, lst_global, lst_timestamp
           FROM '.TBL_LISTS.'
          WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
            AND (  lst_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
-               OR lst_global = \'1\')
+               OR lst_global = true)
       ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC';
 $configurationsStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), (int) $gCurrentUser->getValue('usr_id')));
 
@@ -672,7 +672,7 @@ else
                      INNER JOIN '.TBL_CATEGORIES.'
                              ON cat_id = rol_cat_id
                             AND cat_name_intern <> \'EVENTS\'
-                          WHERE rol_valid  = \'0\'
+                          WHERE rol_valid  = false
                             AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                 OR cat_org_id IS NULL )
                        ORDER BY cat_sequence, rol_name';

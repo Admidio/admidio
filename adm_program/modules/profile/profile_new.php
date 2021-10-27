@@ -290,7 +290,7 @@ foreach($gProfileFields->getProfileFields() as $field)
             $helpId = $gProfileFields->getProperty($gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'), 'usf_description');
         }
 
-        if($gProfileFields->getProperty($usfNameIntern, 'usf_description_inline') == true)
+        if($gProfileFields->getProperty($usfNameIntern, 'usf_description_inline'))
         {
             $helpTextMode  = 'helpTextIdInline';
         }
@@ -360,7 +360,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     'property'          => $fieldProperty,
                     'defaultValue'      => $user->getValue($usfNameIntern, 'database'),
                     'showNoValueButton' => $showDummyRadioButton,
-                    'helpTextIdLabel'   => $helpId,
+                    $helpTextMode       => $helpId,
                     'icon'              => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
@@ -375,7 +375,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                 array(
                     'maxLength'       => 4000,
                     'property'        => $fieldProperty,
-                    'helpTextIdLabel' => $helpId,
+                    $helpTextMode     => $helpId,
                     'icon'            => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
@@ -427,7 +427,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     'type'            => $fieldType,
                     'maxLength'       => $maxlength,
                     'property'        => $fieldProperty,
-                    'helpTextIdLabel' => $helpId,
+                    $helpTextMode     => $helpId,
                     'icon'            => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );

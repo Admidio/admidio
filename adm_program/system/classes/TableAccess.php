@@ -366,10 +366,14 @@ class TableAccess
 
                 // move data to class column value array
                 foreach ($row as $key => $value) {
-                    if($this->columnsInfos[$key]['type'] === 'boolean') {
+                    if(str_starts_with($key, $this->columnPrefix . '_'))
+                    if(str_starts_with($key, $this->columnPrefix . '_')
+                    && ($this->columnsInfos[$key]['type'] === 'boolean'
+                            || $this->columnsInfos[$key]['type'] === 'tinyint')) {
                         $this->dbColumns[$key] = (bool) $value;
-                    } elseif($this->columnsInfos[$key]['type'] === 'integer'
-                    || $this->columnsInfos[$key]['type'] === 'smallint') {
+                    } elseif(str_starts_with($key, $this->columnPrefix . '_')
+                    && ($this->columnsInfos[$key]['type'] === 'integer'
+                            || $this->columnsInfos[$key]['type'] === 'smallint')) {
                         $this->dbColumns[$key] = (int) $value;
                     } else {
                         $this->dbColumns[$key] = $value;
@@ -551,6 +555,7 @@ class TableAccess
             // fields of other tables must not appear in insert/update
             if(str_starts_with($key, $this->columnPrefix . '_')) {
                 if ($this->columnsInfos[$key]['type'] === 'boolean' && DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+                    $GLOBALS['gLogger']->error('PGSQL');
                     if ($value === 1 || $value === '1') {
                         $value = 'true';
                     } else {

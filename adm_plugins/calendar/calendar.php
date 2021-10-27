@@ -302,7 +302,7 @@ if($plg_geb_aktiv)
          LEFT JOIN '.TBL_USER_DATA.' AS first_name
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-             WHERE usr_valid  = \'1\'
+             WHERE usr_valid  = true
                AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                AND rol_id '.$sqlRoleIds.'
                AND mem_begin <= ? -- DATE_NOW

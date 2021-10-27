@@ -345,7 +345,7 @@ class Session extends TableAccess
      */
     public function reloadAllSessions()
     {
-        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = \'true\' ';
+        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = true ';
         $this->db->queryPrepared($sql);
     }
 
@@ -356,7 +356,7 @@ class Session extends TableAccess
      */
     public function reloadSession(int $userId)
     {
-        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = \'true\'
+        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = true
                  WHERE ses_usr_id = ?  -- $userId';
         $this->db->queryPrepared($sql, array($userId));
     }

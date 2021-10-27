@@ -77,7 +77,7 @@ $sql = 'SELECT pho.*, '.$additionalFields.'
           FROM '.TBL_PHOTOS.' AS pho
                '.$additionalTables.'
          WHERE pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-           AND pho_locked = \'0\'
+           AND pho_locked = false
       ORDER BY pho_timestamp_create DESC
          LIMIT 10';
 $queryParams[] = (int) $gCurrentOrganization->getValue('org_id');

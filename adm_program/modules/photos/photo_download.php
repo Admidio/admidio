@@ -141,7 +141,7 @@ if ($getPhotoNr == null)
     if (!$gCurrentUser->editPhotoRight())
     {
         $sql .= '
-            AND pho_locked = \'0\' ';
+            AND pho_locked = false ';
     }
 
     $sql .= '

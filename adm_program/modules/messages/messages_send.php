@@ -279,7 +279,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                          WHERE rol_id    = ? -- $group[\'id\']
                            AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                OR cat_org_id IS NULL )
-                           AND usr_valid = \'1\'
+                           AND usr_valid = true
                                ' . $sqlConditions;
 
                 // if current user is logged in the user id must be excluded because we don't want
@@ -331,7 +331,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                                 ON first_name.usd_usr_id = usr_id
                                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                              WHERE usr_id = ? -- $user->getValue(\'usr_id\')
-                               AND usr_valid = \'1\' ';
+                               AND usr_valid = true ';
                     $statement = $gDb->queryPrepared($sql, array((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), (int) $user->getValue('usr_id')));
 
                     while ($row = $statement->fetch())

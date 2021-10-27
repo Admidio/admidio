@@ -816,7 +816,7 @@ CREATE TABLE %PREFIX%_user_relation_types
     urt_name                    varchar(100)        NOT NULL,
     urt_name_male               varchar(100)        NOT NULL,
     urt_name_female             varchar(100)        NOT NULL,
-    urt_edit_userurt_edit_user               boolean             NOT NULL    DEFAULT '0',
+    urt_edit_user               boolean             NOT NULL    DEFAULT '0',
     urt_id_inverse              integer unsigned    NULL        DEFAULT NULL,
     urt_usr_id_create           integer unsigned    NULL        DEFAULT NULL,
     urt_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,

@@ -64,7 +64,7 @@ class TablePhotos extends TableAccess
         $sql = 'SELECT pho_id, pho_quantity
                   FROM '.TBL_PHOTOS.'
                  WHERE pho_pho_id_parent = ? -- $phoId
-                   AND pho_locked = \'0\'';
+                   AND pho_locked = false';
         $childAlbumsStatement = $this->db->queryPrepared($sql, array($phoId));
 
         while ($phoRow = $childAlbumsStatement->fetch())
@@ -302,7 +302,7 @@ class TablePhotos extends TableAccess
             $sql = 'SELECT pho_id, pho_uuid, pho_begin, pho_quantity
                       FROM '.TBL_PHOTOS.'
                      WHERE pho_pho_id_parent = ? -- $phoId
-                       AND pho_locked = \'0\'
+                       AND pho_locked = false
                   ORDER BY pho_quantity DESC';
             $childAlbumsStatement = $this->db->queryPrepared($sql, array($phoId));
 

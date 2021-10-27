@@ -137,7 +137,7 @@ $sqlSubSelect = '(SELECT COUNT(*) AS count_this
                    WHERE mem_usr_id  = usr_id
                      AND mem_begin  <= \''.DATE_NOW.'\'
                      AND mem_end     > \''.DATE_NOW.'\'
-                     AND rol_valid = \'1\'
+                     AND rol_valid = true
                      AND cat_name_intern <> \'EVENTS\'
                      AND (  cat_org_id = '.(int) $gCurrentOrganization->getValue('org_id').'
                          OR cat_org_id IS NULL ))';
@@ -162,7 +162,7 @@ $sql = 'SELECT COUNT(*) AS count_total
     INNER JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-         WHERE usr_valid = \'1\'
+         WHERE usr_valid = true
                '.$memberOfThisOrganizationCondition;
 $queryParams = array(
     $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
@@ -186,7 +186,7 @@ if($gCurrentOrganization->countAllRecords() > 1)
           WHERE mem_usr_id  = usr_id
             AND mem_begin  <= \''.DATE_NOW.'\'
             AND mem_end     > \''.DATE_NOW.'\'
-            AND rol_valid = \'1\'
+            AND rol_valid = true
             AND cat_name_intern <> \'EVENTS\'
             AND cat_org_id <> '.(int) $gCurrentOrganization->getValue('org_id').')';
 }

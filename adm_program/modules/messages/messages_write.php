@@ -128,7 +128,7 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end   >= ? -- DATE_NOW
                AND usr_id <> ? -- $currUsrId
-               AND usr_valid  = \'1\'
+               AND usr_valid  = true
                AND usr_login_name IS NOT NULL
           GROUP BY usr_id, last_name.usd_value, first_name.usd_value, usr_login_name
           ORDER BY last_name.usd_value, first_name.usd_value';
@@ -357,7 +357,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
                        AND (  cat_org_id = ? -- $currOrgId
                            OR cat_org_id IS NULL)
                      WHERE rol_id IN ('.Database::getQmForValues($sqlRoleIds).')
-                       AND rol_valid = \'1\'
+                       AND rol_valid = true
                            '.$sqlParticipationRoles.'
                   ORDER BY rol_name ASC';
             $rolesStatement = $gDb->queryPrepared($sql, array_merge(array($currOrgId), $sqlRoleIds));
@@ -408,7 +408,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
                        AND mem_begin <= ? -- DATE_NOW
                        AND rol_id IN ('.Database::getQmForValues($listVisibleRoleArray).')
                            '.$sqlUserIds.'
-                       AND usr_valid = \'1\'
+                       AND usr_valid = true
                   ORDER BY last_name, first_name, mem_end DESC';
             $queryParams = array_merge(
                 array(
@@ -463,7 +463,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
                    AND (  cat_org_id = ? -- $currOrgId
                        OR cat_org_id IS NULL)
                  WHERE rol_mail_this_role = 3
-                   AND rol_valid = \'1\'
+                   AND rol_valid = true
               ORDER BY cat_sequence, rol_name';
 
         $statement = $gDb->queryPrepared($sql, array($currOrgId));
@@ -533,7 +533,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
                                      ON field.usf_id = email.usd_usf_id
                                     AND field.usf_type = \'EMAIL\'
                                   WHERE usr_id = ? -- $currUsrId
-                                    AND usr_valid = \'1\'
+                                    AND usr_valid = true
                                GROUP BY email.usd_value, email.usd_value';
             $sqlData['params'] = array($currUsrId);
 

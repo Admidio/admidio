@@ -73,7 +73,7 @@ function disableSoundexSearchIfPgSql(Database $db)
     {
         // soundex is not a default function in PostgreSQL
         $sql = 'UPDATE ' . TBL_PREFERENCES . '
-                   SET prf_value = \'0\'
+                   SET prf_value = false
                  WHERE prf_name = \'system_search_similar\'';
         $db->queryPrepared($sql);
     }

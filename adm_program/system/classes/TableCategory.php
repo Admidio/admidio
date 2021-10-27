@@ -520,7 +520,7 @@ class TableCategory extends TableAccess
             {
                 // there should only be one default category per organization and category type at a time
                 $sql = 'UPDATE '.TBL_CATEGORIES.'
-                           SET cat_default = \'0\'
+                           SET cat_default = false
                          WHERE cat_type    = ? -- $this->getValue(\'cat_type\')
                            AND (  cat_org_id IS NULL
                                OR cat_org_id = ?) -- $gCurrentOrganization->getValue(\'org_id\')';
