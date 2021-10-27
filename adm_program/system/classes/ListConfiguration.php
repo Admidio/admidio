@@ -825,7 +825,7 @@ class ListConfiguration extends TableLists
         // Set SQL-Statement
         if ($optionsAll['showAllMembersDatabase'])
         {
-            $sql = 'SELECT DISTINCT 0 AS mem_leader, usr_id, usr_uuid, ' . $sqlColumnNames . '
+            $sql = 'SELECT DISTINCT \'0\' AS mem_leader, usr_id, usr_uuid, ' . $sqlColumnNames . '
                       FROM '.TBL_USERS.'
                            '.$sqlJoin.'
                      WHERE usr_valid = \'1\' '.

@@ -202,7 +202,7 @@ $selectBoxEntries = array(0 => $gL10n->get('SYS_SYSTEM_DEFAULT_LIST'));
 $sql = 'SELECT lst_id, lst_name
           FROM '.TBL_LISTS.'
          WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-           AND lst_global = 1
+           AND lst_global = \'1\'
            AND lst_name IS NOT NULL
       ORDER BY lst_global ASC, lst_name ASC';
 $pdoStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));

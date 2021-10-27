@@ -720,7 +720,7 @@ class User extends TableAccess
 
         $sqlQueries[] = 'UPDATE '.TBL_LISTS.'
                             SET lst_usr_id = NULL
-                          WHERE lst_global = 1
+                          WHERE lst_global = \'1\'
                             AND lst_usr_id = '.$usrId;
 
         $sqlQueries[] = 'UPDATE '.TBL_PHOTOS.'
@@ -759,10 +759,10 @@ class User extends TableAccess
                           WHERE lsc_lst_id IN (SELECT lst_id
                                                  FROM '.TBL_LISTS.'
                                                 WHERE lst_usr_id = '.$usrId.'
-                                                  AND lst_global = 0)';
+                                                  AND lst_global = \'0\')';
 
         $sqlQueries[] = 'DELETE FROM '.TBL_LISTS.'
-                          WHERE lst_global = 0
+                          WHERE lst_global = \'0\'
                             AND lst_usr_id = '.$usrId;
 
         $sqlQueries[] = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.'
@@ -1606,7 +1606,7 @@ class User extends TableAccess
                    AND mem_begin <= ? -- DATE_NOW
                    AND mem_end    > ? -- DATE_NOW
                    AND cat_org_id = ? -- $this->organizationId
-                   AND '.$administratorColumn.' = 1';
+                   AND '.$administratorColumn.' = \'1\' ';
         $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
