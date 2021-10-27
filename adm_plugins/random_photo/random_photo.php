@@ -82,7 +82,7 @@ if($gSettingsManager->getInt('enable_photo_module') > 0)
         $sql = 'SELECT *
                   FROM '.TBL_PHOTOS.'
                  WHERE pho_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                   AND pho_locked   = 0
+                   AND pho_locked   = \'0\'
                    AND pho_quantity > 0
               ORDER BY pho_begin DESC';
 

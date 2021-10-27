@@ -51,7 +51,7 @@ function subMenu(&$menuList, $level, $menId, $parentId = null)
 
     $sql = 'SELECT *
               FROM '.TBL_MENU.'
-             WHERE men_node = 1
+             WHERE men_node = \'1\'
                AND men_id  <> ? -- $menu->getValue(\'men_id\')
                    '.$sqlConditionParentId;
     $childStatement = $gDb->queryPrepared($sql, $queryParams);
@@ -112,8 +112,8 @@ $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
                  ON cat_id = rol_cat_id
          INNER JOIN '.TBL_ORGANIZATIONS.'
                  ON org_id = cat_org_id
-              WHERE rol_valid  = 1
-                AND rol_system = 0
+              WHERE rol_valid  = \'1\'
+                AND rol_system = \'0\'
                 AND cat_name_intern <> \'EVENTS\'
            ORDER BY cat_name, rol_name';
 $rolesViewStatement = $gDb->queryPrepared($sqlRoles);

@@ -256,8 +256,8 @@ class UserRegistration extends User
                      LEFT JOIN '.TBL_USER_DATA.' AS last_name
                             ON last_name.usd_usr_id = usr_id
                            AND last_name.usd_usf_id = ? -- $this->mProfileFieldsData->getProperty(\'LAST_NAME\', \'usf_id\')
-                         WHERE rol_approve_users = 1
-                           AND usr_valid  = 1
+                         WHERE rol_approve_users = \'1\'s
+                           AND usr_valid  = \'1\'
                            AND cat_org_id = ? -- $this->organizationId
                            AND mem_begin <= ? -- DATE_NOW
                            AND mem_end    > ? -- DATE_NOW';
