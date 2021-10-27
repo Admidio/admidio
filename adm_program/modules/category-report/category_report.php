@@ -424,12 +424,13 @@ foreach ($report->listData as $member => $memberdata)
         {
         	if ($usf_id !== 0)     // profile fields
         	{
+        	    $user->readDataById($member);
+        	    
         		if ($getMode === 'html'
         			&&    ($usf_id === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
         				|| $usf_id === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
         		{
-        		    $user->readDataById($member);
-        		    $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member);
+        		    $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content);
         		    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))).'">'.$htmlValue.'</a>';
         		}
         		else
@@ -447,11 +448,11 @@ foreach ($report->listData as $member => $memberdata)
         		        // checkbox must set a sorting value
         		        if($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')
         		        {
-        		            $columnValues[] = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member), 'order' => $content);
+        		            $columnValues[] = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content), 'order' => $content);
         		        }
         		        else
         		        {
-        		            $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member);
+        		            $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $user->getValue('usr_uuid'));
         		        }
         		    }
         		}
