@@ -379,7 +379,7 @@ class Organization extends TableAccess
         $gSettingsManager->set('groups_roles_default_configuration', $addressList->getValue('lst_id'));
         $gSettingsManager->set('dates_default_list_configuration', $participantList->getValue('lst_id'));
         $gSettingsManager->set('members_list_configuration', $userManagementList->getValue('lst_id'));
-        $gSettingsManager->set('category_report_default_configuration', $categoryReport->getValue('lst_id'));
+        $gSettingsManager->set('category_report_default_configuration', $categoryReport->getValue('crt_id'));
     }
 
     /**
