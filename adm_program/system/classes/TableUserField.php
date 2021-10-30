@@ -282,16 +282,12 @@ class TableUserField extends TableAccess
      */
     public function isVisible()
     {
-        global $gCurrentUser;
-
-        $usrId = (int) $gCurrentUser->getValue('usr_id');
-
-        if ($this->mViewUserField === null || $this->mViewUserFieldUserId !== $usrId)
+        if ($this->mViewUserField === null || $this->mViewUserFieldUserId !== $GLOBALS['gCurrentUserId'])
         {
-            $this->mViewUserFieldUserId = $usrId;
+            $this->mViewUserFieldUserId = $GLOBALS['gCurrentUserId'];
 
             // check if the current user could view the category of the profile field
-            $this->mViewUserField = in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF'), true);
+            $this->mViewUserField = in_array($this->getValue('cat_id'), $GLOBALS['gCurrentUser']->getAllVisibleCategories('USF'), true);
         }
 
         return $this->mViewUserField;

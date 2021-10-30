@@ -81,7 +81,7 @@ if($gSettingsManager->getInt('enable_photo_module') > 0)
         // call photo albums
         $sql = 'SELECT *
                   FROM '.TBL_PHOTOS.'
-                 WHERE pho_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                 WHERE pho_org_id   = ? -- $gCurrentOrgId
                    AND pho_locked   = false
                    AND pho_quantity > 0
               ORDER BY pho_begin DESC';
@@ -92,7 +92,7 @@ if($gSettingsManager->getInt('enable_photo_module') > 0)
             $sql .= ' LIMIT '.$plg_photos_albums;
         }
 
-        $albumStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
+        $albumStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
         $albumList      = $albumStatement->fetchAll();
 
         $i        = 0;

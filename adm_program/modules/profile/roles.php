@@ -152,14 +152,14 @@ if($gCurrentUser->manageRoles())
                AND mem_end     > ? -- DATE_NOW
              WHERE rol_valid   = true
                AND cat_name_intern <> \'EVENTS\'
-               AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND (  cat_org_id = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, cat_id, rol_name';
     $queryParams = array(
         $user->getValue('usr_id'),
         DATE_NOW,
         DATE_NOW,
-        (int) $gCurrentOrganization->getValue('org_id')
+        $gCurrentOrgId
     );
 }
 else
@@ -177,26 +177,26 @@ else
                AND mgl.mem_usr_id = ? -- $user->getValue(\'usr_id\')
                AND mgl.mem_begin <= ? -- DATE_NOW
                AND mgl.mem_end    > ? -- DATE_NOW
-             WHERE bm.mem_usr_id  = ? -- $gCurrentUser->getValue(\'usr_id\')
+             WHERE bm.mem_usr_id  = ? -- $gCurrentUserId
                AND bm.mem_begin  <= ? -- DATE_NOW
                AND bm.mem_end     > ? -- DATE_NOW
                AND bm.mem_leader  = true
                AND rol_leader_rights IN (?,?) -- ROLE_LEADER_MEMBERS_ASSIGN,ROLE_LEADER_MEMBERS_ASSIGN_EDIT
                AND rol_valid      = true
                AND cat_name_intern <> \'EVENTS\'
-               AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND (  cat_org_id  = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, cat_id, rol_name';
     $queryParams = array(
         $user->getValue('usr_id'),
         DATE_NOW,
         DATE_NOW,
-        $gCurrentUser->getValue('usr_id'),
+        $gCurrentUserId,
         DATE_NOW,
         DATE_NOW,
         ROLE_LEADER_MEMBERS_ASSIGN,
         ROLE_LEADER_MEMBERS_ASSIGN_EDIT,
-        $gCurrentOrganization->getValue('org_id')
+        $gCurrentOrgId
     );
 }
 $statement = $gDb->queryPrepared($sql, $queryParams);
@@ -223,7 +223,7 @@ while($row = $statement->fetch())
     // but don't change their own membership, because there must be at least one administrator
     if($role->getValue('rol_administrator') == 1
     && (!$gCurrentUser->isAdministrator()
-    || ($gCurrentUser->isAdministrator() && (int) $user->getValue('usr_id') === (int) $gCurrentUser->getValue('usr_id'))))
+    || ($gCurrentUser->isAdministrator() && (int) $user->getValue('usr_id') === $gCurrentUserId)))
     {
         $memberDisabled = ' disabled="disabled" ';
     }

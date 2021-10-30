@@ -37,10 +37,10 @@ if ($getCommentGboUuid !== '')
         INNER JOIN '.TBL_GUESTBOOK.'
                 ON gbo_id = gbc_gbo_id
              WHERE gbo_uuid   = ? -- $getCommentGboUuid
-               AND gbo_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND gbo_org_id = ? -- $gCurrentOrgId
                    '.$conditions.'
           ORDER BY gbc_timestamp_create ASC';
-    $commentStatement = $gDb->queryPrepared($sql, array($getCommentGboUuid, (int) $gCurrentOrganization->getValue('org_id')));
+    $commentStatement = $gDb->queryPrepared($sql, array($getCommentGboUuid, $gCurrentOrgId));
 
     if($commentStatement->rowCount() > 0)
     {

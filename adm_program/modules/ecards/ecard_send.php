@@ -110,7 +110,7 @@ else
 $message = new TableMessage($gDb);
 $message->setValue('msg_type', TableMessage::MESSAGE_TYPE_EMAIL);
 $message->setValue('msg_subject', $gL10n->get('SYS_GREETING_CARD').': '.$gL10n->get('SYS_NEW_MESSAGE_RECEIVED'));
-$message->setValue('msg_usr_id_sender', $gCurrentUser->getValue('usr_id'));
+$message->setValue('msg_usr_id_sender', $gCurrentUserId);
 
 // set condition if email should only send to the email address of the user field
 // with the internal name 'EMAIL'
@@ -144,7 +144,7 @@ if(count($arrayRoles) > 0)
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
              WHERE rol_id           IN ('.implode(',', $arrayRoles).')
-               AND cat_org_id       = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND cat_org_id       = ? -- $gCurrentOrgId
                AND mem_begin       <= ? -- DATE_NOW
                AND mem_end          > ? -- DATE_NOW
                AND usr_valid        = true
@@ -152,7 +152,7 @@ if(count($arrayRoles) > 0)
     $queryParams = array(
         $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
         $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-        $gCurrentOrganization->getValue('org_id'),
+        $gCurrentOrgId,
         DATE_NOW,
         DATE_NOW
     );

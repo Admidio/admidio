@@ -109,9 +109,9 @@ $sqlAdminRoles = 'SELECT rol_name
                       ON cat_id = rol_cat_id
                    WHERE rol_valid  = true
                      AND '. $rolesRightsColumn .' = true
-                     AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                     AND cat_org_id = ? -- $gCurrentOrgId
                 ORDER BY cat_sequence, rol_name';
-$statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array((int) $gCurrentOrganization->getValue('org_id')));
+$statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrgId));
 
 $adminRoles = array();
 while($roleName = $statementAdminRoles->fetchColumn())
@@ -147,12 +147,12 @@ $categoriesOverview->addRowHeadingByArray($columnHeading);
 
 $sql = 'SELECT *
           FROM '.TBL_CATEGORIES.'
-         WHERE (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+         WHERE (  cat_org_id  = ? -- $gCurrentOrgId
                OR cat_org_id IS NULL )
            AND cat_type = ? -- $getType
       ORDER BY cat_sequence ASC';
 
-$categoryStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), $getType));
+$categoryStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $getType));
 $flagTbodyWritten = false;
 $flagTbodyAllOrgasWritten = false;
 

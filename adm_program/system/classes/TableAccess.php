@@ -509,8 +509,6 @@ class TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentUser;
-
         if (!$this->columnsValueChanged && $this->dbColumns[$this->keyColumnName] !== '')
         {
             return false;
@@ -524,23 +522,23 @@ class TableAccess
 
         // TODO check if "$gCurrentUser instanceof User"
         // see "start_installation.php"
-        if ($updateFingerPrint && $gCurrentUser instanceof self && $gCurrentUser->getValue('usr_id') > 0)
+        if ($updateFingerPrint && $GLOBALS['gCurrentUserId'] > 0)
         {
             // if the table has fields to store the creator and the last change,
             // then fill them here automatically
             if ($this->newRecord && array_key_exists($this->columnPrefix . '_usr_id_create', $this->dbColumns))
             {
                 $this->setValue($this->columnPrefix . '_timestamp_create', DATETIME_NOW);
-                $this->setValue($this->columnPrefix . '_usr_id_create', (int) $gCurrentUser->getValue('usr_id'));
+                $this->setValue($this->columnPrefix . '_usr_id_create', $GLOBALS['gCurrentUserId']);
             }
             elseif (array_key_exists($this->columnPrefix . '_usr_id_change', $this->dbColumns))
             {
                 // Do not update data if the same user has done so within 15 minutes
-                if ((int) $gCurrentUser->getValue('usr_id') !== (int) $this->getValue($this->columnPrefix . '_usr_id_create')
+                if ($GLOBALS['gCurrentUserId'] !== (int) $this->getValue($this->columnPrefix . '_usr_id_create')
                 || time() > (strtotime($this->getValue($this->columnPrefix . '_timestamp_create')) + 900))
                 {
                     $this->setValue($this->columnPrefix . '_timestamp_change', DATETIME_NOW);
-                    $this->setValue($this->columnPrefix . '_usr_id_change', (int) $gCurrentUser->getValue('usr_id'));
+                    $this->setValue($this->columnPrefix . '_usr_id_change', $GLOBALS['gCurrentUserId']);
                 }
             }
         }

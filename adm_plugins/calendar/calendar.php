@@ -303,7 +303,7 @@ if($plg_geb_aktiv)
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
              WHERE usr_valid  = true
-               AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND cat_org_id = ? -- $gCurrentOrgId
                AND rol_id '.$sqlRoleIds.'
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
@@ -314,7 +314,7 @@ if($plg_geb_aktiv)
         $currentMonth,
         $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
         $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-        $gCurrentOrganization->getValue('org_id'),
+        $gCurrentOrgId,
         DATE_NOW,
         DATE_NOW
     );

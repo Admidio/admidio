@@ -27,7 +27,7 @@ function hasRole($roleName, $userId = 0)
 
     if ($userId === 0)
     {
-        $userId = (int) $gCurrentUser->getValue('usr_id');
+        $userId = $gCurrentUserId;
     }
 
     $sql = 'SELECT mem_id
@@ -41,9 +41,9 @@ function hasRole($roleName, $userId = 0)
                AND mem_end    > ? -- DATE_NOW
                AND rol_name   = ? -- $roleName
                AND rol_valid  = true
-               AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND (  cat_org_id = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )';
-    $statement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $roleName, (int) $gCurrentOrganization->getValue('org_id')));
+    $statement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $roleName, $gCurrentOrgId));
 
     return $statement->rowCount() === 1;
 }
@@ -72,9 +72,9 @@ function isMember($userId)
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
                AND rol_valid  = true
-               AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND (  cat_org_id = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )';
-    $statement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id')));
+    $statement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $gCurrentOrgId));
 
     return $statement->fetchColumn() > 0;
 }
@@ -107,9 +107,9 @@ function isGroupLeader($userId, $roleId = 0)
                AND mem_end    > ? -- DATE_NOW
                AND mem_leader = true
                AND rol_valid  = true
-               AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND (  cat_org_id = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )';
-    $queryParams = array($userId, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'));
+    $queryParams = array($userId, DATE_NOW, DATE_NOW, $gCurrentOrgId);
 
     if ($roleId > 0)
     {

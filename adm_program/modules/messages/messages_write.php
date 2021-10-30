@@ -71,9 +71,6 @@ if ($gValidLogin && $getMsgType !== TableMessage::MESSAGE_TYPE_PM && !$gCurrentU
     // => EXIT
 }
 
-$currUsrId = (int) $gCurrentUser->getValue('usr_id');
-$currOrgId = (int) $gCurrentOrganization->getValue('org_id');
-
 // Update the read status of the message
 if ($getMsgUuid !== '')
 {
@@ -123,11 +120,11 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
              WHERE rol_id IN ('.Database::getQmForValues($arrAllMailRoles).')
                AND cat_name_intern <> \'EVENTS\'
-               AND (  cat_org_id = ? -- $currOrgId
+               AND (  cat_org_id = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end   >= ? -- DATE_NOW
-               AND usr_id <> ? -- $currUsrId
+               AND usr_id <> ? -- $gCurrentUserId
                AND usr_valid  = true
                AND usr_login_name IS NOT NULL
           GROUP BY usr_id, last_name.usd_value, first_name.usd_value, usr_login_name
@@ -139,10 +136,10 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
         ),
         $arrAllMailRoles,
         array(
-            $currOrgId,
+            $gCurrentOrgId,
             DATE_NOW,
             DATE_NOW,
-            $currUsrId
+            $gCurrentUserId
         )
     );
     $dropStatement = $gDb->queryPrepared($sql, array_merge($queryParamsArr[0], $queryParamsArr[1], $queryParamsArr[2]));
@@ -354,13 +351,13 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
                       FROM '.TBL_ROLES.'
                 INNER JOIN '.TBL_CATEGORIES.'
                         ON cat_id = rol_cat_id
-                       AND (  cat_org_id = ? -- $currOrgId
+                       AND (  cat_org_id = ? -- $gCurrentOrgId
                            OR cat_org_id IS NULL)
                      WHERE rol_id IN ('.Database::getQmForValues($sqlRoleIds).')
                        AND rol_valid = true
                            '.$sqlParticipationRoles.'
                   ORDER BY rol_name ASC';
-            $rolesStatement = $gDb->queryPrepared($sql, array_merge(array($currOrgId), $sqlRoleIds));
+            $rolesStatement = $gDb->queryPrepared($sql, array_merge(array($gCurrentOrgId), $sqlRoleIds));
             $rolesArray = $rolesStatement->fetchAll();
 
             foreach ($rolesArray as $roleArray)
@@ -404,7 +401,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
                  LEFT JOIN '.TBL_USER_DATA.' AS first_name
                         ON first_name.usd_usr_id = usr_id
                        AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                     WHERE usr_id    <> ? -- $currUsrId
+                     WHERE usr_id    <> ? -- $gCurrentUserId
                        AND mem_begin <= ? -- DATE_NOW
                        AND rol_id IN ('.Database::getQmForValues($listVisibleRoleArray).')
                            '.$sqlUserIds.'
@@ -414,7 +411,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
                 array(
                     (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
                     (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-                    $currUsrId,
+                    $gCurrentUserId,
                     DATE_NOW
                 ),
                 $listVisibleRoleArray
@@ -460,13 +457,13 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                   AND (  cat_org_id = ? -- $currOrgId
+                   AND (  cat_org_id = ? -- $gCurrentOrgId
                        OR cat_org_id IS NULL)
                  WHERE rol_mail_this_role = 3
                    AND rol_valid = true
               ORDER BY cat_sequence, rol_name';
 
-        $statement = $gDb->queryPrepared($sql, array($currOrgId));
+        $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
         while ($row = $statement->fetch())
         {
             $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
@@ -503,17 +500,17 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
 
     $form->addLine();
 
-    if ($currUsrId > 0)
+    if ($gCurrentUserId > 0)
     {
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_USER_FIELDS.'
             INNER JOIN '. TBL_USER_DATA .'
                     ON usd_usf_id = usf_id
                  WHERE usf_type = \'EMAIL\'
-                   AND usd_usr_id = ? -- $currUsrId
+                   AND usd_usr_id = ? -- $gCurrentUserId
                    AND usd_value IS NOT NULL';
 
-        $pdoStatement = $gDb->queryPrepared($sql, array($currUsrId));
+        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentUserId));
         $possibleEmails = $pdoStatement->fetchColumn();
 
         $form->addInput(
@@ -532,10 +529,10 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
                              INNER JOIN '.TBL_USER_FIELDS.' AS field
                                      ON field.usf_id = email.usd_usf_id
                                     AND field.usf_type = \'EMAIL\'
-                                  WHERE usr_id = ? -- $currUsrId
+                                  WHERE usr_id = ? -- $gCurrentUserId
                                     AND usr_valid = true
                                GROUP BY email.usd_value, email.usd_value';
-            $sqlData['params'] = array($currUsrId);
+            $sqlData['params'] = array($gCurrentUserId);
 
             $form->addSelectBoxFromSql(
                 'mailfrom', $gL10n->get('SYS_YOUR_EMAIL'), $gDb, $sqlData,
@@ -569,7 +566,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
     }
 
     // if preference is set then show a checkbox where the user can request a delivery confirmation for the email
-    if (($currUsrId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation') === 2) || (int) $gSettingsManager->get('mail_delivery_confirmation') === 1)
+    if (($gCurrentUserId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation') === 2) || (int) $gSettingsManager->get('mail_delivery_confirmation') === 1)
     {
         $form->addCheckbox('delivery_confirmation', $gL10n->get('SYS_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
     }
@@ -637,7 +634,7 @@ if (isset($messageStatement))
 
         if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
         {
-            if ((int) $row['msc_usr_id'] === $currUsrId)
+            if ((int) $row['msc_usr_id'] === $gCurrentUserId)
             {
                 $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
             }

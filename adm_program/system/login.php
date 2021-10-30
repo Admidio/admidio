@@ -22,9 +22,9 @@ $sql = 'SELECT rol_id
             ON cat_id = rol_cat_id
          WHERE rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
            AND rol_administrator = true
-           AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+           AND (  cat_org_id = ? -- $gCurrentOrgId
                OR cat_org_id IS NULL )';
-$pdoStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), (int) $gCurrentOrganization->getValue('org_id')));
+$pdoStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), $gCurrentOrgId));
 
 // create role object for administrator
 $roleAdministrator = new TableRoles($gDb, $pdoStatement->fetchColumn());
@@ -52,7 +52,7 @@ if($gSettingsManager->getBool('system_organization_select'))
           ORDER BY org_longname ASC, org_shortname ASC';
     $form->addSelectBoxFromSql(
         'org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $gCurrentOrganization->getValue('org_id'), 'class' => 'form-control-small')
+        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $gCurrentOrgId, 'class' => 'form-control-small')
     );
 }
 

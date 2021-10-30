@@ -79,7 +79,7 @@ function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
     $sqlConditionParentId = '';
     $parentPhotoAlbum = new TablePhotos($gDb);
 
-    $queryParams = array((int) $photoAlbum->getValue('pho_id'), (int) $gCurrentOrganization->getValue('org_id'));
+    $queryParams = array((int) $photoAlbum->getValue('pho_id'), $gCurrentOrgId);
     // Erfassen des auszugebenden Albums
     if ($parentId > 0)
     {
@@ -94,7 +94,7 @@ function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
     $sql = 'SELECT *
               FROM '.TBL_PHOTOS.'
              WHERE pho_id    <> ? -- $photoAlbum->getValue(\'pho_id\')
-               AND pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND pho_org_id = ? -- $gCurrentOrgId
                    '.$sqlConditionParentId;
     $childStatement = $gDb->queryPrepared($sql, $queryParams);
 

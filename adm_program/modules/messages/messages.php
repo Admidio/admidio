@@ -88,14 +88,9 @@ $table->addRowHeadingByArray(array(
     $gL10n->get('SYS_DATE'),
     ''
 ));
+
 $table->disableDatatablesColumnsSort(array(3, 6));
 $table->setDatatablesColumnsNotHideResponsive(array(6));
-
-// open some additional functions for messages
-$moduleMessages = new ModuleMessages();
-$usrId = (int) $gCurrentUser->getValue('usr_id');
-$rowIndex = 0;
-
 // special settings for the table
 $table->setDatatablesOrderColumns(array(array(5, 'desc')));
 

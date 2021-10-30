@@ -59,7 +59,7 @@ if($getUsfUuid !== '')
 
     // check if profile field belongs to actual organization
     if($userField->getValue('cat_org_id') > 0
-    && (int) $userField->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+    && (int) $userField->getValue('cat_org_id') !== $gCurrentOrgId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

@@ -81,14 +81,12 @@ class TableLists extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentOrganization, $gCurrentUser;
-
         $this->setValue('lst_timestamp', DATETIME_NOW);
-        $this->setValue('lst_usr_id', (int) $gCurrentUser->getValue('usr_id'));
+        $this->setValue('lst_usr_id', $GLOBALS['gCurrentUserId']);
 
         if ($this->newRecord && empty($this->getValue('lst_org_id')))
         {
-            $this->setValue('lst_org_id', (int) $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('lst_org_id', $GLOBALS['gCurrentOrgId']);
         }
 
         // if "lst_global" isn't set explicit to "1", set it to "0"

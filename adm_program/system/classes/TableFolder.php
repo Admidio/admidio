@@ -460,7 +460,7 @@ class TableFolder extends TableAccess
      */
     public function getFolderForDownload($folderUuid)
     {
-        global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
+        global $gCurrentUser, $gValidLogin;
 
         if ($folderUuid !== '')
         {
@@ -473,9 +473,9 @@ class TableFolder extends TableAccess
         {
             // get first folder of current organization
             $condition = ' fol_fol_id_parent IS NULL
-                       AND fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                       AND fol_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']
                        AND fol_type   = \'DOCUMENTS\' ';
-            $queryParams = array((int) $gCurrentOrganization->getValue('org_id'));
+            $queryParams = array($GLOBALS['gCurrentOrgId']);
         }
         $this->readData($condition, $queryParams);
 
@@ -552,7 +552,7 @@ class TableFolder extends TableAccess
      */
     public function getNavigationForDownload($folderId = 0, $currentNavigation = '')
     {
-        global $gCurrentOrganization, $gL10n;
+        global $gL10n;
 
         if ($folderId > 0)
         {
@@ -590,8 +590,8 @@ class TableFolder extends TableAccess
                             FROM '.TBL_FOLDERS.'
                            WHERE fol_type   = \'DOCUMENTS\'
                              AND fol_fol_id_parent IS NULL
-                             AND fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-        $rootFolderStatement = $this->db->queryPrepared($sqlRootFolder, array((int) $gCurrentOrganization->getValue('org_id')));
+                             AND fol_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']';
+        $rootFolderStatement = $this->db->queryPrepared($sqlRootFolder, array($GLOBALS['gCurrentOrgId']));
         $rootFolderId = $rootFolderStatement->fetchColumn();
 
         $link = '
@@ -649,16 +649,16 @@ class TableFolder extends TableAccess
      */
     private function getSubfoldersWithProperties()
     {
-        global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
+        global $gCurrentUser, $gValidLogin;
 
         // Get all subfolder of the current folder
         $sqlFolders = 'SELECT *
                          FROM '.TBL_FOLDERS.'
                         WHERE fol_type          = \'DOCUMENTS\'
                           AND fol_fol_id_parent = ? -- $this->getValue(\'fol_id\')
-                          AND fol_org_id        = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                          AND fol_org_id        = ? -- $GLOBALS[\'gCurrentOrgId\']
                      ORDER BY fol_name';
-        $foldersStatement = $this->db->queryPrepared($sqlFolders, array((int) $this->getValue('fol_id'), (int) $gCurrentOrganization->getValue('org_id')));
+        $foldersStatement = $this->db->queryPrepared($sqlFolders, array((int) $this->getValue('fol_id'), $GLOBALS['gCurrentOrgId']));
 
         $folders = array();
 
@@ -837,13 +837,11 @@ class TableFolder extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentOrganization, $gCurrentUser;
-
         if ($this->newRecord)
         {
             $this->setValue('fol_timestamp', DATETIME_NOW);
-            $this->setValue('fol_usr_id', (int) $gCurrentUser->getValue('usr_id'));
-            $this->setValue('fol_org_id', (int) $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('fol_usr_id', $GLOBALS['gCurrentUserId']);
+            $this->setValue('fol_org_id', $GLOBALS['gCurrentOrgId']);
         }
 
         return parent::save($updateFingerPrint);

@@ -52,7 +52,7 @@ if(!isset($_POST['usr_login_name']))
 }
 if(!isset($_POST['reg_org_id']))
 {
-    $_POST['reg_org_id'] = (int) $gCurrentOrganization->getValue('org_id');
+    $_POST['reg_org_id'] = $gCurrentOrgId;
 }
 
 // read user data
@@ -322,7 +322,7 @@ catch(AdmException $e)
 $gDb->endTransaction();
 
 // wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
-if((int) $user->getValue('usr_id') === (int) $gCurrentUser->getValue('usr_id'))
+if((int) $user->getValue('usr_id') === $gCurrentUserId)
 {
     $gCurrentUser = $user;
 }

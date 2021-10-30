@@ -115,13 +115,11 @@ else
     $page->setHeadline($getHeadline);
 }
 
-$currOrgId = (int) $gCurrentOrganization->getValue('org_id');
-
 // ------------------------------------------------------
 // SQL-Statements zur Anzeige der Eintraege zusammensetzen
 // ------------------------------------------------------
 $conditionsSpecial = '';
-$queryParamsSpecial = array($currOrgId);
+$queryParamsSpecial = array($gCurrentOrgId);
 // falls eine id fuer einen bestimmten Gaestebucheintrag uebergeben worden ist...
 if ($getGboUuid !== '')
 {
@@ -148,7 +146,7 @@ if ((int) $gSettingsManager->get('enable_guestbook_moderation') > 0)
 // Maximale Anzahl an Gaestebucheintraegen ermitteln, die angezeigt werden sollen
 $sql = 'SELECT COUNT(*) AS count
           FROM '.TBL_GUESTBOOK.'
-         WHERE gbo_org_id = ? -- $currOrgId
+         WHERE gbo_org_id = ? -- $gCurrentOrgId
                '.$conditionsSpecial;
 $pdoStatement = $gDb->queryPrepared($sql, $queryParamsSpecial);
 $guestbookEntries = (int) $pdoStatement->fetchColumn();
@@ -176,17 +174,17 @@ if(!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsMan
     // show link to moderation with number of entries that must be moderated
     $sql = 'SELECT (SELECT COUNT(*) AS count
                       FROM '.TBL_GUESTBOOK.'
-                     WHERE gbo_org_id = ? -- $currOrgId
+                     WHERE gbo_org_id = ? -- $gCurrentOrgId
                        AND gbo_locked = true) AS count_locked_guestbook,
                    (SELECT COUNT(*) AS count
                       FROM '.TBL_GUESTBOOK_COMMENTS.'
                 INNER JOIN '.TBL_GUESTBOOK.'
                         ON gbo_id = gbc_gbo_id
-                     WHERE gbo_org_id = ? -- $currOrgId
+                     WHERE gbo_org_id = ? -- $gCurrentOrgId
                        AND gbc_locked = true) AS count_locked_comments
               FROM '.TBL_ORGANIZATIONS.'
-             WHERE org_id = ? -- $currOrgId';
-    $pdoStatement = $gDb->queryPrepared($sql, array($currOrgId, $currOrgId, $currOrgId));
+             WHERE org_id = ? -- $gCurrentOrgId';
+    $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $gCurrentOrgId, $gCurrentOrgId));
     $row = $pdoStatement->fetch();
     $countLockedEntries = $row['count_locked_guestbook'] + $row['count_locked_comments'];
 
@@ -207,7 +205,7 @@ $guestbook = new TableGuestbook($gDb);
 // Alle Gaestebucheintraege fuer die aktuelle Seite ermitteln
 $sql = 'SELECT *
           FROM '.TBL_GUESTBOOK.' AS gbo
-         WHERE gbo_org_id = ? -- $currOrgId
+         WHERE gbo_org_id = ? -- $gCurrentOrgId
                '.$conditionsSpecial.'
       ORDER BY gbo_timestamp_create DESC
          LIMIT '.$guestbookEntriesPerPage.' OFFSET '.$getStart;

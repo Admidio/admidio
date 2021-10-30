@@ -69,9 +69,9 @@ $sql = 'SELECT cat.*, lnk.*, '.$additionalFields.'
             ON cat_id = lnk_cat_id
                '.$additionalTables.'
          WHERE cat_type = \'LNK\'
-           AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+           AND cat_org_id = ? -- $gCurrentOrgId
       ORDER BY lnk_timestamp_create DESC';
-$queryParams[] = (int) $gCurrentOrganization->getValue('org_id');
+$queryParams[] = $gCurrentOrgId;
 $statement = $gDb->queryPrepared($sql, $queryParams);
 
 // start defining the RSS Feed

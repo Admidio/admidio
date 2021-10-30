@@ -49,7 +49,7 @@ if($getRoleUuid !== '')
     $eventRole = $role->getValue('cat_name_intern') === 'EVENTS';
 
     // check if the role belongs to the current organization
-    if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
+    if((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -201,11 +201,11 @@ $selectBoxEntries = array(0 => $gL10n->get('SYS_SYSTEM_DEFAULT_LIST'));
 // SQL-Statement fuer alle Listenkonfigurationen vorbereiten, die angezeigt werdne sollen
 $sql = 'SELECT lst_id, lst_name
           FROM '.TBL_LISTS.'
-         WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+         WHERE lst_org_id = ? -- $gCurrentOrgId
            AND lst_global = true
            AND lst_name IS NOT NULL
       ORDER BY lst_global ASC, lst_name ASC';
-$pdoStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
+$pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
 while($row = $pdoStatement->fetch())
 {
@@ -343,10 +343,10 @@ if(!$eventRole)
                              ON cat_id = rol_cat_id
                           WHERE rol_valid   = true
                             AND cat_name_intern <> \'EVENTS\'
-                            AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                            AND (  cat_org_id  = ? -- $gCurrentOrgId
                                 OR cat_org_id IS NULL )
                        ORDER BY cat_sequence, rol_name';
-    $sqlData['params'] = array((int) $gCurrentOrganization->getValue('org_id'));
+    $sqlData['params'] = array($gCurrentOrgId);
 
     $form->addSelectBoxFromSql(
         'dependent_roles', $gL10n->get('SYS_DEPENDENT'), $gDb, $sqlData,

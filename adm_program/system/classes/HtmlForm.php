@@ -1736,11 +1736,11 @@ class HtmlForm extends HtmlFormBasic
         // within edit dialogs child organizations are not allowed to assign categories of all organizations
         if($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $gCurrentOrganization->isChildOrganization())
         {
-            $sqlConditions .= ' AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\') ';
+            $sqlConditions .= ' AND cat_org_id = ? -- $gCurrentOrgId ';
         }
         else
         {
-            $sqlConditions .= ' AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+            $sqlConditions .= ' AND (  cat_org_id = ? -- $gCurrentOrgId
                                     OR cat_org_id IS NULL ) ';
         }
 
@@ -1756,7 +1756,7 @@ class HtmlForm extends HtmlFormBasic
             $catIdParams,
             array(
                 $categoryType,
-                (int) $gCurrentOrganization->getValue('org_id')
+                $GLOBALS['gCurrentOrgId']
             )
         );
         $pdoStatement = $database->queryPrepared($sql, $queryParams);

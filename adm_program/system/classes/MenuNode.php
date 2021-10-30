@@ -211,7 +211,7 @@ class MenuNode
      */
     public function loadFromDatabase($nodeId)
     {
-        global $gDb, $gCurrentUser, $gValidLogin, $gL10n;
+        global $gDb, $gValidLogin, $gL10n;
 
         $sql = 'SELECT men_id, men_com_id, men_name_intern, men_name, men_description, men_url, men_icon, com_name_intern
                   FROM '.TBL_MENU.'
@@ -235,7 +235,7 @@ class MenuNode
                     {
                         // get number of unread messages for user
                         $message = new TableMessage($gDb);
-                        $badgeCount = $message->countUnreadMessageRecords((int) $gCurrentUser->getValue('usr_id'));
+                        $badgeCount = $message->countUnreadMessageRecords($GLOBALS['gCurrentUserId']);
 
                         $menuUrl  = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
                         $menuIcon = 'fa-comments';

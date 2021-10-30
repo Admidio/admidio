@@ -95,6 +95,10 @@ if(array_key_exists('gCurrentSession', $_SESSION)
      */
     $gCurrentOrganization =& $gCurrentSession->getObject('gCurrentOrganization');
     $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
+    /**
+     * @var int $gCurrentOrgId The ID of the current organization.
+     */
+    $gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
 }
 else
 {
@@ -121,7 +125,12 @@ else
         $gCurrentOrganization = new Organization($gDb, $g_organization);
     }
 
-    if((int) $gCurrentOrganization->getValue('org_id') === 0)
+    /**
+     * @var int $gCurrentOrgId The ID of the current organization.
+     */
+    $gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
+
+    if($gCurrentOrgId === 0)
     {
         $gLogger->error('Organization could not be found!', array('$g_organization' => $g_organization));
 
@@ -131,7 +140,7 @@ else
     // add the organization to the session
     $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
     $gCurrentSession->addObject('gCurrentOrganization', $gCurrentOrganization);
-    $gCurrentSession->setValue('ses_org_id', (int) $gCurrentOrganization->getValue('org_id'));
+    $gCurrentSession->setValue('ses_org_id', $gCurrentOrgId);
 
     // create a language data object and assign it to the language object
     $gLanguageData = new LanguageData($gSettingsManager->getString('system_language'));
@@ -143,10 +152,6 @@ else
 
 $gL10n = new Language($gLanguageData);
 
-/**
- * @var int $gCurrentOrgId The ID of the current organization.
- */
-$gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
 $sesUsrId      = $gCurrentSession->getValue('ses_usr_id');
 
 // Create a notification object to store and send change notifications to profile fields

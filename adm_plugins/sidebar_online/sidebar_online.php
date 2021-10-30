@@ -75,8 +75,8 @@ $sql = 'SELECT ses_usr_id, usr_uuid, usr_login_name
      LEFT JOIN '.TBL_USERS.'
             ON usr_id = ses_usr_id
          WHERE ses_timestamp BETWEEN ? AND ? -- $refDate AND DATETIME_NOW
-           AND ses_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-$queryParams = array($refDate, DATETIME_NOW, (int) $gCurrentOrganization->getValue('org_id'));
+           AND ses_org_id = ? -- $gCurrentOrgId';
+$queryParams = array($refDate, DATETIME_NOW, $gCurrentOrgId);
 if(!$plg_show_visitors)
 {
     $sql .= '
@@ -85,8 +85,8 @@ if(!$plg_show_visitors)
 if(!$plg_show_self && $gValidLogin)
 {
     $sql .= '
-         AND ses_usr_id <> ? -- $gCurrentUser->getValue(\'usr_id\')';
-    $queryParams[] = (int) $gCurrentUser->getValue('usr_id');
+         AND ses_usr_id <> ? -- $gCurrentUserId';
+    $queryParams[] = $gCurrentUserId;
 }
 $sql .= '
      ORDER BY ses_usr_id';

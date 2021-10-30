@@ -98,10 +98,10 @@ if($gCurrentUser->manageRoles())
                AND mem_end    > ? -- DATE_NOW
              WHERE rol_valid   = true
                AND cat_name_intern <> \'EVENTS\'
-               AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND (  cat_org_id = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';
-    $queryParams = array($user->getValue('usr_id'), DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'));
+    $queryParams = array($user->getValue('usr_id'), DATE_NOW, DATE_NOW, $gCurrentOrgId);
 }
 else
 {
@@ -117,17 +117,17 @@ else
                AND mgl.mem_usr_id = ? -- $user->getValue(\'usr_id\')
                AND mgl.mem_begin <= ? -- DATE_NOW
                AND mgl.mem_end    > ? -- DATE_NOW
-             WHERE bm.mem_usr_id  = ? -- $gCurrentUser->getValue(\'usr_id\')
+             WHERE bm.mem_usr_id  = ? -- $gCurrentUserId
                AND bm.mem_begin  <= ? -- DATE_NOW
                AND bm.mem_end     > ? -- DATE_NOW
                AND bm.mem_leader  = true
                AND rol_leader_rights IN (1,3)
                AND rol_valid      = true
                AND cat_name_intern <> \'EVENTS\'
-               AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND (  cat_org_id  = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';
-    $queryParams = array($user->getValue('usr_id'), DATE_NOW, DATE_NOW, (int) $gCurrentUser->getValue('usr_id'), DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'));
+    $queryParams = array($user->getValue('usr_id'), DATE_NOW, DATE_NOW, $gCurrentUserId, DATE_NOW, DATE_NOW, $gCurrentOrgId);
 }
 $rolesStatement = $gDb->queryPrepared($sql, $queryParams);
 $rolesList      = $rolesStatement->fetchAll();
@@ -187,7 +187,7 @@ foreach($rolesList as $row)
     // but don't change their own membership, because there must be at least one administrator
     if($row['rol_administrator'] == 0
     || ($row['rol_administrator'] == 1 && $gCurrentUser->isAdministrator()
-        && (int) $user->getValue('usr_id') !== (int) $gCurrentUser->getValue('usr_id')))
+        && (int) $user->getValue('usr_id') !== $gCurrentUserId))
     {
         $roleAssign = false;
         if(isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1)

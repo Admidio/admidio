@@ -297,7 +297,7 @@ foreach ($membersList as $member)
     $user = new User($gDb, $gProfileFields, $member['usr_id']);
 
     // besitzt der User eine gueltige E-Mail-Adresse? && aktuellen User ausschließen
-    if (StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email') && (int) $gCurrentUser->getValue('usr_id') !== (int) $member['usr_id'])
+    if (StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email') && $gCurrentUserId !== (int) $member['usr_id'])
     {
         $userIdList[] = $member['usr_id'];
     }
@@ -414,12 +414,12 @@ if ($getMode !== 'csv')
         // create selectbox with all list configurations
         $sql = 'SELECT lst_uuid, lst_name, lst_global
                   FROM '.TBL_LISTS.'
-                 WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                   AND (  lst_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
+                 WHERE lst_org_id = ? -- $gCurrentOrgId
+                   AND (  lst_usr_id = ? -- $gCurrentUserId
                        OR lst_global = true)
                    AND lst_name IS NOT NULL
               ORDER BY lst_global ASC, lst_name ASC';
-        $pdoStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), (int) $gCurrentUser->getValue('usr_id')));
+        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $gCurrentUserId));
 
         $listConfigurations = array();
         while($row = $pdoStatement->fetch())

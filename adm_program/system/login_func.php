@@ -14,7 +14,7 @@ require_once(__DIR__ . '/common.php');
 $bAutoLogin     = false;
 $loginname      = '';
 $password       = '';
-$organizationId = (int) $gCurrentOrganization->getValue('org_id');
+$organizationId = $gCurrentOrgId;
 
 // Filter parameters
 // parameters could be from login dialog or login plugin !!!
@@ -53,7 +53,8 @@ function initLoginParams($prefix)
 function createUserObjectFromPost()
 {
     global $gLogger, $gCurrentUser, $gSettingsManager, $gMenu, $loginname, $password, $gDb, $gL10n;
-    global $gCurrentOrganization, $bAutoLogin, $organizationId, $gProfileFields, $userStatement, $gCurrentSession;
+    global $gCurrentOrganization, $bAutoLogin, $organizationId, $gProfileFields, $userStatement;
+    global $gCurrentSession, $gCurrentOrgId;
 
     if (array_key_exists('usr_login_name', $_POST) && $_POST['usr_login_name'] !== '')
     {
@@ -95,7 +96,7 @@ function createUserObjectFromPost()
     }
 
     // if login organization is different to organization of config file then create new session variables
-    if ($organizationId !== (int) $gCurrentOrganization->getValue('org_id'))
+    if ($organizationId !== $gCurrentOrgId)
     {
         // read organization of config file with their preferences
         $gCurrentOrganization->readDataById($organizationId);

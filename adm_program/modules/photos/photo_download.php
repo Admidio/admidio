@@ -123,8 +123,8 @@ if ($getPhotoNr == null)
     // get sub albums
     $sql = 'SELECT pho_id
               FROM '.TBL_PHOTOS.'
-             WHERE pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-    $queryParams = array((int) $gCurrentOrganization->getValue('org_id'));
+             WHERE pho_org_id = ? -- $gCurrentOrgId';
+    $queryParams = array($gCurrentOrgId);
 
     if ($getPhotoUuid !== '')
     {

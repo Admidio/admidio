@@ -36,13 +36,12 @@ else
 $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
 $userId    = $user->getValue('usr_id');
-$currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
 // only the own password could be individual set.
 // Administrator could only send a generated password or set a password if no password was set before
-if($currUsrId !== $userId
+if($gCurrentUserId !== $userId
 && (!isMember($userId)
-|| (!$gCurrentUser->isAdministrator() && $currUsrId !== $userId)
+|| (!$gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId)
 || ($gCurrentUser->isAdministrator() && $user->getValue('EMAIL') !== '' && $gSettingsManager->getBool('enable_system_mails'))))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -62,7 +61,7 @@ if($getMode === 'change')
         // => EXIT
     }
 
-    if($gCurrentUser->isAdministrator() && $currUsrId !== $userId)
+    if($gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId)
     {
         $oldPassword = '';
     }
@@ -89,14 +88,14 @@ if($getMode === 'change')
                     // check if old password is correct.
                     // Administrator could change password of other users without this verification.
                     if (PasswordUtils::verify($oldPassword, $user->getValue('usr_password'))
-                    || ($gCurrentUser->isAdministrator() && $currUsrId !== $userId))
+                    || ($gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId))
                     {
                         $user->saveChangesWithoutRights();
                         $user->setPassword($newPassword);
                         $user->save();
 
                         // if password of current user changed, then update value in current session
-                        if ($currUsrId === (int) $user->getValue('usr_id'))
+                        if ($gCurrentUserId === (int) $user->getValue('usr_id'))
                         {
                             $gCurrentUser->setPassword($newPassword);
                         }
@@ -196,7 +195,7 @@ elseif($getMode === 'html')
     <div class="modal-body">';
         // show form
         $form = new HtmlForm('password_form', SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid, 'mode' => 'change')));
-        if($currUsrId === $userId)
+        if($gCurrentUserId === $userId)
         {
             // to change own password user must enter the valid old password for verification
             $form->addInput(

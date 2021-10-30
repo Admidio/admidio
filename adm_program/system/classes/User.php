@@ -85,14 +85,12 @@ class User extends TableAccess
      */
     public function __construct(Database $database, ProfileFields $userFields = null, $userId = 0)
     {
-        global $gCurrentOrganization;
-
         if ($userFields !== null)
         {
             $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
         }
 
-        $this->organizationId = (int) $gCurrentOrganization->getValue('org_id');
+        $this->organizationId = $GLOBALS['gCurrentOrgId'];
 
         parent::__construct($database, TBL_USERS, 'usr', $userId);
     }
@@ -655,10 +653,9 @@ class User extends TableAccess
      */
     public function delete()
     {
-        global $gCurrentUser, $gChangeNotification;
+        global $gChangeNotification;
 
-        $usrId     = (int) $this->getValue('usr_id');
-        $currUsrId = (int) $gCurrentUser->getValue('usr_id');
+        $usrId = $this->getValue('usr_id');
 
         if(is_object($gChangeNotification)) {
             // Register all non-empty fields for the notification
@@ -774,31 +771,31 @@ class User extends TableAccess
         // MySQL couldn't create delete statement with same table in subquery.
         // Therefore we fill a temporary table with all ids that should be deleted and reference on this table
         $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
-                          WHERE ids_usr_id = '.$currUsrId;
+                          WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'];
 
         $sqlQueries[] = 'INSERT INTO '.TBL_IDS.'
                                 (ids_usr_id, ids_reference_id)
-                         SELECT '.$currUsrId.', msc_msg_id
+                         SELECT '.$GLOBALS['gCurrentUserId'].', msc_msg_id
                            FROM '.TBL_MESSAGES_CONTENT.'
                           WHERE msc_usr_id = '.$usrId;
 
         $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
                           WHERE msc_msg_id IN (SELECT ids_reference_id
                                                  FROM '.TBL_IDS.'
-                                                WHERE ids_usr_id = '.$currUsrId.')';
+                                                WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'].')';
 
         $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_RECIPIENTS.'
                           WHERE msr_msg_id IN (SELECT ids_reference_id
                                                  FROM '.TBL_IDS.'
-                                                WHERE ids_usr_id = '.$currUsrId.')';
+                                                WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'].')';
 
         $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
                           WHERE msg_id IN (SELECT ids_reference_id
                                              FROM '.TBL_IDS.'
-                                            WHERE ids_usr_id = '.$currUsrId.')';
+                                            WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'].')';
 
         $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
-                          WHERE ids_usr_id = '.$currUsrId;
+                          WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'];
 
         $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_RECIPIENTS.'
                           WHERE msr_usr_id = '.$usrId;
@@ -1814,7 +1811,7 @@ class User extends TableAccess
         $updateCreateUserId = false;
         if ($usrId === 0)
         {
-            if((int) $gCurrentUser->getValue('usr_id') === 0)
+            if($GLOBALS['gCurrentUserId'] === 0)
             {
                 $updateCreateUserId = true;
                 $updateFingerPrint  = false;
@@ -2031,7 +2028,7 @@ class User extends TableAccess
         // Disabled fields can only be edited by users with the right "edit_users" except on registration.
         // Here is no need to check hidden fields because we check on save() method that only users who
         // can edit the profile are allowed to save and change data.
-        if (($usrId === 0 && (int) $gCurrentUser->getValue('usr_id') === 0)
+        if (($usrId === 0 && $GLOBALS['gCurrentUserId'] === 0)
         ||  (int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 0
         || ((int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 1
             && $gCurrentUser->hasRightEditProfile($this, false))

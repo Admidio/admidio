@@ -369,8 +369,8 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
 // show all albums of the current level
 $sql = 'SELECT *
           FROM '.TBL_PHOTOS.'
-         WHERE pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-$queryParams = array((int) $gCurrentOrganization->getValue('org_id'));
+         WHERE pho_org_id = ? -- $gCurrentOrgId';
+$queryParams = array($gCurrentOrgId);
 if ($getPhotoUuid !== '')
 {
     $sql .= '

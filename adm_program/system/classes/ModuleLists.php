@@ -288,7 +288,7 @@ class ModuleLists extends Modules
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = rol_cat_id
              LEFT JOIN '.TBL_DATES.' ON dat_rol_id = rol_id
-                 WHERE (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                 WHERE (  cat_org_id = ? -- $gCurrentOrgId
                        OR cat_org_id IS NULL )
                        '.$sqlConditions;
 
@@ -311,7 +311,7 @@ class ModuleLists extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $listsStatement = $gDb->queryPrepared($sql, array(DATE_NOW, DATE_NOW, DATE_NOW, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $listsStatement = $gDb->queryPrepared($sql, array(DATE_NOW, DATE_NOW, DATE_NOW, DATE_NOW, DATE_NOW, $gCurrentOrgId)); // TODO add more params
 
         // array for results
         return array(
@@ -329,7 +329,7 @@ class ModuleLists extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentOrganization, $gDb;
+        global $gDb;
 
         // assemble conditions
         $sqlConditions = $this->getCategorySql() . $this->getRoleTypeSql() . $this->getVisibleRolesSql();
@@ -338,10 +338,10 @@ class ModuleLists extends Modules
                   FROM '.TBL_ROLES.' AS rol
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON rol_cat_id = cat_id
-                 WHERE (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                 WHERE (  cat_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']
                        OR cat_org_id IS NULL )
                        '.$sqlConditions;
-        $pdoStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $pdoStatement = $gDb->queryPrepared($sql, array($GLOBALS['gCurrentOrgId'])); // TODO add more params
 
         return (int) $pdoStatement->fetchColumn();
     }

@@ -31,7 +31,7 @@ $attachment = new TableAccess($gDb, TBL_MESSAGES_ATTACHMENTS, 'msa', $getMsaId);
 $message    = new TableMessage($gDb, $attachment->getValue('msa_msg_id'));
 
 // user of message is not current user than he is not allowed to view the attachment
-if($gCurrentUser->getValue('usr_id') !== $message->getValue('msg_usr_id_sender'))
+if($gCurrentUserId !== $message->getValue('msg_usr_id_sender'))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT

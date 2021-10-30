@@ -59,7 +59,7 @@ if($getModule === 'photos')
     }
 
     // check if album belongs to current organization
-    if((int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+    if((int) $photoAlbum->getValue('pho_org_id') !== $gCurrentOrgId)
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT

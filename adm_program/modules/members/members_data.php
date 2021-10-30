@@ -139,7 +139,7 @@ $sqlSubSelect = '(SELECT COUNT(*) AS count_this
                      AND mem_end     > \''.DATE_NOW.'\'
                      AND rol_valid = true
                      AND cat_name_intern <> \'EVENTS\'
-                     AND (  cat_org_id = '.(int) $gCurrentOrganization->getValue('org_id').'
+                     AND (  cat_org_id = '.$gCurrentOrgId.'
                          OR cat_org_id IS NULL ))';
 
 if($getMembers)
@@ -188,7 +188,7 @@ if($gCurrentOrganization->countAllRecords() > 1)
             AND mem_end     > \''.DATE_NOW.'\'
             AND rol_valid = true
             AND cat_name_intern <> \'EVENTS\'
-            AND cat_org_id <> '.(int) $gCurrentOrganization->getValue('org_id').')';
+            AND cat_org_id <> '.$gCurrentOrgId.')';
 }
 
 // create sql to show all members (not accepted users should not be shown)
@@ -284,7 +284,7 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
 
     // Administrators can change or send password if login is configured and user is member of current organization
     if($memberOfThisOrganization && $gCurrentUser->isAdministrator()
-    && strlen($row['loginname']) > 0 && (int) $row['usr_id'] !== (int) $gCurrentUser->getValue('usr_id'))
+    && strlen($row['loginname']) > 0 && (int) $row['usr_id'] !== $gCurrentUserId)
     {
         if(strlen($row['email']) > 0 && $gSettingsManager->getBool('enable_system_mails'))
         {
@@ -329,7 +329,7 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
     // add link to delete user btw. remove user from the current organization
     if(((!$memberOfOtherOrganization && $gCurrentUser->isAdministrator()) // kein Mitglied einer anderen Orga, dann duerfen Administratoren loeschen
         || $memberOfThisOrganization)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
-        && (int) $row['usr_id'] !== (int) $gCurrentUser->getValue('usr_id')) // das eigene Profil darf keiner entfernen
+        && (int) $row['usr_id'] !== $gCurrentUserId) // das eigene Profil darf keiner entfernen
     {
         $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 6)) . '">'.

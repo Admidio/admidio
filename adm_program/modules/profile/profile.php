@@ -75,11 +75,10 @@ function getFieldCode($fieldNameIntern, User $user)
 
 unset($_SESSION['profile_request']);
 
-$userId    = (int) $user->getValue('usr_id');
-$currUsrId = (int) $gCurrentUser->getValue('usr_id');
+$userId    = $user->getValue('usr_id');
 
 // set headline
-if($userId === $currUsrId)
+if($userId === $gCurrentUserId)
 {
     $headline = $gL10n->get('PRO_MY_PROFILE');
 }
@@ -217,7 +216,7 @@ if($gCurrentUser->hasRightEditProfile($user))
 }
 
 // Password of own user could be changed
-if($userId === $currUsrId)
+if($userId === $gCurrentUserId)
 {
     $page->addPageFunctionsMenuItem('menu_item_profile_password', $gL10n->get('SYS_CHANGE_PASSWORD'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)),
@@ -306,7 +305,7 @@ $page->addHtml('
             // add loginname
             if(strlen($user->getValue('usr_login_name')) > 0)
             {
-                if ($userId !== $currUsrId && $gSettingsManager->getBool('enable_pm_module'))
+                if ($userId !== $gCurrentUserId && $gSettingsManager->getBool('enable_pm_module'))
                 {
                     $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'),
                         '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)).'" title="' . $gL10n->get('SYS_WRITE_PM') . '">'.
@@ -412,7 +411,7 @@ $page->addHtml('
                                             <i class="fas fa-map-marker-alt"></i>'.$gL10n->get('SYS_MAP').'</a>';
 
                                     // show route link if its not the profile of CurrentUser
-                                    if($userId !== $currUsrId)
+                                    if($userId !== $gCurrentUserId)
                                     {
                                         $address .= ' - <a href="'.$routeUrl.'" target="_blank" title="'.$gL10n->get('SYS_MAP_LINK_ROUTE_DESC').'">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
                                     }
@@ -556,11 +555,11 @@ if($gSettingsManager->getBool('profile_show_roles'))
                    AND mem_begin <= ? -- DATE_NOW
                    AND mem_end    > ? -- DATE_NOW
                    AND mem_usr_id = ? -- $userId
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   AND (  cat_org_id = ? -- $gCurrentOrgId
                        OR cat_org_id IS NULL )
                    AND '.$rolesRightsDbName.' = true
               ORDER BY cat_org_id, cat_sequence, rol_name';
-        $queryParams = array(DATE_NOW, DATE_NOW, $userId, (int) $gCurrentOrganization->getValue('org_id'));
+        $queryParams = array(DATE_NOW, DATE_NOW, $userId, $gCurrentOrgId);
         $roleStatement = $gDb->queryPrepared($sql, $queryParams);
 
         $roles = array();
@@ -809,9 +808,9 @@ if($gSettingsManager->getBool('profile_show_extern_roles')
                AND mem_end    >= ? -- DATE_NOW
                AND rol_valid   = true
                AND cat_name_intern <> \'EVENTS\'
-               AND org_id     <> ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND org_id     <> ? -- $gCurrentOrgId
           ORDER BY org_shortname, cat_sequence, rol_name';
-    $roleStatement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id')));
+    $roleStatement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $gCurrentOrgId));
 
     if($roleStatement->rowCount() > 0)
     {
@@ -867,7 +866,7 @@ if($gSettingsManager->getBool('profile_show_extern_roles')
             }
         }
 
-        $gCurrentUser->setOrganization((int) $gCurrentOrganization->getValue('org_id'));
+        $gCurrentUser->setOrganization($gCurrentOrgId);
 
         if($showRolesOtherOrganizations)
         {

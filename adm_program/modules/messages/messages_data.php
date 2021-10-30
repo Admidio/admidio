@@ -111,17 +111,17 @@ if($getSearch !== '' && count($searchColumns) > 0)
 // get count of all found users
 $sql = 'SELECT COUNT(*)
           FROM ' . TBL_MESSAGES . '
-         WHERE (  msg_usr_id_sender = ? -- $gCurrentUser->getValue(\'usr_id\')
+         WHERE (  msg_usr_id_sender = ? -- $gCurrentUserId
                   OR EXISTS (
                       SELECT 1
                         FROM ' . TBL_MESSAGES_RECIPIENTS . '
                        WHERE msr_msg_id = msg_id
-                         AND msr_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
+                         AND msr_usr_id = ? -- $gCurrentUserId
                   )
                 )';
 $queryParams = array(
-    $gCurrentUser->getValue('usr_id'),
-    $gCurrentUser->getValue('usr_id')
+    $gCurrentUserId,
+    $gCurrentUserId
 );
 $countTotalStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
 
@@ -131,17 +131,17 @@ $jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 $mainSql = 'SELECT msg_id, msg_uuid, msg_type, msg_subject, msg_usr_id_sender, msg_timestamp, msg_read,
                     (SELECT count(1) FROM ' . TBL_MESSAGES_ATTACHMENTS . ' WHERE msa_msg_id = msg_id) AS attachments
               FROM ' . TBL_MESSAGES . '
-             WHERE (  msg_usr_id_sender = ? -- $gCurrentUser->getValue(\'usr_id\')
+             WHERE (  msg_usr_id_sender = ? -- $gCurrentUserId
                    OR EXISTS (
                       SELECT 1
                         FROM ' . TBL_MESSAGES_RECIPIENTS . '
                        WHERE msr_msg_id = msg_id
-                         AND msr_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
+                         AND msr_usr_id = ? -- $gCurrentUserId
                       )
                    )';
 $queryParamsMain = array(
-    $gCurrentUser->getValue('usr_id'),
-    $gCurrentUser->getValue('usr_id')
+    $gCurrentUserId,
+    $gCurrentUserId
 );
 
 $limitCondition = '';

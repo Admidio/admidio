@@ -215,7 +215,7 @@ elseif($getMode === 'delete')
 if($getMode === 'choose')
 {
     // set headline
-    if((int) $user->getValue('usr_id') === (int) $gCurrentUser->getValue('usr_id'))
+    if((int) $user->getValue('usr_id') === $gCurrentUserId)
     {
         $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
     }
@@ -316,7 +316,7 @@ elseif($getMode === 'upload')
     // Image-Objekt löschen
     $userImage->delete();
 
-    if((int) $user->getValue('usr_id') === (int) $gCurrentUser->getValue('usr_id'))
+    if((int) $user->getValue('usr_id') === $gCurrentUserId)
     {
         $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
     }

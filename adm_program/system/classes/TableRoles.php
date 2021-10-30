@@ -204,7 +204,7 @@ class TableRoles extends TableAccess
      */
     public function delete()
     {
-        global $gCurrentSession, $gL10n, $gCurrentOrganization;
+        global $gCurrentSession, $gL10n;
 
         $rolId = (int) $this->getValue('rol_id');
 
@@ -217,8 +217,8 @@ class TableRoles extends TableAccess
                         ON cat_id = rol_cat_id
                      WHERE rol_default_registration = 1
                        AND rol_id    <> ? -- $rolId
-                       AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-            $countRolesStatement = $this->db->queryPrepared($sql, array($rolId, (int) $gCurrentOrganization->getValue('org_id')));
+                       AND cat_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']';
+            $countRolesStatement = $this->db->queryPrepared($sql, array($rolId, $GLOBALS['gCurrentOrgId']));
 
             if ((int) $countRolesStatement->fetchColumn() === 0)
             {
@@ -303,7 +303,7 @@ class TableRoles extends TableAccess
      */
     public function getDefaultList()
     {
-        global $gSettingsManager, $gCurrentOrganization;
+        global $gSettingsManager;
 
         $defaultListId = (int) $this->getValue('rol_lst_id');
 
@@ -330,9 +330,9 @@ class TableRoles extends TableAccess
                 // if no default list was set than load another global list of this organization
                 $sql = 'SELECT MIN(lst_id) as lst_id
                           FROM '.TBL_LISTS.'
-                         WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                         WHERE lst_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']
                            AND lst_global = true ';
-                $statement = $this->db->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+                $statement = $this->db->queryPrepared($sql, array($GLOBALS['gCurrentOrgId']));
                 $row = $statement->fetch();
                 $defaultListConfiguration = $row['lst_id'];
             }
@@ -484,7 +484,7 @@ class TableRoles extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        global $gCurrentOrganization, $gL10n, $gCurrentUser;
+        global $gL10n, $gCurrentUser;
 
         if($checkValue)
         {
@@ -508,8 +508,8 @@ class TableRoles extends TableAccess
                             ON cat_id = rol_cat_id
                          WHERE rol_default_registration = 1
                            AND rol_id    <> ? -- $this->getValue(\'rol_id\')
-                           AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-                $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), (int) $gCurrentOrganization->getValue('org_id')));
+                           AND cat_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']';
+                $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), $GLOBALS['gCurrentOrgId']));
 
                 if ((int) $pdoStatement->fetchColumn() === 0)
                 {

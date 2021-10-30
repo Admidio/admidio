@@ -53,13 +53,13 @@ $sql = 'SELECT usr_id, usr_uuid, usr_login_name, reg_timestamp, last_name.usd_va
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
          WHERE usr_valid = false
-           AND reg_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+           AND reg_org_id = ? -- $gCurrentOrgId
       ORDER BY last_name, first_name';
 $queryParams = array(
     $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
     $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
     $gProfileFields->getProperty('EMAIL', 'usf_id'),
-    $gCurrentOrganization->getValue('org_id')
+    $gCurrentOrgId
 );
 $usrStatement = $gDb->queryPrepared($sql, $queryParams);
 

@@ -240,7 +240,7 @@ class TableCategory extends TableAccess
 
             // if category belongs to current organization than it's editable
             if($this->getValue('cat_org_id') > 0
-            && (int) $this->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
+            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId'])
             {
                 return true;
             }
@@ -404,7 +404,7 @@ class TableCategory extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentOrganization, $gCurrentSession;
+        global $gCurrentSession;
 
         $fieldsChanged = $this->columnsValueChanged;
 
@@ -415,9 +415,9 @@ class TableCategory extends TableAccess
             $queryParams = array($this->getValue('cat_type'));
             if ($this->getValue('cat_org_id') > 0)
             {
-                $orgCondition = ' AND (   cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                $orgCondition = ' AND (   cat_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']
                                        OR cat_org_id IS NULL ) ';
-                $queryParams[] = (int) $gCurrentOrganization->getValue('org_id');
+                $queryParams[] = $GLOBALS['gCurrentOrgId'];
             }
             else
             {
@@ -507,8 +507,6 @@ class TableCategory extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        global $gCurrentOrganization;
-
         if($checkValue)
         {
             // System categories should not be renamed
@@ -523,8 +521,8 @@ class TableCategory extends TableAccess
                            SET cat_default = false
                          WHERE cat_type    = ? -- $this->getValue(\'cat_type\')
                            AND (  cat_org_id IS NULL
-                               OR cat_org_id = ?) -- $gCurrentOrganization->getValue(\'org_id\')';
-                $this->db->queryPrepared($sql, array($this->getValue('cat_type'), (int) $gCurrentOrganization->getValue('org_id')));
+                               OR cat_org_id = ?) -- $GLOBALS[\'gCurrentOrgId\']';
+                $this->db->queryPrepared($sql, array($this->getValue('cat_type'), $GLOBALS['gCurrentOrgId']));
             }
         }
 

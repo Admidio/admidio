@@ -22,14 +22,14 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
     $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
 
     // read new profile field structure for this organization
-    $gProfileFields->readProfileFields((int) $gCurrentOrganization->getValue('org_id'));
+    $gProfileFields->readProfileFields($gCurrentOrgId);
 
     // save new organization id to session
-    $gCurrentSession->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
+    $gCurrentSession->setValue('ses_org_id', $gCurrentOrgId);
     $gCurrentSession->save();
 
     // read all settings from the new organization
-    $gSettingsManager = new SettingsManager($gDb, $gCurrentOrganization->getValue('org_id'));
+    $gSettingsManager = new SettingsManager($gDb, $gCurrentOrgId);
 }
 
 // clear data from global objects
