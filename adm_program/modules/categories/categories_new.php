@@ -259,7 +259,6 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
         $form->addSelectBoxFromSql(
             'adm_categories_edit_right', $gL10n->get($rolesRightEditName), $gDb, $sqlDataView,
             array(
-                'property'     => HtmlForm::FIELD_REQUIRED,
                 'defaultValue' => $roleEditSet,
                 'multiselect'  => true,
                 'placeholder'  => $gL10n->get('SYS_NO_ADDITIONAL_PERMISSIONS_SET')

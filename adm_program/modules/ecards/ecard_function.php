@@ -53,30 +53,26 @@ class FunctionClass
     }
 
     /**
-     * Diese Funktion holt das Template aus dem uebergebenen Verzeichnis und liefert die Daten und einen error state zurueck
+     * This function fetches the template from the given directory and returns the template content and an error state.
      * @param string $tplFilename Filename of the template
      * @param string $tplFolder   Folder path of the templates
      * @return string|null Returns the content of the template file and null if file not found or couldn't open
      */
     public function getEcardTemplate($tplFilename, $tplFolder = '')
     {
-        if ($tplFolder === '')
-        {
-            $tplFolder = ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates';
+        if ($tplFolder === '') {
+            $tplFolder = ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates/';
         }
 
-        if (!is_file($tplFolder . $tplFilename))
-        {
+        if (!is_file($tplFolder . $tplFilename)) {
             return null;
         }
 
         $fileHandle = @fopen($tplFolder . $tplFilename, 'rb');
-        if ($fileHandle)
-        {
+        if ($fileHandle) {
             $fileData = '';
 
-            while (!feof($fileHandle))
-            {
+            while (!feof($fileHandle)) {
                 $fileData .= fgets($fileHandle, 4096);
             }
             fclose($fileHandle);
