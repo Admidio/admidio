@@ -696,11 +696,11 @@ foreach ($membersList as $member)
         // fill content with data of database
         if ($getMode === 'csv')
         {
-            $csvStr .= $separator.$valueQuotes . $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_id'], $member['usr_uuid']) . $valueQuotes;
+            $csvStr .= $separator.$valueQuotes . $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_uuid']) . $valueQuotes;
         }
         else
         {
-            $columnValues[] = $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_id'], $member['usr_uuid']);
+            $columnValues[] = $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_uuid']);
         }
     }
 
