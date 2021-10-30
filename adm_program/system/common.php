@@ -67,7 +67,8 @@ else
 if(array_key_exists('gCurrentSession', $_SESSION)) {
     // read session object from PHP session
     /**
-     * @var Session $gCurrentSession
+     * @var Session $gCurrentSession The global session object that will store the other global objects and
+     *                               validates the session against the stored session in the database
      */
     $gCurrentSession = $_SESSION['gCurrentSession'];
     $gCurrentSession->refreshSession();
@@ -142,8 +143,11 @@ else
 
 $gL10n = new Language($gLanguageData);
 
-$orgId    = $gCurrentOrganization->getValue('org_id');
-$sesUsrId = $gCurrentSession->getValue('ses_usr_id');
+/**
+ * @var int $gCurrentOrgId The ID of the current organization.
+ */
+$gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
+$sesUsrId      = $gCurrentSession->getValue('ses_usr_id');
 
 // Create a notification object to store and send change notifications to profile fields
 $gChangeNotification = new ChangeNotification();
@@ -156,12 +160,16 @@ if($gCurrentSession->hasObject('gCurrentUser'))
      */
     $gProfileFields =& $gCurrentSession->getObject('gProfileFields');
     /**
-     * @var User $gCurrentUser
+     * @var User $gCurrentUser The current user object of the registered user. For visitors there will be no data loaded.
      */
-    $gCurrentUser =& $gCurrentSession->getObject('gCurrentUser');
+    $gCurrentUser  =& $gCurrentSession->getObject('gCurrentUser');
+    /**
+     * @var int $gCurrentOrgId The ID of the current registered user or 0 if its an visitor.
+     */
+    $gCurrentUserId = $gCurrentUser->getValue('usr_id');
 
     // checks if user in database session is the same as in php session
-    if($gCurrentUser->getValue('usr_id') !== $sesUsrId)
+    if($gCurrentUserId !== $sesUsrId)
     {
         $gCurrentUser->clear();
         $gCurrentSession->setValue('ses_usr_id', '');
@@ -170,8 +178,9 @@ if($gCurrentSession->hasObject('gCurrentUser'))
 else
 {
     // create object with current user field structure und user object
-    $gProfileFields = new ProfileFields($gDb, $orgId);
+    $gProfileFields = new ProfileFields($gDb, $gCurrentOrgId);
     $gCurrentUser   = new User($gDb, $gProfileFields, $sesUsrId);
+    $gCurrentUserId = $gCurrentUser->getValue('usr_id');
 
     // if session is created with auto login then update user login data
     // if user object is created and session has usr_id then this is an auto login
@@ -205,7 +214,7 @@ else
 // check session if user login is valid
 if($sesUsrId > 0)
 {
-    if($gCurrentSession->isValidLogin((int) $gCurrentUser->getValue('usr_id')))
+    if($gCurrentSession->isValidLogin($gCurrentUserId))
     {
         $gValidLogin = true;
     }
