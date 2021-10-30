@@ -141,7 +141,7 @@ if ((int) $gSettingsManager->get('enable_guestbook_moderation') > 0)
     }
     else
     {
-        $conditionsSpecial .= ' AND gbo_locked = '0' ';
+        $conditionsSpecial .= ' AND gbo_locked = false ';
     }
 }
 
