@@ -338,9 +338,8 @@ class TableUserField extends TableAccess
      */
     public function setSequence($sequence)
     {
-        $usfSequence = (int) $this->getValue('usf_sequence');
-        $usfCatId    = (int) $this->getValue('usf_cat_id');
-        $usfUuid     = $this->getValue('usf_uuid');
+        $usfCatId = $this->getValue('usf_cat_id');
+        $usfUuid  = $this->getValue('usf_uuid');
 
         $sql = 'UPDATE '.TBL_USER_FIELDS.'
                    SET usf_sequence = ? -- new order sequence
