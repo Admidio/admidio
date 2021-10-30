@@ -19,6 +19,7 @@
 !/adm_plugins/sidebar_dates/
 !/adm_plugins/latest-documents-files/
 !/adm_plugins/sidebar_online/
+!/adm_plugins/category_report/
 
 # Some special OS files that should not commited
 /*.phar

@@ -379,7 +379,7 @@
   <string name="SYS_CREATE_NEW_CONFIGURATION">Crear nueva configuración</string>
   <string name="LST_CREATE_OWN_LIST">Crear una lista propia</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Configuración estándar</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_DESC">Una de estas configuraciones puede ser establecida como predeterminada para las listas de esta organización. Los participantes que no tengan una configuración de lista se visualizarán con esta configuración.</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Una de estas configuraciones puede ser establecida como predeterminada para las listas de esta organización. Los participantes que no tengan una configuración de lista se visualizarán con esta configuración.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">¡No se ha configurado ninguna lista predeterminada!\n\nPóngase en contacto con un administrador para definir una lista como predeterminada.</string>
   <string name="SYS_DELETE_CONFIGURATION">Eliminar Configuración</string>
   <string name="SYS_EMAIL_TO_MEMBERS">E-Mail a miembros</string>

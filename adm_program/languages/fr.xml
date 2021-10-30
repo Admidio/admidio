@@ -1,5 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--Phrases only in CategoryReportmodule-->
+  <string name="SYS_ADD_ANOTHER_CONFIG">Ajouter une configuration supplémentaire</string>
+  <string name="SYS_ADDITIONAL_COLS">Colonnes supplémentaires</string>
+  <string name="SYS_CAT_SELECTION">Sélection de catégorie</string>
+  <string name="SYS_CAT_SELECTION_CONF_DESC">Par la sélection de catégorie, une configuration peut être limitée aux membres des rôles des catégories sélectionnées.\n\n Si aucune restriction ne doit être faite, les deux champs (sélection de rôle et sélection de catégorie) doivent être laissées vides.</string>
+  <string name="SYS_CAT_SELECTION_COL_DESC">Le nom saisi ici apparaît dans "Sélectionner une configuration".</string>
+  <string name="SYS_COLUMN_SELECTION">Sélection de colonne</string>
+  <string name="SYS_COLUMN_SELECTION_DESC">Sélectionne les colonnes à afficher dans la liste. Les rôles inactifs sont marqués avec (*).</string>
+  <string name="SYS_COLUMNS">Colonnes</string>
+  <string name="SYS_CONFIGURATION_DEFAULT_DESC">Paramètres de configuration par défaut</string>
+  <string name="SYS_CONFIGURATIONS">Configurations</string>
+  <string name="SYS_CONFIGURATIONS_HEADER">Ici tu peux créer autant de configuration pour les rapports par catégories que nécessaires. Dans l\'affichage à l\'écran, l\'une de ces configurations sert de base à l\'affichage par "Sélectionner une configuration".</string>
+  <string name="SYS_EXPORT_AND_FILTER">Exporter et filtrer</string>
+  <string name="SYS_IMPORT_2">Import</string>
+  <string name="SYS_LINK_TO_DEINSTALLATION">Aller à la désinstallation</string>       
+  <string name="SYS_NUMBER_COL">Nombre (Colonne)</string> 
+  <string name="SYS_NUMBER_COL_DESC">Si une ligne avec le nombre de membres doit être affichée à la fin du rapport, la coche doit être cochée.</string>
+  <string name="SYS_NUMBER_ROW">Nombre (Ligne)</string>             
+  <string name="SYS_OPTIONS">Options</string>
+  <string name="SYS_ORG_CHOICE">Choix de l\'organisation</string>
+  <string name="SYS_PATTERN">Exemple de configuration</string>
+  <string name="SYS_ROLE_SELECTION">Sélection des rôles</string>
+  <string name="SYS_ROLE_SELECTION_CONF_DESC">Une configuration peut être limitée aux membres des rôles sélectionnés via la sélection de rôle.\n\n Si aucune restriction ne doit être faite, les deux champs (sélection de rôle et sélection de catégorie) doivent être laissées vides.</string>
+  <string name="SYS_ROLEMEMBERSHIPS">Appartenances aux rôles</string>
+  <string name="SYS_WITHOUT">sans</string>  
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Ajouter un événement à l\'agenda</string>
   <string name="DAT_ALL_DAY">Plein temps</string>
@@ -766,6 +791,8 @@
   <string name="SYS_CATEGORY">Catégorie</string>
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Il y a déjà une catégorie dans cette organisation avec ce nom.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">La visibilité des champs de profil de cette catégorie peut être désactivée pour les autres utilisateurs, mais les champs de profil restent visibles dans ton propre profil et peuvent également y être édités.</string>
+  <string name="SYS_CATEGORY_REPORT">Rapport par catégorie</string>
+  <string name="SYS_CATEGORY_REPORT_DESC">Crée une liste de tous les rôles et catégories d'un membre.</string>  
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Si cette option est activée, les champs du profil de cette catégorie apparaissent également dans le profil des organisations suivantes et peuvent aussi être gérés: #VAR1#.\n\nEst-ce que tu aimerait voir ces données uniquement de ton organisation, cette option devrait être désactivée.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-catégorie</string>
   <string name="SYS_CHANGE_PASSWORD">Changer le mot de passe</string>
@@ -855,7 +882,7 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Assignation standard pour l\'enregistrement</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Si un nouvel utilisateur est créé ou si un nouvelle inscription est accepté, ce rôle est automatiquement attribué au nouvel utilisateur. Si le créateur a le droit d\'affecter des rôles, toutes les affectations de rôles sont affichées et peuvent être ajustées en conséquence.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Configuration par défaut</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_DESC">L\'une des configurations spécifiées ici peut devenir la configuration par défaut pour les listes de cette organisation. Les listes de membres des rôles qui n\'ont pas de listes configurés sont affichées avec cette configuration.</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">L\'une des configurations spécifiées ici peut devenir la configuration par défaut pour les listes de cette organisation. Les listes de membres des rôles qui n\'ont pas de listes configurés sont affichées avec cette configuration.</string>
   <string name="SYS_DEFAULT_LIST">Liste par défaut</string>
   <string name="SYS_DEFAULT_LIST_DESC">Si une liste de membres doit être affichée pour ce rôle et qu\'aucune configuration de liste n\'est spécifiée pour ce rôle, la liste est affichée avec la configuration de liste standard du système. Tu peux utiliser ce champ pour sélectionner une configuration de liste différente pour chaque rôle individuellement, qui s\'affiche si aucune configuration de liste n\'est spécifiée.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Aucune liste par défaut n\'a été spécifiée par l\'administrateur !\n\nContacte un administrateur pour qu\'il déclare une liste comme liste par défaut.</string>
@@ -922,6 +949,8 @@
   <string name="SYS_EMAIL_TO_MEMBERS">Envoyer courriel aux membres</string>
   <string name="SYS_EMAIL_TO_LIST">Courriel à la liste</string>
   <string name="SYS_EMPTY">Vide</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE">Activer le module de rapport de catégorie</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE_DESC">Le rapport de catégorie de module crée une liste de rôles et de catégories d'un membre. L'autorisation «Voir la liste des membres de tous les rôles» est requise pour l'opération. (Par défaut: oui)</string>  
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activer le module de téléchargement</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Le module de téléchargement peut être activé ou désactivé. (Par défaut: oui)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Activer les groupes &amp; module de rôles</string>

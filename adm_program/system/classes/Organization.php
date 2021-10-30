@@ -128,7 +128,7 @@ class Organization extends TableAccess
      */
     public function createBasicData($userId)
     {
-        global $gL10n, $gProfileFields;
+        global $gL10n, $gProfileFields, $gSettingsManager;
 
         // read id of system user from database
         $sql = 'SELECT usr_id
@@ -299,13 +299,6 @@ class Organization extends TableAccess
         $addressList->addColumn(6, (int) $gProfileFields->getProperty('CITY', 'usf_id'));
         $addressList->save();
 
-        // set addresslist to default configuration
-        $sql = 'UPDATE '.TBL_PREFERENCES.'
-                   SET prf_value  = ? -- $addressList->getValue(\'lst_id\')
-                 WHERE prf_org_id = ? -- $orgId
-                   AND prf_name   = \'groups_roles_default_configuration\'';
-        $this->db->queryPrepared($sql, array((int) $addressList->getValue('lst_id'), $orgId));
-
         $phoneList = new ListConfiguration($this->db);
         $phoneList->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
         $phoneList->setValue('lst_org_id', $orgId);
@@ -367,12 +360,26 @@ class Organization extends TableAccess
         $userManagementList->addColumn(6, (int) $gProfileFields->getProperty('CITY', 'usf_id'));
         $userManagementList->save();
 
-        // set participant list to default configuration in date module settings
-        $sql = 'UPDATE '.TBL_PREFERENCES.'
-                   SET prf_value = ? -- $participantList->getValue(\'lst_id\')
-                 WHERE prf_name   = \'dates_default_list_configuration\'
-                   AND prf_org_id = ? -- $orgId';
-        $this->db->queryPrepared($sql, array((int) $participantList->getValue('lst_id'), $orgId));
+        // create default category report configuration
+        $categoryReportColumns = 'p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
+                                 'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
+                                 'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
+                                 'p'.$gProfileFields->getProperty('CITY', 'usf_id').','.
+                                 'r'.$roleAdministrator->getValue('rol_id').','.
+                                 'r'.$roleManagement->getValue('rol_id').','.
+                                 'r'.$roleMember->getValue('rol_id');
+        $categoryReport = new TableAccess($this->db, TBL_CATEGORY_REPORT, 'crt');
+        $categoryReport->setValue('crt_org_id', $orgId);
+        $categoryReport->setValue('crt_name', $gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
+        $categoryReport->setValue('crt_col_fields', $categoryReportColumns);
+        $categoryReport->setValue('crt_number_col', 0);
+        $categoryReport->save();
+
+        // set new default configuration to the module settings
+        $gSettingsManager->set('groups_roles_default_configuration', $addressList->getValue('lst_id'));
+        $gSettingsManager->set('dates_default_list_configuration', $participantList->getValue('lst_id'));
+        $gSettingsManager->set('members_list_configuration', $userManagementList->getValue('lst_id'));
+        $gSettingsManager->set('category_report_default_configuration', $categoryReport->getValue('crt_id'));
     }
 
     /**

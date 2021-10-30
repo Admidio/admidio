@@ -1,5 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--Phrases only in CategoryReportmodule-->
+  <string name="SYS_ADD_ANOTHER_CONFIG">Weitere Konfiguration hinzufügen</string>
+  <string name="SYS_ADDITIONAL_COLS">Zusätzliche Spalten</string>
+  <string name="SYS_CAT_SELECTION">Kategoriewahl</string>
+  <string name="SYS_CAT_SELECTION_CONF_DESC">Über Kategoriewahl kann eine Konfiguration auf die Angehörigen von Rollen der gewählten Kategorien eingeschränkt werden.\n\n Soll keine Einschränkung erfolgen, so sind beide Felder (Rollenwahl und Kategoriewahl) leer zu lassen.</string>
+  <string name="SYS_CAT_SELECTION_COL_DESC">Die hier eingetragende Bezeichnung erscheint in der Bildschirmanzeige im Auswahlmenü "Konfiguration auswählen".</string>
+  <string name="SYS_COLUMN_SELECTION">Spaltenauswahl</string>
+  <string name="SYS_COLUMN_SELECTION_DESC">Wählt die Spalten aus, die in der Liste angezeigt werden sollen.\n\n Inaktive Rollen sind mit (*) gekennzeichnet.</string>
+  <string name="SYS_CONFIGURATIONS">Konfigurationen</string>
+  <string name="SYS_CONFIGURATIONS_HEADER">Hier können beliebig viele Konfigurationen für den Kategoriereport erstellt werden. In der Bildschirmanzeige wird jeweils eine dieser Konfigurationen über "Konfiguration auswählen" als Grundlage für die Anzeige verwendet.</string>
+  <string name="SYS_FILTER_TO_EXPORT">Filter zum Exportieren</string>
+  <string name="SYS_GENERAL_ROLE_ASSIGNMENT">Allgemeine Rollenzuordnung</string>
+  <string name="SYS_NUMBER_COL">Anzahl (Spalte)</string>
+  <string name="SYS_NUMBER_COL_DESC">Soll am Ende des Reports eine Zeile mit der Anzahl der Mitgliedschaften angezeigt werden, so ist der Haken zu setzen.</string>
+  <string name="SYS_NUMBER_ROW">Anzahl (Zeile)</string>
+  <string name="SYS_ROLE_SELECTION">Rollenwahl</string>
+  <string name="SYS_ROLE_SELECTION_CONF_DESC">Über Rollenwahl kann eine Konfiguration auf die Angehörigen der gewählten Rollen eingeschränkt werden.\n\n Soll keine Einschränkung erfolgen, so sind beide Felder (Rollenwahl und Kategoriewahl) leer zu lassen.</string>
+  <string name="SYS_ROLEMEMBERSHIPS">Rollenmitgliedschaften</string>
+  <string name="SYS_ROLE_WITHOUT_LEADER">Rollen ohne Leiter</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
   <string name="DAT_ALL_DAY">Ganztägig</string>
@@ -595,6 +614,8 @@
   <string name="SYS_CATEGORY">Kategorie</string>
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
+  <string name="SYS_CATEGORY_REPORT">Kategoriereport</string>
+  <string name="SYS_CATEGORY_REPORT_DESC">Erzeugt eine Auflistung der Rollen- und Kategoriezugehörigkeiten eines Mitglieds.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\nMöchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-Kategorie</string>
   <string name="SYS_CHANGE_HISTORY">Änderungshistorie</string>
@@ -638,6 +659,7 @@
   <string name="SYS_COOKIE_DESC">Diese Website verwendet Cookies, um sicherzustellen, dass du die beste Erfahrung auf unserer Website erhältst. Mit der Nutzung dieser Webseite erklärst du dich einverstanden, dass wir Cookies verwenden.</string>
   <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du deinen Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
   <string name="SYS_COPY">Kopieren</string>
+  <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>  
   <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist Deine angeforderte Kopie der Nachricht</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
   <string name="SYS_COUNT_BCC">Anzahl der BCC Empfänger</string>
@@ -704,7 +726,8 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardzuordnung bei Registrierung</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Wird ein neuer Benutzer angelegt bzw. eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zu zuordnen, so werden ihm alle Rollenzuordnung angezeigt und er kann sie entsprechend anpassen.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für den Kategorienreport dieser Organisation gemacht werden. Die gewählte Konfiguration wird beim Aufruf des Reports direkt angezeigt.</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
   <string name="SYS_DEFAULT_ENCODING_UTF8">Standardkodierung (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Standardliste</string>
   <string name="SYS_DEFAULT_LIST_DESC">Soll eine Mitgliederliste zu dieser Rolle angezeigt werden und wird keine Listenkonfiguration vorgegeben, so wird die Liste in der systemweit eingestellten Standardlistenkonfiguration dargestellt. Über dieses Feld kann für die einzelne Rolle eine andere Listenkonfiguration ausgewählt werden, die angezeigt wird, wenn keine Listenkonfiguration vorgegeben ist.</string>
@@ -798,6 +821,8 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
   <string name="SYS_EMAIL_TO_LIST">E-Mail an Liste</string>
   <string name="SYS_EMPTY">Leer</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE">Modul Kategoriereport aktivieren</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE_DESC">Das Modul Kategoriereport erzeugt eine Auflistung von Rollen- und Kategoriezugehörigkeiten eines Mitglieds. Zum Betrieb ist die Berechtigung "Mitgliederlisten aller Rollen einsehen" erforderlich. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Modul Dokumente &amp; Dateien aktivieren</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Modul Dokumente &amp; Dateien kann über diese Einstellung aktiviert oder deaktiviert werden. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Gruppen &amp; Rollen aktivieren</string>

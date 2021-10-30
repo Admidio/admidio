@@ -109,6 +109,117 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method will migrate the database entries
+     * from plugin Kategoriereport (table adm_plugin_preferences)
+     * to module category report (table adm_category_report).
+     */
+    public static function updateStep41CategoryReportMigration()
+    {
+        global $gSettingsManager, $gL10n, $gProfileFields;
+
+        $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
+        $organizationsStatement = self::$db->queryPrepared($sql);
+        $organizationsArray     = $organizationsStatement->fetchAll();
+
+        foreach($organizationsArray as $organization)
+        {
+            $orgId = (int) $organization['org_id'];
+            $config = array();
+
+            // prüfen, ob vom Plugin Kategoriereport eine configdata.php existiert
+            $file = ADMIDIO_PATH . FOLDER_PLUGINS . '/kategoriereport/configdata.php';
+            if (file_exists($file))
+            {
+                include $file;                  // benötigt wird hier der Wert von $dbtoken
+
+                // prüfen, ob die Tabelle 'adm_plugin_preferences' existiert
+                $tableName = TABLE_PREFIX.'_plugin_preferences';
+                $sql = 'SHOW TABLES LIKE \''.$tableName.'\' ';
+                $tableExistStatement = self::$db->queryPrepared($sql);
+
+                if ($tableExistStatement->rowCount())
+                {
+                    // Konfiguration(en) mit 'PKR_...' einlesen
+                    $sql = 'SELECT plp_id, plp_name, plp_value
+                 	          FROM '.$tableName.'
+                 	         WHERE plp_name LIKE ?
+                 	           AND (plp_org_id = ?
+                     	        OR plp_org_id IS NULL ) ';
+                    $statement = self::$db->queryPrepared($sql, array('PKR__%', $orgId));
+
+                    while ($row = $statement->fetch())
+                    {
+                        $array = explode('__',$row['plp_name']);
+
+                        if ((substr($row['plp_value'], 0, 2) == '((' ) && (substr($row['plp_value'], -2) == '))' ))
+                        {
+                            $row['plp_value'] = substr($row['plp_value'], 2, -2);
+                            $config[$array[2]] = explode($dbtoken,$row['plp_value']);
+                        }
+                        else
+                        {
+                            $config[$array[2]] = $row['plp_value'];
+                        }
+                    }
+                }
+            }
+
+            // if $config is still empty now, then there was no configuration data of the plugin
+            // --> create sample configuration
+            if (empty($config))
+            {
+                $config['col_desc']       = array($gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
+                $config['col_fields']     = array('p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
+                                                  'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
+                                                  'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
+                                                  'p'.$gProfileFields->getProperty('CITY', 'usf_id'));
+                $config['selection_role'] = array('');
+                $config['selection_cat']  = array('');
+                $config['number_col']  	  = array(0) ;
+                $config['config_default'] = 0;
+
+                // Read out the role IDs of the "Administrator", "Board" and "Member" roles
+                $role = new TableRoles(self::$db);
+                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_ADMINISTRATOR'), 'cat_org_id' => $orgId )))
+                {
+                    $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
+                }
+                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('INS_BOARD'), 'cat_org_id' => $orgId )))
+                {
+                    $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
+                }
+                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_MEMBER'), 'cat_org_id' => $orgId )))
+                {
+                    $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
+                }
+            }
+
+            // Write "Kategoriereport" configurations or sample configuration into adm_category_report table
+            foreach ($config['col_desc'] as $i => $dummy)
+            {
+                $categoryReport = new TableAccess(self::$db, TBL_CATEGORY_REPORT, 'crt');
+
+                $categoryReport->setValue('crt_org_id', $orgId);
+                $categoryReport->setValue('crt_name', $config['col_desc'][$i]);
+                $categoryReport->setValue('crt_col_fields', $config['col_fields'][$i]);
+                $categoryReport->setValue('crt_selection_role', $config['selection_role'][$i]);
+                $categoryReport->setValue('crt_selection_cat', $config['selection_cat'][$i]);
+                $categoryReport->setValue('crt_number_col', $config['number_col'][$i]);
+                $categoryReport->save();
+
+                if ($config['config_default'] == $i)
+                {
+                    $sql = 'UPDATE '.TBL_PREFERENCES.'
+                               SET prf_value  = ? -- $categoryReport->getValue(\'crt_id\')
+                             WHERE prf_org_id = ? -- $orgId
+                               AND prf_name   = \'category_report_default_configuration\'';
+                    self::$db->queryPrepared($sql, array((int) $categoryReport->getValue('crt_id'), $orgId));
+                }
+            }
+        }
+    }
+
+    /**
      * This method will add a uuid to each row of the tables adm_users and adm_roles
      */
 	public static function updateStep41AddUuid()

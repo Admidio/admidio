@@ -284,7 +284,7 @@
   <string name="SYS_CREATE_NEW_CONFIGURATION">A criar nova configuração</string>
   <string name="LST_CREATE_OWN_LIST">Criar uma lista personalizada</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Configuração padrão</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_DESC">Uma destas configurações pode ser definida como a configuração padrão para listas nesta organização. Listas de membros de cargos que não possuírem uma configuração de lista serão exibidas com esta configuração.</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Uma destas configurações pode ser definida como a configuração padrão para listas nesta organização. Listas de membros de cargos que não possuírem uma configuração de lista serão exibidas com esta configuração.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Nenhum conjunto de configurações de lista padrão foi definido pelo administrador!\n\nContate o administrador do sistema para obter ajuda.</string>
   <string name="SYS_DELETE_CONFIGURATION">Remover configuração</string>
   <string name="SYS_EMAIL_TO_MEMBERS">E-mail para os membros</string>
