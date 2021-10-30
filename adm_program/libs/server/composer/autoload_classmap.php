@@ -8,6 +8,7 @@ $baseDir = dirname(dirname(dirname($vendorDir)));
 return array(
     'AdmException' => $baseDir . '/adm_program/system/classes/AdmException.php',
     'AutoLogin' => $baseDir . '/adm_program/system/classes/AutoLogin.php',
+    'CategoryReport' => $baseDir . '/adm_program/system/classes/CategoryReport.php',
     'ChangeNotification' => $baseDir . '/adm_program/system/classes/ChangeNotification.php',
     'Component' => $baseDir . '/adm_program/system/classes/Component.php',
     'ComponentUpdate' => $baseDir . '/adm_program/system/classes/ComponentUpdate.php',

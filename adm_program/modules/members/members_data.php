@@ -268,7 +268,7 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
     {
         if(strlen($row[$ColumnNumberSql]) > 0)
         {
-            $columnValues[strval($columnNumberJson)] = $membersListConfig->convertColumnContentForOutput($columnNumber, 'html', $row[$ColumnNumberSql], $row['usr_id'], $row['usr_uuid']);
+            $columnValues[strval($columnNumberJson)] = $membersListConfig->convertColumnContentForOutput($columnNumber, 'html', $row[$ColumnNumberSql], $row['usr_uuid']);
         }
         else
         {

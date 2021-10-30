@@ -135,5 +135,25 @@
     <step id="825">ComponentUpdateSteps::updateStep41MoveEcardTemplates</step>
     <step id="830">ALTER TABLE %PREFIX%_messages DROP COLUMN msg_usr_id_receiver</step>
     <step id="840" database="pgsql">ComponentUpdateSteps::updateStep41PostgreSqlSetBoolean</step>
+    <step id="850">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
+        VALUES ('MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.1.0', 0)</step>
+    <step id="860">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
+        VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'CATEGORY-REPORT'), 1, %UUID%, 0, 9, 1, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC')</step>
+    <step id="870">CREATE TABLE %PREFIX%_category_report
+        (
+        crt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+        crt_org_id                  integer unsigned,
+        crt_name                    varchar(100)        NOT NULL,
+        crt_col_fields              text,
+        crt_selection_role          varchar(100)        NOT NULL,
+        crt_selection_cat           varchar(100)        NOT NULL,
+        crt_number_col              boolean             NOT NULL    DEFAULT '0',
+        PRIMARY KEY (crt_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci</step>
+    <step id="880">ALTER TABLE %PREFIX%_category_report ADD CONSTRAINT %PREFIX%_fk_crt_org FOREIGN KEY (crt_org_id) REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="890">ComponentUpdateSteps::updateStep41CategoryReportMigration</step>
     <step>stop</step>
 </update>

@@ -1,5 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--Phrases only in CategoryReportmodule-->
+  <string name="SYS_ADD_ANOTHER_CONFIG">Add further configuration</string>
+  <string name="SYS_ADDITIONAL_COLS">Additional cols</string>
+  <string name="SYS_CAT_SELECTION">Category selection</string>
+  <string name="SYS_CAT_SELECTION_CONF_DESC">About category choice, a configuration to the members of the roles chosen categories are limited.\n\n There should be no restriction, so both fields (role selection and category selection) are to be left blank.</string>
+  <string name="SYS_CAT_SELECTION_COL_DESC">The bearing is here will appear in the display selection menu "Select configuration".</string>
+  <string name="SYS_COLUMN_SELECTION">Column selection</string>
+  <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns that are to be displayed in the list.\n\nInactive roles are marked with (*).</string>
+  <string name="SYS_CONFIGURATIONS">Configurations</string>
+  <string name="SYS_CONFIGURATIONS_HEADER">Here any number of configurations can be created for the category report. In the display of the category report one of these configurations is selected using "Select configuration" as the basis for the presentation.</string>
+  <string name="SYS_FILTER_TO_EXPORT">Filter to export</string>
+  <string name="SYS_GENERAL_ROLE_ASSIGNMENT">General role assignment</string>
+  <string name="SYS_NUMBER_COL">Number (Column)</string>
+  <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
+  <string name="SYS_NUMBER_ROW">Number (Row)</string>
+  <string name="SYS_ROLE_SELECTION">Role selection</string>
+  <string name="SYS_ROLE_SELECTION_CONF_DESC">About roll select a configuration may be restricted to members of the selected roles.\n\n There should be no restriction, so both fields (role selection and category selection) are to be left blank.</string>
+  <string name="SYS_ROLEMEMBERSHIPS">Role memberships</string>
+  <string name="SYS_ROLE_WITHOUT_LEADER">Role without leader</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Add event to calendar</string>
   <string name="DAT_ALL_DAY">Full time</string>
@@ -595,6 +614,8 @@
   <string name="SYS_CATEGORY">Category</string>
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Category name already exists in selected organization.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
+  <string name="SYS_CATEGORY_REPORT">Category report</string>
+  <string name="SYS_CATEGORY_REPORT_DESC">Creates a list of all roles and categories a member has.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-category</string>
   <string name="SYS_CHANGE_HISTORY">Change history</string>
@@ -638,6 +659,7 @@
   <string name="SYS_COOKIE_DESC">This website uses cookies to ensure that you get the best experience on our website. By using this website you agree that we use cookies.</string>
   <string name="SYS_COOKIE_NOT_SET">Log-in error! Your browser does not accept cookies!\n\nFor successful log-in, please, configure your browser to accept cookies from #VAR1_BOLD#.</string>
   <string name="SYS_COPY">Copy</string>
+  <string name="SYS_COPY_CONFIGURATION">Copy configuration</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Your requested copy of the message</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
   <string name="SYS_COUNT_BCC">Number of BCC recipients</string>
@@ -704,7 +726,8 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Default assignment of registering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">If a new user is created or a new registration is accepted, then this role is automatically assigned to the new user. When the creator has the right to assign roles, all role mappings are displayed and can be changed accordingly.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Default configuration</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_DESC">One of the configurations given here can be set as the default configuration for lists of this organization. Member lists of roles not having a list configuration are displayed with this configuration.</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">One of the configurations given here can be made the default configuration for the category report of this organization. The selected configuration will be displayed directly when the report is called.</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">One of the configurations specified here can be made the default configuration for lists of this organization. Member lists of roles that do not have a list configuration stored will be displayed with this configuration.</string>
   <string name="SYS_DEFAULT_ENCODING_UTF8">Default encoding (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Default list</string>
   <string name="SYS_DEFAULT_LIST_DESC">In case there is a member list for this role to be displayed and no list configuration is specified, the list is displayed in the system-wide selected standard list configuration. Using this field for an individual role, a different configuration list can be selected which is displayed when no configuration list is preset.</string>
@@ -798,6 +821,8 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-mail to members</string>
   <string name="SYS_EMAIL_TO_LIST">E-mail to list</string>
   <string name="SYS_EMPTY">Empty</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE">Activate category report module</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE_DESC">Category report creates a list of all roles and categories a member has. The authorization "View membership lists of all roles" is required for operation. (Default: yes)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activate documents &amp; files module</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">The documents &amp; files module can be activated or deactivated via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Enable groups &amp; roles module</string>

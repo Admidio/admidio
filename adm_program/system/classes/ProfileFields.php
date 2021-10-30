@@ -218,7 +218,7 @@ class ProfileFields
                             // set value2 to user id because we need a second parameter in the link to mail module
                             if ($value2 === null)
                             {
-                                $value2 = $this->mUserId;
+                                $value2 = $this->mUserUuid;
                             }
 
                             $emailLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $value2));

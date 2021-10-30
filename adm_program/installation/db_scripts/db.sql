@@ -13,6 +13,7 @@
 /*==============================================================*/
 DROP TABLE IF EXISTS %PREFIX%_announcements        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_auto_login           CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_category_report      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_components           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_dates                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_files                CASCADE;
@@ -114,6 +115,24 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_cat_uuid ON %PREFIX%_categories (cat_uuid);
+
+/*==============================================================*/
+/* Table: adm_category_report                                   */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_category_report
+(
+    crt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    crt_org_id                  integer unsigned,
+    crt_name                    varchar(100)        NOT NULL,
+    crt_col_fields              text,
+    crt_selection_role          varchar(100)        NOT NULL,
+    crt_selection_cat           varchar(100)        NOT NULL,
+    crt_number_col              boolean             NOT NULL    DEFAULT '0',
+    PRIMARY KEY (crt_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_components                                        */
@@ -869,6 +888,9 @@ ALTER TABLE %PREFIX%_categories
     ADD CONSTRAINT %PREFIX%_fk_cat_org         FOREIGN KEY (cat_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_cat_usr_create  FOREIGN KEY (cat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_cat_usr_change  FOREIGN KEY (cat_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_category_report
+    ADD CONSTRAINT %PREFIX%_fk_crt_org         FOREIGN KEY (crt_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
 
 ALTER TABLE %PREFIX%_dates
     ADD CONSTRAINT %PREFIX%_fk_dat_cat         FOREIGN KEY (dat_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,

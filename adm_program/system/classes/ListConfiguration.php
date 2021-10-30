@@ -108,11 +108,10 @@ class ListConfiguration extends TableLists
      * @param int     $columnNumber Number of the column for which the content should be converted.
      * @param string  $format       The following formats are possible 'html', 'print', 'csv' or 'pdf'
      * @param string  $content      The content that should be converted.
-     * @param int     $userId       Id of the user for which the content should converted. This is not the login user.
      * @param string  $userUuid     Uuid of the user for which the content should converted. This is not the login user.
      * @return string Returns the converted content.
      */
-    public function convertColumnContentForOutput($columnNumber, $format, $content, $userId, $userUuid)
+    public function convertColumnContentForOutput($columnNumber, $format, $content, $userUuid)
     {
         global $gProfileFields, $gL10n, $gSettingsManager;
 
@@ -251,7 +250,7 @@ class ListConfiguration extends TableLists
             &&    ($usfId === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
                 || $usfId === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
             {
-                $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userId);
+                $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userUuid);
                 $outputContent = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $userUuid)).'">'.$htmlValue.'</a>';
             }
             else
@@ -269,11 +268,11 @@ class ListConfiguration extends TableLists
                     // checkbox must set a sorting value
                     if($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
                     {
-                        $outputContent = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userId), 'order' => $content);
+                        $outputContent = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userUuid), 'order' => $content);
                     }
                     else
                     {
-                        $outputContent = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userId);
+                        $outputContent = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $userUuid);
                     }
                 }
             }
