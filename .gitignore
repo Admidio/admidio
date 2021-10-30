@@ -3,6 +3,7 @@
 
 # Don't commit your own stuff
 /adm_my_files/*
+!/adm_my_files/ecard_templates/
 !/adm_my_files/mail_templates/
 !/adm_my_files/config_example.php
 !/adm_my_files/.htaccess

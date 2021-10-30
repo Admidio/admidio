@@ -416,7 +416,7 @@ if ($getMode !== 'csv')
                   FROM '.TBL_LISTS.'
                  WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    AND (  lst_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
-                       OR lst_global = 1)
+                       OR lst_global = \'1\')
                    AND lst_name IS NOT NULL
               ORDER BY lst_global ASC, lst_name ASC';
         $pdoStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), (int) $gCurrentUser->getValue('usr_id')));

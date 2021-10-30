@@ -62,7 +62,7 @@ class FunctionClass
     {
         if ($tplFolder === '')
         {
-            $tplFolder = THEME_PATH . '/ecard_templates/';
+            $tplFolder = ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates';
         }
 
         if (!is_file($tplFolder . $tplFilename))

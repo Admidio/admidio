@@ -89,7 +89,7 @@ final class FileSystemUtils
      * @param string $fileExtension The file extension that should be checked.
      * @return bool Return true if the file extension is allowed to be used within Admidio.
      */
-    public function allowedFileExtension($fileExtension)
+    public static function allowedFileExtension($fileExtension)
     {
         if(array_key_exists($fileExtension, self::$iconFileExtension)) {
             return true;

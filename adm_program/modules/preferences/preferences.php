@@ -915,7 +915,7 @@ $sqlData = array();
 $sqlData['query'] = 'SELECT lst_id, lst_name
                        FROM '.TBL_LISTS.'
                       WHERE lst_org_id = ? -- $orgId
-                        AND lst_global = 1
+                        AND lst_global = \'1\'
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($orgId);
 $formUserManagement->addSelectBoxFromSql(
@@ -1124,7 +1124,7 @@ $formEcards->addInput(
 try
 {
     // get all ecard templates from the theme folder ecard_templates
-    $ecardTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(THEME_PATH.'/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+    $ecardTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 }
 catch (\UnexpectedValueException $e)
 {
@@ -1173,7 +1173,7 @@ $sqlData = array();
 $sqlData['query'] = 'SELECT lst_id, lst_name
                        FROM '.TBL_LISTS.'
                       WHERE lst_org_id = ? -- $orgId
-                        AND lst_global = 1
+                        AND lst_global = \'1\'
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($orgId);
 $formGroupsRoles->addSelectBoxFromSql(
@@ -1436,7 +1436,7 @@ $sqlData = array();
 $sqlData['query'] = 'SELECT lst_id, lst_name
                        FROM '.TBL_LISTS.'
                       WHERE lst_org_id = ? -- $orgId
-                        AND lst_global = 1
+                        AND lst_global = \'1\'
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($orgId);
 $formEvents->addSelectBoxFromSql(

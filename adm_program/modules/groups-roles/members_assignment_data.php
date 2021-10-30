@@ -172,7 +172,7 @@ $sqlSubSelect = '(SELECT COUNT(*) AS count_this
                      AND mem_begin  <= \''.DATE_NOW.'\'
                      AND mem_end     > \''.DATE_NOW.'\'
                          '.$filterRoleCondition.'
-                     AND rol_valid = 1
+                     AND rol_valid = \'1\'
                      AND cat_name_intern <> \'EVENTS\'
                      AND cat_org_id = '.(int) $gCurrentOrganization->getValue('org_id').')';
 
@@ -197,7 +197,7 @@ $sql = 'SELECT COUNT(*) AS count_total
     INNER JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-         WHERE usr_valid = 1
+         WHERE usr_valid = \'1\'
                '.$memberOfThisOrganizationCondition;
 $queryParams = array(
     $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
@@ -235,14 +235,14 @@ $mainSql = 'SELECT DISTINCT usr_id, usr_uuid, last_name.usd_value AS last_name, 
                 ON country.usd_usr_id = usr_id
                AND country.usd_usf_id = ? -- $gProfileFields->getProperty(\'COUNTRY\', \'usf_id\')
          LEFT JOIN '.TBL_ROLES.' AS rol
-                ON rol.rol_valid   = 1
+                ON rol.rol_valid   = \'1\'
                AND rol.rol_id      = ? -- $role->getValue(\'rol_id\')
          LEFT JOIN '.TBL_MEMBERS.' AS mem
                 ON mem.mem_rol_id  = rol.rol_id
                AND mem.mem_begin  <= ? -- DATE_NOW
                AND mem.mem_end     > ? -- DATE_NOW
                AND mem.mem_usr_id  = usr_id
-             WHERE usr_valid = 1
+             WHERE usr_valid = \'1\'
                    '. $memberOfThisOrganizationCondition;
 $queryParamsMain = array(
     $gProfileFields->getProperty('LAST_NAME', 'usf_id'),

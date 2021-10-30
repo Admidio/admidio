@@ -159,44 +159,34 @@ class ComponentUpdate extends Component
 
         $startTime = microtime(true);
 
-        // if a method of this class was set in the update step
-        // then call this function and don't execute a SQL statement
-        if (str_starts_with($updateStepContent, 'ComponentUpdateSteps::'))
-        {
-            $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
-
-            self::executeUpdateMethod($updateStepContent);
-
-            $gLogger->debug('UPDATE: Execution time ' . getExecutionTime($startTime));
-        }
         // only execute if sql statement is for all databases or for the used database
-        elseif (!isset($xmlNode['database']) || (string) $xmlNode['database'] === DB_ENGINE)
-        {
-            $showError = true;
-            // if the attribute error was set to "ignore" then don't show errors that occurs on sql execution
-            if (isset($xmlNode['error']) && (string) $xmlNode['error'] === 'ignore')
-            {
-                $showError = false;
+        if (!isset($xmlNode['database']) || (string) $xmlNode['database'] === DB_ENGINE) {
+            // if a method of this class was set in the update step
+            // then call this function and don't execute a SQL statement
+            if (str_starts_with($updateStepContent, 'ComponentUpdateSteps::')) {
+                $gLogger->info('UPDATE: Execute update step Nr: ' . (int)$xmlNode['id']);
+
+                self::executeUpdateMethod($updateStepContent);
+
+                $gLogger->debug('UPDATE: Execution time ' . getExecutionTime($startTime));
+            } else {
+                $showError = true;
+                // if the attribute error was set to "ignore" then don't show errors that occurs on sql execution
+                if (isset($xmlNode['error']) && (string)$xmlNode['error'] === 'ignore') {
+                    $showError = false;
+                }
+
+                $gLogger->info('UPDATE: Execute update step Nr: ' . (int)$xmlNode['id']);
+
+                $this->executeUpdateSql($updateStepContent, $showError);
+
+                $gLogger->debug('UPDATE: Execution time ' . getExecutionTime($startTime));
             }
-
-            $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
-
-            $this->executeUpdateSql($updateStepContent, $showError);
-
-            $gLogger->debug('UPDATE: Execution time ' . getExecutionTime($startTime));
         }
-        elseif ((string) $xmlNode['database'] !== DB_ENGINE)
-        {
+        else {
             $gLogger->info(
                 'UPDATE: Update step is for another database!',
-                array('database' => (string) $xmlNode['database'], 'step' => (int) $xmlNode['id'])
-            );
-        }
-        else
-        {
-            $gLogger->warning(
-                'UPDATE: Unexpected update step!',
-                array('content' => (string) $xmlNode, 'attributes' => (array) $xmlNode->attributes())
+                array('database' => (string)$xmlNode['database'], 'step' => (int)$xmlNode['id'])
             );
         }
 

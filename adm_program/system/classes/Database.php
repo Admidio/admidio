@@ -568,8 +568,8 @@ class Database
             $replaces = array(
                 // PostgreSQL doesn't know unsigned
                 'unsigned' => '',
-                // PostgreSQL interprets a boolean as string so transform it to a smallint
-                'boolean'  => 'smallint',
+                // since version 4.1 we don't replace boolean with smallint
+                //'boolean'  => 'smallint',
                 // A blob is in PostgreSQL a bytea datatype
                 'blob'     => 'bytea'
             );

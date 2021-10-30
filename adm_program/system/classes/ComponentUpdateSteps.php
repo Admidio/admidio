@@ -20,9 +20,92 @@ final class ComponentUpdateSteps
      * Set the database
      * @param Database $database The database instance
      */
-    public static function setDatabase(Database $database)
-    {
+    public static function setDatabase(Database $database) {
         self::$db = $database;
+    }
+
+
+    /**
+     * This method will add a uuid to each row of the tables adm_users and adm_roles
+     */
+    public static function updateStep41PostgreSqlSetBoolean()
+    {
+        $updateColumnsBoolean = array(
+            array('table' => TBL_CATEGORIES, 'column' => 'cat_system'),
+            array('table' => TBL_CATEGORIES, 'column' => 'cat_default'),
+            array('table' => TBL_DATES, 'column' => 'dat_all_day'),
+            array('table' => TBL_DATES, 'column' => 'dat_highlight'),
+            array('table' => TBL_DATES, 'column' => 'dat_allow_comments'),
+            array('table' => TBL_DATES, 'column' => 'dat_additional_guests'),
+            array('table' => TBL_FILES, 'column' => 'fil_locked'),
+            array('table' => TBL_FOLDERS, 'column' => 'fol_locked'),
+            array('table' => TBL_FOLDERS, 'column' => 'fol_public'),
+            array('table' => TBL_GUESTBOOK, 'column' => 'gbo_locked'),
+            array('table' => TBL_GUESTBOOK_COMMENTS, 'column' => 'gbc_locked'),
+            array('table' => TBL_LISTS, 'column' => 'lst_global'),
+            array('table' => TBL_MEMBERS, 'column' => 'mem_leader'),
+            array('table' => TBL_MENU, 'column' => 'men_node'),
+            array('table' => TBL_MENU, 'column' => 'men_standard'),
+            array('table' => TBL_PHOTOS, 'column' => 'pho_locked'),
+            array('table' => TBL_ROLES, 'column' => 'rol_assign_roles'),
+            array('table' => TBL_ROLES, 'column' => 'rol_approve_users'),
+            array('table' => TBL_ROLES, 'column' => 'rol_announcements'),
+            array('table' => TBL_ROLES, 'column' => 'rol_dates'),
+            array('table' => TBL_ROLES, 'column' => 'rol_documents_files'),
+            array('table' => TBL_ROLES, 'column' => 'rol_edit_user'),
+            array('table' => TBL_ROLES, 'column' => 'rol_guestbook'),
+            array('table' => TBL_ROLES, 'column' => 'rol_guestbook_comments'),
+            array('table' => TBL_ROLES, 'column' => 'rol_mail_to_all'),
+            array('table' => TBL_ROLES, 'column' => 'rol_photo'),
+            array('table' => TBL_ROLES, 'column' => 'rol_profile'),
+            array('table' => TBL_ROLES, 'column' => 'rol_weblinks'),
+            array('table' => TBL_ROLES, 'column' => 'rol_all_lists_view'),
+            array('table' => TBL_ROLES, 'column' => 'rol_default_registration'),
+            array('table' => TBL_ROLES, 'column' => 'rol_valid'),
+            array('table' => TBL_ROLES, 'column' => 'rol_system'),
+            array('table' => TBL_ROLES, 'column' => 'rol_administrator'),
+            array('table' => TBL_SESSIONS, 'column' => 'ses_reload'),
+            array('table' => TBL_USER_FIELDS, 'column' => 'usf_description_inline'),
+            array('table' => TBL_USER_FIELDS, 'column' => 'usf_system'),
+            array('table' => TBL_USER_FIELDS, 'column' => 'usf_disabled'),
+            array('table' => TBL_USER_FIELDS, 'column' => 'usf_hidden'),
+            array('table' => TBL_USER_FIELDS, 'column' => 'usf_mandatory'),
+            array('table' => TBL_USER_FIELDS, 'column' => 'usf_registration'),
+            array('table' => TBL_USERS, 'column' => 'usr_valid'),
+            array('table' => TBL_USER_RELATION_TYPES, 'column' => 'urt_edit_user')
+        );
+
+        foreach($updateColumnsBoolean as $columnsBoolean)
+        {
+            $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' drop default';
+            self::$db->queryPrepared($sql);
+
+            $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DATA TYPE boolean using ' . $columnsBoolean['column'] . '::integer::boolean';
+            self::$db->queryPrepared($sql);
+
+            $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DEFAULT false';
+            self::$db->queryPrepared($sql);
+        }
+    }
+
+    /**
+     * This method will move the folder with the ecard templates to the adm_my_files folder
+     */
+    public static function updateStep41MoveEcardTemplates()
+    {
+        $ecardThemeFolder   = ADMIDIO_PATH . FOLDER_THEMES . '/' . $GLOBALS['gSettingsManager']->getString('theme') . '/ecard_templates';
+        $ecardMyFilesFolder = ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates';
+
+        if(is_dir($ecardThemeFolder)) {
+            try {
+                FileSystemUtils::moveDirectory($ecardThemeFolder, $ecardMyFilesFolder);
+            }
+            catch (\RuntimeException $exception) {
+                $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath('documents')));
+                // => EXIT
+            }
+
+        }
     }
 
     /**
@@ -644,7 +727,7 @@ final class ComponentUpdateSteps
                       FROM ' . TBL_ROLES . '
                 INNER JOIN ' . TBL_CATEGORIES . '
                         ON cat_id = rol_cat_id
-                     WHERE rol_valid  = 1
+                     WHERE rol_valid  = \'1\'
                        AND cat_name_intern <> \'EVENTS\'
                        AND cat_org_id = ? -- $row[\'cat_org_id\']';
             $rolesStatement = self::$db->queryPrepared($sql, array((int) $row['cat_org_id']));

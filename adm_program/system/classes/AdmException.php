@@ -43,16 +43,16 @@ class AdmException extends Exception
     protected $params = array();
 
     /**
-     * Constructor that will **rollback** an open database translation
-     * @param string            $message Translation **id** that should be shown when exception is catched
+     * Constructor saves the parameters to the class and will call the parent constructor. Also a **rollback**
+     * of open database translation will be done.
+     * @param string            $message Translation **id** or simple text that should be shown when exception is catched
      * @param array<int,string> $params  Optional parameter for language string of translation id
      */
     public function __construct($message, $params = array())
     {
         global $gLogger, $gDb;
 
-        if ($gDb instanceof Database)
-        {
+        if ($gDb instanceof Database) {
             // if there is an open transaction we should perform a rollback
             $gDb->rollback();
         }
@@ -61,7 +61,6 @@ class AdmException extends Exception
 
         $this->params = $params;
 
-        // sicherstellen, dass alles korrekt zugewiesen wird
         parent::__construct($message);
     }
 

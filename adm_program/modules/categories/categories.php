@@ -107,8 +107,8 @@ $sqlAdminRoles = 'SELECT rol_name
                     FROM '.TBL_ROLES.'
               INNER JOIN '.TBL_CATEGORIES.'
                       ON cat_id = rol_cat_id
-                   WHERE rol_valid  = 1
-                     AND '. $rolesRightsColumn .' = 1
+                   WHERE rol_valid  = \'1\'
+                     AND '. $rolesRightsColumn .' = \'1\'
                      AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                 ORDER BY cat_sequence, rol_name';
 $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array((int) $gCurrentOrganization->getValue('org_id')));

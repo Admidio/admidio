@@ -55,7 +55,7 @@ class TableMembers extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        global $gChangeNotification;
+        global $gChangeNotification, $gCurrentSession;
 
         // New records will be logged in ::save, because their ID is only generated during first save
         if (!$this->newRecord && $gCurrentSession instanceof Session) {
