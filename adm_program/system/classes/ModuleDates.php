@@ -343,7 +343,7 @@ class ModuleDates extends Modules
                         AND dat_rol_id IS NOT NULL
                         AND dat_rol_id IN (SELECT mem_rol_id
                                              FROM ' . TBL_MEMBERS . ' AS mem2
-                                            WHERE mem2.mem_usr_id = ? -- $GLOBALS['gCurrentUserId']
+                                            WHERE mem2.mem_usr_id = ? -- $GLOBALS[\'gCurrentUserId\']
                                               AND mem2.mem_begin <= dat_begin
                                               AND mem2.mem_end   >= dat_end) ';
                     $params[] = $GLOBALS['gCurrentUserId'];
