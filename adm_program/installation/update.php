@@ -113,7 +113,11 @@ if (!$pdoStatement || $pdoStatement->rowCount() === 0)
 // create an organization object of the current organization
 $gCurrentOrganization = new Organization($gDb, $g_organization);
 $gCurrentOrgId  = $gCurrentOrganization->getValue('org_id');
-$gCurrentUserId = 0;
+
+// get system user id
+$sql = 'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login_name = \'System\' ';
+$pdoStatement = $gDb->queryPrepared($sql);
+$gCurrentUserId = $pdoStatement->fetchColumn();
 
 if ($gCurrentOrgId === 0)
 {

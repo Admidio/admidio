@@ -125,8 +125,8 @@ CREATE TABLE %PREFIX%_category_report
     crt_org_id                  integer unsigned,
     crt_name                    varchar(100)        NOT NULL,
     crt_col_fields              text,
-    crt_selection_role          varchar(100)        NOT NULL,
-    crt_selection_cat           varchar(100)        NOT NULL,
+    crt_selection_role          varchar(100),
+    crt_selection_cat           varchar(100),
     crt_number_col              boolean             NOT NULL    DEFAULT '0',
     PRIMARY KEY (crt_id)
 )

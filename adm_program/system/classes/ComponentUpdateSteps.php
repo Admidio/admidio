@@ -115,7 +115,7 @@ final class ComponentUpdateSteps
      */
     public static function updateStep41CategoryReportMigration()
     {
-        global $gSettingsManager, $gL10n, $gProfileFields;
+        global $gL10n, $gProfileFields;
 
         $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
         $organizationsStatement = self::$db->queryPrepared($sql);
@@ -265,8 +265,8 @@ final class ComponentUpdateSteps
 	}
 
     /**
-     * This method will add a new systemmail text to the database table **adm_texts** for each
-     * organization in the database.
+     * This method will add a new default list for the members management module. This list will be used to configure
+     * and show the columns of the members management overview.
      */
 	public static function updateStep41AddMembersManagementDefaultList()
 	{
