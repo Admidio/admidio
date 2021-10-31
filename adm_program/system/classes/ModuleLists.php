@@ -253,7 +253,7 @@ class ModuleLists extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gSettingsManager, $gDb;
+        global $gSettingsManager, $gDb;
 
         // Parameter
         if($limit === null)
@@ -311,7 +311,7 @@ class ModuleLists extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $listsStatement = $gDb->queryPrepared($sql, array(DATE_NOW, DATE_NOW, DATE_NOW, DATE_NOW, DATE_NOW, $gCurrentOrgId)); // TODO add more params
+        $listsStatement = $gDb->queryPrepared($sql, array(DATE_NOW, DATE_NOW, DATE_NOW, DATE_NOW, DATE_NOW, $GLOBALS['gCurrentOrgId'])); // TODO add more params
 
         // array for results
         return array(

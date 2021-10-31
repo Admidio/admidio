@@ -1230,9 +1230,9 @@ $formCategoryReport->addCheckbox(
 $sqlData = array();
 $sqlData['query'] = 'SELECT crt_id, crt_name
                        FROM '.TBL_CATEGORY_REPORT.'
-                      WHERE crt_org_id = ? -- $orgId
+                      WHERE crt_org_id = ? -- $gCurrentOrgId
                    ORDER BY crt_name ASC';
-$sqlData['params'] = array($orgId);
+$sqlData['params'] = array($gCurrentOrgId);
 $formCategoryReport->addSelectBoxFromSql(
     'category_report_default_configuration', $gL10n->get('SYS_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
     array('defaultValue' => $formValues['category_report_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC')

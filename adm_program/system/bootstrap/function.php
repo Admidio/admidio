@@ -23,11 +23,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php')
  */
 function hasRole($roleName, $userId = 0)
 {
-    global $gDb, $gCurrentUser, $gCurrentOrganization;
-
     if ($userId === 0)
     {
-        $userId = $gCurrentUserId;
+        $userId = $GLOBALS['gCurrentUserId'];
     }
 
     $sql = 'SELECT mem_id
@@ -41,9 +39,9 @@ function hasRole($roleName, $userId = 0)
                AND mem_end    > ? -- DATE_NOW
                AND rol_name   = ? -- $roleName
                AND rol_valid  = true
-               AND (  cat_org_id = ? -- $gCurrentOrgId
+               AND (  cat_org_id = ? -- $GLOBALS[\'gCurrentOrgId\'
                    OR cat_org_id IS NULL )';
-    $statement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $roleName, $gCurrentOrgId));
+    $statement = $GLOBALS['gDb']->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $roleName, $GLOBALS['gCurrentOrgId']));
 
     return $statement->rowCount() === 1;
 }
@@ -55,8 +53,6 @@ function hasRole($roleName, $userId = 0)
  */
 function isMember($userId)
 {
-    global $gDb, $gCurrentOrganization;
-
     if ($userId === 0)
     {
         return false;
@@ -72,9 +68,9 @@ function isMember($userId)
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
                AND rol_valid  = true
-               AND (  cat_org_id = ? -- $gCurrentOrgId
+               AND (  cat_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']
                    OR cat_org_id IS NULL )';
-    $statement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $gCurrentOrgId));
+    $statement = $GLOBALS['gDb']->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $GLOBALS['gCurrentOrgId']));
 
     return $statement->fetchColumn() > 0;
 }
@@ -89,8 +85,6 @@ function isMember($userId)
  */
 function isGroupLeader($userId, $roleId = 0)
 {
-    global $gDb, $gCurrentOrganization;
-
     if ($userId === 0)
     {
         return false;
@@ -107,9 +101,9 @@ function isGroupLeader($userId, $roleId = 0)
                AND mem_end    > ? -- DATE_NOW
                AND mem_leader = true
                AND rol_valid  = true
-               AND (  cat_org_id = ? -- $gCurrentOrgId
+               AND (  cat_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']
                    OR cat_org_id IS NULL )';
-    $queryParams = array($userId, DATE_NOW, DATE_NOW, $gCurrentOrgId);
+    $queryParams = array($userId, DATE_NOW, DATE_NOW, $GLOBALS['gCurrentOrgId']);
 
     if ($roleId > 0)
     {
@@ -117,7 +111,7 @@ function isGroupLeader($userId, $roleId = 0)
         $queryParams[] = $roleId;
     }
 
-    $statement = $gDb->queryPrepared($sql, $queryParams);
+    $statement = $GLOBALS['gDb']->queryPrepared($sql, $queryParams);
 
     return $statement->rowCount() > 0;
 }

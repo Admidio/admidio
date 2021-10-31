@@ -278,12 +278,10 @@ final class ComponentUpdateSteps
 
         foreach($organizationsArray as $organization)
         {
-            $orgId = (int) $organization['org_id'];
-
             // add default configuration
             $userManagementList = new ListConfiguration(self::$db);
             $userManagementList->setValue('lst_name', $gL10n->get('SYS_USER_MANAGEMENT'));
-            $userManagementList->setValue('lst_org_id', $orgId);
+            $userManagementList->setValue('lst_org_id', (int) $organization['org_id']);
             $userManagementList->setValue('lst_global', 1);
             $userManagementList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
             $userManagementList->addColumn(2, (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');

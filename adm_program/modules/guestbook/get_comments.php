@@ -25,11 +25,11 @@ if ($getCommentGboUuid !== '')
     // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
     if((int) $gSettingsManager->get('enable_guestbook_moderation') > 0 && $getModeration)
     {
-        $conditions = ' AND gbc_locked = 1 ';
+        $conditions = ' AND gbc_locked = true ';
     }
     else
     {
-        $conditions = ' AND gbc_locked = 0 ';
+        $conditions = ' AND gbc_locked = false ';
     }
 
     $sql = 'SELECT *
