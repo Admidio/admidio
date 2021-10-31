@@ -366,7 +366,6 @@ class TableAccess
 
                 // move data to class column value array
                 foreach ($row as $key => $value) {
-                    if(str_starts_with($key, $this->columnPrefix . '_'))
                     if(str_starts_with($key, $this->columnPrefix . '_')
                     && ($this->columnsInfos[$key]['type'] === 'boolean'
                             || $this->columnsInfos[$key]['type'] === 'tinyint')) {
