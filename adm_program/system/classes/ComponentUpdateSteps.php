@@ -270,7 +270,7 @@ final class ComponentUpdateSteps
      */
 	public static function updateStep41AddMembersManagementDefaultList()
 	{
-    	global $gL10n, $gProfileFields, $gSettingsManager;
+    	global $gL10n, $gProfileFields;
 
         $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
         $organizationsStatement = self::$db->queryPrepared($sql);
@@ -292,7 +292,10 @@ final class ComponentUpdateSteps
             $userManagementList->save();
 
             // save default list to preferences
-            $gSettingsManager->set('members_list_configuration', $userManagementList->getValue('lst_id'));
+            $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = ? -- $userManagementList->getValue(\'lst_id\')
+                     WHERE prf_org_id = ? -- $organization[\'org_id\']
+                       AND prf_name = \'members_list_configuration\' ';
+            self::$db->queryPrepared($sql, array($userManagementList->getValue('lst_id'), (int) $organization['org_id']));
         }
 	}
 
