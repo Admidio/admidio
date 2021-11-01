@@ -5,7 +5,6 @@
   <string name="SYS_ADDITIONAL_COLS">Additional cols</string>
   <string name="SYS_CAT_SELECTION">Category selection</string>
   <string name="SYS_CAT_SELECTION_CONF_DESC">About category choice, a configuration to the members of the roles chosen categories are limited.\n\n There should be no restriction, so both fields (role selection and category selection) are to be left blank.</string>
-  <string name="SYS_CAT_SELECTION_COL_DESC">The bearing is here will appear in the display selection menu "Select configuration".</string>
   <string name="SYS_COLUMN_SELECTION">Column selection</string>
   <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns that are to be displayed in the list.\n\nInactive roles are marked with (*).</string>
   <string name="SYS_CONFIGURATIONS">Configurations</string>

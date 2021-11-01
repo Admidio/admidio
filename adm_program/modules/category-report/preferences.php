@@ -43,7 +43,7 @@ if ($getAdd)
 }
 
 if ($getDelete > 0)
-{ 
+{
     $config[$getDelete-1]['id'] = $config[$getDelete-1]['id']*(-1);                   // id negieren, als Kennzeichen für "Deleted"
     $config = $report->saveConfigArray($config);
 }
@@ -229,7 +229,7 @@ foreach($config as $key => $value)
 {
     $formConfigurations->openGroupBox('configurations_group',++$currentNumberConf.'. '.$gL10n->get('SYS_CONFIGURATION'));
     $formConfigurations->addInput('name'.$key, $gL10n->get('SYS_DESIGNATION'), $value['name'],
-        array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_COL_DESC'));
+        array('property' => HtmlForm::FIELD_REQUIRED));
     $html = '
 	   <div class="table-responsive">
     		<table class="table table-condensed" id="mylist_fields_table">
@@ -305,23 +305,23 @@ $page->show();
 function createName($name)
 {
     global $gDb, $gL10n, $gCurrentOrganization;
-    
+
     $sql = ' SELECT crt_name
                FROM '. TBL_CATEGORY_REPORT .'
               WHERE ( crt_org_id = ?
                  OR crt_org_id IS NULL ) ';
     $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
-    
+
     $crtNames = array();
     while($row = $statement->fetch())
     {
         $crtNames[] = $row['crt_name'];
     }
-    
+
     while (in_array($name, $crtNames))
     {
         $name .= ' - '.$gL10n->get('SYS_CARBON_COPY');
     }
-    
+
     return $name;
 }
