@@ -535,7 +535,7 @@ class TableRoles extends TableAccess
             $sql = 'UPDATE '.TBL_ROLES.'
                        SET rol_valid = ? -- $status
                      WHERE rol_id = ? -- $this->getValue(\'rol_id\')';
-            $this->db->queryPrepared($sql, array((int) $status, (int) $this->getValue('rol_id')));
+            $this->db->queryPrepared($sql, array((bool) $status, (int) $this->getValue('rol_id')));
 
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role

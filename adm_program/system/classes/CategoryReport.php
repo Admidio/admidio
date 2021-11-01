@@ -139,7 +139,7 @@ class CategoryReport
              				   AND mem_begin <= ? -- DATE_NOW
            					   AND mem_end    > ? -- DATE_NOW
              				   AND rol_id = ? -- $id
-             				   AND mem_leader = 0 ';
+             				   AND mem_leader = false ';
 					$queryParams = array(
 					    DATE_NOW,
 					    DATE_NOW,
@@ -161,7 +161,7 @@ class CategoryReport
              				   AND mem_begin <= ? -- DATE_NOW
            					   AND mem_end    > ? -- DATE_NOW
              				   AND rol_id = ? -- $id
-             				   AND mem_leader = 1 ';
+             				   AND mem_leader = true ';
 					$queryParams = array(
 					    DATE_NOW,
 					    DATE_NOW,
@@ -195,7 +195,7 @@ class CategoryReport
         $sql = ' SELECT mem_usr_id
              	   FROM '.TBL_MEMBERS.', '.TBL_ROLES.', '.TBL_CATEGORIES. '
              	  WHERE mem_rol_id = rol_id
-             	    AND rol_valid  = 1
+             	    AND rol_valid  = true
              	    AND rol_cat_id = cat_id
              	    AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                		 OR cat_org_id IS NULL )
@@ -437,7 +437,7 @@ class CategoryReport
 
         return $this->arrConfiguration;
     }
-    
+
     /**
      * Funktion speichert das Konfigurationsarray
      * @param   $arrConfiguration
@@ -446,9 +446,9 @@ class CategoryReport
     function saveConfigArray(array $arrConfiguration)
     {
         global  $gDb, $gCurrentOrganization, $gSettingsManager;
-        
+
         $defaultConfiguration = 0;
-        
+
         $gDb->startTransaction();
 
         foreach ($arrConfiguration as $key => $values)
@@ -463,7 +463,7 @@ class CategoryReport
                 $categoryReport->setValue('crt_selection_cat', $values['selection_cat']);
                 $categoryReport->setValue('crt_number_col', $values['number_col']);
                 $categoryReport->save();
-                    
+
                 if($values['default_conf'] === true || $defaultConfiguration === 0)
                 {
                     $defaultConfiguration = $categoryReport->getValue('crt_id');
@@ -478,11 +478,11 @@ class CategoryReport
                 $categoryReport->delete();
             }
         }
-        
+
         $gDb->endTransaction();
-        
+
         $this->arrConfiguration = array();
-        
+
         return $this->getConfigArray();
     }
 
@@ -528,7 +528,7 @@ class CategoryReport
         	}
     	}
 	}
-	
+
 	/**
 	 * Funktion prueft, ob ein User Angehoeriger einer bestimmten Kategorie ist
 	 *
@@ -539,7 +539,7 @@ class CategoryReport
 	private function isMemberOfCategorie($cat_id, $user_id = 0)
 	{
 	    global $gCurrentUser, $gDb, $gCurrentOrganization;
-	    
+
 	    if ($user_id == 0)
 	    {
 	        $user_id = $gCurrentUser->getValue('usr_id');
@@ -548,7 +548,7 @@ class CategoryReport
 	    {
 	        return -1;
 	    }
-	    
+
 	    $sql = 'SELECT mem_id
                   FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                  WHERE mem_usr_id = ? -- $user_id
@@ -556,11 +556,11 @@ class CategoryReport
                    AND mem_end    > ? -- DATE_NOW
                    AND mem_rol_id = rol_id
                    AND cat_id   = ? -- $cat_id
-                   AND rol_valid  = 1
+                   AND rol_valid  = true
                    AND rol_cat_id = cat_id
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                     OR cat_org_id IS NULL ) ';
-	    
+
 	    $queryParams = array(
 	        $user_id,
 	        DATE_NOW,
@@ -570,7 +570,7 @@ class CategoryReport
 	    );
 	    $statement = $gDb->queryPrepared($sql, $queryParams);
 	    $user_found = $statement->rowCount();
-	    
+
 	    if ($user_found == 1)
 	    {
 	        return 1;
