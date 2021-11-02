@@ -262,6 +262,8 @@ final class ComponentUpdateSteps
                 self::$db->queryPrepared($sql, array($uuid, $row[$tableUuid['column_id']]));
             }
         }
+
+	    self::$db->initializeTableColumnProperties();
 	}
 
     /**
