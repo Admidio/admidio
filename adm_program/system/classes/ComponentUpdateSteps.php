@@ -83,7 +83,11 @@ final class ComponentUpdateSteps
             $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DATA TYPE boolean using ' . $columnsBoolean['column'] . '::integer::boolean';
             self::$db->queryPrepared($sql);
 
-            $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DEFAULT false';
+            if($columnsBoolean['column'] === 'rol_valid') {
+                $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DEFAULT true';
+            } else {
+                $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DEFAULT false';
+            }
             self::$db->queryPrepared($sql);
         }
     }
