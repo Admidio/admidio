@@ -4,23 +4,23 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.0.7', 0, 1000)
-                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.0.7', 0, 0)
-                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.0.7', 0, 0)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.0.7', 0, 0)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.0.7', 0, 0)
-                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.0.7', 0, 0)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.7', 0, 0)
-                              , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.0.7', 0, 0)
-                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.7', 0, 0)
-                              , (100, 'MODULE', 'SYS_USER_MANAGEMENT', 'MEMBERS', '4.0.7', 0, 0)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.7', 0, 0)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.0.7', 0, 0)
-                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.0.7', 0, 0)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.0.7', 0, 0)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.0.7', 0, 0)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.0.7', 0, 0)
-                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.0.7', 0, 0);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.0.11', 0, 1000)
+                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.0.11', 0, 0)
+                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.0.11', 0, 0)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.0.11', 0, 0)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.0.11', 0, 0)
+                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.0.11', 0, 0)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.11', 0, 0)
+                              , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.0.11', 0, 0)
+                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.11', 0, 0)
+                              , (100, 'MODULE', 'SYS_USER_MANAGEMENT', 'MEMBERS', '4.0.11', 0, 0)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.11', 0, 0)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.0.11', 0, 0)
+                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.0.11', 0, 0)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.0.11', 0, 0)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.0.11', 0, 0)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.0.11', 0, 0)
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.0.11', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -55,7 +55,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 
 
 --
--- Data for table adm_preferences
+-- Data for table adm_users
 --
 
 INSERT INTO %PREFIX%_users (usr_id, usr_login_name, usr_password, usr_new_password, usr_photo, usr_text, usr_activation_code, usr_last_login, usr_actual_login, usr_number_login, usr_date_invalid, usr_number_invalid, usr_usr_id_create, usr_timestamp_create, usr_usr_id_change, usr_timestamp_change, usr_valid) VALUES
@@ -218,9 +218,8 @@ INSERT INTO %PREFIX%_users (usr_id, usr_login_name, usr_password, usr_new_passwo
 (356, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
 (357, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true);
 
-
 --
--- Data for table adm_users
+-- Data for table adm_preferences
 --
 
 INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
@@ -273,6 +272,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (6700, 1, 'groups_roles_roles_per_page', '24'),
     (6705, 1, 'groups_roles_default_configuration', '1'),
     (6710, 1, 'groups_roles_show_former_members', '2'),
+    (6720, 1, 'groups_roles_edit_lists', '1'),
     (6800, 1, 'logout_minutes', '20'),
     (6900, 1, 'mail_bcc_count', '50'),
     (6910, 1, 'mail_character_encoding', 'utf-8'),
@@ -385,6 +385,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (67001, 2, 'groups_roles_roles_per_page', '24'),
     (67005, 2, 'groups_roles_default_configuration', '9'),
     (67010, 2, 'groups_roles_show_former_members', '2'),
+    (67020, 2, 'groups_roles_edit_lists', '1'),
     (68001, 2, 'logout_minutes', '20'),
     (69001, 2, 'mail_bcc_count', '50'),
     (69100, 2, 'mail_character_encoding', 'utf-8'),
@@ -516,7 +517,7 @@ INSERT INTO %PREFIX%_categories (cat_id, cat_org_id, cat_type, cat_name_intern, 
 INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_documents_files, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_this_list_view, rol_all_lists_view, rol_leader_rights, rol_default_registration, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_administrator) VALUES
 (1, 3, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',     true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', true, false, true),
 (2, 3, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER',                  false, false, false, false, false, false, false, true, false, 2, false, true, false, 2, false, 1, true, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', true, false, false),
-(3, 3, 'INS_BOARD', 'INS_DESCRIION_BOARD',                       false, false, true, true, true, true, true, true, true, 3, true, true, true, 2, true, 1, false, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', true, false, false),
+(3, 3, 'INS_BOARD', 'INS_DESCRIPTION_BOARD',                       false, false, true, true, true, true, true, true, true, 3, true, true, true, 2, true, 1, false, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', true, false, false),
 (4, 6, 'DEMO_ROL_1_YOUTH_TEAM', 'DEMO_ROL_1_YOUTH_TEAM_CONTENT', false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, false, 3, false, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', true, false, false),
 (5, 6, 'DEMO_ROL_2_YOUTH_TEAM', 'DEMO_ROL_2_YOUTH_TEAM_CONTENT', false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, false, 3, false, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', true, false, false),
 (6, 100, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',   true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', true, false, true),

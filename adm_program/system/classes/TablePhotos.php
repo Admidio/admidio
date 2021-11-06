@@ -44,6 +44,17 @@ class TablePhotos extends TableAccess
     }
 
     /**
+     * Initialize all necessary data of this object.
+     * @return void
+     */
+    public function clear()
+    {
+        parent::clear();
+
+        $this->hasChildAlbums = null;
+    }
+
+    /**
      * Rekursive Funktion gibt die Anzahl aller Bilder inkl. der Unteralben zurueck
      * pho_id noetig fuer rekursiven Aufruf
      * @param int $phoId

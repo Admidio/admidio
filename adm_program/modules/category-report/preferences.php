@@ -229,7 +229,7 @@ foreach($config as $key => $value)
 {
     $formConfigurations->openGroupBox('configurations_group',++$currentNumberConf.'. '.$gL10n->get('SYS_CONFIGURATION'));
     $formConfigurations->addInput('name'.$key, $gL10n->get('SYS_DESIGNATION'), $value['name'],
-        array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_COL_DESC'));
+        array('property' => HtmlForm::FIELD_REQUIRED));
     $html = '
 	   <div class="table-responsive">
     		<table class="table table-condensed" id="mylist_fields_table">

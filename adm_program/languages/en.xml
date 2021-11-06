@@ -4,19 +4,18 @@
   <string name="SYS_ADD_ANOTHER_CONFIG">Add further configuration</string>
   <string name="SYS_ADDITIONAL_COLS">Additional cols</string>
   <string name="SYS_CAT_SELECTION">Category selection</string>
-  <string name="SYS_CAT_SELECTION_CONF_DESC">About category choice, a configuration to the members of the roles chosen categories are limited.\n\n There should be no restriction, so both fields (role selection and category selection) are to be left blank.</string>
-  <string name="SYS_CAT_SELECTION_COL_DESC">The bearing is here will appear in the display selection menu "Select configuration".</string>
+  <string name="SYS_CAT_SELECTION_CONF_DESC">The category selection can be used to restrict a configuration to the members of roles of the selected categories.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_COLUMN_SELECTION">Column selection</string>
-  <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns that are to be displayed in the list.\n\nInactive roles are marked with (*).</string>
+  <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns to be displayed in the list.\n\n Inactive roles are marked with (*).</string>
   <string name="SYS_CONFIGURATIONS">Configurations</string>
-  <string name="SYS_CONFIGURATIONS_HEADER">Here any number of configurations can be created for the category report. In the display of the category report one of these configurations is selected using "Select configuration" as the basis for the presentation.</string>
+  <string name="SYS_CONFIGURATIONS_HEADER">Any number of configurations can be created here for the category report. In the screen display, one of these configurations is used as the basis for the display in each case via "Select configuration".</string>
   <string name="SYS_FILTER_TO_EXPORT">Filter to export</string>
   <string name="SYS_GENERAL_ROLE_ASSIGNMENT">General role assignment</string>
   <string name="SYS_NUMBER_COL">Number (Column)</string>
   <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
   <string name="SYS_NUMBER_ROW">Number (Row)</string>
   <string name="SYS_ROLE_SELECTION">Role selection</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">About roll select a configuration may be restricted to members of the selected roles.\n\n There should be no restriction, so both fields (role selection and category selection) are to be left blank.</string>
+  <string name="SYS_ROLE_SELECTION_CONF_DESC">The role selection can be restricted a configuration to the members of the selected roles.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_ROLEMEMBERSHIPS">Role memberships</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">Role without leader</string>
   <!--Phrases only in Datesmodule-->
@@ -615,7 +614,7 @@
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Category name already exists in selected organization.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
   <string name="SYS_CATEGORY_REPORT">Category report</string>
-  <string name="SYS_CATEGORY_REPORT_DESC">Creates a list of all roles and categories a member has.</string>
+  <string name="SYS_CATEGORY_REPORT_DESC">Generates a listing of a member's role and category memberships.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-category</string>
   <string name="SYS_CHANGE_HISTORY">Change history</string>

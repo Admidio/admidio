@@ -247,7 +247,9 @@ class TableAccess
                 // Byte
                 case 'bytea':
                     // in PostgreSQL we must encode the stored hex value back to binary
-                    $columnValue = pack('H*', pack('H*', substr($columnValue, 2)));
+                    if(is_string($columnValue) > 0) {
+                        $columnValue = pack('H*', pack('H*', substr($columnValue, 2)));
+                    }
                     break;
 
                 case 'timestamp': // fallthrough

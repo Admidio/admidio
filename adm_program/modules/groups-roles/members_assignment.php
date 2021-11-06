@@ -177,21 +177,18 @@ else
         // if checkbox of user is clicked then change membership
         $("#tbl_assign_role_membership").on("click", "input[type=checkbox].memlist_checkbox", function() {
             var checkbox = $(this);
-            // get user id
-            var rowId = $(this).attr("id");
-            var pos = rowId.search("_");
-            var userUuid = rowId.substring(pos + 1);
+            var userUuid = $(this).attr("id").search("_").substring(pos + 1);
 
             var memberChecked = $("input[type=checkbox]#member_" + userUuid).prop("checked");
             var leaderChecked = $("input[type=checkbox]#leader_" + userUuid).prop("checked");
 
-            // Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
+            // If the group leader checkbox is set, the member checkbox must also be set
             if (checkbox.hasClass("memlist_leader") && leaderChecked) {
                 $("input[type=checkbox]#member_" + userUuid).prop("checked", true);
                 memberChecked = true;
             }
 
-            // Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
+            // When removing the membership also ends the leader assignment
             if (checkbox.hasClass("memlist_member") && !memberChecked) {
                 $("input[type=checkbox]#leader_" + userUuid).prop("checked", false);
                 leaderChecked = false;
