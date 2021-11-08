@@ -505,7 +505,7 @@ class TableAccess
 
         // TODO check if "$gCurrentUser instanceof User"
         // see "start_installation.php"
-        if ($updateFingerPrint && $GLOBALS['gCurrentUserId'] > 0)
+        if ($updateFingerPrint && isset($GLOBALS['gCurrentUserId']) && $GLOBALS['gCurrentUserId'] > 0)
         {
             // if the table has fields to store the creator and the last change,
             // then fill them here automatically
@@ -517,7 +517,7 @@ class TableAccess
             elseif (array_key_exists($this->columnPrefix . '_usr_id_change', $this->dbColumns))
             {
                 // Do not update data if the same user has done so within 15 minutes
-                if ($GLOBALS['gCurrentUserId'] !== (int) $this->getValue($this->columnPrefix . '_usr_id_create')
+                if ($GLOBALS['gCurrentUserId'] !== $this->getValue($this->columnPrefix . '_usr_id_create')
                 || time() > (strtotime($this->getValue($this->columnPrefix . '_timestamp_create')) + 900))
                 {
                     $this->setValue($this->columnPrefix . '_timestamp_change', DATETIME_NOW);
