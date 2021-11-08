@@ -112,8 +112,8 @@
   <string name="DAT_VISIBILITY">Visibilité</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="SYS_ECARD_FROM">Carte de voeux envoyés par</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS">Activer le module de cartes de vœux</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS_DESC">Ce réglage permet d\'activer ou de désactiver le module carte de vœux. Si le serveur ne prend pas en charge l\'envoi de courriels, le module doit être désactivé. Ce module n\'est généralement disponible que pour les utilisateurs enregistrés. (Par défaut : oui)</string>
+  <string name="SYS_ENABLE_GREETING_CARDS">Activer le module de cartes de vœux</string>
+  <string name="SYS_ENABLE_GREETING_CARDS_DESC">Ce réglage permet d\'activer ou de désactiver le module carte de vœux. Si le serveur ne prend pas en charge l\'envoi de courriels, le module doit être désactivé. Ce module n\'est généralement disponible que pour les utilisateurs enregistrés. (Par défaut : oui)</string>
   <string name="SYS_GREETING_CARD">Carte de voeux</string>
   <string name="SYS_GREETING_CARDS">Cartes de voeux</string>
   <string name="SYS_GREETING_CARD_EDIT">Éditer la carte de voeux</string>
@@ -292,8 +292,8 @@
   <string name="SYS_WEBLINKS">Liens internet</string>
   <string name="SYS_WEBLINKS_DESC">Les liens vers des sites web intéressants peuvent être enregistrés ici et regroupés selon différentes catégories.</string>
   <!--Phrases only in Mailmodule-->
-  <string name="SYS_ACTIVATE_EMAILS">Activer le module de courriel</string>
-  <string name="SYS_ACTIVATE_EMAILS_DESC">Le module courriel peut être activé ou désactivé avec cette option. Si le serveur n\'autorise pas d\'envoi de mail, le module doit être désactivé. (par défaut: Activé)</string>
+  <string name="SYS_ENABLE_EMAILS">Activer le module de courriel</string>
+  <string name="SYS_ENABLE_EMAILS_DESC">Le module courriel peut être activé ou désactivé avec cette option. Si le serveur n\'autorise pas d\'envoi de mail, le module doit être désactivé. (par défaut: Activé)</string>
   <string name="SYS_ADD_ATTACHMENT">Ajouter une pièce jointe</string>
   <string name="SYS_ATTACHMENT">Annexes</string>
   <string name="SYS_ATTACHMENT_SIZE">Taille maximale du fichier pour les pièces jointes</string>
@@ -403,8 +403,8 @@
   <!--Phrases only in Messagemodule-->
   <string name="SYS_ACTIVATE_CHAT_MODULE">Activer chat en ligne</string>
   <string name="SYS_ACTIVATE_CHAT_MODULE_DESC">Ce réglage permet d\'activer ou de désactiver le module de chat. Le module charge dynamiquement les données de la base de données toutes les 3 secondes. Un maximum de 99 entrées sont gardées. À l\'atteinte de 100 messages, les 50 premières entrées sont à effacées. (Par défaut : Désactivé)</string>
-  <string name="SYS_ACTIVATE_PM_MODULE">Activer les messages privés</string>
-  <string name="SYS_ACTIVATE_PM_MODULE_DESC">Les messages privés peuvent être activés ou désactivés via ce paramètre. (Par défaut : Activé)</string>
+  <string name="SYS_ENABLE_PM_MODULE">Activer les messages privés</string>
+  <string name="SYS_ENABLE_PM_MODULE_DESC">Les messages privés peuvent être activés ou désactivés via ce paramètre. (Par défaut : Activé)</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Actifs et anciens</string>
   <string name="SYS_CHAT">Chat</string>
   <string name="SYS_DELETE_MESSAGE">Est-ce que le message #VAR1_BOLD# doit maintenant être supprimé?.</string>
@@ -953,8 +953,8 @@
   <string name="$SYS_ENABLE_CATEGORY_REPORT_DESC">Le rapport de catégorie de module crée une liste de rôles et de catégories d'un membre. L'autorisation «Voir la liste des membres de tous les rôles» est requise pour l'opération. (Par défaut: oui)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activer le module de téléchargement</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Le module de téléchargement peut être activé ou désactivé. (Par défaut: oui)</string>
-  <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Activer les groupes &amp; module de rôles</string>
-  <string name="SYS_ENABLE_GROUPS_ROLES_MODULE_DESC">Affiche les groupes et les rôles de l\'organisation et permet la configuration libre des groupes et des rôles. Propres listes peuvent être configurée et appliquée. Ce module n\'est généralement disponible que pour les utilisateurs connectés. (Par défaut: oui)</string>
+  <string name="SYS_ENABLE_GROUPS_ROLES">Activer les groupes &amp; module de rôles</string>
+  <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Affiche les groupes et les rôles de l\'organisation et permet la configuration libre des groupes et des rôles. Propres listes peuvent être configurée et appliquée. Ce module n\'est généralement disponible que pour les utilisateurs connectés. (Par défaut: oui)</string>
   <string name="SYS_END" description="End of a date">Fin</string>
   <string name="SYS_ERROR">Erreur</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">L\'erreur suivante s\'est produite lors de l\'accès à la base de données:\n\n#VAR1#</string>

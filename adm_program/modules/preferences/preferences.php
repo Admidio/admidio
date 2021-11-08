@@ -1103,8 +1103,8 @@ $formEcards = new HtmlForm(
 );
 
 $formEcards->addCheckbox(
-    'enable_ecard_module', $gL10n->get('SYS_ACTIVATE_GREETING_CARDS'), (bool) $formValues['enable_ecard_module'],
-    array('helpTextIdInline' => 'SYS_ACTIVATE_GREETING_CARDS_DESC')
+    'enable_ecard_module', $gL10n->get('SYS_ENABLE_GREETING_CARDS'), (bool) $formValues['enable_ecard_module'],
+    array('helpTextIdInline' => 'SYS_ENABLE_GREETING_CARDS_DESC')
 );
 $formEcards->addInput(
     'ecard_thumbs_scale', $gL10n->get('PHO_SCALE_THUMBNAILS'), $formValues['ecard_thumbs_scale'],
@@ -1154,8 +1154,8 @@ $formGroupsRoles = new HtmlForm(
 );
 
 $formGroupsRoles->addCheckbox(
-    'groups_roles_enable_module', $gL10n->get('SYS_ENABLE_GROUPS_ROLES_MODULE'), (bool) $formValues['groups_roles_enable_module'],
-    array('helpTextIdInline' => 'SYS_ENABLE_GROUPS_ROLES_MODULE_DESC')
+    'groups_roles_enable_module', $gL10n->get('SYS_ENABLE_GROUPS_ROLES'), (bool) $formValues['groups_roles_enable_module'],
+    array('helpTextIdInline' => 'SYS_ENABLE_GROUPS_ROLES_DESC')
 );
 $formGroupsRoles->addInput(
     'groups_roles_roles_per_page', $gL10n->get('SYS_NUMBER_OF_ROLES_PER_PAGE'), $formValues['groups_roles_roles_per_page'],
@@ -1253,12 +1253,12 @@ $formMessages = new HtmlForm(
 );
 
 $formMessages->addCheckbox(
-    'enable_mail_module', $gL10n->get('SYS_ACTIVATE_EMAILS'), (bool) $formValues['enable_mail_module'],
-    array('helpTextIdInline' => 'SYS_ACTIVATE_EMAILS_DESC')
+    'enable_mail_module', $gL10n->get('SYS_ENABLE_EMAILS'), (bool) $formValues['enable_mail_module'],
+    array('helpTextIdInline' => 'SYS_ENABLE_EMAILS_DESC')
 );
 $formMessages->addCheckbox(
-    'enable_pm_module', $gL10n->get('SYS_ACTIVATE_PM_MODULE'), (bool) $formValues['enable_pm_module'],
-    array('helpTextIdInline' => 'SYS_ACTIVATE_PM_MODULE_DESC')
+    'enable_pm_module', $gL10n->get('SYS_ENABLE_PM_MODULE'), (bool) $formValues['enable_pm_module'],
+    array('helpTextIdInline' => 'SYS_ENABLE_PM_MODULE_DESC')
 );
 $formMessages->addCheckbox(
     'enable_mail_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), (bool) $formValues['enable_mail_captcha'],

@@ -110,7 +110,7 @@
   <string name="DAT_VISIBILITY">Ορατότης</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="SYS_ECARD_FROM">Η κάρτα χαιρετισμού εστάλη από</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS">Ενεργοποίηση μονάδας κάρτας χαιρετισμού</string>
+  <string name="SYS_ENABLE_GREETING_CARDS">Ενεργοποίηση μονάδας κάρτας χαιρετισμού</string>
   <string name="SYS_GREETING_CARD">Κάρτα χαιρετισμού</string>
   <string name="SYS_GREETING_CARDS">Κάρτες χαιρετισμού</string>
   <string name="SYS_GREETING_CARD_EDIT">Επεξεργασία κάρτας χαιρετισμού</string>

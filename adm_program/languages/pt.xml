@@ -127,8 +127,8 @@
   <string name="DAT_VISIBILITY">Visibilidade</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="SYS_ECARD_FROM">Cartão enviado por</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS">A ativar módulo de cartões</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS_DESC">Ativar o módulo de cartões? Se o servidor não tiver suporte à e-mail, o módulo deve ficar desativado. Este módulo geralmente está disponível apenas para usuários registrados. (padrão: sim) </string>
+  <string name="SYS_ENABLE_GREETING_CARDS">A ativar módulo de cartões</string>
+  <string name="SYS_ENABLE_GREETING_CARDS_DESC">Ativar o módulo de cartões? Se o servidor não tiver suporte à e-mail, o módulo deve ficar desativado. Este módulo geralmente está disponível apenas para usuários registrados. (padrão: sim) </string>
   <string name="SYS_GREETING_CARD">Cartão</string>
   <string name="SYS_GREETING_CARDS">Cartões</string>
   <string name="SYS_GREETING_CARD_EDIT">Editar cartão</string>
@@ -424,8 +424,8 @@
   <string name="SYS_WANT_CONFIGURATION_FOR_ALL_USERS">Tornar a configuração de lista disponível para todos os usuários?</string>
   <string name="SYS_Z_TO_A">Z à A</string>
   <!--Phrases only in Mailmodule-->
-  <string name="SYS_ACTIVATE_EMAILS">A ativar o módulo de e-mail</string>
-  <string name="SYS_ACTIVATE_EMAILS_DESC">O módulo de e-mail pode ser ativado ou desativado por esta configuração. Se o servidor não possui suporte à e-mail, o módulo deve ficar desativado. (Padrão: ativado)</string>
+  <string name="SYS_ENABLE_EMAILS">A ativar o módulo de e-mail</string>
+  <string name="SYS_ENABLE_EMAILS_DESC">O módulo de e-mail pode ser ativado ou desativado por esta configuração. Se o servidor não possui suporte à e-mail, o módulo deve ficar desativado. (Padrão: ativado)</string>
   <string name="SYS_ADD_ATTACHMENT">Anexar ficheiro</string>
   <string name="SYS_ATTACHMENT">Anexo</string>
   <string name="SYS_ATTACHMENT_SIZE">Tamanho máximo dos anexos de e-mail</string>
@@ -554,8 +554,8 @@
   <!--Phrases only in Messagemodule-->
   <string name="SYS_ACTIVATE_CHAT_MODULE">Ativar bate-papo</string>
   <string name="SYS_ACTIVATE_CHAT_MODULE_DESC">O módulo de bate-papo pode ser ativado ou desativado usando essa configuração. O módulo dinamicamente carrega dados da base de dados a cada 3 segundos. Um limite de máximo de 99 mensagens são guardadas. Ao atingir 100 mensagens, as primeiras 50 são apagadas. (padrão: desativado)</string>
-  <string name="SYS_ACTIVATE_PM_MODULE">Ativar mensagens privadas</string>
-  <string name="SYS_ACTIVATE_PM_MODULE_DESC">Mensagens privadas podem ser ativadas ou desativadas usando essa configuração. (Padrão: ativado)</string>
+  <string name="SYS_ENABLE_PM_MODULE">Ativar mensagens privadas</string>
+  <string name="SYS_ENABLE_PM_MODULE_DESC">Mensagens privadas podem ser ativadas ou desativadas usando essa configuração. (Padrão: ativado)</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Ativo e ex</string>
   <string name="SYS_CHAT">Bate-papo</string>
   <string name="SYS_DELETE_MESSAGE">Remover mensagem #VAR1_BOLD# ?</string>

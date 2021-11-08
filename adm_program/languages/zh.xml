@@ -127,7 +127,7 @@
   <string name="SYS_UPLOAD_FILES">上传文件</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="SYS_ECARD_FROM">贺卡发送自：</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS">激活贺卡模块</string>
+  <string name="SYS_ENABLE_GREETING_CARDS">激活贺卡模块</string>
   <string name="SYS_GREETING_CARD">贺卡</string>
   <string name="SYS_GREETING_CARDS">贺卡</string>
   <string name="SYS_GREETING_CARD_EDIT">编辑贺卡</string>

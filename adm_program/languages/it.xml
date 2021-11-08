@@ -58,7 +58,7 @@
   <string name="DAT_VISIBILITY">Visibilità</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="SYS_ECARD_FROM">Cartolina inviata da</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS">Attivazione modulo cartoline</string>
+  <string name="SYS_ENABLE_GREETING_CARDS">Attivazione modulo cartoline</string>
   <string name="SYS_GREETING_CARD">Cartolina </string>
   <string name="SYS_GREETING_CARDS">Cartolina</string>
   <string name="SYS_GREETING_CARD_EDIT">Modifica la cartolina</string>
@@ -255,7 +255,7 @@
   <string name="SYS_WANT_CONFIGURATION_FOR_ALL_USERS">Ti piacerebbe che la configurazione dell\'elenco fosse resa disponibile per tutti gli utenti?</string>
   <string name="SYS_Z_TO_A">da Z ad A</string>
   <!--Phrases only in Mailmodule-->
-  <string name="SYS_ACTIVATE_EMAILS">Attivazione modulo email</string>
+  <string name="SYS_ENABLE_EMAILS">Attivazione modulo email</string>
   <string name="SYS_ADD_ATTACHMENT">Allega file</string>
   <string name="SYS_ATTACHMENT">Allegati:</string>
   <string name="SYS_ATTACHMENT_SIZE">Grandezza massima degli allegati email</string>
@@ -351,7 +351,7 @@
   <string name="SYS_USERS_PER_PAGE_DESC">Numero di utenti elencati su ogni pagina. Se ci sono più membri in questo gruppo le relative pagine possono essere attivate. (Predefinito: 25)</string>
   <!--Phrases only in Messagemodule-->
   <string name="SYS_ACTIVATE_CHAT_MODULE">Attiva chat</string>
-  <string name="SYS_ACTIVATE_PM_MODULE">Attiva i messaggi privati</string>
+  <string name="SYS_ENABLE_PM_MODULE">Attiva i messaggi privati</string>
   <string name="SYS_CHAT">Chat</string>
   <string name="MSG_FORMER_MEMBERS">Ex membri</string>
   <string name="SYS_CONVERSATION_PARTNER">Business partner</string>

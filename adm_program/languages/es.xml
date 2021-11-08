@@ -174,8 +174,8 @@
   <string name="SYS_UPLOAD_FILES">Subir archivos</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="SYS_ECARD_FROM">Una tarjeta de felicitación de</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS">Activar tarjetas de felicitación.</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS_DESC">El módulo de tarjetas de felicitación se puede habilitar o deshabilitar en esta opción. Si el servidor no soporta correo electrónico, el módulo debe estar deshabilitado. Este módulo generalmente está disponible solo para usuarios registrados. (Predeterminado: sí)</string>
+  <string name="SYS_ENABLE_GREETING_CARDS">Activar tarjetas de felicitación.</string>
+  <string name="SYS_ENABLE_GREETING_CARDS_DESC">El módulo de tarjetas de felicitación se puede habilitar o deshabilitar en esta opción. Si el servidor no soporta correo electrónico, el módulo debe estar deshabilitado. Este módulo generalmente está disponible solo para usuarios registrados. (Predeterminado: sí)</string>
   <string name="SYS_GREETING_CARD">Tarjeta de felicitación</string>
   <string name="SYS_GREETING_CARDS">Tarjetas de felicitación</string>
   <string name="SYS_GREETING_CARD_EDIT">Editar tarjeta de felicitación</string>
@@ -465,8 +465,8 @@
   <string name="SYS_WANT_CONFIGURATION_FOR_ALL_USERS">¿Quisiera que la configuración de la lista seleccionada esté disponible a todos los usuarios?</string>
   <string name="SYS_Z_TO_A">Z hasta A</string>
   <!--Phrases only in Mailmodule-->
-  <string name="SYS_ACTIVATE_EMAILS">Activar el módulo de correo</string>
-  <string name="SYS_ACTIVATE_EMAILS_DESC">El módulo de correo electrónico puede ser habilitado o deshabilitado a través de este campo. Si el servidor no soporta el servicio de correo electrónico, este módulo deberá ser desactivado. (Predeterminado: habilitado)</string>
+  <string name="SYS_ENABLE_EMAILS">Activar el módulo de correo</string>
+  <string name="SYS_ENABLE_EMAILS_DESC">El módulo de correo electrónico puede ser habilitado o deshabilitado a través de este campo. Si el servidor no soporta el servicio de correo electrónico, este módulo deberá ser desactivado. (Predeterminado: habilitado)</string>
   <string name="SYS_ADD_ATTACHMENT">Añadir un anexo</string>
   <string name="SYS_ATTACHMENT">Anexo</string>
   <string name="SYS_ATTACHMENT_SIZE">Tamaño máximo de archivos adjuntos</string>
@@ -591,8 +591,8 @@
   <!--Phrases only in Messagemodule-->
   <string name="SYS_ACTIVATE_CHAT_MODULE">Activar chat</string>
   <string name="SYS_ACTIVATE_CHAT_MODULE_DESC">El módulo de chat se puede habilitar o deshabilitar a través de este ajuste. El módulo carga dinámicamente información de la base de datos cada 3 segundos. Se almacena un máximo de 99 entradas. Para 100 mensajes, se eliminan las primeras 50 entradas. (Predeterminado: deshabilitado)</string>
-  <string name="SYS_ACTIVATE_PM_MODULE">Activar mensajes privados</string>
-  <string name="SYS_ACTIVATE_PM_MODULE_DESC">Los mensajes privados pueden ser habilitados o deshabilitados mediante este ajuste. (Predeterminado: habilitados)</string>
+  <string name="SYS_ENABLE_PM_MODULE">Activar mensajes privados</string>
+  <string name="SYS_ENABLE_PM_MODULE_DESC">Los mensajes privados pueden ser habilitados o deshabilitados mediante este ajuste. (Predeterminado: habilitados)</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Activos y ex</string>
   <string name="SYS_CHAT">Chat</string>
   <string name="SYS_DELETE_MESSAGE">¿Debería eliminarse ahora el mensaje #VAR1_BOLD#?</string>

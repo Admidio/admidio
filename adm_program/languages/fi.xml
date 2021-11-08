@@ -916,8 +916,8 @@
  <string name="SYS_EMPTY">Tyhjä</string>
  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Aktivoi asiakirjat &amp; tiedostomoduuli</string>
  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Asiakirjat &amp; tiedostomoduuli voidaan ottaa käyttöön tai poistaa käytöstä tämän asetuksen avulla. (Oletus: kyllä)</string>
- <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Ota ryhmät käyttöön &amp; roolit -moduuli</string>
- <string name="SYS_ENABLE_GROUPS_ROLES_MODULE_DESC">Näyttää organisaation ryhmät ja roolit ja sallii ryhmien ja roolien ilmaisen konfiguroinnin. Oma lista voidaan määrittää ja soveltaa. Tämä moduuli on yleensä vain kirjautuneiden käyttäjien käytettävissä. (Oletus: kyllä)</string>
+ <string name="SYS_ENABLE_GROUPS_ROLES">Ota ryhmät käyttöön &amp; roolit -moduuli</string>
+ <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Näyttää organisaation ryhmät ja roolit ja sallii ryhmien ja roolien ilmaisen konfiguroinnin. Oma lista voidaan määrittää ja soveltaa. Tämä moduuli on yleensä vain kirjautuneiden käyttäjien käytettävissä. (Oletus: kyllä)</string>
  <string name="SYS_END" description="Päivämäärän loppu">Loppu</string>
  <string name="SYS_ERROR">Virhe</string>
  <string name="SYS_ERROR_DATABASE_ACCESS">Tietokannan käytön aikana tapahtui virhe: \n \n#VAR1#</string>

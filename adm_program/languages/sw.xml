@@ -60,8 +60,8 @@
   <string name="DAT_VISIBILITY">Mwonekano</string>
   <!--Phrases only in Ecardsmodule-->
   <string name="SYS_ECARD_FROM">Kadi ya salamu imetumwa na</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS">Wezesha moduli ya kadi ya salamu</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS_DESC">Moduli ya kadi ya salamu inaweza kuwashwa au kuzimwa  kwa kupitia mpangilio huu. Kama seva hairuhusu barua pepe inatakiwa iwe imezimwa. Kimsingi moduli hii inapatikana tu kwa watumiaji waliosajiliwa. (Chaguo-msingi: ndiyo)</string>
+  <string name="SYS_ENABLE_GREETING_CARDS">Wezesha moduli ya kadi ya salamu</string>
+  <string name="SYS_ENABLE_GREETING_CARDS_DESC">Moduli ya kadi ya salamu inaweza kuwashwa au kuzimwa  kwa kupitia mpangilio huu. Kama seva hairuhusu barua pepe inatakiwa iwe imezimwa. Kimsingi moduli hii inapatikana tu kwa watumiaji waliosajiliwa. (Chaguo-msingi: ndiyo)</string>
   <string name="SYS_GREETING_CARD">Kadi ya salamu</string>
   <string name="SYS_GREETING_CARDS">Kadi za salamu</string>
   <string name="SYS_GREETING_CARD_EDIT">Hariri kadi ya salamu</string>
