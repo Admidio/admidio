@@ -230,7 +230,7 @@
   <string name="INS_WIFE">Wife</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
-  <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be deactivated or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
+  <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be disabled or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Enable system notifications</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Here you can disable the system notifications of Admidio. They can be sent, if for example a new user has registered. Registration confirmations will also be sent as system notifications. In general, this feature should not be disabled unless the server does not support e-mail delivery. The e-mail module is not affected by the deactivation. (Default: yes)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">A new organization will be added to the database including its master data. The current user will be announced as administrator and can maintain the dataset. Users who log into the system need to select the respective organization.</string>
