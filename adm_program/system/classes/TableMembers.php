@@ -97,7 +97,7 @@ class TableMembers extends TableAccess
             $this->delete();
 
             // if role membership of current user will be changed then renew his rights arrays
-            if ($userId === (int) $gCurrentUser->getValue('usr_id'))
+            if ($userId === $GLOBALS['gCurrentUserId'])
             {
                 $gCurrentUser->renewRoleData();
             }
@@ -240,7 +240,7 @@ class TableMembers extends TableAccess
                 $this->save();
 
                 // if role membership of current user will be changed then renew his rights arrays
-                if ((int) $gCurrentUser->getValue('usr_id') === $userId)
+                if ($GLOBALS['gCurrentUserId'] === $userId)
                 {
                     $gCurrentUser->renewRoleData();
                 }
@@ -322,7 +322,7 @@ class TableMembers extends TableAccess
                 }
 
                 // if role membership of current user will be changed then renew his rights arrays
-                if ((int) $gCurrentUser->getValue('usr_id') === (int) $this->getValue('mem_usr_id'))
+                if ($GLOBALS['gCurrentUserId'] === (int) $this->getValue('mem_usr_id'))
                 {
                     $gCurrentUser->renewRoleData();
                 }

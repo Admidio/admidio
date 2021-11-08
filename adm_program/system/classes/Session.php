@@ -345,7 +345,7 @@ class Session extends TableAccess
      */
     public function reloadAllSessions()
     {
-        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = \'true\' ';
+        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = true ';
         $this->db->queryPrepared($sql);
     }
 
@@ -356,7 +356,7 @@ class Session extends TableAccess
      */
     public function reloadSession(int $userId)
     {
-        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = \'true\'
+        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = true
                  WHERE ses_usr_id = ?  -- $userId';
         $this->db->queryPrepared($sql, array($userId));
     }
@@ -372,12 +372,10 @@ class Session extends TableAccess
      */
     public function save($updateFingerPrint = true): bool
     {
-        global $gCurrentOrganization;
-
         if ($this->newRecord)
         {
             // Insert
-            $this->setValue('ses_org_id', (int) $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('ses_org_id', $GLOBALS['gCurrentOrgId']);
             $this->setValue('ses_begin', DATETIME_NOW);
             // remove the last part of the IP because of privacy (GDPR)
             $ip = preg_replace(array('/\.\d+$/', '/[\da-f]*:[\da-f]*$/'), array('.XXX', 'XXXX:XXXX'), $_SERVER['REMOTE_ADDR']);

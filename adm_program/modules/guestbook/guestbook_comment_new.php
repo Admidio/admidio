@@ -86,7 +86,7 @@ if($getGbcUuid !== '')
     $gbComment->readDataByUuid($getGbcUuid);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-    if((int) $gbComment->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+    if((int) $gbComment->getValue('gbo_org_id') !== $gCurrentOrgId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -135,7 +135,7 @@ $page = new HtmlPage('admidio-guestbook-comment-new', $headline);
 
 // show form
 $form = new HtmlForm('guestbook_comment_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'gbc_uuid' => $getGbcUuid, 'headline' => $getHeadline, 'mode' => $mode)), $page);
-if ($gCurrentUser->getValue('usr_id') > 0)
+if ($gCurrentUserId > 0)
 {
     // registered users should not change their name
     $form->addInput(

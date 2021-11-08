@@ -45,7 +45,7 @@ class ModuleMessages
      */
     public function msgGroupNameSplit($roleIdsString)
     {
-        global $gCurrentOrganization, $gL10n, $gDb;
+        global $gL10n, $gDb;
 
         $groupInfo = $this->msgGroupSplit($roleIdsString);
 
@@ -54,9 +54,9 @@ class ModuleMessages
             INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = rol_cat_id
                  WHERE rol_id = ? -- $groupInfo[\'id\']
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   AND (  cat_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']
                        OR cat_org_id IS NULL)';
-        $statement = $gDb->queryPrepared($sql, array($groupInfo['id'], (int) $gCurrentOrganization->getValue('org_id')));
+        $statement = $gDb->queryPrepared($sql, array($groupInfo['id'], $GLOBALS['gCurrentOrgId']));
         $roleName = $statement->fetchColumn();
 
         switch ($groupInfo['status'])

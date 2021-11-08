@@ -104,11 +104,9 @@ class TableGuestbook extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentOrganization;
-
         if ($this->newRecord)
         {
-            $this->setValue('gbo_org_id', (int) $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('gbo_org_id', $GLOBALS['gCurrentOrgId']);
             $this->setValue('gbo_ip_address', $_SERVER['REMOTE_ADDR']);
         }
 

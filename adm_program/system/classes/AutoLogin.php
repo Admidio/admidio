@@ -83,17 +83,15 @@ class AutoLogin extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentOrganization;
-
         // Insert & Update
         $this->setValue('atl_last_login', DATETIME_NOW);
 
         if ($this->newRecord)
         {
             // Insert
-            $this->setValue('atl_org_id', (int) $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('atl_org_id', $GLOBALS['gCurrentOrgId']);
 
-            // Tabelle aufraeumen, wenn ein neuer Datensatz geschrieben wird
+            // Clean up table when a new record is written
             $this->tableCleanup();
         }
 

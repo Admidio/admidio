@@ -206,12 +206,10 @@ class TableFile extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentUser;
-
         if ($this->newRecord)
         {
             $this->setValue('fil_timestamp', DATETIME_NOW);
-            $this->setValue('fil_usr_id', (int) $gCurrentUser->getValue('usr_id'));
+            $this->setValue('fil_usr_id', $GLOBALS['gCurrentUserId']);
         }
 
         return parent::save($updateFingerPrint);

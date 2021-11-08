@@ -128,8 +128,6 @@ else
     $gNavigation->addStartUrl(CURRENT_URL, $headline);
 }
 
-$orgId = (int) $gCurrentOrganization->getValue('org_id');
-
 /**
  * @param string $type
  * @param string $text
@@ -317,10 +315,10 @@ if($gCurrentOrganization->countAllRecords() > 1)
         $sqlData = array();
         $sqlData['query'] = 'SELECT org_id, org_longname
                                FROM '.TBL_ORGANIZATIONS.'
-                              WHERE org_id <> ? -- $orgId
+                              WHERE org_id <> ? -- $gCurrentOrgId
                                 AND org_org_id_parent IS NULL
                            ORDER BY org_longname ASC, org_shortname ASC';
-        $sqlData['params'] = array($orgId);
+        $sqlData['params'] = array($gCurrentOrgId);
         $formOrganization->addSelectBoxFromSql(
             'org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sqlData,
             array('defaultValue' => $formValues['org_org_id_parent'], 'helpTextIdInline' => 'ORG_PARENT_ORGANIZATION_DESC')
@@ -528,19 +526,19 @@ $formSystemNotification->addCustomContent($gL10n->get('SYS_SYSTEM_MAILS'),
     <strong>#organization_homepage#</strong> - '.$gL10n->get('ORG_VARIABLE_URL_ORGANIZATION').'</p>');
 
 $text = new TableText($gDb);
-$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_WEBMASTER', 'txt_org_id' => $orgId));
+$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_WEBMASTER', 'txt_org_id' => $gCurrentOrgId));
 $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_WEBMASTER', $gL10n->get('ORG_NOTIFY_ADMINISTRATOR'), $text->getValue('txt_text'), 7);
-$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_USER', 'txt_org_id' => $orgId));
+$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_USER', 'txt_org_id' => $gCurrentOrgId));
 $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_USER', $gL10n->get('ORG_CONFIRM_REGISTRATION'), $text->getValue('txt_text'), 7);
-$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REFUSE_REGISTRATION', 'txt_org_id' => $orgId));
+$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REFUSE_REGISTRATION', 'txt_org_id' => $gCurrentOrgId));
 $formSystemNotification->addMultilineTextInput('SYSMAIL_REFUSE_REGISTRATION', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
-$text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $orgId));
+$text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrgId));
 $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD');
 $formSystemNotification->addMultilineTextInput(
     'SYSMAIL_NEW_PASSWORD', $gL10n->get('ORG_SEND_NEW_PASSWORD'), $text->getValue('txt_text'), 7,
     array('helpTextIdInline' => $htmlDesc)
 );
-$text->readDataByColumns(array('txt_name' => 'SYSMAIL_PASSWORD_RESET', 'txt_org_id' => $orgId));
+$text->readDataByColumns(array('txt_name' => 'SYSMAIL_PASSWORD_RESET', 'txt_org_id' => $gCurrentOrgId));
 $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK');
 $formSystemNotification->addMultilineTextInput(
     'SYSMAIL_PASSWORD_RESET', $gL10n->get('SYS_PASSWORD_FORGOTTEN'), $text->getValue('txt_text'), 7,
@@ -914,10 +912,10 @@ $formUserManagement = new HtmlForm(
 $sqlData = array();
 $sqlData['query'] = 'SELECT lst_id, lst_name
                        FROM '.TBL_LISTS.'
-                      WHERE lst_org_id = ? -- $orgId
-                        AND lst_global = \'1\'
+                      WHERE lst_org_id = ? -- $gCurrentOrgId
+                        AND lst_global = true
                    ORDER BY lst_name ASC, lst_timestamp DESC';
-$sqlData['params'] = array($orgId);
+$sqlData['params'] = array($gCurrentOrgId);
 $formUserManagement->addSelectBoxFromSql(
     'members_list_configuration', $gL10n->get('SYS_CONFIGURATION_LIST'), $gDb, $sqlData,
     array('defaultValue' => $formValues['members_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_USER_MANAGEMENT_CONFIGURATION_DESC')
@@ -1172,10 +1170,10 @@ $formGroupsRoles->addSelectBox(
 $sqlData = array();
 $sqlData['query'] = 'SELECT lst_id, lst_name
                        FROM '.TBL_LISTS.'
-                      WHERE lst_org_id = ? -- $orgId
-                        AND lst_global = \'1\'
+                      WHERE lst_org_id = ? -- $gCurrentOrgId
+                        AND lst_global = true
                    ORDER BY lst_name ASC, lst_timestamp DESC';
-$sqlData['params'] = array($orgId);
+$sqlData['params'] = array($gCurrentOrgId);
 $formGroupsRoles->addSelectBoxFromSql(
     'groups_roles_default_configuration', $gL10n->get('SYS_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
     array('defaultValue' => $formValues['groups_roles_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_DEFAULT_CONFIGURATION_LISTS_DESC')
@@ -1232,9 +1230,9 @@ $formCategoryReport->addCheckbox(
 $sqlData = array();
 $sqlData['query'] = 'SELECT crt_id, crt_name
                        FROM '.TBL_CATEGORY_REPORT.'
-                      WHERE crt_org_id = ? -- $orgId
+                      WHERE crt_org_id = ? -- $gCurrentOrgId
                    ORDER BY crt_name ASC';
-$sqlData['params'] = array($orgId);
+$sqlData['params'] = array($gCurrentOrgId);
 $formCategoryReport->addSelectBoxFromSql(
     'category_report_default_configuration', $gL10n->get('SYS_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
     array('defaultValue' => $formValues['category_report_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC')
@@ -1435,10 +1433,10 @@ $formEvents->addCheckbox(
 $sqlData = array();
 $sqlData['query'] = 'SELECT lst_id, lst_name
                        FROM '.TBL_LISTS.'
-                      WHERE lst_org_id = ? -- $orgId
-                        AND lst_global = \'1\'
+                      WHERE lst_org_id = ? -- $gCurrentOrgId
+                        AND lst_global = true
                    ORDER BY lst_name ASC, lst_timestamp DESC';
-$sqlData['params'] = array($orgId);
+$sqlData['params'] = array($gCurrentOrgId);
 $formEvents->addSelectBoxFromSql(
     'dates_default_list_configuration', $gL10n->get('DAT_DEFAULT_LIST_CONFIGURATION'), $gDb, $sqlData,
     array('defaultValue' => $formValues['dates_default_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'DAT_DEFAULT_LIST_CONFIGURATION_DESC')

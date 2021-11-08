@@ -182,7 +182,7 @@ else
               ORDER BY org_longname ASC, org_shortname ASC';
         $form->addSelectBoxFromSql(
             'plg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
-            array('defaultValue' => (int) $gCurrentOrganization->getValue('org_id'), 'showContextDependentFirstEntry' => false)
+            array('defaultValue' => $gCurrentOrgId, 'showContextDependentFirstEntry' => false)
         );
     }
 
@@ -209,11 +209,11 @@ else
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE rol_administrator = \'1\'
+                 WHERE rol_administrator = true
                    AND rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   AND (  cat_org_id = ? -- $gCurrentOrgId
                        OR cat_org_id IS NULL )';
-        $administratorStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), (int) $gCurrentOrganization->getValue('org_id')));
+        $administratorStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), $gCurrentOrgId));
 
         // create role object for administrator
         $roleAdministrator = new TableRoles($gDb, (int) $administratorStatement->fetchColumn());

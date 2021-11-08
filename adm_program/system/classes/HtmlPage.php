@@ -436,7 +436,7 @@ class HtmlPage extends \Smarty
      */
     public function show()
     {
-        global $gDebug, $gMenu, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager, $gSetCookieForDomain, $gNavigation;
+        global $gDebug, $gMenu, $gCurrentOrganization, $gValidLogin, $gL10n, $gSettingsManager, $gSetCookieForDomain, $gNavigation;
 
         $urlImprint = '';
         $urlDataProtection = '';
@@ -465,7 +465,7 @@ class HtmlPage extends \Smarty
         $this->assign('javascriptContent', $this->javascriptContent);
         $this->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
 
-        $this->assign('userId', $gCurrentUser->getValue('usr_id'));
+        $this->assign('userId', $GLOBALS['gCurrentUserId']);
         $this->assign('validLogin', $gValidLogin);
         $this->assign('debug', $gDebug);
         $this->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));

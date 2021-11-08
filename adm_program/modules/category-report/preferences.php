@@ -253,7 +253,7 @@ foreach($config as $key => $value)
     $sql = 'SELECT rol_id, rol_name, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
              WHERE cat_id = rol_cat_id
-               AND ( cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+               AND ( cat_org_id = '. $gCurrentOrgId . '
                 OR cat_org_id IS NULL )';
     $formConfigurations->addSelectBoxFromSql('selection_role'.$key, $gL10n->get('SYS_ROLE_SELECTION'), $gDb, $sql,
         array('defaultValue' => explode(',',$value['selection_role']),'multiselect' => true, 'helpTextIdLabel' => 'SYS_ROLE_SELECTION_CONF_DESC'));
@@ -261,7 +261,7 @@ foreach($config as $key => $value)
     $sql = 'SELECT cat_id, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
              WHERE cat_id = rol_cat_id
-               AND ( cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+               AND ( cat_org_id = ' . $gCurrentOrgId . '
                 OR cat_org_id IS NULL )';
     $formConfigurations->addSelectBoxFromSql('selection_cat'.$key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
         array('defaultValue' => explode(',',$value['selection_cat']),'multiselect' => true, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_CONF_DESC'));
@@ -304,13 +304,13 @@ $page->show();
  */
 function createName($name)
 {
-    global $gDb, $gL10n, $gCurrentOrganization;
+    global $gDb, $gL10n, $gCurrentOrgId;
 
     $sql = ' SELECT crt_name
                FROM '. TBL_CATEGORY_REPORT .'
-              WHERE ( crt_org_id = ?
+              WHERE ( crt_org_id = ? -- $gCurrentOrgId
                  OR crt_org_id IS NULL ) ';
-    $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+    $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
     $crtNames = array();
     while($row = $statement->fetch())

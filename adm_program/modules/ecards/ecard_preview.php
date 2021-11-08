@@ -14,7 +14,6 @@
 require_once(__DIR__ . '/../../system/common.php');
 require_once(__DIR__ . '/ecard_function.php');
 
-//$gMessage->showTextOnly(true);
 $gMessage->showThemeBody(false);
 $gMessage->showInModalWindow();
 

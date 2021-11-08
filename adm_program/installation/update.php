@@ -112,16 +112,21 @@ if (!$pdoStatement || $pdoStatement->rowCount() === 0)
 
 // create an organization object of the current organization
 $gCurrentOrganization = new Organization($gDb, $g_organization);
-$currOrgId = (int) $gCurrentOrganization->getValue('org_id');
+$gCurrentOrgId  = $gCurrentOrganization->getValue('org_id');
 
-if ($currOrgId === 0)
+// get system user id
+$sql = 'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login_name = \'System\' ';
+$pdoStatement = $gDb->queryPrepared($sql);
+$gCurrentUserId = $pdoStatement->fetchColumn();
+
+if ($gCurrentOrgId === 0)
 {
     // Organization was not found
     exit('<div style="color: #cc0000;">Error: The organization of the config.php could not be found in the database!</div>');
 }
 
 // define global
-$gProfileFields = new ProfileFields($gDb, $currOrgId);
+$gProfileFields = new ProfileFields($gDb, $gCurrentOrgId);
 
 // read organization specific parameters from adm_preferences
 $gSettingsManager =& $gCurrentOrganization->getSettingsManager();

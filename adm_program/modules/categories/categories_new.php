@@ -116,7 +116,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create category object
 $category = new TableCategory($gDb);
-$orgId = (int) $gCurrentOrganization->getValue('org_id');
 
 if(isset($_SESSION['categories_request']))
 {
@@ -132,7 +131,7 @@ if(isset($_SESSION['categories_request']))
 
     if(isset($_SESSION['categories_request']['show_in_several_organizations']))
     {
-        $category->setValue('cat_org_id', $orgId);
+        $category->setValue('cat_org_id', $gCurrentOrgId);
     }
     unset($_SESSION['categories_request']);
 }
@@ -154,7 +153,7 @@ else
         // profile fields should be organization independent all other categories should be organization dependent as default
         if($getType !== 'USF')
         {
-            $category->setValue('cat_org_id', $orgId);
+            $category->setValue('cat_org_id', $gCurrentOrgId);
         }
     }
 }
@@ -220,14 +219,14 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
                        FROM '.TBL_ROLES.'
                  INNER JOIN '.TBL_CATEGORIES.'
                          ON cat_id = rol_cat_id
-                      WHERE rol_valid  = \'1\'
-                        AND rol_system = \'0\'
+                      WHERE rol_valid  = true
+                        AND rol_system = false
                         AND cat_name_intern <> \'EVENTS\'
-                        AND cat_org_id = ? -- $orgId
+                        AND cat_org_id = ? -- $gCurrentOrgId
                    ORDER BY cat_sequence, rol_name';
     $sqlDataView = array(
         'query'  => $sqlViewRoles,
-        'params' => array($orgId)
+        'params' => array($gCurrentOrgId)
     );
 
     // if no roles are assigned then set "all users" as default
@@ -260,7 +259,6 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
         $form->addSelectBoxFromSql(
             'adm_categories_edit_right', $gL10n->get($rolesRightEditName), $gDb, $sqlDataView,
             array(
-                'property'     => HtmlForm::FIELD_REQUIRED,
                 'defaultValue' => $roleEditSet,
                 'multiselect'  => true,
                 'placeholder'  => $gL10n->get('SYS_NO_ADDITIONAL_PERMISSIONS_SET')
@@ -299,11 +297,11 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
                         FROM '.TBL_ROLES.'
                   INNER JOIN '.TBL_CATEGORIES.'
                           ON cat_id = rol_cat_id
-                       WHERE rol_valid    = \'1\'
-                         AND '. $rolesRightsColumn .' = \'1\'
-                         AND cat_org_id   = ? -- $orgId
+                       WHERE rol_valid    = true
+                         AND '. $rolesRightsColumn .' = true
+                         AND cat_org_id   = ? -- $gCurrentOrgId
                     ORDER BY cat_sequence, rol_name';
-    $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($orgId));
+    $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrgId));
 
     $adminRoles = array();
     while($roleName = $statementAdminRoles->fetchColumn())

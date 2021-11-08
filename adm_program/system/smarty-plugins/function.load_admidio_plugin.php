@@ -24,7 +24,7 @@ function smarty_function_load_admidio_plugin(array $params, Smarty_Internal_Temp
 {
     global $gLogger, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
     global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
-    global $g_root_path, $gPreferences;
+    global $g_root_path, $gPreferences, $gCurrentOrgId, $gCurrentUserId;
 
     if(empty($params['plugin']))
     {

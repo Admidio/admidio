@@ -129,8 +129,7 @@ class TableAccess
 
         if (count($this->columnsInfos) > 0)
         {
-            // die Spalteninfos wurden bereits eingelesen
-            // und werden nun nur noch neu initialisiert
+            // the column infos have already been read and will now only be reinitialized
             foreach ($this->dbColumns as $fieldName => &$fieldValue)
             {
                 $fieldValue = ''; // $this->dbColumns[$fieldName] = '';
@@ -140,23 +139,8 @@ class TableAccess
         }
         else
         {
-            // alle Spalten der Tabelle ins Array einlesen und auf leer setzen
-            $tableColumnsProperties = $this->db->getTableColumnsProperties($this->tableName);
-
-            foreach ($tableColumnsProperties as $columnName => $property)
-            {
-                $this->dbColumns[$columnName] = '';
-                $this->columnsInfos[$columnName]['changed'] = false;
-                $this->columnsInfos[$columnName]['type']    = $property['type'];
-                $this->columnsInfos[$columnName]['null']    = $property['null'];
-                $this->columnsInfos[$columnName]['key']     = $property['key'];
-                $this->columnsInfos[$columnName]['serial']  = $property['serial'];
-
-                if ($property['serial'])
-                {
-                    $this->keyColumnName = $columnName;
-                }
-            }
+            // read all columns informations of the tables
+            $this->setColumnsInfos();
         }
     }
 
@@ -164,9 +148,9 @@ class TableAccess
      * Adds a table with the connected fields to a member array. This table will be add to the
      * select statement if data is read and the connected record is available in this class.
      * The connected table must have a foreign key in the class table.
-     * @param string $table                     Database table name that should be connected. This can be the define of the table.
-     * @param string $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
-     * @param string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
+     * @param string   $table                     Database table name that should be connected. This can be the define of the table.
+     * @param string   $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
+     * @param string   $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
      *
      * **Code example**
      * ```
@@ -330,7 +314,7 @@ class TableAccess
 
     /**
      * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
-     * If the sql will find more than one record the method returns **false**.
+     * If the sql find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string           $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
@@ -343,43 +327,38 @@ class TableAccess
         $sqlAdditionalTables = '';
 
         // create sql to connect additional tables to the select statement
-        if (count($this->additionalTables) > 0)
-        {
-            foreach ($this->additionalTables as $arrAdditionalTable)
-            {
+        if (count($this->additionalTables) > 0) {
+            foreach ($this->additionalTables as $arrAdditionalTable) {
                 $sqlAdditionalTables .= ', '.$arrAdditionalTable['table'];
                 $sqlWhereCondition   .= ' AND '.$arrAdditionalTable['columnNameAdditionalTable'].' = '.$arrAdditionalTable['columnNameClassTable'].' ';
             }
         }
 
         // if condition starts with AND then remove this
-        if (StringUtils::strStartsWith(ltrim($sqlWhereCondition), 'AND', false))
-        {
+        if (StringUtils::strStartsWith(ltrim($sqlWhereCondition), 'AND', false)) {
             $sqlWhereCondition = substr($sqlWhereCondition, 4);
         }
 
-        if ($sqlWhereCondition !== '')
-        {
+        if ($sqlWhereCondition !== '') {
             $sql = 'SELECT *
                       FROM '.$this->tableName.'
                            '.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
             $readDataStatement = $this->db->queryPrepared($sql, $queryParams); // TODO add more params
 
-            if ($readDataStatement->rowCount() === 1)
-            {
+            if ($readDataStatement->rowCount() === 1) {
                 $row = $readDataStatement->fetch();
                 $this->newRecord = false;
 
-                // Daten in das Klassenarray schieben
-                foreach ($row as $key => $value)
-                {
-                    if ($value === null)
-                    {
-                        $this->dbColumns[$key] = ''; // TODO: remove
-                    }
-                    else
-                    {
+                // move data to class column value array
+                foreach ($row as $key => $value) {
+                    if($this->columnsInfos[$key]['type'] === 'boolean'
+                            || $this->columnsInfos[$key]['type'] === 'tinyint') {
+                        $this->dbColumns[$key] = (bool) $value;
+                    } elseif($this->columnsInfos[$key]['type'] === 'integer'
+                            || $this->columnsInfos[$key]['type'] === 'smallint') {
+                        $this->dbColumns[$key] = (int) $value;
+                    } else {
                         $this->dbColumns[$key] = $value;
                     }
                 }
@@ -513,8 +492,6 @@ class TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentUser;
-
         if (!$this->columnsValueChanged && $this->dbColumns[$this->keyColumnName] !== '')
         {
             return false;
@@ -528,23 +505,23 @@ class TableAccess
 
         // TODO check if "$gCurrentUser instanceof User"
         // see "start_installation.php"
-        if ($updateFingerPrint && $gCurrentUser instanceof self && $gCurrentUser->getValue('usr_id') > 0)
+        if ($updateFingerPrint && $GLOBALS['gCurrentUserId'] > 0)
         {
             // if the table has fields to store the creator and the last change,
             // then fill them here automatically
             if ($this->newRecord && array_key_exists($this->columnPrefix . '_usr_id_create', $this->dbColumns))
             {
                 $this->setValue($this->columnPrefix . '_timestamp_create', DATETIME_NOW);
-                $this->setValue($this->columnPrefix . '_usr_id_create', (int) $gCurrentUser->getValue('usr_id'));
+                $this->setValue($this->columnPrefix . '_usr_id_create', $GLOBALS['gCurrentUserId']);
             }
             elseif (array_key_exists($this->columnPrefix . '_usr_id_change', $this->dbColumns))
             {
                 // Do not update data if the same user has done so within 15 minutes
-                if ((int) $gCurrentUser->getValue('usr_id') !== (int) $this->getValue($this->columnPrefix . '_usr_id_create')
+                if ($GLOBALS['gCurrentUserId'] !== (int) $this->getValue($this->columnPrefix . '_usr_id_create')
                 || time() > (strtotime($this->getValue($this->columnPrefix . '_timestamp_create')) + 900))
                 {
                     $this->setValue($this->columnPrefix . '_timestamp_change', DATETIME_NOW);
-                    $this->setValue($this->columnPrefix . '_usr_id_change', (int) $gCurrentUser->getValue('usr_id'));
+                    $this->setValue($this->columnPrefix . '_usr_id_change', $GLOBALS['gCurrentUserId']);
                 }
             }
         }
@@ -656,6 +633,40 @@ class TableAccess
     }
 
     /**
+     * Read all columns with their informations like **type** (integer, varchar, boolean),
+     * **null** (or not), **key** and **serial**. Also the changed flag will be set to false.
+     */
+    protected function setColumnsInfos()
+    {
+        // create array with base table and all connected tables
+        $tables = array($this->tableName);
+
+        foreach($this->additionalTables as $values) {
+            $tables[] = $values['table'];
+        }
+
+        foreach($tables as $table) {
+            $tableColumnsProperties = $this->db->getTableColumnsProperties($table);
+
+            foreach ($tableColumnsProperties as $columnName => $property) {
+                // some actions should only be done for columns of the main table from this class
+                if (str_starts_with($columnName, $this->columnPrefix . '_')) {
+                    $this->dbColumns[$columnName] = '';
+
+                    if ($property['serial']) {
+                        $this->keyColumnName = $columnName;
+                    }
+                }
+                $this->columnsInfos[$columnName]['changed'] = false;
+                $this->columnsInfos[$columnName]['type'] = $property['type'];
+                $this->columnsInfos[$columnName]['null'] = $property['null'];
+                $this->columnsInfos[$columnName]['key'] = $property['key'];
+                $this->columnsInfos[$columnName]['serial'] = $property['serial'];
+            }
+        }
+    }
+
+    /**
      * Set a new value for a column of the database table. The value is only saved in the object.
      * You must call the method **save** to store the new value to the database. If the unique key
      * column is set to 0 than this record will be a new record and all other columns are marked as changed.
@@ -672,7 +683,7 @@ class TableAccess
             return false;
         }
 
-        // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
+        // General plausibility checks based on the field type
         if ($checkValue && $newValue !== '')
         {
             switch ($this->columnsInfos[$columnName]['type'])
@@ -685,7 +696,7 @@ class TableAccess
                         $newValue = '';
                     }
 
-                    // Schluesselfelder duerfen keine 0 enthalten
+                    // Key fields should not contain 0
                     if ((int) $newValue === 0 &&
                         ($this->columnsInfos[$columnName]['key'] || $this->columnsInfos[$columnName]['null']))
                     {

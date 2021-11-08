@@ -487,7 +487,7 @@ class ProfileFields
         // if it's the own profile than we check if user could edit his profile and if so he could view all fields
         // check if the profile field is only visible for users that could edit this
         return ((array_key_exists($fieldNameIntern, $this->mProfileFields) && $this->mProfileFields[$fieldNameIntern]->isVisible())
-            || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
+            || $GLOBALS['gCurrentUserId'] === $this->mUserId)
         && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
     }
 

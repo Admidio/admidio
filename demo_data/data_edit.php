@@ -55,8 +55,24 @@ $sqlQueries[] = 'UPDATE '.TBL_USER_DATA.'
 
 // set name of role to 4 days in future
 $sqlQueries[] = 'UPDATE '.TBL_ROLES.'
-                    SET rol_name = \''.$gL10n->get('DAT_DATE').' '.addDaysToDate(4).' 19:00 - 4\'
+                    SET rol_name = \''.addDaysToDate(4).' 19:00 '.$gL10n->get('DEMO_DAT_BARBECUE').'\'
                   WHERE rol_id = 8 ';
+// set name of role to 4 days in future
+$sqlQueries[] = 'UPDATE '.TBL_ROLES.'
+                    SET rol_name = \''.addDaysToDate(20).' 13:00 '.$gL10n->get('DEMO_DAT_YOGA').'\'
+                  WHERE rol_id = 9 ';
+// set name of role to 4 days in future
+$sqlQueries[] = 'UPDATE '.TBL_ROLES.'
+                    SET rol_name = \''.addDaysToDate(3).' 19:00 '.$gL10n->get('DEMO_DAT_BOARD_MEETING').'\'
+                  WHERE rol_id = 10 ';
+// set name of role to 4 days in future
+$sqlQueries[] = 'UPDATE '.TBL_ROLES.'
+                    SET rol_name = \''.addDaysToDate(32).' 19:00 '.$gL10n->get('DEMO_DAT_BOARD_MEETING').'\'
+                  WHERE rol_id = 11 ';
+// set name of role to 4 days in future
+$sqlQueries[] = 'UPDATE '.TBL_ROLES.'
+                    SET rol_name = \''.addDaysToDate(8).' 20:00 '.$gL10n->get('DEMO_DAT_TEAM_EVENING').'\'
+                  WHERE rol_id = 12 ';
 
 // set membership of date role
 $sqlQueries[] = 'UPDATE '.TBL_MEMBERS.'

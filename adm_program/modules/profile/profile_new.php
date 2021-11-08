@@ -32,7 +32,7 @@ $getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname',  'string'
 $getFirstname = stripslashes(admFuncVariableIsValid($_GET, 'firstname', 'string'));
 $getCopy      = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
-$registrationOrgId = (int) $gCurrentOrganization->getValue('org_id');
+$registrationOrgId = $gCurrentOrgId;
 
 // if current user has no login then only show registration dialog
 if(!$gValidLogin)
@@ -75,7 +75,7 @@ elseif($getNewUser === 2)
 {
     $headline = $gL10n->get('SYS_REGISTRATION');
 }
-elseif($userId === (int) $gCurrentUser->getValue('usr_id'))
+elseif($userId === $gCurrentUserId)
 {
     $headline = $gL10n->get('PRO_EDIT_MY_PROFILE');
 }
@@ -249,7 +249,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     // Password of own user could be changed.
                     // Administrators are allowed to change password if no login was configured or no email is set to send a generated password.
                     if(isMember((int) $user->getValue('usr_id'))
-                    && ((int) $gCurrentUser->getValue('usr_id') === (int) $user->getValue('usr_id')
+                    && ($gCurrentUserId === (int) $user->getValue('usr_id')
                        || ($gCurrentUser->isAdministrator()
                           && (strlen($user->getValue('usr_login_name')) === 0 || strlen($user->getValue('EMAIL')) === 0))))
                     {
@@ -290,7 +290,7 @@ foreach($gProfileFields->getProfileFields() as $field)
             $helpId = $gProfileFields->getProperty($gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'), 'usf_description');
         }
 
-        if($gProfileFields->getProperty($usfNameIntern, 'usf_description_inline') == true)
+        if($gProfileFields->getProperty($usfNameIntern, 'usf_description_inline'))
         {
             $helpTextMode  = 'helpTextIdInline';
         }
@@ -360,7 +360,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     'property'          => $fieldProperty,
                     'defaultValue'      => $user->getValue($usfNameIntern, 'database'),
                     'showNoValueButton' => $showDummyRadioButton,
-                    'helpTextIdLabel'   => $helpId,
+                    $helpTextMode       => $helpId,
                     'icon'              => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
@@ -375,7 +375,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                 array(
                     'maxLength'       => 4000,
                     'property'        => $fieldProperty,
-                    'helpTextIdLabel' => $helpId,
+                    $helpTextMode     => $helpId,
                     'icon'            => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );
@@ -427,7 +427,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     'type'            => $fieldType,
                     'maxLength'       => $maxlength,
                     'property'        => $fieldProperty,
-                    'helpTextIdLabel' => $helpId,
+                    $helpTextMode     => $helpId,
                     'icon'            => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
                 )
             );

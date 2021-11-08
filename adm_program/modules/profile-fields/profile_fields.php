@@ -64,7 +64,7 @@ $sql = 'SELECT *
            AND (  cat_org_id = ?
                OR cat_org_id IS NULL )
       ORDER BY cat_sequence ASC, usf_sequence ASC';
-$statement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
+$statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
 // Create table
 $table = new HtmlTable('tbl_profile_fields', $page, true);

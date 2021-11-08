@@ -504,7 +504,6 @@ else
                     $buttonText = '';
                 }
 
-                $usrId = (int) $gCurrentUser->getValue('usr_id');
                 $disableStatusAttend    = '';
                 $disableStatusTentative = '';
 
@@ -512,9 +511,9 @@ else
                 if ($date->getValue('dat_max_members') > 0 && $outputNumberMembers >= $date->getValue('dat_max_members'))
                 {
                     // Check current user. If user is member of the event role then get his current approval status and set the options
-                    if (in_array($usrId, $participantsArray, true))
+                    if (in_array($gCurrentUserId, $participantsArray, true))
                     {
-                        switch ($participantsArray[$usrId]['approved'])
+                        switch ($participantsArray[$gCurrentUserId]['approved'])
                         {
                             case Participants::PARTICIPATION_MAYBE:
                                 $disableStatusTentative = 'disabled';
@@ -572,7 +571,7 @@ else
                 else
                 {
                     // Show warning for member of the date role if deadline is exceeded and now no changes are possible anymore
-                    if ($participants->isMemberOfEvent($usrId))
+                    if ($participants->isMemberOfEvent($gCurrentUserId))
                     {
                         $attentionDeadline = '
                             <div class="alert alert-warning" role="alert">
@@ -582,7 +581,7 @@ else
                 }
 
                 // Check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
-                if (!$participants->isMemberOfEvent($usrId) && !$date->participationPossible($outputNumberMembers))
+                if (!$participants->isMemberOfEvent($gCurrentUserId) && !$date->participationPossible($outputNumberMembers))
                 {
                     $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
                     $iconParticipationStatus = '';

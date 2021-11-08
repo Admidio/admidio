@@ -534,6 +534,16 @@ class Database
     }
 
     /**
+     * Method will initialize all column properties of all tables. This method should be
+     * used if the database structure has changed since the first database object where created.
+     * After that it's possible to rebuild the cache with the current database data.
+     */
+    public function initializeTableColumnProperties()
+    {
+        $this->dbStructure = array();
+    }
+
+    /**
      * Returns the ID of the unique id column of the last INSERT operation.
      * This method replace the old method Database#insert_id.
      * @return int Return ID value of the last INSERT operation.

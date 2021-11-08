@@ -85,14 +85,12 @@ class User extends TableAccess
      */
     public function __construct(Database $database, ProfileFields $userFields = null, $userId = 0)
     {
-        global $gCurrentOrganization;
-
         if ($userFields !== null)
         {
             $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
         }
 
-        $this->organizationId = (int) $gCurrentOrganization->getValue('org_id');
+        $this->organizationId = $GLOBALS['gCurrentOrgId'];
 
         parent::__construct($database, TBL_USERS, 'usr', $userId);
     }
@@ -417,7 +415,7 @@ class User extends TableAccess
                        AND mem_usr_id = ? -- $this->getValue(\'usr_id\')
                        AND mem_begin <= ? -- DATE_NOW
                        AND mem_end    > ? -- DATE_NOW
-                     WHERE rol_valid  = \'1\'
+                     WHERE rol_valid  = true
                        AND (  cat_org_id = ? -- $this->organizationId
                            OR cat_org_id IS NULL )';
             $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
@@ -655,10 +653,9 @@ class User extends TableAccess
      */
     public function delete()
     {
-        global $gCurrentUser, $gChangeNotification;
+        global $gChangeNotification;
 
-        $usrId     = (int) $this->getValue('usr_id');
-        $currUsrId = (int) $gCurrentUser->getValue('usr_id');
+        $usrId = $this->getValue('usr_id');
 
         if(is_object($gChangeNotification)) {
             // Register all non-empty fields for the notification
@@ -720,7 +717,7 @@ class User extends TableAccess
 
         $sqlQueries[] = 'UPDATE '.TBL_LISTS.'
                             SET lst_usr_id = NULL
-                          WHERE lst_global = \'1\'
+                          WHERE lst_global = true
                             AND lst_usr_id = '.$usrId;
 
         $sqlQueries[] = 'UPDATE '.TBL_PHOTOS.'
@@ -759,10 +756,10 @@ class User extends TableAccess
                           WHERE lsc_lst_id IN (SELECT lst_id
                                                  FROM '.TBL_LISTS.'
                                                 WHERE lst_usr_id = '.$usrId.'
-                                                  AND lst_global = \'0\')';
+                                                  AND lst_global = false)';
 
         $sqlQueries[] = 'DELETE FROM '.TBL_LISTS.'
-                          WHERE lst_global = \'0\'
+                          WHERE lst_global = false
                             AND lst_usr_id = '.$usrId;
 
         $sqlQueries[] = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.'
@@ -774,31 +771,31 @@ class User extends TableAccess
         // MySQL couldn't create delete statement with same table in subquery.
         // Therefore we fill a temporary table with all ids that should be deleted and reference on this table
         $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
-                          WHERE ids_usr_id = '.$currUsrId;
+                          WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'];
 
         $sqlQueries[] = 'INSERT INTO '.TBL_IDS.'
                                 (ids_usr_id, ids_reference_id)
-                         SELECT '.$currUsrId.', msc_msg_id
+                         SELECT '.$GLOBALS['gCurrentUserId'].', msc_msg_id
                            FROM '.TBL_MESSAGES_CONTENT.'
                           WHERE msc_usr_id = '.$usrId;
 
         $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
                           WHERE msc_msg_id IN (SELECT ids_reference_id
                                                  FROM '.TBL_IDS.'
-                                                WHERE ids_usr_id = '.$currUsrId.')';
+                                                WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'].')';
 
         $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_RECIPIENTS.'
                           WHERE msr_msg_id IN (SELECT ids_reference_id
                                                  FROM '.TBL_IDS.'
-                                                WHERE ids_usr_id = '.$currUsrId.')';
+                                                WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'].')';
 
         $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES.'
                           WHERE msg_id IN (SELECT ids_reference_id
                                              FROM '.TBL_IDS.'
-                                            WHERE ids_usr_id = '.$currUsrId.')';
+                                            WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'].')';
 
         $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
-                          WHERE ids_usr_id = '.$currUsrId;
+                          WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'];
 
         $sqlQueries[] = 'DELETE FROM '.TBL_MESSAGES_RECIPIENTS.'
                           WHERE msr_usr_id = '.$usrId;
@@ -1477,7 +1474,7 @@ class User extends TableAccess
                     ON rol_id = mem_rol_id
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE rol_valid  = \'1\'
+                 WHERE rol_valid  = true
                    AND mem_usr_id = ? -- $user->getValue(\'usr_id\')
                    AND mem_begin <= ? -- DATE_NOW
                    AND mem_end    > ? -- DATE_NOW
@@ -1602,11 +1599,11 @@ class User extends TableAccess
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
                  WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
-                   AND rol_valid  = \'1\'
+                   AND rol_valid  = true
                    AND mem_begin <= ? -- DATE_NOW
                    AND mem_end    > ? -- DATE_NOW
                    AND cat_org_id = ? -- $this->organizationId
-                   AND '.$administratorColumn.' = \'1\' ';
+                   AND '.$administratorColumn.' = true ';
         $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
@@ -1652,7 +1649,7 @@ class User extends TableAccess
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
                  WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
-                   AND rol_valid  = \'1\'
+                   AND rol_valid  = true
                    AND mem_begin <= ? -- DATE_NOW
                    AND mem_end    > ? -- DATE_NOW
                    AND cat_org_id = ? -- $this->organizationId';
@@ -1798,7 +1795,7 @@ class User extends TableAccess
     {
         global $gCurrentSession, $gCurrentUser, $gChangeNotification;
 
-        $usrId = (int) $this->getValue('usr_id');
+        $usrId = $this->getValue('usr_id');
 
         // if current user is not new and is not allowed to edit this user
         // and saveChangesWithoutRights isn't true than throw exception
@@ -1814,7 +1811,7 @@ class User extends TableAccess
         $updateCreateUserId = false;
         if ($usrId === 0)
         {
-            if((int) $gCurrentUser->getValue('usr_id') === 0)
+            if($GLOBALS['gCurrentUserId'] === 0)
             {
                 $updateCreateUserId = true;
                 $updateFingerPrint  = false;
@@ -2031,7 +2028,7 @@ class User extends TableAccess
         // Disabled fields can only be edited by users with the right "edit_users" except on registration.
         // Here is no need to check hidden fields because we check on save() method that only users who
         // can edit the profile are allowed to save and change data.
-        if (($usrId === 0 && (int) $gCurrentUser->getValue('usr_id') === 0)
+        if (($usrId === 0 && $GLOBALS['gCurrentUserId'] === 0)
         ||  (int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 0
         || ((int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 1
             && $gCurrentUser->hasRightEditProfile($this, false))

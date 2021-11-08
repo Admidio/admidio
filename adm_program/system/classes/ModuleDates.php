@@ -180,7 +180,7 @@ class ModuleDates extends Modules
                        ' . $additional['tables'] . '
              LEFT JOIN ' . TBL_MEMBERS . ' AS mem
                     ON mem.mem_rol_id = dat_rol_id
-                   AND mem.mem_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
+                   AND mem.mem_usr_id = ? -- $gCurrentUserId
                    AND mem.mem_begin <= ? -- DATE_NOW
                    AND mem.mem_end    > ? -- DATE_NOW
                  WHERE cat_id IN ('.Database::getQmForValues($catIdParams).')
@@ -200,7 +200,7 @@ class ModuleDates extends Modules
         $queryParams = array_merge(
             $additional['params'],
             array(
-                (int) $gCurrentUser->getValue('usr_id'),
+                $GLOBALS['gCurrentUserId'],
                 DATE_NOW,
                 DATE_NOW
             ),
@@ -319,9 +319,8 @@ class ModuleDates extends Modules
             }
         }
 
-        $currUsrId = (int) $gCurrentUser->getValue('usr_id');
         // add conditions for role permission
-        if ($currUsrId > 0)
+        if ($GLOBALS['gCurrentUserId'] > 0)
         {
             switch ($this->getParameter('show'))
             {
@@ -344,10 +343,10 @@ class ModuleDates extends Modules
                         AND dat_rol_id IS NOT NULL
                         AND dat_rol_id IN (SELECT mem_rol_id
                                              FROM ' . TBL_MEMBERS . ' AS mem2
-                                            WHERE mem2.mem_usr_id = ? -- $currUsrId
+                                            WHERE mem2.mem_usr_id = ? -- $GLOBALS[\'gCurrentUserId\']
                                               AND mem2.mem_begin <= dat_begin
                                               AND mem2.mem_end   >= dat_end) ';
-                    $params[] = $currUsrId;
+                    $params[] = $GLOBALS['gCurrentUserId'];
                     break;
             }
         }

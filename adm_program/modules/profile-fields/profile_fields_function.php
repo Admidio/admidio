@@ -29,17 +29,18 @@ $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requir
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
 $getOrder    = admFuncVariableIsValid($_GET, 'order',    'array');
 
-try {
-    // check the CSRF token of the form against the session token
-    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-}
-catch(AdmException $exception) {
-    if($getMode === 1) {
-        $exception->showHtml();
-    } else {
-        $exception->showText();
+if($getMode !== 4 || empty($getOrder)) {
+    try {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+    } catch (AdmException $exception) {
+        if ($getMode === 1) {
+            $exception->showHtml();
+        } else {
+            $exception->showText();
+        }
+        // => EXIT
     }
-    // => EXIT
 }
 
 // only authorized users can edit the profile fields
@@ -58,7 +59,7 @@ if($getUsfUuid !== '')
 
     // check if profile field belongs to actual organization
     if($userField->getValue('cat_org_id') > 0
-    && (int) $userField->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+    && (int) $userField->getValue('cat_org_id') !== $gCurrentOrgId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -187,6 +188,10 @@ if($getMode === 1)
     {
         $_POST['usf_registration'] = 0;
     }
+    if(!isset($_POST['usf_description_inline']))
+    {
+        $_POST['usf_description_inline'] = 0;
+    }
 
     // make html in description secure
     $_POST['usf_description'] = admFuncVariableIsValid($_POST, 'usf_description', 'html');
@@ -243,7 +248,8 @@ elseif($getMode === 2)
 }
 elseif($getMode === 4)
 {
-    // Feldreihenfolge aktualisieren
+    // update field order
+
     if (!empty($getOrder)) {
         // set new order (drag'n'drop)
         $userField->setSequence($getOrder);

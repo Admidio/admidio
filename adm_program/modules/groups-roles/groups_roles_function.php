@@ -56,7 +56,7 @@ if($getRoleUuid !== '')
     $eventRole = $role->getValue('cat_name_intern') === 'EVENTS';
 
     // Check if the role belongs to the current organization
-    if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
+    if((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -93,13 +93,13 @@ if($getMode === 2)
                  WHERE rol_name   = ? -- $_POST[\'rol_name\']
                    AND rol_cat_id = ? -- $_POST[\'rol_cat_id\']
                    AND rol_id    <> ? -- $role->getValue(\'rol_id\')
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   AND (  cat_org_id = ? -- $gCurrentOrgId
                        OR cat_org_id IS NULL )';
         $queryParams = array(
             $_POST['rol_name'],
             (int) $_POST['rol_cat_id'],
             $role->getValue('rol_id'),
-            (int) $gCurrentOrganization->getValue('org_id')
+            $gCurrentOrgId
         );
         $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
@@ -313,7 +313,7 @@ if($getMode === 2)
                     $roleDep->clear();
                     $roleDep->setChild($sentChildRole);
                     $roleDep->setParent($role->getValue('rol_id'));
-                    $roleDep->insert((int) $gCurrentUser->getValue('usr_id'));
+                    $roleDep->insert($gCurrentUserId);
 
                     // füge alle Mitglieder der ChildRole der ParentRole zu
                     $roleDep->updateMembership();

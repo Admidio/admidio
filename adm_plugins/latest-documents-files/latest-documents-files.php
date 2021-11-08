@@ -59,11 +59,11 @@ if(Component::isVisible('DOCUMENTS-FILES'))
 
     if(!$gValidLogin)
     {
-        $sqlCondition = ' AND fol_public = \'1\' ';
+        $sqlCondition = ' AND fol_public = true ';
     }
 
     $rootFolder = new TableFolder($gDb);
-    $rootFolder->readDataByColumns(array('fol_org_id' => $gCurrentOrganization->getValue('org_id'),
+    $rootFolder->readDataByColumns(array('fol_org_id' => $gCurrentOrgId,
                                          'fol_fol_id_parent' => 'NULL',
                                          'fol_type' => 'DOCUMENTS'));
     $downloadFolder = $rootFolder->getValue('fol_path') . '/' . $rootFolder->getValue('fol_name');
@@ -73,11 +73,11 @@ if(Component::isVisible('DOCUMENTS-FILES'))
               FROM '.TBL_FILES.'
         INNER JOIN '.TBL_FOLDERS.'
                 ON fol_id = fil_fol_id
-             WHERE fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+             WHERE fol_org_id = ? -- $gCurrentOrgId
                    '.$sqlCondition.'
           ORDER BY fil_timestamp DESC';
 
-    $filesStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
+    $filesStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
     if($filesStatement->rowCount() > 0)
     {

@@ -103,13 +103,13 @@ class TableUserField extends TableAccess
                  WHERE lsc_usf_id = ? -- $usfId';
         $this->db->queryPrepared($sql, array($usfId));
 
+        $return = parent::delete();
+
         if(is_object($gCurrentSession))
         {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->reloadAllSessions();
         }
-
-        $return = parent::delete();
 
         $this->db->endTransaction();
 
@@ -282,16 +282,12 @@ class TableUserField extends TableAccess
      */
     public function isVisible()
     {
-        global $gCurrentUser;
-
-        $usrId = (int) $gCurrentUser->getValue('usr_id');
-
-        if ($this->mViewUserField === null || $this->mViewUserFieldUserId !== $usrId)
+        if ($this->mViewUserField === null || $this->mViewUserFieldUserId !== $GLOBALS['gCurrentUserId'])
         {
-            $this->mViewUserFieldUserId = $usrId;
+            $this->mViewUserFieldUserId = $GLOBALS['gCurrentUserId'];
 
             // check if the current user could view the category of the profile field
-            $this->mViewUserField = in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF'), true);
+            $this->mViewUserField = in_array($this->getValue('cat_id'), $GLOBALS['gCurrentUser']->getAllVisibleCategories('USF'), true);
         }
 
         return $this->mViewUserField;
@@ -338,9 +334,8 @@ class TableUserField extends TableAccess
      */
     public function setSequence($sequence)
     {
-        $usfSequence = (int) $this->getValue('usf_sequence');
-        $usfCatId    = (int) $this->getValue('usf_cat_id');
-        $usfUuid     = $this->getValue('usf_uuid');
+        $usfCatId = $this->getValue('usf_cat_id');
+        $usfUuid  = $this->getValue('usf_uuid');
 
         $sql = 'UPDATE '.TBL_USER_FIELDS.'
                    SET usf_sequence = ? -- new order sequence

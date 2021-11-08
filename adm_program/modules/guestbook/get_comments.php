@@ -25,11 +25,11 @@ if ($getCommentGboUuid !== '')
     // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
     if((int) $gSettingsManager->get('enable_guestbook_moderation') > 0 && $getModeration)
     {
-        $conditions = ' AND gbc_locked = 1 ';
+        $conditions = ' AND gbc_locked = true ';
     }
     else
     {
-        $conditions = ' AND gbc_locked = 0 ';
+        $conditions = ' AND gbc_locked = false ';
     }
 
     $sql = 'SELECT *
@@ -37,10 +37,10 @@ if ($getCommentGboUuid !== '')
         INNER JOIN '.TBL_GUESTBOOK.'
                 ON gbo_id = gbc_gbo_id
              WHERE gbo_uuid   = ? -- $getCommentGboUuid
-               AND gbo_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND gbo_org_id = ? -- $gCurrentOrgId
                    '.$conditions.'
           ORDER BY gbc_timestamp_create ASC';
-    $commentStatement = $gDb->queryPrepared($sql, array($getCommentGboUuid, (int) $gCurrentOrganization->getValue('org_id')));
+    $commentStatement = $gDb->queryPrepared($sql, array($getCommentGboUuid, $gCurrentOrgId));
 
     if($commentStatement->rowCount() > 0)
     {

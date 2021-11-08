@@ -68,7 +68,7 @@ $role = new TableRoles($gDb);
 $role->readDataByUuid($getRoleUuid);
 
 // roles of other organizations can't be edited
-if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
+if((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0)
 {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
     exit();
@@ -172,9 +172,9 @@ $sqlSubSelect = '(SELECT COUNT(*) AS count_this
                      AND mem_begin  <= \''.DATE_NOW.'\'
                      AND mem_end     > \''.DATE_NOW.'\'
                          '.$filterRoleCondition.'
-                     AND rol_valid = \'1\'
+                     AND rol_valid = true
                      AND cat_name_intern <> \'EVENTS\'
-                     AND cat_org_id = '.(int) $gCurrentOrganization->getValue('org_id').')';
+                     AND cat_org_id = '.$gCurrentOrgId.')';
 
 if($getMembersShowAll)
 {
@@ -197,7 +197,7 @@ $sql = 'SELECT COUNT(*) AS count_total
     INNER JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-         WHERE usr_valid = \'1\'
+         WHERE usr_valid = true
                '.$memberOfThisOrganizationCondition;
 $queryParams = array(
     $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
@@ -235,14 +235,14 @@ $mainSql = 'SELECT DISTINCT usr_id, usr_uuid, last_name.usd_value AS last_name, 
                 ON country.usd_usr_id = usr_id
                AND country.usd_usf_id = ? -- $gProfileFields->getProperty(\'COUNTRY\', \'usf_id\')
          LEFT JOIN '.TBL_ROLES.' AS rol
-                ON rol.rol_valid   = \'1\'
+                ON rol.rol_valid   = true
                AND rol.rol_id      = ? -- $role->getValue(\'rol_id\')
          LEFT JOIN '.TBL_MEMBERS.' AS mem
                 ON mem.mem_rol_id  = rol.rol_id
                AND mem.mem_begin  <= ? -- DATE_NOW
                AND mem.mem_end     > ? -- DATE_NOW
                AND mem.mem_usr_id  = usr_id
-             WHERE usr_valid = \'1\'
+             WHERE usr_valid = true
                    '. $memberOfThisOrganizationCondition;
 $queryParamsMain = array(
     $gProfileFields->getProperty('LAST_NAME', 'usf_id'),

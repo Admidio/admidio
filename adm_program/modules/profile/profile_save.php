@@ -52,7 +52,7 @@ if(!isset($_POST['usr_login_name']))
 }
 if(!isset($_POST['reg_org_id']))
 {
-    $_POST['reg_org_id'] = (int) $gCurrentOrganization->getValue('org_id');
+    $_POST['reg_org_id'] = $gCurrentOrgId;
 }
 
 // read user data
@@ -322,7 +322,7 @@ catch(AdmException $e)
 $gDb->endTransaction();
 
 // wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
-if((int) $user->getValue('usr_id') === (int) $gCurrentUser->getValue('usr_id'))
+if((int) $user->getValue('usr_id') === $gCurrentUserId)
 {
     $gCurrentUser = $user;
 }
@@ -382,7 +382,7 @@ elseif($getNewUser === 2)
     $gMessage->show($gL10n->get('SYS_REGISTRATION_SAVED'));
     // => EXIT
 }
-elseif($getNewUser === 0 && $user->getValue('usr_valid') == 0)
+elseif($getNewUser === 0 && !$user->getValue('usr_valid'))
 {
     // a registration was edited then go back to profile view
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);

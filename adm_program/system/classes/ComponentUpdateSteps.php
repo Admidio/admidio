@@ -83,7 +83,11 @@ final class ComponentUpdateSteps
             $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DATA TYPE boolean using ' . $columnsBoolean['column'] . '::integer::boolean';
             self::$db->queryPrepared($sql);
 
-            $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DEFAULT false';
+            if($columnsBoolean['column'] === 'rol_valid') {
+                $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DEFAULT true';
+            } else {
+                $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DEFAULT false';
+            }
             self::$db->queryPrepared($sql);
         }
     }
@@ -115,7 +119,7 @@ final class ComponentUpdateSteps
      */
     public static function updateStep41CategoryReportMigration()
     {
-        global $gSettingsManager, $gL10n, $gProfileFields;
+        global $gL10n, $gProfileFields;
 
         $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
         $organizationsStatement = self::$db->queryPrepared($sql);
@@ -262,15 +266,17 @@ final class ComponentUpdateSteps
                 self::$db->queryPrepared($sql, array($uuid, $row[$tableUuid['column_id']]));
             }
         }
+
+	    self::$db->initializeTableColumnProperties();
 	}
 
     /**
-     * This method will add a new systemmail text to the database table **adm_texts** for each
-     * organization in the database.
+     * This method will add a new default list for the members management module. This list will be used to configure
+     * and show the columns of the members management overview.
      */
 	public static function updateStep41AddMembersManagementDefaultList()
 	{
-    	global $gL10n, $gProfileFields, $gSettingsManager;
+    	global $gL10n, $gProfileFields;
 
         $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
         $organizationsStatement = self::$db->queryPrepared($sql);
@@ -278,12 +284,10 @@ final class ComponentUpdateSteps
 
         foreach($organizationsArray as $organization)
         {
-            $orgId = (int) $organization['org_id'];
-
             // add default configuration
             $userManagementList = new ListConfiguration(self::$db);
             $userManagementList->setValue('lst_name', $gL10n->get('SYS_USER_MANAGEMENT'));
-            $userManagementList->setValue('lst_org_id', $orgId);
+            $userManagementList->setValue('lst_org_id', (int) $organization['org_id']);
             $userManagementList->setValue('lst_global', 1);
             $userManagementList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
             $userManagementList->addColumn(2, (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
@@ -294,7 +298,10 @@ final class ComponentUpdateSteps
             $userManagementList->save();
 
             // save default list to preferences
-            $gSettingsManager->set('members_list_configuration', $userManagementList->getValue('lst_id'));
+            $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = ? -- $userManagementList->getValue(\'lst_id\')
+                     WHERE prf_org_id = ? -- $organization[\'org_id\']
+                       AND prf_name = \'members_list_configuration\' ';
+            self::$db->queryPrepared($sql, array($userManagementList->getValue('lst_id'), (int) $organization['org_id']));
         }
 	}
 
@@ -614,10 +621,6 @@ final class ComponentUpdateSteps
      */
     public static function updateStep33MigrateDatesRightsToFolderRights()
     {
-        global $gCurrentUser;
-
-        $usrId = (int) $gCurrentUser->getValue('usr_id');
-
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id
                   FROM '.TBL_ROLES_RIGHTS.'
@@ -627,16 +630,16 @@ final class ComponentUpdateSteps
 
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
                        (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
-                SELECT '.$rolesRightId.', dtr_rol_id, dtr_dat_id, ?, ? -- $usrId, DATETIME_NOW
+                SELECT '.$rolesRightId.', dtr_rol_id, dtr_dat_id, ?, ? -- $GLOBALS[\'gCurrentUserId\'], DATETIME_NOW
                   FROM '.TABLE_PREFIX.'_date_role
                  WHERE dtr_rol_id IS NOT NULL';
-        self::$db->queryPrepared($sql, array($usrId, DATETIME_NOW));
+        self::$db->queryPrepared($sql, array($GLOBALS['gCurrentUserId'], DATETIME_NOW));
 
         // if no roles were set than we must assign all default registration roles because now we need at least 1 role
         // so that someone could register to the event
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
                        (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
-                SELECT '.$rolesRightId.', rol_id, dat_id, ?, ? -- $usrId, DATETIME_NOW
+                SELECT '.$rolesRightId.', rol_id, dat_id, ?, ? -- $GLOBALS[\'gCurrentUserId\'], DATETIME_NOW
                   FROM '.TABLE_PREFIX.'_dates
             INNER JOIN '.TABLE_PREFIX.'_categories AS cdat
                     ON cdat.cat_id = dat_cat_id
@@ -650,7 +653,7 @@ final class ComponentUpdateSteps
                    AND dtr_rol_id IS NULL
                    AND rdat.cat_type = \'ROL\'
                    AND rol_default_registration = 1';
-        self::$db->queryPrepared($sql, array($usrId, DATETIME_NOW));
+        self::$db->queryPrepared($sql, array($GLOBALS['gCurrentUserId'], DATETIME_NOW));
     }
 
     /**
@@ -727,7 +730,7 @@ final class ComponentUpdateSteps
                       FROM ' . TBL_ROLES . '
                 INNER JOIN ' . TBL_CATEGORIES . '
                         ON cat_id = rol_cat_id
-                     WHERE rol_valid  = \'1\'
+                     WHERE rol_valid  = true
                        AND cat_name_intern <> \'EVENTS\'
                        AND cat_org_id = ? -- $row[\'cat_org_id\']';
             $rolesStatement = self::$db->queryPrepared($sql, array((int) $row['cat_org_id']));
@@ -839,20 +842,18 @@ final class ComponentUpdateSteps
      */
     public static function updateStep32InstallDefaultUserRelationTypes()
     {
-        global $gL10n, $gCurrentUser;
-
-        $currUsrId = (int) $gCurrentUser->getValue('usr_id');
+        global $gL10n;
 
         $sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.'
                        (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
-                VALUES (1, \''.$gL10n->get('INS_PARENT').'\',      \''.$gL10n->get('INS_FATHER').'\',           \''.$gL10n->get('INS_MOTHER').'\',             2, '.$currUsrId.', \''.DATETIME_NOW.'\')
-                     , (2, \''.$gL10n->get('INS_CHILD').'\',       \''.$gL10n->get('INS_SON').'\',              \''.$gL10n->get('INS_DAUGHTER').'\',           1, '.$currUsrId.', \''.DATETIME_NOW.'\')
-                     , (3, \''.$gL10n->get('INS_SIBLING').'\',     \''.$gL10n->get('INS_BROTHER').'\',          \''.$gL10n->get('INS_SISTER').'\',             3, '.$currUsrId.', \''.DATETIME_NOW.'\')
-                     , (4, \''.$gL10n->get('INS_SPOUSE').'\',      \''.$gL10n->get('INS_HUSBAND').'\',          \''.$gL10n->get('INS_WIFE').'\',               4, '.$currUsrId.', \''.DATETIME_NOW.'\')
-                     , (5, \''.$gL10n->get('INS_COHABITANT').'\',  \''.$gL10n->get('INS_COHABITANT_MALE').'\',  \''.$gL10n->get('INS_COHABITANT_FEMALE').'\',  5, '.$currUsrId.', \''.DATETIME_NOW.'\')
-                     , (6, \''.$gL10n->get('INS_COMPANION').'\',   \''.$gL10n->get('INS_BOYFRIEND').'\',        \''.$gL10n->get('INS_GIRLFRIEND').'\',         6, '.$currUsrId.', \''.DATETIME_NOW.'\')
-                     , (7, \''.$gL10n->get('INS_SUPERIOR').'\',    \''.$gL10n->get('INS_SUPERIOR_MALE').'\',    \''.$gL10n->get('INS_SUPERIOR_FEMALE').'\',    8, '.$currUsrId.', \''.DATETIME_NOW.'\')
-                     , (8, \''.$gL10n->get('INS_SUBORDINATE').'\', \''.$gL10n->get('INS_SUBORDINATE_MALE').'\', \''.$gL10n->get('INS_SUBORDINATE_FEMALE').'\', 7, '.$currUsrId.', \''.DATETIME_NOW.'\')';
+                VALUES (1, \''.$gL10n->get('INS_PARENT').'\',      \''.$gL10n->get('INS_FATHER').'\',           \''.$gL10n->get('INS_MOTHER').'\',             2, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
+                     , (2, \''.$gL10n->get('INS_CHILD').'\',       \''.$gL10n->get('INS_SON').'\',              \''.$gL10n->get('INS_DAUGHTER').'\',           1, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
+                     , (3, \''.$gL10n->get('INS_SIBLING').'\',     \''.$gL10n->get('INS_BROTHER').'\',          \''.$gL10n->get('INS_SISTER').'\',             3, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
+                     , (4, \''.$gL10n->get('INS_SPOUSE').'\',      \''.$gL10n->get('INS_HUSBAND').'\',          \''.$gL10n->get('INS_WIFE').'\',               4, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
+                     , (5, \''.$gL10n->get('INS_COHABITANT').'\',  \''.$gL10n->get('INS_COHABITANT_MALE').'\',  \''.$gL10n->get('INS_COHABITANT_FEMALE').'\',  5, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
+                     , (6, \''.$gL10n->get('INS_COMPANION').'\',   \''.$gL10n->get('INS_BOYFRIEND').'\',        \''.$gL10n->get('INS_GIRLFRIEND').'\',         6, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
+                     , (7, \''.$gL10n->get('INS_SUPERIOR').'\',    \''.$gL10n->get('INS_SUPERIOR_MALE').'\',    \''.$gL10n->get('INS_SUPERIOR_FEMALE').'\',    8, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')
+                     , (8, \''.$gL10n->get('INS_SUBORDINATE').'\', \''.$gL10n->get('INS_SUBORDINATE_MALE').'\', \''.$gL10n->get('INS_SUBORDINATE_FEMALE').'\', 7, '.$GLOBALS['gCurrentUserId'].', \''.DATETIME_NOW.'\')';
         self::$db->query($sql); // TODO add more params
     }
 
@@ -862,7 +863,7 @@ final class ComponentUpdateSteps
      */
     public static function updateStep32MigrateToFolderRights()
     {
-        global $g_organization, $gCurrentUser;
+        global $g_organization;
 
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id
@@ -873,9 +874,9 @@ final class ComponentUpdateSteps
 
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
                        (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
-                SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id, ?, ? -- $gCurrentUser->getValue(\'usr_id\'), DATETIME_NOW
+                SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id, ?, ? -- $gCurrentUserId, DATETIME_NOW
                   FROM '.TABLE_PREFIX.'_folder_roles ';
-        self::$db->queryPrepared($sql, array((int) $gCurrentUser->getValue('usr_id'), DATETIME_NOW));
+        self::$db->queryPrepared($sql, array($GLOBALS['gCurrentUserId'], DATETIME_NOW));
 
         // add new right folder_update to adm_roles_rights
         $sql = 'SELECT fol_id

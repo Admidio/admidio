@@ -20,7 +20,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php')
  */
 function getRolesFromDatabase($userId)
 {
-    global $gDb, $gCurrentOrganization;
+    global $gDb;
 
     $sql = 'SELECT *
               FROM '.TBL_MEMBERS.'
@@ -31,12 +31,12 @@ function getRolesFromDatabase($userId)
              WHERE mem_usr_id  = ? -- $userId
                AND mem_begin  <= ? -- DATE_NOW
                AND mem_end    >= ? -- DATE_NOW
-               AND rol_valid   = \'1\'
+               AND rol_valid   = true
                AND cat_name_intern <> \'EVENTS\'
-               AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND (  cat_org_id  = ? -- $GLOBALS[\'gCurrentOrgId\']
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id, cat_sequence, rol_name';
-    return $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id')));
+    return $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $GLOBALS['gCurrentOrgId']));
 }
 
 /**
@@ -46,7 +46,7 @@ function getRolesFromDatabase($userId)
  */
 function getFutureRolesFromDatabase($userId)
 {
-    global $gDb, $gCurrentOrganization;
+    global $gDb;
 
     $sql = 'SELECT *
               FROM '.TBL_MEMBERS.'
@@ -56,12 +56,12 @@ function getFutureRolesFromDatabase($userId)
                 ON cat_id = rol_cat_id
              WHERE mem_usr_id  = ? -- $userId
                AND mem_begin   > ? -- DATE_NOW
-               AND rol_valid   = \'1\'
+               AND rol_valid   = true
                AND cat_name_intern <> \'EVENTS\'
-               AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND (  cat_org_id  = ? -- $GLOBALS[\'gCurrentOrgId\']
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id, cat_sequence, rol_name';
-    return $gDb->queryPrepared($sql, array($userId, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id')));
+    return $gDb->queryPrepared($sql, array($userId, DATE_NOW, $GLOBALS['gCurrentOrgId']));
 }
 
 /**
@@ -71,7 +71,7 @@ function getFutureRolesFromDatabase($userId)
  */
 function getFormerRolesFromDatabase($userId)
 {
-    global $gDb, $gCurrentOrganization;
+    global $gDb;
 
     $sql = 'SELECT *
               FROM '.TBL_MEMBERS.'
@@ -81,12 +81,12 @@ function getFormerRolesFromDatabase($userId)
                 ON cat_id = rol_cat_id
              WHERE mem_usr_id  = ? -- $userId
                AND mem_end     < ? -- DATE_NOW
-               AND rol_valid   = \'1\'
+               AND rol_valid   = true
                AND cat_name_intern <> \'EVENTS\'
-               AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND (  cat_org_id  = ? -- $GLOBALS[\'gCurrentOrgId\']
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id, cat_sequence, rol_name';
-    return $gDb->queryPrepared($sql, array($userId, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id')));
+    return $gDb->queryPrepared($sql, array($userId, DATE_NOW, $GLOBALS['gCurrentOrgId']));
 }
 
 /**
@@ -108,7 +108,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
     {
         // you must have the right to view memberships of the role or it must be your own profile
         if($gCurrentUser->hasRightViewRole($row['mem_rol_id'])
-        || (int) $gCurrentUser->getValue('usr_id') === (int) $user->getValue('usr_id'))
+        || $GLOBALS['gCurrentUserId'] === (int) $user->getValue('usr_id'))
         {
             $futureMembership = false;
             $showRoleEndDate  = false;
@@ -193,7 +193,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                                 }
 
                                 // You are not allowed to delete your own administrator membership, other roles could be deleted
-                                if (($role->getValue('rol_administrator') == 1 && (int) $gCurrentUser->getValue('usr_id') !== (int) $user->getValue('usr_id'))
+                                if (($role->getValue('rol_administrator') == 1 && $GLOBALS['gCurrentUserId'] !== (int) $user->getValue('usr_id'))
                                 || ($role->getValue('rol_administrator') == 0))
                                 {
                                     $roleMemHTML .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"

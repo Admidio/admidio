@@ -460,7 +460,7 @@ class TableFolder extends TableAccess
      */
     public function getFolderForDownload($folderUuid)
     {
-        global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
+        global $gCurrentUser, $gValidLogin;
 
         if ($folderUuid !== '')
         {
@@ -473,9 +473,9 @@ class TableFolder extends TableAccess
         {
             // get first folder of current organization
             $condition = ' fol_fol_id_parent IS NULL
-                       AND fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                       AND fol_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']
                        AND fol_type   = \'DOCUMENTS\' ';
-            $queryParams = array((int) $gCurrentOrganization->getValue('org_id'));
+            $queryParams = array($GLOBALS['gCurrentOrgId']);
         }
         $this->readData($condition, $queryParams);
 
@@ -545,17 +545,15 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Gibt fuer das Downloadmodul eine HTML-Navigationsleiste fuer die Ordner zurueck
-     * @param int    $folderId
-     * @param string $currentNavigation
-     * @return string
+     * Creates for the documents and files module a HTML navigation bar of the current folder structure.
+     * Therefore this method will be called recursiv if a parent folder was found until there is no parent folder.
+     * @param int    $folderId          ID of the folder of which a HTML breadcrumb should be created.
+     * @param string $currentNavigation HTML of the breadcrumb that still exists.
+     * @return string Returns a HTML breadcrumb or null if no folders were found.
      */
     public function getNavigationForDownload($folderId = 0, $currentNavigation = '')
     {
-        global $gCurrentOrganization, $gL10n;
-
-        if ($folderId > 0)
-        {
+        if ($folderId > 0) {
             // Get infos from requested folder
             $sqlCurrentFolder = 'SELECT fol_id, fol_fol_id_parent, fol_name
                                    FROM '.TBL_FOLDERS.'
@@ -563,8 +561,7 @@ class TableFolder extends TableAccess
             $currentFolderStatement = $this->db->queryPrepared($sqlCurrentFolder, array($folderId));
             $currentFolderRow = $currentFolderStatement->fetch();
 
-            if ($currentFolderRow['fol_fol_id_parent'])
-            {
+            if ($currentFolderRow['fol_fol_id_parent']) {
                 $currentNavigation = '<li class="breadcrumb-item"><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_id' => $currentFolderRow['fol_id'])).
                     '">' . $currentFolderRow['fol_name'] . '</a></li>' . $currentNavigation;
 
@@ -573,41 +570,40 @@ class TableFolder extends TableAccess
             }
 
             return $currentNavigation;
+        } else {
+            $parentId = $this->getValue('fol_fol_id_parent');
+
+            // If there is no parent folder, navigation-bar isn't necessary
+            if ($parentId > 0) {
+                $currentNavigation = $this->getNavigationForDownload($parentId, $currentNavigation);
+
+                // If the folder has a parent folder we need the root folder
+                $sqlRootFolder = 'SELECT fol_id
+                                FROM ' . TBL_FOLDERS . '
+                               WHERE fol_type   = \'DOCUMENTS\'
+                                 AND fol_fol_id_parent IS NULL
+                                 AND fol_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']';
+                $rootFolderStatement = $this->db->queryPrepared($sqlRootFolder, array($GLOBALS['gCurrentOrgId']));
+                $rootFolderId = $rootFolderStatement->fetchColumn();
+
+                $link = '
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <i class="fas fa-folder-open"></i>
+                                <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php', array('folder_id' => $rootFolderId)) . '">
+                                    ' . $GLOBALS['gL10n']->get('SYS_DOCUMENTS_FILES') . '</a>
+                            </li>' .
+                            $currentNavigation .
+                            '<li class="breadcrumb-item active" aria-current="page">' . $this->getValue('fol_name') . '</li>
+                        </ol>
+                    </nav>';
+
+                return $link;
+            }
         }
 
-        $parentId = $this->getValue('fol_fol_id_parent');
-
-        // If there is no parent folder, navigation-bar isn't necessary
-        if ($parentId === '')
-        {
-            return '';
-        }
-
-        $currentNavigation = $this->getNavigationForDownload((int) $parentId, $currentNavigation);
-
-        // If the folder has a parent folder we need the root folder
-        $sqlRootFolder = 'SELECT fol_id
-                            FROM '.TBL_FOLDERS.'
-                           WHERE fol_type   = \'DOCUMENTS\'
-                             AND fol_fol_id_parent IS NULL
-                             AND fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-        $rootFolderStatement = $this->db->queryPrepared($sqlRootFolder, array((int) $gCurrentOrganization->getValue('org_id')));
-        $rootFolderId = $rootFolderStatement->fetchColumn();
-
-        $link = '
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <i class="fas fa-folder-open"></i>
-                    <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_id' => $rootFolderId)).'">
-                        '.$gL10n->get('SYS_DOCUMENTS_FILES').'</a>
-                </li>'.
-                $currentNavigation.
-                '<li class="breadcrumb-item active" aria-current="page">'.$this->getValue('fol_name').'</li>
-            </ol>
-        </nav>';
-
-        return $link;
+        return null;
     }
 
     /**
@@ -649,16 +645,16 @@ class TableFolder extends TableAccess
      */
     private function getSubfoldersWithProperties()
     {
-        global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
+        global $gCurrentUser, $gValidLogin;
 
         // Get all subfolder of the current folder
         $sqlFolders = 'SELECT *
                          FROM '.TBL_FOLDERS.'
                         WHERE fol_type          = \'DOCUMENTS\'
                           AND fol_fol_id_parent = ? -- $this->getValue(\'fol_id\')
-                          AND fol_org_id        = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                          AND fol_org_id        = ? -- $GLOBALS[\'gCurrentOrgId\']
                      ORDER BY fol_name';
-        $foldersStatement = $this->db->queryPrepared($sqlFolders, array((int) $this->getValue('fol_id'), (int) $gCurrentOrganization->getValue('org_id')));
+        $foldersStatement = $this->db->queryPrepared($sqlFolders, array((int) $this->getValue('fol_id'), $GLOBALS['gCurrentOrgId']));
 
         $folders = array();
 
@@ -837,13 +833,11 @@ class TableFolder extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentOrganization, $gCurrentUser;
-
         if ($this->newRecord)
         {
             $this->setValue('fol_timestamp', DATETIME_NOW);
-            $this->setValue('fol_usr_id', (int) $gCurrentUser->getValue('usr_id'));
-            $this->setValue('fol_org_id', (int) $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('fol_usr_id', $GLOBALS['gCurrentUserId']);
+            $this->setValue('fol_org_id', $GLOBALS['gCurrentOrgId']);
         }
 
         return parent::save($updateFingerPrint);

@@ -40,7 +40,7 @@ $role->readDataByUuid($getRoleUuid);
 $_SESSION['set_rol_id'] = $role->getValue('rol_id');
 
 // roles of other organizations can't be edited
-if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
+if((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
@@ -230,12 +230,12 @@ else
                            FROM '.TBL_ROLES.'
                      INNER JOIN '.TBL_CATEGORIES.'
                              ON cat_id = rol_cat_id
-                          WHERE rol_valid   = \'1\'
+                          WHERE rol_valid   = true
                             AND cat_name_intern <> \'EVENTS\'
-                            AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                            AND (  cat_org_id  = ? -- $gCurrentOrgId
                                 OR cat_org_id IS NULL )
                        ORDER BY cat_sequence, rol_name';
-    $sqlData['params'] = array((int) $gCurrentOrganization->getValue('org_id'));
+    $sqlData['params'] = array($gCurrentOrgId);
 
     // create filter menu with elements for role
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');

@@ -581,7 +581,7 @@ class ListConfiguration extends TableLists
      */
     public function getSQL(array $options = array())
     {
-        global $gL10n, $gProfileFields, $gCurrentOrganization;
+        global $gL10n, $gProfileFields;
 
         // create array with all options
         $optionsDefault = array(
@@ -768,7 +768,7 @@ class ListConfiguration extends TableLists
             $sqlRoleIds = '(SELECT rol_id
                               FROM ' . TBL_CATEGORIES . '
                              INNER JOIN ' . TBL_ROLES . ' ON rol_cat_id = cat_id
-                             WHERE (  cat_org_id = '. (int) $gCurrentOrganization->getValue('org_id'). '
+                             WHERE (  cat_org_id = '. $GLOBALS['gCurrentOrgId']. '
                                    OR cat_org_id IS NULL )
                             )';
         }
@@ -806,7 +806,7 @@ class ListConfiguration extends TableLists
         }
         else
         {
-            $sqlMemLeader = ' \'0\' AS mem_leader, ';
+            $sqlMemLeader = ' false AS mem_leader, ';
         }
 
         $sqlUserJoin = 'INNER JOIN '.TBL_USERS.'
@@ -824,10 +824,10 @@ class ListConfiguration extends TableLists
         // Set SQL-Statement
         if ($optionsAll['showAllMembersDatabase'])
         {
-            $sql = 'SELECT DISTINCT \'0\' AS mem_leader, usr_id, usr_uuid, ' . $sqlColumnNames . '
+            $sql = 'SELECT DISTINCT false AS mem_leader, usr_id, usr_uuid, ' . $sqlColumnNames . '
                       FROM '.TBL_USERS.'
                            '.$sqlJoin.'
-                     WHERE usr_valid = \'1\' '.
+                     WHERE usr_valid = true '.
                            $sqlWhere.
                            $sqlOrderBys;
         }
@@ -841,10 +841,10 @@ class ListConfiguration extends TableLists
                         ON cat_id = rol_cat_id
                            '.$sqlUserJoin.'
                            '.$sqlJoin.'
-                     WHERE usr_valid = \'1\'
+                     WHERE usr_valid = true
                        AND rol_id IN ('.$sqlRoleIds.')
                            '.$sqlRelationTypeWhere.'
-                       AND (  cat_org_id = '. (int) $gCurrentOrganization->getValue('org_id'). '
+                       AND (  cat_org_id = '. $GLOBALS['gCurrentOrgId']. '
                            OR cat_org_id IS NULL )
                            '.$sqlMemberStatus.
                            $sqlWhere.

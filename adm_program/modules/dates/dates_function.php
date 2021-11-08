@@ -28,10 +28,10 @@ if($_GET['mode'] == 2)
 }
 
 // Initialize and check the parameters
-$getDateUuid          = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
-$getMode              = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
-$getCopy              = admFuncVariableIsValid($_GET, 'copy',   'bool');
-$getUserUuid          = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => (int) $gCurrentUser->getValue('usr_id')));
+$getDateUuid          = admFuncVariableIsValid($_GET, 'dat_uuid',  'string');
+$getMode              = admFuncVariableIsValid($_GET, 'mode',      'int', array('requireValue' => true));
+$getCopy              = admFuncVariableIsValid($_GET, 'copy',      'bool');
+$getUserUuid          = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 $postAdditionalGuests = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
 $postUserComment      = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
@@ -64,10 +64,7 @@ $date->readDataByUuid($getDateUuid);
 
 // read user data
 $user = new User($gDb, $gProfileFields);
-if($getUserUuid !== '')
-{
-    $user->readDataByUuid($getUserUuid);
-}
+$user->readDataByUuid($getUserUuid);
 
 if (in_array($getMode, array(1, 2), true))
 {
@@ -494,7 +491,7 @@ if($getMode === 1)  // Create a new event or edit an existing event
                       FROM '.TBL_CATEGORIES.'
                      WHERE cat_name_intern = \'EVENTS\'
                        AND cat_org_id = ?';
-            $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+            $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
             $role = new TableRoles($gDb);
 
             // these are the default settings for a date role

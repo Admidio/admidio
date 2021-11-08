@@ -191,7 +191,7 @@ elseif ($getMode === 3)
     }
 }
 
-// Datei / Ordner umbenennen
+// rename folder or file
 elseif ($getMode === 4)
 {
     if (!$getFileUuid && !$getFolderUuid)

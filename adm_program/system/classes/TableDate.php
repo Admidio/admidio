@@ -384,7 +384,7 @@ class TableDate extends TableAccess
         {
             // if category belongs to current organization than events are editable
             if($this->getValue('cat_org_id') > 0
-            && (int) $this->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
+            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId'])
             {
                 return true;
             }

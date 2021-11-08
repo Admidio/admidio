@@ -100,7 +100,6 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && !$gSettingsManager->getB
 }
 
 $sendResult = false;
-$currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
 // if message is EMAIL then check the parameters
 if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
@@ -135,7 +134,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 }
 
 // if user is logged in then show sender name and email
-if ($currUsrId > 0)
+if ($gCurrentUserId > 0)
 {
     $postName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
     if (!StringUtils::strValidCharacters($postFrom, 'email'))
@@ -158,7 +157,7 @@ else
 }
 
 // if no User is set, he is not able to ask for delivery confirmation
-if (!($currUsrId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation') === 2)
+if (!($gCurrentUserId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation') === 2)
 &&  (int) $gSettingsManager->get('mail_delivery_confirmation') !== 1)
 {
     $postDeliveryConfirmation = false;
@@ -167,7 +166,7 @@ if (!($currUsrId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation
 // object to handle the current message in the database
 $message->setValue('msg_type', $getMsgType);
 $message->setValue('msg_subject', $postSubject);
-$message->setValue('msg_usr_id_sender', $gCurrentUser->getValue('usr_id'));
+$message->setValue('msg_usr_id_sender', $gCurrentUserId);
 $message->addContent($postBody);
 
 // check if PM or Email and to steps:
@@ -207,10 +206,10 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                           FROM ' . TBL_ROLES . '
                     INNER JOIN ' . TBL_CATEGORIES . '
                             ON cat_id = rol_cat_id
-                           AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                           AND (  cat_org_id = ? -- $gCurrentOrgId
                                OR cat_org_id IS NULL)
                          WHERE rol_id = ? -- $group[\'id\']';
-                $statement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), $group['id']));
+                $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $group['id']));
                 $row = $statement->fetch();
 
                 // add role to the message object
@@ -231,7 +230,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
                     $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
                     $group['id'],
-                    $gCurrentOrganization->getValue('org_id')
+                    $gCurrentOrgId
                 );
 
                 if ($group['status'] === 'former' && $gSettingsManager->getBool('mail_show_former'))
@@ -277,9 +276,9 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                             ON first_name.usd_usr_id = usr_id
                            AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                          WHERE rol_id    = ? -- $group[\'id\']
-                           AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                           AND (  cat_org_id = ? -- $gCurrentOrgId
                                OR cat_org_id IS NULL )
-                           AND usr_valid = \'1\'
+                           AND usr_valid = true
                                ' . $sqlConditions;
 
                 // if current user is logged in the user id must be excluded because we don't want
@@ -287,8 +286,8 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 if ($gValidLogin)
                 {
                     $sql .= '
-                        AND usr_id <> ? -- $currUsrId';
-                    $queryParams[] = $currUsrId;
+                        AND usr_id <> ? -- $gCurrentUserId';
+                    $queryParams[] = $gCurrentUserId;
                 }
                 $statement = $gDb->queryPrepared($sql, $queryParams);
 
@@ -331,7 +330,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                                 ON first_name.usd_usr_id = usr_id
                                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                              WHERE usr_id = ? -- $user->getValue(\'usr_id\')
-                               AND usr_valid = \'1\' ';
+                               AND usr_valid = true ';
                     $statement = $gDb->queryPrepared($sql, array((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), (int) $user->getValue('usr_id')));
 
                     while ($row = $statement->fetch())

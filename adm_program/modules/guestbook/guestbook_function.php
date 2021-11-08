@@ -101,7 +101,7 @@ if (in_array($getMode, array(1, 2, 3, 9), true))
         $guestbook->readDataByUuid($getGboUuid);
 
         // Check if the entry belongs to the current organization
-        if ((int) $guestbook->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+        if ((int) $guestbook->getValue('gbo_org_id') !== $gCurrentOrgId)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
@@ -118,7 +118,7 @@ elseif (in_array($getMode, array(4, 5, 8, 10), true))
         $gbComment->readDataByUuid($getGbcUuid);
 
         // Check if the entry belongs to the current organization
-        if ((int) $gbComment->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+        if ((int) $gbComment->getValue('gbo_org_id') !== $gCurrentOrgId)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -132,7 +132,7 @@ if ($getMode === 1 || $getMode === 3)
     if ($getMode === 1)
     {
         // if login and new entry then fill name with login user
-        if ($gCurrentUser->getValue('usr_id') > 0)
+        if ($gCurrentUserId > 0)
         {
             $_POST['gbo_name'] = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
         }
@@ -206,9 +206,9 @@ if ($getMode === 1 || $getMode === 3)
                 $sql = 'SELECT COUNT(*) AS count
                           FROM '.TBL_GUESTBOOK.'
                          WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->getInt(\'flooding_protection_time\')
-                           AND gbo_org_id     = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                           AND gbo_org_id     = ? -- $gCurrentOrgId
                            AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_address\')';
-                $queryParams = array($gSettingsManager->getInt('flooding_protection_time'), (int) $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_address'));
+                $queryParams = array($gSettingsManager->getInt('flooding_protection_time'), $gCurrentOrgId, $guestbook->getValue('gbo_ip_address'));
                 $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
                 if ($pdoStatement->fetchColumn() > 0)
@@ -323,7 +323,7 @@ elseif ($getMode === 4 || $getMode === 8)
     if ($getMode === 4)
     {
         // if login then fill name with login user
-        if ((int) $gCurrentUser->getValue('usr_id') > 0)
+        if ($gCurrentUserId > 0)
         {
             $_POST['gbc_name'] = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
         }

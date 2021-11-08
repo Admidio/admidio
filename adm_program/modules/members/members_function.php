@@ -61,8 +61,6 @@ if ($getMode === 1)
     exit();
 }
 
-$orgId = (int) $gCurrentOrganization->getValue('org_id');
-
 // Create user-object
 $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
@@ -76,12 +74,12 @@ if ($getMode === 3 || $getMode === 6)
                 ON rol_id = mem_rol_id
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
-             WHERE rol_valid   = \'1\'
-               AND cat_org_id <> ? -- $orgId
+             WHERE rol_valid   = true
+               AND cat_org_id <> ? -- $gCurrentOrgId
                AND mem_begin  <= ? -- DATE_NOW
                AND mem_end     > ? -- DATE_NOW
                AND mem_usr_id  = ? -- $user->getValue(\'usr_id\')';
-    $pdoStatement = $gDb->queryPrepared($sql, array($orgId, DATE_NOW, DATE_NOW, $user->getValue('usr_id')));
+    $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, DATE_NOW, DATE_NOW, $user->getValue('usr_id')));
     $isAlsoInOtherOrgas = $pdoStatement->fetchColumn() > 0;
 }
 
@@ -90,7 +88,7 @@ if ($getMode === 2)
     // User has to be a member of this organization
     // User could not delete himself
     // Administrators could not be deleted
-    if (!isMember($user->getValue('usr_id')) || (int) $gCurrentUser->getValue('usr_id') === (int) $user->getValue('usr_id')
+    if (!isMember($user->getValue('usr_id')) || $gCurrentUserId === (int) $user->getValue('usr_id')
     || (!$gCurrentUser->isAdministrator() && $user->isAdministrator()))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -105,13 +103,13 @@ if ($getMode === 2)
                 ON rol_id = mem_rol_id
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
-             WHERE rol_valid  = \'1\'
-               AND (  cat_org_id = ? -- $orgId
+             WHERE rol_valid  = true
+               AND (  cat_org_id = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
                AND mem_usr_id = ? -- $user->getValue(\'usr_id\')';
-    $pdoStatement = $gDb->queryPrepared($sql, array($orgId, DATE_NOW, DATE_NOW, $user->getValue('usr_id')));
+    $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, DATE_NOW, DATE_NOW, $user->getValue('usr_id')));
 
     while ($row = $pdoStatement->fetch())
     {
@@ -129,7 +127,7 @@ elseif ($getMode === 3)
     // User must not be in any other organization
     // User could not delete himself
     // Only administrators are allowed to do this
-    if ($isAlsoInOtherOrgas || (int) $gCurrentUser->getValue('usr_id') === (int) $user->getValue('usr_id') || !$gCurrentUser->isAdministrator())
+    if ($isAlsoInOtherOrgas || $gCurrentUserId === (int) $user->getValue('usr_id') || !$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

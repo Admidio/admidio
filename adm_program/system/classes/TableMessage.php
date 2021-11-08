@@ -352,7 +352,7 @@ class TableMessage extends TableAccess
      */
     public function getRecipientsNamesString($showFullUserNames = true)
     {
-        global $gCurrentUser, $gProfileFields, $gL10n;
+        global $gProfileFields, $gL10n;
 
         $recipients = $this->readRecipientsData();
         $recipientsString = '';
@@ -362,7 +362,7 @@ class TableMessage extends TableAccess
         {
             // PM has the conversation initiator and the receiver. Here we must check which
             // role the current user has and show the name of the other user.
-            if((int) $this->getValue('msg_usr_id_sender') === (int) $gCurrentUser->getValue('usr_id'))
+            if((int) $this->getValue('msg_usr_id_sender') === $GLOBALS['gCurrentUserId'])
             {
                 $recipientsString = $recipients[0]['name'];
             }
@@ -426,10 +426,8 @@ class TableMessage extends TableAccess
      */
     public function isUnread()
     {
-        global $gCurrentUser;
-
         if(TableMessage::MESSAGE_TYPE_PM && $this->getValue('msg_read') === 1
-        && $this->getValue('msg_usr_id_sender') != $gCurrentUser->getValue('usr_id'))
+        && $this->getValue('msg_usr_id_sender') != $GLOBALS['gCurrentUserId'])
         {
             return true;
         }
@@ -447,7 +445,7 @@ class TableMessage extends TableAccess
      */
     public function readRecipientsData()
     {
-        global $gCurrentUser, $gProfileFields;
+        global $gProfileFields;
 
         if(count($this->msgRecipientsArray) === 0)
         {
@@ -479,7 +477,7 @@ class TableMessage extends TableAccess
 
                     // PMs could have the current user as recipient than the sender is the recipient for this user
                     if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM
-                    && $recipientUsrId == $gCurrentUser->getValue('usr_id'))
+                    && $recipientUsrId == $GLOBALS['gCurrentUserId'])
                     {
                         $recipientUsrId = (int) $row['msg_usr_id_sender'];
                     }
@@ -523,8 +521,6 @@ class TableMessage extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentUser;
-
         if ($this->newRecord)
         {
             // Insert
@@ -546,7 +542,7 @@ class TableMessage extends TableAccess
             {
                 // now save the message to the database
                 $this->msgContentObject->setValue('msc_msg_id', $this->getValue('msg_id'));
-                $this->msgContentObject->setValue('msc_usr_id', $gCurrentUser->getValue('usr_id'));
+                $this->msgContentObject->setValue('msc_usr_id', $GLOBALS['gCurrentUserId']);
                 $returnValue = $this->msgContentObject->save();
             }
 

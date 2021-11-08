@@ -168,11 +168,11 @@ if($gDbType === 'pgsql')
            AND mem_end    > ? -- DATE_NOW
     INNER JOIN '.TBL_ROLES.'
             ON mem_rol_id = rol_id
-           AND rol_valid  = \'1\'
+           AND rol_valid  = true
     INNER JOIN '.TBL_CATEGORIES.'
             ON rol_cat_id = cat_id
-           AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-         WHERE usr_valid = \'1\'
+           AND cat_org_id = ? -- $gCurrentOrgId
+         WHERE usr_valid = true
            AND mem_rol_id '.$sqlRol.'
       ORDER BY days_to_bdate '.$sqlSort.', last_name, first_name';
 }
@@ -225,11 +225,11 @@ else
            AND mem_end    > ? -- DATE_NOW
     INNER JOIN '.TBL_ROLES.'
             ON mem_rol_id = rol_id
-           AND rol_valid  = \'1\'
+           AND rol_valid  = true
     INNER JOIN '.TBL_CATEGORIES.'
             ON rol_cat_id = cat_id
-           AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-         WHERE usr_valid = \'1\'
+           AND cat_org_id = ? -- $gCurrentOrgId
+         WHERE usr_valid = true
            AND mem_rol_id '.$sqlRol.'
       ORDER BY days_to_bdate '.$sqlSort.', last_name, first_name';
 }
@@ -245,7 +245,7 @@ $queryParams = array(
     $gProfileFields->getProperty('GENDER', 'usf_id'),
     DATE_NOW,
     DATE_NOW,
-    $gCurrentOrganization->getValue('org_id')
+    $gCurrentOrgId
     // TODO add more params
 );
 $birthdayStatement = $gDb->queryPrepared($sql, $queryParams);

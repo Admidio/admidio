@@ -82,7 +82,6 @@ if(!Component::isAdministrable($component))
 
 // create category object
 $category = new TableCategory($gDb);
-$currOrgId = (int) $gCurrentOrganization->getValue('org_id');
 
 if($getCatUuid !== '')
 {
@@ -97,7 +96,7 @@ if($getCatUuid !== '')
 else
 {
     // create a new category
-    $category->setValue('cat_org_id', $currOrgId);
+    $category->setValue('cat_org_id', $gCurrentOrgId);
     $category->setValue('cat_type', $getType);
 }
 
@@ -143,13 +142,13 @@ if($getMode === 1)
     || ($getType === 'ROL' && $category->getValue('cat_name_intern') === 'EVENTS'))
     {
         $category->setValue('cat_org_id', 0);
-        $sqlSearchOrga = ' AND (  cat_org_id = ? -- $currOrgId
+        $sqlSearchOrga = ' AND (  cat_org_id = ? -- $gCurrentOrgId
                                OR cat_org_id IS NULL )';
     }
     else
     {
-        $category->setValue('cat_org_id', $currOrgId);
-        $sqlSearchOrga = ' AND cat_org_id = ? -- $currOrgId';
+        $category->setValue('cat_org_id', $gCurrentOrgId);
+        $sqlSearchOrga = ' AND cat_org_id = ? -- $gCurrentOrgId';
     }
 
     if($category->getValue('cat_name') !== $_POST['cat_name'])
@@ -161,7 +160,7 @@ if($getMode === 1)
                    AND cat_name = ? -- $_POST[\'cat_name\']
                    AND cat_uuid <> ? -- $getCatUuid
                        '.$sqlSearchOrga;
-        $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $_POST['cat_name'], $getCatUuid, $currOrgId));
+        $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $_POST['cat_name'], $getCatUuid, $gCurrentOrgId));
 
         if($categoriesStatement->fetchColumn() > 0)
         {
@@ -241,10 +240,10 @@ if($getMode === 1)
     $sql = 'SELECT *
               FROM '.TBL_CATEGORIES.'
              WHERE cat_type = ? -- $getType
-               AND (  cat_org_id  = ? -- $currOrgId
+               AND (  cat_org_id  = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id ASC, cat_sequence ASC';
-    $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $currOrgId));
+    $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $gCurrentOrgId));
 
     while($row = $categoriesStatement->fetch())
     {

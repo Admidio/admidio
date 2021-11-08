@@ -42,7 +42,7 @@ if($getUserUuid !== '')
               FROM '.TBL_USERS.'
              WHERE usr_uuid = ? -- $getUserUuid
                AND usr_pw_reset_id = ? -- $getResetId
-               AND usr_valid  = \'1\' ';
+               AND usr_valid  = true ';
     $queryParams = array(
         $getUserUuid,
         $getResetId
@@ -198,8 +198,8 @@ elseif(!empty($_POST['recipient_email']))
                        AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
                        AND email.usd_value  = ? -- $_POST[\'recipient_email\']
                      WHERE LENGTH(usr_login_name) > 0
-                       AND rol_valid  = \'1\'
-                       AND usr_valid  = \'1\'
+                       AND rol_valid  = true
+                       AND usr_valid  = true
                        AND mem_begin <= ? -- DATE_NOW
                        AND mem_end    > ? -- DATE_NOW
                   GROUP BY usr_id';
@@ -224,8 +224,8 @@ elseif(!empty($_POST['recipient_email']))
                 INNER JOIN '.TBL_USERS.'
                         ON usr_id = mem_usr_id
                      WHERE usr_login_name = ? -- $_POST[\'recipient_email\']
-                       AND rol_valid  = \'1\'
-                       AND usr_valid  = \'1\'
+                       AND rol_valid  = true
+                       AND usr_valid  = true
                        AND mem_begin <= ? -- DATE_NOW
                        AND mem_end    > ? -- DATE_NOW
                   GROUP BY usr_id';

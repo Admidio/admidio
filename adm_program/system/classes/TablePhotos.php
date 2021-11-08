@@ -75,7 +75,7 @@ class TablePhotos extends TableAccess
         $sql = 'SELECT pho_id, pho_quantity
                   FROM '.TBL_PHOTOS.'
                  WHERE pho_pho_id_parent = ? -- $phoId
-                   AND pho_locked = \'0\'';
+                   AND pho_locked = false';
         $childAlbumsStatement = $this->db->queryPrepared($sql, array($phoId));
 
         while ($phoRow = $childAlbumsStatement->fetch())
@@ -246,15 +246,13 @@ class TablePhotos extends TableAccess
      */
     public function isVisible()
     {
-        global $gCurrentOrganization, $gCurrentUser;
-
         // current photo album must belong to current organization
-        if($this->getValue('pho_id') > 0 && (int) $this->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+        if($this->getValue('pho_id') > 0 && (int) $this->getValue('pho_org_id') !== $GLOBALS['gCurrentOrgId'])
         {
             return false;
         }
         // locked photo album could only be viewed by module administrators
-        elseif((int) $this->getValue('pho_locked') === 1 && !$gCurrentUser->editPhotoRight())
+        elseif((int) $this->getValue('pho_locked') === 1 && !$GLOBALS['gCurrentUser']->editPhotoRight())
         {
             return false;
         }
@@ -273,11 +271,9 @@ class TablePhotos extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentOrganization;
-
         if ($this->newRecord)
         {
-            $this->setValue('pho_org_id', (int) $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('pho_org_id', $GLOBALS['gCurrentOrgId']);
         }
 
         return parent::save($updateFingerPrint);
@@ -313,7 +309,7 @@ class TablePhotos extends TableAccess
             $sql = 'SELECT pho_id, pho_uuid, pho_begin, pho_quantity
                       FROM '.TBL_PHOTOS.'
                      WHERE pho_pho_id_parent = ? -- $phoId
-                       AND pho_locked = \'0\'
+                       AND pho_locked = false
                   ORDER BY pho_quantity DESC';
             $childAlbumsStatement = $this->db->queryPrepared($sql, array($phoId));
 

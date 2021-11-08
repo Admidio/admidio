@@ -529,11 +529,11 @@ $numberLastConfigurations    = 0;
 
 $sql = 'SELECT lst_id, lst_uuid, lst_name, lst_global, lst_timestamp
           FROM '.TBL_LISTS.'
-         WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-           AND (  lst_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
-               OR lst_global = \'1\')
+         WHERE lst_org_id = ? -- $gCurrentOrgId
+           AND (  lst_usr_id = ? -- $gCurrentUserId
+               OR lst_global = true)
       ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC';
-$configurationsStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), (int) $gCurrentUser->getValue('usr_id')));
+$configurationsStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $gCurrentUserId));
 
 $configurations = $configurationsStatement->fetchAll();
 
@@ -626,7 +626,7 @@ else
 }
 // your lists could be deleted, administrators are allowed to delete system configurations
 if(($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
-|| ((int) $gCurrentUser->getValue('usr_id') === (int) $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
+|| ($gCurrentUserId === (int) $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
 {
     $form->addButton('btn_delete', $gL10n->get('SYS_DELETE_CONFIGURATION'), array('icon' => 'fa-trash-alt'));
 }
@@ -672,11 +672,11 @@ else
                      INNER JOIN '.TBL_CATEGORIES.'
                              ON cat_id = rol_cat_id
                             AND cat_name_intern <> \'EVENTS\'
-                          WHERE rol_valid  = \'0\'
-                            AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                          WHERE rol_valid  = false
+                            AND (  cat_org_id  = ? -- $gCurrentOrgId
                                 OR cat_org_id IS NULL )
                        ORDER BY cat_sequence, rol_name';
-    $sqlData['params'] = array((int) $gCurrentOrganization->getValue('org_id'));
+    $sqlData['params'] = array($gCurrentOrgId);
 
     // check if there are roles that the current user could view
     $inactiveRolesStatement = $gDb->queryPrepared($sqlData['query'], $sqlData['params']);

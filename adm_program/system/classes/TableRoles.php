@@ -126,7 +126,7 @@ class TableRoles extends TableAccess
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
-                       AND mem_leader = \'0\'
+                       AND mem_leader = false
                        AND mem_begin <= ? -- DATE_NOW
                        AND mem_end    > ? -- DATE_NOW';
             $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), DATE_NOW, DATE_NOW));
@@ -152,7 +152,7 @@ class TableRoles extends TableAccess
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id  = ? -- $this->getValue(\'rol_id\')
                        AND mem_usr_id <> ? -- $exceptUserId
-                       AND mem_leader  = \'0\'
+                       AND mem_leader  = false
                        AND mem_begin  <= ? -- DATE_NOW
                        AND mem_end     > ? -- DATE_NOW
                        AND (mem_approved IS NULL
@@ -189,7 +189,7 @@ class TableRoles extends TableAccess
         if (!$countLeaders)
         {
             $sql .= '
-                AND mem_leader = \'0\' ';
+                AND mem_leader = false ';
         }
         $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
@@ -204,7 +204,7 @@ class TableRoles extends TableAccess
      */
     public function delete()
     {
-        global $gCurrentSession, $gL10n, $gCurrentOrganization;
+        global $gCurrentSession, $gL10n;
 
         $rolId = (int) $this->getValue('rol_id');
 
@@ -217,8 +217,8 @@ class TableRoles extends TableAccess
                         ON cat_id = rol_cat_id
                      WHERE rol_default_registration = 1
                        AND rol_id    <> ? -- $rolId
-                       AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-            $countRolesStatement = $this->db->queryPrepared($sql, array($rolId, (int) $gCurrentOrganization->getValue('org_id')));
+                       AND cat_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']';
+            $countRolesStatement = $this->db->queryPrepared($sql, array($rolId, $GLOBALS['gCurrentOrgId']));
 
             if ((int) $countRolesStatement->fetchColumn() === 0)
             {
@@ -303,7 +303,7 @@ class TableRoles extends TableAccess
      */
     public function getDefaultList()
     {
-        global $gSettingsManager, $gCurrentOrganization;
+        global $gSettingsManager;
 
         $defaultListId = (int) $this->getValue('rol_lst_id');
 
@@ -330,9 +330,9 @@ class TableRoles extends TableAccess
                 // if no default list was set than load another global list of this organization
                 $sql = 'SELECT MIN(lst_id) as lst_id
                           FROM '.TBL_LISTS.'
-                         WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                           AND lst_global = \'1\' ';
-                $statement = $this->db->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+                         WHERE lst_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']
+                           AND lst_global = true ';
+                $statement = $this->db->queryPrepared($sql, array($GLOBALS['gCurrentOrgId']));
                 $row = $statement->fetch();
                 $defaultListConfiguration = $row['lst_id'];
             }
@@ -484,7 +484,7 @@ class TableRoles extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        global $gCurrentOrganization, $gL10n, $gCurrentUser;
+        global $gL10n, $gCurrentUser;
 
         if($checkValue)
         {
@@ -508,8 +508,8 @@ class TableRoles extends TableAccess
                             ON cat_id = rol_cat_id
                          WHERE rol_default_registration = 1
                            AND rol_id    <> ? -- $this->getValue(\'rol_id\')
-                           AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-                $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), (int) $gCurrentOrganization->getValue('org_id')));
+                           AND cat_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']';
+                $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), $GLOBALS['gCurrentOrgId']));
 
                 if ((int) $pdoStatement->fetchColumn() === 0)
                 {
@@ -535,7 +535,7 @@ class TableRoles extends TableAccess
             $sql = 'UPDATE '.TBL_ROLES.'
                        SET rol_valid = ? -- $status
                      WHERE rol_id = ? -- $this->getValue(\'rol_id\')';
-            $this->db->queryPrepared($sql, array((int) $status, (int) $this->getValue('rol_id')));
+            $this->db->queryPrepared($sql, array((bool) $status, (int) $this->getValue('rol_id')));
 
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role

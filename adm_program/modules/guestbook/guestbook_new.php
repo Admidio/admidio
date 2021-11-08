@@ -62,7 +62,7 @@ if($getGboUuid !== '')
     $guestbook->readDataByUuid($getGboUuid);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-    if((int) $guestbook->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+    if((int) $guestbook->getValue('gbo_org_id') !== $gCurrentOrgId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -96,9 +96,9 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
     $sql = 'SELECT COUNT(*) AS count
               FROM '.TBL_GUESTBOOK.'
              WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->getInt(\'flooding_protection_time\')
-               AND gbo_org_id     = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND gbo_org_id     = ? -- $gCurrentOrgId
                AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_address\')';
-    $queryParams = array($gSettingsManager->getInt('flooding_protection_time'), (int) $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_address'));
+    $queryParams = array($gSettingsManager->getInt('flooding_protection_time'), $gCurrentOrgId, $guestbook->getValue('gbo_ip_address'));
     $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
     if($pdoStatement->fetchColumn() > 0)
@@ -124,7 +124,7 @@ else
 
 // show form
 $form = new HtmlForm('guestbook_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'headline' => $getHeadline, 'mode' => $mode)), $page);
-if ($gCurrentUser->getValue('usr_id') > 0)
+if ($gCurrentUserId > 0)
 {
     // registered users should not change their name
     $form->addInput(

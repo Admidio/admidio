@@ -258,7 +258,7 @@ switch($getMode)
                 elseif(str_starts_with($key, 'SYSMAIL_'))
                 {
                     $text = new TableText($gDb);
-                    $text->readDataByColumns(array('txt_org_id' => (int) $gCurrentOrganization->getValue('org_id'), 'txt_name' => $key));
+                    $text->readDataByColumns(array('txt_org_id' => $gCurrentOrgId, 'txt_name' => $key));
                     $text->setValue('txt_text', $value);
                     $text->save();
                 }
@@ -398,10 +398,10 @@ switch($getMode)
         // create all necessary data for this organization
         $settingsManager =& $newOrganization->getSettingsManager();
         $settingsManager->setMulti($defaultOrgPreferences, false);
-        $newOrganization->createBasicData((int) $gCurrentUser->getValue('usr_id'));
+        $newOrganization->createBasicData($gCurrentUserId);
 
         // now refresh the session organization object because of the new organization
-        $currentOrganizationId = (int) $gCurrentOrganization->getValue('org_id');
+        $currentOrganizationId = $gCurrentOrgId;
         $gCurrentOrganization = new Organization($gDb, $currentOrganizationId);
 
         // if installation of second organization than show organization select at login
@@ -467,7 +467,7 @@ switch($getMode)
 
         // set email data
         $email->setSender($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
-        $email->addRecipientsByUserId((int) $gCurrentUser->getValue('usr_id'));
+        $email->addRecipientsByUserId($gCurrentUserId);
         $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname'))));
         $email->setTemplateText(
             $gL10n->get('SYS_EMAIL_FUNCTION_TEST_CONTENT', array($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'))),

@@ -68,7 +68,7 @@ if($getMode !== 2)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
-    elseif((int) $list->getValue('lst_usr_id') !== (int) $gCurrentUser->getValue('usr_id')
+    elseif((int) $list->getValue('lst_usr_id') !== $gCurrentUserId
     && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

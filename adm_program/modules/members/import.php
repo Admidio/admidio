@@ -153,25 +153,25 @@ $condition = '';
 if(!$gCurrentUser->manageRoles())
 {
     // keine Rollen mit Rollenzuordnungsrecht anzeigen
-    $condition .= ' AND rol_assign_roles = \'0\' ';
+    $condition .= ' AND rol_assign_roles = false ';
 }
 if(!$gCurrentUser->isAdministrator())
 {
     // Don't show administrator role
-    $condition .= ' AND rol_administrator = \'0\' ';
+    $condition .= ' AND rol_administrator = false ';
 }
 
 $sql = 'SELECT rol_id, rol_name, cat_name
           FROM '.TBL_ROLES.'
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
-         WHERE rol_valid   = \'1\'
+         WHERE rol_valid   = true
            AND cat_name_intern <> \'EVENTS\'
-           AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+           AND (  cat_org_id  = ? -- $gCurrentOrgId
                OR cat_org_id IS NULL )
                '.$condition.'
       ORDER BY cat_sequence, rol_name';
-$statement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
+$statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 $roles = array();
 
 while($row = $statement->fetch())
