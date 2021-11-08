@@ -1223,8 +1223,8 @@ $formCategoryReport = new HtmlForm(
     );
 
 $formCategoryReport->addCheckbox(
-    'category_report_enable_module', $gL10n->get('$SYS_ENABLE_CATEGORY_REPORT'), (bool) $formValues['category_report_enable_module'],
-    array('helpTextIdInline' => '$SYS_ENABLE_CATEGORY_REPORT_DESC')
+    'category_report_enable_module', $gL10n->get('SYS_ENABLE_CATEGORY_REPORT'), (bool) $formValues['category_report_enable_module'],
+    array('helpTextIdInline' => 'SYS_ENABLE_CATEGORY_REPORT_DESC')
     );
 // read all global lists
 $sqlData = array();
@@ -1253,8 +1253,8 @@ $formMessages = new HtmlForm(
 );
 
 $formMessages->addCheckbox(
-    'enable_mail_module', $gL10n->get('SYS_ACTIVATE_EMAIL_MODULE'), (bool) $formValues['enable_mail_module'],
-    array('helpTextIdInline' => 'SYS_ACTIVATE_EMAIL_MODULE_DESC')
+    'enable_mail_module', $gL10n->get('SYS_ACTIVATE_EMAILS'), (bool) $formValues['enable_mail_module'],
+    array('helpTextIdInline' => 'SYS_ACTIVATE_EMAILS_DESC')
 );
 $formMessages->addCheckbox(
     'enable_pm_module', $gL10n->get('SYS_ACTIVATE_PM_MODULE'), (bool) $formValues['enable_pm_module'],

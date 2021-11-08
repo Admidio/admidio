@@ -508,8 +508,8 @@
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Aktive og tidligere medlemmer</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Aktive og tidligere</string>
   <string name="SYS_ACTIVE_MEMBERS">Aktive Medlemmer</string>
-  <string name="SYS_ACTIVATE_EMAIL_MODULE">Aktiver e-mail modul</string>
-  <string name="SYS_ACTIVATE_EMAIL_MODULE_DESC">E-mail-modulet kan aktiveres eller deaktiveres via denne indstilling. Hvis serveren ikke understøtter e-mail, skal modulet være deaktiveret. (Standard: aktiveret)</string>
+  <string name="SYS_ACTIVATE_EMAILS">Aktiver e-mail modul</string>
+  <string name="SYS_ACTIVATE_EMAILS_DESC">E-mail-modulet kan aktiveres eller deaktiveres via denne indstilling. Hvis serveren ikke understøtter e-mail, skal modulet være deaktiveret. (Standard: aktiveret)</string>
   <string name="SYS_ACTIVATE_GREETING_CARDS">Aktiverer postkort modul</string>
   <string name="SYS_ACTIVATE_GREETING_CARDS_DESC">Lykønskningskort modulet kan aktiveres eller deaktiveres via denne indstilling. Hvis serveren ikke understøtter e-mail, skal modulet være deaktiveret. Dette modul er generelt kun tilgængeligt for registrerede brugere. (Standard: ja)</string>
   <string name="SYS_ACTIVATE_PM_MODULE">Aktiver private beskeder</string>

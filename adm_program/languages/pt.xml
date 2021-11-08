@@ -424,8 +424,8 @@
   <string name="SYS_WANT_CONFIGURATION_FOR_ALL_USERS">Tornar a configuração de lista disponível para todos os usuários?</string>
   <string name="SYS_Z_TO_A">Z à A</string>
   <!--Phrases only in Mailmodule-->
-  <string name="SYS_ACTIVATE_EMAIL_MODULE">A ativar o módulo de e-mail</string>
-  <string name="SYS_ACTIVATE_EMAIL_MODULE_DESC">O módulo de e-mail pode ser ativado ou desativado por esta configuração. Se o servidor não possui suporte à e-mail, o módulo deve ficar desativado. (Padrão: ativado)</string>
+  <string name="SYS_ACTIVATE_EMAILS">A ativar o módulo de e-mail</string>
+  <string name="SYS_ACTIVATE_EMAILS_DESC">O módulo de e-mail pode ser ativado ou desativado por esta configuração. Se o servidor não possui suporte à e-mail, o módulo deve ficar desativado. (Padrão: ativado)</string>
   <string name="SYS_ADD_ATTACHMENT">Anexar ficheiro</string>
   <string name="SYS_ATTACHMENT">Anexo</string>
   <string name="SYS_ATTACHMENT_SIZE">Tamanho máximo dos anexos de e-mail</string>

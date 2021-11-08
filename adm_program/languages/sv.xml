@@ -508,8 +508,8 @@
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Aktiva och tidigare medlemmar</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Aktiv och tidigare</string>
   <string name="SYS_ACTIVE_MEMBERS">Profilbilder av nyligen aktiva medlemmar</string>
-  <string name="SYS_ACTIVATE_EMAIL_MODULE">Aktivering av e-postmodul</string>
-  <string name="SYS_ACTIVATE_EMAIL_MODULE_DESC">E-postmodulen kan aktiveras eller inaktiveras via denna inställning. Om servern inte stöder e-post bör modulen vara inaktiverad. (Standard: aktiverad)</string>
+  <string name="SYS_ACTIVATE_EMAILS">Aktivering av e-postmodul</string>
+  <string name="SYS_ACTIVATE_EMAILS_DESC">E-postmodulen kan aktiveras eller inaktiveras via denna inställning. Om servern inte stöder e-post bör modulen vara inaktiverad. (Standard: aktiverad)</string>
   <string name="SYS_ACTIVATE_GREETING_CARDS">Aktivering av gratulationskortmodul</string>
   <string name="SYS_ACTIVATE_GREETING_CARDS_DESC">Gratulationskortmodulen kan aktiveras eller inaktiveras via denna inställning. Om servern inte stöder e-post bör modulen vara inaktiverad. Denna modul är generellt endast tillgänglig för registrerade användare. (Standard: ja)</string>
   <string name="SYS_ACTIVATE_PM_MODULE">Aktivera privata meddelanden</string>

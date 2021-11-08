@@ -465,8 +465,8 @@
   <string name="SYS_WANT_CONFIGURATION_FOR_ALL_USERS">¿Quisiera que la configuración de la lista seleccionada esté disponible a todos los usuarios?</string>
   <string name="SYS_Z_TO_A">Z hasta A</string>
   <!--Phrases only in Mailmodule-->
-  <string name="SYS_ACTIVATE_EMAIL_MODULE">Activar el módulo de correo</string>
-  <string name="SYS_ACTIVATE_EMAIL_MODULE_DESC">El módulo de correo electrónico puede ser habilitado o deshabilitado a través de este campo. Si el servidor no soporta el servicio de correo electrónico, este módulo deberá ser desactivado. (Predeterminado: habilitado)</string>
+  <string name="SYS_ACTIVATE_EMAILS">Activar el módulo de correo</string>
+  <string name="SYS_ACTIVATE_EMAILS_DESC">El módulo de correo electrónico puede ser habilitado o deshabilitado a través de este campo. Si el servidor no soporta el servicio de correo electrónico, este módulo deberá ser desactivado. (Predeterminado: habilitado)</string>
   <string name="SYS_ADD_ATTACHMENT">Añadir un anexo</string>
   <string name="SYS_ATTACHMENT">Anexo</string>
   <string name="SYS_ATTACHMENT_SIZE">Tamaño máximo de archivos adjuntos</string>

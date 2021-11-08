@@ -508,8 +508,8 @@
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Actieve en voormalige leden</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Actieve en voormalige</string>
   <string name="SYS_ACTIVE_MEMBERS">Actieve leden</string>
-  <string name="SYS_ACTIVATE_EMAIL_MODULE">E-mail module activeren</string>
-  <string name="SYS_ACTIVATE_EMAIL_MODULE_DESC">De e-mail module kan geactiveerd en gedeactiveerd worden via deze instelling. Als de server het versturen van e-mails niet ondersteunt, deze module svp deactiveren. (Standaard: geactiveerd)</string>
+  <string name="SYS_ACTIVATE_EMAILS">E-mail module activeren</string>
+  <string name="SYS_ACTIVATE_EMAILS_DESC">De e-mail module kan geactiveerd en gedeactiveerd worden via deze instelling. Als de server het versturen van e-mails niet ondersteunt, deze module svp deactiveren. (Standaard: geactiveerd)</string>
   <string name="SYS_ACTIVATE_GREETING_CARDS">Ecard module activeren</string>
   <string name="SYS_ACTIVATE_GREETING_CARDS_DESC">De Ecard module kan geactiveerd en gedeactiveerd worden via deze instellingen. Als de server geen e-mails kan sturen, deze module deactiveren. Alleen ingelogde gebruikers hebben toegang tot deze module. (Standaard: ja)</string>
   <string name="SYS_ACTIVATE_PM_MODULE">Privéberichten activeren</string>

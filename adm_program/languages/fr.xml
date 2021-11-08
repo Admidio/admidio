@@ -292,8 +292,8 @@
   <string name="SYS_WEBLINKS">Liens internet</string>
   <string name="SYS_WEBLINKS_DESC">Les liens vers des sites web intéressants peuvent être enregistrés ici et regroupés selon différentes catégories.</string>
   <!--Phrases only in Mailmodule-->
-  <string name="SYS_ACTIVATE_EMAIL_MODULE">Activer le module de courriel</string>
-  <string name="SYS_ACTIVATE_EMAIL_MODULE_DESC">Le module courriel peut être activé ou désactivé avec cette option. Si le serveur n\'autorise pas d\'envoi de mail, le module doit être désactivé. (par défaut: Activé)</string>
+  <string name="SYS_ACTIVATE_EMAILS">Activer le module de courriel</string>
+  <string name="SYS_ACTIVATE_EMAILS_DESC">Le module courriel peut être activé ou désactivé avec cette option. Si le serveur n\'autorise pas d\'envoi de mail, le module doit être désactivé. (par défaut: Activé)</string>
   <string name="SYS_ADD_ATTACHMENT">Ajouter une pièce jointe</string>
   <string name="SYS_ATTACHMENT">Annexes</string>
   <string name="SYS_ATTACHMENT_SIZE">Taille maximale du fichier pour les pièces jointes</string>

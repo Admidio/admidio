@@ -524,9 +524,9 @@
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Active and former members</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Active and former</string>
   <string name="SYS_ACTIVE_MEMBERS">Active Members</string>
-  <string name="SYS_ACTIVATE_EMAIL_MODULE">Activating e-mail module</string>
-  <string name="SYS_ACTIVATE_EMAIL_MODULE_DESC">The e-mail module can be activated or deactivated via this setting. If the server does not support e-mail, the module should be disabled. (Default: enabled)</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS">Activating greeting card module</string>
+  <string name="SYS_ACTIVATE_EMAILS">Activate e-mails</string>
+  <string name="SYS_ACTIVATE_EMAILS_DESC">The e-mails within messages can be activated or deactivated via this setting. If the server does not support e-mail, the option should be disabled. (Default: enabled)</string>
+  <string name="SYS_ACTIVATE_GREETING_CARDS">Activate greeting card module</string>
   <string name="SYS_ACTIVATE_GREETING_CARDS_DESC">The greeting card module can be activated or deactivated via this setting. If the server does not support e-mail, the module should be disabled. This module is generally only available to registered users. (Default: yes)</string>
   <string name="SYS_ACTIVATE_PM_MODULE">Activate private messages</string>
   <string name="SYS_ACTIVATE_PM_MODULE_DESC">Private messages can be enabled or disabled using this setting. (Default: enabled)</string>
@@ -818,8 +818,8 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-mail to members</string>
   <string name="SYS_EMAIL_TO_LIST">E-mail to list</string>
   <string name="SYS_EMPTY">Empty</string>
-  <string name="$SYS_ENABLE_CATEGORY_REPORT">Activate category report</string>
-  <string name="$SYS_ENABLE_CATEGORY_REPORT_DESC">Category report creates a list of all roles and categories a member has. The authorization "View membership lists of all roles" is required for operation. (Default: yes)</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT">Activate category report</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Category report creates a list of all roles and categories a member has. The authorization "View membership lists of all roles" is required for operation. (Default: yes)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activate documents &amp; files module</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">The documents &amp; files module can be activated or deactivated via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Enable groups &amp; roles module</string>

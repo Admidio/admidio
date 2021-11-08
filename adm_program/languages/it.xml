@@ -255,7 +255,7 @@
   <string name="SYS_WANT_CONFIGURATION_FOR_ALL_USERS">Ti piacerebbe che la configurazione dell\'elenco fosse resa disponibile per tutti gli utenti?</string>
   <string name="SYS_Z_TO_A">da Z ad A</string>
   <!--Phrases only in Mailmodule-->
-  <string name="SYS_ACTIVATE_EMAIL_MODULE">Attivazione modulo email</string>
+  <string name="SYS_ACTIVATE_EMAILS">Attivazione modulo email</string>
   <string name="SYS_ADD_ATTACHMENT">Allega file</string>
   <string name="SYS_ATTACHMENT">Allegati:</string>
   <string name="SYS_ATTACHMENT_SIZE">Grandezza massima degli allegati email</string>
