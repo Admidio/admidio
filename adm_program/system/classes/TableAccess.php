@@ -536,7 +536,6 @@ class TableAccess
             // fields of other tables must not appear in insert/update
             if(str_starts_with($key, $this->columnPrefix . '_')) {
                 if ($this->columnsInfos[$key]['type'] === 'boolean' && DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
-                    $GLOBALS['gLogger']->error('PGSQL');
                     if ($value === 1 || $value === '1') {
                         $value = 'true';
                     } else {
@@ -687,7 +686,6 @@ class TableAccess
         // General plausibility checks based on the field type
         if ($checkValue && $newValue !== '')
         {
-            $GLOBALS['gLogger']->error($columnName.'::'.$this->tableName.'::'.$newValue.'::'.$this->columnsInfos[$columnName]['type']);
             switch ($this->columnsInfos[$columnName]['type'])
             {
                 // Numeric
