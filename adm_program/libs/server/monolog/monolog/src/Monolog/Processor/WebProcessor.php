@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Monolog package.
@@ -19,7 +19,7 @@ namespace Monolog\Processor;
 class WebProcessor implements ProcessorInterface
 {
     /**
-     * @var array|\ArrayAccess
+     * @var array<string, mixed>|\ArrayAccess<string, mixed>
      */
     protected $serverData;
 
@@ -28,19 +28,19 @@ class WebProcessor implements ProcessorInterface
      *
      * Array is structured as [key in record.extra => key in $serverData]
      *
-     * @var array
+     * @var array<string, string>
      */
-    protected $extraFields = array(
+    protected $extraFields = [
         'url'         => 'REQUEST_URI',
         'ip'          => 'REMOTE_ADDR',
         'http_method' => 'REQUEST_METHOD',
         'server'      => 'SERVER_NAME',
         'referrer'    => 'HTTP_REFERER',
-    );
+    ];
 
     /**
-     * @param array|\ArrayAccess $serverData  Array or object w/ ArrayAccess that provides access to the $_SERVER data
-     * @param array|null         $extraFields Field names and the related key inside $serverData to be added. If not provided it defaults to: url, ip, http_method, server, referrer
+     * @param array<string, mixed>|\ArrayAccess<string, mixed>|null $serverData  Array or object w/ ArrayAccess that provides access to the $_SERVER data
+     * @param array<string, string>|null                            $extraFields Field names and the related key inside $serverData to be added. If not provided it defaults to: url, ip, http_method, server, referrer
      */
     public function __construct($serverData = null, array $extraFields = null)
     {
@@ -70,10 +70,9 @@ class WebProcessor implements ProcessorInterface
     }
 
     /**
-     * @param  array $record
-     * @return array
+     * {@inheritDoc}
      */
-    public function __invoke(array $record)
+    public function __invoke(array $record): array
     {
         // skip processing if for some reason request data
         // is not present (CLI or wonky SAPIs)
@@ -86,12 +85,7 @@ class WebProcessor implements ProcessorInterface
         return $record;
     }
 
-    /**
-     * @param  string $extraName
-     * @param  string $serverName
-     * @return $this
-     */
-    public function addExtraField($extraName, $serverName)
+    public function addExtraField(string $extraName, string $serverName): self
     {
         $this->extraFields[$extraName] = $serverName;
 
@@ -99,13 +93,13 @@ class WebProcessor implements ProcessorInterface
     }
 
     /**
-     * @param  array $extra
-     * @return array
+     * @param  mixed[] $extra
+     * @return mixed[]
      */
-    private function appendExtraFields(array $extra)
+    private function appendExtraFields(array $extra): array
     {
         foreach ($this->extraFields as $extraName => $serverName) {
-            $extra[$extraName] = isset($this->serverData[$serverName]) ? $this->serverData[$serverName] : null;
+            $extra[$extraName] = $this->serverData[$serverName] ?? null;
         }
 
         return $extra;

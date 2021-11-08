@@ -21,7 +21,7 @@
         "dapphp/securimage": "^3.6",
         "hautelook/phpass": "^1.0",
         "vanilla/htmlawed": "^2.0",
-        "monolog/monolog": "^1.21",
+        "monolog/monolog": "^2.0",
         "phpmailer/phpmailer": "^6.4",
         "phpoffice/phpspreadsheet": "^1.18",
         "ramsey/uuid": "^4.1",
