@@ -516,7 +516,7 @@
   <string name="SYS_ACTIVATE_PM_MODULE_DESC">Privata meddelanden kan aktiveras eller inaktiveras med den här inställningen. (Standard: aktiverad)</string>
   <string name="SYS_ACTIVATE_ROLE">&quot;Aktivera roll&quot;</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Om du aktiverar rollen #VAR1_BOLD# tilldelas rollmedlemmarna igen behörigheter och rollen kan väljas i alla listor. \n\n Vill du aktivera rollerna igen?</string>
-  <string name="SYS_ACTIVATED">Aktiv</string>
+  <string name="SYS_ENABLED">Aktiv</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Aktiva grupper och roller</string>
   <string name="SYS_ADD_ATTACHMENT">Bifoga fil</string>
   <string name="SYS_ADD_COLUMN">Lägg till kolumn</string>
@@ -698,7 +698,7 @@
   <string name="SYS_DAYS_VAR">#VAR1# dagar</string>
   <string name="SYS_DEACTIVATE_ROLE">Inaktivera roll</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Om du inaktiverar roll #VAR1_BOLD# kan rollen inte längre användas och tilldelas objekt. På samma sätt är alla rättigheter till denna roll inte längre effektiva. Rollen med dess inställning och alla medlemsmappningar finns dock kvar och kan återaktiveras vid ett senare tillfälle.</string>
-  <string name="SYS_DEACTIVATED">Inaktiv</string>
+  <string name="SYS_DISABLED">Inaktiv</string>
   <string name="SYS_DEBUG_OUTPUT">Debug -utdata</string>
   <string name="SYS_DECIMAL_NUMBER">Decimaltal.</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardtilldelning för registrering</string>

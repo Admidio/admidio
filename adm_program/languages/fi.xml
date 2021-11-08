@@ -699,7 +699,7 @@
  <string name="SYS_ACTIVE_MEMBERS">Aktiiviset jäsenet</string>
  <string name="SYS_ACTIVATE_ROLE">Aktivoi rooli</string>
  <string name="SYS_ACTIVATE_ROLE_DESC">Jos aktivoit roolin #VAR1_BOLD#uudelleen, roolin jäsenille annetaan uudelleen käyttöoikeudet ja rooli on valittavissa kaikissa luetteloissa. \n \nHaluatko aktivoida roolit uudelleen?</string>
- <string name="SYS_ACTIVATED">Aktiivinen</string>
+ <string name="SYS_ENABLED">Aktiivinen</string>
  <string name="SYS_ACTIVE_GROUPS_ROLES">Aktiiviset ryhmät ja roolit</string>
  <string name="SYS_ADD_COLUMN">Lisää sarake</string>
  <string name="SYS_ADD_COLUMNS_DESC">Määritä mikä tahansa määrä sarakkeita, jotka vastaavat alla olevan taulukon profiilikenttiä. Lisäksi voit määrittää oletuslajittelun ja lisätä ehtoja, joiden mukaisesti kyseiset jäsenet suodatetaan.</string>
@@ -841,7 +841,7 @@
  <string name="SYS_DAYS_VAR">#VAR1# päivää</string>
  <string name="SYS_DEACTIVATE_ROLE">Poista rooli käytöstä</string>
  <string name="SYS_DEACTIVATE_ROLE_DESC">Jos poistat roolin #VAR1_BOLD#käytöstä, roolia ei voi enää käyttää ja määrittää objekteille. Samoin kaikki tämän roolin oikeudet eivät ole enää tehokkaita. Rooli sen asetuksineen ja jäsenmäärityksineen säilyy kuitenkin ja voidaan aktivoida uudelleen myöhemmin.</string>
- <string name="SYS_DEACTIVATED">Ei -aktiivinen</string>
+ <string name="SYS_DISABLED">Ei -aktiivinen</string>
  <string name="SYS_DEBUG_MODE">Virheenkorjaustila</string>
  <string name="SYS_DECIMAL_NUMBER">desimaaliluku</string>
  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Rekisteröinnin oletusmääritys</string>

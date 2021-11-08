@@ -876,8 +876,8 @@ $formAnnouncements = new HtmlForm(
 );
 
 $selectBoxEntries = array(
-    '0' => $gL10n->get('SYS_DEACTIVATED'),
-    '1' => $gL10n->get('SYS_ACTIVATED'),
+    '0' => $gL10n->get('SYS_DISABLED'),
+    '1' => $gL10n->get('SYS_ENABLED'),
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formAnnouncements->addSelectBox(
@@ -979,8 +979,8 @@ $formPhotos = new HtmlForm(
 );
 
 $selectBoxEntries = array(
-    '0' => $gL10n->get('SYS_DEACTIVATED'),
-    '1' => $gL10n->get('SYS_ACTIVATED'),
+    '0' => $gL10n->get('SYS_DISABLED'),
+    '1' => $gL10n->get('SYS_ENABLED'),
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formPhotos->addSelectBox(
@@ -1051,8 +1051,8 @@ $formGuestbook = new HtmlForm(
 );
 
 $selectBoxEntries = array(
-    '0' => $gL10n->get('SYS_DEACTIVATED'),
-    '1' => $gL10n->get('SYS_ACTIVATED'),
+    '0' => $gL10n->get('SYS_DISABLED'),
+    '1' => $gL10n->get('SYS_ENABLED'),
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formGuestbook->addSelectBox(
@@ -1309,8 +1309,8 @@ $formMessages->addCheckbox(
     array('helpTextIdInline' => 'SYS_HTML_MAILS_REGISTERED_USERS_DESC')
 );
 $selectBoxEntries = array(
-    '0' => $gL10n->get('SYS_DEACTIVATED'),
-    '1' => $gL10n->get('SYS_ACTIVATED'),
+    '0' => $gL10n->get('SYS_DISABLED'),
+    '1' => $gL10n->get('SYS_ENABLED'),
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formMessages->addSelectBox(
@@ -1379,8 +1379,8 @@ $formEvents = new HtmlForm(
 );
 
 $selectBoxEntries = array(
-    '0' => $gL10n->get('SYS_DEACTIVATED'),
-    '1' => $gL10n->get('SYS_ACTIVATED'),
+    '0' => $gL10n->get('SYS_DISABLED'),
+    '1' => $gL10n->get('SYS_ENABLED'),
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formEvents->addSelectBox(
@@ -1474,8 +1474,8 @@ $formWeblinks = new HtmlForm(
 );
 
 $selectBoxEntries = array(
-    '0' => $gL10n->get('SYS_DEACTIVATED'),
-    '1' => $gL10n->get('SYS_ACTIVATED'),
+    '0' => $gL10n->get('SYS_DISABLED'),
+    '1' => $gL10n->get('SYS_ENABLED'),
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formWeblinks->addSelectBox(

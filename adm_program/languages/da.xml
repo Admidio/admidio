@@ -516,7 +516,7 @@
   <string name="SYS_ACTIVATE_PM_MODULE_DESC">Private beskeder kan aktiveres eller deaktiveres ved hjælp af denne indstilling. (Standard: aktiveret)</string>
   <string name="SYS_ACTIVATE_ROLE">Aktiver rolle</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Hvis du genaktiverer rollen #VAR1_BOLD#, tildeles rollemedlemmerne igen tilladelser, og rollen kan vælges i alle lister.\n\nVil du aktivere rollen igen?</string>
-  <string name="SYS_ACTIVATED">Aktiveret</string>
+  <string name="SYS_ENABLED">Aktiveret</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Aktive grupper og roller</string>
   <string name="SYS_ADD_ATTACHMENT">Vedhæft fil</string>
   <string name="SYS_ADD_COLUMN">Tilføj kolonne</string>
@@ -698,7 +698,7 @@
   <string name="SYS_DAYS_VAR">#VAR1# Dage</string>
   <string name="SYS_DEACTIVATE_ROLE">Deaktiver rolle</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Hvis du deaktiverer rolle #VAR1_BOLD#, kan rollen ikke længere anvendes og tildeles til objekter. Samtidigt, så er rettighederne for denne rolle ikke længere aktive. Rollen, med alle indstillinger og medlemmer forbliver dog og kan reaktiveres igen.</string>
-  <string name="SYS_DEACTIVATED">Inaktiv</string>
+  <string name="SYS_DISABLED">Inaktiv</string>
   <string name="SYS_DEBUG_OUTPUT">Debug resultat</string>
   <string name="SYS_DECIMAL_NUMBER">Decimal nummer</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standard tildeling ved registrering</string>

@@ -2,7 +2,7 @@
 <resources>
   <!--Phrases only in CategoryReportmodule-->
   <string name="SYS_ADD_ANOTHER_CONFIG">Ajouter une configuration supplémentaire</string>
-  <string name="SYS_ADDITIONAL_COLS">Colonnes supplémentaires</string>
+  <string name="SYS_ADDITIONAL_COLUMNS">Colonnes supplémentaires</string>
   <string name="SYS_CAT_SELECTION">Sélection de catégorie</string>
   <string name="SYS_CAT_SELECTION_CONF_DESC">Par la sélection de catégorie, une configuration peut être limitée aux membres des rôles des catégories sélectionnées.\n\n Si aucune restriction ne doit être faite, les deux champs (sélection de rôle et sélection de catégorie) doivent être laissées vides.</string>
   <string name="SYS_CAT_SELECTION_COL_DESC">Le nom saisi ici apparaît dans "Sélectionner une configuration".</string>
@@ -732,7 +732,7 @@
   <string name="SYS_ACTIVE_MEMBERS">Membres actifs</string>
   <string name="SYS_ACTIVATE_ROLE">Activer le rôle</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Si tu réactives le rôle #VAR1_BOLD#, les membres du rôle se voient attribuer à nouveau les droits et le rôle apparaît dans toutes les listes.\n\nVeux-tu réactiver ce rôle?</string>
-  <string name="SYS_ACTIVATED">Activé</string>
+  <string name="SYS_ENABLED">Activé</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Groupes et rôles actifs</string>
   <string name="SYS_ADD_COLUMN">Ajouter une colonne</string>
   <string name="SYS_ADD_COLUMNS_DESC">Dans le tableau suivant, affecte des champs de profil à n\'importe quel nombre de colonnes. En outre, tu peux spécifier l\'ordre de tri par défaut et ajouter des conditions aux champs par lesquels les membres respectifs doivent être filtrés.</string>
@@ -876,7 +876,7 @@
   <string name="SYS_DAYS_VAR">#VAR1# Jours</string>
   <string name="SYS_DEACTIVATE_ROLE">Désactiver le rôle</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Si vous désactivez le rôle # VAR1_BOLD #, le rôle ne peut plus être utilisé et attribué à des objets. De même, tous les droits de ce rôle ne sont plus effectifs. Cependant, le rôle avec son paramètre et tous les mappages de membres reste et peut être réactivé à une date ultérieure.</string>
-  <string name="SYS_DEACTIVATED">Désactivé</string>
+  <string name="SYS_DISABLED">Désactivé</string>
   <string name="SYS_DEBUG_MODE">Mode débogage</string>
   <string name="SYS_DECIMAL_NUMBER">Décimale</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Assignation standard pour l\'enregistrement</string>

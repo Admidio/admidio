@@ -390,13 +390,13 @@ class CategoryReport
     	}
     	//Zusatzspalte fuer die Gesamtrollenuebersicht erzeugen
     	$this->headerSelection[$i]['id']   	   = 'adummy';          //a wie additional
-        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLS');
-		$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLEMEMBERSHIPS');
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');
+		$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLE_MEMBERSHIPS');
 		$i++;
 
 		//Zusatzspalte fuer die Anzahl erzeugen
     	$this->headerSelection[$i]['id']   	   = 'ndummy';          //n wie number
-        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLS');
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');
 		$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_ROW') . ')';
 	}
 

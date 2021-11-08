@@ -516,7 +516,7 @@
   <string name="SYS_ACTIVATE_PM_MODULE_DESC">Privéberichten kunnen worden in- of uitgeschakeld via deze instelling. (Standaard: ingeschakeld)</string>
   <string name="SYS_ACTIVATE_ROLE">Activeer rol</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Als u rol #VAR1_BOLD# opnieuw activeert, krijgen de rolleden de rechten opnieuw toegewezen en wordt de rol in alle lijsten weergegeven.\n\nWilt u de rollen opnieuw activeren?</string>
-  <string name="SYS_ACTIVATED">Geactiveerd</string>
+  <string name="SYS_ENABLED">Geactiveerd</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Actieve groepen en rollen</string>
   <string name="SYS_ADD_ATTACHMENT">Bestand bijvoegen</string>
   <string name="SYS_ADD_COLUMN">Kolom toevoegen</string>
@@ -698,7 +698,7 @@
   <string name="SYS_DAYS_VAR">#VAR1# dagen</string>
   <string name="SYS_DEACTIVATE_ROLE">Rol deactiveren</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Als u rol #VAR1_BOLD# deactiveert, kan de rol niet langer worden gebruikt en toegewezen worden aan objecten. Ook zijn alle rechten van deze rol niet langer effectief. De rol met zijn instellingen en lid toewijzingen blijft echter bestaan en kan later opnieuw worden geactiveerd.</string>
-  <string name="SYS_DEACTIVATED">Gedeactiveerd</string>
+  <string name="SYS_DISABLED">Gedeactiveerd</string>
   <string name="SYS_DEBUG_OUTPUT">Uitvoer debuggen</string>
   <string name="SYS_DECIMAL_NUMBER">Decimaal cijfer</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standaard toewijzing bij registratie</string>

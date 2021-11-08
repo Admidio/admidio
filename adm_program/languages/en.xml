@@ -1,21 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in CategoryReportmodule-->
-  <string name="SYS_ADD_ANOTHER_CONFIG">Add further configuration</string>
-  <string name="SYS_ADDITIONAL_COLS">Additional cols</string>
-  <string name="SYS_CAT_SELECTION">Category selection</string>
-  <string name="SYS_CAT_SELECTION_CONF_DESC">The category selection can be used to restrict a configuration to the members of roles of the selected categories.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>
-  <string name="SYS_COLUMN_SELECTION">Column selection</string>
-  <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns to be displayed in the list.\n\n Inactive roles are marked with (*).</string>
-  <string name="SYS_CONFIGURATIONS">Configurations</string>
-  <string name="SYS_CONFIGURATIONS_HEADER">Any number of configurations can be created here for the category report. In the screen display, one of these configurations is used as the basis for the display in each case via "Select configuration".</string>
-  <string name="SYS_FILTER_TO_EXPORT">Filter to export</string>
-  <string name="SYS_GENERAL_ROLE_ASSIGNMENT">General role assignment</string>
-  <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
-  <string name="SYS_ROLE_SELECTION">Role selection</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">The role selection can be restricted a configuration to the members of the selected roles.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>
-  <string name="SYS_ROLEMEMBERSHIPS">Role memberships</string>
-  <string name="SYS_ROLE_WITHOUT_LEADER">Role without leader</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Add event to calendar</string>
   <string name="DAT_ALL_DAY">Full time</string>
@@ -527,19 +511,20 @@
   <string name="SYS_ACTIVATE_EMAILS">Activate e-mails</string>
   <string name="SYS_ACTIVATE_EMAILS_DESC">The e-mails within messages can be activated or deactivated via this setting. If the server does not support e-mail, the option should be disabled. (Default: enabled)</string>
   <string name="SYS_ACTIVATE_GREETING_CARDS">Activate greeting card module</string>
-  <string name="SYS_ACTIVATE_GREETING_CARDS_DESC">The greeting card module can be activated or deactivated via this setting. If the server does not support e-mail, the module should be disabled. This module is generally only available to registered users. (Default: yes)</string>
+  <string name="SYS_ACTIVASTE_GREETING_CARDS_DESC">The greeting card module can be activated or deactivated via this setting. If the server does not support e-mail, the module should be disabled. This module is generally only available to registered users. (Default: yes)</string>
   <string name="SYS_ACTIVATE_PM_MODULE">Activate private messages</string>
   <string name="SYS_ACTIVATE_PM_MODULE_DESC">Private messages can be enabled or disabled using this setting. (Default: enabled)</string>
   <string name="SYS_ACTIVATE_ROLE">Activate role</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">If you re-activate the role #VAR1_BOLD#, the role members are assigned again with permissions and the role is selectable in all lists.\n\nDo you want to re-activate the roles?</string>
-  <string name="SYS_ACTIVATED">Active</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Active groups and roles</string>
+  <string name="SYS_ADD_ANOTHER_CONFIG">Add further configuration</string>
   <string name="SYS_ADD_ATTACHMENT">Attach attachment</string>
   <string name="SYS_ADD_COLUMN">Add column</string>
   <string name="SYS_ADD_COLUMNS_DESC">Assign any number of columns corresponding to profile fields in the table below. In addition, you can specify the default sorting and add conditions under which the respective members are to be filtered.</string>
   <string name="SYS_ADD_RECIPIENTS">Add recipient</string>
   <string name="SYS_ADD_TO_DATABASE">Add to database</string>
   <string name="SYS_ADDRESS">Address</string>
+  <string name="SYS_ADDITIONAL_COLUMNS">Additional columns</string>
   <string name="SYS_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Go to the Admidio download page</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">The online management system for associations, groups and organizations</string>
@@ -605,6 +590,8 @@
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Authentication code</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">The authentication code is part of a captcha. A captcha is used for spam detection. The picture is used to detect if a user or a script (or spambot) filled the form.\nPlease fill the result of the authentication code into the form.</string>
   <string name="SYS_CARBON_COPY">Carbon copy (CC)</string>
+  <string name="SYS_CAT_SELECTION">Category selection</string>
+  <string name="SYS_CAT_SELECTION_CONF_DESC">The category selection can be used to restrict a configuration to the members of roles of the selected categories.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_CATEGORIES">Categories</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">All administrators of the module of the parent organization</string>
@@ -632,6 +619,10 @@
   <string name="SYS_CLOSE">Close</string>
   <string name="SYS_CODING">Coding</string>
   <string name="SYS_COLUMN">Column</string>
+  <string name="SYS_COLUMN_SELECTION">Column selection</string>
+  <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns to be displayed in the list.\n\n Inactive roles are marked with (*).</string>
+  <string name="SYS_CONFIGURATIONS">Configurations</string>
+  <string name="SYS_CONFIGURATIONS_HEADER">Any number of configurations can be created here for the category report. In the screen display, one of these configurations is used as the basis for the display in each case via "Select configuration".</string>
   <string name="SYS_COMMA">Comma (,)</string>
   <string name="SYS_COMMA_SEPARATED_FILE">Comma-/tab-separated file (*.csv)</string>
   <string name="SYS_COMMENT">Comment</string>
@@ -717,7 +708,6 @@
   <string name="SYS_DAYS_VAR">#VAR1# days</string>
   <string name="SYS_DEACTIVATE_ROLE">Deactivate role</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">If you deactivate role #VAR1_BOLD#, the role can no longer be used and assigned to objects. Likewise, all rights of this role are no longer effective. However, the role with its setting and all member mappings remains and can be reactivated at a later date.</string>
-  <string name="SYS_DEACTIVATED">Inactive</string>
   <string name="SYS_DEBUG_OUTPUT">Debug output</string>
   <string name="SYS_DECIMAL_NUMBER">Decimal number</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Default assignment of registering</string>
@@ -754,6 +744,7 @@
   <string name="SYS_DESIGNATION">Name</string>
   <string name="SYS_DIRECTORY_PROTECTION">Directory protection</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Directory separator</string>
+  <string name="SYS_DISABLED">Disabled</string>
   <string name="SYS_DISK_SPACE">Disk space</string>
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Show redirect</string>
@@ -785,7 +776,7 @@
   <string name="SYS_EDIT_FILE">Edit file</string>
   <string name="SYS_EDIT_FOLDER">Edit folder</string>
   <string name="SYS_EDIT_LISTS">Edit lists</string>
-    <string name="SYS_EDIT_LISTS_DESC">Users can create their own lists with selected profile fields and then apply them to groups and roles. Only profile fields and groups or roles that the current user is allowed to see are available. This setting can be used to specify who can create such lists. (Default: All)</string>
+  <string name="SYS_EDIT_LISTS_DESC">Users can create their own lists with selected profile fields and then apply them to groups and roles. Only profile fields and groups or roles that the current user is allowed to see are available. This setting can be used to specify who can create such lists. (Default: All)</string>
   <string name="SYS_EDIT_MEMBERS">Edit members</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Edit profile fields</string>
   <string name="SYS_EDIT_RELATIONSHIPS">Edit relationships</string>
@@ -818,6 +809,7 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-mail to members</string>
   <string name="SYS_EMAIL_TO_LIST">E-mail to list</string>
   <string name="SYS_EMPTY">Empty</string>
+  <string name="SYS_ENABLED">Enabled</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT">Activate category report</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Category report creates a list of all roles and categories a member has. The authorization "View membership lists of all roles" is required for operation. (Default: yes)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activate documents &amp; files module</string>
@@ -871,6 +863,7 @@
   <string name="SYS_FILENAME_INVALID">The selected file name #VAR1_BOLD# contains invalid characters. Please check the file name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is higher than the version of the Admidio scripts #VAR2#.\n\nPlease update your Admidio files on the server #VAR3# by using a later version of Admidio#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
+  <string name="SYS_FILTER_TO_EXPORT">Filter to export</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">First line contains the column name</string>
   <string name="SYS_FIRSTNAME">First name</string>
   <string name="SYS_FIRSTNAME_LASTNAME">First name and lastname</string>
@@ -899,6 +892,7 @@
   <string name="SYS_FROM_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_FURTHER_INFORMATIONS">Further information</string>
   <string name="SYS_GENERAL_LISTS">General lists</string>
+  <string name="SYS_GENERAL_ROLE_ASSIGNMENT">General role assignment</string>
   <string name="SYS_GENDER">Gender</string>
   <string name="SYS_GEN_RANDOM_ERROR">An unexpected error occurred while generating a random number.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">The program can not generate random numbers.\nError Code: #VAR1#\nError Message: #VAR2#</string>
@@ -1093,6 +1087,7 @@
   <string name="SYS_NOTE">Note</string>
   <string name="SYS_NUMBER">Number</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Number of roles per page</string>
+  <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Spreadsheet (*.ods)</string>
   <string name="SYS_OFF">Off</string>
   <string name="SYS_OK">OK</string>
@@ -1228,6 +1223,9 @@
   <string name="SYS_ROLE_MEMBERSHIP_TO">to</string>
   <string name="SYS_ROLE_NAME_EXISTS">Role with same name already exists in this category.</string>
   <string name="SYS_ROLE_SELECT_RIGHT">You do not have permission to select role #VAR1#.\nPlease try to select another role.</string>
+  <string name="SYS_ROLE_SELECTION">Role selection</string>
+  <string name="SYS_ROLE_SELECTION_CONF_DESC">The role selection can be restricted a configuration to the members of the selected roles.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>
+  <string name="SYS_ROLE_WITHOUT_LEADER">Role without leader</string>
   <string name="SYS_ROLE_TYPES">Role types</string>
   <string name="SYS_ROLES">Roles</string>
   <string name="SYS_ROLES_CONFIRMATION_OF_PARTICIPATION">Roles - Confirmation of attendance</string>

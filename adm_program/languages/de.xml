@@ -2,7 +2,7 @@
 <resources>
   <!--Phrases only in CategoryReportmodule-->
   <string name="SYS_ADD_ANOTHER_CONFIG">Weitere Konfiguration hinzufügen</string>
-  <string name="SYS_ADDITIONAL_COLS">Zusätzliche Spalten</string>
+  <string name="SYS_ADDITIONAL_COLUMNS">Zusätzliche Spalten</string>
   <string name="SYS_CAT_SELECTION">Kategoriewahl</string>
   <string name="SYS_CAT_SELECTION_CONF_DESC">Über Kategoriewahl kann eine Konfiguration auf die Angehörigen von Rollen der gewählten Kategorien eingeschränkt werden.\n\n Soll keine Einschränkung erfolgen, so sind beide Felder (Rollenwahl und Kategoriewahl) leer zu lassen.</string>
   <string name="SYS_CAT_SELECTION_COL_DESC">Die hier eingetragende Bezeichnung erscheint in der Bildschirmanzeige im Auswahlmenü "Konfiguration auswählen".</string>
@@ -535,7 +535,7 @@
   <string name="SYS_ACTIVATE_PM_MODULE_DESC">Private Nachrichten können über diese Einstellung aktiviert oder deaktiviert werden. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_ACTIVATE_ROLE">Rolle aktivieren</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# wieder aktivierst, bekommen die Rollenmitglieder wieder die Rechte zugeordnet und die Rolle erscheint in sämtlichen Listen.\n\nMöchtest du die Rollen wieder aktivieren?</string>
-  <string name="SYS_ACTIVATED">Aktiviert</string>
+  <string name="SYS_ENABLED">Aktiviert</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Aktive Gruppen und Rollen</string>
   <string name="SYS_ADD_ATTACHMENT">Anhang hinzufügen</string>
   <string name="SYS_ADD_COLUMN">Spalte hinzufügen</string>
@@ -720,7 +720,7 @@
   <string name="SYS_DAYS_VAR">#VAR1# Tagen</string>
   <string name="SYS_DEACTIVATE_ROLE">Rolle deaktivieren</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# deaktivierst, kann die Rolle nicht mehr genutzt und Objekten zugeordnet werden. Ebenso sind sämtliche Rechte dieser Rolle nicht mehr wirksam. Die Rolle mit ihren Einstellung und allen Mitgliedszuordnungen bleibt allerdings bestehen und kann zu einem späteren Zeitpunkt wieder aktiviert werden.</string>
-  <string name="SYS_DEACTIVATED">Deaktiviert</string>
+  <string name="SYS_DISABLED">Deaktiviert</string>
   <string name="SYS_DEBUG_OUTPUT">Debug-Ausgabe</string>
   <string name="SYS_DECIMAL_NUMBER">Dezimalzahl</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardzuordnung bei Registrierung</string>

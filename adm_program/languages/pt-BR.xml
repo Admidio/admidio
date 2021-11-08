@@ -801,7 +801,7 @@
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Num.</string>
   <string name="SYS_ACTIVATE_ROLE">Ativar cargo</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Se reabilitar o cargo #VAR1_BOLD#, os membros do cargo serão atribuídos novamente com permissões e o cargo será selecionável em todas as listas.\n\nDeseja reabilitar o cargo?</string>
-  <string name="SYS_ACTIVATED">Ativado</string>
+  <string name="SYS_ENABLED">Ativado</string>
   <string name="SYS_ADD_RECIPIENTS">Adicionar destinatário</string>
   <string name="SYS_ADD_TO_DATABASE">Adicionar ao banco de dados</string>
   <string name="SYS_ADDRESS">Endereço</string>
@@ -920,7 +920,7 @@
   <string name="SYS_DATE_MODIFIED">Data da alteração</string>
   <string name="SYS_DATE_TO">a</string>
   <string name="SYS_DAYS_VAR">#VAR1# dias</string>
-  <string name="SYS_DEACTIVATED">Inativo</string>
+  <string name="SYS_DISABLED">Inativo</string>
   <string name="SYS_DEBUG_MODE">Modo de depuração</string>
   <string name="SYS_DECIMAL_NUMBER">Número decimal</string>
   <string name="SYS_DEFAULT_LIST">Lista padrão</string>

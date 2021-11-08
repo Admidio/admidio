@@ -589,7 +589,7 @@
   <string name="SYS_ABORT">Annulla</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
   <string name="SYS_ACTIVATE_ROLE">Attiva ruolo</string>
-  <string name="SYS_ACTIVATED">Attivo</string>
+  <string name="SYS_ENABLED">Attivo</string>
   <string name="SYS_ADD_RECIPIENTS">Aggiungi destinatario</string>
   <string name="SYS_ADD_TO_DATABASE">Aggiungi al database</string>
   <string name="SYS_ADDRESS">Infìdirizzo</string>
@@ -680,7 +680,7 @@
   <string name="SYS_DATE_MODIFIED">Data di modifica</string>
   <string name="SYS_DATE_TO">a</string>
   <string name="SYS_DAYS_VAR">#VAR1# giorni</string>
-  <string name="SYS_DEACTIVATED">Inattivo</string>
+  <string name="SYS_DISABLED">Inattivo</string>
   <string name="SYS_DECIMAL_NUMBER">Numero decimale</string>
   <string name="SYS_DEFAULT_LIST">Elenco predefinito</string>
   <string name="SYS_DEFAULT_LIST_DESC">Nel caso in cui ci sia un elenco dei membri per questo ruolo che può essere visualizzato e non sia specificata la configurazione dell\'elenco, l\'elenco sarà visualizzato in base alla configurazione standard dell\'elenco selezionata nel sistema. Usando questo campo per un ruolo individuale, può essere selezionata una differente configurazione dell\'elenco che è visualizzata quando nessuna configurazione dell\'elenco è stata predefinita.</string>

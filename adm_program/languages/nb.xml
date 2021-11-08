@@ -199,7 +199,7 @@
   <string name="SYS_DATE_MODIFIED">Endringsdato</string>
   <string name="SYS_DATE_TO">til</string>
   <string name="SYS_DAYS_VAR">#VAR1# dager</string>
-  <string name="SYS_DEACTIVATED">Inaktiv</string>
+  <string name="SYS_DISABLED">Inaktiv</string>
   <string name="SYS_DECIMAL_NUMBER">Desimaltall</string>
   <string name="SYS_DEFAULT_VAR">Standard-#VAR1#</string>
   <string name="SYS_DELETE">Slett</string>

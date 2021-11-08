@@ -689,7 +689,7 @@
   <!--Phrases only in Roommodule-->
   <!--System-Phrases for use in every module-->
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
-  <string name="SYS_ACTIVATED">Activado</string>
+  <string name="SYS_ENABLED">Activado</string>
   <string name="SYS_ADDRESS">Dirección</string>
   <string name="SYS_ADMIDIO_TEAM">Equipo Admidio</string>
   <string name="SYS_ADMIDIO_VERSION">Versión-Admidio</string>
@@ -717,7 +717,7 @@
   <string name="SYS_DATABASE_VERSION">Versión de la base de datos</string>
   <string name="SYS_DATE">Fecha</string>
   <string name="SYS_DATE_TO">hasta</string>
-  <string name="SYS_DEACTIVATED">deactivado</string>
+  <string name="SYS_DISABLED">deactivado</string>
   <string name="SYS_DELETE">Eliminar</string>
   <string name="SYS_DESCRIPTION">Descripción</string>
   <string name="SYS_DESIGNATION">Designación</string>
