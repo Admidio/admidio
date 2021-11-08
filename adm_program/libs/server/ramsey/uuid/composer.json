@@ -7,55 +7,58 @@
         "identifier",
         "guid"
     ],
-    "homepage": "https://github.com/ramsey/uuid",
     "license": "MIT",
     "require": {
-        "php": "^7.2 || ^8",
+        "php": "^7.2 || ^8.0",
         "ext-json": "*",
         "brick/math": "^0.8 || ^0.9",
         "ramsey/collection": "^1.0",
-        "symfony/polyfill-ctype": "^1.8"
+        "symfony/polyfill-ctype": "^1.8",
+        "symfony/polyfill-php80": "^1.14"
+    },
+    "replace": {
+        "rhumsaa/uuid": "self.version"
     },
     "require-dev": {
-        "codeception/aspect-mock": "^3",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2 || ^0.7.0",
+        "captainhook/captainhook": "^5.10",
+        "captainhook/plugin-composer": "^5.3",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "doctrine/annotations": "^1.8",
-        "goaop/framework": "^2",
+        "ergebnis/composer-normalize": "^2.15",
         "mockery/mockery": "^1.3",
         "moontoast/math": "^1.1",
         "paragonie/random-lib": "^2",
+        "php-mock/php-mock": "^2.2",
         "php-mock/php-mock-mockery": "^1.3",
-        "php-mock/php-mock-phpunit": "^2.5",
         "php-parallel-lint/php-parallel-lint": "^1.1",
-        "phpbench/phpbench": "^0.17.1",
+        "phpbench/phpbench": "^1.0",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-mockery": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
-        "phpunit/phpunit": "^8.5",
-        "psy/psysh": "^0.10.0",
-        "slevomat/coding-standard": "^6.0",
+        "phpunit/phpunit": "^8.5 || ^9",
+        "slevomat/coding-standard": "^7.0",
         "squizlabs/php_codesniffer": "^3.5",
-        "vimeo/psalm": "3.9.4"
+        "vimeo/psalm": "^4.9"
     },
     "suggest": {
         "ext-bcmath": "Enables faster math with arbitrary-precision integers using BCMath.",
         "ext-ctype": "Enables faster processing of character classification using ctype functions.",
         "ext-gmp": "Enables faster math with arbitrary-precision integers using GMP.",
         "ext-uuid": "Enables the use of PeclUuidTimeGenerator and PeclUuidRandomGenerator.",
-        "ramsey/uuid-doctrine": "Allows the use of Ramsey\\Uuid\\Uuid as Doctrine field type.",
-        "paragonie/random-lib": "Provides RandomLib for use with the RandomLibAdapter"
+        "paragonie/random-lib": "Provides RandomLib for use with the RandomLibAdapter",
+        "ramsey/uuid-doctrine": "Allows the use of Ramsey\\Uuid\\Uuid as Doctrine field type."
     },
     "config": {
         "sort-packages": true
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "4.x-dev"
+            "dev-main": "4.x-dev"
+        },
+        "captainhook": {
+            "force-install": true
         }
-    },
-    "replace": {
-        "rhumsaa/uuid": "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -72,18 +75,26 @@
             "Ramsey\\Uuid\\Test\\": "tests/"
         }
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "scripts": {
+        "analyze": [
+            "@phpstan",
+            "@psalm"
+        ],
+        "build:clean": "git clean -fX build/",
         "lint": "parallel-lint src tests",
+        "lint:paths": "parallel-lint",
         "phpbench": "phpbench run",
         "phpcbf": "phpcbf -vpw --cache=build/cache/phpcs.cache",
         "phpcs": "phpcs --cache=build/cache/phpcs.cache",
         "phpstan": [
-            "phpstan analyse -c tests/phpstan.neon --no-progress",
-            "phpstan analyse -c tests/phpstan-tests.neon --no-progress"
+            "phpstan analyse --no-progress",
+            "phpstan analyse -c phpstan-tests.neon --no-progress"
         ],
-        "psalm": "psalm --show-info=false --config=tests/psalm.xml",
         "phpunit": "phpunit --verbose --colors=always",
         "phpunit-coverage": "phpunit --verbose --colors=always --coverage-html build/coverage",
+        "psalm": "psalm --show-info=false --config=psalm.xml",
         "test": [
             "@lint",
             "@phpbench",
@@ -92,10 +103,5 @@
             "@psalm",
             "@phpunit"
         ]
-    },
-    "support": {
-        "issues": "https://github.com/ramsey/uuid/issues",
-        "rss": "https://github.com/ramsey/uuid/releases.atom",
-        "source": "https://github.com/ramsey/uuid"
     }
 }

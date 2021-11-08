@@ -53,12 +53,8 @@ class Xml extends BaseReader
 
     /**
      * Can the current IReader read the file?
-     *
-     * @param string $pFilename
-     *
-     * @return bool
      */
-    public function canRead($pFilename)
+    public function canRead(string $filename): bool
     {
         //    Office                    xmlns:o="urn:schemas-microsoft-com:office:office"
         //    Excel                    xmlns:x="urn:schemas-microsoft-com:office:excel"
@@ -76,7 +72,7 @@ class Xml extends BaseReader
         ];
 
         // Open file
-        $data = file_get_contents($pFilename);
+        $data = file_get_contents($filename);
 
         // Why?
         //$data = str_replace("'", '"', $data); // fix headers with single quote
@@ -236,12 +232,12 @@ class Xml extends BaseReader
     /**
      * Loads Spreadsheet from file.
      *
-     * @param string $filename
-     *
      * @return Spreadsheet
      */
-    public function load($filename)
+    public function load(string $filename, int $flags = 0)
     {
+        $this->processFlags($flags);
+
         // Create new Spreadsheet
         $spreadsheet = new Spreadsheet();
         $spreadsheet->removeSheetByIndex(0);
@@ -365,7 +361,7 @@ class Xml extends BaseReader
                             $columnTo = $columnID;
                             if (isset($cell_ss['MergeAcross'])) {
                                 $additionalMergedCells += (int) $cell_ss['MergeAcross'];
-                                $columnTo = Coordinate::stringFromColumnIndex(Coordinate::columnIndexFromString($columnID) + $cell_ss['MergeAcross']);
+                                $columnTo = Coordinate::stringFromColumnIndex((int) (Coordinate::columnIndexFromString($columnID) + $cell_ss['MergeAcross']));
                             }
                             $rowTo = $rowID;
                             if (isset($cell_ss['MergeDown'])) {

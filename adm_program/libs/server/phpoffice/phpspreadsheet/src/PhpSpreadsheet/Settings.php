@@ -24,7 +24,7 @@ class Settings
      *
      * @var int
      */
-    private static $libXmlLoaderOptions = null;
+    private static $libXmlLoaderOptions;
 
     /**
      * Allow/disallow libxml_disable_entity_loader() call when not thread safe.
@@ -63,24 +63,29 @@ class Settings
      *
      * @return bool Success or failure
      */
-    public static function setLocale($locale)
+    public static function setLocale(string $locale)
     {
         return Calculation::getInstance()->setLocale($locale);
+    }
+
+    public static function getLocale(): string
+    {
+        return Calculation::getInstance()->getLocale();
     }
 
     /**
      * Identify to PhpSpreadsheet the external library to use for rendering charts.
      *
-     * @param string $rendererClass Class name of the chart renderer
+     * @param string $rendererClassName Class name of the chart renderer
      *    eg: PhpOffice\PhpSpreadsheet\Chart\Renderer\JpGraph
      */
-    public static function setChartRenderer($rendererClass): void
+    public static function setChartRenderer(string $rendererClassName): void
     {
-        if (!is_a($rendererClass, IRenderer::class, true)) {
+        if (!is_a($rendererClassName, IRenderer::class, true)) {
             throw new Exception('Chart renderer must implement ' . IRenderer::class);
         }
 
-        self::$chartRenderer = $rendererClass;
+        self::$chartRenderer = $rendererClassName;
     }
 
     /**
@@ -89,9 +94,14 @@ class Settings
      * @return null|string Class name of the chart renderer
      *    eg: PhpOffice\PhpSpreadsheet\Chart\Renderer\JpGraph
      */
-    public static function getChartRenderer()
+    public static function getChartRenderer(): ?string
     {
         return self::$chartRenderer;
+    }
+
+    public static function htmlEntityFlags(): int
+    {
+        return \ENT_COMPAT;
     }
 
     /**
@@ -113,7 +123,7 @@ class Settings
      *
      * @return int Default options for libxml loader
      */
-    public static function getLibXmlLoaderOptions()
+    public static function getLibXmlLoaderOptions(): int
     {
         if (self::$libXmlLoaderOptions === null && defined('LIBXML_DTDLOAD')) {
             self::setLibXmlLoaderOptions(LIBXML_DTDLOAD | LIBXML_DTDATTR);
@@ -144,7 +154,7 @@ class Settings
      *
      * @return bool $state
      */
-    public static function getLibXmlDisableEntityLoader()
+    public static function getLibXmlDisableEntityLoader(): bool
     {
         return self::$libXmlDisableEntityLoader;
     }
@@ -158,11 +168,9 @@ class Settings
     }
 
     /**
-     * Gets the implementation of cache that should be used for cell collection.
-     *
-     * @return CacheInterface
+     * Gets the implementation of cache that is being used for cell collection.
      */
-    public static function getCache()
+    public static function getCache(): CacheInterface
     {
         if (!self::$cache) {
             self::$cache = new Memory();

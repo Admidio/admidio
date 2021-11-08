@@ -84,10 +84,12 @@ class Csv extends BaseWriter
     /**
      * Save PhpSpreadsheet to file.
      *
-     * @param resource|string $pFilename
+     * @param resource|string $filename
      */
-    public function save($pFilename): void
+    public function save($filename, int $flags = 0): void
     {
+        $this->processFlags($flags);
+
         // Fetch sheet
         $sheet = $this->spreadsheet->getSheet($this->sheetIndex);
 
@@ -97,7 +99,7 @@ class Csv extends BaseWriter
         Calculation::setArrayReturnType(Calculation::RETURN_ARRAY_AS_VALUE);
 
         // Open file
-        $this->openFileHandle($pFilename);
+        $this->openFileHandle($filename);
 
         if ($this->excelCompatibility) {
             $this->setUseBOM(true); //  Enforce UTF-8 BOM Header
@@ -327,6 +329,7 @@ class Csv extends BaseWriter
         return $this;
     }
 
+    /** @var bool */
     private $enclosureRequired = true;
 
     public function setEnclosureRequired(bool $value): self
@@ -339,6 +342,20 @@ class Csv extends BaseWriter
     public function getEnclosureRequired(): bool
     {
         return $this->enclosureRequired;
+    }
+
+    /**
+     * Convert boolean to TRUE/FALSE; otherwise return element cast to string.
+     *
+     * @param mixed $element
+     */
+    private static function elementToString($element): string
+    {
+        if (is_bool($element)) {
+            return $element ? 'TRUE' : 'FALSE';
+        }
+
+        return (string) $element;
     }
 
     /**
@@ -356,6 +373,7 @@ class Csv extends BaseWriter
         $line = '';
 
         foreach ($pValues as $element) {
+            $element = self::elementToString($element);
             // Add delimiter
             $line .= $delimiter;
             $delimiter = $this->delimiter;

@@ -7,6 +7,7 @@ $baseDir = dirname(dirname(dirname($vendorDir)));
 
 return array(
     'AdmException' => $baseDir . '/adm_program/system/classes/AdmException.php',
+    'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'AutoLogin' => $baseDir . '/adm_program/system/classes/AutoLogin.php',
     'CategoryReport' => $baseDir . '/adm_program/system/classes/CategoryReport.php',
     'ChangeNotification' => $baseDir . '/adm_program/system/classes/ChangeNotification.php',
@@ -235,6 +236,7 @@ return array(
     'Smarty_Undefined_Variable' => $vendorDir . '/smarty/smarty/libs/sysplugins/smarty_undefined_variable.php',
     'Smarty_Variable' => $vendorDir . '/smarty/smarty/libs/sysplugins/smarty_variable.php',
     'StringUtils' => $baseDir . '/adm_program/system/classes/StringUtils.php',
+    'Stringable' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
     'SystemInfoUtils' => $baseDir . '/adm_program/system/classes/SystemInfoUtils.php',
     'SystemMail' => $baseDir . '/adm_program/system/classes/SystemMail.php',
     'TCPDF' => $vendorDir . '/tecnickcom/tcpdf/tcpdf.php',
@@ -270,9 +272,11 @@ return array(
     'TableUserRelation' => $baseDir . '/adm_program/system/classes/TableUserRelation.php',
     'TableUserRelationType' => $baseDir . '/adm_program/system/classes/TableUserRelationType.php',
     'TableWeblink' => $baseDir . '/adm_program/system/classes/TableWeblink.php',
+    'UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
     'UploadHandlerDownload' => $baseDir . '/adm_program/system/classes/UploadHandlerDownload.php',
     'UploadHandlerPhoto' => $baseDir . '/adm_program/system/classes/UploadHandlerPhoto.php',
     'User' => $baseDir . '/adm_program/system/classes/User.php',
     'UserImport' => $baseDir . '/adm_program/system/classes/UserImport.php',
     'UserRegistration' => $baseDir . '/adm_program/system/classes/UserRegistration.php',
+    'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
 );

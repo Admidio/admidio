@@ -117,10 +117,12 @@ class Xls extends BaseWriter
     /**
      * Save Spreadsheet to file.
      *
-     * @param resource|string $pFilename
+     * @param resource|string $filename
      */
-    public function save($pFilename): void
+    public function save($filename, int $flags = 0): void
     {
+        $this->processFlags($flags);
+
         // garbage collect
         $this->spreadsheet->garbageCollect();
 
@@ -222,7 +224,7 @@ class Xls extends BaseWriter
         $time = $this->spreadsheet->getProperties()->getModified();
         $root = new Root($time, $time, $arrRootData);
         // save the OLE file
-        $this->openFileHandle($pFilename);
+        $this->openFileHandle($filename);
         $root->save($this->fileHandle);
         $this->maybeCloseFileHandle();
 
