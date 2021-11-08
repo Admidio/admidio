@@ -809,7 +809,7 @@
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Enable documents &amp; files</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Documents &amp; files can be enabled or disabled via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_EMAILS">Enable e-mails</string>
-  <string name="SYS_ENABLE_EMAILS_DESC">The e-mails within messages can be enabled or disabled via this setting. If the server does not support e-mail, the option should be disabled. (Default: enabled)</string>
+  <string name="SYS_ENABLE_EMAILS_DESC">E-mails within messages module can be enabled or disabled via this setting. If the server does not support e-mail, the option should be disabled. (Default: enabled)</string>
   <string name="SYS_ENABLE_GREETING_CARDS">Enable greeting cards</string>
   <string name="SYS_ENABLE_GREETING_CARDS_DESC">The greeting cards can be enabled or disabled via this setting. If the server does not support e-mail, the module should be disabled. This module is generally only available to registered users. (Default: yes)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES">Enable groups &amp; roles</string>
@@ -1232,7 +1232,7 @@
   <string name="SYS_ROLES_MODULE_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights.</string>
   <string name="SYS_ROOM">Room</string>
   <string name="SYS_ROOM_MANAGEMENT">Room administration</string>
-  <string name="SYS_ROW">Zeile</string>
+  <string name="SYS_ROW">Row</string>
   <string name="SYS_RSS_DISABLED">Web feed has been disabled by the system administrator.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
