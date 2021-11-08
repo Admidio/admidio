@@ -180,26 +180,21 @@ else
     }
 }
 
-// If the last URL in the back navigation is the one of the script message_send.php,
-// then the form should be filled with the values from the session
-if (str_contains($gNavigation->getUrl(), 'messages_send.php') && isset($_SESSION['message_request']))
-{
+// After back navigation the form should be filled with the values from the session
+// otherwise initialize the form values
+if (isset($_SESSION['message_request'])) {
     $message->setArray($_SESSION['message_request']);
     $message->addContent($_SESSION['message_request']['msg_body']);
     $formValues = $_SESSION['message_request'];
     unset($_SESSION['message_request']);
 
-    if(!isset($formValues['carbon_copy']))
-    {
+    if(!isset($formValues['carbon_copy'])) {
         $formValues['carbon_copy'] = false;
     }
-    if(!isset($formValues['delivery_confirmation']))
-    {
+    if(!isset($formValues['delivery_confirmation'])) {
         $formValues['delivery_confirmation'] = false;
     }
-}
-else
-{
+} else {
     $message->setValue('msg_subject', $getSubject);
     $formValues['namefrom']    = '';
     $formValues['mailfrom']    = '';
@@ -207,8 +202,7 @@ else
     $formValues['carbon_copy'] = $getCarbonCopy;
     $formValues['delivery_confirmation'] = $getDeliveryConfirmation;
 
-    if ($getForward === false)
-    {
+    if ($getForward === false) {
         $message->addContent('');
     }
 }
