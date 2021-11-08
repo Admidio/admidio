@@ -378,7 +378,7 @@
   <string name="PHO_CREATE_ALBUM">Create album</string>
   <string name="PHO_DISPLAY_PHOTOS">Photo display</string>
   <string name="PHO_DISPLAY_PHOTOS_DESC">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as separate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the current image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modal window)</string>
-  <string name="PHO_DOWNLOAD_ENABLED">Activate download</string>
+  <string name="PHO_DOWNLOAD_ENABLED">Enable download</string>
   <string name="PHO_DOWNLOAD_ENABLED_DESC">Allows to download single photos or complete albums as zip file. A hyperlink will be displayed for each photo or album. If option #VAR1_BOLD# is active only original photos will be downloaded.</string>
   <string name="PHP_DOWNLOAD_ZIP_ERROR">An error occurred when creating the zip file.</string>
   <string name="PHO_EDIT_ALBUM">Edit album</string>
@@ -804,7 +804,7 @@
   <string name="SYS_EMAIL_TO_LIST">E-mail to list</string>
   <string name="SYS_EMPTY">Empty</string>
   <string name="SYS_ENABLED">Enabled</string>
-  <string name="SYS_ENABLE_CATEGORY_REPORT">Activate category report</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT">Enable category report</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Category report creates a list of all roles and categories a member has. The authorization "View membership lists of all roles" is required for operation. (Default: yes)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Enable documents &amp; files</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Documents &amp; files can be enabled or disabled via this setting. (Default: yes)</string>
