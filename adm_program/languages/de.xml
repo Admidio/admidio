@@ -659,7 +659,7 @@
   <string name="SYS_COOKIE_DESC">Diese Website verwendet Cookies, um sicherzustellen, dass du die beste Erfahrung auf unserer Website erhältst. Mit der Nutzung dieser Webseite erklärst du dich einverstanden, dass wir Cookies verwenden.</string>
   <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du deinen Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
   <string name="SYS_COPY">Kopieren</string>
-  <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>  
+  <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist Deine angeforderte Kopie der Nachricht</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
   <string name="SYS_COUNT_BCC">Anzahl der BCC Empfänger</string>
@@ -821,8 +821,8 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
   <string name="SYS_EMAIL_TO_LIST">E-Mail an Liste</string>
   <string name="SYS_EMPTY">Leer</string>
-  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE">Modul Kategoriereport aktivieren</string>
-  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE_DESC">Das Modul Kategoriereport erzeugt eine Auflistung von Rollen- und Kategoriezugehörigkeiten eines Mitglieds. Zum Betrieb ist die Berechtigung "Mitgliederlisten aller Rollen einsehen" erforderlich. (Voreinstellung: ja)</string>
+  <string name="$SYS_ENABLE_CATEGORY_REPORT">Modul Kategoriereport aktivieren</string>
+  <string name="$SYS_ENABLE_CATEGORY_REPORT_DESC">Das Modul Kategoriereport erzeugt eine Auflistung von Rollen- und Kategoriezugehörigkeiten eines Mitglieds. Zum Betrieb ist die Berechtigung "Mitgliederlisten aller Rollen einsehen" erforderlich. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Modul Dokumente &amp; Dateien aktivieren</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Modul Dokumente &amp; Dateien kann über diese Einstellung aktiviert oder deaktiviert werden. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Gruppen &amp; Rollen aktivieren</string>

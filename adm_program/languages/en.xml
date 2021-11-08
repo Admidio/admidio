@@ -11,9 +11,7 @@
   <string name="SYS_CONFIGURATIONS_HEADER">Any number of configurations can be created here for the category report. In the screen display, one of these configurations is used as the basis for the display in each case via "Select configuration".</string>
   <string name="SYS_FILTER_TO_EXPORT">Filter to export</string>
   <string name="SYS_GENERAL_ROLE_ASSIGNMENT">General role assignment</string>
-  <string name="SYS_NUMBER_COL">Number (Column)</string>
   <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
-  <string name="SYS_NUMBER_ROW">Number (Row)</string>
   <string name="SYS_ROLE_SELECTION">Role selection</string>
   <string name="SYS_ROLE_SELECTION_CONF_DESC">The role selection can be restricted a configuration to the members of the selected roles.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_ROLEMEMBERSHIPS">Role memberships</string>
@@ -820,8 +818,8 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-mail to members</string>
   <string name="SYS_EMAIL_TO_LIST">E-mail to list</string>
   <string name="SYS_EMPTY">Empty</string>
-  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE">Activate category report module</string>
-  <string name="SYS_ENABLE_CATEGORY_REPORT_MODULE_DESC">Category report creates a list of all roles and categories a member has. The authorization "View membership lists of all roles" is required for operation. (Default: yes)</string>
+  <string name="$SYS_ENABLE_CATEGORY_REPORT">Activate category report</string>
+  <string name="$SYS_ENABLE_CATEGORY_REPORT_DESC">Category report creates a list of all roles and categories a member has. The authorization "View membership lists of all roles" is required for operation. (Default: yes)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activate documents &amp; files module</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">The documents &amp; files module can be activated or deactivated via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_MODULE">Enable groups &amp; roles module</string>
@@ -1166,7 +1164,7 @@
   <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing the data.</string>
   <string name="SYS_PROFILE_FIELD">Profile field</string>
   <string name="SYS_PROPERTIES">Properties</string>
-  <string name="SYS_QUANTITY">Amount</string>
+  <string name="SYS_QUANTITY">Quantity</string>
   <string name="SYS_QUARTERLY">Quarterly</string>
   <string name="SYS_QUOTE">Single quote (')</string>
   <string name="SYS_RADIO_BUTTON">Radio button</string>
@@ -1236,6 +1234,7 @@
   <string name="SYS_ROLES_MODULE_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights.</string>
   <string name="SYS_ROOM">Room</string>
   <string name="SYS_ROOM_MANAGEMENT">Room administration</string>
+  <string name="SYS_ROW">Zeile</string>
   <string name="SYS_RSS_DISABLED">Web feed has been disabled by the system administrator.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>

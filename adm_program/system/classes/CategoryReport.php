@@ -189,7 +189,7 @@ class CategoryReport
         	}
         }
 
-        $number_col[1] = $gL10n->get('SYS_NUMBER_COL');
+        $number_col[1] = $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')';
 
 		// alle Mitglieder der aktuellen Organisation einlesen
         $sql = ' SELECT mem_usr_id
@@ -397,7 +397,7 @@ class CategoryReport
 		//Zusatzspalte fuer die Anzahl erzeugen
     	$this->headerSelection[$i]['id']   	   = 'ndummy';          //n wie number
         $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLS');
-		$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_NUMBER_ROW');
+		$this->headerSelection[$i]['data']	   = $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_ROW') . ')';
 	}
 
     /**

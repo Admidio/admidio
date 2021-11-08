@@ -1223,8 +1223,8 @@ $formCategoryReport = new HtmlForm(
     );
 
 $formCategoryReport->addCheckbox(
-    'category_report_enable_module', $gL10n->get('SYS_ENABLE_CATEGORY_REPORT_MODULE'), (bool) $formValues['category_report_enable_module'],
-    array('helpTextIdInline' => 'SYS_ENABLE_CATEGORY_REPORT_MODULE_DESC')
+    'category_report_enable_module', $gL10n->get('$SYS_ENABLE_CATEGORY_REPORT'), (bool) $formValues['category_report_enable_module'],
+    array('helpTextIdInline' => '$SYS_ENABLE_CATEGORY_REPORT_DESC')
     );
 // read all global lists
 $sqlData = array();
