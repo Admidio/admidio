@@ -1795,7 +1795,7 @@ class User extends TableAccess
     {
         global $gCurrentSession, $gCurrentUser, $gChangeNotification;
 
-        $usrId = (int) $this->getValue('usr_id');
+        $usrId = $this->getValue('usr_id');
 
         // if current user is not new and is not allowed to edit this user
         // and saveChangesWithoutRights isn't true than throw exception
