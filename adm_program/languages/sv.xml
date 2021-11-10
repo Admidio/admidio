@@ -230,7 +230,6 @@
   <string name="INS_WIFE">Fru</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Modul Access</string>
-  <string name="ORG_ACCESS_TO_MODULE_DESC">Modulen kan avaktiveras eller aktiveras endast för inloggade användare. Om modulen endast är tillgänglig för inloggade användare kommer den att döljas för inloggade användare och webbflödet kommer att avaktiveras helt för båda användargrupperna. (standard: aktiv)</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Aktivera systemaviseringar</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Här kan du inaktivera systemaviseringarna för Admidio. De kan skickas, om till exempel en ny användare har registrerat sig. Registreringsbekräftelser kommer också att skickas som systemmeddelanden. I allmänhet bör denna funktion inte inaktiveras om servern inte stöder leverans av e-post. E-postmodulen påverkas inte av inaktiveringen. (Standard: ja)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">En ny organisation läggs till i databasen inklusive dess stamdata. Den nuvarande användaren kommer att meddelas som administratör och kan behålla datasatsen. Användare som loggar in i systemet måste välja respektive organisation.</string>
@@ -342,7 +341,6 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Om flera organisationer lagras i databasen kan inloggningsskärmen visa en markeringsruta med alla tillgängliga organisationer. Användaren kan sedan logga in för att välja en annan organisation (annat än definierat i config.php). Användaren måste dock vara en registrerad medlem i den valda organisationen.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformation</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">E-postadress.</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Detta fält ska innehålla e-postadressen till en administratör eftersom det kommer att användas som avsändaradress för systemaviseringar, t.ex. för registreringsbekräftelse.</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES">Meddelande om ändrade profilfält</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Aktivera den här inställningen för att skicka aviseringar om eventuella ändringar i en användares profilfält. På så sätt har en administratör möjlighet att säkerställa korrekt datakvalitet. Ändringsmeddelanden skickas till följande e -postadress #VAR1# (standard: nej).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Meddelande om nya poster</string>
@@ -378,7 +376,6 @@
   <string name="PHO_CREATE_ALBUM">Skapa album</string>
   <string name="PHO_DISPLAY_PHOTOS">Fotodisplay</string>
   <string name="PHO_DISPLAY_PHOTOS_DESC">Med det här alternativet kan du definiera hur bilderna ska visas i fotomodulen. Detta kan göras med ett modalfönster som öppnas som separat webbläsarfönster. Förhandsgranskningen av bilden förblir aktiv i bakgrunden. Om bilden ska visas i samma fönster stängs den aktuella bildförhandsvisningen. Det tredje alternativet gör det möjligt att visa bilden i ett popup-fönster som kan användas utöver förhandsvisningen av bilden. (Standard: Modal fönster)</string>
-  <string name="PHO_DOWNLOAD_ENABLED">Aktivera nedladdning</string>
   <string name="PHO_DOWNLOAD_ENABLED_DESC">Gör det möjligt att ladda ner enstaka foton eller kompletta album som zip-fil. En hyperlänk visas för varje foto eller album. Om alternativet VAR1_BOLD # är aktivt laddas endast originalfoton ned.</string>
   <string name="PHP_DOWNLOAD_ZIP_ERROR">Ett fel inträffade när du skapade zip-filen.</string>
   <string name="PHO_EDIT_ALBUM">Redigera album</string>
@@ -508,15 +505,8 @@
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Aktiva och tidigare medlemmar</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Aktiv och tidigare</string>
   <string name="SYS_ACTIVE_MEMBERS">Profilbilder av nyligen aktiva medlemmar</string>
-  <string name="SYS_ENABLE_EMAILS">Aktivering av e-postmodul</string>
-  <string name="SYS_ENABLE_EMAILS_DESC">E-postmodulen kan aktiveras eller inaktiveras via denna inställning. Om servern inte stöder e-post bör modulen vara inaktiverad. (Standard: aktiverad)</string>
-  <string name="SYS_ENABLE_GREETING_CARDS">Aktivering av gratulationskortmodul</string>
-  <string name="SYS_ENABLE_GREETING_CARDS_DESC">Gratulationskortmodulen kan aktiveras eller inaktiveras via denna inställning. Om servern inte stöder e-post bör modulen vara inaktiverad. Denna modul är generellt endast tillgänglig för registrerade användare. (Standard: ja)</string>
-  <string name="SYS_ENABLE_PM_MODULE">Aktivera privata meddelanden</string>
-  <string name="SYS_ENABLE_PM_MODULE_DESC">Privata meddelanden kan aktiveras eller inaktiveras med den här inställningen. (Standard: aktiverad)</string>
   <string name="SYS_ACTIVATE_ROLE">&quot;Aktivera roll&quot;</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Om du aktiverar rollen #VAR1_BOLD# tilldelas rollmedlemmarna igen behörigheter och rollen kan väljas i alla listor. \n\n Vill du aktivera rollerna igen?</string>
-  <string name="SYS_ENABLED">Aktiv</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Aktiva grupper och roller</string>
   <string name="SYS_ADD_ATTACHMENT">Bifoga fil</string>
   <string name="SYS_ADD_COLUMN">Lägg till kolumn</string>
@@ -698,13 +688,11 @@
   <string name="SYS_DAYS_VAR">#VAR1# dagar</string>
   <string name="SYS_DEACTIVATE_ROLE">Inaktivera roll</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Om du inaktiverar roll #VAR1_BOLD# kan rollen inte längre användas och tilldelas objekt. På samma sätt är alla rättigheter till denna roll inte längre effektiva. Rollen med dess inställning och alla medlemsmappningar finns dock kvar och kan återaktiveras vid ett senare tillfälle.</string>
-  <string name="SYS_DISABLED">Inaktiv</string>
   <string name="SYS_DEBUG_OUTPUT">Debug -utdata</string>
   <string name="SYS_DECIMAL_NUMBER">Decimaltal.</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardtilldelning för registrering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Om en ny användare skapas eller en ny registrering accepteras tilldelas denna roll automatiskt den nya användaren. När skaparen har rätt att tilldela roller visas alla rollkartläggningar och kan ändras i enlighet därmed.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Förvald inställning</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_DESC">En av de konfigurationer som anges här kan ställas in som standardkonfiguration för listor för denna organisation. Med den här konfigurationen visas medlemslistor över roller som inte har en listkonfiguration.</string>
   <string name="SYS_DEFAULT_ENCODING_UTF8">Standardkodning (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Standard lista</string>
   <string name="SYS_DEFAULT_LIST_DESC">Om det finns en medlemslista för denna roll som ska visas och ingen listkonfiguration anges, visas listan i den systemomfattande valda standardlistkonfigurationen. Med hjälp av detta fält för en enskild roll kan en annan konfigurationslista väljas som visas när ingen konfigurationslista är förinställd.</string>
@@ -765,6 +753,7 @@
   <string name="SYS_EDIT_FILE">Redigera fil</string>
   <string name="SYS_EDIT_FOLDER">Redigera mapp</string>
   <string name="SYS_EDIT_LISTS">Redigera listor</string>
+  <string name="SYS_EDIT_LISTS_DESC">Användare kan skapa sina egna listor med valda profilfält och sedan tillämpa dem på grupper och roller. Endast profilfält och grupper eller roller som den aktuella användaren får se är tillgängliga. Denna inställning kan användas för att ange vem som kan skapa sådana listor. (Standard: Alla)</string>
   <string name="SYS_EDIT_MEMBERS">Redigera medlemmar</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Redigera profilfält</string>
   <string name="SYS_EDIT_RELATIONSHIPS">Redigera relationer</string>
@@ -797,10 +786,6 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-post till medlemmarna</string>
   <string name="SYS_EMAIL_TO_LIST">E-post till listan</string>
   <string name="SYS_EMPTY">Tom</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Aktivera dokument &amp; filmodul</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Dokumenten &amp; filmodul kan aktiveras eller inaktiveras via denna inställning. (Standard: ja)</string>
-  <string name="SYS_ENABLE_GROUPS_ROLES">Aktivera grupper &amp; rollmodul</string>
-  <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Visar organisationens grupper och roller och tillåter gratis konfigurering av grupper och roller. Egen lista kan konfigureras och tillämpas. Denna modul är i allmänhet endast tillgänglig för inloggade användare. (Standard: ja)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Underhålla och visa relationer</string>
   <string name="SYS_ENABLE_USER_RELATIONS_DESC">Om den är aktiv kan relationer mellan användare upprätthållas och visas. (Standard: ja)</string>
   <string name="SYS_ENCODING_GUESS">Försök att upptäcka kodningen</string>
@@ -1141,7 +1126,6 @@
   <string name="SYS_PROCESSING_ERROR_DESC">Följande problem har uppstått vid bearbetning av data.</string>
   <string name="SYS_PROFILE_FIELD">Profilfält</string>
   <string name="SYS_PROPERTIES">Egenskaper</string>
-  <string name="SYS_QUANTITY">Belopp</string>
   <string name="SYS_QUARTERLY">Kvartalsvis</string>
   <string name="SYS_QUOTE">Enkelt citat (\')</string>
   <string name="SYS_RADIO_BUTTON">Radioknapp</string>
@@ -1315,9 +1299,7 @@
   <string name="SYS_SMTP_PASSWORD">SMTP lösenord</string>
   <string name="SYS_SMTP_PASSWORD_DESC">Lösenord som används för SMTP-autentisering.</string>
   <string name="SYS_SMTP_PORT">SMTP-port</string>
-  <string name="SYS_SMTP_PORT_DESC">Ange porten som ska användas för att upprätta en SMTP-anslutning. (Standard: 25)</string>
   <string name="SYS_SMTP_SECURE">Kryptering</string>
-  <string name="SYS_SMTP_SECURE_DESC">Här kan du välja om och hur SMTP-anslutningen ska krypteras. (Standard: nej)</string>
   <string name="SYS_SMTP_SECURE_NO">nej</string>
   <string name="SYS_SMTP_SECURE_SSL">SSL</string>
   <string name="SYS_SMTP_SECURE_TLS">TLS</string>
@@ -1412,7 +1394,6 @@
   <string name="SYS_VISIBLE_FOR">Synlig för alla</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# syns bara för inloggade användare</string>
   <string name="SYS_VISITORS">Gäster</string>
-  <string name="SYS_WANT_CONFIGURATION_FOR_ALL_USERS">Vill du göra vald listkonfiguration tillgänglig för alla användare?</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Vill du verkligen ta bort kategori #VAR1_BOLD#?</string>
   <string name="SYS_WANT_REGISTER">Jag vill registrera mig nu</string>
   <string name="SYS_WARNING">Varning</string>

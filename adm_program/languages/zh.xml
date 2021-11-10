@@ -1,42 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in Announcementmodule-->
-  <string name="SYS_ANNOUNCEMENT">公告</string>
-  <string name="SYS_ANNOUNCEMENTS">公告</string>
-  <string name="SYS_ANNOUNCEMENTS_DESC">显示或编辑公告，新闻和其他信息</string>
-  <string name="SYS_EDIT_ANNOUNCEMENTS">编辑公告</string>
-  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">已创建新公告</string>
-  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">在#VAR1#创建了新公告\n\n标题: #VAR2#\n创建者: #VAR3#\n创建于: #VAR4#</string>
-  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">部门最新公告 #VAR1#</string>
-  <!--Phrases only in Backupmodule-->
-  <string name="SYS_BACK_TO_BACKUP_PAGE">返回备份页面</string>
-  <string name="SYS_BACKUP_COMPLETED">已在 #VAR1# 中创建备份</string>
-  <string name="SYS_BACKUP_FILE">备份文件</string>
-  <string name="SYS_BACKUP_FROM">在 #VAR1# 上创建备份于 #VAR2#</string>
-  <string name="SYS_CREATION_DATE">创建于</string>
-  <string name="SYS_DATABASE_BACKUP">数据库备份</string>
-  <string name="SYS_DATABASE_BACKUP_DESC">创建和下载系统表的数据库备份。</string>
-  <string name="SYS_DAYS_VAR">#VAR1# 天</string>
-  <string name="SYS_HOURS_VAR">#VAR1# 小时</string>
-  <string name="SYS_MINUTES_VAR">#VAR1# 分钟</string>
-  <string name="SYS_NO_BACKUP_FILE_EXISTS">找不到备份文件！</string>
-  <string name="SYS_BACKUP_ONLY_MYSQL">备份模块只能与MySQL数据库结合使用。</string>
-  <string name="BAC_OVERALL_PROGRESS">进度</string>
-  <string name="SYS_START_BACKUP">开始备份</string>
-  <string name="SYS_TOTAL">总共</string>
-  <string name="SYS_SECONDS_VAR">#VAR1# 秒</string>
-  <!--Phrases only in Category-Administration-->
-  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">上级部门模块的所有管理员</string>
-  <string name="SYS_ALL_THIS_ORGANIZATION">这个部门的所有会员</string>
-  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">类别名称已存在于所选部门中。</string>
-  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">如果激活选项，此类别的配置文件字段将出现，并且可在以下部门的配置文件视图中进行编辑：#VAR1#.\n\n如果字段只应显示在您的部门中，请停用。</string>
-  <string name="SYS_DEFAULT_VAR">标准 #VAR1#</string>
-  <string name="SYS_WANT_DELETE_CATEGORY">你真的想删除部门 #VAR1_BOLD# 么?</string>
-  <string name="SYS_DONT_DELETE_CATEGORY">无法删除类别 #VAR1_BOLD# 因为其含有子类别#VAR2# 。</string>
-  <string name="SYS_MOVE_DOWN">下移 #VAR1#</string>
-  <string name="SYS_MOVE_UP">上移 #VAR1#</string>
-  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">此首选项只能由上级部门设置。</string>
-  <string name="CAT_ONLY_PARENT_ORGANIZATION">此类别对所有部门都可见, 因此可能只能由上级部门编辑。</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">将活动添加到日程表</string>
   <string name="DAT_ALL_DAY">全职</string>
@@ -57,7 +20,6 @@
   <string name="DAT_EMAIL_NOTIFICATION_TITLE">创建了一个新项目</string>
   <string name="DAT_ENABLE_ICAL">启用iCal功能</string>
   <string name="DAT_ENABLE_ICAL_DESC">如果启用iCal，则可以下载给定时间段内的个别事件或所有事件。此外，用户将能够通过使用自己的日历客户端软件订阅事件。(默认值：yes)</string>
-  <string name="DAT_ERROR_DELETE_DEFAULT_LIST">列表 #VAR1_BOLD#  是此部门中参与者的默认配置列表, 无法删除。在模块设置中, 为默认配置选择不同的配置, 然后尝试删除此配置。</string>
   <string name="DAT_EXPORT_ICAL">导出(iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">高亮显示日期</string>
   <string name="DAT_ICAL_DAYS_FUTURE">未来的iCal天数</string>
@@ -66,7 +28,6 @@
   <string name="DAT_LOCATION_LINK">如果提供了足够多关于位置的信息(街道，城市，位置)，Google地图就能计算到达该位置的路线。</string>
   <string name="DAT_LOGIN_POSSIBLE">你想激活注册项目的功能吗？\nIf项目被删除，所有注册的参与者也将被删除。\n如果你要阻止接下来的注册，请减少允许参与者的数量。</string>
   <string name="DAT_MAINTAIN_CATEGORIES_DESC">在这里，您可以创建和编辑类别。</string>
-  <string name="DAT_MANAGE_CALENDARS">管理日程表</string>
   <string name="DAT_MAX_MEMBERS">减少此项目的参与者人数。字段留空为不限制参与者。</string>
   <string name="DAT_PARTICIPANTS_LIMIT">参与人数有限</string>
   <string name="DAT_PARTICIPATE_AT_DATE">作为组织者加入项目</string>
@@ -94,52 +55,6 @@
   <string name="DAT_USER_WILL_ATTEND">参与</string>
   <string name="DAT_VIEW_MODE_COMPACT">紧凑</string>
   <string name="DAT_VISIBILITY">可见度</string>
-  <!--Phrases only in Downloadsmodule-->
-  <string name="SYS_ADD_TO_DATABASE">添加到数据库</string>
-  <string name="SYS_ADDITIONAL_FILES">此列表旨在提供未导入数据库的文件和文件夹的概述。它们可以添加到数据库中。将从选定的文件夹复制访问权限。</string>
-  <string name="SYS_COUNTER">计数器</string>
-  <string name="SYS_CREATE_FOLDER">创建文件夹</string>
-  <string name="DOW_DOWNLOADS">下载</string>
-  <string name="DOW_DOWNLOADS_DESC">可以提供不同的数据文件和文件类型以供下载。此下载可以分类在具有不同访问权限级别的文件夹中。</string>
-  <string name="SYS_EDIT_FILE">编辑文件</string>
-  <string name="SYS_EDIT_FOLDER">编辑文件夹</string>
-  <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">上传了一个新文件</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">激活下载模块</string>
-  <string name="SYS_FILE_EXTENSION_INVALID">不被允许的文件类型。</string>
-  <string name="SYS_FILE_NAME_RULES">文件名应表示文件内容。文件名影响列表的顺序。例如，包含程序的文件夹中的文件名应以日期(yyyy-mm-tt)开头。</string>
-  <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">该文件在服务器上不再可用，应该从数据库中删除。</string>
-  <string name="SYS_FILE_TO_LARGE">上次的文件超过所规定的大小（最大文件大小: #VAR1# MB）。</string>
-  <string name="SYS_FILE_TYPE">文件类型</string>
-  <string name="SYS_FILE_UPLOADED">文件 #VAR1_BOLD# 已上传。</string>
-  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">所有的文件已成功上传。\n\n可关闭对话框。</string>
-  <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">并非所有文件都已成功上传。</string>
-  <string name="SYS_FILES_UPLOAD_DESC">请选择要上传的文件夹 #VAR1_BOLD# 里的所有文件</string>
-  <string name="SYS_FOLDER_NO_FILES">文件夹内不包含任何文件。</string>
-  <string name="SYS_FOLDER_NO_RIGHTS">所选文件夹不被允许显示。</string>
-  <string name="SYS_FOLDER_NOT_EXISTS">文件夹不存在于服务器上，应该从数据库中删除。</string>
-  <string name="SYS_MAXIMUM_FILE_SIZE">最大文件大小</string>
-  <string name="DOW_NEW_FILE_NAME">新的文件名</string>
-  <string name="SYS_NEW_NAME">新的名字</string>
-  <string name="SYS_PREVIOUS_NAME">曾用名</string>
-  <string name="SYS_SELECT_FILES">选择文件</string>
-  <string name="SYS_SET_FOLDER_PERMISSIONS">设置文件夹权限</string>
-  <string name="SYS_UNMANAGED_FILES">非托管文件</string>
-  <string name="SYS_UPLOAD_FILES">上传文件</string>
-  <!--Phrases only in Ecardsmodule-->
-  <string name="SYS_ECARD_FROM">贺卡发送自：</string>
-  <string name="SYS_ENABLE_GREETING_CARDS">激活贺卡模块</string>
-  <string name="SYS_GREETING_CARD">贺卡</string>
-  <string name="SYS_GREETING_CARDS">贺卡</string>
-  <string name="SYS_GREETING_CARD_EDIT">编辑贺卡</string>
-  <string name="SYS_LAYOUT">布局</string>
-  <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">这个值定义贺卡中图像的最大大小(标准：400 x 250像素)。</string>
-  <string name="SYS_NEW_MESSAGE_RECEIVED">收到新消息</string>
-  <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">您的贺卡无法发送！</string>
-  <string name="SYS_RECIPIENT_EMAIL">E-mail 收件人</string>
-  <string name="SYS_RECIPIENT_NAME">收件人姓名</string>
-  <string name="SYS_ECARD_SUCCESSFULLY_SEND">您的贺卡已发送。</string>
-  <string name="SYS_TEMPLATE">模板</string>
-  <string name="SYS_VIEW_PICTURE_FULL_SIZED">显示原图</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">返回留言板</string>
   <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">部门的最新留言条目 #VAR1#</string>
@@ -152,77 +67,121 @@
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">提供的部门名称不完整!</string>
   <string name="INS_SET_ORGANIZATION">定义部门</string>
   <string name="INS_SET_UP_ORGANIZATION">设置部门</string>
-  <!--Phrases only in Linkmodule-->
-  <string name="SYS_SAME_WINDOW">相同的窗口</string>
-  <string name="SYS_WEBLINKS">网页链接</string>
-  <string name="SYS_WEBLINKS_DESC">按类别创建和组织有兴趣的超链接。</string>
-  <!--Phrases only in Listsmodule-->
+  <string name="ORG_FIELD_EXIST">在这个类别中已经有相同字段。</string>
+  <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">您可以创建和编辑能在类别中合并的个人资料字段。</string>
   <string name="SYS_A_TO_Z">A到Z</string>
-  <string name="SYS_CONFIGURATION_DEFAULT">是否将选定的配置标记为该部门的默认配置？</string>
-  <string name="SYS_DEFAULT_CONFIGURATION">默认配置</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">此处给出的配置之一可以设置为该部门列表的默认配置。此配置将显示没有列表配置的角色的成员列表。</string>
-  <string name="SYS_DELETE_CONFIGURATION">删除配置</string>
-  <string name="SYS_EMAIL_TO_MEMBERS">向成员发送电子邮件</string>
-  <string name="SYS_EMAIL_TO_LIST">向列表发送电子邮件</string>
-  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE">Steve</string>
-  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">查找所有不叫Steve的用户</string>
-  <string name="SYS_EXPORT_TO">导出到</string>
-  <string name="SYS_FORMER_MEMBERS">前 </string>
-  <string name="SYS_GENERAL_LISTS">一般列表</string>
-  <!--Phrases only in Mailmodule-->
-  <!--Phrases only in Membersadministration-->
-  <string name="SYS_CREATE_USER">创建用户</string>
-  <string name="SYS_CODING">编码</string>
+  <string name="SYS_ADD_TO_DATABASE">添加到数据库</string>
+  <string name="SYS_ADDITIONAL_FILES">此列表旨在提供未导入数据库的文件和文件夹的概述。它们可以添加到数据库中。将从选定的文件夹复制访问权限。</string>
+  <string name="SYS_ALL_ORGANIZATIONS">所有部门</string>
+  <string name="SYS_ALL_THIS_ORGANIZATION">这个部门的所有会员</string>
+  <string name="SYS_ANNOUNCEMENT">公告</string>
+  <string name="SYS_ANNOUNCEMENTS">公告</string>
+  <string name="SYS_ANNOUNCEMENTS_DESC">显示或编辑公告，新闻和其他信息</string>
+  <string name="SYS_BACK_TO_BACKUP_PAGE">返回备份页面</string>
+  <string name="SYS_BACKUP_COMPLETED">已在 #VAR1# 中创建备份</string>
+  <string name="SYS_BACKUP_FILE">备份文件</string>
+  <string name="SYS_BACKUP_FROM">在 #VAR1# 上创建备份于 #VAR2#</string>
+  <string name="SYS_BACKUP_ONLY_MYSQL">备份模块只能与MySQL数据库结合使用。</string>
+  <string name="SYS_CATEGORIES">类别</string>
+  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">上级部门模块的所有管理员</string>
+  <string name="SYS_CATEGORY"> 类别</string>
+  <string name="SYS_CATEGORY_EXISTS_IN_ORGA">类别名称已存在于所选部门中。</string>
+  <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">如果激活选项，此类别的配置文件字段将出现，并且可在以下部门的配置文件视图中进行编辑：#VAR1#.\n\n如果字段只应显示在您的部门中，请停用。</string>
+  <string name="SYS_CATEGORY_VAR">#VAR1# - 类别</string>
   <string name="SYS_CHANGE_HISTORY">更改历史</string>
   <string name="SYS_CHANGE_HISTORY_OF">#VAR1# 的更改历史</string>
   <string name="SYS_CHOOSE_FILE">选择文件</string>
+  <string name="SYS_CODING">编码</string>
   <string name="SYS_COMPLEMENT">补充</string>
+  <string name="SYS_COUNTER">计数器</string>
+  <string name="SYS_CREATE_FOLDER">创建文件夹</string>
+  <string name="SYS_CREATE_USER">创建用户</string>
+  <string name="SYS_CREATION_DATE">创建于</string>
+  <string name="SYS_DATABASE_BACKUP">数据库备份</string>
+  <string name="SYS_DATABASE_BACKUP_DESC">创建和下载系统表的数据库备份。</string>
   <string name="SYS_DAYS_FIELD_HISTORY">字段历史记录的默认时间段(天)</string>
   <string name="SYS_DAYS_FIELD_HISTORY_DESC"> 配置文件字段的更改将以指定的时间段（以天为单位）列出。这是过滤器的默认选项，用户以后可以更改。对于大型数据库，此选项用于限制更改历史列表。(默认值: 365)</string>
+  <string name="SYS_DAYS_VAR">#VAR1# 天</string>
+  <string name="SYS_DEFAULT_CONFIGURATION">默认配置</string>
+  <string name="SYS_DEFAULT_VAR">标准 #VAR1#</string>
+  <string name="SYS_DELETE_CONFIGURATION">删除配置</string>
+  <string name="SYS_DELETE_SYSTEM_CATEGORY">你不能删除系统类别</string>
+  <string name="SYS_DO_NOT_EDIT">不要编辑</string>
+  <string name="SYS_DONT_DELETE_CATEGORY">无法删除类别 #VAR1_BOLD# 因为其含有子类别#VAR2# 。</string>
   <string name="SYS_DUPLICATE">重复</string>
+  <string name="SYS_ECARD_FROM">贺卡发送自：</string>
+  <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">这个值定义贺卡中图像的最大大小(标准：400 x 250像素)。</string>
+  <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">您的贺卡无法发送！</string>
+  <string name="SYS_ECARD_SUCCESSFULLY_SEND">您的贺卡已发送。</string>
+  <string name="SYS_EDIT_ANNOUNCEMENTS">编辑公告</string>
+  <string name="SYS_EDIT_FILE">编辑文件</string>
+  <string name="SYS_EDIT_FOLDER">编辑文件夹</string>
   <string name="SYS_EDIT_USER">编辑用户</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">已创建新公告</string>
+  <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">上传了一个新文件</string>
+  <string name="SYS_EMAIL_TO_MEMBERS">向成员发送电子邮件</string>
+  <string name="SYS_EMAIL_TO_LIST">向列表发送电子邮件</string>
   <string name="SYS_ENABLE_USER_RELATIONS">保持和显示关系</string>
   <string name="SYS_ENABLE_USER_RELATIONS_DESC">如果设置为有效的，则可以保持和显示用户之间的关系。(默认值：是)</string>
   <string name="SYS_EXISTING_USERS">现有用户</string>
+  <string name="SYS_EXPORT_TO">导出到</string>
   <string name="SYS_FILE_COLUMN">文件列</string>
+  <string name="SYS_FILE_EXTENSION_INVALID">不被允许的文件类型。</string>
+  <string name="SYS_FILE_NAME_RULES">文件名应表示文件内容。文件名影响列表的顺序。例如，包含程序的文件夹中的文件名应以日期(yyyy-mm-tt)开头。</string>
+  <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">该文件在服务器上不再可用，应该从数据库中删除。</string>
+  <string name="SYS_FILE_TYPE">文件类型</string>
+  <string name="SYS_FILE_UPLOADED">文件 #VAR1_BOLD# 已上传。</string>
+  <string name="SYS_FILES_UPLOAD_SUCCESSFUL">所有的文件已成功上传。\n\n可关闭对话框。</string>
+  <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">并非所有文件都已成功上传。</string>
+  <string name="SYS_FILES_UPLOAD_DESC">请选择要上传的文件夹 #VAR1_BOLD# 里的所有文件</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">第一行包含列的名称</string>
+  <string name="SYS_FOLDER_NO_FILES">文件夹内不包含任何文件。</string>
+  <string name="SYS_FOLDER_NO_RIGHTS">所选文件夹不被允许显示。</string>
+  <string name="SYS_FOLDER_NOT_EXISTS">文件夹不存在于服务器上，应该从数据库中删除。</string>
   <string name="SYS_FORMAT">格式</string>
+  <string name="SYS_FORMER_MEMBERS">前 </string>
+  <string name="SYS_GENERAL_LISTS">一般列表</string>
+  <string name="SYS_GREETING_CARD">贺卡</string>
+  <string name="SYS_GREETING_CARDS">贺卡</string>
+  <string name="SYS_GREETING_CARD_EDIT">编辑贺卡</string>
+  <string name="SYS_HOURS_VAR">#VAR1# 小时</string>
   <string name="SYS_IDENTIFY_USERS">现有用户的通过姓氏和名字进行识别。</string>
   <string name="SYS_IMPORT">导入</string>
   <string name="SYS_IMPORT_USERS">导入用户</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">请提供新用户的姓和名字。如果已存在有相同或相似名称的同一用户，将执行数据库检查。</string>
+  <string name="SYS_LAYOUT">布局</string>
   <string name="SYS_MAKE_FORMER">用户可以更改为形式成员，将保留包括成员角色资格的所有用户信息，以供以后使用。</string>
+  <string name="SYS_MAXIMUM_FILE_SIZE">最大文件大小</string>
+  <string name="SYS_MINUTES_VAR">#VAR1# 分钟</string>
+  <string name="SYS_MORE">更多</string>
+  <string name="SYS_MOVE_DOWN">下移 #VAR1#</string>
+  <string name="SYS_MOVE_UP">上移 #VAR1#</string>
+  <string name="SYS_NEW_MESSAGE_RECEIVED">收到新消息</string>
+  <string name="SYS_NEW_NAME">新的名字</string>
+  <string name="SYS_NO_BACKUP_FILE_EXISTS">找不到备份文件！</string>
   <string name="SYS_NO_CHANGES_LOGGED">没有记录被更改。</string>
-  <string name="SYS_DO_NOT_EDIT">不要编辑</string>
+  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">此首选项只能由上级部门设置。</string>
+  <string name="SYS_ORGANIZATION">部门</string>
+  <string name="SYS_PREVIOUS_NAME">曾用名</string>
   <string name="SYS_PROFILE_FIELD">配置文件字段</string>
+  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">部门最新公告 #VAR1#</string>
+  <string name="SYS_RECIPIENT_EMAIL">E-mail 收件人</string>
+  <string name="SYS_RECIPIENT_NAME">收件人姓名</string>
   <string name="SYS_REMOVE_USER">删除用户</string>
   <string name="SYS_REPLACE">替换</string>
-  <string name="SYS_SEND_USERNAME_PASSWORD">发送电子邮件（使用用户名和密码）。</string>
-  <!--Phrases only in Menu-->
-  <!--Phrases only in Messagemodule-->
-  <!--Phrases only in New-User-Registration-->
-  <!--Phrases only in Organizationadministration-->
-  <string name="ORG_FIELD_EXIST">在这个类别中已经有相同字段。</string>
-  <!--Phrases only in Updatecheck-->
-  <!--Phrases only in Photomodule-->
-  <!--Phrases only in Profilemodule-->
-  <!--Phrases only in Relationssmodule-->
-  <!--Phrases only in Rolesmodule-->
   <string name="SYS_ROLE_NAME_EXISTS">在这个类别中已经有相同角色。</string>
-  <!--Phrases only in Roommodule-->
-  <!--System-Phrases for use in every module-->
-  <string name="SYS_ALL_ORGANIZATIONS">所有部门</string>
-  <string name="SYS_CATEGORIES">类别</string>
-  <string name="SYS_CATEGORIES_VAR">#VAR1# - 类别</string>
-  <string name="SYS_CATEGORY"> 类别</string>
-  <string name="SYS_CATEGORY_VAR">#VAR1# - 类别</string>
-  <string name="SYS_DELETE_SYSTEM_CATEGORY">你不能删除系统类别</string>
-  <string name="SYS_MAINTAIN_CATEGORIES">管理类别</string>
-  <string name="SYS_MORE">更多</string>
-  <string name="SYS_ORGANIZATION">部门</string>
+  <string name="SYS_SAME_WINDOW">相同的窗口</string>
+  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE">Steve</string>
+  <string name="SYS_SEARCH_EXCLUDE_EXAMPLE_DESC">查找所有不叫Steve的用户</string>
+  <string name="SYS_SECONDS_VAR">#VAR1# 秒</string>
+  <string name="SYS_SELECT_FILES">选择文件</string>
+  <string name="SYS_SEND_USERNAME_PASSWORD">发送电子邮件（使用用户名和密码）。</string>
+  <string name="SYS_SET_FOLDER_PERMISSIONS">设置文件夹权限</string>
+  <string name="SYS_START_BACKUP">开始备份</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">切换到类别管理</string>
   <string name="SYS_SYSTEM">系统</string>
   <string name="SYS_SYSTEM_MAILS">系统通知</string>
+  <string name="SYS_TEMPLATE">模板</string>
   <string name="SYS_TEXT">文本</string>
   <string name="SYS_THURSDAY">星期四</string>
   <string name="SYS_TIME">时间</string>
@@ -231,33 +190,40 @@
   <string name="SYS_TIME_TO">时间到</string>
   <string name="SYS_TITLE">标题</string>
   <string name="SYS_TO" description="E-Mail"> To</string>
+  <string name="SYS_TOTAL">总共</string>
   <string name="SYS_TUESDAY">星期二</string>
   <string name="SYS_TYPE">类型</string>
   <string name="SYS_UNKNOWN">未经确认的</string>
   <string name="SYS_UNLIMITED">无限</string>
   <string name="SYS_UNLOCK">被释放</string>
+  <string name="SYS_UNMANAGED_FILES">非托管文件</string>
   <string name="SYS_UPDATE">更新</string>
+  <string name="SYS_UPLOAD_FILES">上传文件</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">最大文件上传大小</string>
   <string name="SYS_UPLOAD_NAME_ERROR">文件名不能命名为\"Submit\"。</string>
   <string name="SYS_USER">用户</string>
+  <string name="SYS_USER_FOUND">查找用户</string>
   <string name="SYS_USER_ID_NOT_FOUND">找不到此ID对应的用户！</string>
   <string name="SYS_USER_RELATION">关系</string>
   <string name="SYS_USER_RELATIONS">关系</string>
   <string name="SYS_USER_RELATION_TYPE">关系类型</string>
   <string name="SYS_USERNAME">用户名</string>
   <string name="SYS_USERNAME_OR_EMAIL">用户名或电子邮件</string>
-  <string name="SYS_USER_FOUND">查找用户</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VIEW">视图</string>
+  <string name="SYS_VIEW_PICTURE_FULL_SIZED">显示原图</string>
   <string name="SYS_VISIBLE">可见</string>
   <string name="SYS_VISITORS"> 访客</string>
+  <string name="SYS_WANT_DELETE_CATEGORY">你真的想删除部门 #VAR1_BOLD# 么?</string>
   <string name="SYS_WANT_REGISTER">我想要注册！</string>
   <string name="SYS_WARNING">警告</string>
+  <string name="SYS_WEBLINKS">网页链接</string>
+  <string name="SYS_WEBLINKS_DESC">按类别创建和组织有兴趣的超链接。</string>
   <string name="SYS_WEBMASTER">网站管理员</string>
   <string name="SYS_WEBSITE"> 网站</string>
   <string name="SYS_WEDNESDAY">星期三</string>
   <string name="SYS_WHAT_TO_DO">该怎么办？</string>
   <string name="SYS_WIDTH">宽度</string>
   <string name="SYS_YES">是</string>
-</resources>
+  </resources>

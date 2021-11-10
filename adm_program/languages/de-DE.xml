@@ -1,30 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in CategoryReportmodule-->
-  <string name="SYS_ADD_ANOTHER_CONFIG">Weitere Konfiguration hinzufügen</string>
-  <string name="SYS_ADDITIONAL_COLUMNS">Zusätzliche Spalten</string>
-  <string name="SYS_CAT_SELECTION">Kategoriewahl</string>
-  <string name="SYS_CAT_SELECTION_CONF_DESC">Über Kategoriewahl kann eine Konfiguration auf die Angehörigen von Rollen der gewählten Kategorien eingeschränkt werden.\n\n Soll keine Einschränkung erfolgen, so sind beide Felder (Rollenwahl und Kategoriewahl) leer zu lassen.</string>
-  <string name="SYS_CAT_SELECTION_COL_DESC">Die hier eingetragende Bezeichnung erscheint in der Bildschirmanzeige im Auswahlmenü "Konfiguration auswählen".</string>
-  <string name="SYS_COLUMN_SELECTION">Spaltenauswahl</string>
-  <string name="SYS_COLUMN_SELECTION_DESC">Wählt die Spalten aus, die in der Liste angezeigt werden sollen.\n\n Inaktive Rollen sind mit (*) gekennzeichnet.</string>
-  <string name="SYS_COLUMNS">Spalten</string>
-  <string name="SYS_CONFIGURATION_DEFAULT_DESC">Standardeinstellung der Konfigurationen</string>
-  <string name="SYS_CONFIGURATIONS">Konfigurationen</string>
-  <string name="SYS_CONFIGURATIONS_HEADER">Hier können beliebig viele Konfigurationen für den Kategoriereport erstellt werden. In der Bildschirmanzeige wird jeweils eine dieser Konfigurationen über "Konfiguration auswählen" als Grundlage für die Anzeige verwendet.</string>
-  <string name="SYS_EXPORT_AND_FILTER">Export und Filter</string>
-  <string name="SYS_IMPORT_2">Import</string>
-  <string name="SYS_LINK_TO_DEINSTALLATION">Zur Deinstallation wechseln</string>
-  <string name="SYS_NUMBER_COL">Anzahl (Spalte)</string>
-  <string name="SYS_NUMBER_COL_DESC">Soll am Ende des Reports eine Zeile mit der Anzahl der Mitgliedschaften angezeigt werden, so ist der Haken zu setzen.</string>
-  <string name="SYS_NUMBER_ROW">Anzahl (Zeile)</string>
-  <string name="SYS_OPTIONS">Optionen</string>
-  <string name="SYS_ORG_CHOICE">Organisationswahl</string>
-  <string name="SYS_PATTERN">Beispielkonfiguration</string>
-  <string name="SYS_ROLE_SELECTION">Rollenwahl</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">Über Rollenwahl kann eine Konfiguration auf die Angehörigen der gewählten Rollen eingeschränkt werden.\n\n Soll keine Einschränkung erfolgen, so sind beide Felder (Rollenwahl und Kategoriewahl) leer zu lassen.</string>
-  <string name="SYS_ROLEMEMBERSHIPS">Rollenmitgliedschaften</string>
-  <string name="SYS_WITHOUT">ohne</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
   <string name="DAT_ALL_DAY">Ganztägig</string>
@@ -367,7 +342,7 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss der Benutzer auch an der dieser Organisation registriert sein.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">E-Mail-Adresse</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systembenachrichtigungen benutzt, z.B. bei der Registrierungsbestätigung.</string>
+  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier kann die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Empfängeradresse für Systembenachrichtigungen verwendet, z.B. bei der Registrierungsbestätigung.</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES">Benachrichtigung bei Profiländerungen</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Hier kann die Systembenachrichtigung für geänderte Profildaten aktiviert werden. Werden von einem Benutzer oder Administrator Profildaten geändert, Benutzer gelöscht oder erstellt, erfolgt eine Benachrichtigung an die angegebene E-Mail #VAR1# (Voreinstellung: nein).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
@@ -533,22 +508,17 @@
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Aktive und ehemalige Mitglieder</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Aktive und ehemalige</string>
   <string name="SYS_ACTIVE_MEMBERS">Aktive Mitglieder</string>
-  <string name="SYS_ENABLE_EMAILS">Mailmodul aktivieren</string>
-  <string name="SYS_ENABLE_EMAILS_DESC">Das E-Mailmodul kann über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. (Voreinstellung: Aktiviert)</string>
-  <string name="SYS_ENABLE_GREETING_CARDS">Grußkarten aktivieren</string>
-  <string name="SYS_ENABLE_GREETING_CARDS_DESC">Das Grußkartenmodul kann über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. Dieses Modul steht generell nur angemeldeten Benutzern zur Verfügung. (Voreinstellung: ja)</string>
-  <string name="SYS_ENABLE_PM_MODULE">Private Nachrichten aktivieren</string>
-  <string name="SYS_ENABLE_PM_MODULE_DESC">Private Nachrichten können über diese Einstellung aktiviert oder deaktiviert werden. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_ACTIVATE_ROLE">Rolle aktivieren</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Wenn Sie die Rolle #VAR1_BOLD# wieder aktivieren, bekommen die Rollenmitglieder wieder die Rechte zugeordnet und die Rolle erscheint in sämtlichen Listen.\n\nMöchten Sie die Rollen wieder aktivieren?</string>
-  <string name="SYS_ENABLED">Aktiviert</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Aktive Gruppen und Rollen</string>
+  <string name="SYS_ADD_ANOTHER_CONFIG">Weitere Konfiguration hinzufügen</string>
   <string name="SYS_ADD_ATTACHMENT">Anhang hinzufügen</string>
   <string name="SYS_ADD_COLUMN">Spalte hinzufügen</string>
   <string name="SYS_ADD_COLUMNS_DESC">Ordnen Sie in der folgenden Tabelle beliebig vielen Spalten entsprechende Profilfelder zu. Zusätzlich können Sie die Standardsortierung vorgeben und Bedingungen zu Feldern hinzufügen, nach denen die jeweiligen Mitglieder gefiltert werden sollen.</string>
   <string name="SYS_ADD_RECIPIENTS">Empfänger hinzufügen</string>
   <string name="SYS_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
   <string name="SYS_ADDRESS">Adresse</string>
+  <string name="SYS_ADDITIONAL_COLUMNS">Zusätzliche Spalten</string>
   <string name="SYS_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Gehe zur Admidio-Downloadseite</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen</string>
@@ -614,6 +584,8 @@
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Bestätigungscode</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</string>
   <string name="SYS_CARBON_COPY">Kopie</string>
+  <string name="SYS_CAT_SELECTION">Kategorieauswahl</string>
+  <string name="SYS_CAT_SELECTION_CONF_DESC">Über die Kategorieauswahl kann eine Konfiguration auf die Mitglieder von Rollen der ausgewählten Kategorien eingeschränkt werden.\n\n Soll keine Einschränkung vorgenommen werden, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer sein.</string>
   <string name="SYS_CATEGORIES">Kategorien</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechte bearbeiten. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle Administratoren des Moduls der Elternorganisation</string>
@@ -641,6 +613,10 @@
   <string name="SYS_CLOSE">Schließen</string>
   <string name="SYS_CODING">Kodierung</string>
   <string name="SYS_COLUMN">Spalte</string>
+  <string name="SYS_COLUMN_SELECTION">Spaltenauswahl</string>
+  <string name="SYS_COLUMN_SELECTION_DESC">Wählt die Spalten aus, die in der Liste angezeigt werden sollen.\n\n Inaktive Rollen sind mit (*) gekennzeichnet.</string>
+  <string name="SYS_CONFIGURATIONS">Konfigurationen</string>
+  <string name="SYS_CONFIGURATIONS_HEADER">Hier können beliebig viele Konfigurationen für den Kategoriereport angelegt werden. In der Bildschirmanzeige wird über \"Konfiguration auswählen\" jeweils eine dieser Konfigurationen als Basis für die Anzeige verwendet.</string>
   <string name="SYS_COMMA">Komma (,)</string>
   <string name="SYS_COMMA_SEPARATED_FILE">Komma-/Tab-getrennte Datei (*.csv)</string>
   <string name="SYS_COMMENT">Kommentar</string>
@@ -649,7 +625,7 @@
   <string name="SYS_CONDITION">Bedingung</string>
   <string name="SYS_CONFIGURATION">Konfiguration</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Konfiguration allen Benutzern zur Verfügung stellen</string>
-  <string name="SYS_CONFIGURATION_DELETE">Wollen Sie die aktuelle Listenkonfiguration wirklich löschen?</string>
+  <string name="SYS_CONFIGURATION_DELETE">Wollne Sie aktuelle Listenkonfiguration wirklich löschen?</string>
   <string name="SYS_CONFIGURATION_LIST">Listenkonfiguration</string>
   <string name="SYS_CONFIGURATION_SAVE">Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden?</string>
   <string name="SYS_CONFIRM_PASSWORD">Passwort bestätigen</string>
@@ -726,12 +702,12 @@
   <string name="SYS_DAYS_VAR">#VAR1# Tagen</string>
   <string name="SYS_DEACTIVATE_ROLE">Rolle deaktivieren</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Wenn Sie die Rolle #VAR1_BOLD# deaktivieren, kann die Rolle nicht mehr genutzt und Objekten zugeordnet werden. Ebenso sind sämtliche Rechte dieser Rolle nicht mehr wirksam. Die Rolle mit ihren Einstellung und allen Mitgliedszuordnungen bleibt allerdings bestehen und kann zu einem späteren Zeitpunkt wieder aktiviert werden.</string>
-  <string name="SYS_DISABLED">Deaktiviert</string>
   <string name="SYS_DEBUG_OUTPUT">Debug-Ausgabe</string>
   <string name="SYS_DECIMAL_NUMBER">Dezimalzahl</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardzuordnung bei Registrierung</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Wird ein neuer Benutzer angelegt bzw. eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zu zuordnen, so werden ihm alle Rollenzuordnung angezeigt und er kann sie entsprechend anpassen.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für den Kategorienreport dieser Organisation gemacht werden. Die gewählte Konfiguration wird beim Aufruf des Reports direkt angezeigt.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
   <string name="SYS_DEFAULT_ENCODING_UTF8">Standardkodierung (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Standardliste</string>
@@ -762,6 +738,7 @@
   <string name="SYS_DESIGNATION">Bezeichnung</string>
   <string name="SYS_DIRECTORY_PROTECTION">Verzeichnisschutz</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Verzeichnis Trenner</string>
+  <string name="SYS_DISABLED">Deaktiviert</string>
   <string name="SYS_DISK_SPACE">Speicherplatz</string>
   <string name="SYS_DISK_SPACE_ERROR">Die Belegung des Speicherplatzes konnte nicht ermittelt werden.\n\nFehlermeldung:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Anzeige Weiterleitung</string>
@@ -793,7 +770,7 @@
   <string name="SYS_EDIT_FILE">Datei bearbeiten</string>
   <string name="SYS_EDIT_FOLDER">Ordner bearbeiten</string>
   <string name="SYS_EDIT_LISTS">Listen bearbeiten</string>
-    <string name="SYS_EDIT_LISTS_DESC">Eigene Listen mit ausgewählten Profilfeldern können von Benutzern erstellt und anschließend auf Gruppen und Rollen angewendet werden. Dabei stehen nur Profilfelder und Gruppen bzw. Rollen zur Verfügung, die der jeweilige Benutzer sehen darf. Mit dieser Einstellung kann festgelegt werden, wer solche Listen erstellen kann. (Voreinstellung: Alle)</string>
+  <string name="SYS_EDIT_LISTS_DESC">Eigene Listen mit ausgewählten Profilfeldern können von Benutzern erstellt und anschließend auf Gruppen und Rollen angewendet werden. Dabei stehen nur Profilfelder und Gruppen bzw. Rollen zur Verfügung, die der jeweilige Benutzer sehen darf. Mit dieser Einstellung kann festgelegt werden, wer solche Listen erstellen kann. (Voreinstellung: Alle)</string>
   <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Profilfelder bearbeiten</string>
   <string name="SYS_EDIT_RELATIONSHIPS">Beziehungen bearbeiten</string>
@@ -826,12 +803,19 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
   <string name="SYS_EMAIL_TO_LIST">E-Mail an Liste</string>
   <string name="SYS_EMPTY">Leer</string>
-  <string name="$SYS_ENABLE_CATEGORY_REPORT">Modul Kategoriereport aktivieren</string>
-  <string name="$SYS_ENABLE_CATEGORY_REPORT_DESC">Das Modul Kategoriereport erzeugt eine Auflistung von Rollen- und Kategoriezugehörigkeiten eines Mitglieds. Zum Betrieb ist die Berechtigung "Mitgliederlisten aller Rollen einsehen" erforderlich. (Voreinstellung: ja)</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Downloadmodul aktivieren</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Downloadmodul kann über diese Einstellung aktiviert oder deaktiviert werden. (Voreinstellung: ja)</string>
-  <string name="SYS_ENABLE_GROUPS_ROLES">Gruppen &amp; Rollen aktivieren</string>
+  <string name="SYS_ENABLED">Aktiviert</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT">Kategoriereport aktivieren</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Der Kategoriereport erstellt eine Liste aller Rollen und Kategorien, die ein Mitglied hat. Die Berechtigung \"Mitgliederlisten aller Rollen anzeigen\" ist für den Betrieb erforderlich. (Standard: ja)</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Aktiviere Dokumente &amp; Dateien</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Modul Dokumente &amp; Dateien kann über diese Einstellung aktiviert oder deaktiviert werden. (Standard: ja)</string>
+  <string name="SYS_ENABLE_EMAILS">Aktiviere E-Mails</string>
+  <string name="SYS_ENABLE_EMAILS_DESC">E-Mails innerhalb des Nachrichten-Moduls können über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. (Voreinstellung: Aktiviert)</string>
+  <string name="SYS_ENABLE_GREETING_CARDS">Aktiviere Grußkarten</string>
+  <string name="SYS_ENABLE_GREETING_CARDS_DESC">Grußkarten können über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. Dieses Modul steht generell nur angemeldeten Benutzern zur Verfügung. (Voreinstellung: ja)</string>
+  <string name="SYS_ENABLE_GROUPS_ROLES">Aktiviere Gruppen &amp; Rollen</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Zeigt die Gruppen und Rollen der Organisation an und ermöglicht die freie Konfiguration von Gruppen und Rollen. Eigene Liste können konfiguriert und angewendet werden. Dieses Modul ist generell nur für angemeldete Benutzer verfügbar. (Voreinstellung: ja)</string>
+  <string name="SYS_ENABLE_PM_MODULE">Aktiviere private Nachrichten</string>
+  <string name="SYS_ENABLE_PM_MODULE_DESC">Private Nachrichten können über diese Einstellung aktiviert oder deaktiviert werden. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Beziehungen pflegen und anzeigen</string>
   <string name="SYS_ENABLE_USER_RELATIONS_DESC">Wenn diese Einstellung gesetzt ist, können Beziehungen zwischen den Benutzern gepflegt und angezeigt werden. (Voreinstellung: ja)</string>
   <string name="SYS_ENCODING_GUESS">Versuche die Kodierung zu erkennen</string>
@@ -879,6 +863,7 @@
   <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfen Sie den Dateinamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisieren Sie bitte Ihre Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
+  <string name="SYS_FILTER_TO_EXPORT">Filter zum Exportieren</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">Erste Zeile beinhaltet die Spaltenbezeichnungen</string>
   <string name="SYS_FIRSTNAME">Vorname</string>
   <string name="SYS_FIRSTNAME_LASTNAME">Vorname und Nachname</string>
@@ -907,6 +892,7 @@
   <string name="SYS_FROM_TO">vom #VAR1# bis #VAR2#</string>
   <string name="SYS_FURTHER_INFORMATIONS">Weitere Informationen</string>
   <string name="SYS_GENERAL_LISTS">Allgemeine Listen</string>
+  <string name="SYS_GENERAL_ROLE_ASSIGNMENT">Allgemeine Rollenzuordnung</string>
   <string name="SYS_GENDER">Geschlecht</string>
   <string name="SYS_GEN_RANDOM_ERROR">Es ist ein unerwarteter Fehler bei der Generierung einer zufälligen Zahl aufgetreten.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">Das Programm kann keine zufälligen Zahlen erzeugen.\nError Code: #VAR1#\nError Message: #VAR2#</string>
@@ -1101,6 +1087,7 @@
   <string name="SYS_NOTE">Hinweis</string>
   <string name="SYS_NUMBER">Zahl</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Anzahl Rollen pro Seite</string>
+  <string name="SYS_NUMBER_COL_DESC">Soll am Ende des Reports eine Zeile mit der Anzahl der Mitgliedschaften angezeigt werden, so ist der Haken zu setzen.</string>
   <string name="SYS_ODF_SPREADSHEET">ODF-Tabellendokument (*.ods)</string>
   <string name="SYS_OFF">aus</string>
   <string name="SYS_OK">OK</string>
@@ -1172,7 +1159,7 @@
   <string name="SYS_PROCESSING_ERROR_DESC">Bei der Verarbeitung der Daten ist folgendes Problem aufgetreten.</string>
   <string name="SYS_PROFILE_FIELD">Profilfeld</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
-  <string name="SYS_QUANTITY">Menge</string>
+  <string name="SYS_QUANTITY">Anzahl</string>
   <string name="SYS_QUARTERLY">Vierteljährlich</string>
   <string name="SYS_QUOTE">Einfaches Anführungszeichen (\')</string>
   <string name="SYS_RADIO_BUTTON">Optionsfeld</string>
@@ -1236,12 +1223,16 @@
   <string name="SYS_ROLE_MEMBERSHIP_TO">bis</string>
   <string name="SYS_ROLE_NAME_EXISTS">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Sie Haben keine Berechtigung, die Rolle #VAR1# auszuwählen.\nBitte wählen Sie eine andere Rolle aus.</string>
+  <string name="SYS_ROLE_SELECTION">Rollenauswahl</string>
+  <string name="SYS_ROLE_SELECTION_CONF_DESC">Die Rollenauswahl kann über eine Konfiguration auf die Mitglieder der ausgewählten Rollen eingeschränkt werden.\n\n Soll keine Einschränkung vorgenommen werden, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer bleiben.</string>
+  <string name="SYS_ROLE_WITHOUT_LEADER">Rollen ohne Leiter</string>
   <string name="SYS_ROLE_TYPES">Rollentypen</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROLES_CONFIRMATION_OF_PARTICIPATION">Rollen - Teilnahmebestätigung</string>
   <string name="SYS_ROLES_MODULE_ADMINISTRATORS_DESC">Mitglieder dieser Rolle sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechte bearbeiten.</string>
   <string name="SYS_ROOM">Raum</string>
   <string name="SYS_ROOM_MANAGEMENT">Raumverwaltung</string>
+  <string name="SYS_ROW">Zeile</string>
   <string name="SYS_RSS_DISABLED">Der Web-Feed wurde vom Administrator deaktiviert.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web-Feed für #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>

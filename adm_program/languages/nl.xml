@@ -230,7 +230,6 @@
   <string name="INS_WIFE">Echtgenote</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Module toegang</string>
-  <string name="ORG_ACCESS_TO_MODULE_DESC">Module kan gedeactiveerd worden of alleen worden ingeschakeld voor ingelogde gebruikers. Als module alleen voor ingelogde gebruikers toegankelijk is, zal het worden verborgen voor niet-ingelogde gebruikers. De webfeed is dan volledig uitgeschakeld voor beide gebruikersgroepen. (Standaard: actief)</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Systeemberichten inschakelen</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Hier kunt u de systeemberichten van Admidio uitschakelen. Deze worden verzonden, bijvoorbeeld wanneer een nieuwe gebruiker inlogt. Registratie bevestigingen worden doorgaans ook verzonden als systeembericht. In het algemeen dient deze functie niet te worden uitgeschakeld, behalve als de server het versturen van e-mail niet ondersteund. De e-mail module wordt niet beïnvloed door het uitschakelen van deze functie. (Standaard: ja)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">Voegt een nieuwe organisatie met stamgegevens toe aan de database. De huidige gebruiker wordt automatisch aangewezen als beheerder en kan de verdere instellingen doorvoeren. Gebruikers die zich vervolgens bij het systeem aanmelden, moeten de juiste organisatie selecteren.</string>
@@ -342,7 +341,6 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Als er meerdere organisaties in de database staan, zal in het inlog scherm een keuzeveld getoond worden met alle beschikbare organisaties. De gebruiker kan dan inloggen bij een andere organisatie (een andere die staat in het config.php bestand). Echter, de gebruiker moet een geregistreerd gebruiker zijn van de geselecteerde organisatie.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeeminformatie</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">E-mailadres</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier moet het e-mailadres van een beheerder worden ingevoerd. Dit wordt gebruikt als afzender van systeemberichten, zoals van de registratiebevestiging.</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES">Notificatie voor gewijzigde profielvelden</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Schakel deze instelling in om notificaties te verzenden voor alle wijzigingen in de profielvelden van een gebruiker. Op deze manier heeft een beheerder de mogelijkheid om te zorgen voor een goede kwaliteit van de gegevens. Wijzigingsnotificaties worden verzonden naar het e-mailadres #VAR1# (standaard: nee).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notificatie voor nieuwe berichten</string>
@@ -378,7 +376,6 @@
   <string name="PHO_CREATE_ALBUM">Album maken</string>
   <string name="PHO_DISPLAY_PHOTOS">Fotoweergave</string>
   <string name="PHO_DISPLAY_PHOTOS_DESC">Hier kunt u instellen hoe de afbeeldingen in de fotomodule moeten worden getoond. Dit kan worden gedaan met een modaal venster die opent als apart browservenster. De preview van de afbeelding blijft op de achtergrond actief. Als de afbeelding in hetzelfde venster moet worden getoond, wordt de preview gesloten. Met de derde optie kan de afbeelding middels een pop-up venster worden getoond, als aanvulling op de preview. (Standaard: modaal venster)</string>
-  <string name="PHO_DOWNLOAD_ENABLED">Download activeren</string>
   <string name="PHO_DOWNLOAD_ENABLED_DESC">Hiermee kunt u afzonderlijke foto\'s downloaden en albums als een zipbestand downloaden. Een hyperlink zal worden weergegeven voor elke foto of album. Indien optie #VAR1_BOLD# actief is, zullen alleen de originele foto\'s worden gedownload.</string>
   <string name="PHP_DOWNLOAD_ZIP_ERROR">Er is een fout opgetreden bij het maken van het zipbestand.</string>
   <string name="PHO_EDIT_ALBUM">Bewerk album</string>
@@ -508,15 +505,8 @@
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Actieve en voormalige leden</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Actieve en voormalige</string>
   <string name="SYS_ACTIVE_MEMBERS">Actieve leden</string>
-  <string name="SYS_ENABLE_EMAILS">E-mail module activeren</string>
-  <string name="SYS_ENABLE_EMAILS_DESC">De e-mail module kan geactiveerd en gedeactiveerd worden via deze instelling. Als de server het versturen van e-mails niet ondersteunt, deze module svp deactiveren. (Standaard: geactiveerd)</string>
-  <string name="SYS_ENABLE_GREETING_CARDS">Ecard module activeren</string>
-  <string name="SYS_ENABLE_GREETING_CARDS_DESC">De Ecard module kan geactiveerd en gedeactiveerd worden via deze instellingen. Als de server geen e-mails kan sturen, deze module deactiveren. Alleen ingelogde gebruikers hebben toegang tot deze module. (Standaard: ja)</string>
-  <string name="SYS_ENABLE_PM_MODULE">Privéberichten activeren</string>
-  <string name="SYS_ENABLE_PM_MODULE_DESC">Privéberichten kunnen worden in- of uitgeschakeld via deze instelling. (Standaard: ingeschakeld)</string>
   <string name="SYS_ACTIVATE_ROLE">Activeer rol</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Als u rol #VAR1_BOLD# opnieuw activeert, krijgen de rolleden de rechten opnieuw toegewezen en wordt de rol in alle lijsten weergegeven.\n\nWilt u de rollen opnieuw activeren?</string>
-  <string name="SYS_ENABLED">Geactiveerd</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Actieve groepen en rollen</string>
   <string name="SYS_ADD_ATTACHMENT">Bestand bijvoegen</string>
   <string name="SYS_ADD_COLUMN">Kolom toevoegen</string>
@@ -698,13 +688,11 @@
   <string name="SYS_DAYS_VAR">#VAR1# dagen</string>
   <string name="SYS_DEACTIVATE_ROLE">Rol deactiveren</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Als u rol #VAR1_BOLD# deactiveert, kan de rol niet langer worden gebruikt en toegewezen worden aan objecten. Ook zijn alle rechten van deze rol niet langer effectief. De rol met zijn instellingen en lid toewijzingen blijft echter bestaan en kan later opnieuw worden geactiveerd.</string>
-  <string name="SYS_DISABLED">Gedeactiveerd</string>
   <string name="SYS_DEBUG_OUTPUT">Uitvoer debuggen</string>
   <string name="SYS_DECIMAL_NUMBER">Decimaal cijfer</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standaard toewijzing bij registratie</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Deze rol wordt automatisch toegewezen. Indien de maker de rechten heeft om rollen toe te wijzen, worden alle beschikbare rollen weergegeven kunnen overeenkomstig worden aangepast.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standaard configuratie</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_DESC">Een van de hier getoonde configuraties kan als standaard configuratie ingesteld worden voor de lijsten van deze organisatie. Ledenlijsten van rollen die geen eigen configuratie hebben worden weergegeven met deze configuratie.</string>
   <string name="SYS_DEFAULT_ENCODING_UTF8">Standaard codering (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Standaard lijst</string>
   <string name="SYS_DEFAULT_LIST_DESC">Als een ledenlijst van deze rol wordt weergegeven en geen lijst-configuratie is opgegeven, zal de lijst worden weergegeven met de standaard lijst-configuratie van het systeem. Dit veld kan worden gebruikt om een ​​andere lijst-configuratie voor de individuele rol te selecteren, die wordt weergegeven als er geen lijst-configuratie is ingesteld.</string>
@@ -765,7 +753,7 @@
   <string name="SYS_EDIT_FILE">Bewerk bestand</string>
   <string name="SYS_EDIT_FOLDER">Bewerk map</string>
   <string name="SYS_EDIT_LISTS">Bewerk lijsten</string>
-    <string name="SYS_EDIT_LISTS_DESC">Gebruikers kunnen hun eigen lijsten maken met geselecteerde profielvelden en deze vervolgens toepassen op groepen en rollen. Beschikbaar zijn alleen profielvelden en groepen of rollen die de huidige gebruiker mag zien. Deze instelling kan worden gebruikt om te bepalen wie dergelijke lijsten kan maken. (Standaard: Alle)</string>
+  <string name="SYS_EDIT_LISTS_DESC">Gebruikers kunnen hun eigen lijsten maken met geselecteerde profielvelden en deze vervolgens toepassen op groepen en rollen. Beschikbaar zijn alleen profielvelden en groepen of rollen die de huidige gebruiker mag zien. Deze instelling kan worden gebruikt om te bepalen wie dergelijke lijsten kan maken. (Standaard: Alle)</string>
   <string name="SYS_EDIT_MEMBERS">Bewerk gebruikers</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Bewerk profielvelden</string>
   <string name="SYS_EDIT_RELATIONSHIPS">Bewerk relaties</string>
@@ -798,10 +786,6 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-mail aan leden</string>
   <string name="SYS_EMAIL_TO_LIST">E-mail aan lijst</string>
   <string name="SYS_EMPTY">Leeg</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activeer Documenten &amp; bestanden module</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">De documenten &amp; bestanden module kan via deze instelling worden geactiveerd en gedeactiveerd. (Standaard: ja)</string>
-  <string name="SYS_ENABLE_GROUPS_ROLES">Groepen inschakelen &amp; rollen module</string>
-  <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Toont de groepen en rollen van de organisatie en maakt vrije configuratie van groepen en rollen mogelijk. Eigen lijst kan worden geconfigureerd en toegepast. Deze module is doorgaans alleen beschikbaar voor ingelogde gebruikers. (Standaard: ja)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Relaties bewerken en weergeven</string>
   <string name="SYS_ENABLE_USER_RELATIONS_DESC">Als deze instelling actief is, kunnen relaties tussen gebruikers worden onderhouden en weergegeven. (Standaard: ja)</string>
   <string name="SYS_ENCODING_GUESS">Probeer de codering te detecteren</string>
@@ -1142,7 +1126,6 @@
   <string name="SYS_PROCESSING_ERROR_DESC">Het volgende probleem is opgetreden bij het verwerken van de gegevens.</string>
   <string name="SYS_PROFILE_FIELD">Profielveld</string>
   <string name="SYS_PROPERTIES">Eigenschappen</string>
-  <string name="SYS_QUANTITY">Hoeveelheid</string>
   <string name="SYS_QUARTERLY">Driemaandelijks</string>
   <string name="SYS_QUOTE">Enkel aanhalingsteken (\')</string>
   <string name="SYS_RADIO_BUTTON">Optieveld</string>
