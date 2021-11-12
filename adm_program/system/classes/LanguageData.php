@@ -59,6 +59,10 @@ class LanguageData
      * @var array<string,string> Stores all read text data in an array to get quick access if a text is required several times
      */
     private $textCache = array();
+    /**
+     * @var boolean Set to true if the language folders of the plugins are already loaded.
+     */
+    private $pluginLanguageFoldersLoaded = false;
 
     /**
      * Creates an object that stores all necessary language data and can be handled in session.
@@ -71,8 +75,7 @@ class LanguageData
      */
     public function __construct($language = '', $languageInfos = array())
     {
-        if ($language === '')
-        {
+        if ($language === '') {
             // get browser language and set this language as default
             $language = static::determineBrowserLanguage(self::REFERENCE_LANGUAGE);
         }
@@ -80,42 +83,43 @@ class LanguageData
         $this->setLanguage($language);
         $this->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_LANGUAGES);
 
-        foreach (self::getPluginLanguageFolderPaths() as $pluginLanguageFolderPath)
-        {
-            $this->addLanguageFolderPath($pluginLanguageFolderPath);
-        }
+        $this->addPluginLanguageFolderPaths();
     }
 
     /**
-     * Search and returns all plugin language folder paths
-     * @return array<int,string> Returns all plugin language folder paths
+     * A wakeup add the current database object to this class.
      */
-    private static function getPluginLanguageFolderPaths()
+    public function __wakeup()
     {
-        global $gLogger;
+        $this->pluginLanguageFoldersLoaded = false;
+    }
 
-        try
-        {
-            $pluginFolders = FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_PLUGINS, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
-        }
-        catch (\RuntimeException $exception)
-        {
-            $gLogger->error('L10N: Plugins folder content could not be loaded!', array('errorMessage' => $exception->getMessage()));
+    /**
+     * Read language folder of each plugin in adm_plugins and add this folder to the language folder
+     * array of this class.
+     */
+    public function addPluginLanguageFolderPaths()
+    {
+        if(!$this->pluginLanguageFoldersLoaded) {
+            try {
+                $pluginFolders = FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_PLUGINS, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
+            } catch (\RuntimeException $exception) {
+                $GLOBALS['gLogger']->error('L10N: Plugins folder content could not be loaded!', array('errorMessage' => $exception->getMessage()));
 
-            return array();
-        }
-
-        $languageFolders = array();
-        foreach ($pluginFolders as $pluginFolder => $type)
-        {
-            $languageFolder = $pluginFolder . '/languages';
-            if (is_dir($languageFolder))
-            {
-                $languageFolders[] = $languageFolder;
+                return array();
             }
-        }
 
-        return $languageFolders;
+            foreach ($pluginFolders as $pluginFolder => $type) {
+                $languageFolder = $pluginFolder . '/languages';
+
+                if (is_dir($languageFolder)) {
+                    $this->addLanguageFolderPath($languageFolder);
+                }
+
+            }
+
+            $this->pluginLanguageFoldersLoaded = true;
+        }
     }
 
     /**

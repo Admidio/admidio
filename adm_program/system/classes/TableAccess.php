@@ -105,7 +105,7 @@ class TableAccess
     }
 
     /**
-     * An wakeup add the current database object to this class
+     * A wakeup add the current database object to this class
      */
     public function __wakeup()
     {

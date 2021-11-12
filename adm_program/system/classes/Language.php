@@ -107,16 +107,17 @@ class Language
 
         $startTime = microtime(true);
 
-        try
-        {
+        try {
             $text = $this->getTextFromTextId($textId);
 
             //$gLogger->debug('L10N: Lookup time:', array('time' => getExecutionTime($startTime), 'textId' => $textId));
         }
-        catch (\RuntimeException $exception)
-        {
+        catch (\RuntimeException $exception) {
             $gLogger->debug('L10N: Lookup time:', array('time' => getExecutionTime($startTime), 'textId' => $textId));
             $gLogger->error('L10N: ' . $exception->getMessage(), array('textId' => $textId));
+
+            // Read language folders of the plugins. Maybe there was a new plugin installed.
+            $this->languageData->addPluginLanguageFolderPaths();
 
             // no text found then write #undefined text#
             return '#' . $textId . '#';
