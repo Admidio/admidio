@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES">Όλες οι εγγραφές</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE">Ανακοινώσεις</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_NO_ENTRIES_VISITORS">Δεν υπάρχουν διαθέσιμες ανακοινώσεις για επισκέπτες. Κάντε είσοδο για να δείτε τις ανακοινώσεις.</string>
+</resources>

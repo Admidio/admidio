@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ONLINE_HEADLINE">Ποιος είναι online;</string>
+  <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">Δεν υπάρχουν επισκέπτες αυτή τη στιγμή.</string>
+  <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# Επισκέπτες</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBER">#VAR1# μέλος</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBERS">#VAR1# μέλη</string>
+  <string name="PLG_ONLINE_VAR_ONLINE_ARE">Online είναι #VAR1#</string>
+  <string name="PLG_ONLINE_VAR_ONLINE_IS">Online είναι #VAR1#</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Τρέχων μήνας</string>
+  <string name="PLG_CALENDAR_MONTH">Ιανουάριος, Φεβρουάριος, Μάρτιος, Απρίλιος, Μάιος, Ιούνιος, Ιούλιος, Αύγουστος, Σεπτέμβριος, Οκτώβριος, Νοέμβριος, Δεκέμβριος</string>
+  <string name="PLG_CALENDAR_MORE">(... περισσότερα)</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Δε</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Τρ</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Τε</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">Πε</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">Πα</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">Σα</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Κυ</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Πολλές ημέρες</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_FILES_HEADLINE">Έγγραφα &amp; αρχεία</string>
+  <string name="PLG_LATEST_FILES_MORE_DOWNLOADS">Περισσότερα Έγγραφα &amp; αρχεία</string>
+  <string name="PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE">Δεν υπάρχουν διαθέσιμα έγγραφα ή αρχεία.</string>
+  <string name="PLG_LATEST_FILES_UPLOAD_FROM_AT">Ανέβηκε από #VAR1# στις #VAR2#</string>
+</resources>

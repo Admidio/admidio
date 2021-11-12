@@ -4,7 +4,16 @@
   <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# έχει γενέθλια  σε #VAR2# ημέρες</string>
   <string name="PLG_BIRTHDAY_HEADLINE">Γενέθλια</string>
   <string name="PLG_BIRTHDAY_MAN_VAR">Κ. #VAR1#</string>
-  <string name="PLG_BIRTHDAY_MORE_USERS">Πλήθος χρηστών με γενέθλια σήμερα: #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_USERS">Σήμερα #VAR1# χρήστε έχουν γενέθλια.</string>
   <string name="PLG_BIRTHDAY_NO_USER">Κανένας με γενέθλια σήμερα</string>
-  <string name="PLG_BIRTHDAY_ONE_USER">Ένας με γενέθλια σήμερα!</string>
-  </resources>
+  <string name="PLG_BIRTHDAY_ONE_USER">Ένας χρήστης έχει γενέθλια σήμερα.</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# έγινε #VAR3# ετών #VAR2# μέρες πριν, στις #VAR4#</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# είχε γενέθλια #VAR2# ημέρες πριν</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# θα γίνει σήμερα #VAR2#</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# έχει γενέθλια σήμερα</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# θα γίνει αύριο #VAR3# ετών, στις #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# έχει αύριο γενέθλια</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Κυρία #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# έγινε #VAR3# ετών χθες στις #VAR4#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# είχε γενέθλια χθες</string>
+</resources>

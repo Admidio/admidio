@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_DATES_ALL_EVENTS">Όλες οι εκδηλώσεις</string>
+  <string name="PLG_DATES_HEADLINE">Εκδηλώσεις</string>
+  <string name="PLG_DATES_NO_ENTRIES_VISITORS">Δεν υπάρχουν διαθέσιμες εκδηλώσεις για τους επισκέπτες. Κάντε είσοδο για να δείτε τις εκδηλώσεις.</string>
+</resources>
