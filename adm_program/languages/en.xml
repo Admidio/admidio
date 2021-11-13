@@ -341,7 +341,6 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
   <string name="ORG_SYSTEM_INFORMATION">System informations</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS">Mail address</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">The e-mail address of an administrator should be entered here. This is used as the recipient address for system notifications, e.g. for registration confirmation.</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES">Notification for changed profile fields</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Enable this setting to send notifications for any changes to a user's profile fields. This way an administrator has the possibility to ensure a proper re data quality. Change notifications will be send to the following mail address #VAR1# (default: no).</string>
@@ -526,6 +525,7 @@
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
+  <string name="SYS_ADMINISTRATOR_EMAIL">Administrator email</string>
   <string name="SYS_ADMINISTRATORS">Administrators</string>
   <string name="SYS_ADMINISTRATORS_DESC">These roles are administrators of the Documents and Files module and therefore have access to all folders and files. They can upload and download files and assign access rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax request error.\nError Details: #VAR1#</string>
@@ -1297,9 +1297,9 @@
   <string name="SYS_SEND_TEST_MAIL">Send test mail</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">Send e-mail with username and password.</string>
   <string name="SYS_SENDER">Sender</string>
-  <string name="SYS_SENDER_EMAIL">Sender mail address</string>
+  <string name="SYS_SENDER_EMAIL">Sender email</string>
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Using an unknown mail address as a sender address is not allowed by some providers. In this case you can add an email address which will be used as sender address within the mail module (e.g. noreply@#VAR1#).\nIf the field remains empty the sender\'s mail address will be used (default: empty).</string>
-  <string name="SYS_SENDER_NAME">Name of sender</string>
+  <string name="SYS_SENDER_NAME">Sender name</string>
   <string name="SYS_SENDER_NAME_DESC">Name of the sender\'s mail address. This field has to be maintained if the field for sender\'s mail address is not empty (default: empty).</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">(Sender was logged out. Due to that sender\'s information might be incorrect.)</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Separator for CSV-file</string>

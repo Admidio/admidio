@@ -196,7 +196,7 @@ $form->addInput(
     array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'orga_email', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $orgaEmail,
+    'orga_email', $gL10n->get('SYS_ADMINISTRATOR_EMAIL'), $orgaEmail,
     array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addSelectBox(

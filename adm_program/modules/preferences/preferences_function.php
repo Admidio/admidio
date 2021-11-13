@@ -154,14 +154,14 @@ switch($getMode)
 
                     if($_POST['email_administrator'] === '')
                     {
-                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'))));
+                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ADMINISTRATOR_EMAIL'))));
                         // => EXIT
                     }
                     else
                     {
                         if(!StringUtils::strValidCharacters($_POST['email_administrator'], 'email'))
                         {
-                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'))));
+                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_ADMINISTRATOR_EMAIL'))));
                             // => EXIT
                         }
                     }
@@ -193,7 +193,7 @@ switch($getMode)
                 case 'groups-roles':
                     $checkboxes = array('groups_roles_enable_module');
                     break;
-                    
+
                 case 'category-report':
                     $checkboxes = array('category_report_enable_module');
                     break;
@@ -326,7 +326,7 @@ switch($getMode)
             array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
         );
         $form->addInput(
-            'orgaEmail', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $formValues['orgaEmail'],
+            'orgaEmail', $gL10n->get('SYS_ADMINISTRATOR_EMAIL'), $formValues['orgaEmail'],
             array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
         );
         $form->addSubmitButton(
