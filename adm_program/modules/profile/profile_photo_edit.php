@@ -216,7 +216,7 @@ if ($getMode === 'choose') {
 
     // File size
     if ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE) {
-        $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', array(round(PhpIniUtils::getUploadMaxSize()/pow(1024, 2)))));
+        $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', array(round(PhpIniUtils::getUploadMaxSize()/1024** 2))));
         // => EXIT
     }
 

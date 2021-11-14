@@ -321,7 +321,7 @@ class Email extends PHPMailer
         global $gSettingsManager;
 
         $maxUploadSize = PhpIniUtils::getUploadMaxSize();
-        $currentAttachmentSize = $gSettingsManager->getInt('max_email_attachment_size') * pow(1024, 2);
+        $currentAttachmentSize = $gSettingsManager->getInt('max_email_attachment_size') * 1024** 2;
 
         $attachmentSize = min($maxUploadSize, $currentAttachmentSize);
 

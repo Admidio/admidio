@@ -23,7 +23,7 @@ $rules = array(
 //    'blank_line_after_namespace'                => false, // [@PSR2, @Symfony]
     'blank_line_after_opening_tag'                => true,  // [@Symfony]
 //    'blank_line_before_return'                  => false, // [@Symfony]
-//    'braces'                                    => false, // [@PSR2, @Symfony]
+    'braces'                                      => array('position_after_control_structures' => 'same'), // [@PSR2, @Symfony]
     'cast_spaces'                                 => true,  // [@Symfony]
     'class_definition'                            => array('single_line' => true, 'single_item_single_line' => true, 'multi_line_extends_each_single_line' => true), // [@PSR2, @Symfony]
     'class_keyword_remove'                        => false, // [@]
@@ -124,7 +124,7 @@ $rules = array(
     'phpdoc_trim'                                 => true,  // [@Symfony]
     'phpdoc_types'                                => true,  // [@Symfony]
 //    'phpdoc_var_without_name'                   => false, // [@Symfony]
-//    'pow_to_exponentiation'                     => false, // [@PHP56Migration, @PHP70Migration, @PHP71Migration] TODO: PHP >= 5.6 => true
+    'pow_to_exponentiation'                       => true, // [@PHP56Migration, @PHP70Migration, @PHP71Migration]
 //    'pre_increment'                             => false, // [@Symfony]
     'protected_to_private'                        => true,  // [@]
 //    'psr0'                                      => false, // [@]
@@ -154,8 +154,7 @@ $rules = array(
     'trim_array_spaces'                           => true,  // [@Symfony]
 //    'unary_operator_spaces'                     => false, // [@Symfony]
     'visibility_required'                         => true,  // [@PSR2, @Symfony, @PHP71Migration]
-    'whitespace_after_comma_in_array'             => true,   // [@Symfony]
-    'braces'                                      => array('position_after_control_structures' => 'same')
+    'whitespace_after_comma_in_array'             => true   // [@Symfony]
 );
 
 $finder = PhpCsFixer\Finder::create()
