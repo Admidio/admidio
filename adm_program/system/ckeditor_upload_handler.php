@@ -17,9 +17,9 @@
 require_once(__DIR__ . '/common.php');
 require(__DIR__ . '/login_valid.php');
 
-$getCKEditor        = admFuncVariableIsValid($_GET, 'CKEditor',        'string', array('directOutput' => true, 'requireValue' => true));
+$getCKEditor        = admFuncVariableIsValid($_GET, 'CKEditor', 'string', array('directOutput' => true, 'requireValue' => true));
 $getCKEditorFuncNum = admFuncVariableIsValid($_GET, 'CKEditorFuncNum', 'string', array('directOutput' => true, 'requireValue' => true));
-$getlangCode        = admFuncVariableIsValid($_GET, 'langCode',        'string', array('directOutput' => true));
+$getlangCode        = admFuncVariableIsValid($_GET, 'langCode', 'string', array('directOutput' => true));
 
 $htmlUrl = '';
 $message = '';

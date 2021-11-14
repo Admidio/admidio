@@ -30,9 +30,12 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage('admidio-rooms', $headline);
 
 // show link to create new room
-$page->addPageFunctionsMenuItem('menu_item_new_room', $gL10n->get('SYS_CREATE_VAR', array($textRoom)),
+$page->addPageFunctionsMenuItem(
+    'menu_item_new_room',
+    $gL10n->get('SYS_CREATE_VAR', array($textRoom)),
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('headline' => $textRoom)),
-    'fa-plus-circle');
+    'fa-plus-circle'
+);
 
 if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
     // show firstname and lastname of create and last change user
@@ -134,9 +137,12 @@ if ($roomsStatement->rowCount() === 0) {
             <div class="card-footer">'.
                 // show information about user who creates the recordset and changed it
                 admFuncShowCreateChangeInfoByName(
-                    $row['create_name'], $room->getValue('room_timestamp_create'),
-                    $row['change_name'], $room->getValue('room_timestamp_change'),
-                    $room->getValue('create_uuid'), $room->getValue('change_uuid')
+                    $row['create_name'],
+                    $room->getValue('room_timestamp_create'),
+                    $row['change_name'],
+                    $room->getValue('room_timestamp_change'),
+                    $room->getValue('create_uuid'),
+                    $room->getValue('change_uuid')
                 ).'
             </div>
         </div>');

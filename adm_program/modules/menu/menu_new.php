@@ -16,7 +16,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMenuUuid = admFuncVariableIsValid($_GET, 'menu_uuid',  'string');
+$getMenuUuid = admFuncVariableIsValid($_GET, 'menu_uuid', 'string');
 
 // Rechte pruefen
 if (!$gCurrentUser->isAdministrator()) {
@@ -133,24 +133,33 @@ $menuList = array();
 subMenu($menuList, 1, (int) $menu->getValue('men_id'));
 
 $form->addInput(
-    'men_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_name', 'database'),
+    'men_name',
+    $gL10n->get('SYS_NAME'),
+    $menu->getValue('men_name', 'database'),
     array('maxLength' => 100, 'property'=> HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_MENU_NAME_DESC')
 );
 
 if ($getMenuUuid !== '') {
     $form->addInput(
-        'men_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $menu->getValue('men_name_intern', 'database'),
+        'men_name_intern',
+        $gL10n->get('SYS_INTERNAL_NAME'),
+        $menu->getValue('men_name_intern', 'database'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC')
     );
 }
 
 $form->addMultilineTextInput(
-    'men_description', $gL10n->get('SYS_DESCRIPTION'), $menu->getValue('men_description', 'database'), 2,
+    'men_description',
+    $gL10n->get('SYS_DESCRIPTION'),
+    $menu->getValue('men_description', 'database'),
+    2,
     array('maxLength' => 4000)
 );
 
 $form->addSelectBox(
-    'men_men_id_parent', $gL10n->get('SYS_MENU_LEVEL'), $menuList,
+    'men_men_id_parent',
+    $gL10n->get('SYS_MENU_LEVEL'),
+    $menuList,
     array(
         'property'        => HtmlForm::FIELD_REQUIRED,
         'defaultValue'    => (int) $menu->getValue('men_men_id_parent'),
@@ -162,7 +171,10 @@ $sql = 'SELECT com_id, com_name
           FROM '.TBL_COMPONENTS.'
       ORDER BY com_name';
 $form->addSelectBoxFromSql(
-    'men_com_id', $gL10n->get('SYS_MODULE_RIGHTS'), $gDb, $sql,
+    'men_com_id',
+    $gL10n->get('SYS_MODULE_RIGHTS'),
+    $gDb,
+    $sql,
     array(
         'property'        => $fieldDefault,
         'defaultValue'    => (int) $menu->getValue('men_com_id'),
@@ -171,19 +183,25 @@ $form->addSelectBoxFromSql(
 );
 
 $form->addSelectBox(
-    'menu_view', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleViewSet,
+    'menu_view',
+    $gL10n->get('SYS_VISIBLE_FOR'),
+    $parentRoleViewSet,
     array('defaultValue' => $roleViewSet, 'multiselect' => true)
 );
 
 if ((bool) $menu->getValue('men_node') === false) {
     $form->addInput(
-        'men_url', $gL10n->get('ORG_URL'), $menu->getValue('men_url', 'database'),
+        'men_url',
+        $gL10n->get('ORG_URL'),
+        $menu->getValue('men_url', 'database'),
         array('maxLength' => 100, 'property' => $fieldRequired)
     );
 }
 
 $form->addInput(
-    'men_icon', $gL10n->get('SYS_ICON'), $menu->getValue('men_icon', 'database'),
+    'men_icon',
+    $gL10n->get('SYS_ICON'),
+    $menu->getValue('men_icon', 'database'),
     array(
         'maxLength' => 100,
         'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>')),
@@ -192,7 +210,8 @@ $form->addInput(
 );
 
 $form->addSubmitButton(
-    'btn_save', $gL10n->get('SYS_SAVE'),
+    'btn_save',
+    $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check')
 );
 

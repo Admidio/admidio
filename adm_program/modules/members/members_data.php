@@ -48,9 +48,9 @@ require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
-$getDraw    = admFuncVariableIsValid($_GET, 'draw',    'int',  array('requireValue' => true));
-$getStart   = admFuncVariableIsValid($_GET, 'start',   'int',  array('requireValue' => true));
-$getLength  = admFuncVariableIsValid($_GET, 'length',  'int',  array('requireValue' => true));
+$getDraw    = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
+$getStart   = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
+$getLength  = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
 $getSearch  = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 
 $jsonArray = array('draw' => $getDraw);

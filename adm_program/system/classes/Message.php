@@ -144,7 +144,8 @@ class Message
 
             // forward to next page after x seconds
             if ($this->timer > 0) {
-                $page->addJavascript('
+                $page->addJavascript(
+                    '
                     setTimeout(function() {
                         window.location.href = "'. $this->forwardUrl. '";
                     }, '. $this->timer. ');'

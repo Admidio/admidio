@@ -147,11 +147,11 @@ final class ComponentUpdateSteps
                     $statement = self::$db->queryPrepared($sql, array('PKR__%', $orgId));
 
                     while ($row = $statement->fetch()) {
-                        $array = explode('__',$row['plp_name']);
+                        $array = explode('__', $row['plp_name']);
 
                         if ((substr($row['plp_value'], 0, 2) == '((') && (substr($row['plp_value'], -2) == '))')) {
                             $row['plp_value'] = substr($row['plp_value'], 2, -2);
-                            $config[$array[2]] = explode($dbtoken,$row['plp_value']);
+                            $config[$array[2]] = explode($dbtoken, $row['plp_value']);
                         } else {
                             $config[$array[2]] = $row['plp_value'];
                         }

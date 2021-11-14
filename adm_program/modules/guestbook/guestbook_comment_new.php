@@ -122,21 +122,29 @@ $form = new HtmlForm('guestbook_comment_edit_form', SecurityUtils::encodeUrl(ADM
 if ($gCurrentUserId > 0) {
     // registered users should not change their name
     $form->addInput(
-        'gbc_name', $gL10n->get('SYS_NAME'), $gbComment->getValue('gbc_name'),
+        'gbc_name',
+        $gL10n->get('SYS_NAME'),
+        $gbComment->getValue('gbc_name'),
         array('maxLength' => 60, 'property' => HtmlForm::FIELD_DISABLED)
     );
 } else {
     $form->addInput(
-        'gbc_name', $gL10n->get('SYS_NAME'), $gbComment->getValue('gbc_name'),
+        'gbc_name',
+        $gL10n->get('SYS_NAME'),
+        $gbComment->getValue('gbc_name'),
         array('maxLength' => 60, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 }
 $form->addInput(
-    'gbc_email', $gL10n->get('SYS_EMAIL'), $gbComment->getValue('gbc_email'),
+    'gbc_email',
+    $gL10n->get('SYS_EMAIL'),
+    $gbComment->getValue('gbc_email'),
     array('type' => 'email', 'maxLength' => 254)
 );
 $form->addEditor(
-    'gbc_text', $gL10n->get('SYS_COMMENT'), $gbComment->getValue('gbc_text'),
+    'gbc_text',
+    $gL10n->get('SYS_COMMENT'),
+    $gbComment->getValue('gbc_text'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook')
 );
 
@@ -150,8 +158,10 @@ if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha')) {
 // show information about user who creates the recordset and changed it
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    (int) $gbComment->getValue('gbc_usr_id_create'), $gbComment->getValue('gbc_timestamp_create'),
-    (int) $gbComment->getValue('gbc_usr_id_change'), $gbComment->getValue('gbc_timestamp_change')
+    (int) $gbComment->getValue('gbc_usr_id_create'),
+    $gbComment->getValue('gbc_timestamp_create'),
+    (int) $gbComment->getValue('gbc_usr_id_change'),
+    $gbComment->getValue('gbc_timestamp_change')
 ));
 
 // add form to html page and show page

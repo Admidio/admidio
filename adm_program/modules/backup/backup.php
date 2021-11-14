@@ -86,9 +86,12 @@ if ($getMode === 'show_list') {
     sort($existingBackupFiles);
 
     // show link to create new backup
-    $page->addPageFunctionsMenuItem('menu_item_backup_start', $gL10n->get('SYS_START_BACKUP'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_backup_start',
+        $gL10n->get('SYS_START_BACKUP'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', array('mode' => 'create_backup')),
-        'fa-database');
+        'fa-database'
+    );
 
     // Define table
     $table = new HtmlTable('tableList', $page, true, true);
@@ -142,7 +145,8 @@ if ($getMode === 'show_list') {
     // show button with link to backup list
     $form = new HtmlForm('show_backup_list_form', ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', $page);
     $form->addSubmitButton(
-        'btn_update_overview', $gL10n->get('SYS_BACK_TO_BACKUP_PAGE'),
+        'btn_update_overview',
+        $gL10n->get('SYS_BACK_TO_BACKUP_PAGE'),
         array('icon' => 'fa-arrow-circle-left')
     );
     $page->addHtml($form->show());

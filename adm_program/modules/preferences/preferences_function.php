@@ -277,19 +277,26 @@ switch ($getMode) {
         // show form
         $form = new HtmlForm('add_new_organization_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '3')), $page);
         $form->addInput(
-            'orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'],
+            'orgaShortName',
+            $gL10n->get('SYS_NAME_ABBREVIATION'),
+            $formValues['orgaShortName'],
             array('maxLength' => 10, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
         );
         $form->addInput(
-            'orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'],
+            'orgaLongName',
+            $gL10n->get('SYS_NAME'),
+            $formValues['orgaLongName'],
             array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
         );
         $form->addInput(
-            'orgaEmail', $gL10n->get('SYS_ADMINISTRATOR_EMAIL'), $formValues['orgaEmail'],
+            'orgaEmail',
+            $gL10n->get('SYS_ADMINISTRATOR_EMAIL'),
+            $formValues['orgaEmail'],
             array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
         );
         $form->addSubmitButton(
-            'btn_forward', $gL10n->get('INS_SET_UP_ORGANIZATION'),
+            'btn_forward',
+            $gL10n->get('INS_SET_UP_ORGANIZATION'),
             array('icon' => 'fa-wrench', 'class' => ' offset-sm-3')
         );
 

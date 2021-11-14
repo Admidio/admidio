@@ -60,14 +60,21 @@ $page = new HtmlPage('admidio-messages', $headline);
 
 // link to write new email
 if ($gSettingsManager->getBool('enable_mail_module')) {
-    $page->addPageFunctionsMenuItem('menu_item_messages_new_email', $gL10n->get('SYS_WRITE_EMAIL'),
-        ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', 'fa-envelope-open');
+    $page->addPageFunctionsMenuItem(
+        'menu_item_messages_new_email',
+        $gL10n->get('SYS_WRITE_EMAIL'),
+        ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php',
+        'fa-envelope-open'
+    );
 }
 // link to write new PM
 if ($gSettingsManager->getBool('enable_pm_module')) {
-    $page->addPageFunctionsMenuItem('menu_item_messages_new_pm', $gL10n->get('SYS_WRITE_PM'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_messages_new_pm',
+        $gL10n->get('SYS_WRITE_PM'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM')),
-        'fa-comment-alt');
+        'fa-comment-alt'
+    );
 }
 
 $table = new HtmlTable('adm_message_table', $page, true, true);

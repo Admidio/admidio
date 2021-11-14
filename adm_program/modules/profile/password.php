@@ -21,7 +21,7 @@ header('Content-type: text/html; charset=utf-8');
 
 // Initialize and check the parameters
 $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('requireValue' => true));
-$getMode     = admFuncVariableIsValid($_GET, 'mode',   'string', array('defaultValue' => 'html', 'validValues' => array('html', 'change')));
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'change')));
 
 // in ajax mode only return simple text on error
 if ($getMode === 'change') {
@@ -168,14 +168,18 @@ if ($getMode === 'change') {
     if ($gCurrentUserId === $userId) {
         // to change own password user must enter the valid old password for verification
         $form->addInput(
-                'old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), '',
-                array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)
-            );
+            'old_password',
+            $gL10n->get('PRO_CURRENT_PASSWORD'),
+            '',
+            array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)
+        );
         $form->addLine();
     }
     $form->addInput(
-            'new_password', $gL10n->get('PRO_NEW_PASSWORD'), '',
-            array(
+        'new_password',
+        $gL10n->get('PRO_NEW_PASSWORD'),
+        '',
+        array(
                 'type'             => 'password',
                 'property'         => HtmlForm::FIELD_REQUIRED,
                 'minLength'        => PASSWORD_MIN_LENGTH,
@@ -183,15 +187,18 @@ if ($getMode === 'change') {
                 'passwordUserData' => $user->getPasswordUserData(),
                 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'
             )
-        );
+    );
     $form->addInput(
-            'new_password_confirm', $gL10n->get('SYS_REPEAT'), '',
-            array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
-        );
+        'new_password_confirm',
+        $gL10n->get('SYS_REPEAT'),
+        '',
+        array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
+    );
     $form->addSubmitButton(
-            'btn_save', $gL10n->get('SYS_SAVE'),
-            array('icon' => 'fa-check', 'class' => ' offset-sm-3')
-        );
+        'btn_save',
+        $gL10n->get('SYS_SAVE'),
+        array('icon' => 'fa-check', 'class' => ' offset-sm-3')
+    );
     echo $form->show();
     echo '</div>';
 }

@@ -18,7 +18,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid','string');
+$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'string');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_WEBLINKS')));
 
 // check if the module is enabled for use
@@ -69,26 +69,38 @@ $page = new HtmlPage('admidio-weblinks-edit', $headline);
 // show form
 $form = new HtmlForm('weblinks_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php', array('link_uuid' => $getLinkUuid, 'headline' => $getHeadline, 'mode' => 1)), $page);
 $form->addInput(
-    'lnk_name', $gL10n->get('SYS_LINK_NAME'), SecurityUtils::encodeHTML($link->getValue('lnk_name')),
+    'lnk_name',
+    $gL10n->get('SYS_LINK_NAME'),
+    SecurityUtils::encodeHTML($link->getValue('lnk_name')),
     array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'lnk_url', $gL10n->get('SYS_LINK_ADDRESS'), $link->getValue('lnk_url'),
+    'lnk_url',
+    $gL10n->get('SYS_LINK_ADDRESS'),
+    $link->getValue('lnk_url'),
     array('maxLength' => 2000, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addSelectBoxForCategories(
-    'lnk_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', HtmlForm::SELECT_BOX_MODUS_EDIT,
+    'lnk_cat_id',
+    $gL10n->get('SYS_CATEGORY'),
+    $gDb,
+    'LNK',
+    HtmlForm::SELECT_BOX_MODUS_EDIT,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $link->getValue('lnk_cat_id'))
 );
 $form->addEditor(
-    'lnk_description', $gL10n->get('SYS_DESCRIPTION'), $link->getValue('lnk_description'),
+    'lnk_description',
+    $gL10n->get('SYS_DESCRIPTION'),
+    $link->getValue('lnk_description'),
     array('height' => '150px')
 );
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    (int) $link->getValue('lnk_usr_id_create'), $link->getValue('lnk_timestamp_create'),
-    (int) $link->getValue('lnk_usr_id_change'), $link->getValue('lnk_timestamp_change')
+    (int) $link->getValue('lnk_usr_id_create'),
+    $link->getValue('lnk_timestamp_create'),
+    (int) $link->getValue('lnk_usr_id_change'),
+    $link->getValue('lnk_timestamp_change')
 ));
 
 // add form to html page and show page

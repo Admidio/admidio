@@ -38,14 +38,14 @@ $gDb->queryPrepared('SET SQL_MODE = \'\'');
 // Some Defines
 define('ADMIN_EMAIL', $gSettingsManager->getString('email_administrator')); // eg: admin@example.com
 
-define('BACKTICKCHAR',             '`');
-define('QUOTECHAR',                '\'');
-define('LINE_TERMINATOR',          "\n");    // \n = UNIX; \r\n = Windows; \r = Mac
-define('BUFFER_SIZE',              32768);   // in bytes
-define('TABLES_PER_COL',           30);      // number of table names per column in partial table backup selection screen
-define('STATS_INTERVAL',           500);     // number of records processed between each DHTML stats refresh
+define('BACKTICKCHAR', '`');
+define('QUOTECHAR', '\'');
+define('LINE_TERMINATOR', "\n");    // \n = UNIX; \r\n = Windows; \r = Mac
+define('BUFFER_SIZE', 32768);   // in bytes
+define('TABLES_PER_COL', 30);      // number of table names per column in partial table backup selection screen
+define('STATS_INTERVAL', 500);     // number of records processed between each DHTML stats refresh
 define('MYSQL_RECONNECT_INTERVAL', 100000);  // disconnect and reconnect to MySQL every <interval> rows, to prevent timeouts
-define('OUTPUT_COMPRESSION_TYPE',  'gzip');  // 'bzip2', 'gzip', 'none'; best at "bzip2" for mysqldump-based backups, "gzip" for PHP-based backups
+define('OUTPUT_COMPRESSION_TYPE', 'gzip');  // 'bzip2', 'gzip', 'none'; best at "bzip2" for mysqldump-based backups, "gzip" for PHP-based backups
 define('OUTPUT_COMPRESSION_LEVEL', 6);       // bzip2/gzip compression level (1=fastest,9=best)
 
 // Some Config

@@ -56,13 +56,21 @@ $page->addJavascript('
         window.location.replace("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members.php', array('members' => $flagShowMembers)).'");
     });', true);
 
-$page->addPageFunctionsMenuItem('menu_item_members_create_user', $gL10n->get('SYS_CREATE_USER'),
-    ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', 'fa-plus-circle');
+$page->addPageFunctionsMenuItem(
+    'menu_item_members_create_user',
+    $gL10n->get('SYS_CREATE_USER'),
+    ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php',
+    'fa-plus-circle'
+);
 
 if ($gSettingsManager->getBool('profile_log_edit_fields')) {
     // show link to view profile field change history
-    $page->addPageFunctionsMenuItem('menu_item_members_change_history', $gL10n->get('SYS_CHANGE_HISTORY'),
-        ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', 'fa-history');
+    $page->addPageFunctionsMenuItem(
+        'menu_item_members_change_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
+        ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php',
+        'fa-history'
+    );
 }
 
 // show checkbox to select all users or only active members
@@ -76,18 +84,30 @@ if ($gSettingsManager->getBool('members_show_all_users')) {
 }
 
 // show link to import users
-$page->addPageFunctionsMenuItem('menu_item_members_import_users', $gL10n->get('SYS_IMPORT_USERS'),
-    ADMIDIO_URL.FOLDER_MODULES.'/members/import.php', 'fa-upload');
+$page->addPageFunctionsMenuItem(
+    'menu_item_members_import_users',
+    $gL10n->get('SYS_IMPORT_USERS'),
+    ADMIDIO_URL.FOLDER_MODULES.'/members/import.php',
+    'fa-upload'
+);
 
 if ($gCurrentUser->isAdministrator()) {
     // show link to maintain profile fields
-    $page->addPageFunctionsMenuItem('menu_item_members_profile_fields', $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
-        ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php', 'fa-th-list');
+    $page->addPageFunctionsMenuItem(
+        'menu_item_members_profile_fields',
+        $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
+        ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php',
+        'fa-th-list'
+    );
 
     if ($gSettingsManager->getBool('members_enable_user_relations')) {
         // show link to relation types
-        $page->addPageFunctionsMenuItem('menu_item_members_user_relation_types', $gL10n->get('SYS_EDIT_RELATIONSHIPS'),
-            ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes.php', 'fa-people-arrows');
+        $page->addPageFunctionsMenuItem(
+            'menu_item_members_user_relation_types',
+            $gL10n->get('SYS_EDIT_RELATIONSHIPS'),
+            ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes.php',
+            'fa-people-arrows'
+        );
     }
 }
 
@@ -98,13 +118,15 @@ $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-con
 
 // create array with all column heading values
 $columnHeading = $membersListConfig->getColumnNames();
-array_unshift($columnHeading,
+array_unshift(
+    $columnHeading,
     $gL10n->get('SYS_ABR_NO'),
-    '<i class="fas fa-user" data-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>');
+    '<i class="fas fa-user" data-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>'
+);
 array_push($columnHeading, '&nbsp;');
 
 $columnAlignment = $membersListConfig->getColumnAlignments();
-array_unshift($columnAlignment,'left', 'left');
+array_unshift($columnAlignment, 'left', 'left');
 array_push($columnAlignment, 'right');
 
 $membersTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_data.php', array('members' => $getMembers)));

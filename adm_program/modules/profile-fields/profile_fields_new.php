@@ -72,7 +72,8 @@ if (isset($_SESSION['fields_request'])) {
 // create html page object
 $page = new HtmlPage('admidio-profile-fields-edit', $headline);
 
-$page->addJavascript('
+$page->addJavascript(
+    '
     $("#usf_type").change(function() {
         if ($("#usf_type").val() === "DROPDOWN" || $("#usf_type").val() === "RADIO_BUTTON") {
             $("#usf_value_list_group").show("slow");
@@ -91,12 +92,16 @@ $form = new HtmlForm('profile_fields_edit_form', SecurityUtils::encodeUrl(ADMIDI
 $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
 if ($userField->getValue('usf_system') == 1) {
     $form->addInput(
-        'usf_name', $gL10n->get('SYS_NAME'), $userField->getValue('usf_name', 'database'),
+        'usf_name',
+        $gL10n->get('SYS_NAME'),
+        $userField->getValue('usf_name', 'database'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
     );
 } else {
     $form->addInput(
-        'usf_name', $gL10n->get('SYS_NAME'), $userField->getValue('usf_name', 'database'),
+        'usf_name',
+        $gL10n->get('SYS_NAME'),
+        $userField->getValue('usf_name', 'database'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 }
@@ -105,19 +110,27 @@ $usfNameIntern = $userField->getValue('usf_name_intern');
 // show internal field name for information
 if ($getUsfUuid !== '') {
     $form->addInput(
-        'usf_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $usfNameIntern,
+        'usf_name_intern',
+        $gL10n->get('SYS_INTERNAL_NAME'),
+        $usfNameIntern,
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC')
     );
 }
 
 if ($userField->getValue('usf_system') == 1) {
     $form->addInput(
-        'usf_cat_id', $gL10n->get('SYS_CATEGORY'), $userField->getValue('cat_name'),
+        'usf_cat_id',
+        $gL10n->get('SYS_CATEGORY'),
+        $userField->getValue('cat_name'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
     );
 } else {
     $form->addSelectBoxForCategories(
-        'usf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'USF', HtmlForm::SELECT_BOX_MODUS_EDIT,
+        'usf_cat_id',
+        $gL10n->get('SYS_CATEGORY'),
+        $gDb,
+        'USF',
+        HtmlForm::SELECT_BOX_MODUS_EDIT,
         array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $userField->getValue('usf_cat_id'))
     );
 }
@@ -141,61 +154,84 @@ asort($userFieldText);
 if ($userField->getValue('usf_system') == 1) {
     // bei Systemfeldern darf der Datentyp nicht mehr veraendert werden
     $form->addInput(
-        'usf_type', $gL10n->get('ORG_DATATYPE'), $userFieldText[$userField->getValue('usf_type')],
+        'usf_type',
+        $gL10n->get('ORG_DATATYPE'),
+        $userFieldText[$userField->getValue('usf_type')],
         array('maxLength' => 30, 'property' => HtmlForm::FIELD_DISABLED)
     );
 } else {
     // fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
     $form->addSelectBox(
-        'usf_type', $gL10n->get('ORG_DATATYPE'), $userFieldText,
+        'usf_type',
+        $gL10n->get('ORG_DATATYPE'),
+        $userFieldText,
         array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_type'))
     );
 }
 $form->addMultilineTextInput(
-    'usf_value_list', $gL10n->get('ORG_VALUE_LIST'), $userField->getValue('usf_value_list', 'database'), 6,
+    'usf_value_list',
+    $gL10n->get('ORG_VALUE_LIST'),
+    $userField->getValue('usf_value_list', 'database'),
+    6,
     array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC')
 );
 $form->addInput(
-    'usf_icon', $gL10n->get('SYS_ICON'), $userField->getValue('usf_icon', 'database'),
+    'usf_icon',
+    $gL10n->get('SYS_ICON'),
+    $userField->getValue('usf_icon', 'database'),
     array(
         'maxLength' => 2000,
         'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>'))
     )
 );
 $form->addInput(
-    'usf_url', $gL10n->get('ORG_URL'), $userField->getValue('usf_url'),
+    'usf_url',
+    $gL10n->get('ORG_URL'),
+    $userField->getValue('usf_url'),
     array('maxLength' => 2000, 'helpTextIdLabel' => 'ORG_FIELD_URL_DESC')
 );
 $form->closeGroupBox();
 $form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
 $form->addCheckbox(
-    'usf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), (bool) $userField->getValue('usf_hidden'),
+    'usf_hidden',
+    $gL10n->get('ORG_FIELD_NOT_HIDDEN'),
+    (bool) $userField->getValue('usf_hidden'),
     array('helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'fa-eye')
 );
 $form->addCheckbox(
-    'usf_disabled', $gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))), (bool) $userField->getValue('usf_disabled'),
+    'usf_disabled',
+    $gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))),
+    (bool) $userField->getValue('usf_disabled'),
     array('helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'fa-key')
 );
 
 if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
     $form->addCheckbox(
-        'usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), (bool) $userField->getValue('usf_mandatory'),
+        'usf_mandatory',
+        $gL10n->get('ORG_FIELD_REQUIRED'),
+        (bool) $userField->getValue('usf_mandatory'),
         array('property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'fa-asterisk')
     );
 } else {
     $form->addCheckbox(
-        'usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), (bool) $userField->getValue('usf_mandatory'),
+        'usf_mandatory',
+        $gL10n->get('ORG_FIELD_REQUIRED'),
+        (bool) $userField->getValue('usf_mandatory'),
         array('helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'fa-asterisk')
     );
 }
 if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNameIntern === 'EMAIL') {
     $form->addCheckbox(
-        'usf_registration', $gL10n->get('ORG_FIELD_REGISTRATION'), (bool) $userField->getValue('usf_registration'),
+        'usf_registration',
+        $gL10n->get('ORG_FIELD_REGISTRATION'),
+        (bool) $userField->getValue('usf_registration'),
         array('property' => HtmlForm::FIELD_DISABLED, 'icon' => 'fa-address-card')
     );
 } else {
     $form->addCheckbox(
-        'usf_registration', $gL10n->get('ORG_FIELD_REGISTRATION'), (bool) $userField->getValue('usf_registration'),
+        'usf_registration',
+        $gL10n->get('ORG_FIELD_REGISTRATION'),
+        (bool) $userField->getValue('usf_registration'),
         array('icon' => 'fa-address-card')
     );
 }
@@ -204,14 +240,18 @@ $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-p
 $form->addEditor('usf_description', '', $userField->getValue('usf_description'), array('height' => '200px'));
 $form->addDescription($gL10n->get('SYS_DESCRIPTION_POPOVER_DESC'));
 $form->addCheckbox(
-    'usf_description_inline', $gL10n->get('SYS_DESCRIPTION_INLINE_DESC'), (bool) $userField->getValue('usf_description_inline')
+    'usf_description_inline',
+    $gL10n->get('SYS_DESCRIPTION_INLINE_DESC'),
+    (bool) $userField->getValue('usf_description_inline')
 );
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    (int) $userField->getValue('usf_usr_id_create'), $userField->getValue('usf_timestamp_create'),
-    (int) $userField->getValue('usf_usr_id_change'), $userField->getValue('usf_timestamp_change')
+    (int) $userField->getValue('usf_usr_id_create'),
+    $userField->getValue('usf_timestamp_create'),
+    (int) $userField->getValue('usf_usr_id_change'),
+    $userField->getValue('usf_timestamp_change')
 ));
 
 // add form to html page and show page

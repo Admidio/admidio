@@ -27,10 +27,10 @@ require_once(__DIR__ . '/roles_functions.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid',  'string');
-$getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid',  'string');
-$getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid','string');
-$getMode       = admFuncVariableIsValid($_GET, 'mode',       'int');
+$getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
+$getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid', 'string');
+$getMode       = admFuncVariableIsValid($_GET, 'mode', 'int');
 
 if (in_array($getMode, array(2, 3, 7))) {
     try {
@@ -125,7 +125,7 @@ if ($getMode === 1) {
 } elseif ($getMode === 7) {
     // save membership date changes
     $postMembershipStart = admFuncVariableIsValid($_POST, 'membership_start_date_'.$getMemberUuid, 'date', array('requireValue' => true));
-    $postMembershipEnd   = admFuncVariableIsValid($_POST, 'membership_end_date_'.$getMemberUuid,   'date', array('requireValue' => true));
+    $postMembershipEnd   = admFuncVariableIsValid($_POST, 'membership_end_date_'.$getMemberUuid, 'date', array('requireValue' => true));
 
     $member = new TableMembers($gDb);
     $member->readDataByUuid($getMemberUuid);

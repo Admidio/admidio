@@ -211,7 +211,7 @@ if (!$gSettingsManager->has('theme') || $gSettingsManager->get('theme') == 'mode
 }
 
 define('THEME_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme'));
-define('THEME_URL',  ADMIDIO_URL  . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme'));
+define('THEME_URL', ADMIDIO_URL  . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme'));
 
 // Create message object which can be called if a message should be shown
 $gMessage = new Message();

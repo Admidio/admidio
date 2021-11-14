@@ -22,9 +22,9 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getListUuid    = admFuncVariableIsValid($_GET, 'list_uuid',    'string');
-$getRoleIds     = admFuncVariableIsValid($_GET, 'rol_ids',      'string'); // could be int or int[], so string is necessary
-$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('defaultValue' => true));
+$getListUuid    = admFuncVariableIsValid($_GET, 'list_uuid', 'string');
+$getRoleIds     = admFuncVariableIsValid($_GET, 'rol_ids', 'string'); // could be int or int[], so string is necessary
+$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
 // check if the module is enabled and disallow access if it's disabled
@@ -539,13 +539,21 @@ foreach ($configurations as $configuration) {
     }
 }
 
-$form->addSelectBox('sel_select_configuration', $gL10n->get('SYS_SELECT_CONFIGURATION'), $configurationsArray,
-    array('defaultValue' => $formValues['sel_select_configuration'], 'showContextDependentFirstEntry' => false));
+$form->addSelectBox(
+    'sel_select_configuration',
+    $gL10n->get('SYS_SELECT_CONFIGURATION'),
+    $configurationsArray,
+    array('defaultValue' => $formValues['sel_select_configuration'], 'showContextDependentFirstEntry' => false)
+);
 
 // Administrators could upgrade a configuration to a global configuration that is visible to all users
 if ($gCurrentUser->isAdministrator()) {
-    $form->addCheckbox('cbx_global_configuration', $gL10n->get('SYS_CONFIGURATION_ALL_USERS'), (bool) $list->getValue('lst_global'),
-        array('defaultValue' => $formValues['cbx_global_configuration'], 'helpTextIdLabel' => 'SYS_PRESET_CONFIGURATION_DESC'));
+    $form->addCheckbox(
+        'cbx_global_configuration',
+        $gL10n->get('SYS_CONFIGURATION_ALL_USERS'),
+        (bool) $list->getValue('lst_global'),
+        array('defaultValue' => $formValues['cbx_global_configuration'], 'helpTextIdLabel' => 'SYS_PRESET_CONFIGURATION_DESC')
+    );
 }
 
     $form->addDescription($gL10n->get('SYS_ADD_COLUMNS_DESC'));
@@ -585,7 +593,8 @@ if (($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
 // current configuration can be duplicated and saved with another name
 if (strlen($list->getValue('lst_name')) > 0) {
     $form->addButton(
-        'btn_copy', $gL10n->get('SYS_COPY_VAR', array($gL10n->get('SYS_CONFIGURATION'))),
+        'btn_copy',
+        $gL10n->get('SYS_COPY_VAR', array($gL10n->get('SYS_CONFIGURATION'))),
         array('icon' => 'fa-clone')
     );
 }
@@ -632,8 +641,13 @@ if ($getActiveRole) {
         // => EXIT
     }
 }
-$form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
+$form->addSelectBoxFromSql(
+    'sel_roles_ids',
+    $gL10n->get('SYS_ROLE'),
+    $gDb,
+    $sqlData,
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true)
+);
 
 if ($gSettingsManager->getBool('members_enable_user_relations')) {
     // select box showing all relation types
@@ -641,7 +655,10 @@ if ($gSettingsManager->getBool('members_enable_user_relations')) {
               FROM '.TBL_USER_RELATION_TYPES.'
           ORDER BY urt_name';
     $form->addSelectBoxFromSql(
-        'sel_relationtype_ids', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql,
+        'sel_relationtype_ids',
+        $gL10n->get('SYS_USER_RELATION'),
+        $gDb,
+        $sql,
         array('showContextDependentFirstEntry' => false, 'multiselect' => true, 'defaultValue' => isset($formValues['sel_relationtype_ids']) ? $formValues['sel_relationtype_ids'] : '')
     );
 }
@@ -649,7 +666,8 @@ if ($gSettingsManager->getBool('members_enable_user_relations')) {
 $form->closeGroupBox();
 
 $form->addButton(
-    'btn_show_list', $gL10n->get('SYS_SHOW_LIST'),
+    'btn_show_list',
+    $gL10n->get('SYS_SHOW_LIST'),
     array('icon' => 'fa-list-alt', 'class' => 'btn-primary admidio-margin-bottom')
 );
 

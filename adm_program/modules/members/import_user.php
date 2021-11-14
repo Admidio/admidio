@@ -83,7 +83,8 @@ for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) 
     $userImport->setImportMode((int) $_SESSION['user_import_mode']);
     $userImport->readDataByFirstnameLastName(
         $line[$importProfileFields[$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]],
-        $line[$importProfileFields[$gProfileFields->getProperty('LAST_NAME', 'usf_id')]]);
+        $line[$importProfileFields[$gProfileFields->getProperty('LAST_NAME', 'usf_id')]]
+    );
 
     foreach ($line as $columnKey => $columnValue) {
         // get usf id or database column name

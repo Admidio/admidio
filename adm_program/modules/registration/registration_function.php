@@ -22,9 +22,9 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMode        = admFuncVariableIsValid($_GET, 'mode',          'int', array('requireValue' => true));
+$getMode        = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
 $getNewUserUuid = admFuncVariableIsValid($_GET, 'new_user_uuid', 'string', array('requireValue' => true));
-$getUserUuid    = admFuncVariableIsValid($_GET, 'user_uuid',     'string');
+$getUserUuid    = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 
 // only administrators could approve new users
 if (!$gCurrentUser->approveUsers()) {

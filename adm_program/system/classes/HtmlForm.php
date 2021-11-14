@@ -145,8 +145,12 @@ class HtmlForm extends HtmlFormBasic
 
         if ($optionsAll['method'] === 'post' && isset($GLOBALS['gCurrentSession'])) {
             // add a hidden field with the csrf token to each form
-            $this->addInput('admidio-csrf-token', 'csrf-token', $GLOBALS['gCurrentSession']->getCsrfToken(),
-                array('property' => self::FIELD_HIDDEN));
+            $this->addInput(
+                'admidio-csrf-token',
+                'csrf-token',
+                $GLOBALS['gCurrentSession']->getCsrfToken(),
+                array('property' => self::FIELD_HIDDEN)
+            );
         }
 
         if ($htmlPage instanceof HtmlPage) {
@@ -267,7 +271,9 @@ class HtmlForm extends HtmlFormBasic
 
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addInput(
-            $id, $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'), '',
+            $id,
+            $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'),
+            '',
             array('property' => self::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_CAPTCHA_DESCRIPTION', 'class' => 'form-control-small')
         );
     }
@@ -385,8 +391,12 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         $this->openControlStructure(
-            $optionsAll['referenceId'], $label, self::FIELD_DEFAULT,
-            $optionsAll['helpTextIdLabel'], $optionsAll['icon'], 'form-custom-content ' . $optionsAll['class']
+            $optionsAll['referenceId'],
+            $label,
+            self::FIELD_DEFAULT,
+            $optionsAll['helpTextIdLabel'],
+            $optionsAll['icon'],
+            'form-custom-content ' . $optionsAll['class']
         );
         $this->addHtml($content);
         $this->closeControlStructure($optionsAll);
@@ -480,8 +490,12 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $this->openControlStructure(
-            $id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'],
-            $optionsAll['icon'], 'form-group-editor'
+            $id,
+            $label,
+            $optionsAll['property'],
+            $optionsAll['helpTextIdLabel'],
+            $optionsAll['icon'],
+            'form-group-editor'
         );
         $this->addHtml(
             '<div class="' . $attributes['class'] . '">
@@ -586,8 +600,14 @@ class HtmlForm extends HtmlFormBasic
             $this->addJavascriptCode($javascriptCode, true);
         }
 
-        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'],
-                                    '', 'form-upload');
+        $this->openControlStructure(
+            $id,
+            $label,
+            $optionsAll['property'],
+            $optionsAll['helpTextIdLabel'],
+            '',
+            'form-upload'
+        );
         $this->addSimpleInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', (string) $optionsAll['maxUploadSize']);
 
         // if multi uploads are enabled then the file upload field could be hidden
@@ -978,7 +998,8 @@ class HtmlForm extends HtmlFormBasic
 
         if ($optionsAll['maxLength'] > 0 && $optionsAll['property'] !== self::FIELD_HIDDEN) {
             // if max field length is set and field is not hidden then show a counter how many characters still available
-            $this->addHtml('
+            $this->addHtml(
+                '
                 <small class="characters-count">('
                     .$gL10n->get('SYS_STILL_X_CHARACTERS', array('<span id="' . $id . '_counter" class="">255</span>')).
                 ')</small>'
@@ -1545,7 +1566,8 @@ class HtmlForm extends HtmlFormBasic
         if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $gCurrentOrganization->countAllRecords() > 1) {
             $optionsAll['alertWarning'] = $gL10n->get('SYS_ALL_ORGANIZATIONS_DESC', array(implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true))));
 
-            $this->addJavascriptCode('
+            $this->addJavascriptCode(
+                '
                 $("#'.$id.'").change(function() {
                     if($("option:selected", this).attr("data-global") == 1) {
                         $("#'.$id.'_alert").show("slow");

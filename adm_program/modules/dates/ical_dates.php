@@ -31,10 +31,10 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'int');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
-$getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
+$getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
 
 // Daterange defined in preferences
 if ($getDateFrom == '') {

@@ -221,8 +221,12 @@ abstract class Modules
     protected function setOrder()
     {
         // check optional user parameter and make secure. Otherwise set default value
-        $this->order = admFuncVariableIsValid($this->properties, 'order', 'string',
-                                              array('defaultValue' => 'ASC', 'validValues' => array('ASC', 'DESC')));
+        $this->order = admFuncVariableIsValid(
+            $this->properties,
+            'order',
+            'string',
+            array('defaultValue' => 'ASC', 'validValues' => array('ASC', 'DESC'))
+        );
     }
 
     /**

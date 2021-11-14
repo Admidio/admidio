@@ -29,10 +29,10 @@ if (!$gSettingsManager->getBool('documents_files_enable_module')) {
 }
 
 // Initialize and check the parameters
-$getMode       = admFuncVariableIsValid($_GET, 'mode',        'int', array('requireValue' => true));
+$getMode       = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
 $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
-$getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid',   'string');
-$getName       = admFuncVariableIsValid($_GET, 'name',        'file');
+$getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid', 'string');
+$getName       = admFuncVariableIsValid($_GET, 'name', 'file');
 
 $_SESSION['documents_files_request'] = $_POST;
 

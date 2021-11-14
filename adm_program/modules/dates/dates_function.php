@@ -27,9 +27,9 @@ if ($_GET['mode'] == 2) {
 }
 
 // Initialize and check the parameters
-$getDateUuid          = admFuncVariableIsValid($_GET, 'dat_uuid',  'string');
-$getMode              = admFuncVariableIsValid($_GET, 'mode',      'int', array('requireValue' => true));
-$getCopy              = admFuncVariableIsValid($_GET, 'copy',      'bool');
+$getDateUuid          = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
+$getMode              = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getCopy              = admFuncVariableIsValid($_GET, 'copy', 'bool');
 $getUserUuid          = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 $postAdditionalGuests = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
 $postUserComment      = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
@@ -367,14 +367,22 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $date->getDateTimePeriod(), $calendar))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
-                $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message,
-                    $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+                $notification->adminNotification(
+                    $gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'),
+                    $message,
+                    $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'),
+                    $gCurrentUser->getValue('EMAIL')
+                );
             } else {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $date->getDateTimePeriod(), $calendar))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
-                $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message,
-                    $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+                $notification->adminNotification(
+                    $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'),
+                    $message,
+                    $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'),
+                    $gCurrentUser->getValue('EMAIL')
+                );
             }
         } catch (AdmException $e) {
             $e->showHtml();

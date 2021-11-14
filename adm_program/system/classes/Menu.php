@@ -75,15 +75,25 @@ class Menu
         foreach ($this->menuNodes as $menuNode) {
             if ($menuNode->count() > 0) {
                 $navbar->addItem(
-                    'menu_item_'.$menuNode->getTextId(), '', $menuNode->getName(),
-                    'fa-align-justify', 'right', 'navbar', 'admidio-default-menu-item'
+                    'menu_item_'.$menuNode->getTextId(),
+                    '',
+                    $menuNode->getName(),
+                    'fa-align-justify',
+                    'right',
+                    'navbar',
+                    'admidio-default-menu-item'
                 );
 
                 // now add each entry of the node to the navbar dropdown
                 foreach ($menuNode->getEntries() as $menuEntry) {
                     $navbar->addItem(
-                        $menuEntry['men_name_intern'], $menuEntry['men_url'], $menuEntry['men_name'], $menuEntry['men_icon'], 'right',
-                        'menu_item_'.$menuNode->getTextId(), 'admidio-default-menu-item'
+                        $menuEntry['men_name_intern'],
+                        $menuEntry['men_url'],
+                        $menuEntry['men_name'],
+                        $menuEntry['men_icon'],
+                        'right',
+                        'menu_item_'.$menuNode->getTextId(),
+                        'admidio-default-menu-item'
                     );
                 }
             }

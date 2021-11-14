@@ -18,7 +18,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
-$getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid',   'string');
+$getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid', 'string');
 
 // set headline of the script
 if ($getFileUuid !== '') {
@@ -113,24 +113,34 @@ $page = new HtmlPage('admidio-documents-files-rename', $headline);
 $form = new HtmlForm('edit_download_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '4', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)), $page);
 if ($getFileUuid !== '') {
     $form->addInput(
-        'file_type', $gL10n->get('SYS_FILE_TYPE'), $fileType,
+        'file_type',
+        $gL10n->get('SYS_FILE_TYPE'),
+        $fileType,
         array('property' => HtmlForm::FIELD_DISABLED, 'class' => 'form-control-small')
     );
 }
 $form->addInput(
-    'previous_name', $gL10n->get('SYS_PREVIOUS_NAME'), $originalName,
+    'previous_name',
+    $gL10n->get('SYS_PREVIOUS_NAME'),
+    $originalName,
     array('property' => HtmlForm::FIELD_DISABLED)
 );
 $form->addInput(
-    'new_name', $gL10n->get('SYS_NEW_NAME'), $formValues['new_name'],
+    'new_name',
+    $gL10n->get('SYS_NEW_NAME'),
+    $formValues['new_name'],
     array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_FILE_NAME_RULES')
 );
 $form->addMultilineTextInput(
-    'new_description', $gL10n->get('SYS_DESCRIPTION'), $formValues['new_description'], 4,
+    'new_description',
+    $gL10n->get('SYS_DESCRIPTION'),
+    $formValues['new_description'],
+    4,
     array('maxLength' => 255)
 );
 $form->addSubmitButton(
-    'btn_rename', $gL10n->get('SYS_SAVE'),
+    'btn_rename',
+    $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 $form->addHtml(admFuncShowCreateChangeInfoById($createUserId, $createTimestamp));

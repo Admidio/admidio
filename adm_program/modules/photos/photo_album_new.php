@@ -18,7 +18,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
-$getMode      = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireValue' => true, 'validValues' => array('new', 'change')));
+$getMode      = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('new', 'change')));
 
 $photoAlbumsArray = array(0 => $gL10n->get('PHO_PHOTO_ALBUMS'));
 
@@ -112,12 +112,16 @@ if ($getMode === 'new') {
 // show form
 $form = new HtmlForm('photo_album_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('photo_uuid' => $getPhotoUuid, 'mode' => $getMode)), $page);
 $form->addInput(
-    'pho_name', $gL10n->get('PHO_ALBUM'), $photoAlbum->getValue('pho_name'),
+    'pho_name',
+    $gL10n->get('PHO_ALBUM'),
+    $photoAlbum->getValue('pho_name'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 50)
 );
 subfolder(0, '', $photoAlbum, $photoAlbum->getValue('pho_id'));
 $form->addSelectBox(
-    'pho_pho_id_parent', $gL10n->get('PHO_PARENT_ALBUM'), $photoAlbumsArray,
+    'pho_pho_id_parent',
+    $gL10n->get('PHO_PARENT_ALBUM'),
+    $photoAlbumsArray,
     array(
         'property'                       => HtmlForm::FIELD_REQUIRED,
         'defaultValue'                   => $parentAlbumId,
@@ -126,30 +130,43 @@ $form->addSelectBox(
     )
 );
 $form->addInput(
-    'pho_begin', $gL10n->get('SYS_START'), $photoAlbum->getValue('pho_begin'),
+    'pho_begin',
+    $gL10n->get('SYS_START'),
+    $photoAlbum->getValue('pho_begin'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'type' => 'date', 'maxLength' => 10)
 );
 $form->addInput(
-    'pho_end', $gL10n->get('SYS_END'), $photoAlbum->getValue('pho_end'),
+    'pho_end',
+    $gL10n->get('SYS_END'),
+    $photoAlbum->getValue('pho_end'),
     array('type' => 'date', 'maxLength' => 10)
 );
 $form->addInput(
-    'pho_photographers', $gL10n->get('PHO_PHOTOGRAPHER'), $photoAlbum->getValue('pho_photographers'),
+    'pho_photographers',
+    $gL10n->get('PHO_PHOTOGRAPHER'),
+    $photoAlbum->getValue('pho_photographers'),
     array('maxLength' => 100)
 );
 $form->addMultilineTextInput(
-    'pho_description', $gL10n->get('SYS_DESCRIPTION'), $photoAlbum->getValue('pho_description'), 6,
+    'pho_description',
+    $gL10n->get('SYS_DESCRIPTION'),
+    $photoAlbum->getValue('pho_description'),
+    6,
     array('maxLength' => 4000)
 );
 $form->addCheckbox(
-    'pho_locked', $gL10n->get('PHO_ALBUM_LOCK'), (bool) $photoAlbum->getValue('pho_locked'),
+    'pho_locked',
+    $gL10n->get('PHO_ALBUM_LOCK'),
+    (bool) $photoAlbum->getValue('pho_locked'),
     array('helpTextIdLabel' => 'PHO_ALBUM_LOCK_DESC')
 );
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    (int) $photoAlbum->getValue('pho_usr_id_create'), $photoAlbum->getValue('pho_timestamp_create'),
-    (int) $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')
+    (int) $photoAlbum->getValue('pho_usr_id_create'),
+    $photoAlbum->getValue('pho_timestamp_create'),
+    (int) $photoAlbum->getValue('pho_usr_id_change'),
+    $photoAlbum->getValue('pho_timestamp_change')
 ));
 
 // add form to html page and show page

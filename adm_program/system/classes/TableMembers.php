@@ -66,8 +66,12 @@ class TableMembers extends TableAccess
             }
             if ($oldValue != $newValue) {
                 $gChangeNotification->logRoleChange(
-                    $this->getValue('mem_usr_id'), $this->getValue('mem_id'), $this->getValue('rol_name'),
-                    $columnName, $oldValue, $newValue
+                    $this->getValue('mem_usr_id'),
+                    $this->getValue('mem_id'),
+                    $this->getValue('rol_name'),
+                    $columnName,
+                    $oldValue,
+                    $newValue
                 );
             }
         }
@@ -120,13 +124,37 @@ class TableMembers extends TableAccess
             $usrId = $this->getValue('mem_usr_id');
             $memId = $this->getValue('mem_id');
             $membership = $this->getValue('rol_name');
-            $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_begin',
-                $this->getValue('mem_begin', 'Y-m-d'), null, /*user=*/null, /*deleting=*/true);
-            $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_end',
-                $this->getValue('mem_end', 'Y-m-d'), null, /*user=*/null, /*deleting=*/true);
+            $gChangeNotification->logRoleChange(
+                $usrId,
+                $memId,
+                $membership,
+                'mem_begin',
+                $this->getValue('mem_begin', 'Y-m-d'),
+                null, // user=
+                null, // deleting=
+                true
+            );
+            $gChangeNotification->logRoleChange(
+                $usrId,
+                $memId,
+                $membership,
+                'mem_end',
+                $this->getValue('mem_end', 'Y-m-d'),
+                null, // user=
+                null, // deleting=
+                true
+            );
             if ($this->getValue('mem_leader')) {
-                $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_leaderf',
-                    $this->getValue('mem_leader'), null, /*user=*/null, /*deleting=*/true);
+                $gChangeNotification->logRoleChange(
+                    $usrId,
+                    $memId,
+                    $membership,
+                    'mem_leaderf',
+                    $this->getValue('mem_leader'),
+                    null, // user=
+                    null, // deleting=
+                    true
+                );
             }
         }
 
@@ -170,13 +198,37 @@ class TableMembers extends TableAccess
             // Log begin, end and leader as changed (set to NULL)
             $usrId = $obj->getValue('mem_usr_id');
             $membership = $obj->getValue('rol_name');
-            $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_begin',
-                null, $obj->getValue('mem_begin', 'Y-m-d'), /*user=*/ null, /*deleting=*/ true);
-            $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_end',
-                null, $obj->getValue('mem_end', 'Y-m-d'), /*user=*/ null, /*deleting=*/ true);
+            $gChangeNotification->logRoleChange(
+                $usrId,
+                $memId,
+                $membership,
+                'mem_begin',
+                null,
+                $obj->getValue('mem_begin', 'Y-m-d'), /*user=*/ 
+                null, /*deleting=*/ 
+                true
+            );
+            $gChangeNotification->logRoleChange(
+                $usrId,
+                $memId,
+                $membership,
+                'mem_end',
+                null,
+                $obj->getValue('mem_end', 'Y-m-d'), /*user=*/ 
+                null, /*deleting=*/ 
+                true
+            );
             if ($obj->getValue('mem_leader')) {
-                $gChangeNotification->logRoleChange($usrId, $memId, $membership, 'mem_leader',
-                    null, $obj->getValue('mem_leader'), /*user=*/ null, /*deleting=*/ true);
+                $gChangeNotification->logRoleChange(
+                    $usrId,
+                    $memId,
+                    $membership,
+                    'mem_leader',
+                    null,
+                    $obj->getValue('mem_leader'), /*user=*/ 
+                    null, /*deleting=*/ 
+                    true
+                );
             }
         }
 
@@ -268,7 +320,7 @@ class TableMembers extends TableAccess
             // the actual date must be after the beginning
             // and the actual date must be before the end date
             if (strcmp($nowDate, $this->getValue('mem_begin', 'Y-m-d')) >= 0
-            &&  strcmp($endDate, $this->getValue('mem_end',   'Y-m-d')) < 0) {
+            &&  strcmp($endDate, $this->getValue('mem_end', 'Y-m-d')) < 0) {
                 // if role administrator then check if this membership is the last one -> don't delete it
                 if ((int) $this->getValue('rol_administrator') === 1) {
                     $sql = 'SELECT mem_id

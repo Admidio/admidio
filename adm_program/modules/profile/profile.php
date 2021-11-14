@@ -177,7 +177,8 @@ $page->addJavascript('
         });
     }
 ');
-$page->addJavascript('
+$page->addJavascript(
+    '
     $(".admMemberInfo").click(function() {
         showHideMembershipInformation($(this))
     });
@@ -199,62 +200,90 @@ $page->addJavascript('
 
 // if user has right then show link to edit profile
 if ($gCurrentUser->hasRightEditProfile($user)) {
-    $page->addPageFunctionsMenuItem('menu_item_profile_edit', $gL10n->get('PRO_EDIT_PROFILE'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_profile_edit',
+        $gL10n->get('PRO_EDIT_PROFILE'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $user->getValue('usr_uuid'))),
-        'fa-edit');
+        'fa-edit'
+    );
 }
 
 // Password of own user could be changed
 if ($userId === $gCurrentUserId) {
-    $page->addPageFunctionsMenuItem('menu_item_profile_password', $gL10n->get('SYS_CHANGE_PASSWORD'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_profile_password',
+        $gL10n->get('SYS_CHANGE_PASSWORD'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)),
-        'fa-key');
+        'fa-key'
+    );
 } elseif ($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0) {
     // Administrators can change or send password if login is configured and user is member of current organization
 
     if (strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->getBool('enable_system_mails')) {
         // if email is set and systemmails are activated then administrator can send a new password to user
-        $page->addPageFunctionsMenuItem('menu_item_profile_send_password', $gL10n->get('ORG_SEND_NEW_PASSWORD'),
+        $page->addPageFunctionsMenuItem(
+            'menu_item_profile_send_password',
+            $gL10n->get('ORG_SEND_NEW_PASSWORD'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $getUserUuid, 'mode' => '5')),
-            'fa-key');
+            'fa-key'
+        );
     } else {
         // if user has no email or send email is disabled then administrator could set a new password
-        $page->addPageFunctionsMenuItem('menu_item_profile_password', $gL10n->get('SYS_CHANGE_PASSWORD'),
+        $page->addPageFunctionsMenuItem(
+            'menu_item_profile_password',
+            $gL10n->get('SYS_CHANGE_PASSWORD'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)),
-            'fa-key');
+            'fa-key'
+        );
     }
 }
 
 // show link to view profile field change history
 if ($gSettingsManager->getBool('profile_log_edit_fields') && $gCurrentUser->hasRightEditProfile($user)) {
-    $page->addPageFunctionsMenuItem('menu_item_profile_change_history', $gL10n->get('SYS_CHANGE_HISTORY'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_profile_change_history',
+        $gL10n->get('SYS_CHANGE_HISTORY'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', array('user_uuid' => $getUserUuid)),
-        'fa-history');
+        'fa-history'
+    );
 }
 
 // show link to export the profile as vCard
-$page->addPageFunctionsMenuItem('menu_item_profile_vcard', $gL10n->get('PRO_EXPORT_VCARD'),
+$page->addPageFunctionsMenuItem(
+    'menu_item_profile_vcard',
+    $gL10n->get('PRO_EXPORT_VCARD'),
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '1', 'user_uuid' => $getUserUuid)),
-    'fa-file-export');
+    'fa-file-export'
+);
 
 // if you have the right to assign roles then show the link to assign new roles to this user
 if ($gCurrentUser->assignRoles()) {
-    $page->addPageFunctionsMenuItem('menu_item_profile_role_memberships_change', $gL10n->get('SYS_EDIT_ROLE_MEMBERSHIPS'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_profile_role_memberships_change',
+        $gL10n->get('SYS_EDIT_ROLE_MEMBERSHIPS'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid)),
-        'fa-users');
+        'fa-users'
+    );
 }
 
 // show link to create relations
 if ($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser->editUsers()) {
-    $page->addPageFunctionsMenuItem('menu_item_profile_user_relation_types', $gL10n->get('SYS_CREATE_RELATIONSHIP'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_profile_user_relation_types',
+        $gL10n->get('SYS_CREATE_RELATIONSHIP'),
         SecurityUtils::encodeUrl(ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)),
-        'fa-people-arrows');
+        'fa-people-arrows'
+    );
 }
 
 if ($gCurrentUser->isAdministrator()) {
     // show link to maintain profile fields
-    $page->addPageFunctionsMenuItem('menu_item_profile_maintain_fields', $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
-        ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php', 'fa-th-list');
+    $page->addPageFunctionsMenuItem(
+        'menu_item_profile_maintain_fields',
+        $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
+        ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php',
+        'fa-th-list'
+    );
 }
 
 // *******************************************************************************
@@ -281,9 +310,12 @@ $page->addHtml('
             // add loginname
             if (strlen($user->getValue('usr_login_name')) > 0) {
                 if ($userId !== $gCurrentUserId && $gSettingsManager->getBool('enable_pm_module')) {
-                    $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'),
+                    $form->addStaticControl(
+                        'username',
+                        $gL10n->get('SYS_USERNAME'),
                         '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)).'" title="' . $gL10n->get('SYS_WRITE_PM') . '">'.
-                            '<i class="fas fa-comment-alt"></i>'.$user->getValue('usr_login_name').'</a>');
+                            '<i class="fas fa-comment-alt"></i>'.$user->getValue('usr_login_name').'</a>'
+                    );
                 } else {
                     $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'));
                 }
@@ -873,8 +905,10 @@ if ($gSettingsManager->getBool('members_enable_user_relations')) {
                 $page->addHtml(
                     '<div id="relation_info_'.(int) $relation->getValue('ure_id').'_Content" style="display: none;">'.
                     admFuncShowCreateChangeInfoById(
-                        (int) $relation->getValue('ure_usr_id_create'), $relation->getValue('ure_timestamp_create'),
-                        (int) $relation->getValue('ure_usr_id_change'), $relation->getValue('ure_timestamp_change')
+                        (int) $relation->getValue('ure_usr_id_create'),
+                        $relation->getValue('ure_timestamp_create'),
+                        (int) $relation->getValue('ure_usr_id_change'),
+                        $relation->getValue('ure_timestamp_change')
                     ).
                     '</div>'
                 );
@@ -892,8 +926,10 @@ if ($gSettingsManager->getBool('members_enable_user_relations')) {
 
 // show information about user who creates the recordset and changed it
 $page->addHtml(admFuncShowCreateChangeInfoById(
-    (int) $user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'),
-    (int) $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')
+    (int) $user->getValue('usr_usr_id_create'),
+    $user->getValue('usr_timestamp_create'),
+    (int) $user->getValue('usr_usr_id_change'),
+    $user->getValue('usr_timestamp_change')
 ));
 
 $page->show();

@@ -112,7 +112,8 @@ if ($gValidLogin) {
     // create a static form
     $form = new HtmlForm('plugin-login-static-form', '#', null, array('type' => 'vertical', 'setFocus' => false));
     $form->addStaticControl(
-        'plg_user', $gL10n->get('SYS_MEMBER'),
+        'plg_user',
+        $gL10n->get('SYS_MEMBER'),
         '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_uuid' => $gCurrentUser->getValue('usr_uuid'))). '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'
         . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') .
         '</a>'
@@ -132,15 +133,21 @@ if ($gValidLogin) {
     // create and show the login form
 
     $form = new HtmlForm(
-        'plugin-login-form', ADMIDIO_URL.'/adm_program/system/login_check.php', null,
+        'plugin-login-form',
+        ADMIDIO_URL.'/adm_program/system/login_check.php',
+        null,
         array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
     );
     $form->addInput(
-        'plg_usr_login_name', $gL10n->get('SYS_USERNAME'), '',
+        'plg_usr_login_name',
+        $gL10n->get('SYS_USERNAME'),
+        '',
         array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 254)
     );
     $form->addInput(
-        'plg_usr_password', $gL10n->get('SYS_PASSWORD'), '',
+        'plg_usr_password',
+        $gL10n->get('SYS_PASSWORD'),
+        '',
         array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)
     );
 
@@ -150,7 +157,10 @@ if ($gValidLogin) {
                   FROM '.TBL_ORGANIZATIONS.'
               ORDER BY org_longname ASC, org_shortname ASC';
         $form->addSelectBoxFromSql(
-            'plg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
+            'plg_org_id',
+            $gL10n->get('SYS_ORGANIZATION'),
+            $gDb,
+            $sql,
             array('defaultValue' => $gCurrentOrgId, 'showContextDependentFirstEntry' => false)
         );
     }

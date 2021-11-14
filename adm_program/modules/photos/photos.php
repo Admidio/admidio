@@ -28,11 +28,11 @@ if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
 }
 
 // Initialize and check the parameters
-$getPhotoUuid      = admFuncVariableIsValid($_GET, 'photo_uuid',      'string');
-$getHeadline       = admFuncVariableIsValid($_GET, 'headline',        'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
-$getStart          = admFuncVariableIsValid($_GET, 'start',           'int');
+$getPhotoUuid      = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
+$getHeadline       = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
+$getStart          = admFuncVariableIsValid($_GET, 'start', 'int');
 $getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'int', array('defaultValue' => 1));
-$getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr',        'int');
+$getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
 
 unset($_SESSION['photo_album_request'], $_SESSION['ecard_request']);
 
@@ -80,7 +80,8 @@ if ($gSettingsManager->getBool('enable_rss')) {
 }
 
 if ($photoAlbum->isEditable()) {
-    $page->addJavascript('
+    $page->addJavascript(
+        '
         /**
          * rotate image
          * @param {int}    img
@@ -89,8 +90,10 @@ if ($photoAlbum->isEditable()) {
         function imageRotate(img, direction) {
             $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php", {photo_uuid: "'.$getPhotoUuid.'", photo_nr: img, job: "rotate", direction: direction}, function(data) {
                 // Appending the random number is necessary to trick the browser cache
-                $("#img_" + img).attr("src", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php',
-                    array('photo_uuid' => $getPhotoUuid, 'thumb' => 1)).'&photo_nr=" + img + "&rand=" + Math.random());
+                $("#img_" + img).attr("src", "'.SecurityUtils::encodeUrl(
+        ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php',
+        array('photo_uuid' => $getPhotoUuid, 'thumb' => 1)
+    ).'&photo_nr=" + img + "&rand=" + Math.random());
                 return true;
             });
         }'
@@ -102,7 +105,8 @@ if ((int) $gSettingsManager->get('photo_show_mode') === 1) {
     $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.css');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.js');
 
-    $page->addJavascript('
+    $page->addJavascript(
+        '
         $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) {
             event.preventDefault();
             $(this).ekkoLightbox();
@@ -118,29 +122,41 @@ if ($getPhotoNr > 0) {
 
 if ($gCurrentUser->editPhotoRight()) {
     // show link to create new album
-    $page->addPageFunctionsMenuItem('menu_item_photos_new_album', $gL10n->get('PHO_CREATE_ALBUM'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_photos_new_album',
+        $gL10n->get('PHO_CREATE_ALBUM'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('mode' => 'new', 'photo_uuid' => $getPhotoUuid)),
-        'fa-plus-circle');
+        'fa-plus-circle'
+    );
 
     if ($getPhotoUuid !== '') {
         // show link to edit album
-        $page->addPageFunctionsMenuItem('menu_item_photos_edit_album', $gL10n->get('PHO_EDIT_ALBUM'),
+        $page->addPageFunctionsMenuItem(
+            'menu_item_photos_edit_album',
+            $gL10n->get('PHO_EDIT_ALBUM'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('mode' => 'change', 'photo_uuid' => $getPhotoUuid)),
-            'fa-edit');
+            'fa-edit'
+        );
 
         // show link to upload photos
-        $page->addPageFunctionsMenuItem('menu_item_photos_upload_photo', $gL10n->get('PHO_UPLOAD_PHOTOS'),
+        $page->addPageFunctionsMenuItem(
+            'menu_item_photos_upload_photo',
+            $gL10n->get('PHO_UPLOAD_PHOTOS'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'photos', 'uuid' => $getPhotoUuid)),
-            'fa-upload');
+            'fa-upload'
+        );
     }
 }
 
 // show link to download photos if enabled
 if ($gSettingsManager->getBool('photo_download_enabled') && $photoAlbum->getValue('pho_quantity') > 0) {
     // show link to download photos
-    $page->addPageFunctionsMenuItem('menu_item_photos_download', $gL10n->get('SYS_DOWNLOAD_ALBUM'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_photos_download',
+        $gL10n->get('SYS_DOWNLOAD_ALBUM'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('photo_uuid' => $getPhotoUuid)),
-        'fa-download');
+        'fa-download'
+    );
 }
 
 // Breadcrump bauen
@@ -305,8 +321,10 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
 
     // show information about user who creates the recordset and changed it
     $page->addHtml(admFuncShowCreateChangeInfoById(
-        (int) $photoAlbum->getValue('pho_usr_id_create'), $photoAlbum->getValue('pho_timestamp_create'),
-        (int) $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')
+        (int) $photoAlbum->getValue('pho_usr_id_create'),
+        $photoAlbum->getValue('pho_timestamp_create'),
+        (int) $photoAlbum->getValue('pho_usr_id_change'),
+        $photoAlbum->getValue('pho_timestamp_change')
     ));
 
     // show page navigations through thumbnails

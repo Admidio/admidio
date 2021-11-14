@@ -248,11 +248,11 @@ class CategoryReport
                         $role->readDataById($rol_id);
                         $this->listData[$member][$key] .= $role->getValue('rol_name').'; ';
                     }
-                    $this->listData[$member][$key] = trim($this->listData[$member][$key],'; ');
+                    $this->listData[$member][$key] = trim($this->listData[$member][$key], '; ');
                 } elseif ($data['type'] == 'n') {              //Sonderfall: Anzahlspalte
                     $this->listData[$member][$key] = '';
                 } else {
-                    if (isset($data['usr_id']) and in_array($member,$data['usr_id'])) {
+                    if (isset($data['usr_id']) and in_array($member, $data['usr_id'])) {
                         $this->listData[$member][$key] = true;
                         $number_row_count++;
                         $number_col[$key]++;

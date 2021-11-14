@@ -22,10 +22,10 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getStart    = admFuncVariableIsValid($_GET, 'start',     'int');
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
+$getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'int');
 $getRoleType = admFuncVariableIsValid($_GET, 'role_type', 'int', array('defaultValue' => 1));
-$getShow     = admFuncVariableIsValid($_GET, 'show',      'string', array('defaultValue' => 'card', 'validValues' => array('card', 'permissions')));
+$getShow     = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'card', 'validValues' => array('card', 'permissions')));
 
 define('ROLE_TYPE_INACTIVE', 0);
 define('ROLE_TYPE_ACTIVE', 1);
@@ -90,32 +90,47 @@ if ($getShow === 'card') {
 
 if ($gCurrentUser->manageRoles()) {
     // show link to create new role
-    $page->addPageFunctionsMenuItem('menu_item_groups_roles_add', $gL10n->get('SYS_CREATE_ROLE'),
-        ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', 'fa-plus-circle');
+    $page->addPageFunctionsMenuItem(
+        'menu_item_groups_roles_add',
+        $gL10n->get('SYS_CREATE_ROLE'),
+        ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php',
+        'fa-plus-circle'
+    );
 
     if ($getShow === 'card') {
         // show permissions of all roles
-        $page->addPageFunctionsMenuItem('menu_item_groups_roles_show_permissions', $gL10n->get('SYS_SHOW_PERMISSIONS'),
+        $page->addPageFunctionsMenuItem(
+            'menu_item_groups_roles_show_permissions',
+            $gL10n->get('SYS_SHOW_PERMISSIONS'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('show' => 'permissions')),
-            'fa-user-shield');
+            'fa-user-shield'
+        );
     }
 
     // show link to maintain categories
-    $page->addPageFunctionsMenuItem('menu_item_groups_roles_maintain_categories', $gL10n->get('SYS_EDIT_CATEGORIES'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_groups_roles_maintain_categories',
+        $gL10n->get('SYS_EDIT_CATEGORIES'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
-        'fa-th-large');
+        'fa-th-large'
+    );
 }
 
 // show link to create own list
 if ($gSettingsManager->getInt('groups_roles_edit_lists') === 1 // everyone
 || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && $gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
 || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && $gCurrentUser->isAdministrator())) {
-    $page->addPageFunctionsMenuItem('menu_item_groups_own_list', $gL10n->get('SYS_EDIT_LISTS'),
-        ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php', 'fa-list-alt');
+    $page->addPageFunctionsMenuItem(
+        'menu_item_groups_own_list',
+        $gL10n->get('SYS_EDIT_LISTS'),
+        ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php',
+        'fa-list-alt'
+    );
 }
 
 // add filter navbar
-$page->addJavascript('
+$page->addJavascript(
+    '
     $("#cat_id").change(function() {
         $("#navbar_filter_form").submit();
     });
@@ -130,12 +145,20 @@ $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
 $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', $page, array('type' => 'navbar', 'setFocus' => false));
 $form->addInput('show', '', $getShow, array('property' => HtmlForm::FIELD_HIDDEN));
 $form->addSelectBoxForCategories(
-    'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', HtmlForm::SELECT_BOX_MODUS_FILTER,
-    array('defaultValue' => $getCatId));
+    'cat_id',
+    $gL10n->get('SYS_CATEGORY'),
+    $gDb,
+    'ROL',
+    HtmlForm::SELECT_BOX_MODUS_FILTER,
+    array('defaultValue' => $getCatId)
+);
 if ($gCurrentUser->manageRoles()) {
     $form->addSelectBox(
-        'role_type', $gL10n->get('SYS_ROLE_TYPES'), array(0 => $gL10n->get('SYS_INACTIVE_GROUPS_ROLES'), 1 => $gL10n->get('SYS_ACTIVE_GROUPS_ROLES'), 2 => $gL10n->get('SYS_ROLES_CONFIRMATION_OF_PARTICIPATION')),
-        array('defaultValue' => $getRoleType));
+        'role_type',
+        $gL10n->get('SYS_ROLE_TYPES'),
+        array(0 => $gL10n->get('SYS_INACTIVE_GROUPS_ROLES'), 1 => $gL10n->get('SYS_ACTIVE_GROUPS_ROLES'), 2 => $gL10n->get('SYS_ROLES_CONFIRMATION_OF_PARTICIPATION')),
+        array('defaultValue' => $getRoleType)
+    );
 }
 $filterNavbar->addForm($form->show());
 $page->addHtml($filterNavbar->show());

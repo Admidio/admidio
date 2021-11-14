@@ -45,8 +45,8 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getDraw   = admFuncVariableIsValid($_GET, 'draw',   'int', array('requireValue' => true));
-$getStart  = admFuncVariableIsValid($_GET, 'start',  'int', array('requireValue' => true));
+$getDraw   = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
+$getStart  = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
 $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
 $getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 

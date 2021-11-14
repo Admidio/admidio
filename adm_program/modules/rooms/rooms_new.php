@@ -18,7 +18,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getRoomUuid = admFuncVariableIsValid($_GET, 'room_uuid','string');
+$getRoomUuid = admFuncVariableIsValid($_GET, 'room_uuid', 'string');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ROOM')));
 
 // only authorized users are allowed to edit the rooms
@@ -55,15 +55,21 @@ $page = new HtmlPage('admidio-rooms-edit', $headline);
 $form = new HtmlForm('rooms_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_function.php', array('room_uuid' => $getRoomUuid, 'mode' => '1')), $page);
 $form->openGroupBox('gb_name_properties', $gL10n->get('SYS_NAME').' &amp; '.$gL10n->get('SYS_PROPERTIES'));
 $form->addInput(
-    'room_name', $gL10n->get('SYS_ROOM'), $room->getValue('room_name'),
+    'room_name',
+    $gL10n->get('SYS_ROOM'),
+    $room->getValue('room_name'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'room_capacity', $gL10n->get('SYS_CAPACITY').' ('.$gL10n->get('SYS_SEATING').')', (int) $room->getValue('room_capacity'),
+    'room_capacity',
+    $gL10n->get('SYS_CAPACITY').' ('.$gL10n->get('SYS_SEATING').')',
+    (int) $room->getValue('room_capacity'),
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'room_overhang', $gL10n->get('SYS_OVERHANG'), (int) $room->getValue('room_overhang'),
+    'room_overhang',
+    $gL10n->get('SYS_OVERHANG'),
+    (int) $room->getValue('room_overhang'),
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_ROOM_OVERHANG')
 );
 $form->closeGroupBox();
@@ -73,8 +79,10 @@ $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    (int) $room->getValue('room_usr_id_create'), $room->getValue('room_timestamp_create'),
-    (int) $room->getValue('dat_usr_id_change'),  $room->getValue('room_timestamp_change')
+    (int) $room->getValue('room_usr_id_create'),
+    $room->getValue('room_timestamp_create'),
+    (int) $room->getValue('dat_usr_id_change'),
+    $room->getValue('room_timestamp_change')
 ));
 
 // add form to html page and show page

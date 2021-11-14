@@ -17,7 +17,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getCommentGboUuid = admFuncVariableIsValid($_GET, 'gbo_uuid',   'string');
+$getCommentGboUuid = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
 $getModeration     = admFuncVariableIsValid($_GET, 'moderation', 'bool');
 
 if ($getCommentGboUuid !== '') {
@@ -54,8 +54,10 @@ if ($getCommentGboUuid !== '') {
             <div class="card admidio-blog-comment" id="gbc_'.$gbcUuid.'">
                 <div class="card-header">
                     <i class="fas fa-comment"></i>' .
-                        $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($gbComment->getValue('gbc_name'), $gbComment->getValue('gbc_timestamp_create',
-                            $gSettingsManager->getString('system_date')), $gbComment->getValue('gbc_timestamp_create', $gSettingsManager->getString('system_time'))));
+                        $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($gbComment->getValue('gbc_name'), $gbComment->getValue(
+                            'gbc_timestamp_create',
+                            $gSettingsManager->getString('system_date')
+                        ), $gbComment->getValue('gbc_timestamp_create', $gSettingsManager->getString('system_time'))));
 
             // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
             if (strlen($gbcEmail) > 0) {
@@ -98,9 +100,11 @@ if ($getCommentGboUuid !== '') {
             // show information about user who edit the recordset
             if (strlen($gbComment->getValue('gbc_usr_id_change')) > 0) {
                 echo '<div class="card-footer">'.admFuncShowCreateChangeInfoById(
-                        0, '',
-                        (int) $gbComment->getValue('gbc_usr_id_change'), $gbComment->getValue('gbc_timestamp_change')
-                    ).'</div>';
+                    0,
+                    '',
+                    (int) $gbComment->getValue('gbc_usr_id_change'),
+                    $gbComment->getValue('gbc_timestamp_change')
+                ).'</div>';
             }
             echo '</div>';
         }

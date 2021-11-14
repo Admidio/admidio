@@ -25,12 +25,12 @@ $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 $postFrom       = admFuncVariableIsValid($_POST, 'mailfrom', 'string');
 $postName       = admFuncVariableIsValid($_POST, 'namefrom', 'string');
 $postSubject    = StringUtils::strStripTags($_POST['msg_subject']); // Subject should be send without html conversations
-$postSubjectSQL = admFuncVariableIsValid($_POST, 'msg_subject',  'string');
+$postSubjectSQL = admFuncVariableIsValid($_POST, 'msg_subject', 'string');
 $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
-$postUserIdList = admFuncVariableIsValid($_POST, 'userIdList',   'string');
-$postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid',    'string');
+$postUserIdList = admFuncVariableIsValid($_POST, 'userIdList', 'string');
+$postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid', 'string');
 
 // save form data in session for back navigation
 $_SESSION['message_request'] = $_POST;

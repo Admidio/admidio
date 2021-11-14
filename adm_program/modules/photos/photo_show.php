@@ -26,11 +26,11 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid','string', array('requireValue' => true));
-$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',   'int');
-$getMaxWidth  = admFuncVariableIsValid($_GET, 'max_width',  'int', array('defaultValue' => 0));
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string', array('requireValue' => true));
+$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
+$getMaxWidth  = admFuncVariableIsValid($_GET, 'max_width', 'int', array('defaultValue' => 0));
 $getMaxHeight = admFuncVariableIsValid($_GET, 'max_height', 'int', array('defaultValue' => 0));
-$getThumbnail = admFuncVariableIsValid($_GET, 'thumb',      'bool');
+$getThumbnail = admFuncVariableIsValid($_GET, 'thumb', 'bool');
 $image        = null;
 
 // check if the module is enabled and disallow access if it's disabled

@@ -26,18 +26,18 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getMsgType    = admFuncVariableIsValid($_GET, 'msg_type',    'string', array('defaultValue' => TableMessage::MESSAGE_TYPE_EMAIL));
-$getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid',   'string');
-$getSubject    = admFuncVariableIsValid($_GET, 'subject',     'string');
-$getMsgUuid    = admFuncVariableIsValid($_GET, 'msg_uuid',    'string');
-$getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid',   'string');
+$getMsgType    = admFuncVariableIsValid($_GET, 'msg_type', 'string', array('defaultValue' => TableMessage::MESSAGE_TYPE_EMAIL));
+$getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getSubject    = admFuncVariableIsValid($_GET, 'subject', 'string');
+$getMsgUuid    = admFuncVariableIsValid($_GET, 'msg_uuid', 'string');
+$getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
 $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
-$getForward    = admFuncVariableIsValid($_GET, 'forward',     'bool');
+$getForward    = admFuncVariableIsValid($_GET, 'forward', 'bool');
 
 // Check form values
 $postUserIdList = admFuncVariableIsValid($_POST, 'userIdList', 'string');
-$postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid',  'string');
+$postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid', 'string');
 
 
 $message = new TableMessage($gDb);
@@ -203,7 +203,9 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
     if ($getUserUuid === '') {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
         $form->addSelectBox(
-            'msg_to', $gL10n->get('SYS_TO'), $list,
+            'msg_to',
+            $gL10n->get('SYS_TO'),
+            $list,
             array(
                 'property'               => HtmlForm::FIELD_REQUIRED,
                 'multiselect'            => true,
@@ -222,7 +224,9 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
 
     if ($getSubject === '') {
         $form->addInput(
-            'msg_subject', $gL10n->get('SYS_SUBJECT'), $message->getValue('msg_subject'),
+            'msg_subject',
+            $gL10n->get('SYS_SUBJECT'),
+            $message->getValue('msg_subject'),
             array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
         );
     } else {
@@ -230,7 +234,10 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
     }
 
     $form->addMultilineTextInput(
-        'msg_body', $gL10n->get('SYS_MESSAGE'), $message->getContent(), 10,
+        'msg_body',
+        $gL10n->get('SYS_MESSAGE'),
+        $message->getContent(),
+        10,
         array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 
@@ -428,7 +435,9 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
     }
 
     $form->addSelectBox(
-        'msg_to', $gL10n->get('SYS_TO'), $list,
+        'msg_to',
+        $gL10n->get('SYS_TO'),
+        $list,
         array(
             'property'               => HtmlForm::FIELD_REQUIRED,
             'multiselect'            => true,
@@ -453,7 +462,9 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         $possibleEmails = $pdoStatement->fetchColumn();
 
         $form->addInput(
-            'name', $gL10n->get('SYS_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
+            'name',
+            $gL10n->get('SYS_YOUR_NAME'),
+            $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
             array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
         );
 
@@ -473,22 +484,31 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
             $sqlData['params'] = array($gCurrentUserId);
 
             $form->addSelectBoxFromSql(
-                'mailfrom', $gL10n->get('SYS_YOUR_EMAIL'), $gDb, $sqlData,
+                'mailfrom',
+                $gL10n->get('SYS_YOUR_EMAIL'),
+                $gDb,
+                $sqlData,
                 array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false)
             );
         } else {
             $form->addInput(
-                'mailfrom', $gL10n->get('SYS_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'),
+                'mailfrom',
+                $gL10n->get('SYS_YOUR_EMAIL'),
+                $gCurrentUser->getValue('EMAIL'),
                 array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
             );
         }
     } else {
         $form->addInput(
-            'namefrom', $gL10n->get('SYS_YOUR_NAME'), $formValues['namefrom'],
+            'namefrom',
+            $gL10n->get('SYS_YOUR_NAME'),
+            $formValues['namefrom'],
             array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
         );
         $form->addInput(
-            'mailfrom', $gL10n->get('SYS_YOUR_EMAIL'), $formValues['mailfrom'],
+            'mailfrom',
+            $gL10n->get('SYS_YOUR_EMAIL'),
+            $formValues['mailfrom'],
             array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
         );
     }
@@ -507,14 +527,17 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
 
     $form->openGroupBox('gb_mail_message', $gL10n->get('SYS_MESSAGE'));
     $form->addInput(
-        'msg_subject', $gL10n->get('SYS_SUBJECT'), $message->getValue('msg_subject'),
+        'msg_subject',
+        $gL10n->get('SYS_SUBJECT'),
+        $message->getValue('msg_subject'),
         array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 
     // Nur eingeloggte User duerfen Attachments anhaengen...
     if ($gValidLogin && ($gSettingsManager->getInt('max_email_attachment_size') > 0) && PhpIniUtils::isFileUploadEnabled()) {
         $form->addFileUpload(
-            'btn_add_attachment', $gL10n->get('SYS_ATTACHMENT'),
+            'btn_add_attachment',
+            $gL10n->get('SYS_ATTACHMENT'),
             array(
                 'enableMultiUploads' => true,
                 'maxUploadSize'      => Email::getMaxAttachmentSize(),
@@ -531,7 +554,10 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         $form->addEditor('msg_body', '', $message->getContent(), array('property' => HtmlForm::FIELD_REQUIRED));
     } else {
         $form->addMultilineTextInput(
-            'msg_body', $gL10n->get('SYS_TEXT'), $message->getContent(), 10,
+            'msg_body',
+            $gL10n->get('SYS_TEXT'),
+            $message->getContent(),
+            10,
             array('property' => HtmlForm::FIELD_REQUIRED)
         );
     }

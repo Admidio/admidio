@@ -17,8 +17,8 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getRoomUuid = admFuncVariableIsValid($_GET, 'room_uuid','string');
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int', array('requireValue' => true));
+$getRoomUuid = admFuncVariableIsValid($_GET, 'room_uuid', 'string');
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
 
 // only authorized users are allowed to edit the rooms
 if (!$gCurrentUser->isAdministrator()) {

@@ -19,9 +19,9 @@ require_once(__DIR__ . '/ecard_function.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid',  'string');
-$getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid',  'string');
-$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',  'int', array('requireValue' => true));
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
+$getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr', 'int', array('requireValue' => true));
 $showPage     = admFuncVariableIsValid($_GET, 'show_page', 'int', array('defaultValue' => 1));
 
 // Initialisierung lokaler Variablen
@@ -99,7 +99,8 @@ $page = new HtmlPage('admidio-ecards', $headline);
 
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.min.js');
 
-$page->addJavascript('
+$page->addJavascript(
+    '
     $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) {
         event.preventDefault();
         $(this).ekkoLightbox();
@@ -150,7 +151,9 @@ foreach ($templates as $templateName) {
 }
 unset($templateName);
 $form->addSelectBox(
-    'ecard_template', $gL10n->get('SYS_TEMPLATE'), $newTemplateArray,
+    'ecard_template',
+    $gL10n->get('SYS_TEMPLATE'),
+    $newTemplateArray,
     array('defaultValue' => $template, 'property' => HtmlForm::FIELD_REQUIRED, 'showContextDependentFirstEntry' => false)
 );
 $form->closeGroupBox();
@@ -208,22 +211,30 @@ while ($row = $statement->fetch()) {
 }
 
 $form->addSelectBox(
-    'ecard_recipients', $gL10n->get('SYS_TO'), $list,
+    'ecard_recipients',
+    $gL10n->get('SYS_TO'),
+    $list,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $recipients, 'multiselect' => true)
 );
 $form->addLine();
 $form->addInput(
-    'name_from', $gL10n->get('SYS_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
+    'name_from',
+    $gL10n->get('SYS_YOUR_NAME'),
+    $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
     array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
 );
 $form->addInput(
-    'mail_from', $gL10n->get('SYS_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'),
+    'mail_from',
+    $gL10n->get('SYS_YOUR_EMAIL'),
+    $gCurrentUser->getValue('EMAIL'),
     array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
 );
 $form->closeGroupBox();
 $form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'), 'admidio-panel-editor');
 $form->addEditor(
-    'ecard_message', '', $message,
+    'ecard_message',
+    '',
+    $message,
     array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook')
 );
 $form->closeGroupBox();

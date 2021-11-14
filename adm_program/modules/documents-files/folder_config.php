@@ -121,7 +121,10 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC'
 // show form
 $form = new HtmlForm('folder_rights_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '7', 'folder_uuid' => $getFolderUuid)), $page);
 $form->addSelectBoxFromSql(
-    'adm_roles_view_right', $gL10n->get('SYS_VISIBLE_FOR'), $gDb, $sqlDataView,
+    'adm_roles_view_right',
+    $gL10n->get('SYS_VISIBLE_FOR'),
+    $gDb,
+    $sqlDataView,
     array(
         'property'     => HtmlForm::FIELD_REQUIRED,
         'defaultValue' => $roleViewSet,
@@ -130,7 +133,10 @@ $form->addSelectBoxFromSql(
     )
 );
 $form->addSelectBoxFromSql(
-    'adm_roles_upload_right', $gL10n->get('SYS_UPLOAD_FILES'), $gDb, $sqlDataView,
+    'adm_roles_upload_right',
+    $gL10n->get('SYS_UPLOAD_FILES'),
+    $gDb,
+    $sqlDataView,
     array(
         'property'     => HtmlForm::FIELD_REQUIRED,
         'defaultValue' => $roleUploadSet,
@@ -139,11 +145,14 @@ $form->addSelectBoxFromSql(
     )
 );
 $form->addStaticControl(
-    'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
+    'adm_administrators',
+    $gL10n->get('SYS_ADMINISTRATORS'),
+    implode(', ', $adminRoles),
     array('helpTextIdLabel' => $gL10n->get('SYS_ADMINISTRATORS_DESC', array($gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'))))
 );
 $form->addSubmitButton(
-    'btn_save', $gL10n->get('SYS_SAVE'),
+    'btn_save',
+    $gL10n->get('SYS_SAVE'),
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 

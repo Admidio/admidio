@@ -19,10 +19,10 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['links_request']);
 
 // Initialize and check the parameters
-$getStart    = admFuncVariableIsValid($_GET, 'start',    'int');
+$getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_WEBLINKS')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
-$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid','string');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'int');
+$getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'string');
 
 // check if the module is enabled for use
 if ((int) $gSettingsManager->get('enable_weblinks_module') === 0) {
@@ -74,19 +74,26 @@ $page->addHtml('<div id="links_overview">');
 if ($weblinks->getId() === 0) {
     if (count($gCurrentUser->getAllEditableCategories('LNK')) > 0) {
         // show link to create new weblink
-        $page->addPageFunctionsMenuItem('menu_item_links_add', $gL10n->get('SYS_CREATE_LINK'),
+        $page->addPageFunctionsMenuItem(
+            'menu_item_links_add',
+            $gL10n->get('SYS_CREATE_LINK'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('headline' => $getHeadline)),
-            'fa-plus-circle');
+            'fa-plus-circle'
+        );
     }
 
     if ($gCurrentUser->editWeblinksRight()) {
         // show link to maintain categories
-        $page->addPageFunctionsMenuItem('menu_item_links_maintain_categories', $gL10n->get('SYS_EDIT_CATEGORIES'),
+        $page->addPageFunctionsMenuItem(
+            'menu_item_links_maintain_categories',
+            $gL10n->get('SYS_EDIT_CATEGORIES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK', 'title' => $getHeadline)),
-            'fa-th-large');
+            'fa-th-large'
+        );
     }
 
-    $page->addJavascript('
+    $page->addJavascript(
+        '
         $("#cat_id").change(function() {
             $("#navbar_filter_form").submit();
         });',
@@ -97,8 +104,13 @@ if ($weblinks->getId() === 0) {
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addSelectBoxForCategories(
-        'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', HtmlForm::SELECT_BOX_MODUS_FILTER,
-        array('defaultValue' => $getCatId));
+        'cat_id',
+        $gL10n->get('SYS_CATEGORY'),
+        $gDb,
+        'LNK',
+        HtmlForm::SELECT_BOX_MODUS_FILTER,
+        array('defaultValue' => $getCatId)
+    );
     $filterNavbar->addForm($form->show());
     $page->addHtml($filterNavbar->show());
 }

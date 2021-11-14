@@ -23,7 +23,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUrtUuid = admFuncVariableIsValid($_GET, 'urt_uuid', 'string');
-$getMode    = admFuncVariableIsValid($_GET, 'mode',     'int', array('requireValue' => true));
+$getMode    = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
 
 if (!$gSettingsManager->getBool('members_enable_user_relations')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -75,7 +75,9 @@ if ($getMode === 1) {
     $relationType->setValue('urt_edit_user', $_POST['urt_edit_user']);
 
     $postRelationType = admFuncVariableIsValid(
-        $_POST, 'relation_type', 'string',
+        $_POST,
+        'relation_type',
+        'string',
         array(
             'defaultValue' => $relationType->getRelationTypeString(),
             'validValues' => array(

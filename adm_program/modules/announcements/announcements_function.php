@@ -26,7 +26,7 @@ if ((int) $gSettingsManager->get('enable_announcements_module') === 0) {
 
 // Initialize and check the parameters
 $getAnnUuid = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
-$getMode    = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
+$getMode    = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
 
 // create announcement object
 $announcement = new TableAnnouncement($gDb);

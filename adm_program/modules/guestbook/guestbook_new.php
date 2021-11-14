@@ -111,25 +111,35 @@ $form = new HtmlForm('guestbook_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL
 if ($gCurrentUserId > 0) {
     // registered users should not change their name
     $form->addInput(
-        'gbo_name', $gL10n->get('SYS_NAME'), $guestbook->getValue('gbo_name'),
+        'gbo_name',
+        $gL10n->get('SYS_NAME'),
+        $guestbook->getValue('gbo_name'),
         array('maxLength' => 60, 'property' => HtmlForm::FIELD_DISABLED)
     );
 } else {
     $form->addInput(
-        'gbo_name', $gL10n->get('SYS_NAME'), $guestbook->getValue('gbo_name'),
+        'gbo_name',
+        $gL10n->get('SYS_NAME'),
+        $guestbook->getValue('gbo_name'),
         array('maxLength' => 60, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 }
 $form->addInput(
-    'gbo_email', $gL10n->get('SYS_EMAIL'), $guestbook->getValue('gbo_email'),
+    'gbo_email',
+    $gL10n->get('SYS_EMAIL'),
+    $guestbook->getValue('gbo_email'),
     array('type' => 'email', 'maxLength' => 254)
 );
 $form->addInput(
-    'gbo_homepage', $gL10n->get('SYS_WEBSITE'), $guestbook->getValue('gbo_homepage'),
+    'gbo_homepage',
+    $gL10n->get('SYS_WEBSITE'),
+    $guestbook->getValue('gbo_homepage'),
     array('maxLength' => 50)
 );
 $form->addEditor(
-    'gbo_text', $gL10n->get('SYS_MESSAGE'), $guestbook->getValue('gbo_text'),
+    'gbo_text',
+    $gL10n->get('SYS_MESSAGE'),
+    $guestbook->getValue('gbo_text'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook')
 );
 
@@ -143,8 +153,10 @@ if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha')) {
 // show information about user who creates the recordset and changed it
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    (int) $guestbook->getValue('gbo_usr_id_create'), $guestbook->getValue('gbo_timestamp_create'),
-    (int) $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')
+    (int) $guestbook->getValue('gbo_usr_id_create'),
+    $guestbook->getValue('gbo_timestamp_create'),
+    (int) $guestbook->getValue('gbo_usr_id_change'),
+    $guestbook->getValue('gbo_timestamp_change')
 ));
 
 // add form to html page and show page

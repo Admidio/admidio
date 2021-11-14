@@ -22,7 +22,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('requireValue' => true));
-$getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defaultValue' => 'choose', 'validValues' => array('choose', 'save', 'dont_save', 'upload', 'delete')));
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'choose', 'validValues' => array('choose', 'save', 'dont_save', 'upload', 'delete')));
 
 // in ajax mode only return simple text on error
 if ($getMode === 'delete') {
@@ -192,11 +192,13 @@ if ($getMode === 'choose') {
     $form = new HtmlForm('upload_files_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'upload', 'user_uuid' => $getUserUuid)), $page, array('enableFileUpload' => true));
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addFileUpload(
-        'foto_upload_file', $gL10n->get('PRO_CHOOSE_PHOTO'),
+        'foto_upload_file',
+        $gL10n->get('PRO_CHOOSE_PHOTO'),
         array('allowedMimeTypes' => array('image/jpeg', 'image/png'), 'helpTextIdLabel' => 'profile_photo_up_help')
     );
     $form->addSubmitButton(
-        'btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'),
+        'btn_upload',
+        $gL10n->get('PRO_UPLOAD_PHOTO'),
         array('icon' => 'fa-upload', 'class' => ' offset-sm-3')
     );
 

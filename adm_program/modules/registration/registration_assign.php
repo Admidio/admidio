@@ -108,7 +108,8 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage('admidio-registration-assign', $headline);
 
-$page->addHtml('
+$page->addHtml(
+    '
     <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', array($newUser->getValue('FIRST_NAME'). ' '. $newUser->getValue('LAST_NAME'))).'</p>
     <div class="card admidio-blog">
         <div class="card-header">'.$gL10n->get('SYS_USER_FOUND').'</div>
@@ -178,7 +179,8 @@ while ($row = $usrStatement->fetch()) {
     }
     ++$i;
 }
-$page->addHtml('
+$page->addHtml(
+    '
     </div>
     </div>
     <div class="card admidio-blog">

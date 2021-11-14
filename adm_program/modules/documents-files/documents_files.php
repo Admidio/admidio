@@ -17,7 +17,7 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['documents_files_request']);
 
 // Initialize and check the parameters
-$getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid',  'string');
+$getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
 
 // Check if module is activated
 if (!$gSettingsManager->getBool('documents_files_enable_module')) {
@@ -64,25 +64,37 @@ if ($currentFolder->hasUploadRight()) {
     // upload only possible if upload filesize > 0
     if ($gSettingsManager->getInt('max_file_upload_size') > 0) {
         // show links for upload, create folder and folder configuration
-        $page->addPageFunctionsMenuItem('menu_item_documents_upload_files', $gL10n->get('SYS_UPLOAD_FILES'),
+        $page->addPageFunctionsMenuItem(
+            'menu_item_documents_upload_files',
+            $gL10n->get('SYS_UPLOAD_FILES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'documents_files', 'uuid' => $getFolderUuid)),
-            'fa-upload');
+            'fa-upload'
+        );
 
-        $page->addPageFunctionsMenuItem('menu_item_documents_create_folder', $gL10n->get('SYS_CREATE_FOLDER'),
+        $page->addPageFunctionsMenuItem(
+            'menu_item_documents_create_folder',
+            $gL10n->get('SYS_CREATE_FOLDER'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_uuid' => $getFolderUuid)),
-            'fa-plus-circle');
+            'fa-plus-circle'
+        );
 
         if ($currentFolder->getValue('fol_fol_id_parent') > 0) {
-            $page->addPageFunctionsMenuItem('menu_item_documents_edit_folder', $gL10n->get('SYS_EDIT_FOLDER'),
+            $page->addPageFunctionsMenuItem(
+                'menu_item_documents_edit_folder',
+                $gL10n->get('SYS_EDIT_FOLDER'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_uuid' => $getFolderUuid)),
-                'fa-edit');
+                'fa-edit'
+            );
         }
     }
 
     if ($gCurrentUser->adminDocumentsFiles()) {
-        $page->addPageFunctionsMenuItem('menu_item_documents_permissions', $gL10n->get('SYS_PERMISSIONS'),
+        $page->addPageFunctionsMenuItem(
+            'menu_item_documents_permissions',
+            $gL10n->get('SYS_PERMISSIONS'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_uuid' => $getFolderUuid)),
-            'fa-lock');
+            'fa-lock'
+        );
     }
 }
 

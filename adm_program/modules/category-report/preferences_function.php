@@ -39,8 +39,8 @@ try {
             for ($conf = 0; isset($_POST['name'. $conf]); $conf++) {
                 $values['id']             = $_POST['id'. $conf];
                 $values['name']           = $_POST['name'. $conf];
-                $values['selection_role'] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]),',') : '';
-                $values['selection_cat']  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]),',') : '';
+                $values['selection_role'] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]), ',') : '';
+                $values['selection_cat']  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]), ',') : '';
                 $values['number_col']     = isset($_POST['number_col'. $conf]) ? 1 : 0;
                 $values['default_conf']   = (bool) $_POST['default_conf'. $conf];
 
@@ -58,7 +58,7 @@ try {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_COLUMN'))));
                 }
 
-                $values['col_fields'] = substr($fields,0,-1);
+                $values['col_fields'] = substr($fields, 0, -1);
                 $config[] = $values;
             }
 

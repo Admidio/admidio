@@ -323,7 +323,8 @@ class HtmlTable extends HtmlTableBasic
             $this->datatablesInitParameters[] = '"columnDefs": [' . implode(',', $this->datatablesColumnDefs) . ']';
         }
 
-        $this->htmlPage->addJavascript('
+        $this->htmlPage->addJavascript(
+            '
             $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->getString('system_date') . '"));
             $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time') . '"));
 

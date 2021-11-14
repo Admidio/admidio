@@ -17,8 +17,14 @@ if (isset($_POST['system_language']) && trim($_POST['system_language']) !== '') 
     $gL10n->setLanguage($_SESSION['language']);
 } elseif (!isset($_SESSION['language'])) {
     $page = new HtmlPageInstallation('admidio-installation-message');
-    $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'), $gL10n->get('SYS_BACK'),
-        'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome')));
+    $page->showMessage(
+        'error',
+        $gL10n->get('SYS_NOTE'),
+        $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'),
+        $gL10n->get('SYS_BACK'),
+        'fa-arrow-circle-left',
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome'))
+    );
     // => EXIT
 }
 
@@ -55,36 +61,53 @@ $page->assign('text', $gL10n->get('INS_DATABASE_LOGIN_DESC'));
 $form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')));
 $form->openGroupBox('gbConnectDatabase', $gL10n->get('INS_DATABASE_LOGIN'));
 $form->addSelectBoxFromXml(
-    'db_engine', $gL10n->get('INS_DATABASE_SYSTEM'), ADMIDIO_PATH.'/adm_program/system/databases.xml',
-    'identifier', 'name', array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $dbEngine)
+    'db_engine',
+    $gL10n->get('INS_DATABASE_SYSTEM'),
+    ADMIDIO_PATH.'/adm_program/system/databases.xml',
+    'identifier',
+    'name',
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $dbEngine)
 );
 $form->addInput(
-    'db_host', $gL10n->get('SYS_HOST'), $dbHost,
+    'db_host',
+    $gL10n->get('SYS_HOST'),
+    $dbHost,
     array('pattern' => $hostRegex, 'maxLength' => 64, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'INS_DATABASE_HOST_INFO')
 );
 $form->addInput(
-    'db_port', $gL10n->get('SYS_PORT'), $dbPort,
+    'db_port',
+    $gL10n->get('SYS_PORT'),
+    $dbPort,
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextIdLabel' => 'INS_DATABASE_PORT_INFO')
 );
 $form->addInput(
-    'db_name', $gL10n->get('SYS_DATABASE'), $dbName,
+    'db_name',
+    $gL10n->get('SYS_DATABASE'),
+    $dbName,
     array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'db_username', $gL10n->get('SYS_USERNAME'), $dbUsername,
+    'db_username',
+    $gL10n->get('SYS_USERNAME'),
+    $dbUsername,
     array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'db_password', $gL10n->get('SYS_PASSWORD'), '',
+    'db_password',
+    $gL10n->get('SYS_PASSWORD'),
+    '',
     array('type' => 'password')
 );
 $form->addInput(
-    'table_prefix', $gL10n->get('INS_TABLE_PREFIX'), $tablePrefix,
+    'table_prefix',
+    $gL10n->get('INS_TABLE_PREFIX'),
+    $tablePrefix,
     array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 10, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
 );
 $form->closeGroupBox();
 $form->addButton(
-    'previous_page', $gL10n->get('SYS_BACK'),
+    'previous_page',
+    $gL10n->get('SYS_BACK'),
     array('icon' => 'fa-arrow-circle-left', 'class' => 'admidio-margin-bottom',
         'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome')))
 );

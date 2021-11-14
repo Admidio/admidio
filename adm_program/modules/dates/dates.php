@@ -33,16 +33,16 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
-$getStart    = admFuncVariableIsValid($_GET, 'start',     'int');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
-$getDateUuid = admFuncVariableIsValid($_GET, 'dat_uuid',  'string');
-$getShow     = admFuncVariableIsValid($_GET, 'show',      'string', array('defaultValue' => 'all', 'validValues' => array('all', 'maybe_participate', 'only_participate')));
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
+$getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'int');
+$getDateUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
+$getShow     = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'all', 'validValues' => array('all', 'maybe_participate', 'only_participate')));
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
-$getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
+$getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
 $getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'print')));
-$getView     = admFuncVariableIsValid($_GET, 'view',      'string', array('defaultValue' => $gSettingsManager->getString('dates_view'), 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
+$getView     = admFuncVariableIsValid($_GET, 'view', 'string', array('defaultValue' => $gSettingsManager->getString('dates_view'), 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
 
 // check if module is active
 if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
@@ -124,9 +124,12 @@ if ($getViewMode === 'html') {
 
     // Add new event
     if (count($gCurrentUser->getAllEditableCategories('DAT')) > 0 && $getDateUuid === '') {
-        $page->addPageFunctionsMenuItem('menu_item_event_add', $gL10n->get('SYS_CREATE_VAR', array($getHeadline)),
+        $page->addPageFunctionsMenuItem(
+            'menu_item_event_add',
+            $gL10n->get('SYS_CREATE_VAR', array($getHeadline)),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('headline' => $getHeadline)),
-            'fa-plus-circle');
+            'fa-plus-circle'
+        );
     }
 
     if ($getDateUuid === '') {
@@ -135,16 +138,22 @@ if ($getViewMode === 'html') {
 
         // ical Download
         if ($gSettingsManager->getBool('enable_dates_ical')) {
-            $page->addPageFunctionsMenuItem('menu_item_event_ical', $gL10n->get('DAT_EXPORT_ICAL'),
+            $page->addPageFunctionsMenuItem(
+                'menu_item_event_ical',
+                $gL10n->get('DAT_EXPORT_ICAL'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('headline' => $getHeadline, 'cat_id' => $getCatId, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
-                'fa-file-export');
+                'fa-file-export'
+            );
         }
 
         if ($gCurrentUser->editDates()) {
             // if no calendar selectbox is shown, then show link to edit calendars
-            $page->addPageFunctionsMenuItem('menu_item_event_categories', $gL10n->get('SYS_EDIT_CALENDARS'),
+            $page->addPageFunctionsMenuItem(
+                'menu_item_event_categories',
+                $gL10n->get('SYS_EDIT_CALENDARS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT')),
-                'fa-th-large');
+                'fa-th-large'
+            );
         }
 
         // create filter menu with elements for calendar and start-/enddate
@@ -167,19 +176,29 @@ if ($getViewMode === 'html') {
             );
         }
         $form->addSelectBox(
-            'sel_change_view', $gL10n->get('SYS_VIEW'), $selectBoxEntries,
+            'sel_change_view',
+            $gL10n->get('SYS_VIEW'),
+            $selectBoxEntries,
             array('defaultValue' => $getView, 'showContextDependentFirstEntry' => false)
         );
         $form->addSelectBoxForCategories(
-            'cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', HtmlForm::SELECT_BOX_MODUS_FILTER,
+            'cat_id',
+            $gL10n->get('DAT_CALENDAR'),
+            $gDb,
+            'DAT',
+            HtmlForm::SELECT_BOX_MODUS_FILTER,
             array('defaultValue' => (int) $dates->getParameter('cat_id'))
         );
         $form->addInput(
-            'date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'),
+            'date_from',
+            $gL10n->get('SYS_START'),
+            $dates->getParameter('dateStartFormatAdmidio'),
             array('type' => 'date', 'maxLength' => 10)
         );
         $form->addInput(
-            'date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'),
+            'date_to',
+            $gL10n->get('SYS_END'),
+            $dates->getParameter('dateEndFormatAdmidio'),
             array('type' => 'date', 'maxLength' => 10)
         );
         $form->addInput('view', '', $getView, array('property' => HtmlForm::FIELD_HIDDEN));
@@ -673,9 +692,12 @@ if ($datesResult['totalCount'] === 0) {
                 <div class="card-footer">'.
                     // show information about user who created the recordset and changed it
                     admFuncShowCreateChangeInfoByName(
-                        $row['create_name'], $date->getValue('dat_timestamp_create'),
-                        $row['change_name'], $date->getValue('dat_timestamp_change'),
-                        $row['create_uuid'], $row['change_uuid']
+                        $row['create_name'],
+                        $date->getValue('dat_timestamp_create'),
+                        $row['change_name'],
+                        $date->getValue('dat_timestamp_change'),
+                        $row['create_uuid'],
+                        $row['change_uuid']
                     ).'
                     </div>
                 </div>');

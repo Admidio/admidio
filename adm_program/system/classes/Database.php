@@ -309,7 +309,7 @@ class Database
             }
 
             $trace['class'] = array_key_exists('class', $trace) ? $trace['class'] : '';
-            $trace['type']  = array_key_exists('type',  $trace) ? $trace['type'] : '';
+            $trace['type']  = array_key_exists('type', $trace) ? $trace['type'] : '';
 
             $output .= '<br />';
             $output .= '<strong>FILE:</strong> ' . SecurityUtils::encodeHTML($trace['file']) . '<br />';

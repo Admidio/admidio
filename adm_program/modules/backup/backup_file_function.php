@@ -18,8 +18,8 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getJob      = admFuncVariableIsValid($_GET, 'job',      'string', array('requireValue' => true, 'validValues' => array('delete', 'get_file')));
-$getFilename = admFuncVariableIsValid($_GET, 'filename', 'file',   array('requireValue' => true));
+$getJob      = admFuncVariableIsValid($_GET, 'job', 'string', array('requireValue' => true, 'validValues' => array('delete', 'get_file')));
+$getFilename = admFuncVariableIsValid($_GET, 'filename', 'file', array('requireValue' => true));
 
 // only administrators are allowed to create backups
 if (!$gCurrentUser->isAdministrator()) {

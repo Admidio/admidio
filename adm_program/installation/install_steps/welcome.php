@@ -18,19 +18,21 @@ $page = new HtmlPageInstallation('admidio-installation-welcome');
 $page->addTemplateFile('installation.tpl');
 $page->assign('subHeadline', $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
 $page->assign('text', $gL10n->get(
-        'INS_WELCOME_TEXT',
-        array(
+    'INS_WELCOME_TEXT',
+    array(
             '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation" target="_blank">', '</a>',
             '<a href="https://www.admidio.org/forum" target="_blank">', '</a>'
         )
-    ));
+));
 
 
 $form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database')));
 
 // the possible languages will be read from a xml file
 $form->addSelectBox(
-    'system_language', $gL10n->get('INS_PLEASE_CHOOSE_LANGUAGE'), $gL10n->getAvailableLanguages(),
+    'system_language',
+    $gL10n->get('INS_PLEASE_CHOOSE_LANGUAGE'),
+    $gL10n->getAvailableLanguages(),
     array('defaultValue' => $gL10n->getLanguage(), 'showContextDependentFirstEntry' => false)
 );
 
@@ -41,7 +43,8 @@ if (ADMIDIO_VERSION_BETA > 0) {
     $form->addDescription(
         '<div class="alert alert-warning alert-small" role="alert">
             <i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('INS_WARNING_BETA_VERSION').'
-        </div>');
+        </div>'
+    );
 }
 
 $form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'fa-arrow-circle-right', 'class' => 'float-right'));

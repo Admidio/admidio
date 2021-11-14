@@ -24,16 +24,28 @@ if (isset($_POST['orga_shortname'])) {
     ||  $_SESSION['orga_email']     === ''
     ||  !in_array($_SESSION['orga_timezone'], \DateTimeZone::listIdentifiers(), true)) {
         $page = new HtmlPageInstallation('admidio-installation-message');
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')));
+        $page->showMessage(
+            'error',
+            $gL10n->get('SYS_NOTE'),
+            $gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'),
+            $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization'))
+        );
         // => EXIT
     }
 
     // allow only letters, numbers and special characters like .-_+@
     if (!StringUtils::strValidCharacters($_SESSION['orga_shortname'], 'noSpecialChar')) {
         $page = new HtmlPageInstallation('admidio-installation-message');
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION')), $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')));
+        $page->showMessage(
+            'error',
+            $gL10n->get('SYS_NOTE'),
+            $gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION')),
+            $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization'))
+        );
         // => EXIT
     }
 }
@@ -77,32 +89,45 @@ $page->addJavascript('
 $form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config')));
 $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ADMINISTRATOR'));
 $form->addInput(
-    'user_last_name', $gL10n->get('SYS_LASTNAME'), $userLastName,
+    'user_last_name',
+    $gL10n->get('SYS_LASTNAME'),
+    $userLastName,
     array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'user_first_name', $gL10n->get('SYS_FIRSTNAME'), $userFirstName,
+    'user_first_name',
+    $gL10n->get('SYS_FIRSTNAME'),
+    $userFirstName,
     array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'user_email', $gL10n->get('SYS_EMAIL'), $userEmail,
+    'user_email',
+    $gL10n->get('SYS_EMAIL'),
+    $userEmail,
     array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'user_login', $gL10n->get('SYS_USERNAME'), $userLogin,
+    'user_login',
+    $gL10n->get('SYS_USERNAME'),
+    $userLogin,
     array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'user_password', $gL10n->get('SYS_PASSWORD'), '',
+    'user_password',
+    $gL10n->get('SYS_PASSWORD'),
+    '',
     array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION')
 );
 $form->addInput(
-    'user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), '',
+    'user_password_confirm',
+    $gL10n->get('SYS_CONFIRM_PASSWORD'),
+    '',
     array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
 );
 $form->closeGroupBox();
 $form->addButton(
-    'previous_page', $gL10n->get('SYS_BACK'),
+    'previous_page',
+    $gL10n->get('SYS_BACK'),
     array('icon' => 'fa-arrow-circle-left', 'class' => 'admidio-margin-bottom',
         'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')))
 );

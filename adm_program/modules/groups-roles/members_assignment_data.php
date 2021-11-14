@@ -49,11 +49,11 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid',     'string', array('requireValue' => true, 'directOutput' => true));
+$getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid', 'string', array('requireValue' => true, 'directOutput' => true));
 $getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
-$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool', array('defaultValue' => false));
-$getDraw   = admFuncVariableIsValid($_GET, 'draw',   'int', array('requireValue' => true));
-$getStart  = admFuncVariableIsValid($_GET, 'start',  'int', array('requireValue' => true));
+$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
+$getDraw   = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
+$getStart  = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
 $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
 $getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 

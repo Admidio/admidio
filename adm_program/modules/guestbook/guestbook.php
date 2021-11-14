@@ -31,10 +31,10 @@ if ((int) $gSettingsManager->get('enable_guestbook_module') === 0) {
 }
 
 // Initialize and check the parameters
-$getStart      = admFuncVariableIsValid($_GET, 'start',      'int');
-$getHeadline   = admFuncVariableIsValid($_GET, 'headline',   'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
+$getStart      = admFuncVariableIsValid($_GET, 'start', 'int');
+$getHeadline   = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 $getModeration = admFuncVariableIsValid($_GET, 'moderation', 'bool');
-$getGboUuid    = admFuncVariableIsValid($_GET, 'gbo_uuid',   'string');
+$getGboUuid    = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
 
 if ($getModeration && !$gCurrentUser->editGuestbookRight()) {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -144,9 +144,12 @@ if ($gSettingsManager->getInt('guestbook_entries_per_page') > 0) {
 
 if ($getGboUuid === '' && !$getModeration) {
     // show link to create new guestbook entry
-    $page->addPageFunctionsMenuItem('menu_item_guestbook_new_entry', $gL10n->get('SYS_WRITE_ENTRY'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_guestbook_new_entry',
+        $gL10n->get('SYS_WRITE_ENTRY'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('headline' => $getHeadline)),
-        'fa-pencil-alt');
+        'fa-pencil-alt'
+    );
 }
 
 if (!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsManager->get('enable_guestbook_moderation') > 0) {
@@ -168,9 +171,13 @@ if (!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsMa
     $countLockedEntries = $row['count_locked_guestbook'] + $row['count_locked_comments'];
 
     if ($countLockedEntries > 0) {
-        $page->addPageFunctionsMenuItem('menu_item_guestbook_moderate', $gL10n->get('GBO_MODERATE_ENTRIES'),
+        $page->addPageFunctionsMenuItem(
+            'menu_item_guestbook_moderate',
+            $gL10n->get('GBO_MODERATE_ENTRIES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('moderation' => '1', 'headline' => $getHeadline)),
-            'fa-tasks', $countLockedEntries);
+            'fa-tasks',
+            $countLockedEntries
+        );
         /*$guestbookMenu->addItem(
             'admMenuItemModerate', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('moderation' => '1', 'headline' => $getHeadline)),
             $gL10n->get('GBO_MODERATE_ENTRIES').'<span class="badge">'.$countLockedEntries.'</span>', 'fa-tasks'
@@ -214,8 +221,10 @@ if ($countGuestbookEntries === 0) {
         <div class="card admidio-blog" id="gbo_'.$gboUuid.'">
             <div class="card-header">
                 <i class="fas fa-book"></i>'.
-                $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($gboName, $guestbook->getValue('gbo_timestamp_create',
-                    $gSettingsManager->getString('system_date')), $guestbook->getValue('gbo_timestamp_create', $gSettingsManager->getString('system_time')))));
+                $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($gboName, $guestbook->getValue(
+                    'gbo_timestamp_create',
+                    $gSettingsManager->getString('system_date')
+                ), $guestbook->getValue('gbo_timestamp_create', $gSettingsManager->getString('system_time')))));
 
         // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
         if (strlen($gboHomepage) > 0) {
@@ -342,9 +351,11 @@ if ($countGuestbookEntries === 0) {
         // show information about user who edit the recordset
         if (strlen($guestbook->getValue('gbo_usr_id_change')) > 0) {
             $page->addHtml('<div class="card-footer">'.admFuncShowCreateChangeInfoById(
-                    0, '',
-                    (int) $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')
-                ).'</div>');
+                0,
+                '',
+                (int) $guestbook->getValue('gbo_usr_id_change'),
+                $guestbook->getValue('gbo_timestamp_change')
+            ).'</div>');
         }
         $page->addHtml('</div>');
     }  // Ende While-Schleife

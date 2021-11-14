@@ -65,15 +65,20 @@ echo '
 
     $form = new HtmlForm('form_members_create_user', ADMIDIO_URL.FOLDER_MODULES.'/members/members_assign.php');
     $form->addInput(
-        'lastname', $gL10n->get('SYS_LASTNAME'), '',
+        'lastname',
+        $gL10n->get('SYS_LASTNAME'),
+        '',
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
     );
     $form->addInput(
-        'firstname', $gL10n->get('SYS_FIRSTNAME'), '',
+        'firstname',
+        $gL10n->get('SYS_FIRSTNAME'),
+        '',
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
     );
     $form->addSubmitButton(
-        'btn_add', $gL10n->get('SYS_CREATE_USER'),
+        'btn_add',
+        $gL10n->get('SYS_CREATE_USER'),
         array('icon' => 'fa-plus-circle', 'class' => ' offset-sm-3')
     );
     echo $form->show();

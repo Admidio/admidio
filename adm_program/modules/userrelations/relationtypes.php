@@ -29,8 +29,12 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage('admidio-relationtypes', $headline);
 
 // define link to create new category
-$page->addPageFunctionsMenuItem('menu_item_relation_type_add', $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_CONFIGURATION'))),
-    ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', 'fa-plus-circle');
+$page->addPageFunctionsMenuItem(
+    'menu_item_relation_type_add',
+    $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_CONFIGURATION'))),
+    ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php',
+    'fa-plus-circle'
+);
 
 
 // Create table object
@@ -96,8 +100,10 @@ while ($relRow = $relationTypesStatement->fetch()) {
     }
 
     $relationtypeAdministration = '
-    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php',
-        array('urt_uuid' => $relationType1->getValue('urt_uuid'))). '"><i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
+    <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(
+        ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php',
+        array('urt_uuid' => $relationType1->getValue('urt_uuid'))
+    ). '"><i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
     <a class="admidio-icon-link openPopup" href="javascript:void(0);"
         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_'. $relationType1->getValue('urt_uuid'),
         'name' => $relationType1->getValue('urt_name').($relationType1->isUnidirectional() ? '' : ('/'.$relationType2->getValue('urt_name'))),

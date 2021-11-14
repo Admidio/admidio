@@ -28,7 +28,8 @@ unset($_SESSION['fields_request']);
 // create html page object
 $page = new HtmlPage('admidio-profile-fields', $headline);
 
-$page->addJavascript('
+$page->addJavascript(
+    '
     $(".admidio-open-close-caret").click(function() {
         showHideBlock($(this).attr("id"));
     });
@@ -47,13 +48,20 @@ $page->addJavascript('
 );
 
 // define link to create new profile field
-$page->addPageFunctionsMenuItem('menu_item_new_field', $gL10n->get('ORG_CREATE_PROFILE_FIELD'),
-    ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', 'fa-plus-circle');
+$page->addPageFunctionsMenuItem(
+    'menu_item_new_field',
+    $gL10n->get('ORG_CREATE_PROFILE_FIELD'),
+    ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php',
+    'fa-plus-circle'
+);
 
 // define link to maintain categories
-$page->addPageFunctionsMenuItem('menu_item_maintain_category', $gL10n->get('SYS_EDIT_CATEGORIES'),
+$page->addPageFunctionsMenuItem(
+    'menu_item_maintain_category',
+    $gL10n->get('SYS_EDIT_CATEGORIES'),
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'USF')),
-    'fa-th-large');
+    'fa-th-large'
+);
 
 $sql = 'SELECT *
           FROM '.TBL_USER_FIELDS.'
@@ -105,8 +113,10 @@ while ($row = $statement->fetch()) {
 
         $table->addTableBody();
         $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'admidio-group-row-'.$categoryId));
-        $table->addColumn('<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.$userField->getValue('cat_name'),
-                          array('id' => 'group_'.$blockId, 'colspan' => '9'));
+        $table->addColumn(
+            '<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.$userField->getValue('cat_name'),
+            array('id' => 'group_'.$blockId, 'colspan' => '9')
+        );
         $table->addTableBody('id', $blockId);
         $table->addAttribute('class', 'admidio-sortable');
     }

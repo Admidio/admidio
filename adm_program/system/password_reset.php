@@ -16,7 +16,7 @@
 require_once(__DIR__ . '/common.php');
 
 // Initialize and check the parameters
-$getResetId  = admFuncVariableIsValid($_GET, 'id',        'string');
+$getResetId  = admFuncVariableIsValid($_GET, 'id', 'string');
 $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 
 // "systemmail" and "request password" must be activated
@@ -120,7 +120,9 @@ if ($getUserUuid !== '') {
         // show form
         $form = new HtmlForm('password_form', SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_SYSTEM.'/password_reset.php', array('user_uuid' => $getUserUuid, 'id' => $getResetId)), $page);
         $form->addInput(
-            'new_password', $gL10n->get('PRO_NEW_PASSWORD'), '',
+            'new_password',
+            $gL10n->get('PRO_NEW_PASSWORD'),
+            '',
             array(
                 'type'             => 'password',
                 'property'         => HtmlForm::FIELD_REQUIRED,
@@ -131,11 +133,14 @@ if ($getUserUuid !== '') {
             )
         );
         $form->addInput(
-            'new_password_confirm', $gL10n->get('SYS_REPEAT'), '',
+            'new_password_confirm',
+            $gL10n->get('SYS_REPEAT'),
+            '',
             array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
         );
         $form->addSubmitButton(
-            'btn_save', $gL10n->get('SYS_SAVE'),
+            'btn_save',
+            $gL10n->get('SYS_SAVE'),
             array('icon' => 'fa-check', 'class' => ' offset-sm-3')
         );
 
@@ -267,7 +272,9 @@ if ($getUserUuid !== '') {
     // show form
     $form = new HtmlForm('password_reset_form', ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php', $page);
     $form->addInput(
-        'recipient_email', $gL10n->get('SYS_USERNAME_OR_EMAIL'), '',
+        'recipient_email',
+        $gL10n->get('SYS_USERNAME_OR_EMAIL'),
+        '',
         array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 

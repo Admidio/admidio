@@ -27,7 +27,7 @@ if ((int) $gSettingsManager->get('enable_announcements_module') === 0) {
 // Initialize and check the parameters
 $getAnnUuid  = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
-$getCopy     = admFuncVariableIsValid($_GET, 'copy',     'bool');
+$getCopy     = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
 // set headline of the script
 if ($getCopy) {
@@ -77,21 +77,31 @@ $page = new HtmlPage('admidio-announcements-edit', $headline);
 // show form
 $form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'headline' => $getHeadline, 'mode' => '1')), $page);
 $form->addInput(
-    'ann_headline', $gL10n->get('SYS_TITLE'), SecurityUtils::encodeHTML($announcement->getValue('ann_headline')),
+    'ann_headline',
+    $gL10n->get('SYS_TITLE'),
+    SecurityUtils::encodeHTML($announcement->getValue('ann_headline')),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addSelectBoxForCategories(
-    'ann_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', HtmlForm::SELECT_BOX_MODUS_EDIT,
+    'ann_cat_id',
+    $gL10n->get('SYS_CATEGORY'),
+    $gDb,
+    'ANN',
+    HtmlForm::SELECT_BOX_MODUS_EDIT,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $announcement->getValue('ann_cat_id'))
 );
 $form->addEditor(
-    'ann_description', $gL10n->get('SYS_TEXT'), $announcement->getValue('ann_description'),
+    'ann_description',
+    $gL10n->get('SYS_TEXT'),
+    $announcement->getValue('ann_description'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'height' => '400')
 );
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    (int) $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_timestamp_create'),
-    (int) $announcement->getValue('ann_usr_id_change'), $announcement->getValue('ann_timestamp_change')
+    (int) $announcement->getValue('ann_usr_id_create'),
+    $announcement->getValue('ann_timestamp_create'),
+    (int) $announcement->getValue('ann_usr_id_change'),
+    $announcement->getValue('ann_timestamp_change')
 ));
 
 // add form to html page and show page

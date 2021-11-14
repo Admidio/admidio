@@ -176,7 +176,8 @@ if ($getMode !== 'csv') {
         $page->setTitle($title);
         $page->setHeadline($headline);
 
-        $page->addJavascript('
+        $page->addJavascript(
+            '
             $("#menu_item_lists_print_view").click(function() {
                 window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'mode'              => 'print',
@@ -194,34 +195,50 @@ if ($getMode !== 'csv') {
 
             // dropdown menu item with all export possibilities
             $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'fa-file-download');
-            $page->addPageFunctionsMenuItem('menu_item_lists_csv_ms', $gL10n->get('SYS_MICROSOFT_EXCEL'),
+            $page->addPageFunctionsMenuItem(
+                'menu_item_lists_csv_ms',
+                $gL10n->get('SYS_MICROSOFT_EXCEL'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'crt_id'            => $getCrtId,
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'csv-ms')),
-                'fa-file-excel', 'menu_item_lists_export');
-            $page->addPageFunctionsMenuItem('menu_item_lists_pdf', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
+                'fa-file-excel',
+                'menu_item_lists_export'
+            );
+            $page->addPageFunctionsMenuItem(
+                'menu_item_lists_pdf',
+                $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')',
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'crt_id'            => $getCrtId,
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'pdf')),
-                'fa-file-pdf', 'menu_item_lists_export');
-            $page->addPageFunctionsMenuItem('menu_item_lists_pdfl', $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
+                'fa-file-pdf',
+                'menu_item_lists_export'
+            );
+            $page->addPageFunctionsMenuItem(
+                'menu_item_lists_pdfl',
+                $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'crt_id'            => $getCrtId,
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'pdfl')),
-                'fa-file-pdf', 'menu_item_lists_export');
-            $page->addPageFunctionsMenuItem('menu_item_lists_csv', $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
+                'fa-file-pdf',
+                'menu_item_lists_export'
+            );
+            $page->addPageFunctionsMenuItem(
+                'menu_item_lists_csv',
+                $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')',
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php', array(
                     'crt_id'            => $getCrtId,
                     'filter'            => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
                     'mode'              => 'csv-oo')),
-                'fa-file-csv', 'menu_item_lists_export');
+                'fa-file-csv',
+                'menu_item_lists_export'
+            );
         } else {
             // if filter is not enabled, reset filterstring
             $getFilter = '';
@@ -229,12 +246,17 @@ if ($getMode !== 'csv') {
 
         if ($gCurrentUser->isAdministrator()) {
             // show link to pluginpreferences
-            $page->addPageFunctionsMenuItem('admMenuItemPreferencesLists', $gL10n->get('SYS_CONFIGURATIONS'),
-                ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php',  'fa-cog');
+            $page->addPageFunctionsMenuItem(
+                'admMenuItemPreferencesLists',
+                $gL10n->get('SYS_CONFIGURATIONS'),
+                ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php',
+                'fa-cog'
+            );
         }
 
         // process changes in the navbar form with javascript submit
-        $page->addJavascript('
+        $page->addJavascript(
+            '
             $("#export_and_filter").change(function() {
                 $("#navbar_filter_form_category_report").submit();
             });
@@ -251,8 +273,12 @@ if ($getMode !== 'csv') {
         // create filter menu with elements for role
         $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form_category_report', '', $page, array('type' => 'navbar', 'setFocus' => false));
-        $form->addSelectBox('crt_id', $gL10n->get('SYS_SELECT_CONFIGURATION'), $selectBoxEntries,
-            array('showContextDependentFirstEntry' => false, 'defaultValue' => $getCrtId));
+        $form->addSelectBox(
+            'crt_id',
+            $gL10n->get('SYS_SELECT_CONFIGURATION'),
+            $selectBoxEntries,
+            array('showContextDependentFirstEntry' => false, 'defaultValue' => $getCrtId)
+        );
         if ($getExportAndFilter) {
             $form->addInput('filter', $gL10n->get('SYS_FILTER'), $getFilter);
         }
@@ -402,7 +428,7 @@ foreach ($report->listData as $member => $memberdata) {
         $columnNumber++;
     }
 
-    if ($getFilter == '' || ($getFilter != '' && (stristr(implode('',$columnValues), $getFilter) || stristr($tmp_csv, $getFilter)))) {
+    if ($getFilter == '' || ($getFilter != '' && (stristr(implode('', $columnValues), $getFilter) || stristr($tmp_csv, $getFilter)))) {
         if ($getMode == 'csv') {
             $csvStr .= $tmp_csv. "\n";
         } else {

@@ -25,12 +25,12 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['announcements_request']);
 
 // Initialize and check the parameters
-$getStart    = admFuncVariableIsValid($_GET, 'start',     'int');
-$getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
-$getAnnUuid  = admFuncVariableIsValid($_GET, 'ann_uuid',  'string');
+$getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'int');
+$getAnnUuid  = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
-$getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
+$getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
 
 // check if module is enabled
 if ((int) $gSettingsManager->get('enable_announcements_module') === 0) {
@@ -79,19 +79,26 @@ if ($gSettingsManager->getInt('announcements_per_page') > 0) {
 // create module specific functions menu
 if (count($gCurrentUser->getAllEditableCategories('ANN')) > 0) {
     // show link to create new announcement
-    $page->addPageFunctionsMenuItem('menu_item_announcement_add', $gL10n->get('SYS_CREATE_ENTRY'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_announcement_add',
+        $gL10n->get('SYS_CREATE_ENTRY'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)),
-        'fa-plus-circle');
+        'fa-plus-circle'
+    );
 }
 
 if ($gCurrentUser->editAnnouncements()) {
-    $page->addPageFunctionsMenuItem('menu_item_announcement_categories', $gL10n->get('SYS_EDIT_CATEGORIES'),
+    $page->addPageFunctionsMenuItem(
+        'menu_item_announcement_categories',
+        $gL10n->get('SYS_EDIT_CATEGORIES'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')),
-        'fa-th-large');
+        'fa-th-large'
+    );
 }
 
 // add filter navbar
-$page->addJavascript('
+$page->addJavascript(
+    '
     $("#cat_id").change(function() {
         $("#navbar_filter_form").submit();
     });',
@@ -103,8 +110,13 @@ if ($getAnnUuid === '') {
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addSelectBoxForCategories(
-        'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', HtmlForm::SELECT_BOX_MODUS_FILTER,
-        array('defaultValue' => $getCatId));
+        'cat_id',
+        $gL10n->get('SYS_CATEGORY'),
+        $gDb,
+        'ANN',
+        HtmlForm::SELECT_BOX_MODUS_FILTER,
+        array('defaultValue' => $getCatId)
+    );
     $filterNavbar->addForm($form->show());
     $page->addHtml($filterNavbar->show());
 }
@@ -159,9 +171,12 @@ if ($announcementsCount === 0) {
             <div class="card-footer">'.
                 // show information about user who creates the recordset and changed it
                 admFuncShowCreateChangeInfoByName(
-                    $row['create_name'], $announcement->getValue('ann_timestamp_create'),
-                    $row['change_name'], $announcement->getValue('ann_timestamp_change'),
-                    $row['create_uuid'], $row['change_uuid']
+                    $row['create_name'],
+                    $announcement->getValue('ann_timestamp_create'),
+                    $row['change_name'],
+                    $announcement->getValue('ann_timestamp_change'),
+                    $row['create_uuid'],
+                    $row['change_uuid']
                 ) .
                 '<div class="admidio-info-category">' .
                     $gL10n->get('SYS_CATEGORY') .

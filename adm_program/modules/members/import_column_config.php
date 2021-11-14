@@ -48,7 +48,8 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_ASSIGN_FIELDS_DESC').'</p>');
 $form = new HtmlForm('import_assign_fields_form', ADMIDIO_URL. FOLDER_MODULES.'/members/import_user.php', $page, array('type' => 'vertical'));
 $form->addCheckbox('first_row', $gL10n->get('SYS_FIRST_LINE_COLUMN_NAME'), $formValues['first_row']);
 $form->addHtml('<div class="alert alert-warning alert-small" id="admidio-import-unused"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('SYS_IMPORT_UNUSED_HEAD').'<div id="admidio-import-unused-fields">-</div></div>');
-$page->addJavascript('
+$page->addJavascript(
+    '
     $(".admidio-import-field").change(function() {
         var available = [];
         $("#import_assign_fields_form .admidio-import-field").first().children("option").each(function() {
@@ -102,10 +103,12 @@ $htmlFieldTable = '
                 $categoryId = $catId;
             }
             $usfId = (int) $field->getValue('usf_id');
-            $tooltip = $gL10n->get('SYS_POSSIBLE_FIELDNAMES',
+            $tooltip = $gL10n->get(
+                'SYS_POSSIBLE_FIELDNAMES',
                 array(
                     $field->getValue('usf_name') . ', ' .
-                    $field->getValue('usf_name_intern')));
+                    $field->getValue('usf_name_intern'))
+            );
             $htmlFieldTable .= '<tr>
                 <td><label for="usf-'. $usfId. '" title="'.$tooltip.'">'.$field->getValue('usf_name');
             // Lastname und first name are mandatory fields
@@ -154,9 +157,11 @@ $htmlFieldTable = '
 
         // administrator could also import loginname and password
         if ($gCurrentUser->isAdministrator()) {
-            $tooltip = trim($gL10n->get('SYS_POSSIBLE_FIELDNAMES',
+            $tooltip = trim($gL10n->get(
+                'SYS_POSSIBLE_FIELDNAMES',
                 array(
-                    $gL10n->get('SYS_USERNAME'))));
+                    $gL10n->get('SYS_USERNAME'))
+            ));
 
             $htmlFieldTable .= '<tbody>
                 <tr class="admidio-group-heading">
@@ -206,9 +211,11 @@ $htmlFieldTable = '
             $htmlFieldTable .= '</select>
                     </td>
                 </tr>';
-            $tooltip = trim($gL10n->get('SYS_POSSIBLE_FIELDNAMES',
-                    array(
-                        $gL10n->get('SYS_PASSWORD'))));
+            $tooltip = trim($gL10n->get(
+                'SYS_POSSIBLE_FIELDNAMES',
+                array(
+                        $gL10n->get('SYS_PASSWORD'))
+            ));
 
             $htmlFieldTable .= '<tr>
                     <td><label for="usr_password" title="'.$tooltip.'">' . $gL10n->get('SYS_PASSWORD') . '</td>

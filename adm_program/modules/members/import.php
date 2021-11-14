@@ -72,10 +72,13 @@ $formats = array(
     'HTML' => $gL10n->get('SYS_HTML_TABLE')
 );
 $form->addSelectBox(
-    'format',$gL10n->get('SYS_FORMAT'), $formats,
+    'format',
+    $gL10n->get('SYS_FORMAT'),
+    $formats,
     array('showContextDependentFirstEntry' => false, 'property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['format'])
 );
-$page->addJavascript('
+$page->addJavascript(
+    '
     $("#format").change(function() {
         var format = $(this).children("option:selected").val();
          $(".import-setting").prop("disabled", true).parents("div.form-group").hide();
@@ -86,7 +89,8 @@ $page->addJavascript('
 );
 
 $form->addFileUpload(
-    'userfile', $gL10n->get('SYS_CHOOSE_FILE'),
+    'userfile',
+    $gL10n->get('SYS_CHOOSE_FILE'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values',
               'text/html',
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -114,7 +118,9 @@ $selectBoxEntries = array(
     'ISO-8859-1' => $gL10n->get('SYS_ISO_8859_1')
 );
 $form->addSelectBox(
-    'import_coding', $gL10n->get('SYS_CODING'), $selectBoxEntries,
+    'import_coding',
+    $gL10n->get('SYS_CODING'),
+    $selectBoxEntries,
     array('showContextDependentFirstEntry' => false, 'defaultValue' => $formValues['import_coding'], 'class' => 'import-setting import-CSV import-HTML')
 );
 
@@ -126,7 +132,9 @@ $selectBoxEntries = array(
     '|' => $gL10n->get('SYS_PIPE')
 );
 $form->addSelectBox(
-    'import_separator', $gL10n->get('SYS_SEPARATOR_FOR_CSV_FILE'), $selectBoxEntries,
+    'import_separator',
+    $gL10n->get('SYS_SEPARATOR_FOR_CSV_FILE'),
+    $selectBoxEntries,
     array('showContextDependentFirstEntry' => false, 'defaultValue' => $formValues['import_separator'], 'class' => 'import-setting import-CSV')
 );
 
@@ -137,7 +145,9 @@ $selectBoxEntries = array(
     '\'' => $gL10n->get('SYS_QUOTE')
 );
 $form->addSelectBox(
-    'import_enclosure', $gL10n->get('SYS_FIELD_ENCLOSURE'), $selectBoxEntries,
+    'import_enclosure',
+    $gL10n->get('SYS_FIELD_ENCLOSURE'),
+    $selectBoxEntries,
     array('showContextDependentFirstEntry' => false, 'defaultValue' => $formValues['import_enclosure'], 'class' => 'import-setting import-CSV')
 );
 
@@ -172,7 +182,9 @@ while ($row = $statement->fetch()) {
     $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
 }
 $form->addSelectBox(
-    'import_role_id', $gL10n->get('SYS_ASSIGN_ROLE'), $roles,
+    'import_role_id',
+    $gL10n->get('SYS_ASSIGN_ROLE'),
+    $roles,
     array(
         'property'        => HtmlForm::FIELD_REQUIRED,
         'defaultValue'    => $formValues['import_role_id'],
@@ -187,7 +199,9 @@ $selectBoxEntries = array(
     4 => $gL10n->get('SYS_COMPLEMENT')
 );
 $form->addSelectBox(
-    'user_import_mode', $gL10n->get('SYS_EXISTING_USERS'), $selectBoxEntries,
+    'user_import_mode',
+    $gL10n->get('SYS_EXISTING_USERS'),
+    $selectBoxEntries,
     array(
         'property'                       => HtmlForm::FIELD_REQUIRED,
         'defaultValue'                   => $formValues['user_import_mode'],
@@ -196,7 +210,8 @@ $form->addSelectBox(
     )
 );
 $form->addSubmitButton(
-    'btn_forward', $gL10n->get('SYS_ASSIGN_FIELDS'),
+    'btn_forward',
+    $gL10n->get('SYS_ASSIGN_FIELDS'),
     array('icon' => 'fa-arrow-circle-right', 'class' => ' offset-sm-3')
 );
 

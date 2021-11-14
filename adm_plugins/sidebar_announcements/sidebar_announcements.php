@@ -23,9 +23,9 @@ if (is_file(__DIR__ . '/config.php')) {
     require_once(__DIR__ . '/config.php');
 }
 
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'int');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
-$getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
+$getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
 
 // set default values if there no value has been stored in the config.php
 if (!isset($plg_announcements_count) || !is_numeric($plg_announcements_count)) {
@@ -121,8 +121,10 @@ if ($gSettingsManager->getInt('enable_announcements_module') > 0) {
                     $textPrev = substr($textPrev, 0, $plg_show_preview + 15);
                     $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).'
                         <a class="admidio-icon-link" target="'. $plg_link_target. '"
-                            href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php',
-                                array('ann_uuid' => (int) $plgAnnouncement->getValue('ann_uuid'), 'headline' => $plg_headline)). '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
+                            href="'. SecurityUtils::encodeUrl(
+                        ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php',
+                        array('ann_uuid' => (int) $plgAnnouncement->getValue('ann_uuid'), 'headline' => $plg_headline)
+                    ). '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
 
                     echo '<div>'.$textPrev.'</div>';
                 }

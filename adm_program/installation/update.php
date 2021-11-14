@@ -46,8 +46,14 @@ try {
 
     $page = new HtmlPageInstallation('admidio-update-message');
     $page->setUpdateModus();
-    $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
-        $gL10n->get('SYS_RELOAD'), 'fa-arrow-circle-right', ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
+    $page->showMessage(
+        'error',
+        $gL10n->get('SYS_NOTE'),
+        $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
+        $gL10n->get('SYS_RELOAD'),
+        'fa-arrow-circle-right',
+        ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php'
+    );
     // => EXIT
 }
 
@@ -133,8 +139,14 @@ if (FileSystemUtils::isUnixWithPosix() && (!is_executable(ADMIDIO_PATH . FOLDER_
 
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_DATA_DIR_RIGHTS'),
-            $gL10n->get('SYS_RELOAD'), 'fa-arrow-circle-right', ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
+        $page->showMessage(
+            'error',
+            $gL10n->get('SYS_NOTE'),
+            $gL10n->get('INS_DATA_DIR_RIGHTS'),
+            $gL10n->get('SYS_RELOAD'),
+            'fa-arrow-circle-right',
+            ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php'
+        );
         // => EXIT
     }
 }
@@ -147,8 +159,14 @@ if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA 
     } catch (\RuntimeException $exception) {
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL)),
-            $gL10n->get('SYS_RELOAD'), 'fa-arrow-circle-right', ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
+        $page->showMessage(
+            'error',
+            $gL10n->get('SYS_NOTE'),
+            $gL10n->get('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL)),
+            $gL10n->get('SYS_RELOAD'),
+            'fa-arrow-circle-right',
+            ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php'
+        );
         // => EXIT
     }
 }
@@ -159,8 +177,14 @@ $message = checkDatabaseVersion($gDb);
 if ($message !== '') {
     $page = new HtmlPageInstallation('admidio-update-message');
     $page->setUpdateModus();
-    $page->showMessage('error', $gL10n->get('SYS_NOTE'), $message,
-        $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
+    $page->showMessage(
+        'error',
+        $gL10n->get('SYS_NOTE'),
+        $message,
+        $gL10n->get('SYS_OVERVIEW'),
+        'fa-home',
+        ADMIDIO_URL . '/adm_program/overview.php'
+    );
     // => EXIT
 }
 
@@ -199,8 +223,14 @@ if ($installedDbBetaVersion > 0) {
 if ($installedDbVersion === '') {
     $page = new HtmlPageInstallation('admidio-update-message');
     $page->setUpdateModus();
-    $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_UPDATE_NOT_POSSIBLE') . '<p>' . $gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', array(ADMIDIO_VERSION_TEXT)) . '</p>',
-        $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
+    $page->showMessage(
+        'error',
+        $gL10n->get('SYS_NOTE'),
+        $gL10n->get('INS_UPDATE_NOT_POSSIBLE') . '<p>' . $gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', array(ADMIDIO_VERSION_TEXT)) . '</p>',
+        $gL10n->get('SYS_OVERVIEW'),
+        'fa-home',
+        ADMIDIO_URL . '/adm_program/overview.php'
+    );
     // => EXIT
 }
 
@@ -244,18 +274,23 @@ if ($getMode === 1) {
         if (!isset($gLoginForUpdate) || $gLoginForUpdate === 1) {
             $form->addDescription($gL10n->get('INS_ADMINISTRATOR_LOGIN_DESC'));
             $form->addInput(
-                'login_name', $gL10n->get('SYS_USERNAME'), '',
+                'login_name',
+                $gL10n->get('SYS_USERNAME'),
+                '',
                 array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
             );
             // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
             $form->addInput(
-                'password', $gL10n->get('SYS_PASSWORD'), '',
+                'password',
+                $gL10n->get('SYS_PASSWORD'),
+                '',
                 array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
             );
         }
 
         $form->addButton(
-            'next_page', $gL10n->get('INS_UPDATE_DATABASE'),
+            'next_page',
+            $gL10n->get('INS_UPDATE_DATABASE'),
             array('icon' => 'fa-sync', 'class' => 'btn-primary')
         );
 
@@ -266,18 +301,32 @@ if ($getMode === 1) {
     elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep) {
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
-        $page->showMessage('success', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_DATABASE_IS_UP_TO_DATE') . '<br />' . $gL10n->get('SYS_DATABASE_DOESNOT_NEED_UPDATED'),
-            $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
+        $page->showMessage(
+            'success',
+            $gL10n->get('SYS_NOTE'),
+            $gL10n->get('SYS_DATABASE_IS_UP_TO_DATE') . '<br />' . $gL10n->get('SYS_DATABASE_DOESNOT_NEED_UPDATED'),
+            $gL10n->get('SYS_OVERVIEW'),
+            'fa-home',
+            ADMIDIO_URL . '/adm_program/overview.php'
+        );
     // => EXIT
     }
     // if source version smaller then database -> show error
     else {
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get(
-                'SYS_FILESYSTEM_VERSION_INVALID', array($installedDbVersion,
-                ADMIDIO_VERSION_TEXT, '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>')),
-            $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
+        $page->showMessage(
+            'error',
+            $gL10n->get('SYS_NOTE'),
+            $gL10n->get(
+            'SYS_FILESYSTEM_VERSION_INVALID',
+            array($installedDbVersion,
+                ADMIDIO_VERSION_TEXT, '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>')
+        ),
+            $gL10n->get('SYS_OVERVIEW'),
+            'fa-home',
+            ADMIDIO_URL . '/adm_program/overview.php'
+        );
         // => EXIT
     }
 } elseif ($getMode === 2) {
@@ -287,8 +336,14 @@ if ($getMode === 1) {
     } catch (AdmException $exception) {
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $exception->getText(),
-            $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
+        $page->showMessage(
+            'error',
+            $gL10n->get('SYS_NOTE'),
+            $exception->getText(),
+            $gL10n->get('SYS_OVERVIEW'),
+            'fa-home',
+            ADMIDIO_URL . '/adm_program/overview.php'
+        );
     }
 
     doAdmidioUpdate($installedDbVersion);
@@ -306,7 +361,8 @@ if ($getMode === 1) {
 
     $form = new HtmlForm('update-successful-form', ADMIDIO_HOMEPAGE . 'donate.php', null, array('setFocus' => false));
     $form->addButton(
-        'main_page', $gL10n->get('SYS_LATER'),
+        'main_page',
+        $gL10n->get('SYS_LATER'),
         array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/overview.php', 'class' => 'admidio-margin-bottom')
     );
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-heart'));

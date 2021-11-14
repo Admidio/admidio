@@ -255,10 +255,10 @@ class ListConfiguration extends TableLists
             for ($newColumnNumber = $number, $max = $this->countColumns(); $newColumnNumber < $max; ++$newColumnNumber) {
                 $newColumn = $this->columns[$newColumnNumber];
                 $oldColumn = $this->columns[$newColumnNumber + 1];
-                $newColumn->setValue('lsc_usf_id',        $oldColumn->getValue('lsc_usf_id'));
+                $newColumn->setValue('lsc_usf_id', $oldColumn->getValue('lsc_usf_id'));
                 $newColumn->setValue('lsc_special_field', $oldColumn->getValue('lsc_special_field'));
-                $newColumn->setValue('lsc_sort',          $oldColumn->getValue('lsc_sort'));
-                $newColumn->setValue('lsc_filter',        $oldColumn->getValue('lsc_filter'));
+                $newColumn->setValue('lsc_sort', $oldColumn->getValue('lsc_sort'));
+                $newColumn->setValue('lsc_filter', $oldColumn->getValue('lsc_filter'));
                 $newColumn->save();
             }
             $this->columns[$newColumnNumber]->delete();

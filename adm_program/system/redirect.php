@@ -33,7 +33,8 @@ $page = new HtmlPage('admidio-redirect', $gL10n->get('SYS_REDIRECT'));
 $page->addHeader('<meta http-equiv="refresh" content="' . $gSettingsManager->getInt('weblinks_redirect_seconds') . '; url=' . $getUrl . '">');
 
 // Counter zählt die sekunden bis zur Weiterleitung runter
-$page->addJavascript('
+$page->addJavascript(
+    '
     /**
      * @param {bool} init
      */

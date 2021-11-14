@@ -19,11 +19,11 @@ require(__DIR__ . '/login_valid.php');
 
 // Initialize and check the parameters
 $gMessage->showThemeBody(false);
-$getType        = admFuncVariableIsValid($_GET, 'type',          'string', array('requireValue' => true));
-$getElementId   = admFuncVariableIsValid($_GET, 'element_id',    'string', array('requireValue' => true));
-$getDatabaseId  = admFuncVariableIsValid($_GET, 'database_id',   'string', array('requireValue' => true));
+$getType        = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true));
+$getElementId   = admFuncVariableIsValid($_GET, 'element_id', 'string', array('requireValue' => true));
+$getDatabaseId  = admFuncVariableIsValid($_GET, 'database_id', 'string', array('requireValue' => true));
 $getDatabaseId2 = admFuncVariableIsValid($_GET, 'database_id_2', 'string');
-$getName        = admFuncVariableIsValid($_GET, 'name',          'string');
+$getName        = admFuncVariableIsValid($_GET, 'name', 'string');
 
 // initialize local variables
 $text = 'SYS_DELETE_ENTRY';

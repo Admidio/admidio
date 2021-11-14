@@ -32,12 +32,12 @@ if (strlen($_POST['ecard_template']) === 0) {
 
 // Initialize and check the parameters
 $ecardMessage     = '';
-$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template',  'file',   array('requireValue' => true));
-$postPhotoUuid    = admFuncVariableIsValid($_POST, 'photo_uuid',      'string', array('requireValue' => true));
-$postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr',        'int',    array('requireValue' => true));
-$nameRecipient    = admFuncVariableIsValid($_POST, 'name_recipient',  'string');
+$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));
+$postPhotoUuid    = admFuncVariableIsValid($_POST, 'photo_uuid', 'string', array('requireValue' => true));
+$postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr', 'int', array('requireValue' => true));
+$nameRecipient    = admFuncVariableIsValid($_POST, 'name_recipient', 'string');
 $emailRecipient   = admFuncVariableIsValid($_POST, 'email_recipient', 'string');
-$ecardMessage     = admFuncVariableIsValid($_POST, 'ecard_message',   'html');
+$ecardMessage     = admFuncVariableIsValid($_POST, 'ecard_message', 'html');
 
 $imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale')));
 

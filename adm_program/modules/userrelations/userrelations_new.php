@@ -60,8 +60,10 @@ $page = new HtmlPage('admidio-userrelations-edit', $headline);
 $form = new HtmlForm('relation_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php', array('user_uuid' => $getUserUuid, 'mode' => '1')), $page);
 
 $form->addInput(
-    'usr_id', $gL10n->get('SYS_USER'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'),
-     array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
+    'usr_id',
+    $gL10n->get('SYS_USER'),
+    $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'),
+    array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
 );
 
 // select box showing all relation types
@@ -69,7 +71,10 @@ $sql = 'SELECT urt_id, urt_name
           FROM '.TBL_USER_RELATION_TYPES.'
       ORDER BY urt_name';
 $form->addSelectBoxFromSql(
-    'urt_id', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql,
+    'urt_id',
+    $gL10n->get('SYS_USER_RELATION'),
+    $gDb,
+    $sql,
     array('property' => HtmlForm::FIELD_REQUIRED)
 );
 
@@ -161,7 +166,10 @@ if ($gCurrentUser->editUsers()) {
 }
 
 $form->addSelectBoxFromSql(
-    'usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sqlData,
+    'usr_id2',
+    $gL10n->get('SYS_MEMBER'),
+    $gDb,
+    $sqlData,
     array('property' => HtmlForm::FIELD_REQUIRED, 'search' => true)
 );
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));

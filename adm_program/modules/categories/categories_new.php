@@ -22,7 +22,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
-$getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'AWA')));
+$getType  = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'AWA')));
 
 $roleViewSet = array(0);
 $roleEditSet = array(0);
@@ -153,7 +153,8 @@ if ($getType === 'USF') {
 }
 
 if ($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1) {
-    $page->addJavascript('
+    $page->addJavascript(
+        '
         function showHideViewRightControl() {
             if ($("#show_in_several_organizations").is(":checked")) {
                 $("#adm_categories_view_right_group").hide();
@@ -181,7 +182,9 @@ if ($category->getValue('cat_system') == 1) {
 }
 
 $form->addInput(
-    'cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_name', 'database'),
+    'cat_name',
+    $gL10n->get('SYS_NAME'),
+    $category->getValue('cat_name', 'database'),
     array('maxLength' => 100, 'property' => $fieldPropertyCatName)
 );
 
@@ -216,7 +219,10 @@ if ($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false ||
 
     // show selectbox with all assigned roles
     $form->addSelectBoxFromSql(
-        'adm_categories_view_right', $gL10n->get('SYS_VISIBLE_FOR'), $gDb, $sqlDataView,
+        'adm_categories_view_right',
+        $gL10n->get('SYS_VISIBLE_FOR'),
+        $gDb,
+        $sqlDataView,
         array(
             'property'     => HtmlForm::FIELD_REQUIRED,
             'defaultValue' => $roleViewSet,
@@ -229,7 +235,10 @@ if ($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false ||
     // until now we don't use edit rights for profile fields
     if ($getType !== 'USF') {
         $form->addSelectBoxFromSql(
-            'adm_categories_edit_right', $gL10n->get($rolesRightEditName), $gDb, $sqlDataView,
+            'adm_categories_edit_right',
+            $gL10n->get($rolesRightEditName),
+            $gDb,
+            $sqlDataView,
             array(
                 'defaultValue' => $roleEditSet,
                 'multiselect'  => true,
@@ -274,7 +283,9 @@ if ($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrg
     }
 
     $form->addStaticControl(
-        'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
+        'adm_administrators',
+        $gL10n->get('SYS_ADMINISTRATORS'),
+        implode(', ', $adminRoles),
         array('helpTextIdLabel' => $gL10n->get('SYS_CATEGORIES_ADMINISTRATORS_DESC', array($rolesRightsName)))
     );
 
@@ -284,19 +295,25 @@ if ($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrg
     }
 
     $form->addCheckbox(
-        'show_in_several_organizations', $gL10n->get('SYS_DATA_MULTI_ORGA'), $checked,
+        'show_in_several_organizations',
+        $gL10n->get('SYS_DATA_MULTI_ORGA'),
+        $checked,
         array('property' => $fieldProperty, 'helpTextIdLabel' => $helpTextIdLabel)
     );
 }
 
 $form->addCheckbox(
-    'cat_default', $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)), (bool) $category->getValue('cat_default'),
+    'cat_default',
+    $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)),
+    (bool) $category->getValue('cat_default'),
     array('icon' => 'fa-star')
 );
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    (int) $category->getValue('cat_usr_id_create'), $category->getValue('cat_timestamp_create'),
-    (int) $category->getValue('cat_usr_id_change'), $category->getValue('cat_timestamp_change')
+    (int) $category->getValue('cat_usr_id_create'),
+    $category->getValue('cat_timestamp_create'),
+    (int) $category->getValue('cat_usr_id_change'),
+    $category->getValue('cat_timestamp_change')
 ));
 
 // add form to html page and show page

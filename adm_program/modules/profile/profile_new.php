@@ -26,11 +26,11 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid',  'string');
+$getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 $getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'int');
-$getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname',  'string'));
+$getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname', 'string'));
 $getFirstname = stripslashes(admFuncVariableIsValid($_GET, 'firstname', 'string'));
-$getCopy      = admFuncVariableIsValid($_GET, 'copy',     'bool');
+$getCopy      = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
 $registrationOrgId = $gCurrentOrgId;
 
@@ -177,14 +177,18 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 }
 
                 $form->addInput(
-                    'usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'),
+                    'usr_login_name',
+                    $gL10n->get('SYS_USERNAME'),
+                    $user->getValue('usr_login_name'),
                     array('maxLength' => 254, 'property' => $fieldProperty, 'helpTextIdLabel' => $fieldHelpId, 'class' => 'form-control-small')
                 );
 
                 if ($getNewUser === 2) {
                     // at registration add password and password confirm to form
                     $form->addInput(
-                        'usr_password', $gL10n->get('SYS_PASSWORD'), '',
+                        'usr_password',
+                        $gL10n->get('SYS_PASSWORD'),
+                        '',
                         array(
                             'type'             => 'password',
                             'property'         => HtmlForm::FIELD_REQUIRED,
@@ -195,7 +199,9 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                         )
                     );
                     $form->addInput(
-                        'password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), '',
+                        'password_confirm',
+                        $gL10n->get('SYS_CONFIRM_PASSWORD'),
+                        '',
                         array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'class' => 'form-control-small')
                     );
 
@@ -205,7 +211,10 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                                   FROM '.TBL_ORGANIZATIONS.'
                               ORDER BY org_longname ASC, org_shortname ASC';
                         $form->addSelectBoxFromSql(
-                            'reg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
+                            'reg_org_id',
+                            $gL10n->get('SYS_ORGANIZATION'),
+                            $gDb,
+                            $sql,
                             array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $registrationOrgId)
                         );
                     }
@@ -350,7 +359,9 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             }
 
             $form->addInput(
-                'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'), $gProfileFields->getProperty($usfNameIntern, 'usf_name'), $user->getValue($usfNameIntern),
+                'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
+                $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
+                $user->getValue($usfNameIntern),
                 array(
                     'type'            => $fieldType,
                     'maxLength'       => $maxlength,
@@ -384,8 +395,10 @@ if ($getNewUser === 2) {
 if ($getNewUser === 0) {
     // show information about user who creates the recordset and changed it
     $form->addHtml(admFuncShowCreateChangeInfoById(
-        (int) $user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'),
-        (int) $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')
+        (int) $user->getValue('usr_usr_id_create'),
+        $user->getValue('usr_timestamp_create'),
+        (int) $user->getValue('usr_usr_id_change'),
+        $user->getValue('usr_timestamp_change')
     ));
 }
 

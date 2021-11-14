@@ -23,8 +23,8 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getMenuUuid = admFuncVariableIsValid($_GET, 'menu_uuid','string');
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
+$getMenuUuid = admFuncVariableIsValid($_GET, 'menu_uuid', 'string');
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
 
 // check rights
@@ -56,11 +56,11 @@ if ($getMode === 1) {
     $_SESSION['menu_request'] = $_POST;
 
     $postIdParent = admFuncVariableIsValid($_POST, 'men_men_id_parent', 'int');
-    $postComId    = admFuncVariableIsValid($_POST, 'men_com_id',        'int');
-    $postName     = admFuncVariableIsValid($_POST, 'men_name',          'string', array('default' => ''));
-    $postDesc     = admFuncVariableIsValid($_POST, 'men_description',   'string', array('default' => ''));
-    $postUrl      = admFuncVariableIsValid($_POST, 'men_url',           'string', array('default' => ''));
-    $postIcon     = admFuncVariableIsValid($_POST, 'men_icon',          'string', array('default' => ''));
+    $postComId    = admFuncVariableIsValid($_POST, 'men_com_id', 'int');
+    $postName     = admFuncVariableIsValid($_POST, 'men_name', 'string', array('default' => ''));
+    $postDesc     = admFuncVariableIsValid($_POST, 'men_description', 'string', array('default' => ''));
+    $postUrl      = admFuncVariableIsValid($_POST, 'men_url', 'string', array('default' => ''));
+    $postIcon     = admFuncVariableIsValid($_POST, 'men_icon', 'string', array('default' => ''));
 
     // within standard menu items the url should not be changed
     if ($menu->getValue('men_standard')) {

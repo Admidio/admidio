@@ -423,8 +423,10 @@ class TableMessage extends TableAccess
                              ON first_name.usd_usr_id = msr_usr_id
                             AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                     WHERE msg_id = ? -- $this->getValue(\'msg_id\') ';
-            $messagesRecipientsStatement = $this->db->queryPrepared($sql,
-                array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $this->getValue('msg_id')));
+            $messagesRecipientsStatement = $this->db->queryPrepared(
+                $sql,
+                array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $this->getValue('msg_id'))
+            );
 
             while ($row = $messagesRecipientsStatement->fetch()) {
                 // save message recipient as TableAcess object to the array

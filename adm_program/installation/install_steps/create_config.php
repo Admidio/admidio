@@ -27,31 +27,55 @@ if (isset($_POST['user_last_name'])) {
     ||  $_SESSION['user_login']      === ''
     ||  $_SESSION['user_password']   === '') {
         $page = new HtmlPageInstallation('admidio-installation-message');
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
+        $page->showMessage(
+            'error',
+            $gL10n->get('SYS_NOTE'),
+            $gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'),
+            $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
+        );
         // => EXIT
     }
 
     // username should only have valid chars
     if (!StringUtils::strValidCharacters($_SESSION['user_login'], 'noSpecialChar')) {
         $page = new HtmlPageInstallation('admidio-installation-message');
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_FIELD_INVALID_CHAR', array($gL10n->get('SYS_USERNAME'))), $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
+        $page->showMessage(
+            'error',
+            $gL10n->get('SYS_NOTE'),
+            $gL10n->get('SYS_FIELD_INVALID_CHAR', array($gL10n->get('SYS_USERNAME'))),
+            $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
+        );
         // => EXIT
     }
 
     if (!StringUtils::strValidCharacters($_SESSION['user_email'], 'email')) {
         $page = new HtmlPageInstallation('admidio-installation-message');
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL'))), $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
+        $page->showMessage(
+            'error',
+            $gL10n->get('SYS_NOTE'),
+            $gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL'))),
+            $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
+        );
         // => EXIT
     }
 
     // Password min length is 8 chars
     if (strlen($_SESSION['user_password']) < PASSWORD_MIN_LENGTH) {
         $page = new HtmlPageInstallation('admidio-installation-message');
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('PRO_PASSWORD_LENGTH'), $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
+        $page->showMessage(
+            'error',
+            $gL10n->get('SYS_NOTE'),
+            $gL10n->get('PRO_PASSWORD_LENGTH'),
+            $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
+        );
         // => EXIT
     }
 
@@ -65,16 +89,28 @@ if (isset($_POST['user_last_name'])) {
     // Admin Password should have a minimum strength of 1
     if (PasswordUtils::passwordStrength($_SESSION['user_password'], $userData) < 1) {
         $page = new HtmlPageInstallation('admidio-installation-message');
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'), $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
+        $page->showMessage(
+            'error',
+            $gL10n->get('SYS_NOTE'),
+            $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'),
+            $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
+        );
         // => EXIT
     }
 
     // password must be the same with password confirm
     if ($_SESSION['user_password'] !== $_SESSION['user_password_confirm']) {
         $page = new HtmlPageInstallation('admidio-installation-message');
-        $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_PASSWORDS_NOT_EQUAL'), $gL10n->get('SYS_BACK'),
-            'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
+        $page->showMessage(
+            'error',
+            $gL10n->get('SYS_NOTE'),
+            $gL10n->get('SYS_PASSWORDS_NOT_EQUAL'),
+            $gL10n->get('SYS_BACK'),
+            'fa-arrow-circle-left',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator'))
+        );
         // => EXIT
     }
 }
@@ -135,7 +171,8 @@ if ($configFileHandle) {
 
     $form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
     $form->addSubmitButton(
-        'next_page', $gL10n->get('INS_INSTALL_ADMIDIO'),
+        'next_page',
+        $gL10n->get('INS_INSTALL_ADMIDIO'),
         array('icon' => 'fa-sync')
     );
 } else {
@@ -145,15 +182,18 @@ if ($configFileHandle) {
 
     $form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
     $form->addButton(
-        'previous_page', $gL10n->get('SYS_BACK'),
+        'previous_page',
+        $gL10n->get('SYS_BACK'),
         array('icon' => 'fa-arrow-circle-left', 'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')))
     );
     $form->addButton(
-        'download_config', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'),
+        'download_config',
+        $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'),
         array('icon' => 'fa-download', 'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'download_config')))
     );
     $form->addSubmitButton(
-        'next_page', $gL10n->get('INS_INSTALL_ADMIDIO'),
+        'next_page',
+        $gL10n->get('INS_INSTALL_ADMIDIO'),
         array('icon' => 'fa-sync')
     );
 }

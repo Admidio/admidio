@@ -240,7 +240,7 @@ class User extends TableAccess
             if ($mode === 'set') {
                 // save new end date if an later date exists
                 // but only if end date is greater than the begin date otherwise the membership should be deleted
-                if (strcmp($member->getValue('mem_end', 'Y-m-d'),   $maxEndDate) > 0
+                if (strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0
                 &&  strcmp($member->getValue('mem_begin', 'Y-m-d'), $maxEndDate) < 0) {
                     $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
                 }
@@ -1063,7 +1063,7 @@ class User extends TableAccess
 
         if ($gCurrentUser->allowedViewProfileField($this, 'FIRST_NAME')) {
             $vCard[] = 'N;CHARSET=ISO-8859-1:' .
-                utf8_decode($this->getValue('LAST_NAME',  'database')) . ';' .
+                utf8_decode($this->getValue('LAST_NAME', 'database')) . ';' .
                 utf8_decode($this->getValue('FIRST_NAME', 'database')) . ';;;';
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'LAST_NAME')) {
@@ -1088,10 +1088,10 @@ class User extends TableAccess
         &&  $gCurrentUser->allowedViewProfileField($this, 'POSTCODE')
         &&  $gCurrentUser->allowedViewProfileField($this, 'COUNTRY')) {
             $vCard[] = 'ADR;CHARSET=ISO-8859-1;HOME:;;' .
-                utf8_decode($this->getValue('STREET',  'database')) . ';' .
-                utf8_decode($this->getValue('CITY',     'database')) . ';;' .
+                utf8_decode($this->getValue('STREET', 'database')) . ';' .
+                utf8_decode($this->getValue('CITY', 'database')) . ';;' .
                 utf8_decode($this->getValue('POSTCODE', 'database')) . ';' .
-                utf8_decode($this->getValue('COUNTRY',  'database'));
+                utf8_decode($this->getValue('COUNTRY', 'database'));
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'WEBSITE')) {
             $vCard[] = 'URL;HOME:' . $this->getValue('WEBSITE');
@@ -1751,7 +1751,9 @@ class User extends TableAccess
                 $gChangeNotification->logUserChange(
                     (int) $this->getValue('usr_id'),
                     'usr_password',
-                    $this->getValue('usr_password'), $newPassword, $this
+                    $this->getValue('usr_password'),
+                    $newPassword,
+                    $this
                 );
             }
             return parent::setValue('usr_password', $newPassword, false);
@@ -1773,7 +1775,9 @@ class User extends TableAccess
             $gChangeNotification->logUserChange(
                 (int) $this->getValue('usr_id'),
                 'usr_password',
-                $this->getValue('usr_password'), $newPasswordHash, $this
+                $this->getValue('usr_password'),
+                $newPasswordHash,
+                $this
             );
         }
         return parent::setValue('usr_password', $newPasswordHash, false);
@@ -1839,7 +1843,9 @@ class User extends TableAccess
                 $gChangeNotification->logUserChange(
                     (int) $this->getValue('usr_id'),
                     $columnName,
-                    $this->getValue($columnName), $newValue, $this
+                    $this->getValue($columnName),
+                    $newValue,
+                    $this
                 );
             }
 
@@ -1891,9 +1897,12 @@ class User extends TableAccess
                 $this->mProfileFieldsData->getProperty($columnName, 'usf_id'),
                 $columnName, // TODO: is $columnName the internal name or the human-readable?
                 // Old and new values in human-readable version:
-                $oldFieldValue, $this->mProfileFieldsData->getValue($columnName, 'text'),
+                $oldFieldValue,
+                $this->mProfileFieldsData->getValue($columnName, 'text'),
                 // Old and new values in raw dtabase:
-                $oldFieldValue_db, $newValue, $this
+                $oldFieldValue_db,
+                $newValue,
+                $this
             );
         }
 
@@ -1919,7 +1928,7 @@ class User extends TableAccess
     public function updateLoginData()
     {
         $this->saveChangesWithoutRights();
-        $this->setValue('usr_last_login',   $this->getValue('usr_actual_login', 'Y-m-d H:i:s'));
+        $this->setValue('usr_last_login', $this->getValue('usr_actual_login', 'Y-m-d H:i:s'));
         $this->setValue('usr_number_login', (int) $this->getValue('usr_number_login') + 1);
         $this->setValue('usr_actual_login', DATETIME_NOW);
         $this->save(false); // Zeitstempel nicht aktualisieren // TODO Exception handling

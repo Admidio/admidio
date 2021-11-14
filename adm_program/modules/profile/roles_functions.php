@@ -192,28 +192,39 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
             $roleMemHTML .= '</span>
                     </li>
                     <li class="list-group-item" id="membership_period_'.$memberUuid.'" style="visibility: hidden; display: none;">';
-            $form = new HtmlForm('membership_period_form_'.$memberUuid, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '7', 'user_uuid' => $user->getValue('usr_uuid'), 'member_uuid' => $row['mem_uuid'])),
-                            null, array('type' => 'navbar', 'method' => 'post', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
+            $form = new HtmlForm(
+                'membership_period_form_'.$memberUuid,
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '7', 'user_uuid' => $user->getValue('usr_uuid'), 'member_uuid' => $row['mem_uuid'])),
+                null,
+                array('type' => 'navbar', 'method' => 'post', 'setFocus' => false, 'class' => 'admidio-form-membership-period')
+            );
             $form->addInput(
-                            'membership_start_date_'.$memberUuid, $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gSettingsManager->getString('system_date')),
-                            array('type' => 'date', 'maxLength' => 10)
-                        );
+                'membership_start_date_'.$memberUuid,
+                $gL10n->get('SYS_START'),
+                $member->getValue('mem_begin', $gSettingsManager->getString('system_date')),
+                array('type' => 'date', 'maxLength' => 10)
+            );
             $form->addInput(
-                            'membership_end_date_'.$memberUuid, $gL10n->get('SYS_END'), $member->getValue('mem_end', $gSettingsManager->getString('system_date')),
-                            array('type' => 'date', 'maxLength' => 10)
-                        );
+                'membership_end_date_'.$memberUuid,
+                $gL10n->get('SYS_END'),
+                $member->getValue('mem_end', $gSettingsManager->getString('system_date')),
+                array('type' => 'date', 'maxLength' => 10)
+            );
             $form->addSubmitButton(
-                            'btn_send_'.$memberUuid, $gL10n->get('SYS_OK'),
-                            array('class' => 'btn btn-primary button-membership-period-form', 'data-admidio' => $memberUuid)
-                        );
+                'btn_send_'.$memberUuid,
+                $gL10n->get('SYS_OK'),
+                array('class' => 'btn btn-primary button-membership-period-form', 'data-admidio' => $memberUuid)
+            );
             $roleMemHTML .= $form->show();
             $roleMemHTML .= '</li>
                     <li class="list-group-item" id="member_info_'.$memberUuid.'_Content" style="display: none;">';
             // show information about user who creates the recordset and changed it
             $roleMemHTML .= admFuncShowCreateChangeInfoById(
-                            (int) $member->getValue('mem_usr_id_create'), $member->getValue('mem_timestamp_create'),
-                            (int) $member->getValue('mem_usr_id_change'), $member->getValue('mem_timestamp_change')
-                        ).'
+                (int) $member->getValue('mem_usr_id_create'),
+                $member->getValue('mem_timestamp_create'),
+                (int) $member->getValue('mem_usr_id_change'),
+                $member->getValue('mem_timestamp_change')
+            ).'
                     </li>
                 </ul>
             </li>';

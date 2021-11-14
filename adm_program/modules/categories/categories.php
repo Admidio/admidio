@@ -122,9 +122,12 @@ unset($_SESSION['categories_request']);
 $page = new HtmlPage('admidio-categories', $headline);
 
 // define link to create new category
-$page->addPageFunctionsMenuItem('menu_item_categories_add', $addButtonText,
+$page->addPageFunctionsMenuItem(
+    'menu_item_categories_add',
+    $addButtonText,
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType)),
-    'fa-plus-circle');
+    'fa-plus-circle'
+);
 
 // Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);

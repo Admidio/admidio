@@ -422,15 +422,19 @@ class ChangeNotification
 
                 $message = $gL10n->get(
                     $message,
-                    array($userdata['first_name'], $userdata['last_name'], $userdata['usr_login_name'], $currname));
+                    array($userdata['first_name'], $userdata['last_name'], $userdata['usr_login_name'], $currname)
+                );
 
                 $changes = $userdata['profile_changes'];
                 if ($changes) {
                     $hasContent = true;
                     $message .= $table_begin .
-                        sprintf($format_hdr, $gL10n->get('SYS_FIELD'),
+                        sprintf(
+                            $format_hdr,
+                            $gL10n->get('SYS_FIELD'),
                             $gL10n->get('SYS_PREVIOUS_VALUE'),
-                            $gL10n->get('SYS_NEW_VALUE'));
+                            $gL10n->get('SYS_NEW_VALUE')
+                        );
                     foreach ($changes as $c) {
                         $message .= sprintf($format_row, $c[0], $c[1], $c[2]);
                     }
@@ -441,10 +445,13 @@ class ChangeNotification
                 if ($changes) {
                     $hasContent = true;
                     $message .= $table_begin .
-                        sprintf($format_rolhdr,
-                            $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_FIELD'),
+                        sprintf(
+                            $format_rolhdr,
+                            $gL10n->get('SYS_ROLE'),
+                            $gL10n->get('SYS_FIELD'),
                             $gL10n->get('SYS_PREVIOUS_VALUE'),
-                            $gL10n->get('SYS_NEW_VALUE'));
+                            $gL10n->get('SYS_NEW_VALUE')
+                        );
                     foreach ($changes as $c) {
                         $message .= sprintf($format_rolrow, $c[0], $c[1], $c[2], $c[3]);
                     }
@@ -453,10 +460,15 @@ class ChangeNotification
 
                 if ($hasContent) {
                     $notification->adminNotification(
-                        $gL10n->get($messageTitle,
-                            array($userdata['first_name'], $userdata['last_name'], $userdata['usr_login_name'])),
+                        $gL10n->get(
+                            $messageTitle,
+                            array($userdata['first_name'], $userdata['last_name'], $userdata['usr_login_name'])
+                        ),
                         $message,
-                        $currfullname, $gCurrentUser->getValue('EMAIL'), 'enable_email_changenotification');
+                        $currfullname,
+                        $gCurrentUser->getValue('EMAIL'),
+                        'enable_email_changenotification'
+                    );
                 }
             }
         }

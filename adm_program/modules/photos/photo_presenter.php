@@ -20,7 +20,7 @@ const PHOTO_SHOW_MODAL  = 1;
 const PHOTO_SHOW_PAGE   = 2;
 
 // Initialize and check the parameters
-$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid','string', array('requireValue' => true));
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string', array('requireValue' => true));
 $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr', 'int', array('requireValue' => true));
 
 // check if the module is enabled and disallow access if it's disabled

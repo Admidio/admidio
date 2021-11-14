@@ -228,7 +228,7 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
             $pageNavClassNext = 'page-item disabled';
         }
 
-        $pageNavigationPrevText = getListElementString($gL10n->get('SYS_BACK'),      $pageNavClassPrev, $baseUrl, $queryParamName, ($onPage - 2) * $itemsPerPage);
+        $pageNavigationPrevText = getListElementString($gL10n->get('SYS_BACK'), $pageNavClassPrev, $baseUrl, $queryParamName, ($onPage - 2) * $itemsPerPage);
         $pageNavigationNextText = getListElementString($gL10n->get('SYS_PAGE_NEXT'), $pageNavClassNext, $baseUrl, $queryParamName, $onPage * $itemsPerPage);
 
         $pageNavigationString = $pageNavigationPrevText.$pageNavigationString.$pageNavigationNextText;
@@ -482,9 +482,12 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
 
     // get html output from other function
     return admFuncShowCreateChangeInfoByName(
-        $htmlCreateName, $timestampCreate,
-        $htmlEditName, $timestampEdited,
-        $userUuidCreated, $userUuidEdited
+        $htmlCreateName,
+        $timestampCreate,
+        $htmlEditName,
+        $timestampEdited,
+        $userUuidCreated,
+        $userUuidEdited
     );
 }
 

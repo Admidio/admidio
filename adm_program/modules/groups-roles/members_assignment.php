@@ -26,11 +26,11 @@ if (isset($_GET['mode']) && $_GET['mode'] === 'assign') {
 }
 
 // Initialize and check the parameters
-$getMode           = admFuncVariableIsValid($_GET, 'mode',          'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
-$getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid',     'string', array('requireValue' => true, 'directOutput' => true));
-$getUserUuid       = admFuncVariableIsValid($_GET, 'user_uuid',     'string', array('directOutput' => true));
+$getMode           = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
+$getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid', 'string', array('requireValue' => true, 'directOutput' => true));
+$getUserUuid       = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('directOutput' => true));
 $getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
-$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool',   array('defaultValue' => false));
+$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
 
 // create object of the commited role
 $role = new TableRoles($gDb);
@@ -199,8 +199,12 @@ if ($getMode === 'assign') {
     $page->addJavascript($javascriptCode, true);
 
     if ($gCurrentUser->editUsers()) {
-        $page->addPageFunctionsMenuItem('menu_item_members_assign_create_user', $gL10n->get('SYS_CREATE_USER'),
-            ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', 'fa-plus-circle');
+        $page->addPageFunctionsMenuItem(
+            'menu_item_members_assign_create_user',
+            $gL10n->get('SYS_CREATE_USER'),
+            ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php',
+            'fa-plus-circle'
+        );
     }
 
     $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
@@ -218,7 +222,10 @@ if ($getMode === 'assign') {
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form_roles', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addSelectBoxFromSql(
-        'filter_rol_id', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
+        'filter_rol_id',
+        $gL10n->get('SYS_ROLE'),
+        $gDb,
+        $sqlData,
         array('defaultValue' => $getFilterRoleId, 'firstEntry' => $gL10n->get('SYS_ALL'))
     );
     $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL_USERS'), false, array('helpTextIdLabel' => 'SYS_SHOW_ALL_USERS_DESC'));

@@ -41,7 +41,7 @@ function FunctionIsDisabled($function)
 
     static $DisabledFunctions = null;
     if ($DisabledFunctions === null) {
-        $disable_functions_local  = explode(',',     @ini_get('disable_functions'));
+        $disable_functions_local  = explode(',', @ini_get('disable_functions'));
         $disable_functions_global = explode(',', @get_cfg_var('disable_functions'));
         foreach ($disable_functions_local as $key => $value) {
             $DisabledFunctions[$value] = 'local';

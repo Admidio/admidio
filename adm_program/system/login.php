@@ -36,11 +36,15 @@ $page = new HtmlPage('admidio-login', $headline);
 $form = new HtmlForm('login_form', ADMIDIO_URL.'/adm_program/system/login_check.php', $page, array('showRequiredFields' => false));
 
 $form->addInput(
-    'usr_login_name', $gL10n->get('SYS_USERNAME'), '',
+    'usr_login_name',
+    $gL10n->get('SYS_USERNAME'),
+    '',
     array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
 );
 $form->addInput(
-    'usr_password', $gL10n->get('SYS_PASSWORD'), '',
+    'usr_password',
+    $gL10n->get('SYS_PASSWORD'),
+    '',
     array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
 );
 
@@ -50,7 +54,10 @@ if ($gSettingsManager->getBool('system_organization_select')) {
               FROM '.TBL_ORGANIZATIONS.'
           ORDER BY org_longname ASC, org_shortname ASC';
     $form->addSelectBoxFromSql(
-        'org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
+        'org_id',
+        $gL10n->get('SYS_ORGANIZATION'),
+        $gDb,
+        $sql,
         array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $gCurrentOrgId, 'class' => 'form-control-small')
     );
 }

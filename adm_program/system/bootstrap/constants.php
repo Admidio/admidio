@@ -61,13 +61,13 @@ if (isset($_SERVER['HTTP_X_FORWARDED_SERVER']) && $_SERVER['HTTP_X_FORWARDED_SER
 define('ADMIDIO_URL_PATH', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
 
 // PATHS
-define('SERVER_PATH',  realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www
+define('SERVER_PATH', realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www
 define('ADMIDIO_PATH', dirname(dirname(dirname(__DIR__)))); // /var/www/subfolder
 define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/overview.php
 
 // URLS
 define('ADMIDIO_URL', $g_root_path); // https://www.example.org:1234/subfolder | https://www.myproxy.com:1234/www.example.com/subfolder
-define('FILE_URL',    (strlen(ADMIDIO_URL_PATH) > 0 && strpos($_SERVER['SCRIPT_NAME'], (string) ADMIDIO_URL_PATH) === false) ? SCHEME . '://' . HOST . ADMIDIO_URL_PATH . $_SERVER['SCRIPT_NAME'] : SCHEME . '://' . HOST . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
+define('FILE_URL', (strlen(ADMIDIO_URL_PATH) > 0 && strpos($_SERVER['SCRIPT_NAME'], (string) ADMIDIO_URL_PATH) === false) ? SCHEME . '://' . HOST . ADMIDIO_URL_PATH . $_SERVER['SCRIPT_NAME'] : SCHEME . '://' . HOST . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
 define('CURRENT_URL', (strlen(ADMIDIO_URL_PATH) > 0 && strpos($_SERVER['REQUEST_URI'], (string) ADMIDIO_URL_PATH) === false) ? SCHEME . '://' . HOST . ADMIDIO_URL_PATH . $_SERVER['REQUEST_URI'] : SCHEME . '://' . HOST . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
 
 // FOLDERS
@@ -111,43 +111,43 @@ define('DB_PASSWORD', $g_adm_pw);
 
 define('TABLE_PREFIX', $g_tbl_praefix);
 
-define('TBL_ANNOUNCEMENTS',        TABLE_PREFIX . '_announcements');
-define('TBL_AUTO_LOGIN',           TABLE_PREFIX . '_auto_login');
-define('TBL_CATEGORIES',           TABLE_PREFIX . '_categories');
-define('TBL_CATEGORY_REPORT',      TABLE_PREFIX . '_category_report');
-define('TBL_COMPONENTS',           TABLE_PREFIX . '_components');
-define('TBL_DATES',                TABLE_PREFIX . '_dates');
-define('TBL_FILES',                TABLE_PREFIX . '_files');
-define('TBL_FOLDERS',              TABLE_PREFIX . '_folders');
-define('TBL_GUESTBOOK',            TABLE_PREFIX . '_guestbook');
-define('TBL_GUESTBOOK_COMMENTS',   TABLE_PREFIX . '_guestbook_comments');
-define('TBL_IDS',                  TABLE_PREFIX . '_ids');
-define('TBL_LINKS',                TABLE_PREFIX . '_links');
-define('TBL_LIST_COLUMNS',         TABLE_PREFIX . '_list_columns');
-define('TBL_LISTS',                TABLE_PREFIX . '_lists');
-define('TBL_MEMBERS',              TABLE_PREFIX . '_members');
-define('TBL_MENU',                 TABLE_PREFIX . '_menu');
-define('TBL_MESSAGES',             TABLE_PREFIX . '_messages');
+define('TBL_ANNOUNCEMENTS', TABLE_PREFIX . '_announcements');
+define('TBL_AUTO_LOGIN', TABLE_PREFIX . '_auto_login');
+define('TBL_CATEGORIES', TABLE_PREFIX . '_categories');
+define('TBL_CATEGORY_REPORT', TABLE_PREFIX . '_category_report');
+define('TBL_COMPONENTS', TABLE_PREFIX . '_components');
+define('TBL_DATES', TABLE_PREFIX . '_dates');
+define('TBL_FILES', TABLE_PREFIX . '_files');
+define('TBL_FOLDERS', TABLE_PREFIX . '_folders');
+define('TBL_GUESTBOOK', TABLE_PREFIX . '_guestbook');
+define('TBL_GUESTBOOK_COMMENTS', TABLE_PREFIX . '_guestbook_comments');
+define('TBL_IDS', TABLE_PREFIX . '_ids');
+define('TBL_LINKS', TABLE_PREFIX . '_links');
+define('TBL_LIST_COLUMNS', TABLE_PREFIX . '_list_columns');
+define('TBL_LISTS', TABLE_PREFIX . '_lists');
+define('TBL_MEMBERS', TABLE_PREFIX . '_members');
+define('TBL_MENU', TABLE_PREFIX . '_menu');
+define('TBL_MESSAGES', TABLE_PREFIX . '_messages');
 define('TBL_MESSAGES_ATTACHMENTS', TABLE_PREFIX . '_messages_attachments');
-define('TBL_MESSAGES_CONTENT',     TABLE_PREFIX . '_messages_content');
-define('TBL_MESSAGES_RECIPIENTS',  TABLE_PREFIX . '_messages_recipients');
-define('TBL_ORGANIZATIONS',        TABLE_PREFIX . '_organizations');
-define('TBL_PHOTOS',               TABLE_PREFIX . '_photos');
-define('TBL_PREFERENCES',          TABLE_PREFIX . '_preferences');
-define('TBL_REGISTRATIONS',        TABLE_PREFIX . '_registrations');
-define('TBL_ROLE_DEPENDENCIES',    TABLE_PREFIX . '_role_dependencies');
-define('TBL_ROLES',                TABLE_PREFIX . '_roles');
-define('TBL_ROLES_RIGHTS',         TABLE_PREFIX . '_roles_rights');
-define('TBL_ROLES_RIGHTS_DATA',    TABLE_PREFIX . '_roles_rights_data');
-define('TBL_ROOMS',                TABLE_PREFIX . '_rooms');
-define('TBL_SESSIONS',             TABLE_PREFIX . '_sessions');
-define('TBL_TEXTS',                TABLE_PREFIX . '_texts');
-define('TBL_USERS',                TABLE_PREFIX . '_users');
-define('TBL_USER_DATA',            TABLE_PREFIX . '_user_data');
-define('TBL_USER_FIELDS',          TABLE_PREFIX . '_user_fields');
-define('TBL_USER_LOG',             TABLE_PREFIX . '_user_log');
-define('TBL_USER_RELATIONS',       TABLE_PREFIX . '_user_relations');
-define('TBL_USER_RELATION_TYPES',  TABLE_PREFIX . '_user_relation_types');
+define('TBL_MESSAGES_CONTENT', TABLE_PREFIX . '_messages_content');
+define('TBL_MESSAGES_RECIPIENTS', TABLE_PREFIX . '_messages_recipients');
+define('TBL_ORGANIZATIONS', TABLE_PREFIX . '_organizations');
+define('TBL_PHOTOS', TABLE_PREFIX . '_photos');
+define('TBL_PREFERENCES', TABLE_PREFIX . '_preferences');
+define('TBL_REGISTRATIONS', TABLE_PREFIX . '_registrations');
+define('TBL_ROLE_DEPENDENCIES', TABLE_PREFIX . '_role_dependencies');
+define('TBL_ROLES', TABLE_PREFIX . '_roles');
+define('TBL_ROLES_RIGHTS', TABLE_PREFIX . '_roles_rights');
+define('TBL_ROLES_RIGHTS_DATA', TABLE_PREFIX . '_roles_rights_data');
+define('TBL_ROOMS', TABLE_PREFIX . '_rooms');
+define('TBL_SESSIONS', TABLE_PREFIX . '_sessions');
+define('TBL_TEXTS', TABLE_PREFIX . '_texts');
+define('TBL_USERS', TABLE_PREFIX . '_users');
+define('TBL_USER_DATA', TABLE_PREFIX . '_user_data');
+define('TBL_USER_FIELDS', TABLE_PREFIX . '_user_fields');
+define('TBL_USER_LOG', TABLE_PREFIX . '_user_log');
+define('TBL_USER_RELATIONS', TABLE_PREFIX . '_user_relations');
+define('TBL_USER_RELATION_TYPES', TABLE_PREFIX . '_user_relation_types');
 
 // #####################
 // ###  OTHER STUFF  ###
