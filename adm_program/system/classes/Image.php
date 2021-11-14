@@ -40,8 +40,7 @@ class Image
      */
     public function __construct($pathAndFilename = '')
     {
-        if ($pathAndFilename !== '')
-        {
+        if ($pathAndFilename !== '') {
             $this->setImageFromPath($pathAndFilename);
         }
     }
@@ -54,13 +53,11 @@ class Image
      */
     public function copyToBrowser($imageResource = null, $quality = 95)
     {
-        if ($imageResource === null)
-        {
+        if ($imageResource === null) {
             $imageResource = $this->imageResource;
         }
 
-        switch ($this->imageType)
-        {
+        switch ($this->imageType) {
             case IMAGETYPE_JPEG:
                 echo imagejpeg($imageResource, null, $quality);
                 break;
@@ -85,18 +82,15 @@ class Image
      */
     public function copyToFile($imageResource = null, $pathAndFilename = '', $quality = 95)
     {
-        if ($imageResource === null)
-        {
+        if ($imageResource === null) {
             $imageResource = $this->imageResource;
         }
 
-        if ($pathAndFilename === '')
-        {
+        if ($pathAndFilename === '') {
             $pathAndFilename = $this->imagePath;
         }
 
-        switch ($this->imageType)
-        {
+        switch ($this->imageType) {
             case IMAGETYPE_JPEG:
                 return imagejpeg($imageResource, $pathAndFilename, $quality);
 
@@ -114,8 +108,7 @@ class Image
      */
     private function createResource($pathAndFilename)
     {
-        switch ($this->imageType)
-        {
+        switch ($this->imageType) {
             case IMAGETYPE_JPEG:
                 $imageResource = imagecreatefromjpeg($pathAndFilename);
                 break;
@@ -127,8 +120,7 @@ class Image
                 return false;
         }
 
-        if ($imageResource === false)
-        {
+        if ($imageResource === false) {
             return false;
         }
 
@@ -160,43 +152,32 @@ class Image
     {
         global $gLogger;
 
-        if(self::isFontAwesomeIcon($icon))
-        {
-            if(str_starts_with($icon, 'fa-'))
-            {
+        if (self::isFontAwesomeIcon($icon)) {
+            if (str_starts_with($icon, 'fa-')) {
                 $icon = 'fas ' . $icon;
             }
 
-            if($text !== '')
-            {
+            if ($text !== '') {
                 return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw" data-toggle="tooltip" title="' . $text . '"></i>';
-            }
-            else
-            {
+            } else {
                 return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw"></i>';
             }
         }
 
-        if(self::isImageFilename($icon))
-        {
+        if (self::isImageFilename($icon)) {
             // A full URL of an icon
-            if(StringUtils::strStartsWith($icon, 'http', false) && filter_var($icon, FILTER_VALIDATE_URL) !== false)
-            {
+            if (StringUtils::strStartsWith($icon, 'http', false) && filter_var($icon, FILTER_VALIDATE_URL) !== false) {
                 return '<img class="admidio-icon-info ' . $cssClass . '" src="' . $icon . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
             }
 
-            try
-            {
+            try {
                 // Only a filename -> look into theme icon folder
-                if(StringUtils::strIsValidFileName($icon))
-                {
+                if (StringUtils::strIsValidFileName($icon)) {
                     $iconPath = THEME_URL . '/images/' . $icon;
 
                     return '<img class="admidio-icon-info' . $cssClass . '" src="' . $iconPath . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
                 }
-            }
-            catch (AdmException $e)
-            {
+            } catch (AdmException $e) {
                 // Do nothing here
             }
         }
@@ -249,10 +230,8 @@ class Image
      */
     public static function isImageFilename($image, array $allowedTypes = array('.png', '.jpg', '.jpeg'))
     {
-        foreach ($allowedTypes as $allowedType)
-        {
-            if (StringUtils::strEndsWith($image, $allowedType, false))
-            {
+        foreach ($allowedTypes as $allowedType) {
+            if (StringUtils::strEndsWith($image, $allowedType, false)) {
                 return true;
             }
         }
@@ -266,8 +245,7 @@ class Image
      */
     public function rotate($direction = self::ROTATE_DIRECTION_RIGHT)
     {
-        switch ($direction)
-        {
+        switch ($direction) {
             case self::ROTATE_DIRECTION_LEFT:
                 $angle = 90;
                 break;
@@ -303,24 +281,19 @@ class Image
      */
     public function scale($newXSize, $newYSize, $maintainAspectRatio = true)
     {
-        if ($maintainAspectRatio)
-        {
-            if ($newXSize >= $this->imageWidth && $newYSize >= $this->imageHeight)
-            {
+        if ($maintainAspectRatio) {
+            if ($newXSize >= $this->imageWidth && $newYSize >= $this->imageHeight) {
                 return false;
             }
 
             // calc aspect ratio
             $aspectRatio = $this->imageWidth / $this->imageHeight;
 
-            if ($aspectRatio > $newXSize / $newYSize)
-            {
+            if ($aspectRatio > $newXSize / $newYSize) {
                 // scale to maximum width
                 $newWidth = $newXSize;
                 $newHeight = (int) round($newXSize / $aspectRatio);
-            }
-            else
-            {
+            } else {
                 // scale to maximum height
                 $newWidth = (int) round($newYSize * $aspectRatio);
                 $newHeight = $newYSize;
@@ -330,8 +303,7 @@ class Image
         }
 
         // check current memory limit and set this to 50MB if the current value is lower
-        if (PhpIniUtils::getMemoryLimit() < 50 * 1024 * 1024) // 50MB
-        {
+        if (PhpIniUtils::getMemoryLimit() < 50 * 1024 * 1024) { // 50MB
             @ini_set('memory_limit', '50M');
         }
 
@@ -357,19 +329,15 @@ class Image
      */
     public function scaleLargerSide($newMaxSize)
     {
-        if($newMaxSize < $this->imageWidth || $newMaxSize < $this->imageHeight)
-        {
+        if ($newMaxSize < $this->imageWidth || $newMaxSize < $this->imageHeight) {
             // calc aspect ratio
             $aspectRatio = $this->imageWidth / $this->imageHeight;
 
-            if($this->imageWidth > $this->imageHeight)
-            {
+            if ($this->imageWidth > $this->imageHeight) {
                 // Scale the x-side
                 $newXSize = $newMaxSize;
                 $newYSize = (int) round($newMaxSize / $aspectRatio);
-            }
-            else
-            {
+            } else {
                 // Scale the y-side
                 $newXSize = (int) round($newMaxSize * $aspectRatio);
                 $newYSize = $newMaxSize;
@@ -390,8 +358,7 @@ class Image
     {
         $imageResource = imagecreatefromstring($imageData);
 
-        if ($imageResource === false)
-        {
+        if ($imageResource === false) {
             return false;
         }
 
@@ -411,16 +378,14 @@ class Image
      */
     public function setImageFromPath($pathAndFilename)
     {
-        if (!is_file($pathAndFilename))
-        {
+        if (!is_file($pathAndFilename)) {
             return false;
         }
 
         $this->imagePath = $pathAndFilename;
         $imageProperties = getimagesize($this->imagePath);
 
-        if ($imageProperties === false)
-        {
+        if ($imageProperties === false) {
             return false;
         }
 
@@ -438,8 +403,7 @@ class Image
      */
     public function setImageType($imageType)
     {
-        switch ($imageType)
-        {
+        switch ($imageType) {
             case 'jpeg':
                 $this->imageType = IMAGETYPE_JPEG;
                 break;
@@ -453,5 +417,4 @@ class Image
 
         return true;
     }
-
 }

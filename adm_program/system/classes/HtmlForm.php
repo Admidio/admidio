@@ -126,27 +126,20 @@ class HtmlForm extends HtmlFormBasic
         // set specific Admidio css form class
         $this->addAttribute('role', 'form');
 
-        if ($this->type === 'default')
-        {
+        if ($this->type === 'default') {
             $optionsAll['class'] .= ' form-horizontal form-dialog';
-        }
-        elseif ($this->type === 'vertical')
-        {
+        } elseif ($this->type === 'vertical') {
             $optionsAll['class'] .= ' admidio-form-vertical form-dialog';
-        }
-        elseif ($this->type === 'navbar')
-        {
+        } elseif ($this->type === 'navbar') {
             $optionsAll['class'] .= ' form-inline ';
         }
 
-        if ($optionsAll['class'] !== '')
-        {
+        if ($optionsAll['class'] !== '') {
             $this->addAttribute('class', $optionsAll['class']);
         }
 
         // Set specific parameters that are necessary for file upload with a form
-        if ($optionsAll['enableFileUpload'])
-        {
+        if ($optionsAll['enableFileUpload']) {
             $this->addAttribute('enctype', 'multipart/form-data');
         }
 
@@ -156,14 +149,12 @@ class HtmlForm extends HtmlFormBasic
                 array('property' => self::FIELD_HIDDEN));
         }
 
-        if ($htmlPage instanceof HtmlPage)
-        {
+        if ($htmlPage instanceof HtmlPage) {
             $this->htmlPage =& $htmlPage;
         }
 
         // if its not a navbar form and not a static form then first field of form should get focus
-        if ($optionsAll['setFocus'])
-        {
+        if ($optionsAll['setFocus']) {
             $this->addJavascriptCode('$(".form-dialog:first *:input:enabled:visible:not([readonly]):first").focus();', true);
         }
     }
@@ -193,34 +184,25 @@ class HtmlForm extends HtmlFormBasic
         $value = $text;
 
         // add default css class
-        if (strpos($optionsAll['class'], 'btn-primary') === false)
-        {
+        if (strpos($optionsAll['class'], 'btn-primary') === false) {
             $optionsAll['class'] .= ' btn btn-secondary';
-        }
-        else
-        {
+        } else {
             $optionsAll['class'] .= ' btn';
         }
 
-        if ($optionsAll['icon'] !== '')
-        {
-            if (Image::isFontAwesomeIcon($optionsAll['icon']))
-            {
-                if (str_starts_with($optionsAll['icon'], 'fa-'))
-                {
+        if ($optionsAll['icon'] !== '') {
+            if (Image::isFontAwesomeIcon($optionsAll['icon'])) {
+                if (str_starts_with($optionsAll['icon'], 'fa-')) {
                     $optionsAll['icon'] = 'fas ' . $optionsAll['icon'];
                 }
                 $value = '<i class="' . $optionsAll['icon'] . '"></i>' . $value;
-            }
-            else
-            {
+            } else {
                 $value = '<img src="' . $optionsAll['icon'] . '" alt="' . $text . '" />' . $value;
             }
         }
         $this->addElement('button');
 
-        if ($optionsAll['data-admidio'] !== '')
-        {
+        if ($optionsAll['data-admidio'] !== '') {
             $this->addAttribute('data-admidio', (string) $optionsAll['data-admidio']);
         }
 
@@ -229,16 +211,13 @@ class HtmlForm extends HtmlFormBasic
 
         $javascriptCode = '';
 
-        if ($optionsAll['link'] !== '')
-        {
+        if ($optionsAll['link'] !== '') {
             // disable default form submit
             $javascriptCode .= 'self.location.href="' . $optionsAll['link'] . '";';
         }
 
-        if ($optionsAll['link'] !== '')
-        {
-            if ($optionsAll['type'] === 'submit')
-            {
+        if ($optionsAll['link'] !== '') {
+            if ($optionsAll['type'] === 'submit') {
                 $javascriptCode .= '$(this).submit();';
             }
 
@@ -251,12 +230,9 @@ class HtmlForm extends HtmlFormBasic
             $this->addJavascriptCode($javascriptCode, true);
         }
 
-        if ($optionsAll['class'] !== '')
-        {
+        if ($optionsAll['class'] !== '') {
             $this->addAttribute('class', $optionsAll['class']);
-        }
-        else
-        {
+        } else {
             $this->addAttribute('class', 'btn btn-secondary');
         }
 
@@ -277,8 +253,7 @@ class HtmlForm extends HtmlFormBasic
         $attributes = array('class' => 'captcha');
 
         // set specific css class for this field
-        if ($class !== '')
-        {
+        if ($class !== '') {
             $attributes['class'] .= ' ' . $class;
         }
 
@@ -341,35 +316,28 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
-        if ($optionsAll['property'] === self::FIELD_DISABLED)
-        {
+        if ($optionsAll['property'] === self::FIELD_DISABLED) {
             $attributes['disabled'] = 'disabled';
-        }
-        elseif ($optionsAll['property'] === self::FIELD_REQUIRED)
-        {
+        } elseif ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
         }
 
         // if checked = true then set checkbox checked
-        if ($checked)
-        {
+        if ($checked) {
             $attributes['checked'] = 'checked';
         }
 
         // set specific css class for this field
-        if ($optionsAll['class'] !== '')
-        {
+        if ($optionsAll['class'] !== '') {
             $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
-        if ($optionsAll['icon'] !== '')
-        {
+        if ($optionsAll['icon'] !== '') {
             // create html for icon
             $htmlIcon = Image::getIconHtml($optionsAll['icon'], '');
         }
 
-        if ($optionsAll['helpTextIdLabel'] !== '')
-        {
+        if ($optionsAll['helpTextIdLabel'] !== '') {
             $htmlHelpIcon = self::getHelpTextIcon($optionsAll['helpTextIdLabel']);
         }
 
@@ -480,19 +448,16 @@ class HtmlForm extends HtmlFormBasic
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        if ($optionsAll['labelVertical'])
-        {
+        if ($optionsAll['labelVertical']) {
             $this->type = 'vertical';
         }
 
-        if ($optionsAll['property'] === self::FIELD_REQUIRED)
-        {
+        if ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
         }
 
         // set specific css class for this field
-        if ($optionsAll['class'] !== '')
-        {
+        if ($optionsAll['class'] !== '') {
             $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
@@ -506,11 +471,9 @@ class HtmlForm extends HtmlFormBasic
             });
             CKEDITOR.config.height = "' . $optionsAll['height'] . '";';
 
-        if ($gSettingsManager->getBool('system_js_editor_enabled'))
-        {
+        if ($gSettingsManager->getBool('system_js_editor_enabled')) {
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if ($this->htmlPage instanceof HtmlPage)
-            {
+            if ($this->htmlPage instanceof HtmlPage) {
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/ckeditor/ckeditor.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
@@ -585,35 +548,28 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
-        if ($optionsAll['property'] === self::FIELD_DISABLED)
-        {
+        if ($optionsAll['property'] === self::FIELD_DISABLED) {
             $attributes['disabled'] = 'disabled';
-        }
-        elseif ($optionsAll['property'] === self::FIELD_REQUIRED)
-        {
+        } elseif ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
         }
 
-        if (count($optionsAll['allowedMimeTypes']) > 0)
-        {
+        if (count($optionsAll['allowedMimeTypes']) > 0) {
             $attributes['accept'] = implode(',', $optionsAll['allowedMimeTypes']);
         }
 
-        if ($optionsAll['icon'] === '')
-        {
+        if ($optionsAll['icon'] === '') {
             $optionsAll['icon'] = 'fa-upload';
         }
 
         // set specific css class for this field
-        if ($optionsAll['class'] !== '')
-        {
+        if ($optionsAll['class'] !== '') {
             $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
         // if multiple uploads are enabled then add javascript that will
         // dynamically add new upload fields to the form
-        if ($optionsAll['enableMultiUploads'])
-        {
+        if ($optionsAll['enableMultiUploads']) {
             $javascriptCode = '
                 // add new line to add new attachment to this mail
                 $("#btn_add_attachment_' . $id . '").click(function() {
@@ -636,13 +592,11 @@ class HtmlForm extends HtmlFormBasic
 
         // if multi uploads are enabled then the file upload field could be hidden
         // until the user will click on the button to add a new upload field
-        if (!$optionsAll['hideUploadField'] || !$optionsAll['enableMultiUploads'])
-        {
+        if (!$optionsAll['hideUploadField'] || !$optionsAll['enableMultiUploads']) {
             $this->addSimpleInput('file', 'userfile[]', null, '', $attributes);
         }
 
-        if ($optionsAll['enableMultiUploads'])
-        {
+        if ($optionsAll['enableMultiUploads']) {
             // show button to add new upload field to form
             $this->addHtml(
                 '<button type="button" id="btn_add_attachment_' . $id . '" class="btn btn-secondary">
@@ -718,8 +672,7 @@ class HtmlForm extends HtmlFormBasic
         $attributes['placeholder'] = $optionsAll['placeholder'];
 
         // set min/max input length
-        switch ($optionsAll['type'])
-        {
+        switch ($optionsAll['type']) {
             case 'text': // fallthrough
             case 'search': // fallthrough
             case 'email': // fallthrough
@@ -730,12 +683,10 @@ class HtmlForm extends HtmlFormBasic
 
                 $attributes['minlength'] = $optionsAll['minLength'];
 
-                if ($optionsAll['maxLength'] > 0)
-                {
+                if ($optionsAll['maxLength'] > 0) {
                     $attributes['maxlength'] = $optionsAll['maxLength'];
 
-                    if ($attributes['minlength'] > $attributes['maxlength'])
-                    {
+                    if ($attributes['minlength'] > $attributes['maxlength']) {
                         $gLogger->warning(
                             'Attribute "minlength" is greater than "maxlength"!',
                             array('minlength' => $attributes['maxlength'], 'maxlength' => $attributes['maxlength'])
@@ -748,8 +699,7 @@ class HtmlForm extends HtmlFormBasic
                 $attributes['max'] = $optionsAll['maxNumber'];
                 $attributes['step'] = $optionsAll['step'];
 
-                if ($attributes['min'] > $attributes['max'])
-                {
+                if ($attributes['min'] > $attributes['max']) {
                     $gLogger->warning(
                         'Attribute "min" is greater than "max"!',
                         array('min' => $attributes['min'], 'max' => $attributes['max'])
@@ -759,8 +709,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // set field properties
-        switch ($optionsAll['property'])
-        {
+        switch ($optionsAll['property']) {
             case self::FIELD_DISABLED:
                 $attributes['disabled'] = 'disabled';
                 break;
@@ -780,39 +729,30 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // set specific css class for this field
-        if ($optionsAll['class'] !== '')
-        {
+        if ($optionsAll['class'] !== '') {
             $attributes['class'] .= ' '.$optionsAll['class'];
         }
 
         // add a nice modern datepicker to date inputs
-        if (in_array($optionsAll['type'], array('date', 'datetime', 'birthday'), true))
-        {
-            if ($optionsAll['placeholder'] === '')
-            {
+        if (in_array($optionsAll['type'], array('date', 'datetime', 'birthday'), true)) {
+            if ($optionsAll['placeholder'] === '') {
                 $attributes['placeholder'] = DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date'));
-            }
-            else
-            {
+            } else {
                 $attributes['placeholder'] = $optionsAll['placeholder'];
             }
 
             // if you have a birthday field than start with the years selection
-            if ($optionsAll['type'] === 'birthday')
-            {
+            if ($optionsAll['type'] === 'birthday') {
                 $attributes['data-provide'] = 'datepicker-birthday';
                 $datepickerOptions = ' startView: 2, ';
-            }
-            else
-            {
+            } else {
                 $attributes['data-provide'] = 'datepicker';
                 $datepickerOptions = ' todayBtn: "linked", ';
             }
 
             $javascriptCode = '';
 
-            if (!$this->datepickerInitialized || $optionsAll['type'] === 'birthday')
-            {
+            if (!$this->datepickerInitialized || $optionsAll['type'] === 'birthday') {
                 $javascriptCode = '
                     $("input[data-provide=\'' . $attributes['data-provide'] . '\']").each(function() {
                         $(this).datepicker({
@@ -823,20 +763,17 @@ class HtmlForm extends HtmlFormBasic
                         });
                     })';
 
-                if ($optionsAll['type'] !== 'birthday')
-                {
+                if ($optionsAll['type'] !== 'birthday') {
                     $this->datepickerInitialized = true;
                 }
             }
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if ($this->htmlPage instanceof HtmlPage)
-            {
+            if ($this->htmlPage instanceof HtmlPage) {
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/css/bootstrap-datepicker3.css');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/js/bootstrap-datepicker.js');
                 // datepicker doesn't deliver a en language file therefore we should not try to load it
-                if($gL10n->getLanguageLibs() !== 'en')
-                {
+                if ($gL10n->getLanguageLibs() !== 'en') {
                     $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/locales/bootstrap-datepicker.' . $gL10n->getLanguageLibs() . '.min.js');
                 }
             }
@@ -844,28 +781,24 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // Remove attributes that are not set
-        $attributes = array_filter($attributes, function ($attribute)
-        {
+        $attributes = array_filter($attributes, function ($attribute) {
             return $attribute !== '' && $attribute !== null;
         });
 
-        if ($optionsAll['property'] !== self::FIELD_HIDDEN)
-        {
+        if ($optionsAll['property'] !== self::FIELD_HIDDEN) {
             // now create html for the field
             $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         }
 
         // if datetime then add a time field behind the date field
-        if ($optionsAll['type'] === 'datetime')
-        {
+        if ($optionsAll['type'] === 'datetime') {
             $dateValue = '';
             $timeValue = '';
 
             // first try to split datetime to a date and a time value
             $datetime = \DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $value);
 
-            if ($datetime)
-            {
+            if ($datetime) {
                 $dateValue = $datetime->format($gSettingsManager->getString('system_date'));
                 $timeValue = $datetime->format($gSettingsManager->getString('system_time'));
             }
@@ -876,32 +809,25 @@ class HtmlForm extends HtmlFormBasic
             $attributes['placeholder'] = 'HH:MM';
             $attributes['data-provide'] = '';
             $this->addSimpleInput('text', $id . '_time', $id . '_time', $timeValue, $attributes);
-        }
-        else
-        {
+        } else {
             // a date type has some problems with chrome so we set it as text type
-            if ($optionsAll['type'] === 'date' || $optionsAll['type'] === 'birthday')
-            {
+            if ($optionsAll['type'] === 'date' || $optionsAll['type'] === 'birthday') {
                 $optionsAll['type'] = 'text';
             }
             $this->addSimpleInput($optionsAll['type'], $id, $id, $value, $attributes);
         }
 
-        if ($optionsAll['htmlAfter'] !== '')
-        {
+        if ($optionsAll['htmlAfter'] !== '') {
             $this->addHtml($optionsAll['htmlAfter']);
         }
 
-        if ($optionsAll['passwordStrength'])
-        {
+        if ($optionsAll['passwordStrength']) {
             $passwordStrengthLevel = 1;
-            if ($gSettingsManager instanceof SettingsManager && $gSettingsManager->getInt('password_min_strength'))
-            {
+            if ($gSettingsManager instanceof SettingsManager && $gSettingsManager->getInt('password_min_strength')) {
                 $passwordStrengthLevel = $gSettingsManager->getInt('password_min_strength');
             }
 
-            if ($this->htmlPage instanceof HtmlPage)
-            {
+            if ($this->htmlPage instanceof HtmlPage) {
                 $zxcvbnUserInputs = json_encode($optionsAll['passwordUserData'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 $javascriptCode = '
                     $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4 * '.$passwordStrengthLevel.')");
@@ -929,8 +855,7 @@ class HtmlForm extends HtmlFormBasic
             ');
         }
 
-        if ($optionsAll['property'] !== self::FIELD_HIDDEN)
-        {
+        if ($optionsAll['property'] !== self::FIELD_HIDDEN) {
             $this->closeControlStructure($optionsAll);
         }
     }
@@ -943,14 +868,12 @@ class HtmlForm extends HtmlFormBasic
      */
     protected function addJavascriptCode($javascriptCode, $executeAfterPageLoad = false)
     {
-        if ($this->htmlPage instanceof HtmlPage)
-        {
+        if ($this->htmlPage instanceof HtmlPage) {
             $this->htmlPage->addJavascript($javascriptCode, $executeAfterPageLoad);
             return;
         }
 
-        if ($executeAfterPageLoad)
-        {
+        if ($executeAfterPageLoad) {
             $javascriptCode = '$(function() { ' . $javascriptCode . ' });';
         }
         $this->addHtml('<script type="text/javascript">' . $javascriptCode . '</script>');
@@ -1008,8 +931,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // set field properties
-        switch ($optionsAll['property'])
-        {
+        switch ($optionsAll['property']) {
             case self::FIELD_DISABLED:
                 $attributes['disabled'] = 'disabled';
                 break;
@@ -1029,13 +951,11 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // set specific css class for this field
-        if ($optionsAll['class'] !== '')
-        {
+        if ($optionsAll['class'] !== '') {
             $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
-        if ($optionsAll['maxLength'] > 0)
-        {
+        if ($optionsAll['maxLength'] > 0) {
             $attributes['maxlength'] = $optionsAll['maxLength'];
 
             // if max field length is set then show a counter how many characters still available
@@ -1047,8 +967,7 @@ class HtmlForm extends HtmlFormBasic
                 });';
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if ($this->htmlPage instanceof HtmlPage)
-            {
+            if ($this->htmlPage instanceof HtmlPage) {
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/noblecount/jquery.noblecount.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
@@ -1057,8 +976,7 @@ class HtmlForm extends HtmlFormBasic
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         $this->addTextArea($id, $rows, 80, $value, $id, $attributes);
 
-        if ($optionsAll['maxLength'] > 0 && $optionsAll['property'] !== self::FIELD_HIDDEN)
-        {
+        if ($optionsAll['maxLength'] > 0 && $optionsAll['property'] !== self::FIELD_HIDDEN) {
             // if max field length is set and field is not hidden then show a counter how many characters still available
             $this->addHtml('
                 <small class="characters-count">('
@@ -1117,28 +1035,22 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
-        if ($optionsAll['property'] === self::FIELD_DISABLED)
-        {
+        if ($optionsAll['property'] === self::FIELD_DISABLED) {
             $attributes['disabled'] = 'disabled';
-        }
-        elseif ($optionsAll['property'] === self::FIELD_REQUIRED)
-        {
+        } elseif ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
         }
 
         // set specific css class for this field
-        if ($optionsAll['class'] !== '')
-        {
+        if ($optionsAll['class'] !== '') {
             $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
 
         // set one radio button with no value will be set in front of the other array.
-        if ($optionsAll['showNoValueButton'])
-        {
-            if ($optionsAll['defaultValue'] === '')
-            {
+        if ($optionsAll['showNoValueButton']) {
+            if ($optionsAll['defaultValue'] === '') {
                 $attributes['checked'] = 'checked';
             }
 
@@ -1148,12 +1060,10 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // for each entry of the array create an input radio field
-        foreach ($values as $key => $value)
-        {
+        foreach ($values as $key => $value) {
             unset($attributes['checked']);
 
-            if ($optionsAll['defaultValue'] == $key)
-            {
+            if ($optionsAll['defaultValue'] == $key) {
                 $attributes['checked'] = 'checked';
             }
 
@@ -1244,8 +1154,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // set field properties
-        switch ($optionsAll['property'])
-        {
+        switch ($optionsAll['property']) {
             case self::FIELD_DISABLED:
                 $attributes['disabled'] = 'disabled';
                 break;
@@ -1264,20 +1173,16 @@ class HtmlForm extends HtmlFormBasic
                 break;
         }
 
-        if ($optionsAll['multiselect'])
-        {
+        if ($optionsAll['multiselect']) {
             $attributes['multiple'] = 'multiple';
             $name = $id . '[]';
 
-            if ($optionsAll['defaultValue'] !== '' && !is_array($optionsAll['defaultValue']))
-            {
+            if ($optionsAll['defaultValue'] !== '' && !is_array($optionsAll['defaultValue'])) {
                 $optionsAll['defaultValue'] = array($optionsAll['defaultValue']);
             }
 
-            if ($optionsAll['showContextDependentFirstEntry'] && $optionsAll['property'] === self::FIELD_REQUIRED)
-            {
-                if($optionsAll['placeholder'] === '')
-                {
+            if ($optionsAll['showContextDependentFirstEntry'] && $optionsAll['property'] === self::FIELD_REQUIRED) {
+                if ($optionsAll['placeholder'] === '') {
                     $optionsAll['placeholder'] = $gL10n->get('SYS_SELECT_FROM_LIST');
                 }
 
@@ -1287,8 +1192,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // set specific css class for this field
-        if ($optionsAll['class'] !== '')
-        {
+        if ($optionsAll['class'] !== '') {
             $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
@@ -1299,56 +1203,39 @@ class HtmlForm extends HtmlFormBasic
 
         // add an additional first entry to the select box and set this as preselected if necessary
         $defaultEntry = false;
-        if ($optionsAll['firstEntry'] !== '' || $optionsAll['showContextDependentFirstEntry'])
-        {
-            if ($optionsAll['defaultValue'] === '')
-            {
+        if ($optionsAll['firstEntry'] !== '' || $optionsAll['showContextDependentFirstEntry']) {
+            if ($optionsAll['defaultValue'] === '') {
                 $defaultEntry = true;
             }
         }
 
-        if ($optionsAll['firstEntry'] !== '')
-        {
-            if(is_array($optionsAll['firstEntry']))
-            {
+        if ($optionsAll['firstEntry'] !== '') {
+            if (is_array($optionsAll['firstEntry'])) {
                 $this->addOption($optionsAll['firstEntry'][0], $optionsAll['firstEntry'][1], null, $defaultEntry);
-            }
-            else
-            {
+            } else {
                 $this->addOption('', '- ' . $optionsAll['firstEntry'] . ' -', null, $defaultEntry);
             }
-        }
-        elseif ($optionsAll['showContextDependentFirstEntry'])
-        {
-            if ($optionsAll['property'] === self::FIELD_REQUIRED)
-            {
+        } elseif ($optionsAll['showContextDependentFirstEntry']) {
+            if ($optionsAll['property'] === self::FIELD_REQUIRED) {
                 $this->addOption('', '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -', null, $defaultEntry);
-            }
-            else
-            {
+            } else {
                 $this->addOption('', ' ', null, $defaultEntry);
             }
-        }
-        elseif (count($values) === 0)
-        {
+        } elseif (count($values) === 0) {
             $this->addOption('', '');
         }
 
         $optionGroup = null;
 
-        foreach ($values as $key => $value)
-        {
+        foreach ($values as $key => $value) {
             // create entry in html
             $defaultEntry = false;
 
             // if each array element is an array then create option groups
-            if (is_array($value))
-            {
+            if (is_array($value)) {
                 // add optiongroup if necessary
-                if ($optionGroup !== $value[2])
-                {
-                    if ($optionGroup !== null)
-                    {
+                if ($optionGroup !== $value[2]) {
+                    if ($optionGroup !== null) {
                         $this->closeOptionGroup();
                     }
 
@@ -1360,62 +1247,48 @@ class HtmlForm extends HtmlFormBasic
                 $value[1] = Language::translateIfTranslationStrId($value[1]);
 
                 // add option
-                if (!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == $value[0])
-                {
+                if (!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == $value[0]) {
                     $defaultEntry = true;
                 }
 
-                if(is_array($optionsAll['valueAttributes']))
-                {
+                if (is_array($optionsAll['valueAttributes'])) {
                     $this->addOption((string) $value[0], $value[1], null, $defaultEntry, false, $optionsAll['valueAttributes'][$value[0]]);
-                }
-                else
-                {
+                } else {
                     $this->addOption((string) $value[0], $value[1], null, $defaultEntry);
                 }
-            }
-            else
-            {
+            } else {
                 // if value is a translation string we must translate it
                 $value = Language::translateIfTranslationStrId($value);
 
                 // set the value attribute of the option tag
                 $optionValue = $key;
 
-                if($optionsAll['arrayKeyIsNotValue'])
-                {
+                if ($optionsAll['arrayKeyIsNotValue']) {
                     $optionValue = $value;
                 }
 
                 // array has only key and value then create a normal selectbox without optiongroups
-                if (!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == $optionValue)
-                {
+                if (!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == $optionValue) {
                     $defaultEntry = true;
                 }
 
-                if(is_array($optionsAll['valueAttributes']))
-                {
+                if (is_array($optionsAll['valueAttributes'])) {
                     $this->addOption((string) $optionValue, $value, null, $defaultEntry, false, $optionsAll['valueAttributes'][$key]);
-                }
-                else
-                {
+                } else {
                     $this->addOption((string) $optionValue, $value, null, $defaultEntry);
                 }
             }
         }
 
-        if ($optionGroup !== null)
-        {
+        if ($optionGroup !== null) {
             $this->closeOptionGroup();
         }
 
-        if ($optionsAll['multiselect'] || $optionsAll['search'])
-        {
+        if ($optionsAll['multiselect'] || $optionsAll['search']) {
             $maximumSelectionNumber = '';
             $allowClear = 'false';
 
-            if ($optionsAll['maximumSelectionNumber'] > 0)
-            {
+            if ($optionsAll['maximumSelectionNumber'] > 0) {
                 $maximumSelectionNumber = ' maximumSelectionLength: ' . $optionsAll['maximumSelectionNumber'] . ', ';
                 $allowClear = 'true';
             }
@@ -1430,16 +1303,14 @@ class HtmlForm extends HtmlFormBasic
                 });';
 
             // add default values to multi select
-            if (is_array($optionsAll['defaultValue']) && count($optionsAll['defaultValue']) > 0)
-            {
+            if (is_array($optionsAll['defaultValue']) && count($optionsAll['defaultValue']) > 0) {
                 $htmlDefaultValues = '"' . implode('", "', $optionsAll['defaultValue']) . '"';
 
                 $javascriptCode .= ' $("#' . $id . '").val([' . $htmlDefaultValues . ']).trigger("change");';
             }
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if ($this->htmlPage instanceof HtmlPage)
-            {
+            if ($this->htmlPage instanceof HtmlPage) {
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/select2/css/select2.css');
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/select2-bootstrap-theme/select2-bootstrap.css');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/select2/js/select2.js');
@@ -1516,29 +1387,22 @@ class HtmlForm extends HtmlFormBasic
         $selectBoxEntries = array();
 
         // execute the sql statement
-        if (is_array($sql))
-        {
+        if (is_array($sql)) {
             $pdoStatement = $database->queryPrepared($sql['query'], $sql['params']);
-        }
-        else
-        {
+        } else {
             // TODO deprecated: remove in Admidio 4.0
             $pdoStatement = $database->query($sql);
         }
 
         // create array from sql result
-        while ($row = $pdoStatement->fetch(\PDO::FETCH_NUM))
-        {
+        while ($row = $pdoStatement->fetch(\PDO::FETCH_NUM)) {
             // if result has 3 columns then create a array in array
-            if(array_key_exists(2, $row))
-            {
+            if (array_key_exists(2, $row)) {
                 // translate category name
                 $row[2] = Language::translateIfTranslationStrId($row[2]);
 
                 $selectBoxEntries[] = array($row[0], $row[1], $row[2]);
-            }
-            else
-            {
+            } else {
                 $selectBoxEntries[$row[0]] = $row[1];
             }
         }
@@ -1601,22 +1465,18 @@ class HtmlForm extends HtmlFormBasic
         /**
          * @var \SimpleXMLElement $xmlChildNode
          */
-        foreach ($xmlRootNode->children() as $xmlChildNode)
-        {
+        foreach ($xmlRootNode->children() as $xmlChildNode) {
             $key   = '';
             $value = '';
 
             /**
              * @var \SimpleXMLElement $xmlChildChildNode
              */
-            foreach ($xmlChildNode->children() as $xmlChildChildNode)
-            {
-                if ($xmlChildChildNode->getName() === $xmlValueTag)
-                {
+            foreach ($xmlChildNode->children() as $xmlChildChildNode) {
+                if ($xmlChildChildNode->getName() === $xmlValueTag) {
                     $key = (string) $xmlChildChildNode;
                 }
-                if ($xmlChildChildNode->getName() === $xmlViewTag)
-                {
+                if ($xmlChildChildNode->getName() === $xmlViewTag) {
                     $value = (string) $xmlChildChildNode;
                 }
             }
@@ -1682,8 +1542,7 @@ class HtmlForm extends HtmlFormBasic
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        if($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $gCurrentOrganization->countAllRecords() > 1)
-        {
+        if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $gCurrentOrganization->countAllRecords() > 1) {
             $optionsAll['alertWarning'] = $gL10n->get('SYS_ALL_ORGANIZATIONS_DESC', array(implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true))));
 
             $this->addJavascriptCode('
@@ -1703,13 +1562,11 @@ class HtmlForm extends HtmlFormBasic
         $sqlConditions = '';
 
         // create sql conditions if category must have child elements
-        if ($selectBoxModus === self::SELECT_BOX_MODUS_FILTER)
-        {
+        if ($selectBoxModus === self::SELECT_BOX_MODUS_FILTER) {
             $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories($categoryType));
             $optionsAll['showContextDependentFirstEntry'] = false;
 
-            switch ($categoryType)
-            {
+            switch ($categoryType) {
                 case 'DAT':
                     $sqlTables = ' INNER JOIN ' . TBL_DATES . ' ON cat_id = dat_cat_id ';
                     break;
@@ -1722,24 +1579,18 @@ class HtmlForm extends HtmlFormBasic
                     $sqlConditions = ' AND cat_name_intern <> \'EVENTS\' ';
                     break;
             }
-        }
-        else
-        {
+        } else {
             $catIdParams = array_merge(array(0), $gCurrentUser->getAllEditableCategories($categoryType));
         }
 
-        if (!$optionsAll['showSystemCategory'])
-        {
+        if (!$optionsAll['showSystemCategory']) {
             $sqlConditions .= ' AND cat_system = false ';
         }
 
         // within edit dialogs child organizations are not allowed to assign categories of all organizations
-        if($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $gCurrentOrganization->isChildOrganization())
-        {
+        if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $gCurrentOrganization->isChildOrganization()) {
             $sqlConditions .= ' AND cat_org_id = ? -- $gCurrentOrgId ';
-        }
-        else
-        {
+        } else {
             $sqlConditions .= ' AND (  cat_org_id = ? -- $gCurrentOrgId
                                     OR cat_org_id IS NULL ) ';
         }
@@ -1763,26 +1614,22 @@ class HtmlForm extends HtmlFormBasic
         $countCategories = $pdoStatement->rowCount();
 
         // if no or only one category exist and in filter modus, than don't show category
-        if ($selectBoxModus === self::SELECT_BOX_MODUS_FILTER && ($countCategories === 0 || $countCategories === 1))
-        {
+        if ($selectBoxModus === self::SELECT_BOX_MODUS_FILTER && ($countCategories === 0 || $countCategories === 1)) {
             return;
         }
 
         $categoriesArray = array();
         $optionsAll['valueAttributes'] = array();
 
-        if ($selectBoxModus === self::SELECT_BOX_MODUS_FILTER && $countCategories > 1)
-        {
+        if ($selectBoxModus === self::SELECT_BOX_MODUS_FILTER && $countCategories > 1) {
             $categoriesArray[0] = $gL10n->get('SYS_ALL');
             $optionsAll['valueAttributes'][0] = array('data-global' => 0);
         }
 
-        while ($row = $pdoStatement->fetch())
-        {
+        while ($row = $pdoStatement->fetch()) {
             // if several categories exist than select default category
             if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $optionsAll['defaultValue'] === 0
-            && ($countCategories === 1 || $row['cat_default'] === 1))
-            {
+            && ($countCategories === 1 || $row['cat_default'] === 1)) {
                 $optionsAll['defaultValue'] = $row['cat_id'];
             }
 
@@ -1790,16 +1637,12 @@ class HtmlForm extends HtmlFormBasic
             $categoriesArray[$row['cat_id']] = Language::translateIfTranslationStrId($row['cat_name']);
 
             // add label that this category is visible to all organizations
-            if($row['cat_org_id'] === null)
-            {
-                if($categoriesArray[$row['cat_id']] !== $gL10n->get('SYS_ALL_ORGANIZATIONS'))
-                {
+            if ($row['cat_org_id'] === null) {
+                if ($categoriesArray[$row['cat_id']] !== $gL10n->get('SYS_ALL_ORGANIZATIONS')) {
                     $categoriesArray[$row['cat_id']] = $categoriesArray[$row['cat_id']] . ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
                 }
                 $optionsAll['valueAttributes'][$row['cat_id']] = array('data-global' => 1);
-            }
-            else
-            {
+            } else {
                 $optionsAll['valueAttributes'][$row['cat_id']] = array('data-global' => 0);
             }
         }
@@ -1839,8 +1682,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // set specific css class for this field
-        if ($optionsAll['class'] !== '')
-        {
+        if ($optionsAll['class'] !== '') {
             $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
@@ -1874,15 +1716,14 @@ class HtmlForm extends HtmlFormBasic
 
         // add default css classes
         $optionsAll['class'] .= ' btn-primary';
-        if($this->type !== 'navbar') {
+        if ($this->type !== 'navbar') {
             $optionsAll['class'] .= '  admidio-margin-bottom';
         }
 
         // now add button to form
         $this->addButton($id, $text, $optionsAll);
 
-        if (!$this->buttonGroupOpen)
-        {
+        if (!$this->buttonGroupOpen) {
             $this->addHtml('<div class="form-alert" style="display: none;">&nbsp;</div>');
         }
     }
@@ -1913,19 +1754,15 @@ class HtmlForm extends HtmlFormBasic
         $parameters = array();
         $helpTextId = $options['helpTextIdInline'];
 
-        if (is_array($options['helpTextIdInline']))
-        {
+        if (is_array($options['helpTextIdInline'])) {
             $parameters = $options['helpTextIdInline'][1];
             $helpTextId = $options['helpTextIdInline'][0];
         }
 
-        if ($helpTextId !== '')
-        {
+        if ($helpTextId !== '') {
             // if text is a translation-id then translate it
-            if (Language::isTranslationStringId($helpTextId))
-            {
-                foreach ($parameters as &$parameter)
-                {
+            if (Language::isTranslationStringId($helpTextId)) {
+                foreach ($parameters as &$parameter) {
                     // parameters should be strings
                     $parameter = (string) $parameter;
 
@@ -1935,9 +1772,7 @@ class HtmlForm extends HtmlFormBasic
                 unset($parameter);
 
                 $helpText = $gL10n->get($helpTextId, $parameters);
-            }
-            else
-            {
+            } else {
                 $helpText = $helpTextId;
             }
 
@@ -1945,19 +1780,15 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // add block with warning alert
-        if(isset($options['alertWarning']) && $options['alertWarning'] !== '')
-        {
+        if (isset($options['alertWarning']) && $options['alertWarning'] !== '') {
             $this->addHtml('<div class="alert alert-warning mt-3" role="alert">
                 <i class="fas fa-exclamation-triangle"></i>'.$options['alertWarning'].'
             </div>');
         }
 
-        if ($this->type === 'vertical' || $this->type === 'navbar')
-        {
+        if ($this->type === 'vertical' || $this->type === 'navbar') {
             $this->addHtml('</div>');
-        }
-        else
-        {
+        } else {
             $this->addHtml('</div></div>');
         }
     }
@@ -1981,19 +1812,13 @@ class HtmlForm extends HtmlFormBasic
     {
         global $gL10n, $gProfileFields;
 
-        if ($parameter === null)
-        {
-            if(Language::isTranslationStringId($textId))
-            {
+        if ($parameter === null) {
+            if (Language::isTranslationStringId($textId)) {
                 $text = $gL10n->get($textId);
-            }
-            else
-            {
+            } else {
                 $text = $textId;
             }
-        }
-        else
-        {
+        } else {
             $text = $gL10n->get($textId, array($parameter));
         }
 
@@ -2037,69 +1862,53 @@ class HtmlForm extends HtmlFormBasic
         $htmlHelpIcon = '';
         $htmlIdFor    = '';
 
-        if ($property !== self::FIELD_HIDDEN)
-        {
+        if ($property !== self::FIELD_HIDDEN) {
             ++$this->countElements;
         }
 
         // set specific css class for this row
-        if ($class !== '')
-        {
+        if ($class !== '') {
             $cssClassRow .= ' ' . $class;
         }
 
-        if($this->type === 'default')
-        {
+        if ($this->type === 'default') {
             $cssClassRow .= ' row';
         }
 
         // if necessary set css class for a mandatory element
-        if ($property === self::FIELD_REQUIRED && $this->showRequiredFields)
-        {
+        if ($property === self::FIELD_REQUIRED && $this->showRequiredFields) {
             $cssClassRow .= ' admidio-form-group-required';
             $this->flagRequiredFields = true;
         }
 
-        if ($id !== '')
-        {
+        if ($id !== '') {
             $htmlIdFor = ' for="' . $id . '"';
             $this->addHtml('<div id="' . $id . '_group" class="' . $cssClassRow . '">');
-        }
-        else
-        {
+        } else {
             $this->addHtml('<div class="' . $cssClassRow . '">');
         }
 
-        if ($icon !== '')
-        {
+        if ($icon !== '') {
             // create html for icon
             $htmlIcon = Image::getIconHtml($icon, $label);
         }
 
-        if ($helpTextId !== '')
-        {
+        if ($helpTextId !== '') {
             $htmlHelpIcon = self::getHelpTextIcon($helpTextId);
         }
 
         // add label element
-        if ($this->type === 'vertical' || $this->type === 'navbar')
-        {
-            if ($label !== '')
-            {
+        if ($this->type === 'vertical' || $this->type === 'navbar') {
+            if ($label !== '') {
                 $this->addHtml('<label' . $htmlIdFor . '>' . $htmlIcon . $label . $htmlHelpIcon . '</label>');
             }
-        }
-        else
-        {
-            if ($label !== '')
-            {
+        } else {
+            if ($label !== '') {
                 $this->addHtml(
                     '<label' . $htmlIdFor . ' class="col-sm-3 control-label">' . $htmlIcon . $label . $htmlHelpIcon . '</label>
                     <div class="col-sm-9">'
                 );
-            }
-            else
-            {
+            } else {
                 $this->addHtml('<div class="offset-sm-3 col-sm-9">');
             }
         }
@@ -2117,8 +1926,7 @@ class HtmlForm extends HtmlFormBasic
     {
         $this->addHtml('<div id="' . $id . '" class="card admidio-field-group ' . $class . '">');
         // add headline to groupbox
-        if ($headline !== null)
-        {
+        if ($headline !== null) {
             $this->addHtml('<div class="card-header">' . $headline . '</div>');
         }
         $this->addHtml('<div class="card-body">');
@@ -2136,16 +1944,14 @@ class HtmlForm extends HtmlFormBasic
         global $gL10n;
 
         // if there are no elements in the form then return nothing
-        if ($this->countElements === 0)
-        {
+        if ($this->countElements === 0) {
             return '';
         }
 
         $html = '';
 
         // If required fields were set than a notice which marker represents the required fields will be shown.
-        if ($this->flagRequiredFields && $this->showRequiredFields)
-        {
+        if ($this->flagRequiredFields && $this->showRequiredFields) {
             $html .= '<div class="admidio-form-required-notice"><span>' . $gL10n->get('SYS_REQUIRED_FIELDS') . '</span></div>';
         }
 

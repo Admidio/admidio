@@ -49,7 +49,6 @@ class Navigation
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -100,26 +99,21 @@ class Navigation
      */
     public function addUrl($url, $text = null, $icon = null)
     {
-        if (!StringUtils::strValidCharacters($url, 'url'))
-        {
+        if (!StringUtils::strValidCharacters($url, 'url')) {
             throw new AdmException('SYS_URL_INVALID_CHAR', array($url));
         }
 
         $count = count($this->urlStack);
 
         // if the last url is equal to the new url than don't add the new url
-        if ($count > 0 && $url === $this->urlStack[$count - 1]['url'])
-        {
+        if ($count > 0 && $url === $this->urlStack[$count - 1]['url']) {
             return false;
         }
 
         // if the second last url is equal to the new url then only remove the last url
-        if ($count > 1 && $url === $this->urlStack[$count - 2]['url'])
-        {
+        if ($count > 1 && $url === $this->urlStack[$count - 2]['url']) {
             array_pop($this->urlStack);
-        }
-        else
-        {
+        } else {
             $this->urlStack[] = array('url' => $url, 'text' => $text, 'icon' => $icon);
         }
 
@@ -134,8 +128,7 @@ class Navigation
      */
     public function deleteLastUrl()
     {
-        if (count($this->urlStack) > 1)
-        {
+        if (count($this->urlStack) > 1) {
             return array_pop($this->urlStack);
         }
 
@@ -188,17 +181,14 @@ class Navigation
     {
         $links = array();
 
-        foreach ($this->urlStack as $url)
-        {
-            if (strlen($url['text']) > 0)
-            {
+        foreach ($this->urlStack as $url) {
+            if (strlen($url['text']) > 0) {
                 $links[] = '<a href="'.$url['url'].'">'.$url['text'].'</a>';
             }
         }
 
         // if no links where found then show nothing
-        if (count($links) === 0)
-        {
+        if (count($links) === 0) {
             return '';
         }
 

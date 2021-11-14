@@ -25,12 +25,11 @@ $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('requi
 $getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defaultValue' => 'choose', 'validValues' => array('choose', 'save', 'dont_save', 'upload', 'delete')));
 
 // in ajax mode only return simple text on error
-if($getMode === 'delete')
-{
+if ($getMode === 'delete') {
     $gMessage->showHtmlTextOnly(true);
 }
 
-if(in_array($getMode, array('delete', 'save', 'upload'))) {
+if (in_array($getMode, array('delete', 'save', 'upload'))) {
     try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
@@ -45,8 +44,7 @@ if(in_array($getMode, array('delete', 'save', 'upload'))) {
 }
 
 // checks if the server settings for file_upload are set to ON
-if (!PhpIniUtils::isFileUploadEnabled())
-{
+if (!PhpIniUtils::isFileUploadEnabled()) {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
     // => EXIT
 }
@@ -56,85 +54,64 @@ $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
 
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-if(!$gCurrentUser->hasRightEditProfile($user))
-{
+if (!$gCurrentUser->hasRightEditProfile($user)) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
 // bei Ordnerspeicherung pruefen ob der Unterordner in adm_my_files mit entsprechenden Rechten existiert
-if((int) $gSettingsManager->get('profile_photo_storage') === 1)
-{
+if ((int) $gSettingsManager->get('profile_photo_storage') === 1) {
     // ggf. Ordner für Userfotos in adm_my_files anlegen
-    try
-    {
+    try {
         FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos');
-    }
-    catch (\RuntimeException $exception)
-    {
+    } catch (\RuntimeException $exception) {
         $gMessage->show($exception->getMessage());
         // => EXIT
     }
 }
 
-if((int) $user->getValue('usr_id') === 0)
-{
+if ((int) $user->getValue('usr_id') === 0) {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }
 
-if($getMode === 'save')
-{
+if ($getMode === 'save') {
     // Foto speichern
 
-    try
-    {
+    try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch(AdmException $exception)
-    {
+    } catch (AdmException $exception) {
         $exception->showHtml();
         // => EXIT
     }
 
-    if((int) $gSettingsManager->get('profile_photo_storage') === 1)
-    {
+    if ((int) $gSettingsManager->get('profile_photo_storage') === 1) {
         // Foto im Dateisystem speichern
 
         // Nachsehen ob fuer den User ein Photo gespeichert war
         $fileOld = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '_new.jpg';
-        if(is_file($fileOld))
-        {
+        if (is_file($fileOld)) {
             $fileNew = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '.jpg';
-            try
-            {
+            try {
                 FileSystemUtils::deleteFileIfExists($fileNew);
 
-                try
-                {
+                try {
                     FileSystemUtils::moveFile($fileOld, $fileNew);
-                }
-                catch (\RuntimeException $exception)
-                {
+                } catch (\RuntimeException $exception) {
                     $gLogger->error('Could not move file!', array('from' => $fileOld, 'to' => $fileNew));
                     // TODO
                 }
-            }
-            catch (\RuntimeException $exception)
-            {
+            } catch (\RuntimeException $exception) {
                 $gLogger->error('Could not delete file!', array('filePath' => $fileNew));
                 // TODO
             }
         }
-    }
-    else
-    {
+    } else {
         // Foto in der Datenbank speichern
 
         // Nachsehen ob fuer den User ein Photo gespeichert war
-        if(strlen($gCurrentSession->getValue('ses_binary')) > 0)
-        {
+        if (strlen($gCurrentSession->getValue('ses_binary')) > 0) {
             $gDb->startTransaction();
             // Fotodaten in User-Tabelle schreiben
             $user->setValue('usr_photo', $gCurrentSession->getValue('ses_binary'));
@@ -151,56 +128,42 @@ if($getMode === 'save')
     // zur Ausgangsseite zurueck
     $gNavigation->deleteLastUrl();
     admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $getUserUuid)));
-    // => EXIT
-}
-elseif($getMode === 'dont_save')
-{
+// => EXIT
+} elseif ($getMode === 'dont_save') {
     // Foto nicht speichern
     // Ordnerspeicherung
-    if((int) $gSettingsManager->get('profile_photo_storage') === 1)
-    {
+    if ((int) $gSettingsManager->get('profile_photo_storage') === 1) {
         $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '_new.jpg';
-        try
-        {
+        try {
             FileSystemUtils::deleteFileIfExists($file);
-        }
-        catch (\RuntimeException $exception)
-        {
+        } catch (\RuntimeException $exception) {
             $gLogger->error('Could not delete file!', array('filePath' => $file));
             // TODO
         }
     }
     // Datenbankspeicherung
-    else
-    {
+    else {
         $gCurrentSession->setValue('ses_binary', '');
         $gCurrentSession->save();
     }
     // zur Ausgangsseite zurueck
     $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $getUserUuid)), 2000);
     $gMessage->show($gL10n->get('SYS_PROCESS_CANCELED'));
-    // => EXIT
-}
-elseif($getMode === 'delete')
-{
+// => EXIT
+} elseif ($getMode === 'delete') {
     // Foto loeschen
     // Ordnerspeicherung, Datei löschen
-    if((int) $gSettingsManager->get('profile_photo_storage') === 1)
-    {
+    if ((int) $gSettingsManager->get('profile_photo_storage') === 1) {
         $filePath = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '.jpg';
-        try
-        {
+        try {
             FileSystemUtils::deleteFileIfExists($filePath);
-        }
-        catch (\RuntimeException $exception)
-        {
+        } catch (\RuntimeException $exception) {
             $gLogger->error('Could not delete file!', array('filePath' => $filePath));
             // TODO
         }
     }
     // Datenbankspeicherung, Daten aus Session entfernen
-    else
-    {
+    else {
         $user->setValue('usr_photo', '');
         $user->save();
         $gCurrentSession->reloadSession($user->getValue('usr_id'));
@@ -212,15 +175,11 @@ elseif($getMode === 'delete')
 }
 
 // Foto hochladen
-if($getMode === 'choose')
-{
+if ($getMode === 'choose') {
     // set headline
-    if((int) $user->getValue('usr_id') === $gCurrentUserId)
-    {
+    if ((int) $user->getValue('usr_id') === $gCurrentUserId) {
         $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
-    }
-    else
-    {
+    } else {
         $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
     }
 
@@ -244,48 +203,39 @@ if($getMode === 'choose')
     // add form to html page and show page
     $page->addHtml($form->show());
     $page->show();
-}
-elseif($getMode === 'upload')
-{
+} elseif ($getMode === 'upload') {
     // Foto zwischenspeichern bestaetigen
 
-    try
-    {
+    try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch(AdmException $exception)
-    {
+    } catch (AdmException $exception) {
         $exception->showHtml();
         // => EXIT
     }
 
     // File size
-    if ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE)
-    {
+    if ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE) {
         $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', array(round(PhpIniUtils::getUploadMaxSize()/pow(1024, 2)))));
         // => EXIT
     }
 
     // check if a file was really uploaded
-    if(!file_exists($_FILES['userfile']['tmp_name'][0]) || !is_uploaded_file($_FILES['userfile']['tmp_name'][0]))
-    {
+    if (!file_exists($_FILES['userfile']['tmp_name'][0]) || !is_uploaded_file($_FILES['userfile']['tmp_name'][0])) {
         $gMessage->show($gL10n->get('PRO_PHOTO_NOT_CHOSEN'));
         // => EXIT
     }
 
     // File ending
     $imageProperties = getimagesize($_FILES['userfile']['tmp_name'][0]);
-    if ($imageProperties === false || !in_array($imageProperties['mime'], array('image/jpeg', 'image/png'), true))
-    {
+    if ($imageProperties === false || !in_array($imageProperties['mime'], array('image/jpeg', 'image/png'), true)) {
         $gMessage->show($gL10n->get('PRO_PHOTO_FORMAT_INVALID'));
         // => EXIT
     }
 
     // Auflösungskontrolle
     $imageDimensions = $imageProperties[0] * $imageProperties[1];
-    if($imageDimensions > admFuncProcessableImageSize())
-    {
+    if ($imageDimensions > admFuncProcessableImageSize()) {
         $gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', array(round(admFuncProcessableImageSize()/1000000, 2))));
         // => EXIT
     }
@@ -296,13 +246,11 @@ elseif($getMode === 'upload')
     $userImage->scale(130, 170);
 
     // Ordnerspeicherung
-    if((int) $gSettingsManager->get('profile_photo_storage') === 1)
-    {
+    if ((int) $gSettingsManager->get('profile_photo_storage') === 1) {
         $userImage->copyToFile(null, ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '_new.jpg');
     }
     // Datenbankspeicherung
-    else
-    {
+    else {
         // Foto in PHP-Temp-Ordner übertragen
         $userImage->copyToFile(null, $_FILES['userfile']['tmp_name'][0]);
         // Foto aus PHP-Temp-Ordner einlesen
@@ -316,12 +264,9 @@ elseif($getMode === 'upload')
     // Image-Objekt löschen
     $userImage->delete();
 
-    if((int) $user->getValue('usr_id') === $gCurrentUserId)
-    {
+    if ((int) $user->getValue('usr_id') === $gCurrentUserId) {
         $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
-    }
-    else
-    {
+    } else {
         $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
     }
 

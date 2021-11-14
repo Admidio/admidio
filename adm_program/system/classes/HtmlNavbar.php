@@ -79,20 +79,15 @@ class HtmlNavbar
     {
         global $gL10n;
 
-        if ($name === null)
-        {
-            if ($type === 'default')
-            {
+        if ($name === null) {
+            if ($type === 'default') {
                 $name = $gL10n->get('SYS_MENU');
-            }
-            elseif ($type === 'filter')
-            {
+            } elseif ($type === 'filter') {
                 $name = $gL10n->get('SYS_FILTER');
             }
         }
 
-        if ($htmlPage instanceof HtmlPage)
-        {
+        if ($htmlPage instanceof HtmlPage) {
             $this->htmlPage =& $htmlPage;
         }
 
@@ -137,32 +132,22 @@ class HtmlNavbar
         $urlStartRegex = '/^(https?:)?\/\//i';
 
         // add root path to link unless the full URL is given
-        if ($url !== '' && $url !== '#' && preg_match($urlStartRegex, $url) === 0)
-        {
+        if ($url !== '' && $url !== '#' && preg_match($urlStartRegex, $url) === 0) {
             $url = ADMIDIO_URL . $url;
         }
 
         $item = array('id' => $id, 'text' => $text, 'icon' => $icon, 'url' => $url, 'class' => $class);
 
-        if ($orientation === 'left')
-        {
-            if ($parentItem === 'navbar')
-            {
+        if ($orientation === 'left') {
+            if ($parentItem === 'navbar') {
                 $this->leftItems[$id] = $item;
-            }
-            elseif (array_key_exists($parentItem, $this->leftItems))
-            {
+            } elseif (array_key_exists($parentItem, $this->leftItems)) {
                 $this->leftItems[$parentItem]['items'][$id] = $item;
             }
-        }
-        elseif ($orientation === 'right')
-        {
-            if ($parentItem === 'navbar')
-            {
+        } elseif ($orientation === 'right') {
+            if ($parentItem === 'navbar') {
                 $this->rightItems[$id] = $item;
-            }
-            elseif (array_key_exists($parentItem, $this->rightItems))
-            {
+            } elseif (array_key_exists($parentItem, $this->rightItems)) {
                 $this->rightItems[$parentItem]['items'][$id] = $item;
             }
         }
@@ -177,8 +162,7 @@ class HtmlNavbar
     {
         $iconHtml = '';
 
-        if ($data['icon'] !== '')
-        {
+        if ($data['icon'] !== '') {
             $iconHtml = Image::getIconHtml($data['icon'], $data['text']);
         }
 
@@ -199,8 +183,7 @@ class HtmlNavbar
     {
         $iconHtml = '';
 
-        if ($data['icon'] !== '')
-        {
+        if ($data['icon'] !== '') {
             $iconHtml = Image::getIconHtml($data['icon'], $data['text']);
         }
 
@@ -218,17 +201,12 @@ class HtmlNavbar
     {
         $html = '<ul class="navbar-nav mr-auto ' . $class . '">';
 
-        foreach($items as $menuEntry)
-        {
-            if (array_key_exists('items', $menuEntry) && is_array($menuEntry['items']))
-            {
-                if (count($menuEntry['items']) === 1)
-                {
+        foreach ($items as $menuEntry) {
+            if (array_key_exists('items', $menuEntry) && is_array($menuEntry['items'])) {
+                if (count($menuEntry['items']) === 1) {
                     // only one entry then add a simple link to the navbar
                     $html .= $this->createHtmlLink(current($menuEntry['items']));
-                }
-                else
-                {
+                } else {
                     // add a dropdown to the navbar
                     $html .= '
                         <li class="nav-item dropdown ' . $menuEntry['class'] . '">
@@ -237,15 +215,12 @@ class HtmlNavbar
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">';
 
-                    foreach ($menuEntry['items'] as $menuEntryDropDown)
-                    {
+                    foreach ($menuEntry['items'] as $menuEntryDropDown) {
                         $html .= $this->createHtmlDropdownLink($menuEntryDropDown);
                     }
                     $html .= '</div></li>';
                 }
-            }
-            else
-            {
+            } else {
                 // add a simple link to the navbar
                 $html .= $this->createHtmlLink($menuEntry);
             }
@@ -276,35 +251,30 @@ class HtmlNavbar
         $navHtml = '';
 
         // add left item block to navbar
-        if (count($this->leftItems) > 0)
-        {
+        if (count($this->leftItems) > 0) {
             $showNavbar = true;
             $navHtml .= $this->getNavHtml($this->leftItems, 'navbar-left');
         }
 
         // add form to navbar
-        if ($this->htmlForm !== '')
-        {
+        if ($this->htmlForm !== '') {
             $showNavbar = true;
             $navHtml .= $this->htmlForm;
         }
 
         // add right item block to navbar
-        if (count($this->rightItems) > 0)
-        {
+        if (count($this->rightItems) > 0) {
             $showNavbar = true;
             $navHtml .= $this->getNavHtml($this->rightItems, 'navbar-right');
         }
 
-        if (!$showNavbar)
-        {
+        if (!$showNavbar) {
             // dont show navbar if no menu item or form was added
             return '';
         }
 
         // if navbar will be shown then set this flag in page object
-        if ($this->htmlPage instanceof HtmlPage)
-        {
+        if ($this->htmlPage instanceof HtmlPage) {
             $this->htmlPage->hasNavbar();
         }
 
@@ -312,13 +282,10 @@ class HtmlNavbar
         $cssClassNavbar = '';
 
         // default navbar should not show the brand, only in xs mode
-        if ($this->type === 'default')
-        {
+        if ($this->type === 'default') {
             $cssClassBrand = 'd-block d-md-none';
             $cssClassNavbar = 'navbar-menu';
-        }
-        elseif ($this->type === 'filter')
-        {
+        } elseif ($this->type === 'filter') {
             $cssClassNavbar = 'navbar-filter';
         }
 

@@ -20,8 +20,7 @@ $getMsaId = admFuncVariableIsValid($_GET, 'msa_id', 'int', array('requireValue' 
 $getView  = admFuncVariableIsValid($_GET, 'view', 'bool');
 
 // check if the call of the page was allowed
-if (!$gSettingsManager->getBool('enable_mail_module'))
-{
+if (!$gSettingsManager->getBool('enable_mail_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -31,8 +30,7 @@ $attachment = new TableAccess($gDb, TBL_MESSAGES_ATTACHMENTS, 'msa', $getMsaId);
 $message    = new TableMessage($gDb, $attachment->getValue('msa_msg_id'));
 
 // user of message is not current user than he is not allowed to view the attachment
-if($gCurrentUserId !== $message->getValue('msg_usr_id_sender'))
-{
+if ($gCurrentUserId !== $message->getValue('msg_usr_id_sender')) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -41,8 +39,7 @@ if($gCurrentUserId !== $message->getValue('msg_usr_id_sender'))
 $completePath = ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment->getValue('msa_file_name');
 
 // check if the file already exists
-if (!is_file($completePath))
-{
+if (!is_file($completePath)) {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
     // => EXIT
 }
@@ -51,12 +48,9 @@ if (!is_file($completePath))
 $fileSize = filesize($completePath);
 $filename = FileSystemUtils::getSanitizedPathEntry($attachment->getValue('msa_file_name'));
 
-if($getView)
-{
+if ($getView) {
     $content = 'inline';
-}
-else
-{
+} else {
     $content = 'attachment';
 }
 
@@ -70,22 +64,18 @@ header('Cache-Control: private');
 header('Pragma: public');
 
 // file output
-if ($fileSize > 10 * 1024 * 1024)
-{
+if ($fileSize > 10 * 1024 * 1024) {
     // file output for large files (> 10MB)
     $chunkSize = 1024 * 1024;
     $handle = fopen($completePath, 'rb');
-    while (!feof($handle))
-    {
+    while (!feof($handle)) {
         $buffer = fread($handle, $chunkSize);
         echo $buffer;
         ob_flush();
         flush();
     }
     fclose($handle);
-}
-else
-{
+} else {
     // file output for small files (< 10MB)
     readfile($completePath);
 }

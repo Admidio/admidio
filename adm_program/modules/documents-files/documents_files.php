@@ -20,41 +20,31 @@ unset($_SESSION['documents_files_request']);
 $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid',  'string');
 
 // Check if module is activated
-if (!$gSettingsManager->getBool('documents_files_enable_module'))
-{
+if (!$gSettingsManager->getBool('documents_files_enable_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-try
-{
+try {
     // get recordset of current folder from database
     $currentFolder = new TableFolder($gDb);
     $currentFolder->getFolderForDownload($getFolderUuid);
-}
-catch(AdmException $e)
-{
+} catch (AdmException $e) {
     $e->showHtml();
     // => EXIT
 }
 
 // set headline of the script
-if($currentFolder->getValue('fol_fol_id_parent') == null)
-{
+if ($currentFolder->getValue('fol_fol_id_parent') == null) {
     $headline = $gL10n->get('SYS_DOCUMENTS_FILES');
-}
-else
-{
+} else {
     $headline = $gL10n->get('SYS_DOCUMENTS_FILES').' - '.$currentFolder->getValue('fol_name');
 }
 
-if($getFolderUuid !== '')
-{
+if ($getFolderUuid !== '') {
     // URL auf Navigationstack ablegen
     $gNavigation->addUrl(CURRENT_URL, $headline);
-}
-else
-{
+} else {
     // Navigation of the module starts here
     $gNavigation->addStartUrl(CURRENT_URL, $headline);
 }
@@ -70,11 +60,9 @@ $navigationBar = $currentFolder->getNavigationForDownload();
 // create html page object
 $page = new HtmlPage('admidio-documents-files', $headline);
 
-if ($currentFolder->hasUploadRight())
-{
+if ($currentFolder->hasUploadRight()) {
     // upload only possible if upload filesize > 0
-    if ($gSettingsManager->getInt('max_file_upload_size') > 0)
-    {
+    if ($gSettingsManager->getInt('max_file_upload_size') > 0) {
         // show links for upload, create folder and folder configuration
         $page->addPageFunctionsMenuItem('menu_item_documents_upload_files', $gL10n->get('SYS_UPLOAD_FILES'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'documents_files', 'uuid' => $getFolderUuid)),
@@ -84,16 +72,14 @@ if ($currentFolder->hasUploadRight())
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_new.php', array('folder_uuid' => $getFolderUuid)),
             'fa-plus-circle');
 
-        if($currentFolder->getValue('fol_fol_id_parent') > 0)
-        {
+        if ($currentFolder->getValue('fol_fol_id_parent') > 0) {
             $page->addPageFunctionsMenuItem('menu_item_documents_edit_folder', $gL10n->get('SYS_EDIT_FOLDER'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_uuid' => $getFolderUuid)),
                 'fa-edit');
         }
     }
 
-    if($gCurrentUser->adminDocumentsFiles())
-    {
+    if ($gCurrentUser->adminDocumentsFiles()) {
         $page->addPageFunctionsMenuItem('menu_item_documents_permissions', $gL10n->get('SYS_PERMISSIONS'),
             SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_uuid' => $getFolderUuid)),
             'fa-lock');
@@ -121,14 +107,11 @@ $documentsFilesOverview->addRowHeadingByArray($columnHeading);
 $documentsFilesOverview->setMessageIfNoRowsFound('SYS_FOLDER_NO_FILES', 'warning');
 
 // Get folder content
-if (isset($folderContent['folders']))
-{
+if (isset($folderContent['folders'])) {
     // First get possible sub folders
-    foreach ($folderContent['folders'] as $nextFolder)
-    {
+    foreach ($folderContent['folders'] as $nextFolder) {
         $folderDescription = '';
-        if($nextFolder['fol_description'] !== null)
-        {
+        if ($nextFolder['fol_description'] !== null) {
             $folderDescription = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-trigger="hover click"
                 data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFolder['fol_description'].'"></i>';
         }
@@ -144,26 +127,21 @@ if (isset($folderContent['folders']))
             ''
         );
 
-        if ($currentFolder->hasUploadRight())
-        {
+        if ($currentFolder->hasUploadRight()) {
             // Links for change and delete
             $additionalFolderFunctions = '';
 
-            if($gCurrentUser->adminDocumentsFiles())
-            {
+            if ($gCurrentUser->adminDocumentsFiles()) {
                 $additionalFolderFunctions .= '
                 <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/folder_config.php', array('folder_uuid' => $nextFolder['fol_uuid'])) . '">
                     <i class="fas fa-lock" data-toggle="tooltip" title="'.$gL10n->get('SYS_PERMISSIONS').'"></i></a>';
             }
 
-            if($nextFolder['fol_exists'] === true)
-            {
+            if ($nextFolder['fol_exists'] === true) {
                 $additionalFolderFunctions .= '
                 <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_uuid' => $nextFolder['fol_uuid'])) . '">
                     <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_FOLDER').'"></i></a>';
-            }
-            elseif($gCurrentUser->adminDocumentsFiles())
-            {
+            } elseif ($gCurrentUser->adminDocumentsFiles()) {
                 $additionalFolderFunctions .= '
                 <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover click" data-placement="left"
                     title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('SYS_FOLDER_NOT_EXISTS').'"></i>';
@@ -174,9 +152,7 @@ if (isset($folderContent['folders']))
                                     data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'fol', 'element_id' => 'row_folder_'.$nextFolder['fol_uuid'],
                                     'name' => $nextFolder['fol_name'], 'database_id' => $nextFolder['fol_uuid'])).'">
                                     <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE_FOLDER').'"></i></a>';
-        }
-        else
-        {
+        } else {
             $columnValues[] = '&nbsp;';
         }
 
@@ -185,12 +161,10 @@ if (isset($folderContent['folders']))
 }
 
 // Get contained files
-if (isset($folderContent['files']))
-{
+if (isset($folderContent['files'])) {
     $file = new TableFile($gDb);
 
-    foreach ($folderContent['files'] as $nextFile)
-    {
+    foreach ($folderContent['files'] as $nextFile) {
         $file->clear();
         $file->setArray($nextFile);
 
@@ -198,8 +172,7 @@ if (isset($folderContent['files']))
         $fileLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $fileUuid, 'view' => 1));
         $target   = '';
 
-        if($file->isViewableInBrowser())
-        {
+        if ($file->isViewableInBrowser()) {
             $target = ' target="_blank"';
         }
 
@@ -207,8 +180,7 @@ if (isset($folderContent['files']))
         $timestamp = \DateTime::createFromFormat('Y-m-d H:i:s', $nextFile['fil_timestamp']);
 
         $fileDescription = '';
-        if($file->getValue('fil_description') !== '')
-        {
+        if ($file->getValue('fil_description') !== '') {
             $fileDescription = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-trigger="hover click"
                 data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$file->getValue('fil_description').'"></i>';
         }
@@ -231,17 +203,13 @@ if (isset($folderContent['files']))
         <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/get_file.php', array('file_uuid' => $fileUuid)). '">
             <i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('SYS_DOWNLOAD_FILE').'"></i></a>';
 
-        if ($currentFolder->hasUploadRight())
-        {
+        if ($currentFolder->hasUploadRight()) {
             // Links for change and delete
-            if($file->getValue('fil_exists') === true)
-            {
+            if ($file->getValue('fil_exists') === true) {
                 $additionalFileFunctions .= '
                 <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/rename.php', array('folder_uuid' => $getFolderUuid, 'file_uuid' => $fileUuid)). '">
                     <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
-            }
-            elseif($gCurrentUser->adminDocumentsFiles())
-            {
+            } elseif ($gCurrentUser->adminDocumentsFiles()) {
                 $additionalFileFunctions .= '
                 <i class="fas fa-exclamation-triangle" data-toggle="popover" data-trigger="hover click" data-placement="left"
                     title="'.$gL10n->get('SYS_WARNING').'" data-content="'.$gL10n->get('SYS_FILE_NOT_EXIST_DELETE_FROM_DB').'"></i>';
@@ -267,11 +235,9 @@ $htmlDocumentsFilesOverview = $documentsFilesOverview->show();
 
 
 // If user is download Admin show further files contained in this folder.
-if ($gCurrentUser->adminDocumentsFiles())
-{
+if ($gCurrentUser->adminDocumentsFiles()) {
     // Check whether additional content was found in the folder
-    if (isset($folderContent['additionalFolders']) || isset($folderContent['additionalFiles']))
-    {
+    if (isset($folderContent['additionalFolders']) || isset($folderContent['additionalFiles'])) {
         $htmlAdminTableHeadline = '<h2>'.$gL10n->get('SYS_UNMANAGED_FILES').HtmlForm::getHelpTextIcon('SYS_ADDITIONAL_FILES').'</h2>';
 
         // Create table object
@@ -288,10 +254,8 @@ if ($gCurrentUser->adminDocumentsFiles())
         $adminTable->addRowHeadingByArray($columnHeading);
 
         // Get folders
-        if (isset($folderContent['additionalFolders']))
-        {
-            foreach ($folderContent['additionalFolders'] as $nextFolder)
-            {
+        if (isset($folderContent['additionalFolders'])) {
+            foreach ($folderContent['additionalFolders'] as $nextFolder) {
                 $columnValues = array(
                     '<i class="fas fa-fw fa-folder" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').'"></i>',
                     $nextFolder['fol_name'],
@@ -305,12 +269,10 @@ if ($gCurrentUser->adminDocumentsFiles())
         }
 
         // Get files
-        if (isset($folderContent['additionalFiles']))
-        {
+        if (isset($folderContent['additionalFiles'])) {
             $file = new TableFile($gDb);
 
-            foreach ($folderContent['additionalFiles'] as $nextFile)
-            {
+            foreach ($folderContent['additionalFiles'] as $nextFile) {
                 $file->clear();
                 $file->setArray($nextFile);
 
@@ -336,8 +298,7 @@ $page->addHtml($navigationBar);
 $page->addHtml($htmlDocumentsFilesOverview);
 
 // if user has admin download rights, then show admin table for undefined files in folders
-if(isset($htmlAdminTable))
-{
+if (isset($htmlAdminTable)) {
     $page->addHtml($htmlAdminTableHeadline);
     $page->addHtml($htmlAdminTable);
 }

@@ -12,15 +12,13 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // check for valid login
-if (!$gValidLogin)
-{
+if (!$gValidLogin) {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }
 
 // check if the call of the page was allowed
-if (!$gSettingsManager->getBool('enable_pm_module') && !$gSettingsManager->getBool('enable_mail_module'))
-{
+if (!$gSettingsManager->getBool('enable_pm_module') && !$gSettingsManager->getBool('enable_mail_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -28,13 +26,11 @@ if (!$gSettingsManager->getBool('enable_pm_module') && !$gSettingsManager->getBo
 // Initialize and check the parameters
 $getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'string');
 
-if ($getMsgUuid !== '')
-{
+if ($getMsgUuid !== '') {
     try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch(AdmException $exception) {
+    } catch (AdmException $exception) {
         $exception->showText();
         // => EXIT
     }
@@ -63,14 +59,12 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage('admidio-messages', $headline);
 
 // link to write new email
-if ($gSettingsManager->getBool('enable_mail_module'))
-{
+if ($gSettingsManager->getBool('enable_mail_module')) {
     $page->addPageFunctionsMenuItem('menu_item_messages_new_email', $gL10n->get('SYS_WRITE_EMAIL'),
         ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', 'fa-envelope-open');
 }
 // link to write new PM
-if ($gSettingsManager->getBool('enable_pm_module'))
-{
+if ($gSettingsManager->getBool('enable_pm_module')) {
     $page->addPageFunctionsMenuItem('menu_item_messages_new_pm', $gL10n->get('SYS_WRITE_PM'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM')),
         'fa-comment-alt');

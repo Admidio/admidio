@@ -57,8 +57,7 @@ class Menu
      */
     public function addFunctionsNode(MenuNode &$node)
     {
-        if($this->functionsNodeAdded)
-        {
+        if ($this->functionsNodeAdded) {
             array_shift($this->menuNodes);
         }
 
@@ -73,18 +72,15 @@ class Menu
      */
     public function addToNavbar(HtmlNavbar &$navbar)
     {
-        foreach($this->menuNodes as $menuNode)
-        {
-            if($menuNode->count() > 0)
-            {
+        foreach ($this->menuNodes as $menuNode) {
+            if ($menuNode->count() > 0) {
                 $navbar->addItem(
                     'menu_item_'.$menuNode->getTextId(), '', $menuNode->getName(),
                     'fa-align-justify', 'right', 'navbar', 'admidio-default-menu-item'
                 );
 
                 // now add each entry of the node to the navbar dropdown
-                foreach($menuNode->getEntries() as $menuEntry)
-                {
+                foreach ($menuNode->getEntries() as $menuEntry) {
                     $navbar->addItem(
                         $menuEntry['men_name_intern'], $menuEntry['men_url'], $menuEntry['men_name'], $menuEntry['men_icon'], 'right',
                         'menu_item_'.$menuNode->getTextId(), 'admidio-default-menu-item'
@@ -123,15 +119,13 @@ class Menu
      */
     public function getHtml($mediaView = false)
     {
-        if(!$this->menuLoaded)
-        {
+        if (!$this->menuLoaded) {
             $this->loadFromDatabase();
         }
 
         $html = '<nav class="admidio-menu-list collapse" id="admidio-main-menu">';
 
-        foreach($this->menuNodes as $menuNode)
-        {
+        foreach ($this->menuNodes as $menuNode) {
             $html .= $menuNode->getHtml($mediaView);
         }
 
@@ -157,8 +151,7 @@ class Menu
 
         $mainNodesStatement = $gDb->queryPrepared($sql);
 
-        while ($mainNodes = $mainNodesStatement->fetch())
-        {
+        while ($mainNodes = $mainNodesStatement->fetch()) {
             $countMenuNodes++;
             $this->menuNodes[$countMenuNodes] = new MenuNode($mainNodes['men_name_intern'], $mainNodes['men_name']);
             $this->menuNodes[$countMenuNodes]->loadFromDatabase($mainNodes['men_id']);
@@ -170,8 +163,7 @@ class Menu
      */
     public function removeFunctionsNode()
     {
-        if($this->functionsNodeAdded)
-        {
+        if ($this->functionsNodeAdded) {
             array_shift($this->menuNodes);
             $this->functionsNodeAdded = false;
         }

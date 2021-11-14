@@ -32,30 +32,30 @@
  */
 class ChangeNotification
 {
-     /** @var $changes Queued array of changes (user ID as key) made during this
-      *  php process. This data structure is meant to cache all changes and then
-      *  send out only one notification mail per user when PHP is finished.
-      *  The structure of each entry of this entry is:
-      *      uid => array(
-      *          'uid'=>123,
-      *          'usr_login_name'=>'',
-      *          'first_name'=>'',
-      *          'last_name'=>'',
-      *          'created' => false,
-      *          'deleted' => false,
-      *          'profile_changes' => array(
-      *              field_id => array('Field Name', 'old_value', 'new_value'),
-      *          ),
-      *          'role_changes' => array(
-      *              role_id => array('Role Name', 'fieldname', 'old_value', 'new_value'),
-      *          )
-      *      )
-      */
-     protected $changes = array();
+    /** @var $changes Queued array of changes (user ID as key) made during this
+     *  php process. This data structure is meant to cache all changes and then
+     *  send out only one notification mail per user when PHP is finished.
+     *  The structure of each entry of this entry is:
+     *      uid => array(
+     *          'uid'=>123,
+     *          'usr_login_name'=>'',
+     *          'first_name'=>'',
+     *          'last_name'=>'',
+     *          'created' => false,
+     *          'deleted' => false,
+     *          'profile_changes' => array(
+     *              field_id => array('Field Name', 'old_value', 'new_value'),
+     *          ),
+     *          'role_changes' => array(
+     *              role_id => array('Role Name', 'fieldname', 'old_value', 'new_value'),
+     *          )
+     *      )
+     */
+    protected $changes = array();
 
-     /** @var $format Whether to send mails as 'html' or 'text' (as configured)
-      */
-     protected $format = 'html';
+    /** @var $format Whether to send mails as 'html' or 'text' (as configured)
+     */
+    protected $format = 'html';
 
     /**
      * Constructor that initialize the class member parameters
@@ -228,7 +228,7 @@ class ChangeNotification
         $this->prepareUserChanges($userId, $user);
         $fieldtitle = $fieldname;
         $ignore = false;
-        switch($fieldname) {
+        switch ($fieldname) {
             case 'mem_begin':
                 $fieldtitle = $gL10n->get('SYS_MEMBERSHIP_START');
                 break;
@@ -260,8 +260,9 @@ class ChangeNotification
         global $gProfileFields, $gL10n;
 
         // If user was never created in the DB, no need to log
-        if ($userId == 0)
+        if ($userId == 0) {
             return;
+        }
         if (is_null($user)) {
             $user = new User($this->db, $gProfileFields, $userId);
         }
@@ -295,7 +296,6 @@ class ChangeNotification
                 }
             }
         }
-
     }
 
     /**
@@ -311,8 +311,9 @@ class ChangeNotification
         global $gProfileFields, $gL10n, $gDb;
 
         // If user wasn't yet created in the DB, no need to log anything
-        if ($userId == 0)
+        if ($userId == 0) {
             return;
+        }
 
         // 1. TODO: Create a history log database entry for the deletion
 
@@ -367,7 +368,6 @@ class ChangeNotification
                 $this->logRoleChange($userId, $row['rol_name'], $gL10n->get('SYS_LEADER'), $row['mem_leader'], null, $user, /*deleting=*/true);
             }
         }
-
     }
 
     /**
@@ -379,10 +379,9 @@ class ChangeNotification
     {
         global $gSettingsManager, $gL10n, $gCurrentUser;
 
-        if($gSettingsManager->has('enable_email_changenotification')
+        if ($gSettingsManager->has('enable_email_changenotification')
             && $gSettingsManager->getBool('enable_email_changenotification')
-            && is_object($gCurrentUser))
-        {
+            && is_object($gCurrentUser)) {
             $currfullname = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
             $currname = $currfullname . ' (login: ' . $gCurrentUser->getValue('usr_login_name') . ')';
             if ($this->format == 'html') {
@@ -453,7 +452,6 @@ class ChangeNotification
                 }
 
                 if ($hasContent) {
-
                     $notification->adminNotification(
                         $gL10n->get($messageTitle,
                             array($userdata['first_name'], $userdata['last_name'], $userdata['usr_login_name'])),
@@ -470,7 +468,8 @@ class ChangeNotification
     /**
      * Shutdown function for cleanup: Send out all pending notification when the php processing is finished.
      */
-    public function shutdown() {
+    public function shutdown()
+    {
         $this->sendNotifications();
     }
 }

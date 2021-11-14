@@ -72,14 +72,12 @@ class SystemMail extends Email
         global $gSettingsManager;
 
         // create organization object of the organization the current user is assigned (at registration this can be every organization)
-        if(!$this->smOrganization instanceof Organization || (int) $this->smOrganization->getValue('org_id') !== $user->getOrganization())
-        {
+        if (!$this->smOrganization instanceof Organization || (int) $this->smOrganization->getValue('org_id') !== $user->getOrganization()) {
             $this->smOrganization = new Organization($this->db, $user->getOrganization());
         }
 
         // read email text from text table in database
-        if($this->smTextObject->getValue('txt_name') !== $systemMailId)
-        {
+        if ($this->smTextObject->getValue('txt_name') !== $systemMailId) {
             $this->smTextObject->readDataByColumns(array(
                 'txt_name'   => $systemMailId,
                 'txt_org_id' => (int) $this->smOrganization->getValue('org_id')
@@ -106,27 +104,20 @@ class SystemMail extends Email
         $mailSrcText = preg_replace(array_keys($pregRepArray), array_values($pregRepArray), $mailSrcText);
 
         // zusaetzliche Variablen ersetzen
-        foreach ($this->smVariables as $number => $value)
-        {
+        foreach ($this->smVariables as $number => $value) {
             $mailSrcText = str_replace('#variable'.$number.'#', $value, $mailSrcText);
         }
 
         // Betreff und Inhalt anhand von Kennzeichnungen splitten oder ggf. Default-Inhalte nehmen
-        if(str_contains($mailSrcText, '#subject#'))
-        {
+        if (str_contains($mailSrcText, '#subject#')) {
             $this->smMailHeader = trim(substr($mailSrcText, strpos($mailSrcText, '#subject#') + 9, strpos($mailSrcText, '#content#') - 9));
-        }
-        else
-        {
+        } else {
             $this->smMailHeader = 'Systemmail von '.$this->smOrganization->getValue('org_homepage');
         }
 
-        if(str_contains($mailSrcText, '#content#'))
-        {
+        if (str_contains($mailSrcText, '#content#')) {
             $this->smMailText = trim(substr($mailSrcText, strpos($mailSrcText, '#content#') + 9));
-        }
-        else
-        {
+        } else {
             $this->smMailText = $mailSrcText;
         }
 
@@ -162,8 +153,7 @@ class SystemMail extends Email
         $returnMessage = $this->sendEmail();
 
         // if something went wrong then throw an exception with the error message
-        if($returnMessage !== true)
-        {
+        if ($returnMessage !== true) {
             throw new AdmException('SYS_EMAIL_NOT_SEND', array($user->getValue('EMAIL'), $returnMessage));
         }
 

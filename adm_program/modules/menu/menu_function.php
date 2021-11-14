@@ -28,25 +28,22 @@ $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requir
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
 
 // check rights
-if(!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // create menu object
 $menu = new TableMenu($gDb);
 
-if($getMenuUuid !== '')
-{
+if ($getMenuUuid !== '') {
     $menu->readDataByUuid($getMenuUuid);
 }
 
 try {
     // check the CSRF token of the form against the session token
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-}
-catch(AdmException $exception) {
-    if($getMode === 1) {
+} catch (AdmException $exception) {
+    if ($getMode === 1) {
         $exception->showHtml();
     } else {
         $exception->showText();
@@ -55,8 +52,7 @@ catch(AdmException $exception) {
 }
 
 // create menu or update it
-if($getMode === 1)
-{
+if ($getMode === 1) {
     $_SESSION['menu_request'] = $_POST;
 
     $postIdParent = admFuncVariableIsValid($_POST, 'men_men_id_parent', 'int');
@@ -67,33 +63,26 @@ if($getMode === 1)
     $postIcon     = admFuncVariableIsValid($_POST, 'men_icon',          'string', array('default' => ''));
 
     // within standard menu items the url should not be changed
-    if($menu->getValue('men_standard'))
-    {
+    if ($menu->getValue('men_standard')) {
         $postUrl = $menu->getValue('men_url');
     }
 
     // Check if mandatory fields are filled
-    if($postName === '')
-    {
+    if ($postName === '') {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
     }
 
-    if($postUrl === '')
-    {
+    if ($postUrl === '') {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_URL'))));
         // => EXIT
     }
 
     // check if font awesome syntax is used or if its a valid filename syntax
-    if($postIcon !== '' && !preg_match('/fa-[a-zA-z0-9]/', $postIcon))
-    {
-        try
-        {
+    if ($postIcon !== '' && !preg_match('/fa-[a-zA-z0-9]/', $postIcon)) {
+        try {
             StringUtils::strIsValidFileName($postIcon, true);
-        }
-        catch (AdmException $e)
-        {
+        } catch (AdmException $e) {
             $gMessage->show($gL10n->get('SYS_INVALID_FONT_AWESOME'));
             // => EXIT
         }
@@ -104,8 +93,7 @@ if($getMode === 1)
     $menu->setValue('men_name', $postName);
     $menu->setValue('men_description', $postDesc);
 
-    if(!$menu->getValue('men_standard'))
-    {
+    if (!$menu->getValue('men_standard')) {
         $menu->setValue('men_url', $postUrl);
         $menu->setValue('men_com_id', $postComId);
     }
@@ -113,8 +101,7 @@ if($getMode === 1)
     // save Data to Table
     $returnCode = $menu->save();
 
-    if($returnCode < 0)
-    {
+    if ($returnCode < 0) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
@@ -122,23 +109,17 @@ if($getMode === 1)
     $displayMenu = new RolesRights($gDb, 'menu_view', (int) $menu->getValue('men_id'));
     $rolesDisplayRight = $displayMenu->getRolesIds();
 
-    if(!isset($_POST['menu_view']) || !is_array($_POST['menu_view']))
-    {
+    if (!isset($_POST['menu_view']) || !is_array($_POST['menu_view'])) {
         // remove all entries, so it is allowed without login
         $displayMenu->removeRoles($rolesDisplayRight);
-    }
-    else
-    {
+    } else {
         // add new or update roles
         $displayMenu->addRoles(array_map('intval', $_POST['menu_view']));
     }
 
-    if($gNavigation->count() > 1)
-    {
+    if ($gNavigation->count() > 1) {
         $gNavigation->deleteLastUrl();
-    }
-    else
-    {
+    } else {
         $gNavigation->addUrl($gHomepage, 'Home');
     }
 
@@ -146,20 +127,15 @@ if($getMode === 1)
 
     header('Location: '. $gNavigation->getUrl());
     exit();
-}
-elseif($getMode === 2)
-{
+} elseif ($getMode === 2) {
     // delete menu
-    if($menu->delete())
-    {
+    if ($menu->delete()) {
         echo 'done';
     }
     exit();
-}
-elseif($getMode === 3)
-{
+} elseif ($getMode === 3) {
     // Update menu sequence
-    if($menu->moveSequence($getSequence)) {
+    if ($menu->moveSequence($getSequence)) {
         echo 'done';
     } else {
         echo 'Sequence could not be changed.';

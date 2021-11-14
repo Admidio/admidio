@@ -11,14 +11,12 @@
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
-if (!$gSettingsManager->getBool('members_enable_user_relations'))
-{
+if (!$gSettingsManager->getBool('members_enable_user_relations')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-if (!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -67,24 +65,21 @@ $relationType1 = new TableUserRelationType($gDb);
 $relationType2 = new TableUserRelationType($gDb);
 
 // Get data
-while($relRow = $relationTypesStatement->fetch())
-{
+while ($relRow = $relationTypesStatement->fetch()) {
     $editUserIcon = '';
     $editUserInverseIcon = '';
 
     $relationType1->clear();
     $relationType1->setArray($relRow);
 
-    if((bool) $relRow['urt_edit_user'])
-    {
+    if ((bool) $relRow['urt_edit_user']) {
         $editUserIcon = ' <i class="fas fa-user-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
     }
 
     $nameRelationshiptype = $relationType1->getValue('urt_name') . $editUserIcon;
 
     // if it's a asymmetrical relationship type we must add the name of the other relationship type
-    if($relationType1->getRelationTypeString() === 'asymmetrical')
-    {
+    if ($relationType1->getRelationTypeString() === 'asymmetrical') {
         $relationType2->clear();
         $relRow2 = $relRow;
         $relRow2['urt_id'] = $relRow2['urt_id_inverse'];
@@ -93,8 +88,7 @@ while($relRow = $relationTypesStatement->fetch())
         $relRow2['urt_name_female'] = $relRow2['urt_name_female_inverse'];
         $relationType2->setArray($relRow2);
 
-        if((bool) $relRow['urt_edit_user_inverse'])
-        {
+        if ((bool) $relRow['urt_edit_user_inverse']) {
             $editUserInverseIcon = ' <i class="fas fa-user-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
         }
 

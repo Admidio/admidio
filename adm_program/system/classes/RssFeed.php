@@ -72,8 +72,7 @@ class RssFeed
      */
     public function addItem($title, $description, $link, $author = '', $pubDate = '', $category = '')
     {
-        if(!StringUtils::strValidCharacters(StringUtils::strToLower($author), 'email'))
-        {
+        if (!StringUtils::strValidCharacters(StringUtils::strToLower($author), 'email')) {
             $author = '';
         }
 
@@ -123,10 +122,8 @@ class RssFeed
         global $gL10n;
 
         $channelInfo = '';
-        foreach (array('title', 'link', 'description', 'copyright') as $field)
-        {
-            if (isset($this->channel[$field]))
-            {
+        foreach (array('title', 'link', 'description', 'copyright') as $field) {
+            if (isset($this->channel[$field])) {
                 $channelInfo .= '<'.$field.'>'.SecurityUtils::encodeHTML($this->channel[$field]).'</'.$field.'>'.chr(10);
             }
         }
@@ -143,13 +140,10 @@ class RssFeed
     private function getItems()
     {
         $itemString = '';
-        foreach ($this->items as $item)
-        {
+        foreach ($this->items as $item) {
             $itemString .= '<item>'.chr(10);
-            foreach (array('title', 'description', 'link', 'author', 'pubDate', 'category') as $field)
-            {
-                if (isset($item[$field]) && $item[$field] !== '')
-                {
+            foreach (array('title', 'description', 'link', 'author', 'pubDate', 'category') as $field) {
+                if (isset($item[$field]) && $item[$field] !== '') {
                     // fields should only be set if they have a value
                     $itemString .= '<'.$field.'>'.SecurityUtils::encodeHTML($item[$field]).'</'.$field.'>'.chr(10);
                 }

@@ -26,16 +26,14 @@ $getJob       = admFuncVariableIsValid($_GET, 'job',       'string', array('requ
 $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',  'int',    array('requireValue' => true));
 $getDirection = admFuncVariableIsValid($_GET, 'direction', 'string', array('validValues' => array('left', 'right')));
 
-if ((int) $gSettingsManager->get('enable_photo_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
     // check if the module is activated
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // check if current user has right to upload photos
-if (!$gCurrentUser->editPhotoRight())
-{
+if (!$gCurrentUser->editPhotoRight()) {
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
     // => EXIT
 }
@@ -49,12 +47,9 @@ function deleteThumbnail(TablePhotos $photoAlbum, $picNr)
 {
     // Ordnerpfad zusammensetzen
     $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id') . '/thumbnails/' . $picNr . '.jpg';
-    try
-    {
+    try {
         FileSystemUtils::deleteFileIfExists($photoPath);
-    }
-    catch (\RuntimeException $exception)
-    {
+    } catch (\RuntimeException $exception) {
         $GLOBALS['gLogger']->error('Could not delete file!', array('filePath' => $photoPath));
         // TODO
     }
@@ -71,14 +66,11 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
     $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id');
 
     // delete photos
-    try
-    {
+    try {
         FileSystemUtils::deleteFileIfExists($albumPath.'/'.$picNr.'.jpg');
         FileSystemUtils::deleteFileIfExists($albumPath.'/originals/'.$picNr.'.jpg');
         FileSystemUtils::deleteFileIfExists($albumPath.'/originals/'.$picNr.'.png');
-    }
-    catch (\RuntimeException $exception)
-    {
+    } catch (\RuntimeException $exception) {
         $GLOBALS['gLogger']->error(
             'Could not delete file!',
             array('filePaths' => array(
@@ -94,20 +86,14 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
     $newPicNr = $picNr;
     $thumbnailDelete = false;
 
-    for ($actPicNr = 1; $actPicNr <= (int) $photoAlbum->getValue('pho_quantity'); ++$actPicNr)
-    {
-        if (is_file($albumPath.'/'.$actPicNr.'.jpg'))
-        {
-            if ($actPicNr > $newPicNr)
-            {
-                try
-                {
+    for ($actPicNr = 1; $actPicNr <= (int) $photoAlbum->getValue('pho_quantity'); ++$actPicNr) {
+        if (is_file($albumPath.'/'.$actPicNr.'.jpg')) {
+            if ($actPicNr > $newPicNr) {
+                try {
                     FileSystemUtils::moveFile($albumPath.'/'.$actPicNr.'.jpg', $albumPath.'/'.$newPicNr.'.jpg');
                     FileSystemUtils::moveFile($albumPath.'/originals/'.$actPicNr.'.jpg', $albumPath.'/originals/'.$newPicNr.'.jpg');
                     FileSystemUtils::moveFile($albumPath.'/originals/'.$actPicNr.'.png', $albumPath.'/originals/'.$newPicNr.'.png');
-                }
-                catch (\RuntimeException $exception)
-                {
+                } catch (\RuntimeException $exception) {
                     $GLOBALS['gLogger']->error(
                         'Could not move file!',
                         array(
@@ -127,14 +113,11 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
                 }
                 ++$newPicNr;
             }
-        }
-        else
-        {
+        } else {
             $thumbnailDelete = true;
         }
 
-        if ($thumbnailDelete)
-        {
+        if ($thumbnailDelete) {
             // Delete all thumbnails starting from the deleted image
             deleteThumbnail($photoAlbum, $actPicNr);
         }
@@ -150,17 +133,14 @@ $photoAlbum = new TablePhotos($gDb);
 $photoAlbum->readDataByUuid($getPhotoUuid);
 
 // check if the user is allowed to edit this photo album
-if (!$photoAlbum->isEditable())
-{
+if (!$photoAlbum->isEditable()) {
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
     // => EXIT
 }
 
 // Rotate the photo by 90°
-if ($getJob === 'rotate')
-{
-    if ($getDirection !== '')
-    {
+if ($getJob === 'rotate') {
+    if ($getDirection !== '') {
         deleteThumbnail($photoAlbum, $getPhotoNr);
 
         // get album folder path with image file name
@@ -173,13 +153,11 @@ if ($getJob === 'rotate')
     }
 }
 // delete photo from filesystem and update photo album
-elseif ($getJob === 'delete')
-{
+elseif ($getJob === 'delete') {
     try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch(AdmException $exception) {
+    } catch (AdmException $exception) {
         $exception->showText();
         // => EXIT
     }

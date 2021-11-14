@@ -28,44 +28,33 @@ $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'int', 
 $_SESSION['import_request'] = $_POST;
 unset($_SESSION['import_csv_request']);
 
-try
-{
+try {
     // check the CSRF token of the form against the session token
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-}
-catch(AdmException $exception)
-{
+} catch (AdmException $exception) {
     $exception->showHtml();
     // => EXIT
 }
 
 // only authorized users should import users
-if(!$gCurrentUser->editUsers())
-{
+if (!$gCurrentUser->editUsers()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
 $importfile = $_FILES['userfile']['tmp_name'][0];
-if(strlen($importfile) === 0)
-{
+if (strlen($importfile) === 0) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_FILE'))));
-    // => EXIT
-}
-elseif($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE)
-{
+// => EXIT
+} elseif ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE) {
     // check the filesize against the server settings
     $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('max_file_upload_size'))));
-    // => EXIT
-}
-elseif(!file_exists($importfile) || !is_uploaded_file($importfile))
-{
+// => EXIT
+} elseif (!file_exists($importfile) || !is_uploaded_file($importfile)) {
     // check if a file was really uploaded
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
-    // => EXIT
-}
-elseif($postRoleId === 0)
-{
+// => EXIT
+} elseif ($postRoleId === 0) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ROLE'))));
     // => EXIT
 }
@@ -74,9 +63,8 @@ elseif($postRoleId === 0)
 // get a role assignment right if he did not have it before.
 $role = new TableRoles($gDb, $postRoleId);
 
-if(!$gCurrentUser->hasRightViewRole((int) $role->getValue('rol_id'))
-|| (!$gCurrentUser->manageRoles() && $role->getValue('rol_assign_roles') == false))
-{
+if (!$gCurrentUser->hasRightViewRole((int) $role->getValue('rol_id'))
+|| (!$gCurrentUser->manageRoles() && $role->getValue('rol_assign_roles') == false)) {
     $gMessage->show($gL10n->get('SYS_ROLE_SELECT_RIGHT', array($role->getValue('rol_name'))));
     // => EXIT
 }
@@ -85,7 +73,7 @@ if(!$gCurrentUser->hasRightViewRole((int) $role->getValue('rol_id'))
 $_SESSION['rol_id']           = (int) $role->getValue('rol_id');
 $_SESSION['user_import_mode'] = $postUserImportMode;
 
-switch($postImportFormat) {
+switch ($postImportFormat) {
     case 'XLSX':
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
         break;
@@ -102,9 +90,7 @@ switch($postImportFormat) {
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
         if ($postImportCoding === 'GUESS') {
             $postImportCoding = \PhpOffice\PhpSpreadsheet\Reader\Csv::guessEncoding($importfile);
-        }
-        elseif($postImportCoding === '')
-        {
+        } elseif ($postImportCoding === '') {
             $postImportCoding = 'UTF-8';
         }
         $reader->setInputEncoding($postImportCoding);
@@ -129,42 +115,28 @@ switch($postImportFormat) {
 }
 
 // TODO: Better error handling if file cannot be loaded (phpSpreadsheet apparently does not always use exceptions)
-if (isset($reader) and !is_null($reader))
-{
-    try
-    {
+if (isset($reader) and !is_null($reader)) {
+    try {
         $spreadsheet = $reader->load($importfile);
         // Read specified sheet (passed as argument/param)
-        if (is_numeric($postWorksheet))
-        {
+        if (is_numeric($postWorksheet)) {
             $sheet = $spreadsheet->getSheet($postWorksheet);
-        }
-        elseif (!empty($postWorksheet))
-        {
+        } elseif (!empty($postWorksheet)) {
             $sheet = $spreadsheet->getSheetByName($postWorksheet);
-        }
-        else
-        {
+        } else {
             $sheet = $spreadsheet->getActiveSheet();
         }
 
-        if (empty($sheet))
-        {
+        if (empty($sheet)) {
             $gMessage->show($gL10n->get('SYS_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet)));
-            // => EXIT
-        }
-        else
-        {
+        // => EXIT
+        } else {
             $_SESSION['import_data']       = $sheet->toArray();
         }
-    }
-    catch(\PhpOffice\PhpSpreadsheet\Exception | \Exception $e)
-    {
+    } catch (\PhpOffice\PhpSpreadsheet\Exception | \Exception $e) {
         $gMessage->show($e->getMessage());
         // => EXIT
-    }
-    catch (AdmException $e)
-    {
+    } catch (AdmException $e) {
         $e->showText();
         // => EXIT
     }

@@ -44,18 +44,12 @@ class TableGuestbookComment extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        if ($columnName === 'gbc_text')
-        {
-            if (!isset($this->dbColumns['gbc_text']))
-            {
+        if ($columnName === 'gbc_text') {
+            if (!isset($this->dbColumns['gbc_text'])) {
                 $value = '';
-            }
-            elseif ($format === 'database')
-            {
+            } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['gbc_text']));
-            }
-            else
-            {
+            } else {
                 $value = $this->dbColumns['gbc_text'];
             }
 
@@ -86,8 +80,7 @@ class TableGuestbookComment extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        if ($this->newRecord)
-        {
+        if ($this->newRecord) {
             $this->setValue('gbc_org_id', $GLOBALS['gCurrentOrgId']);
             $this->setValue('gbc_ip_address', $_SERVER['REMOTE_ADDR']);
         }
@@ -105,18 +98,14 @@ class TableGuestbookComment extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($checkValue)
-        {
-            if ($columnName === 'gbc_text')
-            {
+        if ($checkValue) {
+            if ($columnName === 'gbc_text') {
                 return parent::setValue($columnName, $newValue, false);
             }
 
-            if ($columnName === 'gbc_email' && $newValue !== '')
-            {
+            if ($columnName === 'gbc_email' && $newValue !== '') {
                 // If Email has a invalid format, it won't be set
-                if (!StringUtils::strValidCharacters($newValue, 'email'))
-                {
+                if (!StringUtils::strValidCharacters($newValue, 'email')) {
                     return false;
                 }
             }

@@ -30,8 +30,7 @@ $templates = $funcClass->getFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templ
 $headline  = $gL10n->get('SYS_GREETING_CARD_EDIT');
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('enable_ecard_module'))
-{
+if (!$gSettingsManager->getBool('enable_ecard_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -40,16 +39,12 @@ if (!$gSettingsManager->getBool('enable_ecard_module'))
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid)
-{
+if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid) {
     $photoAlbum =& $_SESSION['photo_album'];
-}
-else
-{
+} else {
     // einlesen des Albums falls noch nicht in Session gespeichert
     $photoAlbum = new TablePhotos($gDb);
-    if($getPhotoUuid !== '')
-    {
+    if ($getPhotoUuid !== '') {
         $photoAlbum->readDataByUuid($getPhotoUuid);
     }
 
@@ -57,51 +52,43 @@ else
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
-if($getPhotoUuid !== '' && (int) $photoAlbum->getValue('pho_org_id') !== $gCurrentOrgId)
-{
+if ($getPhotoUuid !== '' && (int) $photoAlbum->getValue('pho_org_id') !== $gCurrentOrgId) {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }
 
-if ($gValidLogin && $gCurrentUser->getValue('EMAIL') === '')
-{
+if ($gValidLogin && $gCurrentUser->getValue('EMAIL') === '') {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
     $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', array('<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php">', '</a>')));
     // => EXIT
 }
 
-if ($getUserUuid !== '')
-{
+if ($getUserUuid !== '') {
     // usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
 
     // darf auf die User-Id zugegriffen werden
-    if((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || strlen($user->getValue('usr_id')) === 0)
-    {
+    if ((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || strlen($user->getValue('usr_id')) === 0) {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
         // => EXIT
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
-    if (!StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email'))
-    {
+    if (!StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email')) {
         $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))));
         // => EXIT
     }
 }
 
-if(isset($_SESSION['ecard_request']))
-{
+if (isset($_SESSION['ecard_request'])) {
     // if user is returned to this form after he submit it,
     // then try to restore all values that he has entered before
     $template   = $_SESSION['ecard_request']['ecard_template'];
     $recipients = $_SESSION['ecard_request']['ecard_recipients'];
     $message    = $_SESSION['ecard_request']['ecard_message'];
-}
-else
-{
+} else {
     $template   = $gSettingsManager->getString('ecard_template');
     $recipients = null;
     $message    = '';
@@ -152,15 +139,13 @@ $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
         class="imageFrame" alt="'.$gL10n->get('SYS_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('SYS_VIEW_PICTURE_FULL_SIZED').'" />
     </a>');
 $templates = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-if (!is_array($templates))
-{
+if (!is_array($templates)) {
     $gMessage->show($gL10n->get('SYS_TEMPLATE_FOLDER_OPEN'));
     // => EXIT
 }
 // create new array without file extension in visual value
 $newTemplateArray = array();
-foreach($templates as $templateName)
-{
+foreach ($templates as $templateName) {
     $newTemplateArray[$templateName] = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
 }
 unset($templateName);
@@ -186,8 +171,7 @@ $sql = 'SELECT rol_id, rol_name
       ORDER BY rol_name';
 $statement = $gDb->queryPrepared($sql, $arrayMailRoles);
 
-while($row = $statement->fetch())
-{
+while ($row = $statement->fetch()) {
     $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], $gL10n->get('SYS_ROLES'));
 }
 
@@ -219,8 +203,7 @@ $queryParams = array(
 );
 $statement = $gDb->queryPrepared($sql, $queryParams);
 
-while ($row = $statement->fetch())
-{
+while ($row = $statement->fetch()) {
     $list[] = array($row['usr_id'], $row['last_name']. ', '.$row['first_name'], $gL10n->get('SYS_MEMBERS'));
 }
 

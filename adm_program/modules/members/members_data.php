@@ -58,20 +58,17 @@ $jsonArray = array('draw' => $getDraw);
 header('Content-Type: application/json');
 
 // if only active members should be shown then set parameter
-if(!$gSettingsManager->getBool('members_show_all_users'))
-{
+if (!$gSettingsManager->getBool('members_show_all_users')) {
     $getMembers = true;
 }
 
 // only legitimate users are allowed to call the user management
-if (!$gCurrentUser->editUsers())
-{
+if (!$gCurrentUser->editUsers()) {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
     exit();
 }
 
-if(isset($_SESSION['members_list_config']))
-{
+if (isset($_SESSION['members_list_config'])) {
     $membersListConfig = $_SESSION['members_list_config'];
 }
 
@@ -80,34 +77,23 @@ $useOrderBy = false;
 $orderCondition = '';
 $orderColumns = array_merge(array('no', 'member_this_orga'), $membersListConfig->getColumnNamesSql());
 
-if(array_key_exists('order', $_GET))
-{
-    foreach($_GET['order'] as $order)
-    {
-        if(is_numeric($order['column']))
-        {
-            if($orderCondition === '')
-            {
+if (array_key_exists('order', $_GET)) {
+    foreach ($_GET['order'] as $order) {
+        if (is_numeric($order['column'])) {
+            if ($orderCondition === '') {
                 $orderCondition = ' ORDER BY ';
-            }
-            else
-            {
+            } else {
                 $orderCondition .= ', ';
             }
 
-            if(strtoupper($order['dir']) === 'ASC')
-            {
+            if (strtoupper($order['dir']) === 'ASC') {
                 $orderCondition .= $orderColumns[$order['column']]. ' ASC ';
-            }
-            else
-            {
+            } else {
                 $orderCondition .= $orderColumns[$order['column']]. ' DESC ';
             }
         }
     }
-}
-else
-{
+} else {
     $useOrderBy = true;
 }
 
@@ -115,12 +101,10 @@ else
 $searchCondition = '';
 $searchColumns = $membersListConfig->getSearchConditions();
 
-if($getSearch !== '' && count($searchColumns) > 0)
-{
+if ($getSearch !== '' && count($searchColumns) > 0) {
     $searchString = explode(' ', $getSearch);
 
-    foreach($searchString as $searchWord)
-    {
+    foreach ($searchString as $searchWord) {
         $searchCondition .= ' AND CONCAT(' . implode(', ', $searchColumns) . ') LIKE \'%'.$searchWord.'%\' ';
     }
 
@@ -142,13 +126,10 @@ $sqlSubSelect = '(SELECT COUNT(*) AS count_this
                      AND (  cat_org_id = '.$gCurrentOrgId.'
                          OR cat_org_id IS NULL ))';
 
-if($getMembers)
-{
+if ($getMembers) {
     $memberOfThisOrganizationCondition = ' AND '.$sqlSubSelect.' > 0 ';
     $memberOfThisOrganizationSelect = ' 1 ';
-}
-else
-{
+} else {
     $memberOfThisOrganizationCondition = '';
     $memberOfThisOrganizationSelect = $sqlSubSelect;
 }
@@ -174,8 +155,7 @@ $jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 
 // create a subselect to check if the user is also an active member of another organization
 $memberOfOtherOrganizationSelect = ' 0 ';
-if($gCurrentOrganization->countAllRecords() > 1)
-{
+if ($gCurrentOrganization->countAllRecords() > 1) {
     $memberOfOtherOrganizationSelect = '
         (SELECT COUNT(*) AS count_other
            FROM '.TBL_MEMBERS.'
@@ -192,12 +172,9 @@ if($gCurrentOrganization->countAllRecords() > 1)
 }
 
 // create sql to show all members (not accepted users should not be shown)
-if($getMembers)
-{
+if ($getMembers) {
     $mainSql = $membersListConfig->getSql(array('showAllMembersThisOrga' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
-}
-else
-{
+} else {
     $mainSql = $membersListConfig->getSql(array('showAllMembersDatabase' => true, 'useConditions' => false, 'useOrderBy' => $useOrderBy));
 }
 $mainSql = 'SELECT DISTINCT '.$memberOfThisOrganizationSelect.' AS member_this_orga, '.$memberOfOtherOrganizationSelect.' AS member_other_orga, usr_login_name as loginname,
@@ -210,18 +187,14 @@ $queryParamsMain = array(
     $gProfileFields->getProperty('EMAIL', 'usf_id')
 ); // TODO add more params
 $limitCondition = '';
-if($getLength > 0)
-{
+if ($getLength > 0) {
     $limitCondition = ' LIMIT ' . $getLength . ' OFFSET ' . $getStart;
 }
 
-if($getSearch === '')
-{
+if ($getSearch === '') {
     // no search condition entered then return all records in dependence of order, limit and offset
     $sql = $mainSql . $searchCondition . $orderCondition . $limitCondition;
-}
-else
-{
+} else {
     $sql = 'SELECT *
               FROM ('.$mainSql.') AS members
                '.$searchCondition
@@ -235,8 +208,7 @@ $rowNumber = $getStart; // count for every row
 
 $jsonArray['data'] = array();
 
-while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
-{
+while ($row = $mglStatement->fetch(\PDO::FETCH_BOTH)) {
     ++$rowNumber;
     $ColumnNumberSql = 7;
     $columnNumberJson = 2;
@@ -248,13 +220,10 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
     $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_id'], '0' => $rowNumber);
 
     // Add icon for "Orgamitglied" or "Nichtmitglied"
-    if($memberOfThisOrganization)
-    {
+    if ($memberOfThisOrganization) {
         $icon = 'fa-user';
         $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName));
-    }
-    else
-    {
+    } else {
         $icon = 'fa-user-alt-slash';
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($orgName));
     }
@@ -264,14 +233,10 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
 
     // add all columns of the list configuration to the json array
     // start columnNumber with 4 because the first 2 columns are not of the list configuration
-    for($columnNumber = 1; $columnNumber <= $membersListConfig->countColumns(); $columnNumber++)
-    {
-        if(strlen($row[$ColumnNumberSql]) > 0)
-        {
+    for ($columnNumber = 1; $columnNumber <= $membersListConfig->countColumns(); $columnNumber++) {
+        if (strlen($row[$ColumnNumberSql]) > 0) {
             $columnValues[(string) $columnNumberJson] = $membersListConfig->convertColumnContentForOutput($columnNumber, 'html', $row[$ColumnNumberSql], $row['usr_uuid']);
-        }
-        else
-        {
+        } else {
             $columnValues[(string) $columnNumberJson] = '';
         }
 
@@ -283,17 +248,13 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
     $userAdministration = '';
 
     // Administrators can change or send password if login is configured and user is member of current organization
-    if($memberOfThisOrganization && $gCurrentUser->isAdministrator()
-    && strlen($row['loginname']) > 0 && (int) $row['usr_id'] !== $gCurrentUserId)
-    {
-        if(strlen($row['email']) > 0 && $gSettingsManager->getBool('enable_system_mails'))
-        {
+    if ($memberOfThisOrganization && $gCurrentUser->isAdministrator()
+    && strlen($row['loginname']) > 0 && (int) $row['usr_id'] !== $gCurrentUserId) {
+        if (strlen($row['email']) > 0 && $gSettingsManager->getBool('enable_system_mails')) {
             // if email is set and systemmails are activated then administrators can send a new password to user
             $userAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 5)).'">'.
                 '<i class="fas fa-key" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
-        }
-        else
-        {
+        } else {
             // if user has no email or send email is disabled then administrators could set a new password
             $userAdministration = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $row['usr_uuid'])).'">'.
@@ -302,14 +263,10 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
     }
 
     // add link to send email to user
-    if(strlen($row['email']) > 0)
-    {
-        if(!$gSettingsManager->getBool('enable_mail_module'))
-        {
+    if (strlen($row['email']) > 0) {
+        if (!$gSettingsManager->getBool('enable_mail_module')) {
             $mailLink = 'mailto:'.$row['email'];
-        }
-        else
-        {
+        } else {
             $mailLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['usr_uuid']));
         }
         $userAdministration .= '<a class="admidio-icon-link" href="'.$mailLink.'">'.
@@ -320,17 +277,15 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
         '<i class="fas fa-clone" data-toggle="tooltip" title="' . $gL10n->get('SYS_COPY') . '"></i></a>';
 
     // add link to edit user, but only edit users who are members of the current organization
-    if($memberOfThisOrganization || !$memberOfOtherOrganization)
-    {
+    if ($memberOfThisOrganization || !$memberOfOtherOrganization) {
         $userAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'])).'">'.
             '<i class="fas fa-edit" data-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT_USER') . '"></i></a>';
     }
 
     // add link to delete user btw. remove user from the current organization
-    if(((!$memberOfOtherOrganization && $gCurrentUser->isAdministrator()) // kein Mitglied einer anderen Orga, dann duerfen Administratoren loeschen
+    if (((!$memberOfOtherOrganization && $gCurrentUser->isAdministrator()) // kein Mitglied einer anderen Orga, dann duerfen Administratoren loeschen
         || $memberOfThisOrganization)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
-        && (int) $row['usr_id'] !== $gCurrentUserId) // das eigene Profil darf keiner entfernen
-    {
+        && (int) $row['usr_id'] !== $gCurrentUserId) { // das eigene Profil darf keiner entfernen
         $userAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 6)) . '">'.
                 '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_REMOVE_USER').'"></i>
@@ -344,14 +299,10 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
 }
 
 // set count of filtered records
-if($getSearch !== '')
-{
-    if($rowNumber < $getStart + $getLength)
-    {
+if ($getSearch !== '') {
+    if ($rowNumber < $getStart + $getLength) {
         $jsonArray['recordsFiltered'] = $rowNumber;
-    }
-    else
-    {
+    } else {
         // read count of all filtered records without limit and offset
         $sql = 'SELECT COUNT(*) AS count
                   FROM ('.$mainSql.') AS members
@@ -360,9 +311,7 @@ if($getSearch !== '')
 
         $jsonArray['recordsFiltered'] = (int) $countFilteredStatement->fetchColumn();
     }
-}
-else
-{
+} else {
     $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
 }
 

@@ -23,18 +23,14 @@ $showSystemCategory = false;
 $eventRole = false;
 
 // only users with the special right are allowed to manage roles
-if(!$gCurrentUser->manageRoles())
-{
+if (!$gCurrentUser->manageRoles()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
-if($getRoleUuid !== '')
-{
+if ($getRoleUuid !== '') {
     $headline = $gL10n->get('SYS_EDIT_ROLE');
-}
-else
-{
+} else {
     $headline = $gL10n->get('SYS_CREATE_ROLE');
 }
 
@@ -43,39 +39,32 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // Rollenobjekt anlegen
 $role = new TableRoles($gDb);
 
-if($getRoleUuid !== '')
-{
+if ($getRoleUuid !== '') {
     $role->readDataByUuid($getRoleUuid);
     $eventRole = $role->getValue('cat_name_intern') === 'EVENTS';
 
     // check if the role belongs to the current organization
-    if((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0)
-    {
+    if ((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 
     // Administrator role could only be created or edited by administrators
-    if($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator())
-    {
+    if ($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator()) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 
     // hidden roles can also see hidden categories
-    if($role->getValue('cat_system') == 1)
-    {
+    if ($role->getValue('cat_system') == 1) {
         $showSystemCategory = true;
     }
-}
-else
-{
+} else {
     $role->setValue('rol_this_list_view', 1);
     $role->setValue('rol_mail_this_role', 2);
 }
 
-if(isset($_SESSION['roles_request']))
-{
+if (isset($_SESSION['roles_request'])) {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
     $role->setArray($_SESSION['roles_request']);
@@ -142,15 +131,12 @@ $page->addJavascript('
 // show form
 $form = new HtmlForm('roles_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_function.php', array('role_uuid' => $getRoleUuid, 'mode' => '2')), $page);
 $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->get('SYS_CATEGORY'));
-if($role->getValue('rol_administrator') === 1 || $eventRole)
-{
+if ($role->getValue('rol_administrator') === 1 || $eventRole) {
     $form->addInput(
         'rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_READONLY)
     );
-}
-else
-{
+} else {
     $form->addInput(
         'rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
@@ -166,8 +152,7 @@ $form->addSelectBoxForCategories(
 );
 $form->closeGroupBox();
 $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
-if($gSettingsManager->getBool('enable_mail_module'))
-{
+if ($gSettingsManager->getBool('enable_mail_module')) {
     $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'), 3 => $gL10n->get('SYS_ALSO_VISITORS'));
     $form->addSelectBox(
         'rol_mail_this_role', $gL10n->get('SYS_SEND_MAILS'), $selectBoxEntries,
@@ -207,8 +192,7 @@ $sql = 'SELECT lst_id, lst_name
       ORDER BY lst_global ASC, lst_name ASC';
 $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
-while($row = $pdoStatement->fetch())
-{
+while ($row = $pdoStatement->fetch()) {
     $selectBoxEntries[$row['lst_id']] = $row['lst_name'];
 }
 $form->addSelectBox(
@@ -216,8 +200,7 @@ $form->addSelectBox(
     array('defaultValue' => (int) $role->getValue('rol_lst_id'), 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'SYS_DEFAULT_LIST_DESC')
 );
 
-if(!$eventRole)
-{
+if (!$eventRole) {
     $form->addCheckbox(
         'rol_default_registration', $gL10n->get('SYS_DEFAULT_ASSIGNMENT_REGISTRATION'), (bool) $role->getValue('rol_default_registration'),
         array('helpTextIdLabel' => 'SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC')
@@ -238,8 +221,7 @@ if(!$eventRole)
 $form->closeGroupBox();
 
 // event roles should not set rights, dates meetings and dependencies
-if(!$eventRole)
-{
+if (!$eventRole) {
     $form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
     $form->addCheckbox(
         'rol_assign_roles', $gL10n->get('SYS_RIGHT_ASSIGN_ROLES'), (bool) $role->getValue('rol_assign_roles'),
@@ -253,8 +235,7 @@ if(!$eventRole)
         'rol_approve_users', $gL10n->get('SYS_RIGHT_APPROVE_USERS'), (bool) $role->getValue('rol_approve_users'),
         array('icon' => 'fa-address-card')
     );
-    if($gSettingsManager->getBool('enable_mail_module'))
-    {
+    if ($gSettingsManager->getBool('enable_mail_module')) {
         $form->addCheckbox(
             'rol_mail_to_all', $gL10n->get('SYS_RIGHT_MAIL_TO_ALL'), (bool) $role->getValue('rol_mail_to_all'),
             array('icon' => 'fa-envelope')
@@ -268,51 +249,44 @@ if(!$eventRole)
         'rol_profile', $gL10n->get('SYS_RIGHT_PROFILE'), (bool) $role->getValue('rol_profile'),
         array('icon' => 'fa-user')
     );
-    if((int) $gSettingsManager->get('enable_announcements_module') > 0)
-    {
+    if ((int) $gSettingsManager->get('enable_announcements_module') > 0) {
         $form->addCheckbox(
             'rol_announcements', $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'), (bool) $role->getValue('rol_announcements'),
             array('helpTextIdLabel' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-newspaper')
         );
     }
-    if((int) $gSettingsManager->get('enable_dates_module') > 0)
-    {
+    if ((int) $gSettingsManager->get('enable_dates_module') > 0) {
         $form->addCheckbox(
             'rol_dates', $gL10n->get('SYS_RIGHT_DATES'), (bool) $role->getValue('rol_dates'),
             array('helpTextIdLabel' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-calendar-alt')
         );
     }
-    if((int) $gSettingsManager->get('enable_photo_module') > 0)
-    {
+    if ((int) $gSettingsManager->get('enable_photo_module') > 0) {
         $form->addCheckbox(
             'rol_photo', $gL10n->get('SYS_RIGHT_PHOTOS'), (bool) $role->getValue('rol_photo'),
             array('icon' => 'fa-image')
         );
     }
-    if($gSettingsManager->getBool('documents_files_enable_module'))
-    {
+    if ($gSettingsManager->getBool('documents_files_enable_module')) {
         $form->addCheckbox(
             'rol_documents_files', $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'), (bool) $role->getValue('rol_documents_files'),
             array('helpTextIdLabel' => 'SYS_RIGHT_DOCUMENTS_FILES_DESC', 'icon' => 'fa-download')
         );
     }
-    if((int) $gSettingsManager->get('enable_guestbook_module') > 0)
-    {
+    if ((int) $gSettingsManager->get('enable_guestbook_module') > 0) {
         $form->addCheckbox(
             'rol_guestbook', $gL10n->get('SYS_RIGHT_GUESTBOOK'), (bool) $role->getValue('rol_guestbook'),
             array('icon' => 'fa-book')
         );
         // if not registered users can set comments than there is no need to set a role dependent right
-        if(!$gSettingsManager->getBool('enable_gbook_comments4all'))
-        {
+        if (!$gSettingsManager->getBool('enable_gbook_comments4all')) {
             $form->addCheckbox(
                 'rol_guestbook_comments', $gL10n->get('SYS_RIGHT_GUESTBOOK_COMMENTS'), (bool) $role->getValue('rol_guestbook_comments'),
                 array('icon' => 'fa-comment')
             );
         }
     }
-    if((int) $gSettingsManager->get('enable_weblinks_module') > 0)
-    {
+    if ((int) $gSettingsManager->get('enable_weblinks_module') > 0) {
         $form->addCheckbox(
             'rol_weblinks', $gL10n->get('SYS_RIGHT_WEBLINKS'), (bool) $role->getValue('rol_weblinks'),
             array('helpTextIdLabel' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-link')
@@ -330,8 +304,7 @@ if(!$eventRole)
 
     $form->openGroupBox('gb_dependencies', $gL10n->get('SYS_DEPENDENCIES').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
     $roleName = $gL10n->get('SYS_NEW_ROLE');
-    if($role->getValue('rol_name') !== '')
-    {
+    if ($role->getValue('rol_name') !== '') {
         $roleName = $gL10n->get('SYS_ROLE').' <strong>'.$role->getValue('rol_name').'</strong>';
     }
     $form->addHtml('<p>'.$gL10n->get('SYS_ROLE_DEPENDENCIES_DESC', array($roleName)).'</p>');

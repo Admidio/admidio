@@ -27,15 +27,13 @@ $getNewUserUuid = admFuncVariableIsValid($_GET, 'new_user_uuid', 'string', array
 $getUserUuid    = admFuncVariableIsValid($_GET, 'user_uuid',     'string');
 
 // only administrators could approve new users
-if(!$gCurrentUser->approveUsers())
-{
+if (!$gCurrentUser->approveUsers()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
 // module must be enabled in the settings
-if(!$gSettingsManager->getBool('registration_enable_module'))
-{
+if (!$gSettingsManager->getBool('registration_enable_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -44,10 +42,8 @@ if(!$gSettingsManager->getBool('registration_enable_module'))
 $registrationUser = new UserRegistration($gDb, $gProfileFields);
 $registrationUser->readDataByUuid($getNewUserUuid);
 
-if($getMode === 1 || $getMode === 2)
-{
-    try
-    {
+if ($getMode === 1 || $getMode === 2) {
+    try {
         $user = new User($gDb, $gProfileFields);
         $user->readDataByUuid($getUserUuid);
 
@@ -61,13 +57,10 @@ if($getMode === 1 || $getMode === 2)
         $user->save();
 
         // every new user to the organization will get the default roles for registration
-        if($getMode === 1)
-        {
+        if ($getMode === 1) {
             $user->assignDefaultRoles();
         }
-    }
-    catch(AdmException $e)
-    {
+    } catch (AdmException $e) {
         // exception is thrown when email couldn't be send
         // so save user data and then show error
         $user->save();
@@ -78,31 +71,24 @@ if($getMode === 1 || $getMode === 2)
 
     // if current user has the right to assign roles then show roles dialog
     // otherwise go to previous url (default roles are assigned automatically)
-    if($gCurrentUser->manageRoles())
-    {
+    if ($gCurrentUser->manageRoles()) {
         // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
         $gNavigation->addUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_uuid' => $getUserUuid, 'new_user_uuid' => $getNewUserUuid)));
         admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid)));
-        // => EXIT
-    }
-    else
-    {
+    // => EXIT
+    } else {
         admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_uuid' => $getUserUuid, 'new_user_uuid' => $getNewUserUuid)));
         // => EXIT
     }
-}
-elseif($getMode === 3)
-{
+} elseif ($getMode === 3) {
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
 
     $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
 
     // execute only if system mails are supported
-    if($gSettingsManager->getBool('enable_system_mails'))
-    {
-        try
-        {
+    if ($gSettingsManager->getBool('enable_system_mails')) {
+        try {
             // Send mail to the user to confirm the registration or the assignment to the new organization
             $systemMail = new SystemMail($gDb);
             $systemMail->addRecipientsByUserId($getUserId);
@@ -110,47 +96,33 @@ elseif($getMode === 3)
 
             $gMessage->show($gL10n->get('SYS_ASSIGN_LOGIN_EMAIL', array($user->getValue('EMAIL'))));
             // => EXIT
-        }
-        catch(AdmException $e)
-        {
+        } catch (AdmException $e) {
             $e->showHtml();
             // => EXIT
         }
-    }
-    else
-    {
+    } else {
         $gMessage->show($gL10n->get('SYS_ASSIGN_LOGIN_SUCCESSFUL'));
         // => EXIT
     }
-}
-elseif($getMode === 4)
-{
-    try
-    {
+} elseif ($getMode === 4) {
+    try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
         // delete registration
         $registrationUser->delete();
-    }
-    catch(AdmException $e)
-    {
+    } catch (AdmException $e) {
         $e->showText();
         // => EXIT
     }
 
     // return successful delete for XMLHttpRequest
     echo 'done';
-}
-elseif($getMode === 5)
-{
-    try
-    {
+} elseif ($getMode === 5) {
+    try {
         // accept a registration, assign necessary roles and send a notification email
         $registrationUser->acceptRegistration();
-    }
-    catch(AdmException $e)
-    {
+    } catch (AdmException $e) {
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
         $e->showHtml();
         // => EXIT
@@ -158,29 +130,21 @@ elseif($getMode === 5)
 
     // if current user has the right to assign roles then show roles dialog
     // otherwise go to previous url (default roles are assigned automatically)
-    if($gCurrentUser->manageRoles())
-    {
+    if ($gCurrentUser->manageRoles()) {
         admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('new_user' => '3', 'user_uuid' => $getNewUserUuid)));
-        // => EXIT
-    }
-    else
-    {
+    // => EXIT
+    } else {
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
         $gMessage->show($gL10n->get('PRO_ASSIGN_REGISTRATION_SUCCESSFUL'));
         // => EXIT
     }
-}
-elseif($getMode === 6)
-{
+} elseif ($getMode === 6) {
     // Der User existiert schon und besitzt auch ein Login
 
-    try
-    {
+    try {
         // delete registration
         $registrationUser->delete();
-    }
-    catch(AdmException $e)
-    {
+    } catch (AdmException $e) {
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
         $e->showHtml();
         // => EXIT

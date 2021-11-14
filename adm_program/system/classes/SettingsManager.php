@@ -58,11 +58,9 @@ class SettingsManager
     {
         global $gDb;
 
-        if ($gDb instanceof Database)
-        {
+        if ($gDb instanceof Database) {
             $this->db = $gDb;
         }
-
     }
 
     /**
@@ -92,12 +90,10 @@ class SettingsManager
      */
     public function del($name)
     {
-        if (!self::isValidName($name) && $this->throwExceptions)
-        {
+        if (!self::isValidName($name) && $this->throwExceptions) {
             throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
-        if (!$this->has($name) && $this->throwExceptions)
-        {
+        if (!$this->has($name) && $this->throwExceptions) {
             throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
 
@@ -121,8 +117,7 @@ class SettingsManager
      */
     public function getAll($update = false)
     {
-        if ($update || !$this->initFullLoad)
-        {
+        if ($update || !$this->initFullLoad) {
             $this->resetAll();
         }
 
@@ -138,12 +133,10 @@ class SettingsManager
      */
     public function get($name, $update = false)
     {
-        if (!self::isValidName($name) && $this->throwExceptions)
-        {
+        if (!self::isValidName($name) && $this->throwExceptions) {
             throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
-        if (!$this->has($name, $update) && $this->throwExceptions)
-        {
+        if (!$this->has($name, $update) && $this->throwExceptions) {
             throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
 
@@ -163,8 +156,7 @@ class SettingsManager
         $value = $this->get($name, $update);
         $value = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
-        if ($value === null && $this->throwExceptions)
-        {
+        if ($value === null && $this->throwExceptions) {
             throw new \InvalidArgumentException('Settings value of name "' . $name . '" is not of type bool!');
         }
 
@@ -184,8 +176,7 @@ class SettingsManager
         $value = $this->get($name, $update);
         $value = filter_var($value, FILTER_VALIDATE_INT);
 
-        if ($value === false && $this->throwExceptions)
-        {
+        if ($value === false && $this->throwExceptions) {
             throw new \InvalidArgumentException('Settings value of name "' . $name . '" is not of type int!');
         }
 
@@ -205,8 +196,7 @@ class SettingsManager
         $value = $this->get($name, $update);
         $value = filter_var($value, FILTER_VALIDATE_FLOAT);
 
-        if ($value === false && $this->throwExceptions)
-        {
+        if ($value === false && $this->throwExceptions) {
             throw new \InvalidArgumentException('Settings value of name "' . $name . '" is not of type float!');
         }
 
@@ -234,21 +224,16 @@ class SettingsManager
      */
     public function has($name, $update = false)
     {
-        if (!self::isValidName($name) && $this->throwExceptions)
-        {
+        if (!self::isValidName($name) && $this->throwExceptions) {
             throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
 
-        if ($update || !array_key_exists($name, $this->settings))
-        {
-            try
-            {
+        if ($update || !array_key_exists($name, $this->settings)) {
+            try {
                 $this->settings[$name] = $this->load($name);
 
                 return true;
-            }
-            catch (\UnexpectedValueException $e)
-            {
+            } catch (\UnexpectedValueException $e) {
                 return false;
             }
         }
@@ -289,8 +274,7 @@ class SettingsManager
 
         $settings = array();
 
-        while ($row = $pdoStatement->fetch())
-        {
+        while ($row = $pdoStatement->fetch()) {
             $settings[$row['prf_name']] = $row['prf_value'];
         }
 
@@ -311,8 +295,7 @@ class SettingsManager
                    AND prf_name   = ? -- $name';
         $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId, $name));
 
-        if ($pdoStatement->rowCount() === 0 && $this->throwExceptions)
-        {
+        if ($pdoStatement->rowCount() === 0 && $this->throwExceptions) {
             throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
 
@@ -350,22 +333,18 @@ class SettingsManager
      */
     public function setMulti(array $settings, $update = true)
     {
-        foreach ($settings as $name => $value)
-        {
-            if (!self::isValidName($name))
-            {
+        foreach ($settings as $name => $value) {
+            if (!self::isValidName($name)) {
                 throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
             }
-            if (!self::isValidValue($value) && $this->throwExceptions)
-            {
+            if (!self::isValidValue($value) && $this->throwExceptions) {
                 throw new \UnexpectedValueException('Settings value "' . $value . '" is an invalid value!');
             }
         }
 
         $this->db->startTransaction();
 
-        foreach ($settings as $name => $value)
-        {
+        foreach ($settings as $name => $value) {
             $this->updateOrInsertSetting($name, (string) $value, $update);
         }
 
@@ -383,12 +362,10 @@ class SettingsManager
      */
     public function set($name, $value, $update = true)
     {
-        if (!self::isValidName($name))
-        {
+        if (!self::isValidName($name)) {
             throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
-        if (!self::isValidValue($value))
-        {
+        if (!self::isValidValue($value)) {
             throw new \UnexpectedValueException('Settings value "' . $value . '" is an invalid value!');
         }
 
@@ -420,15 +397,11 @@ class SettingsManager
      */
     private function updateOrInsertSetting($name, $value, $update = true)
     {
-        if ($this->has($name, true))
-        {
-            if ($update && $this->settings[$name] !== $value)
-            {
+        if ($this->has($name, true)) {
+            if ($update && $this->settings[$name] !== $value) {
                 $this->update($name, $value);
             }
-        }
-        else
-        {
+        } else {
             $this->insert($name, $value);
         }
     }

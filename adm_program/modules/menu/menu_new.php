@@ -19,8 +19,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 $getMenuUuid = admFuncVariableIsValid($_GET, 'menu_uuid',  'string');
 
 // Rechte pruefen
-if(!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
@@ -38,13 +37,10 @@ function subMenu(&$menuList, $level, $menId, $parentId = null)
     $queryParams = array($menId);
 
     // Erfassen des auszugebenden Menu
-    if ($parentId > 0)
-    {
+    if ($parentId > 0) {
         $sqlConditionParentId .= ' AND men_men_id_parent = ? -- $parentId';
         $queryParams[] = $parentId;
-    }
-    else
-    {
+    } else {
         $sqlConditionParentId .= ' AND men_men_id_parent IS NULL';
     }
 
@@ -58,8 +54,7 @@ function subMenu(&$menuList, $level, $menId, $parentId = null)
     $parentMenu = new TableMenu($gDb);
     $einschub = str_repeat('&nbsp;', $level * 3) . '&#151;&nbsp;';
 
-    while($menuEntry = $childStatement->fetch())
-    {
+    while ($menuEntry = $childStatement->fetch()) {
         $parentMenu->clear();
         $parentMenu->setArray($menuEntry);
 
@@ -76,8 +71,7 @@ $menu = new TableMenu($gDb);
 // systemcategories should not be renamed
 $roleViewSet[] = 0;
 
-if($getMenuUuid !== '')
-{
+if ($getMenuUuid !== '') {
     $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_MENU')));
 
     $menu->readDataByUuid($getMenuUuid);
@@ -85,14 +79,11 @@ if($getMenuUuid !== '')
     // Read current roles rights of the menu
     $display = new RolesRights($gDb, 'menu_view', $menu->getValue('men_id'));
     $roleViewSet = $display->getRolesIds();
-}
-else
-{
+} else {
     $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU')));
 }
 
-if(isset($_SESSION['menu_request']))
-{
+if (isset($_SESSION['menu_request'])) {
     // due to incorrect input, the user has returned to this form
     // Now write the previously entered content into the object
     $menu->setArray($_SESSION['menu_request']);
@@ -118,8 +109,7 @@ $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
 $rolesViewStatement = $gDb->queryPrepared($sqlRoles);
 
 $parentRoleViewSet = array();
-while($rowViewRoles = $rolesViewStatement->fetch())
-{
+while ($rowViewRoles = $rolesViewStatement->fetch()) {
     // Jede Rolle wird nun dem Array hinzugefuegt
     $parentRoleViewSet[] = array(
         $rowViewRoles['rol_id'],
@@ -134,8 +124,7 @@ $form = new HtmlForm('menu_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FO
 $fieldRequired = HtmlForm::FIELD_REQUIRED;
 $fieldDefault  = HtmlForm::FIELD_DEFAULT;
 
-if((bool) $menu->getValue('men_standard'))
-{
+if ((bool) $menu->getValue('men_standard')) {
     $fieldRequired = HtmlForm::FIELD_DISABLED;
     $fieldDefault  = HtmlForm::FIELD_DISABLED;
 }
@@ -148,8 +137,7 @@ $form->addInput(
     array('maxLength' => 100, 'property'=> HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_MENU_NAME_DESC')
 );
 
-if($getMenuUuid !== '')
-{
+if ($getMenuUuid !== '') {
     $form->addInput(
         'men_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $menu->getValue('men_name_intern', 'database'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC')
@@ -187,8 +175,7 @@ $form->addSelectBox(
     array('defaultValue' => $roleViewSet, 'multiselect' => true)
 );
 
-if((bool) $menu->getValue('men_node') === false)
-{
+if ((bool) $menu->getValue('men_node') === false) {
     $form->addInput(
         'men_url', $gL10n->get('ORG_URL'), $menu->getValue('men_url', 'database'),
         array('maxLength' => 100, 'property' => $fieldRequired)

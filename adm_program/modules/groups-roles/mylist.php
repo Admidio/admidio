@@ -30,15 +30,13 @@ $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('groups_roles_enable_module')
     || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
-    || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && !$gCurrentUser->isAdministrator()))
-{
+    || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && !$gCurrentUser->isAdministrator())) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // only users with the right to assign roles can view inactive roles
-if(!$gCurrentUser->checkRolesRight('rol_assign_roles'))
-{
+if (!$gCurrentUser->checkRolesRight('rol_assign_roles')) {
     $getActiveRole = true;
 }
 
@@ -46,8 +44,7 @@ if(!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 $headline = $gL10n->get('SYS_CONFIGURATION_LIST');
 
 // add current url to navigation stack if last url was not the same page
-if(!str_contains($gNavigation->getUrl(), 'mylist.php'))
-{
+if (!str_contains($gNavigation->getUrl(), 'mylist.php')) {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 }
 
@@ -58,54 +55,40 @@ $mySqlMaxColumnAlert = '';
 $list = new ListConfiguration($gDb);
 $list->readDataByUuid($getListUuid);
 
-if(isset($_SESSION['mylist_request']))
-{
+if (isset($_SESSION['mylist_request'])) {
     $formValues = $_SESSION['mylist_request'];
     unset($_SESSION['mylist_request']);
 
-    if(!isset($formValues['cbx_global_configuration']))
-    {
+    if (!isset($formValues['cbx_global_configuration'])) {
         $formValues['cbx_global_configuration'] = 0;
     }
 
-    if(!isset($formValues['sel_roles_ids']))
-    {
+    if (!isset($formValues['sel_roles_ids'])) {
         $formValues['sel_roles_ids'] = 0;
     }
 
     // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden, muessen diese nun direkt angelegt werden
-    for($i = $defaultColumnRows + 1; $i > 0; ++$i)
-    {
-        if(isset($formValues['column'.$i]))
-        {
+    for ($i = $defaultColumnRows + 1; $i > 0; ++$i) {
+        if (isset($formValues['column'.$i])) {
             ++$defaultColumnRows;
-        }
-        else
-        {
+        } else {
             $i = -1;
         }
     }
-}
-else
-{
+} else {
     $formValues['sel_select_configuration'] = $getListUuid;
     $formValues['cbx_global_configuration'] = $list->getValue('lst_global');
     $formValues['sel_roles_ids']            = $getRoleIds;
 
     // if a saved configuration was loaded then add columns to formValues array
-    if($getListUuid !== '')
-    {
+    if ($getListUuid !== '') {
         $defaultColumnRows = $list->countColumns();
 
-        for($number = 1, $max = $list->countColumns(); $number <= $max; ++$number)
-        {
+        for ($number = 1, $max = $list->countColumns(); $number <= $max; ++$number) {
             $column = $list->getColumnObject($number);
-            if($column->getValue('lsc_usf_id') > 0)
-            {
+            if ($column->getValue('lsc_usf_id') > 0) {
                 $formValues['column'. $number] = (int) $column->getValue('lsc_usf_id');
-            }
-            else
-            {
+            } else {
                 $formValues['column'. $number] = $column->getValue('lsc_special_field');
             }
 
@@ -120,8 +103,7 @@ $page = new HtmlPage('admidio-mylist', $headline);
 
 // within MySql it's only possible to join 61 tables therefore show a message if user
 // want's to join more than 57 columns
-if(DB_ENGINE === Database::PDO_ENGINE_MYSQL)
-{
+if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
     $mySqlMaxColumnAlert = '
     if (fieldNumberIntern >= 57) {
         alert("'.$gL10n->get('SYS_NO_MORE_COLUMN').'");
@@ -244,20 +226,17 @@ $arrParticipientsInformation = array(
     'mem_count_guests'     => $gL10n->get('SYS_SEAT_AMOUNT')
 );
 
-foreach($gProfileFields->getProfileFields() as $field)
-{
+foreach ($gProfileFields->getProfileFields() as $field) {
     // at the end of category basic data save positions for loginname and username
     // they will be added after profile fields loop
-    if($oldCategoryNameIntern === 'BASIC_DATA' && $field->getValue('cat_name_intern') !== 'BASIC_DATA')
-    {
+    if ($oldCategoryNameIntern === 'BASIC_DATA' && $field->getValue('cat_name_intern') !== 'BASIC_DATA') {
         $posEndOfMasterData    = $i;
         $i                    += 2;
         $oldCategoryNameIntern = $field->getValue('cat_name_intern');
     }
 
     // add profile field to user field array
-    if($gProfileFields->isVisible($field->getValue('usf_name_intern'), $gCurrentUser->editUsers()))
-    {
+    if ($gProfileFields->isVisible($field->getValue('usf_name_intern'), $gCurrentUser->editUsers())) {
         $javascriptCode .= '
             userFields[' . $i . '] = {
                 "cat_id": '. (int) $field->getValue('cat_id'). ',
@@ -270,16 +249,12 @@ foreach($gProfileFields->getProfileFields() as $field)
             };';
 
         // get available values for current field type and push to array
-        if($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'RADIO_BUTTON')
-        {
-            foreach($field->getValue('usf_value_list', 'text') as $key => $value)
-            {
+        if ($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'RADIO_BUTTON') {
+            foreach ($field->getValue('usf_value_list', 'text') as $key => $value) {
                 $javascriptCode .= '
                     userFields[' . $i . ']["usf_value_list"]["'. $key .'"] = "'. $value .'";';
             }
-        }
-        else
-        {
+        } else {
             $javascriptCode .= '
                 userFields[' . $i . ']["usf_value_list"] = "";';
         }
@@ -291,8 +266,7 @@ foreach($gProfileFields->getProfileFields() as $field)
 
     // Add loginname and photo at the end of category basic data
     // add new category with start and end date of role membership
-    if($posEndOfMasterData === 0)
-    {
+    if ($posEndOfMasterData === 0) {
         $posEndOfMasterData = $i;
         $i += 2;
     }
@@ -332,8 +306,7 @@ foreach($gProfileFields->getProfileFields() as $field)
         };';
 
     // add new category with participant information of events
-    foreach($arrParticipientsInformation as $memberStatus => $columnName)
-    {
+    foreach ($arrParticipientsInformation as $memberStatus => $columnName) {
         ++$i;
         $javascriptCode .= '
             userFields['. $i . '] = {
@@ -355,17 +328,14 @@ foreach($gProfileFields->getProfileFields() as $field)
 
 // now add all columns to the javascript row objects
 $actualColumnNumber = 1;
-while(isset($formValues['column' . $actualColumnNumber]))
-{
+while (isset($formValues['column' . $actualColumnNumber])) {
     $sortValue      = '';
     $conditionValue = '';
 
-    if(isset($formValues['sort' . $actualColumnNumber]))
-    {
+    if (isset($formValues['sort' . $actualColumnNumber])) {
         $sortValue = $formValues['sort' . $actualColumnNumber];
     }
-    if(isset($formValues['condition' . $actualColumnNumber]))
-    {
+    if (isset($formValues['condition' . $actualColumnNumber])) {
         $conditionValue = $formValues['condition' . $actualColumnNumber];
     }
 
@@ -537,57 +507,43 @@ $configurationsStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $gCur
 
 $configurations = $configurationsStatement->fetchAll();
 
-foreach($configurations as $configuration)
-{
-    if($configuration['lst_global'] == 0 && !$yourLastConfigurationsGroup && strlen($configuration['lst_name']) === 0)
-    {
+foreach ($configurations as $configuration) {
+    if ($configuration['lst_global'] == 0 && !$yourLastConfigurationsGroup && strlen($configuration['lst_name']) === 0) {
         $actualGroup = $gL10n->get('SYS_YOUR_LAST_CONFIGURATION');
         $yourLastConfigurationsGroup = true;
-    }
-    elseif($configuration['lst_global'] == 0 && !$yourConfigurationsGroup && strlen($configuration['lst_name']) > 0)
-    {
+    } elseif ($configuration['lst_global'] == 0 && !$yourConfigurationsGroup && strlen($configuration['lst_name']) > 0) {
         $actualGroup = $gL10n->get('SYS_YOUR_CONFIGURATION');
         $yourConfigurationsGroup = true;
-    }
-    elseif($configuration['lst_global'] == 1 && !$presetConfigurationsGroup)
-    {
+    } elseif ($configuration['lst_global'] == 1 && !$presetConfigurationsGroup) {
         $actualGroup = $gL10n->get('SYS_PRESET_CONFIGURATION');
         $presetConfigurationsGroup = true;
     }
 
     // if its a temporary saved configuration than show timestamp of creating as name
-    if(strlen($configuration['lst_name']) === 0)
-    {
+    if (strlen($configuration['lst_name']) === 0) {
         $objListTimestamp = new \DateTime($configuration['lst_timestamp']);
         ++$numberLastConfigurations;
 
         // only 5 configurations without a name should be saved for each user
-        if($numberLastConfigurations > 5)
-        {
+        if ($numberLastConfigurations > 5) {
             // delete all other configurations
             $delList = new ListConfiguration($gDb, $configuration['lst_id']);
             $delList->delete();
-        }
-        else
-        {
+        } else {
             // now add configuration to array
             $configurationsArray[] = array($configuration['lst_uuid'], $objListTimestamp->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')), $actualGroup);
         }
-    }
-    else
-    {
+    } else {
         // now add configuration to array
         $configurationsArray[] = array($configuration['lst_uuid'], $configuration['lst_name'], $actualGroup);
     }
-
 }
 
 $form->addSelectBox('sel_select_configuration', $gL10n->get('SYS_SELECT_CONFIGURATION'), $configurationsArray,
     array('defaultValue' => $formValues['sel_select_configuration'], 'showContextDependentFirstEntry' => false));
 
 // Administrators could upgrade a configuration to a global configuration that is visible to all users
-if($gCurrentUser->isAdministrator())
-{
+if ($gCurrentUser->isAdministrator()) {
     $form->addCheckbox('cbx_global_configuration', $gL10n->get('SYS_CONFIGURATION_ALL_USERS'), (bool) $list->getValue('lst_global'),
         array('defaultValue' => $formValues['cbx_global_configuration'], 'helpTextIdLabel' => 'SYS_PRESET_CONFIGURATION_DESC'));
 }
@@ -616,23 +572,18 @@ if($gCurrentUser->isAdministrator())
 
 $form->openButtonGroup();
 $form->addButton('btn_add_column', $gL10n->get('SYS_ADD_COLUMN'), array('icon' => 'fa-plus-circle'));
-if($getListUuid !== '' && $list->getValue('lst_name') !== '')
-{
+if ($getListUuid !== '' && $list->getValue('lst_name') !== '') {
     $form->addButton('btn_save_changes', $gL10n->get('SYS_SAVE_CHANGES'), array('icon' => 'fa-check'));
-}
-else
-{
+} else {
     $form->addButton('btn_save', $gL10n->get('SYS_SAVE_CONFIGURATION'), array('icon' => 'fa-check'));
 }
 // your lists could be deleted, administrators are allowed to delete system configurations
-if(($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
-|| ($gCurrentUserId === (int) $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
-{
+if (($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
+|| ($gCurrentUserId === (int) $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0)) {
     $form->addButton('btn_delete', $gL10n->get('SYS_DELETE_CONFIGURATION'), array('icon' => 'fa-trash-alt'));
 }
 // current configuration can be duplicated and saved with another name
-if(strlen($list->getValue('lst_name')) > 0)
-{
+if (strlen($list->getValue('lst_name')) > 0) {
     $form->addButton(
         'btn_copy', $gL10n->get('SYS_COPY_VAR', array($gL10n->get('SYS_CONFIGURATION'))),
         array('icon' => 'fa-clone')
@@ -646,13 +597,11 @@ $form->openGroupBox('gb_select_members', $gL10n->get('SYS_SELECT_MEMBERS'));
 
 // show all roles where the user has the right to view them
 $sqlData = array();
-if($getActiveRole)
-{
+if ($getActiveRole) {
     $allVisibleRoles = $gCurrentUser->getAllVisibleRoles();
 
     // check if there are roles that the current user could view
-    if(count($allVisibleRoles) === 0)
-    {
+    if (count($allVisibleRoles) === 0) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
         // => EXIT
     }
@@ -664,9 +613,7 @@ if($getActiveRole)
                           WHERE rol_id IN (' . Database::getQmForValues($allVisibleRoles) . ')
                        ORDER BY cat_sequence, rol_name';
     $sqlData['params'] = $allVisibleRoles;
-}
-else
-{
+} else {
     $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
                            FROM '.TBL_ROLES.'
                      INNER JOIN '.TBL_CATEGORIES.'
@@ -680,17 +627,15 @@ else
 
     // check if there are roles that the current user could view
     $inactiveRolesStatement = $gDb->queryPrepared($sqlData['query'], $sqlData['params']);
-    if($inactiveRolesStatement->rowCount() === 0)
-    {
-            $gMessage->show($gL10n->get('PRO_NO_ROLES_VISIBLE'));
-            // => EXIT
+    if ($inactiveRolesStatement->rowCount() === 0) {
+        $gMessage->show($gL10n->get('PRO_NO_ROLES_VISIBLE'));
+        // => EXIT
     }
 }
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
 
-if ($gSettingsManager->getBool('members_enable_user_relations'))
-{
+if ($gSettingsManager->getBool('members_enable_user_relations')) {
     // select box showing all relation types
     $sql = 'SELECT urt_id, urt_name, urt_name
               FROM '.TBL_USER_RELATION_TYPES.'

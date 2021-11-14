@@ -28,13 +28,11 @@ function initLoginParams($prefix)
     $loginname = $_POST[$prefix . 'usr_login_name'];
     $password  = $_POST[$prefix . 'usr_password'];
 
-    if ($gSettingsManager->getBool('enable_auto_login') && array_key_exists($prefix . 'auto_login', $_POST) && $_POST[$prefix . 'auto_login'] == 1)
-    {
+    if ($gSettingsManager->getBool('enable_auto_login') && array_key_exists($prefix . 'auto_login', $_POST) && $_POST[$prefix . 'auto_login'] == 1) {
         $bAutoLogin = true;
     }
     // if user can choose organization then save the selection
-    if (array_key_exists($prefix . 'org_id', $_POST) && is_numeric($_POST[$prefix . 'org_id']) && $_POST[$prefix . 'org_id'] > 0)
-    {
+    if (array_key_exists($prefix . 'org_id', $_POST) && is_numeric($_POST[$prefix . 'org_id']) && $_POST[$prefix . 'org_id'] > 0) {
         $organizationId = (int) $_POST[$prefix . 'org_id'];
     }
 }
@@ -56,24 +54,20 @@ function createUserObjectFromPost()
     global $gCurrentOrganization, $bAutoLogin, $organizationId, $gProfileFields, $userStatement;
     global $gCurrentSession, $gCurrentOrgId;
 
-    if (array_key_exists('usr_login_name', $_POST) && $_POST['usr_login_name'] !== '')
-    {
+    if (array_key_exists('usr_login_name', $_POST) && $_POST['usr_login_name'] !== '') {
         initLoginParams('');
     }
 
-    if (array_key_exists('plg_usr_login_name', $_POST) && $_POST['plg_usr_login_name'] !== '')
-    {
+    if (array_key_exists('plg_usr_login_name', $_POST) && $_POST['plg_usr_login_name'] !== '') {
         initLoginParams('plg_');
     }
 
-    if ($loginname === '')
-    {
+    if ($loginname === '') {
         throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_USERNAME')));
         // => EXIT
     }
 
-    if ($password === '')
-    {
+    if ($password === '') {
         throw new AdmException('SYS_FIELD_EMPTY', array($gL10n->get('SYS_PASSWORD')));
         // => EXIT
     }
@@ -84,8 +78,7 @@ function createUserObjectFromPost()
              WHERE UPPER(usr_login_name) = UPPER(?)';
     $userStatement = $gDb->queryPrepared($sql, array($loginname));
 
-    if ($userStatement->rowCount() === 0)
-    {
+    if ($userStatement->rowCount() === 0) {
         $gLogger->warning('AUTHENTICATION: Incorrect username/password!', array(
             'username' => $loginname,
             'password' => '******'
@@ -96,8 +89,7 @@ function createUserObjectFromPost()
     }
 
     // if login organization is different to organization of config file then create new session variables
-    if ($organizationId !== $gCurrentOrgId)
-    {
+    if ($organizationId !== $gCurrentOrgId) {
         // read organization of config file with their preferences
         $gCurrentOrganization->readDataById($organizationId);
 

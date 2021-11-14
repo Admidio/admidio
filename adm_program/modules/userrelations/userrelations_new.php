@@ -18,21 +18,18 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 
-if (!$gSettingsManager->getBool('members_enable_user_relations'))
-{
+if (!$gSettingsManager->getBool('members_enable_user_relations')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // only users who can edit all users are allowed to create user relations
-if(!$gCurrentUser->editUsers())
-{
+if (!$gCurrentUser->editUsers()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
-if($getUserUuid === '')
-{
+if ($getUserUuid === '') {
     $gMessage->show($gL10n->get('SYS_NO_ENTRY'));
     // => EXIT
 }
@@ -40,8 +37,7 @@ if($getUserUuid === '')
 $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
 
-if($user->isNewRecord())
-{
+if ($user->isNewRecord()) {
     $gMessage->show($gL10n->get('SYS_NO_ENTRY'));
     // => EXIT
 }
@@ -49,8 +45,7 @@ if($user->isNewRecord())
 $sql = 'SELECT COUNT(urt_id) AS count FROM '.TBL_USER_RELATION_TYPES;
 $relationsStatement = $gDb->queryPrepared($sql);
 
-if((int) $relationsStatement->fetchColumn() === 0)
-{
+if ((int) $relationsStatement->fetchColumn() === 0) {
     $gMessage->show($gL10n->get('REL_NO_RELATION_TYPES_FOUND'));
     // => EXIT
 }
@@ -79,8 +74,7 @@ $form->addSelectBoxFromSql(
 );
 
 $sqlData = array();
-if($gCurrentUser->editUsers())
-{
+if ($gCurrentUser->editUsers()) {
     // the user has the edit right, therefore he can edit all visible users
     $sqlData['query'] = 'SELECT usr_id, CONCAT(last_name.usd_value, \' \', first_name.usd_value) AS name
                            FROM '.TBL_MEMBERS.'
@@ -119,9 +113,7 @@ if($gCurrentUser->editUsers())
             DATE_NOW
         )
     );
-}
-else
-{
+} else {
     // select all users which the current user can edit because of role leader rights
     $sqlData['query'] = 'SELECT usr_id, CONCAT(last_name.usd_value, \' \', first_name.usd_value) AS name
                            FROM '.TBL_MEMBERS.'

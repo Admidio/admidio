@@ -22,8 +22,7 @@ $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid','string');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_WEBLINKS')));
 
 // check if the module is enabled for use
-if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_weblinks_module') === 0) {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -32,41 +31,32 @@ if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
 // create weblink object
 $link = new TableWeblink($gDb);
 
-if($getLinkUuid !== '')
-{
+if ($getLinkUuid !== '') {
     $link->readDataByUuid($getLinkUuid);
 
     // check if the current user could edit this weblink
-    if(!$link->isEditable())
-    {
+    if (!$link->isEditable()) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
-}
-else
-{
+} else {
     // check if the user has the right to edit at least one category
-    if(count($gCurrentUser->getAllEditableCategories('LNK')) === 0)
-    {
+    if (count($gCurrentUser->getAllEditableCategories('LNK')) === 0) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 }
 
-if(isset($_SESSION['links_request']))
-{
+if (isset($_SESSION['links_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
     $link->setArray($_SESSION['links_request']);
     unset($_SESSION['links_request']);
 }
 
-if($getLinkUuid !== '')
-{
+if ($getLinkUuid !== '') {
     $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
-}
-else
-{
+} else {
     $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
 }
 

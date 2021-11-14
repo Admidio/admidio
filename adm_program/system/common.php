@@ -9,16 +9,14 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php')
-{
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php') {
     exit('This page may not be called directly!');
 }
 
 $rootPath = dirname(dirname(__DIR__));
 
 // if config file doesn't exists, than show installation dialog
-if (!is_file($rootPath . '/adm_my_files/config.php'))
-{
+if (!is_file($rootPath . '/adm_my_files/config.php')) {
     header('Location: adm_program/installation/index.php');
     exit();
 }
@@ -30,12 +28,9 @@ require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
 // global parameters
 $gValidLogin = false;
 
-try
-{
+try {
     $gDb = Database::createDatabaseInstance();
-}
-catch(AdmException $e)
-{
+} catch (AdmException $e) {
     $e->showText();
     // => EXIT
 }
@@ -45,26 +40,20 @@ catch(AdmException $e)
 /********************************************************************************/
 
 // start PHP session
-try
-{
+try {
     Session::start(COOKIE_PREFIX);
-}
-catch (\RuntimeException $exception)
-{
+} catch (\RuntimeException $exception) {
     // TODO
 }
 
 // determine session id
-if(array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE))
-{
+if (array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
     $gSessionId = $_COOKIE[COOKIE_PREFIX . '_SESSION_ID'];
-}
-else
-{
+} else {
     $gSessionId = session_id();
 }
 
-if(array_key_exists('gCurrentSession', $_SESSION)) {
+if (array_key_exists('gCurrentSession', $_SESSION)) {
     // read session object from PHP session
     /**
      * @var Session $gCurrentSession The global session object that will store the other global objects and
@@ -75,10 +64,9 @@ if(array_key_exists('gCurrentSession', $_SESSION)) {
 }
 
 // Session handling
-if(array_key_exists('gCurrentSession', $_SESSION)
+if (array_key_exists('gCurrentSession', $_SESSION)
     && $_SESSION['gCurrentSession']->hasObject('gCurrentOrganization')
-    && $_SESSION['gCurrentSession']->getValue('ses_reload') === false)
-{
+    && $_SESSION['gCurrentSession']->getValue('ses_reload') === false) {
     // read system component
     /**
      * @var Component $gSystemComponent
@@ -99,10 +87,8 @@ if(array_key_exists('gCurrentSession', $_SESSION)
      * @var int $gCurrentOrgId The ID of the current organization.
      */
     $gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
-}
-else
-{
-    if(array_key_exists('gCurrentSession', $_SESSION)) {
+} else {
+    if (array_key_exists('gCurrentSession', $_SESSION)) {
         $gCurrentSession->initializeObjects();
     } else {
         // create new session object and store it in PHP session
@@ -116,12 +102,9 @@ else
     $gCurrentSession->addObject('gSystemComponent', $gSystemComponent);
 
     // create object of the organization of config file with their preferences
-    if($gCurrentSession->getOrganizationId() > 0)
-    {
+    if ($gCurrentSession->getOrganizationId() > 0) {
         $gCurrentOrganization = new Organization($gDb, $gCurrentSession->getOrganizationId());
-    }
-    else
-    {
+    } else {
         $gCurrentOrganization = new Organization($gDb, $g_organization);
     }
 
@@ -130,8 +113,7 @@ else
      */
     $gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
 
-    if($gCurrentOrgId === 0)
-    {
+    if ($gCurrentOrgId === 0) {
         $gLogger->error('Organization could not be found!', array('$g_organization' => $g_organization));
 
         // organization not found
@@ -158,8 +140,7 @@ $sesUsrId      = $gCurrentSession->getValue('ses_usr_id');
 $gChangeNotification = new ChangeNotification();
 
 // now if auto login is done, read global user data
-if($gCurrentSession->hasObject('gCurrentUser'))
-{
+if ($gCurrentSession->hasObject('gCurrentUser')) {
     /**
      * @var ProfileFields $gProfileFields
      */
@@ -174,14 +155,11 @@ if($gCurrentSession->hasObject('gCurrentUser'))
     $gCurrentUserId = $gCurrentUser->getValue('usr_id');
 
     // checks if user in database session is the same as in php session
-    if($gCurrentUserId !== $sesUsrId)
-    {
+    if ($gCurrentUserId !== $sesUsrId) {
         $gCurrentUser->clear();
         $gCurrentSession->setValue('ses_usr_id', '');
     }
-}
-else
-{
+} else {
     // create object with current user field structure und user object
     $gProfileFields = new ProfileFields($gDb, $gCurrentOrgId);
     $gCurrentUser   = new User($gDb, $gProfileFields, $sesUsrId);
@@ -190,8 +168,7 @@ else
     // if session is created with auto login then update user login data
     // if user object is created and session has usr_id then this is an auto login
     // and we should update the login data and count logins
-    if($sesUsrId > 0)
-    {
+    if ($sesUsrId > 0) {
         $gCurrentUser->updateLoginData();
     }
 
@@ -201,30 +178,23 @@ else
 }
 
 // create a global menu object that reads the menu structure only once
-if($gCurrentSession->hasObject('gMenu'))
-{
+if ($gCurrentSession->hasObject('gMenu')) {
     /**
      * @var Menu $gMenu
      */
     $gMenu =& $gCurrentSession->getObject('gMenu');
     $gMenu->removeFunctionsNode();
-}
-else
-{
+} else {
     // read menu from database
     $gMenu = new Menu();
     $gCurrentSession->addObject('gMenu', $gMenu);
 }
 
 // check session if user login is valid
-if($sesUsrId > 0)
-{
-    if($gCurrentSession->isValidLogin($gCurrentUserId))
-    {
+if ($sesUsrId > 0) {
+    if ($gCurrentSession->isValidLogin($gCurrentUserId)) {
         $gValidLogin = true;
-    }
-    else
-    {
+    } else {
         $gCurrentUser->clear();
     }
 }
@@ -236,8 +206,7 @@ $gCurrentSession->save();
 // create necessary objects and parameters
 
 // set default theme if no theme or old theme was set
-if (!$gSettingsManager->has('theme') || $gSettingsManager->get('theme') == 'modern')
-{
+if (!$gSettingsManager->has('theme') || $gSettingsManager->get('theme') == 'modern') {
     $gSettingsManager->set('theme', 'simple');
 }
 
@@ -249,26 +218,20 @@ $gMessage = new Message();
 
 // Create object for navigation between the scripts and modules
 // Every URL will be stored in a stack and can be called if user want's to navigate back
-if($gCurrentSession->hasObject('gNavigation'))
-{
+if ($gCurrentSession->hasObject('gNavigation')) {
     /**
      * @var Navigation $gNavigation
      */
     $gNavigation =& $gCurrentSession->getObject('gNavigation');
-}
-else
-{
+} else {
     $gNavigation = new Navigation();
     $gCurrentSession->addObject('gNavigation', $gNavigation);
 }
 
-try
-{
+try {
     // check version of database against version of file system and show notice if not equal
     $gSystemComponent->checkDatabaseVersion();
-}
-catch(AdmException $e)
-{
+} catch (AdmException $e) {
     $gSettingsManager->disableExceptions();
     $gMessage->showThemeBody(false);
     $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php');
@@ -276,11 +239,8 @@ catch(AdmException $e)
 }
 
 // set default homepage
-if($gValidLogin)
-{
+if ($gValidLogin) {
     $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_login');
-}
-else
-{
+} else {
     $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
 }

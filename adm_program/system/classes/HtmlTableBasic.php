@@ -156,18 +156,15 @@ class HtmlTableBasic extends HtmlElement
 
         parent::__construct('table');
 
-        if ($id !== null)
-        {
+        if ($id !== null) {
             $this->addAttribute('id', $id);
         }
 
-        if ($class !== null)
-        {
+        if ($class !== null) {
             $this->addAttribute('class', $class);
         }
 
-        if ($this->border > 0)
-        {
+        if ($this->border > 0) {
             $this->addAttribute('border', $this->border);
         }
     }
@@ -186,14 +183,12 @@ class HtmlTableBasic extends HtmlElement
     {
         $this->addElement($columnType);
 
-        if (array_key_exists($this->columnCount, $this->columnsWidth) && count($this->columnsWidth) > 0)
-        {
+        if (array_key_exists($this->columnCount, $this->columnsWidth) && count($this->columnsWidth) > 0) {
             $this->addAttribute('style', 'width: ' . $this->columnsWidth[$this->columnCount] . ';');
         }
 
         // Check optional attributes in associative array and set all attributes
-        if ($arrAttributes !== null)
-        {
+        if ($arrAttributes !== null) {
             $this->setAttributesFromArray($arrAttributes);
         }
 
@@ -207,20 +202,15 @@ class HtmlTableBasic extends HtmlElement
      */
     private function addColumnsData($data = '', $col = 'td')
     {
-        if ($data === '')
-        {
+        if ($data === '') {
             return;
         }
 
-        if (is_array($data))
-        {
-            foreach ($data as $column)
-            {
+        if (is_array($data)) {
+            foreach ($data as $column) {
                 $this->addColumn($column, null, $col);
             }
-        }
-        else
-        {
+        } else {
             $this->addColumn($data, null, $col);
         }
     }
@@ -242,38 +232,28 @@ class HtmlTableBasic extends HtmlElement
         $this->columnCount = 0;
 
         // If row is active we must close it first before starting new one
-        if (in_array('tr', $this->arrParentElements, true))
-        {
+        if (in_array('tr', $this->arrParentElements, true)) {
             $this->closeParentElement('tr');
         }
 
         $this->addParentElement('tr');
 
         // Check optional attributes in associative array and set all attributes
-        if ($arrAttributes !== null)
-        {
+        if ($arrAttributes !== null) {
             $this->setAttributesFromArray($arrAttributes);
         }
 
-        if (count($this->rowClasses) === 0)
-        {
-            if (count($this->columnsWidth) === 0)
-            {
-                if ($data !== '')
-                {
+        if (count($this->rowClasses) === 0) {
+            if (count($this->columnsWidth) === 0) {
+                if ($data !== '') {
                     $this->addColumn($data, null, $columnType);
                     $this->closeParentElement('tr');
                 }
-            }
-            else
-            {
+            } else {
                 $this->addColumnsData($data, $columnType);
             }
-        }
-        else
-        {
-            if ($this->tbody)
-            {
+        } else {
+            if ($this->tbody) {
                 // Only allowed in body element of the table
                 $rowClass = $this->rowClasses[$this->rowCount % count($this->rowClasses)];
                 $this->addAttribute('class', $rowClass, 'tr');
@@ -283,8 +263,7 @@ class HtmlTableBasic extends HtmlElement
         }
 
         // only increase rowCount if this is a data row and not the header
-        if ($columnType === 'td')
-        {
+        if ($columnType === 'td') {
             ++$this->rowCount;
         }
     }
@@ -302,13 +281,11 @@ class HtmlTableBasic extends HtmlElement
 
         $this->{$element} = true;
 
-        if ($attribute !== null && $value !== null)
-        {
+        if ($attribute !== null && $value !== null) {
             $this->addAttribute($attribute, $value);
         }
 
-        if ($data !== '')
-        {
+        if ($data !== '') {
             $this->addRow($data, null, $col);
         }
     }
@@ -326,13 +303,11 @@ class HtmlTableBasic extends HtmlElement
         // always close tr if that was open before
         $this->closeParentElement('tr');
 
-        if ($this->tfoot)
-        {
+        if ($this->tfoot) {
             $this->closeParentElement('tfoot');
         }
 
-        if ($this->thead)
-        {
+        if ($this->thead) {
             $this->closeParentElement('thead');
         }
 
@@ -350,14 +325,12 @@ class HtmlTableBasic extends HtmlElement
      */
     public function addTableFooter($attribute = null, $value = null, $data = '', $col = 'td')
     {
-        if ($this->thead && in_array('thead', $this->arrParentElements, true))
-        {
+        if ($this->thead && in_array('thead', $this->arrParentElements, true)) {
             $this->closeParentElement('thead');
         }
 
         // Check if table footer already exists
-        if ($this->tfoot)
-        {
+        if ($this->tfoot) {
             return false;
         }
 
@@ -380,8 +353,7 @@ class HtmlTableBasic extends HtmlElement
     public function addTableHeader($attribute = null, $value = null, $data = '', $col = 'td')
     {
         // Check if table head already exists
-        if ($this->thead)
-        {
+        if ($this->thead) {
             return false;
         }
 

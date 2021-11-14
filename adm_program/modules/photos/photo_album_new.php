@@ -23,19 +23,15 @@ $getMode      = admFuncVariableIsValid($_GET, 'mode',   'string', array('require
 $photoAlbumsArray = array(0 => $gL10n->get('PHO_PHOTO_ALBUMS'));
 
 // check if the module is enabled and disallow access if it's disabled
-if ((int) $gSettingsManager->get('enable_photo_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 $headline = '';
-if ($getMode === 'new')
-{
+if ($getMode === 'new') {
     $headline = $gL10n->get('PHO_CREATE_ALBUM');
-}
-elseif ($getMode === 'change')
-{
+} elseif ($getMode === 'change') {
     $headline = $gL10n->get('PHO_EDIT_ALBUM');
 }
 
@@ -44,20 +40,17 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create photo album object
 $photoAlbum = new TablePhotos($gDb);
 
-if ($getMode === 'change')
-{
+if ($getMode === 'change') {
     $photoAlbum->readDataByUuid($getPhotoUuid);
 }
 
 // check if the user is allowed to edit this photo album
-if (!$photoAlbum->isEditable())
-{
+if (!$photoAlbum->isEditable()) {
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
     // => EXIT
 }
 
-if (isset($_SESSION['photo_album_request']))
-{
+if (isset($_SESSION['photo_album_request'])) {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
     $photoAlbum->setArray($_SESSION['photo_album_request']);
@@ -81,13 +74,10 @@ function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
 
     $queryParams = array((int) $photoAlbum->getValue('pho_id'), $gCurrentOrgId);
     // Erfassen des auszugebenden Albums
-    if ($parentId > 0)
-    {
+    if ($parentId > 0) {
         $sqlConditionParentId .= ' AND pho_pho_id_parent = ? -- $parentId';
         $queryParams[] = $parentId;
-    }
-    else
-    {
+    } else {
         $sqlConditionParentId .= ' AND pho_pho_id_parent IS NULL';
     }
 
@@ -98,8 +88,7 @@ function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
                    '.$sqlConditionParentId;
     $childStatement = $gDb->queryPrepared($sql, $queryParams);
 
-    while($admPhotoChild = $childStatement->fetch())
-    {
+    while ($admPhotoChild = $childStatement->fetch()) {
         $parentPhotoAlbum->clear();
         $parentPhotoAlbum->setArray($admPhotoChild);
 
@@ -114,12 +103,9 @@ function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
 // create html page object
 $page = new HtmlPage('admidio-photo-album-edit', $headline);
 
-if ($getMode === 'new')
-{
+if ($getMode === 'new') {
     $parentAlbumId = $photoAlbum->getValue('pho_id');
-}
-else
-{
+} else {
     $parentAlbumId = $photoAlbum->getValue('pho_pho_id_parent');
 }
 

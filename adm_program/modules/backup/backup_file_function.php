@@ -22,8 +22,7 @@ $getJob      = admFuncVariableIsValid($_GET, 'job',      'string', array('requir
 $getFilename = admFuncVariableIsValid($_GET, 'filename', 'file',   array('requireValue' => true));
 
 // only administrators are allowed to create backups
-if(!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -34,14 +33,12 @@ $backupAbsolutePath = ADMIDIO_PATH . FOLDER_DATA . '/backup/'; // make sure to i
 $completePath = $backupAbsolutePath.$getFilename;
 
 // check if file exists physically at all
-if(!is_file($completePath))
-{
+if (!is_file($completePath)) {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
     // => EXIT
 }
 
-switch($getJob)
-{
+switch ($getJob) {
     case 'get_file':
         // Determine file size
         $fileSize = filesize($completePath);
@@ -63,21 +60,16 @@ switch($getJob)
     case 'delete':
         // Delete backup file
 
-        try
-        {
+        try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
             FileSystemUtils::deleteFileIfExists($completePath);
             echo 'done';
-        }
-        catch(AdmException $e)
-        {
+        } catch (AdmException $e) {
             $e->showText();
             // => EXIT
-        }
-        catch (\RuntimeException $exception)
-        {
+        } catch (\RuntimeException $exception) {
             $gLogger->error('Could not delete file!', array('filePath' => $completePath));
             // TODO
         }

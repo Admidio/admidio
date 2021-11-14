@@ -13,8 +13,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // only authorized users can edit the profile fields
-if (!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -94,15 +93,13 @@ $disable     = '';
 $mandatory   = '';
 $usfSystem   = '';
 
-while($row = $statement->fetch())
-{
+while ($row = $statement->fetch()) {
     $userField->clear();
     $userField->setArray($row);
 
     $usfUuid = $userField->getValue('usf_uuid');
 
-    if($categoryId !== (int) $userField->getValue('cat_id'))
-    {
+    if ($categoryId !== (int) $userField->getValue('cat_id')) {
         $categoryId = (int) $userField->getValue('usf_cat_id');
         $blockId = 'admCategory'.$categoryId;
 
@@ -114,16 +111,12 @@ while($row = $statement->fetch())
         $table->addAttribute('class', 'admidio-sortable');
     }
 
-    if($userField->getValue('usf_description') === '')
-    {
+    if ($userField->getValue('usf_description') === '') {
         $fieldDescription = '&nbsp;';
-    }
-    else
-    {
+    } else {
         $fieldDescription = $userField->getValue('usf_description', 'database');
 
-        if(strlen($fieldDescription) > 30)
-        {
+        if (strlen($fieldDescription) > 30) {
             // read first 30 chars of text, then search for last space and cut the text there. After that add a "more" link
             $textPrev = substr($fieldDescription, 0, 30);
             $maxPosPrev = strrpos($textPrev, ' ');
@@ -131,42 +124,29 @@ while($row = $statement->fetch())
                 ' <span class="collapse" id="viewdetails'.$usfUuid.'">'.substr($fieldDescription, $maxPosPrev).'.
                 </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$usfUuid.'"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
         }
-
     }
 
-    if($userField->getValue('usf_hidden') == 1)
-    {
+    if ($userField->getValue('usf_hidden') == 1) {
         $hidden = '<i class="fas fa-eye admidio-opacity-reduced" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_HIDDEN').'"></i>';
-    }
-    else
-    {
+    } else {
         $hidden = '<i class="fas fa-eye" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'"></i>';
     }
 
-    if($userField->getValue('usf_disabled') == 1)
-    {
+    if ($userField->getValue('usf_disabled') == 1) {
         $disable = '<i class="fas fa-key" data-toggle="tooltip" data-html="true" title="'.$gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))).'"></i>';
-    }
-    else
-    {
+    } else {
         $disable = '<i class="fas fa-key admidio-opacity-reduced" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'"></i>';
     }
 
-    if($userField->getValue('usf_mandatory') == 1)
-    {
+    if ($userField->getValue('usf_mandatory') == 1) {
         $mandatory = '<i class="fas fa-asterisk" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'"></i>';
-    }
-    else
-    {
+    } else {
         $mandatory = '<i class="fas fa-asterisk admidio-opacity-reduced" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'"></i>';
     }
 
-    if($userField->getValue('usf_registration') == 1)
-    {
+    if ($userField->getValue('usf_registration') == 1) {
         $registration = '<i class="fas fa-address-card" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REGISTRATION').'"></i>';
-    }
-    else
-    {
+    } else {
         $registration = '<i class="fas fa-address-card admidio-opacity-reduced" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_REGISTRATION').'"></i>';
     }
 
@@ -185,12 +165,9 @@ while($row = $statement->fetch())
     $usfSystem = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)).'">'.
                     '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
-    if($userField->getValue('usf_system') == 1)
-    {
+    if ($userField->getValue('usf_system') == 1) {
         $usfSystem .= '<i class="fas fa-trash invisible"></i>';
-    }
-    else
-    {
+    } else {
         $usfSystem .='<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$usfUuid,
                         'name' => $userField->getValue('usf_name'), 'database_id' => $usfUuid)).'">'.

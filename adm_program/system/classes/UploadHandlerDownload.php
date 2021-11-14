@@ -46,13 +46,10 @@ class UploadHandlerDownload extends UploadHandler
 
         $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $contentRange);
 
-        if(!isset($file->error))
-        {
-            try
-            {
+        if (!isset($file->error)) {
+            try {
                 // check filesize against module settings
-                if ($file->size > $gSettingsManager->getInt('max_file_upload_size') * 1024 * 1024)
-                {
+                if ($file->size > $gSettingsManager->getInt('max_file_upload_size') * 1024 * 1024) {
                     throw new AdmException('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('max_file_upload_size')));
                 }
 
@@ -73,8 +70,7 @@ class UploadHandlerDownload extends UploadHandler
                 $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
                 $newFile->setValue('fil_counter', 0);
 
-                if(!$newFile->allowedFileExtension())
-                {
+                if (!$newFile->allowedFileExtension()) {
                     throw new AdmException('SYS_FILE_EXTENSION_INVALID');
                 }
 
@@ -98,17 +94,12 @@ class UploadHandlerDownload extends UploadHandler
                     $fullName,
                     $gCurrentUser->getValue('EMAIL')
                 );
-            }
-            catch(AdmException $e)
-            {
+            } catch (AdmException $e) {
                 $file->error = $e->getText();
 
-                try
-                {
+                try {
                     FileSystemUtils::deleteFileIfExists($this->options['upload_dir'].$file->name);
-                }
-                catch (\RuntimeException $exception)
-                {
+                } catch (\RuntimeException $exception) {
                     $gLogger->error('Could not delete file!', array('filePath' => $this->options['upload_dir'].$file->name));
                     // TODO
                 }
@@ -127,15 +118,13 @@ class UploadHandlerDownload extends UploadHandler
      * @param string $file
      * @param int    $index
      */
-    protected function handle_form_data($file, $index) {
+    protected function handle_form_data($file, $index)
+    {
         // ADM Start
-        try
-        {
+        try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_REQUEST['admidio-csrf-token']);
-        }
-        catch(AdmException $exception)
-        {
+        } catch (AdmException $exception) {
             $file->error = $exception->getText();
             // => EXIT
         }

@@ -49,8 +49,7 @@ class HtmlPageInstallation extends HtmlPage
         $this->addTemplateDir(ADMIDIO_PATH . FOLDER_INSTALLATION . '/templates/', 'inst');
 
         // if no modus set then set installation modus
-        if ($headline === '')
-        {
+        if ($headline === '') {
             $this->setInstallationModus();
         }
     }

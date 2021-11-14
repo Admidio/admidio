@@ -21,15 +21,13 @@ $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string', array('r
 $headline = $gL10n->get('SYS_SET_FOLDER_PERMISSIONS');
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('documents_files_enable_module'))
-{
+if (!$gSettingsManager->getBool('documents_files_enable_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
-if (!$gCurrentUser->adminDocumentsFiles())
-{
+if (!$gCurrentUser->adminDocumentsFiles()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -40,29 +38,24 @@ $rolesViewRightParentFolder = array();
 $sqlRolesViewRight          = '';
 $sqlRolesUploadRight        = '';
 
-try
-{
+try {
     // get recordset of current folder from database
     $folder = new TableFolder($gDb);
     $folder->getFolderForDownload($getFolderUuid);
 
     // read parent folder
-    if ($folder->getValue('fol_fol_id_parent'))
-    {
+    if ($folder->getValue('fol_fol_id_parent')) {
         // get recordset of parent folder from database
         $parentFolder = new TableFolder($gDb, (int) $folder->getValue('fol_fol_id_parent'));
         $parentFolder->getFolderForDownload($parentFolder->getValue('fol_uuid'));
 
         // get assigned roles of the parent folder
         $rolesViewRightParentFolder = $parentFolder->getRoleViewArrayOfFolder();
-        if(count($rolesViewRightParentFolder) > 0)
-        {
+        if (count($rolesViewRightParentFolder) > 0) {
             $sqlRolesViewRight = ' AND rol_id IN (' . Database::getQmForValues($rolesViewRightParentFolder) . ')';
         }
     }
-}
-catch(AdmException $e)
-{
+} catch (AdmException $e) {
     $e->showHtml();
     // => EXIT
 }
@@ -84,8 +77,7 @@ $sqlDataView = array(
 
 $firstEntryViewRoles = '';
 
-if (count($rolesViewRightParentFolder) === 0)
-{
+if (count($rolesViewRightParentFolder) === 0) {
     $firstEntryViewRoles = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
 }
 
@@ -93,8 +85,7 @@ if (count($rolesViewRightParentFolder) === 0)
 $roleViewSet = $folder->getRoleViewArrayOfFolder();
 
 // if no roles are assigned then set "all users" as default
-if(count($roleViewSet) === 0)
-{
+if (count($roleViewSet) === 0) {
     $roleViewSet[] = 0;
 }
 
@@ -102,8 +93,7 @@ if(count($roleViewSet) === 0)
 $roleUploadSet = $folder->getRoleUploadArrayOfFolder();
 
 // if no roles are assigned then set "all users" as default
-if(count($roleUploadSet) === 0)
-{
+if (count($roleUploadSet) === 0) {
     $roleUploadSet[] = '';
 }
 
@@ -119,8 +109,7 @@ $sqlAdminRoles = 'SELECT rol_name
 $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrgId));
 
 $adminRoles = array();
-while($row = $statementAdminRoles->fetch())
-{
+while ($row = $statementAdminRoles->fetch()) {
     $adminRoles[] = $row['rol_name'];
 }
 

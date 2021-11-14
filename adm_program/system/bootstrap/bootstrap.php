@@ -8,8 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if (basename($_SERVER['SCRIPT_FILENAME']) === 'bootstrap.php')
-{
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'bootstrap.php') {
     exit('This page may not be called directly!');
 }
 
@@ -27,20 +26,16 @@ require_once($rootPath . '/adm_program/languages/languages.php');
 ini_set('error_reporting', '-1');
 ini_set('log_errors', '1');
 
-if ($gDebug)
-{
+if ($gDebug) {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
-}
-else
-{
+} else {
     ini_set('display_errors', '0');
     ini_set('display_startup_errors', '0');
 }
 
 // check PHP version and show notice if version is too low
-if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
-{
+if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
     exit('<div style="color: #cc0000;">Error: Your PHP version ' . PHP_VERSION . ' does not fulfill
         the minimum requirements for this Admidio version. You need at least PHP ' . MIN_PHP_VERSION . ' or higher.</div>');
 }
@@ -63,8 +58,7 @@ require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/function.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/global_request_params.php');
 
 // Force permanent HTTPS redirect
-if ($gForceHTTPS && !HTTPS)
-{
+if ($gForceHTTPS && !HTTPS) {
     $url = str_replace('http://', 'https://', CURRENT_URL);
 
     $gLogger->notice('REDIRECT: Redirecting permanent to HTTPS!', array('url' => $url, 'statusCode' => 301));

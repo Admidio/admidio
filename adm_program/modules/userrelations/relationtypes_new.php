@@ -18,14 +18,12 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getUrtUuid = admFuncVariableIsValid($_GET, 'urt_uuid', 'string');
 
-if (!$gSettingsManager->getBool('members_enable_user_relations'))
-{
+if (!$gSettingsManager->getBool('members_enable_user_relations')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-if (!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -36,8 +34,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $relationType1 = new TableUserRelationType($gDb);
 $relationType2 = new TableUserRelationType($gDb);
 
-if($getUrtUuid !== '')
-{
+if ($getUrtUuid !== '') {
     $relationType1->readDataByUuid($getUrtUuid);
     $relationType2->readDataById((int) $relationType1->getValue('urt_id_inverse'));
 }
@@ -69,8 +66,7 @@ $form->addCheckbox(
 );
 
 $options = array('defaultValue' => $relationType1->getRelationTypeString(), 'helpTextIdLabel' => 'SYS_RELATIONSHIP_TYPE_DESC');
-if (!$relationType1->isNewRecord())
-{
+if (!$relationType1->isNewRecord()) {
     $options['property'] = HtmlForm::FIELD_DISABLED;
 }
 

@@ -21,50 +21,39 @@ $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string');
 $getFileUuid   = admFuncVariableIsValid($_GET, 'file_uuid',   'string');
 
 // set headline of the script
-if($getFileUuid !== '')
-{
+if ($getFileUuid !== '') {
     $headline = $gL10n->get('SYS_EDIT_FILE');
-}
-else
-{
+} else {
     $headline = $gL10n->get('SYS_EDIT_FOLDER');
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('documents_files_enable_module'))
-{
+if (!$gSettingsManager->getBool('documents_files_enable_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-if(isset($_SESSION['documents_files_request']))
-{
+if (isset($_SESSION['documents_files_request'])) {
     $formValues = $_SESSION['documents_files_request'];
     unset($_SESSION['documents_files_request']);
-}
-else
-{
+} else {
     $formValues['new_name'] = null;
     $formValues['new_description'] = null;
 }
 
-try
-{
+try {
     // check the rights of the current folder
     // user must be administrator or must have the right to upload files
     $targetFolder = new TableFolder($gDb);
     $targetFolder->getFolderForDownload($getFolderUuid);
-}
-catch(AdmException $e)
-{
+} catch (AdmException $e) {
     $e->showHtml();
     // => EXIT
 }
 
-if (!$targetFolder->hasUploadRight())
-{
+if (!$targetFolder->hasUploadRight()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -74,10 +63,8 @@ $fileType        = '';
 $createUserId    = 0;
 $createTimestamp = '';
 
-try
-{
-    if ($getFileUuid !== '')
-    {
+try {
+    if ($getFileUuid !== '') {
         // get recordset of current file from database
         $file = new TableFile($gDb);
         $file->getFileForDownload($getFileUuid);
@@ -87,22 +74,16 @@ try
         $createUserId    = (int) $file->getValue('fil_usr_id');
         $createTimestamp = $file->getValue('fil_timestamp');
 
-        if ($formValues['new_name'] === null)
-        {
+        if ($formValues['new_name'] === null) {
             $formValues['new_name'] = $originalName;
         }
 
-        if ($formValues['new_description'] === null)
-        {
+        if ($formValues['new_description'] === null) {
             $formValues['new_description'] = $file->getValue('fil_description');
         }
-
-    }
-    else
-    {
+    } else {
         // main folder should not be renamed
-        if ($targetFolder->getValue('fol_fol_id_parent') === '')
-        {
+        if ($targetFolder->getValue('fol_fol_id_parent') === '') {
             $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
             // => EXIT
         }
@@ -112,19 +93,15 @@ try
         $createUserId    = (int) $targetFolder->getValue('fol_usr_id');
         $createTimestamp = $targetFolder->getValue('fol_timestamp');
 
-        if ($formValues['new_name'] == null)
-        {
+        if ($formValues['new_name'] == null) {
             $formValues['new_name'] = $originalName;
         }
 
-        if ($formValues['new_description'] == null)
-        {
+        if ($formValues['new_description'] == null) {
             $formValues['new_description'] = $targetFolder->getValue('fol_description');
         }
     }
-}
-catch(AdmException $e)
-{
+} catch (AdmException $e) {
     $e->showHtml();
     // => EXIT
 }
@@ -134,8 +111,7 @@ $page = new HtmlPage('admidio-documents-files-rename', $headline);
 
 // create html form
 $form = new HtmlForm('edit_download_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '4', 'folder_uuid' => $getFolderUuid, 'file_uuid' => $getFileUuid)), $page);
-if ($getFileUuid !== '')
-{
+if ($getFileUuid !== '') {
     $form->addInput(
         'file_type', $gL10n->get('SYS_FILE_TYPE'), $fileType,
         array('property' => HtmlForm::FIELD_DISABLED, 'class' => 'form-control-small')

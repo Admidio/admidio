@@ -71,10 +71,8 @@ class TableMessage extends TableAccess
     public function addRole($roleId, $roleMode, $roleName = '')
     {
         // first search if role already exists in recipients list
-        foreach($this->msgRecipientsObjectArray as $messageRecipientObject)
-        {
-            if($messageRecipientObject->getValue('msr_rol_id') === $roleId)
-            {
+        foreach ($this->msgRecipientsObjectArray as $messageRecipientObject) {
+            if ($messageRecipientObject->getValue('msr_rol_id') === $roleId) {
                 // if object found than update role mode and exist function
                 $messageRecipientObject->setValue('msr_role_mode', $roleMode);
                 return;
@@ -108,21 +106,15 @@ class TableMessage extends TableAccess
     public function addUser($userId, $fullName = '')
     {
         // PM always update the recipient if the message exists
-        if($this->getValue('msg_type') === self::MESSAGE_TYPE_PM)
-        {
-            if(count($this->msgRecipientsObjectArray) === 1)
-            {
+        if ($this->getValue('msg_type') === self::MESSAGE_TYPE_PM) {
+            if (count($this->msgRecipientsObjectArray) === 1) {
                 $this->msgRecipientsObjectArray->setValue('msr_usr_id', $userId);
                 return;
             }
-        }
-        else // EMAIL
-        {
+        } else { // EMAIL
             // first search if user already exists in recipients list and than exist function
-            foreach($this->msgRecipientsObjectArray as $messageRecipientObject)
-            {
-                if($messageRecipientObject->getValue('msr_usr_id') === $userId)
-                {
+            foreach ($this->msgRecipientsObjectArray as $messageRecipientObject) {
+                if ($messageRecipientObject->getValue('msr_usr_id') === $userId) {
                     return;
                 }
             }
@@ -212,15 +204,12 @@ class TableMessage extends TableAccess
 
         $msgId = (int) $this->getValue('msg_id');
 
-        if ($this->getValue('msg_type') === self::MESSAGE_TYPE_EMAIL || (int) $this->getValue('msg_read') === 2)
-        {
+        if ($this->getValue('msg_type') === self::MESSAGE_TYPE_EMAIL || (int) $this->getValue('msg_read') === 2) {
             // first delete attachments files and the database entry
             $attachments   = $this->getAttachmentsInformations();
 
-            foreach($attachments as $attachment)
-            {
-                if(!FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name']))
-                {
+            foreach ($attachments as $attachment) {
+                if (!FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name'])) {
                     throw new AdmException('INS_DATABASE_FILE_NOT_FOUND', array(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments', $attachment['admidio_file_name']));
                 }
             }
@@ -238,9 +227,7 @@ class TableMessage extends TableAccess
             $this->db->queryPrepared($sql, array($msgId));
 
             parent::delete();
-        }
-        else
-        {
+        } else {
             $sql = 'UPDATE '.TBL_MESSAGES.'
                        SET msg_read = 2
                      WHERE msg_id = ? -- $msgId';
@@ -267,8 +254,7 @@ class TableMessage extends TableAccess
                  WHERE msa_msg_id = ? -- $this->getValue(\'msg_id\')';
         $attachmentsStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
 
-        while($row = $attachmentsStatement->fetch())
-        {
+        while ($row = $attachmentsStatement->fetch()) {
             $attachments[] = array('msa_id' => $row['msa_id'], 'file_name' => $row['msa_original_file_name'], 'admidio_file_name' => $row['msa_file_name']);
         }
 
@@ -285,8 +271,7 @@ class TableMessage extends TableAccess
         $content = '';
 
         // if content was not set until now than read it from the database if message was already stored there
-        if(!is_object($this->msgContentObject) && $this->getValue('msg_id') > 0)
-        {
+        if (!is_object($this->msgContentObject) && $this->getValue('msg_id') > 0) {
             $sql = 'SELECT msc_id, msc_msg_id, msc_usr_id, msc_message, msc_timestamp
                       FROM '. TBL_MESSAGES_CONTENT. ' msc1
                      WHERE msc_msg_id = ? -- $this->getValue(\'msg_id\')
@@ -303,8 +288,7 @@ class TableMessage extends TableAccess
         }
 
         // read content of the content object
-        if(is_object($this->msgContentObject))
-        {
+        if (is_object($this->msgContentObject)) {
             $content = $this->msgContentObject->getValue('msc_message', 'database');
         }
 
@@ -334,8 +318,7 @@ class TableMessage extends TableAccess
     public function getConversationPartner()
     {
         global $gLogger;
-        if($this->getValue('msg_type') === self::MESSAGE_TYPE_PM)
-        {
+        if ($this->getValue('msg_type') === self::MESSAGE_TYPE_PM) {
             $recipients = $this->readRecipientsData();
             return $recipients[0]['id'];
         }
@@ -358,33 +341,22 @@ class TableMessage extends TableAccess
         $recipientsString = '';
         $singleRecipientsCount = 0;
 
-        if($this->getValue('msg_type') === self::MESSAGE_TYPE_PM)
-        {
+        if ($this->getValue('msg_type') === self::MESSAGE_TYPE_PM) {
             // PM has the conversation initiator and the receiver. Here we must check which
             // role the current user has and show the name of the other user.
-            if((int) $this->getValue('msg_usr_id_sender') === $GLOBALS['gCurrentUserId'])
-            {
+            if ((int) $this->getValue('msg_usr_id_sender') === $GLOBALS['gCurrentUserId']) {
                 $recipientsString = $recipients[0]['name'];
-            }
-            else
-            {
+            } else {
                 $user = new User($this->db, $gProfileFields, $this->getValue('msg_usr_id_sender'));
                 $recipientsString = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
             }
-        }
-        else
-        {
+        } else {
             // email receivers are all stored in the recipients array
-            foreach($recipients as $recipient)
-            {
-                if($recipient['type'] === 'user' && !$showFullUserNames)
-                {
+            foreach ($recipients as $recipient) {
+                if ($recipient['type'] === 'user' && !$showFullUserNames) {
                     $singleRecipientsCount++;
-                }
-                else
-                {
-                    if(strlen($recipientsString) > 0)
-                    {
+                } else {
+                    if (strlen($recipientsString) > 0) {
                         $recipientsString .= '; ';
                     }
 
@@ -393,23 +365,16 @@ class TableMessage extends TableAccess
             }
 
             // if full user names should not be shown than create a text with the number of individual recipients
-            if(!$showFullUserNames && $singleRecipientsCount > 0)
-            {
-                if($singleRecipientsCount === 1)
-                {
+            if (!$showFullUserNames && $singleRecipientsCount > 0) {
+                if ($singleRecipientsCount === 1) {
                     $textIndividualRecipients = $gL10n->get('SYS_COUNT_INDIVIDUAL_RECIPIENT', array($singleRecipientsCount));
-                }
-                else
-                {
+                } else {
                     $textIndividualRecipients = $gL10n->get('SYS_COUNT_INDIVIDUAL_RECIPIENTS', array($singleRecipientsCount));
                 }
 
-                if(strlen($recipientsString) > 0)
-                {
+                if (strlen($recipientsString) > 0) {
                     $recipientsString = $gL10n->get('SYS_PARAMETER1_AND_PARAMETER2', array($recipientsString, $textIndividualRecipients));
-                }
-                else
-                {
+                } else {
                     $recipientsString = $textIndividualRecipients;
                 }
             }
@@ -426,9 +391,8 @@ class TableMessage extends TableAccess
      */
     public function isUnread()
     {
-        if(self::MESSAGE_TYPE_PM && $this->getValue('msg_read') === 1
-        && $this->getValue('msg_usr_id_sender') != $GLOBALS['gCurrentUserId'])
-        {
+        if (self::MESSAGE_TYPE_PM && $this->getValue('msg_read') === 1
+        && $this->getValue('msg_usr_id_sender') != $GLOBALS['gCurrentUserId']) {
             return true;
         }
 
@@ -447,8 +411,7 @@ class TableMessage extends TableAccess
     {
         global $gProfileFields;
 
-        if(count($this->msgRecipientsArray) === 0)
-        {
+        if (count($this->msgRecipientsArray) === 0) {
             $sql = 'SELECT msg_usr_id_sender, msr_id, msr_rol_id, msr_usr_id, msr_role_mode, rol_name, first_name.usd_value AS firstname, last_name.usd_value AS lastname
                       FROM ' . TBL_MESSAGES . '
                      INNER JOIN ' . TBL_MESSAGES_RECIPIENTS . ' ON msr_msg_id = msg_id
@@ -463,22 +426,19 @@ class TableMessage extends TableAccess
             $messagesRecipientsStatement = $this->db->queryPrepared($sql,
                 array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $this->getValue('msg_id')));
 
-            while($row = $messagesRecipientsStatement->fetch())
-            {
+            while ($row = $messagesRecipientsStatement->fetch()) {
                 // save message recipient as TableAcess object to the array
                 $messageRecipient = new TableAccess($this->db, TBL_MESSAGES_RECIPIENTS, 'msr');
                 $messageRecipient->setArray($row);
                 $this->msgRecipientsObjectArray[] = $messageRecipient;
 
                 // now save message recipient into an simple array
-                if($row['msr_usr_id'] > 0)
-                {
+                if ($row['msr_usr_id'] > 0) {
                     $recipientUsrId = (int) $row['msr_usr_id'];
 
                     // PMs could have the current user as recipient than the sender is the recipient for this user
-                    if($this->getValue('msg_type') === self::MESSAGE_TYPE_PM
-                    && $recipientUsrId == $GLOBALS['gCurrentUserId'])
-                    {
+                    if ($this->getValue('msg_type') === self::MESSAGE_TYPE_PM
+                    && $recipientUsrId == $GLOBALS['gCurrentUserId']) {
                         $recipientUsrId = (int) $row['msg_usr_id_sender'];
                     }
 
@@ -490,9 +450,7 @@ class TableMessage extends TableAccess
                               'mode'   => 0,
                               'msr_id' => (int) $row['msr_id']
                         );
-                }
-                else
-                {
+                } else {
                     // add user to recipients
                     $this->msgRecipientsArray[] =
                         array('type'   => 'role',
@@ -521,25 +479,21 @@ class TableMessage extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        if ($this->newRecord)
-        {
+        if ($this->newRecord) {
             // Insert
             $this->setValue('msg_timestamp', DATETIME_NOW);
         }
 
         $returnValue = parent::save($updateFingerPrint);
 
-        if($returnValue)
-        {
+        if ($returnValue) {
             // now save every recipient
-            foreach($this->msgRecipientsObjectArray as $msgRecipientsObject)
-            {
+            foreach ($this->msgRecipientsObjectArray as $msgRecipientsObject) {
                 $msgRecipientsObject->setValue('msr_msg_id', $this->getValue('msg_id'));
                 $msgRecipientsObject->save();
             }
 
-            if(is_object($this->msgContentObject))
-            {
+            if (is_object($this->msgContentObject)) {
                 // now save the message to the database
                 $this->msgContentObject->setValue('msc_msg_id', $this->getValue('msg_id'));
                 $this->msgContentObject->setValue('msc_usr_id', $GLOBALS['gCurrentUserId']);
@@ -560,20 +514,16 @@ class TableMessage extends TableAccess
      */
     protected function saveAttachments()
     {
-        try
-        {
+        try {
             FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments');
-        }
-        catch (\RuntimeException $exception)
-        {
+        } catch (\RuntimeException $exception) {
             return array(
                 'text' => 'SYS_FOLDER_NOT_CREATED',
                 'path' => 'adm_my_files/photos/' . $folderName
             );
         }
 
-        foreach($this->msgAttachments as $attachement)
-        {
+        foreach ($this->msgAttachments as $attachement) {
             $file_name = $this->getValue('msg_id').'_'.$attachement[1];
 
             FileSystemUtils::copyFile($attachement[0], ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $file_name);
@@ -596,8 +546,7 @@ class TableMessage extends TableAccess
     {
         global $gMenu;
 
-        if($this->getValue('msg_read') > 0)
-        {
+        if ($this->getValue('msg_read') > 0) {
             $sql = 'UPDATE '.TBL_MESSAGES.'
                        SET msg_read = 0
                      WHERE msg_id   = ? -- $this->getValue(\'msg_id\') ';

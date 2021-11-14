@@ -19,8 +19,7 @@
 ///////////////////       SUPPORT FUNCTIONS       ///////////////////
 /////////////////////////////////////////////////////////////////////
 
-if (!function_exists('getmicrotime'))
-{
+if (!function_exists('getmicrotime')) {
     /**
      * @return float
      */
@@ -41,16 +40,13 @@ function FunctionIsDisabled($function)
     global $gLogger;
 
     static $DisabledFunctions = null;
-    if ($DisabledFunctions === null)
-    {
+    if ($DisabledFunctions === null) {
         $disable_functions_local  = explode(',',     @ini_get('disable_functions'));
         $disable_functions_global = explode(',', @get_cfg_var('disable_functions'));
-        foreach ($disable_functions_local as $key => $value)
-        {
+        foreach ($disable_functions_local as $key => $value) {
             $DisabledFunctions[$value] = 'local';
         }
-        foreach ($disable_functions_global as $key => $value)
-        {
+        foreach ($disable_functions_global as $key => $value) {
             $DisabledFunctions[$value] = 'global';
         }
     }
@@ -64,22 +60,17 @@ function FunctionIsDisabled($function)
 function SafeExec($command)
 {
     static $AllowedExecFunctions = array();
-    if (count($AllowedExecFunctions) === 0)
-    {
+    if (count($AllowedExecFunctions) === 0) {
         $AllowedExecFunctions = array('shell_exec' => true, 'passthru' => true, 'system' => true, 'exec' => true);
-        foreach ($AllowedExecFunctions as $key => $value)
-        {
+        foreach ($AllowedExecFunctions as $key => $value) {
             $AllowedExecFunctions[$key] = !FunctionIsDisabled($key);
         }
     }
-    foreach ($AllowedExecFunctions as $execfunction => $is_allowed)
-    {
-        if (!$is_allowed)
-        {
+    foreach ($AllowedExecFunctions as $execfunction => $is_allowed) {
+        if (!$is_allowed) {
             continue;
         }
-        switch ($execfunction)
-        {
+        switch ($execfunction) {
             case 'passthru':
                 ob_start();
                 $execfunction($command);
@@ -107,12 +98,10 @@ function SafeExec($command)
 function MySQLdumpVersion()
 {
     static $version = null;
-    if ($version === null)
-    {
+    if ($version === null) {
         $version = false;
         $execdversion = SafeExec('mysqldump --version');
-        if (preg_match('#^mysqldump +Ver ([0-9\\.]+)#i', $execdversion, $matches))
-        {
+        if (preg_match('#^mysqldump +Ver ([0-9\\.]+)#i', $execdversion, $matches)) {
             $version = $matches[1];
         }
     }
@@ -125,12 +114,10 @@ function MySQLdumpVersion()
 function gzipVersion()
 {
     static $version = null;
-    if ($version === null)
-    {
+    if ($version === null) {
         $version = false;
         $execdversion = SafeExec('gzip --version');
-        if (preg_match('#^gzip ([0-9\\.]+)#i', $execdversion, $matches))
-        {
+        if (preg_match('#^gzip ([0-9\\.]+)#i', $execdversion, $matches)) {
             $version = $matches[1];
         }
     }
@@ -143,16 +130,12 @@ function gzipVersion()
 function bzip2Version()
 {
     static $version = null;
-    if ($version === null)
-    {
+    if ($version === null) {
         $version = false;
         $execdversion = SafeExec('bzip2 --version 2>&1');
-        if (preg_match('#^bzip2(.*) Version ([0-9\\.]+)#i', $execdversion, $matches))
-        {
+        if (preg_match('#^bzip2(.*) Version ([0-9\\.]+)#i', $execdversion, $matches)) {
             $version = $matches[2];
-        }
-        elseif (preg_match('#^bzip2:#i', $execdversion, $matches))
-        {
+        } elseif (preg_match('#^bzip2:#i', $execdversion, $matches)) {
             $version = 'installed_unknown_version';
         }
     }
@@ -169,16 +152,11 @@ function FormattedTimeRemaining($seconds, $precision = 1)
 {
     global $gL10n;
 
-    if ($seconds > 86400)
-    {
+    if ($seconds > 86400) {
         return $gL10n->get('SYS_DAYS_VAR', array(number_format($seconds / 86400, $precision)));
-    }
-    elseif ($seconds > 3600)
-    {
+    } elseif ($seconds > 3600) {
         return $gL10n->get('SYS_HOURS_VAR', array(number_format($seconds / 3600, $precision)));
-    }
-    elseif ($seconds > 60)
-    {
+    } elseif ($seconds > 60) {
         return $gL10n->get('SYS_MINUTES_VAR', array(number_format($seconds / 60, $precision)));
     }
     return $gL10n->get('SYS_SECONDS_VAR', array(number_format($seconds, $precision)));
@@ -192,23 +170,18 @@ function FormattedTimeRemaining($seconds, $precision = 1)
  */
 function FileSizeNiceDisplay($filesize, $precision = 2)
 {
-    if ($filesize < 1000)
-    {
+    if ($filesize < 1000) {
         $sizeunit  = 'bytes';
         $precision = 0;
-    }
-    else
-    {
+    } else {
         $filesize /= 1024;
         $sizeunit  = 'kB';
     }
-    if ($filesize >= 1000)
-    {
+    if ($filesize >= 1000) {
         $filesize /= 1024;
         $sizeunit  = 'MB';
     }
-    if ($filesize >= 1000)
-    {
+    if ($filesize >= 1000) {
         $filesize /= 1024;
         $sizeunit  = 'GB';
     }
@@ -224,30 +197,22 @@ function FileSizeNiceDisplay($filesize, $precision = 2)
 function OutputInformation($id, $dhtml, $text = '')
 {
     global $DHTMLenabled;
-    if ($DHTMLenabled)
-    {
-        if (!is_null($dhtml))
-        {
-            if ($id)
-            {
+    if ($DHTMLenabled) {
+        if (!is_null($dhtml)) {
+            if ($id) {
                 echo '<script type="text/javascript">
                     var element = document.getElementById("'.$id.'");
                     if (element) {
                         element.innerHTML = "' . str_replace('</', '<\\/', $dhtml) . '";
                     }
                 </script>';
-            }
-            else
-            {
+            } else {
                 echo $dhtml;
             }
             //flush();
         }
-    }
-    else
-    {
-        if ($text)
-        {
+    } else {
+        if ($text) {
             echo $text;
             //flush();
         }

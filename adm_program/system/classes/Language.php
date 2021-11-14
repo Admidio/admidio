@@ -64,8 +64,7 @@ class Language
     {
         global $gSettingsManager;
 
-        if ($languageDataObject === null)
-        {
+        if ($languageDataObject === null) {
             $languageDataObject = new LanguageData($gSettingsManager->getString('system_language'));
         }
         $this->languageData =& $languageDataObject;
@@ -111,8 +110,7 @@ class Language
             $text = $this->getTextFromTextId($textId);
 
             //$gLogger->debug('L10N: Lookup time:', array('time' => getExecutionTime($startTime), 'textId' => $textId));
-        }
-        catch (\RuntimeException $exception) {
+        } catch (\RuntimeException $exception) {
             $gLogger->debug('L10N: Lookup time:', array('time' => getExecutionTime($startTime), 'textId' => $textId));
             $gLogger->error('L10N: ' . $exception->getMessage(), array('textId' => $textId));
 
@@ -133,8 +131,7 @@ class Language
      */
     public function getAvailableLanguages()
     {
-        if (count($this->languages) === 0)
-        {
+        if (count($this->languages) === 0) {
             $this->languages = self::loadAvailableLanguages();
         }
 
@@ -151,12 +148,10 @@ class Language
         $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries-' . $this->languageData->getLanguage() . '.xml';
         $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries-' . LanguageData::REFERENCE_LANGUAGE   . '.xml';
 
-        if (is_file($langFile))
-        {
+        if (is_file($langFile)) {
             return $langFile;
         }
-        if (is_file($langFileRef))
-        {
+        if (is_file($langFileRef)) {
             return $langFileRef;
         }
 
@@ -172,8 +167,7 @@ class Language
     {
         $countries = $this->languageData->getCountries();
 
-        if (count($countries) === 0)
-        {
+        if (count($countries) === 0) {
             $countries = $this->loadCountries();
             $this->languageData->setCountries($countries);
         }
@@ -191,20 +185,17 @@ class Language
      */
     public function getCountryName($countryIsoCode)
     {
-        if (empty($countryIsoCode))
-        {
+        if (empty($countryIsoCode)) {
             return '';
         }
 
-        if (!preg_match('/^[A-Z]{3}$/', $countryIsoCode))
-        {
+        if (!preg_match('/^[A-Z]{3}$/', $countryIsoCode)) {
             throw new \UnexpectedValueException('Invalid country-iso-code!');
         }
 
         $countries = $this->getCountries();
 
-        if (!array_key_exists($countryIsoCode, $countries))
-        {
+        if (!array_key_exists($countryIsoCode, $countries)) {
             throw new \OutOfBoundsException('Country-iso-code does not exist!');
         }
 
@@ -221,16 +212,14 @@ class Language
      */
     public function getCountryIsoCode($countryName)
     {
-        if ($countryName === '')
-        {
+        if ($countryName === '') {
             throw new \UnexpectedValueException('Invalid country-name!');
         }
 
         $countries = $this->getCountries();
 
         $result = array_search($countryName, $countries, true);
-        if ($result === false)
-        {
+        if ($result === false) {
             throw new \OutOfBoundsException('Country-name does not exist!');
         }
 
@@ -275,28 +264,19 @@ class Language
     private function getTextFromTextId($textId)
     {
         // first search text id in text-cache
-        try
-        {
+        try {
             return $this->languageData->getTextCache($textId);
-        }
-        catch (\OutOfBoundsException $exception)
-        {
+        } catch (\OutOfBoundsException $exception) {
             // if text id wasn't found than search for it in language
-            try
-            {
+            try {
                 // search for text id in every \SimpleXMLElement (language file) of the object array
                 return $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->languageData->getLanguage(), $textId);
-            }
-            catch (\OutOfBoundsException $exception)
-            {
+            } catch (\OutOfBoundsException $exception) {
                 // if text id wasn't found than search for it in reference language
-                try
-                {
+                try {
                     // search for text id in every \SimpleXMLElement (language file) of the object array
                     return $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, LanguageData::REFERENCE_LANGUAGE, $textId);
-                }
-                catch (\OutOfBoundsException $exception)
-                {
+                } catch (\OutOfBoundsException $exception) {
                     throw new \OutOfBoundsException($exception->getMessage());
                 }
             }
@@ -322,7 +302,9 @@ class Language
     {
         global $gSupportedLanguages;
 
-        return array_map(function ($languageInfos) { return $languageInfos['name']; }, $gSupportedLanguages);
+        return array_map(function ($languageInfos) {
+            return $languageInfos['name'];
+        }, $gSupportedLanguages);
     }
 
     /**
@@ -342,8 +324,7 @@ class Language
         /**
          * @var \SimpleXMLElement $xmlNode
          */
-        foreach ($countriesXml->children() as $xmlNode)
-        {
+        foreach ($countriesXml->children() as $xmlNode) {
             $countries[(string) $xmlNode['name']] = (string) $xmlNode;
         }
 
@@ -363,8 +344,7 @@ class Language
     private function prepareTextPlaceholders($text, array $params)
     {
         // replace placeholder with value of parameters
-        foreach ($params as $index => $param)
-        {
+        foreach ($params as $index => $param) {
             $paramNr = $index + 1;
 
             $param = self::translateIfTranslationStrId($param);
@@ -411,10 +391,8 @@ class Language
 
         // if not exists create a \SimpleXMLElement of the language file in the language path
         // and add it to the array of language objects
-        if (!array_key_exists($languageFilePath, $xmlLanguageObjects))
-        {
-            if (!is_file($languageFilePath))
-            {
+        if (!array_key_exists($languageFilePath, $xmlLanguageObjects)) {
+            if (!is_file($languageFilePath)) {
                 $gLogger->error('L10N: Language file does not exist!', array('languageFilePath' => $languageFilePath));
 
                 throw new \OutOfBoundsException('Language file does not exist!');
@@ -426,8 +404,7 @@ class Language
         // text not in cache -> read from xml file in "Android Resource String" format
         $xmlNodes = $xmlLanguageObjects[$languageFilePath]->xpath('/resources/string[@name="'.$textId.'"]');
 
-        if ($xmlNodes === false || count($xmlNodes) === 0)
-        {
+        if ($xmlNodes === false || count($xmlNodes) === 0) {
             throw new \OutOfBoundsException('Could not found text-id!');
         }
 
@@ -449,16 +426,12 @@ class Language
     private function searchTextIdInLangObject(array &$xmlLanguageObjects, $language, $textId)
     {
         $languageFolderPaths = $this->languageData->getLanguageFolderPaths();
-        foreach ($languageFolderPaths as $languageFolderPath)
-        {
-            try
-            {
+        foreach ($languageFolderPaths as $languageFolderPath) {
+            try {
                 $languageFilePath = $languageFolderPath . '/' . $language . '.xml';
 
                 return $this->searchLanguageText($xmlLanguageObjects, $languageFilePath, $textId);
-            }
-            catch (\OutOfBoundsException $exception)
-            {
+            } catch (\OutOfBoundsException $exception) {
                 // continue searching, no debug output because this will be default way if you have several language path through plugins
             }
         }
@@ -473,8 +446,7 @@ class Language
      */
     public function setLanguage($language)
     {
-        if ($language === $this->languageData->getLanguage())
-        {
+        if ($language === $this->languageData->getLanguage()) {
             return false;
         }
 
@@ -496,8 +468,7 @@ class Language
     {
         global $gL10n;
 
-        if (self::isTranslationStringId($string))
-        {
+        if (self::isTranslationStringId($string)) {
             return $gL10n->get($string);
         }
 

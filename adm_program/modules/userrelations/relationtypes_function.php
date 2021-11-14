@@ -25,14 +25,12 @@ require(__DIR__ . '/../../system/login_valid.php');
 $getUrtUuid = admFuncVariableIsValid($_GET, 'urt_uuid', 'string');
 $getMode    = admFuncVariableIsValid($_GET, 'mode',     'int', array('requireValue' => true));
 
-if (!$gSettingsManager->getBool('members_enable_user_relations'))
-{
+if (!$gSettingsManager->getBool('members_enable_user_relations')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-if (!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -51,28 +49,23 @@ try {
 
 $relationType = new TableUserRelationType($gDb);
 
-if($getUrtUuid !== '')
-{
+if ($getUrtUuid !== '') {
     $relationType->readDataByUuid($getUrtUuid);
 }
 
-if($getMode === 1)
-{
+if ($getMode === 1) {
     // create or edit relationtype
 
-    if(!isset($_POST['urt_edit_user']))
-    {
+    if (!isset($_POST['urt_edit_user'])) {
         $_POST['urt_edit_user'] = 0;
     }
 
-    if(!isset($_POST['urt_edit_user_inverse']))
-    {
+    if (!isset($_POST['urt_edit_user_inverse'])) {
         $_POST['urt_edit_user_inverse'] = 0;
     }
 
     $relationType2 = new TableUserRelationType($gDb);
-    if($getUrtUuid !== '')
-    {
+    if ($getUrtUuid !== '') {
         $relationType2->readDataById((int) $relationType->getValue('urt_id_inverse'));
     }
 
@@ -92,8 +85,7 @@ if($getMode === 1)
             )
         )
     );
-    if ($postRelationType === 'asymmetrical')
-    {
+    if ($postRelationType === 'asymmetrical') {
         $relationType2->setValue('urt_name', $_POST['urt_name_inverse']);
         $relationType2->setValue('urt_name_male', empty($_POST['urt_name_male_inverse']) ? $_POST['urt_name_inverse'] : $_POST['urt_name_male_inverse']);
         $relationType2->setValue('urt_name_female', empty($_POST['urt_name_female_inverse']) ? $_POST['urt_name_inverse'] : $_POST['urt_name_female_inverse']);
@@ -105,23 +97,18 @@ if($getMode === 1)
 
     $relationType->save();
 
-    if ($postRelationType === 'asymmetrical')
-    {
-        if($getUrtUuid === '')
-        {
+    if ($postRelationType === 'asymmetrical') {
+        if ($getUrtUuid === '') {
             $relationType2->setValue('urt_id_inverse', (int) $relationType->getValue('urt_id'));
         }
 
         $relationType2->save();
 
-        if($getUrtUuid === '')
-        {
+        if ($getUrtUuid === '') {
             $relationType->setValue('urt_id_inverse', (int) $relationType2->getValue('urt_id'));
             $relationType->save();
         }
-    }
-    elseif ($postRelationType === 'symmetrical')
-    {
+    } elseif ($postRelationType === 'symmetrical') {
         $relationType->setValue('urt_id_inverse', (int) $relationType->getValue('urt_id'));
         $relationType->save();
     }
@@ -130,20 +117,14 @@ if($getMode === 1)
 
     $gNavigation->deleteLastUrl();
     admRedirect($gNavigation->getUrl());
-    // => EXIT
-}
-elseif($getMode === 2)
-{
+// => EXIT
+} elseif ($getMode === 2) {
     // delete relationtype
-    try
-    {
-        if($relationType->delete())
-        {
+    try {
+        if ($relationType->delete()) {
             echo 'done';
         }
-    }
-    catch(AdmException $e)
-    {
+    } catch (AdmException $e) {
         $e->showText();
         // => EXIT
     }

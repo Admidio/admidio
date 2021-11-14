@@ -12,14 +12,12 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // only authorized users can import users
-if(!$gCurrentUser->editUsers())
-{
+if (!$gCurrentUser->editUsers()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
-if(count($_SESSION['import_data']) === 0)
-{
+if (count($_SESSION['import_data']) === 0) {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
     // => EXIT
 }
@@ -29,19 +27,15 @@ $headline = $gL10n->get('SYS_ASSIGN_FIELDS');
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-if(isset($_SESSION['import_csv_request']))
-{
+if (isset($_SESSION['import_csv_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
     $formValues = $_SESSION['import_csv_request'];
     unset($_SESSION['import_csv_request']);
-    if(!isset($form['first_row']))
-    {
+    if (!isset($form['first_row'])) {
         $formValues['first_row'] = false;
     }
-}
-else
-{
+} else {
     $formValues['first_row'] = true;
 }
 
@@ -92,13 +86,10 @@ $htmlFieldTable = '
 
         // list every profile field from database
 
-        foreach($gProfileFields->getProfileFields() as $field)
-        {
+        foreach ($gProfileFields->getProfileFields() as $field) {
             $catId = (int) $field->getValue('cat_id');
-            if($categoryId !== $catId)
-            {
-                if($categoryId !== null)
-                {
+            if ($categoryId !== $catId) {
+                if ($categoryId !== null) {
                     $htmlFieldTable .= '</tbody>';
                 }
                 $htmlFieldTable .= '<tbody>
@@ -117,58 +108,52 @@ $htmlFieldTable = '
                     $field->getValue('usf_name_intern')));
             $htmlFieldTable .= '<tr>
                 <td><label for="usf-'. $usfId. '" title="'.$tooltip.'">'.$field->getValue('usf_name');
-                    // Lastname und first name are mandatory fields
-                    if($field->getValue('usf_name_intern') === 'LAST_NAME' || $field->getValue('usf_name_intern') === 'FIRST_NAME')
-                    {
-                        $htmlFieldTable .= '&nbsp;&nbsp;<span class="text-danger">('.$gL10n->get('SYS_MANDATORY_FIELD').')</span>';
-                    }
-                    $htmlFieldTable .= '</label></td>
+            // Lastname und first name are mandatory fields
+            if ($field->getValue('usf_name_intern') === 'LAST_NAME' || $field->getValue('usf_name_intern') === 'FIRST_NAME') {
+                $htmlFieldTable .= '&nbsp;&nbsp;<span class="text-danger">('.$gL10n->get('SYS_MANDATORY_FIELD').')</span>';
+            }
+            $htmlFieldTable .= '</label></td>
                 <td>
                     <select class="form-control admidio-import-field" size="1" id="usf-'. $usfId. '" name="usf-'. $usfId. '">';
 
-                        $selectEntries = '';
-                        // Alle Spalten aus der Datei in Combobox auflisten
-                        $found = false;
-                        foreach($arrayCsvColumns as $colKey => $colValue)
-                        {
-                            $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
+            $selectEntries = '';
+            // Alle Spalten aus der Datei in Combobox auflisten
+            $found = false;
+            foreach ($arrayCsvColumns as $colKey => $colValue) {
+                $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
 
-                            $selected = '';
-                            // If the user is returned to the form (e.g. a required
-                            // field was not selected), the $formValues['usf-#']
-                            // array is populated, so use the assignments from the previous
-                            // config page, so the config is preserved:
-                            if(isset($formValues['usf-'. $usfId]))
-                            {
-                                if (strlen($formValues['usf-'. $usfId]) > 0 && $formValues['usf-'. $usfId] == $colKey)
-                                {
-                                    $selected .= ' selected="selected"';
-                                    $found = true;
-                                }
-                            }
-                            // Otherwise, detect the entry where the column header
-                            // matches the Admidio field name or internal field name (case-insensitive)
-                            elseif (strtolower($colValue) == strtolower($field->getValue('usf_name'))
-                                || strtolower($colValue) == strtolower($field->getValue('usf_name_intern')))
-                            {
-                                $selected .= ' selected="selected"';
-                                $found = true;
-                            }
-                            $selectEntries .= '<option value="'.$colKey.'"'.$selected.'>'.$colValue.'</option>';
-                        }
-                        // Insert default (empty) entry and select if if no other item is selected
-                        $htmlFieldTable .= '<option value=""'.($found ? ' selected="selected"' : '').'></option>';
-                        $htmlFieldTable .= $selectEntries;
+                $selected = '';
+                // If the user is returned to the form (e.g. a required
+                // field was not selected), the $formValues['usf-#']
+                // array is populated, so use the assignments from the previous
+                // config page, so the config is preserved:
+                if (isset($formValues['usf-'. $usfId])) {
+                    if (strlen($formValues['usf-'. $usfId]) > 0 && $formValues['usf-'. $usfId] == $colKey) {
+                        $selected .= ' selected="selected"';
+                        $found = true;
+                    }
+                }
+                // Otherwise, detect the entry where the column header
+                // matches the Admidio field name or internal field name (case-insensitive)
+                elseif (strtolower($colValue) == strtolower($field->getValue('usf_name'))
+                                || strtolower($colValue) == strtolower($field->getValue('usf_name_intern'))) {
+                    $selected .= ' selected="selected"';
+                    $found = true;
+                }
+                $selectEntries .= '<option value="'.$colKey.'"'.$selected.'>'.$colValue.'</option>';
+            }
+            // Insert default (empty) entry and select if if no other item is selected
+            $htmlFieldTable .= '<option value=""'.($found ? ' selected="selected"' : '').'></option>';
+            $htmlFieldTable .= $selectEntries;
 
 
-                    $htmlFieldTable .= '</select>
+            $htmlFieldTable .= '</select>
                 </td>
             </tr>';
         }
 
         // administrator could also import loginname and password
-        if($gCurrentUser->isAdministrator())
-        {
+        if ($gCurrentUser->isAdministrator()) {
             $tooltip = trim($gL10n->get('SYS_POSSIBLE_FIELDNAMES',
                 array(
                     $gL10n->get('SYS_USERNAME'))));
@@ -188,87 +173,79 @@ $htmlFieldTable = '
                     <td>
                         <select class="form-control admidio-import-field" size="1" id="usr_login_name" name="usr_login_name">';
 
-                            $selectEntries = '';
-                            // Alle Spalten aus der Datei in Combobox auflisten
-                            $found = false;
-                            foreach($arrayCsvColumns as $colKey => $colValue)
-                            {
-                                $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
+            $selectEntries = '';
+            // Alle Spalten aus der Datei in Combobox auflisten
+            $found = false;
+            foreach ($arrayCsvColumns as $colKey => $colValue) {
+                $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
 
-                                $selected = '';
-                                // If the user is returned to the form (e.g. a required
-                                // field was not selected), the $formValues['usf-#']
-                                // array is populated, so use the assignments from the previous
-                                // config page, so the config is preserved:
-                                if(isset($formValues['usr_login_name']))
-                                {
-                                    if (strlen($formValues['usr_login_name']) > 0 && $formValues['usr_login_name'] == $colKey)
-                                    {
-                                        $selected .= ' selected="selected"';
-                                        $found = true;
-                                    }
-                                }
-                                // Otherwise, detect the entry where the column header
-                                // matches the Admidio field name or internal field name (case-insensitive)
-                                elseif (strtolower($colValue) == strtolower($gL10n->get('SYS_USERNAME')))
-                                {
-                                    $selected .= ' selected="selected"';
-                                    $found = true;
-                                }
-                                $selectEntries .= '<option value="'.$colKey.'"'.$selected.'>'.$colValue.'</option>';
-                            }
-                            // Insert default (empty) entry and select if if no other item is selected
-                            $htmlFieldTable .= '<option value=""'.($found ? ' selected="selected"' : '').'></option>';
-                            $htmlFieldTable .= $selectEntries;
+                $selected = '';
+                // If the user is returned to the form (e.g. a required
+                // field was not selected), the $formValues['usf-#']
+                // array is populated, so use the assignments from the previous
+                // config page, so the config is preserved:
+                if (isset($formValues['usr_login_name'])) {
+                    if (strlen($formValues['usr_login_name']) > 0 && $formValues['usr_login_name'] == $colKey) {
+                        $selected .= ' selected="selected"';
+                        $found = true;
+                    }
+                }
+                // Otherwise, detect the entry where the column header
+                // matches the Admidio field name or internal field name (case-insensitive)
+                elseif (strtolower($colValue) == strtolower($gL10n->get('SYS_USERNAME'))) {
+                    $selected .= ' selected="selected"';
+                    $found = true;
+                }
+                $selectEntries .= '<option value="'.$colKey.'"'.$selected.'>'.$colValue.'</option>';
+            }
+            // Insert default (empty) entry and select if if no other item is selected
+            $htmlFieldTable .= '<option value=""'.($found ? ' selected="selected"' : '').'></option>';
+            $htmlFieldTable .= $selectEntries;
 
 
-                        $htmlFieldTable .= '</select>
+            $htmlFieldTable .= '</select>
                     </td>
                 </tr>';
-                $tooltip = trim($gL10n->get('SYS_POSSIBLE_FIELDNAMES',
+            $tooltip = trim($gL10n->get('SYS_POSSIBLE_FIELDNAMES',
                     array(
                         $gL10n->get('SYS_PASSWORD'))));
 
-                $htmlFieldTable .= '<tr>
+            $htmlFieldTable .= '<tr>
                     <td><label for="usr_password" title="'.$tooltip.'">' . $gL10n->get('SYS_PASSWORD') . '</td>
                     <td>
                         <select class="form-control admidio-import-field" size="1" id="usr_password" name="usr_password">';
 
-                            $selectEntries = '';
-                            // Alle Spalten aus der Datei in Combobox auflisten
-                            $found = false;
-                            foreach($arrayCsvColumns as $colKey => $colValue)
-                            {
-                                $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
+            $selectEntries = '';
+            // Alle Spalten aus der Datei in Combobox auflisten
+            $found = false;
+            foreach ($arrayCsvColumns as $colKey => $colValue) {
+                $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
 
-                                $selected = '';
-                                // If the user is returned to the form (e.g. a required
-                                // field was not selected), the $formValues['usf-#']
-                                // array is populated, so use the assignments from the previous
-                                // config page, so the config is preserved:
-                                if(isset($formValues['usr_password']))
-                                {
-                                    if (strlen($formValues['usr_password']) > 0 && $formValues['usr_password'] == $colKey)
-                                    {
-                                        $selected .= ' selected="selected"';
-                                        $found = true;
-                                    }
-                                }
-                                // Otherwise, detect the entry where the column header
-                                // matches the Admidio field name or internal field name (case-insensitive)
-                                elseif (strtolower($colValue) == strtolower($gL10n->get('SYS_PASSWORD')))
-                                {
-                                    $selected .= ' selected="selected"';
-                                    $found = true;
-                                }
-                                $selectEntries .= '<option value="'.$colKey.'"'.$selected.'>'.$colValue.'</option>';
-                            }
-                            // Insert default (empty) entry and select if if no other item is selected
-                            $htmlFieldTable .= '<option value=""'.($found ? ' selected="selected"' : '').'></option>';
-                            $htmlFieldTable .= $selectEntries;
+                $selected = '';
+                // If the user is returned to the form (e.g. a required
+                // field was not selected), the $formValues['usf-#']
+                // array is populated, so use the assignments from the previous
+                // config page, so the config is preserved:
+                if (isset($formValues['usr_password'])) {
+                    if (strlen($formValues['usr_password']) > 0 && $formValues['usr_password'] == $colKey) {
+                        $selected .= ' selected="selected"';
+                        $found = true;
+                    }
+                }
+                // Otherwise, detect the entry where the column header
+                // matches the Admidio field name or internal field name (case-insensitive)
+                elseif (strtolower($colValue) == strtolower($gL10n->get('SYS_PASSWORD'))) {
+                    $selected .= ' selected="selected"';
+                    $found = true;
+                }
+                $selectEntries .= '<option value="'.$colKey.'"'.$selected.'>'.$colValue.'</option>';
+            }
+            // Insert default (empty) entry and select if if no other item is selected
+            $htmlFieldTable .= '<option value=""'.($found ? ' selected="selected"' : '').'></option>';
+            $htmlFieldTable .= $selectEntries;
 
 
-                        $htmlFieldTable .= '</select>
+            $htmlFieldTable .= '</select>
                     </td>
                 </tr>
             </tbody>';

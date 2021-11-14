@@ -8,8 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if (basename($_SERVER['SCRIPT_FILENAME']) === 'polyfill.php')
-{
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'polyfill.php') {
     exit('This page may not be called directly!');
 }
 
@@ -27,17 +26,20 @@ if (!defined('PASSWORD_ARGON2ID')) {
 
 // For PHP <8.0
 if (!function_exists('str_contains')) {
-    function str_contains($haystack, $needle) {
+    function str_contains($haystack, $needle)
+    {
         return $needle === '' || \strpos($haystack, $needle) !== false;
     }
 }
 if (!function_exists('str_starts_with')) {
-    function str_starts_with($haystack, $needle) {
+    function str_starts_with($haystack, $needle)
+    {
         return \strncmp($haystack, $needle, \strlen($needle)) === 0;
     }
 }
 if (!function_exists('str_ends_with')) {
-    function str_ends_with($haystack, $needle) {
+    function str_ends_with($haystack, $needle)
+    {
         return $needle === '' || ($haystack !== '' && \substr_compare($haystack, $needle, -\strlen($needle)) === 0);
     }
 }

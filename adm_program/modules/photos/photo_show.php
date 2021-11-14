@@ -34,32 +34,25 @@ $getThumbnail = admFuncVariableIsValid($_GET, 'thumb',      'bool');
 $image        = null;
 
 // check if the module is enabled and disallow access if it's disabled
-if ((int) $gSettingsManager->get('enable_photo_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-    // => EXIT
-}
-elseif ((int) $gSettingsManager->get('enable_photo_module') === 2)
-{
+// => EXIT
+} elseif ((int) $gSettingsManager->get('enable_photo_module') === 2) {
     // only logged in users can access the module
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // read album data out of session or database
-if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid)
-{
+if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid) {
     $photoAlbum =& $_SESSION['photo_album'];
-}
-else
-{
+} else {
     $photoAlbum = new TablePhotos($gDb);
     $photoAlbum->readDataByUuid($getPhotoUuid);
     $_SESSION['photo_album'] = $photoAlbum;
 }
 
 // check if the current user could view this photo album
-if(!$photoAlbum->isVisible())
-{
+if (!$photoAlbum->isVisible()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -72,32 +65,24 @@ $picThumbPath = $albumFolder . '/thumbnails/' . $getPhotoNr . '.jpg';
 // output the determined image path in debug mode
 $gLogger->info('ImagePath: ' . $picPath);
 
-if ($getThumbnail)
-{
-    if ($getPhotoNr > 0)
-    {
+if ($getThumbnail) {
+    if ($getPhotoNr > 0) {
         $thumbLength = null;
 
         // If thumbnail exists detect longer page
-        if (is_file($picThumbPath))
-        {
+        if (is_file($picThumbPath)) {
             $imageProperties = getimagesize($picThumbPath);
-            if (is_array($imageProperties))
-            {
+            if (is_array($imageProperties)) {
                 $thumbLength = max($imageProperties[0], $imageProperties[1]);
             }
         }
 
         // Check whether the image is stored as a thumbnail in the appropriate size, if not, create it.
-        if (!is_file($picThumbPath) || $thumbLength !== $gSettingsManager->getInt('photo_thumbs_scale'))
-        {
-            try
-            {
+        if (!is_file($picThumbPath) || $thumbLength !== $gSettingsManager->getInt('photo_thumbs_scale')) {
+            try {
                 // If thumnail directory does not exist, create one
                 FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/thumbnails');
-            }
-            catch (\RuntimeException $exception)
-            {
+            } catch (\RuntimeException $exception) {
                 $gLogger->error('Could not create directory!', array('directoryPath' => $albumFolder . '/thumbnails'));
                 // TODO
             }
@@ -106,51 +91,36 @@ if ($getThumbnail)
             $image = new Image($picPath);
             $image->scaleLargerSide($gSettingsManager->getInt('photo_thumbs_scale'));
             $image->copyToFile(null, $picThumbPath);
-        }
-        else
-        {
+        } else {
             header('Content-Type: image/jpeg');
             readfile($picThumbPath);
         }
-    }
-    else
-    {
+    } else {
         // if no image was passed, then display NoPix
         $image = new Image(THEME_PATH . '/images/no_photo_found.png');
         $image->scaleLargerSide($gSettingsManager->getInt('photo_thumbs_scale'));
     }
-}
-else
-{
-    if (!is_file($picPath))
-    {
+} else {
+    if (!is_file($picPath)) {
         $picPath = THEME_PATH . '/images/no_photo_found.png';
     }
 
     // read image from filesystem and scale it if necessary
     $image = new Image($picPath);
-    if($getMaxWidth > 0 || $getMaxHeight > 0)
-    {
+    if ($getMaxWidth > 0 || $getMaxHeight > 0) {
         $image->scale($getMaxWidth, $getMaxHeight);
-    }
-    else
-    {
+    } else {
         // image should not be scaled so read the size of the image
         list($getMaxWidth, $getMaxHeight) = $image->getImageSize();
     }
 }
 
-if ($image !== null)
-{
+if ($image !== null) {
     // insert copyright text into photo if photo size is larger than 200px
-    if (($getMaxWidth > 200) && $gSettingsManager->getString('photo_image_text') !== '')
-    {
-        if ($gSettingsManager->getInt('photo_image_text_size') > 0)
-        {
+    if (($getMaxWidth > 200) && $gSettingsManager->getString('photo_image_text') !== '') {
+        if ($gSettingsManager->getInt('photo_image_text_size') > 0) {
             $fontSize = $getMaxWidth / $gSettingsManager->getInt('photo_image_text_size');
-        }
-        else
-        {
+        } else {
             $fontSize = $getMaxWidth / 40;
         }
         $imageSize = $image->getImageSize();
@@ -160,12 +130,9 @@ if ($image !== null)
         $fontTtf = ADMIDIO_PATH . '/adm_program/system/fonts/mrphone.ttf';
 
         // show name of photograph if set otherwise show name of organization
-        if(strlen($photoAlbum->getValue('pho_photographers')) > 0)
-        {
+        if (strlen($photoAlbum->getValue('pho_photographers')) > 0) {
             $text = '© ' . $photoAlbum->getValue('pho_photographers');
-        }
-        else
-        {
+        } else {
             $text = $gSettingsManager->getString('photo_image_text');
         }
 

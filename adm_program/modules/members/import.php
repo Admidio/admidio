@@ -12,15 +12,13 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // only authorized users can import users
-if(!$gCurrentUser->editUsers())
-{
+if (!$gCurrentUser->editUsers()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
 // check if file_uploads is set to ON in the current server settings...
-if (!PhpIniUtils::isFileUploadEnabled())
-{
+if (!PhpIniUtils::isFileUploadEnabled()) {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
     // => EXIT
 }
@@ -30,8 +28,7 @@ $headline = $gL10n->get('SYS_IMPORT_USERS');
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-if(isset($_SESSION['import_request']))
-{
+if (isset($_SESSION['import_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
     $formValues = $_SESSION['import_request'];
@@ -149,13 +146,11 @@ $form->addSelectBox(
 // first read all relevant roles from database and create an array with them
 $condition = '';
 
-if(!$gCurrentUser->manageRoles())
-{
+if (!$gCurrentUser->manageRoles()) {
     // keine Rollen mit Rollenzuordnungsrecht anzeigen
     $condition .= ' AND rol_assign_roles = false ';
 }
-if(!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     // Don't show administrator role
     $condition .= ' AND rol_administrator = false ';
 }
@@ -173,8 +168,7 @@ $sql = 'SELECT rol_id, rol_name, cat_name
 $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 $roles = array();
 
-while($row = $statement->fetch())
-{
+while ($row = $statement->fetch()) {
     $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
 }
 $form->addSelectBox(

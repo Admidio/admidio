@@ -24,16 +24,14 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if (!$gSettingsManager->getBool('enable_rss'))
-{
+if (!$gSettingsManager->getBool('enable_rss')) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
     // => EXIT
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if ((int) $gSettingsManager->get('enable_guestbook_module') !== 1)
-{
+if ((int) $gSettingsManager->get('enable_guestbook_module') !== 1) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -63,8 +61,7 @@ $rss = new RssFeed(
 $guestbook = new TableGuestbook($gDb);
 
 // Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $statement->fetch())
-{
+while ($row = $statement->fetch()) {
     // ausgelesene Gaestebuchdaten in Guestbook-Objekt schieben
     $guestbook->clear();
     $guestbook->setArray($row);

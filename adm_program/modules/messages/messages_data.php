@@ -58,34 +58,23 @@ header('Content-Type: application/json');
 $orderCondition = '';
 $orderColumns = array('msg_type', 'msg_subject', 'recipients', 'attachments', 'msg_timestamp');
 
-if(array_key_exists('order', $_GET))
-{
-    foreach($_GET['order'] as $order)
-    {
-        if(is_numeric($order['column']))
-        {
-            if($orderCondition === '')
-            {
+if (array_key_exists('order', $_GET)) {
+    foreach ($_GET['order'] as $order) {
+        if (is_numeric($order['column'])) {
+            if ($orderCondition === '') {
                 $orderCondition = ' ORDER BY ';
-            }
-            else
-            {
+            } else {
                 $orderCondition .= ', ';
             }
 
-            if(strtoupper($order['dir']) === 'ASC')
-            {
+            if (strtoupper($order['dir']) === 'ASC') {
                 $orderCondition .= $orderColumns[$order['column']]. ' ASC ';
-            }
-            else
-            {
+            } else {
                 $orderCondition .= $orderColumns[$order['column']]. ' DESC ';
             }
         }
     }
-}
-else
-{
+} else {
     $orderCondition = ' ORDER BY msg_timestamp DESC ';
 }
 
@@ -96,12 +85,10 @@ $searchColumns = array(
     'COALESCE(msg_subject, \' \')'
 );
 
-if($getSearch !== '' && count($searchColumns) > 0)
-{
+if ($getSearch !== '' && count($searchColumns) > 0) {
     $searchString = explode(' ', $getSearch);
 
-    foreach($searchString as $searchWord)
-    {
+    foreach ($searchString as $searchWord) {
         $searchCondition .= ' AND concat(' . implode(', ', $searchColumns) . ') LIKE \'%'.$searchWord.'%\' ';
     }
 
@@ -145,18 +132,14 @@ $queryParamsMain = array(
 );
 
 $limitCondition = '';
-if($getLength > 0)
-{
+if ($getLength > 0) {
     $limitCondition = ' LIMIT ' . $getLength . ' OFFSET ' . $getStart;
 }
 
-if($getSearch === '')
-{
+if ($getSearch === '') {
     // no search condition entered then return all records in dependence of order, limit and offset
     $sql = $mainSql . $orderCondition . $limitCondition;
-}
-else
-{
+} else {
     $sql = 'SELECT msg_id, msg_uuid, msg_type, msg_subject, attachments, msg_timestamp
               FROM ('.$mainSql.') AS members
                '.$searchCondition
@@ -168,8 +151,7 @@ $messageStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $que
 $rowNumber = $getStart; // count for every row
 
 // show rows with all organization users
-while($message = $messageStatement->fetch())
-{
+while ($message = $messageStatement->fetch()) {
     ++$rowNumber;
     $arrContent = array();
     $cssClass   = 'font-weight-normal';
@@ -179,32 +161,24 @@ while($message = $messageStatement->fetch())
     $messageObject->setArray($message);
 
     // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
-    if($message['msg_type'] === TableMessage::MESSAGE_TYPE_EMAIL)
-    {
+    if ($message['msg_type'] === TableMessage::MESSAGE_TYPE_EMAIL) {
         $icon = 'fa-envelope';
         $iconText = $gL10n->get('SYS_EMAIL');
         $links = '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_uuid' => $message['msg_uuid'], 'forward' => '1')) . '">
                     <i class="fas fa-share" data-toggle="tooltip" title="'.$gL10n->get('SYS_FORWARD').'"></i></a>';
-
-    }
-    else
-    {
+    } else {
         $icon = 'fa-comment-alt';
         $iconText = $gL10n->get('SYS_PRIVATE_MESSAGES');
         $links = '';
     }
 
-    if($messageObject->isUnread())
-    {
+    if ($messageObject->isUnread()) {
         $cssClass = 'font-weight-bold';
     }
 
-    if($message['attachments'] === 1)
-    {
+    if ($message['attachments'] === 1) {
         $iconAttachments = '<i class="fas fa-paperclip" data-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENT_ONE') . '"></i>';
-    }
-    elseif($message['attachments'] > 1)
-    {
+    } elseif ($message['attachments'] > 1) {
         $iconAttachments = '<i class="fas fa-paperclip" data-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENTS_VAR', array($message['attachments'])) . '"></i>';
     }
 
@@ -226,14 +200,10 @@ while($message = $messageStatement->fetch())
 }
 
 // set count of filtered records
-if($getSearch !== '')
-{
-    if($rowNumber < $getStart + $getLength)
-    {
+if ($getSearch !== '') {
+    if ($rowNumber < $getStart + $getLength) {
         $jsonArray['recordsFiltered'] = $rowNumber;
-    }
-    else
-    {
+    } else {
         // read count of all filtered records without limit and offset
         $sql = 'SELECT COUNT(*) AS count
                   FROM ('.$mainSql.') AS members
@@ -241,15 +211,12 @@ if($getSearch !== '')
         $countFilteredStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $queryParamsSearch));
         $jsonArray['recordsFiltered'] = (int) $countFilteredStatement->fetchColumn();
     }
-}
-else
-{
+} else {
     $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
 }
 
 // add empty data element if no rows where found
-if(!array_key_exists('data', $jsonArray))
-{
+if (!array_key_exists('data', $jsonArray)) {
     $jsonArray['data'] = array();
 }
 

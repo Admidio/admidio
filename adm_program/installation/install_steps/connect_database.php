@@ -8,18 +8,14 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if (basename($_SERVER['SCRIPT_FILENAME']) === 'connect_database.php')
-{
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'connect_database.php') {
     exit('This page may not be called directly!');
 }
 
-if (isset($_POST['system_language']) && trim($_POST['system_language']) !== '')
-{
+if (isset($_POST['system_language']) && trim($_POST['system_language']) !== '') {
     $_SESSION['language'] = $_POST['system_language'];
     $gL10n->setLanguage($_SESSION['language']);
-}
-elseif (!isset($_SESSION['language']))
-{
+} elseif (!isset($_SESSION['language'])) {
     $page = new HtmlPageInstallation('admidio-installation-message');
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'), $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome')));
@@ -34,17 +30,14 @@ $hostRegex = '^(' . $hostnameRegex . '|' . $ipv4Regex . '|' . $ipv6Regex . ')$';
 $sqlIdentifiersRegex = '^[a-zA-Z0-9_$@-]+$';
 
 // initialize form data
-if (isset($_SESSION['db_host']))
-{
+if (isset($_SESSION['db_host'])) {
     $dbEngine    = $_SESSION['db_engine'];
     $dbHost      = $_SESSION['db_host'];
     $dbPort      = $_SESSION['db_port'];
     $dbName      = $_SESSION['db_name'];
     $dbUsername  = $_SESSION['db_username'];
     $tablePrefix = $_SESSION['table_prefix'];
-}
-else
-{
+} else {
     $dbEngine    = '';
     $dbHost      = '';
     $dbPort      = '';

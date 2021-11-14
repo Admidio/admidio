@@ -25,20 +25,17 @@ $htmlUrl = '';
 $message = '';
 
 // check if a file was really uploaded
-if(!file_exists($_FILES['upload']['tmp_name']) || !is_uploaded_file($_FILES['upload']['tmp_name']))
-{
+if (!file_exists($_FILES['upload']['tmp_name']) || !is_uploaded_file($_FILES['upload']['tmp_name'])) {
     $message = $gL10n->get('SYS_FILE_NOT_EXIST');
 }
 
 // checks if the server settings for file_upload are set to ON
-if (!PhpIniUtils::isFileUploadEnabled())
-{
+if (!PhpIniUtils::isFileUploadEnabled()) {
     $message = $gL10n->get('SYS_SERVER_NO_UPLOAD');
 }
 
 // if necessary create the module folders in adm_my_files
-switch ($getCKEditor)
-{
+switch ($getCKEditor) {
     case 'ann_description':
         $folderName = 'announcements';
         break;
@@ -64,8 +61,7 @@ switch ($getCKEditor)
         // TODO
 }
 
-try
-{
+try {
     $imagesPath = ADMIDIO_PATH . FOLDER_DATA . '/' . $folderName . '/images';
 
     FileSystemUtils::createDirectoryIfNotExists($imagesPath);
@@ -78,9 +74,7 @@ try
     $htmlUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/show_image.php', array('module' => $folderName, 'file' => $filename));
 
     move_uploaded_file($_FILES['upload']['tmp_name'], $imagesPath . '/' . $filename);
-}
-catch (\RuntimeException $exception)
-{
+} catch (\RuntimeException $exception) {
     $message = $exception->getMessage();
 }
 

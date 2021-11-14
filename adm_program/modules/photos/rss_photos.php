@@ -24,21 +24,17 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if (!$gSettingsManager->getBool('enable_rss'))
-{
+if (!$gSettingsManager->getBool('enable_rss')) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
     // => EXIT
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if ((int) $gSettingsManager->get('enable_photo_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-    // => EXIT
-}
-elseif ((int) $gSettingsManager->get('enable_photo_module') === 2)
-{
+// => EXIT
+} elseif ((int) $gSettingsManager->get('enable_photo_module') === 2) {
     // only logged in users can access the module
     require(__DIR__ . '/../../system/login_valid.php');
 }
@@ -46,8 +42,7 @@ elseif ((int) $gSettingsManager->get('enable_photo_module') === 2)
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
 
-if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
-{
+if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
     // show firstname and lastname of create and last change user
     $additionalFields = ' cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name ';
     $additionalTables = '
@@ -61,9 +56,7 @@ if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
         $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
         $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
     );
-}
-else
-{
+} else {
     // show username of create and last change user
     $additionalFields = ' cre_username.usr_login_name AS create_name ';
     $additionalTables = '
@@ -97,8 +90,7 @@ $rss = new RssFeed(
 );
 
 // Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $statement->fetch())
-{
+while ($row = $statement->fetch()) {
     // Daten in ein Photo-Objekt uebertragen
     $photoAlbum->clear();
     $photoAlbum->setArray($row);
@@ -110,8 +102,7 @@ while ($row = $statement->fetch())
     $phoId       = (int) $photoAlbum->getValue('pho_id');
     $phoParentId = (int) $photoAlbum->getValue('pho_pho_id_parent');
 
-    while($phoParentId > 0)
-    {
+    while ($phoParentId > 0) {
         // Erfassen des Eltern Albums
         $sql = 'SELECT pho_name, pho_pho_id_parent
                   FROM '.TBL_PHOTOS.'
@@ -129,28 +120,23 @@ while ($row = $statement->fetch())
     // Inhalt zusammensetzen
     $description = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
     // Enddatum nur wenn anders als startdatum
-    if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin'))
-    {
+    if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin')) {
         $description = $gL10n->get('SYS_DATE_FROM_TO', array($description, $photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'))));
     }
     $description .= '<br />' . $photoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $photoAlbum->getValue('pho_photographers');
 
-    if (strlen($photoAlbum->getValue('pho_description')) > 0)
-    {
+    if (strlen($photoAlbum->getValue('pho_description')) > 0) {
         $description .= '<br /><br />' . $photoAlbum->getValue('pho_description') . '</p>';
     }
 
     // show the last five photos as examples
-    if ($photoAlbum->getValue('pho_quantity') > 0)
-    {
+    if ($photoAlbum->getValue('pho_quantity') > 0) {
         $description .= '<br /><br />'.$gL10n->get('SYS_PREVIEW').':<br />';
-        for ($photoNr = $photoAlbum->getValue('pho_quantity'); $photoNr >= $photoAlbum->getValue('pho_quantity')-4 && $photoNr > 0; --$photoNr)
-        {
+        for ($photoNr = $photoAlbum->getValue('pho_quantity'); $photoNr >= $photoAlbum->getValue('pho_quantity')-4 && $photoNr > 0; --$photoNr) {
             $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $phoId . '/' . $photoNr . '.jpg';
 
             // show only photo if that photo exists
-            if (is_file($photoPath))
-            {
+            if (is_file($photoPath)) {
                 $description .=
                     '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php', array('pho_id' => $phoId, 'photo_nr' => $photoNr)).'"><img
                     src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $phoId, 'photo_nr' => $photoNr,

@@ -62,18 +62,12 @@ class TableGuestbook extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        if ($columnName === 'gbo_text')
-        {
-            if (!isset($this->dbColumns['gbo_text']))
-            {
+        if ($columnName === 'gbo_text') {
+            if (!isset($this->dbColumns['gbo_text'])) {
                 $value = '';
-            }
-            elseif ($format === 'database')
-            {
+            } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['gbo_text']));
-            }
-            else
-            {
+            } else {
                 $value = $this->dbColumns['gbo_text'];
             }
 
@@ -104,8 +98,7 @@ class TableGuestbook extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        if ($this->newRecord)
-        {
+        if ($this->newRecord) {
             $this->setValue('gbo_org_id', $GLOBALS['gCurrentOrgId']);
             $this->setValue('gbo_ip_address', $_SERVER['REMOTE_ADDR']);
         }
@@ -123,26 +116,18 @@ class TableGuestbook extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($checkValue)
-        {
-            if ($columnName === 'gbo_text')
-            {
+        if ($checkValue) {
+            if ($columnName === 'gbo_text') {
                 return parent::setValue($columnName, $newValue, false);
-            }
-            elseif ($columnName === 'gbo_email' && $newValue !== '')
-            {
+            } elseif ($columnName === 'gbo_email' && $newValue !== '') {
                 // If Email has a invalid format, it won't be set
-                if (!StringUtils::strValidCharacters($newValue, 'email'))
-                {
+                if (!StringUtils::strValidCharacters($newValue, 'email')) {
                     return false;
                 }
-            }
-            elseif ($columnName === 'gbo_homepage' && $newValue !== '')
-            {
+            } elseif ($columnName === 'gbo_homepage' && $newValue !== '') {
                 $newValue = admFuncCheckUrl($newValue);
 
-                if ($newValue === false)
-                {
+                if ($newValue === false) {
                     return false;
                 }
             }

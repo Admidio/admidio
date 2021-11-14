@@ -24,8 +24,7 @@ $getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'bool');
 $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
 
-if ((int) $user->getValue('usr_id') === 0)
-{
+if ((int) $user->getValue('usr_id') === 0) {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }
@@ -34,52 +33,38 @@ if ((int) $user->getValue('usr_id') === 0)
 $image   = null;
 $picPath = THEME_PATH. '/images/no_profile_pic.png';
 
-if ($gCurrentUser->hasRightViewProfile($user))
-{
-    if ($getNewPhoto)
-    {
+if ($gCurrentUser->hasRightViewProfile($user)) {
+    if ($getNewPhoto) {
         // show temporary saved new photo from upload in database
-        if ((int) $gSettingsManager->get('profile_photo_storage') === 0)
-        {
+        if ((int) $gSettingsManager->get('profile_photo_storage') === 0) {
             $image = new Image();
             $image->setImageFromData($gCurrentSession->getValue('ses_binary'));
         }
         // show temporary saved new photo from upload in filesystem
-        else
-        {
+        else {
             $picPath = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '_new.jpg';
             $image = new Image($picPath);
         }
-    }
-    else
-    {
+    } else {
         // show photo from database
-        if ((int) $gSettingsManager->get('profile_photo_storage') === 0)
-        {
-            if (strlen($user->getValue('usr_photo')) != null)
-            {
+        if ((int) $gSettingsManager->get('profile_photo_storage') === 0) {
+            if (strlen($user->getValue('usr_photo')) != null) {
                 $image = new Image();
                 $image->setImageFromData($user->getValue('usr_photo'));
-            }
-            else
-            {
+            } else {
                 $image = new Image($picPath);
             }
         }
         // show photo from folder adm_my_files
-        else
-        {
+        else {
             $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '.jpg';
-            if (is_file($file))
-            {
+            if (is_file($file)) {
                 $picPath = $file;
             }
             $image = new Image($picPath);
         }
     }
-}
-else
-{
+} else {
     // if user has no right to view profile then show dummy photo
     $image = new Image($picPath);
 }

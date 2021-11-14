@@ -18,46 +18,38 @@ $pluginFolder = basename(__DIR__);
 require_once($rootPath . '/adm_program/system/common.php');
 
 // only include config file if it exists
-if (is_file(__DIR__ . '/config.php'))
-{
+if (is_file(__DIR__ . '/config.php')) {
     require_once(__DIR__ . '/config.php');
 }
 
 // set default values if there no value has been stored in the config.php
-if(!isset($plgCountFiles) || !is_numeric($plgCountFiles))
-{
+if (!isset($plgCountFiles) || !is_numeric($plgCountFiles)) {
     $plgCountFiles = 5;
 }
 
-if(!isset($plgMaxCharsFilename) || !is_numeric($plgMaxCharsFilename))
-{
+if (!isset($plgMaxCharsFilename) || !is_numeric($plgMaxCharsFilename)) {
     $plgMaxCharsFilename = 0;
 }
 
-if(!isset($plg_show_upload_timestamp))
-{
+if (!isset($plg_show_upload_timestamp)) {
     $plg_show_upload_timestamp = true;
 }
 
-if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
-{
+if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
     $plg_show_headline = 1;
 }
 
 // check if the module is enabled
-if(Component::isVisible('DOCUMENTS-FILES'))
-{
+if (Component::isVisible('DOCUMENTS-FILES')) {
     $countVisibleDownloads = 0;
     $sqlCondition          = '';
 
     echo '<div id="plugin-'. $pluginFolder. '" class="admidio-plugin-content">';
-    if($plg_show_headline)
-    {
+    if ($plg_show_headline) {
         echo '<h3>'.$gL10n->get('PLG_LATEST_FILES_HEADLINE').'</h3>';
     }
 
-    if(!$gValidLogin)
-    {
+    if (!$gValidLogin) {
         $sqlCondition = ' AND fol_public = true ';
     }
 
@@ -78,34 +70,27 @@ if(Component::isVisible('DOCUMENTS-FILES'))
 
     $filesStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
-    if($filesStatement->rowCount() > 0)
-    {
+    if ($filesStatement->rowCount() > 0) {
         echo '<div class="btn-group-vertical" role="group">';
 
-        while($rowFile = $filesStatement->fetch())
-        {
+        while ($rowFile = $filesStatement->fetch()) {
             $errorCode = '';
 
-            try
-            {
+            try {
                 // get recordset of current file from database
                 $file = new TableFile($gDb);
                 $file->getFileForDownload($rowFile['fil_uuid']);
-            }
-            catch(AdmException $e)
-            {
+            } catch (AdmException $e) {
                 $errorCode = $e->getMessage();
 
-                if($errorCode !== 'SYS_FOLDER_NO_RIGHTS')
-                {
+                if ($errorCode !== 'SYS_FOLDER_NO_RIGHTS') {
                     $e->showText();
                     // => EXIT
                 }
             }
 
             // only show download if user has rights to view folder
-            if($errorCode !== 'SYS_FOLDER_NO_RIGHTS')
-            {
+            if ($errorCode !== 'SYS_FOLDER_NO_RIGHTS') {
                 // get filename without extension and extension separatly
                 $fileName      = pathinfo($rowFile['fil_name'], PATHINFO_FILENAME);
                 $fullFolderFileName = $rowFile['fol_path']. '/'. $rowFile['fol_name']. '/'.$rowFile['fil_name'];
@@ -113,14 +98,12 @@ if(Component::isVisible('DOCUMENTS-FILES'))
                 ++$countVisibleDownloads;
 
                 // if max chars are set then limit characters of shown filename
-                if($plgMaxCharsFilename > 0 && strlen($fileName) > $plgMaxCharsFilename)
-                {
+                if ($plgMaxCharsFilename > 0 && strlen($fileName) > $plgMaxCharsFilename) {
                     $fileName = substr($fileName, 0, $plgMaxCharsFilename). '...';
                 }
 
                 // if set in config file then show timestamp of file upload
-                if($plg_show_upload_timestamp)
-                {
+                if ($plg_show_upload_timestamp) {
                     // Vorname und Nachname abfragen (Upload der Datei)
                     $user = new User($gDb, $gProfileFields, $rowFile['fil_usr_id']);
 
@@ -131,8 +114,7 @@ if(Component::isVisible('DOCUMENTS-FILES'))
                 <a class="btn admidio-icon-link" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/documents-files/get_file.php', array('file_id' => $rowFile['fil_id'])). '">'.
                     '<i class="fas ' . $file->getFontAwesomeIcon() . '"></i>' . $fileName . '.' . $file->getFileExtension() . '</a>';
 
-                if($countVisibleDownloads === $plgCountFiles)
-                {
+                if ($countVisibleDownloads === $plgCountFiles) {
                     break;
                 }
             }
@@ -141,19 +123,13 @@ if(Component::isVisible('DOCUMENTS-FILES'))
         echo '</div>';
     }
 
-    if($countVisibleDownloads === 0)
-    {
-        if($gValidLogin)
-        {
+    if ($countVisibleDownloads === 0) {
+        if ($gValidLogin) {
             echo $gL10n->get('PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE');
-        }
-        else
-        {
+        } else {
             echo $gL10n->get('SYS_FOLDER_NO_FILES_VISITOR');
         }
-    }
-    else
-    {
+    } else {
         echo '<hr />
         <a class="btn admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php"><i class="fas fa-list"></i>' . $gL10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS').'</a>';
     }

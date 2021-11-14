@@ -18,16 +18,11 @@ $rootPath = dirname(dirname(__DIR__));
 
 // embed config file
 $configPath = $rootPath . '/adm_my_files/config.php';
-if (is_file($configPath))
-{
+if (is_file($configPath)) {
     require_once($configPath);
-}
-elseif (is_file($rootPath . '/config.php'))
-{
+} elseif (is_file($rootPath . '/config.php')) {
     exit('<div style="color: #cc0000;">Old v1.x or v2.x Config-File detected! Please update first to the latest v3.3 Version!</div>');
-}
-else
-{
+} else {
     // no config file exists -> go to installation
     header('Location: installation.php');
     exit();
@@ -43,12 +38,9 @@ define('THEME_URL', 'layout');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
 
 // connect to database
-try
-{
+try {
     $gDb = Database::createDatabaseInstance();
-}
-catch (AdmException $e)
-{
+} catch (AdmException $e) {
     $gLanguageData = new LanguageData('en');
     $gL10n = new Language($gLanguageData);
 
@@ -60,40 +52,30 @@ catch (AdmException $e)
 }
 
 // start PHP session
-try
-{
+try {
     Session::start(COOKIE_PREFIX);
-}
-catch (\RuntimeException $exception)
-{
+} catch (\RuntimeException $exception) {
     // TODO
 }
 
 // determine session id
-if(array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE))
-{
+if (array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
     $gSessionId = $_COOKIE[COOKIE_PREFIX . '_SESSION_ID'];
-}
-else
-{
+} else {
     $gSessionId = session_id();
 }
 
 // create session object
-if(array_key_exists('gCurrentSession', $_SESSION))
-{
+if (array_key_exists('gCurrentSession', $_SESSION)) {
     $gCurrentSession = $_SESSION['gCurrentSession'];
-}
-else
-{
+} else {
     // create new session object and store it in PHP session
     $gCurrentSession = new Session($gDb, $gSessionId, COOKIE_PREFIX);
     $_SESSION['gCurrentSession'] = $gCurrentSession;
 }
 
 // check if adm_my_files has write privileges
-if (!is_writable(ADMIDIO_PATH . FOLDER_DATA))
-{
+if (!is_writable(ADMIDIO_PATH . FOLDER_DATA)) {
     echo $gL10n->get('INS_FOLDER_NOT_WRITABLE', array('adm_my_files'));
     exit();
 }
@@ -102,8 +84,7 @@ if (!is_writable(ADMIDIO_PATH . FOLDER_DATA))
 $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
 $pdoStatement = $gDb->queryPrepared($sql, array(), false);
 
-if (!$pdoStatement || $pdoStatement->rowCount() === 0)
-{
+if (!$pdoStatement || $pdoStatement->rowCount() === 0) {
     // no valid installation exists -> show installation wizard
     admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php');
     // => EXIT
@@ -118,8 +99,7 @@ $sql = 'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login_name = \'System\' '
 $pdoStatement = $gDb->queryPrepared($sql);
 $gCurrentUserId = $pdoStatement->fetchColumn();
 
-if ($gCurrentOrgId === 0)
-{
+if ($gCurrentOrgId === 0) {
     // Organization was not found
     exit('<div style="color: #cc0000;">Error: The organization of the config.php could not be found in the database!</div>');
 }
@@ -131,28 +111,20 @@ $gProfileFields = new ProfileFields($gDb, $gCurrentOrgId);
 $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 
 // create language and language data object to handle translations
-if (!$gSettingsManager->has('system_language'))
-{
+if (!$gSettingsManager->has('system_language')) {
     $gSettingsManager->set('system_language', 'de');
 }
 $gLanguageData = new LanguageData($gSettingsManager->getString('system_language'));
 $gL10n = new Language($gLanguageData);
 $gChangeNotification = new ChangeNotification();
 
-if (FileSystemUtils::isUnixWithPosix() && (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FOLDER_DATA)))
-{
-    try
-    {
+if (FileSystemUtils::isUnixWithPosix() && (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FOLDER_DATA))) {
+    try {
         FileSystemUtils::chmodDirectory(ADMIDIO_PATH . FOLDER_DATA);
-    }
-    catch (\RuntimeException $exception)
-    {
-        try
-        {
+    } catch (\RuntimeException $exception) {
+        try {
             $pathPermissions = FileSystemUtils::getPathPermissions(ADMIDIO_PATH . FOLDER_DATA);
-        }
-        catch (\RuntimeException $exception)
-        {
+        } catch (\RuntimeException $exception) {
             $pathPermissions = array('exception' => $exception->getMessage());
         }
         $pathPermissions['path'] = ADMIDIO_PATH . FOLDER_DATA;
@@ -168,15 +140,11 @@ if (FileSystemUtils::isUnixWithPosix() && (!is_executable(ADMIDIO_PATH . FOLDER_
 }
 
 // config.php exists at wrong place
-if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA . '/config.php'))
-{
+if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA . '/config.php')) {
     // try to delete the config file at the old place otherwise show notice to user
-    try
-    {
+    try {
         FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . '/config.php');
-    }
-    catch (\RuntimeException $exception)
-    {
+    } catch (\RuntimeException $exception) {
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL)),
@@ -188,8 +156,7 @@ if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA 
 // check database version
 $message = checkDatabaseVersion($gDb);
 
-if ($message !== '')
-{
+if ($message !== '') {
     $page = new HtmlPageInstallation('admidio-update-message');
     $page->setUpdateModus();
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $message,
@@ -204,23 +171,18 @@ $maxUpdateStep          = 0;
 $currentUpdateStep      = 0;
 
 $sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
-if (!$gDb->queryPrepared($sql, array(), false))
-{
+if (!$gDb->queryPrepared($sql, array(), false)) {
     // in Admidio version 2 the database version was stored in preferences table
-    if ($gSettingsManager->has('db_version'))
-    {
+    if ($gSettingsManager->has('db_version')) {
         $installedDbVersion     = $gSettingsManager->getString('db_version');
         $installedDbBetaVersion = $gSettingsManager->getInt('db_version_beta');
     }
-}
-else
-{
+} else {
     // read system component
     $componentUpdateHandle = new ComponentUpdate($gDb);
     $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
 
-    if ($componentUpdateHandle->getValue('com_id') > 0)
-    {
+    if ($componentUpdateHandle->getValue('com_id') > 0) {
         $installedDbVersion     = $componentUpdateHandle->getValue('com_version');
         $installedDbBetaVersion = (int) $componentUpdateHandle->getValue('com_beta');
         $currentUpdateStep      = (int) $componentUpdateHandle->getValue('com_update_step');
@@ -229,14 +191,12 @@ else
 }
 
 // if a beta was installed then create the version string with Beta version
-if ($installedDbBetaVersion > 0)
-{
+if ($installedDbBetaVersion > 0) {
     $installedDbVersion = $installedDbVersion . ' Beta ' . $installedDbBetaVersion;
 }
 
 // if database version is not set then show notice
-if ($installedDbVersion === '')
-{
+if ($installedDbVersion === '') {
     $page = new HtmlPageInstallation('admidio-update-message');
     $page->setUpdateModus();
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_UPDATE_NOT_POSSIBLE') . '<p>' . $gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', array(ADMIDIO_VERSION_TEXT)) . '</p>',
@@ -244,15 +204,13 @@ if ($installedDbVersion === '')
     // => EXIT
 }
 
-if ($getMode === 1)
-{
+if ($getMode === 1) {
     $gLogger->info('UPDATE: Show update start-view');
 
     // if database version is smaller then source version -> update
     // if database version is equal to source but beta has a difference -> update
     if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<')
-    || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep))
-    {
+    || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep)) {
         // create a page with the notice that the installation must be configured on the next pages
         $page = new HtmlPageInstallation('admidio-update');
         $page->addTemplateFile('update.tpl');
@@ -283,8 +241,7 @@ if ($getMode === 1)
         // create form with login and update button
         $form = new HtmlForm('update_login_form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 2)));
 
-        if (!isset($gLoginForUpdate) || $gLoginForUpdate === 1)
-        {
+        if (!isset($gLoginForUpdate) || $gLoginForUpdate === 1) {
             $form->addDescription($gL10n->get('INS_ADMINISTRATOR_LOGIN_DESC'));
             $form->addInput(
                 'login_name', $gL10n->get('SYS_USERNAME'), '',
@@ -306,17 +263,15 @@ if ($getMode === 1)
         $page->show();
     }
     // if versions are equal > no update
-    elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep)
-    {
+    elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep) {
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
         $page->showMessage('success', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_DATABASE_IS_UP_TO_DATE') . '<br />' . $gL10n->get('SYS_DATABASE_DOESNOT_NEED_UPDATED'),
             $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
-        // => EXIT
+    // => EXIT
     }
     // if source version smaller then database -> show error
-    else
-    {
+    else {
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get(
@@ -325,16 +280,11 @@ if ($getMode === 1)
             $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
         // => EXIT
     }
-}
-elseif ($getMode === 2)
-{
-    try
-    {
+} elseif ($getMode === 2) {
+    try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch (AdmException $exception)
-    {
+    } catch (AdmException $exception) {
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $exception->getText(),

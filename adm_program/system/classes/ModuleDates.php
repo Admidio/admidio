@@ -160,8 +160,7 @@ class ModuleDates extends Modules
     {
         global $gDb, $gSettingsManager, $gCurrentUser;
 
-        if ($limit === null)
-        {
+        if ($limit === null) {
             $limit = $gSettingsManager->getInt('dates_per_page');
         }
 
@@ -188,12 +187,10 @@ class ModuleDates extends Modules
               ORDER BY dat_begin ' . $this->order;
 
         // Parameter
-        if ($limit > 0)
-        {
+        if ($limit > 0) {
             $sql .= ' LIMIT ' . $limit;
         }
-        if ($startElement > 0)
-        {
+        if ($startElement > 0) {
             $sql .= ' OFFSET ' . $startElement;
         }
 
@@ -226,8 +223,7 @@ class ModuleDates extends Modules
     {
         global $gDb, $gCurrentUser;
 
-        if ($this->id > 0)
-        {
+        if ($this->id > 0) {
             return 1;
         }
 
@@ -256,8 +252,7 @@ class ModuleDates extends Modules
         global $gDb, $gL10n, $gCurrentOrganization;
 
         // set headline with category name
-        if ($this->getParameter('cat_id') > 0)
-        {
+        if ($this->getParameter('cat_id') > 0) {
             $category  = new TableCategory($gDb, $this->getParameter('cat_id'));
             $headline .= ' - ' . $category->getValue('cat_name');
         }
@@ -266,13 +261,11 @@ class ModuleDates extends Modules
         // Define a prefix
         if ($this->getParameter('mode') === 'old'
         ||    ($this->getParameter('dateStartFormatEnglish') < DATE_NOW
-            && $this->getParameter('dateEndFormatEnglish')   < DATE_NOW))
-        {
+            && $this->getParameter('dateEndFormatEnglish')   < DATE_NOW)) {
             $headline = $gL10n->get('DAT_PREVIOUS_DATES', array('')) . $headline;
         }
 
-        if ($this->getParameter('view_mode') === 'print')
-        {
+        if ($this->getParameter('view_mode') === 'print') {
             $headline = $gCurrentOrganization->getValue('org_longname') . ' - ' . $headline;
         }
 
@@ -292,16 +285,13 @@ class ModuleDates extends Modules
 
         $uuid = $this->getParameter('dat_uuid');
         // In case ID was permitted and user has rights
-        if (!empty($uuid))
-        {
+        if (!empty($uuid)) {
             $sqlConditions .= ' AND dat_uuid = ? '; // $id
             $params[] = $uuid;
         }
         // ...otherwise get all additional events for a group
-        else
-        {
-            if (!$this->getParameter('dateStartFormatEnglish'))
-            {
+        else {
+            if (!$this->getParameter('dateStartFormatEnglish')) {
                 $this->setDateRange(); // TODO Exception handling
             }
 
@@ -312,18 +302,15 @@ class ModuleDates extends Modules
 
             $catId = (int) $this->getParameter('cat_id');
             // show all events from category
-            if ($catId > 0)
-            {
+            if ($catId > 0) {
                 $sqlConditions .= ' AND cat_id = ? '; // $catId
                 $params[] = $catId;
             }
         }
 
         // add conditions for role permission
-        if ($GLOBALS['gCurrentUserId'] > 0)
-        {
-            switch ($this->getParameter('show'))
-            {
+        if ($GLOBALS['gCurrentUserId'] > 0) {
+            switch ($this->getParameter('show')) {
                 case 'maybe_participate':
                     $roleMemberships = $gCurrentUser->getRoleMemberships();
                     $sqlConditions .= '
@@ -352,8 +339,7 @@ class ModuleDates extends Modules
         }
 
         // add valid calendars
-        if(count($this->calendarNames) > 0)
-        {
+        if (count($this->calendarNames) > 0) {
             $sqlConditions .= ' AND cat_name IN (\''. implode('', $this->calendarNames) . '\')';
         }
 
@@ -386,14 +372,12 @@ class ModuleDates extends Modules
     {
         global $gSettingsManager;
 
-        if ($dateRangeStart === '')
-        {
+        if ($dateRangeStart === '') {
             $dateStart = '1970-01-01';
             $dateEnd   = (date('Y') + 10) . '-12-31';
 
             // set date_from and date_to regarding to current mode
-            switch ($this->mode)
-            {
+            switch ($this->mode) {
                 case 'actual':
                     $dateRangeStart = DATE_NOW;
                     $dateRangeEnd   = $dateEnd;
@@ -409,22 +393,19 @@ class ModuleDates extends Modules
             }
         }
         // If mode=old then we want to have the events in reverse order ('DESC')
-        if ($this->mode === 'old')
-        {
+        if ($this->mode === 'old') {
             $this->order = 'DESC';
         }
 
         // Create date object and format date_from in English format and system format and push to daterange array
         $objDateFrom = \DateTime::createFromFormat('Y-m-d', $dateRangeStart);
 
-        if ($objDateFrom === false)
-        {
+        if ($objDateFrom === false) {
             // check if date_from has system format
             $objDateFrom = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $dateRangeStart);
         }
 
-        if ($objDateFrom === false)
-        {
+        if ($objDateFrom === false) {
             return false;
         }
 
@@ -434,14 +415,12 @@ class ModuleDates extends Modules
         // Create date object and format date_to in English format and system format and push to daterange array
         $objDateTo = \DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
 
-        if ($objDateTo === false)
-        {
+        if ($objDateTo === false) {
             // check if date_from  has system format
             $objDateTo = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $dateRangeEnd);
         }
 
-        if ($objDateTo === false)
-        {
+        if ($objDateTo === false) {
             return false;
         }
 
@@ -449,8 +428,7 @@ class ModuleDates extends Modules
         $this->setParameter('dateEndFormatAdmidio', $objDateTo->format($gSettingsManager->getString('system_date')));
 
         // DateTo should be greater than DateFrom (Timestamp must be less)
-        if ($objDateFrom->getTimestamp() > $objDateTo->getTimestamp())
-        {
+        if ($objDateFrom->getTimestamp() > $objDateTo->getTimestamp()) {
             throw new AdmException('SYS_DATE_END_BEFORE_BEGIN');
         }
 
@@ -465,8 +443,7 @@ class ModuleDates extends Modules
     {
         global $gSettingsManager, $gProfileFields;
 
-        if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
-        {
+        if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
             $lastNameUsfId  = (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id');
             $firstNameUsfId = (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id');
 
@@ -493,9 +470,7 @@ class ModuleDates extends Modules
                        ON cha_firstname.usd_usr_id = dat_usr_id_change
                       AND cha_firstname.usd_usf_id = ? -- $firstNameUsfId';
             $additionalParams = array($lastNameUsfId, $firstNameUsfId, $lastNameUsfId, $firstNameUsfId);
-        }
-        else
-        {
+        } else {
             // show username of create and last change user
             $additionalFields = '
                 cre_user.usr_login_name AS create_name,

@@ -71,7 +71,6 @@ class Message
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -124,32 +123,27 @@ class Message
         $gDb->rollback();
 
         // Set caption, if it was not set explicitly before
-        if($headline === '')
-        {
+        if ($headline === '') {
             $headline = $gL10n->get('SYS_NOTE');
         }
 
-        if(!$this->inline)
-        {
+        if (!$this->inline) {
             // check only if not already set to true
             $this->inline = headers_sent();
         }
 
-        if(!isset($page))
-        {
+        if (!isset($page)) {
             // create html page object
             $page = new HtmlPage('admidio-message', $headline);
             $page->hideBackLink();
 
-            if(!$this->includeThemeBody)
-            {
+            if (!$this->includeThemeBody) {
                 // don't show custom html of the current theme
                 $page->setInlineMode();
             }
 
             // forward to next page after x seconds
-            if ($this->timer > 0)
-            {
+            if ($this->timer > 0) {
                 $page->addJavascript('
                     setTimeout(function() {
                         window.location.href = "'. $this->forwardUrl. '";
@@ -158,18 +152,13 @@ class Message
             }
         }
 
-        if($this->showTextOnly)
-        {
+        if ($this->showTextOnly) {
             // show the pure message text without any html
             echo strip_tags($content);
-        }
-        elseif($this->showHtmlTextOnly)
-        {
+        } elseif ($this->showHtmlTextOnly) {
             // show the pure message text with their html
             echo $content;
-        }
-        elseif($this->inline)
-        {
+        } elseif ($this->inline) {
             // show the message in html but without the theme specific header and body
             $page->assign('message', $content);
             $page->assign('messageHeadline', $headline);
@@ -177,9 +166,7 @@ class Message
             $page->assign('showYesNoButtons', $this->showYesNoButtons);
             $page->assign('l10n', $gL10n);
             $page->display('message_modal.tpl');
-        }
-        else
-        {
+        } else {
             // show a Admidio html page with complete theme header and body
             $page->assign('message', $content);
             $page->assign('forwardUrl', $this->forwardUrl);

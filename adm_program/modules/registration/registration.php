@@ -11,22 +11,19 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // check if module is active
-if(!$gSettingsManager->getBool('registration_enable_module'))
-{
+if (!$gSettingsManager->getBool('registration_enable_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // if there is no login then show a profile form where the user can register himself
-if(!$gValidLogin)
-{
+if (!$gValidLogin) {
     admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '2')));
     // => EXIT
 }
 
 // Only Users with the right "approve users" can confirm registrations. Otherwise exit.
-if(!$gCurrentUser->approveUsers())
-{
+if (!$gCurrentUser->approveUsers()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -63,8 +60,7 @@ $queryParams = array(
 );
 $usrStatement = $gDb->queryPrepared($sql, $queryParams);
 
-if ($usrStatement->rowCount() === 0)
-{
+if ($usrStatement->rowCount() === 0) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_NO_NEW_REGISTRATIONS'), $gL10n->get('SYS_REGISTRATION'));
     // => EXIT
@@ -86,17 +82,13 @@ $columnHeading = array(
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 $table->addRowHeadingByArray($columnHeading);
 
-while($row = $usrStatement->fetch())
-{
+while ($row = $usrStatement->fetch()) {
     $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['reg_timestamp']);
     $datetimeCreate  = $timestampCreate->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
 
-    if($gSettingsManager->getBool('enable_mail_module'))
-    {
+    if ($gSettingsManager->getBool('enable_mail_module')) {
         $mailLink = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['usr_uuid'])).'">'.$row['email'].'</a>';
-    }
-    else
-    {
+    } else {
         $mailLink  = '<a href="mailto:'.$row['email'].'">'.$row['email'].'</a>';
     }
 

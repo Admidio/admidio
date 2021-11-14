@@ -22,8 +22,7 @@ $getRoomUuid = admFuncVariableIsValid($_GET, 'room_uuid','string');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ROOM')));
 
 // only authorized users are allowed to edit the rooms
-if (!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -34,19 +33,15 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // Create room object
 $room = new TableRooms($gDb);
 
-if ($getRoomUuid !== '')
-{
+if ($getRoomUuid !== '') {
     $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
 
     $room->readDataByUuid($getRoomUuid);
-}
-else
-{
+} else {
     $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
 }
 
-if (isset($_SESSION['rooms_request']))
-{
+if (isset($_SESSION['rooms_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
     $room->setArray($_SESSION['rooms_request']);

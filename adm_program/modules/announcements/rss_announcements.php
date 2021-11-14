@@ -27,16 +27,14 @@ require_once(__DIR__ . '/../../system/common.php');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if (!$gSettingsManager->getBool('enable_rss'))
-{
+if (!$gSettingsManager->getBool('enable_rss')) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
     // => EXIT
 }
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
-if ((int) $gSettingsManager->get('enable_announcements_module') !== 1)
-{
+if ((int) $gSettingsManager->get('enable_announcements_module') !== 1) {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -57,13 +55,11 @@ $rss = new RssFeed(
 );
 
 // Wenn Ankündigungen vorhanden laden
-if($announcements->getDataSetCount() > 0)
-{
+if ($announcements->getDataSetCount() > 0) {
     $announcement = new TableAnnouncement($gDb);
     $rows = $announcements->getDataSet(0, 10);
     // Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-    foreach ($rows['recordset'] as $row)
-    {
+    foreach ($rows['recordset'] as $row) {
         // ausgelesene Ankuendigungsdaten in Announcement-Objekt schieben
         $announcement->clear();
         $announcement->setArray($row);

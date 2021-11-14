@@ -61,12 +61,10 @@ class TableDate extends TableAccess
     {
         global $gCurrentUser;
 
-        if($this->getValue('dat_rol_id') > 0)
-        {
+        if ($this->getValue('dat_rol_id') > 0) {
             $eventParticipationRoles = new RolesRights($this->db, 'event_participation', (int) $this->getValue('dat_id'));
 
-            if(count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0)
-            {
+            if (count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0) {
                 return true;
             }
         }
@@ -101,8 +99,7 @@ class TableDate extends TableAccess
         $eventParticipationRoles->delete();
 
         // if date has participants then the role with their memberships must be deleted
-        if ($datRoleId > 0)
-        {
+        if ($datRoleId > 0) {
             $sql = 'UPDATE '.TBL_DATES.'
                        SET dat_rol_id = NULL
                      WHERE dat_id = ? -- $datId';
@@ -149,24 +146,19 @@ class TableDate extends TableAccess
         $beginDate = $this->getValue('dat_begin', $gSettingsManager->getString('system_date')). '&nbsp;&nbsp;';
         $endDate   = '';
 
-        if ($this->getValue('dat_all_day') != 1)
-        {
+        if ($this->getValue('dat_all_day') != 1) {
             $beginDate .= $this->getValue('dat_begin', $gSettingsManager->getString('system_time'));
         }
 
-        if($showPeriodEnd)
-        {
+        if ($showPeriodEnd) {
             // Show date end and time
-            if($this->getValue('dat_begin', $gSettingsManager->getString('system_date')) !== $this->getValue('dat_end', $gSettingsManager->getString('system_date')))
-            {
+            if ($this->getValue('dat_begin', $gSettingsManager->getString('system_date')) !== $this->getValue('dat_end', $gSettingsManager->getString('system_date'))) {
                 $endDate .= $this->getValue('dat_end', $gSettingsManager->getString('system_date'));
             }
-            if ($this->getValue('dat_all_day') != 1)
-            {
+            if ($this->getValue('dat_all_day') != 1) {
                 $endDate .= ' '. $this->getValue('dat_end', $gSettingsManager->getString('system_time'));
             }
-            if($endDate !== '')
-            {
+            if ($endDate !== '') {
                 $endDate = ' - '. $endDate;
             }
         }
@@ -249,8 +241,7 @@ class TableDate extends TableAccess
             'CREATED:' . $this->getValue('dat_timestamp_create', $dateTimeFormat)
         );
 
-        if ($this->getValue('dat_timestamp_change') !== null)
-        {
+        if ($this->getValue('dat_timestamp_change') !== null) {
             $iCalVEvent[] = 'LAST-MODIFIED:' . $this->getValue('dat_timestamp_change', $dateTimeFormat);
         }
 
@@ -261,8 +252,7 @@ class TableDate extends TableAccess
         $iCalVEvent[] = 'DTSTAMP:' . date($dateTimeFormat);
         $iCalVEvent[] = 'LOCATION:' . $this->escapeIcalText($this->getValue('dat_location'));
 
-        if ((int) $this->getValue('dat_all_day') === 1)
-        {
+        if ((int) $this->getValue('dat_all_day') === 1) {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
             // Outlook und Co. zeigen es erst dann korrekt an
             $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('dat_end', 'Y-m-d H:i:s'));
@@ -270,9 +260,7 @@ class TableDate extends TableAccess
 
             $iCalVEvent[] = 'DTSTART;VALUE=DATE:' . $this->getValue('dat_begin', 'Ymd');
             $iCalVEvent[] = 'DTEND;VALUE=DATE:' . $dateTime->add($oneDayOffset)->format('Ymd');
-        }
-        else
-        {
+        } else {
             $iCalVEvent[] = 'DTSTART;TZID=' . date_default_timezone_get() . ':' . $this->getValue('dat_begin', $dateTimeFormat);
             $iCalVEvent[] = 'DTEND;TZID='   . date_default_timezone_get() . ':' . $this->getValue('dat_end',   $dateTimeFormat);
         }
@@ -297,10 +285,8 @@ class TableDate extends TableAccess
     {
         global $gL10n;
 
-        if ($columnName === 'dat_end' && (int) $this->dbColumns['dat_all_day'] === 1)
-        {
-            if ($format === '')
-            {
+        if ($columnName === 'dat_end' && (int) $this->dbColumns['dat_all_day'] === 1) {
+            if ($format === '') {
                 $format = 'Y-m-d';
             }
 
@@ -308,36 +294,23 @@ class TableDate extends TableAccess
             $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $this->dbColumns['dat_end']);
             $oneDayOffset = new \DateInterval('P1D');
             $value = $dateTime->sub($oneDayOffset)->format($format);
-        }
-        elseif ($columnName === 'dat_description')
-        {
-            if (!isset($this->dbColumns['dat_description']))
-            {
+        } elseif ($columnName === 'dat_description') {
+            if (!isset($this->dbColumns['dat_description'])) {
                 $value = '';
-            }
-            elseif ($format === 'database')
-            {
+            } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['dat_description']), ENT_QUOTES, 'UTF-8');
-            }
-            else
-            {
+            } else {
                 $value = $this->dbColumns['dat_description'];
             }
-        }
-        else
-        {
+        } else {
             $value = parent::getValue($columnName, $format);
         }
 
-        if ($format !== 'database')
-        {
-            if ($columnName === 'dat_country' && $value)
-            {
+        if ($format !== 'database') {
+            if ($columnName === 'dat_country' && $value) {
                 // beim Land die sprachabhaengige Bezeichnung auslesen
                 $value = $gL10n->getCountryName($value);
-            }
-            elseif ($columnName === 'cat_name')
-            {
+            } elseif ($columnName === 'cat_name') {
                 // if text is a translation-id then translate it
                 $value = Language::translateIfTranslationStrId($value);
             }
@@ -354,12 +327,9 @@ class TableDate extends TableAccess
     {
         global $gSettingsManager;
 
-        if ($this->getValue('dat_deadline') == null)
-        {
+        if ($this->getValue('dat_deadline') == null) {
             $validDeadline = $this->getValue('dat_begin');
-        }
-        else
-        {
+        } else {
             $validDeadline = $this->getValue('dat_deadline');
         }
 
@@ -379,19 +349,16 @@ class TableDate extends TableAccess
     {
         global $gCurrentOrganization, $gCurrentUser;
 
-        if($gCurrentUser->editDates()
-        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('DAT'), true))
-        {
+        if ($gCurrentUser->editDates()
+        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('DAT'), true)) {
             // if category belongs to current organization than events are editable
-            if($this->getValue('cat_org_id') > 0
-            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId'])
-            {
+            if ($this->getValue('cat_org_id') > 0
+            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId']) {
                 return true;
             }
 
             // if category belongs to all organizations, child organization couldn't edit it
-            if((int) $this->getValue('cat_org_id') === 0 && !$gCurrentOrganization->isChildOrganization())
-            {
+            if ((int) $this->getValue('cat_org_id') === 0 && !$gCurrentOrganization->isChildOrganization()) {
                 return true;
             }
         }
@@ -420,10 +387,9 @@ class TableDate extends TableAccess
      */
     public function participationPossible($currentCountParticipations)
     {
-        if(!$this->deadlineExceeded()
+        if (!$this->deadlineExceeded()
         && ($this->getValue('dat_max_members') === 0
-           || ($this->getValue('dat_max_members') > 0 && $currentCountParticipations < $this->getValue('dat_max_members'))))
-        {
+           || ($this->getValue('dat_max_members') > 0 && $currentCountParticipations < $this->getValue('dat_max_members')))) {
             return true;
         }
         return false;
@@ -438,8 +404,7 @@ class TableDate extends TableAccess
         $this->clear();
 
         // add id to sql condition
-        if ($roleId > 0)
-        {
+        if ($roleId > 0) {
             // call method to read data out of database
             return $this->readData(' AND dat_rol_id = ? ', array($roleId));
         }
@@ -457,26 +422,20 @@ class TableDate extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($checkValue)
-        {
-            if ($columnName === 'dat_description')
-            {
+        if ($checkValue) {
+            if ($columnName === 'dat_description') {
                 return parent::setValue($columnName, $newValue, false);
-            }
-            elseif($columnName === 'dat_cat_id')
-            {
+            } elseif ($columnName === 'dat_cat_id') {
                 $category = new TableCategory($this->db, $newValue);
 
-                if(!$category->isVisible() || $category->getValue('cat_type') !== 'DAT')
-                {
+                if (!$category->isVisible() || $category->getValue('cat_type') !== 'DAT') {
                     throw new AdmException('Category of the event '. $this->getValue('dat_name'). ' could not be set
                         because the category is not visible to the current user and current organization.');
                 }
             }
         }
 
-        if ($columnName === 'dat_end' && (int) $this->getValue('dat_all_day') === 1)
-        {
+        if ($columnName === 'dat_end' && (int) $this->getValue('dat_all_day') === 1) {
             // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
             // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
             $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $newValue);

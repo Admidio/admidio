@@ -9,8 +9,7 @@
  ***********************************************************************************************
  */
 // if config file doesn't exists, than show installation dialog
-if (!is_file(__DIR__ . '/../adm_my_files/config.php'))
-{
+if (!is_file(__DIR__ . '/../adm_my_files/config.php')) {
     header('Location: adm_program/installation/index.php');
     exit();
 }

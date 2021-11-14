@@ -29,29 +29,25 @@ $_SESSION['mylist_request'] = $_POST;
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('groups_roles_enable_module')
 || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
-|| ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && !$gCurrentUser->isAdministrator()))
-{
+|| ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && !$gCurrentUser->isAdministrator())) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // Mindestens ein Feld sollte zugeordnet sein
-if(!isset($_POST['column1']) || strlen($_POST['column1']) === 0)
-{
+if (!isset($_POST['column1']) || strlen($_POST['column1']) === 0) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array('1. '.$gL10n->get('SYS_COLUMN'))));
     // => EXIT
 }
 
 // Rolle muss beim Anzeigen gefuellt sein
-if($getMode === 2
-&& (!isset($_POST['sel_roles_ids']) || (int) $_POST['sel_roles_ids'] === 0 || !is_array($_POST['sel_roles_ids'])))
-{
+if ($getMode === 2
+&& (!isset($_POST['sel_roles_ids']) || (int) $_POST['sel_roles_ids'] === 0 || !is_array($_POST['sel_roles_ids']))) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ROLE'))));
     // => EXIT
 }
 
-if(!isset($_POST['sel_relationtype_ids']))
-{
+if (!isset($_POST['sel_relationtype_ids'])) {
     $_POST['sel_relationtype_ids'] = array();
 }
 
@@ -60,32 +56,24 @@ $list = new ListConfiguration($gDb);
 $list->readDataByUuid($getListUuid);
 
 // pruefen, ob Benutzer die Rechte hat, diese Liste zu bearbeiten
-if($getMode !== 2)
-{
+if ($getMode !== 2) {
     // global lists can only be edited by administrator
-    if($list->getValue('lst_global') == 1 && !$gCurrentUser->isAdministrator())
-    {
+    if ($list->getValue('lst_global') == 1 && !$gCurrentUser->isAdministrator()) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-    elseif((int) $list->getValue('lst_usr_id') !== $gCurrentUserId
-    && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0)
-    {
+    // => EXIT
+    } elseif ((int) $list->getValue('lst_usr_id') !== $gCurrentUserId
+    && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 }
 
 // Liste speichern
-if ($getMode === 1 || $getMode === 2)
-{
-    try
-    {
+if ($getMode === 1 || $getMode === 2) {
+    try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch(AdmException $exception)
-    {
+    } catch (AdmException $exception) {
         $exception->showHtml();
         // => EXIT
     }
@@ -93,30 +81,22 @@ if ($getMode === 1 || $getMode === 2)
     $globalConfiguration = admFuncVariableIsValid($_POST, 'cbx_global_configuration', 'bool', array('defaultValue' => false));
 
     // alle vorhandenen Spalten durchgehen
-    for($columnNumber = 1; isset($_POST['column'. $columnNumber]); ++$columnNumber)
-    {
-        if(strlen($_POST['column'. $columnNumber]) > 0)
-        {
+    for ($columnNumber = 1; isset($_POST['column'. $columnNumber]); ++$columnNumber) {
+        if (strlen($_POST['column'. $columnNumber]) > 0) {
             $list->addColumn($columnNumber, $_POST['column'. $columnNumber], $_POST['sort'. $columnNumber], $_POST['condition'. $columnNumber]);
-        }
-        else
-        {
+        } else {
             $list->deleteColumn($columnNumber, true);
         }
     }
 
-    if($getName !== '')
-    {
+    if ($getName !== '') {
         $list->setValue('lst_name', $getName);
     }
 
     // set list global only in save mode
-    if($getMode === 1 && $gCurrentUser->isAdministrator())
-    {
+    if ($getMode === 1 && $gCurrentUser->isAdministrator()) {
         $list->setValue('lst_global', $globalConfiguration);
-    }
-    else
-    {
+    } else {
         $list->setValue('lst_global', 0);
     }
 
@@ -124,8 +104,7 @@ if ($getMode === 1 || $getMode === 2)
 
     $listUuid = $list->getValue('lst_uuid');
 
-    if($getMode === 1)
-    {
+    if ($getMode === 1) {
         // save new id to session so that we can restore the configuration with new list name
         $_SESSION['mylist_request']['sel_select_configuration'] = $listUuid;
 
@@ -144,18 +123,13 @@ if ($getMode === 1 || $getMode === 2)
             'urt_ids'   => implode(',', $_POST['sel_relationtype_ids'])
         )
     ));
-    // => EXIT
-}
-elseif ($getMode === 3)
-{
-    try
-    {
+// => EXIT
+} elseif ($getMode === 3) {
+    try {
         // delete list configuration
         $list->delete();
         unset($_SESSION['mylist_request']);
-    }
-    catch(AdmException $e)
-    {
+    } catch (AdmException $e) {
         $e->showHtml();
         // => EXIT
     }

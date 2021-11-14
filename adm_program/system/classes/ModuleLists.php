@@ -186,8 +186,7 @@ class ModuleLists extends Modules
      */
     private function getCategorySql()
     {
-        if($this->catId > 0)
-        {
+        if ($this->catId > 0) {
             return ' AND cat_id  = '.$this->catId;
         }
         return '';
@@ -201,8 +200,7 @@ class ModuleLists extends Modules
     {
         $sql = '';
 
-        switch($this->roleType)
-        {
+        switch ($this->roleType) {
             case ROLE_TYPE_INACTIVE:
                 $sql = ' AND rol_valid   = false
                          AND cat_name_intern <> \'EVENTS\' ';
@@ -229,16 +227,14 @@ class ModuleLists extends Modules
     {
         global $gCurrentUser;
 
-        if($this->roleType == 0 && $gCurrentUser->isAdministrator())
-        {
+        if ($this->roleType == 0 && $gCurrentUser->isAdministrator()) {
             // if inactive roles should be shown, then show all of them to administrator
             return '';
         }
 
         // create a list with all rol_ids that the user is allowed to view
         $visibleRoles = implode(',', $gCurrentUser->getAllVisibleRoles());
-        if($visibleRoles !== '')
-        {
+        if ($visibleRoles !== '') {
             return ' AND rol_id IN ('.$visibleRoles.')';
         }
 
@@ -256,8 +252,7 @@ class ModuleLists extends Modules
         global $gSettingsManager, $gDb;
 
         // Parameter
-        if($limit === null)
-        {
+        if ($limit === null) {
             // Roles per page
             $limit = $gSettingsManager->getInt('groups_roles_roles_per_page');
         }
@@ -292,22 +287,17 @@ class ModuleLists extends Modules
                        OR cat_org_id IS NULL )
                        '.$sqlConditions;
 
-        if($this->roleType === ROLE_TYPE_EVENT_PARTICIPATION)
-        {
+        if ($this->roleType === ROLE_TYPE_EVENT_PARTICIPATION) {
             $sql .= ' ORDER BY cat_sequence, dat_begin DESC, rol_name ';
-        }
-        else
-        {
+        } else {
             $sql .= ' ORDER BY cat_sequence, rol_name ';
         }
 
         // If is there a limit then specify one
-        if($limit > 0)
-        {
+        if ($limit > 0) {
             $sql .= ' LIMIT '.$limit;
         }
-        if($startElement > 0)
-        {
+        if ($startElement > 0) {
             $sql .= ' OFFSET '.$startElement;
         }
 

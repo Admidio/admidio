@@ -33,12 +33,9 @@ $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
 
 // set headline of the script
-if($getUserUuid !== '')
-{
+if ($getUserUuid !== '') {
     $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
-}
-else
-{
+} else {
     $headline = $gL10n->get('SYS_CHANGE_HISTORY');
 }
 
@@ -46,8 +43,7 @@ else
 // then the profile field history will be shown otherwise show error
 if (!$gSettingsManager->getBool('profile_log_edit_fields')
     || ($getUserUuid === '' && !$gCurrentUser->editUsers())
-    || ($getUserUuid !== '' && !$gCurrentUser->hasRightEditProfile($user)))
-{
+    || ($getUserUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -58,30 +54,25 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // filter_date_from and filter_date_to can have different formats
 // now we try to get a default format for intern use and html output
 $objDateFrom = \DateTime::createFromFormat('Y-m-d', $getDateFrom);
-if($objDateFrom === false)
-{
+if ($objDateFrom === false) {
     // check if date has system format
     $objDateFrom = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateFrom);
-    if($objDateFrom === false)
-    {
+    if ($objDateFrom === false) {
         $objDateFrom = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), '1970-01-01');
     }
 }
 
 $objDateTo = \DateTime::createFromFormat('Y-m-d', $getDateTo);
-if($objDateTo === false)
-{
+if ($objDateTo === false) {
     // check if date has system format
     $objDateTo = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateTo);
-    if($objDateTo === false)
-    {
+    if ($objDateTo === false) {
         $objDateTo = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), '1970-01-01');
     }
 }
 
 // DateTo should be greater than DateFrom
-if($objDateFrom > $objDateTo)
-{
+if ($objDateFrom > $objDateTo) {
     $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
     // => EXIT
 }
@@ -94,8 +85,7 @@ $dateToHtml     = $objDateTo->format($gSettingsManager->getString('system_date')
 // create sql conditions
 $sqlConditions = '';
 $queryParamsConditions = array();
-if($getUserUuid !== '')
-{
+if ($getUserUuid !== '') {
     $sqlConditions = ' AND usl_usr_id = ? -- $user->getValue(\'usr_id\')';
     $queryParamsConditions = array($user->getValue('usr_id'));
 }
@@ -140,19 +130,15 @@ $queryParams = array(
 );
 $fieldHistoryStatement = $gDb->queryPrepared($sql, array_merge($queryParams, $queryParamsConditions));
 
-if($fieldHistoryStatement->rowCount() === 0)
-{
+if ($fieldHistoryStatement->rowCount() === 0) {
     // message is shown, so delete this page from navigation stack
     $gNavigation->deleteLastUrl();
 
     // show message if there were no changes for users
-    if($getUserUuid !== '')
-    {
+    if ($getUserUuid !== '') {
         $gMessage->show($gL10n->get('SYS_NO_CHANGES_LOGGED_PROFIL', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))));
-        // => EXIT
-    }
-    else
-    {
+    // => EXIT
+    } else {
         $gMessage->show($gL10n->get('SYS_NO_CHANGES_LOGGED'));
         // => EXIT
     }
@@ -175,13 +161,10 @@ $table = new HtmlTable('profile_field_history_table', $page, true, true);
 
 $columnHeading = array();
 
-if($getUserUuid === '')
-{
+if ($getUserUuid === '') {
     $table->setDatatablesOrderColumns(array(array(6, 'desc')));
     $columnHeading[] = $gL10n->get('SYS_NAME');
-}
-else
-{
+} else {
     $table->setDatatablesOrderColumns(array(array(5, 'desc')));
 }
 
@@ -193,34 +176,26 @@ $columnHeading[] = $gL10n->get('SYS_CHANGED_AT');
 
 $table->addRowHeadingByArray($columnHeading);
 
-while($row = $fieldHistoryStatement->fetch())
-{
+while ($row = $fieldHistoryStatement->fetch()) {
     $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['usl_timestamp_create']);
     $columnValues    = array();
 
-    if($getUserUuid === '')
-    {
+    if ($getUserUuid === '') {
         $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr'])).'">'.$row['last_name'].', '.$row['first_name'].'</a>';
     }
 
     $columnValues[] = $gProfileFields->getPropertyById((int) $row['usl_usf_id'], 'usf_name');
     $uslValueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new']);
-    if($uslValueNew !== '')
-    {
+    if ($uslValueNew !== '') {
         $columnValues[] = $uslValueNew;
-    }
-    else
-    {
+    } else {
         $columnValues[] = '&nbsp;';
     }
 
     $uslValueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old']);
-    if($uslValueOld !== '')
-    {
+    if ($uslValueOld !== '') {
         $columnValues[] = $uslValueOld;
-    }
-    else
-    {
+    } else {
         $columnValues[] = '&nbsp;';
     }
 

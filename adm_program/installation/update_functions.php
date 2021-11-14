@@ -16,8 +16,7 @@ function checkLogin()
 {
     global $gDb, $gL10n, $gLoginForUpdate, $gProfileFields, $gCurrentUser;
 
-    if (isset($gLoginForUpdate) && !$gLoginForUpdate)
-    {
+    if (isset($gLoginForUpdate) && !$gLoginForUpdate) {
         return;
     }
 
@@ -31,29 +30,23 @@ function checkLogin()
              WHERE UPPER(usr_login_name) = UPPER(?)';
     $userStatement = $gDb->queryPrepared($sql, array($loginName));
 
-    if ($userStatement->rowCount() === 0)
-    {
+    if ($userStatement->rowCount() === 0) {
         // show message that username or password is incorrect
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT'), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', 'update.php');
-        // => EXIT
-    }
-    else
-    {
+    // => EXIT
+    } else {
         // create object with current user field structure und user object
         $gCurrentUser = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
 
-        try
-        {
+        try {
             // check login data. If login failed an exception will be thrown.
             // Don't update the current session with user id and don't do a rehash of the password
             // because in former versions the password field was to small for the current hashes
             // and the update of this field will be done after this check.
             $gCurrentUser->checkLogin($password, false, false, false, true);
-        }
-        catch (AdmException $e)
-        {
+        } catch (AdmException $e) {
             // show message with the error of the exception
             $page = new HtmlPageInstallation('admidio-update-message');
             $page->setUpdateModus();
@@ -84,8 +77,7 @@ function updateOrgPreferences()
     $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
     $orgaStatement = $gDb->queryPrepared($sql);
 
-    while ($orgId = $orgaStatement->fetchColumn())
-    {
+    while ($orgId = $orgaStatement->fetchColumn()) {
         $organization = new Organization($gDb, $orgId);
         $settingsManager =& $organization->getSettingsManager();
         $settingsManager->setMulti($defaultOrgPreferences, false);
@@ -100,8 +92,7 @@ function toggleForeignKeyChecks($enable)
 {
     global $gDb;
 
-    if (DB_ENGINE === Database::PDO_ENGINE_MYSQL)
-    {
+    if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
         // disable foreign key checks for mysql, so tables can easily deleted
         $sql = 'SET foreign_key_checks = ' . (int) $enable;
         $gDb->queryPrepared($sql);
@@ -151,8 +142,7 @@ function doAdmidioUpdate($installedDbVersion)
     // create ".htaccess" file for folder "adm_my_files"
     $htaccess = new Htaccess(ADMIDIO_PATH . FOLDER_DATA);
 
-    if (!$htaccess->protectFolder())
-    {
+    if (!$htaccess->protectFolder()) {
         $gLogger->warning('.htaccess file could not be created!');
     }
 

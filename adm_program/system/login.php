@@ -45,8 +45,7 @@ $form->addInput(
 );
 
 // show selectbox with all organizations of database
-if($gSettingsManager->getBool('system_organization_select'))
-{
+if ($gSettingsManager->getBool('system_organization_select')) {
     $sql = 'SELECT org_id, org_longname
               FROM '.TBL_ORGANIZATIONS.'
           ORDER BY org_longname ASC, org_shortname ASC';
@@ -56,15 +55,13 @@ if($gSettingsManager->getBool('system_organization_select'))
     );
 }
 
-if($gSettingsManager->getBool('enable_auto_login'))
-{
+if ($gSettingsManager->getBool('enable_auto_login')) {
     $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
 }
 $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key', 'class' => ' offset-sm-3'));
 $page->addHtml($form->show());
 
-if($gSettingsManager->getBool('registration_enable_module'))
-{
+if ($gSettingsManager->getBool('registration_enable_module')) {
     $page->addHtml('
         <div id="login_registration_link">
             <small>
@@ -74,18 +71,13 @@ if($gSettingsManager->getBool('registration_enable_module'))
 }
 
 // show link if user has login problems
-if($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('enable_system_mails'))
-{
+if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('enable_system_mails')) {
     // request to reset the password
     $forgotPasswordLink = ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php';
-}
-elseif($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3)
-{
+} elseif ($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
     // show link of message module to send mail to administrator role
     $forgotPasswordLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
-}
-else
-{
+} else {
     // show link to send mail with local mail-client to administrator
     $forgotPasswordLink = SecurityUtils::encodeUrl('mailto:'.$gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
 }

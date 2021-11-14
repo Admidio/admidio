@@ -71,8 +71,7 @@ class Participants
     private function checkId($roleId)
     {
         // check passed parameter and compare to current object
-        if($this->rolId === -1 || ($this->rolId === 0 && $this->rolId !== $roleId))
-        {
+        if ($this->rolId === -1 || ($this->rolId === 0 && $this->rolId !== $roleId)) {
             $this->rolId = $roleId;
             return true;
         }
@@ -99,8 +98,7 @@ class Participants
      */
     public function getCount($rolId = 0)
     {
-        if ($rolId !== 0)
-        {
+        if ($rolId !== 0) {
             $this->clear();
             $this->checkId($rolId);
         }
@@ -118,8 +116,7 @@ class Participants
         // Write all member Id´s and leader status in an array
         $numParticipants = array();
 
-        while ($row = $membersStatement->fetch())
-        {
+        while ($row = $membersStatement->fetch()) {
             $numParticipants[] = array(
                 'member'            => (int) $row['mem_usr_id'],
                 'leader'            => (bool) $row['mem_leader'],
@@ -130,18 +127,15 @@ class Participants
         // count total number of participants and leaders of the date
         $leader = 0;
         $totalCount = 0;
-        foreach ($numParticipants as $member)
-        {
-            if($member['leader'])
-            {
+        foreach ($numParticipants as $member) {
+            if ($member['leader']) {
                 ++$leader;
             }
 
             $totalCount = $totalCount + $member['count_guests'] + 1;
         }
         // check if class variables $count and $leader are set to default flag.
-        if($this->count === -1 && $this->leader === -1)
-        {
+        if ($this->count === -1 && $this->leader === -1) {
             // Then store the results in class variables.
             $this->count = $totalCount;
             $this->leader = $leader;
@@ -158,8 +152,7 @@ class Participants
     public function getLimit($rolId = 0)
     {
         // check if class variables $count and $leader are set to default flag.
-        if($this->count === -1 && $this->leader === -1)
-        {
+        if ($this->count === -1 && $this->leader === -1) {
             // get data from database
             $this->getCount($rolId);
         }
@@ -175,8 +168,7 @@ class Participants
     public function getNumLeaders($rolId = 0)
     {
         // check if class variables $count and $leader are set to default flag.
-        if($this->count === -1 && $this->leader === -1)
-        {
+        if ($this->count === -1 && $this->leader === -1) {
             // get data from database
             $this->getCount($rolId);
         }
@@ -194,8 +186,7 @@ class Participants
     {
         global $gProfileFields;
 
-        if (!in_array($order, array('ASC', 'DESC'), true))
-        {
+        if (!in_array($order, array('ASC', 'DESC'), true)) {
             return false;
         }
 
@@ -224,8 +215,7 @@ class Participants
         $membersStatement = $this->db->queryPrepared($sql, $queryParams);
 
         $participants = array();
-        while ($row = $membersStatement->fetch())
-        {
+        while ($row = $membersStatement->fetch()) {
             $participants[(int) $row['mem_usr_id']] = array(
                 'usrId'     => (int) $row['mem_usr_id'],
                 'surname'   => $row['surname'],
@@ -249,13 +239,10 @@ class Participants
         // Read participants of current event role
         $eventMember = $this->getParticipantsArray($this->rolId);
         // Search for user in array
-        foreach($eventMember as $participant)
-        {
-            if ($participant['usrId'] === (int) $userId)
-            {
+        foreach ($eventMember as $participant) {
+            if ($participant['usrId'] === (int) $userId) {
                 // is member of the event
-                if ($participant['approved'] != self::PARTICIPATION_NO)
-                {
+                if ($participant['approved'] != self::PARTICIPATION_NO) {
                     return true;
                 }
             }

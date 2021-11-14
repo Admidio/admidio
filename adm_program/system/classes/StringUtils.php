@@ -17,8 +17,7 @@ final class StringUtils
      */
     public static function strToLower($string)
     {
-        if (function_exists('mb_strtolower'))
-        {
+        if (function_exists('mb_strtolower')) {
             return mb_strtolower($string, 'UTF-8');
         }
 
@@ -33,8 +32,7 @@ final class StringUtils
      */
     public static function strToUpper($string)
     {
-        if (function_exists('mb_strtoupper'))
-        {
+        if (function_exists('mb_strtoupper')) {
             return mb_strtoupper($string, 'UTF-8');
         }
 
@@ -50,8 +48,7 @@ final class StringUtils
      */
     public static function strContains($string, $contains, $caseSensitive = true)
     {
-        if ($caseSensitive)
-        {
+        if ($caseSensitive) {
             return str_contains($string, $contains);
         }
 
@@ -67,8 +64,7 @@ final class StringUtils
      */
     public static function strStartsWith($string, $start, $caseSensitive = true)
     {
-        if ($caseSensitive)
-        {
+        if ($caseSensitive) {
             return str_starts_with($string, $start);
         }
 
@@ -84,8 +80,7 @@ final class StringUtils
      */
     public static function strEndsWith($string, $end, $caseSensitive = true)
     {
-        if ($caseSensitive)
-        {
+        if ($caseSensitive) {
             return str_ends_with($string, $end);
         }
 
@@ -117,10 +112,8 @@ final class StringUtils
             'msg_body', 'plugin_CKEditor', 'room_description', 'usf_description', 'mail_smtp_password'
         );
 
-        foreach ($srcArray as $key => $value)
-        {
-            if (!in_array($key, $specialKeys, true))
-            {
+        foreach ($srcArray as $key => $value) {
+            if (!in_array($key, $specialKeys, true)) {
                 $srcArray[$key] = self::strStripTags($value);
             }
         }
@@ -135,13 +128,10 @@ final class StringUtils
      */
     public static function strStripTags($value)
     {
-        if (is_array($value))
-        {
+        if (is_array($value)) {
             // call function for every array element
             $value = array_map('self::strStripTags', $value);
-        }
-        else
-        {
+        } else {
             // remove whitespaces at beginning and end
             $value = trim($value);
             // removes html and php code
@@ -161,13 +151,11 @@ final class StringUtils
      */
     public static function strValidCharacters($string, $checkType)
     {
-        if (trim($string) === '')
-        {
+        if (trim($string) === '') {
             return false;
         }
 
-        switch ($checkType)
-        {
+        switch ($checkType) {
             case 'noSpecialChar': // a simple e-mail address should still be possible (like username)
                 $validRegex = '/^[\w.@+-]+$/i';
                 break;
@@ -191,13 +179,11 @@ final class StringUtils
         }
 
         // check if string contains only valid characters
-        if (!preg_match($validRegex, $string))
-        {
+        if (!preg_match($validRegex, $string)) {
             return false;
         }
 
-        switch ($checkType)
-        {
+        switch ($checkType) {
             case 'email':
                 return filter_var(trim($string), FILTER_VALIDATE_EMAIL) !== false;
             case 'url':
@@ -223,8 +209,7 @@ final class StringUtils
         $filename = urldecode($filename);
 
         // If the filename was not empty
-        if (trim($filename) === '')
-        {
+        if (trim($filename) === '') {
             throw new AdmException('SYS_FILENAME_EMPTY');
         }
 
@@ -236,21 +221,18 @@ final class StringUtils
             self::strContains($filename, '\\') ||
             (!self::strValidCharacters($filename, 'file') && $checkExtension) ||
             (!self::strValidCharacters($filename, 'folder') && !$checkExtension)
-        )
-        {
+        ) {
             throw new AdmException('SYS_FILENAME_INVALID', array(self::strStripTags($filename)));
         }
 
-        if ($checkExtension)
-        {
+        if ($checkExtension) {
             // check if the extension is not listed as blocked
             $extensionBlocklist = array('php', 'php3', 'php4', 'php5', 'pht', 'html', 'htm', 'phtml',
                 'shtml', 'htaccess', 'htpasswd', 'pl', 'js', 'vbs', 'asp',
                 'asa', 'cer', 'asax', 'swf', 'xap', 'cgi', 'ssi', 'phar', 'svg');
             $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
-            if (in_array($fileExtension, $extensionBlocklist, true))
-            {
+            if (in_array($fileExtension, $extensionBlocklist, true)) {
                 throw new AdmException('SYS_FILE_EXTENSION_INVALID');
             }
         }
@@ -269,14 +251,12 @@ final class StringUtils
     public static function strIsValidFolderName($filename)
     {
         // If the filename was not empty
-        if (trim($filename) === '')
-        {
+        if (trim($filename) === '') {
             throw new AdmException('SYS_FOLDER_NAME_EMPTY');
         }
 
         // filename should only contains valid characters and don't start with a dot
-        if (basename($filename) !== $filename || self::strStartsWith($filename, '.') || !self::strValidCharacters($filename, 'folder'))
-        {
+        if (basename($filename) !== $filename || self::strStartsWith($filename, '.') || !self::strValidCharacters($filename, 'folder')) {
             throw new AdmException('SYS_FOLDER_NAME_INVALID', array($filename));
         }
 

@@ -58,17 +58,13 @@ class Organization extends TableAccess
     {
         parent::__construct($database, TBL_ORGANIZATIONS, 'org');
 
-        if(is_numeric($organization))
-        {
+        if (is_numeric($organization)) {
             $this->readDataById($organization);
-        }
-        else
-        {
+        } else {
             $this->readDataByColumns(array('org_shortname' => $organization));
         }
 
-        if((int) $this->getValue('org_id') > 0)
-        {
+        if ((int) $this->getValue('org_id') > 0) {
             $this->settingsManager = new SettingsManager($database, (int) $this->getValue('org_id'));
             $this->settingsManager->resetAll();
         }
@@ -79,8 +75,7 @@ class Organization extends TableAccess
      */
     public function &getSettingsManager()
     {
-        if(!$this->settingsManager instanceof SettingsManager)
-        {
+        if (!$this->settingsManager instanceof SettingsManager) {
             $this->settingsManager = new SettingsManager($this->db, (int) $this->getValue('org_id'));
             $this->settingsManager->resetAll();
         }
@@ -100,8 +95,7 @@ class Organization extends TableAccess
         $this->childOrganizations       = array();
         $this->countOrganizations       = 0;
 
-        if ($this->settingsManager instanceof SettingsManager)
-        {
+        if ($this->settingsManager instanceof SettingsManager) {
             $this->settingsManager->clearAll();
         }
     }
@@ -113,8 +107,7 @@ class Organization extends TableAccess
      */
     public function countAllRecords()
     {
-        if($this->countOrganizations === 0)
-        {
+        if ($this->countOrganizations === 0) {
             $this->countOrganizations = parent::countAllRecords();
         }
         return $this->countOrganizations;
@@ -149,8 +142,7 @@ class Organization extends TableAccess
 
         $orgId = (int) $this->getValue('org_id');
 
-        foreach($systemmailsTexts as $key => $value)
-        {
+        foreach ($systemmailsTexts as $key => $value) {
             // convert <br /> to a normal line feed
             $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $value);
 
@@ -198,8 +190,7 @@ class Organization extends TableAccess
         $this->db->queryPrepared($sql, $queryParams);
 
         // if the second organization is added than also create global categories
-        if($this->countAllRecords() === 2)
-        {
+        if ($this->countAllRecords() === 2) {
             $categoryAnnouncement = new TableCategory($this->db);
             $categoryAnnouncement->setValue('cat_type', 'ANN');
             $categoryAnnouncement->setValue('cat_name_intern', 'ANN_ALL_ORGANIZATIONS');
@@ -393,8 +384,7 @@ class Organization extends TableAccess
     {
         $organizations = $this->getOrganizationsInRelationship();
 
-        if($shortname)
-        {
+        if ($shortname) {
             /**
              * @param string $value
              * @return string
@@ -428,14 +418,12 @@ class Organization extends TableAccess
         $sqlWhere = array();
         $queryParams = array();
 
-        if ($child)
-        {
+        if ($child) {
             $sqlWhere[] = 'org_org_id_parent = ?';
             $queryParams[] = (int) $this->getValue('org_id');
         }
         $orgParentId = (int) $this->getValue('org_org_id_parent');
-        if ($parent && $orgParentId > 0)
-        {
+        if ($parent && $orgParentId > 0) {
             $sqlWhere[] = 'org_id = ?';
             $queryParams[] = $orgParentId;
         }
@@ -446,15 +434,11 @@ class Organization extends TableAccess
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         $childOrganizations = array();
-        while ($row = $pdoStatement->fetch())
-        {
+        while ($row = $pdoStatement->fetch()) {
             $orgId = (int) $row['org_id'];
-            if ($longname)
-            {
+            if ($longname) {
                 $childOrganizations[$orgId] = $row['org_longname'];
-            }
-            else
-            {
+            } else {
                 $childOrganizations[$orgId] = $row['org_shortname'];
             }
         }
@@ -466,8 +450,7 @@ class Organization extends TableAccess
      */
     protected function getChildOrganizations()
     {
-        if(!$this->bCheckChildOrganizations)
-        {
+        if (!$this->bCheckChildOrganizations) {
             // Daten erst einmal aus DB einlesen
             $this->childOrganizations = $this->getOrganizationsInRelationship(true, false);
             $this->bCheckChildOrganizations = true;
@@ -504,19 +487,14 @@ class Organization extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($checkValue)
-        {
+        if ($checkValue) {
             // org_shortname shouldn't be edited
-            if($columnName === 'org_shortname' && !$this->newRecord)
-            {
+            if ($columnName === 'org_shortname' && !$this->newRecord) {
                 return false;
-            }
-            elseif($columnName === 'org_homepage' && $newValue !== '')
-            {
+            } elseif ($columnName === 'org_homepage' && $newValue !== '') {
                 $newValue = admFuncCheckUrl($newValue);
 
-                if ($newValue === false)
-                {
+                if ($newValue === false) {
                     return false;
                 }
             }

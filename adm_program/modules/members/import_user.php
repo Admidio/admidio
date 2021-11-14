@@ -13,32 +13,26 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 $_SESSION['import_csv_request'] = $_POST;
 
-try
-{
+try {
     // check the CSRF token of the form against the session token
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-}
-catch(AdmException $exception)
-{
+} catch (AdmException $exception) {
     $exception->showHtml();
     // => EXIT
 }
 
 // only authorized users can import users
-if(!$gCurrentUser->editUsers())
-{
+if (!$gCurrentUser->editUsers()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
 // Lastname und firstname are mandatory fields
-if(strlen($_POST['usf-'.$gProfileFields->getProperty('LAST_NAME', 'usf_id')]) === 0)
-{
+if (strlen($_POST['usf-'.$gProfileFields->getProperty('LAST_NAME', 'usf_id')]) === 0) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gProfileFields->getProperty('LAST_NAME', 'usf_name'))));
     // => EXIT
 }
-if(strlen($_POST['usf-'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]) === 0)
-{
+if (strlen($_POST['usf-'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]) === 0) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gProfileFields->getProperty('FIRST_NAME', 'usf_name'))));
     // => EXIT
 }
@@ -57,16 +51,13 @@ $importedFields = array();
 $importProfileFields = array();
 
 // create array with all profile fields that where assigned to columns of the import file
-foreach($_POST as $formFieldId => $importFileColumn)
-{
+foreach ($_POST as $formFieldId => $importFileColumn) {
     // normal profile fields
-    if(strpos($formFieldId, 'usf-') !== false && $importFileColumn !== '')
-    {
+    if (strpos($formFieldId, 'usf-') !== false && $importFileColumn !== '') {
         $importProfileFields[(int) substr($formFieldId, 4)] = (int) $importFileColumn;
     }
     // username and password
-    elseif(strpos($formFieldId, 'usr_') !== false && $importFileColumn !== '')
-    {
+    elseif (strpos($formFieldId, 'usr_') !== false && $importFileColumn !== '') {
         $importProfileFields[$formFieldId] = $importFileColumn;
     }
 }
@@ -74,8 +65,7 @@ foreach($_POST as $formFieldId => $importFileColumn)
 // Determine dependent roles
 $depRoles = RoleDependency::getParentRoles($gDb, (int) $_SESSION['rol_id']);
 
-if($firstRowTitle)
-{
+if ($firstRowTitle) {
     // skip first line, because here are the column names
     $line = next($_SESSION['import_data']);
     $startRow = 1;
@@ -84,8 +74,7 @@ if($firstRowTitle)
 // set execution time to 10 minutes because we have a lot to do
 PhpIniUtils::startNewExecutionTimeLimit(600);
 
-for($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i)
-{
+for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) {
     $userCounted   = false;
     $userLoginName = '';
     $userPassword  = '';
@@ -96,58 +85,46 @@ for($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i)
         $line[$importProfileFields[$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]],
         $line[$importProfileFields[$gProfileFields->getProperty('LAST_NAME', 'usf_id')]]);
 
-    foreach($line as $columnKey => $columnValue)
-    {
+    foreach ($line as $columnKey => $columnValue) {
         // get usf id or database column name
         $assignedFieldColumnId = array_search($columnKey, $importProfileFields);
         // remove spaces and html tags
         $columnValue = trim(strip_tags($columnValue));
 
-        if(is_int($assignedFieldColumnId))
-        {
+        if (is_int($assignedFieldColumnId)) {
             $userImport->setValue($gProfileFields->getPropertyById($assignedFieldColumnId, 'usf_name_intern'), $columnValue);
-        }
-        else
-        {
+        } else {
             // remember username and password and add it later to the user
-            if($assignedFieldColumnId === 'usr_login_name')
-            {
+            if ($assignedFieldColumnId === 'usr_login_name') {
                 $userLoginName = $columnValue;
-            }
-            elseif($assignedFieldColumnId === 'usr_password')
-            {
+            } elseif ($assignedFieldColumnId === 'usr_password') {
                 $userPassword = $columnValue;
             }
         }
     }
 
     // add login data to the user
-    if($userLoginName !== '' && $userPassword !== '')
-    {
+    if ($userLoginName !== '' && $userPassword !== '') {
         $userImport->setLoginData($userLoginName, $userPassword);
     }
 
-    if($userImport->isNewRecord())
-    {
+    if ($userImport->isNewRecord()) {
         ++$countImportNewUser;
         $userCounted = true;
     }
 
-    if($userImport->save() && !$userCounted)
-    {
+    if ($userImport->save() && !$userCounted) {
         ++$countImportEditUser;
         $userCounted = true;
     }
 
     // assign role membership to user
-    if($userImport->setRoleMembership((int) $_SESSION['rol_id']))
-    {
+    if ($userImport->setRoleMembership((int) $_SESSION['rol_id'])) {
         ++$countImportEditRole;
     }
 
     // assign dependent role memberships to user
-    foreach($depRoles as $depRole)
-    {
+    foreach ($depRoles as $depRole) {
         $userImport->setRoleMembership($depRole);
     }
 

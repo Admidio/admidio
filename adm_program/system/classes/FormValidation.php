@@ -44,13 +44,11 @@ class FormValidation
 
         $securimage = new Securimage();
 
-        if ($securimage->check($value))
-        {
+        if ($securimage->check($value)) {
             return true;
         }
 
-        if ($gSettingsManager->getString('captcha_type') === 'calc')
-        {
+        if ($gSettingsManager->getString('captcha_type') === 'calc') {
             throw new AdmException('SYS_CAPTCHA_CALC_CODE_INVALID');
         }
 

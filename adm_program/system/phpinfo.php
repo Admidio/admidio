@@ -12,8 +12,7 @@ require_once(__DIR__ . '/common.php');
 require(__DIR__ . '/login_valid.php');
 
 // only administrators are allowed to view phpinfo
-if (!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }

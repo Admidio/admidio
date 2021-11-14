@@ -19,15 +19,13 @@ require(__DIR__ . '/../../system/login_valid.php');
 $getNewUserUuid = admFuncVariableIsValid($_GET, 'new_user_uuid', 'string', array('requireValue' => true));
 
 // only administrators could approve new users
-if(!$gCurrentUser->approveUsers())
-{
+if (!$gCurrentUser->approveUsers()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
 // pruefen, ob Modul aufgerufen werden darf
-if(!$gSettingsManager->getBool('registration_enable_module'))
-{
+if (!$gSettingsManager->getBool('registration_enable_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -43,16 +41,13 @@ $lastName  = $gDb->escapeString($newUser->getValue('LAST_NAME', 'database'));
 $firstName = $gDb->escapeString($newUser->getValue('FIRST_NAME', 'database'));
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
-if(DB_ENGINE === Database::PDO_ENGINE_MYSQL && $gSettingsManager->getBool('system_search_similar'))
-{
+if (DB_ENGINE === Database::PDO_ENGINE_MYSQL && $gSettingsManager->getBool('system_search_similar')) {
     $sqlSimilarName =
         '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
             AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4) )
          OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4)
             AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4) ) )';
-}
-else
-{
+} else {
     $sqlSimilarName =
         '(  (   last_name.usd_value  = '. $lastName.'
             AND first_name.usd_value = '. $firstName.')
@@ -96,17 +91,13 @@ $queryParams = array(
 $usrStatement = $gDb->queryPrepared($sql, $queryParams);
 
 // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
-if($gCurrentUser->editUsers())
-{
+if ($gCurrentUser->editUsers()) {
     $urlCreateNewUser = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_uuid' => $getNewUserUuid));
-}
-else
-{
+} else {
     $urlCreateNewUser = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '5', 'new_user_uuid' => $getNewUserUuid));
 }
 
-if($usrStatement->rowCount() === 0)
-{
+if ($usrStatement->rowCount() === 0) {
     // if user doesn't exists than show profile or auto assign roles
     admRedirect($urlCreateNewUser);
     // => EXIT
@@ -126,76 +117,58 @@ $page->addHtml('
 
 // show all found users with their address who have a similar name and show link for further handling
 $i = 0;
-while($row = $usrStatement->fetch())
-{
-    if($i > 0)
-    {
+while ($row = $usrStatement->fetch()) {
+    if ($i > 0) {
         $page->addHtml('<hr />');
     }
     $page->addHtml('<p>
         <a class="btn" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])).'" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">
             <i class="fas fa-user"></i>'.$row['first_name'].' '.$row['last_name'].'</a><br />');
 
-        if($row['street'] !== '')
-        {
-            $page->addHtml($row['street'].'<br />');
+    if ($row['street'] !== '') {
+        $page->addHtml($row['street'].'<br />');
+    }
+    if ($row['zip_code'] !== '' || $row['city'] !== '') {
+        $page->addHtml($row['zip_code'].' '.$row['city'].'<br />');
+    }
+    if ($row['email'] !== '') {
+        if ($gSettingsManager->getBool('enable_mail_module')) {
+            $page->addHtml('<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['usr_uuid'])).'">'.$row['email'].'</a><br />');
+        } else {
+            $page->addHtml('<a href="mailto:'.$row['email'].'">'.$row['email'].'</a><br />');
         }
-        if($row['zip_code'] !== '' || $row['city'] !== '')
-        {
-            $page->addHtml($row['zip_code'].' '.$row['city'].'<br />');
-        }
-        if($row['email'] !== '')
-        {
-            if($gSettingsManager->getBool('enable_mail_module'))
-            {
-                $page->addHtml('<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['usr_uuid'])).'">'.$row['email'].'</a><br />');
-            }
-            else
-            {
-                $page->addHtml('<a href="mailto:'.$row['email'].'">'.$row['email'].'</a><br />');
-            }
-        }
+    }
     $page->addHtml('</p>');
 
-    if(isMember($row['usr_id']))
-    {
+    if (isMember($row['usr_id'])) {
         // found user is member of this organization
-        if(strlen($row['usr_login_name']) > 0)
-        {
+        if (strlen($row['usr_login_name']) > 0) {
             // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken
             $page->addHtml('<p>'.$gL10n->get('SYS_USER_VALID_LOGIN'));
-            if($gSettingsManager->getBool('enable_system_mails'))
-            {
+            if ($gSettingsManager->getBool('enable_system_mails')) {
                 $page->addHtml('<br />'.$gL10n->get('SYS_REMINDER_SEND_LOGIN').'</p>
 
                 <button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $getNewUserUuid, 'user_uuid' => $row['usr_uuid'], 'mode' => '6')).'\'">
                     <i class="fas fa-key"></i>'.$gL10n->get('SYS_SEND_LOGIN_INFORMATION').'</button>');
             }
-        }
-        else
-        {
+        } else {
             // Logindaten sind NICHT vorhanden -> diese nun zuordnen
             $page->addHtml('<p>'.$gL10n->get('SYS_USER_NO_VALID_LOGIN').'</p>
 
             <button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $getNewUserUuid, 'user_uuid' => $row['usr_uuid'], 'mode' => '1')).'\'">
                 <i class="fas fa-user-check"></i>'.$gL10n->get('SYS_ASSIGN_LOGIN_INFORMATION').'</button>');
         }
-    }
-    else
-    {
+    } else {
         // gefundene User ist noch KEIN Mitglied dieser Organisation
         $link = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $getNewUserUuid, 'user_uuid' => $row['usr_uuid'], 'mode' => '2'));
 
-        if($row['usr_login_name'] !== '')
-        {
+        if ($row['usr_login_name'] !== '') {
             // Logindaten sind bereits vorhanden
             $page->addHtml('<p>'.$gL10n->get('SYS_USER_NO_MEMBERSHIP_LOGIN', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
 
             <button class="btn btn-primary" onclick="window.location.href=\''.$link.'\'">
                 <i class="fas fa-user-check"></i>'.$gL10n->get('SYS_ASSIGN_MEMBERSHIP_AND_LOGIN').'</button>');
-        }
-        else
-        {
+        } else {
             // KEINE Logindaten vorhanden
             $page->addHtml('<p>'.$gL10n->get('SYS_USER_NO_MEMBERSHIP_NO_LOGIN', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
 

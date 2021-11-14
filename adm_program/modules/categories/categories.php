@@ -33,8 +33,7 @@ if (($getType === 'ROL' && !$gCurrentUser->manageRoles())
 ||  ($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
 ||  ($getType === 'USF' && !$gCurrentUser->editUsers())
 ||  ($getType === 'DAT' && !$gCurrentUser->editDates())
-||  ($getType === 'AWA' && !$gCurrentUser->editUsers()))
-{
+||  ($getType === 'AWA' && !$gCurrentUser->editUsers())) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -45,8 +44,7 @@ $addButtonText    = $gL10n->get('SYS_CREATE_CATEGORY');
 $visibleHeadline  = $gL10n->get('SYS_VISIBLE_FOR');
 $editableHeadline = '';
 
-switch ($getType)
-{
+switch ($getType) {
     case 'ROL':
         $component = 'GROUPS-ROLES';
         $rolesRightsColumn = 'rol_assign_roles';
@@ -95,10 +93,9 @@ switch ($getType)
 }
 
 // check if the current user has the right to
-if(!Component::isAdministrable($component))
-{
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-        // => EXIT
+if (!Component::isAdministrable($component)) {
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
 }
 
 // read all administrator roles
@@ -114,8 +111,7 @@ $sqlAdminRoles = 'SELECT rol_name
 $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrgId));
 
 $adminRoles = array();
-while($roleName = $statementAdminRoles->fetchColumn())
-{
+while ($roleName = $statementAdminRoles->fetchColumn()) {
     $adminRoles[] = $roleName;
 }
 
@@ -159,40 +155,31 @@ $flagTbodyAllOrgasWritten = false;
 $category = new TableCategory($gDb);
 
 // Get data
-while($catRow = $categoryStatement->fetch())
-{
+while ($catRow = $categoryStatement->fetch()) {
     $category->clear();
     $category->setArray($catRow);
 
     $catId = (int) $category->getValue('cat_id');
     $categoryUuid = $category->getValue('cat_uuid');
 
-    if($category->getValue('cat_system') == 1 && $getType === 'USF')
-    {
+    if ($category->getValue('cat_system') == 1 && $getType === 'USF') {
         // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
         $categoriesOverview->addTableBody('id', 'cat_'.$catId);
-    }
-    elseif((int) $category->getValue('cat_org_id') === 0 && $getType === 'USF')
-    {
+    } elseif ((int) $category->getValue('cat_org_id') === 0 && $getType === 'USF') {
         // Kategorien über alle Organisationen kommen immer zuerst
-        if(!$flagTbodyAllOrgasWritten)
-        {
+        if (!$flagTbodyAllOrgasWritten) {
             $flagTbodyAllOrgasWritten = true;
             $categoriesOverview->addTableBody('id', 'cat_all_orgas');
         }
-    }
-    else
-    {
-        if(!$flagTbodyWritten)
-        {
+    } else {
+        if (!$flagTbodyWritten) {
             $flagTbodyWritten = true;
             $categoriesOverview->addTableBody('id', 'cat_list');
         }
     }
 
     $htmlMoveRow = '&nbsp;';
-    if($category->getValue('cat_system') == 0 || $getType !== 'USF')
-    {
+    if ($category->getValue('cat_system') == 0 || $getType !== 'USF') {
         $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableCategory::MOVE_UP.'\', \'row_'.$categoryUuid.'\',
                             \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('type' => $getType, 'mode' => 4, 'cat_uuid' => $categoryUuid, 'sequence' => TableCategory::MOVE_UP)) . '\',
                             \''.$gCurrentSession->getCsrfToken().'\')">'.
@@ -204,51 +191,34 @@ while($catRow = $categoryStatement->fetch())
     }
 
     $htmlDefaultCategory = '&nbsp;';
-    if($category->getValue('cat_default') == 1)
-    {
+    if ($category->getValue('cat_default') == 1) {
         $htmlDefaultCategory = '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($addButtonText)) . '"></i>';
     }
 
     // create list with all roles that could view the category
-    if($getType === 'ROL')
-    {
+    if ($getType === 'ROL') {
         $htmlViewRolesNames = '';
-    }
-    else
-    {
+    } else {
         $rightCategoryView = new RolesRights($gDb, 'category_view', $catId);
         $arrRolesIds = $rightCategoryView->getRolesIds();
 
-        if(count($arrRolesIds) > 0)
-        {
+        if (count($arrRolesIds) > 0) {
             $htmlViewRolesNames = implode(', ', array_merge($rightCategoryView->getRolesNames(), $adminRoles));
-        }
-        else
-        {
-            if($gCurrentOrganization->countAllRecords() > 1)
-            {
-                if((int) $category->getValue('cat_org_id') === 0)
-                {
+        } else {
+            if ($gCurrentOrganization->countAllRecords() > 1) {
+                if ((int) $category->getValue('cat_org_id') === 0) {
                     $htmlViewRolesNames = $gL10n->get('SYS_ALL_ORGANIZATIONS');
-                }
-                else
-                {
+                } else {
                     $htmlViewRolesNames = $gL10n->get('SYS_ALL_THIS_ORGANIZATION');
                 }
 
-                if($getType !== 'USF')
-                {
+                if ($getType !== 'USF') {
                     $htmlViewRolesNames .= ' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
                 }
-            }
-            else
-            {
-                if($getType === 'USF')
-                {
+            } else {
+                if ($getType === 'USF') {
                     $htmlViewRolesNames = $gL10n->get('SYS_ALL_THIS_ORGANIZATION');
-                }
-                else
-                {
+                } else {
                     $htmlViewRolesNames = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
                 }
             }
@@ -256,42 +226,29 @@ while($catRow = $categoryStatement->fetch())
     }
 
     // create list with all roles that could edit the category
-    if($getType === 'ROL')
-    {
+    if ($getType === 'ROL') {
         $htmlEditRolesNames = '';
-    }
-    else
-    {
-
-        if((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->isChildOrganization())
-        {
+    } else {
+        if ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->isChildOrganization()) {
             $htmlEditRolesNames = $gL10n->get('SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA');
-        }
-        else
-        {
+        } else {
             $rightCategoryEdit  = new RolesRights($gDb, 'category_edit', $catId);
             $htmlEditRolesNames = implode(', ', array_merge($rightCategoryEdit->getRolesNames(), $adminRoles));
         }
     }
 
-    if($category->isEditable())
-    {
+    if ($category->isEditable()) {
         $categoryAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_uuid' => $categoryUuid, 'type' => $getType)).'">'.
                                     '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
-        if($category->getValue('cat_system') == 1)
-        {
+        if ($category->getValue('cat_system') == 1) {
             $categoryAdministration .= '<i class="fas fa-trash invisible"></i>';
-        }
-        else
-        {
+        } else {
             $categoryAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. $categoryUuid, 'name' => $category->getValue('cat_name'), 'database_id' => $categoryUuid, 'database_id_2' => $getType)).'">'.
                                             '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
-    }
-    else
-    {
+    } else {
         $categoryAdministration = '<i class="fas fa-trash invisible"></i><i class="fas fa-trash invisible"></i>';
     }
 

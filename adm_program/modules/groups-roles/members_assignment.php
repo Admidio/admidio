@@ -20,8 +20,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
-if(isset($_GET['mode']) && $_GET['mode'] === 'assign')
-{
+if (isset($_GET['mode']) && $_GET['mode'] === 'assign') {
     // ajax mode then only show text if error occurs
     $gMessage->showTextOnly(true);
 }
@@ -40,37 +39,31 @@ $role->readDataByUuid($getRoleUuid);
 $_SESSION['set_rol_id'] = $role->getValue('rol_id');
 
 // roles of other organizations can't be edited
-if((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0)
-{
+if ((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
 // check if user is allowed to assign members to this role
-if(!$role->allowedToAssignMembers($gCurrentUser))
-{
+if (!$role->allowedToAssignMembers($gCurrentUser)) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
-if($getMembersShowAll)
-{
+if ($getMembersShowAll) {
     $getFilterRoleId = 0;
 }
 
-if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
-{
+if ($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId)) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS_VIEW_LIST'));
     // => EXIT
 }
 
-if($getMode === 'assign')
-{
+if ($getMode === 'assign') {
     // change membership of that user
     // this must be called as ajax request
 
-    try
-    {
+    try {
         $membership = false;
         $leadership = false;
         $memberApproved = null;
@@ -79,17 +72,14 @@ if($getMode === 'assign')
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
 
         // if its an event the user must attend to the event
-        if($role->getValue('cat_name_intern') === 'EVENTS')
-        {
+        if ($role->getValue('cat_name_intern') === 'EVENTS') {
             $memberApproved = 2;
         }
 
-        if(isset($_POST['member_'.$getUserUuid]) && $_POST['member_'.$getUserUuid] === 'true')
-        {
+        if (isset($_POST['member_'.$getUserUuid]) && $_POST['member_'.$getUserUuid] === 'true') {
             $membership = true;
         }
-        if(isset($_POST['leader_'.$getUserUuid]) && $_POST['leader_'.$getUserUuid] === 'true')
-        {
+        if (isset($_POST['leader_'.$getUserUuid]) && $_POST['leader_'.$getUserUuid] === 'true') {
             $membership = true;
             $leadership = true;
         }
@@ -101,47 +91,36 @@ if($getMode === 'assign')
         $memCount = $role->countMembers($user->getValue('usr_id'));
 
         // If role would have less members than allowed or leader is to be added
-        if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $memCount || (int) $role->getValue('rol_max_members') === 0)))
-        {
+        if ($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $memCount || (int) $role->getValue('rol_max_members') === 0))) {
             $member->startMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'), $leadership, $memberApproved);
 
             // find the parent roles and assign user to parent roles
             $dependencies = RoleDependency::getParentRoles($gDb, (int) $role->getValue('rol_id'));
             $parentRoles  = array();
 
-            foreach($dependencies as $tmpRole)
-            {
+            foreach ($dependencies as $tmpRole) {
                 $member->startMembership($tmpRole, $user->getValue('usr_id'), null, $memberApproved);
             }
             echo 'success';
-        }
-        elseif(!$leadership && !$membership)
-        {
+        } elseif (!$leadership && !$membership) {
             $member->stopMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'));
             echo 'success';
-        }
-        else
-        {
+        } else {
             $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name'))));
             // => EXIT
         }
-    }
-    catch(AdmException $e)
-    {
+    } catch (AdmException $e) {
         $e->showText();
         // => EXIT
     }
-}
-else
-{
+} else {
     // show html list with all users and their membership to this role
 
     // set headline of the script
     $headline = $gL10n->get('SYS_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 
     // add current url to navigation stack if last url was not the same page
-    if(!str_contains($gNavigation->getUrl(), 'members_assignment.php'))
-    {
+    if (!str_contains($gNavigation->getUrl(), 'members_assignment.php')) {
         $gNavigation->addUrl(CURRENT_URL, $headline);
     }
 
@@ -150,8 +129,7 @@ else
 
     $javascriptCode = '';
 
-    if($getMembersShowAll)
-    {
+    if ($getMembersShowAll) {
         $javascriptCode .= '$("#mem_show_all").prop("checked", true);';
     }
 
@@ -220,8 +198,7 @@ else
 
     $page->addJavascript($javascriptCode, true);
 
-    if ($gCurrentUser->editUsers())
-    {
+    if ($gCurrentUser->editUsers()) {
         $page->addPageFunctionsMenuItem('menu_item_members_assign_create_user', $gL10n->get('SYS_CREATE_USER'),
             ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', 'fa-plus-circle');
     }
@@ -257,22 +234,19 @@ else
     $htmlLeaderText   = '';
 
     // show icon that leaders have no additional rights
-    if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_NO_RIGHTS)
-    {
+    if ((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_NO_RIGHTS) {
         $htmlLeaderText .= $gL10n->get('SYS_LEADER_NO_ADDITIONAL_RIGHTS');
     }
 
     // show icon with edit user right if leader has this right
-    if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_EDIT
-    || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-    {
+    if ((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_EDIT
+    || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
         $htmlLeaderText .= $gL10n->get('SYS_LEADER_EDIT_MEMBERS');
     }
 
     // show icon with assign role right if leader has this right
-    if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN
-    || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-    {
+    if ((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN
+    || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
         $htmlLeaderText .= $gL10n->get('SYS_LEADER_ASSIGN_MEMBERS');
     }
 
@@ -285,26 +259,22 @@ else
         $gL10n->get('SYS_MEMBER'));
     $columnAlignment = array('left', 'left');
 
-    if($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers()))
-    {
+    if ($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers())) {
         $columnHeading[] = $gL10n->get('SYS_LASTNAME');
         $columnAlignment[] = 'left';
     }
-    if($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->editUsers()))
-    {
+    if ($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->editUsers())) {
         $columnHeading[] = $gL10n->get('SYS_FIRSTNAME');
         $columnAlignment[] = 'left';
     }
-    if($gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())
+    if ($gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
-    || $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers()))
-    {
+    || $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())) {
         $columnHeading[] = '<i class="fas fa-map-marker-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_ADDRESS').'"></i>';
         $columnAlignment[] = 'left';
     }
-    if($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers()))
-    {
+    if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers())) {
         $columnHeading[] = $gL10n->get('SYS_BIRTHDAY');
         $columnAlignment[] = 'left';
     }

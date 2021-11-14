@@ -24,12 +24,9 @@ $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('requi
 $getMode     = admFuncVariableIsValid($_GET, 'mode',   'string', array('defaultValue' => 'html', 'validValues' => array('html', 'change')));
 
 // in ajax mode only return simple text on error
-if($getMode === 'change')
-{
+if ($getMode === 'change') {
     $gMessage->showHtmlTextOnly(true);
-}
-else
-{
+} else {
     $gMessage->showInModalWindow();
 }
 
@@ -39,34 +36,26 @@ $userId    = $user->getValue('usr_id');
 
 // only the own password could be individual set.
 // Administrator could only send a generated password or set a password if no password was set before
-if($gCurrentUserId !== $userId
+if ($gCurrentUserId !== $userId
 && (!isMember($userId)
 || (!$gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId)
-|| ($gCurrentUser->isAdministrator() && $user->getValue('EMAIL') !== '' && $gSettingsManager->getBool('enable_system_mails'))))
-{
+|| ($gCurrentUser->isAdministrator() && $user->getValue('EMAIL') !== '' && $gSettingsManager->getBool('enable_system_mails')))) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
-if($getMode === 'change')
-{
-    try
-    {
+if ($getMode === 'change') {
+    try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch(AdmException $exception)
-    {
+    } catch (AdmException $exception) {
         $exception->showHtml();
         // => EXIT
     }
 
-    if($gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId)
-    {
+    if ($gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId) {
         $oldPassword = '';
-    }
-    else
-    {
+    } else {
         $oldPassword = $_POST['old_password'];
     }
 
@@ -76,61 +65,43 @@ if($getMode === 'change')
 
     // Handle form input
 
-    if(($oldPassword !== '' || $gCurrentUser->isAdministrator())
-    &&  $newPassword !== '' && $newPasswordConfirm !== '')
-    {
-        if(strlen($newPassword) >= PASSWORD_MIN_LENGTH)
-        {
-            if (PasswordUtils::passwordStrength($newPassword, $user->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength'))
-            {
-                if ($newPassword === $newPasswordConfirm)
-                {
+    if (($oldPassword !== '' || $gCurrentUser->isAdministrator())
+    &&  $newPassword !== '' && $newPasswordConfirm !== '') {
+        if (strlen($newPassword) >= PASSWORD_MIN_LENGTH) {
+            if (PasswordUtils::passwordStrength($newPassword, $user->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength')) {
+                if ($newPassword === $newPasswordConfirm) {
                     // check if old password is correct.
                     // Administrator could change password of other users without this verification.
                     if (PasswordUtils::verify($oldPassword, $user->getValue('usr_password'))
-                    || ($gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId))
-                    {
+                    || ($gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId)) {
                         $user->saveChangesWithoutRights();
                         $user->setPassword($newPassword);
                         $user->save();
 
                         // if password of current user changed, then update value in current session
-                        if ($gCurrentUserId === (int) $user->getValue('usr_id'))
-                        {
+                        if ($gCurrentUserId === (int) $user->getValue('usr_id')) {
                             $gCurrentUser->setPassword($newPassword);
                         }
 
                         $phrase = 'success';
-                    }
-                    else
-                    {
+                    } else {
                         $phrase = $gL10n->get('PRO_PASSWORD_OLD_WRONG');
                     }
-                }
-                else
-                {
+                } else {
                     $phrase = $gL10n->get('SYS_PASSWORDS_NOT_EQUAL');
                 }
-            }
-            else
-            {
+            } else {
                 $phrase = $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH');
             }
-        }
-        else
-        {
+        } else {
             $phrase = $gL10n->get('PRO_PASSWORD_LENGTH');
         }
-    }
-    else
-    {
+    } else {
         $phrase = $gL10n->get('SYS_FIELDS_EMPTY');
     }
 
     echo $phrase;
-}
-elseif($getMode === 'html')
-{
+} elseif ($getMode === 'html') {
 
     // Show password form
 
@@ -138,8 +109,7 @@ elseif($getMode === 'html')
     $zxcvbnUserInputs = json_encode($user->getPasswordUserData(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
     $passwordStrengthLevel = 1;
-    if ($gSettingsManager->getInt('password_min_strength'))
-    {
+    if ($gSettingsManager->getInt('password_min_strength')) {
         $passwordStrengthLevel = $gSettingsManager->getInt('password_min_strength');
     }
 
@@ -193,18 +163,17 @@ elseif($getMode === 'html')
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
     <div class="modal-body">';
-        // show form
-        $form = new HtmlForm('password_form', SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid, 'mode' => 'change')));
-        if($gCurrentUserId === $userId)
-        {
-            // to change own password user must enter the valid old password for verification
-            $form->addInput(
+    // show form
+    $form = new HtmlForm('password_form', SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid, 'mode' => 'change')));
+    if ($gCurrentUserId === $userId) {
+        // to change own password user must enter the valid old password for verification
+        $form->addInput(
                 'old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), '',
                 array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)
             );
-            $form->addLine();
-        }
-        $form->addInput(
+        $form->addLine();
+    }
+    $form->addInput(
             'new_password', $gL10n->get('PRO_NEW_PASSWORD'), '',
             array(
                 'type'             => 'password',
@@ -215,14 +184,14 @@ elseif($getMode === 'html')
                 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'
             )
         );
-        $form->addInput(
+    $form->addInput(
             'new_password_confirm', $gL10n->get('SYS_REPEAT'), '',
             array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
         );
-        $form->addSubmitButton(
+    $form->addSubmitButton(
             'btn_save', $gL10n->get('SYS_SAVE'),
             array('icon' => 'fa-check', 'class' => ' offset-sm-3')
         );
-        echo $form->show();
+    echo $form->show();
     echo '</div>';
 }

@@ -34,7 +34,6 @@ class ModuleMessages
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -59,8 +58,7 @@ class ModuleMessages
         $statement = $gDb->queryPrepared($sql, array($groupInfo['id'], $GLOBALS['gCurrentOrgId']));
         $roleName = $statement->fetchColumn();
 
-        switch ($groupInfo['status'])
-        {
+        switch ($groupInfo['status']) {
 //            case 'active':
 //                return $roleName . ' (' . $gL10n->get('SYS_ACTIVE_MEMBERS') . ')';
             case 'former':
@@ -82,21 +80,14 @@ class ModuleMessages
         $groupSplit = explode(':', $groupString);
         $groupIdAndStatus = explode('-', trim($groupSplit[1]));
 
-        if (count($groupIdAndStatus) === 1)
-        {
+        if (count($groupIdAndStatus) === 1) {
             $status = 'active';
             $groupIdAndStatus[] = 0;
-        }
-        elseif ($groupIdAndStatus[1] === '1')
-        {
+        } elseif ($groupIdAndStatus[1] === '1') {
             $status = 'former';
-        }
-        elseif ($groupIdAndStatus[1] === '2')
-        {
+        } elseif ($groupIdAndStatus[1] === '2') {
             $status = 'active_former';
-        }
-        else
-        {
+        } else {
             $status = 'unknown';
         }
 

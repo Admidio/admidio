@@ -56,12 +56,9 @@ class TableFile extends TableAccess
     {
         global $gLogger;
 
-        try
-        {
+        try {
             FileSystemUtils::deleteFileIfExists($this->getFullFilePath());
-        }
-        catch (\RuntimeException $exception)
-        {
+        } catch (\RuntimeException $exception) {
             $gLogger->error('Could not delete file!', array('filePath' => $this->getFullFilePath()));
             // TODO
         }
@@ -112,35 +109,30 @@ class TableFile extends TableAccess
         $this->readDataByUuid($fileUuid);
 
         // Check if a dataset is found
-        if ((int) $this->getValue('fil_id') === 0)
-        {
+        if ((int) $this->getValue('fil_id') === 0) {
             throw new AdmException('SYS_INVALID_PAGE_VIEW');
         }
 
         // If current user has download-admin-rights => allow
-        if ($gCurrentUser->adminDocumentsFiles())
-        {
+        if ($gCurrentUser->adminDocumentsFiles()) {
             return true;
         }
 
         // If file is locked (and no download-admin-rights) => throw exception
-        if ($this->getValue('fil_locked'))
-        {
+        if ($this->getValue('fil_locked')) {
             $this->clear();
             throw new AdmException('SYS_FOLDER_NO_RIGHTS');
         }
 
         // If folder is public (and file is not locked) => allow
-        if ($this->getValue('fol_public'))
-        {
+        if ($this->getValue('fol_public')) {
             return true;
         }
 
         // check if user has a membership in a role that is assigned to the current folder
         $folderViewRolesObject = new RolesRights($this->db, 'folder_view', (int) $this->getValue('fol_id'));
 
-        if ($folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
-        {
+        if ($folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships())) {
             return true;
         }
 
@@ -179,8 +171,7 @@ class TableFile extends TableAccess
         $value = parent::getValue($columnName, $format);
 
         // getValue transforms & to html chars. This must be undone.
-        if ($columnName === 'fil_name')
-        {
+        if ($columnName === 'fil_name') {
             $value = htmlspecialchars_decode($value);
         }
 
@@ -206,8 +197,7 @@ class TableFile extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        if ($this->newRecord)
-        {
+        if ($this->newRecord) {
             $this->setValue('fil_timestamp', DATETIME_NOW);
             $this->setValue('fil_usr_id', $GLOBALS['gCurrentUserId']);
         }

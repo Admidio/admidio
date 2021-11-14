@@ -19,8 +19,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1, 'directOutput' => true));
 
-if ($getMode === 3 && !$gCurrentUser->isAdministrator())
-{
+if ($getMode === 3 && !$gCurrentUser->isAdministrator()) {
     echo $gL10n->get('SYS_NO_RIGHTS');
     exit();
 }
@@ -41,8 +40,7 @@ function getUpdateVersion($updateInfo, $search)
     $adding = strlen($search) - 1;
 
     // Version auslesen
-    while ($pointer !== "\n")
-    {
+    while ($pointer !== "\n") {
         ++$i;
         $updateVersion .= $pointer;
         $pointer = $updateInfo[$currentVersionStart + $adding + $i];
@@ -66,21 +64,16 @@ function checkVersion($currentVersion, $checkStableVersion, $checkBetaVersion, $
     $update = 0;
 
     // Zunächst auf stabile Version prüfen
-    if (version_compare($checkStableVersion, $currentVersion, '>'))
-    {
+    if (version_compare($checkStableVersion, $currentVersion, '>')) {
         $update = 1;
     }
 
     // Jetzt auf Beta Version prüfen
     $status = version_compare($checkBetaVersion, $currentVersion);
-    if ($status === 1 || ($status === 0 && version_compare($betaRelease, $betaFlag, '>')))
-    {
-        if ($update === 1)
-        {
+    if ($status === 1 || ($status === 0 && version_compare($betaRelease, $betaFlag, '>'))) {
+        if ($update === 1) {
             $update = 3;
-        }
-        else
-        {
+        } else {
             $update = 2;
         }
     }
@@ -92,17 +85,14 @@ function checkVersion($currentVersion, $checkStableVersion, $checkBetaVersion, $
 // verfügbare Admidio Versionen vom Server einlesen (Textfile)
 // Zunächst die Methode selektieren (CURL bevorzugt)
 $updateInfoUrl = ADMIDIO_HOMEPAGE . 'update.txt';
-if (@file_get_contents($updateInfoUrl) === false)
-{
+if (@file_get_contents($updateInfoUrl) === false) {
     // Admidio Versionen nicht auslesbar
     $stableVersion = 'n/a';
     $betaVersion   = 'n/a';
     $betaRelease   = '';
 
     $versionUpdate = 99;
-}
-else
-{
+} else {
     $updateInfo = file_get_contents($updateInfoUrl);
 
     // Admidio Versionen vom Server übergeben
@@ -111,14 +101,12 @@ else
     $betaRelease   = getUpdateVersion($updateInfo, 'Beta-Release=');
 
     // Keine Stabile Version verfügbar (eigentlich unmöglich)
-    if ($stableVersion === '')
-    {
+    if ($stableVersion === '') {
         $stableVersion = 'n/a';
     }
 
     // Keine Beatversion verfügbar
-    if ($betaVersion === '')
-    {
+    if ($betaVersion === '') {
         $betaVersion = 'n/a';
         $betaRelease = '';
     }
@@ -131,34 +119,23 @@ else
 // in der Variable $versionUpdate abgefragt werden.
 // $versionUpdate (0 = Kein Update, 1 = Neue stabile Version, 2 = Neue Beta-Version, 3 = Neue stabile + Beta Version, 99 = Keine Verbindung)
 
-if ($getMode === 2)
-{
+if ($getMode === 2) {
 
     // Updateergebnis anzeigen
 
 
-    if ($versionUpdate === 1)
-    {
+    if ($versionUpdate === 1) {
         $versionsText = $gL10n->get('SYS_NEW_VERSION_AVAILABLE');
-    }
-    elseif ($versionUpdate === 2)
-    {
+    } elseif ($versionUpdate === 2) {
         $versionsText = $gL10n->get('SYS_NEW_BETA_AVAILABLE');
-    }
-    elseif ($versionUpdate === 3)
-    {
+    } elseif ($versionUpdate === 3) {
         $versionsText = $gL10n->get('SYS_NEW_BOTH_AVAILABLE');
-    }
-    elseif ($versionUpdate === 99)
-    {
+    } elseif ($versionUpdate === 99) {
         $admidioLink = '<a href="' . ADMIDIO_HOMEPAGE . 'download.php" target="_blank">Admidio</a>';
         $versionsText = $gL10n->get('SYS_CONNECTION_ERROR', array($admidioLink));
-    }
-    else
-    {
+    } else {
         $versionsTextBeta = '';
-        if (ADMIDIO_VERSION_BETA > 0)
-        {
+        if (ADMIDIO_VERSION_BETA > 0) {
             $versionsTextBeta = 'Beta ';
         }
 
@@ -174,15 +151,12 @@ if ($getMode === 2)
             <br />
             ' . $gL10n->get('SYS_AVAILABLE_BETA') . ': &nbsp;';
 
-    if ($versionUpdate !== 99 && $betaVersion !== 'n/a')
-    {
+    if ($versionUpdate !== 99 && $betaVersion !== 'n/a') {
         echo '
             <a class="btn" href="' . ADMIDIO_HOMEPAGE . 'download.php" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">'.
                 '<i class="fas fa-link"></i>' . $betaVersion . ' Beta ' . $betaRelease . '
             </a>';
-    }
-    else
-    {
+    } else {
         echo $betaVersion;
     }
     echo '

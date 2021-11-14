@@ -28,26 +28,21 @@ require_once(__DIR__ . '/backup.functions.php');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'show_list', 'validValues' => array('show_list', 'create_backup')));
 
 // only administrators are allowed to create backups
-if(!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
 // module not available for other databases except MySQL
-if(DB_ENGINE !== Database::PDO_ENGINE_MYSQL)
-{
+if (DB_ENGINE !== Database::PDO_ENGINE_MYSQL) {
     $gMessage->show($gL10n->get('SYS_BACKUP_ONLY_MYSQL'));
     // => EXIT
 }
 
 // check backup path in adm_my_files and create it if necessary
-try
-{
+try {
     FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/backup');
-}
-catch (\RuntimeException $exception)
-{
+} catch (\RuntimeException $exception) {
     $gMessage->show($exception->getMessage());
     // => EXIT
 }
@@ -59,8 +54,7 @@ $page = new HtmlPage('admidio-backup', $headline);
 
 $backupAbsolutePath = ADMIDIO_PATH . FOLDER_DATA . '/backup/'; // make sure to include trailing slash
 
-if($getMode === 'show_list')
-{
+if ($getMode === 'show_list') {
     $existingBackupFiles = array();
 
     // start navigation of this module here
@@ -68,26 +62,20 @@ if($getMode === 'show_list')
 
     // create a list with all valid files in the backup folder
     $dirHandle = @opendir($backupAbsolutePath);
-    if ($dirHandle)
-    {
-        while (($entry = readdir($dirHandle)) !== false)
-        {
-            if($entry === '.' || $entry === '..')
-            {
+    if ($dirHandle) {
+        while (($entry = readdir($dirHandle)) !== false) {
+            if ($entry === '.' || $entry === '..') {
                 continue;
             }
 
-            try
-            {
+            try {
                 StringUtils::strIsValidFileName($entry);
 
                 // replace invalid characters in filename
                 $entry = FileSystemUtils::removeInvalidCharsInFilename($entry);
 
                 $existingBackupFiles[] = $entry;
-            }
-            catch(AdmException $e)
-            {
+            } catch (AdmException $e) {
                 $temp = 1;
             }
         }
@@ -121,8 +109,7 @@ if($getMode === 'show_list')
 
     $backupSizeSum = 0;
 
-    foreach($existingBackupFiles as $key => $oldBackupFile)
-    {
+    foreach ($existingBackupFiles as $key => $oldBackupFile) {
         $fileSize = filesize($backupAbsolutePath.$oldBackupFile);
         $backupSizeSum += $fileSize;
 
@@ -138,16 +125,13 @@ if($getMode === 'show_list')
         $table->addRowByArray($columnValues, 'row_file_'.$key);
     }
 
-    if(count($existingBackupFiles) > 0)
-    {
+    if (count($existingBackupFiles) > 0) {
         $columnValues = array('&nbsp;', $gL10n->get('SYS_TOTAL'), round($backupSizeSum / 1024) .' kB', '&nbsp;');
         $table->addRowFooterByArray($columnValues);
     }
 
     $page->addHtml($table->show());
-}
-elseif($getMode === 'create_backup')
-{
+} elseif ($getMode === 'create_backup') {
     ob_start();
     require_once(__DIR__ . '/backup_script.php');
     $fileContent = ob_get_contents();
@@ -162,7 +146,6 @@ elseif($getMode === 'create_backup')
         array('icon' => 'fa-arrow-circle-left')
     );
     $page->addHtml($form->show());
-
 }
 
 // show html of complete page

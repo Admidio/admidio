@@ -73,8 +73,7 @@ class AdmException extends Exception
         global $gL10n;
 
         // if text is a translation-id then translate it
-        if (Language::isTranslationStringId($this->message))
-        {
+        if (Language::isTranslationStringId($this->message)) {
             return $gL10n->get($this->message, $this->params);
         }
 
@@ -101,13 +100,10 @@ class AdmException extends Exception
         global $gMessage;
 
         // display database error to user
-        if ($gMessage instanceof Message)
-        {
+        if ($gMessage instanceof Message) {
             $gMessage->show($this->getText());
-            // => EXIT
-        }
-        else
-        {
+        // => EXIT
+        } else {
             $this->showText();
             // => EXIT
         }
@@ -118,8 +114,7 @@ class AdmException extends Exception
      */
     public function showText()
     {
-        if (!headers_sent())
-        {
+        if (!headers_sent()) {
             header('Content-type: text/html; charset=utf-8');
         }
 

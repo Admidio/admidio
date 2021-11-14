@@ -24,8 +24,7 @@ $getInlineView   = admFuncVariableIsValid($_GET, 'inline',        'bool',   arra
 header('Content-type: text/html; charset=utf-8');
 
 // show headline
-if($getInlineView)
-{
+if ($getInlineView) {
     echo '
         <div class="modal-header">
             <h3 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h3>
@@ -34,12 +33,10 @@ if($getInlineView)
         <div class="modal-body">';
 }
 
-switch ($getMessageId)
-{
+switch ($getMessageId) {
     // room help text
     case 'room_detail':
-        if(is_numeric($getMessageVar1))
-        {
+        if (is_numeric($getMessageVar1)) {
             $room = new TableRooms($gDb, $getMessageVar1);
             echo '
                 <div class="row">
@@ -161,7 +158,6 @@ switch ($getMessageId)
         echo $gL10n->get(strtoupper($getMessageId), array(Language::translateIfTranslationStrId($getMessageVar1)));
 }
 
-if($getInlineView)
-{
+if ($getInlineView) {
     echo '</div></div>';
 }

@@ -25,8 +25,7 @@ final class PhpIniUtils
      */
     public static function getDisabledFunctions()
     {
-        if (self::$disabledFunctions === null)
-        {
+        if (self::$disabledFunctions === null) {
             self::$disabledFunctions = explode(',', ini_get('disable_functions'));
         }
 
@@ -52,16 +51,14 @@ final class PhpIniUtils
      */
     private static function getBytesFromSize($data, $multi = self::BYTES_UNIT_FACTOR_1024)
     {
-        if ($data === '' || $data === '-1')
-        {
+        if ($data === '' || $data === '-1') {
             return INF;
         }
 
         $value = (float) substr($data, 0, -1);
         $unit  = strtoupper(substr($data, -1));
 
-        switch ($unit)
-        {
+        switch ($unit) {
             case 'T': // fallthrough
                 $value *= $multi;
             case 'G': // fallthrough
@@ -163,15 +160,12 @@ final class PhpIniUtils
     {
         $baseDirs = self::getBaseDirs();
 
-        if ($baseDirs[0] === '')
-        {
+        if ($baseDirs[0] === '') {
             return true;
         }
 
-        foreach ($baseDirs as $baseDir)
-        {
-            if (strpos($directoryPath, $baseDir) === 0)
-            {
+        foreach ($baseDirs as $baseDir) {
+            if (strpos($directoryPath, $baseDir) === 0) {
                 return true;
             }
         }
@@ -189,12 +183,10 @@ final class PhpIniUtils
     {
         $directoryPath = FileSystemUtils::getNormalizedPath($directoryPath);
 
-        if (!is_dir($directoryPath))
-        {
+        if (!is_dir($directoryPath)) {
             throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
         }
-        if (!self::isInBaseDirs($directoryPath))
-        {
+        if (!self::isInBaseDirs($directoryPath)) {
             throw new \RuntimeException('Directory "' . $directoryPath . '" is not in base-directories!');
         }
     }
@@ -209,8 +201,7 @@ final class PhpIniUtils
      */
     public static function setBaseDirs(array $directoryPaths = array())
     {
-        foreach ($directoryPaths as &$directoryPath)
-        {
+        foreach ($directoryPaths as &$directoryPath) {
             self::checkIsValidDir($directoryPath);
         }
         unset($directoryPath);
@@ -244,15 +235,13 @@ final class PhpIniUtils
     {
         global $gDebug, $gLogger;
 
-        if (in_array('set_time_limit', self::getDisabledFunctions(), true))
-        {
+        if (in_array('set_time_limit', self::getDisabledFunctions(), true)) {
             return;
         }
 
         // @ prevents error output in safe-mode
         $result = @set_time_limit($seconds);
-        if (!$result && $gDebug)
-        {
+        if (!$result && $gDebug) {
             $gLogger->warning('Function set_time_limit failed');
         }
     }

@@ -33,14 +33,11 @@ $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 
 // check if module is enabled
-if ((int) $gSettingsManager->get('enable_announcements_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_announcements_module') === 0) {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-    // => EXIT
-}
-elseif((int) $gSettingsManager->get('enable_announcements_module') === 2)
-{
+// => EXIT
+} elseif ((int) $gSettingsManager->get('enable_announcements_module') === 2) {
     // Access only with valid login
     require(__DIR__ . '/../../system/login_valid.php');
 }
@@ -55,12 +52,9 @@ $announcements->setDateRange($getDateFrom, $getDateTo);
 $announcementsCount = $announcements->getDataSetCount();
 
 // add url to navigation stack
-if($getAnnUuid !== '')
-{
+if ($getAnnUuid !== '') {
     $gNavigation->addUrl(CURRENT_URL, $getHeadline);
-}
-else
-{
+} else {
     $gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
 }
 
@@ -68,8 +62,7 @@ else
 $page = new HtmlPage('admidio-announcements', $getHeadline);
 
 // add rss feed to announcements
-if($gSettingsManager->getBool('enable_rss'))
-{
+if ($gSettingsManager->getBool('enable_rss')) {
     $page->addRssFile(
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/rss_announcements.php', array('headline' => $getHeadline)),
         $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline))
@@ -77,26 +70,21 @@ if($gSettingsManager->getBool('enable_rss'))
 }
 
 // number of announcements per page
-if($gSettingsManager->getInt('announcements_per_page') > 0)
-{
+if ($gSettingsManager->getInt('announcements_per_page') > 0) {
     $announcementsPerPage = $gSettingsManager->getInt('announcements_per_page');
-}
-else
-{
+} else {
     $announcementsPerPage = $announcementsCount;
 }
 
 // create module specific functions menu
-if(count($gCurrentUser->getAllEditableCategories('ANN')) > 0)
-{
+if (count($gCurrentUser->getAllEditableCategories('ANN')) > 0) {
     // show link to create new announcement
     $page->addPageFunctionsMenuItem('menu_item_announcement_add', $gL10n->get('SYS_CREATE_ENTRY'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('headline' => $getHeadline)),
         'fa-plus-circle');
 }
 
-if($gCurrentUser->editAnnouncements())
-{
+if ($gCurrentUser->editAnnouncements()) {
     $page->addPageFunctionsMenuItem('menu_item_announcement_categories', $gL10n->get('SYS_EDIT_CATEGORIES'),
         SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')),
         'fa-th-large');
@@ -110,8 +98,7 @@ $page->addJavascript('
     true
 );
 
-if($getAnnUuid === '')
-{
+if ($getAnnUuid === '') {
     // create filter menu with elements for category
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
@@ -122,27 +109,20 @@ if($getAnnUuid === '')
     $page->addHtml($filterNavbar->show());
 }
 
-if($announcementsCount === 0)
-{
+if ($announcementsCount === 0) {
     // no announcements found
-    if($getAnnUuid !== '')
-    {
+    if ($getAnnUuid !== '') {
         $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>');
-    }
-    else
-    {
+    } else {
         $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
     }
-}
-else
-{
+} else {
     // get all recordsets
     $announcementsArray = $announcements->getDataSet($getStart, $announcementsPerPage);
     $announcement = new TableAnnouncement($gDb);
 
     // show all announcements
-    foreach($announcementsArray['recordset'] as $row)
-    {
+    foreach ($announcementsArray['recordset'] as $row) {
         $announcement->clear();
         $announcement->setArray($row);
 
@@ -154,10 +134,9 @@ else
             <div class="card-header">
                 <i class="fas fa-newspaper"></i>' . $annHeadline);
 
-                // check if the user could edit this announcement
-                if($announcement->isEditable())
-                {
-                    $page->addHtml('
+        // check if the user could edit this announcement
+        if ($announcement->isEditable()) {
+            $page->addHtml('
                     <div class="dropdown float-right">
                         <a class="" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
@@ -171,8 +150,8 @@ else
                                 <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('SYS_DELETE').'</a>
                         </div>
                     </div>');
-                }
-            $page->addHtml('</div>
+        }
+        $page->addHtml('</div>
 
             <div class="card-body">'.
                 $announcement->getValue('ann_description').

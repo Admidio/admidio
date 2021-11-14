@@ -49,8 +49,7 @@ class TableMenu extends TableAccess
     {
         global $gCurrentSession;
 
-        if ($gCurrentSession instanceof Session)
-        {
+        if ($gCurrentSession instanceof Session) {
             // now set menu object in session invalid because the menu has changed
             $gCurrentSession->reloadAllSessions();
         }
@@ -70,8 +69,7 @@ class TableMenu extends TableAccess
     {
         $newNameIntern = strtoupper(str_replace(' ', '_', $name));
 
-        if ($index > 1)
-        {
+        if ($index > 1) {
             $newNameIntern = $newNameIntern . '_' . $index;
         }
 
@@ -80,8 +78,7 @@ class TableMenu extends TableAccess
                  WHERE men_name_intern = ? -- $newNameIntern';
         $userFieldsStatement = $this->db->queryPrepared($sql, array($newNameIntern));
 
-        if ($userFieldsStatement->rowCount() > 0)
-        {
+        if ($userFieldsStatement->rowCount() > 0) {
             ++$index;
             $newNameIntern = $this->getNewNameIntern($name, $index);
         }
@@ -105,8 +102,7 @@ class TableMenu extends TableAccess
         $value = parent::getValue($columnName, $format);
 
         // if text is a translation-id then translate it
-        if($columnName === 'men_name' && $format !== 'database' && Language::isTranslationStringId($value))
-        {
+        if ($columnName === 'men_name' && $format !== 'database' && Language::isTranslationStringId($value)) {
             $value = $gL10n->get($value);
         }
 
@@ -125,10 +121,8 @@ class TableMenu extends TableAccess
         $returnCode = false;
 
         // die Sortierung wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if($mode === self::MOVE_UP)
-        {
-            if($menOrder > 1)
-            {
+        if ($mode === self::MOVE_UP) {
+            if ($menOrder > 1) {
                 $sql = 'UPDATE '.TBL_MENU.'
                            SET men_order = ? -- $menOrder
                          WHERE men_men_id_parent = ? -- $menIdParent
@@ -139,8 +133,7 @@ class TableMenu extends TableAccess
             }
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif($mode === self::MOVE_DOWN)
-        {
+        elseif ($mode === self::MOVE_DOWN) {
             // count all categories that are organization independent because these categories should not
             // be mixed with the organization categories. Hidden categories are sidelined.
             $sql = 'SELECT COUNT(*) AS count
@@ -149,8 +142,7 @@ class TableMenu extends TableAccess
             $countMenuStatement = $this->db->queryPrepared($sql, array($menIdParent));
             $rowCount = $countMenuStatement->fetchColumn();
 
-            if($menOrder < $rowCount)
-            {
+            if ($menOrder < $rowCount) {
                 $sql = 'UPDATE '.TBL_MENU.'
                            SET men_order = ? -- $menOrder
                          WHERE men_men_id_parent = ? -- $menIdParent
@@ -173,8 +165,7 @@ class TableMenu extends TableAccess
     {
         $returnValue = parent::readDataById($menId);
 
-        if($returnValue)
-        {
+        if ($returnValue) {
             $this->elementTable = TBL_MENU;
             $this->elementColumn = 'men_id';
         }
@@ -195,8 +186,7 @@ class TableMenu extends TableAccess
     {
         $returnValue = parent::readDataByColumns($columnArray);
 
-        if($returnValue)
-        {
+        if ($returnValue) {
             $this->elementTable = TBL_MENU;
             $this->elementColumn = 'men_id';
         }
@@ -219,8 +209,7 @@ class TableMenu extends TableAccess
 
         $this->db->startTransaction();
 
-        if($this->newRecord)
-        {
+        if ($this->newRecord) {
             // if new field than generate new name intern, otherwise no change will be made
             $this->setValue('men_name_intern', $this->getNewNameIntern($this->getValue('men_name', 'database'), 1));
 
@@ -236,8 +225,7 @@ class TableMenu extends TableAccess
 
         $returnValue = parent::save($updateFingerPrint);
 
-        if ($gCurrentSession instanceof Session)
-        {
+        if ($gCurrentSession instanceof Session) {
             // now set menu object in session invalid because the menu has changed
             $gCurrentSession->reloadAllSessions();
         }

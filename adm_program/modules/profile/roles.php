@@ -33,8 +33,7 @@ $getInline   = admFuncVariableIsValid($_GET, 'inline',    'bool');
 $html = '';
 
 // if user is allowed to assign at least one role then allow access
-if(!$gCurrentUser->assignRoles())
-{
+if (!$gCurrentUser->assignRoles()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -45,25 +44,20 @@ $user->readDataByUuid($getUserUuid);
 // set headline of the script
 $headline = $gL10n->get('SYS_ROLE_ASSIGNMENT_FOR', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
 
-if(!$getInline)
-{
+if (!$getInline) {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 }
 // Testen ob Feste Rolle gesetzt ist
-if(isset($_SESSION['set_rol_id']))
-{
+if (isset($_SESSION['set_rol_id'])) {
     $setRoleId = $_SESSION['set_rol_id'];
     unset($_SESSION['set_rol_id']);
-}
-else
-{
+} else {
     $setRoleId = null;
 }
 
 $page = null;
 
-if($getInline)
-{
+if ($getInline) {
     header('Content-type: text/html; charset=utf-8');
 
     $html .= '<script type="text/javascript">
@@ -111,10 +105,7 @@ if($getInline)
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
     <div class="modal-body">';
-
-}
-else
-{
+} else {
     // create html page object
     $page = new HtmlPage('admidio-profile-roles', $headline);
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
@@ -138,8 +129,7 @@ $table->addRowHeadingByArray($columnHeading);
 $table->setColumnAlignByArray(array('center', 'left', 'left', 'left'));
 $table->setColumnsWidth(array('10%', '30%', '45%', '15%'));
 
-if($gCurrentUser->manageRoles())
-{
+if ($gCurrentUser->manageRoles()) {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
     $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_leader_rights, mem_rol_id, mem_usr_id, mem_leader
               FROM '.TBL_ROLES.'
@@ -161,9 +151,7 @@ if($gCurrentUser->manageRoles())
         DATE_NOW,
         $gCurrentOrgId
     );
-}
-else
-{
+} else {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
     $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_leader_rights,
                    mgl.mem_rol_id AS mem_rol_id, mgl.mem_usr_id AS mem_usr_id, mgl.mem_leader AS mem_leader
@@ -203,8 +191,7 @@ $statement = $gDb->queryPrepared($sql, $queryParams);
 $category  = null;
 $role      = new TableRoles($gDb);
 
-while($row = $statement->fetch())
-{
+while ($row = $statement->fetch()) {
     $columnValues   = array();
     $memberChecked  = '';
     $memberDisabled = '';
@@ -214,29 +201,25 @@ while($row = $statement->fetch())
 
     // if user is assigned to this role
     // or if user is created in members.php of list module
-    if($row['mem_usr_id'] > 0 || ($getNewUser === 1 && (int) $role->getValue('rol_id') == $setRoleId))
-    {
+    if ($row['mem_usr_id'] > 0 || ($getNewUser === 1 && (int) $role->getValue('rol_id') == $setRoleId)) {
         $memberChecked = ' checked="checked" ';
     }
 
     // if role is administrator than only administrator can add new user,
     // but don't change their own membership, because there must be at least one administrator
-    if($role->getValue('rol_administrator') == 1
+    if ($role->getValue('rol_administrator') == 1
     && (!$gCurrentUser->isAdministrator()
-    || ($gCurrentUser->isAdministrator() && (int) $user->getValue('usr_id') === $gCurrentUserId)))
-    {
+    || ($gCurrentUser->isAdministrator() && (int) $user->getValue('usr_id') === $gCurrentUserId))) {
         $memberDisabled = ' disabled="disabled" ';
     }
 
     // if user is flagged as leader than check the ckeckbox ;)
-    if($row['mem_leader'] > 0)
-    {
+    if ($row['mem_leader'] > 0) {
         $leaderChecked = ' checked="checked" ';
     }
 
     // the leader of administrator role can only be set by a administrator
-    if($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator())
-    {
+    if ($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator()) {
         $leaderDisabled = ' disabled="disabled" ';
     }
 
@@ -248,8 +231,7 @@ while($row = $statement->fetch())
     );
 
     // if new category than display a category header
-    if($category !== (int) $role->getValue('cat_id'))
-    {
+    if ($category !== (int) $role->getValue('cat_id')) {
         $blockId = 'admCategory'.(int) $role->getValue('cat_id');
 
         $table->addTableBody();
@@ -266,29 +248,25 @@ while($row = $statement->fetch())
                        $leaderChecked.$leaderDisabled.' onclick="profileJS.markLeader(this);" value="1" />';
 
     // show icon that leaders have no additional rights
-    if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_NO_RIGHTS)
-    {
+    if ((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_NO_RIGHTS) {
         $leaderRights .= '<i class="fas fa-info-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
                           <i class="fas fa-trash invisible"></i>';
     }
 
     // show icon with edit user right if leader has this right
-    if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_EDIT
-    || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-    {
+    if ((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_EDIT
+    || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
         $leaderRights .= '<i class="fas fa-user-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_EDIT_MEMBERS').'"></i>';
     }
 
     // show icon with assign role right if leader has this right
-    if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN
-    || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-    {
+    if ((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN
+    || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
         $leaderRights .= '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('SYS_LEADER_ASSIGN_MEMBERS').'"></i>';
     }
 
     // show dummy icon if leader has not all rights
-    if((int) $role->getValue('rol_leader_rights') !== ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-    {
+    if ((int) $role->getValue('rol_leader_rights') !== ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
         $leaderRights .= '<i class="fas fa-trash invisible"></i>';
     }
     $columnValues[] = $leaderRights;
@@ -302,12 +280,9 @@ $html .= '
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>';
 
-if($getInline)
-{
+if ($getInline) {
     echo $html.'</div>';
-}
-else
-{
+} else {
     $page->addHtml($html);
     $page->show();
 }

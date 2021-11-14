@@ -40,12 +40,9 @@ class AutoLogin extends TableAccess
         parent::__construct($database, TBL_AUTO_LOGIN, 'atl');
 
         // if not integer than the auto-login-id is commited
-        if (is_int($session))
-        {
+        if (is_int($session)) {
             $this->readDataById($session);
-        }
-        else
-        {
+        } else {
             $this->readDataByColumns(array('atl_auto_login_id' => $session));
         }
     }
@@ -59,12 +56,9 @@ class AutoLogin extends TableAccess
     {
         $loginId = '';
 
-        try
-        {
+        try {
             $loginId = $userId . ':' . SecurityUtils::getRandomString(40);
-        }
-        catch (AdmException $e)
-        {
+        } catch (AdmException $e) {
             $e->showText();
             // => EXIT
         }
@@ -86,8 +80,7 @@ class AutoLogin extends TableAccess
         // Insert & Update
         $this->setValue('atl_last_login', DATETIME_NOW);
 
-        if ($this->newRecord)
-        {
+        if ($this->newRecord) {
             // Insert
             $this->setValue('atl_org_id', $GLOBALS['gCurrentOrgId']);
 

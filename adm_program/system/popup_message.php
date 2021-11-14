@@ -30,8 +30,7 @@ $text = 'SYS_DELETE_ENTRY';
 $callbackFunction = '';
 
 // URL zusammensetzen
-switch ($getType)
-{
+switch ($getType) {
     case 'ann':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('mode' => 2, 'ann_uuid' => $getDatabaseId));
         break;
@@ -42,12 +41,9 @@ switch ($getType)
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('cat_uuid' => $getDatabaseId, 'mode' => 2, 'type' => $getDatabaseId2));
 
         // get special message for calendars
-        if($getDatabaseId2 === 'DAT')
-        {
+        if ($getDatabaseId2 === 'DAT') {
             $text = 'SYS_DELETE_ENTRY';
-        }
-        else
-        {
+        } else {
             $text = 'SYS_WANT_DELETE_CATEGORY';
         }
         break;
@@ -135,13 +131,11 @@ switch ($getType)
         $url = '';
 }
 
-if($callbackFunction !== '')
-{
+if ($callbackFunction !== '') {
     $callbackFunction = ', \''.$callbackFunction.'\'';
 }
 
-if($url === '')
-{
+if ($url === '') {
     $gMessage->showThemeBody(false);
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT

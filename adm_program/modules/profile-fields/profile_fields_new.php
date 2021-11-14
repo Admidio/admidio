@@ -19,8 +19,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 $getUsfUuid = admFuncVariableIsValid($_GET, 'usf_uuid', 'string');
 
 // only authorized users can edit the profile fields
-if (!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -28,32 +27,25 @@ if (!$gCurrentUser->isAdministrator())
 // benutzerdefiniertes Feldobjekt anlegen
 $userField = new TableUserField($gDb);
 
-if($getUsfUuid !== '')
-{
+if ($getUsfUuid !== '') {
     $userField->readDataByUuid($getUsfUuid);
 
     $headline = $gL10n->get('ORG_EDIT_PROFILE_FIELD');
 
     // hidden must be 0, if the flag should be set
-    if($userField->getValue('usf_hidden') == 1)
-    {
+    if ($userField->getValue('usf_hidden') == 1) {
         $userField->setValue('usf_hidden', 0);
-    }
-    else
-    {
+    } else {
         $userField->setValue('usf_hidden', 1);
     }
 
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
-    if($userField->getValue('cat_org_id') > 0
-    && (int) $userField->getValue('cat_org_id') !== $gCurrentOrgId)
-    {
+    if ($userField->getValue('cat_org_id') > 0
+    && (int) $userField->getValue('cat_org_id') !== $gCurrentOrgId) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
-}
-else
-{
+} else {
     $headline = $gL10n->get('ORG_CREATE_PROFILE_FIELD');
 
     // default values for a new field
@@ -63,15 +55,11 @@ else
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-if(isset($_SESSION['fields_request']))
-{
+if (isset($_SESSION['fields_request'])) {
     // hidden must be 0, if the flag should be set
-    if($_SESSION['fields_request']['usf_hidden'] == 1)
-    {
+    if ($_SESSION['fields_request']['usf_hidden'] == 1) {
         $_SESSION['fields_request']['usf_hidden'] = 0;
-    }
-    else
-    {
+    } else {
         $_SESSION['fields_request']['usf_hidden'] = 1;
     }
 
@@ -101,15 +89,12 @@ $page->addJavascript('
 // show form
 $form = new HtmlForm('profile_fields_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_function.php', array('usf_uuid' => $getUsfUuid, 'mode' => '1')), $page);
 $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
-if($userField->getValue('usf_system') == 1)
-{
+if ($userField->getValue('usf_system') == 1) {
     $form->addInput(
         'usf_name', $gL10n->get('SYS_NAME'), $userField->getValue('usf_name', 'database'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
     );
-}
-else
-{
+} else {
     $form->addInput(
         'usf_name', $gL10n->get('SYS_NAME'), $userField->getValue('usf_name', 'database'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
@@ -118,23 +103,19 @@ else
 
 $usfNameIntern = $userField->getValue('usf_name_intern');
 // show internal field name for information
-if($getUsfUuid !== '')
-{
+if ($getUsfUuid !== '') {
     $form->addInput(
         'usf_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $usfNameIntern,
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC')
     );
 }
 
-if($userField->getValue('usf_system') == 1)
-{
+if ($userField->getValue('usf_system') == 1) {
     $form->addInput(
         'usf_cat_id', $gL10n->get('SYS_CATEGORY'), $userField->getValue('cat_name'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
     );
-}
-else
-{
+} else {
     $form->addSelectBoxForCategories(
         'usf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'USF', HtmlForm::SELECT_BOX_MODUS_EDIT,
         array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $userField->getValue('usf_cat_id'))
@@ -157,16 +138,13 @@ $userFieldText = array(
 );
 asort($userFieldText);
 
-if($userField->getValue('usf_system') == 1)
-{
+if ($userField->getValue('usf_system') == 1) {
     // bei Systemfeldern darf der Datentyp nicht mehr veraendert werden
     $form->addInput(
         'usf_type', $gL10n->get('ORG_DATATYPE'), $userFieldText[$userField->getValue('usf_type')],
         array('maxLength' => 30, 'property' => HtmlForm::FIELD_DISABLED)
     );
-}
-else
-{
+} else {
     // fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
     $form->addSelectBox(
         'usf_type', $gL10n->get('ORG_DATATYPE'), $userFieldText,
@@ -199,29 +177,23 @@ $form->addCheckbox(
     array('helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'fa-key')
 );
 
-if($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME')
-{
+if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
     $form->addCheckbox(
         'usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), (bool) $userField->getValue('usf_mandatory'),
         array('property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'fa-asterisk')
     );
-}
-else
-{
+} else {
     $form->addCheckbox(
         'usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), (bool) $userField->getValue('usf_mandatory'),
         array('helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'fa-asterisk')
     );
 }
-if($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNameIntern === 'EMAIL')
-{
+if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNameIntern === 'EMAIL') {
     $form->addCheckbox(
         'usf_registration', $gL10n->get('ORG_FIELD_REGISTRATION'), (bool) $userField->getValue('usf_registration'),
         array('property' => HtmlForm::FIELD_DISABLED, 'icon' => 'fa-address-card')
     );
-}
-else
-{
+} else {
     $form->addCheckbox(
         'usf_registration', $gL10n->get('ORG_FIELD_REGISTRATION'), (bool) $userField->getValue('usf_registration'),
         array('icon' => 'fa-address-card')

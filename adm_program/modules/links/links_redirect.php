@@ -18,14 +18,12 @@ require_once(__DIR__ . '/../../system/common.php');
 $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid','string');
 
 // check if the module is enabled for use
-if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_weblinks_module') === 0) {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-if((int) $gSettingsManager->get('enable_weblinks_module') === 2)
-{
+if ((int) $gSettingsManager->get('enable_weblinks_module') === 2) {
     // available only with valid login
     require(__DIR__ . '/../../system/login_valid.php');
 }
@@ -36,8 +34,7 @@ $weblink->readDataByUuid($getLinkUuid);
 $lnkUrl = $weblink->getValue('lnk_url');
 
 // if no link is set or the weblink is not visible to the user show error
-if(strlen($lnkUrl) === 0 || !$weblink->isVisible())
-{
+if (strlen($lnkUrl) === 0 || !$weblink->isVisible()) {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }
@@ -47,8 +44,7 @@ $weblink->setValue('lnk_counter', (int) $weblink->getValue('lnk_counter') + 1);
 $weblink->save();
 
 // MR: Neue Prüfung für direkte Weiterleitung oder mit Anzeige
-if ($gSettingsManager->getInt('weblinks_redirect_seconds') > 0)
-{
+if ($gSettingsManager->getInt('weblinks_redirect_seconds') > 0) {
     // create html page object
     $page = new HtmlPage('admidio-weblinks-redirect', $gL10n->get('SYS_REDIRECT'));
 
@@ -78,9 +74,7 @@ if ($gSettingsManager->getInt('weblinks_redirect_seconds') > 0)
 
     // show html of complete page
     $page->show();
-}
-else
-{
+} else {
     admRedirect($lnkUrl);
     // => EXIT
 }

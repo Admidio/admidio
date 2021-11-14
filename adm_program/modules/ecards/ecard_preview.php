@@ -17,19 +17,15 @@ require_once(__DIR__ . '/ecard_function.php');
 $gMessage->showThemeBody(false);
 $gMessage->showInModalWindow();
 
-try
-{
+try {
     // check the CSRF token of the form against the session token
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-}
-catch(AdmException $exception)
-{
+} catch (AdmException $exception) {
     $exception->showHtml();
     // => EXIT
 }
 
-if(strlen($_POST['ecard_template']) === 0)
-{
+if (strlen($_POST['ecard_template']) === 0) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TEMPLATE'))));
     // => EXIT
 }
@@ -50,8 +46,7 @@ $funcClass = new FunctionClass($gL10n);
 // read content of template file
 $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName);
 
-if($ecardDataToParse === null)
-{
+if ($ecardDataToParse === null) {
     $gMessage->show($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
     // => EXIT
 }

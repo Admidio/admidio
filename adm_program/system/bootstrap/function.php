@@ -8,8 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php')
-{
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
     exit('This page may not be called directly!');
 }
 
@@ -23,8 +22,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php')
  */
 function hasRole($roleName, $userId = 0)
 {
-    if ($userId === 0)
-    {
+    if ($userId === 0) {
         $userId = $GLOBALS['gCurrentUserId'];
     }
 
@@ -53,8 +51,7 @@ function hasRole($roleName, $userId = 0)
  */
 function isMember($userId)
 {
-    if ($userId === 0)
-    {
+    if ($userId === 0) {
         return false;
     }
 
@@ -85,8 +82,7 @@ function isMember($userId)
  */
 function isGroupLeader($userId, $roleId = 0)
 {
-    if ($userId === 0)
-    {
+    if ($userId === 0) {
         return false;
     }
 
@@ -105,8 +101,7 @@ function isGroupLeader($userId, $roleId = 0)
                    OR cat_org_id IS NULL )';
     $queryParams = array($userId, DATE_NOW, DATE_NOW, $GLOBALS['gCurrentOrgId']);
 
-    if ($roleId > 0)
-    {
+    if ($roleId > 0) {
         $sql .= ' AND mem_rol_id = ? -- $roleId';
         $queryParams[] = $roleId;
     }
@@ -134,15 +129,13 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
 {
     global $gL10n;
 
-    if ($itemsCount === 0 || $itemsPerPage === 0)
-    {
+    if ($itemsCount === 0 || $itemsPerPage === 0) {
         return '';
     }
 
     $totalPagesCount = (int) ceil($itemsCount / $itemsPerPage);
 
-    if ($totalPagesCount <= 1)
-    {
+    if ($totalPagesCount <= 1) {
         return '';
     }
 
@@ -159,14 +152,10 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
     {
         $pageNavString = '';
 
-        for ($i = $start; $i < $end; ++$i)
-        {
-            if ($i === $page)
-            {
+        for ($i = $start; $i < $end; ++$i) {
+            if ($i === $page) {
                 $pageNavString .= getListElementString((string) $i, 'page-item active');
-            }
-            else
-            {
+            } else {
                 $pageNavString .= getListElementString((string) $i, 'page-item', $url, $paramName, ($i - 1) * $itemsPerPage);
             }
         }
@@ -185,14 +174,12 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
     function getListElementString($linkText, $className = '', $url = '', $paramName = '', $paramValue = null)
     {
         $classString = '';
-        if ($className !== '')
-        {
+        if ($className !== '') {
             $classString = ' class="'.$className.'"';
         }
 
         $urlString = '#';
-        if ($url !== '')
-        {
+        if ($url !== '') {
             $urlString = $url.'&'.$paramName.'='.$paramValue;
         }
 
@@ -203,18 +190,15 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
 
     $pageNavigationString = '';
 
-    if ($totalPagesCount > 7)
-    {
+    if ($totalPagesCount > 7) {
         $initPageMax = ($totalPagesCount > 3) ? 3 : $totalPagesCount;
 
         $pageNavigationString .= getListElementsFromTo(1, $initPageMax + 1, $onPage, $baseUrl, $queryParamName, $itemsPerPage);
 
-        if ($totalPagesCount > 3)
-        {
+        if ($totalPagesCount > 3) {
             $disabledLink = '<li class="page-item disabled"><a>...</a></li>';
 
-            if ($onPage > 1 && $onPage < $totalPagesCount)
-            {
+            if ($onPage > 1 && $onPage < $totalPagesCount) {
                 $pageNavigationString .= ($onPage > 5) ? $disabledLink : '&nbsp;&nbsp;';
 
                 $initPageMin = ($onPage > 4) ? $onPage : 5;
@@ -223,31 +207,24 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
                 $pageNavigationString .= getListElementsFromTo($initPageMin - 1, $initPageMax + 2, $onPage, $baseUrl, $queryParamName, $itemsPerPage);
 
                 $pageNavigationString .= ($onPage < $totalPagesCount - 4) ? $disabledLink : '&nbsp;&nbsp;';
-            }
-            else
-            {
+            } else {
                 $pageNavigationString .= $disabledLink;
             }
 
             $pageNavigationString .= getListElementsFromTo($totalPagesCount - 2, $totalPagesCount + 1, $onPage, $baseUrl, $queryParamName, $itemsPerPage);
         }
-    }
-    else
-    {
+    } else {
         $pageNavigationString .= getListElementsFromTo(1, $totalPagesCount + 1, $onPage, $baseUrl, $queryParamName, $itemsPerPage);
     }
 
-    if ($addPrevNextText)
-    {
+    if ($addPrevNextText) {
         $pageNavClassPrev = '';
-        if ($onPage === 1)
-        {
+        if ($onPage === 1) {
             $pageNavClassPrev = 'page-item disabled';
         }
 
         $pageNavClassNext = '';
-        if ($onPage === $totalPagesCount)
-        {
+        if ($onPage === $totalPagesCount) {
             $pageNavClassNext = 'page-item disabled';
         }
 
@@ -270,8 +247,7 @@ function admFuncProcessableImageSize()
 {
     $memoryLimit = PhpIniUtils::getMemoryLimit();
     // if memory_limit is disabled in php.ini
-    if (is_infinite($memoryLimit))
-    {
+    if (is_infinite($memoryLimit)) {
         $memoryLimit = 128 * 1024 * 1024; // 128MB
     }
 
@@ -332,39 +308,24 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
     $value = null;
 
     // set default value for each datatype if no value is given and no value was required
-    if (array_key_exists($variableName, $array) && $array[$variableName] !== '')
-    {
+    if (array_key_exists($variableName, $array) && $array[$variableName] !== '') {
         $value = $array[$variableName];
-    }
-    else
-    {
-        if ($optionsAll['requireValue'])
-        {
+    } else {
+        if ($optionsAll['requireValue']) {
             // if value is required an no value is given then show error
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-        }
-        elseif ($optionsAll['defaultValue'] !== null)
-        {
+        } elseif ($optionsAll['defaultValue'] !== null) {
             // if a default value was set then take this value
             $value = $optionsAll['defaultValue'];
-        }
-        else
-        {
+        } else {
             // no value set then initialize the parameter
-            if ($datatype === 'bool' || $datatype === 'boolean')
-            {
+            if ($datatype === 'bool' || $datatype === 'boolean') {
                 $value = false;
-            }
-            elseif ($datatype === 'numeric' || $datatype === 'int')
-            {
+            } elseif ($datatype === 'numeric' || $datatype === 'int') {
                 $value = 0;
-            }
-            elseif ($datatype === 'float')
-            {
+            } elseif ($datatype === 'float') {
                 $value = 0.0;
-            }
-            else
-            {
+            } else {
                 $value = '';
             }
 
@@ -374,23 +335,17 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
     // check if parameter has a valid value
     // do a strict check with in_array because the function don't work properly
-    if ($optionsAll['validValues'] !== null && !in_array($value, $optionsAll['validValues'], true))
-    {
+    if ($optionsAll['validValues'] !== null && !in_array($value, $optionsAll['validValues'], true)) {
         $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
     }
 
-    switch ($datatype)
-    {
+    switch ($datatype) {
         case 'file':
-            try
-            {
-                if ($value !== '')
-                {
+            try {
+                if ($value !== '') {
                     StringUtils::strIsValidFileName($value, false);
                 }
-            }
-            catch (AdmException $e)
-            {
+            } catch (AdmException $e) {
                 $errorMessage = $e->getText();
             }
             break;
@@ -399,13 +354,11 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             // check if date is a valid Admidio date format
             $objAdmidioDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
 
-            if (!$objAdmidioDate)
-            {
+            if (!$objAdmidioDate) {
                 // check if date has english format
                 $objEnglishDate = \DateTime::createFromFormat('Y-m-d', $value);
 
-                if (!$objEnglishDate)
-                {
+                if (!$objEnglishDate) {
                     $errorMessage = $gL10n->get('SYS_NOT_VALID_DATE_FORMAT', array($variableName));
                 }
             }
@@ -414,8 +367,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
         case 'bool': // fallthrough
         case 'boolean':
             $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-            if ($valid === null)
-            {
+            if ($valid === null) {
                 $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
             }
             $value = $valid;
@@ -425,22 +377,14 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
         case 'float': // fallthrough
         case 'numeric':
             // numeric datatype should only contain numbers
-            if (!is_numeric($value))
-            {
+            if (!is_numeric($value)) {
                 $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-            }
-            else
-            {
-                if ($datatype === 'int')
-                {
+            } else {
+                if ($datatype === 'int') {
                     $value = filter_var($value, FILTER_VALIDATE_INT);
-                }
-                elseif ($datatype === 'float')
-                {
+                } elseif ($datatype === 'float') {
                     $value = filter_var($value, FILTER_VALIDATE_FLOAT);
-                }
-                else
-                {
+                } else {
                     // https://www.php.net/manual/en/function.is-numeric.php#107326
                     $value += 0;
                 }
@@ -458,23 +402,18 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
     }
 
     // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben
-    if ($errorMessage === '')
-    {
+    if ($errorMessage === '') {
         return $value;
     }
 
-    if (isset($gMessage) && $gMessage instanceof Message)
-    {
-        if ($optionsAll['directOutput'])
-        {
+    if (isset($gMessage) && $gMessage instanceof Message) {
+        if ($optionsAll['directOutput']) {
             $gMessage->showTextOnly(true);
         }
 
         $gMessage->show($errorMessage);
-        // => EXIT
-    }
-    else
-    {
+    // => EXIT
+    } else {
         echo $errorMessage;
         exit();
     }
@@ -497,32 +436,24 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
     global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
     // only show info if system setting is activated
-    if ((int) $gSettingsManager->get('system_show_create_edit') === 0)
-    {
+    if ((int) $gSettingsManager->get('system_show_create_edit') === 0) {
         return '';
     }
 
     // compose name of user who create the recordset
     $htmlCreateName = '';
     $userUuidCreated = '';
-    if ($timestampCreate)
-    {
-        if ($userIdCreated > 0)
-        {
+    if ($timestampCreate) {
+        if ($userIdCreated > 0) {
             $userCreate = new User($gDb, $gProfileFields, $userIdCreated);
             $userUuidCreated = $userCreate->getValue('usr_uuid');
 
-            if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
-            {
+            if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
                 $htmlCreateName = $userCreate->getValue('FIRST_NAME') . ' ' . $userCreate->getValue('LAST_NAME');
-            }
-            else
-            {
+            } else {
                 $htmlCreateName = $userCreate->getValue('usr_login_name');
             }
-        }
-        else
-        {
+        } else {
             $htmlCreateName = $gL10n->get('SYS_DELETED_USER');
         }
     }
@@ -530,30 +461,22 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
     // compose name of user who edit the recordset
     $htmlEditName = '';
     $userUuidEdited = '';
-    if ($timestampEdited)
-    {
-        if ($userIdEdited > 0)
-        {
+    if ($timestampEdited) {
+        if ($userIdEdited > 0) {
             $userEdit = new User($gDb, $gProfileFields, $userIdEdited);
             $userUuidEdited = $userEdit->getValue('usr_uuid');
 
-            if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
-            {
+            if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
                 $htmlEditName = $userEdit->getValue('FIRST_NAME') . ' ' . $userEdit->getValue('LAST_NAME');
-            }
-            else
-            {
+            } else {
                 $htmlEditName = $userEdit->getValue('usr_login_name');
             }
-        }
-        else
-        {
+        } else {
             $htmlEditName = $gL10n->get('SYS_DELETED_USER');
         }
     }
 
-    if ($htmlCreateName === '' && $htmlEditName === '')
-    {
+    if ($htmlCreateName === '' && $htmlEditName === '') {
         return '';
     }
 
@@ -584,26 +507,22 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
     global $gL10n, $gValidLogin, $gSettingsManager;
 
     // only show info if system setting is activated
-    if ((int) $gSettingsManager->get('system_show_create_edit') === 0)
-    {
+    if ((int) $gSettingsManager->get('system_show_create_edit') === 0) {
         return '';
     }
 
     $html = '';
 
     // compose name of user who create the recordset
-    if ($timestampCreate)
-    {
+    if ($timestampCreate) {
         $userNameCreated = trim($userNameCreated);
 
-        if ($userNameCreated === '')
-        {
+        if ($userNameCreated === '') {
             $userNameCreated = $gL10n->get('SYS_DELETED_USER');
         }
 
         // if valid login and a user id is given than create a link to the profile of this user
-        if ($gValidLogin && $userUuidCreated !== '' && $userNameCreated !== $gL10n->get('SYS_SYSTEM'))
-        {
+        if ($gValidLogin && $userUuidCreated !== '' && $userNameCreated !== $gL10n->get('SYS_SYSTEM')) {
             $userNameCreated = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $userUuidCreated)) .
                                '">' . $userNameCreated . '</a>';
         }
@@ -612,18 +531,15 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
     }
 
     // compose name of user who edit the recordset
-    if ($timestampEdited)
-    {
+    if ($timestampEdited) {
         $userNameEdited = trim($userNameEdited);
 
-        if ($userNameEdited === '')
-        {
+        if ($userNameEdited === '') {
             $userNameEdited = $gL10n->get('SYS_DELETED_USER');
         }
 
         // if valid login and a user id is given than create a link to the profile of this user
-        if ($gValidLogin && $userUuidEdited !== '' && $userNameEdited !== $gL10n->get('SYS_SYSTEM'))
-        {
+        if ($gValidLogin && $userUuidEdited !== '' && $userNameEdited !== $gL10n->get('SYS_SYSTEM')) {
             $userNameEdited = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $userUuidEdited)) .
                               '">' . $userNameEdited . '</a>';
         }
@@ -631,8 +547,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         $html .= '<span class="info-edited">' . $gL10n->get('SYS_LAST_EDITED_BY', array($userNameEdited, $timestampEdited)) . '</span>';
     }
 
-    if ($html === '')
-    {
+    if ($html === '') {
         return '';
     }
 
@@ -647,14 +562,12 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
 function admFuncCheckUrl($url)
 {
     // Homepage url have to start with "http://"
-    if (!StringUtils::strStartsWith($url, 'http://', false) && !StringUtils::strStartsWith($url, 'https://', false))
-    {
+    if (!StringUtils::strStartsWith($url, 'http://', false) && !StringUtils::strStartsWith($url, 'https://', false)) {
         $url = 'http://' . $url;
     }
 
     // For Homepage only valid url chars are allowed
-    if (!StringUtils::strValidCharacters($url, 'url'))
-    {
+    if (!StringUtils::strValidCharacters($url, 'url')) {
         return false;
     }
 
@@ -673,22 +586,19 @@ function admRedirect($url, $statusCode = 303)
 
     $loggerObject = array('url' => $url, 'statusCode' => $statusCode);
 
-    if (headers_sent())
-    {
+    if (headers_sent()) {
         $gLogger->error('REDIRECT: Header already sent!', $loggerObject);
 
         $gMessage->show($gL10n->get('SYS_HEADER_ALREADY_SENT'));
         // => EXIT
     }
-    if (filter_var($url, FILTER_VALIDATE_URL) === false)
-    {
+    if (filter_var($url, FILTER_VALIDATE_URL) === false) {
         $gLogger->error('REDIRECT: URL is not a valid URL!', $loggerObject);
 
         $gMessage->show($gL10n->get('SYS_REDIRECT_URL_INVALID'));
         // => EXIT
     }
-    if (!in_array($statusCode, array(301, 302, 303, 307), true))
-    {
+    if (!in_array($statusCode, array(301, 302, 303, 307), true)) {
         $gLogger->error('REDIRECT: Status Code is not allowed!', $loggerObject);
 
         $gMessage->show($gL10n->get('SYS_STATUS_CODE_INVALID'));
@@ -696,15 +606,12 @@ function admRedirect($url, $statusCode = 303)
     }
 
     // Check if $url starts with the Admidio URL
-    if (strpos($url, ADMIDIO_URL) === 0)
-    {
+    if (strpos($url, ADMIDIO_URL) === 0) {
         $gLogger->info('REDIRECT: Redirecting to internal URL!', $loggerObject);
 
         // TODO check if user is authorized for url
         $redirectUrl = $url;
-    }
-    else
-    {
+    } else {
         $gLogger->notice('REDIRECT: Redirecting to external URL!', $loggerObject);
 
         $redirectUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/redirect.php', array('url' => $url));
@@ -736,8 +643,7 @@ function getExecutionTime($startTime)
  */
 function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 {
-    switch($searchType)
-    {
+    switch ($searchType) {
         case 'file':
             return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
         case 'dir':

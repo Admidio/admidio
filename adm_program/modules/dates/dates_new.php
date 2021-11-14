@@ -24,8 +24,7 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 $getCopy     = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
 // check if module is active
-if((int) $gSettingsManager->get('enable_dates_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
     // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -37,16 +36,11 @@ $dateCurrentUserAssigned  = false;
 $roleViewSet              = array();
 
 // set headline of the script
-if($getCopy)
-{
+if ($getCopy) {
     $headline = $gL10n->get('SYS_COPY_VAR', array($getHeadline));
-}
-elseif($getDateUuid !== '')
-{
+} elseif ($getDateUuid !== '') {
     $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
-}
-else
-{
+} else {
     $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
 }
 
@@ -55,8 +49,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create date object
 $date = new TableDate($gDb);
 
-if(isset($_SESSION['dates_request']))
-{
+if (isset($_SESSION['dates_request'])) {
     // By wrong input, the user returned to this form now write the previously entered contents into the object
 
     // first set date and time field to a datetime within system format and add this to date class
@@ -71,29 +64,23 @@ if(isset($_SESSION['dates_request']))
     $date->setArray($_SESSION['dates_request']);
 
     // get the selected roles for visibility
-    if(isset($_SESSION['dates_request']['adm_event_participation_right']) && $_SESSION['dates_request']['adm_event_participation_right'] !== '')
-    {
+    if (isset($_SESSION['dates_request']['adm_event_participation_right']) && $_SESSION['dates_request']['adm_event_participation_right'] !== '') {
         $roleViewSet = $_SESSION['dates_request']['adm_event_participation_right'];
     }
 
     // check if a registration to this event is possible
-    if(array_key_exists('date_registration_possible', $_SESSION['dates_request']))
-    {
+    if (array_key_exists('date_registration_possible', $_SESSION['dates_request'])) {
         $dateRegistrationPossible = (bool) $_SESSION['dates_request']['date_registration_possible'];
     }
 
     // check if current user is assigned to this date
-    if(array_key_exists('date_current_user_assigned', $_SESSION['dates_request']))
-    {
+    if (array_key_exists('date_current_user_assigned', $_SESSION['dates_request'])) {
         $dateCurrentUserAssigned = (bool) $_SESSION['dates_request']['date_current_user_assigned'];
     }
 
     unset($_SESSION['dates_request']);
-}
-else
-{
-    if($getDateUuid !== '')
-    {
+} else {
+    if ($getDateUuid !== '') {
         // read data from database
         $date->readDataByUuid($getDateUuid);
 
@@ -102,17 +89,13 @@ else
         $roleViewSet = $eventParticipationRolesObject->getRolesIds();
 
         // check if the current user could edit this event
-        if(!$date->isEditable())
-        {
+        if (!$date->isEditable()) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
-    }
-    else
-    {
+    } else {
         // check if the user has the right to edit at least one category
-        if(count($gCurrentUser->getAllEditableCategories('DAT')) === 0)
-        {
+        if (count($gCurrentUser->getAllEditableCategories('DAT')) === 0) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
@@ -128,21 +111,17 @@ else
     }
 
     // check if a registration to this event is possible
-    if($date->getValue('dat_rol_id') > 0)
-    {
+    if ($date->getValue('dat_rol_id') > 0) {
         $dateRegistrationPossible = true;
     }
     // check if current user is assigned to this date
     $dateCurrentUserAssigned = $gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id'));
 }
 
-if($date->getValue('dat_rol_id') > 0)
-{
+if ($date->getValue('dat_rol_id') > 0) {
     $dateRoleId = (int) $date->getValue('dat_rol_id');
     $role = new TableRoles($gDb, $dateRoleId);
-}
-else
-{
+} else {
     $dateRoleId = 0;
     $role = new TableRoles($gDb);
 }
@@ -256,24 +235,20 @@ $form->addInput(
 );
 
 // if a map link should be shown in the event then show help text and a field where the user could choose the country
-if($gSettingsManager->getBool('dates_show_map_link'))
-{
+if ($gSettingsManager->getBool('dates_show_map_link')) {
     $form->addInput(
         'dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'),
         array('maxLength' => 100, 'helpTextIdLabel' => 'DAT_LOCATION_LINK')
     );
 
-    if(!$date->getValue('dat_country') && $getDateUuid === '')
-    {
+    if (!$date->getValue('dat_country') && $getDateUuid === '') {
         $date->setValue('dat_country', $gSettingsManager->getString('default_country'));
     }
     $form->addSelectBox(
         'dat_country', $gL10n->get('SYS_COUNTRY'), $gL10n->getCountries(),
         array('defaultValue' => $date->getValue('dat_country', 'database'))
     );
-}
-else
-{
+} else {
     $form->addInput(
         'dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'),
         array('maxLength' => 100)
@@ -281,16 +256,12 @@ else
 }
 
 // if room selection is activated then show a selectbox with all rooms
-if($gSettingsManager->getBool('dates_show_rooms'))
-{
-    if(DB_ENGINE === Database::PDO_ENGINE_MYSQL)
-    {
+if ($gSettingsManager->getBool('dates_show_rooms')) {
+    if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
         $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
                   FROM '.TBL_ROOMS.'
               ORDER BY room_name';
-    }
-    else
-    {
+    } else {
         $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\'
                   FROM '.TBL_ROOMS.'
               ORDER BY room_name';

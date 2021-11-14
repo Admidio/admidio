@@ -11,8 +11,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Rechte pruefen
-if(!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
@@ -54,8 +53,7 @@ $sql = 'SELECT men_id, men_uuid, men_name
       ORDER BY men_order';
 $mainMenStatement = $gDb->queryPrepared($sql);
 
-while ($mainMen = $mainMenStatement->fetch())
-{
+while ($mainMen = $mainMenStatement->fetch()) {
     $sql = 'SELECT men_id, men_uuid, men_men_id_parent, men_name, men_description, men_standard, men_url
               FROM '.TBL_MENU.'
              WHERE men_men_id_parent = ? -- $mainMen[\'men_id\']
@@ -65,12 +63,10 @@ while ($mainMen = $mainMenStatement->fetch())
     $menuGroup = 0;
 
     // Get data
-    while($menuRow = $menuStatement->fetch())
-    {
+    while ($menuRow = $menuStatement->fetch()) {
         $menIdParent = (int) $menuRow['men_men_id_parent'];
 
-        if($menuGroup !== $menIdParent)
-        {
+        if ($menuGroup !== $menIdParent) {
             $blockId = 'admMenu_'.$menIdParent;
 
             $menuOverview->addTableBody();
@@ -86,12 +82,9 @@ while ($mainMen = $mainMenStatement->fetch())
         $menuNameDesc = Language::translateIfTranslationStrId($menuRow['men_description']);
 
         // add root path to link unless the full URL is given
-        if (preg_match('/^http(s?):\/\//', $menuRow['men_url']) === 0)
-        {
+        if (preg_match('/^http(s?):\/\//', $menuRow['men_url']) === 0) {
             $menuLink = ADMIDIO_URL . $menuRow['men_url'];
-        }
-        else
-        {
+        } else {
             $menuLink = $menuRow['men_url'];
         }
 
@@ -105,8 +98,7 @@ while ($mainMen = $mainMenStatement->fetch())
                             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array($headline)) . '"></i></a>';
 
         $htmlStandardMenu = '&nbsp;';
-        if($menuRow['men_standard'])
-        {
+        if ($menuRow['men_standard']) {
             $htmlStandardMenu = '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>';
         }
 
@@ -114,8 +106,7 @@ while ($mainMen = $mainMenStatement->fetch())
                                 '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>';
 
         // don't allow delete for standard menus
-        if(!$menuRow['men_standard'])
-        {
+        if (!$menuRow['men_standard']) {
             $menuAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'men', 'element_id' => 'row_men_'.
                                         $menuRow['men_uuid'], 'name' => $menuName, 'database_id' => $menuRow['men_uuid'])).'">'.

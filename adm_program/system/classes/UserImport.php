@@ -106,18 +106,14 @@ class UserImport extends User
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
         $maxUserId = (int) $pdoStatement->fetchColumn();
 
-        if($maxUserId > 0)
-        {
+        if ($maxUserId > 0) {
             $this->readDataById($maxUserId);
             $this->userExists = true;
 
-            if($this->importMode === self::USER_IMPORT_DISPLACE)
-            {
+            if ($this->importMode === self::USER_IMPORT_DISPLACE) {
                 // delete all user data of profile fields
                 $this->deleteUserFieldData();
-            }
-            elseif($this->importMode === self::USER_IMPORT_DUPLICATE)
-            {
+            } elseif ($this->importMode === self::USER_IMPORT_DUPLICATE) {
                 // save as new user
                 $this->clear();
             }
@@ -137,19 +133,14 @@ class UserImport extends User
      */
     public function setImportMode($mode)
     {
-        if(is_int($mode) && $mode > 0 && $mode < 5)
-        {
+        if (is_int($mode) && $mode > 0 && $mode < 5) {
             $this->importMode = $mode;
 
-            if($this->userExists)
-            {
-                if($this->importMode === self::USER_IMPORT_DISPLACE)
-                {
+            if ($this->userExists) {
+                if ($this->importMode === self::USER_IMPORT_DISPLACE) {
                     // delete all user data of profile fields
                     $this->deleteUserFieldData();
-                }
-                elseif($this->importMode === self::USER_IMPORT_DUPLICATE)
-                {
+                } elseif ($this->importMode === self::USER_IMPORT_DUPLICATE) {
                     // save as new user
                     $this->clear();
                 }
@@ -171,11 +162,10 @@ class UserImport extends User
     {
         global $gCurrentUser, $gSettingsManager;
 
-        if($gCurrentUser->isAdministrator()
+        if ($gCurrentUser->isAdministrator()
         && strlen($this->getValue('usr_login_name')) === 0
         && strlen($password) >= PASSWORD_MIN_LENGTH
-        && PasswordUtils::passwordStrength($password, $this->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength'))
-        {
+        && PasswordUtils::passwordStrength($password, $this->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength')) {
             $this->setValue('usr_login_name', $loginName);
             $this->setPassword($password);
             return true;
@@ -209,44 +199,31 @@ class UserImport extends User
         global $gL10n, $gLogger;
 
         // if user already exists and existing data should not be edited than do nothing
-        if($this->userExists && $this->importMode === self::USER_IMPORT_NOT_EDIT)
-        {
+        if ($this->userExists && $this->importMode === self::USER_IMPORT_NOT_EDIT) {
             return false;
         }
 
         // users data from adm_users table
-        if (str_starts_with($columnName, 'usr_'))
-        {
+        if (str_starts_with($columnName, 'usr_')) {
             return parent::setValue($columnName, $newValue, $checkValue);
-        }
-        else
-        {
+        } else {
             // convert the value of the import file to a Admidio expected value
             $validValue = '';
 
-            if($columnName === 'COUNTRY')
-            {
-                try
-                {
+            if ($columnName === 'COUNTRY') {
+                try {
                     $validValue = $gL10n->getCountryIsoCode($newValue);
-                }
-                catch(Exception $e)
-                {
+                } catch (Exception $e) {
                     $gLogger->info($e->getMessage());
                 }
-            }
-            else
-            {
-                switch ($this->mProfileFieldsData->getProperty($columnName, 'usf_type'))
-                {
+            } else {
+                switch ($this->mProfileFieldsData->getProperty($columnName, 'usf_type')) {
                     case 'CHECKBOX':
                         $columnValueToLower = StringUtils::strToLower($newValue);
-                        if(in_array($columnValueToLower, array('y', 'yes', '1', 'j', StringUtils::strToLower($gL10n->get('SYS_YES'))), true))
-                        {
+                        if (in_array($columnValueToLower, array('y', 'yes', '1', 'j', StringUtils::strToLower($gL10n->get('SYS_YES'))), true)) {
                             $validValue = '1';
                         }
-                        if(in_array($columnValueToLower, array('n', 'no', '0', '', StringUtils::strToLower($gL10n->get('SYS_NO'))), true))
-                        {
+                        if (in_array($columnValueToLower, array('n', 'no', '0', '', StringUtils::strToLower($gL10n->get('SYS_NO'))), true)) {
                             $validValue = '0';
                         }
                         break;
@@ -256,15 +233,11 @@ class UserImport extends User
                         $arrListValues = $this->mProfileFieldsData->getProperty($columnName, 'usf_value_list', 'text');
                         $position = 1;
 
-                        foreach($arrListValues as $value)
-                        {
-                            if(StringUtils::strToLower($newValue) === StringUtils::strToLower(trim($arrListValues[$position])))
-                            {
+                        foreach ($arrListValues as $value) {
+                            if (StringUtils::strToLower($newValue) === StringUtils::strToLower(trim($arrListValues[$position]))) {
                                 // if col_value is text than save position if text is equal to text of position
                                 $validValue = $position;
-                            }
-                            elseif(is_numeric($newValue) && !is_numeric($arrListValues[$position]) && $newValue > 0 && $newValue < 1000)
-                            {
+                            } elseif (is_numeric($newValue) && !is_numeric($arrListValues[$position]) && $newValue > 0 && $newValue < 1000) {
                                 // if col_value is numeric than save position if col_value is equal to position
                                 $validValue = $newValue;
                             }
@@ -272,15 +245,13 @@ class UserImport extends User
                         }
                         break;
                     case 'EMAIL':
-                        if(StringUtils::strValidCharacters($newValue, 'email'))
-                        {
+                        if (StringUtils::strValidCharacters($newValue, 'email')) {
                             $validValue = substr($newValue, 0, 255);
                         }
                         break;
                     case 'INTEGER':
                         // number could contain dot and comma
-                        if(is_numeric(strtr($newValue, ',.', '00')))
-                        {
+                        if (is_numeric(strtr($newValue, ',.', '00'))) {
                             $validValue = $newValue;
                         }
                         break;
@@ -292,8 +263,7 @@ class UserImport extends User
                 }
             }
 
-            if($validValue !== '')
-            {
+            if ($validValue !== '') {
                 return parent::setValue($columnName, $validValue, $checkValue);
             }
         }

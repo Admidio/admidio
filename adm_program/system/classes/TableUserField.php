@@ -81,8 +81,7 @@ class TableUserField extends TableAccess
                  WHERE lsc_usf_id = ? -- $usfId';
         $listsStatement = $this->db->queryPrepared($sql, array($usfId));
 
-        while($rowLst = $listsStatement->fetch())
-        {
+        while ($rowLst = $listsStatement->fetch()) {
             $sql = 'UPDATE '.TBL_LIST_COLUMNS.'
                        SET lsc_number = lsc_number - 1
                      WHERE lsc_lst_id = ? -- $rowLst[\'lsc_lst_id\']
@@ -105,8 +104,7 @@ class TableUserField extends TableAccess
 
         $return = parent::delete();
 
-        if(is_object($gCurrentSession))
-        {
+        if (is_object($gCurrentSession)) {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->reloadAllSessions();
         }
@@ -128,8 +126,7 @@ class TableUserField extends TableAccess
     {
         $newNameIntern = strtoupper(preg_replace('/[^A-Za-z0-9_]/', '', str_replace(' ', '_', $name)));
 
-        if ($index > 1)
-        {
+        if ($index > 1) {
             $newNameIntern = $newNameIntern . '_' . $index;
         }
 
@@ -138,8 +135,7 @@ class TableUserField extends TableAccess
                  WHERE usf_name_intern = ? -- $newNameIntern';
         $userFieldsStatement = $this->db->queryPrepared($sql, array($newNameIntern));
 
-        if ($userFieldsStatement->rowCount() > 0)
-        {
+        if ($userFieldsStatement->rowCount() > 0) {
             ++$index;
             $newNameIntern = $this->getNewNameIntern($name, $index);
         }
@@ -160,40 +156,27 @@ class TableUserField extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        if ($columnName === 'usf_description')
-        {
-            if (!isset($this->dbColumns['usf_description']))
-            {
+        if ($columnName === 'usf_description') {
+            if (!isset($this->dbColumns['usf_description'])) {
                 $value = '';
-            }
-            elseif ($format === 'database')
-            {
+            } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['usf_description']), ENT_QUOTES, 'UTF-8');
-            }
-            else
-            {
+            } else {
                 $value = $this->dbColumns['usf_description'];
             }
-        }
-        elseif ($columnName === 'usf_name_intern')
-        {
+        } elseif ($columnName === 'usf_name_intern') {
             // internal name should be read with no conversion
             $value = parent::getValue($columnName, 'database');
-        }
-        else
-        {
+        } else {
             $value = parent::getValue($columnName, $format);
         }
 
-        if ($value === null)
-        {
+        if ($value === null) {
             return '';
         }
 
-        if ($format !== 'database')
-        {
-            switch ($columnName)
-            {
+        if ($format !== 'database') {
+            switch ($columnName) {
                 case 'usf_name': // fallthrough
                 case 'cat_name':
                     // if text is a translation-id then translate it
@@ -201,29 +184,22 @@ class TableUserField extends TableAccess
 
                     break;
                 case 'usf_value_list':
-                    if ($this->dbColumns['usf_type'] === 'DROPDOWN' || $this->dbColumns['usf_type'] === 'RADIO_BUTTON')
-                    {
+                    if ($this->dbColumns['usf_type'] === 'DROPDOWN' || $this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
                         $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
 
                         // first replace windows new line with unix new line and then create an array
                         $valueFormated = str_replace("\r\n", "\n", $value);
                         $arrListValues = explode("\n", $valueFormated);
 
-                        foreach ($arrListValues as $key => &$listValue)
-                        {
-                            if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON')
-                            {
+                        foreach ($arrListValues as $key => &$listValue) {
+                            if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
                                 // if value is imagefile or imageurl then show image
                                 if (Image::isFontAwesomeIcon($listValue)
-                                || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false)) // TODO: simplify check for images
-                                {
+                                || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false)) { // TODO: simplify check for images
                                     // if there is imagefile and text separated by | then explode them
-                                    if (str_contains($listValue, '|'))
-                                    {
+                                    if (str_contains($listValue, '|')) {
                                         list($listValueImage, $listValueText) = explode('|', $listValue);
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         $listValueImage = $listValue;
                                         $listValueText  = $this->getValue('usf_name');
                                     }
@@ -231,20 +207,14 @@ class TableUserField extends TableAccess
                                     // if text is a translation-id then translate it
                                     $listValueText = Language::translateIfTranslationStrId($listValueText);
 
-                                    if ($format === 'text')
-                                    {
+                                    if ($format === 'text') {
                                         // if no image is wanted then return the text part or only the position of the entry
-                                        if (str_contains($listValue, '|'))
-                                        {
+                                        if (str_contains($listValue, '|')) {
                                             $listValue = $listValueText;
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             $listValue = $key + 1;
                                         }
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         $listValue = Image::getIconHtml($listValueImage, $listValueText);
                                     }
                                 }
@@ -282,8 +252,7 @@ class TableUserField extends TableAccess
      */
     public function isVisible()
     {
-        if ($this->mViewUserField === null || $this->mViewUserFieldUserId !== $GLOBALS['gCurrentUserId'])
-        {
+        if ($this->mViewUserField === null || $this->mViewUserFieldUserId !== $GLOBALS['gCurrentUserId']) {
             $this->mViewUserFieldUserId = $GLOBALS['gCurrentUserId'];
 
             // check if the current user could view the category of the profile field
@@ -309,13 +278,11 @@ class TableUserField extends TableAccess
                    AND usf_sequence = ? -- $usfSequence -/+ 1';
 
         // profile field will get one number lower and therefore move a position up in the list
-        if ($mode === self::MOVE_UP)
-        {
+        if ($mode === self::MOVE_UP) {
             $newSequence = $usfSequence - 1;
         }
         // profile field will get one number higher and therefore move a position down in the list
-        elseif ($mode === self::MOVE_DOWN)
-        {
+        elseif ($mode === self::MOVE_DOWN) {
             $newSequence = $usfSequence + 1;
         }
 
@@ -376,15 +343,13 @@ class TableUserField extends TableAccess
         $fieldsChanged = $this->columnsValueChanged;
 
         // if new field than generate new name intern, otherwise no change will be made
-        if ($this->newRecord)
-        {
+        if ($this->newRecord) {
             $this->setValue('usf_name_intern', $this->getNewNameIntern($this->getValue('usf_name', 'database'), 1));
         }
 
         $returnValue = parent::save($updateFingerPrint);
 
-        if ($fieldsChanged && $gCurrentSession instanceof Session)
-        {
+        if ($fieldsChanged && $gCurrentSession instanceof Session) {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->reloadAllSessions();
         }
@@ -405,44 +370,33 @@ class TableUserField extends TableAccess
     {
         global $gL10n;
 
-        if($newValue !== parent::getValue($columnName))
-        {
-            if($checkValue)
-            {
-                if ($columnName === 'usf_description')
-                {
+        if ($newValue !== parent::getValue($columnName)) {
+            if ($checkValue) {
+                if ($columnName === 'usf_description') {
                     return parent::setValue($columnName, $newValue, false);
-                }
-                elseif ($columnName === 'usf_cat_id')
-                {
+                } elseif ($columnName === 'usf_cat_id') {
                     $category = new TableCategory($this->db, $newValue);
 
-                    if (!$category->isVisible() || $category->getValue('cat_type') !== 'USF')
-                    {
+                    if (!$category->isVisible() || $category->getValue('cat_type') !== 'USF') {
                         throw new AdmException('Category of the user field '. $this->getValue('dat_name'). ' could not be set
                             because the category is not visible to the current user and current organization.');
                     }
-                }
-                elseif ($columnName === 'usf_url' && $newValue !== '')
-                {
+                } elseif ($columnName === 'usf_url' && $newValue !== '') {
                     $newValue = admFuncCheckUrl($newValue);
 
-                    if ($newValue === false)
-                    {
+                    if ($newValue === false) {
                         throw new AdmException('SYS_URL_INVALID_CHAR', array($gL10n->get('ORG_URL')));
                     }
                 }
 
                 // name, category and type couldn't be edited if it's a system field
-                if (in_array($columnName, array('usf_cat_id', 'usf_type', 'usf_name'), true) && (int) $this->getValue('usf_system') === 1)
-                {
+                if (in_array($columnName, array('usf_cat_id', 'usf_type', 'usf_name'), true) && (int) $this->getValue('usf_system') === 1) {
                     throw new AdmException('The user field ' . $this->getValue('usf_name_intern') . ' as a system field. You could
                         not change the category, type or name.');
                 }
             }
 
-            if ($columnName === 'usf_cat_id' && (int) $this->getValue($columnName) !== (int) $newValue)
-            {
+            if ($columnName === 'usf_cat_id' && (int) $this->getValue($columnName) !== (int) $newValue) {
                 // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
                 $sql = 'SELECT COUNT(*) AS count
                           FROM '.TBL_USER_FIELDS.'

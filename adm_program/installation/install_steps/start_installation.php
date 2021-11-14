@@ -10,14 +10,12 @@
  */
 use Ramsey\Uuid\Uuid;
 
-if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php')
-{
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php') {
     exit('This page may not be called directly!');
 }
 
 // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
-if (!is_file($configPath))
-{
+if (!is_file($configPath)) {
     $page = new HtmlPageInstallation('admidio-installation-message');
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')), $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config')));
@@ -34,8 +32,7 @@ if (isset($_SESSION['table_prefix'])
     || $_SESSION['db_username']    !== DB_USERNAME
     || $_SESSION['db_password']    !== DB_PASSWORD
     || $_SESSION['table_prefix']   !== TABLE_PREFIX
-    || $_SESSION['orga_shortname'] !== $g_organization))
-{
+    || $_SESSION['orga_shortname'] !== $g_organization)) {
     $page = new HtmlPageInstallation('admidio-installation-message');
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')), $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database')));
@@ -48,8 +45,7 @@ PhpIniUtils::startNewExecutionTimeLimit(300);
 // read data from sql script db.sql and execute all statements to the current database
 $sqlQueryResult = querySqlFile($db, 'db.sql');
 
-if (is_string($sqlQueryResult))
-{
+if (is_string($sqlQueryResult)) {
     $page = new HtmlPageInstallation('admidio-installation-message');
     $page->showMessage('error', $gL10n->get('SYS_NOTE'), $sqlQueryResult, $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_config')));
@@ -250,8 +246,7 @@ try {
     $systemUser->saveChangesWithoutRights();
     $systemUser->setValue('LAST_NAME', $gL10n->get('SYS_SYSTEM'));
     $systemUser->save(false); // no registered user -> UserIdCreate couldn't be filled
-}
-catch(AdmException $exeption) {
+} catch (AdmException $exeption) {
     $exeption->showHtml();
 }
 // now set current user to system user

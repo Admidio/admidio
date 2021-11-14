@@ -30,37 +30,30 @@ $uploadDir               = '';
 $uploadUrl               = '';
 
 // module specific checks
-if($getModule === 'photos')
-{
+if ($getModule === 'photos') {
     // check if the module is activated
-    if ((int) $gSettingsManager->get('enable_photo_module') === 0)
-    {
+    if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
         $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
         // => EXIT
     }
 
     // check if current user has right to upload photos
-    if (!$gCurrentUser->editPhotoRight())
-    {
+    if (!$gCurrentUser->editPhotoRight()) {
         $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
         // => EXIT
     }
 
     // create photo object or read it from session
-    if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_uuid') === $getUuid)
-    {
+    if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_uuid') === $getUuid) {
         $photoAlbum =& $_SESSION['photo_album'];
-    }
-    else
-    {
+    } else {
         $photoAlbum = new TablePhotos($gDb);
         $photoAlbum->readDataByUuid($getUuid);
         $_SESSION['photo_album'] = $photoAlbum;
     }
 
     // check if album belongs to current organization
-    if((int) $photoAlbum->getValue('pho_org_id') !== $gCurrentOrgId)
-    {
+    if ((int) $photoAlbum->getValue('pho_org_id') !== $gCurrentOrgId) {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT
     }
@@ -68,11 +61,8 @@ if($getModule === 'photos')
     $uploadDir = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/';
     $uploadUrl = ADMIDIO_URL . FOLDER_DATA . '/photos/upload/';
     $destinationName = $photoAlbum->getValue('pho_name');
-}
-elseif($getModule === 'documents_files')
-{
-    if (!$gSettingsManager->getBool('documents_files_enable_module'))
-    {
+} elseif ($getModule === 'documents_files') {
+    if (!$gSettingsManager->getBool('documents_files_enable_module')) {
         $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
         // => EXIT
     }
@@ -81,51 +71,41 @@ elseif($getModule === 'documents_files')
     $folder->readDataByUuid($getUuid);
 
     // check if current user has right to upload files
-    if (!$folder->hasUploadRight())
-    {
+    if (!$folder->hasUploadRight()) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 
     // upload only possible if upload filesize > 0
-    if ($gSettingsManager->getInt('max_file_upload_size') === 0)
-    {
+    if ($gSettingsManager->getInt('max_file_upload_size') === 0) {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT
     }
 
-    try
-    {
+    try {
         // get recordset of current folder from database
         $folder->getFolderForDownload($getUuid);
         $folderPath = $folder->getFolderPath() . '/';
         $uploadDir = ADMIDIO_PATH . $folderPath;
         $uploadUrl = ADMIDIO_URL . $folderPath;
         $destinationName = $folder->getValue('fol_name');
-    }
-    catch(AdmException $e)
-    {
+    } catch (AdmException $e) {
         $e->showHtml();
         // => EXIT
     }
 }
 
 // check if the server allow file uploads
-if (!PhpIniUtils::isFileUploadEnabled())
-{
+if (!PhpIniUtils::isFileUploadEnabled()) {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
     // => EXIT
 }
 
-if($getMode === 'choose_files')
-{
+if ($getMode === 'choose_files') {
     // delete old stuff in upload folder
-    try
-    {
+    try {
         FileSystemUtils::deleteDirectoryContentIfExists(ADMIDIO_PATH . FOLDER_DATA. '/photos/upload');
-    }
-    catch (\RuntimeException $exception)
-    {
+    } catch (\RuntimeException $exception) {
         $gLogger->error('Could not delete directory content!', array('directoryPath' => ADMIDIO_PATH . FOLDER_DATA. '/photos/upload'));
         // TODO
     }
@@ -140,12 +120,9 @@ if($getMode === 'choose_files')
 
     $page->addHtml($fileUpload->getHtml($destinationName));
     $page->show();
-}
-elseif($getMode === 'upload_files')
-{
+} elseif ($getMode === 'upload_files') {
     // upload files to temp upload folder
-    if($getModule === 'photos')
-    {
+    if ($getModule === 'photos') {
         $uploadHandler = new UploadHandlerPhoto(
             array(
                 'upload_dir'        => $uploadDir,
@@ -156,9 +133,7 @@ elseif($getMode === 'upload_files')
             true,
             array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID'))
         );
-    }
-    elseif($getModule === 'documents_files')
-    {
+    } elseif ($getModule === 'documents_files') {
         $uploadHandler = new UploadHandlerDownload(array(
             'upload_dir'     => $uploadDir,
             'upload_url'     => $uploadUrl,

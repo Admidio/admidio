@@ -53,17 +53,13 @@ class CategoryReport
 
         $colfields = explode(',', $this->arrConfiguration[$this->conf]['col_fields']);
         // die gespeicherten Konfigurationen durchlaufen
-        foreach ($colfields as $key => $data)
-        {
+        foreach ($colfields as $key => $data) {
             // das ist nur zur Ueberpruefung, ob diese Freigabe noch existent ist
             // es koennte u.U. ja sein, dass ein Profilfeld oder eine Rolle seit der letzten Speicherung geloescht wurde
             $found = $this->isInHeaderSelection($data);
-            if ($found == 0)
-            {
+            if ($found == 0) {
                 continue;
-            }
-            else
-            {
+            } else {
                 $workarray[$key+1] = array();
             }
 
@@ -77,8 +73,7 @@ class CategoryReport
             $this->headerData[$key+1]['id'] = 0;
             $this->headerData[$key+1]['data'] = $this->headerSelection[$found]['data'];
 
-            switch ($type)
-            {
+            switch ($type) {
                 case 'p':                    //p=profileField
                     // nur bei Profilfeldern wird 'id' mit der 'usf_id' ueberschrieben
                     $this->headerData[$key+1]['id'] = $id;
@@ -104,8 +99,7 @@ class CategoryReport
                     );
                     $statement = $gDb->queryPrepared($sql, $queryParams);
 
-                    while ($row = $statement->fetch())
-                    {
+                    while ($row = $statement->fetch()) {
                         $workarray[$key+1]['usr_id'][] = $row['mem_usr_id'];
                     }
                     $number_col[$key+1] = 0;
@@ -125,8 +119,7 @@ class CategoryReport
                     );
                     $statement = $gDb->queryPrepared($sql, $queryParams);
 
-                    while ($row = $statement->fetch())
-                    {
+                    while ($row = $statement->fetch()) {
                         $workarray[$key+1]['usr_id'][] = $row['mem_usr_id'];
                     }
                     $number_col[$key+1] = 0;
@@ -147,8 +140,7 @@ class CategoryReport
                     );
                     $statement = $gDb->queryPrepared($sql, $queryParams);
 
-                    while ($row = $statement->fetch())
-                    {
+                    while ($row = $statement->fetch()) {
                         $workarray[$key+1]['usr_id'][] = $row['mem_usr_id'];
                     }
                     $number_col[$key+1] = 0;
@@ -169,8 +161,7 @@ class CategoryReport
                     );
                     $statement = $gDb->queryPrepared($sql, $queryParams);
 
-                    while ($row = $statement->fetch())
-                    {
+                    while ($row = $statement->fetch()) {
                         $workarray[$key+1]['usr_id'][] = $row['mem_usr_id'];
                     }
                     $number_col[$key+1] = 0;
@@ -208,16 +199,14 @@ class CategoryReport
         );
         $statement = $gDb->queryPrepared($sql, $queryParams);
 
-        while ($row = $statement->fetch())
-        {
+        while ($row = $statement->fetch()) {
             $this->listData[$row['mem_usr_id']] = array();
         }
 
         $user = new User($gDb, $gProfileFields);
 
         // alle Mitlieder durchlaufen   ...
-        foreach ($this->listData as $member => $dummy)
-        {
+        foreach ($this->listData as $member => $dummy) {
             $user->readDataById($member);
             $memberShips = $user->getRoleMemberships();
             $number_row_count = 0;
@@ -225,82 +214,59 @@ class CategoryReport
             // bestehen Rollen- und/oder Kategorieeinschraenkungen?
             $rolecatmarker = true;
             if ($this->arrConfiguration[$this->conf]['selection_role'] != ''
-             || $this->arrConfiguration[$this->conf]['selection_cat'] != '')
-            {
+             || $this->arrConfiguration[$this->conf]['selection_cat'] != '') {
                 $rolecatmarker = false;
-                foreach (explode(',', $this->arrConfiguration[$this->conf]['selection_role']) as $rol)
-                {
-                    if ($user->isMemberOfRole((int) $rol))
-                    {
+                foreach (explode(',', $this->arrConfiguration[$this->conf]['selection_role']) as $rol) {
+                    if ($user->isMemberOfRole((int) $rol)) {
                         $rolecatmarker = true;
                     }
                 }
-                foreach (explode(',', $this->arrConfiguration[$this->conf]['selection_cat']) as $cat)
-                {
-                    if ($this->isMemberOfCategorie($cat, $member))
-                    {
+                foreach (explode(',', $this->arrConfiguration[$this->conf]['selection_cat']) as $cat) {
+                    if ($this->isMemberOfCategorie($cat, $member)) {
                         $rolecatmarker = true;
                     }
                 }
             }
-            if (!$rolecatmarker)
-            {
+            if (!$rolecatmarker) {
                 unset($this->listData[$member]);
                 continue;
             }
 
-            foreach ($workarray as $key => $data)
-            {
-                if ($data['type'] == 'p')
-                {
+            foreach ($workarray as $key => $data) {
+                if ($data['type'] == 'p') {
                     if (($gProfileFields->getPropertyById($data['id'], 'usf_type') == 'DROPDOWN'
-                           || $gProfileFields->getPropertyById($data['id'], 'usf_type') == 'RADIO_BUTTON'))
-                    {
+                           || $gProfileFields->getPropertyById($data['id'], 'usf_type') == 'RADIO_BUTTON')) {
                         $this->listData[$member][$key] = $user->getValue($gProfileFields->getPropertyById($data['id'], 'usf_name_intern'), 'database');
-                    }
-                    else
-                    {
+                    } else {
                         $this->listData[$member][$key] = $user->getValue($gProfileFields->getPropertyById($data['id'], 'usf_name_intern'));
                     }
-                }
-                elseif ($data['type'] == 'a')              //Sonderfall: Rollengesamtuebersicht erstellen
-                {
+                } elseif ($data['type'] == 'a') {              //Sonderfall: Rollengesamtuebersicht erstellen
                     $role = new TableRoles($gDb);
 
                     $this->listData[$member][$key] = '';
-                    foreach ($memberShips as $rol_id)
-                    {
+                    foreach ($memberShips as $rol_id) {
                         $role->readDataById($rol_id);
                         $this->listData[$member][$key] .= $role->getValue('rol_name').'; ';
                     }
                     $this->listData[$member][$key] = trim($this->listData[$member][$key],'; ');
-                }
-                elseif ($data['type'] == 'n')              //Sonderfall: Anzahlspalte
-                {
+                } elseif ($data['type'] == 'n') {              //Sonderfall: Anzahlspalte
                     $this->listData[$member][$key] = '';
-                }
-                else
-                {
-                    if (isset($data['usr_id']) and in_array($member,$data['usr_id']))
-                    {
+                } else {
+                    if (isset($data['usr_id']) and in_array($member,$data['usr_id'])) {
                         $this->listData[$member][$key] = true;
                         $number_row_count++;
                         $number_col[$key]++;
-                    }
-                    else
-                    {
+                    } else {
                         $this->listData[$member][$key] = '';
                     }
                 }
             }
-            if ($number_row_pos > -1)
-            {
+            if ($number_row_pos > -1) {
                 $this->listData[$member][$number_row_pos]=$number_row_count;
             }
         }
 
-        if ($this->arrConfiguration[$this->conf]['number_col'] == 1)
-        {
+        if ($this->arrConfiguration[$this->conf]['number_col'] == 1) {
             $this->listData[] = $number_col;
         }
     }
@@ -316,10 +282,8 @@ class CategoryReport
         $categories = array();
 
         $i 	= 1;
-        foreach ($gProfileFields->getProfileFields() as $field)
-        {
-            if ($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers())
-            {
+        foreach ($gProfileFields->getProfileFields() as $field) {
+            if ($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers()) {
                 $this->headerSelection[$i]['id']       = 'p'.$field->getValue('usf_id');
                 $this->headerSelection[$i]['cat_name'] = $field->getValue('cat_name');
                 $this->headerSelection[$i]['data']     = addslashes($field->getValue('usf_name'));
@@ -337,11 +301,9 @@ class CategoryReport
         $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
         $k = 0;
-        while ($row = $statement->fetch())
-        {
+        while ($row = $statement->fetch()) {
             // check if the category name must be translated
-            if (Language::isTranslationStringId($row['cat_name']))
-            {
+            if (Language::isTranslationStringId($row['cat_name'])) {
                 $row['cat_name'] = $gL10n->get($row['cat_name']);
             }
             $categories[$k]['cat_id']   = $row['cat_id'];
@@ -351,24 +313,21 @@ class CategoryReport
         }
 
         // alle eingelesenen Kategorien durchlaufen und die Rollen dazu einlesen
-        foreach ($categories as $data)
-        {
+        foreach ($categories as $data) {
             $this->headerSelection[$i]['id']   	   = 'c'.$data['cat_id'];
             $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
             $this->headerSelection[$i]['data']	   = $data['data'];
             $i++;
 
-               $sql = 'SELECT DISTINCT rol.rol_name, rol.rol_id, rol.rol_valid
+            $sql = 'SELECT DISTINCT rol.rol_name, rol.rol_id, rol.rol_valid
                 	           FROM '.TBL_CATEGORIES.' AS cat, '.TBL_ROLES.' AS rol
                 	          WHERE cat.cat_id = ?
                 	            AND cat.cat_id = rol.rol_cat_id';
             $statement = $gDb->queryPrepared($sql, array($data['cat_id']));
 
-            while ($row = $statement->fetch())
-            {
+            while ($row = $statement->fetch()) {
                 $marker = '';
-                if ($row['rol_valid'] == 0)
-                {
+                if ($row['rol_valid'] == 0) {
                     $marker = ' (' .  ($row['rol_valid'] == 0 ? '*' : '') . ')';
                 }
 
@@ -377,7 +336,7 @@ class CategoryReport
                 $this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLE').': '.$row['rol_name'].$marker;
                 $i++;
 
-                   $this->headerSelection[$i]['id']   	   = 'w'.$row['rol_id'];		//w wie without (Leader)
+                $this->headerSelection[$i]['id']   	   = 'w'.$row['rol_id'];		//w wie without (Leader)
                 $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
                 $this->headerSelection[$i]['data']	   = $gL10n->get('SYS_ROLE_WITHOUT_LEADER').': '.$row['rol_name'].$marker;
                 $i++;
@@ -409,16 +368,14 @@ class CategoryReport
     {
         global  $gDb, $gSettingsManager, $gCurrentOrgId;
 
-        if(count($this->arrConfiguration) === 0)
-        {
+        if (count($this->arrConfiguration) === 0) {
             $sql = ' SELECT *
                        FROM '. TBL_CATEGORY_REPORT .'
                       WHERE ( crt_org_id = ? -- $gCurrentOrgId
                          OR crt_org_id IS NULL ) ';
             $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
-            while($row = $statement->fetch())
-            {
+            while ($row = $statement->fetch()) {
                 $values = array();
                 $values['id']             = $row['crt_id'];
                 $values['name']           = $row['crt_name'];
@@ -427,8 +384,7 @@ class CategoryReport
                 $values['selection_cat']  = $row['crt_selection_cat'];
                 $values['number_col']     = $row['crt_number_col'];
                 $values['default_conf']   = false;
-                if($gSettingsManager->getInt('category_report_default_configuration') == $row['crt_id'])
-                {
+                if ($gSettingsManager->getInt('category_report_default_configuration') == $row['crt_id']) {
                     $values['default_conf']   = true;
                 }
                 $this->arrConfiguration[] = $values;
@@ -451,10 +407,8 @@ class CategoryReport
 
         $gDb->startTransaction();
 
-        foreach ($arrConfiguration as $key => $values)
-        {
-            if ($values['id'] === '' || $values['id'] > 0)                  // id > 0 (=edit a configuration) or '' (=append a configuration)
-            {
+        foreach ($arrConfiguration as $key => $values) {
+            if ($values['id'] === '' || $values['id'] > 0) {                  // id > 0 (=edit a configuration) or '' (=append a configuration)
                 $categoryReport = new TableAccess($gDb, TBL_CATEGORY_REPORT, 'crt', $values['id']);
                 $categoryReport->setValue('crt_org_id', $gCurrentOrgId);
                 $categoryReport->setValue('crt_name', $values['name']);
@@ -464,15 +418,12 @@ class CategoryReport
                 $categoryReport->setValue('crt_number_col', $values['number_col']);
                 $categoryReport->save();
 
-                if($values['default_conf'] === true || $defaultConfiguration === 0)
-                {
+                if ($values['default_conf'] === true || $defaultConfiguration === 0) {
                     $defaultConfiguration = $categoryReport->getValue('crt_id');
                 }
                 // set default configuration
                 $gSettingsManager->set('category_report_default_configuration', $defaultConfiguration);
-            }
-            else                                                            // delete
-            {
+            } else {                                                            // delete
                 $values['id'] = $values['id']*(-1);
                 $categoryReport = new TableAccess($gDb, TBL_CATEGORY_REPORT, 'crt', $values['id']);
                 $categoryReport->delete();
@@ -504,10 +455,8 @@ class CategoryReport
     public function isInheaderSelection($search_value)
     {
         $ret = 0;
-        foreach ($this->headerSelection as $key => $data)
-        {
-            if ($data['id'] == $search_value)
-            {
+        foreach ($this->headerSelection as $key => $data) {
+            if ($data['id'] == $search_value) {
                 $ret = $key;
                 break;
             }
@@ -520,10 +469,8 @@ class CategoryReport
      */
     public function setConfiguration($crtId)
     {
-        foreach($this->arrConfiguration as $key => $values)
-        {
-            if($values['id'] == $crtId)
-            {
+        foreach ($this->arrConfiguration as $key => $values) {
+            if ($values['id'] == $crtId) {
                 $this->conf = $key;
             }
         }
@@ -540,12 +487,9 @@ class CategoryReport
     {
         global $gCurrentUserId, $gDb, $gCurrentOrgId;
 
-        if ($user_id == 0)
-        {
+        if ($user_id == 0) {
             $user_id = $gCurrentUserId;
-        }
-        elseif (is_numeric($user_id) == false)
-        {
+        } elseif (is_numeric($user_id) == false) {
             return -1;
         }
 
@@ -571,12 +515,9 @@ class CategoryReport
         $statement = $gDb->queryPrepared($sql, $queryParams);
         $user_found = $statement->rowCount();
 
-        if ($user_found == 1)
-        {
+        if ($user_found == 1) {
             return 1;
-        }
-        else
-        {
+        } else {
             return 0;
         }
     }

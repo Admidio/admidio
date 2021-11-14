@@ -65,13 +65,11 @@ class HtmlDiv extends HtmlElement
     {
         parent::__construct('div');
 
-        if ($id !== null)
-        {
+        if ($id !== null) {
             $this->addAttribute('id', $id);
         }
 
-        if ($class !== null)
-        {
+        if ($class !== null) {
             $this->addAttribute('class', $class);
         }
     }
@@ -92,13 +90,11 @@ class HtmlDiv extends HtmlElement
         // Define new div element
         $this->addParentElement('div');
 
-        if ($id !== null)
-        {
+        if ($id !== null) {
             $this->addAttribute('id', $id);
         }
 
-        if ($class !== null)
-        {
+        if ($class !== null) {
             $this->addAttribute('class', $class);
         }
         // raise level
@@ -116,18 +112,15 @@ class HtmlDiv extends HtmlElement
     {
         $this->addElement($element);
 
-        if ($id !== null)
-        {
+        if ($id !== null) {
             $this->addAttribute('id', $id);
         }
 
-        if ($class !== null)
-        {
+        if ($class !== null) {
             $this->addAttribute('class', $class);
         }
 
-        if ($data !== null)
-        {
+        if ($data !== null) {
             $this->addData($data);
         }
     }
@@ -145,35 +138,28 @@ class HtmlDiv extends HtmlElement
         // count entries in array
         $totalCount = count($this->arrParentElements);
 
-        if ($totalCount === 0)
-        {
+        if ($totalCount === 0) {
             return false;
         }
 
         // find position in log array
         $position = array_search($parentElement, $this->arrParentElements, true);
 
-        if (is_int($position))
-        {
+        if (is_int($position)) {
             // if last position set Endtag in string and remove from array
-            if ($position === $totalCount)
-            {
+            if ($position === $totalCount) {
                 $this->htmlString .= '</' . $this->arrParentElements[$position] . '>';
                 unset($this->arrParentElements[$position]);
-            }
-            else
-            {
+            } else {
                 // all elements setted later must also be closed and removed from array
-                for ($i = $totalCount - 1; $i >= $position; --$i)
-                {
+                for ($i = $totalCount - 1; $i >= $position; --$i) {
                     $this->htmlString .= '</' . $this->arrParentElements[$i] . '>';
                     unset($this->arrParentElements[$i]);
                 }
             }
         }
 
-        if ($parentElement === 'div')
-        {
+        if ($parentElement === 'div') {
             // set new level
             --$this->level;
         }
@@ -189,8 +175,7 @@ class HtmlDiv extends HtmlElement
     public function getHtmlDiv()
     {
         // first check if open div elements exists and set all endtags if needed
-        for ($this->level; $this->level > 2; --$this->level)
-        {
+        for ($this->level; $this->level > 2; --$this->level) {
             $this->closeParentElement('div');
         }
 

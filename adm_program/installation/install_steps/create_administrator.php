@@ -8,13 +8,11 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_administrator.php')
-{
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_administrator.php') {
     exit('This page may not be called directly!');
 }
 
-if (isset($_POST['orga_shortname']))
-{
+if (isset($_POST['orga_shortname'])) {
     // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
     $_SESSION['orga_shortname'] = StringUtils::strStripTags($_POST['orga_shortname']);
     $_SESSION['orga_longname']  = StringUtils::strStripTags($_POST['orga_longname']);
@@ -24,8 +22,7 @@ if (isset($_POST['orga_shortname']))
     if ($_SESSION['orga_shortname'] === ''
     ||  $_SESSION['orga_longname']  === ''
     ||  $_SESSION['orga_email']     === ''
-    ||  !in_array($_SESSION['orga_timezone'], \DateTimeZone::listIdentifiers(), true))
-    {
+    ||  !in_array($_SESSION['orga_timezone'], \DateTimeZone::listIdentifiers(), true)) {
         $page = new HtmlPageInstallation('admidio-installation-message');
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')));
@@ -33,8 +30,7 @@ if (isset($_POST['orga_shortname']))
     }
 
     // allow only letters, numbers and special characters like .-_+@
-    if(!StringUtils::strValidCharacters($_SESSION['orga_shortname'], 'noSpecialChar'))
-    {
+    if (!StringUtils::strValidCharacters($_SESSION['orga_shortname'], 'noSpecialChar')) {
         $page = new HtmlPageInstallation('admidio-installation-message');
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION')), $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_organization')));
@@ -43,15 +39,12 @@ if (isset($_POST['orga_shortname']))
 }
 
 // initialize form data
-if (isset($_SESSION['user_last_name']))
-{
+if (isset($_SESSION['user_last_name'])) {
     $userLastName  = $_SESSION['user_last_name'];
     $userFirstName = $_SESSION['user_first_name'];
     $userEmail     = $_SESSION['user_email'];
     $userLogin     = $_SESSION['user_login'];
-}
-else
-{
+} else {
     $userLastName  = '';
     $userFirstName = '';
     $userEmail     = '';

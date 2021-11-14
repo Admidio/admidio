@@ -45,13 +45,11 @@ class Htaccess
      */
     public function protectFolder()
     {
-        if (is_file($this->folderPath . '/.htaccess'))
-        {
+        if (is_file($this->folderPath . '/.htaccess')) {
             return true;
         }
 
-        try
-        {
+        try {
             FileSystemUtils::createDirectoryIfNotExists($this->folderPath);
 
             $lines = array(
@@ -60,9 +58,7 @@ class Htaccess
             );
             $data = implode("\n", $lines) . "\n";
             FileSystemUtils::writeFile($this->folderPath . '/.htaccess', $data);
-        }
-        catch (\RuntimeException $exception)
-        {
+        } catch (\RuntimeException $exception) {
             return false;
         }
 
@@ -75,12 +71,9 @@ class Htaccess
      */
     public function unprotectFolder()
     {
-        try
-        {
+        try {
             FileSystemUtils::deleteFileIfExists($this->folderPath . '/.htaccess');
-        }
-        catch (\RuntimeException $exception)
-        {
+        } catch (\RuntimeException $exception) {
             return false;
         }
 

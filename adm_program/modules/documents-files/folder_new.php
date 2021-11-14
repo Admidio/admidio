@@ -21,8 +21,7 @@ $getFolderUuid = admFuncVariableIsValid($_GET, 'folder_uuid', 'string', array('r
 $headline = $gL10n->get('SYS_CREATE_FOLDER');
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('documents_files_enable_module'))
-{
+if (!$gSettingsManager->getBool('documents_files_enable_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -31,32 +30,25 @@ $folder = new TableFolder($gDb);
 $folder->readDataByUuid($getFolderUuid);
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
-if (!$folder->hasUploadRight())
-{
+if (!$folder->hasUploadRight()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-if(isset($_SESSION['documents_files_request']))
-{
+if (isset($_SESSION['documents_files_request'])) {
     $formValues = $_SESSION['documents_files_request'];
     unset($_SESSION['documents_files_request']);
-}
-else
-{
+} else {
     $formValues['new_folder'] = '';
     $formValues['new_description'] = '';
 }
 
-try
-{
+try {
     // get recordset of current folder from database
     $folder->getFolderForDownload($getFolderUuid);
-}
-catch(AdmException $e)
-{
+} catch (AdmException $e) {
     $e->showHtml();
     // => EXIT
 }

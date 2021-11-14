@@ -21,24 +21,18 @@ $getGboUuid  = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // check if the module is enabled and disallow access if it's disabled
-if ((int) $gSettingsManager->get('enable_guestbook_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_guestbook_module') === 0) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-    // => EXIT
-}
-elseif((int) $gSettingsManager->get('enable_guestbook_module') === 2)
-{
+// => EXIT
+} elseif ((int) $gSettingsManager->get('enable_guestbook_module') === 2) {
     // only logged in users can access the module
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // set headline of the script
-if ($getGboUuid !== '')
-{
+if ($getGboUuid !== '') {
     $headline = $getHeadline . ' - ' . $gL10n->get('SYS_EDIT_ENTRY');
-}
-else
-{
+} else {
     $headline = $getHeadline . ' - ' . $gL10n->get('SYS_WRITE_ENTRY');
 }
 
@@ -48,13 +42,11 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // Gaestebuchobjekt anlegen
 $guestbook = new TableGuestbook($gDb);
 
-if($getGboUuid !== '')
-{
+if ($getGboUuid !== '') {
     // Falls ein Eintrag bearbeitet werden soll muss geprueft weden ob die Rechte gesetzt sind...
     require(__DIR__ . '/../../system/login_valid.php');
 
-    if (!$gCurrentUser->editGuestbookRight())
-    {
+    if (!$gCurrentUser->editGuestbookRight()) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
@@ -62,8 +54,7 @@ if($getGboUuid !== '')
     $guestbook->readDataByUuid($getGboUuid);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-    if((int) $guestbook->getValue('gbo_org_id') !== $gCurrentOrgId)
-    {
+    if ((int) $guestbook->getValue('gbo_org_id') !== $gCurrentOrgId) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
@@ -71,23 +62,20 @@ if($getGboUuid !== '')
 
 // Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
 // Name, Emailadresse und Homepage vorbelegt werden...
-if ($getGboUuid === '' && $gValidLogin)
-{
+if ($getGboUuid === '' && $gValidLogin) {
     $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
     $guestbook->setValue('gbo_email', $gCurrentUser->getValue('EMAIL'));
     $guestbook->setValue('gbo_homepage', $gCurrentUser->getValue('WEBSITE'));
 }
 
-if(isset($_SESSION['guestbook_entry_request']))
-{
+if (isset($_SESSION['guestbook_entry_request'])) {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
     $guestbook->setArray($_SESSION['guestbook_entry_request']);
     unset($_SESSION['guestbook_entry_request']);
 }
 
-if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
-{
+if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0) {
     // Falls er nicht eingeloggt ist, wird vor dem Ausfuellen des Formulars noch geprueft ob der
     // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
     // einen GB-Eintrag erzeugt hat...
@@ -101,8 +89,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
     $queryParams = array($gSettingsManager->getInt('flooding_protection_time'), $gCurrentOrgId, $guestbook->getValue('gbo_ip_address'));
     $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
-    if($pdoStatement->fetchColumn() > 0)
-    {
+    if ($pdoStatement->fetchColumn() > 0) {
         // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
         $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time'))));
         // => EXIT
@@ -113,27 +100,21 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
 $page = new HtmlPage('admidio-guestbook-new', $headline);
 
 // Html des Modules ausgeben
-if ($getGboUuid !== '')
-{
+if ($getGboUuid !== '') {
     $mode = '3';
-}
-else
-{
+} else {
     $mode = '1';
 }
 
 // show form
 $form = new HtmlForm('guestbook_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('gbo_uuid' => $getGboUuid, 'headline' => $getHeadline, 'mode' => $mode)), $page);
-if ($gCurrentUserId > 0)
-{
+if ($gCurrentUserId > 0) {
     // registered users should not change their name
     $form->addInput(
         'gbo_name', $gL10n->get('SYS_NAME'), $guestbook->getValue('gbo_name'),
         array('maxLength' => 60, 'property' => HtmlForm::FIELD_DISABLED)
     );
-}
-else
-{
+} else {
     $form->addInput(
         'gbo_name', $gL10n->get('SYS_NAME'), $guestbook->getValue('gbo_name'),
         array('maxLength' => 60, 'property' => HtmlForm::FIELD_REQUIRED)
@@ -153,8 +134,7 @@ $form->addEditor(
 );
 
 // if captchas are enabled then visitors of the website must resolve this
-if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha'))
-{
+if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha')) {
     $form->openGroupBox('gb_confirmation_of_entry', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
     $form->addCaptcha('captcha_code');
     $form->closeGroupBox();

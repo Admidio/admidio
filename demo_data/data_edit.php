@@ -214,7 +214,6 @@ $sqlQueries[] = 'UPDATE '.TBL_LINKS.'
                     SET lnk_timestamp_create = \''.addDaysToDate(4, true).'\'
                   WHERE lnk_id = 3 ';
 
-foreach ($sqlQueries as $sqlQuery)
-{
+foreach ($sqlQueries as $sqlQuery) {
     $gDb->queryPrepared($sqlQuery);
 }

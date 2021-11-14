@@ -68,21 +68,18 @@ $role = new TableRoles($gDb);
 $role->readDataByUuid($getRoleUuid);
 
 // roles of other organizations can't be edited
-if((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0)
-{
+if ((int) $role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0) {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
     exit();
 }
 
 // check if user is allowed to assign members to this role
-if(!$role->allowedToAssignMembers($gCurrentUser))
-{
+if (!$role->allowedToAssignMembers($gCurrentUser)) {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
     exit();
 }
 
-if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
-{
+if ($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId)) {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS_VIEW_LIST')));
     exit();
 }
@@ -91,34 +88,23 @@ if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
 $orderCondition = '';
 $orderColumns = array('member_this_orga', 'member_this_role', 'last_name', 'first_name', 'birthday', 'street', 'leader_this_role');
 
-if(array_key_exists('order', $_GET))
-{
-    foreach($_GET['order'] as $order)
-    {
-        if(is_numeric($order['column']))
-        {
-            if($orderCondition === '')
-            {
+if (array_key_exists('order', $_GET)) {
+    foreach ($_GET['order'] as $order) {
+        if (is_numeric($order['column'])) {
+            if ($orderCondition === '') {
                 $orderCondition = ' ORDER BY ';
-            }
-            else
-            {
+            } else {
                 $orderCondition .= ', ';
             }
 
-            if(strtoupper($order['dir']) === 'ASC')
-            {
+            if (strtoupper($order['dir']) === 'ASC') {
                 $orderCondition .= $orderColumns[$order['column']]. ' ASC ';
-            }
-            else
-            {
+            } else {
                 $orderCondition .= $orderColumns[$order['column']]. ' DESC ';
             }
         }
     }
-}
-else
-{
+} else {
     $orderCondition = ' ORDER BY last_name ASC, first_name ASC ';
 }
 
@@ -135,12 +121,10 @@ $searchColumns = array(
     'COALESCE(country, \' \')'
 );
 
-if($getSearch !== '' && count($searchColumns) > 0)
-{
+if ($getSearch !== '' && count($searchColumns) > 0) {
     $searchString = explode(' ', $getSearch);
 
-    foreach($searchString as $searchWord)
-    {
+    foreach ($searchString as $searchWord) {
         $searchCondition .= ' AND concat(' . implode(', ', $searchColumns) . ') LIKE \'%'.$searchWord.'%\' ';
     }
 
@@ -148,15 +132,11 @@ if($getSearch !== '' && count($searchColumns) > 0)
 }
 
 $filterRoleCondition = '';
-if($getMembersShowAll)
-{
+if ($getMembersShowAll) {
     $getFilterRoleId = 0;
-}
-else
-{
+} else {
     // show only members of current organization
-    if($getFilterRoleId > 0)
-    {
+    if ($getFilterRoleId > 0) {
         $filterRoleCondition = ' AND mem_rol_id = '.$getFilterRoleId.' ';
     }
 }
@@ -176,14 +156,11 @@ $sqlSubSelect = '(SELECT COUNT(*) AS count_this
                      AND cat_name_intern <> \'EVENTS\'
                      AND cat_org_id = '.$gCurrentOrgId.')';
 
-if($getMembersShowAll)
-{
+if ($getMembersShowAll) {
     // show all users
     $memberOfThisOrganizationCondition = '';
     $memberOfThisOrganizationSelect = $sqlSubSelect;
-}
-else
-{
+} else {
     $memberOfThisOrganizationCondition = ' AND '.$sqlSubSelect.' > 0 ';
     $memberOfThisOrganizationSelect = ' 1 ';
 }
@@ -258,18 +235,14 @@ $queryParamsMain = array(
 ); // TODO add more params
 
 $limitCondition = '';
-if($getLength > 0)
-{
+if ($getLength > 0) {
     $limitCondition = ' LIMIT ' . $getLength . ' OFFSET ' . $getStart;
 }
 
-if($getSearch === '')
-{
+if ($getSearch === '') {
     // no search condition entered then return all records in dependence of order, limit and offset
     $sql = $mainSql . $orderCondition . $limitCondition;
-}
-else
-{
+} else {
     $sql = 'SELECT usr_id, usr_uuid, last_name, first_name, birthday, city, street, zip_code, country, member_this_role, leader_this_role, member_this_orga
               FROM ('.$mainSql.') AS members
                '.$searchCondition
@@ -281,104 +254,78 @@ $userStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $queryP
 $rowNumber = $getStart; // count for every row
 
 // show rows with all organization users
-while($user = $userStatement->fetch())
-{
+while ($user = $userStatement->fetch()) {
     ++$rowNumber;
     $arrContent  = array();
     $addressText = '';
 
     // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
-    if($user['member_this_orga'] > 0)
-    {
+    if ($user['member_this_orga'] > 0) {
         $icon = 'fa-user';
         $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname')));
-    }
-    else
-    {
+    } else {
         $icon = 'fa-user-times';
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname')));
     }
     $arrContent[] = '<i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
 
     // set flag if user is member of the current organization or not
-    if($user['member_this_role'])
-    {
+    if ($user['member_this_role']) {
         $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_uuid'].'" name="member_'.$user['usr_uuid'].'" checked="checked" class="memlist_checkbox memlist_member" />';
-    }
-    else
-    {
+    } else {
         $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_uuid'].'" name="member_'.$user['usr_uuid'].'" class="memlist_checkbox memlist_member" />';
     }
 
-    if($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers()))
-    {
+    if ($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers())) {
         $arrContent[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $user['usr_uuid'])).'">'.$user['last_name'].'</a>';
     }
 
-    if($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->editUsers()))
-    {
+    if ($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->editUsers())) {
         $arrContent[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $user['usr_uuid'])).'">'.$user['first_name'].'</a>';
     }
 
     // create string with user address
-    if(strlen($user['country']) > 0 && $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers()))
-    {
+    if (strlen($user['country']) > 0 && $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())) {
         $addressText .= $gL10n->getCountryName($user['country']);
     }
-    if((strlen($user['zip_code']) > 0 && $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers()))
-    || (strlen($user['city']) > 0 && $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())))
-    {
+    if ((strlen($user['zip_code']) > 0 && $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers()))
+    || (strlen($user['city']) > 0 && $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers()))) {
         // some countries have the order postcode city others have city postcode
-        if((int) $gProfileFields->getProperty('CITY', 'usf_sequence') > (int) $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
-        {
+        if ((int) $gProfileFields->getProperty('CITY', 'usf_sequence') > (int) $gProfileFields->getProperty('POSTCODE', 'usf_sequence')) {
             $addressText .= ' - '. $user['zip_code']. ' '. $user['city'];
-        }
-        else
-        {
+        } else {
             $addressText .= ' - '. $user['city']. ' '. $user['zip_code'];
         }
     }
-    if(strlen($user['street']) > 0 && $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers()))
-    {
+    if (strlen($user['street']) > 0 && $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())) {
         $addressText .= ' - '. $user['street'];
     }
 
-    if($gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())
+    if ($gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
-    || $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers()))
-    {
-        if(strlen($addressText) > 0)
-        {
+    || $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())) {
+        if (strlen($addressText) > 0) {
             $arrContent[] = '<i class="fas fa-map-marker-alt" data-toggle="tooltip" title="' . trim($addressText, ' -') . '"></i>';
-        }
-        else
-        {
+        } else {
             $arrContent[] = '&nbsp;';
         }
     }
 
-    if($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers()))
-    {
+    if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers())) {
         // show birthday if it's known
-        if(strlen($user['birthday']) > 0)
-        {
+        if (strlen($user['birthday']) > 0) {
             $birthdayDate = \DateTime::createFromFormat('Y-m-d', $user['birthday']);
             $arrContent[] = $birthdayDate->format($gSettingsManager->getString('system_date'));
-        }
-        else
-        {
+        } else {
             $arrContent[] = '&nbsp;';
         }
     }
 
     // set flag if user is a leader of the current role or not
-    if($user['leader_this_role'])
-    {
+    if ($user['leader_this_role']) {
         $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
-    }
-    else
-    {
+    } else {
         $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox memlist_leader" />';
     }
 
@@ -387,14 +334,10 @@ while($user = $userStatement->fetch())
 }
 
 // set count of filtered records
-if($getSearch !== '')
-{
-    if($rowNumber < $getStart + $getLength)
-    {
+if ($getSearch !== '') {
+    if ($rowNumber < $getStart + $getLength) {
         $jsonArray['recordsFiltered'] = $rowNumber;
-    }
-    else
-    {
+    } else {
         // read count of all filtered records without limit and offset
         $sql = 'SELECT COUNT(*) AS count
                   FROM ('.$mainSql.') AS members
@@ -402,15 +345,12 @@ if($getSearch !== '')
         $countFilteredStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $queryParamsSearch));
         $jsonArray['recordsFiltered'] = (int) $countFilteredStatement->fetchColumn();
     }
-}
-else
-{
+} else {
     $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
 }
 
 // add empty data element if no rows where found
-if(!array_key_exists('data', $jsonArray))
-{
+if (!array_key_exists('data', $jsonArray)) {
     $jsonArray['data'] = array();
 }
 

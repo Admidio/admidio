@@ -76,10 +76,8 @@ class RolesRights extends TableAccess
      */
     public function addRoles(array $roleIds)
     {
-        foreach ($roleIds as $roleId)
-        {
-            if (!in_array($roleId, $this->rolesIds, true) && $roleId > 0)
-            {
+        foreach ($roleIds as $roleId) {
+            if (!in_array($roleId, $this->rolesIds, true) && $roleId > 0) {
                 $rolesRightsData = new TableAccess($this->db, TBL_ROLES_RIGHTS_DATA, 'rrd');
                 $rolesRightsData->setValue('rrd_ror_id', (int) $this->getValue('ror_id'));
                 $rolesRightsData->setValue('rrd_rol_id', $roleId);
@@ -110,12 +108,10 @@ class RolesRights extends TableAccess
      */
     public function delete()
     {
-        if(count($this->rolesRightsDataObjects) > 0)
-        {
+        if (count($this->rolesRightsDataObjects) > 0) {
             $this->db->startTransaction();
 
-            foreach($this->rolesRightsDataObjects as $object)
-            {
+            foreach ($this->rolesRightsDataObjects as $object) {
                 $object->delete();
             }
 
@@ -142,15 +138,13 @@ class RolesRights extends TableAccess
     {
         $arrRolesNames = array();
 
-        if (count($this->rolesIds) > 0)
-        {
+        if (count($this->rolesIds) > 0) {
             $sql = 'SELECT rol_name
                       FROM '.TBL_ROLES.'
                      WHERE rol_id IN ('.Database::getQmForValues($this->rolesIds).') ';
             $rolesStatement = $this->db->queryPrepared($sql, $this->rolesIds);
 
-            while ($rowRole = $rolesStatement->fetch())
-            {
+            while ($rowRole = $rolesStatement->fetch()) {
                 $arrRolesNames[] = $rowRole['rol_name'];
             }
         }
@@ -181,16 +175,14 @@ class RolesRights extends TableAccess
      */
     protected function readData($sqlWhereCondition, array $queryParams = array())
     {
-        if(parent::readData($sqlWhereCondition, $queryParams))
-        {
+        if (parent::readData($sqlWhereCondition, $queryParams)) {
             $sql = 'SELECT *
                       FROM '.TBL_ROLES_RIGHTS_DATA.'
                      WHERE rrd_ror_id    = ? -- $this->getValue(\'ror_id\')
                        AND rrd_object_id = ? -- $this->objectId';
             $rolesRightsStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('ror_id'), $this->objectId));
 
-            while($row = $rolesRightsStatement->fetch())
-            {
+            while ($row = $rolesRightsStatement->fetch()) {
                 $rolId = (int) $row['rrd_rol_id'];
                 $this->rolesRightsDataObjects[$rolId] = new TableAccess($this->db, TBL_ROLES_RIGHTS_DATA, 'rrd');
                 $this->rolesRightsDataObjects[$rolId]->setArray($row);
@@ -207,10 +199,8 @@ class RolesRights extends TableAccess
      */
     public function removeRoles(array $roleIds)
     {
-        foreach ($roleIds as $roleId)
-        {
-            if (in_array($roleId, $this->rolesIds, true))
-            {
+        foreach ($roleIds as $roleId) {
+            if (in_array($roleId, $this->rolesIds, true)) {
                 $this->rolesRightsDataObjects[$roleId]->delete();
             }
         }
@@ -227,13 +217,11 @@ class RolesRights extends TableAccess
     public function saveRoles(array $roleIds)
     {
         // if array is empty or only contain the role id = 0 then delete all roles rights
-        if(count($roleIds) === 0 || (count($roleIds) === 1 && $roleIds[0] === 0))
-        {
+        if (count($roleIds) === 0 || (count($roleIds) === 1 && $roleIds[0] === 0)) {
             $this->delete();
         }
         // save new roles rights to the database
-        else
-        {
+        else {
             // get new roles and removed roles
             $addRoles = array_diff($roleIds, $this->getRolesIds());
             $removeRoles = array_diff($this->getRolesIds(), $roleIds);
@@ -243,8 +231,7 @@ class RolesRights extends TableAccess
             $this->removeRoles($removeRoles);
 
             // if current right has a parent role right than add the roles also to the parent role right
-            if((int) $this->getValue('ror_ror_id_parent') > 0)
-            {
+            if ((int) $this->getValue('ror_ror_id_parent') > 0) {
                 $parentRight      = new TableAccess($this->db, TBL_ROLES_RIGHTS, 'ror', (int) $this->getValue('ror_ror_id_parent'));
                 $parentRolesRight = new self($this->db, $parentRight->getValue('ror_name_intern'), $this->objectId);
                 $parentRolesRight->saveRolesOfChildRight($roleIds);
@@ -261,8 +248,7 @@ class RolesRights extends TableAccess
     public function saveRolesOfChildRight(array $roleIds)
     {
         // if array is empty of new roles is empty or viewable roles array is empty than add nothing
-        if(count($roleIds) > 0 && count($this->getRolesIds()) > 0)
-        {
+        if (count($roleIds) > 0 && count($this->getRolesIds()) > 0) {
             // add new roles and save them to database
             $addRoles = array_diff($roleIds, $this->getRolesIds());
             $this->addRoles($addRoles);

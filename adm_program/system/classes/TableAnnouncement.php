@@ -64,18 +64,12 @@ class TableAnnouncement extends TableAccess
     {
         global $gL10n;
 
-        if ($columnName === 'ann_description')
-        {
-            if (!isset($this->dbColumns['ann_description']))
-            {
+        if ($columnName === 'ann_description') {
+            if (!isset($this->dbColumns['ann_description'])) {
                 $value = '';
-            }
-            elseif ($format === 'database')
-            {
+            } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['ann_description']), ENT_QUOTES, 'UTF-8');
-            }
-            else
-            {
+            } else {
                 $value = $this->dbColumns['ann_description'];
             }
 
@@ -85,8 +79,7 @@ class TableAnnouncement extends TableAccess
         $value = parent::getValue($columnName, $format);
 
         // if text is a translation-id then translate it
-        if ($columnName === 'cat_name' && $format !== 'database' && Language::isTranslationStringId($value))
-        {
+        if ($columnName === 'cat_name' && $format !== 'database' && Language::isTranslationStringId($value)) {
             $value = $gL10n->get($value);
         }
 
@@ -105,19 +98,16 @@ class TableAnnouncement extends TableAccess
         global $gCurrentOrganization, $gCurrentUser;
 
         // check if the current user could edit the category of the announcement
-        if($gCurrentUser->editAnnouncements()
-        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true))
-        {
+        if ($gCurrentUser->editAnnouncements()
+        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true)) {
             // if category belongs to current organization than announcements are editable
-            if($this->getValue('cat_org_id') > 0
-            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId'])
-            {
+            if ($this->getValue('cat_org_id') > 0
+            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId']) {
                 return true;
             }
 
             // if category belongs to all organizations, child organization couldn't edit it
-            if((int) $this->getValue('cat_org_id') === 0 && !$gCurrentOrganization->isChildOrganization())
-            {
+            if ((int) $this->getValue('cat_org_id') === 0 && !$gCurrentOrganization->isChildOrganization()) {
                 return true;
             }
         }
@@ -148,18 +138,13 @@ class TableAnnouncement extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($checkValue)
-        {
-            if ($columnName === 'ann_description')
-            {
+        if ($checkValue) {
+            if ($columnName === 'ann_description') {
                 return parent::setValue($columnName, $newValue, false);
-            }
-            elseif($columnName === 'ann_cat_id')
-            {
+            } elseif ($columnName === 'ann_cat_id') {
                 $category = new TableCategory($this->db, $newValue);
 
-                if(!$category->isVisible() || $category->getValue('cat_type') !== 'ANN')
-                {
+                if (!$category->isVisible() || $category->getValue('cat_type') !== 'ANN') {
                     throw new AdmException('Category of the announcement '. $this->getValue('ann_name'). ' could not be set
                         because the category is not visible to the current user and current organization.');
                 }

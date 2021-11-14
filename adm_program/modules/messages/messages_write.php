@@ -43,41 +43,36 @@ $postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid',  'string');
 $message = new TableMessage($gDb);
 $message->readDataByUuid($getMsgUuid);
 
-if ($getMsgUuid !== '')
-{
+if ($getMsgUuid !== '') {
     $getMsgType = $message->getValue('msg_type');
 }
 
 // check if the call of the page was allowed by settings
 if ((!$gSettingsManager->getBool('enable_mail_module') && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
-   || (!$gSettingsManager->getBool('enable_pm_module') && $getMsgType === TableMessage::MESSAGE_TYPE_PM))
-{
+   || (!$gSettingsManager->getBool('enable_pm_module') && $getMsgType === TableMessage::MESSAGE_TYPE_PM)) {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // check for valid login
-if (!$gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM)
-{
+if (!$gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM) {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }
 
 // check if the current user has email address for sending an email
-if ($gValidLogin && $getMsgType !== TableMessage::MESSAGE_TYPE_PM && !$gCurrentUser->hasEmail())
-{
+if ($gValidLogin && $getMsgType !== TableMessage::MESSAGE_TYPE_PM && !$gCurrentUser->hasEmail()) {
     $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', array('<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php">', '</a>')));
     // => EXIT
 }
 
 // Update the read status of the message
-if ($getMsgUuid !== '')
-{
+if ($getMsgUuid !== '') {
     // update the read-status
     $message->setReadValue();
 
-    if($getForward === true) {
+    if ($getForward === true) {
         $getMsgUuid = '';
     } else {
         $messageStatement = $message->getConversation($message->getValue('msg_id'));
@@ -86,24 +81,20 @@ if ($getMsgUuid !== '')
     $getSubject = $message->getValue('msg_subject');
     $user = new User($gDb, $gProfileFields, $message->getConversationPartner());
     $getUserUuid = $user->getValue('usr_uuid');
-}
-elseif($getUserUuid !== '')
-{
+} elseif ($getUserUuid !== '') {
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
 }
 
 $maxNumberRecipients = 1;
-if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM && $gSettingsManager->getInt('mail_max_receiver') > 0)
-{
+if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM && $gSettingsManager->getInt('mail_max_receiver') > 0) {
     $maxNumberRecipients = $gSettingsManager->getInt('mail_max_receiver');
 }
 
 $list = array();
 $arrAllMailRoles = $gCurrentUser->getAllMailRoles();
 
-if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrAllMailRoles) > 0)
-{
+if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrAllMailRoles) > 0) {
     $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
               FROM '.TBL_MEMBERS.'
         INNER JOIN '.TBL_ROLES.'
@@ -144,38 +135,30 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
     );
     $dropStatement = $gDb->queryPrepared($sql, array_merge($queryParamsArr[0], $queryParamsArr[1], $queryParamsArr[2]));
 
-    while ($row = $dropStatement->fetch())
-    {
+    while ($row = $dropStatement->fetch()) {
         $list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'].' (' .$row['usr_login_name'].')', '');
     }
 
     // no roles or users found then show message
-    if(count($list) === 0)
-    {
+    if (count($list) === 0) {
         $gMessage->show($gL10n->get('SYS_NO_ROLES_AND_USERS'));
         // => EXIT
     }
 }
 
-if ($getUserUuid !== '')
-{
+if ($getUserUuid !== '') {
     // if an User ID is given, we need to check if the actual user is allowed to contact this user
-    if ((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || $user->getValue('usr_id') === '')
-    {
+    if ((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || $user->getValue('usr_id') === '') {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
         // => EXIT
     }
 }
 
-if ($getSubject !== '')
-{
+if ($getSubject !== '') {
     $headline = $gL10n->get('SYS_SUBJECT').': '.$getSubject;
-}
-else
-{
+} else {
     $headline = $gL10n->get('SYS_SEND_EMAIL');
-    if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
-    {
+    if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         $headline = $gL10n->get('SYS_SEND_PRIVATE_MESSAGE');
     }
 }
@@ -188,10 +171,10 @@ if (isset($_SESSION['message_request'])) {
     $formValues = $_SESSION['message_request'];
     unset($_SESSION['message_request']);
 
-    if(!isset($formValues['carbon_copy'])) {
+    if (!isset($formValues['carbon_copy'])) {
         $formValues['carbon_copy'] = false;
     }
-    if(!isset($formValues['delivery_confirmation'])) {
+    if (!isset($formValues['delivery_confirmation'])) {
         $formValues['delivery_confirmation'] = false;
     }
 } else {
@@ -213,13 +196,11 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage('admidio-messages-write', $headline);
 
-if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
-{
+if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
     // show form
     $form = new HtmlForm('pm_send_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', array('msg_type' => 'PM', 'msg_uuid' => $getMsgUuid)), $page, array('enableFileUpload' => true));
 
-    if ($getUserUuid === '')
-    {
+    if ($getUserUuid === '') {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
         $form->addSelectBox(
             'msg_to', $gL10n->get('SYS_TO'), $list,
@@ -232,24 +213,19 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
         );
         $form->closeGroupBox();
         $sendto = '';
-    }
-    else
-    {
+    } else {
         $form->addInput('msg_to', '', $user->getValue('usr_id'), array('property' => HtmlForm::FIELD_HIDDEN));
         $sendto = ' ' . $gL10n->get('SYS_TO') . ' ' .$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').' ('.$user->getValue('usr_login_name').')';
     }
 
     $form->openGroupBox('gb_pm_message', $gL10n->get('SYS_MESSAGE') . $sendto);
 
-    if($getSubject === '')
-    {
+    if ($getSubject === '') {
         $form->addInput(
             'msg_subject', $gL10n->get('SYS_SUBJECT'), $message->getValue('msg_subject'),
             array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
         );
-    }
-    else
-    {
+    } else {
         $form->addInput('msg_subject', '', $message->getValue('msg_subject'), array('property' => HtmlForm::FIELD_HIDDEN));
     }
 
@@ -264,20 +240,14 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 
     // add form to html page
     $page->addHtml($form->show());
-}
-elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
-{
-    if ($getUserUuid !== '')
-    {
+} elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '') {
+    if ($getUserUuid !== '') {
         // check if the user has email address for receiving an email
-        if (!$user->hasEmail())
-        {
+        if (!$user->hasEmail()) {
             $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))));
             // => EXIT
         }
-    }
-    elseif ($getRoleUuid !== '')
-    {
+    } elseif ($getRoleUuid !== '') {
         // wird eine bestimmte Rolle aufgerufen, dann pruefen, ob die Rechte dazu vorhanden sind
         $role = new TableRoles($gDb);
         $role->readDataByUuid($getRoleUuid);
@@ -285,11 +255,10 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
         // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
         // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
         // Rollen muessen zur aktuellen Organisation gehoeren
-        if((!$gValidLogin && $role->getValue('rol_mail_this_role') != 3)
+        if ((!$gValidLogin && $role->getValue('rol_mail_this_role') != 3)
         || ($gValidLogin  && !$gCurrentUser->hasRightSendMailToRole($role->getValue('rol_id')))
-        || $role->getValue('rol_id') == null)
-        {
-           $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        || $role->getValue('rol_id') == null) {
+            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
             // => EXIT
         }
 
@@ -304,20 +273,15 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
     $sqlUserIds = '';
     $sqlParticipationRoles = '';
 
-    if ($getUserUuid !== '')
-    {
+    if ($getUserUuid !== '') {
         // usr_id was committed then write email to this user
         $preloadData = $user->getValue('usr_id');
         $sqlUserIds  = ' AND usr_id = ? -- $user->getValue(\'usr_id\')';
-    }
-    elseif ($getRoleUuid !== '')
-    {
+    } elseif ($getRoleUuid !== '') {
         // role id was committed then write email to this role
         $preloadData = 'groupID: '.$role->getValue('rol_id');
         $sqlRoleIds  = array($role->getValue('rol_id'));
-    }
-    else
-    {
+    } else {
         // no user or role was committed then show list with all roles and users
         // where the current user has the right to send email
         $preloadData = isset($formValues['msg_to']) ? $formValues['msg_to'] : '';
@@ -326,20 +290,16 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
     }
 
     // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
-    if ($gValidLogin)
-    {
+    if ($gValidLogin) {
         $list = array();
         $listFormer = array();
         $listActiveAndFormer = array();
         $listRoleIdsArray = array();
 
-        if(count($sqlRoleIds) === 0)
-        {
+        if (count($sqlRoleIds) === 0) {
             // if only send mail to one user than this user must be in a role the current user is allowed to see
             $listVisibleRoleArray = $gCurrentUser->getAllVisibleRoles();
-        }
-        else
-        {
+        } else {
             // list array with all roles where user is allowed to send mail to
             $sql = 'SELECT rol_id, rol_name
                       FROM '.TBL_ROLES.'
@@ -354,15 +314,13 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
             $rolesStatement = $gDb->queryPrepared($sql, array_merge(array($gCurrentOrgId), $sqlRoleIds));
             $rolesArray = $rolesStatement->fetchAll();
 
-            foreach ($rolesArray as $roleArray)
-            {
+            foreach ($rolesArray as $roleArray) {
                 // Rollenobjekt anlegen
                 $role = new TableRoles($gDb);
                 $role->setArray($roleArray);
                 $list[] = array('groupID: '.$roleArray['rol_id'], $roleArray['rol_name'], $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_MEMBERS') . ')');
                 $listRoleIdsArray[] = $roleArray['rol_id'];
-                if($role->hasFormerMembers() > 0 && $gSettingsManager->getBool('mail_show_former'))
-                {
+                if ($role->hasFormerMembers() > 0 && $gSettingsManager->getBool('mail_show_former')) {
                     // list role with former members
                     $listFormer[] = array('groupID: '.$roleArray['rol_id'].'-1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_FORMER_MEMBERS') . ')');
                     // list role with active and former members
@@ -374,8 +332,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
             $listVisibleRoleArray = array_intersect($listRoleIdsArray, $gCurrentUser->getAllVisibleRoles());
         }
 
-        if($getRoleUuid === '' && count($listVisibleRoleArray) > 0)
-        {
+        if ($getRoleUuid === '' && count($listVisibleRoleArray) > 0) {
             // if no special role was preselected then list users
             $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, rol_id, mem_begin, mem_end
                       FROM '.TBL_MEMBERS.'
@@ -410,8 +367,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
                 ),
                 $listVisibleRoleArray
             );
-            if ($sqlUserIds !== '')
-            {
+            if ($sqlUserIds !== '') {
                 $queryParams[] = $user->getValue('usr_id');
             }
             $statement = $gDb->queryPrepared($sql, $queryParams);
@@ -419,21 +375,16 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
             $passiveList = array();
             $activeList = array();
 
-            while ($row = $statement->fetch())
-            {
+            while ($row = $statement->fetch()) {
                 $usrId = (int) $row['usr_id'];
 
                 // every user should only be once in the list
-                if (!isset($currentUserId) || $currentUserId !== $usrId)
-                {
+                if (!isset($currentUserId) || $currentUserId !== $usrId) {
                     // if membership is active then show them as active members
-                    if($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW)
-                    {
+                    if ($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW) {
                         $activeList[]  = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('SYS_ACTIVE_MEMBERS'));
                         $currentUserId = $usrId;
-                    }
-                    elseif($gSettingsManager->getBool('mail_show_former'))
-                    {
+                    } elseif ($gSettingsManager->getBool('mail_show_former')) {
                         $passiveList[] = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('SYS_FORMER_MEMBERS'));
                         $currentUserId = $usrId;
                     }
@@ -442,9 +393,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
 
             $list = array_merge($list, $activeList, $passiveList);
         }
-    }
-    else
-    {
+    } else {
         $maxNumberRecipients = 1;
         // list all roles where guests could send mails to
         $sql = 'SELECT rol_id, rol_name
@@ -458,14 +407,12 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
               ORDER BY cat_sequence, rol_name';
 
         $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
-        while ($row = $statement->fetch())
-        {
+        while ($row = $statement->fetch()) {
             $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
         }
     }
 
-    if($postListUuid !== '')
-    {
+    if ($postListUuid !== '') {
         $preloadData = 'dummy';
         $showlist = new ListConfiguration($gDb);
         $showlist->readDataByUuid($postListUuid);
@@ -475,8 +422,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
     }
 
     // no roles or users found then show message
-    if(count($list) === 0)
-    {
+    if (count($list) === 0) {
         $gMessage->show($gL10n->get('SYS_NO_ROLES_AND_USERS'));
         // => EXIT
     }
@@ -494,8 +440,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
 
     $form->addLine();
 
-    if ($gCurrentUserId > 0)
-    {
+    if ($gCurrentUserId > 0) {
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_USER_FIELDS.'
             INNER JOIN '. TBL_USER_DATA .'
@@ -512,8 +457,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
             array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
         );
 
-        if($possibleEmails > 1)
-        {
+        if ($possibleEmails > 1) {
             $sqlData = array();
             $sqlData['query'] = 'SELECT email.usd_value AS ID, email.usd_value AS email
                                    FROM '.TBL_USERS.'
@@ -532,17 +476,13 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
                 'mailfrom', $gL10n->get('SYS_YOUR_EMAIL'), $gDb, $sqlData,
                 array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false)
             );
-        }
-        else
-        {
+        } else {
             $form->addInput(
                 'mailfrom', $gL10n->get('SYS_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'),
                 array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
             );
         }
-    }
-    else
-    {
+    } else {
         $form->addInput(
             'namefrom', $gL10n->get('SYS_YOUR_NAME'), $formValues['namefrom'],
             array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
@@ -554,14 +494,12 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
     }
 
     // show option to send a copy to your email address only for registered users because of spam abuse
-    if($gValidLogin)
-    {
+    if ($gValidLogin) {
         $form->addCheckbox('carbon_copy', $gL10n->get('SYS_SEND_COPY'), $formValues['carbon_copy']);
     }
 
     // if preference is set then show a checkbox where the user can request a delivery confirmation for the email
-    if (($gCurrentUserId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation') === 2) || (int) $gSettingsManager->get('mail_delivery_confirmation') === 1)
-    {
+    if (($gCurrentUserId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation') === 2) || (int) $gSettingsManager->get('mail_delivery_confirmation') === 1) {
         $form->addCheckbox('delivery_confirmation', $gL10n->get('SYS_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
     }
 
@@ -574,8 +512,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
     );
 
     // Nur eingeloggte User duerfen Attachments anhaengen...
-    if ($gValidLogin && ($gSettingsManager->getInt('max_email_attachment_size') > 0) && PhpIniUtils::isFileUploadEnabled())
-    {
+    if ($gValidLogin && ($gSettingsManager->getInt('max_email_attachment_size') > 0) && PhpIniUtils::isFileUploadEnabled()) {
         $form->addFileUpload(
             'btn_add_attachment', $gL10n->get('SYS_ATTACHMENT'),
             array(
@@ -590,12 +527,9 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
     }
 
     // add textfield or ckeditor to form
-    if($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users'))
-    {
+    if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users')) {
         $form->addEditor('msg_body', '', $message->getContent(), array('property' => HtmlForm::FIELD_REQUIRED));
-    }
-    else
-    {
+    } else {
         $form->addMultilineTextInput(
             'msg_body', $gL10n->get('SYS_TEXT'), $message->getContent(), 10,
             array('property' => HtmlForm::FIELD_REQUIRED)
@@ -605,8 +539,7 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
     $form->closeGroupBox();
 
     // if captchas are enabled then visitors of the website must resolve this
-    if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha'))
-    {
+    if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha')) {
         $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
         $form->addCaptcha('captcha_code');
         $form->closeGroupBox();
@@ -618,47 +551,35 @@ elseif ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $getMsgUuid === '')
     $page->addHtml($form->show());
 }
 
-if (isset($messageStatement))
-{
-    while ($row = $messageStatement->fetch())
-    {
+if (isset($messageStatement)) {
+    while ($row = $messageStatement->fetch()) {
         $date = new \DateTime($row['msc_timestamp']);
         $messageText = htmlspecialchars_decode(stripslashes($row['msc_message']));
         $messageFooter = '';
 
-        if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
-        {
-            if ((int) $row['msc_usr_id'] === $gCurrentUserId)
-            {
+        if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
+            if ((int) $row['msc_usr_id'] === $gCurrentUserId) {
                 $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
-            }
-            else
-            {
+            } else {
                 $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
             }
 
             $messageHeader = $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($sentUser, $date->format($gSettingsManager->getString('system_date')), $date->format($gSettingsManager->getString('system_time'))));
             $messageIcon   = 'fa-comment-alt';
-        }
-        else
-        {
+        } else {
             $messageHeader = $date->format($gSettingsManager->getString('system_date')) . ' ' . $date->format($gSettingsManager->getString('system_time')) .'<br />' . $gL10n->get('SYS_TO') . ': ' . $message->getRecipientsNamesString();
             $messageIcon   = 'fa-envelope';
             $attachments   = $message->getAttachmentsInformations();
 
-            if(count($attachments) > 0)
-            {
+            if (count($attachments) > 0) {
                 $messageFooter .= '<div class="card-footer"><i class="fas fa-paperclip"></i> ' . $gL10n->get('SYS_ATTACHMENT');
             }
 
-            foreach($attachments as $attachment)
-            {
-
+            foreach ($attachments as $attachment) {
                 $messageFooter .= '<a class="admidio-attachment" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/get_attachment.php', array('msa_id' => $attachment['msa_id'])) . '">' . $attachment['file_name'] . '</a>';
             }
 
-            if(count($attachments) > 0)
-            {
+            if (count($attachments) > 0) {
                 $messageFooter .= '</div>';
             }
         }

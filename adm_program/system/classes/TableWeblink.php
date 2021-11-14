@@ -42,29 +42,20 @@ class TableWeblink extends TableAccess
     {
         global $gL10n;
 
-        if ($columnName === 'lnk_description')
-        {
-            if (!isset($this->dbColumns['lnk_description']))
-            {
+        if ($columnName === 'lnk_description') {
+            if (!isset($this->dbColumns['lnk_description'])) {
                 $value = '';
-            }
-            elseif ($format === 'database')
-            {
+            } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['lnk_description']));
-            }
-            else
-            {
+            } else {
                 $value = $this->dbColumns['lnk_description'];
             }
-        }
-        else
-        {
+        } else {
             $value = parent::getValue($columnName, $format);
         }
 
         // if text is a translation-id then translate it
-        if ($columnName === 'cat_name' && $format !== 'database' && Language::isTranslationStringId($value))
-        {
+        if ($columnName === 'cat_name' && $format !== 'database' && Language::isTranslationStringId($value)) {
             $value = $gL10n->get($value);
         }
 
@@ -82,19 +73,16 @@ class TableWeblink extends TableAccess
     {
         global $gCurrentOrganization, $gCurrentUser;
 
-        if($gCurrentUser->editDates()
-        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true))
-        {
+        if ($gCurrentUser->editDates()
+        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true)) {
             // if category belongs to current organization than weblinks are editable
-            if($this->getValue('cat_org_id') > 0
-            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId'])
-            {
+            if ($this->getValue('cat_org_id') > 0
+            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId']) {
                 return true;
             }
 
             // if category belongs to all organizations, child organization couldn't edit it
-            if((int) $this->getValue('cat_org_id') === 0 && !$gCurrentOrganization->isChildOrganization())
-            {
+            if ((int) $this->getValue('cat_org_id') === 0 && !$gCurrentOrganization->isChildOrganization()) {
                 return true;
             }
         }
@@ -127,28 +115,20 @@ class TableWeblink extends TableAccess
     {
         global $gL10n;
 
-        if ($checkValue)
-        {
-            if ($columnName === 'lnk_description')
-            {
+        if ($checkValue) {
+            if ($columnName === 'lnk_description') {
                 return parent::setValue($columnName, $newValue, false);
-            }
-            elseif ($columnName === 'lnk_cat_id')
-            {
+            } elseif ($columnName === 'lnk_cat_id') {
                 $category = new TableCategory($this->db, $newValue);
 
-                if (!$category->isVisible() || $category->getValue('cat_type') !== 'LNK')
-                {
+                if (!$category->isVisible() || $category->getValue('cat_type') !== 'LNK') {
                     throw new AdmException('Category of the weblink '. $this->getValue('lnk_name'). ' could not be set
                         because the category is not visible to the current user and current organization.');
                 }
-            }
-            elseif ($columnName === 'lnk_url' && $newValue !== '')
-            {
+            } elseif ($columnName === 'lnk_url' && $newValue !== '') {
                 $newValue = admFuncCheckUrl($newValue);
 
-                if ($newValue === false)
-                {
+                if ($newValue === false) {
                     throw new AdmException('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_WEBSITE')));
                 }
             }

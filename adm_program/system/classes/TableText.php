@@ -40,8 +40,7 @@ class TableText extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        if ($columnName === 'txt_text')
-        {
+        if ($columnName === 'txt_text') {
             return $this->dbColumns['txt_text'];
         }
 
@@ -59,8 +58,7 @@ class TableText extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        if ($this->newRecord && $this->getValue('txt_org_id') === '')
-        {
+        if ($this->newRecord && $this->getValue('txt_org_id') === '') {
             // Insert
             $this->setValue('txt_org_id', $GLOBALS['gCurrentOrgId']);
         }

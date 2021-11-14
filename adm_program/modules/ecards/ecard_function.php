@@ -40,14 +40,11 @@ class FunctionClass
      */
     public function getFileNames($directory)
     {
-        try
-        {
+        try {
             $directoryFiles = FileSystemUtils::getDirectoryContent($directory, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE));
 
             return array_keys($directoryFiles);
-        }
-        catch (\RuntimeException $exception)
-        {
+        } catch (\RuntimeException $exception) {
             return array();
         }
     }
@@ -106,20 +103,17 @@ class FunctionClass
         global $gCurrentUser;
 
         // Falls der Name des Empfaenger nicht vorhanden ist wird er fuer die Vorschau ersetzt
-        if (strip_tags(trim($recipientName)) === '')
-        {
+        if (strip_tags(trim($recipientName)) === '') {
             $recipientName = '< '.$this->nameRecipientString.' >';
         }
 
         // Falls die Email des Empfaenger nicht vorhanden ist wird sie fuer die Vorschau ersetzt
-        if (strip_tags(trim($recipientEmail)) === '')
-        {
+        if (strip_tags(trim($recipientEmail)) === '') {
             $recipientEmail = '< '.$this->emailRecipientString.' >';
         }
 
         // Falls die Nachricht nicht vorhanden ist wird sie fuer die Vorschau ersetzt
-        if (trim($ecardMessage) === '')
-        {
+        if (trim($ecardMessage) === '') {
             $ecardMessage = '< '.$this->yourMessageString.' >';
         }
 
@@ -175,10 +169,8 @@ class FunctionClass
         $email->addRecipient($recipientEmail, $recipientName);
 
         // alle Bilder werden aus dem Template herausgeholt, damit diese als Anhang verschickt werden koennen
-        if (preg_match_all('/(<img .*src=")(.*)(".*>)/Uim', $ecardHtmlData, $matchArray))
-        {
-            foreach (array_unique($matchArray[2]) as $match)
-            {
+        if (preg_match_all('/(<img .*src=")(.*)(".*>)/Uim', $ecardHtmlData, $matchArray)) {
+            foreach (array_unique($matchArray[2]) as $match) {
                 // anstelle der URL muss nun noch der Server-Pfad gesetzt werden
                 $replaces = array(
                     THEME_URL   => THEME_PATH,
@@ -187,8 +179,7 @@ class FunctionClass
                 $imgServerPath = StringUtils::strMultiReplace($match, $replaces);
 
                 // wird das Bild aus photo_show.php generiert, dann den uebergebenen Pfad zum Bild einsetzen
-                if (str_contains($imgServerPath, 'photo_show.php'))
-                {
+                if (str_contains($imgServerPath, 'photo_show.php')) {
                     $imgServerPath = $photoServerPath;
                 }
 
@@ -198,8 +189,7 @@ class FunctionClass
                 $imgType = $imagePathInfo['extension'];
 
                 // das zu versendende eigentliche Bild, muss noch auf das entsprechende Format angepasst werden
-                if (str_contains($match, 'photo_show.php'))
-                {
+                if (str_contains($match, 'photo_show.php')) {
                     $imgName = 'picture.' . $imgType;
                     $imgNameIntern = substr(md5(uniqid($imgName . time(), true)), 0, 8) . '.' . $imgType;
                     $imgServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'. $imgNameIntern;
@@ -211,16 +201,12 @@ class FunctionClass
                 }
 
                 // Bild als Anhang an die Mail haengen
-                if ($imgName !== 'none.jpg' && $imgName !== '')
-                {
+                if ($imgName !== 'none.jpg' && $imgName !== '') {
                     $cid = md5(uniqid($imgName . time(), true));
                     $result = $email->addEmbeddedImage($imgServerPath, $cid, $imgName, 'base64', 'image/' . $imgType);
-                    if ($result)
-                    {
+                    if ($result) {
                         $ecardHtmlData = str_replace($match, 'cid:' . $cid, $ecardHtmlData);
-                    }
-                    else
-                    {
+                    } else {
                         $returnCode = $email->ErrorInfo;
                     }
                 }
@@ -230,18 +216,14 @@ class FunctionClass
         $email->setText($ecardHtmlData);
         $email->setHtmlMail();
 
-        if ($returnCode)
-        {
+        if ($returnCode) {
             $returnCode = $email->sendEmail();
         }
 
         // nun noch das von der Groesse angepasste Bild loeschen
-        try
-        {
+        try {
             FileSystemUtils::deleteFileIfExists($imgPhotoPath);
-        }
-        catch (\RuntimeException $exception)
-        {
+        } catch (\RuntimeException $exception) {
             $gLogger->error('Could not delete file!', array('filePath' => $imgPhotoPath));
             // TODO
         }

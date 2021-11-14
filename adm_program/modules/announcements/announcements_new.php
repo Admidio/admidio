@@ -19,8 +19,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // check if the module is enabled and disallow access if it's disabled
-if ((int) $gSettingsManager->get('enable_announcements_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_announcements_module') === 0) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -31,16 +30,11 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 $getCopy     = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
 // set headline of the script
-if($getCopy)
-{
+if ($getCopy) {
     $headline = $gL10n->get('SYS_COPY_VAR', array($getHeadline));
-}
-elseif($getAnnUuid !== '')
-{
+} elseif ($getAnnUuid !== '') {
     $headline = $getHeadline. ' - '. $gL10n->get('SYS_EDIT_ENTRY');
-}
-else
-{
+} else {
     $headline = $getHeadline. ' - '. $gL10n->get('SYS_CREATE_ENTRY');
 }
 
@@ -50,34 +44,27 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // Create announcements object
 $announcement = new TableAnnouncement($gDb);
 
-if($getAnnUuid !== '')
-{
+if ($getAnnUuid !== '') {
     $announcement->readDataByUuid($getAnnUuid);
 
-    if($getCopy === true)
-    {
+    if ($getCopy === true) {
         $getAnnUuid = '';
     }
 
     // check if the current user could edit this announcement
-    if(!$announcement->isEditable())
-    {
+    if (!$announcement->isEditable()) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
-}
-else
-{
+} else {
     // check if the user has the right to edit at least one category
-    if(count($gCurrentUser->getAllEditableCategories('ANN')) === 0)
-    {
+    if (count($gCurrentUser->getAllEditableCategories('ANN')) === 0) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 }
 
-if(isset($_SESSION['announcements_request']))
-{
+if (isset($_SESSION['announcements_request'])) {
     // due to incorrect input the user has returned to this form
     // now write the previously entered contents into the object
     $announcement->setArray($_SESSION['announcements_request']);

@@ -64,12 +64,10 @@ class ComponentUpdate extends Component
         global $gLogger;
 
         // update of Admidio core has another path for the xml files as plugins
-        if ($this->getValue('com_type') === 'SYSTEM')
-        {
+        if ($this->getValue('com_type') === 'SYSTEM') {
             $updateFile = ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
 
-            if (is_file($updateFile))
-            {
+            if (is_file($updateFile)) {
                 return new \SimpleXMLElement($updateFile, 0, true);
             }
 
@@ -92,23 +90,17 @@ class ComponentUpdate extends Component
         $maxUpdateStep = 0;
         $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
 
-        if($currentVersionArray[0] > 1)
-        {
-            try
-            {
+        if ($currentVersionArray[0] > 1) {
+            try {
                 // open xml file for this version
                 $xmlObject = $this->getXmlObject($currentVersionArray[0], $currentVersionArray[1]);
-            }
-            catch (\UnexpectedValueException $exception)
-            {
+            } catch (\UnexpectedValueException $exception) {
                 return 0;
             }
 
             // go step by step through the SQL statements until the last one is found
-            foreach ($xmlObject->children() as $updateStep)
-            {
-                if ((string) $updateStep === self::UPDATE_STEP_STOP)
-                {
+            foreach ($xmlObject->children() as $updateStep) {
+                if ((string) $updateStep === self::UPDATE_STEP_STOP) {
                     break;
                 }
 
@@ -182,8 +174,7 @@ class ComponentUpdate extends Component
 
                 $gLogger->debug('UPDATE: Execution time ' . getExecutionTime($startTime));
             }
-        }
-        else {
+        } else {
             $gLogger->info(
                 'UPDATE: Update step is for another database!',
                 array('database' => (string) $xmlNode['database'], 'step' => (int) $xmlNode['id'])
@@ -209,21 +200,17 @@ class ComponentUpdate extends Component
         $targetVersionArray  = self::getVersionArrayFromVersion($targetVersion);
         $initialMinorVersion = $currentVersionArray[1];
 
-        for ($mainVersion = $currentVersionArray[0]; $mainVersion <= $targetVersionArray[0]; ++$mainVersion)
-        {
+        for ($mainVersion = $currentVersionArray[0]; $mainVersion <= $targetVersionArray[0]; ++$mainVersion) {
             // Set max subversion for iteration. If we are in the loop of the target main version
             // then set target minor-version to the max version
             $maxMinorVersion = 20;
-            if ($mainVersion === $targetVersionArray[0])
-            {
+            if ($mainVersion === $targetVersionArray[0]) {
                 $maxMinorVersion = $targetVersionArray[1];
             }
 
-            for ($minorVersion = $initialMinorVersion; $minorVersion <= $maxMinorVersion; ++$minorVersion)
-            {
+            for ($minorVersion = $initialMinorVersion; $minorVersion <= $maxMinorVersion; ++$minorVersion) {
                 // if version is not equal to current version then start update step with 0
-                if ($mainVersion !== $currentVersionArray[0] || $minorVersion !== $currentVersionArray[1])
-                {
+                if ($mainVersion !== $currentVersionArray[0] || $minorVersion !== $currentVersionArray[1]) {
                     $this->setValue('com_update_step', 0);
                     $this->save();
                 }
@@ -232,29 +219,21 @@ class ComponentUpdate extends Component
                 $gLogger->notice('UPDATE: Start executing update steps to version '.$mainVersion.'.'.$minorVersion);
 
                 // open xml file for this version
-                try
-                {
+                try {
                     $xmlObject = $this->getXmlObject($mainVersion, $minorVersion);
 
                     // go step by step through the SQL statements and execute them
-                    foreach ($xmlObject->children() as $updateStep)
-                    {
-                        if ((string) $updateStep === self::UPDATE_STEP_STOP)
-                        {
+                    foreach ($xmlObject->children() as $updateStep) {
+                        if ((string) $updateStep === self::UPDATE_STEP_STOP) {
                             break;
                         }
-                        if ((int) $updateStep['id'] > (int) $this->getValue('com_update_step'))
-                        {
+                        if ((int) $updateStep['id'] > (int) $this->getValue('com_update_step')) {
                             $this->executeStep($updateStep);
-                        }
-                        else
-                        {
+                        } else {
                             $gLogger->info('UPDATE: Skip update step Nr: ' . (int) $updateStep['id']);
                         }
                     }
-                }
-                catch (\UnexpectedValueException $exception)
-                {
+                } catch (\UnexpectedValueException $exception) {
                     // TODO
                 }
 

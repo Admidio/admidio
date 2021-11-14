@@ -109,12 +109,10 @@ class ModuleAnnouncements extends Modules
               ORDER BY ann_timestamp_create DESC';
 
         // Check if limit was set
-        if ($limit > 0)
-        {
+        if ($limit > 0) {
             $sql .= ' LIMIT '.$limit;
         }
-        if ($startElement > 0)
-        {
+        if ($startElement > 0) {
             $sql .= ' OFFSET '.$startElement;
         }
 
@@ -166,34 +164,29 @@ class ModuleAnnouncements extends Modules
 
         $uuid = $this->getParameter('ann_uuid');
         // In case ID was permitted and user has rights
-        if (!empty($uuid))
-        {
+        if (!empty($uuid)) {
             $sqlConditions .= ' AND ann_uuid = ? '; // $uuid
             $params[] = $uuid;
         }
         // ...otherwise get all additional announcements for a group
-        else
-        {
+        else {
             $catId = (int) $this->getParameter('cat_id');
             // show all events from category
-            if ($catId > 0)
-            {
+            if ($catId > 0) {
                 // show all events from category
                 $sqlConditions .= ' AND cat_id = ? '; // $catId
                 $params[] = $catId;
             }
 
             // Search announcements to date
-            if ($this->getParameter('dateStartFormatEnglish'))
-            {
+            if ($this->getParameter('dateStartFormatEnglish')) {
                 $sqlConditions = 'AND ann_timestamp_create BETWEEN ? AND ? '; // $this->getParameter('dateStartFormatEnglish') . ' 00:00:00' AND $this->getParameter('dateEndFormatEnglish') . ' 23:59:59'
                 $params[] = $this->getParameter('dateStartFormatEnglish') . ' 00:00:00';
                 $params[] = $this->getParameter('dateEndFormatEnglish')   . ' 23:59:59';
             }
 
             // add valid calendars
-            if(count($this->categoriesNames) > 0)
-            {
+            if (count($this->categoriesNames) > 0) {
                 $sqlConditions .= ' AND cat_name IN (\''. implode('', $this->categoriesNames) . '\')';
             }
         }
@@ -226,18 +219,14 @@ class ModuleAnnouncements extends Modules
     {
         global $gSettingsManager;
 
-        if (!$this->setDateRangeParams($dateRangeStart, 'Start', 'Y-m-d'))
-        {
-            if (!$this->setDateRangeParams($dateRangeStart, 'Start', $gSettingsManager->getString('system_date')))
-            {
+        if (!$this->setDateRangeParams($dateRangeStart, 'Start', 'Y-m-d')) {
+            if (!$this->setDateRangeParams($dateRangeStart, 'Start', $gSettingsManager->getString('system_date'))) {
                 return false;
             }
         }
 
-        if (!$this->setDateRangeParams($dateRangeEnd, 'End', 'Y-m-d'))
-        {
-            if (!$this->setDateRangeParams($dateRangeEnd, 'End', $gSettingsManager->getString('system_date')))
-            {
+        if (!$this->setDateRangeParams($dateRangeEnd, 'End', 'Y-m-d')) {
+            if (!$this->setDateRangeParams($dateRangeEnd, 'End', $gSettingsManager->getString('system_date'))) {
                 return false;
             }
         }
@@ -257,8 +246,7 @@ class ModuleAnnouncements extends Modules
 
         $objDate = \DateTime::createFromFormat($dateFormat, $dateRange);
 
-        if ($objDate === false)
-        {
+        if ($objDate === false) {
             return false;
         }
 
@@ -276,8 +264,7 @@ class ModuleAnnouncements extends Modules
     {
         global $gSettingsManager, $gProfileFields;
 
-        if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
-        {
+        if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
             $lastNameUsfId  = (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id');
             $firstNameUsfId = (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id');
 
@@ -304,9 +291,7 @@ class ModuleAnnouncements extends Modules
                        ON cha_firstname.usd_usr_id = ann_usr_id_change
                       AND cha_firstname.usd_usf_id = ? -- $firstNameUsfId';
             $additionalParams = array($lastNameUsfId, $firstNameUsfId, $lastNameUsfId, $firstNameUsfId);
-        }
-        else
-        {
+        } else {
             // show username of create and last change user
             $additionalFields = '
                 cre_user.usr_login_name AS create_name,

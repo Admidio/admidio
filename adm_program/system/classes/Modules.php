@@ -167,8 +167,7 @@ abstract class Modules
      */
     public function getParameter($parameterName)
     {
-        if ($parameterName !== '' && array_key_exists($parameterName, $this->parameters))
-        {
+        if ($parameterName !== '' && array_key_exists($parameterName, $this->parameters)) {
             return $this->parameters[$parameterName];
         }
 
@@ -244,20 +243,14 @@ abstract class Modules
      */
     public function setParameter($parameterName, $parameterValue)
     {
-        if ($parameterName !== '')
-        {
+        if ($parameterName !== '') {
             $this->parameters[$parameterName] = $parameterValue;
 
-            if ($parameterName === 'cat_id')
-            {
+            if ($parameterName === 'cat_id') {
                 $this->catId = (int) $parameterValue;
-            }
-            elseif ($parameterName === 'role_type')
-            {
+            } elseif ($parameterName === 'role_type') {
                 $this->roleType = (int) $parameterValue;
-            }
-            elseif ($parameterName === 'mode')
-            {
+            } elseif ($parameterName === 'mode') {
                 $this->mode = $parameterValue;
             }
         }

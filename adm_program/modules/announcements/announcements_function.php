@@ -18,8 +18,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // check if the module is enabled for use
-if ((int) $gSettingsManager->get('enable_announcements_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_announcements_module') === 0) {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -32,22 +31,17 @@ $getMode    = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue
 // create announcement object
 $announcement = new TableAnnouncement($gDb);
 
-if($getAnnUuid !== '')
-{
+if ($getAnnUuid !== '') {
     $announcement->readDataByUuid($getAnnUuid);
 
     // check if the user has the right to edit this announcement
-    if(!$announcement->isEditable())
-    {
+    if (!$announcement->isEditable()) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
-}
-else
-{
+} else {
     // check if the user has the right to edit at least one category
-    if(count($gCurrentUser->getAllEditableCategories('ANN')) === 0)
-    {
+    if (count($gCurrentUser->getAllEditableCategories('ANN')) === 0) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
@@ -55,37 +49,29 @@ else
 
 $_SESSION['announcements_request'] = $_POST;
 
-try
-{
+try {
     // check the CSRF token of the form against the session token
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-}
-catch(AdmException $e)
-{
-    if($getMode === 1) {
+} catch (AdmException $e) {
+    if ($getMode === 1) {
         $e->showHtml();
-    }
-    else {
+    } else {
         $e->showText();
     }
     // => EXIT
 }
 
-if($getMode === 1)
-{
-    if(strlen($_POST['ann_headline']) === 0)
-    {
+if ($getMode === 1) {
+    if (strlen($_POST['ann_headline']) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_HEADLINE'))));
         // => EXIT
     }
-    if(strlen($_POST['ann_description']) === 0)
-    {
+    if (strlen($_POST['ann_description']) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TEXT'))));
         // => EXIT
     }
     // check if the current user is allowed to use the selected category
-    if(!in_array((int) $_POST['ann_cat_id'], $gCurrentUser->getAllEditableCategories('ANN'), true))
-    {
+    if (!in_array((int) $_POST['ann_cat_id'], $gCurrentUser->getAllEditableCategories('ANN'), true)) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
@@ -93,13 +79,10 @@ if($getMode === 1)
     // make html in description secure
     $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');
 
-    try
-    {
+    try {
         // write POST parameters in announcement object
-        foreach($_POST as $key => $value) // TODO possible security issue
-        {
-            if(str_starts_with($key, 'ann_'))
-            {
+        foreach ($_POST as $key => $value) { // TODO possible security issue
+            if (str_starts_with($key, 'ann_')) {
                 $announcement->setValue($key, $value);
             }
         }
@@ -107,24 +90,18 @@ if($getMode === 1)
         // Daten in Datenbank schreiben
         $returnValue = $announcement->save();
 
-        if($returnValue === false)
-        {
+        if ($returnValue === false) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
-        }
-        else
-        {
-            if($getAnnUuid === '')
-            {
+        // => EXIT
+        } else {
+            if ($getAnnUuid === '') {
                 $message = $gL10n->get('SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
 
                 $notification = new Email();
                 $notification->adminNotification($gL10n->get('SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
             }
         }
-    }
-    catch(AdmException $e)
-    {
+    } catch (AdmException $e) {
         $e->showHtml();
         // => EXIT
     }
@@ -133,10 +110,8 @@ if($getMode === 1)
     $gNavigation->deleteLastUrl();
 
     admRedirect($gNavigation->getUrl());
-    // => EXIT
-}
-elseif($getMode === 2)
-{
+// => EXIT
+} elseif ($getMode === 2) {
     // delete current announcements, right checks were done before
     $announcement->delete();
 

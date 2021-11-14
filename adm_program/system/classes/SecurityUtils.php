@@ -18,8 +18,7 @@ final class SecurityUtils
      */
     public static function encodeHTML($input, $encodeAll = false, $encoding = 'UTF-8')
     {
-        if ($encodeAll)
-        {
+        if ($encodeAll) {
             // Encodes: all special HTML characters
             return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
         }
@@ -39,21 +38,18 @@ final class SecurityUtils
     public static function encodeUrl($path, array $params = array(), $anchor = '', $encode = false)
     {
         $paramsText = '';
-        if (count($params) > 0)
-        {
+        if (count($params) > 0) {
             $paramsText = '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
         }
 
         $anchorText = '';
-        if ($anchor !== '')
-        {
+        if ($anchor !== '') {
             $anchorText = '#' . rawurlencode($anchor);
         }
 
         $url = $path . $paramsText . $anchorText;
 
-        if ($encode)
-        {
+        if ($encode) {
             return self::encodeHTML($url);
         }
 
@@ -76,8 +72,7 @@ final class SecurityUtils
 
         $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $exception->getCode(), 'message' => $exception->getMessage()));
 
-        if ($exceptionOnInsecurePRNG)
-        {
+        if ($exceptionOnInsecurePRNG) {
             throw new AdmException($exceptionMessage, array($exception->getCode(), $exception->getMessage()));
         }
 
@@ -95,16 +90,11 @@ final class SecurityUtils
      */
     public static function getRandomInt($min, $max, $exceptionOnInsecurePRNG = false)
     {
-        try
-        {
+        try {
             $int = \random_int($min, $max);
-        }
-        catch (\Error $e)
-        {
+        } catch (\Error $e) {
             $int = self::getRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_ERROR');
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $int = self::getRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_EXCEPTION');
         }
 
@@ -124,29 +114,25 @@ final class SecurityUtils
      */
     public static function getRandomString($length = 16, $charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
     {
-        if ($length < 4)
-        {
+        if ($length < 4) {
             throw new \RuntimeException('Min-length is 4.');
         }
 
         $charsetLength = strlen($charset);
 
         // Check for duplicate chars in charset
-        if ($charsetLength !== strlen(implode('', array_unique(str_split($charset)))))
-        {
+        if ($charsetLength !== strlen(implode('', array_unique(str_split($charset))))) {
             throw new \UnexpectedValueException('Charset contains duplicate chars.');
         }
 
         // Check for a minimum of 2 unique chars
-        if ($charsetLength < 2)
-        {
+        if ($charsetLength < 2) {
             throw new \UnexpectedValueException('Charset must contain at least 2 unique chars.');
         }
 
         $randomString = '';
         $charsetMaxIndex = $charsetLength - 1;
-        for ($i = 0; $i < $length; ++$i)
-        {
+        for ($i = 0; $i < $length; ++$i) {
             $randomInt = self::getRandomInt(0, $charsetMaxIndex);
             $randomString .= $charset[$randomInt];
         }
@@ -164,8 +150,7 @@ final class SecurityUtils
     {
         global $gCurrentSession;
 
-        if($csrfToken !== $gCurrentSession->getCsrfToken())
-        {
+        if ($csrfToken !== $gCurrentSession->getCsrfToken()) {
             throw new AdmException('Invalid or missing CSRF token!');
         }
     }

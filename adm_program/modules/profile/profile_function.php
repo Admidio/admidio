@@ -32,7 +32,7 @@ $getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid',  'string');
 $getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid','string');
 $getMode       = admFuncVariableIsValid($_GET, 'mode',       'int');
 
-if(in_array($getMode, array(2, 3, 7))) {
+if (in_array($getMode, array(2, 3, 7))) {
     try {
         // in ajax mode only return simple text on error
         $gMessage->showHtmlTextOnly(true);
@@ -49,8 +49,7 @@ if(in_array($getMode, array(2, 3, 7))) {
 $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
 
-if($getMode === 1)
-{
+if ($getMode === 1) {
     // Export vCard of user
 
     $filename = $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME');
@@ -66,40 +65,29 @@ if($getMode === 1)
 
     // create vcard and check if user is allowed to edit profile, so he can see more data
     echo $user->getVCard();
-}
-elseif($getMode === 2)
-{
+} elseif ($getMode === 2) {
     // Cancel membership of role
     $member = new TableMembers($gDb);
     $member->readDataByUuid($getMemberUuid);
     $role   = new TableRoles($gDb, (int) $member->getValue('mem_rol_id'));
 
     // if user has the right then cancel membership
-    if($role->allowedToAssignMembers($gCurrentUser))
-    {
-        try
-        {
+    if ($role->allowedToAssignMembers($gCurrentUser)) {
+        try {
             $member->stopMembership();
-        }
-        catch(AdmException $e)
-        {
+        } catch (AdmException $e) {
             $e->showText();
             // => EXIT
         }
 
         // Beendigung erfolgreich -> Rueckgabe fuer XMLHttpRequest
         echo 'done';
-    }
-    else
-    {
+    } else {
         echo $gL10n->get('SYS_NO_RIGHTS');
     }
-}
-elseif($getMode === 3)
-{
+} elseif ($getMode === 3) {
     // Remove former membership of role
-    if($gCurrentUser->isAdministrator())
-    {
+    if ($gCurrentUser->isAdministrator()) {
         $member = new TableMembers($gDb);
         $member->readDataByUuid($getMemberUuid);
         $member->delete();
@@ -107,48 +95,34 @@ elseif($getMode === 3)
         // Entfernen erfolgreich -> Rueckgabe fuer XMLHttpRequest
         echo 'done';
     }
-}
-elseif($getMode === 4)
-{
+} elseif ($getMode === 4) {
     // reload role memberships
     $roleStatement  = getRolesFromDatabase($user->getValue('usr_id'));
     $countRole      = $roleStatement->rowCount();
     echo getRoleMemberships('role_list', $user, $roleStatement);
-}
-elseif($getMode === 5)
-{
+} elseif ($getMode === 5) {
     // reload former role memberships
     $roleStatement  = getFormerRolesFromDatabase($user->getValue('usr_id'));
     $countRole      = $roleStatement->rowCount();
     echo getRoleMemberships('former_role_list', $user, $roleStatement);
 
-    if($countRole === 0)
-    {
+    if ($countRole === 0) {
         echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'none\' })</script>';
-    }
-    else
-    {
+    } else {
         echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'block\' })</script>';
     }
-}
-elseif($getMode === 6)
-{
+} elseif ($getMode === 6) {
     // reload future role memberships
     $roleStatement  = getFutureRolesFromDatabase($user->getValue('usr_id'));
     $countRole      = $roleStatement->rowCount();
     echo getRoleMemberships('future_role_list', $user, $roleStatement);
 
-    if($countRole === 0)
-    {
+    if ($countRole === 0) {
         echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'none\' })</script>';
-    }
-    else
-    {
+    } else {
         echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'block\' })</script>';
     }
-}
-elseif($getMode === 7)
-{
+} elseif ($getMode === 7) {
     // save membership date changes
     $postMembershipStart = admFuncVariableIsValid($_POST, 'membership_start_date_'.$getMemberUuid, 'date', array('requireValue' => true));
     $postMembershipEnd   = admFuncVariableIsValid($_POST, 'membership_end_date_'.$getMemberUuid,   'date', array('requireValue' => true));
@@ -158,8 +132,7 @@ elseif($getMode === 7)
     $role   = new TableRoles($gDb, (int) $member->getValue('mem_rol_id'));
 
     // check if user has the right to edit this membership
-    if(!$role->allowedToAssignMembers($gCurrentUser))
-    {
+    if (!$role->allowedToAssignMembers($gCurrentUser)) {
         exit($gL10n->get('SYS_NO_RIGHTS'));
     }
 
@@ -168,38 +141,28 @@ elseif($getMode === 7)
 
     // Check das Beginn Datum
     $startDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $postMembershipStart);
-    if($startDate === false)
-    {
+    if ($startDate === false) {
         exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), $gSettingsManager->getString('system_date'))));
-    }
-    else
-    {
+    } else {
         // Datum formatiert zurueckschreiben
         $formatedStartDate = $startDate->format('Y-m-d');
     }
 
     // Falls gesetzt wird das Enddatum gecheckt
-    if($postMembershipEnd !== '')
-    {
+    if ($postMembershipEnd !== '') {
         $endDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $postMembershipEnd);
-        if($endDate === false)
-        {
+        if ($endDate === false) {
             exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), $gSettingsManager->getString('system_date'))));
-        }
-        else
-        {
+        } else {
             // Datum formatiert zurueckschreiben
             $formatedEndDate = $endDate->format('Y-m-d');
         }
 
         // If start-date is later/bigger or on same day than end-date we show an error
-        if ($formatedStartDate > $formatedEndDate)
-        {
+        if ($formatedStartDate > $formatedEndDate) {
             exit($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
         }
-    }
-    else
-    {
+    } else {
         $formatedEndDate = DATE_MAX;
     }
 
@@ -207,16 +170,13 @@ elseif($getMode === 7)
     $user->editRoleMembership($member->getValue('mem_id'), $formatedStartDate, $formatedEndDate);
 
     echo 'success';
-}
-elseif ($getMode === 8)
-{
+} elseif ($getMode === 8) {
     // Export every member of a role into one vCard file
 
     $role = new TableRoles($gDb);
     $role->readDataByUuid($getRoleUuid);
 
-    if($gCurrentUser->hasRightViewRole($role->getValue('rol_id')))
-    {
+    if ($gCurrentUser->hasRightViewRole($role->getValue('rol_id'))) {
         // create filename of organization name and role name
         $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.vcf';
 
@@ -237,8 +197,7 @@ elseif ($getMode === 8)
                    AND mem_end    > ? -- DATE_NOW';
         $pdoStatement = $gDb->queryPrepared($sql, array($role->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
-        while($memberUserId = $pdoStatement->fetchColumn())
-        {
+        while ($memberUserId = $pdoStatement->fetchColumn()) {
             // create user object
             $user = new User($gDb, $gProfileFields, (int) $memberUserId);
             // create vcard and check if user is allowed to edit profile, so he can see more data

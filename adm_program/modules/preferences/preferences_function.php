@@ -25,58 +25,47 @@ $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 
 $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
 
 // in ajax mode only return simple text on error
-if($getMode === 1)
-{
+if ($getMode === 1) {
     $gMessage->showHtmlTextOnly(true);
 
-    try
-    {
+    try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    }
-    catch(AdmException $exception)
-    {
+    } catch (AdmException $exception) {
         $exception->showHtml();
         // => EXIT
     }
 }
 
 // only administrators are allowed to edit organization preferences or create new organizations
-if(!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
-switch($getMode)
-{
+switch ($getMode) {
     case 1:
         $checkboxes = array();
 
-        try
-        {
+        try {
             // first check the fields of the submitted form
-            switch($getForm)
-            {
+            switch ($getForm) {
                 case 'common':
                     $checkboxes = array(
                         'system_cookie_note', 'enable_rss',
                         'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check'
                     );
 
-                    if(!StringUtils::strIsValidFolderName($_POST['theme'])
-                    || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $_POST['theme'] . '/index.html'))
-                    {
+                    if (!StringUtils::strIsValidFolderName($_POST['theme'])
+                    || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $_POST['theme'] . '/index.html')) {
                         $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
                         // => EXIT
                     }
-                    if($_POST['system_url_imprint'] !== '' && !StringUtils::strValidCharacters($_POST['system_url_imprint'], 'url'))
-                    {
+                    if ($_POST['system_url_imprint'] !== '' && !StringUtils::strValidCharacters($_POST['system_url_imprint'], 'url')) {
                         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_IMPRINT'))));
                         // => EXIT
                     }
-                    if($_POST['system_url_data_protection'] !== '' && !StringUtils::strValidCharacters($_POST['system_url_data_protection'], 'url'))
-                    {
+                    if ($_POST['system_url_data_protection'] !== '' && !StringUtils::strValidCharacters($_POST['system_url_data_protection'], 'url')) {
                         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_DATA_PROTECTION'))));
                         // => EXIT
                     }
@@ -87,14 +76,12 @@ switch($getMode)
                         'enable_auto_login', 'enable_password_recovery'
                     );
 
-                    if(!is_numeric($_POST['logout_minutes']) || $_POST['logout_minutes'] <= 0)
-                    {
+                    if (!is_numeric($_POST['logout_minutes']) || $_POST['logout_minutes'] <= 0) {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_AUTOMATIC_LOGOUT_AFTER'))));
                         // => EXIT
                     }
 
-                    if(!isset($_POST['enable_auto_login']) && $gSettingsManager->getBool('enable_auto_login'))
-                    {
+                    if (!isset($_POST['enable_auto_login']) && $gSettingsManager->getBool('enable_auto_login')) {
                         // if auto login was deactivated than delete all saved logins
                         $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
                         $gDb->queryPrepared($sql);
@@ -104,29 +91,25 @@ switch($getMode)
                 case 'organization':
                     $checkboxes = array('system_organization_select');
 
-                    if($_POST['org_longname'] === '')
-                    {
+                    if ($_POST['org_longname'] === '') {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
                         // => EXIT
                     }
                     break;
 
                 case 'regional_settings':
-                    if(!StringUtils::strIsValidFolderName($_POST['system_language'])
-                    || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $_POST['system_language'] . '.xml'))
-                    {
+                    if (!StringUtils::strIsValidFolderName($_POST['system_language'])
+                    || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $_POST['system_language'] . '.xml')) {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LANGUAGE'))));
                         // => EXIT
                     }
 
-                    if($_POST['system_date'] === '')
-                    {
+                    if ($_POST['system_date'] === '') {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_DATE_FORMAT'))));
                         // => EXIT
                     }
 
-                    if($_POST['system_time'] === '')
-                    {
+                    if ($_POST['system_time'] === '') {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_TIME_FORMAT'))));
                         // => EXIT
                     }
@@ -139,10 +122,8 @@ switch($getMode)
                 case 'email_dispatch':
                     $checkboxes = array('mail_smtp_auth');
 
-                    if($_POST['mail_sendmail_address'] !== '')
-                    {
-                        if(!StringUtils::strValidCharacters($_POST['mail_sendmail_address'], 'email'))
-                        {
+                    if ($_POST['mail_sendmail_address'] !== '') {
+                        if (!StringUtils::strValidCharacters($_POST['mail_sendmail_address'], 'email')) {
                             $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_SENDER_EMAIL'))));
                             // => EXIT
                         }
@@ -152,15 +133,11 @@ switch($getMode)
                 case 'system_notification':
                     $checkboxes = array('enable_system_mails', 'enable_email_notification');
 
-                    if($_POST['email_administrator'] === '')
-                    {
+                    if ($_POST['email_administrator'] === '') {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ADMINISTRATOR_EMAIL'))));
-                        // => EXIT
-                    }
-                    else
-                    {
-                        if(!StringUtils::strValidCharacters($_POST['email_administrator'], 'email'))
-                        {
+                    // => EXIT
+                    } else {
+                        if (!StringUtils::strValidCharacters($_POST['email_administrator'], 'email')) {
                             $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_ADMINISTRATOR_EMAIL'))));
                             // => EXIT
                         }
@@ -217,8 +194,7 @@ switch($getMode)
                     break;
 
                 case 'links':
-                    if(!is_numeric($_POST['weblinks_redirect_seconds']) || $_POST['weblinks_redirect_seconds'] < 0)
-                    {
+                    if (!is_numeric($_POST['weblinks_redirect_seconds']) || $_POST['weblinks_redirect_seconds'] < 0) {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_DISPLAY_REDIRECT'))));
                         // => EXIT
                     }
@@ -228,49 +204,36 @@ switch($getMode)
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                     // => EXIT
             }
-        }
-        catch(AdmException $e)
-        {
+        } catch (AdmException $e) {
             $e->showText();
             // => EXIT
         }
         // check every checkbox if a value was committed
         // if no value is found then set 0 because 0 will not be committed in a html checkbox element
-        foreach($checkboxes as $value)
-        {
-            if(!isset($_POST[$value]) || $_POST[$value] != 1)
-            {
+        foreach ($checkboxes as $value) {
+            if (!isset($_POST[$value]) || $_POST[$value] != 1) {
                 $_POST[$value] = 0;
             }
         }
 
         // then update the database with the new values
 
-        foreach($_POST as $key => $value) // TODO possible security issue
-        {
+        foreach ($_POST as $key => $value) { // TODO possible security issue
             // Sort out elements that are not stored in adm_preferences here
-            if(!in_array($key, array('save', 'admidio-csrf-token')))
-            {
-                if(str_starts_with($key, 'org_'))
-                {
+            if (!in_array($key, array('save', 'admidio-csrf-token'))) {
+                if (str_starts_with($key, 'org_')) {
                     $gCurrentOrganization->setValue($key, $value);
-                }
-                elseif(str_starts_with($key, 'SYSMAIL_'))
-                {
+                } elseif (str_starts_with($key, 'SYSMAIL_')) {
                     $text = new TableText($gDb);
                     $text->readDataByColumns(array('txt_org_id' => $gCurrentOrgId, 'txt_name' => $key));
                     $text->setValue('txt_text', $value);
                     $text->save();
-                }
-                elseif($key === 'enable_auto_login' && $value == 0 && $gSettingsManager->getBool('enable_auto_login'))
-                {
+                } elseif ($key === 'enable_auto_login' && $value == 0 && $gSettingsManager->getBool('enable_auto_login')) {
                     // if deactivate auto login than delete all saved logins
                     $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
                     $gDb->queryPrepared($sql);
                     $gSettingsManager->set($key, $value);
-                }
-                else
-                {
+                } else {
                     $gSettingsManager->set($key, $value);
                 }
             }
@@ -280,8 +243,7 @@ switch($getMode)
         $gCurrentOrganization->save();
 
         // refresh language if necessary
-        if($gL10n->getLanguage() !== $gSettingsManager->getString('system_language'))
-        {
+        if ($gL10n->getLanguage() !== $gSettingsManager->getString('system_language')) {
             $gL10n->setLanguage($gSettingsManager->getString('system_language'));
         }
 
@@ -293,13 +255,10 @@ switch($getMode)
 
     // show welcome dialog for new organization
     case 2:
-        if(isset($_SESSION['add_organization_request']))
-        {
+        if (isset($_SESSION['add_organization_request'])) {
             $formValues = $_SESSION['add_organization_request'];
             unset($_SESSION['add_organization_request']);
-        }
-        else
-        {
+        } else {
             $formValues['orgaShortName'] = '';
             $formValues['orgaLongName']  = '';
             $formValues['orgaEmail']     = '';
@@ -343,35 +302,29 @@ switch($getMode)
     case 3:
         $_SESSION['add_organization_request'] = $_POST;
 
-        try
-        {
+        try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-        }
-        catch(AdmException $exception)
-        {
+        } catch (AdmException $exception) {
             $exception->showHtml();
             // => EXIT
         }
 
         // form fields are not filled
-        if($_POST['orgaShortName'] === '' || $_POST['orgaLongName'] === '')
-        {
+        if ($_POST['orgaShortName'] === '' || $_POST['orgaLongName'] === '') {
             $gMessage->show($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'));
             // => EXIT
         }
 
         // check if orga shortname exists
         $organization = new Organization($gDb, $_POST['orgaShortName']);
-        if($organization->getValue('org_id') > 0)
-        {
+        if ($organization->getValue('org_id') > 0) {
             $gMessage->show($gL10n->get('INS_ORGA_SHORTNAME_EXISTS', array($_POST['orgaShortName'])));
             // => EXIT
         }
 
         // allow only letters, numbers and special characters like .-_+@
-        if(!StringUtils::strValidCharacters($_POST['orgaShortName'], 'noSpecialChar'))
-        {
+        if (!StringUtils::strValidCharacters($_POST['orgaShortName'], 'noSpecialChar')) {
             $gMessage->show($gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION')));
             // => EXIT
         }
@@ -405,8 +358,7 @@ switch($getMode)
         $gCurrentOrganization = new Organization($gDb, $currentOrganizationId);
 
         // if installation of second organization than show organization select at login
-        if($gCurrentOrganization->countAllRecords() === 2)
-        {
+        if ($gCurrentOrganization->countAllRecords() === 2) {
             $sql = 'UPDATE '.TBL_PREFERENCES.'
                        SET prf_value = 1
                      WHERE prf_name = \'system_organization_select\'';
@@ -434,16 +386,14 @@ switch($getMode)
 
     // set directory protection, write htaccess
     case 4:
-        if (is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess'))
-        {
+        if (is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess')) {
             echo $gL10n->get('SYS_ON');
             return;
         }
 
         // create ".htaccess" file for folder "adm_my_files"
         $htaccess = new Htaccess(ADMIDIO_PATH . FOLDER_DATA);
-        if ($htaccess->protectFolder())
-        {
+        if ($htaccess->protectFolder()) {
             echo $gL10n->get('SYS_ON');
             return;
         }
@@ -460,8 +410,7 @@ switch($getMode)
         $email = new Email();
         $email->setDebugMode(true);
 
-        if ($gSettingsManager->getBool('mail_html_registered_users'))
-        {
+        if ($gSettingsManager->getBool('mail_html_registered_users')) {
             $email->setHtmlMail();
         }
 
@@ -479,20 +428,16 @@ switch($getMode)
         // finally send the mail
         $sendResult = $email->sendEmail();
 
-        if(isset($GLOBALS['phpmailer_output_debug']))
-        {
+        if (isset($GLOBALS['phpmailer_output_debug'])) {
             $debugOutput .= '<br /><br /><h3>' . $gL10n->get('SYS_DEBUG_OUTPUT') . '</h3>' . $GLOBALS['phpmailer_output_debug'];
         }
 
         // message if send/save is OK
-        if ($sendResult === true) // don't remove check === true. ($sendResult) won't work
-        {
+        if ($sendResult === true) { // don't remove check === true. ($sendResult) won't work
             $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'email_dispatch')));
             $gMessage->show($gL10n->get('SYS_EMAIL_SEND') . $debugOutput);
-            // => EXIT
-        }
-        else
-        {
+        // => EXIT
+        } else {
             $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', array($gL10n->get('SYS_RECIPIENT'), $sendResult)) . $debugOutput);
             // => EXIT
         }

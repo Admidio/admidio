@@ -8,8 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php')
-{
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php') {
     exit('This page may not be called directly!');
 }
 
@@ -36,8 +35,7 @@ $form->addSelectBox(
 );
 
 // if this is a beta version then show a notice to the user
-if (ADMIDIO_VERSION_BETA > 0)
-{
+if (ADMIDIO_VERSION_BETA > 0) {
     $gLogger->notice('INSTALLATION: This is a BETA release!');
 
     $form->addDescription(

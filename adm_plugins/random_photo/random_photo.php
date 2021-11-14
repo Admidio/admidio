@@ -19,64 +19,50 @@ $pluginFolder = basename(__DIR__);
 require_once($rootPath . '/adm_program/system/common.php');
 
 // only include config file if it exists
-if (is_file(__DIR__ . '/config.php'))
-{
+if (is_file(__DIR__ . '/config.php')) {
     require_once(__DIR__ . '/config.php');
 }
 
 // set default values if there no value has been stored in the config.php
-if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
-{
+if (!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word)) {
     $plg_max_char_per_word = 0;
 }
 
-if(isset($plg_link_target))
-{
+if (isset($plg_link_target)) {
     $plg_link_target = strip_tags($plg_link_target);
-}
-else
-{
+} else {
     $plg_link_target = '_self';
 }
 
-if(!isset($plg_photos_max_width) || !is_numeric($plg_photos_max_width))
-{
+if (!isset($plg_photos_max_width) || !is_numeric($plg_photos_max_width)) {
     $plg_photos_max_width = 0;
 }
 
-if(!isset($plg_photos_max_height) || !is_numeric($plg_photos_max_height))
-{
+if (!isset($plg_photos_max_height) || !is_numeric($plg_photos_max_height)) {
     $plg_photos_max_height = 0;
 }
-if(!isset($plg_photos_albums) || !is_numeric($plg_photos_albums))
-{
+if (!isset($plg_photos_albums) || !is_numeric($plg_photos_albums)) {
     $plg_photos_albums = 0;
 }
-if(!isset($plg_photos_picnr) || !is_numeric($plg_photos_picnr))
-{
+if (!isset($plg_photos_picnr) || !is_numeric($plg_photos_picnr)) {
     $plg_photos_picnr = 0;
 }
-if(!isset($plg_photos_show_link))
-{
+if (!isset($plg_photos_show_link)) {
     $plg_photos_show_link = true;
 }
 
-if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
-{
+if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
     $plg_show_headline = 1;
 }
 
-if($gSettingsManager->getInt('enable_photo_module') > 0)
-{
+if ($gSettingsManager->getInt('enable_photo_module') > 0) {
     echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
-    if($plg_show_headline)
-    {
+    if ($plg_show_headline) {
         echo '<h3>'.$gL10n->get('SYS_PHOTOS').'</h3>';
     }
 
-    if($gSettingsManager->getInt('enable_photo_module') === 1
-    || ($gSettingsManager->getInt('enable_photo_module') === 2 && $gValidLogin))
-    {
+    if ($gSettingsManager->getInt('enable_photo_module') === 1
+    || ($gSettingsManager->getInt('enable_photo_module') === 2 && $gValidLogin)) {
         // call photo albums
         $sql = 'SELECT *
                   FROM '.TBL_PHOTOS.'
@@ -86,8 +72,7 @@ if($gSettingsManager->getInt('enable_photo_module') > 0)
               ORDER BY pho_begin DESC';
 
         // optional set a limit which albums should be scanned
-        if($plg_photos_albums > 0)
-        {
+        if ($plg_photos_albums > 0) {
             $sql .= ' LIMIT '.$plg_photos_albums;
         }
 
@@ -101,17 +86,13 @@ if($gSettingsManager->getInt('enable_photo_module') > 0)
         $album = new TablePhotos($gDb);
 
         // loop, if an image is not found directly, but limit to 20 passes
-        while(!is_file($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
-        {
+        while (!is_file($picPath) && $i < 20 && $albumStatement->rowCount() > 0) {
             $album->setArray($albumList[mt_rand(0, $albumStatement->rowCount()-1)]);
 
             // optionally select an image randomly
-            if($plg_photos_picnr === 0)
-            {
+            if ($plg_photos_picnr === 0) {
                 $picNr = mt_rand(1, (int) $album->getValue('pho_quantity'));
-            }
-            else
-            {
+            } else {
                 $picNr = $plg_photos_picnr;
             }
 
@@ -120,31 +101,23 @@ if($gSettingsManager->getInt('enable_photo_module') > 0)
             ++$i;
         }
 
-        if(!is_file($picPath))
-        {
+        if (!is_file($picPath)) {
             $picPath = THEME_PATH . '/images/no_photo_found.png';
         }
 
-        if($plg_photos_show_link && $plg_max_char_per_word > 0)
-        {
+        if ($plg_photos_show_link && $plg_max_char_per_word > 0) {
             // Wrap link text if necessary
             $words = explode(' ', $album->getValue('pho_name'));
 
-            foreach ($words as $word)
-            {
-                if(strlen($word) > $plg_max_char_per_word)
-                {
+            foreach ($words as $word) {
+                if (strlen($word) > $plg_max_char_per_word) {
                     $linkText .= substr($word, 0, $plg_max_char_per_word).'-<br />'.
                         substr($word, $plg_max_char_per_word).' ';
-                }
-                else
-                {
+                } else {
                     $linkText .= $word.' ';
                 }
             }
-        }
-        else
-        {
+        } else {
             $linkText = $album->getValue('pho_name');
         }
 
@@ -155,13 +128,10 @@ if($gSettingsManager->getInt('enable_photo_module') > 0)
             src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $photoUuid, 'photo_nr' => $picNr, 'pho_begin' => $album->getValue('pho_begin', 'Y-m-d'), 'max_width' => $plg_photos_max_width, 'max_height' => $plg_photos_max_height)).'" /></a>';
 
         // optional the linked name of the album
-        if($plg_photos_show_link)
-        {
+        if ($plg_photos_show_link) {
             echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $photoUuid)).'" target="'.$plg_link_target.'">'.$linkText.'</a>';
         }
-    }
-    else
-    {
+    } else {
         echo $gL10n->get('PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS');
     }
 

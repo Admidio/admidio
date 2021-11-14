@@ -154,7 +154,8 @@ $rules = array(
     'trim_array_spaces'                           => true,  // [@Symfony]
 //    'unary_operator_spaces'                     => false, // [@Symfony]
     'visibility_required'                         => true,  // [@PSR2, @Symfony, @PHP71Migration]
-    'whitespace_after_comma_in_array'             => true   // [@Symfony]
+    'whitespace_after_comma_in_array'             => true,   // [@Symfony]
+    'braces'                                      => array('position_after_control_structures' => 'same')
 );
 
 $finder = PhpCsFixer\Finder::create()

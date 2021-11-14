@@ -23,8 +23,7 @@ $getFile   = admFuncVariableIsValid($_GET, 'file',   'file', array('requireValue
 $imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/' . $getModule . '/images/' . $getFile;
 
 // check if image exists
-if (!is_file($imageServerPath))
-{
+if (!is_file($imageServerPath)) {
     http_response_code(404);
     exit();
 }

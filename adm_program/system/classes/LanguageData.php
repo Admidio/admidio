@@ -100,7 +100,7 @@ class LanguageData
      */
     public function addPluginLanguageFolderPaths()
     {
-        if(!$this->pluginLanguageFoldersLoaded) {
+        if (!$this->pluginLanguageFoldersLoaded) {
             try {
                 $pluginFolders = FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_PLUGINS, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
             } catch (\RuntimeException $exception) {
@@ -115,7 +115,6 @@ class LanguageData
                 if (is_dir($languageFolder)) {
                     $this->addLanguageFolderPath($languageFolder);
                 }
-
             }
 
             $this->pluginLanguageFoldersLoaded = true;
@@ -131,13 +130,11 @@ class LanguageData
      */
     public function addLanguageFolderPath($languageFolderPath)
     {
-        if ($languageFolderPath === '' || !is_dir($languageFolderPath))
-        {
+        if ($languageFolderPath === '' || !is_dir($languageFolderPath)) {
             throw new \UnexpectedValueException('Invalid folder path!');
         }
 
-        if (in_array($languageFolderPath, $this->languageFolderPaths, true))
-        {
+        if (in_array($languageFolderPath, $this->languageFolderPaths, true)) {
             return false;
         }
 
@@ -153,8 +150,7 @@ class LanguageData
      */
     public static function determineBrowserLanguage($defaultLanguage)
     {
-        if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) || empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
-        {
+        if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) || empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             return $defaultLanguage;
         }
 
@@ -162,23 +158,19 @@ class LanguageData
         $languageChoosed = $defaultLanguage;
         $priorityChoosed = 0;
 
-        foreach ($languages as $value)
-        {
-            if (!preg_match('/^([a-z]{2,3}(?:-[a-zA-Z]{2,3})?|\*)(?:\s*;\s*q=(0(?:\.\d{1,3})?|1(?:\.0{1,3})?))?$/', $value, $matches))
-            {
+        foreach ($languages as $value) {
+            if (!preg_match('/^([a-z]{2,3}(?:-[a-zA-Z]{2,3})?|\*)(?:\s*;\s*q=(0(?:\.\d{1,3})?|1(?:\.0{1,3})?))?$/', $value, $matches)) {
                 continue;
             }
 
             $langCodes = explode('-', $matches[1]);
 
             $priority = 1.0;
-            if (isset($matches[2]))
-            {
+            if (isset($matches[2])) {
                 $priority = (float) $matches[2];
             }
 
-            if ($priorityChoosed < $priority && $langCodes[0] !== '*')
-            {
+            if ($priorityChoosed < $priority && $langCodes[0] !== '*') {
                 $languageChoosed = $langCodes[0];
                 $priorityChoosed = $priority;
             }
@@ -240,8 +232,7 @@ class LanguageData
      */
     public function getTextCache($textId)
     {
-        if (!array_key_exists($textId, $this->textCache))
-        {
+        if (!array_key_exists($textId, $this->textCache)) {
             throw new \OutOfBoundsException('Text-id is not cached!');
         }
 
@@ -266,8 +257,7 @@ class LanguageData
     {
         global $gSupportedLanguages;
 
-        if ($language === $this->language)
-        {
+        if ($language === $this->language) {
             return false;
         }
 

@@ -29,8 +29,7 @@ class DateTimeExtended extends DateTime
             7 => $gL10n->get('SYS_SUNDAY')
         );
 
-        if ($weekday > 0)
-        {
+        if ($weekday > 0) {
             return $weekdays[$weekday];
         }
 
@@ -64,14 +63,10 @@ class DateTimeExtended extends DateTime
             'y' => 'yy'
         );
 
-        foreach ($formatArray as $formatChar)
-        {
-            if (array_key_exists($formatChar, $characterMapping))
-            {
+        foreach ($formatArray as $formatChar) {
+            if (array_key_exists($formatChar, $characterMapping)) {
                 $destFormat .= $characterMapping[$formatChar];
-            }
-            else
-            {
+            } else {
                 $destFormat .= $formatChar;
             }
         }

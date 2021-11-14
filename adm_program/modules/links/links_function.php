@@ -24,9 +24,8 @@ $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int', array('requireVa
 try {
     // check the CSRF token of the form against the session token
     SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-}
-catch(AdmException $exception) {
-    if($getMode === 1) {
+} catch (AdmException $exception) {
+    if ($getMode === 1) {
         $exception->showHtml();
     } else {
         $exception->showText();
@@ -35,8 +34,7 @@ catch(AdmException $exception) {
 }
 
 // check if the module is enabled for use
-if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_weblinks_module') === 0) {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -45,50 +43,40 @@ if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
 // create weblink object
 $link = new TableWeblink($gDb);
 
-if($getLinkUuid !== '')
-{
+if ($getLinkUuid !== '') {
     $link->readDataByUuid($getLinkUuid);
 
     // check if the current user could edit this weblink
-    if(!$link->isEditable())
-    {
+    if (!$link->isEditable()) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
-}
-else
-{
+} else {
     // check if the user has the right to edit at least one category
-    if(count($gCurrentUser->getAllEditableCategories('LNK')) === 0)
-    {
+    if (count($gCurrentUser->getAllEditableCategories('LNK')) === 0) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 }
 
-if ($getMode === 1)
-{
+if ($getMode === 1) {
     $_SESSION['links_request'] = $_POST;
     $weblinkIsNew = $link->isNewRecord();
 
-    if(strlen(StringUtils::strStripTags($_POST['lnk_name'])) === 0)
-    {
+    if (strlen(StringUtils::strStripTags($_POST['lnk_name'])) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LINK_NAME'))));
         // => EXIT
     }
-    if(strlen(StringUtils::strStripTags($_POST['lnk_url'])) === 0)
-    {
+    if (strlen(StringUtils::strStripTags($_POST['lnk_url'])) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LINK_ADDRESS'))));
         // => EXIT
     }
-    if(strlen($_POST['lnk_cat_id']) === 0)
-    {
+    if (strlen($_POST['lnk_cat_id']) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
         // => EXIT
     }
     // check if the current user is allowed to use the selected category
-    if(!in_array((int) $_POST['lnk_cat_id'], $gCurrentUser->getAllEditableCategories('LNK'), true))
-    {
+    if (!in_array((int) $_POST['lnk_cat_id'], $gCurrentUser->getAllEditableCategories('LNK'), true)) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
@@ -96,48 +84,37 @@ if ($getMode === 1)
     // make html in description secure
     $_POST['lnk_description'] = admFuncVariableIsValid($_POST, 'lnk_description', 'html');
 
-    try
-    {
+    try {
         // POST variables to the announcements object
-        foreach($_POST as $key => $value) // TODO possible security issue
-        {
-            if(str_starts_with($key, 'lnk_'))
-            {
+        foreach ($_POST as $key => $value) { // TODO possible security issue
+            if (str_starts_with($key, 'lnk_')) {
                 $link->setValue($key, $value);
             }
         }
-    }
-    catch(AdmException $e)
-    {
+    } catch (AdmException $e) {
         $e->showHtml();
     }
 
     // Set link counter to 0
-    if ($weblinkIsNew)
-    {
+    if ($weblinkIsNew) {
         $link->setValue('lnk_counter', 0);
     }
 
     // save weblink data to database
     $returnCode = $link->save();
 
-    if($returnCode === false)
-    {
+    if ($returnCode === false) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 
-    if($returnCode === true && $weblinkIsNew)
-    {
+    if ($returnCode === true && $weblinkIsNew) {
         // Notification email for new entries
         $message = $gL10n->get('SYS_LINK_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
-        try
-        {
+        try {
             $notification = new Email();
             $notification->adminNotification($gL10n->get('SYS_LINK_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
-        }
-        catch(AdmException $e)
-        {
+        } catch (AdmException $e) {
             $e->showHtml();
         }
     }
@@ -146,18 +123,14 @@ if ($getMode === 1)
     $gNavigation->deleteLastUrl();
 
     admRedirect($gNavigation->getUrl());
-    // => EXIT
-}
-elseif ($getMode === 2)
-{
+// => EXIT
+} elseif ($getMode === 2) {
     // delete current announcements, right checks were done before
     $link->delete();
 
     // Delete successful -> Return for XMLHttpRequest
     echo 'done';
-}
-else
-{
+} else {
     // Falls der mode unbekannt ist, ist natürlich Ende...
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT

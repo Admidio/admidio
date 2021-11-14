@@ -8,8 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if (basename($_SERVER['SCRIPT_FILENAME']) === 'constants.php')
-{
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'constants.php') {
     exit('This page may not be called directly!');
 }
 
@@ -29,12 +28,9 @@ define('ADMIDIO_VERSION_BETA', 1);
 
 define('ADMIDIO_VERSION', ADMIDIO_VERSION_MAIN . '.' . ADMIDIO_VERSION_MINOR . '.' . ADMIDIO_VERSION_PATCH);
 
-if(ADMIDIO_VERSION_BETA > 0)
-{
+if (ADMIDIO_VERSION_BETA > 0) {
     define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION . ' Beta ' . ADMIDIO_VERSION_BETA);
-}
-else
-{
+} else {
     define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION);
 }
 
@@ -53,15 +49,12 @@ define('PORT', (int) $_SERVER['SERVER_PORT']); // 443 | 80
 
 $port = (PORT === 80 || PORT === 443) ? '' : ':' . PORT; // :1234
 
-if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']) && $_SERVER['HTTP_X_FORWARDED_SERVER'] !== $_SERVER['HTTP_HOST'])
-{
+if (isset($_SERVER['HTTP_X_FORWARDED_SERVER']) && $_SERVER['HTTP_X_FORWARDED_SERVER'] !== $_SERVER['HTTP_HOST']) {
     // if ssl proxy is used than this proxy is the host and the cookie must be set for this
     // due to https://github.com/Admidio/admidio/issues/898 changed HTTP_X_FORWARDED_SERVER into HTTP_X_FORWARDED_HOST
     define('HOST', $_SERVER['HTTP_X_FORWARDED_HOST'] . $port . '/' . $_SERVER['HTTP_HOST']); // ssl.example.org/my.domain.net
     define('DOMAIN', strstr($_SERVER['HTTP_X_FORWARDED_HOST'] . $port . ':', ':', true)); // ssl.example.org
-}
-else
-{
+} else {
     define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
     define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
 }
@@ -161,12 +154,9 @@ define('TBL_USER_RELATION_TYPES',  TABLE_PREFIX . '_user_relation_types');
 // #####################
 
 // create an installation unique cookie prefix and remove special characters
-if(isset($g_adm_db))
-{
+if (isset($g_adm_db)) {
     $cookiePrefix = 'ADMIDIO_' . $g_organization . '_' . DB_NAME . '_' . TABLE_PREFIX;
-}
-else
-{
+} else {
     $cookiePrefix = 'ADMIDIO_' . TABLE_PREFIX;
 }
 define('COOKIE_PREFIX', preg_replace('/\W/', '_', $cookiePrefix));

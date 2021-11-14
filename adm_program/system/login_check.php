@@ -10,36 +10,28 @@
  */
 require_once(__DIR__ . '/login_func.php');
 
-try
-{
+try {
     createUserObjectFromPost();
-}
-catch (AdmException $e)
-{
+} catch (AdmException $e) {
     $gMessage->show($e->getText());
     // => EXIT
 }
 
 // check if browser can set cookies and throw error if not
-if (!array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE))
-{
+if (!array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
     $gMessage->show($gL10n->get('SYS_COOKIE_NOT_SET', array(DOMAIN)));
     // => EXIT
 }
 
 // remove login page from navigation stack
-if (str_ends_with($gNavigation->getUrl(), '/login.php'))
-{
+if (str_ends_with($gNavigation->getUrl(), '/login.php')) {
     $gNavigation->deleteLastUrl();
 }
 
 // If no forward url has been set, then refer to the start page after login
-if (array_key_exists('login_forward_url', $_SESSION))
-{
+if (array_key_exists('login_forward_url', $_SESSION)) {
     $forwardUrl = $_SESSION['login_forward_url'];
-}
-else
-{
+} else {
     $forwardUrl = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_login');
 }
 

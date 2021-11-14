@@ -62,8 +62,7 @@ class UserRegistration extends User
     {
         parent::__construct($database, $userFields, $userId);
 
-        if($organizationId > 0)
-        {
+        if ($organizationId > 0) {
             $this->setOrganization($organizationId);
         }
 
@@ -96,8 +95,7 @@ class UserRegistration extends User
         $this->db->endTransaction();
 
         // only send mail if systemmails are enabled
-        if($GLOBALS['gSettingsManager']->getBool('enable_system_mails') && $this->sendEmail)
-        {
+        if ($GLOBALS['gSettingsManager']->getBool('enable_system_mails') && $this->sendEmail) {
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
             $sysmail->addRecipientsByUserId((int) $this->getValue('usr_id'));
@@ -121,12 +119,9 @@ class UserRegistration extends User
         $user->setPassword($this->getValue('usr_password'), false);
 
         // adopt all registration fields to the user if this is enabled in the settings
-        if($GLOBALS['gSettingsManager']->getBool('registration_adopt_all_data'))
-        {
-            foreach($this->mProfileFieldsData->getProfileFields() as $profileField)
-            {
-                if($profileField->getValue('usf_registration') && $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern')) !== '')
-                {
+        if ($GLOBALS['gSettingsManager']->getBool('registration_adopt_all_data')) {
+            foreach ($this->mProfileFieldsData->getProfileFields() as $profileField) {
+                if ($profileField->getValue('usf_registration') && $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern')) !== '') {
                     $user->setValue($profileField->getValue('usf_name_intern'), $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern'), 'database'));
                 }
             }
@@ -143,8 +138,7 @@ class UserRegistration extends User
     {
         // only send mail if systemmails are enabled and user has email address
         // mail must be send before user data is removed from this object
-        if($GLOBALS['gSettingsManager']->getBool('enable_system_mails') && $this->sendEmail && $this->getValue('EMAIL') !== '')
-        {
+        if ($GLOBALS['gSettingsManager']->getBool('enable_system_mails') && $this->sendEmail && $this->getValue('EMAIL') !== '') {
             // send mail to user that his registration was rejected
             $sysmail = new SystemMail($this->db);
             $sysmail->addRecipientsByUserId((int) $this->getValue('usr_id'));
@@ -158,15 +152,13 @@ class UserRegistration extends User
 
         // if user is not valid and has no other registrations
         // than delete user because he has no use for the system
-        if(!$this->getValue('usr_valid'))
-        {
+        if (!$this->getValue('usr_valid')) {
             $sql = 'SELECT reg_id
                       FROM '.TBL_REGISTRATIONS.'
                      WHERE reg_usr_id = ? -- $this->getValue(\'usr_id\')';
             $registrationsStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('usr_id')));
 
-            if($registrationsStatement->rowCount() === 0)
-            {
+            if ($registrationsStatement->rowCount() === 0) {
                 $return = parent::delete();
             }
         }
@@ -217,16 +209,14 @@ class UserRegistration extends User
     public function save($updateFingerPrint = true)
     {
         // if new registration is saved then set user not valid
-        if($this->tableRegistration->isNewRecord())
-        {
+        if ($this->tableRegistration->isNewRecord()) {
             $this->setValue('usr_valid', 0);
         }
 
         $returnValue = parent::save($updateFingerPrint); // TODO Exception handling
 
         // if new registration is saved then save also record in registration table and send notification mail
-        if($this->tableRegistration->isNewRecord())
-        {
+        if ($this->tableRegistration->isNewRecord()) {
             // save registration record
             $this->tableRegistration->setValue('reg_org_id', $this->organizationId);
             $this->tableRegistration->setValue('reg_usr_id', (int) $this->getValue('usr_id'));
@@ -235,9 +225,8 @@ class UserRegistration extends User
 
             // send a notification mail to all role members of roles that can approve registrations
             // therefore the flags system mails and notification mail for roles with approve registration must be activated
-            if($GLOBALS['gSettingsManager']->getBool('enable_system_mails')
-                && $GLOBALS['gSettingsManager']->getBool('enable_registration_admin_mail') && $this->sendEmail)
-            {
+            if ($GLOBALS['gSettingsManager']->getBool('enable_system_mails')
+                && $GLOBALS['gSettingsManager']->getBool('enable_registration_admin_mail') && $this->sendEmail) {
                 $sql = 'SELECT DISTINCT first_name.usd_value AS first_name, last_name.usd_value AS last_name, email.usd_value AS email
                           FROM '.TBL_MEMBERS.'
                     INNER JOIN '.TBL_ROLES.'
@@ -271,8 +260,7 @@ class UserRegistration extends User
                 );
                 $emailStatement = $this->db->queryPrepared($sql, $queryParams);
 
-                while($row = $emailStatement->fetch())
-                {
+                while ($row = $emailStatement->fetch()) {
                     // send mail that a new registration is available
                     $sysmail = new SystemMail($this->db);
                     $sysmail->addRecipient($row['email'], $row['first_name']. ' '. $row['last_name']);

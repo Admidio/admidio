@@ -13,8 +13,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // only administrators are allowed to manage rooms
-if (!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -35,8 +34,7 @@ $page->addPageFunctionsMenuItem('menu_item_new_room', $gL10n->get('SYS_CREATE_VA
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('headline' => $textRoom)),
     'fa-plus-circle');
 
-if((int) $gSettingsManager->get('system_show_create_edit') === 1)
-{
+if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
     // show firstname and lastname of create and last change user
     $additionalFields = '
         cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
@@ -65,9 +63,7 @@ if((int) $gSettingsManager->get('system_show_create_edit') === 1)
         $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
         $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
     );
-}
-else
-{
+} else {
     // show username of create and last change user
     $additionalFields = '
         cre_user.usr_login_name AS create_name,
@@ -88,17 +84,13 @@ $sql = 'SELECT room.*, '.$additionalFields.'
       ORDER BY room_name';
 $roomsStatement = $gDb->queryPrepared($sql, $queryParams);
 
-if($roomsStatement->rowCount() === 0)
-{
+if ($roomsStatement->rowCount() === 0) {
     // Keine Räume gefunden
     $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
-}
-else
-{
+} else {
     $room = new TableRooms($gDb);
     // Räume auflisten
-    while($row = $roomsStatement->fetch())
-    {
+    while ($row = $roomsStatement->fetch()) {
         // GB-Objekt initialisieren und neuen DS uebergeben
         $room->clear();
         $room->setArray($row);
@@ -124,25 +116,21 @@ else
                     <div class="col-sm-2 col-4">'.$gL10n->get('SYS_CAPACITY').'</div>
                     <div class="col-sm-4 col-8"><strong>'.(int) $room->getValue('room_capacity').'</strong></div>');
 
-                    if($room->getValue('room_overhang') > 0)
-                    {
-                        $page->addHtml('<div class="col-sm-2 col-4">'.$gL10n->get('SYS_OVERHANG').'</div>
+        if ($room->getValue('room_overhang') > 0) {
+            $page->addHtml('<div class="col-sm-2 col-4">'.$gL10n->get('SYS_OVERHANG').'</div>
                         <div class="col-sm-4 col-8"><strong>'.(int) $room->getValue('room_overhang').'</strong></div>');
-                    }
-                    else
-                    {
-                        $page->addHtml('<div class="col-sm-2 col-4">&nbsp;</div>
+        } else {
+            $page->addHtml('<div class="col-sm-2 col-4">&nbsp;</div>
                         <div class="col-sm-4 col-8">&nbsp;</div>');
-                    }
+        }
 
-                    //echo $table->getHtmlTable();
-                    $page->addHtml('</div>');
+        //echo $table->getHtmlTable();
+        $page->addHtml('</div>');
 
-                if(strlen($room->getValue('room_description')) > 0)
-                {
-                    $page->addHtml($room->getValue('room_description'));
-                }
-            $page->addHtml('</div>
+        if (strlen($room->getValue('room_description')) > 0) {
+            $page->addHtml($room->getValue('room_description'));
+        }
+        $page->addHtml('</div>
             <div class="card-footer">'.
                 // show information about user who creates the recordset and changed it
                 admFuncShowCreateChangeInfoByName(

@@ -84,25 +84,20 @@ class MenuNode
         $node['men_description'] = Language::translateIfTranslationStrId($description);
 
         // add root path to link unless the full URL is given
-        if (preg_match('/^http(s?):\/\//', $url) === 0 && strpos($url, 'javascript:') !== 0)
-        {
+        if (preg_match('/^http(s?):\/\//', $url) === 0 && strpos($url, 'javascript:') !== 0) {
             $url = ADMIDIO_URL . $url;
         }
         $node['men_url'] = $url;
 
-        if (strlen($icon) === 0)
-        {
+        if (strlen($icon) === 0) {
             $icon = 'fa-trash-alt invisible';
         }
         $node['men_icon'] = $icon;
         $node['badge_count'] = $badgeCount;
 
-        if($parentMenuItemId === '')
-        {
+        if ($parentMenuItemId === '') {
             $this->nodeEntries[$node['men_name_intern']] = $node;
-        }
-        else
-        {
+        } else {
             $this->nodeEntries[$parentMenuItemId]['sub_items'][] = $node;
         }
     }
@@ -143,24 +138,20 @@ class MenuNode
     {
         $html = '';
 
-        if($this->count() > 0)
-        {
+        if ($this->count() > 0) {
             $html .= '<div class="admidio-menu-header">'.$this->name.'</div>
 
             <ul class="nav flex-column mb-0">';
 
-            foreach($this->nodeEntries as $menuEntry)
-            {
+            foreach ($this->nodeEntries as $menuEntry) {
                 $htmlBadge = '';
                 $htmlIcon = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
 
-                if($menuEntry['badge_count'] > 0)
-                {
+                if ($menuEntry['badge_count'] > 0) {
                     $htmlBadge = '<span class="badge badge-light">' . $menuEntry['badge_count'] . '</span>';
                 }
 
-                if(isset($menuEntry['sub_items']))
-                {
+                if (isset($menuEntry['sub_items'])) {
                     $html .= '
                     <li class="nav-item dropdown">
                         <a id="'.$menuEntry['men_name_intern'].'" class="nav-link dropdown-toggle" data-toggle="dropdown"
@@ -168,26 +159,22 @@ class MenuNode
                             ' . $htmlIcon . $menuEntry['men_name'] . $htmlBadge . '
                         </a>
                         <div class="dropdown-menu dropdown-menu-left">';
-                            foreach($menuEntry['sub_items'] as $subMenuEntry)
-                            {
-                                $htmlSubBadge = '';
-                                $htmlSubIcon = Image::getIconHtml($subMenuEntry['men_icon'], $subMenuEntry['men_name']);
+                    foreach ($menuEntry['sub_items'] as $subMenuEntry) {
+                        $htmlSubBadge = '';
+                        $htmlSubIcon = Image::getIconHtml($subMenuEntry['men_icon'], $subMenuEntry['men_name']);
 
-                                if($subMenuEntry['badge_count'] > 0)
-                                {
-                                    $htmlSubBadge = '<span class="badge badge-light">' . $subMenuEntry['badge_count'] . '</span>';
-                                }
+                        if ($subMenuEntry['badge_count'] > 0) {
+                            $htmlSubBadge = '<span class="badge badge-light">' . $subMenuEntry['badge_count'] . '</span>';
+                        }
 
-                                $html .= '
+                        $html .= '
                                 <a id="'.$subMenuEntry['men_name_intern'].'" class="dropdown-item" href="'.$subMenuEntry['men_url'].'">
                                     ' . $htmlSubIcon . $subMenuEntry['men_name'] . $htmlSubBadge . '
                                 </a>';
-                            }
-                        $html .= '</div>
+                    }
+                    $html .= '</div>
                     </li>';
-                }
-                else
-                {
+                } else {
                     $html .= '
                     <li class="nav-item">
                         <a id="'.$menuEntry['men_name_intern'].'" class="nav-link" href="'.$menuEntry['men_url'].'">
@@ -222,17 +209,13 @@ class MenuNode
 
         $nodesStatement = $gDb->queryPrepared($sql, array($nodeId));
 
-        while ($node = $nodesStatement->fetch(PDO::FETCH_ASSOC))
-        {
-            if ((int) $node['men_com_id'] === 0 || Component::isVisible($node['com_name_intern']))
-            {
-                if($this->menuItemIsVisible($node['men_id']))
-                {
+        while ($node = $nodesStatement->fetch(PDO::FETCH_ASSOC)) {
+            if ((int) $node['men_com_id'] === 0 || Component::isVisible($node['com_name_intern'])) {
+                if ($this->menuItemIsVisible($node['men_id'])) {
                     $badgeCount = 0;
 
                     // special case because there are different links if you are logged in or out for mail
-                    if ($gValidLogin && $node['men_name_intern'] === 'mail')
-                    {
+                    if ($gValidLogin && $node['men_name_intern'] === 'mail') {
                         // get number of unread messages for user
                         $message = new TableMessage($gDb);
                         $badgeCount = $message->countUnreadMessageRecords($GLOBALS['gCurrentUserId']);
@@ -240,9 +223,7 @@ class MenuNode
                         $menuUrl  = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
                         $menuIcon = 'fa-comments';
                         $menuName = $gL10n->get('SYS_MESSAGES');
-                    }
-                    else
-                    {
+                    } else {
                         $menuUrl  = $node['men_url'];
                         $menuIcon = $node['men_icon'];
                         $menuName = $node['men_name'];
@@ -254,8 +235,7 @@ class MenuNode
         }
 
         // if only the overview entry exists, than don't show anly menu item
-        if(count($this->nodeEntries) === 1 && $this->nodeEntries[key($this->nodeEntries)]['men_name_intern'] === 'overview')
-        {
+        if (count($this->nodeEntries) === 1 && $this->nodeEntries[key($this->nodeEntries)]['men_name_intern'] === 'overview') {
             $this->nodeEntries = array();
         }
     }
@@ -271,15 +251,13 @@ class MenuNode
     {
         global $gDb, $gCurrentUser;
 
-        if($menuId > 0)
-        {
+        if ($menuId > 0) {
             // Read current roles rights of the menu
             $displayMenu = new RolesRights($gDb, 'menu_view', $menuId);
             $rolesDisplayRight = $displayMenu->getRolesIds();
 
             // check for right to show the menu
-            if (count($rolesDisplayRight) === 0 || $displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
-            {
+            if (count($rolesDisplayRight) === 0 || $displayMenu->hasRight($gCurrentUser->getRoleMemberships())) {
                 return true;
             }
         }

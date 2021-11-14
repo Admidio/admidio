@@ -28,17 +28,12 @@ $date = new TableDate($gDb);
 $date->readDataByUuid($getDatUuid);
 
 // Get the fingerprint of calling user. If is not the user itself check the requesting user whether it has the permission to edit the states
-if ($gCurrentUser->getValue('usr_uuid') === $getUserUuid)
-{
-    if(!$date->allowedToParticipate())
-    {
+if ($gCurrentUser->getValue('usr_uuid') === $getUserUuid) {
+    if (!$date->allowedToParticipate()) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-}
-else
-{
-    if (!$gCurrentUser->isAdministrator() && !$gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id')))
-    {
+} else {
+    if (!$gCurrentUser->isAdministrator() && !$gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id'))) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 }
@@ -48,14 +43,11 @@ $participants = new Participants($gDb, (int) $date->getValue('dat_rol_id'));
 $participantsArray = $participants->getParticipantsArray((int) $date->getValue('dat_rol_id'));
 
 // If extended options for participation are allowed then show in form
-if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1)
-{
-    if ((int) $date->getValue('dat_allow_comments') === 1)
-    {
+if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1) {
+    if ((int) $date->getValue('dat_allow_comments') === 1) {
         $disableComments = HtmlForm::FIELD_DEFAULT;
     }
-    if ((int) $date->getValue('dat_additional_guests') === 1)
-    {
+    if ((int) $date->getValue('dat_additional_guests') === 1) {
         $disableAdditionalGuests = HtmlForm::FIELD_DEFAULT;
     }
 }
@@ -125,8 +117,7 @@ $participationForm->addButton(
     array('icon' => 'fa-check-circle', 'class' => 'admidio-event-approval-state-attend')
 );
 
-if ($gSettingsManager->getBool('dates_may_take_part'))
-{
+if ($gSettingsManager->getBool('dates_may_take_part')) {
     $participationForm->addButton(
         'btn_tentative_' . $getDatUuid, $gL10n->get('DAT_USER_TENTATIVE'),
         array('icon' => 'fa-question-circle', 'class' => 'admidio-event-approval-state-tentative')

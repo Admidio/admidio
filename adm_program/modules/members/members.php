@@ -21,14 +21,12 @@ unset($_SESSION['import_request']);
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
 
 // if only active members should be shown then set parameter
-if(!$gSettingsManager->getBool('members_show_all_users'))
-{
+if (!$gSettingsManager->getBool('members_show_all_users')) {
     $getMembers = true;
 }
 
 // only legitimate users are allowed to call the user management
-if (!$gCurrentUser->editUsers())
-{
+if (!$gCurrentUser->editUsers()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -61,16 +59,14 @@ $page->addJavascript('
 $page->addPageFunctionsMenuItem('menu_item_members_create_user', $gL10n->get('SYS_CREATE_USER'),
     ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', 'fa-plus-circle');
 
-if($gSettingsManager->getBool('profile_log_edit_fields'))
-{
+if ($gSettingsManager->getBool('profile_log_edit_fields')) {
     // show link to view profile field change history
     $page->addPageFunctionsMenuItem('menu_item_members_change_history', $gL10n->get('SYS_CHANGE_HISTORY'),
         ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', 'fa-history');
 }
 
 // show checkbox to select all users or only active members
-if($gSettingsManager->getBool('members_show_all_users'))
-{
+if ($gSettingsManager->getBool('members_show_all_users')) {
     // create filter menu with elements for category
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
@@ -83,14 +79,12 @@ if($gSettingsManager->getBool('members_show_all_users'))
 $page->addPageFunctionsMenuItem('menu_item_members_import_users', $gL10n->get('SYS_IMPORT_USERS'),
     ADMIDIO_URL.FOLDER_MODULES.'/members/import.php', 'fa-upload');
 
-if($gCurrentUser->isAdministrator())
-{
+if ($gCurrentUser->isAdministrator()) {
     // show link to maintain profile fields
     $page->addPageFunctionsMenuItem('menu_item_members_profile_fields', $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
         ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php', 'fa-th-list');
 
-    if($gSettingsManager->getBool('members_enable_user_relations'))
-    {
+    if ($gSettingsManager->getBool('members_enable_user_relations')) {
         // show link to relation types
         $page->addPageFunctionsMenuItem('menu_item_members_user_relation_types', $gL10n->get('SYS_EDIT_RELATIONSHIPS'),
             ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes.php', 'fa-people-arrows');

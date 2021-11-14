@@ -27,16 +27,14 @@ require_once(__DIR__ . '/../../system/common.php');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
-if (!$gSettingsManager->getBool('enable_rss'))
-{
+if (!$gSettingsManager->getBool('enable_rss')) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
     // => EXIT
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if ((int) $gSettingsManager->get('enable_dates_module') !== 1)
-{
+if ((int) $gSettingsManager->get('enable_dates_module') !== 1) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -61,11 +59,9 @@ $rss  = new RssFeed(
 $date = new TableDate($gDb);
 
 // Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-if ($datesResult['numResults'] > 0)
-{
+if ($datesResult['numResults'] > 0) {
     $date = new TableDate($gDb);
-    foreach ($datesResult['recordset'] as $row)
-    {
+    foreach ($datesResult['recordset'] as $row) {
         // ausgelesene Termindaten in Date-Objekt schieben
         $date->clear();
         $date->setArray($row);
@@ -77,8 +73,7 @@ if ($datesResult['numResults'] > 0)
 
         // set data for attributes of this entry
         $title = $dateFrom;
-        if ($dateFrom !== $dateTo)
-        {
+        if ($dateFrom !== $dateTo) {
             $title .= ' - ' . $dateTo;
         }
         $title  .= ' ' . $date->getValue('dat_headline');
@@ -88,27 +83,21 @@ if ($datesResult['numResults'] > 0)
         $descDateTo   = '';
         $description  = $descDateFrom;
 
-        if ($date->getValue('dat_all_day') == 0)
-        {
+        if ($date->getValue('dat_all_day') == 0) {
             $descDateFrom .= ' ' . $date->getValue('dat_begin', $gSettingsManager->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
 
-            if ($dateFrom !== $dateTo)
-            {
+            if ($dateFrom !== $dateTo) {
                 $descDateTo = $dateTo . ' ';
             }
             $descDateTo  .= ' ' . $date->getValue('dat_end', $gSettingsManager->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
             $description = $gL10n->get('SYS_DATE_FROM_TO', array($descDateFrom, $descDateTo));
-        }
-        else
-        {
-            if ($dateFrom !== $dateTo)
-            {
+        } else {
+            if ($dateFrom !== $dateTo) {
                 $description = $gL10n->get('SYS_DATE_FROM_TO', array($descDateFrom, $dateTo));
             }
         }
 
-        if ($dateLocation !== '')
-        {
+        if ($dateLocation !== '') {
             $description .= '<br /><br />' . $gL10n->get('DAT_LOCATION') . ': ' . $dateLocation;
         }
 

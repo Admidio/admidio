@@ -94,8 +94,7 @@ class RoleDependency
     {
         $this->clear();
 
-        if ($childRoleId === 0 || $parentRoleId === 0)
-        {
+        if ($childRoleId === 0 || $parentRoleId === 0) {
             return false;
         }
 
@@ -106,8 +105,7 @@ class RoleDependency
         $roleDependenciesStatement = $this->db->queryPrepared($sql, array($childRoleId, $parentRoleId));
 
         $row = $roleDependenciesStatement->fetch();
-        if ($row)
-        {
+        if ($row) {
             $this->roleIdParent     = $row['rld_rol_id_parent'];
             $this->roleIdChild      = $row['rld_rol_id_child'];
             $this->comment          = $row['rld_comment'];
@@ -131,17 +129,14 @@ class RoleDependency
     {
         $allParentIds = array();
 
-        if ($childId > 0)
-        {
+        if ($childId > 0) {
             $sql = 'SELECT rld_rol_id_parent
                       FROM '.TBL_ROLE_DEPENDENCIES.'
                      WHERE rld_rol_id_child = ? -- $childId';
             $pdoStatement = $database->queryPrepared($sql, array($childId));
 
-            if ($pdoStatement->rowCount() > 0)
-            {
-                while ($roleParentId = $pdoStatement->fetchColumn())
-                {
+            if ($pdoStatement->rowCount() > 0) {
+                while ($roleParentId = $pdoStatement->fetchColumn()) {
                     $allParentIds[] = (int) $roleParentId;
                 }
             }
@@ -159,17 +154,14 @@ class RoleDependency
     {
         $allChildIds = array();
 
-        if ($parentId > 0)
-        {
+        if ($parentId > 0) {
             $sql = 'SELECT rld_rol_id_child
                       FROM '.TBL_ROLE_DEPENDENCIES.'
                      WHERE rld_rol_id_parent = ? -- $parentId';
             $pdoStatement = $database->queryPrepared($sql, array($parentId));
 
-            if ($pdoStatement->rowCount() > 0)
-            {
-                while ($roleChildId = $pdoStatement->fetchColumn())
-                {
+            if ($pdoStatement->rowCount() > 0) {
+                while ($roleChildId = $pdoStatement->fetchColumn()) {
                     $allChildIds[] = (int) $roleChildId;
                 }
             }
@@ -193,8 +185,7 @@ class RoleDependency
      */
     public function insert($loginUserId)
     {
-        if ($loginUserId > 0 && !$this->isEmpty())
-        {
+        if ($loginUserId > 0 && !$this->isEmpty()) {
             $sql = 'INSERT INTO '.TBL_ROLE_DEPENDENCIES.'
                            (rld_rol_id_parent, rld_rol_id_child, rld_comment, rld_usr_id, rld_timestamp)
                     VALUES (?, ?, ?, ?, ?) -- $this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW';
@@ -215,8 +206,7 @@ class RoleDependency
      */
     public static function removeChildRoles(Database $database, $parentId)
     {
-        if ($parentId > 0)
-        {
+        if ($parentId > 0) {
             $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
                      WHERE rld_rol_id_parent = ? -- $parentId';
             $database->queryPrepared($sql, array($parentId));
@@ -233,8 +223,7 @@ class RoleDependency
      */
     public function setParent($parentId)
     {
-        if ($parentId > 0)
-        {
+        if ($parentId > 0) {
             $this->roleIdParent = $parentId;
             $this->persisted = false;
 
@@ -250,8 +239,7 @@ class RoleDependency
      */
     public function setChild($childId)
     {
-        if ($childId > 0)
-        {
+        if ($childId > 0) {
             $this->roleIdChild = $childId;
             $this->persisted = false;
 
@@ -268,8 +256,7 @@ class RoleDependency
      */
     public function update($loginUserId)
     {
-        if ($loginUserId > 0 && !$this->isEmpty())
-        {
+        if ($loginUserId > 0 && !$this->isEmpty()) {
             $sql = 'UPDATE '.TBL_ROLE_DEPENDENCIES.'
                        SET rld_rol_id_parent = ? -- $this->roleIdParent
                          , rld_rol_id_child  = ? -- $this->roleIdChild
@@ -304,8 +291,7 @@ class RoleDependency
      */
     public function updateMembership()
     {
-        if ($this->roleIdParent === 0 || $this->roleIdChild === 0)
-        {
+        if ($this->roleIdParent === 0 || $this->roleIdChild === 0) {
             return false;
         }
 
@@ -316,12 +302,10 @@ class RoleDependency
                    AND mem_end    > ? -- DATE_NOW';
         $membershipStatement = $this->db->queryPrepared($sql, array($this->roleIdChild, DATE_NOW, DATE_NOW));
 
-        if ($membershipStatement->rowCount() > 0)
-        {
+        if ($membershipStatement->rowCount() > 0) {
             $member = new TableMembers($this->db);
 
-            while ($memberUserId = $membershipStatement->fetchColumn())
-            {
+            while ($memberUserId = $membershipStatement->fetchColumn()) {
                 $member->startMembership($this->roleIdParent, (int) $memberUserId);
             }
         }

@@ -20,20 +20,16 @@ $getFileUuid = admFuncVariableIsValid($_GET, 'file_uuid', 'string', array('requi
 $getView     = admFuncVariableIsValid($_GET, 'view',      'bool');
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('documents_files_enable_module'))
-{
+if (!$gSettingsManager->getBool('documents_files_enable_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-try
-{
+try {
     // get recordset of current file from database
     $file = new TableFile($gDb);
     $file->getFileForDownload($getFileUuid);
-}
-catch(AdmException $e)
-{
+} catch (AdmException $e) {
     $e->showHtml();
     // => EXIT
 }
@@ -42,8 +38,7 @@ catch(AdmException $e)
 $completePath = $file->getFullFilePath();
 
 // check if the file already exists
-if (!is_file($completePath))
-{
+if (!is_file($completePath)) {
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
     // => EXIT
 }
@@ -56,12 +51,9 @@ $file->save();
 $fileSize = filesize($completePath);
 $filename = FileSystemUtils::getSanitizedPathEntry($file->getValue('fil_name'));
 
-if($getView)
-{
+if ($getView) {
     $content = 'inline';
-}
-else
-{
+} else {
     $content = 'attachment';
 }
 
@@ -75,22 +67,18 @@ header('Cache-Control: private');
 header('Pragma: public');
 
 // file output
-if ($fileSize > 10 * 1024 * 1024)
-{
+if ($fileSize > 10 * 1024 * 1024) {
     // file output for large files (> 10MB)
     $chunkSize = 1024 * 1024;
     $handle = fopen($completePath, 'rb');
-    while (!feof($handle))
-    {
+    while (!feof($handle)) {
         $buffer = fread($handle, $chunkSize);
         echo $buffer;
         ob_flush();
         flush();
     }
     fclose($handle);
-}
-else
-{
+} else {
     // file output for small files (< 10MB)
     readfile($completePath);
 }

@@ -20,7 +20,8 @@ final class ComponentUpdateSteps
      * Set the database
      * @param Database $database The database instance
      */
-    public static function setDatabase(Database $database) {
+    public static function setDatabase(Database $database)
+    {
         self::$db = $database;
     }
 
@@ -75,15 +76,14 @@ final class ComponentUpdateSteps
             array('table' => TBL_USER_RELATION_TYPES, 'column' => 'urt_edit_user')
         );
 
-        foreach($updateColumnsBoolean as $columnsBoolean)
-        {
+        foreach ($updateColumnsBoolean as $columnsBoolean) {
             $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' drop default';
             self::$db->queryPrepared($sql);
 
             $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DATA TYPE boolean using ' . $columnsBoolean['column'] . '::integer::boolean';
             self::$db->queryPrepared($sql);
 
-            if($columnsBoolean['column'] === 'rol_valid') {
+            if ($columnsBoolean['column'] === 'rol_valid') {
                 $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DEFAULT true';
             } else {
                 $sql = 'ALTER TABLE ' . $columnsBoolean['table'] . ' ALTER COLUMN ' . $columnsBoolean['column'] . ' SET DEFAULT false';
@@ -100,15 +100,13 @@ final class ComponentUpdateSteps
         $ecardThemeFolder   = ADMIDIO_PATH . FOLDER_THEMES . '/' . $GLOBALS['gSettingsManager']->getString('theme') . '/ecard_templates';
         $ecardMyFilesFolder = ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates';
 
-        if(is_dir($ecardThemeFolder)) {
+        if (is_dir($ecardThemeFolder)) {
             try {
                 FileSystemUtils::moveDirectory($ecardThemeFolder, $ecardMyFilesFolder);
-            }
-            catch (\RuntimeException $exception) {
+            } catch (\RuntimeException $exception) {
                 $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath('documents')));
                 // => EXIT
             }
-
         }
     }
 
@@ -125,15 +123,13 @@ final class ComponentUpdateSteps
         $organizationsStatement = self::$db->queryPrepared($sql);
         $organizationsArray     = $organizationsStatement->fetchAll();
 
-        foreach($organizationsArray as $organization)
-        {
+        foreach ($organizationsArray as $organization) {
             $orgId = (int) $organization['org_id'];
             $config = array();
 
             // prüfen, ob vom Plugin Kategoriereport eine configdata.php existiert
             $file = ADMIDIO_PATH . FOLDER_PLUGINS . '/kategoriereport/configdata.php';
-            if (file_exists($file))
-            {
+            if (file_exists($file)) {
                 include $file;                  // benötigt wird hier der Wert von $dbtoken
 
                 // prüfen, ob die Tabelle 'adm_plugin_preferences' existiert
@@ -141,8 +137,7 @@ final class ComponentUpdateSteps
                 $sql = 'SHOW TABLES LIKE \''.$tableName.'\' ';
                 $tableExistStatement = self::$db->queryPrepared($sql);
 
-                if ($tableExistStatement->rowCount())
-                {
+                if ($tableExistStatement->rowCount()) {
                     // Konfiguration(en) mit 'PKR_...' einlesen
                     $sql = 'SELECT plp_id, plp_name, plp_value
                  	          FROM '.$tableName.'
@@ -151,17 +146,13 @@ final class ComponentUpdateSteps
                      	        OR plp_org_id IS NULL ) ';
                     $statement = self::$db->queryPrepared($sql, array('PKR__%', $orgId));
 
-                    while ($row = $statement->fetch())
-                    {
+                    while ($row = $statement->fetch()) {
                         $array = explode('__',$row['plp_name']);
 
-                        if ((substr($row['plp_value'], 0, 2) == '((') && (substr($row['plp_value'], -2) == '))'))
-                        {
+                        if ((substr($row['plp_value'], 0, 2) == '((') && (substr($row['plp_value'], -2) == '))')) {
                             $row['plp_value'] = substr($row['plp_value'], 2, -2);
                             $config[$array[2]] = explode($dbtoken,$row['plp_value']);
-                        }
-                        else
-                        {
+                        } else {
                             $config[$array[2]] = $row['plp_value'];
                         }
                     }
@@ -170,8 +161,7 @@ final class ComponentUpdateSteps
 
             // if $config is still empty now, then there was no configuration data of the plugin
             // --> create sample configuration
-            if (empty($config))
-            {
+            if (empty($config)) {
                 $config['col_desc']       = array($gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
                 $config['col_fields']     = array('p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
                                                   'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
@@ -184,23 +174,19 @@ final class ComponentUpdateSteps
 
                 // Read out the role IDs of the "Administrator", "Board" and "Member" roles
                 $role = new TableRoles(self::$db);
-                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_ADMINISTRATOR'), 'cat_org_id' => $orgId)))
-                {
+                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_ADMINISTRATOR'), 'cat_org_id' => $orgId))) {
                     $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
                 }
-                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('INS_BOARD'), 'cat_org_id' => $orgId)))
-                {
+                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('INS_BOARD'), 'cat_org_id' => $orgId))) {
                     $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
                 }
-                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_MEMBER'), 'cat_org_id' => $orgId)))
-                {
+                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_MEMBER'), 'cat_org_id' => $orgId))) {
                     $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
                 }
             }
 
             // Write "Kategoriereport" configurations or sample configuration into adm_category_report table
-            foreach ($config['col_desc'] as $i => $dummy)
-            {
+            foreach ($config['col_desc'] as $i => $dummy) {
                 $categoryReport = new TableAccess(self::$db, TBL_CATEGORY_REPORT, 'crt');
 
                 $categoryReport->setValue('crt_org_id', $orgId);
@@ -211,8 +197,7 @@ final class ComponentUpdateSteps
                 $categoryReport->setValue('crt_number_col', $config['number_col'][$i]);
                 $categoryReport->save();
 
-                if ($config['config_default'] == $i)
-                {
+                if ($config['config_default'] == $i) {
                     $sql = 'UPDATE '.TBL_PREFERENCES.'
                                SET prf_value  = ? -- $categoryReport->getValue(\'crt_id\')
                              WHERE prf_org_id = ? -- $orgId
@@ -250,15 +235,13 @@ final class ComponentUpdateSteps
             array('table' => TBL_USER_RELATION_TYPES, 'column_id' => 'urt_id', 'column_uuid' => 'urt_uuid'),
         );
 
-        foreach($updateTablesUuid as $tableUuid)
-        {
+        foreach ($updateTablesUuid as $tableUuid) {
             $sql = 'SELECT ' . $tableUuid['column_id'] . '
                       FROM ' . $tableUuid['table'] . '
                      WHERE ' . $tableUuid['column_uuid'] . ' IS NULL ';
             $statement = self::$db->queryPrepared($sql);
 
-            while($row = $statement->fetch())
-            {
+            while ($row = $statement->fetch()) {
                 $uuid = Uuid::uuid4();
 
                 $sql = 'UPDATE ' . $tableUuid['table'] . ' SET ' . $tableUuid['column_uuid'] . ' = ? -- $uuid
@@ -282,8 +265,7 @@ final class ComponentUpdateSteps
         $organizationsStatement = self::$db->queryPrepared($sql);
         $organizationsArray     = $organizationsStatement->fetchAll();
 
-        foreach($organizationsArray as $organization)
-        {
+        foreach ($organizationsArray as $organization) {
             // add default configuration
             $userManagementList = new ListConfiguration(self::$db);
             $userManagementList->setValue('lst_name', $gL10n->get('SYS_USER_MANAGEMENT'));
@@ -316,8 +298,7 @@ final class ComponentUpdateSteps
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = self::$db->queryPrepared($sql);
 
-        while($row = $organizationStatement->fetch())
-        {
+        while ($row = $organizationStatement->fetch()) {
             // convert <br /> to a normal line feed
             $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET'));
 
@@ -339,34 +320,26 @@ final class ComponentUpdateSteps
         $sql = 'SELECT msg_id, msg_usr_id_receiver FROM ' . TBL_MESSAGES;
         $messagesStatement = self::$db->queryPrepared($sql);
 
-        while($row = $messagesStatement->fetch())
-        {
+        while ($row = $messagesStatement->fetch()) {
             $messageRecipient = new TableAccess(self::$db, TBL_MESSAGES_RECIPIENTS, 'msr');
             $recipientsSplit  = explode('|', $row['msg_usr_id_receiver']);
 
-            foreach ($recipientsSplit as $recipients)
-            {
+            foreach ($recipientsSplit as $recipients) {
                 $messageRecipient->clear();
                 $messageRecipient->setValue('msr_msg_id', $row['msg_id']);
 
-                if (str_contains($recipients, ':'))
-                {
+                if (str_contains($recipients, ':')) {
                     $groupSplit = explode(':', $recipients);
                     $groupIdAndStatus = explode('-', trim($groupSplit[1]));
                     $messageRecipient->setValue('msr_rol_id', $groupIdAndStatus[0]);
 
                     // set mode of the role (active, former, former and active)
-                    if (count($groupIdAndStatus) === 1)
-                    {
+                    if (count($groupIdAndStatus) === 1) {
                         $messageRecipient->setValue('msr_role_mode', 0);
-                    }
-                    else
-                    {
+                    } else {
                         $messageRecipient->setValue('msr_role_mode', $groupIdAndStatus[1]);
                     }
-                }
-                else
-                {
+                } else {
                     $messageRecipient->setValue('msr_usr_id', (int) trim($recipients));
                 }
                 $messageRecipient->save();
@@ -379,18 +352,13 @@ final class ComponentUpdateSteps
      */
     public static function updateStep40AddEmailTemplate()
     {
-        if(file_exists(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/template.html'))
-        {
+        if (file_exists(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/template.html')) {
             $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'template.html\' WHERE prf_name = \'mail_template\'';
             $pdoStatement = self::$db->queryPrepared($sql);
-        }
-        elseif(file_exists(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/default.html'))
-        {
+        } elseif (file_exists(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/default.html')) {
             $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'default.html\' WHERE prf_name = \'mail_template\'';
             $pdoStatement = self::$db->queryPrepared($sql);
-        }
-        else
-        {
+        } else {
             $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'\' WHERE prf_name = \'mail_template\'';
             $pdoStatement = self::$db->queryPrepared($sql);
         }
@@ -407,8 +375,7 @@ final class ComponentUpdateSteps
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = self::$db->queryPrepared($sql);
 
-        while($row = $organizationStatement->fetch())
-        {
+        while ($row = $organizationStatement->fetch()) {
             $rowId = (int) $row['org_id'];
 
             $organization = new Organization(self::$db, $rowId);
@@ -419,8 +386,7 @@ final class ComponentUpdateSteps
                        AND fol_org_id = ? -- $rowId';
             $folderStatement = self::$db->queryPrepared($sql, array($rowId));
 
-            if($rowFolder = $folderStatement->fetch())
-            {
+            if ($rowFolder = $folderStatement->fetch()) {
                 $folder = new TableFolder(self::$db, $rowFolder['fol_id']);
                 $folderOldName = $folder->getFullFolderPath('documents');
                 $folder->setValue('fol_name', TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')));
@@ -431,15 +397,11 @@ final class ComponentUpdateSteps
                          WHERE fol_org_id = '.$rowId;
                 self::$db->query($sql); // TODO add more params
 
-                if(is_dir($folderOldName))
-                {
-                    try
-                    {
+                if (is_dir($folderOldName)) {
+                    try {
                         //rename($folderOldName, $folder->getFullFolderPath());
                         FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath('documents'));
-                    }
-                    catch (\RuntimeException $exception)
-                    {
+                    } catch (\RuntimeException $exception) {
                         $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath('documents')));
                         // TODO
                     }
@@ -459,8 +421,7 @@ final class ComponentUpdateSteps
                  WHERE cat_name_intern = \'EVENTS\' ';
         $rolesStatement = self::$db->queryPrepared($sql);
 
-        while($row = $rolesStatement->fetch())
-        {
+        while ($row = $rolesStatement->fetch()) {
             $role = new TableRoles(self::$db);
             $role->setArray($row);
 
@@ -490,8 +451,7 @@ final class ComponentUpdateSteps
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = self::$db->queryPrepared($sql);
 
-        while($row = $organizationStatement->fetch())
-        {
+        while ($row = $organizationStatement->fetch()) {
             $rowId = (int) $row['org_id'];
 
             // Add new list configuration
@@ -539,8 +499,7 @@ final class ComponentUpdateSteps
     {
         global $gCurrentOrganization;
 
-        if($gCurrentOrganization->countAllRecords() > 1)
-        {
+        if ($gCurrentOrganization->countAllRecords() > 1) {
             $categoryAnnouncement = new TableCategory(self::$db);
             $categoryAnnouncement->setValue('cat_type', 'ANN');
             $categoryAnnouncement->setValue('cat_name_intern', 'ANN_ALL_ORGANIZATIONS');
@@ -572,12 +531,10 @@ final class ComponentUpdateSteps
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = self::$db->queryPrepared($sql);
 
-        while($row = $organizationStatement->fetch())
-        {
+        while ($row = $organizationStatement->fetch()) {
             $rowId = (int) $row['org_id'];
 
-            if($g_organization === $row['org_shortname'])
-            {
+            if ($g_organization === $row['org_shortname']) {
                 $sql = 'UPDATE '.TBL_CATEGORIES.'
                            SET cat_name_intern = \'EVENTS\'
                              , cat_name   = ? -- $gL10n->get(\'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION\')
@@ -586,9 +543,7 @@ final class ComponentUpdateSteps
                            AND cat_type        = \'ROL\'
                            AND cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\' ';
                 self::$db->queryPrepared($sql, array($gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION'), $rowId));
-            }
-            else
-            {
+            } else {
                 // create organization depending category for events
                 $category = new TableCategory(self::$db);
                 $category->setValue('cat_org_id', $rowId);
@@ -723,8 +678,7 @@ final class ComponentUpdateSteps
                    AND cat_hidden = 1 ';
         $categoryStatement = self::$db->queryPrepared($sql);
 
-        while($row = $categoryStatement->fetch())
-        {
+        while ($row = $categoryStatement->fetch()) {
             $roles = array();
             $sql = 'SELECT rol_id
                       FROM ' . TBL_ROLES . '
@@ -735,8 +689,7 @@ final class ComponentUpdateSteps
                        AND cat_org_id = ? -- $row[\'cat_org_id\']';
             $rolesStatement = self::$db->queryPrepared($sql, array((int) $row['cat_org_id']));
 
-            while($rowRole = $rolesStatement->fetch())
-            {
+            while ($rowRole = $rolesStatement->fetch()) {
                 $roles[] = (int) $rowRole['rol_id'];
             }
 
@@ -756,20 +709,15 @@ final class ComponentUpdateSteps
         $sql = 'SELECT org_shortname FROM ' . TBL_ORGANIZATIONS;
         $pdoStatement = self::$db->queryPrepared($sql);
 
-        while($orgShortname = $pdoStatement->fetchColumn())
-        {
+        while ($orgShortname = $pdoStatement->fetchColumn()) {
             $path = ADMIDIO_PATH . FOLDER_DATA . '/download_';
             $orgNameOld = str_replace(array(' ', '.', ',', '\'', '"', '´', '`'), '_', $orgShortname);
             $orgNameNew = FileSystemUtils::getSanitizedPathEntry($orgShortname);
 
-            if ($orgNameOld !== $orgNameNew)
-            {
-                try
-                {
+            if ($orgNameOld !== $orgNameNew) {
+                try {
                     FileSystemUtils::moveDirectory($path . strtolower($orgNameOld), $path . strtolower($orgNameNew));
-                }
-                catch (\RuntimeException $exception)
-                {
+                } catch (\RuntimeException $exception) {
                     $gLogger->error('Could not move directory!', array('from' => $path . strtolower($orgNameOld), 'to' => $path . strtolower($orgNameNew)));
                     // TODO
                 }
@@ -787,8 +735,7 @@ final class ComponentUpdateSteps
                  WHERE usf_name_intern IN (\'AOL_INSTANT_MESSENGER\', \'GOOGLE_PLUS\', \'YAHOO_MESSENGER\')';
         $messengerStatement = self::$db->queryPrepared($sql);
 
-        while($row = $messengerStatement->fetch())
-        {
+        while ($row = $messengerStatement->fetch()) {
             // save roles to role right
             $rightCategoryView = new TableUserField(self::$db, (int) $row['usf_id']);
             $rightCategoryView->delete();
@@ -812,8 +759,7 @@ final class ComponentUpdateSteps
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = self::$db->queryPrepared($sql);
 
-        while($row = $organizationStatement->fetch())
-        {
+        while ($row = $organizationStatement->fetch()) {
             $rowId = (int) $row['org_id'];
 
             $sql = 'INSERT INTO '.TBL_CATEGORIES.'
@@ -897,19 +843,15 @@ final class ComponentUpdateSteps
         $rolesDownloadStatement = self::$db->queryPrepared($sql, array($g_organization));
 
         $rolesArray = array();
-        while($roleId = $rolesDownloadStatement->fetchColumn())
-        {
+        while ($roleId = $rolesDownloadStatement->fetchColumn()) {
             $rolesArray[] = (int) $roleId;
         }
 
-        try
-        {
+        try {
             // get recordset of current folder from database
             $folder = new TableFolder(self::$db, $folderId);
             $folder->addRolesOnFolder('folder_upload', $rolesArray);
-        }
-        catch(AdmException $e)
-        {
+        } catch (AdmException $e) {
             $e->showText();
             // => EXIT
         }
@@ -926,8 +868,7 @@ final class ComponentUpdateSteps
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = self::$db->queryPrepared($sql);
 
-        while($row = $organizationStatement->fetch())
-        {
+        while ($row = $organizationStatement->fetch()) {
             $rowId = (int) $row['org_id'];
 
             $organization = new Organization(self::$db, $rowId);
@@ -938,8 +879,7 @@ final class ComponentUpdateSteps
                        AND fol_org_id = ? -- $rowId';
             $folderStatement = self::$db->queryPrepared($sql, array($rowId));
 
-            if($rowFolder = $folderStatement->fetch())
-            {
+            if ($rowFolder = $folderStatement->fetch()) {
                 $folder = new TableFolder(self::$db, $rowFolder['fol_id']);
                 $folderOldName = $folder->getFullFolderPath('documents');
                 $folder->setValue('fol_name', TableFolder::getRootFolderName('documents', $organization->getValue('org_shortname')));
@@ -950,21 +890,15 @@ final class ComponentUpdateSteps
                          WHERE fol_org_id = '.$rowId;
                 self::$db->query($sql); // TODO add more params
 
-                if($row['org_shortname'] === $g_organization && is_dir($folderOldName))
-                {
-                    try
-                    {
+                if ($row['org_shortname'] === $g_organization && is_dir($folderOldName)) {
+                    try {
                         FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath('documents'));
-                    }
-                    catch (\RuntimeException $exception)
-                    {
+                    } catch (\RuntimeException $exception) {
                         $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath('documents')));
                         // TODO
                     }
                 }
-            }
-            else
-            {
+            } else {
                 $sql = 'INSERT INTO '.TBL_FOLDERS.'
                                (fol_org_id, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_timestamp)
                         VALUES (?, \'DOWNLOAD\', ?, ?, 0, 1, ?) -- $rowId, TableFolder::getRootFolderName(), FOLDER_DATA, DATETIME_NOW';
@@ -1004,24 +938,19 @@ final class ComponentUpdateSteps
      */
     public static function updateStep32RewriteFolderRights($folder = '')
     {
-        if (!FileSystemUtils::isUnixWithPosix())
-        {
+        if (!FileSystemUtils::isUnixWithPosix()) {
             return false;
         }
 
-        if ($folder === '')
-        {
+        if ($folder === '') {
             $folder = ADMIDIO_PATH . FOLDER_DATA;
         }
 
-        try
-        {
+        try {
             FileSystemUtils::chmodDirectory($folder, FileSystemUtils::DEFAULT_MODE_DIRECTORY, true);
 
             return true;
-        }
-        catch (\RuntimeException $exception)
-        {
+        } catch (\RuntimeException $exception) {
             return false;
         }
     }
@@ -1035,8 +964,7 @@ final class ComponentUpdateSteps
         $organizationsStatement = self::$db->queryPrepared($sql);
         $organizationsArray     = $organizationsStatement->fetchAll();
 
-        foreach($organizationsArray as $organization)
-        {
+        foreach ($organizationsArray as $organization) {
             $orgId = (int) $organization['org_id'];
 
             $sql = 'SELECT lst_id
@@ -1070,8 +998,7 @@ final class ComponentUpdateSteps
                                     WHERE dat_rol_id = rol_id)';
         $rolesStatement = self::$db->queryPrepared($sql);
 
-        while($roleId = $rolesStatement->fetchColumn())
-        {
+        while ($roleId = $rolesStatement->fetchColumn()) {
             $role = new TableRoles(self::$db, (int) $roleId);
             $role->delete(); // TODO Exception handling
         }

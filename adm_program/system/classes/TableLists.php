@@ -43,16 +43,13 @@ class TableLists extends TableAccess
         $lstId = (int) $this->getValue('lst_id');
 
         // if this list is the default configuration of a module than it couldn't be deleted
-        if ($lstId === $gSettingsManager->getInt('groups_roles_default_configuration'))
-        {
+        if ($lstId === $gSettingsManager->getInt('groups_roles_default_configuration')) {
             throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_GROUPS_ROLES')));
         }
-        if ($lstId === $gSettingsManager->getInt('dates_default_list_configuration'))
-        {
+        if ($lstId === $gSettingsManager->getInt('dates_default_list_configuration')) {
             throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('DAT_DATES')));
         }
-        if ($lstId === $gSettingsManager->getInt('members_list_configuration'))
-        {
+        if ($lstId === $gSettingsManager->getInt('members_list_configuration')) {
             throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_USER_MANAGEMENT')));
         }
 
@@ -84,14 +81,12 @@ class TableLists extends TableAccess
         $this->setValue('lst_timestamp', DATETIME_NOW);
         $this->setValue('lst_usr_id', $GLOBALS['gCurrentUserId']);
 
-        if ($this->newRecord && empty($this->getValue('lst_org_id')))
-        {
+        if ($this->newRecord && empty($this->getValue('lst_org_id'))) {
             $this->setValue('lst_org_id', $GLOBALS['gCurrentOrgId']);
         }
 
         // if "lst_global" isn't set explicit to "1", set it to "0"
-        if ((int) $this->getValue('lst_global') !== 1)
-        {
+        if ((int) $this->getValue('lst_global') !== 1) {
             $this->setValue('lst_global', 0);
         }
 

@@ -22,8 +22,7 @@ $showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
 $headline = $gL10n->get('SYS_SETTINGS');
 
 // only administrators are allowed to edit organization preferences
-if(!$gCurrentUser->isAdministrator())
-{
+if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
@@ -40,8 +39,7 @@ $showOptionValidModules = array(
 );
 
 // open the modules tab if the options of a module should be shown
-if(in_array($showOption, $showOptionValidModules, true))
-{
+if (in_array($showOption, $showOptionValidModules, true)) {
     $page->addJavascript('
         $("#tabs_nav_modules").attr("class", "nav-link active");
         $("#tabs-modules").attr("class", "tab-pane fade show active");
@@ -49,9 +47,7 @@ if(in_array($showOption, $showOptionValidModules, true))
         location.hash = "#" + "panel_'.$showOption.'";',
         true
     );
-}
-else
-{
+} else {
     $page->addJavascript('
         $("#tabs_nav_common").attr("class", "nav-link active");
         $("#tabs-common").attr("class", "tab-pane fade show active");
@@ -117,13 +113,10 @@ $page->addJavascript('
     true
 );
 
-if($showOption !== '')
-{
+if ($showOption !== '') {
     // add current url to navigation stack
     $gNavigation->addUrl(CURRENT_URL, $headline);
-}
-else
-{
+} else {
     // Navigation of the module starts here
     $gNavigation->addStartUrl(CURRENT_URL, $headline);
 }
@@ -187,8 +180,7 @@ $formCommon = new HtmlForm(
 
 // search all available themes in theme folder
 $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
-if (count($themes) === 0)
-{
+if (count($themes) === 0) {
     $gMessage->show($gL10n->get('SYS_TEMPLATE_FOLDER_OPEN'));
     // => EXIT
 }
@@ -307,11 +299,9 @@ $formOrganization->addInput(
     array('maxLength' => 60)
 );
 
-if($gCurrentOrganization->countAllRecords() > 1)
-{
+if ($gCurrentOrganization->countAllRecords() > 1) {
     // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
-    if(!$gCurrentOrganization->isParentOrganization())
-    {
+    if (!$gCurrentOrganization->isParentOrganization()) {
         $sqlData = array();
         $sqlData['query'] = 'SELECT org_id, org_longname
                                FROM '.TBL_ORGANIZATIONS.'
@@ -634,8 +624,7 @@ $html = '<span id="admidio_version_content">'.ADMIDIO_VERSION_TEXT.'
 $formAdmidioUpdate->addCustomContent($gL10n->get('SYS_ADMIDIO_VERSION'), $html);
 
 // if database version is different to file version, then show database version
-if($gSystemComponent->getValue('com_version') !== ADMIDIO_VERSION)
-{
+if ($gSystemComponent->getValue('com_version') !== ADMIDIO_VERSION) {
     $formAdmidioUpdate->addStaticControl('admidio_database_version', $gL10n->get('ORG_DIFFERENT_DATABASE_VERSION'), $gSystemComponent->getValue('com_version'));
 }
 
@@ -644,16 +633,11 @@ $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' =>
 $updateStep = (int) $gSystemComponent->getValue('com_update_step');
 $maxStep = $component->getMaxUpdateStep();
 $textStep = $updateStep . ' / ' . $maxStep;
-if ($updateStep === $maxStep)
-{
+if ($updateStep === $maxStep) {
     $html = getStaticText('success', $textStep);
-}
-elseif ($updateStep > $maxStep)
-{
+} elseif ($updateStep > $maxStep) {
     $html = getStaticText('warning', $textStep);
-}
-else
-{
+} else {
     $html = getStaticText('danger', $textStep);
 }
 $formAdmidioUpdate->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $html);
@@ -668,70 +652,50 @@ $page->addHtml(getPreferencePanel('common', 'admidio_update', 'accordion_prefere
 
 $formPhp = new HtmlForm('php_preferences_form', null, $page);
 
-if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
-{
+if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
     $html = getStaticText('danger', PHP_VERSION, ' &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION)));
-}
-elseif (version_compare(PHP_VERSION, '7.2', '<'))
-{
+} elseif (version_compare(PHP_VERSION, '7.2', '<')) {
     $html = getStaticText('warning', PHP_VERSION, ' &rarr; '.$gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://www.php.net/supported-versions.php" target="_blank">Supported Versions</a>')));
-}
-else
-{
+} else {
     $html = getStaticText('success', PHP_VERSION);
 }
 $formPhp->addStaticControl('php_version', $gL10n->get('SYS_PHP_VERSION'), $html);
 
 $postMaxSize = PhpIniUtils::getPostMaxSize();
-if(is_infinite($postMaxSize))
-{
+if (is_infinite($postMaxSize)) {
     $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
-}
-else
-{
+} else {
     $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($postMaxSize));
 }
 $formPhp->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $html);
 
 $memoryLimit = PhpIniUtils::getMemoryLimit();
-if(is_infinite($memoryLimit))
-{
+if (is_infinite($memoryLimit)) {
     $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
-}
-else
-{
+} else {
     $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($memoryLimit));
 }
 $formPhp->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $html);
 
-if(PhpIniUtils::isFileUploadEnabled())
-{
+if (PhpIniUtils::isFileUploadEnabled()) {
     $html = getStaticText('success', $gL10n->get('SYS_ON'));
-}
-else
-{
+} else {
     $html = getStaticText('danger', $gL10n->get('SYS_OFF'));
 }
 $formPhp->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
 
 $fileUploadMaxFileSize = PhpIniUtils::getFileUploadMaxFileSize();
-if(is_infinite($fileUploadMaxFileSize))
-{
+if (is_infinite($fileUploadMaxFileSize)) {
     $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
-}
-else
-{
+} else {
     $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($fileUploadMaxFileSize));
 }
 $formPhp->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), $html);
 
-try
-{
+try {
     SecurityUtils::getRandomInt(0, 1, true);
     $html = getStaticText('success', $gL10n->get('SYS_SECURE'));
-}
-catch (AdmException $e)
-{
+} catch (AdmException $e) {
     $html = getStaticText('danger', $gL10n->get('SYS_PRNG_INSECURE'), '<br />' . $e->getText());
 }
 $formPhp->addStaticControl('pseudo_random_number_generator', $gL10n->get('SYS_PRNG'), $html);
@@ -750,22 +714,16 @@ $formSystemInformation->addStaticControl(
     '<strong>' . SystemInfoUtils::getOS() . '</strong> (' . SystemInfoUtils::getUname() . ')'
 );
 
-if(SystemInfoUtils::is64Bit())
-{
+if (SystemInfoUtils::is64Bit()) {
     $html = getStaticText('success', $gL10n->get('SYS_YES'));
-}
-else
-{
+} else {
     $html = getStaticText('success', $gL10n->get('SYS_NO'));
 }
 $formSystemInformation->addStaticControl('64bit', $gL10n->get('SYS_64BIT'), $html);
 
-if(SystemInfoUtils::isUnixFileSystem())
-{
+if (SystemInfoUtils::isUnixFileSystem()) {
     $html = '<strong>' . $gL10n->get('SYS_YES') . '</strong>';
-}
-else
-{
+} else {
     $html = '<strong>' . $gL10n->get('SYS_NO') . '</strong>';
 }
 $formSystemInformation->addStaticControl('unix', $gL10n->get('SYS_UNIX'), $html);
@@ -785,22 +743,16 @@ $formSystemInformation->addStaticControl(
     SystemInfoUtils::getMaxPathLength()
 );
 
-if(version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion(), '<'))
-{
+if (version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion(), '<')) {
     $html = getStaticText('danger', $gDb->getVersion(), ' &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', array($gDb->getMinimumRequiredVersion())));
-}
-else
-{
+} else {
     $html = getStaticText('success', $gDb->getVersion());
 }
 $formSystemInformation->addStaticControl('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
 
-if(is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess'))
-{
+if (is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess')) {
     $html = getStaticText('success', $gL10n->get('SYS_ON'));
-}
-else
-{
+} else {
     $html = getStaticText(
         'danger',
         '<span id="directory_protection_status">' . $gL10n->get('SYS_OFF') . '</span>',
@@ -811,38 +763,28 @@ $formSystemInformation->addStaticControl('directory_protection', $gL10n->get('SY
 
 $formSystemInformation->addStaticControl('max_processable_image_size', $gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE'), round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('SYS_MEGAPIXEL'));
 
-if(isset($gDebug) && $gDebug)
-{
+if (isset($gDebug) && $gDebug) {
     $html = getStaticText('danger', $gL10n->get('SYS_ON'));
-}
-else
-{
+} else {
     $html = getStaticText('success', $gL10n->get('SYS_OFF'));
 }
 $formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_OUTPUT'), $html);
 
-if(isset($gImportDemoData) && $gImportDemoData)
-{
+if (isset($gImportDemoData) && $gImportDemoData) {
     $html = getStaticText('danger', $gL10n->get('SYS_ON'));
-}
-else
-{
+} else {
     $html = getStaticText('success', $gL10n->get('SYS_OFF'));
 }
 $formSystemInformation->addStaticControl('import_mode', $gL10n->get('SYS_IMPORT_MODE'), $html);
 
-try
-{
+try {
     $diskSpace = FileSystemUtils::getDiskSpace();
 
     $diskUsagePercent = round(($diskSpace['used'] / $diskSpace['total']) * 100, 1);
     $progressBarClass = '';
-    if ($diskUsagePercent > 90)
-    {
+    if ($diskUsagePercent > 90) {
         $progressBarClass = ' progress-bar-danger';
-    }
-    elseif ($diskUsagePercent > 70)
-    {
+    } elseif ($diskUsagePercent > 70) {
         $progressBarClass = ' progress-bar-warning';
     }
     $html = '
@@ -851,9 +793,7 @@ try
             ' . FileSystemUtils::getHumanReadableBytes($diskSpace['used']) . ' / ' . FileSystemUtils::getHumanReadableBytes($diskSpace['total']) . '
         </div>
     </div>';
-}
-catch (\RuntimeException $exception)
-{
+} catch (\RuntimeException $exception) {
     $gLogger->error('FILE-SYSTEM: Disk space could not be determined!');
 
     $html = getStaticText('danger', $gL10n->get('SYS_DISK_SPACE_ERROR', array($exception->getMessage())));
@@ -1119,18 +1059,14 @@ $formEcards->addInput(
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_ECARD_MAX_PHOTO_SIZE_DESC')
 );
 
-try
-{
+try {
     // get all ecard templates from the theme folder ecard_templates
     $ecardTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-}
-catch (\UnexpectedValueException $e)
-{
+} catch (\UnexpectedValueException $e) {
     $ecardTemplatesFiles = array();
 }
 
-foreach($ecardTemplatesFiles as &$templateName)
-{
+foreach ($ecardTemplatesFiles as &$templateName) {
     $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
 }
 unset($templateName);
@@ -1265,13 +1201,10 @@ $formMessages->addCheckbox(
     array('helpTextIdInline' => 'SYS_SHOW_CAPTCHA_DESC')
 );
 
-try
-{
+try {
     // search all available email templates in folder of adm_my_files
     $emailTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-}
-catch (\UnexpectedValueException $e)
-{
+} catch (\UnexpectedValueException $e) {
     $emailTemplatesFiles = array();
 }
 
@@ -1351,8 +1284,7 @@ $formProfile->addCheckbox(
     array('helpTextIdInline' => 'PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC')
 );
 
-if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->isParentOrganization())
-{
+if ($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->isParentOrganization()) {
     $formProfile->addCheckbox(
         'profile_show_extern_roles', $gL10n->get('PRO_SHOW_ROLES_OTHER_ORGANIZATIONS'), (bool) $formValues['profile_show_extern_roles'],
         array('helpTextIdInline' => 'PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC')
@@ -1387,8 +1319,7 @@ $formEvents->addSelectBox(
     'enable_dates_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries,
     array('defaultValue' => $formValues['enable_dates_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
 );
-if($gSettingsManager->getBool('dates_show_rooms'))
-{
+if ($gSettingsManager->getBool('dates_show_rooms')) {
     $selectBoxEntries = array(
         'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
         'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),
@@ -1396,9 +1327,7 @@ if($gSettingsManager->getBool('dates_show_rooms'))
         'participants' => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_PARTICIPANTS'),
         'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
     );
-}
-else
-{
+} else {
     $selectBoxEntries = array(
         'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
         'compact'      => $gL10n->get('DAT_VIEW_MODE_COMPACT'),

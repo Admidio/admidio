@@ -8,8 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if (basename($_SERVER['SCRIPT_FILENAME']) === 'logging.php')
-{
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'logging.php') {
     exit('This page may not be called directly!');
 }
 
@@ -22,12 +21,9 @@ use Monolog\Processor\IntrospectionProcessor;
 function createLogDirIfNotExist()
 {
     // check log folder in "adm_my_files" and create if necessary
-    try
-    {
+    try {
         FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/logs');
-    }
-    catch (\RuntimeException $exception)
-    {
+    } catch (\RuntimeException $exception) {
         error_log('Log folder could not be created! ' . $exception->getMessage());
     }
 }
@@ -99,8 +95,7 @@ function initLogging(\Psr\Log\LoggerInterface $logger)
 }
 
 $logLevel = Logger::WARNING;
-if ($gDebug)
-{
+if ($gDebug) {
     $logLevel = Logger::DEBUG;
 }
 $gLogger = createAdmidioLogger(ADMIDIO_PATH . FOLDER_DATA . '/logs', $logLevel);

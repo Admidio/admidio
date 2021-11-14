@@ -19,8 +19,7 @@ $gNavigation->deleteLastUrl();
 $nextUrl = $gNavigation->getUrl();
 
 // if no page was found then show the default homepage
-if ($nextUrl === null)
-{
+if ($nextUrl === null) {
     $nextUrl = $gHomepage;
 }
 

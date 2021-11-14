@@ -48,10 +48,8 @@ class UploadHandlerPhoto extends UploadHandler
 
         $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $contentRange);
 
-        if(!isset($file->error))
-        {
-            try
-            {
+        if (!isset($file->error)) {
+            try {
                 $fileLocation = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/' . $file->name;
                 $albumFolder  = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id');
 
@@ -62,12 +60,10 @@ class UploadHandlerPhoto extends UploadHandler
                 $file->name = FileSystemUtils::removeInvalidCharsInFilename($file->name);
 
                 // create folder if not exists
-                if(!is_dir($albumFolder))
-                {
+                if (!is_dir($albumFolder)) {
                     $error = $photoAlbum->createFolder();
 
-                    if(is_array($error))
-                    {
+                    if (is_array($error)) {
                         $file->error = $gL10n->get($error['text'], array($error['path']));
                         return $file;
                     }
@@ -77,14 +73,12 @@ class UploadHandlerPhoto extends UploadHandler
 
                 // read image size
                 $imageProperties = getimagesize($fileLocation);
-                if ($imageProperties === false)
-                {
+                if ($imageProperties === false) {
                     throw new AdmException('PHO_PHOTO_FORMAT_INVALID');
                 }
 
                 // check mime type and set file extension
-                switch ($imageProperties['mime'])
-                {
+                switch ($imageProperties['mime']) {
                     case 'image/jpeg':
                         $fileExtension = 'jpg';
                         break;
@@ -97,8 +91,7 @@ class UploadHandlerPhoto extends UploadHandler
 
                 $imageDimensions = $imageProperties[0] * $imageProperties[1];
                 $processableImageSize = admFuncProcessableImageSize();
-                if ($imageDimensions > $processableImageSize)
-                {
+                if ($imageDimensions > $processableImageSize) {
                     throw new AdmException($gL10n->get('PHO_RESOLUTION_MORE_THAN') . ' ' . round($processableImageSize / 1000000, 2) . ' ' . $gL10n->get('SYS_MEGAPIXEL'));
                 }
 
@@ -110,36 +103,26 @@ class UploadHandlerPhoto extends UploadHandler
                 $image->delete();
 
                 // if enabled then save original image
-                if ($gSettingsManager->getBool('photo_keep_original'))
-                {
-                    try
-                    {
+                if ($gSettingsManager->getBool('photo_keep_original')) {
+                    try {
                         FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/originals');
 
-                        try
-                        {
+                        try {
                             FileSystemUtils::moveFile($fileLocation, $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension);
-                        }
-                        catch (\RuntimeException $exception)
-                        {
+                        } catch (\RuntimeException $exception) {
                             $gLogger->error('Could not move file!', array('from' => $fileLocation, 'to' => $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension));
                             // TODO
                         }
-                    }
-                    catch (\RuntimeException $exception)
-                    {
+                    } catch (\RuntimeException $exception) {
                         $gLogger->error('Could not create directory!', array('directoryPath' => $albumFolder . '/originals'));
                         // TODO
                     }
                 }
 
                 // save thumbnail
-                try
-                {
+                try {
                     FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/thumbnails');
-                }
-                catch (\RuntimeException $exception)
-                {
+                } catch (\RuntimeException $exception) {
                 }
 
                 $image = new Image($fileLocation);
@@ -148,35 +131,24 @@ class UploadHandlerPhoto extends UploadHandler
                 $image->delete();
 
                 // delete image from upload folder
-                try
-                {
+                try {
                     FileSystemUtils::deleteFileIfExists($fileLocation);
-                }
-                catch (\RuntimeException $exception)
-                {
+                } catch (\RuntimeException $exception) {
                 }
 
                 // if image was successfully saved in filesystem then update image count of album
-                if(is_file($albumFolder.'/'.$newPhotoFileNumber.'.jpg'))
-                {
+                if (is_file($albumFolder.'/'.$newPhotoFileNumber.'.jpg')) {
                     $photoAlbum->setValue('pho_quantity', (int) $photoAlbum->getValue('pho_quantity') + 1);
                     $photoAlbum->save();
-                }
-                else
-                {
+                } else {
                     throw new AdmException('PHO_PHOTO_PROCESSING_ERROR');
                 }
-            }
-            catch(AdmException $e)
-            {
+            } catch (AdmException $e) {
                 $file->error = $e->getText();
 
-                try
-                {
+                try {
                     FileSystemUtils::deleteFileIfExists($this->options['upload_dir'].$file->name);
-                }
-                catch (\RuntimeException $exception)
-                {
+                } catch (\RuntimeException $exception) {
                 }
 
                 return $file;
@@ -193,15 +165,13 @@ class UploadHandlerPhoto extends UploadHandler
      * @param string $file
      * @param int    $index
      */
-    protected function handle_form_data($file, $index) {
+    protected function handle_form_data($file, $index)
+    {
         // ADM Start
-        try
-        {
+        try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_REQUEST['admidio-csrf-token']);
-        }
-        catch(AdmException $exception)
-        {
+        } catch (AdmException $exception) {
             $file->error = $exception->getText();
             // => EXIT
         }

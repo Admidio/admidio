@@ -64,16 +64,12 @@ class Session extends TableAccess
 
         $this->cookieAutoLoginId = $cookiePrefix . '_AUTO_LOGIN_ID';
 
-        if (is_int($session))
-        {
+        if (is_int($session)) {
             $this->readDataById($session);
-        }
-        else
-        {
+        } else {
             $this->readDataByColumns(array('ses_session_id' => $session));
 
-            if ($this->newRecord)
-            {
+            if ($this->newRecord) {
                 // if PHP session id was commited then store them in that field
                 $this->setValue('ses_session_id', $session);
                 $this->setValue('ses_timestamp', DATETIME_NOW);
@@ -93,8 +89,7 @@ class Session extends TableAccess
      */
     public function addObject(string $objectName, &$object): bool
     {
-        if (is_object($object) && !array_key_exists($objectName, $this->mObjectArray))
-        {
+        if (is_object($object) && !array_key_exists($objectName, $this->mObjectArray)) {
             $this->mObjectArray[$objectName] = &$object;
             return true;
         }
@@ -108,8 +103,7 @@ class Session extends TableAccess
     {
         global $gCurrentUser;
 
-        if (isset($gCurrentUser) && $gCurrentUser instanceof User)
-        {
+        if (isset($gCurrentUser) && $gCurrentUser instanceof User) {
             $gCurrentUser->clear();
         }
         $this->setValue('ses_usr_id', '');
@@ -125,8 +119,7 @@ class Session extends TableAccess
      */
     public function getCsrfToken(bool $newToken = false): string
     {
-        if($this->csrfToken === '' || $newToken)
-        {
+        if ($this->csrfToken === '' || $newToken) {
             $this->csrfToken = SecurityUtils::getRandomString(30);
         }
 
@@ -141,8 +134,7 @@ class Session extends TableAccess
      */
     public function &getObject(string $objectName)
     {
-        if (!array_key_exists($objectName, $this->mObjectArray))
-        {
+        if (!array_key_exists($objectName, $this->mObjectArray)) {
             // use parameter because we return a reference so only value will return an error
             $returnValue = false;
             return $returnValue;
@@ -160,8 +152,7 @@ class Session extends TableAccess
      */
     public function getOrganizationId(): int
     {
-        if ($this->mAutoLogin instanceof AutoLogin)
-        {
+        if ($this->mAutoLogin instanceof AutoLogin) {
             return (int) $this->mAutoLogin->getValue('atl_org_id');
         }
 
@@ -196,17 +187,14 @@ class Session extends TableAccess
     {
         global $gSettingsManager;
 
-        if ($userId > 0)
-        {
-            if ((int) $this->getValue('ses_usr_id') === $userId)
-            {
+        if ($userId > 0) {
+            if ((int) $this->getValue('ses_usr_id') === $userId) {
                 // session has a user assigned -> check if login is still valid
                 $timeGap = time() - strtotime($this->getValue('ses_timestamp', 'Y-m-d H:i:s'));
 
                 // Check how long the user was inactive. If time range is to long -> logout
                 // if user has auto login than session is also valid
-                if ($this->mAutoLogin instanceof AutoLogin || $timeGap < $gSettingsManager->getInt('logout_minutes') * 60)
-                {
+                if ($this->mAutoLogin instanceof AutoLogin || $timeGap < $gSettingsManager->getInt('logout_minutes') * 60) {
                     return true;
                 }
             }
@@ -231,8 +219,7 @@ class Session extends TableAccess
         $this->setValue('ses_usr_id', '');
         $this->save();
 
-        if ($this->mAutoLogin instanceof AutoLogin)
-        {
+        if ($this->mAutoLogin instanceof AutoLogin) {
             // remove auto login cookie from users browser by setting expired timestamp to 0
             self::setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'));
 
@@ -251,14 +238,12 @@ class Session extends TableAccess
      */
     public function refreshAutoLogin()
     {
-        if (array_key_exists($this->cookieAutoLoginId, $_COOKIE))
-        {
+        if (array_key_exists($this->cookieAutoLoginId, $_COOKIE)) {
             // restore user from auto login session
             $this->mAutoLogin = new AutoLogin($this->db, $_COOKIE[$this->cookieAutoLoginId]);
 
             // valid AutoLogin found
-            if ($this->mAutoLogin->getValue('atl_id') > 0)
-            {
+            if ($this->mAutoLogin->getValue('atl_id') > 0) {
                 $autoLoginId = $this->mAutoLogin->generateAutoLoginId((int) $this->getValue('ses_usr_id'));
                 $this->mAutoLogin->setValue('atl_auto_login_id', $autoLoginId);
                 $this->mAutoLogin->setValue('atl_session_id', $this->getValue('ses_session_id'));
@@ -273,9 +258,7 @@ class Session extends TableAccess
                 $timestampExpired = $oneYearAfterDateTime->getTimestamp();
 
                 self::setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
-            }
-            else
-            {
+            } else {
                 // an invalid AutoLogin should made the current AutoLogin unusable
                 $this->mAutoLogin = null;
                 self::setCookie($this->cookieAutoLoginId, $_COOKIE[$this->cookieAutoLoginId]);
@@ -284,8 +267,7 @@ class Session extends TableAccess
                 $autoLoginParts = explode(':', $_COOKIE[$this->cookieAutoLoginId]);
                 $userId = $autoLoginParts[0];
 
-                if($userId > 0)
-                {
+                if ($userId > 0) {
                     $sql = 'UPDATE '.TBL_AUTO_LOGIN.'
                                SET atl_number_invalid = atl_number_invalid + 1
                              WHERE atl_usr_id = ? -- $userId';
@@ -312,8 +294,7 @@ class Session extends TableAccess
         // check if current connection has same ip address as of session initialization
         // if config parameter $gCheckIpAddress = 0 then don't check ip address
         $sesIpAddress = $this->getValue('ses_ip_address');
-        if (isset($GLOBALS['gCheckIpAddress']) && $GLOBALS['gCheckIpAddress'] && $sesIpAddress !== '' && $sesIpAddress !== $_SERVER['REMOTE_ADDR'])
-        {
+        if (isset($GLOBALS['gCheckIpAddress']) && $GLOBALS['gCheckIpAddress'] && $sesIpAddress !== '' && $sesIpAddress !== $_SERVER['REMOTE_ADDR']) {
             $GLOBALS['gLogger']->warning('Admidio stored session ip address: ' . $sesIpAddress . ' :: Remote ip address: ' . $_SERVER['REMOTE_ADDR']);
             $GLOBALS['gLogger']->warning('The IP address does not match with the IP address the current session was started! For safety reasons the current session was closed.');
 
@@ -326,15 +307,11 @@ class Session extends TableAccess
 
         // session in database could be deleted if user was some time inactive and another user
         // clears the table. Therefor we must reset the user id
-        if ($this->mAutoLogin instanceof AutoLogin)
-        {
-            if((int) $this->getValue('ses_usr_id') === 0)
-            {
+        if ($this->mAutoLogin instanceof AutoLogin) {
+            if ((int) $this->getValue('ses_usr_id') === 0) {
                 $this->setValue('ses_usr_id', (int) $this->mAutoLogin->getValue('atl_usr_id'));
             }
-        }
-        elseif(array_key_exists($this->cookieAutoLoginId, $_COOKIE))
-        {
+        } elseif (array_key_exists($this->cookieAutoLoginId, $_COOKIE)) {
             $this->refreshAutoLogin();
         }
     }
@@ -372,8 +349,7 @@ class Session extends TableAccess
      */
     public function save($updateFingerPrint = true): bool
     {
-        if ($this->newRecord)
-        {
+        if ($this->newRecord) {
             // Insert
             $this->setValue('ses_org_id', $GLOBALS['gCurrentOrgId']);
             $this->setValue('ses_begin', DATETIME_NOW);
@@ -432,39 +408,29 @@ class Session extends TableAccess
     {
         global $gLogger, $gSetCookieForDomain;
 
-        if ($path === '')
-        {
-            if($gSetCookieForDomain)
-            {
+        if ($path === '') {
+            if ($gSetCookieForDomain) {
                 $path = '/';
-            }
-            else
-            {
+            } else {
                 $path = ADMIDIO_URL_PATH . '/';
             }
         }
-        if ($domain === '')
-        {
+        if ($domain === '') {
             $domain = DOMAIN;
             // https://www.php.net/manual/en/function.setcookie.php#73107
-            if ($domain === 'localhost')
-            {
+            if ($domain === 'localhost') {
                 $domain = false;
             }
         }
-        if ($secure === null)
-        {
+        if ($secure === null) {
             $secure = HTTPS;
         }
 
         $gLogger->info('Set Cookie!', array('name' => $name, 'value' => $value, 'expire' => $expire, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly, 'sameSite' => 'lax'));
 
-        if (PHP_VERSION_ID < 70300)
-        {
+        if (PHP_VERSION_ID < 70300) {
             return setcookie($name, $value, $expire, $path. ';samesite=lax', $domain, $secure, $httpOnly);
-        }
-        else
-        {
+        } else {
             return setcookie($name, $value, array(
                 'expires'  => $expire,
                 'path'     => $path,
@@ -491,8 +457,7 @@ class Session extends TableAccess
     {
         global $gLogger, $gSetCookieForDomain;
 
-        if (headers_sent())
-        {
+        if (headers_sent()) {
             $message = 'HTTP-Headers already sent!';
             $gLogger->alert($message);
 
@@ -504,40 +469,30 @@ class Session extends TableAccess
         // Set the cookie name
         session_name($sessionName);
 
-        if ($path === '')
-        {
-            if ($gSetCookieForDomain)
-            {
+        if ($path === '') {
+            if ($gSetCookieForDomain) {
                 $path = '/';
-            }
-            else
-            {
+            } else {
                 $path = ADMIDIO_URL_PATH . '/';
             }
         }
 
-        if ($domain === '')
-        {
+        if ($domain === '') {
             $domain = DOMAIN;
 
             // TODO: Test if this is necessary
             // https://www.php.net/manual/en/function.setcookie.php#73107
-            if ($domain === 'localhost')
-            {
+            if ($domain === 'localhost') {
                 $domain = false;
             }
         }
-        if ($secure === null)
-        {
+        if ($secure === null) {
             $secure = HTTPS;
         }
 
-        if (PHP_VERSION_ID < 70300)
-        {
+        if (PHP_VERSION_ID < 70300) {
             session_set_cookie_params($limit, $path. ';samesite=lax', $domain, $secure, $httpOnly);
-        }
-        else
-        {
+        } else {
             session_set_cookie_params(array(
                 'lifetime' => $limit,
                 'path'     => $path,
@@ -548,8 +503,7 @@ class Session extends TableAccess
             ));
         }
 
-        if (session_status() === PHP_SESSION_ACTIVE)
-        {
+        if (session_status() === PHP_SESSION_ACTIVE) {
             $gLogger->notice('Session is already started!', array('sessionId' => session_id()));
         }
 

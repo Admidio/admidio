@@ -70,13 +70,11 @@ class HtmlList extends HtmlElement
     {
         parent::__construct($list);
 
-        if ($id !== null)
-        {
+        if ($id !== null) {
             $this->addAttribute('id', $id);
         }
 
-        if ($class !== null)
-        {
+        if ($class !== null) {
             $this->addAttribute('class', $class);
         }
     }
@@ -90,19 +88,16 @@ class HtmlList extends HtmlElement
     public function addDataList($id = null, $term = null, $description = null)
     {
         // First check whether open list item tag  must be closed before setting new item
-        if (in_array('dl', $this->arrParentElements, true))
-        {
+        if (in_array('dl', $this->arrParentElements, true)) {
             $this->closeParentElement('dl');
         }
         $this->addParentElement('dl');
 
-        if ($id !== null)
-        {
+        if ($id !== null) {
             $this->addAttribute('id', $id);
         }
 
-        if ($term !== null && $description !== null)
-        {
+        if ($term !== null && $description !== null) {
             $this->addDataListItems($term, $description);
         }
     }
@@ -126,48 +121,38 @@ class HtmlList extends HtmlElement
      */
     public function addListItem($id = null, $data = null, $term = null)
     {
-        if ($data !== null)
-        {
-            if ($term !== null)
-            {
+        if ($data !== null) {
+            if ($term !== null) {
                 // First check whether open list item tag  must be closed before setting new item
-                if (in_array('li', $this->arrParentElements, true))
-                {
+                if (in_array('li', $this->arrParentElements, true)) {
                     $this->closeParentElement('li');
                 }
 
                 // Set new item
                 $this->addParentElement('li');
 
-                if ($id !== null)
-                {
+                if ($id !== null) {
                     $this->addAttribute('id', $id);
                 }
 
                 // Define datalist with term and data as description
                 $this->addDataList(null, $term, $data);
                 $this->closeParentElement('li');
-            }
-            else
-            {
+            } else {
                 $this->addElement('li');
 
-                if ($id !== null)
-                {
+                if ($id !== null) {
                     $this->addAttribute('id', $id);
                 }
 
                 $this->addData($data);
             }
-        }
-        else
-        {
+        } else {
             $this->closeParentElement('li');
             // handle as parent element maybe a datalist could be nested next
             $this->addParentElement('li');
 
-            if ($id !== null)
-            {
+            if ($id !== null) {
                 $this->addAttribute('id', $id);
             }
         }

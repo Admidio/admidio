@@ -112,8 +112,7 @@ class ModuleWeblinks extends Modules
         global $gCurrentUser, $gSettingsManager, $gDb;
 
         // Parameter
-        if($limit === null)
-        {
+        if ($limit === null) {
             $limit = $gSettingsManager->getInt('weblinks_per_page');
         }
 
@@ -129,12 +128,10 @@ class ModuleWeblinks extends Modules
                        '.$sqlConditions['sql'].'
               ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
 
-        if($limit > 0)
-        {
+        if ($limit > 0) {
             $sql .= ' LIMIT '.$limit;
         }
-        if($startElement > 0)
-        {
+        if ($startElement > 0) {
             $sql .= ' OFFSET '.$startElement;
         }
 
@@ -183,8 +180,7 @@ class ModuleWeblinks extends Modules
 
         $catId = (int) $this->getParameter('cat_id');
         // set headline with category name
-        if($catId > 0)
-        {
+        if ($catId > 0) {
             $category  = new TableCategory($gDb, $catId);
             $headline .= ' - '. $category->getValue('cat_name');
         }
@@ -204,14 +200,12 @@ class ModuleWeblinks extends Modules
         $catId = (int) $this->getParameter('cat_id');
 
         // In case ID was permitted and user has rights
-        if(!empty($uuid))
-        {
+        if (!empty($uuid)) {
             $sqlConditions .= ' AND lnk_uuid = ? '; // $uuid
             $params[] = $uuid;
         }
         // show all weblinks from category
-        elseif($catId > 0)
-        {
+        elseif ($catId > 0) {
             $sqlConditions .= ' AND cat_id = ? '; // $catId
             $params[] = $catId;
         }

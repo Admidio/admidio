@@ -16,23 +16,17 @@ $rootPath = dirname(__DIR__);
 
 // embed config file
 $configPath = $rootPath . '/adm_my_files/config.php';
-if (is_file($configPath))
-{
+if (is_file($configPath)) {
     require_once($configPath);
-}
-elseif (is_file($rootPath . '/config.php'))
-{
+} elseif (is_file($rootPath . '/config.php')) {
     exit('<div style="color: #cc0000;">Old v1.x or v2.x Config-File detected! Please update first to the latest v3.3 Version!</div>');
-}
-else
-{
+} else {
     echo '<p style="color: #cc0000;">Error: Config file not found!</p>';
     exit();
 }
 
 // import of demo data must be enabled in config.php
-if (!isset($gImportDemoData) || !$gImportDemoData)
-{
+if (!isset($gImportDemoData) || !$gImportDemoData) {
     exit('<p style="color: #cc0000;">Error: Demo data could not be imported because you have
     not set the preference <strong>gImportDemoData</strong> in your configuration file.</p>
     <p style="color: #cc0000;">Please add the following line to your config.php:<br /><em>$gImportDemoData = true;</em></p>');
@@ -49,36 +43,27 @@ function getBacktrace()
     $output = '<div style="font-family: monospace;">';
     $backtrace = debug_backtrace();
 
-    foreach ($backtrace as $number => $trace)
-    {
+    foreach ($backtrace as $number => $trace) {
         // We skip the first one, because it only shows this file/function
-        if ($number === 0)
-        {
+        if ($number === 0) {
             continue;
         }
 
         // Strip the current directory from path
-        if (empty($trace['file']))
-        {
+        if (empty($trace['file'])) {
             $trace['file'] = '';
-        }
-        else
-        {
+        } else {
             $trace['file'] = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $trace['file']);
             $trace['file'] = substr($trace['file'], 1);
         }
         $args = array();
 
         // If include/require/include_once is not called, do not show arguments - they may contain sensible information
-        if (!in_array($trace['function'], array('include', 'require', 'include_once'), true))
-        {
+        if (!in_array($trace['function'], array('include', 'require', 'include_once'), true)) {
             unset($trace['args']);
-        }
-        else
-        {
+        } else {
             // Path...
-            if (!empty($trace['args'][0]))
-            {
+            if (!empty($trace['args'][0])) {
                 $argument = SecurityUtils::encodeHTML($trace['args'][0]);
                 $argument = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $argument);
                 $argument = substr($argument, 1);
@@ -126,8 +111,7 @@ function toggleForeignKeyChecks($enable)
 {
     global $gDb;
 
-    if (DB_ENGINE === Database::PDO_ENGINE_MYSQL)
-    {
+    if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
         // disable foreign key checks for mysql, so tables can easily deleted
         $sql = 'SET foreign_key_checks = ' . (int) $enable;
         $gDb->queryPrepared($sql);
@@ -142,23 +126,17 @@ function executeSqlStatements(array $sqlStatements, $filename)
 {
     global $gDb, $gL10n;
 
-    foreach ($sqlStatements as $sqlStatement)
-    {
-        if ($filename === 'data.sql')
-        {
+    foreach ($sqlStatements as $sqlStatement) {
+        if ($filename === 'data.sql') {
             // search for translation strings with the prefix DEMO or SYS and try replace them
             preg_match_all('/(DEMO_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sqlStatement, $results);
 
-            foreach ($results[0] as $value)
-            {
+            foreach ($results[0] as $value) {
                 // if it's a string of a systemmail then html linefeeds must be replaced
-                if (str_starts_with($value, 'SYS_SYSMAIL_'))
-                {
+                if (str_starts_with($value, 'SYS_SYSMAIL_')) {
                     // convert <br /> to a normal line feed
                     $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
-                }
-                else
-                {
+                } else {
                     $convertedText = $gL10n->get($value);
                 }
 
@@ -182,12 +160,9 @@ function readAndExecuteSQLFromFile($filename)
 
     echo 'Reading file "'.$filename.'" ...<br />';
 
-    try
-    {
+    try {
         $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFilePath);
-    }
-    catch (\RuntimeException $exception)
-    {
+    } catch (\RuntimeException $exception) {
         exit('<p style="color: #cc0000;">' . $exception->getMessage() . ' File-Path: ' . $sqlFilePath . '</p>');
     }
 
@@ -203,15 +178,13 @@ function resetPostgresSequences()
 {
     global $gDb;
 
-    if (DB_ENGINE === Database::PDO_ENGINE_PGSQL)
-    {
+    if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
         $sql = 'SELECT relname
                   FROM pg_class
                  WHERE relkind = \'S\'';
         $pdoStatement = $gDb->queryPrepared($sql);
 
-        while ($relname = $pdoStatement->fetchColumn())
-        {
+        while ($relname = $pdoStatement->fetchColumn()) {
             $sql = 'SELECT setval(\'' . $relname . '\', 1000000)';
             $gDb->queryPrepared($sql);
         }
@@ -241,8 +214,7 @@ function getInstalledDbVersion()
     $sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
     $pdoStatement = $gDb->queryPrepared($sql, array(), false);
 
-    if ($pdoStatement === false)
-    {
+    if ($pdoStatement === false) {
         // in Admidio version 2 the database version was stored in preferences table
         $sql = 'SELECT prf_value
                   FROM ' . TBL_PREFERENCES . '
@@ -295,12 +267,9 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 
 // start php session and remove session object with all data, so that
 // all data will be read after the update
-try
-{
+try {
     Session::start(COOKIE_PREFIX);
-}
-catch (\RuntimeException $exception)
-{
+} catch (\RuntimeException $exception) {
     // TODO
 }
 unset($_SESSION['gCurrentSession']);
@@ -311,24 +280,18 @@ $gL10n = new Language($gLanguageData);
 $gL10n->addLanguageFolderPath(ADMIDIO_PATH . '/demo_data/languages');
 
 // copy content of folder adm_my_files to productive folder
-try
-{
+try {
     prepareAdmidioDataFolder();
-}
-catch (\RuntimeException $exception)
-{
+} catch (\RuntimeException $exception) {
     echo '<p style="color: #cc0000;">' . $exception->getMessage() . '</p>';
     exit();
 }
 echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
 
 // connect to database
-try
-{
+try {
     $gDb = Database::createDatabaseInstance();
-}
-catch (AdmException $e)
-{
+} catch (AdmException $e) {
     exit('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())));
 }
 

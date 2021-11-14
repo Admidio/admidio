@@ -8,13 +8,11 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_config.php')
-{
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_config.php') {
     exit('This page may not be called directly!');
 }
 
-if (isset($_POST['user_last_name']))
-{
+if (isset($_POST['user_last_name'])) {
     // Daten des Administrators in Sessionvariablen gefiltert speichern
     $_SESSION['user_last_name']        = StringUtils::strStripTags($_POST['user_last_name']);
     $_SESSION['user_first_name']       = StringUtils::strStripTags($_POST['user_first_name']);
@@ -27,8 +25,7 @@ if (isset($_POST['user_last_name']))
     ||  $_SESSION['user_first_name'] === ''
     ||  $_SESSION['user_email']      === ''
     ||  $_SESSION['user_login']      === ''
-    ||  $_SESSION['user_password']   === '')
-    {
+    ||  $_SESSION['user_password']   === '') {
         $page = new HtmlPageInstallation('admidio-installation-message');
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
@@ -36,16 +33,14 @@ if (isset($_POST['user_last_name']))
     }
 
     // username should only have valid chars
-    if (!StringUtils::strValidCharacters($_SESSION['user_login'], 'noSpecialChar'))
-    {
+    if (!StringUtils::strValidCharacters($_SESSION['user_login'], 'noSpecialChar')) {
         $page = new HtmlPageInstallation('admidio-installation-message');
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_FIELD_INVALID_CHAR', array($gL10n->get('SYS_USERNAME'))), $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
         // => EXIT
     }
 
-    if (!StringUtils::strValidCharacters($_SESSION['user_email'], 'email'))
-    {
+    if (!StringUtils::strValidCharacters($_SESSION['user_email'], 'email')) {
         $page = new HtmlPageInstallation('admidio-installation-message');
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL'))), $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
@@ -53,8 +48,7 @@ if (isset($_POST['user_last_name']))
     }
 
     // Password min length is 8 chars
-    if (strlen($_SESSION['user_password']) < PASSWORD_MIN_LENGTH)
-    {
+    if (strlen($_SESSION['user_password']) < PASSWORD_MIN_LENGTH) {
         $page = new HtmlPageInstallation('admidio-installation-message');
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('PRO_PASSWORD_LENGTH'), $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
@@ -69,8 +63,7 @@ if (isset($_POST['user_last_name']))
         $_SESSION['user_login']
     );
     // Admin Password should have a minimum strength of 1
-    if (PasswordUtils::passwordStrength($_SESSION['user_password'], $userData) < 1)
-    {
+    if (PasswordUtils::passwordStrength($_SESSION['user_password'], $userData) < 1) {
         $page = new HtmlPageInstallation('admidio-installation-message');
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'), $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
@@ -78,8 +71,7 @@ if (isset($_POST['user_last_name']))
     }
 
     // password must be the same with password confirm
-    if ($_SESSION['user_password'] !== $_SESSION['user_password_confirm'])
-    {
+    if ($_SESSION['user_password'] !== $_SESSION['user_password_confirm']) {
         $page = new HtmlPageInstallation('admidio-installation-message');
         $page->showMessage('error', $gL10n->get('SYS_NOTE'), $gL10n->get('SYS_PASSWORDS_NOT_EQUAL'), $gL10n->get('SYS_BACK'),
             'fa-arrow-circle-left', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'create_administrator')));
@@ -88,8 +80,7 @@ if (isset($_POST['user_last_name']))
 }
 
 // if config file exists than don't create a new one
-if (is_file($configPath))
-{
+if (is_file($configPath)) {
     admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation')));
     // => EXIT
 }
@@ -101,8 +92,7 @@ $configFileContent = fread($configFileHandle, filesize($filename));
 fclose($configFileHandle);
 
 $port = 'null';
-if ($_SESSION['db_port'])
-{
+if ($_SESSION['db_port']) {
     $port = $_SESSION['db_port'];
 }
 
@@ -134,8 +124,7 @@ $page->addJavascript('
 // now save new configuration file in Admidio folder if user has write access to this folder
 $configFileHandle = @fopen($configPath, 'ab');
 
-if ($configFileHandle)
-{
+if ($configFileHandle) {
     // save config file in Admidio folder
     fwrite($configFileHandle, $configFileContent);
     fclose($configFileHandle);
@@ -149,9 +138,7 @@ if ($configFileHandle)
         'next_page', $gL10n->get('INS_INSTALL_ADMIDIO'),
         array('icon' => 'fa-sync')
     );
-}
-else
-{
+} else {
     // if user doesn't has write access then create a page with a download link for the config file
     $page->assign('subHeadline', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
     $page->assign('text', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', array('config.php', ADMIDIO_URL . FOLDER_DATA, 'adm_my_files')));

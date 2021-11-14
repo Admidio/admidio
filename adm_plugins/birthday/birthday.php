@@ -19,107 +19,84 @@ $pluginFolder = basename(__DIR__);
 require_once($rootPath . '/adm_program/system/common.php');
 
 // only include config file if it exists
-if (is_file(__DIR__ . '/config.php'))
-{
+if (is_file(__DIR__ . '/config.php')) {
     require_once(__DIR__ . '/config.php');
 }
 
 // set default values if there no value has been stored in the config.php
-if(!isset($plg_show_names_extern) || !is_numeric($plg_show_names_extern) || $plg_show_names_extern !== 1)
-{
+if (!isset($plg_show_names_extern) || !is_numeric($plg_show_names_extern) || $plg_show_names_extern !== 1) {
     $plg_show_names_extern = 0;
 }
 
-if(!isset($plg_show_email_extern) || !is_numeric($plg_show_email_extern))
-{
+if (!isset($plg_show_email_extern) || !is_numeric($plg_show_email_extern)) {
     $plg_show_email_extern = 0;
 }
 
-if(!isset($plg_show_names) || !is_numeric($plg_show_names))
-{
+if (!isset($plg_show_names) || !is_numeric($plg_show_names)) {
     $plg_show_names = 1;
 }
 
-if(!isset($plg_show_age) || !is_numeric($plg_show_age))
-{
+if (!isset($plg_show_age) || !is_numeric($plg_show_age)) {
     $plg_show_age = 0;
 }
 
-if(isset($plg_link_target))
-{
+if (isset($plg_link_target)) {
     $plg_link_target = strip_tags($plg_link_target);
-}
-else
-{
+} else {
     $plg_link_target = '_self';
 }
 
-if(!isset($plg_show_hinweis_keiner) || !is_numeric($plg_show_hinweis_keiner))
-{
+if (!isset($plg_show_hinweis_keiner) || !is_numeric($plg_show_hinweis_keiner)) {
     $plg_show_hinweis_keiner = 0;
 }
 
-if(!isset($plg_show_alter_anrede) || !is_numeric($plg_show_alter_anrede))
-{
+if (!isset($plg_show_alter_anrede) || !is_numeric($plg_show_alter_anrede)) {
     $plg_show_alter_anrede = 18;
 }
 
-if(!isset($plg_show_zeitraum) || !is_numeric($plg_show_zeitraum))
-{
+if (!isset($plg_show_zeitraum) || !is_numeric($plg_show_zeitraum)) {
     $plg_show_zeitraum = 5;
 }
 
-if(!isset($plg_show_future) || !is_numeric($plg_show_future))
-{
+if (!isset($plg_show_future) || !is_numeric($plg_show_future)) {
     $plg_show_future = 5;
 }
-if(!isset($plg_show_display_limit) || !is_numeric($plg_show_display_limit))
-{
+if (!isset($plg_show_display_limit) || !is_numeric($plg_show_display_limit)) {
     $plg_show_display_limit = 200;
 }
 // Prüfen, ob die Rollenbedingung gesetzt wurde
-if(isset($plg_rolle_sql) && is_array($plg_rolle_sql) && count($plg_rolle_sql) > 0)
-{
+if (isset($plg_rolle_sql) && is_array($plg_rolle_sql) && count($plg_rolle_sql) > 0) {
     $sqlRol = 'IN (' . implode(',', $plg_rolle_sql) . ')';
-}
-else
-{
+} else {
     $sqlRol = 'IS NOT NULL';
 }
 
 // Prüfen, ob die Sortierbedingung gesetzt wurde
-if(!isset($plg_sort_sql) || $plg_sort_sql === '')
-{
+if (!isset($plg_sort_sql) || $plg_sort_sql === '') {
     $sqlSort = 'DESC';
-}
-else
-{
+} else {
     $sqlSort = $plg_sort_sql;
 }
 
-if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
-{
+if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
     $plg_show_headline = 1;
 }
 
 // ist der Benutzer ausgeloggt und soll nur die Anzahl der Geb-Kinder angezeigt werden, dann Zeitraum auf 0 Tage setzen
-if($plg_show_names_extern === 0 && !$gValidLogin)
-{
+if ($plg_show_names_extern === 0 && !$gValidLogin) {
     $plg_show_zeitraum = 0;
     $plg_show_future   = 0;
 }
 
 // if page object is set then integrate css file of this plugin
 global $page;
-if(isset($page) && $page instanceof HtmlPage)
-{
+if (isset($page) && $page instanceof HtmlPage) {
     $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/birthday/birthday.css');
 }
 
 $fieldBirthday = $gProfileFields->getProperty('BIRTHDAY', 'usf_id');
 
-if($gDbType === 'pgsql')
-{
+if ($gDbType === 'pgsql') {
     $sql = 'SELECT DISTINCT usr_id, usr_uuid, usr_login_name,
                         last_name.usd_value AS last_name, first_name.usd_value AS first_name,
                         birthday.bday AS birthday, birthday.bdate,
@@ -174,9 +151,7 @@ if($gDbType === 'pgsql')
          WHERE usr_valid = true
            AND mem_rol_id '.$sqlRol.'
       ORDER BY days_to_bdate '.$sqlSort.', last_name, first_name';
-}
-else
-{
+} else {
     $sql = 'SELECT DISTINCT usr_id, usr_uuid, usr_login_name,
                         last_name.usd_value AS last_name, first_name.usd_value AS first_name,
                         birthday.bday AS birthday, birthday.bdate,
@@ -252,25 +227,20 @@ $birthdayStatement = $gDb->queryPrepared($sql, $queryParams);
 $numberBirthdays = $birthdayStatement->rowCount();
 
 echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
-if($plg_show_headline)
-{
+if ($plg_show_headline) {
     echo '<h3>'.$gL10n->get('PLG_BIRTHDAY_HEADLINE').'</h3>';
 }
 
-if($numberBirthdays > 0)
-{
-    if($plg_show_names_extern === 1 || $gValidLogin)
-    {
+if ($numberBirthdays > 0) {
+    if ($plg_show_names_extern === 1 || $gValidLogin) {
         echo '<ul id="plgBirthdayNameList">';
 
         // how many birthdays should be displayed (as a maximum)
         $birthdayCount = null;
 
-            while(($row = $birthdayStatement->fetch()) && $birthdayCount < $plg_show_display_limit)
-            {
-                // the display type of the name
-                switch ($plg_show_names)
-                {
+        while (($row = $birthdayStatement->fetch()) && $birthdayCount < $plg_show_display_limit) {
+            // the display type of the name
+            switch ($plg_show_names) {
                     case 1:  // first name, last name
                         $plgShowName = $row['first_name']. ' '. $row['last_name'];
                         break;
@@ -287,111 +257,83 @@ if($numberBirthdays > 0)
                         $plgShowName = $row['first_name']. ' '. $row['last_name'];
                 }
 
-                // ab einem festgelegten Alter wird fuer ausgeloggte Besucher nur der Nachname mit Anrede angezeigt
-                if(!$gValidLogin && $plg_show_alter_anrede <= $row['age'])
-                {
-                    if ($row['gender'] > 1)
-                    {
-                        $plgShowName = $gL10n->get('PLG_BIRTHDAY_WOMAN_VAR', array($row['last_name']));
-                    }
-                    else
-                    {
-                        $plgShowName = $gL10n->get('PLG_BIRTHDAY_MAN_VAR', array($row['last_name']));
-                    }
+            // ab einem festgelegten Alter wird fuer ausgeloggte Besucher nur der Nachname mit Anrede angezeigt
+            if (!$gValidLogin && $plg_show_alter_anrede <= $row['age']) {
+                if ($row['gender'] > 1) {
+                    $plgShowName = $gL10n->get('PLG_BIRTHDAY_WOMAN_VAR', array($row['last_name']));
+                } else {
+                    $plgShowName = $gL10n->get('PLG_BIRTHDAY_MAN_VAR', array($row['last_name']));
                 }
+            }
 
-                // show name and e-mail link for registered users
-                if($gValidLogin)
-                {
-                    $plgShowName = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '"
+            // show name and e-mail link for registered users
+            if ($gValidLogin) {
+                $plgShowName = '<a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '"
                         target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $plgShowName. '</a>';
 
-                    // E-Mail-Adresse ist hinterlegt und soll auch bei eingeloggten Benutzern verlinkt werden
-                    if(strlen($row['email']) > 0 && $plg_show_email_extern < 2)
-                    {
-                        $plgShowName .= '
+                // E-Mail-Adresse ist hinterlegt und soll auch bei eingeloggten Benutzern verlinkt werden
+                if (strlen($row['email']) > 0 && $plg_show_email_extern < 2) {
+                    $plgShowName .= '
                             <a class="admidio-icon-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('user_uuid' => $row['usr_uuid'])) . '">'.
                                 '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_WRITE_EMAIL').'"></i></a>';
-                    }
                 }
-                elseif($plg_show_email_extern === 1 && strlen($row['email']) > 0)
-                {
-                    $plgShowName .= '
+            } elseif ($plg_show_email_extern === 1 && strlen($row['email']) > 0) {
+                $plgShowName .= '
                         <a class="admidio-icon-link" href="mailto:'. $row['email']. '">'.
                             '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_WRITE_EMAIL').'"></i></a>';
-                }
+            }
 
-                // set css class and string for birthday today, in the future or in the past
-                $birthdayDate = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
+            // set css class and string for birthday today, in the future or in the past
+            $birthdayDate = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
 
-                if ($row['days_to_bdate'] < 0)
-                {
-                    $plgCssClass = 'plgBirthdayNameHighlightAgo';
-                    if ($row['days_to_bdate'] == -1)
-                    {
-                        $birthdayText = 'PLG_BIRTHDAY_YESTERDAY';
-                        $plgDays = ' ';
-                    }
-                    else
-                    {
-                        $birthdayText = 'PLG_BIRTHDAY_PAST';
-                        $plgDays = -$row['days_to_bdate'];
-                    }
+            if ($row['days_to_bdate'] < 0) {
+                $plgCssClass = 'plgBirthdayNameHighlightAgo';
+                if ($row['days_to_bdate'] == -1) {
+                    $birthdayText = 'PLG_BIRTHDAY_YESTERDAY';
+                    $plgDays = ' ';
+                } else {
+                    $birthdayText = 'PLG_BIRTHDAY_PAST';
+                    $plgDays = -$row['days_to_bdate'];
                 }
-                elseif ($row['days_to_bdate'] > 0)
-                {
-                    $plgCssClass = 'plgBirthdayNameHighlightFuture';
-                    if ($row['days_to_bdate'] == 1)
-                    {
-                        $birthdayText = 'PLG_BIRTHDAY_TOMORROW';
-                        $plgDays = ' ';
-                    }
-                    else
-                    {
-                        $birthdayText = 'PLG_BIRTHDAY_FUTURE';
-                        $plgDays = $row['days_to_bdate'];
-                    }
+            } elseif ($row['days_to_bdate'] > 0) {
+                $plgCssClass = 'plgBirthdayNameHighlightFuture';
+                if ($row['days_to_bdate'] == 1) {
+                    $birthdayText = 'PLG_BIRTHDAY_TOMORROW';
+                    $plgDays = ' ';
+                } else {
+                    $birthdayText = 'PLG_BIRTHDAY_FUTURE';
+                    $plgDays = $row['days_to_bdate'];
                 }
-                else
-                {
-                    $plgCssClass  = 'plgBirthdayNameHighlight';
-                    $birthdayText = 'PLG_BIRTHDAY_TODAY';
-                    $plgDays      = $row['age'];
-                }
+            } else {
+                $plgCssClass  = 'plgBirthdayNameHighlight';
+                $birthdayText = 'PLG_BIRTHDAY_TODAY';
+                $plgDays      = $row['age'];
+            }
 
-                // don't show age of birthday person if preference is set
-                if ($plg_show_age === 0 || !$gValidLogin)
-                {
-                    $birthdayText .= '_NO_AGE';
-                }
+            // don't show age of birthday person if preference is set
+            if ($plg_show_age === 0 || !$gValidLogin) {
+                $birthdayText .= '_NO_AGE';
+            }
 
-                // now show string with the birthday person
-                echo '<li><span id="'.$plgCssClass.'">'.
+            // now show string with the birthday person
+            echo '<li><span id="'.$plgCssClass.'">'.
                     $gL10n->get($birthdayText, array($plgShowName, $plgDays, $row['age'], $birthdayDate->format($gSettingsManager->getString('system_date')))).
                 '</span></li>';
 
-                // counting displayed birthdays
-                $birthdayCount++;
-            }
-        echo '</ul>';
-    }
-    else
-    {
-        if($numberBirthdays === 1)
-        {
-            echo '<p>'.$gL10n->get('PLG_BIRTHDAY_ONE_USER').'</p>';
+            // counting displayed birthdays
+            $birthdayCount++;
         }
-        else
-        {
+        echo '</ul>';
+    } else {
+        if ($numberBirthdays === 1) {
+            echo '<p>'.$gL10n->get('PLG_BIRTHDAY_ONE_USER').'</p>';
+        } else {
             echo '<p>'.$gL10n->get('PLG_BIRTHDAY_MORE_USERS', array($numberBirthdays)).'</p>';
         }
     }
-}
-else
-{
+} else {
     // Bei entsprechend gesetzter Konfiguration wird auch im Fall, dass keiner Geburtstag hat, eine Meldung ausgegeben.
-    if(!$plg_show_hinweis_keiner)
-    {
+    if (!$plg_show_hinweis_keiner) {
         echo '<p>'.$gL10n->get('PLG_BIRTHDAY_NO_USER').'</p>';
     }
 }

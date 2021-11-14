@@ -32,8 +32,7 @@ class TableUserRelation extends TableAccess
     public function getInverse()
     {
         $relationType = new TableUserRelationType($this->db, (int) $this->getValue('ure_urt_id'));
-        if ($relationType->getValue('urt_id_inverse') === null)
-        {
+        if ($relationType->getValue('urt_id_inverse') === null) {
             return null;
         }
 
@@ -45,8 +44,7 @@ class TableUserRelation extends TableAccess
         $inverse = new self($this->db);
         $inverse->readDataByColumns($selectColumns);
 
-        if ($inverse->isNewRecord())
-        {
+        if ($inverse->isNewRecord()) {
             return null;
         }
 
@@ -62,11 +60,9 @@ class TableUserRelation extends TableAccess
     {
         $this->db->startTransaction();
 
-        if ($deleteInverse)
-        {
+        if ($deleteInverse) {
             $inverse = $this->getInverse();
-            if ($inverse)
-            {
+            if ($inverse) {
                 $inverse->delete(false);
             }
         }

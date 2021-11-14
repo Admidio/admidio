@@ -37,8 +37,7 @@ $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 
 // Daterange defined in preferences
-if($getDateFrom == '')
-{
+if ($getDateFrom == '') {
     $now = new \DateTime();
     $dayOffsetPast   = new \DateInterval('P'.$gSettingsManager->getInt('dates_ical_days_past').'D');
     $dayOffsetFuture = new \DateInterval('P'.$gSettingsManager->getInt('dates_ical_days_future').'D');
@@ -47,21 +46,17 @@ if($getDateFrom == '')
 }
 
 // Message if module is disabled
-if((int) $gSettingsManager->get('enable_dates_module') === 0)
-{
+if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
     // Module disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-    // => EXIT
-}
-elseif((int) $gSettingsManager->get('enable_dates_module') === 2)
-{
+// => EXIT
+} elseif ((int) $gSettingsManager->get('enable_dates_module') === 2) {
     // only with valid login
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // If Ical enabled and module is public
-if (!$gSettingsManager->getBool('enable_dates_ical'))
-{
+if (!$gSettingsManager->getBool('enable_dates_ical')) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_ICAL_DISABLED'));
     // => EXIT
@@ -79,8 +74,7 @@ $datesResult = $dates->getDataSet(0, 0);
 $parameters = $dates->getParameters();
 
 // Headline for file name
-if($getCatId > 0)
-{
+if ($getCatId > 0) {
     $calendar = new TableCategory($gDb, $getCatId);
     $getHeadline.= '_'. $calendar->getValue('cat_name');
 }
@@ -88,11 +82,9 @@ if($getCatId > 0)
 $date = new TableDate($gDb);
 $iCal = $date->getIcalHeader();
 
-if($datesResult['numResults'] > 0)
-{
+if ($datesResult['numResults'] > 0) {
     $date = new TableDate($gDb);
-    foreach($datesResult['recordset'] as $row)
-    {
+    foreach ($datesResult['recordset'] as $row) {
         $date->clear();
         $date->setArray($row);
         $iCal .= $date->getIcalVEvent(DOMAIN);

@@ -103,13 +103,11 @@ class HtmlTable extends HtmlTableBasic
     {
         global $gL10n;
 
-        if ($class === null)
-        {
+        if ($class === null) {
             $class = 'table';
         }
 
-        if ($hoverRows)
-        {
+        if ($hoverRows) {
             $class .= ' table-hover';
         }
 
@@ -122,15 +120,13 @@ class HtmlTable extends HtmlTableBasic
 
         // when using DataTables we must set the width attribute so that all columns will change
         // dynamic their width if the browser window size change.
-        if ($datatables)
-        {
+        if ($datatables) {
             $this->addAttribute('width', '100%');
 
             $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.lang"}';
         }
 
-        if ($htmlPage instanceof HtmlPage)
-        {
+        if ($htmlPage instanceof HtmlPage) {
             $this->htmlPage =& $htmlPage;
         }
     }
@@ -151,8 +147,7 @@ class HtmlTable extends HtmlTableBasic
     private function addRowTypeByArray($type, array $arrColumnValues, $id = null, array $arrAttributes = null, $colspan = 1, $colspanOffset = 1)
     {
         // set an id to the column
-        if ($id !== null)
-        {
+        if ($id !== null) {
             $arrAttributes['id'] = $id;
         }
 
@@ -161,8 +156,7 @@ class HtmlTable extends HtmlTableBasic
         $this->columnCount = count($arrColumnValues);
 
         // now add each column to the row
-        foreach ($arrColumnValues as $key => $value)
-        {
+        foreach ($arrColumnValues as $key => $value) {
             $this->prepareAndAddColumn($type, $key, $value, $colspan, $colspanOffset);
         }
     }
@@ -212,8 +206,7 @@ class HtmlTable extends HtmlTableBasic
     public function addRowByArray(array $arrColumnValues, $id = null, array $arrAttributes = null, $colspan = 1, $colspanOffset = 1)
     {
         // if body area wasn't defined until now then do it
-        if (!$this->tbody)
-        {
+        if (!$this->tbody) {
             $this->addTableBody();
         }
 
@@ -229,8 +222,7 @@ class HtmlTable extends HtmlTableBasic
     public function disableDatatablesColumnsSort(array $columnsSort)
     {
         // internal datatable columns starts with 0
-        foreach ($columnsSort as $columnSort)
-        {
+        foreach ($columnsSort as $columnSort) {
             $this->datatablesColumnDefs[] = '{ "orderable": false, "targets": ' . ($columnSort - 1) . ' }';
         }
     }
@@ -256,13 +248,10 @@ class HtmlTable extends HtmlTableBasic
         $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables-datetime-moment/datetime-moment.js');
         $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/datatables.css');
 
-        if ($this->rowCount > 10 || $this->serverSideProcessing)
-        {
+        if ($this->rowCount > 10 || $this->serverSideProcessing) {
             // set default page length of the table
             $this->datatablesInitParameters[] = '"pageLength": ' . $this->rowsPerPage;
-        }
-        else
-        {
+        } else {
             // disable page length menu
             $this->datatablesInitParameters[] = '"paging": false';
         }
@@ -276,8 +265,7 @@ class HtmlTable extends HtmlTableBasic
         $this->datatablesInitParameters[] = '"responsive": true';
 
         // set server-side processing
-        if ($this->serverSideProcessing)
-        {
+        if ($this->serverSideProcessing) {
             $this->datatablesInitParameters[] = '"processing": true';
             $this->datatablesInitParameters[] = '"serverSide": true';
             $this->datatablesInitParameters[] = '"ajax": "'.$this->serverSideFile.'"';
@@ -301,8 +289,7 @@ class HtmlTable extends HtmlTableBasic
         $javascriptGroup = '';
         $javascriptGroupFunction = '';
 
-        if ($this->groupedColumn >= 0)
-        {
+        if ($this->groupedColumn >= 0) {
             $javascriptGroup = ',
                 "drawCallback": function(settings) {
                     var api  = this.api();
@@ -332,8 +319,7 @@ class HtmlTable extends HtmlTableBasic
         }
 
         // if columnDefs were defined then create a comma separated string with all elements of the array
-        if (count($this->datatablesColumnDefs) > 0)
-        {
+        if (count($this->datatablesColumnDefs) > 0) {
             $this->datatablesInitParameters[] = '"columnDefs": [' . implode(',', $this->datatablesColumnDefs) . ']';
         }
 
@@ -364,32 +350,25 @@ class HtmlTable extends HtmlTableBasic
         $columnAttributes = array();
 
         // set colspan if parameters are set
-        if ($colspan >= 2 && $colspanOffset === ($key + 1))
-        {
+        if ($colspan >= 2 && $colspanOffset === ($key + 1)) {
             $columnAttributes['colspan'] = $colspan;
         }
 
-        if (!$this->datatables && array_key_exists($key, $this->columnsAlign))
-        {
+        if (!$this->datatables && array_key_exists($key, $this->columnsAlign)) {
             $columnAttributes['style'] = 'text-align: ' . $this->columnsAlign[$key] . ';';
         }
 
         // if is array than check for sort or search values
-        if (is_array($value))
-        {
+        if (is_array($value)) {
             $columnValue = $value['value'];
 
-            if (array_key_exists('order', $value))
-            {
+            if (array_key_exists('order', $value)) {
                 $columnAttributes['data-order'] = $value['order'];
             }
-            if (array_key_exists('search', $value))
-            {
+            if (array_key_exists('search', $value)) {
                 $columnAttributes['data-search'] = $value['search'];
             }
-        }
-        else
-        {
+        } else {
             $columnValue = $value;
         }
 
@@ -405,15 +384,11 @@ class HtmlTable extends HtmlTableBasic
      */
     public function setColumnAlignByArray(array $columnsAlign)
     {
-        if($this->datatables)
-        {
-            foreach ($columnsAlign as $columnNumber => $align)
-            {
+        if ($this->datatables) {
+            foreach ($columnsAlign as $columnNumber => $align) {
                 $this->datatablesColumnDefs[] = '{ targets: ' . $columnNumber . ', className: \'text-'.$align.'\' }';
             }
-        }
-        else
-        {
+        } else {
             $this->columnsAlign = $columnsAlign;
         }
     }
@@ -429,8 +404,7 @@ class HtmlTable extends HtmlTableBasic
     public function setDatatablesAlternativeOrderColumns($selectedColumn, $arrayOrderColumns)
     {
         // internal datatable columns starts with 0
-        if (is_array($arrayOrderColumns))
-        {
+        if (is_array($arrayOrderColumns)) {
             /**
              * @param int $item
              * @return int decremented item
@@ -440,9 +414,7 @@ class HtmlTable extends HtmlTableBasic
                 return --$item;
             }
             $orderData = implode(',', array_map('decrement', $arrayOrderColumns));
-        }
-        else
-        {
+        } else {
             $orderData = --$arrayOrderColumns;
         }
 
@@ -458,8 +430,7 @@ class HtmlTable extends HtmlTableBasic
     public function setDatatablesColumnsHide(array $columnsHide)
     {
         // internal datatable columns starts with 0
-        foreach ($columnsHide as $columnHide)
-        {
+        foreach ($columnsHide as $columnHide) {
             $this->datatablesColumnDefs[] = '{ "visible": false, "targets": ' . ($columnHide - 1) . ' }';
         }
     }
@@ -477,8 +448,7 @@ class HtmlTable extends HtmlTableBasic
     public function setDatatablesColumnsNotHideResponsive(array $columnsNotHideResponsive, $priority = 1)
     {
         // internal datatable columns starts with 0
-        foreach ($columnsNotHideResponsive as $columnNotHideResponsive)
-        {
+        foreach ($columnsNotHideResponsive as $columnNotHideResponsive) {
             $this->datatablesColumnDefs[] = '{ "responsivePriority": ' . $priority . ', "targets": ' . ($columnNotHideResponsive - 1) . ' }';
         }
     }
@@ -522,14 +492,10 @@ class HtmlTable extends HtmlTableBasic
     public function setDatatablesOrderColumns(array $arrayOrderColumns)
     {
         // internal datatable columns starts with 0
-        foreach ($arrayOrderColumns as $column)
-        {
-            if (is_array($column))
-            {
+        foreach ($arrayOrderColumns as $column) {
+            if (is_array($column)) {
                 $this->columnsOrder[] = '[' . ($column[0] - 1) . ', "' . $column[1] . '"]';
-            }
-            else
-            {
+            } else {
                 $this->columnsOrder[] = '[' . ($column - 1) . ', "asc"]';
             }
         }
@@ -556,8 +522,7 @@ class HtmlTable extends HtmlTableBasic
 
         $message = $gL10n->get($messageId);
 
-        switch ($messageType)
-        {
+        switch ($messageType) {
             case 'warning':
                 $this->messageNoRowsFound = '<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>' . $message . '</div>';
                 break;
@@ -590,15 +555,13 @@ class HtmlTable extends HtmlTableBasic
      */
     public function show()
     {
-        if ($this->rowCount === 0 && !$this->serverSideProcessing)
-        {
+        if ($this->rowCount === 0 && !$this->serverSideProcessing) {
             // if table contains no rows then show message and not the table
             return '<p>' . $this->messageNoRowsFound . '</p>';
         }
 
         // show table content
-        if ($this->datatables && $this->htmlPage instanceof HtmlPage)
-        {
+        if ($this->datatables && $this->htmlPage instanceof HtmlPage) {
             $this->initDatatablesTable();
 
             return $this->getHtmlTable();
