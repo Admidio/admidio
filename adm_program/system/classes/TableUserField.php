@@ -18,8 +18,8 @@
  */
 class TableUserField extends TableAccess
 {
-    const MOVE_UP   = 'UP';
-    const MOVE_DOWN = 'DOWN';
+    public const MOVE_UP   = 'UP';
+    public const MOVE_DOWN = 'DOWN';
 
     /**
      * @var bool|null Flag if the current user could view this user
@@ -296,8 +296,8 @@ class TableUserField extends TableAccess
     /**
      * Profile field will change the sequence one step up or one step down.
      * @param string $mode mode if the profile field move up or down, values are TableUserField::MOVE_UP, TableUserField::MOVE_DOWN
-     * @return bool Return true if the sequence of the category could be changed, otherwise false.
      * @throws AdmException
+     * @return bool Return true if the sequence of the category could be changed, otherwise false.
      */
     public function moveSequence($mode)
     {
@@ -326,11 +326,11 @@ class TableUserField extends TableAccess
         return $this->save();
     }
 
-   /**
+    /**
      * Profile field will change the complete sequence.
      * @param array $sequence the new sequence of profile fields (field IDs)
-     * @return bool Return true if the sequence of the category could be changed, otherwise false.
      * @throws AdmException
+     * @return bool Return true if the sequence of the category could be changed, otherwise false.
      */
     public function setSequence($sequence)
     {

@@ -32,32 +32,32 @@
  */
 class ChangeNotification
 {
-    /** @var $changes Queued array of changes (user ID as key) made during this
-     *  php process. This data structure is meant to cache all changes and then
-     *  send out only one notification mail per user when PHP is finished.
-     *  The structure of each entry of this entry is:
-     *      uid => array(
-     *          'uid'=>123,
-     *          'usr_login_name'=>'',
-     *          'first_name'=>'',
-     *          'last_name'=>'',
-     *          'created' => false,
-     *          'deleted' => false,
-     *          'profile_changes' => array(
-     *              field_id => array('Field Name', 'old_value', 'new_value'),
-     *          ),
-     *          'role_changes' => array(
-     *              role_id => array('Role Name', 'fieldname', 'old_value', 'new_value'),
-     *          )
-     *      )
-     */
+     /** @var $changes Queued array of changes (user ID as key) made during this
+      *  php process. This data structure is meant to cache all changes and then
+      *  send out only one notification mail per user when PHP is finished.
+      *  The structure of each entry of this entry is:
+      *      uid => array(
+      *          'uid'=>123,
+      *          'usr_login_name'=>'',
+      *          'first_name'=>'',
+      *          'last_name'=>'',
+      *          'created' => false,
+      *          'deleted' => false,
+      *          'profile_changes' => array(
+      *              field_id => array('Field Name', 'old_value', 'new_value'),
+      *          ),
+      *          'role_changes' => array(
+      *              role_id => array('Role Name', 'fieldname', 'old_value', 'new_value'),
+      *          )
+      *      )
+      */
      protected $changes = array();
 
      /** @var $format Whether to send mails as 'html' or 'text' (as configured)
-     */
+      */
      protected $format = 'html';
 
-     /**
+    /**
      * Constructor that initialize the class member parameters
      */
     public function __construct()
@@ -71,7 +71,7 @@ class ChangeNotification
         register_shutdown_function(array($this, 'shutdown'));
     }
 
-   /**
+    /**
      * Clear the queue of all recorded changes. No notifications are sent out by
      * this method.
      * @param int $userId The user for whom all recorded changes should be cleared (null for all users)
@@ -85,7 +85,7 @@ class ChangeNotification
         }
     }
 
-   /**
+    /**
      * Initialize the internal data structure to queue changes to a given user ID.
      * @param int $userId The user for whom to prepare the internal data structure
      */
@@ -124,7 +124,7 @@ class ChangeNotification
      *                       user. In this case, the change will not be logged
      *                       in the history database.
      */
-    public function logProfileChange($userId, $fieldId, $fieldname, $old_value, $new_value, $old_value_db = null, $new_value_db = null, $user = NULL, $deleting = false)
+    public function logProfileChange($userId, $fieldId, $fieldname, $old_value, $new_value, $old_value_db = null, $new_value_db = null, $user = null, $deleting = false)
     {
         global $gSettingsManager, $gDb;
         // 1. Create a database log entry if so configured
@@ -158,7 +158,7 @@ class ChangeNotification
      *                       user. In this case, the change will not be logged
      *                       in the history database.
      */
-    public function logUserChange($userId, $fieldId, $old_value, $new_value, $user = NULL, $deleting = false)
+    public function logUserChange($userId, $fieldId, $old_value, $new_value, $user = null, $deleting = false)
     {
         global $gSettingsManager, $gL10n;
 
@@ -212,7 +212,7 @@ class ChangeNotification
      *                       user. In this case, the change will not be logged
      *                       in the history database.
      */
-    public function logRoleChange($userId, $roleId, $role, $fieldname, $old_value, $new_value, $user = NULL, $deleting = false)
+    public function logRoleChange($userId, $roleId, $role, $fieldname, $old_value, $new_value, $user = null, $deleting = false)
     {
         global $gSettingsManager, $gL10n;
         // Don't log anything if no User ID is set yet (e.g. user not yet saved to the database!)
@@ -255,7 +255,7 @@ class ChangeNotification
      * @param int $userId The user to whom the change applies
      * @param User $user(optional) The User object of the newly created user
      */
-    public function logUserCreation($userId, $user = NULL)
+    public function logUserCreation($userId, $user = null)
     {
         global $gProfileFields, $gL10n;
 
@@ -306,7 +306,7 @@ class ChangeNotification
      * @param int $userId The user to whom the change applies
      * @param User $user(optional) The User object of the user to be deleted
      */
-    public function logUserDeletion($userId, $user = NULL)
+    public function logUserDeletion($userId, $user = null)
     {
         global $gProfileFields, $gL10n, $gDb;
 
@@ -360,10 +360,10 @@ class ChangeNotification
 
         while ($row = $query->fetch()) {
             $this->logRoleChange($userId, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_START'), $row['mem_begin'], null, $user, /*deleting=*/true);
-            if ($row['mem_end'] ) {
+            if ($row['mem_end']) {
                 $this->logRoleChange($userId, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_END'), $row['mem_end'], null, $user, /*deleting=*/true);
             }
-            if ($row['mem_leader'] ) {
+            if ($row['mem_leader']) {
                 $this->logRoleChange($userId, $row['rol_name'], $gL10n->get('SYS_LEADER'), $row['mem_leader'], null, $user, /*deleting=*/true);
             }
         }
@@ -390,8 +390,8 @@ class ChangeNotification
                 $format_row = "<tr><th> %s </th><td> %s </td><td> %s </td></tr>\n";
                 $format_rolhdr = "<tr><th> %s </th><th> %s </th><th> %s </th><th> %s </th></tr>\n";
                 $format_rolrow = "<tr><th> %s </th><td> %s </td><td> %s </td><td> %s </td></tr>\n";
-                $table_begin = "<br><br><table border=\"1\">";
-                $table_end = "</table><br>";
+                $table_begin = '<br><br><table border="1">';
+                $table_end = '</table><br>';
             } else {
                 $format_hdr = "%25s %25s -> %25s\n";
                 $format_row = "%25.25s %25.25s -> %25s\n ";

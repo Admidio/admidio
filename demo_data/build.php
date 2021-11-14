@@ -12,7 +12,6 @@
  * lang : de (default) the language for the demo db
  ***********************************************************************************************
  */
-
 $rootPath = dirname(__DIR__);
 
 // embed config file

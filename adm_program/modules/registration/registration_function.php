@@ -18,7 +18,6 @@
  * new_user_uuid: UUID of the new registered user to be processed
  * user_uuid:     UUID of the user to whom the new login should be assigned
  *****************************************************************************/
-
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 

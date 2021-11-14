@@ -14,8 +14,8 @@
  */
 class TableMessage extends TableAccess
 {
-    const MESSAGE_TYPE_EMAIL = 'EMAIL';
-    const MESSAGE_TYPE_PM    = 'PM';
+    public const MESSAGE_TYPE_EMAIL = 'EMAIL';
+    public const MESSAGE_TYPE_PM    = 'PM';
 
     /**
      * @var array<int,string> This array has all the file names of the attachments. First element is the path and second element is the file name.
@@ -26,11 +26,11 @@ class TableMessage extends TableAccess
      */
     protected $msgRecipientsArray = array();
     /**
-     * @var Array with TableAcess objects
+     * @var array with TableAcess objects
      */
     protected $msgRecipientsObjectArray = array();
     /**
-     * @var Object of TableAcess for the current content of the message.
+     * @var object of TableAcess for the current content of the message.
      */
     protected $msgContentObject;
 
@@ -108,7 +108,7 @@ class TableMessage extends TableAccess
     public function addUser($userId, $fullName = '')
     {
         // PM always update the recipient if the message exists
-        if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM)
+        if($this->getValue('msg_type') === self::MESSAGE_TYPE_PM)
         {
             if(count($this->msgRecipientsObjectArray) === 1)
             {
@@ -270,9 +270,9 @@ class TableMessage extends TableAccess
         while($row = $attachmentsStatement->fetch())
         {
             $attachments[] = array('msa_id' => $row['msa_id'], 'file_name' => $row['msa_original_file_name'], 'admidio_file_name' => $row['msa_file_name']);
-	    }
+        }
 
-	    return $attachments;
+        return $attachments;
     }
 
     /**
@@ -334,7 +334,7 @@ class TableMessage extends TableAccess
     public function getConversationPartner()
     {
         global $gLogger;
-        if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM)
+        if($this->getValue('msg_type') === self::MESSAGE_TYPE_PM)
         {
             $recipients = $this->readRecipientsData();
             return $recipients[0]['id'];
@@ -358,7 +358,7 @@ class TableMessage extends TableAccess
         $recipientsString = '';
         $singleRecipientsCount = 0;
 
-        if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM)
+        if($this->getValue('msg_type') === self::MESSAGE_TYPE_PM)
         {
             // PM has the conversation initiator and the receiver. Here we must check which
             // role the current user has and show the name of the other user.
@@ -426,7 +426,7 @@ class TableMessage extends TableAccess
      */
     public function isUnread()
     {
-        if(TableMessage::MESSAGE_TYPE_PM && $this->getValue('msg_read') === 1
+        if(self::MESSAGE_TYPE_PM && $this->getValue('msg_read') === 1
         && $this->getValue('msg_usr_id_sender') != $GLOBALS['gCurrentUserId'])
         {
             return true;
@@ -476,7 +476,7 @@ class TableMessage extends TableAccess
                     $recipientUsrId = (int) $row['msr_usr_id'];
 
                     // PMs could have the current user as recipient than the sender is the recipient for this user
-                    if($this->getValue('msg_type') === TableMessage::MESSAGE_TYPE_PM
+                    if($this->getValue('msg_type') === self::MESSAGE_TYPE_PM
                     && $recipientUsrId == $GLOBALS['gCurrentUserId'])
                     {
                         $recipientUsrId = (int) $row['msg_usr_id_sender'];

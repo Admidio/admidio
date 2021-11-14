@@ -15,7 +15,6 @@
  * For this purpose the information of the role as well as the associated category
  * are read out. But only the role data are written
  */
-
 class TableRoles extends TableAccess
 {
     /**

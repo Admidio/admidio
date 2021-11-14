@@ -18,15 +18,15 @@
  */
 final class FileSystemUtils
 {
-    const CONTENT_TYPE_DIRECTORY = 'directory';
-    const CONTENT_TYPE_FILE      = 'file';
-    const CONTENT_TYPE_LINK      = 'link';
+    public const CONTENT_TYPE_DIRECTORY = 'directory';
+    public const CONTENT_TYPE_FILE      = 'file';
+    public const CONTENT_TYPE_LINK      = 'link';
 
-    const ROOT_ID = 0;
-    const ROOT_FOLDER = '/';
+    public const ROOT_ID = 0;
+    public const ROOT_FOLDER = '/';
 
-    const DEFAULT_MODE_DIRECTORY = 0775;
-    const DEFAULT_MODE_FILE      = 0664;
+    public const DEFAULT_MODE_DIRECTORY = 0775;
+    public const DEFAULT_MODE_FILE      = 0664;
 
     /**
      * @var array<int,string> The allowed directories
@@ -36,7 +36,7 @@ final class FileSystemUtils
     /**
      * @var array<string,string> Array with file extensions and the best Font Awesome icon that should be used
      */
-    protected static $iconFileExtension = array(
+    private static $iconFileExtension = array(
         'bmp'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/bmp', 'viewable' => true),
         'gif'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/gif', 'viewable' => true),
         'jpg'  => array('icon' => 'fa-file-image', 'mime-type' => 'image/jpeg', 'viewable' => true),

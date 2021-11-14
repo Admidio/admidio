@@ -155,7 +155,7 @@ final class ComponentUpdateSteps
                     {
                         $array = explode('__',$row['plp_name']);
 
-                        if ((substr($row['plp_value'], 0, 2) == '((' ) && (substr($row['plp_value'], -2) == '))' ))
+                        if ((substr($row['plp_value'], 0, 2) == '((') && (substr($row['plp_value'], -2) == '))'))
                         {
                             $row['plp_value'] = substr($row['plp_value'], 2, -2);
                             $config[$array[2]] = explode($dbtoken,$row['plp_value']);
@@ -179,20 +179,20 @@ final class ComponentUpdateSteps
                                                   'p'.$gProfileFields->getProperty('CITY', 'usf_id'));
                 $config['selection_role'] = array('');
                 $config['selection_cat']  = array('');
-                $config['number_col']  	  = array(0) ;
+                $config['number_col']  	  = array(0);
                 $config['config_default'] = 0;
 
                 // Read out the role IDs of the "Administrator", "Board" and "Member" roles
                 $role = new TableRoles(self::$db);
-                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_ADMINISTRATOR'), 'cat_org_id' => $orgId )))
+                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_ADMINISTRATOR'), 'cat_org_id' => $orgId)))
                 {
                     $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
                 }
-                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('INS_BOARD'), 'cat_org_id' => $orgId )))
+                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('INS_BOARD'), 'cat_org_id' => $orgId)))
                 {
                     $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
                 }
-                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_MEMBER'), 'cat_org_id' => $orgId )))
+                if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_MEMBER'), 'cat_org_id' => $orgId)))
                 {
                     $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
                 }
@@ -226,9 +226,9 @@ final class ComponentUpdateSteps
     /**
      * This method will add a uuid to each row of the tables adm_users and adm_roles
      */
-	public static function updateStep41AddUuid()
-	{
-	    $updateTablesUuid = array(
+    public static function updateStep41AddUuid()
+    {
+        $updateTablesUuid = array(
             array('table' => TBL_ANNOUNCEMENTS, 'column_id' => 'ann_id', 'column_uuid' => 'ann_uuid'),
             array('table' => TBL_CATEGORIES, 'column_id' => 'cat_id', 'column_uuid' => 'cat_uuid'),
             array('table' => TBL_DATES, 'column_id' => 'dat_id', 'column_uuid' => 'dat_uuid'),
@@ -250,7 +250,7 @@ final class ComponentUpdateSteps
             array('table' => TBL_USER_RELATION_TYPES, 'column_id' => 'urt_id', 'column_uuid' => 'urt_uuid'),
         );
 
-	    foreach($updateTablesUuid as $tableUuid)
+        foreach($updateTablesUuid as $tableUuid)
         {
             $sql = 'SELECT ' . $tableUuid['column_id'] . '
                       FROM ' . $tableUuid['table'] . '
@@ -267,16 +267,16 @@ final class ComponentUpdateSteps
             }
         }
 
-	    self::$db->initializeTableColumnProperties();
-	}
+        self::$db->initializeTableColumnProperties();
+    }
 
     /**
      * This method will add a new default list for the members management module. This list will be used to configure
      * and show the columns of the members management overview.
      */
-	public static function updateStep41AddMembersManagementDefaultList()
-	{
-    	global $gL10n, $gProfileFields;
+    public static function updateStep41AddMembersManagementDefaultList()
+    {
+        global $gL10n, $gProfileFields;
 
         $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
         $organizationsStatement = self::$db->queryPrepared($sql);
@@ -303,15 +303,15 @@ final class ComponentUpdateSteps
                        AND prf_name = \'members_list_configuration\' ';
             self::$db->queryPrepared($sql, array($userManagementList->getValue('lst_id'), (int) $organization['org_id']));
         }
-	}
+    }
 
     /**
      * This method will add a new systemmail text to the database table **adm_texts** for each
      * organization in the database.
      */
-	public static function updateStep41AddSystemmailText()
-	{
-    	global $gL10n;
+    public static function updateStep41AddSystemmailText()
+    {
+        global $gL10n;
 
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = self::$db->queryPrepared($sql);
@@ -321,21 +321,21 @@ final class ComponentUpdateSteps
             // convert <br /> to a normal line feed
             $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET'));
 
-        	$textPasswordReset = new TableAccess(self::$db, TBL_TEXTS, 'txt');
-        	$textPasswordReset->setValue('txt_org_id', $row['org_id']);
-        	$textPasswordReset->setValue('txt_name', 'SYSMAIL_PASSWORD_RESET');
-        	$textPasswordReset->setValue('txt_text', $value);
-        	$textPasswordReset->save();
+            $textPasswordReset = new TableAccess(self::$db, TBL_TEXTS, 'txt');
+            $textPasswordReset->setValue('txt_org_id', $row['org_id']);
+            $textPasswordReset->setValue('txt_name', 'SYSMAIL_PASSWORD_RESET');
+            $textPasswordReset->setValue('txt_text', $value);
+            $textPasswordReset->save();
         }
-	}
+    }
 
     /**
      * This method will migrate the recipients of messages from the database column msg_usr_id_receiver
      * to the new table adm_messages_recipients. There each recipient will be add in a separate row that
      * reference to the message.
      */
-	public static function updateStep41MigrateMessageRecipients()
-	{
+    public static function updateStep41MigrateMessageRecipients()
+    {
         $sql = 'SELECT msg_id, msg_usr_id_receiver FROM ' . TBL_MESSAGES;
         $messagesStatement = self::$db->queryPrepared($sql);
 
@@ -371,8 +371,8 @@ final class ComponentUpdateSteps
                 }
                 $messageRecipient->save();
             }
-	    }
-	}
+        }
+    }
 
     /**
      * This method adds the email template to the preferences

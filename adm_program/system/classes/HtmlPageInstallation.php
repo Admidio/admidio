@@ -33,7 +33,6 @@
  * $page->showMessage('error', 'Message', 'Some error message.', $gL10n->get('SYS_OVERVIEW'), 'fa-home', ADMIDIO_URL . '/adm_program/overview.php');
  * ```
  */
-
 class HtmlPageInstallation extends HtmlPage
 {
     /**

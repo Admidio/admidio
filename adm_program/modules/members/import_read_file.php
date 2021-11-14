@@ -114,7 +114,7 @@ switch($postImportFormat) {
         }
 
         if ($postEnclosure != 'AUTO') {
-            $reader->setEnclosure($postEnclosure );
+            $reader->setEnclosure($postEnclosure);
         }
         break;
 

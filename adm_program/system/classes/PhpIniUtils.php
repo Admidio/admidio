@@ -8,11 +8,10 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
 final class PhpIniUtils
 {
-    const BYTES_UNIT_FACTOR_1024 = 1024;
-    const BYTES_UNIT_FACTOR_1000 = 1000;
+    public const BYTES_UNIT_FACTOR_1024 = 1024;
+    public const BYTES_UNIT_FACTOR_1000 = 1000;
 
     /**
      * @var array<int,string> The disabled function names

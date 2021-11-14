@@ -27,15 +27,13 @@
  * $userImport->save();
  * ```
  */
-
-
 class UserImport extends User
 {
     // create readable constants for user import mode
-    const USER_IMPORT_NOT_EDIT  = 1;
-    const USER_IMPORT_DUPLICATE = 2;
-    const USER_IMPORT_DISPLACE  = 3;
-    const USER_IMPORT_COMPLETE  = 4;
+    public const USER_IMPORT_NOT_EDIT  = 1;
+    public const USER_IMPORT_DUPLICATE = 2;
+    public const USER_IMPORT_DISPLACE  = 3;
+    public const USER_IMPORT_COMPLETE  = 4;
 
     /**
      * @var int Mode how the user will be imported. Details are described at the method setImportMode()
@@ -57,7 +55,7 @@ class UserImport extends User
      */
     public function __construct(Database $database, ProfileFields $userFields, $userId = 0)
     {
-        $this->importMode = UserImport::USER_IMPORT_NOT_EDIT;
+        $this->importMode = self::USER_IMPORT_NOT_EDIT;
 
         parent::__construct($database, $userFields, $userId);
     }
@@ -113,12 +111,12 @@ class UserImport extends User
             $this->readDataById($maxUserId);
             $this->userExists = true;
 
-            if($this->importMode === UserImport::USER_IMPORT_DISPLACE)
+            if($this->importMode === self::USER_IMPORT_DISPLACE)
             {
                 // delete all user data of profile fields
                 $this->deleteUserFieldData();
             }
-            elseif($this->importMode === UserImport::USER_IMPORT_DUPLICATE)
+            elseif($this->importMode === self::USER_IMPORT_DUPLICATE)
             {
                 // save as new user
                 $this->clear();
@@ -145,12 +143,12 @@ class UserImport extends User
 
             if($this->userExists)
             {
-                if($this->importMode === UserImport::USER_IMPORT_DISPLACE)
+                if($this->importMode === self::USER_IMPORT_DISPLACE)
                 {
                     // delete all user data of profile fields
                     $this->deleteUserFieldData();
                 }
-                elseif($this->importMode === UserImport::USER_IMPORT_DUPLICATE)
+                elseif($this->importMode === self::USER_IMPORT_DUPLICATE)
                 {
                     // save as new user
                     $this->clear();
@@ -211,7 +209,7 @@ class UserImport extends User
         global $gL10n, $gLogger;
 
         // if user already exists and existing data should not be edited than do nothing
-        if($this->userExists && $this->importMode === UserImport::USER_IMPORT_NOT_EDIT)
+        if($this->userExists && $this->importMode === self::USER_IMPORT_NOT_EDIT)
         {
             return false;
         }

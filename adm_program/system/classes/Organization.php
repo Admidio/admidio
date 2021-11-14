@@ -7,7 +7,7 @@
  ***********************************************************************************************
  */
 
-/**
+/*
  * Handle organization data of Admidio and is connected to database table adm_organizations
  *
  * This class creates the organization object and manages the access to the

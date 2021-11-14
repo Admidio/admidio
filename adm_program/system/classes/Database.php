@@ -7,7 +7,7 @@
  ***********************************************************************************************
  */
 
-/**
+/*
  * Handle the connection to the database, send all sql statements and handle the returned rows.
  *
  * This class creates a connection to the database and provides several methods
@@ -62,8 +62,8 @@ use Ramsey\Uuid\Uuid;
 
 class Database
 {
-    const PDO_ENGINE_MYSQL = 'mysql';
-    const PDO_ENGINE_PGSQL = 'pgsql';
+    public const PDO_ENGINE_MYSQL = 'mysql';
+    public const PDO_ENGINE_PGSQL = 'pgsql';
 
     /**
      * @var string The database engine ("mysql", "pgsql")

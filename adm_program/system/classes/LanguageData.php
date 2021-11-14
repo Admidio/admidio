@@ -33,7 +33,7 @@
  */
 class LanguageData
 {
-    const REFERENCE_LANGUAGE = 'en'; // The ISO code of the default language that should be read if in the current language the text id is not translated
+    public const REFERENCE_LANGUAGE = 'en'; // The ISO code of the default language that should be read if in the current language the text id is not translated
 
     /**
      * @var string The code of the language that should be read in this object
@@ -60,7 +60,7 @@ class LanguageData
      */
     private $textCache = array();
     /**
-     * @var boolean Set to true if the language folders of the plugins are already loaded.
+     * @var bool Set to true if the language folders of the plugins are already loaded.
      */
     private $pluginLanguageFoldersLoaded = false;
 

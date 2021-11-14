@@ -12,7 +12,6 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
 $rootPath = dirname(dirname(__DIR__));
 $pluginFolder = basename(__DIR__);
 

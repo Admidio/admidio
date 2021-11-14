@@ -268,11 +268,11 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
     {
         if(strlen($row[$ColumnNumberSql]) > 0)
         {
-            $columnValues[strval($columnNumberJson)] = $membersListConfig->convertColumnContentForOutput($columnNumber, 'html', $row[$ColumnNumberSql], $row['usr_uuid']);
+            $columnValues[(string) $columnNumberJson] = $membersListConfig->convertColumnContentForOutput($columnNumber, 'html', $row[$ColumnNumberSql], $row['usr_uuid']);
         }
         else
         {
-            $columnValues[strval($columnNumberJson)] = '';
+            $columnValues[(string) $columnNumberJson] = '';
         }
 
         $columnNumberJson++;
@@ -337,7 +337,7 @@ while($row = $mglStatement->fetch(\PDO::FETCH_BOTH))
             </a>';
     }
 
-    $columnValues[strval($columnNumberJson)] = $userAdministration;
+    $columnValues[(string) $columnNumberJson] = $userAdministration;
 
     // add current row to json array
     $jsonArray['data'][] = $columnValues;

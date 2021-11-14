@@ -13,13 +13,12 @@
  *
  ***********************************************************************************************
  */
-
 require_once(__DIR__ . '/../../system/common.php');
 
 // only authorized user are allowed to start this module
 if (!$gCurrentUser->isAdministrator())
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // Initialize and check the parameters
@@ -29,9 +28,9 @@ $gMessage->showHtmlTextOnly(true);
 
 try
 {
-	switch ($getForm)
-   	{
-   		case 'configurations':
+    switch ($getForm)
+    {
+        case 'configurations':
             try
             {
                 // check the CSRF token of the form against the session token
@@ -43,48 +42,47 @@ try
                 // => EXIT
             }
 
-			for ($conf = 0; isset($_POST['name'. $conf]); $conf++)
-   			{
-   			    $values['id']             = $_POST['id'. $conf];
-   				$values['name']           = $_POST['name'. $conf];
-   				$values['selection_role'] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]),',') : '';
-   				$values['selection_cat']  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]),',') : '';
-   				$values['number_col']     = isset($_POST['number_col'. $conf]) ? 1 : 0 ;
-   				$values['default_conf']   = (bool)$_POST['default_conf'. $conf];
+            for ($conf = 0; isset($_POST['name'. $conf]); $conf++)
+            {
+                $values['id']             = $_POST['id'. $conf];
+                $values['name']           = $_POST['name'. $conf];
+                $values['selection_role'] = isset($_POST['selection_role'. $conf]) ? trim(implode(',', $_POST['selection_role'. $conf]),',') : '';
+                $values['selection_cat']  = isset($_POST['selection_cat'. $conf]) ? trim(implode(',', $_POST['selection_cat'. $conf]),',') : '';
+                $values['number_col']     = isset($_POST['number_col'. $conf]) ? 1 : 0;
+                $values['default_conf']   = (bool) $_POST['default_conf'. $conf];
 
-   				$allColumnsEmpty = true;
+                $allColumnsEmpty = true;
 
-   				$fields = '';
-   				for ($number = 1; isset($_POST['column'.$conf.'_'.$number]); $number++)
-   				{
-       				if (strlen($_POST['column'.$conf.'_'.$number]) > 0)
-       				{
-       					$allColumnsEmpty = false;
-           				$fields .= $_POST['column'.$conf.'_'.$number].',';
-       				}
-   				}
+                $fields = '';
+                for ($number = 1; isset($_POST['column'.$conf.'_'.$number]); $number++)
+                {
+                       if (strlen($_POST['column'.$conf.'_'.$number]) > 0)
+                       {
+                           $allColumnsEmpty = false;
+                           $fields .= $_POST['column'.$conf.'_'.$number].',';
+                       }
+                }
 
-   				if ($allColumnsEmpty)
-   				{
-   					$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_COLUMN'))));
-   				}
+                if ($allColumnsEmpty)
+                {
+                    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_COLUMN'))));
+                }
 
-   				$values['col_fields'] = substr($fields,0,-1);
-   				$config[] = $values;
-   			}
+                $values['col_fields'] = substr($fields,0,-1);
+                $config[] = $values;
+            }
 
             $report = new CategoryReport();
-   			$config = $report->saveConfigArray($config);
-           	break;
+            $config = $report->saveConfigArray($config);
+               break;
 
-       	default:
-          		$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-   	}
+           default:
+                  $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    }
 }
 catch(AdmException $e)
 {
-	$e->showText();
+    $e->showText();
 }
 
 echo 'success';
-

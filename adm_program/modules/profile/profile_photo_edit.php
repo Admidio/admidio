@@ -85,7 +85,7 @@ if((int) $user->getValue('usr_id') === 0)
 
 if($getMode === 'save')
 {
-    /*****************************Foto speichern*************************************/
+    // Foto speichern
 
     try
     {
@@ -155,7 +155,7 @@ if($getMode === 'save')
 }
 elseif($getMode === 'dont_save')
 {
-    /*****************************Foto nicht speichern*************************************/
+    // Foto nicht speichern
     // Ordnerspeicherung
     if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
@@ -183,7 +183,7 @@ elseif($getMode === 'dont_save')
 }
 elseif($getMode === 'delete')
 {
-    /***************************** Foto loeschen *************************************/
+    // Foto loeschen
     // Ordnerspeicherung, Datei löschen
     if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
@@ -211,7 +211,7 @@ elseif($getMode === 'delete')
     exit();
 }
 
-/*****************************Foto hochladen*************************************/
+// Foto hochladen
 if($getMode === 'choose')
 {
     // set headline
@@ -247,7 +247,7 @@ if($getMode === 'choose')
 }
 elseif($getMode === 'upload')
 {
-    /*****************************Foto zwischenspeichern bestaetigen***********************************/
+    // Foto zwischenspeichern bestaetigen
 
     try
     {

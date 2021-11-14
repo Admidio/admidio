@@ -12,7 +12,6 @@
  * menu_uuid: UUID of the menu entry that should be edited
  *
  ****************************************************************************/
-
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 

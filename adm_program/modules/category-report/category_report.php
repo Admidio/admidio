@@ -17,7 +17,6 @@
  * config		    : the selected configuration
  ***********************************************************************************************
  */
-
 require_once(__DIR__ . '/../../system/common.php');
 
 // check if the module is enabled and disallow access if it's disabled
@@ -38,8 +37,8 @@ if (!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 $report = new CategoryReport();
 $config = $report->getConfigArray();
 
-$getCrtId           = admFuncVariableIsValid($_GET, 'crt_id', 'int', array('defaultValue' => $gSettingsManager->get('category_report_default_configuration')) );
-$getMode            = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl' )));
+$getCrtId           = admFuncVariableIsValid($_GET, 'crt_id', 'int', array('defaultValue' => $gSettingsManager->get('category_report_default_configuration')));
+$getMode            = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
 $getFilter          = admFuncVariableIsValid($_GET, 'filter', 'string');
 $getExportAndFilter = admFuncVariableIsValid($_GET, 'export_and_filter', 'bool', array('defaultValue' => false));
 
@@ -109,7 +108,7 @@ $subheadline = $config[$report->getConfiguration()]['name'];
 
 $filename    = $g_organization.'-'.$headline.'-'.$subheadline;
 
-if ($getMode === 'html' )
+if ($getMode === 'html')
 {
     $gNavigation->addStartUrl(CURRENT_URL, $headline);
 }
@@ -131,9 +130,9 @@ if ($getMode !== 'csv')
     elseif ($getMode === 'pdf')
     {
         if (ini_get('max_execution_time')<600)
-    	{
-    		ini_set('max_execution_time', 600); //600 seconds = 10 minutes
-    	}
+        {
+            ini_set('max_execution_time', 600); //600 seconds = 10 minutes
+        }
 
         $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -247,33 +246,33 @@ if ($getMode !== 'csv')
         }
 
         if ($gCurrentUser->isAdministrator())
-		{
-    		// show link to pluginpreferences
-    		$page->addPageFunctionsMenuItem('admMenuItemPreferencesLists', $gL10n->get('SYS_CONFIGURATIONS'),
-    		    ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php',  'fa-cog');
-		}
+        {
+            // show link to pluginpreferences
+            $page->addPageFunctionsMenuItem('admMenuItemPreferencesLists', $gL10n->get('SYS_CONFIGURATIONS'),
+                ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php',  'fa-cog');
+        }
 
-		// process changes in the navbar form with javascript submit
-		$page->addJavascript('
+        // process changes in the navbar form with javascript submit
+        $page->addJavascript('
             $("#export_and_filter").change(function() {
                 $("#navbar_filter_form_category_report").submit();
             });
             $("#crt_id").change(function() {
                 $("#navbar_filter_form_category_report").submit();
             });',
-		    true
-		);
+            true
+        );
 
-		foreach ($config as $key => $item)
-		{
-		    $selectBoxEntries[$item['id']] = $item['name'];
-		}
+        foreach ($config as $key => $item)
+        {
+            $selectBoxEntries[$item['id']] = $item['name'];
+        }
 
         // create filter menu with elements for role
         $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form_category_report', '', $page, array('type' => 'navbar', 'setFocus' => false));
-		$form->addSelectBox('crt_id', $gL10n->get('SYS_SELECT_CONFIGURATION'), $selectBoxEntries,
-		    array('showContextDependentFirstEntry' => false,'defaultValue' => $getCrtId));
+        $form->addSelectBox('crt_id', $gL10n->get('SYS_SELECT_CONFIGURATION'), $selectBoxEntries,
+            array('showContextDependentFirstEntry' => false, 'defaultValue' => $getCrtId));
         if ($getExportAndFilter)
         {
             $form->addInput('filter', $gL10n->get('SYS_FILTER'), $getFilter);
@@ -299,8 +298,8 @@ $columnNumber = 1;
 
 foreach ($report->headerData as $columnHeader)
 {
-	// bei Profilfeldern ist in 'id' die usf_id, ansonsten 0
-	$usf_id = $columnHeader['id'];
+    // bei Profilfeldern ist in 'id' die usf_id, ansonsten 0
+    $usf_id = $columnHeader['id'];
 
     if ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'NUMBER'
         || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DECIMAL_NUMBER')
@@ -309,29 +308,29 @@ foreach ($report->headerData as $columnHeader)
     }
     else
     {
-    	$columnAlign[] = 'center';
+        $columnAlign[] = 'center';
     }
 
     if ($getMode == 'csv')
     {
-    	if ($columnNumber === 1)
+        if ($columnNumber === 1)
         {
-        	// in der ersten Spalte die laufende Nummer noch davorsetzen
+            // in der ersten Spalte die laufende Nummer noch davorsetzen
             $csvStr .= $valueQuotes. $gL10n->get('SYS_ABR_NO'). $valueQuotes;
         }
         $csvStr .= $separator. $valueQuotes. $columnHeader['data']. $valueQuotes;
     }
     elseif ($getMode == 'pdf')
     {
-    	if ($columnNumber === 1)
+        if ($columnNumber === 1)
         {
-        	$table->addColumn($gL10n->get('SYS_ABR_NO'), array('style' => 'text-align: center;font-size:14;background-color:#C7C7C7;'), 'th');
+            $table->addColumn($gL10n->get('SYS_ABR_NO'), array('style' => 'text-align: center;font-size:14;background-color:#C7C7C7;'), 'th');
         }
         $table->addColumn($columnHeader['data'], array('style' => 'text-align: center;font-size:14;background-color:#C7C7C7;'), 'th');
     }
     elseif ($getMode == 'html' || $getMode == 'print')
     {
-    	$columnValues[] = $columnHeader['data'];
+        $columnValues[] = $columnHeader['data'];
     }
     $columnNumber++;
 }
@@ -357,18 +356,18 @@ $user = new User($gDb, $gProfileFields);
 // die Daten einlesen
 foreach ($report->listData as $member => $memberdata)
 {
-	$columnValues = array();
+    $columnValues = array();
     $tmp_csv = '';
 
     // Felder zu Datensatz
     $columnNumber = 1;
     foreach ($memberdata as $key => $content)
     {
-    	if ($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf')
+        if ($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf')
         {
-        	if ($columnNumber === 1)
+            if ($columnNumber === 1)
             {
-            	// die Laufende Nummer noch davorsetzen
+                // die Laufende Nummer noch davorsetzen
                 $columnValues[] = $listRowNumber;
             }
         }
@@ -381,9 +380,9 @@ foreach ($report->listData as $member => $memberdata)
             }
         }
 
-        /*****************************************************************/
+
         // create output format
-       	/*****************************************************************/
+
 
         $usf_id = 0;
         $usf_id = $report->headerData[$key]['id'];
@@ -392,7 +391,7 @@ foreach ($report->listData as $member => $memberdata)
          && in_array($getMode, array('csv', 'pdf'), true)
          && $content > 0
          && ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
-              || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON') )
+              || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON'))
         {
             // show selected text of optionfield or combobox
             $arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
@@ -413,7 +412,7 @@ foreach ($report->listData as $member => $memberdata)
 
         if ($getMode == 'csv')
         {
-        	$tmp_csv .= $separator. $valueQuotes. $content. $valueQuotes;
+            $tmp_csv .= $separator. $valueQuotes. $content. $valueQuotes;
         }
         // pdf should show only text and not much html content
         elseif ($getMode === 'pdf')
@@ -422,67 +421,67 @@ foreach ($report->listData as $member => $memberdata)
         }
         else                   // create output in html layout for getMode = html or print
         {
-        	if ($usf_id !== 0)     // profile fields
-        	{
-        	    $user->readDataById($member);
-        	    
-        		if ($getMode === 'html'
-        			&&    ($usf_id === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
-        				|| $usf_id === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
-        		{
-        		    $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content);
-        		    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))).'">'.$htmlValue.'</a>';
-        		}
-        		else
-        		{
-        		    // within print mode no links should be set
-        		    if ($getMode === 'print'
-        		        &&    ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'EMAIL'
-        		            || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
-        		            || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'URL'))
-        		    {
-        		        $columnValues[] = $content;
-        		    }
-        		    else
-        		    {
-        		        // checkbox must set a sorting value
-        		        if($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')
-        		        {
-        		            $columnValues[] = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content), 'order' => $content);
-        		        }
-        		        else
-        		        {
-        		            $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $user->getValue('usr_uuid'));
-        		        }
-        		    }
-        		}
-        	}
-       	    else            // all other fields except profile fields
-       	    {
+            if ($usf_id !== 0)     // profile fields
+            {
+                $user->readDataById($member);
+
+                if ($getMode === 'html'
+                    &&    ($usf_id === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
+                        || $usf_id === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
+                {
+                    $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content);
+                    $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))).'">'.$htmlValue.'</a>';
+                }
+                else
+                {
+                    // within print mode no links should be set
+                    if ($getMode === 'print'
+                        &&    ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'EMAIL'
+                            || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
+                            || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'URL'))
+                    {
+                        $columnValues[] = $content;
+                    }
+                    else
+                    {
+                        // checkbox must set a sorting value
+                        if($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')
+                        {
+                            $columnValues[] = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content), 'order' => $content);
+                        }
+                        else
+                        {
+                            $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $user->getValue('usr_uuid'));
+                        }
+                    }
+                }
+            }
+               else            // all other fields except profile fields
+               {
                 // if empty string pass a whitespace
                 if (strlen($content) > 0)
                 {
-            	   $columnValues[] = $content;
-			    }
+                   $columnValues[] = $content;
+                }
                 else
                 {
-            	   $columnValues[] = '&nbsp;';
+                   $columnValues[] = '&nbsp;';
                 }
-       	    }
-		}
-		$columnNumber++;
+               }
+        }
+        $columnNumber++;
     }
 
-	if ($getFilter == '' || ($getFilter <> '' && (stristr(implode('',$columnValues), $getFilter  ) || stristr($tmp_csv, $getFilter))))
+    if ($getFilter == '' || ($getFilter != '' && (stristr(implode('',$columnValues), $getFilter) || stristr($tmp_csv, $getFilter))))
     {
-		if ($getMode == 'csv')
-   	 	{
-    		$csvStr .= $tmp_csv. "\n";
-    	}
-   	 	else
-    	{
-        	$table->addRowByArray($columnValues, null, array('nobr' => 'true'));
-    	}
+        if ($getMode == 'csv')
+        {
+            $csvStr .= $tmp_csv. "\n";
+        }
+        else
+        {
+            $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
+        }
         $listRowNumber++;
     }
 }  // End-For (jeder gefundene User)

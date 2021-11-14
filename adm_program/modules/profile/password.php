@@ -73,9 +73,9 @@ if($getMode === 'change')
     $newPassword        = $_POST['new_password'];
     $newPasswordConfirm = $_POST['new_password_confirm'];
 
-    /***********************************************************************/
-    /* Handle form input */
-    /***********************************************************************/
+
+    // Handle form input
+
     if(($oldPassword !== '' || $gCurrentUser->isAdministrator())
     &&  $newPassword !== '' && $newPasswordConfirm !== '')
     {
@@ -131,9 +131,9 @@ if($getMode === 'change')
 }
 elseif($getMode === 'html')
 {
-    /***********************************************************************/
-    /* Show password form */
-    /***********************************************************************/
+
+    // Show password form
+
 
     $zxcvbnUserInputs = json_encode($user->getPasswordUserData(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 

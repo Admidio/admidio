@@ -28,7 +28,7 @@
  */
 class ComponentUpdate extends Component
 {
-    const UPDATE_STEP_STOP = 'stop';
+    public const UPDATE_STEP_STOP = 'stop';
 
     /**
      * Constructor that will create an object for component updating.
@@ -164,7 +164,7 @@ class ComponentUpdate extends Component
             // if a method of this class was set in the update step
             // then call this function and don't execute a SQL statement
             if (str_starts_with($updateStepContent, 'ComponentUpdateSteps::')) {
-                $gLogger->info('UPDATE: Execute update step Nr: ' . (int)$xmlNode['id']);
+                $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
 
                 self::executeUpdateMethod($updateStepContent);
 
@@ -172,11 +172,11 @@ class ComponentUpdate extends Component
             } else {
                 $showError = true;
                 // if the attribute error was set to "ignore" then don't show errors that occurs on sql execution
-                if (isset($xmlNode['error']) && (string)$xmlNode['error'] === 'ignore') {
+                if (isset($xmlNode['error']) && (string) $xmlNode['error'] === 'ignore') {
                     $showError = false;
                 }
 
-                $gLogger->info('UPDATE: Execute update step Nr: ' . (int)$xmlNode['id']);
+                $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
 
                 $this->executeUpdateSql($updateStepContent, $showError);
 
@@ -186,7 +186,7 @@ class ComponentUpdate extends Component
         else {
             $gLogger->info(
                 'UPDATE: Update step is for another database!',
-                array('database' => (string)$xmlNode['database'], 'step' => (int)$xmlNode['id'])
+                array('database' => (string) $xmlNode['database'], 'step' => (int) $xmlNode['id'])
             );
         }
 

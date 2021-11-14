@@ -533,11 +533,11 @@ if ($fp = open_backup_file($backupabsolutepath.$tempbackupfilename))
     // Since views can depend on each other in any order, we need to
     // create temporary tables with the (potentially) required columns first,
     // which will later be dropped again and replaced by the actual view.
-            # 1) Drop view from database
-            # 2) create surrogate table to have columns available in case another view depends on it
-            # After all surrogate tables are created:
-            # 3) remove surrogate table
-            # 4) Create actual view (CREATE VIEW command only, no data ex-/import required)
+            // 1) Drop view from database
+            // 2) create surrogate table to have columns available in case another view depends on it
+            // After all surrogate tables are created:
+            // 3) remove surrogate table
+            // 4) Create actual view (CREATE VIEW command only, no data ex-/import required)
     $allviewsstructure = '';
     foreach ($SelectedViews as $dbname => $value)
     {

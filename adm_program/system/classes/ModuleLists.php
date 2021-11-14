@@ -166,9 +166,9 @@
  */
 class ModuleLists extends Modules
 {
-    const ROLE_TYPE_INACTIVE = 0;
-    const ROLE_TYPE_ACTIVE = 1;
-    const ROLE_TYPE_EVENT_PARTICIPATION = 2;
+    public const ROLE_TYPE_INACTIVE = 0;
+    public const ROLE_TYPE_ACTIVE = 1;
+    public const ROLE_TYPE_EVENT_PARTICIPATION = 2;
 
     /**
      * creates an new ModuleLists object

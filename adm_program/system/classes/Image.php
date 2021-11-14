@@ -8,12 +8,11 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
 class Image
 {
-    const ROTATE_DIRECTION_LEFT  = 'left';
-    const ROTATE_DIRECTION_RIGHT = 'right';
-    const ROTATE_DIRECTION_FLIP  = 'flip';
+    public const ROTATE_DIRECTION_LEFT  = 'left';
+    public const ROTATE_DIRECTION_RIGHT = 'right';
+    public const ROTATE_DIRECTION_FLIP  = 'flip';
 
     /**
      * @var string

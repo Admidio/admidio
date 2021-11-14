@@ -82,9 +82,9 @@ if($getUserUuid !== '')
             $newPassword        = $_POST['new_password'];
             $newPasswordConfirm = $_POST['new_password_confirm'];
 
-            /***********************************************************************/
-            /* Handle form input */
-            /***********************************************************************/
+
+            // Handle form input
+
             if($newPassword !== '' && $newPasswordConfirm !== '')
             {
                 if(strlen($newPassword) >= PASSWORD_MIN_LENGTH)
@@ -295,7 +295,7 @@ elseif(!empty($_POST['recipient_email']))
 }
 else
 {
-    /*********************HTML_PART*******************************/
+    // HTML_PART
 
     $headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
 

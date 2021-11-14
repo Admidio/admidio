@@ -6,7 +6,6 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
 final class StringUtils
 {
     /**
@@ -239,7 +238,7 @@ final class StringUtils
             (!self::strValidCharacters($filename, 'folder') && !$checkExtension)
         )
         {
-            throw new AdmException('SYS_FILENAME_INVALID', array(StringUtils::strStripTags($filename)));
+            throw new AdmException('SYS_FILENAME_INVALID', array(self::strStripTags($filename)));
         }
 
         if ($checkExtension)

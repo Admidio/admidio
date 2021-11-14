@@ -27,7 +27,6 @@
  * $page->show();
  * ```
  */
-
 class HtmlPage extends \Smarty
 {
     /**

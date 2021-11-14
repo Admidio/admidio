@@ -37,8 +37,8 @@
  */
 class TableCategory extends TableAccess
 {
-    const MOVE_UP   = 'UP';
-    const MOVE_DOWN = 'DOWN';
+    public const MOVE_UP   = 'UP';
+    public const MOVE_DOWN = 'DOWN';
 
     /**
      * @var string

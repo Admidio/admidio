@@ -118,7 +118,7 @@ if ($getPhotoNr == null)
         }
     }
 
-    /************************add sub albums as subfolders*************************************/
+    // add sub albums as subfolders
 
     // get sub albums
     $sql = 'SELECT pho_id

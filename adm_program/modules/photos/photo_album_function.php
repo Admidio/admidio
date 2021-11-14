@@ -52,7 +52,7 @@ if (!$photoAlbum->isEditable())
 // Location with the path from the database
 $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 
-/********************Aenderungen oder Neueintraege kontrollieren***********************************/
+// Aenderungen oder Neueintraege kontrollieren
 if ($getMode === 'new' || $getMode === 'change')
 {
     try {
@@ -206,7 +206,7 @@ if ($getMode === 'new' || $getMode === 'change')
     }
 }
 
-/**************************************************************************/
+
 
 // delete photo album
 elseif ($getMode === 'delete')

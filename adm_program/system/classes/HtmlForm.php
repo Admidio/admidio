@@ -32,14 +32,14 @@
  */
 class HtmlForm extends HtmlFormBasic
 {
-    const FIELD_DEFAULT  = 0;
-    const FIELD_REQUIRED = 1;
-    const FIELD_DISABLED = 2;
-    const FIELD_READONLY = 3;
-    const FIELD_HIDDEN   = 4;
+    public const FIELD_DEFAULT  = 0;
+    public const FIELD_REQUIRED = 1;
+    public const FIELD_DISABLED = 2;
+    public const FIELD_READONLY = 3;
+    public const FIELD_HIDDEN   = 4;
 
-    const SELECT_BOX_MODUS_EDIT = 'EDIT_CATEGORIES';
-    const SELECT_BOX_MODUS_FILTER = 'FILTER_CATEGORIES';
+    public const SELECT_BOX_MODUS_EDIT = 'EDIT_CATEGORIES';
+    public const SELECT_BOX_MODUS_FILTER = 'FILTER_CATEGORIES';
 
     /**
      * @var bool Flag if this form has required fields. Then a notice must be written at the end of the form

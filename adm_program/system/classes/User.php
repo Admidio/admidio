@@ -12,10 +12,9 @@
 /**
  * Handles all the user data and the rights. This is used for the current login user and for other users of the database.
  */
-
 class User extends TableAccess
 {
-    const MAX_INVALID_LOGINS = 3;
+    public const MAX_INVALID_LOGINS = 3;
 
     /**
      * @var bool
@@ -670,7 +669,7 @@ class User extends TableAccess
         {
             $message = new TableMessage($this->db, $row['msg_id']);
             $message->delete();
-	    }
+        }
 
         // now delete every database entry where the user id is used
         $sqlQueries = array();
@@ -1899,7 +1898,7 @@ class User extends TableAccess
         if (!$doHashing) {
             if(is_object($gChangeNotification)) {
                 $gChangeNotification->logUserChange(
-                    (int)$this->getValue('usr_id'),
+                    (int) $this->getValue('usr_id'),
                     'usr_password',
                     $this->getValue('usr_password'), $newPassword, $this
                 );
@@ -1921,7 +1920,7 @@ class User extends TableAccess
 
         if(is_object($gChangeNotification)) {
             $gChangeNotification->logUserChange(
-                (int)$this->getValue('usr_id'),
+                (int) $this->getValue('usr_id'),
                 'usr_password',
                 $this->getValue('usr_password'), $newPasswordHash, $this
             );
@@ -1990,7 +1989,7 @@ class User extends TableAccess
             // log the changes only when $this->save is called!
             if (!$this->newRecord && is_object($gChangeNotification)) {
                 $gChangeNotification->logUserChange(
-                    (int)$this->getValue('usr_id'),
+                    (int) $this->getValue('usr_id'),
                     $columnName,
                     $this->getValue($columnName), $newValue, $this
                 );
@@ -2044,7 +2043,7 @@ class User extends TableAccess
 
         if ($returnCode && !$this->newRecord && is_object($gChangeNotification)) {
             $gChangeNotification->logProfileChange(
-                (int)$this->getValue('usr_id'),
+                (int) $this->getValue('usr_id'),
                 $this->mProfileFieldsData->getProperty($columnName, 'usf_id'),
                 $columnName, // TODO: is $columnName the internal name or the human-readable?
                 // Old and new values in human-readable version:

@@ -8,15 +8,14 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
 final class SystemInfoUtils
 {
-    const UNAME_MODE_A = 'a';
-    const UNAME_MODE_S = 's';
-    const UNAME_MODE_N = 'n';
-    const UNAME_MODE_R = 'r';
-    const UNAME_MODE_V = 'v';
-    const UNAME_MODE_M = 'm';
+    public const UNAME_MODE_A = 'a';
+    public const UNAME_MODE_S = 's';
+    public const UNAME_MODE_N = 'n';
+    public const UNAME_MODE_R = 'r';
+    public const UNAME_MODE_V = 'v';
+    public const UNAME_MODE_M = 'm';
 
     /**
      * @return string

@@ -128,7 +128,7 @@ $htmlFieldTable = '
 
                         $selectEntries = '';
                         // Alle Spalten aus der Datei in Combobox auflisten
-                        $found = FALSE;
+                        $found = false;
                         foreach($arrayCsvColumns as $colKey => $colValue)
                         {
                             $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
@@ -143,16 +143,16 @@ $htmlFieldTable = '
                                 if (strlen($formValues['usf-'. $usfId]) > 0 && $formValues['usf-'. $usfId] == $colKey)
                                 {
                                     $selected .= ' selected="selected"';
-                                    $found = TRUE;
+                                    $found = true;
                                 }
                             }
                             // Otherwise, detect the entry where the column header
                             // matches the Admidio field name or internal field name (case-insensitive)
-                            else if (strtolower($colValue) == strtolower($field->getValue('usf_name'))
+                            elseif (strtolower($colValue) == strtolower($field->getValue('usf_name'))
                                 || strtolower($colValue) == strtolower($field->getValue('usf_name_intern')))
                             {
                                 $selected .= ' selected="selected"';
-                                $found = TRUE;
+                                $found = true;
                             }
                             $selectEntries .= '<option value="'.$colKey.'"'.$selected.'>'.$colValue.'</option>';
                         }
@@ -190,7 +190,7 @@ $htmlFieldTable = '
 
                             $selectEntries = '';
                             // Alle Spalten aus der Datei in Combobox auflisten
-                            $found = FALSE;
+                            $found = false;
                             foreach($arrayCsvColumns as $colKey => $colValue)
                             {
                                 $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
@@ -205,15 +205,15 @@ $htmlFieldTable = '
                                     if (strlen($formValues['usr_login_name']) > 0 && $formValues['usr_login_name'] == $colKey)
                                     {
                                         $selected .= ' selected="selected"';
-                                        $found = TRUE;
+                                        $found = true;
                                     }
                                 }
                                 // Otherwise, detect the entry where the column header
                                 // matches the Admidio field name or internal field name (case-insensitive)
-                                else if (strtolower($colValue) == strtolower($gL10n->get('SYS_USERNAME')))
+                                elseif (strtolower($colValue) == strtolower($gL10n->get('SYS_USERNAME')))
                                 {
                                     $selected .= ' selected="selected"';
-                                    $found = TRUE;
+                                    $found = true;
                                 }
                                 $selectEntries .= '<option value="'.$colKey.'"'.$selected.'>'.$colValue.'</option>';
                             }
@@ -236,7 +236,7 @@ $htmlFieldTable = '
 
                             $selectEntries = '';
                             // Alle Spalten aus der Datei in Combobox auflisten
-                            $found = FALSE;
+                            $found = false;
                             foreach($arrayCsvColumns as $colKey => $colValue)
                             {
                                 $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
@@ -251,15 +251,15 @@ $htmlFieldTable = '
                                     if (strlen($formValues['usr_password']) > 0 && $formValues['usr_password'] == $colKey)
                                     {
                                         $selected .= ' selected="selected"';
-                                        $found = TRUE;
+                                        $found = true;
                                     }
                                 }
                                 // Otherwise, detect the entry where the column header
                                 // matches the Admidio field name or internal field name (case-insensitive)
-                                else if (strtolower($colValue) == strtolower($gL10n->get('SYS_PASSWORD')))
+                                elseif (strtolower($colValue) == strtolower($gL10n->get('SYS_PASSWORD')))
                                 {
                                     $selected .= ' selected="selected"';
-                                    $found = TRUE;
+                                    $found = true;
                                 }
                                 $selectEntries .= '<option value="'.$colKey.'"'.$selected.'>'.$colValue.'</option>';
                             }

@@ -7,7 +7,7 @@
  ***********************************************************************************************
  */
 
-/**
+/*
  * Controls read and write access to datbase tables
  *
  * This class should help you to read and write records of database tables.

@@ -36,7 +36,7 @@ if(isset($_SESSION['import_request']))
     // now write the previously entered contents into the object
     $formValues = $_SESSION['import_request'];
     unset($_SESSION['import_request']);
-};
+}
 
 // Make sure all potential form values have either a value from the previous request or the default
 if (!isset($formValues['format'])) {
@@ -76,7 +76,7 @@ $formats = array(
 );
 $form->addSelectBox(
     'format',$gL10n->get('SYS_FORMAT'), $formats,
-    array('showContextDependentFirstEntry' => FALSE, 'property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['format'])
+    array('showContextDependentFirstEntry' => false, 'property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['format'])
 );
 $page->addJavascript('
     $("#format").change(function() {
@@ -90,8 +90,7 @@ $page->addJavascript('
 
 $form->addFileUpload(
     'userfile', $gL10n->get('SYS_CHOOSE_FILE'),
-    array('property' => HtmlForm::FIELD_REQUIRED, 'allowedMimeTypes' =>
-        array('text/comma-separated-values',
+    array('property' => HtmlForm::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values',
               'text/html',
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
               'application/vnd.ms-excel',
@@ -119,7 +118,7 @@ $selectBoxEntries = array(
 );
 $form->addSelectBox(
     'import_coding', $gL10n->get('SYS_CODING'), $selectBoxEntries,
-    array('showContextDependentFirstEntry' => FALSE, 'defaultValue' => $formValues['import_coding'], 'class' => 'import-setting import-CSV import-HTML')
+    array('showContextDependentFirstEntry' => false, 'defaultValue' => $formValues['import_coding'], 'class' => 'import-setting import-CSV import-HTML')
 );
 
 $selectBoxEntries = array(
@@ -131,7 +130,7 @@ $selectBoxEntries = array(
 );
 $form->addSelectBox(
     'import_separator', $gL10n->get('SYS_SEPARATOR_FOR_CSV_FILE'), $selectBoxEntries,
-    array('showContextDependentFirstEntry' => FALSE, 'defaultValue' => $formValues['import_separator'], 'class' => 'import-setting import-CSV')
+    array('showContextDependentFirstEntry' => false, 'defaultValue' => $formValues['import_separator'], 'class' => 'import-setting import-CSV')
 );
 
 $selectBoxEntries = array(
@@ -142,7 +141,7 @@ $selectBoxEntries = array(
 );
 $form->addSelectBox(
     'import_enclosure', $gL10n->get('SYS_FIELD_ENCLOSURE'), $selectBoxEntries,
-    array('showContextDependentFirstEntry' => FALSE, 'defaultValue' => $formValues['import_enclosure'], 'class' => 'import-setting import-CSV')
+    array('showContextDependentFirstEntry' => false, 'defaultValue' => $formValues['import_enclosure'], 'class' => 'import-setting import-CSV')
 );
 
 

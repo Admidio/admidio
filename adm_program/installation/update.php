@@ -14,7 +14,6 @@
  *        3 : Show result of update
  ***********************************************************************************************
  */
-
 $rootPath = dirname(dirname(__DIR__));
 
 // embed config file

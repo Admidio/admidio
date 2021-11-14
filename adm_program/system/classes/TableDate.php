@@ -421,7 +421,7 @@ class TableDate extends TableAccess
     public function participationPossible($currentCountParticipations)
     {
         if(!$this->deadlineExceeded()
-        && (  $this->getValue('dat_max_members') === 0
+        && ($this->getValue('dat_max_members') === 0
            || ($this->getValue('dat_max_members') > 0 && $currentCountParticipations < $this->getValue('dat_max_members'))))
         {
             return true;

@@ -14,9 +14,9 @@
  */
 class TableUserRelationType extends TableAccess
 {
-    const USER_RELATION_TYPE_UNIDIRECTIONAL = 'unidirectional';
-    const USER_RELATION_TYPE_SYMMETRICAL    = 'symmetrical';
-    const USER_RELATION_TYPE_ASYMMETRICAL   = 'asymmetrical';
+    public const USER_RELATION_TYPE_UNIDIRECTIONAL = 'unidirectional';
+    public const USER_RELATION_TYPE_SYMMETRICAL    = 'symmetrical';
+    public const USER_RELATION_TYPE_ASYMMETRICAL   = 'asymmetrical';
 
     /**
      * Constructor that will create an object of a recordset of the table adm_user_relation_types.

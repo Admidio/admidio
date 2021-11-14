@@ -16,7 +16,6 @@
  * start      : Position of query recordset where the visual output should start
  *
  *****************************************************************************/
-
 require_once(__DIR__ . '/../../system/common.php');
 
 // check if the module is enabled and disallow access if it's disabled
@@ -220,7 +219,7 @@ if ($getPhotoUuid !== '')
     $page->addHtml('</p>');
 }
 
-/*************************THUMBNAILS**********************************/
+// THUMBNAILS
 // Nur wenn uebergebenes Album Bilder enthaelt
 if ($photoAlbum->getValue('pho_quantity') > 0)
 {
@@ -364,7 +363,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
     ));
 
 }
-/************************ Album list *************************************/
+// Album list
 
 // show all albums of the current level
 $sql = 'SELECT *
@@ -524,7 +523,7 @@ if($albumsCount > 0)
     $page->addHtml('</div>');
 }
 
-/****************************Leeres Album****************/
+// Leeres Album
 // Falls das Album weder Fotos noch Unterordner enthaelt
 if ($albumsCount === 0 && ($photoAlbum->getValue('pho_quantity') == 0 || strlen($photoAlbum->getValue('pho_quantity')) === 0))  // alle vorhandenen Albumen werden ignoriert
 {

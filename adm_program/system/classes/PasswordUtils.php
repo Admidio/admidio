@@ -24,24 +24,24 @@ use Hautelook\Phpass\PasswordHash;
  */
 final class PasswordUtils
 {
-    const HASH_ALGORITHM_DEFAULT = 'DEFAULT';
-    const HASH_ALGORITHM_ARGON2ID = 'ARGON2ID';
-    const HASH_ALGORITHM_ARGON2I = 'ARGON2I';
-    const HASH_ALGORITHM_BCRYPT = 'BCRYPT';
-    const HASH_ALGORITHM_SHA512 = 'SHA512';
+    public const HASH_ALGORITHM_DEFAULT = 'DEFAULT';
+    public const HASH_ALGORITHM_ARGON2ID = 'ARGON2ID';
+    public const HASH_ALGORITHM_ARGON2I = 'ARGON2I';
+    public const HASH_ALGORITHM_BCRYPT = 'BCRYPT';
+    public const HASH_ALGORITHM_SHA512 = 'SHA512';
 
-    const HASH_COST_BCRYPT_DEFAULT = PASSWORD_BCRYPT_DEFAULT_COST;
-    const HASH_COST_BCRYPT_MIN = 8;
-    const HASH_COST_BCRYPT_MAX = 31;
-    const HASH_COST_SHA512_DEFAULT = 100000;
-    const HASH_COST_SHA512_MIN = 25000;
-    const HASH_COST_SHA512_MAX = 999999999;
+    public const HASH_COST_BCRYPT_DEFAULT = PASSWORD_BCRYPT_DEFAULT_COST;
+    public const HASH_COST_BCRYPT_MIN = 8;
+    public const HASH_COST_BCRYPT_MAX = 31;
+    public const HASH_COST_SHA512_DEFAULT = 100000;
+    public const HASH_COST_SHA512_MIN = 25000;
+    public const HASH_COST_SHA512_MAX = 999999999;
 
-    const HASH_INDICATOR_ARGON2ID = '$argon2id$';
-    const HASH_INDICATOR_ARGON2I = '$argon2i$';
-    const HASH_INDICATOR_BCRYPT = '$2y$';
-    const HASH_INDICATOR_SHA512 = '$6$';
-    const HASH_INDICATOR_PORTABLE = '$P$';
+    public const HASH_INDICATOR_ARGON2ID = '$argon2id$';
+    public const HASH_INDICATOR_ARGON2I = '$argon2i$';
+    public const HASH_INDICATOR_BCRYPT = '$2y$';
+    public const HASH_INDICATOR_SHA512 = '$6$';
+    public const HASH_INDICATOR_PORTABLE = '$P$';
 
     /**
      * Run a benchmark to get the best fitting cost value.

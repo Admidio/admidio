@@ -64,11 +64,11 @@ use PHPMailer\PHPMailer\Exception;
  */
 class Email extends PHPMailer
 {
-    const SIZE_UNIT_BYTE = 'Byte';
-    const SIZE_UNIT_KIBIBYTE = 'KiB';
-    const SIZE_UNIT_MEBIBYTE = 'MiB';
-    const SIZE_UNIT_GIBIBYTE = 'GiB';
-    const SIZE_UNIT_TEBIBYTE = 'TiB';
+    public const SIZE_UNIT_BYTE = 'Byte';
+    public const SIZE_UNIT_KIBIBYTE = 'KiB';
+    public const SIZE_UNIT_MEBIBYTE = 'MiB';
+    public const SIZE_UNIT_GIBIBYTE = 'GiB';
+    public const SIZE_UNIT_TEBIBYTE = 'TiB';
 
     /**
      * @var string Plain text of email
@@ -177,9 +177,9 @@ class Email extends PHPMailer
      * Add the name and email address of the given user id to the email as a normal recipient. If the system setting
      * **mail_send_to_all_addresses** is set than all email addresses of the given user id will be added.
      * @param int $userId Id of an user who should be the recipient of the email.
-     * @return Returns true if recipients could be added to the email.
      * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
      *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
+     * @return Returns true if recipients could be added to the email.
      */
     public function addRecipientsByUserId($userId)
     {
@@ -385,7 +385,7 @@ class Email extends PHPMailer
         if($outputGlobalVar)
         {
             $this->SMTPDebug = SMTP::DEBUG_CLIENT;
-            $this->Debugoutput = function($str, $level) {
+            $this->Debugoutput = function ($str, $level) {
                 $GLOBALS['phpmailer_output_debug'] .= $level . ': ' . $str . '<br />';
             };
         }

@@ -262,9 +262,9 @@ $documentsFilesOverview->setDatatablesColumnsHide(array(1));
 $documentsFilesOverview->setDatatablesOrderColumns(array(1, 3));
 $htmlDocumentsFilesOverview = $documentsFilesOverview->show();
 
-/**************************************************************************/
+
 // Add Admin table to html page
-/**************************************************************************/
+
 
 // If user is download Admin show further files contained in this folder.
 if ($gCurrentUser->adminDocumentsFiles())

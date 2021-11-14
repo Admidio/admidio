@@ -18,7 +18,6 @@
  *        start_installation   : Start installation
  ***********************************************************************************************
  */
-
 $rootPath = dirname(dirname(__DIR__));
 require_once($rootPath . '/adm_program/installation/install_functions.php');
 

@@ -95,8 +95,8 @@ class Navigation
      *                     would be linked with the $url.
      * @param string $icon A url to the icon that should be shown in the html navigation stack
      *                     together with the text and would be linked with the $url.
-     * @return bool Returns true if the navigation-stack got changed and false if not.
      * @throws AdmException Throws an exception if the url has invalid characters.
+     * @return bool Returns true if the navigation-stack got changed and false if not.
      */
     public function addUrl($url, $text = null, $icon = null)
     {
@@ -144,8 +144,8 @@ class Navigation
 
     /**
      * Get the last added url from the stack.
-     * @return string|null Returns the last added url. If the stack is empty returns null
      * @throws AdmException Throws an exception if no url is in the navigation stack.
+     * @return string|null Returns the last added url. If the stack is empty returns null
      */
     public function getUrl()
     {
@@ -160,8 +160,8 @@ class Navigation
 
     /**
      * Get the previous url from the stack. This is not the last url that was added to the stack!
-     * @return string|null Returns the previous added url. If only one url is added it returns this one. If no url is added returns null
      * @throws AdmException Throws an exception if no previous url is in the navigation stack.
+     * @return string|null Returns the previous added url. If only one url is added it returns this one. If no url is added returns null
      */
     public function getPreviousUrl()
     {
