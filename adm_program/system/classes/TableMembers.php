@@ -204,8 +204,8 @@ class TableMembers extends TableAccess
                 $membership,
                 'mem_begin',
                 null,
-                $obj->getValue('mem_begin', 'Y-m-d'), /*user=*/ 
-                null, /*deleting=*/ 
+                $obj->getValue('mem_begin', 'Y-m-d'), // user=
+                null, // deleting=
                 true
             );
             $gChangeNotification->logRoleChange(
@@ -214,8 +214,8 @@ class TableMembers extends TableAccess
                 $membership,
                 'mem_end',
                 null,
-                $obj->getValue('mem_end', 'Y-m-d'), /*user=*/ 
-                null, /*deleting=*/ 
+                $obj->getValue('mem_end', 'Y-m-d'), // user=
+                null, // deleting=
                 true
             );
             if ($obj->getValue('mem_leader')) {
@@ -225,8 +225,8 @@ class TableMembers extends TableAccess
                     $membership,
                     'mem_leader',
                     null,
-                    $obj->getValue('mem_leader'), /*user=*/ 
-                    null, /*deleting=*/ 
+                    $obj->getValue('mem_leader'), // user=
+                    null, // deleting=
                     true
                 );
             }

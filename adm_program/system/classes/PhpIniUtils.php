@@ -61,10 +61,13 @@ final class PhpIniUtils
         switch ($unit) {
             case 'T': // fallthrough
                 $value *= $multi;
+                // no break
             case 'G': // fallthrough
                 $value *= $multi;
+                // no break
             case 'M': // fallthrough
                 $value *= $multi;
+                // no break
             case 'K': // fallthrough
                 $value *= $multi;
         }

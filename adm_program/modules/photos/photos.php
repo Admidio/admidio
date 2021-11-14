@@ -91,9 +91,9 @@ if ($photoAlbum->isEditable()) {
             $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php", {photo_uuid: "'.$getPhotoUuid.'", photo_nr: img, job: "rotate", direction: direction}, function(data) {
                 // Appending the random number is necessary to trick the browser cache
                 $("#img_" + img).attr("src", "'.SecurityUtils::encodeUrl(
-        ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php',
-        array('photo_uuid' => $getPhotoUuid, 'thumb' => 1)
-    ).'&photo_nr=" + img + "&rand=" + Math.random());
+            ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php',
+            array('photo_uuid' => $getPhotoUuid, 'thumb' => 1)
+        ).'&photo_nr=" + img + "&rand=" + Math.random());
                 return true;
             });
         }'

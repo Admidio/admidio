@@ -319,10 +319,10 @@ if ($getMode === 1) {
             'error',
             $gL10n->get('SYS_NOTE'),
             $gL10n->get(
-            'SYS_FILESYSTEM_VERSION_INVALID',
-            array($installedDbVersion,
+                'SYS_FILESYSTEM_VERSION_INVALID',
+                array($installedDbVersion,
                 ADMIDIO_VERSION_TEXT, '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>')
-        ),
+            ),
             $gL10n->get('SYS_OVERVIEW'),
             'fa-home',
             ADMIDIO_URL . '/adm_program/overview.php'

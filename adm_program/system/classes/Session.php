@@ -411,8 +411,7 @@ class Session extends TableAccess
         string $domain = '',
         bool $secure = null,
         bool $httpOnly = true
-    ): bool
-    {
+    ): bool {
         global $gLogger, $gSetCookieForDomain;
 
         if ($path === '') {
