@@ -25,7 +25,7 @@ $rules = array(
 //    'blank_line_before_return'                  => false, // [@Symfony]
 //    'braces'                                    => false, // [@PSR2, @Symfony]
     'cast_spaces'                                 => true,  // [@Symfony]
-    'class_definition'                            => array('singleLine' => true, 'singleItemSingleLine' => true, 'multiLineExtendsEachSingleLine' => true), // [@PSR2, @Symfony]
+    'class_definition'                            => array('single_line' => true, 'single_item_single_line' => true, 'multi_line_extends_each_single_line' => true), // [@PSR2, @Symfony]
     'class_keyword_remove'                        => false, // [@]
     'combine_consecutive_unsets'                  => true,  // [@]
 //    'concat_space'                              => false, // [@Symfony]
@@ -43,7 +43,7 @@ $rules = array(
     'function_to_constant'                        => true,  // [@Symfony]
     'function_typehint_space'                     => true,  // [@Symfony]
 //    'general_phpdoc_annotation_remove'          => false, // [@]
-    'hash_to_slash_comment'                       => true,  // [@Symfony]
+    'single_line_comment_style'                   => true,  // [@Symfony]
 //    'header_comment'                            => false, // [@]
     'heredoc_to_nowdoc'                           => true,  // [@Symfony]
 //    'include'                                   => false, // [@Symfony]
@@ -52,7 +52,7 @@ $rules = array(
     'line_ending'                                 => true,  // [@PSR2, @Symfony]
     'linebreak_after_opening_tag'                 => true,  // [@]
     'lowercase_cast'                              => true,  // [@Symfony]
-    'lowercase_constants'                         => true,  // [@PSR2, @Symfony]
+    'constant_case'                         => true,  // [@PSR2, @Symfony]
     'lowercase_keywords'                          => true,  // [@PSR2, @Symfony]
 //    'mb_str_functions'                          => false, // [@]
 //    'method_argument_space'                     => false, // [@PSR2, @Symfony]
@@ -74,7 +74,7 @@ $rules = array(
 //    'no_leading_namespace_whitespace'           => false, // [@Symfony]
     'no_mixed_echo_print'                         => array('use' => 'echo'), // [@Symfony]
     'no_multiline_whitespace_around_double_arrow' => true,  // [@Symfony]
-    'no_multiline_whitespace_before_semicolons'   => true,  // [@]
+    'multiline_whitespace_before_semicolons'      => false,  // [@]
     'no_php4_constructor'                         => true,  // [@]
     'no_short_bool_cast'                          => true,  // [@Symfony]
 //    'no_short_echo_tag'                         => false, // [@]
@@ -108,7 +108,7 @@ $rules = array(
 //    'phpdoc_align'                              => false, // [@Symfony]
 //    'phpdoc_annotation_without_dot'             => false, // [@Symfony]
     'phpdoc_indent'                               => true,  // [@Symfony]
-    'phpdoc_inline_tag'                           => true,  // [@Symfony]
+    'general_phpdoc_tag_rename'                   => true,  // [@Symfony]
     'phpdoc_no_access'                            => true,  // [@Symfony]
     'phpdoc_no_alias_tag'                         => true,  // [@Symfony]
 //    'phpdoc_no_empty_return'                    => false, // [@Symfony]
@@ -163,9 +163,9 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('node_modules')
 ;
 
-return PhpCsFixer\Config::create()
+$config = new PhpCsFixer\Config();
+return $config->setRules($rules)
     ->setUsingCache(false)
     ->setRiskyAllowed(true)
-    ->setRules($rules)
     ->setFinder($finder)
-;
+    ;
