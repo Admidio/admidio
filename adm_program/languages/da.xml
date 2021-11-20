@@ -341,7 +341,6 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Vis organisations vælger</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Hvis der er flere organisationer gemt i den samme database, så kan Log ind skærmen vise en valg boks med alle tilgængelige organisationer. Brugeren kan så på login skærmen vælge en anden organisation (en anden organisation end den der er defineret i config.php). Brugeren skal selvfølgelig være registreret medlem af den valgte organisation.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformation</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS">E-mail adresse</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">E-mail-adressen til en administrator skal indtastes her. Denne bruges som modtageradresse til systemmeddelelser, f.eks. til registreringsbekræftelse.</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES">Meddelelse om ændrede profilfelter</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Aktiver denne indstilling for at sende meddelelser om ændringer i en brugers profilfelter. På denne måde har en administrator mulighed for at sikre en korrekt datakvalitet. Ændringsmeddelelser sendes til følgende mailadresse #VAR1# (standard: nej).</string>
@@ -526,6 +525,7 @@
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
+  <string name="SYS_ADMINISTRATOR_EMAIL">Administrator e-mail</string>
   <string name="SYS_ADMINISTRATORS">Administratorer</string>
   <string name="SYS_ADMINISTRATORS_DESC">Disse roller er administratorer af downloadmodulet og har adgang til alle mapper og filer. Du kan uploade, downloade og konfigurere adgangsrettigheder. En rolle kan indstilles som administrator ved at tildele tilladelsen #VAR1_BOLD#.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax forespørgsels fejl.\nFejl detaljer: #VAR1#</string>
@@ -542,13 +542,8 @@
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Tildel og rediger medlemmer</string>
   <string name="SYS_ASSIGN_FIELDS">Tilføj felter</string>
   <string name="SYS_ASSIGN_FIELDS_DESC">Forbind et database felt til et matchende felt i import filen.\n\nPå venstre side kan du se alle de typer af database felter som er i databasen, og til højre kan du finde alle kolonner i den valgte importfil. Du kan lade felter være tomme hvis du ikke har matchende felter i din import fil.</string>
-  <string name="SYS_ASSIGN_LOGIN_INFORMATION">Tildeling af login information</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Login informationen er tildelt.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Login informationen er blevet tildelt og brugeren er blevet informeret via e-mail.</string>
-  <string name="SYS_ASSIGN_MEMBERS">Tilføjer medlemmer</string>
-  <string name="SYS_ASSIGN_MEMBERSHIP">Tildeler medlemskab</string>
-  <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Tildeler medlemskab og login information til den valgte bruger.</string>
-  <string name="SYS_ASSIGN_REGISTRATION">Tildeler registrering</string>
   <string name="SYS_ASSIGN_ROLE">Tildel rolle</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Vælg en rolle for importerede brugere.\n\nDu vil kun kunne se de roller som du har adgang til.</string>
   <string name="SYS_ASSIGN_ROLES">Tildel roller</string>
@@ -993,7 +988,7 @@
   <string name="SYS_MAP">Kort</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Viser placeringen på Google Maps. Gaden, postnummer, by og land overføres til Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Viser en rute fra dit eget bopæl til denne brugers placering på Google Maps. Gaden, postnummer, by og land overføres til Google.</string>
-  <string name="SYS_MAX_ATTACHMENT_SIZE">Ubegrænset antal modtagere kan tilføjes. Total størrelse af alle vedhæftede filer må ikke overstige #VAR1# MB.</string>
+  <string name="SYS_MAX_ATTACHMENT_SIZE">Du kan vedhæfte lige så mange filer du vil. Den samlede filstørelse må ikke overskride #VAR1# MB. </string>
   <string name="SYS_MAX_PARTICIPANTS">Max. antal deltagere</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# af max. #VAR2# deltagere</string>
   <string name="SYS_MAX_PATH_LENGTH">Maksimal sti længde</string>
@@ -1297,9 +1292,9 @@
   <string name="SYS_SEND_TEST_MAIL">Send test e-mail</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">Send e-mail med brugerid og kodeord.</string>
   <string name="SYS_SENDER">Afsender</string>
-  <string name="SYS_SENDER_EMAIL">Afsender e-mail adresse</string>
+  <string name="SYS_SENDER_EMAIL">Afsender e-mail</string>
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Brug af en ukendt mail-adresse som afsenderadresse er ikke tilladt af nogle udbydere. I dette tilfælde kan du tilføje en e-mail-adresse, der vil blive brugt som afsenderadresse i postmodulet (f.eks. Noreply@#VAR1#).\nHvis feltet forbliver tomt, vil afsenderens e-mail-adresse blive brugt (standard: Tom).</string>
-  <string name="SYS_SENDER_NAME">Navn på afsender</string>
+  <string name="SYS_SENDER_NAME">Afsender navn</string>
   <string name="SYS_SENDER_NAME_DESC">Navn på afsenderens mail-adresse. Dette felt skal vedligeholdes, hvis feltet for afsenders mail-adresse ikke er tomt (standard: tomt).</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">(Afsender var logget af. Derfor kan afsenders information være forkert.)</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">‎Separator til CSV-fil‎</string>
