@@ -58,14 +58,15 @@ $page = new HtmlPage('admidio-userrelations-edit', $headline);
 
 // show form
 $form = new HtmlForm('relation_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php', array('user_uuid' => $getUserUuid, 'mode' => '1')), $page);
-
+$form->openGroupBox('gbUser');
 $form->addInput(
     'usr_id',
     $gL10n->get('SYS_USER'),
     $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
 );
-
+$form->closeGroupBox();
+$form->openGroupBox('gbAssignRelationship', $gL10n->get('SYS_ASSIGN_RELATIONSHIP'));
 // select box showing all relation types
 $sql = 'SELECT urt_id, urt_name
           FROM '.TBL_USER_RELATION_TYPES.'
@@ -172,6 +173,7 @@ $form->addSelectBoxFromSql(
     $sqlData,
     array('property' => HtmlForm::FIELD_REQUIRED, 'search' => true)
 );
+$form->closeGroupBox();
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 
 // add form to html page and show page
