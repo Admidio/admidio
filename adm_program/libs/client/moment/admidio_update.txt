@@ -1,4 +1,0 @@
-Short description to update the current lib
-
-1. Go to https://momentjs.com/
-2. Download only the two files of this folder and replace them

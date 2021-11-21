@@ -148,7 +148,6 @@ and sharing great software.
 - [jQuery](https://jquery.com/): JavaScript-Library
 - [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin
 - [Lightbox](https://ashleydw.github.io/lightbox/): Lightbox for Bootstrap
-- [Moment](http://momentjs.com/): Parse, validate, manipulate, and display dates in JavaScript
 - [Monolog](https://github.com/Seldaek/monolog/): Logging for PHP
 - [NobleCount](https://tpgblog.com/NobleCount/): NobleCount… for a more ‘proper’ count of the characters remaining.
 - [phpass](https://github.com/hautelook/phpass/): Portable PHP password hashing framework

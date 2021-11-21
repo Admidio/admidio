@@ -244,8 +244,6 @@ class HtmlTable extends HtmlTableBasic
         global $gSettingsManager;
 
         $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/datatables.js');
-        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/moment/moment.min.js');
-        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables-datetime-moment/datetime-moment.js');
         $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/datatables.css');
 
         if ($this->rowCount > 10 || $this->serverSideProcessing) {
@@ -325,9 +323,6 @@ class HtmlTable extends HtmlTableBasic
 
         $this->htmlPage->addJavascript(
             '
-            $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->getString('system_date') . '"));
-            $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time') . '"));
-
             var admidioTable = $("#' . $this->id . '").DataTable({' .
             implode(',', $this->datatablesInitParameters) .
             $javascriptGroup . '
