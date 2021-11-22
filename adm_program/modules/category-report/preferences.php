@@ -265,7 +265,7 @@ foreach($config as $key => $value)
                 OR cat_org_id IS NULL )';
     $formConfigurations->addSelectBoxFromSql('selection_cat'.$key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
         array('defaultValue' => explode(',',$value['selection_cat']),'multiselect' => true, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_CONF_DESC'));
-    $formConfigurations->addCheckbox('number_col'.$key, $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')';, $value['number_col'], array('helpTextIdLabel' => 'SYS_NUMBER_COL_DESC'));
+    $formConfigurations->addCheckbox('number_col'.$key, $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', $value['number_col'], array('helpTextIdLabel' => 'SYS_NUMBER_COL_DESC'));
     $formConfigurations->addInput('id'.$key, '', $value['id'], array('property' => HtmlForm::FIELD_HIDDEN));
     $formConfigurations->addInput('default_conf'.$key, '', $value['default_conf'], array('property' => HtmlForm::FIELD_HIDDEN));
     $html = '<a id="copy_config" class="icon-text-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php', array('copy' => $key+1)).'">
