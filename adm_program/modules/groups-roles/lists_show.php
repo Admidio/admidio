@@ -634,14 +634,14 @@ foreach ($membersList as $member) {
 
     if ($editUserStatus) {
         // Get the matching event
-        $sql = 'SELECT dat_id
+        $sql = 'SELECT dat_uuid
                   FROM '.TBL_DATES.'
                  WHERE dat_rol_id = ? -- $roleIds[0]';
         $datesStatement = $gDb->queryPrepared($sql, $roleIds);
-        $dateId         = $datesStatement->fetchColumn();
+        $dateUuid       = $datesStatement->fetchColumn();
         // prepare edit icon
         $columnValues[] = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId, 'usr_id' => $member['usr_id'])) . '">
+                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_uuid' => $dateUuid, 'user_uuid' => $member['usr_uuid'])) . '">
                                 <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
     }
 

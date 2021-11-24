@@ -7,7 +7,7 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
- * dat_id    - ID of the date
+ * dat_uuid  - UUID of the event
  * user_uuid - UUID of the user whose participation detail shall be set or changed
  ***********************************************************************************************
  */

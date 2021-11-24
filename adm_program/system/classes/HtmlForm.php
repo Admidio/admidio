@@ -267,7 +267,7 @@ class HtmlForm extends HtmlFormBasic
         $this->addHtml('<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/dapphp/securimage/securimage_show.php" alt="CAPTCHA Image" />
                         <a class="admidio-icon-link" href="javascript:void(0)" onclick="' . $onClickCode . '">
                             <i class="fas fa-sync-alt fa-lg" data-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>');
-        $this->closeControlStructure(array('helpTextIdInline' => ''));
+        $this->closeControlStructure(array('helpTextIdInline' => '', 'property' => ''));
 
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addInput(
@@ -382,6 +382,7 @@ class HtmlForm extends HtmlFormBasic
     {
         // create array with all options
         $optionsDefault = array(
+            'property'         => '',
             'referenceId'      => '',
             'helpTextIdLabel'  => '',
             'helpTextIdInline' => '',
@@ -805,10 +806,8 @@ class HtmlForm extends HtmlFormBasic
             return $attribute !== '' && $attribute !== null;
         });
 
-        if ($optionsAll['property'] !== self::FIELD_HIDDEN) {
-            // now create html for the field
-            $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
-        }
+        // now create html for the field
+        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
 
         // if datetime then add a time field behind the date field
         if ($optionsAll['type'] === 'datetime') {
@@ -875,9 +874,7 @@ class HtmlForm extends HtmlFormBasic
             ');
         }
 
-        if ($optionsAll['property'] !== self::FIELD_HIDDEN) {
-            $this->closeControlStructure($optionsAll);
-        }
+        $this->closeControlStructure($optionsAll);
     }
 
     /**
@@ -1700,7 +1697,7 @@ class HtmlForm extends HtmlFormBasic
         $attributes = array('class' => 'form-control-static');
 
         // create array with all options
-        $optionsDefault = array('helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
+        $optionsDefault = array('property' => '', 'helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // set specific css class for this field
@@ -1771,47 +1768,47 @@ class HtmlForm extends HtmlFormBasic
      */
     protected function closeControlStructure(array $options = array())
     {
-        global $gL10n;
+        if ($options['property'] !== self::FIELD_HIDDEN) {
+            $parameters = array();
+            $helpTextId = $options['helpTextIdInline'];
 
-        $parameters = array();
-        $helpTextId = $options['helpTextIdInline'];
-
-        if (is_array($options['helpTextIdInline'])) {
-            $parameters = $options['helpTextIdInline'][1];
-            $helpTextId = $options['helpTextIdInline'][0];
-        }
-
-        if ($helpTextId !== '') {
-            // if text is a translation-id then translate it
-            if (Language::isTranslationStringId($helpTextId)) {
-                foreach ($parameters as &$parameter) {
-                    // parameters should be strings
-                    $parameter = (string) $parameter;
-
-                    // if parameter is a translation-id then translate it
-                    $parameter = Language::translateIfTranslationStrId($parameter);
-                }
-                unset($parameter);
-
-                $helpText = $gL10n->get($helpTextId, $parameters);
-            } else {
-                $helpText = $helpTextId;
+            if (is_array($options['helpTextIdInline'])) {
+                $parameters = $options['helpTextIdInline'][1];
+                $helpTextId = $options['helpTextIdInline'][0];
             }
 
-            $this->addHtml('<div class="help-block">' . $helpText . '</div>');
-        }
+            if ($helpTextId !== '') {
+                // if text is a translation-id then translate it
+                if (Language::isTranslationStringId($helpTextId)) {
+                    foreach ($parameters as &$parameter) {
+                        // parameters should be strings
+                        $parameter = (string)$parameter;
 
-        // add block with warning alert
-        if (isset($options['alertWarning']) && $options['alertWarning'] !== '') {
-            $this->addHtml('<div class="alert alert-warning mt-3" role="alert">
-                <i class="fas fa-exclamation-triangle"></i>'.$options['alertWarning'].'
+                        // if parameter is a translation-id then translate it
+                        $parameter = Language::translateIfTranslationStrId($parameter);
+                    }
+                    unset($parameter);
+
+                    $helpText = $GLOBALS['gL10n']->get($helpTextId, $parameters);
+                } else {
+                    $helpText = $helpTextId;
+                }
+
+                $this->addHtml('<div class="help-block">' . $helpText . '</div>');
+            }
+
+            // add block with warning alert
+            if (isset($options['alertWarning']) && $options['alertWarning'] !== '') {
+                $this->addHtml('<div class="alert alert-warning mt-3" role="alert">
+                <i class="fas fa-exclamation-triangle"></i>' . $options['alertWarning'] . '
             </div>');
-        }
+            }
 
-        if ($this->type === 'vertical' || $this->type === 'navbar') {
-            $this->addHtml('</div>');
-        } else {
-            $this->addHtml('</div></div>');
+            if ($this->type === 'vertical' || $this->type === 'navbar') {
+                $this->addHtml('</div>');
+            } else {
+                $this->addHtml('</div></div>');
+            }
         }
     }
 
@@ -1879,59 +1876,59 @@ class HtmlForm extends HtmlFormBasic
      */
     protected function openControlStructure($id, $label, $property = self::FIELD_DEFAULT, $helpTextId = '', $icon = '', $class = '')
     {
-        $cssClassRow  = 'form-group';
-        $htmlIcon     = '';
-        $htmlHelpIcon = '';
-        $htmlIdFor    = '';
-
         if ($property !== self::FIELD_HIDDEN) {
+            $cssClassRow = 'form-group';
+            $htmlIcon = '';
+            $htmlHelpIcon = '';
+            $htmlIdFor = '';
+
             ++$this->countElements;
-        }
 
-        // set specific css class for this row
-        if ($class !== '') {
-            $cssClassRow .= ' ' . $class;
-        }
-
-        if ($this->type === 'default') {
-            $cssClassRow .= ' row';
-        }
-
-        // if necessary set css class for a mandatory element
-        if ($property === self::FIELD_REQUIRED && $this->showRequiredFields) {
-            $cssClassRow .= ' admidio-form-group-required';
-            $this->flagRequiredFields = true;
-        }
-
-        if ($id !== '') {
-            $htmlIdFor = ' for="' . $id . '"';
-            $this->addHtml('<div id="' . $id . '_group" class="' . $cssClassRow . '">');
-        } else {
-            $this->addHtml('<div class="' . $cssClassRow . '">');
-        }
-
-        if ($icon !== '') {
-            // create html for icon
-            $htmlIcon = Image::getIconHtml($icon, $label);
-        }
-
-        if ($helpTextId !== '') {
-            $htmlHelpIcon = self::getHelpTextIcon($helpTextId);
-        }
-
-        // add label element
-        if ($this->type === 'vertical' || $this->type === 'navbar') {
-            if ($label !== '') {
-                $this->addHtml('<label' . $htmlIdFor . '>' . $htmlIcon . $label . $htmlHelpIcon . '</label>');
+            // set specific css class for this row
+            if ($class !== '') {
+                $cssClassRow .= ' ' . $class;
             }
-        } else {
-            if ($label !== '') {
-                $this->addHtml(
-                    '<label' . $htmlIdFor . ' class="col-sm-3 control-label">' . $htmlIcon . $label . $htmlHelpIcon . '</label>
-                    <div class="col-sm-9">'
-                );
+
+            if ($this->type === 'default') {
+                $cssClassRow .= ' row';
+            }
+
+            // if necessary set css class for a mandatory element
+            if ($property === self::FIELD_REQUIRED && $this->showRequiredFields) {
+                $cssClassRow .= ' admidio-form-group-required';
+                $this->flagRequiredFields = true;
+            }
+
+            if ($id !== '') {
+                $htmlIdFor = ' for="' . $id . '"';
+                $this->addHtml('<div id="' . $id . '_group" class="' . $cssClassRow . '">');
             } else {
-                $this->addHtml('<div class="offset-sm-3 col-sm-9">');
+                $this->addHtml('<div class="' . $cssClassRow . '">');
+            }
+
+            if ($icon !== '') {
+                // create html for icon
+                $htmlIcon = Image::getIconHtml($icon, $label);
+            }
+
+            if ($helpTextId !== '') {
+                $htmlHelpIcon = self::getHelpTextIcon($helpTextId);
+            }
+
+            // add label element
+            if ($this->type === 'vertical' || $this->type === 'navbar') {
+                if ($label !== '') {
+                    $this->addHtml('<label' . $htmlIdFor . '>' . $htmlIcon . $label . $htmlHelpIcon . '</label>');
+                }
+            } else {
+                if ($label !== '') {
+                    $this->addHtml(
+                        '<label' . $htmlIdFor . ' class="col-sm-3 control-label">' . $htmlIcon . $label . $htmlHelpIcon . '</label>
+                    <div class="col-sm-9">'
+                    );
+                } else {
+                    $this->addHtml('<div class="offset-sm-3 col-sm-9">');
+                }
             }
         }
     }
