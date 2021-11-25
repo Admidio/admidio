@@ -61,6 +61,16 @@ if ($getModule === 'photos') {
     $uploadDir = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/';
     $uploadUrl = ADMIDIO_URL . FOLDER_DATA . '/photos/upload/';
     $destinationName = $photoAlbum->getValue('pho_name');
+
+    if($getMode === 'choose_files') {
+        // delete old stuff in upload folder
+        try {
+            FileSystemUtils::deleteDirectoryContentIfExists(ADMIDIO_PATH . FOLDER_DATA . '/photos/upload');
+        } catch (\RuntimeException $exception) {
+            $gLogger->error('Could not delete directory content!', array('directoryPath' => ADMIDIO_PATH . FOLDER_DATA . '/photos/upload'));
+            // TODO
+        }
+    }
 } elseif ($getModule === 'documents_files') {
     if (!$gSettingsManager->getBool('documents_files_enable_module')) {
         $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -102,14 +112,6 @@ if (!PhpIniUtils::isFileUploadEnabled()) {
 }
 
 if ($getMode === 'choose_files') {
-    // delete old stuff in upload folder
-    try {
-        FileSystemUtils::deleteDirectoryContentIfExists(ADMIDIO_PATH . FOLDER_DATA. '/photos/upload');
-    } catch (\RuntimeException $exception) {
-        $gLogger->error('Could not delete directory content!', array('directoryPath' => ADMIDIO_PATH . FOLDER_DATA. '/photos/upload'));
-        // TODO
-    }
-
     $gNavigation->addUrl(CURRENT_URL);
 
     // create html page object
