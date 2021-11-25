@@ -324,9 +324,9 @@ while ($user = $userStatement->fetch()) {
 
     // set flag if user is a leader of the current role or not
     if ($user['leader_this_role']) {
-        $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
+        $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_uuid'].'" name="leader_'.$user['usr_uuid'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
     } else {
-        $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox memlist_leader" />';
+        $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_uuid'].'" name="leader_'.$user['usr_uuid'].'" class="memlist_checkbox memlist_leader" />';
     }
 
     // create array with all column values and add it to the json array

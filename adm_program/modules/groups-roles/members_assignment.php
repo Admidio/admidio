@@ -155,7 +155,7 @@ if ($getMode === 'assign') {
         // if checkbox of user is clicked then change membership
         $("#tbl_assign_role_membership").on("click", "input[type=checkbox].memlist_checkbox", function() {
             var checkbox = $(this);
-            var userUuid = $(this).attr("id").search("_").substring(pos + 1);
+            var userUuid = $(this).attr("id").substring($(this).attr("id").search("_") + 1);
 
             var memberChecked = $("input[type=checkbox]#member_" + userUuid).prop("checked");
             var leaderChecked = $("input[type=checkbox]#leader_" + userUuid).prop("checked");
