@@ -943,6 +943,7 @@
   <string name="SYS_INVALID_FONT_AWESOME">Der eingegebene Icon-Name entspricht nicht der erwarteten Syntax. Ein Icon von Font Awesome muss dem Schema fa-iconname entsprechen. Eine Datei muss im Themeordner images abgelegt sein und eine png oder jpg Endung besitzen.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <string name="SYS_IO_ERROR">E/A Fehler</string>
+  <string name="SYS_IS_VAR_FROM">ist #VAR1# von</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_ITEMNAME">Artikelname</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Querformat</string>

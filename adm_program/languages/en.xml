@@ -549,7 +549,6 @@
   <string name="SYS_ASSIGN_MEMBERSHIP">Assign membership</string>
   <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Assign membership and login information to selected user.</string>
   <string name="SYS_ASSIGN_REGISTRATION">Assign registration</string>
-  <string name="SYS_ASSIGN_RELATIONSHIP">Assign relationship</string>
   <string name="SYS_ASSIGN_ROLE">Assign role</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Select a role for all imported users.\n\nAvailable are only roles which you have user permission for.</string>
   <string name="SYS_ASSIGN_ROLES">Assign roles</string>
@@ -943,6 +942,7 @@
   <string name="SYS_INVALID_FONT_AWESOME">The entered icon name does not correspond to the expected syntax. An icon of font Awesome must correspond to the schema fa-iconname. A file must be stored in the images theme folder and have a png or jpg extension.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Invalid page view</string>
   <string name="SYS_IO_ERROR">I/O error</string>
+  <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_ITEMNAME">Item name</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landscape</string>
