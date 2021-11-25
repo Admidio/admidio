@@ -1,23 +1,59 @@
 ﻿{
-    "sEmptyTable":     "Hakuna data iliyo patikana",
-    "sInfo":           "Inaonyesha _START_ mpaka _END_ ya matokeo _TOTAL_",
-    "sInfoEmpty":      "Inaonyesha 0 hadi 0 ya matokeo 0",
-    "sInfoFiltered":   "(uschujo kutoka matokeo idadi _MAX_)",
-    "sInfoPostFix":    "",
-    "sInfoThousands":  ",",
-    "sLengthMenu":     "Onyesha _MENU_ matokeo",
-    "sLoadingRecords": "Inapakia...",
-    "sProcessing":     "Processing...",
-    "sSearch":         "Tafuta:",
-    "sZeroRecords":    "Rekodi vinavyolingana haziku patikana",
-    "oPaginate": {
-        "sFirst":    "Mwanzo",
-        "sLast":     "Mwisho",
-        "sNext":     "Ijayo",
-        "sPrevious": "Kabla"
+    "emptyTable": "Hakuna data iliyo patikana",
+    "info": "Inaonyesha _START_ mpaka _END_ ya matokeo _TOTAL_",
+    "infoEmpty": "Inaonyesha 0 hadi 0 ya matokeo 0",
+    "infoFiltered": "(uschujo kutoka matokeo idadi _MAX_)",
+    "infoThousands": ",",
+    "lengthMenu": "Onyesha _MENU_ matokeo",
+    "loadingRecords": "Inapakia...",
+    "processing": "Processing...",
+    "search": "Tafuta:",
+    "zeroRecords": "Rekodi vinavyolingana haziku patikana",
+    "paginate": {
+        "first": "Mwanzo",
+        "last": "Mwisho",
+        "next": "Ijayo",
+        "previous": "Kabla"
     },
-    "oAria": {
-        "sSortAscending": ": seti kulainisha sanjari kwa mtindo wa upandaji",
-        "sSortDescending": ": seti kulainisha sanjari kwa mtindo wa mteremko"
+    "aria": {
+        "sortAscending": ": seti kulainisha sanjari kwa mtindo wa upandaji",
+        "sortDescending": ": seti kulainisha sanjari kwa mtindo wa mteremko"
+    },
+    "autoFill": {
+        "cancel": "Ghairi",
+        "fill": "Jaza",
+        "fillHorizontal": "Jaza kwa usawa",
+        "fillVertical": "Jaza kwa wima"
+    },
+    "buttons": {
+        "collection": "Makusanyiko",
+        "colvis": "Muonekano wa safu",
+        "colvisRestore": "Rejesha muonekano",
+        "copy": "Nakili",
+        "copySuccess": {
+            "1": "Safu moja imenakili ",
+            "_": "Safu %ds zimenakiliwa kwenye clipboard"
+        },
+        "copyTitle": "Nakili kwenye Clipboard",
+        "csv": "CSV",
+        "excel": "Excel",
+        "pageLength": {
+            "-1": "Onyesha safu zote",
+            "_": "Onyesha safu %d"
+        },
+        "pdf": "PDF",
+        "print": "Chapisha"
+    },
+    "decimal": ".",
+    "searchBuilder": {
+        "add": "Weka Sharti",
+        "clearAll": "Ondoa zote",
+        "condition": "Sharti",
+        "data": "Data",
+        "deleteTitle": "Futa sheria ya kuchuja",
+        "leftTitle": "Vigezo vya zamani",
+        "logicAnd": "Pamoja na",
+        "logicOr": "Au",
+        "value": "Thamani"
     }
 }
