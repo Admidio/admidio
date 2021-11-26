@@ -101,7 +101,7 @@ if ($gCurrentUser->editUsers()) {
     );
 } else {
     // select all users which the current user can edit because of role leader rights
-    $sqlData['query'] = 'SELECT usr_id, CONCAT(last_name.usd_value, \' \', first_name.usd_value) AS name
+    $sqlData['query'] = 'SELECT usr_id, CONCAT(first_name.usd_value, \' \', last_name.usd_value) AS name
                            FROM '.TBL_MEMBERS.'
                      INNER JOIN '.TBL_USERS.'
                              ON usr_id = mem_usr_id
@@ -151,7 +151,7 @@ $form->addSelectBoxFromSql(
     $gL10n->get('SYS_MEMBER'),
     $gDb,
     $sqlData,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'search' => true)
+    array('property' => HtmlForm::FIELD_REQUIRED, 'search' => true, 'placeholder' => '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -')
 );
 // select box showing all relation types
 $sql = 'SELECT urt_id, REPLACE(\'' . $gL10n->get('SYS_IS_VAR_FROM') . '\', \'#VAR1#\', urt_name)
@@ -167,7 +167,7 @@ $form->addSelectBoxFromSql(
 
 $form->addInput(
     'usr_id',
-    $gL10n->get('SYS_USER'),
+    $gL10n->get('SYS_CURRENT_MEMBER'),
     $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
 );
