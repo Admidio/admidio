@@ -62,7 +62,7 @@ $form = new HtmlForm('relation_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.
 $sqlData = array();
 if ($gCurrentUser->editUsers()) {
     // the user has the edit right, therefore he can edit all visible users
-    $sqlData['query'] = 'SELECT usr_id, CONCAT(last_name.usd_value, \' \', first_name.usd_value) AS name
+    $sqlData['query'] = 'SELECT usr_id, CONCAT(first_name.usd_value, \' \', last_name.usd_value) AS name
                            FROM '.TBL_MEMBERS.'
                      INNER JOIN '.TBL_ROLES.'
                              ON rol_id = mem_rol_id
