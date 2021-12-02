@@ -462,7 +462,7 @@ class TableAccess
 
         // if new role then set create the uuid
         if ($this->isNewRecord() && array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
-            $this->setValue($this->columnPrefix . '_uuid', Uuid::uuid4());
+            $this->setValue($this->columnPrefix . '_uuid', (string) Uuid::uuid4());
         }
 
         // TODO check if "$gCurrentUser instanceof User"

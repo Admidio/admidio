@@ -494,7 +494,7 @@ $yourLastConfigurationsGroup = false;
 $yourConfigurationsGroup     = false;
 $presetConfigurationsGroup   = false;
 $actualGroup                 = '';
-$configurationsArray[]       = array(0, $gL10n->get('SYS_CREATE_NEW_CONFIGURATION'), null);
+$configurationsArray[]       = array('-', $gL10n->get('SYS_CREATE_NEW_CONFIGURATION'), null);
 $numberLastConfigurations    = 0;
 
 $sql = 'SELECT lst_id, lst_uuid, lst_name, lst_global, lst_timestamp
