@@ -217,7 +217,7 @@ $javascriptCode = '
 // create a multidimensional array for all columns with the necessary data
 $i = 1;
 $oldCategoryNameIntern = '';
-$posEndOfMasterData = 0;
+$posEndOfBasicData = 0;
 $arrParticipientsInformation = array(
     'mem_approved'         => $gL10n->get('SYS_PARTICIPATION_STATUS'),
     'mem_usr_id_change'    => $gL10n->get('SYS_CHANGED_BY'),
@@ -230,7 +230,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
     // at the end of category basic data save positions for loginname and username
     // they will be added after profile fields loop
     if ($oldCategoryNameIntern === 'BASIC_DATA' && $field->getValue('cat_name_intern') !== 'BASIC_DATA') {
-        $posEndOfMasterData    = $i;
+        $posEndOfBasicData    = $i;
         $i                    += 2;
         $oldCategoryNameIntern = $field->getValue('cat_name_intern');
     }
@@ -266,12 +266,12 @@ foreach ($gProfileFields->getProfileFields() as $field) {
 
     // Add loginname and photo at the end of category basic data
     // add new category with start and end date of role membership
-    if ($posEndOfMasterData === 0) {
-        $posEndOfMasterData = $i;
+    if ($posEndOfBasicData === 0) {
+        $posEndOfBasicData = $i;
         $i += 2;
     }
     $javascriptCode .= '
-        userFields[' . $posEndOfMasterData . '] = {
+        userFields[' . $posEndOfBasicData . '] = {
             "cat_id": userFields[1]["cat_id"],
             "cat_name": userFields[1]["cat_name"],
             "usf_id": "usr_login_name",
@@ -279,7 +279,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             "usf_name_intern": "'.$gL10n->get('SYS_USERNAME').'"
         };
 
-        userFields[' . ($posEndOfMasterData + 1) . '] = {
+        userFields[' . ($posEndOfBasicData + 1) . '] = {
             "cat_id": userFields[1]["cat_id"],
             "cat_name": userFields[1]["cat_name"],
             "usf_id": "usr_photo",
