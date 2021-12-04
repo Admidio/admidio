@@ -1027,6 +1027,10 @@ $sqlData['query'] = 'SELECT lst_id, lst_name
                        FROM '.TBL_LISTS.'
                       WHERE lst_org_id = ? -- $gCurrentOrgId
                         AND lst_global = true
+                        AND NOT EXISTS (SELECT 1
+                                       FROM '.TBL_LIST_COLUMNS.'
+                                       WHERE lsc_lst_id = lst_id
+                                       AND lsc_special_field LIKE \'mem%\')
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($gCurrentOrgId);
 $formUserManagement->addSelectBoxFromSql(
