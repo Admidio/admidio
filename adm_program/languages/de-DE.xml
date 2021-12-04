@@ -549,7 +549,6 @@
   <string name="SYS_ASSIGN_MEMBERSHIP">Mitgliedschaft zuweisen</string>
   <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Mitgliedschaft und Zugangsdaten diesem Benutzer zuordnen</string>
   <string name="SYS_ASSIGN_REGISTRATION">Registrierung zuordnen</string>
-  <string name="SYS_ASSIGN_RELATIONSHIP">Beziehung zuordnen</string>
   <string name="SYS_ASSIGN_ROLE">Rolle zuordnen</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.\n\nIhnen stehen nur Rollen zur Auswahl, die Sie sehen dürfen und keine Rollenzuordnungsberechtigung besitzen, falls Sie diese selber nicht besitzt.</string>
   <string name="SYS_ASSIGN_ROLES">Rollen zuordnen</string>
@@ -673,6 +672,7 @@
   <string name="SYS_CREATION_DATE">Erstellungsdatum</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Aktuelle Datenbankversion</string>
+  <string name="SYS_CURRENT_MEMBER">Aktuelles Mitglied</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Sie haben keine gültige E-Mail-Adresse hinterlegt!\n\nTragen Sie bitte in Ihrem #VAR1#Profil#VAR2# eine E-Mail-Adresse ein.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, so sind die Objekte (Termine, Ankündigungen, Weblinks ...) dieser Kategorie auch auf den Webseiten folgender Organisationen sichtbar:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
@@ -943,6 +943,7 @@
   <string name="SYS_INVALID_FONT_AWESOME">Der eingegebene Icon-Name entspricht nicht der Syntax von Font Awesome. Prüfen Sie bitte, ob es diesen Namen auch als Icon gibt.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <string name="SYS_IO_ERROR">E/A Fehler</string>
+  <string name="SYS_IS_VAR_FROM">ist #VAR1# von</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_ITEMNAME">Artikelname</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Querformat</string>

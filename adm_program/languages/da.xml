@@ -542,8 +542,13 @@
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Tildel og rediger medlemmer</string>
   <string name="SYS_ASSIGN_FIELDS">Tilføj felter</string>
   <string name="SYS_ASSIGN_FIELDS_DESC">Forbind et database felt til et matchende felt i import filen.\n\nPå venstre side kan du se alle de typer af database felter som er i databasen, og til højre kan du finde alle kolonner i den valgte importfil. Du kan lade felter være tomme hvis du ikke har matchende felter i din import fil.</string>
+  <string name="SYS_ASSIGN_LOGIN_INFORMATION">Tildel login data</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Login informationen er tildelt.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Login informationen er blevet tildelt og brugeren er blevet informeret via e-mail.</string>
+  <string name="SYS_ASSIGN_MEMBERS">Tildel medlemmer</string>
+  <string name="SYS_ASSIGN_MEMBERSHIP">Tildel medlemsskab</string>
+  <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Tildel medlemsskab og login oplysninger til den valgte bruger</string>
+  <string name="SYS_ASSIGN_REGISTRATION">Tildel registrering</string>
   <string name="SYS_ASSIGN_ROLE">Tildel rolle</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Vælg en rolle for importerede brugere.\n\nDu vil kun kunne se de roller som du har adgang til.</string>
   <string name="SYS_ASSIGN_ROLES">Tildel roller</string>
@@ -667,6 +672,7 @@
   <string name="SYS_CREATION_DATE">Oprettet den</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Nuværende database version</string>
+  <string name="SYS_CURRENT_MEMBER">Nuværende medlem</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du har ikke indtastet en gyldig e-mail adresse!\n\nIndtast en gyldig e-mail adresse i din #VAR1#profil#VAR2#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Hvis denne indstilling er aktiveret, vises dataene (Begivenheder, meddelelser, weblinks ...) i denne kategori også på følgende organisationers websteder:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Data er synlig for flere organisationer</string>
@@ -937,6 +943,7 @@
   <string name="SYS_INVALID_FONT_AWESOME">Det indtastede ikonnavn stemmer ikke overens med syntaksen til Font Awesome. Kontroller, om der er et ikon med dette navn.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ugyldig side visning</string>
   <string name="SYS_IO_ERROR">I/O fejl</string>
+  <string name="SYS_IS_VAR_FROM">er #VAR1# fra</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_ITEMNAME">Emne navn</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landskab</string>

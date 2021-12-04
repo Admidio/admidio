@@ -549,7 +549,6 @@
   <string name="SYS_ASSIGN_MEMBERSHIP">Mitgliedschaft zuweisen</string>
   <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Mitgliedschaft und Zugangsdaten diesem Benutzer zuordnen</string>
   <string name="SYS_ASSIGN_REGISTRATION">Registrierung zuordnen</string>
-  <string name="SYS_ASSIGN_RELATIONSHIP">Beziehnung zuordnen</string>
   <string name="SYS_ASSIGN_ROLE">Rolle zuordnen</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.\n\nDir stehen nur Rollen zur Auswahl, die du sehen darfst und keine Rollenzuordnungsberechtigung besitzen, falls du diese selber nicht besitzt.</string>
   <string name="SYS_ASSIGN_ROLES">Rollen zuordnen</string>
@@ -673,6 +672,7 @@
   <string name="SYS_CREATION_DATE">Erstellungsdatum</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Aktuelle Datenbankversion</string>
+  <string name="SYS_CURRENT_MEMBER">Aktuelles Mitglied</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du hast keine gültige E-Mail-Adresse hinterlegt!\n\nTrage bitte in deinem #VAR1#Profil#VAR2# eine E-Mail-Adresse ein.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, so sind die Objekte (Termine, Ankündigungen, Weblinks ...) dieser Kategorie auch auf den Webseiten folgender Organisationen sichtbar:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
