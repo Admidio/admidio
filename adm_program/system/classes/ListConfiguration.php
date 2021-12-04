@@ -542,7 +542,6 @@ class ListConfiguration extends TableLists
             }
 
             $arrSqlColumnNames[] = $dbColumnName;
-
             $userFieldType = $gProfileFields->getPropertyById($lscUsfId, 'usf_type');
 
             // create a valid sort
@@ -557,12 +556,11 @@ class ListConfiguration extends TableLists
                         // mysql
                         $columnType = 'unsigned';
                     }
-                    $arrOrderByColumns[] = ' CAST('.$dbColumnName.') '.$lscSort;
+                    $arrOrderByColumns[] = ' CAST(' . $dbColumnName . ') ' . $lscSort;
                 } else {
-                    $arrOrderByColumns[] = substr($dbColumnName, 0, strpos($dbColumnName, ' AS')).' '.$lscSort;
+                    $arrOrderByColumns[] = $dbColumnName . ' ' . $lscSort;
                 }
             }
-
             // Handle the conditions for the columns
             if ($optionsAll['useConditions'] && $listColumn->getValue('lsc_filter') != '') {
                 $value = $listColumn->getValue('lsc_filter');
