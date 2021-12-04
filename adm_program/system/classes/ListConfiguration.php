@@ -558,8 +558,11 @@ class ListConfiguration extends TableLists
                         $columnType = 'unsigned';
                     }
                     $arrOrderByColumns[] = ' CAST('.$dbColumnName.') '.$lscSort;
-                } else {
+                } elseif (strpos($dbColumnName, ' AS') > 0) {
                     $arrOrderByColumns[] = substr($dbColumnName, 0, strpos($dbColumnName, ' AS')).' '.$lscSort;
+                }
+                else {
+                    $arrOrderByColumns[] = $dbColumnName.' '.$lscSort;
                 }
             }
 
