@@ -1821,7 +1821,7 @@ class User extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        global $gCurrentUser, $gSettingsManager, $gChangeNotification;
+        global $gSettingsManager, $gChangeNotification;
 
         // users data from adm_users table
         if (str_starts_with($columnName, 'usr_')) {
@@ -1835,13 +1835,18 @@ class User extends TableAccess
                 return false;
             }
 
+            // only update if value has changed
+            if ($this->getValue($columnName, 'database') == $newValue) {
+                return true;
+            }
+
             // For new records, do not immediately queue all changes for notification,
             // as the record might never be saved to the database (e.g. when
             // doing a check for an existing user)! => For new records,
             // log the changes only when $this->save is called!
             if (!$this->newRecord && is_object($gChangeNotification)) {
                 $gChangeNotification->logUserChange(
-                    (int) $this->getValue('usr_id'),
+                    $this->getValue('usr_id'),
                     $columnName,
                     $this->getValue($columnName),
                     $newValue,
@@ -1862,26 +1867,24 @@ class User extends TableAccess
             $date = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $newValue);
 
             if ($date !== false) {
-                $newValue = (string) $date->format('Y-m-d');
+                $newValue = $date->format('Y-m-d');
             }
         }
 
-        // only to a update if value has changed
+        // only update if value has changed
         if ($oldFieldValue_db === $newValue) {
             return true;
         }
-
-        $usrId = (int) $this->getValue('usr_id');
 
         $returnCode = false;
 
         // Disabled fields can only be edited by users with the right "edit_users" except on registration.
         // Here is no need to check hidden fields because we check on save() method that only users who
         // can edit the profile are allowed to save and change data.
-        if (($usrId === 0 && $GLOBALS['gCurrentUserId'] === 0)
+        if (($this->getValue('usr_id') === 0 && $GLOBALS['gCurrentUserId'] === 0)
         ||  (int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 0
         || ((int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 1
-            && $gCurrentUser->hasRightEditProfile($this, false))
+            && $GLOBALS['gCurrentUser']->hasRightEditProfile($this, false))
         || $this->saveChangesWithoutRights === true) {
             $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
         }
@@ -1893,7 +1896,7 @@ class User extends TableAccess
 
         if ($returnCode && !$this->newRecord && is_object($gChangeNotification)) {
             $gChangeNotification->logProfileChange(
-                (int) $this->getValue('usr_id'),
+                $this->getValue('usr_id'),
                 $this->mProfileFieldsData->getProperty($columnName, 'usf_id'),
                 $columnName, // TODO: is $columnName the internal name or the human-readable?
                 // Old and new values in human-readable version:
