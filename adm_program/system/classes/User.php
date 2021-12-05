@@ -1853,7 +1853,7 @@ class User extends TableAccess
         }
 
         // user data from adm_user_fields table (human-readable text representation and raw database value)
-        $oldFieldValue = $this->mProfileFieldsData->getValue($columnName, 'text');
+        $oldFieldValue = $this->mProfileFieldsData->getValue($columnName);
         $oldFieldValue_db = $this->mProfileFieldsData->getValue($columnName, 'database');
         $newValue = (string) $newValue;
 
@@ -1862,7 +1862,7 @@ class User extends TableAccess
             $date = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $newValue);
 
             if ($date !== false) {
-                $newValue = $date->format('Y-m-d');
+                $newValue = (string) $date->format('Y-m-d');
             }
         }
 
@@ -1898,7 +1898,7 @@ class User extends TableAccess
                 $columnName, // TODO: is $columnName the internal name or the human-readable?
                 // Old and new values in human-readable version:
                 $oldFieldValue,
-                $this->mProfileFieldsData->getValue($columnName, 'text'),
+                $this->mProfileFieldsData->getValue($columnName),
                 // Old and new values in raw dtabase:
                 $oldFieldValue_db,
                 $newValue,
