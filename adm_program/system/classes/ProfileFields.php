@@ -313,7 +313,7 @@ class ProfileFields
      * Returns the user value for this column. Within a dropdown or radio button field the format could be set to **text** so
      * an icon will not be shown.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field whose value should be read
-     * @param string $format          Returns the field value in a special format **text**, **html**, **database**
+     * @param string $format          Returns the field value in a special format e.g. **html**, **database**
      *                                or datetime (detailed description in method description)
      *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function
      *                                * 'html'  : returns the value in html-format if this is necessary for that field type.
