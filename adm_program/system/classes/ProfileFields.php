@@ -322,8 +322,6 @@ class ProfileFields
      */
     public function getValue($fieldNameIntern, $format = '')
     {
-        global $gL10n, $gSettingsManager;
-
         $value = '';
 
         // exists a profile field with that name ?
@@ -339,7 +337,7 @@ class ProfileFields
             if ($fieldNameIntern === 'COUNTRY') {
                 if ($value !== '') {
                     // read the language name of the country
-                    $value = $gL10n->getCountryName($value);
+                    $value = $GLOBALS['gL10n']->getCountryName($value);
                 }
             } else {
                 switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type')) {
@@ -353,7 +351,7 @@ class ProfileFields
 
                             // if no format or html is set then show date format from Admidio settings
                             if ($format === '' || $format === 'html') {
-                                $value = $date->format($gSettingsManager->getString('system_date'));
+                                $value = $date->format($GLOBALS['gSettingsManager']->getString('system_date'));
                             } else {
                                 $value = $date->format($format);
                             }
@@ -401,10 +399,8 @@ class ProfileFields
      */
     public function isEditable($fieldNameIntern, $allowedToEditProfile)
     {
-        global $gCurrentUser;
-
         return $this->isVisible($fieldNameIntern, $allowedToEditProfile)
-        && ($gCurrentUser->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0);
+        && ($GLOBALS['gCurrentUser']->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0);
     }
 
     /**
@@ -419,11 +415,9 @@ class ProfileFields
      */
     public function isVisible($fieldNameIntern, $allowedToEditProfile = false)
     {
-        global $gCurrentUser;
-
         // check a special case where the field is only visible for users who can edit the profile but must therefore
         // have the right to edit all users
-        if (!$gCurrentUser->editUsers()
+        if (!$GLOBALS['gCurrentUser']->editUsers()
         && $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 1
         && $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 1) {
             return false;
