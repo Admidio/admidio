@@ -19,7 +19,7 @@
 require_once(__DIR__ . '/common.php');
 
 // Initialize and check the parameters
-$getUrl = admFuncVariableIsValid($_GET, 'url', 'string', array('requireValue' => true));
+$getUrl = admFuncVariableIsValid($_GET, 'url', 'url', array('requireValue' => true));
 
 if (filter_var($getUrl, FILTER_VALIDATE_URL) === false) {
     $gMessage->show($gL10n->get('SYS_REDIRECT_URL_INVALID'));
