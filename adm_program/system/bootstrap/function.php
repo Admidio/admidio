@@ -271,7 +271,7 @@ function admFuncProcessableImageSize()
  * @param array<string,mixed> $array        The array with the element that should be checked
  * @param string              $variableName Name of the array element that should be checked
  * @param string              $datatype     The datatype like **string**, **numeric**, **int**, **float**, **bool**, **boolean**, **html**,
- *                                          **date**, **file** or **folder** that is expected and which will be checked.
+ *                                          **url**, **date**, **file** or **folder** that is expected and which will be checked.
  *                                          Datatype **date** expects a date that has the Admidio default format from the
  *                                          preferences or the english date format **Y-m-d**
  * @param array<string,mixed> $options      (optional) An array with the following possible entries:
@@ -340,7 +340,8 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
     }
 
     switch ($datatype) {
-        case 'file':
+        case 'file': // fallthrough
+        case 'folder':
             try {
                 if ($value !== '') {
                     StringUtils::strIsValidFileName($value, false);
@@ -398,6 +399,12 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
         case 'html':
             // check html string vor invalid tags and scripts
             $value = Htmlawed::filter(stripslashes($value), array('safe' => 1));
+            break;
+
+        case 'url':
+            if (!StringUtils::strValidCharacters($value, 'url')) {
+                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+            }
             break;
     }
 
