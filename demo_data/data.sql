@@ -4,219 +4,221 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.0.11', 0, 1000)
-                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.0.11', 0, 0)
-                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.0.11', 0, 0)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.0.11', 0, 0)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.0.11', 0, 0)
-                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.0.11', 0, 0)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.11', 0, 0)
-                              , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.0.11', 0, 0)
-                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.11', 0, 0)
-                              , (100, 'MODULE', 'SYS_USER_MANAGEMENT', 'MEMBERS', '4.0.11', 0, 0)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.11', 0, 0)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.0.11', 0, 0)
-                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.0.11', 0, 0)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.0.11', 0, 0)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.0.11', 0, 0)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.0.11', 0, 0)
-                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.0.11', 0, 0);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.1.0', 0, 1000)
+                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.1.0', 0, 0)
+                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.1.0', 0, 0)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.1.0', 0, 0)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.1.0', 0, 0)
+                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.1.0', 0, 0)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.1.0', 0, 0)
+                              , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.1.0', 0, 0)
+                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.1.0', 0, 0)
+                              , (100, 'MODULE', 'SYS_USER_MANAGEMENT', 'MEMBERS', '4.1.0', 0, 0)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.1.0', 0, 0)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.1.0', 0, 0)
+                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.1.0', 0, 0)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.1.0', 0, 0)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.1.0', 0, 0)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.1.0', 0, 0)
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.1.0', 0, 0)
+                              , (190, 'MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.1.0', 0, 0);
 
 --
 -- Data for table adm_organizations
 --
 
-INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org_id_parent, org_homepage) VALUES
-(1, 'Demo-Organisation', 'DEMO', NULL, 'https://www.admidio.org/demo/'),
-(2, 'Test-Organisation', 'TEST', 1, 'https://www.admidio.org/demo/');
+INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org_id_parent, org_homepage, org_uuid) VALUES
+(1, 'Demo-Organisation', 'DEMO', NULL, 'https://www.admidio.org/demo/', 'f04eef83-91ad-40bf-8267-09cd40ce0799'),
+(2, 'Test-Organisation', 'TEST', 1, 'https://www.admidio.org/demo/', '8418cd76-3ac9-455f-bfb4-ed6561abdb7b');
 
 --
 -- Data for table adm_menu
 --
 
-INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description) VALUES
-(NULL, NULL, true, 1, true, 'modules', NULL, '', 'SYS_MODULES', ''),
-(NULL, NULL, true, 2, true, 'administration', NULL, '', 'SYS_ADMINISTRATION', ''),
-(NULL, NULL, true, 3, true, 'plugins', NULL, '', 'SYS_PLUGINS', ''),
-(NULL, 1, false, 1, true, 'overview', '/adm_program/overview.php', 'fa-home', 'SYS_OVERVIEW', ''),
-(60, 1, false, 3, true, 'documents-files', '/adm_program/modules/documents-files/documents_files.php', 'fa-file-download', 'SYS_DOCUMENTS_FILES', 'SYS_DOCUMENTS_FILES_DESC'),
-(90, 1, false, 7, true, 'groups-roles', '/adm_program/modules/groups-roles/groups_roles.php', 'fa-users', 'SYS_GROUPS_ROLES', 'SYS_GROUPS_ROLES_DESC'),
-(20, 1, false, 2, true, 'announcements', '/adm_program/modules/announcements/announcements.php', 'fa-newspaper', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC'),
-(130, 1, false, 5, true, 'photo', '/adm_program/modules/photos/photos.php', 'fa-image', 'SYS_PHOTOS', 'PHO_PHOTOS_DESC'),
-(70, 1, false, 6, true, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'fa-book', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC'),
-(50, 1, false, 8, true, 'dates', '/adm_program/modules/dates/dates.php', 'fa-calendar-alt', 'DAT_DATES', 'DAT_DATES_DESC'),
-(80, 1, false, 9, true, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC'),
-(30, 2, false, 4, true, 'dbback', '/adm_program/modules/backup/backup.php', 'fa-database', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC'),
-(140, 2, false, 6, true, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'fa-cog', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC'),
-(120, 1, false, 4, true, 'mail', '/adm_program/modules/messages/messages_write.php', 'fa-envelope', 'SYS_EMAIL', 'SYS_EMAIL_DESC'),
-(160, 2, false, 1, true, 'newreg', '/adm_program/modules/registration/registration.php', 'fa-address-card', 'SYS_NEW_REGISTRATIONS', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC'),
-(100, 2, false, 2, true, 'usrmgt', '/adm_program/modules/members/members.php', 'fa-users-cog', 'SYS_USER_MANAGEMENT', 'SYS_USER_MANAGEMENT_DESC'),
-(110, 2, false, 5, true, 'menu', '/adm_program/modules/menu/menu.php', 'fa-stream', 'SYS_MENU', 'SYS_MENU_DESC');
+INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description, men_uuid) VALUES
+(NULL, NULL, true, 1, true, 'modules', NULL, '', 'SYS_MODULES', '', 'fbc2b774-8666-4d3d-996c-4c86e137d189'),
+(NULL, NULL, true, 2, true, 'administration', NULL, '', 'SYS_ADMINISTRATION', '', '9f27b3da-805c-4b1a-adfd-9ac7cc9d4c82'),
+(NULL, NULL, true, 3, true, 'plugins', NULL, '', 'SYS_PLUGINS', '', '4317f28b-ce43-4ac1-a8eb-7e583d16add4'),
+(NULL, 1, false, 1, true, 'overview', '/adm_program/overview.php', 'fa-home', 'SYS_OVERVIEW', '', 'f037c6b0-e71e-4961-80d7-9ea5e42ddb7a'),
+(60, 1, false, 3, true, 'documents-files', '/adm_program/modules/documents-files/documents_files.php', 'fa-file-download', 'SYS_DOCUMENTS_FILES', 'SYS_DOCUMENTS_FILES_DESC', '187c7c07-4b2a-4f3f-925c-6f40c03e740b'),
+(90, 1, false, 7, true, 'groups-roles', '/adm_program/modules/groups-roles/groups_roles.php', 'fa-users', 'SYS_GROUPS_ROLES', 'SYS_GROUPS_ROLES_DESC', 'ebd216b3-26eb-48ec-a082-d1d9645bb051'),
+(20, 1, false, 2, true, 'announcements', '/adm_program/modules/announcements/announcements.php', 'fa-newspaper', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC', 'd96ba837-9b02-4c4e-afa5-c12167cd01db'),
+(130, 1, false, 5, true, 'photo', '/adm_program/modules/photos/photos.php', 'fa-image', 'SYS_PHOTOS', 'PHO_PHOTOS_DESC', '21db7ac5-7aae-4616-bf88-5b29507d4a02'),
+(70, 1, false, 6, true, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'fa-book', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC', 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e'),
+(50, 1, false, 8, true, 'dates', '/adm_program/modules/dates/dates.php', 'fa-calendar-alt', 'DAT_DATES', 'DAT_DATES_DESC', '446a2c54-b269-4b6c-8a1c-869901b35b01'),
+(80, 1, false, 9, true, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC', '5b8b3e60-bc71-4375-bfc3-a9783a63bb72'),
+(190, 1, false, 10, true, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC', 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b'),
+(30, 2, false, 4, true, 'dbback', '/adm_program/modules/backup/backup.php', 'fa-database', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC', '9c6d01e3-b104-4f75-8562-7e7ebe7a929b'),
+(140, 2, false, 6, true, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'fa-cog', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC', '2965d083-8dd3-4a43-9b27-53018e5f22c1'),
+(120, 1, false, 4, true, 'mail', '/adm_program/modules/messages/messages_write.php', 'fa-envelope', 'SYS_EMAIL', 'SYS_EMAIL_DESC', 'edb6a573-fb66-4dfb-ba90-466317572204'),
+(160, 2, false, 1, true, 'newreg', '/adm_program/modules/registration/registration.php', 'fa-address-card', 'SYS_NEW_REGISTRATIONS', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC', '62330cbc-4c15-4860-b841-10a35d88cd3c'),
+(100, 2, false, 2, true, 'usrmgt', '/adm_program/modules/members/members.php', 'fa-users-cog', 'SYS_USER_MANAGEMENT', 'SYS_USER_MANAGEMENT_DESC', '168ad66e-e34d-4f14-8a65-a78dd7dbd058'),
+(110, 2, false, 5, true, 'menu', '/adm_program/modules/menu/menu.php', 'fa-stream', 'SYS_MENU', 'SYS_MENU_DESC', 'ef4b5380-3500-4ec4-a432-a7f4099a2a92');
 
 
 --
 -- Data for table adm_users
 --
 
-INSERT INTO %PREFIX%_users (usr_id, usr_login_name, usr_password, usr_new_password, usr_photo, usr_text, usr_activation_code, usr_last_login, usr_actual_login, usr_number_login, usr_date_invalid, usr_number_invalid, usr_usr_id_create, usr_timestamp_create, usr_usr_id_change, usr_timestamp_change, usr_valid) VALUES
-(1, 'admin', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2009-02-27 21:52:41', '2009-02-27 22:31:17', 26, NULL, 0, 2, '2008-05-03 09:43:02', 354, '2009-02-24 09:43:02', true),
-(2, 'System', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, '2008-05-03 09:40:43', NULL, NULL, false),
-(202, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:44:59', 1, '2009-02-14 15:24:39', true),
-(203, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:44:59', 1, '2009-02-14 15:24:39', true),
-(204, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:00', 1, '2009-02-14 20:45:00', true),
-(205, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:00', 1, '2009-02-14 20:45:00', true),
-(206, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:01', 1, '2009-02-14 20:45:01', true),
-(207, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:03', 1, '2009-02-14 20:45:03', true),
-(208, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:05', 1, '2009-02-14 20:45:05', true),
-(209, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:06', 1, '2009-02-14 20:45:06', true),
-(210, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:07', 1, '2009-02-14 20:45:07', true),
-(211, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:09', 1, '2009-02-14 20:45:09', true),
-(212, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:11', 1, '2009-02-14 20:45:11', true),
-(213, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:13', 1, '2009-02-14 20:45:13', true),
-(214, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:15', 1, '2009-02-14 20:45:15', true),
-(215, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:18', 1, '2009-02-14 20:45:18', true),
-(216, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:19', 1, '2009-02-14 20:45:19', true),
-(217, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:21', 1, '2009-02-14 20:45:21', true),
-(218, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:26', 1, '2009-02-14 20:45:26', true),
-(219, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:30', 1, '2009-02-14 20:45:30', true),
-(220, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:33', 1, '2009-02-14 20:45:33', true),
-(221, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:35', 1, '2009-02-14 20:45:35', true),
-(222, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:36', 1, '2009-02-14 20:45:36', true),
-(223, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:37', 1, '2009-02-14 20:45:37', true),
-(224, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:40', 1, '2009-02-14 20:45:40', true),
-(225, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:41', 1, '2009-02-14 20:45:41', true),
-(226, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:44', 1, '2009-02-14 20:45:44', true),
-(227, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:46', 1, '2009-02-14 20:45:46', true),
-(228, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:47', 1, '2009-02-14 20:45:47', true),
-(229, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:49', 1, '2009-02-14 20:45:49', true),
-(230, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:51', 1, '2009-02-14 20:45:51', true),
-(231, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:53', 1, '2009-02-14 20:45:53', true),
-(232, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:54', 1, '2009-02-14 20:45:54', true),
-(233, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:55', 1, '2009-02-14 20:45:55', true),
-(234, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:56', 1, '2009-02-14 20:45:56', true),
-(235, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:58', 1, '2009-02-14 20:45:58', true),
-(236, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:00', 1, '2009-02-14 20:46:00', true),
-(237, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:01', 1, '2009-02-14 20:46:01', true),
-(238, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:03', 1, '2009-02-14 20:46:03', true),
-(239, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:06', 1, '2009-02-14 20:46:06', true),
-(240, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:08', 1, '2009-02-14 20:46:08', true),
-(241, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:10', 1, '2009-02-14 20:46:10', true),
-(242, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:11', 1, '2009-02-14 20:46:11', true),
-(243, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:12', 1, '2009-02-14 20:46:12', true),
-(244, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:13', 1, '2009-02-14 20:46:13', true),
-(245, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:15', 1, '2009-02-14 20:46:15', true),
-(246, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:16', 1, '2009-02-14 20:46:16', true),
-(247, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:16', 1, '2009-02-14 20:46:16', true),
-(248, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:17', 1, '2009-02-14 20:46:17', true),
-(249, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:18', 1, '2009-02-14 20:46:18', true),
-(250, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:18', 1, '2009-02-14 20:46:18', true),
-(251, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:19', 1, '2009-02-14 20:46:19', true),
-(252, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:20', 1, '2009-02-14 20:46:20', true),
-(253, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:21', 1, '2009-02-14 20:46:21', true),
-(254, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:22', 1, '2009-02-14 20:46:22', true),
-(255, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:22', 1, '2009-02-14 20:46:22', true),
-(256, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:23', 1, '2009-02-14 20:46:23', true),
-(257, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:23', 1, '2009-02-14 20:46:23', true),
-(258, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:24', 1, '2009-02-14 20:46:24', true),
-(259, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:25', 1, '2009-02-14 20:46:25', true),
-(260, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:25', 1, '2009-02-14 20:46:25', true),
-(261, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:26', 1, '2009-02-14 20:46:26', true),
-(262, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:26', 1, '2009-02-14 20:46:26', true),
-(263, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:27', 1, '2009-02-14 20:46:27', true),
-(264, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:28', 1, '2009-02-14 20:46:28', true),
-(265, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:28', 1, '2009-02-14 20:46:28', true),
-(266, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:29', 1, '2009-02-14 20:46:29', true),
-(267, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:29', 1, '2009-02-14 20:46:29', true),
-(268, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:30', 1, '2009-02-14 20:46:30', true),
-(269, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:30', 1, '2009-02-14 20:46:30', true),
-(270, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:31', 1, '2009-02-14 20:46:31', true),
-(271, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:31', 1, '2009-02-14 20:46:31', true),
-(272, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:32', 1, '2009-02-14 20:46:32', true),
-(273, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:33', 1, '2009-02-14 20:46:33', true),
-(274, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:33', 1, '2009-02-14 20:46:33', true),
-(275, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:34', 1, '2009-02-14 20:46:34', true),
-(276, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:35', 1, '2009-02-14 20:46:35', true),
-(277, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:35', 1, '2009-02-14 20:46:35', true),
-(278, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:36', 1, '2009-02-14 20:46:36', true),
-(279, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:37', 1, '2009-02-14 20:46:37', true),
-(280, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:37', 1, '2009-02-14 20:46:37', true),
-(281, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:38', 1, '2009-02-14 20:46:38', true),
-(282, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:38', 1, '2009-02-14 20:46:38', true),
-(283, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:39', 1, '2009-02-14 20:46:39', true),
-(284, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:40', 1, '2009-02-14 20:46:40', true),
-(285, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:41', 1, '2009-02-14 20:46:41', true),
-(286, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:41', 1, '2009-02-14 20:46:41', true),
-(287, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:42', 1, '2009-02-14 20:46:42', true),
-(288, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:43', 1, '2009-02-14 20:46:43', true),
-(289, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:43', 1, '2009-02-14 20:46:43', true),
-(290, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:44', 1, '2009-02-14 20:46:44', true),
-(291, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:45', 1, '2009-02-14 20:46:45', true),
-(292, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:45', 1, '2009-02-14 20:46:45', true),
-(293, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:46', 1, '2009-02-14 20:46:46', true),
-(294, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:47', 1, '2009-02-14 20:46:47', true),
-(295, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:47', 1, '2009-02-14 20:46:47', true),
-(296, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:47', 1, '2009-02-14 20:46:47', true),
-(297, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:48', 1, '2009-02-14 20:46:48', true),
-(298, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:48', 1, '2009-02-14 20:46:48', true),
-(299, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:49', 1, '2009-02-14 20:46:49', true),
-(300, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:50', 1, '2009-02-14 20:46:50', true),
-(301, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:50', 1, '2009-02-14 20:46:50', true),
-(302, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:51', 1, '2009-02-14 20:46:51', true),
-(303, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:52', 1, '2009-02-14 20:46:52', true),
-(304, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:52', 1, '2009-02-14 20:46:52', true),
-(305, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:53', 1, '2009-02-14 20:46:53', true),
-(306, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:53', 1, '2009-02-14 20:46:53', true),
-(307, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:54', 1, '2009-02-14 20:46:54', true),
-(308, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:54', 1, '2009-02-14 20:46:54', true),
-(309, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:55', 1, '2009-02-14 20:46:55', true),
-(310, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:55', 1, '2009-02-14 20:46:55', true),
-(311, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:56', 1, '2009-02-14 20:46:56', true),
-(312, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:56', 1, '2009-02-14 20:46:56', true),
-(313, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:57', 1, '2009-02-14 20:46:57', true),
-(314, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:58', 1, '2009-02-14 20:46:58', true),
-(315, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:58', 1, '2009-02-14 20:46:58', true),
-(316, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:59', 1, '2009-02-14 20:46:59', true),
-(317, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:00', 1, '2009-02-14 20:47:00', true),
-(318, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:00', 1, '2009-02-14 20:47:00', true),
-(319, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:01', 1, '2009-02-14 20:47:01', true),
-(320, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:01', 1, '2009-02-14 20:47:01', true),
-(321, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:02', 1, '2009-02-14 20:47:02', true),
-(322, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:03', 1, '2009-02-14 20:47:03', true),
-(323, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:03', 1, '2009-02-14 20:47:03', true),
-(324, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:04', 1, '2009-02-14 20:47:04', true),
-(325, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:04', 1, '2009-02-14 20:47:04', true),
-(326, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:05', 1, '2009-02-14 20:47:05', true),
-(327, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:05', 1, '2009-02-14 20:47:05', true),
-(328, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:06', 1, '2009-02-14 20:47:06', true),
-(329, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:07', 1, '2009-02-14 20:47:07', true),
-(330, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:07', 1, '2009-02-14 20:47:07', true),
-(331, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:08', 1, '2009-02-14 20:47:08', true),
-(332, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:09', 1, '2009-02-14 20:47:09', true),
-(333, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:09', 1, '2009-02-14 20:47:09', true),
-(334, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:10', 1, '2009-02-14 20:47:10', true),
-(335, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:10', 1, '2009-02-14 20:47:10', true),
-(336, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:11', 1, '2009-02-14 20:47:11', true),
-(337, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:12', 1, '2009-02-14 20:47:12', true),
-(338, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:12', 1, '2009-02-14 20:47:12', true),
-(339, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:13', 1, '2009-02-14 20:47:13', true),
-(340, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:14', 1, '2009-02-14 20:47:14', true),
-(341, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:14', 1, '2009-02-14 20:47:14', true),
-(342, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:15', 1, '2009-02-14 20:47:15', true),
-(343, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:16', 1, '2009-02-14 20:47:16', true),
-(344, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:16', 1, '2009-02-14 20:47:16', true),
-(345, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:18', 1, '2009-02-14 20:47:18', true),
-(346, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:18', 1, '2009-02-14 20:47:18', true),
-(347, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:19', 1, '2009-02-14 20:47:19', true),
-(348, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:20', 1, '2009-02-14 20:47:20', true),
-(349, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:21', 1, '2009-02-14 20:47:21', true),
-(350, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
-(351, 'Demo', '5c4896c0c3fefb8ef0b326e436790906', NULL, NULL, NULL, NULL, '2008-05-12 20:29:15', '2009-02-27 22:34:06', 2, NULL, 0, 351, '2008-05-12 20:29:33', 354, '2011-02-03 14:19:13', true),
-(352, 'Mustermann01', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 23:31:26', NULL, NULL, false),
-(353, 'Dina', 'c33367701511b4f6020ec61ded352059', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 23:33:38', NULL, NULL, false),
-(354, 'DEMO_CHAIRMAN', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', true),
-(355, 'SYS_MEMBER', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', true),
-(356, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
-(357, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true);
+INSERT INTO %PREFIX%_users (usr_id, usr_uuid, usr_login_name, usr_password, usr_photo, usr_text, usr_last_login, usr_actual_login, usr_number_login, usr_date_invalid, usr_number_invalid, usr_usr_id_create, usr_timestamp_create, usr_usr_id_change, usr_timestamp_change, usr_valid) VALUES
+(1  , '7a854ed2-50db-49ee-9379-31d07f467d47', 'admin', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, '2009-02-27 21:52:41', '2009-02-27 22:31:17', 26, NULL, 0, 2, '2008-05-03 09:43:02', 354, '2009-02-24 09:43:02', true),
+(2  , '5b84e9c8-b9b9-44d1-acf2-29fbb1015d01', 'System', NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, '2008-05-03 09:40:43', NULL, NULL, false),
+(202, '93ce816e-7cfd-45e1-b025-a3644828c47c', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:44:59', 1, '2009-02-14 15:24:39', true),
+(203, 'f4361cf5-0b58-4602-b6f9-9ce4535b111f', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:44:59', 1, '2009-02-14 15:24:39', true),
+(204, 'df18391b-e9a0-454a-ba0d-c589ade80b17', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:00', 1, '2009-02-14 20:45:00', true),
+(205, 'd5843761-d0c2-4a17-a196-cb0795abbc27', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:00', 1, '2009-02-14 20:45:00', true),
+(206, 'cd3c047a-a7cc-4b1e-aa18-8cf83408fd08', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:01', 1, '2009-02-14 20:45:01', true),
+(207, 'cd60260c-646a-495a-bc9e-d675554c7962', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:03', 1, '2009-02-14 20:45:03', true),
+(208, 'e3d76810-5c64-4ca7-9219-b6bb2113c6b7', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:05', 1, '2009-02-14 20:45:05', true),
+(209, '1b5b1b29-0c7b-4ec1-ad42-0eeb8e0af891', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:06', 1, '2009-02-14 20:45:06', true),
+(210, '4574b93d-22e0-4e18-93c1-1e6c93869ee9', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:07', 1, '2009-02-14 20:45:07', true),
+(211, '2d5c235d-3e97-4c31-baf9-01664b449800', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:09', 1, '2009-02-14 20:45:09', true),
+(212, 'c67a424f-9f89-46f9-8554-165582168d42', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:11', 1, '2009-02-14 20:45:11', true),
+(213, 'de709436-a2d5-4270-999f-adb8a06bb443', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:13', 1, '2009-02-14 20:45:13', true),
+(214, 'ffffba2e-a41b-4fa3-9074-f02ac7271ef8', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:15', 1, '2009-02-14 20:45:15', true),
+(215, '6ad567f4-68aa-4add-a01f-64787cee2f09', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:18', 1, '2009-02-14 20:45:18', true),
+(216, '7703951f-2658-48fc-b301-4ea1f30c1d93', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:19', 1, '2009-02-14 20:45:19', true),
+(217, '9fa45677-54e0-4bea-b86b-4e6ee6e894f2', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:21', 1, '2009-02-14 20:45:21', true),
+(218, 'd41b8e54-d55d-42f1-bb52-71a1286e3dc3', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:26', 1, '2009-02-14 20:45:26', true),
+(219, 'befe86bf-7479-4cd1-919c-783f41a6cb53', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:30', 1, '2009-02-14 20:45:30', true),
+(220, 'e841a425-4707-4489-9d9e-a2348ef78a40', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:33', 1, '2009-02-14 20:45:33', true),
+(221, '446b790c-7276-454e-873f-eddecd212b2d', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:35', 1, '2009-02-14 20:45:35', true),
+(222, '81b68c73-ca8e-473d-b93c-d255bda67787', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:36', 1, '2009-02-14 20:45:36', true),
+(223, 'fcf95aa0-04b9-4251-b6d3-3e738d97fbd0', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:37', 1, '2009-02-14 20:45:37', true),
+(224, '649bc587-131c-40f0-82ab-17a84e925883', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:40', 1, '2009-02-14 20:45:40', true),
+(225, 'ed93b673-dee0-4c9a-beeb-5bea86df1d33', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:41', 1, '2009-02-14 20:45:41', true),
+(226, '1e05d4df-68f1-46da-97cd-f8106a2448b3', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:44', 1, '2009-02-14 20:45:44', true),
+(227, '68bb8c2a-d50c-4d1b-bf15-fcee832c8b3f', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:46', 1, '2009-02-14 20:45:46', true),
+(228, '7da8b421-5933-4c0c-b7c1-a5a74743284f', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:47', 1, '2009-02-14 20:45:47', true),
+(229, '120fe91e-706e-433c-a69d-e750a3958da3', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:49', 1, '2009-02-14 20:45:49', true),
+(230, 'fb8568ea-0e62-4019-bdc5-366cb89ccfed', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:51', 1, '2009-02-14 20:45:51', true),
+(231, '20302356-314b-4752-a967-2bbe4d06e2ba', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:53', 1, '2009-02-14 20:45:53', true),
+(232, 'b0648307-3763-4e11-9814-c8f629eb0e87', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:54', 1, '2009-02-14 20:45:54', true),
+(233, '6111bc37-2a05-4804-ac1b-20957eadaa73', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:55', 1, '2009-02-14 20:45:55', true),
+(234, 'c08a6a65-86ce-4307-b7e9-cde87d3d6ebb', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:56', 1, '2009-02-14 20:45:56', true),
+(235, '8b3c611b-a524-4134-8f4d-dde8eae13242', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:58', 1, '2009-02-14 20:45:58', true),
+(236, 'c2694fd6-e158-4de2-90ce-83b7eccae532', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:00', 1, '2009-02-14 20:46:00', true),
+(237, '44171fc4-4039-4502-9072-5dccb3a36349', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:01', 1, '2009-02-14 20:46:01', true),
+(238, '735544e3-374b-4967-bacc-a467c3dd4b4d', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:03', 1, '2009-02-14 20:46:03', true),
+(239, 'eb1c4b06-85b5-4e00-a311-a4c1c5108be6', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:06', 1, '2009-02-14 20:46:06', true),
+(240, '1525af50-1b2b-45ce-8a07-35b0b1eb5a5e', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:08', 1, '2009-02-14 20:46:08', true),
+(241, 'f829ff81-2950-4bad-a8ef-ed437fdafce1', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:10', 1, '2009-02-14 20:46:10', true),
+(242, '310c655b-f85f-419b-a33c-4dad98ea924c', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:11', 1, '2009-02-14 20:46:11', true),
+(243, 'c2670498-5018-4549-b1e0-a448c71de399', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:12', 1, '2009-02-14 20:46:12', true),
+(244, '355ba9cd-c8af-4777-a00b-267183a25f3f', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:13', 1, '2009-02-14 20:46:13', true),
+(245, '1cafa7e1-166b-4f79-b760-f03100dd94f1', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:15', 1, '2009-02-14 20:46:15', true),
+(246, '4b9dd602-1c30-4441-83e7-a81babe57008', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:16', 1, '2009-02-14 20:46:16', true),
+(247, '8f70e5fa-d525-48be-ada6-3c6a694faf91', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:16', 1, '2009-02-14 20:46:16', true),
+(248, '4d6fabea-e2e9-48ec-9e24-c458dd3bf51a', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:17', 1, '2009-02-14 20:46:17', true),
+(249, 'f1ad561c-fb7b-4c49-81e5-b4f4e60bf04d', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:18', 1, '2009-02-14 20:46:18', true),
+(250, '587f587a-3618-411a-b3e2-ae9fc3becdb9', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:18', 1, '2009-02-14 20:46:18', true),
+(251, '03f4c5cf-b2ab-4868-b951-c0dff196d21f', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:19', 1, '2009-02-14 20:46:19', true),
+(252, 'd222cb1b-4b7c-4354-be02-67168160e2d6', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:20', 1, '2009-02-14 20:46:20', true),
+(253, '1424bee6-5a45-43b2-9bba-37fae9060fe9', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:21', 1, '2009-02-14 20:46:21', true),
+(254, '8f4523b8-10bd-4dc7-9d24-1ad85375d188', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:22', 1, '2009-02-14 20:46:22', true),
+(255, '8cfad614-cd2f-4fb2-9e82-e7e43bb61353', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:22', 1, '2009-02-14 20:46:22', true),
+(256, 'eac653cf-5265-4161-9bc7-0a1e1808075e', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:23', 1, '2009-02-14 20:46:23', true),
+(257, 'f8691a52-a207-4c32-9953-eda4f20a0f00', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:23', 1, '2009-02-14 20:46:23', true),
+(258, 'd0e9bd42-930f-4096-b8cc-cdcaa9d63088', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:24', 1, '2009-02-14 20:46:24', true),
+(259, 'b94fdf67-8a68-411c-8048-527539a35894', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:25', 1, '2009-02-14 20:46:25', true),
+(260, '79b14a0a-3f6e-43d0-9543-28fb1a0a7acc', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:25', 1, '2009-02-14 20:46:25', true),
+(261, 'de94811a-efc4-4df7-9d97-05fa249f7543', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:26', 1, '2009-02-14 20:46:26', true),
+(262, 'ebbc0fe3-23e3-43a3-b75a-9100d50429e6', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:26', 1, '2009-02-14 20:46:26', true),
+(263, '749891b6-6b9c-4e8d-a0ed-f24413565950', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:27', 1, '2009-02-14 20:46:27', true),
+(264, 'a0c48e53-e935-4209-b108-b05ca4b58293', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:28', 1, '2009-02-14 20:46:28', true),
+(265, 'be8b0107-2364-4d25-a6e4-5599e6c94df0', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:28', 1, '2009-02-14 20:46:28', true),
+(266, 'f793f3d1-ff21-411f-bd69-eb6483123647', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:29', 1, '2009-02-14 20:46:29', true),
+(267, '59b7dd7f-77b0-43f5-9145-bc41757847df', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:29', 1, '2009-02-14 20:46:29', true),
+(268, '253d65b6-b0cf-48c3-a0f5-aebe2021e849', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:30', 1, '2009-02-14 20:46:30', true),
+(269, '9bff3c81-5c94-4e69-9291-d2469de0f973', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:30', 1, '2009-02-14 20:46:30', true),
+(270, 'e7483706-9591-41eb-9df2-69ad470cad45', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:31', 1, '2009-02-14 20:46:31', true),
+(271, '7fd5cdc9-801d-4373-9f15-40d131ed6c57', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:31', 1, '2009-02-14 20:46:31', true),
+(272, '327eda38-525a-4ab1-9b2b-eb732019365b', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:32', 1, '2009-02-14 20:46:32', true),
+(273, '406ef1ec-a666-4f51-a309-098fe1d99a1f', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:33', 1, '2009-02-14 20:46:33', true),
+(274, '6f7bde18-8bcc-4176-81d9-3f04eeb8ff8e', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:33', 1, '2009-02-14 20:46:33', true),
+(275, 'c07b940a-7282-4dec-8446-3c82c6ebd784', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:34', 1, '2009-02-14 20:46:34', true),
+(276, 'b969e22c-7db6-4133-be28-6acf30ba6d89', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:35', 1, '2009-02-14 20:46:35', true),
+(277, '11929404-1bd6-4e67-87eb-180e47d3c6b7', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:35', 1, '2009-02-14 20:46:35', true),
+(278, '6aaebdc7-4b59-414f-817f-d4845014d7c1', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:36', 1, '2009-02-14 20:46:36', true),
+(279, 'e806b13e-0c39-4f06-97ee-c389ecdb1df5', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:37', 1, '2009-02-14 20:46:37', true),
+(280, 'f787f83b-1a4a-411f-b447-4308c2f529d5', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:37', 1, '2009-02-14 20:46:37', true),
+(281, '68689ffa-49d5-4b93-bd56-209ee07a028a', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:38', 1, '2009-02-14 20:46:38', true),
+(282, 'd985a4ed-3be1-4e98-9f12-2d04664996e0', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:38', 1, '2009-02-14 20:46:38', true),
+(283, '4758a63e-a5f3-4d58-a25b-2c8bb323b30c', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:39', 1, '2009-02-14 20:46:39', true),
+(284, '3d28e30b-7c29-456d-afc3-64019fcddb30', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:40', 1, '2009-02-14 20:46:40', true),
+(285, '9a27b1ed-3cee-48a2-b886-d9e768fa2973', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:41', 1, '2009-02-14 20:46:41', true),
+(286, '2e433f1a-50da-4ab5-abb8-d0ad2f14ac58', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:41', 1, '2009-02-14 20:46:41', true),
+(287, '5cb7ae95-63b4-47ce-955a-5e318d4484db', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:42', 1, '2009-02-14 20:46:42', true),
+(288, '3a5f0186-bbb5-4c00-831b-5b909fc924f0', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:43', 1, '2009-02-14 20:46:43', true),
+(289, '537d8d74-882b-466d-b14b-aba396f951c7', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:43', 1, '2009-02-14 20:46:43', true),
+(290, '348d9d0b-0d63-44a8-a797-7e0c21d7c7cb', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:44', 1, '2009-02-14 20:46:44', true),
+(291, '7f02a06a-22f8-4020-aa01-c7e51fb3b1d2', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:45', 1, '2009-02-14 20:46:45', true),
+(292, '20e9aca7-e84a-4829-8d32-6e254e607488', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:45', 1, '2009-02-14 20:46:45', true),
+(293, '90e280ed-1d37-4fd7-ad91-9af60b806f8f', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:46', 1, '2009-02-14 20:46:46', true),
+(294, '3d61ba92-56f3-480b-b3cc-c37b19ac04d7', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:47', 1, '2009-02-14 20:46:47', true),
+(295, 'd427e53b-a2cd-4b7d-81b7-904d9fb636dc', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:47', 1, '2009-02-14 20:46:47', true),
+(296, 'c11dab58-c20a-407b-8357-f6b869af0714', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:47', 1, '2009-02-14 20:46:47', true),
+(297, 'ceba0dd2-8e9c-4204-84a7-523c5a491cbd', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:48', 1, '2009-02-14 20:46:48', true),
+(298, 'b95d1942-88d0-4b08-9857-0314a0f6b995', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:48', 1, '2009-02-14 20:46:48', true),
+(299, '37a00f5a-b9e6-4095-891a-ab7b860e9918', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:49', 1, '2009-02-14 20:46:49', true),
+(300, '4564365c-0931-4a53-b35f-ab35d6229809', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:50', 1, '2009-02-14 20:46:50', true),
+(301, '73ad9e68-0715-4f34-aa79-6eb6de3f3cf0', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:50', 1, '2009-02-14 20:46:50', true),
+(302, '2c7ff257-7bfd-40ba-afab-8e55794eedcf', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:51', 1, '2009-02-14 20:46:51', true),
+(303, '370e6a8d-a341-45c7-9be9-49e9af23e7ba', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:52', 1, '2009-02-14 20:46:52', true),
+(304, '37a01c8c-fa7b-42d2-832c-ec0589f1fee3', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:52', 1, '2009-02-14 20:46:52', true),
+(305, 'c932f06e-4f9c-41db-a15d-baf4546d673f', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:53', 1, '2009-02-14 20:46:53', true),
+(306, 'f1413fb4-02d7-4d8b-ac5c-64b808b8e714', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:53', 1, '2009-02-14 20:46:53', true),
+(307, '3400a119-ec6f-4ba5-b4ae-80f3078c9398', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:54', 1, '2009-02-14 20:46:54', true),
+(308, '7ab5d98f-4c1c-480f-9fc8-c5fe10f7c794', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:54', 1, '2009-02-14 20:46:54', true),
+(309, 'fca89818-fa9b-4e75-94d0-7e19819299bb', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:55', 1, '2009-02-14 20:46:55', true),
+(310, '15694740-b06c-4fbd-9a79-10543c9232bd', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:55', 1, '2009-02-14 20:46:55', true),
+(311, '1a9e0ad6-172e-4438-a54b-3cb76da32af2', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:56', 1, '2009-02-14 20:46:56', true),
+(312, '98c0074d-8c01-4857-a46b-820696a444c6', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:56', 1, '2009-02-14 20:46:56', true),
+(313, '753bd2c6-a8ab-4f08-af96-7c8998831b96', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:57', 1, '2009-02-14 20:46:57', true),
+(314, 'fc76d351-8985-41c8-9766-d20c790efe70', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:58', 1, '2009-02-14 20:46:58', true),
+(315, '018eba8d-e7a6-4c55-9f73-b48881975aa3', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:58', 1, '2009-02-14 20:46:58', true),
+(316, '3c54fc5f-06ea-430a-8f9c-0eae5477ddee', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:46:59', 1, '2009-02-14 20:46:59', true),
+(317, '602cce9e-0670-4716-9532-e0e294b15dcf', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:00', 1, '2009-02-14 20:47:00', true),
+(318, '24b5221b-247b-4225-8d40-47b625a6ba16', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:00', 1, '2009-02-14 20:47:00', true),
+(319, '6f8e487b-12aa-43e2-b26b-ef04c6c3eb7c', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:01', 1, '2009-02-14 20:47:01', true),
+(320, '9605a4bf-3e87-4b77-aa49-195ebcc2afc6', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:01', 1, '2009-02-14 20:47:01', true),
+(321, 'a277890c-b2f9-4c6a-bf63-75e225ba152e', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:02', 1, '2009-02-14 20:47:02', true),
+(322, '0bd8cb99-50a8-4cf8-91e6-78cd5fc883b3', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:03', 1, '2009-02-14 20:47:03', true),
+(323, '15073e01-2532-4240-9a5c-b672c4cce8b6', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:03', 1, '2009-02-14 20:47:03', true),
+(324, '1baea179-91c6-4167-8ad5-58c474f62311', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:04', 1, '2009-02-14 20:47:04', true),
+(325, 'e8cfa1dd-11bb-41ec-bab6-41b8b508affe', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:04', 1, '2009-02-14 20:47:04', true),
+(326, 'b522f5d5-4163-4dc5-ae03-3cf2f983931e', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:05', 1, '2009-02-14 20:47:05', true),
+(327, '960f7456-238f-42fa-a234-59968dc4b009', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:05', 1, '2009-02-14 20:47:05', true),
+(328, 'b85d7a1f-d784-4aef-84c6-30441d38625c', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:06', 1, '2009-02-14 20:47:06', true),
+(329, 'ae29aa7c-579c-4f2f-8e70-bedf02027717', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:07', 1, '2009-02-14 20:47:07', true),
+(330, '0cf04db2-2484-4eb6-bb28-98a55cb459c6', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:07', 1, '2009-02-14 20:47:07', true),
+(331, '8935e4c1-56a8-4678-8977-680402f22757', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:08', 1, '2009-02-14 20:47:08', true),
+(332, '8a869d19-fa79-4c90-9ef9-5ff5d9fa62f0', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:09', 1, '2009-02-14 20:47:09', true),
+(333, 'dee5bb3e-60ee-4bed-88d0-afaaffacadd3', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:09', 1, '2009-02-14 20:47:09', true),
+(334, '2409f3a1-6a08-4edc-b8ba-95f3ea1e2025', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:10', 1, '2009-02-14 20:47:10', true),
+(335, 'fdfb7e6f-329e-4e56-b851-39d8cf7c7af0', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:10', 1, '2009-02-14 20:47:10', true),
+(336, 'eeb1275c-6c65-463a-9d16-04be64e2f7c5', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:11', 1, '2009-02-14 20:47:11', true),
+(337, '6da0b876-2faf-4668-8bdc-ed0ec9607b56', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:12', 1, '2009-02-14 20:47:12', true),
+(338, '8c4f43de-c226-44a6-a76e-6fd530b34d36', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:12', 1, '2009-02-14 20:47:12', true),
+(339, '7ebcfa5c-7552-45ef-8199-a3655ab3510e', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:13', 1, '2009-02-14 20:47:13', true),
+(340, '413a7e7d-1fb9-4224-bc31-21350e9257eb', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:14', 1, '2009-02-14 20:47:14', true),
+(341, '8d058857-3174-455e-844f-6c909f43e55f', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:14', 1, '2009-02-14 20:47:14', true),
+(342, 'e73da122-b961-4c7f-92a3-c7224a2960c1', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:15', 1, '2009-02-14 20:47:15', true),
+(343, '6afff462-2c5d-465e-8120-ec43f579c7d9', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:16', 1, '2009-02-14 20:47:16', true),
+(344, 'c5a78a84-9d19-4f16-81a9-eae94530d17c', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:16', 1, '2009-02-14 20:47:16', true),
+(345, '91c2e034-f671-467c-ab5b-8268e0505fb0', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:18', 1, '2009-02-14 20:47:18', true),
+(346, '9ca4bc75-15ca-416d-abf3-d07f0799ba95', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:18', 1, '2009-02-14 20:47:18', true),
+(347, 'b2e88992-59f2-4f15-97a8-b4b028bae598', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:19', 1, '2009-02-14 20:47:19', true),
+(348, 'd00f7e21-53a4-41bd-8324-52cfd7a01e99', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:20', 1, '2009-02-14 20:47:20', true),
+(349, 'b50d8ea6-2afe-44ae-9721-dea54413724d', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:21', 1, '2009-02-14 20:47:21', true),
+(350, 'eace5159-f088-4af0-afa0-5e691f3d5cc8', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
+(351, '56920e00-761c-495a-b43d-082eda94a145', 'Demo', '5c4896c0c3fefb8ef0b326e436790906', NULL, NULL, '2008-05-12 20:29:15', '2009-02-27 22:34:06', 2, NULL, 0, 351, '2008-05-12 20:29:33', 354, '2011-02-03 14:19:13', true),
+(352, '4cae66ed-6c2f-4eac-be07-2635ddc1ceda', 'Mustermann01', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 23:31:26', NULL, NULL, false),
+(353, '386e8531-deb7-40ed-a06b-df4366d9bba6', 'Dina', 'c33367701511b4f6020ec61ded352059', NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 23:33:38', NULL, NULL, false),
+(354, '006bd130-34d4-4b86-9e82-b1464ad60a0b', 'DEMO_CHAIRMAN', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', true),
+(355, '97f8346c-ca53-40de-857a-459d26d9df40', 'SYS_MEMBER', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', true),
+(356, '232a5ee7-4ed9-41de-b081-0b5090b00462', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
+(357, 'd1ba8d2b-ad8f-43bc-a22d-cbd71eed09a4', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true);
 
 --
 -- Data for table adm_preferences
@@ -236,6 +238,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (2600, 1, 'documents_files_enable_module', '1'),
     (2700, 1, 'enable_ecard_module', '1'),
     (2950, 1, 'enable_email_notification', '0'),
+    (2960, 1, 'enable_email_changenotification', '0'),
     (3100, 1, 'enable_gbook_comments4all', '0'),
     (3150, 1, 'enable_guestbook_moderation', '0'),
     (3200, 1, 'enable_guestbook_module', '2'),
@@ -244,7 +247,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (3500, 1, 'enable_mail_captcha', '1'),
     (3600, 1, 'enable_mail_module', '1'),
     (3610, 1, 'enable_pm_module', '1'),
-    (3620, 1, 'enable_chat_module', '1'),
     (3700, 1, 'enable_password_recovery', '1'),
     (3800, 1, 'enable_photo_module', '1'),
     (3900, 1, 'enable_registration_captcha', '1'),
@@ -252,6 +254,8 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (4100, 1, 'enable_rss', '1'),
     (4200, 1, 'enable_system_mails', '0'),
     (4300, 1, 'enable_weblinks_module', '1'),
+    (4304, 1, 'category_report_enable_module', '1'),
+    (4305, 1, 'category_report_default_configuration', '1'),
     (4310, 1, 'dates_ical_days_past', '60'),
     (4320, 1, 'dates_ical_days_future', '365'),
     (4330, 1, 'dates_view', 'detail'),
@@ -281,6 +285,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (6925, 1, 'mail_into_to', '0'),
     (6927, 1, 'mail_show_former', '1'),
     (6930, 1, 'mail_max_receiver', '4'),
+    (6940, 1, 'mail_save_attachments', '0'),
     (7000, 1, 'mail_sendmail_address', ''),
     (7010, 1, 'mail_sendmail_name', ''),
     (7020, 1, 'mail_send_method', 'phpmail'),
@@ -296,7 +301,8 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (7200, 1, 'max_file_upload_size', '3'),
     (7250, 1, 'members_users_per_page', '25'),
     (7251, 1, 'members_days_field_history', '365'),
-    (7252, 1, 'members_show_all_users', '1'),
+    (7252, 1, 'members_list_configuration', '15'),
+    (7253, 1, 'members_show_all_users', '1'),
     (7300, 1, 'photo_image_text', '© demo.admidio.org'),
     (7305, 1, 'photo_image_text_size', '40'),
     (7350, 1, 'photo_albums_per_page', '24'),
@@ -315,6 +321,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (8600, 1, 'profile_show_former_roles', '1'),
     (8700, 1, 'profile_show_extern_roles', '1'),
     (8800, 1, 'registration_enable_module', '1'),
+    (8810, 1, 'registration_adopt_all_data', '0'),
     (8900, 1, 'theme', 'simple'),
     (9000, 1, 'weblinks_per_page', '0'),
     (9100, 1, 'weblinks_redirect_seconds', '10'),
@@ -349,6 +356,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (26001, 2, 'documents_files_enable_module', '1'),
     (27001, 2, 'enable_ecard_module', '1'),
     (29501, 2, 'enable_email_notification', '0'),
+    (29510, 2, 'enable_email_changenotification', '0'),
     (31001, 2, 'enable_gbook_comments4all', '0'),
     (31501, 2, 'enable_guestbook_moderation', '0'),
     (32001, 2, 'enable_guestbook_module', '2'),
@@ -357,7 +365,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (35001, 2, 'enable_mail_captcha', '1'),
     (36001, 2, 'enable_mail_module', '1'),
     (36010, 2, 'enable_pm_module', '0'),
-    (36020, 2, 'enable_chat_module', '0'),
     (37001, 2, 'enable_password_recovery', '1'),
     (38001, 2, 'enable_photo_module', '1'),
     (39001, 2, 'enable_registration_captcha', '1'),
@@ -365,6 +372,8 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (41001, 2, 'enable_rss', '1'),
     (42001, 2, 'enable_system_mails', '0'),
     (43001, 2, 'enable_weblinks_module', '1'),
+    (43050, 2, 'category_report_enable_module', '1'),
+    (43055, 2, 'category_report_default_configuration', '2'),
     (43100, 2, 'dates_ical_days_past', '60'),
     (43200, 2, 'dates_ical_days_future', '365'),
     (43300, 2, 'dates_view', 'detail'),
@@ -394,6 +403,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (69250, 2, 'mail_into_to', '0'),
     (69270, 2, 'mail_show_former', '1'),
     (69300, 2, 'mail_max_receiver', '1'),
+    (69400, 2, 'mail_save_attachments', '0'),
     (70001, 2, 'mail_sendmail_address', ''),
     (70010, 2, 'mail_sendmail_name', ''),
     (70020, 2, 'mail_send_method', 'phpmail'),
@@ -409,6 +419,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (72001, 2, 'max_file_upload_size', '3'),
     (72500, 2, 'members_users_per_page', '25'),
     (72510, 2, 'members_days_field_history', '365'),
+    (72515, 2, 'members_list_configuration', '16'),
     (72520, 2, 'members_show_all_users', '0'),
     (73000, 2, 'photo_albums_per_page', '24'),
     (73025, 2, 'photo_image_text', '© demo.admidio.org'),
@@ -428,6 +439,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (86001, 2, 'profile_show_former_roles', '1'),
     (87001, 2, 'profile_show_extern_roles', '1'),
     (88001, 2, 'registration_enable_module', '1'),
+    (88010, 2, 'registration_adopt_all_data', '0'),
     (89001, 2, 'theme', 'simple'),
     (90001, 2, 'weblinks_per_page', '0'),
     (91001, 2, 'weblinks_redirect_seconds', '10'),
@@ -477,56 +489,56 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 -- Data for table adm_categories
 --
 
-INSERT INTO %PREFIX%_categories (cat_id, cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create, cat_usr_id_change, cat_timestamp_change) VALUES
-(1, NULL, 'USF', 'MASTER_DATA', 'SYS_MASTER_DATA', true, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(2, NULL, 'USF', 'SOCIAL_NETWORKS', 'SYS_SOCIAL_NETWORKS', false, false, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
-(3, 1, 'ROL', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(4, 1, 'ROL', 'GROUPS', 'INS_GROUPS', false, true, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
-(5, 1, 'ROL', 'COURSES', 'INS_COURSES', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(6, 1, 'ROL', 'TEAMS', 'INS_TEAMS', false, false, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
-(7, 1, 'LNK', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(8, NULL, 'USF', 'ADDIDIONAL_DATA', 'INS_ADDIDIONAL_DATA', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(9, 1, 'LNK', 'ADMIDIO', 'Admidio', false, true, 2, 1, '2011-04-06 22:05:20', NULL, NULL),
-(10, 1, 'DAT', 'COMMON', 'SYS_COMMON', false, true, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(11, 1, 'DAT', 'COURSES', 'INS_COURSES', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
-(12, 1, 'DAT', 'TRAINING', 'INS_TRAINING', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(13, 1, 'ANN', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(14, 1, 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
-(100, 2, 'ROL', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(101, 2, 'ROL', 'GROUPS', 'INS_GROUPS', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
-(102, 2, 'ROL', 'COURSES', 'INS_COURSES', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(103, 2, 'ROL', 'TEAMS', 'INS_TEAMS', false, false, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
-(104, 2, 'LNK', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(105, 2, 'LNK', 'ADMIDIO', 'Admidio', false, false, 2, 1, '2011-04-06 22:05:20', NULL, NULL),
-(106, 2, 'DAT', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(107, 2, 'DAT', 'COURSES', 'INS_COURSES', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
-(108, 2, 'DAT', 'TRAINING', 'INS_TRAINING', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(109, 2, 'ANN', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(110, 2, 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
-(200, 1, 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', true, false, 5, 1, '2012-01-08 11:12:05', NULL, NULL),
-(201, 2, 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', true, false, 5, 1, '2012-01-08 11:12:05', NULL, NULL),
-(300, NULL, 'ANN', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(301, NULL, 'DAT', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', false, false, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
-(302, NULL, 'LNK', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL);
+INSERT INTO %PREFIX%_categories (cat_id, cat_uuid, cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create, cat_usr_id_change, cat_timestamp_change) VALUES
+(1,   '4404540e-bdad-46b7-8c52-f30e7ab51675', NULL, 'USF', 'BASIC_DATA', 'SYS_BASIC_DATA', true, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(2,   'f8e89d85-325d-4620-a7d4-36b42ae06f45', NULL, 'USF', 'SOCIAL_NETWORKS', 'SYS_SOCIAL_NETWORKS', false, false, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
+(3,   'dd483a2f-c8dd-47da-a4d1-cb97d58a62a0', 1, 'ROL', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(4,   '1f3d2f16-e81d-4f63-9582-2e9e4419aba8', 1, 'ROL', 'GROUPS', 'INS_GROUPS', false, true, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(5,   'e5329e2d-8fc5-4cc2-994c-a5f687289754', 1, 'ROL', 'COURSES', 'INS_COURSES', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
+(6,   '22a1c65c-588c-427a-939e-0ea30dad2012', 1, 'ROL', 'TEAMS', 'INS_TEAMS', false, false, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
+(7,   'c0778d6e-804b-4d19-b624-802663ebcdca', 1, 'LNK', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(8,   'ad3a3cd8-3108-4df2-b08b-60aa3dad4975', NULL, 'USF', 'ADDIDIONAL_DATA', 'INS_ADDIDIONAL_DATA', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
+(9,   '32edc214-cb7b-42f1-a4af-7336a28ada5e', 1, 'LNK', 'ADMIDIO', 'Admidio', false, true, 2, 1, '2011-04-06 22:05:20', NULL, NULL),
+(10,  '67850ca7-990b-4791-a238-5fd370caa23d', 1, 'DAT', 'COMMON', 'SYS_COMMON', false, true, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(11,  '22c1edc4-4af3-4098-9bb9-375341f1e6c4', 1, 'DAT', 'COURSES', 'INS_COURSES', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(12,  '63573db9-9ad4-47c6-9064-ff77f53d9e6e', 1, 'DAT', 'TRAINING', 'INS_TRAINING', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
+(13,  'ab11ce61-471b-4f49-8735-92134b417d6e', 1, 'ANN', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(14,  '8803b2aa-f36e-4c9b-99ed-52685b5048d7', 1, 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(100, '6beea24e-58b7-4668-8ac6-6ccc625cc989', 2, 'ROL', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(101, '93456821-ec9f-4ca0-a645-9bb1433985ac', 2, 'ROL', 'GROUPS', 'INS_GROUPS', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(102, 'cd47a540-d0e1-4cac-8ef9-e1c64880dedd', 2, 'ROL', 'COURSES', 'INS_COURSES', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
+(103, '160819d4-d192-4120-82f7-88e565e2bf18', 2, 'ROL', 'TEAMS', 'INS_TEAMS', false, false, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
+(104, '9bf1a1ea-69b4-4226-aa55-2517455ed32d', 2, 'LNK', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(105, '9a4b3de1-3cab-40db-97f6-77719c731f01', 2, 'LNK', 'ADMIDIO', 'Admidio', false, false, 2, 1, '2011-04-06 22:05:20', NULL, NULL),
+(106, '1141cb37-7e15-4107-aa3f-15e1cd740860', 2, 'DAT', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(107, 'b1c33600-6e8a-47db-88a0-0665e7005fec', 2, 'DAT', 'COURSES', 'INS_COURSES', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(108, '0001df5c-1ef1-49da-bed2-c88152cfa792', 2, 'DAT', 'TRAINING', 'INS_TRAINING', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
+(109, '84205a4e-4fd7-49e4-bed9-63e3280a70d8', 2, 'ANN', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(110, 'c9767836-63fe-470c-abc8-1187d8143d19', 2, 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', false, false, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(200, 'fff9f4cf-2368-43c4-bb3a-322008830729', 1, 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', true, false, 5, 1, '2012-01-08 11:12:05', NULL, NULL),
+(201, '6ee60a30-4721-4427-ac12-dc11f624c5fb', 2, 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', true, false, 5, 1, '2012-01-08 11:12:05', NULL, NULL),
+(300, 'a657459f-cef8-4f68-8008-0c5e34f4bfa5', NULL, 'ANN', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
+(301, 'f4d498ba-87db-4a4e-a894-7b7f42bd4d12', NULL, 'DAT', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', false, false, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
+(302, 'a0fa893e-c600-4157-831e-a946cc73fb58', NULL, 'LNK', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', false, false, 3, 1, '2012-01-08 11:12:05', NULL, NULL);
 
 
 --
 -- Data for table adm_roles
 --
 
-INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_documents_files, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_this_list_view, rol_all_lists_view, rol_leader_rights, rol_default_registration, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_administrator) VALUES
-(1, 3, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',     true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', true, false, true),
-(2, 3, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER',                  false, false, false, false, false, false, false, true, false, 2, false, true, false, 2, false, 1, true, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', true, false, false),
-(3, 3, 'INS_BOARD', 'INS_DESCRIPTION_BOARD',                       false, false, true, true, true, true, true, true, true, 3, true, true, true, 2, true, 1, false, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', true, false, false),
-(4, 6, 'DEMO_ROL_1_YOUTH_TEAM', 'DEMO_ROL_1_YOUTH_TEAM_CONTENT', false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, false, 3, false, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', true, false, false),
-(5, 6, 'DEMO_ROL_2_YOUTH_TEAM', 'DEMO_ROL_2_YOUTH_TEAM_CONTENT', false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, false, 3, false, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', true, false, false),
-(6, 100, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',   true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', true, false, true),
-(7, 100, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER',                false, false, false, false, false, false, false, true, false, 2, false, true, false, 2, false, 1, true, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 16:26:36', 1, '2010-12-22 06:34:06', true, false, false),
-(8, 200, '2017-02-06 19:00 DEMO_DAT_BARBECUE', 'DEMO_DAT_BARBECUE_CONTENT', false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
-(9, 200, '2017-04-13 13:00 DEMO_DAT_YOGA', 'DEMO_DAT_YOGA_CONTENT', false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 12:08:23', NULL, NULL, true, false, false),
-(10, 200, '2017-05-15 19:00 DEMO_DAT_BOARD_MEETING', NULL,       false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
-(11, 200, '2017-05-26 19:00 DEMO_DAT_BOARD_MEETING', NULL,       false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
-(12, 200, '2017-05-26 20:00 DEMO_DAT_TEAM_EVENING', NULL,        false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 18:38:18', NULL, NULL, true, false, false);
+INSERT INTO %PREFIX%_roles (rol_id, rol_uuid, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_documents_files, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_this_list_view, rol_all_lists_view, rol_leader_rights, rol_default_registration, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_administrator) VALUES
+(1 , 'a8fd58c3-c926-40ca-96fb-5db86bfe6a16', 3, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',     true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', true, false, true),
+(2 , 'd1dc4c6e-eb17-4d1a-a491-237257f6b1fb', 3, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER',                  false, false, false, false, false, false, false, true, false, 2, false, true, false, 2, false, 1, true, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', true, false, false),
+(3 , '621fa25f-2fac-4310-af52-af939041cb66', 3, 'INS_BOARD', 'INS_DESCRIPTION_BOARD',                       false, false, true, true, true, true, true, true, true, 3, true, true, true, 2, true, 1, false, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', true, false, false),
+(4 , '685c8a84-e58c-4d40-8297-8d2671e1fb89', 6, 'DEMO_ROL_1_YOUTH_TEAM', 'DEMO_ROL_1_YOUTH_TEAM_CONTENT', false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, false, 3, false, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', true, false, false),
+(5 , '5f4fb933-806c-4161-a333-212cba85ae6c', 6, 'DEMO_ROL_2_YOUTH_TEAM', 'DEMO_ROL_2_YOUTH_TEAM_CONTENT', false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, false, 3, false, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', true, false, false),
+(6 , '7a9e3ff4-197a-48db-9abc-c32c4cc79567', 100, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',   true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', true, false, true),
+(7 , '77b0c6cc-cc66-4384-a34e-3277cdf081c6', 100, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER',                false, false, false, false, false, false, false, true, false, 2, false, true, false, 2, false, 1, true, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 16:26:36', 1, '2010-12-22 06:34:06', true, false, false),
+(8 , '515c99a1-28d6-4395-b966-4b04cd512f12', 200, '2017-02-06 19:00 DEMO_DAT_BARBECUE', 'DEMO_DAT_BARBECUE_CONTENT', false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
+(9 , '1b3d4123-2898-40e5-b9c4-b4db65207133', 200, '2017-04-13 13:00 DEMO_DAT_YOGA', 'DEMO_DAT_YOGA_CONTENT', false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 12:08:23', NULL, NULL, true, false, false),
+(10, '040b4f49-2e45-460a-a354-1004d8bef27e', 200, '2017-05-15 19:00 DEMO_DAT_BOARD_MEETING', NULL,       false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
+(11, '7450a81b-5b69-43c6-906b-47e343ecb55f', 200, '2017-05-26 19:00 DEMO_DAT_BOARD_MEETING', NULL,       false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
+(12, '3c16c9da-9425-4ee3-9b53-8aed1c19bc34', 200, '2017-05-26 20:00 DEMO_DAT_TEAM_EVENING', NULL,        false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 18:38:18', NULL, NULL, true, false, false);
 
 --
 -- Data for table adm_roles_rights
@@ -560,13 +572,13 @@ INSERT INTO %PREFIX%_roles_rights_data (rrd_id, rrd_ror_id, rrd_rol_id, rrd_obje
 -- Data for table adm_user_fields
 --
 
-INSERT INTO %PREFIX%_user_fields (usf_id, usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_icon, usf_url, usf_system, usf_disabled, usf_hidden, usf_mandatory, usf_registration, usf_sequence, usf_usr_id_create, usf_timestamp_create, usf_usr_id_change, usf_timestamp_change) VALUES
-(1, 1, 'TEXT', 'LAST_NAME', 'SYS_LASTNAME', NULL, NULL, NULL, NULL, true, true, false, true, true, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(2, 1, 'TEXT', 'FIRST_NAME', 'SYS_FIRSTNAME', NULL, NULL, NULL, NULL, true, true, false, true, true, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
-(3, 1, 'TEXT', 'STREET', 'SYS_STREET', NULL, NULL, NULL, NULL, false, false, false, false, true, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(4, 1, 'TEXT', 'POSTCODE', 'SYS_POSTCODE', NULL, NULL, NULL, NULL, false, false, false, false, true, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
-(5, 1, 'TEXT', 'CITY', 'SYS_CITY', NULL, NULL, NULL, NULL, false, false, false, false, true, 5, 1, '2012-01-08 11:12:05', NULL, NULL),
-(25, 1, 'DROPDOWN', 'BUNDESLAND', 'Bundesland', NULL, 'Bayern
+INSERT INTO %PREFIX%_user_fields (usf_id, usf_uuid, usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_icon, usf_url, usf_system, usf_disabled, usf_hidden, usf_mandatory, usf_registration, usf_sequence, usf_usr_id_create, usf_timestamp_create, usf_usr_id_change, usf_timestamp_change) VALUES
+(1 , '8bd39525-1bb0-4306-85b0-a08c7c71faad', 1, 'TEXT', 'LAST_NAME', 'SYS_LASTNAME', NULL, NULL, NULL, NULL, true, true, false, true, true, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(2 , '424592e0-5abc-4abe-ab18-c4088cfb17fa', 1, 'TEXT', 'FIRST_NAME', 'SYS_FIRSTNAME', NULL, NULL, NULL, NULL, true, true, false, true, true, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(3 , '34c57527-f0e6-426f-9ff7-4cf51c5b0238', 1, 'TEXT', 'STREET', 'SYS_STREET', NULL, NULL, NULL, NULL, false, false, false, false, true, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
+(4 , '4d07edd9-44c0-4c85-9f66-1a521447fb74', 1, 'TEXT', 'POSTCODE', 'SYS_POSTCODE', NULL, NULL, NULL, NULL, false, false, false, false, true, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
+(5 , '9b0b5f84-7d18-4df0-91ea-7eaca46cbfc4', 1, 'TEXT', 'CITY', 'SYS_CITY', NULL, NULL, NULL, NULL, false, false, false, false, true, 5, 1, '2012-01-08 11:12:05', NULL, NULL),
+(25, 'fcc3ab94-3a50-41ea-a70b-dba6f9079a77', 1, 'DROPDOWN', 'BUNDESLAND', 'Bundesland', NULL, 'Bayern
 Baden-Württemberg
 Berlin
 Brandenburg
@@ -582,37 +594,37 @@ Sachsen
 Sachsen-Anhalt
 Schleswig-Holstein
 Thüringen', NULL, NULL, false, false, false, false, true, 6, 1, '2013-11-27T17:50:14', 1, '2013-11-28T16:12:08'),
-(6, 1, 'TEXT', 'COUNTRY', 'SYS_COUNTRY', NULL, NULL, NULL, NULL, false, false, false, false, true, 7, 1, '2012-01-08 11:12:05', NULL, NULL),
-(7, 1, 'PHONE', 'PHONE', 'SYS_PHONE', NULL, NULL, NULL, NULL, false, false, false, false, true, 8, 1, '2012-01-08 11:12:05', NULL, NULL),
-(8, 1, 'PHONE', 'MOBILE', 'SYS_MOBILE', NULL, NULL, NULL, NULL, false, false, false, false, true, 9, 1, '2012-01-08 11:12:05', NULL, NULL),
-(9, 1, 'PHONE', 'FAX', 'SYS_FAX', NULL, NULL, NULL, NULL, false, false, false, false, true, 10, 1, '2012-01-08 11:12:05', NULL, NULL),
-(10, 1, 'DATE', 'BIRTHDAY', 'SYS_BIRTHDAY', NULL, NULL, NULL, NULL, false, false, false, false, true, 11, 1, '2012-01-08 11:12:05', NULL, NULL),
-(11, 1, 'RADIO_BUTTON', 'GENDER', 'SYS_GENDER', NULL, 'fa-mars|SYS_MALE
+(6 , '75dcb582-231f-4b24-81fc-5cdce79a3069', 1, 'TEXT', 'COUNTRY', 'SYS_COUNTRY', NULL, NULL, NULL, NULL, false, false, false, false, true, 7, 1, '2012-01-08 11:12:05', NULL, NULL),
+(7 , '88c73af3-dea9-4d5c-b8d3-b2c743da5b14', 1, 'PHONE', 'PHONE', 'SYS_PHONE', NULL, NULL, NULL, NULL, false, false, false, false, true, 8, 1, '2012-01-08 11:12:05', NULL, NULL),
+(8 , '6d85e436-4edd-4d7d-b9d7-df17ea4de1fb', 1, 'PHONE', 'MOBILE', 'SYS_MOBILE', NULL, NULL, NULL, NULL, false, false, false, false, true, 9, 1, '2012-01-08 11:12:05', NULL, NULL),
+(9 , 'ba722e5a-843f-4b0c-8083-0a2db1e85630', 1, 'PHONE', 'FAX', 'SYS_FAX', NULL, NULL, NULL, NULL, false, false, false, false, true, 10, 1, '2012-01-08 11:12:05', NULL, NULL),
+(10, 'f3dca1e4-d439-4501-967e-e87545060b03', 1, 'DATE', 'BIRTHDAY', 'SYS_BIRTHDAY', NULL, NULL, NULL, NULL, false, false, false, false, true, 11, 1, '2012-01-08 11:12:05', NULL, NULL),
+(11, '944252e6-7275-42bd-9d7a-03ff294080fb', 1, 'RADIO_BUTTON', 'GENDER', 'SYS_GENDER', NULL, 'fa-mars|SYS_MALE
 fa-venus|SYS_FEMALE', NULL, NULL, false, false, false, false, true, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
-(12, 1, 'EMAIL', 'EMAIL', 'SYS_EMAIL', NULL, NULL, NULL, NULL, true, false, false, true, true, 13, 1, '2012-01-08 11:12:05', NULL, NULL),
-(13, 1, 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, NULL, NULL, NULL, false, false, false, false, true, 14, 1, '2012-01-08 11:12:05', NULL, NULL),
-(22, 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'INS_FACEBOOK_DESC', NULL, 'fab fa-facebook', 'https://www.facebook.com/#user_content#', false, false, false, false, false, 1, 1, '2012-01-08 11:11:40', NULL, NULL),
-(16, 2, 'TEXT', 'ICQ', 'INS_ICQ', 'INS_ICQ_DESC', NULL, 'icq.png', 'https://www.icq.com/people/#user_content#', false, false, false, false, false, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
-(18, 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'INS_SKYPE_DESC', NULL, 'fab fa-skype', NULL, false, false, false, false, false, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
-(23, 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'INS_TWITTER_DESC', NULL, 'fab fa-twitter', 'https://twitter.com/#user_content#', false, false, false, false, false, 4, 1, '2012-01-08 11:11:40', NULL, NULL),
-(24, 2, 'TEXT', 'XING', 'INS_XING', 'INS_XING_DESC', NULL, 'fab fa-xing', 'https://www.xing.com/profile/#user_content#', false, false, false, false, false, 5, 1, '2012-01-08 11:11:40', NULL, NULL),
-(20, 8, 'NUMBER', 'MEMBERSHIP_NUMBER', 'DEMO_PRO_MEMBERSHIP_NUMBER', NULL, NULL, NULL, NULL, false, true, false, false, false, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
-(21, 8, 'TEXT', 'FAVORITE_COLOR', 'DEMO_PRO_FAVORITE_COLOR', 'DEMO_PRO_FAVORITE_COLOR_CONTENT', NULL, NULL, NULL, false, false, false, false, false, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
+(12, '09556bd3-0bc5-4e97-800a-4ed347f6327e', 1, 'EMAIL', 'EMAIL', 'SYS_EMAIL', NULL, NULL, NULL, NULL, true, false, false, true, true, 13, 1, '2012-01-08 11:12:05', NULL, NULL),
+(13, '627c57a6-f17b-44df-9d31-3d668634eb97', 1, 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, NULL, NULL, NULL, false, false, false, false, true, 14, 1, '2012-01-08 11:12:05', NULL, NULL),
+(22, '041f1bb5-4305-47d7-8538-c1e7163339a6', 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'INS_FACEBOOK_DESC', NULL, 'fab fa-facebook', 'https://www.facebook.com/#user_content#', false, false, false, false, false, 1, 1, '2012-01-08 11:11:40', NULL, NULL),
+(16, '37d17c5a-f134-4002-b25d-59ec671dc946', 2, 'TEXT', 'ICQ', 'INS_ICQ', 'INS_ICQ_DESC', NULL, 'icq.png', 'https://www.icq.com/people/#user_content#', false, false, false, false, false, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
+(18, 'f4d0eca5-8a8c-4805-9379-be9d2e824a89', 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'INS_SKYPE_DESC', NULL, 'fab fa-skype', NULL, false, false, false, false, false, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
+(23, '30d0f751-7b38-4704-b042-cf6fbe2f447d', 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'INS_TWITTER_DESC', NULL, 'fab fa-twitter', 'https://twitter.com/#user_content#', false, false, false, false, false, 4, 1, '2012-01-08 11:11:40', NULL, NULL),
+(24, '1b2045a6-bae3-4948-91fa-f0e669c488b4', 2, 'TEXT', 'XING', 'INS_XING', 'INS_XING_DESC', NULL, 'fab fa-xing', 'https://www.xing.com/profile/#user_content#', false, false, false, false, false, 5, 1, '2012-01-08 11:11:40', NULL, NULL),
+(20, '89b33bc0-913a-404c-9899-e53ad5080fec', 8, 'NUMBER', 'MEMBERSHIP_NUMBER', 'DEMO_PRO_MEMBERSHIP_NUMBER', NULL, NULL, NULL, NULL, false, true, false, false, false, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
+(21, '15b324bc-29d8-4b79-bee9-10072b8d7489', 8, 'TEXT', 'FAVORITE_COLOR', 'DEMO_PRO_FAVORITE_COLOR', 'DEMO_PRO_FAVORITE_COLOR_CONTENT', NULL, NULL, NULL, false, false, false, false, false, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
 
 
 --
 -- Data for table adm_user_relation_types
 --
 
-INSERT INTO %PREFIX%_user_relation_types (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create, urt_usr_id_change, urt_timestamp_change) VALUES
-(1, 'INS_PARENT', 'INS_FATHER', 'INS_MOTHER', 2, 2, '2016-11-22 05:29:56', NULL, NULL),
-(2, 'INS_CHILD', 'INS_SON', 'INS_DAUGHTER', 1, 2, '2016-11-22 05:29:56', NULL, NULL),
-(3, 'INS_SIBLING', 'INS_BROTHER', 'INS_SISTER', 3, 2, '2016-11-22 05:29:56', NULL, NULL),
-(4, 'INS_SPOUSE', 'INS_HUSBAND', 'INS_WIFE', 4, 2, '2016-11-22 05:29:56', NULL, NULL),
-(5, 'INS_COHABITANT', 'INS_COHABITANT_MALE', 'INS_COHABITANT_FEMALE', 5, 2, '2016-11-22 05:29:56', NULL, NULL),
-(6, 'INS_COMPANION', 'INS_BOYFRIEND', 'INS_GIRLFRIEND', 6, 2, '2016-11-22 05:29:56', NULL, NULL),
-(7, 'INS_SUPERIOR', 'INS_SUPERIOR_MALE', 'INS_SUPERIOR_FEMALE', 8, 2, '2016-11-22 05:29:56', NULL, NULL),
-(8, 'INS_SUBORDINATE', 'INS_SUBORDINATE_MALE', 'INS_SUBORDINATE_FEMALE', 7, 2, '2016-11-22 05:29:56', NULL, NULL);
+INSERT INTO %PREFIX%_user_relation_types (urt_id, urt_uuid, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create, urt_usr_id_change, urt_timestamp_change) VALUES
+(1, '3f716ce8-f05e-4eb9-a89e-20a8a277aa18', 'INS_PARENT', 'INS_FATHER', 'INS_MOTHER', 2, 2, '2016-11-22 05:29:56', NULL, NULL),
+(2, 'e728bdd5-cc1f-46a3-aef3-a3a12cc8aad6', 'INS_CHILD', 'INS_SON', 'INS_DAUGHTER', 1, 2, '2016-11-22 05:29:56', NULL, NULL),
+(3, '7d31dd74-77a4-461d-9402-37ae8fe2cfcf', 'INS_SIBLING', 'INS_BROTHER', 'INS_SISTER', 3, 2, '2016-11-22 05:29:56', NULL, NULL),
+(4, '91b3c6a0-2559-4e7a-bfcc-4f47e56efd35', 'INS_SPOUSE', 'INS_HUSBAND', 'INS_WIFE', 4, 2, '2016-11-22 05:29:56', NULL, NULL),
+(5, 'be687ee3-bd7d-499e-b388-b0387fb89389', 'INS_COHABITANT', 'INS_COHABITANT_MALE', 'INS_COHABITANT_FEMALE', 5, 2, '2016-11-22 05:29:56', NULL, NULL),
+(6, '7a7acc74-7c9f-404f-bd74-abe7482c4126', 'INS_COMPANION', 'INS_BOYFRIEND', 'INS_GIRLFRIEND', 6, 2, '2016-11-22 05:29:56', NULL, NULL),
+(7, '7169f73a-49a9-4ce3-981a-102c6eb2c3c9', 'INS_SUPERIOR', 'INS_SUPERIOR_MALE', 'INS_SUPERIOR_FEMALE', 8, 2, '2016-11-22 05:29:56', NULL, NULL),
+(8, 'a7ab66fb-67c1-4828-aeda-dc31d09050dc', 'INS_SUBORDINATE', 'INS_SUBORDINATE_MALE', 'INS_SUBORDINATE_FEMALE', 7, 2, '2016-11-22 05:29:56', NULL, NULL);
 
 
 --
@@ -637,105 +649,116 @@ INSERT INTO %PREFIX%_user_relations (ure_id, ure_urt_id, ure_usr_id1, ure_usr_id
 -- Data for table adm_announcements
 --
 
-INSERT INTO %PREFIX%_announcements (ann_id, ann_cat_id, ann_headline, ann_description, ann_usr_id_create, ann_timestamp_create, ann_usr_id_change, ann_timestamp_change) VALUES
-(1, 13, 'DEMO_ANN_NEW_JERSEYS', 'DEMO_ANN_NEW_JERSEYS_CONTENT', 1, '2012-01-01 00:00:00', NULL, NULL),
-(2, 13, 'DEMO_ANN_AEROBICS_COURSE', 'DEMO_ANN_AEROBICS_COURSE_CONTENT', 1, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53'),
-(3, 300, 'DEMO_ANN_WELCOME', 'DEMO_ANN_WELCOME_CONTENT', 1, '2012-01-08 11:12:05', NULL, NULL);
+INSERT INTO %PREFIX%_announcements (ann_id, ann_uuid, ann_cat_id, ann_headline, ann_description, ann_usr_id_create, ann_timestamp_create, ann_usr_id_change, ann_timestamp_change) VALUES
+(1, 'e49d66f4-0546-4a23-bb57-27eb2b97d271', 13, 'DEMO_ANN_NEW_JERSEYS', 'DEMO_ANN_NEW_JERSEYS_CONTENT', 1, '2012-01-01 00:00:00', NULL, NULL),
+(2, 'e84aae2a-7e1d-4f91-b2e1-ead4bac900ed', 13, 'DEMO_ANN_AEROBICS_COURSE', 'DEMO_ANN_AEROBICS_COURSE_CONTENT', 1, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53'),
+(3, '934346cc-123c-4162-9506-86b07c6c08ce', 300, 'DEMO_ANN_WELCOME', 'DEMO_ANN_WELCOME_CONTENT', 1, '2012-01-08 11:12:05', NULL, NULL);
+
+
+--
+-- Data for table adm_category_report
+--
+
+INSERT INTO %PREFIX%_category_report (crt_id, crt_org_id, crt_name, crt_col_fields, crt_selection_role, crt_selection_cat, crt_number_col) VALUES
+(1, 1, 'SYS_GENERAL_ROLE_ASSIGNMENT', 'p2,p1,p3,p5,r1', NULL, NULL, 0),
+(2, 2, 'SYS_GENERAL_ROLE_ASSIGNMENT', 'p2,p1,p3,p5,r6', NULL, NULL, 0);
 
 
 --
 -- Data for table adm_dates
 --
 
-INSERT INTO %PREFIX%_dates (dat_id, dat_cat_id, dat_begin, dat_end, dat_all_day, dat_description, dat_location, dat_country, dat_headline, dat_highlight, dat_usr_id_create, dat_timestamp_create, dat_usr_id_change, dat_timestamp_change, dat_rol_id, dat_room_id, dat_max_members, dat_allow_comments, dat_additional_guests) VALUES
-(3, 12, '2012-01-22 16:00:00', '2012-01-22 18:00:00', false, 'DEMO_DAT_YOUTH_TRAINING_CONTENT', 'DEMO_DAT_YOUTH_TRAINING_LOCATION', 'GBR', 'DEMO_DAT_YOUTH_TRAINING', false,  1, '2017-07-06 17:38:26', NULL, NULL, NULL, NULL, 0, false, false),
-(4, 10, '2012-01-12 19:00:00', '2012-01-12 23:30:00', false, 'DEMO_DAT_BARBECUE_CONTENT', NULL, NULL, 'DEMO_DAT_BARBECUE', true, 1, '2017-07-06 17:41:18', NULL, NULL, 8, NULL, 0, true, true),
-(5, 10, '2012-02-07 00:00:00', '2012-02-12 00:00:00', true, 'DEMO_DAT_TRAINER_COURSE_CONTENT', 'DEMO_DAT_TRAINER_COURSE_LOCATION', 'FRA', 'DEMO_DAT_TRAINER_COURSE', true, 1, '2017-07-06 17:49:13', NULL, NULL, NULL, NULL, 0, false, false),
-(6, 301, '2012-01-18 15:00:00', '2012-01-18 19:00:00', false, 'DEMO_DAT_COMPUTER_COURSE_CONTENT', 'DEMO_DAT_COMPUTER_COURSE_LOCATION', 'DEU', 'DEMO_DAT_COMPUTER_COURSE', false, 1, '2017-01-06 11:25:13', NULL, NULL, NULL, NULL, 0, false, false),
-(7, 301, '2012-01-07 00:00:00', '2012-01-07 00:00:00', true, 'DEMO_DAT_TRIP_AMSTERDAM_CONTENT', 'DEMO_DAT_TRIP_AMSTERDAM_LOCATION', 'NLD', 'DEMO_DAT_TRIP_AMSTERDAM', false, 1, '2018-01-06 11:25:13', NULL, NULL, NULL, NULL, 0, false, false),
-(8, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false,  1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
-(9, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
-(10, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
-(11, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
-(12, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
-(13, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
-(14, 107, '2012-01-12 19:00:00', '2012-01-12 23:30:00', false, 'DEMO_DAT_YOGA_CONTENT', 'DEMO_DAT_YOGA_LOCATION', 'ESP', 'DEMO_DAT_YOGA', true, 1, '2017-07-06 17:41:18', NULL, NULL, 9, NULL, 0, false, false),
-(15, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', false, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_BOARD_MEETING', false, 1, '2018-05-06 23:03:18', NULL, NULL, 10, NULL, 0, false, false),
-(16, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', false, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_BOARD_MEETING', false, 1, '2018-05-06 23:03:18', NULL, NULL, 11, NULL, 0, false, false),
-(17, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', false, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_TEAM_EVENING', false, 355, '2018-02-14 18:38:18', NULL, NULL, 12, NULL, 0, false, false);
+INSERT INTO %PREFIX%_dates (dat_id, dat_uuid, dat_cat_id, dat_begin, dat_end, dat_all_day, dat_description, dat_location, dat_country, dat_headline, dat_highlight, dat_usr_id_create, dat_timestamp_create, dat_usr_id_change, dat_timestamp_change, dat_rol_id, dat_room_id, dat_max_members, dat_allow_comments, dat_additional_guests) VALUES
+(3 , 'e539f6d4-a5ac-4536-8779-df203a83ef39', 12, '2012-01-22 16:00:00', '2012-01-22 18:00:00', false, 'DEMO_DAT_YOUTH_TRAINING_CONTENT', 'DEMO_DAT_YOUTH_TRAINING_LOCATION', 'GBR', 'DEMO_DAT_YOUTH_TRAINING', false,  1, '2017-07-06 17:38:26', NULL, NULL, NULL, NULL, 0, false, false),
+(4 , '2bc7d168-7b4e-4ec1-9765-18989e32030c', 10, '2012-01-12 19:00:00', '2012-01-12 23:30:00', false, 'DEMO_DAT_BARBECUE_CONTENT', NULL, NULL, 'DEMO_DAT_BARBECUE', true, 1, '2017-07-06 17:41:18', NULL, NULL, 8, NULL, 0, true, true),
+(5 , '10408fec-1534-4115-a83d-60681c13bcfd', 10, '2012-02-07 00:00:00', '2012-02-12 00:00:00', true, 'DEMO_DAT_TRAINER_COURSE_CONTENT', 'DEMO_DAT_TRAINER_COURSE_LOCATION', 'FRA', 'DEMO_DAT_TRAINER_COURSE', true, 1, '2017-07-06 17:49:13', NULL, NULL, NULL, NULL, 0, false, false),
+(6 , '0df388d7-b8f0-4c11-88f4-fbac697b2297', 301, '2012-01-18 15:00:00', '2012-01-18 19:00:00', false, 'DEMO_DAT_COMPUTER_COURSE_CONTENT', 'DEMO_DAT_COMPUTER_COURSE_LOCATION', 'DEU', 'DEMO_DAT_COMPUTER_COURSE', false, 1, '2017-01-06 11:25:13', NULL, NULL, NULL, NULL, 0, false, false),
+(7 , '2a0151ef-2f03-4b6f-abe3-ce86d5a74ba8', 301, '2012-01-07 00:00:00', '2012-01-07 00:00:00', true, 'DEMO_DAT_TRIP_AMSTERDAM_CONTENT', 'DEMO_DAT_TRIP_AMSTERDAM_LOCATION', 'NLD', 'DEMO_DAT_TRIP_AMSTERDAM', false, 1, '2018-01-06 11:25:13', NULL, NULL, NULL, NULL, 0, false, false),
+(8 , '2c610a75-15e8-4ab2-9bd5-63769800d2e8', 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false,  1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
+(9 , '236c9f98-c826-4f42-a0e4-8421f83e11ff', 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
+(10, '9dbbb1d4-ec43-4704-b4d5-3a4f29d5dab1', 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
+(11, '86c27d41-caf3-49b6-9d68-a079c532dbe3', 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
+(12, 'fadeff52-a0e0-4ab9-8e43-a2a0578ab5ed', 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
+(13, 'cd9f4490-ddae-4949-a083-a826a12ea3d1', 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
+(14, '6fa731ef-e166-49ed-bb56-182243cbc5c8', 107, '2012-01-12 19:00:00', '2012-01-12 23:30:00', false, 'DEMO_DAT_YOGA_CONTENT', 'DEMO_DAT_YOGA_LOCATION', 'ESP', 'DEMO_DAT_YOGA', true, 1, '2017-07-06 17:41:18', NULL, NULL, 9, NULL, 0, false, false),
+(15, '7095ed97-9cf5-4247-b057-613164aaa512', 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', false, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_BOARD_MEETING', false, 1, '2018-05-06 23:03:18', NULL, NULL, 10, NULL, 0, false, false),
+(16, '217da340-7419-4e07-8f5f-bf037cbd2a4f', 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', false, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_BOARD_MEETING', false, 1, '2018-05-06 23:03:18', NULL, NULL, 11, NULL, 0, false, false),
+(17, 'b89b03a5-867b-4747-8429-981c76e0b61e', 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', false, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_TEAM_EVENING', false, 355, '2018-02-14 18:38:18', NULL, NULL, 12, NULL, 0, false, false);
 
 
 --
 -- Data for table adm_folders
 --
 
-INSERT INTO %PREFIX%_folders (fol_id, fol_org_id, fol_fol_id_parent, fol_type, fol_name, fol_description, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp) VALUES
-(1, 1, NULL, 'DOCUMENTS', 'documents_demo', NULL, '/adm_my_files', false, true, 1, '2014-01-01 22:35:07'),
-(2, 1, 1, 'DOCUMENTS', 'licenses', NULL, '/adm_my_files/documents_demo', false, true, 1, '2014-02-05 14:05:34'),
-(3, 1, 1, 'DOCUMENTS', 'board-meeting', NULL, '/adm_my_files/documents_demo', false, false, 354, '2016-04-15 13:25:06'),
-(100, 2, NULL, 'DOCUMENTS', 'download_test', NULL, '/adm_my_files', false, true, 1, '2014-01-01 22:35:07');
+INSERT INTO %PREFIX%_folders (fol_id, fol_uuid, fol_org_id, fol_fol_id_parent, fol_type, fol_name, fol_description, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp) VALUES
+(1  , '80b3c79b-27d1-4cdc-b86c-d9e8d79d59eb', 1, NULL, 'DOCUMENTS', 'documents_demo', NULL, '/adm_my_files', false, true, 1, '2014-01-01 22:35:07'),
+(2  , 'b1621a3d-0cea-4cbd-94c4-fc0cde15f324', 1, 1, 'DOCUMENTS', 'licenses', NULL, '/adm_my_files/documents_demo', false, true, 1, '2014-02-05 14:05:34'),
+(3  , '3e26f7db-a167-445b-8441-215eb63153f5', 1, 1, 'DOCUMENTS', 'board-meeting', NULL, '/adm_my_files/documents_demo', false, false, 354, '2016-04-15 13:25:06'),
+(100, '63973fe1-1a26-4561-b564-b1065f2c863b', 2, NULL, 'DOCUMENTS', 'download_test', NULL, '/adm_my_files', false, true, 1, '2014-01-01 22:35:07');
 
 
 --
 -- Data for table adm_files
 --
 
-INSERT INTO %PREFIX%_files (fil_id, fil_fol_id, fil_name, fil_description, fil_locked, fil_counter, fil_usr_id, fil_timestamp) VALUES
-(1, 2, 'gpl-1.0.txt', null, false, 15, 1, '2015-08-13 08:24:45'),
-(2, 2, 'gpl-2.0.txt', null, false, 45, 1, '2015-08-13 08:24:45'),
-(3, 2, 'gpl-3.0.txt', null, false, 8, 1, '2015-08-13 08:24:45'),
-(4, 2, 'lgpl-3.0.txt', null, false, 0, 1, '2015-08-13 08:24:45'),
-(5, 1, 'admidio-readme.md', null, false, 134, 1, '2015-07-01 10:05:23'),
-(6, 1, 'admidio-logo.png', null, false, 45, 1, '2015-07-01 10:07:23'),
-(7, 3, '20160511_meeting.txt', null, false, 45, 354, '2015-07-01 10:07:23'),
-(100, 100, 'admidio-readme.md', null, false, 14, 1, '2015-07-01 10:05:23'),
-(101, 100, 'admidio-logo.png', null, false, 6, 1, '2015-07-01 10:07:23');
+INSERT INTO %PREFIX%_files (fil_id, fil_uuid, fil_fol_id, fil_name, fil_description, fil_locked, fil_counter, fil_usr_id, fil_timestamp) VALUES
+(1  , '445789b2-dee8-4a95-a116-9a3f0974841c', 2, 'gpl-1.0.txt', null, false, 15, 1, '2015-08-13 08:24:45'),
+(2  , 'ef0334bd-53e5-4dcd-8417-6cde7d460d20', 2, 'gpl-2.0.txt', null, false, 45, 1, '2015-08-13 08:24:45'),
+(3  , 'bb7b5322-c04d-44e2-8bdb-cc539a827560', 2, 'gpl-3.0.txt', null, false, 8, 1, '2015-08-13 08:24:45'),
+(4  , '9c856e3b-784b-461d-96b2-ae1286197211', 2, 'lgpl-3.0.txt', null, false, 0, 1, '2015-08-13 08:24:45'),
+(5  , '2fee7e92-a38a-4129-864c-77d4c90bcf77', 1, 'admidio-readme.md', null, false, 134, 1, '2015-07-01 10:05:23'),
+(6  , '9792023e-a74d-4a89-ab89-8a15645b94a4', 1, 'admidio-logo.png', null, false, 45, 1, '2015-07-01 10:07:23'),
+(7  , 'd9b14196-e272-44cb-b263-6dd46d704692', 3, '20160511_meeting.txt', null, false, 45, 354, '2015-07-01 10:07:23'),
+(100, '2859ffec-8691-4d22-a0df-188215e7df25', 100, 'admidio-readme.md', null, false, 14, 1, '2015-07-01 10:05:23'),
+(101, '0213c7e4-3564-4448-ad39-8a19bc56adcb', 100, 'admidio-logo.png', null, false, 6, 1, '2015-07-01 10:07:23');
 
 
 --
 -- Data for table adm_guestbook
 --
 
-INSERT INTO %PREFIX%_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_email, gbo_homepage, gbo_ip_address, gbo_locked, gbo_usr_id_create, gbo_timestamp_create, gbo_usr_id_change, gbo_timestamp_change) VALUES
-(1, 1, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_WELCOME', 'administrator@admidio.org', 'https://www.admidio.org/', '84.63.38.55', false, 1, '2011-12-25 12:14:42', NULL, NULL),
-(2, 1, 'Sepp Mayerchen', 'DEMO_GBO_GUEST_ENTRY1', NULL, NULL, '84.63.38.55', false, NULL, '2012-01-03 20:16:42', NULL, NULL);
+INSERT INTO %PREFIX%_guestbook (gbo_id, gbo_uuid, gbo_org_id, gbo_name, gbo_text, gbo_email, gbo_homepage, gbo_ip_address, gbo_locked, gbo_usr_id_create, gbo_timestamp_create, gbo_usr_id_change, gbo_timestamp_change) VALUES
+(1, '5d4aac57-ec05-4d10-b240-9dff8a54801b', 1, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_WELCOME', 'administrator@admidio.org', 'https://www.admidio.org/', '84.63.38.55', false, 1, '2011-12-25 12:14:42', NULL, NULL),
+(2, '6ab5808d-3d7e-4809-b4a4-406b0614508d', 1, 'Sepp Mayerchen', 'DEMO_GBO_GUEST_ENTRY1', NULL, NULL, '84.63.38.55', false, NULL, '2012-01-03 20:16:42', NULL, NULL);
 
 --
 -- Data for table adm_guestbook_comments
 --
 
-INSERT INTO %PREFIX%_guestbook_comments (gbc_id, gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_ip_address, gbc_locked, gbc_usr_id_create, gbc_timestamp_create, gbc_usr_id_change, gbc_timestamp_change) VALUES
-(1, 2, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_COMMENT1', 'administrator@admidio.org', '84.63.38.55', false, 1, '2012-01-04 16:23:12', NULL, NULL);
+INSERT INTO %PREFIX%_guestbook_comments (gbc_id, gbc_uuid, gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_ip_address, gbc_locked, gbc_usr_id_create, gbc_timestamp_create, gbc_usr_id_change, gbc_timestamp_change) VALUES
+(1, '3d449b6f-0f17-47bf-b642-7af7db6f9307', 2, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_COMMENT1', 'administrator@admidio.org', '84.63.38.55', false, 1, '2012-01-04 16:23:12', NULL, NULL);
 
 --
 -- Data for table adm_links
 --
 
-INSERT INTO %PREFIX%_links (lnk_id, lnk_cat_id, lnk_name, lnk_description, lnk_url, lnk_counter, lnk_usr_id_create, lnk_timestamp_create, lnk_usr_id_change, lnk_timestamp_change) VALUES
-(1, 7, 'DEMO_LNK_SAMPLE_PAGE', 'DEMO_LNK_SAMPLE_PAGE_CONTENT', 'https://www.example.com', 6, 1, '2012-01-04 22:13:26', 1, '2012-01-05 21:16:32'),
-(2, 9, 'Admidio', 'DEMO_LNK_ADMIDIO_CONTENT', 'https://www.admidio.org/', 157, 1, '2012-01-08 11:12:05', NULL, NULL),
-(3, 9, 'DEMO_LNK_FORUM', 'DEMO_LNK_FORUM_CONTENT', 'https://www.admidio.org/forum/', 46, 1, '2012-01-04 21:15:44', NULL, NULL),
-(4, 9, 'DEMO_LNK_DOCUMENTATION', 'DEMO_LNK_DOCUMENTATION_CONTENT', 'https://www.admidio.org/dokuwiki', 21, 1, '2012-04-05 14:13:23', NULL, NULL);
+INSERT INTO %PREFIX%_links (lnk_id, lnk_uuid, lnk_cat_id, lnk_name, lnk_description, lnk_url, lnk_counter, lnk_usr_id_create, lnk_timestamp_create, lnk_usr_id_change, lnk_timestamp_change) VALUES
+(1, '07bdb749-e925-4715-ba92-360bf3b2821d', 7, 'DEMO_LNK_SAMPLE_PAGE', 'DEMO_LNK_SAMPLE_PAGE_CONTENT', 'https://www.example.com', 6, 1, '2012-01-04 22:13:26', 1, '2012-01-05 21:16:32'),
+(2, 'ae39a20e-b5b2-4ebb-8b1a-882bd6d777d5', 9, 'Admidio', 'DEMO_LNK_ADMIDIO_CONTENT', 'https://www.admidio.org/', 157, 1, '2012-01-08 11:12:05', NULL, NULL),
+(3, '476855ec-6c36-449c-a4ac-c17b27a34e11', 9, 'DEMO_LNK_FORUM', 'DEMO_LNK_FORUM_CONTENT', 'https://www.admidio.org/forum/', 46, 1, '2012-01-04 21:15:44', NULL, NULL),
+(4, '69e19ac6-1744-495b-bd70-bf8c3baaf15c', 9, 'DEMO_LNK_DOCUMENTATION', 'DEMO_LNK_DOCUMENTATION_CONTENT', 'https://www.admidio.org/dokuwiki', 21, 1, '2012-04-05 14:13:23', NULL, NULL);
 
 --
 -- Data for table adm_lists
 --
 
-INSERT INTO %PREFIX%_lists (lst_id, lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global) VALUES
-(1, 1, 1, 'INS_ADDRESS_LIST', '2009-02-27 21:50:57',  true),
-(2, 1, 1, 'INS_PHONE_LIST', '2009-02-27 21:50:57',  true),
-(3, 1, 1, 'SYS_CONTACT_DETAILS', '2009-02-27 21:50:57',  true),
-(4, 1, 1, 'INS_MEMBERSHIP', '2009-02-27 21:50:57',  true),
-(5, 1, 1, 'SYS_SOCIAL_NETWORKS', '2009-02-27 21:56:52',  false),
-(6, 1, 1, 'SYS_BIRTHDAY', '2009-02-27 21:57:38',  false),
-(7, 1, 351, 'SYS_WEBSITE', '2009-02-27 22:34:28',  false),
-(8, 1, 351, NULL, '2009-02-27 22:34:47',  false),
-(9, 2, 1, 'INS_ADDRESS_LIST', '2012-02-27 21:50:57',  true),
-(10, 2, 1, 'INS_PHONE_LIST', '2012-02-27 21:50:57',  true),
-(11, 2, 1, 'SYS_CONTACT_DETAILS', '2012-02-27 21:50:57',  true),
-(12, 2, 1, 'INS_MEMBERSHIP', '2012-02-27 21:50:57',  true),
-(13, 1, 1, 'SYS_PARTICIPANTS', '2018-04-05 21:50:57',  true),
-(14, 2, 1, 'SYS_PARTICIPANTS', '2018-04-05 21:50:57',  true);
+INSERT INTO %PREFIX%_lists (lst_id, lst_uuid, lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global) VALUES
+(1 , '485a11f0-e4f9-4771-a71c-1eacff12dd4c', 1, 1, 'INS_ADDRESS_LIST', '2009-02-27 21:50:57',  true),
+(2 , '914693d9-5e08-42f9-a97f-1b1e8ed8ae2a', 1, 1, 'INS_PHONE_LIST', '2009-02-27 21:50:57',  true),
+(3 , 'c28f0e74-d95f-44d7-8e02-2ca80ee220ae', 1, 1, 'SYS_CONTACT_DETAILS', '2009-02-27 21:50:57',  true),
+(4 , '4e3d9b48-eeff-4760-98c6-a69b38221342', 1, 1, 'INS_MEMBERSHIP', '2009-02-27 21:50:57',  true),
+(5 , '3a28db85-bf2c-4828-82f7-f8c67a0ff692', 1, 1, 'SYS_SOCIAL_NETWORKS', '2009-02-27 21:56:52',  false),
+(6 , 'ca9a32ec-efd2-46da-a9ee-8cf6aa0c179e', 1, 1, 'SYS_BIRTHDAY', '2009-02-27 21:57:38',  false),
+(7 , 'a4889bdb-e294-46a6-a76f-4456707012e3', 1, 351, 'SYS_WEBSITE', '2009-02-27 22:34:28',  false),
+(8 , '5ebcd56b-3095-4656-82b7-70f451de07b8', 1, 351, NULL, '2009-02-27 22:34:47',  false),
+(9 , '82b5af7a-d535-4383-8f0e-befbd6e8d9e8', 2, 1, 'INS_ADDRESS_LIST', '2012-02-27 21:50:57',  true),
+(10, 'df811fdd-89cd-49f2-9031-49a8aab71860', 2, 1, 'INS_PHONE_LIST', '2012-02-27 21:50:57',  true),
+(11, '77afdf9a-1d25-4993-8680-6fc556c2972c', 2, 1, 'SYS_CONTACT_DETAILS', '2012-02-27 21:50:57',  true),
+(12, 'a834cebe-3592-4f05-8c9b-73551615f570', 2, 1, 'INS_MEMBERSHIP', '2012-02-27 21:50:57',  true),
+(13, 'afc87e5f-fffa-46f3-82d1-6e8c65472ae4', 1, 1, 'SYS_PARTICIPANTS', '2018-04-05 21:50:57',  true),
+(14, 'a94a023b-56fa-4d6e-b05e-267a3d37ba09', 2, 1, 'SYS_PARTICIPANTS', '2018-04-05 21:50:57',  true),
+(15, 'd39d0642-c367-43ca-bc73-578219febbc6', 1, 1, 'SYS_USER_MANAGEMENT', '2021-11-13 15:08:45',  true),
+(16, '6efad974-5b15-4bb7-a1f8-350fa4b7a452', 2, 1, 'SYS_USER_MANAGEMENT', '2021-11-13 15:08:45',  true);
 
 --
 -- Data for table adm_list_columns
@@ -821,261 +844,295 @@ INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, l
 (133, 14, 2, 2, NULL, NULL, NULL),
 (134, 14, 3, NULL, 'mem_approved', NULL, NULL),
 (135, 14, 4, NULL, 'mem_comment', NULL, NULL),
-(136, 14, 5, NULL, 'mem_count_guests', NULL, NULL);
+(136, 14, 5, NULL, 'mem_count_guests', NULL, NULL),
+(140, 15, 1, 1, NULL, 'ASC', NULL),
+(141, 15, 2, 2, NULL, 'ASC', NULL),
+(142, 15, 3, NULL, 'usr_login_name', NULL, NULL),
+(143, 15, 4, 11, NULL, NULL, NULL),
+(144, 15, 5, 10, NULL, NULL, NULL),
+(145, 15, 6, 5, NULL, NULL, NULL),
+(150, 16, 1, 1, NULL, 'ASC', NULL),
+(151, 16, 2, 2, NULL, 'ASC', NULL),
+(152, 16, 3, NULL, 'usr_login_name', NULL, NULL),
+(153, 16, 4, 11, NULL, NULL, NULL),
+(154, 16, 5, 10, NULL, NULL, NULL),
+(155, 16, 6, 5, NULL, NULL, NULL);
 
 --
 -- Data for table adm_members
 --
 
-INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader, mem_usr_id_create, mem_timestamp_create, mem_usr_id_change, mem_timestamp_change, mem_approved, mem_comment, mem_count_guests) VALUES
-(1, 1, 1, '2008-04-20', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(2, 2, 1, '2008-04-20', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(3, 4, 1, '2008-04-20', '2009-10-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(4, 6, 1, '2009-04-20', '9999-12-31', false, 354, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(5, 7, 1, '2009-04-20', '9999-12-31', false, 354, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(6, 9, 1, '2008-04-20', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
-(7, 11, 1, '2016-04-20', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
-(10, 7, 2, '2008-04-20', '9999-12-31', false, NULL, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(11, 7, 2, '2008-04-20', '9999-12-31', false, NULL, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(201, 2, 202, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(202, 2, 203, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(203, 2, 204, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(204, 2, 205, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(205, 2, 206, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(206, 2, 207, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(207, 2, 208, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(208, 2, 209, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(209, 2, 210, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(211, 2, 212, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(212, 2, 213, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(213, 2, 214, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(214, 2, 215, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(215, 2, 216, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(216, 2, 217, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(217, 2, 218, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(218, 2, 219, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(219, 2, 220, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(220, 2, 221, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(221, 2, 222, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(222, 2, 223, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(223, 2, 224, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(224, 2, 225, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(225, 2, 226, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(226, 2, 227, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(227, 2, 228, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(228, 2, 229, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(229, 2, 230, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(230, 2, 231, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(231, 2, 232, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(232, 2, 233, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(233, 2, 234, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(234, 2, 235, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(235, 2, 236, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(236, 2, 237, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(237, 2, 238, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(238, 2, 239, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(239, 2, 240, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(240, 2, 241, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(241, 2, 242, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(242, 2, 243, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(243, 2, 244, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(244, 2, 245, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(245, 2, 246, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(246, 2, 247, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(247, 2, 248, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(248, 2, 249, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(249, 2, 250, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(250, 2, 251, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(251, 2, 252, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(252, 2, 253, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(253, 2, 254, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(254, 2, 255, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(255, 2, 256, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(256, 2, 257, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(257, 2, 258, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(258, 2, 259, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(259, 2, 260, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(260, 2, 261, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(261, 2, 262, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(262, 2, 263, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(263, 2, 264, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(264, 2, 265, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(265, 2, 266, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(266, 2, 267, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(267, 2, 268, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(268, 2, 269, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(269, 2, 270, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(270, 2, 271, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(271, 2, 272, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(272, 2, 273, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(273, 2, 274, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(274, 2, 275, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(275, 2, 276, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(276, 2, 277, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(277, 2, 278, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(278, 2, 279, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(279, 2, 280, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(280, 2, 281, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(281, 2, 282, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(282, 2, 283, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(283, 2, 284, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(284, 2, 285, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(285, 2, 286, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(286, 2, 287, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(287, 2, 288, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(288, 2, 289, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(289, 2, 290, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(290, 2, 291, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(291, 2, 292, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(292, 2, 293, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(293, 2, 294, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(294, 2, 295, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(295, 2, 296, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(296, 2, 297, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(297, 2, 298, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(298, 2, 299, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(299, 2, 300, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(300, 2, 301, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(301, 2, 302, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(302, 2, 303, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(303, 2, 304, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(304, 2, 305, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(305, 2, 306, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(306, 2, 307, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(307, 2, 308, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(308, 2, 309, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(309, 2, 310, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(310, 2, 311, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(311, 2, 312, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(312, 2, 313, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(313, 2, 314, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(314, 2, 315, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(315, 2, 316, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(316, 2, 317, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(317, 2, 318, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(318, 2, 319, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(319, 2, 320, '2008-04-26', '2008-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(320, 2, 321, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(321, 2, 322, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(322, 2, 323, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(323, 2, 324, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(324, 2, 325, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(325, 2, 326, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(326, 2, 327, '2008-04-26', '2008-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(327, 2, 328, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(328, 2, 329, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(329, 2, 330, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(330, 2, 331, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(331, 2, 332, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(332, 2, 333, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(333, 2, 334, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(334, 2, 335, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(335, 2, 336, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(336, 2, 337, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(337, 2, 338, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(338, 2, 339, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(339, 2, 340, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(340, 2, 341, '2008-04-26', '2008-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(341, 2, 342, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(342, 2, 343, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(343, 2, 344, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(346, 2, 347, '2008-04-26', '2008-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(347, 2, 348, '2008-04-26', '2008-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(348, 2, 349, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(349, 2, 350, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(350, 2, 351, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(351, 3, 351, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(352, 3, 1, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(353, 4, 255, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(354, 4, 262, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(355, 4, 271, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(356, 4, 273, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(357, 4, 275, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(358, 4, 289, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(359, 4, 292, '2008-05-03', '2008-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(360, 4, 341, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(361, 4, 347, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(362, 4, 351, '2008-05-03', '9999-12-31', true, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(363, 4, 204, '2008-05-03', '9999-12-31', true, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(364, 5, 212, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(365, 5, 214, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(366, 5, 220, '2008-05-03', '9999-12-31', true, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(367, 5, 226, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(368, 5, 263, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(369, 5, 269, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(370, 5, 283, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(371, 5, 290, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(372, 5, 294, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(373, 5, 325, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(374, 5, 326, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(375, 5, 342, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(376, 5, 350, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(377, 3, 213, '2008-05-28', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(378, 3, 240, '2008-05-28', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(379, 2, 354, '2008-05-28', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(380, 3, 354, '2009-06-12', '9999-12-31', true, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(381, 2, 355, '2009-07-12', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(382, 5, 355, '2012-11-03', '9999-12-31', true, 2, '2014-08-25 17:13:52', NULL, NULL, NULL, NULL, 0),
-(400, 7, 205, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(401, 7, 211, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(402, 7, 290, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(403, 7, 291, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(404, 7, 292, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(405, 7, 293, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(406, 7, 345, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(407, 7, 351, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(500, 8, 1, '2020-09-16', '9999-12-31', true, 2, '2008-05-03 07:43:02', 1, '2017-01-21 09:21:02', 2, NULL, 1),
-(501, 8, 223, '2020-09-18', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 3),
-(502, 8, 255, '2020-09-18', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0),
-(503, 8, 302, '2020-09-18', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 2),
-(504, 8, 265, '2020-09-19', '9999-12-31', false, 2, '2008-05-03 07:43:02', 328, '2017-02-01 22:04:21', 2, NULL, 0),
-(505, 8, 266, '2020-09-18', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0),
-(506, 8, 267, '2020-09-18', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 1),
-(507, 8, 268, '2020-09-18', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 1, NULL, 0),
-(508, 8, 270, '2020-09-19', '9999-12-31', false, 2, '2008-05-03 07:43:02', 328, '2017-02-01 22:04:21', 2, NULL, 0),
-(509, 2, 356, '2015-07-12', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(510, 2, 357, '2015-07-12', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
-(520, 12, 355, '2018-06-03', '9999-12-31', true, 2, '2014-08-25 17:13:52', NULL, NULL, 2, NULL, 0),
-(521, 12, 263, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0),
-(522, 12, 269, '2018-06-04', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
-(523, 12, 283, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 1, NULL, 0),
-(524, 12, 300, '2018-06-03', '9999-12-31', true, 2, '2014-08-25 17:13:52', NULL, NULL, 1, NULL, 0),
-(525, 12, 301, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
-(526, 12, 310, '2018-06-04', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
-(540, 11, 351, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
-(541, 11, 354, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
-(542, 11, 240, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0);
+INSERT INTO %PREFIX%_members (mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader, mem_usr_id_create, mem_timestamp_create, mem_usr_id_change, mem_timestamp_change, mem_approved, mem_comment, mem_count_guests) VALUES
+(1  , 'fd3e1942-1285-4fe0-b3c0-eb3c5cebfad0', 1, 1, '2008-04-20', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(2  , '46da7d44-9209-45cb-acaa-f4b9ba7fa40b', 2, 1, '2008-04-20', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(3  , '3fbe3c81-dfa4-4354-ba96-06d531ba712a', 4, 1, '2008-04-20', '2009-10-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(4  , 'ca1d02ea-ff41-4a96-9484-2012d129a7b8', 6, 1, '2009-04-20', '9999-12-31', false, 354, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(5  , '1d0a3c88-f464-4f3c-8735-c2904807c82d', 7, 1, '2009-04-20', '9999-12-31', false, 354, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(6  , '91f8f88b-8e84-416d-9d6b-dbeb7a51cd83', 9, 1, '2008-04-20', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
+(7  , 'da316d25-8e33-410f-9d29-9926bd06f9e1', 11, 1, '2016-04-20', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
+(10 , '51ee7ad9-3d4a-4f19-ab9b-fe29dec88329', 7, 2, '2008-04-20', '9999-12-31', false, NULL, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(11 , '9e8f92bd-6d05-4ca1-b2e9-72abd7fff7e7', 7, 2, '2008-04-20', '9999-12-31', false, NULL, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(201, 'b9502822-1ae7-44c1-8cf2-7f87b1d15946', 2, 202, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(202, '5b6df531-4576-455d-a7d3-6b79ba41ef09', 2, 203, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(203, '17e0ce5c-726c-485b-bb9e-c4e62cac0920', 2, 204, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(204, 'f8d5636f-c278-4188-9ba6-7ce275d20f20', 2, 205, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(205, '6a7648a4-ff84-4105-84dd-f7fd4bbebdfd', 2, 206, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(206, 'e5510b7f-ca35-434c-b744-fedcd80dd8bd', 2, 207, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(207, '8acf2c76-f9ce-4602-a1d9-8e7458260b46', 2, 208, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(208, 'f5939a65-2f67-48ac-a9f3-f62eb4881280', 2, 209, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(209, '30555d7e-d161-4ac3-af40-cc86874e1741', 2, 210, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(211, '351d96a4-2732-4a9c-9560-d652494cff99', 2, 212, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(212, '74c826ee-18be-4957-a784-fbc5c4b63b39', 2, 213, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(213, '9f26dade-f080-4119-bff5-0e6b00be9f0d', 2, 214, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(214, '2ecdfaa5-6af5-4c4e-93b6-ab6edb2c69ee', 2, 215, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(215, '9c10af84-bbfb-4748-8bff-cfafa3cd1a96', 2, 216, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(216, 'f5ec5dae-7085-41b1-8389-424c184be214', 2, 217, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(217, '563f61e5-1116-4a63-aa77-cad8b3aa41ed', 2, 218, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(218, '8db7589b-08d4-4618-980b-f115e299c641', 2, 219, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(219, '4f5d544e-e5c0-49d7-979e-77850e76f67a', 2, 220, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(220, '940bd559-8e96-423c-a6ab-b68502c05ac8', 2, 221, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(221, 'ba278734-e59f-4134-99dd-4bac886283b3', 2, 222, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(222, 'ea078cfa-9917-4d80-91f3-1bd5cd832e68', 2, 223, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(223, '6b8eedac-c5cc-4293-b1a7-371b556c5515', 2, 224, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(224, '17dea8af-9560-4006-8a38-544dae3f9ba5', 2, 225, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(225, 'b1dbdf7b-a708-4242-b9f1-73dc19c121c4', 2, 226, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(226, '41748d24-56a7-4d35-acd1-69a34c261411', 2, 227, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(227, '256c6ffb-170c-4bd8-8112-a032dfb96bd5', 2, 228, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(228, '70200655-507c-4fca-93ac-4696ef6d189f', 2, 229, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(229, 'b329e4d6-96d3-462e-b4e5-756f5fa10fae', 2, 230, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(230, '5ab2525a-9465-4ce3-8bfb-dd5d13f3f22b', 2, 231, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(231, 'df9a9dad-909c-4916-be65-07d046456a28', 2, 232, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(232, '31b9390e-3343-4397-9ea2-f82e91e570e5', 2, 233, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(233, '04e2d5ae-552e-4413-b8d0-88118d885c54', 2, 234, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(234, '94d56c24-4d92-42db-819c-dd47dbd68b4c', 2, 235, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(235, '9f29dc74-184f-4b61-91d8-5d8928bdece8', 2, 236, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(236, '276fb65e-167f-42dc-b294-9e6b49d5365f', 2, 237, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(237, 'f97acfec-7c4f-4bd1-ba14-f0f1b90449c5', 2, 238, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(238, '871a812d-767a-4588-bb91-cacb4aa0e694', 2, 239, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(239, 'c49cb6db-8096-4564-a209-de425d6ac314', 2, 240, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(240, '8caa8722-5009-46d7-b01a-d6a76fa1fb53', 2, 241, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(241, '6d8e7880-ebaf-4ab4-8532-e44f52eb0b7b', 2, 242, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(242, '9afa6fd1-cf94-40bd-8e9d-16c9f3115614', 2, 243, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(243, 'f1d47a6a-57d2-49b4-b7bc-3bcd951514dc', 2, 244, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(244, '10da187c-b11c-4f1f-ac88-b3e65dbfc060', 2, 245, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(245, '6d385e13-f457-434b-9cfd-389e7e90c947', 2, 246, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(246, 'ae1dbadf-c8aa-487f-891a-eee9587f6941', 2, 247, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(247, '0e3ecd4a-2ea0-4476-960e-6bbf3aa857d1', 2, 248, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(248, 'ad44894f-cca1-4718-95cf-13cc415febb5', 2, 249, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(249, 'b27f6a5e-fc40-4d76-92db-613316d2011a', 2, 250, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(250, 'ca26a6ac-2f2e-4167-96cc-90f48ae76e6f', 2, 251, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(251, '9a4fb40b-1408-416e-9d99-36b4b803b358', 2, 252, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(252, 'fff1962c-9957-4366-a3fb-6b00665f7559', 2, 253, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(253, '03445038-1ca0-4ccb-b2c5-43b12ecb72ff', 2, 254, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(254, '99b567a6-cbe0-4e37-96ef-64a7158ce613', 2, 255, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(255, 'd13d843c-4265-4d81-ad72-957413505628', 2, 256, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(256, 'a49a5b09-57ef-4abd-a436-81c7b55b8998', 2, 257, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(257, 'eada7eed-cabb-492e-bee8-9a7024780b10', 2, 258, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(258, '8bbca168-7a03-4ddb-939b-dfcc85dba3da', 2, 259, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(259, '016ccd02-9097-451d-86a7-d383d7d5b139', 2, 260, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(260, '0fb31975-ea21-4953-9fc4-7d7e2800a8e5', 2, 261, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(261, 'd72789c9-56f6-4a7d-9d9a-8f2c6c0078b1', 2, 262, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(262, 'd493ba22-b957-479b-bf92-065e039e95a6', 2, 263, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(263, '8d390ae5-1114-45c3-9de1-c3bc1982e044', 2, 264, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(264, '0a901e60-f4d0-4eaa-90a2-fc6bc958faac', 2, 265, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(265, '96d0e294-1198-4e51-8583-7d9972a0d59b', 2, 266, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(266, 'c2fa4f30-017c-4f1f-8fa9-87c29055d67c', 2, 267, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(267, '741c7150-bef7-417d-96d5-89f866fc09b6', 2, 268, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(268, 'e56d6cc5-89b2-4f36-932c-c5da05408823', 2, 269, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(269, 'a7d7b03d-1c18-4a6e-9e13-c44b7c03a6e9', 2, 270, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(270, '1b139734-2a57-4531-91f4-15377aea5b7e', 2, 271, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(271, '4a254300-871b-4ded-975f-605ef725dcdb', 2, 272, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(272, 'a7f6b05e-e2c7-4b7f-8c08-cead8b36a780', 2, 273, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(273, '944ef4c4-9933-4f1b-b913-3a1c6162eb5d', 2, 274, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(274, '6cf99c3c-6bd4-4d42-ad8a-5ba23d7e72d3', 2, 275, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(275, 'e36a08b4-b7bd-4565-af1a-39740b4d33c7', 2, 276, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(276, '19b6c7f5-e199-4634-a003-74efc084861f', 2, 277, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(277, 'ea0953b3-6e04-49f0-ab52-ceaaf28b2840', 2, 278, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(278, '583669b7-42dc-4183-9b70-834894660c2f', 2, 279, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(279, 'e0f728f9-7826-4052-a04e-03b69df6257e', 2, 280, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(280, 'b3e192f2-8eb2-47ac-98f2-38e677ad2f68', 2, 281, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(281, 'd3c8b3b7-6d19-4f15-9ec1-2115dcc94e88', 2, 282, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(282, '4a3c4aef-2158-4cf3-9cdb-7e4fa3f6ee7f', 2, 283, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(283, '447afc3f-c4b7-4922-9e43-76b1d13505d2', 2, 284, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(284, '402a1db3-0044-4dd9-9e03-dda83dcea96a', 2, 285, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(285, '6fcb184c-15fa-4b56-9ffe-a459d92f31df', 2, 286, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(286, 'cb89079d-20dd-41a5-9672-27acb97e2d8f', 2, 287, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(287, 'dd480354-b16b-4c16-86eb-cda37c8fc217', 2, 288, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(288, '1ebddc49-cdfb-464d-a023-edcdc5445472', 2, 289, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(289, 'cc709580-4cf0-4578-a198-cf9b0f4c78e1', 2, 290, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(290, '2c586ab9-6a52-4bc7-8fe9-9bbee2de9707', 2, 291, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(291, '4c026c78-25e5-4dd8-bdde-6a0dbac02928', 2, 292, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(292, '371f1f76-a443-45b5-9a94-e842fd7b1d16', 2, 293, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(293, '22edd590-9964-47b1-9ae4-07974582d189', 2, 294, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(294, '9ff8ff89-517f-493b-9dcb-60cbbcf1f311', 2, 295, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(295, 'd1dd57a3-280b-4fd9-b362-068f298cb37a', 2, 296, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(296, 'e69ea2a9-07a8-425a-b42b-cfb37e925aeb', 2, 297, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(297, 'cae931c1-7cb4-4646-bf02-dfb94d3c381c', 2, 298, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(298, 'e242b230-b461-4613-9607-8436abc08b37', 2, 299, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(299, '3013b8c7-5ec6-4686-ac94-b755c85397c5', 2, 300, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(300, 'c0d3a82f-27aa-4071-8f4b-32e337b75980', 2, 301, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(301, '06a4b0fd-9fc1-4206-b7d0-1fb1810eb69e', 2, 302, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(302, 'fe35b25b-bbc0-4598-a896-bc24a706fe75', 2, 303, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(303, '1db85131-4b0e-43c5-931f-7e4b748671e1', 2, 304, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(304, '5760d370-b330-4e22-9275-02591e44b1e3', 2, 305, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(305, '7d72d8c2-3393-405a-870f-b65b31057191', 2, 306, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(306, '8214f854-0530-4a23-982d-ea2199ea792a', 2, 307, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(307, '807f25f4-3362-458b-8859-d13ad0c7b218', 2, 308, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(308, '591bae19-a226-48ea-97e0-4d655dd9169b', 2, 309, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(309, '49fe5b9a-52d2-4d7b-94ca-d43b8bf6b0ed', 2, 310, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(310, '55d098bd-6884-47c7-9d13-94adb85d7f5d', 2, 311, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(311, 'cab2c557-cc83-496f-a009-78dac3d575f7', 2, 312, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(312, '46877631-60b4-4c96-bbec-1340a4d4f463', 2, 313, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(313, '8cd59b24-0cb1-4236-9c17-c4834b111116', 2, 314, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(314, '46ca35dd-3eda-46ac-8b86-36ef729a2db1', 2, 315, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(315, '99538362-bd80-4ff0-99b2-8c0969769002', 2, 316, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(316, 'c71c8925-4aa6-415b-af82-e5dd7671b360', 2, 317, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(317, 'b4e16d38-8d94-4db9-8d4c-0b5404747294', 2, 318, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(318, 'd25ec87d-08a5-4402-8fb8-9e5de2bbd7ac', 2, 319, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(319, '517986a3-60f9-448e-bf3d-2fa82b2b8dc1', 2, 320, '2008-04-26', '2008-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(320, '1ff9b34a-33b6-48e1-82c4-3cf23f9c0c17', 2, 321, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(321, '2757d517-16d5-452b-b409-10a81abb9cf6', 2, 322, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(322, 'eabcf3c6-03b9-4702-b9b4-8c12f24d34b6', 2, 323, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(323, '62e60b1f-d0bc-4f08-9dc3-0f2ff1054a3d', 2, 324, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(324, 'e7f7df15-9108-4771-9fa1-8b7fbd584f99', 2, 325, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(325, '241b8d38-284a-4e2b-9952-1c6f9879131a', 2, 326, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(326, 'bef0a4fe-50f8-4d77-9fa3-351acc044269', 2, 327, '2008-04-26', '2008-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(327, '04de04fb-5fb8-4daf-aff4-361ee3fdc86d', 2, 328, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(328, '2bb2e202-5edd-4f9a-ba18-59b45eba724c', 2, 329, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(329, '1db73c85-2d08-44f0-b715-2f3b91912eb3', 2, 330, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(330, 'ffd0ee3a-b0cb-427c-a10a-d6c6119256e4', 2, 331, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(331, '99a20f23-d3f5-4bc7-956d-abab252768eb', 2, 332, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(332, '27817601-a6dc-44e8-8ea4-f55491be0752', 2, 333, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(333, 'b256c61d-06bc-40bf-86f4-f5f703a16c28', 2, 334, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(334, '9d8435cd-e311-4d69-a508-24546d631598', 2, 335, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(335, '20e4164a-a6ac-41f8-88fd-a8e4092110c0', 2, 336, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(336, 'ee7c4f19-6bd7-435a-a259-1b985209e73e', 2, 337, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(337, 'f01dbf07-7443-455b-8517-9837782d4201', 2, 338, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(338, '53834f65-b7f7-49bc-9e99-640271a18422', 2, 339, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(339, '8f3b7e7c-1ffb-4c45-9fb7-4419e98cf5ff', 2, 340, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(340, 'd86c8207-86b3-425b-a466-d9e17966cdb2', 2, 341, '2008-04-26', '2008-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(341, 'a1f3d6b3-f290-4e36-8d9a-a563cc00f48b', 2, 342, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(342, '6c001c53-a1dc-46e2-a1a7-194c18eed7de', 2, 343, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(343, '600a3c42-7a11-4aaf-b1e2-f3a0f36eec1d', 2, 344, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(346, '9b14f1e7-3ec2-43fc-a1f6-4e087f0c8e98', 2, 347, '2008-04-26', '2008-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(347, 'a01e9318-ab1f-4af7-935e-90447b3df20e', 2, 348, '2008-04-26', '2008-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(348, 'afdfd7d4-9ee7-4af4-b97c-7ed438cefd68', 2, 349, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(349, '234bca7f-52bd-4133-9613-da4d11ce6b21', 2, 350, '2008-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(350, '136dd336-bcc0-4c0a-88e4-9c7688bfacae', 2, 351, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(351, 'ba2e7b2f-62a9-41ac-ac75-203e2101f4de', 3, 351, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(352, '9af70a15-fc26-4a3f-af48-733b3f5cde39', 3, 1, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(353, '11c4a389-56fc-4642-9ae2-c0fed697e11c', 4, 255, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(354, 'fbe556f8-c236-467e-9b7c-b1772743a850', 4, 262, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(355, '4eec44a8-ccc7-4c4c-bcb3-a1e1242331f6', 4, 271, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(356, 'e60246ed-1e9e-4456-adc2-3009fdb2f4d1', 4, 273, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(357, '1dc48b81-a306-47b3-a3ee-a1eef3424f53', 4, 275, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(358, '747ec675-1514-4b9c-8879-0e974a364e29', 4, 289, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(359, '95d90a05-22c6-4264-b926-342ed1337ecf', 4, 292, '2008-05-03', '2008-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(360, 'e44c7f2e-0104-4a0b-aebd-0e78171461f4', 4, 341, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(361, '30764e53-1fcd-440b-9302-67d965dbb20c', 4, 347, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(362, 'e7c034bf-4791-4947-b3fe-aa9d254a16bd', 4, 351, '2008-05-03', '9999-12-31', true, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(363, 'ce570ae8-0186-4887-9905-910b989fbc85', 4, 204, '2008-05-03', '9999-12-31', true, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(364, 'bd6193ba-410f-4c74-8b6c-208eb469d74c', 5, 212, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(365, '59fd88b3-f1bc-449b-936d-1301bb20f0f5', 5, 214, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(366, 'fdc602a7-307b-41c3-bac0-498595550dd3', 5, 220, '2008-05-03', '9999-12-31', true, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(367, '5226d969-c670-4e51-b205-15df7d9234a3', 5, 226, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(368, '525f8181-010c-4081-ac1a-2fc521c5bc2e', 5, 263, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(369, 'b6a827cb-806b-4267-83fb-61c6287b218a', 5, 269, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(370, 'b49c1d83-9a44-449c-8cea-8ad7bb890dab', 5, 283, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(371, '2d55366f-e53f-48cd-addd-ad7397343319', 5, 290, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(372, '5f48d090-4e66-4b1d-ad0c-98dadb3249ae', 5, 294, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(373, '90dc20dc-b0fa-4e7d-af65-0f81a6289380', 5, 325, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(374, '24213712-7df1-4400-9ed0-fa7b9c0e6c0e', 5, 326, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(375, 'a7d03c99-89da-49fa-8c59-879e557922fe', 5, 342, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(376, '8d6775ba-5bba-4852-ad18-c2a6ab502885', 5, 350, '2008-05-03', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(377, 'd43c83ae-3636-4d15-a548-5e643297f4e3', 3, 213, '2008-05-28', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(378, '16bb2a64-a46d-4d21-8585-3f32bf4138d3', 3, 240, '2008-05-28', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(379, '3c65f3a7-3677-4f50-b805-08fcdcf495a6', 2, 354, '2008-05-28', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(380, 'fdf8adf1-d06e-4fde-b14e-d503b550fa51', 3, 354, '2009-06-12', '9999-12-31', true, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(381, '795afe4d-ffd4-471c-943b-dc13036e89c3', 2, 355, '2009-07-12', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(382, '08a28c94-935f-4f92-8d72-5e1278dc080d', 5, 355, '2012-11-03', '9999-12-31', true, 2, '2014-08-25 17:13:52', NULL, NULL, NULL, NULL, 0),
+(400, 'b0f06fbe-3738-4a8b-ab63-de50e720c2fe', 7, 205, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(401, 'd38b54ad-149d-498b-a628-e6cb296a63a8', 7, 211, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(402, 'cfa20f73-976b-4006-9322-f31abf719030', 7, 290, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(403, '69d8d75b-736a-407b-8dae-349164a4adec', 7, 291, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(404, '7f48731f-059b-40a5-92ca-60113d3eefc1', 7, 292, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(405, 'b0baf871-f39e-41f5-97e9-2517aee5628b', 7, 293, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(406, '2cb9b255-e189-4c37-bddb-8f0d5a836242', 7, 345, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(407, '531f5e42-e37c-450e-b4e7-7dcb4ce35ca3', 7, 351, '2010-04-26', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(500, 'f5b30256-e61d-4e71-b052-44d5d08f775e', 8, 1, '2020-09-16', '9999-12-31', true, 2, '2008-05-03 07:43:02', 1, '2017-01-21 09:21:02', 2, NULL, 1),
+(501, '5325c400-1ca7-4131-9ecc-bf35e78de7e1', 8, 223, '2020-09-18', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 3),
+(502, '586cd51a-8332-47e9-9a98-2869ae7a0824', 8, 255, '2020-09-18', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0),
+(503, '171004d5-098a-4a0f-a678-ddcdb04cb88c', 8, 302, '2020-09-18', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 2),
+(504, '130bf8b5-a83f-4e11-90c4-3540bb88f067', 8, 265, '2020-09-19', '9999-12-31', false, 2, '2008-05-03 07:43:02', 328, '2017-02-01 22:04:21', 2, NULL, 0),
+(505, '6c51cbfd-069a-48b0-b375-a2e7a37d77b2', 8, 266, '2020-09-18', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0),
+(506, '4f671955-257b-4215-ba11-b283761d1268', 8, 267, '2020-09-18', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 1),
+(507, 'fd793b02-0d97-462e-8670-a02cf07ab043', 8, 268, '2020-09-18', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 1, NULL, 0),
+(508, 'bd258607-f940-4a08-8ff6-5cbc837c5a10', 8, 270, '2020-09-19', '9999-12-31', false, 2, '2008-05-03 07:43:02', 328, '2017-02-01 22:04:21', 2, NULL, 0),
+(509, 'bf789f06-8f99-4ef3-a34c-4f4106571c72', 2, 356, '2015-07-12', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(510, '1cec63b0-33ac-4076-8e29-518caca63728', 2, 357, '2015-07-12', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, NULL, NULL, 0),
+(520, '3151a59a-4697-478c-90c7-0cf06b5ee860', 12, 355, '2018-06-03', '9999-12-31', true, 2, '2014-08-25 17:13:52', NULL, NULL, 2, NULL, 0),
+(521, '0babe98c-24ac-4bd4-9b53-4855439261c0', 12, 263, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0),
+(522, '9b87c9a3-e25a-4b54-b9ab-441692045fdb', 12, 269, '2018-06-04', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
+(523, '9b95ad01-c45a-4e78-a00b-092add02624e', 12, 283, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 1, NULL, 0),
+(524, 'b0445844-049e-41d8-969f-d3c76018226a', 12, 300, '2018-06-03', '9999-12-31', true, 2, '2014-08-25 17:13:52', NULL, NULL, 1, NULL, 0),
+(525, '38d8a478-8f1d-4483-a59c-944166c36ed4', 12, 301, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
+(526, 'd03a900b-4ac6-4ab8-963b-27a079b36303', 12, 310, '2018-06-04', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
+(540, 'fd47c224-6f9e-4689-8c9c-d36e6c0257c7', 11, 351, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
+(541, '34dd8ad2-3d96-465c-b7d0-2071fa79c9fb', 11, 354, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
+(542, '58cde084-6aa8-49c9-88ab-8238ca510bbf', 11, 240, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0);
 
 
 --
 -- Data for table adm_messages
 --
 
-INSERT INTO %PREFIX%_messages (msg_id, msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read) VALUES
-(1, 'EMAIL', 'DEMO_MSG_EVENTS_HOMEPAGE', 1, '313 | 332 | 355 | 354', '2021-01-20 14:58:16', 0),
-(2, 'EMAIL', 'DEMO_MSG_NEW_MODULE', 1, 'groupID: 3', '2021-02-01 16:07:01', 0),
-(3, 'EMAIL', 'DEMO_MSG_NEW_TRAINING_TIMES', 1, 'groupID: 4 | groupID: 5 | 354', '2021-02-03 12:08:02', 0),
-(4, 'EMAIL', 'DEMO_MSG_INVITATION_MEMBERS_MEETING', 354, 'groupID: 2-2 | 1', '2021-02-03 05:11:37', 0),
-(5, 'PM', 'DEMO_MSG_RESERVE_ROOM', 354, true, '2021-02-02 09:12:35', 1),
-(6, 'PM', 'DEMO_MSG_MEMBERSHIP_FEE_MISSING', 354, '355', '2021-02-03 05:14:22', 1),
-(7, 'EMAIL', 'DEMO_MSG_TRAINING', 355, '216 | 227', '2021-02-03 05:16:19', 0),
-(8, 'PM', 'DEMO_MSG_NO_ACCESS_DOCUMENTS', 1, '355', '2021-02-03 05:18:18', 1);
+INSERT INTO %PREFIX%_messages (msg_id, msg_uuid, msg_type, msg_subject, msg_usr_id_sender, msg_timestamp, msg_read) VALUES
+(1, '39a0e3e2-8163-4cbf-bb9b-ac87dbf8ab77', 'EMAIL', 'DEMO_MSG_EVENTS_HOMEPAGE', 1, '2021-01-20 14:58:16', 0),
+(2, 'd12a108d-0bc7-468c-86a5-b05626a21f15', 'EMAIL', 'DEMO_MSG_NEW_MODULE', 1, '2021-02-01 16:07:01', 0),
+(3, '479fb7ae-52eb-401e-aba7-a3ca74f69c32', 'EMAIL', 'DEMO_MSG_NEW_TRAINING_TIMES', 1, '2021-02-03 12:08:02', 0),
+(4, '42fb2917-a25b-4d1f-92ae-2cc837aae4a6', 'EMAIL', 'DEMO_MSG_INVITATION_MEMBERS_MEETING', 354, '2021-02-03 05:11:37', 0),
+(5, '9be7e4cc-4cf9-4945-84e8-0cb387063501', 'PM', 'DEMO_MSG_RESERVE_ROOM', 354, '2021-02-02 09:12:35', 1),
+(6, '62d38fd3-b392-43f5-983a-bf563e780c07', 'PM', 'DEMO_MSG_MEMBERSHIP_FEE_MISSING', 354, '2021-02-03 05:14:22', 1),
+(7, '693a032a-fee7-4a03-8e21-05647b6b6848', 'EMAIL', 'DEMO_MSG_TRAINING', 355, '2021-02-03 05:16:19', 0),
+(8, 'c727b421-e303-4381-b097-9f6eeb56ca39', 'PM', 'DEMO_MSG_NO_ACCESS_DOCUMENTS', 1, '2021-02-03 05:18:18', 1);
 
 
 --
 -- Data for table adm_messages_content
 --
 
-INSERT INTO %PREFIX%_messages_content (msc_id, msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp) VALUES
-(1, 1, 1, 1, 'DEMO_MSG_EVENTS_HOMEPAGE_CONTENT', '2021-02-03 04:58:16'),
-(2, 2, 1, 1, 'DEMO_MSG_NEW_MODULE_CONTENT', '2021-02-03 05:07:01'),
-(3, 3, 1, 1, 'DEMO_MSG_NEW_TRAINING_TIMES_CONTENT', '2021-02-03 05:08:02'),
-(4, 4, 1, 354, 'DEMO_MSG_INVITATION_MEMBERS_MEETING_CONTENT', '2021-02-03 05:11:37'),
-(5, 5, 1, 354, 'DEMO_MSG_RESERVE_ROOM_CONTENT', '2021-02-03 05:12:35'),
-(6, 6, 1, 354, 'DEMO_MSG_MEMBERSHIP_FEE_MISSING_CONTENT', '2021-02-03 05:14:22'),
-(7, 7, 1, 355, 'DEMO_MSG_TRAINING_CONTENT', '2021-02-03 05:16:19'),
-(8, 8, 1, 355, 'DEMO_MSG_NO_ACCESS_DOCUMENTS_CONTENT1', '2021-02-03 05:17:23'),
-(9, 8, 2, 1, 'DEMO_MSG_NO_ACCESS_DOCUMENTS_CONTENT2', '2021-02-03 05:18:18');
+INSERT INTO %PREFIX%_messages_content (msc_id, msc_msg_id, msc_usr_id, msc_message, msc_timestamp) VALUES
+(1, 1, 1, 'DEMO_MSG_EVENTS_HOMEPAGE_CONTENT', '2021-02-03 04:58:16'),
+(2, 2, 1, 'DEMO_MSG_NEW_MODULE_CONTENT', '2021-02-03 05:07:01'),
+(3, 3, 1, 'DEMO_MSG_NEW_TRAINING_TIMES_CONTENT', '2021-02-03 05:08:02'),
+(4, 4, 354, 'DEMO_MSG_INVITATION_MEMBERS_MEETING_CONTENT', '2021-02-03 05:11:37'),
+(5, 5, 354, 'DEMO_MSG_RESERVE_ROOM_CONTENT', '2021-02-03 05:12:35'),
+(6, 6, 354, 'DEMO_MSG_MEMBERSHIP_FEE_MISSING_CONTENT', '2021-02-03 05:14:22'),
+(7, 7, 355, 'DEMO_MSG_TRAINING_CONTENT', '2021-02-03 05:16:19'),
+(8, 8, 355, 'DEMO_MSG_NO_ACCESS_DOCUMENTS_CONTENT1', '2021-02-03 05:17:23'),
+(9, 8, 1, 'DEMO_MSG_NO_ACCESS_DOCUMENTS_CONTENT2', '2021-02-03 05:18:18');
+
+
+--
+-- Data for table adm_messages_recipients
+--
+
+INSERT INTO %PREFIX%_messages_recipients (msr_id, msr_msg_id, msr_rol_id, msr_usr_id, msr_role_mode) VALUES
+(1, 1, NULL, 313, 0),
+(2, 1, NULL, 332, 0),
+(3, 1, NULL, 355, 0),
+(4, 1, NULL, 354, 0),
+(5, 2, 3, NULL, 0),
+(6, 3, 4, NULL, 0),
+(7, 3, 5, NULL, 0),
+(8, 3, NULL, 354, 0),
+(9, 4, 2, NULL, 2),
+(10, 4, NULL, 1, 0),
+(11, 5, NULL, 1, 0),
+(12, 6, NULL, 355, 0),
+(13, 7, NULL, 216, 0),
+(14, 7, NULL, 227, 0),
+(15, 8, NULL, 355, 0);
 
 
 --
@@ -1092,27 +1149,27 @@ INSERT INTO %PREFIX%_registrations (reg_id, reg_org_id, reg_usr_id, reg_timestam
 -- Data for table adm_photos
 --
 
-INSERT INTO %PREFIX%_photos (pho_id, pho_org_id, pho_quantity, pho_name, pho_begin, pho_end, pho_description, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
-(1, 1, 0, 'DEMO_PHO_CROATIA', '2009-10-05', '2009-10-11', 'DEMO_PHO_CROATIA_DESC', 'DEMO_PHO_STEVEN_SMITH', false, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
-(2, 1, 3, 'DEMO_PHO_PLITVICE_LAKES', '2009-10-05', '2009-10-07', NULL, 'DEMO_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
-(3, 1, 3, 'Krka', '2009-10-08', '2009-10-11', NULL, 'DEMO_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
-(4, 1, 5, 'Machu Picchu', '2009-09-14', '2009-09-17', 'DEMO_PHO_MACHU_PICCHU_DESC', 'Admin', false, NULL, 1, '2009-10-23 18:20:50', NULL, NULL);
+INSERT INTO %PREFIX%_photos (pho_id, pho_org_id, pho_uuid, pho_quantity, pho_name, pho_begin, pho_end, pho_description, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
+(1, 1, 'b4aaf3eb-8735-45b3-a2f0-f2a7e9d289eb', 0, 'DEMO_PHO_CROATIA', '2009-10-05', '2009-10-11', 'DEMO_PHO_CROATIA_DESC', 'DEMO_PHO_STEVEN_SMITH', false, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
+(2, 1, '3d45f9cf-957e-41be-bb48-f452429fcd05', 3, 'DEMO_PHO_PLITVICE_LAKES', '2009-10-05', '2009-10-07', NULL, 'DEMO_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
+(3, 1, 'bf174cf8-f190-4898-bb3e-af881ad68780', 3, 'Krka', '2009-10-08', '2009-10-11', NULL, 'DEMO_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
+(4, 1, 'f6af3421-f80c-4145-89f2-75bec24640b8', 5, 'Machu Picchu', '2009-09-14', '2009-09-17', 'DEMO_PHO_MACHU_PICCHU_DESC', 'Admin', false, NULL, 1, '2009-10-23 18:20:50', NULL, NULL);
 
 
 --
 -- Data for table adm_rooms
 --
 
-INSERT INTO %PREFIX%_rooms (room_id, room_name, room_description, room_capacity, room_overhang, room_usr_id_create, room_timestamp_create, room_usr_id_change, room_timestamp_change) VALUES
-(1, 'DEMO_ROOM_MEETING_ROOM', 'DEMO_ROOM_MEETING_ROOM_CONTENT', 15, NULL, 1, '2011-04-07 19:15:08', NULL, NULL),
-(2, 'DEMO_ROOM_FUNCTION_ROOM', 'DEMO_ROOM_FUNCTION_ROOM_CONTENT', 65, 15, 1, '2012-01-015 10:03:38', NULL, NULL);
+INSERT INTO %PREFIX%_rooms (room_id, room_uuid, room_name, room_description, room_capacity, room_overhang, room_usr_id_create, room_timestamp_create, room_usr_id_change, room_timestamp_change) VALUES
+(1, 'fcc15de8-0c3c-4e2a-a3a5-df20f0fee1c3', 'DEMO_ROOM_MEETING_ROOM', 'DEMO_ROOM_MEETING_ROOM_CONTENT', 15, NULL, 1, '2011-04-07 19:15:08', NULL, NULL),
+(2, '0faef968-2a2d-41bd-a668-911e322b4e50', 'DEMO_ROOM_FUNCTION_ROOM', 'DEMO_ROOM_FUNCTION_ROOM_CONTENT', 65, 15, 1, '2012-01-015 10:03:38', NULL, NULL);
 
 --
 -- Data for table adm_sessions
 --
 
-INSERT INTO %PREFIX%_sessions (ses_id, ses_usr_id, ses_org_id, ses_session_id, ses_begin, ses_timestamp, ses_ip_address, ses_binary, ses_renew) VALUES
-(1, NULL, 1, 'a8c1eedddd38a6806c81a775da97a16b', '2012-01-08 11:14:25', '2012-01-08 11:14:25', '127.0.0.1', NULL, 0);
+INSERT INTO %PREFIX%_sessions (ses_id, ses_usr_id, ses_org_id, ses_session_id, ses_begin, ses_timestamp, ses_ip_address, ses_binary, ses_reload) VALUES
+(1, NULL, 1, 'a8c1eedddd38a6806c81a775da97a16b', '2012-01-08 11:14:25', '2012-01-08 11:14:25', '127.0.0.1', NULL, false);
 
 --
 -- Data for table adm_texts
@@ -1122,12 +1179,12 @@ INSERT INTO %PREFIX%_texts (txt_id, txt_org_id, txt_name, txt_text) VALUES
 (1, 1, 'SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REGISTRATION_USER'),
 (2, 1, 'SYSMAIL_REGISTRATION_WEBMASTER', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
 (3, 1, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_NEW_PASSWORD'),
-(4, 1, 'SYSMAIL_ACTIVATION_LINK', 'SYS_SYSMAIL_ACTIVATION_LINK'),
+(4, 1, 'SYSMAIL_PASSWORD_RESET', 'SYS_SYSMAIL_PASSWORD_RESET'),
 (5, 1, 'SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_REFUSE_REGISTRATION'),
 (101, 2, 'SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REGISTRATION_USER'),
 (102, 2, 'SYSMAIL_REGISTRATION_WEBMASTER', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
 (103, 2, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_NEW_PASSWORD'),
-(104, 2, 'SYSMAIL_ACTIVATION_LINK', 'SYS_SYSMAIL_ACTIVATION_LINK'),
+(104, 2, 'SYSMAIL_PASSWORD_RESET', 'SYS_SYSMAIL_PASSWORD_RESET'),
 (105, 2, 'SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_REFUSE_REGISTRATION');
 
 
