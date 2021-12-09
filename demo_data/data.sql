@@ -238,6 +238,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (2600, 1, 'documents_files_enable_module', '1'),
     (2700, 1, 'enable_ecard_module', '1'),
     (2950, 1, 'enable_email_notification', '0'),
+    (2960, 1, 'enable_email_changenotification', '0'),
     (3100, 1, 'enable_gbook_comments4all', '0'),
     (3150, 1, 'enable_guestbook_moderation', '0'),
     (3200, 1, 'enable_guestbook_module', '2'),
@@ -246,7 +247,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (3500, 1, 'enable_mail_captcha', '1'),
     (3600, 1, 'enable_mail_module', '1'),
     (3610, 1, 'enable_pm_module', '1'),
-    (3620, 1, 'enable_chat_module', '1'),
     (3700, 1, 'enable_password_recovery', '1'),
     (3800, 1, 'enable_photo_module', '1'),
     (3900, 1, 'enable_registration_captcha', '1'),
@@ -254,6 +254,8 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (4100, 1, 'enable_rss', '1'),
     (4200, 1, 'enable_system_mails', '0'),
     (4300, 1, 'enable_weblinks_module', '1'),
+    (4304, 1, 'category_report_enable_module', '1'),
+    (4305, 1, 'category_report_default_configuration', '1'),
     (4310, 1, 'dates_ical_days_past', '60'),
     (4320, 1, 'dates_ical_days_future', '365'),
     (4330, 1, 'dates_view', 'detail'),
@@ -283,6 +285,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (6925, 1, 'mail_into_to', '0'),
     (6927, 1, 'mail_show_former', '1'),
     (6930, 1, 'mail_max_receiver', '4'),
+    (6940, 1, 'mail_save_attachments', '0'),
     (7000, 1, 'mail_sendmail_address', ''),
     (7010, 1, 'mail_sendmail_name', ''),
     (7020, 1, 'mail_send_method', 'phpmail'),
@@ -298,7 +301,8 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (7200, 1, 'max_file_upload_size', '3'),
     (7250, 1, 'members_users_per_page', '25'),
     (7251, 1, 'members_days_field_history', '365'),
-    (7252, 1, 'members_show_all_users', '1'),
+    (7252, 1, 'members_list_configuration', '15'),
+    (7253, 1, 'members_show_all_users', '1'),
     (7300, 1, 'photo_image_text', '© demo.admidio.org'),
     (7305, 1, 'photo_image_text_size', '40'),
     (7350, 1, 'photo_albums_per_page', '24'),
@@ -317,6 +321,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (8600, 1, 'profile_show_former_roles', '1'),
     (8700, 1, 'profile_show_extern_roles', '1'),
     (8800, 1, 'registration_enable_module', '1'),
+    (8810, 1, 'registration_adopt_all_data', '0'),
     (8900, 1, 'theme', 'simple'),
     (9000, 1, 'weblinks_per_page', '0'),
     (9100, 1, 'weblinks_redirect_seconds', '10'),
@@ -351,6 +356,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (26001, 2, 'documents_files_enable_module', '1'),
     (27001, 2, 'enable_ecard_module', '1'),
     (29501, 2, 'enable_email_notification', '0'),
+    (29510, 2, 'enable_email_changenotification', '0'),
     (31001, 2, 'enable_gbook_comments4all', '0'),
     (31501, 2, 'enable_guestbook_moderation', '0'),
     (32001, 2, 'enable_guestbook_module', '2'),
@@ -359,7 +365,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (35001, 2, 'enable_mail_captcha', '1'),
     (36001, 2, 'enable_mail_module', '1'),
     (36010, 2, 'enable_pm_module', '0'),
-    (36020, 2, 'enable_chat_module', '0'),
     (37001, 2, 'enable_password_recovery', '1'),
     (38001, 2, 'enable_photo_module', '1'),
     (39001, 2, 'enable_registration_captcha', '1'),
@@ -367,6 +372,8 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (41001, 2, 'enable_rss', '1'),
     (42001, 2, 'enable_system_mails', '0'),
     (43001, 2, 'enable_weblinks_module', '1'),
+    (43050, 2, 'category_report_enable_module', '1'),
+    (43055, 2, 'category_report_default_configuration', '2'),
     (43100, 2, 'dates_ical_days_past', '60'),
     (43200, 2, 'dates_ical_days_future', '365'),
     (43300, 2, 'dates_view', 'detail'),
@@ -396,6 +403,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (69250, 2, 'mail_into_to', '0'),
     (69270, 2, 'mail_show_former', '1'),
     (69300, 2, 'mail_max_receiver', '1'),
+    (69400, 2, 'mail_save_attachments', '0'),
     (70001, 2, 'mail_sendmail_address', ''),
     (70010, 2, 'mail_sendmail_name', ''),
     (70020, 2, 'mail_send_method', 'phpmail'),
@@ -411,6 +419,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (72001, 2, 'max_file_upload_size', '3'),
     (72500, 2, 'members_users_per_page', '25'),
     (72510, 2, 'members_days_field_history', '365'),
+    (72515, 2, 'members_list_configuration', '16'),
     (72520, 2, 'members_show_all_users', '0'),
     (73000, 2, 'photo_albums_per_page', '24'),
     (73025, 2, 'photo_image_text', '© demo.admidio.org'),
@@ -430,6 +439,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (86001, 2, 'profile_show_former_roles', '1'),
     (87001, 2, 'profile_show_extern_roles', '1'),
     (88001, 2, 'registration_enable_module', '1'),
+    (88010, 2, 'registration_adopt_all_data', '0'),
     (89001, 2, 'theme', 'simple'),
     (90001, 2, 'weblinks_per_page', '0'),
     (91001, 2, 'weblinks_redirect_seconds', '10'),
@@ -480,7 +490,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 --
 
 INSERT INTO %PREFIX%_categories (cat_id, cat_uuid, cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create, cat_usr_id_change, cat_timestamp_change) VALUES
-(1,   '4404540e-bdad-46b7-8c52-f30e7ab51675', NULL, 'USF', 'MASTER_DATA', 'SYS_MASTER_DATA', true, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(1,   '4404540e-bdad-46b7-8c52-f30e7ab51675', NULL, 'USF', 'BASIC_DATA', 'SYS_BASIC_DATA', true, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (2,   'f8e89d85-325d-4620-a7d4-36b42ae06f45', NULL, 'USF', 'SOCIAL_NETWORKS', 'SYS_SOCIAL_NETWORKS', false, false, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
 (3,   'dd483a2f-c8dd-47da-a4d1-cb97d58a62a0', 1, 'ROL', 'COMMON', 'SYS_COMMON', false, false, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (4,   '1f3d2f16-e81d-4f63-9582-2e9e4419aba8', 1, 'ROL', 'GROUPS', 'INS_GROUPS', false, true, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
@@ -646,6 +656,15 @@ INSERT INTO %PREFIX%_announcements (ann_id, ann_uuid, ann_cat_id, ann_headline, 
 
 
 --
+-- Data for table adm_category_report
+--
+
+INSERT INTO %PREFIX%_category_report (crt_id, crt_org_id, crt_name, crt_col_fields, crt_selection_role, crt_selection_cat, crt_number_col) VALUES
+(1, 1, 'SYS_GENERAL_ROLE_ASSIGNMENT', 'p2,p1,p3,p5,r1', NULL, NULL, 0),
+(2, 2, 'SYS_GENERAL_ROLE_ASSIGNMENT', 'p2,p1,p3,p5,r6', NULL, NULL, 0);
+
+
+--
 -- Data for table adm_dates
 --
 
@@ -737,7 +756,9 @@ INSERT INTO %PREFIX%_lists (lst_id, lst_uuid, lst_org_id, lst_usr_id, lst_name, 
 (11, '77afdf9a-1d25-4993-8680-6fc556c2972c', 2, 1, 'SYS_CONTACT_DETAILS', '2012-02-27 21:50:57',  true),
 (12, 'a834cebe-3592-4f05-8c9b-73551615f570', 2, 1, 'INS_MEMBERSHIP', '2012-02-27 21:50:57',  true),
 (13, 'afc87e5f-fffa-46f3-82d1-6e8c65472ae4', 1, 1, 'SYS_PARTICIPANTS', '2018-04-05 21:50:57',  true),
-(14, 'a94a023b-56fa-4d6e-b05e-267a3d37ba09', 2, 1, 'SYS_PARTICIPANTS', '2018-04-05 21:50:57',  true);
+(14, 'a94a023b-56fa-4d6e-b05e-267a3d37ba09', 2, 1, 'SYS_PARTICIPANTS', '2018-04-05 21:50:57',  true),
+(15, 'd39d0642-c367-43ca-bc73-578219febbc6', 1, 1, 'SYS_USER_MANAGEMENT', '2021-11-13 15:08:45',  true),
+(16, '6efad974-5b15-4bb7-a1f8-350fa4b7a452', 2, 1, 'SYS_USER_MANAGEMENT', '2021-11-13 15:08:45',  true);
 
 --
 -- Data for table adm_list_columns
@@ -823,7 +844,19 @@ INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, l
 (133, 14, 2, 2, NULL, NULL, NULL),
 (134, 14, 3, NULL, 'mem_approved', NULL, NULL),
 (135, 14, 4, NULL, 'mem_comment', NULL, NULL),
-(136, 14, 5, NULL, 'mem_count_guests', NULL, NULL);
+(136, 14, 5, NULL, 'mem_count_guests', NULL, NULL),
+(140, 15, 1, 1, NULL, 'ASC', NULL),
+(141, 15, 2, 2, NULL, 'ASC', NULL),
+(142, 15, 3, NULL, 'usr_login_name', NULL, NULL),
+(143, 15, 4, 11, NULL, NULL, NULL),
+(144, 15, 5, 10, NULL, NULL, NULL),
+(145, 15, 6, 5, NULL, NULL, NULL),
+(150, 16, 1, 1, NULL, 'ASC', NULL),
+(151, 16, 2, 2, NULL, 'ASC', NULL),
+(152, 16, 3, NULL, 'usr_login_name', NULL, NULL),
+(153, 16, 4, 11, NULL, NULL, NULL),
+(154, 16, 5, 10, NULL, NULL, NULL),
+(155, 16, 6, 5, NULL, NULL, NULL);
 
 --
 -- Data for table adm_members
@@ -1146,12 +1179,12 @@ INSERT INTO %PREFIX%_texts (txt_id, txt_org_id, txt_name, txt_text) VALUES
 (1, 1, 'SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REGISTRATION_USER'),
 (2, 1, 'SYSMAIL_REGISTRATION_WEBMASTER', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
 (3, 1, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_NEW_PASSWORD'),
-(4, 1, 'SYSMAIL_ACTIVATION_LINK', 'SYS_SYSMAIL_ACTIVATION_LINK'),
+(4, 1, 'SYSMAIL_PASSWORD_RESET', 'SYS_SYSMAIL_PASSWORD_RESET'),
 (5, 1, 'SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_REFUSE_REGISTRATION'),
 (101, 2, 'SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REGISTRATION_USER'),
 (102, 2, 'SYSMAIL_REGISTRATION_WEBMASTER', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
 (103, 2, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_NEW_PASSWORD'),
-(104, 2, 'SYSMAIL_ACTIVATION_LINK', 'SYS_SYSMAIL_ACTIVATION_LINK'),
+(104, 2, 'SYSMAIL_PASSWORD_RESET', 'SYS_SYSMAIL_PASSWORD_RESET'),
 (105, 2, 'SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_REFUSE_REGISTRATION');
 
 
