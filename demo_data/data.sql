@@ -1053,31 +1053,53 @@ INSERT INTO %PREFIX%_members (mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begi
 -- Data for table adm_messages
 --
 
-INSERT INTO %PREFIX%_messages (msg_id, msg_uuid, msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read) VALUES
-(1, '39a0e3e2-8163-4cbf-bb9b-ac87dbf8ab77', 'EMAIL', 'DEMO_MSG_EVENTS_HOMEPAGE', 1, '313 | 332 | 355 | 354', '2021-01-20 14:58:16', 0),
-(2, 'd12a108d-0bc7-468c-86a5-b05626a21f15', 'EMAIL', 'DEMO_MSG_NEW_MODULE', 1, 'groupID: 3', '2021-02-01 16:07:01', 0),
-(3, '479fb7ae-52eb-401e-aba7-a3ca74f69c32', 'EMAIL', 'DEMO_MSG_NEW_TRAINING_TIMES', 1, 'groupID: 4 | groupID: 5 | 354', '2021-02-03 12:08:02', 0),
-(4, '42fb2917-a25b-4d1f-92ae-2cc837aae4a6', 'EMAIL', 'DEMO_MSG_INVITATION_MEMBERS_MEETING', 354, 'groupID: 2-2 | 1', '2021-02-03 05:11:37', 0),
-(5, '9be7e4cc-4cf9-4945-84e8-0cb387063501', 'PM', 'DEMO_MSG_RESERVE_ROOM', 354, true, '2021-02-02 09:12:35', 1),
-(6, '62d38fd3-b392-43f5-983a-bf563e780c07', 'PM', 'DEMO_MSG_MEMBERSHIP_FEE_MISSING', 354, '355', '2021-02-03 05:14:22', 1),
-(7, '693a032a-fee7-4a03-8e21-05647b6b6848', 'EMAIL', 'DEMO_MSG_TRAINING', 355, '216 | 227', '2021-02-03 05:16:19', 0),
-(8, 'c727b421-e303-4381-b097-9f6eeb56ca39', 'PM', 'DEMO_MSG_NO_ACCESS_DOCUMENTS', 1, '355', '2021-02-03 05:18:18', 1);
+INSERT INTO %PREFIX%_messages (msg_id, msg_uuid, msg_type, msg_subject, msg_usr_id_sender, msg_timestamp, msg_read) VALUES
+(1, '39a0e3e2-8163-4cbf-bb9b-ac87dbf8ab77', 'EMAIL', 'DEMO_MSG_EVENTS_HOMEPAGE', 1, '2021-01-20 14:58:16', 0),
+(2, 'd12a108d-0bc7-468c-86a5-b05626a21f15', 'EMAIL', 'DEMO_MSG_NEW_MODULE', 1, '2021-02-01 16:07:01', 0),
+(3, '479fb7ae-52eb-401e-aba7-a3ca74f69c32', 'EMAIL', 'DEMO_MSG_NEW_TRAINING_TIMES', 1, '2021-02-03 12:08:02', 0),
+(4, '42fb2917-a25b-4d1f-92ae-2cc837aae4a6', 'EMAIL', 'DEMO_MSG_INVITATION_MEMBERS_MEETING', 354, '2021-02-03 05:11:37', 0),
+(5, '9be7e4cc-4cf9-4945-84e8-0cb387063501', 'PM', 'DEMO_MSG_RESERVE_ROOM', 354, '2021-02-02 09:12:35', 1),
+(6, '62d38fd3-b392-43f5-983a-bf563e780c07', 'PM', 'DEMO_MSG_MEMBERSHIP_FEE_MISSING', 354, '2021-02-03 05:14:22', 1),
+(7, '693a032a-fee7-4a03-8e21-05647b6b6848', 'EMAIL', 'DEMO_MSG_TRAINING', 355, '2021-02-03 05:16:19', 0),
+(8, 'c727b421-e303-4381-b097-9f6eeb56ca39', 'PM', 'DEMO_MSG_NO_ACCESS_DOCUMENTS', 1, '2021-02-03 05:18:18', 1);
 
 
 --
 -- Data for table adm_messages_content
 --
 
-INSERT INTO %PREFIX%_messages_content (msc_id, msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp) VALUES
-(1, 1, 1, 1, 'DEMO_MSG_EVENTS_HOMEPAGE_CONTENT', '2021-02-03 04:58:16'),
-(2, 2, 1, 1, 'DEMO_MSG_NEW_MODULE_CONTENT', '2021-02-03 05:07:01'),
-(3, 3, 1, 1, 'DEMO_MSG_NEW_TRAINING_TIMES_CONTENT', '2021-02-03 05:08:02'),
-(4, 4, 1, 354, 'DEMO_MSG_INVITATION_MEMBERS_MEETING_CONTENT', '2021-02-03 05:11:37'),
-(5, 5, 1, 354, 'DEMO_MSG_RESERVE_ROOM_CONTENT', '2021-02-03 05:12:35'),
-(6, 6, 1, 354, 'DEMO_MSG_MEMBERSHIP_FEE_MISSING_CONTENT', '2021-02-03 05:14:22'),
-(7, 7, 1, 355, 'DEMO_MSG_TRAINING_CONTENT', '2021-02-03 05:16:19'),
-(8, 8, 1, 355, 'DEMO_MSG_NO_ACCESS_DOCUMENTS_CONTENT1', '2021-02-03 05:17:23'),
-(9, 8, 2, 1, 'DEMO_MSG_NO_ACCESS_DOCUMENTS_CONTENT2', '2021-02-03 05:18:18');
+INSERT INTO %PREFIX%_messages_content (msc_id, msc_msg_id, msc_usr_id, msc_message, msc_timestamp) VALUES
+(1, 1, 1, 'DEMO_MSG_EVENTS_HOMEPAGE_CONTENT', '2021-02-03 04:58:16'),
+(2, 2, 1, 'DEMO_MSG_NEW_MODULE_CONTENT', '2021-02-03 05:07:01'),
+(3, 3, 1, 'DEMO_MSG_NEW_TRAINING_TIMES_CONTENT', '2021-02-03 05:08:02'),
+(4, 4, 354, 'DEMO_MSG_INVITATION_MEMBERS_MEETING_CONTENT', '2021-02-03 05:11:37'),
+(5, 5, 354, 'DEMO_MSG_RESERVE_ROOM_CONTENT', '2021-02-03 05:12:35'),
+(6, 6, 354, 'DEMO_MSG_MEMBERSHIP_FEE_MISSING_CONTENT', '2021-02-03 05:14:22'),
+(7, 7, 355, 'DEMO_MSG_TRAINING_CONTENT', '2021-02-03 05:16:19'),
+(8, 8, 355, 'DEMO_MSG_NO_ACCESS_DOCUMENTS_CONTENT1', '2021-02-03 05:17:23'),
+(9, 8, 1, 'DEMO_MSG_NO_ACCESS_DOCUMENTS_CONTENT2', '2021-02-03 05:18:18');
+
+
+--
+-- Data for table adm_messages_recipients
+--
+
+INSERT INTO %PREFIX%_messages_recipients (msr_id, msr_msg_id, msr_rol_id, msr_usr_id, msr_role_mode) VALUES
+(1, 1, NULL, 313, 0),
+(2, 1, NULL, 332, 0),
+(3, 1, NULL, 355, 0),
+(4, 1, NULL, 354, 0),
+(5, 2, 3, NULL, 0),
+(6, 3, 4, NULL, 0),
+(7, 3, 5, NULL, 0),
+(8, 3, NULL, 354, 0),
+(9, 4, 2, NULL, 2),
+(10, 4, NULL, 1, 0),
+(11, 5, NULL, 1, 0),
+(12, 6, NULL, 355, 0),
+(13, 7, NULL, 216, 0),
+(14, 7, NULL, 227, 0),
+(15, 8, NULL, 355, 0);
 
 
 --
@@ -1094,27 +1116,27 @@ INSERT INTO %PREFIX%_registrations (reg_id, reg_org_id, reg_usr_id, reg_timestam
 -- Data for table adm_photos
 --
 
-INSERT INTO %PREFIX%_photos (pho_id, pho_org_id, pho_quantity, pho_name, pho_begin, pho_end, pho_description, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
-(1, 1, 0, 'DEMO_PHO_CROATIA', '2009-10-05', '2009-10-11', 'DEMO_PHO_CROATIA_DESC', 'DEMO_PHO_STEVEN_SMITH', false, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
-(2, 1, 3, 'DEMO_PHO_PLITVICE_LAKES', '2009-10-05', '2009-10-07', NULL, 'DEMO_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
-(3, 1, 3, 'Krka', '2009-10-08', '2009-10-11', NULL, 'DEMO_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
-(4, 1, 5, 'Machu Picchu', '2009-09-14', '2009-09-17', 'DEMO_PHO_MACHU_PICCHU_DESC', 'Admin', false, NULL, 1, '2009-10-23 18:20:50', NULL, NULL);
+INSERT INTO %PREFIX%_photos (pho_id, pho_org_id, pho_uuid, pho_quantity, pho_name, pho_begin, pho_end, pho_description, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
+(1, 1, 'b4aaf3eb-8735-45b3-a2f0-f2a7e9d289eb', 0, 'DEMO_PHO_CROATIA', '2009-10-05', '2009-10-11', 'DEMO_PHO_CROATIA_DESC', 'DEMO_PHO_STEVEN_SMITH', false, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
+(2, 1, '3d45f9cf-957e-41be-bb48-f452429fcd05', 3, 'DEMO_PHO_PLITVICE_LAKES', '2009-10-05', '2009-10-07', NULL, 'DEMO_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
+(3, 1, 'bf174cf8-f190-4898-bb3e-af881ad68780', 3, 'Krka', '2009-10-08', '2009-10-11', NULL, 'DEMO_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
+(4, 1, 'f6af3421-f80c-4145-89f2-75bec24640b8', 5, 'Machu Picchu', '2009-09-14', '2009-09-17', 'DEMO_PHO_MACHU_PICCHU_DESC', 'Admin', false, NULL, 1, '2009-10-23 18:20:50', NULL, NULL);
 
 
 --
 -- Data for table adm_rooms
 --
 
-INSERT INTO %PREFIX%_rooms (room_id, room_name, room_description, room_capacity, room_overhang, room_usr_id_create, room_timestamp_create, room_usr_id_change, room_timestamp_change) VALUES
-(1, 'DEMO_ROOM_MEETING_ROOM', 'DEMO_ROOM_MEETING_ROOM_CONTENT', 15, NULL, 1, '2011-04-07 19:15:08', NULL, NULL),
-(2, 'DEMO_ROOM_FUNCTION_ROOM', 'DEMO_ROOM_FUNCTION_ROOM_CONTENT', 65, 15, 1, '2012-01-015 10:03:38', NULL, NULL);
+INSERT INTO %PREFIX%_rooms (room_id, room_uuid, room_name, room_description, room_capacity, room_overhang, room_usr_id_create, room_timestamp_create, room_usr_id_change, room_timestamp_change) VALUES
+(1, 'fcc15de8-0c3c-4e2a-a3a5-df20f0fee1c3', 'DEMO_ROOM_MEETING_ROOM', 'DEMO_ROOM_MEETING_ROOM_CONTENT', 15, NULL, 1, '2011-04-07 19:15:08', NULL, NULL),
+(2, '0faef968-2a2d-41bd-a668-911e322b4e50', 'DEMO_ROOM_FUNCTION_ROOM', 'DEMO_ROOM_FUNCTION_ROOM_CONTENT', 65, 15, 1, '2012-01-015 10:03:38', NULL, NULL);
 
 --
 -- Data for table adm_sessions
 --
 
-INSERT INTO %PREFIX%_sessions (ses_id, ses_usr_id, ses_org_id, ses_session_id, ses_begin, ses_timestamp, ses_ip_address, ses_binary, ses_renew) VALUES
-(1, NULL, 1, 'a8c1eedddd38a6806c81a775da97a16b', '2012-01-08 11:14:25', '2012-01-08 11:14:25', '127.0.0.1', NULL, 0);
+INSERT INTO %PREFIX%_sessions (ses_id, ses_usr_id, ses_org_id, ses_session_id, ses_begin, ses_timestamp, ses_ip_address, ses_binary, ses_reload) VALUES
+(1, NULL, 1, 'a8c1eedddd38a6806c81a775da97a16b', '2012-01-08 11:14:25', '2012-01-08 11:14:25', '127.0.0.1', NULL, false);
 
 --
 -- Data for table adm_texts
