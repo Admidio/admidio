@@ -405,6 +405,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'TableMembers' => __DIR__ . '/../../../..' . '/adm_program/system/classes/TableMembers.php',
         'TableMenu' => __DIR__ . '/../../../..' . '/adm_program/system/classes/TableMenu.php',
         'TableMessage' => __DIR__ . '/../../../..' . '/adm_program/system/classes/TableMessage.php',
+        'TableMessageContent' => __DIR__ . '/../../../..' . '/adm_program/system/classes/TableMessageContent.php',
         'TablePhotos' => __DIR__ . '/../../../..' . '/adm_program/system/classes/TablePhotos.php',
         'TableRoles' => __DIR__ . '/../../../..' . '/adm_program/system/classes/TableRoles.php',
         'TableRooms' => __DIR__ . '/../../../..' . '/adm_program/system/classes/TableRooms.php',

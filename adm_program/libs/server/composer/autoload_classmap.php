@@ -264,6 +264,7 @@ return array(
     'TableMembers' => $baseDir . '/adm_program/system/classes/TableMembers.php',
     'TableMenu' => $baseDir . '/adm_program/system/classes/TableMenu.php',
     'TableMessage' => $baseDir . '/adm_program/system/classes/TableMessage.php',
+    'TableMessageContent' => $baseDir . '/adm_program/system/classes/TableMessageContent.php',
     'TablePhotos' => $baseDir . '/adm_program/system/classes/TablePhotos.php',
     'TableRoles' => $baseDir . '/adm_program/system/classes/TableRoles.php',
     'TableRooms' => $baseDir . '/adm_program/system/classes/TableRooms.php',
