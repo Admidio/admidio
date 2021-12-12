@@ -36,14 +36,15 @@ class TableMessageContent extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        global $gSettingsManager;
         if ($columnName === 'msc_message') {
-            if ($gSettingsManager->getBool('mail_html_registered_users')) {
-                $value = htmlspecialchars_decode(stripslashes($row['msc_message']));
-            } elseif ($format === 'database') {
+            if ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['msc_message']));
+            } elseif($this->dbColumns['msc_message'] != strip_tags($this->dbColumns['msc_message'])) {
+                // text contains html
+                $value = htmlspecialchars_decode(stripslashes($this->dbColumns['msc_message']));
             } else {
-                $value = str_replace('\\n', '<br />', $row['msc_message']);
+                // simple plain text than replace the line breaks
+                $value = nl2br($this->dbColumns['msc_message']);
             }
 
             return $value;
