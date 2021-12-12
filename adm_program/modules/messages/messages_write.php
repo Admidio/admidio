@@ -578,22 +578,23 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
 }
 
 if (isset($messageStatement)) {
+    $messageContent = new TableMessageContent($gDb);
+
     while ($row = $messageStatement->fetch()) {
-        $date = new \DateTime($row['msc_timestamp']);
-        $messageText = htmlspecialchars_decode(stripslashes($row['msc_message']));
+        $messageContent->setArray($row);
         $messageFooter = '';
 
         if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
-            if ((int) $row['msc_usr_id'] === $gCurrentUserId) {
+            if ($messageContent->getValue('msc_usr_id') === $gCurrentUserId) {
                 $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
             } else {
                 $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
             }
 
-            $messageHeader = $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($sentUser, $date->format($gSettingsManager->getString('system_date')), $date->format($gSettingsManager->getString('system_time'))));
+            $messageHeader = $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($sentUser, $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'))));
             $messageIcon   = 'fa-comment-alt';
         } else {
-            $messageHeader = $date->format($gSettingsManager->getString('system_date')) . ' ' . $date->format($gSettingsManager->getString('system_time')) .'<br />' . $gL10n->get('SYS_TO') . ': ' . $message->getRecipientsNamesString();
+            $messageHeader = $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) .'<br />' . $gL10n->get('SYS_TO') . ': ' . $message->getRecipientsNamesString();
             $messageIcon   = 'fa-envelope';
             $attachments   = $message->getAttachmentsInformations();
 
@@ -615,7 +616,7 @@ if (isset($messageStatement)) {
             <div class="card-header">
                 <i class="fas ' . $messageIcon . '"></i>' . $messageHeader . '
             </div>
-            <div class="card-body">' . $messageText . '</div>
+            <div class="card-body">' . $messageContent->getValue('msc_message') . '</div>
             ' . $messageFooter . '
         </div>');
     }
