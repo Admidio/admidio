@@ -560,8 +560,7 @@ class ListConfiguration extends TableLists
                     $arrOrderByColumns[] = ' CAST('.$dbColumnName.') '.$lscSort;
                 } elseif (strpos($dbColumnName, ' AS') > 0) {
                     $arrOrderByColumns[] = substr($dbColumnName, 0, strpos($dbColumnName, ' AS')).' '.$lscSort;
-                }
-                else {
+                } else {
                     $arrOrderByColumns[] = $dbColumnName.' '.$lscSort;
                 }
             }
@@ -632,7 +631,12 @@ class ListConfiguration extends TableLists
                 }
 
                 // now transform condition into SQL
-                $sqlWhere .= $parser->makeSqlStatement($value, $dbColumnName, $type, $gProfileFields->getPropertyById($lscUsfId, 'usf_name')); // TODO Exception handling
+                if (strpos($dbColumnName, ' AS') > 0) {
+                    $columnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS')).' '.$lscSort;
+                } else {
+                    $columnName = $dbColumnName;
+                }
+                $sqlWhere .= $parser->makeSqlStatement($value, $columnName, $type, $gProfileFields->getPropertyById($lscUsfId, 'usf_name')); // TODO Exception handling
             }
         }
 
