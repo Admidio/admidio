@@ -302,7 +302,7 @@ class TableMessage extends TableAccess
      */
     public function getConversation($msgId)
     {
-        $sql = 'SELECT msc_usr_id, msc_message, msc_timestamp
+        $sql = 'SELECT msc_id, msc_usr_id, msc_message, msc_timestamp
                   FROM '. TBL_MESSAGES_CONTENT. '
                  WHERE msc_msg_id = ? -- $msgId
               ORDER BY msc_id DESC';
