@@ -152,7 +152,7 @@ $form->addMultilineTextInput(
     $gL10n->get('SYS_DESCRIPTION'),
     $role->getValue('rol_description'),
     3,
-    array('property' => ($eventRole ? HtmlForm::FIELD_READONLY : HtmlForm::FIELD_REQUIRED), 'maxLength' => 4000)
+    array('property' => ($eventRole ? HtmlForm::FIELD_READONLY : HtmlForm::FIELD_DEFAULT), 'maxLength' => 4000)
 );
 $form->addSelectBoxForCategories(
     'rol_cat_id',
