@@ -37,7 +37,7 @@ $getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
 unset($_SESSION['photo_album_request'], $_SESSION['ecard_request']);
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
-if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid) {
+if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid) {
     $photoAlbum =& $_SESSION['photo_album'];
 } else {
     // einlesen des Albums falls noch nicht in Session gespeichert
@@ -161,7 +161,7 @@ if ($gSettingsManager->getBool('photo_download_enabled') && $photoAlbum->getValu
 
 // Breadcrump bauen
 $navilink = '';
-$phoParentId = (int) $photoAlbum->getValue('pho_pho_id_parent');
+$phoParentId = $photoAlbum->getValue('pho_pho_id_parent');
 $photoAlbumParent = new TablePhotos($gDb);
 
 while ($phoParentId > 0) {
@@ -169,10 +169,10 @@ while ($phoParentId > 0) {
     $photoAlbumParent->readDataById($phoParentId);
 
     // create link to parent photo album
-    $navilink = '<li class="breadcrumb-item"><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => (int) $photoAlbumParent->getValue('pho_uuid'))).'">'.
+    $navilink = '<li class="breadcrumb-item"><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $photoAlbumParent->getValue('pho_uuid'))).'">'.
         $photoAlbumParent->getValue('pho_name') . '</a></li>' . $navilink;
 
-    $phoParentId = (int) $photoAlbumParent->getValue('pho_pho_id_parent');
+    $phoParentId = $photoAlbumParent->getValue('pho_pho_id_parent');
 }
 
 if ($getPhotoUuid !== '') {
@@ -382,7 +382,7 @@ if ($albumsCount > 0) {
         $childPhotoAlbum->setArray($albumList[$x]);
 
         // folder of the album
-        $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $childPhotoAlbum->getValue('pho_id');
+        $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $childPhotoAlbum->getValue('pho_id');
 
         // show album if album is not locked or it has child albums or the user has the photo module edit right
         if ((is_dir($albumFolder) && $childPhotoAlbum->getValue('pho_locked') == 0)
