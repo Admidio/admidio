@@ -187,7 +187,7 @@ if ($getViewMode === 'html') {
             $gDb,
             'DAT',
             HtmlForm::SELECT_BOX_MODUS_FILTER,
-            array('defaultValue' => (int) $dates->getParameter('cat_id'))
+            array('defaultValue' => $dates->getParameter('cat_id'))
         );
         $form->addInput(
             'date_from',
@@ -280,7 +280,7 @@ if ($datesResult['totalCount'] === 0) {
         $date->setArray($row);
 
         $dateUuid     = $date->getValue('dat_uuid');
-        $dateRolId    = (int) $date->getValue('dat_rol_id');
+        $dateRolId    = $date->getValue('dat_rol_id');
         $dateHeadline = $date->getValue('dat_headline');
 
         // initialize all output elements
@@ -391,7 +391,7 @@ if ($datesResult['totalCount'] === 0) {
         }
 
         // if active, then show room information
-        $dateRoomId = (int) $date->getValue('dat_room_id');
+        $dateRoomId = $date->getValue('dat_room_id');
         if ($dateRoomId > 0) {
             $room = new TableRooms($gDb, $dateRoomId);
 
@@ -404,7 +404,7 @@ if ($datesResult['totalCount'] === 0) {
         }
 
         // check the rights if the user is allowed to view the participiants or he is allowed to participate
-        if ($gCurrentUser->hasRightViewRole((int) $date->getValue('dat_rol_id'))
+        if ($gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id'))
             || $row['mem_leader'] == 1
             || $gCurrentUser->editDates()
             || $date->allowedToParticipate()) {
@@ -748,7 +748,7 @@ if ($datesResult['totalCount'] === 0) {
                 case 'room':
                     if ($dateRolId > 0) {
                         if ($date->getValue('dat_max_members') > 0) {
-                            $htmlParticipants = $outputNumberMembers . ' / ' . (int) $date->getValue('dat_max_members');
+                            $htmlParticipants = $outputNumberMembers . ' / ' . $date->getValue('dat_max_members');
                         } else {
                             $htmlParticipants = $outputNumberMembers . '&nbsp;';
                         }
@@ -767,7 +767,7 @@ if ($datesResult['totalCount'] === 0) {
 
                     if (is_array($participantsArray)) {
                         // Only show participants if user has right to view the list, is leader or has permission to create/edit events
-                        if ($gCurrentUser->hasRightViewRole((int) $date->getValue('dat_rol_id'))
+                        if ($gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id'))
                             || $row['mem_leader'] == 1
                             || $gCurrentUser->editDates()) {
                             foreach ($participantsArray as $participant) {
