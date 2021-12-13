@@ -21,7 +21,7 @@ $plg_show_names_extern = 0;
 // 1 - (Default) First name Last name  (John Doe)
 // 2 - Last name, First name (Doe, John)
 // 3 - First name (John)
-// 4 - Loginname (Johni)
+// 4 - Login name (John)
 $plg_show_names = 1;
 
 // Show the age of the birthday person (only for registered users)
@@ -66,7 +66,7 @@ $plg_link_target = '_self';
 $plg_rolle_sql = array();
 
 // In which sort order should the birthdays be listed?
-// The values could be ascendend = 'ASC' or descendend = 'DESC'
+// The values could be ascending = 'ASC' or descending = 'DESC'
 $plg_sort_sql = 'DESC';
 
 // Should the header of the plugin be displayed?
