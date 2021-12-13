@@ -249,7 +249,7 @@ class Organization extends TableAccess
         $roleMember->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_MEMBER'));
         $roleMember->setValue('rol_mail_this_role', 2);
         $roleMember->setValue('rol_profile', 1);
-        $roleMember->setValue('rol_this_list_view', 1);
+        $roleMember->setValue('rol_this_list_view', 0);
         $roleMember->setValue('rol_default_registration', 1);
         $roleMember->save();
 
