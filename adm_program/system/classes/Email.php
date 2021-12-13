@@ -451,7 +451,7 @@ class Email extends PHPMailer
      * @param string $senderEmail The email address of the sender
      * @param string $recipients  List with firstname and lastname of all recipients of this mail
      */
-    public function setTemplateText($text, $senderName, $senderEmail, $recipients)
+    public function setTemplateText($text, $senderName, $senderEmail, $senderUuid, $recipients)
     {
         global $gValidLogin, $gCurrentOrganization, $gSettingsManager, $gL10n;
 
@@ -475,6 +475,7 @@ class Email extends PHPMailer
             '#sender#'       => $senderName,
             '#sender_name#'  => $senderName,
             '#sender_email#' => $senderEmail,
+            '#sender_uuid#'  => $senderUuid,
             '#message#'      => $text,
             '#receiver#'     => $recipients,
             '#recipients#'   => $recipients,
