@@ -496,7 +496,7 @@ class User extends TableAccess
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isAdministrator = false)
     {
-        global $gLogger, $gSettingsManager, $gCurrentSession, $gSessionId, $installedDbVersion, $gL10n;
+        global $gLogger, $gSettingsManager, $gCurrentSession, $installedDbVersion, $gL10n;
 
         if ($this->hasMaxInvalidLogins()) {
             throw new AdmException($gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN'));
@@ -542,7 +542,8 @@ class User extends TableAccess
 
         if ($updateSessionCookies) {
             // set cookie for session id
-            Session::setCookie(COOKIE_PREFIX . '_SESSION_ID', $gSessionId);
+            $gCurrentSession->regenerateId();
+            Session::setCookie(COOKIE_PREFIX . '_SESSION_ID', $gCurrentSession->getValue('ses_session_id'));
 
             // count logins and update login dates
             $this->saveChangesWithoutRights();
@@ -1697,7 +1698,7 @@ class User extends TableAccess
         if ($this->columnsValueChanged && $gCurrentSession instanceof Session) {
             // now set reload the session of the user,
             // because he has new data and maybe new rights
-            $gCurrentSession->reloadSession($usrId);
+            $gCurrentSession->reload($usrId);
         }
         // The record is a new record, which was just stored to the database
         // for the first time => record it as a user creation now
