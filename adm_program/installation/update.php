@@ -64,19 +64,12 @@ try {
     // TODO
 }
 
-// determine session id
-if (array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
-    $gSessionId = $_COOKIE[COOKIE_PREFIX . '_SESSION_ID'];
-} else {
-    $gSessionId = session_id();
-}
-
 // create session object
 if (array_key_exists('gCurrentSession', $_SESSION)) {
     $gCurrentSession = $_SESSION['gCurrentSession'];
 } else {
     // create new session object and store it in PHP session
-    $gCurrentSession = new Session($gDb, $gSessionId, COOKIE_PREFIX);
+    $gCurrentSession = new Session($gDb, COOKIE_PREFIX);
     $_SESSION['gCurrentSession'] = $gCurrentSession;
 }
 

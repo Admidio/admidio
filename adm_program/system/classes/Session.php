@@ -53,25 +53,29 @@ class Session extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_sessions.
      * If the id is set than the specific session will be loaded.
      * @param Database   $database     Object of the class Database. This should be the default global object **$gDb**.
-     * @param int|string $session      The recordset of the session with this id will be loaded.
-     *                                 The session can be the table id or the alphanumeric session id.
-     *                                 If id isn't set than an empty object of the table is created.
      * @param string     $cookiePrefix The prefix that is used for cookies
      */
-    public function __construct(Database $database, $session = 0, $cookiePrefix = '')
+    public function __construct(Database $database, $cookiePrefix = '')
     {
         parent::__construct($database, TBL_SESSIONS, 'ses');
 
+        // determine session id
+        if (array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
+            $sessionId = $_COOKIE[COOKIE_PREFIX . '_SESSION_ID'];
+        } else {
+            $sessionId = session_id();
+        }
+
         $this->cookieAutoLoginId = $cookiePrefix . '_AUTO_LOGIN_ID';
 
-        if (is_int($session)) {
-            $this->readDataById($session);
+        if (is_int($sessionId)) {
+            $this->readDataById($sessionId);
         } else {
-            $this->readDataByColumns(array('ses_session_id' => $session));
+            $this->readDataByColumns(array('ses_session_id' => $sessionId));
 
             if ($this->newRecord) {
                 // if PHP session id was commited then store them in that field
-                $this->setValue('ses_session_id', $session);
+                $this->setValue('ses_session_id', $sessionId);
                 $this->setValue('ses_timestamp', DATETIME_NOW);
             }
         }
