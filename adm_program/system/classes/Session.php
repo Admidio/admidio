@@ -321,6 +321,18 @@ class Session extends TableAccess
     }
 
     /**
+     * This method will replace the current session ID with a new one, and keep the current session information.
+     * The new session id will be stored in the database.
+     */
+    public function regenerateId()
+    {
+        session_regenerate_id();
+
+        $this->setValue('ses_session_id', session_id());
+        $this->save();
+    }
+
+    /**
      * This method will reload all stored objects of all active sessions. The session will be
      * reloaded if the user will open a new page.
      */
