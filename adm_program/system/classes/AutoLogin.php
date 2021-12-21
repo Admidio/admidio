@@ -18,11 +18,11 @@
  * **Code examples**
  * ```
  * // create a valid user login for a Admidio session from auto login
- * $autoLogin = new AutoLogin($gDb, $gSessionId);
+ * $autoLogin = new AutoLogin($gDb, $sessionId);
  * $autoLogin->setValidLogin($gCurrentSession, $_COOKIE['ADMIDIO_ID']);
  *
  * // delete an auto login
- * $autoLogin = new AutoLogin($gDb, $gSessionId);
+ * $autoLogin = new AutoLogin($gDb, $sessionId);
  * $autoLogin->delete();
  * ```
  */

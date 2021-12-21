@@ -120,7 +120,7 @@ if ($getMode === 'save') {
             // Foto aus Session entfernen und neues Einlesen des Users veranlassen
             $gCurrentSession->setValue('ses_binary', '');
             $gCurrentSession->save();
-            $gCurrentSession->reloadSession($user->getValue('usr_id'));
+            $gCurrentSession->reload($user->getValue('usr_id'));
             $gDb->endTransaction();
         }
     }
@@ -166,7 +166,7 @@ if ($getMode === 'save') {
     else {
         $user->setValue('usr_photo', '');
         $user->save();
-        $gCurrentSession->reloadSession($user->getValue('usr_id'));
+        $gCurrentSession->reload($user->getValue('usr_id'));
     }
 
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest

@@ -46,13 +46,6 @@ try {
     // TODO
 }
 
-// determine session id
-if (array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
-    $gSessionId = $_COOKIE[COOKIE_PREFIX . '_SESSION_ID'];
-} else {
-    $gSessionId = session_id();
-}
-
 if (array_key_exists('gCurrentSession', $_SESSION)) {
     // read session object from PHP session
     /**
@@ -60,7 +53,7 @@ if (array_key_exists('gCurrentSession', $_SESSION)) {
      *                               validates the session against the stored session in the database
      */
     $gCurrentSession = $_SESSION['gCurrentSession'];
-    $gCurrentSession->refreshSession();
+    $gCurrentSession->refresh();
 }
 
 // Session handling
@@ -92,7 +85,7 @@ if (array_key_exists('gCurrentSession', $_SESSION)
         $gCurrentSession->initializeObjects();
     } else {
         // create new session object and store it in PHP session
-        $gCurrentSession = new Session($gDb, $gSessionId, COOKIE_PREFIX);
+        $gCurrentSession = new Session($gDb, COOKIE_PREFIX);
         $_SESSION['gCurrentSession'] = $gCurrentSession;
     }
 
