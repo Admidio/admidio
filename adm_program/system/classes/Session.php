@@ -290,7 +290,7 @@ class Session extends TableAccess
      * Reload session data from database table adm_sessions. If IP address check is activated than check if the IP
      * address has changed. Refresh AutoLogin with new auto_login_id.
      */
-    public function refreshSession()
+    public function refresh()
     {
         // read session data from database to update the renew flag
         $this->readDataById((int) $this->getValue('ses_id'));
@@ -347,7 +347,7 @@ class Session extends TableAccess
      * and reloaded if the user opens a new page.
      * @param int $userId Id of the user whose session should be relaoded.
      */
-    public function reloadSession(int $userId)
+    public function reload(int $userId)
     {
         $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = true
                  WHERE ses_usr_id = ?  -- $userId';

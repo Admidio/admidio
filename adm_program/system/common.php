@@ -53,7 +53,7 @@ if (array_key_exists('gCurrentSession', $_SESSION)) {
      *                               validates the session against the stored session in the database
      */
     $gCurrentSession = $_SESSION['gCurrentSession'];
-    $gCurrentSession->refreshSession();
+    $gCurrentSession->refresh();
 }
 
 // Session handling
