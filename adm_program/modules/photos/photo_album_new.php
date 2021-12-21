@@ -66,7 +66,7 @@ if (isset($_SESSION['photo_album_request'])) {
  */
 function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
 {
-    global $gDb, $gCurrentOrganization, $photoAlbumsArray;
+    global $gDb, $gCurrentOrgId, $photoAlbumsArray;
 
     $vorschub .= '&nbsp;&nbsp;&nbsp;';
     $sqlConditionParentId = '';
