@@ -103,6 +103,7 @@ $sql = 'SELECT COUNT(*)
                       SELECT 1
                         FROM ' . TBL_MESSAGES_RECIPIENTS . '
                        WHERE msr_msg_id = msg_id
+                         AND msg_type   = \'PM\'
                          AND msr_usr_id = ? -- $gCurrentUserId
                   )
                 )';
@@ -123,6 +124,7 @@ $mainSql = 'SELECT msg_id, msg_uuid, msg_type, msg_subject, msg_usr_id_sender, m
                       SELECT 1
                         FROM ' . TBL_MESSAGES_RECIPIENTS . '
                        WHERE msr_msg_id = msg_id
+                         AND msg_type   = \'PM\'
                          AND msr_usr_id = ? -- $gCurrentUserId
                       )
                    )';
