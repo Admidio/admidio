@@ -426,7 +426,7 @@ if ($albumsCount > 0) {
                                             ' .$htmlLock . '
                                             <a class="dropdown-item btn openPopup" href="javascript:void(0);"
                                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_' . $childPhotoAlbum->getValue('pho_uuid'),
-                                            'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => $childPhotoAlbum->getValue('photo_uuid'))).'">
+                                            'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => $childPhotoAlbum->getValue('pho_uuid'))).'">
                                                 <i class="fas fa-trash-alt" data-toggle="tooltip"></i> '.$gL10n->get('PHO_ALBUM_DELETE').'</a>
                                         </div>
                                     </div>');
