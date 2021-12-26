@@ -1409,7 +1409,7 @@
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Brugeren er ikke medlem af organisationen #VAR1#, men er i besiddelse af et login.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Brugeren er ikke medlem af organisationen #VAR1# og har ingen loginoplysninger registreret.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">Bruger har intet login endnu.\nVil du tildele informationen fra den valgte registrering til brugeren?</string>
-  <string name="SYS_USER_PHOTO">Bruger billede</string>
+  <string name="SYS_PROFILE_PHOTO">Bruger billede</string>
   <string name="SYS_USER_RELATION">Relation</string>
   <string name="SYS_USER_RELATIONS">Relationer</string>
   <string name="SYS_USER_RELATION_TYPE">Relations typer</string>

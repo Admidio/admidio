@@ -1367,7 +1367,7 @@
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Användaren är inte medlem i organisationen #VAR1# men har redan inloggningsinformation tilldelad.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Användaren är inte medlem i organisationen #VAR1# och har ingen inloggningsinformation registrerad.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">Användaren har ingen inloggning än. \n Vill du tilldela användaren information om den valda registreringen?</string>
-  <string name="SYS_USER_PHOTO">Bild</string>
+  <string name="SYS_PROFILE_PHOTO">Bild</string>
   <string name="SYS_USER_RELATION">Relation</string>
   <string name="SYS_USER_RELATIONS">relationer</string>
   <string name="SYS_USER_RELATION_TYPE">Relationstyp</string>

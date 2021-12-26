@@ -1369,7 +1369,7 @@
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Gebruiker is geen lid van organisatie #VAR1# maar er is al inloginformatie toegewezen.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Gebruiker is geen lid van organisatie #VAR1# en er is geen inloginformatie toegewezen.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">Gebruiker heeft nog geen inloggegevens.\nWilt u de informatie over deze registratie toewijzen aan de gebruiker?</string>
-  <string name="SYS_USER_PHOTO">Gebruikersafbeelding</string>
+  <string name="SYS_PROFILE_PHOTO">Gebruikersafbeelding</string>
   <string name="SYS_USER_RELATION">Relatie</string>
   <string name="SYS_USER_RELATIONS">Relaties</string>
   <string name="SYS_USER_RELATION_TYPE">Relatie type</string>

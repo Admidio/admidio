@@ -353,7 +353,7 @@
   <string name="SYS_USER_FOUND">Bruker funnet</string>
   <string name="SYS_USER_ID_NOT_FOUND">Ingen brukere med denne ID\'en ble funnet!</string>
   <string name="SYS_USER_MANAGEMENT">Brukerhåndtering</string>
-  <string name="SYS_USER_PHOTO">Brukerbilde</string>
+  <string name="SYS_PROFILE_PHOTO">Brukerbilde</string>
   <string name="SYS_USERNAME">Brukernavn</string>
   <string name="SYS_USERNAME_OR_EMAIL">Brukernavn eller epost</string>
   <string name="SYS_USERS_PER_PAGE">Antall brukere pr. side</string>

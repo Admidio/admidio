@@ -1160,6 +1160,7 @@
   <string name="SYS_PROCESS_CANCELED">Process canceled.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing the data.</string>
   <string name="SYS_PROFILE_FIELD">Profile field</string>
+  <string name="SYS_PROFILE_PHOTO">Profile photo</string>
   <string name="SYS_PROPERTIES">Properties</string>
   <string name="SYS_QUANTITY">Quantity</string>
   <string name="SYS_QUARTERLY">Quarterly</string>
@@ -1409,7 +1410,6 @@
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">User is not a member of organization #VAR1# but has already login data assigned.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">User is not a member of organization #VAR1# and has no login data registered.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">User has no login yet.\nWould you like to assign the information of the selected registration to the user?</string>
-  <string name="SYS_USER_PHOTO">User picture</string>
   <string name="SYS_USER_RELATION">Relationship</string>
   <string name="SYS_USER_RELATIONS">Relationships</string>
   <string name="SYS_USER_RELATION_TYPE">Relationship type</string>

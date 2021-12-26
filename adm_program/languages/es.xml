@@ -737,7 +737,7 @@
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">El usuario no es un miembro de la organización #VAR1#, pero ya tiene asignada información de acceso.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">El usuario no es miembro de la organización #VAR1# y no tiene registrada información de acceso.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">Este usuario no tiene ninguna entrada.\n¿Desea asociar la información con los datos de este registro?</string>
-  <string name="SYS_USER_PHOTO">Foto de usuario</string>
+  <string name="SYS_PROFILE_PHOTO">Foto de usuario</string>
   <string name="SYS_USER_RELATION">Relación</string>
   <string name="SYS_USER_RELATIONS">relaciónes</string>
   <string name="SYS_USER_RELATION_TYPE">Tipo de relación</string>
