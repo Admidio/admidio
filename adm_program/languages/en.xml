@@ -1204,7 +1204,7 @@
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Manage documents and files</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Roles having this permission can manage the rights for the documents and files module. This includes who can see folders and can upload files.</string>
   <string name="SYS_RIGHT_EDIT_USER">Edit profile of all users</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other users (except passwords).\n In addition they have access to the user administration and can add/delete users.</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other users (except passwords).\n In addition they have access to the user administration and can add or delete users.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Edit and delete guestbook entries</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Create comments of guestbook entries</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">This setting controls who has the right to send emails to this role via the message module. The role right #VAR1_BOLD# is still above this setting.</string>
