@@ -124,10 +124,10 @@ class ListConfiguration extends TableLists
         } elseif ($column->getValue('lsc_special_field') === 'usr_photo') {
             // show user photo
             if (in_array($format, array('html', 'print'), true)) {
-                $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $userUuid)).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_USER_PHOTO').'" />';
+                $content = '<img src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('user_uuid' => $userUuid)).'" style="vertical-align: middle;" alt="'.$gL10n->get('SYS_PROFILE_PHOTO').'" />';
             }
             if (in_array($format, array('csv', 'pdf'), true) && $content != null) {
-                $content = $gL10n->get('SYS_USER_PHOTO');
+                $content = $gL10n->get('SYS_PROFILE_PHOTO');
             }
         } elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX') {
             if (in_array($format, array('csv', 'pdf'), true)) {

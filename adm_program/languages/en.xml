@@ -915,7 +915,7 @@
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Creating and sending HTML based e-mails can be enabled for registered users. A JavaScript editor will be displayed for comfortable editing, instead of the standard text field. The current option is for guests due security reasons unavailable.</string>
   <string name="SYS_HTML_TABLE">HTML table</string>
-  <string name="SYS_ICAL_DISABLED">iCal has been disabled by the system administrator.</string>
+  <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IDENTIFY_USERS">Identification of existing users is made by means of first name and surname.</string>
   <string name="SYS_IMPORTANT">Important</string>
@@ -1160,6 +1160,7 @@
   <string name="SYS_PROCESS_CANCELED">Process canceled.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing the data.</string>
   <string name="SYS_PROFILE_FIELD">Profile field</string>
+  <string name="SYS_PROFILE_PHOTO">Profile photo</string>
   <string name="SYS_PROPERTIES">Properties</string>
   <string name="SYS_QUANTITY">Quantity</string>
   <string name="SYS_QUARTERLY">Quarterly</string>
@@ -1168,7 +1169,6 @@
   <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Latest announcements from organization #VAR1#</string>
   <string name="SYS_RECIPIENT">Recipient</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail recipient</string>
-  <string name="SYS_RECIPIENT_NAME">Name of recipient</string>
   <string name="SYS_REDIRECT">Redirect</string>
   <string name="SYS_REDIRECT_DESC">You are leaving the website of #VAR1_BOLD# and will be redirected automatically to #VAR3# in #VAR2# seconds.\n\nIf the automatic redirection is not working please click #VAR4#here#VAR5#!</string>
   <string name="SYS_REDIRECT_URL_INVALID">The specified redirect URL is not valid.</string>
@@ -1203,7 +1203,7 @@
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Manage documents and files</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Roles having this permission can manage the rights for the documents and files module. This includes who can see folders and can upload files.</string>
   <string name="SYS_RIGHT_EDIT_USER">Edit profile of all users</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other users (except passwords).\n In addition they have access to the user administration and can add/delete users.</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other users (except passwords).\n In addition they have access to the user administration and can add or delete users.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Edit and delete guestbook entries</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Create comments of guestbook entries</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">This setting controls who has the right to send emails to this role via the message module. The role right #VAR1_BOLD# is still above this setting.</string>
@@ -1235,7 +1235,7 @@
   <string name="SYS_ROOM">Room</string>
   <string name="SYS_ROOM_MANAGEMENT">Room administration</string>
   <string name="SYS_ROW">Row</string>
-  <string name="SYS_RSS_DISABLED">Web feed has been disabled by the system administrator.</string>
+  <string name="SYS_RSS_DISABLED">Web feed is disabled.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
   <string name="SYS_SAFE_MODE_PROBLEM">Might cause problems with file uploads</string>
@@ -1409,7 +1409,6 @@
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">User is not a member of organization #VAR1# but has already login data assigned.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">User is not a member of organization #VAR1# and has no login data registered.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">User has no login yet.\nWould you like to assign the information of the selected registration to the user?</string>
-  <string name="SYS_USER_PHOTO">User picture</string>
   <string name="SYS_USER_RELATION">Relationship</string>
   <string name="SYS_USER_RELATIONS">Relationships</string>
   <string name="SYS_USER_RELATION_TYPE">Relationship type</string>

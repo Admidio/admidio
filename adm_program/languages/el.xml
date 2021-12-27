@@ -1407,7 +1407,7 @@
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Ο χρήστης δεν είναι μέλος του συλλόγου #VAR1# αλλά έχει καταχωρημένα στοιχεία σύνδεσης.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Ο χρήστης δεν είναι μέλος του συλλόγου #VAR1# και δεν έχει καταχωρημένα στοιχεία σύνδεσης.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">Ο χρήστης δεν έχει συνδεθεί ακόμα.\nΘέλετε να εκχωρήσετε τα στοιχεία της επιλεγμένης εγγραφής στον χρήστη;</string>
-  <string name="SYS_USER_PHOTO">Φωτογραφία χρήστη</string>
+  <string name="SYS_PROFILE_PHOTO">Φωτογραφία χρήστη</string>
   <string name="SYS_USER_RELATION">Σχέση</string>
   <string name="SYS_USER_RELATIONS">Σχέσεις</string>
   <string name="SYS_USER_RELATION_TYPE">Τύπος σχέσης</string>

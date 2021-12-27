@@ -1095,7 +1095,7 @@
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">L\'utente non è membro dell\'organizzazione #VAR1# ma ha già i dati di accesso assegnati</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">L\'utente non è membro dell\'organizzazione #VAR1# e non ha dati di accesso registrati.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">L\'utente non ha ancora l\'accesso.\nTi piacerebbe assegnare le informazioni della registrazione selezionata all\'utente?</string>
-  <string name="SYS_USER_PHOTO">Immagine utente</string>
+  <string name="SYS_PROFILE_PHOTO">Immagine utente</string>
   <string name="SYS_USER_RELATION">Relazione</string>
   <string name="SYS_USER_RELATIONS">Relazioni</string>
   <string name="SYS_USER_RELATION_TYPE">Tipo di relazione</string>
