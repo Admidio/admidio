@@ -284,7 +284,7 @@
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kann Web-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Voreinstellung: ja)</string>
   <string name="ORG_FIELD_DESCRIPTION">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</string>
   <string name="ORG_FIELD_DISABLED">Feld nur für Benutzer:innen mit dem Recht #VAR1_BOLD# editierbar</string>
-  <string name="ORG_FIELD_DISABLED_DESC">Ein gesperrtes Feld kann von der Benutzerin oder dem Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzerinnn und Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer:innen zu bearbeiten. Leiter einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</string>
+  <string name="ORG_FIELD_DISABLED_DESC">Ein gesperrtes Feld kann von der Benutzerin oder dem Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzerinnn und Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer:innen zu bearbeiten. Leiter:innen einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</string>
   <string name="ORG_FIELD_EXIST">Es existiert bereits ein Feld in dieser Kategorie mit dem selben Namen.</string>
   <string name="ORG_FIELD_HIDDEN">Feld nur für berechtigte Benutzer:innen (eigenes Profil &amp; Rollenrecht) sichtbar</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Ein Feld ist normalerweise für alle Benutzer:innen sichtbar, die das Profil sehen dürfen. Ist diese Einstellung nicht gesetzt, dann können nur Benutzer:innen das Feld sehen, die das Profil auch bearbeiten dürfen.</string>
@@ -953,12 +953,12 @@
   <string name="SYS_LASTNAME">Nachname</string>
   <string name="SYS_LATER">Später</string>
   <string name="SYS_LAYOUT">Layout</string>
-  <string name="SYS_LEADER">Leiter</string>
-  <string name="SYS_LEADER_NO_ADDITIONAL_RIGHTS">Leiter dieser Rolle haben keine gesonderten Rechte. Sie werden in Listenansichten nur hervorgehoben dargestellt.</string>
-  <string name="SYS_LEADER_EDIT_MEMBERS">Leiter dieser Rolle können Profildaten aller Rollenmitglieder bearbeiten.</string>
-  <string name="SYS_LEADER_ASSIGN_MEMBERS">Leiter dieser Rolle können neue Rollenmitglieder hinzufügen oder vorhandene Mitglieder entfernen.</string>
-  <string name="SYS_LEADER_RIGHTS_DESC">Rollenmitglieder können zu Leitern einer Rolle ernannt werden und optional erweiterte Rechte bekommen.\nSie können das Recht bekommen Profildaten aller Rollenmitglieder zu bearbeiten und/oder das Recht Mitglieder der Rolle hinzuzufügen oder zu entfernen. Bekommen sie beide Rechte zugewiesen wären sie dadurch allerdings indirekt in der Lage Profildaten aller Mitglieder zu bearbeiten.</string>
-  <string name="SYS_LEADERS">Leiter</string>
+  <string name="SYS_LEADER">Leiter:in</string>
+  <string name="SYS_LEADER_NO_ADDITIONAL_RIGHTS">Leiter:innen dieser Rolle haben keine gesonderten Rechte. Sie werden in Listenansichten nur hervorgehoben dargestellt.</string>
+  <string name="SYS_LEADER_EDIT_MEMBERS">Leiter:innen dieser Rolle können Profildaten aller Rollenmitglieder bearbeiten.</string>
+  <string name="SYS_LEADER_ASSIGN_MEMBERS">Leiter:innen dieser Rolle können neue Rollenmitglieder hinzufügen oder vorhandene Mitglieder entfernen.</string>
+  <string name="SYS_LEADER_RIGHTS_DESC">Rollenmitglieder können zu Leiterinnen oder Leitern einer Rolle ernannt werden und optional erweiterte Rechte bekommen.\nSie können das Recht bekommen Profildaten aller Rollenmitglieder zu bearbeiten und/oder das Recht Mitglieder der Rolle hinzuzufügen oder zu entfernen. Bekommen sie beide Rechte zugewiesen wären sie dadurch allerdings indirekt in der Lage Profildaten aller Mitglieder zu bearbeiten.</string>
+  <string name="SYS_LEADERS">Leiter:innen</string>
   <string name="SYS_LINK_COLLECTION_FROM">Linksammlung von #VAR1#</string>
   <string name="SYS_LINK_EMAIL_NOTIFICATION_TITLE">Ein neuer Weblink wurde angelegt</string>
   <string name="SYS_LINK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei #VAR1# angelegt.\n\nLink: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
@@ -1067,7 +1067,7 @@
   <string name="SYS_NO_DEFAULT_ROLE">Sie können die Einstellung #VAR1_BOLD# nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</string>
   <string name="SYS_NO_ENTRY">Der angeforderte Eintrag existiert nicht in der Datenbank.</string>
   <string name="SYS_NO_ENTRIES">Es sind keine Einträge vorhanden.</string>
-  <string name="SYS_NO_LEADER">Ohne Leiter</string>
+  <string name="SYS_NO_LEADER">Ohne Leiter:in</string>
   <string name="SYS_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
   <string name="SYS_NO_NEW_REGISTRATIONS">Es sind keine Registrierungen vorhanden.</string>
   <string name="SYS_NO_QUOTATION">Kein Anführungszeichen</string>
@@ -1227,7 +1227,7 @@
   <string name="SYS_ROLE_SELECT_RIGHT">Sie Haben keine Berechtigung, die Rolle #VAR1# auszuwählen.\nBitte wählen Sie eine andere Rolle aus.</string>
   <string name="SYS_ROLE_SELECTION">Rollenauswahl</string>
   <string name="SYS_ROLE_SELECTION_CONF_DESC">Die Rollenauswahl kann über eine Konfiguration auf die Mitglieder der ausgewählten Rollen eingeschränkt werden.\n\n Soll keine Einschränkung vorgenommen werden, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer bleiben.</string>
-  <string name="SYS_ROLE_WITHOUT_LEADER">Rollen ohne Leiter</string>
+  <string name="SYS_ROLE_WITHOUT_LEADER">Rollen ohne Leiter:in</string>
   <string name="SYS_ROLE_TYPES">Rollentypen</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROLES_CONFIRMATION_OF_PARTICIPATION">Rollen - Teilnahmebestätigung</string>
@@ -1314,7 +1314,7 @@
   <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Für nicht angemeldete Benutzer:innen wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss die Benutzerin oder der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Zeige ehemalige Mitglieder</string>
-  <string name="SYS_SHOW_FORMER_MEMBERS_DESC">Mit dieser Einstellung kann festgelegt werden, wer ehemalige Rollenmitglieder sehen darf. Die Benutzerin bzw. der Benutzer muss allerdings auch das Recht haben die Rolle selber zu sehen. Leiter einer Rolle dürfen die Ehemaligen ihrer Rolle auch sehen, wenn sie für die Rolle dasselbe Recht gesetzt bekommen haben, welches hier eingestellt ist. (Voreinstellung: #VAR1#)</string>
+  <string name="SYS_SHOW_FORMER_MEMBERS_DESC">Mit dieser Einstellung kann festgelegt werden, wer ehemalige Rollenmitglieder sehen darf. Die Benutzerin bzw. der Benutzer muss allerdings auch das Recht haben die Rolle selber zu sehen. Leiter:innen einer Rolle dürfen die Ehemaligen ihrer Rolle auch sehen, wenn sie für die Rolle dasselbe Recht gesetzt bekommen haben, welches hier eingestellt ist. (Voreinstellung: #VAR1#)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_ONLY">Zeige nur ehemalige Mitglieder</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_RIGHT">Benutzer:innen mit dem Recht #VAR1_BOLD#</string>
   <string name="SYS_SHOW_LIST">Liste anzeigen</string>
