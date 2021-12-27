@@ -4,7 +4,7 @@
   <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
   <string name="DAT_ALL_DAY">Ganztägig</string>
   <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Teilnehmende können anonyme Gäste anmelden</string>
-  <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmende können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl der Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn eine teilnehmende Persion weitere Besucher:innen mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.  </string>
+  <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmende können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl der Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn eine teilnehmende Persion weitere Gäste mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.  </string>
   <string name="DAT_ALLOW_USER_COMMENTS">Kommentare zur Anmeldung erlauben</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Teilnehmende können ihre Teilnahme kommentieren. Die Kommentare können über die Liste der Teilnehmenden eingesehen werden</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmende zuordnen</string>
@@ -101,16 +101,16 @@
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Intervall</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Für nicht angemeldete Benutzer:innen wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer:innen in zu kurzen Zeitabständen hintereinander unerwünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Voreinstellung: 60 Sekunden)</string>
   <string name="GBO_GUESTBOOK">Gästebuch</string>
-  <string name="GBO_GUESTBOOK_DESC">Besucher und Mitglieder können hier ihre Grüße und Anmerkungen hinterlassen, sowie andere Einträge kommentieren.</string>
+  <string name="GBO_GUESTBOOK_DESC">Gäste und Mitglieder können hier ihre Grüße und Anmerkungen hinterlassen, sowie andere Einträge kommentieren.</string>
   <string name="GBO_GUESTBOOK_MODERATION">Moderation aktivieren für</string>
-  <string name="GBO_GUESTBOOK_MODERATION_DESC">Gästebucheinträge werden erst nach einer Sichtprüfung einer Administratorin oder eines Administrators publiziert. Hier kann eingestellt werden, ob die Prüfung nur bei Besuchern, auch bei angemeldeten Benutzer:innen oder bei niemandem durchgeführt werden soll.  (Voreinstellung: Niemand)</string>
+  <string name="GBO_GUESTBOOK_MODERATION_DESC">Gästebucheinträge werden erst nach einer Sichtprüfung einer Administratorin oder eines Administrators publiziert. Hier kann eingestellt werden, ob die Prüfung nur bei Gästen, auch bei angemeldeten Benutzer:innen oder bei niemandem durchgeführt werden soll.  (Voreinstellung: Niemand)</string>
   <string name="GBO_HIDE_COMMENTS">Kommentare ausblenden</string>
   <string name="GBO_INITIAL_COMMENTS_LOADING">Kommentare direkt anzeigen</string>
   <string name="GBO_INITIAL_COMMENTS_LOADING_DESC">Wenn diese Option aktiviert ist, werden beim Aufruf der Gästebuchseite die Kommentare direkt geladen und angezeigt. Im anderen Fall muss die Benutzerin oder der Benutzer auf einen Link klicken um die Kommentare zu sehen. (Voreinstellung: nein)</string>
   <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Neueste Gästebucheinträge der Organisation #VAR1#</string>
   <string name="GBO_MODERATE_ENTRIES">Einträge moderieren</string>
   <string name="GBO_MODERATE_VAR">#VAR1# moderieren</string>
-  <string name="GBO_ONLY_VISITORS">Nur Besucher</string>
+  <string name="GBO_ONLY_VISITORS">Nur Besucher:innen</string>
   <string name="GBO_SHOW_COMMENTS">Kommentare anzeigen</string>
   <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Zeige #VAR1# Kommentar(e) zu diesem Eintrag</string>
   <string name="GBO_WRITE_COMMENT">Kommentar schreiben</string>
@@ -157,7 +157,7 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Zugangsdaten zur Datenbank eingeben</string>
   <string name="INS_ERROR_OPEN_FILE">Die Datei #VAR1_BOLD# konnte nicht geöffnet werden.</string>
   <string name="INS_FACEBOOK">Facebook</string>
-  <string name="INS_FACEBOOK_DESC">Wollen Sie Ihr Facebook-Profil hier verlinken? Dazu benötigen Sie Ihren Nutzernamen bei Facebook. Melden Sie sich bei Facebook an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher aus Ihrem Profil direkt Ihr Facebook-Profil aufrufen.</string>
+  <string name="INS_FACEBOOK_DESC">Wollen Sie Ihr Facebook-Profil hier verlinken? Dazu benötigen Sie Ihren Nutzernamen bei Facebook. Melden Sie sich bei Facebook an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher:innen aus Ihrem Profil direkt Ihr Facebook-Profil aufrufen.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Der Ordner #VAR1_BOLD# besitzt keine Schreibrechte. Ohne Schreibrechte können keine Dateien oder Fotos von den Anwendern hochgeladen werden.</string>
   <string name="INS_GROUPS">Gruppen</string>
   <string name="INS_HOST_INVALID">Hostname ist nicht gültig. Geben Sie einen gültigen Hostnamen oder IP-Adresse ein.</string>
@@ -189,7 +189,7 @@
   <string name="INS_TEAMS">Mannschaften</string>
   <string name="INS_TRAINING">Training</string>
   <string name="INS_TWITTER">Twitter</string>
-  <string name="INS_TWITTER_DESC">Wollen Sie Ihr Twitter-Profil hier verlinken? Dazu benötigen Sie Ihren eindeutigen Namen bei Twitter. Melden Sie sich bei Twitter an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher aus Ihrem Profil direkt Ihr Twitter-Profil aufrufen.</string>
+  <string name="INS_TWITTER_DESC">Wollen Sie Ihr Twitter-Profil hier verlinken? Dazu benötigen Sie Ihren eindeutigen Namen bei Twitter. Melden Sie sich bei Twitter an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher:innen aus Ihrem Profil direkt Ihr Twitter-Profil aufrufen.</string>
   <string name="INS_UPDATE">Update</string>
   <string name="INS_UPDATE_DATABASE">Datenbank aktualisieren</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Eine Aktualisierung der Datenbank ist nicht möglich!</string>
@@ -203,7 +203,7 @@
   <string name="INS_WELCOME_TEXT_UPDATE">Sie haben bereits die Verzeichnisse von Admidio mit einer neuen Version aktualisiert. Nun müssen Sie noch die Datenbank von der aktuellen Version #VAR2# auf die Version #VAR1# aktualisieren, damit Admidio mit der neuen Version laufen kann.\n\nHaben Sie Fragen oder Probleme mit dem Update, schauen Sie bitte #VAR3#unsere Update-Anleitung#VAR4# an oder wenden Sie sich an #VAR5#unser Supportforum#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# setzt mindestens die MySQL-Version #VAR2# voraus. Sie sollten versuchen die MySQL-Datenbank zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu Ihrer Datenbank ist.</string>
   <string name="INS_XING">Xing</string>
-  <string name="INS_XING_DESC">Wollen Sie Ihr Xing-Profil hier verlinken? Dazu benötigen Sie Ihren eindeutigen Namen bei Xing. Melden Sie sich bei Xing an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher aus Ihrem Profil direkt Ihr Xing-Profil aufrufen.</string>
+  <string name="INS_XING_DESC">Wollen Sie Ihr Xing-Profil hier verlinken? Dazu benötigen Sie Ihren eindeutigen Namen bei Xing. Melden Sie sich bei Xing an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher:innen aus Ihrem Profil direkt Ihr Xing-Profil aufrufen.</string>
   <string name="INS_BOYFRIEND">Freund</string>
   <string name="INS_BROTHER">Bruder</string>
   <string name="INS_CHILD">Kind</string>
@@ -230,7 +230,7 @@
   <string name="INS_WIFE">Ehefrau</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
-  <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer:innen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das Modul für Besucher ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>
+  <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer:innen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das Modul für Gäste ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Systembenachrichtigungen aktivieren</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Hier können die Systembenachrichtigungen von Admidio deaktiviert werden. Systembenachrichtigungen werden versendet, wenn sich zum Beispiel eine neue Benutzerin oder ein neuer Benutzer angemeldet hat. Aber auch Registrierungsbestätigungen werden als Systembenachrichtigungen verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden, es sei denn der Server unterstützt keinen E-Mailversand. Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Voreinstellung: ja)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Die/Der aktuelle Benutzer:in wird dort automatisch zur/zum Administrator:in ernannt und kann die weitere Einrichtung durchführen. Benutzer:innen, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</string>
@@ -279,7 +279,7 @@
   <string name="ORG_EMAIL_ALERTS_DESC">Mitglieder aller Rollen mit der Berechtigung #VAR1_BOLD# erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat. (Voreinstellung: ja)</string>
   <string name="ORG_ENABLE_CAPTCHA">Captcha aktivieren</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Registrierung aktivieren</string>
-  <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Die Registrierung durch Besucher der Homepage kann über diese Einstellung aktiviert oder deaktiviert werden. Welche Profilfelder bei der Registrierung angezeigt werden, kann in den Profilfeld-Einstellungen je Feld konfiguriert werden. (Voreinstellung: ja)</string>
+  <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Die Registrierung durch Besucher:innen der Homepage kann über diese Einstellung aktiviert oder deaktiviert werden. Welche Profilfelder bei der Registrierung angezeigt werden, kann in den Profilfeld-Einstellungen je Feld konfiguriert werden. (Voreinstellung: ja)</string>
   <string name="ORG_ENABLE_RSS_FEEDS">Web-Feeds aktivieren</string>
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kann Web-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Voreinstellung: ja)</string>
   <string name="ORG_FIELD_DESCRIPTION">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</string>
@@ -297,7 +297,7 @@
   <string name="ORG_FIELD_REQUIRED_DESC">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</string>
   <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später im Profil den Inhalt, den die Benutzerin oder der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter #user_content# in die URL eingebaut werden. Dies ist dann der Inhalt, den die Benutzerin oder der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: https://www.google.de/search?q=#user_content#\nFeldinhalt: Admidio\nLink im Profil: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Auf diese Seite wird die Benutzerin oder der Benutzer geleitet, sobald er sich angemeldet hat. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</string>
-  <string name="ORG_HOMEPAGE_VISITORS">Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</string>
+  <string name="ORG_HOMEPAGE_VISITORS">Diese Seite ist die Standard-Startseite von Admidio auf die Gäste geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</string>
   <string name="ORG_INVALID_THEME">Es wurde kein gültiges Theme ausgewählt.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Farbe Javascript-Editor</string>
   <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Hier wird die Hintergrundfarbe des Javascript-Editors angegeben. Dies kann ein hexadezimaler Farbwert sein z.B. #ffa500 oder ein RGB-Wert z.B. rgb(255, 185,0).</string>
@@ -369,8 +369,8 @@
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Album löschen</string>
   <string name="PHO_ALBUM_LOCK">Album sperren</string>
-  <string name="PHO_ALBUM_LOCK_DESC">Gesperrte Alben können von Besuchern und Mitgliedern nicht eingesehen werden. Sie können zum Beispiel ein Album vorübergehen sperren, während Sie gerade alle Bilder des Albums hochladen.</string>
-  <string name="PHO_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt.</string>
+  <string name="PHO_ALBUM_LOCK_DESC">Gesperrte Alben können von Gästen und Mitgliedern nicht eingesehen werden. Sie können zum Beispiel ein Album vorübergehen sperren, während Sie gerade alle Bilder des Albums hochladen.</string>
+  <string name="PHO_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Gästen aus diesem Grund nicht angezeigt.</string>
   <string name="PHO_ALBUM_UNLOCK">Album entsperren</string>
   <string name="PHO_CAPTION_SIZE">Größe des Bildtextes</string>
   <string name="PHO_CAPTION_SIZE_DESC">Die Größe des Bildtextes wird proportional zur Bildgröße, nach der Formel \"Bildgröße/Devisor\" berechnet. Durch Erhöhung des Devisors verringert sich die Schriftgröße. (Voreinstellung: 40)</string>
@@ -384,7 +384,7 @@
   <string name="PHO_EMAIL_NOTIFICATION_TITLE">Ein neues Fotoalbum wurde angelegt</string>
   <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neues Fotoalbum bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
   <string name="PHO_FILE_UPLOADED">Das Bild #VAR1_BOLD# wurde hochgeladen.</string>
-  <string name="PHO_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesuchern der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</string>
+  <string name="PHO_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesucher:innen der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</string>
   <string name="PHO_KEEP_ORIGINAL">Originale zusätzlich speichern</string>
   <string name="PHO_KEEP_ORIGINAL_DESC">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option #VAR1_BOLD# aktiviert, werden die Originalfotos herunterladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</string>
   <string name="PHO_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster haben darf. Bei einem Modalen-Fenster oder Popup-Fenster wird das Fenster automatisch in der Größe an das Foto angepasst. Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder für die Anzeige nicht neu skaliert werden müssen. (Voreinstellung: 640 x 400 Pixel)</string>
@@ -533,7 +533,7 @@
   <string name="SYS_ALL_ORGANIZATIONS">Alle Organisationen</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">Die ausgewählte Kategorie ist für alle Organisationen freigegeben.\nDas gerade bearbeitete Objekt (Termin, Ankündigung, Profilfeld, Weblink ...) wird also nicht nur in dieser Organisation sichtbar sein, sondern in allen folgenden Organisationen ebenfalls angezeigt: #VAR1#.</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
-  <string name="SYS_ALSO_VISITORS">auch Besucher</string>
+  <string name="SYS_ALSO_VISITORS">auch Besucher:innen</string>
   <string name="SYS_ANNOUNCEMENT">Ankündigung</string>
   <string name="SYS_ANNOUNCEMENTS">Ankündigungen</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</string>
@@ -873,7 +873,7 @@
   <string name="SYS_FOLDER_EXISTS">Der Ordner #VAR1# existiert bereits!\n\nBitte wählen Sie einen anderen Namen für den Ordner aus.</string>
   <string name="SYS_FOLDER_NO_FILES">Der Ordner enthält keine Dateien.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Sie besitzen keine Rechte den gewählten Ordner zu sehen.</string>
-  <string name="SYS_FOLDER_NO_FILES_VISITOR">Es stehen keine Dateien zum Download für Besucher zur Verfügung.</string>
+  <string name="SYS_FOLDER_NO_FILES_VISITOR">Es stehen keine Dateien zum Download für Gäste zur Verfügung.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWenden Sie Sich bitte an eine:n #VAR2#Administrator:in#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Der gesuchte Ordner konnte nicht gefunden werden.</string>
@@ -990,7 +990,7 @@
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">Es können Beziehungstypen (Elternteil - Kind) definiert werden. Zu jeder definierten Beziehung wird der Typ (asymmetrisch, symmetrisch oder unidirektional) hinterlegt, sowie die Profilbearbeitungsrechte innerhalb der Beziehung festgelegt.</string>
   <string name="SYS_MAKE_FORMER">Sie können die Benutzerin bzw. den Benutzer zu einer/einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und Sie sie später immer wieder sehen können, welchen Rollen diese Person zugeordnet war.</string>
   <string name="SYS_MALE">Männlich</string>
-  <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Besucher, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
+  <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Besucher:innen, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
   <string name="SYS_MANDATORY_FIELD">Pflichtfeld</string>
   <string name="SYS_MAP">Karte</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Zeigt den Wohnort bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
@@ -1435,7 +1435,7 @@
   <string name="SYS_VISIBLE">Sichtbar</string>
   <string name="SYS_VISIBLE_FOR">Sichtbar für</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# nur für angemeldete Benutzer:innen sichtbar</string>
-  <string name="SYS_VISITORS">Besucher</string>
+  <string name="SYS_VISITORS">Besucher:innen</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Möchten Sie die Kategorie #VAR1_BOLD# wirklich löschen?</string>
   <string name="SYS_WANT_REGISTER">Ich möchte mich registrieren!</string>
   <string name="SYS_WARNING">Warnung</string>
