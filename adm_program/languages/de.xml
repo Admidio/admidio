@@ -778,7 +778,7 @@
   <string name="SYS_EDIT_ROLE">Rolle bearbeiten</string>
   <string name="SYS_EDIT_ROLE_MEMBERSHIPS">Rollenmitgliedschaft bearbeiten</string>
   <string name="SYS_EDIT_USER">Benutzer:in bearbeiten</string>
-  <string name="SYS_EDIT_USER_IN_RELATION">Profil dieser Beziehung kann bearbeitet werden</string>
+  <string name="SYS_EDIT_USER_IN_RELATION">Das Profil dieser Beziehung kann bearbeitet werden.</string>
   <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
   <string name="SYS_EDIT_WEBLINKS">Weblinks bearbeiten</string>
   <string name="SYS_EDITED_BY">Geändert von</string>
@@ -812,7 +812,7 @@
   <string name="SYS_ENABLE_EMAILS">Aktiviere E-Mails</string>
   <string name="SYS_ENABLE_EMAILS_DESC">E-Mails innerhalb des Nachrichten-Moduls können über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_ENABLE_GREETING_CARDS">Aktiviere Grußkarten</string>
-  <string name="SYS_ENABLE_GREETING_CARDS_DESC">Grußkarten können über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. Dieses Modul steht generell nur angemeldeten Benutzerinnen und Benutzern zur Verfügung. (Voreinstellung: ja)</string>
+  <string name="SYS_ENABLE_GREETING_CARDS_DESC">Grußkarten können über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. Dieses Modul ist generell nur für angemeldete Benutzerinnen und Benutzern verfügbar. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES">Aktiviere Gruppen &amp; Rollen</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Zeigt die Gruppen und Rollen der Organisation an und ermöglicht die freie Konfiguration von Gruppen und Rollen. Eigene Liste können konfiguriert und angewendet werden. Dieses Modul ist generell nur für angemeldete Benutzerinnen und Benutzern verfügbar. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_PM_MODULE">Aktiviere private Nachrichten</string>
@@ -1286,7 +1286,7 @@
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Ist diese Einstellung gesetzt, dann können E-Mails an einzelne ehemalige Mitglieder, sowie an alle ehemaligen Mitglieder einer Rolle gesendet werden. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Sende E-Mails an alle E-Mail Adressen der Benutzerin bzw. des Benutzers</string>
-  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen der Benutzer bzw. des Benutzer gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: Aktiviert)</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen der Benutzerin bzw. des Benutzers gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Zugangsdaten zuschicken</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn du eingeloggt bist stehen dir weitere Rollen und Empfänger zur Verfügung, an die du E-Mails schreiben kannst.</string>
   <string name="SYS_SEND_MAILS">E-Mails zusenden</string>
@@ -1418,7 +1418,7 @@
   <string name="SYS_USERNAME_OR_EMAIL">Anmeldename oder E-Mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# am #VAR2# um #VAR3#</string>
   <string name="SYS_USERS_PER_PAGE">Anzahl Benutzer:innen pro Seite</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">Anzahl Benutzer:innen die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer:innen zu der Organisation, so kann man in der Liste blättern. (Voreinstellung: 25)</string>
+  <string name="SYS_USERS_PER_PAGE_DESC">Die Anzahl Benutzer:innen die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer:innen zu der Organisation, so kann man in der Liste blättern. (Voreinstellung: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">Du benutzt eine aktuelle #VAR1#Version von Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
