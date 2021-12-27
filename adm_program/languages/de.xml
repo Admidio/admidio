@@ -19,7 +19,7 @@
   <string name="DAT_DATES">Termine</string>
   <string name="DAT_DATES_DESC">Termine können hier angelegt und angeschaut werden. Benutzer:innen können sich auf Wunsch zu diesen Terminen anmelden.</string>
   <string name="DAT_DEADLINE">Anmeldeschluss</string>
-  <string name="DAT_DEADLINE_ATTENTION">Deine Anmeldung kann nicht mehr verändert werden, da das vorgegebene Enddatum für Anmeldungen erreicht wurde oder der Termin in der Vergangenheit liegt. Bitte wende dich an die Leiter des Termins oder einen Administrator!</string>
+  <string name="DAT_DEADLINE_ATTENTION">Deine Anmeldung kann nicht mehr verändert werden, da das vorgegebene Enddatum für Anmeldungen erreicht wurde oder der Termin in der Vergangenheit liegt. Bitte wende dich an die Leiter:innen des Termins oder eine:n Administrator:in!</string>
   <string name="DAT_DEADLINE_DESC">Teilnehmer können sich bis zu diesem Datum am Termin anmelden. Leiter:innen und Benutzer:innen mit dem Recht Termine zu bearbeiten können weiterhin Teilnehmer zuordnen. Wenn kein Datumswert angegeben wird, dann wird als Default das Startdatum des Termins als Anmeldeschluss angenommen.</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standardkonfiguration  der Teilnehmerliste</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für die Teilnehmerliste an Terminen dieser Organisation gemacht werden. Teilnehmer von Terminen werden mit dieser Konfiguration angezeigt.</string>
@@ -103,7 +103,7 @@
   <string name="GBO_GUESTBOOK">Gästebuch</string>
   <string name="GBO_GUESTBOOK_DESC">Besucher und Mitglieder können hier ihre Grüße und Anmerkungen hinterlassen, sowie andere Einträge kommentieren.</string>
   <string name="GBO_GUESTBOOK_MODERATION">Moderation aktivieren für</string>
-  <string name="GBO_GUESTBOOK_MODERATION_DESC">Gästebucheinträge werden erst nach einer Sichtprüfung eines Administrators publiziert. Hier kann eingestellt werden, ob die Prüfung nur bei Besuchern, auch bei angemeldeten Benutzer:innen oder bei niemandem durchgeführt werden soll.  (Voreinstellung: Niemand)</string>
+  <string name="GBO_GUESTBOOK_MODERATION_DESC">Gästebucheinträge werden erst nach einer Sichtprüfung einer Administratorin oder eines Administrators publiziert. Hier kann eingestellt werden, ob die Prüfung nur bei Besuchern, auch bei angemeldeten Benutzer:innen oder bei niemandem durchgeführt werden soll.  (Voreinstellung: Niemand)</string>
   <string name="GBO_HIDE_COMMENTS">Kommentare ausblenden</string>
   <string name="GBO_INITIAL_COMMENTS_LOADING">Kommentare direkt anzeigen</string>
   <string name="GBO_INITIAL_COMMENTS_LOADING_DESC">Wenn diese Option aktiviert ist, werden beim Aufruf der Gästebuchseite die Kommentare direkt geladen und angezeigt. Im anderen Fall muss die Benutzerin oder der Benutzer auf einen Link klicken um die Kommentare zu sehen. (Voreinstellung: nein)</string>
@@ -119,14 +119,14 @@
   <string name="INS_ADD_ORGANIZATION">Organisation hinzufügen</string>
   <string name="INS_ADDIDIONAL_DATA">Zusätzliche Daten</string>
   <string name="INS_ADDRESS_LIST">Adressliste</string>
-  <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Es sind nicht alle Daten für den Administrator eingegeben worden!</string>
-  <string name="INS_ADMINISTRATOR_LOGIN_DESC">Ein Update der Datenbank darf nur von einem Administrator durchgeführt werden. Gib an dieser Stelle bitte die Zugangsdaten eines Administrators ein.</string>
+  <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Es sind nicht alle Daten für eine:n Administrator:in eingegeben worden!</string>
+  <string name="INS_ADMINISTRATOR_LOGIN_DESC">Ein Update der Datenbank darf nur von einer Administratorin oder einem Administrator durchgeführt werden. Gib an dieser Stelle bitte die Zugangsdaten einer Administratorin oder eines Administrators ein.</string>
   <string name="INS_BOARD">Vorstand</string>
   <string name="INS_CONFERENCE_ROOM">Besprechungsraum</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Die Datei #VAR1_BOLD# befindet sich nicht im Admidio Hauptverzeichnis!\n\nLade die Datei gegebenenfalls erneut herunter und kopiere diese in das entsprechende Verzeichnis.</string>
   <string name="INS_CONTINUE_INSTALLATION">Installation fortsetzen</string>
   <string name="INS_COURSES">Kurse</string>
-  <string name="INS_CREATE_ADMINISTRATOR">Administrator anlegen</string>
+  <string name="INS_CREATE_ADMINISTRATOR">Administrator:in anlegen</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">Konfigurationsdatei erzeugen</string>
   <string name="INS_DATA_FULLY_ENTERED">Du hast alle notwendigen Daten für die Installation von Admidio eingegeben.\n\nJetzt muss die Datenbank erstellt und mit deinen Daten befüllt werden.</string>
   <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">Die Datenbank Parameter wurden nicht vollständig eingegeben!</string>
@@ -147,13 +147,13 @@
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Die Konfigurationsdatei #VAR1_BOLD# konnte nicht im Ordner #VAR2_BOLD# abgelegt werden. Bitte gib dem Ordner Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) oder lade die Konfigurationsdatei herunter und kopiere diese mit einem FTP-Programm in das Admidio Verzeichnis #VAR3_BOLD#.\n\nNachdem du die Datei dort abgelegt hast, kannst du die Installation fortsetzen.</string>
   <string name="INS_DATA_DIR_RIGHTS">Die erforderlichen Ordnerrechte für \"adm_my_files\" konnten nicht automatisch gesetzt werden. Um fortzufahren müssen die Rechte manuell auf \"777\" gesetzt werden.</string>
   <string name="INS_DATA_DO_NOT_MATCH">Die Daten aus der #VAR1_BOLD# stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfe bitte deine config.php und ändere die Daten entsprechend den gerade getätigten Angaben.</string>
-  <string name="INS_DATA_OF_ADMINISTRATOR">Daten des Administrators</string>
-  <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Gib in diesem Formular Name, E-Mail und die Zugangsdaten des Administrators an. Mit diesen Daten kannst du dich nach der Installation bei Admidio anmelden.</string>
+  <string name="INS_DATA_OF_ADMINISTRATOR">Daten einer Administratorin / eines Administrators</string>
+  <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Gib in diesem Formular Name, E-Mail und die Zugangsdaten einer Administratorin oder eines Administrators an. Mit diesen Daten kannst du dich nach der Installation bei Admidio anmelden.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Daten der Organisation</string>
   <string name="INS_DESCRIPTION_BOARD">Vorstand des Vereins</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Hier können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Beamer steht zur Verfügung.</string>
   <string name="INS_DESCRIPTION_MEMBER">Alle Mitglieder der Organisation</string>
-  <string name="INS_DESCRIPTION_ADMINISTRATOR">Gruppe der Administratoren des Systems</string>
+  <string name="INS_DESCRIPTION_ADMINISTRATOR">Gruppe aller Administratorinnen und Administratoren des Systems</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Zugangsdaten zur Datenbank eingeben</string>
   <string name="INS_ERROR_OPEN_FILE">Die Datei #VAR1_BOLD# konnte nicht geöffnet werden.</string>
   <string name="INS_FACEBOOK">Facebook</string>
@@ -166,7 +166,7 @@
   <string name="INS_INSTALL_ADMIDIO">Admidio installieren</string>
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</string>
-  <string name="INS_INSTALLATION_SUCCESSFUL">Die Admidio-Datenbank ist nun installiert und die Konfigurationsdatei eingerichtet. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.</string>
+  <string name="INS_INSTALLATION_SUCCESSFUL">Die Admidio-Datenbank ist nun installiert und die Konfigurationsdatei eingerichtet. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten einer Administratorin oder eines Administrators anmelden.</string>
   <string name="INS_INSTALLATION_VERSION">Installation Version #VAR1#</string>
   <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Die Installation war erfolgreich</string>
   <string name="INS_INTERN">Intern</string>
@@ -199,7 +199,7 @@
   <string name="INS_WARNING_BETA_VERSION">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Willkommen zur Installation von Admidio</string>
   <string name="INS_WELCOME_TO_UPDATE">Willkommen zur Aktualisierung von Admidio</string>
-  <string name="INS_WELCOME_TEXT">Dieser Assistent hilft dir die Mitgliederverwaltung Admidio einzurichten. Es werden nun alle notwendigen Daten abgefragt, damit das System vollständig eingerichtet werden kann und du dich als Administrator anmelden kannst.\n\nHast du Fragen oder Probleme mit der Installation, schau dir bitte #VAR1#unsere Installationsanleitung#VAR2# an oder wende dich an #VAR3#unser Supportforum#VAR4#.</string>
+  <string name="INS_WELCOME_TEXT">Dieser Assistent hilft dir die Mitgliederverwaltung Admidio einzurichten. Es werden nun alle notwendigen Daten abgefragt, damit das System vollständig eingerichtet werden kann und du dich als Administrator:in anmelden kannst.\n\nHast du Fragen oder Probleme mit der Installation, schau dir bitte #VAR1#unsere Installationsanleitung#VAR2# an oder wende dich an #VAR3#unser Supportforum#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">Du hast bereits die Verzeichnisse von Admidio mit einer neuen Version aktualisiert. Nun muss noch die Datenbank von der aktuellen Version #VAR2# auf die Version #VAR1# aktualisiert werden, damit Admidio mit der neuen Version laufen kann.\n\nHast du Fragen oder Probleme mit dem Update, schau dir bitte #VAR3#unsere Update-Anleitung#VAR4# an oder wende dich an #VAR5#unser Supportforum#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# setzt mindestens die MySQL-Version #VAR2# voraus. Du solltest versuchen die MySQL-Datenbank zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu deiner Datenbank ist.</string>
   <string name="INS_XING">Xing</string>
@@ -233,7 +233,7 @@
   <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer:innen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das Modul für Besucher ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Systembenachrichtigungen aktivieren</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Hier können die Systembenachrichtigungen von Admidio deaktiviert werden. Systembenachrichtigungen werden versendet, wenn sich zum Beispiel ein:e neue:r Benutzer:in angemeldet hat. Aber auch Registrierungsbestätigungen werden als Systembenachrichtigungen verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden. Es sei denn der Server unterstützt keinen E-Mailversand. Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Voreinstellung: ja)</string>
-  <string name="ORG_ADD_ORGANIZATION_DESC">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der/Die aktuelle Benutzer:in wird dort automatisch zum Administrator ernannt und kann die weitere Einrichtung durchführen. Benutzer:innen, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</string>
+  <string name="ORG_ADD_ORGANIZATION_DESC">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der/Die aktuelle Benutzer:in wird dort automatisch zur/zum Administrator:in ernannt und kann die weitere Einrichtung durchführen. Benutzer:innen, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Zusätzliche Variablen</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Voreinstellung: simple)</string>
@@ -310,7 +310,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Gib in diesem Formular die Abkürzung, den offiziellen Namen sowie die E-Mail-Adresse der Organisation ein, die du hinzufügen möchtest. Die E-Mail-Adresse sollte eine allgemeine Adresse der Organisation sein. Diese wird unter anderem als Absenderadresse bei automatischen Systembenachrichtigungen genutzt.</string>
   <string name="ORG_NO_FIELD_CREATED">Es wurden noch keine organisationsspezifischen Profilfelder angelegt!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
-  <string name="ORG_NOTIFY_ADMINISTRATOR">Benachrichtigung des Administrators nach einer Registrierung</string>
+  <string name="ORG_NOTIFY_ADMINISTRATOR">Benachrichtigung einer Administratorin oder eines Administrators nach einer Registrierung</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Voreinstellung: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Benutzer:innen</string>
@@ -341,11 +341,11 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier kann die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Empfängeradresse für Systembenachrichtigungen verwendet, z.B. bei der Registrierungsbestätigung.</string>
+  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier kann die E-Mail-Adresse eines Administrienden eingetragen werden. Diese wird als Empfängeradresse für Systembenachrichtigungen verwendet, z.B. bei der Registrierungsbestätigung.</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES">Benachrichtigung bei Profiländerungen</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Hier kann die Systembenachrichtigung für geänderte Profildaten aktiviert werden. Werden von einer Benutzerin oder einem Benutzer Profildaten erstellt, geändert oder gelöscht, erfolgt eine Benachrichtigung an die angegebene E-Mail #VAR1# (Voreinstellung: nein).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mail-Adresse #VAR1# versendet. (Voreinstellung: nein)</string>
+  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Die Administratorin oder der Administrator hat so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mail-Adresse #VAR1# versendet. (Voreinstellung: nein)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</string>
   <string name="ORG_THEME_FOLDER_OPEN">Themes Ordner konnte nicht geöffnet/gelesen werden.</string>
   <string name="ORG_TIME_FORMAT">Zeitformat</string>
@@ -461,7 +461,7 @@
   <string name="PRO_MY_PROFILE">Mein Profil</string>
   <string name="PRO_NEW_PASSWORD">Neues Passwort</string>
   <string name="PRO_NEW_PICTURE">Neues Profilfoto</string>
-  <string name="PRO_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer:innen hinterlegt. Wende dich bitte an einen Administrator, der diese Einstellung vornehmen kann.</string>
+  <string name="PRO_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer:innen hinterlegt. Wende dich bitte an eine:n Administrator:in, der diese Einstellung vornehmen kann.</string>
   <string name="PRO_NO_PERMISSIONS_ASSIGNED">Es wurden keine Berechtigungen vergeben.</string>
   <string name="PRO_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</string>
   <string name="PRO_PASSWORD_CHANGED">Das Passwort wurde erfolgreich geändert.</string>
@@ -524,10 +524,10 @@
   <string name="SYS_ADMIDIO_UPDATE">Admidio Update</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
-  <string name="SYS_ADMINISTRATOR">Administrator</string>
-  <string name="SYS_ADMINISTRATOR_EMAIL">Administrator E-Mail</string>
-  <string name="SYS_ADMINISTRATORS">Administratoren</string>
-  <string name="SYS_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Dokumente und Dateien Moduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
+  <string name="SYS_ADMINISTRATOR">Administrator:in</string>
+  <string name="SYS_ADMINISTRATOR_EMAIL">Administrator:in E-Mail</string>
+  <string name="SYS_ADMINISTRATORS">Administrierende</string>
+  <string name="SYS_ADMINISTRATORS_DESC">Mitglieder dieser Rollen sind Administrierende des Dokumente und Dateien Moduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zu einer administrierende Rolle gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle Organisationen</string>
@@ -587,8 +587,8 @@
   <string name="SYS_CAT_SELECTION">Kategorieauswahl</string>
   <string name="SYS_CAT_SELECTION_CONF_DESC">Über die Kategorieauswahl kann eine Konfiguration auf die Mitglieder von Rollen der ausgewählten Kategorien eingeschränkt werden.\n\n Soll keine Einschränkung vorgenommen werden, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer sein.</string>
   <string name="SYS_CATEGORIES">Kategorien</string>
-  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechte bearbeiten. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
-  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle Administratoren des Moduls der Elternorganisation</string>
+  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Mitglieder dieser Rollen sind Administrierende des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechte bearbeiten. Eine Rolle kann zur administrierenden Rolle gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
+  <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle Administrierende des Moduls der Elternorganisation</string>
   <string name="SYS_CATEGORY">Kategorie</string>
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer:innen unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
@@ -713,7 +713,7 @@
   <string name="SYS_DEFAULT_ENCODING_UTF8">Standardkodierung (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Standardliste</string>
   <string name="SYS_DEFAULT_LIST_DESC">Soll eine Mitgliederliste zu dieser Rolle angezeigt werden und wird keine Listenkonfiguration vorgegeben, so wird die Liste in der systemweit eingestellten Standardlistenkonfiguration dargestellt. Über dieses Feld kann für die einzelne Rolle eine andere Listenkonfiguration ausgewählt werden, die angezeigt wird, wenn keine Listenkonfiguration vorgegeben ist.</string>
-  <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
+  <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an eine:n Administrator:in, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
   <string name="SYS_DEFAULT_VAR">Standard-#VAR1#</string>
   <string name="SYS_DELETE">Löschen</string>
   <string name="SYS_DELETE_CONFIGURATION">Konfiguration löschen</string>
@@ -874,12 +874,12 @@
   <string name="SYS_FOLDER_NO_FILES">Der Ordner enthält keine Dateien.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Du besitzt keine Rechte den gewählten Ordner zu sehen.</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Es stehen keine Dokumente oder Dateien für Besucher zur Verfügung.</string>
-  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWende dich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
+  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWende dich bitte an eine:n #VAR2#Administrator:in#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Der Ordner (ID #VAR1#) konnte nicht gefunden werden.</string>
   <string name="SYS_FOLDER_RENAME">Der Ordner #VAR1# wurde umbenannt.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Beim Umbenennen des Ordners #VAR1# ist ein Fehler aufgetreten.</string>
-  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
+  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an eine:n #VAR2#Administrator:in#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
   <string name="SYS_FONT">Schriftart</string>
   <string name="SYS_FONT_AWESOME_DESC">Du kannst auf unterschiedliche Arten ein Icon hinterlegen:\n1. Ein Icon des Webfonts "Font Awesome". Gehe dazu auf #VAR1#http://fontawesome.com#VAR2# und wähle ein kostenloses Icon der Sammlung "Solid" oder "Brands" aus. Als Präfix musst du noch fa- davor setzen. Wählst du also das Icon "user" aus, musst du hier "fa-user" eintragen.\n2. Ein JPEG oder PNG Icon. Trage dazu die vollständige URL zusammen mit dem Dateinamen des Icons ein. Alternativ kannst du das Icon auch im Theme im Ordner "images" ablegen, dann brauchst du nur den Dateinamen anzugeben.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Ich habe mein Passwort vergessen!</string>
@@ -915,12 +915,12 @@
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML-Mails</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Die Erstellung und der Versand von HTML-Mails kann für registrierte Benutzer:innen aktiviert werden. Anstelle des normalen Textfeldes wird dann ein Javascript-Editor angezeigt über den der Text komfortabel editiert werden kann. Aus Sicherheitsgründen ist diese Funktion nicht für Gäste möglich.</string>
   <string name="SYS_HTML_TABLE">HTML-Tabelle</string>
-  <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Administrator deaktiviert.</string>
+  <string name="SYS_ICAL_DISABLED">Die iCal-Funktion ist deaktiviert.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IDENTIFY_USERS">Existierende Benutzer:innen werden anhand von Vornamen und Nachnamen erkannt.</string>
   <string name="SYS_IMPORTANT">Wichtig</string>
   <string name="SYS_IMPORT">Importieren</string>
-  <string name="SYS_IMPORT_LOGIN_DATA_DESC">Zugangsdaten können nur von einem Administrator importiert werden. Es müssen dabei die Regeln der Organisation eingehalten werden (z.B. die Passwortlänge und Passwortstärke). Benutzer:innen mit bereits vorhandenen Zugangsdaten behalten diese. Es werden keine Zugangsdaten durch den Import überschrieben.</string>
+  <string name="SYS_IMPORT_LOGIN_DATA_DESC">Zugangsdaten können nur von einer Administatorin oder einem Administrator importiert werden. Es müssen dabei die Regeln der Organisation eingehalten werden (z.B. die Passwortlänge und Passwortstärke). Benutzer:innen mit bereits vorhandenen Zugangsdaten behalten diese. Es werden keine Zugangsdaten durch den Import überschrieben.</string>
   <string name="SYS_IMPORT_MODE">Import Modus</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Das Arbeitsblatt #VAR1# existiert in der importierten Datei nicht!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Benutzer:innen wurden angelegt.\n#VAR2# Benutzer:innen wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.</string>
@@ -933,7 +933,7 @@
   <string name="SYS_INFORMATIONS">Informationen</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Gib bitte den Vor- und Nachnamen der neuen Benutzerin oder des neuen Benutzers ein. Bevor der Datensatz angelegt wird, wird geprüft, ob eine Benutzerin oder ein Benutzer mit ähnlichem Namen bereits in der Datenbank existiert.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation erfolgreich</string>
-  <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Die Admidio-Datenbank ist nun installiert und fertig eingerichtet. Die Konfigurationsdatei mit den Zugangsdaten zur Datenbank wurde erstellt und hinterlegt. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.</string>
+  <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Die Admidio-Datenbank ist nun installiert und fertig eingerichtet. Die Konfigurationsdatei mit den Zugangsdaten zur Datenbank wurde erstellt und hinterlegt. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten eines Administrienden anmelden.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">Die Installation und Einrichtung der Datenbank wurde erfolgreich durchgeführt.</string>
   <string name="SYS_INSTALLED">Installiert</string>
   <string name="SYS_INTERNAL_NAME">Interner Name</string>
@@ -976,7 +976,7 @@
   <string name="SYS_LOGIN">Anmelden</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Deine Anmeldung wurde noch nicht freigeschaltet.\n\nDu wirst benachrichtigt, sobald deine Anmeldung freigeschaltet wurde und ein Login möglich ist.</string>
-  <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Die Zugangsdaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Administratoren der Organisation #VAR1_BOLD# freigeschaltet.</string>
+  <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Die Zugangsdaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Administrierende der Organisation #VAR1_BOLD# freigeschaltet.</string>
   <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Zugangsdaten wurden richtig eingegeben, allerdings bist du kein aktives Mitglied der Organisation #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der eingegebene Anmeldename und/oder das Passwort ist falsch.</string>
   <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
@@ -1042,8 +1042,8 @@
   <string name="SYS_MOVE_UP">#VAR1# nach oben verschieben</string>
   <string name="SYS_MOVE_VAR">#VAR1# verschieben</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger</string>
-  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Empfänger enthalten alle Empfänger im BCC-Feld. Damit ist sichergestellt, dass keiner die E-Mail-Adressen der anderen Empfänger sieht. Das TO-Feld muss allerdings auch befüllt werden. Über diese Einstellung kann festgelegt werden, was im Empfängerfeld (TO) hinterlegt wird. Dies kein ein versteckter Wert \"Undisclosed Recipients\" sein, was aber bei manchen Providern zu Problemen führt. Alternativ kann das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administratoradresse aus den Systembenachrichtigungen gefüllt werden. Hinweis: Alle Emails an mehrere Empfänger werden dann auch an die E-Mail-Adresse im Empfängerfeld (TO) geschickt. (Voreinstellung: Absender)</string>
-  <string name="SYS_MUST_HAVE_ADMINISTRATOR">Die Rolle Administrator muss mindestens ein Mitglied haben!</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Empfänger enthalten alle Empfänger im BCC-Feld. Damit ist sichergestellt, dass keiner die E-Mail-Adressen der anderen Empfänger sieht. Das TO-Feld muss allerdings auch befüllt werden. Über diese Einstellung kann festgelegt werden, was im Empfängerfeld (TO) hinterlegt wird. Dies kein ein versteckter Wert \"Undisclosed Recipients\" sein, was aber bei manchen Providern zu Problemen führt. Alternativ kann das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administrator:innen-Adresse aus den Systembenachrichtigungen gefüllt werden. Hinweis: Alle Emails an mehrere Empfänger werden dann auch an die E-Mail-Adresse im Empfängerfeld (TO) geschickt. (Voreinstellung: Absender)</string>
+  <string name="SYS_MUST_HAVE_ADMINISTRATOR">Die Rolle Administrator:in muss mindestens ein Mitglied haben!</string>
   <string name="SYS_MYLIST_CONDITION_DESC">Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben. Damit wird die ausgewählte Rolle noch einmal nach deinen Bedingungen eingeschränkt.</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Name (Abkürzung)</string>
@@ -1114,7 +1114,7 @@
   <string name="SYS_PASSWORD">Passwort</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen?</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Bitte gib deine E-Mail-Adresse ein, mit der du dich angemeldet hast. Wir werden dir dann einen Link schicken, mit dem du dein Passwort zurücksetzen und anschließend ein neues Passwort vergeben kannst.</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Hat die Benutzerin oder der Benutzer sein Passwort vergessen, kann er sich einen Link zuschicken lassen, über den er auf dieser Webseite ein neues Passwort für seinen Account vergeben kann. Ist diese Option deaktiviert, kann die Benutzerin oder der Benutzer nur eine Anfrage per E-Mail an den Administrator stellen, damit dieser ein neues Passwort hinterlegt. Damit das Passwort zugesendet werden kann, muss zusätzlich die Einstellung #VAR1_BOLD# gesetzt sein. (Voreinstellung: ja)</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Hat die Benutzerin oder der Benutzer sein Passwort vergessen, kann er sich einen Link zuschicken lassen, über den er auf dieser Webseite ein neues Passwort für seinen Account vergeben kann. Ist diese Option deaktiviert, kann die Benutzerin oder der Benutzer nur eine Anfrage per E-Mail an die Administratorinnen und Administratoren stellen, damit dieser ein neues Passwort hinterlegt. Damit das Passwort zugesendet werden kann, muss zusätzlich die Einstellung #VAR1_BOLD# gesetzt sein. (Voreinstellung: ja)</string>
   <string name="SYS_PASSWORD_RESET_INVALID">Du hast einen ungültigen Link zum Zurücksetzen deines Passworts aufgerufen. Falls du dein Passwort noch nicht zurückgesetzt hast, fordere bitte einen neuen Link über die Funktion #VAR1# an.</string>
   <string name="SYS_PASSWORD_RESET_SAVED">Das neue Passwort wurde nun übernommen!</string>
   <string name="SYS_PASSWORD_UNKNOWN">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfe bitte dein Passwort und gib dieses erneut ein.</string>
@@ -1213,7 +1213,7 @@
   <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">Diese Einstellung steuert, welche Benutzer:innen das Recht haben, diverse Listen und die einzelnen Profile der Rollenmitglieder anzuschauen. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
   <string name="SYS_RIGHT_WEBLINKS">Weblinks verwalten</string>
   <string name="SYS_ROLE">Rolle</string>
-  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administratoren besitzen alle Berechtigungen für den Ordner.</string>
+  <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administrierende besitzen alle Berechtigungen für den Ordner.</string>
   <string name="SYS_ROLE_ASSIGNMENT_FOR">Rollenzuordnung für #VAR1# #VAR2#</string>
   <string name="SYS_ROLE_DEPENDENCIES_DESC">Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der #VAR1# sein!\n\nBeim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen Rolle Mitglied der #VAR1#. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften nicht aufgehoben!</string>
   <string name="SYS_ROLE_INFORMATION">Rolleninformationen</string>
@@ -1231,11 +1231,11 @@
   <string name="SYS_ROLE_TYPES">Rollentypen</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROLES_CONFIRMATION_OF_PARTICIPATION">Rollen - Teilnahmebestätigung</string>
-  <string name="SYS_ROLES_MODULE_ADMINISTRATORS_DESC">Mitglieder dieser Rolle sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechte bearbeiten.</string>
+  <string name="SYS_ROLES_MODULE_ADMINISTRATORS_DESC">Mitglieder dieser Rolle sind Administrierende des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechte bearbeiten.</string>
   <string name="SYS_ROOM">Raum</string>
   <string name="SYS_ROOM_MANAGEMENT">Raumverwaltung</string>
   <string name="SYS_ROW">Zeile</string>
-  <string name="SYS_RSS_DISABLED">Der Web-Feed wurde vom Administrator deaktiviert.</string>
+  <string name="SYS_RSS_DISABLED">Der Web-Feed ist deaktiviert.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web-Feed für #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
   <string name="SYS_SAFE_MODE_PROBLEM">problematisch bei Dateiuploads</string>
@@ -1359,10 +1359,10 @@
   <string name="SYS_SUPPORT_ADMIDIO">Admidio unterstützen</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorienverwaltung</string>
   <string name="SYS_SYMMETRICAL">symmetrisch</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Zugangsdaten für #organization_long_name#\n#content# Hallo #user_first_name#,\n\ndu erhältst deine Zugangsdaten für die Webseite #organization_homepage#.\nAnmeldename: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Administratoren</string>
-  <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Passwort zurücksetzen für #organization_long_name#\n#content# Hallo #user_first_name#,\n\nwir haben eine Anfrage zum Zurücksetzen deines Passwortes auf #organization_homepage# erhalten.\n\nFalls die Anfrage von dir gekommen ist, kannst du über den folgenden Link dein Passwort zurücksetzen und ein neues Passwort vergeben: \n#variable1#\n\nViele Grüße\nDie Administratoren</string>
-  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an den Administrator #administrator_email# von #organization_homepage#.\n\nViele Grüße\nDie Administratoren</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name# bestätigt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun kannst du dich mit deinem Anmeldenamen #user_login_name# und deinem Passwort auf der Homepage anmelden.\n\nSolltest du noch Fragen haben, schreib eine E-Mail an #administrator_email#.\n\nViele Grüße\nDie Administratoren</string>
+  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Zugangsdaten für #organization_long_name#\n#content# Hallo #user_first_name#,\n\ndu erhältst deine Zugangsdaten für die Webseite #organization_homepage#.\nAnmeldename: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Administrienden</string>
+  <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Passwort zurücksetzen für #organization_long_name#\n#content# Hallo #user_first_name#,\n\nwir haben eine Anfrage zum Zurücksetzen deines Passwortes auf #organization_homepage# erhalten.\n\nFalls die Anfrage von dir gekommen ist, kannst du über den folgenden Link dein Passwort zurücksetzen und ein neues Passwort vergeben: \n#variable1#\n\nViele Grüße\nDie Administrienden</string>
+  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an eine:n Administrator:in #administrator_email# von #organization_homepage#.\n\nViele Grüße\nDie Administrienden</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name# bestätigt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun kannst du dich mit deinem Anmeldenamen #user_login_name# und deinem Passwort auf der Homepage anmelden.\n\nSolltest du noch Fragen haben, schreib eine E-Mail an #administrator_email#.\n\nViele Grüße\nDie Administrienden</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich eine neue Benutzerin oder ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname:  #user_first_name#\nE-Mail:   #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>

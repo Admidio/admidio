@@ -915,7 +915,7 @@
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Creating and sending HTML based e-mails can be enabled for registered users. A JavaScript editor will be displayed for comfortable editing, instead of the standard text field. The current option is for guests due security reasons unavailable.</string>
   <string name="SYS_HTML_TABLE">HTML table</string>
-  <string name="SYS_ICAL_DISABLED">iCal has been disabled by the system administrator.</string>
+  <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IDENTIFY_USERS">Identification of existing users is made by means of first name and surname.</string>
   <string name="SYS_IMPORTANT">Important</string>
@@ -1236,7 +1236,7 @@
   <string name="SYS_ROOM">Room</string>
   <string name="SYS_ROOM_MANAGEMENT">Room administration</string>
   <string name="SYS_ROW">Row</string>
-  <string name="SYS_RSS_DISABLED">Web feed has been disabled by the system administrator.</string>
+  <string name="SYS_RSS_DISABLED">Web feed is disabled.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
   <string name="SYS_SAFE_MODE_PROBLEM">Might cause problems with file uploads</string>
