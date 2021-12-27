@@ -1169,7 +1169,6 @@
   <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Latest announcements from organization #VAR1#</string>
   <string name="SYS_RECIPIENT">Recipient</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail recipient</string>
-  <string name="SYS_RECIPIENT_NAME">Name of recipient</string>
   <string name="SYS_REDIRECT">Redirect</string>
   <string name="SYS_REDIRECT_DESC">You are leaving the website of #VAR1_BOLD# and will be redirected automatically to #VAR3# in #VAR2# seconds.\n\nIf the automatic redirection is not working please click #VAR4#here#VAR5#!</string>
   <string name="SYS_REDIRECT_URL_INVALID">The specified redirect URL is not valid.</string>

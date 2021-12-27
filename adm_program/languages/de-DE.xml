@@ -96,7 +96,7 @@
   <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">Es wurde ein neuer Gästebuchkommentar bei #VAR1# angelegt.\n\nText: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
   <string name="GBO_EMAIL_NOTIFICATION_TITLE">Ein neuer Gästebucheintrag wurde angelegt</string>
   <string name="GBO_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Gästebucheintrag bei #VAR1# angelegt.\n\nText: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
-  <string name="GBO_ENTRY_QUEUED">Der Eintrag wurde gespeichert. Er wird erst sichtbar nachdem er von einem Moderator freigeschaltet wurde.</string>
+  <string name="GBO_ENTRY_QUEUED">Der Eintrag wurde gespeichert. Er wird erst sichtbar nachdem er von einer Moderatorin oder einem Moderator freigeschaltet wurde.</string>
   <string name="GBO_FLOODING_PROTECTION">Ihr letzter Eintrag im Gästebuch liegt weniger als #VAR1# Sekunden zurück.</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Intervall</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Für nicht angemeldete Benutzer:innen wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer:innen in zu kurzen Zeitabständen hintereinander unerwünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Voreinstellung: 60 Sekunden)</string>
@@ -341,7 +341,7 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier kann die E-Mail-Adresse eines Administrienden eingetragen werden. Diese wird als Empfängeradresse für Systembenachrichtigungen verwendet, z.B. bei der Registrierungsbestätigung.</string>
+  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier kann die E-Mail-Adresse eines Administrierenden eingetragen werden. Diese wird als Empfängeradresse für Systembenachrichtigungen verwendet, z.B. bei der Registrierungsbestätigung.</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES">Benachrichtigung bei Profiländerungen</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Hier kann die Systembenachrichtigung für geänderte Profildaten aktiviert werden. Werden von einer Benutzerin oder einem Benutzer Profildaten erstellt, geändert oder gelöscht, erfolgt eine Benachrichtigung an die angegebene E-Mail #VAR1# (Voreinstellung: nein).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
@@ -514,7 +514,7 @@
   <string name="SYS_ADD_ATTACHMENT">Anhang hinzufügen</string>
   <string name="SYS_ADD_COLUMN">Spalte hinzufügen</string>
   <string name="SYS_ADD_COLUMNS_DESC">Ordnen Sie in der folgenden Tabelle beliebig vielen Spalten entsprechende Profilfelder zu. Zusätzlich können Sie die Standardsortierung vorgeben und Bedingungen zu Feldern hinzufügen, nach denen die jeweiligen Mitglieder gefiltert werden sollen.</string>
-  <string name="SYS_ADD_RECIPIENTS">Empfänger hinzufügen</string>
+  <string name="SYS_ADD_RECIPIENTS">Empfänger:innen hinzufügen</string>
   <string name="SYS_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
   <string name="SYS_ADDRESS">Adresse</string>
   <string name="SYS_ADDITIONAL_COLUMNS">Zusätzliche Spalten</string>
@@ -644,10 +644,10 @@
   <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist Ihre angeforderte Kopie der Nachricht</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
-  <string name="SYS_COUNT_BCC">Anzahl der BCC Empfänger</string>
-  <string name="SYS_COUNT_BCC_DESC">E-Mails an Rollen mit mehreren Mitgliedern werden als Blindkopie (BCC) versendet. So kann vom Empfänger nicht eingesehen werden, wer diese E-Mail noch bekommen hat. Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängern pro E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Besitzt eine Rolle mehr Mitglieder als die eingestellte Zahl, so werden mehrere E-Mails erzeugt. Wird der Wert auf 1 gesetzt, so werden die E-Mails nicht als Blindkopie versendet, sondern direkt an den Empfänger. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Voreinstellung: 50)</string>
-  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individueller Empfänger</string>
-  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuelle Empfänger</string>
+  <string name="SYS_COUNT_BCC">Anzahl der BCC Empfänger:innen</string>
+  <string name="SYS_COUNT_BCC_DESC">E-Mails an Rollen mit mehreren Mitgliedern werden als Blindkopie (BCC) versendet. So kann von der Empfängerin oder dem Empfänger nicht eingesehen werden, wer diese E-Mail noch bekommen hat. Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängerinnen oder Empfängern pro E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Besitzt eine Rolle mehr Mitglieder als die eingestellte Zahl, so werden mehrere E-Mails erzeugt. Wird der Wert auf 1 gesetzt, so werden die E-Mails nicht als Blindkopie versendet, sondern direkt an die Empfängerin oder den Empfänger. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Voreinstellung: 50)</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuelle empfangende Person</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuelle Empfangende</string>
   <string name="SYS_COUNTER">Zähler</string>
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">DEU</string>
@@ -938,8 +938,8 @@
   <string name="SYS_INSTALLED">Installiert</string>
   <string name="SYS_INTERNAL_NAME">Interner Name</string>
   <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
-  <string name="SYS_INTO_TO">Empfänger im TO-Feld und nicht im BCC-Feld auflisten</string>
-  <string name="SYS_INTO_TO_DESC">Geht eine E-Mail an mehrere Personen, dann werden die Empfänger bei gesetzter Einstellung alle im TO-Feld der E-Mail aufgelistet. Dadurch kann jeder Empfänger die Namen und E-Mail-Adressen der anderen Empfänger sehen. Außerdem hat er die Möglichkeit auf diese E-Mail an alle anderen Empfänger zu antworten. (Voreinstellung: Deaktiviert)</string>
+  <string name="SYS_INTO_TO">Empfänger:innen im TO-Feld und nicht im BCC-Feld auflisten</string>
+  <string name="SYS_INTO_TO_DESC">Geht eine E-Mail an mehrere Personen, dann werden die Empfänger:innen bei gesetzter Einstellung alle im TO-Feld der E-Mail aufgelistet. Dadurch kann jeder Empfangende die Namen und E-Mail-Adressen der anderen Empfangenden sehen. Außerdem hat er die Möglichkeit auf diese E-Mail an alle anderen Empfänger:innen zu antworten. (Voreinstellung: Deaktiviert)</string>
   <string name="SYS_INVALID_FONT_AWESOME">Der eingegebene Icon-Name entspricht nicht der Syntax von Font Awesome. Prüfen Sie bitte, ob es diesen Namen auch als Icon gibt.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <string name="SYS_IO_ERROR">E/A Fehler</string>
@@ -1000,8 +1000,8 @@
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# von max. #VAR2# Teilnehmenden</string>
   <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
-  <string name="SYS_MAX_RECEIVER">Maximale Empfänger für E-Mails</string>
-  <string name="SYS_MAX_RECEIVER_DESC">Dieser Wert gibt an, wieviele Empfänger man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden.</string>
+  <string name="SYS_MAX_RECEIVER">Maximale Empfänger:innen für E-Mails</string>
+  <string name="SYS_MAX_RECEIVER_DESC">Dieser Wert gibt an, wie viele Empfänger:innen man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden.</string>
   <string name="SYS_MAXIMUM_FILE_SIZE">Maximale Dateigröße</string>
   <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Benutzer:innen können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Voreinstellung: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Mit Vorbehalt teilnehmen</string>
@@ -1041,8 +1041,8 @@
   <string name="SYS_MOVE_DOWN">#VAR1# nach unten verschieben</string>
   <string name="SYS_MOVE_UP">#VAR1# nach oben verschieben</string>
   <string name="SYS_MOVE_VAR">#VAR1# verschieben</string>
-  <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger</string>
-  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Empfänger enthalten alle Empfänger im BCC-Feld. Damit ist sichergestellt, dass keiner die E-Mail-Adressen der anderen Empfänger sieht. Das TO-Feld muss allerdings auch befüllt werden. Über diese Einstellung kann festgelegt werden, was im Empfängerfeld (TO) hinterlegt wird. Dies kein ein versteckter Wert \"Undisclosed Recipients\" sein, was aber bei manchen Providern zu Problemen führt. Alternativ kann das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administrator:innen-Adresse aus den Systembenachrichtigungen gefüllt werden. Hinweis: Alle Emails an mehrere Empfänger werden dann auch an die E-Mail-Adresse im Empfängerfeld (TO) geschickt. (Voreinstellung: Absender)</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger:innen</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Empfänger:innen enthalten alle Empfänger:innen im BCC-Feld. Damit ist sichergestellt, dass keiner die E-Mail-Adressen der anderen Empfänger:innen sieht. Das TO-Feld muss allerdings auch befüllt werden. Über diese Einstellung kann festgelegt werden, was im Empfängerfeld (TO) hinterlegt wird. Dies kein ein versteckter Wert \"Undisclosed Recipients\" sein, was aber bei manchen Providern zu Problemen führt. Alternativ kann das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administrator:innen-Adresse aus den Systembenachrichtigungen gefüllt werden. Hinweis: Alle Emails an mehrere Empfänger:innen werden dann auch an die E-Mail-Adresse im Empfängerfeld (TO) geschickt. (Voreinstellung: Absender:in)</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">Die Rolle Administrator:in muss mindestens ein Mitglied haben!</string>
   <string name="SYS_MYLIST_CONDITION_DESC">Hier können Sie Bedingungen zu jedem Feld in Ihrer neuen Liste eingeben. Damit wird die ausgewählte Rolle noch einmal nach Ihren Bedingungen eingeschränkt.</string>
   <string name="SYS_NAME">Name</string>
@@ -1166,9 +1166,9 @@
   <string name="SYS_QUOTE">Einfaches Anführungszeichen (\')</string>
   <string name="SYS_RADIO_BUTTON">Optionsfeld</string>
   <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Neueste Ankündigungen der Organisation #VAR1#</string>
-  <string name="SYS_RECIPIENT">Empfänger</string>
-  <string name="SYS_RECIPIENT_EMAIL">Empfänger E-Mail</string>
-  <string name="SYS_RECIPIENT_NAME">Empfänger Name</string>
+  <string name="SYS_RECIPIENT">Empfänger:in</string>
+  <string name="SYS_RECIPIENT_EMAIL">Empfänger:in E-Mail</string>
+  <string name="SYS_RECIPIENT_NAME">Empfänger:in Name</string>
   <string name="SYS_REDIRECT">Weiterleitung</string>
   <string name="SYS_REDIRECT_DESC">Sie verlassen jetzt das Webangebot von #VAR1_BOLD# und werden in #VAR2# Sekunden automatisch zu #VAR3# weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicken Sie bitte #VAR4#hier#VAR5#!</string>
   <string name="SYS_REDIRECT_URL_INVALID">Die angegebene Weiterleitungs-URL ist ungültig.</string>
@@ -1295,15 +1295,15 @@
   <string name="SYS_SEND_NEW_LOGIN">Möchten Sie #VAR1_BOLD# eine E-Mail mit dem aktuellen Anmeldenamen und einem neuen Passwort mailen?</string>
   <string name="SYS_SEND_NEW_PW">Neues Passwort zusenden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Private Nachricht senden</string>
-  <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Ihre PM wird an den ausgewählten Empfänger gesendet</string>
+  <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Ihre PM wird an die ausgewählte Empfängerin bzw. den ausgewählten Empfänger gesendet</string>
   <string name="SYS_SEND_TEST_MAIL">Testmail verschicken</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">E-Mail mit Anmeldenamen und neuem Passwort zuschicken</string>
-  <string name="SYS_SENDER">Absender</string>
-  <string name="SYS_SENDER_EMAIL">Absender E-Mail</string>
-  <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter E-Mail-Adressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle E-Mails aus dem E-Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Voreinstellung: leer)</string>
+  <string name="SYS_SENDER">Absender:in</string>
+  <string name="SYS_SENDER_EMAIL">Absender:in E-Mail</string>
+  <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter E-Mail-Adressen als Absender:in nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle E-Mails aus dem E-Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse der Absenderin bzw. des Absenders genutzt. (Voreinstellung: leer)</string>
   <string name="SYS_SENDER_NAME">Absendername</string>
-  <string name="SYS_SENDER_NAME_DESC">Name des Absenders zur verwendeten E-Mail-Adresse. Dieses Feld muss nur gefüllt werden, wenn auch eine Absender E-Mail-Adresse gepflegt ist. (Voreinstellung: leer)</string>
-  <string name="SYS_SENDER_NOT_LOGGED_IN">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</string>
+  <string name="SYS_SENDER_NAME_DESC">Name der Absenderin bzw. des Absenders zur verwendeten E-Mail-Adresse. Dieses Feld muss nur gefüllt werden, wenn auch eine Absender:in E-Mail-Adresse gepflegt ist. (Voreinstellung: leer)</string>
+  <string name="SYS_SENDER_NOT_LOGGED_IN">(Die absendende Person war nicht eingeloggt. Deshalb könnten die Angaben fehlerhaft sein.)</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Trennzeichen für CSV-Datei</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
