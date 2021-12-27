@@ -3,11 +3,11 @@
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
   <string name="DAT_ALL_DAY">Ganztägig</string>
-  <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Teilnehmer:innen können anonyme Gäste anmelden</string>
-  <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmer:innen können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl an Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn ein Teilnehmer weitere Besucher mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.  </string>
+  <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Teilnehmende können anonyme Gäste anmelden</string>
+  <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmende können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl an Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn eine teilnehmende Person weitere Besucher:innen mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.  </string>
   <string name="DAT_ALLOW_USER_COMMENTS">Kommentare zur Anmeldung erlauben</string>
-  <string name="DAT_ALLOW_USER_COMMENTS_DESC">Teilnehmer:innen können ihre Teilnahme kommentieren. Die Kommentare können über die Liste der Teilnehmenden eingesehen werden</string>
-  <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmer:innen zuordnen</string>
+  <string name="DAT_ALLOW_USER_COMMENTS_DESC">Teilnehmende können ihre Teilnahme kommentieren. Die Kommentare können über die Liste der Teilnehmenden eingesehen werden</string>
+  <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmende zuordnen</string>
   <string name="DAT_ATTEND">Teilnehmen</string>
   <string name="DAT_ATTEND_DATE">Du hast die Teilnahme für den Termin #VAR1_BOLD# am #VAR2# zugesagt.</string>
   <string name="DAT_ATTEND_POSSIBLY">Du hast die Teilnahme für den Termin #VAR1_BOLD# am #VAR2# unter Vorbehalt zugesagt.</string>
@@ -20,20 +20,20 @@
   <string name="DAT_DATES_DESC">Termine können hier angelegt und angeschaut werden. Benutzer:innen können sich auf Wunsch zu diesen Terminen anmelden.</string>
   <string name="DAT_DEADLINE">Anmeldeschluss</string>
   <string name="DAT_DEADLINE_ATTENTION">Deine Anmeldung kann nicht mehr verändert werden, da das vorgegebene Enddatum für Anmeldungen erreicht wurde oder der Termin in der Vergangenheit liegt. Bitte wende dich an die Leiter:innen des Termins oder eine:n Administrator:in!</string>
-  <string name="DAT_DEADLINE_DESC">Teilnehmer können sich bis zu diesem Datum am Termin anmelden. Leiter:innen und Benutzer:innen mit dem Recht Termine zu bearbeiten können weiterhin Teilnehmer zuordnen. Wenn kein Datumswert angegeben wird, dann wird als Default das Startdatum des Termins als Anmeldeschluss angenommen.</string>
-  <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standardkonfiguration  der Teilnehmerliste</string>
-  <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für die Teilnehmerliste an Terminen dieser Organisation gemacht werden. Teilnehmer von Terminen werden mit dieser Konfiguration angezeigt.</string>
+  <string name="DAT_DEADLINE_DESC">Teilnehmende können sich bis zu diesem Datum am Termin anmelden. Leiter:innen und Benutzer:innen mit dem Recht Termine zu bearbeiten können weiterhin Teilnehmende zuordnen. Wenn kein Datumswert angegeben wird, dann wird als Default das Startdatum des Termins als Anmeldeschluss angenommen.</string>
+  <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standardkonfiguration der Liste aller Teilnehmenden</string>
+  <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für die Liste aller Teilnehmenden an Terminen dieser Organisation gemacht werden. Teilnehmende von Terminen werden mit dieser Konfiguration angezeigt.</string>
   <string name="DAT_EDIT_CALENDAR_DESC">Hier können Kalender angelegt und bearbeitet werden.</string>
   <string name="DAT_EDIT_EVENTS">Termine bearbeiten</string>
   <string name="DAT_EDIT_ROOMS">Räume bearbeiten</string>
   <string name="DAT_EDIT_ROOMS_DESC">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Ein Termin wurde geändert</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">Es wurde ein Termin bei #VAR1# geändert.\n\nTitel: #VAR2#\nDatum: #VAR3#\nKalender: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Ort: #VAR1#\nRaum: #VAR2#\nTeilnehmer: #VAR3#\nGeändert von: #VAR4#\n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Ort: #VAR1#\nRaum: #VAR2#\nTeilnehmende: #VAR3#\nGeändert von: #VAR4#\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3">Geändert am: #VAR1#</string>
   <string name="DAT_EMAIL_NOTIFICATION_TITLE">Ein neuer Termin wurde angelegt</string>
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">Es wurde ein neuer Termin bei #VAR1# angelegt.\n\nTitel: #VAR2#\nDatum: #VAR3#\nKalender: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Ort: #VAR1#\nRaum: #VAR2#\nTeilnehmer: #VAR3#\nAngelegt von: #VAR4#\n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Ort: #VAR1#\nRaum: #VAR2#\nTeilnehmende: #VAR3#\nAngelegt von: #VAR4#\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Angelegt am: #VAR1#</string>
   <string name="DAT_ENABLE_ICAL">iCal-Funktion aktivieren</string>
   <string name="DAT_ENABLE_ICAL_DESC">Ist diese Funktion aktiviert, lassen sich einzelne Termine oder alle Termine in einem festgelegten Zeitraum herunterladen. Auch das Abonnieren der Termine mit einer Kalendersoftware wird möglich. (Voreinstellung: ja)</string>
@@ -45,10 +45,10 @@
   <string name="DAT_ICAL_DAYS_PAST_DESC">Anzahl der Tage in der Vergangenheit, die in einem iCal-Download oder -Abo einbezogen werden sollen. Wird der iCal-Download innerhalb des Event-Moduls gestartet, dann wird diese Einstellung ignoriert und die gefilterten Termine exportiert. (Voreinstellung: 30)</string>
   <string name="DAT_LOCATION">Ort</string>
   <string name="DAT_LOCATION_LINK">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</string>
-  <string name="DAT_LOGIN_POSSIBLE">Hier kann ausgewählt werden, ob eine Anmeldung zu dem angegebenen Termin möglich sein soll oder nicht.\nFalls die Anmeldung nachträglich gelöscht wird, werden auch alle bisherigen Teilnehmer vom Termin entfernt.\nWenn man hingegen nur die Anmeldung für neue Teilnehmer beenden möchte, so kann man die derzeitige Teilnehmerzahl als Teilnahmebegrenzung eintragen.</string>
+  <string name="DAT_LOGIN_POSSIBLE">Hier kann ausgewählt werden, ob eine Anmeldung zu dem angegebenen Termin möglich sein soll oder nicht.\nFalls die Anmeldung nachträglich gelöscht wird, werden auch alle bisherigen Teilnehmende vom Termin entfernt.\nWenn man hingegen nur die Anmeldung für neue Teilnehmende beenden möchte, so kann man die derzeitige Anzahl aller Teilnehmenden als Teilnahmebegrenzung eintragen.</string>
   <string name="DAT_MAINTAIN_CATEGORIES_DESC">Hier können Kategorien angelegt und bearbeitet werden.</string>
-  <string name="DAT_MAX_MEMBERS">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</string>
-  <string name="DAT_PARTICIPANTS_LIMIT">Teilnehmerbegrenzung</string>
+  <string name="DAT_MAX_MEMBERS">Hier kann die Anzahl der Teilnehmenden für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</string>
+  <string name="DAT_PARTICIPANTS_LIMIT">Begrenzung der Teilnehmenden</string>
   <string name="DAT_PARTICIPATE_NO_RIGHTS">Du besitzt nicht das Recht dich für diesen Termin anzumelden.</string>
   <string name="DAT_PARTICIPATE_AT_DATE">An Termin als Organisator teilnehmen</string>
   <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Du wirst Organisator des Termins und erhältst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren ernennen.</string>
@@ -57,21 +57,21 @@
   <string name="DAT_REGISTRATION_POSSIBLE_FOR">Anmeldung möglich für</string>
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">Keine Anmeldung mehr möglich.</string>
   <string name="DAT_REGISTRATION_POSSIBLE">Anmeldung zu diesem Termin ermöglichen</string>
-  <string name="DAT_REMOVE_APPLICATION">Willst du die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmer gelöscht werden.</string>
-  <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Teilnehmer können die Teilnehmerliste einsehen</string>
-  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Teilnehmer können Mails an alle Teilnehmer senden</string>
-  <string name="DAT_ROLES_DIFFERENT">Du hast bei den Teilnehmern Rollen zugeordnet, welche bei der gewählten Kategorie nicht das Recht haben die Termine zu sehen. Bitte wähle bei den Teilnehmern eine der folgenden Rollen: #VAR1_BOLD#.</string>
+  <string name="DAT_REMOVE_APPLICATION">Willst du die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmenden gelöscht.</string>
+  <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Teilnehmende können die Liste der Teilnehmenden einsehen</string>
+  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Teilnehmende können E-Mails an alle Teilnehmenden senden</string>
+  <string name="DAT_ROLES_DIFFERENT">Du hast bei den Teilnehmenden Rollen zugeordnet, welche bei der gewählten Kategorie nicht das Recht haben die Termine zu sehen. Bitte wähle bei den Teilnehmenden eine der folgenden Rollen: #VAR1_BOLD#.</string>
   <string name="DAT_ROOM_INFORMATIONS">Rauminformationen</string>
   <string name="DAT_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzplätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
   <string name="DAT_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
   <string name="DAT_ROOM_SELECTABLE">Raum auswählbar</string>
   <string name="DAT_ROOM_SELECTABLE_DESC">Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl eines Raums zu ermöglichen. (Voreinstellung: nein)</string>
   <string name="DAT_SAVE_ALL_CONFIRMATIONS">Absagen zu Terminen speichern</string>
-  <string name="DAT_SAVE_ALL_CONFIRMATIONS_DESC">Absagen von Teilnehmern zu Terminen können gespeichert werden. Die Absagen werden dann in der Teilnehmerliste ebenfalls angezeigt. Wird diese Option deaktiviert, dann werden Absagen nicht gespeichert und können in der Teilnehmerliste auch nicht eingesehen werden. Diese Option gilt ab dem Zeitpunkt der Einstellung und kann rückwirkend nicht mehr angewendet werden! (Voreinstellung : Ja)</string>
+  <string name="DAT_SAVE_ALL_CONFIRMATIONS_DESC">Absagen von Teilnehmenden zu Terminen können gespeichert werden. Die Absagen werden dann in der Liste der Teilnehmenden ebenfalls angezeigt. Wird diese Option deaktiviert, dann werden Absagen nicht gespeichert und können in der Liste der Teilnehmenden auch nicht eingesehen werden. Diese Option gilt ab dem Zeitpunkt der Einstellung und kann rückwirkend nicht mehr angewendet werden! (Voreinstellung : Ja)</string>
   <string name="DAT_SHOW_MAP_LINK">Kartenlink anzeigen</string>
   <string name="DAT_SHOW_MAP_LINK_DESC">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Voreinstellung: ja)</string>
   <string name="DAT_SHOW_ON_MAP">Auf Karte zeigen</string>
-  <string name="DAT_SHOW_PARTICIPANTS">Teilnehmer anzeigen</string>
+  <string name="DAT_SHOW_PARTICIPANTS">Teilnehmende anzeigen</string>
   <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Wechsel zur Kalenderverwaltung</string>
   <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Wechsel zur Raumverwaltung</string>
   <string name="DAT_VIEW_MODE">Standard-Darstellung</string>
@@ -996,8 +996,8 @@
   <string name="SYS_MAP_LINK_HOME_DESC">Zeigt den Wohnort bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt eine Route vom eigenen Wohnort zum Wohnort dieser Benutzerin bzw. dieses Benutzers bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MAX_ATTACHMENT_SIZE">Du kannst so viele Anhänge hinzufügen, wie du möchtest. Die Dateigröße aller Anhänge zusammen darf #VAR1# MB nicht überschreiten.</string>
-  <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmer</string>
-  <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# von max. #VAR2# Teilnehmern</string>
+  <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmende</string>
+  <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# von max. #VAR2# Teilnehmende</string>
   <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
   <string name="SYS_MAX_RECEIVER">Maximale Empfänger für E-Mails</string>
@@ -1013,7 +1013,7 @@
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Mitglied der Organisation #VAR1#</string>
   <string name="SYS_MEMBERS">Mitglieder</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Mitglieder zwischen #VAR1# und #VAR2#</string>
-  <string name="SYS_MEMBERS_PER_PAGE">Anzahl Teilnehmer pro Seite</string>
+  <string name="SYS_MEMBERS_PER_PAGE">Anzahl Teilnehmende pro Seite</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Voreinstellung: 25)</string>
   <string name="SYS_MEMBERSHIP_END">Mitgliedschaftsende</string>
   <string name="SYS_MEMBERSHIP_DELETE">Willst du die Mitgliedschaft bei der Rolle #VAR1_BOLD# wirklich beenden?</string>
@@ -1108,9 +1108,9 @@
   <string name="SYS_PAGE_PREVIOUS">Vorherige</string>
   <string name="SYS_PAGE_NEXT">Nächste</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# und #VAR2#</string>
-  <string name="SYS_PARTICIPANTS">Teilnehmer</string>
-  <string name="SYS_PARTICIPATION_INFORMATION">Teilnehmerinformationen</string>
-  <string name="SYS_PARTICIPATION_STATUS">Teilnehmerstatus</string>
+  <string name="SYS_PARTICIPANTS">Teilnehmende</string>
+  <string name="SYS_PARTICIPATION_INFORMATION">Informationen der Teilnehmenden</string>
+  <string name="SYS_PARTICIPATION_STATUS">Status der teilnehmenden Person</string>
   <string name="SYS_PASSWORD">Passwort</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen?</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Bitte gib deine E-Mail-Adresse ein, mit der du dich angemeldet hast. Wir werden dir dann einen Link schicken, mit dem du dein Passwort zurücksetzen und anschließend ein neues Passwort vergeben kannst.</string>
