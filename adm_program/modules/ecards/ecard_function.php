@@ -24,7 +24,7 @@ class FunctionClass
      */
     public function __construct(Language $gL10n)
     {
-        $this->nameRecipientString      = $gL10n->get('SYS_RECIPIENT_NAME');
+        $this->nameRecipientString      = $gL10n->get('SYS_RECIPIENT');
         $this->emailRecipientString     = $gL10n->get('SYS_RECIPIENT_EMAIL');
         $this->yourMessageString        = $gL10n->get('SYS_MESSAGE');
         $this->newMessageReceivedString = $gL10n->get('SYS_NEW_MESSAGE_RECEIVED');

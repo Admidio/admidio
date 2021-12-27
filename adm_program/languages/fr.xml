@@ -1307,7 +1307,7 @@
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Cet utilisateur n\'est pas encore membre de l\'organisation #VAR1#, mais possède déjà des données de connexion.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Cet utilisateur n\'est pas encore membre de l\'organisation #VAR1# et ne possède pas de données de connexion.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">Cet utilisateur n\'a pas encore de login.\nTu veux lui attribuer les données de cet inscription ?</string>
-  <string name="SYS_USER_PHOTO">Photo de l\'utilisateur</string>
+  <string name="SYS_PROFILE_PHOTO">Photo de l\'utilisateur</string>
   <string name="SYS_USER_RELATION">Relation</string>
   <string name="SYS_USER_RELATIONS">Relations</string>
   <string name="SYS_USER_RELATION_TYPE">Type de relation</string>

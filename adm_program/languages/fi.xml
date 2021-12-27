@@ -1367,7 +1367,7 @@
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Käyttäjä ei ole organisaation #VAR1# jäsen, mutta on jo määrittänyt kirjautumistiedot.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Käyttäjä ei ole organisaation #VAR1# jäsen eikä hänellä ole rekisteröityjä kirjautumistietoja.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">Käyttäjällä ei ole vielä kirjautumistunnusta. \nHaluatko määrittää valitun rekisteröinnin tiedot käyttäjälle?</string>
-  <string name="SYS_USER_PHOTO">Käyttäjän kuva</string>
+  <string name="SYS_PROFILE_PHOTO">Käyttäjän kuva</string>
   <string name="SYS_USER_RELATION">Suhde</string>
   <string name="SYS_USER_RELATIONS">Suhteet</string>
   <string name="SYS_USER_RELATION_TYPE">Suhteen tyyppi</string>

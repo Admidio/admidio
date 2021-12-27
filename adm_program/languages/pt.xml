@@ -1245,7 +1245,7 @@
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">O usuário não é um membro da organização #VAR1# mas já possui informações de sessão atribuídas.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">O usuário não é um membro da organização #VAR1# e não possui informação de sessão registrada.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">O usuário ainda não tem um nome de usuário.\nAtribuir informação do registro selecionado para o usuário?</string>
-  <string name="SYS_USER_PHOTO">Foto de perfil</string>
+  <string name="SYS_PROFILE_PHOTO">Foto de perfil</string>
   <string name="SYS_USER_RELATION">Relação</string>
   <string name="SYS_USER_RELATIONS">Relações</string>
   <string name="SYS_USER_RELATION_TYPE">Tipo de relação</string>
