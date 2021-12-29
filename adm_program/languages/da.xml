@@ -915,7 +915,7 @@
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Oprettelse og afsendelse af HTML formaterede e-mails kan tillades for registrerede brugere. En JavaScript editor vil blive vist, istedet for standard tekstfeltet. Af sikkerheds årsager er dette ikke tilladt for gæster.</string>
   <string name="SYS_HTML_TABLE">‎HTML-tabel‎</string>
-  <string name="SYS_ICAL_DISABLED">ICal er blevet deaktiveret af system administratoren.</string>
+  <string name="SYS_ICAL_DISABLED">iCal-funktionen er deaktiveret.</string>
   <string name="SYS_ICON">Ikon</string>
   <string name="SYS_IDENTIFY_USERS">Identifikation af eksisterende brugere beror på sammenligning af for og efternavn.</string>
   <string name="SYS_IMPORTANT">Vigtigt</string>
@@ -1160,6 +1160,7 @@
   <string name="SYS_PROCESS_CANCELED">Proces afbrudt.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Det følgende problem opstod under arbejdet med data.</string>
   <string name="SYS_PROFILE_FIELD">Profil felt</string>
+  <string name="SYS_PROFILE_PHOTO">Profilbillede</string>
   <string name="SYS_PROPERTIES">Indstillinger</string>
   <string name="SYS_QUANTITY">Antal</string>
   <string name="SYS_QUARTERLY">Kvartalsvis</string>
@@ -1168,7 +1169,6 @@
   <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Sidste nye meddelelse fra organisationen #VAR1#</string>
   <string name="SYS_RECIPIENT">Modtager</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail modtager</string>
-  <string name="SYS_RECIPIENT_NAME">Navn på modtager</string>
   <string name="SYS_REDIRECT">Viderestil</string>
   <string name="SYS_REDIRECT_DESC">Du forlader nu siden #VAR1_BOLD# og vil blive omdirigeret automatisk til #VAR3# i løbet af #VAR2# sekunder.\n\n hvis den automatiske omdirigering ikke virker, klik da venligst #VAR4# her #VAR5#!</string>
   <string name="SYS_REDIRECT_URL_INVALID">Den specificerede redirect URL er ugyldig.</string>
@@ -1203,7 +1203,7 @@
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Administrer dokumenter og filer</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Roller som har denne rettighed kan administrere rettighederne for dokumenter og fil modulet. Dette inkluderer hvem der kan se folderen og uploade filer til den.</string>
   <string name="SYS_RIGHT_EDIT_USER">Rediger profil for alle brugere</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Roller der har denne rettighed kan redigere i andre brugeres data (undtagen kodeord).\n De har desuden adgang til bruger administrationen og kan tilføje / slette brugere.</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Roller med denne tilladelse kan redigere andre brugeres data (undtagen adgangskoder).\n Derudover har de adgang til brugeradministrationen og kan tilføje eller slette brugere.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Rediger og slet gæstebogs indlæg</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Opret kommentarer til gæstebogs indlæg</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">Denne indstilling styrer, hvem der har ret til at sende e-mails til denne rolle via meddelelsesmodulet. Rollens rettighed #VAR1_BOLD# er stadig over denne indstilling.</string>
@@ -1235,7 +1235,7 @@
   <string name="SYS_ROOM">Lokale</string>
   <string name="SYS_ROOM_MANAGEMENT">Lokale administration</string>
   <string name="SYS_ROW">Række</string>
-  <string name="SYS_RSS_DISABLED">Web feed er blevet deaktiveret af system administratoren.</string>
+  <string name="SYS_RSS_DISABLED">Webfeed er deaktiveret.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
   <string name="SYS_SAFE_MODE_PROBLEM">problematisk med fil overførsler</string>
@@ -1409,7 +1409,6 @@
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Brugeren er ikke medlem af organisationen #VAR1#, men er i besiddelse af et login.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Brugeren er ikke medlem af organisationen #VAR1# og har ingen loginoplysninger registreret.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">Bruger har intet login endnu.\nVil du tildele informationen fra den valgte registrering til brugeren?</string>
-  <string name="SYS_PROFILE_PHOTO">Bruger billede</string>
   <string name="SYS_USER_RELATION">Relation</string>
   <string name="SYS_USER_RELATIONS">Relationer</string>
   <string name="SYS_USER_RELATION_TYPE">Relations typer</string>
