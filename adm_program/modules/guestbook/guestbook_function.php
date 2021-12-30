@@ -188,10 +188,7 @@ if ($getMode === 1 || $getMode === 3) {
         // Daten in Datenbank schreiben
         $returnCode = $guestbook->save();
 
-        if ($returnCode === false) {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-        } else {
+        if ($returnCode === true) {
             // Benachrichtigungs-Email für neue Einträge
             if (!$gValidLogin) {
                 $gboName  = $_POST['gbo_name'];
@@ -334,10 +331,7 @@ if ($getMode === 1 || $getMode === 3) {
         // Daten in Datenbank schreiben
         $returnCode = $gbComment->save();
 
-        if ($returnCode === false) {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-        } else {
+        if ($returnCode === true) {
             // Benachrichtigungs-Email für neue Einträge
             if (!$gValidLogin) {
                 $gbcName  = $gbComment->getValue('gbc_name');

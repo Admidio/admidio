@@ -103,11 +103,6 @@ if ($getMode === 1) {
     // save weblink data to database
     $returnCode = $link->save();
 
-    if ($returnCode === false) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-
     if ($returnCode === true && $weblinkIsNew) {
         // Notification email for new entries
         $message = $gL10n->get('SYS_LINK_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));

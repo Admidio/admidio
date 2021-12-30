@@ -101,10 +101,6 @@ if ($getMode === 1) {
     // save Data to Table
     $returnCode = $menu->save();
 
-    if ($returnCode < 0) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    }
-
     // Read current roles of the menu
     $displayMenu = new RolesRights($gDb, 'menu_view', (int) $menu->getValue('men_id'));
     $rolesDisplayRight = $displayMenu->getRolesIds();

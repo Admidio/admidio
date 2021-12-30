@@ -90,16 +90,11 @@ if ($getMode === 1) {
         // Daten in Datenbank schreiben
         $returnValue = $announcement->save();
 
-        if ($returnValue === false) {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-        } else {
-            if ($getAnnUuid === '') {
-                $message = $gL10n->get('SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
+        if ($returnValue === true && $getAnnUuid === '') {
+            $message = $gL10n->get('SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
 
-                $notification = new Email();
-                $notification->adminNotification($gL10n->get('SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
-            }
+            $notification = new Email();
+            $notification->adminNotification($gL10n->get('SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
         }
     } catch (AdmException $e) {
         $e->showHtml();
