@@ -134,7 +134,7 @@ if ($getMode === 1) {
     }
 
     if ($category->getValue('cat_name') !== $_POST['cat_name']) {
-        // Schauen, ob die Kategorie bereits existiert
+        // See if the category already exists
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_CATEGORIES.'
                  WHERE cat_type = ? -- $getType
@@ -149,8 +149,8 @@ if ($getMode === 1) {
         }
     }
 
-    // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
-    // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
+    // for all checkboxes it must be checked whether a value was transferred here, if not,
+    // hen set the value here to 0, since 0 is not transferred
     $checkboxes = array('cat_default');
 
     foreach ($checkboxes as $value) {
@@ -159,7 +159,7 @@ if ($getMode === 1) {
         }
     }
 
-    // POST Variablen in das UserField-Objekt schreiben
+    // POST Writing variables to the UserField object
     foreach ($_POST as $key => $value) { // TODO possible security issue
         if (str_starts_with($key, 'cat_')) {
             $category->setValue($key, $value);
@@ -169,54 +169,52 @@ if ($getMode === 1) {
     $gDb->startTransaction();
 
     // write category into database
-    $returnCode = $category->save();
+    $category->save();
 
-    if ($returnCode === true) {
-        if ($getType !== 'ROL') {
-            $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
+    if ($getType !== 'ROL') {
+        $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
 
-            // roles have their own preferences for visibility, so only allow this for other types
-            // until now we do not support visibility for categories that belong to several organizations
-            if ($category->getValue('cat_org_id') > 0
-            || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1)) {
-                // save changed roles rights of the category
-                $rightCategoryView->saveRoles(array_map('intval', $_POST['adm_categories_view_right']));
-            } else {
-                // delete existing roles rights of the category
-                $rightCategoryView->delete();
-            }
-
-            if ($getType === 'USF') {
-                // delete cache with profile categories rights
-                $gProfileFields = new ProfileFields($gDb, $orgId);
-            } else {
-                // until now we don't use edit rights for profile fields
-                $rightCategoryEdit = new RolesRights($gDb, 'category_edit', (int) $category->getValue('cat_id'));
-                $rightCategoryEdit->saveRoles(array_map('intval', $_POST['adm_categories_edit_right']));
-            }
+        // roles have their own preferences for visibility, so only allow this for other types
+        // until now we do not support visibility for categories that belong to several organizations
+        if ($category->getValue('cat_org_id') > 0
+        || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1)) {
+            // save changed roles rights of the category
+            $rightCategoryView->saveRoles(array_map('intval', $_POST['adm_categories_view_right']));
+        } else {
+            // delete existing roles rights of the category
+            $rightCategoryView->delete();
         }
 
-        // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
-        // dann muss die Sequenz fuer den alle Kategorien dieses Typs neu gesetzt werden
-        $sequenceCategory = new TableCategory($gDb);
-        $sequence = 0;
-
-        $sql = 'SELECT *
-                  FROM '.TBL_CATEGORIES.'
-                 WHERE cat_type = ? -- $getType
-                   AND (  cat_org_id  = ? -- $gCurrentOrgId
-                       OR cat_org_id IS NULL )
-              ORDER BY cat_org_id ASC, cat_sequence ASC';
-        $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $gCurrentOrgId));
-
-        while ($row = $categoriesStatement->fetch()) {
-            ++$sequence;
-            $sequenceCategory->clear();
-            $sequenceCategory->setArray($row);
-
-            $sequenceCategory->setValue('cat_sequence', $sequence);
-            $sequenceCategory->save();
+        if ($getType === 'USF') {
+            // delete cache with profile categories rights
+            $gProfileFields = new ProfileFields($gDb, $orgId);
+        } else {
+            // until now we don't use edit rights for profile fields
+            $rightCategoryEdit = new RolesRights($gDb, 'category_edit', (int) $category->getValue('cat_id'));
+            $rightCategoryEdit->saveRoles(array_map('intval', $_POST['adm_categories_edit_right']));
         }
+    }
+
+    // if a category has been converted from all orgs to a specific one or the other way around,
+    // then the sequence must be reset for all categories of this type
+    $sequenceCategory = new TableCategory($gDb);
+    $sequence = 0;
+
+    $sql = 'SELECT *
+              FROM '.TBL_CATEGORIES.'
+             WHERE cat_type = ? -- $getType
+               AND (  cat_org_id  = ? -- $gCurrentOrgId
+                   OR cat_org_id IS NULL )
+          ORDER BY cat_org_id ASC, cat_sequence ASC';
+    $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $gCurrentOrgId));
+
+    while ($row = $categoriesStatement->fetch()) {
+        ++$sequence;
+        $sequenceCategory->clear();
+        $sequenceCategory->setArray($row);
+
+        $sequenceCategory->setValue('cat_sequence', $sequence);
+        $sequenceCategory->save();
     }
 
     $gDb->endTransaction();
@@ -225,7 +223,7 @@ if ($getMode === 1) {
     unset($_SESSION['categories_request']);
 
     admRedirect($gNavigation->getUrl());
-// => EXIT
+    // => EXIT
 } elseif ($getMode === 2) {
     // delete category
     try {
@@ -238,7 +236,7 @@ if ($getMode === 1) {
         // => EXIT
     }
 } elseif ($getMode === 4) {
-    // Kategoriereihenfolge aktualisieren
+    // Update category sequence
     $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableCategory::MOVE_UP, TableCategory::MOVE_DOWN)));
 
     if ($category->moveSequence($getSequence)) {
