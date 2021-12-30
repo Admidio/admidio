@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ZxcvbnPhp;
 
 use ZxcvbnPhp\Matchers\BaseMatch;
@@ -32,7 +34,7 @@ class Matcher
      *
      * @see  zxcvbn/src/matching.coffee::omnimatch
      */
-    public function getMatches($password, array $userInputs = [])
+    public function getMatches(string $password, array $userInputs = []): array
     {
         $matches = [];
         foreach ($this->getMatchers() as $matcher) {
@@ -48,7 +50,7 @@ class Matcher
         return $matches;
     }
 
-    public function addMatcher(string $className)
+    public function addMatcher(string $className): self
     {
         if (!is_a($className, MatchInterface::class, true)) {
             throw new \InvalidArgumentException(sprintf('Matcher class must implement %s', MatchInterface::class));
@@ -73,7 +75,7 @@ class Matcher
      * @param callable $value_compare_func
      * @return bool
      */
-    public static function usortStable(array &$array, callable $value_compare_func)
+    public static function usortStable(array &$array, callable $value_compare_func): bool
     {
         $index = 0;
         foreach ($array as &$item) {
@@ -89,7 +91,7 @@ class Matcher
         return $result;
     }
 
-    public static function compareMatches(BaseMatch $a, BaseMatch $b)
+    public static function compareMatches(BaseMatch $a, BaseMatch $b): int
     {
         $beginDiff = $a->begin - $b->begin;
         if ($beginDiff) {
@@ -103,7 +105,7 @@ class Matcher
      *
      * @return array Array of classes implementing MatchInterface
      */
-    protected function getMatchers()
+    protected function getMatchers(): array
     {
         return array_merge(
             self::DEFAULT_MATCHERS,

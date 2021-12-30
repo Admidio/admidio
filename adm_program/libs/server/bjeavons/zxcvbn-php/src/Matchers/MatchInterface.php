@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ZxcvbnPhp\Matchers;
 
 interface MatchInterface
@@ -12,17 +14,11 @@ interface MatchInterface
      * @code array('Alice Smith')
      * @endcode
      *
-     * @return array Array of Match objects
+     * @return array|BaseMatch[] Array of Match objects
      */
-    public static function match($password, array $userInputs = []);
+    public static function match(string $password, array $userInputs = []): array;
 
-    /**
-     * @return integer
-     */
-    public function getGuesses();
+    public function getGuesses(): float;
 
-    /**
-     * @return float
-     */
-    public function getGuessesLog10();
+    public function getGuessesLog10(): float;
 }

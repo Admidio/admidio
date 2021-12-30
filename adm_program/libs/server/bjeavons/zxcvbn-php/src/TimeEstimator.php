@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ZxcvbnPhp;
 
 /**
@@ -10,7 +12,11 @@ namespace ZxcvbnPhp;
  */
 class TimeEstimator
 {
-    public function estimateAttackTimes($guesses)
+    /**
+     * @param int|float $guesses
+     * @return array
+     */
+    public function estimateAttackTimes(float $guesses): array
     {
         $crack_times_seconds = [
             'online_throttling_100_per_hour' => $guesses / (100 / 3600),
@@ -31,7 +37,7 @@ class TimeEstimator
         ];
     }
 
-    protected function guessesToScore($guesses)
+    protected function guessesToScore(float $guesses): int
     {
         $DELTA = 5;
 
@@ -60,9 +66,9 @@ class TimeEstimator
         return 4;
     }
 
-    protected function displayTime($seconds)
+    protected function displayTime(float $seconds): string
     {
-        $callback = function ($seconds) {
+        $callback = function (float $seconds): array {
             $minute = 60;
             $hour = $minute * 60;
             $day = $hour * 24;
@@ -107,7 +113,7 @@ class TimeEstimator
             return [null, 'centuries'];
         };
 
-        list($display_num, $display_str) = $callback($seconds);
+        [$display_num, $display_str] = $callback($seconds);
 
         if ($display_num > 1) {
             $display_str .= 's';

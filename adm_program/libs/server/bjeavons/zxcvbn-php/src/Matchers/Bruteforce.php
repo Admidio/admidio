@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ZxcvbnPhp\Matchers;
 
+use JetBrains\PhpStorm\ArrayShape;
 use ZxcvbnPhp\Scorer;
 
 /**
@@ -12,7 +15,6 @@ use ZxcvbnPhp\Scorer;
  */
 class Bruteforce extends BaseMatch
 {
-
     public const BRUTEFORCE_CARDINALITY = 10;
 
     public $pattern = 'bruteforce';
@@ -22,7 +24,7 @@ class Bruteforce extends BaseMatch
      * @param array $userInputs
      * @return Bruteforce[]
      */
-    public static function match($password, array $userInputs = [])
+    public static function match(string $password, array $userInputs = []): array
     {
         // Matches entire string.
         $match = new static($password, 0, mb_strlen($password) - 1, $password);
@@ -30,7 +32,8 @@ class Bruteforce extends BaseMatch
     }
 
 
-    public function getFeedback($isSoleMatch)
+    #[ArrayShape(['warning' => 'string', 'suggestions' => 'string[]'])]
+    public function getFeedback(bool $isSoleMatch): array
     {
         return [
             'warning' => "",
@@ -39,11 +42,11 @@ class Bruteforce extends BaseMatch
         ];
     }
 
-    public function getRawGuesses()
+    public function getRawGuesses(): float
     {
         $guesses = pow(self::BRUTEFORCE_CARDINALITY, mb_strlen($this->token));
         if ($guesses === INF) {
-            return defined('PHP_FLOAT_MAX') ? PHP_FLOAT_MAX : 1e308;
+            return PHP_FLOAT_MAX;
         }
 
         // small detail: make bruteforce matches at minimum one guess bigger than smallest allowed

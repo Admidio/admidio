@@ -2,21 +2,22 @@
     "packages": [
         {
             "name": "bjeavons/zxcvbn-php",
-            "version": "1.2.0",
-            "version_normalized": "1.2.0.0",
+            "version": "1.3.1",
+            "version_normalized": "1.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bjeavons/zxcvbn-php.git",
-                "reference": "13b505d53c6e72a8fce7f42e3392f13642bbf65e"
+                "reference": "994928ae5b17ecff8baa2406832d37bdf01116c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bjeavons/zxcvbn-php/zipball/13b505d53c6e72a8fce7f42e3392f13642bbf65e",
-                "reference": "13b505d53c6e72a8fce7f42e3392f13642bbf65e",
+                "url": "https://api.github.com/repos/bjeavons/zxcvbn-php/zipball/994928ae5b17ecff8baa2406832d37bdf01116c0",
+                "reference": "994928ae5b17ecff8baa2406832d37bdf01116c0",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2 | ^8.0",
+                "ext-json": "*",
+                "php": "^7.2 | ^8.0 | ^8.1",
                 "symfony/polyfill-mbstring": ">=1.3.1"
             },
             "require-dev": {
@@ -24,7 +25,10 @@
                 "phpunit/phpunit": "^8.5",
                 "squizlabs/php_codesniffer": "3.*"
             },
-            "time": "2020-11-30T16:47:23+00:00",
+            "suggest": {
+                "ext-gmp": "Required for optimized binomial calculations (also requires PHP >= 7.3)"
+            },
+            "time": "2021-12-21T18:37:02+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -50,7 +54,7 @@
             ],
             "support": {
                 "issues": "https://github.com/bjeavons/zxcvbn-php/issues",
-                "source": "https://github.com/bjeavons/zxcvbn-php/tree/1.2.0"
+                "source": "https://github.com/bjeavons/zxcvbn-php/tree/1.3.1"
             },
             "install-path": "../bjeavons/zxcvbn-php"
         },
@@ -175,26 +179,23 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.13.0",
-            "version_normalized": "4.13.0.0",
+            "version": "v4.14.0",
+            "version_normalized": "4.14.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "08e27c97e4c6ed02f37c5b2b20488046c8d90d75"
+                "reference": "12ab42bd6e742c70c0a52f7b82477fcd44e64b75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/08e27c97e4c6ed02f37c5b2b20488046c8d90d75",
-                "reference": "08e27c97e4c6ed02f37c5b2b20488046c8d90d75",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/12ab42bd6e742c70c0a52f7b82477fcd44e64b75",
+                "reference": "12ab42bd6e742c70c0a52f7b82477fcd44e64b75",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
             },
-            "require-dev": {
-                "simpletest/simpletest": "dev-master#72de02a7b80c6bb8864ef9bf66d41d2f58f826bd"
-            },
-            "time": "2020-06-29T00:56:53+00:00",
+            "time": "2021-12-25T01:21:49+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -226,7 +227,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ezyang/htmlpurifier/issues",
-                "source": "https://github.com/ezyang/htmlpurifier/tree/master"
+                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.14.0"
             },
             "install-path": "../ezyang/htmlpurifier"
         },
@@ -635,17 +636,17 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.5.1",
-            "version_normalized": "6.5.1.0",
+            "version": "v6.5.3",
+            "version_normalized": "6.5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "dd803df5ad7492e1b40637f7ebd258fee5ca7355"
+                "reference": "baeb7cde6b60b1286912690ab0693c7789a31e71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/dd803df5ad7492e1b40637f7ebd258fee5ca7355",
-                "reference": "dd803df5ad7492e1b40637f7ebd258fee5ca7355",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/baeb7cde6b60b1286912690ab0693c7789a31e71",
+                "reference": "baeb7cde6b60b1286912690ab0693c7789a31e71",
                 "shasum": ""
             },
             "require": {
@@ -672,7 +673,7 @@
                 "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
                 "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
             },
-            "time": "2021-08-18T09:14:16+00:00",
+            "time": "2021-11-25T16:34:11+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -704,7 +705,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.5.1"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.5.3"
             },
             "funding": [
                 {
@@ -1597,23 +1598,23 @@
         },
         {
             "name": "tecnickcom/tcpdf",
-            "version": "6.4.2",
-            "version_normalized": "6.4.2.0",
+            "version": "6.4.3",
+            "version_normalized": "6.4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "172540dcbfdf8dc983bc2fe78feff48ff7ec1c76"
+                "reference": "3cfc830d70b3783ecfc198fc28c183287bcb1dce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/172540dcbfdf8dc983bc2fe78feff48ff7ec1c76",
-                "reference": "172540dcbfdf8dc983bc2fe78feff48ff7ec1c76",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/3cfc830d70b3783ecfc198fc28c183287bcb1dce",
+                "reference": "3cfc830d70b3783ecfc198fc28c183287bcb1dce",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "2021-07-20T14:43:20+00:00",
+            "time": "2021-12-28T12:31:24+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1660,7 +1661,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tecnickcom/TCPDF/issues",
-                "source": "https://github.com/tecnickcom/TCPDF/tree/6.4.2"
+                "source": "https://github.com/tecnickcom/TCPDF/tree/6.4.3"
             },
             "funding": [
                 {
