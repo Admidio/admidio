@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ZxcvbnPhp\Matchers;
 
+use JetBrains\PhpStorm\ArrayShape;
 use ZxcvbnPhp\Matcher;
+use ZxcvbnPhp\Math\Binomial;
 
 class DictionaryMatch extends BaseMatch
 {
-
     public $pattern = 'dictionary';
 
     /** @var string The name of the dictionary that the token was found in. */
@@ -33,14 +36,14 @@ class DictionaryMatch extends BaseMatch
     protected const ALL_LOWER = "/^[^A-Z]+$/u";
 
     /**
-     * Match occurences of dictionary words in password.
+     * Match occurrences of dictionary words in password.
      *
      * @param string $password
      * @param array $userInputs
      * @param array $rankedDictionaries
      * @return DictionaryMatch[]
      */
-    public static function match($password, array $userInputs = [], $rankedDictionaries = [])
+    public static function match(string $password, array $userInputs = [], array $rankedDictionaries = []): array
     {
         $matches = [];
         if ($rankedDictionaries) {
@@ -74,17 +77,22 @@ class DictionaryMatch extends BaseMatch
      * @param string $token
      * @param array $params An array with keys: [dictionary_name, matched_word, rank].
      */
-    public function __construct($password, $begin, $end, $token, array $params = [])
+    public function __construct(string $password, int $begin, int $end, string $token, array $params = [])
     {
         parent::__construct($password, $begin, $end, $token);
         if (!empty($params)) {
-            $this->dictionaryName = isset($params['dictionary_name']) ? $params['dictionary_name'] : null;
-            $this->matchedWord = isset($params['matched_word']) ? $params['matched_word'] : null;
-            $this->rank = isset($params['rank']) ? $params['rank'] : null;
+            $this->dictionaryName = $params['dictionary_name'] ?? '';
+            $this->matchedWord = $params['matched_word'] ?? '';
+            $this->rank = $params['rank'] ?? 0;
         }
     }
 
-    public function getFeedback($isSoleMatch)
+    /**
+     * @param bool $isSoleMatch
+     * @return array
+     */
+    #[ArrayShape(['warning' => 'string', 'suggestions' => 'string[]'])]
+    public function getFeedback(bool $isSoleMatch): array
     {
         $startUpper = '/^[A-Z][^A-Z]+$/u';
         $allUpper = '/^[^a-z]+$/u';
@@ -103,7 +111,7 @@ class DictionaryMatch extends BaseMatch
         return $feedback;
     }
 
-    public function getFeedbackWarning($isSoleMatch)
+    public function getFeedbackWarning(bool $isSoleMatch): string
     {
         switch ($this->dictionaryName) {
             case 'passwords':
@@ -144,7 +152,7 @@ class DictionaryMatch extends BaseMatch
      * @param array $dict
      * @return array
      */
-    protected static function dictionaryMatch($password, $dict)
+    protected static function dictionaryMatch(string $password, array $dict): array
     {
         $result = [];
         $length = mb_strlen($password);
@@ -175,7 +183,7 @@ class DictionaryMatch extends BaseMatch
      *
      * @return array
      */
-    protected static function getRankedDictionaries()
+    protected static function getRankedDictionaries(): array
     {
         if (empty(self::$rankedDictionaries)) {
             $json = file_get_contents(dirname(__FILE__) . '/frequency_lists.json');
@@ -191,10 +199,7 @@ class DictionaryMatch extends BaseMatch
         return self::$rankedDictionaries;
     }
 
-    /**
-     * @return integer
-     */
-    protected function getRawGuesses()
+    protected function getRawGuesses(): float
     {
         $guesses = $this->rank;
         $guesses *= $this->getUppercaseVariations();
@@ -202,10 +207,7 @@ class DictionaryMatch extends BaseMatch
         return $guesses;
     }
 
-    /**
-     * @return integer
-     */
-    protected function getUppercaseVariations()
+    protected function getUppercaseVariations(): float
     {
         $word = $this->token;
         if (preg_match(self::ALL_LOWER, $word) || mb_strtolower($word) === $word) {
@@ -224,12 +226,12 @@ class DictionaryMatch extends BaseMatch
         // otherwise calculate the number of ways to capitalize U+L uppercase+lowercase letters
         // with U uppercase letters or less. or, if there's more uppercase than lower (for eg. PASSwORD),
         // the number of ways to lowercase U+L letters with L lowercase letters or less.
-        $uppercase = count(array_filter(preg_split('//u', $word, null, PREG_SPLIT_NO_EMPTY), 'ctype_upper'));
-        $lowercase = count(array_filter(preg_split('//u', $word, null, PREG_SPLIT_NO_EMPTY), 'ctype_lower'));
+        $uppercase = count(array_filter(preg_split('//u', $word, -1, PREG_SPLIT_NO_EMPTY), 'ctype_upper'));
+        $lowercase = count(array_filter(preg_split('//u', $word, -1, PREG_SPLIT_NO_EMPTY), 'ctype_lower'));
 
         $variations = 0;
         for ($i = 1; $i <= min($uppercase, $lowercase); $i++) {
-            $variations += static::binom($uppercase + $lowercase, $i);
+            $variations += Binomial::binom($uppercase + $lowercase, $i);
         }
         return $variations;
     }

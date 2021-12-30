@@ -1,25 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ZxcvbnPhp\Matchers;
 
+use JetBrains\PhpStorm\ArrayShape;
 use ZxcvbnPhp\Matcher;
 
 class YearMatch extends BaseMatch
 {
-
     public const NUM_YEARS = 119;
 
     public $pattern = 'regex';
     public $regexName = 'recent_year';
 
     /**
-     * Match occurences of years in a password
+     * Match occurrences of years in a password
      *
      * @param string $password
      * @param array $userInputs
      * @return YearMatch[]
      */
-    public static function match($password, array $userInputs = [])
+    public static function match(string $password, array $userInputs = []): array
     {
         $matches = [];
         $groups = static::findAll($password, "/(19\d\d|200\d|201\d)/u");
@@ -30,7 +32,8 @@ class YearMatch extends BaseMatch
         return $matches;
     }
 
-    public function getFeedback($isSoleMatch)
+    #[ArrayShape(['warning' => 'string', 'suggestions' => 'string[]'])]
+    public function getFeedback(bool $isSoleMatch): array
     {
         return [
             'warning' => "Recent years are easy to guess",
@@ -41,9 +44,9 @@ class YearMatch extends BaseMatch
         ];
     }
 
-    protected function getRawGuesses()
+    protected function getRawGuesses(): float
     {
-        $yearSpace = abs((int)$this->token - DateMatch::getReferenceYear());
+        $yearSpace = abs($this->token - DateMatch::getReferenceYear());
         return max($yearSpace, DateMatch::MIN_YEAR_SPACE);
     }
 }

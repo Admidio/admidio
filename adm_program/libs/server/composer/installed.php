@@ -20,12 +20,12 @@
             'dev_requirement' => false,
         ),
         'bjeavons/zxcvbn-php' => array(
-            'pretty_version' => '1.2.0',
-            'version' => '1.2.0.0',
+            'pretty_version' => '1.3.1',
+            'version' => '1.3.1.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../bjeavons/zxcvbn-php',
             'aliases' => array(),
-            'reference' => '13b505d53c6e72a8fce7f42e3392f13642bbf65e',
+            'reference' => '994928ae5b17ecff8baa2406832d37bdf01116c0',
             'dev_requirement' => false,
         ),
         'brick/math' => array(
@@ -47,12 +47,12 @@
             'dev_requirement' => false,
         ),
         'ezyang/htmlpurifier' => array(
-            'pretty_version' => 'v4.13.0',
-            'version' => '4.13.0.0',
+            'pretty_version' => 'v4.14.0',
+            'version' => '4.14.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../ezyang/htmlpurifier',
             'aliases' => array(),
-            'reference' => '08e27c97e4c6ed02f37c5b2b20488046c8d90d75',
+            'reference' => '12ab42bd6e742c70c0a52f7b82477fcd44e64b75',
             'dev_requirement' => false,
         ),
         'hautelook/phpass' => array(
@@ -110,12 +110,12 @@
             'dev_requirement' => false,
         ),
         'phpmailer/phpmailer' => array(
-            'pretty_version' => 'v6.5.1',
-            'version' => '6.5.1.0',
+            'pretty_version' => 'v6.5.3',
+            'version' => '6.5.3.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpmailer/phpmailer',
             'aliases' => array(),
-            'reference' => 'dd803df5ad7492e1b40637f7ebd258fee5ca7355',
+            'reference' => 'baeb7cde6b60b1286912690ab0693c7789a31e71',
             'dev_requirement' => false,
         ),
         'phpoffice/phpspreadsheet' => array(
@@ -239,12 +239,12 @@
             'dev_requirement' => false,
         ),
         'tecnickcom/tcpdf' => array(
-            'pretty_version' => '6.4.2',
-            'version' => '6.4.2.0',
+            'pretty_version' => '6.4.3',
+            'version' => '6.4.3.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../tecnickcom/tcpdf',
             'aliases' => array(),
-            'reference' => '172540dcbfdf8dc983bc2fe78feff48ff7ec1c76',
+            'reference' => '3cfc830d70b3783ecfc198fc28c183287bcb1dce',
             'dev_requirement' => false,
         ),
         'vanilla/htmlawed' => array(

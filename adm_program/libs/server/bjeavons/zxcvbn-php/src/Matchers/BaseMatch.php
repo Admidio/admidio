@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ZxcvbnPhp\Matchers;
 
+use JetBrains\PhpStorm\ArrayShape;
+use ZxcvbnPhp\Math\Binomial;
 use ZxcvbnPhp\Scorer;
 
 abstract class BaseMatch implements MatchInterface
 {
-
     /**
      * @var
      */
@@ -32,13 +35,7 @@ abstract class BaseMatch implements MatchInterface
      */
     public $pattern;
 
-    /**
-     * @param $password
-     * @param $begin
-     * @param $end
-     * @param $token
-     */
-    public function __construct($password, $begin, $end, $token)
+    public function __construct(string $password, int $begin, int $end, string $token)
     {
         $this->password = $password;
         $this->begin = $begin;
@@ -54,10 +51,11 @@ abstract class BaseMatch implements MatchInterface
      * @return array
      *   Associative array with warning (string) and suggestions (array of strings)
      */
-    abstract public function getFeedback($isSoleMatch);
+    #[ArrayShape(['warning' => 'string', 'suggestions' => 'string[]'])]
+    abstract public function getFeedback(bool $isSoleMatch): array;
 
     /**
-     * Find all occurences of regular expression in a string.
+     * Find all occurrences of regular expression in a string.
      *
      * @param string $string
      *   String to search.
@@ -78,7 +76,7 @@ abstract class BaseMatch implements MatchInterface
      *       )
      *     )
      */
-    public static function findAll($string, $regex, $offset = 0)
+    public static function findAll(string $string, string $regex, int $offset = 0): array
     {
         // $offset is the number of multibyte-aware number of characters to offset, but the offset parameter for
         // preg_match_all counts bytes, not characters: to correct this, we need to calculate the byte offset and pass
@@ -120,38 +118,24 @@ abstract class BaseMatch implements MatchInterface
     /**
      * Calculate binomial coefficient (n choose k).
      *
-     * http://www.php.net/manual/en/ref.math.php#57895
-     *
-     * @param $n
-     * @param $k
-     * @return int
+     * @param int $n
+     * @param int $k
+     * @return float
+     * @deprecated Use {@see Binomial::binom()} instead
      */
-    public static function binom($n, $k)
+    public static function binom(int $n, int $k): float
     {
-        $j = $res = 1;
-
-        if ($k < 0 || $k > $n) {
-            return 0;
-        }
-        if (($n - $k) < $k) {
-            $k = $n - $k;
-        }
-        while ($j <= $k) {
-            $res *= $n--;
-            $res /= $j++;
-        }
-
-        return $res;
+        return Binomial::binom($n, $k);
     }
 
-    abstract protected function getRawGuesses();
+    abstract protected function getRawGuesses(): float;
 
-    public function getGuesses()
+    public function getGuesses(): float
     {
         return max($this->getRawGuesses(), $this->getMinimumGuesses());
     }
 
-    protected function getMinimumGuesses()
+    protected function getMinimumGuesses(): float
     {
         if (mb_strlen($this->token) < mb_strlen($this->password)) {
             if (mb_strlen($this->token) === 1) {
@@ -163,7 +147,7 @@ abstract class BaseMatch implements MatchInterface
         return 0;
     }
 
-    public function getGuessesLog10()
+    public function getGuessesLog10(): float
     {
         return log10($this->getGuesses());
     }
