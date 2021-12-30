@@ -426,22 +426,11 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
         $role->setValue('rol_description', substr($date->getValue('dat_description'), 0, 3999));
 
-        // save role in database
-        $returnCode2 = $role->save();
-        if ($returnCode < 0 || $returnCode2 < 0) {
-            $gDb->rollback();
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
-        }
+        $role->save();
 
-        // dat_rol_id anpassen (Referenz zwischen date und role)
+        // match dat_rol_id (reference between event and role)
         $date->setValue('dat_rol_id', (int) $role->getValue('rol_id'));
-        $returnCode = $date->save();
-        if ($returnCode < 0) {
-            $gDb->rollback();
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
-        }
+        $date->save();
     } elseif ($_POST['date_registration_possible'] == 0 && $date->getValue('dat_rol_id') > 0) {
         // date participation was deselected -> delete flag in event and than delete role
         $role = new TableRoles($gDb, (int) $date->getValue('dat_rol_id'));

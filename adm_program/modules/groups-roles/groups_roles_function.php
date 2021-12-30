@@ -234,12 +234,7 @@ if ($getMode === 2) {
     }
 
     $gDb->startTransaction();
-    $returnCode = $role->save();
-
-    if ($returnCode < 0) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
+    $role->save();
 
     // save role dependencies in database
     if (array_key_exists('dependent_roles', $_POST) && !$eventRole) {

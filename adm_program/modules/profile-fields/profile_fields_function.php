@@ -179,18 +179,12 @@ if ($getMode === 1) {
         $e->showHtml();
     }
 
-    // Daten in Datenbank schreiben
-    $returnCode = $userField->save();
-
-    if ($returnCode < 0) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
+    $userField->save();
 
     $gNavigation->deleteLastUrl();
     unset($_SESSION['fields_request']);
 
-    // zu den Organisationseinstellungen zurueck
+    // return to the members management settings
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 // => EXIT

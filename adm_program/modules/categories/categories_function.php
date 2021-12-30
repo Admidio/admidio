@@ -171,55 +171,52 @@ if ($getMode === 1) {
     // write category into database
     $returnCode = $category->save();
 
-    if ($returnCode < 0) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
+    if ($returnCode === true) {
+        if ($getType !== 'ROL') {
+            $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
 
-    if ($getType !== 'ROL') {
-        $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
+            // roles have their own preferences for visibility, so only allow this for other types
+            // until now we do not support visibility for categories that belong to several organizations
+            if ($category->getValue('cat_org_id') > 0
+            || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1)) {
+                // save changed roles rights of the category
+                $rightCategoryView->saveRoles(array_map('intval', $_POST['adm_categories_view_right']));
+            } else {
+                // delete existing roles rights of the category
+                $rightCategoryView->delete();
+            }
 
-        // roles have their own preferences for visibility, so only allow this for other types
-        // until now we do not support visibility for categories that belong to several organizations
-        if ($category->getValue('cat_org_id') > 0
-        || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1)) {
-            // save changed roles rights of the category
-            $rightCategoryView->saveRoles(array_map('intval', $_POST['adm_categories_view_right']));
-        } else {
-            // delete existing roles rights of the category
-            $rightCategoryView->delete();
+            if ($getType === 'USF') {
+                // delete cache with profile categories rights
+                $gProfileFields = new ProfileFields($gDb, $orgId);
+            } else {
+                // until now we don't use edit rights for profile fields
+                $rightCategoryEdit = new RolesRights($gDb, 'category_edit', (int) $category->getValue('cat_id'));
+                $rightCategoryEdit->saveRoles(array_map('intval', $_POST['adm_categories_edit_right']));
+            }
         }
 
-        if ($getType === 'USF') {
-            // delete cache with profile categories rights
-            $gProfileFields = new ProfileFields($gDb, $orgId);
-        } else {
-            // until now we don't use edit rights for profile fields
-            $rightCategoryEdit = new RolesRights($gDb, 'category_edit', (int) $category->getValue('cat_id'));
-            $rightCategoryEdit->saveRoles(array_map('intval', $_POST['adm_categories_edit_right']));
+        // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
+        // dann muss die Sequenz fuer den alle Kategorien dieses Typs neu gesetzt werden
+        $sequenceCategory = new TableCategory($gDb);
+        $sequence = 0;
+
+        $sql = 'SELECT *
+                  FROM '.TBL_CATEGORIES.'
+                 WHERE cat_type = ? -- $getType
+                   AND (  cat_org_id  = ? -- $gCurrentOrgId
+                       OR cat_org_id IS NULL )
+              ORDER BY cat_org_id ASC, cat_sequence ASC';
+        $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $gCurrentOrgId));
+
+        while ($row = $categoriesStatement->fetch()) {
+            ++$sequence;
+            $sequenceCategory->clear();
+            $sequenceCategory->setArray($row);
+
+            $sequenceCategory->setValue('cat_sequence', $sequence);
+            $sequenceCategory->save();
         }
-    }
-
-    // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
-    // dann muss die Sequenz fuer den alle Kategorien dieses Typs neu gesetzt werden
-    $sequenceCategory = new TableCategory($gDb);
-    $sequence = 0;
-
-    $sql = 'SELECT *
-              FROM '.TBL_CATEGORIES.'
-             WHERE cat_type = ? -- $getType
-               AND (  cat_org_id  = ? -- $gCurrentOrgId
-                   OR cat_org_id IS NULL )
-          ORDER BY cat_org_id ASC, cat_sequence ASC';
-    $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $gCurrentOrgId));
-
-    while ($row = $categoriesStatement->fetch()) {
-        ++$sequence;
-        $sequenceCategory->clear();
-        $sequenceCategory->setArray($row);
-
-        $sequenceCategory->setValue('cat_sequence', $sequence);
-        $sequenceCategory->save();
     }
 
     $gDb->endTransaction();
