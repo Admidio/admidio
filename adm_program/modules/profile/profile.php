@@ -276,16 +276,6 @@ if ($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser
     );
 }
 
-if ($gCurrentUser->isAdministrator()) {
-    // show link to maintain profile fields
-    $page->addPageFunctionsMenuItem(
-        'menu_item_profile_maintain_fields',
-        $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
-        ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php',
-        'fa-th-list'
-    );
-}
-
 // *******************************************************************************
 // User data block
 // *******************************************************************************
