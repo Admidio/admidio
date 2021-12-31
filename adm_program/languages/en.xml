@@ -337,7 +337,7 @@
   <string name="ORG_SHOW_CREATE_EDIT">Show creator and timestamp of creation</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">In some places the creator and the user with the last change to a record is displayed together with a timestamp. This setting can be used to determine whether this information is displayed at all and whether the user should be displayed with the user name or with their first and last name.</string>
   <string name="ORG_SHOW_ALL_USERS">Optional show all users</string>
-  <string name="ORG_SHOW_ALL_USERS_DESC">If this option is enabled, former members and members of other organizations will be displayed in addition to the active members of the current organization. Otherwise only members of the current organization will be displayed. When creating new users or assigning registrations all organizations will still be checked for existing users.</string>
+  <string name="ORG_SHOW_ALL_USERS_DESC">If this option is set, former members and members of other organizations can optionally be displayed in the member administration in addition to the active members of the current organization. Otherwise only active members of the current organization are displayed. When creating new members or assigning registrations, however, the system will continue to look for existing users in the entire database of all organizations.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
   <string name="ORG_SYSTEM_INFORMATION">System informations</string>
@@ -1204,8 +1204,8 @@
   <string name="SYS_RIGHT_DATES">Manage events</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Manage documents and files</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Roles having this permission can manage the rights for the documents and files module. This includes who can see folders and can upload files.</string>
-  <string name="SYS_RIGHT_EDIT_USER">Edit profile of all users</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other users (except passwords).\n In addition they have access to the user administration and can add or delete users.</string>
+  <string name="SYS_RIGHT_EDIT_USER">Edit profile of all members</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other members (except passwords).\n In addition they have access to the members administration and can add or delete members.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Edit and delete guestbook entries</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Create comments of guestbook entries</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">This setting controls who has the right to send emails to this role via the message module. The role right #VAR1_BOLD# is still above this setting.</string>
@@ -1415,8 +1415,8 @@
   <string name="SYS_USERNAME">Username</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
-  <string name="SYS_USERS_PER_PAGE">Number of users per page</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">Number of users listed on each page. If there are multiple members in this group pages can be turned. (Default: 25)</string>
+  <string name="SYS_USERS_PER_PAGE">Number of members per page</string>
+  <string name="SYS_USERS_PER_PAGE_DESC">The number of members listed on a page in a member management. If there are more members to the organization, you can scroll to the next page within the overview. (Default: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">You are using a current #VAR1#version of Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>

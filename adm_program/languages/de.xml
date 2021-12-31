@@ -337,7 +337,7 @@
   <string name="ORG_SHOW_CREATE_EDIT">Ersteller und Zeitstempel anzeigen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">An einigen Stellen wird die Erstellerin bzw. der Ersteller zusammen mit der Benutzerin bzw. der Benutzer mit der letzten Änderung zu einem Datensatz zusammen mit einem Zeitstempel angezeigt. Mit dieser Einstellung kann festgelegt werden, ob diese Informationen überhaupt angezeigt werden und ob die Benutzerin oder der Benutzer mit dem Anmeldenamen oder mit ihrem Vor- und Nachnamen angezeigt werden soll.</string>
   <string name="ORG_SHOW_ALL_USERS">Optional alle Benutzer:innen anzeigen</string>
-  <string name="ORG_SHOW_ALL_USERS_DESC">Ist diese Einstellung gesetzt, so werden in der Mitgliederverwaltung neben den aktiven Mitgliedern der aktuellen Organisation optional auch ehemalige Mitglieder und Mitglieder anderer Organisationen angezeigt. Wird die Einstellung deaktiviert, werden nur aktive Mitglieder der aktuellen Organisation angezeigt. Beim Anlegen neuer Benutzer:innen oder Zuordnen von Anmeldungen wird allerdings weiterhin im gesamten Datenbestand aller Organisationen nach bereits existierenden Benutzer:innen geschaut.</string>
+  <string name="ORG_SHOW_ALL_USERS_DESC">Ist diese Option gesetzt, können neben den aktiven Mitgliedern der aktuellen Organisation optional auch ehemalige Mitglieder und Mitglieder anderer Organisationen in der Mitgliederverwaltung angezeigt werden. Ansonsten werden nur aktive Mitglieder der aktuellen Organisation angezeigt. Beim Anlegen neuer Mitglieder oder beim Zuordnen von Registrierungen wird jedoch weiterhin in der gesamten Datenbank aller Organisationen nach vorhandenen Benutzern gesucht.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
@@ -1202,8 +1202,8 @@
   <string name="SYS_RIGHT_DATES">Termine verwalten</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Dokumente und Dateien verwalten</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Rollen mit dieser Berechtigung können im Modul für Dokumente und Dateien die Rechte vergeben, welche Rollen bestimme Ordner sehen oder Dateien hochladen dürfen.</string>
-  <string name="SYS_RIGHT_EDIT_USER">Profildaten aller Benutzer:innen bearbeiten</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Rollen mit dieser Berechtigung können alle Profildaten (außer Passwörter) anderer Mitglieder bearbeiten.\nAußerdem haben sie Zugriff auf die Mitgliederverwaltung und können dort Benutzer:innen anlegen oder löschen.</string>
+  <string name="SYS_RIGHT_EDIT_USER">Profildaten aller Mitglieder bearbeiten</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Rollen mit dieser Berechtigung können alle Profildaten (außer Passwörter) anderer Mitglieder bearbeiten.\nAußerdem haben sie Zugriff auf die Mitgliederverwaltung und können dort Mitglieder anlegen oder löschen.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Gästebucheinträge bearbeiten und löschen</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Kommentare zu Gästebucheinträgen anlegen</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">Diese Einstellung steuert, wer das Recht hat über das Nachrichtenmodul E-Mails an diese Rolle zu versenden. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
@@ -1417,8 +1417,8 @@
   <string name="SYS_USERNAME">Anmeldename</string>
   <string name="SYS_USERNAME_OR_EMAIL">Anmeldename oder E-Mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# am #VAR2# um #VAR3#</string>
-  <string name="SYS_USERS_PER_PAGE">Anzahl Benutzer:innen pro Seite</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">Die Anzahl Benutzer:innen die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer:innen zu der Organisation, so kann man in der Liste blättern. (Voreinstellung: 25)</string>
+  <string name="SYS_USERS_PER_PAGE">Anzahl Mitglieder pro Seite</string>
+  <string name="SYS_USERS_PER_PAGE_DESC">Die Anzahl der Mitglieder die auf einer Seite in einer Mitgliederverwaltung aufgelistet werden. Gibt es mehr Mitglieder zu der Organisation, so kann man innerhalb der Übersicht blättern. (Voreinstellung: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">Du benutzt eine aktuelle #VAR1#Version von Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
