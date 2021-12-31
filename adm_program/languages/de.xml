@@ -745,6 +745,7 @@
   <string name="SYS_DISPLAY_REDIRECT">Anzeige Weiterleitung</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Voreinstellung: 10 Sekunden)</string>
   <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
+  <string name="SYS_DIVERSE">Divers</string>
   <string name="SYS_DO_NOT_EDIT">Nicht bearbeiten</string>
   <string name="SYS_DOCUMENTS_FILES">Dokumente &amp; Dateien</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Unterschiedliche Dokumente und Dateien können hier zur Ansicht oder zum Download angeboten werden. Diese können in Ordnern mit individuellen Zugriffsrechten zusammengefasst werden.</string>
@@ -931,7 +932,7 @@
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inaktive Gruppen und Rollen</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
-  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Gib bitte den Vor- und Nachnamen der neuen Benutzerin oder des neuen Benutzers ein. Bevor der Datensatz angelegt wird, wird geprüft, ob eine Benutzerin oder ein Benutzer mit ähnlichem Namen bereits in der Datenbank existiert.</string>
+  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Gib bitte den Vor- und Nachnamen des neuen Mitglieds ein. Bevor der Datensatz angelegt wird, wird geprüft, ob eine Person mit einem ähnlichen Namen bereits in der Datenbank existiert.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation erfolgreich</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Die Admidio-Datenbank ist nun installiert und fertig eingerichtet. Die Konfigurationsdatei mit den Zugangsdaten zur Datenbank wurde erstellt und hinterlegt. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten eines Administrienden anmelden.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">Die Installation und Einrichtung der Datenbank wurde erfolgreich durchgeführt.</string>
@@ -1397,7 +1398,7 @@
   <string name="SYS_UPDATE_SUCCESSFUL">Aktualisierung erfolgreich</string>
   <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-+_:/#?= .</string>
   <string name="SYS_USER">Benutzer:in</string>
-  <string name="SYS_USER_COULD_BE_CREATED">Die Benutzerin bzw. der Benutzer kann angelegt werden.</string>
+  <string name="SYS_USER_COULD_BE_CREATED">Die Person kann angelegt werden.</string>
   <string name="SYS_USER_DELETE_DESC">Willst du #VAR1_BOLD# wirklich löschen?\n\nDie Benutzerin bzw. der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
   <string name="SYS_USER_FOUND">Gefundene Benutzer:innen</string>
   <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein:e Benutzer:in zu der übergebenen ID gefunden werden!</string>
