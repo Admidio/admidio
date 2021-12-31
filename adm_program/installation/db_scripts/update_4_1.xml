@@ -48,7 +48,7 @@
     <step id="190">UPDATE %PREFIX%_components SET com_name = 'SYS_WEBLINKS' WHERE com_name = 'LNK_WEBLINKS'</step>
     <step id="200">UPDATE %PREFIX%_menu SET men_name = 'SYS_WEBLINKS', men_description = 'SYS_WEBLINKS_DESC' WHERE men_name_intern = 'weblinks'</step>
     <step id="210">UPDATE %PREFIX%_components SET com_name = 'SYS_USER_MANAGEMENT' WHERE com_name = 'MEM_USER_MANAGEMENT'</step>
-    <step id="220">UPDATE %PREFIX%_menu SET men_name = 'SYS_USER_MANAGEMENT', men_description = 'SYS_USER_MANAGEMENT_DESC' WHERE men_name_intern = 'usrmgt'</step>
+    <step id="220">UPDATE %PREFIX%_menu SET men_name = 'SYS_USER_MANAGEMENT', men_description = 'SYS_MEMBERS_DESC' WHERE men_name_intern = 'usrmgt'</step>
     <step id="230">UPDATE %PREFIX%_menu SET men_name = 'SYS_EMAIL', men_description = 'SYS_EMAIL_DESC' WHERE men_name_intern = 'mail'</step>
     <step id="240">UPDATE %PREFIX%_menu SET men_name = 'SYS_NEW_REGISTRATIONS', men_description = 'SYS_MANAGE_NEW_REGISTRATIONS_DESC' WHERE men_name_intern = 'newreg'</step>
     <step id="250">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_description_inline boolean NOT NULL DEFAULT '0'</step>
@@ -155,5 +155,7 @@
         COLLATE = utf8_unicode_ci</step>
     <step id="880">ALTER TABLE %PREFIX%_category_report ADD CONSTRAINT %PREFIX%_fk_crt_org FOREIGN KEY (crt_org_id) REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
     <step id="890">ComponentUpdateSteps::updateStep41CategoryReportMigration</step>
+    <step id="900">UPDATE %PREFIX%_components SET com_name = 'SYS_MEMBERS' WHERE com_name = 'SYS_USER_MANAGEMENT'</step>
+    <step id="910">UPDATE %PREFIX%_menu SET men_name = 'SYS_MEMBERS', men_description = 'SYS_MEMBERS_DESC' WHERE men_name_intern = 'usrmgt'</step>
     <step>stop</step>
 </update>

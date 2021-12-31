@@ -57,7 +57,7 @@ echo '
 </script>
 
 <div class="modal-header">
-    <h3 class="modal-title">'.$gL10n->get('SYS_CREATE_USER').'</h3>
+    <h3 class="modal-title">'.$gL10n->get('SYS_CREATE_MEMBER').'</h3>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 </div>
 <div class="modal-body">
@@ -78,7 +78,7 @@ echo '
     );
     $form->addSubmitButton(
         'btn_add',
-        $gL10n->get('SYS_CREATE_USER'),
+        $gL10n->get('SYS_CREATE_MEMBER'),
         array('icon' => 'fa-plus-circle', 'class' => ' offset-sm-3')
     );
     echo $form->show();

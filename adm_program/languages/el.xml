@@ -666,7 +666,7 @@
   <string name="SYS_CREATE_NOT_FOUND_USER">Εάν ο νέος χρήστης δεν περιλαμβάνεται στους χρήστες που βρέθηκαν, μπορείτε να τον δημιουργήσετε.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Δημιουργία σχέσης</string>
   <string name="SYS_CREATE_ROLE">Δημιουργία ρόλου</string>
-  <string name="SYS_CREATE_USER">Δημιουργία χρήστη</string>
+  <string name="SYS_CREATE_MEMBER">Δημιουργία χρήστη</string>
   <string name="SYS_CREATE_VAR">Δημιουργία #VAR1#</string>
   <string name="SYS_CREATED_BY">Δημιουργήθηκε από #VAR1# σε #VAR2#</string>
   <string name="SYS_CREATION_DATE">Δημιουργήθηκε στις</string>
@@ -831,7 +831,7 @@
   <string name="SYS_EXAMPLES">Παραδείγματα</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
-  <string name="SYS_EXISTING_USERS">Υπάρχων χρήστης</string>
+  <string name="SYS_EXISTING_MEMBERS">Υπάρχων χρήστης</string>
   <string name="SYS_EXPORT_LISTS">Εξαγωγή λιστών</string>
   <string name="SYS_EXPORT_LISTS_DESC">Οι λίστες ομάδων και ρόλων μπορούν να εξαχθούν από τους χρήστες, υπό την προϋπόθεση ότι έχετε το δικαίωμα να προβάλετε αυτές τις λίστες. Αυτή η ρύθμιση μπορεί να χρησιμοποιηθεί για τον περιορισμό της λειτουργίας εξαγωγής. (Default: All)</string>
   <string name="SYS_EXPORT_TO">Εξαγωγή σε</string>
@@ -924,7 +924,7 @@
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Το φύλλο εργασίας #VAR1# δεν υπάρχει στο εισαγόμενο αρχείο!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Η εισαγωγή ήταν επιτυχής..\n\n#VAR1# δημιουργήθηκαν νέοι χρήστες.\nΈγινε επεξεργασία των χρηστών #VAR2#.\nΈχουν εκχωρηθεί συνδρομές ρόλων#VAR3#.</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">Στις ακόλουθες στήλες του αρχείου εισαγωγής δεν εκχωρούνται πεδία προφίλ:</string>
-  <string name="SYS_IMPORT_USERS">Εισαγωγή χρήστη(ών)</string>
+  <string name="SYS_IMPORT_MEMBERS">Εισαγωγή χρήστη(ών)</string>
   <string name="SYS_IMPRINT">Αποτύπωμα</string>
   <string name="SYS_IMPRINT_DESC">Εδώ μπορεί να κατατεθεί η διεύθυνση URL για το αποτύπωμα της σελίδας σας. Εάν το επιλεγμένο θέμα το υποστηρίζει, θα εμφανιστεί ένας σύνδεσμος στις σελίδες Admidio. (Παράδειγμα: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Ανενεργά γκρουπ και ρόλοι</string>
@@ -1400,8 +1400,8 @@
   <string name="SYS_USER_FOUND">Βρέθηκε μέλος</string>
   <string name="SYS_USER_ID_NOT_FOUND">Δεν υπάρχει μέλος με αυτό το ID!</string>
   <string name="SYS_USER_MANAGEMENT">Διαχείριση μελών</string>
-  <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">Μία από τις διαμορφώσεις που καθορίζονται εδώ μπορεί να χρησιμοποιηθεί για την εμφάνιση της διαχείρισης του μέλους. Στη συνέχεια, οι στήλες της διαμόρφωσης της επιλεγμένης λίστας εμφανίζονται στη διαχείριση μέλους.</string>
-  <string name="SYS_USER_MANAGEMENT_DESC">Προβολή και οργάνωση ενεργών και πρώην μελών. Νέοι χρήστες μπορούν να εισαχθούν ή να δημιουργηθούν.</string>
+  <string name="SYS_MEMBERS_CONFIGURATION_DESC">Μία από τις διαμορφώσεις που καθορίζονται εδώ μπορεί να χρησιμοποιηθεί για την εμφάνιση της διαχείρισης του μέλους. Στη συνέχεια, οι στήλες της διαμόρφωσης της επιλεγμένης λίστας εμφανίζονται στη διαχείριση μέλους.</string>
+  <string name="SYS_MEMBERS_DESC">Προβολή και οργάνωση ενεργών και πρώην μελών. Νέοι χρήστες μπορούν να εισαχθούν ή να δημιουργηθούν.</string>
   <string name="SYS_USER_NO_EMAIL">Ο χρήστης #VAR1_BOLD# δεν έχει έγκυρη διεύθυνση e-mail στις προσωπικές πληροφορίες!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Ο χρήστης δεν είναι μέλος του συλλόγου #VAR1# ακόμη.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Ο χρήστης δεν είναι μέλος του συλλόγου #VAR1# αλλά έχει καταχωρημένα στοιχεία σύνδεσης.</string>

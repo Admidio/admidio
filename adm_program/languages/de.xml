@@ -337,7 +337,7 @@
   <string name="ORG_SHOW_CREATE_EDIT">Ersteller und Zeitstempel anzeigen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">An einigen Stellen wird die Erstellerin bzw. der Ersteller zusammen mit der Benutzerin bzw. der Benutzer mit der letzten Änderung zu einem Datensatz zusammen mit einem Zeitstempel angezeigt. Mit dieser Einstellung kann festgelegt werden, ob diese Informationen überhaupt angezeigt werden und ob die Benutzerin oder der Benutzer mit dem Anmeldenamen oder mit ihrem Vor- und Nachnamen angezeigt werden soll.</string>
   <string name="ORG_SHOW_ALL_USERS">Optional alle Benutzer:innen anzeigen</string>
-  <string name="ORG_SHOW_ALL_USERS_DESC">Ist diese Einstellung gesetzt, so werden in der Benutzerverwaltung neben den aktiven Mitgliedern der aktuellen Organisation optional auch ehemalige Mitglieder und Mitglieder anderer Organisationen angezeigt. Wird die Einstellung deaktiviert, werden nur aktive Mitglieder der aktuellen Organisation angezeigt. Beim Anlegen neuer Benutzer:innen oder Zuordnen von Anmeldungen wird allerdings weiterhin im gesamten Datenbestand aller Organisationen nach bereits existierenden Benutzer:innen geschaut.</string>
+  <string name="ORG_SHOW_ALL_USERS_DESC">Ist diese Einstellung gesetzt, so werden in der Mitgliederverwaltung neben den aktiven Mitgliedern der aktuellen Organisation optional auch ehemalige Mitglieder und Mitglieder anderer Organisationen angezeigt. Wird die Einstellung deaktiviert, werden nur aktive Mitglieder der aktuellen Organisation angezeigt. Beim Anlegen neuer Benutzer:innen oder Zuordnen von Anmeldungen wird allerdings weiterhin im gesamten Datenbestand aller Organisationen nach bereits existierenden Benutzer:innen geschaut.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
@@ -661,12 +661,12 @@
   <string name="SYS_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
   <string name="SYS_CREATE_HTACCESS">.htaccess erstellen</string>
   <string name="SYS_CREATE_LINK">Link anlegen</string>
+  <string name="SYS_CREATE_MEMBER">Mitglied anlegen</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Neue Konfiguration erstellen</string>
   <string name="SYS_CREATE_NEW_USER">Neue:n Benutzer:in anlegen</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Falls die neue Benutzerin bzw. der neue Benutzer nicht unter den gefundenen Daten aufgelistet ist, kannst du diese:n neu anlegen.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Beziehung anlegen</string>
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
-  <string name="SYS_CREATE_USER">Benutzer:in anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
   <string name="SYS_CREATION_DATE">Erstellungsdatum</string>
@@ -832,7 +832,7 @@
   <string name="SYS_EXAMPLES">Beispiele</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
-  <string name="SYS_EXISTING_USERS">Existierende Benutzer:innen</string>
+  <string name="SYS_EXISTING_MEMBERS">Existierende Mitglieder</string>
   <string name="SYS_EXPORT_LISTS">Listen exportieren</string>
   <string name="SYS_EXPORT_LISTS_DESC">Listen von Gruppen und Rollen können von Benutzerinnen und Benutzern exportiert werden, sofern sie das Recht haben diese Listen zu sehen. Mit dieser Einstellung kann die Exportfunktion eingeschränkt werden. (Voreinstellung: Alle)</string>
   <string name="SYS_EXPORT_TO">Exportieren nach</string>
@@ -925,7 +925,7 @@
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Das Arbeitsblatt #VAR1# existiert in der importierten Datei nicht!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Benutzer:innen wurden angelegt.\n#VAR2# Benutzer:innen wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">Folgende Spalten der Importdatei sind keinen Feldern in Admidio zugeordnet:</string>
-  <string name="SYS_IMPORT_USERS">Benutzer:innen importieren</string>
+  <string name="SYS_IMPORT_MEMBERS">Mitglieder importieren</string>
   <string name="SYS_IMPRINT">Impressum</string>
   <string name="SYS_IMPRINT_DESC">Hier kann die URL zum Impressum deiner Seite hinterlegt werden. Sofern das gewählte Theme dies unterstützt, wird ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inaktive Gruppen und Rollen</string>
@@ -1203,7 +1203,7 @@
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Dokumente und Dateien verwalten</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Rollen mit dieser Berechtigung können im Modul für Dokumente und Dateien die Rechte vergeben, welche Rollen bestimme Ordner sehen oder Dateien hochladen dürfen.</string>
   <string name="SYS_RIGHT_EDIT_USER">Profildaten aller Benutzer:innen bearbeiten</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Rollen mit dieser Berechtigung können alle Profildaten (außer Passwörter) anderer Mitglieder bearbeiten.\nAußerdem haben sie Zugriff auf die Benutzerverwaltung und können dort Benutzer:innen anlegen oder löschen.</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Rollen mit dieser Berechtigung können alle Profildaten (außer Passwörter) anderer Mitglieder bearbeiten.\nAußerdem haben sie Zugriff auf die Mitgliederverwaltung und können dort Benutzer:innen anlegen oder löschen.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Gästebucheinträge bearbeiten und löschen</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Kommentare zu Gästebucheinträgen anlegen</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">Diese Einstellung steuert, wer das Recht hat über das Nachrichtenmodul E-Mails an diese Rolle zu versenden. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
@@ -1310,7 +1310,7 @@
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
   <string name="SYS_SETTINGS">Einstellungen</string>
   <string name="SYS_SHOW_ALL_USERS">Alle Benutzer:innen anzeigen</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Ist die Einstellung nicht gesetzt werden nur die aktiven Mitglieder dieser Organisation angezeigt. ist die Einstellung aktiviert werden alle Benutzer:innen der Datenbank angezeigt.</string>
+  <string name="SYS_SHOW_ALL_USERS_DESC">Bei gesetzter Einstellung werden neben den aktiven Mitgliedern dieser Organisation auch ehemalige Mitglieder, sowie Mitglieder anderer Organisationen angezeigt.</string>
   <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Für nicht angemeldete Benutzer:innen wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss die Benutzerin oder der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Zeige ehemalige Mitglieder</string>
@@ -1402,8 +1402,8 @@
   <string name="SYS_USER_FOUND">Gefundene Benutzer:innen</string>
   <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein:e Benutzer:in zu der übergebenen ID gefunden werden!</string>
   <string name="SYS_USER_MANAGEMENT">Benutzerverwaltung</string>
-  <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann für die Anzeige der Benutzerverwaltung genutzt werden. Es werden anschließend in der Benutzerverwaltung die Spalten der ausgewählten Listenkonfiguration angezeigt.</string>
-  <string name="SYS_USER_MANAGEMENT_DESC">Alle aktiven und ehemaligen Benutzer:innen können hier eingesehen und verwaltet werden. Neue Benutzer:innen können angelegt oder importiert werden.</string>
+  <string name="SYS_MEMBERS_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann für die Anzeige der Mitgliederverwaltung genutzt werden. Es werden anschließend in der Mitgliederverwaltung die Spalten der ausgewählten Listenkonfiguration angezeigt.</string>
+  <string name="SYS_MEMBERS_DESC">Alle aktiven und ehemaligen Mitglieder können hier eingesehen und verwaltet werden. Neue Mitglieder können angelegt oder importiert werden.</string>
   <string name="SYS_USER_NO_EMAIL">#VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Diese:r Benutzer:in ist noch kein Mitglied der Organisation #VAR1#.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Diese:r Benutzer:in ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Zugangsdaten.</string>

@@ -652,7 +652,7 @@
   <string name="SYS_CREATE_NOT_FOUND_USER">Jos uutta käyttäjää ei ole löydettyjen käyttäjien joukossa, voit luoda sen.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Luo suhde</string>
   <string name="SYS_CREATE_ROLE">Luo rooli</string>
-  <string name="SYS_CREATE_USER">Luo uusi käyttäjä</string>
+  <string name="SYS_CREATE_MEMBER">Luo uusi käyttäjä</string>
   <string name="SYS_CREATE_VAR">Luo #VAR1#</string>
   <string name="SYS_CREATED_BY">Tekijä #VAR1# on #VAR2#</string>
   <string name="SYS_CREATION_DATE">Luotu</string>
@@ -801,7 +801,7 @@
   <string name="SYS_EXAMPLES">Esimerkkejä</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
-  <string name="SYS_EXISTING_USERS">Olemassa oleva käyttäjä</string>
+  <string name="SYS_EXISTING_MEMBERS">Olemassa oleva käyttäjä</string>
   <string name="SYS_EXPORT_LISTS">Vie luettelot</string>
   <string name="SYS_EXPORT_LISTS_DESC">Käyttäjät voivat viedä ryhmien ja roolien luetteloita, jos sinulla on oikeus tarkastella näitä luetteloita. Tätä asetusta voidaan käyttää vientitoiminnon rajoittamiseen. (Oletus: Kaikki)</string>
   <string name="SYS_EXPORT_TO">Vie muotoon</string>
@@ -892,7 +892,7 @@
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Laskentataulukkoa #VAR1# ei ole tuodussa tiedostossa!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Tuonti onnistui .. \n\n#VAR1# uutta käyttäjää on luotu. \n#VAR2# käyttäjää on muokattu. \n#VAR3# roolijäseniä.</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">Seuraaville tuontitiedoston sarakkeille ei ole määritetty profiilikenttiä:</string>
-  <string name="SYS_IMPORT_USERS">Tuo käyttäjätunnus(kset)</string>
+  <string name="SYS_IMPORT_MEMBERS">Tuo käyttäjätunnus(kset)</string>
   <string name="SYS_IMPRINT">Jälki</string>
   <string name="SYS_IMPRINT_DESC">Täällä voidaan tallentaa sivusi leiman URL -osoite. Jos valittu teema tukee tätä, Admidio -sivuilla näkyy linkki. (Esimerkki: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Ei aktiiviset ryhmät ja roolit</string>
@@ -1360,8 +1360,8 @@
   <string name="SYS_USER_FOUND">Käyttäjä löytyi</string>
   <string name="SYS_USER_ID_NOT_FOUND">Käyttäjää ei löydy tällä tunnuksella!</string>
   <string name="SYS_USER_MANAGEMENT">Käyttäjien hallinta</string>
-  <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">Käyttäjähallinnan näyttämiseen voidaan käyttää jotakin tässä määritetyistä kokoonpanoista. Valitun luettelon kokoonpanon sarakkeet näytetään sitten käyttäjän hallinnassa.</string>
-  <string name="SYS_USER_MANAGEMENT_DESC">Näytä ja järjestä kaikki aktiiviset ja entiset jäsenet täällä. Uusia käyttäjiä voidaan tuoda tai luoda.</string>
+  <string name="SYS_MEMBERS_CONFIGURATION_DESC">Käyttäjähallinnan näyttämiseen voidaan käyttää jotakin tässä määritetyistä kokoonpanoista. Valitun luettelon kokoonpanon sarakkeet näytetään sitten käyttäjän hallinnassa.</string>
+  <string name="SYS_MEMBERS_DESC">Näytä ja järjestä kaikki aktiiviset ja entiset jäsenet täällä. Uusia käyttäjiä voidaan tuoda tai luoda.</string>
   <string name="SYS_USER_NO_EMAIL">Käyttäjällä #VAR1_BOLD# ei ole kelvollista sähköpostiosoitetta henkilökohtaisissa tiedoissa!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Tämä käyttäjä ei ole vielä organisaation #VAR1# jäsen.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Käyttäjä ei ole organisaation #VAR1# jäsen, mutta on jo määrittänyt kirjautumistiedot.</string>

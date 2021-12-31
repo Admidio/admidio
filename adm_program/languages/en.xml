@@ -661,12 +661,12 @@
   <string name="SYS_CREATE_FOLDER_DESC">A new folder will be created in folder #VAR1_BOLD#.</string>
   <string name="SYS_CREATE_HTACCESS">Create .htaccess</string>
   <string name="SYS_CREATE_LINK">Create new link</string>
+  <string name="SYS_CREATE_MEMBER">Create member</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Create a new configuration</string>
   <string name="SYS_CREATE_NEW_USER">Add new user</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">If the new user is not listed among the users found, you can create it.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Create relationship</string>
   <string name="SYS_CREATE_ROLE">Create role</string>
-  <string name="SYS_CREATE_USER">Create user</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATED_BY">Created by #VAR1# on #VAR2#</string>
   <string name="SYS_CREATION_DATE">Created on</string>
@@ -832,7 +832,7 @@
   <string name="SYS_EXAMPLES">Examples</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
-  <string name="SYS_EXISTING_USERS">Existing user</string>
+  <string name="SYS_EXISTING_MEMBERS">Existing members</string>
   <string name="SYS_EXPORT_LISTS">Export lists</string>
   <string name="SYS_EXPORT_LISTS_DESC">Lists of groups and roles can be exported by users, provided that you have the right to view these lists. This setting can be used to restrict the export function. (Default: All)</string>
   <string name="SYS_EXPORT_TO">Export to</string>
@@ -921,11 +921,11 @@
   <string name="SYS_IMPORTANT">Important</string>
   <string name="SYS_IMPORT">Import</string>
   <string name="SYS_IMPORT_LOGIN_DATA_DESC">Login data can only be imported by an administrator. The rules of the organization must be observed (e.g. password length and password strength). Users with already existing login data keep them. No login data will be overwritten by the import.</string>
+  <string name="SYS_IMPORT_MEMBERS">Import members</string>
   <string name="SYS_IMPORT_MODE">Import mode</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">The worksheet #VAR1# does not exist in the imported file!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Import was successful..\n\n#VAR1# new users have been created.\n#VAR2# users have been edited.\n#VAR3# role memberships have been assigned.</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned any profile fields:</string>
-  <string name="SYS_IMPORT_USERS">Import user(s)</string>
   <string name="SYS_IMPRINT">Imprint</string>
   <string name="SYS_IMPRINT_DESC">Here the URL for the imprint of your page can be deposited. If the selected theme supports this, a link will be displayed on the Admidio pages. (Example: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inactive groups and roles</string>
@@ -1013,6 +1013,8 @@
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Member of organization #VAR1#</string>
   <string name="SYS_MEMBERS">Members</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Members between #VAR1# and #VAR2#</string>
+  <string name="SYS_MEMBERS_CONFIGURATION_DESC">One of the configurations specified here can be used to display the members administration. The columns of the selected list configuration are then displayed in the members administration.</string>
+  <string name="SYS_MEMBERS_DESC">Display and organize all active and former members here. New members can be imported or created.</string>
   <string name="SYS_MEMBERS_PER_PAGE">Members displayed per page</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Number of members listed in the HTML view. More members can be listed by using the pagination function. This value won\'t affect print preview and export functionality (Default: 25).</string>
   <string name="SYS_MEMBERSHIP_END">End of membership</string>
@@ -1310,7 +1312,7 @@
   <string name="SYS_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
   <string name="SYS_SETTINGS">Preferences</string>
   <string name="SYS_SHOW_ALL_USERS">Show all users</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Only active members of this organization will be listed if this option is not set. Otherwise all users of the database will be listed.</string>
+  <string name="SYS_SHOW_ALL_USERS_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
   <string name="SYS_SHOW_CALENDAR">Display calendar</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For logged out users an alphanumeric text will appear when captcha module is activated. The provided text has to be entered into the proper field. This should prevent abuse of the form by spammers. (default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Show former members</string>
@@ -1401,9 +1403,6 @@
   <string name="SYS_USER_DELETE_DESC">Would you like to delete #VAR1_BOLD#?\n\nUser is going to be physically deleted in the database which makes later access impossible.</string>
   <string name="SYS_USER_FOUND">User found</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
-  <string name="SYS_USER_MANAGEMENT">User management</string>
-  <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">One of the configurations specified here can be used to display the user administration. The columns of the selected list configuration are then displayed in the user administration.</string>
-  <string name="SYS_USER_MANAGEMENT_DESC">Display and organize all active and former members here. New users can be imported or created.</string>
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">This user is not a member of organization #VAR1# yet.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">User is not a member of organization #VAR1# but has already login data assigned.</string>
