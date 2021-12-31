@@ -652,7 +652,7 @@
   <string name="SYS_CREATE_NOT_FOUND_USER">U kunt nieuwe gebruiker aanmaken, als deze gebruiker niet voorkomt in de lijst met gevonden gebruikers.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Maak relatie</string>
   <string name="SYS_CREATE_ROLE">Maak rol</string>
-  <string name="SYS_CREATE_USER">Maak gebruiker</string>
+  <string name="SYS_CREATE_MEMBER">Maak gebruiker</string>
   <string name="SYS_CREATE_VAR">Maak #VAR1#</string>
   <string name="SYS_CREATED_BY">Gemaakt door #VAR1# op #VAR2#</string>
   <string name="SYS_CREATION_DATE">Gemaakt op</string>
@@ -801,7 +801,7 @@
   <string name="SYS_EXAMPLES">Voorbeelden</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
-  <string name="SYS_EXISTING_USERS">Bestaande gebruiker</string>
+  <string name="SYS_EXISTING_MEMBERS">Bestaande gebruiker</string>
   <string name="SYS_EXPORT_LISTS">Exporteer lijsten</string>
   <string name="SYS_EXPORT_LISTS_DESC">Lijsten met groepen en rollen kunnen door gebruikers worden geëxporteerd, op voorwaarde dat u het recht heeft om deze lijsten te bekijken. Deze instelling kan worden gebruikt om de exportfunctie te beperken. (Standaard: alles)</string>
   <string name="SYS_EXPORT_TO">Exporteer</string>
@@ -892,7 +892,7 @@
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Het werkblad #VAR1# bestaat niet in het geïmporteerde bestand!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Importeren is gelukt..\n\n#VAR1# nieuwe gebruikers zijn gemaakt.\n#VAR2# gebruikers zijn bewerkt.\n#VAR3# rol lidmaatschappen zijn toegewezen.</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">Aan de volgende kolommen van het importbestand zijn geen profielvelden toegewezen:</string>
-  <string name="SYS_IMPORT_USERS">Importeer gebruiker(s)</string>
+  <string name="SYS_IMPORT_MEMBERS">Importeer gebruiker(s)</string>
   <string name="SYS_IMPRINT">Afdruk</string>
   <string name="SYS_IMPRINT_DESC">Hier kan de URL voor de afdruk van uw pagina worden ingesteld. Als het geselecteerde thema dit ondersteunt, wordt er ook een link weergegeven op de Admidio-pagina\'s. (Voorbeeld: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inactieve groepen en rollen</string>
@@ -1362,8 +1362,8 @@
   <string name="SYS_USER_FOUND">Gebruiker gevonden</string>
   <string name="SYS_USER_ID_NOT_FOUND">Geen gebruiker kon gevonden worden met deze ID!</string>
   <string name="SYS_USER_MANAGEMENT">Gebruikersbeheer</string>
-  <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">Een van de hier gespecificeerde configuraties kan worden gebruikt om het gebruikersbeheer weer te geven. De kolommen van de geselecteerde lijst-configuratie worden vervolgens weergegeven in het gebruikersbeheer.</string>
-  <string name="SYS_USER_MANAGEMENT_DESC">Hier worden alle actieve en voormalige leden getoond. U kunt leden importeren uit een bestand, aanmaken of beheren.</string>
+  <string name="SYS_MEMBERS_CONFIGURATION_DESC">Een van de hier gespecificeerde configuraties kan worden gebruikt om het gebruikersbeheer weer te geven. De kolommen van de geselecteerde lijst-configuratie worden vervolgens weergegeven in het gebruikersbeheer.</string>
+  <string name="SYS_MEMBERS_DESC">Hier worden alle actieve en voormalige leden getoond. U kunt leden importeren uit een bestand, aanmaken of beheren.</string>
   <string name="SYS_USER_NO_EMAIL">Gebruiker #VAR1_BOLD# heeft geen geldig e-mailadres in zijn profiel!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">De gebruiker is nog geen lid van organisatie #VAR1#.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Gebruiker is geen lid van organisatie #VAR1# maar er is al inloginformatie toegewezen.</string>

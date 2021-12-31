@@ -95,7 +95,7 @@
   <string name="SYS_COMPLEMENT">补充</string>
   <string name="SYS_COUNTER">计数器</string>
   <string name="SYS_CREATE_FOLDER">创建文件夹</string>
-  <string name="SYS_CREATE_USER">创建用户</string>
+  <string name="SYS_CREATE_MEMBER">创建用户</string>
   <string name="SYS_CREATION_DATE">创建于</string>
   <string name="SYS_DATABASE_BACKUP">数据库备份</string>
   <string name="SYS_DATABASE_BACKUP_DESC">创建和下载系统表的数据库备份。</string>
@@ -123,7 +123,7 @@
   <string name="SYS_EMAIL_TO_LIST">向列表发送电子邮件</string>
   <string name="SYS_ENABLE_USER_RELATIONS">保持和显示关系</string>
   <string name="SYS_ENABLE_USER_RELATIONS_DESC">如果设置为有效的，则可以保持和显示用户之间的关系。(默认值：是)</string>
-  <string name="SYS_EXISTING_USERS">现有用户</string>
+  <string name="SYS_EXISTING_MEMBERS">现有用户</string>
   <string name="SYS_EXPORT_TO">导出到</string>
   <string name="SYS_FILE_COLUMN">文件列</string>
   <string name="SYS_FILE_EXTENSION_INVALID">不被允许的文件类型。</string>
@@ -147,7 +147,7 @@
   <string name="SYS_HOURS_VAR">#VAR1# 小时</string>
   <string name="SYS_IDENTIFY_USERS">现有用户的通过姓氏和名字进行识别。</string>
   <string name="SYS_IMPORT">导入</string>
-  <string name="SYS_IMPORT_USERS">导入用户</string>
+  <string name="SYS_IMPORT_MEMBERS">导入用户</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">请提供新用户的姓和名字。如果已存在有相同或相似名称的同一用户，将执行数据库检查。</string>
   <string name="SYS_LAYOUT">布局</string>
   <string name="SYS_MAKE_FORMER">用户可以更改为形式成员，将保留包括成员角色资格的所有用户信息，以供以后使用。</string>

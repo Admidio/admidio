@@ -13,7 +13,7 @@ INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, co
                               , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.1.0', 0, 0)
                               , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.1.0', 0, 0)
                               , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.1.0', 0, 0)
-                              , (100, 'MODULE', 'SYS_USER_MANAGEMENT', 'MEMBERS', '4.1.0', 0, 0)
+                              , (100, 'MODULE', 'SYS_MEMBERS', 'MEMBERS', '4.1.0', 0, 0)
                               , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.1.0', 0, 0)
                               , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.1.0', 0, 0)
                               , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.1.0', 0, 0)
@@ -52,7 +52,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (140, 2, false, 6, true, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'fa-cog', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC', '2965d083-8dd3-4a43-9b27-53018e5f22c1'),
 (120, 1, false, 4, true, 'mail', '/adm_program/modules/messages/messages_write.php', 'fa-envelope', 'SYS_EMAIL', 'SYS_EMAIL_DESC', 'edb6a573-fb66-4dfb-ba90-466317572204'),
 (160, 2, false, 1, true, 'newreg', '/adm_program/modules/registration/registration.php', 'fa-address-card', 'SYS_NEW_REGISTRATIONS', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC', '62330cbc-4c15-4860-b841-10a35d88cd3c'),
-(100, 2, false, 2, true, 'usrmgt', '/adm_program/modules/members/members.php', 'fa-users-cog', 'SYS_USER_MANAGEMENT', 'SYS_USER_MANAGEMENT_DESC', '168ad66e-e34d-4f14-8a65-a78dd7dbd058'),
+(100, 2, false, 2, true, 'usrmgt', '/adm_program/modules/members/members.php', 'fa-users-cog', 'SYS_MEMBERS', 'SYS_MEMBERS_DESC', '168ad66e-e34d-4f14-8a65-a78dd7dbd058'),
 (110, 2, false, 5, true, 'menu', '/adm_program/modules/menu/menu.php', 'fa-stream', 'SYS_MENU', 'SYS_MENU_DESC', 'ef4b5380-3500-4ec4-a432-a7f4099a2a92');
 
 
@@ -757,8 +757,8 @@ INSERT INTO %PREFIX%_lists (lst_id, lst_uuid, lst_org_id, lst_usr_id, lst_name, 
 (12, 'a834cebe-3592-4f05-8c9b-73551615f570', 2, 1, 'INS_MEMBERSHIP', '2012-02-27 21:50:57',  true),
 (13, 'afc87e5f-fffa-46f3-82d1-6e8c65472ae4', 1, 1, 'SYS_PARTICIPANTS', '2018-04-05 21:50:57',  true),
 (14, 'a94a023b-56fa-4d6e-b05e-267a3d37ba09', 2, 1, 'SYS_PARTICIPANTS', '2018-04-05 21:50:57',  true),
-(15, 'd39d0642-c367-43ca-bc73-578219febbc6', 1, 1, 'SYS_USER_MANAGEMENT', '2021-11-13 15:08:45',  true),
-(16, '6efad974-5b15-4bb7-a1f8-350fa4b7a452', 2, 1, 'SYS_USER_MANAGEMENT', '2021-11-13 15:08:45',  true);
+(15, 'd39d0642-c367-43ca-bc73-578219febbc6', 1, 1, 'SYS_MEMBERS', '2021-11-13 15:08:45',  true),
+(16, '6efad974-5b15-4bb7-a1f8-350fa4b7a452', 2, 1, 'SYS_MEMBERS', '2021-11-13 15:08:45',  true);
 
 --
 -- Data for table adm_list_columns

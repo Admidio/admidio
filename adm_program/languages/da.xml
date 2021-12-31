@@ -666,7 +666,7 @@
   <string name="SYS_CREATE_NOT_FOUND_USER">Du kan oprette den nye bruger hvis brugeren ikke allerede findes i bruger listen.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Opret relation</string>
   <string name="SYS_CREATE_ROLE">Opret rolle</string>
-  <string name="SYS_CREATE_USER">Opret bruger</string>
+  <string name="SYS_CREATE_MEMBER">Opret bruger</string>
   <string name="SYS_CREATE_VAR">Opret #VAR1#</string>
   <string name="SYS_CREATED_BY">Oprettet af #VAR1# den #VAR2#</string>
   <string name="SYS_CREATION_DATE">Oprettet den</string>
@@ -832,7 +832,7 @@
   <string name="SYS_EXAMPLES">Eksempler</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
-  <string name="SYS_EXISTING_USERS">Eksisterende bruger</string>
+  <string name="SYS_EXISTING_MEMBERS">Eksisterende bruger</string>
   <string name="SYS_EXPORT_LISTS">‎Eksportere lister‎</string>
   <string name="SYS_EXPORT_LISTS_DESC">‎Lister over grupper og roller kan eksporteres af brugere, forudsat at du har ret til at få vist disse lister. Denne indstilling kan bruges til at begrænse eksportfunktionen. (Standard: Alle)‎</string>
   <string name="SYS_EXPORT_TO">Eksport til</string>
@@ -925,7 +925,7 @@
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">‎Regnearket #VAR1# findes ikke i den importerede fil!‎</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Importen forløb succesfuldt..\n\n#VAR1# nye brugere er blevet oprettet.\n#VAR2# Brugere er blevet rettet.\n#VAR3# rolle medlemskaber er blevet tildelt.</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">‎Følgende kolonner i importfilen er ikke tildelt noget profilfelt:‎</string>
-  <string name="SYS_IMPORT_USERS">Importer bruger(e)</string>
+  <string name="SYS_IMPORT_MEMBERS">Importer bruger(e)</string>
   <string name="SYS_IMPRINT">Aftryk</string>
   <string name="SYS_IMPRINT_DESC">Her kan URL\'en til dit indtryk af din side deponeres. Hvis det valgte tema understøtter dette, vises et link på Admidio-siderne. (Eksempel: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inaktive grupper og roller</string>
@@ -1402,8 +1402,8 @@
   <string name="SYS_USER_FOUND">Bruger fundet</string>
   <string name="SYS_USER_ID_NOT_FOUND">Der kunne ikke findes nogen bruger med dette ID!</string>
   <string name="SYS_USER_MANAGEMENT">Bruger Administration</string>
-  <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">‎En af de konfigurationer, der er angivet her, kan bruges til at få vist brugeradministrationen. Kolonnerne i den valgte listekonfiguration vises derefter i brugeradministrationen.‎</string>
-  <string name="SYS_USER_MANAGEMENT_DESC">Vis og organiser alle aktive og tidligere medlemmer her. Nye brugere kan oprettes eller importeres fra CSV fil.</string>
+  <string name="SYS_MEMBERS_CONFIGURATION_DESC">‎En af de konfigurationer, der er angivet her, kan bruges til at få vist brugeradministrationen. Kolonnerne i den valgte listekonfiguration vises derefter i brugeradministrationen.‎</string>
+  <string name="SYS_MEMBERS_DESC">Vis og organiser alle aktive og tidligere medlemmer her. Nye brugere kan oprettes eller importeres fra CSV fil.</string>
   <string name="SYS_USER_NO_EMAIL">Brugeren #VAR1_BOLD# har ikke nogen gyldig e-mail adresse i sin personlige information!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Denne bruger er ikke medlem af organisationen #VAR1# endnu.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Brugeren er ikke medlem af organisationen #VAR1#, men er i besiddelse af et login.</string>

@@ -633,7 +633,7 @@
   <string name="SYS_CREATE_NEW_USER">Adicionar novo usuário</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Se o novo usuário não estiver na lista, podes criá-lo.</string>
   <string name="SYS_CREATE_ROLE">Criar cargo</string>
-  <string name="SYS_CREATE_USER">Criar usuário</string>
+  <string name="SYS_CREATE_MEMBER">Criar usuário</string>
   <string name="SYS_CREATE_VAR">Criar #VAR1#</string>
   <string name="SYS_CREATED_BY">Criado por #VAR1# em #VAR2#</string>
   <string name="SYS_CREATION_DATE">Criada em</string>
@@ -745,7 +745,7 @@
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Eventos - Confirmação de comparecimento</string>
   <string name="SYS_EXAMPLE">Exemplo</string>
   <string name="SYS_EXAMPLES">Exemplos</string>
-  <string name="SYS_EXISTING_USERS">Usuário existente</string>
+  <string name="SYS_EXISTING_MEMBERS">Usuário existente</string>
   <string name="SYS_EXPORT_TO">Exportar para</string>
   <string name="SYS_FADE_IN">Aparecer gradualmente</string>
   <string name="SYS_FAX">Fax</string>
@@ -823,7 +823,7 @@
   <string name="SYS_IMPORT">Importar</string>
   <string name="SYS_IMPORT_MODE">Modo de importação</string>
   <string name="SYS_IMPORT_SUCCESSFUL">A importação está completa.\n\n#VAR1# novos usuários foram criados.\n#VAR2# usuários foram editados.\n#VAR3# filiações de cargos foram atribuídas.</string>
-  <string name="SYS_IMPORT_USERS">Importar usuário(s)</string>
+  <string name="SYS_IMPORT_MEMBERS">Importar usuário(s)</string>
   <string name="SYS_IMPRINT">Imprimir</string>
   <string name="SYS_IMPRINT_DESC">Insira a URL para a impressão da sua página. Se o tema selecionado suportar, um link será exibido nas páginas do Admidio. (Example: https://www.example.com/imprint.html)</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Caixa de informações</string>
@@ -1243,7 +1243,7 @@
   <string name="SYS_USER_FOUND">Usuário encontrado</string>
   <string name="SYS_USER_ID_NOT_FOUND">Nenhum usuário encontrado com este ID!</string>
   <string name="SYS_USER_MANAGEMENT">Gestão de usuários</string>
-  <string name="SYS_USER_MANAGEMENT_DESC">Exibir todos os membros aqui. Novos usuários podem ser importados ou criados.</string>
+  <string name="SYS_MEMBERS_DESC">Exibir todos os membros aqui. Novos usuários podem ser importados ou criados.</string>
   <string name="SYS_USER_NO_EMAIL">O usuário #VAR1_BOLD# não possui nenhum endereço de e-mail em suas informações pessoais!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Este usuário não é um membro da organização #VAR1# ainda.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">O usuário não é um membro da organização #VAR1# mas já possui informações de sessão atribuídas.</string>

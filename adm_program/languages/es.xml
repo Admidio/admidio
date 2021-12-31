@@ -355,7 +355,7 @@
   <string name="SYS_CREATE_NEW_CONFIGURATION">Crear nueva configuración</string>
   <string name="SYS_CREATE_NEW_USER">Crear un nuevo Usuario</string>
   <string name="SYS_CREATE_ROLE">crear rol</string>
-  <string name="SYS_CREATE_USER">Crear usuario</string>
+  <string name="SYS_CREATE_MEMBER">Crear usuario</string>
   <string name="SYS_CREATION_DATE">Fecha de creación</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_DATABASE">Base de datos</string>
@@ -412,7 +412,7 @@
   <string name="SYS_END_MEMBERSHIP_OF_USER_OK">La membresía del usuario #VAR1_BOLD# en #VAR2_BOLD# fue cancelada exitosamente.</string>
   <string name="SYS_ERROR">Error</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">La configuración de la lista #VAR1_BOLD# es la predeterminada para las listas en esta organización, y no puede ser borrada. En el módulo de preferencias, seleccione como predeterminada una configuración diferente a la actual y después intente borrar esta configuración.</string>
-  <string name="SYS_EXISTING_USERS">Usuario existente</string>
+  <string name="SYS_EXISTING_MEMBERS">Usuario existente</string>
   <string name="SYS_EXPORT_TO">Exportar a</string>
   <string name="SYS_FAX">Fax</string>
   <string name="SYS_FEMALE">Feminino</string>
@@ -465,7 +465,7 @@
   <string name="SYS_IMPORTANT">Importante</string>
   <string name="SYS_IMPORT">Importar</string>
   <string name="SYS_IMPORT_SUCCESSFUL">La importación fue exitosa. \n\n#VAR1# nuevos usuarios han sido creados. \n#VAR2# usuarios han sido editados.\nSe han asignado #VAR3# membresías de roles.</string>
-  <string name="SYS_IMPORT_USERS">Importar usuario</string>
+  <string name="SYS_IMPORT_MEMBERS">Importar usuario</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="SYS_INFORMATIONS">Informaciónes</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Por favor escriba el nombre y apellido del nuevo usuario. Antes de crearlo, se verifica si ya existe un usuario con un nombre similar o igual en la base de datos.</string>
@@ -732,7 +732,7 @@
   <string name="SYS_USER_DELETE_DESC">¿Realmente desea eliminar a #VAR1_BOLD#?\n\nEl usuario será eliminado de la base de datos, lo que impedirá el acceso posterior a su información.</string>
   <string name="SYS_USER_FOUND">Usuarios encontrados</string>
   <string name="SYS_USER_MANAGEMENT">Administración de usuarios</string>
-  <string name="SYS_USER_MANAGEMENT_DESC">Aquí se pueden administrar y ver Todos los usuarios activos y antiguos. Se pueden importar o crear nuevos usuarios.</string>
+  <string name="SYS_MEMBERS_DESC">Aquí se pueden administrar y ver Todos los usuarios activos y antiguos. Se pueden importar o crear nuevos usuarios.</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Este usuario aún no es miembro de la organización #VAR1#.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">El usuario no es un miembro de la organización #VAR1#, pero ya tiene asignada información de acceso.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">El usuario no es miembro de la organización #VAR1# y no tiene registrada información de acceso.</string>

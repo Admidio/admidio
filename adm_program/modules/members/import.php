@@ -23,7 +23,7 @@ if (!PhpIniUtils::isFileUploadEnabled()) {
     // => EXIT
 }
 
-$headline = $gL10n->get('SYS_IMPORT_USERS');
+$headline = $gL10n->get('SYS_IMPORT_MEMBERS');
 
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -200,7 +200,7 @@ $selectBoxEntries = array(
 );
 $form->addSelectBox(
     'user_import_mode',
-    $gL10n->get('SYS_EXISTING_USERS'),
+    $gL10n->get('SYS_EXISTING_MEMBERS'),
     $selectBoxEntries,
     array(
         'property'                       => HtmlForm::FIELD_REQUIRED,

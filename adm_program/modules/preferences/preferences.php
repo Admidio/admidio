@@ -1038,7 +1038,7 @@ $formUserManagement->addSelectBoxFromSql(
     $gL10n->get('SYS_CONFIGURATION_LIST'),
     $gDb,
     $sqlData,
-    array('defaultValue' => $formValues['members_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_USER_MANAGEMENT_CONFIGURATION_DESC')
+    array('defaultValue' => $formValues['members_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MEMBERS_CONFIGURATION_DESC')
 );
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formUserManagement->addSelectBox(
@@ -1076,7 +1076,7 @@ $formUserManagement->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'user_administration', 'accordion_modules', $gL10n->get('SYS_USER_MANAGEMENT'), 'fas fa-users-cog', $formUserManagement->show()));
+$page->addHtml(getPreferencePanel('modules', 'user_administration', 'accordion_modules', $gL10n->get('SYS_MEMBERS'), 'fas fa-users-cog', $formUserManagement->show()));
 
 // PANEL: DOCUMENTS-FILES
 

@@ -130,7 +130,7 @@
   <string name="SYS_CREATE">Opprett</string>
   <string name="SYS_CREATE_NEW_USER">Legg til ny bruker</string>
   <string name="SYS_CREATE_ROLE">Opprett rolle</string>
-  <string name="SYS_CREATE_USER">Opprett bruker</string>
+  <string name="SYS_CREATE_MEMBER">Opprett bruker</string>
   <string name="SYS_CREATION_DATE">Opprettet</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_DATABASE">Database</string>
@@ -162,7 +162,7 @@
   <string name="SYS_ERROR">Feil</string>
   <string name="SYS_EXAMPLE">Eksempel</string>
   <string name="SYS_EXAMPLES">Eksempler</string>
-  <string name="SYS_EXISTING_USERS">Eksisterende bruker</string>
+  <string name="SYS_EXISTING_MEMBERS">Eksisterende bruker</string>
   <string name="SYS_FAX">Faks</string>
   <string name="SYS_FEMALE">Kvinne</string>
   <string name="SYS_FIELD">Felt</string>
@@ -193,7 +193,7 @@
   <string name="SYS_HOURS_VAR">#VAR1# timer</string>
   <string name="SYS_ICON">Ikon</string>
   <string name="SYS_IMPORT">Import</string>
-  <string name="SYS_IMPORT_USERS">Brukerimport</string>
+  <string name="SYS_IMPORT_MEMBERS">Brukerimport</string>
   <string name="SYS_INFORMATIONS">informasjon</string>
   <string name="SYS_INSTALLED">Installert</string>
   <string name="SYS_INTERNAL_NAME">Internt navn</string>

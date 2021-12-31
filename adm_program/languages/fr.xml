@@ -643,7 +643,7 @@
   <string name="SYS_CREATE_NOT_FOUND_USER">Si le nouvel utilisateur ne figure pas dans la liste des utilisateurs trouvés, tu peux créer un nouvel utilisateur.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Créer relation</string>
   <string name="SYS_CREATE_ROLE">Création de rôles</string>
-  <string name="SYS_CREATE_USER">Créer un membre</string>
+  <string name="SYS_CREATE_MEMBER">Créer un membre</string>
   <string name="SYS_CREATE_VAR">Créer #VAR1#</string>
   <string name="SYS_CREATED_BY">Créé par #VAR1# le #VAR2#</string>
   <string name="SYS_CREATION_DATE">Date de création</string>
@@ -772,7 +772,7 @@
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Evénements - Confirmation de participation</string>
   <string name="SYS_EXAMPLE">Exemple</string>
   <string name="SYS_EXAMPLES">Exemples</string>
-  <string name="SYS_EXISTING_USERS">Membres existants</string>
+  <string name="SYS_EXISTING_MEMBERS">Membres existants</string>
   <string name="SYS_EXPORT_TO">Exporter vers</string>
   <string name="SYS_FADE_IN">Fondre</string>
   <string name="SYS_FAX">Télécopieur</string>
@@ -854,7 +854,7 @@
   <string name="SYS_IMPORT">Importer</string>
   <string name="SYS_IMPORT_MODE">Mode importation</string>
   <string name="SYS_IMPORT_SUCCESSFUL">L\'importation a été réussie.\n\n#VAR1# nouveaux membres ont été créés.\n#VAR2# membres ont été modifiés.\n#VAR3# d\'appartenances aux rôle ont été assignés.</string>
-  <string name="SYS_IMPORT_USERS">Importer des membres</string>
+  <string name="SYS_IMPORT_MEMBERS">Importer des membres</string>
   <string name="SYS_IMPRINT">Impressum</string>
   <string name="SYS_IMPRINT_DESC">Ici, tu peux entrer l\'URL de l\'impressum de ta page. Si le thème sélectionné le supporte, un lien sera affiché sur les pages Admidio. (Exemple : https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Groupes et rôles inactifs</string>
@@ -1301,7 +1301,7 @@
   <string name="SYS_USER_FOUND">Utilisateurs trouvés</string>
   <string name="SYS_USER_ID_NOT_FOUND">Aucun utilisateur n\'a pu être trouvé pour l\'ID donnée !</string>
   <string name="SYS_USER_MANAGEMENT">Administration des membres</string>
-  <string name="SYS_USER_MANAGEMENT_DESC">Tous les membres actifs et anciens membres peuvent être consultés et gérés ici. De nouveaux membres peuvent être créés ou importés.</string>
+  <string name="SYS_MEMBERS_DESC">Tous les membres actifs et anciens membres peuvent être consultés et gérés ici. De nouveaux membres peuvent être créés ou importés.</string>
   <string name="SYS_USER_NO_EMAIL">L\'utilisateur #VAR1_BOLD# n\'a pas d\'adresse courriel valide dans son profil !</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Cet utilisateur n\'est pas encore membre de l\'organisation #VAR1#.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Cet utilisateur n\'est pas encore membre de l\'organisation #VAR1#, mais possède déjà des données de connexion.</string>
