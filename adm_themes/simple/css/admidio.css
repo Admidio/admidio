@@ -202,7 +202,7 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
 /***********************************/
 /* Mark mandatory fields */
 /***********************************/
-.admidio-form-group-required label:after,
+.admidio-form-group-required .control-label:after,
 .admidio-form-required-notice span:after {
     font-family: "Font Awesome 5 Free";
     font-size: 6pt;
