@@ -4,9 +4,9 @@
   <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# tem o seu aniversário em #VAR2# dias</string>
   <string name="PLG_BIRTHDAY_HEADLINE">Aniversários</string>
   <string name="PLG_BIRTHDAY_MAN_VAR">Sr. #VAR1#</string>
-  <string name="PLG_BIRTHDAY_MORE_USERS">Número de aniversariantes hoje: #VAR1#</string>
-  <string name="PLG_BIRTHDAY_NO_USER">Ninguém faz anos hoje.</string>
-  <string name="PLG_BIRTHDAY_ONE_USER">Um utilizador faz anos hoje.</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Número de aniversariantes hoje: #VAR1#</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Ninguém faz anos hoje.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Um utilizador faz anos hoje.</string>
   <string name="PLG_BIRTHDAY_PAST">#VAR1# fez #VAR3# anos há #VAR2# dias, na #VAR4#</string>
   <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# teve o seu aniversário há #VAR2# dias</string>
   <string name="PLG_BIRTHDAY_TODAY">#VAR1# fará #VAR2# anos hoje</string>

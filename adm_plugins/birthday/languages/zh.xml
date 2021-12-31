@@ -3,9 +3,9 @@
   <string name="PLG_BIRTHDAY_FUTURE">#VAR1# #VAR2#天后将#VAR3#岁 , 在 #VAR4#</string>
   <string name="PLG_BIRTHDAY_HEADLINE">生日</string>
   <string name="PLG_BIRTHDAY_MAN_VAR">#VAR1#先生</string>
-  <string name="PLG_BIRTHDAY_MORE_USERS">今天有 #VAR1# 个用户生日。</string>
-  <string name="PLG_BIRTHDAY_NO_USER">今天没有用户生日。</string>
-  <string name="PLG_BIRTHDAY_ONE_USER">今天有一个用户生日！</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">今天有 #VAR1# 个用户生日。</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">今天没有用户生日。</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">今天有一个用户生日！</string>
   <string name="PLG_BIRTHDAY_PAST">#VAR1# #VAR2#天前达到了#VAR3#岁 , 在 #VAR4#</string>
   <string name="PLG_BIRTHDAY_TODAY">#VAR1# 将在今天 #VAR2#</string>
   <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# 明天将#VAR3#岁了，在 #VAR4# </string>

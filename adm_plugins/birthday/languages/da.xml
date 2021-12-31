@@ -4,9 +4,9 @@
   <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# har sin fødselsdag om #VAR2# dage</string>
   <string name="PLG_BIRTHDAY_HEADLINE">Fødselsdag</string>
   <string name="PLG_BIRTHDAY_MAN_VAR">Hr #VAR1#</string>
-  <string name="PLG_BIRTHDAY_MORE_USERS">Idag har #VAR1# brugere fødselsdag.</string>
-  <string name="PLG_BIRTHDAY_NO_USER">Idag har ingen brugere fødselsdag.</string>
-  <string name="PLG_BIRTHDAY_ONE_USER">Idag har én bruger fødselsdag.</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Idag har #VAR1# brugere fødselsdag.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Idag har ingen brugere fødselsdag.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Idag har én bruger fødselsdag.</string>
   <string name="PLG_BIRTHDAY_PAST">#VAR1# blev for #VAR2# dage siden #VAR3# år, den #VAR4#</string>
   <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# havde sin fødselsdag for #VAR2# dage siden</string>
   <string name="PLG_BIRTHDAY_TODAY">#VAR1# bliver idag #VAR2#</string>

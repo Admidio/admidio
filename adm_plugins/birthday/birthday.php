@@ -326,15 +326,15 @@ if ($numberBirthdays > 0) {
         echo '</ul>';
     } else {
         if ($numberBirthdays === 1) {
-            echo '<p>'.$gL10n->get('PLG_BIRTHDAY_ONE_USER').'</p>';
+            echo '<p>'.$gL10n->get('PLG_BIRTHDAY_ONE_MEMBER').'</p>';
         } else {
-            echo '<p>'.$gL10n->get('PLG_BIRTHDAY_MORE_USERS', array($numberBirthdays)).'</p>';
+            echo '<p>'.$gL10n->get('PLG_BIRTHDAY_MORE_MEMBERS', array($numberBirthdays)).'</p>';
         }
     }
 } else {
     // Bei entsprechend gesetzter Konfiguration wird auch im Fall, dass keiner Geburtstag hat, eine Meldung ausgegeben.
     if (!$plg_show_hinweis_keiner) {
-        echo '<p>'.$gL10n->get('PLG_BIRTHDAY_NO_USER').'</p>';
+        echo '<p>'.$gL10n->get('PLG_BIRTHDAY_NO_USE').'</p>';
     }
 }
 
