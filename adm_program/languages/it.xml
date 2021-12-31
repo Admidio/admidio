@@ -610,7 +610,7 @@
   <string name="SYS_CREATE_NEW_USER">Aggiungi un nuovo utente</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Potrai creare un nuovo utente, se l\'utente non è elencato tra gli utenti trovati.</string>
   <string name="SYS_CREATE_ROLE">Crea ruolo</string>
-  <string name="SYS_CREATE_USER">Crea utente</string>
+  <string name="SYS_CREATE_MEMBER">Crea utente</string>
   <string name="SYS_CREATE_VAR">Crea #VAR1#</string>
   <string name="SYS_CREATED_BY">Creato da #VAR1# il #VAR2#</string>
   <string name="SYS_CREATION_DATE">Creato su</string>
@@ -699,7 +699,7 @@
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERRORE 404 - PAGINA NON TROVATA!</string>
   <string name="SYS_EXAMPLE">Esempio</string>
   <string name="SYS_EXAMPLES">Esempi</string>
-  <string name="SYS_EXISTING_USERS">Utente esistente</string>
+  <string name="SYS_EXISTING_MEMBERS">Utente esistente</string>
   <string name="SYS_EXPORT_TO">Esporta per</string>
   <string name="SYS_FADE_IN">Dissolvenza in</string>
   <string name="SYS_FAX">Fax</string>
@@ -762,7 +762,7 @@
   <string name="SYS_IDENTIFY_USERS">L\'identificazione degli utenti già esistenti è fatta sulla base del nome e del cognome.</string>
   <string name="SYS_IMPORT">Importa</string>
   <string name="SYS_IMPORT_SUCCESSFUL">L\'importazione ha avuto successo..\n\n#VAR1# nuovi utenti sono stati creati.\n#VAR2# utenti sono stati modificati.\n#VAR3# ruoli di membership sono stati assegnati.</string>
-  <string name="SYS_IMPORT_USERS">Importa utente(i)</string>
+  <string name="SYS_IMPORT_MEMBERS">Importa utente(i)</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Spazio informazioni</string>
   <string name="SYS_INFORMATIONS">informazioni</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Per favore fornisci il nome e il cognome del nuovo utente. Sarà effettuata una verifica nel database se un utente con lo stesso nome o con un nome simile esiste già.</string>
@@ -1089,7 +1089,7 @@
   <string name="SYS_USER_FOUND">Utente trovato</string>
   <string name="SYS_USER_ID_NOT_FOUND">Nessun utente è stato trovato con questo ID!</string>
   <string name="SYS_USER_MANAGEMENT">Gestione dell\'utente</string>
-  <string name="SYS_USER_MANAGEMENT_DESC">Visualizza e organizza qui tutti i membri attivi e gli ex membri. Nuovi utenti possono essere creati o importati.</string>
+  <string name="SYS_MEMBERS_DESC">Visualizza e organizza qui tutti i membri attivi e gli ex membri. Nuovi utenti possono essere creati o importati.</string>
   <string name="SYS_USER_NO_EMAIL">L\'utente #VAR1_BOLD# non ha alcun indirizzo email valido nelle informazioni personali!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Questo utente non è ancora membro dell\'organizzazione #VAR1#.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">L\'utente non è membro dell\'organizzazione #VAR1# ma ha già i dati di accesso assegnati</string>

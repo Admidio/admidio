@@ -13,7 +13,7 @@ INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, co
                               , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.0.11', 0, 0)
                               , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.0.11', 0, 0)
                               , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.0.11', 0, 0)
-                              , (100, 'MODULE', 'SYS_USER_MANAGEMENT', 'MEMBERS', '4.0.11', 0, 0)
+                              , (100, 'MODULE', 'SYS_MEMBERS', 'MEMBERS', '4.0.11', 0, 0)
                               , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.0.11', 0, 0)
                               , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.0.11', 0, 0)
                               , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.0.11', 0, 0)

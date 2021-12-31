@@ -201,7 +201,7 @@ if ($getMode === 'assign') {
     if ($gCurrentUser->editUsers()) {
         $page->addPageFunctionsMenuItem(
             'menu_item_members_assign_create_user',
-            $gL10n->get('SYS_CREATE_USER'),
+            $gL10n->get('SYS_CREATE_MEMBER'),
             ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php',
             'fa-plus-circle'
         );

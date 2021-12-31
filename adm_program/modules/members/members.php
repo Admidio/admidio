@@ -32,7 +32,7 @@ if (!$gCurrentUser->editUsers()) {
 }
 
 // set headline of the script
-$headline = $gL10n->get('SYS_USER_MANAGEMENT');
+$headline = $gL10n->get('SYS_MEMBERS');
 
 // Navigation of the module starts here
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
@@ -58,7 +58,7 @@ $page->addJavascript('
 
 $page->addPageFunctionsMenuItem(
     'menu_item_members_create_user',
-    $gL10n->get('SYS_CREATE_USER'),
+    $gL10n->get('SYS_CREATE_MEMBER'),
     ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php',
     'fa-plus-circle'
 );
@@ -86,7 +86,7 @@ if ($gSettingsManager->getBool('members_show_all_users')) {
 // show link to import users
 $page->addPageFunctionsMenuItem(
     'menu_item_members_import_users',
-    $gL10n->get('SYS_IMPORT_USERS'),
+    $gL10n->get('SYS_IMPORT_MEMBERS'),
     ADMIDIO_URL.FOLDER_MODULES.'/members/import.php',
     'fa-upload'
 );

@@ -652,7 +652,7 @@
   <string name="SYS_CREATE_NOT_FOUND_USER">Om den nya användaren inte är listad bland de hittade användare kan du skapa den.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Skapa relation</string>
   <string name="SYS_CREATE_ROLE">Skapa roll</string>
-  <string name="SYS_CREATE_USER">Skapa användare</string>
+  <string name="SYS_CREATE_MEMBER">Skapa användare</string>
   <string name="SYS_CREATE_VAR">Skapa #VAR1#</string>
   <string name="SYS_CREATED_BY">Skapad av #VAR1# på #VAR2#</string>
   <string name="SYS_CREATION_DATE">Skapad</string>
@@ -801,7 +801,7 @@
   <string name="SYS_EXAMPLES">Exempel</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
-  <string name="SYS_EXISTING_USERS">Befintlig användare:</string>
+  <string name="SYS_EXISTING_MEMBERS">Befintlig användare:</string>
   <string name="SYS_EXPORT_LISTS">Exportera listor</string>
   <string name="SYS_EXPORT_LISTS_DESC">Listor över grupper och roller kan exporteras av användare, förutsatt att du har rätt att se dessa listor. Denna inställning kan användas för att begränsa exportfunktionen. (Standard: Alla)</string>
   <string name="SYS_EXPORT_TO">Exportera till</string>
@@ -892,7 +892,7 @@
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Arbetsbladet #VAR1# finns inte i den importerade filen!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Importen lyckades .. \n\n #VAR1# nya användare har skapats. \n #VAR2# användare har redigerats. \n #VAR3# rollmedlemskap har tilldelats.</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">Följande kolumner i importfilen tilldelas inga profilfält:</string>
-  <string name="SYS_IMPORT_USERS">Importera användare</string>
+  <string name="SYS_IMPORT_MEMBERS">Importera användare</string>
   <string name="SYS_IMPRINT">Information</string>
   <string name="SYS_IMPRINT_DESC">Här kan URL: en för avtrycket på din sida deponeras. Om det valda temat stöder detta kommer en länk att visas på Admidio-sidorna. (Exempel: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inaktiva grupper och roller</string>
@@ -1360,8 +1360,8 @@
   <string name="SYS_USER_FOUND">Ingen användare hittades</string>
   <string name="SYS_USER_ID_NOT_FOUND">Ingen användare kunde hittas med detta ID!</string>
   <string name="SYS_USER_MANAGEMENT">Användarhantering</string>
-  <string name="SYS_USER_MANAGEMENT_CONFIGURATION_DESC">En av de konfigurationer som anges här kan användas för att visa användaradministrationen. Kolumnerna i den valda listkonfigurationen visas sedan i användaradministrationen.</string>
-  <string name="SYS_USER_MANAGEMENT_DESC">Visa och organisera alla aktiva och tidigare medlemmar här. Nya användare kan importeras eller skapas.</string>
+  <string name="SYS_MEMBERS_CONFIGURATION_DESC">En av de konfigurationer som anges här kan användas för att visa användaradministrationen. Kolumnerna i den valda listkonfigurationen visas sedan i användaradministrationen.</string>
+  <string name="SYS_MEMBERS_DESC">Visa och organisera alla aktiva och tidigare medlemmar här. Nya användare kan importeras eller skapas.</string>
   <string name="SYS_USER_NO_EMAIL">Användare #VAR1_BOLD# har ingen giltig e-postadress i personlig information!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Den här användaren är inte medlem i organisationen #VAR1# än.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Användaren är inte medlem i organisationen #VAR1# men har redan inloggningsinformation tilldelad.</string>

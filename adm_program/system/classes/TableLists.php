@@ -50,7 +50,7 @@ class TableLists extends TableAccess
             throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('DAT_DATES')));
         }
         if ($lstId === $gSettingsManager->getInt('members_list_configuration')) {
-            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_USER_MANAGEMENT')));
+            throw new AdmException('SYS_ERROR_DELETE_DEFAULT_LIST', array($this->getValue('lst_name'), $gL10n->get('SYS_MEMBERS')));
         }
 
         $this->db->startTransaction();
