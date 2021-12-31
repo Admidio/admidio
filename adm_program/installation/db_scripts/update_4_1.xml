@@ -157,5 +157,8 @@
     <step id="890">ComponentUpdateSteps::updateStep41CategoryReportMigration</step>
     <step id="900">UPDATE %PREFIX%_components SET com_name = 'SYS_MEMBERS' WHERE com_name = 'SYS_USER_MANAGEMENT'</step>
     <step id="910">UPDATE %PREFIX%_menu SET men_name = 'SYS_MEMBERS', men_description = 'SYS_MEMBERS_DESC' WHERE men_name_intern = 'usrmgt'</step>
+    <step id="920">UPDATE %PREFIX%_user_fields SET usf_value_list = 'fa-mars|SYS_MALE
+fa-venus|SYS_FEMALE
+fa-mars-stroke-v|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'fa-mars|%'</step>
     <step>stop</step>
 </update>

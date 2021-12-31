@@ -162,7 +162,8 @@ $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'FAX\',        \'SYS_FAX\',       NULL, 0, NULL, 0, 0, 0, 0, 9,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, 0, NULL, 0, 0, 0, 0, 10, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, 0, \'fa-mars|SYS_MALE
-fa-venus|SYS_FEMALE\', 0, 0, 0, 0, 11, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+fa-venus|SYS_FEMALE
+fa-mars-stroke-v|SYS_DIVERSE\', 0, 0, 0, 0, 11, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, 0, NULL, 1, 0, 1, 1, 12, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, 0, NULL, 0, 0, 0, 0, 13, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdAddidionalData.', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \''.$gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC').'\', 1, NULL, 0, 0, 1, 0, 14, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
