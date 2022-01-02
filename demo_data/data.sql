@@ -600,7 +600,8 @@ Thüringen', NULL, NULL, false, false, false, false, true, 6, 1, '2013-11-27T17:
 (9 , 'ba722e5a-843f-4b0c-8083-0a2db1e85630', 1, 'PHONE', 'FAX', 'SYS_FAX', NULL, NULL, NULL, NULL, false, false, false, false, true, 10, 1, '2012-01-08 11:12:05', NULL, NULL),
 (10, 'f3dca1e4-d439-4501-967e-e87545060b03', 1, 'DATE', 'BIRTHDAY', 'SYS_BIRTHDAY', NULL, NULL, NULL, NULL, false, false, false, false, true, 11, 1, '2012-01-08 11:12:05', NULL, NULL),
 (11, '944252e6-7275-42bd-9d7a-03ff294080fb', 1, 'RADIO_BUTTON', 'GENDER', 'SYS_GENDER', NULL, 'fa-mars|SYS_MALE
-fa-venus|SYS_FEMALE', NULL, NULL, false, false, false, false, true, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
+fa-venus|SYS_FEMALE
+fa-mars-stroke-v|SYS_DIVERSE', NULL, NULL, false, false, false, false, true, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
 (12, '09556bd3-0bc5-4e97-800a-4ed347f6327e', 1, 'EMAIL', 'EMAIL', 'SYS_EMAIL', NULL, NULL, NULL, NULL, true, false, false, true, true, 13, 1, '2012-01-08 11:12:05', NULL, NULL),
 (13, '627c57a6-f17b-44df-9d31-3d668634eb97', 1, 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, NULL, NULL, NULL, false, false, false, false, true, 14, 1, '2012-01-08 11:12:05', NULL, NULL),
 (22, '041f1bb5-4305-47d7-8538-c1e7163339a6', 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'INS_FACEBOOK_DESC', NULL, 'fab fa-facebook', 'https://www.facebook.com/#user_content#', false, false, false, false, false, 1, 1, '2012-01-08 11:11:40', NULL, NULL),
