@@ -168,6 +168,7 @@ class ProfileFields
         if ($value != '')
         {
             // create html for each field type
+            $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
             $htmlValue = $value;
 
             $usfType = $this->mProfileFields[$fieldNameIntern]->getValue('usf_type');
