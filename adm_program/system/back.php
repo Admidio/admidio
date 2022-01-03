@@ -15,11 +15,11 @@ require_once(__DIR__ . '/common.php');
 // delete the last url from the stack. This should be the actual page.
 $gNavigation->deleteLastUrl();
 
-// now get the "new" last url from the stack. This should be the last page
-$nextUrl = $gNavigation->getUrl();
-
-// if no page was found then show the default homepage
-if ($nextUrl === null) {
+try {
+    // now get the "new" last url from the stack. This should be the last page
+    $nextUrl = $gNavigation->getUrl();
+} catch (AdmException $e) {
+    // if no page was found then show the default homepage
     $nextUrl = $gHomepage;
 }
 
