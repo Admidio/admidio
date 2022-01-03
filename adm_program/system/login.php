@@ -16,18 +16,17 @@ $headline = $gL10n->get('SYS_LOGIN');
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // read id of administrator role
-$sql = 'SELECT rol_id
+$sql = 'SELECT MIN(rol_id) as rol_id
           FROM '.TBL_ROLES.'
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
-         WHERE rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
-           AND rol_administrator = true
+         WHERE rol_administrator = true
            AND (  cat_org_id = ? -- $gCurrentOrgId
                OR cat_org_id IS NULL )';
-$pdoStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), $gCurrentOrgId));
+$pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
 // create role object for administrator
-$roleAdministrator = new TableRoles($gDb, $pdoStatement->fetchColumn());
+$roleAdministrator = new TableRoles($gDb, (int) $pdoStatement->fetchColumn());
 
 // create html page object
 $page = new HtmlPage('admidio-login', $headline);
