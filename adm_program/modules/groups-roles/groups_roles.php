@@ -359,7 +359,7 @@ foreach($listsResult['recordset'] as $row)
                             $html .= ' - ' . TableRoles::getCostPeriods($role->getValue('rol_cost_period'));
                         }
 
-                        $page->addHtml('<li class="list-group-item"><h6>' . $gL10n->get('SYS_CONTRIBUTION') . '</h6><span class="d-block">' . $html . '</span>' . $htmlLeader . '</li>');
+                        $page->addHtml('<li class="list-group-item"><h6>' . $gL10n->get('SYS_CONTRIBUTION') . '</h6><span class="d-block">' . $html . '</span></li>');
                     }
 
                     // show count of members and leaders of this role
