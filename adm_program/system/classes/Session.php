@@ -174,11 +174,16 @@ class Session extends TableAccess
     }
 
     /**
-     * Initialize the array with all objects.
+     * Initialize the array with all objects except the gNavigation object. If the session got an refresh
+     * the existing navigation should still be stored in the refreshed sesssion.
      */
     public function initializeObjects()
     {
-        $this->mObjectArray = array();
+        foreach($this->mObjectArray as $key => $element) {
+            if($key !== 'gNavigation') {
+                unset($this->mObjectArray[$key]);
+            }
+        }
     }
 
     /**
