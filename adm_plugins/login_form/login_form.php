@@ -181,15 +181,14 @@ if ($gValidLogin) {
 
     if ($plg_show_email_link) {
         // read id of administrator role
-        $sql = 'SELECT rol_id
+        $sql = 'SELECT MIN(rol_id) as rol_id
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
                  WHERE rol_administrator = true
-                   AND rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
                    AND (  cat_org_id = ? -- $gCurrentOrgId
                        OR cat_org_id IS NULL )';
-        $administratorStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), $gCurrentOrgId));
+        $administratorStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
         // create role object for administrator
         $roleAdministrator = new TableRoles($gDb, (int) $administratorStatement->fetchColumn());
