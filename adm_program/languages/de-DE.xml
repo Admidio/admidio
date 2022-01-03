@@ -661,12 +661,12 @@
   <string name="SYS_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
   <string name="SYS_CREATE_HTACCESS">.htaccess erstellen</string>
   <string name="SYS_CREATE_LINK">Link anlegen</string>
+  <string name="SYS_CREATE_MEMBER">Mitglied anlegen</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Neue Konfiguration erstellen</string>
   <string name="SYS_CREATE_NEW_USER">Neue:n Benutzer:in anlegen</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Falls die neue Benutzerin bzw. der neue Benutzer nicht unter den gefundenen Daten aufgelistet ist, können Sie diesen neu anlegen.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Beziehung anlegen</string>
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
-  <string name="SYS_CREATE_MEMBER">Mitglied anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
   <string name="SYS_CREATION_DATE">Erstellungsdatum</string>
@@ -678,7 +678,6 @@
   <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
   <string name="SYS_DATA_PROTECTION">Datenschutz</string>
   <string name="SYS_DATA_PROTECTION_DESC">Hier kann die URL zu deiner Seite mit den Datenschutzhinweisen hinterlegt werden. Diese Seite wird innerhalb des Hinweises auf die Verwendung von Cookies für weitere Informationen verlinkt. Sofern das gewählte Theme dies unterstützt, wird auch ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/data_protection.html)</string>
-  <string name="SYS_DATA_PROTECTION_PERMISSION">Ich willige in die Verarbeitung der Daten ein.</string>
   <string name="SYS_DATA_PROTECTION_PERMISSION_DESC">Die von der Organisation bereitgestellten Informationen habe ich gelesen. Soweit die von mir angegebenen personenbezogenen Daten keine notwendigen Daten zur Vertragserfüllung sind, erkläre ich meine Einwilligung zur Verarbeitung dieser Daten. Meine Daten werden ausschließlich für die Zwecke der Organisation gespeichert und vertraulich behandelt.</string>
   <string name="SYS_DATABASE">Datenbank</string>
   <string name="SYS_DATABASE_BACKUP">Datenbank-Backup</string>
@@ -922,11 +921,11 @@
   <string name="SYS_IMPORTANT">Wichtig</string>
   <string name="SYS_IMPORT">Importieren</string>
   <string name="SYS_IMPORT_LOGIN_DATA_DESC">Zugangsdaten können nur von einer Administatorin oder einem Administrator importiert werden. Es müssen dabei die Regeln der Organisation eingehalten werden (z.B. die Passwortlänge und Passwortstärke). Benutzer:innen mit bereits vorhandenen Zugangsdaten behalten diese. Es werden keine Zugangsdaten durch den Import überschrieben.</string>
+  <string name="SYS_IMPORT_MEMBERS">Mitglieder importieren</string>
   <string name="SYS_IMPORT_MODE">Import Modus</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Das Arbeitsblatt #VAR1# existiert in der importierten Datei nicht!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Benutzer:innen wurden angelegt.\n#VAR2# Benutzer:innen wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">Folgende Spalten der Importdatei sind keinen Feldern in Admidio zugeordnet:</string>
-  <string name="SYS_IMPORT_MEMBERS">Mitglieder importieren</string>
   <string name="SYS_IMPRINT">Impressum</string>
   <string name="SYS_IMPRINT_DESC">Hier kann die URL zum Impressum deiner Seite hinterlegt werden. Sofern das gewählte Theme dies unterstützt, wird ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inaktive Gruppen und Rollen</string>
@@ -1014,6 +1013,8 @@
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Mitglied der Organisation #VAR1#</string>
   <string name="SYS_MEMBERS">Mitglieder</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Mitglieder zwischen #VAR1# und #VAR2#</string>
+  <string name="SYS_MEMBERS_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann für die Anzeige der Mitgliederverwaltung genutzt werden. Es werden anschließend in der Mitgliederverwaltung die Spalten der ausgewählten Listenkonfiguration angezeigt.</string>
+  <string name="SYS_MEMBERS_DESC">Alle aktiven und ehemaligen Mitglieder können hier eingesehen und verwaltet werden. Neue Mitglieder können angelegt oder importiert werden.</string>
   <string name="SYS_MEMBERS_PER_PAGE">Anzahl Teilnehmende pro Seite</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Voreinstellung: 25)</string>
   <string name="SYS_MEMBERSHIP_END">Mitgliedschaftsende</string>
@@ -1161,6 +1162,7 @@
   <string name="SYS_PROCESS_CANCELED">Der Vorgang wurde abgebrochen.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Bei der Verarbeitung der Daten ist folgendes Problem aufgetreten.</string>
   <string name="SYS_PROFILE_FIELD">Profilfeld</string>
+  <string name="SYS_PROFILE_PHOTO">Profilfoto</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
   <string name="SYS_QUANTITY">Anzahl</string>
   <string name="SYS_QUARTERLY">Vierteljährlich</string>
@@ -1169,7 +1171,6 @@
   <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Neueste Ankündigungen der Organisation #VAR1#</string>
   <string name="SYS_RECIPIENT">Empfänger:in</string>
   <string name="SYS_RECIPIENT_EMAIL">Empfänger:in E-Mail</string>
-  <string name="SYS_RECIPIENT_NAME">Empfänger:in Name</string>
   <string name="SYS_REDIRECT">Weiterleitung</string>
   <string name="SYS_REDIRECT_DESC">Sie verlassen jetzt das Webangebot von #VAR1_BOLD# und werden in #VAR2# Sekunden automatisch zu #VAR3# weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicken Sie bitte #VAR4#hier#VAR5#!</string>
   <string name="SYS_REDIRECT_URL_INVALID">Die angegebene Weiterleitungs-URL ist ungültig.</string>
@@ -1402,15 +1403,11 @@
   <string name="SYS_USER_DELETE_DESC">Wollen Sie #VAR1_BOLD# wirklich löschen?\n\nDie Benutzerin bzw. der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
   <string name="SYS_USER_FOUND">Gefundene Benutzer:innen</string>
   <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein:e Benutzer:in zu der übergebenen ID gefunden werden!</string>
-  <string name="SYS_USER_MANAGEMENT">Benutzerverwaltung</string>
-  <string name="SYS_MEMBERS_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann für die Anzeige der Mitgliederverwaltung genutzt werden. Es werden anschließend in der Mitgliederverwaltung die Spalten der ausgewählten Listenkonfiguration angezeigt.</string>
-  <string name="SYS_MEMBERS_DESC">Alle aktiven und ehemaligen Mitglieder können hier eingesehen und verwaltet werden. Neue Mitglieder können angelegt oder importiert werden.</string>
   <string name="SYS_USER_NO_EMAIL">#VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Diese:r Benutzer:in ist noch kein Mitglied der Organisation #VAR1#.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Diese:r Benutzer:in ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Zugangsdaten.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Diese:r Benutzer:in ist noch kein Mitglied der Organisation #VAR1# und besitzt auch keine Zugangsdaten.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">Diese:r Benutzer:in besitzt noch kein Login.\nMöchten Sie ihm die Daten dieser Registrierung zuordnen?</string>
-  <string name="SYS_PROFILE_PHOTO">Profilfoto</string>
   <string name="SYS_USER_RELATION">Beziehung</string>
   <string name="SYS_USER_RELATIONS">Beziehungen</string>
   <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
