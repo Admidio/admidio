@@ -59,7 +59,7 @@ if ($getMode === 1) {
     $postComId    = admFuncVariableIsValid($_POST, 'men_com_id', 'int');
     $postName     = admFuncVariableIsValid($_POST, 'men_name', 'string', array('default' => ''));
     $postDesc     = admFuncVariableIsValid($_POST, 'men_description', 'string', array('default' => ''));
-    $postUrl      = admFuncVariableIsValid($_POST, 'men_url', 'url', array('default' => ''));
+    $postUrl      = $_POST['men_url'];
     $postIcon     = admFuncVariableIsValid($_POST, 'men_icon', 'string', array('default' => ''));
 
     // within standard menu items the url should not be changed
@@ -70,6 +70,12 @@ if ($getMode === 1) {
     // Check if mandatory fields are filled
     if ($postName === '') {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
+        // => EXIT
+    }
+
+    if(!StringUtils::strValidCharacters($postUrl, 'url')
+    && !preg_match('=^[^?*;:~<>|\"\\\\]+$=', $postUrl)) {
+        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('ORG_URL'))));
         // => EXIT
     }
 
