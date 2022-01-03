@@ -678,6 +678,7 @@
   <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
   <string name="SYS_DATA_PROTECTION">Datenschutz</string>
   <string name="SYS_DATA_PROTECTION_DESC">Hier kann die URL zu deiner Seite mit den Datenschutzhinweisen hinterlegt werden. Diese Seite wird innerhalb des Hinweises auf die Verwendung von Cookies für weitere Informationen verlinkt. Sofern das gewählte Theme dies unterstützt, wird auch ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/data_protection.html)</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION">Ich willige in die Verarbeitung der Daten ein.</string>
   <string name="SYS_DATA_PROTECTION_PERMISSION_DESC">Die von der Organisation bereitgestellten Informationen habe ich gelesen. Soweit die von mir angegebenen personenbezogenen Daten keine notwendigen Daten zur Vertragserfüllung sind, erkläre ich meine Einwilligung zur Verarbeitung dieser Daten. Meine Daten werden ausschließlich für die Zwecke der Organisation gespeichert und vertraulich behandelt.</string>
   <string name="SYS_DATABASE">Datenbank</string>
   <string name="SYS_DATABASE_BACKUP">Datenbank-Backup</string>
