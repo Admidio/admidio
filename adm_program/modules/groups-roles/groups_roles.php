@@ -325,8 +325,7 @@ foreach ($listsResult['recordset'] as $row) {
         }
 
         // show members fee
-        if (strlen($role->getValue('rol_cost')) > 0
-                    || (strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)) {
+        if (strlen($role->getValue('rol_cost')) > 0 || $role->getValue('rol_cost_period') > 0) {
             $html = '';
 
             // Member fee
@@ -339,7 +338,7 @@ foreach ($listsResult['recordset'] as $row) {
                 $html .= ' - ' . TableRoles::getCostPeriods($role->getValue('rol_cost_period'));
             }
 
-            $page->addHtml('<li class="list-group-item"><h6>' . $gL10n->get('SYS_CONTRIBUTION') . '</h6><span class="d-block">' . $html . '</span>' . $htmlLeader . '</li>');
+            $page->addHtml('<li class="list-group-item"><h6>' . $gL10n->get('SYS_CONTRIBUTION') . '</h6><span class="d-block">' . $html . '</span></li>');
         }
 
         // show count of members and leaders of this role
