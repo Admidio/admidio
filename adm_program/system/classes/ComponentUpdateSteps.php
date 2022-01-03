@@ -102,9 +102,18 @@ final class ComponentUpdateSteps
 
         if (is_dir($ecardThemeFolder)) {
             try {
-                FileSystemUtils::moveDirectory($ecardThemeFolder, $ecardMyFilesFolder);
+                FileSystemUtils::copyDirectory($ecardThemeFolder, $ecardMyFilesFolder);
             } catch (\RuntimeException $exception) {
-                $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath('documents')));
+                $gLogger->error('Could not copy directory!', array('from' => $ecardThemeFolder, 'to' => $ecardMyFilesFolder).'. Please check if Admidio have write rights within adm_my_files.');
+                return;
+                // => EXIT
+            }
+
+            try {
+                FileSystemUtils::deleteDirectoryIfExists($ecardThemeFolder);
+            } catch (\RuntimeException $exception) {
+                // no rights to delete the old folder, then continue the update process
+                return;
                 // => EXIT
             }
         }
