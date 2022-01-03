@@ -97,6 +97,8 @@ final class ComponentUpdateSteps
      */
     public static function updateStep41MoveEcardTemplates()
     {
+        global $gLogger;
+
         $ecardThemeFolder   = ADMIDIO_PATH . FOLDER_THEMES . '/' . $GLOBALS['gSettingsManager']->getString('theme') . '/ecard_templates';
         $ecardMyFilesFolder = ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates';
 
