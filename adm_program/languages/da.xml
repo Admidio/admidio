@@ -337,7 +337,7 @@
   <string name="ORG_SHOW_CREATE_EDIT">Vis opretter og tidspunktet for oprettelsen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Nogle steder vises skaberen og brugeren med den sidste ændring til en post sammen med et tidsstempel. Denne indstilling kan bruges til at bestemme, om denne information overhovedet vises, og om brugeren skal vises med brugernavnet eller med deres for- og efternavn.</string>
   <string name="ORG_SHOW_ALL_USERS">Valgfrit: vis alle brugere</string>
-  <string name="ORG_SHOW_ALL_USERS_DESC">Hvis denne mulighed er aktiveret, vil tidligere medlemmer og medlemmer af andre organisationer blive vist sammen med de aktive medlemmer af den nuværende organisation/forening. Ellers så vil kun medlemmer af den nuværende organisation/forening blive vist. Når der oprettes nye brugere eller der tildeles registreringer vil alle organisationer/foreninger blive checket for eksisterende brugere.</string>
+  <string name="ORG_SHOW_ALL_USERS_DESC">Hvis denne mulighed er indstillet, kan tidligere medlemmer og medlemmer af andre organisationer valgfrit vises i medlemsadministrationen ud over de aktive medlemmer af den nuværende organisation. Ellers vises kun aktive medlemmer af den aktuelle organisation. Ved oprettelse af nye medlemmer eller tildeling af registreringer vil systemet dog fortsat søge efter eksisterende brugere i hele databasen for alle organisationer.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Vis organisations vælger</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Hvis der er flere organisationer gemt i den samme database, så kan Log ind skærmen vise en valg boks med alle tilgængelige organisationer. Brugeren kan så på login skærmen vælge en anden organisation (en anden organisation end den der er defineret i config.php). Brugeren skal selvfølgelig være registreret medlem af den valgte organisation.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformation</string>
@@ -661,12 +661,12 @@
   <string name="SYS_CREATE_FOLDER_DESC">En ny folder vil blive oprettet i folderen #VAR1_BOLD#.</string>
   <string name="SYS_CREATE_HTACCESS">Opret .htaccess</string>
   <string name="SYS_CREATE_LINK">Opret nyt link</string>
+  <string name="SYS_CREATE_MEMBER">Opret medlem</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Opret ny liste</string>
   <string name="SYS_CREATE_NEW_USER">Tilføj ny bruger</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Du kan oprette den nye bruger hvis brugeren ikke allerede findes i bruger listen.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Opret relation</string>
   <string name="SYS_CREATE_ROLE">Opret rolle</string>
-  <string name="SYS_CREATE_MEMBER">Opret bruger</string>
   <string name="SYS_CREATE_VAR">Opret #VAR1#</string>
   <string name="SYS_CREATED_BY">Oprettet af #VAR1# den #VAR2#</string>
   <string name="SYS_CREATION_DATE">Oprettet den</string>
@@ -678,7 +678,7 @@
   <string name="SYS_DATA_MULTI_ORGA">Data er synlig for flere organisationer</string>
   <string name="SYS_DATA_PROTECTION">Data beskyttelse</string>
   <string name="SYS_DATA_PROTECTION_DESC">Her kan URL\'en til din side med fortrolighedspolitikken indtastes. Denne side er knyttet til brugen af cookies til yderligere information. Hvis det valgte tema understøtter dette, vises et link også på Admidio-siderne. (Eksempel: https://www.example.com/data_protection.html)</string>
-  <string name="SYS_DATA_PROTECTION_PERMISSION">Jeg accepterer behandlingen af dataene</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION">Jeg giver samtykke til behandlingen af dataene.</string>
   <string name="SYS_DATA_PROTECTION_PERMISSION_DESC">Jeg har læst oplysningerne fra organisationen. For så vidt de personoplysninger, jeg har givet, ikke er nødvendige data til opfyldelse af kontrakten, erklærer jeg mit samtykke til behandling af disse data. Mine data gemmes udelukkende til organisationens formål og behandles fortroligt.</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_BACKUP">Database-Backup</string>
@@ -745,6 +745,7 @@
   <string name="SYS_DISPLAY_REDIRECT">Vis viderestilling</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Aktiver automatisk viderestilling for links. Brugeren vil blive advaret om at de forlader Admidio siderne når de klikker på et link i linkmodulet. Klikkede links vil åbne efter forud defineret tid. Hvis viderestilling er sat til 0, så vil linket blivet åbnet uden varsel. (Standard: 10 sekunder).</string>
   <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Vis rolle medlemskaber</string>
+  <string name="SYS_DIVERSE">Alsidig</string>
   <string name="SYS_DO_NOT_EDIT">Rediger ikke</string>
   <string name="SYS_DOCUMENTS_FILES">Dokumenter &amp; Filer</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Forskellige dokumenter og filer kan ses eller leveres til download. Disse filer kan kategoriseres i mapper med forskellige adgangstilladelsesniveauer.</string>
@@ -832,7 +833,7 @@
   <string name="SYS_EXAMPLES">Eksempler</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
-  <string name="SYS_EXISTING_MEMBERS">Eksisterende bruger</string>
+  <string name="SYS_EXISTING_MEMBERS">Eksisterende medlemmer</string>
   <string name="SYS_EXPORT_LISTS">‎Eksportere lister‎</string>
   <string name="SYS_EXPORT_LISTS_DESC">‎Lister over grupper og roller kan eksporteres af brugere, forudsat at du har ret til at få vist disse lister. Denne indstilling kan bruges til at begrænse eksportfunktionen. (Standard: Alle)‎</string>
   <string name="SYS_EXPORT_TO">Eksport til</string>
@@ -921,17 +922,17 @@
   <string name="SYS_IMPORTANT">Vigtigt</string>
   <string name="SYS_IMPORT">Importer</string>
   <string name="SYS_IMPORT_LOGIN_DATA_DESC">‎Logondata kan kun importeres af en administrator. Organisationens regler skal overholdes (f.eks. adgangskodelængde og adgangskodestyrke). Brugere med allerede eksisterende logindata beholder dem. Ingen logindata overskrives af importen.‎</string>
+  <string name="SYS_IMPORT_MEMBERS">Importer medlemmer</string>
   <string name="SYS_IMPORT_MODE">Import tilstand</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">‎Regnearket #VAR1# findes ikke i den importerede fil!‎</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Importen forløb succesfuldt..\n\n#VAR1# nye brugere er blevet oprettet.\n#VAR2# Brugere er blevet rettet.\n#VAR3# rolle medlemskaber er blevet tildelt.</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">‎Følgende kolonner i importfilen er ikke tildelt noget profilfelt:‎</string>
-  <string name="SYS_IMPORT_MEMBERS">Importer bruger(e)</string>
   <string name="SYS_IMPRINT">Aftryk</string>
   <string name="SYS_IMPRINT_DESC">Her kan URL\'en til dit indtryk af din side deponeres. Hvis det valgte tema understøtter dette, vises et link på Admidio-siderne. (Eksempel: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inaktive grupper og roller</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Info boks</string>
   <string name="SYS_INFORMATIONS">information</string>
-  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Skriv fornavn og efternavn på den nye bruger. Et database check vil sikre at der ikke er en bruger med samme eller lignene navn.</string>
+  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Indtast venligst for- og efternavn på det nye medlem. Inden posten oprettes, kontrolleres det, om der allerede findes en person med et lignende navn i databasen.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Sucessfuld installation</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Admidio databasen er nu installeret og fuldstændigt konfigureret. Konfigurations filen med adgangsdata til databasen er oprettet og gemt. Du kan nu arbejde med Admidio og logge på med dine administrator oplysninger.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">Installationen og opsætningen af databasen blev sucessfuldt afsluttet.</string>
@@ -1013,6 +1014,8 @@
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Medlem af organisation #VAR1#</string>
   <string name="SYS_MEMBERS">Medlemmer</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Medlemmer imellem #VAR1# og #VAR2#</string>
+  <string name="SYS_MEMBERS_CONFIGURATION_DESC">En af de her specificerede konfigurationer kan bruges til at vise medlemsadministrationen. Kolonnerne i den valgte listekonfiguration vises derefter i medlemsadministrationen.</string>
+  <string name="SYS_MEMBERS_DESC">Vis og organiser alle aktive og tidligere medlemmer her. Nye medlemmer kan importeres eller oprettes.</string>
   <string name="SYS_MEMBERS_PER_PAGE">Medlemmer vist pr. side</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Antal medlemmer som vises i HTML visningen. Flere medlemmer kan vises ved at bruge side opdelings funktionen. Denne værdi vil ikke påvirke print visning eller eksport funktionalitet (Standard: 25).</string>
   <string name="SYS_MEMBERSHIP_END">Afslutning af medlemskab</string>
@@ -1202,8 +1205,8 @@
   <string name="SYS_RIGHT_DATES">Administrer begivenheder</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Administrer dokumenter og filer</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Roller som har denne rettighed kan administrere rettighederne for dokumenter og fil modulet. Dette inkluderer hvem der kan se folderen og uploade filer til den.</string>
-  <string name="SYS_RIGHT_EDIT_USER">Rediger profil for alle brugere</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Roller med denne tilladelse kan redigere andre brugeres data (undtagen adgangskoder).\n Derudover har de adgang til brugeradministrationen og kan tilføje eller slette brugere.</string>
+  <string name="SYS_RIGHT_EDIT_USER">Rediger profilen for alle medlemmer</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Roller med denne tilladelse kan redigere andre medlemmers data (undtagen adgangskoder).\n Derudover har de adgang til medlemsadministrationen og kan tilføje eller slette medlemmer.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Rediger og slet gæstebogs indlæg</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Opret kommentarer til gæstebogs indlæg</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">Denne indstilling styrer, hvem der har ret til at sende e-mails til denne rolle via meddelelsesmodulet. Rollens rettighed #VAR1_BOLD# er stadig over denne indstilling.</string>
@@ -1310,7 +1313,7 @@
   <string name="SYS_SET_FOLDER_PERMISSIONS">Sæt folder rettigheder</string>
   <string name="SYS_SETTINGS">Indstillinger</string>
   <string name="SYS_SHOW_ALL_USERS">Vis alle brugere</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Kun aktive medlemmer af denne organisation vil blive vist hvis denne indstilling ikke er sat. Ellers vil alle brugere i databasen blive vist.</string>
+  <string name="SYS_SHOW_ALL_USERS_DESC">Hvis denne indstilling er angivet, vises tidligere medlemmer såvel som medlemmer af andre organisationer ud over de aktive medlemmer af denne organisation.</string>
   <string name="SYS_SHOW_CALENDAR">Vis kalender</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For udloggede brugere vises en alfanumerisk tekst, når captcha-modulet er aktiveret. Den medfølgende tekst skal indtastes i det rigtige felt. Dette skal forhindre misbrug af formularen fra spammere. (standard: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Vis tidligere medlemmer</string>
@@ -1397,13 +1400,10 @@
   <string name="SYS_UPDATE_SUCCESSFUL">Opdatering udført sucessfuldt</string>
   <string name="SYS_URL_INVALID_CHAR">URL\'en i feltet #VAR1_BOLD# indeholder ulovlige karakterer.\n\nTilladte karakterer er bogstaver fra \'a\' til \'z\' og \'A\' til \'Z\', cifre fra 0-9 og specielle karakterer som .+-_:/#?= Undlad ÆØÅæøå</string>
   <string name="SYS_USER">Bruger</string>
-  <string name="SYS_USER_COULD_BE_CREATED">Bruger kunne oprettes.</string>
+  <string name="SYS_USER_COULD_BE_CREATED">Personen kunne oprettes.</string>
   <string name="SYS_USER_DELETE_DESC">Vil du virkelig slette #VAR1_BOLD#?\n\nBrugeren bliver slettet helt fra databasen, så adgang til vedkommendes informationer bliver helt slettet.</string>
   <string name="SYS_USER_FOUND">Bruger fundet</string>
   <string name="SYS_USER_ID_NOT_FOUND">Der kunne ikke findes nogen bruger med dette ID!</string>
-  <string name="SYS_USER_MANAGEMENT">Bruger Administration</string>
-  <string name="SYS_MEMBERS_CONFIGURATION_DESC">‎En af de konfigurationer, der er angivet her, kan bruges til at få vist brugeradministrationen. Kolonnerne i den valgte listekonfiguration vises derefter i brugeradministrationen.‎</string>
-  <string name="SYS_MEMBERS_DESC">Vis og organiser alle aktive og tidligere medlemmer her. Nye brugere kan oprettes eller importeres fra CSV fil.</string>
   <string name="SYS_USER_NO_EMAIL">Brugeren #VAR1_BOLD# har ikke nogen gyldig e-mail adresse i sin personlige information!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Denne bruger er ikke medlem af organisationen #VAR1# endnu.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Brugeren er ikke medlem af organisationen #VAR1#, men er i besiddelse af et login.</string>
@@ -1416,8 +1416,8 @@
   <string name="SYS_USERNAME">Bruger navn</string>
   <string name="SYS_USERNAME_OR_EMAIL">Brugernavn eller e-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# på #VAR2# den #VAR3#</string>
-  <string name="SYS_USERS_PER_PAGE">Antal brugere pr. side</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">Antal brugere vist på hver side. Hvis der er flere medlemmer i denne gruppe så kan siderne vendes. (Standard: 25)</string>
+  <string name="SYS_USERS_PER_PAGE">Antal medlemmer pr. side</string>
+  <string name="SYS_USERS_PER_PAGE_DESC">Antallet af medlemmer, der er angivet på en side i en medlemsadministration. Er der flere medlemmer i organisationen, kan du scrolle til næste side i oversigten. (Standard: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">Du bruger den nyeste version af Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
