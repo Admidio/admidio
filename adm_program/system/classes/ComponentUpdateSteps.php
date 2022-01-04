@@ -106,7 +106,7 @@ final class ComponentUpdateSteps
             try {
                 FileSystemUtils::copyDirectory($ecardThemeFolder, $ecardMyFilesFolder);
             } catch (\RuntimeException $exception) {
-                $gLogger->error('Could not copy directory!', array('from' => $ecardThemeFolder, 'to' => $ecardMyFilesFolder).'. Please check if Admidio have write rights within adm_my_files.');
+                $gLogger->error('Could not copy directory from '. $ecardThemeFolder.' to '. $ecardMyFilesFolder.'. Please check if Admidio have write rights within adm_my_files.');
                 return;
                 // => EXIT
             }
