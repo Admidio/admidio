@@ -548,6 +548,12 @@ class ListConfiguration extends TableLists
             // create a valid sort
             $lscSort = $listColumn->getValue('lsc_sort');
             if ($lscSort != '') {
+                if (strpos($dbColumnName, ' AS') > 0) {
+                    $sortColumnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS'));
+                } else {
+                    $sortColumnName = $dbColumnName;
+                }
+
                 if ($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL') {
                     // if a field has numeric values then there must be a cast because database
                     // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
@@ -557,11 +563,9 @@ class ListConfiguration extends TableLists
                         // mysql
                         $columnType = 'unsigned';
                     }
-                    $arrOrderByColumns[] = ' CAST('.$dbColumnName.') '.$lscSort;
-                } elseif (strpos($dbColumnName, ' AS') > 0) {
-                    $arrOrderByColumns[] = substr($dbColumnName, 0, strpos($dbColumnName, ' AS')).' '.$lscSort;
+                    $arrOrderByColumns[] = ' CAST('.$sortColumnName.' AS '.$columnType.') '.$lscSort;
                 } else {
-                    $arrOrderByColumns[] = $dbColumnName.' '.$lscSort;
+                    $arrOrderByColumns[] = $sortColumnName.' '.$lscSort;
                 }
             }
 
