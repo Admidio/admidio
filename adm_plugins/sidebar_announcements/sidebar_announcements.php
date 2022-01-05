@@ -89,7 +89,9 @@ if ($gSettingsManager->getInt('enable_announcements_module') > 0) {
                 $plgAnnouncement->clear();
                 $plgAnnouncement->setArray($plgRow);
 
-                echo '<h5><a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php', array('ann_uuid' => $plgAnnouncement->getValue('ann_uuid'), 'headline' => $plg_headline)). '" target="'. $plg_link_target. '">';
+                echo '<h5><a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php',
+                        array('ann_uuid' => $plgAnnouncement->getValue('ann_uuid'), 'headline' => $plg_headline)
+                    ). '" target="'. $plg_link_target. '">';
 
                 if ($plg_max_char_per_word > 0) {
                     $plgNewHeadline = '';
@@ -123,7 +125,7 @@ if ($gSettingsManager->getInt('enable_announcements_module') > 0) {
                         <a class="admidio-icon-link" target="'. $plg_link_target. '"
                             href="'. SecurityUtils::encodeUrl(
                         ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php',
-                        array('ann_uuid' => (int) $plgAnnouncement->getValue('ann_uuid'), 'headline' => $plg_headline)
+                        array('ann_uuid' => $plgAnnouncement->getValue('ann_uuid'), 'headline' => $plg_headline)
                     ). '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
 
                     echo '<div>'.$textPrev.'</div>';
