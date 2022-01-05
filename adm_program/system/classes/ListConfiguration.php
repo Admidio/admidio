@@ -517,6 +517,7 @@ class ListConfiguration extends TableLists
 
         $arrSqlColumnNames = array();
         $arrOrderByColumns = array();
+        $sqlColumnNames = '';
         $sqlOrderBys = '';
         $sqlJoin  = '';
         $sqlWhere = '';
@@ -644,7 +645,9 @@ class ListConfiguration extends TableLists
             }
         }
 
-        $sqlColumnNames = implode(', ', $arrSqlColumnNames);
+        if(count($arrSqlColumnNames) > 0) {
+            $sqlColumnNames = ', ' . implode(', ', $arrSqlColumnNames);
+        }
 
         // add sorting if option is set and sorting columns are stored
         if ($optionsAll['useOrderBy']) {
@@ -712,14 +715,14 @@ class ListConfiguration extends TableLists
 
         // Set SQL-Statement
         if ($optionsAll['showAllMembersDatabase']) {
-            $sql = 'SELECT DISTINCT false AS mem_leader, usr_id, usr_uuid, ' . $sqlColumnNames . '
+            $sql = 'SELECT DISTINCT false AS mem_leader, usr_id, usr_uuid ' . $sqlColumnNames . '
                       FROM '.TBL_USERS.'
                            '.$sqlJoin.'
                      WHERE usr_valid = true '.
                            $sqlWhere.
                            $sqlOrderBys;
         } else {
-            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . ' usr_id, usr_uuid, ' . $sqlColumnNames . '
+            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . ' usr_id, usr_uuid ' . $sqlColumnNames . '
                       FROM '.TBL_MEMBERS.'
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id
