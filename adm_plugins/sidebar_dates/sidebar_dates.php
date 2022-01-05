@@ -91,7 +91,9 @@ if ($gSettingsManager->getInt('enable_dates_module') > 0) {
                 echo '<h5>'.$plgDate->getDateTimePeriod($plg_show_date_end);
 
                 // create a link to date module
-                echo '<br /><a href="'. SecurityUtils::encodeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))). '" target="'. $plg_link_target. '">';
+                echo '<br /><a href="'. SecurityUtils::encodeUrl($plg_link_url,
+                        array('view_mode' => 'html', 'view' => 'detail', 'dat_uuid' => $plgDate->getValue('dat_uuid'))
+                    ). '" target="'. $plg_link_target. '">';
 
                 if ($plg_max_char_per_word > 0) {
                     $plgNewHeadline = '';
@@ -125,7 +127,7 @@ if ($gSettingsManager->getInt('enable_dates_module') > 0) {
                         <a class="admidio-icon-link" target="'. $plg_link_target. '"
                             href="'.SecurityUtils::encodeUrl(
                         $plg_link_url,
-                        array('view' => 'detail', 'id' => (int) $plgDate->getValue('dat_id'))
+                        array('view' => 'detail', 'dat_uuid' => $plgDate->getValue('dat_uuid'))
                     ). '"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
 
                     echo '<div>'.$textPrev.'</div>';
