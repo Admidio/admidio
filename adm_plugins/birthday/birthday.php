@@ -64,14 +64,14 @@ if (!isset($plg_show_future) || !is_numeric($plg_show_future)) {
 if (!isset($plg_show_display_limit) || !is_numeric($plg_show_display_limit)) {
     $plg_show_display_limit = 200;
 }
-// Prüfen, ob die Rollenbedingung gesetzt wurde
+// Check if the role condition has been set
 if (isset($plg_rolle_sql) && is_array($plg_rolle_sql) && count($plg_rolle_sql) > 0) {
     $sqlRol = 'IN (' . implode(',', $plg_rolle_sql) . ')';
 } else {
     $sqlRol = 'IS NOT NULL';
 }
 
-// Prüfen, ob die Sortierbedingung gesetzt wurde
+// Check if the sort condition has been set
 if (!isset($plg_sort_sql) || $plg_sort_sql === '') {
     $sqlSort = 'DESC';
 } else {
@@ -82,7 +82,7 @@ if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
     $plg_show_headline = 1;
 }
 
-// ist der Benutzer ausgeloggt und soll nur die Anzahl der Geb-Kinder angezeigt werden, dann Zeitraum auf 0 Tage setzen
+// If the user is logged out and only the number of birth children should be displayed, then set the period to 0 days.
 if ($plg_show_names_extern === 0 && !$gValidLogin) {
     $plg_show_zeitraum = 0;
     $plg_show_future   = 0;
@@ -257,7 +257,7 @@ if ($numberBirthdays > 0) {
                         $plgShowName = $row['first_name']. ' '. $row['last_name'];
                 }
 
-            // ab einem festgelegten Alter wird fuer ausgeloggte Besucher nur der Nachname mit Anrede angezeigt
+            // from a specified age, only the last name with salutation is displayed for logged out visitors
             if (!$gValidLogin && $plg_show_alter_anrede <= $row['age']) {
                 if ($row['gender'] > 1) {
                     $plgShowName = $gL10n->get('PLG_BIRTHDAY_WOMAN_VAR', array($row['last_name']));
@@ -332,9 +332,9 @@ if ($numberBirthdays > 0) {
         }
     }
 } else {
-    // Bei entsprechend gesetzter Konfiguration wird auch im Fall, dass keiner Geburtstag hat, eine Meldung ausgegeben.
+    // If the configuration is set accordingly, a message is output if no member has a birthday today
     if (!$plg_show_hinweis_keiner) {
-        echo '<p>'.$gL10n->get('PLG_BIRTHDAY_NO_USE').'</p>';
+        echo '<p>'.$gL10n->get('PLG_BIRTHDAY_NO_MEMBERS').'</p>';
     }
 }
 
