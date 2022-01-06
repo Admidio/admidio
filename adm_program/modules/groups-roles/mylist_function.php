@@ -83,7 +83,7 @@ if ($getMode === 1 || $getMode === 2) {
     // alle vorhandenen Spalten durchgehen
     for ($columnNumber = 1; isset($_POST['column'. $columnNumber]); ++$columnNumber) {
         if (strlen($_POST['column'. $columnNumber]) > 0) {
-            $list->addColumn($columnNumber, $_POST['column'. $columnNumber], $_POST['sort'. $columnNumber], $_POST['condition'. $columnNumber]);
+            $list->addColumn($_POST['column'. $columnNumber], $_POST['sort'. $columnNumber], $_POST['condition'. $columnNumber]);
         } else {
             $list->deleteColumn($columnNumber, true);
         }

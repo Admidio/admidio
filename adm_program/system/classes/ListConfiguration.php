@@ -42,17 +42,19 @@ class ListConfiguration extends TableLists
 
     /**
      * Add new column to column array
-     * @param int        $number
      * @param int|string $field
      * @param string     $sort
      * @param string     $filter
      * @return bool
      */
-    public function addColumn($number, $field, $sort = '', $filter = '')
+    public function addColumn($field, $sort = '', $filter = '')
     {
+        // current number of the new column
+        $number = count($this->columns) + 1;
+
         // can join max. 61 tables
         // Passed parameters must be set carefully
-        if ($number === 0 || $field === '' || count($this->columns) >= 57) {
+        if ($field === '' || count($this->columns) >= 57) {
             return false;
         }
 

@@ -282,12 +282,22 @@ final class ComponentUpdateSteps
             $userManagementList->setValue('lst_name', $gL10n->get('SYS_MEMBERS'));
             $userManagementList->setValue('lst_org_id', (int) $organization['org_id']);
             $userManagementList->setValue('lst_global', 1);
-            $userManagementList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-            $userManagementList->addColumn(2, (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-            $userManagementList->addColumn(3, 'usr_login_name');
-            $userManagementList->addColumn(4, (int) $gProfileFields->getProperty('GENDER', 'usf_id'));
-            $userManagementList->addColumn(5, (int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-            $userManagementList->addColumn(6, (int) $gProfileFields->getProperty('CITY', 'usf_id'));
+            if ($gProfileFields->getProperty('LAST_NAME', 'usf_id') > 0) {
+                $userManagementList->addColumn((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+            }
+            if ($gProfileFields->getProperty('FIRST_NAME', 'usf_id') > 0) {
+                $userManagementList->addColumn((int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+            }
+            $userManagementList->addColumn('usr_login_name');
+            if ($gProfileFields->getProperty('GENDER', 'usf_id') > 0) {
+                $userManagementList->addColumn((int) $gProfileFields->getProperty('GENDER', 'usf_id'));
+            }
+            if ($gProfileFields->getProperty('BIRTHDAY', 'usf_id') > 0) {
+                $userManagementList->addColumn((int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+            }
+            if ($gProfileFields->getProperty('CITY', 'usf_id') > 0) {
+                $userManagementList->addColumn((int) $gProfileFields->getProperty('CITY', 'usf_id'));
+            }
             $userManagementList->save();
 
             // save default list to preferences
