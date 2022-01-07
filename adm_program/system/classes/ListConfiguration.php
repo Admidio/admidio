@@ -41,11 +41,12 @@ class ListConfiguration extends TableLists
     }
 
     /**
-     * Add new column to column array
-     * @param int|string $field
-     * @param string     $sort
-     * @param string     $filter
-     * @return bool
+     * Add new column to column array. The number of the column will be the maximum number of the
+     * current array plus one.
+     * @param int|string $field  Usf-Id of a profile field or the name of a special field.
+     * @param string     $sort   Value **ASC** for ascending and **DESC** for descending.
+     * @param string     $filter A filter for the values of that column.
+     * @return bool Returns true if the field was added to the column list.
      */
     public function addColumn($field, $sort = '', $filter = '')
     {
@@ -54,7 +55,7 @@ class ListConfiguration extends TableLists
 
         // can join max. 61 tables
         // Passed parameters must be set carefully
-        if ($field === '' || count($this->columns) >= 57) {
+        if (strlen($field) === 0 || count($this->columns) >= 57) {
             return false;
         }
 
