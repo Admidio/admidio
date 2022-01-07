@@ -55,7 +55,7 @@ class ListConfiguration extends TableLists
 
         // can join max. 61 tables
         // Passed parameters must be set carefully
-        if (strlen($field) === 0 || count($this->columns) >= 57) {
+        if (strlen($field) === 0 || $field === 0 || count($this->columns) >= 57) {
             return false;
         }
 
