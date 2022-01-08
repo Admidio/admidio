@@ -402,7 +402,7 @@ CREATE TABLE %PREFIX%_menu
     men_node                    boolean             NOT NULL    DEFAULT false,
     men_order                   integer unsigned,
     men_standard                boolean             NOT NULL    DEFAULT false,
-    men_url                     varchar(255),
+    men_url                     varchar(2000),
     men_icon                    varchar(2000),
     PRIMARY KEY (men_id)
 )
