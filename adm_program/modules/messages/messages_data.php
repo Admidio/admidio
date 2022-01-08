@@ -178,7 +178,7 @@ while ($message = $messageStatement->fetch()) {
         $cssClass = 'font-weight-bold';
     }
 
-    if ($message['attachments'] === 1) {
+    if ((int) $message['attachments'] === 1) {
         $iconAttachments = '<i class="fas fa-paperclip" data-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENT_ONE') . '"></i>';
     } elseif ($message['attachments'] > 1) {
         $iconAttachments = '<i class="fas fa-paperclip" data-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENTS_VAR', array($message['attachments'])) . '"></i>';
