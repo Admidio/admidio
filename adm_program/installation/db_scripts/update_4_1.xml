@@ -161,5 +161,6 @@
 fa-venus|SYS_FEMALE
 fa-mars-stroke-v|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'fa-mars|%'</step>
     <step id="930">DELETE FROM %PREFIX%_list_columns WHERE lsc_usf_id IS NULL AND lsc_special_field IS NULL</step>
+    <step id="940">UPDATE %PREFIX%_user_fields SET usf_name_intern = REPLACE(usf_name_intern, '-', '') WHERE usf_name_intern LIKE '%-%'</step>
     <step>stop</step>
 </update>
