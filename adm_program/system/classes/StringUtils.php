@@ -182,8 +182,8 @@ final class StringUtils
                 $validRegex = '=^[^/?*;:~<>|\"\\\\]+$=';
                 break;
             case 'url':
-                //$validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() \/%=#:~.@+-]+$/i';
-                $validRegex = '/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i';
+                $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() \/%=#:~.@+-]+$/i';
+                $validRegexValidUrl = '/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i';
                 break;
             case 'phone':
                 $validRegex = '/^[\d() \/+-]+$/i';
@@ -203,6 +203,11 @@ final class StringUtils
             case 'email':
                 return filter_var(trim($string), FILTER_VALIDATE_EMAIL) !== false;
             case 'url':
+                // url has a valid structure
+                if (!preg_match($validRegexValidUrl, $string)) {
+                    return false;
+                }
+
                 return filter_var(trim($string), FILTER_VALIDATE_URL) !== false;
             default:
                 return true;
