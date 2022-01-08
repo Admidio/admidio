@@ -181,7 +181,7 @@ $mainSql = 'SELECT DISTINCT '.$memberOfThisOrganizationSelect.' AS member_this_o
                 (SELECT email.usd_value FROM '.TBL_USER_DATA.' email
                   WHERE  email.usd_usr_id = usr_id
                     AND email.usd_usf_id = ? /* $gProfileFields->getProperty(\'email\', \'usf_id\') */
-                 ) AS email, '.
+                 ) AS member_email, '.
             substr($mainSql, 15);
 $queryParamsMain = array(
     $gProfileFields->getProperty('EMAIL', 'usf_id')
@@ -250,7 +250,7 @@ while ($row = $mglStatement->fetch(\PDO::FETCH_BOTH)) {
     // Administrators can change or send password if login is configured and user is member of current organization
     if ($memberOfThisOrganization && $gCurrentUser->isAdministrator()
     && strlen($row['loginname']) > 0 && (int) $row['usr_id'] !== $gCurrentUserId) {
-        if (strlen($row['email']) > 0 && $gSettingsManager->getBool('enable_system_mails')) {
+        if (strlen($row['member_email']) > 0 && $gSettingsManager->getBool('enable_system_mails')) {
             // if email is set and systemmails are activated then administrators can send a new password to user
             $userAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 5)).'">'.
                 '<i class="fas fa-key" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
@@ -263,14 +263,14 @@ while ($row = $mglStatement->fetch(\PDO::FETCH_BOTH)) {
     }
 
     // add link to send email to user
-    if (strlen($row['email']) > 0) {
+    if (strlen($row['member_email']) > 0) {
         if (!$gSettingsManager->getBool('enable_mail_module')) {
-            $mailLink = 'mailto:'.$row['email'];
+            $mailLink = 'mailto:'.$row['member_email'];
         } else {
             $mailLink = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['usr_uuid']));
         }
         $userAdministration .= '<a class="admidio-icon-link" href="'.$mailLink.'">'.
-            '<i class="fas fa-envelope" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_EMAIL_TO', array($row['email'])) . '"></i></a>';
+            '<i class="fas fa-envelope" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_EMAIL_TO', array($row['member_email'])) . '"></i></a>';
     }
 
     $userAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'], 'copy' => 1)).'">'.
