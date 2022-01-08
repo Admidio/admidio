@@ -34,13 +34,13 @@ if (!$gSettingsManager->getBool('groups_roles_enable_module')
     // => EXIT
 }
 
-// Mindestens ein Feld sollte zugeordnet sein
+// At least one field should be assigned
 if (!isset($_POST['column1']) || strlen($_POST['column1']) === 0) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array('1. '.$gL10n->get('SYS_COLUMN'))));
     // => EXIT
 }
 
-// Rolle muss beim Anzeigen gefuellt sein
+// role must be filled when displaying
 if ($getMode === 2
 && (!isset($_POST['sel_roles_ids']) || (int) $_POST['sel_roles_ids'] === 0 || !is_array($_POST['sel_roles_ids']))) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ROLE'))));
@@ -51,11 +51,10 @@ if (!isset($_POST['sel_relationtype_ids'])) {
     $_POST['sel_relationtype_ids'] = array();
 }
 
-// Listenobjekt anlegen
 $list = new ListConfiguration($gDb);
 $list->readDataByUuid($getListUuid);
 
-// pruefen, ob Benutzer die Rechte hat, diese Liste zu bearbeiten
+// check if user has the rights to edit this list
 if ($getMode !== 2) {
     // global lists can only be edited by administrator
     if ($list->getValue('lst_global') == 1 && !$gCurrentUser->isAdministrator()) {
@@ -68,7 +67,7 @@ if ($getMode !== 2) {
     }
 }
 
-// Liste speichern
+// save list
 if ($getMode === 1 || $getMode === 2) {
     try {
         // check the CSRF token of the form against the session token
@@ -80,10 +79,10 @@ if ($getMode === 1 || $getMode === 2) {
 
     $globalConfiguration = admFuncVariableIsValid($_POST, 'cbx_global_configuration', 'bool', array('defaultValue' => false));
 
-    // alle vorhandenen Spalten durchgehen
+    // go through all existing columns
     for ($columnNumber = 1; isset($_POST['column'. $columnNumber]); ++$columnNumber) {
         if (strlen($_POST['column'. $columnNumber]) > 0) {
-            $list->addColumn($_POST['column'. $columnNumber], $_POST['sort'. $columnNumber], $_POST['condition'. $columnNumber]);
+            $list->addColumn($_POST['column'. $columnNumber], $columnNumber, $_POST['sort'. $columnNumber], $_POST['condition'. $columnNumber]);
         } else {
             $list->deleteColumn($columnNumber, true);
         }

@@ -44,14 +44,18 @@ class ListConfiguration extends TableLists
      * Add new column to column array. The number of the column will be the maximum number of the
      * current array plus one.
      * @param int|string $field  Usf-Id of a profile field or the name of a special field.
-     * @param string     $sort   Value **ASC** for ascending and **DESC** for descending.
-     * @param string     $filter A filter for the values of that column.
+     * @param int        $number Optional the number of the column. This is useful if the list already exists
+     *                           and maybe the profile field changed the position within the list.
+     * @param string     $sort   Optional the value **ASC** for ascending and **DESC** for descending.
+     * @param string     $filter Optional a filter for the values of that column.
      * @return bool Returns true if the field was added to the column list.
      */
-    public function addColumn($field, $sort = '', $filter = '')
+    public function addColumn($field, $number = 0, $sort = '', $filter = '')
     {
-        // current number of the new column
-        $number = count($this->columns) + 1;
+        if($number === 0) {
+            // current number of the new column
+            $number = count($this->columns) + 1;
+        }
 
         // can join max. 61 tables
         // Passed parameters must be set carefully
