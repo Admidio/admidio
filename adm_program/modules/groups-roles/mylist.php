@@ -26,6 +26,7 @@ $getListUuid    = admFuncVariableIsValid($_GET, 'list_uuid', 'string');
 $getRoleIds     = admFuncVariableIsValid($_GET, 'rol_ids', 'string'); // could be int or int[], so string is necessary
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
+$getListUuid = ($getListUuid === '-' ? '' : $getListUuid);
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('groups_roles_enable_module')
@@ -67,7 +68,7 @@ if (isset($_SESSION['mylist_request'])) {
         $formValues['sel_roles_ids'] = 0;
     }
 
-    // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden, muessen diese nun direkt angelegt werden
+    // if rows for columns have been added manually before, they must now be created directly
     for ($i = $defaultColumnRows + 1; $i > 0; ++$i) {
         if (isset($formValues['column'.$i])) {
             ++$defaultColumnRows;
@@ -76,7 +77,7 @@ if (isset($_SESSION['mylist_request'])) {
         }
     }
 } else {
-    $formValues['sel_select_configuration'] = $getListUuid;
+    $formValues['sel_select_configuration'] = ($getListUuid === '' ? '-' : $getListUuid);
     $formValues['cbx_global_configuration'] = $list->getValue('lst_global');
     $formValues['sel_roles_ids']            = $getRoleIds;
 
@@ -118,7 +119,7 @@ $javascriptCode = '
     var arrDefaultFields  = createColumnsArray();
 
     /**
-     * Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
+     * Function adds a new line to assign columns for the list
      */
     function addColumn() {
         '.$mySqlMaxColumnAlert.'
@@ -166,7 +167,7 @@ $javascriptCode = '
         htmlCboFields += "</select>";
         newCellField.innerHTML = htmlCboFields;
 
-        // neue Spalte zur Einstellung der Sortierung
+        // new column for setting the sorting
         var selectAsc  = "";
         var selectDesc = "";
 
@@ -188,7 +189,7 @@ $javascriptCode = '
                 "<option value=\"DESC\" " + selectDesc + ">'.$gL10n->get('SYS_Z_TO_A').'</option>" +
             "</select>";
 
-        // neue Spalte fuer Bedingungen
+        // new column for conditions
         condition = "";
         if (arrDefaultFields[fieldNumberShow]) {
             var fieldName = arrDefaultFields[fieldNumberShow]["usf_name"];
@@ -264,7 +265,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
     $oldCategoryNameIntern = $field->getValue('cat_name_intern');
 }
 
-    // Add loginname and photo at the end of category basic data
+    // Add login name and photo at the end of category basic data
     // add new category with start and end date of role membership
     if ($posEndOfBasicData === 0) {
         $posEndOfBasicData = $i;
@@ -519,7 +520,7 @@ foreach ($configurations as $configuration) {
         $presetConfigurationsGroup = true;
     }
 
-    // if its a temporary saved configuration than show timestamp of creating as name
+    // if it's a temporary saved configuration than show timestamp of creating as name
     if (strlen($configuration['lst_name']) === 0) {
         $objListTimestamp = new \DateTime($configuration['lst_timestamp']);
         ++$numberLastConfigurations;
