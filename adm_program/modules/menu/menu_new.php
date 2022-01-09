@@ -194,7 +194,7 @@ if ((bool) $menu->getValue('men_node') === false) {
         'men_url',
         $gL10n->get('ORG_URL'),
         $menu->getValue('men_url', 'database'),
-        array('maxLength' => 100, 'property' => $fieldRequired)
+        array('maxLength' => 2000, 'property' => $fieldRequired)
     );
 }
 
@@ -203,7 +203,7 @@ $form->addInput(
     $gL10n->get('SYS_ICON'),
     $menu->getValue('men_icon', 'database'),
     array(
-        'maxLength' => 100,
+        'maxLength' => 2000,
         'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>')),
         'class' => 'form-control-small'
     )
