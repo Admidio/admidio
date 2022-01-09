@@ -882,12 +882,12 @@
   <string name="SYS_FOLDER_RENAME_ERROR">Virhe, kun kansio #VAR1# nimettiin uudelleen.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Kansiota VAR1_BOLD#ei voida luoda tarvittavilla kirjoitusoikeuksilla. \n \nKysy apua#VAR2#järjestelmänvalvojalta#VAR3# tarkista kirjoitusoikeudet (käyttämällä FTP: tä muuttamalla tiedostomääritteet arvoon 0777 tai drwxrwxrwx).</string>
   <string name="SYS_FONT">Fontti</string>
-  <string name="SYS_FONT_AWESOME_DESC">Voit tallentaa kuvakkeen eri tavoin: \n1. Verkkokirjasimen kuvake \"Font Awesome \". Siirry osoitteeseen #VAR1#http://fontawesome.com#VAR2# ja valitse ilmainen kuvake \"Solid \" - tai \"Brands \" -kokoelmasta. Etuliitteenä sinun on asetettava fa-merkki sen eteen. Joten jos valitset kuvakkeen \"käyttäjä \", sinun on kirjoitettava \"fa-user \" tähän. \n2. JPEG- tai PNG -kuvake. Voit tehdä tämän kirjoittamalla koko URL -osoitteen ja kuvakkeen tiedostonimen. Vaihtoehtoisesti voit laittaa kuvakkeen teeman kansioon \"kuvat \", ja sinun tarvitsee vain määrittää tiedoston nimi.</string>
+  <string name="SYS_FONT_AWESOME_DESC">Voit tallentaa kuvakkeen eri tavoilla:\n1. Verkkofontin \"Font Awesome\" kuvake. Siirry osoitteeseen #VAR1#http://fontawesome.com#VAR2# ja valitse ilmainen kuvake \"Solid\"- tai \"Brands\"-kokoelmasta. Etuliitteenä sinun täytyy laittaa fa- sen eteen. Joten jos valitset kuvakkeen \"user\", sinun on syötettävä \"fa-user\" tähän.\n2. JPEG- tai PNG-kuvake. Tee tämä asettamalla kuvaketiedosto teemakansioon \"kuvat\". Lisää kuvaketiedoston nimi tähän.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Unohdin salasanani!</string>
   <string name="SYS_FORMAT">Muoto</string>
-  <string name="SYS_FORMER">Entinen</string>
+  <string name="SYS_FORMER">Entistä</string>
   <string name="SYS_FORMER_MEMBERS">Entiset jäsenet</string>
-  <string name="SYS_FORMER_PL">Entinen</string>
+  <string name="SYS_FORMER_PL">Entistä</string>
   <string name="SYS_FORWARD">Lälhetä edelleen</string>
   <string name="SYS_FRIDAY">perjantai</string>
   <string name="SYS_FROM">kohteesta #VAR1#</string>
@@ -1012,7 +1012,7 @@
   <string name="SYS_MEMBER">Jäsen</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Jäsenmääritys</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Organisaation jäsen #VAR1#</string>
-  <string name="SYS_MEMBERS">Jäsenet</string>
+  <string name="SYS_MEMBERS">Jäsentä</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Jäsenet välillä #VAR1#ja #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">Yhtä tässä määritellyistä kokoonpanoista voidaan käyttää jäsenten hallinnon näyttämiseen. Valitun listan kokoonpanon sarakkeet näkyvät sitten jäsenten hallinnassa.</string>
   <string name="SYS_MEMBERS_DESC">Näytä ja järjestä kaikki aktiiviset ja entiset jäsenet täällä. Uusia jäseniä voidaan tuoda tai luoda.</string>
@@ -1111,7 +1111,7 @@
   <string name="SYS_PAGE_PREVIOUS">Edellinen</string>
   <string name="SYS_PAGE_NEXT">Seuraava</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# ja #VAR2#</string>
-  <string name="SYS_PARTICIPANTS">Jäsenet</string>
+  <string name="SYS_PARTICIPANTS">Jäsentä</string>
   <string name="SYS_PARTICIPATION_INFORMATION">Osallistujatiedot</string>
   <string name="SYS_PARTICIPATION_STATUS">Osallistujan tila</string>
   <string name="SYS_PASSWORD">Salasana</string>

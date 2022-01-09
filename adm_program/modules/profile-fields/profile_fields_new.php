@@ -180,7 +180,7 @@ $form->addInput(
     $gL10n->get('SYS_ICON'),
     $userField->getValue('usf_icon', 'database'),
     array(
-        'maxLength' => 2000,
+        'maxLength' => 100,
         'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>'))
     )
 );

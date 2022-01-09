@@ -164,5 +164,9 @@ fa-mars-stroke-v|SYS_DIVERSE' WHERE usf_name_intern = 'GENDER' AND usf_value_lis
     <step id="940">UPDATE %PREFIX%_user_fields SET usf_name_intern = REPLACE(usf_name_intern, '-', '') WHERE usf_name_intern LIKE '%-%'</step>
     <step id="950" database="mysql">ALTER TABLE %PREFIX%_menu MODIFY COLUMN men_url varchar(2000)</step>
     <step id="960" database="pgsql">ALTER TABLE %PREFIX%_menu ALTER COLUMN men_url TYPE varchar(2000)</step>
+    <step id="970" database="mysql">ALTER TABLE %PREFIX%_menu MODIFY COLUMN men_icon varchar(100)</step>
+    <step id="980" database="pgsql">ALTER TABLE %PREFIX%_menu ALTER COLUMN men_icon TYPE varchar(100)</step>
+    <step id="990" database="mysql">ALTER TABLE %PREFIX%_user_fields MODIFY COLUMN usf_icon varchar(100)</step>
+    <step id="1000" database="pgsql">ALTER TABLE %PREFIX%_user_fields ALTER COLUMN usf_icon TYPE varchar(100)</step>
     <step>stop</step>
 </update>
