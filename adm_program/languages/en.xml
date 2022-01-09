@@ -882,7 +882,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while folder #VAR1# was renamed.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
-  <string name="SYS_FONT_AWESOME_DESC">You can store an icon in different ways:\n1. An icon of the web font \"Font Awesome\". Go to #VAR1#http://fontawesome.com#VAR2# and select a free icon from the \"Solid\" or \"Brands\" collection. As a prefix you have to put a fa- in front of it. So if you choose the icon \"user\", you have to enter \"fa-user\" here.\n2. A JPEG or PNG icon. To do this, enter the complete URL together with the file name of the icon. Alternatively, you can put the icon in the theme in the folder \"images\", then you only need to specify the file name.</string>
+  <string name="SYS_FONT_AWESOME_DESC">You can store an icon in different ways:\n1. An icon of the web font \"Font Awesome\". Go to #VAR1#http://fontawesome.com#VAR2# and select a free icon from the \"Solid\" or \"Brands\" collection. As a prefix you have to put a fa- in front of it. So if you choose the icon \"user\", you have to enter \"fa-user\" here.\n2. A JPEG or PNG icon. To do this, put the icon file in the theme folder \"images\". Add the name of the icon file here.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">I forgot my password!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
