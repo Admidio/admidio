@@ -402,8 +402,8 @@ CREATE TABLE %PREFIX%_menu
     men_node                    boolean             NOT NULL    DEFAULT false,
     men_order                   integer unsigned,
     men_standard                boolean             NOT NULL    DEFAULT false,
-    men_url                     varchar(255),
-    men_icon                    varchar(2000),
+    men_url                     varchar(2000),
+    men_icon                    varchar(100),
     PRIMARY KEY (men_id)
 )
 ENGINE = InnoDB
@@ -736,7 +736,7 @@ CREATE TABLE %PREFIX%_user_fields
     usf_description             text,
     usf_description_inline      boolean             NOT NULL    DEFAULT false,
     usf_value_list              text,
-    usf_icon                    varchar(2000),
+    usf_icon                    varchar(100),
     usf_url                     varchar(2000),
     usf_system                  boolean             NOT NULL    DEFAULT false,
     usf_disabled                boolean             NOT NULL    DEFAULT false,
