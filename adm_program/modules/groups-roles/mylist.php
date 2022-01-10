@@ -26,7 +26,6 @@ $getListUuid    = admFuncVariableIsValid($_GET, 'list_uuid', 'string');
 $getRoleIds     = admFuncVariableIsValid($_GET, 'rol_ids', 'string'); // could be int or int[], so string is necessary
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
-$getListUuid = ($getListUuid === '-' ? '' : $getListUuid);
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('groups_roles_enable_module')
@@ -77,7 +76,7 @@ if (isset($_SESSION['mylist_request'])) {
         }
     }
 } else {
-    $formValues['sel_select_configuration'] = ($getListUuid === '' ? '-' : $getListUuid);
+    $formValues['sel_select_configuration'] = $getListUuid;
     $formValues['cbx_global_configuration'] = $list->getValue('lst_global');
     $formValues['sel_roles_ids']            = $getRoleIds;
 
@@ -495,7 +494,7 @@ $yourLastConfigurationsGroup = false;
 $yourConfigurationsGroup     = false;
 $presetConfigurationsGroup   = false;
 $actualGroup                 = '';
-$configurationsArray[]       = array('-', $gL10n->get('SYS_CREATE_NEW_CONFIGURATION'), null);
+$configurationsArray[]       = array('', $gL10n->get('SYS_CREATE_NEW_CONFIGURATION'), null);
 $numberLastConfigurations    = 0;
 
 $sql = 'SELECT lst_id, lst_uuid, lst_name, lst_global, lst_timestamp

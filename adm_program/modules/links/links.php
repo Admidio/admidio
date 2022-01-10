@@ -36,7 +36,7 @@ if ((int) $gSettingsManager->get('enable_weblinks_module') === 0) {
 
 $category = new TableCategory($gDb);
 
-if (strlen($getCatUuid) > 1) {
+if ($getCatUuid !== '') {
     $category->readDataByUuid($getCatUuid);
     $getHeadline .= ' - '.$category->getValue('cat_name');
 }

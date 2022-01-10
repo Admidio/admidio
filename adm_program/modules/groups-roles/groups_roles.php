@@ -68,7 +68,7 @@ if (!$gCurrentUser->checkRolesRight('rol_assign_roles')) {
 
 $category = new TableCategory($gDb);
 
-if (strlen($getCatUuid) > 1) {
+if ($getCatUuid !== '') {
     $category->readDataByUuid($getCatUuid);
     $headline .= ' - '.$category->getValue('cat_name');
 }

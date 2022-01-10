@@ -58,7 +58,7 @@ if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
 
 $calendar = new TableCategory($gDb);
 
-if (strlen($getCatUuid) > 1) {
+if ($getCatUuid !== '') {
     $calendar->readDataByUuid($getCatUuid);
 }
 
