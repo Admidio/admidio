@@ -15,7 +15,7 @@
  * start     - Position of query recordset where the visual output should start
  * headline  - Headline shown over events
  *             (Default) Events
- * cat_id    - show all events of calendar with this id
+ * cat_uuid  - show all events of calendar with this UUID
  * dat_uuid  - UUID of a single event that should be shown
  * show      - all               : (Default) show all events
  *           - maybe_participate : Show only events where the current user participates or could participate
@@ -36,7 +36,7 @@ unset($_SESSION['dates_request']);
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'int');
+$getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getDateUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
 $getShow     = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'all', 'validValues' => array('all', 'maybe_participate', 'only_participate')));
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
@@ -56,10 +56,16 @@ if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
 
 // create object and get recordset of available dates
 
+$calendar = new TableCategory($gDb);
+
+if (strlen($getCatUuid) > 1) {
+    $calendar->readDataByUuid($getCatUuid);
+}
+
 try {
     $dates = new ModuleDates();
     $dates->setParameter('mode', $getMode);
-    $dates->setParameter('cat_id', $getCatId);
+    $dates->setParameter('cat_id', $calendar->getValue('cat_id'));
     $dates->setParameter('dat_uuid', $getDateUuid);
     $dates->setParameter('show', $getShow);
     $dates->setParameter('view_mode', $getViewMode);
@@ -67,10 +73,6 @@ try {
 } catch (AdmException $e) {
     $e->showHtml();
     // => EXIT
-}
-
-if ($getCatId > 0) {
-    $calendar = new TableCategory($gDb, $getCatId);
 }
 
 // Number of events each page for default view 'html' or 'compact' view
@@ -109,11 +111,11 @@ if ($getViewMode === 'html') {
 
     $page->addJavascript('
         $("#sel_change_view").change(function() {
-            self.location.href = "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('mode' => $getMode, 'headline' => $getHeadline, 'date_from' => $dates->getParameter('dateStartFormatAdmidio'), 'date_to' => $dates->getParameter('dateEndFormatAdmidio'), 'cat_id' => $getCatId)) . '&view=" + $("#sel_change_view").val();
+            self.location.href = "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('mode' => $getMode, 'headline' => $getHeadline, 'date_from' => $dates->getParameter('dateStartFormatAdmidio'), 'date_to' => $dates->getParameter('dateEndFormatAdmidio'), 'cat_uuid' => $getCatUuid)) . '&view=" + $("#sel_change_view").val();
         });
 
         $("#menu_item_event_print_view").click(function() {
-            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('view_mode' => 'print', 'view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_id' => $getCatId, 'dat_uuid' => $getDateUuid, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'))) . '", "_blank");
+            window.open("'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('view_mode' => 'print', 'view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'dat_uuid' => $getDateUuid, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'))) . '", "_blank");
         });', true);
 
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
@@ -141,7 +143,7 @@ if ($getViewMode === 'html') {
             $page->addPageFunctionsMenuItem(
                 'menu_item_event_ical',
                 $gL10n->get('DAT_EXPORT_ICAL'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('headline' => $getHeadline, 'cat_id' => $getCatId, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
                 'fa-file-export'
             );
         }
@@ -182,12 +184,12 @@ if ($getViewMode === 'html') {
             array('defaultValue' => $getView, 'showContextDependentFirstEntry' => false)
         );
         $form->addSelectBoxForCategories(
-            'cat_id',
+            'cat_uuid',
             $gL10n->get('DAT_CALENDAR'),
             $gDb,
             'DAT',
             HtmlForm::SELECT_BOX_MODUS_FILTER,
-            array('defaultValue' => $dates->getParameter('cat_id'))
+            array('defaultValue' => $getCatUuid)
         );
         $form->addInput(
             'date_from',
@@ -804,6 +806,6 @@ if ($datesResult['totalCount'] === 0) {
     }
 }
 // If necessary show links to navigate to next and previous recordsets of the query
-$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_id' => $getCatId, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'), 'view_mode' => $getViewMode));
+$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'), 'view_mode' => $getViewMode));
 $page->addHtml(admFuncGeneratePagination($baseUrl, $datesResult['totalCount'], $datesResult['limit'], $getStart));
 $page->show();

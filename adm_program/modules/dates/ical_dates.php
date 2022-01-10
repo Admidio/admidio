@@ -18,7 +18,7 @@
  *
  * headline  - Headline für Ics-Feed
  *             (Default) Events
- * cat_id    - show all dates of calendar with this id
+ * cat_uuid  - show all dates of calendar with this UUID
  * date_from - set the minimum date of the events that should be shown
  *             if this parameter is not set than the actual date is set
  * date_to   - set the maximum date of the events that should be shown
@@ -32,7 +32,7 @@ unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'int');
+$getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
 
@@ -62,22 +62,23 @@ if (!$gSettingsManager->getBool('enable_dates_ical')) {
     // => EXIT
 }
 
+$calendar = new TableCategory($gDb);
+
+if (strlen($getCatUuid) > 1) {
+    $calendar->readDataByUuid($getCatUuid);
+    $getHeadline .= '_'.$calendar->getValue('cat_name');
+}
+
 // create Object
 $dates = new ModuleDates();
 // set mode, viewmode, calendar, startdate and enddate manually
 $dates->setParameter('view_mode', 'period');
-$dates->setParameter('cat_id', $getCatId);
+$dates->setParameter('cat_id', $calendar->getValue('cat_id'));
 $dates->setDateRange($getDateFrom, $getDateTo);
 // read events for output
 $datesResult = $dates->getDataSet(0, 0);
 // get parameters fom $_GET Array stored in class
 $parameters = $dates->getParameters();
-
-// Headline for file name
-if ($getCatId > 0) {
-    $calendar = new TableCategory($gDb, $getCatId);
-    $getHeadline.= '_'. $calendar->getValue('cat_name');
-}
 
 $date = new TableDate($gDb);
 $iCal = $date->getIcalHeader();

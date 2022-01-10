@@ -10,7 +10,7 @@
  * start     : Position of query recordset where the visual output should start
  * headline  : Ueberschrift, die ueber den Links steht
  *             (Default) Links
- * cat_id    : show only links of this category id, if id is not set than show all links
+ * cat_uuid  : show only links of this category, if UUID is not set than show all links
  * link_uuid : Uuid of a single link that should be shown.
  ***********************************************************************************************
  */
@@ -21,7 +21,7 @@ unset($_SESSION['links_request']);
 // Initialize and check the parameters
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_WEBLINKS')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'int');
+$getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'string');
 
 // check if the module is enabled for use
@@ -34,10 +34,17 @@ if ((int) $gSettingsManager->get('enable_weblinks_module') === 0) {
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
+$category = new TableCategory($gDb);
+
+if (strlen($getCatUuid) > 1) {
+    $category->readDataByUuid($getCatUuid);
+    $getHeadline .= ' - '.$category->getValue('cat_name');
+}
+
 // Create Link object
 $weblinks = new ModuleWeblinks();
 $weblinks->setParameter('lnk_uuid', $getLinkUuid);
-$weblinks->setParameter('cat_id', $getCatId);
+$weblinks->setParameter('cat_id', $category->getValue('cat_id'));
 $weblinksCount = $weblinks->getDataSetCount();
 
 // number of weblinks per page
@@ -47,9 +54,6 @@ if ($gSettingsManager->getInt('weblinks_per_page') > 0) {
     $weblinksPerPage = $weblinksCount;
 }
 
-// Output head
-$headline = $weblinks->getHeadline($getHeadline);
-
 // add url to navigation stack
 if ($getLinkUuid  !== '') {
     $gNavigation->addUrl(CURRENT_URL, $getHeadline);
@@ -58,7 +62,7 @@ if ($getLinkUuid  !== '') {
 }
 
 // create html page object
-$page = new HtmlPage('admidio-weblinks', $headline);
+$page = new HtmlPage('admidio-weblinks', $getHeadline);
 
 if ($gSettingsManager->getBool('enable_rss')) {
     $page->addRssFile(
@@ -94,7 +98,7 @@ if ($weblinks->getId() === 0) {
 
     $page->addJavascript(
         '
-        $("#cat_id").change(function() {
+        $("#cat_uuid").change(function() {
             $("#navbar_filter_form").submit();
         });',
         true
@@ -104,12 +108,12 @@ if ($weblinks->getId() === 0) {
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addSelectBoxForCategories(
-        'cat_id',
+        'cat_uuid',
         $gL10n->get('SYS_CATEGORY'),
         $gDb,
         'LNK',
         HtmlForm::SELECT_BOX_MODUS_FILTER,
-        array('defaultValue' => $getCatId)
+        array('defaultValue' => $getCatUuid)
     );
     $filterNavbar->addForm($form->show());
     $page->addHtml($filterNavbar->show());
@@ -200,7 +204,7 @@ if ($weblinksCount === 0) {
 $page->addHtml('</div>');
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('headline' => $getHeadline, 'cat_id' => $getCatId));
+$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('headline' => $getHeadline, 'cat_uuid' => $getCatUuid));
 $page->addHtml(admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $weblinks->getStartElement()));
 
 // show html of complete page
