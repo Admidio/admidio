@@ -170,24 +170,6 @@ class ModuleWeblinks extends Modules
     }
 
     /**
-     * Returns a module specific headline
-     * @param string $headline The initial headline of the module.
-     * @return string Returns the full headline of the module
-     */
-    public function getHeadline($headline)
-    {
-        global $gDb;
-
-        $catId = (int) $this->getParameter('cat_id');
-        // set headline with category name
-        if ($catId > 0) {
-            $category  = new TableCategory($gDb, $catId);
-            $headline .= ' - '. $category->getValue('cat_name');
-        }
-        return $headline;
-    }
-
-    /**
      * Add several conditions to an SQL string that could later be used as additional conditions in other SQL queries.
      * @return array<string,string|array<int,int>> Returns an array of a SQL string with additional conditions and it's query params.
      */

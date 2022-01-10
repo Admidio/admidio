@@ -10,7 +10,7 @@
  * Parameters:
  *
  * start     : Position of query recordset where the visual output should start
- * cat_id    : show only roles of this category id, if id is not set than show all roles
+ * cat_uuid  : show only roles of this category, if UUID is not set than show all roles
  * role_type : The type of roles that should be shown within this page.
  *             0 - inactive roles
  *             1 - active roles
@@ -23,7 +23,7 @@ require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'int');
+$getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getRoleType = admFuncVariableIsValid($_GET, 'role_type', 'int', array('defaultValue' => 1));
 $getShow     = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'card', 'validValues' => array('card', 'permissions')));
 
@@ -66,15 +66,17 @@ if (!$gCurrentUser->checkRolesRight('rol_assign_roles')) {
     $getRoleType = ROLE_TYPE_ACTIVE;
 }
 
-// New Modulelist object
-$lists = new ModuleLists();
-$lists->setParameter('cat_id', $getCatId);
-$lists->setParameter('role_type', (int) $getRoleType);
+$category = new TableCategory($gDb);
 
-if ($getCatId > 0) {
-    $category = new TableCategory($gDb, $getCatId);
+if (strlen($getCatUuid) > 1) {
+    $category->readDataByUuid($getCatUuid);
     $headline .= ' - '.$category->getValue('cat_name');
 }
+
+// New Modulelist object
+$lists = new ModuleLists();
+$lists->setParameter('cat_id', $category->getValue('cat_id'));
+$lists->setParameter('role_type', (int) $getRoleType);
 
 // create html page object
 $page = new HtmlPage('admidio-groups-roles', $headline);
@@ -131,7 +133,7 @@ if ($gSettingsManager->getInt('groups_roles_edit_lists') === 1 // everyone
 // add filter navbar
 $page->addJavascript(
     '
-    $("#cat_id").change(function() {
+    $("#cat_uuid").change(function() {
         $("#navbar_filter_form").submit();
     });
     $("#role_type").change(function() {
@@ -145,12 +147,12 @@ $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
 $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', $page, array('type' => 'navbar', 'setFocus' => false));
 $form->addInput('show', '', $getShow, array('property' => HtmlForm::FIELD_HIDDEN));
 $form->addSelectBoxForCategories(
-    'cat_id',
+    'cat_uuid',
     $gL10n->get('SYS_CATEGORY'),
     $gDb,
     'ROL',
     HtmlForm::SELECT_BOX_MODUS_FILTER,
-    array('defaultValue' => $getCatId)
+    array('defaultValue' => $getCatUuid)
 );
 if ($gCurrentUser->manageRoles()) {
     $form->addSelectBox(
@@ -507,7 +509,7 @@ if ($getShow === 'card') {
 
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('cat_id' => $getCatId, 'role_type' => (int) $getRoleType));
+$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('cat_uuid' => $getCatUuid, 'role_type' => (int) $getRoleType));
 $page->addHtml(admFuncGeneratePagination($baseUrl, $listsResult['totalCount'], $gSettingsManager->getInt('groups_roles_roles_per_page'), $getStart));
 
 $page->show();

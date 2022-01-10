@@ -1615,7 +1615,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // the sql statement which returns all found categories
-        $sql = 'SELECT DISTINCT cat_id, cat_org_id, cat_name, cat_default, cat_sequence
+        $sql = 'SELECT DISTINCT cat_id, cat_org_id, cat_uuid, cat_name, cat_default, cat_sequence
                   FROM ' . TBL_CATEGORIES . '
                        ' . $sqlTables . '
                  WHERE cat_id IN (' . Database::getQmForValues($catIdParams) . ')
@@ -1649,20 +1649,20 @@ class HtmlForm extends HtmlFormBasic
             // if several categories exist than select default category
             if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $optionsAll['defaultValue'] === 0
             && ($countCategories === 1 || $row['cat_default'] === 1)) {
-                $optionsAll['defaultValue'] = $row['cat_id'];
+                $optionsAll['defaultValue'] = $row['cat_uuid'];
             }
 
             // if text is a translation-id then translate it
-            $categoriesArray[$row['cat_id']] = Language::translateIfTranslationStrId($row['cat_name']);
+            $categoriesArray[$row['cat_uuid']] = Language::translateIfTranslationStrId($row['cat_name']);
 
             // add label that this category is visible to all organizations
             if ($row['cat_org_id'] === null) {
-                if ($categoriesArray[$row['cat_id']] !== $gL10n->get('SYS_ALL_ORGANIZATIONS')) {
-                    $categoriesArray[$row['cat_id']] = $categoriesArray[$row['cat_id']] . ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
+                if ($categoriesArray[$row['cat_uuid']] !== $gL10n->get('SYS_ALL_ORGANIZATIONS')) {
+                    $categoriesArray[$row['cat_uuid']] = $categoriesArray[$row['cat_uuid']] . ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
                 }
-                $optionsAll['valueAttributes'][$row['cat_id']] = array('data-global' => 1);
+                $optionsAll['valueAttributes'][$row['cat_uuid']] = array('data-global' => 1);
             } else {
-                $optionsAll['valueAttributes'][$row['cat_id']] = array('data-global' => 0);
+                $optionsAll['valueAttributes'][$row['cat_uuid']] = array('data-global' => 0);
             }
         }
 

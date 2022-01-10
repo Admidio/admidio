@@ -12,7 +12,7 @@
  * start     - Position of query recordset where the visual output should start
  * headline  - Title of the announcement module. This will be shown in the whole module.
  *             (Default) SYS_ANNOUNCEMENTS
- * cat_id    - Show only announcements of this category id, if id is not set than show all announcements.
+ * cat_uuid  - Show only announcements of this category, if UUID is not set than show all announcements.
  * ann_uuid  - Uuid of a single announcement that should be shown.
  * date_from - is set to 01.01.1970,
  *             if no date information is delivered
@@ -27,7 +27,7 @@ unset($_SESSION['announcements_request']);
 // Initialize and check the parameters
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ANNOUNCEMENTS')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'int');
+$getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getAnnUuid  = admFuncVariableIsValid($_GET, 'ann_uuid', 'string');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
@@ -42,10 +42,17 @@ if ((int) $gSettingsManager->get('enable_announcements_module') === 0) {
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
+$category = new TableCategory($gDb);
+
+if (strlen($getCatUuid) > 1) {
+    $category->readDataByUuid($getCatUuid);
+    $getHeadline .= ' - '.$category->getValue('cat_name');
+}
+
 // create object for announcements
 $announcements = new ModuleAnnouncements();
 $announcements->setParameter('ann_uuid', $getAnnUuid);
-$announcements->setParameter('cat_id', $getCatId);
+$announcements->setParameter('cat_id', $category->getValue('cat_id'));
 $announcements->setDateRange($getDateFrom, $getDateTo);
 
 // get parameters and number of recordsets
@@ -99,7 +106,7 @@ if ($gCurrentUser->editAnnouncements()) {
 // add filter navbar
 $page->addJavascript(
     '
-    $("#cat_id").change(function() {
+    $("#cat_uuid").change(function() {
         $("#navbar_filter_form").submit();
     });',
     true
@@ -110,12 +117,12 @@ if ($getAnnUuid === '') {
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addSelectBoxForCategories(
-        'cat_id',
+        'cat_uuid',
         $gL10n->get('SYS_CATEGORY'),
         $gDb,
         'ANN',
         HtmlForm::SELECT_BOX_MODUS_FILTER,
-        array('defaultValue' => $getCatId)
+        array('defaultValue' => $getCatUuid)
     );
     $filterNavbar->addForm($form->show());
     $page->addHtml($filterNavbar->show());
@@ -187,7 +194,7 @@ if ($announcementsCount === 0) {
     }  // Ende foreach
 
     // If necessary show links to navigate to next and previous recordsets of the query
-    $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_id' => $getCatId));
+    $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_uuid' => $getCatUuid));
     $page->addHtml(admFuncGeneratePagination($baseUrl, $announcementsCount, $announcementsPerPage, $getStart));
 }
 
