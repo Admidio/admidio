@@ -75,11 +75,6 @@ if ($getMode === 1) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
         // => EXIT
     }
-    // check if the current user is allowed to use the selected category
-    if (!in_array((int) $_POST['lnk_cat_id'], $gCurrentUser->getAllEditableCategories('LNK'), true)) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
 
     // make html in description secure
     $_POST['lnk_description'] = admFuncVariableIsValid($_POST, 'lnk_description', 'html');

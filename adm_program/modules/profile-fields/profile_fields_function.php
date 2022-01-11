@@ -93,7 +93,7 @@ if ($getMode === 1) {
         // => EXIT
     }
 
-    if ($userField->getValue('usf_system') == 0 && (int) $_POST['usf_cat_id'] === 0) {
+    if ($userField->getValue('usf_system') == 0 && strlen($_POST['usf_cat_id']) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
         // => EXIT
     }

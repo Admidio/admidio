@@ -426,10 +426,20 @@ class TableDate extends TableAccess
             if ($columnName === 'dat_description') {
                 return parent::setValue($columnName, $newValue, false);
             } elseif ($columnName === 'dat_cat_id') {
-                $category = new TableCategory($this->db, $newValue);
+                $category = new TableCategory($this->db);
+                if(is_int($newValue)) {
+                    if(!$category->readDataById($newValue)) {
+                        throw new AdmException('No Category with the given id '. $newValue. ' was found in the database.');
+                    }
+                } else {
+                    if(!$category->readDataByUuid($newValue)) {
+                        throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
+                    }
+                    $newValue = $category->getValue('cat_id');
+                }
 
                 if (!$category->isVisible() || $category->getValue('cat_type') !== 'DAT') {
-                    throw new AdmException('Category of the event '. $this->getValue('dat_name'). ' could not be set
+                    throw new AdmException('Category of the event '. $this->getValue('ann_name'). ' could not be set
                         because the category is not visible to the current user and current organization.');
                 }
             }

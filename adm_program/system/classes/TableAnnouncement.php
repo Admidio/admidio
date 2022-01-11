@@ -140,9 +140,20 @@ class TableAnnouncement extends TableAccess
     {
         if ($checkValue) {
             if ($columnName === 'ann_description') {
-                return parent::setValue($columnName, $newValue, false);
+                // don't check value because it contains expected html tags
+                $checkValue = false;
             } elseif ($columnName === 'ann_cat_id') {
-                $category = new TableCategory($this->db, $newValue);
+                $category = new TableCategory($this->db);
+                if(is_int($newValue)) {
+                    if(!$category->readDataById($newValue)) {
+                        throw new AdmException('No Category with the given id '. $newValue. ' was found in the database.');
+                    }
+                } else {
+                    if(!$category->readDataByUuid($newValue)) {
+                        throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
+                    }
+                    $newValue = $category->getValue('cat_id');
+                }
 
                 if (!$category->isVisible() || $category->getValue('cat_type') !== 'ANN') {
                     throw new AdmException('Category of the announcement '. $this->getValue('ann_name'). ' could not be set

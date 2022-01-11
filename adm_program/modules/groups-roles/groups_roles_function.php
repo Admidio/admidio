@@ -71,7 +71,8 @@ if ($getMode === 2) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
     }
-    if ((int) $_POST['rol_cat_id'] === 0) {
+
+    if (strlen($_POST['rol_cat_id']) === 0) {
         // not all fields are filled
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
         // => EXIT
@@ -210,9 +211,9 @@ if ($getMode === 2) {
         }
     }
 
-    // Kontrollieren ob bei nachtraeglicher Senkung der maximalen Mitgliederzahl diese nicht bereits ueberschritten wurde
+    // Check whether the maximum number of members has already been exceeded in the event , also if the maximum number of members was reduced.
     if ($getRoleUuid !== '' && (int) $_POST['rol_max_members'] !== (int) $role->getValue('rol_max_members')) {
-        // Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
+        // Count how many people already have the role, without leaders
         $role->setValue('rol_max_members', (int) $_POST['rol_max_members']);
         $numFreePlaces = $role->countVacancies();
 
@@ -223,7 +224,7 @@ if ($getMode === 2) {
     }
 
     try {
-        // POST Variablen in das Role-Objekt schreiben
+        // write POST parameters in roles object
         foreach ($_POST as $key => $value) { // TODO possible security issue
             if (str_starts_with($key, 'rol_')) {
                 $role->setValue($key, $value);
@@ -264,7 +265,7 @@ if ($getMode === 2) {
                     $roleDep->setParent($role->getValue('rol_id'));
                     $roleDep->insert($gCurrentUserId);
 
-                    // füge alle Mitglieder der ChildRole der ParentRole zu
+                    // add all members of the ChildRole to the ParentRole
                     $roleDep->updateMembership();
                 }
             }
