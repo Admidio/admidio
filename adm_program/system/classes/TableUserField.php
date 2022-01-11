@@ -375,13 +375,24 @@ class TableUserField extends TableAccess
         if ($newValue !== parent::getValue($columnName)) {
             if ($checkValue) {
                 if ($columnName === 'usf_description') {
-                    return parent::setValue($columnName, $newValue, false);
+                    // don't check value because it contains expected html tags
+                    $checkValue = false;
                 } elseif ($columnName === 'usf_cat_id') {
-                    $category = new TableCategory($this->db, $newValue);
+                    $category = new TableCategory($this->db);
+                    if(is_int($newValue)) {
+                        if(!$category->readDataById($newValue)) {
+                            throw new AdmException('No Category with the given id '. $newValue. ' was found in the database.');
+                        }
+                    } else {
+                        if(!$category->readDataByUuid($newValue)) {
+                            throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
+                        }
+                        $newValue = $category->getValue('cat_id');
+                    }
 
                     if (!$category->isVisible() || $category->getValue('cat_type') !== 'USF') {
-                        throw new AdmException('Category of the user field '. $this->getValue('dat_name'). ' could not be set
-                            because the category is not visible to the current user and current organization.');
+                        throw new AdmException('Category of the announcement '. $this->getValue('ann_name'). ' could not be set
+                        because the category is not visible to the current user and current organization.');
                     }
                 } elseif ($columnName === 'usf_url' && $newValue !== '') {
                     $newValue = admFuncCheckUrl($newValue);
@@ -399,7 +410,7 @@ class TableUserField extends TableAccess
             }
 
             if ($columnName === 'usf_cat_id' && (int) $this->getValue($columnName) !== (int) $newValue) {
-                // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
+                // first determine the highest sequence number of the category
                 $sql = 'SELECT COUNT(*) AS count
                           FROM '.TBL_USER_FIELDS.'
                          WHERE usf_cat_id = ? -- $newValue';

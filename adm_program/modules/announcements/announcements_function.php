@@ -70,9 +70,8 @@ if ($getMode === 1) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TEXT'))));
         // => EXIT
     }
-    // check if the current user is allowed to use the selected category
-    if (!in_array((int) $_POST['ann_cat_id'], $gCurrentUser->getAllEditableCategories('ANN'), true)) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    if (strlen($_POST['ann_cat_id']) === 0) {
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
         // => EXIT
     }
 
@@ -87,7 +86,6 @@ if ($getMode === 1) {
             }
         }
 
-        // Daten in Datenbank schreiben
         $returnValue = $announcement->save();
 
         if ($returnValue === true && $getAnnUuid === '') {

@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Verschiedene Funktionen fuer Termine
+ * Various functions for events
  *
  * @copyright 2004-2022 The Admidio Team
  * @see https://www.admidio.org/
@@ -9,13 +9,13 @@
  *
  * Parameters:
  *
- * dat_id     - ID of the event that should be edited
- * mode   : 1 - Create or edit an event
- *          2 - Delete the event
- *          3 - User attends to the event
- *          4 - User cancel the event
- *          6 - Export event in ical format
- *          7 - User may participate in the event
+ * dat_uuid  : UUID of the event that should be edited
+ * mode      : 1 - Create or edit an event
+ *             2 - Delete the event
+ *             3 - User attends to the event
+ *             4 - User cancel the event
+ *             6 - Export event in ical format
+ *             7 - User may participate in the event
  * user_uuid : UUID of the user membership to an event should be edited
  * copy      : true - The event of the dat_id will be copied and the base for this new event
  ***********************************************************************************************
@@ -45,7 +45,7 @@ if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
 }
 
 if ($getMode !== 6 || (int) $gSettingsManager->get('enable_dates_module') === 2) {
-    // Alle Funktionen, ausser Exportieren und anmelden, duerfen nur eingeloggte User
+    // All functions, except export and login, are only available for logged in users.
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
@@ -127,11 +127,8 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     if (strlen($_POST['dat_cat_id']) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('DAT_CALENDAR'))));
         // => EXIT
-    }
-    // check if the current user is allowed to use the selected category
-    if (!in_array((int) $_POST['dat_cat_id'], $gCurrentUser->getAllEditableCategories('DAT'), true)) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
+    } else {
+        $date->setValue('dat_cat_id', $_POST['dat_cat_id']);
     }
 
     if (isset($_POST['dat_all_day'])) {
@@ -144,7 +141,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         $date->setValue('dat_all_day', 0);
     }
 
-    // das Land nur zusammen mit dem Ort abspeichern
+    // save the country only together with the location
     if (strlen($_POST['dat_location']) === 0) {
         $_POST['dat_country'] = null;
     }
@@ -255,7 +252,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
 
     if (isset($_POST['adm_event_participation_right'])) {
         // save changed roles rights of the category
-        $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $_POST['dat_cat_id']);
+        $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $date->getValue('dat_cat_id'));
 
         // if roles for visibility are assigned to the category than check if the assigned roles of event participation
         // are within the visibility roles set otherwise show error
@@ -270,7 +267,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     $_POST['dat_description'] = admFuncVariableIsValid($_POST, 'dat_description', 'html');
 
     // ------------------------------------------------
-    // Prüfen ob gewaehlter Raum bereits zu dem Termin reserviert ist
+    // Check if the selected room is already reserved for the appointment
     // ------------------------------------------------
 
     if ($gSettingsManager->getBool('dates_show_rooms')) {
@@ -341,7 +338,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         $sqlCal = 'SELECT cat_name
                      FROM '.TBL_CATEGORIES.'
                     WHERE cat_id = ?';
-        $pdoStatement = $gDb->queryPrepared($sqlCal, array((int) $_POST['dat_cat_id']));
+        $pdoStatement = $gDb->queryPrepared($sqlCal, array((int) $date->getValue('dat_cat_id')));
         $calendar = $pdoStatement->fetchColumn();
 
         if (strlen($_POST['dat_location']) > 0) {

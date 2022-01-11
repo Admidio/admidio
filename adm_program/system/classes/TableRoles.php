@@ -454,10 +454,20 @@ class TableRoles extends TableAccess
 
         if ($checkValue) {
             if ($columnName === 'rol_cat_id' && isset($gCurrentUser) && $gCurrentUser instanceof User) {
-                $category = new TableCategory($this->db, $newValue);
+                $category = new TableCategory($this->db);
+                if(is_int($newValue)) {
+                    if(!$category->readDataById($newValue)) {
+                        throw new AdmException('No Category with the given id '. $newValue. ' was found in the database.');
+                    }
+                } else {
+                    if(!$category->readDataByUuid($newValue)) {
+                        throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
+                    }
+                    $newValue = $category->getValue('cat_id');
+                }
 
                 if (!$category->isVisible() || $category->getValue('cat_type') !== 'ROL') {
-                    throw new AdmException('Category of the role '. $this->getValue('dat_name'). ' could not be set
+                    throw new AdmException('Category of the role '. $this->getValue('ann_name'). ' could not be set
                         because the category is not visible to the current user and current organization.');
                 }
             }
