@@ -74,7 +74,7 @@ if ($getMode === 1) {
     }
 
     if(!StringUtils::strValidCharacters($postUrl, 'url')
-    && !preg_match('=^[^?*;:~<>|\"\\\\]+$=', $postUrl)) {
+    && !preg_match('=^[^*;:~<>|\"\\\\]+$=', $postUrl)) {
         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('ORG_URL'))));
         // => EXIT
     }
