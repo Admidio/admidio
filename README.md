@@ -4,8 +4,8 @@ Admidio is a free open source user management system for websites of
 organizations and groups. The system has a flexible role model so that
 it’s possible to reflect the structure and permissions of your organization.
 You can create an individual profile for your members by adding or removing
-fields. Additional to these functions the system contains several modules
-like member lists, event manager, guestbook, photo album or a documents & files area.
+profile fields. Additional to these functions the system contains several modules
+like member lists, event manager, messages, photo album or a documents & files area.
 
 ![logo](https://www.admidio.org/images/mainpage_flying_icons.png)
 
