@@ -395,11 +395,6 @@ class TableUserField extends TableAccess
                         }
                         $newValue = $category->getValue('cat_id');
                     }
-
-                    if (!$category->isVisible() || $category->getValue('cat_type') !== 'USF') {
-                        throw new AdmException('Category of the announcement '. $this->getValue('ann_name'). ' could not be set
-                        because the category is not visible to the current user and current organization.');
-                    }
                 } elseif ($columnName === 'usf_url' && $newValue !== '') {
                     $newValue = admFuncCheckUrl($newValue);
 

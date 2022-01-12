@@ -86,17 +86,16 @@ if ($getMode === 1) {
                 $link->setValue($key, $value);
             }
         }
+
+        // Set link counter to 0
+        if ($weblinkIsNew) {
+            $link->setValue('lnk_counter', 0);
+        }
+
+        $returnCode = $link->save();
     } catch (AdmException $e) {
         $e->showHtml();
     }
-
-    // Set link counter to 0
-    if ($weblinkIsNew) {
-        $link->setValue('lnk_counter', 0);
-    }
-
-    // save weblink data to database
-    $returnCode = $link->save();
 
     if ($returnCode === true && $weblinkIsNew) {
         // Notification email for new entries

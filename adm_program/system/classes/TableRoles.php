@@ -405,9 +405,13 @@ class TableRoles extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentSession;
+        global $gCurrentSession, $gCurrentUser;
 
         $fieldsChanged = $this->columnsValueChanged;
+
+        if (!in_array((int) $this->getValue('rol_cat_id'), $gCurrentUser->getAllEditableCategories('ROL'), true)) {
+            throw new AdmException('Role could not be saved because you are not allowed to edit roles of this category.');
+        }
 
         $returnValue = parent::save($updateFingerPrint);
 
@@ -464,11 +468,6 @@ class TableRoles extends TableAccess
                         throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
                     }
                     $newValue = $category->getValue('cat_id');
-                }
-
-                if (!$category->isVisible() || $category->getValue('cat_type') !== 'ROL') {
-                    throw new AdmException('Category of the role '. $this->getValue('ann_name'). ' could not be set
-                        because the category is not visible to the current user and current organization.');
                 }
             }
 

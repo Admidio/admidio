@@ -230,12 +230,12 @@ if ($getMode === 2) {
                 $role->setValue($key, $value);
             }
         }
+
+        $gDb->startTransaction();
+        $role->save();
     } catch (AdmException $e) {
         $e->showHtml();
     }
-
-    $gDb->startTransaction();
-    $role->save();
 
     // save role dependencies in database
     if (array_key_exists('dependent_roles', $_POST) && !$eventRole) {

@@ -129,6 +129,25 @@ class TableAnnouncement extends TableAccess
     }
 
     /**
+     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * a new record or if only an update is necessary. The update statement will only update the changed columns.
+     * If the table has columns for creator or editor than these column with their timestamp will be updated.
+     * For new records the organization and ip address will be set per default.
+     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
+     * @return bool If an update or insert into the database was done then return true, otherwise false.
+     */
+    public function save($updateFingerPrint = true)
+    {
+        global $gCurrentUser;
+
+        if (!in_array((int) $this->getValue('ann_cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true)) {
+            throw new AdmException('Announcement could not be saved because you are not allowed to edit announcements of this category.');
+        }
+
+        return parent::save($updateFingerPrint);
+    }
+
+    /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
@@ -153,11 +172,6 @@ class TableAnnouncement extends TableAccess
                         throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
                     }
                     $newValue = $category->getValue('cat_id');
-                }
-
-                if (!$category->isVisible() || $category->getValue('cat_type') !== 'ANN') {
-                    throw new AdmException('Category of the announcement '. $this->getValue('ann_name'). ' could not be set
-                        because the category is not visible to the current user and current organization.');
                 }
             }
         }
