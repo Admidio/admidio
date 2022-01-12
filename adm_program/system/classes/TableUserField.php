@@ -340,7 +340,13 @@ class TableUserField extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentSession;
+        global $gCurrentSession, $gCurrentUser;
+
+        // only administrators can edit profile fields
+        if (!$gCurrentUser->isAdministrator()) {
+            throw new AdmException('Profile field could not be saved because only administrators are allowed to edit profile fields.');
+            // => EXIT
+        }
 
         $fieldsChanged = $this->columnsValueChanged;
 
@@ -388,11 +394,6 @@ class TableUserField extends TableAccess
                             throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
                         }
                         $newValue = $category->getValue('cat_id');
-                    }
-
-                    if (!$category->isVisible() || $category->getValue('cat_type') !== 'USF') {
-                        throw new AdmException('Category of the announcement '. $this->getValue('ann_name'). ' could not be set
-                        because the category is not visible to the current user and current organization.');
                     }
                 } elseif ($columnName === 'usf_url' && $newValue !== '') {
                     $newValue = admFuncCheckUrl($newValue);

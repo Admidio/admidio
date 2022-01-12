@@ -315,14 +315,12 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                 $date->setValue($key, $value);
             }
         }
+
+        $gDb->startTransaction();
+        $returnCode = $date->save();
     } catch (AdmException $e) {
         $e->showHtml();
     }
-
-    $gDb->startTransaction();
-
-    // save event in database
-    $returnCode = $date->save();
 
     $datId = (int) $date->getValue('dat_id');
 
