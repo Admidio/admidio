@@ -72,4 +72,37 @@
     <string name="DEMO_ROOM_MEETING_ROOM_CONTENT">In diesem Raum können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Ein Beamer steht zur Verfügung.</string>
     <string name="DEMO_ROOM_FUNCTION_ROOM">Veranstaltungsraum</string>
     <string name="DEMO_ROOM_FUNCTION_ROOM_CONTENT">Der Veranstaltungsraum kann für Geburtstagsfeiern, Jahresversammlungen oder Party's genutzt werden. Eine rechtzeitige Reservierung ist erwünscht.</string>
+
+    <string name="DEMO_components">DEMO_components</string>
+    <string name="DEMO_organizations">DEMO_organizations</string>
+    <string name="DEMO_menu">DEMO_menu</string>
+    <string name="DEMO_preferences">DEMO_preferences</string>
+    <string name="DEMO_users">DEMO_users</string>
+    <string name="DEMO_categories">DEMO_categories</string>
+    <string name="DEMO_category_report">DEMO_category_report</string>
+    <string name="DEMO_roles">DEMO_roles</string>
+    <string name="DEMO_roles_rights">DEMO_roles_rights</string>
+    <string name="DEMO_roles_rights_data">DEMO_roles_rights_data</string>
+    <string name="DEMO_user_fields">DEMO_user_fields</string>
+    <string name="DEMO_user_relation_types">DEMO_user_relation_types</string>
+    <string name="DEMO_user_relations">DEMO_user_relations</string>
+    <string name="DEMO_announcements">DEMO_announcements</string>
+    <string name="DEMO_dates">DEMO_dates</string>
+    <string name="DEMO_folders">DEMO_folders</string>
+    <string name="DEMO_files">DEMO_files</string>
+    <string name="DEMO_guestbook">DEMO_guestbook</string>
+    <string name="DEMO_guestbook_comments">DEMO_guestbook_comments</string>
+    <string name="DEMO_links">DEMO_links</string>
+    <string name="DEMO_lists">DEMO_lists</string>
+    <string name="DEMO_list_columns">DEMO_list_columns</string>
+    <string name="DEMO_members">DEMO_members</string>
+    <string name="DEMO_messages">DEMO_messages</string>
+    <string name="DEMO_messages_content">DEMO_messages_content</string>
+    <string name="DEMO_messages_recipients">DEMO_messages_recipients</string>
+    <string name="DEMO_registrations">DEMO_registrations</string>
+    <string name="DEMO_photos">DEMO_photos</string>
+    <string name="DEMO_rooms">DEMO_rooms</string>
+    <string name="DEMO_sessions">DEMO_sessions</string>
+    <string name="DEMO_texts">DEMO_texts</string>
+    <string name="DEMO_user_data">DEMO_user_data</string>
 </resources>
