@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.43] - 2022-01-10
+
+### Security
+- Prevent evasion of the `static_classes` security policy. This addresses CVE-2021-21408
+
+## [3.1.42] - 2022-01-10
+
+### Security
+- Prevent arbitrary PHP code execution through maliciously crafted expression for the math function. This addresses CVE-2021-29454
+
+## [3.1.41] - 2022-01-09
+
+### Security
+- Rewrote the mailto function to not use `eval` when encoding with javascript
+
 ## [3.1.40] - 2021-10-13
 
 ### Changed
