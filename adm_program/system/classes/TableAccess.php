@@ -328,8 +328,10 @@ class TableAccess
                     if ($this->columnsInfos[$key]['type'] === 'boolean'
                             || $this->columnsInfos[$key]['type'] === 'tinyint') {
                         $this->dbColumns[$key] = (bool) $value;
-                    } elseif ($this->columnsInfos[$key]['type'] === 'integer'
-                            || $this->columnsInfos[$key]['type'] === 'smallint') {
+                    } elseif (($this->columnsInfos[$key]['type'] === 'integer'
+                            || $this->columnsInfos[$key]['type'] === 'smallint')
+                    && $value != '') {
+                        // only convert to int if it's not a null value
                         $this->dbColumns[$key] = (int) $value;
                     } else {
                         $this->dbColumns[$key] = $value;
