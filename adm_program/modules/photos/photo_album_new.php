@@ -20,7 +20,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 $getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
 $getMode      = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('new', 'change')));
 
-$photoAlbumsArray = array(0 => $gL10n->get('PHO_PHOTO_ALBUMS'));
+$photoAlbumsArray = array('ALL' => $gL10n->get('PHO_PHOTO_ALBUMS'));
 
 // check if the module is enabled and disallow access if it's disabled
 if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
@@ -93,7 +93,7 @@ function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
         $parentPhotoAlbum->setArray($admPhotoChild);
 
         // add entry to array of all photo albums
-        $photoAlbumsArray[(int) $parentPhotoAlbum->getValue('pho_id')] =
+        $photoAlbumsArray[$parentPhotoAlbum->getValue('pho_uuid')] =
             $vorschub.'&#151; '.$parentPhotoAlbum->getValue('pho_name').'&nbsp('.$parentPhotoAlbum->getValue('pho_begin', 'Y').')';
 
         subfolder((int) $parentPhotoAlbum->getValue('pho_id'), $vorschub, $photoAlbum, $phoId);
@@ -104,9 +104,10 @@ function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
 $page = new HtmlPage('admidio-photo-album-edit', $headline);
 
 if ($getMode === 'new') {
-    $parentAlbumId = $photoAlbum->getValue('pho_id');
+    $parentAlbumUuid = 'ALL';
 } else {
-    $parentAlbumId = $photoAlbum->getValue('pho_pho_id_parent');
+    $parentAlbum = new TablePhotos($gDb, $photoAlbum->getValue('pho_pho_id_parent'));
+    $parentAlbumUuid = $parentAlbum->getValue('pho_uuid');
 }
 
 // show form
@@ -124,7 +125,7 @@ $form->addSelectBox(
     $photoAlbumsArray,
     array(
         'property'                       => HtmlForm::FIELD_REQUIRED,
-        'defaultValue'                   => $parentAlbumId,
+        'defaultValue'                   => $parentAlbumUuid,
         'showContextDependentFirstEntry' => false,
         'helpTextIdLabel'                => $gL10n->get('PHO_PARENT_ALBUM_DESC', array('PHO_PHOTO_ALBUMS'))
     )
