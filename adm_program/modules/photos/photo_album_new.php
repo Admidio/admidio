@@ -120,7 +120,7 @@ $form->addInput(
 );
 subfolder(0, '', $photoAlbum, $photoAlbum->getValue('pho_id'));
 $form->addSelectBox(
-    'pho_pho_id_parent',
+    'parent_album_uuid',
     $gL10n->get('PHO_PARENT_ALBUM'),
     $photoAlbumsArray,
     array(

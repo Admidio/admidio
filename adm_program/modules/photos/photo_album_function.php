@@ -111,6 +111,12 @@ if ($getMode === 'new' || $getMode === 'change') {
         }
     }
 
+    if($_POST['parent_album_uuid'] !== 'ALL') {
+        $parentAlbum = new TablePhotos($gDb);
+        $parentAlbum->readDataByUuid($_POST['parent_album_uuid']);
+        $photoAlbum->setValue('pho_pho_id_parent', $parentAlbum->getValue('pho_id'));
+    }
+
     if ($getMode === 'new') {
         // write recordset with new album into database
         $photoAlbum->save();
