@@ -131,7 +131,7 @@ switch ($getMode) {
                     break;
 
                 case 'system_notification':
-                    $checkboxes = array('enable_system_mails', 'enable_email_notification');
+                    $checkboxes = array('enable_system_mails', 'enable_email_notification', 'enable_email_changenotification');
 
                     if ($_POST['email_administrator'] === '') {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ADMINISTRATOR_EMAIL'))));
