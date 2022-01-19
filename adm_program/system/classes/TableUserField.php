@@ -340,7 +340,13 @@ class TableUserField extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentSession;
+        global $gCurrentSession, $gCurrentUser;
+
+        // only administrators can edit profile fields
+        if (!$gCurrentUser->isAdministrator() && !$this->saveChangesWithoutRights) {
+            throw new AdmException('Profile field could not be saved because only administrators are allowed to edit profile fields.');
+            // => EXIT
+        }
 
         $fieldsChanged = $this->columnsValueChanged;
 
