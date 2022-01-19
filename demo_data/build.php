@@ -128,8 +128,8 @@ function executeSqlStatements(array $sqlStatements, $filename)
 
     foreach ($sqlStatements as $sqlStatement) {
         if ($filename === 'data.sql') {
-            // search for translation strings with the prefix DEMO or SYS and try replace them
-            preg_match_all('/(DEMO_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sqlStatement, $results);
+            // search for translation strings with the prefix DDT or SYS and try to replace them
+            preg_match_all('/(DDT_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sqlStatement, $results);
 
             foreach ($results[0] as $value) {
                 // if it's a string of a systemmail then html linefeeds must be replaced
