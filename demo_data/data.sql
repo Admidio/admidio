@@ -213,7 +213,7 @@ INSERT INTO %PREFIX%_users (usr_id, usr_login_name, usr_password, usr_new_passwo
 (351, 'Demo', '5c4896c0c3fefb8ef0b326e436790906', NULL, NULL, NULL, NULL, '2008-05-12 20:29:15', '2009-02-27 22:34:06', 2, NULL, 0, 351, '2008-05-12 20:29:33', 354, '2011-02-03 14:19:13', true),
 (352, 'Mustermann01', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 23:31:26', NULL, NULL, false),
 (353, 'Dina', 'c33367701511b4f6020ec61ded352059', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 23:33:38', NULL, NULL, false),
-(354, 'DEMO_CHAIRMAN', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', true),
+(354, 'DDT_CHAIRMAN', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', true),
 (355, 'SYS_MEMBER', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', true),
 (356, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
 (357, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true);
@@ -518,15 +518,15 @@ INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_a
 (1, 3, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',     true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', true, false, true),
 (2, 3, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER',                  false, false, false, false, false, false, false, true, false, 2, false, true, false, 2, false, 1, true, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', true, false, false),
 (3, 3, 'INS_BOARD', 'INS_DESCRIPTION_BOARD',                       false, false, true, true, true, true, true, true, true, 3, true, true, true, 2, true, 1, false, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', true, false, false),
-(4, 6, 'DEMO_ROL_1_YOUTH_TEAM', 'DEMO_ROL_1_YOUTH_TEAM_CONTENT', false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, false, 3, false, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', true, false, false),
-(5, 6, 'DEMO_ROL_2_YOUTH_TEAM', 'DEMO_ROL_2_YOUTH_TEAM_CONTENT', false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, false, 3, false, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', true, false, false),
+(4, 6, 'DDT_ROL_1_YOUTH_TEAM', 'DDT_ROL_1_YOUTH_TEAM_CONTENT', false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, false, 3, false, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', true, false, false),
+(5, 6, 'DDT_ROL_2_YOUTH_TEAM', 'DDT_ROL_2_YOUTH_TEAM_CONTENT', false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, false, 3, false, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', true, false, false),
 (6, 100, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',   true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', true, false, true),
 (7, 100, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER',                false, false, false, false, false, false, false, true, false, 2, false, true, false, 2, false, 1, true, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 16:26:36', 1, '2010-12-22 06:34:06', true, false, false),
-(8, 200, '2017-02-06 19:00 DEMO_DAT_BARBECUE', 'DEMO_DAT_BARBECUE_CONTENT', false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
-(9, 200, '2017-04-13 13:00 DEMO_DAT_YOGA', 'DEMO_DAT_YOGA_CONTENT', false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 12:08:23', NULL, NULL, true, false, false),
-(10, 200, '2017-05-15 19:00 DEMO_DAT_BOARD_MEETING', NULL,       false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
-(11, 200, '2017-05-26 19:00 DEMO_DAT_BOARD_MEETING', NULL,       false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
-(12, 200, '2017-05-26 20:00 DEMO_DAT_TEAM_EVENING', NULL,        false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 18:38:18', NULL, NULL, true, false, false);
+(8, 200, '2017-02-06 19:00 DDT_DAT_BARBECUE', 'DDT_DAT_BARBECUE_CONTENT', false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
+(9, 200, '2017-04-13 13:00 DDT_DAT_YOGA', 'DDT_DAT_YOGA_CONTENT', false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 12:08:23', NULL, NULL, true, false, false),
+(10, 200, '2017-05-15 19:00 DDT_DAT_BOARD_MEETING', NULL,       false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
+(11, 200, '2017-05-26 19:00 DDT_DAT_BOARD_MEETING', NULL,       false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
+(12, 200, '2017-05-26 20:00 DDT_DAT_TEAM_EVENING', NULL,        false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 18:38:18', NULL, NULL, true, false, false);
 
 --
 -- Data for table adm_roles_rights
@@ -596,8 +596,8 @@ fa-venus|SYS_FEMALE', NULL, NULL, false, false, false, false, true, 12, 1, '2012
 (18, 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'INS_SKYPE_DESC', NULL, 'fab fa-skype', NULL, false, false, false, false, false, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
 (23, 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'INS_TWITTER_DESC', NULL, 'fab fa-twitter', 'https://twitter.com/#user_content#', false, false, false, false, false, 4, 1, '2012-01-08 11:11:40', NULL, NULL),
 (24, 2, 'TEXT', 'XING', 'INS_XING', 'INS_XING_DESC', NULL, 'fab fa-xing', 'https://www.xing.com/profile/#user_content#', false, false, false, false, false, 5, 1, '2012-01-08 11:11:40', NULL, NULL),
-(20, 8, 'NUMBER', 'MEMBERSHIP_NUMBER', 'DEMO_PRO_MEMBERSHIP_NUMBER', NULL, NULL, NULL, NULL, false, true, false, false, false, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
-(21, 8, 'TEXT', 'FAVORITE_COLOR', 'DEMO_PRO_FAVORITE_COLOR', 'DEMO_PRO_FAVORITE_COLOR_CONTENT', NULL, NULL, NULL, false, false, false, false, false, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
+(20, 8, 'NUMBER', 'MEMBERSHIP_NUMBER', 'DDT_PRO_MEMBERSHIP_NUMBER', NULL, NULL, NULL, NULL, false, true, false, false, false, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
+(21, 8, 'TEXT', 'FAVORITE_COLOR', 'DDT_PRO_FAVORITE_COLOR', 'DDT_PRO_FAVORITE_COLOR_CONTENT', NULL, NULL, NULL, false, false, false, false, false, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
 
 
 --
@@ -638,9 +638,9 @@ INSERT INTO %PREFIX%_user_relations (ure_id, ure_urt_id, ure_usr_id1, ure_usr_id
 --
 
 INSERT INTO %PREFIX%_announcements (ann_id, ann_cat_id, ann_headline, ann_description, ann_usr_id_create, ann_timestamp_create, ann_usr_id_change, ann_timestamp_change) VALUES
-(1, 13, 'DEMO_ANN_NEW_JERSEYS', 'DEMO_ANN_NEW_JERSEYS_CONTENT', 1, '2012-01-01 00:00:00', NULL, NULL),
-(2, 13, 'DEMO_ANN_AEROBICS_COURSE', 'DEMO_ANN_AEROBICS_COURSE_CONTENT', 1, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53'),
-(3, 300, 'DEMO_ANN_WELCOME', 'DEMO_ANN_WELCOME_CONTENT', 1, '2012-01-08 11:12:05', NULL, NULL);
+(1, 13, 'DDT_ANN_NEW_JERSEYS', 'DDT_ANN_NEW_JERSEYS_CONTENT', 1, '2012-01-01 00:00:00', NULL, NULL),
+(2, 13, 'DDT_ANN_AEROBICS_COURSE', 'DDT_ANN_AEROBICS_COURSE_CONTENT', 1, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53'),
+(3, 300, 'DDT_ANN_WELCOME', 'DDT_ANN_WELCOME_CONTENT', 1, '2012-01-08 11:12:05', NULL, NULL);
 
 
 --
@@ -648,21 +648,21 @@ INSERT INTO %PREFIX%_announcements (ann_id, ann_cat_id, ann_headline, ann_descri
 --
 
 INSERT INTO %PREFIX%_dates (dat_id, dat_cat_id, dat_begin, dat_end, dat_all_day, dat_description, dat_location, dat_country, dat_headline, dat_highlight, dat_usr_id_create, dat_timestamp_create, dat_usr_id_change, dat_timestamp_change, dat_rol_id, dat_room_id, dat_max_members, dat_allow_comments, dat_additional_guests) VALUES
-(3, 12, '2012-01-22 16:00:00', '2012-01-22 18:00:00', false, 'DEMO_DAT_YOUTH_TRAINING_CONTENT', 'DEMO_DAT_YOUTH_TRAINING_LOCATION', 'GBR', 'DEMO_DAT_YOUTH_TRAINING', false,  1, '2017-07-06 17:38:26', NULL, NULL, NULL, NULL, 0, false, false),
-(4, 10, '2012-01-12 19:00:00', '2012-01-12 23:30:00', false, 'DEMO_DAT_BARBECUE_CONTENT', NULL, NULL, 'DEMO_DAT_BARBECUE', true, 1, '2017-07-06 17:41:18', NULL, NULL, 8, NULL, 0, true, true),
-(5, 10, '2012-02-07 00:00:00', '2012-02-12 00:00:00', true, 'DEMO_DAT_TRAINER_COURSE_CONTENT', 'DEMO_DAT_TRAINER_COURSE_LOCATION', 'FRA', 'DEMO_DAT_TRAINER_COURSE', true, 1, '2017-07-06 17:49:13', NULL, NULL, NULL, NULL, 0, false, false),
-(6, 301, '2012-01-18 15:00:00', '2012-01-18 19:00:00', false, 'DEMO_DAT_COMPUTER_COURSE_CONTENT', 'DEMO_DAT_COMPUTER_COURSE_LOCATION', 'DEU', 'DEMO_DAT_COMPUTER_COURSE', false, 1, '2017-01-06 11:25:13', NULL, NULL, NULL, NULL, 0, false, false),
-(7, 301, '2012-01-07 00:00:00', '2012-01-07 00:00:00', true, 'DEMO_DAT_TRIP_AMSTERDAM_CONTENT', 'DEMO_DAT_TRIP_AMSTERDAM_LOCATION', 'NLD', 'DEMO_DAT_TRIP_AMSTERDAM', false, 1, '2018-01-06 11:25:13', NULL, NULL, NULL, NULL, 0, false, false),
-(8, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false,  1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
-(9, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
-(10, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
-(11, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
-(12, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
-(13, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
-(14, 107, '2012-01-12 19:00:00', '2012-01-12 23:30:00', false, 'DEMO_DAT_YOGA_CONTENT', 'DEMO_DAT_YOGA_LOCATION', 'ESP', 'DEMO_DAT_YOGA', true, 1, '2017-07-06 17:41:18', NULL, NULL, 9, NULL, 0, false, false),
-(15, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', false, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_BOARD_MEETING', false, 1, '2018-05-06 23:03:18', NULL, NULL, 10, NULL, 0, false, false),
-(16, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', false, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_BOARD_MEETING', false, 1, '2018-05-06 23:03:18', NULL, NULL, 11, NULL, 0, false, false),
-(17, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', false, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_TEAM_EVENING', false, 355, '2018-02-14 18:38:18', NULL, NULL, 12, NULL, 0, false, false);
+(3, 12, '2012-01-22 16:00:00', '2012-01-22 18:00:00', false, 'DDT_DAT_YOUTH_TRAINING_CONTENT', 'DDT_DAT_YOUTH_TRAINING_LOCATION', 'GBR', 'DDT_DAT_YOUTH_TRAINING', false,  1, '2017-07-06 17:38:26', NULL, NULL, NULL, NULL, 0, false, false),
+(4, 10, '2012-01-12 19:00:00', '2012-01-12 23:30:00', false, 'DDT_DAT_BARBECUE_CONTENT', NULL, NULL, 'DDT_DAT_BARBECUE', true, 1, '2017-07-06 17:41:18', NULL, NULL, 8, NULL, 0, true, true),
+(5, 10, '2012-02-07 00:00:00', '2012-02-12 00:00:00', true, 'DDT_DAT_TRAINER_COURSE_CONTENT', 'DDT_DAT_TRAINER_COURSE_LOCATION', 'FRA', 'DDT_DAT_TRAINER_COURSE', true, 1, '2017-07-06 17:49:13', NULL, NULL, NULL, NULL, 0, false, false),
+(6, 301, '2012-01-18 15:00:00', '2012-01-18 19:00:00', false, 'DDT_DAT_COMPUTER_COURSE_CONTENT', 'DDT_DAT_COMPUTER_COURSE_LOCATION', 'DEU', 'DDT_DAT_COMPUTER_COURSE', false, 1, '2017-01-06 11:25:13', NULL, NULL, NULL, NULL, 0, false, false),
+(7, 301, '2012-01-07 00:00:00', '2012-01-07 00:00:00', true, 'DDT_DAT_TRIP_AMSTERDAM_CONTENT', 'DDT_DAT_TRIP_AMSTERDAM_LOCATION', 'NLD', 'DDT_DAT_TRIP_AMSTERDAM', false, 1, '2018-01-06 11:25:13', NULL, NULL, NULL, NULL, 0, false, false),
+(8, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DDT_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DDT_DAT_TEAM_TRAINING', false,  1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
+(9, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DDT_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DDT_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
+(10, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DDT_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DDT_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
+(11, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DDT_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DDT_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
+(12, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DDT_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DDT_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
+(13, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', false, null, 'DDT_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DDT_DAT_TEAM_TRAINING', false, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0, false, false),
+(14, 107, '2012-01-12 19:00:00', '2012-01-12 23:30:00', false, 'DDT_DAT_YOGA_CONTENT', 'DDT_DAT_YOGA_LOCATION', 'ESP', 'DDT_DAT_YOGA', true, 1, '2017-07-06 17:41:18', NULL, NULL, 9, NULL, 0, false, false),
+(15, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', false, null, 'DDT_DAT_CLUBHOUSE', 'DEU', 'DDT_DAT_BOARD_MEETING', false, 1, '2018-05-06 23:03:18', NULL, NULL, 10, NULL, 0, false, false),
+(16, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', false, null, 'DDT_DAT_CLUBHOUSE', 'DEU', 'DDT_DAT_BOARD_MEETING', false, 1, '2018-05-06 23:03:18', NULL, NULL, 11, NULL, 0, false, false),
+(17, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', false, null, 'DDT_DAT_CLUBHOUSE', 'DEU', 'DDT_DAT_TEAM_EVENING', false, 355, '2018-02-14 18:38:18', NULL, NULL, 12, NULL, 0, false, false);
 
 
 --
@@ -697,25 +697,25 @@ INSERT INTO %PREFIX%_files (fil_id, fil_fol_id, fil_name, fil_description, fil_l
 --
 
 INSERT INTO %PREFIX%_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_email, gbo_homepage, gbo_ip_address, gbo_locked, gbo_usr_id_create, gbo_timestamp_create, gbo_usr_id_change, gbo_timestamp_change) VALUES
-(1, 1, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_WELCOME', 'administrator@admidio.org', 'https://www.admidio.org/', '84.63.38.55', false, 1, '2011-12-25 12:14:42', NULL, NULL),
-(2, 1, 'Sepp Mayerchen', 'DEMO_GBO_GUEST_ENTRY1', NULL, NULL, '84.63.38.55', false, NULL, '2012-01-03 20:16:42', NULL, NULL);
+(1, 1, 'Paul Schmidt', 'DDT_GBO_WEBMASTER_WELCOME', 'administrator@admidio.org', 'https://www.admidio.org/', '84.63.38.55', false, 1, '2011-12-25 12:14:42', NULL, NULL),
+(2, 1, 'Sepp Mayerchen', 'DDT_GBO_GUEST_ENTRY1', NULL, NULL, '84.63.38.55', false, NULL, '2012-01-03 20:16:42', NULL, NULL);
 
 --
 -- Data for table adm_guestbook_comments
 --
 
 INSERT INTO %PREFIX%_guestbook_comments (gbc_id, gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_ip_address, gbc_locked, gbc_usr_id_create, gbc_timestamp_create, gbc_usr_id_change, gbc_timestamp_change) VALUES
-(1, 2, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_COMMENT1', 'administrator@admidio.org', '84.63.38.55', false, 1, '2012-01-04 16:23:12', NULL, NULL);
+(1, 2, 'Paul Schmidt', 'DDT_GBO_WEBMASTER_COMMENT1', 'administrator@admidio.org', '84.63.38.55', false, 1, '2012-01-04 16:23:12', NULL, NULL);
 
 --
 -- Data for table adm_links
 --
 
 INSERT INTO %PREFIX%_links (lnk_id, lnk_cat_id, lnk_name, lnk_description, lnk_url, lnk_counter, lnk_usr_id_create, lnk_timestamp_create, lnk_usr_id_change, lnk_timestamp_change) VALUES
-(1, 7, 'DEMO_LNK_SAMPLE_PAGE', 'DEMO_LNK_SAMPLE_PAGE_CONTENT', 'https://www.example.com', 6, 1, '2012-01-04 22:13:26', 1, '2012-01-05 21:16:32'),
-(2, 9, 'Admidio', 'DEMO_LNK_ADMIDIO_CONTENT', 'https://www.admidio.org/', 157, 1, '2012-01-08 11:12:05', NULL, NULL),
-(3, 9, 'DEMO_LNK_FORUM', 'DEMO_LNK_FORUM_CONTENT', 'https://www.admidio.org/forum/', 46, 1, '2012-01-04 21:15:44', NULL, NULL),
-(4, 9, 'DEMO_LNK_DOCUMENTATION', 'DEMO_LNK_DOCUMENTATION_CONTENT', 'https://www.admidio.org/dokuwiki', 21, 1, '2012-04-05 14:13:23', NULL, NULL);
+(1, 7, 'DDT_LNK_SAMPLE_PAGE', 'DDT_LNK_SAMPLE_PAGE_CONTENT', 'https://www.example.com', 6, 1, '2012-01-04 22:13:26', 1, '2012-01-05 21:16:32'),
+(2, 9, 'Admidio', 'DDT_LNK_ADMIDIO_CONTENT', 'https://www.admidio.org/', 157, 1, '2012-01-08 11:12:05', NULL, NULL),
+(3, 9, 'DDT_LNK_FORUM', 'DDT_LNK_FORUM_CONTENT', 'https://www.admidio.org/forum/', 46, 1, '2012-01-04 21:15:44', NULL, NULL),
+(4, 9, 'DDT_LNK_DOCUMENTATION', 'DDT_LNK_DOCUMENTATION_CONTENT', 'https://www.admidio.org/dokuwiki', 21, 1, '2012-04-05 14:13:23', NULL, NULL);
 
 --
 -- Data for table adm_lists
@@ -1052,14 +1052,14 @@ INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end
 --
 
 INSERT INTO %PREFIX%_messages (msg_id, msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read) VALUES
-(1, 'EMAIL', 'DEMO_MSG_EVENTS_HOMEPAGE', 1, '313 | 332 | 355 | 354', '2021-01-20 14:58:16', 0),
-(2, 'EMAIL', 'DEMO_MSG_NEW_MODULE', 1, 'groupID: 3', '2021-02-01 16:07:01', 0),
-(3, 'EMAIL', 'DEMO_MSG_NEW_TRAINING_TIMES', 1, 'groupID: 4 | groupID: 5 | 354', '2021-02-03 12:08:02', 0),
-(4, 'EMAIL', 'DEMO_MSG_INVITATION_MEMBERS_MEETING', 354, 'groupID: 2-2 | 1', '2021-02-03 05:11:37', 0),
-(5, 'PM', 'DEMO_MSG_RESERVE_ROOM', 354, true, '2021-02-02 09:12:35', 1),
-(6, 'PM', 'DEMO_MSG_MEMBERSHIP_FEE_MISSING', 354, '355', '2021-02-03 05:14:22', 1),
-(7, 'EMAIL', 'DEMO_MSG_TRAINING', 355, '216 | 227', '2021-02-03 05:16:19', 0),
-(8, 'PM', 'DEMO_MSG_NO_ACCESS_DOCUMENTS', 1, '355', '2021-02-03 05:18:18', 1);
+(1, 'EMAIL', 'DDT_MSG_EVENTS_HOMEPAGE', 1, '313 | 332 | 355 | 354', '2021-01-20 14:58:16', 0),
+(2, 'EMAIL', 'DDT_MSG_NEW_MODULE', 1, 'groupID: 3', '2021-02-01 16:07:01', 0),
+(3, 'EMAIL', 'DDT_MSG_NEW_TRAINING_TIMES', 1, 'groupID: 4 | groupID: 5 | 354', '2021-02-03 12:08:02', 0),
+(4, 'EMAIL', 'DDT_MSG_INVITATION_MEMBERS_MEETING', 354, 'groupID: 2-2 | 1', '2021-02-03 05:11:37', 0),
+(5, 'PM', 'DDT_MSG_RESERVE_ROOM', 354, true, '2021-02-02 09:12:35', 1),
+(6, 'PM', 'DDT_MSG_MEMBERSHIP_FEE_MISSING', 354, '355', '2021-02-03 05:14:22', 1),
+(7, 'EMAIL', 'DDT_MSG_TRAINING', 355, '216 | 227', '2021-02-03 05:16:19', 0),
+(8, 'PM', 'DDT_MSG_NO_ACCESS_DOCUMENTS', 1, '355', '2021-02-03 05:18:18', 1);
 
 
 --
@@ -1067,15 +1067,15 @@ INSERT INTO %PREFIX%_messages (msg_id, msg_type, msg_subject, msg_usr_id_sender,
 --
 
 INSERT INTO %PREFIX%_messages_content (msc_id, msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp) VALUES
-(1, 1, 1, 1, 'DEMO_MSG_EVENTS_HOMEPAGE_CONTENT', '2021-02-03 04:58:16'),
-(2, 2, 1, 1, 'DEMO_MSG_NEW_MODULE_CONTENT', '2021-02-03 05:07:01'),
-(3, 3, 1, 1, 'DEMO_MSG_NEW_TRAINING_TIMES_CONTENT', '2021-02-03 05:08:02'),
-(4, 4, 1, 354, 'DEMO_MSG_INVITATION_MEMBERS_MEETING_CONTENT', '2021-02-03 05:11:37'),
-(5, 5, 1, 354, 'DEMO_MSG_RESERVE_ROOM_CONTENT', '2021-02-03 05:12:35'),
-(6, 6, 1, 354, 'DEMO_MSG_MEMBERSHIP_FEE_MISSING_CONTENT', '2021-02-03 05:14:22'),
-(7, 7, 1, 355, 'DEMO_MSG_TRAINING_CONTENT', '2021-02-03 05:16:19'),
-(8, 8, 1, 355, 'DEMO_MSG_NO_ACCESS_DOCUMENTS_CONTENT1', '2021-02-03 05:17:23'),
-(9, 8, 2, 1, 'DEMO_MSG_NO_ACCESS_DOCUMENTS_CONTENT2', '2021-02-03 05:18:18');
+(1, 1, 1, 1, 'DDT_MSG_EVENTS_HOMEPAGE_CONTENT', '2021-02-03 04:58:16'),
+(2, 2, 1, 1, 'DDT_MSG_NEW_MODULE_CONTENT', '2021-02-03 05:07:01'),
+(3, 3, 1, 1, 'DDT_MSG_NEW_TRAINING_TIMES_CONTENT', '2021-02-03 05:08:02'),
+(4, 4, 1, 354, 'DDT_MSG_INVITATION_MEMBERS_MEETING_CONTENT', '2021-02-03 05:11:37'),
+(5, 5, 1, 354, 'DDT_MSG_RESERVE_ROOM_CONTENT', '2021-02-03 05:12:35'),
+(6, 6, 1, 354, 'DDT_MSG_MEMBERSHIP_FEE_MISSING_CONTENT', '2021-02-03 05:14:22'),
+(7, 7, 1, 355, 'DDT_MSG_TRAINING_CONTENT', '2021-02-03 05:16:19'),
+(8, 8, 1, 355, 'DDT_MSG_NO_ACCESS_DOCUMENTS_CONTENT1', '2021-02-03 05:17:23'),
+(9, 8, 2, 1, 'DDT_MSG_NO_ACCESS_DOCUMENTS_CONTENT2', '2021-02-03 05:18:18');
 
 
 --
@@ -1093,10 +1093,10 @@ INSERT INTO %PREFIX%_registrations (reg_id, reg_org_id, reg_usr_id, reg_timestam
 --
 
 INSERT INTO %PREFIX%_photos (pho_id, pho_org_id, pho_quantity, pho_name, pho_begin, pho_end, pho_description, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
-(1, 1, 0, 'DEMO_PHO_CROATIA', '2009-10-05', '2009-10-11', 'DEMO_PHO_CROATIA_DESC', 'DEMO_PHO_STEVEN_SMITH', false, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
-(2, 1, 3, 'DEMO_PHO_PLITVICE_LAKES', '2009-10-05', '2009-10-07', NULL, 'DEMO_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
-(3, 1, 3, 'Krka', '2009-10-08', '2009-10-11', NULL, 'DEMO_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
-(4, 1, 5, 'Machu Picchu', '2009-09-14', '2009-09-17', 'DEMO_PHO_MACHU_PICCHU_DESC', 'Admin', false, NULL, 1, '2009-10-23 18:20:50', NULL, NULL);
+(1, 1, 0, 'DDT_PHO_CROATIA', '2009-10-05', '2009-10-11', 'DDT_PHO_CROATIA_DESC', 'DDT_PHO_STEVEN_SMITH', false, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
+(2, 1, 3, 'DDT_PHO_PLITVICE_LAKES', '2009-10-05', '2009-10-07', NULL, 'DDT_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
+(3, 1, 3, 'Krka', '2009-10-08', '2009-10-11', NULL, 'DDT_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
+(4, 1, 5, 'Machu Picchu', '2009-09-14', '2009-09-17', 'DDT_PHO_MACHU_PICCHU_DESC', 'Admin', false, NULL, 1, '2009-10-23 18:20:50', NULL, NULL);
 
 
 --
@@ -1104,8 +1104,8 @@ INSERT INTO %PREFIX%_photos (pho_id, pho_org_id, pho_quantity, pho_name, pho_beg
 --
 
 INSERT INTO %PREFIX%_rooms (room_id, room_name, room_description, room_capacity, room_overhang, room_usr_id_create, room_timestamp_create, room_usr_id_change, room_timestamp_change) VALUES
-(1, 'DEMO_ROOM_MEETING_ROOM', 'DEMO_ROOM_MEETING_ROOM_CONTENT', 15, NULL, 1, '2011-04-07 19:15:08', NULL, NULL),
-(2, 'DEMO_ROOM_FUNCTION_ROOM', 'DEMO_ROOM_FUNCTION_ROOM_CONTENT', 65, 15, 1, '2012-01-015 10:03:38', NULL, NULL);
+(1, 'DDT_ROOM_MEETING_ROOM', 'DDT_ROOM_MEETING_ROOM_CONTENT', 15, NULL, 1, '2011-04-07 19:15:08', NULL, NULL),
+(2, 'DDT_ROOM_FUNCTION_ROOM', 'DDT_ROOM_FUNCTION_ROOM_CONTENT', 65, 15, 1, '2012-01-015 10:03:38', NULL, NULL);
 
 --
 -- Data for table adm_sessions
@@ -2802,11 +2802,11 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1807, 353, 11, '2'),
 (1808, 353, 12, 'dina@example.com'),
 (18081, 353, 25, '9'),
-(1809, 354, 1, 'DEMO_CHAIRMAN'),
+(1809, 354, 1, 'DDT_CHAIRMAN'),
 (1810, 354, 2, 'Eric'),
 (1811, 354, 6, 'DEU'),
 (1812, 354, 11, 1),
-(1813, 354, 12, 'DEMO_CHAIRMAN@example.com'),
+(1813, 354, 12, 'DDT_CHAIRMAN@example.com'),
 (18131, 354, 22, 'Admidio'),
 (18132, 354, 25, '9'),
 (1814, 355, 1, 'Schmidt'),
