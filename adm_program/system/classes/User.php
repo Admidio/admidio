@@ -57,10 +57,6 @@ class User extends TableAccess
      */
     protected $assignRoles;
     /**
-     * @var bool If this flag is set then a user can save changes to the user if he hasn't the necessary rights
-     */
-    protected $saveChangesWithoutRights;
-    /**
      * @var array<int,bool> Array with all user ids where the current user is allowed to edit the profile.
      */
     protected $usersEditAllowed = array();
@@ -577,7 +573,6 @@ class User extends TableAccess
         // initialize rights arrays
         $this->usersEditAllowed = array();
         $this->renewRoleData();
-        $this->saveChangesWithoutRights = false;
     }
 
     /**
@@ -1711,17 +1706,6 @@ class User extends TableAccess
 
         return $returnValue;
     }
-
-    /**
-     * If this method is set then a user can save changes to the user if he hasn't the necessary rights
-     * to edit the whole profile or a special profile field of that user.
-     * @return void
-     */
-    public function saveChangesWithoutRights()
-    {
-        $this->saveChangesWithoutRights = true;
-    }
-
 
     /**
      * Set the id of the organization which should be used in this user object.

@@ -72,6 +72,11 @@ class TableAccess
      * @var array<string,array<string,mixed>> Array which stores further information (changed yes/no, field type)
      */
     protected $columnsInfos = array();
+    /**
+     * @var bool If this flag is set then some right checks will be disabled, so that the object could be saved also
+     * if the current user doesn't has the right to do this.
+     */
+    protected $saveChangesWithoutRights;
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
@@ -121,6 +126,7 @@ class TableAccess
     {
         $this->newRecord = true;
         $this->columnsValueChanged = false;
+        $this->saveChangesWithoutRights = false;
 
         if (count($this->columnsInfos) > 0) {
             // the column infos have already been read and will now only be reinitialized
@@ -547,6 +553,16 @@ class TableAccess
         $this->columnsValueChanged = false;
 
         return true;
+    }
+
+    /**
+     * If this method is set then the current user can save changes to this object if he hasn't the necessary rights.
+     * The flag must be used within the class implementation.
+     * @return void
+     */
+    public function saveChangesWithoutRights()
+    {
+        $this->saveChangesWithoutRights = true;
     }
 
     /**

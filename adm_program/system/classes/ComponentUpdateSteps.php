@@ -25,6 +25,26 @@ final class ComponentUpdateSteps
         self::$db = $database;
     }
 
+    /**
+     * This method will add a new default list for the members management module. This list will be used to configure
+     * and show the columns of the members management overview.
+     */
+    public static function updateStep41CleanUpInternalNameProfileFields()
+    {
+        $sql = 'SELECT * FROM ' . TBL_USER_FIELDS;
+        $userFieldsStatement = self::$db->queryPrepared($sql);
+
+        while ($row = $userFieldsStatement->fetch()) {
+            $userField = new TableUserField(self::$db);
+            $userField->setArray($row);
+            $userField->saveChangesWithoutRights();
+
+            $userField->setValue('usf_name_intern',
+                strtoupper(preg_replace('/[^A-Za-z0-9_]/', '',
+                    str_replace(' ', '_', $userField->getValue('usf_name_intern')))));
+            $userField->save();
+        }
+    }
 
     /**
      * This method will add a uuid to each row of the tables adm_users and adm_roles

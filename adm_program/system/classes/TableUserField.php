@@ -343,7 +343,7 @@ class TableUserField extends TableAccess
         global $gCurrentSession, $gCurrentUser;
 
         // only administrators can edit profile fields
-        if (!$gCurrentUser->isAdministrator()) {
+        if (!$gCurrentUser->isAdministrator() && !$this->saveChangesWithoutRights) {
             throw new AdmException('Profile field could not be saved because only administrators are allowed to edit profile fields.');
             // => EXIT
         }
