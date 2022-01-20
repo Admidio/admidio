@@ -68,7 +68,7 @@ if ($gSettingsManager->getInt('weblinks_redirect_seconds') > 0) {
     $page->addHtml('
     <p class="lead">'.$gL10n->get('SYS_REDIRECT_DESC', array($gCurrentOrganization->getValue('org_longname'),
         '<span id="counter">'.$gSettingsManager->getInt('weblinks_redirect_seconds').'</span>',
-        '<strong>'.SecurityUtils::encodeHTML($weblink->getValue('lnk_name')).'</strong> ('.$lnkUrl.')',
+        '<strong>'.$weblink->getValue('lnk_name').'</strong> ('.$lnkUrl.')',
         '<a href="'.$lnkUrl.'" target="_self">', '</a>')).'
     </p>');
 

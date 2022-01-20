@@ -237,7 +237,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         }
     }
 
-    // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
+    // only show fields that are enabled for registration or the user has permission to edit that field
     if ($showField) {
         // add profile fields to form
         $fieldProperty = HtmlForm::FIELD_DEFAULT;
@@ -323,7 +323,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             $form->addMultilineTextInput(
                 'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                $user->getValue($usfNameIntern),
+                $user->getValue($usfNameIntern, 'database'),
                 3,
                 array(
                     'maxLength'       => 4000,
@@ -361,7 +361,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             $form->addInput(
                 'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                $user->getValue($usfNameIntern),
+                $user->getValue($usfNameIntern, 'database'),
                 array(
                     'type'            => $fieldType,
                     'maxLength'       => $maxlength,

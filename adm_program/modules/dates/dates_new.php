@@ -233,7 +233,7 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
 $form->addInput(
     'dat_headline',
     $gL10n->get('SYS_TITLE'),
-    $date->getValue('dat_headline'),
+    $date->getValue('dat_headline', 'database'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 
@@ -242,7 +242,7 @@ if ($gSettingsManager->getBool('dates_show_map_link')) {
     $form->addInput(
         'dat_location',
         $gL10n->get('DAT_LOCATION'),
-        $date->getValue('dat_location'),
+        $date->getValue('dat_location', 'database'),
         array('maxLength' => 100, 'helpTextIdLabel' => 'DAT_LOCATION_LINK')
     );
 
@@ -259,7 +259,7 @@ if ($gSettingsManager->getBool('dates_show_map_link')) {
     $form->addInput(
         'dat_location',
         $gL10n->get('DAT_LOCATION'),
-        $date->getValue('dat_location'),
+        $date->getValue('dat_location', 'database'),
         array('maxLength' => 100)
     );
 }
@@ -305,7 +305,7 @@ $form->addSelectBoxForCategories(
     $gDb,
     'DAT',
     HtmlForm::SELECT_BOX_MODUS_EDIT,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $date->getValue('dat_cat_id'))
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $date->getValue('cat_uuid'))
 );
 $form->closeGroupBox();
 

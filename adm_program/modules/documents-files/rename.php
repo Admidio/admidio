@@ -89,7 +89,7 @@ try {
         }
 
         // read folder data to rename the folder
-        $originalName    = $targetFolder->getValue('fol_name');
+        $originalName    = $targetFolder->getValue('fol_name', 'database');
         $createUserId    = (int) $targetFolder->getValue('fol_usr_id');
         $createTimestamp = $targetFolder->getValue('fol_timestamp');
 
@@ -98,7 +98,7 @@ try {
         }
 
         if ($formValues['new_description'] == null) {
-            $formValues['new_description'] = $targetFolder->getValue('fol_description');
+            $formValues['new_description'] = $targetFolder->getValue('fol_description', 'database');
         }
     }
 } catch (AdmException $e) {

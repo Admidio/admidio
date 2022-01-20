@@ -146,12 +146,11 @@ if ($announcementsCount === 0) {
         $announcement->setArray($row);
 
         $annUuid = $announcement->getValue('ann_uuid');
-        $annHeadline = SecurityUtils::encodeHTML($announcement->getValue('ann_headline'));
 
         $page->addHtml('
         <div class="card admidio-blog" id="ann_'.$annUuid.'">
             <div class="card-header">
-                <i class="fas fa-newspaper"></i>' . $annHeadline);
+                <i class="fas fa-newspaper"></i>' . $announcement->getValue('ann_headline'));
 
         // check if the user could edit this announcement
         if ($announcement->isEditable()) {
@@ -187,7 +186,7 @@ if ($announcementsCount === 0) {
                 ) .
                 '<div class="admidio-info-category">' .
                     $gL10n->get('SYS_CATEGORY') .
-                    '&nbsp;<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_id' => (int) $announcement->getValue('ann_cat_id'))).'">' . SecurityUtils::encodeHTML($announcement->getValue('cat_name')).'</a>
+                    '&nbsp;<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_id' => (int) $announcement->getValue('ann_cat_id'))).'">' . $announcement->getValue('cat_name').'</a>
                 </div>
             </div>
         </div>');
