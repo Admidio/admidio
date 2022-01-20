@@ -34,7 +34,6 @@ return array(
     'HtmlPageInstallation' => $baseDir . '/adm_program/system/classes/HtmlPageInstallation.php',
     'HtmlTable' => $baseDir . '/adm_program/system/classes/HtmlTable.php',
     'HtmlTableBasic' => $baseDir . '/adm_program/system/classes/HtmlTableBasic.php',
-    'Htmlawed' => $vendorDir . '/vanilla/htmlawed/src/Htmlawed.php',
     'Image' => $baseDir . '/adm_program/system/classes/Image.php',
     'Language' => $baseDir . '/adm_program/system/classes/Language.php',
     'LanguageData' => $baseDir . '/adm_program/system/classes/LanguageData.php',

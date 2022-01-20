@@ -398,7 +398,13 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
         case 'html':
             // check html string vor invalid tags and scripts
-            $value = Htmlawed::filter(stripslashes($value), array('safe' => 1));
+            $config = HTMLPurifier_Config::createDefault();
+            $config->set('Core', 'Encoding', 'UTF-8');
+            $config->set('HTML', 'Doctype', 'HTML 4.01 Transitional');
+            $config->set('Cache', 'DefinitionImpl', null);
+
+            $filter = new HTMLPurifier($config);
+            $value = $filter->purify($value);
             break;
 
         case 'url':
@@ -408,7 +414,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             break;
     }
 
-    // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben
+    // if no error was detected, then return the contents of the variable
     if ($errorMessage === '') {
         return $value;
     }

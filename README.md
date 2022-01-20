@@ -143,7 +143,7 @@ and sharing great software.
 - [Cookie Consent](https://cookieconsent.insites.com/): The most popular solution to the EU cookie law
 - [Datatables](https://www.datatables.net/): Table plugin for jQuery
 - [Font Awesome](https://fontawesome.com/): Vector icons and social logos
-- [htmLawed](https://github.com/vanilla/htmlawed/): PHP code to purify & filter HTML
+- [HTML Purifier](http://htmlpurifier.org/): PHP code to purify & filter HTML
 - [James Heinrich](http://www.silisoftware.com/): backupDB
 - [jQuery](https://jquery.com/): JavaScript-Library
 - [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin

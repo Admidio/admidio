@@ -1,7 +1,7 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '4.1.0',
-        'version' => '4.1.0.0',
+        'pretty_version' => '4.1.3',
+        'version' => '4.1.3.0',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../../../',
         'aliases' => array(),
@@ -11,8 +11,8 @@
     ),
     'versions' => array(
         'admidio/admidio' => array(
-            'pretty_version' => '4.1.0',
-            'version' => '4.1.0.0',
+            'pretty_version' => '4.1.3',
+            'version' => '4.1.3.0',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../../../',
             'aliases' => array(),
@@ -203,12 +203,12 @@
             ),
         ),
         'smarty/smarty' => array(
-            'pretty_version' => 'v3.1.43',
-            'version' => '3.1.43.0',
+            'pretty_version' => 'v3.1.44',
+            'version' => '3.1.44.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../smarty/smarty',
             'aliases' => array(),
-            'reference' => '273f7e00fec034f6d61112552e9caf08d19565b7',
+            'reference' => '99085d8dc65eeb5e55ae3cba74d3dc6b3bb0205e',
             'dev_requirement' => false,
         ),
         'symfony/polyfill-ctype' => array(
@@ -245,15 +245,6 @@
             'install_path' => __DIR__ . '/../tecnickcom/tcpdf',
             'aliases' => array(),
             'reference' => '42cd0f9786af7e5db4fcedaa66f717b0d0032320',
-            'dev_requirement' => false,
-        ),
-        'vanilla/htmlawed' => array(
-            'pretty_version' => 'v2.2.5',
-            'version' => '2.2.5.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../vanilla/htmlawed',
-            'aliases' => array(),
-            'reference' => 'b1fc7b3990796112387c08a132f85b7333022ec2',
             'dev_requirement' => false,
         ),
     ),
