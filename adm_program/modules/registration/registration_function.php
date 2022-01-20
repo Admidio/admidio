@@ -91,7 +91,7 @@ if ($getMode === 1 || $getMode === 2) {
         try {
             // Send mail to the user to confirm the registration or the assignment to the new organization
             $systemMail = new SystemMail($gDb);
-            $systemMail->addRecipientsByUserId($getUserId);
+            $systemMail->addRecipientsByUserId($user->getValue('usr_id'));
             $systemMail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user);
 
             $gMessage->show($gL10n->get('SYS_ASSIGN_LOGIN_EMAIL', array($user->getValue('EMAIL'))));
