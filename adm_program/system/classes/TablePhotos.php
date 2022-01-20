@@ -179,8 +179,6 @@ class TablePhotos extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        global $gL10n;
-
         if ($columnName === 'pho_description' && $format === 'html') {
             $value = nl2br(parent::getValue($columnName));
         } else {
