@@ -27,9 +27,6 @@ if (!$gCurrentUser->isAdministrator()) {
     // => EXIT
 }
 
-// add current url to navigation stack
-$gNavigation->addUrl(CURRENT_URL, $headline);
-
 // Create room object
 $room = new TableRooms($gDb);
 
@@ -40,6 +37,9 @@ if ($getRoomUuid !== '') {
 } else {
     $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
 }
+
+// add current url to navigation stack
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 if (isset($_SESSION['rooms_request'])) {
     // due to incorrect input the user has returned to this form
@@ -57,7 +57,7 @@ $form->openGroupBox('gb_name_properties', $gL10n->get('SYS_NAME').' &amp; '.$gL1
 $form->addInput(
     'room_name',
     $gL10n->get('SYS_ROOM'),
-    $room->getValue('room_name'),
+    $room->getValue('room_name', 'database'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(

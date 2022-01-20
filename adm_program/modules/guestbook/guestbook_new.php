@@ -53,15 +53,15 @@ if ($getGboUuid !== '') {
 
     $guestbook->readDataByUuid($getGboUuid);
 
-    // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
+    // Check if the entry belongs to the current organization
     if ((int) $guestbook->getValue('gbo_org_id') !== $gCurrentOrgId) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 }
 
-// Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
-// Name, Emailadresse und Homepage vorbelegt werden...
+// If no ID was passed, but the user is logged in, at least the following can be done
+// name, email address and homepage can be preset...
 if ($getGboUuid === '' && $gValidLogin) {
     $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
     $guestbook->setValue('gbo_email', $gCurrentUser->getValue('EMAIL'));
@@ -69,8 +69,7 @@ if ($getGboUuid === '' && $gValidLogin) {
 }
 
 if (isset($_SESSION['guestbook_entry_request'])) {
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    // due to a wrong input the user has returned to this form, now write the previously entered content into the object
     $guestbook->setArray($_SESSION['guestbook_entry_request']);
     unset($_SESSION['guestbook_entry_request']);
 }
@@ -113,14 +112,14 @@ if ($gCurrentUserId > 0) {
     $form->addInput(
         'gbo_name',
         $gL10n->get('SYS_NAME'),
-        $guestbook->getValue('gbo_name'),
+        $guestbook->getValue('gbo_name', 'database'),
         array('maxLength' => 60, 'property' => HtmlForm::FIELD_DISABLED)
     );
 } else {
     $form->addInput(
         'gbo_name',
         $gL10n->get('SYS_NAME'),
-        $guestbook->getValue('gbo_name'),
+        $guestbook->getValue('gbo_name', 'database'),
         array('maxLength' => 60, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 }
