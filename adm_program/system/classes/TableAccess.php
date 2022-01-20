@@ -627,7 +627,11 @@ class TableAccess
                     }
                 }
                 $this->columnsInfos[$columnName]['changed'] = false;
-                $this->columnsInfos[$columnName]['type'] = $property['type'];
+                if(strpos($property['type'], '(') > 0) {
+                    $this->columnsInfos[$columnName]['type'] = substr($property['type'], 0, strpos($property['type'], '('));
+                } else {
+                    $this->columnsInfos[$columnName]['type'] = $property['type'];
+                }
                 $this->columnsInfos[$columnName]['null'] = $property['null'];
                 $this->columnsInfos[$columnName]['key'] = $property['key'];
                 $this->columnsInfos[$columnName]['serial'] = $property['serial'];
