@@ -61,7 +61,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 --
 
 INSERT INTO %PREFIX%_users (usr_id, usr_uuid, usr_login_name, usr_password, usr_photo, usr_text, usr_last_login, usr_actual_login, usr_number_login, usr_date_invalid, usr_number_invalid, usr_usr_id_create, usr_timestamp_create, usr_usr_id_change, usr_timestamp_change, usr_valid) VALUES
-(1  , '7a854ed2-50db-49ee-9379-31d07f467d47', 'admin', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, '2009-02-27 21:52:41', '2009-02-27 22:31:17', 26, NULL, 0, 2, '2008-05-03 09:43:02', 354, '2009-02-24 09:43:02', true),
+(1  , '7a854ed2-50db-49ee-9379-31d07f467d47', 'admin', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, '2009-02-27 21:52:41', '2009-02-27 22:31:17', 26, NULL, 0, 2, '2008-05-03 09:43:02', 354, '2009-02-24 09:43:02', true),
 (2  , '5b84e9c8-b9b9-44d1-acf2-29fbb1015d01', 'System', NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, '2008-05-03 09:40:43', NULL, NULL, false),
 (202, '93ce816e-7cfd-45e1-b025-a3644828c47c', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:44:59', 1, '2009-02-14 15:24:39', true),
 (203, 'f4361cf5-0b58-4602-b6f9-9ce4535b111f', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:44:59', 1, '2009-02-14 15:24:39', true),
@@ -215,8 +215,8 @@ INSERT INTO %PREFIX%_users (usr_id, usr_uuid, usr_login_name, usr_password, usr_
 (351, '56920e00-761c-495a-b43d-082eda94a145', 'Demo', '5c4896c0c3fefb8ef0b326e436790906', NULL, NULL, '2008-05-12 20:29:15', '2009-02-27 22:34:06', 2, NULL, 0, 351, '2008-05-12 20:29:33', 354, '2011-02-03 14:19:13', true),
 (352, '4cae66ed-6c2f-4eac-be07-2635ddc1ceda', 'Mustermann01', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 23:31:26', NULL, NULL, false),
 (353, '386e8531-deb7-40ed-a06b-df4366d9bba6', 'Dina', 'c33367701511b4f6020ec61ded352059', NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 23:33:38', NULL, NULL, false),
-(354, '006bd130-34d4-4b86-9e82-b1464ad60a0b', 'DDT_CHAIRMAN', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', true),
-(355, '97f8346c-ca53-40de-857a-459d26d9df40', 'SYS_MEMBER', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', true),
+(354, '006bd130-34d4-4b86-9e82-b1464ad60a0b', 'DDT_CHAIRMAN', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', true),
+(355, '97f8346c-ca53-40de-857a-459d26d9df40', 'SYS_MEMBER', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', true),
 (356, '232a5ee7-4ed9-41de-b081-0b5090b00462', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
 (357, 'd1ba8d2b-ad8f-43bc-a22d-cbd71eed09a4', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true);
 

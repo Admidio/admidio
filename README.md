@@ -150,7 +150,6 @@ and sharing great software.
 - [Lightbox](https://ashleydw.github.io/lightbox/): Lightbox for Bootstrap
 - [Monolog](https://github.com/Seldaek/monolog/): Logging for PHP
 - [NobleCount](https://tpgblog.com/NobleCount/): NobleCount… for a more ‘proper’ count of the characters remaining.
-- [phpass](https://github.com/hautelook/phpass/): Portable PHP password hashing framework
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP
 - [PHPSpreadsheet](https://phpspreadsheet.readthedocs.io): PhpSpreadsheet offers a set of classes that allow you to read and write various spreadsheet file formats.
 - [PSR Log](https://github.com/php-fig/log): An interface that describes a logger.

@@ -135,10 +135,6 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
     public static $prefixesPsr0 = array (
         'H' => 
         array (
-            'Hautelook' => 
-            array (
-                0 => __DIR__ . '/..' . '/hautelook/phpass/src',
-            ),
             'HTMLPurifier' => 
             array (
                 0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',

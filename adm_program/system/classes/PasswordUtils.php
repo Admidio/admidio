@@ -7,11 +7,8 @@
  ***********************************************************************************************
  */
 
-use Hautelook\Phpass\PasswordHash;
-
 /**
  * This class provides static functions for different tasks for passwords and hashing
- * It used the "phpass" lib to provide backward compatibility to the old password hashing way
  *
  * Functions:
  * hash()               hash the given password with the given options
@@ -275,9 +272,6 @@ final class PasswordUtils
         } elseif (str_starts_with($hash, self::HASH_INDICATOR_SHA512)) {
             $passwordHash = crypt($password, $hash);
             return hash_equals($passwordHash, $hash);
-        } elseif (str_starts_with($hash, self::HASH_INDICATOR_PORTABLE)) {
-            $passwordHasher = new PasswordHash(9, true);
-            return $passwordHasher->CheckPassword($password, $hash);
         }
         // MD5 Hashes are 32 chars long and consists out of HEX values (digits and a-f)
         elseif (preg_match('/^[\dA-Fa-f]{32}$/', $hash)) {

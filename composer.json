@@ -20,7 +20,6 @@
         "bjeavons/zxcvbn-php": "^1.2.0",
         "dapphp/securimage": "^3.6",
         "ezyang/htmlpurifier": "^4.14",
-        "hautelook/phpass": "^1.0",
         "monolog/monolog": "^2.0",
         "phpmailer/phpmailer": "^6.4",
         "phpoffice/phpspreadsheet": "^1.18",

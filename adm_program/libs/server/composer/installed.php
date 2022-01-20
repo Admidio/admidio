@@ -55,15 +55,6 @@
             'reference' => '12ab42bd6e742c70c0a52f7b82477fcd44e64b75',
             'dev_requirement' => false,
         ),
-        'hautelook/phpass' => array(
-            'pretty_version' => '1.1.0',
-            'version' => '1.1.0.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../hautelook/phpass',
-            'aliases' => array(),
-            'reference' => 'b2daca28508000d1dd126e93ec472d771626a774',
-            'dev_requirement' => false,
-        ),
         'maennchen/zipstream-php' => array(
             'pretty_version' => '2.1.0',
             'version' => '2.1.0.0',
