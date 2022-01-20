@@ -276,7 +276,7 @@
   <string name="ORG_DIFFERENT_DATABASE_VERSION">Abweichende Datenbankversion</string>
   <string name="ORG_EDIT_PROFILE_FIELD">Profilfeld bearbeiten</string>
   <string name="ORG_EMAIL_ALERTS">E-Mail-Benachrichtigung</string>
-  <string name="ORG_EMAIL_ALERTS_DESC">Mitglieder aller Rollen mit der Berechtigung #VAR1_BOLD# erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat. (Voreinstellung: ja)</string>
+  <string name="ORG_EMAIL_ALERTS_DESC">Mitglieder aller Rollen mit der Berechtigung #VAR1_BOLD# erhalten eine E-Mail, sobald sich eine neue Benutzerin oder ein neuer Benutzer am System registriert hat. (Voreinstellung: ja)</string>
   <string name="ORG_ENABLE_CAPTCHA">Captcha aktivieren</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Registrierung aktivieren</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Die Registrierung durch Besucher:innen der Homepage kann über diese Einstellung aktiviert oder deaktiviert werden. Welche Profilfelder bei der Registrierung angezeigt werden, kann in den Profilfeld-Einstellungen je Feld konfiguriert werden. (Voreinstellung: ja)</string>
