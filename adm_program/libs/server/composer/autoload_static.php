@@ -175,7 +175,6 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'HtmlPageInstallation' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlPageInstallation.php',
         'HtmlTable' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlTable.php',
         'HtmlTableBasic' => __DIR__ . '/../../../..' . '/adm_program/system/classes/HtmlTableBasic.php',
-        'Htmlawed' => __DIR__ . '/..' . '/vanilla/htmlawed/src/Htmlawed.php',
         'Image' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Image.php',
         'Language' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Language.php',
         'LanguageData' => __DIR__ . '/../../../..' . '/adm_program/system/classes/LanguageData.php',

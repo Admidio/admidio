@@ -1281,17 +1281,17 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v3.1.43",
-            "version_normalized": "3.1.43.0",
+            "version": "v3.1.44",
+            "version_normalized": "3.1.44.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smarty-php/smarty.git",
-                "reference": "273f7e00fec034f6d61112552e9caf08d19565b7"
+                "reference": "99085d8dc65eeb5e55ae3cba74d3dc6b3bb0205e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/273f7e00fec034f6d61112552e9caf08d19565b7",
-                "reference": "273f7e00fec034f6d61112552e9caf08d19565b7",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/99085d8dc65eeb5e55ae3cba74d3dc6b3bb0205e",
+                "reference": "99085d8dc65eeb5e55ae3cba74d3dc6b3bb0205e",
                 "shasum": ""
             },
             "require": {
@@ -1301,7 +1301,7 @@
                 "phpunit/phpunit": "^7.5 || ^6.5 || ^5.7 || ^4.8",
                 "smarty/smarty-lexer": "^3.1"
             },
-            "time": "2022-01-10T09:52:40+00:00",
+            "time": "2022-01-17T23:12:04+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1341,7 +1341,7 @@
                 "forum": "http://www.smarty.net/forums/",
                 "irc": "irc://irc.freenode.org/smarty",
                 "issues": "https://github.com/smarty-php/smarty/issues",
-                "source": "https://github.com/smarty-php/smarty/tree/v3.1.43"
+                "source": "https://github.com/smarty-php/smarty/tree/v3.1.44"
             },
             "install-path": "../smarty/smarty"
         },
@@ -1676,52 +1676,6 @@
                 }
             ],
             "install-path": "../tecnickcom/tcpdf"
-        },
-        {
-            "name": "vanilla/htmlawed",
-            "version": "v2.2.5",
-            "version_normalized": "2.2.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/vanilla/htmlawed.git",
-                "reference": "b1fc7b3990796112387c08a132f85b7333022ec2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/vanilla/htmlawed/zipball/b1fc7b3990796112387c08a132f85b7333022ec2",
-                "reference": "b1fc7b3990796112387c08a132f85b7333022ec2",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "tburry/pquery": "~1.0.1"
-            },
-            "time": "2019-10-16T15:36:02+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "classmap": [
-                    "src/Htmlawed.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Todd Burry",
-                    "email": "todd@vanillaforums.com"
-                }
-            ],
-            "description": "A composer wrapper for the htmLawed library to purify & filter HTML. Tested with PHPUnit and PhantomJS!",
-            "support": {
-                "issues": "https://github.com/vanilla/htmlawed/issues",
-                "source": "https://github.com/vanilla/htmlawed/tree/master"
-            },
-            "install-path": "../vanilla/htmlawed"
         }
     ],
     "dev": true,
