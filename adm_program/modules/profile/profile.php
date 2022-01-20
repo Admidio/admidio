@@ -313,9 +313,9 @@ $page->addHtml('
                 $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $gL10n->get('SYS_NOT_REGISTERED'));
             }
 
-            $bAddressOutput = false;    // Merker, ob die Adresse schon angezeigt wurde
+            $bAddressOutput = false;    // Flag whether the address has already been displayed
 
-            // Schleife ueber alle Felder der Stammdaten
+            // Loop over all fields of the master data
 
             foreach ($gProfileFields->getProfileFields() as $field) {
                 // Display only fields of the basic data
@@ -489,7 +489,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
     // Authorizations block
     // *******************************************************************************
 
-    // Array mit allen Berechtigungen
+    // Array with all permissions
     $rolesRights = array(
         'rol_all_lists_view',
         'rol_announcements',
@@ -654,7 +654,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
     </div>');
 
     // *******************************************************************************
-    // Roles block
+    // Current roles assignments
     // *******************************************************************************
 
     // List all roles assigned to the member
@@ -677,7 +677,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
     </div>');
 
     // *******************************************************************************
-    // block with future memberships
+    // Future memberships assignments
     // *******************************************************************************
 
     $roleStatement  = getFutureRolesFromDatabase($userId);
@@ -701,10 +701,10 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
 
 if ($gSettingsManager->getBool('profile_show_former_roles')) {
     // *******************************************************************************
-    // Ehemalige Rollen Block
+    // Former roles assignments
     // *******************************************************************************
 
-    // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
+    // List all roles that were assigned to the member
 
     $roleStatement  = getFormerRolesFromDatabase($userId);
     $countRole      = $roleStatement->rowCount();

@@ -78,7 +78,7 @@ if ($getMsgUuid !== '') {
         $messageStatement = $message->getConversation($message->getValue('msg_id'));
     }
 
-    $getSubject = $message->getValue('msg_subject');
+    $getSubject = $message->getValue('msg_subject', 'database');
     $user = new User($gDb, $gProfileFields, $message->getConversationPartner());
     $getUserUuid = $user->getValue('usr_uuid');
 } elseif ($getUserUuid !== '') {
@@ -155,7 +155,7 @@ if ($getUserUuid !== '') {
 }
 
 if ($getSubject !== '') {
-    $headline = $gL10n->get('SYS_SUBJECT').': '.$getSubject;
+    $headline = $gL10n->get('SYS_SUBJECT').': '.SecurityUtils::encodeHTML($getSubject);
 } else {
     $headline = $gL10n->get('SYS_SEND_EMAIL');
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
@@ -226,7 +226,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         $form->addInput(
             'msg_subject',
             $gL10n->get('SYS_SUBJECT'),
-            $message->getValue('msg_subject'),
+            $message->getValue('msg_subject', 'database'),
             array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
         );
     } else {
@@ -529,7 +529,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
     $form->addInput(
         'msg_subject',
         $gL10n->get('SYS_SUBJECT'),
-        $message->getValue('msg_subject'),
+        $message->getValue('msg_subject', 'database'),
         array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 

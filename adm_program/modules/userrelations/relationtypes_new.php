@@ -49,19 +49,19 @@ $form->openGroupBox('gb_user_relationship', $gL10n->get('SYS_USER_RELATION'));
 $form->addInput(
     'urt_name',
     $gL10n->get('SYS_NAME'),
-    $relationType1->getValue('urt_name'),
+    $relationType1->getValue('urt_name', 'database'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
     'urt_name_male',
     $gL10n->get('SYS_MALE'),
-    ($relationType1->getValue('urt_name_male') !== $relationType1->getValue('urt_name')) ? $relationType1->getValue('urt_name_male') : '',
+    ($relationType1->getValue('urt_name_male') !== $relationType1->getValue('urt_name')) ? $relationType1->getValue('urt_name_male', 'database') : '',
     array('maxLength' => 100)
 );
 $form->addInput(
     'urt_name_female',
     $gL10n->get('SYS_FEMALE'),
-    ($relationType1->getValue('urt_name_female') !== $relationType1->getValue('urt_name')) ? $relationType1->getValue('urt_name_female') : '',
+    ($relationType1->getValue('urt_name_female') !== $relationType1->getValue('urt_name')) ? $relationType1->getValue('urt_name_female', 'database') : '',
     array('maxLength' => 100)
 );
 $form->addCheckbox(
@@ -130,19 +130,19 @@ $page->addJavascript(
 $form->addInput(
     'urt_name_inverse',
     $gL10n->get('SYS_NAME'),
-    $relationType2->getValue('urt_name'),
+    $relationType2->getValue('urt_name', 'database'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
     'urt_name_male_inverse',
     $gL10n->get('SYS_MALE'),
-    ($relationType2->getValue('urt_name_male') !== $relationType2->getValue('urt_name')) ? $relationType2->getValue('urt_name_male') : '',
+    ($relationType2->getValue('urt_name_male') !== $relationType2->getValue('urt_name')) ? $relationType2->getValue('urt_name_male', 'database') : '',
     array('maxLength' => 100)
 );
 $form->addInput(
     'urt_name_female_inverse',
     $gL10n->get('SYS_FEMALE'),
-    ($relationType2->getValue('urt_name_female') !== $relationType2->getValue('urt_name')) ? $relationType2->getValue('urt_name_female') : '',
+    ($relationType2->getValue('urt_name_female') !== $relationType2->getValue('urt_name')) ? $relationType2->getValue('urt_name_female', 'database') : '',
     array('maxLength' => 100)
 );
 $form->addCheckbox(

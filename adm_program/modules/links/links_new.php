@@ -71,7 +71,7 @@ $form = new HtmlForm('weblinks_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.
 $form->addInput(
     'lnk_name',
     $gL10n->get('SYS_LINK_NAME'),
-    SecurityUtils::encodeHTML($link->getValue('lnk_name')),
+    $link->getValue('lnk_name', 'database'),
     array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
@@ -86,7 +86,7 @@ $form->addSelectBoxForCategories(
     $gDb,
     'LNK',
     HtmlForm::SELECT_BOX_MODUS_EDIT,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $link->getValue('lnk_cat_id'))
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $link->getValue('cat_uuid'))
 );
 $form->addEditor(
     'lnk_description',

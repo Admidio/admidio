@@ -79,7 +79,7 @@ $form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO
 $form->addInput(
     'ann_headline',
     $gL10n->get('SYS_TITLE'),
-    SecurityUtils::encodeHTML($announcement->getValue('ann_headline')),
+    $announcement->getValue('ann_headline', 'database'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addSelectBoxForCategories(
@@ -88,7 +88,7 @@ $form->addSelectBoxForCategories(
     $gDb,
     'ANN',
     HtmlForm::SELECT_BOX_MODUS_EDIT,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $announcement->getValue('ann_cat_id'))
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $announcement->getValue('cat_uuid'))
 );
 $form->addEditor(
     'ann_description',
