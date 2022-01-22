@@ -302,11 +302,11 @@ final class ComponentUpdateSteps
             $userManagementList->setValue('lst_name', $gL10n->get('SYS_MEMBERS'));
             $userManagementList->setValue('lst_org_id', (int) $organization['org_id']);
             $userManagementList->setValue('lst_global', 1);
-            $userManagementList->addColumn((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-            $userManagementList->addColumn((int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+            $userManagementList->addColumn((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0,'ASC');
+            $userManagementList->addColumn((int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
             $userManagementList->addColumn('usr_login_name');
-            $userManagementList->addColumn((int) $gProfileFields->getProperty('GENDER', 'usf_id'));
-            $userManagementList->addColumn((int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+            $userManagementList->addColumn((int) $gProfileFields->getProperty('GENDER',  'usf_id'));
+            $userManagementList->addColumn((int) $gProfileFields->getProperty('BIRTHDAY',  'usf_id'));
             $userManagementList->addColumn((int) $gProfileFields->getProperty('CITY', 'usf_id'));
             $userManagementList->save();
 
