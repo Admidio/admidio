@@ -26,6 +26,15 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method only execute an sql statement but because of the use of & it could not done in our XML structure
+     */
+    public static function updateStep41CleanUpRoleNames()
+    {
+        $sql = 'UPDATE ' . TBL_ROLES . ' SET rol_name = REPLACE(rol_name, \'&nbsp;&nbsp;\', \' \') ';
+        self::$db->queryPrepared($sql);
+    }
+
+    /**
      * This method will add a new default list for the members management module. This list will be used to configure
      * and show the columns of the members management overview.
      */
