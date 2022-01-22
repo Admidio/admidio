@@ -218,7 +218,7 @@ if ($gCurrentUser->isAdministrator() || $getNewUser > 0) {
     // Only administrators could change loginname or within a new registration
     if ($_POST['usr_login_name'] !== $user->getValue('usr_login_name')) {
         if (strlen($_POST['usr_login_name']) > 0) {
-            // pruefen, ob der Benutzername bereits vergeben ist
+            // check if the username is already assigned
             $sql = 'SELECT usr_uuid
                       FROM '.TBL_USERS.'
                      WHERE usr_login_name = ?';
@@ -237,7 +237,7 @@ if ($gCurrentUser->isAdministrator() || $getNewUser > 0) {
     }
 }
 
-// falls Registrierung, dann die entsprechenden Felder noch besetzen
+// if registration, then still fill the corresponding fields
 if ($getNewUser === 2) {
     $user->setPassword($_POST['usr_password']);
 
@@ -269,7 +269,7 @@ try {
 
 $gDb->endTransaction();
 
-// wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
+// if data of the logged in user is changed, then update session variables
 if ((int) $user->getValue('usr_id') === $gCurrentUserId) {
     $gCurrentUser = $user;
 }
@@ -278,7 +278,7 @@ unset($_SESSION['profile_request']);
 $gNavigation->deleteLastUrl();
 
 // ------------------------------------------------------------
-// je nach Aufrufmodus auf die richtige Seite weiterleiten
+// redirect to the correct page depending on the call mode
 // ------------------------------------------------------------
 
 if ($getNewUser === 1 || $getNewUser === 3) {
@@ -304,7 +304,7 @@ if ($getNewUser === 1 || $getNewUser === 3) {
     // if current user has the right to assign roles then show roles dialog
     // otherwise go to previous url (default roles are assigned automatically)
     if ($gCurrentUser->assignRoles()) {
-        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid, 'new_user' => $getNewUser)));
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $user->getValue('usr_uuid'), 'new_user' => $getNewUser)));
     // => EXIT
     } else {
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
