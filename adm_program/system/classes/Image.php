@@ -152,38 +152,39 @@ class Image
     {
         global $gLogger;
 
-        if (self::isFontAwesomeIcon($icon)) {
-            if (str_starts_with($icon, 'fa-')) {
-                $icon = 'fas ' . $icon;
-            }
-
-            if ($text !== '') {
-                return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw" data-toggle="tooltip" title="' . $text . '"></i>';
-            } else {
-                return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw"></i>';
-            }
-        }
-
-        if (self::isImageFilename($icon)) {
-            // A full URL of an icon
-            if (StringUtils::strStartsWith($icon, 'http', false) && filter_var($icon, FILTER_VALIDATE_URL) !== false) {
-                return '<img class="admidio-icon-info ' . $cssClass . '" src="' . $icon . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
-            }
-
-            try {
-                // Only a filename -> look into theme icon folder
-                if (StringUtils::strIsValidFileName($icon)) {
-                    $iconPath = THEME_URL . '/images/' . $icon;
-
-                    return '<img class="admidio-icon-info' . $cssClass . '" src="' . $iconPath . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
+        if($icon !== '') {
+            if (self::isFontAwesomeIcon($icon)) {
+                if (str_starts_with($icon, 'fa-')) {
+                    $icon = 'fas ' . $icon;
                 }
-            } catch (AdmException $e) {
-                // Do nothing here
+
+                if ($text !== '') {
+                    return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw" data-toggle="tooltip" title="' . $text . '"></i>';
+                } else {
+                    return '<i class="' . $icon . ' ' . $cssClass . ' fa-fw"></i>';
+                }
             }
+
+            if (self::isImageFilename($icon)) {
+                // A full URL of an icon
+                if (StringUtils::strStartsWith($icon, 'http', false) && filter_var($icon, FILTER_VALIDATE_URL) !== false) {
+                    return '<img class="admidio-icon-info ' . $cssClass . '" src="' . $icon . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
+                }
+
+                try {
+                    // Only a filename -> look into theme icon folder
+                    if (StringUtils::strIsValidFileName($icon)) {
+                        $iconPath = THEME_URL . '/images/' . $icon;
+
+                        return '<img class="admidio-icon-info' . $cssClass . '" src="' . $iconPath . '" data-toggle="tooltip" title="' . $text . '" alt="' . $text . '" />';
+                    }
+                } catch (AdmException $e) {
+                    // Do nothing here
+                }
+            }
+
+            $gLogger->warning('Invalid image/icon name!', array('icon' => $icon, 'text' => $text));
         }
-
-        $gLogger->warning('Invalid image/icon name!', array('icon' => $icon, 'text' => $text));
-
         return '';
     }
 
