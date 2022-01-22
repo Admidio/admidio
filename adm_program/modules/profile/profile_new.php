@@ -334,6 +334,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             );
         } else {
             $fieldType = 'text';
+            $format    = '';
 
             if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DATE') {
                 if ($usfNameIntern === 'BIRTHDAY') {
@@ -354,14 +355,16 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 $maxlength = array(0, 9999999999, 1);
             } elseif ($gProfileFields->getProperty($usfNameIntern, 'cat_name_intern') === 'SOCIAL_NETWORKS') {
                 $maxlength = '255';
+                $format = 'database';
             } else {
                 $maxlength = '100';
+                $format = 'database';
             }
 
             $form->addInput(
                 'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                $user->getValue($usfNameIntern, 'database'),
+                $user->getValue($usfNameIntern, $format),
                 array(
                     'type'            => $fieldType,
                     'maxLength'       => $maxlength,
