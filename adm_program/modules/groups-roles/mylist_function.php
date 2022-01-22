@@ -68,7 +68,7 @@ if ($getMode !== 2) {
 }
 
 // save list
-if ($getMode === 1 || $getMode === 2) {
+if (in_array($getMode, array(1, 2), true)) {
     try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
@@ -93,7 +93,7 @@ if ($getMode === 1 || $getMode === 2) {
     }
 
     // set list global only in save mode
-    if ($getMode === 1 && $gCurrentUser->isAdministrator()) {
+    if (in_array($getMode, array(1, 2), true) && $gCurrentUser->isAdministrator()) {
         $list->setValue('lst_global', $globalConfiguration);
     } else {
         $list->setValue('lst_global', 0);
