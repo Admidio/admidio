@@ -443,7 +443,7 @@ $javascriptCode .= '
 
         switch (mode) {
             case "show":
-                myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('list_uuid' => $getListUuid, 'mode' => 2)).'";
+                myListConfigForm.action = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist_function.php', array('mode' => 2)).'";
                 myListConfigForm.submit();
                 break;
 

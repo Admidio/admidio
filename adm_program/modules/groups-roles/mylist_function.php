@@ -11,7 +11,7 @@
  *
  * list_uuid : UUID of the list configuration that should be edited
  * mode      : 1 - Save list configuration
- *             2 - Save list configuration and show list
+ *             2 - Save temporary list configuration and show list
  *             3 - Delete list configuration
  * name      : (optional) Name of the list that should be used to save list
  ***********************************************************************************************
@@ -52,7 +52,9 @@ if (!isset($_POST['sel_relationtype_ids'])) {
 }
 
 $list = new ListConfiguration($gDb);
-$list->readDataByUuid($getListUuid);
+if($getListUuid !== '') {
+    $list->readDataByUuid($getListUuid);
+}
 
 // check if user has the rights to edit this list
 if ($getMode !== 2) {
@@ -93,7 +95,7 @@ if (in_array($getMode, array(1, 2), true)) {
     }
 
     // set list global only in save mode
-    if (in_array($getMode, array(1, 2), true) && $gCurrentUser->isAdministrator()) {
+    if ($getMode === 1 && $gCurrentUser->isAdministrator()) {
         $list->setValue('lst_global', $globalConfiguration);
     } else {
         $list->setValue('lst_global', 0);
