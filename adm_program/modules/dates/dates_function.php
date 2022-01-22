@@ -420,8 +420,8 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
             $role->setValue('rol_max_members', (int) $_POST['dat_max_members']);
         }
 
-        $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
-        $role->setValue('rol_description', substr($date->getValue('dat_description'), 0, 3999));
+        $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline', 'database'));
+        $role->setValue('rol_description', substr($date->getValue('dat_description', 'database'), 0, 3999));
 
         $role->save();
 
