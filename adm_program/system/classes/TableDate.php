@@ -143,7 +143,7 @@ class TableDate extends TableAccess
     {
         global $gSettingsManager;
 
-        $beginDate = $this->getValue('dat_begin', $gSettingsManager->getString('system_date')). '&nbsp;&nbsp;';
+        $beginDate = $this->getValue('dat_begin', $gSettingsManager->getString('system_date')). ' ';
         $endDate   = '';
 
         if ($this->getValue('dat_all_day') != 1) {
