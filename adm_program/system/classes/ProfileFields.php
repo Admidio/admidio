@@ -222,8 +222,10 @@ class ProfileFields
 
                     foreach ($arrListValues as $index => $listValue) {
                         // if value is imagefile or imageurl then show image
-                        if ($usfType === 'RADIO_BUTTON' && (Image::isFontAwesomeIcon($listValue)
-                        || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false))) { // TODO: simplify check for images
+                        if ($usfType === 'RADIO_BUTTON'
+                            && (Image::isFontAwesomeIcon($listValue)
+                                || StringUtils::strContains($listValue, '.png', false)
+                                || StringUtils::strContains($listValue, '.jpg', false))) { // TODO: simplify check for images
                             // if there is imagefile and text separated by | then explode them
                             if (str_contains($listValue, '|')) {
                                 list($listValueImage, $listValueText) = explode('|', $listValue);
