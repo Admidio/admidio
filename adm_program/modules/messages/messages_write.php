@@ -591,7 +591,10 @@ if (isset($messageStatement)) {
                 $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
             }
 
-            $messageHeader = $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($sentUser, $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'))));
+            $messageHeader = $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($sentUser,
+                $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_date')),
+                $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_time'))
+            ));
             $messageIcon   = 'fa-comment-alt';
         } else {
             $messageHeader = $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) .'<br />' . $gL10n->get('SYS_TO') . ': ' . $message->getRecipientsNamesString();
