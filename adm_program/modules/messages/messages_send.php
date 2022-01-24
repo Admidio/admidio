@@ -480,6 +480,7 @@ if ($sendResult === true) { // don't remove check === true. ($sendResult) won't 
 
     // after sending remove the send page from navigation stack
     $gNavigation->deleteLastUrl();
+    unset($_SESSION['message_request']);
 
     // message if sending was OK
     if ($gNavigation->count() > 0) {
