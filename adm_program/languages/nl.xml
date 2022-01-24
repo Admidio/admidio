@@ -142,7 +142,7 @@
   <string name="INS_DATABASE_TYPE_INVALID">Admidio ondersteunt alleen MySQL en PostgreSQL.</string>
   <string name="INS_DATABASE_USER_INVALID">De database gebruiker bevat ongeldige tekens!</string>
   <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Database maken</string>
-  <string name="INS_DELETE_CONFIG_FILE">In de hoofdmap van Admidio #VAR1_BOLD# bestaat al een bestand config.php. Dit bestand is verplaatst naar de map adm_my_files. Verwijder alstublieft het bestand in de hoofdmap.</string>
+  <string name="INS_DELETE_CONFIG_FILE">In de hoofdmap van Admidio #VAR1_BOLD# bestaat al een bestand config.php. Dit bestand is verplaatst naar de map adm_my_files. Verwijder svp het bestand in de hoofdmap.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Configuratiebestand downloaden</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Het configuratiebestand #VAR1_BOLD# kon niet in de map #VAR2_BOLD# geplaatst worden. Zorg ervoor dat de rechten van de map goed zijn ingesteld (via FTP het bestandsattribuut in 0777 of drwxrwxrwx veranderen) of download het configuratiebestand en kopieer dit met een FTP-programma in de Admidio map #VAR3_BOLD#.\n\nNadat u het bestand daar geplaatst hebt, kunt u doorgaan met de installatie.</string>
   <string name="INS_DATA_DIR_RIGHTS">De noodzakelijke rechten voor de map \"adm_my_files\" konden niet automatisch ingesteld worden. Om door te gaan moeten die rechten handmatig op \"777\" gezet worden.</string>
@@ -230,6 +230,7 @@
   <string name="INS_WIFE">Echtgenote</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Module toegang</string>
+  <string name="ORG_ACCESS_TO_MODULE_DESC">Module kan in- of uitgeschakeld worden voor ingelogde gebruikers. Als module alleen voor ingelogde gebruikers toegankelijk is, zal het worden verborgen voor niet-ingelogde gebruikers. De webfeed is dan volledig uitgeschakeld voor beide gebruikersgroepen. (Standaard: actief)</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Systeemberichten inschakelen</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Hier kunt u de systeemberichten van Admidio uitschakelen. Deze worden verzonden, bijvoorbeeld wanneer een nieuwe gebruiker inlogt. Registratie bevestigingen worden doorgaans ook verzonden als systeembericht. In het algemeen dient deze functie niet te worden uitgeschakeld, behalve als de server het versturen van e-mail niet ondersteund. De e-mail module wordt niet beïnvloed door het uitschakelen van deze functie. (Standaard: ja)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">Voegt een nieuwe organisatie met stamgegevens toe aan de database. De huidige gebruiker wordt automatisch aangewezen als beheerder en kan de verdere instellingen doorvoeren. Gebruikers die zich vervolgens bij het systeem aanmelden, moeten de juiste organisatie selecteren.</string>
@@ -336,11 +337,11 @@
   <string name="ORG_SHOW_CREATE_EDIT">Toon maker en tijdstip</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Op sommige plaatsen worden de maker en de gebruiker met de laatste wijziging samen in een record weergegeven met een tijdstempel. Deze instelling kan worden gebruikt om te bepalen of deze informatie überhaupt wordt weergegeven en of de gebruiker moet worden weergegeven met gebruikersnaam of met voor- en achternaam.</string>
   <string name="ORG_SHOW_ALL_USERS">Optioneel alle gebruikers tonen</string>
-  <string name="ORG_SHOW_ALL_USERS_DESC">Indien geactiveerd, zullen naast de actieve leden van de huidige organisatie ook de voormalige leden en leden van andere organisaties getoond worden. Anders worden alleen leden van de huidige organisatie weergegeven. Tijdens het aanmaken van nieuwe gebruikers of bij het toewijzen van nieuwe registraties, zullen alle organisaties gecontroleerd worden op bestaande gebruikers.</string>
+  <string name="ORG_SHOW_ALL_USERS_DESC">Als deze optie is ingeschakeld, kunnen naast actieve leden van de huidige organisatie optioneel ook voormalige leden en leden van andere organisaties in de ledenadministratie worden getoond. Anders worden alleen actieve leden van de huidige organisatie getoond. Bij het aanmaken van nieuwe leden of het toekennen van registraties blijft het systeem echter zoeken naar bestaande gebruikers in de gehele database van alle organisaties.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Toon organisatie selectie</string>
-  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Als er meerdere organisaties in de database staan, zal in het inlog scherm een keuzeveld getoond worden met alle beschikbare organisaties. De gebruiker kan dan inloggen bij een andere organisatie (een andere die staat in het config.php bestand). Echter, de gebruiker moet een geregistreerd gebruiker zijn van de geselecteerde organisatie.</string>
+  <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Als er meerdere organisaties in de database staan, zal in het inlog scherm een keuzeveld getoond worden met alle beschikbare organisaties. De gebruiker kan dan inloggen bij een andere organisatie (anders dan gedefinieerd in het config.php bestand). Echter, de gebruiker moet een geregistreerd lid zijn van de geselecteerde organisatie.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeeminformatie</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS">E-mailadres</string>
+  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier moet het e-mailadres van een beheerder worden ingevuld. Dit wordt gebruikt als het adres van de ontvanger voor systeemmeldingen, b.v. voor registratiebevestiging.</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES">Notificatie voor gewijzigde profielvelden</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Schakel deze instelling in om notificaties te verzenden voor alle wijzigingen in de profielvelden van een gebruiker. Op deze manier heeft een beheerder de mogelijkheid om te zorgen voor een goede kwaliteit van de gegevens. Wijzigingsnotificaties worden verzonden naar het e-mailadres #VAR1# (standaard: nee).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notificatie voor nieuwe berichten</string>
@@ -376,6 +377,7 @@
   <string name="PHO_CREATE_ALBUM">Album maken</string>
   <string name="PHO_DISPLAY_PHOTOS">Fotoweergave</string>
   <string name="PHO_DISPLAY_PHOTOS_DESC">Hier kunt u instellen hoe de afbeeldingen in de fotomodule moeten worden getoond. Dit kan worden gedaan met een modaal venster die opent als apart browservenster. De preview van de afbeelding blijft op de achtergrond actief. Als de afbeelding in hetzelfde venster moet worden getoond, wordt de preview gesloten. Met de derde optie kan de afbeelding middels een pop-up venster worden getoond, als aanvulling op de preview. (Standaard: modaal venster)</string>
+  <string name="PHO_DOWNLOAD_ENABLED">Download inschakelen</string>
   <string name="PHO_DOWNLOAD_ENABLED_DESC">Hiermee kunt u afzonderlijke foto\'s downloaden en albums als een zipbestand downloaden. Een hyperlink zal worden weergegeven voor elke foto of album. Indien optie #VAR1_BOLD# actief is, zullen alleen de originele foto\'s worden gedownload.</string>
   <string name="PHP_DOWNLOAD_ZIP_ERROR">Er is een fout opgetreden bij het maken van het zipbestand.</string>
   <string name="PHO_EDIT_ALBUM">Bewerk album</string>
@@ -508,12 +510,14 @@
   <string name="SYS_ACTIVATE_ROLE">Activeer rol</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Als u rol #VAR1_BOLD# opnieuw activeert, krijgen de rolleden de rechten opnieuw toegewezen en wordt de rol in alle lijsten weergegeven.\n\nWilt u de rollen opnieuw activeren?</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Actieve groepen en rollen</string>
+  <string name="SYS_ADD_ANOTHER_CONFIG">Verdere configuratie toevoegen</string>
   <string name="SYS_ADD_ATTACHMENT">Bestand bijvoegen</string>
   <string name="SYS_ADD_COLUMN">Kolom toevoegen</string>
   <string name="SYS_ADD_COLUMNS_DESC">Wijs een willekeurig aantal kolommen toe die overeenkomen met profielvelden in de onderstaande tabel. Bovendien kunt u standaard sortering en voorwaarden opgeven op grond waarvan de leden moeten worden gesorteerd.</string>
   <string name="SYS_ADD_RECIPIENTS">Ontvanger toevoegen</string>
   <string name="SYS_ADD_TO_DATABASE">Voeg toe in database</string>
   <string name="SYS_ADDRESS">Adres</string>
+  <string name="SYS_ADDITIONAL_COLUMNS">Extra kolommen</string>
   <string name="SYS_ADDITIONAL_FILES">Deze lijst geeft u een overzicht van alle bestanden en mappen die nog niet in de database zijn geimporteerd. Voeg ze hier toe. Toegangsrechten zullen van geselecteerde map gekopieerd worden.</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Ga naar de downloadpagina van Admidio</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Het online management systeem voor Verenigingen, Groepen en Organisaties</string>
@@ -521,6 +525,7 @@
   <string name="SYS_ADMIDIO_VERSION">Admidio versie</string>
   <string name="SYS_ADMINISTRATION">Administratie</string>
   <string name="SYS_ADMINISTRATOR">Beheerder</string>
+  <string name="SYS_ADMINISTRATOR_EMAIL">E-mailadres beheerder</string>
   <string name="SYS_ADMINISTRATORS">Beheerders</string>
   <string name="SYS_ADMINISTRATORS_DESC">Leden van deze rol zijn beheerders van de documenten en bestanden module en hebben toegang tot alle mappen en bestanden. Ze kunnen bestanden uploaden, downloaden en toegangsrechten instellen. Een rol kan een beheerder worden als deze het recht #VAR1_BOLD# toegewezen wordt.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax foutmelding.\nDetails foutmelding: #VAR1#</string>
@@ -579,12 +584,16 @@
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Identificatiecode</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">De authenticatiecode is onderdeel van captcha. Een captcha wordt gebruikt voor spam preventie. De afbeelding wordt gebruikt om vast te stellen of een gebruiker of script (of spambot) het formulier heeft ingevuld.\nVoer svp de uitkomst van de authenticatiecode in het formulierveld in.</string>
   <string name="SYS_CARBON_COPY">Kopie (CC)</string>
+  <string name="SYS_CAT_SELECTION">Categorie selectie</string>
+  <string name="SYS_CAT_SELECTION_CONF_DESC">De categorieselectie kan worden gebruikt om een configuratie te beperken tot de leden van rollen van de geselecteerde categorieën.\n\n Als er geen beperking wordt ingesteld, moeten beide velden (rolselectie en categorieselectie) leeg worden gelaten.</string>
   <string name="SYS_CATEGORIES">Categoriën</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Leden van deze rol zijn beheerders van de module en hebben toegang tot alles. U kunt data maken, bewerken, verwijderen en categorieën en hun rechten bewerken. Een rol kan een beheerder worden als deze het recht #VAR1_BOLD# toegewezen wordt.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle beheerders van de module van de hoofdorganisatie.</string>
   <string name="SYS_CATEGORY">Categorie</string>
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Naam van categorie bestaat al in de geselecteerde organisatie.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">De zichtbaarheid van de profielvelden in deze categorie kan voor andere gebruikers afgeschermd worden, maar de profielvelden blijven zichtbaar in hun eigen profiel en kunnen daar bewerkt worden.</string>
+  <string name="SYS_CATEGORY_REPORT">Categorie rapport</string>
+  <string name="SYS_CATEGORY_REPORT_DESC">Genereert een lijst van de rol en categorie lidmaatschappen van een lid.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Als deze optie is geactiveerd, zullen profielvelden van deze categorie verschijnen die kunnen worden bewerkt in het profiel van de volgende organisaties: #VAR1#.\n\nSvp deactiveren als velden alleen in uw eigen organisatie getoond moeten worden.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-categorie</string>
   <string name="SYS_CHANGE_HISTORY">Wijzigingsgeschiedenis</string>
@@ -604,6 +613,10 @@
   <string name="SYS_CLOSE">Sluiten</string>
   <string name="SYS_CODING">Coderen</string>
   <string name="SYS_COLUMN">Kolom</string>
+  <string name="SYS_COLUMN_SELECTION">Kolom selectie</string>
+  <string name="SYS_COLUMN_SELECTION_DESC">Selecteert de kolommen die in de lijst moeten worden weergegeven.\n\n Inactieve rollen zijn gemarkeerd met (*).</string>
+  <string name="SYS_CONFIGURATIONS">Configuraties</string>
+  <string name="SYS_CONFIGURATIONS_HEADER">Elk aantal configuraties kan hier worden aangemaakt voor het categorierapport. In de schermweergave wordt één van deze configuraties als basis voor elke weergave gebruikt via \"Selecteer configuratie\".</string>
   <string name="SYS_COMMA">Komma (,)</string>
   <string name="SYS_COMMA_SEPARATED_FILE">Komma/tab-gescheiden bestand (*.csv)</string>
   <string name="SYS_COMMENT">Reactie</string>
@@ -628,6 +641,7 @@
   <string name="SYS_COOKIE_DESC">Deze website maakt gebruik van Cookies om ervoor te zorgen dat u de beste ervaring op onze website krijgt. Door deze website te gebruiken, gaat u ermee akkoord dat we Cookies gebruiken.</string>
   <string name="SYS_COOKIE_NOT_SET">U kunt niet inloggen omdat uw browser geen cookies accepteert!\n\nOm in te kunnen loggen moet u uw browser Cookies laten accepteren van #VAR1_BOLD#.</string>
   <string name="SYS_COPY">Kopieer</string>
+  <string name="SYS_COPY_CONFIGURATION">Kopieer configuratie</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Uw gevraagde kopie van het bericht</string>
   <string name="SYS_COPY_VAR">Kopieer #VAR1#</string>
   <string name="SYS_COUNT_BCC">Aantal BCC ontvangers</string>
@@ -647,23 +661,24 @@
   <string name="SYS_CREATE_FOLDER_DESC">De nieuwe map wordt in de bestaande map #VAR1_BOLD# aangemaakt.</string>
   <string name="SYS_CREATE_HTACCESS">Maak .htaccess</string>
   <string name="SYS_CREATE_LINK">Maak nieuwe link</string>
+  <string name="SYS_CREATE_MEMBER">Maak lid</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Maak nieuwe configuratie</string>
   <string name="SYS_CREATE_NEW_USER">Voeg nieuwe gebruiker toe</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">U kunt nieuwe gebruiker aanmaken, als deze gebruiker niet voorkomt in de lijst met gevonden gebruikers.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Maak relatie</string>
   <string name="SYS_CREATE_ROLE">Maak rol</string>
-  <string name="SYS_CREATE_MEMBER">Maak gebruiker</string>
   <string name="SYS_CREATE_VAR">Maak #VAR1#</string>
   <string name="SYS_CREATED_BY">Gemaakt door #VAR1# op #VAR2#</string>
   <string name="SYS_CREATION_DATE">Gemaakt op</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Huidige database-versie</string>
+  <string name="SYS_CURRENT_MEMBER">Huidig lid</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Ongeldig e-mailadres doorgegeven!\n\nGeef svp een e-mailadres door in uw #VAR1#profiel#VAR2#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Als deze optie is geactiveerd, zijn de objecten (evenementen, mededelingen, weblinks ...) van deze categorie ook zichtbaar op de websites van de volgende organisaties:\n #VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Gegevens zichtbaar voor meerdere organisaties</string>
   <string name="SYS_DATA_PROTECTION">Privacy Policy</string>
   <string name="SYS_DATA_PROTECTION_DESC">Hier kan de URL naar uw pagina met het privacybeleid worden ingesteld. Deze pagina is gekoppeld aan het bericht over Cookies, voor meer informatie. Als het geselecteerde thema dit ondersteunt, wordt er ook een link weergegeven op de Admidio-pagina\'s. (Voorbeeld: https://www.example.com/data_protection.html)</string>
-  <string name="SYS_DATA_PROTECTION_PERMISSION">Ik geef toestemming voor de verwerking van de gegevens</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION">Ik geef toestemming voor de verwerking van de gegevens.</string>
   <string name="SYS_DATA_PROTECTION_PERMISSION_DESC">Ik heb de informatie van de organisatie gelezen. Voor zover de door mij verstrekte persoonlijke gegevens geen noodzakelijke gegevens zijn voor de uitvoering van het contract, geef ik toestemming voor de verwerking van deze gegevens. Mijn gegevens worden uitsluitend ten behoeve van de organisatie bewaard en vertrouwelijk behandeld.</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_BACKUP">Backup database</string>
@@ -693,6 +708,8 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standaard toewijzing bij registratie</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Deze rol wordt automatisch toegewezen. Indien de maker de rechten heeft om rollen toe te wijzen, worden alle beschikbare rollen weergegeven kunnen overeenkomstig worden aangepast.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standaard configuratie</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Een van de hier opgegeven configuraties kan de standaardconfiguratie worden voor het categorierapport van deze organisatie. De geselecteerde configuratie wordt direct weergegeven wanneer het rapport wordt opgeroepen.</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Een van de hier gespecificeerde configuraties kan de standaardconfiguratie worden voor lijsten van deze organisatie. Ledenlijsten van rollen waarvoor geen lijstconfiguratie is opgeslagen, worden met deze configuratie weergegeven.</string>
   <string name="SYS_DEFAULT_ENCODING_UTF8">Standaard codering (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Standaard lijst</string>
   <string name="SYS_DEFAULT_LIST_DESC">Als een ledenlijst van deze rol wordt weergegeven en geen lijst-configuratie is opgegeven, zal de lijst worden weergegeven met de standaard lijst-configuratie van het systeem. Dit veld kan worden gebruikt om een ​​andere lijst-configuratie voor de individuele rol te selecteren, die wordt weergegeven als er geen lijst-configuratie is ingesteld.</string>
@@ -722,11 +739,13 @@
   <string name="SYS_DESIGNATION">Naam</string>
   <string name="SYS_DIRECTORY_PROTECTION">Mapbescherming</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Map scheidingsteken</string>
+  <string name="SYS_DISABLED">Uitgeschakeld</string>
   <string name="SYS_DISK_SPACE">Schijfruimte</string>
   <string name="SYS_DISK_SPACE_ERROR">Het gebruik van de schijfruimte kon niet worden bepaald.\n\nFoutmelding:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Toon doorverwijzing</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Activeer automatisch doorverwijzen van links. Als gebruiker op een link klikt zal hij/zij gewaarschuwd worden middels een bericht wanneer hij/zij de pagina\'s van Admidio verlaat. De link waarop geklikt wordt zal geopend worden na een vooraf ingestelde tijd. Als doorverwijzen op 0 staat, zal link geopend worden zonder waarschuwing vooraf. (Standaard: 10 seconden)</string>
   <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Toon rol lidmaatschap</string>
+  <string name="SYS_DIVERSE">Verschillend</string>
   <string name="SYS_DO_NOT_EDIT">Niet bewerken</string>
   <string name="SYS_DOCUMENTS_FILES">Documenten &amp; bestanden</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">U kunt hier verschillende soorten bestanden als download aanbieden. Deze bestanden kunnen in mappen verdeeld worden met verschillende toegangsrechten.</string>
@@ -754,7 +773,7 @@
   <string name="SYS_EDIT_FOLDER">Bewerk map</string>
   <string name="SYS_EDIT_LISTS">Bewerk lijsten</string>
   <string name="SYS_EDIT_LISTS_DESC">Gebruikers kunnen hun eigen lijsten maken met geselecteerde profielvelden en deze vervolgens toepassen op groepen en rollen. Beschikbaar zijn alleen profielvelden en groepen of rollen die de huidige gebruiker mag zien. Deze instelling kan worden gebruikt om te bepalen wie dergelijke lijsten kan maken. (Standaard: Alle)</string>
-  <string name="SYS_EDIT_MEMBERS">Bewerk gebruikers</string>
+  <string name="SYS_EDIT_MEMBERS">Bewerk leden</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Bewerk profielvelden</string>
   <string name="SYS_EDIT_RELATIONSHIPS">Bewerk relaties</string>
   <string name="SYS_EDIT_ROLE">Bewerk rol</string>
@@ -786,6 +805,19 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-mail aan leden</string>
   <string name="SYS_EMAIL_TO_LIST">E-mail aan lijst</string>
   <string name="SYS_EMPTY">Leeg</string>
+  <string name="SYS_ENABLED">Ingeschakeld</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT">Categorierapport inschakelen</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Categorierapport maakt een lijst van alle rollen en categorieën die een lid heeft. De autorisatie \"Bekijk lidmaatschapslijsten van alle rollen\" is vereist voor de verwerking. (Standaard: ja)</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Documenten &amp; bestanden inschakelen</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Documenten &amp; bestanden kunnen via deze instelling worden in- of uitgeschakeld. (Standaard: ja)</string>
+  <string name="SYS_ENABLE_EMAILS">E-mails inschakelen</string>
+  <string name="SYS_ENABLE_EMAILS_DESC">E-mails binnen de berichtenmodule kunnen via deze instelling worden in- of uitgeschakeld. Als de server geen e-mail ondersteunt, moet de optie worden uitgeschakeld. (Standaard: ingeschakeld)</string>
+  <string name="SYS_ENABLE_GREETING_CARDS">Ecards inschakelen</string>
+  <string name="SYS_ENABLE_GREETING_CARDS_DESC">De Ecards kunnen via deze instelling worden in- of uitgeschakeld. Als de server geen e-mail ondersteunt, moet de module worden uitgeschakeld. Deze module is over het algemeen alleen beschikbaar voor geregistreerde gebruikers. (Standaard: ja)</string>
+  <string name="SYS_ENABLE_GROUPS_ROLES">Groepen &amp; rollen inschakelen</string>
+  <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Toont de groepen en rollen van de organisatie en maakt vrije configuratie van groepen en rollen mogelijk. Eigen lijst kan worden geconfigureerd en toegepast. Deze module is over het algemeen alleen beschikbaar voor ingelogde gebruikers. (Standaard: ja)</string>
+  <string name="SYS_ENABLE_PM_MODULE">Privéberichten inschakelen</string>
+  <string name="SYS_ENABLE_PM_MODULE_DESC">Privéberichten kunnen via deze instelling worden in- of uitgeschakeld. (Standaard: ingeschakeld)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Relaties bewerken en weergeven</string>
   <string name="SYS_ENABLE_USER_RELATIONS_DESC">Als deze instelling actief is, kunnen relaties tussen gebruikers worden onderhouden en weergegeven. (Standaard: ja)</string>
   <string name="SYS_ENCODING_GUESS">Probeer de codering te detecteren</string>
@@ -801,7 +833,7 @@
   <string name="SYS_EXAMPLES">Voorbeelden</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
-  <string name="SYS_EXISTING_MEMBERS">Bestaande gebruiker</string>
+  <string name="SYS_EXISTING_MEMBERS">Bestaande leden</string>
   <string name="SYS_EXPORT_LISTS">Exporteer lijsten</string>
   <string name="SYS_EXPORT_LISTS_DESC">Lijsten met groepen en rollen kunnen door gebruikers worden geëxporteerd, op voorwaarde dat u het recht heeft om deze lijsten te bekijken. Deze instelling kan worden gebruikt om de exportfunctie te beperken. (Standaard: alles)</string>
   <string name="SYS_EXPORT_TO">Exporteer</string>
@@ -833,6 +865,7 @@
   <string name="SYS_FILENAME_INVALID">De geselecteerde bestandsnaam #VAR1_BOLD# bevat ongeldige tekens. Controleer svp de bestandsnaam.\n\n De volgende tekens zijn niet toegestaan: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">De database versie #VAR1# is lager dan de versie van Admidio scripts #VAR2#.\n\nUpdate uw Admidio-bestanden op de server #VAR3# met de meer recente Admidio-versie #VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
+  <string name="SYS_FILTER_TO_EXPORT">Filter om te exporteren</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">Eerste regel bevat naam van kolom</string>
   <string name="SYS_FIRSTNAME">Voornaam</string>
   <string name="SYS_FIRSTNAME_LASTNAME">Voornaam en achternaam</string>
@@ -849,7 +882,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">Foutmelding tijdens hernoemen van map #VAR1#.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden.\n\nVraag svp hulp bij een #VAR2#beheerder#VAR3# om de schrijfrechten na te kijken (via FTP rechten veranderen naar 0777 of drwxrwxrwx).</string>
   <string name="SYS_FONT">Lettertype</string>
-  <string name="SYS_FONT_AWESOME_DESC">U kunt een pictogram op verschillende manieren opslaan:\n1. Een pictogram van web font \"Font Awesome\". Ga naar #VAR1#http://fontawesome.com#VAR2# en kies een gratis pictogram van de \"Solid\" of \"Brands\" collectie. Als prefix moet u fa- ervoor zetten. Dus als u pictogram \"user\" kiest, moet u \"fa-user\" invoeren.\n2. Een JPEG or PNG pictogram. Voer hiervoor de volledige URL samen met de bestandsnaam van het pictogram in. Als alternatief kunt u het pictogram in het thema in de map \"images\" plaatsen, dan hoeft u alleen de bestandsnaam op te geven.</string>
+  <string name="SYS_FONT_AWESOME_DESC">U kunt een pictogram op verschillende manieren opslaan:\n1. Een pictogram van web font \"Font Awesome\". Ga naar #VAR1#http://fontawesome.com#VAR2# en kies een gratis pictogram van de \"Solid\" of \"Brands\" collectie. Als prefix moet u fa- ervoor zetten. Dus als u pictogram \"user\" kiest, moet u \"fa-user\" invoeren.\n2. Een JPEG or PNG pictogram. Om dit te doen, plaats het pictogrambestand in de themamap \"images\". Voeg hier de naam van het pictogrambestand toe.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Ik ben mijn wachtwoord vergeten!</string>
   <string name="SYS_FORMAT">Formaat</string>
   <string name="SYS_FORMER">Voormalig</string>
@@ -861,6 +894,7 @@
   <string name="SYS_FROM_TO">van #VAR1# tot #VAR2#</string>
   <string name="SYS_FURTHER_INFORMATIONS">Verdere informatie</string>
   <string name="SYS_GENERAL_LISTS">Algemene lijsten</string>
+  <string name="SYS_GENERAL_ROLE_ASSIGNMENT">Algemene roltoewijzing</string>
   <string name="SYS_GENDER">Geslacht</string>
   <string name="SYS_GEN_RANDOM_ERROR">Er is een onverwachte fout opgetreden bij het genereren van een willekeurig nummer.\nFoutcode: #VAR1#\nFoutmelding: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">Het programma kan geen willekeurige nummers genereren.\nFoutcode: #VAR1#\nFoutmelding: #VAR2#</string>
@@ -882,23 +916,23 @@
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Het maken en versturen van op HTML gebaseerde e-mails kan ingeschakeld worden voor geregistreerde gebruikers. Een JavaScript editor wordt getoond voor comfortabel bewerken, in plaats van het standaard tekst veld. Deze optie is voor gasten in verband met veiligheid niet mogelijk.</string>
   <string name="SYS_HTML_TABLE">HTML tabel</string>
-  <string name="SYS_ICAL_DISABLED">iCal is uitgeschakeld door de beheerder.</string>
+  <string name="SYS_ICAL_DISABLED">De iCal functie is uitgeschakeld.</string>
   <string name="SYS_ICON">Pictogram</string>
   <string name="SYS_IDENTIFY_USERS">Identificatie van bestaande gebruikers gaat door middel van voor- en achternaam.</string>
   <string name="SYS_IMPORTANT">Belangrijk</string>
   <string name="SYS_IMPORT">Importeer</string>
   <string name="SYS_IMPORT_LOGIN_DATA_DESC">Inloggegevens kunnen alleen worden geïmporteerd door een beheerder. De regels van de organisatie moeten worden nageleefd (bijvoorbeeld wachtwoordlengte en wachtwoordsterkte). Gebruikers met reeds bestaande inloggegevens bewaren deze. Er worden geen inloggegevens overschreven door de import.</string>
+  <string name="SYS_IMPORT_MEMBERS">Importeer leden</string>
   <string name="SYS_IMPORT_MODE">Importmodus</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Het werkblad #VAR1# bestaat niet in het geïmporteerde bestand!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Importeren is gelukt..\n\n#VAR1# nieuwe gebruikers zijn gemaakt.\n#VAR2# gebruikers zijn bewerkt.\n#VAR3# rol lidmaatschappen zijn toegewezen.</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">Aan de volgende kolommen van het importbestand zijn geen profielvelden toegewezen:</string>
-  <string name="SYS_IMPORT_MEMBERS">Importeer gebruiker(s)</string>
   <string name="SYS_IMPRINT">Afdruk</string>
   <string name="SYS_IMPRINT_DESC">Hier kan de URL voor de afdruk van uw pagina worden ingesteld. Als het geselecteerde thema dit ondersteunt, wordt er ook een link weergegeven op de Admidio-pagina\'s. (Voorbeeld: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inactieve groepen en rollen</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Infoveld</string>
   <string name="SYS_INFORMATIONS">informatie</string>
-  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Geef svp voor- en achternaam van nieuwe gebruiker op. Er vindt een controle in de database plaats indien er reeds een gebruiker bestaat met dezelfde naam.</string>
+  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Vul svp de voor- en achternaam van het nieuwe lid in. Voordat het record wordt aangemaakt, wordt gecontroleerd of er al een persoon met dezelfde naam in de database staat.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installatie succesvol</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">De Admidio-database is nu geïnstalleerd en volledig ingesteld. Het configuratiebestand met de toegangsgegevens tot de database is aangemaakt en opgeslagen. U kunt nu met Admidio werken en inloggen met de beheerdersgegevens.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">De installatie en configuratie van de database is met succes voltooid.</string>
@@ -910,6 +944,7 @@
   <string name="SYS_INVALID_FONT_AWESOME">De ingevoerde pictogramnaam komt niet overeen met de verwachte opbouw. Een pictogram van font Awesome moet overeenkomen met fa-pictogramnaam. Een bestand moet worden opgeslagen in de afbeeldingenmap van het thema en een png- of jpg-extensie hebben.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ongeldige pagina weergave</string>
   <string name="SYS_IO_ERROR">I/O fout</string>
+  <string name="SYS_IS_VAR_FROM">is #VAR1# van</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_ITEMNAME">Item-naam</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landschap</string>
@@ -961,7 +996,7 @@
   <string name="SYS_MAP">Plattegrond</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Geeft de plaats weer op Google Maps. De straat, postcode, plaats en land worden verstuurd naar Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Geeft een route weer van uw eigen woonplaats naar de locatie van deze gebruiker op Google Maps. De straat, postcode, plaats en land worden verstuurd naar Google.</string>
-  <string name="SYS_MAX_ATTACHMENT_SIZE">Onbeperkt aantal ontvangers kan toegevoegd worden. Totale grootte van alle attachments mag niet meer zijn dan #VAR1# MB.</string>
+  <string name="SYS_MAX_ATTACHMENT_SIZE">U kunt zoveel bijlagen toevoegen als u wilt. De bestandsgrootte van alle bijlagen samen mag niet groter zijn dan #VAR1# MB.</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. deelnemers</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# van max. #VAR2# deelnemers</string>
   <string name="SYS_MAX_PATH_LENGTH">Max padlengte</string>
@@ -979,6 +1014,8 @@
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Lid van organisatie #VAR1#</string>
   <string name="SYS_MEMBERS">Leden</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Leden tussen #VAR1# en #VAR2#</string>
+  <string name="SYS_MEMBERS_CONFIGURATION_DESC">Een van de hier gespecificeerde configuraties kan worden gebruikt om het ledenbeheer weer te geven. De kolommen van de geselecteerde lijst-configuratie worden vervolgens weergegeven in het ledenbeheer.</string>
+  <string name="SYS_MEMBERS_DESC">Toon en organiseer hier alle actieve en voormalige leden. Nieuwe leden kunnen worden geïmporteerd of aangemaakt.</string>
   <string name="SYS_MEMBERS_PER_PAGE">Aantal leden per pagina</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Aantal leden dat in het HTML-overzicht worden weergegeven. Meer leden kunnen bereikt worden door verder te bladeren. Het afdrukvoorbeeld en de export worden door deze waarde niet beïnvloed. (Standaard: 25)</string>
   <string name="SYS_MEMBERSHIP_END">Einde lidmaatschap</string>
@@ -1055,6 +1092,7 @@
   <string name="SYS_NOTE">Bericht</string>
   <string name="SYS_NUMBER">Aantal</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Aantal rollen per pagina</string>
+  <string name="SYS_NUMBER_COL_DESC">Het betreffende selectievakje moet worden geactiveerd als u aan het einde van het rapport een regel met het aantal lidmaatschappen wilt weergeven.</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Spreadsheet (*.ods)</string>
   <string name="SYS_OFF">Uit</string>
   <string name="SYS_OK">OK</string>
@@ -1125,14 +1163,15 @@
   <string name="SYS_PROCESS_CANCELED">Proces geannuleerd.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Het volgende probleem is opgetreden bij het verwerken van de gegevens.</string>
   <string name="SYS_PROFILE_FIELD">Profielveld</string>
+  <string name="SYS_PROFILE_PHOTO">Profielfoto</string>
   <string name="SYS_PROPERTIES">Eigenschappen</string>
+  <string name="SYS_QUANTITY">Aantal</string>
   <string name="SYS_QUARTERLY">Driemaandelijks</string>
   <string name="SYS_QUOTE">Enkel aanhalingsteken (\')</string>
   <string name="SYS_RADIO_BUTTON">Optieveld</string>
   <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Nieuwste mededelingen van organisatie #VAR1#</string>
   <string name="SYS_RECIPIENT">Ontvanger</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail ontvanger</string>
-  <string name="SYS_RECIPIENT_NAME">Naam ontvanger</string>
   <string name="SYS_REDIRECT">Doorverwijzen</string>
   <string name="SYS_REDIRECT_DESC">U verlaat nu de website van #VAR1_BOLD#  en wordt in #VAR2# seconden doorverwezen naar #VAR3#.\n\nAls deze automatische doorverwijzing niet functioneert, klik dan #VAR4#hier#VAR5#!</string>
   <string name="SYS_REDIRECT_URL_INVALID">De opgegeven omleidings-URL is niet geldig.</string>
@@ -1148,7 +1187,7 @@
   <string name="SYS_RELATIONSHIP_TYPE_DESC">Een asymmetrische relatie kan b.v. worden gebruikt voor ouder / kind, terwijl een symmetrische relatie b.v. kan worden gebruikt voor broers en zussen. Deze zijn altijd tweezijdig, terwijl unidirectionele relaties slechts in één richting wijzen.</string>
   <string name="SYS_RELOAD">Opnieuw laden</string>
   <string name="SYS_REMEMBER_ME">Blijf ingelogd</string>
-  <string name="SYS_REMINDER_SEND_LOGIN">Wilt u de gebruiker inloggegevens (inclusief wachtwoord) ter herinnering sturen?</string>
+  <string name="SYS_REMINDER_SEND_LOGIN">Wilt u de gebruiker inloggegevens met een nieuw wachtwoord sturen ter herinnering?</string>
   <string name="SYS_REMOVE">Verwijderen</string>
   <string name="SYS_REMOVE_MESSAGE">Bericht verwijderen</string>
   <string name="SYS_REMOVE_USER">Verwijder gebruiker</string>
@@ -1158,7 +1197,7 @@
   <string name="SYS_REQUIRED_FIELDS">Verplichte velden</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">U bent al ingelogd op het systeem. Het is niet nodig om een nieuw wachtwoord aan te vragen.</string>
   <string name="SYS_RESTRICTIONS">Voorwaarden</string>
-  <string name="SYS_RIGHT_ALL_LISTS_VIEW">Bekijk ledenlijsten van alle rollen</string>
+  <string name="SYS_RIGHT_ALL_LISTS_VIEW">Bekijk lidmaatschapslijsten van alle rollen</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Beheer mededelingen</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Registraties toewijzen en bewerken</string>
   <string name="SYS_RIGHT_ASSIGN_ROLES">Rollen bewerken en toewijzen</string>
@@ -1167,7 +1206,7 @@
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Beheer documenten en bestanden</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Rollen met deze rechten kunnen rechten toewijzen in de documenten en bestanden module. Dit omvat wie mappen kan zien en bestanden kan uploaden.</string>
   <string name="SYS_RIGHT_EDIT_USER">Profiel van alle leden bewerken</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Rollen met deze rechten kunnen alle gebruikersgegevens (behalve wachtwoorden) van andere leden bewerken. \nU hebt ook toegang tot het gebruikersbeheer en kunt nieuwe gebruikers maken of oude gebruikers verwijderen.</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Rollen met deze rechten kunnen de gegevens van andere leden bewerken (behalve wachtwoorden).\n Daarnaast hebben ze toegang tot de ledenadministratie en kunnen ze leden toevoegen of verwijderen.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Berichten gastenboek bewerken en verwijderen</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Reacties plaatsen in gastenboek</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">Deze instelling bepaalt wie het recht heeft om e-mails naar deze rol te sturen via de berichten module. Het recht van de rol #VAR1_BOLD# staat nog steeds boven deze instelling.</string>
@@ -1189,13 +1228,17 @@
   <string name="SYS_ROLE_MEMBERSHIP_TO">tot</string>
   <string name="SYS_ROLE_NAME_EXISTS">Rol met dezelfde naam bestaat al in deze categorie.</string>
   <string name="SYS_ROLE_SELECT_RIGHT">U heeft geen toestemming om rol #VAR1# te selecteren.\nKies svp een andere rol.</string>
+  <string name="SYS_ROLE_SELECTION">Rolselectie</string>
+  <string name="SYS_ROLE_SELECTION_CONF_DESC">De rolselectie kan een configuratie worden beperkt tot de leden van de geselecteerde rollen.\n\n Als er geen beperking wordt ingesteld, moeten beide velden (rolselectie en categorieselectie) leeg worden gelaten. </string>
+  <string name="SYS_ROLE_WITHOUT_LEADER">Rol zonder leider</string>
   <string name="SYS_ROLE_TYPES">Roltypes</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROLES_CONFIRMATION_OF_PARTICIPATION">Rollen - bevestiging van deelname</string>
   <string name="SYS_ROLES_MODULE_ADMINISTRATORS_DESC">Leden van deze rol zijn beheerders van de module en hebben toegang tot alles. U kunt gegevens maken, bewerken, verwijderen en categorieën en hun rechten bewerken.</string>
   <string name="SYS_ROOM">Zaal</string>
   <string name="SYS_ROOM_MANAGEMENT">Zaalbeheer</string>
-  <string name="SYS_RSS_DISABLED">De webfeed is uitgeschakeld door de beheerder.</string>
+  <string name="SYS_ROW">Rij</string>
+  <string name="SYS_RSS_DISABLED">Web feed is uitgeschakeld</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Webfeed voor #VAR1#</string>
   <string name="SYS_SAFE_MODE">Veilige modus</string>
   <string name="SYS_SAFE_MODE_PROBLEM">Veroorzaakt mogelijk problemen met uploaden van bestanden</string>
@@ -1259,9 +1302,9 @@
   <string name="SYS_SEND_TEST_MAIL">Stuur test e-mail</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">Verstuur e-mail met gebruikersnaam en wachtwoord.</string>
   <string name="SYS_SENDER">Afzender</string>
-  <string name="SYS_SENDER_EMAIL">E-mailadres afzender</string>
+  <string name="SYS_SENDER_EMAIL">E-mail verstuurder</string>
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Sommige providers accepteren geen onbekend e-mailadres als afzender. Geef daarom een e-mailadres op dat als standaard e-mailadres wordt gebruik in de e-mail module (b.v. noreply@#VAR1#).\nAls dit veld leeg blijft zal het e-mailadres van de afzender gebruikt worden. (Standaard: leeg)</string>
-  <string name="SYS_SENDER_NAME">Naam afzender</string>
+  <string name="SYS_SENDER_NAME">Naam verstuurder</string>
   <string name="SYS_SENDER_NAME_DESC">Naam afzender van het gebruikte e-mailadres. Dit veld hoeft alleen ingevuld te worden als er ook een e-mailadres van de afzender is ingevuld. (Standaard: leeg)</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">(Afzender is uitgelogd. Daarom kan de informatie van afzender onjuist zijn.)</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Scheidingsteken voor CSV-bestand</string>
@@ -1270,7 +1313,7 @@
   <string name="SYS_SET_FOLDER_PERMISSIONS">Toegangsrechten map instellen</string>
   <string name="SYS_SETTINGS">Voorkeuren</string>
   <string name="SYS_SHOW_ALL_USERS">Toon alle gebruikers</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Is deze instelling niet gekozen dan worden enkel actieve leden van deze organisatie weergegeven. En anders worden alle gebruikers in de database weergegeven.</string>
+  <string name="SYS_SHOW_ALL_USERS_DESC">Als deze instelling is ingesteld, worden naast de actieve leden van deze organisatie ook voormalige leden en leden van andere organisaties weergegeven.</string>
   <string name="SYS_SHOW_CALENDAR">Toon kalender</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Voor niet-ingelogde gebruikers zal een alfanumerieke code weergegeven worden, als de captcha is geactiveerd. Dit moet correct worden ingevoerd in het betreffende veld. Dit is om ervoor te zorgen dat het formulier niet kan worden misbruikt door spammers. (Standaard: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Toon voormalige leden</string>
@@ -1357,19 +1400,15 @@
   <string name="SYS_UPDATE_SUCCESSFUL">Bijwerken succesvol</string>
   <string name="SYS_URL_INVALID_CHAR">De URL in veld #VAR1_BOLD# bevat ongeldige karakters.\n\nAlleen alfabetische karakters, umlauts, nummers 0-9 en speciale karakters .-+_:/#?= zijn toegestaan.</string>
   <string name="SYS_USER">Gebruiker</string>
-  <string name="SYS_USER_COULD_BE_CREATED">De gebruiker kan gemaakt worden.</string>
+  <string name="SYS_USER_COULD_BE_CREATED">De persoon kan gemaakt worden.</string>
   <string name="SYS_USER_DELETE_DESC">Wilt u #VAR1_BOLD# verwijderen?\n\nGebruiker wordt daadwerkelijk verwijderd uit de database en toegang tot zijn gegevens is niet langer mogelijk.</string>
   <string name="SYS_USER_FOUND">Gebruiker gevonden</string>
   <string name="SYS_USER_ID_NOT_FOUND">Geen gebruiker kon gevonden worden met deze ID!</string>
-  <string name="SYS_USER_MANAGEMENT">Gebruikersbeheer</string>
-  <string name="SYS_MEMBERS_CONFIGURATION_DESC">Een van de hier gespecificeerde configuraties kan worden gebruikt om het gebruikersbeheer weer te geven. De kolommen van de geselecteerde lijst-configuratie worden vervolgens weergegeven in het gebruikersbeheer.</string>
-  <string name="SYS_MEMBERS_DESC">Hier worden alle actieve en voormalige leden getoond. U kunt leden importeren uit een bestand, aanmaken of beheren.</string>
   <string name="SYS_USER_NO_EMAIL">Gebruiker #VAR1_BOLD# heeft geen geldig e-mailadres in zijn profiel!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">De gebruiker is nog geen lid van organisatie #VAR1#.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Gebruiker is geen lid van organisatie #VAR1# maar er is al inloginformatie toegewezen.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Gebruiker is geen lid van organisatie #VAR1# en er is geen inloginformatie toegewezen.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">Gebruiker heeft nog geen inloggegevens.\nWilt u de informatie over deze registratie toewijzen aan de gebruiker?</string>
-  <string name="SYS_PROFILE_PHOTO">Gebruikersafbeelding</string>
   <string name="SYS_USER_RELATION">Relatie</string>
   <string name="SYS_USER_RELATIONS">Relaties</string>
   <string name="SYS_USER_RELATION_TYPE">Relatie type</string>
@@ -1377,8 +1416,8 @@
   <string name="SYS_USERNAME">Gebruikersnaam</string>
   <string name="SYS_USERNAME_OR_EMAIL">Gebruikersnaam of e-mailadres</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# op #VAR2# om #VAR3#</string>
-  <string name="SYS_USERS_PER_PAGE">Aantal gebruikers per pagina</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">Aantal gebruikers die op een pagina in een lijst weergegeven worden. Zijn er meer gebruikers, dan kan er gebladerd worden. (Standaard: 25)</string>
+  <string name="SYS_USERS_PER_PAGE">Aantal leden per pagina</string>
+  <string name="SYS_USERS_PER_PAGE_DESC">Het aantal leden per pagina in een ledenbeheer. Mochten er meer leden binnen de organisatie zijn, dan kunt u binnen het overzicht naar de volgende pagina scrollen. (Standaard: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">U gebruikt momenteel een #VAR1#versie van Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
