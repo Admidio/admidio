@@ -210,6 +210,7 @@ $gCurrentOrganization->setValue('org_longname', $_SESSION['orga_longname']);
 $gCurrentOrganization->setValue('org_shortname', $_SESSION['orga_shortname']);
 $gCurrentOrganization->setValue('org_homepage', ADMIDIO_URL);
 $gCurrentOrganization->save();
+$gCurrentOrgId = $gCurrentOrganization->getValue('org_id');
 
 // create administrator and assign roles
 $administrator = new User($db);

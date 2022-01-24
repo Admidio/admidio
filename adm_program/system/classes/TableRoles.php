@@ -409,7 +409,7 @@ class TableRoles extends TableAccess
 
         $fieldsChanged = $this->columnsValueChanged;
 
-        if (!in_array((int) $this->getValue('rol_cat_id'), $gCurrentUser->getAllEditableCategories('ROL'), true)) {
+        if (!$this->saveChangesWithoutRights && !in_array((int) $this->getValue('rol_cat_id'), $gCurrentUser->getAllEditableCategories('ROL'), true)) {
             throw new AdmException('Role could not be saved because you are not allowed to edit roles of this category.');
         }
 
