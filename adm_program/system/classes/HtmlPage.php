@@ -426,6 +426,7 @@ class HtmlPage extends \Smarty
         $gMenu->addFunctionsNode($this->menuNodePageFunctions);
 
         $this->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
+        $this->assign('languageIsoCode', $gL10n->getLanguageIsoCode());
         $this->assign('id', $this->id);
         $this->assign('title', $this->title);
         $this->assign('headline', $this->headline);
