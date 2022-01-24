@@ -424,7 +424,7 @@ class TableDate extends TableAccess
     {
         global $gCurrentUser;
 
-        if (!in_array((int) $this->getValue('dat_cat_id'), $gCurrentUser->getAllEditableCategories('DAT'), true)) {
+        if (!$this->saveChangesWithoutRights && !in_array((int) $this->getValue('dat_cat_id'), $gCurrentUser->getAllEditableCategories('DAT'), true)) {
             throw new AdmException('Event could not be saved because you are not allowed to edit events of this category.');
         }
 

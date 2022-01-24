@@ -115,7 +115,7 @@ class TableWeblink extends TableAccess
     {
         global $gCurrentUser;
 
-        if (!in_array((int) $this->getValue('lnk_cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true)) {
+        if (!$this->saveChangesWithoutRights && !in_array((int) $this->getValue('lnk_cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true)) {
             throw new AdmException('Weblink could not be saved because you are not allowed to edit weblinks of this category.');
         }
 

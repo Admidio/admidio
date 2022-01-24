@@ -140,7 +140,7 @@ class TableAnnouncement extends TableAccess
     {
         global $gCurrentUser;
 
-        if (!in_array((int) $this->getValue('ann_cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true)) {
+        if (!$this->saveChangesWithoutRights && !in_array((int) $this->getValue('ann_cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true)) {
             throw new AdmException('Announcement could not be saved because you are not allowed to edit announcements of this category.');
         }
 
