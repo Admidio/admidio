@@ -1279,7 +1279,7 @@ class HtmlForm extends HtmlFormBasic
                 $value = Language::translateIfTranslationStrId($value);
 
                 // set the value attribute of the option tag
-                $optionValue = ($key === 0 ? '' : $key);
+                $optionValue = $key;
 
                 if ($optionsAll['arrayKeyIsNotValue']) {
                     $optionValue = $value;
