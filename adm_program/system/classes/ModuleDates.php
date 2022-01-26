@@ -478,9 +478,9 @@ class ModuleDates extends Modules
                 cre_user.usr_uuid AS create_uuid, cha_user.usr_uuid AS change_uuid ';
             $additionalTables = '
                 LEFT JOIN '.TBL_USERS.' AS cre_user
-                       ON cre_username.usr_id = dat_usr_id_create
+                       ON cre_user.usr_id = dat_usr_id_create
                 LEFT JOIN '.TBL_USERS.' AS cha_user
-                       ON cha_username.usr_id = dat_usr_id_change ';
+                       ON cha_user.usr_id = dat_usr_id_change ';
             $additionalParams = array();
         }
 
