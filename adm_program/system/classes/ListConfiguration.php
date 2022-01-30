@@ -644,7 +644,7 @@ class ListConfiguration extends TableLists
 
                 // now transform condition into SQL
                 if (strpos($dbColumnName, ' AS') > 0) {
-                    $columnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS')).' '.$lscSort;
+                    $columnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS'));
                 } else {
                     $columnName = $dbColumnName;
                 }
