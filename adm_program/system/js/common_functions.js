@@ -69,16 +69,16 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
 
 /**
  * The function converts the format of the php date() function
- * to the format that is used of the moment.js script.
+ * to the format that is used of the luxon.js script.
  * @param {string} format A string with the format definition of the php date() function
  * @return {string} Format of moment.js script
  */
-function formatPhpToMoment(format) {
+function formatPhpToLuxon(format) {
     var formatMap = {
-        d: "DD",
-        D: "ddd",
-        j: "D",
-        l: "dddd",
+        d: "dd",
+        D: "ccc",
+        j: "d",
+        l: "cccc",
         N: "E",
         S: function() {
             return "[" + this.format("Do").replace(/\d*/g, "") + "]";
@@ -99,8 +99,8 @@ function formatPhpToMoment(format) {
             return this.isLeapYear() ? 1 : 0;
         },
         o: "GGGG",
-        Y: "YYYY",
-        y: "YY",
+        Y: "yyyy",
+        y: "yy",
         a: "a",
         A: "A",
         B: function() {

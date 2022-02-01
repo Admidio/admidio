@@ -148,6 +148,7 @@ and sharing great software.
 - [jQuery](https://jquery.com/): JavaScript-Library
 - [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin
 - [Lightbox](https://ashleydw.github.io/lightbox/): Lightbox for Bootstrap
+- [Luxon](https://moment.github.io/luxon/#/): A powerful, modern, and friendly wrapper for JavaScript dates and times.
 - [Monolog](https://github.com/Seldaek/monolog/): Logging for PHP
 - [NobleCount](https://tpgblog.com/NobleCount/): NobleCount… for a more ‘proper’ count of the characters remaining.
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP
