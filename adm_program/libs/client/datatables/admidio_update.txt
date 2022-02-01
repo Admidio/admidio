@@ -14,3 +14,4 @@ Short description to update the current lib
    - Concatenate
 2. Download and unzip the file
 3. Copy the 2 css and 2 js files from the main folder to the lib folder
+4. Get the datatables luxon plugin from https://github.com/DataTables/Plugins/blob/master/sorting/datetime-luxon.js
