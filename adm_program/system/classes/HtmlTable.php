@@ -323,10 +323,17 @@ class HtmlTable extends HtmlTableBasic
             $this->datatablesInitParameters[] = '"columnDefs": [' . implode(',', $this->datatablesColumnDefs) . ']';
         }
 
-        $this->htmlPage->addJavascript(
-            '
+        // luxon doesn't work properly if we use server side processing. Than an JS error is thrown.
+        if (!$this->serverSideProcessing) {
+            $this->htmlPage->addJavascript(
+                '
             $.fn.dataTable.luxon(formatPhpToLuxon("' . $gSettingsManager->getString('system_date') . '"));
             $.fn.dataTable.luxon(formatPhpToLuxon("' . $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time') . '"));
+            ',true
+            );
+        }
+        $this->htmlPage->addJavascript(
+            '
             var admidioTable = $("#' . $this->id . '").DataTable({' .
             implode(',', $this->datatablesInitParameters) .
             $javascriptGroup . '
