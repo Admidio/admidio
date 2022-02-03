@@ -1348,7 +1348,7 @@
   <string name="SYS_SMTP_SECURE_NO">ohne</string>
   <string name="SYS_SMTP_SECURE_SSL">SSL</string>
   <string name="SYS_SMTP_SECURE_TLS">TLS</string>
-  <string name="SYS_SMTP_USER">SMTP Anmledename</string>
+  <string name="SYS_SMTP_USER">SMTP Anmeldename</string>
   <string name="SYS_SMTP_USER_DESC">Der Anmeldename, der bei der SMTP-Authentifizierung verwendet wird.</string>
   <string name="SYS_SOCIAL_NETWORKS">Soziale Netzwerke</string>
   <string name="SYS_START" description="Start of a date">Beginn</string>
