@@ -44,7 +44,7 @@ if ($getUserUuid === '' && $getNewUser === 0) {
     $getNewUser = 1;
 }
 
-// User-ID nur uebernehmen, wenn ein vorhandener Benutzer auch bearbeitet wird
+// Take over user UUID only if an existing user is also edited
 if ($getUserUuid !== '' && $getNewUser !== 0 && $getNewUser !== 3) {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
@@ -61,6 +61,7 @@ if ($getCopy) {
     $user->setValue('usr_id', 0);
     $userId = 0;
     $getNewUser = 1;
+    $getUserUuid = '';
     $headline = $gL10n->get('SYS_COPY_VAR', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
 } elseif ($getNewUser === 1) {
     $headline = $gL10n->get('PRO_ADD_USER');
@@ -72,10 +73,10 @@ if ($getCopy) {
     $headline = $gL10n->get('PRO_EDIT_PROFILE');
 }
 
-// pruefen, ob Modul aufgerufen werden darf
+// check if module may be called
 switch ($getNewUser) {
     case 0:
-        // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
+        // checks if the user has the necessary rights to change the corresponding profile
         if (!$gCurrentUser->hasRightEditProfile($user)) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
@@ -83,20 +84,20 @@ switch ($getNewUser) {
         break;
 
     case 1:
-        // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
+        // checks if the user has the necessary rights to create new users
         if (!$gCurrentUser->editUsers()) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
 
-        // wurde Nachname und Vorname uebergeben, dann diese bereits vorbelegen
+        // If last name and first name are passed, then these are already preassigned
         $user->setValue('LAST_NAME', $getLastname);
         $user->setValue('FIRST_NAME', $getFirstname);
         break;
 
     case 2: // fallthrough
     case 3:
-        // Registrierung deaktiviert, also auch diesen Modus sperren
+        // Registration disabled, so also lock this mode
         if (!$gSettingsManager->getBool('registration_enable_module')) {
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
             // => EXIT
@@ -106,7 +107,7 @@ switch ($getNewUser) {
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// Formular wurde ueber "Zurueck"-Funktion aufgerufen, also alle Felder mit den vorherigen Werten fuellen
+// Form was called via "Back" function, so fill all fields with the previous values
 if (isset($_SESSION['profile_request'])) {
     $user->noValueCheck();
 
