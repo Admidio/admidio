@@ -400,6 +400,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             // check html string vor invalid tags and scripts
             $config = HTMLPurifier_Config::createDefault();
             $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
+            $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
             $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
 
             $filter = new HTMLPurifier($config);
