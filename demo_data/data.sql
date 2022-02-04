@@ -2900,3 +2900,19 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1915, 357, 6, 'DEU'),
 (1916, 357, 10, '2014-01-21'),
 (1917, 357, 11, 1);
+
+
+--
+-- Data for table adm_user_log
+--
+
+INSERT INTO %PREFIX%_user_log (usl_id, usl_usr_id, usl_usf_id, usl_value_new, usl_value_old, usl_usr_id_create, usl_timestamp_create, usl_comment) VALUES
+(1, 1, 3, 'Unter den Linden 45', 'Musterallee 25', 1, '2022-02-04 22:42:03', NULL),
+(2, 1, 4, '10117', '54897', 1, '2022-02-04 22:42:03', NULL),
+(3, 1, 5, 'Berlin', 'Düren', 1, '2022-02-04 22:42:03', NULL),
+(4, 1, 25, '3', '10', 1, '2022-02-04 22:42:03', NULL),
+(5, 1, 9, NULL, '02456-3908903', 1, '2022-01-15 09:42:03', NULL),
+(6, 1, 23, 'Admidio', NULL, 1, '2021-11-25 15:02:03', NULL),
+(7, 213, 8, '0181-457412', '0183-342342', 1, '2022-02-03 15:52:35', NULL),
+(8, 213, 13, NULL, 'www.example.org', 1, '2021-10-01 04:02:35', NULL),
+(9, 213, 23, NULL, 'begunk', 1, '2021-10-01 04:02:35', NULL);
