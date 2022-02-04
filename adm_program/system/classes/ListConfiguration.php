@@ -738,6 +738,7 @@ class ListConfiguration extends TableLists
                            '.$sqlUserJoin.'
                            '.$sqlJoin.'
                      WHERE usr_valid = true
+                       AND rol_valid = true
                        AND rol_id IN ('.$sqlRoleIds.')
                            '.$sqlRelationTypeWhere.'
                        AND (  cat_org_id = '. $GLOBALS['gCurrentOrgId']. '
