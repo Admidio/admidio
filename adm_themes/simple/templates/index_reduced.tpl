@@ -44,7 +44,7 @@
 
             {if $hasPreviousUrl}
                 <!-- Add link to previous page -->
-                <a class="" href="{$urlAdmidio}/adm_program/system/back.php"><i class="fas fa-arrow-circle-left fa-fw"></i> {$l10n->get('SYS_BACK')}</a>
+                <a id="admidio-back-link" class="" href="{$urlAdmidio}/adm_program/system/back.php"><i class="fas fa-arrow-circle-left fa-fw"></i> {$l10n->get('SYS_BACK')}</a>
             {/if}
         </div>
 
