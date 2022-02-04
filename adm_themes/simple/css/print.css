@@ -26,6 +26,10 @@ h3, h5 {
     margin-bottom: 25px;
 }
 
+#admidio-back-link {
+    display: none;
+}
+
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, .admidio-img-presenter,
