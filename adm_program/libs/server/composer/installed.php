@@ -194,12 +194,12 @@
             ),
         ),
         'smarty/smarty' => array(
-            'pretty_version' => 'v3.1.44',
-            'version' => '3.1.44.0',
+            'pretty_version' => 'v4.0.4',
+            'version' => '4.0.4.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../smarty/smarty',
             'aliases' => array(),
-            'reference' => '99085d8dc65eeb5e55ae3cba74d3dc6b3bb0205e',
+            'reference' => 'cdf0f2b164fbb9a96f86be97713a2426f0bb0c97',
             'dev_requirement' => false,
         ),
         'symfony/polyfill-ctype' => array(
