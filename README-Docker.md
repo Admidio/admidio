@@ -248,8 +248,10 @@ services:
     image: mariadb:10.5.8
     container_name: Admidio-MariaDB
     volumes:
-      - "./data/database/config:/etc/mysql/conf.d"
-      - "./data/database/data:/var/lib/mysql"
+      - "Admidio-MariaDB-confd:/etc/mysql/conf.d"
+      - "Admidio-MariaDB-data:/var/lib/mysql"
+    ports:
+      - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=secret-password
       - MYSQL_DATABASE=admidio
@@ -263,9 +265,9 @@ services:
     depends_on:
       - db
     volumes:
-      - ./data/admidio/files:/opt/app-root/src/adm_my_files
-      - ./data/admidio/themes:/opt/app-root/src/adm_themes
-      - ./data/admidio/plugins:/opt/app-root/src/adm_plugins
+      - Admidio-files:/opt/app-root/src/adm_my_files
+      - Admidio-themes:/opt/app-root/src/adm_themes
+      - Admidio-plugins:/opt/app-root/src/adm_plugins
     ports:
       - 8080:8080
     environment:
@@ -303,8 +305,10 @@ services:
     image: mariadb:10.5.8
     container_name: Admidio-MariaDB
     volumes:
-      - "./data/database/config:/etc/mysql/conf.d"
-      - "./data/database/data:/var/lib/mysql"
+      - "Admidio-MariaDB-confd:/etc/mysql/conf.d"
+      - "Admidio-MariaDB-data:/var/lib/mysql"
+    ports:
+      - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=secret-password
       - MYSQL_DATABASE=admidio
@@ -319,9 +323,9 @@ services:
     depends_on:
       - db
     volumes:
-      - ./data/admidio/files:/opt/app-root/src/adm_my_files
-      - ./data/admidio/themes:/opt/app-root/src/adm_themes
-      - ./data/admidio/plugins:/opt/app-root/src/adm_plugins
+      - Admidio-files:/opt/app-root/src/adm_my_files
+      - Admidio-themes:/opt/app-root/src/adm_themes
+      - Admidio-plugins:/opt/app-root/src/adm_plugins
     ports:
       - 8080:8080
     environment:
