@@ -3,10 +3,10 @@
  ***********************************************************************************************
  * Sidebar Announcements
  *
- * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
- * und so ideal in einer Seitenleiste eingesetzt werden kann
+ * Plugin that lists the latest announcements in a slim interface and
+ * can thus be ideally used in a sidebar
  *
- * Compatible with Admidio version 3.3
+ * Compatible with Admidio version 4.1
  *
  * @copyright 2004-2022 The Admidio Team
  * @see https://www.admidio.org/
