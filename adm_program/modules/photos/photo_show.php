@@ -26,7 +26,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string', array('requireValue' => true));
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
 $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
 $getMaxWidth  = admFuncVariableIsValid($_GET, 'max_width', 'int', array('defaultValue' => 0));
 $getMaxHeight = admFuncVariableIsValid($_GET, 'max_height', 'int', array('defaultValue' => 0));
