@@ -79,30 +79,26 @@ if ($gSettingsManager->getInt('enable_photo_module') > 0) {
         $albumStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
         $albumList      = $albumStatement->fetchAll();
 
-        $i        = 0;
-        $picNr    = 0;
-        $picPath  = '';
+        $i = 0;
+        $photoNr = 0;
+        $photoServerPath = '';
         $linkText = '';
         $album = new TablePhotos($gDb);
 
         // loop, if an image is not found directly, but limit to 20 passes
-        while (!is_file($picPath) && $i < 20 && $albumStatement->rowCount() > 0) {
+        while (!is_file($photoServerPath) && $i < 20 && $albumStatement->rowCount() > 0) {
             $album->setArray($albumList[mt_rand(0, $albumStatement->rowCount()-1)]);
 
             // optionally select an image randomly
             if ($plg_photos_picnr === 0) {
-                $picNr = mt_rand(1, (int) $album->getValue('pho_quantity'));
+                $photoNr = mt_rand(1, (int) $album->getValue('pho_quantity'));
             } else {
-                $picNr = $plg_photos_picnr;
+                $photoNr = $plg_photos_picnr;
             }
 
             // Compose image path
-            $picPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $album->getValue('pho_begin', 'Y-m-d') . '_' . (int) $album->getValue('pho_id') . '/' . $picNr . '.jpg';
+            $photoServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $album->getValue('pho_begin', 'Y-m-d') . '_' . (int) $album->getValue('pho_id') . '/' . $photoNr . '.jpg';
             ++$i;
-        }
-
-        if (!is_file($picPath)) {
-            $picPath = THEME_PATH . '/images/no_photo_found.png';
         }
 
         if ($plg_photos_show_link && $plg_max_char_per_word > 0) {
@@ -123,9 +119,9 @@ if ($gSettingsManager->getInt('enable_photo_module') > 0) {
 
         // show the photo
         $photoUuid = $album->getValue('pho_uuid');
-        echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $photoUuid, 'photo_nr' => $picNr)).'" target="'. $plg_link_target. '"><img
+        echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $photoUuid, 'photo_nr' => $photoNr)).'" target="'. $plg_link_target. '"><img
             class="rounded d-block w-100" alt="'.$linkText.'" title="'.$linkText.'"
-            src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $photoUuid, 'photo_nr' => $picNr, 'pho_begin' => $album->getValue('pho_begin', 'Y-m-d'), 'max_width' => $plg_photos_max_width, 'max_height' => $plg_photos_max_height)).'" /></a>';
+            src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $photoUuid, 'photo_nr' => $photoNr, 'pho_begin' => $album->getValue('pho_begin', 'Y-m-d'), 'max_width' => $plg_photos_max_width, 'max_height' => $plg_photos_max_height)).'" /></a>';
 
         // optional the linked name of the album
         if ($plg_photos_show_link) {
