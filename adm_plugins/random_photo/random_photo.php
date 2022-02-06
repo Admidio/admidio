@@ -6,7 +6,7 @@
  * Plugin displays a randomly selected photo from the photo module and links the
  * corresponding album next to the image
  *
- * Compatible with Admidio version 3.3
+ * Compatible with Admidio version 4.1
  *
  * @copyright 2004-2022 The Admidio Team
  * @see https://www.admidio.org/

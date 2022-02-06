@@ -7,7 +7,7 @@
  * coming. This plugin can be used to show the Admidio events andbirthdays in a
  * sidebar within Admidio or in an external website.
  *
- * Compatible with Admidio version 4.0
+ * Compatible with Admidio version 4.1
  *
  * @copyright 2004-2022 The Admidio Team
  * @see https://www.admidio.org/
