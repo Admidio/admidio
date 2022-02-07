@@ -186,7 +186,7 @@ if ($announcementsCount === 0) {
                 ) .
                 '<div class="admidio-info-category">' .
                     $gL10n->get('SYS_CATEGORY') .
-                    '&nbsp;<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_id' => (int) $announcement->getValue('ann_cat_id'))).'">' . $announcement->getValue('cat_name').'</a>
+                    '&nbsp;<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_uuid' => $announcement->getValue('cat_uuid'))).'">' . $announcement->getValue('cat_name').'</a>
                 </div>
             </div>
         </div>');
