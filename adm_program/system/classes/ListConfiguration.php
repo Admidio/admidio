@@ -741,6 +741,7 @@ class ListConfiguration extends TableLists
                        AND rol_valid = true
                        AND rol_id IN ('.$sqlRoleIds.')
                            '.$sqlRelationTypeWhere.'
+                       AND cat_name_intern <> \'EVENTS\'
                        AND (  cat_org_id = '. $GLOBALS['gCurrentOrgId']. '
                            OR cat_org_id IS NULL )
                            '.$sqlMemberStatus.
