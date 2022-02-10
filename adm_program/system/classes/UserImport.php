@@ -264,7 +264,7 @@ class UserImport extends User
             }
 
             // if user should be completed than also empty values must be set
-            if ($validValue !== '' || self::USER_IMPORT_COMPLETE) {
+            if ($validValue !== '' || $this->importMode === self::USER_IMPORT_COMPLETE) {
                 return parent::setValue($columnName, $validValue, $checkValue);
             }
         }
