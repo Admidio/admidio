@@ -513,10 +513,6 @@ if ($numMembers === 0) {
 $arrColumnNames = $list->getColumnNames();
 $arrColumnAlign = $list->getColumnAlignments();
 
-// add column with sequential number
-array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'));
-array_unshift($arrColumnAlign, 'left');
-
 // set the first column for the counter
 if ($getMode === 'html') {
     // in html mode we group leaders. Therefore we need a special hidden column.
@@ -528,6 +524,10 @@ if ($getMode === 'html') {
         $arrColumnNames[] = '&nbsp;';
     }
 }
+
+// add column with sequential number
+array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'));
+array_unshift($arrColumnAlign, 'left');
 
 if ($getMode === 'csv') {
     $csvStr = $valueQuotes . implode($valueQuotes.$separator.$valueQuotes, $arrColumnNames) . $valueQuotes . "\n";
