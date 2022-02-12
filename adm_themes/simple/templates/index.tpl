@@ -123,6 +123,7 @@
                         <!-- Add link to previous page -->
                         <a id="admidio-back-link" class="" href="{$urlAdmidio}/adm_program/system/back.php"><i class="fas fa-arrow-circle-left fa-fw"></i> {$l10n->get('SYS_BACK')}</a>
                     {/if}
+                    {$menuFunctions}
                 </div>
 
                 {* The main content of the page that will be generated through the Admidio scripts *}

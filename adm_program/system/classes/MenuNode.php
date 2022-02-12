@@ -191,6 +191,65 @@ class MenuNode
     }
 
     /**
+     * Create the html code of the menu node as a html Navbar block. If a node has sub items than
+     * a dropdown will be created.
+     * @return string Html code of the menu.
+     */
+    public function getHtmlNav()
+    {
+        $html = '';
+
+        if ($this->count() > 0) {
+            $html .= '<ul class="nav admidio-page-nav">';
+
+            foreach ($this->nodeEntries as $menuEntry) {
+                $htmlBadge = '';
+                $htmlIcon = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
+
+                if ($menuEntry['badge_count'] > 0) {
+                    $htmlBadge = '<span class="badge badge-light">' . $menuEntry['badge_count'] . '</span>';
+                }
+
+                if (isset($menuEntry['sub_items'])) {
+                    $html .= '
+                    <li class="nav-item dropdown">
+                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                            href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            ' . $htmlIcon . $menuEntry['men_name'] . $htmlBadge . '
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-left">';
+                    foreach ($menuEntry['sub_items'] as $subMenuEntry) {
+                        $htmlSubBadge = '';
+                        $htmlSubIcon = Image::getIconHtml($subMenuEntry['men_icon'], $subMenuEntry['men_name']);
+
+                        if ($subMenuEntry['badge_count'] > 0) {
+                            $htmlSubBadge = '<span class="badge badge-light">' . $subMenuEntry['badge_count'] . '</span>';
+                        }
+
+                        $html .= '
+                                <a id="'.$subMenuEntry['men_name_intern'].'" class="dropdown-item" href="'.$subMenuEntry['men_url'].'">
+                                    ' . $htmlSubIcon . $subMenuEntry['men_name'] . $htmlSubBadge . '
+                                </a>';
+                    }
+                    $html .= '</div>
+                    </li>';
+                } else {
+                    $html .= '
+                    <li class="nav-item">
+                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link btn btn-secondary" href="'.$menuEntry['men_url'].'">
+                            ' . $htmlIcon . $menuEntry['men_name'] . $htmlBadge . '
+                        </a>
+                    </li>';
+                }
+            }
+
+            $html .= '</ul>';
+        }
+
+        return $html;
+    }
+
+    /**
      * Load all entries of that node from the database table **adm_menu**. Therefore each entry
      * must have stored the $nodeId as the mem_mem_id_parent. The entries will be stored within
      * the internal array $nodeEntries.

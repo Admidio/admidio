@@ -185,7 +185,7 @@ $page->addJavascript(
 
     $("#menu_item_profile_password").attr("href", "javascript:void(0);");
     $("#menu_item_profile_password").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)).'");
-    $("#menu_item_profile_password").attr("class", "nav-link openPopup");
+    $("#menu_item_profile_password").attr("class", "nav-link btn btn-secondary openPopup");
 
     $("input[data-provide=\'datepicker\']").datepicker({
         language: "'.$gL10n->getLanguageLibs().'",
