@@ -28,7 +28,7 @@
  * $menuList->addToNavbar($navbar);
  * ```
  */
-class Menu
+class MenuDatabase
 {
     /**
      * @var array Array with the main nodes and their entries
