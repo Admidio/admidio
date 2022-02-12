@@ -775,9 +775,7 @@
   <string name="SYS_EDIT_LISTS_DESC">Users can create their own lists with selected profile fields and then apply them to groups and roles. Only profile fields and groups or roles that the current user is allowed to see are available. This setting can be used to specify who can create such lists. (Default: All)</string>
   <string name="SYS_EDIT_MEMBERS">Edit members</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Edit profile fields</string>
-  <string name="SYS_EDIT_RELATIONSHIPS">Edit relationships</string>
   <string name="SYS_EDIT_ROLE">Edit role</string>
-  <string name="SYS_EDIT_ROLE_MEMBERSHIPS">Edit role membership</string>
   <string name="SYS_EDIT_USER">Edit user</string>
   <string name="SYS_EDIT_USER_IN_RELATION">User profile of this relationship can be edited</string>
   <string name="SYS_EDIT_VAR">Edit #VAR1#</string>
@@ -1361,6 +1359,7 @@
   <string name="SYS_SUNDAY">Sunday</string>
   <string name="SYS_SUPPORT_ADMIDIO">Support Admidio</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
+  <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Switch to relationship configuration</string>
   <string name="SYS_SYMMETRICAL">Symmetrical</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Login data for #organization_long_name#\n#content# Hello #user_first_name#,\n\nYou receive your login data for the website #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nCheers,\nThe administrators</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Reset password for #organization_long_name#\n#content# Hello #user_first_name#,\n\nWe have received a request to reset your password on #organization_homepage#.\n\nIf the request came from you, you can use the following link to reset your password and set a new one: \n#variable1#\n\nBest regards\nThe administrators</string>

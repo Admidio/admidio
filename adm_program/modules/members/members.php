@@ -49,7 +49,7 @@ $page = new HtmlPage('admidio-members', $headline);
 $page->addJavascript('
     $("#menu_item_members_create_user").attr("href", "javascript:void(0);");
     $("#menu_item_members_create_user").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php");
-    $("#menu_item_members_create_user").attr("class", "nav-link openPopup");
+    $("#menu_item_members_create_user").attr("class", "nav-link btn btn-secondary openPopup");
 
     // change mode of users that should be shown
     $("#mem_show_all").click(function() {
@@ -99,16 +99,6 @@ if ($gCurrentUser->isAdministrator()) {
         ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields.php',
         'fa-th-list'
     );
-
-    if ($gSettingsManager->getBool('members_enable_user_relations')) {
-        // show link to relation types
-        $page->addPageFunctionsMenuItem(
-            'menu_item_members_user_relation_types',
-            $gL10n->get('SYS_EDIT_RELATIONSHIPS'),
-            ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes.php',
-            'fa-people-arrows'
-        );
-    }
 }
 
 $orgName = $gCurrentOrganization->getValue('org_longname');

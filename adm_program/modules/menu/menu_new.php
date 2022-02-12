@@ -212,7 +212,7 @@ $form->addInput(
 $form->addSubmitButton(
     'btn_save',
     $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check')
+    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
 );
 
 // add form to html page and show page
