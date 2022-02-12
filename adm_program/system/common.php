@@ -173,13 +173,13 @@ if ($gCurrentSession->hasObject('gCurrentUser')) {
 // create a global menu object that reads the menu structure only once
 if ($gCurrentSession->hasObject('gMenu')) {
     /**
-     * @var MenuDatabase $gMenu
+     * @var MainMenu $gMenu
      */
     $gMenu =& $gCurrentSession->getObject('gMenu');
     $gMenu->removeFunctionsNode();
 } else {
     // read menu from database
-    $gMenu = new MenuDatabase();
+    $gMenu = new MainMenu();
     $gCurrentSession->addObject('gMenu', $gMenu);
 }
 
