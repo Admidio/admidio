@@ -175,7 +175,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'Language' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Language.php',
         'LanguageData' => __DIR__ . '/../../../..' . '/adm_program/system/classes/LanguageData.php',
         'ListConfiguration' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ListConfiguration.php',
-        'Menu' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Menu.php',
+        'MainMenu' => __DIR__ . '/../../../..' . '/adm_program/system/classes/MainMenu.php',
         'MenuNode' => __DIR__ . '/../../../..' . '/adm_program/system/classes/MenuNode.php',
         'Message' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Message.php',
         'ModuleAnnouncements' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleAnnouncements.php',

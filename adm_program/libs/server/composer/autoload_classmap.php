@@ -38,7 +38,7 @@ return array(
     'Language' => $baseDir . '/adm_program/system/classes/Language.php',
     'LanguageData' => $baseDir . '/adm_program/system/classes/LanguageData.php',
     'ListConfiguration' => $baseDir . '/adm_program/system/classes/ListConfiguration.php',
-    'Menu' => $baseDir . '/adm_program/system/classes/Menu.php',
+    'MainMenu' => $baseDir . '/adm_program/system/classes/MainMenu.php',
     'MenuNode' => $baseDir . '/adm_program/system/classes/MenuNode.php',
     'Message' => $baseDir . '/adm_program/system/classes/Message.php',
     'ModuleAnnouncements' => $baseDir . '/adm_program/system/classes/ModuleAnnouncements.php',
