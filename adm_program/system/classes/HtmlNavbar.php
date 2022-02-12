@@ -273,11 +273,6 @@ class HtmlNavbar
             return '';
         }
 
-        // if navbar will be shown then set this flag in page object
-        if ($this->htmlPage instanceof HtmlPage) {
-            $this->htmlPage->hasNavbar();
-        }
-
         $cssClassBrand = '';
         $cssClassNavbar = '';
 

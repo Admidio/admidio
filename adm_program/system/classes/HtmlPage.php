@@ -54,10 +54,6 @@ class HtmlPage extends \Smarty
      */
     protected $menuNodePageFunctions;
     /**
-     * @var bool Flag if the current page has a navbar.
-     */
-    protected $hasNavbar = false;
-    /**
      * @var array<int,string> An array with all necessary cascading style sheets files for the html page.
      */
     protected $cssFiles = array();
@@ -329,15 +325,6 @@ class HtmlPage extends \Smarty
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * Flag if the current page has a navbar.
-     * @return void
-     */
-    public function hasNavbar()
-    {
-        $this->hasNavbar = true;
     }
 
     /**
