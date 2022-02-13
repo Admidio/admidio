@@ -118,17 +118,17 @@
 /* page function menu */
 /***********************************/
 
-.admidio-page-nav {
+.admidio-menu-function-node {
     margin-top: 25px;
 }
 
-.admidio-page-nav .nav-link {
+.admidio-menu-function-node .nav-link {
     margin-right: 25px;
     margin-top: 15px;
 }
 
 @media (max-width: 767px) {
-    .admidio-page-nav .nav-link {
+    .admidio-menu-function-node .nav-link {
         max-width: 150px;
     }
 }

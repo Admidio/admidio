@@ -428,7 +428,7 @@ class HtmlPage extends \Smarty
 
         $this->assign('printView', $this->printView);
         $this->assign('menuSidebar', $gMenu->getHtml());
-        $this->assign('menuFunctions', $this->menuNodePageFunctions->getHtmlNav());
+        $this->assign('menuFunctions', $this->menuNodePageFunctions->getHtml());
         $this->assign('templateFile', $this->templateFile);
         $this->assign('content', $this->pageContent);
 

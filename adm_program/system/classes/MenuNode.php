@@ -132,76 +132,23 @@ class MenuNode
     /**
      * Create the html code of the menu node as a html list. If a node has sub items than
      * a dropdown will be created.
+     * @param bool $mainMenu Flag, if the menu node should be added to the main menu
      * @return string Html code of the menu.
      */
-    public function getHtml()
+    public function getHtml($mainMenu = false)
     {
         $html = '';
+        $linkClasses = '';
 
         if ($this->count() > 0) {
-            $html .= '<div class="admidio-menu-header">'.$this->name.'</div>
-
-            <ul class="nav flex-column mb-0">';
-
-            foreach ($this->nodeEntries as $menuEntry) {
-                $htmlBadge = '';
-                $htmlIcon = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
-
-                if ($menuEntry['badge_count'] > 0) {
-                    $htmlBadge = '<span class="badge badge-light">' . $menuEntry['badge_count'] . '</span>';
-                }
-
-                if (isset($menuEntry['sub_items'])) {
-                    $html .= '
-                    <li class="nav-item dropdown">
-                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link dropdown-toggle" data-toggle="dropdown"
-                            href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            ' . $htmlIcon . $menuEntry['men_name'] . $htmlBadge . '
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-left">';
-                    foreach ($menuEntry['sub_items'] as $subMenuEntry) {
-                        $htmlSubBadge = '';
-                        $htmlSubIcon = Image::getIconHtml($subMenuEntry['men_icon'], $subMenuEntry['men_name']);
-
-                        if ($subMenuEntry['badge_count'] > 0) {
-                            $htmlSubBadge = '<span class="badge badge-light">' . $subMenuEntry['badge_count'] . '</span>';
-                        }
-
-                        $html .= '
-                                <a id="'.$subMenuEntry['men_name_intern'].'" class="dropdown-item" href="'.$subMenuEntry['men_url'].'">
-                                    ' . $htmlSubIcon . $subMenuEntry['men_name'] . $htmlSubBadge . '
-                                </a>';
-                    }
-                    $html .= '</div>
-                    </li>';
-                } else {
-                    $html .= '
-                    <li class="nav-item">
-                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link" href="'.$menuEntry['men_url'].'">
-                            ' . $htmlIcon . $menuEntry['men_name'] . $htmlBadge . '
-                        </a>
-                    </li>';
-                }
+            if($mainMenu) {
+                $html .= '<div class="admidio-menu-header">'.$this->name.'</div>
+                            <ul class="nav admidio-menu-node flex-column mb-0">';
+            } else {
+                $html .= '<ul class="nav admidio-menu-function-node">';
+                $linkClasses = ' btn btn-secondary ';
             }
 
-            $html .= '</ul>';
-        }
-
-        return $html;
-    }
-
-    /**
-     * Create the html code of the menu node as a html Navbar block. If a node has sub items than
-     * a dropdown will be created.
-     * @return string Html code of the menu.
-     */
-    public function getHtmlNav()
-    {
-        $html = '';
-
-        if ($this->count() > 0) {
-            $html .= '<ul class="nav admidio-page-nav">';
-
             foreach ($this->nodeEntries as $menuEntry) {
                 $htmlBadge = '';
                 $htmlIcon = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
@@ -213,7 +160,7 @@ class MenuNode
                 if (isset($menuEntry['sub_items'])) {
                     $html .= '
                     <li class="nav-item dropdown">
-                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link ' . $linkClasses . ' dropdown-toggle" data-toggle="dropdown"
                             href="#" role="button" aria-haspopup="true" aria-expanded="false">
                             ' . $htmlIcon . $menuEntry['men_name'] . $htmlBadge . '
                         </a>
@@ -236,7 +183,7 @@ class MenuNode
                 } else {
                     $html .= '
                     <li class="nav-item">
-                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link btn btn-secondary" href="'.$menuEntry['men_url'].'">
+                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link ' . $linkClasses . '" href="'.$menuEntry['men_url'].'">
                             ' . $htmlIcon . $menuEntry['men_name'] . $htmlBadge . '
                         </a>
                     </li>';
