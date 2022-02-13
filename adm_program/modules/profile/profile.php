@@ -185,7 +185,7 @@ $page->addJavascript(
 
     $("#menu_item_profile_password").attr("href", "javascript:void(0);");
     $("#menu_item_profile_password").attr("data-href", "'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)).'");
-    $("#menu_item_profile_password").attr("class", "nav-link openPopup");
+    $("#menu_item_profile_password").attr("class", "nav-link btn btn-secondary openPopup");
 
     $("input[data-provide=\'datepicker\']").datepicker({
         language: "'.$gL10n->getLanguageLibs().'",
@@ -255,16 +255,6 @@ $page->addPageFunctionsMenuItem(
     SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '1', 'user_uuid' => $getUserUuid)),
     'fa-file-export'
 );
-
-// if you have the right to assign roles then show the link to assign new roles to this user
-if ($gCurrentUser->assignRoles()) {
-    $page->addPageFunctionsMenuItem(
-        'menu_item_profile_role_memberships_change',
-        $gL10n->get('SYS_EDIT_ROLE_MEMBERSHIPS'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid)),
-        'fa-users'
-    );
-}
 
 // show link to create relations
 if ($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser->editUsers()) {
@@ -666,9 +656,9 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
         <div class="card-header">'.$gL10n->get('SYS_ROLE_MEMBERSHIPS'));
     // if you have the right to assign roles then show the link to assign new roles to this user
     if ($gCurrentUser->assignRoles()) {
-        $page->addHtml('<a class="admidio-icon-link float-right openPopup" id="profile_role_memberships_change" data-class="modal-lg"
+        $page->addHtml('<a class="btn btn-secondary float-right openPopup" id="profile_role_memberships_change" data-class="modal-lg"
                     href="javascript:void(0);" data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => '1')).'">
-                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_ROLE_MEMBERSHIPS').'"></i></a>');
+                    <i class="fas fa-edit"></i>' . $gL10n->get('SYS_EDIT') . '</a>');
     }
     $page->addHtml('</div>
         <div class="card-body" id="profile_roles_box_body">

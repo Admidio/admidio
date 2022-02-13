@@ -28,7 +28,7 @@
  * $menuList->addToNavbar($navbar);
  * ```
  */
-class Menu
+class MainMenu
 {
     /**
      * @var array Array with the main nodes and their entries
@@ -121,13 +121,11 @@ class Menu
     }
 
     /**
-     * Create the html code of the menu as a list. There are different
-     * parameters to change the look of the menu.
-     * @param bool $mediaView If set to true than the menu will be shown in the style of bootstrap media object
-     *                        https://getbootstrap.com/docs/4.3/components/media-object/
+     * Create the html code of the menu as a list. The different menu nodes will be created by the html method
+     * of the sub class MenuNode.
      * @return string Html code of the menu.
      */
-    public function getHtml($mediaView = false)
+    public function getHtml()
     {
         if (!$this->menuLoaded) {
             $this->loadFromDatabase();
@@ -136,7 +134,7 @@ class Menu
         $html = '<nav class="admidio-menu-list collapse" id="admidio-main-menu">';
 
         foreach ($this->menuNodes as $menuNode) {
-            $html .= $menuNode->getHtml($mediaView);
+            $html .= $menuNode->getHtml(true);
         }
 
         $html .= '</nav>';

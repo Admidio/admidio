@@ -50,13 +50,9 @@ class HtmlPage extends \Smarty
      */
     protected $pageContent = '';
     /**
-     * @var MenuNode An object that represents all functions of the current page that should be shown in the default menu
+     * @var MenuNode An object that represents all functions of the current page that should be shown in the menu of this page
      */
     protected $menuNodePageFunctions;
-    /**
-     * @var bool Flag if the current page has a navbar.
-     */
-    protected $hasNavbar = false;
     /**
      * @var array<int,string> An array with all necessary cascading style sheets files for the html page.
      */
@@ -332,15 +328,6 @@ class HtmlPage extends \Smarty
     }
 
     /**
-     * Flag if the current page has a navbar.
-     * @return void
-     */
-    public function hasNavbar()
-    {
-        $this->hasNavbar = true;
-    }
-
-    /**
      * If this method is called than the back link to the previous page will not be shown.
      */
     public function hideBackLink()
@@ -422,9 +409,6 @@ class HtmlPage extends \Smarty
         // disallow iFrame integration from other domains to avoid clickjacking attacks
         header('X-Frame-Options: SAMEORIGIN');
 
-        // add page functions menu to global menu
-        $gMenu->addFunctionsNode($this->menuNodePageFunctions);
-
         $this->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
         $this->assign('languageIsoCode', $gL10n->getLanguageIsoCode());
         $this->assign('id', $this->id);
@@ -444,6 +428,7 @@ class HtmlPage extends \Smarty
 
         $this->assign('printView', $this->printView);
         $this->assign('menuSidebar', $gMenu->getHtml());
+        $this->assign('menuFunctions', $this->menuNodePageFunctions->getHtml());
         $this->assign('templateFile', $this->templateFile);
         $this->assign('content', $this->pageContent);
 

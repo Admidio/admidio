@@ -115,6 +115,25 @@
 }
 
 /***********************************/
+/* page function menu */
+/***********************************/
+
+.admidio-menu-function-node {
+    margin-top: 25px;
+}
+
+.admidio-menu-function-node .nav-link {
+    margin-right: 25px;
+    margin-top: 15px;
+}
+
+@media (max-width: 767px) {
+    .admidio-menu-function-node .nav-link {
+        max-width: 150px;
+    }
+}
+
+/***********************************/
 /* Default tags */
 /***********************************/
 
@@ -134,7 +153,11 @@ a:hover, .page-link:hover, a.btn:hover {
     color: #25717d;
 }
 
-a.btn-primary {
+a.btn-primary, .btn-secondary {
+    color: #f7f7f7 !important;
+}
+
+a.btn-primary:hover, .btn-secondary:hover {
     color: #ffffff !important;
 }
 

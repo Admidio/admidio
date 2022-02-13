@@ -308,7 +308,7 @@ $form->addCheckbox(
     (bool) $category->getValue('cat_default'),
     array('icon' => 'fa-star')
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check', 'class' => ' offset-sm-3'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $category->getValue('cat_usr_id_create'),
     $category->getValue('cat_timestamp_create'),
