@@ -409,7 +409,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
             $role = new TableRoles($gDb);
 
             // these are the default settings for a date role
-            $role->setValue('rol_cat_id', $pdoStatement->fetchColumn());
+            $role->setValue('rol_cat_id', (int) $pdoStatement->fetchColumn());
             // role members are allowed to view lists
             $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? 1 : 0);
             // role members are allowed to send mail to this role
