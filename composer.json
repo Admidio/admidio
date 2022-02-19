@@ -36,6 +36,7 @@
         "ext-pdo_pgsql": "For PostgreSQL database support"
     },
     "autoload": {
-        "classmap": ["adm_program/system/classes/"]
+        "classmap": ["adm_program/system/classes/"],
+        "files": ["adm_program/libs/client/jquery-file-upload/server/php/UploadHandler.php"]
     }
 }

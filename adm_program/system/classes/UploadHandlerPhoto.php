@@ -25,7 +25,6 @@
  *                                               'array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID')));
  * ```
  */
-require_once(ADMIDIO_PATH . FOLDER_LIBS_CLIENT . '/jquery-file-upload/server/php/UploadHandler.php');
 
 class UploadHandlerPhoto extends UploadHandler
 {
