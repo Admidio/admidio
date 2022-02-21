@@ -7,18 +7,18 @@ FROM registry.access.redhat.com/ubi8/php-74:latest
 MAINTAINER Stefan Schatz
 
 # Build-time metadata as defined at http://label-schema.org
-ARG BUILD_DATE
-ARG VCS_REF
-ARG VERSION
-LABEL org.label-schema.build-date="${BUILD_DATE}" \
+ARG ADMIDIO_BUILD_DATE
+ARG ADMIDIO_VCS_REF
+ARG ADMIDIO_VERSION
+LABEL org.label-schema.build-date="${ADMIDIO_BUILD_DATE}" \
       org.label-schema.name="Admidio" \
       org.label-schema.description="Admidio is a free open source user management system for websites of organizations and groups." \
       org.label-schema.license="GPL-2.0", \
       org.label-schema.url="https://www.admidio.org/" \
-      org.label-schema.vcs-ref="${VCS_REF}" \
+      org.label-schema.vcs-ref="${ADMIDIO_VCS_REF}" \
       org.label-schema.vcs-url="https://github.com/Admidio/admidio" \
       org.label-schema.vendor="Admidio" \
-      org.label-schema.version="${VERSION}" \
+      org.label-schema.version="${ADMIDIO_VERSION}" \
       org.label-schema.schema-version="1.0"
 
 
