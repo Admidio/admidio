@@ -12,9 +12,9 @@ set -o pipefail  # causes a pipeline (for example, curl -s https://sipb.mit.edu/
 # https://docs.docker.com/docker-hub/builds/advanced/
 # $IMAGE_NAME var is injected into the build so the tag is correct.
 
-# docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-#              --build-arg VCS_REF=`git rev-parse --short HEAD` \
-#              --build-arg VERSION=`cat VERSION` .
+# docker build --build-arg ADMIDIO_BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+#              --build-arg ADMIDIO_VCS_REF=`git rev-parse --short HEAD` \
+#              --build-arg ADMIDIO_VERSION=`cat ADMIDIO_VERSION` .
 
 
 
@@ -22,11 +22,34 @@ set -o pipefail  # causes a pipeline (for example, curl -s https://sipb.mit.edu/
 # example usage:
 #   IMAGE_NAME="yourUsername/admidio:v4.0.4" ./hooks/build
 
+IMAGE_NAME="${IMAGE_NAME}"
+if [ "${IMAGE_NAME}" = "" ]; then
+    echo "[ERROR] IMAGE_NAME not specified."
+    exit 1
+fi
+
+for item in ${IMAGE_NAME}; do
+    IMAGE_NAMES="${IMAGE_NAMES} -t ${item}"
+done
+ADMIDIO_BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+ADMIDIO_VCS_REF="$(git describe --always --abbrev=7 --tags --long)"
+ADMIDIO_VERSION="$(git describe --always --abbrev=0 --tags)"
+
 echo "Build hook running"
+echo "docker build --build-arg ADMIDIO_BUILD_DATE=\"${ADMIDIO_BUILD_DATE}\" \
+--build-arg ADMIDIO_VCS_REF=\"${ADMIDIO_VCS_REF}\" \
+--build-arg ADMIDIO_VERSION=\"${ADMIDIO_VERSION}\" \
+--rm --force-rm \
+-f \"Dockerfile\" \
+${IMAGE_NAMES} \
+.
+"
+
 docker build \
-  --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
-  --build-arg VCS_REF="$(git describe --always --abbrev=7 --tags --long)" \
-  --build-arg VERSION="$(git describe --always --abbrev=0 --tags)" \
+  --build-arg ADMIDIO_BUILD_DATE="${ADMIDIO_BUILD_DATE}" \
+  --build-arg ADMIDIO_VCS_REF="${ADMIDIO_VCS_REF}" \
+  --build-arg ADMIDIO_VERSION="${ADMIDIO_VERSION}" \
   --rm --force-rm \
   -f "Dockerfile" \
-  -t "${IMAGE_NAME}" .
+  ${IMAGE_NAMES} \
+  .
