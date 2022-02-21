@@ -21,8 +21,8 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 ![Docker Pulls](https://img.shields.io/docker/pulls/admidio/admidio?style=plastic)
 
 -	[`latest`](https://github.com/Admidio/admidio/blob/master/Dockerfile)
--	[`branch-v4.0`](https://github.com/Admidio/admidio/blob/v4.0/Dockerfile)
-- `vN.N.N` (e.g.: `v4.0.4`)
+-	[`branch-v4.1`](https://github.com/Admidio/admidio/blob/v4.1/Dockerfile)
+- `vN.N.N` (e.g.: `v4.1.7`)
 - see https://hub.docker.com/r/admidio/admidio/tags for all available tags
 
 You can find the releasenotes on Github [admidio/releases](https://github.com/Admidio/admidio/releases) and the Docker images on Dockerhub [admidio/admidio](https://hub.docker.com/r/admidio/admidio/).
@@ -42,7 +42,7 @@ docker run --detach -it --name "Admidio-MariaDB" \
   -e MYSQL_ROOT_PASSWORD="my_VerySecureRootPassword.01" \
   -e MYSQL_USER="admidio" \
   -e MYSQL_PASSWORD="my_VerySecureAdmidioUserPassword.01" \
-  mariadb:10.5.8
+  mariadb:latest
 ```
 
 ## Start an `admidio` server instance
@@ -99,7 +99,7 @@ docker run --detach -it --name "Admidio" \
 * **`--name "Admidio"`:** Docker container name
 * **`--memory="1024m"`:** limit ram usage of docker container to 1GB
 * **`-p 8080:8080`:** published port (see https://docs.docker.com/config/containers/container-networking/#published-ports)
-* **admidio/admidio:latest:** Image name with version tag. We recommend a special version tag to be used instead of latest (e.g.: `admidio/admidio:v4.0.4`)
+* **admidio/admidio:latest:** Image name with version tag. We recommend a special version tag to be used instead of latest (e.g.: `admidio/admidio:v4.1.7`)
 
 ## Database container link
 * **`--link "Admidio-MariaDB:db"`:** connect to docker database server instance.  
@@ -196,7 +196,7 @@ see https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:konfigurationsdatei_conf
 ### `TZ`
 Specifying the time zone that will be used for this organization. The value corresponds to one of PHP support Time Zone. The time zone is set once during installation and should not thereafter be changed. Must the time zone be nevertheless adjusted later, so the times already recorded are not adjusted to the new time zone.
 
-Possible values: `Europe/Berlin`
+Possible values: `Europe/Vienna`
 
 see https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:konfigurationsdatei_config.php#gtimezone
 
@@ -244,45 +244,45 @@ version: '3.9'
 
 services:
   db:
-    restart: always
-    image: mariadb:10.5.8
+    restart: unless-stopped
+    image: mariadb:latest
     container_name: Admidio-MariaDB
     volumes:
-      - "Admidio-MariaDB-confd:/etc/mysql/conf.d"
-      - "Admidio-MariaDB-data:/var/lib/mysql"
-    ports:
-      - 3306:3306
+      - "Admidio_MariaDB_config:/etc/mysql/conf.d"
+      - "Admidio_MariaDB_data:/var/lib/mysql"
+    # ports:
+    #   - 3306:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=secret-password
+      - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=admidio
       - MYSQL_USER=admidio
-      - MYSQL_PASSWORD=secret-password
+      - MYSQL_PASSWORD=password
 
   admidio:
-    restart: always
-    image: admidio/admidio:v4.0.4
+    restart: unless-stopped
+    image: admidio/admidio:latest
     container_name: Admidio
     depends_on:
       - db
     volumes:
-      - Admidio-files:/opt/app-root/src/adm_my_files
-      - Admidio-themes:/opt/app-root/src/adm_themes
-      - Admidio-plugins:/opt/app-root/src/adm_plugins
+      - Admidio_files:/opt/app-root/src/adm_my_files
+      - Admidio_themes:/opt/app-root/src/adm_themes
+      - Admidio_plugins:/opt/app-root/src/adm_plugins
     ports:
-      - 8080:8080
+      - 8084:8080
     environment:
       - ADMIDIO_DB_TYPE=mysql
       - ADMIDIO_DB_HOST=db:3306
       - ADMIDIO_DB_NAME=admidio
       - ADMIDIO_DB_USER=admidio
-      - ADMIDIO_DB_PASSWORD=secret-password
+      - ADMIDIO_DB_PASSWORD=password
       #- ADMIDIO_DB_TABLE_PRAEFIX=adm
-      #- ADMIDIO_MAIL_RELAYHOST=hostname.domain.at:25
+      # - ADMIDIO_MAIL_RELAYHOST=hostname.domain.at:25
       #- ADMIDIO_LOGIN_FOR_UPDATE=1
-      #- ADMIDIO_ORGANISATION=ADMIDIO
+      # - ADMIDIO_ORGANISATION=TEST02
       #- ADMIDIO_PASSWORD_HASH_ALGORITHM=DEFAULT
-      #- ADMIDIO_ROOT_PATH=https://www.mydomain.at/admidio
-      #- TZ=Europe/Vienna
+      # - ADMIDIO_ROOT_PATH=http://localhost:8084
+      - TZ=Europe/Vienna
       #- HTTPD_START_SERVERS=8
       #- DOCUMENTROOT=/
       #- PHP_MEMORY_LIMIT=256M
@@ -291,6 +291,13 @@ services:
       #- DISPLAY_STARTUP_ERRORS=OFF
       #- TRACK_ERRORS=OFF
       #- HTML_ERRORS=ON
+
+volumes:
+  Admidio_MariaDB_config:
+  Admidio_MariaDB_data:
+  Admidio_files:
+  Admidio_themes:
+  Admidio_plugins:
 ```
 
 ## Docker Compose Example with local build (docker-compose.yaml)
@@ -301,46 +308,46 @@ version: '3.9'
 
 services:
   db:
-    restart: always
-    image: mariadb:10.5.8
+    restart: unless-stopped
+    image: mariadb:latest
     container_name: Admidio-MariaDB
     volumes:
-      - "Admidio-MariaDB-confd:/etc/mysql/conf.d"
-      - "Admidio-MariaDB-data:/var/lib/mysql"
-    ports:
-      - 3306:3306
+      - "Admidio_MariaDB_config:/etc/mysql/conf.d"
+      - "Admidio_MariaDB_data:/var/lib/mysql"
+    # ports:
+    #   - 3306:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=secret-password
+      - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=admidio
       - MYSQL_USER=admidio
-      - MYSQL_PASSWORD=secret-password
+      - MYSQL_PASSWORD=password
 
   admidio:
     build: .
-    image: yourUsername/admidio:v4.0.4
+    image: yourUsername/admidio:latest
     container_name: Admidio
-    restart: always
+    restart: unless-stopped
     depends_on:
       - db
     volumes:
-      - Admidio-files:/opt/app-root/src/adm_my_files
-      - Admidio-themes:/opt/app-root/src/adm_themes
-      - Admidio-plugins:/opt/app-root/src/adm_plugins
+      - Admidio_files:/opt/app-root/src/adm_my_files
+      - Admidio_themes:/opt/app-root/src/adm_themes
+      - Admidio_plugins:/opt/app-root/src/adm_plugins
     ports:
-      - 8080:8080
+      - 8084:8080
     environment:
       - ADMIDIO_DB_TYPE=mysql
       - ADMIDIO_DB_HOST=db:3306
       - ADMIDIO_DB_NAME=admidio
       - ADMIDIO_DB_USER=admidio
-      - ADMIDIO_DB_PASSWORD=secret-password
+      - ADMIDIO_DB_PASSWORD=password
       #- ADMIDIO_DB_TABLE_PRAEFIX=adm
-      #- ADMIDIO_MAIL_RELAYHOST=hostname.domain.at:25
+      # - ADMIDIO_MAIL_RELAYHOST=hostname.domain.at:25
       #- ADMIDIO_LOGIN_FOR_UPDATE=1
-      #- ADMIDIO_ORGANISATION=ADMIDIO
+      # - ADMIDIO_ORGANISATION=TEST02
       #- ADMIDIO_PASSWORD_HASH_ALGORITHM=DEFAULT
-      #- ADMIDIO_ROOT_PATH=https://www.mydomain.at/admidio
-      #- TZ=Europe/Vienna
+      # - ADMIDIO_ROOT_PATH=http://localhost:8084
+      - TZ=Europe/Vienna
       #- HTTPD_START_SERVERS=8
       #- DOCUMENTROOT=/
       #- PHP_MEMORY_LIMIT=256M
@@ -349,4 +356,11 @@ services:
       #- DISPLAY_STARTUP_ERRORS=OFF
       #- TRACK_ERRORS=OFF
       #- HTML_ERRORS=ON
+
+volumes:
+  Admidio_MariaDB_config:
+  Admidio_MariaDB_data:
+  Admidio_files:
+  Admidio_themes:
+  Admidio_plugins:
 ```
