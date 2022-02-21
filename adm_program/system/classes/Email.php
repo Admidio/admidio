@@ -348,20 +348,20 @@ class Email extends PHPMailer
      * Set a debug modus for sending emails. This will only be useful if you use smtp for sending
      * emails. If you still use PHP mail() there fill be no debug output. With the parameter
      * **$outputGlobalVar** you have the option to put the output in a global variable
-     * **$GLOBALS['phpmailer_output_debug']**. Otherwise the output will go the the Admidio log files.
+     * **$GLOBALS['phpmailer_output_debug']**. Otherwise the output will go to the Admidio log files.
      * @param bool $outputGlobalVar Put the output in a global variable **$GLOBALS['phpmailer_output_debug']**.
      */
     public function setDebugMode($outputGlobalVar = false)
     {
         global $gLogger;
 
+        $this->SMTPDebug = SMTP::DEBUG_SERVER;
+
         if ($outputGlobalVar) {
-            $this->SMTPDebug = SMTP::DEBUG_CLIENT;
             $this->Debugoutput = function ($str, $level) {
                 $GLOBALS['phpmailer_output_debug'] .= $level . ': ' . $str . '<br />';
             };
         } else {
-            $this->SMTPDebug = SMTP::DEBUG_SERVER;
             $this->Debugoutput = $gLogger;
         }
     }
