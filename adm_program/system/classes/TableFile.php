@@ -69,20 +69,20 @@ class TableFile extends TableAccess
 
     /**
      * Gets the absolute path of the folder (with folder-name)
-     * @return string
+     * @return string Returns the folder path of the current file.
      */
     public function getFullFolderPath()
     {
-        return ADMIDIO_PATH . $this->getValue('fol_path') . '/' . $this->getValue('fol_name');
+        return ADMIDIO_PATH . $this->getValue('fol_path', 'database') . '/' . $this->getValue('fol_name', 'database');
     }
 
     /**
      * Gets the absolute path of the file
-     * @return string Absolute pth of the file
+     * @return string Returns the folder path with the file name of the current file.
      */
     public function getFullFilePath()
     {
-        return $this->getFullFolderPath() . '/' . $this->getValue('fil_name');
+        return $this->getFullFolderPath() . '/' . $this->getValue('fil_name', 'database');
     }
 
     /**
