@@ -108,6 +108,7 @@ elseif ($getMode === 3) {
 
     try {
         $newFolderName = admFuncVariableIsValid($_POST, 'new_folder', 'file', array('requireValue' => true));
+        $newFolderDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
 
         // Test ob der Ordner schon existiert im Filesystem
         if (is_dir($folder->getFullFolderPath() . '/' . $newFolderName)) {
