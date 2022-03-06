@@ -370,10 +370,12 @@ class Organization extends TableAccess
         $categoryReport->save();
 
         // set new default configuration to the module settings
-        $gSettingsManager->set('groups_roles_default_configuration', $addressList->getValue('lst_id'));
-        $gSettingsManager->set('dates_default_list_configuration', $participantList->getValue('lst_id'));
-        $gSettingsManager->set('members_list_configuration', $userManagementList->getValue('lst_id'));
-        $gSettingsManager->set('category_report_default_configuration', $categoryReport->getValue('crt_id'));
+        $organizationSettings = new SettingsManager($this->db, $orgId);
+        $organizationSettings->getAll();
+        $organizationSettings->set('groups_roles_default_configuration', $addressList->getValue('lst_id'));
+        $organizationSettings->set('dates_default_list_configuration', $participantList->getValue('lst_id'));
+        $organizationSettings->set('members_list_configuration', $userManagementList->getValue('lst_id'));
+        $organizationSettings->set('category_report_default_configuration', $categoryReport->getValue('crt_id'));
     }
 
     /**
