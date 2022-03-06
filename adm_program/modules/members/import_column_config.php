@@ -38,6 +38,79 @@ if (isset($_SESSION['import_csv_request'])) {
 } else {
     $formValues['first_row'] = true;
 }
+/**
+ * @param array $columnList The array contains the following elements cat_name, id, name, name_intern, tooltip
+ * @return void
+ */
+function getColumnAssignmentHtml(array $arrayColumnList, array $arrayCsvColumns)
+{
+    global $gL10n;
+
+    $categoryName = null;
+    $html = '';
+
+    foreach ($arrayColumnList as $column) {
+        if ($categoryName !== $column['cat_name']) {
+            if ($categoryName !== null) {
+                $html .= '</tbody>';
+            }
+            $html .= '<tbody>
+                    <tr class="admidio-group-heading">
+                        <td colspan="4">'.$column['cat_name'].'</td>
+                    </tr>
+                </tbody>
+                <tbody>';
+
+            $categoryName = $column['cat_name'];
+        }
+
+        $html .= '<tr>
+                <td><label for="'. $column['id']. '" title="'.$column['tooltip'].'">'.$column['name'];
+        // Lastname und first name are mandatory fields
+        if ($column['name_intern'] === 'LAST_NAME' || $column['name_intern'] === 'FIRST_NAME') {
+            $html .= '&nbsp;&nbsp;<span class="text-danger">('.$gL10n->get('SYS_MANDATORY_FIELD').')</span>';
+        }
+        $html .= '</label></td>
+            <td>';
+
+        $selectEntries = '';
+        // list all columns of the file
+        $found = false;
+        foreach ($arrayCsvColumns as $colKey => $colValue) {
+            $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
+
+            $selected = '';
+            // If the user is returned to the form (e.g. a required
+            // field was not selected), the $formValues['usf-#']
+            // array is populated, so use the assignments from the previous
+            // config page, so the config is preserved:
+            if (isset($formValues[$column['id']])) {
+                if (strlen($formValues[$column['id']]) > 0 && $formValues[$column['id']] == $colKey) {
+                    $selected .= ' selected="selected"';
+                    $found = true;
+                }
+            }
+            // Otherwise, detect the entry where the column header
+            // matches the Admidio field name or internal field name (case-insensitive)
+            elseif (strtolower($colValue) == strtolower($column['name'])
+                || strtolower($colValue) == strtolower($column['name_intern'])) {
+                $selected .= ' selected="selected"';
+                $found = true;
+            }
+            $selectEntries .= '<option value="'.$colKey.'"'.$selected.'>'.$colValue.'</option>';
+        }
+        // add html for select box
+        // Insert default (empty) entry and select if if no other item is selected
+        $html .= '
+        <select class="form-control admidio-import-field" size="1" id="'. $column['id']. '" name="'. $column['id']. '">
+            <option value=""'.($found ? ' selected="selected"' : '').'></option>
+            ' . $selectEntries . '
+        </select>
+
+        </td></tr>';
+    }
+    return $html;
+}
 
 // create html page object
 $page = new HtmlPage('admidio-members-import-csv', $headline);
@@ -84,9 +157,48 @@ $htmlFieldTable = '
 
         $arrayCsvColumns = $_SESSION['import_data'][0];
         $categoryId = null;
+        $arrayImportableFields = array();
+
+        // create array with all fields that could be imported
+        foreach ($gProfileFields->getProfileFields() as $field) {
+            $arrayImportableFields[] = array(
+                'cat_name'    => $field->getValue('cat_name'),
+                'id'          => $field->getValue('usf_uuid'),
+                'name'        => $field->getValue('usf_name'),
+                'name_intern' => $field->getValue('usf_name_intern'),
+                'tooltip'     => $gL10n->get('SYS_POSSIBLE_FIELDNAMES',
+                    array(
+                        $field->getValue('usf_name') . ', ' .
+                        $field->getValue('usf_name_intern'))
+                )
+            );
+        }
+
+        // administrator could also import login name and password
+        if ($gCurrentUser->isAdministrator()) {
+            $arrayImportableFields[] = array(
+                'cat_name'    => $gL10n->get('SYS_ASSIGN_LOGIN_INFORMATION'),
+                'id'          => 'usr_login_name',
+                'name'        => $gL10n->get('SYS_USERNAME'),
+                'name_intern' => $gL10n->get('SYS_USERNAME'),
+                'tooltip'     => $gL10n->get('SYS_POSSIBLE_FIELDNAMES',
+                    array($gL10n->get('SYS_USERNAME')))
+            );
+            $arrayImportableFields[] = array(
+                'cat_name'    => $gL10n->get('SYS_ASSIGN_LOGIN_INFORMATION'),
+                'id'          => 'usr_password',
+                'name'        => $gL10n->get('SYS_PASSWORD'),
+                'name_intern' => $gL10n->get('SYS_PASSWORD'),
+                'tooltip'     => $gL10n->get('SYS_POSSIBLE_FIELDNAMES',
+                    array($gL10n->get('SYS_PASSWORD')))
+            );
+        }
+
+        $htmlFieldTable .= getColumnAssignmentHtml($arrayImportableFields, $arrayCsvColumns);
+
 
         // list every profile field from database
-
+/*
         foreach ($gProfileFields->getProfileFields() as $field) {
             $catId = (int) $field->getValue('cat_id');
             if ($categoryId !== $catId) {
@@ -120,7 +232,7 @@ $htmlFieldTable = '
                     <select class="form-control admidio-import-field" size="1" id="usf-'. $usfId. '" name="usf-'. $usfId. '">';
 
             $selectEntries = '';
-            // Alle Spalten aus der Datei in Combobox auflisten
+            // list all columns of the file
             $found = false;
             foreach ($arrayCsvColumns as $colKey => $colValue) {
                 $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
@@ -155,7 +267,7 @@ $htmlFieldTable = '
             </tr>';
         }
 
-        // administrator could also import loginname and password
+        // administrator could also import login name and password
         if ($gCurrentUser->isAdministrator()) {
             $tooltip = trim($gL10n->get(
                 'SYS_POSSIBLE_FIELDNAMES',
@@ -179,7 +291,7 @@ $htmlFieldTable = '
                         <select class="form-control admidio-import-field" size="1" id="usr_login_name" name="usr_login_name">';
 
             $selectEntries = '';
-            // Alle Spalten aus der Datei in Combobox auflisten
+            // list all columns of the file
             $found = false;
             foreach ($arrayCsvColumns as $colKey => $colValue) {
                 $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
@@ -223,7 +335,7 @@ $htmlFieldTable = '
                         <select class="form-control admidio-import-field" size="1" id="usr_password" name="usr_password">';
 
             $selectEntries = '';
-            // Alle Spalten aus der Datei in Combobox auflisten
+            // list all columns of the file
             $found = false;
             foreach ($arrayCsvColumns as $colKey => $colValue) {
                 $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
@@ -256,7 +368,7 @@ $htmlFieldTable = '
                     </td>
                 </tr>
             </tbody>';
-        }
+        }*/
     $htmlFieldTable .= '</tbody>
     </table>';
 $form->addHtml($htmlFieldTable);
