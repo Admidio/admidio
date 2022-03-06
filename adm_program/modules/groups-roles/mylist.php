@@ -156,12 +156,12 @@ $javascriptCode = '
             // bei gespeicherten Listen das entsprechende Profilfeld selektieren
             // und den Feldnamen dem Listenarray hinzufügen
             if (arrDefaultFields[fieldNumberShow]) {
-                if (arrUserFields[counter]["usf_id"] === arrDefaultFields[fieldNumberShow]["usf_id"]) {
+                if (arrUserFields[counter]["usf_name_intern"] === arrDefaultFields[fieldNumberShow]["usf_name_intern"]) {
                     selected = " selected=\"selected\" ";
                     arrDefaultFields[fieldNumberShow]["usf_name"] = arrUserFields[counter]["usf_name"];
                 }
             }
-            htmlCboFields += "<option value=\"" + arrUserFields[counter]["usf_id"] + "\" " + selected + ">" + arrUserFields[counter]["usf_name"] + "</option>";
+            htmlCboFields += "<option value=\"" + arrUserFields[counter]["usf_name_intern"] + "\" " + selected + ">" + arrUserFields[counter]["usf_name"] + "</option>";
         }
         htmlCboFields += "</select>";
         newCellField.innerHTML = htmlCboFields;
@@ -215,9 +215,8 @@ $javascriptCode = '
         var userFields = [];';
 
 // create a multidimensional array for all columns with the necessary data
-$i = 1;
+$i = 0;
 $oldCategoryNameIntern = '';
-$posEndOfBasicData = 0;
 $arrParticipientsInformation = array(
     'mem_approved'         => $gL10n->get('SYS_PARTICIPATION_STATUS'),
     'mem_usr_id_change'    => $gL10n->get('SYS_CHANGED_BY'),
@@ -230,18 +229,45 @@ foreach ($gProfileFields->getProfileFields() as $field) {
     // at the end of category basic data save positions for loginname and username
     // they will be added after profile fields loop
     if ($oldCategoryNameIntern === 'BASIC_DATA' && $field->getValue('cat_name_intern') !== 'BASIC_DATA') {
-        $posEndOfBasicData    = $i;
-        $i                    += 2;
+        $javascriptCode .= '
+            userFields[' . ++$i . '] = {
+                "cat_uuid": userFields[1]["cat_uuid"],
+                "cat_name": userFields[1]["cat_name"],
+                "usf_uuid": "usr_login_name",
+                "usf_name": "'.$gL10n->get('SYS_USERNAME').'",
+                "usf_name_intern": "usr_login_name"
+            };
+
+            userFields[' . ++$i . '] = {
+                "cat_uuid": userFields[1]["cat_uuid"],
+                "cat_name": userFields[1]["cat_name"],
+                "usf_uuid": "usr_photo",
+                "usf_name": "'.$gL10n->get('SYS_PHOTO').'",
+                "usf_name_intern": "usr_photo"
+            };';
+
+        // administrator could export the uuid of each user to identify the user later at the import
+        if($gCurrentUser->editUsers()) {
+            $javascriptCode .= '
+                userFields[' . ++$i . '] = {
+                    "cat_uuid": userFields[1]["cat_uuid"],
+                    "cat_name": userFields[1]["cat_name"],
+                    "usf_uuid": "usr_uuid",
+                    "usf_name": "'.$gL10n->get('SYS_UNIQUE_ID').'",
+                    "usf_name_intern": "usr_uuid"
+                    };';
+        }
+
         $oldCategoryNameIntern = $field->getValue('cat_name_intern');
     }
 
     // add profile field to user field array
     if ($gProfileFields->isVisible($field->getValue('usf_name_intern'), $gCurrentUser->editUsers())) {
         $javascriptCode .= '
-            userFields[' . $i . '] = {
-                "cat_id": '. (int) $field->getValue('cat_id'). ',
+            userFields[' . ++$i . '] = {
+                "cat_uuid": "'. $field->getValue('cat_uuid'). '",
                 "cat_name": "'. str_replace('"', '\'', $field->getValue('cat_name')). '",
-                "usf_id": "'. (int) $field->getValue('usf_id'). '",
+                "usf_uuid": "'. $field->getValue('usf_uuid'). '",
                 "usf_name": "'. addslashes($field->getValue('usf_name')). '",
                 "usf_name_intern": "'. addslashes($field->getValue('usf_name_intern')). '",
                 "usf_type": "'. $field->getValue('usf_type'). '",
@@ -258,63 +284,38 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             $javascriptCode .= '
                 userFields[' . $i . ']["usf_value_list"] = "";';
         }
-        ++$i;
     }
 
     $oldCategoryNameIntern = $field->getValue('cat_name_intern');
 }
 
-    // Add login name and photo at the end of category basic data
-    // add new category with start and end date of role membership
-    if ($posEndOfBasicData === 0) {
-        $posEndOfBasicData = $i;
-        $i += 2;
-    }
     $javascriptCode .= '
-        userFields[' . $posEndOfBasicData . '] = {
-            "cat_id": userFields[1]["cat_id"],
-            "cat_name": userFields[1]["cat_name"],
-            "usf_id": "usr_login_name",
-            "usf_name": "'.$gL10n->get('SYS_USERNAME').'",
-            "usf_name_intern": "'.$gL10n->get('SYS_USERNAME').'"
-        };
-
-        userFields[' . ($posEndOfBasicData + 1) . '] = {
-            "cat_id": userFields[1]["cat_id"],
-            "cat_name": userFields[1]["cat_name"],
-            "usf_id": "usr_photo",
-            "usf_name": "'.$gL10n->get('SYS_PHOTO').'",
-            "usf_name_intern": "'.$gL10n->get('SYS_PHOTO').'"
-        };
-
-        userFields[' . $i . '] = {
-            "cat_id": -1,
+        userFields[' . ++$i . '] = {
+            "cat_uuid": "",
             "cat_name": "'.$gL10n->get('SYS_ROLE_INFORMATION').'",
-            "usf_id": "mem_begin",
+            "usf_uuid": "mem_begin",
             "usf_name": "'.$gL10n->get('SYS_MEMBERSHIP_START').'",
-            "usf_name_intern": "'.$gL10n->get('SYS_MEMBERSHIP_START').'"
+            "usf_name_intern": "mem_begin"
         };';
 
-    ++$i;
     $javascriptCode .= '
-        userFields[' . $i . '] = {
-            "cat_id": -1,
+        userFields[' . ++$i . '] = {
+            "cat_uuid": "",
             "cat_name": "'.$gL10n->get('SYS_ROLE_INFORMATION').'",
-            "usf_id": "mem_end",
+            "usf_uuid": "mem_end",
             "usf_name": "'.$gL10n->get('SYS_MEMBERSHIP_END').'",
-            "usf_name_intern": "'.$gL10n->get('SYS_MEMBERSHIP_END').'"
+            "usf_name_intern": "mem_end"
         };';
 
     // add new category with participant information of events
     foreach ($arrParticipientsInformation as $memberStatus => $columnName) {
-        ++$i;
         $javascriptCode .= '
-            userFields['. $i . '] = {
-                "cat_id"   : -1,
+            userFields['. ++$i . '] = {
+                "cat_uuid"   : "",
                 "cat_name" : "'.$gL10n->get('SYS_PARTICIPATION_INFORMATION').'",
-                "usf_id"   : "'.$memberStatus.'",
+                "usf_uuid"   : "'.$memberStatus.'",
                 "usf_name" : "'.$columnName.'",
-                "usf_name_intern" : "'.$columnName.'",
+                "usf_name_intern" : "'.$memberStatus.'",
             };';
     }
 
@@ -341,7 +342,7 @@ while (isset($formValues['column' . $actualColumnNumber])) {
 
     $javascriptCode .= '
         defaultFields[' . $actualColumnNumber . '] = {
-            "usf_id": "' . $formValues['column' . $actualColumnNumber] . '",
+            "usf_name_intern": "' . $formValues['column' . $actualColumnNumber] . '",
             "sort": "' . $sortValue . '",
             "condition": "' . $conditionValue . '"
         };';
@@ -381,7 +382,7 @@ $javascriptCode .= '
                         selected = "";
 
                         if (arrDefaultFields[fieldNumberShow]) {
-                            if (arrUserFields[key]["usf_id"] === arrDefaultFields[fieldNumberShow]["usf_id"]
+                            if (arrUserFields[key]["usf_name_intern"] === arrDefaultFields[fieldNumberShow]["usf_name_intern"]
                             &&  arrUserFields[key]["usf_value_list"][selectValue] == arrDefaultFields[fieldNumberShow]["condition"]) {
                                 selected = " selected=\"selected\" ";
                             }
@@ -398,14 +399,14 @@ $javascriptCode .= '
                     selected = "";
 
                     if (arrDefaultFields[fieldNumberShow]) {
-                        if (arrUserFields[key]["usf_id"] === arrDefaultFields[fieldNumberShow]["usf_id"]
+                        if (arrUserFields[key]["usf_name_intern"] === arrDefaultFields[fieldNumberShow]["usf_name_intern"]
                             && arrDefaultFields[fieldNumberShow]["condition"] == "1") {
                             selected = " selected=\"selected\" ";
                         }
                             html += "<option value=\"1\" " + selected + ">'.$gL10n->get('SYS_YES').'</option>";
                         selected = "";
 
-                        if (arrUserFields[key]["usf_id"] === arrDefaultFields[fieldNumberShow]["usf_id"]
+                        if (arrUserFields[key]["usf_name_intern"] === arrDefaultFields[fieldNumberShow]["usf_name_intern"]
                             && arrDefaultFields[fieldNumberShow]["condition"] == "0") {
                             selected = " selected=\"selected\" ";
                         }

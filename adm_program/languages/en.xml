@@ -1386,6 +1386,7 @@
   <string name="SYS_TOTAL">Total</string>
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TYPE">Type</string>
+  <string name="SYS_UNIQUE_ID">Unique ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Unidentified</string>
   <string name="SYS_UNLIMITED">Unlimited</string>

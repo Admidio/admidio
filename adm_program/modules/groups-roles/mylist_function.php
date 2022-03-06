@@ -84,7 +84,12 @@ if (in_array($getMode, array(1, 2), true)) {
     // go through all existing columns
     for ($columnNumber = 1; isset($_POST['column'. $columnNumber]); ++$columnNumber) {
         if (strlen($_POST['column'. $columnNumber]) > 0) {
-            $list->addColumn($_POST['column'. $columnNumber], $columnNumber, $_POST['sort'. $columnNumber], $_POST['condition'. $columnNumber]);
+            // add column to list and check if its a profile field or another column
+            if(StringUtils::strStartsWith($_POST['column'. $columnNumber], 'usr_') || StringUtils::strStartsWith($_POST['column'. $columnNumber], 'mem_')) {
+                $list->addColumn($_POST['column' . $columnNumber], $columnNumber, $_POST['sort' . $columnNumber], $_POST['condition' . $columnNumber]);
+            } else {
+                $list->addColumn($gProfileFields->getProperty($_POST['column' . $columnNumber], 'usf_id') , $columnNumber, $_POST['sort' . $columnNumber], $_POST['condition' . $columnNumber]);
+            }
         } else {
             $list->deleteColumn($columnNumber, true);
         }
