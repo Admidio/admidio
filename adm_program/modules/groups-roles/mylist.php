@@ -231,17 +231,13 @@ foreach ($gProfileFields->getProfileFields() as $field) {
     if ($oldCategoryNameIntern === 'BASIC_DATA' && $field->getValue('cat_name_intern') !== 'BASIC_DATA') {
         $javascriptCode .= '
             userFields[' . ++$i . '] = {
-                "cat_uuid": userFields[1]["cat_uuid"],
                 "cat_name": userFields[1]["cat_name"],
-                "usf_uuid": "usr_login_name",
                 "usf_name": "'.$gL10n->get('SYS_USERNAME').'",
                 "usf_name_intern": "usr_login_name"
             };
 
             userFields[' . ++$i . '] = {
-                "cat_uuid": userFields[1]["cat_uuid"],
                 "cat_name": userFields[1]["cat_name"],
-                "usf_uuid": "usr_photo",
                 "usf_name": "'.$gL10n->get('SYS_PHOTO').'",
                 "usf_name_intern": "usr_photo"
             };';
@@ -250,9 +246,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         if($gCurrentUser->editUsers()) {
             $javascriptCode .= '
                 userFields[' . ++$i . '] = {
-                    "cat_uuid": userFields[1]["cat_uuid"],
                     "cat_name": userFields[1]["cat_name"],
-                    "usf_uuid": "usr_uuid",
                     "usf_name": "'.$gL10n->get('SYS_UNIQUE_ID').'",
                     "usf_name_intern": "usr_uuid"
                     };';
@@ -265,9 +259,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
     if ($gProfileFields->isVisible($field->getValue('usf_name_intern'), $gCurrentUser->editUsers())) {
         $javascriptCode .= '
             userFields[' . ++$i . '] = {
-                "cat_uuid": "'. $field->getValue('cat_uuid'). '",
                 "cat_name": "'. str_replace('"', '\'', $field->getValue('cat_name')). '",
-                "usf_uuid": "'. $field->getValue('usf_uuid'). '",
                 "usf_name": "'. addslashes($field->getValue('usf_name')). '",
                 "usf_name_intern": "'. addslashes($field->getValue('usf_name_intern')). '",
                 "usf_type": "'. $field->getValue('usf_type'). '",
@@ -291,18 +283,13 @@ foreach ($gProfileFields->getProfileFields() as $field) {
 
     $javascriptCode .= '
         userFields[' . ++$i . '] = {
-            "cat_uuid": "",
             "cat_name": "'.$gL10n->get('SYS_ROLE_INFORMATION').'",
-            "usf_uuid": "mem_begin",
             "usf_name": "'.$gL10n->get('SYS_MEMBERSHIP_START').'",
             "usf_name_intern": "mem_begin"
-        };';
+        };
 
-    $javascriptCode .= '
         userFields[' . ++$i . '] = {
-            "cat_uuid": "",
             "cat_name": "'.$gL10n->get('SYS_ROLE_INFORMATION').'",
-            "usf_uuid": "mem_end",
             "usf_name": "'.$gL10n->get('SYS_MEMBERSHIP_END').'",
             "usf_name_intern": "mem_end"
         };';
@@ -311,9 +298,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
     foreach ($arrParticipientsInformation as $memberStatus => $columnName) {
         $javascriptCode .= '
             userFields['. ++$i . '] = {
-                "cat_uuid"   : "",
                 "cat_name" : "'.$gL10n->get('SYS_PARTICIPATION_INFORMATION').'",
-                "usf_uuid"   : "'.$memberStatus.'",
                 "usf_name" : "'.$columnName.'",
                 "usf_name_intern" : "'.$memberStatus.'",
             };';
