@@ -376,6 +376,9 @@ class Organization extends TableAccess
         $organizationSettings->set('dates_default_list_configuration', $participantList->getValue('lst_id'));
         $organizationSettings->set('members_list_configuration', $userManagementList->getValue('lst_id'));
         $organizationSettings->set('category_report_default_configuration', $categoryReport->getValue('crt_id'));
+        if ($this->countAllRecords() > 1) {
+            $organizationSettings->set('system_organization_select', true);
+        }
     }
 
     /**
