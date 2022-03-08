@@ -92,6 +92,7 @@ function createUserObjectFromPost()
     if ($organizationId !== $gCurrentOrgId) {
         // read organization of config file with their preferences
         $gCurrentOrganization->readDataById($organizationId);
+        $gCurrentOrgId = $organizationId;
 
         // read new profile field structure for this organization
         $gProfileFields->readProfileFields($organizationId);
@@ -109,6 +110,7 @@ function createUserObjectFromPost()
 
     // create user object
     $gCurrentUser = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
+    $gCurrentUserId = $gCurrentUser->getValue('usr_id');
 
     return $gCurrentUser->checkLogin($password, $bAutoLogin);
 }
