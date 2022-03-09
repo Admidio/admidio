@@ -744,7 +744,7 @@
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Show redirect</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Activate auto forwarding for links. User will be notified by a warning message about leaving the pages of Admidio when clicking a hyperlink in link module. Clicked hyperlink will be opened after predefined time. Is redirection set to 0, hyperlink will be opened without showing the warning message (default: 10 seconds).</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Display role memberships</string>
+  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">View role memberships</string>
   <string name="SYS_DIVERSE">Diverse</string>
   <string name="SYS_DO_NOT_EDIT">Do not edit</string>
   <string name="SYS_DOCUMENTS_FILES">Documents &amp; Files</string>
@@ -761,7 +761,7 @@
   <string name="SYS_ECARD_FROM">Greeting card sent by</string>
   <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">The defined values indicate the maximum size of an image in the greeting card (Standard: 400 x 250 Pixel).</string>
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Your greeting card could not be sent!</string>
-  <string name="SYS_ECARD_SUCCESSFULLY_SEND">Your greeting card was send.</string>
+  <string name="SYS_ECARD_SUCCESSFULLY_SEND">Your greeting card was sent.</string>
   <string name="SYS_EDIT">Edit</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Edit announcements</string>
   <string name="SYS_EDIT_CALENDAR">Edit calendar</string>
