@@ -929,7 +929,7 @@
   <string name="SYS_IMPRINT_DESC">Here the URL for the imprint of your page can be deposited. If the selected theme supports this, a link will be displayed on the Admidio pages. (Example: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inactive groups and roles</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Info box</string>
-  <string name="SYS_INFORMATIONS">information</string>
+  <string name="SYS_INFORMATIONS">Information</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please enter the first and last name of the new member. Before the record is created, a check is made to see if a person with a similar name already exists in the database.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation successful</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">The Admidio database is now installed and completely set up. The configuration file with the access data to the database has been created and stored. You can now work with Admidio and log in with the administrator data.</string>
@@ -1142,7 +1142,7 @@
   <string name="SYS_PLUGINS">Plugins</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
-  <string name="SYS_POSSIBLE_FIELDNAMES">Column names for autodetection: #VAR1#</string>
+  <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST size</string>
   <string name="SYS_POSTCODE">Postal code</string>
   <string name="SYS_PRESENTATION">Display</string>
@@ -1260,8 +1260,8 @@
   <string name="SYS_SEARCH_GENDER_DESC">Searching for all male users</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_EXAMPLE">Mei*</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_DESC">Searching for all users with name beginning with \'Mei\'</string>
-  <string name="SYS_SEARCH_LASTNAME_EXAMPLE">Schmitz</string>
-  <string name="SYS_SEARCH_LASTNAME_DESC">Searching for users with family name \'Schmitz\'</string>
+  <string name="SYS_SEARCH_LASTNAME_EXAMPLE">Smith</string>
+  <string name="SYS_SEARCH_LASTNAME_DESC">Searching for users with family name \'Smith\'</string>
   <string name="SYS_SEARCH_LOCATION_EXAMPLE">Cologne or Berlin</string>
   <string name="SYS_SEARCH_LOCATION_DESC">Look for all users coming from Cologne or Berlin</string>
   <string name="SYS_SEARCH_NOT_EMPTY_EXAMPLE_DESC">Finds all users who have filled the Road field</string>
@@ -1284,7 +1284,7 @@
   <string name="SYS_SEND_COPY">Send copy of e-mail to my address</string>
   <string name="SYS_SEND_EMAIL">Send e-mail</string>
   <string name="SYS_SEND_EMAIL_FORMER">Send e-mails to former members</string>
-  <string name="SYS_SEND_EMAIL_FORMER_DESC">If this option is set, then e-mails could be send to individual former members, as well as to all former members of a role. (Default: Activated)</string>
+  <string name="SYS_SEND_EMAIL_FORMER_DESC">If this option is set, then e-mails could be sent to individual former members, as well as to all former members of a role. (Default: Activated)</string>
   <string name="SYS_SEND_EMAIL_TO">Send e-mail to #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send e-mails to all e-mail addresses of the user</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, e-mails will be sent to all user e-mail addresses stored in the profile. If the setting is deactivated, e-mails will only be sent to the e-mail address from the profile field with the internal name EMAIL. (Default: enabled)</string>
