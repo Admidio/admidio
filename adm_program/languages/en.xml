@@ -283,13 +283,13 @@
   <string name="ORG_ENABLE_RSS_FEEDS">Enable web feeds</string>
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio is able to provide web feeds for several modules (announcements, appointments, guestbook, photo gallery and weblinks) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</string>
   <string name="ORG_FIELD_DESCRIPTION">Define unlimited additional fields. Fields will be displayed and can be edited in user\'s profile. These fields will be available in own list, too.</string>
-  <string name="ORG_FIELD_DISABLED">Field editable only for user with permission #VAR1_BOLD#</string>
+  <string name="ORG_FIELD_DISABLED">Field only editable for user with permission #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by the user in its own profile. It can be edited only by users who have the permission to edit all users. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
   <string name="ORG_FIELD_EXIST">Field with same name already exists in this category.</string>
   <string name="ORG_FIELD_HIDDEN">Field viewable for authorized users only (own profile &amp; role rights)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Usually a field is visible to everybody who is allowed to view the profile. If this option is deselected only user who are allowed to edit this profile can see the field.</string>
   <string name="ORG_FIELD_NOT_DISABLED">Field can be edited by users themselves.</string>
-  <string name="ORG_FIELD_NOT_HIDDEN">Field to see for all users.</string>
+  <string name="ORG_FIELD_NOT_HIDDEN">Field visible for all users.</string>
   <string name="ORG_FIELD_NOT_MANDATORY">Field is mandatory. It must be filled in.</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Field is not displayed during registration</string>
   <string name="ORG_FIELD_REGISTRATION">Field is displayed during registration</string>
