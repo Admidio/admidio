@@ -24,7 +24,7 @@ $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 // Check form values
 $postFrom       = admFuncVariableIsValid($_POST, 'mailfrom', 'string');
 $postName       = admFuncVariableIsValid($_POST, 'namefrom', 'string');
-$postSubject    = StringUtils::strStripTags($_POST['msg_subject']); // Subject should be send without html conversations
+$postSubject    = StringUtils::strStripTags($_POST['msg_subject']); // Subject should be sent without html conversations
 $postSubjectSQL = admFuncVariableIsValid($_POST, 'msg_subject', 'string');
 $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
@@ -75,13 +75,13 @@ if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM) {
     $getMsgType = TableMessage::MESSAGE_TYPE_EMAIL;
 }
 
-// Stop if pm should be send pm module is disabled
+// Stop if pm should be sent pm module is disabled
 if ($getMsgType === TableMessage::MESSAGE_TYPE_PM && !$gSettingsManager->getBool('enable_pm_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-// Stop if mail should be send and mail module is disabled
+// Stop if mail should be sent and mail module is disabled
 if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && !$gSettingsManager->getBool('enable_mail_module')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -203,18 +203,15 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                 if ($group['status'] === 'former' && $gSettingsManager->getBool('mail_show_former')) {
                     // only former members
                     $sqlConditions = ' AND mem_end < ? -- DATE_NOW ';
-                    $queryParams[] = DATE_NOW;
                 } elseif ($group['status'] === 'active_former' && $gSettingsManager->getBool('mail_show_former')) {
                     // former members and active members
                     $sqlConditions = ' AND mem_begin < ? -- DATE_NOW ';
-                    $queryParams[] = DATE_NOW;
                 } else {
                     // only active members
                     $sqlConditions = ' AND mem_begin <= ? -- DATE_NOW
                                        AND mem_end    > ? -- DATE_NOW ';
-                    $queryParams[] = DATE_NOW;
-                    $queryParams[] = DATE_NOW;
                 }
+                $queryParams[] = DATE_NOW;
 
                 $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
                           FROM ' . TBL_MEMBERS . '
@@ -264,7 +261,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                 // create user object
                 $user = new User($gDb, $gProfileFields, $value);
 
-                // only send email to user if current user is allowed to view this user and he has a valid email address
+                // only send email to user if current user is allowed to view this user, and he has a valid email address
                 if ($gCurrentUser->hasRightViewProfile($user)) {
                     // add user to the message object
                     $message->addUser((int) $user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
@@ -340,35 +337,38 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                         // => EXIT
                     }
 
-                    // check if a file was really uploaded
-                    if (!file_exists($_FILES['userfile']['tmp_name'][$currentAttachmentNo]) || !is_uploaded_file($_FILES['userfile']['tmp_name'][$currentAttachmentNo])) {
-                        $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
-                        // => EXIT
-                    }
-
-                    if ($_FILES['userfile']['error'][$currentAttachmentNo] === UPLOAD_ERR_OK) {
-                        // check the size of the attachment
-                        $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
-                        if ($attachmentSize > Email::getMaxAttachmentSize()) {
-                            $gMessage->show($gL10n->get('SYS_ATTACHMENT_TO_LARGE'));
+                    // only check attachment if there was already a file added
+                    if(strlen($_FILES['userfile']['tmp_name'][$currentAttachmentNo]) > 0) {
+                        // check if a file was really uploaded
+                        if (!file_exists($_FILES['userfile']['tmp_name'][$currentAttachmentNo]) || !is_uploaded_file($_FILES['userfile']['tmp_name'][$currentAttachmentNo])) {
+                            $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
                             // => EXIT
                         }
 
-                        // set filetyp to standard if not given
-                        if (strlen($_FILES['userfile']['type'][$currentAttachmentNo]) <= 0) {
-                            $_FILES['userfile']['type'][$currentAttachmentNo] = 'application/octet-stream';
-                        }
+                        if ($_FILES['userfile']['error'][$currentAttachmentNo] === UPLOAD_ERR_OK) {
+                            // check the size of the attachment
+                            $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
+                            if ($attachmentSize > Email::getMaxAttachmentSize()) {
+                                $gMessage->show($gL10n->get('SYS_ATTACHMENT_TO_LARGE'));
+                                // => EXIT
+                            }
 
-                        // add the attachment to the email and message object
-                        try {
-                            $email->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo], $encoding = 'base64', $_FILES['userfile']['type'][$currentAttachmentNo]);
-                            $message->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo]);
-                        } catch (Exception $e) {
-                            $gMessage->show($e->errorMessage());
-                            // => EXIT
-                        } catch (\Exception $e) {
-                            $gMessage->show($e->getMessage());
-                            // => EXIT
+                            // set file type to standard if not given
+                            if (strlen($_FILES['userfile']['type'][$currentAttachmentNo]) <= 0) {
+                                $_FILES['userfile']['type'][$currentAttachmentNo] = 'application/octet-stream';
+                            }
+
+                            // add the attachment to the email and message object
+                            try {
+                                $email->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo], $encoding = 'base64', $_FILES['userfile']['type'][$currentAttachmentNo]);
+                                $message->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo]);
+                            } catch (Exception $e) {
+                                $gMessage->show($e->errorMessage());
+                                // => EXIT
+                            } catch (\Exception $e) {
+                                $gMessage->show($e->getMessage());
+                                // => EXIT
+                            }
                         }
                     }
                 }
@@ -387,7 +387,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
         $email->setHtmlMail();
     }
 
-    // set flag if copy should be send to sender
+    // set flag if copy should be sent to sender
     if (isset($postCarbonCopy) && $postCarbonCopy) {
         $email->setCopyToSenderFlag();
     }
@@ -426,7 +426,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
         $listName = $showList->getValue('lst_name');
         $receiverName = $gL10n->get('SYS_LIST') . ($listName === '' ? '' : ' - ' . $listName);
     } elseif ($gSettingsManager->getBool('mail_into_to')) {
-        $receiverName = $message->getRecipientsNamesString(true);
+        $receiverName = $message->getRecipientsNamesString();
     } else {
         $receiverName = $message->getRecipientsNamesString(false);
     }
@@ -437,7 +437,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
     // finally send the mail
     $sendResult = $email->sendEmail();
 
-    // within this mode an smtp protocol will be shown and the header was still send to browser
+    // within this mode a smtp protocol will be shown and the header was still send to browser
     if ($gDebug && headers_sent()) {
         $email->isSMTP();
         $gMessage->showHtmlTextOnly(true);
@@ -471,11 +471,14 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
     $sendResult = true;
 }
 
-// message if send/save is OK
+// save message to database if send/save is OK
 if ($sendResult === true) { // don't remove check === true. ($sendResult) won't work
     if ($gValidLogin) {
-        // save mail or message to database
-        $message->save();
+        try {
+            $message->save();
+        } catch (AdmException $e) {
+            $e->showHtml();
+        }
     }
 
     // after sending remove the send page from navigation stack

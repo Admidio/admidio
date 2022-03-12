@@ -12,11 +12,11 @@
 /******************************************************************************
  * Parameters:
  *
- * msg_tpye  - This could be EMAIL if you want to write an email or PM if you want to write a private Message
+ * msg_type  - This could be EMAIL if you want to write an email or PM if you want to write a private Message
  * user_uuid - send message to the given user UUID
  * subject   - subject of the message
  * msg_uuid  - UUID of the message -> just for answers
- * role_uuid - UUID of a role to which an email should be send
+ * role_uuid - UUID of a role to which an email should be sent
  * carbon_copy - false - (Default) "Send copy to me" checkbox is NOT set
  *             - true  - "Send copy to me" checkbox is set
  * forward : true - The message of the msg_id will be copied and the base for this new message
@@ -147,7 +147,7 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
 }
 
 if ($getUserUuid !== '') {
-    // if an User ID is given, we need to check if the actual user is allowed to contact this user
+    // if a user ID is given, we need to check if the actual user is allowed to contact this user
     if ((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || $user->getValue('usr_id') === '') {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
         // => EXIT
@@ -255,13 +255,13 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
             // => EXIT
         }
     } elseif ($getRoleUuid !== '') {
-        // wird eine bestimmte Rolle aufgerufen, dann pruefen, ob die Rechte dazu vorhanden sind
+        // if a certain role is called, then check if the rights for it are available
         $role = new TableRoles($gDb);
         $role->readDataByUuid($getRoleUuid);
 
-        // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
-        // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
-        // Rollen muessen zur aktuellen Organisation gehoeren
+        // Logged out users are only allowed to write mails to roles with the flag "all visitors of the site"
+        // Logged in users are only allowed to write mails to roles they are authorized for
+        // all roles must belong to the current organization
         if ((!$gValidLogin && $role->getValue('rol_mail_this_role') != 3)
         || ($gValidLogin  && !$gCurrentUser->hasRightSendMailToRole($role->getValue('rol_id')))
         || $role->getValue('rol_id') == null) {
@@ -296,7 +296,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         $sqlParticipationRoles = ' AND cat_name_intern <> \'EVENTS\' ';
     }
 
-    // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
+    // no role id set, then list all roles according to login/logout
     if ($gValidLogin) {
         $list = array();
         $listFormer = array();
@@ -533,7 +533,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 
-    // Nur eingeloggte User duerfen Attachments anhaengen...
+    // Only logged in users are allowed to attach files
     if ($gValidLogin && ($gSettingsManager->getInt('max_email_attachment_size') > 0) && PhpIniUtils::isFileUploadEnabled()) {
         $form->addFileUpload(
             'btn_add_attachment',
@@ -549,7 +549,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         );
     }
 
-    // add textfield or ckeditor to form
+    // add multiline text element or ckeditor to form
     if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users')) {
         $form->addEditor('msg_body', '', $message->getContent(), array('property' => HtmlForm::FIELD_REQUIRED));
     } else {

@@ -61,12 +61,12 @@ class TableMessage extends TableAccess
      * A role could be added to the class to which the email was send. This information will
      * later be stored in the database. If you need the role name within the class before the
      * data is stored in database than you should set the role name with the parameter $roleName.
-     * @param $roleId   Id the role to which the message was send
-     * @param $roleMode This parameter has the following values:
-     *                  0 - only active members of the role
-     *                  1 - only former members of the role
-     *                  2 - active and former members of the role
-     * @param $roleName Optional the name of the role. Should be set if the name should be used within the class.
+     * @param int $roleId   Id the role to which the message was send
+     * @param int $roleMode This parameter has the following values:
+     *                      0 - only active members of the role
+     *                      1 - only former members of the role
+     *                      2 - active and former members of the role
+     * @param string $roleName Optional the name of the role. Should be set if the name should be used within the class.
      */
     public function addRole($roleId, $roleMode, $roleName = '')
     {
@@ -100,8 +100,8 @@ class TableMessage extends TableAccess
      * A user could be added to the class to which the email was send. This information will
      * later be stored in the database. If you need the user name within the class before the
      * data is stored in database than you should set the user name with the parameter $fullName.
-     * @param $userId   Id the user to which the message was send
-     * @param $fullName Optional the name of the user. Should be set if the name should be used within the class.
+     * @param int    $userId   Id the user to which the message was send
+     * @param string $fullName Optional the name of the user. Should be set if the name should be used within the class.
      */
     public function addUser($userId, $fullName = '')
     {
@@ -243,7 +243,7 @@ class TableMessage extends TableAccess
      * Read all attachments from the database and will return an array with all neccessary informations about
      * the attachments. The array contains for each attachment a subarray with the following elements:
      * **msa_id** and **file_name** and **admidio_file_name**.
-     * @return Returns an array with all attachments and the following elements: **msa_id** and **file_name**
+     * @return array Returns an array with all attachments and the following elements: **msa_id** and **file_name**
      */
     public function getAttachmentsInformations()
     {
@@ -330,7 +330,7 @@ class TableMessage extends TableAccess
      * Build a string with all role names and firstname and lastname of the users.
      * The names will be semicolon separated. If $showFullUserNames is set to false only a
      * number of recipients users will be shown.
-     * @param $showFullUserNames If set to true the first and last name of each user will be shown.
+     * @param bool $showFullUserNames If set to true the first and last name of each user will be shown.
      * @return string Returns a string with all role names and firstname and lastname of the users.
      */
     public function getRecipientsNamesString($showFullUserNames = true)
@@ -521,7 +521,7 @@ class TableMessage extends TableAccess
         } catch (\RuntimeException $exception) {
             return array(
                 'text' => 'SYS_FOLDER_NOT_CREATED',
-                'path' => 'adm_my_files/photos/' . $folderName
+                'path' => ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments'
             );
         }
 
