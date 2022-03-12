@@ -324,11 +324,15 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
 
     $datId = (int) $date->getValue('dat_id');
 
-    if (isset($_POST['adm_event_participation_right'])) {
-        // save changed roles rights of the category
-        $rightEventParticipation = new RolesRights($gDb, 'event_participation', $datId);
-        $rightEventParticipation->saveRoles(array_map('intval', $_POST['adm_event_participation_right']));
+    // save changed roles rights of the category
+    if(isset($_POST['adm_event_participation_right'])) {
+        $eventParticipationRoles = array_map('intval', $_POST['adm_event_participation_right']);
+    } else {
+        $eventParticipationRoles = array();
     }
+
+    $rightEventParticipation = new RolesRights($gDb, 'event_participation', $datId);
+    $rightEventParticipation->saveRoles($eventParticipationRoles);
 
     if ($returnCode === true && $gSettingsManager->getBool('enable_email_notification')) {
         // Notification email for new entries
