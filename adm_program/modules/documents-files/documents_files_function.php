@@ -36,10 +36,10 @@ $getName       = admFuncVariableIsValid($_GET, 'name', 'file');
 
 $_SESSION['documents_files_request'] = $_POST;
 
-// Pfad in adm_my_files pruefen und ggf. anlegen
+// Check path in adm_my_files and create if necessary
 try {
     FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName());
-} catch (\RuntimeException $exception) {
+} catch (RuntimeException $exception) {
     $gMessage->show($exception->getMessage());
     // => EXIT
 }
@@ -86,7 +86,7 @@ if ($getMode === 2) {
         }
 
         if ($file->delete()) {
-            // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+            // Delete successful -> return for XMLHttpRequest
             echo 'done';
         }
     } else {
@@ -121,7 +121,7 @@ elseif ($getMode === 3) {
             if ($error === null) {
                 $folId = (int) $folder->getValue('fol_id');
 
-                // Jetzt noch den Ordner der DB hinzufuegen...
+                // add folder to database
                 $newFolder = new TableFolder($gDb);
 
                 $newFolder->setValue('fol_fol_id_parent', $folId);
@@ -151,7 +151,7 @@ elseif ($getMode === 3) {
         }
     } catch (AdmException $e) {
         if ($e->getMessage() === 'SYS_FILENAME_EMPTY') {
-            $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME'));
+            $e->setNewMessage('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME')));
         }
         if ($e->getMessage() === 'SYS_FILENAME_INVALID') {
             $e->setNewMessage('SYS_FOLDER_NAME_INVALID');
@@ -193,7 +193,7 @@ elseif ($getMode === 4) {
                     // rename file in filesystem and database
                     try {
                         FileSystemUtils::moveFile($oldFile, $newPath . $newFile);
-                    } catch (\RuntimeException $exception) {
+                    } catch (RuntimeException $exception) {
                         $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
                         $gMessage->show($gL10n->get('SYS_FILE_RENAME_ERROR', array($oldName)));
                         // => EXIT
@@ -232,7 +232,7 @@ elseif ($getMode === 4) {
                         FileSystemUtils::moveDirectory($oldFolder, ADMIDIO_PATH. $folder->getValue('fol_path'). '/'.$newFolder);
 
                         $folder->rename($newFolder, $folder->getValue('fol_path'));
-                    } catch (\RuntimeException $exception) {
+                    } catch (RuntimeException $exception) {
                         $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
                         $gMessage->show($gL10n->get('SYS_FOLDER_RENAME_ERROR', array($oldName)));
                         // => EXIT
@@ -251,7 +251,7 @@ elseif ($getMode === 4) {
     // exception handling; replace some exception strings with better descriptions
     catch (AdmException $e) {
         if ($e->getMessage() === 'SYS_FILENAME_EMPTY') {
-            $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('SYS_NEW_NAME'));
+            $e->setNewMessage('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NEW_NAME')));
         }
         if ($e->getMessage() === 'SYS_FILENAME_INVALID' && $getFolderUuid !== '') {
             $e->setNewMessage('SYS_FOLDER_NAME_INVALID');
@@ -261,15 +261,15 @@ elseif ($getMode === 4) {
     }
 }
 
-// Folder loeschen
+// delete folder
 elseif ($getMode === 5) {
     if ($getFolderUuid === '') {
-        // Es muss eine FolderId uebergeben werden
+        // the uuid of the current folder must be set
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
-    } elseif ($getFolderUuid !== '') {
+    } else {
         if ($folder->delete()) {
-            // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+            // Delete successful -> return for XMLHttpRequest
             echo 'done';
         }
     }
@@ -277,10 +277,10 @@ elseif ($getMode === 5) {
     unset($_SESSION['documents_files_request']);
 }
 
-// Datei / Ordner zur DB hinzufeuegen
+// add file / folder to database
 elseif ($getMode === 6) {
     if ($getFolderUuid === '') {
-        // FolderId ist zum hinzufuegen erforderlich
+        // the uuid of the current folder must be set
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT
     }
@@ -295,9 +295,9 @@ elseif ($getMode === 6) {
     $newObjectPath = $folder->getFullFolderPath() . '/' . $getName;
     $folId         = (int) $folder->getValue('fol_id');
 
-    // Pruefen ob das neue Element eine Datei order ein Ordner ist.
+    // check if a file or folder should be created
     if (is_file($newObjectPath)) {
-        // Datei hinzufuegen
+        // add file to database
         $newFile = new TableFile($gDb);
         $newFile->setValue('fil_fol_id', $folId);
         $newFile->setValue('fil_name', $getName);
@@ -305,14 +305,14 @@ elseif ($getMode === 6) {
         $newFile->setValue('fil_counter', 0);
         $newFile->save();
 
-        // Zurueck zur letzten Seite
+        // back to previous page
         $gNavigation->addUrl(CURRENT_URL);
 
         admRedirect(ADMIDIO_URL . '/adm_program/system/back.php');
     // => EXIT
     } elseif (is_dir($newObjectPath)) {
 
-        // Ordner der DB hinzufuegen
+        // add folder to database
         $newFolder = new TableFolder($gDb);
         $newFolder->setValue('fol_fol_id_parent', $folId);
         $newFolder->setValue('fol_type', 'DOCUMENTS');
@@ -328,7 +328,7 @@ elseif ($getMode === 6) {
         $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folId);
         $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
 
-        // Zurueck zur letzten Seite
+        // back to previous page
         $gNavigation->addUrl(CURRENT_URL);
 
         admRedirect(ADMIDIO_URL . '/adm_program/system/back.php');
@@ -343,13 +343,13 @@ elseif ($getMode === 7) {
         // => EXIT
     }
     if (!isset($_POST['adm_roles_upload_right'])) {
-        // upload right need not to be set because documents & files module administrators still
+        // upload right does not need to be set because documents & files module administrators still
         // have the right, so initialize the parameter
         $_POST['adm_roles_upload_right'] = array();
     }
 
     if ($getFolderUuid === '' || !is_array($_POST['adm_roles_view_right']) || !is_array($_POST['adm_roles_upload_right'])) {
-        // FolderId ist zum hinzufuegen erforderlich
+        // the uuid of the current folder must be set
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT
     }
@@ -363,12 +363,6 @@ elseif ($getMode === 7) {
     try {
         $postIntRolesViewRight   = array_map('intval', $_POST['adm_roles_view_right']);
         $postIntRolesUploadRight = array_map('intval', $_POST['adm_roles_upload_right']);
-
-        if ($folder->getValue('fol_fol_id_parent')) {
-            // get recordset of parent folder from database
-            $parentFolder = new TableFolder($gDb, (int) $folder->getValue('fol_fol_id_parent'));
-            $parentFolder->getFolderForDownload($parentFolder->getValue('fol_uuid'));
-        }
 
         // Read current view roles rights of the folder
         $rightFolderView = new RolesRights($gDb, 'folder_view', $folder->getValue('fol_id'));
