@@ -117,7 +117,7 @@ class HtmlFormBasic extends HtmlElement
     }
 
     /**
-     * Add a input field with attribute properties.
+     * Add an input field with attribute properties.
      * @param string               $type          Type of input field e.g. 'text'
      * @param string               $name          Name of the input field
      * @param string               $id            Optional ID for the input
