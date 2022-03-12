@@ -39,11 +39,16 @@ if (strlen($lnkUrl) === 0 || !$weblink->isVisible()) {
     // => EXIT
 }
 
-// Wenn Link gültig ist, Counter um eine Position erhöhen
-$weblink->setValue('lnk_counter', (int) $weblink->getValue('lnk_counter') + 1);
-$weblink->save();
+try {
+    // If link is valid, increase counter by one position
+    $weblink->setValue('lnk_counter', (int) $weblink->getValue('lnk_counter') + 1);
+    $weblink->saveChangesWithoutRights();
+    $weblink->save();
+} catch (AdmException $e) {
+    $e->showHtml();
+}
 
-// MR: Neue Prüfung für direkte Weiterleitung oder mit Anzeige
+// direct forwarding or show page with notice of redirection
 if ($gSettingsManager->getInt('weblinks_redirect_seconds') > 0) {
     // create html page object
     $page = new HtmlPage('admidio-weblinks-redirect', $gL10n->get('SYS_REDIRECT'));
@@ -51,7 +56,7 @@ if ($gSettingsManager->getInt('weblinks_redirect_seconds') > 0) {
     // add special header for automatic redirection after x seconds
     $page->addHeader('<meta http-equiv="refresh" content="'. $gSettingsManager->getInt('weblinks_redirect_seconds').'; url='.$lnkUrl.'">');
 
-    // Counter zählt die sekunden bis zur Weiterleitung runter
+    // Counter counts down the seconds until forwarding
     $page->addJavascript('
         /**
          * @param {bool} init
@@ -64,7 +69,6 @@ if ($gSettingsManager->getInt('weblinks_redirect_seconds') > 0) {
         countDown(true);
     ');
 
-    // Html des Modules ausgeben
     $page->addHtml('
     <p class="lead">'.$gL10n->get('SYS_REDIRECT_DESC', array($gCurrentOrganization->getValue('org_longname'),
         '<span id="counter">'.$gSettingsManager->getInt('weblinks_redirect_seconds').'</span>',
@@ -72,7 +76,6 @@ if ($gSettingsManager->getInt('weblinks_redirect_seconds') > 0) {
         '<a href="'.$lnkUrl.'" target="_self">', '</a>')).'
     </p>');
 
-    // show html of complete page
     $page->show();
 } else {
     admRedirect($lnkUrl);
