@@ -20,7 +20,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // calculate default date from which the profile fields history should be shown
-$filterDateFrom = \DateTime::createFromFormat('Y-m-d', DATE_NOW);
+$filterDateFrom = DateTime::createFromFormat('Y-m-d', DATE_NOW);
 $filterDateFrom->modify('-'.$gSettingsManager->getInt('members_days_field_history').' day');
 
 // Initialize and check the parameters
@@ -53,21 +53,21 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // filter_date_from and filter_date_to can have different formats
 // now we try to get a default format for intern use and html output
-$objDateFrom = \DateTime::createFromFormat('Y-m-d', $getDateFrom);
+$objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if ($objDateFrom === false) {
     // check if date has system format
-    $objDateFrom = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateFrom);
+    $objDateFrom = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateFrom);
     if ($objDateFrom === false) {
-        $objDateFrom = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), '1970-01-01');
+        $objDateFrom = DateTime::createFromFormat($gSettingsManager->getString('system_date'), '1970-01-01');
     }
 }
 
-$objDateTo = \DateTime::createFromFormat('Y-m-d', $getDateTo);
+$objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
 if ($objDateTo === false) {
     // check if date has system format
-    $objDateTo = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateTo);
+    $objDateTo = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateTo);
     if ($objDateTo === false) {
-        $objDateTo = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), '1970-01-01');
+        $objDateTo = DateTime::createFromFormat($gSettingsManager->getString('system_date'), '1970-01-01');
     }
 }
 
@@ -118,6 +118,7 @@ $sql = 'SELECT usl_usr_id, usr.usr_uuid as uuid_usr, last_name.usd_value AS last
             ON create_first_name.usd_usr_id = usl_usr_id_create
            AND create_first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
          WHERE usl_timestamp_create BETWEEN ? AND ? -- $dateFromIntern AND $dateToIntern
+           AND usl_usf_id in (' .  implode(',', $gProfileFields->getVisibleArray(true)) . ')
                '.$sqlConditions.'
       ORDER BY usl_timestamp_create DESC';
 $queryParams = array(
@@ -147,7 +148,7 @@ if ($fieldHistoryStatement->rowCount() === 0) {
 // create html page object
 $page = new HtmlPage('admidio-profile-fields-history', $headline);
 
-// create filter menu with input elements for Startdate and Enddate
+// create filter menu with input elements for start date and end date
 $filterNavbar = new HtmlNavbar('menu_profile_field_history_filter', null, null, 'filter');
 $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', $page, array('type' => 'navbar', 'setFocus' => false));
 $form->addInput('user_uuid', '', $getUserUuid, array('property' => HtmlForm::FIELD_HIDDEN));
@@ -177,7 +178,7 @@ $columnHeading[] = $gL10n->get('SYS_CHANGED_AT');
 $table->addRowHeadingByArray($columnHeading);
 
 while ($row = $fieldHistoryStatement->fetch()) {
-    $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['usl_timestamp_create']);
+    $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['usl_timestamp_create']);
     $columnValues    = array();
 
     if ($getUserUuid === '') {
