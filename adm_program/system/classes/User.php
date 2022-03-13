@@ -109,7 +109,7 @@ class User extends TableAccess
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
      */
-    public function allowedViewProfileField(self $user, $fieldNameIntern)
+    public function allowedViewProfileField(self $user, string $fieldNameIntern)
     {
         return $user->mProfileFieldsData->isVisible($fieldNameIntern, $this->hasRightEditProfile($user));
     }
@@ -125,7 +125,7 @@ class User extends TableAccess
         $this->db->startTransaction();
 
         // every user will get the default roles for registration, if the current user has the right to assign roles
-        // than the roles assignment dialog will be shown
+        // than the role assignment dialog will be shown
         $sql = 'SELECT rol_id
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
@@ -149,7 +149,7 @@ class User extends TableAccess
 
     /**
      * @param string $mode      'set' or 'edit'
-     * @param int $id           Id of the role for which the membership should be set,
+     * @param int $id           ID of the role for which the membership should be set,
      *                          or id of the current membership that should be edited.
      * @param string $startDate New start date of the membership. Default will be **DATE_NOW**.
      * @param string $endDate   New end date of the membership. Default will be **31.12.9999**
@@ -169,7 +169,7 @@ class User extends TableAccess
         $maxEndDate   = $endDate;
 
         if ($mode === 'set') {
-            // subtract 1 day from start date so that we find memberships that ends yesterday
+            // subtract 1 day from start date so that we find memberships that end yesterday
             // these memberships can be continued with new date
             $oneDayOffset = new \DateInterval('P1D');
 
@@ -192,7 +192,7 @@ class User extends TableAccess
                        AND mem_usr_id = ? -- $usrId
                        AND mem_begin <= ? -- $endDate
                        AND mem_end   >= ? -- $startDate
-                  ORDER BY mem_begin ASC';
+                  ORDER BY mem_begin';
             $queryParams = array(
                 $id,
                 $usrId,
@@ -209,7 +209,7 @@ class User extends TableAccess
                        AND mem_usr_id = ? -- $usrId
                        AND mem_begin <= ? -- $endDate
                        AND mem_end   >= ? -- $startDate
-                  ORDER BY mem_begin ASC';
+                  ORDER BY mem_begin';
             $queryParams = array(
                 $id,
                 $member->getValue('mem_rol_id'),
@@ -234,14 +234,14 @@ class User extends TableAccess
             }
 
             if ($mode === 'set') {
-                // save new end date if an later date exists
-                // but only if end date is greater than the begin date otherwise the membership should be deleted
+                // save new end date if a later date exists
+                // but only if end date is greater than the beginn date otherwise the membership should be deleted
                 if (strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0
                 &&  strcmp($member->getValue('mem_begin', 'Y-m-d'), $maxEndDate) < 0) {
                     $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
                 }
             } else {
-                // save new end date if an later date exists
+                // save new end date if a later date exists
                 if (strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0) {
                     $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
                 }
@@ -257,7 +257,7 @@ class User extends TableAccess
                     $minStartDate = $member->getValue('mem_begin', 'Y-m-d');
                 }
 
-                // save new end date if an later date exists
+                // save new end date if a later date exists
                 if (strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0) {
                     $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
                 }
@@ -296,7 +296,7 @@ class User extends TableAccess
     }
 
     /**
-     * Method reads all relationships of the user and will store them in an array. Also the
+     * Method reads all relationships of the user and will store them in an array. The
      * relationship property if the user can edit the profile of the other user will be stored
      * for later checks within this class.
      * @return bool Return true if relationships could be checked.
@@ -336,8 +336,8 @@ class User extends TableAccess
     /**
      * The method reads all roles where this user has a valid membership and checks the rights of
      * those roles. It stores all rights that the user get at last through one role in an array.
-     * In addition the method checks which roles lists the user could see in an separate array.
-     * Also an array with all roles where the user has the right to write an email will be stored.
+     * The method checks which role lists the user could see in a separate array.
+     * An array with all roles where the user has the right to write an email will be stored.
      * The method considered the role leader rights of each role if this is set and the current
      * user is a leader in a role.
      * @param string $right The database column name of the right that should be checked. If this param
@@ -409,8 +409,7 @@ class User extends TableAccess
                     // add role to membership array
                     $this->rolesMembership[] = $rolId;
 
-                    // Rechte der Rollen in das Array uebertragen,
-                    // falls diese noch nicht durch andere Rollen gesetzt wurden
+                    // Transfer the rights of the roles into the array, if these have not yet been set by other roles
                     foreach ($tmpRolesRights as $key => &$value) {
                         if (!$value && $row[$key] == '1') {
                             $value = true;
@@ -429,25 +428,25 @@ class User extends TableAccess
                     }
                 }
 
-                // Listenansichtseinstellung merken
-                // Leiter duerfen die Rolle sehen
+                // Remember list view setting
+                // leaders are allowed to see the role
                 if ($row['mem_usr_id'] > 0 && ($row['rol_this_list_view'] > 0 || $memLeader)) {
-                    // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
+                    // Membership to the role and this is not locked, then look at it
                     $this->listViewRights[$rolId] = true;
                 } elseif ((int) $row['rol_this_list_view'] === 2) {
-                    // andere Rollen anschauen, wenn jeder sie sehen darf
+                    // look at other roles when everyone is allowed to see them
                     $this->listViewRights[$rolId] = true;
                 } else {
                     $this->listViewRights[$rolId] = false;
                 }
 
-                // Mailrechte setzen
-                // Leiter duerfen der Rolle Mails schreiben
+                // Set mail permissions
+                // Leaders are allowed to write mails to the role
                 if ($row['mem_usr_id'] > 0 && ($row['rol_mail_this_role'] > 0 || $memLeader)) {
-                    // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
+                    // Membership to the role and this is not locked, then look at it
                     $this->listMailRights[$rolId] = true;
                 } elseif ($row['rol_mail_this_role'] >= 2) {
-                    // andere Rollen anschauen, wenn jeder sie sehen darf
+                    // look at other roles when everyone is allowed to see them
                     $this->listMailRights[$rolId] = true;
                 } else {
                     $this->listMailRights[$rolId] = false;
@@ -455,12 +454,12 @@ class User extends TableAccess
             }
             $this->rolesRights = $tmpRolesRights;
 
-            // ist das Recht 'alle Listen einsehen' gesetzt, dann dies auch im Array bei allen Rollen setzen
+            // if the right 'view all lists' is set, then set this also in the array for all roles
             if ($this->rolesRights['rol_all_lists_view']) {
                 $this->listViewRights = array_fill_keys(array_keys($this->listViewRights), true);
             }
 
-            // ist das Recht 'allen Rollen EMails schreiben' gesetzt, dann dies auch im Array bei allen Rollen setzen
+            // if the right 'write emails to all roles' is set, then set this also in the array for all roles
             if ($this->rolesRights['rol_mail_to_all']) {
                 $this->listMailRights = array_fill_keys(array_keys($this->listMailRights), true);
             }
@@ -1423,6 +1422,32 @@ class User extends TableAccess
     }
 
     /**
+     * Deletes all other sessions of the current user except the current session. Also all auto logins of the user
+     * will be removed. This method is useful if the user changed his password or if unusual activities within
+     * the user account are noticed.
+     * @return bool Returns true if all things could be done. Otherwise false is returned.
+     */
+    public function invalidateAllOtherLogins()
+    {
+        global $gCurrentUserId, $gCurrentSession;
+
+        // remove all sessions of the current user except the current session
+        $sql = 'DELETE FROM ' . TBL_SESSIONS . '
+                 WHERE ses_usr_id = ? -- $gCurrentUserId
+                   AND ses_id    <> ? -- $gCurrentSession->getValue(\'ses_id\') ';
+        $queryParams = array($gCurrentUserId, $gCurrentSession->getValue('ses_id'));
+        $this->db->queryPrepared($sql, $queryParams);
+
+        // remove all auto logins of the current user
+        $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN . '
+                 WHERE atl_usr_id = ? -- $gCurrentUserId ';
+        $queryParams = array($gCurrentUserId);
+        $this->db->queryPrepared($sql, $queryParams);
+
+        return true;
+    }
+
+    /**
      * Checks if the user is assigned to the role **Administrator**
      * @return bool Returns **true** if the user is a member of the role **Administrator**
      */
@@ -1765,7 +1790,12 @@ class User extends TableAccess
                 $this
             );
         }
-        return parent::setValue('usr_password', $newPasswordHash, false);
+        if(parent::setValue('usr_password', $newPasswordHash, false)) {
+            // for security reasons remove all sessions and auto login of the user
+            return $this->invalidateAllOtherLogins();
+        }
+
+        return false;
     }
 
     /**
@@ -2029,7 +2059,7 @@ class User extends TableAccess
 
     /**
      * Return the (internal) representation of this user's profile fields
-     * @return array All profile fields of the user
+     * @return object<ProfileFields> All profile fields of the user
      */
     public function getProfileFieldsData()
     {
