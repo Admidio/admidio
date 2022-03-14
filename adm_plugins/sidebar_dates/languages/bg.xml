@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_DATES_ALL_EVENTS">Всички събития</string>
+  <string name="PLG_DATES_HEADLINE">Събития</string>
+  <string name="PLG_DATES_NO_ENTRIES_VISITORS">Събитията не са достъпни за посетители. Влезте за да видите събития.</string>
+</resources>

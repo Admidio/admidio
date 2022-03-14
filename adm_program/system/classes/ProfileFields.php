@@ -13,7 +13,7 @@
  * When an object is created than the actual profile fields structure will
  * be read. In addition to this structure you can read the user values for
  * all fields if you call @c readUserData . If you read field values than
- * you will get the formated output. It's also possible to set user data and
+ * you will get the formatted output. It's also possible to set user data and
  * save this data to the database
  */
 class ProfileFields
@@ -39,7 +39,7 @@ class ProfileFields
      */
     protected $mUserUuid = '';
     /**
-     * @var bool if true, than no value will be checked if method setValue is called
+     * @var bool if true, no value will be checked if method setValue is called
      */
     protected $noValueCheck = false;
     /**
@@ -59,7 +59,7 @@ class ProfileFields
     }
 
     /**
-     * An wakeup add the current database object to this class
+     * A wakeup add the current database object to this class
      */
     public function __wakeup()
     {
@@ -98,6 +98,25 @@ class ProfileFields
         $this->mUserData = array();
 
         $this->db->endTransaction();
+    }
+
+    /**
+     * Create an array with all usf_id of profile fields that are editable to the current user in consideration
+     * if the current user is allowed to edit the profile or not.
+     * @param bool $allowedToEditProfile Flag if the user is allowed to edit the profile.
+     * @return array Returns an array with all usf_id of profile fields that are editable to the current user.
+     */
+    public function getEditableArray($allowedToEditProfile = false)
+    {
+        $editableFields = array();
+
+        foreach ($this->mProfileFields as $field) {
+            if($this->isEditable($field->getValue('usf_name_intern'), $allowedToEditProfile)) {
+                $editableFields[] = $field->getValue('usf_id');
+            }
+        }
+
+        return $editableFields;
     }
 
     /**
@@ -148,11 +167,11 @@ class ProfileFields
 
     /**
      * Returns the value of the field in html format with consideration of all layout parameters
-     * @param string     $fieldNameIntern Internal profile field name of the field that should be html formated
-     * @param string|int $value           The value that should be formated must be commited so that layout
+     * @param string     $fieldNameIntern Internal profile field name of the field that should be html formatted
+     * @param string|int $value           The value that should be formatted must be committed so that layout
      *                                    is also possible for values that aren't stored in database
      * @param int        $value2          An optional parameter that is necessary for some special fields like email to commit the user id
-     * @return string Returns an html formated string that considered the profile field settings
+     * @return string Returns a html formatted string that considered the profile field settings
      */
     public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
     {
@@ -185,9 +204,9 @@ class ProfileFields
                     break;
                 case 'DATE':
                     if ($value !== '') {
-                        // date must be formated
-                        $date = \DateTime::createFromFormat('Y-m-d', $value);
-                        if ($date instanceof \DateTime) {
+                        // date must be formatted
+                        $date = DateTime::createFromFormat('Y-m-d', $value);
+                        if ($date instanceof DateTime) {
                             $htmlValue = $date->format($gSettingsManager->getString('system_date'));
                         }
                     }
@@ -217,8 +236,8 @@ class ProfileFields
                     $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
 
                     // first replace windows new line with unix new line and then create an array
-                    $valueFormated = str_replace("\r\n", "\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
-                    $arrListValues = explode("\n", $valueFormated);
+                    $valueFormatted = str_replace("\r\n", "\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
+                    $arrListValues = explode("\n", $valueFormatted);
 
                     foreach ($arrListValues as $index => $listValue) {
                         // if value is imagefile or imageurl then show image
@@ -347,7 +366,7 @@ class ProfileFields
                     case 'DATE':
                         if ($value !== '') {
                             // if date field then the current date format must be used
-                            $date = \DateTime::createFromFormat('Y-m-d', $value);
+                            $date = DateTime::createFromFormat('Y-m-d', $value);
                             if ($date === false) {
                                 return $value;
                             }
@@ -379,6 +398,25 @@ class ProfileFields
         }
 
         return $value;
+    }
+
+    /**
+     * Create an array with all usf_id of profile fields that are visible to the current user in consideration
+     * if the current user is allowed to edit the profile or not.
+     * @param bool $allowedToEditProfile Flag if the user is allowed to edit the profile.
+     * @return array Returns an array with all usf_id of profile fields that are visible to the current user.
+     */
+    public function getVisibleArray($allowedToEditProfile = false)
+    {
+        $visibleFields = array();
+
+        foreach ($this->mProfileFields as $field) {
+            if($this->isVisible($field->getValue('usf_name_intern'), $allowedToEditProfile)) {
+                $visibleFields[] = $field->getValue('usf_id');
+            }
+        }
+
+        return $visibleFields;
     }
 
     /**
@@ -463,7 +501,7 @@ class ProfileFields
                     ON cat_id = usf_cat_id
                  WHERE cat_org_id IS NULL
                     OR cat_org_id = ? -- $organizationId
-              ORDER BY cat_sequence ASC, usf_sequence ASC';
+              ORDER BY cat_sequence, usf_sequence';
         $userFieldsStatement = $this->db->queryPrepared($sql, array($organizationId));
 
         while ($row = $userFieldsStatement->fetch()) {
@@ -559,16 +597,16 @@ class ProfileFields
         if ($fieldValue !== '') {
             switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type')) {
                 case 'CHECKBOX':
-                    // Checkbox darf nur 0 oder 1 haben
+                    // Checkbox may only have 0 or 1
                     if (!$this->noValueCheck && $fieldValue !== '0' && $fieldValue !== '1') {
                         return false;
                     }
                     break;
                 case 'DATE':
-                    // Datum muss gueltig sein und formatiert werden
-                    $date = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $fieldValue);
+                    // Date must be valid and formatted
+                    $date = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $fieldValue);
                     if ($date === false) {
-                        $date = \DateTime::createFromFormat('Y-m-d', $fieldValue);
+                        $date = DateTime::createFromFormat('Y-m-d', $fieldValue);
                         if ($date === false && !$this->noValueCheck) {
                             return false;
                         }
@@ -577,7 +615,7 @@ class ProfileFields
                     }
                     break;
                 case 'EMAIL':
-                    // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
+                    // Email may only contain valid characters and must conform to a fixed scheme
                     if (!$this->noValueCheck && !StringUtils::strValidCharacters($fieldValue, 'email')) {
                         return false;
                     }

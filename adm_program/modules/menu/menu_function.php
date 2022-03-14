@@ -107,17 +107,15 @@ if ($getMode === 1) {
     // save Data to Table
     $returnCode = $menu->save();
 
-    // Read current roles of the menu
-    $displayMenu = new RolesRights($gDb, 'menu_view', (int) $menu->getValue('men_id'));
-    $rolesDisplayRight = $displayMenu->getRolesIds();
-
-    if (!isset($_POST['menu_view']) || !is_array($_POST['menu_view'])) {
-        // remove all entries, so it is allowed without login
-        $displayMenu->removeRoles($rolesDisplayRight);
+    // save changed roles rights of the menu
+    if(isset($_POST['menu_view'])) {
+        $menuViewRoles = array_map('intval', $_POST['menu_view']);
     } else {
-        // add new or update roles
-        $displayMenu->addRoles(array_map('intval', $_POST['menu_view']));
+        $menuViewRoles = array();
     }
+
+    $rightMenuView = new RolesRights($gDb, 'menu_view', $menu->getValue('men_id'));
+    $rightMenuView->saveRoles($menuViewRoles);
 
     if ($gNavigation->count() > 1) {
         $gNavigation->deleteLastUrl();

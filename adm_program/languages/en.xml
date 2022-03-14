@@ -283,13 +283,13 @@
   <string name="ORG_ENABLE_RSS_FEEDS">Enable web feeds</string>
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio is able to provide web feeds for several modules (announcements, appointments, guestbook, photo gallery and weblinks) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</string>
   <string name="ORG_FIELD_DESCRIPTION">Define unlimited additional fields. Fields will be displayed and can be edited in user\'s profile. These fields will be available in own list, too.</string>
-  <string name="ORG_FIELD_DISABLED">Field editable only for user with permission #VAR1_BOLD#</string>
+  <string name="ORG_FIELD_DISABLED">Field only editable for user with permission #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by the user in its own profile. It can be edited only by users who have the permission to edit all users. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
   <string name="ORG_FIELD_EXIST">Field with same name already exists in this category.</string>
   <string name="ORG_FIELD_HIDDEN">Field viewable for authorized users only (own profile &amp; role rights)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Usually a field is visible to everybody who is allowed to view the profile. If this option is deselected only user who are allowed to edit this profile can see the field.</string>
   <string name="ORG_FIELD_NOT_DISABLED">Field can be edited by users themselves.</string>
-  <string name="ORG_FIELD_NOT_HIDDEN">Field to see for all users.</string>
+  <string name="ORG_FIELD_NOT_HIDDEN">Field visible for all users.</string>
   <string name="ORG_FIELD_NOT_MANDATORY">Field is mandatory. It must be filled in.</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Field is not displayed during registration</string>
   <string name="ORG_FIELD_REGISTRATION">Field is displayed during registration</string>
@@ -744,7 +744,7 @@
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Show redirect</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Activate auto forwarding for links. User will be notified by a warning message about leaving the pages of Admidio when clicking a hyperlink in link module. Clicked hyperlink will be opened after predefined time. Is redirection set to 0, hyperlink will be opened without showing the warning message (default: 10 seconds).</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Display role memberships</string>
+  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">View role memberships</string>
   <string name="SYS_DIVERSE">Diverse</string>
   <string name="SYS_DO_NOT_EDIT">Do not edit</string>
   <string name="SYS_DOCUMENTS_FILES">Documents &amp; Files</string>
@@ -761,7 +761,7 @@
   <string name="SYS_ECARD_FROM">Greeting card sent by</string>
   <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">The defined values indicate the maximum size of an image in the greeting card (Standard: 400 x 250 Pixel).</string>
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Your greeting card could not be sent!</string>
-  <string name="SYS_ECARD_SUCCESSFULLY_SEND">Your greeting card was send.</string>
+  <string name="SYS_ECARD_SUCCESSFULLY_SEND">Your greeting card was sent.</string>
   <string name="SYS_EDIT">Edit</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Edit announcements</string>
   <string name="SYS_EDIT_CALENDAR">Edit calendar</string>
@@ -929,7 +929,7 @@
   <string name="SYS_IMPRINT_DESC">Here the URL for the imprint of your page can be deposited. If the selected theme supports this, a link will be displayed on the Admidio pages. (Example: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inactive groups and roles</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Info box</string>
-  <string name="SYS_INFORMATIONS">information</string>
+  <string name="SYS_INFORMATIONS">Information</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please enter the first and last name of the new member. Before the record is created, a check is made to see if a person with a similar name already exists in the database.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation successful</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">The Admidio database is now installed and completely set up. The configuration file with the access data to the database has been created and stored. You can now work with Admidio and log in with the administrator data.</string>
@@ -1142,7 +1142,7 @@
   <string name="SYS_PLUGINS">Plugins</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
-  <string name="SYS_POSSIBLE_FIELDNAMES">Column names for autodetection: #VAR1#</string>
+  <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST size</string>
   <string name="SYS_POSTCODE">Postal code</string>
   <string name="SYS_PRESENTATION">Display</string>
@@ -1260,8 +1260,8 @@
   <string name="SYS_SEARCH_GENDER_DESC">Searching for all male users</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_EXAMPLE">Mei*</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_DESC">Searching for all users with name beginning with \'Mei\'</string>
-  <string name="SYS_SEARCH_LASTNAME_EXAMPLE">Schmitz</string>
-  <string name="SYS_SEARCH_LASTNAME_DESC">Searching for users with family name \'Schmitz\'</string>
+  <string name="SYS_SEARCH_LASTNAME_EXAMPLE">Smith</string>
+  <string name="SYS_SEARCH_LASTNAME_DESC">Searching for users with family name \'Smith\'</string>
   <string name="SYS_SEARCH_LOCATION_EXAMPLE">Cologne or Berlin</string>
   <string name="SYS_SEARCH_LOCATION_DESC">Look for all users coming from Cologne or Berlin</string>
   <string name="SYS_SEARCH_NOT_EMPTY_EXAMPLE_DESC">Finds all users who have filled the Road field</string>
@@ -1284,7 +1284,7 @@
   <string name="SYS_SEND_COPY">Send copy of e-mail to my address</string>
   <string name="SYS_SEND_EMAIL">Send e-mail</string>
   <string name="SYS_SEND_EMAIL_FORMER">Send e-mails to former members</string>
-  <string name="SYS_SEND_EMAIL_FORMER_DESC">If this option is set, then e-mails could be send to individual former members, as well as to all former members of a role. (Default: Activated)</string>
+  <string name="SYS_SEND_EMAIL_FORMER_DESC">If this option is set, then e-mails could be sent to individual former members, as well as to all former members of a role. (Default: Activated)</string>
   <string name="SYS_SEND_EMAIL_TO">Send e-mail to #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send e-mails to all e-mail addresses of the user</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, e-mails will be sent to all user e-mail addresses stored in the profile. If the setting is deactivated, e-mails will only be sent to the e-mail address from the profile field with the internal name EMAIL. (Default: enabled)</string>

@@ -693,6 +693,7 @@ class ListConfiguration extends TableLists
                              INNER JOIN ' . TBL_ROLES . ' ON rol_cat_id = cat_id
                              WHERE (  cat_org_id = '. $GLOBALS['gCurrentOrgId']. '
                                    OR cat_org_id IS NULL )
+                               AND cat_name_intern <> \'EVENTS\'
                             )';
         }
 
@@ -752,7 +753,6 @@ class ListConfiguration extends TableLists
                        AND rol_valid = true
                        AND rol_id IN ('.$sqlRoleIds.')
                            '.$sqlRelationTypeWhere.'
-                       AND cat_name_intern <> \'EVENTS\'
                        AND (  cat_org_id = '. $GLOBALS['gCurrentOrgId']. '
                            OR cat_org_id IS NULL )
                            '.$sqlMemberStatus.
