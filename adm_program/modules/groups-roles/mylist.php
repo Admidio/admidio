@@ -86,8 +86,10 @@ if (isset($_SESSION['mylist_request'])) {
 
         for ($number = 1, $max = $list->countColumns(); $number <= $max; ++$number) {
             $column = $list->getColumnObject($number);
+            $userField = new TableUserField($gDb, $column->getValue('lsc_usf_id'));
+
             if ($column->getValue('lsc_usf_id') > 0) {
-                $formValues['column'. $number] = (int) $column->getValue('lsc_usf_id');
+                $formValues['column'. $number] = $userField->getValue('usf_name_intern');
             } else {
                 $formValues['column'. $number] = $column->getValue('lsc_special_field');
             }
@@ -128,7 +130,7 @@ $javascriptCode = '
         var table = document.getElementById("mylist_fields_tbody");
         var newTableRow = table.insertRow(fieldNumberIntern);
         newTableRow.setAttribute("id", "row" + fieldNumberShow)
-        //$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
+        $(newTableRow).css("display", "none");
         var newCellCount = newTableRow.insertCell(-1);
         newCellCount.textContent = (fieldNumberShow) + ". '.$gL10n->get('SYS_COLUMN').' :";
 

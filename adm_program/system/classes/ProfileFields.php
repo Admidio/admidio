@@ -52,7 +52,7 @@ class ProfileFields
      * @param Database $database       Database object (should be **$gDb**)
      * @param int      $organizationId The id of the organization for which the profile field structure should be read
      */
-    public function __construct(Database $database, $organizationId)
+    public function __construct(Database $database, int $organizationId)
     {
         $this->db =& $database;
         $this->readProfileFields($organizationId);
@@ -106,7 +106,7 @@ class ProfileFields
      * @param bool $allowedToEditProfile Flag if the user is allowed to edit the profile.
      * @return array Returns an array with all usf_id of profile fields that are editable to the current user.
      */
-    public function getEditableArray($allowedToEditProfile = false)
+    public function getEditableArray(bool $allowedToEditProfile = false): array
     {
         $editableFields = array();
 
@@ -122,19 +122,23 @@ class ProfileFields
     /**
      * @return array<string,TableUserField>
      */
-    public function getProfileFields()
+    public function getProfileFields(): array
     {
         return $this->mProfileFields;
     }
 
     /**
-     * returns for a fieldname intern (usf_name_intern) the value of the column from table adm_user_fields
+     * Returns for a field name intern (usf_name_intern) the value of the column from table adm_user_fields.
+     * Optional a format could be set.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of table **adm_user_fields**
      * @param string $column          The column name of **adm_user_field** for which you want the value
-     * @param string $format          Optional the format (is necessary for timestamps)
-     * @return mixed
+     * @param string $format    For column **usf_value_list** the following format is accepted:
+     *                           * **database** returns database value of **usf_value_list** without any transformations
+     *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
+     *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
+     * @return string Returns for the profile field with the given uuid the value.
      */
-    public function getProperty($fieldNameIntern, $column, $format = '')
+    public function getProperty(string $fieldNameIntern, string $column, string $format = '')
     {
         if (array_key_exists($fieldNameIntern, $this->mProfileFields)) {
             return $this->mProfileFields[$fieldNameIntern]->getValue($column, $format);
@@ -148,16 +152,42 @@ class ProfileFields
     }
 
     /**
-     * returns for field id (usf_id) the value of the column from table adm_user_fields
+     * Returns for field id (usf_id) the value of the column from table adm_user_fields.
+     * Optional a format could be set.
      * @param int    $fieldId Expects the **usf_id** of table **adm_user_fields**
      * @param string $column  The column name of **adm_user_field** for which you want the value
-     * @param string $format  Optional the format (is necessary for timestamps)
-     * @return string
+     * @param string $format    For column **usf_value_list** the following format is accepted:
+     *                           * **database** returns database value of **usf_value_list** without any transformations
+     *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
+     *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
+     * @return string Returns for the profile field with the given uuid the value.
      */
-    public function getPropertyById($fieldId, $column, $format = '')
+    public function getPropertyById(int $fieldId, string $column, string $format = ''): string
     {
         foreach ($this->mProfileFields as $field) {
-            if ((int) $field->getValue('usf_id') === (int) $fieldId) {
+            if ((int) $field->getValue('usf_id') === $fieldId) {
+                return $field->getValue($column, $format);
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Returns for field uuid (usf_uuid) the value of the column from table adm_user_fields.
+     * Optional a format could be set.
+     * @param string $fieldUuid Expects the **usf_id** of table **adm_user_fields**
+     * @param string $column    The column name of **adm_user_field** for which you want the value
+     * @param string $format    For column **usf_value_list** the following format is accepted:
+     *                           * **database** returns database value of **usf_value_list** without any transformations
+     *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
+     *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
+     * @return string Returns for the profile field with the given uuid the value.
+     */
+    public function getPropertyByUuid(string $fieldUuid, string $column, string $format = ''): string
+    {
+        foreach ($this->mProfileFields as $field) {
+            if ($field->getValue('usf_uuid') === $fieldUuid) {
                 return $field->getValue($column, $format);
             }
         }
@@ -170,10 +200,10 @@ class ProfileFields
      * @param string     $fieldNameIntern Internal profile field name of the field that should be html formatted
      * @param string|int $value           The value that should be formatted must be committed so that layout
      *                                    is also possible for values that aren't stored in database
-     * @param int        $value2          An optional parameter that is necessary for some special fields like email to commit the user id
+     * @param string     $value2          An optional parameter that is necessary for some special fields like email to commit the user uuid
      * @return string Returns a html formatted string that considered the profile field settings
      */
-    public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
+    public function getHtmlValue(string $fieldNameIntern, string $value, string $value2 = '')
     {
         global $gSettingsManager;
 
@@ -218,7 +248,7 @@ class ProfileFields
                             $emailLink = 'mailto:' . $value;
                         } else {
                             // set value2 to user id because we need a second parameter in the link to mail module
-                            if ($value2 === null) {
+                            if ($value2 === '') {
                                 $value2 = $this->mUserUuid;
                             }
 
@@ -342,7 +372,7 @@ class ProfileFields
      *                                * 'database' : returns the value that is stored in database with no format applied
      * @return string|int|bool Returns the value for the column.
      */
-    public function getValue($fieldNameIntern, $format = '')
+    public function getValue(string $fieldNameIntern, string $format = '')
     {
         $value = '';
 
@@ -406,7 +436,7 @@ class ProfileFields
      * @param bool $allowedToEditProfile Flag if the user is allowed to edit the profile.
      * @return array Returns an array with all usf_id of profile fields that are visible to the current user.
      */
-    public function getVisibleArray($allowedToEditProfile = false)
+    public function getVisibleArray(bool $allowedToEditProfile = false): array
     {
         $visibleFields = array();
 
@@ -423,7 +453,7 @@ class ProfileFields
      * returns true if a column of user table or profile fields has changed
      * @return bool
      */
-    public function hasColumnsValueChanged()
+    public function hasColumnsValueChanged(): bool
     {
         return $this->columnsValueChanged;
     }
@@ -439,7 +469,7 @@ class ProfileFields
      *                                    set if you are not in a user context.
      * @return bool Return true if the current user is allowed to view this profile field
      */
-    public function isEditable($fieldNameIntern, $allowedToEditProfile)
+    public function isEditable(string $fieldNameIntern, bool $allowedToEditProfile): bool
     {
         return $this->isVisible($fieldNameIntern, $allowedToEditProfile)
         && ($GLOBALS['gCurrentUser']->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0);
@@ -455,7 +485,7 @@ class ProfileFields
      *                                    set if you are not in a user context.
      * @return bool Return true if the current user is allowed to view this profile field
      */
-    public function isVisible($fieldNameIntern, $allowedToEditProfile = false)
+    public function isVisible(string $fieldNameIntern, bool $allowedToEditProfile = false): bool
     {
         // check a special case where the field is only visible for users who can edit the profile but must therefore
         // have the right to edit all users
@@ -488,7 +518,7 @@ class ProfileFields
      * @param int $organizationId The id of the organization for which the profile fields
      *                            structure should be read.
      */
-    public function readProfileFields($organizationId)
+    public function readProfileFields(int $organizationId)
     {
         // first initialize existing data
         $this->mProfileFields = array();
@@ -520,7 +550,7 @@ class ProfileFields
      * @param int $organizationId The id of the organization for which the profile fields
      *                            structure should be read if necessary.
      */
-    public function readUserData($userId, $organizationId)
+    public function readUserData(int $userId, int $organizationId)
     {
         if (count($this->mProfileFields) === 0) {
             $this->readProfileFields($organizationId);
@@ -528,7 +558,7 @@ class ProfileFields
 
         if ($userId > 0) {
             // remember the user
-            $this->mUserId = (int) $userId;
+            $this->mUserId = $userId;
 
             // read all user data of user
             $sql = 'SELECT *
@@ -556,7 +586,7 @@ class ProfileFields
      * save data of every user field
      * @param int $userId id is necessary if new user, that id was not known before
      */
-    public function saveUserData($userId)
+    public function saveUserData(int $userId)
     {
         $this->db->startTransaction();
 
@@ -575,7 +605,7 @@ class ProfileFields
         }
 
         $this->columnsValueChanged = false;
-        $this->mUserId = (int) $userId;
+        $this->mUserId = $userId;
 
         $this->db->endTransaction();
     }
@@ -586,7 +616,7 @@ class ProfileFields
      * @param mixed  $fieldValue
      * @return bool
      */
-    public function setValue($fieldNameIntern, $fieldValue)
+    public function setValue(string $fieldNameIntern, $fieldValue): bool
     {
         global $gSettingsManager;
 

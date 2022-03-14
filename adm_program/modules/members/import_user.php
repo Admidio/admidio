@@ -11,6 +11,8 @@
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
+use Ramsey\Uuid\Uuid;
+
 $_SESSION['import_csv_request'] = $_POST;
 
 try {
@@ -28,11 +30,11 @@ if (!$gCurrentUser->editUsers()) {
 }
 
 // Lastname und firstname are mandatory fields
-if (strlen($_POST['usf-'.$gProfileFields->getProperty('LAST_NAME', 'usf_id')]) === 0) {
+if (strlen($_POST[$gProfileFields->getProperty('LAST_NAME', 'usf_uuid')]) === 0) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gProfileFields->getProperty('LAST_NAME', 'usf_name'))));
     // => EXIT
 }
-if (strlen($_POST['usf-'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]) === 0) {
+if (strlen($_POST[$gProfileFields->getProperty('FIRST_NAME', 'usf_uuid')]) === 0) {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gProfileFields->getProperty('FIRST_NAME', 'usf_name'))));
     // => EXIT
 }
@@ -40,6 +42,7 @@ if (strlen($_POST['usf-'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]) 
 // go through each line from the file one by one and create the user in the DB
 $line = reset($_SESSION['import_data']);
 $userImport = new UserImport($gDb, $gProfileFields);
+$identifyUserByUuid = false;
 $firstRowTitle = array_key_exists('first_row', $_POST);
 $startRow = 0;
 $countImportNewUser  = 0;
@@ -52,13 +55,12 @@ $importProfileFields = array();
 
 // create array with all profile fields that where assigned to columns of the import file
 foreach ($_POST as $formFieldId => $importFileColumn) {
-    // normal profile fields
-    if (strpos($formFieldId, 'usf-') !== false && $importFileColumn !== '') {
-        $importProfileFields[(int) substr($formFieldId, 4)] = (int) $importFileColumn;
-    }
-    // username and password
-    elseif (strpos($formFieldId, 'usr_') !== false && $importFileColumn !== '') {
-        $importProfileFields[$formFieldId] = $importFileColumn;
+    if ($importFileColumn !== ''
+    && (Uuid::isValid($formFieldId) || strpos($formFieldId, 'usr_') !== false)) {
+        if($formFieldId === 'usr_uuid') {
+            $identifyUserByUuid = true;
+        }
+        $importProfileFields[$formFieldId] = (int) $importFileColumn;
     }
 }
 
@@ -81,10 +83,14 @@ for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) 
     $userImport->clear();
 
     $userImport->setImportMode((int) $_SESSION['user_import_mode']);
-    $userImport->readDataByFirstnameLastName(
-        $line[$importProfileFields[$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]],
-        $line[$importProfileFields[$gProfileFields->getProperty('LAST_NAME', 'usf_id')]]
-    );
+    if($identifyUserByUuid) {
+        $userImport->readDataByUuid($line[$importProfileFields['usr_uuid']]);
+    } else {
+        $userImport->readDataByFirstnameLastName(
+            $line[$importProfileFields[$gProfileFields->getProperty('FIRST_NAME', 'usf_uuid')]],
+            $line[$importProfileFields[$gProfileFields->getProperty('LAST_NAME', 'usf_uuid')]]
+        );
+    }
 
     foreach ($line as $columnKey => $columnValue) {
         // get usf id or database column name
@@ -92,8 +98,8 @@ for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) 
         // remove spaces and html tags
         $columnValue = trim(strip_tags($columnValue));
 
-        if (is_int($assignedFieldColumnId)) {
-            $userImport->setValue($gProfileFields->getPropertyById($assignedFieldColumnId, 'usf_name_intern'), $columnValue);
+        if (Uuid::isValid($assignedFieldColumnId)) {
+            $userImport->setValue($gProfileFields->getPropertyByUuid($assignedFieldColumnId, 'usf_name_intern'), $columnValue);
         } else {
             // remember username and password and add it later to the user
             if ($assignedFieldColumnId === 'usr_login_name') {
@@ -114,9 +120,14 @@ for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) 
         $userCounted = true;
     }
 
-    if ($userImport->save() && !$userCounted) {
-        ++$countImportEditUser;
-        $userCounted = true;
+    // save imported data of the user in database
+    try {
+        if ($userImport->save() && !$userCounted) {
+            ++$countImportEditUser;
+            $userCounted = true;
+        }
+    } catch (AdmException $e) {
+        $e->showHtml();
     }
 
     // assign role membership to user
