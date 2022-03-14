@@ -106,7 +106,7 @@ class ProfileFields
      * @param bool $allowedToEditProfile Flag if the user is allowed to edit the profile.
      * @return array Returns an array with all usf_id of profile fields that are editable to the current user.
      */
-    public function getEditableArray(bool $allowedToEditProfile = false): array
+    public function getEditableArray(bool $allowedToEditProfile = false)
     {
         $editableFields = array();
 
@@ -122,7 +122,7 @@ class ProfileFields
     /**
      * @return array<string,TableUserField>
      */
-    public function getProfileFields(): array
+    public function getProfileFields()
     {
         return $this->mProfileFields;
     }
@@ -162,7 +162,7 @@ class ProfileFields
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return string Returns for the profile field with the given uuid the value.
      */
-    public function getPropertyById(int $fieldId, string $column, string $format = ''): string
+    public function getPropertyById(int $fieldId, string $column, string $format = '')
     {
         foreach ($this->mProfileFields as $field) {
             if ((int) $field->getValue('usf_id') === $fieldId) {
@@ -184,7 +184,7 @@ class ProfileFields
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return string Returns for the profile field with the given uuid the value.
      */
-    public function getPropertyByUuid(string $fieldUuid, string $column, string $format = ''): string
+    public function getPropertyByUuid(string $fieldUuid, string $column, string $format = '')
     {
         foreach ($this->mProfileFields as $field) {
             if ($field->getValue('usf_uuid') === $fieldUuid) {
