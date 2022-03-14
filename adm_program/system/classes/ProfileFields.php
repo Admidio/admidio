@@ -203,7 +203,7 @@ class ProfileFields
      * @param string     $value2          An optional parameter that is necessary for some special fields like email to commit the user uuid
      * @return string Returns a html formatted string that considered the profile field settings
      */
-    public function getHtmlValue(string $fieldNameIntern, string $value, string $value2 = '')
+    public function getHtmlValue($fieldNameIntern, $value, $value2 = '')
     {
         global $gSettingsManager;
 
