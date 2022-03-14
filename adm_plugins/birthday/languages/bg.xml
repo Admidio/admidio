@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# ще бъде на #VAR3# години след #VAR2# дена на #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# ще има рожден ден след #VAR2# дни</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Рождени дни</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Г-н #VAR1#</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# стана на #VAR3# години преди #VAR2# дена, на #VAR4#</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# имаше рожден ден преди #VAR2# дена</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# днес става на #VAR2#</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# днес има рожден дан</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# утре ще стане на #VAR3# години, на #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# утре има рождан дан</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Г-жа #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# утре става на #VAR3# на #VAR4#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# вчера имаше рожден ден</string>
+</resources>

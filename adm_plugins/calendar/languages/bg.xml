@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Сегашния месец</string>
+  <string name="PLG_CALENDAR_MONTH">Януари,Февруари,Март,Април,Май,Юни,Юли,Август,Септември,Октомври,Ноември,Декември</string>
+  <string name="PLG_CALENDAR_MORE">(... още)</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">по</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">вт</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">ср</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">че</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">пе</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">съ</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">не</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Няколко дни</string>
+</resources>

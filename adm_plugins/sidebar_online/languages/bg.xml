@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ONLINE_HEADLINE">Кой е онлайн?</string>
+  <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">Няма онлайн потребители..</string>
+  <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# посетители</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBER">#VAR1# члет</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBERS">#VAR1# членове</string>
+  <string name="PLG_ONLINE_VAR_ONLINE_ARE">Онлайн има #VAR1#</string>
+  <string name="PLG_ONLINE_VAR_ONLINE_IS">Онлайн е #VAR1#</string>
+</resources>

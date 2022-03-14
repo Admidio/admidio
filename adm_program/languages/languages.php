@@ -19,6 +19,11 @@ $gSupportedLanguages = array(
         'isocode' => 'da',
         'libs'    => 'da'
     ),
+    'bg'    => array(
+        'name'    => 'Bulgarian - Български',
+        'isocode' => 'bg',
+        'libs'    => 'bg'
+    ),
     'nl'    => array(
         'name'    => 'Dutch - Nederlands',
         'isocode' => 'nl',
