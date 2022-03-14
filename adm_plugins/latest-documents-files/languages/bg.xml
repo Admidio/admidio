@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_FILES_HEADLINE">Документи и файлове</string>
+  <string name="PLG_LATEST_FILES_MORE_DOWNLOADS">Още документи и файлове</string>
+  <string name="PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE">Няма налични документи и файлове.</string>
+  <string name="PLG_LATEST_FILES_UPLOAD_FROM_AT">Качен от #VAR1# на #VAR2#</string>
+</resources>
