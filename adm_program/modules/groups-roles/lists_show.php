@@ -14,7 +14,8 @@
  * date_to:         Value for the end date of the date range filter (default: current date)
  * list_uuid:       UUID of the list configuration that should be shown.
  *                  If id is null then the default list of the role will be shown.
- * rol_ids:         Id of the role or an integer array of all role ids whose members should be shown
+ * rol_ids:         ID of the role or an integer array of all role ids whose members should be shown
+ * urt_ids:         ID of the relation type or an integer array of all relation types ids whose members should be shown
  * show_former_members: 0 - (Default) show members of role that are active within the selected date range
  *                      1 - show only former members of the role
  ***********************************************************************************************
@@ -404,6 +405,7 @@ if ($getMode !== 'csv') {
             $form->addInput('date_to', $gL10n->get('SYS_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('list_uuid', '', $getListUuid, array('property' => HtmlForm::FIELD_HIDDEN));
             $form->addInput('rol_ids', '', $getRoleIds, array('property' => HtmlForm::FIELD_HIDDEN));
+            $form->addInput('urt_ids', '', $getRelationTypeIds, array('property' => HtmlForm::FIELD_HIDDEN));
             $form->addCheckbox('show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
         }
@@ -421,7 +423,7 @@ if ($getMode !== 'csv') {
                 if ($(this).val() === "mylist") {
                     self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php', array('rol_ids' => $getRoleIds)) . '";
                 } else {
-                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&list_uuid=" + $(this).val();
+                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $getRoleIds, 'urt_ids' => $getRelationTypeIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&list_uuid=" + $(this).val();
                 }
             });
 
