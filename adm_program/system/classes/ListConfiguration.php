@@ -41,8 +41,8 @@ class ListConfiguration extends TableLists
     }
 
     /**
-     * Add new column to column array. The number of the column will be the maximum number of the
-     * current array plus one.
+     * Add new column to column array. The number of the column will be the maximum number of the current
+     * array plus one. The special field usr_uuid could only be added by users with the right to edit all users.
      * @param int|string $field  Usf-Id of a profile field or the name of a special field.
      * @param int        $number Optional the number of the column. This is useful if the list already exists
      *                           and maybe the profile field changed the position within the list.
@@ -52,6 +52,8 @@ class ListConfiguration extends TableLists
      */
     public function addColumn($field, $number = 0, $sort = '', $filter = '')
     {
+        global $gCurrentUser;
+
         if($number === 0) {
             // current number of the new column
             $number = count($this->columns) + 1;
@@ -60,6 +62,11 @@ class ListConfiguration extends TableLists
         // can join max. 61 tables
         // Passed parameters must be set carefully
         if (strlen($field) === 0 || $field === 0 || count($this->columns) >= 57) {
+            return false;
+        }
+
+        // uuid could only be added by an administrator
+        if(!$gCurrentUser->editUsers() && $field === 'usr_uuid') {
             return false;
         }
 
@@ -289,6 +296,7 @@ class ListConfiguration extends TableLists
         $arrSpecialColumnNames = array(
             'usr_login_name'       => 'left',
             'usr_photo'            => 'left',
+            'usr_uuid'             => 'left',
             'mem_begin'            => 'left',
             'mem_end'              => 'left',
             'mem_leader'           => 'left',
@@ -338,6 +346,7 @@ class ListConfiguration extends TableLists
         $arrSpecialColumnNames = array(
             'usr_login_name'       => $gL10n->get('SYS_USERNAME'),
             'usr_photo'            => $gL10n->get('SYS_PHOTO'),
+            'usr_uuid'             => $gL10n->get('SYS_UNIQUE_ID'),
             'mem_begin'            => $gL10n->get('SYS_START'),
             'mem_end'              => $gL10n->get('SYS_END'),
             'mem_leader'           => $gL10n->get('SYS_LEADERS'),
@@ -535,12 +544,12 @@ class ListConfiguration extends TableLists
             $tableAlias = '';
             if ($lscUsfId > 0) {
                 // dynamic profile field
-                $tableAlias = 'row'. $listColumn->getValue('lsc_number'). 'id'. $lscUsfId;
+                $tableAlias = 'row' . $listColumn->getValue('lsc_number') . 'id' . $lscUsfId;
 
                 // define JOIN - Syntax
-                $sqlJoin .= ' LEFT JOIN '.TBL_USER_DATA.' '.$tableAlias.'
-                                     ON '.$tableAlias.'.usd_usr_id = usr_id
-                                    AND '.$tableAlias.'.usd_usf_id = '.$lscUsfId;
+                $sqlJoin .= ' LEFT JOIN ' . TBL_USER_DATA . ' ' . $tableAlias . '
+                                     ON ' . $tableAlias . '.usd_usr_id = usr_id
+                                    AND ' . $tableAlias . '.usd_usf_id = ' . $lscUsfId;
 
                 // usf_id is prefix for the table
                 $dbColumnName = $tableAlias . '.usd_value AS ' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern');
@@ -549,106 +558,108 @@ class ListConfiguration extends TableLists
                 $dbColumnName = $listColumn->getValue('lsc_special_field');
             }
 
-            $arrSqlColumnNames[] = $dbColumnName;
+            if (strlen($dbColumnName) > 0) {
+                $arrSqlColumnNames[] = $dbColumnName;
 
-            $userFieldType = $gProfileFields->getPropertyById($lscUsfId, 'usf_type');
+                $userFieldType = $gProfileFields->getPropertyById($lscUsfId, 'usf_type');
 
-            // create a valid sort
-            $lscSort = $listColumn->getValue('lsc_sort');
-            if ($lscSort != '') {
-                if (strpos($dbColumnName, ' AS') > 0) {
-                    $sortColumnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS'));
-                } else {
-                    $sortColumnName = $dbColumnName;
-                }
-
-                if ($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL') {
-                    // if a field has numeric values then there must be a cast because database
-                    // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
-                    if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
-                        $columnType = 'numeric';
+                // create a valid sort
+                $lscSort = $listColumn->getValue('lsc_sort');
+                if ($lscSort != '') {
+                    if (strpos($dbColumnName, ' AS') > 0) {
+                        $sortColumnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS'));
                     } else {
-                        // mysql
-                        $columnType = 'unsigned';
+                        $sortColumnName = $dbColumnName;
                     }
-                    $arrOrderByColumns[] = ' CAST('.$sortColumnName.' AS '.$columnType.') '.$lscSort;
-                } else {
-                    $arrOrderByColumns[] = $sortColumnName.' '.$lscSort;
-                }
-            }
 
-            // Handle the conditions for the columns
-            if ($optionsAll['useConditions'] && $listColumn->getValue('lsc_filter') != '') {
-                $value = $listColumn->getValue('lsc_filter');
-                $type = '';
-
-                // custom profile field
-                if ($lscUsfId > 0) {
-                    switch ($userFieldType) {
-                        case 'CHECKBOX':
-                            $type = 'checkbox';
-
-                            // 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
-                            $arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
-                            $arrCheckboxKeys   = array(1, 0, 1, 0);
-                            $value = str_replace(array_map('StringUtils::strToLower', $arrCheckboxValues), $arrCheckboxKeys, StringUtils::strToLower($value));
-                            break;
-
-                        case 'DROPDOWN': // fallthrough
-                        case 'RADIO_BUTTON':
-                            $type = 'int';
-
-                            // replace all field values with their internal numbers
-                            $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
-                            $value = array_search(StringUtils::strToLower($value), array_map('StringUtils::strToLower', $arrListValues), true);
-                            break;
-
-                        case 'NUMBER': // fallthrough
-                        case 'DECIMAL':
-                            $type = 'int';
-                            break;
-
-                        case 'DATE':
-                            $type = 'date';
-                            break;
-
-                        default:
-                            $type = 'string';
-                    }
-                } else {
-                    switch ($listColumn->getValue('lsc_special_field')) {
-                        case 'mem_begin': // fallthrough
-                        case 'mem_end':
-                            $type = 'date';
-                            break;
-
-                        case 'usr_login_name':
-                            $type = 'string';
-                            break;
-
-                        case 'usr_photo':
-                            $type = '';
-                            break;
+                    if ($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL') {
+                        // if a field has numeric values then there must be a cast because database
+                        // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
+                        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+                            $columnType = 'numeric';
+                        } else {
+                            // mysql
+                            $columnType = 'unsigned';
+                        }
+                        $arrOrderByColumns[] = ' CAST(' . $sortColumnName . ' AS ' . $columnType . ') ' . $lscSort;
+                    } else {
+                        $arrOrderByColumns[] = $sortColumnName . ' ' . $lscSort;
                     }
                 }
 
-                $parser = new ConditionParser();
+                // Handle the conditions for the columns
+                if ($optionsAll['useConditions'] && $listColumn->getValue('lsc_filter') != '') {
+                    $value = $listColumn->getValue('lsc_filter');
+                    $type = '';
 
-                // if profile field then add not exists condition
-                if ($lscUsfId > 0) {
-                    $parser->setNotExistsStatement('SELECT 1
-                                                      FROM '.TBL_USER_DATA.' '.$tableAlias.'s
-                                                     WHERE '.$tableAlias.'s.usd_usr_id = usr_id
-                                                       AND '.$tableAlias.'s.usd_usf_id = '.$lscUsfId);
-                }
+                    // custom profile field
+                    if ($lscUsfId > 0) {
+                        switch ($userFieldType) {
+                            case 'CHECKBOX':
+                                $type = 'checkbox';
 
-                // now transform condition into SQL
-                if (strpos($dbColumnName, ' AS') > 0) {
-                    $columnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS'));
-                } else {
-                    $columnName = $dbColumnName;
+                                // 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
+                                $arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
+                                $arrCheckboxKeys = array(1, 0, 1, 0);
+                                $value = str_replace(array_map('StringUtils::strToLower', $arrCheckboxValues), $arrCheckboxKeys, StringUtils::strToLower($value));
+                                break;
+
+                            case 'DROPDOWN': // fallthrough
+                            case 'RADIO_BUTTON':
+                                $type = 'int';
+
+                                // replace all field values with their internal numbers
+                                $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
+                                $value = array_search(StringUtils::strToLower($value), array_map('StringUtils::strToLower', $arrListValues), true);
+                                break;
+
+                            case 'NUMBER': // fallthrough
+                            case 'DECIMAL':
+                                $type = 'int';
+                                break;
+
+                            case 'DATE':
+                                $type = 'date';
+                                break;
+
+                            default:
+                                $type = 'string';
+                        }
+                    } else {
+                        switch ($listColumn->getValue('lsc_special_field')) {
+                            case 'mem_begin': // fallthrough
+                            case 'mem_end':
+                                $type = 'date';
+                                break;
+
+                            case 'usr_login_name':
+                                $type = 'string';
+                                break;
+
+                            case 'usr_photo':
+                                $type = '';
+                                break;
+                        }
+                    }
+
+                    $parser = new ConditionParser();
+
+                    // if profile field then add not exists condition
+                    if ($lscUsfId > 0) {
+                        $parser->setNotExistsStatement('SELECT 1
+                                                      FROM ' . TBL_USER_DATA . ' ' . $tableAlias . 's
+                                                     WHERE ' . $tableAlias . 's.usd_usr_id = usr_id
+                                                       AND ' . $tableAlias . 's.usd_usf_id = ' . $lscUsfId);
+                    }
+
+                    // now transform condition into SQL
+                    if (strpos($dbColumnName, ' AS') > 0) {
+                        $columnName = substr($dbColumnName, 0, strpos($dbColumnName, ' AS'));
+                    } else {
+                        $columnName = $dbColumnName;
+                    }
+                    $sqlWhere .= $parser->makeSqlStatement($value, $columnName, $type, $gProfileFields->getPropertyById($lscUsfId, 'usf_name')); // TODO Exception handling
                 }
-                $sqlWhere .= $parser->makeSqlStatement($value, $columnName, $type, $gProfileFields->getPropertyById($lscUsfId, 'usf_name')); // TODO Exception handling
             }
         }
 
@@ -770,9 +781,12 @@ class ListConfiguration extends TableLists
             // only add columns to the array if the current user is allowed to view them
             if ((int) $lscRow['lsc_usf_id'] === 0
             || $gProfileFields->isVisible($gProfileFields->getPropertyById((int) $lscRow['lsc_usf_id'], 'usf_name_intern'), $gCurrentUser->editUsers())) {
-                $lscNumber = (int) $lscRow['lsc_number'];
-                $this->columns[$lscNumber] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
-                $this->columns[$lscNumber]->setArray($lscRow);
+                // user uuid should only be viewed by users that could edit roles
+                if ($lscRow['lsc_special_field'] !== 'usr_uuid' || $gCurrentUser->editUsers()) {
+                    $lscNumber = (int) $lscRow['lsc_number'];
+                    $this->columns[$lscNumber] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
+                    $this->columns[$lscNumber]->setArray($lscRow);
+                }
             }
         }
     }
