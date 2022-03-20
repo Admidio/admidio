@@ -33,6 +33,9 @@ USER root
 RUN yum update -y --allowerasing --skip-broken --nobest --setopt=tsflags=nodocs && \
     yum install -y postfix && \
     yum reinstall -y tzdata && \
+    yum remove -y nodejs nodejs-docs npm && \
+    yum autoremove -y && \
+    rm -rf /usr/lib/node_modules && \
     yum -y clean all --enablerepo='*'
 
 COPY . .
@@ -50,7 +53,7 @@ RUN set -euf -o pipefail ; \
       trivy filesystem --exit-code 1 --severity CRITICAL --no-progress / && \
       echo "scan image with trivy (trivy filesystem --exit-code 1 --severity MEDIUM,HIGH --no-progress /)" && \
       trivy filesystem --exit-code 0 --severity MEDIUM,HIGH --no-progress / && \
-      trivy --clear-cache --reset ; \
+      rm -rf /opt/app-root/src/.cache/trivy ; \
     fi
 
 
