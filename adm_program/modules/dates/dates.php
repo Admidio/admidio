@@ -773,7 +773,11 @@ if ($datesResult['totalCount'] === 0) {
                             || $row['mem_leader'] == 1
                             || $gCurrentUser->editDates()) {
                             foreach ($participantsArray as $participant) {
-                                $columnValue[] = $participant['firstname']. ' ' . $participant['surname'];
+                                if($participant['approved'] === Participants::PARTICIPATION_YES) {
+                                    $columnValue[] = $participant['firstname'] . ' ' . $participant['surname'];
+                                } elseif($participant['approved'] === Participants::PARTICIPATION_MAYBE) {
+                                    $columnValue[] = $participant['firstname'] . ' ' . $participant['surname'] . ' (' . $gL10n->get('DAT_USER_TENTATIVE') . ')';
+                                }
                             }
                         }
                     }
