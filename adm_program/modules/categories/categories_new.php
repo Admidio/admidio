@@ -101,7 +101,7 @@ if (!Component::isAdministrable($component)) {
     // => EXIT
 }
 
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->addUrl(CURRENT_URL, $headlineSuffix);
 
 // create category object
 $category = new TableCategory($gDb);

@@ -46,8 +46,14 @@
     }
 }
 
+.admidio-content-col {
+    padding: 0px;
+}
+
 .admidio-content {
     order: 1;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 /***********************************/

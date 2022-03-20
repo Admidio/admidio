@@ -420,6 +420,7 @@ class HtmlPage extends \Smarty
         $this->assign('urlTheme', THEME_URL);
         $this->assign('javascriptContent', $this->javascriptContent);
         $this->assign('javascriptContentExecuteAtPageLoad', $this->javascriptContentExecute);
+        $this->assign('navigationStack', $gNavigation->getStack());
 
         $this->assign('userUuid', $gCurrentUser->getValue('usr_uuid'));
         $this->assign('validLogin', $gValidLogin);
