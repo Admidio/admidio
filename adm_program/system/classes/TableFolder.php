@@ -500,14 +500,14 @@ class TableFolder extends TableAccess
     {
         if ($folderId > 0) {
             // Get infos from requested folder
-            $sqlCurrentFolder = 'SELECT fol_id, fol_fol_id_parent, fol_name
+            $sqlCurrentFolder = 'SELECT fol_id, fol_uuid, fol_fol_id_parent, fol_name
                                    FROM '.TBL_FOLDERS.'
                                   WHERE fol_id = ? -- $folderId';
             $currentFolderStatement = $this->db->queryPrepared($sqlCurrentFolder, array($folderId));
             $currentFolderRow = $currentFolderStatement->fetch();
 
             if ($currentFolderRow['fol_fol_id_parent']) {
-                $currentNavigation = '<li class="breadcrumb-item"><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_id' => $currentFolderRow['fol_id'])).
+                $currentNavigation = '<li class="breadcrumb-item"><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $currentFolderRow['fol_uuid'])).
                     '">' . $currentFolderRow['fol_name'] . '</a></li>' . $currentNavigation;
 
                 // Next call with parent folder
@@ -523,20 +523,20 @@ class TableFolder extends TableAccess
                 $currentNavigation = $this->getNavigationForDownload($parentId, $currentNavigation);
 
                 // If the folder has a parent folder we need the root folder
-                $sqlRootFolder = 'SELECT fol_id
+                $sqlRootFolder = 'SELECT fol_uuid
                                 FROM ' . TBL_FOLDERS . '
                                WHERE fol_type   = \'DOCUMENTS\'
                                  AND fol_fol_id_parent IS NULL
                                  AND fol_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']';
                 $rootFolderStatement = $this->db->queryPrepared($sqlRootFolder, array($GLOBALS['gCurrentOrgId']));
-                $rootFolderId = $rootFolderStatement->fetchColumn();
+                $rootFolderUuid = $rootFolderStatement->fetchColumn();
 
                 $link = '
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
                                 <i class="fas fa-folder-open"></i>
-                                <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php', array('folder_id' => $rootFolderId)) . '">
+                                <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php', array('folder_uuid' => $rootFolderUuid)) . '">
                                     ' . $GLOBALS['gL10n']->get('SYS_DOCUMENTS_FILES') . '</a>
                             </li>' .
                             $currentNavigation .
