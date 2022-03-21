@@ -136,11 +136,6 @@
                 <div id="content" class="admidio-content" role="main">
                     <div class="admidio-content-header">
                         <h1 class="admidio-module-headline">{$headline}</h1>
-
-                        {if $hasPreviousUrl}
-                            <!-- Add link to previous page -->
-                            <a id="admidio-back-link" class="" href="{$urlAdmidio}/adm_program/system/back.php"><i class="fas fa-arrow-circle-left fa-fw"></i> {$l10n->get('SYS_BACK')}</a>
-                        {/if}
                         {$menuFunctions}
                     </div>
 

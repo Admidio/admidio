@@ -90,7 +90,7 @@ if ($getViewMode === 'html') {
         $gNavigation->addUrl(CURRENT_URL, $dates->getHeadline($getHeadline));
     } else {
         // Navigation of the module starts here
-        $gNavigation->addStartUrl(CURRENT_URL, $dates->getHeadline($getHeadline));
+        $gNavigation->addStartUrl(CURRENT_URL, $dates->getHeadline($getHeadline), 'fa-calendar-alt');
     }
 }
 

@@ -60,9 +60,7 @@ if ($getCopy > 0)
     $config = $report->saveConfigArray($config);
 }
 
-$gNavigation->clear();
-$gNavigation->addUrl(ADMIDIO_URL.FOLDER_MODULES.'/category-report/category_report.php');
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_CONFIGURATIONS'));
 
 // create html page object
 $page = new HtmlPage('plg-category-report-preferences', $headline);

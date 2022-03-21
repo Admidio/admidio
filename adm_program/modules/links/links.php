@@ -58,7 +58,7 @@ if ($gSettingsManager->getInt('weblinks_per_page') > 0) {
 if ($getLinkUuid  !== '') {
     $gNavigation->addUrl(CURRENT_URL, $getHeadline);
 } else {
-    $gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
+    $gNavigation->addStartUrl(CURRENT_URL, $getHeadline, 'fa-link');
 }
 
 // create html page object

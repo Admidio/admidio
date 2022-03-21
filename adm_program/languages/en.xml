@@ -900,7 +900,6 @@
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">The program expects a string with at least 2 different characters.</string>
   <string name="SYS_GREETING_CARD">Greeting card</string>
   <string name="SYS_GREETING_CARDS">Greeting cards</string>
-  <string name="SYS_GREETING_CARD_EDIT">Edit greeting card</string>
   <string name="SYS_GROUPS_ROLES">Groups &amp; roles</string>
   <string name="SYS_GROUPS_ROLES_DESC">Overview and management of all groups and roles of the organization. Different member lists can be displayed, exported and own lists can be created.</string>
   <string name="SYS_HALF_YEARLY">Half-yearly</string>
@@ -1289,6 +1288,7 @@
   <string name="SYS_SEND_EMAIL_TO">Send e-mail to #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send e-mails to all e-mail addresses of the user</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, e-mails will be sent to all user e-mail addresses stored in the profile. If the setting is deactivated, e-mails will only be sent to the e-mail address from the profile field with the internal name EMAIL. (Default: enabled)</string>
+  <string name="SYS_SEND_GREETING_CARD">Send greeting card</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Send login information</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Your e-mail will be sent to all members with an e-mail address of the selected role or the selected recipients .\n\nFurther roles and recipients are available for logged in users only.</string>
   <string name="SYS_SEND_MAILS">Send e-mails</string>

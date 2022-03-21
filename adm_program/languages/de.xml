@@ -902,7 +902,6 @@
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Das Programm erwartet eine Zeichenkette mit mindestens 2 unterschiedlichen Zeichen.</string>
   <string name="SYS_GREETING_CARD">Grußkarte</string>
   <string name="SYS_GREETING_CARDS">Grußkarten</string>
-  <string name="SYS_GREETING_CARD_EDIT">Grußkarte bearbeiten</string>
   <string name="SYS_GROUPS_ROLES">Gruppen &amp; Rollen</string>
   <string name="SYS_GROUPS_ROLES_DESC">Übersicht und Verwaltung aller Gruppen und Rollen der Organisation. Es können verschiedene Mitgliederlisten angezeigt, exportiert und eigene Listen erstellt werden.</string>
   <string name="SYS_HALF_YEARLY">Halbjährlich</string>
@@ -1289,8 +1288,9 @@
   <string name="SYS_SEND_EMAIL_FORMER">E-Mails an Ehemalige senden</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Ist diese Einstellung gesetzt, dann können E-Mails an einzelne ehemalige Mitglieder, sowie an alle ehemaligen Mitglieder einer Rolle gesendet werden. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
-  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Sende E-Mails an alle E-Mail Adressen der Benutzerin bzw. des Benutzers</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Sende E-Mails an alle E-Mail-Adressen der Benutzerin bzw. des Benutzers</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen der Benutzerin bzw. des Benutzers gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: Aktiviert)</string>
+  <string name="SYS_SEND_GREETING_CARD">Grußkarte versenden</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Zugangsdaten zuschicken</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger:innen.\n\nWenn du eingeloggt bist stehen dir weitere Rollen und Empfänger:innen zur Verfügung, an die du E-Mails schreiben kannst.</string>
   <string name="SYS_SEND_MAILS">E-Mails zusenden</string>
@@ -1300,7 +1300,7 @@
   <string name="SYS_SEND_NEW_PW">Neues Passwort zusenden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Private Nachricht senden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Deine PM wird an die ausgewählte Empfängerin bzw. den ausgewählten Empfänger gesendet</string>
-  <string name="SYS_SEND_TEST_MAIL">Testmail verschicken</string>
+  <string name="SYS_SEND_TEST_MAIL">Testmail versenden</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">E-Mail mit Anmeldenamen und neuem Passwort zuschicken</string>
   <string name="SYS_SENDER">Absender:in</string>
   <string name="SYS_SENDER_EMAIL">Absender:in E-Mail</string>

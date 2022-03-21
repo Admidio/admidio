@@ -289,7 +289,7 @@ if (count($relationTypeIds) === 1) {
 
 // if html mode and last url was not a list view then save this url to navigation stack
 if ($getMode === 'html' && !str_contains($gNavigation->getUrl(), 'lists_show.php')) {
-    $gNavigation->addUrl(CURRENT_URL);
+    $gNavigation->addUrl(CURRENT_URL, $headline);
 }
 
 if ($getMode !== 'csv') {
