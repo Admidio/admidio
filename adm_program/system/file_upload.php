@@ -61,6 +61,7 @@ if ($getModule === 'photos') {
     $uploadDir = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/';
     $uploadUrl = ADMIDIO_URL . FOLDER_DATA . '/photos/upload/';
     $destinationName = $photoAlbum->getValue('pho_name');
+    $headline = $gL10n->get('PHO_UPLOAD_PHOTOS');
 
     if($getMode === 'choose_files') {
         // delete old stuff in upload folder
@@ -99,6 +100,7 @@ if ($getModule === 'photos') {
         $uploadDir = ADMIDIO_PATH . $folderPath;
         $uploadUrl = ADMIDIO_URL . $folderPath;
         $destinationName = $folder->getValue('fol_name');
+        $headline = $gL10n->get('SYS_UPLOAD_FILES');
     } catch (AdmException $e) {
         $e->showHtml();
         // => EXIT
@@ -112,10 +114,10 @@ if (!PhpIniUtils::isFileUploadEnabled()) {
 }
 
 if ($getMode === 'choose_files') {
-    $gNavigation->addUrl(CURRENT_URL);
+    $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = new HtmlPage('admidio-file-upload');
+    $page = new HtmlPage('admidio-file-upload', $headline);
 
     $fileUpload = new FileUpload($page, $getModule, $getUuid);
     $fileUpload->setHeaderData();

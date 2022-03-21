@@ -31,11 +31,11 @@ $getCopy     = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
 // set headline of the script
 if ($getCopy) {
-    $headline = $gL10n->get('SYS_COPY_VAR', array($getHeadline));
+    $headline = $gL10n->get('SYS_COPY_ENTRY');
 } elseif ($getAnnUuid !== '') {
-    $headline = $getHeadline. ' - '. $gL10n->get('SYS_EDIT_ENTRY');
+    $headline = $gL10n->get('SYS_EDIT_ENTRY');
 } else {
-    $headline = $getHeadline. ' - '. $gL10n->get('SYS_CREATE_ENTRY');
+    $headline = $gL10n->get('SYS_CREATE_ENTRY');
 }
 
 // add current url to navigation stack
@@ -72,7 +72,7 @@ if (isset($_SESSION['announcements_request'])) {
 }
 
 // create html page object
-$page = new HtmlPage('admidio-announcements-edit', $headline);
+$page = new HtmlPage('admidio-announcements-edit', $getHeadline . ' - ' . $headline);
 
 // show form
 $form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_uuid' => $getAnnUuid, 'headline' => $getHeadline, 'mode' => '1')), $page);

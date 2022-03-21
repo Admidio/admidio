@@ -643,6 +643,7 @@
   <string name="SYS_COPY">Copy</string>
   <string name="SYS_COPY_CONFIGURATION">Copy configuration</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Your requested copy of the message</string>
+  <string name="SYS_COPY_ENTRY">Copy entry</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
   <string name="SYS_COUNT_BCC">Number of BCC recipients</string>
   <string name="SYS_COUNT_BCC_DESC">E-Mails to roles of several members will be sent as blind copy (BCC). This way, the recipients will not be able to see who else received the message. The amount indicated in the current field is defining the number of maximum recipients of an e-mail message. The maximum number of recipients might also be restricted by the hosting provider. In case of more e-mail recipients than allowed, several e-mail messages will be generated. Should the value be set to 1, each recipient will receive directly an individual message. The number of outgoing e-mail messages within a certain time period might be restricted by the hosting provider, too. (Default: 50)</string>

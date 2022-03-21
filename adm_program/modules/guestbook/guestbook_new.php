@@ -31,9 +31,9 @@ if ((int) $gSettingsManager->get('enable_guestbook_module') === 0) {
 
 // set headline of the script
 if ($getGboUuid !== '') {
-    $headline = $getHeadline . ' - ' . $gL10n->get('SYS_EDIT_ENTRY');
+    $headline = $gL10n->get('SYS_EDIT_ENTRY');
 } else {
-    $headline = $getHeadline . ' - ' . $gL10n->get('SYS_WRITE_ENTRY');
+    $headline = $gL10n->get('SYS_WRITE_ENTRY');
 }
 
 // add current url to navigation stack
@@ -96,7 +96,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0) 
 }
 
 // create html page object
-$page = new HtmlPage('admidio-guestbook-new', $headline);
+$page = new HtmlPage('admidio-guestbook-new', $getHeadline . ' - ' . $headline);
 
 // Html des Modules ausgeben
 if ($getGboUuid !== '') {

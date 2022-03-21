@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Klasse erweitert das PHP-DateTime-Objekt um einige nuetzliche Funktionen
+ * Class to create a file upload page for document & files or photos module
  *
  * @copyright 2004-2022 The Admidio Team
  * @see https://www.admidio.org/
@@ -19,16 +19,17 @@ class FileUpload
      */
     protected $module;
     /**
-     * @var int Id of the destination object that could be the folder or the album
+     * @var string UUID of the destination object that could be the folder or the album
      */
     protected $destinationUuid;
 
     /**
      * Constructor that will create an object of FileUpload.
-     * @param HtmlPage $page   Object that represents the current page where the upload should be integrated
-     * @param string   $module Name module for which the upload should be done. Preferred modules are 'photos' and 'documents_files'
+     * @param HtmlPage $page            Object that represents the current page where the upload should be integrated
+     * @param string   $module          Name module for which the upload should be done. Preferred modules are 'photos' and 'documents_files'
+     * @param string   $destinationUuid UUID of the destination object that could be the folder or the album
      */
-    public function __construct(HtmlPage $page, $module, $destinationUuid)
+    public function __construct(HtmlPage $page, string $module, string $destinationUuid)
     {
         $this->page = $page;
         $this->module = $module;
@@ -38,25 +39,21 @@ class FileUpload
     /**
      * Creates the html output for the upload dialog with module specific strings.
      * @param string $destinationName Name of the folder or album where the file should be uploaded
-     * @return Returns the html output for an upload dialog
+     * @return string Returns the html output for an upload dialog.
      */
-    public function getHtml($destinationName)
+    public function getHtml(string $destinationName): string
     {
         global $gL10n;
 
         if ($this->module === 'photos') {
-            $headline = $gL10n->get('PHO_UPLOAD_PHOTOS');
             $textUploadDescription = $gL10n->get('PHO_PHOTO_UPLOAD_DESC', array($destinationName));
             $textSelectFiles = $gL10n->get('PHO_SELECT_FOTOS');
             $textBackButton = $gL10n->get('SYS_BACK_TO_ALBUM');
         } elseif ($this->module === 'documents_files') {
-            $headline = $gL10n->get('SYS_UPLOAD_FILES');
             $textUploadDescription = $gL10n->get('SYS_FILES_UPLOAD_DESC', array($destinationName));
             $textSelectFiles = $gL10n->get('SYS_SELECT_FILES');
             $textBackButton = $gL10n->get('SYS_BACK_TO_FOLDER');
         }
-
-        $this->page->setHeadline($headline);
 
         return '
         <p class="lead">'.$textUploadDescription.'</p>

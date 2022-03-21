@@ -120,7 +120,7 @@
                     <ol class="breadcrumb">
                         {foreach $navigationStack as $navElementArray}
                             {if !empty($navElementArray['icon'])}
-                                {$breadcrumbIcon="<i class=\"fas `$navElementArray['icon']`\"></i> "}
+                                {$breadcrumbIcon="<i class=\"admidio-icon-chain fas `$navElementArray['icon']`\"></i>"}
                             {else}
                                 {$breadcrumbIcon=''}
                             {/if}

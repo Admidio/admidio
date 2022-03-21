@@ -136,7 +136,7 @@ if ($getMode === 'assign') {
     $javascriptCode .= '
         $("#menu_item_members_assign_create_user").attr("href", "javascript:void(0);");
         $("#menu_item_members_assign_create_user").attr("data-href", "'.ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php");
-        $("#menu_item_members_assign_create_user").attr("class", "nav-link openPopup");
+        $("#menu_item_members_assign_create_user").attr("class", "nav-link btn btn-secondary openPopup");
 
         // change mode of users that should be shown
         $("#filter_rol_id").change(function() {

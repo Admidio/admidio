@@ -643,6 +643,7 @@
   <string name="SYS_COPY">Kopieren</string>
   <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist Deine angeforderte Kopie der Nachricht</string>
+  <string name="SYS_COPY_ENTRY">Eintrag kopieren</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
   <string name="SYS_COUNT_BCC">Anzahl der BCC Empfänger:innen</string>
   <string name="SYS_COUNT_BCC_DESC">E-Mails an Rollen mit mehreren Mitgliedern werden als Blindkopie (BCC) versendet. So kann von der Empfängerin oder dem Empfänger nicht eingesehen werden, wer diese E-Mail noch bekommen hat. Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängerinnen oder Empfängern pro E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Besitzt eine Rolle mehr Mitglieder als die eingestellte Zahl, so werden mehrere E-Mails erzeugt. Wird der Wert auf 1 gesetzt, so werden die E-Mails nicht als Blindkopie versendet, sondern direkt an die Empfängerin oder den Empfänger. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Voreinstellung: 50)</string>

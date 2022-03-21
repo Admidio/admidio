@@ -53,7 +53,7 @@ $headline = $gL10n->get('SYS_MESSAGES');
 
 // add current url to navigation stack
 $gNavigation->clear();
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->addUrl(CURRENT_URL, $headline, 'fa-envelope');
 
 // create html page object
 $page = new HtmlPage('admidio-messages', $headline);
