@@ -58,7 +58,7 @@ if ($getMode === 'show_list') {
     $existingBackupFiles = array();
 
     // start navigation of this module here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-database');
 
     // create a list with all valid files in the backup folder
     $dirHandle = @opendir($backupAbsolutePath);
@@ -142,7 +142,7 @@ if ($getMode === 'show_list') {
 
     $page->addHtml($fileContent);
 
-    // show button with link to backup list
+    // show button with link of backup list
     $form = new HtmlForm('show_backup_list_form', ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', $page);
     $form->addSubmitButton(
         'btn_update_overview',

@@ -20,7 +20,7 @@ require_once(__DIR__ . '/system/common.php');
 $headline = $gL10n->get('SYS_OVERVIEW');
 
 // Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline);
+$gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-home');
 
 // create html page object and load template file
 $page = new HtmlPage('admidio-overview', $headline);

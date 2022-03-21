@@ -10,7 +10,7 @@
  */
 require_once(__DIR__ . '/../../system/common.php');
 
-// Rechte pruefen
+// check rights to use this module
 if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -20,7 +20,7 @@ $headline = $gL10n->get('SYS_MENU');
 // create html page object
 $page = new HtmlPage('admidio-menu', $headline);
 
-$gNavigation->addStartUrl(CURRENT_URL, $headline);
+$gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-stream');
 
 $page->addJavascript(
     '

@@ -121,7 +121,7 @@ if ($showOption !== '') {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 } else {
     // Navigation of the module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-cog');
 }
 
 /**

@@ -35,7 +35,7 @@ if (!$gCurrentUser->editUsers()) {
 $headline = $gL10n->get('SYS_MEMBERS');
 
 // Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline);
+$gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-users-cog');
 
 $membersListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('members_list_configuration'));
 $_SESSION['members_list_config'] = $membersListConfig;
