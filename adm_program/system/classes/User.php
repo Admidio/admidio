@@ -473,7 +473,7 @@ class User extends TableAccess
      * was set. Optional the current session could be updated to a valid login session.
      * @param string $password             The password for the current user. This should not be encoded.
      * @param bool   $setAutoLogin         If set to true then this login will be stored in AutoLogin table
-     *                                     and the user doesn't need to login another time with this browser.
+     *                                     and the user doesn't need login to another time with this browser.
      *                                     To use this functionality **$updateSessionCookies** must be set to true.
      * @param bool   $updateSessionCookies The current session will be updated to a valid login.
      *                                     If set to false then the login is only valid for the current script.
@@ -509,14 +509,14 @@ class User extends TableAccess
             throw new AdmException($gL10n->get('SYS_LOGIN_NOT_ACTIVATED'));
         }
 
-        $orgLongname = $this->getOrgLongname();
+        $orgLongName = $this->getOrgLongname();
 
-        if (!$this->isMemberOfOrganization($orgLongname)) {
-            throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongname)));
+        if (!$this->isMemberOfOrganization($orgLongName)) {
+            throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongName)));
         }
 
-        if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization($orgLongname)) {
-            throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongname)));
+        if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization($orgLongName)) {
+            throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongName)));
         }
 
         if ($updateHash) {
@@ -528,7 +528,7 @@ class User extends TableAccess
             $gCurrentSession->save();
         }
 
-        // should the user stayed logged in automatically, than the cookie would expire in one year
+        // should the user stayed logged in automatically, then the cookie would expire in one year
         if ($setAutoLogin && $gSettingsManager->getBool('enable_auto_login')) {
             $gCurrentSession->setAutoLogin();
         } else {
@@ -576,7 +576,7 @@ class User extends TableAccess
 
     /**
      * Deletes the selected user of the table and all the many references in other tables.
-     * After that the class will be initialize.
+     * After that the class will be initialized.
      * @return bool **true** if no error occurred
      */
     public function delete()
@@ -695,8 +695,8 @@ class User extends TableAccess
         $sqlQueries[] = 'DELETE FROM '.TBL_MEMBERS.'
                           WHERE mem_usr_id = '.$usrId;
 
-        // MySQL couldn't create delete statement with same table in subquery.
-        // Therefore we fill a temporary table with all ids that should be deleted and reference on this table
+        // MySQL couldn't create delete statement with same table in a subquery.
+        // Therefore, we fill a temporary table with all ids that should be deleted and reference on this table
         $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
                           WHERE ids_usr_id = '.$GLOBALS['gCurrentUserId'];
 
@@ -776,7 +776,7 @@ class User extends TableAccess
      * Edit an existing role membership of the current user. If the new date range contains
      * a future or past membership of the same role then the two memberships will be merged.
      * In opposite to setRoleMembership this method is useful to end a membership earlier.
-     * @param int    $memberId  Id of the current membership that should be edited.
+     * @param int    $memberId  ID of the current membership that should be edited.
      * @param string $startDate New start date of the membership. Default will be **DATE_NOW**.
      * @param string $endDate   New end date of the membership. Default will be **DATE_MAX**
      * @param bool   $leader    If set to **1** then the member will be leader of the role and
@@ -1422,20 +1422,27 @@ class User extends TableAccess
     }
 
     /**
-     * Deletes all other sessions of the current user except the current session. Also all auto logins of the user
-     * will be removed. This method is useful if the user changed his password or if unusual activities within
-     * the user account are noticed.
+     * Deletes all other sessions of the current user except the current session if there is already a current
+     * session. All auto logins of the user will be removed. This method is useful if the user changed his
+     * password or if unusual activities within the user account are noticed.
      * @return bool Returns true if all things could be done. Otherwise false is returned.
      */
     public function invalidateAllOtherLogins()
     {
         global $gCurrentUserId, $gCurrentSession;
 
-        // remove all sessions of the current user except the current session
-        $sql = 'DELETE FROM ' . TBL_SESSIONS . '
-                 WHERE ses_usr_id = ? -- $gCurrentUserId
-                   AND ses_id    <> ? -- $gCurrentSession->getValue(\'ses_id\') ';
-        $queryParams = array($gCurrentUserId, $gCurrentSession->getValue('ses_id'));
+        if(isset($gCurrentSession)) {
+            // remove all sessions of the current user except the current session
+            $sql = 'DELETE FROM ' . TBL_SESSIONS . '
+                     WHERE ses_usr_id = ? -- $gCurrentUserId
+                       AND ses_id    <> ? -- $gCurrentSession->getValue(\'ses_id\') ';
+            $queryParams = array($gCurrentUserId, $gCurrentSession->getValue('ses_id'));
+        } else {
+            // remove all sessions of the current user
+            $sql = 'DELETE FROM ' . TBL_SESSIONS . '
+                     WHERE ses_usr_id = ? -- $gCurrentUserId ';
+            $queryParams = array($gCurrentUserId);
+        }
         $this->db->queryPrepared($sql, $queryParams);
 
         // remove all auto logins of the current user
@@ -1460,10 +1467,10 @@ class User extends TableAccess
 
     /**
      * Checks if this user is an admin of this organization.
-     * @param string $orgLongname The longname of this organization.
+     * @param string $orgLongName The longname of this organization.
      * @return bool Return true if user is admin of this organization.
      */
-    private function isAdminOfOrganization($orgLongname)
+    private function isAdminOfOrganization($orgLongName)
     {
         global $gLogger, $installedDbVersion;
 
@@ -1496,7 +1503,7 @@ class User extends TableAccess
 
         $loggingObject = array(
             'username'     => $this->getValue('usr_login_name'),
-            'organisation' => $orgLongname
+            'organisation' => $orgLongName
         );
 
         $gLogger->warning('AUTHENTICATION: User is no administrator!', $loggingObject);
@@ -1516,10 +1523,10 @@ class User extends TableAccess
 
     /**
      * Checks if this user is a member of this organization.
-     * @param string $orgLongname The longname of this organization.
+     * @param string $orgLongName The longname of this organization.
      * @return bool Return true if user is member of this organization.
      */
-    private function isMemberOfOrganization($orgLongname)
+    private function isMemberOfOrganization($orgLongName)
     {
         global $gLogger;
 
@@ -1544,7 +1551,7 @@ class User extends TableAccess
 
         $loggingObject = array(
             'username'     => $this->getValue('usr_login_name'),
-            'organisation' => $orgLongname
+            'organisation' => $orgLongName
         );
 
         $gLogger->warning('AUTHENTICATION: User is not member in this organisation!', $loggingObject);
