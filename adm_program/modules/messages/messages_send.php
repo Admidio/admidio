@@ -210,6 +210,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                     // only active members
                     $sqlConditions = ' AND mem_begin <= ? -- DATE_NOW
                                        AND mem_end    > ? -- DATE_NOW ';
+                    $queryParams[] = DATE_NOW;
                 }
                 $queryParams[] = DATE_NOW;
 
