@@ -42,20 +42,17 @@ if ($currentFolder->getValue('fol_fol_id_parent') == null) {
 }
 
 if ($getFolderUuid !== '') {
-    // URL auf Navigationstack ablegen
-    $gNavigation->addUrl(CURRENT_URL, $headline);
+    // add URL to navigation stack
+    $gNavigation->addUrl(CURRENT_URL, $currentFolder->getValue('fol_name'));
 } else {
     // Navigation of the module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+    $gNavigation->addStartUrl(CURRENT_URL, $gL10n->get('SYS_DOCUMENTS_FILES'), 'fa-file-download');
 }
 
 $getFolderUuid = $currentFolder->getValue('fol_uuid');
 
 // Get folder content for style
 $folderContent = $currentFolder->getFolderContentsForDownload();
-
-// Keep navigation link
-$navigationBar = $currentFolder->getNavigationForDownload();
 
 // create html page object
 $page = new HtmlPage('admidio-documents-files', $headline);
@@ -304,8 +301,6 @@ if ($gCurrentUser->adminDocumentsFiles()) {
 }
 
 // Output module html to client
-
-$page->addHtml($navigationBar);
 
 $page->addHtml($htmlDocumentsFilesOverview);
 

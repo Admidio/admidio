@@ -13,8 +13,8 @@
  * This class stores every url that you add to the object in a stack. From
  * there it's possible to return the last called url or a previous url. This
  * can be used to allow a navigation within a module. It's also possible
- * to create a html navigation bar. Therefore you should add a url and a link text
- * to the object everytime you submit a url.
+ * to create a html navigation bar. Therefore, you should add an url and a link text
+ * to the object everytime you submit an url.
  *
  * **Code example**
  * ```
@@ -61,8 +61,8 @@ class Navigation
     }
 
     /**
-     * Number of urls that a currently in the stack
-     * @return int
+     * Number of urls that are currently in the stack
+     * @return int Returns the number of the urls in the stack.
      */
     public function count()
     {
@@ -72,17 +72,33 @@ class Navigation
     /**
      * Initialize the stack and adds a new url to the navigation stack.
      * If a html navigation bar should be created later than you should fill the text and maybe the icon.
-     * @param string $url  The url that should be added to the navigation stack.
+     * @param string $url The url that should be added to the navigation stack.
      * @param string $text A text that should be shown in the html navigation stack and
      *                     would be linked with the $url.
-     * @param string $icon A url to the icon that should be shown in the html navigation stack
+     * @param string $icon The name of a fontawesome icon that should be shown in the html navigation stack
      *                     together with the text and would be linked with the $url.
      * @return void
+     * @throws AdmException Throws an exception if the url has invalid characters.
      */
     public function addStartUrl($url, $text = null, $icon = null)
     {
         $this->clear();
         $this->addUrl($url, $text, $icon);
+    }
+
+    /**
+     * Removes the last url from the stack. If there is only one element
+     * in the stack than don't remove it, because this will be the initial
+     * url that should be called.
+     * @return array<string,string>|null Returns the removed element
+     */
+    public function deleteLastUrl()
+    {
+        if (count($this->urlStack) > 1) {
+            return array_pop($this->urlStack);
+        }
+
+        return null;
     }
 
     /**
@@ -92,7 +108,7 @@ class Navigation
      * @param string $url The url that should be added to the navigation stack.
      * @param string $text A text that should be shown in the html navigation stack and
      *                     would be linked with the $url.
-     * @param string $icon A url to the icon that should be shown in the html navigation stack
+     * @param string $icon The name of a fontawesome icon that should be shown in the html navigation stack
      *                     together with the text and would be linked with the $url.
      * @throws AdmException Throws an exception if the url has invalid characters.
      * @return bool Returns true if the navigation-stack got changed and false if not.
@@ -121,18 +137,12 @@ class Navigation
     }
 
     /**
-     * Removes the last url from the stack. If there is only one element
-     * in the stack than don't remove it, because this will be the initial
-     * url that should be called.
-     * @return array<string,string>|null Returns the removed element
+     * The navigation stack contains each url. Optional a text and an icon is also set for the url.
+     * @return array<int,array<string,string> Array with the navigation stack. The array has the following element **url**, **text** and **icon**
      */
-    public function deleteLastUrl()
+    public function getStack()
     {
-        if (count($this->urlStack) > 1) {
-            return array_pop($this->urlStack);
-        }
-
-        return null;
+        return $this->urlStack;
     }
 
     /**
@@ -168,30 +178,5 @@ class Navigation
         $entry = max(0, $count - 2);
 
         return $this->urlStack[$entry]['url'];
-    }
-
-    /**
-     * Returns html code that contain links to all previous added urls from the stack.
-     * The output will look like: `FirstPage > SecondPage > ThirdPage ...`
-     * The last page of this list is always the current page.
-     * @param string $id Optional you could set an id for the navigation bar
-     * @return string Returns html code of the navigation bar.
-     */
-    public function getHtmlNavigationBar($id = 'adm-navigation-bar')
-    {
-        $links = array();
-
-        foreach ($this->urlStack as $url) {
-            if (strlen($url['text']) > 0) {
-                $links[] = '<a href="'.$url['url'].'">'.$url['text'].'</a>';
-            }
-        }
-
-        // if no links where found then show nothing
-        if (count($links) === 0) {
-            return '';
-        }
-
-        return '<div id="'.$id.'" class="admNavigation admNavigationBar">'.implode('', $links).'</div>';
     }
 }

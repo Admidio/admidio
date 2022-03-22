@@ -105,7 +105,7 @@ $subheadline = $config[$report->getConfiguration()]['name'];
 $filename    = $g_organization.'-'.$headline.'-'.$subheadline;
 
 if ($getMode === 'html') {
-    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-list-ul');
 }
 
 if ($getMode !== 'csv') {

@@ -42,6 +42,7 @@ if (($getType === 'ROL' && !$gCurrentUser->manageRoles())
 $headline         = $gL10n->get('SYS_CATEGORIES');
 $addButtonText    = $gL10n->get('SYS_CREATE_CATEGORY');
 $visibleHeadline  = $gL10n->get('SYS_VISIBLE_FOR');
+$navigationHeadline = $gL10n->get('SYS_CATEGORIES');
 $editableHeadline = '';
 
 switch ($getType) {
@@ -63,6 +64,7 @@ switch ($getType) {
         $component = 'DATES';
         $rolesRightsColumn = 'rol_dates';
         $headline = $gL10n->get('DAT_DATES') . ' - ' . $gL10n->get('SYS_CALENDARS');
+        $navigationHeadline = $gL10n->get('SYS_CALENDARS');
         $editableHeadline = $gL10n->get('DAT_EDIT_EVENTS');
         $addButtonText    = $gL10n->get('SYS_CREATE_CALENDAR');
         break;
@@ -115,7 +117,7 @@ while ($roleName = $statementAdminRoles->fetchColumn()) {
     $adminRoles[] = $roleName;
 }
 
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->addUrl(CURRENT_URL, $navigationHeadline);
 unset($_SESSION['categories_request']);
 
 // create html page object

@@ -45,7 +45,7 @@ if ($getModeration && !$gCurrentUser->editGuestbookRight()) {
 if ($getGboUuid !== '') {
     $gNavigation->addUrl(CURRENT_URL, $getHeadline);
 } else {
-    $gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
+    $gNavigation->addStartUrl(CURRENT_URL, $getHeadline, 'fa-book');
 }
 
 // create html page object

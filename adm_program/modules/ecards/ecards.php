@@ -27,7 +27,7 @@ $showPage     = admFuncVariableIsValid($_GET, 'show_page', 'int', array('default
 // Initialisierung lokaler Variablen
 $funcClass = new FunctionClass($gL10n);
 $templates = $funcClass->getFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates');
-$headline  = $gL10n->get('SYS_GREETING_CARD_EDIT');
+$headline  = $gL10n->get('SYS_SEND_GREETING_CARD');
 
 // check if the module is enabled and disallow access if it's disabled
 if (!$gSettingsManager->getBool('enable_ecard_module')) {

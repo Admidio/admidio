@@ -62,7 +62,7 @@ $announcementsCount = $announcements->getDataSetCount();
 if ($getAnnUuid !== '') {
     $gNavigation->addUrl(CURRENT_URL, $getHeadline);
 } else {
-    $gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
+    $gNavigation->addStartUrl(CURRENT_URL, $getHeadline, 'fa-newspaper');
 }
 
 // create html page object

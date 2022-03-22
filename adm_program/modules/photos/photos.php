@@ -65,7 +65,7 @@ if ($getPhotoUuid !== '') {
     $headline = $getHeadline;
 
     // Navigation of the module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-image');
 }
 
 // create html page object
@@ -159,22 +159,6 @@ if ($gSettingsManager->getBool('photo_download_enabled') && $photoAlbum->getValu
     );
 }
 
-// Breadcrump bauen
-$navilink = '';
-$phoParentId = $photoAlbum->getValue('pho_pho_id_parent');
-$photoAlbumParent = new TablePhotos($gDb);
-
-while ($phoParentId > 0) {
-    // get parent photo album
-    $photoAlbumParent->readDataById($phoParentId);
-
-    // create link to parent photo album
-    $navilink = '<li class="breadcrumb-item"><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $photoAlbumParent->getValue('pho_uuid'))).'">'.
-        $photoAlbumParent->getValue('pho_name') . '</a></li>' . $navilink;
-
-    $phoParentId = $photoAlbumParent->getValue('pho_pho_id_parent');
-}
-
 if ($getPhotoUuid !== '') {
     // show additional album information
     $datePeriod = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
@@ -182,18 +166,6 @@ if ($getPhotoUuid !== '') {
     if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin') && strlen($photoAlbum->getValue('pho_end')) > 0) {
         $datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'));
     }
-
-    $page->addHtml('
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <i class="fas fa-image"></i>
-                <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php">'.$gL10n->get('PHO_PHOTO_ALBUMS').'</a>
-            </li>'.
-            $navilink.'
-            <li class="breadcrumb-item active" aria-current="page">'.$photoAlbum->getValue('pho_name').'</li>
-        </ol>
-    </nav>');
 
     // Notice for users with foto edit right that this album is locked
     if ($photoAlbum->getValue('pho_locked') == 1) {

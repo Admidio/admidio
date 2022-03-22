@@ -68,12 +68,12 @@ if (!$gCurrentUser->checkRolesRight('rol_assign_roles')) {
 
 $category = new TableCategory($gDb);
 
-if ($getCatUuid !== '') {
+if (strlen($getCatUuid) > 1) {
     $category->readDataByUuid($getCatUuid);
     $headline .= ' - '.$category->getValue('cat_name');
 }
 
-// New Modulelist object
+// New module list object
 $lists = new ModuleLists();
 $lists->setParameter('cat_id', $category->getValue('cat_id'));
 $lists->setParameter('role_type', (int) $getRoleType);
@@ -83,10 +83,10 @@ $page = new HtmlPage('admidio-groups-roles', $headline);
 
 if ($getShow === 'card') {
     // Navigation of the module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-users');
 } else {
     // In permission mode the navigation should continue
-    $gNavigation->addUrl(CURRENT_URL, $headline);
+    $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_PERMISSIONS'));
 }
 
 

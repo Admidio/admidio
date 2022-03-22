@@ -32,7 +32,7 @@ if (!$gCurrentUser->approveUsers()) {
 $headline = $gL10n->get('SYS_NEW_REGISTRATIONS');
 
 // Navigation in module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline);
+$gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
 
 // Select new Members of the group
 $sql = 'SELECT usr_id, usr_uuid, usr_login_name, reg_timestamp, last_name.usd_value AS last_name,

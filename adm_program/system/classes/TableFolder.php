@@ -490,68 +490,6 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Creates for the documents and files module a HTML navigation bar of the current folder structure.
-     * Therefore this method will be called recursiv if a parent folder was found until there is no parent folder.
-     * @param int    $folderId          ID of the folder of which a HTML breadcrumb should be created.
-     * @param string $currentNavigation HTML of the breadcrumb that still exists.
-     * @return string Returns a HTML breadcrumb or null if no folders were found.
-     */
-    public function getNavigationForDownload($folderId = 0, $currentNavigation = '')
-    {
-        if ($folderId > 0) {
-            // Get infos from requested folder
-            $sqlCurrentFolder = 'SELECT fol_id, fol_fol_id_parent, fol_name
-                                   FROM '.TBL_FOLDERS.'
-                                  WHERE fol_id = ? -- $folderId';
-            $currentFolderStatement = $this->db->queryPrepared($sqlCurrentFolder, array($folderId));
-            $currentFolderRow = $currentFolderStatement->fetch();
-
-            if ($currentFolderRow['fol_fol_id_parent']) {
-                $currentNavigation = '<li class="breadcrumb-item"><a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_id' => $currentFolderRow['fol_id'])).
-                    '">' . $currentFolderRow['fol_name'] . '</a></li>' . $currentNavigation;
-
-                // Next call with parent folder
-                return $this->getNavigationForDownload($currentFolderRow['fol_fol_id_parent'], $currentNavigation);
-            }
-
-            return $currentNavigation;
-        } else {
-            $parentId = $this->getValue('fol_fol_id_parent');
-
-            // If there is no parent folder, navigation-bar isn't necessary
-            if ($parentId > 0) {
-                $currentNavigation = $this->getNavigationForDownload($parentId, $currentNavigation);
-
-                // If the folder has a parent folder we need the root folder
-                $sqlRootFolder = 'SELECT fol_id
-                                FROM ' . TBL_FOLDERS . '
-                               WHERE fol_type   = \'DOCUMENTS\'
-                                 AND fol_fol_id_parent IS NULL
-                                 AND fol_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']';
-                $rootFolderStatement = $this->db->queryPrepared($sqlRootFolder, array($GLOBALS['gCurrentOrgId']));
-                $rootFolderId = $rootFolderStatement->fetchColumn();
-
-                $link = '
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <i class="fas fa-folder-open"></i>
-                                <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php', array('folder_id' => $rootFolderId)) . '">
-                                    ' . $GLOBALS['gL10n']->get('SYS_DOCUMENTS_FILES') . '</a>
-                            </li>' .
-                            $currentNavigation .
-                            '<li class="breadcrumb-item active" aria-current="page">' . $this->getValue('fol_name') . '</li>
-                        </ol>
-                    </nav>';
-
-                return $link;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Returns an array with all roles ids that have the right to view the folder.
      * @return array<int,int> Returns an array with all role ids that have the right to view the folder.
      */

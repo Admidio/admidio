@@ -24,19 +24,19 @@ $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defau
 $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
 
-// Testen ob Recht besteht Profil einzusehn
+// check if right to view profile exists
 if (!$gCurrentUser->hasRightViewProfile($user)) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
 /**
- * diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder dabei wird der Inhalt richtig formatiert
+ * this function returns the html code for a field with description, formatting the content correctly
  * @param string $fieldNameIntern
  * @param User   $user
  * @return false|array<string,string>
  */
-function getFieldCode($fieldNameIntern, User $user)
+function getFieldCode(string $fieldNameIntern, User $user)
 {
     global $gCurrentUser, $gProfileFields, $gL10n;
 
@@ -51,14 +51,14 @@ function getFieldCode($fieldNameIntern, User $user)
 
     // if birthday then show age
     if ($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') === 'BIRTHDAY' && $value !== '') {
-        $birthday = \DateTime::createFromFormat('Y-m-d', $user->getValue($fieldNameIntern, 'Y-m-d'));
-        $now = new \DateTime('now');
+        $birthday = DateTime::createFromFormat('Y-m-d', $user->getValue($fieldNameIntern, 'Y-m-d'));
+        $now = new DateTime('now');
         $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->diff($now)->y. ' '.$gL10n->get('PRO_YEARS').')';
     } elseif (strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_icon')) > 0) {
         $value = $gProfileFields->getProperty($fieldNameIntern, 'usf_icon') . $value;
     }
 
-    // show html of field, if user has a value for that field or it's a checkbox field
+    // show html of field, if user has a value for that field, or it's a checkbox field
     if (strlen($user->getValue($fieldNameIntern)) > 0 || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'CHECKBOX') {
         $html['label'] = $gProfileFields->getProperty($fieldNameIntern, 'usf_name');
         $html['value'] = $value;
@@ -78,11 +78,12 @@ if ($userId === $gCurrentUserId) {
     $headline = $gL10n->get('PRO_PROFILE_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
 }
 
-// if user id was not set and own profile should be shown then initialize navigation
-if (!isset($_GET['user_id']) && !isset($_GET['user_uuid'])) {
-    $gNavigation->clear();
+// if user UUID was not set and own profile should be shown then initialize navigation
+if (!isset($_GET['user_uuid'])) {
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-user');
+} else {
+    $gNavigation->addUrl(CURRENT_URL, $headline);
 }
-$gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage('admidio-profile', $headline);
@@ -378,7 +379,7 @@ $page->addHtml('
                                         <a class="admidio-icon-link" href="'. $mapUrl. '" target="_blank" title="'.$gL10n->get('SYS_MAP_LINK_HOME_DESC').'">
                                             <i class="fas fa-map-marker-alt"></i>'.$gL10n->get('SYS_MAP').'</a>';
 
-                                    // show route link if its not the profile of CurrentUser
+                                    // show route link if it's not the profile of CurrentUser
                                     if ($userId !== $gCurrentUserId) {
                                         $address .= ' - <a href="'.$routeUrl.'" target="_blank" title="'.$gL10n->get('SYS_MAP_LINK_ROUTE_DESC').'">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
                                     }
@@ -458,7 +459,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             $form = new HtmlForm('profile_'.$field->getValue('cat_name_intern').'_form');
         }
 
-        // show html of field, if user has a value for that field or it's a checkbox field
+        // show html of field, if user has a value for that field, or it's a checkbox field
         if (strlen($user->getValue($fieldNameIntern)) > 0 || $field->getValue('usf_type') === 'CHECKBOX') {
             $field = getFieldCode($fieldNameIntern, $user);
             if (is_array($field) && $field['value'] !== '') {
@@ -770,7 +771,7 @@ if ($gSettingsManager->getBool('profile_show_extern_roles')
                     $showRolesOtherOrganizations = true;
                 }
 
-                $startDate = \DateTime::createFromFormat('Y-m-d', $row['mem_begin']);
+                $startDate = DateTime::createFromFormat('Y-m-d', $row['mem_begin']);
                 // jede einzelne Rolle anzeigen
                 $page->addHtml('
                 <li class="list-group-item">
