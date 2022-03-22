@@ -64,7 +64,7 @@ if ($getCopy) {
     $getUserUuid = '';
     $headline = $gL10n->get('SYS_COPY_VAR', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
 } elseif ($getNewUser === 1) {
-    $headline = $gL10n->get('PRO_ADD_USER');
+    $headline = $gL10n->get('SYS_CREATE_MEMBER');
 } elseif ($getNewUser === 2) {
     $headline = $gL10n->get('SYS_REGISTRATION');
 } elseif ($userId === $gCurrentUserId) {

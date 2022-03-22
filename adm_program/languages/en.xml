@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in Datesmodule-->
+  <!--Phrases only in event module-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Add event to calendar</string>
   <string name="DAT_ALL_DAY">Full time</string>
   <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Participants can register anonymous guests</string>
@@ -84,7 +84,7 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detailed</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Visibility</string>
-  <!--Phrases only in Guestbookmodule-->
+  <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Back to guestbook</string>
   <string name="GBO_CAPTCHA_DESC">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It\'s necessary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (default: yes)</string>
   <string name="GBO_COMMENT_BY">Comment of #VAR1#</string>
@@ -114,7 +114,7 @@
   <string name="GBO_SHOW_COMMENTS">Display comments</string>
   <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Display #VAR1# comment(s) of this guest book entry</string>
   <string name="GBO_WRITE_COMMENT">Leave comment</string>
-  <!--Phrases only in Installation-->
+  <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Add another organization</string>
   <string name="INS_ADD_ORGANIZATION">Add organization</string>
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
@@ -228,7 +228,7 @@
   <string name="INS_SON">Son</string>
   <string name="INS_SPOUSE">Spouse</string>
   <string name="INS_WIFE">Wife</string>
-  <!--Phrases only in Organizationadministration-->
+  <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be disabled or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Enable system notifications</string>
@@ -365,7 +365,7 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Short name of the organization</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Website URL of the organization</string>
   <string name="ORG_VARIABLE_USERNAME">Username of the user from the respective e-mail context</string>
-  <!--Phrases only in Photomodule-->
+  <!--Phrases only in photo module-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Delete album</string>
   <string name="PHO_ALBUM_LOCK">Lock album</string>
@@ -424,9 +424,7 @@
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">This option defines how many thumbnail previews will be displayed on each page. If there are more images in this album a page navigation will be added automatically. (Default: 16)</string>
   <string name="PHO_UPLOAD_PHOTOS">Upload photos</string>
   <string name="PHO_WANT_DELETE_PHOTO">Selected photo will be deleted. Are you sure?</string>
-  <!--Phrases only in Profilemodule-->
-  <string name="PRO_ACCEPT_NEW_PICTURE">Confirm new profile picture</string>
-  <string name="PRO_ADD_USER">Add user</string>
+  <!--Phrases only in profile module-->
   <string name="PRO_ASSIGNED_BY_ROLES">Set by the roles</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Registration has been confirmed. The user can now log on to the system.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Cancel membership</string>
