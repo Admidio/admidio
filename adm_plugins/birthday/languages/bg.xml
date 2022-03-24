@@ -4,6 +4,9 @@
   <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# ще има рожден ден след #VAR2# дни</string>
   <string name="PLG_BIRTHDAY_HEADLINE">Рождени дни</string>
   <string name="PLG_BIRTHDAY_MAN_VAR">Г-н #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Днес #VAR1# участници имат рождени дни.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Днес няма рожден ден на участник.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Днес е рожде ден на участник.</string>
   <string name="PLG_BIRTHDAY_PAST">#VAR1# стана на #VAR3# години преди #VAR2# дена, на #VAR4#</string>
   <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# имаше рожден ден преди #VAR2# дена</string>
   <string name="PLG_BIRTHDAY_TODAY">#VAR1# днес става на #VAR2#</string>
