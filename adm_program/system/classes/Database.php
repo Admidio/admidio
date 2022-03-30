@@ -189,6 +189,23 @@ class Database
     }
 
     /**
+     * Method will check if the user has the right to create a table. Therefore, the method will try to create a table
+     * in the current database. You should set the $gDebug on true so an exception will be thrown. Otherwise the
+     * function will only return false,
+     * @return bool Return true if write access is set for the current database user.
+     */
+    public function checkWriteAccess()
+    {
+        $sql = 'CREATE TABLE adm_sys (sys varchar(10)) ';
+        if ($this->query($sql, true) !== false) {
+            $sql = 'DROP TABLE adm_sys ';
+            $this->query($sql);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @throws AdmException
      */
     protected function connect()

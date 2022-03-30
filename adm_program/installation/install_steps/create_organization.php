@@ -141,7 +141,10 @@ if (isset($_POST['db_host'])) {
     if (!is_file($configPath)) {
         // check database connections
         try {
+            $gDebug = true;
             $db = new Database($_SESSION['db_engine'], $_SESSION['db_host'], $_SESSION['db_port'], $_SESSION['db_name'], $_SESSION['db_username'], $_SESSION['db_password']);
+            $db->checkWriteAccess();
+            $gDebug = false;
         } catch (AdmException $e) {
             $page = new HtmlPageInstallation('admidio-installation-message');
             $page->showMessage(
