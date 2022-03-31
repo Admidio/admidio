@@ -124,7 +124,7 @@ if ($gSettingsManager->getInt('groups_roles_edit_lists') === 1 // everyone
 || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && $gCurrentUser->isAdministrator())) {
     $page->addPageFunctionsMenuItem(
         'menu_item_groups_own_list',
-        $gL10n->get('SYS_EDIT_LISTS'),
+        $gL10n->get('SYS_CONFIGURE_LISTS'),
         ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php',
         'fa-list-alt'
     );

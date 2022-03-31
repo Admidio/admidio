@@ -1407,9 +1407,9 @@ $selectBoxEntriesEditLists = array(
 );
 $formGroupsRoles->addSelectBox(
     'groups_roles_edit_lists',
-    $gL10n->get('SYS_EDIT_LISTS'),
+    $gL10n->get('SYS_CONFIGURE_LISTS'),
     $selectBoxEntriesEditLists,
-    array('defaultValue' => $formValues['groups_roles_edit_lists'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_EDIT_LISTS_DESC')
+    array('defaultValue' => $formValues['groups_roles_edit_lists'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_CONFIGURE_LISTS_DESC')
 );
 $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';

@@ -770,8 +770,8 @@
   <string name="SYS_EDIT_ENTRY">Edit entry</string>
   <string name="SYS_EDIT_FILE">Edit file</string>
   <string name="SYS_EDIT_FOLDER">Edit folder</string>
-  <string name="SYS_EDIT_LISTS">Edit lists</string>
-  <string name="SYS_EDIT_LISTS_DESC">Users can create their own lists with selected profile fields and then apply them to groups and roles. Only profile fields and groups or roles that the current user is allowed to see are available. This setting can be used to specify who can create such lists. (Default: All)</string>
+  <string name="SYS_CONFIGURE_LISTS">Configure lists</string>
+  <string name="SYS_CONFIGURE_LISTS_DESC">Users can create their own lists with selected profile fields and then apply them to groups and roles. Only profile fields and groups or roles that the current user is allowed to see are available. This setting can be used to specify who can create such lists. (Default: All)</string>
   <string name="SYS_EDIT_MEMBERS">Edit members</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Edit profile fields</string>
   <string name="SYS_EDIT_ROLE">Edit role</string>
