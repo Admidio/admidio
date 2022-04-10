@@ -576,6 +576,7 @@ class User extends TableAccess
 
     /**
      * Deletes the selected user of the table and all the many references in other tables.
+     * Also a notification that the user is deleted will be send if notification is enabled.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
      */
@@ -585,7 +586,8 @@ class User extends TableAccess
 
         $usrId = $this->getValue('usr_id');
 
-        if (is_object($gChangeNotification)) {
+        // only send notification if a valid user will be deleted
+        if (is_object($gChangeNotification) && $this->getValue('usr_valid')) {
             // Register all non-empty fields for the notification
             $gChangeNotification->logUserDeletion($usrId, $this);
         }
