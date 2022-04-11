@@ -41,16 +41,29 @@ $lastName  = $gDb->escapeString($newUser->getValue('LAST_NAME', 'database'));
 $firstName = $gDb->escapeString($newUser->getValue('FIRST_NAME', 'database'));
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
+// the following combinations within first name and last name will be checked:
+// 1. first name and last name are equal (under consideration of soundex)
+// 2. last name is equal and only first part of first name of existing members is equal
+// 3. last name is equal and only first part of first name of new registration member is equal
+// 4. last name is equal to first name and first name is equal to last name
 if (DB_ENGINE === Database::PDO_ENGINE_MYSQL && $gSettingsManager->getBool('system_search_similar')) {
     $sqlSimilarName =
         '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
             AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4) )
+         OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
+            AND SUBSTRING(SOUNDEX(SUBSTRING(first_name.usd_value, 1, LOCATE(\' \', first_name.usd_value))), 1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4) )
+         OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
+            AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(SUBSTRING('. $firstName.', 1, LOCATE(\' \', '.$firstName.'))), 1, 4) )
          OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4)
             AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4) ) )';
 } else {
     $sqlSimilarName =
         '(  (   last_name.usd_value  = '. $lastName.'
             AND first_name.usd_value = '. $firstName.')
+         OR (   last_name.usd_value  = '. $lastName.'
+            AND SUBSTRING(first_name.usd_value, 1, POSITION(\' \', first_name.usd_value)) = '. $firstName.')
+         OR (   last_name.usd_value  = '. $lastName.'
+            AND first_name.usd_value = SUBSTRING('. $firstName.', 1, POSITION(\' \', '. $firstName.')))
          OR (   last_name.usd_value  = '. $firstName.'
             AND first_name.usd_value = '. $lastName.') )';
 }
