@@ -521,10 +521,10 @@ $formEmailDispatch->addSelectBox(
     array('defaultValue' => $formValues['mail_recipients_with_roles'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MULTIPLE_RECIPIENTS_DESC')
 );
 $formEmailDispatch->addInput(
-    'mail_bcc_count',
-    $gL10n->get('SYS_COUNT_BCC'),
-    $formValues['mail_bcc_count'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_COUNT_BCC_DESC')
+    'mail_number_recipients',
+    $gL10n->get('SYS_NUMBER_RECIPIENTS'),
+    $formValues['mail_number_recipients'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_NUMBER_RECIPIENTS_DESC')
 );
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
 $formEmailDispatch->addSelectBox(

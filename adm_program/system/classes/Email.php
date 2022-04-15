@@ -641,7 +641,7 @@ class Email extends PHPMailer
 
         try {
             // if there is a limit of email recipients than split the recipients into smaller packages
-            $recipientsArrays = array_chunk($this->emBccArray, $gSettingsManager->getInt('mail_bcc_count'));
+            $recipientsArrays = array_chunk($this->emBccArray, $gSettingsManager->getInt('mail_number_recipients'));
 
             foreach ($recipientsArrays as $recipientsArray) {
                 // if number of bcc recipients = 1 then send the mail directly to the user and not as bcc
