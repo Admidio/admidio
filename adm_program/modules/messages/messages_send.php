@@ -400,7 +400,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
         if ($receivers === 1) {
             $email->addRecipient($address[0], $address[1]);
         } else {
-            $email->addBlindCopy($address[0], $address[1]);
+            $email->addRecipient($address[0], $address[1]);
         }
     }
 

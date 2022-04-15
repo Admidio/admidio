@@ -146,25 +146,23 @@ class Email extends PHPMailer
     }
 
     /**
-     * method adds main recipients to mail
+     * Adds the name and address to the recipients list. If the recipient will be sent as TO or BCC will be later
+     * independence of other preference be set.
      * @param string $address
      * @param string $name
      * @return true|string
      */
     public function addRecipient($address, $name = '')
     {
-        return $this->addBlindCopy($address, $name);
-        /*try {
-            $this->addAddress($address, $name);
-        } catch (Exception $e) {
-            return $e->errorMessage();
-        } catch (\Exception $e) {
-            return $e->getMessage();
+        // Recipients must be Ascii-US formatted, so encode in MimeHeader
+        $asciiName = stripslashes($name);
+
+        if (StringUtils::strValidCharacters($address, 'email')) {
+            $this->emBccArray[] = array('name' => $asciiName, 'address' => $address);
+            $this->emRecipientsNames[] = $name;
+            return true;
         }
-
-        $this->emRecipientsNames[] = $name;
-
-        return true;*/
+        return false;
     }
 
     /**
@@ -252,7 +250,7 @@ class Email extends PHPMailer
             // all email addresses will be attached as BCC
             while ($row = $statement->fetch()) {
                 if (StringUtils::strValidCharacters($row['email'], 'email')) {
-                    $this->addBlindCopy($row['email'], $row['firstname'] . ' ' . $row['lastname']);
+                    $this->addRecipient($row['email'], $row['firstname'] . ' ' . $row['lastname']);
                     ++$numberRecipientsAdded;
                 }
             }
@@ -267,7 +265,7 @@ class Email extends PHPMailer
     /**
      * Add the name and email address of the given user id to the email as a normal recipient. If the system setting
      * **mail_send_to_all_addresses** is set than all email addresses of the given user id will be added.
-     * @param int $userId ID of an user who should be the recipient of the email.
+     * @param int $userId ID of a user who should be the recipient of the email.
      * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
      *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
      * @return int Returns the number of added email addresses.
@@ -306,7 +304,7 @@ class Email extends PHPMailer
             // all email addresses will be attached as BCC
             while ($row = $statement->fetch()) {
                 if (StringUtils::strValidCharacters($row['email'], 'email')) {
-                    $this->addBlindCopy($row['email'], $row['firstname'] . ' ' . $row['lastname']);
+                    $this->addRecipient($row['email'], $row['firstname'] . ' ' . $row['lastname']);
                     ++$numberRecipientsAdded;
                 }
             }
@@ -344,18 +342,11 @@ class Email extends PHPMailer
      * @param string $address
      * @param string $name
      * @return bool
+     * @deprecated 4.2.0:4.3.0 "addBlindCopy()" is deprecated, use "addRecipient()" instead.
      */
     public function addBlindCopy($address, $name = '')
     {
-        // Blindcopy must be Ascii-US formated, so encode in MimeHeader
-        $asciiName = stripslashes($name);
-
-        if (StringUtils::strValidCharacters($address, 'email')) {
-            $this->emBccArray[] = array('name' => $asciiName, 'address' => $address);
-            $this->emRecipientsNames[] = $name;
-            return true;
-        }
-        return false;
+        return $this->addRecipient($address, $name);
     }
 
     /**
