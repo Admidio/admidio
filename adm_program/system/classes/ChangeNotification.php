@@ -459,7 +459,7 @@ class ChangeNotification
                 }
 
                 if ($hasContent) {
-                    $notification->adminNotification(
+                    $notification->sendNotification(
                         $gL10n->get(
                             $messageTitle,
                             array($userdata['first_name'], $userdata['last_name'], $userdata['usr_login_name'])

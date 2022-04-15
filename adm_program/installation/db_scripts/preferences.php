@@ -63,6 +63,7 @@ $defaultOrgPreferences = array(
 
     // System notifications
     'enable_system_mails'             => '1',
+    'system_notification_role'        => '',
     'enable_email_notification'       => '0',
     'enable_email_changenotification' => '0',
 

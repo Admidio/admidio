@@ -31,7 +31,6 @@ use PHPMailer\PHPMailer\Exception;
  * ein Empfaenger mittels einer der drei Funktionen gesetzt werden)
  *
  * addRecipient($address, $name = '')
- * addCopy($address, $name = '')
  * addBlindCopy($address, $name = '')
  * Parameters: $address - Die Emailadresse
  *             $name    - Der Name des Absenders (optional)
@@ -69,6 +68,10 @@ class Email extends PHPMailer
     public const SIZE_UNIT_MEBIBYTE = 'MiB';
     public const SIZE_UNIT_GIBIBYTE = 'GiB';
     public const SIZE_UNIT_TEBIBYTE = 'TiB';
+
+    public const EMAIL_ALL_MEMBERS         = 0;
+    public const EMAIL_ONLY_ACTIVE_MEMBERS = 1;
+    public const EMAIL_ONLY_FORMER_MEMBERS = 2;
 
     /**
      * @var string Plain text of email
@@ -150,7 +153,8 @@ class Email extends PHPMailer
      */
     public function addRecipient($address, $name = '')
     {
-        try {
+        return $this->addBlindCopy($address, $name);
+        /*try {
             $this->addAddress($address, $name);
         } catch (Exception $e) {
             return $e->errorMessage();
@@ -160,16 +164,113 @@ class Email extends PHPMailer
 
         $this->emRecipientsNames[] = $name;
 
-        return true;
+        return true;*/
+    }
+
+    /**
+     * Add the name and email address of all users of the role to the email as a normal recipient. If the system setting
+     * **mail_send_to_all_addresses** is set than all email addresses of the given users will be added.
+     * @param string $roleUuid  UUID of a role whose users should be the recipients of the email.
+     * @param int $memberStatus Status of the members who should get the email. Possible values are
+     *                          EMAIL_ALL_MEMBERS, EMAIL_ONLY_ACTIVE_MEMBERS, EMAIL_ONLY_FORMER_MEMBERS
+     *                          The default value will be EMAIL_ONLY_ACTIVE_MEMBERS.
+     * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
+     *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
+     * @return int Returns the number of added email addresses.
+     */
+    public function addRecipientsByRole($roleUuid, $memberStatus = self::EMAIL_ONLY_ACTIVE_MEMBERS)
+    {
+        global $gSettingsManager, $gProfileFields, $gL10n, $gDb, $gCurrentOrgId, $gCurrentUserId, $gValidLogin;
+
+        $sqlEmailField = '';
+        $numberRecipientsAdded = 0;
+
+        // set condition if email should only send to the email address of the user field
+        // with the internal name 'EMAIL'
+        if (!$gSettingsManager->getBool('mail_send_to_all_addresses')) {
+            $sqlEmailField = ' AND field.usf_name_intern = \'EMAIL\' ';
+        }
+
+        $queryParams = array(
+            $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+            $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+            $roleUuid,
+            $gCurrentOrgId
+        );
+
+        if ($memberStatus === self::EMAIL_ONLY_FORMER_MEMBERS && $gSettingsManager->getBool('mail_show_former')) {
+            // only former members
+            $sqlConditions = ' AND mem_end < ? -- DATE_NOW ';
+        } elseif ($memberStatus === self::EMAIL_ALL_MEMBERS && $gSettingsManager->getBool('mail_show_former')) {
+            // former members and active members
+            $sqlConditions = ' AND mem_begin < ? -- DATE_NOW ';
+        } else {
+            // only active members
+            $sqlConditions = ' AND mem_begin <= ? -- DATE_NOW
+                                       AND mem_end    > ? -- DATE_NOW ';
+            $queryParams[] = DATE_NOW;
+        }
+        $queryParams[] = DATE_NOW;
+
+        $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
+                          FROM ' . TBL_MEMBERS . '
+                    INNER JOIN ' . TBL_ROLES . '
+                            ON rol_id = mem_rol_id
+                    INNER JOIN ' . TBL_CATEGORIES . '
+                            ON cat_id = rol_cat_id
+                    INNER JOIN ' . TBL_USERS . '
+                            ON usr_id = mem_usr_id
+                    INNER JOIN ' . TBL_USER_DATA . ' AS email
+                            ON email.usd_usr_id = usr_id
+                           AND LENGTH(email.usd_value) > 0
+                    INNER JOIN ' . TBL_USER_FIELDS . ' AS field
+                            ON field.usf_id = email.usd_usf_id
+                           AND field.usf_type = \'EMAIL\'
+                               ' . $sqlEmailField . '
+                     LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
+                            ON last_name.usd_usr_id = usr_id
+                           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+                     LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
+                            ON first_name.usd_usr_id = usr_id
+                           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+                         WHERE rol_uuid      = ? -- $roleUuid
+                           AND (  cat_org_id = ? -- $gCurrentOrgId
+                               OR cat_org_id IS NULL )
+                           AND usr_valid = true
+                               ' . $sqlConditions;
+
+        // if current user is logged in the user id must be excluded because we don't want
+        // to send the email to himself
+        if ($gValidLogin) {
+            $sql .= '
+                        AND usr_id <> ? -- $gCurrentUserId';
+            $queryParams[] = $gCurrentUserId;
+        }
+        $statement = $gDb->queryPrepared($sql, $queryParams);
+
+        if ($statement->rowCount() > 0) {
+            // all email addresses will be attached as BCC
+            while ($row = $statement->fetch()) {
+                if (StringUtils::strValidCharacters($row['email'], 'email')) {
+                    $this->addBlindCopy($row['email'], $row['firstname'] . ' ' . $row['lastname']);
+                    ++$numberRecipientsAdded;
+                }
+            }
+        } else {
+            throw new AdmException($gL10n->get('SYS_NO_VALID_RECIPIENTS'));
+        }
+
+
+        return $numberRecipientsAdded > 0;
     }
 
     /**
      * Add the name and email address of the given user id to the email as a normal recipient. If the system setting
      * **mail_send_to_all_addresses** is set than all email addresses of the given user id will be added.
-     * @param int $userId Id of an user who should be the recipient of the email.
+     * @param int $userId ID of an user who should be the recipient of the email.
      * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
      *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
-     * @return Returns true if recipients could be added to the email.
+     * @return int Returns the number of added email addresses.
      */
     public function addRecipientsByUserId($userId)
     {
@@ -205,7 +306,7 @@ class Email extends PHPMailer
             // all email addresses will be attached as BCC
             while ($row = $statement->fetch()) {
                 if (StringUtils::strValidCharacters($row['email'], 'email')) {
-                    $this->addRecipient($row['email'], $row['firstname'] . ' ' . $row['lastname']);
+                    $this->addBlindCopy($row['email'], $row['firstname'] . ' ' . $row['lastname']);
                     ++$numberRecipientsAdded;
                 }
             }
@@ -258,16 +359,16 @@ class Email extends PHPMailer
     }
 
     /**
-     * Creates an email for the administrator. Therefore we use the email that is stored in
-     * the global preference email_administrator. We don't use the role administrator!
-     * @param string $subject
-     * @param string $message
-     * @param string $editorName
-     * @param string $editorEmail
+     * Send a notification email to all members of the notification role. This role is configured within the
+     * global preference **system_notification_role**.
+     * @param string $subject     The subject of the email.
+     * @param string $message     The body of the email.
+     * @param string $editorName  The name of the sender of the email.
+     * @param string $editorEmail The email address of the sender of the email.
      * @throws AdmException 'SYS_EMAIL_NOT_SEND'
      * @return bool|string
      */
-    public function adminNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'enable_email_notification')
+    public function sendNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'enable_email_notification')
     {
         global $gSettingsManager, $gCurrentOrganization;
 
@@ -275,8 +376,8 @@ class Email extends PHPMailer
             return false;
         }
 
-        // Send Notification to Admin
-        $this->addRecipient($gSettingsManager->getString('email_administrator'));
+        // Send notification to configured role
+        $this->addRecipientsByRole($gSettingsManager->getString('system_notification_role'));
 
         // Set Sender
         if ($editorEmail === '') {
@@ -290,7 +391,7 @@ class Email extends PHPMailer
 
         // send html if preference is set
         if ($gSettingsManager->getBool('mail_html_registered_users')) {
-            $this->sendDataAsHtml();
+            $this->setHtmlMail();
         } else {
             // html linebreaks should be converted in simple linefeed
             $message = str_replace('<br />', "\n", $message);
@@ -513,49 +614,6 @@ class Email extends PHPMailer
     }
 
     /**
-     * Sends Emails with BCC addresses
-     * @throws \PHPMailer\PHPMailer\Exception
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
-     */
-    private function sendBccMails()
-    {
-        global $gSettingsManager;
-
-        // Bcc Array in Päckchen zerlegen
-        $bccArrays = array_chunk($this->emBccArray, $gSettingsManager->getInt('mail_bcc_count'));
-
-        foreach ($bccArrays as $bccArray) {
-            // if number of bcc recipients = 1 then send the mail directly to the user and not as bcc
-            if (count($bccArray) === 1) {
-                // remove all current recipients from mail
-                $this->clearAllRecipients();
-
-                $this->addAddress($bccArray[0]['address'], $bccArray[0]['name']);
-            } elseif ($gSettingsManager->getBool('mail_into_to')) {
-                // remove all current recipients from mail
-                $this->clearAllRecipients();
-
-                // add all recipients as bcc to the mail
-                foreach ($bccArray as $bcc) {
-                    $this->addAddress($bcc['address'], $bcc['name']);
-                }
-            } else {
-                // remove only all BCC because to-address could be explicit set if undisclosed recipients won't work
-                $this->clearBCCs();
-
-                // add all recipients as bcc to the mail
-                foreach ($bccArray as $bcc) {
-                    $this->addBCC($bcc['address'], $bcc['name']);
-                }
-            }
-
-            // now send mail
-            $this->send();
-        }
-    }
-
-    /**
      * Sends a copy of the mail back to the sender. If the flag emListRecipients it set than all
      * recipients will be listed in the mail.
      * @throws \PHPMailer\PHPMailer\Exception
@@ -611,12 +669,16 @@ class Email extends PHPMailer
     }
 
     /**
-     * Funktion um die Email endgueltig zu versenden...
+     * Method will send the email to all recipients. Therefore, the method will evaluate how to send the email.
+     * If it's necessary all recipients will be added to BCC and also smaller packages of recipients will be
+     * created. So maybe several emails will be send. Also a copy to the sender will be send if the preferences are set.
      * @return true|string
      */
     public function sendEmail()
     {
-        // Text in Nachricht einfügen
+        global $gSettingsManager, $gLogger, $gDebug;
+
+        // add body to the email
         if ($this->emSendAsHTML) {
             $this->msgHTML($this->emHtmlText);
         } else {
@@ -624,16 +686,48 @@ class Email extends PHPMailer
         }
 
         try {
-            // Wenn es Bcc-Empfänger gibt
-            if (count($this->emBccArray) > 0) {
-                $this->sendBccMails();
-            }
-            // Einzelmailversand
-            else {
+            // if there is a limit of email recipients than split the recipients into smaller packages
+            $recipientsArrays = array_chunk($this->emBccArray, $gSettingsManager->getInt('mail_bcc_count'));
+
+            foreach ($recipientsArrays as $recipientsArray) {
+                // if number of bcc recipients = 1 then send the mail directly to the user and not as bcc
+                if (count($recipientsArray) === 1) {
+                    // remove all current recipients from mail
+                    $this->clearAllRecipients();
+
+                    $this->addAddress($recipientsArray[0]['address'], $recipientsArray[0]['name']);
+                    if ($gDebug) {
+                        $gLogger->notice('Email send as TO to ' . $recipientsArray[0]['name'] . ' (' . $recipientsArray[0]['address']) . ')';
+                    }
+                } elseif ($gSettingsManager->getBool('mail_into_to')) {
+                    // remove all current recipients from mail
+                    $this->clearAllRecipients();
+
+                    // add all recipients as bcc to the mail
+                    foreach ($recipientsArray as $recipientTO) {
+                        $this->addAddress($recipientTO['address'], $recipientTO['name']);
+                        if ($gDebug) {
+                            $gLogger->notice('Email send as TO to ' . $recipientTO['name'] . ' (' . $recipientTO['address']) . ')';
+                        }
+                    }
+                } else {
+                    // remove only all BCC because to-address could be explicit set if undisclosed recipients won't work
+                    $this->clearBCCs();
+
+                    // add all recipients as bcc to the mail
+                    foreach ($recipientsArray as $recipientBCC) {
+                        $this->addBCC($recipientBCC['address'], $recipientBCC['name']);
+                        if ($gDebug) {
+                            $gLogger->notice('Email send as BCC to ' . $recipientBCC['name'] . ' (' . $recipientBCC['address']) . ')';
+                        }
+                    }
+                }
+
+                // now send mail
                 $this->send();
             }
 
-            // Jetzt noch die Mail an den Kopieempfänger
+            // now send the email as a copy to the sender
             if ($this->emCopyToSender) {
                 $this->sendCopyMail();
             }

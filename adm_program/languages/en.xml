@@ -1086,6 +1086,7 @@
   <string name="SYS_NOT_SET">Not set</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Please use a valid date as condition for field #VAR1_BOLD#.</string>
   <string name="SYS_NOTE">Note</string>
+  <string name="SYS_NOTIFICATION_ROLE_DESC">Notifications about new entries or profile changes are sent to all members of this role.</string>
   <string name="SYS_NUMBER">Number</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Number of roles per page</string>
   <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
