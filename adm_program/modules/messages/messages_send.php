@@ -176,12 +176,9 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                             ON cat_id = rol_cat_id
                            AND (  cat_org_id = ? -- $gCurrentOrgId
                                OR cat_org_id IS NULL)
-                         WHERE rol_id = ? -- $group[\'id\']';
+                         WHERE rol_uuid = ? -- $group[\'id\']';
                 $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $group['id']));
                 $row = $statement->fetch();
-
-                // add role to the message object
-                $message->addRole($group['id'], $group['role_mode'], $row['rol_name']);
 
                 // logged out ones just to role with permission level "all visitors"
                 // logged in user is just allowed to send to role with permission
@@ -193,6 +190,12 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                     // => EXIT
                 }
 
+                // add role to the message object
+                $message->addRole($row['rol_id'], $group['role_mode'], $row['rol_name']);
+
+                // add all role members as recipients to the email
+                $email->addRecipientsByRole($group['role_id'], $group['status']);
+/*
                 $queryParams = array(
                     $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
                     $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
@@ -257,7 +260,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                             $receiver[] = array($row['email'], $row['firstname'] . ' ' . $row['lastname']);
                         }
                     }
-                }
+                }*/
             } else {
                 // create user object
                 $user = new User($gDb, $gProfileFields, $value);
@@ -267,6 +270,10 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                     // add user to the message object
                     $message->addUser((int) $user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
 
+                    // add user as recipients to the email
+                    $email->addRecipientsByUserId((int) $user->getValue('usr_id'));
+
+                    /*
                     $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
                               FROM ' . TBL_USERS . '
                         INNER JOIN ' . TBL_USER_DATA . ' AS email
@@ -290,7 +297,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                         if (StringUtils::strValidCharacters($row['email'], 'email')) {
                             $receiver[] = array($row['email'], $row['firstname'] . ' ' . $row['lastname']);
                         }
-                    }
+                    }*/
                 }
             }
         }
@@ -392,7 +399,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
     if (isset($postCarbonCopy) && $postCarbonCopy) {
         $email->setCopyToSenderFlag();
     }
-
+/*
     // get array with unique receivers
     $sendResults = array_map('unserialize', array_unique(array_map('serialize', $receiver)));
     $receivers = count($sendResults);
@@ -403,8 +410,8 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
             $email->addRecipient($address[0], $address[1]);
         }
     }
-
-    if ($receivers > 1) {
+*/
+    if ($email->countRecipients() > 1) {
         // normally we need no To-address and set "undisclosed recipients", but if
         // that won't work than the following address will be set
         if ((int) $gSettingsManager->get('mail_recipients_with_roles') === 1) {

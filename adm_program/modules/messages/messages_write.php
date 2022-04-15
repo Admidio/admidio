@@ -308,7 +308,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
             $listVisibleRoleArray = $gCurrentUser->getAllVisibleRoles();
         } else {
             // list array with all roles where user is allowed to send mail to
-            $sql = 'SELECT rol_id, rol_name
+            $sql = 'SELECT rol_id, rol_uuid, rol_name
                       FROM '.TBL_ROLES.'
                 INNER JOIN '.TBL_CATEGORIES.'
                         ON cat_id = rol_cat_id
@@ -322,16 +322,15 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
             $rolesArray = $rolesStatement->fetchAll();
 
             foreach ($rolesArray as $roleArray) {
-                // Rollenobjekt anlegen
                 $role = new TableRoles($gDb);
                 $role->setArray($roleArray);
-                $list[] = array('groupID: '.$roleArray['rol_id'], $roleArray['rol_name'], $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_MEMBERS') . ')');
+                $list[] = array('groupID: '.$roleArray['rol_uuid'], $roleArray['rol_name'], $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_MEMBERS') . ')');
                 $listRoleIdsArray[] = $roleArray['rol_id'];
                 if ($role->hasFormerMembers() > 0 && $gSettingsManager->getBool('mail_show_former')) {
                     // list role with former members
-                    $listFormer[] = array('groupID: '.$roleArray['rol_id'].'-1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_FORMER_MEMBERS') . ')');
+                    $listFormer[] = array('groupID: '.$roleArray['rol_uuid'].'-1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_FORMER_MEMBERS') . ')');
                     // list role with active and former members
-                    $listActiveAndFormer[] = array('groupID: '.$roleArray['rol_id'].'-2', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS_SHORT').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
+                    $listActiveAndFormer[] = array('groupID: '.$roleArray['rol_uuid'].'-2', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS_SHORT').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
                 }
             }
 
@@ -403,7 +402,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
     } else {
         $maxNumberRecipients = 1;
         // list all roles where guests could send mails to
-        $sql = 'SELECT rol_id, rol_name
+        $sql = 'SELECT rol_uuid, rol_name
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
@@ -415,7 +414,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
 
         $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
         while ($row = $statement->fetch()) {
-            $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
+            $list[] = array('groupID: '.$row['rol_uuid'], $row['rol_name'], '');
         }
     }
 

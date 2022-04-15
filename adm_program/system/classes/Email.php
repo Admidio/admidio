@@ -104,21 +104,20 @@ class Email extends PHPMailer
     /**
      * @var array<int,array<string,string>>
      */
-    private $emBccArray = array();
+    private $emRecipientsArray = array();
 
     /**
      * Email constructor.
      */
     public function __construct()
     {
-        // Übername Einstellungen
         global $gL10n, $gSettingsManager, $gDebug;
 
         parent::__construct(true); // enable exceptions in PHPMailer
 
         $this->Timeout = 30; // set timeout to 30 seconds
 
-        // Versandmethode festlegen
+        // set sending method
         if ($gSettingsManager->getString('mail_send_method') === 'SMTP') {
             $this->isSMTP();
 
@@ -158,7 +157,7 @@ class Email extends PHPMailer
         $asciiName = stripslashes($name);
 
         if (StringUtils::strValidCharacters($address, 'email')) {
-            $this->emBccArray[] = array('name' => $asciiName, 'address' => $address);
+            $this->emRecipientsArray[] = array('name' => $asciiName, 'address' => $address);
             $this->emRecipientsNames[] = $name;
             return true;
         }
@@ -363,6 +362,15 @@ class Email extends PHPMailer
     public function adminNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'enable_email_notification')
     {
         $this->sendNotification($subject, $message, $editorName, $editorEmail, $enable_flag);
+    }
+
+    /**
+     * Get the count of all recipients that are currently set for this email.
+     * @return int Returns the number of recipients currently set for this email.
+     */
+    public function countRecipients()
+    {
+        return count($this->emRecipientsArray);
     }
 
     /**
@@ -632,7 +640,7 @@ class Email extends PHPMailer
 
         try {
             // if there is a limit of email recipients than split the recipients into smaller packages
-            $recipientsArrays = array_chunk($this->emBccArray, $gSettingsManager->getInt('mail_number_recipients'));
+            $recipientsArrays = array_chunk($this->emRecipientsArray, $gSettingsManager->getInt('mail_number_recipients'));
 
             foreach ($recipientsArrays as $recipientsArray) {
                 // if number of bcc recipients = 1 then send the mail directly to the user and not as bcc

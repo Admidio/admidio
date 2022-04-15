@@ -81,18 +81,18 @@ class ModuleMessages
         $groupIdAndStatus = explode('-', trim($groupSplit[1]));
 
         if (count($groupIdAndStatus) === 1) {
-            $status = 'active';
+            $status = Email::EMAIL_ONLY_ACTIVE_MEMBERS;
             $groupIdAndStatus[] = 0;
         } elseif ($groupIdAndStatus[1] === '1') {
-            $status = 'former';
+            $status = Email::EMAIL_ONLY_FORMER_MEMBERS;
         } elseif ($groupIdAndStatus[1] === '2') {
-            $status = 'active_former';
+            $status = Email::EMAIL_ALL_MEMBERS;
         } else {
-            $status = 'unknown';
+            $status = Email::EMAIL_ONLY_ACTIVE_MEMBERS;
         }
 
         return array(
-            'id'        => (int) $groupIdAndStatus[0],
+            'id'        => $groupIdAndStatus[0],
             'status'    => $status,
             'role_mode' => $groupIdAndStatus[1]
         );
