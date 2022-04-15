@@ -134,11 +134,11 @@ switch ($getMode) {
                     $checkboxes = array('enable_system_mails', 'enable_email_notification', 'enable_email_changenotification');
 
                     if ($_POST['email_administrator'] === '') {
-                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ADMINISTRATOR_EMAIL'))));
+                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_EMAIL_ADMINISTRATOR'))));
                     // => EXIT
                     } else {
                         if (!StringUtils::strValidCharacters($_POST['email_administrator'], 'email')) {
-                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_ADMINISTRATOR_EMAIL'))));
+                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL_ADMINISTRATOR'))));
                             // => EXIT
                         }
                     }
@@ -290,7 +290,7 @@ switch ($getMode) {
         );
         $form->addInput(
             'orgaEmail',
-            $gL10n->get('SYS_ADMINISTRATOR_EMAIL'),
+            $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
             $formValues['orgaEmail'],
             array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
         );

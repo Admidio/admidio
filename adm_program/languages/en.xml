@@ -341,7 +341,6 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
   <string name="ORG_SYSTEM_INFORMATION">System informations</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">The e-mail address of an administrator should be entered here. This is used as the recipient address for system notifications, e.g. for registration confirmation.</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES">Notification for changed profile fields</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Enable this setting to send notifications for any changes to a user's profile fields. This way an administrator has the possibility to ensure a proper re data quality. Change notifications will be send to the following mail address #VAR1# (default: no).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notification for new entries</string>
@@ -523,7 +522,6 @@
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
-  <string name="SYS_ADMINISTRATOR_EMAIL">Administrator email</string>
   <string name="SYS_ADMINISTRATORS">Administrators</string>
   <string name="SYS_ADMINISTRATORS_DESC">These roles are administrators of the Documents and Files module and therefore have access to all folders and files. They can upload and download files and assign access rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax request error.\nError Details: #VAR1#</string>
@@ -781,6 +779,8 @@
   <string name="SYS_EDIT_WEBLINKS">Edit web links</string>
   <string name="SYS_EDITED_BY">Last edited by</string>
   <string name="SYS_EMAIL">E-mail</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR">Email Administrator</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR_DESC">The e-mail address of an administrator is displayed in the system whenever an unexpected event has occurred. There is a hint that you should contact an administrator.</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">A new announcement was created</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">A new announcement at #VAR1# was created.\n\nTitle: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was changed</string>

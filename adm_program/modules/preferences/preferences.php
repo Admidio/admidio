@@ -347,6 +347,12 @@ $formOrganization->addInput(
     $formValues['org_homepage'],
     array('maxLength' => 60)
 );
+$formOrganization->addInput(
+    'email_administrator',
+    $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
+    $formValues['email_administrator'],
+    array('type' => 'email', 'maxLength' => 50, 'helpTextIdInline' => 'SYS_EMAIL_ADMINISTRATOR_DESC')
+);
 
 if ($gCurrentOrganization->countAllRecords() > 1) {
     // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
@@ -605,12 +611,6 @@ $formSystemNotification->addCheckbox(
     $gL10n->get('ORG_ACTIVATE_SYSTEM_MAILS'),
     (bool) $formValues['enable_system_mails'],
     array('helpTextIdInline' => 'ORG_ACTIVATE_SYSTEM_MAILS_DESC')
-);
-$formSystemNotification->addInput(
-    'email_administrator',
-    $gL10n->get('SYS_ADMINISTRATOR_EMAIL'),
-    $formValues['email_administrator'],
-    array('type' => 'email', 'maxLength' => 50, 'helpTextIdInline' => 'ORG_SYSTEM_MAIL_ADDRESS_DESC')
 );
 $formSystemNotification->addCheckbox(
     'enable_email_notification',

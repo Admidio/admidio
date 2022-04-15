@@ -341,7 +341,7 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier kann die E-Mail-Adresse eines Administrierenden eingetragen werden. Diese wird als Empfängeradresse für Systembenachrichtigungen verwendet, z.B. bei der Registrierungsbestätigung.</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR_DESC">Die E-Mail-Adresse eines Administrierenden wird im System immer dann angezeigt, wenn ein unerwartetes Ereignis eingetreten ist. Es erfolgt der Hinweis, das man Kontakt mit einem Administrator aufnehmen sollte.</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES">Benachrichtigung bei Profiländerungen</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Hier kann die Systembenachrichtigung für geänderte Profildaten aktiviert werden. Werden von einer Benutzerin oder einem Benutzer Profildaten erstellt, geändert oder gelöscht, erfolgt eine Benachrichtigung an die angegebene E-Mail #VAR1# (Voreinstellung: nein).</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
@@ -525,7 +525,7 @@
   <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator:in</string>
-  <string name="SYS_ADMINISTRATOR_EMAIL">Administrator:in E-Mail</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR">E-Mail Administrator:in</string>
   <string name="SYS_ADMINISTRATORS">Administrierende</string>
   <string name="SYS_ADMINISTRATORS_DESC">Mitglieder dieser Rollen sind Administrierende des Dokumente und Dateien Moduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zu einer administrierende Rolle gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
