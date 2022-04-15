@@ -372,6 +372,7 @@ class Organization extends TableAccess
         // set new default configuration to the module settings
         $organizationSettings = new SettingsManager($this->db, $orgId);
         $organizationSettings->getAll();
+        $organizationSettings->set('system_notification_role', $roleAdministrator->getValue('rol_uuid'));
         $organizationSettings->set('groups_roles_default_configuration', $addressList->getValue('lst_id'));
         $organizationSettings->set('dates_default_list_configuration', $participantList->getValue('lst_id'));
         $organizationSettings->set('members_list_configuration', $userManagementList->getValue('lst_id'));

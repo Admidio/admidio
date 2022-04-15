@@ -239,7 +239,7 @@ $form->addInput(
 );
 $form->addInput(
     'orga_email',
-    $gL10n->get('SYS_ADMINISTRATOR_EMAIL'),
+    $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
     $orgaEmail,
     array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
 );

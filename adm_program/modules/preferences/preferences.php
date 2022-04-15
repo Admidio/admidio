@@ -347,6 +347,12 @@ $formOrganization->addInput(
     $formValues['org_homepage'],
     array('maxLength' => 60)
 );
+$formOrganization->addInput(
+    'email_administrator',
+    $gL10n->get('SYS_EMAIL_ADMINISTRATOR'),
+    $formValues['email_administrator'],
+    array('type' => 'email', 'maxLength' => 50, 'helpTextIdInline' => 'SYS_EMAIL_ADMINISTRATOR_DESC')
+);
 
 if ($gCurrentOrganization->countAllRecords() > 1) {
     // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
@@ -606,12 +612,7 @@ $formSystemNotification->addCheckbox(
     (bool) $formValues['enable_system_mails'],
     array('helpTextIdInline' => 'ORG_ACTIVATE_SYSTEM_MAILS_DESC')
 );
-$formSystemNotification->addInput(
-    'email_administrator',
-    $gL10n->get('SYS_ADMINISTRATOR_EMAIL'),
-    $formValues['email_administrator'],
-    array('type' => 'email', 'maxLength' => 50, 'helpTextIdInline' => 'ORG_SYSTEM_MAIL_ADDRESS_DESC')
-);
+
 $formSystemNotification->addCheckbox(
     'enable_email_notification',
     $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'),
@@ -624,6 +625,29 @@ $formSystemNotification->addCheckbox(
     (bool) $formValues['enable_email_changenotification'],
     array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_CHANGES_DESC', array('<em>'.$gSettingsManager->getString('email_administrator').'</em>')))
 );
+
+// read all roles of the organization
+$sqlData = array();
+$sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
+               FROM '.TBL_ROLES.'
+         INNER JOIN '.TBL_CATEGORIES.'
+                 ON cat_id = rol_cat_id
+         INNER JOIN '.TBL_ORGANIZATIONS.'
+                 ON org_id = cat_org_id
+              WHERE rol_valid  = true
+                AND rol_system = false
+                AND cat_org_id = ? -- $gCurrentOrgId
+                AND cat_name_intern <> \'EVENTS\'
+           ORDER BY cat_name, rol_name';
+$sqlData['params'] = array($gCurrentOrgId);
+$formSystemNotification->addSelectBoxFromSql(
+    'system_notification_role',
+    $gL10n->get('SYS_ROLE'),
+    $gDb,
+    $sqlData,
+    array('defaultValue' => $formValues['system_notification_role'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_NOTIFICATION_ROLE_DESC')
+);
+
 $formSystemNotification->addCustomContent(
     $gL10n->get('SYS_SYSTEM_MAILS'),
     '<p>'.$gL10n->get('ORG_SYSTEM_MAIL_TEXTS_DESC').':</p>

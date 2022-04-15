@@ -30,13 +30,16 @@ $defaultOrgPreferences = array(
     'system_js_editor_enabled'       => '1',
     'system_js_editor_color'         => '#96c4cb',
     'system_language'                => 'de',
-    'system_organization_select'     => '0',
     'system_search_similar'          => '1',
     'system_show_create_edit'        => '1',
     'system_time'                    => 'H:i',
     'system_url_imprint'             => '',
     'system_url_data_protection'     => '',
     'password_min_strength'          => '1',
+
+    // Organization
+    'email_administrator'            => 'administrator@'. DOMAIN,
+    'system_organization_select'     => '0',
 
     // Registration
     'registration_enable_module'     => '1',
@@ -59,10 +62,10 @@ $defaultOrgPreferences = array(
     'mail_smtp_password'             => '',
 
     // System notifications
-    'enable_system_mails'         => '1',
-    'email_administrator'         => 'administrator@'. DOMAIN,
-    'enable_email_notification'   => '0',
-    'enable_email_changenotification'   => '0',
+    'enable_system_mails'             => '1',
+    'system_notification_role'        => '',
+    'enable_email_notification'       => '0',
+    'enable_email_changenotification' => '0',
 
     // Captcha
     'captcha_type'                => 'pic',

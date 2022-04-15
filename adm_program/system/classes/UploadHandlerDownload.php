@@ -87,7 +87,7 @@ class UploadHandlerDownload extends UploadHandler
                     )
                 );
                 $notification = new Email();
-                $notification->adminNotification(
+                $notification->sendNotification(
                     $gL10n->get('SYS_EMAIL_FILE_NOTIFICATION_TITLE'),
                     $message,
                     $fullName,
