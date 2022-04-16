@@ -145,17 +145,19 @@ class Email extends PHPMailer
     }
 
     /**
-     * Adds the name and address to the recipients list. If the recipient will be sent as TO or BCC will be later
-     * independence of other preference be set.
-     * @param string $address
-     * @param string $name
-     * @return true|string
+     * Adds the name and address to the recipients list. The valid email address will only be added if it's not already
+     * in the recipients list. The decision if the recipient will be sent as TO or BCC will be done later
+     * in the email send process.
+     * @param string $address A valid email address to which the email should be sent.
+     * @param string $name    The name of the recipient that will be shown in the email header.
+     * @return bool Returns **true** if the address was added to the recipients list.
      */
     public function addRecipient($address, $name = '')
     {
         // Recipients must be Ascii-US formatted, so encode in MimeHeader
         $asciiName = stripslashes($name);
 
+        // check if valid email address and if email not in the recipients array
         if (StringUtils::strValidCharacters($address, 'email')
         && array_search($address, array_column($this->emRecipientsArray, 'address')) === false) {
             $this->emRecipientsArray[] = array('name' => $asciiName, 'address' => $address);
@@ -362,7 +364,7 @@ class Email extends PHPMailer
      */
     public function adminNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'enable_email_notification')
     {
-        $this->sendNotification($subject, $message, $editorName, $editorEmail, $enable_flag);
+        return $this->sendNotification($subject, $message, $editorName, $editorEmail, $enable_flag);
     }
 
     /**
