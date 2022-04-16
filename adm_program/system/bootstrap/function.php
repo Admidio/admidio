@@ -648,25 +648,3 @@ function getExecutionTime($startTime)
 
     return number_format(($stopTime - $startTime) * 1000, 6, '.', '') . ' ms';
 }
-
-/**
- * Search all visible files or directories in the specified directory.
- * @deprecated 4.0.0:4.1.0 "admFuncGetDirectoryEntries()" is deprecated, use "FileSystemUtils::getDirectoryContent()" instead.
- * @param string $directory  The directory where the files or directories should be searched.
- * @param string $searchType This could be **file**, **dir**, **both** or **all** and represent
- *                           the type of entries that should be searched.
- * @return false|array<string,string> Returns an array with all found entries or false if an error occurs.
- */
-function admFuncGetDirectoryEntries($directory, $searchType = 'file')
-{
-    switch ($searchType) {
-        case 'file':
-            return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-        case 'dir':
-            return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
-        case 'both':
-            return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false));
-        case 'all':
-            return array_keys(FileSystemUtils::getDirectoryContent($directory, false, false));
-    }
-}

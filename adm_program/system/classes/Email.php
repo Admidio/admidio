@@ -632,7 +632,7 @@ class Email extends PHPMailer
      */
     public function sendEmail()
     {
-        global $gSettingsManager, $gLogger, $gDebug;
+        global $gSettingsManager, $gLogger, $gDebug, $gValidLogin, $gCurrentUser;
 
         // add body to the email
         if ($this->emSendAsHTML) {
@@ -669,6 +669,17 @@ class Email extends PHPMailer
                 } else {
                     // remove only all BCC because to-address could be explicit set if undisclosed recipients won't work
                     $this->clearBCCs();
+
+                    // normally we need no To-address and set "undisclosed recipients", but if
+                    // that won't work than the following address will be set
+                    if ($gValidLogin && (int) $gSettingsManager->get('mail_recipients_with_roles') === 1) {
+                        // fill recipient with sender address to prevent problems with provider
+                        $this->addAddress($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'));
+                    } elseif ((int) $gSettingsManager->get('mail_recipients_with_roles') === 2
+                    || (!$gValidLogin && (int) $gSettingsManager->get('mail_recipients_with_roles') === 1)) {
+                        // fill recipient with administrators address to prevent problems with provider
+                        $this->addAddress($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
+                    }
 
                     // add all recipients as bcc to the mail
                     foreach ($recipientsArray as $recipientBCC) {
