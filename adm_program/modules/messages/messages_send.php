@@ -307,18 +307,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
     if (isset($postCarbonCopy) && $postCarbonCopy) {
         $email->setCopyToSenderFlag();
     }
-/*
-    // get array with unique receivers
-    $sendResults = array_map('unserialize', array_unique(array_map('serialize', $receiver)));
-    $receivers = count($sendResults);
-    foreach ($sendResults as $address) {
-        if ($receivers === 1) {
-            $email->addRecipient($address[0], $address[1]);
-        } else {
-            $email->addRecipient($address[0], $address[1]);
-        }
-    }
-*/
+
     if ($email->countRecipients() > 1) {
         // normally we need no To-address and set "undisclosed recipients", but if
         // that won't work than the following address will be set

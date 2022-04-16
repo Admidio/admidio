@@ -156,7 +156,8 @@ class Email extends PHPMailer
         // Recipients must be Ascii-US formatted, so encode in MimeHeader
         $asciiName = stripslashes($name);
 
-        if (StringUtils::strValidCharacters($address, 'email')) {
+        if (StringUtils::strValidCharacters($address, 'email')
+        && array_search($address, array_column($this->emRecipientsArray, 'address')) === false) {
             $this->emRecipientsArray[] = array('name' => $asciiName, 'address' => $address);
             $this->emRecipientsNames[] = $name;
             return true;
