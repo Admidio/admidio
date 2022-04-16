@@ -340,7 +340,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
 
         if ($getRoleUuid === '' && count($listVisibleRoleArray) > 0) {
             // if no special role was preselected then list users
-            $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, rol_id, mem_begin, mem_end
+            $sql = 'SELECT usr_uuid, first_name.usd_value AS first_name, last_name.usd_value AS last_name, rol_id, mem_begin, mem_end
                       FROM '.TBL_MEMBERS.'
                 INNER JOIN '.TBL_ROLES.'
                         ON rol_id = mem_rol_id
@@ -378,21 +378,20 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
             }
             $statement = $gDb->queryPrepared($sql, $queryParams);
 
-            $passiveList = array();
-            $activeList = array();
+            $passiveList   = array();
+            $activeList    = array();
+            $currentUserId = '';
 
             while ($row = $statement->fetch()) {
-                $usrId = (int) $row['usr_id'];
-
                 // every user should only be once in the list
-                if (!isset($currentUserId) || $currentUserId !== $usrId) {
+                if ($currentUserId !== $row['usr_uuid']) {
                     // if membership is active then show them as active members
                     if ($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW) {
-                        $activeList[]  = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('SYS_ACTIVE_MEMBERS'));
-                        $currentUserId = $usrId;
+                        $activeList[]  = array($row['usr_uuid'], $row['last_name'].' '.$row['first_name'], $gL10n->get('SYS_ACTIVE_MEMBERS'));
+                        $currentUserId = $row['usr_uuid'];
                     } elseif ($gSettingsManager->getBool('mail_show_former')) {
-                        $passiveList[] = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('SYS_FORMER_MEMBERS'));
-                        $currentUserId = $usrId;
+                        $passiveList[] = array($row['usr_uuid'], $row['last_name'].' '.$row['first_name'], $gL10n->get('SYS_FORMER_MEMBERS'));
+                        $currentUserId = $row['usr_uuid'];
                     }
                 }
             }

@@ -196,7 +196,8 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                 $email->addRecipientsByRole($group['uuid'], $group['status']);
             } else {
                 // create user object
-                $user = new User($gDb, $gProfileFields, $value);
+                $user = new User($gDb, $gProfileFields);
+                $user->readDataByUuid($value);
 
                 // only send email to user if current user is allowed to view this user, and he has a valid email address
                 if ($gCurrentUser->hasRightViewProfile($user)) {
@@ -205,32 +206,6 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
 
                     // add user as recipients to the email
                     $email->addRecipientsByUserId((int) $user->getValue('usr_id'));
-
-                    /*
-                    $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
-                              FROM ' . TBL_USERS . '
-                        INNER JOIN ' . TBL_USER_DATA . ' AS email
-                                ON email.usd_usr_id = usr_id
-                               AND LENGTH(email.usd_value) > 0
-                        INNER JOIN ' . TBL_USER_FIELDS . ' AS field
-                                ON field.usf_id = email.usd_usf_id
-                               AND field.usf_type = \'EMAIL\'
-                                   ' . $sqlEmailField . '
-                         LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                                ON last_name.usd_usr_id = usr_id
-                               AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-                         LEFT JOIN '.TBL_USER_DATA.' AS first_name
-                                ON first_name.usd_usr_id = usr_id
-                               AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                             WHERE usr_id = ? -- $user->getValue(\'usr_id\')
-                               AND usr_valid = true ';
-                    $statement = $gDb->queryPrepared($sql, array((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), (int) $user->getValue('usr_id')));
-
-                    while ($row = $statement->fetch()) {
-                        if (StringUtils::strValidCharacters($row['email'], 'email')) {
-                            $receiver[] = array($row['email'], $row['firstname'] . ' ' . $row['lastname']);
-                        }
-                    }*/
                 }
             }
         }
