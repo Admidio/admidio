@@ -328,9 +328,9 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
                 $listRoleIdsArray[] = $roleArray['rol_id'];
                 if ($role->hasFormerMembers() > 0 && $gSettingsManager->getBool('mail_show_former')) {
                     // list role with former members
-                    $listFormer[] = array('groupID: '.$roleArray['rol_uuid'].'-1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_FORMER_MEMBERS') . ')');
+                    $listFormer[] = array('groupID: '.$roleArray['rol_uuid'].'+1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_FORMER_MEMBERS') . ')');
                     // list role with active and former members
-                    $listActiveAndFormer[] = array('groupID: '.$roleArray['rol_uuid'].'-2', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS_SHORT').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
+                    $listActiveAndFormer[] = array('groupID: '.$roleArray['rol_uuid'].'+2', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS_SHORT').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
                 }
             }
 

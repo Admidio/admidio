@@ -650,7 +650,7 @@ class Email extends PHPMailer
 
                     $this->addAddress($recipientsArray[0]['address'], $recipientsArray[0]['name']);
                     if ($gDebug) {
-                        $gLogger->notice('Email send as TO to ' . $recipientsArray[0]['name'] . ' (' . $recipientsArray[0]['address']) . ')';
+                        $gLogger->notice('Email send as TO to ' . $recipientsArray[0]['name'] . ' (' . $recipientsArray[0]['address'] . ')');
                     }
                 } elseif ($gSettingsManager->getBool('mail_into_to')) {
                     // remove all current recipients from mail
@@ -660,7 +660,7 @@ class Email extends PHPMailer
                     foreach ($recipientsArray as $recipientTO) {
                         $this->addAddress($recipientTO['address'], $recipientTO['name']);
                         if ($gDebug) {
-                            $gLogger->notice('Email send as TO to ' . $recipientTO['name'] . ' (' . $recipientTO['address']) . ')';
+                            $gLogger->notice('Email send as TO to ' . $recipientTO['name'] . ' (' . $recipientTO['address'] . ')');
                         }
                     }
                 } else {
@@ -671,7 +671,7 @@ class Email extends PHPMailer
                     foreach ($recipientsArray as $recipientBCC) {
                         $this->addBCC($recipientBCC['address'], $recipientBCC['name']);
                         if ($gDebug) {
-                            $gLogger->notice('Email send as BCC to ' . $recipientBCC['name'] . ' (' . $recipientBCC['address']) . ')';
+                            $gLogger->notice('Email send as BCC to ' . $recipientBCC['name'] . ' (' . $recipientBCC['address'] . ')');
                         }
                     }
                 }

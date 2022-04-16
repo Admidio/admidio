@@ -72,13 +72,13 @@ class ModuleMessages
 
     /**
      * check for Group and give back a array with group ID[0] and if it is active, inactive or both [1].
-     * @param string $groupString (e.g: "groupID: 4-2")
+     * @param string $groupString (e.g: "groupID: 93ce816e-7cfd-45e1-b025-a3644828c47c+2")
      * @return array<string,string|int> Returns the groupId and status
      */
     public static function msgGroupSplit($groupString)
     {
         $groupSplit = explode(':', $groupString);
-        $groupIdAndStatus = explode('-', trim($groupSplit[1]));
+        $groupIdAndStatus = explode('+', trim($groupSplit[1]));
 
         if (count($groupIdAndStatus) === 1) {
             $status = Email::EMAIL_ONLY_ACTIVE_MEMBERS;
@@ -92,7 +92,7 @@ class ModuleMessages
         }
 
         return array(
-            'id'        => $groupIdAndStatus[0],
+            'uuid'      => $groupIdAndStatus[0],
             'status'    => $status,
             'role_mode' => $groupIdAndStatus[1]
         );
