@@ -49,8 +49,9 @@ $defaultOrgPreferences = array(
 
     // E-mail dispatch
     'mail_send_method'               => 'phpmail',
-    'mail_number_recipients'         => '50',
     'mail_recipients_with_roles'     => '1',
+    'mail_number_recipients'         => '50',
+    'mail_into_to'                   => '0',
     'mail_character_encoding'        => 'utf-8',
     'mail_save_attachments'          => '1',
     'mail_smtp_host'                 => '',
@@ -133,7 +134,6 @@ $defaultOrgPreferences = array(
     'enable_mail_captcha'         => '1',
     'mail_max_receiver'           => '10',
     'mail_show_former'            => '1',
-    'mail_into_to'                => '0',
     'max_email_attachment_size'   => '1',
     'mail_sendmail_address'       => '',
     'mail_sendmail_name'          => '',

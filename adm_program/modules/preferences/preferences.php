@@ -520,6 +520,12 @@ $formEmailDispatch->addSelectBox(
     $selectBoxEntries,
     array('defaultValue' => $formValues['mail_recipients_with_roles'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MULTIPLE_RECIPIENTS_DESC')
 );
+$formEmailDispatch->addCheckbox(
+    'mail_into_to',
+    $gL10n->get('SYS_INTO_TO'),
+    (bool) $formValues['mail_into_to'],
+    array('helpTextIdInline' => 'SYS_INTO_TO_DESC')
+);
 $formEmailDispatch->addInput(
     'mail_number_recipients',
     $gL10n->get('SYS_NUMBER_RECIPIENTS'),
@@ -1543,12 +1549,6 @@ $formMessages->addCheckbox(
     $gL10n->get('SYS_SEND_EMAIL_FORMER'),
     (bool) $formValues['mail_show_former'],
     array('helpTextIdInline' => 'SYS_SEND_EMAIL_FORMER_DESC')
-);
-$formMessages->addCheckbox(
-    'mail_into_to',
-    $gL10n->get('SYS_INTO_TO'),
-    (bool) $formValues['mail_into_to'],
-    array('helpTextIdInline' => 'SYS_INTO_TO_DESC')
 );
 $formMessages->addInput(
     'max_email_attachment_size',
