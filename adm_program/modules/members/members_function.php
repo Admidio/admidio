@@ -135,7 +135,7 @@ if ($getMode === 2) {
     // E-Mail support must be enabled
     // Only administrators are allowed to send new login data or users who want to approve login data
     if (isMember($user->getValue('usr_id'))
-    && $gSettingsManager->getBool('enable_system_mails')
+    && $gSettingsManager->getBool('system_notifications_enabled')
     && ($gCurrentUser->isAdministrator() || $gCurrentUser->approveUsers())) {
         try {
             // Generate new secure-random password and save it

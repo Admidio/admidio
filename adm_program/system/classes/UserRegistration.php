@@ -95,7 +95,7 @@ class UserRegistration extends User
         $this->db->endTransaction();
 
         // only send mail if systemmails are enabled
-        if ($GLOBALS['gSettingsManager']->getBool('enable_system_mails') && $this->sendEmail) {
+        if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled') && $this->sendEmail) {
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
             $sysmail->addRecipientsByUserId((int) $this->getValue('usr_id'));
@@ -138,7 +138,7 @@ class UserRegistration extends User
     {
         // only send mail if systemmails are enabled and user has email address
         // mail must be send before user data is removed from this object
-        if ($GLOBALS['gSettingsManager']->getBool('enable_system_mails') && $this->sendEmail && $this->getValue('EMAIL') !== '') {
+        if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled') && $this->sendEmail && $this->getValue('EMAIL') !== '') {
             // send mail to user that his registration was rejected
             $sysmail = new SystemMail($this->db);
             $sysmail->addRecipientsByUserId((int) $this->getValue('usr_id'));
@@ -225,7 +225,7 @@ class UserRegistration extends User
 
             // send a notification mail to all role members of roles that can approve registrations
             // therefore the flags system mails and notification mail for roles with approve registration must be activated
-            if ($GLOBALS['gSettingsManager']->getBool('enable_system_mails')
+            if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled')
                 && $GLOBALS['gSettingsManager']->getBool('enable_registration_admin_mail') && $this->sendEmail) {
                 $sql = 'SELECT DISTINCT first_name.usd_value AS first_name, last_name.usd_value AS last_name, email.usd_value AS email
                           FROM '.TBL_MEMBERS.'

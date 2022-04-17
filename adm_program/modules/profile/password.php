@@ -39,7 +39,7 @@ $userId    = $user->getValue('usr_id');
 if ($gCurrentUserId !== $userId
 && (!isMember($userId)
 || (!$gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId)
-|| ($gCurrentUser->isAdministrator() && $user->getValue('EMAIL') !== '' && $gSettingsManager->getBool('enable_system_mails')))) {
+|| ($gCurrentUser->isAdministrator() && $user->getValue('EMAIL') !== '' && $gSettingsManager->getBool('system_notifications_enabled')))) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }

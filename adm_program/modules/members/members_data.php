@@ -250,7 +250,7 @@ while ($row = $mglStatement->fetch(\PDO::FETCH_BOTH)) {
     // Administrators can change or send password if login is configured and user is member of current organization
     if ($memberOfThisOrganization && $gCurrentUser->isAdministrator()
     && strlen($row['loginname']) > 0 && (int) $row['usr_id'] !== $gCurrentUserId) {
-        if (strlen($row['member_email']) > 0 && $gSettingsManager->getBool('enable_system_mails')) {
+        if (strlen($row['member_email']) > 0 && $gSettingsManager->getBool('system_notifications_enabled')) {
             // if email is set and systemmails are activated then administrators can send a new password to user
             $userAdministration = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 5)).'">'.
                 '<i class="fas fa-key" data-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';

@@ -520,11 +520,17 @@ $formEmailDispatch->addSelectBox(
     $selectBoxEntries,
     array('defaultValue' => $formValues['mail_recipients_with_roles'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MULTIPLE_RECIPIENTS_DESC')
 );
+$formEmailDispatch->addCheckbox(
+    'mail_into_to',
+    $gL10n->get('SYS_INTO_TO'),
+    (bool) $formValues['mail_into_to'],
+    array('helpTextIdInline' => 'SYS_INTO_TO_DESC')
+);
 $formEmailDispatch->addInput(
-    'mail_bcc_count',
-    $gL10n->get('SYS_COUNT_BCC'),
-    $formValues['mail_bcc_count'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_COUNT_BCC_DESC')
+    'mail_number_recipients',
+    $gL10n->get('SYS_NUMBER_RECIPIENTS'),
+    $formValues['mail_number_recipients'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_NUMBER_RECIPIENTS_DESC')
 );
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
 $formEmailDispatch->addSelectBox(
@@ -607,22 +613,22 @@ $formSystemNotification = new HtmlForm(
 );
 
 $formSystemNotification->addCheckbox(
-    'enable_system_mails',
+    'system_notifications_enabled',
     $gL10n->get('ORG_ACTIVATE_SYSTEM_MAILS'),
-    (bool) $formValues['enable_system_mails'],
+    (bool) $formValues['system_notifications_enabled'],
     array('helpTextIdInline' => 'ORG_ACTIVATE_SYSTEM_MAILS_DESC')
 );
 
 $formSystemNotification->addCheckbox(
-    'enable_email_notification',
+    'system_notifications_new_entries',
     $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'),
-    (bool) $formValues['enable_email_notification'],
+    (bool) $formValues['system_notifications_new_entries'],
     array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', array('<em>'.$gSettingsManager->getString('email_administrator').'</em>')))
 );
 $formSystemNotification->addCheckbox(
-    'enable_email_changenotification',
+    'system_notifications_profile_changes',
     $gL10n->get('ORG_SYSTEM_MAIL_CHANGES'),
-    (bool) $formValues['enable_email_changenotification'],
+    (bool) $formValues['system_notifications_profile_changes'],
     array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_CHANGES_DESC', array('<em>'.$gSettingsManager->getString('email_administrator').'</em>')))
 );
 
@@ -641,11 +647,11 @@ $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
            ORDER BY cat_name, rol_name';
 $sqlData['params'] = array($gCurrentOrgId);
 $formSystemNotification->addSelectBoxFromSql(
-    'system_notification_role',
+    'system_notifications_role',
     $gL10n->get('SYS_ROLE'),
     $gDb,
     $sqlData,
-    array('defaultValue' => $formValues['system_notification_role'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_NOTIFICATION_ROLE_DESC')
+    array('defaultValue' => $formValues['system_notifications_role'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_NOTIFICATION_ROLE_DESC')
 );
 
 $formSystemNotification->addCustomContent(
@@ -1543,12 +1549,6 @@ $formMessages->addCheckbox(
     $gL10n->get('SYS_SEND_EMAIL_FORMER'),
     (bool) $formValues['mail_show_former'],
     array('helpTextIdInline' => 'SYS_SEND_EMAIL_FORMER_DESC')
-);
-$formMessages->addCheckbox(
-    'mail_into_to',
-    $gL10n->get('SYS_INTO_TO'),
-    (bool) $formValues['mail_into_to'],
-    array('helpTextIdInline' => 'SYS_INTO_TO_DESC')
 );
 $formMessages->addInput(
     'max_email_attachment_size',

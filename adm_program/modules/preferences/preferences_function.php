@@ -130,7 +130,7 @@ switch ($getMode) {
                     break;
 
                 case 'email_dispatch':
-                    $checkboxes = array('mail_smtp_auth');
+                    $checkboxes = array('mail_into_to', 'mail_smtp_auth');
 
                     if ($_POST['mail_sendmail_address'] !== '') {
                         if (!StringUtils::strValidCharacters($_POST['mail_sendmail_address'], 'email')) {
@@ -141,7 +141,7 @@ switch ($getMode) {
                     break;
 
                 case 'system_notification':
-                    $checkboxes = array('enable_system_mails', 'enable_email_notification', 'enable_email_changenotification');
+                    $checkboxes = array('system_notifications_enabled', 'system_notifications_new_entries', 'system_notifications_profile_changes');
                     break;
 
                 case 'captcha':
@@ -177,7 +177,7 @@ switch ($getMode) {
 
                 case 'messages':
                     $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha',
-                                        'mail_send_to_all_addresses', 'mail_html_registered_users', 'mail_into_to', 'mail_show_former', 'mail_save_attachments');
+                                        'mail_send_to_all_addresses', 'mail_html_registered_users', 'mail_show_former', 'mail_save_attachments');
                     break;
 
                 case 'photos':

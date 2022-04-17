@@ -220,7 +220,7 @@ if ($userId === $gCurrentUserId) {
 } elseif ($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0) {
     // Administrators can change or send password if login is configured and user is member of current organization
 
-    if (strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->getBool('enable_system_mails')) {
+    if (strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->getBool('system_notifications_enabled')) {
         // if email is set and systemmails are activated then administrator can send a new password to user
         $page->addPageFunctionsMenuItem(
             'menu_item_profile_send_password',

@@ -196,7 +196,7 @@ if ($gValidLogin) {
         $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 
         // show link if user has login problems
-        if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('enable_system_mails')) {
+        if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('system_notifications_enabled')) {
             // request to reset the password
             $linkUrl  = ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php';
             $linkText = $gL10n->get('SYS_PASSWORD_FORGOTTEN');

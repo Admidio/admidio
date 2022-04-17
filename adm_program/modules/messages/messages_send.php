@@ -145,7 +145,6 @@ $message->addContent($postBody);
 
 // check if PM or Email and to steps:
 if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
-    $receiver = array();
     $sqlConditions  = '';
     $sqlEmailField  = '';
 
@@ -176,12 +175,9 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                             ON cat_id = rol_cat_id
                            AND (  cat_org_id = ? -- $gCurrentOrgId
                                OR cat_org_id IS NULL)
-                         WHERE rol_id = ? -- $group[\'id\']';
-                $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $group['id']));
+                         WHERE rol_uuid = ? -- $group[\'uuid\']';
+                $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $group['uuid']));
                 $row = $statement->fetch();
-
-                // add role to the message object
-                $message->addRole($group['id'], $group['role_mode'], $row['rol_name']);
 
                 // logged out ones just to role with permission level "all visitors"
                 // logged in user is just allowed to send to role with permission
@@ -193,104 +189,23 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                     // => EXIT
                 }
 
-                $queryParams = array(
-                    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-                    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-                    $group['id'],
-                    $gCurrentOrgId
-                );
+                // add role to the message object
+                $message->addRole($row['rol_id'], $group['role_mode'], $row['rol_name']);
 
-                if ($group['status'] === 'former' && $gSettingsManager->getBool('mail_show_former')) {
-                    // only former members
-                    $sqlConditions = ' AND mem_end < ? -- DATE_NOW ';
-                } elseif ($group['status'] === 'active_former' && $gSettingsManager->getBool('mail_show_former')) {
-                    // former members and active members
-                    $sqlConditions = ' AND mem_begin < ? -- DATE_NOW ';
-                } else {
-                    // only active members
-                    $sqlConditions = ' AND mem_begin <= ? -- DATE_NOW
-                                       AND mem_end    > ? -- DATE_NOW ';
-                    $queryParams[] = DATE_NOW;
-                }
-                $queryParams[] = DATE_NOW;
-
-                $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
-                          FROM ' . TBL_MEMBERS . '
-                    INNER JOIN ' . TBL_ROLES . '
-                            ON rol_id = mem_rol_id
-                    INNER JOIN ' . TBL_CATEGORIES . '
-                            ON cat_id = rol_cat_id
-                    INNER JOIN ' . TBL_USERS . '
-                            ON usr_id = mem_usr_id
-                    INNER JOIN ' . TBL_USER_DATA . ' AS email
-                            ON email.usd_usr_id = usr_id
-                           AND LENGTH(email.usd_value) > 0
-                    INNER JOIN ' . TBL_USER_FIELDS . ' AS field
-                            ON field.usf_id = email.usd_usf_id
-                           AND field.usf_type = \'EMAIL\'
-                               ' . $sqlEmailField . '
-                     LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                            ON last_name.usd_usr_id = usr_id
-                           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-                     LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
-                            ON first_name.usd_usr_id = usr_id
-                           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                         WHERE rol_id    = ? -- $group[\'id\']
-                           AND (  cat_org_id = ? -- $gCurrentOrgId
-                               OR cat_org_id IS NULL )
-                           AND usr_valid = true
-                               ' . $sqlConditions;
-
-                // if current user is logged in the user id must be excluded because we don't want
-                // to send the email to himself
-                if ($gValidLogin) {
-                    $sql .= '
-                        AND usr_id <> ? -- $gCurrentUserId';
-                    $queryParams[] = $gCurrentUserId;
-                }
-                $statement = $gDb->queryPrepared($sql, $queryParams);
-
-                if ($statement->rowCount() > 0) {
-                    // all role members will be attached as BCC
-                    while ($row = $statement->fetch()) {
-                        if (StringUtils::strValidCharacters($row['email'], 'email')) {
-                            $receiver[] = array($row['email'], $row['firstname'] . ' ' . $row['lastname']);
-                        }
-                    }
-                }
+                // add all role members as recipients to the email
+                $email->addRecipientsByRole($group['uuid'], $group['status']);
             } else {
                 // create user object
-                $user = new User($gDb, $gProfileFields, $value);
+                $user = new User($gDb, $gProfileFields);
+                $user->readDataByUuid($value);
 
                 // only send email to user if current user is allowed to view this user, and he has a valid email address
                 if ($gCurrentUser->hasRightViewProfile($user)) {
                     // add user to the message object
                     $message->addUser((int) $user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
 
-                    $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
-                              FROM ' . TBL_USERS . '
-                        INNER JOIN ' . TBL_USER_DATA . ' AS email
-                                ON email.usd_usr_id = usr_id
-                               AND LENGTH(email.usd_value) > 0
-                        INNER JOIN ' . TBL_USER_FIELDS . ' AS field
-                                ON field.usf_id = email.usd_usf_id
-                               AND field.usf_type = \'EMAIL\'
-                                   ' . $sqlEmailField . '
-                         LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                                ON last_name.usd_usr_id = usr_id
-                               AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-                         LEFT JOIN '.TBL_USER_DATA.' AS first_name
-                                ON first_name.usd_usr_id = usr_id
-                               AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                             WHERE usr_id = ? -- $user->getValue(\'usr_id\')
-                               AND usr_valid = true ';
-                    $statement = $gDb->queryPrepared($sql, array((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), (int) $user->getValue('usr_id')));
-
-                    while ($row = $statement->fetch()) {
-                        if (StringUtils::strValidCharacters($row['email'], 'email')) {
-                            $receiver[] = array($row['email'], $row['firstname'] . ' ' . $row['lastname']);
-                        }
-                    }
+                    // add user as recipients to the email
+                    $email->addRecipientsByUserId((int) $user->getValue('usr_id'));
                 }
             }
         }
@@ -301,7 +216,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
     }
 
     // if no valid recipients exists show message
-    if (count($receiver) === 0) {
+    if ($email->countRecipients() === 0) {
         $gMessage->show($gL10n->get('SYS_NO_VALID_RECIPIENTS'));
         // => EXIT
     }
@@ -391,29 +306,6 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
     // set flag if copy should be sent to sender
     if (isset($postCarbonCopy) && $postCarbonCopy) {
         $email->setCopyToSenderFlag();
-    }
-
-    // get array with unique receivers
-    $sendResults = array_map('unserialize', array_unique(array_map('serialize', $receiver)));
-    $receivers = count($sendResults);
-    foreach ($sendResults as $address) {
-        if ($receivers === 1) {
-            $email->addRecipient($address[0], $address[1]);
-        } else {
-            $email->addBlindCopy($address[0], $address[1]);
-        }
-    }
-
-    if ($receivers > 1) {
-        // normally we need no To-address and set "undisclosed recipients", but if
-        // that won't work than the following address will be set
-        if ((int) $gSettingsManager->get('mail_recipients_with_roles') === 1) {
-            // fill recipient with sender address to prevent problems with provider
-            $email->addRecipient($postFrom, $postName);
-        } elseif ((int) $gSettingsManager->get('mail_recipients_with_roles') === 2) {
-            // fill recipient with administrators address to prevent problems with provider
-            $email->addRecipient($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
-        }
     }
 
     // add confirmation mail to the sender

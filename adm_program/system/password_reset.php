@@ -20,7 +20,7 @@ $getResetId  = admFuncVariableIsValid($_GET, 'id', 'string');
 $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 
 // "systemmail" and "request password" must be activated
-if (!$gSettingsManager->getBool('enable_system_mails') || !$gSettingsManager->getBool('enable_password_recovery')) {
+if (!$gSettingsManager->getBool('system_notifications_enabled') || !$gSettingsManager->getBool('enable_password_recovery')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }

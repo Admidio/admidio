@@ -77,7 +77,7 @@ if ($gSettingsManager->getBool('registration_enable_module')) {
 }
 
 // show link if user has login problems
-if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('enable_system_mails')) {
+if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('system_notifications_enabled')) {
     // request to reset the password
     $forgotPasswordLink = ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php';
 } elseif ($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
