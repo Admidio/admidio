@@ -309,7 +309,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Ange förkortningen, det officiella namnet och e-postadressen för den organisation du vill lägga till. E-postadressen ska vara en allmän adress. Den kommer att användas som avsändaradress när du skickar automatiska systemaviseringar.</string>
   <string name="ORG_NO_FIELD_CREATED">Inget organisationsspecifikt fält har skapats än!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">När du ändrar vyn kommer alla osparade ändringar att gå förlorade.</string>
-  <string name="ORG_NOTIFY_ADMINISTRATOR">Meddelande till administratören om nya registreringar</string>
+  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Meddelande till administratören om nya registreringar</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster per sida</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definiera antalet objekt som visas på en sida. Pagination tillhandahålls om antalet objekt överstiger det definierade värdet. Utskriftsförhandsgranskning och exportfunktioner påverkas inte. Om värdet är 0 kommer alla objekt att listas och paginering inaktiveras. (standard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">För inloggade användare endast</string>

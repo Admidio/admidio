@@ -310,7 +310,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Geben Sie in diesem Formular die Abkürzung, den offiziellen Namen sowie die E-Mail-Adresse der Organisation ein, die Sie hinzufügen möchten. Die E-Mail-Adresse sollte eine allgemeine Adresse der Organisation sein. Diese wird unter anderem als Absenderadresse bei automatischen Systembenachrichtigungen genutzt.</string>
   <string name="ORG_NO_FIELD_CREATED">Es wurden noch keine organisationsspezifischen Profilfelder angelegt!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
-  <string name="ORG_NOTIFY_ADMINISTRATOR">Benachrichtigung einer Administratorin oder eines Administrators nach einer Registrierung</string>
+  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Benachrichtigung einer Administratorin oder eines Administrators nach einer Registrierung</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Voreinstellung: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Benutzer:innen</string>

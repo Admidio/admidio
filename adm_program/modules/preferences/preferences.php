@@ -648,7 +648,7 @@ $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
 $sqlData['params'] = array($gCurrentOrgId);
 $formSystemNotification->addSelectBoxFromSql(
     'system_notifications_role',
-    $gL10n->get('SYS_ROLE'),
+    $gL10n->get('SYS_NOTIFICATION_ROLE'),
     $gDb,
     $sqlData,
     array('defaultValue' => $formValues['system_notifications_role'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_NOTIFICATION_ROLE_DESC')
@@ -669,7 +669,7 @@ $formSystemNotification->addCustomContent(
 
 $text = new TableText($gDb);
 $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_WEBMASTER', 'txt_org_id' => $gCurrentOrgId));
-$formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_WEBMASTER', $gL10n->get('ORG_NOTIFY_ADMINISTRATOR'), $text->getValue('txt_text'), 7);
+$formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_WEBMASTER', $gL10n->get('SYS_NOTIFICATION_NEW_REGISTRATION'), $text->getValue('txt_text'), 7);
 $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_USER', 'txt_org_id' => $gCurrentOrgId));
 $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_USER', $gL10n->get('ORG_CONFIRM_REGISTRATION'), $text->getValue('txt_text'), 7);
 $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REFUSE_REGISTRATION', 'txt_org_id' => $gCurrentOrgId));

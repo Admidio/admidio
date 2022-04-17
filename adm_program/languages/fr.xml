@@ -309,7 +309,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Dans ce formulaire, entre l\'abréviation, le nom officiel et l\'adresse de courriel de l\'organisation que tu veux ajouter. L\'adresse de courriel doit être une adresse générale de l\'organisation. Cette adresse est notamment utilisée comme adresse de l\'expéditeur pour les notifications automatiques du système.</string>
   <string name="ORG_NO_FIELD_CREATED">Actuellement, aucun champ de profil spécifique pour l\'organisation n\'a été créé!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Lorsque tu passe à cette vue, tous les réglages non sauvegardés sont perdus.</string>
-  <string name="ORG_NOTIFY_ADMINISTRATOR">Notification de l\'administrateur après une inscription</string>
+  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notification de l\'administrateur après une inscription</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Nombre d\'entrées par page</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Nombre d\'éléments affichés sur une page. Une pagination est activée si le nombre d\'éléments dépasse la valeur définie. L\'aperçu avant impression et l\'exportation ne sont pas affectés. Si la valeur est 0, tous les éléments seront affichés sur une page et la pagination est désactivée. (Par défaut: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Uniquement pour les utilisateurs connectés</string>

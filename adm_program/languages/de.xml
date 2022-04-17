@@ -310,7 +310,8 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Gib in diesem Formular die Abkürzung, den offiziellen Namen sowie die E-Mail-Adresse der Organisation ein, die du hinzufügen möchtest. Die E-Mail-Adresse sollte eine allgemeine Adresse der Organisation sein. Diese wird unter anderem als Absenderadresse bei automatischen Systembenachrichtigungen genutzt.</string>
   <string name="ORG_NO_FIELD_CREATED">Es wurden noch keine organisationsspezifischen Profilfelder angelegt!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
-  <string name="ORG_NOTIFY_ADMINISTRATOR">Benachrichtigung einer Administratorin oder eines Administrators nach einer Registrierung</string>
+  <string name="SYS_NOTIFICATION_ROLE">Benachrichtigungsrolle</string>
+  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Benachrichtigung nach einer neuen Registrierung</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Voreinstellung: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Benutzer:innen</string>
@@ -342,11 +343,11 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
   <string name="SYS_EMAIL_ADMINISTRATOR_DESC">Die E-Mail-Adresse eines Administrierenden wird im System immer dann angezeigt, wenn ein unerwartetes Ereignis eingetreten ist. Es erfolgt der Hinweis, das man Kontakt mit einem Administrator aufnehmen sollte.</string>
-    <string name="SYS_NOTIFICATION_ROLE_DESC">Benachrichtigungen über neue Einträge oder Profiländerungen werden an alle Mitglieder dieser Rolle gesendet.</string>
+  <string name="SYS_NOTIFICATION_ROLE_DESC">Benachrichtigungen über neue Einträge oder Profiländerungen werden an alle Mitglieder dieser Rolle gesendet.</string>
   <string name="ORG_SYSTEM_MAIL_CHANGES">Benachrichtigung bei Profiländerungen</string>
-  <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Hier kann die Systembenachrichtigung für geänderte Profildaten aktiviert werden. Werden von einer Benutzerin oder einem Benutzer Profildaten erstellt, geändert oder gelöscht, erfolgt eine Benachrichtigung an die angegebene E-Mail #VAR1# (Voreinstellung: nein).</string>
+  <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Hier kann eine Systembenachrichtigung für geänderte Profildaten aktiviert werden. Werden von einer Benutzerin oder einem Benutzer Profildaten erstellt, geändert oder gelöscht, erfolgt eine Benachrichtigung an die Mitglieder der hinterlegten Benachrichtigungsrolle per E-Mail. (Voreinstellung: nein)</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Die Administratorin oder der Administrator hat so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mail-Adresse #VAR1# versendet. (Voreinstellung: nein)</string>
+  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann eine Systembenachrichtigung für neue Einträge in den Modulen Ankündigungen, Termine, Gästebuch, Weblinks und Fotos aktiviert werden. Mitglieder der hinterlegten Benachrichtigungsrolle erhalten so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen. (Voreinstellung: nein)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</string>
   <string name="ORG_THEME_FOLDER_OPEN">Themes Ordner konnte nicht geöffnet/gelesen werden.</string>
   <string name="ORG_TIME_FORMAT">Zeitformat</string>

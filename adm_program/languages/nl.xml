@@ -310,7 +310,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Voer de afkorting, de officiële naam en ook het e-mailadres in van de organisatie die u wilt toevoegen. Het e-mailadres moet een algemeen adres van de organisatie zijn. Het wordt als verzendadres van automatische systeemberichten gebruikt.</string>
   <string name="ORG_NO_FIELD_CREATED">Er zijn nog geen specifieke velden voor deze organistaie aangemaakt!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Bij het wijzigen van weergave gaan alle niet opgeslagen instellingen verloren.</string>
-  <string name="ORG_NOTIFY_ADMINISTRATOR">Notificatie voor beheerder over nieuwe registraties</string>
+  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notificatie voor beheerder over nieuwe registraties</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Aantal berichten per pagina</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Bepaal het aantal items die per pagina getoond wordt. Er ontstaat paginering wanneer er meer geplaatst wordt. Als aantal 0 is, zal alles getoond worden en is paginering gedeactiveerd. (Standaard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Alleen voor ingelogde gebruikers</string>

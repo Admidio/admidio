@@ -310,7 +310,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Indtast en forkortelse, det officiellle navn samt en e-mail adresse til organisationen du til tilføje. E-mail adressen skal være en generel e-mail adresse. Den vil blive brugt som afsender e-mail adresse når der sendes automatiske system e-mails og notifikationer.</string>
   <string name="ORG_NO_FIELD_CREATED">Intet organisations specifikt felt er oprettet endnu!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Ved ændringer i visningen vil alle ikke gemte ændringer være tabt.</string>
-  <string name="ORG_NOTIFY_ADMINISTRATOR">Notifikation til administratoren om nye registreringer</string>
+  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notifikation til administratoren om nye registreringer</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster pr. side</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definer et antal emner som vises på en side. Sideskift sker hvis antallet af emner overskrider den definerede værdi. Print Preview og eksport funktionalitet er ikke påvirket. Hvis værdien er 0, vil alle emner blive vist og sideskift bliver deaktiveret. (Standard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Kun for brugere der er logget ind</string>
