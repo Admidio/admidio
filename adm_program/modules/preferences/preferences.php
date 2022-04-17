@@ -613,22 +613,22 @@ $formSystemNotification = new HtmlForm(
 );
 
 $formSystemNotification->addCheckbox(
-    'enable_system_mails',
+    'system_notifications_enabled',
     $gL10n->get('ORG_ACTIVATE_SYSTEM_MAILS'),
-    (bool) $formValues['enable_system_mails'],
+    (bool) $formValues['system_notifications_enabled'],
     array('helpTextIdInline' => 'ORG_ACTIVATE_SYSTEM_MAILS_DESC')
 );
 
 $formSystemNotification->addCheckbox(
-    'enable_email_notification',
+    'system_notifications_new_entries',
     $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'),
-    (bool) $formValues['enable_email_notification'],
+    (bool) $formValues['system_notifications_new_entries'],
     array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', array('<em>'.$gSettingsManager->getString('email_administrator').'</em>')))
 );
 $formSystemNotification->addCheckbox(
-    'enable_email_changenotification',
+    'system_notifications_profile_changes',
     $gL10n->get('ORG_SYSTEM_MAIL_CHANGES'),
-    (bool) $formValues['enable_email_changenotification'],
+    (bool) $formValues['system_notifications_profile_changes'],
     array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_CHANGES_DESC', array('<em>'.$gSettingsManager->getString('email_administrator').'</em>')))
 );
 
@@ -647,11 +647,11 @@ $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
            ORDER BY cat_name, rol_name';
 $sqlData['params'] = array($gCurrentOrgId);
 $formSystemNotification->addSelectBoxFromSql(
-    'system_notification_role',
+    'system_notifications_role',
     $gL10n->get('SYS_ROLE'),
     $gDb,
     $sqlData,
-    array('defaultValue' => $formValues['system_notification_role'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_NOTIFICATION_ROLE_DESC')
+    array('defaultValue' => $formValues['system_notifications_role'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_NOTIFICATION_ROLE_DESC')
 );
 
 $formSystemNotification->addCustomContent(

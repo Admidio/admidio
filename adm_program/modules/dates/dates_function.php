@@ -334,7 +334,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     $rightEventParticipation = new RolesRights($gDb, 'event_participation', $datId);
     $rightEventParticipation->saveRoles($eventParticipationRoles);
 
-    if ($returnCode === true && $gSettingsManager->getBool('enable_email_notification')) {
+    if ($returnCode === true && $gSettingsManager->getBool('system_notifications_new_entries')) {
         // Notification email for new entries
 
         $sqlCal = 'SELECT cat_name

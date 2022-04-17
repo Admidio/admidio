@@ -159,7 +159,7 @@ while ($row = $usrStatement->fetch()) {
         if (strlen($row['usr_login_name']) > 0) {
             // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken
             $page->addHtml('<p>'.$gL10n->get('SYS_USER_VALID_LOGIN'));
-            if ($gSettingsManager->getBool('enable_system_mails')) {
+            if ($gSettingsManager->getBool('system_notifications_enabled')) {
                 $page->addHtml('<br />'.$gL10n->get('SYS_REMINDER_SEND_LOGIN').'</p>
 
                 <button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $getNewUserUuid, 'user_uuid' => $row['usr_uuid'], 'mode' => '6')).'\'">

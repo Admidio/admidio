@@ -141,7 +141,7 @@ switch ($getMode) {
                     break;
 
                 case 'system_notification':
-                    $checkboxes = array('enable_system_mails', 'enable_email_notification', 'enable_email_changenotification');
+                    $checkboxes = array('system_notifications_enabled', 'system_notifications_new_entries', 'system_notifications_profile_changes');
                     break;
 
                 case 'captcha':

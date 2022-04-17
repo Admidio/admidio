@@ -87,7 +87,7 @@ if ($getMode === 1 || $getMode === 2) {
     $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
 
     // execute only if system mails are supported
-    if ($gSettingsManager->getBool('enable_system_mails')) {
+    if ($gSettingsManager->getBool('system_notifications_enabled')) {
         try {
             // Send mail to the user to confirm the registration or the assignment to the new organization
             $systemMail = new SystemMail($gDb);

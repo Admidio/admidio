@@ -353,7 +353,7 @@ class Email extends PHPMailer
 
     /**
      * Send a notification email to all members of the notification role. This role is configured within the
-     * global preference **system_notification_role**.
+     * global preference **system_notifications_role**.
      * @param string $subject     The subject of the email.
      * @param string $message     The body of the email.
      * @param string $editorName  The name of the sender of the email.
@@ -362,7 +362,7 @@ class Email extends PHPMailer
      * @return bool|string
      * @deprecated 4.2.0:4.3.0 "adminNotification()" is deprecated, use "sendNotification()" instead.
      */
-    public function adminNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'enable_email_notification')
+    public function adminNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'system_notifications_new_entries')
     {
         return $this->sendNotification($subject, $message, $editorName, $editorEmail, $enable_flag);
     }
@@ -713,7 +713,7 @@ class Email extends PHPMailer
 
     /**
      * Send a notification email to all members of the notification role. This role is configured within the
-     * global preference **system_notification_role**.
+     * global preference **system_notifications_role**.
      * @param string $subject     The subject of the email.
      * @param string $message     The body of the email.
      * @param string $editorName  The name of the sender of the email.
@@ -721,7 +721,7 @@ class Email extends PHPMailer
      * @throws AdmException 'SYS_EMAIL_NOT_SEND'
      * @return bool|string
      */
-    public function sendNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'enable_email_notification')
+    public function sendNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'system_notifications_new_entries')
     {
         global $gSettingsManager, $gCurrentOrganization;
 
@@ -730,7 +730,7 @@ class Email extends PHPMailer
         }
 
         // Send notification to configured role
-        $this->addRecipientsByRole($gSettingsManager->getString('system_notification_role'));
+        $this->addRecipientsByRole($gSettingsManager->getString('system_notifications_role'));
 
         // Set Sender
         if ($editorEmail === '') {

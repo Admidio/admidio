@@ -63,10 +63,10 @@ $defaultOrgPreferences = array(
     'mail_smtp_password'             => '',
 
     // System notifications
-    'enable_system_mails'             => '1',
-    'system_notification_role'        => '',
-    'enable_email_notification'       => '0',
-    'enable_email_changenotification' => '0',
+    'system_notifications_enabled'         => '1',
+    'system_notifications_role'            => '',
+    'system_notifications_new_entries'     => '0',
+    'system_notifications_profile_changes' => '0',
 
     // Captcha
     'captcha_type'                => 'pic',
