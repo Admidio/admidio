@@ -230,8 +230,8 @@
   <string name="INS_WIFE">Moglie</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Modulo per l\'accesso</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS">Abilita le notifiche di sistema</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Qui puoi disabilitare le notifiche di sistema di Admidio. Esse possono essere inviate, ad esempio, se si registra un nuovo utente. Le conferme della registrazione saranno anch\'esse inviate come notifiche di sistema. In generale, questa funzionalità non sarà disabilitata salvo se il server non supporta l\'invio di e-mail. Il modulo e-mail è attivato. (Predefinito: Sì)</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS">Abilita le notifiche di sistema</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Qui puoi disabilitare le notifiche di sistema di Admidio. Esse possono essere inviate, ad esempio, se si registra un nuovo utente. Le conferme della registrazione saranno anch\'esse inviate come notifiche di sistema. In generale, questa funzionalità non sarà disabilitata salvo se il server non supporta l\'invio di e-mail. Il modulo e-mail è attivato. (Predefinito: Sì)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">Una nuova organizzazione sarà aggiunta al database con i suoi dati principali. L\'utente attuale sarà annunciato come amministratore e potrà mantenere il set di dati. Gli utenti che accedono al sistema devono selezionare la rispettiva organizzazione.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Variabili aggiuntive</string>
   <string name="ORG_ADMIDIO_THEME">Tema Admidio</string>
@@ -342,10 +342,10 @@
   <string name="ORG_SYSTEM_INFORMATION">Informazioni di sistema</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">Indirizzo email</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Qui va inserito l\'indirizzo e-mail di un amministratore. Rappresenta il destinatario per le notifiche di sistema, ad esempio per la conferma della registrazione.</string>
-  <string name="ORG_SYSTEM_MAIL_CHANGES">Notifica per i campi del profilo modificati</string>
-  <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Abilita questa impostazione per inviare notifiche per qualsiasi modifica ai campi del profilo di un utente. In questo modo un amministratore ha la possibilità di assicurare una corretta qualità dei dati. Le notifiche di modifica saranno inviate al seguente indirizzo e-mail #VAR1# (predefinito: no).</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notifica per nuovi inserimenti</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Questa funzionalità è usata per abilitare le notifiche di sistema per nuovi inserimenti all\'interno dei moduli. E\' usata come funzionalità di monitoraggio all\'interno di Admidio. Così l\'amministratore riceverà notifica via e-mail quando nuovi inserimenti saranno aggiunti all\'interno dei moduli (solo i nuovi inserimenti saranno considerati). Le notifiche di sistema saranno inviate all\'indirizzo email #VAR1#. (Default: No)</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notifica per i campi del profilo modificati</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Abilita questa impostazione per inviare notifiche per qualsiasi modifica ai campi del profilo di un utente. In questo modo un amministratore ha la possibilità di assicurare una corretta qualità dei dati. Le notifiche di modifica saranno inviate al seguente indirizzo e-mail #VAR1# (predefinito: no).</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notifica per nuovi inserimenti</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Questa funzionalità è usata per abilitare le notifiche di sistema per nuovi inserimenti all\'interno dei moduli. E\' usata come funzionalità di monitoraggio all\'interno di Admidio. Così l\'amministratore riceverà notifica via e-mail quando nuovi inserimenti saranno aggiunti all\'interno dei moduli (solo i nuovi inserimenti saranno considerati). Le notifiche di sistema saranno inviate all\'indirizzo email #VAR1#. (Default: No)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Qui è possibile definire i testi di ogni notifica di sistema. I testi sono divisi in due parti (soggetto e contenuto) e sono identificati da #subject# e #content#. Il contenuto di ogni sezione segue la sezione stessa.\n\nIn in ogni mail possono essere usati i seguenti caratteri jolly. Essi saranno sostituiti con il corrispondente contenuto in fase di esecuzione</string>
   <string name="ORG_THEME_FOLDER_OPEN">La cartella Themes non può essere aperta/letta.</string>
   <string name="ORG_TIME_FORMAT">Formato ora</string>

@@ -230,8 +230,8 @@
   <string name="INS_WIFE">Fru</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Modul Access</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS">Aktivera systemaviseringar</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Här kan du inaktivera systemaviseringarna för Admidio. De kan skickas, om till exempel en ny användare har registrerat sig. Registreringsbekräftelser kommer också att skickas som systemmeddelanden. I allmänhet bör denna funktion inte inaktiveras om servern inte stöder leverans av e-post. E-postmodulen påverkas inte av inaktiveringen. (Standard: ja)</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS">Aktivera systemaviseringar</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Här kan du inaktivera systemaviseringarna för Admidio. De kan skickas, om till exempel en ny användare har registrerat sig. Registreringsbekräftelser kommer också att skickas som systemmeddelanden. I allmänhet bör denna funktion inte inaktiveras om servern inte stöder leverans av e-post. E-postmodulen påverkas inte av inaktiveringen. (Standard: ja)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">En ny organisation läggs till i databasen inklusive dess stamdata. Den nuvarande användaren kommer att meddelas som administratör och kan behålla datasatsen. Användare som loggar in i systemet måste välja respektive organisation.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Ytterligare variabler</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-tema</string>
@@ -341,10 +341,10 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Om flera organisationer lagras i databasen kan inloggningsskärmen visa en markeringsruta med alla tillgängliga organisationer. Användaren kan sedan logga in för att välja en annan organisation (annat än definierat i config.php). Användaren måste dock vara en registrerad medlem i den valda organisationen.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformation</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">E-postadress.</string>
-  <string name="ORG_SYSTEM_MAIL_CHANGES">Meddelande om ändrade profilfält</string>
-  <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Aktivera den här inställningen för att skicka aviseringar om eventuella ändringar i en användares profilfält. På så sätt har en administratör möjlighet att säkerställa korrekt datakvalitet. Ändringsmeddelanden skickas till följande e -postadress #VAR1# (standard: nej).</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Meddelande om nya poster</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Här kan du aktivera systemaviseringar för nya modulposter. Dessa aviseringar kommer att användas för intern övervakning av Admidio. På detta sätt har en administratör möjlighet att få information om nya modulposter (endast nya poster kommer att beaktas). Systemaviseringar skickas till följande e-postadress #VAR1# (standard: nej).</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Meddelande om ändrade profilfält</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Aktivera den här inställningen för att skicka aviseringar om eventuella ändringar i en användares profilfält. På så sätt har en administratör möjlighet att säkerställa korrekt datakvalitet. Ändringsmeddelanden skickas till följande e -postadress #VAR1# (standard: nej).</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Meddelande om nya poster</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Här kan du aktivera systemaviseringar för nya modulposter. Dessa aviseringar kommer att användas för intern övervakning av Admidio. På detta sätt har en administratör möjlighet att få information om nya modulposter (endast nya poster kommer att beaktas). Systemaviseringar skickas till följande e-postadress #VAR1# (standard: nej).</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Här kan du motivera texten för varje systemmeddelande. Texterna är indelade i två delar (ämne och innehåll) och identifieras med # ämne # och # innehåll #. Innehållet för varje avsnitt följer det. \n\n I varje e-post kan följande jokertecken användas. De kommer att ersättas med motsvarande innehåll vid körning</string>
   <string name="ORG_THEME_FOLDER_OPEN">Temamappen kunde inte öppnas / läsas.</string>
   <string name="ORG_TIME_FORMAT">Tidsformat</string>

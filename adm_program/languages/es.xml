@@ -228,8 +228,8 @@
   <string name="INS_WIFE">Esposa</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Acceso al módulo</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS">Habilitar notificaciones del sistema</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Aquí se pueden desactivar las notificaciones del sistema de Admidio. Éstas se envían cuando, por ejemplo, un nuevo usuario ha iniciado sesión. Pero también se envían confirmaciones de registro como notificaciones del sistema. Esta característica no debe deshabilitarse en general, excepto si el servidor no admite la entrega de correo electrónico. El módulo de correo electrónico no se ve afectado por la desactivación. (Por defecto: sí)</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS">Habilitar notificaciones del sistema</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Aquí se pueden desactivar las notificaciones del sistema de Admidio. Éstas se envían cuando, por ejemplo, un nuevo usuario ha iniciado sesión. Pero también se envían confirmaciones de registro como notificaciones del sistema. Esta característica no debe deshabilitarse en general, excepto si el servidor no admite la entrega de correo electrónico. El módulo de correo electrónico no se ve afectado por la desactivación. (Por defecto: sí)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">Agrega una nueva organización, con sus datos maestros, en la base de datos. El usuario actual se designa automáticamente como administrador y puede llevar a cabo la configuración adicional. Los usuarios que inicien sesión en el sistema, deberán seleccionar la organización respectiva.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Variables adicionales</string>
   <string name="ORG_ADMIDIO_THEME">Tema Admidio</string>

@@ -231,8 +231,6 @@
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be disabled or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS">Enable system notifications</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Here you can disable the system notifications of Admidio. They can be sent, if for example a new user has registered. Registration confirmations will also be sent as system notifications. In general, this feature should not be disabled unless the server does not support e-mail delivery. The e-mail module is not affected by the deactivation. (Default: yes)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">A new organization will be added to the database including its master data. The current user will be announced as administrator and can maintain the dataset. Users who log into the system need to select the respective organization.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Additional variables</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
@@ -340,10 +338,6 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
   <string name="ORG_SYSTEM_INFORMATION">System informations</string>
-  <string name="ORG_SYSTEM_MAIL_CHANGES">Notification for changed profile fields</string>
-  <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">A system notification for changed profile data can be activated here. If profile data is created, changed or deleted by a user, the members of the stored notification role are notified by e-mail. (Default: no)</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notification for new entries</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Here you can activate a system notification for new entries in the modules Announcements, Events, Guestbook, Web Links and Photos. Members of the stored notification role get the possibility to be notified about new entries in the modules by e-mail. (Default: no)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Here you can justify the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime</string>
   <string name="ORG_THEME_FOLDER_OPEN">Themes folder could not be opened/read.</string>
   <string name="ORG_TIME_FORMAT">Time format</string>
@@ -812,6 +806,8 @@
   <string name="SYS_ENABLE_GREETING_CARDS_DESC">The greeting cards can be enabled or disabled via this setting. If the server does not support e-mail, the module should be disabled. This module is generally only available to registered users. (Default: yes)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES">Enable groups &amp; roles</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Displays the groups and roles of the organization and allows free configuration of groups and roles. Own list can be configured and applied. This module is generally only available for logged in users. (Default: yes)</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS">Enable system notifications</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Here you can enable or disable the system notifications of Admidio. They can be sent, if for example a new user has registered. Registration confirmations will also be sent as system notifications. In general, this feature should not be disabled unless the server does not support e-mail delivery. The e-mail module is not affected by the deactivation. (Default: yes)</string>
   <string name="SYS_ENABLE_PM_MODULE">Enable private messages</string>
   <string name="SYS_ENABLE_PM_MODULE_DESC">Private messages can be enabled or disabled using this setting. (Default: enabled)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Maintain and show relationships</string>
@@ -1086,6 +1082,10 @@
   <string name="SYS_NOT_VALID_DATE_FORMAT">Please use a valid date as condition for field #VAR1_BOLD#.</string>
   <string name="SYS_NOTE">Note</string>
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notification after a new registration</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification for new entries</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Here you can activate a system notification for new entries in the modules Announcements, Events, Guestbook, Web Links and Photos. Members of the stored notification role get the possibility to be notified about new entries in the modules by e-mail. (Default: no)</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notification for changed profile fields</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">A system notification for changed profile data can be activated here. If profile data is created, changed or deleted by a user, the members of the stored notification role are notified by e-mail. (Default: no)</string>
   <string name="SYS_NOTIFICATION_ROLE">Notification role</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Notifications about new entries or profile changes are sent to all members of this role.</string>
   <string name="SYS_NUMBER">Number</string>

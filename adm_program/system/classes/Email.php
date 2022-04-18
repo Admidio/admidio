@@ -647,7 +647,7 @@ class Email extends PHPMailer
 
             foreach ($recipientsArrays as $recipientsArray) {
                 // if number of bcc recipients = 1 then send the mail directly to the user and not as bcc
-                if (count($recipientsArray) === 1) {
+                if ($this->countRecipients() === 1) {
                     // remove all current recipients from mail
                     $this->clearAllRecipients();
 

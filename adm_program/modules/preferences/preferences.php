@@ -308,7 +308,7 @@ $formSecurity->addCheckbox(
     'enable_password_recovery',
     $gL10n->get('SYS_PASSWORD_FORGOTTEN'),
     (bool) $formValues['enable_password_recovery'],
-    array('helpTextIdInline' => array('SYS_PASSWORD_FORGOTTEN_PREF_DESC', array('ORG_ACTIVATE_SYSTEM_MAILS')))
+    array('helpTextIdInline' => array('SYS_PASSWORD_FORGOTTEN_PREF_DESC', array('SYS_ENABLE_NOTIFICATIONS')))
 );
 
 
@@ -614,22 +614,22 @@ $formSystemNotification = new HtmlForm(
 
 $formSystemNotification->addCheckbox(
     'system_notifications_enabled',
-    $gL10n->get('ORG_ACTIVATE_SYSTEM_MAILS'),
+    $gL10n->get('SYS_ENABLE_NOTIFICATIONS'),
     (bool) $formValues['system_notifications_enabled'],
-    array('helpTextIdInline' => 'ORG_ACTIVATE_SYSTEM_MAILS_DESC')
+    array('helpTextIdInline' => 'SYS_ENABLE_NOTIFICATIONS_DESC')
 );
 
 $formSystemNotification->addCheckbox(
     'system_notifications_new_entries',
-    $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'),
+    $gL10n->get('SYS_NOTIFICATION_NEW_ENTRIES'),
     (bool) $formValues['system_notifications_new_entries'],
-    array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', array('<em>'.$gSettingsManager->getString('email_administrator').'</em>')))
+    array('helpTextIdInline' => 'SYS_NOTIFICATION_NEW_ENTRIES_DESC')
 );
 $formSystemNotification->addCheckbox(
     'system_notifications_profile_changes',
-    $gL10n->get('ORG_SYSTEM_MAIL_CHANGES'),
+    $gL10n->get('SYS_NOTIFICATION_PROFILE_CHANGES'),
     (bool) $formValues['system_notifications_profile_changes'],
-    array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_CHANGES_DESC', array('<em>'.$gSettingsManager->getString('email_administrator').'</em>')))
+    array('helpTextIdInline' => 'SYS_NOTIFICATION_PROFILE_CHANGES_DESC')
 );
 
 // read all roles of the organization

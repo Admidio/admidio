@@ -230,8 +230,8 @@
   <string name="INS_WIFE">Épouse</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Accès au module</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS">Activer les notifications du système</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Ici, les notifications système d\'Admidio peuvent être désactivées. Les notifications système sont envoyées lorsqu\'un nouvel utilisateur se connecte, par exemple. Les confirmations d\'inscription sont également envoyées sous forme de notifications système. Cette fonction ne doit généralement pas être désactivée. A moins que le serveur ne supporte pas l\'envoi de courriels. Le module courriel n\'est pas affecté par cette désactivation. (Par défaut : oui)</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS">Activer les notifications du système</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Ici, les notifications système d\'Admidio peuvent être désactivées. Les notifications système sont envoyées lorsqu\'un nouvel utilisateur se connecte, par exemple. Les confirmations d\'inscription sont également envoyées sous forme de notifications système. Cette fonction ne doit généralement pas être désactivée. A moins que le serveur ne supporte pas l\'envoi de courriels. Le module courriel n\'est pas affecté par cette désactivation. (Par défaut : oui)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">Ajoute une nouvelle organisation avec ces données de bases. L\'utilisateur actuel est automatiquement nommé administrateur et peut effectuer les autres configurations. Les utilisateurs qui se connectent à partir de maintenant au système doivent indiquer le nom de l\'organisation.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Variables supplémentaires</string>
   <string name="ORG_ADMIDIO_THEME">Thèmes Admidio</string>
@@ -341,8 +341,8 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Si plusieurs organisations sont configurées dans la base de données, le dialogue de connexion avec toutes les organisations peut être affichée dans le dialogue de séléction.  L\'utilisateur peut séléctionner une autre organisation (telle que définie dans config.php) à laquelle il se connecte. Tourefois, l\'utilisateur doit également être inscrit à l\'organisation.</string>
   <string name="ORG_SYSTEM_INFORMATION">Information du système</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">Adresse de courriel</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notification pour les nouvelles entrées</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Ici, tu peux activer les notification du système pour les nouvelles entrées dans les modules. Il sert de fonction de surveillance au sein d\'Admidio. L\'administrateur a la possibilité d\'être informé des nouvelles entrées dans les modules par courriel (seules les nouvelles entrées sont prises en compte). Les notifications du système sont envoyées à l\'adresse de courriel #VAR1#. (Par défaut : non)</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification pour les nouvelles entrées</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Ici, tu peux activer les notification du système pour les nouvelles entrées dans les modules. Il sert de fonction de surveillance au sein d\'Admidio. L\'administrateur a la possibilité d\'être informé des nouvelles entrées dans les modules par courriel (seules les nouvelles entrées sont prises en compte). Les notifications du système sont envoyées à l\'adresse de courriel #VAR1#. (Par défaut : non)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Les textes de tous les notifications de système peuvent être adaptés et complétés ici. Les textes sont divisés en 2 zones (sujet &amp; contenu) et sont identifiés par les chaînes de caractères #subject# et #content#. Puis suit le contenu respectif pour cette zone.\n\nDans chaque courriel, les caractères de remplacement suivants peuvent être utilisés, qui sont remplacés au moment de l\'exécution par le contenu correspondant.</string>
   <string name="ORG_THEME_FOLDER_OPEN">Le dossier thèmes n\'a pas pu être ouvert oulu.</string>
   <string name="ORG_TIME_FORMAT">Format horaire</string>

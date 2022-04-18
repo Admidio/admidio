@@ -230,8 +230,8 @@
   <string name="INS_WIFE">Esposa</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Acesso ao módulo</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS">Ativar notificações do sistema</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Desative as notificações do sistema do Admidio aqui. Elas serão enviadas, por exemplo, se um novo usuário se registrar. Confirmações de registro também serão enviadas como notificações. Esta funcionalidade deve ser apenas desativada caso o servidor não suporte envio de e-mails. O módulo de e-mail não é afetado por esta opção. (padrão: sim)</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS">Ativar notificações do sistema</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Desative as notificações do sistema do Admidio aqui. Elas serão enviadas, por exemplo, se um novo usuário se registrar. Confirmações de registro também serão enviadas como notificações. Esta funcionalidade deve ser apenas desativada caso o servidor não suporte envio de e-mails. O módulo de e-mail não é afetado por esta opção. (padrão: sim)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">Uma nova organização será adicionada para a base de dados incluindo seus dados-mestre. O usuário atual será anunciado como administrador e pode manter o conjunto de dados. O usuário que iniciar sessão no sistema precisa selecionar a respetiva organização.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Variáveis adicionais</string>
   <string name="ORG_ADMIDIO_THEME">Tema do Admidio</string>
@@ -340,8 +340,8 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Caso haja várias organizações guardadas na base de dados, o ecrã de início de sessão exibirá uma caixa de seleção com todas as organizações disponíveis. O usuário poderá então, ao iniciar a sessão, selecionar outra organização (outra que não esteja definida no config.php). Entretanto, o usuário deve ser um membro registado da organização selecionada.</string>
   <string name="ORG_SYSTEM_INFORMATION">Informações do sistema</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">Endereço de e-mail</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notificação para as novas entradas</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Aqui é possível ativar notificações de sistema para novas entradas de módulos. Essas notificações serão usadas para monitoramento interno do Admidio. Assim, o administrador pode ser informado sobre novas entradas de módulos (apenas novas entradas serão consideradas). As notificações de sistema serão enviadas para o seguinte endereço de e-mail #VAR1# (padrão: não).</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notificação para as novas entradas</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Aqui é possível ativar notificações de sistema para novas entradas de módulos. Essas notificações serão usadas para monitoramento interno do Admidio. Assim, o administrador pode ser informado sobre novas entradas de módulos (apenas novas entradas serão consideradas). As notificações de sistema serão enviadas para o seguinte endereço de e-mail #VAR1# (padrão: não).</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Justifique aqui o texto de cada notificação de sistema. Os textos estão divididos em 2 partes (assunto e conteúdo) e são identificados por #subject# e #content#. A ser seguido pelo respetivo conteúdo para esta seção.\n\nEm cada envio os seguintes coringas serão usados. Eles serão substituídos pelos conteúdos correspondentes durante a execução.</string>
   <string name="ORG_THEME_FOLDER_OPEN">O diretório de temas não pode ser aberto/lido.</string>
   <string name="ORG_TIME_FORMAT">Formato de hora</string>

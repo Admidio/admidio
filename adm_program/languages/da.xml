@@ -231,8 +231,8 @@
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Modul adgang</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Modulet kan kun deaktiveres eller aktiveres for brugere der er logget ind. Hvis modulet kun er tilgængeligt for brugere der er logget ind, vil det være skjult for brugere der ikke er logget ind, og webfeed vil være fuldstændigt deaktiveret for begge brugergrupper. (standard: aktiv)</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS">Aktiver system beskeder</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Her kan du deaktivere system beskeder fra Admidio. De kan blive afsendt, hvis for eksempel en ny bruger logger på. Registrerings bekræftelser vil også blive sendt som system beskeder. Generelt set, bør disse beskeder ikke slås fra, med mindre serveren ikke understøtter afsendelse af system e-mails. E-mail modulet bliver ikke berørt af en deaktivering. (Standard: Ja)</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS">Aktiver system beskeder</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Her kan du deaktivere system beskeder fra Admidio. De kan blive afsendt, hvis for eksempel en ny bruger logger på. Registrerings bekræftelser vil også blive sendt som system beskeder. Generelt set, bør disse beskeder ikke slås fra, med mindre serveren ikke understøtter afsendelse af system e-mails. E-mail modulet bliver ikke berørt af en deaktivering. (Standard: Ja)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">En ny organisation vil blive tilføjet til databasen inklusiv dens masterdata. Den nuværende bruger vil blive annonceret som administrator og kan administrere datasættet. Brugere som logger på systemet skal vælge den respektive organisation.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Yderligere variabler</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Tema</string>
@@ -342,10 +342,10 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Hvis der er flere organisationer gemt i den samme database, så kan Log ind skærmen vise en valg boks med alle tilgængelige organisationer. Brugeren kan så på login skærmen vælge en anden organisation (en anden organisation end den der er defineret i config.php). Brugeren skal selvfølgelig være registreret medlem af den valgte organisation.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformation</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">E-mail-adressen til en administrator skal indtastes her. Denne bruges som modtageradresse til systemmeddelelser, f.eks. til registreringsbekræftelse.</string>
-  <string name="ORG_SYSTEM_MAIL_CHANGES">Meddelelse om ændrede profilfelter</string>
-  <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Aktiver denne indstilling for at sende meddelelser om ændringer i en brugers profilfelter. På denne måde har en administrator mulighed for at sikre en korrekt datakvalitet. Ændringsmeddelelser sendes til følgende mailadresse #VAR1# (standard: nej).</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Besked om nye poster</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Denne funktion bliver brugt til at aktivere system beskeder for nye poster inde i moduler. Det anvendes som en monitorerings funktion inde i Admidio. Så administratoren kan blive gjort opmærksom på når nye poster bliver tilføjet inde i moduler (kun NYE poster vil blive taget i betragtning). Disse system beskeder vil blive sendt til e-mail adressen #VAR1#. (Standard: Nej)</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Meddelelse om ændrede profilfelter</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Aktiver denne indstilling for at sende meddelelser om ændringer i en brugers profilfelter. På denne måde har en administrator mulighed for at sikre en korrekt datakvalitet. Ændringsmeddelelser sendes til følgende mailadresse #VAR1# (standard: nej).</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Besked om nye poster</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Denne funktion bliver brugt til at aktivere system beskeder for nye poster inde i moduler. Det anvendes som en monitorerings funktion inde i Admidio. Så administratoren kan blive gjort opmærksom på når nye poster bliver tilføjet inde i moduler (kun NYE poster vil blive taget i betragtning). Disse system beskeder vil blive sendt til e-mail adressen #VAR1#. (Standard: Nej)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Her kan du ændre teksten til hver enkelt system besked. Teksterne er delt i to dele(emne og indhold) og er identificeret med #subject# og #content#. Indholdet i hver sektion kommer lige efter overskriften.\n\nI hver mail kan de følgende wildcards bruges. Disse vil blive erstattet af indhold når systemet køres.</string>
   <string name="ORG_THEME_FOLDER_OPEN">Tema folderen kunne ikke åbnes eller læses.</string>
   <string name="ORG_TIME_FORMAT">Tidsformat</string>

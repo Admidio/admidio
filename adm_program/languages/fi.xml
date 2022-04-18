@@ -231,8 +231,8 @@
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Moduulin käyttö</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Moduuli voidaan poistaa käytöstä tai ottaa käyttöön vain kirjautuneille käyttäjille. Jos moduuli on vain sisäänkirjautuneiden käyttäjien käytettävissä, se piilotetaan uloskirjautuneilta käyttäjiltä ja verkkosyöte poistetaan kokonaan käytöstä molemmilta käyttäjäryhmiltä. (oletus: aktiivinen) </string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS">Ota järjestelmäilmoitukset käyttöön</string>
-  <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Täällä voit poistaa Admidion järjestelmäilmoitukset käytöstä. Ne voidaan lähettää, jos esimerkiksi uusi käyttäjä on rekisteröitynyt. Rekisteröintivahvistukset lähetetään myös järjestelmäilmoituksina. Yleensä tätä ominaisuutta ei saa poistaa käytöstä, ellei palvelin tue sähköpostin jakelua. Deaktivointi ei vaikuta sähköpostimoduuliin. (Oletus: kyllä)</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS">Ota järjestelmäilmoitukset käyttöön</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Täällä voit poistaa Admidion järjestelmäilmoitukset käytöstä. Ne voidaan lähettää, jos esimerkiksi uusi käyttäjä on rekisteröitynyt. Rekisteröintivahvistukset lähetetään myös järjestelmäilmoituksina. Yleensä tätä ominaisuutta ei saa poistaa käytöstä, ellei palvelin tue sähköpostin jakelua. Deaktivointi ei vaikuta sähköpostimoduuliin. (Oletus: kyllä)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">Tietokantaan lisätään uusi organisaatio, joka sisältää sen perustiedot. Nykyinen käyttäjä ilmoitetaan järjestelmänvalvojaksi ja hän voi ylläpitää tietojoukkoa. Käyttäjien, jotka kirjautuvat järjestelmään, on valittava organisaatio.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Muut muuttujat</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-teema</string>
@@ -342,10 +342,10 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Jos tietokantaan on tallennettu useita organisaatioita, kirjautumisnäyttö voi näyttää valintaruudun, jossa näkyvät kaikki käytettävissä olevat organisaatiot. Käyttäjä voi kirjautumisen yhteydessä valita toisen organisaation (muun kuin config.php -määritelmän). Käyttäjän on kuitenkin oltava valitun organisaation rekisteröity jäsen.</string>
   <string name="ORG_SYSTEM_INFORMATION">Järjestelmätiedot</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Syötä tähän järjestelmänvalvojan sähköpostiosoite. Tätä käytetään järjestelmän ilmoitusten vastaanottajaosoitteena, esim. rekisteröinnin vahvistusta varten. </string>
-  <string name="ORG_SYSTEM_MAIL_CHANGES">Ilmoitus muutetuista profiilikentistä</string>
-  <string name="ORG_SYSTEM_MAIL_CHANGES_DESC">Ota tämä asetus käyttöön, jos haluat lähettää ilmoituksia käyttäjän profiilikenttien muutoksista. Tällä tavalla järjestelmänvalvojalla on mahdollisuus varmistaa oikea tietojen laatu. Muutosilmoitukset lähetetään seuraavaan sähköpostiosoitteeseen #VAR1# (oletus: ei).</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Ilmoitus uusista merkinnöistä</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Täällä voit aktivoida järjestelmäilmoitukset uusille moduulimerkinnöille. Näitä ilmoituksia käytetään Admidion sisäiseen seurantaan. Tällä tavalla järjestelmänvalvojalla on mahdollisuus saada tietoa uusista moduulimerkinnöistä (vain uudet merkinnät otetaan huomioon). Järjestelmäilmoitukset lähetetään seuraavaan sähköpostiosoitteeseen #VAR1# (oletus: ei).</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Ilmoitus muutetuista profiilikentistä</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Ota tämä asetus käyttöön, jos haluat lähettää ilmoituksia käyttäjän profiilikenttien muutoksista. Tällä tavalla järjestelmänvalvojalla on mahdollisuus varmistaa oikea tietojen laatu. Muutosilmoitukset lähetetään seuraavaan sähköpostiosoitteeseen #VAR1# (oletus: ei).</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Ilmoitus uusista merkinnöistä</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Täällä voit aktivoida järjestelmäilmoitukset uusille moduulimerkinnöille. Näitä ilmoituksia käytetään Admidion sisäiseen seurantaan. Tällä tavalla järjestelmänvalvojalla on mahdollisuus saada tietoa uusista moduulimerkinnöistä (vain uudet merkinnät otetaan huomioon). Järjestelmäilmoitukset lähetetään seuraavaan sähköpostiosoitteeseen #VAR1# (oletus: ei).</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Tässä voit perustella jokaisen järjestelmäilmoituksen tekstin. Tekstit on jaettu kahteen osaan (aihe ja sisältö), ja ne tunnistetaan #subject# ja #content#. Jokaisen osion sisältö seuraa sitä. \n\nKussakin sähköpostissa voidaan käyttää seuraavia yleismerkkejä. Ne korvataan vastaavalla sisällöllä ajon aikana</string>
   <string name="ORG_THEME_FOLDER_OPEN">Teemat -kansiota ei voitu avata/lukea.</string>
   <string name="ORG_TIME_FORMAT">Aikamuoto</string>
