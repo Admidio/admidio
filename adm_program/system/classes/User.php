@@ -1582,25 +1582,6 @@ class User extends TableAccess
     }
 
     /**
-     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
-     * If the sql find more than one record the method returns **false**.
-     * Per default all columns of the default table will be read and stored in the object.
-     * @param string           $sqlWhereCondition Conditions for the table to select one record
-     * @param array<int,mixed> $queryParams       The query params for the prepared statement
-     * @return bool Returns **true** if one record is found
-     * @see TableAccess#readDataById
-     * @see TableAccess#readDataByColumns
-     */
-    protected function readData($sqlWhereCondition, array $queryParams = array())
-    {
-        if(!parent::readData($sqlWhereCondition, $queryParams)) {
-            $this->setDefaultValues();
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Reads a user record out of the table adm_users in database selected by the unique user id.
      * Also all profile fields of the object **mProfileFieldsData** will be read.
      * @param int $userId Unique id of the user that should be read
@@ -1612,6 +1593,8 @@ class User extends TableAccess
             // read data of all user fields from current user
             $this->mProfileFieldsData->readUserData($userId, $this->organizationId);
             return true;
+        } else {
+            $this->setDefaultValues();
         }
 
         return false;
@@ -1633,6 +1616,8 @@ class User extends TableAccess
             // read data of all user fields from current user
             $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
             return true;
+        } else {
+            $this->setDefaultValues();
         }
 
         return false;
