@@ -131,7 +131,7 @@ if ($userField->getValue('usf_system') == 1) {
         $gDb,
         'USF',
         HtmlForm::SELECT_BOX_MODUS_EDIT,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $userField->getValue('usf_cat_id'))
+        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('cat_uuid'))
     );
 }
 $form->closeGroupBox();
