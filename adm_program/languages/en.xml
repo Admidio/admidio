@@ -836,7 +836,9 @@
   <string name="SYS_FIELD">Field</string>
   <string name="SYS_FIELD_EMPTY">Field #VAR1_BOLD# is empty.</string>
   <string name="SYS_FIELD_ENCLOSURE">Quotation character for the fields</string>
-  <string name="SYS_FIELD_INVALID_CHAR">Field #VAR1_BOLD# contains illegal characters.\n\nAllowed characters are letters from \'a\' to \'z\' and \'A\' to \'Z\', numbers from 0 to 9 and special characters like .-_+@ .</string>
+  <string name="SYS_FIELD_INVALID_CHAR">The entered value in the field #VAR1_BOLD# contains illegal characters.\n\nAllowed characters are letters from \'a\' to \'z\' and \'A\' to \'Z\', numbers from 0 to 9 and special characters like .-_+@ .</string>
+  <string name="SYS_FIELD_INVALID_INPUT">The Field #VAR1_BOLD# contains an invalid input.</string>
+  <string name="SYS_FIELD_INVALID_REGEX">The entered value in the field #VAR1_BOLD# contains characters which do not match the corresponding regular expression of the field. Please check the field description which characters are allowed.</string>
   <string name="SYS_FIELDS_EMPTY">Some fields are empty.</string>
   <string name="SYS_FILE">File</string>
   <string name="SYS_FILE_COLUMN">File column</string>

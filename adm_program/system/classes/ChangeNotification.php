@@ -134,7 +134,7 @@ class ChangeNotification
             $logEntry->setValue('usl_usf_id', $fieldId);
             $logEntry->setValue('usl_value_old', $old_value_db);
             $logEntry->setValue('usl_value_new', $new_value_db);
-            $logEntry->setValue('usl_comm', '');
+            $logEntry->setValue('usl_comment', '');
             $logEntry->save();
         }
 

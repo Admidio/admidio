@@ -170,37 +170,11 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             }
 
             // Write value from field to user class object
-            $returnCode = $user->setValue($field->getValue('usf_name_intern'), $_POST[$postId]);
-
-            // Output of the error message depending on the data type
-            if (!$returnCode) {
-                switch ($field->getValue('usf_type')) {
-                    case 'CHECKBOX':
-                        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-                        // => EXIT
-                        break;
-                    case 'DATE':
-                        $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($field->getValue('usf_name'), $gSettingsManager->getString('system_date'))));
-                        // => EXIT
-                        break;
-                    case 'EMAIL':
-                        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($field->getValue('usf_name'))));
-                        // => EXIT
-                        break;
-                    case 'NUMBER': // fallthrough
-                    case 'DECIMAL':
-                        $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', array($field->getValue('usf_name'))));
-                        // => EXIT
-                        break;
-                    case 'PHONE':
-                        $gMessage->show($gL10n->get('SYS_PHONE_INVALID_CHAR', array($field->getValue('usf_name'))));
-                        // => EXIT
-                        break;
-                    case 'URL':
-                        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($field->getValue('usf_name'))));
-                        // => EXIT
-                        break;
-                }
+            try {
+                $user->setValue($field->getValue('usf_name_intern'), $_POST[$postId]);
+            } catch (AdmException $e) {
+                // show notice why the value of a profile field could not be set
+                $e->showHtml();
             }
         } else {
             // Checkboxes do not pass a value at 0, so set it here if it is not a required field.
