@@ -803,7 +803,7 @@ class User extends TableAccess
         || ($categoryType === 'DAT' && $this->editDates())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
         || ($categoryType === 'USF' && $this->editUsers())
-        || ($categoryType === 'ROL' && $this->assignRoles())) {
+        || ($categoryType === 'ROL' && $this->manageRoles())) {
             $condition = '';
         } else {
             $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
@@ -1982,7 +1982,8 @@ class User extends TableAccess
     }
 
     /**
-     * Checks if the user has the right to assign members to at least one role.
+     * Checks if the user has the right to assign members to at least one role. This method also returns
+     * true if the user is a leader of the role and could assign other members to that role.
      * @return bool Return **true** if the user can assign members to at least one role.
      */
     public function assignRoles()
