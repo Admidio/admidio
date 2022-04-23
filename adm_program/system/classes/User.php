@@ -1593,11 +1593,11 @@ class User extends TableAccess
      */
     protected function readData($sqlWhereCondition, array $queryParams = array())
     {
-        if(parent::readData($sqlWhereCondition, $queryParams)) {
+        if(!parent::readData($sqlWhereCondition, $queryParams)) {
             $this->setDefaultValues();
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**
@@ -1770,7 +1770,7 @@ class User extends TableAccess
         foreach ($this->mProfileFieldsData->getProfileFields() as $profileField) {
             $defaultValue = $profileField->getValue('usf_default_value');
             if($defaultValue !== '') {
-                $this->setValue($defaultValue);
+                $this->setValue($profileField->getValue('usf_name_intern'), $defaultValue);
             }
         }
     }
