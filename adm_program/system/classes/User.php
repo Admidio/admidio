@@ -1583,7 +1583,8 @@ class User extends TableAccess
 
     /**
      * Reads a user record out of the table adm_users in database selected by the unique user id.
-     * Also all profile fields of the object **mProfileFieldsData** will be read.
+     * All profile fields of the object **mProfileFieldsData** will also be read. If no user was
+     * found than the default values of all profile fields will be set.
      * @param int $userId Unique id of the user that should be read
      * @return bool Returns **true** if one record is found
      */
@@ -1603,8 +1604,9 @@ class User extends TableAccess
     /**
      * Reads a record out of the table in database selected by the unique uuid column in the table.
      * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
-     * Per default all columns of the default table will be read and stored in the object.
-     * Not every Admidio table has a uuid. Please check the database structure before you use this method.
+     * Per default all columns of the default table will be read and stored in the object. If no user
+     * was found than the default values of all profile fields will be set.
+     * Not every Admidio table has an uuid. Please check the database structure before you use this method.
      * @param int $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
