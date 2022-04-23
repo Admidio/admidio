@@ -614,20 +614,22 @@ class ProfileFields
      * Set a value for a profile field. The value will be checked against typical conditions of the data type and
      * also against the custom regex if this is set. If an invalid value is set an AdmException will be thrown.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
-     * @param mixed  $fieldValue
+     * @param mixed  $fieldValue      The new value that should be stored in the profile field.
+     * @param bool   $checkValue      The value will be checked if it's valid. If set to **false** than the value will
+     *                                not be checked.
      * @throws AdmException If an invalid value should be set.
      *                      exception->text contains a string with the reason why the login failed.
      * @return bool Return true if the value is valid and would be accepted otherwise return false or an exception.
      */
-    public function setValue(string $fieldNameIntern, $fieldValue): bool
+    public function setValue(string $fieldNameIntern, $fieldValue, $checkValue = true): bool
     {
         global $gSettingsManager, $gL10n;
 
         if (!array_key_exists($fieldNameIntern, $this->mProfileFields)) {
-            return false;
+            throw new AdmException('Profile field ' . $fieldNameIntern . ' doesn\'t exists!');
         }
 
-        if ($fieldValue !== '') {
+        if ($fieldValue !== '' && $checkValue) {
             switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type')) {
                 case 'CHECKBOX':
                     // Checkbox may only have 0 or 1
@@ -687,7 +689,7 @@ class ProfileFields
             }
 
             if($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex') !== ''
-            && !preg_match($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex'), $fieldValue)) {
+            && preg_match($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex'), $fieldValue) === 0) {
                 throw new AdmException($gL10n->get('SYS_FIELD_INVALID_REGEX', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'))));
             }
         }

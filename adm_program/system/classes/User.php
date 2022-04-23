@@ -1829,14 +1829,19 @@ class User extends TableAccess
     }
 
     /**
-     * set value for column usd_value of field
+     * Set a value for a profile field. The value will be checked against typical conditions of the data type and
+     * also against the custom regex if this is set. If an invalid value is set an AdmException will be thrown.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
-     * @param mixed  $fieldValue
-     * @return bool
+     * @param mixed  $fieldValue      The new value that should be stored in the profile field.
+     * @param bool   $checkValue      The value will be checked if it's valid. If set to **false** than the value will
+     *                                not be checked.
+     * @throws AdmException If an invalid value should be set.
+     *                      exception->text contains a string with the reason why the login failed.
+     * @return bool Return true if the value is valid and would be accepted otherwise return false or an exception.
      */
-    public function setProfileFieldsValue($fieldNameIntern, $fieldValue)
+    public function setProfileFieldsValue($fieldNameIntern, $fieldValue, $checkValue = true)
     {
-        return $this->mProfileFieldsData->setValue($fieldNameIntern, $fieldValue);
+        return $this->mProfileFieldsData->setValue($fieldNameIntern, $fieldValue, $checkValue);
     }
 
     /**
