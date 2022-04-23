@@ -349,7 +349,7 @@
   <string name="ORG_TIME_FORMAT_DESC">Le format correspond à la fonction PHP %VAR1. (Par défaut: H:i)</string>
   <string name="ORG_TIMEZONE">Fuseau horaire</string>
   <string name="ORG_TIMEZONE_DESC">Il s\'agit du fuseau horaire spécifié. Si cela est modifié ultérieurement dans le fichier de configuration config.php d\'Admidio, les dates et les heures déjà saisies ne sont pas adaptées au nouveau fuseau horaire.</string>
-  <string name="ORG_URL">URL</string>
+  <string name="SYS_URL">URL</string>
   <string name="ORG_VALUE_LIST">Liste de valeurs</string>
   <string name="ORG_VALUE_LIST_DESC">Dans cette zone, tu peux saisir les éléments de la liste déroulante ou du champ d\'options. Tu peux entrer un élément par ligne dans le champ de la liste déroulante ou du champ d\'options.\n\nLors de la saisie, le texte n\'est pas sauvegardé dans le profil, mais la position sélectionnée dans la liste. Si tu modifie le texte d\'un élément, tous les membres pour lesquels ce champ a été saisie, reçoivent immédiatement le nouveau texte dans leur profil. Cependant, si tu déplace un élément sur une autre ligne, un autre élément sera affichée pour les membres. Dans un champ d\'options, une icône peut aussi être affichée à la place d\'un texte. Tu peux spécifier le nom d\'une icône du dossier thème (ex. : ok.png) ou l\'URL d\'une image externe (ex. : https://www.example.com/example.jpg). Tu peux facultativement définir une infobulle sur l\'icône en utilisant un trait d\'union vertical (ex. : féminin.png|féminin).</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Lien d\'activation pour le nouveau mot de passe</string>

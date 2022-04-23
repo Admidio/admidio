@@ -45,7 +45,7 @@ $menuOverview = new HtmlTable('tbl_menues', $page, true);
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
-    $gL10n->get('ORG_URL'),
+    $gL10n->get('SYS_URL'),
     '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_MENU_ITEM'))) . '"></i>',
     '&nbsp;'
 );

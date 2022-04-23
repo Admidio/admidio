@@ -348,7 +348,7 @@
   <string name="ORG_TIME_FORMAT_DESC">O formato entra em conflito com a função PHP #VAR1#. (padrão: H:i)</string>
   <string name="ORG_TIMEZONE">Fuso horário</string>
   <string name="ORG_TIMEZONE_DESC">Este é o fuso horário atual. Se modificado no config.php do Admidio, as novas datas e horários não serão ajustados ao novo fuso.</string>
-  <string name="ORG_URL">URL</string>
+  <string name="SYS_URL">URL</string>
   <string name="ORG_VALUE_LIST">Lista de valores</string>
   <string name="ORG_VALUE_LIST_DESC">Neste campo, pode inserir entradas para o menu suspenso ou botões de rádio. Cada linha será considerada uma entrada diferente. Os perfis não guardam o texto propriamente dito, mas a sua posição na lista. Se mudares o texto numa linha, todos os usuários atribuídos receberão o novo texto em seus perfis, mas se moveres uma entrada para outra linha, os usuários podem receber outro entrada ao invés. Com um campo opcional, um ícone pode ser exibido ao invés de um texto. Podem ser especificados o nome de um ícone do diretório do tema (ex: ok.png) ou o url de uma imagem externa (ex: www.exemplo.com/exemplo.jpg). Legendas podem ser definidas através de uma barra vertical (ex: female.png | mulher).</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Link de ativação para a nova palavra-passe</string>

@@ -344,7 +344,6 @@
   <string name="ORG_TIME_FORMAT_DESC">Format complies with PHP function #VAR1#. (default: H:i)</string>
   <string name="ORG_TIMEZONE">Time zone</string>
   <string name="ORG_TIMEZONE_DESC">This is the set time zone. If this is changed later in the config.php file of Admidio, already recorded dates and times are not adjusted to the new time zone.</string>
-  <string name="ORG_URL">URL</string>
   <string name="ORG_VALUE_LIST">Value list</string>
   <string name="ORG_VALUE_LIST_DESC">In this field, you can enter the entries for the drop-down list box or the option field. For each line, an entry of the drop-down list field or the option field can be entered here.\n\nThe profile is not stored as text later, but the selected position from the list. If you change the text in a line, all users already assigned will immediately see the new text in their profile. However, if you move an entry into another line, users may see a different entry.\n\nAn option field can be displayed as icon instead of a text. The name of an icon from the theme folder (ex: ok.png) or the url of an external image (example: https://www.example.com/example.jpg) can be specified. A tooltip for the icon (eg female.png|female) can optionally be set via a vertical divider.</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Activation link for the new password</string>
@@ -611,7 +610,8 @@
   <string name="SYS_COMMENT">Comment</string>
   <string name="SYS_COMMON">General</string>
   <string name="SYS_COMPLEMENT">Complement</string>
-  <string name="SYS_CONDITION">Requirement</string>
+  <string name="SYS_CONDITION">Condition</string>
+  <string name="SYS_CONDITIONS">Conditions</string>
   <string name="SYS_CONFIGURATION">Configuration</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Permission to use configuration for all members</string>
   <string name="SYS_CONFIGURATION_DELETE">Would you like to delete selected list configuration?</string>
@@ -704,6 +704,7 @@
   <string name="SYS_DEFAULT_LIST">Default list</string>
   <string name="SYS_DEFAULT_LIST_DESC">In case there is a member list for this role to be displayed and no list configuration is specified, the list is displayed in the system-wide selected standard list configuration. Using this field for an individual role, a different configuration list can be selected which is displayed when no configuration list is preset.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">No default list configuration set defined by the administrator!\n\nContact system administrator for help.</string>
+  <string name="SYS_DEFAULT_VALUE">Default value</string>
   <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="SYS_DELETE">Delete</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>
@@ -1038,7 +1039,7 @@
   <string name="SYS_MULTIPLE_RECIPIENTS">Multiple recipients</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-mails to multiple recipients contain all recipients in the BCC field. This ensures that nobody sees the e-mail addresses of the other recipients. However, the TO field must also be filled. This setting can be used to define what is entered in the recipient (TO) field. This could be a hidden value "Undisclosed Recipients", but this causes problems with some providers. Alternatively the recipient field (TO) can be filled with the sender address or the administrator address from the system notifications. Note: All emails to multiple recipients will then also be sent to the email address in the recipient field (TO). (Default: Sender)</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">The role \'administrator\' must have at least one member assigned!</string>
-  <string name="SYS_MYLIST_CONDITION_DESC">Define requirements of all fields used in your new list configuration. Requirements of selected role will be limited by your own requirements.</string>
+  <string name="SYS_MYLIST_CONDITION_DESC">Define conditions of all fields used in your new list configuration. Conditions of selected role will be limited by your own conditions.</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Short name</string>
   <string name="SYS_NEW_BETA_AVAILABLE">A new beta version is available!</string>
@@ -1178,6 +1179,8 @@
   <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Adopt all data from the registration for the existing user</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">If a newly registered user already exists in the database, all data from the registration will be transferred to the existing user if this setting is set. If this setting is not set, only the user name and the password are taken over. In case of users, which did not exist before, all data from the registration will always be taken over, independent of this setting. (Default: yes)</string>
+  <string name="SYS_REGULAR_EXPRESSION">Regular expression</string>
+  <string name="SYS_REGULAR_EXPRESSION_DESC">Any regular expression can be stored that will be applied to the user's entered content in this profile field. The content must match the conditions of the regular expression for the entered value to be stored in the field. The regular expression is checked in addition to the general conditions of the data type.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationship configuration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relationship configurations</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">If set, then a user can edit the profile of another user to which he is related to. For an asymmetric relationship, the right is assigned separately for each relationship, and for a symmetric relationship, both users can edit the other profile, and in case of a unidirectional relationship, only the user with the relationship stored can edit the other profile.</string>
@@ -1399,6 +1402,7 @@
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
   <string name="SYS_UPLOAD_NAME_ERROR">The file name can not be named \"Submit\".</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
+  <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
   <string name="SYS_USER">User</string>
   <string name="SYS_USER_COULD_BE_CREATED">The Person could be created.</string>

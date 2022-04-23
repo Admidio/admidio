@@ -352,7 +352,7 @@
   <string name="ORG_TIME_FORMAT_DESC">Muoto on PHP -funktion #VAR1# mukainen. (oletus: H:i)</string>
   <string name="ORG_TIMEZONE">Aikavyöhyke</string>
   <string name="ORG_TIMEZONE_DESC">Tämä on asetettu aikavyöhyke. Jos tämä muutetaan myöhemmin Admidion config.php -tiedostossa, jo tallennettuja päivämääriä ja aikoja ei muuteta uuteen aikavyöhykkeeseen.</string>
-  <string name="ORG_URL">URL -osoite</string>
+  <string name="SYS_URL">URL -osoite</string>
   <string name="ORG_VALUE_LIST">Arvoluettelo</string>
   <string name="ORG_VALUE_LIST_DESC">Tässä kentässä voit syöttää avattavan luetteloruudun tai vaihtoehtojen kentät. Jokaiselle riville voidaan syöttää avattavan luettelokentän tai vaihtoehtoisen kentän merkintä. \n \nProfiilia ei tallenneta myöhemmin tekstinä, vaan valittu paikka luettelosta. Jos muutat rivin tekstiä, kaikki jo määritetyt käyttäjät näkevät heti uuden tekstin profiilissaan. Jos kuitenkin siirrät merkinnän toiselle riville, käyttäjät voivat nähdä toisen merkinnän. \n \nVaihtoehtokenttä voidaan näyttää kuvakkeena tekstin sijasta. Teema -kansion kuvakkeen nimi (esim. Ok.png) tai ulkoisen kuvan URL -osoite (esimerkki: https://www.example.com/example.jpg) voidaan määrittää. Työkaluvihje kuvakkeelle (esim. Female.png | female) voidaan vaihtoehtoisesti asettaa pystysuoran jakajan kautta.</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Uuden salasanan aktivointilinkki</string>

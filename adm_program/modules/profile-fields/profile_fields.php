@@ -168,7 +168,7 @@ while ($row = $statement->fetch()) {
                            'PHONE'        => $gL10n->get('SYS_PHONE'),
                            'TEXT'         => $gL10n->get('SYS_TEXT').' (100)',
                            'TEXT_BIG'     => $gL10n->get('SYS_TEXT').' (4000)',
-                           'URL'          => $gL10n->get('ORG_URL'),
+                           'URL'          => $gL10n->get('SYS_URL'),
                            'NUMBER'       => $gL10n->get('SYS_NUMBER'),
                            'DECIMAL'      => $gL10n->get('SYS_DECIMAL_NUMBER'));
 

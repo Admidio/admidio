@@ -1582,6 +1582,25 @@ class User extends TableAccess
     }
 
     /**
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
+     * If the sql find more than one record the method returns **false**.
+     * Per default all columns of the default table will be read and stored in the object.
+     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams       The query params for the prepared statement
+     * @return bool Returns **true** if one record is found
+     * @see TableAccess#readDataById
+     * @see TableAccess#readDataByColumns
+     */
+    protected function readData($sqlWhereCondition, array $queryParams = array())
+    {
+        if(parent::readData($sqlWhereCondition, $queryParams)) {
+            $this->setDefaultValues();
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Reads a user record out of the table adm_users in database selected by the unique user id.
      * Also all profile fields of the object **mProfileFieldsData** will be read.
      * @param int $userId Unique id of the user that should be read
@@ -1742,6 +1761,21 @@ class User extends TableAccess
     }
 
     /**
+     * Set the default values that are stored in the profile fields configuration to each profile field.
+     * A default value will only be set if **usf_default_value** is not NULL.
+     * @return void
+     */
+    public function setDefaultValues()
+    {
+        foreach ($this->mProfileFieldsData->getProfileFields() as $profileField) {
+            $defaultValue = $profileField->getValue('usf_default_value');
+            if($defaultValue !== '') {
+                $this->setValue($defaultValue);
+            }
+        }
+    }
+
+    /**
      * Set the id of the organization which should be used in this user object.
      * The organization is used to read the rights of the user. If **setOrganization** isn't called
      * than the default organization **gCurrentOrganization** is set for the current user object.
@@ -1805,6 +1839,17 @@ class User extends TableAccess
         }
 
         return false;
+    }
+
+    /**
+     * set value for column usd_value of field
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
+     * @param mixed  $fieldValue
+     * @return bool
+     */
+    public function setProfileFieldsValue($fieldNameIntern, $fieldValue)
+    {
+        return $this->mProfileFieldsData->setValue($fieldNameIntern, $fieldValue);
     }
 
     /**
@@ -1934,17 +1979,6 @@ class User extends TableAccess
         }
 
         return $returnCode;
-    }
-
-    /**
-     * set value for column usd_value of field
-     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
-     * @param mixed  $fieldValue
-     * @return bool
-     */
-    public function setProfileFieldsValue($fieldNameIntern, $fieldValue)
-    {
-        return $this->mProfileFieldsData->setValue($fieldNameIntern, $fieldValue);
     }
 
     /**
