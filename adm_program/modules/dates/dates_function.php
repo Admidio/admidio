@@ -392,80 +392,89 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     // if necessary write away role for participation
     // ----------------------------------------------
 
-    if ($_POST['date_registration_possible'] == 1 && strlen($date->getValue('dat_rol_id')) === 0) {
-        // create role for participations
-        if ($getCopy) {
-            // copy original role with their settings
-            $sql = 'SELECT dat_rol_id
-                      FROM '.TBL_DATES.'
-                     WHERE dat_uuid = ?';
-            $pdoStatement = $gDb->queryPrepared($sql, array($originalDateUuid));
+    try {
+        if($_POST['date_registration_possible'] == 1) {
+            if ($date->getValue('dat_rol_id') > 0) {
+                // if event exists and you could register to this event then we must check
+                // if the data of the role must be changed
+                $role = new TableRoles($gDb, (int)$date->getValue('dat_rol_id'));
 
-            $role = new TableRoles($gDb, (int) $pdoStatement->fetchColumn());
-            $role->setValue('rol_id', '0');
-        } else {
-            // Read category for event participation
-            $sql = 'SELECT cat_id
-                      FROM '.TBL_CATEGORIES.'
+                $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
+                $role->setValue('rol_description', substr($date->getValue('dat_description'), 0, 3999));
+                // role members are allowed to view lists
+                $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? 1 : 0);
+                // role members are allowed to send mail to this role
+                $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? 1 : 0);
+                $role->setValue('rol_max_members', (int)$date->getValue('dat_max_members'));
+
+                $role->save();
+            } else {
+                // create role for participation
+                if ($getCopy) {
+                    // copy original role with their settings
+                    $sql = 'SELECT dat_rol_id
+                      FROM ' . TBL_DATES . '
+                     WHERE dat_uuid = ?';
+                    $pdoStatement = $gDb->queryPrepared($sql, array($originalDateUuid));
+
+                    $role = new TableRoles($gDb, (int)$pdoStatement->fetchColumn());
+                    $role->setValue('rol_id', '0');
+                } else {
+                    // Read category for event participation
+                    $sql = 'SELECT cat_id
+                      FROM ' . TBL_CATEGORIES . '
                      WHERE cat_name_intern = \'EVENTS\'
                        AND cat_org_id = ?';
-            $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
-            $role = new TableRoles($gDb);
+                    $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
+                    $role = new TableRoles($gDb);
+                    $role->setType(TableRoles::ROLE_EVENT);
 
-            // these are the default settings for a date role
-            $role->setValue('rol_cat_id', (int) $pdoStatement->fetchColumn());
-            // role members are allowed to view lists
-            $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? 1 : 0);
-            // role members are allowed to send mail to this role
-            $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? 1 : 0);
-            $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations
-            $role->setValue('rol_max_members', (int) $_POST['dat_max_members']);
+                    // these are the default settings for a date role
+                    $role->setValue('rol_cat_id', (int)$pdoStatement->fetchColumn());
+                    // role members are allowed to view lists
+                    $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? 1 : 0);
+                    // role members are allowed to send mail to this role
+                    $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? 1 : 0);
+                    $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations
+                    $role->setValue('rol_max_members', (int)$_POST['dat_max_members']);
+                }
+
+                $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline', 'database'));
+                $role->setValue('rol_description', substr($date->getValue('dat_description', 'database'), 0, 3999));
+
+                $role->save();
+
+                // match dat_rol_id (reference between event and role)
+                $date->setValue('dat_rol_id', (int)$role->getValue('rol_id'));
+                $date->save();
+            }
+
+            // check if flag is set that current user wants to participate as leader to the date
+            if (isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1
+                && !$gCurrentUser->isLeaderOfRole((int)$date->getValue('dat_rol_id'))) {
+                // user wants to participate -> add him to date and set approval state to 2 ( user attend )
+                $member = new TableMembers($gDb);
+                $member->startMembership((int)$role->getValue('rol_id'), $user->getValue('usr_id'), true, 2);
+            } elseif (!isset($_POST['date_current_user_assigned'])
+                && $gCurrentUser->isMemberOfRole((int)$date->getValue('dat_rol_id'))) {
+                // user does't want to participate as leader -> remove his participation as leader from the event,
+                // dont remove the participation itself!
+                $member = new TableMembers($gDb);
+                $member->readDataByColumns(array('mem_rol_id' => (int)$role->getValue('rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
+                $member->setValue('mem_leader', 0);
+                $member->save();
+            }
+        } else {
+            if($date->getValue('dat_rol_id') > 0) {
+                // date participation was deselected -> delete flag in event and than delete role
+                $role = new TableRoles($gDb, (int)$date->getValue('dat_rol_id'));
+                $date->setValue('dat_rol_id', '');
+                $date->save();
+                $role->delete();
+            }
         }
-
-        $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline', 'database'));
-        $role->setValue('rol_description', substr($date->getValue('dat_description', 'database'), 0, 3999));
-
-        $role->save();
-
-        // match dat_rol_id (reference between event and role)
-        $date->setValue('dat_rol_id', (int) $role->getValue('rol_id'));
-        $date->save();
-    } elseif ($_POST['date_registration_possible'] == 0 && $date->getValue('dat_rol_id') > 0) {
-        // date participation was deselected -> delete flag in event and than delete role
-        $role = new TableRoles($gDb, (int) $date->getValue('dat_rol_id'));
-        $date->setValue('dat_rol_id', '');
-        $date->save();
-        $role->delete();
-    } elseif ($_POST['date_registration_possible'] == 1 && $date->getValue('dat_rol_id') > 0) {
-        // if event exists and you could register to this event then we must check
-        // if the data of the role must be changed
-        $role = new TableRoles($gDb, (int) $date->getValue('dat_rol_id'));
-
-        $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
-        $role->setValue('rol_description', substr($date->getValue('dat_description'), 0, 3999));
-        // role members are allowed to view lists
-        $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? 1 : 0);
-        // role members are allowed to send mail to this role
-        $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? 1 : 0);
-        $role->setValue('rol_max_members', (int) $date->getValue('dat_max_members'));
-
-        $role->save();
-    }
-
-    // check if flag is set that current user wants to participate as leader to the date
-    if (isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1
-    && !$gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id'))) {
-        // user wants to participate -> add him to date and set approval state to 2 ( user attend )
-        $member = new TableMembers($gDb);
-        $member->startMembership((int) $role->getValue('rol_id'), $user->getValue('usr_id'), true, 2);
-    } elseif (!isset($_POST['date_current_user_assigned'])
-    && $gCurrentUser->isMemberOfRole((int) $date->getValue('dat_rol_id'))) {
-        // user does't want to participate as leader -> remove his participation as leader from the event,
-        // dont remove the participation itself!
-        $member = new TableMembers($gDb);
-        $member->readDataByColumns(array('mem_rol_id' => (int) $role->getValue('rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
-        $member->setValue('mem_leader', 0);
-        $member->save();
+    } catch (AdmException $e) {
+        $e->showHtml();
     }
 
     $gDb->endTransaction();

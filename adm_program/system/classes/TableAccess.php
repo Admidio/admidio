@@ -299,6 +299,7 @@ class TableAccess
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readDataById
+     * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
     protected function readData($sqlWhereCondition, array $queryParams = array())
@@ -359,6 +360,7 @@ class TableAccess
      * @param int $id Unique id of id column of the table.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
+     * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
     public function readDataById($id)
@@ -383,6 +385,7 @@ class TableAccess
      * @param int $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
+     * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
      */
     public function readDataByUuid($uuid)
@@ -417,6 +420,7 @@ class TableAccess
      * ```
      * @see TableAccess#readData
      * @see TableAccess#readDataById
+     * @see TableAccess#readDataByUuid
      */
     public function readDataByColumns(array $columnArray)
     {
