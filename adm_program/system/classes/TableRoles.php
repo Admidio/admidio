@@ -11,12 +11,14 @@
 
 /**
  * This class is used to create a role object.
- * A role can be administered over this class in the data base.
+ * A role can be administered over this class in the database.
  * For this purpose the information of the role as well as the associated category
  * are read out. But only the role data are written
  */
 class TableRoles extends TableAccess
 {
+    public const ROLE_GROUP = 0;
+    public const ROLE_EVENT = 1;
     /**
      * @var int number of leaders of this role
      */
@@ -25,6 +27,10 @@ class TableRoles extends TableAccess
      * @var int number of members (without leaders) of this role
      */
     protected $countMembers;
+    /**
+     * @var int Represents the type of the role that could be ROLE_GROUP (default) or ROLE_EVENT
+     */
+    protected $type;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_roles.
@@ -156,9 +162,9 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * die Funktion gibt die Anzahl freier Plaetze zurueck
-     * ist rol_max_members nicht gesetzt so wird INF zurueckgegeben
-     * @param bool $countLeaders
+     * Returns the number of available places within this role for participants. If **rol_max_members** is not set
+     * than the method returns INF.
+     * @param bool $countLeaders Flag if the leaders should be count as participants. As per default they will not count.
      * @return int|float
      */
     public function countVacancies($countLeaders = false)
@@ -185,7 +191,7 @@ class TableRoles extends TableAccess
 
     /**
      * Deletes the selected role of the table and all references in other tables.
-     * After that the class will be initialize.
+     * After that the class will be initialized.
      * @throws AdmException
      * @return bool **true** if no error occurred
      */
@@ -243,7 +249,7 @@ class TableRoles extends TableAccess
 
         if ($gCurrentSession instanceof Session) {
             // all active users must renew their user data because maybe their
-            // rights have been changed if they where members of this role
+            // rights have been changed if they were members of this role
             $gCurrentSession->reloadAllSessions();
         }
 
@@ -293,7 +299,7 @@ class TableRoles extends TableAccess
             return $defaultListId;
         }
 
-        if ($this->getValue('cat_name_intern') === 'EVENTS') {
+        if ($this->type === TableRoles::ROLE_EVENT) {
             // read system default list configuration for events
             return $gSettingsManager->getInt('dates_default_list_configuration');
         } else {
@@ -362,9 +368,9 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to view this role. Therefore
+     * This method checks if the current user is allowed to view this role. Therefore,
      * the view properties of the role will be checked. If it's an event role than
-     * we also check if the user is a member of the roles that could participate to the event.
+     * we also check if the user is a member of the roles that could participate at the event.
      * @return bool Return true if the current user is allowed to view this role
      */
     public function isVisible()
@@ -377,7 +383,7 @@ class TableRoles extends TableAccess
 
         $rolId = (int) $this->getValue('rol_id');
 
-        if ($this->getValue('cat_name_intern') !== 'EVENTS') {
+        if ($this->type === TableRoles::ROLE_EVENT) {
             return $gCurrentUser->hasRightViewRole($rolId);
         }
 
@@ -396,9 +402,35 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
+     * If the sql find more than one record the method returns **false**.
+     * Per default all columns of the default table will be read and stored in the object.
+     * If one record is found than the type of the role (ROLE_GROUP or ROLE_EVENT) is set.
+     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams       The query params for the prepared statement
+     * @return bool Returns **true** if one record is found
+     * @see TableAccess#readDataById
+     * @see TableAccess#readDataByUuid
+     * @see TableAccess#readDataByColumns
+     */
+    protected function readData($sqlWhereCondition, array $queryParams = array())
+    {
+        if (parent::readData($sqlWhereCondition, $queryParams)) {
+            if($this->getValue('cat_name_intern') === 'EVENTS') {
+                $this->setType(TableRoles::ROLE_EVENT);
+            } else {
+                $this->setType(TableRoles::ROLE_GROUP);
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
-     * If the table has columns for creator or editor than these column with their timestamp will be updated.
+     * If the table has columns for creator or editor than these columns with their timestamp will be updated.
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
@@ -409,16 +441,19 @@ class TableRoles extends TableAccess
 
         $fieldsChanged = $this->columnsValueChanged;
 
-        if (!$this->saveChangesWithoutRights && !in_array((int) $this->getValue('rol_cat_id'), $gCurrentUser->getAllEditableCategories('ROL'), true)) {
+        // the right to edit roles should only be checked for group roles and not for event roles
+        if (!$this->saveChangesWithoutRights
+        && $this->type === TableRoles::ROLE_GROUP
+        && !in_array((int) $this->getValue('rol_cat_id'), $gCurrentUser->getAllEditableCategories('ROL'), true)) {
             throw new AdmException('Role could not be saved because you are not allowed to edit roles of this category.');
         }
 
         $returnValue = parent::save($updateFingerPrint);
 
-        // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
+        // after saving check if user objects have to be read in again
         if ($fieldsChanged && $gCurrentSession instanceof Session) {
             // all active users must renew their user data because maybe their
-            // rights have been changed if they where members of this role
+            // rights have been changed if they were members of this role
             $gCurrentSession->reloadAllSessions();
         }
 
@@ -426,8 +461,8 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * aktuelle Rolle wird auf aktiv gesetzt
-     * @return bool
+     * Set the current role active.
+     * @return bool Returns **true** if the role could be set to active.
      */
     public function setActive()
     {
@@ -435,8 +470,8 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * aktuelle Rolle wird auf inaktiv gesetzt
-     * @return bool
+     * Set the current role inactive.
+     * @return bool Returns **true** if the role could be set to inactive.
      */
     public function setInactive()
     {
@@ -492,6 +527,19 @@ class TableRoles extends TableAccess
     }
 
     /**
+     * Set the type of the role. This could be a role that represents a group ROLE_GROUP that will be used in the
+     * groups and roles module or participants of an event ROLE_EVENT that will be used within the event module.
+     * @param int $type Represents the type of the role that could be ROLE_GROUP (default) or ROLE_EVENT
+     * @return void
+     */
+    public function setType($type)
+    {
+        if($type === TableRoles::ROLE_GROUP || $type === TableRoles::ROLE_EVENT) {
+            $this->type = $type;
+        }
+    }
+
+    /**
      * @param bool $status
      * @return bool
      */
@@ -499,7 +547,7 @@ class TableRoles extends TableAccess
     {
         global $gCurrentSession;
 
-        // die Systemrollem sind immer aktiv
+        // system roles are always active and could therefore not be toggled
         if ((int) $this->getValue('rol_system') === 0) {
             $sql = 'UPDATE '.TBL_ROLES.'
                        SET rol_valid = ? -- $status
@@ -507,7 +555,7 @@ class TableRoles extends TableAccess
             $this->db->queryPrepared($sql, array((bool) $status, (int) $this->getValue('rol_id')));
 
             // all active users must renew their user data because maybe their
-            // rights have been changed if they where members of this role
+            // rights have been changed if they were members of this role
             $gCurrentSession->reloadAllSessions();
 
             return true;

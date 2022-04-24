@@ -635,6 +635,7 @@ class TableFolder extends TableAccess
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readDataById
+     * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
     protected function readData($sqlWhereCondition, array $queryParams = array())
