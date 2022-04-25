@@ -705,7 +705,7 @@ class TableAccess
 
         if (array_key_exists($columnName, $this->dbColumns)) {
             // only mark as "changed" if the value is different (DON'T use binary safe function!)
-            if ($this->dbColumns[$columnName] != $newValue) {
+            if (strcmp((string) $this->dbColumns[$columnName], (string) $newValue) !== 0) {
                 $this->dbColumns[$columnName] = $newValue;
                 $this->columnsValueChanged = true;
                 $this->columnsInfos[$columnName]['changed'] = true;
