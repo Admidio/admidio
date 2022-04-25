@@ -709,7 +709,6 @@ class TableAccess
             $this->dbColumns[$columnName] = $newValue;
             $this->columnsValueChanged = true;
             $this->columnsInfos[$columnName]['changed'] = true;
-            return true;
         }
 
         return true;
