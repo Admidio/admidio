@@ -22,9 +22,9 @@ class ListConfiguration extends TableLists
      */
     protected $columns = array();
     /**
-     * @var array<int,string> Array each column name within the sql statement e.g. LAST_NAME or mem_begin
+     * @var array<int,string> Array with the usr_id as key and the first name, last name as values
      */
-    protected $columnsSqlName = array();
+    protected $arrUserNames = array();
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
@@ -209,10 +209,16 @@ class ListConfiguration extends TableLists
                 }
             }
         } elseif (in_array($column->getValue('lsc_special_field'), array('usr_usr_id_create', 'usr_usr_id_change', 'mem_usr_id_change')) && (int) $content) {
-            // Get User Information
-            $user = new User($gDb, $gProfileFields, $content);
+            // Get User Information and store information in array
+            $userId = (int) $content;
 
-            $content = $user->getValue('LAST_NAME').', '.$user->getValue('FIRST_NAME');
+            if(array_key_exists($userId, $this->arrUserNames)) {
+                $content = $this->arrUserNames[$userId];
+            } else {
+                $user = new User($gDb, $gProfileFields, $userId);
+                $content = $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME');
+                $this->arrUserNames[$userId] = $content;
+            }
         }
 
         // format value for csv export
