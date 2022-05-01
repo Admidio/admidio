@@ -672,8 +672,8 @@
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATED_AT">Angelegt am</string>
+  <string name="SYS_CREATED_BY">Angelegt von</string>
   <string name="SYS_CREATED_BY_AND_AT">Angelegt von #VAR1# am #VAR2#</string>
-  <string name="SYS_CREATED_AT">Erstellungsdatum</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Aktuelle Datenbankversion</string>
   <string name="SYS_CURRENT_MEMBER">Aktuelles Mitglied</string>

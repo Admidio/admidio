@@ -249,12 +249,24 @@ foreach ($gProfileFields->getProfileFields() as $field) {
 
                 userFields[' . ++$i . '] = {
                     "cat_name": userFields[1]["cat_name"],
+                    "usf_name": "'.$gL10n->get('SYS_CREATED_BY').'",
+                    "usf_name_intern": "usr_usr_id_create"
+                    };
+
+                userFields[' . ++$i . '] = {
+                    "cat_name": userFields[1]["cat_name"],
                     "usf_name": "'.$gL10n->get('SYS_CREATED_AT').'",
                     "usf_name_intern": "usr_timestamp_create"
                     };
 
-            userFields[' . ++$i . '] = {
-                "cat_name": userFields[1]["cat_name"],
+                userFields[' . ++$i . '] = {
+                    "cat_name": userFields[1]["cat_name"],
+                    "usf_name": "'.$gL10n->get('SYS_CHANGED_BY').'",
+                    "usf_name_intern": "usr_usr_id_change"
+                    };
+
+                userFields[' . ++$i . '] = {
+                    "cat_name": userFields[1]["cat_name"],
                     "usf_name": "'.$gL10n->get('SYS_CHANGED_AT').'",
                     "usf_name_intern": "usr_timestamp_change"
                     };
