@@ -100,7 +100,7 @@ if ($getMode === 'show_list') {
     // create array with all column heading values
     $columnHeading = array(
         $gL10n->get('SYS_BACKUP_FILE'),
-        $gL10n->get('SYS_CREATION_DATE'),
+        $gL10n->get('SYS_CREATED_AT'),
         $gL10n->get('SYS_SIZE'),
         '&nbsp;'
     );

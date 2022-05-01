@@ -356,7 +356,7 @@
   <string name="SYS_CREATE_NEW_USER">Crear un nuevo Usuario</string>
   <string name="SYS_CREATE_ROLE">crear rol</string>
   <string name="SYS_CREATE_MEMBER">Crear usuario</string>
-  <string name="SYS_CREATION_DATE">Fecha de creación</string>
+  <string name="SYS_CREATED_AT">Fecha de creación</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_DATABASE">Base de datos</string>
   <string name="SYS_DATABASE_BACKUP">Respaldo (backup) de la base de datos.</string>

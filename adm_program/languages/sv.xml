@@ -654,8 +654,8 @@
   <string name="SYS_CREATE_ROLE">Skapa roll</string>
   <string name="SYS_CREATE_MEMBER">Skapa användare</string>
   <string name="SYS_CREATE_VAR">Skapa #VAR1#</string>
-  <string name="SYS_CREATED_BY">Skapad av #VAR1# på #VAR2#</string>
-  <string name="SYS_CREATION_DATE">Skapad</string>
+  <string name="SYS_CREATED_BY_AND_AT">Skapad av #VAR1# på #VAR2#</string>
+  <string name="SYS_CREATED_AT">Skapad</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Nuvarande databasversion</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Ingen giltig e-postadress har angetts!\n\n Ange en e-postadress i din #VAR1# -profil #VAR2#.</string>

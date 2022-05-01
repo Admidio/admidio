@@ -77,7 +77,7 @@
   <string name="SYS_COUNTER">Kihesabuji</string>
   <string name="SYS_CREATE_FOLDER">Tengeneza folda</string>
   <string name="SYS_CREATE_FOLDER_DESC">Folda jipya litatengenezwa kwenye folda #VAR1_BOLD#.</string>
-  <string name="SYS_CREATION_DATE">Imetengenezwa</string>
+  <string name="SYS_CREATED_AT">Imetengenezwa</string>
   <string name="SYS_DATABASE_BACKUP">Chelezo ya hazinadata</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Tengeneza na pakua chelezo za hazinadata za Majedwali ya Admidio.</string>
   <string name="SYS_DAYS_VAR">Siku #VAR1#</string>

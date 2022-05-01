@@ -96,7 +96,7 @@
   <string name="SYS_COUNTER">计数器</string>
   <string name="SYS_CREATE_FOLDER">创建文件夹</string>
   <string name="SYS_CREATE_MEMBER">创建用户</string>
-  <string name="SYS_CREATION_DATE">创建于</string>
+  <string name="SYS_CREATED_AT">创建于</string>
   <string name="SYS_DATABASE_BACKUP">数据库备份</string>
   <string name="SYS_DATABASE_BACKUP_DESC">创建和下载系统表的数据库备份。</string>
   <string name="SYS_DAYS_FIELD_HISTORY">字段历史记录的默认时间段(天)</string>

@@ -543,7 +543,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
                                '">' . $userNameCreated . '</a>';
         }
 
-        $html .= '<span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY', array($userNameCreated, $timestampCreate)) . '</span>';
+        $html .= '<span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY_AND_AT', array($userNameCreated, $timestampCreate)) . '</span>';
     }
 
     // compose name of user who edit the recordset

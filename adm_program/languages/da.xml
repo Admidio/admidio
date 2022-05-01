@@ -668,8 +668,8 @@
   <string name="SYS_CREATE_RELATIONSHIP">Opret relation</string>
   <string name="SYS_CREATE_ROLE">Opret rolle</string>
   <string name="SYS_CREATE_VAR">Opret #VAR1#</string>
-  <string name="SYS_CREATED_BY">Oprettet af #VAR1# den #VAR2#</string>
-  <string name="SYS_CREATION_DATE">Oprettet den</string>
+  <string name="SYS_CREATED_BY_AND_AT">Oprettet af #VAR1# den #VAR2#</string>
+  <string name="SYS_CREATED_AT">Oprettet den</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Nuværende database version</string>
   <string name="SYS_CURRENT_MEMBER">Nuværende medlem</string>
