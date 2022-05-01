@@ -658,8 +658,8 @@
   <string name="SYS_CREATE_RELATIONSHIP">Create relationship</string>
   <string name="SYS_CREATE_ROLE">Create role</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
-  <string name="SYS_CREATED_BY">Created by #VAR1# on #VAR2#</string>
-  <string name="SYS_CREATION_DATE">Created on</string>
+  <string name="SYS_CREATED_AT">Created at</string>
+  <string name="SYS_CREATED_BY_AND_AT">Created by #VAR1# at #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Current database version</string>
   <string name="SYS_CURRENT_MEMBER">Current member</string>
@@ -941,6 +941,7 @@
   <string name="SYS_LANDSCAPE" description="Format for printing">Landscape</string>
   <string name="SYS_LANGUAGE">Language</string>
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Is your language missing or do you want to translate more texts or improve existing translations? Then have a look at #VAR1#Wiki page of Admidio#VAR2# to see how you can help with the translation.</string>
+  <string name="SYS_LAST_EDITED">Last edited</string>
   <string name="SYS_LAST_EDITED_BY">Last edited by #VAR1# on #VAR2#</string>
   <string name="SYS_LASTNAME">Surname</string>
   <string name="SYS_LATER">Later</string>

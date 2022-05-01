@@ -668,8 +668,8 @@
   <string name="SYS_CREATE_RELATIONSHIP">Maak relatie</string>
   <string name="SYS_CREATE_ROLE">Maak rol</string>
   <string name="SYS_CREATE_VAR">Maak #VAR1#</string>
-  <string name="SYS_CREATED_BY">Gemaakt door #VAR1# op #VAR2#</string>
-  <string name="SYS_CREATION_DATE">Gemaakt op</string>
+  <string name="SYS_CREATED_BY_AND_AT">Gemaakt door #VAR1# op #VAR2#</string>
+  <string name="SYS_CREATED_AT">Gemaakt op</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Huidige database-versie</string>
   <string name="SYS_CURRENT_MEMBER">Huidig lid</string>

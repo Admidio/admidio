@@ -645,8 +645,8 @@
   <string name="SYS_CREATE_ROLE">Création de rôles</string>
   <string name="SYS_CREATE_MEMBER">Créer un membre</string>
   <string name="SYS_CREATE_VAR">Créer #VAR1#</string>
-  <string name="SYS_CREATED_BY">Créé par #VAR1# le #VAR2#</string>
-  <string name="SYS_CREATION_DATE">Date de création</string>
+  <string name="SYS_CREATED_BY_AND_AT">Créé par #VAR1# le #VAR2#</string>
+  <string name="SYS_CREATED_AT">Date de création</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Version actuelle de la base de données</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Tu n\'as pas entré d\'adresse courriel valide ! \n\nEntre une adresse courriel dans ton #VAR1#Profile#VAR2#.</string>
