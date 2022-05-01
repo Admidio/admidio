@@ -169,6 +169,14 @@ class ListConfiguration extends TableLists
                 $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
                 $content = $arrListValues[$content];
             }
+        } elseif ($column->getValue('lsc_special_field') === 'usr_timestamp_create'
+            || $column->getValue('lsc_special_field') === 'usr_timestamp_change'
+            || $column->getValue('lsc_special_field') === 'mem_timestamp_change') {
+            if (strlen($content) > 0) {
+                // date must be formated
+                $date = \DateTime::createFromFormat('Y-m-d H:i:s', $content);
+                $content = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+            }
         } elseif ($column->getValue('lsc_special_field') === 'mem_approved') {
             // Assign Integer to Language strings
             switch ((int) $content) {
