@@ -668,8 +668,8 @@
   <string name="SYS_CREATE_RELATIONSHIP">Luo suhde</string>
   <string name="SYS_CREATE_ROLE">Luo rooli</string>
   <string name="SYS_CREATE_VAR">Luo #VAR1#</string>
-  <string name="SYS_CREATED_BY">Tekijä #VAR1# on #VAR2#</string>
-  <string name="SYS_CREATION_DATE">Luotu</string>
+  <string name="SYS_CREATED_BY_AND_AT">Tekijä #VAR1# on #VAR2#</string>
+  <string name="SYS_CREATED_AT">Luotu</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Tietokannan nykyinen versio</string>
   <string name="SYS_CURRENT_MEMBER">Nykyinen jäsen </string>

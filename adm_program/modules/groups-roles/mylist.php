@@ -234,12 +234,6 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         $javascriptCode .= '
             userFields[' . ++$i . '] = {
                 "cat_name": userFields[1]["cat_name"],
-                "usf_name": "'.$gL10n->get('SYS_USERNAME').'",
-                "usf_name_intern": "usr_login_name"
-            };
-
-            userFields[' . ++$i . '] = {
-                "cat_name": userFields[1]["cat_name"],
                 "usf_name": "'.$gL10n->get('SYS_PHOTO').'",
                 "usf_name_intern": "usr_photo"
             };';
@@ -247,6 +241,36 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         // administrator could export the uuid of each user to identify the user later at the import
         if($gCurrentUser->editUsers()) {
             $javascriptCode .= '
+                userFields[' . ++$i . '] = {
+                    "cat_name": userFields[1]["cat_name"],
+                    "usf_name": "'.$gL10n->get('SYS_USERNAME').'",
+                    "usf_name_intern": "usr_login_name"
+                };
+
+                userFields[' . ++$i . '] = {
+                    "cat_name": userFields[1]["cat_name"],
+                    "usf_name": "'.$gL10n->get('SYS_CREATED_BY').'",
+                    "usf_name_intern": "usr_usr_id_create"
+                    };
+
+                userFields[' . ++$i . '] = {
+                    "cat_name": userFields[1]["cat_name"],
+                    "usf_name": "'.$gL10n->get('SYS_CREATED_AT').'",
+                    "usf_name_intern": "usr_timestamp_create"
+                    };
+
+                userFields[' . ++$i . '] = {
+                    "cat_name": userFields[1]["cat_name"],
+                    "usf_name": "'.$gL10n->get('SYS_CHANGED_BY').'",
+                    "usf_name_intern": "usr_usr_id_change"
+                    };
+
+                userFields[' . ++$i . '] = {
+                    "cat_name": userFields[1]["cat_name"],
+                    "usf_name": "'.$gL10n->get('SYS_CHANGED_AT').'",
+                    "usf_name_intern": "usr_timestamp_change"
+                    };
+
                 userFields[' . ++$i . '] = {
                     "cat_name": userFields[1]["cat_name"],
                     "usf_name": "'.$gL10n->get('SYS_UNIQUE_ID').'",

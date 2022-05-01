@@ -668,8 +668,8 @@
   <string name="SYS_CREATE_ROLE">Δημιουργία ρόλου</string>
   <string name="SYS_CREATE_MEMBER">Δημιουργία χρήστη</string>
   <string name="SYS_CREATE_VAR">Δημιουργία #VAR1#</string>
-  <string name="SYS_CREATED_BY">Δημιουργήθηκε από #VAR1# σε #VAR2#</string>
-  <string name="SYS_CREATION_DATE">Δημιουργήθηκε στις</string>
+  <string name="SYS_CREATED_BY_AND_AT">Δημιουργήθηκε από #VAR1# σε #VAR2#</string>
+  <string name="SYS_CREATED_AT">Δημιουργήθηκε στις</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Τρέχουσα έκδοση βάσης δεδομένων</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Δεν έχει δοθεί έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου!\n\nΠαρακαλούμε δώστε μια διεύθυνση ηλεκτρονικού ταχυδρομείου στο #VAR1#προφίλ#VAR2#.</string>

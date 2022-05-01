@@ -131,7 +131,7 @@
   <string name="SYS_CREATE_NEW_USER">Legg til ny bruker</string>
   <string name="SYS_CREATE_ROLE">Opprett rolle</string>
   <string name="SYS_CREATE_MEMBER">Opprett bruker</string>
-  <string name="SYS_CREATION_DATE">Opprettet</string>
+  <string name="SYS_CREATED_AT">Opprettet</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_BACKUP">Sikkerhetskopier database</string>

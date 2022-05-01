@@ -121,7 +121,7 @@ class ListConfiguration extends TableLists
      */
     public function convertColumnContentForOutput($columnNumber, $format, $content, $userUuid)
     {
-        global $gProfileFields, $gL10n, $gSettingsManager;
+        global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
         $column = $this->getColumnObject($columnNumber);
 
@@ -169,6 +169,12 @@ class ListConfiguration extends TableLists
                 $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
                 $content = $arrListValues[$content];
             }
+        } elseif (in_array($column->getValue('lsc_special_field'), array('usr_timestamp_create', 'usr_timestamp_change', 'mem_timestamp_change'))) {
+            if (strlen($content) > 0) {
+                // date must be formated
+                $date = \DateTime::createFromFormat('Y-m-d H:i:s', $content);
+                $content = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+            }
         } elseif ($column->getValue('lsc_special_field') === 'mem_approved') {
             // Assign Integer to Language strings
             switch ((int) $content) {
@@ -202,7 +208,7 @@ class ListConfiguration extends TableLists
                     $content = $htmlText;
                 }
             }
-        } elseif ($column->getValue('lsc_special_field') === 'mem_usr_id_change' && (int) $content) {
+        } elseif (in_array($column->getValue('lsc_special_field'), array('usr_usr_id_create', 'usr_usr_id_change', 'mem_usr_id_change')) && (int) $content) {
             // Get User Information
             $user = new User($gDb, $gProfileFields, $content);
 
@@ -296,6 +302,10 @@ class ListConfiguration extends TableLists
         $arrSpecialColumnNames = array(
             'usr_login_name'       => 'left',
             'usr_photo'            => 'left',
+            'usr_usr_id_create'    => 'left',
+            'usr_timestamp_create' => 'left',
+            'usr_usr_id_change'    => 'left',
+            'usr_timestamp_change' => 'left',
             'usr_uuid'             => 'left',
             'mem_begin'            => 'left',
             'mem_end'              => 'left',
@@ -346,6 +356,10 @@ class ListConfiguration extends TableLists
         $arrSpecialColumnNames = array(
             'usr_login_name'       => $gL10n->get('SYS_USERNAME'),
             'usr_photo'            => $gL10n->get('SYS_PHOTO'),
+            'usr_usr_id_create'    => $gL10n->get('SYS_CREATED_BY'),
+            'usr_timestamp_create' => $gL10n->get('SYS_CREATED_AT'),
+            'usr_usr_id_change'    => $gL10n->get('SYS_CHANGED_BY'),
+            'usr_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
             'usr_uuid'             => $gL10n->get('SYS_UNIQUE_ID'),
             'mem_begin'            => $gL10n->get('SYS_START'),
             'mem_end'              => $gL10n->get('SYS_END'),
@@ -473,8 +487,7 @@ class ListConfiguration extends TableLists
                         $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'1900-02-01\')';
                         break;
 
-                    case 'usr_login_name':
-                    case 'usr_photo':
+                    default:
                         $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'\')';
                         break;
                 }
@@ -632,13 +645,12 @@ class ListConfiguration extends TableLists
                                 $type = 'date';
                                 break;
 
-                            case 'usr_login_name':
-                                $type = 'string';
-                                break;
-
                             case 'usr_photo':
                                 $type = '';
                                 break;
+
+                            default:
+                                $type = 'string';
                         }
                     }
 
@@ -781,8 +793,9 @@ class ListConfiguration extends TableLists
             // only add columns to the array if the current user is allowed to view them
             if ((int) $lscRow['lsc_usf_id'] === 0
             || $gProfileFields->isVisible($gProfileFields->getPropertyById((int) $lscRow['lsc_usf_id'], 'usf_name_intern'), $gCurrentUser->editUsers())) {
-                // user uuid should only be viewed by users that could edit roles
-                if ($lscRow['lsc_special_field'] !== 'usr_uuid' || $gCurrentUser->editUsers()) {
+                // some user fields should only be viewed by users that could edit roles
+                if (!in_array($lscRow['lsc_special_field'], array('usr_login_name', 'usr_usr_id_create', 'usr_timestamp_create', 'usr_usr_id_change', 'usr_timestamp_change', 'usr_login_name', 'usr_uuid'))
+                    || $gCurrentUser->editUsers()) {
                     $lscNumber = (int) $lscRow['lsc_number'];
                     $this->columns[$lscNumber] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
                     $this->columns[$lscNumber]->setArray($lscRow);

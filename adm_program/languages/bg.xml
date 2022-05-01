@@ -668,8 +668,8 @@
   <string name="SYS_CREATE_RELATIONSHIP">Създаване на отношение</string>
   <string name="SYS_CREATE_ROLE">Създаване на роля</string>
   <string name="SYS_CREATE_VAR">Създаване на #VAR1#</string>
-  <string name="SYS_CREATED_BY">Създаден от #VAR1# на #VAR2#</string>
-  <string name="SYS_CREATION_DATE">Съзазен на</string>
+  <string name="SYS_CREATED_BY_AND_AT">Създаден от #VAR1# на #VAR2#</string>
+  <string name="SYS_CREATED_AT">Съзазен на</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Текуща версия на базата данни</string>
   <string name="SYS_CURRENT_MEMBER">Настоящ участник</string>

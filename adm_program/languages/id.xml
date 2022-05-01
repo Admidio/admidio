@@ -429,8 +429,8 @@
   <string name="SYS_CREATE_NOT_FOUND_USER">Potrai creare un nuovo utente, se l\'utente non è elencato tra gli utenti trovati.</string>
   <string name="SYS_CREATE_ROLE">Crea ruolo</string>
   <string name="SYS_CREATE_VAR">Crea #VAR1#</string>
-  <string name="SYS_CREATED_BY">Creato da #VAR1# il #VAR2#</string>
-  <string name="SYS_CREATION_DATE">Dibuat pada</string>
+  <string name="SYS_CREATED_BY_AND_AT">Creato da #VAR1# il #VAR2#</string>
+  <string name="SYS_CREATED_AT">Dibuat pada</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_BACKUP">Cadangan databse</string>

@@ -635,8 +635,8 @@
   <string name="SYS_CREATE_ROLE">Criar cargo</string>
   <string name="SYS_CREATE_MEMBER">Criar usuário</string>
   <string name="SYS_CREATE_VAR">Criar #VAR1#</string>
-  <string name="SYS_CREATED_BY">Criado por #VAR1# em #VAR2#</string>
-  <string name="SYS_CREATION_DATE">Criada em</string>
+  <string name="SYS_CREATED_BY_AND_AT">Criado por #VAR1# em #VAR2#</string>
+  <string name="SYS_CREATED_AT">Criada em</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Nenhum endereço de e-mail válido foi inserido!\n\nPor favor, insira um endereço válido no teu #VAR1#pefil#VAR2#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Se esta opção estiver ativa, os dados (eventos, anúncios, links ...) nesta categoria também aparecerão nas páginas web das seguintes organizações:\n#VAR1_BOLD#</string>
