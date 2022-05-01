@@ -121,7 +121,7 @@ class ListConfiguration extends TableLists
      */
     public function convertColumnContentForOutput($columnNumber, $format, $content, $userUuid)
     {
-        global $gProfileFields, $gL10n, $gSettingsManager;
+        global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
         $column = $this->getColumnObject($columnNumber);
 
