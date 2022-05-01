@@ -255,7 +255,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
 
             userFields[' . ++$i . '] = {
                 "cat_name": userFields[1]["cat_name"],
-                    "usf_name": "'.$gL10n->get('SYS_LAST_EDITED').'",
+                    "usf_name": "'.$gL10n->get('SYS_CHANGED_AT').'",
                     "usf_name_intern": "usr_timestamp_change"
                     };
 

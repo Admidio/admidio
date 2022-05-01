@@ -349,7 +349,7 @@ class ListConfiguration extends TableLists
             'usr_login_name'       => $gL10n->get('SYS_USERNAME'),
             'usr_photo'            => $gL10n->get('SYS_PHOTO'),
             'usr_timestamp_create' => $gL10n->get('SYS_CREATED_AT'),
-            'usr_timestamp_change' => $gL10n->get('SYS_LAST_EDITED'),
+            'usr_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
             'usr_uuid'             => $gL10n->get('SYS_UNIQUE_ID'),
             'mem_begin'            => $gL10n->get('SYS_START'),
             'mem_end'              => $gL10n->get('SYS_END'),
