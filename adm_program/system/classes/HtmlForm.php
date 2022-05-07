@@ -1834,7 +1834,7 @@ class HtmlForm extends HtmlFormBasic
 
         $html = '';
 
-        if($string !== '') {
+        if(!empty($string)) {
             if ($parameter === null) {
                 if (Language::isTranslationStringId($string)) {
                     $text = $gL10n->get($string);

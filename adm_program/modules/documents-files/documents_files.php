@@ -119,18 +119,12 @@ $documentsFilesOverview->setMessageIfNoRowsFound('SYS_FOLDER_NO_FILES', 'warning
 if (isset($folderContent['folders'])) {
     // First get possible sub folders
     foreach ($folderContent['folders'] as $nextFolder) {
-        $folderDescription = '';
-        if ($nextFolder['fol_description'] !== null) {
-            $folderDescription = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-trigger="hover click"
-                data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$nextFolder['fol_description'].'"></i>';
-        }
-
         // create array with all column values
         $columnValues = array(
             1, // Type folder
             '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $nextFolder['fol_uuid'])). '">
                 <i class="fas fa-fw fa-folder" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').'"></i></a>',
-            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $nextFolder['fol_uuid'])). '">'. $nextFolder['fol_name']. '</a>'.$folderDescription,
+            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $nextFolder['fol_uuid'])). '">'. $nextFolder['fol_name']. '</a>'.HtmlForm::getHelpTextIcon($nextFolder['fol_description']),
             '',
             '',
             ''
@@ -188,18 +182,12 @@ if (isset($folderContent['files'])) {
         // Format timestamp
         $timestamp = \DateTime::createFromFormat('Y-m-d H:i:s', $nextFile['fil_timestamp']);
 
-        $fileDescription = '';
-        if ($file->getValue('fil_description') !== '') {
-            $fileDescription = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-trigger="hover click"
-                data-placement="right" title="'.$gL10n->get('SYS_DESCRIPTION').'" data-content="'.$file->getValue('fil_description').'"></i>';
-        }
-
         // create array with all column values
         $columnValues = array(
             2, // Type file
             '<a class="admidio-icon-link" href="' . $fileLink . '"' . $target . '>
                 <i class="fas fa-fw ' . $file->getFontAwesomeIcon() . '" data-toggle="tooltip" title="'.$gL10n->get('SYS_FILE').'"></i></a>',
-            '<a href="' . $fileLink . '"' . $target . '>'. $file->getValue('fil_name'). '</a>'.$fileDescription,
+            '<a href="' . $fileLink . '"' . $target . '>'. $file->getValue('fil_name'). '</a>'.HtmlForm::getHelpTextIcon($file->getValue('fil_description')),
             $timestamp->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
             round($file->getValue('fil_size') / 1024). ' kB&nbsp;',
             ($file->getValue('fil_counter') !== '') ? $file->getValue('fil_counter') : 0
