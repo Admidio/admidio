@@ -86,6 +86,8 @@ $columnHeading = array(
     '<i class="fas fa-key" data-toggle="tooltip" data-html="true" title="'.$gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))).'"></i>',
     '<i class="fas fa-asterisk" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'"></i>',
     '<i class="fas fa-address-card" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REGISTRATION').'"></i>',
+    $gL10n->get('SYS_DEFAULT_VALUE'),
+    $gL10n->get('SYS_REGULAR_EXPRESSION'),
     '&nbsp;'
 );
 $table->addRowHeadingByArray($columnHeading);
@@ -186,6 +188,8 @@ while ($row = $statement->fetch()) {
         $disable,
         $mandatory,
         $registration,
+        $userField->getValue('usf_default_value'),
+        $userField->getValue('usf_regex'),
         $usfSystem
     );
     $table->addRowByArray($columnValues, 'row_usf_'.$usfUuid, array('data-id' => $usfUuid));
