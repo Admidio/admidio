@@ -1823,28 +1823,32 @@ class HtmlForm extends HtmlFormBasic
     /**
      * Add a small help icon to the form at the current element which shows the
      * translated text of the text-id on mouseover or when you click on the icon.
-     * @param string $textId    A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
+     * @param string $string    A text that should be shown or an unique text id from the translation xml files
+     *                          that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
      * @param string $parameter If you need an additional parameter for the text you can set this parameter.
      * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
      */
-    public static function getHelpTextIcon($textId, $parameter = null)
+    public static function getHelpTextIcon($string, $parameter = null)
     {
-        global $gL10n, $gProfileFields;
+        global $gL10n;
 
-        if ($parameter === null) {
-            if (Language::isTranslationStringId($textId)) {
-                $text = $gL10n->get($textId);
+        $html = '';
+
+        if($string !== '') {
+            if ($parameter === null) {
+                if (Language::isTranslationStringId($string)) {
+                    $text = $gL10n->get($string);
+                } else {
+                    $text = $string;
+                }
             } else {
-                $text = $textId;
+                $text = $gL10n->get($string, array($parameter));
             }
-        } else {
-            $text = $gL10n->get($textId, array($parameter));
-        }
 
-        $html = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover"
+            $html = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover"
             data-html="true" data-trigger="hover click" data-placement="auto"
-            title="'.$gL10n->get('SYS_NOTE').'" data-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
-
+            title="' . $gL10n->get('SYS_NOTE') . '" data-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
+        }
         return $html;
     }
 
