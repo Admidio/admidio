@@ -171,7 +171,7 @@ while ($row = $statement->fetch()) {
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)).'">'.$userField->getValue('usf_name').'</a>' . HtmlForm::getHelpTextIcon($userField->getValue('usf_description')),
+        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)).'">'.$userField->getValue('usf_name').'</a>' . HtmlForm::getHelpTextIcon($userField->getValue('usf_description'), 'SYS_DESCRIPTION'),
         '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableUserField::MOVE_UP.'\', \'row_usf_'.$usfUuid.'\',
             \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4, 'usf_uuid' => $usfUuid, 'sequence' => TableUserField::MOVE_UP)) . '\',
             \''.$gCurrentSession->getCsrfToken().'\')">'.

@@ -124,7 +124,7 @@ if (isset($folderContent['folders'])) {
             1, // Type folder
             '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $nextFolder['fol_uuid'])). '">
                 <i class="fas fa-fw fa-folder" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').'"></i></a>',
-            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $nextFolder['fol_uuid'])). '">'. $nextFolder['fol_name']. '</a>'.HtmlForm::getHelpTextIcon($nextFolder['fol_description']),
+            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $nextFolder['fol_uuid'])). '">'. $nextFolder['fol_name']. '</a>'.HtmlForm::getHelpTextIcon($nextFolder['fol_description'], 'SYS_DESCRIPTION'),
             '',
             '',
             ''
@@ -187,7 +187,7 @@ if (isset($folderContent['files'])) {
             2, // Type file
             '<a class="admidio-icon-link" href="' . $fileLink . '"' . $target . '>
                 <i class="fas fa-fw ' . $file->getFontAwesomeIcon() . '" data-toggle="tooltip" title="'.$gL10n->get('SYS_FILE').'"></i></a>',
-            '<a href="' . $fileLink . '"' . $target . '>'. $file->getValue('fil_name'). '</a>'.HtmlForm::getHelpTextIcon($file->getValue('fil_description')),
+            '<a href="' . $fileLink . '"' . $target . '>'. $file->getValue('fil_name'). '</a>'.HtmlForm::getHelpTextIcon($file->getValue('fil_description'), 'SYS_DESCRIPTION'),
             $timestamp->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
             round($file->getValue('fil_size') / 1024). ' kB&nbsp;',
             ($file->getValue('fil_counter') !== '') ? $file->getValue('fil_counter') : 0
