@@ -464,6 +464,7 @@ final class ComponentUpdateSteps
         while ($row = $rolesStatement->fetch()) {
             $role = new TableRoles(self::$db);
             $role->setArray($row);
+            $role->saveChangesWithoutRights();
 
             $date = new TableDate(self::$db);
             $date->readDataByRoleId($role->getValue('rol_id'));
@@ -475,7 +476,7 @@ final class ComponentUpdateSteps
     }
 
     /**
-     * This method adds a new global list configuration for Participients of Events.
+     * This method adds a new global list configuration for participants of events.
      */
     public static function updateStep33AddDefaultParticipantList()
     {
