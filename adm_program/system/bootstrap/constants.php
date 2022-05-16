@@ -19,14 +19,14 @@ define('SCRIPT_START_TIME', microtime(true));
 // ##################
 
 // !!! Please do not edit these version numbers !!!
-define('MIN_PHP_VERSION', '7.2.0');
+const MIN_PHP_VERSION = '7.2.0';
 
-define('ADMIDIO_VERSION_MAIN', 4);
-define('ADMIDIO_VERSION_MINOR', 2);
-define('ADMIDIO_VERSION_PATCH', 0);
-define('ADMIDIO_VERSION_BETA', 1);
+const ADMIDIO_VERSION_MAIN = 4;
+const ADMIDIO_VERSION_MINOR = 2;
+const ADMIDIO_VERSION_PATCH = 0;
+const ADMIDIO_VERSION_BETA = 1;
 
-define('ADMIDIO_VERSION', ADMIDIO_VERSION_MAIN . '.' . ADMIDIO_VERSION_MINOR . '.' . ADMIDIO_VERSION_PATCH);
+const ADMIDIO_VERSION = ADMIDIO_VERSION_MAIN . '.' . ADMIDIO_VERSION_MINOR . '.' . ADMIDIO_VERSION_PATCH;
 
 if (ADMIDIO_VERSION_BETA > 0) {
     define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION . ' Beta ' . ADMIDIO_VERSION_BETA);
@@ -39,12 +39,12 @@ if (ADMIDIO_VERSION_BETA > 0) {
 // ######################
 
 // Admidio Homepage
-define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
+const ADMIDIO_HOMEPAGE = 'https://www.admidio.org/';
 
 // BASIC STUFF
 // https://www.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
 define('SCHEME', parse_url($g_root_path, PHP_URL_SCHEME)); // get SCHEME out of $g_root_path because server doesn't have this info if ssl proxy is used
-define('HTTPS', SCHEME === 'https'); // true | false
+const HTTPS = SCHEME === 'https'; // true | false
 define('PORT', (int) $_SERVER['SERVER_PORT']); // 443 | 80
 
 $port = (PORT === 80 || PORT === 443) ? '' : ':' . PORT; // :1234
@@ -55,14 +55,14 @@ if (isset($_SERVER['HTTP_X_FORWARDED_SERVER']) && $_SERVER['HTTP_X_FORWARDED_SER
     define('HOST', $_SERVER['HTTP_X_FORWARDED_HOST'] . $port . '/' . $_SERVER['HTTP_HOST']); // ssl.example.org/my.domain.net
     define('DOMAIN', strstr($_SERVER['HTTP_X_FORWARDED_HOST'] . $port . ':', ':', true)); // ssl.example.org
 } else {
-    define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
+    define('HOST', $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
     define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
 }
 define('ADMIDIO_URL_PATH', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
 
 // PATHS
 define('SERVER_PATH', realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www
-define('ADMIDIO_PATH', dirname(dirname(dirname(__DIR__)))); // /var/www/subfolder
+define('ADMIDIO_PATH', dirname(__DIR__, 3)); // /var/www/subfolder
 define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/overview.php
 
 // URLS
@@ -71,16 +71,16 @@ define('FILE_URL', (strlen(ADMIDIO_URL_PATH) > 0 && strpos($_SERVER['SCRIPT_NAME
 define('CURRENT_URL', (strlen(ADMIDIO_URL_PATH) > 0 && strpos($_SERVER['REQUEST_URI'], (string) ADMIDIO_URL_PATH) === false) ? SCHEME . '://' . HOST . ADMIDIO_URL_PATH . $_SERVER['REQUEST_URI'] : SCHEME . '://' . HOST . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
 
 // FOLDERS
-define('FOLDER_DATA', '/adm_my_files');
-define('FOLDER_SYSTEM', '/adm_program/system');
-define('FOLDER_CLASSES', '/adm_program/system/classes');
-define('FOLDER_INSTALLATION', '/adm_program/installation');
-define('FOLDER_LIBS_SERVER', '/adm_program/libs/server'); // PHP libs
-define('FOLDER_LIBS_CLIENT', '/adm_program/libs/client'); // JS/CSS libs
-define('FOLDER_LANGUAGES', '/adm_program/languages');
-define('FOLDER_THEMES', '/adm_themes');
-define('FOLDER_MODULES', '/adm_program/modules');
-define('FOLDER_PLUGINS', '/adm_plugins');
+const FOLDER_DATA = '/adm_my_files';
+const FOLDER_SYSTEM = '/adm_program/system';
+const FOLDER_CLASSES = '/adm_program/system/classes';
+const FOLDER_INSTALLATION = '/adm_program/installation';
+const FOLDER_LIBS_SERVER = '/adm_program/libs/server'; // PHP libs
+const FOLDER_LIBS_CLIENT = '/adm_program/libs/client'; // JS/CSS libs
+const FOLDER_LANGUAGES = '/adm_program/languages';
+const FOLDER_THEMES = '/adm_themes';
+const FOLDER_MODULES = '/adm_program/modules';
+const FOLDER_PLUGINS = '/adm_plugins';
 
 // ####################
 // ###  DATE-STUFF  ###
@@ -92,7 +92,7 @@ date_default_timezone_set($gTimezone);
 // date and time for use in scripts
 define('DATE_NOW', date('Y-m-d'));
 define('DATETIME_NOW', date('Y-m-d H:i:s'));
-define('DATE_MAX', '9999-12-31');
+const DATE_MAX = '9999-12-31';
 
 // ###################
 // ###  DB-CONFIG  ###
@@ -111,43 +111,43 @@ define('DB_PASSWORD', $g_adm_pw);
 
 define('TABLE_PREFIX', $g_tbl_praefix);
 
-define('TBL_ANNOUNCEMENTS', TABLE_PREFIX . '_announcements');
-define('TBL_AUTO_LOGIN', TABLE_PREFIX . '_auto_login');
-define('TBL_CATEGORIES', TABLE_PREFIX . '_categories');
-define('TBL_CATEGORY_REPORT', TABLE_PREFIX . '_category_report');
-define('TBL_COMPONENTS', TABLE_PREFIX . '_components');
-define('TBL_DATES', TABLE_PREFIX . '_dates');
-define('TBL_FILES', TABLE_PREFIX . '_files');
-define('TBL_FOLDERS', TABLE_PREFIX . '_folders');
-define('TBL_GUESTBOOK', TABLE_PREFIX . '_guestbook');
-define('TBL_GUESTBOOK_COMMENTS', TABLE_PREFIX . '_guestbook_comments');
-define('TBL_IDS', TABLE_PREFIX . '_ids');
-define('TBL_LINKS', TABLE_PREFIX . '_links');
-define('TBL_LIST_COLUMNS', TABLE_PREFIX . '_list_columns');
-define('TBL_LISTS', TABLE_PREFIX . '_lists');
-define('TBL_MEMBERS', TABLE_PREFIX . '_members');
-define('TBL_MENU', TABLE_PREFIX . '_menu');
-define('TBL_MESSAGES', TABLE_PREFIX . '_messages');
-define('TBL_MESSAGES_ATTACHMENTS', TABLE_PREFIX . '_messages_attachments');
-define('TBL_MESSAGES_CONTENT', TABLE_PREFIX . '_messages_content');
-define('TBL_MESSAGES_RECIPIENTS', TABLE_PREFIX . '_messages_recipients');
-define('TBL_ORGANIZATIONS', TABLE_PREFIX . '_organizations');
-define('TBL_PHOTOS', TABLE_PREFIX . '_photos');
-define('TBL_PREFERENCES', TABLE_PREFIX . '_preferences');
-define('TBL_REGISTRATIONS', TABLE_PREFIX . '_registrations');
-define('TBL_ROLE_DEPENDENCIES', TABLE_PREFIX . '_role_dependencies');
-define('TBL_ROLES', TABLE_PREFIX . '_roles');
-define('TBL_ROLES_RIGHTS', TABLE_PREFIX . '_roles_rights');
-define('TBL_ROLES_RIGHTS_DATA', TABLE_PREFIX . '_roles_rights_data');
-define('TBL_ROOMS', TABLE_PREFIX . '_rooms');
-define('TBL_SESSIONS', TABLE_PREFIX . '_sessions');
-define('TBL_TEXTS', TABLE_PREFIX . '_texts');
-define('TBL_USERS', TABLE_PREFIX . '_users');
-define('TBL_USER_DATA', TABLE_PREFIX . '_user_data');
-define('TBL_USER_FIELDS', TABLE_PREFIX . '_user_fields');
-define('TBL_USER_LOG', TABLE_PREFIX . '_user_log');
-define('TBL_USER_RELATIONS', TABLE_PREFIX . '_user_relations');
-define('TBL_USER_RELATION_TYPES', TABLE_PREFIX . '_user_relation_types');
+const TBL_ANNOUNCEMENTS = TABLE_PREFIX . '_announcements';
+const TBL_AUTO_LOGIN = TABLE_PREFIX . '_auto_login';
+const TBL_CATEGORIES = TABLE_PREFIX . '_categories';
+const TBL_CATEGORY_REPORT = TABLE_PREFIX . '_category_report';
+const TBL_COMPONENTS = TABLE_PREFIX . '_components';
+const TBL_DATES = TABLE_PREFIX . '_dates';
+const TBL_FILES = TABLE_PREFIX . '_files';
+const TBL_FOLDERS = TABLE_PREFIX . '_folders';
+const TBL_GUESTBOOK = TABLE_PREFIX . '_guestbook';
+const TBL_GUESTBOOK_COMMENTS = TABLE_PREFIX . '_guestbook_comments';
+const TBL_IDS = TABLE_PREFIX . '_ids';
+const TBL_LINKS = TABLE_PREFIX . '_links';
+const TBL_LIST_COLUMNS = TABLE_PREFIX . '_list_columns';
+const TBL_LISTS = TABLE_PREFIX . '_lists';
+const TBL_MEMBERS = TABLE_PREFIX . '_members';
+const TBL_MENU = TABLE_PREFIX . '_menu';
+const TBL_MESSAGES = TABLE_PREFIX . '_messages';
+const TBL_MESSAGES_ATTACHMENTS = TABLE_PREFIX . '_messages_attachments';
+const TBL_MESSAGES_CONTENT = TABLE_PREFIX . '_messages_content';
+const TBL_MESSAGES_RECIPIENTS = TABLE_PREFIX . '_messages_recipients';
+const TBL_ORGANIZATIONS = TABLE_PREFIX . '_organizations';
+const TBL_PHOTOS = TABLE_PREFIX . '_photos';
+const TBL_PREFERENCES = TABLE_PREFIX . '_preferences';
+const TBL_REGISTRATIONS = TABLE_PREFIX . '_registrations';
+const TBL_ROLE_DEPENDENCIES = TABLE_PREFIX . '_role_dependencies';
+const TBL_ROLES = TABLE_PREFIX . '_roles';
+const TBL_ROLES_RIGHTS = TABLE_PREFIX . '_roles_rights';
+const TBL_ROLES_RIGHTS_DATA = TABLE_PREFIX . '_roles_rights_data';
+const TBL_ROOMS = TABLE_PREFIX . '_rooms';
+const TBL_SESSIONS = TABLE_PREFIX . '_sessions';
+const TBL_TEXTS = TABLE_PREFIX . '_texts';
+const TBL_USERS = TABLE_PREFIX . '_users';
+const TBL_USER_DATA = TABLE_PREFIX . '_user_data';
+const TBL_USER_FIELDS = TABLE_PREFIX . '_user_fields';
+const TBL_USER_LOG = TABLE_PREFIX . '_user_log';
+const TBL_USER_RELATIONS = TABLE_PREFIX . '_user_relations';
+const TBL_USER_RELATION_TYPES = TABLE_PREFIX . '_user_relation_types';
 
 // #####################
 // ###  OTHER STUFF  ###
@@ -166,15 +166,15 @@ if (isset($g_adm_db)) {
 define('COOKIE_PREFIX', preg_replace('/\W/', '_', $cookiePrefix));
 
 // constants for column rol_leader_rights
-define('ROLE_LEADER_NO_RIGHTS', 0);
-define('ROLE_LEADER_MEMBERS_ASSIGN', 1);
-define('ROLE_LEADER_MEMBERS_EDIT', 2);
-define('ROLE_LEADER_MEMBERS_ASSIGN_EDIT', 3);
+const ROLE_LEADER_NO_RIGHTS = 0;
+const ROLE_LEADER_MEMBERS_ASSIGN = 1;
+const ROLE_LEADER_MEMBERS_EDIT = 2;
+const ROLE_LEADER_MEMBERS_ASSIGN_EDIT = 3;
 
 // Password settings
-define('PASSWORD_MIN_LENGTH', 8);
-define('PASSWORD_GEN_LENGTH', 16);
-define('PASSWORD_GEN_CHARS', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+const PASSWORD_MIN_LENGTH = 8;
+const PASSWORD_GEN_LENGTH = 16;
+const PASSWORD_GEN_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 // ####################
 // ###  DEPRECATED  ###
