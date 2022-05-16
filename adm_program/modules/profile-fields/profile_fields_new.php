@@ -195,7 +195,11 @@ $form->openGroupBox('gb_conditions', $gL10n->get('SYS_CONDITIONS'));
 $form->addInput(
     'usf_default_value',
     $gL10n->get('SYS_DEFAULT_VALUE'),
-    $userField->getValue('usf_default_value')
+    $userField->getValue('usf_default_value'),
+    array('htmlAfter' => '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-class="modal-lg"
+                        data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => 'profile_field_default_value', 'inline' => 'true')).'">
+                        <i class="fas fa-info-circle admidio-info-icon"></i>
+                    </a>')
 );
 $form->addInput(
     'usf_regex',

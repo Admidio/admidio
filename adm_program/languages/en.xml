@@ -706,6 +706,8 @@
   <string name="SYS_DEFAULT_LIST_DESC">In case there is a member list for this role to be displayed and no list configuration is specified, the list is displayed in the system-wide selected standard list configuration. Using this field for an individual role, a different configuration list can be selected which is displayed when no configuration list is preset.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">No default list configuration set defined by the administrator!\n\nContact system administrator for help.</string>
   <string name="SYS_DEFAULT_VALUE">Default value</string>
+  <string name="SYS_DEFAULT_VALUE_DESC">You can set default values for a profile field. If a new member is created, the field is preset with this value. The user can then adjust this value if desired. The following list contains examples of which values can be stored for which field types.</string>
+  <string name="SYS_DEFAULT_VALUE_TEXT">With these field types you can store a value that you would also enter in the profile.</string>
   <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="SYS_DELETE">Delete</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>

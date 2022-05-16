@@ -720,6 +720,8 @@
   <string name="SYS_DEFAULT_LIST_DESC">Soll eine Mitgliederliste zu dieser Rolle angezeigt werden und wird keine Listenkonfiguration vorgegeben, so wird die Liste in der systemweit eingestellten Standardlistenkonfiguration dargestellt. Über dieses Feld kann für die einzelne Rolle eine andere Listenkonfiguration ausgewählt werden, die angezeigt wird, wenn keine Listenkonfiguration vorgegeben ist.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an eine:n Administrator:in, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
   <string name="SYS_DEFAULT_VALUE">Standardwert</string>
+  <string name="SYS_DEFAULT_VALUE_DESC">Du kannst Standardwerte für ein Profilfeld hinterlegen. Wird ein neues Mitglied angelegt, so wird das Feld mit diesem Wert vorbelegt. Die Benutzerin oder der Benutzer können diesen Wert auf Wunsch anschließend anpassen. In der folgenden Liste sind Beispiele hinterlegt, welche Werte bei welchem Feldtypen hinterlegt werden können.</string>
+  <string name="SYS_DEFAULT_VALUE_TEXT">Bei diesen Feldtypen kannst du einen Wert hinterlegen, den du auch so im Profil eingeben würdest.</string>
   <string name="SYS_DEFAULT_VAR">Standard-#VAR1#</string>
   <string name="SYS_DELETE">Löschen</string>
   <string name="SYS_DELETE_CONFIGURATION">Konfiguration löschen</string>
