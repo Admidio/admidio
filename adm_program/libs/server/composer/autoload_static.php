@@ -191,6 +191,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'Participants' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Participants.php',
         'PasswordUtils' => __DIR__ . '/../../../..' . '/adm_program/system/classes/PasswordUtils.php',
         'PhpIniUtils' => __DIR__ . '/../../../..' . '/adm_program/system/classes/PhpIniUtils.php',
+        'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
         'ProfileFields' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ProfileFields.php',
         'QRcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/qrcode.php',
         'RoleDependency' => __DIR__ . '/../../../..' . '/adm_program/system/classes/RoleDependency.php',
