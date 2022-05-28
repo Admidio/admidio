@@ -105,7 +105,7 @@ if ($getSearch !== '' && count($searchColumns) > 0) {
     $searchString = explode(' ', $getSearch);
 
     foreach ($searchString as $searchWord) {
-        $searchCondition .= ' AND CONCAT(' . implode(', ', $searchColumns) . ') LIKE \'%'.$searchWord.'%\' ';
+        $searchCondition .= ' AND CONCAT(' . implode(', \' \', ', $searchColumns) . ') LIKE \'%'.$searchWord.'%\' ';
     }
 
     $searchCondition = ' WHERE ' . substr($searchCondition, 4);
