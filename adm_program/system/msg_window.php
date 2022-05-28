@@ -135,39 +135,7 @@ switch ($getMessageId) {
                 </tbody>
             </table>';
         break;
-
-    case 'profile_field_default_value':
-        echo '
-            <p>'.$gL10n->get('SYS_DEFAULT_VALUE_DESC').'</p>
-            <p>'.$gL10n->get('SYS_EXAMPLES').':</p>
-            <table class="table table-condensed">
-                <thead>
-                    <tr>
-                        <th style="width: 100px;">'.$gL10n->get('ORG_DATATYPE').'</th>
-                        <th>'.$gL10n->get('SYS_DEFAULT_VALUE').'</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>'.$gL10n->get('SYS_TEXT').', '.$gL10n->get('SYS_NUMBER').', '.$gL10n->get('SYS_DECIMAL_NUMBER').', '.$gL10n->get('SYS_PHONE').', '.$gL10n->get('SYS_EMAIL').', '.$gL10n->get('SYS_URL').'</td>
-                        <td>'.$gL10n->get('SYS_DEFAULT_VALUE_TEXT').'</td>
-                    </tr>
-                    <tr>
-                        <td>'.$gL10n->get('SYS_DATE').'</td>
-                        <td>'.$gL10n->get('SYS_SEARCH_LASTNAME_DESC').'</td>
-                    </tr>
-                    <tr>
-                        <td>'.$gL10n->get('SYS_DROPDOWN_LISTBOX').', '.$gL10n->get('SYS_RADIO_BUTTON').'</td>
-                        <td>'.$gL10n->get('SYS_SEARCH_LASTNAME_DESC').'</td>
-                    </tr>
-                    <tr>
-                        <td>'.$gL10n->get('SYS_CHECKBOX').'</td>
-                        <td>'.$gL10n->get('SYS_SEARCH_LASTNAME_DESC').'</td>
-                    </tr>
-                </tbody>
-            </table>';
-        break;
-
+        
     // Profile photo help text
     case 'profile_photo_up_help':
         echo '
