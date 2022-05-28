@@ -53,18 +53,13 @@ function getColumnAssignmentHtml(array $arrayColumnList, array $arrayCsvColumns)
 
     foreach ($arrayColumnList as $column) {
         if ($categoryName !== $column['cat_name']) {
-            $htmlCategoryTooltip = '';
             if ($categoryName !== null) {
                 $html .= '</tbody>';
             }
-            if(isset($column['cat_tooltip']) && $column['cat_tooltip'] !== '') {
-                $htmlCategoryTooltip = '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover"
-                    data-html="true" data-trigger="hover click" data-placement="auto"
-                    title="' . $gL10n->get('SYS_NOTE') . '" data-content="' . $column['cat_tooltip'] . '"></i>';
-            }
+
             $html .= '<tbody>
                     <tr class="admidio-group-heading">
-                        <td colspan="4">' . $column['cat_name'] . $htmlCategoryTooltip . '</td>
+                        <td colspan="4">' . $column['cat_name'] . HtmlForm::getHelpTextIcon($column['cat_tooltip']) . '</td>
                     </tr>
                 </tbody>
                 <tbody>';
@@ -169,6 +164,7 @@ $htmlFieldTable = '
 
         $arrayImportableFields[] = array(
             'cat_name'    => $gL10n->get('SYS_BASIC_DATA'),
+            'cat_tooltip' => '',
             'id'          => 'usr_uuid',
             'name'        => $gL10n->get('SYS_UNIQUE_ID'),
             'name_intern' => $gL10n->get('SYS_UNIQUE_ID'),
@@ -180,6 +176,7 @@ $htmlFieldTable = '
         foreach ($gProfileFields->getProfileFields() as $field) {
             $arrayImportableFields[] = array(
                 'cat_name'    => $field->getValue('cat_name'),
+                'cat_tooltip' => '',
                 'id'          => $field->getValue('usf_uuid'),
                 'name'        => $field->getValue('usf_name'),
                 'name_intern' => $field->getValue('usf_name_intern'),

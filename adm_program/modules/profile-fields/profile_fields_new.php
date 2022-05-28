@@ -147,7 +147,7 @@ $userFieldText = array(
     'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
     'TEXT'         => $gL10n->get('SYS_TEXT').' (100 '.$gL10n->get('SYS_CHARACTERS').')',
     'TEXT_BIG'     => $gL10n->get('SYS_TEXT').' (4000 '.$gL10n->get('SYS_CHARACTERS').')',
-    'URL'          => $gL10n->get('ORG_URL')
+    'URL'          => $gL10n->get('SYS_URL')
 );
 asort($userFieldText);
 
@@ -186,12 +186,26 @@ $form->addInput(
 );
 $form->addInput(
     'usf_url',
-    $gL10n->get('ORG_URL'),
+    $gL10n->get('SYS_URL'),
     $userField->getValue('usf_url'),
     array('maxLength' => 2000, 'helpTextIdLabel' => 'ORG_FIELD_URL_DESC')
 );
 $form->closeGroupBox();
-$form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
+$form->openGroupBox('gb_conditions', $gL10n->get('SYS_CONDITIONS'));
+$form->addInput(
+    'usf_default_value',
+    $gL10n->get('SYS_DEFAULT_VALUE'),
+    $userField->getValue('usf_default_value'),
+    array('helpTextIdLabel' => 'SYS_DEFAULT_VALUE_DESC')
+);
+$form->addInput(
+    'usf_regex',
+    $gL10n->get('SYS_REGULAR_EXPRESSION'),
+    $userField->getValue('usf_regex'),
+    array('helpTextIdLabel' => 'SYS_REGULAR_EXPRESSION_DESC')
+);
+$form->closeGroupBox();
+$form->openGroupBox('gb_permissions', $gL10n->get('SYS_PERMISSIONS'));
 $form->addCheckbox(
     'usf_hidden',
     $gL10n->get('ORG_FIELD_NOT_HIDDEN'),

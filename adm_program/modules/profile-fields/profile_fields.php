@@ -81,12 +81,13 @@ $table->setMessageIfNoRowsFound('ORG_NO_FIELD_CREATED');
 $columnHeading = array(
     $gL10n->get('SYS_FIELD').HtmlForm::getHelpTextIcon('ORG_FIELD_DESCRIPTION'),
     '&nbsp;',
-    $gL10n->get('SYS_DESCRIPTION'),
+    $gL10n->get('ORG_DATATYPE'),
     '<i class="fas fa-eye" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'"></i>',
     '<i class="fas fa-key" data-toggle="tooltip" data-html="true" title="'.$gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))).'"></i>',
     '<i class="fas fa-asterisk" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'"></i>',
     '<i class="fas fa-address-card" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REGISTRATION').'"></i>',
-    $gL10n->get('ORG_DATATYPE'),
+    $gL10n->get('SYS_DEFAULT_VALUE'),
+    $gL10n->get('SYS_REGULAR_EXPRESSION'),
     '&nbsp;'
 );
 $table->addRowHeadingByArray($columnHeading);
@@ -94,8 +95,7 @@ $table->addRowHeadingByArray($columnHeading);
 $categoryId = 0;
 $userField  = new TableUserField($gDb);
 
-// Intialize variables
-$description = '';
+// Initialize variables
 $hidden      = '';
 $disable     = '';
 $mandatory   = '';
@@ -119,21 +119,6 @@ while ($row = $statement->fetch()) {
         );
         $table->addTableBody('id', $blockId);
         $table->addAttribute('class', 'admidio-sortable');
-    }
-
-    if ($userField->getValue('usf_description') === '') {
-        $fieldDescription = '&nbsp;';
-    } else {
-        $fieldDescription = $userField->getValue('usf_description', 'database');
-
-        if (strlen($fieldDescription) > 30) {
-            // read first 30 chars of text, then search for last space and cut the text there. After that add a "more" link
-            $textPrev = substr($fieldDescription, 0, 30);
-            $maxPosPrev = strrpos($textPrev, ' ');
-            $fieldDescription = substr($textPrev, 0, $maxPosPrev).
-                ' <span class="collapse" id="viewdetails'.$usfUuid.'">'.substr($fieldDescription, $maxPosPrev).'.
-                </span> <a class="admidio-icon-link" data-toggle="collapse" data-target="#viewdetails'.$usfUuid.'"><i class="fas fa-angle-double-right" data-toggle="tooltip" title="'.$gL10n->get('SYS_MORE').'"></i></a>';
-        }
     }
 
     if ($userField->getValue('usf_hidden') == 1) {
@@ -168,7 +153,7 @@ while ($row = $statement->fetch()) {
                            'PHONE'        => $gL10n->get('SYS_PHONE'),
                            'TEXT'         => $gL10n->get('SYS_TEXT').' (100)',
                            'TEXT_BIG'     => $gL10n->get('SYS_TEXT').' (4000)',
-                           'URL'          => $gL10n->get('ORG_URL'),
+                           'URL'          => $gL10n->get('SYS_URL'),
                            'NUMBER'       => $gL10n->get('SYS_NUMBER'),
                            'DECIMAL'      => $gL10n->get('SYS_DECIMAL_NUMBER'));
 
@@ -186,7 +171,7 @@ while ($row = $statement->fetch()) {
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)).'">'.$userField->getValue('usf_name').'</a>',
+        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)).'">'.$userField->getValue('usf_name').'</a>' . HtmlForm::getHelpTextIcon($userField->getValue('usf_description'), 'SYS_DESCRIPTION'),
         '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveTableRow(\''.TableUserField::MOVE_UP.'\', \'row_usf_'.$usfUuid.'\',
             \''.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields/profile_fields_function.php', array('mode' => 4, 'usf_uuid' => $usfUuid, 'sequence' => TableUserField::MOVE_UP)) . '\',
             \''.$gCurrentSession->getCsrfToken().'\')">'.
@@ -198,12 +183,13 @@ while ($row = $statement->fetch()) {
         <a class="admidio-icon-link">'.
             '<i class="fas fa-arrows-alt handle" data-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_VAR', array('SYS_PROFILE_FIELD')) . '"></i></a>
             ',
-        $fieldDescription,
+        $userFieldText[$userField->getValue('usf_type')],
         $hidden,
         $disable,
         $mandatory,
         $registration,
-        $userFieldText[$userField->getValue('usf_type')],
+        $userField->getValue('usf_default_value'),
+        $userField->getValue('usf_regex'),
         $usfSystem
     );
     $table->addRowByArray($columnValues, 'row_usf_'.$usfUuid, array('data-id' => $usfUuid));

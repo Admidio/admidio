@@ -354,7 +354,7 @@
   <string name="ORG_TIME_FORMAT_DESC">Das Format entspricht der PHP-Funktion #VAR1#. (Voreinstellung: H:i)</string>
   <string name="ORG_TIMEZONE">Zeitzone</string>
   <string name="ORG_TIMEZONE_DESC">Dies ist die festgelegte Zeitzone. Wird diese später in der Konfigurationsdatei config.php von Admidio geändert, so werden bereits erfasste Daten und Uhrzeiten nicht an die neue Zeitzone angepasst.</string>
-  <string name="ORG_URL">URL</string>
+  <string name="SYS_URL">URL</string>
   <string name="ORG_VALUE_LIST">Werteliste</string>
   <string name="ORG_VALUE_LIST_DESC">In diesem Feld kannst du die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so erhalten alle bereits zugeordneten Benutzer:innen sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzer:innen evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Themeordner (Bsp.: ok.png) oder die Url eines externen Bildes (Bsp.: https://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
@@ -625,6 +625,7 @@
   <string name="SYS_COMMON">Allgemein</string>
   <string name="SYS_COMPLEMENT">Ergänzen</string>
   <string name="SYS_CONDITION">Bedingung</string>
+  <string name="SYS_CONDITIONS">Bedingungen</string>
   <string name="SYS_CONFIGURATION">Konfiguration</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Konfiguration allen Benutzer:innen zur Verfügung stellen</string>
   <string name="SYS_CONFIGURATION_DELETE">Willst du die aktuelle Listenkonfiguration wirklich löschen?</string>
@@ -718,6 +719,8 @@
   <string name="SYS_DEFAULT_LIST">Standardliste</string>
   <string name="SYS_DEFAULT_LIST_DESC">Soll eine Mitgliederliste zu dieser Rolle angezeigt werden und wird keine Listenkonfiguration vorgegeben, so wird die Liste in der systemweit eingestellten Standardlistenkonfiguration dargestellt. Über dieses Feld kann für die einzelne Rolle eine andere Listenkonfiguration ausgewählt werden, die angezeigt wird, wenn keine Listenkonfiguration vorgegeben ist.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an eine:n Administrator:in, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
+  <string name="SYS_DEFAULT_VALUE">Standardwert</string>
+  <string name="SYS_DEFAULT_VALUE_DESC">Du kannst einen Standardwert für dieses Profilfeld hinterlegen. Dieser Wert wird bei einen neuen Benutzer in dem Feld direkt vorbelegt. Trage dazu den Wert in das Feld ein, den du auch im Profil selber bei dem Feld hinterlegen würdest.\n\nBei dem Datentyp Checkbox kannst du 1 für aktiviert und 0 für deaktviert hinterlegen. Bei den Datentypen Dropdown-Listenfeld und Optionsfeld hinterlegst du die Nummer der Zeile aus der Werteliste in der der gewünschte Wert steht.</string>
   <string name="SYS_DEFAULT_VAR">Standard-#VAR1#</string>
   <string name="SYS_DELETE">Löschen</string>
   <string name="SYS_DELETE_CONFIGURATION">Konfiguration löschen</string>
@@ -847,7 +850,9 @@
   <string name="SYS_FIELD">Feld</string>
   <string name="SYS_FIELD_EMPTY">Das Feld #VAR1_BOLD# ist nicht gefüllt.</string>
   <string name="SYS_FIELD_ENCLOSURE">Anführungszeichen für die Felder</string>
-  <string name="SYS_FIELD_INVALID_CHAR">Das Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</string>
+  <string name="SYS_FIELD_INVALID_CHAR">Der eingegebene Wert in das Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</string>
+  <string name="SYS_FIELD_INVALID_INPUT">Das Feld #VAR1_BOLD# enthält eine ungültige Eingabe.</string>
+  <string name="SYS_FIELD_INVALID_REGEX">Der eingegebene Wert in das Feld #VAR1_BOLD# enthält Zeichen, welche nicht dem entsprechenden regulären Ausdruck des Feldes entsprechen. Bitte schaue in die Feldbeschreibung, welche Zeichen erlaubt sind.</string>
   <string name="SYS_FIELDS_EMPTY">Es sind nicht alle Felder gefüllt worden.</string>
   <string name="SYS_FILE">Datei</string>
   <string name="SYS_FILE_COLUMN">Dateispalte</string>
@@ -1183,6 +1188,8 @@
   <string name="SYS_REGISTRATION_SAVED">Deine Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Deine Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung wirst du per E-Mail benachrichtigt.</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer:innen übernehmen</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Existiert eine neu registrierte Benutzerin oder ein neu registrierter Benutzer bereits in der Datenbank, so werden bei gesetzter Einstellung alle Daten aus der Registrierung in den bestehenden Datensatz übernommen. Wenn diese Einstellung nicht gesetzt ist, werden nur der Anmeldename und das Passwort übernommen. Bei Benutzerinnen und Benutzern, welche bisher noch nicht vorhanden waren, werden unabhängig von dieser Einstellung immer alle Daten aus der Registrierung übernommen. (Voreinstellung: ja)</string>
+  <string name="SYS_REGULAR_EXPRESSION">Regulärer Ausdruck</string>
+  <string name="SYS_REGULAR_EXPRESSION_DESC">Es kann ein beliebiger regulärer Ausdruck hinterlegt werden, der auf den eingegebenen Inhalt des Benutzers in dieses Profilfeld angewendet wird. Der Inhalt muss den Bedingungen des regulären Ausdrucks entsprechen, damit der eingegebene Wert in dem Feld gespeichert werden kann. Der reguläre Ausdruck wird zusätzlich zu den allgemeinen Bedingungen des Datentyps geprüft.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Beziehungskonfigurationen</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein:e Benutzer:in das Profil einer anderen Benutzerin oder eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer:innen das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur die Benutzer bzw. der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>

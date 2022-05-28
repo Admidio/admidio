@@ -75,12 +75,12 @@ if ($getMode === 1) {
 
     if(!StringUtils::strValidCharacters($postUrl, 'url')
     && !preg_match('=^[^*;:~<>|\"\\\\]+$=', $postUrl)) {
-        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('ORG_URL'))));
+        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_URL'))));
         // => EXIT
     }
 
     if ($postUrl === '') {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_URL'))));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_URL'))));
         // => EXIT
     }
 

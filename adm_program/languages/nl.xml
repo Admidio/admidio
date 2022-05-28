@@ -352,7 +352,7 @@
   <string name="ORG_TIME_FORMAT_DESC">Formaat voldoet aan PHP functie #VAR1#. (Standaard: H:i)</string>
   <string name="ORG_TIMEZONE">Tijdzone</string>
   <string name="ORG_TIMEZONE_DESC">Dit is de ingestelde tijdzone. Als dit later in het configuratiebestand config.php wordt aangepast, worden alle reeds ingestelde data en tijden niet mee aangepast.</string>
-  <string name="ORG_URL">URL</string>
+  <string name="SYS_URL">URL</string>
   <string name="ORG_VALUE_LIST">Lijst met waarden</string>
   <string name="ORG_VALUE_LIST_DESC">In dit veld kunt u de items van het drop-down selectieveld of het optieveld invoeren. Per regel kan één item van het drop-down selectieveld of het optieveld ingevoerd worden.\n\nHet profiel wordt later niet als tekst opgeslagen, maar de geselecteerde positie uit de lijst. Als u de tekst in een regel verandert, zullen alle gebruikers deze nieuwe tekst direct in hun profiel kunnen zien. Als u echter een item naar een andere regel verplaatst, zullen de gebruikers mogelijk een ander item zien.\n\nEen optieveld kan ook als pictogram in plaats van als tekst weergegeven worden. Om dit te doen kan de naam van het pictogram uit de thema map opgegeven worden (b.v. ok.png) of de URL van een externe afbeelding (b.v. https://www.example.com/example.jpg). Door een verticale scheidslijn te gebruiken kan een tooltip aan het pictogram gekoppeld worden (b.v. vrouw.png|vrouw).</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Activatielink voor nieuw wachtwoord</string>

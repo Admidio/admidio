@@ -114,7 +114,7 @@ if (isset($_SESSION['profile_request'])) {
     foreach ($gProfileFields->getProfileFields() as $field) {
         $fieldName = 'usf-'. (int) $field->getValue('usf_id');
         if (isset($_SESSION['profile_request'][$fieldName])) {
-            $user->setProfileFieldsValue($field->getValue('usf_name_intern'), stripslashes($_SESSION['profile_request'][$fieldName]));
+            $user->setProfileFieldsValue($field->getValue('usf_name_intern'), stripslashes($_SESSION['profile_request'][$fieldName]), false);
         }
     }
 

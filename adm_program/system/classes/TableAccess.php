@@ -650,13 +650,14 @@ class TableAccess
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue   The new value that should be stored in the database field
      * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @throws AdmException If **columnName** doesn't exists. exception->text contains a string with the reason why the login failed.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @see TableAccess#getValue
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         if (!array_key_exists($columnName, $this->dbColumns)) {
-            return false;
+            throw new AdmException('Column ' . $columnName . ' doesn\'t exists in table ' . $this->tableName . '!');
         }
 
         // General plausibility checks based on the field type
@@ -703,17 +704,13 @@ class TableAccess
             }
         }
 
-        if (array_key_exists($columnName, $this->dbColumns)) {
-            // only mark as "changed" if the value is different (DON'T use binary safe function!)
-            if (strcmp((string) $this->dbColumns[$columnName], (string) $newValue) !== 0) {
-                $this->dbColumns[$columnName] = $newValue;
-                $this->columnsValueChanged = true;
-                $this->columnsInfos[$columnName]['changed'] = true;
-            }
-
-            return true;
+        // only mark as "changed" if the value is different (DON'T use binary safe function!)
+        if (strcmp((string) $this->dbColumns[$columnName], (string) $newValue) !== 0) {
+            $this->dbColumns[$columnName] = $newValue;
+            $this->columnsValueChanged = true;
+            $this->columnsInfos[$columnName]['changed'] = true;
         }
 
-        return false;
+        return true;
     }
 }

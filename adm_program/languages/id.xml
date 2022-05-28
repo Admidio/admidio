@@ -240,7 +240,7 @@
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Qui è possibile definire i testi di ogni notifica di sistema. I testi sono divisi in due parti (soggetto e contenuto) e sono identificati da #subject# e #content#. Il contenuto di ogni sezione segue la sezione stessa.\n\nIn in ogni mail possono essere usati i seguenti caratteri jolly. Essi saranno sostituiti con il corrispondente contenuto in fase di esecuzione</string>
   <string name="ORG_TIME_FORMAT">Formato ora</string>
   <string name="ORG_TIME_FORMAT_DESC">Il ormato rispetta la funzione PHP #VAR1#. (predefinito: H:i)</string>
-  <string name="ORG_URL">URL</string>
+  <string name="SYS_URL">URL</string>
   <string name="ORG_VALUE_LIST">Elenco dei valori</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Collegamento per l\'attivazione  della nuova password</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">Indirizzo email di sistema dell\'organizzazione</string>

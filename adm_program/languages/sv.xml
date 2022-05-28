@@ -351,7 +351,7 @@
   <string name="ORG_TIME_FORMAT_DESC">Format uppfyller PHP-funktionen #VAR1#. (standard: H: i)</string>
   <string name="ORG_TIMEZONE">Tidszon</string>
   <string name="ORG_TIMEZONE_DESC">Detta är den inställda tidszonen. Om detta ändras senare i config.php-filen i Admidio, anpassas inte redan inspelade datum och tider till den nya tidszonen.</string>
-  <string name="ORG_URL">Internetadress</string>
+  <string name="SYS_URL">Internetadress</string>
   <string name="ORG_VALUE_LIST">Värdelista</string>
   <string name="ORG_VALUE_LIST_DESC">I det här fältet kan du ange poster för listrutan eller alternativfältet. För varje rad kan en post i rullgardinsfältet eller alternativfältet anges här. \n\n Profilen lagras inte som text senare, men den valda positionen från listan. Om du ändrar texten i en rad ser alla redan tilldelade användare omedelbart den nya texten i sin profil. Men om du flyttar en post till en annan rad kan användarna se en annan post. \n\n Ett fält för alternativ kan visas som ikon istället för en text. Namnet på en ikon från temamappen (ex: ok.png) eller url till en extern bild (exempel: https://www.example.com/example.jpg) kan anges. Ett verktygstips för ikonen (t.ex. kvinnlig.png | kvinna) kan valfritt ställas in via en vertikal avdelare.</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktiveringslänk för det nya lösenordet</string>

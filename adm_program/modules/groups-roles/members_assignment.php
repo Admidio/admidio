@@ -237,7 +237,6 @@ if ($getMode === 'assign') {
     $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
     // create column header to assign role leaders
-    $htmlLeaderColumn = $gL10n->get('SYS_LEADER');
     $htmlLeaderText   = '';
 
     // show icon that leaders have no additional rights
@@ -256,9 +255,6 @@ if ($getMode === 'assign') {
     || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT) {
         $htmlLeaderText .= $gL10n->get('SYS_LEADER_ASSIGN_MEMBERS');
     }
-
-    $htmlLeaderColumn .= '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-html="true" data-trigger="hover click" data-placement="auto"
-            title="'.$gL10n->get('SYS_NOTE').'" data-content="' . SecurityUtils::encodeHTML($htmlLeaderText) . '"></i>';
 
     // create array with all column heading values
     $columnHeading = array(
@@ -285,7 +281,7 @@ if ($getMode === 'assign') {
         $columnHeading[] = $gL10n->get('SYS_BIRTHDAY');
         $columnAlignment[] = 'left';
     }
-    $columnHeading[] = $htmlLeaderColumn;
+    $columnHeading[] = $gL10n->get('SYS_LEADER') . HtmlForm::getHelpTextIcon($htmlLeaderText);
     $columnAlignment[] = 'left';
 
     $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/members_assignment_data.php', array('role_uuid' => $getRoleUuid, 'filter_rol_id' => $getFilterRoleId, 'mem_show_all' => $getMembersShowAll)));

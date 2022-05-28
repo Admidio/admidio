@@ -192,7 +192,7 @@ $form->addSelectBox(
 if ((bool) $menu->getValue('men_node') === false) {
     $form->addInput(
         'men_url',
-        $gL10n->get('ORG_URL'),
+        $gL10n->get('SYS_URL'),
         $menu->getValue('men_url', 'database'),
         array('maxLength' => 2000, 'property' => $fieldRequired)
     );

@@ -29,7 +29,7 @@ $getName        = admFuncVariableIsValid($_GET, 'name', 'string');
 $text = 'SYS_DELETE_ENTRY';
 $callbackFunction = '';
 
-// URL zusammensetzen
+// compose URL
 switch ($getType) {
     case 'ann':
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('mode' => 2, 'ann_uuid' => $getDatabaseId));

@@ -352,7 +352,7 @@
   <string name="ORG_TIME_FORMAT_DESC">Das Format entspricht der PHP-Funktion #VAR1#. (Voreinstellung: H:i)</string>
   <string name="ORG_TIMEZONE">Zeitzone</string>
   <string name="ORG_TIMEZONE_DESC">Dies ist die festgelegte Zeitzone. Wird diese später in der Konfigurationsdatei config.php von Admidio geändert, so werden bereits erfasste Daten und Uhrzeiten nicht an die neue Zeitzone angepasst.</string>
-  <string name="ORG_URL">URL</string>
+  <string name="SYS_URL">URL</string>
   <string name="ORG_VALUE_LIST">Werteliste</string>
   <string name="ORG_VALUE_LIST_DESC">In diesem Feld können Sie die Einträge für das Dropdown-Listenfeld oder, das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so sehen alle bereits zugeordneten Benutzer:innen sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzerinnen bzw. Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Theme Ordner (Bsp.: ok.png) oder die URL eines externen Bildes (Bsp.: https://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>

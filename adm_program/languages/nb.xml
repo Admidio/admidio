@@ -62,7 +62,7 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Hvis flere organisasjoner er satt opp i databasen, kan de bli vist en valgboks i påloggingsdialogen med alle organisasjoner. Brukeren kan da velge en annen organisasjon (som satt i config.php) å logge seg på. Imidlertid må brukeren også være registrert i denne organisasjonen.</string>
   <string name="ORG_TIME_FORMAT">Tidsformat</string>
   <string name="ORG_TIMEZONE">Tidssone</string>
-  <string name="ORG_URL">URL</string>
+  <string name="SYS_URL">URL</string>
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Organisasjonsnavn</string>
   <string name="ORG_VARIABLE_NEW_PASSWORD">Nytt brukerpassord</string>
   <!--Phrases only in Photomodule-->

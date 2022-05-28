@@ -1583,7 +1583,8 @@ class User extends TableAccess
 
     /**
      * Reads a user record out of the table adm_users in database selected by the unique user id.
-     * Also all profile fields of the object **mProfileFieldsData** will be read.
+     * All profile fields of the object **mProfileFieldsData** will also be read. If no user was
+     * found than the default values of all profile fields will be set.
      * @param int $userId Unique id of the user that should be read
      * @return bool Returns **true** if one record is found
      */
@@ -1593,6 +1594,8 @@ class User extends TableAccess
             // read data of all user fields from current user
             $this->mProfileFieldsData->readUserData($userId, $this->organizationId);
             return true;
+        } else {
+            $this->setDefaultValues();
         }
 
         return false;
@@ -1601,8 +1604,9 @@ class User extends TableAccess
     /**
      * Reads a record out of the table in database selected by the unique uuid column in the table.
      * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
-     * Per default all columns of the default table will be read and stored in the object.
-     * Not every Admidio table has a uuid. Please check the database structure before you use this method.
+     * Per default all columns of the default table will be read and stored in the object. If no user
+     * was found than the default values of all profile fields will be set.
+     * Not every Admidio table has an uuid. Please check the database structure before you use this method.
      * @param int $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
@@ -1614,6 +1618,8 @@ class User extends TableAccess
             // read data of all user fields from current user
             $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
             return true;
+        } else {
+            $this->setDefaultValues();
         }
 
         return false;
@@ -1742,6 +1748,21 @@ class User extends TableAccess
     }
 
     /**
+     * Set the default values that are stored in the profile fields configuration to each profile field.
+     * A default value will only be set if **usf_default_value** is not NULL.
+     * @return void
+     */
+    public function setDefaultValues()
+    {
+        foreach ($this->mProfileFieldsData->getProfileFields() as $profileField) {
+            $defaultValue = $profileField->getValue('usf_default_value');
+            if($defaultValue !== '') {
+                $this->setValue($profileField->getValue('usf_name_intern'), $defaultValue);
+            }
+        }
+    }
+
+    /**
      * Set the id of the organization which should be used in this user object.
      * The organization is used to read the rights of the user. If **setOrganization** isn't called
      * than the default organization **gCurrentOrganization** is set for the current user object.
@@ -1805,6 +1826,22 @@ class User extends TableAccess
         }
 
         return false;
+    }
+
+    /**
+     * Set a value for a profile field. The value will be checked against typical conditions of the data type and
+     * also against the custom regex if this is set. If an invalid value is set an AdmException will be thrown.
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
+     * @param mixed  $fieldValue      The new value that should be stored in the profile field.
+     * @param bool   $checkValue      The value will be checked if it's valid. If set to **false** than the value will
+     *                                not be checked.
+     * @throws AdmException If an invalid value should be set.
+     *                      exception->text contains a string with the reason why the login failed.
+     * @return bool Return true if the value is valid and would be accepted otherwise return false or an exception.
+     */
+    public function setProfileFieldsValue($fieldNameIntern, $fieldValue, $checkValue = true)
+    {
+        return $this->mProfileFieldsData->setValue($fieldNameIntern, $fieldValue, $checkValue);
     }
 
     /**
@@ -1934,17 +1971,6 @@ class User extends TableAccess
         }
 
         return $returnCode;
-    }
-
-    /**
-     * set value for column usd_value of field
-     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
-     * @param mixed  $fieldValue
-     * @return bool
-     */
-    public function setProfileFieldsValue($fieldNameIntern, $fieldValue)
-    {
-        return $this->mProfileFieldsData->setValue($fieldNameIntern, $fieldValue);
     }
 
     /**

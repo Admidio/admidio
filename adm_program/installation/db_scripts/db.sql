@@ -736,6 +736,8 @@ CREATE TABLE %PREFIX%_user_fields
     usf_description             text,
     usf_description_inline      boolean             NOT NULL    DEFAULT false,
     usf_value_list              text,
+    usf_default_value           varchar(100),
+    usf_regex                   varchar(100),
     usf_icon                    varchar(100),
     usf_url                     varchar(2000),
     usf_system                  boolean             NOT NULL    DEFAULT false,

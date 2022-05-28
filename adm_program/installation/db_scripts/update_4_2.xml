@@ -14,5 +14,7 @@
     <step id="120" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_system_mails' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'system_notifications_enabled'</step>
     <step id="130" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_system_mails' AND pr1.prf_name = 'system_notifications_enabled'</step>
     <step id="140">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_system_mails'</step>
+    <step id="150">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_default_value varchar(100)</step>
+    <step id="160">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_regex varchar(100)</step>
     <step>stop</step>
 </update>

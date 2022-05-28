@@ -58,10 +58,6 @@ switch ($getMessageId) {
         }
         break;
 
-    case 'user_field_description':
-        echo $gProfileFields->getProperty($getMessageVar1, 'usf_description');
-        break;
-
     // mylist condition description
     case 'mylist_condition':
         echo '
