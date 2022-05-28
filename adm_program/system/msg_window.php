@@ -135,7 +135,7 @@ switch ($getMessageId) {
                 </tbody>
             </table>';
         break;
-        
+
     // Profile photo help text
     case 'profile_photo_up_help':
         echo '
