@@ -47,18 +47,15 @@ try {
     // => EXIT
 }
 
-$headline = $gL10n->get('SYS_DATABASE_BACKUP');
-
-// create html page object
-$page = new HtmlPage('admidio-backup', $headline);
-
 $backupAbsolutePath = ADMIDIO_PATH . FOLDER_DATA . '/backup/'; // make sure to include trailing slash
 
 if ($getMode === 'show_list') {
     $existingBackupFiles = array();
 
     // start navigation of this module here
+    $headline = $gL10n->get('SYS_DATABASE_BACKUP');
     $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-database');
+    $page = new HtmlPage('admidio-backup', $headline);
 
     // create a list with all valid files in the backup folder
     $dirHandle = @opendir($backupAbsolutePath);
@@ -140,6 +137,9 @@ if ($getMode === 'show_list') {
     $fileContent = ob_get_contents();
     ob_end_clean();
 
+    $headline = $gL10n->get('SYS_EXECUTE_BACKUP');
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+    $page = new HtmlPage('admidio-backup', $headline);
     $page->addHtml($fileContent);
 
     // show button with link of backup list

@@ -1135,7 +1135,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
             flush();
         }
         $e = new SmartyCompilerException($error_text);
-        $e->line = $line;
+        $e->setLine($line);
         $e->source = trim(preg_replace('![\t\r\n]+!', ' ', $match[ $line - 1 ]));
         $e->desc = $args;
         $e->template = $this->template->source->filepath;
@@ -1438,6 +1438,10 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * @return bool true if compiling succeeded, false if it failed
      */
     abstract protected function doCompile($_content, $isTemplateSource = false);
+
+    public function cStyleComment($string) {
+        return '/*' . str_replace('*/', '* /' , $string) . '*/';
+    }
 
     /**
      * Compile Tag

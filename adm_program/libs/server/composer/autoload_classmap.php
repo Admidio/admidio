@@ -53,6 +53,7 @@ return array(
     'Participants' => $baseDir . '/adm_program/system/classes/Participants.php',
     'PasswordUtils' => $baseDir . '/adm_program/system/classes/PasswordUtils.php',
     'PhpIniUtils' => $baseDir . '/adm_program/system/classes/PhpIniUtils.php',
+    'PhpToken' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
     'ProfileFields' => $baseDir . '/adm_program/system/classes/ProfileFields.php',
     'QRcode' => $vendorDir . '/tecnickcom/tcpdf/include/barcodes/qrcode.php',
     'RoleDependency' => $baseDir . '/adm_program/system/classes/RoleDependency.php',
