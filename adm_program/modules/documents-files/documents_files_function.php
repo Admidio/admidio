@@ -279,6 +279,58 @@ elseif ($getMode === 5) {
 
 // add file / folder to database
 elseif ($getMode === 6) {
+    public function addFolderFileToDatabase(TableFolder $currentFolder, string $newFolderFileName) {
+        global $gDb;
+
+        $newFolderFileName = urldecode($newFolderFileName);
+        $newObjectPath     = $currentFolder->getFullFolderPath() . '/' . $newFolderFileName;
+        $folderId          = (int) $currentFolder->getValue('fol_id');
+
+        // check if a file or folder should be created
+        if (is_file($newObjectPath)) {
+            // add file to database
+            $newFile = new TableFile($gDb);
+            $newFile->setValue('fil_fol_id', $folderId);
+            $newFile->setValue('fil_name', $newFolderFileName);
+            $newFile->setValue('fil_locked', $folder->getValue('fol_locked'));
+            $newFile->setValue('fil_counter', 0);
+            $newFile->save();
+
+        } elseif (is_dir($newObjectPath)) {
+
+            // add folder to database
+            $newFolder = new TableFolder($gDb);
+            $newFolder->setValue('fol_fol_id_parent', $folderId);
+            $newFolder->setValue('fol_type', 'DOCUMENTS');
+            $newFolder->setValue('fol_name', $newFolderFileName);
+            $newFolder->setValue('fol_path', $folder->getFolderPath());
+            $newFolder->setValue('fol_locked', $folder->getValue('fol_locked'));
+            $newFolder->setValue('fol_public', $folder->getValue('fol_public'));
+            $newFolder->save();
+
+            // get roles rights of parent folder
+            $rightParentFolderView = new RolesRights($gDb, 'folder_view', $folderId);
+            $newFolder->addRolesOnFolder('folder_view', $rightParentFolderView->getRolesIds());
+            $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folderId);
+            $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
+
+            // now look for all files and folder within that new folder and add them also to the database
+            $dirHandle = @opendir($folderPath);
+            if ($dirHandle) {
+                while (($entry = readdir($dirHandle)) !== false) {
+                    if ($entry === '.' || $entry === '..' || str_starts_with($entry, '.')) {
+                        continue;
+                    }
+                }
+
+                // call recursively
+                addFolderFileToDatabase($newFolder, $entry);
+
+                closedir($dirHandle);
+            }
+        }
+    }
+
     if ($getFolderUuid === '') {
         // the uuid of the current folder must be set
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
