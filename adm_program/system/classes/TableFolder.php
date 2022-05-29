@@ -110,6 +110,63 @@ class TableFolder extends TableAccess
     }
 
     /**
+     * Add a new file or subfolder of the current folder to the database. If a folder will be added all files and
+     * subfolders of this folder will be added recursively with this method. The configured rights for viewing and
+     * uploading will be adopt to the subfolders.
+     * @param string $newFolderFileName Name of the folder or file that should be added to the database.
+     */
+    public function addFolderOrFileToDatabase(string $newFolderFileName)
+    {
+        global $gDb;
+
+        $newFolderFileName = urldecode($newFolderFileName);
+        $newObjectPath = $this->getFullFolderPath() . '/' . $newFolderFileName;
+        $folderId = (int) $this->getValue('fol_id');
+
+        // check if a file or folder should be created
+        if (is_file($newObjectPath)) {
+            // add file to database
+            $newFile = new TableFile($gDb);
+            $newFile->setValue('fil_fol_id', $folderId);
+            $newFile->setValue('fil_name', $newFolderFileName);
+            $newFile->setValue('fil_locked', $this->getValue('fol_locked'));
+            $newFile->setValue('fil_counter', 0);
+            $newFile->save();
+
+        } elseif (is_dir($newObjectPath)) {
+            // add folder to database
+            $newFolder = new TableFolder($gDb);
+            $newFolder->setValue('fol_fol_id_parent', $folderId);
+            $newFolder->setValue('fol_type', 'DOCUMENTS');
+            $newFolder->setValue('fol_name', $newFolderFileName);
+            $newFolder->setValue('fol_path', $this->getFolderPath());
+            $newFolder->setValue('fol_locked', $this->getValue('fol_locked'));
+            $newFolder->setValue('fol_public', $this->getValue('fol_public'));
+            $newFolder->save();
+
+            // get roles rights of parent folder
+            $rightParentFolderView = new RolesRights($gDb, 'folder_view', $folderId);
+            $newFolder->addRolesOnFolder('folder_view', $rightParentFolderView->getRolesIds());
+            $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folderId);
+            $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
+
+            // now look for all files and folder within that new folder and add them also to the database
+            $dirHandle = @opendir($newObjectPath);
+            if ($dirHandle) {
+                while (($entry = readdir($dirHandle)) !== false) {
+                    if ($entry === '.' || $entry === '..' || str_starts_with($entry, '.')) {
+                        continue;
+                    }
+
+                    // call recursively
+                    $newFolder->addFolderOrFileToDatabase($entry);
+                }
+                closedir($dirHandle);
+            }
+        }
+    }
+
+    /**
      * Add all roles of the array to the current folder and all of the subfolders. The
      * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
      * @param string         $rolesRightNameIntern Name of the right where the roles should be added
