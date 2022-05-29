@@ -117,8 +117,6 @@ class TableFolder extends TableAccess
      */
     public function addFolderOrFileToDatabase(string $newFolderFileName)
     {
-        global $gDb;
-
         $newFolderFileName = urldecode($newFolderFileName);
         $newObjectPath = $this->getFullFolderPath() . '/' . $newFolderFileName;
         $folderId = (int) $this->getValue('fol_id');
@@ -126,7 +124,7 @@ class TableFolder extends TableAccess
         // check if a file or folder should be created
         if (is_file($newObjectPath)) {
             // add file to database
-            $newFile = new TableFile($gDb);
+            $newFile = new TableFile($this->db);
             $newFile->setValue('fil_fol_id', $folderId);
             $newFile->setValue('fil_name', $newFolderFileName);
             $newFile->setValue('fil_locked', $this->getValue('fol_locked'));
@@ -135,7 +133,7 @@ class TableFolder extends TableAccess
 
         } elseif (is_dir($newObjectPath)) {
             // add folder to database
-            $newFolder = new TableFolder($gDb);
+            $newFolder = new TableFolder($this->db);
             $newFolder->setValue('fol_fol_id_parent', $folderId);
             $newFolder->setValue('fol_type', 'DOCUMENTS');
             $newFolder->setValue('fol_name', $newFolderFileName);
@@ -145,9 +143,9 @@ class TableFolder extends TableAccess
             $newFolder->save();
 
             // get roles rights of parent folder
-            $rightParentFolderView = new RolesRights($gDb, 'folder_view', $folderId);
+            $rightParentFolderView = new RolesRights($this->db, 'folder_view', $folderId);
             $newFolder->addRolesOnFolder('folder_view', $rightParentFolderView->getRolesIds());
-            $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folderId);
+            $rightParentFolderUpload = new RolesRights($this->db, 'folder_upload', $folderId);
             $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
 
             // now look for all files and folder within that new folder and add them also to the database
