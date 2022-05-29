@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in Datesmodule-->
+  <!--Phrases only in event module-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
   <string name="DAT_ALL_DAY">Ganztägig</string>
   <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Teilnehmende können anonyme Gäste anmelden</string>
@@ -84,7 +84,7 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detailliert</string>
   <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
   <string name="DAT_VISIBILITY">Sichtbarkeit</string>
-  <!--Phrases only in Guestbookmodule-->
+  <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Zurück zum Gästebuch</string>
   <string name="GBO_CAPTCHA_DESC">Für nicht angemeldete Benutzer:innen wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss die Benutzerin oder der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Voreinstellung: ja)</string>
   <string name="GBO_COMMENT_BY">Kommentar von #VAR1#</string>
@@ -114,7 +114,7 @@
   <string name="GBO_SHOW_COMMENTS">Kommentare anzeigen</string>
   <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Zeige #VAR1# Kommentar(e) zu diesem Eintrag</string>
   <string name="GBO_WRITE_COMMENT">Kommentar schreiben</string>
-  <!--Phrases only in Installation-->
+  <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Weitere Organisation hinzufügen</string>
   <string name="INS_ADD_ORGANIZATION">Organisation hinzufügen</string>
   <string name="INS_ADDIDIONAL_DATA">Zusätzliche Daten</string>
@@ -228,11 +228,9 @@
   <string name="INS_SON">Sohn</string>
   <string name="INS_SPOUSE">Ehepartner/-in</string>
   <string name="INS_WIFE">Ehefrau</string>
-  <!--Phrases only in Organizationadministration-->
+  <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer:innen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das Modul für Gäste ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>
-  <string name="SYS_ENABLE_NOTIFICATIONS">Systembenachrichtigungen aktivieren</string>
-  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Hier können die Systembenachrichtigungen von Admidio deaktiviert werden. Systembenachrichtigungen werden versendet, wenn sich zum Beispiel eine neue Benutzerin oder ein neuer Benutzer angemeldet hat. Aber auch Registrierungsbestätigungen werden als Systembenachrichtigungen verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden, es sei denn der Server unterstützt keinen E-Mailversand. Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Voreinstellung: ja)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Die/Der aktuelle Benutzer:in wird dort automatisch zur/zum Administrator:in ernannt und kann die weitere Einrichtung durchführen. Benutzer:innen, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Zusätzliche Variablen</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
@@ -310,7 +308,6 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Geben Sie in diesem Formular die Abkürzung, den offiziellen Namen sowie die E-Mail-Adresse der Organisation ein, die Sie hinzufügen möchten. Die E-Mail-Adresse sollte eine allgemeine Adresse der Organisation sein. Diese wird unter anderem als Absenderadresse bei automatischen Systembenachrichtigungen genutzt.</string>
   <string name="ORG_NO_FIELD_CREATED">Es wurden noch keine organisationsspezifischen Profilfelder angelegt!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Benachrichtigung einer Administratorin oder eines Administrators nach einer Registrierung</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Voreinstellung: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Benutzer:innen</string>
@@ -341,18 +338,12 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier kann die E-Mail-Adresse eines Administrierenden eingetragen werden. Diese wird als Empfängeradresse für Systembenachrichtigungen verwendet, z.B. bei der Registrierungsbestätigung.</string>
-  <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Benachrichtigung bei Profiländerungen</string>
-  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Hier kann die Systembenachrichtigung für geänderte Profildaten aktiviert werden. Werden von einer Benutzerin oder einem Benutzer Profildaten erstellt, geändert oder gelöscht, erfolgt eine Benachrichtigung an die angegebene E-Mail #VAR1# (Voreinstellung: nein).</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Die Administratorin oder der Administrator hat so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mail-Adresse #VAR1# versendet. (Voreinstellung: nein)</string>
-  <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</string>
+  <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder E-Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch den entsprechenden Inhalt ersetzt werden</string>
   <string name="ORG_THEME_FOLDER_OPEN">Themes Ordner konnte nicht geöffnet/gelesen werden.</string>
   <string name="ORG_TIME_FORMAT">Zeitformat</string>
   <string name="ORG_TIME_FORMAT_DESC">Das Format entspricht der PHP-Funktion #VAR1#. (Voreinstellung: H:i)</string>
   <string name="ORG_TIMEZONE">Zeitzone</string>
   <string name="ORG_TIMEZONE_DESC">Dies ist die festgelegte Zeitzone. Wird diese später in der Konfigurationsdatei config.php von Admidio geändert, so werden bereits erfasste Daten und Uhrzeiten nicht an die neue Zeitzone angepasst.</string>
-  <string name="SYS_URL">URL</string>
   <string name="ORG_VALUE_LIST">Werteliste</string>
   <string name="ORG_VALUE_LIST_DESC">In diesem Feld können Sie die Einträge für das Dropdown-Listenfeld oder, das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so sehen alle bereits zugeordneten Benutzer:innen sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzerinnen bzw. Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Theme Ordner (Bsp.: ok.png) oder die URL eines externen Bildes (Bsp.: https://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
@@ -365,7 +356,7 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Kurzbezeichnung der Organisation</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">URL der Webseite der Organisation</string>
   <string name="ORG_VARIABLE_USERNAME">Anmeldename der Benutzerin oder des Benutzers aus dem jeweiligen E-Mailkontext</string>
-  <!--Phrases only in Photomodule-->
+  <!--Phrases only in photo module-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Album löschen</string>
   <string name="PHO_ALBUM_LOCK">Album sperren</string>
@@ -424,9 +415,7 @@
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">Der angegebene Wert bestimmt wieviele kleine Vorschaubilder auf einer Seite angezeigt werden. Hat ein Album mehr Bilder, so wird automatisch eine Seitennavigation hinzugefügt. (Voreinstellung: 16)</string>
   <string name="PHO_UPLOAD_PHOTOS">Fotos hochladen</string>
   <string name="PHO_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
-  <!--Phrases only in Profilemodule-->
-  <string name="PRO_ACCEPT_NEW_PICTURE">Neues Profilfoto übernehmen</string>
-  <string name="PRO_ADD_USER">Benutzer:in anlegen</string>
+  <!--Phrases only in profile module-->
   <string name="PRO_ASSIGNED_BY_ROLES">Vergeben durch die Rollen</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Die Registrierung wurde erfolgreich bestätigt. Die Benutzerin oder der Benutzer kann sich jetzt im System anmelden.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
@@ -525,7 +514,6 @@
   <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator:in</string>
-  <string name="SYS_ADMINISTRATOR_EMAIL">Administrator:in E-Mail</string>
   <string name="SYS_ADMINISTRATORS">Administrierende</string>
   <string name="SYS_ADMINISTRATORS_DESC">Mitglieder dieser Rollen sind Administrierende des Dokumente und Dateien Moduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zu einer administrierende Rolle gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
@@ -623,6 +611,7 @@
   <string name="SYS_COMMON">Allgemein</string>
   <string name="SYS_COMPLEMENT">Ergänzen</string>
   <string name="SYS_CONDITION">Bedingung</string>
+  <string name="SYS_CONDITIONS">Bedingungen</string>
   <string name="SYS_CONFIGURATION">Konfiguration</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Konfiguration allen Benutzer:innen zur Verfügung stellen</string>
   <string name="SYS_CONFIGURATION_DELETE">Wollen Sie aktuelle Listenkonfiguration wirklich löschen?</string>
@@ -643,9 +632,10 @@
   <string name="SYS_COPY">Kopieren</string>
   <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist Ihre angeforderte Kopie der Nachricht</string>
+  <string name="SYS_COPY_ENTRY">Eintrag kopieren</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
-  <string name="SYS_COUNT_BCC">Anzahl der BCC Empfänger:innen</string>
-  <string name="SYS_COUNT_BCC_DESC">E-Mails an Rollen mit mehreren Mitgliedern werden als Blindkopie (BCC) versendet. So kann von der Empfängerin oder dem Empfänger nicht eingesehen werden, wer diese E-Mail noch bekommen hat. Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängerinnen oder Empfängern pro E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Besitzt eine Rolle mehr Mitglieder als die eingestellte Zahl, so werden mehrere E-Mails erzeugt. Wird der Wert auf 1 gesetzt, so werden die E-Mails nicht als Blindkopie versendet, sondern direkt an die Empfängerin oder den Empfänger. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Voreinstellung: 50)</string>
+  <string name="SYS_NUMBER_RECIPIENTS">Anzahl der Empfänger:innen</string>
+  <string name="SYS_NUMBER_RECIPIENTS_DESC">Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängerinnen oder Empfängern in einer E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Soll eine E-Mail an mehr Empfänger gesendet werden als die hier eingestellte Anzahl, so werden mehrere E-Mails erzeugt. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Voreinstellung: 50)</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuelle empfangende Person</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuelle Empfangende</string>
   <string name="SYS_COUNTER">Zähler</string>
@@ -668,8 +658,9 @@
   <string name="SYS_CREATE_RELATIONSHIP">Beziehung anlegen</string>
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
+  <string name="SYS_CREATED_AT">Angelegt am</string>
+  <string name="SYS_CREATED_BY">Angelegt von</string>
   <string name="SYS_CREATED_BY_AND_AT">Angelegt von #VAR1# am #VAR2#</string>
-  <string name="SYS_CREATED_AT">Erstellungsdatum</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Aktuelle Datenbankversion</string>
   <string name="SYS_CURRENT_MEMBER">Aktuelles Mitglied</string>
@@ -714,6 +705,8 @@
   <string name="SYS_DEFAULT_LIST">Standardliste</string>
   <string name="SYS_DEFAULT_LIST_DESC">Soll eine Mitgliederliste zu dieser Rolle angezeigt werden und wird keine Listenkonfiguration vorgegeben, so wird die Liste in der systemweit eingestellten Standardlistenkonfiguration dargestellt. Über dieses Feld kann für die einzelne Rolle eine andere Listenkonfiguration ausgewählt werden, die angezeigt wird, wenn keine Listenkonfiguration vorgegeben ist.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWenden Sie sich bitte an eine:n Administrator:in, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
+  <string name="SYS_DEFAULT_VALUE">Standardwert</string>
+  <string name="SYS_DEFAULT_VALUE_DESC">Sie können einen Standardwert für dieses Profilfeld hinterlegen. Dieser Wert wird bei einem neuen Mitglied in dem Profilfeld direkt vorbelegt. Tragen Sie dazu den Wert in dieses Feld ein, den Sie auch im Profil selber bei dem Feld hinterlegen würden.\n\nBei dem Datentyp Checkbox können Sie 1 für aktiviert und 0 für deaktiviert hinterlegen. Bei den Datentypen Dropdown-Listenfeld und Optionsfeld hinterlegen Sie die Nummer der Zeile aus der Werteliste in der der gewünschte Wert steht.</string>
   <string name="SYS_DEFAULT_VAR">Standard-#VAR1#</string>
   <string name="SYS_DELETE">Löschen</string>
   <string name="SYS_DELETE_CONFIGURATION">Konfiguration löschen</string>
@@ -771,19 +764,19 @@
   <string name="SYS_EDIT_ENTRY">Eintrag bearbeiten</string>
   <string name="SYS_EDIT_FILE">Datei bearbeiten</string>
   <string name="SYS_EDIT_FOLDER">Ordner bearbeiten</string>
-  <string name="SYS_EDIT_LISTS">Listen bearbeiten</string>
-  <string name="SYS_EDIT_LISTS_DESC">Eigene Listen mit ausgewählten Profilfeldern können von Benutzer:innen erstellt und anschließend auf Gruppen und Rollen angewendet werden. Dabei stehen nur Profilfelder und Gruppen bzw. Rollen zur Verfügung, die die jeweilige Benutzerin oder der jeweilige Benutzer sehen darf. Mit dieser Einstellung kann festgelegt werden, wer solche Listen erstellen kann. (Voreinstellung: Alle)</string>
+  <string name="SYS_CONFIGURE_LISTS">Listen konfigurieren</string>
+  <string name="SYS_CONFIGURE_LISTS_DESC">Benutzer können ihre eigenen Listen mit ausgewählten Profilfeldern erstellen und diese dann auf Gruppen und Rollen anwenden. Es sind nur Profilfelder und Gruppen oder Rollen verfügbar, die der aktuelle Benutzer sehen darf. Mit dieser Einstellung können Sie festlegen, wer solche Listen erstellen darf. (Voreinstellung: Alle)</string>
   <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Profilfelder bearbeiten</string>
-  <string name="SYS_EDIT_RELATIONSHIPS">Beziehungen bearbeiten</string>
   <string name="SYS_EDIT_ROLE">Rolle bearbeiten</string>
-  <string name="SYS_EDIT_ROLE_MEMBERSHIPS">Rollenmitgliedschaft bearbeiten</string>
   <string name="SYS_EDIT_USER">Benutzer:in bearbeiten</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Profil dieser Beziehung bearbeiten</string>
   <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
   <string name="SYS_EDIT_WEBLINKS">Weblinks bearbeiten</string>
   <string name="SYS_EDITED_BY">Geändert von</string>
   <string name="SYS_EMAIL">E-Mail</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR">E-Mail Administrator:in</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR_DESC">Die E-Mail-Adresse eines Administrierenden wird im System immer dann angezeigt, wenn ein unerwartetes Ereignis eingetreten ist. Es erfolgt der Hinweis, das man Kontakt mit einem Administrator aufnehmen sollte.</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Eine neue Ankündigung wurde angelegt</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Es wurde eine neue Ankündigung bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde geändert</string>
@@ -810,13 +803,15 @@
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Der Kategoriereport erstellt eine Liste aller Rollen und Kategorien, die ein Mitglied hat. Die Berechtigung \"Mitgliederlisten aller Rollen anzeigen\" ist für den Betrieb erforderlich. (Standard: ja)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Aktiviere Dokumente &amp; Dateien</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Das Modul Dokumente &amp; Dateien kann über diese Einstellung aktiviert oder deaktiviert werden. (Standard: ja)</string>
-  <string name="SYS_ENABLE_EMAILS">Aktiviere E-Mails</string>
+  <string name="SYS_ENABLE_EMAILS">E-Mails aktivieren</string>
   <string name="SYS_ENABLE_EMAILS_DESC">E-Mails innerhalb des Nachrichten-Moduls können über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. (Voreinstellung: Aktiviert)</string>
-  <string name="SYS_ENABLE_GREETING_CARDS">Aktiviere Grußkarten</string>
+  <string name="SYS_ENABLE_GREETING_CARDS">Grußkarten aktivieren</string>
   <string name="SYS_ENABLE_GREETING_CARDS_DESC">Grußkarten können über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. Dieses Modul ist generell nur für angemeldete Benutzerinnen und Benutzern verfügbar. (Voreinstellung: ja)</string>
-  <string name="SYS_ENABLE_GROUPS_ROLES">Aktiviere Gruppen &amp; Rollen</string>
+  <string name="SYS_ENABLE_GROUPS_ROLES">Gruppen &amp; Rollen aktivieren</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Zeigt die Gruppen und Rollen der Organisation an und ermöglicht die freie Konfiguration von Gruppen und Rollen. Eigene Liste können konfiguriert und angewendet werden. Dieses Modul ist generell nur für angemeldete Benutzerinnen und Benutzern verfügbar. (Voreinstellung: ja)</string>
-  <string name="SYS_ENABLE_PM_MODULE">Aktiviere private Nachrichten</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS">Systembenachrichtigungen aktivieren</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Hier können die Systembenachrichtigungen von Admidio deaktiviert werden. Systembenachrichtigungen werden versendet, wenn sich zum Beispiel ein:e neue:r Benutzer:in angemeldet hat. Aber auch Registrierungsbestätigungen werden als Systembenachrichtigungen verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden. Es sei denn der Server unterstützt keinen E-Mailversand. Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Voreinstellung: ja)</string>
+  <string name="SYS_ENABLE_PM_MODULE">Private Nachrichten aktivieren</string>
   <string name="SYS_ENABLE_PM_MODULE_DESC">Private Nachrichten können über diese Einstellung aktiviert oder deaktiviert werden. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Beziehungen pflegen und anzeigen</string>
   <string name="SYS_ENABLE_USER_RELATIONS_DESC">Wenn diese Einstellung gesetzt ist, können Beziehungen zwischen Benutzer:innen gepflegt und angezeigt werden. (Voreinstellung: ja)</string>
@@ -833,6 +828,7 @@
   <string name="SYS_EXAMPLES">Beispiele</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
+  <string name="SYS_EXECUTE_BACKUP">Backup durchführen</string>
   <string name="SYS_EXISTING_MEMBERS">Existierende Mitglieder</string>
   <string name="SYS_EXPORT_LISTS">Listen exportieren</string>
   <string name="SYS_EXPORT_LISTS_DESC">Listen von Gruppen und Rollen können von Benutzerinnnen und Benutzern exportiert werden, sofern sie das Recht haben diese Listen zu sehen. Mit dieser Einstellung kann die Exportfunktion eingeschränkt werden. (Voreinstellung: Alle)</string>
@@ -843,7 +839,9 @@
   <string name="SYS_FIELD">Feld</string>
   <string name="SYS_FIELD_EMPTY">Das Feld #VAR1_BOLD# ist nicht gefüllt.</string>
   <string name="SYS_FIELD_ENCLOSURE">Anführungszeichen für die Felder</string>
-  <string name="SYS_FIELD_INVALID_CHAR">Das Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</string>
+  <string name="SYS_FIELD_INVALID_CHAR">Der eingegebene Wert in dem Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</string>
+  <string name="SYS_FIELD_INVALID_INPUT">Das Feld #VAR1_BOLD# enthält eine ungültige Eingabe.</string>
+  <string name="SYS_FIELD_INVALID_REGEX">Der eingegebene Wert in dem Feld #VAR1_BOLD# enthält Zeichen, welche nicht dem entsprechenden regulären Ausdruck des Feldes entsprechen. Bitte schauen Sie in die Feldbeschreibung, welche Zeichen erlaubt sind.</string>
   <string name="SYS_FIELDS_EMPTY">Es sind nicht alle Felder gefüllt worden.</string>
   <string name="SYS_FILE">Datei</string>
   <string name="SYS_FILE_COLUMN">Dateispalte</string>
@@ -901,7 +899,6 @@
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Das Programm erwartet eine Zeichenkette mit mindestens 2 unterschiedlichen Zeichen.</string>
   <string name="SYS_GREETING_CARD">Grußkarte</string>
   <string name="SYS_GREETING_CARDS">Grußkarten</string>
-  <string name="SYS_GREETING_CARD_EDIT">Grußkarte bearbeiten</string>
   <string name="SYS_GROUPS_ROLES">Gruppen &amp; Rollen</string>
   <string name="SYS_GROUPS_ROLES_DESC">Übersicht und Verwaltung aller Gruppen und Rollen der Organisation. Es können verschiedene Mitgliederlisten angezeigt, exportiert und eigene Listen erstellt werden.</string>
   <string name="SYS_HALF_YEARLY">Halbjährlich</string>
@@ -1047,7 +1044,7 @@
   <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger:innen</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Empfänger:innen enthalten alle Empfänger:innen im BCC-Feld. Damit ist sichergestellt, dass keiner die E-Mail-Adressen der anderen Empfänger:innen sieht. Das TO-Feld muss allerdings auch befüllt werden. Über diese Einstellung kann festgelegt werden, was im Empfängerfeld (TO) hinterlegt wird. Dies kein ein versteckter Wert \"Undisclosed Recipients\" sein, was aber bei manchen Providern zu Problemen führt. Alternativ kann das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administrator:innen-Adresse aus den Systembenachrichtigungen gefüllt werden. Hinweis: Alle Emails an mehrere Empfänger:innen werden dann auch an die E-Mail-Adresse im Empfängerfeld (TO) geschickt. (Voreinstellung: Absender:in)</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">Die Rolle Administrator:in muss mindestens ein Mitglied haben!</string>
-  <string name="SYS_MYLIST_CONDITION_DESC">Hier können Sie Bedingungen zu jedem Feld in Ihrer neuen Liste eingeben. Damit wird die ausgewählte Rolle noch einmal nach Ihren Bedingungen eingeschränkt.</string>
+  <string name="SYS_MYLIST_CONDITION_DESC">Hier können Sie Bedingungen zu jedem Feld in Ihrer Liste hinterlegen. Damit werden die ermittelten Mitglieder der ausgewählten Rolle mit Ihren Bedingungen weiter eingeschränkt.</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Name (Abkürzung)</string>
   <string name="SYS_NEW_BETA_AVAILABLE">Eine neue Beta Version ist verfügbar!</string>
@@ -1090,6 +1087,13 @@
   <string name="SYS_NOT_SET">nicht gesetzt</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Bitte in der Bedingung des Feldes #VAR1_BOLD# ein gültiges Datum verwenden.</string>
   <string name="SYS_NOTE">Hinweis</string>
+  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Benachrichtigung nach einer neuen Registrierung</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Hier kann eine Systembenachrichtigung für neue Einträge in den Modulen Ankündigungen, Termine, Gästebuch, Weblinks und Fotos aktiviert werden. Mitglieder der hinterlegten Benachrichtigungsrolle erhalten so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen. (Voreinstellung: nein)</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Benachrichtigung bei Profiländerungen</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Hier kann eine Systembenachrichtigung für neue Einträge in den Modulen Ankündigungen, Termine, Gästebuch, Weblinks und Fotos aktiviert werden. Mitglieder der hinterlegten Benachrichtigungsrolle erhalten so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen. (Voreinstellung: nein)</string>
+  <string name="SYS_NOTIFICATION_ROLE">Rolle für Benachrichtungen</string>
+  <string name="SYS_NOTIFICATION_ROLE_DESC">Benachrichtigungen über neue Einträge oder Profiländerungen werden an alle Mitglieder dieser Rolle gesendet.</string>
   <string name="SYS_NUMBER">Zahl</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Anzahl Rollen pro Seite</string>
   <string name="SYS_NUMBER_COL_DESC">Soll am Ende des Reports eine Zeile mit der Anzahl der Mitgliedschaften angezeigt werden, so ist der Haken zu setzen.</string>
@@ -1180,6 +1184,8 @@
   <string name="SYS_REGISTRATION_SAVED">Ihre Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Ihre Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung werden Sie per E-Mail benachrichtigt.</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer:innen übernehmen</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Existiert eine neu registrierte Benutzerin oder ein neu registrierter Benutzer bereits in der Datenbank, so werden bei gesetzter Einstellung alle Daten aus der Registrierung in den bestehenden Datensatz übernommen. Wenn diese Einstellung nicht gesetzt ist, werden nur der Anmeldename und das Passwort übernommen. Bei Benutzerinnen und Benutzern, welche bisher noch nicht vorhanden waren, werden unabhängig von dieser Einstellung immer alle Daten aus der Registrierung übernommen. (Voreinstellung: ja)</string>
+  <string name="SYS_REGULAR_EXPRESSION">Regulärer Ausdruck</string>
+  <string name="SYS_REGULAR_EXPRESSION_DESC">Es kann ein beliebiger regulärer Ausdruck hinterlegt werden, der auf den eingegebenen Inhalt des Benutzers in dieses Profilfeld angewendet wird. Der Inhalt muss den Bedingungen des regulären Ausdrucks entsprechen, damit der eingegebene Wert in dem Feld gespeichert werden kann. Der reguläre Ausdruck wird zusätzlich zu den allgemeinen Bedingungen des Datentyps geprüft.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Beziehungskonfigurationen</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein:e Benutzer:in das Profil einer anderen Benutzerin oder eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer:innen das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur die Benutzer bzw. der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
@@ -1288,9 +1294,10 @@
   <string name="SYS_SEND_EMAIL_FORMER">E-Mails an Ehemalige senden</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Ist diese Einstellung gesetzt, dann können E-Mails an einzelne ehemalige Mitglieder, sowie an alle ehemaligen Mitglieder einer Rolle gesendet werden. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
-  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Sende E-Mails an alle E-Mail Adressen der Benutzerin bzw. des Benutzers</string>
-  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen der Benutzerin oder des Benutzers gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: Aktiviert)</string>
-  <string name="SYS_SEND_LOGIN_INFORMATION">Zugangsdaten zuschicken</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">E-Mails an alle E-Mail-Adressen der Benutzerin bzw. des Benutzers senden</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen der Benutzerin oder des Benutzers gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail-Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: Aktiviert)</string>
+  <string name="SYS_SEND_GREETING_CARD">Grußkarte versenden</string>
+  <string name="SYS_SEND_LOGIN_INFORMATION">Zugangsdaten versenden</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen und Empfänger zur Verfügung, an die Sie E-Mails schreiben können.</string>
   <string name="SYS_SEND_MAILS">E-Mails zusenden</string>
   <string name="SYS_SEND_METHOD">Versandmethode</string>
@@ -1299,7 +1306,7 @@
   <string name="SYS_SEND_NEW_PW">Neues Passwort zusenden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Private Nachricht senden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Ihre PM wird an die ausgewählte Empfängerin bzw. den ausgewählten Empfänger gesendet</string>
-  <string name="SYS_SEND_TEST_MAIL">Testmail verschicken</string>
+  <string name="SYS_SEND_TEST_MAIL">Testmail versenden</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">E-Mail mit Anmeldenamen und neuem Passwort zuschicken</string>
   <string name="SYS_SENDER">Absender:in</string>
   <string name="SYS_SENDER_EMAIL">Absender:in E-Mail</string>
@@ -1361,6 +1368,7 @@
   <string name="SYS_SUNDAY">Sonntag</string>
   <string name="SYS_SUPPORT_ADMIDIO">Admidio unterstützen</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorienverwaltung</string>
+  <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Wechsel zur Beziehungskonfiguration</string>
   <string name="SYS_SYMMETRICAL">symmetrisch</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Zugangsdaten für #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie erhalten Ihre Zugangsdaten für die Webseite #organization_homepage#.\nAnmeldename: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Administrierenden</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Passwort zurücksetzen für #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nwir haben eine Anfrage zum Zurücksetzen Ihres Passwortes auf #organization_homepage# erhalten.\n\nFalls die Anfrage von Ihnen gekommen ist, können Sie über den folgenden Link Ihr Passwort zurücksetzen und ein neues Passwort vergeben: \n#variable1#\n\nMit freundlichen Grüßen\nDie Administrierenden</string>
@@ -1387,6 +1395,7 @@
   <string name="SYS_TOTAL">Summe</string>
   <string name="SYS_TUESDAY">Dienstag</string>
   <string name="SYS_TYPE">Typ</string>
+  <string name="SYS_UNIQUE_ID">Eindeutige ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Unbekannt</string>
   <string name="SYS_UNLIMITED">Unbegrenzt</string>
@@ -1398,6 +1407,7 @@
   <string name="SYS_UPLOAD_MAX_FILESIZE">max. Uploadgröße</string>
   <string name="SYS_UPLOAD_NAME_ERROR">Der Dateiname darf nicht \"submit\" heißen.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Aktualisierung erfolgreich</string>
+  <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-+_:/#?= .</string>
   <string name="SYS_USER">Benutzer:in</string>
   <string name="SYS_USER_COULD_BE_CREATED">Die Person kann angelegt werden.</string>

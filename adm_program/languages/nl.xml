@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in Datesmodule-->
+  <!--Phrases only in event module-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Plaats evenement op kalender</string>
   <string name="DAT_ALL_DAY">Full time</string>
   <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Deelnemers kunnen anonieme gasten aanmelden</string>
@@ -17,7 +17,7 @@
   <string name="DAT_CURRENT_DATES_OF_ORGA">Huidige evenementen van organisatie #VAR1#</string>
   <string name="DAT_DATE">Evenement</string>
   <string name="DAT_DATES">Evenementen</string>
-  <string name="DAT_DATES_DESC">Hier kunt u evenementen maken en bewerken. Gebruikers kunnen zich opgeven hiervoor.</string>
+  <string name="DAT_DATES_DESC">Hier kunt u evenementen maken en bewerken. Gebruikers kunnen zich aanmelden voor deze evenementen.</string>
   <string name="DAT_DEADLINE">Uiterste datum</string>
   <string name="DAT_DEADLINE_ATTENTION">Deze aanmelding kan niet meer gewijzigd worden omdat de einddatum voor aanmelden verstreken is of het evenement in het verleden ligt. Neem svp contact op met een evenement leider of een beheerder!</string>
   <string name="DAT_DEADLINE_DESC">Deelnemers kunnen zich tot deze datum aanmelden voor het evenement. Leiders en gebruikers met het recht om evenementen te bewerken, kunnen doorgaan met het toewijzen van deelnemers. Als er geen datum is opgegeven, wordt de startdatum van het evenement standaard als einddatum registratie overgenomen.</string>
@@ -84,7 +84,7 @@
   <string name="DAT_VIEW_MODE_DETAIL">Gedetailleerd</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Zichtbaarheid</string>
-  <!--Phrases only in Guestbookmodule-->
+  <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Terug naar gastenboek</string>
   <string name="GBO_CAPTCHA_DESC">Als deze optie is geactiveerd, krijgen gebruikers die niet zijn ingelogd een afbeelding met een captcha-code of een eenvoudige berekening. Het is noodzakelijk om de juiste code of resultaat in te vullen om het bericht op te slaan. De captcha is onderdeel van de anti-spam oplossing in Admidio. (Standaard: ja)</string>
   <string name="GBO_COMMENT_BY">Reactie van #VAR1#</string>
@@ -114,7 +114,7 @@
   <string name="GBO_SHOW_COMMENTS">Toon reacties</string>
   <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Toon #VAR1# reactie(s) van dit bericht in gastenboek</string>
   <string name="GBO_WRITE_COMMENT">Plaats reactie</string>
-  <!--Phrases only in Installation-->
+  <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Voeg andere organisatie toe</string>
   <string name="INS_ADD_ORGANIZATION">Voeg organisatie toe</string>
   <string name="INS_ADDIDIONAL_DATA">Extra informatie</string>
@@ -228,11 +228,9 @@
   <string name="INS_SON">Zoon</string>
   <string name="INS_SPOUSE">Levenspartner</string>
   <string name="INS_WIFE">Echtgenote</string>
-  <!--Phrases only in Organizationadministration-->
+  <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Module toegang</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Module kan in- of uitgeschakeld worden voor ingelogde gebruikers. Als module alleen voor ingelogde gebruikers toegankelijk is, zal het worden verborgen voor niet-ingelogde gebruikers. De webfeed is dan volledig uitgeschakeld voor beide gebruikersgroepen. (Standaard: actief)</string>
-  <string name="SYS_ENABLE_NOTIFICATIONS">Systeemberichten inschakelen</string>
-  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Hier kunt u de systeemberichten van Admidio uitschakelen. Deze worden verzonden, bijvoorbeeld wanneer een nieuwe gebruiker inlogt. Registratie bevestigingen worden doorgaans ook verzonden als systeembericht. In het algemeen dient deze functie niet te worden uitgeschakeld, behalve als de server het versturen van e-mail niet ondersteund. De e-mail module wordt niet beïnvloed door het uitschakelen van deze functie. (Standaard: ja)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">Voegt een nieuwe organisatie met stamgegevens toe aan de database. De huidige gebruiker wordt automatisch aangewezen als beheerder en kan de verdere instellingen doorvoeren. Gebruikers die zich vervolgens bij het systeem aanmelden, moeten de juiste organisatie selecteren.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Extra variabelen</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-thema</string>
@@ -307,10 +305,9 @@
   <string name="ORG_LOGIN_AUTOMATICALLY">Automatisch inloggen</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Gebruikers kunnen tijdens inloggen bepalen of inloginformatie opgeslagen moet worden op hun computer. Hierdoor worden ze automatisch ingelogd bij het volgende bezoek. Dit kan echter misbruik tot gevolg hebben. (Standaard: ja)</string>
   <string name="ORG_NEW_ORGANIZATION">Nieuwe organisatie</string>
-  <string name="ORG_NEW_ORGANIZATION_DESC">Voer de afkorting, de officiële naam en ook het e-mailadres in van de organisatie die u wilt toevoegen. Het e-mailadres moet een algemeen adres van de organisatie zijn. Het wordt als verzendadres van automatische systeemberichten gebruikt.</string>
+  <string name="ORG_NEW_ORGANIZATION_DESC">Voer de afkorting, de officiële naam en ook het e-mailadres in van de organisatie die u wilt toevoegen. Het e-mailadres moet een algemeen adres van de organisatie zijn. Het wordt als verzendadres van automatische systeemnotificaties gebruikt.</string>
   <string name="ORG_NO_FIELD_CREATED">Er zijn nog geen specifieke velden voor deze organistaie aangemaakt!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Bij het wijzigen van weergave gaan alle niet opgeslagen instellingen verloren.</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notificatie voor beheerder over nieuwe registraties</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Aantal berichten per pagina</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Bepaal het aantal items die per pagina getoond wordt. Er ontstaat paginering wanneer er meer geplaatst wordt. Als aantal 0 is, zal alles getoond worden en is paginering gedeactiveerd. (Standaard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Alleen voor ingelogde gebruikers</string>
@@ -327,7 +324,7 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Zeer hoog</string>
   <string name="ORG_PIXEL">Pixel</string>
   <string name="ORG_PROFILE_FIELDS">Profielvelden</string>
-  <string name="ORG_REFUSE_REGISTRATION">Berichtgeving bij registratie weigering</string>
+  <string name="ORG_REFUSE_REGISTRATION">Notificatie bij registratie weigering</string>
   <string name="ORG_REGIONAL_SETTINGS">Regionale instellingen</string>
   <string name="ORG_REGISTERED_USERS">Ingelogde gebruiker</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES">Zoek naar dezelfde namen</string>
@@ -341,18 +338,12 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Toon organisatie selectie</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Als er meerdere organisaties in de database staan, zal in het inlog scherm een keuzeveld getoond worden met alle beschikbare organisaties. De gebruiker kan dan inloggen bij een andere organisatie (anders dan gedefinieerd in het config.php bestand). Echter, de gebruiker moet een geregistreerd lid zijn van de geselecteerde organisatie.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeeminformatie</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier moet het e-mailadres van een beheerder worden ingevuld. Dit wordt gebruikt als het adres van de ontvanger voor systeemmeldingen, b.v. voor registratiebevestiging.</string>
-  <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notificatie voor gewijzigde profielvelden</string>
-  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Schakel deze instelling in om notificaties te verzenden voor alle wijzigingen in de profielvelden van een gebruiker. Op deze manier heeft een beheerder de mogelijkheid om te zorgen voor een goede kwaliteit van de gegevens. Wijzigingsnotificaties worden verzonden naar het e-mailadres #VAR1# (standaard: nee).</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notificatie voor nieuwe berichten</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Hier kunnen systeemberichten worden geactiveerd voor nieuwe berichten in de modules. Deze notificaties hebben binnen Admidio een controlerende functie. Hierdoor heeft de beheerder de mogelijkheid om te worden geïnformeerd over nieuwe berichten in de modules (alleen nieuwe berichten komen in aanmerking). Systeemberichten worden gestuurd naar het e-mailadres #VAR1#. (Standaard: nee)</string>
-  <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier kunnen alle systeemberichten aangepast worden. De berichten zijn verdeeld in 2 onderdelen (onderwerp en inhoud) en worden geïdentificeerd door #subject# en #content#. Daarna volgt de inhoud van deze onderdelen.\n\nIn elke e-mail kunnen de volgende placeholders worden gebruikt. Ze worden tijdens uitvoeren vervangen door de bijbehorende inhoud.</string>
+  <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier kunnen alle systeemnotificaties aangepast worden. De berichten zijn verdeeld in 2 onderdelen (onderwerp en inhoud) en worden geïdentificeerd door #subject# en #content#. Daarna volgt de inhoud van deze onderdelen.\n\nIn elke e-mail kunnen de volgende placeholders worden gebruikt. Ze worden tijdens uitvoeren vervangen door de bijbehorende inhoud.</string>
   <string name="ORG_THEME_FOLDER_OPEN">De thema-map kan niet geopend en/of gelezen worden.</string>
   <string name="ORG_TIME_FORMAT">Tijd formaat</string>
   <string name="ORG_TIME_FORMAT_DESC">Formaat voldoet aan PHP functie #VAR1#. (Standaard: H:i)</string>
   <string name="ORG_TIMEZONE">Tijdzone</string>
   <string name="ORG_TIMEZONE_DESC">Dit is de ingestelde tijdzone. Als dit later in het configuratiebestand config.php wordt aangepast, worden alle reeds ingestelde data en tijden niet mee aangepast.</string>
-  <string name="SYS_URL">URL</string>
   <string name="ORG_VALUE_LIST">Lijst met waarden</string>
   <string name="ORG_VALUE_LIST_DESC">In dit veld kunt u de items van het drop-down selectieveld of het optieveld invoeren. Per regel kan één item van het drop-down selectieveld of het optieveld ingevoerd worden.\n\nHet profiel wordt later niet als tekst opgeslagen, maar de geselecteerde positie uit de lijst. Als u de tekst in een regel verandert, zullen alle gebruikers deze nieuwe tekst direct in hun profiel kunnen zien. Als u echter een item naar een andere regel verplaatst, zullen de gebruikers mogelijk een ander item zien.\n\nEen optieveld kan ook als pictogram in plaats van als tekst weergegeven worden. Om dit te doen kan de naam van het pictogram uit de thema map opgegeven worden (b.v. ok.png) of de URL van een externe afbeelding (b.v. https://www.example.com/example.jpg). Door een verticale scheidslijn te gebruiken kan een tooltip aan het pictogram gekoppeld worden (b.v. vrouw.png|vrouw).</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Activatielink voor nieuw wachtwoord</string>
@@ -365,7 +356,7 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Afkorting van organisatie</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Website URL van de organisatie</string>
   <string name="ORG_VARIABLE_USERNAME">Gebruikersnaam van de gebruiker uit de respectieve e-mailcontext</string>
-  <!--Phrases only in Photomodule-->
+  <!--Phrases only in photo module-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Verwijder album</string>
   <string name="PHO_ALBUM_LOCK">Album vergrendelen</string>
@@ -424,9 +415,7 @@
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">De ingevoerde waarde bepaalt hoeveel miniaturen op een pagina te zien zijn. Als een album meer foto\'s heeft dan wordt er automatisch een paginanavigatie toegevoegd. (Standaard: 16)</string>
   <string name="PHO_UPLOAD_PHOTOS">Foto\'s uploaden</string>
   <string name="PHO_WANT_DELETE_PHOTO">Geselecteerde foto wordt verwijderd. Doorgaan?</string>
-  <!--Phrases only in Profilemodule-->
-  <string name="PRO_ACCEPT_NEW_PICTURE">Bevestig nieuwe profielfoto</string>
-  <string name="PRO_ADD_USER">Voeg gebruiker toe</string>
+  <!--Phrases only in profile module-->
   <string name="PRO_ASSIGNED_BY_ROLES">Ingesteld door de rollen</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Registratie werd bevestigd. De gebruiker kan nu inloggen bij het systeem.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Lidmaatschap beëindigen</string>
@@ -525,7 +514,6 @@
   <string name="SYS_ADMIDIO_VERSION">Admidio versie</string>
   <string name="SYS_ADMINISTRATION">Administratie</string>
   <string name="SYS_ADMINISTRATOR">Beheerder</string>
-  <string name="SYS_ADMINISTRATOR_EMAIL">E-mailadres beheerder</string>
   <string name="SYS_ADMINISTRATORS">Beheerders</string>
   <string name="SYS_ADMINISTRATORS_DESC">Leden van deze rol zijn beheerders van de documenten en bestanden module en hebben toegang tot alle mappen en bestanden. Ze kunnen bestanden uploaden, downloaden en toegangsrechten instellen. Een rol kan een beheerder worden als deze het recht #VAR1_BOLD# toegewezen wordt.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax foutmelding.\nDetails foutmelding: #VAR1#</string>
@@ -541,7 +529,7 @@
   <string name="SYS_ANNUALLY">Jaarlijks</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Leden toewijzen en bewerken</string>
   <string name="SYS_ASSIGN_FIELDS">Wijs velden toe</string>
-  <string name="SYS_ASSIGN_FIELDS_DESC">Wijs een kolom van het bestand aan de database velden toe, indien mogelijk.\n\nAan de linkerkant kunt u verschillende type database velden vinden. Aan de rechterkant kunt u de kolommen van het geselecteerde bestand koppelen aan de database velden. Velden kunnen leeg blijven wanneer het bestand niet elk database veld beslaat.</string>
+  <string name="SYS_ASSIGN_FIELDS_DESC">In de linkerkolom van de volgende tabel worden alle profielvelden weergegeven. In de rechterkolom worden de kolommen uit het te importeren bestand weergegeven in een keuzelijst. Alle kolommen van het bestand dat u wilt importeren, moeten nu worden toegewezen aan een profielveld.\n\nBestaande leden worden geïdentificeerd met voornaam en achternaam. Als u de unieke ID (UUID) van het lid beschikbaar heeft in uw bestand, kunt u deze selecteren in de mapping. De leden worden dan automatisch geïdentificeerd aan de hand van dit ID en niet meer met voor- en achternaam.</string>
   <string name="SYS_ASSIGN_LOGIN_INFORMATION">Inloginformatie toewijzen</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">De inloginformatie is succesvol toegewezen.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">De inloginformatie is succesvol toegewezen en de gebruiker is via e-mail geïnformeerd.</string>
@@ -622,7 +610,6 @@
   <string name="SYS_COMMENT">Reactie</string>
   <string name="SYS_COMMON">Algemeen</string>
   <string name="SYS_COMPLEMENT">Aanvulling</string>
-  <string name="SYS_CONDITION">Voorwaarde</string>
   <string name="SYS_CONFIGURATION">Configuratie</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Toestemming om configuratie voor alle leden te gebruiken</string>
   <string name="SYS_CONFIGURATION_DELETE">Wilt u de geselecteerde lijst-configuratie verwijderen?</string>
@@ -643,9 +630,10 @@
   <string name="SYS_COPY">Kopieer</string>
   <string name="SYS_COPY_CONFIGURATION">Kopieer configuratie</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Uw gevraagde kopie van het bericht</string>
+  <string name="SYS_COPY_ENTRY">Kopieer invoer</string>
   <string name="SYS_COPY_VAR">Kopieer #VAR1#</string>
-  <string name="SYS_COUNT_BCC">Aantal BCC ontvangers</string>
-  <string name="SYS_COUNT_BCC_DESC">E-mails naar rollen met meerdere leden zullen als Blind Carbon Copy worden verstuurd (BCC). Op deze manier zullen de ontvangers niet kunnen zien wie dit bericht nog meer ontvangen hebben. Het getal in het huidige veld definieert het maximum aantal geadresseerden van een e-mailbericht. Het maximum aantal geadresseerden kan ook worden beperkt door de hosting provider. In het geval van meer geadresseerden dan toegestaan, zullen meerdere e-mailberichten worden gegenereerd. Als de waarde is ingesteld op 1, zal elke geadresseerde een afzonderlijk bericht ontvangen. Het aantal uitgaande e-mailberichten binnen een bepaalde tijdsperiode kan ook door de hosting provider zijn beperkt. (Standaard: 50)</string>
+  <string name="SYS_NUMBER_RECIPIENTS">Aantal ontvangers</string>
+  <string name="SYS_NUMBER_RECIPIENTS_DESC">Het aantal in dit veld geeft het maximale aantal ontvangers in een e-mail aan. Dit aantal kan door providers worden beperkt. Als een e-mail naar meer ontvangers moet worden verzonden dan het hier ingestelde aantal, worden meerdere e-mails gegenereerd. Ook het aantal te versturen e-mails binnen een termijn kan door providers worden beperkt. (Standaard: 50)</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuele ontvanger</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuele ontvangers</string>
   <string name="SYS_COUNTER">Teller</string>
@@ -668,8 +656,9 @@
   <string name="SYS_CREATE_RELATIONSHIP">Maak relatie</string>
   <string name="SYS_CREATE_ROLE">Maak rol</string>
   <string name="SYS_CREATE_VAR">Maak #VAR1#</string>
-  <string name="SYS_CREATED_BY_AND_AT">Gemaakt door #VAR1# op #VAR2#</string>
   <string name="SYS_CREATED_AT">Gemaakt op</string>
+  <string name="SYS_CREATED_BY">Gemaakt door</string>
+  <string name="SYS_CREATED_BY_AND_AT">Gemaakt door #VAR1# op #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Huidige database-versie</string>
   <string name="SYS_CURRENT_MEMBER">Huidig lid</string>
@@ -744,7 +733,7 @@
   <string name="SYS_DISK_SPACE_ERROR">Het gebruik van de schijfruimte kon niet worden bepaald.\n\nFoutmelding:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Toon doorverwijzing</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Activeer automatisch doorverwijzen van links. Als gebruiker op een link klikt zal hij/zij gewaarschuwd worden middels een bericht wanneer hij/zij de pagina\'s van Admidio verlaat. De link waarop geklikt wordt zal geopend worden na een vooraf ingestelde tijd. Als doorverwijzen op 0 staat, zal link geopend worden zonder waarschuwing vooraf. (Standaard: 10 seconden)</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Toon rol lidmaatschap</string>
+  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Toon rol lidmaatschappen</string>
   <string name="SYS_DIVERSE">Verschillend</string>
   <string name="SYS_DO_NOT_EDIT">Niet bewerken</string>
   <string name="SYS_DOCUMENTS_FILES">Documenten &amp; bestanden</string>
@@ -771,19 +760,19 @@
   <string name="SYS_EDIT_ENTRY">Bericht bewerken</string>
   <string name="SYS_EDIT_FILE">Bewerk bestand</string>
   <string name="SYS_EDIT_FOLDER">Bewerk map</string>
-  <string name="SYS_EDIT_LISTS">Bewerk lijsten</string>
-  <string name="SYS_EDIT_LISTS_DESC">Gebruikers kunnen hun eigen lijsten maken met geselecteerde profielvelden en deze vervolgens toepassen op groepen en rollen. Beschikbaar zijn alleen profielvelden en groepen of rollen die de huidige gebruiker mag zien. Deze instelling kan worden gebruikt om te bepalen wie dergelijke lijsten kan maken. (Standaard: Alle)</string>
+  <string name="SYS_CONFIGURE_LISTS">Configureer lijsten</string>
+  <string name="SYS_CONFIGURE_LISTS_DESC">Gebruikers kunnen hun eigen lijsten maken met geselecteerde profielvelden en deze vervolgens toepassen op groepen en rollen. Alleen profielvelden en groepen of rollen die de huidige gebruiker mag zien, zijn beschikbaar. Deze instelling kan worden gebruikt om te bepalen wie dergelijke lijsten kan maken. (Standaard: Alle)</string>
   <string name="SYS_EDIT_MEMBERS">Bewerk leden</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Bewerk profielvelden</string>
-  <string name="SYS_EDIT_RELATIONSHIPS">Bewerk relaties</string>
   <string name="SYS_EDIT_ROLE">Bewerk rol</string>
-  <string name="SYS_EDIT_ROLE_MEMBERSHIPS">Bewerk rol lidmaatschap</string>
   <string name="SYS_EDIT_USER">Bewerk gebruiker</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Gebruikersprofiel van deze relatie kan bewerkt worden</string>
   <string name="SYS_EDIT_VAR">Bewerk #VAR1#</string>
   <string name="SYS_EDIT_WEBLINKS">Weblinks bewerken</string>
   <string name="SYS_EDITED_BY">Laatst aangepast door</string>
   <string name="SYS_EMAIL">E-mail</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR">E-mail beheerder</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR_DESC">Het e-mailadres van een beheerder wordt in het systeem weergegeven wanneer zich een onverwachte gebeurtenis heeft voorgedaan. Er is een aanduiding dat je contact moet opnemen met een beheerder.</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Een nieuwe mededeling is gemaakt</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Een nieuwe mededeling is gemaakt op #VAR1#.\n\nTitel: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Gebruiker #VAR1# #VAR2# (login: #VAR3#) is gewijzigd</string>
@@ -816,6 +805,8 @@
   <string name="SYS_ENABLE_GREETING_CARDS_DESC">De Ecards kunnen via deze instelling worden in- of uitgeschakeld. Als de server geen e-mail ondersteunt, moet de module worden uitgeschakeld. Deze module is over het algemeen alleen beschikbaar voor geregistreerde gebruikers. (Standaard: ja)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES">Groepen &amp; rollen inschakelen</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Toont de groepen en rollen van de organisatie en maakt vrije configuratie van groepen en rollen mogelijk. Eigen lijst kan worden geconfigureerd en toegepast. Deze module is over het algemeen alleen beschikbaar voor ingelogde gebruikers. (Standaard: ja)</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS">Systeemnotificaties inschakelen</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Hier kunt u de systeemnotificaties van Admidio in- en uitschakelen. Deze worden verzonden, bijvoorbeeld wanneer een nieuwe gebruiker zich heeft geregistreerd. Registratie bevestigingen worden ook verzonden als systeemnotificaties. Normaal gesproken moet deze functie niet worden uitgeschakeld, behalve als de server het versturen van e-mail niet ondersteund. De e-mail module wordt niet beïnvloed door het uitschakelen van deze functie. (Standaard: ja)</string>
   <string name="SYS_ENABLE_PM_MODULE">Privéberichten inschakelen</string>
   <string name="SYS_ENABLE_PM_MODULE_DESC">Privéberichten kunnen via deze instelling worden in- of uitgeschakeld. (Standaard: ingeschakeld)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Relaties bewerken en weergeven</string>
@@ -833,6 +824,7 @@
   <string name="SYS_EXAMPLES">Voorbeelden</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
+  <string name="SYS_EXECUTE_BACKUP">Backup uitvoeren</string>
   <string name="SYS_EXISTING_MEMBERS">Bestaande leden</string>
   <string name="SYS_EXPORT_LISTS">Exporteer lijsten</string>
   <string name="SYS_EXPORT_LISTS_DESC">Lijsten met groepen en rollen kunnen door gebruikers worden geëxporteerd, op voorwaarde dat u het recht heeft om deze lijsten te bekijken. Deze instelling kan worden gebruikt om de exportfunctie te beperken. (Standaard: alles)</string>
@@ -843,7 +835,6 @@
   <string name="SYS_FIELD">Veld</string>
   <string name="SYS_FIELD_EMPTY">Veld #VAR1_BOLD# is leeg.</string>
   <string name="SYS_FIELD_ENCLOSURE">Aanhalingsteken voor de velden</string>
-  <string name="SYS_FIELD_INVALID_CHAR">In veld #VAR1_BOLD# staan onjuiste karakters.\n\nToegestaan zijn letters a-z en A-Z, cijfers 0-9 en speciale karakters zoals .-_+@ .</string>
   <string name="SYS_FIELDS_EMPTY">Niet alle velden zijn ingevuld.</string>
   <string name="SYS_FILE">Bestand</string>
   <string name="SYS_FILE_COLUMN">Bestand kolom</string>
@@ -901,7 +892,6 @@
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Het programma verwacht een tekenreeks met minimaal 2 verschillende tekens.</string>
   <string name="SYS_GREETING_CARD">Ecard </string>
   <string name="SYS_GREETING_CARDS">Ecards</string>
-  <string name="SYS_GREETING_CARD_EDIT">Bewerk Ecard</string>
   <string name="SYS_GROUPS_ROLES">Groepen &amp; rollen</string>
   <string name="SYS_GROUPS_ROLES_DESC">Overzicht en beheer van alle groepen en rollen van de organisatie. Er kunnen verschillende ledenlijsten worden weergegeven, geëxporteerd en eigen lijsten kunnen worden aangemaakt.</string>
   <string name="SYS_HALF_YEARLY">Halfjaarlijks</string>
@@ -1045,9 +1035,8 @@
   <string name="SYS_MOVE_UP">Plaats #VAR1# omhoog</string>
   <string name="SYS_MOVE_VAR">Verplaats #VAR1#</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Meerdere ontvangers</string>
-  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-mails naar meerdere ontvangers bevatten alle ontvangers in het BCC-veld. Dit zorgt ervoor dat niemand de e-mailadressen van de andere ontvangers ziet. Echter, het TO-veld moet ook worden ingevuld. Deze instelling kan worden gebruikt om te bepalen wat er in het ontvangerveld (TO) is ingevoerd. Dit kan een verborgen waarde zijn \"Undisclosed Recipients\", maar dit veroorzaakt problemen bij sommige providers. Als alternatief kan het ontvangerveld (TO) worden gevuld met het afzenderadres of het beheerdersadres van de systeemberichten. Let op: alle e-mails naar meerdere ontvangers worden dan ook naar het e-mailadres in het ontvangerveld (TO) gestuurd. (Standaard: afzender)</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-mails naar meerdere ontvangers bevatten alle ontvangers in het BCC-veld. Dit zorgt ervoor dat niemand de e-mailadressen van de andere ontvangers ziet. Echter, het TO-veld moet ook worden ingevuld. Deze instelling kan worden gebruikt om te bepalen wat er in het ontvangerveld (TO) is ingevoerd. Dit kan een verborgen waarde zijn \"Undisclosed Recipients\", maar dit veroorzaakt problemen bij sommige providers. Als alternatief kan het ontvangerveld (TO) worden gevuld met het afzenderadres of het beheerdersadres van de systeemnotificaties. Let op: alle e-mails naar meerdere ontvangers worden dan ook naar het e-mailadres in het ontvangerveld (TO) gestuurd. (Standaard: afzender)</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">De rol van beheerder moet tenminste één lid hebben!</string>
-  <string name="SYS_MYLIST_CONDITION_DESC">Geef voorwaarden op voor alle velden die in uw nieuwe lijst-configuratie komen. Voorwaarden van de geselecteerde rol worden beperkt door uw eigen voorwaarden.</string>
   <string name="SYS_NAME">Naam</string>
   <string name="SYS_NAME_ABBREVIATION">Naam (afkorting)</string>
   <string name="SYS_NEW_BETA_AVAILABLE">Een nieuwe beta-versie is beschikbaar!</string>
@@ -1090,6 +1079,13 @@
   <string name="SYS_NOT_SET">Niet ingesteld</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Gelieve een geldig datum te gebruiken als voorwaarde voor het veld #VAR1_BOLD#.</string>
   <string name="SYS_NOTE">Bericht</string>
+  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notificatie na een nieuwe registratie</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notificatie voor nieuwe berichten</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Hier kunt u een systeemnotificatie activeren voor nieuwe berichten in de modules Mededelingen, Evenementen, Gastenboek, Weblinks en Foto\'s. Leden van de opgeslagen notificatierol krijgen de mogelijkheid om per e-mail op de hoogte te worden gehouden van nieuwe berichten in de modules. (Standaard: nee)</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notificatie voor gewijzigde profielvelden</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Een systeemnotificatie voor gewijzigde profielgegevens kan hier worden geactiveerd. Als profielgegevens worden aangemaakt, gewijzigd of verwijderd door een gebruiker, worden de leden van de opgeslagen notificatierol per e-mail op de hoogte gebracht. (Standaard: nee)</string>
+  <string name="SYS_NOTIFICATION_ROLE">Notificatierol</string>
+  <string name="SYS_NOTIFICATION_ROLE_DESC">Notificaties over nieuwe berichten of profielwijzigingen worden verzonden naar alle leden van deze rol.</string>
   <string name="SYS_NUMBER">Aantal</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Aantal rollen per pagina</string>
   <string name="SYS_NUMBER_COL_DESC">Het betreffende selectievakje moet worden geactiveerd als u aan het einde van het rapport een regel met het aantal lidmaatschappen wilt weergeven.</string>
@@ -1144,7 +1140,7 @@
   <string name="SYS_PLUGINS">Plugins</string>
   <string name="SYS_PORT">Poort</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portret</string>
-  <string name="SYS_POSSIBLE_FIELDNAMES">Kolomnamen voor automatische detectie: #VAR1#, #VAR2#</string>
+  <string name="SYS_POSSIBLE_FIELDNAMES">Kolomnamen voor automatische detectie: #VAR1#</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST grootte</string>
   <string name="SYS_POSTCODE">Postcode</string>
   <string name="SYS_PRESENTATION">Toon</string>
@@ -1229,7 +1225,7 @@
   <string name="SYS_ROLE_NAME_EXISTS">Rol met dezelfde naam bestaat al in deze categorie.</string>
   <string name="SYS_ROLE_SELECT_RIGHT">U heeft geen toestemming om rol #VAR1# te selecteren.\nKies svp een andere rol.</string>
   <string name="SYS_ROLE_SELECTION">Rolselectie</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">De rolselectie kan een configuratie worden beperkt tot de leden van de geselecteerde rollen.\n\n Als er geen beperking wordt ingesteld, moeten beide velden (rolselectie en categorieselectie) leeg worden gelaten. </string>
+  <string name="SYS_ROLE_SELECTION_CONF_DESC">De rolselectie kan via een configuratie worden beperkt tot de leden van de geselecteerde rollen.\n\n Als er geen beperking wordt ingesteld, moeten beide velden (rolselectie en categorieselectie) leeg worden gelaten.</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">Rol zonder leider</string>
   <string name="SYS_ROLE_TYPES">Roltypes</string>
   <string name="SYS_ROLES">Rollen</string>
@@ -1262,8 +1258,8 @@
   <string name="SYS_SEARCH_GENDER_DESC">Zoekt alle mannelijke gebruikers</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_EXAMPLE">Mei*</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_DESC">Leden zoeken waarbij achternaam begint met Mei</string>
-  <string name="SYS_SEARCH_LASTNAME_EXAMPLE">Schmitz</string>
-  <string name="SYS_SEARCH_LASTNAME_DESC">Leden zoeken met de achternaam Schmitz</string>
+  <string name="SYS_SEARCH_LASTNAME_EXAMPLE">Smith</string>
+  <string name="SYS_SEARCH_LASTNAME_DESC">Zoeken naar leden met de achternaam \'Smith\'</string>
   <string name="SYS_SEARCH_LOCATION_EXAMPLE">Keulen of Berlijn</string>
   <string name="SYS_SEARCH_LOCATION_DESC">Leden zoeken die uit Keulen of Berlijn komen</string>
   <string name="SYS_SEARCH_NOT_EMPTY_EXAMPLE_DESC">Zoekt alle gebruikers die het Straat veld hebben ingevuld</string>
@@ -1286,10 +1282,11 @@
   <string name="SYS_SEND_COPY">Stuur kopie naar mijn e-mailadres</string>
   <string name="SYS_SEND_EMAIL">Stuur e-mail</string>
   <string name="SYS_SEND_EMAIL_FORMER">E-mails naar voormalige leden sturen</string>
-  <string name="SYS_SEND_EMAIL_FORMER_DESC">Via deze instelling kunnen e-mails worden verzonden naar individuele voormalige leden en naar alle voormalige leden van een rol. (Standaard: geactiveerd)</string>
+  <string name="SYS_SEND_EMAIL_FORMER_DESC">Als deze optie is ingeschakeld, kunnen e-mails worden verzonden naar individuele voormalige leden, maar ook naar alle voormalige leden van een rol. (Standaard: Geactiveerd)</string>
   <string name="SYS_SEND_EMAIL_TO">Stuur e-mail naar #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Stuur e-mails naar alle e-mailadressen van de gebruiker</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Als deze instelling is geactiveerd, worden e-mails naar alle e-mailadressen gestuurd die in het profiel staan. Als deze instelling is gedeactiveerd, worden e-mails alleen gestuurd naar het e-mailadres van het profielveld met de interne naam EMAIL. (Standaard: geactiveerd)</string>
+  <string name="SYS_SEND_GREETING_CARD">Stuur Ecard</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Verstuur inloginformatie</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Uw e-mail wordt verzonden naar alle leden van de geselecteerde rol, als hun e-mailadres bekend is of aan de geselecteerde ontvangers.\n\nAls u ingelogd bent, zijn extra rollen en ontvangers beschikbaar.</string>
   <string name="SYS_SEND_MAILS">Stuur e-mails</string>
@@ -1361,6 +1358,7 @@
   <string name="SYS_SUNDAY">Zondag</string>
   <string name="SYS_SUPPORT_ADMIDIO">Support Admidio</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Ga naar categoriebeheer</string>
+  <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Naar relatie configuratie overschakelen</string>
   <string name="SYS_SYMMETRICAL">Symmetrisch</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Inloggegevens voor #organization_long_name#\n#content# Hallo #user_first_name#,\n\nUw nieuwe inloggegevens voor de website #organization_homepage#\nGebruikersnaam: #user_login_name#\nWachtwoord: #variable1#\n\nHet wachtwoord is automatisch gegenereerd.\nU moet dit wijzigen in uw profiel nadat u bent ingelogd op #organization_homepage#.\n\nHartelijke groeten,\nDe beheerders</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Wachtwoord opnieuw instellen voor #organization_long_name#\n#content# Hallo #user_first_name#,\n\nWij hebben een verzoek ontvangen om uw wachtwoord opnieuw in te stellen op #organization_homepage#.\n\nAls het verzoek van u afkomstig is, kunt u de volgende link gebruiken om een nieuw wachtwoord in te stellen:\n#variable1#\n\nHartelijke groeten\nDe beheerders</string>
@@ -1369,7 +1367,7 @@
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Nieuwe registratie op de #organization_long_name# website\n#content# Een nieuwe gebruiker heeft zich geregistreerd op  #organization_homepage#.\n\nAchternaam: #user_last_name#\nVoornaam: #user_first_name#\nE-mailadres: #user_email#\n\n\nDit bericht is automatisch gegenereerd.</string>
   <string name="SYS_SYSTEM">Systeem</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">Standaard lijst voor het hele systeem</string>
-  <string name="SYS_SYSTEM_MAILS">Systeemberichten</string>
+  <string name="SYS_SYSTEM_MAILS">Systeemnotificaties</string>
   <string name="SYS_TAB">Tab</string>
   <string name="SYS_TEMPLATE">Sjabloon</string>
   <string name="SYS_TEMPLATE_DESC">Stel standaard sjabloon in. (Standaard: ansichtkaart)</string>
@@ -1387,6 +1385,7 @@
   <string name="SYS_TOTAL">Totaal</string>
   <string name="SYS_TUESDAY">Dinsdag</string>
   <string name="SYS_TYPE">Type</string>
+  <string name="SYS_UNIQUE_ID">Uniek ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Onbekend</string>
   <string name="SYS_UNLIMITED">Onbeperkt</string>

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in Datesmodule-->
+  <!--Phrases only in event module-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Tilføj aktivitet til kalender</string>
   <string name="DAT_ALL_DAY">Hele dagen</string>
   <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Deltagere kan registrere anonyme gæster</string>
@@ -84,7 +84,7 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detaljeret</string>
   <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
   <string name="DAT_VISIBILITY">Synlighed</string>
-  <!--Phrases only in Guestbookmodule-->
+  <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tilbage til gæstebog</string>
   <string name="GBO_CAPTCHA_DESC">Hvis denne indstilling er aktiveret, får brugere, der ikke er logget ind, et billede med en captcha-kode eller en simpel beregning. Det er nødvendigt at udfylde den korrekte kode eller resultat for at gemme posten. Captcha er en del af antispam-løsningen i Admidio. (standard: ja)</string>
   <string name="GBO_COMMENT_BY">Kommentar til #VAR1#</string>
@@ -114,7 +114,7 @@
   <string name="GBO_SHOW_COMMENTS">Vis kommentarer</string>
   <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Vis #VAR1# Kommentar(er) for dette gæstebogs indlæg</string>
   <string name="GBO_WRITE_COMMENT">Skriv kommentar</string>
-  <!--Phrases only in Installation-->
+  <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Tilføj en anden organisation</string>
   <string name="INS_ADD_ORGANIZATION">Tilføj organisation</string>
   <string name="INS_ADDIDIONAL_DATA">Yderligere information</string>
@@ -228,11 +228,9 @@
   <string name="INS_SON">Søn</string>
   <string name="INS_SPOUSE">Ægtefælle</string>
   <string name="INS_WIFE">Kone</string>
-  <!--Phrases only in Organizationadministration-->
+  <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Modul adgang</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Modulet kan kun deaktiveres eller aktiveres for brugere der er logget ind. Hvis modulet kun er tilgængeligt for brugere der er logget ind, vil det være skjult for brugere der ikke er logget ind, og webfeed vil være fuldstændigt deaktiveret for begge brugergrupper. (standard: aktiv)</string>
-  <string name="SYS_ENABLE_NOTIFICATIONS">Aktiver system beskeder</string>
-  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Her kan du deaktivere system beskeder fra Admidio. De kan blive afsendt, hvis for eksempel en ny bruger logger på. Registrerings bekræftelser vil også blive sendt som system beskeder. Generelt set, bør disse beskeder ikke slås fra, med mindre serveren ikke understøtter afsendelse af system e-mails. E-mail modulet bliver ikke berørt af en deaktivering. (Standard: Ja)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">En ny organisation vil blive tilføjet til databasen inklusiv dens masterdata. Den nuværende bruger vil blive annonceret som administrator og kan administrere datasættet. Brugere som logger på systemet skal vælge den respektive organisation.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Yderligere variabler</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Tema</string>
@@ -283,13 +281,13 @@
   <string name="ORG_ENABLE_RSS_FEEDS">Aktiver web-feeds</string>
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan levere web-feeds til adskillige moduler (Annonceringer, aftaler, gæstebog, fotogalleri og weblinks) på oversigten for hvert modul. Tilmelding er mulig via browser eller feed læser. (Standard: Ja)</string>
   <string name="ORG_FIELD_DESCRIPTION">Definér antal eller ubegrænset yderligere felter. Felterne vil blive vist og kan redigeres i brugerens profil. Disse felter vil også være tilgængelige i egne lister.</string>
-  <string name="ORG_FIELD_DISABLED">Feltet kan kun redigeres af brugere med følgende rettigheder #VAR1_BOLD#</string>
+  <string name="ORG_FIELD_DISABLED">Feltet kan kun redigeres for bruger med tilladelse #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">Et låst profil felt kan ikke længere redigeres af brugeren i dennes egen profil. Det kan kun redigeres af brugere der har rettigheder til at redigere på alle bruger profiler. Lederen af en rolle med rettigheder til at redigere profiler for rolle medlemmerne, kan også redigere dette profil felt.  </string>
   <string name="ORG_FIELD_EXIST">Feltnavnet eksisterer allerede i denne kategori.</string>
   <string name="ORG_FIELD_HIDDEN">Feltet er kun synligt for godkendte brugere (egen profil &amp; rolle autorisation)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Sædvanligvis er et felt synligt for alle brugere som har tilladelse til at se profilen. Hvis denne indstilling er valgt fra så er det kun brugere med tilladelse til at redigere profilen der kan se dette felt.</string>
   <string name="ORG_FIELD_NOT_DISABLED">Felt kan rettes af brugeren selv.</string>
-  <string name="ORG_FIELD_NOT_HIDDEN">Felt som er synligt for alle.</string>
+  <string name="ORG_FIELD_NOT_HIDDEN">Feltet er synligt for alle brugere.</string>
   <string name="ORG_FIELD_NOT_MANDATORY">Feltet er påkrævet. Det skal udfyldes.</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Feltet vises IKKE under registrering</string>
   <string name="ORG_FIELD_REGISTRATION">Feltet vises ved registrering</string>
@@ -310,7 +308,6 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Indtast en forkortelse, det officiellle navn samt en e-mail adresse til organisationen du til tilføje. E-mail adressen skal være en generel e-mail adresse. Den vil blive brugt som afsender e-mail adresse når der sendes automatiske system e-mails og notifikationer.</string>
   <string name="ORG_NO_FIELD_CREATED">Intet organisations specifikt felt er oprettet endnu!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Ved ændringer i visningen vil alle ikke gemte ændringer være tabt.</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notifikation til administratoren om nye registreringer</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster pr. side</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definer et antal emner som vises på en side. Sideskift sker hvis antallet af emner overskrider den definerede værdi. Print Preview og eksport funktionalitet er ikke påvirket. Hvis værdien er 0, vil alle emner blive vist og sideskift bliver deaktiveret. (Standard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Kun for brugere der er logget ind</string>
@@ -341,18 +338,12 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Vis organisations vælger</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Hvis der er flere organisationer gemt i den samme database, så kan Log ind skærmen vise en valg boks med alle tilgængelige organisationer. Brugeren kan så på login skærmen vælge en anden organisation (en anden organisation end den der er defineret i config.php). Brugeren skal selvfølgelig være registreret medlem af den valgte organisation.</string>
   <string name="ORG_SYSTEM_INFORMATION">Systeminformation</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">E-mail-adressen til en administrator skal indtastes her. Denne bruges som modtageradresse til systemmeddelelser, f.eks. til registreringsbekræftelse.</string>
-  <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Meddelelse om ændrede profilfelter</string>
-  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Aktiver denne indstilling for at sende meddelelser om ændringer i en brugers profilfelter. På denne måde har en administrator mulighed for at sikre en korrekt datakvalitet. Ændringsmeddelelser sendes til følgende mailadresse #VAR1# (standard: nej).</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Besked om nye poster</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Denne funktion bliver brugt til at aktivere system beskeder for nye poster inde i moduler. Det anvendes som en monitorerings funktion inde i Admidio. Så administratoren kan blive gjort opmærksom på når nye poster bliver tilføjet inde i moduler (kun NYE poster vil blive taget i betragtning). Disse system beskeder vil blive sendt til e-mail adressen #VAR1#. (Standard: Nej)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Her kan du ændre teksten til hver enkelt system besked. Teksterne er delt i to dele(emne og indhold) og er identificeret med #subject# og #content#. Indholdet i hver sektion kommer lige efter overskriften.\n\nI hver mail kan de følgende wildcards bruges. Disse vil blive erstattet af indhold når systemet køres.</string>
   <string name="ORG_THEME_FOLDER_OPEN">Tema folderen kunne ikke åbnes eller læses.</string>
   <string name="ORG_TIME_FORMAT">Tidsformat</string>
   <string name="ORG_TIME_FORMAT_DESC">Formatet efterkommer standarden i PHP funktionen #VAR1#. (Standard: H:i)</string>
   <string name="ORG_TIMEZONE">Tidszone</string>
   <string name="ORG_TIMEZONE_DESC">Dette er den allerede satte tidszone. Hvis denne ændres senere i Admidios config.php fil, så vil eksisterende datoer og tider IKKE blive justeret til den nye tidszone.</string>
-  <string name="SYS_URL">URL</string>
   <string name="ORG_VALUE_LIST">Værdi liste</string>
   <string name="ORG_VALUE_LIST_DESC">I dette felt kan du indtaste poster for alternativknappen drop-down boks. En titel pr. linje i rullelisten boks eller marken option kan påvises her. \ N \ nI profilen gemmes ikke teksten senere, men det valgte element på listen. man ændrer derfor teksten i træk, så vi finde allerede tildelt brugere straks den nye tekst i deres profil. men man Flytter en post til en anden linje, så når brugerne en anden post er muligvis vises. \ n \ nFor en alternativknap kan vises i stedet for en tekst, et ikon. I betragtning navnet på et ikon fra tema mappe (Ex:. Ok.png) eller url på en ekstern billede (Ex:. Https://www.example.com/example.jpg) kan specificeres. Om en lodret bindestreg kan også eventuelt et værktøjstip er sat til Icon (. Ex: female.png | hun).</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktiverings link til nyt kodeord</string>
@@ -365,7 +356,7 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Forkortelse af organisations navnet</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Organisationens hjemmeside URL</string>
   <string name="ORG_VARIABLE_USERNAME">Brugernavn for brugeren fra den respektive e-mail-kontekst</string>
-  <!--Phrases only in Photomodule-->
+  <!--Phrases only in photo module-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Slet album</string>
   <string name="PHO_ALBUM_LOCK">Lås album</string>
@@ -424,9 +415,7 @@
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">Denne indstilling definerer hvor mange thumbnail billeder der vil blive vist pr. side. Hvis der er flere billeder i albummet, vil der automatisk blive tilføjet side navigation. (Standard: 16)</string>
   <string name="PHO_UPLOAD_PHOTOS">Overfør billede</string>
   <string name="PHO_WANT_DELETE_PHOTO">Det valgte billede bliver slettet. Er du sikker?</string>
-  <!--Phrases only in Profilemodule-->
-  <string name="PRO_ACCEPT_NEW_PICTURE">Bekræft nyt profil bilede</string>
-  <string name="PRO_ADD_USER">Tilføj bruger</string>
+  <!--Phrases only in profile module-->
   <string name="PRO_ASSIGNED_BY_ROLES">Sat af rollerne</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Registrering er blevet bekræftet. Brugeren kan nu logge på systemet.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Afslut medlemsskab</string>
@@ -525,7 +514,6 @@
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
-  <string name="SYS_ADMINISTRATOR_EMAIL">Administrator e-mail</string>
   <string name="SYS_ADMINISTRATORS">Administratorer</string>
   <string name="SYS_ADMINISTRATORS_DESC">Disse roller er administratorer af downloadmodulet og har adgang til alle mapper og filer. Du kan uploade, downloade og konfigurere adgangsrettigheder. En rolle kan indstilles som administrator ved at tildele tilladelsen #VAR1_BOLD#.</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax forespørgsels fejl.\nFejl detaljer: #VAR1#</string>
@@ -541,7 +529,7 @@
   <string name="SYS_ANNUALLY">Årligt</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Tildel og rediger medlemmer</string>
   <string name="SYS_ASSIGN_FIELDS">Tilføj felter</string>
-  <string name="SYS_ASSIGN_FIELDS_DESC">Forbind et database felt til et matchende felt i import filen.\n\nPå venstre side kan du se alle de typer af database felter som er i databasen, og til højre kan du finde alle kolonner i den valgte importfil. Du kan lade felter være tomme hvis du ikke har matchende felter i din import fil.</string>
+  <string name="SYS_ASSIGN_FIELDS_DESC">I venstre kolonne i følgende tabel vises alle profilfelter. I højre kolonne vises kolonnerne fra filen, der skal importeres, i en valgliste. Alle kolonner fra den fil, du vil importere, skal nu tildeles et profilfelt.\n\nEksisterende medlemmer identificeres ved fornavn og efternavn. Hvis du har medlemmets unikke ID (UUID) tilgængeligt i din fil, kan du vælge det i kortlægningen. Medlemmerne vil så automatisk blive identificeret med dette ID og ikke længere med fornavn og efternavn.</string>
   <string name="SYS_ASSIGN_LOGIN_INFORMATION">Tildel login data</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Login informationen er tildelt.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Login informationen er blevet tildelt og brugeren er blevet informeret via e-mail.</string>
@@ -622,7 +610,8 @@
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Generel</string>
   <string name="SYS_COMPLEMENT">Supplere</string>
-  <string name="SYS_CONDITION">Krav</string>
+  <string name="SYS_CONDITION">Betingelse</string>
+  <string name="SYS_CONDITIONS">Betingelser</string>
   <string name="SYS_CONFIGURATION">Liste indstilling</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Tilladelse til at bruge listen for alle medlemer</string>
   <string name="SYS_CONFIGURATION_DELETE">Vil du slette den valgte liste?</string>
@@ -643,9 +632,10 @@
   <string name="SYS_COPY">Kopier</string>
   <string name="SYS_COPY_CONFIGURATION">Kopier konfiguration</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Din ønskede kopi af beskeden</string>
+  <string name="SYS_COPY_ENTRY">Kopiér posten</string>
   <string name="SYS_COPY_VAR">Kopier #VAR1#</string>
-  <string name="SYS_COUNT_BCC">Antal BCC modtagere</string>
-  <string name="SYS_COUNT_BCC_DESC">E-Mails til roller med mange medlemmer, vil blive sendt som Blind Kopi (BCC - Blind Copy). På den måde, kan modtagerne ikke se hvem der ellers har modtaget den samme e-mail. Værdien angivet i feltet definerer maksimum antal modtagere af en given e-mail. Maximum antal modtagere kan også være begrænset af din internet udbyder. Hvis der er flere modtagere af en e-mail end tilladt, så bliver der genereret flere e-mails. Sætter du værdien til 1, vil hver enkelt modtager få en individuel e-mail. Antallet af udsendte e-mails inden for en nærmere bestemt periode kan også være begrænset af din internet udbyder. (Standard: 50)</string>
+  <string name="SYS_NUMBER_RECIPIENTS">Antal modtagere</string>
+  <string name="SYS_NUMBER_RECIPIENTS_DESC">Nummeret i dette felt angiver det maksimale antal modtagere i en e-mail. Dette antal kan begrænses af udbydere. Hvis en e-mail skal sendes til flere modtagere end det antal, der er angivet her, vil der blive genereret flere e-mails. Antallet af mulige e-mails, der skal sendes inden for en periode, kan også begrænses af udbydere. (Standard: 50)</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuel modtager</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural"># VAR1 # individuelle modtagere</string>
   <string name="SYS_COUNTER">Tæller</string>
@@ -668,8 +658,9 @@
   <string name="SYS_CREATE_RELATIONSHIP">Opret relation</string>
   <string name="SYS_CREATE_ROLE">Opret rolle</string>
   <string name="SYS_CREATE_VAR">Opret #VAR1#</string>
-  <string name="SYS_CREATED_BY_AND_AT">Oprettet af #VAR1# den #VAR2#</string>
   <string name="SYS_CREATED_AT">Oprettet den</string>
+  <string name="SYS_CREATED_BY">Oprettet af</string>
+  <string name="SYS_CREATED_BY_AND_AT">Oprettet af  #VAR1# den #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Nuværende database version</string>
   <string name="SYS_CURRENT_MEMBER">Nuværende medlem</string>
@@ -714,6 +705,8 @@
   <string name="SYS_DEFAULT_LIST">Standard Liste</string>
   <string name="SYS_DEFAULT_LIST_DESC">I tilfælde af at der er en medlemsliste for denne rolle som skal vises og ingen liste konfiguration er specificeret, så vises listen i system standard konfigurationen. Ved at bruge dette felt til en individuel rolle, kan du vælge en anden liste konfiguration som kan bruges når der ikke ellers er en liste konfiguration til rådighed.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Der er ikke defineret et standard liste indstillings sæt af administratoren!\n\nKontakt systemadministratoren for at få hjælp.</string>
+  <string name="SYS_DEFAULT_VALUE">Standard værdi</string>
+  <string name="SYS_DEFAULT_VALUE_DESC">Du kan indstille en standardværdi for dette profilfelt. Denne værdi vil blive forudindstillet direkte for en ny bruger i feltet. For at gøre dette skal du indtaste værdien i feltet, som du også ville indtaste i selve profilen.\n\nFor afkrydsningsfeltets datatype kan du indtaste 1 for aktiveret og 0 for deaktiveret. For datatypers rullelistefelt og alternativknap indtaster du nummeret på linjen fra værdilisten, hvori den ønskede værdi er placeret.</string>
   <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="SYS_DELETE">Slet</string>
   <string name="SYS_DELETE_CONFIGURATION">Slet liste indstillingen</string>
@@ -744,7 +737,7 @@
   <string name="SYS_DISK_SPACE_ERROR">Brugen af lagerpladsen kunne ikke bestemmes.\n\n Fejlmeddelelse:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Vis viderestilling</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Aktiver automatisk viderestilling for links. Brugeren vil blive advaret om at de forlader Admidio siderne når de klikker på et link i linkmodulet. Klikkede links vil åbne efter forud defineret tid. Hvis viderestilling er sat til 0, så vil linket blivet åbnet uden varsel. (Standard: 10 sekunder).</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Vis rolle medlemskaber</string>
+  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Se rollemedlemskaber</string>
   <string name="SYS_DIVERSE">Alsidig</string>
   <string name="SYS_DO_NOT_EDIT">Rediger ikke</string>
   <string name="SYS_DOCUMENTS_FILES">Dokumenter &amp; Filer</string>
@@ -761,7 +754,7 @@
   <string name="SYS_ECARD_FROM">Postkort sendt af</string>
   <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">Den definerede værdi indikerer maximum størrelsen på et billede i postkortet (Standard: 400 x 250 Pixel).</string>
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Dit postkort kunne ikke afsendes!</string>
-  <string name="SYS_ECARD_SUCCESSFULLY_SEND">Dit postkort blev sendt.</string>
+  <string name="SYS_ECARD_SUCCESSFULLY_SEND">Dit lykønskningskort blev sendt.</string>
   <string name="SYS_EDIT">Rediger</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Rediger meddelelser</string>
   <string name="SYS_EDIT_CALENDAR">Rediger kalender</string>
@@ -771,19 +764,19 @@
   <string name="SYS_EDIT_ENTRY">Rediger emne</string>
   <string name="SYS_EDIT_FILE">Rediger fil</string>
   <string name="SYS_EDIT_FOLDER">Rediger folder</string>
-  <string name="SYS_EDIT_LISTS">Rediger lister</string>
-  <string name="SYS_EDIT_LISTS_DESC">Brugere kan oprette deres egne lister med udvalgte profilfelter og derefter anvende dem på grupper og roller. Kun profilfelter og grupper eller roller, som den aktuelle bruger har lov til at se, er tilgængelige. Denne indstilling kan bruges til at angive, hvem der kan oprette sådanne lister. (Standard: Alle)</string>
+  <string name="SYS_CONFIGURE_LISTS">Konfigurer lister</string>
+  <string name="SYS_CONFIGURE_LISTS_DESC">Brugere kan oprette deres egne lister med udvalgte profilfelter og derefter anvende dem på grupper og roller. Kun profilfelter og grupper eller roller, som den aktuelle bruger har tilladelse til at se, er tilgængelige. Denne indstilling kan bruges til at angive, hvem der kan oprette sådanne lister. (Standard: Alle)</string>
   <string name="SYS_EDIT_MEMBERS">Rediger medlemmer</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Rediger profil felter</string>
-  <string name="SYS_EDIT_RELATIONSHIPS">Rediger relationer</string>
   <string name="SYS_EDIT_ROLE">Rediger rolle</string>
-  <string name="SYS_EDIT_ROLE_MEMBERSHIPS">Rediger rolle medlemskab</string>
   <string name="SYS_EDIT_USER">Rediger bruger</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Brugerprofil for denne relation kan redigeres</string>
   <string name="SYS_EDIT_VAR">Rediger #VAR1#</string>
   <string name="SYS_EDIT_WEBLINKS">Rediger web links</string>
   <string name="SYS_EDITED_BY">Sidst ændret af</string>
   <string name="SYS_EMAIL">E-mail</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR">E-mail Administrator</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR_DESC">Når der sker noget uventet, vises en e-mail adresse til en administrator. Det er en hentydning til at kontakte administratoren.</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">En ny meddelelse blev oprettet</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">En ny meddelelse på #VAR1# blev oprettet. \n\nTitel: #VAR2#\ nOprettet af: #VAR3#\nOprettet på: #VAR4#</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev ændret</string>
@@ -816,6 +809,8 @@
   <string name="SYS_ENABLE_GREETING_CARDS_DESC">Lykønskningskortene kan aktiveres eller deaktiveres via denne indstilling. Hvis serveren ikke understøtter e-mail, skal modulet være deaktiveret. Dette modul er generelt kun tilgængeligt for registrerede brugere. (Standard: ja)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES">Aktiver grupper &amp; roller</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Viser organisationens grupper og roller og tillader fri konfiguration af grupper og roller. Egen liste kan konfigureres og anvendes. Dette modul er generelt kun tilgængeligt for brugere der er logget ind. (Standard: ja)</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS">Aktiver systemmeddelelser</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Her kan du aktivere eller deaktivere Admidios systemmeddelelser. De kan sendes, hvis f.eks. en ny bruger er registreret. Registreringsbekræftelser vil også blive sendt som systemmeddelelser. Generelt bør denne funktion ikke deaktiveres, medmindre serveren ikke understøtter e-mail-levering. E-mail-modulet er ikke påvirket af deaktiveringen. (Standard: ja)</string>
   <string name="SYS_ENABLE_PM_MODULE">Aktiver private beskeder</string>
   <string name="SYS_ENABLE_PM_MODULE_DESC">Private beskeder kan aktiveres eller deaktiveres ved hjælp af denne indstilling. (Standard: aktiveret)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Vedligehold og vis relationer</string>
@@ -833,6 +828,7 @@
   <string name="SYS_EXAMPLES">Eksempler</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
+  <string name="SYS_EXECUTE_BACKUP">Start backup</string>
   <string name="SYS_EXISTING_MEMBERS">Eksisterende medlemmer</string>
   <string name="SYS_EXPORT_LISTS">‎Eksportere lister‎</string>
   <string name="SYS_EXPORT_LISTS_DESC">‎Lister over grupper og roller kan eksporteres af brugere, forudsat at du har ret til at få vist disse lister. Denne indstilling kan bruges til at begrænse eksportfunktionen. (Standard: Alle)‎</string>
@@ -843,7 +839,9 @@
   <string name="SYS_FIELD">Felt</string>
   <string name="SYS_FIELD_EMPTY">Felt #VAR1_BOLD# er tomt.</string>
   <string name="SYS_FIELD_ENCLOSURE">‎Citattegn for felterne‎</string>
-  <string name="SYS_FIELD_INVALID_CHAR">Feltet #VAR1_BOLD# indeholder ulovlige karakterer.\n\nTilladte karakterer er bogstaver fra \'a\' til \'z\' og \'A\' til \'Z\', cifre fra 0 til 9 og specielle karakterer som .-_+@ .</string>
+  <string name="SYS_FIELD_INVALID_CHAR">Den indtastede værdi i feltet #VAR1_BOLD# indeholder ulovlige tegn.\n\nTilladte tegn er bogstaver fra \'a\' til \'z\' og \'A\' til \'Z\', tal fra 0 til 9 og specialtegn som .-_+ @ .</string>
+  <string name="SYS_FIELD_INVALID_INPUT">Feltet #VAR1_BOLD# indeholder et ugyldigt input.</string>
+  <string name="SYS_FIELD_INVALID_REGEX">Den indtastede værdi i feltet #VAR1_BOLD# indeholder tegn, som ikke matcher feltets tilsvarende regulære udtryk. Tjek venligst feltbeskrivelsen, hvilke tegn der er tilladt.</string>
   <string name="SYS_FIELDS_EMPTY">Nogen felter er tomme.</string>
   <string name="SYS_FILE">Fil</string>
   <string name="SYS_FILE_COLUMN">Fil kolonne</string>
@@ -901,7 +899,6 @@
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Programmet forventer en streng med mindst to forskellige karakterer.</string>
   <string name="SYS_GREETING_CARD">Postkort</string>
   <string name="SYS_GREETING_CARDS">Postkort</string>
-  <string name="SYS_GREETING_CARD_EDIT">Rediger postkort</string>
   <string name="SYS_GROUPS_ROLES">Grupper &amp; roller</string>
   <string name="SYS_GROUPS_ROLES_DESC">Overblik og administration af alle grupper og roller i organisationen. Forskellige medlemslister kan vises, eksporteret og egne lister kan oprettes.</string>
   <string name="SYS_HALF_YEARLY">Halvårligt</string>
@@ -931,7 +928,7 @@
   <string name="SYS_IMPRINT_DESC">Her kan URL\'en til dit indtryk af din side deponeres. Hvis det valgte tema understøtter dette, vises et link på Admidio-siderne. (Eksempel: https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inaktive grupper og roller</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Info boks</string>
-  <string name="SYS_INFORMATIONS">information</string>
+  <string name="SYS_INFORMATIONS">Information</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Indtast venligst for- og efternavn på det nye medlem. Inden posten oprettes, kontrolleres det, om der allerede findes en person med et lignende navn i databasen.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Sucessfuld installation</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Admidio databasen er nu installeret og fuldstændigt konfigureret. Konfigurations filen med adgangsdata til databasen er oprettet og gemt. Du kan nu arbejde med Admidio og logge på med dine administrator oplysninger.</string>
@@ -1047,7 +1044,7 @@
   <string name="SYS_MULTIPLE_RECIPIENTS">Flere modtagere</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-mails til flere modtagere indeholder alle modtagere i BCC feltet. Dette sikrer at ingen kan se e-mail adresserne til de andre modtagere. Men, (TIL) feltet skal også udfyldes. Denne indstilling kan bruges til at definere hvad der skal stå i modtgerens (TIL) felt. Det kan være en skjult værdi som \"Skjulte modtagere\", men dette skaber problemer hos nogen udbydere af e-mail tjenester. Alternativt kan modtager feltet (TIL) udfyldes med administratorens afsender adresse fra System meddelelserne. Fodnote: Alle emails til flere modtagere bliver da også sendt til den e-mail adresse der står i (TIL) feltet. (Standard: Afsender)</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">Rollen \'Administrator\' skal have mindst ét medlem tildelt til denne rolle.</string>
-  <string name="SYS_MYLIST_CONDITION_DESC">Definer kravene til alle felterne brug i din nye liste konfiguration. Kravene til den valgte rolle vil blive begrænset af dine egne krav.</string>
+  <string name="SYS_MYLIST_CONDITION_DESC">Her kan du definere betingelser for hvert felt i din liste. Dette vil yderligere begrænse de bestemte medlemmer af den valgte rolle med dine betingelser.</string>
   <string name="SYS_NAME">Navn</string>
   <string name="SYS_NAME_ABBREVIATION">Kort navn</string>
   <string name="SYS_NEW_BETA_AVAILABLE">En ny beta version er tilgængelig!</string>
@@ -1090,6 +1087,13 @@
   <string name="SYS_NOT_SET">ikke sat</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Venligst anvend en valid dato som grundlag for feltet #VAR1_BOLD#.</string>
   <string name="SYS_NOTE">Noter</string>
+  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Meddelelse efter ny tilmelding</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Meddelelse for nye poster</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Her kan du aktivere en systemnotifikation for nye tilmeldinger i modulerne Meddelelser, Begivenheder, Gæstebog, Weblinks og Billeder. Medlemmer af den lagrede notifikationsrolle får mulighed for at få besked om nye poster i modulerne via e-mail. (Standard: nej)</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Meddelelse for ændrede profilfelter</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">En system meddelelse for ændrede profildata kan aktiveres her. Hvis profildata oprettes, ændres eller slettes af en bruger, får medlemmerne af den gemte notifikationsrolle besked via e-mail. (Standard: nej)</string>
+  <string name="SYS_NOTIFICATION_ROLE">Notifikationsrolle</string>
+  <string name="SYS_NOTIFICATION_ROLE_DESC">Meddelelser om nye poster eller profilændringer sendes til alle medlemmer af denne rolle.</string>
   <string name="SYS_NUMBER">Nummer</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Antal roller pr. side.</string>
   <string name="SYS_NUMBER_COL_DESC">Det respektive afkrydsningsfelt skal aktiveres, hvis du vil have vist en linje med antallet af medlemskaber i slutningen af rapporten.</string>
@@ -1144,7 +1148,7 @@
   <string name="SYS_PLUGINS">Plugins</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portræt</string>
-  <string name="SYS_POSSIBLE_FIELDNAMES">‎Kolonnenavne til automatisk opdagelse: #VAR1#‎</string>
+  <string name="SYS_POSSIBLE_FIELDNAMES">Kolonnenavne til automatisk registrering: #VAR1#</string>
   <string name="SYS_POST_MAX_SIZE">max. POST størrelse</string>
   <string name="SYS_POSTCODE">Postnummer</string>
   <string name="SYS_PRESENTATION">Vis</string>
@@ -1180,6 +1184,8 @@
   <string name="SYS_REGISTRATION_SAVED">Dine data er blevet gemt.\n\nDu kan logge ind efter de er godkendt. Du vil blive informeret via e-mail når dine data er godkendt.</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Overfør alle data fra registreringen for den eksisterende bruger</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Hvis der allerede findes en nyregistreret bruger i databasen, overføres alle data fra registreringen til den eksisterende bruger, hvis denne indstilling er sat. Hvis denne indstilling ikke er indstillet, overføres kun brugernavnet og adgangskoden. I tilfælde af brugere, der ikke eksisterede før, vil alle data fra registreringen altid blive overført uafhængigt af denne indstilling. (Standard: Ja)</string>
+  <string name="SYS_REGULAR_EXPRESSION">Regulært udtryk</string>
+  <string name="SYS_REGULAR_EXPRESSION_DESC">Ethvert regulært udtryk kan gemmes, som vil blive anvendt på brugerens indtastede indhold i dette profilfelt. Indholdet skal matche betingelserne for det regulære udtryk, for at den indtastede værdi kan gemmes i feltet. Det regulære udtryk kontrolleres ud over de generelle betingelser for datatypen.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relations konfiguration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relations konfigurationer</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Hvis det er indstillet, kan en bruger redigere profilen til en anden bruger, som han er relateret til. For et asymmetrisk forhold tildeles rettigheden separat for hvert forhold, og for et symmetrisk forhold kan begge brugere redigere den anden profil, og i tilfælde af et ensrettet forhold kan kun brugeren der har relationen på sin profil, redigere den anden profil.</string>
@@ -1262,8 +1268,8 @@
   <string name="SYS_SEARCH_GENDER_DESC">Søgning efter mand, kvinde og uidentificeret køn</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_EXAMPLE">Mei*</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_DESC">Søgning efter alle brugere med navne der begynder med \'Mei\'</string>
-  <string name="SYS_SEARCH_LASTNAME_EXAMPLE">Hansen</string>
-  <string name="SYS_SEARCH_LASTNAME_DESC">Søgning efter brugere med efternavnet \'Hansen\'</string>
+  <string name="SYS_SEARCH_LASTNAME_EXAMPLE">Smith</string>
+  <string name="SYS_SEARCH_LASTNAME_DESC">Søger efter brugere med efternavn \'Smith\'</string>
   <string name="SYS_SEARCH_LOCATION_EXAMPLE">Aalborg eller Køge</string>
   <string name="SYS_SEARCH_LOCATION_DESC">Søgning efter brugere der kommer fra Aalborg eller Køge</string>
   <string name="SYS_SEARCH_NOT_EMPTY_EXAMPLE_DESC">Finder alle brugere der har udfyldt vej feltet</string>
@@ -1286,10 +1292,11 @@
   <string name="SYS_SEND_COPY">Send kopi af e-mail til min egen adresse</string>
   <string name="SYS_SEND_EMAIL">Send e-mail</string>
   <string name="SYS_SEND_EMAIL_FORMER">Send e-mails til tidligere medlemmer</string>
-  <string name="SYS_SEND_EMAIL_FORMER_DESC">Denne indstilling tillader at der sendes e-mail til enkeltstående tidligere medlemmer eller til alle tidligere medlemmer af en rolle.(Standard: aktiveret)</string>
+  <string name="SYS_SEND_EMAIL_FORMER_DESC">Hvis denne mulighed er indstillet, kan e-mails sendes til individuelle tidligere medlemmer såvel som til alle tidligere medlemmer af en rolle. (Standard: Aktiveret)</string>
   <string name="SYS_SEND_EMAIL_TO">Send e-mail til #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send e-mails til alle brugerens e-mail-adresser</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Hvis denne indstilling er aktiveret, sendes e-mails til alle brugerens e-mail-adresser, der er gemt i profilen. Hvis indstillingen er deaktiveret, sendes e-mails kun til e-mail-adressen fra profilfeltet med det interne navn EMAIL. (Standard: aktiveret)</string>
+  <string name="SYS_SEND_GREETING_CARD">Send lykønskningskort</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Send login information</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Din email vil blive sendt til alle medlemmer der har en email adresse og som tilhører den valgte rolle eller de valgte modtagere.\n\nFlere roller og modtagere er tilgængelige kun for brugere der er logget ind.</string>
   <string name="SYS_SEND_MAILS">Send e-mails</string>
@@ -1361,6 +1368,7 @@
   <string name="SYS_SUNDAY">søndag</string>
   <string name="SYS_SUPPORT_ADMIDIO">Støt Admidio</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Skift til kategori administration</string>
+  <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Skift til relations konfiguration</string>
   <string name="SYS_SYMMETRICAL">Symmetrisk</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Legitimations oplysninger for #organization_long_name#\n#content# Hej #user_first_name#,\n\nDu modtager dine legitimations oplysninger til webstedet #organization_homepage#.\nBrugernavn: #user_login_name#\nAdgangskode: #variabel1#\n\nAdgangskoden  genereres automatisk,\nDu skal ændre adgangskoden, når du er logget ind på #organization_homepage# i din profil.\n\nMed venlig hilsen\nAdministratorerne</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">‎#subject# Nulstil adgangskode for #organization_long_name#\n#indhold# Hej #user_first_name#,\n\nVi har modtaget en anmodning om at nulstille adgangskoden på #organization_homepage#.\n\nHvis anmodningen kom fra dig, kan du bruge følgende link til at nulstille adgangskoden og angive et nyt: \n#variable1#\n\nVenlig hilsen\nAdministratorerne‎</string>
@@ -1387,6 +1395,7 @@
   <string name="SYS_TOTAL">Total</string>
   <string name="SYS_TUESDAY">tirsdag</string>
   <string name="SYS_TYPE">Type</string>
+  <string name="SYS_UNIQUE_ID">Unikt ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Uidentificeret</string>
   <string name="SYS_UNLIMITED">Ubegrænset</string>
@@ -1398,6 +1407,7 @@
   <string name="SYS_UPLOAD_MAX_FILESIZE">max. overførsels filstørrelse</string>
   <string name="SYS_UPLOAD_NAME_ERROR">Filnavnet kan ikke være \"Submit\".</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Opdatering udført sucessfuldt</string>
+  <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">URL\'en i feltet #VAR1_BOLD# indeholder ulovlige karakterer.\n\nTilladte karakterer er bogstaver fra \'a\' til \'z\' og \'A\' til \'Z\', cifre fra 0-9 og specielle karakterer som .+-_:/#?= Undlad ÆØÅæøå</string>
   <string name="SYS_USER">Bruger</string>
   <string name="SYS_USER_COULD_BE_CREATED">Personen kunne oprettes.</string>

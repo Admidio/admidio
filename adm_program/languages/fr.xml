@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in Datesmodule-->
+  <!--Phrases only in event module-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Ajouter un événement à l\'agenda</string>
   <string name="DAT_ALL_DAY">Plein temps</string>
   <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Les participants peuvent inscrire des invités anonymes</string>
@@ -20,7 +20,7 @@
   <string name="DAT_DATES_DESC">Les événements peuvent être créés et visualisés ici. Les utilisateurs peuvent s\'inscrire à ces événements sur demande.</string>
   <string name="DAT_DEADLINE">Délai d\'inscription</string>
   <string name="DAT_DEADLINE_ATTENTION">Ton inscription ne peut plus être modifiée, parce que la date de fin des inscriptions a été atteinte ou que l\'événement est dans le passé. Contacte le responsable l\'événement ou un administrateur !</string>
-  <string name="DAT_DEADLINE_DESC">Les participants peuvent s\'inscrire jusqu\'à cette date. Le chef ou des utilisateurs avec le droit d\'éditer des événements peuvent assigner des participants aussi après cette date. Si aucune date n\'est spécifiée, le système prend automatiquement la date de début comme délai d\'inscription.</string>
+  <string name="DAT_DEADLINE_DESC">Les participants peuvent s\'inscrire jusqu\'à cette date. Le responsable ou des utilisateurs avec le droit d\'éditer des événements peuvent assigner des participants aussi après cette date. Si aucune date n\'est spécifiée, le système prend automatiquement la date de début comme délai d\'inscription.</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION">Configuration standard de la liste des participants</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">L\'une des configurations spécifiées ici peut devenir la configuration par défaut pour la liste des participants aux événements de cette organisation. Les participants des événements sont affichés avec cette configuration.</string>
   <string name="DAT_EDIT_CALENDAR_DESC">Ici, tu peux créer et modifier des calendriers.</string>
@@ -84,7 +84,7 @@
   <string name="DAT_VIEW_MODE_DETAIL">Détaillé</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Visibilité</string>
-  <!--Phrases only in Guestbookmodule-->
+  <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Retour au livre d\'or</string>
   <string name="GBO_CAPTCHA_DESC">Pour les utilisateurs qui ne sont pas connectés, un code alphanumérique ou un simple calcul arithmétique est affiché dans le livre d\'or avec captcha activé. L\'utilisateur doit le saisir correctement avant d\'envoyer le contenu du formulaire. Ceci afin de s\'assurer que le formulaire ne peut pas être utilisé à mauvais escient par les spammeurs. (Par défaut : oui)</string>
   <string name="GBO_COMMENT_BY">Commentaire de #VAR1#</string>
@@ -114,7 +114,7 @@
   <string name="GBO_SHOW_COMMENTS">Afficher les commentaires</string>
   <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Afficher #VAR1# commentaire(s) pour cette entrées.</string>
   <string name="GBO_WRITE_COMMENT">Écrire un commentaire</string>
-  <!--Phrases only in Installation-->
+  <!--Phrases only in installation-->
   <string name="INS_ADD_ANOTHER_ORGANIZATION">Ajouter une autre organisation</string>
   <string name="INS_ADD_ORGANIZATION">Ajouter une organistaion</string>
   <string name="INS_ADDIDIONAL_DATA">Données supplémentaires</string>
@@ -228,10 +228,9 @@
   <string name="INS_SON">Fils</string>
   <string name="INS_SPOUSE">Conjoint/-e</string>
   <string name="INS_WIFE">Épouse</string>
-  <!--Phrases only in Organizationadministration-->
+  <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Accès au module</string>
-  <string name="SYS_ENABLE_NOTIFICATIONS">Activer les notifications du système</string>
-  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Ici, les notifications système d\'Admidio peuvent être désactivées. Les notifications système sont envoyées lorsqu\'un nouvel utilisateur se connecte, par exemple. Les confirmations d\'inscription sont également envoyées sous forme de notifications système. Cette fonction ne doit généralement pas être désactivée. A moins que le serveur ne supporte pas l\'envoi de courriels. Le module courriel n\'est pas affecté par cette désactivation. (Par défaut : oui)</string>
+  <string name="ORG_ACCESS_TO_MODULE_DESC">Le module peut être désactivé ou activé pour les utilisateurs authentifiés seulement. Si le module est seulement accessible aux utilisateurs authentifiés, il sera caché pour les visiteurs et le flux Web sera complètement désactivé pour les deux groupes d\'utilisateurs. (par défaut: actif)</string>
   <string name="ORG_ADD_ORGANIZATION_DESC">Ajoute une nouvelle organisation avec ces données de bases. L\'utilisateur actuel est automatiquement nommé administrateur et peut effectuer les autres configurations. Les utilisateurs qui se connectent à partir de maintenant au système doivent indiquer le nom de l\'organisation.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Variables supplémentaires</string>
   <string name="ORG_ADMIDIO_THEME">Thèmes Admidio</string>
@@ -282,8 +281,8 @@
   <string name="ORG_ENABLE_RSS_FEEDS">Activer les flux Web</string>
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio peut fournir des flux web pour différents modules (annonces, événements, livre d\'or, galeries photos et liens web) sur les pages de vue d\'ensemble respectives, qui peuvent ensuite être affectées à un lecteur de flux via le navigateur. (Par défaut : oui)</string>
   <string name="ORG_FIELD_DESCRIPTION">Il est possible de définir un nombre illimité de champs supplémentaires. Ceux-ci sont affichés dans le profil de chaque utilisateurs et peuvent également y être édités. Ces champs sont également disponibles dans \"Mes listes\".</string>
-  <string name="ORG_FIELD_DISABLED">Le champ ne peut être édité que par les utilisateurs ayant le droit #VAR1_BOLD#.</string>
-  <string name="ORG_FIELD_DISABLED_DESC">L\'utilisateur ne peut pas modifier un champ verrouillé dans son propre profil. Le champ ne peut être édité que par les utilisateurs qui ont le droit de modifier tous les utilisateurs. Les chefs d\'un rôle ayant le droit de modifier les profils des membres du rôle peuvent également modifier ce champ.</string>
+  <string name="ORG_FIELD_DISABLED">Le champ ne peut être éditer que par un utilisateur qui en a la permission #VAR1_BOLD#</string>
+  <string name="ORG_FIELD_DISABLED_DESC">L\'utilisateur ne peut pas modifier un champ verrouillé dans son propre profil. Le champ ne peut être édité que par les utilisateurs qui ont le droit de modifier tous les utilisateurs. Les responsables d\'un rôle ayant le droit de modifier les profils des membres du rôle peuvent également modifier ce champ.</string>
   <string name="ORG_FIELD_EXIST">Il y a déjà un champ dans cette catégorie avec le même nom.</string>
   <string name="ORG_FIELD_HIDDEN">Champ visible uniquement pour les utilisateurs autorisés (profil personnel &amp; droits de rôle)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Un champ est généralement visible pour tous les utilisateurs qui sont autorisés à voir le profil. Si ce paramètre n\'est pas défini, seuls les utilisateurs autorisés à modifier le profil peuvent voir le champ.</string>
@@ -309,7 +308,6 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Dans ce formulaire, entre l\'abréviation, le nom officiel et l\'adresse de courriel de l\'organisation que tu veux ajouter. L\'adresse de courriel doit être une adresse générale de l\'organisation. Cette adresse est notamment utilisée comme adresse de l\'expéditeur pour les notifications automatiques du système.</string>
   <string name="ORG_NO_FIELD_CREATED">Actuellement, aucun champ de profil spécifique pour l\'organisation n\'a été créé!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Lorsque tu passe à cette vue, tous les réglages non sauvegardés sont perdus.</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notification de l\'administrateur après une inscription</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Nombre d\'entrées par page</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Nombre d\'éléments affichés sur une page. Une pagination est activée si le nombre d\'éléments dépasse la valeur définie. L\'aperçu avant impression et l\'exportation ne sont pas affectés. Si la valeur est 0, tous les éléments seront affichés sur une page et la pagination est désactivée. (Par défaut: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Uniquement pour les utilisateurs connectés</string>
@@ -336,20 +334,15 @@
   <string name="ORG_SHOW_CREATE_EDIT">Afficher créateur et horodatage</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Un champ est généralement visible pour tous les utilisateurs. Si cette fonction n\'est pas séléctionnée, les données ne peuvent être vus seulement par les utilisateurs qui ont le droit de modifier tous les utilisateurs. Dans son propre profil, l\'utilisateur peut visualiser et modifier ces données.</string>
   <string name="ORG_SHOW_ALL_USERS">Afficher optionnellement tous les utilisateurs</string>
-  <string name="ORG_SHOW_ALL_USERS_DESC">Si ce paramètre est défini, les anciens membres et les membres d\'autres organisations peuvent être affichés dans l\'administration des utilisateurs en plus des membres actifs de l\'organisation actuelle. Si ce paramètre est désactivé, seuls les membres actifs de l\'organisation actuelle sont affichés. Toutefois, lors de la création de nouveaux utilisateurs ou de l\'attribution d\'inscription, le système recherche toujours des utilisateurs existants dans l\'ensemble de la base d\'utilisateurs de toutes les organisations.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Afficher la séléction d\'organisation</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Si plusieurs organisations sont configurées dans la base de données, le dialogue de connexion avec toutes les organisations peut être affichée dans le dialogue de séléction.  L\'utilisateur peut séléctionner une autre organisation (telle que définie dans config.php) à laquelle il se connecte. Tourefois, l\'utilisateur doit également être inscrit à l\'organisation.</string>
   <string name="ORG_SYSTEM_INFORMATION">Information du système</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS">Adresse de courriel</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification pour les nouvelles entrées</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Ici, tu peux activer les notification du système pour les nouvelles entrées dans les modules. Il sert de fonction de surveillance au sein d\'Admidio. L\'administrateur a la possibilité d\'être informé des nouvelles entrées dans les modules par courriel (seules les nouvelles entrées sont prises en compte). Les notifications du système sont envoyées à l\'adresse de courriel #VAR1#. (Par défaut : non)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Les textes de tous les notifications de système peuvent être adaptés et complétés ici. Les textes sont divisés en 2 zones (sujet &amp; contenu) et sont identifiés par les chaînes de caractères #subject# et #content#. Puis suit le contenu respectif pour cette zone.\n\nDans chaque courriel, les caractères de remplacement suivants peuvent être utilisés, qui sont remplacés au moment de l\'exécution par le contenu correspondant.</string>
   <string name="ORG_THEME_FOLDER_OPEN">Le dossier thèmes n\'a pas pu être ouvert oulu.</string>
   <string name="ORG_TIME_FORMAT">Format horaire</string>
   <string name="ORG_TIME_FORMAT_DESC">Le format correspond à la fonction PHP %VAR1. (Par défaut: H:i)</string>
   <string name="ORG_TIMEZONE">Fuseau horaire</string>
   <string name="ORG_TIMEZONE_DESC">Il s\'agit du fuseau horaire spécifié. Si cela est modifié ultérieurement dans le fichier de configuration config.php d\'Admidio, les dates et les heures déjà saisies ne sont pas adaptées au nouveau fuseau horaire.</string>
-  <string name="SYS_URL">URL</string>
   <string name="ORG_VALUE_LIST">Liste de valeurs</string>
   <string name="ORG_VALUE_LIST_DESC">Dans cette zone, tu peux saisir les éléments de la liste déroulante ou du champ d\'options. Tu peux entrer un élément par ligne dans le champ de la liste déroulante ou du champ d\'options.\n\nLors de la saisie, le texte n\'est pas sauvegardé dans le profil, mais la position sélectionnée dans la liste. Si tu modifie le texte d\'un élément, tous les membres pour lesquels ce champ a été saisie, reçoivent immédiatement le nouveau texte dans leur profil. Cependant, si tu déplace un élément sur une autre ligne, un autre élément sera affichée pour les membres. Dans un champ d\'options, une icône peut aussi être affichée à la place d\'un texte. Tu peux spécifier le nom d\'une icône du dossier thème (ex. : ok.png) ou l\'URL d\'une image externe (ex. : https://www.example.com/example.jpg). Tu peux facultativement définir une infobulle sur l\'icône en utilisant un trait d\'union vertical (ex. : féminin.png|féminin).</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Lien d\'activation pour le nouveau mot de passe</string>
@@ -362,7 +355,7 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Nom abrégé de l\'organisation</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">URL du site Web de l\'organisation</string>
   <string name="ORG_VARIABLE_USERNAME">Nom d\'utilisateur de l\'utilisateur à partir du contexte du courriel respectif</string>
-  <!--Phrases only in Photomodule-->
+  <!--Phrases only in photo module-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Supprimer l\'album</string>
   <string name="PHO_ALBUM_LOCK">Bloquer l\'album</string>
@@ -374,6 +367,7 @@
   <string name="PHO_CREATE_ALBUM">Créer un album</string>
   <string name="PHO_DISPLAY_PHOTOS">Présentation des photos</string>
   <string name="PHO_DISPLAY_PHOTOS_DESC">Ici, tu peux définir comment les photos doivent être présentées dans le module photo. Ceci peut être fait avec une fenêtre modale, qui ouvre une nouvelle fenêtre dans la fenêtre existante du navigateur. La prévisualisation sélectionnée des photos reste active en arrière-plan. Si les images doivent être affichées dans la même fenêtre, la prévisualisation actuelle des photos est quitté et une nouvelle page avec la photo sélectionnée est affichée. Si une fenêtre popup doit être créée, une nouvelle fenêtre de navigateur s\'ouvre dans laquelle la photo sélectionnée est affichée. Celui-ci peut alors être utilisé indépendamment de la fenêtre du navigateur avec la prévisualisation des photo. (Par défaut : Fenêtre modal)</string>
+  <string name="PHO_DOWNLOAD_ENABLED">Activer les téléchargements</string>
   <string name="PHO_DOWNLOAD_ENABLED_DESC">Ceci te permets de télécharger des photos individuelles ainsi que des albums complets sous forme de fichier-zip. Pour chaque album ou chaque photo, un lien est affiché. Si l\'option #VAR1_BOLD# est activée, seule les photos orginales sont téléchargées.</string>
   <string name="PHP_DOWNLOAD_ZIP_ERROR">Une erreure s\'est produite lors de la création du fichier zip.</string>
   <string name="PHO_EDIT_ALBUM">Modifier l\'album</string>
@@ -420,9 +414,7 @@
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">La valeur spécifiée détermine le nombre de petites photos de prévisualisation affichées sur une page. Si un album a plus de photos, une navigation de pages est ajoutée automatiquement. (Par défaut: 16)</string>
   <string name="PHO_UPLOAD_PHOTOS">Télécharger des photos</string>
   <string name="PHO_WANT_DELETE_PHOTO">Veux-tu vraiment supprimer la photo sélectionnée ?</string>
-  <!--Phrases only in Profilemodule-->
-  <string name="PRO_ACCEPT_NEW_PICTURE">Confirmer la nouvelle photo de profil</string>
-  <string name="PRO_ADD_USER">Création d\'un utilisateur</string>
+  <!--Phrases only in profile module-->
   <string name="PRO_ASSIGNED_BY_ROLES">Attribué par les rôles</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">L\'inscription a été confirmé avec succès. L\'utilisateur peut maintenant se connecter au système.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Mettre fin à l\'adhésion</string>
@@ -506,12 +498,14 @@
   <string name="SYS_ACTIVATE_ROLE">Activer le rôle</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Si tu réactives le rôle #VAR1_BOLD#, les membres du rôle se voient attribuer à nouveau les droits et le rôle apparaît dans toutes les listes.\n\nVeux-tu réactiver ce rôle?</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Groupes et rôles actifs</string>
+  <string name="SYS_ADD_ANOTHER_CONFIG">Ajouter la configuration additionnelle</string>
   <string name="SYS_ADD_ATTACHMENT">Ajouter une pièce jointe</string>
   <string name="SYS_ADD_COLUMN">Ajouter une colonne</string>
   <string name="SYS_ADD_COLUMNS_DESC">Dans le tableau suivant, affecte des champs de profil à n\'importe quel nombre de colonnes. En outre, tu peux spécifier l\'ordre de tri par défaut et ajouter des conditions aux champs par lesquels les membres respectifs doivent être filtrés.</string>
   <string name="SYS_ADD_RECIPIENTS">Ajouter un destinataire</string>
   <string name="SYS_ADD_TO_DATABASE">Ajouter à la base de donnée</string>
   <string name="SYS_ADDRESS">Adresse</string>
+  <string name="SYS_ADDITIONAL_COLUMNS">Colonnes supplémentaires</string>
   <string name="SYS_ADDITIONAL_FILES">Cette liste vise à fournir un aperçu des fichiers et dossiers qui ne sont pas encore gérés dans la base de données. Celles-ci peuvent maintenant être ajoutées à la base de données. Les permissions du dossier courant sont automatiquement reprises.</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Changer à la page de téléchargement d\'Admidio</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Le système de gestion en ligne pour les associations, les groupes et les organisations</string>
@@ -534,22 +528,24 @@
   <string name="SYS_ANNUALLY">Annuel</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assigner et éditer les membres</string>
   <string name="SYS_ASSIGN_FIELDS">Attribuer des champs</string>
-  <string name="SYS_ASSIGN_FIELDS_DESC">Si possible, attribue aux champs de la base de donnée une colonne du fichier.\n\nSur le côté gauche se trouvent tous les champs possibles de la base de données et sur le côté droit toutes les colonnes du fichier sélectionné sont listées. Si tous les champs de la base de données ne sont pas présents dans le fichier, ces champs peuvent simplement être laissés vides.</string>
   <string name="SYS_ASSIGN_LOGIN_INFORMATION">Attribuer des données d\'accès</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Les données de connexion ont été attribuées avec succès.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Les données de connexion ont été attribuées avec succès et l\'utilisateur a été notifié par courriel.</string>
   <string name="SYS_ASSIGN_MEMBERS">Assignation des membres</string>
   <string name="SYS_ASSIGN_MEMBERSHIP">Attribuer l\'adhésion</string>
-  <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Attribuer des données d\'adhésion et de connexion à cet utilisateur.</string>
+  <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Attribuer des données d\'adhésion et des informations de connexion à cet utilisateur.</string>
   <string name="SYS_ASSIGN_REGISTRATION">Attribuer l\'inscription</string>
   <string name="SYS_ASSIGN_ROLE">Attribuer un rôle</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Sélectionne un rôle auquel tous les membres importés sont automatiquement affectés. \n\nSeuls les rôles pour lesquels tu as les droits d\'utilisateur sont disponibles.</string>
   <string name="SYS_ASSIGN_ROLES">Attribuer des rôles</string>
   <string name="SYS_ASYMMETRICAL">Asymétrique</string>
   <string name="SYS_ATTACHMENT">Annexes</string>
+  <string name="SYS_ATTACHMENT_ONE">1 pièce jointe</string>
   <string name="SYS_ATTACHMENT_SIZE">Taille maximale du fichier pour les pièces jointes</string>
   <string name="SYS_ATTACHMENT_SIZE_DESC">Les utilisateurs ne peuvent joindre que des fichiers dont la taille est plus inférieure à la valeur spécifiée ici. Si la valeur est 0, il n\'est pas possible de joindre des fichiers dans ce module. (standard: 1MB)</string>
   <string name="SYS_ATTACHMENT_TO_LARGE">Ton fichier joint n\'a pas pu être téléchargé.\nProbablement il est trop grand!</string>
+  <string name="SYS_ATTACHMENTS_VAR">#VAR1# pièces jointes</string>
+  <string name="SYS_AUTO_DETECT">Détection automatique</string>
   <string name="SYS_AVAILABLE">Disponible</string>
   <string name="SYS_AVAILABLE_BETA">Version bêta disponible</string>
   <string name="SYS_BACK">Retour</string>
@@ -561,6 +557,7 @@
   <string name="SYS_BACKUP_FILE">Fichier de sauvegarde</string>
   <string name="SYS_BACKUP_FROM">Fichier de sauvegarde créé le #VAR1# à #VAR2#</string>
   <string name="SYS_BACKUP_ONLY_MYSQL">Le module de sauvegarde ne peut être utilisé uniquement pour des bases de données MySQL.</string>
+  <string name="SYS_BASIC_DATA">Simple données</string>
   <string name="SYS_BIRTHDAY">Anniversaire</string>
   <string name="SYS_CALENDARS">Calendrier</string>
   <string name="SYS_CANT_DELETE_ROLE">Tu ne peux pas supprimer le rôle #VAR1_BOLD#.</string>
@@ -573,12 +570,15 @@
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Code de confirmation</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Le code d\'authentification fait partie d\'un captcha. Un captcha est utilisé pour la détection de spam. L\'image est utilisée pour détecter si un utilisateur ou un script (ou un spambot) a rempli le formulaire. \ NVeuillez remplir le résultat du code d\'authentification dans le formulaire.</string>
   <string name="SYS_CARBON_COPY">Copie</string>
+  <string name="SYS_CAT_SELECTION">Sélection de la catégorie</string>
   <string name="SYS_CATEGORIES">Catégories</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Ces rôles sont des administrateurs du module et ont accès à tout. Tu peux créer, modifier, supprimer des données et éditer des catégories avec tes droits. Tu peux faire d\'un rôle un administrateur en lui assignant le droit #VAR1_BOLD#.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Tous les administrateurs du module de l\'organisation mère</string>
   <string name="SYS_CATEGORY">Catégorie</string>
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Il y a déjà une catégorie dans cette organisation avec ce nom.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">La visibilité des champs de profil de cette catégorie peut être désactivée pour les autres utilisateurs, mais les champs de profil restent visibles dans ton propre profil et peuvent également y être édités.</string>
+  <string name="SYS_CATEGORY_REPORT">Rapport de catégorie</string>
+  <string name="SYS_CATEGORY_REPORT_DESC">Générer la liste des rôles d\'un membre et à ces catégories</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Si cette option est activée, les champs du profil de cette catégorie apparaissent également dans le profil des organisations suivantes et peuvent aussi être gérés: #VAR1#.\n\nEst-ce que tu aimerait voir ces données uniquement de ton organisation, cette option devrait être désactivée.</string>
   <string name="SYS_CATEGORY_VAR">#VAR1#-catégorie</string>
   <string name="SYS_CHANGE_HISTORY">Historique des modifications</string>
@@ -598,10 +598,16 @@
   <string name="SYS_CLOSE">Fermer</string>
   <string name="SYS_CODING">Codage</string>
   <string name="SYS_COLUMN">Colonne</string>
+  <string name="SYS_COLUMN_SELECTION">Sélection de colonnes</string>
+  <string name="SYS_COLUMN_SELECTION_DESC">Sélectionner les colonnes qui seront affichés dans la liste.\n\n Les rôles inactifs sont marqués avec (*).</string>
+  <string name="SYS_CONFIGURATIONS">Configuration</string>
+  <string name="SYS_COMMA">virgule (,)</string>
+  <string name="SYS_COMMA_SEPARATED_FILE">Virgule-/tab-séparé fichier (*.csv)</string>
   <string name="SYS_COMMENT">Commentaire</string>
   <string name="SYS_COMMON">Général</string>
   <string name="SYS_COMPLEMENT">Compléter</string>
   <string name="SYS_CONDITION">Condition</string>
+  <string name="SYS_CONDITIONS">Conditions</string>
   <string name="SYS_CONFIGURATION">Configuration</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Mettre la configuration à disposition de tous les utilisateurs</string>
   <string name="SYS_CONFIGURATION_DELETE">Veux-tu vraiment supprimer la configuration actuelle de la liste ?</string>
@@ -620,16 +626,18 @@
   <string name="SYS_COOKIE_DESC">Ce site Web utilise des cookies pour s\'assurer que tu as la meilleure expérience sur notre site Web. En utilisant ce site Web, tu accepte que nous utilisions des cookies.</string>
   <string name="SYS_COOKIE_NOT_SET">Tu ne peux pas te connecter parce que ton navigateur n\'autorise pas les cookies !\n\nTu dois configurer ton navigateur pour accepter les cookies de #VAR1_BOLD# pour te connecter avec succès.</string>
   <string name="SYS_COPY">Copier</string>
+  <string name="SYS_COPY_CONFIGURATION">Copier la configuration</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Ci-après la copie de ton courriel envoyé</string>
+  <string name="SYS_COPY_ENTRY">Copier l\'entrée</string>
   <string name="SYS_COPY_VAR">Copier #VAR1#</string>
-  <string name="SYS_COUNT_BCC">Nombre des destinataires BCC</string>
-  <string name="SYS_COUNT_BCC_DESC">Les courriels aux rôles avec plusieurs membres sont envoyés sous forme de copies cachées (BCC). Le destinataire ne pourra pas voir qui d\'autre a reçu ce courriel. Le nombre dans ce champ indique le nombre maximum de destinataires par courriel. Ce nombre peut être limité par les fournisseurs d\'accès à internet. Si un rôle a plus de membres que le nombre défini, plusieurs courriels sont générés. Si la valeur est fixée à 1, les courriels ne sont pas envoyés en copie cachée, mais directement au destinataire. Le nombre de courriels possibles à envoyer pendant une période de temps peut également être limité par les fournisseurs d\'accès à internet. (Par défaut : 50)</string>
+  <string name="SYS_NUMBER_RECIPIENTS">Nombre de destinataires</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular"># VAR1 # destinataire individuel</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural"># VAR1 # destinataires individuels</string>
   <string name="SYS_COUNTER">Compteur</string>
   <string name="SYS_COUNTRY">Pays</string>
   <string name="SYS_COUNTRY_EG" translation="edited">FRA</string>
   <string name="SYS_COUNTRY_ISO">Le pays doit être spécifié avec le code ISO 3166 ALPHA-3 (3 caractères)</string>
+  <string name="SYS_CP1252">Code Page – 1252</string>
   <string name="SYS_CREATE">Création</string>
   <string name="SYS_CREATE_CALENDAR">Créer calendrier</string>
   <string name="SYS_CREATE_CATEGORY">Créer catégorie</string>
@@ -638,22 +646,26 @@
   <string name="SYS_CREATE_FOLDER_DESC">Le nouveau dossier est créé dans le dossier existant #VAR1_BOLD#.</string>
   <string name="SYS_CREATE_HTACCESS">Créer .htaccess</string>
   <string name="SYS_CREATE_LINK">Créer un nouveau lien</string>
+  <string name="SYS_CREATE_MEMBER">Créer un membre</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Créer une nouvelle configuration</string>
   <string name="SYS_CREATE_NEW_USER">Créer un nouvel utilisateur</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Si le nouvel utilisateur ne figure pas dans la liste des utilisateurs trouvés, tu peux créer un nouvel utilisateur.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Créer relation</string>
   <string name="SYS_CREATE_ROLE">Création de rôles</string>
-  <string name="SYS_CREATE_MEMBER">Créer un membre</string>
   <string name="SYS_CREATE_VAR">Créer #VAR1#</string>
-  <string name="SYS_CREATED_BY_AND_AT">Créé par #VAR1# le #VAR2#</string>
   <string name="SYS_CREATED_AT">Date de création</string>
+  <string name="SYS_CREATED_BY">Créé par</string>
+  <string name="SYS_CREATED_BY_AND_AT">Créé par #VAR1# le #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_DATABASE_VERSION">Version actuelle de la base de données</string>
+  <string name="SYS_CURRENT_MEMBER">Membre courant</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Tu n\'as pas entré d\'adresse courriel valide ! \n\nEntre une adresse courriel dans ton #VAR1#Profile#VAR2#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Si cette option est activée, les objets (événements, annonces, liens web...) de cette catégorie sont également visibles sur les sites web des organisations suivantes:\n#VAR1_BOLD#.</string>
   <string name="SYS_DATA_MULTI_ORGA">Données visibles pour plusieurs organisations</string>
   <string name="SYS_DATA_PROTECTION">Confidentialité des données</string>
   <string name="SYS_DATA_PROTECTION_DESC">Ici, tu peux entrer l\'URL de ta page avec les informations sur la protection des données. Cette page est liée dans la référence à l\'utilisation de cookies pour plus d\'informations. Si le thème sélectionné le supporte, un lien est également affiché sur les pages Admidio. (Exemple : https://www.example.com/data_protection.html)</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION">Je consens au traitement de mes données.</string>
+  <string name="SYS_DATA_PROTECTION_PERMISSION_DESC">J\'ai lu les informations fournies par l\'organisation. Dans la mesure où les données personnelles que j\'ai fournies ne sont pas des données nécessaires à l\'exécution du contrat, je déclare consentir au traitement de ces données. Mes données seront stockées exclusivement aux fins de l\'organisation et traitées de manière confidentielle.</string>
   <string name="SYS_DATABASE">Base de données</string>
   <string name="SYS_DATABASE_BACKUP">Sauvegarde de la base de données</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Les sauvegardes des bases de données des tables Admidio peuvent être créées et téléchargées ici.</string>
@@ -677,13 +689,16 @@
   <string name="SYS_DAYS_VAR">#VAR1# Jours</string>
   <string name="SYS_DEACTIVATE_ROLE">Désactiver le rôle</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Si vous désactivez le rôle # VAR1_BOLD #, le rôle ne peut plus être utilisé et attribué à des objets. De même, tous les droits de ce rôle ne sont plus effectifs. Cependant, le rôle avec son paramètre et tous les mappages de membres reste et peut être réactivé à une date ultérieure.</string>
+  <string name="SYS_DEBUG_OUTPUT">Sortie de débogage</string>
   <string name="SYS_DECIMAL_NUMBER">Décimale</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Assignation standard pour l\'enregistrement</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Si un nouvel utilisateur est créé ou si un nouvelle inscription est accepté, ce rôle est automatiquement attribué au nouvel utilisateur. Si le créateur a le droit d\'affecter des rôles, toutes les affectations de rôles sont affichées et peuvent être ajustées en conséquence.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Configuration par défaut</string>
+  <string name="SYS_DEFAULT_ENCODING_UTF8">Encodage par défaut (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Liste par défaut</string>
   <string name="SYS_DEFAULT_LIST_DESC">Si une liste de membres doit être affichée pour ce rôle et qu\'aucune configuration de liste n\'est spécifiée pour ce rôle, la liste est affichée avec la configuration de liste standard du système. Tu peux utiliser ce champ pour sélectionner une configuration de liste différente pour chaque rôle individuellement, qui s\'affiche si aucune configuration de liste n\'est spécifiée.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Aucune liste par défaut n\'a été spécifiée par l\'administrateur !\n\nContacte un administrateur pour qu\'il déclare une liste comme liste par défaut.</string>
+  <string name="SYS_DEFAULT_VALUE">Valeur par défaut</string>
   <string name="SYS_DEFAULT_VAR">#VAR1# par défaut</string>
   <string name="SYS_DELETE">Supprimer</string>
   <string name="SYS_DELETE_CONFIGURATION">Supprimer configuration</string>
@@ -704,20 +719,24 @@
   <string name="SYS_DEPENDENCIES">Dépendances</string>
   <string name="SYS_DEPENDENT">Dépendant</string>
   <string name="SYS_DESCRIPTION">Description</string>
+  <string name="SYS_DESCRIPTION_INLINE_DESC">Afficher la description en dessous du champ directement dans le formulaire.</string>
   <string name="SYS_DESIGNATION">Libellé</string>
   <string name="SYS_DIRECTORY_PROTECTION">Protection des répertoires</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Séparateur de dossiers</string>
+  <string name="SYS_DISABLED">Désactivé</string>
   <string name="SYS_DISK_SPACE">Espace disque</string>
   <string name="SYS_DISK_SPACE_ERROR"> L\'utilisation de l\'espace disque n\'a pas pu être déterminée.\n\nMessage d\'erreur:\n#VAR1#.</string>
   <string name="SYS_DISPLAY_REDIRECT">Afficher la redirection</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Ici, le transfert automatique des liens peut être activé. Lorsque tu appel un lien à partir du module de lien, une page d\'avis s\'affiche qui indique que tu quitte les pages d\'Admidio. Après un temps spécifié en secondes, le lien actuel est alors appelé. Si la redirection est réglée sur 0, le lien est appelé directement sans afficher la page d\'avis. (Par défaut : 10 secondes)</string>
   <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Afficher l\'adhésion aux rôle </string>
+  <string name="SYS_DIVERSE">Diverse</string>
   <string name="SYS_DO_NOT_EDIT">Ne pas éditer</string>
   <string name="SYS_DOCUMENTS_FILES">Documents &amp; Dossiers</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Différents documents et fichiers peuvent être visualisés ou fournis pour téléchargement. Ces fichiers peuvent être classés dans des dossiers avec différents niveaux d\'autorisation d\'accès.</string>
   <string name="SYS_DONATE">Don</string>
   <string name="SYS_DONT_DELETE_CATEGORY">La catégorie #VAR1_BOLD# ne peut pas être supprimée, puisqu\'il y a encore des entrées dépendantes: #VAR2#.</string>
   <string name="SYS_DONT_SHOW">Ne pas afficher</string>
+  <string name="SYS_DQUOTE">Double guillemets (\")</string>
   <string name="SYS_DROPDOWN_LISTBOX">Liste déroulante</string>
   <string name="SYS_DOWNLOAD_ALBUM">Télécharger l\'album</string>
   <string name="SYS_DOWNLOAD_FILE">Télécharger un fichier</string>
@@ -736,22 +755,30 @@
   <string name="SYS_EDIT_ENTRY">Editer la saisie</string>
   <string name="SYS_EDIT_FILE">Éditer le fichier</string>
   <string name="SYS_EDIT_FOLDER">Éditer le dossier</string>
-  <string name="SYS_EDIT_LISTS">Editer listes</string>
+  <string name="SYS_CONFIGURE_LISTS">Configure les listes</string>
   <string name="SYS_EDIT_MEMBERS">Editer les membres</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Editer champs du profile</string>
-  <string name="SYS_EDIT_RELATIONSHIPS">Editer relations</string>
   <string name="SYS_EDIT_ROLE">Modifier le rôle</string>
-  <string name="SYS_EDIT_ROLE_MEMBERSHIPS">Editer adhésions aux rôles</string>
   <string name="SYS_EDIT_USER">Modifier les utilisateurs</string>
   <string name="SYS_EDIT_USER_IN_RELATION">Le profil utilisateur de cette relation peut être modifié.</string>
   <string name="SYS_EDIT_VAR">#VAR1# éditer</string>
   <string name="SYS_EDIT_WEBLINKS">Editer les liens web</string>
   <string name="SYS_EDITED_BY">Modifié par</string>
   <string name="SYS_EMAIL">Courriel</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR">Courriel de l\'Administrateur</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Une nouvelle annonce a été créée</string>
+  <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Une nouvelle annonce à #VAR1# a été créée.\n\nTitre: #VAR2#\nCréée par: #VAR3#\nCréée à: #VAR4#</string>
+  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Utilisateur #VAR1# #VAR2# (identifiant: #VAR3#) a été changé</string>
+  <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Les données de profil de l\'utilisateur #VAR1# #VAR2# (identifiant: #VAR3#) a été changé par #VAR4#.</string>
+  <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">Utilisateur #VAR1# #VAR2# (identifiant: #VAR3#) a été créé</string>
+  <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">L\'utilisateur #VAR1# #VAR2# (identifiant: #VAR3#) a été créé par #VAR4#.</string>
+  <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Utilisateur #VAR1# #VAR2# (identifiant: #VAR3#) a été supprimé</string>
+  <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Le profil de l\'utilisateur #VAR1# #VAR2# (identifiant: #VAR3#) a été supprimé par #VAR4#.</string>
   <string name="SYS_EMAIL_DESC">Les courriels peuvent être envoyé à différents rôles, qu\'il sagisse de groupes, de cours ou de départements.</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">Un nouveau fichier a été téléchargé</string>
   <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">Un nouveau fichier a été télécharger vers #VAR1#\n\nFile: #VAR2#\nTéléchargé par: #VAR3#\nTéléchargé à: #VAR4#</string>
+  <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# fonction test courriel</string>
+  <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Ce courriel a été envoyé via le #VAR1# website de #VAR2# organisation par les paramètres de courriel stockés ici.</string>
   <string name="SYS_EMAIL_INVALID">L\'adresse courriel dans le champ #VAR1_BOLD# contient des caractères non valides ou n\'a pas été saisie complètement.</string>
   <string name="SYS_EMAIL_NOT_SEND"> Le courriel n\'a pas pu être envoyé à #VAR1_BOLD#.\n\nL\'erreur suivante s\'est produite:\n#VAR2#.</string>
   <string name="SYS_EMAIL_SEND">Le courriel a été envoyé.</string>
@@ -760,8 +787,19 @@
   <string name="SYS_EMAIL_TO_MEMBERS">Envoyer courriel aux membres</string>
   <string name="SYS_EMAIL_TO_LIST">Courriel à la liste</string>
   <string name="SYS_EMPTY">Vide</string>
+  <string name="SYS_ENABLED">Activé</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT">Activer le rapport des catégories</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activer les documents &amp; fichiers</string>
+  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Documents &amp; fichiers peuvent être activés ou désactivés à travers ce paramètre. (par défaut: oui)</string>
+  <string name="SYS_ENABLE_EMAILS">Activer les courriels</string>
+  <string name="SYS_ENABLE_GREETING_CARDS">Activer les cartes de vœux</string>
+  <string name="SYS_ENABLE_GROUPS_ROLES">Activer les groupes &amp; rôles</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS">Activer les notifications système</string>
+  <string name="SYS_ENABLE_PM_MODULE">Activer les messages privés</string>
+  <string name="SYS_ENABLE_PM_MODULE_DESC">Les messages privés peuvent être activés ou désactivés à travers ce paramètre. (par défaut: oui)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Gérer et afficher les relations</string>
   <string name="SYS_ENABLE_USER_RELATIONS_DESC">Si ce paramètre est défini, les relations entre les membres peuvent être gérées et affichées. (Par défaut : oui)</string>
+  <string name="SYS_ENCODING_GUESS">Tentative de détecter l\'encodage</string>
   <string name="SYS_END" description="End of a date">Fin</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER">Veux-tu mettre fin à l\'adhésion du membre #VAR1# à #VAR2#?</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER_OK">L\'adhésion du membre #VAR1_BOLD# à #VAR2_BOLD# a été résiliée avec succès!</string>
@@ -772,14 +810,19 @@
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Evénements - Confirmation de participation</string>
   <string name="SYS_EXAMPLE">Exemple</string>
   <string name="SYS_EXAMPLES">Exemples</string>
+  <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
+  <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
+  <string name="SYS_EXECUTE_BACKUP">Exécution de la sauvegarde</string>
   <string name="SYS_EXISTING_MEMBERS">Membres existants</string>
+  <string name="SYS_EXPORT_LISTS">Listes d\'export</string>
   <string name="SYS_EXPORT_TO">Exporter vers</string>
   <string name="SYS_FADE_IN">Fondre</string>
   <string name="SYS_FAX">Télécopieur</string>
   <string name="SYS_FEMALE">Féminin</string>
   <string name="SYS_FIELD">Champ</string>
   <string name="SYS_FIELD_EMPTY">Le champ #VAR1_BOLD# n\'est pas rempli.</string>
-  <string name="SYS_FIELD_INVALID_CHAR">Le champ #VAR1_BOLD# contient des caractères invalides.\n\nPermis ne sont que les lettres a-z et A-Z, les chiffres 0-9 et les caractères spéciaux .-_+@ .</string>
+  <string name="SYS_FIELD_ENCLOSURE">Caractère de citation pour les champs</string>
+  <string name="SYS_FIELD_INVALID_INPUT">Le champ #VAR1_BOLD# contient une entrée invalide.</string>
   <string name="SYS_FIELDS_EMPTY">Tous les champs n\'ont pas été remplis.</string>
   <string name="SYS_FILE">Fichier</string>
   <string name="SYS_FILE_COLUMN">Colonne de fichiers</string>
@@ -801,6 +844,7 @@
   <string name="SYS_FILENAME_INVALID">Le nom de fichier sélectionné #VAR1_BOLD# contient des caractères invalides. Prière de vérifier le nom.\n\nLes caractères spéciaux suivants ne sont pas acceptés: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">La version de la base de données #VAR1# est supérieure à la version des scripts Admidio #VAR2#.\n\nActualise tes fichiers Admidio sur le serveur FTP #VAR3#avec une version récente d\'Admidio#VAR4#.</string>
   <string name="SYS_FILTER">Filtre</string>
+  <string name="SYS_FILTER_TO_EXPORT">Filtre pour l\'export</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">La première ligne contient les intitulés des colonnes</string>
   <string name="SYS_FIRSTNAME">Prénom</string>
   <string name="SYS_FIRSTNAME_LASTNAME">Prénom et nom de famille</string>
@@ -809,6 +853,7 @@
   <string name="SYS_FOLDER_EXISTS">Le dossier # VAR1 # existe déjà! \ Non Veuillez sélectionner un nom de dossier différent.</string>
   <string name="SYS_FOLDER_NO_FILES">Le dossier est vide.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Vous n\'êtes pas autorisé à afficher le dossier sélectionné.</string>
+  <string name="SYS_FOLDER_NO_FILES_VISITOR">Il n\'y a pas de documents ou de fichiers disponibles pour les visiteurs.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Le dossier #VAR1_BOLD# ne peut pas être créé.\n\nContacte l\'administrateur #VAR2#Administrateur#VAR3#, afin qu\'il puisse vérifier les permissions d\'écriture du dossier parent.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Le dossier n\'existe plus sur le serveur. Il devrait être supprimé de la base de données.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Dossier (ID # VAR1 #) non trouvé.</string>
@@ -816,24 +861,24 @@
   <string name="SYS_FOLDER_RENAME_ERROR">Une erreur s\'est produite quand le dossier #VAR1# a été renommé..</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Le dossier #VAR1_BOLD# ne peut pas être créé avec les droits d\'écriture.\n\nContacte l\'administrateur #VAR2#Administrateur#VAR3#, afin qu\'il puisse vérifier les droits d\'écriture (définis les attributs du fichier à 0777 ou drwxrwxrwx via FTP).</string>
   <string name="SYS_FONT">Police</string>
-  <string name="SYS_FONT_AWESOME_DESC">Vous pouvez stocker une icône de différentes manières: \ n1. Une icône de la police Web \"Font Awesome\". Allez sur # VAR1 #http: //fontawesome.com#VAR2# et sélectionnez une icône gratuite dans la collection \"Solid\" ou \"Brands\". En tant que préfixe, vous devez mettre un fa- devant. Donc, si vous choisissez l\'icône \"utilisateur\", vous devez entrer \"fa-user\" ici. \ N2. Une icône JPEG ou PNG. Pour ce faire, entrez l\'URL complète avec le nom de fichier de l\'icône. Alternativement, vous pouvez mettre l\'icône dans le thème dans le dossier \"images\", il vous suffit alors de spécifier le nom du fichier.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">J\'ai oublié mon mot de passe!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Ancien</string>
   <string name="SYS_FORMER_MEMBERS">Anciens membres</string>
   <string name="SYS_FORMER_PL">Anciens</string>
+  <string name="SYS_FORWARD">Avance</string>
   <string name="SYS_FRIDAY">vendredi</string>
   <string name="SYS_FROM">de #VAR1#</string>
   <string name="SYS_FROM_TO">#VAR1# vers #VAR2#</string>
   <string name="SYS_FURTHER_INFORMATIONS">Plus d\'informations</string>
   <string name="SYS_GENERAL_LISTS">Listes générales</string>
+  <string name="SYS_GENERAL_ROLE_ASSIGNMENT">Attribution générale des rôles</string>
   <string name="SYS_GENDER">Sexe</string>
   <string name="SYS_GEN_RANDOM_ERROR">Une erreur inattendue s\'est produite lors de la génération d\'un nombre aléatoire.\nCode d\'erreur : #VAR1#\nMessage d\'erreur : #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">Le programme ne peut pas générer des nombres aléatoires.\nCode d\'erreur : #VAR1#\nMessage d\'erreur : #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Le programme attend une chaîne de caractères avec au moins 2 caractères différents.</string>
   <string name="SYS_GREETING_CARD">Carte de voeux</string>
   <string name="SYS_GREETING_CARDS">Cartes de voeux</string>
-  <string name="SYS_GREETING_CARD_EDIT">Éditer la carte de voeux</string>
   <string name="SYS_GROUPS_ROLES">Groupes &amp; rôles.</string>
   <string name="SYS_GROUPS_ROLES_DESC">Vue d\'ensemble et gestion de tous les groupes et rôles de l\'organisation. Différentes listes de membres peuvent être affichées, exportées et des listes propres peuvent être créées.</string>
   <string name="SYS_HALF_YEARLY">Semestriel</string>
@@ -847,20 +892,22 @@
   <string name="SYS_HOURS_VAR">#VAR1# heures</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">Courriels HTML</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">La création et l\'envoi de courriels HTML peuvent être activés pour les utilisateurs connectés. Au lieu du champ de texte normal, un editeur Javascript est alors affiché, via lequel le texte peut être édité confortablement. Pour des raisons de sécurité, cette fonction n\'est pas disponible pour les visiteurs.</string>
-  <string name="SYS_ICAL_DISABLED">La fonction iCal a été désactivée par l\'administrateur.</string>
+  <string name="SYS_HTML_TABLE">Table HTML</string>
+  <string name="SYS_ICAL_DISABLED">La fonction iCal est désactivé.</string>
   <string name="SYS_ICON">Icone</string>
   <string name="SYS_IDENTIFY_USERS">Les membres existants sont identifiés par leur prénom et leur nom de famille.</string>
   <string name="SYS_IMPORTANT">Important</string>
   <string name="SYS_IMPORT">Importer</string>
+  <string name="SYS_IMPORT_MEMBERS">Import des membres</string>
   <string name="SYS_IMPORT_MODE">Mode importation</string>
+  <string name="SYS_IMPORT_SHEET_NOT_EXISTS">La feuille de calcul #VAR1# n\'existe pas dans le fichier importé!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">L\'importation a été réussie.\n\n#VAR1# nouveaux membres ont été créés.\n#VAR2# membres ont été modifiés.\n#VAR3# d\'appartenances aux rôle ont été assignés.</string>
-  <string name="SYS_IMPORT_MEMBERS">Importer des membres</string>
+  <string name="SYS_IMPORT_UNUSED_HEAD">Les colonnes suivantes du fichier d\'import ne sont pas assignés par aucun champ de profil:</string>
   <string name="SYS_IMPRINT">Impressum</string>
   <string name="SYS_IMPRINT_DESC">Ici, tu peux entrer l\'URL de l\'impressum de ta page. Si le thème sélectionné le supporte, un lien sera affiché sur les pages Admidio. (Exemple : https://www.example.com/imprint.html)</string>
   <string name="SYS_INACTIVE_GROUPS_ROLES">Groupes et rôles inactifs</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
-  <string name="SYS_INFORMATIONS">Informations</string>
-  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Saisis prénom et nom de famille pour le nouveau membre. Avant la création du membre, le système vérifie si un membre ayant un nom similaire existe déjà dans la base de données.</string>
+  <string name="SYS_INFORMATIONS">Information</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">installation réussie</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">La base de données Admidio est maintenant installée et complètement configurée. Le fichier de configuration avec les données d\'accès à la base de données a été créé et stocké. Vous pouvez maintenant travailler avec Admidio et vous connecter avec les données d\'administrateur.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">L\'installation et la configuration de la base de données ont été effectuées avec succès.</string>
@@ -872,21 +919,22 @@
   <string name="SYS_INVALID_FONT_AWESOME">Le nom de l\'icône saisi ne correspond pas à la syntaxe attendue. Une icône de police Awesome doit correspondre au schéma fa-iconname. Un fichier doit être stocké dans le dossier du thème des images et avoir une extension png ou jpg.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Afficher la page invalide</string>
   <string name="SYS_IO_ERROR">Erreur d\'E/S</string>
+  <string name="SYS_IS_VAR_FROM">est #VAR1# de</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_ITEMNAME">nNom de l\'article</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Format paysage</string>
   <string name="SYS_LANGUAGE">Langue</string>
-  <string name="SYS_LANGUAGE_HELP_TRANSLATION">Votre langue manque-t-elle ou souhaitez-vous traduire plus de textes ou améliorer les traductions existantes? Alors jetez un œil à la page # VAR1 # Wiki d\'Admidio # VAR2 # pour voir comment vous pouvez aider à la traduction.</string>
-  <string name="SYS_LAST_EDITED_BY">Dernière édition par %#VAR1# le #VAR2#</string>
+  <string name="SYS_LANGUAGE_HELP_TRANSLATION">Votre langue manque-t-elle ou souhaitez-vous traduire plus de textes ou améliorer les traductions existantes? Alors jetez un œil à la page #VAR1# Wiki d\'Admidio #VAR2# pour voir comment vous pouvez aider à la traduction.</string>
+  <string name="SYS_LAST_EDITED_BY">Dernière édition par #VAR1# le #VAR2#</string>
   <string name="SYS_LASTNAME">Nom de famille</string>
   <string name="SYS_LATER">Plus tard</string>
   <string name="SYS_LAYOUT">Mise en page</string>
-  <string name="SYS_LEADER">Chef</string>
-  <string name="SYS_LEADER_NO_ADDITIONAL_RIGHTS">Les chefs de ce rôle n\'ont pas de droits distincts. Ils ne sont mis en évidence que dans les vues de liste.</string>
-  <string name="SYS_LEADER_EDIT_MEMBERS">Les chefs de ce rôle peuvent modifier les données de profil pour tous les membres du rôle.</string>
-  <string name="SYS_LEADER_ASSIGN_MEMBERS">Les chefs de ce rôle peuvent ajouter de nouveaux membres ou retirer des membres existants.</string>
-  <string name="SYS_LEADER_RIGHTS_DESC">Les membres de rôle peuvent être nommés comme chef d\'un rôle et éventuellement obtenir des droits étendus. \nIls peuvent obtenir le droit d\'éditer les données de profil de tous les membres de rôle et/ou le droit d\'ajouter ou de supprimer des membres du rôle. S\'ils reçoivent les deux droits, ils pourraient indirectement modifier les données du profil de tous les membres.</string>
-  <string name="SYS_LEADERS">Chefs</string>
+  <string name="SYS_LEADER">Responsable</string>
+  <string name="SYS_LEADER_NO_ADDITIONAL_RIGHTS">Les responsables de ce rôle n\'ont pas de droits distincts. Ils ne sont mis en évidence que dans les vues de liste.</string>
+  <string name="SYS_LEADER_EDIT_MEMBERS">Les responsables de ce rôle peuvent modifier les données de profil pour tous les membres du rôle.</string>
+  <string name="SYS_LEADER_ASSIGN_MEMBERS">Les responsables de ce rôle peuvent ajouter de nouveaux membres ou retirer des membres existants.</string>
+  <string name="SYS_LEADER_RIGHTS_DESC">Les membres de rôle peuvent être nommés comme responsable d\'un rôle et éventuellement obtenir des droits étendus. \nIls peuvent obtenir le droit d\'éditer les données de profil de tous les membres de rôle et/ou le droit d\'ajouter ou de supprimer des membres du rôle. S\'ils reçoivent les deux droits, ils pourraient indirectement modifier les données du profil de tous les membres.</string>
+  <string name="SYS_LEADERS">Responsables</string>
   <string name="SYS_LINK_COLLECTION_FROM">Collection de liens de #VAR1#</string>
   <string name="SYS_LINK_EMAIL_NOTIFICATION_TITLE">Un nouveau lien web à été créé</string>
   <string name="SYS_LINK_EMAIL_NOTIFICATION_MESSAGE">Un nouveau lien web vers #VAR1# a été créé.\n\nAdresse du lien: #VAR2#\nCréé par: #VAR3#\nCréé le: #VAR4#</string>
@@ -923,9 +971,8 @@
   <string name="SYS_MAP">Carte</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Affiche le domicile sur Google Maps. La rue, le code postal, la ville et le pays sont transférés à Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC"> Affiche un itinéraire depuis le propre domicile jusqu\'au domicile de cet utilisateur sur Google Maps. La rue, le code postal, la ville et le pays sont transférés à Google.</string>
-  <string name="SYS_MAX_ATTACHMENT_SIZE">Un nombre illimité de fichiers peut être joint. Cependant, la taille total des fichiers ne doit pas dépasser #VAR1# MB.</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. participants</string>
-  <string name="SYS_MAX_PARTICIPANTS_OF_ROLE"># VAR1 # de max. # VAR2 # participants</string>
+  <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# de max. #VAR2# participants</string>
   <string name="SYS_MAX_PATH_LENGTH">Longueur maximale de chemin</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Taille maximale de l\'image éditable</string>
   <string name="SYS_MAX_RECEIVER">Nombre maximum de destinataires pour les courriels</string>
@@ -968,10 +1015,10 @@
   <string name="SYS_MORE">Plus</string>
   <string name="SYS_MOVE_DOWN">#VAR1# déplacer vers le bas</string>
   <string name="SYS_MOVE_UP">Monter #VAR1#</string>
+  <string name="SYS_MOVE_VAR">Déplacer #VAR1#</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Plusieurs destinataires</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">Les e-mails adressés à plusieurs destinataires contiennent tous les destinataires dans le champ Cci. Cela garantit que personne ne voit les adresses e-mail des autres destinataires. Cependant, le champ TO doit également être rempli. Ce paramètre peut être utilisé pour définir ce qui est entré dans le champ destinataire (TO). Il peut s\'agir d\'une valeur masquée «Destinataires non divulgués», mais cela pose des problèmes avec certains fournisseurs. Alternativement, le champ du destinataire (TO) peut être rempli avec l\'adresse de l\'expéditeur ou l\'adresse de l\'administrateur à partir des notifications système. Remarque: tous les e-mails adressés à plusieurs destinataires seront également envoyés à l\'adresse e-mail dans le champ du destinataire (TO).</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">Au moins un membre doit avoir le rôle d\'administrateur !</string>
-  <string name="SYS_MYLIST_CONDITION_DESC">Tu peux saisir ici les conditions pour chaque champ de ta nouvelle liste. Les conditions du rôle sélectionné sera limité en fonction de tes propres conditions.</string>
   <string name="SYS_NAME">Nom</string>
   <string name="SYS_NAME_ABBREVIATION">Nom (abréviation)</string>
   <string name="SYS_NEW_BETA_AVAILABLE">Une nouvelle version bêta est disponible !</string>
@@ -994,7 +1041,7 @@
   <string name="SYS_NO_DEFAULT_ROLE">Tu ne peux pas supprimer le paramètre #VAR1_BOLD#, car au moins un rôle doit être défini comme affectation par défaut.</string>
   <string name="SYS_NO_ENTRY">L\'entrée demandée n\'existe pas dans la base de données.</string>
   <string name="SYS_NO_ENTRIES">Il n\'y a pas d\'entrées.</string>
-  <string name="SYS_NO_LEADER">Aucun chef</string>
+  <string name="SYS_NO_LEADER">Aucun responsable</string>
   <string name="SYS_NO_MORE_COLUMN">Pour des raisons techniques, aucune colonne supplémentaire ne peut être ajoutée.</string>
   <string name="SYS_NO_NEW_REGISTRATIONS">Il n\'y a pas d\'inscriptions disponibles.</string>
   <string name="SYS_NO_RIGHTS">Tu n\'as pas l\'autorisation requise pour effectuer cette action.</string>
@@ -1013,8 +1060,13 @@
   <string name="SYS_NOT_SET">Non défini</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Utilise dans les conditions du champs #VAR1_BOLD# uniquement une date valide.</string>
   <string name="SYS_NOTE">Consigne</string>
+  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notification après une nouvelle inscription</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification pour les nouvelles entrées</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notification pour les changements dans les champs de profil</string>
+  <string name="SYS_NOTIFICATION_ROLE">Rôle de notification</string>
   <string name="SYS_NUMBER">Nombre</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Nombre de rôles par page</string>
+  <string name="SYS_ODF_SPREADSHEET">ODF Feuille de calcul (*.ods)</string>
   <string name="SYS_OFF">Activé</string>
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">Désactivé</string>
@@ -1031,13 +1083,14 @@
   <string name="SYS_PAGE">Page</string>
   <string name="SYS_PAGE_PREVIOUS">Précédent</string>
   <string name="SYS_PAGE_NEXT">Suivant</string>
-  <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and"># VAR1 # et # VAR2 #</string>
+  <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# et #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Participants</string>
   <string name="SYS_PARTICIPATION_INFORMATION">Informations concernant les participants</string>
   <string name="SYS_PARTICIPATION_STATUS">Status des participants</string>
   <string name="SYS_PASSWORD">Mot de passe</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Mot de passe oublié</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Si tu as oublié ton mot de passe, le système peut créer un nouveau mot de passe et l\'envoyer à ton adresse de courriel. Entre ton nom d\'utilisateur ou l\'adresse courriel que tu as utilisée pour t\'inscrire à ce système. Le nouveau mot de passe sera envoyé immédiatement à cette adresse courriel.</string>
+  <string name="SYS_PASSWORD_RESET_SAVED">Le nouveau mot de passe a maintenant été appliqué !</string>
   <string name="SYS_PASSWORD_UNKNOWN">Tu as saisi un mot de passe incorrect et n\'as pas pu être connecté. \n\nVérifie ton mot de passe et saisis le à nouveau.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">Le mot de passe saisi ne correspond pas à la répétition.</string>
   <string name="SYS_PATH_SEPARATOR">Séparateur de chemin</string>
@@ -1049,18 +1102,20 @@
   <string name="SYS_PHOTO">Photo</string>
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">Toutes les photos ont été téléchargées avec succès.</string>
   <string name="SYS_PHOTOS">Photos</string>
-  <string name="SYS_PHOTO_OF_VAR">Photo de # VAR1 #</string>
+  <string name="SYS_PHOTO_OF_VAR">Photo de #VAR1#</string>
   <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">Tous les paramètres PHP</string>
   <string name="SYS_PHP_MAIL">PHP mail()</string>
   <string name="SYS_PHP_VERSION">Version PHP</string>
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio nécessite #VAR1# ou supérieur</string>
   <string name="SYS_PHP_VERSION_EOL">La version PHP n\'est plus officiellement supportée par PHP (End of Life). (#VAR1#)</string>
+  <string name="SYS_PIPE">Barre verticale (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Sélectionne</string>
   <string name="SYS_PLEASE_WAIT">Patiente</string>
   <string name="SYS_PLUGINS">Plugins</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Format portrait</string>
+  <string name="SYS_POSSIBLE_FIELDNAMES">Noms de colonne pour la détection automatique: #VAR1#</string>
   <string name="SYS_POST_MAX_SIZE">Taille POST max.</string>
   <string name="SYS_POSTCODE">Code postal</string>
   <string name="SYS_PRESENTATION">Affichage</string>
@@ -1079,23 +1134,27 @@
   <string name="SYS_PROCESS_CANCELED">Le processus a été annulé.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Le problème suivant s\'est produit lors du traitement des données.</string>
   <string name="SYS_PROFILE_FIELD">Champs de profil</string>
+  <string name="SYS_PROFILE_PHOTO">Photo de profil</string>
   <string name="SYS_PROPERTIES">Propriétés</string>
+  <string name="SYS_QUANTITY">Quantité</string>
   <string name="SYS_QUARTERLY">Trimestrielle</string>
+  <string name="SYS_QUOTE">Simple guillemet (\')</string>
   <string name="SYS_RADIO_BUTTON">Champ d\'options</string>
   <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Les dernières annonces de l\'organisation #VAR1#</string>
   <string name="SYS_RECIPIENT">Destinataire</string>
   <string name="SYS_RECIPIENT_EMAIL">Courriel du destinataire</string>
-  <string name="SYS_RECIPIENT_NAME">Nom du destinataire</string>
   <string name="SYS_REDIRECT">Redirection</string>
   <string name="SYS_REDIRECT_DESC">Tu quite maintenant le site web de #VAR1_BOLD# et tu est automatiquement redirigé vers #VAR3# en #VAR2# secondes. Si la redirection automatique ne fonctionne pas, clique sur #VAR4#ici#VAR5# !</string>
   <string name="SYS_REDIRECT_URL_INVALID">L\'URL de transfert spécifié n\'est pas valide.</string>
   <string name="SYS_REGISTERED_AS">Connecté en tant que</string>
   <string name="SYS_REGISTRATION">Inscription</string>
   <string name="SYS_REGISTRATION_SAVED">Tes données ont été enregistrées.\n\nUne connexion n\'est pas encore possible. Ton inscription doit d\'abord être activée. Après l\'activation, tu seras averti par e-mail.</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Adopter toutes les données d\'une inscription pour un utilisateur existant</string>
+  <string name="SYS_REGULAR_EXPRESSION">Expression régulière</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Configuration des relations</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Configurations des relations</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Si cette option est définie, un utilisateur peut modifier le profil d\'un autre utilisateur avec lequel il est relié. Dans une relation asymétrique, le droit est attribuée séparément pour chaque direction de relation, dans une relation symétrique, les deux utilisateurs peuvent éditer l\'autre profil, et dans une relation unidirectionnelle, seul l\'utilisateur avec la relation stockée peut éditer l\'autre profil.</string>
-  <string name="SYS_RELATIONSHIP_TYPE_DELETE">Veux-tu effacer le type de relation #VAR1_BOLD# ? Attention: Ceci efface toutes les relations existantes de ce type.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DELETE">Veux-tu effacer le type de relation #VAR1_BOLD#? Attention: Ceci efface toutes les relations existantes de ce type.</string>
   <string name="SYS_RELATIONSHIP_TYPE_DESC">Une relation asymètrique est utilisée par exemple pour les relations parent/enfant, pendant que les relations symètriques peut être utilisées pour frères et soeurs. Il s\'agit toujours de relations bidirectionelles, pendant que les relations unidirectionnelles montre seulement une direction.</string>
   <string name="SYS_RELOAD">Rechargement</string>
   <string name="SYS_REMEMBER_ME">Rester connecté</string>
@@ -1116,8 +1175,7 @@
   <string name="SYS_RIGHT_DATES">Gérer les événements</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Gérer les documents et les fichiers</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Les rôles disposant de cette autorisation peuvent gérer les droits pour le module documents et fichiers. Cela inclut qui peut voir les dossiers et qui peut télécharger des fichiers.</string>
-  <string name="SYS_RIGHT_EDIT_USER">Modifier les données de profil de tous les utilisateurs</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Les rôles avec cette autorisation peuvent éditer toutes les données d\'utilisateur (sauf les mots de passe) des autres membres.\nEn outre, ils ont accès à l\'administration des utilisateurs et peuvent créer de nouveaux utilisateurs ou supprimer d\'anciens utilisateurs.</string>
+  <string name="SYS_RIGHT_EDIT_USER">Editer le profil de tous les membres</string>
   <string name="SYS_RIGHT_GUESTBOOK">Modifier et supprimer des entrées du livre d\'or</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Créer des commentaires pour les entrées du livre d\'or</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">Ce paramètre contrôle qui a le droit d\'envoyer des e-mails à ce rôle à l\'aide du module de message. Cependant, le droit du rôle #VAR1_BOLD# est toujours au-dessus de ce paramètre.</string>
@@ -1139,19 +1197,23 @@
   <string name="SYS_ROLE_MEMBERSHIP_TO">à</string>
   <string name="SYS_ROLE_NAME_EXISTS">Il y a déjà un rôle dans cette catégorie avec le même nom.</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Tu n\'as pas les autorisations pour sélectionner le rôle #VAR1#.\nSélectionne un autre rôle.</string>
+  <string name="SYS_ROLE_SELECTION">Sélection de rôle</string>
+  <string name="SYS_ROLE_WITHOUT_LEADER">Rôle sans responsable</string>
   <string name="SYS_ROLE_TYPES">Types de rôle</string>
   <string name="SYS_ROLES">Rôles</string>
   <string name="SYS_ROLES_CONFIRMATION_OF_PARTICIPATION">Rôles - Certificat de participation</string>
   <string name="SYS_ROLES_MODULE_ADMINISTRATORS_DESC">Les membres de ce rôle sont des administrateurs du module et ont accès à tout. Ils peuvent créer, modifier, supprimer des données et éditer des catégories avec leurs droits.</string>
   <string name="SYS_ROOM">Chambre</string>
   <string name="SYS_ROOM_MANAGEMENT">Administration des salles</string>
-  <string name="SYS_RSS_DISABLED">Le flux Web a été désactivé par l\'administrateur.</string>
+  <string name="SYS_ROW">Ligne</string>
+  <string name="SYS_RSS_DISABLED">Flux web est désactivé.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">flux Web pour #VAR1#</string>
   <string name="SYS_SAFE_MODE">Mode sans échec</string>
   <string name="SYS_SAFE_MODE_PROBLEM">problématique avec les téléchargements de fichiers</string>
   <string name="SYS_SAME_WINDOW">Même fenêtre</string>
   <string name="SYS_SATURDAY">Samedi</string>
   <string name="SYS_SAVE">Enregistrer</string>
+  <string name="SYS_SAVE_ATTACHMENTS">Sauvegarder les pièces jointes</string>
   <string name="SYS_SAVE_CHANGES">Enregistrer les modifications</string>
   <string name="SYS_SAVE_CONFIGURATION">Enregistrer la configuration</string>
   <string name="SYS_SAVE_DATA">Les données ont été enregistrées.</string>
@@ -1167,8 +1229,8 @@
   <string name="SYS_SEARCH_GENDER_DESC">Recherche tous les utilisateurs masculins</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_EXAMPLE">Mei*</string>
   <string name="SYS_SEARCH_LASTNAME_BEGINS_DESC">Recherche des utilisateurs dont le nom commençant par \'Mei\'</string>
-  <string name="SYS_SEARCH_LASTNAME_EXAMPLE">Schmitz</string>
-  <string name="SYS_SEARCH_LASTNAME_DESC">Recherche des utilisateurs avec le nom de famille \'Schmitz\'</string>
+  <string name="SYS_SEARCH_LASTNAME_EXAMPLE">Dupond</string>
+  <string name="SYS_SEARCH_LASTNAME_DESC">Rechercher les utilisateurs avec le nom de famille \'Dupond\'</string>
   <string name="SYS_SEARCH_LOCATION_EXAMPLE">Cologne ou Berlin</string>
   <string name="SYS_SEARCH_LOCATION_DESC">Recherche des utilisateurs provenant de Cologne ou de Berlin</string>
   <string name="SYS_SEARCH_NOT_EMPTY_EXAMPLE_DESC">Recherche tous les utilisateurs qui ont le champ rue rempli.</string>
@@ -1186,14 +1248,15 @@
   <string name="SYS_SELECT_FILES">Sélectionner les fichiers</string>
   <string name="SYS_SELECT_FROM_LIST">Sélectionner dans la liste</string>
   <string name="SYS_SELECT_MEMBERS">Sélectionner des membres</string>
+  <string name="SYS_SEMICOLON">Point-virgule (;)</string>
   <string name="SYS_SEND">Envoyer</string>
   <string name="SYS_SEND_COPY">Envoyer une copie du courriel à mon adresse</string>
   <string name="SYS_SEND_EMAIL">Envoyer un courriel</string>
   <string name="SYS_SEND_EMAIL_FORMER">Envoyer des courriels aux anciens</string>
-  <string name="SYS_SEND_EMAIL_FORMER_DESC">Si ce paramètre est défini, des courriels peuvent être envoyés aux anciens membres individuellement, ainsi qu\'à tous les anciens membres d\'un rôle. (Par défaut : Activé)</string>
   <string name="SYS_SEND_EMAIL_TO">Envoyer un courriel à #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Envoyer des courriels à toutes les adresses de courriel de l\'utilisateur</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Si ce paramètre est activé, des courriels sont envoyés à toutes les adresses de courriels de l\'utilisateur stockées dans le profil. Si ce paramètre est désactivé, les courriels ne sont envoyés à l\'adresse de courriel qu\'à partir du champ de profil avec le nom interne EMAIL. (Par défaut : Activé)</string>
+  <string name="SYS_SEND_GREETING_CARD">Envoyer une carte de vœux</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Envoyer les données de connexion</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Ton courriel sera envoyé à tous les membres du rôle séléctionné, s\'ils ont entré leur adresse de courriel dans le système ou aux destinataires sélectionnés.\n\nSi tu es connecté, tu as d\'autres rôles et destinataires auxquels tu peux envoyer des courriels.</string>
   <string name="SYS_SEND_MAILS">Envoyer des courriels</string>
@@ -1203,23 +1266,24 @@
   <string name="SYS_SEND_NEW_PW">Envoyer le nouveau mot de passe</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Envoyer un message privé</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Ton message privé sera envoyé au déstinataire sélectionné</string>
+  <string name="SYS_SEND_TEST_MAIL">Envoyer un courriel de test</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">Envoyer un courriel avec un nom d\'utilisateur et un nouveau mot de passe.</string>
   <string name="SYS_SENDER">Expéditeur</string>
-  <string name="SYS_SENDER_EMAIL">Adresse de courriel de l\'expéditeur</string>
+  <string name="SYS_SENDER_EMAIL">Expéditeur du courriel</string>
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Certains hébérgeurs n\'autorisent pas l\'utilisation d\'adresses mails inconnus comme expéditeur. Dans ce cas, il est possible d\'entrer ici une adresse à partir de laquelle tous les courriels du module courriel peuvent être envoyés (par ex. mailversand@#VAR1#).\nSi le champ reste vide, l\'adresse de l\'expéditeur est utilisée. (Par défaut : vide)</string>
-  <string name="SYS_SENDER_NAME">Nom de l\'expéditeur </string>
+  <string name="SYS_SENDER_NAME">Nom de l\'expéditeur</string>
   <string name="SYS_SENDER_NAME_DESC">Nom de l\'expediteur pour l\'adresse de courriel utilisé. Ce champ ne doit être renseignée que si une adresse de courriel de l\'expéditeur à également été saisie. (Par défaut: vide)</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">(L\'expéditeur n\'était pas conecté. Par conséquent, les données de l\'expéditeur peuvent être incorrectes.)</string>
+  <string name="SYS_SEPARATOR_FOR_CSV_FILE">Séparateur pour le fichier CSV</string>
   <string name="SYS_SERVER">Serveur</string>
   <string name="SYS_SERVER_NO_UPLOAD">Les paramètres du serveur n\'autorisent pas les téléchargements de fichiers.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Attribuer des droits aux dossiers</string>
   <string name="SYS_SETTINGS">Paramétrages</string>
   <string name="SYS_SHOW_ALL_USERS">Afficher tous les membres</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Si le paramètre n\'est pas défini, seuls les membres actifs de cette organisation sont affichés ; si le paramètre est activé, tous les membres de la base de données sont affichés.</string>
   <string name="SYS_SHOW_CALENDAR">Affichage du calendrier</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Pour les utilisateurs qui ne sont pas connectés, un code alphanumérique est affiché dans le formulaire de courriel lorsque Captcha est activé. L\'utilisateur doit le saisir correctement avant d\'envoyer le courriel. Ceci afin de s\'assurer que le formulaire ne peut pas être utilisé à mauvais escient par les spammeurs. (Par défaut : oui)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Afficher les anciens membres</string>
-  <string name="SYS_SHOW_FORMER_MEMBERS_DESC">Avec cette option tu peux définir qui peut voir les anciens membres du rôle. Cependant, l\'utilisateur doit également avoir le droit de voir le rôle lui-même. Les chefs d\'un rôle peuvent également voir les anciens de leur rôle s\'ils ont obtenu le même droit pour le rôle que celui défini ici. (Par défaut : #VAR1#)</string>
+  <string name="SYS_SHOW_FORMER_MEMBERS_DESC">Avec cette option tu peux définir qui peut voir les anciens membres du rôle. Cependant, l\'utilisateur doit également avoir le droit de voir le rôle lui-même. Les responsables d\'un rôle peuvent également voir les anciens de leur rôle s\'ils ont obtenu le même droit pour le rôle que celui défini ici. (Par défaut : #VAR1#)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_ONLY">Affiche seulement les anciens membres du rôle</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_RIGHT">Utilisateur avec le droit #VAR1_BOLD#</string>
   <string name="SYS_SHOW_LIST">Afficher la liste</string>
@@ -1261,6 +1325,7 @@
   <string name="SYS_SUNDAY">Dimanche</string>
   <string name="SYS_SUPPORT_ADMIDIO">Soutenir Admidio</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Changer à la gestion des catégories</string>
+  <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Basculer sur la configuration des relations</string>
   <string name="SYS_SYMMETRICAL">symétrique</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Données de connexion pour #organization_long_name#\n#content# Salut #user_first_name#,\n\ntu reçoit tes données de connexions pour la page web #organization_homepage#.\nNom d\'utilisateur : #user_login_name#\nMot de passe : #variable1#\n\nLe mot de passe a été généré automatiquement.\nTu dois le changer après que tu t\'es connecté à #organization_homepage# dans ton profil.\n\nMeilleures salutations\nLes administrateurs</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Inscription à #organization_long_name# refusée\n#content# Salut #user_first_name#,\n\nton inscription à #organization_homepage# a été refusé.\n\nLes inscriptions sont généralement acceptées uniquement pour des membres. Si tu es un membre et que ton inscription a quand même été rejetée, c\'est peut-être parce que tu n\'as pas été identifié comme membre.\nPour clarifier les raisons du rejet, contacte l\'administrateur #administrator_email# de #organization_homepage#.\n\nMeilleures salutations\nLes administrateurs</string>
@@ -1269,9 +1334,11 @@
   <string name="SYS_SYSTEM">Système</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">Liste standard à l\'échelle du système</string>
   <string name="SYS_SYSTEM_MAILS">Message de système</string>
+  <string name="SYS_TAB">Tabulation</string>
   <string name="SYS_TEMPLATE">Modèle standard</string>
   <string name="SYS_TEMPLATE_DESC">Le modèle standard est défini ici. (Par défaut : Carte postale)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Le dossier des modèles n\'a pas pu être ouvert ou lu.</string>
+  <string name="SYS_TEST_MAIL">Courriel de test</string>
   <string name="SYS_TEXT">Texte</string>
   <string name="SYS_THURSDAY">Jeudi</string>
   <string name="SYS_TIME">Heure</string>
@@ -1283,6 +1350,7 @@
   <string name="SYS_TOTAL">Total</string>
   <string name="SYS_TUESDAY">Mardi</string>
   <string name="SYS_TYPE">Type</string>
+  <string name="SYS_UNIQUE_ID">Identifiant unique</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Inconnu</string>
   <string name="SYS_UNLIMITED">Illimité</string>
@@ -1294,31 +1362,32 @@
   <string name="SYS_UPLOAD_MAX_FILESIZE">Taille max. du fichier à télécharger</string>
   <string name="SYS_UPLOAD_NAME_ERROR">Le nom du fichier ne doit pas être \"submit\".</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Mise à jour réussie</string>
+  <string name="SYS_URL">Adresse web</string>
   <string name="SYS_URL_INVALID_CHAR">L\'URL dans le champ #VAR1_BOLD# contient des caractères invalides.\n\nPermis ne sont que des lettres et des trémas, des chiffres de 0 à 9 et les caractères spéciaux .-+_:/#?= .</string>
   <string name="SYS_USER">Utilisateur</string>
-  <string name="SYS_USER_COULD_BE_CREATED">Le membre peut être créé.</string>
+  <string name="SYS_USER_COULD_BE_CREATED">La personne peut être créé.</string>
   <string name="SYS_USER_DELETE_DESC">Veux-tu vraiment supprimer #VAR1_BOLD# ?\n\nLe membre est physiquement supprimé de la base donnée et l\'accès à ses données n\'est plus possible.</string>
   <string name="SYS_USER_FOUND">Utilisateurs trouvés</string>
   <string name="SYS_USER_ID_NOT_FOUND">Aucun utilisateur n\'a pu être trouvé pour l\'ID donnée !</string>
-  <string name="SYS_USER_MANAGEMENT">Administration des membres</string>
-  <string name="SYS_MEMBERS_DESC">Tous les membres actifs et anciens membres peuvent être consultés et gérés ici. De nouveaux membres peuvent être créés ou importés.</string>
   <string name="SYS_USER_NO_EMAIL">L\'utilisateur #VAR1_BOLD# n\'a pas d\'adresse courriel valide dans son profil !</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Cet utilisateur n\'est pas encore membre de l\'organisation #VAR1#.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Cet utilisateur n\'est pas encore membre de l\'organisation #VAR1#, mais possède déjà des données de connexion.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Cet utilisateur n\'est pas encore membre de l\'organisation #VAR1# et ne possède pas de données de connexion.</string>
   <string name="SYS_USER_NO_VALID_LOGIN">Cet utilisateur n\'a pas encore de login.\nTu veux lui attribuer les données de cet inscription ?</string>
-  <string name="SYS_PROFILE_PHOTO">Photo de l\'utilisateur</string>
   <string name="SYS_USER_RELATION">Relation</string>
   <string name="SYS_USER_RELATIONS">Relations</string>
   <string name="SYS_USER_RELATION_TYPE">Type de relation</string>
   <string name="SYS_USER_VALID_LOGIN">Cet utilisateur dispose déjà d\'un login valide.</string>
   <string name="SYS_USERNAME">Nom d\'utilisateur</string>
   <string name="SYS_USERNAME_OR_EMAIL">Nom d\'utilisateur ou courriel</string>
-  <string name="SYS_USERNAME_WITH_TIMESTAMP"># VAR1 # sur # VAR2 # à # VAR3 #</string>
+  <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# sur #VAR2# à #VAR3#</string>
   <string name="SYS_USERS_PER_PAGE">Nombre de membres par page</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">Le nombre de membres listés sur une page. S\'il y a plus de membres pour cet organisation, tu peux faire défiler la liste. (Par défaut : 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">Tu utilise une version actuelle #VAR1# version d\'Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
+  <string name="SYS_UTF16BE">UTF-16BE</string>
+  <string name="SYS_UTF16LE">UTF-16LE</string>
+  <string name="SYS_UTF32BE">UTF-32BE</string>
+  <string name="SYS_UTF32LE">UTF-32LE</string>
   <string name="SYS_VALID_FROM" description="Date valid from">Valable du</string>
   <string name="SYS_VALID_TO" description="Date valid to">Valable jusqu\'au</string>
   <string name="SYS_VARIOUS_ROLES">Divers rôles</string>
@@ -1341,6 +1410,7 @@
   <string name="SYS_WEEKDAY">Jour de la semaine</string>
   <string name="SYS_WHAT_TO_DO">Que faut-il faire ?</string>
   <string name="SYS_WIDTH">Largeur</string>
+  <string name="SYS_WORKSHEET_NAMEINDEX">Feuille de calcul (index ou nom)</string>
   <string name="SYS_WRITE_EMAIL">Écrire un courriel</string>
   <string name="SYS_WRITE_ENTRY">Écrire une entrée</string>
   <string name="SYS_WRITE_PM">Écrire un message privé</string>
