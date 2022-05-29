@@ -316,7 +316,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
         } elseif ($optionsAll['defaultValue'] !== null) {
             // if a default value was set then take this value
-            $value = $optionsAll['defaultValue'];
+            $value = html_entity_decode($optionsAll['defaultValue']);
         } else {
             // no value set then initialize the parameter
             if ($datatype === 'bool' || $datatype === 'boolean') {
