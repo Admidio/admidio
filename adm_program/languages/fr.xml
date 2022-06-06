@@ -334,6 +334,7 @@
   <string name="ORG_SHOW_CREATE_EDIT">Afficher créateur et horodatage</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Un champ est généralement visible pour tous les utilisateurs. Si cette fonction n\'est pas séléctionnée, les données ne peuvent être vus seulement par les utilisateurs qui ont le droit de modifier tous les utilisateurs. Dans son propre profil, l\'utilisateur peut visualiser et modifier ces données.</string>
   <string name="ORG_SHOW_ALL_USERS">Afficher optionnellement tous les utilisateurs</string>
+  <string name="ORG_SHOW_ALL_USERS_DESC">Si cette option est définie, les anciens membres et les membres d\'autres organisations peuvent éventuellement être affichés dans l\'administration des membres en plus des membres actifs de l\'organisation actuelle. Sinon, seuls les membres actifs de l\'organisation actuelle sont affichés. Toutefois, lors de la création de nouveaux membres ou de l\'attribution d\'enregistrements, le système continuera à rechercher les utilisateurs existants dans l\'ensemble de la base de données de toutes les organisations.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Afficher la séléction d\'organisation</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Si plusieurs organisations sont configurées dans la base de données, le dialogue de connexion avec toutes les organisations peut être affichée dans le dialogue de séléction.  L\'utilisateur peut séléctionner une autre organisation (telle que définie dans config.php) à laquelle il se connecte. Tourefois, l\'utilisateur doit également être inscrit à l\'organisation.</string>
   <string name="ORG_SYSTEM_INFORMATION">Information du système</string>
@@ -528,6 +529,7 @@
   <string name="SYS_ANNUALLY">Annuel</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assigner et éditer les membres</string>
   <string name="SYS_ASSIGN_FIELDS">Attribuer des champs</string>
+  <string name="SYS_ASSIGN_FIELDS_DESC">Dans la colonne de gauche du tableau suivant, tous les champs du profil sont affichés. Dans la colonne de droite, les colonnes du fichier à importer sont affichées dans une liste de sélection. Toutes les colonnes du fichier à importer doivent maintenant être affectées à un champ de profil.\n\nLes membres existants sont identifiés par leur prénom et leur nom. Si vous disposez de l\'identifiant unique (UUID) du membre dans votre fichier, vous pouvez le sélectionner dans le mappage. Les membres seront alors automatiquement identifiés par cet ID et non plus par leur nom et prénom.</string>
   <string name="SYS_ASSIGN_LOGIN_INFORMATION">Attribuer des données d\'accès</string>
   <string name="SYS_ASSIGN_LOGIN_SUCCESSFUL">Les données de connexion ont été attribuées avec succès.</string>
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Les données de connexion ont été attribuées avec succès et l\'utilisateur a été notifié par courriel.</string>
@@ -571,6 +573,7 @@
   <string name="SYS_CAPTCHA_DESCRIPTION">Le code d\'authentification fait partie d\'un captcha. Un captcha est utilisé pour la détection de spam. L\'image est utilisée pour détecter si un utilisateur ou un script (ou un spambot) a rempli le formulaire. \ NVeuillez remplir le résultat du code d\'authentification dans le formulaire.</string>
   <string name="SYS_CARBON_COPY">Copie</string>
   <string name="SYS_CAT_SELECTION">Sélection de la catégorie</string>
+  <string name="SYS_CAT_SELECTION_CONF_DESC">La sélection de catégorie peut être utilisée pour restreindre une configuration aux membres des rôles des catégories sélectionnées. Si aucune restriction n\'est faite, les deux champs (sélection de rôle et sélection de catégorie) doivent être laissés vides.</string>
   <string name="SYS_CATEGORIES">Catégories</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Ces rôles sont des administrateurs du module et ont accès à tout. Tu peux créer, modifier, supprimer des données et éditer des catégories avec tes droits. Tu peux faire d\'un rôle un administrateur en lui assignant le droit #VAR1_BOLD#.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Tous les administrateurs du module de l\'organisation mère</string>
@@ -601,6 +604,7 @@
   <string name="SYS_COLUMN_SELECTION">Sélection de colonnes</string>
   <string name="SYS_COLUMN_SELECTION_DESC">Sélectionner les colonnes qui seront affichés dans la liste.\n\n Les rôles inactifs sont marqués avec (*).</string>
   <string name="SYS_CONFIGURATIONS">Configuration</string>
+  <string name="SYS_CONFIGURATIONS_HEADER">Un nombre illimité de configurations peut être créé ici pour le rapport de catégorie. Dans l\'affichage d\'écran, une de ces configurations est utilisée comme base pour l\'affichage dans chaque cas via \"Sélectionner configuration\".</string>
   <string name="SYS_COMMA">virgule (,)</string>
   <string name="SYS_COMMA_SEPARATED_FILE">Virgule-/tab-séparé fichier (*.csv)</string>
   <string name="SYS_COMMENT">Commentaire</string>
@@ -631,6 +635,7 @@
   <string name="SYS_COPY_ENTRY">Copier l\'entrée</string>
   <string name="SYS_COPY_VAR">Copier #VAR1#</string>
   <string name="SYS_NUMBER_RECIPIENTS">Nombre de destinataires</string>
+  <string name="SYS_NUMBER_RECIPIENTS_DESC">Le nombre figurant dans ce champ indique le nombre maximal de destinataires d\'un courriel. Ce nombre peut être limité par les fournisseurs. Si un e-mail doit être envoyé à plus de destinataires que le nombre défini ici, plusieurs e-mails seront générés. Le nombre d\'e-mails possibles à envoyer au cours d\'une période peut également être limité par les fournisseurs. (Par défaut : 50)</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular"># VAR1 # destinataire individuel</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural"># VAR1 # destinataires individuels</string>
   <string name="SYS_COUNTER">Compteur</string>
@@ -694,11 +699,14 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Assignation standard pour l\'enregistrement</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Si un nouvel utilisateur est créé ou si un nouvelle inscription est accepté, ce rôle est automatiquement attribué au nouvel utilisateur. Si le créateur a le droit d\'affecter des rôles, toutes les affectations de rôles sont affichées et peuvent être ajustées en conséquence.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Configuration par défaut</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">L\'une des configurations données ici peut devenir la configuration par défaut pour le rapport de catégorie de cette organisation. La configuration sélectionnée sera affichée directement lorsque le rapport sera appelé.</string>
+  <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">L\'une des configurations spécifiées ici peut devenir la configuration par défaut des listes de cette organisation. Les listes de membres des rôles qui n\'ont pas de configuration de liste enregistrée seront affichées avec cette configuration.</string>
   <string name="SYS_DEFAULT_ENCODING_UTF8">Encodage par défaut (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Liste par défaut</string>
   <string name="SYS_DEFAULT_LIST_DESC">Si une liste de membres doit être affichée pour ce rôle et qu\'aucune configuration de liste n\'est spécifiée pour ce rôle, la liste est affichée avec la configuration de liste standard du système. Tu peux utiliser ce champ pour sélectionner une configuration de liste différente pour chaque rôle individuellement, qui s\'affiche si aucune configuration de liste n\'est spécifiée.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Aucune liste par défaut n\'a été spécifiée par l\'administrateur !\n\nContacte un administrateur pour qu\'il déclare une liste comme liste par défaut.</string>
   <string name="SYS_DEFAULT_VALUE">Valeur par défaut</string>
+  <string name="SYS_DEFAULT_VALUE_DESC">Vous pouvez définir une valeur par défaut pour ce champ de profil. Cette valeur sera directement prédéfinie pour un nouvel utilisateur dans le champ. Pour ce faire, saisissez dans le champ la valeur que vous saisiriez également dans le profil lui-même.\n\nPour le type de données case à cocher, vous pouvez saisir 1 pour activé et 0 pour désactivé. Pour les types de données liste déroulante et bouton radio, vous saisissez le numéro de la ligne de la liste de valeurs dans laquelle se trouve la valeur souhaitée.</string>
   <string name="SYS_DEFAULT_VAR">#VAR1# par défaut</string>
   <string name="SYS_DELETE">Supprimer</string>
   <string name="SYS_DELETE_CONFIGURATION">Supprimer configuration</string>
@@ -719,6 +727,7 @@
   <string name="SYS_DEPENDENCIES">Dépendances</string>
   <string name="SYS_DEPENDENT">Dépendant</string>
   <string name="SYS_DESCRIPTION">Description</string>
+  <string name="SYS_DESCRIPTION_POPOVER_DESC">La description est affichée dans une petite fenêtre, à laquelle on peut accéder par l\'intermédiaire d\'une icône en forme de point d\'interrogation située à côté de l\'étiquette du champ.</string>
   <string name="SYS_DESCRIPTION_INLINE_DESC">Afficher la description en dessous du champ directement dans le formulaire.</string>
   <string name="SYS_DESIGNATION">Libellé</string>
   <string name="SYS_DIRECTORY_PROTECTION">Protection des répertoires</string>
@@ -756,6 +765,7 @@
   <string name="SYS_EDIT_FILE">Éditer le fichier</string>
   <string name="SYS_EDIT_FOLDER">Éditer le dossier</string>
   <string name="SYS_CONFIGURE_LISTS">Configure les listes</string>
+  <string name="SYS_CONFIGURE_LISTS_DESC">Les utilisateurs peuvent créer leurs propres listes avec des champs de profil sélectionnés, puis les appliquer aux groupes et aux rôles. Seuls les champs de profil et les groupes ou rôles que l\'utilisateur actuel est autorisé à voir sont disponibles. Ce paramètre peut être utilisé pour spécifier qui peut créer de telles listes. (Par défaut : Tous)</string>
   <string name="SYS_EDIT_MEMBERS">Editer les membres</string>
   <string name="SYS_EDIT_PROFILE_FIELDS">Editer champs du profile</string>
   <string name="SYS_EDIT_ROLE">Modifier le rôle</string>
@@ -766,6 +776,7 @@
   <string name="SYS_EDITED_BY">Modifié par</string>
   <string name="SYS_EMAIL">Courriel</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Courriel de l\'Administrateur</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR_DESC">L\'adresse électronique d\'un administrateur est affichée dans le système lorsqu\'un événement inattendu se produit. Il s\'agit d\'une aide vous invitant à contacter un administrateur.</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Une nouvelle annonce a été créée</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Une nouvelle annonce à #VAR1# a été créée.\n\nTitre: #VAR2#\nCréée par: #VAR3#\nCréée à: #VAR4#</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Utilisateur #VAR1# #VAR2# (identifiant: #VAR3#) a été changé</string>
@@ -789,12 +800,17 @@
   <string name="SYS_EMPTY">Vide</string>
   <string name="SYS_ENABLED">Activé</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT">Activer le rapport des catégories</string>
+  <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Le rapport sur les catégories crée une liste de tous les rôles et catégories que possède un membre. L\'autorisation \"Afficher les listes de membres de tous les rôles\" est requise pour l\'opération. (Par défaut : oui)</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Activer les documents &amp; fichiers</string>
   <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Documents &amp; fichiers peuvent être activés ou désactivés à travers ce paramètre. (par défaut: oui)</string>
   <string name="SYS_ENABLE_EMAILS">Activer les courriels</string>
+  <string name="SYS_ENABLE_EMAILS_DESC">Ce paramètre permet d\'activer ou de désactiver les e-mails dans le module des messages. Si le serveur ne prend pas en charge les e-mails, l\'option doit être désactivée. (Par défaut : activé)</string>
   <string name="SYS_ENABLE_GREETING_CARDS">Activer les cartes de vœux</string>
+  <string name="SYS_ENABLE_GREETING_CARDS_DESC">Les cartes de vœux peuvent être activées ou désactivées via ce paramètre. Si le serveur ne prend pas en charge le courrier électronique, le module doit être désactivé. Ce module n\'est généralement disponible que pour les utilisateurs enregistrés. (Par défaut : oui)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES">Activer les groupes &amp; rôles</string>
+  <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Affiche les groupes et les rôles de l\'organisation et permet de configurer librement les groupes et les rôles. Une liste personnelle peut être configurée et appliquée. Ce module n\'est généralement disponible que pour les utilisateurs connectés. (Par défaut : oui)</string>
   <string name="SYS_ENABLE_NOTIFICATIONS">Activer les notifications système</string>
+  <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Ici vous pouvez activer ou désactiver les notifications système d\'Admidio. Elles peuvent être envoyées, si par exemple un nouvel utilisateur s\'est enregistré. Les confirmations d\'enregistrement seront également envoyées en tant que notifications système. En général, cette fonction ne doit pas être désactivée, sauf si le serveur ne prend pas en charge l\'envoi d\'e-mails. Le module e-mail n\'est pas affecté par la désactivation. (Par défaut : oui)</string>
   <string name="SYS_ENABLE_PM_MODULE">Activer les messages privés</string>
   <string name="SYS_ENABLE_PM_MODULE_DESC">Les messages privés peuvent être activés ou désactivés à travers ce paramètre. (par défaut: oui)</string>
   <string name="SYS_ENABLE_USER_RELATIONS">Gérer et afficher les relations</string>
@@ -815,6 +831,7 @@
   <string name="SYS_EXECUTE_BACKUP">Exécution de la sauvegarde</string>
   <string name="SYS_EXISTING_MEMBERS">Membres existants</string>
   <string name="SYS_EXPORT_LISTS">Listes d\'export</string>
+  <string name="SYS_EXPORT_LISTS_DESC">Les listes de groupes et de rôles peuvent être exportées par les utilisateurs, à condition que vous ayez le droit de visualiser ces listes. Ce paramètre peut être utilisé pour restreindre la fonction d\'exportation. (Par défaut : Tous)</string>
   <string name="SYS_EXPORT_TO">Exporter vers</string>
   <string name="SYS_FADE_IN">Fondre</string>
   <string name="SYS_FAX">Télécopieur</string>
@@ -822,7 +839,9 @@
   <string name="SYS_FIELD">Champ</string>
   <string name="SYS_FIELD_EMPTY">Le champ #VAR1_BOLD# n\'est pas rempli.</string>
   <string name="SYS_FIELD_ENCLOSURE">Caractère de citation pour les champs</string>
+  <string name="SYS_FIELD_INVALID_CHAR">La valeur saisie dans le champ #VAR1_BOLD# contient des caractères illégaux. Les caractères autorisés sont les lettres de \'a\' à \'z\' et de \'A\' à \'Z\', les chiffres de 0 à 9 et les caractères spéciaux comme .-_+@ .</string>
   <string name="SYS_FIELD_INVALID_INPUT">Le champ #VAR1_BOLD# contient une entrée invalide.</string>
+  <string name="SYS_FIELD_INVALID_REGEX">La valeur saisie dans le champ #VAR1_BOLD# contient des caractères qui ne correspondent pas à l\'expression régulière correspondante du champ. Veuillez vérifier dans la description du champ quels sont les caractères autorisés.</string>
   <string name="SYS_FIELDS_EMPTY">Tous les champs n\'ont pas été remplis.</string>
   <string name="SYS_FILE">Fichier</string>
   <string name="SYS_FILE_COLUMN">Colonne de fichiers</string>
@@ -861,6 +880,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">Une erreur s\'est produite quand le dossier #VAR1# a été renommé..</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Le dossier #VAR1_BOLD# ne peut pas être créé avec les droits d\'écriture.\n\nContacte l\'administrateur #VAR2#Administrateur#VAR3#, afin qu\'il puisse vérifier les droits d\'écriture (définis les attributs du fichier à 0777 ou drwxrwxrwx via FTP).</string>
   <string name="SYS_FONT">Police</string>
+  <string name="SYS_FONT_AWESOME_DESC">Vous pouvez enregistrer une icône de différentes manières:\n1. Une icône de la police web \"Font Awesome\". Allez sur #VAR1#http://fontawesome.com#VAR2# et sélectionnez une icône libre dans la collection \"Solid\" ou \"Brands\". Comme préfixe, vous devez mettre un fa- devant l\'icône. Ainsi, si vous choisissez l\'icône \"user\", vous devez saisir \"fa-user\" ici.\n2. Une icône JPEG ou PNG. Pour ce faire, placez le fichier de l\'icône dans le dossier \"images\" du thème. Ajoutez le nom du fichier d\'icône ici.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">J\'ai oublié mon mot de passe!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Ancien</string>
@@ -898,6 +918,7 @@
   <string name="SYS_IDENTIFY_USERS">Les membres existants sont identifiés par leur prénom et leur nom de famille.</string>
   <string name="SYS_IMPORTANT">Important</string>
   <string name="SYS_IMPORT">Importer</string>
+  <string name="SYS_IMPORT_LOGIN_DATA_DESC">Les données de connexion ne peuvent être importées que par un administrateur. Les règles de l\'organisation doivent être respectées (par exemple, la longueur et la force du mot de passe). Les utilisateurs ayant des données de connexion existantes les conservent. Aucune donnée de connexion ne sera écrasée par l\'importation.</string>
   <string name="SYS_IMPORT_MEMBERS">Import des membres</string>
   <string name="SYS_IMPORT_MODE">Mode importation</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">La feuille de calcul #VAR1# n\'existe pas dans le fichier importé!</string>
@@ -908,6 +929,7 @@
   <string name="SYS_INACTIVE_GROUPS_ROLES">Groupes et rôles inactifs</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
   <string name="SYS_INFORMATIONS">Information</string>
+  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Veuillez saisir le nom et le prénom du nouveau membre. Avant la création de l\'enregistrement, une vérification est effectuée pour voir si une personne portant un nom similaire existe déjà dans la base de données.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">installation réussie</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">La base de données Admidio est maintenant installée et complètement configurée. Le fichier de configuration avec les données d\'accès à la base de données a été créé et stocké. Vous pouvez maintenant travailler avec Admidio et vous connecter avec les données d\'administrateur.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">L\'installation et la configuration de la base de données ont été effectuées avec succès.</string>
@@ -971,6 +993,7 @@
   <string name="SYS_MAP">Carte</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Affiche le domicile sur Google Maps. La rue, le code postal, la ville et le pays sont transférés à Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC"> Affiche un itinéraire depuis le propre domicile jusqu\'au domicile de cet utilisateur sur Google Maps. La rue, le code postal, la ville et le pays sont transférés à Google.</string>
+  <string name="SYS_MAX_ATTACHMENT_SIZE">Vous pouvez ajouter autant de pièces jointes que vous le souhaitez. La taille de l\'ensemble des pièces jointes ne doit pas dépasser #VAR1# MB.</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. participants</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# de max. #VAR2# participants</string>
   <string name="SYS_MAX_PATH_LENGTH">Longueur maximale de chemin</string>
@@ -988,6 +1011,8 @@
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Membres de l\'organisation #VAR1#</string>
   <string name="SYS_MEMBERS">Membres</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Membres entre #VAR1# et #VAR2#</string>
+  <string name="SYS_MEMBERS_CONFIGURATION_DESC">L\'une des configurations spécifiées ici peut être utilisée pour afficher l\'administration des membres. Les colonnes de la configuration de liste sélectionnée sont alors affichées dans l\'administration des membres.</string>
+  <string name="SYS_MEMBERS_DESC">Affichez et organisez ici tous les membres actifs et anciens. De nouveaux membres peuvent être importés ou créés.</string>
   <string name="SYS_MEMBERS_PER_PAGE">Nombre de membres par page</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Nombre de membres affichés dans la vue HTML. D\'autres membres peuvent être trouvés en naviguant. L\'aperçu avant impression et l\'exportation ne sont pas affectés par cette valeur. (Valeur par défaut : 25)</string>
   <string name="SYS_MEMBERSHIP_END">Fin de l\'adhésion</string>
@@ -1019,6 +1044,7 @@
   <string name="SYS_MULTIPLE_RECIPIENTS">Plusieurs destinataires</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">Les e-mails adressés à plusieurs destinataires contiennent tous les destinataires dans le champ Cci. Cela garantit que personne ne voit les adresses e-mail des autres destinataires. Cependant, le champ TO doit également être rempli. Ce paramètre peut être utilisé pour définir ce qui est entré dans le champ destinataire (TO). Il peut s\'agir d\'une valeur masquée «Destinataires non divulgués», mais cela pose des problèmes avec certains fournisseurs. Alternativement, le champ du destinataire (TO) peut être rempli avec l\'adresse de l\'expéditeur ou l\'adresse de l\'administrateur à partir des notifications système. Remarque: tous les e-mails adressés à plusieurs destinataires seront également envoyés à l\'adresse e-mail dans le champ du destinataire (TO).</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">Au moins un membre doit avoir le rôle d\'administrateur !</string>
+  <string name="SYS_MYLIST_CONDITION_DESC">Ici, vous pouvez définir des conditions pour chaque champ de votre liste. Cela permettra de restreindre davantage les membres déterminés du rôle sélectionné avec vos conditions.</string>
   <string name="SYS_NAME">Nom</string>
   <string name="SYS_NAME_ABBREVIATION">Nom (abréviation)</string>
   <string name="SYS_NEW_BETA_AVAILABLE">Une nouvelle version bêta est disponible !</string>
@@ -1044,6 +1070,7 @@
   <string name="SYS_NO_LEADER">Aucun responsable</string>
   <string name="SYS_NO_MORE_COLUMN">Pour des raisons techniques, aucune colonne supplémentaire ne peut être ajoutée.</string>
   <string name="SYS_NO_NEW_REGISTRATIONS">Il n\'y a pas d\'inscriptions disponibles.</string>
+  <string name="SYS_NO_QUOTATION">Pas de citation</string>
   <string name="SYS_NO_RIGHTS">Tu n\'as pas l\'autorisation requise pour effectuer cette action.</string>
   <string name="SYS_NO_RIGHTS_VIEW_LIST">Tu n\'as pas le droit de consulter les listes de rôles.</string>
   <string name="SYS_NO_ROLE_GIVEN">Aucun rôle a été indiqué.</string>
@@ -1062,10 +1089,14 @@
   <string name="SYS_NOTE">Consigne</string>
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notification après une nouvelle inscription</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification pour les nouvelles entrées</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Vous pouvez activer ici une notification système pour les nouvelles entrées dans les modules Annonces, Événements, Livre d\'or, Liens Web et Photos. Les membres du rôle de notification enregistré ont la possibilité d\'être informés par e-mail des nouvelles entrées dans les modules. (Par défaut : non)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notification pour les changements dans les champs de profil</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Une notification système pour les données de profil modifiées peut être activée ici. Si des données de profil sont créées, modifiées ou supprimées par un utilisateur, les membres du rôle de notification enregistré sont avertis par e-mail. (Par défaut : non)</string>
   <string name="SYS_NOTIFICATION_ROLE">Rôle de notification</string>
+  <string name="SYS_NOTIFICATION_ROLE_DESC">Les notifications concernant les nouvelles entrées ou les modifications de profil sont envoyées à tous les membres de ce rôle.</string>
   <string name="SYS_NUMBER">Nombre</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Nombre de rôles par page</string>
+  <string name="SYS_NUMBER_COL_DESC">La case à cocher correspondante doit être activée si vous voulez afficher à la fin du rapport une ligne avec le nombre d\'adhésions.</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Feuille de calcul (*.ods)</string>
   <string name="SYS_OFF">Activé</string>
   <string name="SYS_OK">OK</string>
@@ -1090,6 +1121,8 @@
   <string name="SYS_PASSWORD">Mot de passe</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Mot de passe oublié</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Si tu as oublié ton mot de passe, le système peut créer un nouveau mot de passe et l\'envoyer à ton adresse de courriel. Entre ton nom d\'utilisateur ou l\'adresse courriel que tu as utilisée pour t\'inscrire à ce système. Le nouveau mot de passe sera envoyé immédiatement à cette adresse courriel.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Si l\'utilisateur a oublié son mot de passe, il peut demander qu\'un lien lui soit envoyé, grâce auquel il pourra définir un nouveau mot de passe pour son compte sur ce site web. Si cette option est désactivée, l\'utilisateur peut uniquement envoyer une demande par e-mail à l\'administrateur pour recevoir un nouveau mot de passe. Pour que le mot de passe soit envoyé, le paramètre #VAR1_BOLD# doit également être défini. (Par défaut : oui)</string>
+  <string name="SYS_PASSWORD_RESET_INVALID">Vous avez demandé un lien de réinitialisation de mot de passe invalide. Si vous n\'avez pas encore réinitialisé votre mot de passe, veuillez demander un nouveau lien en utilisant la fonction #VAR1#.</string>
   <string name="SYS_PASSWORD_RESET_SAVED">Le nouveau mot de passe a maintenant été appliqué !</string>
   <string name="SYS_PASSWORD_UNKNOWN">Tu as saisi un mot de passe incorrect et n\'as pas pu être connecté. \n\nVérifie ton mot de passe et saisis le à nouveau.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">Le mot de passe saisi ne correspond pas à la répétition.</string>
@@ -1150,7 +1183,9 @@
   <string name="SYS_REGISTRATION">Inscription</string>
   <string name="SYS_REGISTRATION_SAVED">Tes données ont été enregistrées.\n\nUne connexion n\'est pas encore possible. Ton inscription doit d\'abord être activée. Après l\'activation, tu seras averti par e-mail.</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Adopter toutes les données d\'une inscription pour un utilisateur existant</string>
+  <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Si un utilisateur nouvellement enregistré existe déjà dans la base de données, toutes les données de l\'enregistrement seront transférées à l\'utilisateur existant si ce paramètre est défini. Si ce paramètre n\'est pas défini, seuls le nom d\'utilisateur et le mot de passe sont repris. Dans le cas d\'utilisateurs qui n\'existaient pas auparavant, toutes les données de l\'enregistrement seront toujours reprises, indépendamment de ce paramètre. (Par défaut : oui)</string>
   <string name="SYS_REGULAR_EXPRESSION">Expression régulière</string>
+  <string name="SYS_REGULAR_EXPRESSION_DESC">Il est possible de stocker toute expression régulière qui sera appliquée au contenu saisi par l\'utilisateur dans ce champ de profil. Le contenu doit correspondre aux conditions de l\'expression régulière pour que la valeur saisie soit enregistrée dans le champ. L\'expression régulière est vérifiée en plus des conditions générales du type de données.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Configuration des relations</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Configurations des relations</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Si cette option est définie, un utilisateur peut modifier le profil d\'un autre utilisateur avec lequel il est relié. Dans une relation asymétrique, le droit est attribuée séparément pour chaque direction de relation, dans une relation symétrique, les deux utilisateurs peuvent éditer l\'autre profil, et dans une relation unidirectionnelle, seul l\'utilisateur avec la relation stockée peut éditer l\'autre profil.</string>
@@ -1166,6 +1201,7 @@
   <string name="SYS_REPEAT">Répéter</string>
   <string name="SYS_REPLACE">Remplacer</string>
   <string name="SYS_REQUIRED_FIELDS">PfliChamps obligatoires</string>
+  <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Vous êtes déjà connecté au système. Il n\'est pas nécessaire de demander un nouveau mot de passe.</string>
   <string name="SYS_RESTRICTIONS">Resctrictions</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Voir la liste des membres de tous les rôles</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Gérer les annonces</string>
@@ -1176,6 +1212,7 @@
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Gérer les documents et les fichiers</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Les rôles disposant de cette autorisation peuvent gérer les droits pour le module documents et fichiers. Cela inclut qui peut voir les dossiers et qui peut télécharger des fichiers.</string>
   <string name="SYS_RIGHT_EDIT_USER">Editer le profil de tous les membres</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Les rôles ayant cette permission peuvent modifier les données des autres membres (sauf les mots de passe). En outre, ils ont accès à l\'administration des membres et peuvent ajouter ou supprimer des membres.</string>
   <string name="SYS_RIGHT_GUESTBOOK">Modifier et supprimer des entrées du livre d\'or</string>
   <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Créer des commentaires pour les entrées du livre d\'or</string>
   <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">Ce paramètre contrôle qui a le droit d\'envoyer des e-mails à ce rôle à l\'aide du module de message. Cependant, le droit du rôle #VAR1_BOLD# est toujours au-dessus de ce paramètre.</string>
@@ -1198,6 +1235,7 @@
   <string name="SYS_ROLE_NAME_EXISTS">Il y a déjà un rôle dans cette catégorie avec le même nom.</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Tu n\'as pas les autorisations pour sélectionner le rôle #VAR1#.\nSélectionne un autre rôle.</string>
   <string name="SYS_ROLE_SELECTION">Sélection de rôle</string>
+  <string name="SYS_ROLE_SELECTION_CONF_DESC">La sélection des rôles peut être limitée par la configuration aux membres des rôles sélectionnés. Si aucune restriction ne doit être faite, les deux champs (sélection des rôles et sélection des catégories) doivent être laissés vides.</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">Rôle sans responsable</string>
   <string name="SYS_ROLE_TYPES">Types de rôle</string>
   <string name="SYS_ROLES">Rôles</string>
@@ -1214,6 +1252,7 @@
   <string name="SYS_SATURDAY">Samedi</string>
   <string name="SYS_SAVE">Enregistrer</string>
   <string name="SYS_SAVE_ATTACHMENTS">Sauvegarder les pièces jointes</string>
+  <string name="SYS_SAVE_ATTACHMENTS_DESC">Les pièces jointes des e-mails sont sauvegardées sur l\'espace web et peuvent toujours être consultées dans l\'e-mail sauvegardé après l\'envoi. (Par défaut : activé)</string>
   <string name="SYS_SAVE_CHANGES">Enregistrer les modifications</string>
   <string name="SYS_SAVE_CONFIGURATION">Enregistrer la configuration</string>
   <string name="SYS_SAVE_DATA">Les données ont été enregistrées.</string>
@@ -1253,6 +1292,7 @@
   <string name="SYS_SEND_COPY">Envoyer une copie du courriel à mon adresse</string>
   <string name="SYS_SEND_EMAIL">Envoyer un courriel</string>
   <string name="SYS_SEND_EMAIL_FORMER">Envoyer des courriels aux anciens</string>
+  <string name="SYS_SEND_EMAIL_FORMER_DESC">Si cette option est activée, des e-mails peuvent être envoyés à des anciens membres individuels, ainsi qu\'à tous les anciens membres d\'un rôle. (Par défaut : Activé)</string>
   <string name="SYS_SEND_EMAIL_TO">Envoyer un courriel à #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Envoyer des courriels à toutes les adresses de courriel de l\'utilisateur</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Si ce paramètre est activé, des courriels sont envoyés à toutes les adresses de courriels de l\'utilisateur stockées dans le profil. Si ce paramètre est désactivé, les courriels ne sont envoyés à l\'adresse de courriel qu\'à partir du champ de profil avec le nom interne EMAIL. (Par défaut : Activé)</string>
@@ -1280,6 +1320,7 @@
   <string name="SYS_SET_FOLDER_PERMISSIONS">Attribuer des droits aux dossiers</string>
   <string name="SYS_SETTINGS">Paramétrages</string>
   <string name="SYS_SHOW_ALL_USERS">Afficher tous les membres</string>
+  <string name="SYS_SHOW_ALL_USERS_DESC">Si ce paramètre est défini, les anciens membres ainsi que les membres d\'autres organisations sont affichés en plus des membres actifs de cette organisation.</string>
   <string name="SYS_SHOW_CALENDAR">Affichage du calendrier</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Pour les utilisateurs qui ne sont pas connectés, un code alphanumérique est affiché dans le formulaire de courriel lorsque Captcha est activé. L\'utilisateur doit le saisir correctement avant d\'envoyer le courriel. Ceci afin de s\'assurer que le formulaire ne peut pas être utilisé à mauvais escient par les spammeurs. (Par défaut : oui)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Afficher les anciens membres</string>
@@ -1308,7 +1349,9 @@
   <string name="SYS_SMTP_PASSWORD">Mot de passe SMTP</string>
   <string name="SYS_SMTP_PASSWORD_DESC">Le mot de passe utilisé pour l\'authetification SMTP.</string>
   <string name="SYS_SMTP_PORT">SMTP Port</string>
+  <string name="SYS_SMTP_PORT_DESC">Spécifier le port qui doit être utilisé pour établir une connexion SMTP. (Par défaut : 587)</string>
   <string name="SYS_SMTP_SECURE">Cryptage SMTP</string>
+  <string name="SYS_SMTP_SECURE_DESC">Vous pouvez choisir ici si et comment la connexion SMTP doit être chiffrée. (Par défaut : TLS)</string>
   <string name="SYS_SMTP_SECURE_NO">sans</string>
   <string name="SYS_SMTP_SECURE_SSL">SSL</string>
   <string name="SYS_SMTP_SECURE_TLS">TLS</string>
@@ -1328,6 +1371,7 @@
   <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Basculer sur la configuration des relations</string>
   <string name="SYS_SYMMETRICAL">symétrique</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Données de connexion pour #organization_long_name#\n#content# Salut #user_first_name#,\n\ntu reçoit tes données de connexions pour la page web #organization_homepage#.\nNom d\'utilisateur : #user_login_name#\nMot de passe : #variable1#\n\nLe mot de passe a été généré automatiquement.\nTu dois le changer après que tu t\'es connecté à #organization_homepage# dans ton profil.\n\nMeilleures salutations\nLes administrateurs</string>
+  <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Réinitialisation du mot de passe de #organization_long_name#\n#content# Bonjour #user_first_name#,\n\nNous avons reçu une demande de réinitialisation de votre mot de passe sur #organization_homepage#.\n\n\NSi la demande émane de vous, vous pouvez utiliser le lien suivant pour réinitialiser votre mot de passe et en définir un nouveau : \n#variable1#\n\nBien Cordialement\nLes administrateurs</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Inscription à #organization_long_name# refusée\n#content# Salut #user_first_name#,\n\nton inscription à #organization_homepage# a été refusé.\n\nLes inscriptions sont généralement acceptées uniquement pour des membres. Si tu es un membre et que ton inscription a quand même été rejetée, c\'est peut-être parce que tu n\'as pas été identifié comme membre.\nPour clarifier les raisons du rejet, contacte l\'administrateur #administrator_email# de #organization_homepage#.\n\nMeilleures salutations\nLes administrateurs</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Inscription à #organization_long_name# confirmé\n#content# Salut #user_first_name#,\n\nta connexion à #organization_homepage# a été confirmé.\n\nTu peux te connecter à la page d\'accueil avec ton nom d\'utilisateur #user_login_name# et ton mot de passe.\n\nSi tu as encore des questions, envoie un courriel à #administrator_email#.\n\nMeilleures salutations\nLes administrateurs</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Nouvel inscription à #organization_long_name#\n#content# Un nouvel utilisateur s\'est inscript sur #organization_homepage#.\n\nNom de famille : #user_last_name#\nPrénom : #user_first_name#\nCourriel :   #user_email#\n\n\n Ce message a été généré automatiquement.</string>
@@ -1339,6 +1383,7 @@
   <string name="SYS_TEMPLATE_DESC">Le modèle standard est défini ici. (Par défaut : Carte postale)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Le dossier des modèles n\'a pas pu être ouvert ou lu.</string>
   <string name="SYS_TEST_MAIL">Courriel de test</string>
+  <string name="SYS_TEST_MAIL_DESC">Avant d\'appeler cette fonction, tous les paramètres d\'envoi d\'e-mail doivent être enregistrés !\nUn simple e-mail avec l\'objet #VAR1_BOLD# sera envoyé à l\'adresse e-mail de l\'utilisateur connecté en fonction des paramètres d\'e-mail enregistrés. Au cours du processus, un journal d\'envoi est édité pendant l\'envoi SMTP, ce qui peut être utile en cas de problème.</string>
   <string name="SYS_TEXT">Texte</string>
   <string name="SYS_THURSDAY">Jeudi</string>
   <string name="SYS_TIME">Heure</string>
@@ -1382,6 +1427,7 @@
   <string name="SYS_USERNAME_OR_EMAIL">Nom d\'utilisateur ou courriel</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# sur #VAR2# à #VAR3#</string>
   <string name="SYS_USERS_PER_PAGE">Nombre de membres par page</string>
+  <string name="SYS_USERS_PER_PAGE_DESC">Le nombre de membres figurant sur une page dans une gestion des membres. S\'il y a plus de membres dans l\'organisation, vous pouvez passer à la page suivante dans la vue d\'ensemble. (Valeur par défaut : 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">Tu utilise une version actuelle #VAR1# version d\'Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
