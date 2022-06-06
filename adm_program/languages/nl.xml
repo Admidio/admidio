@@ -610,6 +610,8 @@
   <string name="SYS_COMMENT">Reactie</string>
   <string name="SYS_COMMON">Algemeen</string>
   <string name="SYS_COMPLEMENT">Aanvulling</string>
+  <string name="SYS_CONDITION">Voorwaarde</string>
+  <string name="SYS_CONDITIONS">Voorwaarden</string>
   <string name="SYS_CONFIGURATION">Configuratie</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Toestemming om configuratie voor alle leden te gebruiken</string>
   <string name="SYS_CONFIGURATION_DELETE">Wilt u de geselecteerde lijst-configuratie verwijderen?</string>
@@ -703,6 +705,8 @@
   <string name="SYS_DEFAULT_LIST">Standaard lijst</string>
   <string name="SYS_DEFAULT_LIST_DESC">Als een ledenlijst van deze rol wordt weergegeven en geen lijst-configuratie is opgegeven, zal de lijst worden weergegeven met de standaard lijst-configuratie van het systeem. Dit veld kan worden gebruikt om een ​​andere lijst-configuratie voor de individuele rol te selecteren, die wordt weergegeven als er geen lijst-configuratie is ingesteld.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Geen standaard lijst-configuratie gedefinieerd door beheerder!\n\nNeem voor hulp contact met beheerder op.</string>
+  <string name="SYS_DEFAULT_VALUE">Standaard waarde</string>
+  <string name="SYS_DEFAULT_VALUE_DESC">U kunt een standaard waarde instellen voor dit profielveld. Deze waarde wordt direct ingesteld voor een nieuwe gebruiker. Voer hiervoor de waarde in het veld in die u ook in het profiel zelf zou invoeren.\n\nVoor het selectievakje type kunt u 1 invoeren voor geactiveerd en 0 voor gedeactiveerd. Bij het keuzeveld type en optieveld type vult u het nummer in van de regel uit de lijst met waarden waarin de gewenste waarde staat.</string>
   <string name="SYS_DEFAULT_VAR">Standaard #VAR1#</string>
   <string name="SYS_DELETE">Verwijder</string>
   <string name="SYS_DELETE_CONFIGURATION">Verwijder configuratie</string>
@@ -835,6 +839,9 @@
   <string name="SYS_FIELD">Veld</string>
   <string name="SYS_FIELD_EMPTY">Veld #VAR1_BOLD# is leeg.</string>
   <string name="SYS_FIELD_ENCLOSURE">Aanhalingsteken voor de velden</string>
+  <string name="SYS_FIELD_INVALID_CHAR">De ingevoerde waarde in het veld #VAR1_BOLD# bevat ongeldige karakters.\n\nToegestane karakters zijn letters van \'a\' tot \'z\' en van \'A\' tot \'Z\', nummers vanaf 0 tot 9 en speciale karakters zoals  .-_+@ .</string>
+  <string name="SYS_FIELD_INVALID_INPUT">Veld #VAR1_BOLD# bevat ongeldige invoer.</string>
+  <string name="SYS_FIELD_INVALID_REGEX">De ingevoerde waarde in het veld #VAR1_BOLD# bevat tekens die niet overeenkomen met de corresponderende reguliere expressie van het veld. Controleer de veldbeschrijving voor welke karakters zijn toegestaan.</string>
   <string name="SYS_FIELDS_EMPTY">Niet alle velden zijn ingevuld.</string>
   <string name="SYS_FILE">Bestand</string>
   <string name="SYS_FILE_COLUMN">Bestand kolom</string>
@@ -1037,6 +1044,7 @@
   <string name="SYS_MULTIPLE_RECIPIENTS">Meerdere ontvangers</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-mails naar meerdere ontvangers bevatten alle ontvangers in het BCC-veld. Dit zorgt ervoor dat niemand de e-mailadressen van de andere ontvangers ziet. Echter, het TO-veld moet ook worden ingevuld. Deze instelling kan worden gebruikt om te bepalen wat er in het ontvangerveld (TO) is ingevoerd. Dit kan een verborgen waarde zijn \"Undisclosed Recipients\", maar dit veroorzaakt problemen bij sommige providers. Als alternatief kan het ontvangerveld (TO) worden gevuld met het afzenderadres of het beheerdersadres van de systeemnotificaties. Let op: alle e-mails naar meerdere ontvangers worden dan ook naar het e-mailadres in het ontvangerveld (TO) gestuurd. (Standaard: afzender)</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">De rol van beheerder moet tenminste één lid hebben!</string>
+  <string name="SYS_MYLIST_CONDITION_DESC">Hier kunt u voorwaarden definiëren voor elk veld in uw lijst. Deze voorwaarden zullen bepaalde leden van de geselecteerde rol verder beperken.</string>
   <string name="SYS_NAME">Naam</string>
   <string name="SYS_NAME_ABBREVIATION">Naam (afkorting)</string>
   <string name="SYS_NEW_BETA_AVAILABLE">Een nieuwe beta-versie is beschikbaar!</string>
@@ -1176,6 +1184,8 @@
   <string name="SYS_REGISTRATION_SAVED">Uw gegevens zijn opgeslagen.\n\nNa goedkeuring kunt u inloggen. U zult per e-mail hierover worden geinformeerd.</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Neem alle gegevens van de registratie over voor de bestaande gebruiker</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Als een nieuw geregistreerde gebruiker al in de database bestaat, worden alle gegevens van de registratie overgedragen naar de bestaande gebruiker, als deze instelling is ingesteld. Als deze instelling niet is ingesteld, worden alleen de gebruikersnaam en het wachtwoord overgenomen. Als de gebruiker niet eerder bestond, worden altijd alle gegevens uit de registratie overgenomen, onafhankelijk van deze instelling. (Standaard: ja)</string>
+  <string name="SYS_REGULAR_EXPRESSION">Reguliere expressie</string>
+  <string name="SYS_REGULAR_EXPRESSION_DESC">Elke reguliere expressie kan worden opgeslagen, die wordt toegepast op inhoud die gebruiker in dit profielveld invoert. De inhoud moet overeenkomen met de voorwaarden van de reguliere expressie om de ingevoerde waarde in het veld op te slaan. Naast de algemene voorwaarden van het type veld wordt de reguliere expressie gecontroleerd.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relatie configuratie</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relatie configuraties</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Als deze instelling is ingesteld, kan een gebruiker het profiel van een andere gebruiker bewerken als hij in relatie staat tot deze andere gebruiker. Bij een asymmetrische relatie wordt het recht afzonderlijk toegewezen, bij een symmetrische relatie mogen beide gebruikers het andere profiel bewerken en bij een unidirectionele relatie mag alleen de gebruiker met de opgeslagen relatie het andere profiel bewerken.</string>
@@ -1397,6 +1407,7 @@
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. upload grootte</string>
   <string name="SYS_UPLOAD_NAME_ERROR">Bestandsnaam kan niet \"Submit\" heten.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Bijwerken succesvol</string>
+  <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">De URL in veld #VAR1_BOLD# bevat ongeldige karakters.\n\nAlleen alfabetische karakters, umlauts, nummers 0-9 en speciale karakters .-+_:/#?= zijn toegestaan.</string>
   <string name="SYS_USER">Gebruiker</string>
   <string name="SYS_USER_COULD_BE_CREATED">De persoon kan gemaakt worden.</string>
