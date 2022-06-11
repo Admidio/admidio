@@ -125,7 +125,7 @@ if ($gCurrentUser->editPhotoRight()) {
     $page->addPageFunctionsMenuItem(
         'menu_item_photos_new_album',
         $gL10n->get('PHO_CREATE_ALBUM'),
-        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('mode' => 'new', 'photo_uuid' => $getPhotoUuid)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('mode' => 'new')),
         'fa-plus-circle'
     );
 
