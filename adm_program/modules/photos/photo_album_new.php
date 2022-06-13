@@ -40,8 +40,13 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create photo album object
 $photoAlbum = new TablePhotos($gDb);
 
-if ($getMode === 'change') {
+if ($getMode === 'new') {
+    $parentAlbumUuid = $getPhotoUuid;
+    $getPhotoUuid = null;
+} elseif ($getMode === 'change') {
     $photoAlbum->readDataByUuid($getPhotoUuid);
+    $parentAlbum = new TablePhotos($gDb, $photoAlbum->getValue('pho_pho_id_parent'));
+    $parentAlbumUuid = $parentAlbum->getValue('pho_uuid');
 }
 
 // check if the user is allowed to edit this photo album
@@ -58,13 +63,12 @@ if (isset($_SESSION['photo_album_request'])) {
 }
 
 /**
- * die Albenstruktur fuer eine Auswahlbox darstellen und das aktuelle Album vorauswählen
+ * Read the album structure to an array that could be used for a select box.
  * @param int         $parentId
  * @param string      $vorschub
- * @param TablePhotos $photoAlbum
- * @param int         $phoId
+ * @param int         $currentAlbumPhoId
  */
-function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
+function subfolder(int $parentId, string $vorschub, int $currentAlbumPhoId)
 {
     global $gDb, $gCurrentOrgId, $photoAlbumsArray;
 
@@ -72,8 +76,9 @@ function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
     $sqlConditionParentId = '';
     $parentPhotoAlbum = new TablePhotos($gDb);
 
-    $queryParams = array((int) $photoAlbum->getValue('pho_id'), $gCurrentOrgId);
-    // Erfassen des auszugebenden Albums
+    $queryParams = array($currentAlbumPhoId, $gCurrentOrgId);
+
+    // read all sub albums of the parent album
     if ($parentId > 0) {
         $sqlConditionParentId .= ' AND pho_pho_id_parent = ? -- $parentId';
         $queryParams[] = $parentId;
@@ -96,19 +101,12 @@ function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
         $photoAlbumsArray[$parentPhotoAlbum->getValue('pho_uuid')] =
             $vorschub.'&#151; '.$parentPhotoAlbum->getValue('pho_name').'&nbsp('.$parentPhotoAlbum->getValue('pho_begin', 'Y').')';
 
-        subfolder((int) $parentPhotoAlbum->getValue('pho_id'), $vorschub, $photoAlbum, $phoId);
+        subfolder((int) $parentPhotoAlbum->getValue('pho_id'), $vorschub, $currentAlbumPhoId);
     }//while
 }//function
 
 // create html page object
 $page = new HtmlPage('admidio-photo-album-edit', $headline);
-
-if ($getMode === 'new') {
-    $parentAlbumUuid = 'ALL';
-} else {
-    $parentAlbum = new TablePhotos($gDb, $photoAlbum->getValue('pho_pho_id_parent'));
-    $parentAlbumUuid = $parentAlbum->getValue('pho_uuid');
-}
 
 // show form
 $form = new HtmlForm('photo_album_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('photo_uuid' => $getPhotoUuid, 'mode' => $getMode)), $page);
@@ -118,9 +116,9 @@ $form->addInput(
     $photoAlbum->getValue('pho_name', 'database'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 50)
 );
-subfolder(0, '', $photoAlbum, $photoAlbum->getValue('pho_id'));
+subfolder(0, '', $photoAlbum->getValue('pho_id'));
 $form->addSelectBox(
-    'pho_pho_id_parent',
+    'parent_album_uuid',
     $gL10n->get('PHO_PARENT_ALBUM'),
     $photoAlbumsArray,
     array(

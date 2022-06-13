@@ -49,7 +49,6 @@ if (!$photoAlbum->isEditable()) {
 // Location with the path from the database
 $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 
-// Aenderungen oder Neueintraege kontrollieren
 if ($getMode === 'new' || $getMode === 'change') {
     try {
         // check the CSRF token of the form against the session token
@@ -103,6 +102,11 @@ if ($getMode === 'new' || $getMode === 'change') {
     if (strlen($_POST['pho_photographers']) === 0) {
         $_POST['pho_photographers'] = $gL10n->get('SYS_UNKNOWN');
     }
+
+    // set parent photo id
+    $photoAlbumParent = new TablePhotos($gDb);
+    $photoAlbumParent->readDataByUuid($_POST['parent_album_uuid']);
+    $_POST['pho_pho_id_parent'] = $photoAlbumParent->getValue('pho_id');
 
     //  POST Write variables to the Role object
     foreach ($_POST as $key => $value) { // TODO possible security issue
