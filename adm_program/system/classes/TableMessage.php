@@ -312,12 +312,10 @@ class TableMessage extends TableAccess
 
     /**
      * If the message type is PM this method will return the conversation partner of the PM.
-     * @param int $usrId
-     * @return int Returns **ID** of the user that is partner in the actual conversation or false if its not a message.
+     * @return int Returns **ID** of the user that is partner in the actual conversation or false if it's not a message.
      */
     public function getConversationPartner()
     {
-        global $gLogger;
         if ($this->getValue('msg_type') === self::MESSAGE_TYPE_PM) {
             $recipients = $this->readRecipientsData();
             return $recipients[0]['id'];
@@ -364,7 +362,7 @@ class TableMessage extends TableAccess
                 }
             }
 
-            // if full user names should not be shown than create a text with the number of individual recipients
+            // if full usernames should not be shown than create a text with the number of individual recipients
             if (!$showFullUserNames && $singleRecipientsCount > 0) {
                 if ($singleRecipientsCount === 1) {
                     $textIndividualRecipients = $gL10n->get('SYS_COUNT_INDIVIDUAL_RECIPIENT', array($singleRecipientsCount));
@@ -437,12 +435,6 @@ class TableMessage extends TableAccess
                 // now save message recipient into an simple array
                 if ($row['msr_usr_id'] > 0) {
                     $recipientUsrId = (int) $row['msr_usr_id'];
-
-                    // PMs could have the current user as recipient than the sender is the recipient for this user
-                    if ($this->getValue('msg_type') === self::MESSAGE_TYPE_PM
-                    && $recipientUsrId == $GLOBALS['gCurrentUserId']) {
-                        $recipientUsrId = (int) $row['msg_usr_id_sender'];
-                    }
 
                     // add role to recipients
                     $this->msgRecipientsArray[] =
