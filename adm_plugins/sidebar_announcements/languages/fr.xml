@@ -2,4 +2,5 @@
 <resources>
   <string name="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES">Toutes les annonces</string>
   <string name="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE">Annonces</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_NO_ENTRIES_VISITORS">Il n\'y a pas d\'annonces disponibles pour les visiteurs. Veuillez vous connecter pour voir les annonces.</string>
 </resources>
