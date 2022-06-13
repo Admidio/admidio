@@ -69,6 +69,12 @@ if ($gValidLogin && $getMsgType !== TableMessage::MESSAGE_TYPE_PM && !$gCurrentU
 
 // Update the read status of the message
 if ($getMsgUuid !== '') {
+    // check if user is allowed to view message
+    if(!in_array($gCurrentUserId, array($message->getValue('msg_usr_id_sender'), $message->getConversationPartner()))) {
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
+    }
+
     // update the read-status
     $message->setReadValue();
 
@@ -79,7 +85,11 @@ if ($getMsgUuid !== '') {
     }
 
     $getSubject = $message->getValue('msg_subject', 'database');
-    $user = new User($gDb, $gProfileFields, $message->getConversationPartner());
+    if($gCurrentUserId !== $message->getValue('msg_usr_id_sender')) {
+        $user = new User($gDb, $gProfileFields, $message->getValue('msg_usr_id_sender'));
+    } else {
+        $user = new User($gDb, $gProfileFields, $message->getConversationPartner());
+    }
     $getUserUuid = $user->getValue('usr_uuid');
 } elseif ($getUserUuid !== '') {
     $user = new User($gDb, $gProfileFields);
