@@ -13,7 +13,7 @@ ARG ADMIDIO_VERSION
 LABEL org.label-schema.build-date="${ADMIDIO_BUILD_DATE}" \
       org.label-schema.name="Admidio" \
       org.label-schema.description="Admidio is a free open source user management system for websites of organizations and groups." \
-      org.label-schema.license="GPL-2.0", \
+      org.label-schema.license="GPL-2.0" \
       org.label-schema.url="https://www.admidio.org/" \
       org.label-schema.vcs-ref="${ADMIDIO_VCS_REF}" \
       org.label-schema.vcs-url="https://github.com/Admidio/admidio" \
