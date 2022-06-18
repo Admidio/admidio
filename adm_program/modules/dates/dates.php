@@ -434,7 +434,7 @@ if ($datesResult['totalCount'] === 0) {
                 switch ($row['member_approval_state']) {
                     case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
                         $buttonText = $gL10n->get('SYS_PARTICIPATE_QUESTION');
-                        $iconParticipationStatus = '<i class="fas fa-calendar-check"></i>';
+                        $iconParticipationStatus = '<i class="fas fa-user-plus"></i>';
                         break;
                     case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
                         $buttonText = $gL10n->get('DAT_USER_ATTEND');
