@@ -8,7 +8,6 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Allow comments within participation</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Participants can comment on their participation. The comments can be viewed via the participant list</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Add participants</string>
-  <string name="DAT_ATTEND">Participate</string>
   <string name="DAT_ATTEND_DATE">You signed up for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="DAT_ATTEND_POSSIBLY">You signed up tentative for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="DAT_CALENDAR">Calendar</string>
@@ -1116,6 +1115,8 @@
   <string name="SYS_PAGE_NEXT">Next</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# and #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Members</string>
+  <string name="SYS_PARTICIPATE">Participate</string>
+  <string name="SYS_PARTICIPATE_QUESTION">Participate?</string>
   <string name="SYS_PARTICIPATION_INFORMATION">Participant information</string>
   <string name="SYS_PARTICIPATION_STATUS">Participant Status</string>
   <string name="SYS_PASSWORD">Password</string>

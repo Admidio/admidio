@@ -4,7 +4,7 @@
   <string name="DAT_ADD_DATE_TO_CALENDAR">Ongeza tukio kwenye kalenda</string>
   <string name="DAT_ALL_DAY">Muda kamili</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Ongeza washiriki</string>
-  <string name="DAT_ATTEND">Shiriki</string>
+  <string name="SYS_PARTICIPATE">Shiriki</string>
   <string name="DAT_CALENDAR">Kalenda</string>
   <string name="DAT_CANCEL">Sitisha</string>
   <string name="DAT_CURRENT_DATES_OF_ORGA">Matukio ya sasa/karibuni ya mashirika #VAR1#</string>

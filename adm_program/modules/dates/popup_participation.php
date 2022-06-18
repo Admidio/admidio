@@ -122,7 +122,7 @@ $participationForm->addHtml('</div><div class="modal-footer">');
 $participationForm->openButtonGroup();
 $participationForm->addButton(
     'btn_attend_' . $getDatUuid,
-    $gL10n->get('DAT_ATTEND'),
+    $gL10n->get('SYS_PARTICIPATE'),
     array('icon' => 'fa-check-circle', 'class' => 'admidio-event-approval-state-attend')
 );
 

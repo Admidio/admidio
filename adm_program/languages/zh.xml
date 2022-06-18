@@ -4,7 +4,7 @@
   <string name="DAT_ADD_DATE_TO_CALENDAR">将活动添加到日程表</string>
   <string name="DAT_ALL_DAY">全职</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">添加参与者</string>
-  <string name="DAT_ATTEND">参与</string>
+  <string name="SYS_PARTICIPATE">参与</string>
   <string name="DAT_CALENDAR">日程表</string>
   <string name="DAT_CANCEL">取消</string>
   <string name="DAT_CURRENT_DATES_OF_ORGA">部门的当前活动 #VAR1#</string>

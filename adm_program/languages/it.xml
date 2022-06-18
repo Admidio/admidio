@@ -8,7 +8,7 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Consenti i commenti internamente alla partecipazione</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">I partecipanti possono commentare la propria partecipazione. I commenti possono essere letti tramite la lista dei partecipanti</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Aggiungi partecipanti</string>
-  <string name="DAT_ATTEND">Participare</string>
+  <string name="SYS_PARTICIPATE">Participare</string>
   <string name="DAT_ATTEND_DATE">Ti sei registrato all\'evento #VAR1_BOLD# on #VAR2#.</string>
   <string name="DAT_ATTEND_POSSIBLY">Ti sei iscritto provvisoriamente all’evento #VAR1_BOLD# su #VAR2#.</string>
   <string name="DAT_CALENDAR">Calendario</string>

@@ -8,7 +8,7 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Разрешаване на коментари на участниците</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Учестниците могат да коментират своето участие. Коментарите могат да се видят през списъците на участниците.</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Добавяне на участници</string>
-  <string name="DAT_ATTEND">Участване</string>
+  <string name="SYS_PARTICIPATE">Участване</string>
   <string name="DAT_ATTEND_DATE">Вие сте се записали за събитие #VAR1_BOLD# на #VAR2#.</string>
   <string name="DAT_ATTEND_POSSIBLY">Регистрирахте се предварително за събитието #VAR1_BOLD# на #VAR2#.</string>
   <string name="DAT_CALENDAR">Календар</string>

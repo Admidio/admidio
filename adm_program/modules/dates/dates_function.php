@@ -597,5 +597,5 @@ if (in_array($getMode, array(3, 4, 7), true)) {
     }
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
-    $gMessage->show($outputMessage, $gL10n->get('DAT_ATTEND'));
+    $gMessage->show($outputMessage, $gL10n->get('SYS_PARTICIPATE'));
 }

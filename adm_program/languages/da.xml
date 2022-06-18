@@ -8,7 +8,7 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Tillad kommentarer for deltagere</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Deltagere kan kommentere på deres deltagelse. Kommentarerne kan ses via deltagerlisten.</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Tilføj deltagere</string>
-  <string name="DAT_ATTEND">Deltag</string>
+  <string name="SYS_PARTICIPATE">Deltag</string>
   <string name="DAT_ATTEND_DATE">Du tilmeldte dig aktiviteten #VAR1_BOLD# den #VAR2#.</string>
   <string name="DAT_ATTEND_POSSIBLY">Du har lavet en midlertidig tilmelding til aktiviteten #VAR1_BOLD# den #VAR2#.</string>
   <string name="DAT_CALENDAR">Kalender</string>

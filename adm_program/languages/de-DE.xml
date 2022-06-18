@@ -8,7 +8,7 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Kommentare zur Anmeldung erlauben</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Teilnehmende können ihre Teilnahme kommentieren. Die Kommentare können über die Liste der Teilnehmenden eingesehen werden</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmende zuordnen</string>
-  <string name="DAT_ATTEND">Teilnehmen</string>
+  <string name="SYS_PARTICIPATE">Teilnehmen</string>
   <string name="DAT_ATTEND_DATE">Sie haben die Teilnahme für den Termin #VAR1_BOLD# am #VAR2# zugesagt. </string>
   <string name="DAT_ATTEND_POSSIBLY">Sie haben die Teilnahme für den Termin #VAR1_BOLD# am #VAR2# unter Vorbehalt zugesagt. </string>
   <string name="DAT_CALENDAR">Kalender</string>

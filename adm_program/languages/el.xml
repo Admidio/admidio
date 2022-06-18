@@ -8,7 +8,7 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Να επιτρέπονται σχόλια στο πλαίσιο της συμμετοχής</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Οι συμμετέχοντες μπορούν να σχολιάσουν τη συμμετοχή τους. Τα σχόλια μπορούν να προβληθούν μέσω της λίστας συμμετεχόντων</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Πρόσθεση συμμετεχόντων</string>
-  <string name="DAT_ATTEND">Συμμετοχή</string>
+  <string name="SYS_PARTICIPATE">Συμμετοχή</string>
   <string name="DAT_ATTEND_DATE">Εγγραφήκατε στην εκδήλωση #VAR1_BOLD# => #VAR2#.</string>
   <string name="DAT_ATTEND_POSSIBLY">Εγγραφήκατε υπό αίρεση στην εκδήλωση #VAR1_BOLD# => #VAR2#.</string>
   <string name="DAT_CALENDAR">Ημερολόγιο</string>

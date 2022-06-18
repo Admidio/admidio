@@ -8,7 +8,6 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Kommentare zur Anmeldung erlauben</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Teilnehmende können ihre Teilnahme kommentieren. Die Kommentare können über die Liste der Teilnehmenden eingesehen werden</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmende zuordnen</string>
-  <string name="DAT_ATTEND">Teilnehmen</string>
   <string name="DAT_ATTEND_DATE">Du hast die Teilnahme für den Termin #VAR1_BOLD# am #VAR2# zugesagt.</string>
   <string name="DAT_ATTEND_POSSIBLY">Du hast die Teilnahme für den Termin #VAR1_BOLD# am #VAR2# unter Vorbehalt zugesagt.</string>
   <string name="DAT_CALENDAR">Kalender</string>
@@ -1116,6 +1115,8 @@
   <string name="SYS_PAGE_NEXT">Nächste</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# und #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Teilnehmende</string>
+  <string name="SYS_PARTICIPATE">Teilnehmen</string>
+  <string name="SYS_PARTICIPATE_QUESTION">Teilnehmen?</string>
   <string name="SYS_PARTICIPATION_INFORMATION">Informationen der Teilnehmenden</string>
   <string name="SYS_PARTICIPATION_STATUS">Status der teilnehmenden Person</string>
   <string name="SYS_PASSWORD">Passwort</string>

@@ -8,7 +8,7 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Salli kommentit osallistumisen sisällä</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Osallistujat voivat kommentoida osallistumistaan. Kommentteja voi tarkastella osallistujaluettelon kautta</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Lisää osallistujia</string>
-  <string name="DAT_ATTEND">Osallistu</string>
+  <string name="SYS_PARTICIPATE">Osallistu</string>
   <string name="DAT_ATTEND_DATE">Rekisteröidyit tapahtumaan #VAR1_BOLD# #VAR2#.</string>
   <string name="DAT_ATTEND_POSSIBLY">Ilmoittauduit alustavasti tapahtumaan #VAR1_BOLD# #VAR2#.</string>
   <string name="DAT_CALENDAR">Kalenteri</string>

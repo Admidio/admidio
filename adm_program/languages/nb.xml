@@ -5,7 +5,7 @@
   <string name="DAT_ALL_DAY">Fulltid</string>
   <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Deltakere kan registrere anonyme gjester</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Legg til deltakere</string>
-  <string name="DAT_ATTEND">Delta</string>
+  <string name="SYS_PARTICIPATE">Delta</string>
   <string name="DAT_CALENDAR">Kalender</string>
   <string name="DAT_CANCEL">Avbryt</string>
   <string name="DAT_DATE">Hendelse</string>

@@ -1744,7 +1744,7 @@ $formEvents->addCheckbox(
     'dates_may_take_part',
     $gL10n->get('SYS_MAYBE_PARTICIPATE'),
     (bool) $formValues['dates_may_take_part'],
-    array('helpTextIdInline' => $gL10n->get('SYS_MAYBE_PARTICIPATE_DESC', array('DAT_ATTEND', 'DAT_CANCEL', 'DAT_USER_TENTATIVE')))
+    array('helpTextIdInline' => $gL10n->get('SYS_MAYBE_PARTICIPATE_DESC', array('SYS_PARTICIPATE', 'DAT_CANCEL', 'DAT_USER_TENTATIVE')))
 );
 $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';

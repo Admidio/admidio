@@ -8,7 +8,7 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Opmerkingen tijdens aanmelding toestaan</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Deelnemers kunnen opmerkingen maken over hun deelname. De opmerkingen kunnen worden bekeken via de deelnemerslijst</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Voeg deelnemers toe</string>
-  <string name="DAT_ATTEND">Deelnemen</string>
+  <string name="SYS_PARTICIPATE">Deelnemen</string>
   <string name="DAT_ATTEND_DATE">U heeft zich aangemeld voor het evenement #VAR1_BOLD# op #VAR2#.</string>
   <string name="DAT_ATTEND_POSSIBLY">U heeft uw deelname voor evenement #VAR1_BOLD# op #VAR2# onder voorbehoud toegezegd.</string>
   <string name="DAT_CALENDAR">Kalender</string>

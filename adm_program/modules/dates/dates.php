@@ -433,7 +433,7 @@ if ($datesResult['totalCount'] === 0) {
 
                 switch ($row['member_approval_state']) {
                     case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
-                        $buttonText = $gL10n->get('DAT_USER_INVITED');
+                        $buttonText = $gL10n->get('SYS_PARTICIPATE_QUESTION');
                         $iconParticipationStatus = '<i class="fas fa-calendar-check"></i>';
                         break;
                     case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
@@ -452,7 +452,7 @@ if ($datesResult['totalCount'] === 0) {
                         $iconParticipationStatus = '<i class="fas fa-times-circle"></i>';
                         break;
                     default:
-                        $buttonText = $gL10n->get('DAT_ATTEND');
+                        $buttonText = $gL10n->get('SYS_PARTICIPATE');
                         $iconParticipationStatus = '<i class="fas fa-edit"></i>';
                 }
 
@@ -492,7 +492,7 @@ if ($datesResult['totalCount'] === 0) {
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a class="btn admidio-event-approval-state-attend" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '3', 'dat_uuid' => $dateUuid)) . '"' . $disableStatusAttend . '>
-                                            <i class="fas fa-check-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>' . $gL10n->get('DAT_ATTEND') . '
+                                            <i class="fas fa-check-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>' . $gL10n->get('SYS_PARTICIPATE') . '
                                         </a>
                                     </li>';
                         if ($gSettingsManager->getBool('dates_may_take_part')) {

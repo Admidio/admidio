@@ -8,7 +8,7 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Tillåt kommentarer inom deltagande</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Deltagarna kan kommentera sitt deltagande. Kommentarerna kan ses via deltagarlistan</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Lägg till till deltagare</string>
-  <string name="DAT_ATTEND">Delta</string>
+  <string name="SYS_PARTICIPATE">Delta</string>
   <string name="DAT_ATTEND_DATE">Du registrerade dig för evenemanget #VAR1_BOLD# på #VAR2#.</string>
   <string name="DAT_ATTEND_POSSIBLY">Du registrerade dig för evenemanget #VAR1_BOLD# på #VAR2#. </string>
   <string name="DAT_CALENDAR">kalender</string>

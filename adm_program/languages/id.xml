@@ -8,7 +8,7 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Izinkan komentar saat pendaftaran</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Peserta dapat mengomentari partisipasi mereka. Komentar dapat dilihat melalui daftar peserta</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Tambahkan peserta</string>
-  <string name="DAT_ATTEND">Ikut serta</string>
+  <string name="SYS_PARTICIPATE">Ikut serta</string>
   <string name="DAT_ATTEND_DATE">Anda mendaftar untuk acara tersebut #VAR1_BOLD# di #VAR2#.</string>
   <string name="DAT_ATTEND_POSSIBLY">Anda menandatangani tentatif untuk acara tersebut #VAR1_BOLD# di #VAR2#. </string>
   <string name="DAT_CALENDAR">Kalender</string>
