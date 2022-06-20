@@ -4,7 +4,7 @@
  * Calendar
  *
  * Plugin shows the actual month with all the events and birthdays that are
- * coming. This plugin can be used to show the Admidio events andbirthdays in a
+ * coming. This plugin can be used to show the Admidio events and birthdays in a
  * sidebar within Admidio or in an external website.
  *
  * Compatible with Admidio version 4.1
@@ -26,6 +26,9 @@ if (is_file(__DIR__ . '/config.php')) {
 
 // Initialize and check the parameters
 $getDateId = admFuncVariableIsValid($_GET, 'date_id', 'string');
+
+// global variable to show names of the members who have birthday
+$plgCalendarShowNames = false;
 
 // set default values if there no value has been stored in the config.php
 if (!isset($plg_ajaxbox)) {
@@ -57,6 +60,24 @@ if (!isset($plg_kal_cat)) {
 }
 if (!isset($plg_kal_cat_show)) {
     $plg_kal_cat_show = 1;
+}
+
+// check if only members of configured roles could view birthday
+if ($gValidLogin) {
+    if (isset($plg_calendar_roles_view_plugin) && count($plg_calendar_roles_view_plugin) > 0) {
+        // current user must be member of at least one listed role
+        if(count(array_intersect($plg_calendar_roles_view_plugin, $gCurrentUser->getRoleMemberships())) > 0) {
+            $plgCalendarShowNames = true;
+        }
+    } else {
+        // every member could view birthdays
+        $plgCalendarShowNames = true;
+    }
+} else {
+    if ($plg_geb_login === 0) {
+        // every visitor is allowed to view birthdays
+        $plgCalendarShowNames = true;
+    }
 }
 
 // check if role conditions where set
@@ -408,8 +429,7 @@ while ($currentDay <= $lastDayCurrentMonth) {
 
     // add users birthdays to the calendar
     if ($plg_geb_aktiv) {
-        if (array_key_exists($currentDay, $birthdaysMonthDayArray)
-        && (!$plg_geb_login || ($plg_geb_login && $gValidLogin))) {
+        if (array_key_exists($currentDay, $birthdaysMonthDayArray) && $plgCalendarShowNames) {
             foreach ($birthdaysMonthDayArray[$currentDay] as $birthdayArray) {
                 $hasBirthdays = true;
 
