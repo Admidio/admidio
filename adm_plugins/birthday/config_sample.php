@@ -41,10 +41,10 @@ $plg_show_alter_anrede = 18;
 $plg_show_hinweis_keiner = 0;
 
 // Show all birthdays in the last x days
-$plg_show_zeitraum = 5;
+$plg_show_zeitraum = 1;
 
 // Show all birthdays of the next x days
-$plg_show_future = 5;
+$plg_show_future = 2;
 
 // How many birthdays should bei displayed as a maximum?
 $plg_show_display_limit = 200;
@@ -60,9 +60,15 @@ $plg_show_email_extern = 0;
 // You can insert specified values of the html target attribute
 $plg_link_target = '_self';
 
-// You can list role ids (comma separated) from which the birthday persons should
-// be searched. If no role is set than the plugin will search for all active members.
-// example value: array(2, 5, 13)
+// You can list role ids (comma separated) whose members are allowed to view the content
+// of this plugin. If the users doesn't have the right only the number of birthdays are shown.
+// Example: $plg_roles_view_plugin_sql = array(2, 4, 10);
+$plg_birthday_roles_view_plugin = array();
+
+// Here you can define which roles users must have whose birthdays should be shown. Within the
+// default setting birthdays of all users will be shown. Fill the array with ids of the roles to only
+// allow birthdays of members of these roles.
+// Example: $plg_rolle_sql = array(2, 4, 10);
 $plg_rolle_sql = array();
 
 // In which sort order should the birthdays be listed?

@@ -3,8 +3,8 @@
  ***********************************************************************************************
  * Birthday
  *
- * Das Plugin listet alle Benutzer auf, die an dem aktuellen Tag Geburtstag haben.
- * Auf Wunsch koennen auch Geburtstagskinder vor X Tagen angezeigt werden.
+ * The plugin lists all users who have birthday on the current day. In the configuration
+ * file you can set that also past or future birthdays are displayed.
  *
  * Compatible with Admidio version 4.1
  *
@@ -22,6 +22,9 @@ require_once($rootPath . '/adm_program/system/common.php');
 if (is_file(__DIR__ . '/config.php')) {
     require_once(__DIR__ . '/config.php');
 }
+
+// global variable to show names of the members who have birthday
+$plgBirthdayShowNames = false;
 
 // set default values if there no value has been stored in the config.php
 if (!isset($plg_show_names_extern) || !is_numeric($plg_show_names_extern) || $plg_show_names_extern !== 1) {
@@ -55,15 +58,34 @@ if (!isset($plg_show_alter_anrede) || !is_numeric($plg_show_alter_anrede)) {
 }
 
 if (!isset($plg_show_zeitraum) || !is_numeric($plg_show_zeitraum)) {
-    $plg_show_zeitraum = 5;
+    $plg_show_zeitraum = 1;
 }
 
 if (!isset($plg_show_future) || !is_numeric($plg_show_future)) {
-    $plg_show_future = 5;
+    $plg_show_future = 2;
 }
 if (!isset($plg_show_display_limit) || !is_numeric($plg_show_display_limit)) {
     $plg_show_display_limit = 200;
 }
+
+// check if only members of configured roles could view birthday
+if ($gValidLogin) {
+    if (isset($plg_birthday_roles_view_plugin) && count($plg_birthday_roles_view_plugin) > 0) {
+        // current user must be member of at least one listed role
+        if(count(array_intersect($plg_birthday_roles_view_plugin, $gCurrentUser->getRoleMemberships())) > 0) {
+            $plgBirthdayShowNames = true;
+        }
+    } else {
+        // every member could view birthdays
+        $plgBirthdayShowNames = true;
+    }
+} else {
+    if ($plg_show_names_extern === 1) {
+        // every visitor is allowed to view birthdays
+        $plgBirthdayShowNames = true;
+    }
+}
+
 // Check if the role condition has been set
 if (isset($plg_rolle_sql) && is_array($plg_rolle_sql) && count($plg_rolle_sql) > 0) {
     $sqlRol = 'IN (' . implode(',', $plg_rolle_sql) . ')';
@@ -82,8 +104,8 @@ if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
     $plg_show_headline = 1;
 }
 
-// If the user is logged out and only the number of birth children should be displayed, then set the period to 0 days.
-if ($plg_show_names_extern === 0 && !$gValidLogin) {
+// if no birthdays should be shown than disable future and former birthday periods
+if (!$plgBirthdayShowNames) {
     $plg_show_zeitraum = 0;
     $plg_show_future   = 0;
 }
@@ -232,7 +254,7 @@ if ($plg_show_headline) {
 }
 
 if ($numberBirthdays > 0) {
-    if ($plg_show_names_extern === 1 || $gValidLogin) {
+    if ($plgBirthdayShowNames) {
         echo '<ul id="plgBirthdayNameList">';
 
         // how many birthdays should be displayed (as a maximum)
