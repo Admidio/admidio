@@ -50,10 +50,14 @@ mailq
 
 
 # generate admidio config.php
-# ADMIDIO_CONFIG_TEMPLATE="/opt/app-root/src/adm_my_files/config_example.php"
+ADMIDIO_CONFIG_TEMPLATE="/opt/app-root/src/provisioning/adm_my_files/config_example.php"
 ADMIDIO_CONFIG="/opt/app-root/src/adm_my_files/config.php"
-# echo "[INFO ] generate admidio config.php file"
-# cp --preserve=mode,ownership,timestamps "${ADMIDIO_CONFIG_TEMPLATE}" "${ADMIDIO_CONFIG}"
+
+# if nessary environment variables exist, copy config template to config file
+if ! ( [ -z "${ADMIDIO_DB_HOST}" ] || ( [ -z "${ADMIDIO_DB_PORT}" ] && [ -z "${ADMIDIO_DB_HOST##*:}" ] ) || [ -z "${ADMIDIO_DB_NAME}" ] || [ -z "${ADMIDIO_DB_USER}" ] || [ -z "${ADMIDIO_DB_PASSWORD}" ] ) ; then
+    echo "[INFO ] generate admidio config.php file"
+    cp --preserve=mode,ownership,timestamps "${ADMIDIO_CONFIG_TEMPLATE}" "${ADMIDIO_CONFIG}"
+fi
 # chown default.root "${ADMIDIO_CONFIG}"
 # chmod 664 "${ADMIDIO_CONFIG}"
 
