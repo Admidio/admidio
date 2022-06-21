@@ -393,8 +393,8 @@ class Language
         // and add it to the array of language objects
         if (!array_key_exists($languageFilePath, $xmlLanguageObjects)) {
             if (!is_file($languageFilePath)) {
-                $gLogger->error('L10N: Language file does not exist!', array('languageFilePath' => $languageFilePath));
-
+                // don't log missing file because user could not fix that problem if there is no translation file
+                //$gLogger->error('L10N: Language file does not exist!', array('languageFilePath' => $languageFilePath));
                 throw new \OutOfBoundsException('Language file does not exist!');
             }
 
