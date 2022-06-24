@@ -66,6 +66,15 @@ class Component extends TableAccess
             $filesystemVersion .= '-Beta.' . ADMIDIO_VERSION_BETA;
         }
 
+        if($this->getValue('com_update_completed') !== true) {
+            $errorMessage = 'The update to version ' . $filesystemVersion . ' was not successfully finished!
+                The last update step that was successfully performed was step ' . $this->getValue('com_update_step') .
+                ' of version ' . $dbVersion . '.';
+            $gLogger->warning($errorMessage);
+
+            throw new AdmException($errorMessage);
+        }
+
         $returnCode = version_compare($dbVersion, $filesystemVersion);
 
         if ($returnCode === -1) { // database has minor version
