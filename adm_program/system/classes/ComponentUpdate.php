@@ -156,12 +156,29 @@ class ComponentUpdate extends Component
 
         // only execute if sql statement is for all databases or for the used database
         if (!isset($xmlNode['database']) || (string) $xmlNode['database'] === DB_ENGINE) {
+            $errorMessage = '<p>An error occured within the update script. Please visit our
+                support forum <a href="https://www.admidio.org/forum">https://www.admidio.org/forum</a> and
+                provide the following informations.</p>
+                <p><b>VERSION:</b> ' . $version . '<br><b>STEP:</b> ' . (int) $xmlNode['id'] . '</p>';
+
             // if a method of this class was set in the update step
             // then call this function and don't execute a SQL statement
             if (str_starts_with($updateStepContent, 'ComponentUpdateSteps::')) {
                 $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
 
-                self::executeUpdateMethod($updateStepContent);
+                try {
+                    self::executeUpdateMethod($updateStepContent);
+                } catch (AdmException $e) {
+                    echo '
+                        <div style="font-family: monospace;">
+                             <p><strong>S C R I P T - E R R O R</strong></p>
+                             ' . $errorMessage . '
+                             <p><strong>MESSAGE:</strong> ' . $e->getMessage() . '</p>
+                             <p><strong>B A C K T R A C E</strong></p>
+                             <p>' . str_replace('#', '<br />', $e->getTraceAsString()) . '</p>
+                         </div>';
+                    exit();
+                }
 
                 $gLogger->debug('UPDATE: Execution time ' . getExecutionTime($startTime));
             } else {
@@ -176,10 +193,7 @@ class ComponentUpdate extends Component
                 $returnCodeSql = $this->executeUpdateSql($updateStepContent, false);
 
                 if($showError && !$returnCodeSql) {
-                    $this->db->showError('<p>An error occured within the update script. Please visit our
-                        support forum <a href="https://www.admidio.org/forum">https://www.admidio.org/forum</a> and
-                        provide the following informations.</p>
-                        <p><b>Version:</b> ' . $version . '<br><b>Step:</b> ' . (int) $xmlNode['id'] . '</p>');
+                    $this->db->showError($errorMessage);
                     // => EXIT
                 }
 
@@ -235,6 +249,10 @@ class ComponentUpdate extends Component
                     $this->save();
                 }
 
+                // save current version to system component
+                $this->setValue('com_version', $mainVersion.'.'.$minorVersion.'.0');
+                $this->save();
+
                 // output of the version number for better debugging
                 $gLogger->notice('UPDATE: Start executing update steps to version '.$mainVersion.'.'.$minorVersion);
 
@@ -258,10 +276,6 @@ class ComponentUpdate extends Component
                 }
 
                 $gLogger->notice('UPDATE: Finish executing update steps to version '.$mainVersion.'.'.$minorVersion);
-
-                // save current version to system component
-                $this->setValue('com_version', $mainVersion.'.'.$minorVersion.'.0');
-                $this->save();
             }
 
             // reset subversion because we want to start update for next main version with subversion 0

@@ -842,8 +842,6 @@ class Database
     {
         global $gLogger, $gSettingsManager, $gL10n;
 
-        $backtrace = $this->getBacktrace();
-
         // Rollback on open transaction
         if ($this->transactions > 0) {
             $this->pdo->rollBack();
@@ -863,7 +861,7 @@ class Database
                  ' . $errorInfo[1] . '<br /><br />
                  ' . $errorInfo[2] . '<br /><br />
                  <strong>B A C K T R A C E</strong><br />
-                 ' . $backtrace . '
+                 ' . $this->getBacktrace() . '
              </div>';
 
         // display database error to user
