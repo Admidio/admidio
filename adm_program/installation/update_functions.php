@@ -110,15 +110,6 @@ function doAdmidioUpdate($installedDbVersion)
 
     checkLogin();
 
-    $componentUpdateHandle = new ComponentUpdate($gDb);
-    $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
-    // if the update is from a version lower than 4.2.0 than the field com_update_complete doesn't exist
-    // otherwise set the status to incomplete update
-    if(version_compare($componentUpdateHandle->getValue('com_update_version'), '4.2.0', '>')) {
-        $componentUpdateHandle->setValue('com_update_completed', false);
-        $componentUpdateHandle->save();
-    }
-
     updateOrgPreferences();
 
     // disable foreign key checks for mysql, so tables can easily deleted
@@ -140,6 +131,8 @@ function doAdmidioUpdate($installedDbVersion)
 
     $gCurrentUser = new User($gDb, $gProfileFields, (int) $systemUserStatement->fetchColumn());
 
+    $componentUpdateHandle = new ComponentUpdate($gDb);
+    $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
     $componentUpdateHandle->update(ADMIDIO_VERSION);
 
     // activate foreign key checks, so database is consistent
@@ -151,10 +144,6 @@ function doAdmidioUpdate($installedDbVersion)
     if (!$htaccess->protectFolder()) {
         $gLogger->warning('.htaccess file could not be created!');
     }
-
-    // set status to a successful completed update
-    $componentUpdateHandle->setValue('com_update_completed', true);
-    $componentUpdateHandle->save();
 
     // after the update first force the reload of the cache for all active sessions
     $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = \'true\'';

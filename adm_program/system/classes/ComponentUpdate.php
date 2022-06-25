@@ -124,13 +124,15 @@ class ComponentUpdate extends Component
     }
 
     /**
-     * Prepares and execute a sql statement
-     * @param string $sql
-     * @param bool   $showError
+     * Prepares and execute a sql statement.
+     * @param string $sql       The sql statement that should be executed.
+     * @param bool   $showError If set to **true** the error will be shown and the script will terminated
+     *                          within the Database class.
+     * @return bool Return **true** if the sql statement could be successfully executed otherwise **false**
      */
     private function executeUpdateSql($sql, $showError)
     {
-        $this->db->queryPrepared(Database::prepareSqlAdmidioParameters($sql), array(), $showError);
+        return $this->db->queryPrepared(Database::prepareSqlAdmidioParameters($sql), array(), $showError);
     }
 
     /**
@@ -141,9 +143,10 @@ class ComponentUpdate extends Component
      * if the value of the attribute is equal to your current **DB_ENGINE**. If the node has
      * an attribute **error** and this is set to **ignore** than an sql error will not stop
      * the update script.
-     * @param \SimpleXMLElement $xmlNode A SimpleXML node of the current update step.
+     * @param SimpleXMLElement $xmlNode A SimpleXML node of the current update step.
+     * @param string $version A version string of the version corresponding to the $xmlNode
      */
-    private function executeStep(\SimpleXMLElement $xmlNode)
+    private function executeStep(SimpleXMLElement $xmlNode, string $version = '')
     {
         global $gLogger;
 
@@ -170,7 +173,15 @@ class ComponentUpdate extends Component
 
                 $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
 
-                $this->executeUpdateSql($updateStepContent, $showError);
+                $returnCodeSql = $this->executeUpdateSql($updateStepContent, false);
+
+                if($showError && !$returnCodeSql) {
+                    $this->db->showError('<p>An error occured within the update script. Please visit our
+                        support forum <a href="https://www.admidio.org/forum">https://www.admidio.org/forum</a> and
+                        provide the following informations.</p>
+                        <p><b>Version:</b> ' . $version . '<br><b>Step:</b> ' . (int) $xmlNode['id'] . '</p>');
+                    // => EXIT
+                }
 
                 $gLogger->debug('UPDATE: Execution time ' . getExecutionTime($startTime));
             }
@@ -187,9 +198,11 @@ class ComponentUpdate extends Component
     }
 
     /**
-     * Do a loop through all versions start with the current version and end with the target version.
-     * Within every subversion the method will search for an update xml file and execute all steps
-     * in this file until the end of file is reached. If an error occurred then the update will be stopped.
+     * Do a loop through all versions start with the last installed version and end with the current version of the
+     * file system (**$targetVersion**). Within every subversion the method will search for an update xml file and
+     * execute all steps in this file until the end of file is reached. If an error occurred then the update will
+     * be stopped and the system will be marked with update not completed so that it's possible to continue the
+     * update later if the problem was fixed.
      * @param string $targetVersion The target version to update.
      */
     public function update($targetVersion)
@@ -199,6 +212,13 @@ class ComponentUpdate extends Component
         $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
         $targetVersionArray  = self::getVersionArrayFromVersion($targetVersion);
         $initialMinorVersion = $currentVersionArray[1];
+
+        // if the update is from a version lower than 4.2.0 than the field com_update_complete doesn't exist
+        // otherwise set the status to incomplete update
+        if(version_compare($this->getValue('com_update_version'), '4.2.0', '>')) {
+            $this->setValue('com_update_completed', false);
+            $this->save();
+        }
 
         for ($mainVersion = $currentVersionArray[0]; $mainVersion <= $targetVersionArray[0]; ++$mainVersion) {
             // Set max subversion for iteration. If we are in the loop of the target main version
@@ -228,7 +248,7 @@ class ComponentUpdate extends Component
                             break;
                         }
                         if ((int) $updateStep['id'] > (int) $this->getValue('com_update_step')) {
-                            $this->executeStep($updateStep);
+                            $this->executeStep($updateStep, $mainVersion.'.'.$minorVersion.'.0');
                         } else {
                             $gLogger->info('UPDATE: Skip update step Nr: ' . (int) $updateStep['id']);
                         }
@@ -240,20 +260,23 @@ class ComponentUpdate extends Component
                 $gLogger->notice('UPDATE: Finish executing update steps to version '.$mainVersion.'.'.$minorVersion);
 
                 // save current version to system component
-                $this->setValue('com_version', ADMIDIO_VERSION);
-                $this->setValue('com_beta', ADMIDIO_VERSION_BETA);
+                $this->setValue('com_version', $mainVersion.'.'.$minorVersion.'.0');
                 $this->save();
-
-                // save current version to all modules
-                $sql = 'UPDATE '.TBL_COMPONENTS.'
-                           SET com_version = ? -- ADMIDIO_VERSION
-                             , com_beta    = ? -- ADMIDIO_VERSION_BETA
-                         WHERE com_type = \'MODULE\'';
-                $this->db->queryPrepared($sql, array(ADMIDIO_VERSION, ADMIDIO_VERSION_BETA));
             }
 
             // reset subversion because we want to start update for next main version with subversion 0
             $initialMinorVersion = 0;
         }
+
+        // save current version of file system to all modules
+        $sql = 'UPDATE '.TBL_COMPONENTS.'
+                           SET com_version = ? -- ADMIDIO_VERSION
+                             , com_beta    = ? -- ADMIDIO_VERSION_BETA
+                         WHERE com_type IN (\'SYSTEM\', \'MODULE\')';
+        $this->db->queryPrepared($sql, array(ADMIDIO_VERSION, ADMIDIO_VERSION_BETA));
+
+        // set status to a successful completed update
+        $this->setValue('com_update_completed', true);
+        $this->save();
     }
 }

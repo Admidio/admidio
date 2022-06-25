@@ -835,9 +835,10 @@ class Database
      * Display the error code and error message to the user if a database error occurred.
      * The error must be read by the child method. This method will call a backtrace so
      * you see the script and specific line in which the error occurred.
+     * @param string $errorMessage Optional an error message could be set and integrated in the output of the sql error.
      * @return void Will exit the script and returns a html output with the error information.
      */
-    public function showError()
+    public function showError($errorMessage = '')
     {
         global $gLogger, $gSettingsManager, $gL10n;
 
@@ -857,6 +858,7 @@ class Database
         $htmlOutput = '
             <div style="font-family: monospace;">
                  <p><strong>S Q L - E R R O R</strong></p>
+                 ' . $errorMessage . '
                  <p><strong>CODE:</strong> ' . $errorCode . '</p>
                  ' . $errorInfo[1] . '<br /><br />
                  ' . $errorInfo[2] . '<br /><br />
