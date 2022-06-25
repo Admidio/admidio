@@ -168,7 +168,7 @@ class ComponentUpdate extends Component
 
                 try {
                     self::executeUpdateMethod($updateStepContent);
-                } catch (AdmException $e) {
+                } catch (Throwable $e) {
                     echo '
                         <div style="font-family: monospace;">
                              <p><strong>S C R I P T - E R R O R</strong></p>
