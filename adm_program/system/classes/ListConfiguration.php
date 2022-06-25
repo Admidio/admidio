@@ -73,7 +73,7 @@ class ListConfiguration extends TableLists
         // If column doesn't exist create object
         if (!array_key_exists($number, $this->columns)) {
             $this->columns[$number] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
-            $this->columns[$number]->setValue('lsc_lsf_id', (int) $this->getValue('lst_id'));
+            $this->columns[$number]->setValue('lsc_lst_id', (int) $this->getValue('lst_id'));
         }
 
         // Assign content of column
