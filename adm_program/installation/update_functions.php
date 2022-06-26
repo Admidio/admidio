@@ -131,7 +131,6 @@ function doAdmidioUpdate($installedDbVersion)
 
     $gCurrentUser = new User($gDb, $gProfileFields, (int) $systemUserStatement->fetchColumn());
 
-    // reread component because in version 3.0 the component will be created within the update
     $componentUpdateHandle = new ComponentUpdate($gDb);
     $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
     $componentUpdateHandle->update(ADMIDIO_VERSION);

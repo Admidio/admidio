@@ -16,6 +16,7 @@
         "php": "^7.2 || ^8.0",
         "ext-gd": "*",
         "ext-pdo": "*",
+        "ext-simplexml": "*",
         "ext-zip": "*",
         "bjeavons/zxcvbn-php": "^1.2.0",
         "dapphp/securimage": "^3.6",

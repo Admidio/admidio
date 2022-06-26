@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
+    <step id="1">ALTER TABLE %PREFIX%_components ADD COLUMN com_update_completed boolean NOT NULL DEFAULT true</step>
+    <step id="5">UPDATE %PREFIX%_components SET com_update_completed = false WHERE com_name_intern = 'CORE'</step>
     <step id="10" database="mysql">UPDATE %PREFIX%_preferences INNER JOIN %PREFIX%_roles ON rol_administrator = true SET prf_value = rol_uuid WHERE prf_name = 'system_notifications_role'</step>
     <step id="20" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = rol_uuid FROM %PREFIX%_preferences WHERE prf_name = 'system_notifications_role' AND rol_administrator = true</step>
     <step id="30" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_bcc_count' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_number_recipients'</step>
