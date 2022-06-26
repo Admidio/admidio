@@ -445,16 +445,7 @@ class TableAccess
         }
 
         // call method to read data out of database
-        $returnCode = $this->readData($sqlWhereCondition, array_values($sqlParams));
-
-        // save the array fields in the object
-        if (!$returnCode) {
-            foreach ($columnArray as $columnName => $columnValue) {
-                $this->setValue($columnName, $columnValue);
-            }
-        }
-
-        return $returnCode;
+        return $this->readData($sqlWhereCondition, array_values($sqlParams));
     }
 
     /**
