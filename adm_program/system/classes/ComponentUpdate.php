@@ -282,16 +282,11 @@ class ComponentUpdate extends Component
             $initialMinorVersion = 0;
         }
 
-        if(version_compare($this->getValue('com_update_version'), '4.2.0', '>')) {
-            // set status to a successful completed update
-            $this->setValue('com_update_completed', true);
-            $this->save();
-        }
-
         // save current version of file system to all modules
         $sql = 'UPDATE '.TBL_COMPONENTS.'
                            SET com_version = ? -- ADMIDIO_VERSION
                              , com_beta    = ? -- ADMIDIO_VERSION_BETA
+                             , com_update_completed = true
                          WHERE com_type IN (\'SYSTEM\', \'MODULE\')';
         $this->db->queryPrepared($sql, array(ADMIDIO_VERSION, ADMIDIO_VERSION_BETA));
     }
