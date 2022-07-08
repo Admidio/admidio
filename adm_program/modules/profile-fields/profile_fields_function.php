@@ -155,9 +155,6 @@ if ($getMode === 1) {
     if (!isset($_POST['usf_disabled'])) {
         $_POST['usf_disabled'] = 0;
     }
-    if (!isset($_POST['usf_mandatory'])) {
-        $_POST['usf_mandatory'] = 0;
-    }
     if (!isset($_POST['usf_registration'])) {
         $_POST['usf_registration'] = 0;
     }
