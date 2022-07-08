@@ -744,7 +744,7 @@ CREATE TABLE %PREFIX%_user_fields
     usf_system                  boolean             NOT NULL    DEFAULT false,
     usf_disabled                boolean             NOT NULL    DEFAULT false,
     usf_hidden                  boolean             NOT NULL    DEFAULT false,
-    usf_mandatory               boolean             NOT NULL    DEFAULT false,
+    usf_mandatory               smallint             NOT NULL    DEFAULT false,
     usf_registration            boolean             NOT NULL    DEFAULT false,
     usf_sequence                smallint            NOT NULL,
     usf_usr_id_create           integer unsigned,

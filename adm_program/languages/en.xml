@@ -291,7 +291,6 @@
   <string name="ORG_FIELD_NOT_REGISTRATION">Field is not displayed during registration</string>
   <string name="ORG_FIELD_REGISTRATION">Field is displayed during registration</string>
   <string name="ORG_FIELD_REQUIRED">Mandatory field that has to be filled in always.</string>
-  <string name="ORG_FIELD_REQUIRED_DESC">Flagged (mandatory) fields always have to be filled in. This rule applies for registrations and for regular profile changes performed by users.</string>
   <string name="ORG_FIELD_URL_DESC">The entered URL later links in the profile to the content that the user has entered in this field. Optionally, even the wildcard #user_content# can be defined in the URL. This is the content that the user has entered in the field..\n\nExample:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nLink in profile: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/overview.php)</string>
@@ -1079,6 +1078,7 @@
   <string name="SYS_NO_VALID_RECIPIENTS">The selected roles and users have no valid e-mail addresses. For this reason, the e-mail can`t be sent.</string>
   <string name="SYS_NOBODY">Nobody</string>
   <string name="SYS_NONE">None</string>
+  <string name="SYS_NOT_AT_REGISTRATION">Not at registration</string>
   <string name="SYS_NOT_EMPTY">Not empty</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">You are not a member of organization #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Please use a valid number as condition for field #VAR1_BOLD#.</string>
@@ -1102,6 +1102,7 @@
   <string name="SYS_ON">On</string>
   <string name="SYS_ONE_TIME">One time</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Online membership management</string>
+  <string name="SYS_ONLY_AT_REGISTRATION">Only at registration</string>
   <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">This preference can only be set by the parent organization.</string>
   <string name="SYS_OPERATING_SYSTEM">Operating system</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Opposite relationship</string>

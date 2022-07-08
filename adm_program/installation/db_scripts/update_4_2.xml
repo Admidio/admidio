@@ -18,5 +18,7 @@
     <step id="140">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_system_mails'</step>
     <step id="150">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_default_value varchar(100)</step>
     <step id="160">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_regex varchar(100)</step>
+    <step id="170" database="mysql">ALTER TABLE %PREFIX%_user_fields MODIFY COLUMN usf_mandatory smallint NOT NULL</step>
+    <step id="180" database="pgsql">ALTER TABLE %PREFIX%_user_fields ALTER COLUMN usf_mandatory SET DATA TYPE smallint</step>
     <step>stop</step>
 </update>
