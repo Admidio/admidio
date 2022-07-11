@@ -1973,7 +1973,7 @@ class HtmlForm extends HtmlFormBasic
 
         // If required fields were set than a notice which marker represents the required fields will be shown.
         if ($this->flagRequiredFields && $this->showRequiredFields) {
-            $html .= '<div class="admidio-form-required-notice"><span>' . $gL10n->get('SYS_REQUIRED_FIELDS') . '</span></div>';
+            $html .= '<div class="admidio-form-required-notice"><span>' . $gL10n->get('SYS_REQUIRED_INPUT') . '</span></div>';
         }
 
         // now get whole form html code

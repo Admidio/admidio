@@ -238,14 +238,14 @@ $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES', 2 => 'SYS_ONLY_AT_R
 if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
     $form->addInput(
         'usf_mandatory',
-        $gL10n->get('SYS_MANDATORY_FIELD'),
+        $gL10n->get('SYS_REQUIRED_INPUT'),
         $gL10n->get($mandatoryFieldValues[$userField->getValue('usf_mandatory')]),
         array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
     );
 } else {
     $form->addSelectBox(
         'usf_mandatory',
-        $gL10n->get('SYS_MANDATORY_FIELD'),
+        $gL10n->get('SYS_REQUIRED_INPUT'),
         $mandatoryFieldValues,
         array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_mandatory'))
     );

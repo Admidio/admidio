@@ -287,10 +287,8 @@
   <string name="ORG_FIELD_HIDDEN_DESC">Usually a field is visible to everybody who is allowed to view the profile. If this option is deselected only user who are allowed to edit this profile can see the field.</string>
   <string name="ORG_FIELD_NOT_DISABLED">Field can be edited by users themselves.</string>
   <string name="ORG_FIELD_NOT_HIDDEN">Field visible for all users.</string>
-  <string name="ORG_FIELD_NOT_MANDATORY">Field is mandatory. It must be filled in.</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Field is not displayed during registration</string>
   <string name="ORG_FIELD_REGISTRATION">Field is displayed during registration</string>
-  <string name="ORG_FIELD_REQUIRED">Mandatory field that has to be filled in always.</string>
   <string name="ORG_FIELD_URL_DESC">The entered URL later links in the profile to the content that the user has entered in this field. Optionally, even the wildcard #user_content# can be defined in the URL. This is the content that the user has entered in the field..\n\nExample:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nLink in profile: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/overview.php)</string>
@@ -987,7 +985,6 @@
   <string name="SYS_MAKE_FORMER">A user can be changed to status former member. This will preserve all user information including role memberships for later use.</string>
   <string name="SYS_MALE">Male</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">New registrations of visitors can be listed, approved or refused here.</string>
-  <string name="SYS_MANDATORY_FIELD">Mandatory field</string>
   <string name="SYS_MAP">Map</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Displays the location on Google Maps. The street, postal code, city and country are transferred to Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Displays a route from your own place of residence to the location of this user on Google Maps. The street, postal code, city and country are transferred to Google.</string>
@@ -1202,7 +1199,7 @@
   <string name="SYS_REMOVE_USER_DESC">By choosing #VAR1_BOLD#, all data will be deleted and this information wont be available anymore.</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REPLACE">Replace</string>
-  <string name="SYS_REQUIRED_FIELDS">Required fields</string>
+  <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESTRICTIONS">Restrictions</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">View membership lists of all roles</string>

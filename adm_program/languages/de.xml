@@ -287,11 +287,8 @@
   <string name="ORG_FIELD_HIDDEN_DESC">Ein Feld ist normalerweise für alle Benutzer:innen sichtbar, die das Profil sehen dürfen. Ist diese Einstellung nicht gesetzt, dann können nur Benutzer:innen das Feld sehen, die das Profil auch bearbeiten dürfen.</string>
   <string name="ORG_FIELD_NOT_DISABLED">Feld kann durch Benutzer:innen selbst bearbeitet werden</string>
   <string name="ORG_FIELD_NOT_HIDDEN">Feld für alle Benutzer:innen sichtbar</string>
-  <string name="ORG_FIELD_NOT_MANDATORY">Feld muss nicht zwingend ausgefüllt werden</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Feld wird bei der Registrierung nicht angezeigt</string>
   <string name="ORG_FIELD_REGISTRATION">Feld wird bei der Registrierung angezeigt</string>
-  <string name="ORG_FIELD_REQUIRED">Pflichtfeld, muss immer ausgefüllt werden</string>
-  <string name="ORG_FIELD_REQUIRED_DESC">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</string>
   <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später im Profil den Inhalt, den die Benutzerin oder der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter #user_content# in die URL eingebaut werden. Dies ist dann der Inhalt, den die Benutzerin oder der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: https://www.google.de/search?q=#user_content#\nFeldinhalt: Admidio\nLink im Profil: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Auf diese Seite wird die Benutzerin oder der Benutzer geleitet, sobald er/sie sich angemeldet hat. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Diese Seite ist die Standard-Startseite von Admidio auf die Gäste geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</string>
@@ -988,7 +985,6 @@
   <string name="SYS_MAKE_FORMER">Du kannst die Benutzerin bzw. den Benutzer zu einer/einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und du später immer wieder sehen kannst, welchen Rollen diese Person zugeordnet war.</string>
   <string name="SYS_MALE">Männlich</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Besucher:innen, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
-  <string name="SYS_MANDATORY_FIELD">Pflichtfeld</string>
   <string name="SYS_MAP">Karte</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Zeigt den Wohnort bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt eine Route vom eigenen Wohnort zum Wohnort dieser Benutzerin bzw. dieses Benutzers bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
@@ -1203,7 +1199,7 @@
   <string name="SYS_REMOVE_USER_DESC">Wenn du #VAR1_BOLD# auswählst, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</string>
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REPLACE">Ersetzen</string>
-  <string name="SYS_REQUIRED_FIELDS">Pflichtfelder</string>
+  <string name="SYS_REQUIRED_INPUT">Notwendige Eingabe</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Du bist bereits im System angemeldet. Das Anfordern eines neuen Passworts ist nicht notwendig.</string>
   <string name="SYS_RESTRICTIONS">Einschränkungen</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen einsehen</string>

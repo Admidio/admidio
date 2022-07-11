@@ -71,7 +71,7 @@ function getColumnAssignmentHtml(array $arrayColumnList, array $arrayCsvColumns)
                 <td><label for="'. $column['id']. '" title="'.$column['tooltip'].'">'.$column['name'];
         // Lastname und first name are mandatory fields
         if ($column['name_intern'] === 'LAST_NAME' || $column['name_intern'] === 'FIRST_NAME') {
-            $html .= '&nbsp;&nbsp;<span class="text-danger">('.$gL10n->get('SYS_MANDATORY_FIELD').')</span>';
+            $html .= '&nbsp;&nbsp;<span class="text-danger">('.$gL10n->get('SYS_REQUIRED_INPUT').')</span>';
         }
         $html .= '</label></td>
             <td>';
