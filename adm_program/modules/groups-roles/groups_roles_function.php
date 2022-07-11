@@ -17,6 +17,7 @@
  *         3 - set role inaktive
  *         4 - delete role
  *         5 - set role active
+ *         6 - Export vCard of role
  *
  *****************************************************************************/
 
@@ -302,7 +303,9 @@ if ($getMode === 2) {
         // => EXIT
     }
     exit();
-} elseif ($getMode === 5) { // set role active
+} elseif ($getMode === 5) {
+    // set role active
+
     // event roles should not set active
     // all other roles could now set active
     if (!$eventRole && $role->setActive()) {
@@ -311,4 +314,36 @@ if ($getMode === 2) {
         $gL10n->get('SYS_NO_RIGHTS');
     }
     exit();
+} elseif ($getMode === 6) {
+    // Export every member of a role into one vCard file
+
+    $role = new TableRoles($gDb);
+    $role->readDataByUuid($getRoleUuid);
+
+    if ($gCurrentUser->hasRightViewRole($role->getValue('rol_id'))) {
+        // create filename of organization name and role name
+        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.vcf';
+
+        $filename = FileSystemUtils::getSanitizedPathEntry($filename);
+
+        header('Content-Type: text/x-vcard; charset=iso-8859-1');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
+
+        // necessary for IE, because without it the download with SSL has problems
+        header('Cache-Control: private');
+        header('Pragma: public');
+
+        $sql = 'SELECT mem_usr_id
+                  FROM '.TBL_MEMBERS.'
+                 WHERE mem_rol_id = ? -- $role->getValue(\'rol_id\')
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW';
+        $pdoStatement = $gDb->queryPrepared($sql, array($role->getValue('rol_id'), DATE_NOW, DATE_NOW));
+
+        while ($memberUserId = $pdoStatement->fetchColumn()) {
+            $user = new User($gDb, $gProfileFields, (int) $memberUserId);
+            // create vcard and check if user is allowed to edit profile, so he can see more data
+            echo $user->getVCard();
+        }
+    }
 }
