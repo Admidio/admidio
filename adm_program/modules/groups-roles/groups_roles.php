@@ -250,7 +250,7 @@ foreach ($listsResult['recordset'] as $row) {
         // show link to export vCard if user is allowed to see members and the role has members
         if ($row['num_members'] > 0 || $row['num_leader'] > 0) {
             $html .= '
-                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/groups_roles_function.php', array('mode' => '6', 'role_uuid' => $roleUuid)).'">'.
+                        <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_function.php', array('mode' => '6', 'role_uuid' => $roleUuid)).'">'.
                             '<i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'"></i></a>';
         }
 
