@@ -144,7 +144,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         if (isset($_POST[$postId])) {
             // Mandatory fields must be filled
             // Email must always be filled at registration !!!
-            if ((strlen($_POST[$postId]) === 0 && $field->getValue('usf_mandatory') == 1)
+            if ((strlen($_POST[$postId]) === 0 && $field->getValue('usf_required_input') == 1)
             || (strlen($_POST[$postId]) === 0 && $field->getValue('usf_name_intern') === 'EMAIL' && $getNewUser === 2)) {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($field->getValue('usf_name'))));
                 // => EXIT
@@ -178,9 +178,9 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             }
         } else {
             // Checkboxes do not pass a value at 0, so set it here if it is not a required field.
-            if ($field->getValue('usf_type') === 'CHECKBOX' && $field->getValue('usf_mandatory') == 0) {
+            if ($field->getValue('usf_type') === 'CHECKBOX' && $field->getValue('usf_required_input') == 0) {
                 $user->setValue($field->getValue('usf_name_intern'), '0');
-            } elseif ($field->getValue('usf_mandatory') == 1) {
+            } elseif ($field->getValue('usf_required_input') == 1) {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($field->getValue('usf_name'))));
                 // => EXIT
             }

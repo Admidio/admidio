@@ -1199,7 +1199,7 @@
   <string name="SYS_REMOVE_USER_DESC">Wenn du #VAR1_BOLD# auswählst, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</string>
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REPLACE">Ersetzen</string>
-  <string name="SYS_REQUIRED_INPUT">Notwendige Eingabe</string>
+  <string name="SYS_REQUIRED_INPUT">Erforderliche Eingabe</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Du bist bereits im System angemeldet. Das Anfordern eines neuen Passworts ist nicht notwendig.</string>
   <string name="SYS_RESTRICTIONS">Einschränkungen</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen einsehen</string>

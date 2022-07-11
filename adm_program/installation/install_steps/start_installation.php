@@ -150,7 +150,7 @@ $db->queryPrepared($sql);
 
 // create profile fields of category basic data
 $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
-               (usf_cat_id, usf_uuid, usf_type, usf_name_intern, usf_name, usf_description, usf_description_inline, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_registration, usf_sequence, usf_usr_id_create, usf_timestamp_create)
+               (usf_cat_id, usf_uuid, usf_type, usf_name_intern, usf_name, usf_description, usf_description_inline, usf_value_list, usf_system, usf_disabled, usf_required_input, usf_registration, usf_sequence, usf_usr_id_create, usf_timestamp_create)
         VALUES ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'LAST_NAME\',  \'SYS_LASTNAME\',  NULL, 0, NULL, 1, 1, 1, 1, 1,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'FIRST_NAME\', \'SYS_FIRSTNAME\', NULL, 0, NULL, 1, 1, 1, 1, 2,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'STREET\',     \'SYS_STREET\',    NULL, 0, NULL, 0, 0, 0, 0, 3,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')

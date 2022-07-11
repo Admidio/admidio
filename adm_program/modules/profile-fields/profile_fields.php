@@ -184,7 +184,7 @@ while ($row = $statement->fetch()) {
         $hidden,
         $disable,
         $registration,
-        $gL10n->get($mandatoryFieldValues[$userField->getValue('usf_mandatory')]),
+        $gL10n->get($mandatoryFieldValues[$userField->getValue('usf_required_input')]),
         $userField->getValue('usf_default_value'),
         $userField->getValue('usf_regex'),
         $usfSystem
