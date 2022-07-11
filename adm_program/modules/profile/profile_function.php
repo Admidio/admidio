@@ -18,7 +18,6 @@
  *           7 - save membership data
  * user_uuid   : UUID of the user to be edited
  * member_uuid : UUID of role membership that should be edited
- * role_uuid   : UUID of role from which the user vcards should be exported
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -27,7 +26,6 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
-$getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
 $getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid', 'string');
 $getMode       = admFuncVariableIsValid($_GET, 'mode', 'int');
 
