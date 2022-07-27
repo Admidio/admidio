@@ -151,7 +151,7 @@ while ($row = $statement->fetch()) {
                            'DECIMAL'      => $gL10n->get('SYS_DECIMAL_NUMBER'));
     $mandatoryFieldValues = array(0 => 'SYS_NO',
                                   1 => 'SYS_YES',
-                                  2 => 'SYS_ONLY_AT_REGISTRATION',
+                                  2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE',
                                   3 => 'SYS_NOT_AT_REGISTRATION');
 
     $usfSystem = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)).'">'.

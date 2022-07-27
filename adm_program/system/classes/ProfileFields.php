@@ -459,6 +459,20 @@ class ProfileFields
     }
 
     /**
+     * Checks if a profile field must have a value. This check is done against the configuration of that
+     * profile field. It is possible that the input is always required or only in a registration form or only in
+     * the own profile. Another case is always a required value except within a registration form.
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
+     * @param int $userId Optional the ID of the user for which the required profile field should be checked.
+     * @param bool $registration Set to **true** if the check should be done for a registration form. The default is **false**
+     * @return bool Returns true if the profile field has a required input.
+     */
+    public function hasRequiredInput(string $fieldNameIntern, int $userId = 0, bool $registration = false): bool
+    {
+        return $this->mProfileFields[$fieldNameIntern]->hasRequiredInput($userId, $registration);
+    }
+
+    /**
      * This method checks if the current user is allowed to edit this profile field of $fieldNameIntern
      * within the context of the user in this object.
      * !!! NOTE that this method ONLY checks if it could be possible to edit this field. There MUST be

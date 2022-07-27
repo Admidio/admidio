@@ -1099,7 +1099,7 @@
   <string name="SYS_ON">On</string>
   <string name="SYS_ONE_TIME">One time</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Online membership management</string>
-  <string name="SYS_ONLY_AT_REGISTRATION">Only at registration</string>
+  <string name="SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE">Only at registration and own profile</string>
   <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">This preference can only be set by the parent organization.</string>
   <string name="SYS_OPERATING_SYSTEM">Operating system</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Opposite relationship</string>

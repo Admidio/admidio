@@ -250,22 +250,8 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         && !$gCurrentUser->hasRightEditProfile($user, false) && $getNewUser === 0) {
             // disable field if this is configured in profile field configuration
             $fieldProperty = HtmlForm::FIELD_DISABLED;
-        } elseif ((int) $gProfileFields->getProperty($usfNameIntern, 'usf_required_input') > TableUserField::USER_FIELD_MANDATORY_NO) {
-            if($getNewUser === 2 || $getNewUser === 3) {
-                // registration
-                if((int) $gProfileFields->getProperty($usfNameIntern, 'usf_required_input') === TableUserField::USER_FIELD_MANDATORY_YES
-                    || (int) $gProfileFields->getProperty($usfNameIntern, 'usf_required_input') === TableUserField::USER_FIELD_MANDATORY_ONLY_REGISTRATION) {
-                    // set mandatory field
-                    $fieldProperty = HtmlForm::FIELD_REQUIRED;
-                }
-            } else {
-                // no registration
-                if((int) $gProfileFields->getProperty($usfNameIntern, 'usf_required_input') === TableUserField::USER_FIELD_MANDATORY_YES
-                    || (int) $gProfileFields->getProperty($usfNameIntern, 'usf_required_input') === TableUserField::USER_FIELD_MANDATORY_NOT_REGISTRATION) {
-                    // set mandatory field
-                    $fieldProperty = HtmlForm::FIELD_REQUIRED;
-                }
-            }
+        } elseif ($gProfileFields->hasRequiredInput($usfNameIntern, $userId, (($getNewUser === 2 || $getNewUser === 3) ? true : false))) {
+            $fieldProperty = HtmlForm::FIELD_REQUIRED;
         }
 
         if (strlen($gProfileFields->getProperty($usfNameIntern, 'usf_description')) > 0) {

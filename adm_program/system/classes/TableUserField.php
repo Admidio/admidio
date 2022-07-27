@@ -250,6 +250,33 @@ class TableUserField extends TableAccess
     }
 
     /**
+     * Checks if a profile field must have a value. This check is done against the configuration of that
+     * profile field. It is possible that the input is always required or only in a registration form or only in
+     * the own profile. Another case is always a required value except within a registration form.
+     * @param int $userId Optional the ID of the user for which the required profile field should be checked.
+     * @param bool $registration Set to **true** if the check should be done for a registration form. The default is **false**
+     * @return bool Returns true if the profile field has a required input.
+     */
+    public function hasRequiredInput(int $userId = 0, bool $registration = false): bool
+    {
+        global $gCurrentUserId;
+
+        $requiredInput = $this->getValue('usf_required_input');
+
+        if($requiredInput === TableUserField::USER_FIELD_MANDATORY_YES) {
+            return true;
+        } elseif ($requiredInput === TableUserField::USER_FIELD_MANDATORY_ONLY_REGISTRATION) {
+            if($userId === $gCurrentUserId || $registration) {
+                return true;
+            }
+        } elseif ($requiredInput === TableUserField::USER_FIELD_MANDATORY_NOT_REGISTRATION && !$registration) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * This method checks if the current user is allowed to view this profile field. Therefore
      * the visibility of the category is checked. This method will not check the context if
      * the user is allowed to view the field because he has the right to edit the profile.
