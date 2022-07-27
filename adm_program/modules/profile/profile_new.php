@@ -304,18 +304,8 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'RADIO_BUTTON') {
             $showDummyRadioButton = false;
 
-            if($getNewUser === 2 || $getNewUser === 3) {
-                // registration
-                if((int) $gProfileFields->getProperty($usfNameIntern, 'usf_required_input') === TableUserField::USER_FIELD_MANDATORY_NO
-                    || (int) $gProfileFields->getProperty($usfNameIntern, 'usf_required_input') === TableUserField::USER_FIELD_MANDATORY_NOT_REGISTRATION) {
-                    $showDummyRadioButton = true;
-                }
-            } else {
-                // no registration
-                if((int) $gProfileFields->getProperty($usfNameIntern, 'usf_required_input') === TableUserField::USER_FIELD_MANDATORY_NO
-                    || (int) $gProfileFields->getProperty($usfNameIntern, 'usf_required_input') === TableUserField::USER_FIELD_MANDATORY_ONLY_REGISTRATION) {
-                    $showDummyRadioButton = true;
-                }
+            if(!$gProfileFields->hasRequiredInput($usfNameIntern, $userId, (($getNewUser === 2 || $getNewUser === 3) ? true : false))) {
+                $showDummyRadioButton = true;
             }
 
             $form->addRadioButton(
