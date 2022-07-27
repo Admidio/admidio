@@ -21,10 +21,10 @@ class TableUserField extends TableAccess
     public const MOVE_UP   = 'UP';
     public const MOVE_DOWN = 'DOWN';
 
-    public const USER_FIELD_MANDATORY_NO = 0;
-    public const USER_FIELD_MANDATORY_YES = 1;
-    public const USER_FIELD_MANDATORY_ONLY_REGISTRATION = 2;
-    public const USER_FIELD_MANDATORY_NOT_REGISTRATION = 3;
+    const USER_FIELD_REQUIRED_INPUT_NO = 0;
+    const USER_FIELD_REQUIRED_INPUT_YES = 1;
+    const USER_FIELD_REQUIRED_INPUT_ONLY_REGISTRATION = 2;
+    const USER_FIELD_REQUIRED_INPUT_NOT_REGISTRATION = 3;
 
     /**
      * @var bool|null Flag if the current user could view this user
@@ -263,13 +263,13 @@ class TableUserField extends TableAccess
 
         $requiredInput = $this->getValue('usf_required_input');
 
-        if($requiredInput === TableUserField::USER_FIELD_MANDATORY_YES) {
+        if($requiredInput === TableUserField::USER_FIELD_REQUIRED_INPUT_YES) {
             return true;
-        } elseif ($requiredInput === TableUserField::USER_FIELD_MANDATORY_ONLY_REGISTRATION) {
+        } elseif ($requiredInput === TableUserField::USER_FIELD_REQUIRED_INPUT_ONLY_REGISTRATION) {
             if($userId === $gCurrentUserId || $registration) {
                 return true;
             }
-        } elseif ($requiredInput === TableUserField::USER_FIELD_MANDATORY_NOT_REGISTRATION && !$registration) {
+        } elseif ($requiredInput === TableUserField::USER_FIELD_REQUIRED_INPUT_NOT_REGISTRATION && !$registration) {
             return true;
         }
 
