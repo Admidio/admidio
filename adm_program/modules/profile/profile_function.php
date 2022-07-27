@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * verschiedene Funktionen fuer das Profil
+ * various functions for the profile handling
  *
  * @copyright 2004-2022 The Admidio Team
  * @see https://www.admidio.org/
@@ -16,10 +16,8 @@
  *           5 - reload former role memberships
  *           6 - reload future role memberships
  *           7 - save membership data
- *           8 - Export vCard of role
  * user_uuid   : UUID of the user to be edited
  * member_uuid : UUID of role membership that should be edited
- * role_uuid   : UUID of role from which the user vcards should be exported
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -28,7 +26,6 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
-$getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
 $getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid', 'string');
 $getMode       = admFuncVariableIsValid($_GET, 'mode', 'int');
 
@@ -170,38 +167,4 @@ if ($getMode === 1) {
     $user->editRoleMembership($member->getValue('mem_id'), $formatedStartDate, $formatedEndDate);
 
     echo 'success';
-} elseif ($getMode === 8) {
-    // Export every member of a role into one vCard file
-
-    $role = new TableRoles($gDb);
-    $role->readDataByUuid($getRoleUuid);
-
-    if ($gCurrentUser->hasRightViewRole($role->getValue('rol_id'))) {
-        // create filename of organization name and role name
-        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.vcf';
-
-        $filename = FileSystemUtils::getSanitizedPathEntry($filename);
-
-        header('Content-Type: text/x-vcard; charset=iso-8859-1');
-        header('Content-Disposition: attachment; filename="'.$filename.'"');
-
-        // necessary for IE, because without it the download with SSL has problems
-        header('Cache-Control: private');
-        header('Pragma: public');
-
-        // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-        $sql = 'SELECT mem_usr_id
-                  FROM '.TBL_MEMBERS.'
-                 WHERE mem_rol_id = ? -- $role->getValue(\'rol_id\')
-                   AND mem_begin <= ? -- DATE_NOW
-                   AND mem_end    > ? -- DATE_NOW';
-        $pdoStatement = $gDb->queryPrepared($sql, array($role->getValue('rol_id'), DATE_NOW, DATE_NOW));
-
-        while ($memberUserId = $pdoStatement->fetchColumn()) {
-            // create user object
-            $user = new User($gDb, $gProfileFields, (int) $memberUserId);
-            // create vcard and check if user is allowed to edit profile, so he can see more data
-            echo $user->getVCard();
-        }
-    }
 }

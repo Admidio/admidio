@@ -5,7 +5,7 @@
     window.addEventListener("load", function() {
         window.cookieconsent.initialise({
             "cookie": {
-                "name": "'{$cookiePrefix}_cookieconsent_status",
+                "name": "{$cookiePrefix}_cookieconsent_status",
                 "domain": "{$cookieDomain}",
                 "path": "{$cookiePath}"
             },
