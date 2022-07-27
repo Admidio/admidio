@@ -142,10 +142,9 @@ foreach ($gProfileFields->getProfileFields() as $field) {
        || ($field->getValue('usf_disabled') == 1 && $gCurrentUser->hasRightEditProfile($user, false))
        || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0))) {
         if (isset($_POST[$postId])) {
-            // Mandatory fields must be filled
-            // Email must always be filled at registration !!!
-            if ((strlen($_POST[$postId]) === 0 && $field->getValue('usf_mandatory') == 1)
-            || (strlen($_POST[$postId]) === 0 && $field->getValue('usf_name_intern') === 'EMAIL' && $getNewUser === 2)) {
+            // required fields must be filled
+            if(strlen($_POST[$postId]) === 0
+                && $field->hasRequiredInput($user->getValue('usr_id'), (($getNewUser === 2 || $getNewUser === 3) ? true : false))) {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($field->getValue('usf_name'))));
                 // => EXIT
             }
@@ -178,9 +177,9 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             }
         } else {
             // Checkboxes do not pass a value at 0, so set it here if it is not a required field.
-            if ($field->getValue('usf_type') === 'CHECKBOX' && $field->getValue('usf_mandatory') == 0) {
+            if ($field->getValue('usf_type') === 'CHECKBOX' && $field->getValue('usf_required_input') == 0) {
                 $user->setValue($field->getValue('usf_name_intern'), '0');
-            } elseif ($field->getValue('usf_mandatory') == 1) {
+            } elseif ($field->getValue('usf_required_input') == 1) {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($field->getValue('usf_name'))));
                 // => EXIT
             }

@@ -84,8 +84,8 @@ $columnHeading = array(
     $gL10n->get('ORG_DATATYPE'),
     '<i class="fas fa-eye" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'"></i>',
     '<i class="fas fa-key" data-toggle="tooltip" data-html="true" title="'.$gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))).'"></i>',
-    '<i class="fas fa-asterisk" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'"></i>',
     '<i class="fas fa-address-card" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REGISTRATION').'"></i>',
+    $gL10n->get('SYS_REQUIRED_INPUT'),
     $gL10n->get('SYS_DEFAULT_VALUE'),
     $gL10n->get('SYS_REGULAR_EXPRESSION'),
     '&nbsp;'
@@ -98,7 +98,6 @@ $userField  = new TableUserField($gDb);
 // Initialize variables
 $hidden      = '';
 $disable     = '';
-$mandatory   = '';
 $usfSystem   = '';
 
 while ($row = $statement->fetch()) {
@@ -133,12 +132,6 @@ while ($row = $statement->fetch()) {
         $disable = '<i class="fas fa-key admidio-opacity-reduced" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'"></i>';
     }
 
-    if ($userField->getValue('usf_mandatory') == 1) {
-        $mandatory = '<i class="fas fa-asterisk" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'"></i>';
-    } else {
-        $mandatory = '<i class="fas fa-asterisk admidio-opacity-reduced" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'"></i>';
-    }
-
     if ($userField->getValue('usf_registration') == 1) {
         $registration = '<i class="fas fa-address-card" data-toggle="tooltip" title="'.$gL10n->get('ORG_FIELD_REGISTRATION').'"></i>';
     } else {
@@ -156,6 +149,10 @@ while ($row = $statement->fetch()) {
                            'URL'          => $gL10n->get('SYS_URL'),
                            'NUMBER'       => $gL10n->get('SYS_NUMBER'),
                            'DECIMAL'      => $gL10n->get('SYS_DECIMAL_NUMBER'));
+    $mandatoryFieldValues = array(0 => 'SYS_NO',
+                                  1 => 'SYS_YES',
+                                  2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE',
+                                  3 => 'SYS_NOT_AT_REGISTRATION');
 
     $usfSystem = '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields/profile_fields_new.php', array('usf_uuid' => $usfUuid)).'">'.
                     '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
@@ -186,8 +183,8 @@ while ($row = $statement->fetch()) {
         $userFieldText[$userField->getValue('usf_type')],
         $hidden,
         $disable,
-        $mandatory,
         $registration,
+        $gL10n->get($mandatoryFieldValues[$userField->getValue('usf_required_input')]),
         $userField->getValue('usf_default_value'),
         $userField->getValue('usf_regex'),
         $usfSystem

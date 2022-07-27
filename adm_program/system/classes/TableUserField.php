@@ -21,6 +21,11 @@ class TableUserField extends TableAccess
     public const MOVE_UP   = 'UP';
     public const MOVE_DOWN = 'DOWN';
 
+    const USER_FIELD_REQUIRED_INPUT_NO = 0;
+    const USER_FIELD_REQUIRED_INPUT_YES = 1;
+    const USER_FIELD_REQUIRED_INPUT_ONLY_REGISTRATION = 2;
+    const USER_FIELD_REQUIRED_INPUT_NOT_REGISTRATION = 3;
+
     /**
      * @var bool|null Flag if the current user could view this user
      */
@@ -242,6 +247,33 @@ class TableUserField extends TableAccess
         }
 
         return $value;
+    }
+
+    /**
+     * Checks if a profile field must have a value. This check is done against the configuration of that
+     * profile field. It is possible that the input is always required or only in a registration form or only in
+     * the own profile. Another case is always a required value except within a registration form.
+     * @param int $userId Optional the ID of the user for which the required profile field should be checked.
+     * @param bool $registration Set to **true** if the check should be done for a registration form. The default is **false**
+     * @return bool Returns true if the profile field has a required input.
+     */
+    public function hasRequiredInput(int $userId = 0, bool $registration = false): bool
+    {
+        global $gCurrentUserId;
+
+        $requiredInput = $this->getValue('usf_required_input');
+
+        if($requiredInput === TableUserField::USER_FIELD_REQUIRED_INPUT_YES) {
+            return true;
+        } elseif ($requiredInput === TableUserField::USER_FIELD_REQUIRED_INPUT_ONLY_REGISTRATION) {
+            if($userId === $gCurrentUserId || $registration) {
+                return true;
+            }
+        } elseif ($requiredInput === TableUserField::USER_FIELD_REQUIRED_INPUT_NOT_REGISTRATION && !$registration) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

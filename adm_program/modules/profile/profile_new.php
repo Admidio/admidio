@@ -250,8 +250,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         && !$gCurrentUser->hasRightEditProfile($user, false) && $getNewUser === 0) {
             // disable field if this is configured in profile field configuration
             $fieldProperty = HtmlForm::FIELD_DISABLED;
-        } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_mandatory') == 1) {
-            // set mandatory field
+        } elseif ($gProfileFields->hasRequiredInput($usfNameIntern, $userId, (($getNewUser === 2 || $getNewUser === 3) ? true : false))) {
             $fieldProperty = HtmlForm::FIELD_REQUIRED;
         }
 
@@ -304,7 +303,8 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             );
         } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'RADIO_BUTTON') {
             $showDummyRadioButton = false;
-            if ($gProfileFields->getProperty($usfNameIntern, 'usf_mandatory') == 0) {
+
+            if(!$gProfileFields->hasRequiredInput($usfNameIntern, $userId, (($getNewUser === 2 || $getNewUser === 3) ? true : false))) {
                 $showDummyRadioButton = true;
             }
 

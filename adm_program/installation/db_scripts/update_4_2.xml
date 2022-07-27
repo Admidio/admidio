@@ -18,5 +18,10 @@
     <step id="140">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_system_mails'</step>
     <step id="150">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_default_value varchar(100)</step>
     <step id="160">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_regex varchar(100)</step>
+    <step id="170">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_required_input smallint NOT NULL DEFAULT 0</step>
+    <step id="180">UPDATE %PREFIX%_user_fields SET usf_required_input = usf_mandatory</step>
+    <step id="190">ALTER TABLE %PREFIX%_user_fields DROP COLUMN usf_mandatory</step>
+    <step id="200">UPDATE %PREFIX%_user_fields SET usf_required_input = 2 WHERE usf_name_intern = 'EMAIL' AND usf_required_input = 0</step>
+    <step id="210">UPDATE %PREFIX%_user_fields SET usf_required_input = 2 WHERE usf_name_intern = 'DATA_PROTECTION_PERMISSION'</step>
     <step>stop</step>
 </update>

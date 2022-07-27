@@ -152,7 +152,7 @@ $userFieldText = array(
 asort($userFieldText);
 
 if ($userField->getValue('usf_system') == 1) {
-    // bei Systemfeldern darf der Datentyp nicht mehr veraendert werden
+    // for system fields, the data type may no longer be changed
     $form->addInput(
         'usf_type',
         $gL10n->get('ORG_DATATYPE'),
@@ -160,7 +160,7 @@ if ($userField->getValue('usf_system') == 1) {
         array('maxLength' => 30, 'property' => HtmlForm::FIELD_DISABLED)
     );
 } else {
-    // fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
+    // if it's not a system field the user must select the data type
     $form->addSelectBox(
         'usf_type',
         $gL10n->get('ORG_DATATYPE'),
@@ -219,21 +219,6 @@ $form->addCheckbox(
     array('helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'fa-key')
 );
 
-if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
-    $form->addCheckbox(
-        'usf_mandatory',
-        $gL10n->get('ORG_FIELD_REQUIRED'),
-        (bool) $userField->getValue('usf_mandatory'),
-        array('property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'fa-asterisk')
-    );
-} else {
-    $form->addCheckbox(
-        'usf_mandatory',
-        $gL10n->get('ORG_FIELD_REQUIRED'),
-        (bool) $userField->getValue('usf_mandatory'),
-        array('helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'fa-asterisk')
-    );
-}
 if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNameIntern === 'EMAIL') {
     $form->addCheckbox(
         'usf_registration',
@@ -247,6 +232,22 @@ if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNam
         $gL10n->get('ORG_FIELD_REGISTRATION'),
         (bool) $userField->getValue('usf_registration'),
         array('icon' => 'fa-address-card')
+    );
+}
+$mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES', 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE', 3 => 'SYS_NOT_AT_REGISTRATION');
+if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
+    $form->addInput(
+        'usf_required_input',
+        $gL10n->get('SYS_REQUIRED_INPUT'),
+        $gL10n->get($mandatoryFieldValues[$userField->getValue('usf_required_input')]),
+        array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+    );
+} else {
+    $form->addSelectBox(
+        'usf_required_input',
+        $gL10n->get('SYS_REQUIRED_INPUT'),
+        $mandatoryFieldValues,
+        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_required_input'))
     );
 }
 $form->closeGroupBox();
