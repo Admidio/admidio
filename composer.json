@@ -1,7 +1,6 @@
 {
     "name": "admidio/admidio",
     "description": "Admidio is a free open source user management system for websites of organizations and groups.",
-    "version": "4.1.3",
     "type": "project",
     "keywords": ["admidio", "management", "organizations"],
     "license": "GPL-2.0",
