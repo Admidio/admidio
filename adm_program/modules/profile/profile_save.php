@@ -160,6 +160,10 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                         if (strrpos($_POST[$postId], '/posts') > 0) {
                             $_POST[$postId] = substr($_POST[$postId], 0, strrpos($_POST[$postId], '/posts'));
                         }
+                        // xing has the suffix /cv in the url
+                        if (strrpos($_POST[$postId], '/cv') > 0) {
+                            $_POST[$postId] = substr($_POST[$postId], 0, strrpos($_POST[$postId], '/cv'));
+                        }
 
                         $_POST[$postId] = substr($_POST[$postId], strrpos($_POST[$postId], '/') + 1);
                         if (strrpos($_POST[$postId], '?') > 0) {
