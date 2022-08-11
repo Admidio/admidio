@@ -944,6 +944,7 @@
   <string name="SYS_LANGUAGE">Sprache</string>
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Fehlt deine Sprache oder möchtest du weitere Texte übersetzen oder vorhandene Übersetzungen verbessern? Dann schau auf #VAR1#Wiki-Seite von Admidio#VAR2# nach, wie du bei der Übersetzung mitarbeiten kannst.</string>
   <string name="SYS_LAST_EDITED_BY">Zuletzt bearbeitet von #VAR1# am #VAR2#</string>
+  <string name="SYS_LAST_LOGIN_ON">Letzte Anmeldung am #VAR1# um #VAR2# Uhr</string>
   <string name="SYS_LASTNAME">Nachname</string>
   <string name="SYS_LATER">Später</string>
   <string name="SYS_LAYOUT">Layout</string>

@@ -288,18 +288,22 @@ $page->addHtml('
                 $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
             }
 
-            // add loginname
+            // add login name
             if (strlen($user->getValue('usr_login_name')) > 0) {
+                $userName = '';
+
                 if ($userId !== $gCurrentUserId && $gSettingsManager->getBool('enable_pm_module')) {
-                    $form->addStaticControl(
-                        'username',
-                        $gL10n->get('SYS_USERNAME'),
-                        '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)).'" title="' . $gL10n->get('SYS_WRITE_PM') . '">'.
-                            '<i class="fas fa-comment-alt"></i>'.$user->getValue('usr_login_name').'</a>'
-                    );
+                    $userName .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)).'" title="' . $gL10n->get('SYS_WRITE_PM') . '">'.
+                            '<i class="fas fa-comment-alt"></i>'.$user->getValue('usr_login_name').'</a>';
                 } else {
-                    $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'));
+                    $userName .= $user->getValue('usr_login_name');
                 }
+
+                if($userId === $gCurrentUserId || $gCurrentUser->isAdministrator()) {
+                    $userName .= HtmlForm::getHelpTextIcon($gL10n->get('SYS_LAST_LOGIN_ON', array($gCurrentUser->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $gCurrentUser->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));
+                }
+
+                $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $userName);
             } else {
                 $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $gL10n->get('SYS_NOT_REGISTERED'));
             }
