@@ -585,12 +585,12 @@ class Email extends PHPMailer
 
         // replace parameters in email template
         $replaces = array(
-            '#receiver_first_name#'       => $firstName,
-            '#receiver_firstname#'       => $firstName,
-            '#receiver_surname#'  => $surname,
-            '#receiver_lastname#'  => $surname,
-            '#receiver_email#' => $email,
-            '#receiver_name#'  => $name
+            '#receiver_first_name#' => $firstName,
+            '#receiver_firstname#'  => $firstName,
+            '#receiver_surname#'    => $surname,
+            '#receiver_lastname#'   => $surname,
+            '#receiver_email#'      => $email,
+            '#receiver_name#'       => $name
         );
         return StringUtils::strMultiReplace($text, $replaces);
     }
