@@ -112,7 +112,7 @@
                     <i class="fas fa-bars fa-fw"></i>
                 </button>
                 </div>
-                {$menuSidebar}
+                {$menuSidebar->getHtml()}
             </div>
 
             <div class="admidio-content-col col-12 col-md-9 col-xl-10">
@@ -136,7 +136,7 @@
                 <div id="content" class="admidio-content" role="main">
                     <div class="admidio-content-header">
                         <h1 class="admidio-module-headline">{$headline}</h1>
-                        {$menuFunctions}
+                        {$menuFunctions->getHtml()}
                     </div>
 
                     {* The main content of the page that will be generated through the Admidio scripts *}

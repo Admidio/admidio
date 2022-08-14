@@ -143,6 +143,15 @@ class MainMenu
     }
 
     /**
+     * Get all MenuNodes.
+     * @return string Html code of the menu.
+     */
+    public function getAllNodes()
+    {
+        return $this->menuNodes;
+    }
+
+    /**
      * Load the menu from the database table adm_menu
      */
     public function loadFromDatabase()
