@@ -513,19 +513,6 @@ $formEmailDispatch->addInput(
     $formValues['mail_sendmail_name'],
     array('maxLength' => 50, 'helpTextIdInline' => 'SYS_SENDER_NAME_DESC')
 );
-$selectBoxEntries = array(0 => $gL10n->get('SYS_HIDDEN'), 1 => $gL10n->get('SYS_SENDER'), 2 => $gL10n->get('SYS_ADMINISTRATOR'));
-$formEmailDispatch->addSelectBox(
-    'mail_recipients_with_roles',
-    $gL10n->get('SYS_MULTIPLE_RECIPIENTS'),
-    $selectBoxEntries,
-    array('defaultValue' => $formValues['mail_recipients_with_roles'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MULTIPLE_RECIPIENTS_DESC')
-);
-$formEmailDispatch->addCheckbox(
-    'mail_into_to',
-    $gL10n->get('SYS_INTO_TO'),
-    (bool) $formValues['mail_into_to'],
-    array('helpTextIdInline' => 'SYS_INTO_TO_DESC')
-);
 $formEmailDispatch->addInput(
     'mail_number_recipients',
     $gL10n->get('SYS_NUMBER_RECIPIENTS'),

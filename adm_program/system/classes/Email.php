@@ -662,7 +662,7 @@ class Email extends PHPMailer
      */
     public function sendEmail()
     {
-        global $gSettingsManager, $gLogger, $gDebug, $gValidLogin, $gCurrentUser;
+        global $gSettingsManager, $gLogger, $gDebug;
 
         try {
             // if there is a limit of email recipients than split the recipients into smaller packages
@@ -670,83 +670,25 @@ class Email extends PHPMailer
 
             foreach ($recipientsArrays as $recipientsArray) {
                 try {
-                    // if number of bcc recipients = 1 then send the mail directly to the user and not as bcc
-                    if ($this->countRecipients() === 1) {
-                        // remove all current recipients from mail
+                    // add all recipients as bcc to the mail
+                    foreach ($recipientsArray as $recipient) {
                         $this->clearAllRecipients();
-
-                        $this->addAddress($recipientsArray[0]['address'], $recipientsArray[0]['name']);
+                        $this->addAddress($recipient['address'], $recipient['name']);
                         if ($gDebug) {
-                            $gLogger->notice('Email send as TO to ' . $recipientsArray[0]['name'] . ' (' . $recipientsArray[0]['address'] . ')');
+                            $gLogger->notice('Email send as TO to ' . $recipient['name'] . ' (' . $recipient['address'] . ')');
                         }
+
                         // add body to the email
                         if ($this->emSendAsHTML) {
-                            $html = $this->setUserSpecificTemplateText($this->emHtmlText, $recipientsArray[0]['firstname'], $recipientsArray[0]['surname'], $recipientsArray[0]['address'], $recipientsArray[0]['name']);
+                            $html = $this->setUserSpecificTemplateText($this->emHtmlText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
                             $this->msgHTML($html);
                         } else {
-                            $txt = $this->setUserSpecificTemplateText($this->emText, $recipientsArray[0]['firstname'], $recipientsArray[0]['surname'], $recipientsArray[0]['address'], $recipientsArray[0]['name']);
+                            $txt = $this->setUserSpecificTemplateText($this->emText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
                             $this->Body = $txt;
                         }
                         
                         // now send mail
                         $this->send();
-                    } elseif ($gSettingsManager->getBool('mail_into_to')) {
-                    
-                        // add all recipients as bcc to the mail
-                        foreach ($recipientsArray as $recipientTO) {
-                            // remove all current recipients from mail
-                            $this->clearAllRecipients();
-
-                            $this->addAddress($recipientTO['address'], $recipientTO['name']);
-                            if ($gDebug) {
-                                $gLogger->notice('Email send as TO to ' . $recipientTO['name'] . ' (' . $recipientTO['address'] . ')');
-                            }
-
-                            // add body to the email
-                            if ($this->emSendAsHTML) {
-                                $html = $this->setUserSpecificTemplateText($this->emHtmlText, $recipientTO['firstname'], $recipientTO['surname'], $recipientTO['address'], $recipientTO['name']);
-                                $this->msgHTML($html);
-                            } else {
-                                $txt = $this->setUserSpecificTemplateText($this->emText, $recipientTO['firstname'], $recipientTO['surname'], $recipientTO['address'], $recipientTO['name']);
-                                $this->Body = $txt;
-                            }
-                            
-                            // now send mail
-                            $this->send();
-                        }
-                    } else {
-                        // normally we need no To-address and set "undisclosed recipients", but if
-                        // that won't work than the following address will be set
-                        if ($gValidLogin && (int) $gSettingsManager->get('mail_recipients_with_roles') === 1) {
-                            // fill recipient with sender address to prevent problems with provider
-                            $this->addAddress($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'));
-                        } elseif ((int) $gSettingsManager->get('mail_recipients_with_roles') === 2
-                        || (!$gValidLogin && (int) $gSettingsManager->get('mail_recipients_with_roles') === 1)) {
-                            // fill recipient with administrators address to prevent problems with provider
-                            $this->addAddress($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
-                        }
-
-                        // add all recipients as bcc to the mail
-                        foreach ($recipientsArray as $recipientBCC) {
-                            // remove only all BCC because to-address could be explicit set if undisclosed recipients won't work
-                            $this->clearBCCs();
-                            $this->addBCC($recipientBCC['address'], $recipientBCC['name']);
-                            if ($gDebug) {
-                                $gLogger->notice('Email send as BCC to ' . $recipientBCC['name'] . ' (' . $recipientBCC['address'] . ')');
-                            }
-
-                            // add body to the email
-                            if ($this->emSendAsHTML) {
-                                $html = $this->setUserSpecificTemplateText($this->emHtmlText, $recipientBCC['firstname'], $recipientBCC['surname'], $recipientBCC['address'], $recipientBCC['name']);
-                                $this->msgHTML($html);
-                            } else {
-                                $txt = $this->setUserSpecificTemplateText($this->emText, $recipientBCC['firstname'], $recipientBCC['surname'], $recipientBCC['address'], $recipientBCC['name']);
-                                $this->Body = $txt;
-                            }
-                            
-                            // now send mail
-                            $this->send();
-                        }
                     }
                 } catch (Exception $e) {
                     return $e->errorMessage();
