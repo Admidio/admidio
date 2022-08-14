@@ -148,6 +148,10 @@ class MainMenu
      */
     public function getAllNodes()
     {
+        if (!$this->menuLoaded) {
+            $this->loadFromDatabase();
+        }
+        
         return $this->menuNodes;
     }
 
