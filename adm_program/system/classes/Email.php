@@ -73,6 +73,9 @@ class Email extends PHPMailer
     public const EMAIL_ONLY_ACTIVE_MEMBERS = 1;
     public const EMAIL_ONLY_FORMER_MEMBERS = 2;
 
+    public const SENDINGMODE_BULK = 1;
+    public const SENDINGMODE_SINGLE = 1;
+
     /**
      * @var string Plain text of email
      */
@@ -101,6 +104,10 @@ class Email extends PHPMailer
      * @var bool
      */
     private $emSendAsHTML = false;
+    /**
+    * @var int The sending mode from the settings: 0 = BULK, 1 = SINGLE
+    */
+    private $sendingMode = Email::SENDINGMODE_BULK;
     /**
      * @var array<int,array<string,string>>
      */
@@ -139,6 +146,7 @@ class Email extends PHPMailer
             $this->isMail();
         }
 
+        $this->sendingMode = $gSettingsManager->getInt('mail_sending_mode');
         // set language for error reporting
         $this->setLanguage($gL10n->getLanguageIsoCode());
         $this->CharSet = $gSettingsManager->getString('mail_character_encoding');
@@ -609,52 +617,6 @@ class Email extends PHPMailer
     }
 
     /**
-     * Sends a copy of the mail back to the sender. If the flag emListRecipients it set than all
-     * recipients will be listed in the mail.
-     * @throws \PHPMailer\PHPMailer\Exception
-     */
-    private function sendCopyMail()
-    {
-        global $gL10n;
-
-        // remove all recipients
-        $this->clearAllRecipients();
-
-        $this->Subject = $gL10n->get('SYS_CARBON_COPY') . ': ' . $this->Subject;
-
-        // add a separate header with info of the copy mail
-        if ($this->emSendAsHTML) {
-            $copyHeader = $gL10n->get('SYS_COPY_OF_YOUR_EMAIL') . ':' . static::$LE . '<hr style="border: 1px solid;" />' .
-                static::$LE . static::$LE;
-        } else {
-            $copyHeader = $gL10n->get('SYS_COPY_OF_YOUR_EMAIL') . ':' . static::$LE .
-                '*****************************************************************************************************************************' .
-                static::$LE . static::$LE;
-        }
-
-        // if the flag emListRecipients is set than list all recipients of the mail
-        if ($this->emListRecipients) {
-            $copyHeader = $gL10n->get('SYS_MESSAGE_WENT_TO').':' . static::$LE . static::$LE .
-                implode(static::$LE, $this->emRecipientsNames) . static::$LE . static::$LE . $copyHeader;
-        }
-
-        $this->emText = $copyHeader . $this->emText;
-        $this->emHtmlText = nl2br($copyHeader) . $this->emHtmlText;
-
-        // add the text of the message
-        if ($this->emSendAsHTML) {
-            $this->msgHTML($this->emHtmlText);
-        } else {
-            $this->Body = $this->emText;
-        }
-
-        // now set the sender of the original mail as the recipients of the copy mail
-        $this->addAddress($this->emSender['address'], $this->emSender['name']);
-
-        $this->send();
-    }
-
-    /**
      * Method will send the email to all recipients. Therefore, the method will evaluate how to send the email.
      * If it's necessary all recipients will be added to BCC and also smaller packages of recipients will be
      * created. So maybe several emails will be send. Also a copy to the sender will be send if the preferences are set.
@@ -662,38 +624,87 @@ class Email extends PHPMailer
      */
     public function sendEmail()
     {
-        global $gSettingsManager, $gLogger, $gDebug;
-
+        global $gSettingsManager, $gLogger, $gDebug, $gValidLogin, $gCurrentUser;
         try {
-            // if there is a limit of email recipients than split the recipients into smaller packages
-            $recipientsArrays = array_chunk($this->emRecipientsArray, $gSettingsManager->getInt('mail_number_recipients'));
-
-            foreach ($recipientsArrays as $recipientsArray) {
-                try {
-                    // add all recipients as bcc to the mail
-                    foreach ($recipientsArray as $recipient) {
-                        $this->clearAllRecipients();
-                        $this->addAddress($recipient['address'], $recipient['name']);
-                        if ($gDebug) {
-                            $gLogger->notice('Email send as TO to ' . $recipient['name'] . ' (' . $recipient['address'] . ')');
-                        }
-
-                        // add body to the email
-                        if ($this->emSendAsHTML) {
-                            $html = $this->setUserSpecificTemplateText($this->emHtmlText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
-                            $this->msgHTML($html);
-                        } else {
-                            $txt = $this->setUserSpecificTemplateText($this->emText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
-                            $this->Body = $txt;
-                        }
-                        
-                        // now send mail
-                        $this->send();
+            // If sending mode is "SINGLE" every E-mail is send on its own, so we do not need to check anything else here
+            if($this->sendingMode == Email::SENDINGMODE_SINGLE) {
+                foreach ($this->emRecipientsArray as $recipient) {
+                    $this->clearAllRecipients();
+                    $this->addAddress($recipient['address'], $recipient['name']);
+                    if ($gDebug) {
+                        $gLogger->notice('Email send as TO to ' . $recipient['name'] . ' (' . $recipient['address'] . ')');
                     }
-                } catch (Exception $e) {
-                    return $e->errorMessage();
-                } catch (\Exception $e) {
-                    return $e->getMessage();
+
+                    // add body to the email
+                    if ($this->emSendAsHTML) {
+                        $html = $this->setUserSpecificTemplateText($this->emHtmlText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
+                        $this->msgHTML($html);
+                    } else {
+                        $txt = $this->setUserSpecificTemplateText($this->emText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
+                        $this->Body = $txt;
+                    }
+                    
+                    // now send mail
+                    $this->send();
+                }
+            } else {
+                // add body to the email
+                if ($this->emSendAsHTML) {
+                    $this->msgHTML($this->emHtmlText);
+                } else {
+                    $this->Body = $this->emText;
+                }
+
+                // if there is a limit of email recipients than split the recipients into smaller packages
+                $recipientsArrays = array_chunk($this->emRecipientsArray, $gSettingsManager->getInt('mail_number_recipients'));
+
+                foreach ($recipientsArrays as $recipientsArray) {
+                    // if number of bcc recipients = 1 then send the mail directly to the user and not as bcc
+                    if ($this->countRecipients() === 1) {
+                        // remove all current recipients from mail
+                        $this->clearAllRecipients();
+
+                        $this->addAddress($recipientsArray[0]['address'], $recipientsArray[0]['name']);
+                        if ($gDebug) {
+                            $gLogger->notice('Email send as TO to ' . $recipientsArray[0]['name'] . ' (' . $recipientsArray[0]['address'] . ')');
+                        }
+                    } elseif ($gSettingsManager->getBool('mail_into_to')) {
+                        // remove all current recipients from mail
+                        $this->clearAllRecipients();
+
+                        // add all recipients as bcc to the mail
+                        foreach ($recipientsArray as $recipientTO) {
+                            $this->addAddress($recipientTO['address'], $recipientTO['name']);
+                            if ($gDebug) {
+                                $gLogger->notice('Email send as TO to ' . $recipientTO['name'] . ' (' . $recipientTO['address'] . ')');
+                            }
+                        }
+                    } else {
+                        // remove only all BCC because to-address could be explicit set if undisclosed recipients won't work
+                        $this->clearBCCs();
+
+                        // normally we need no To-address and set "undisclosed recipients", but if
+                        // that won't work than the following address will be set
+                        if ($gValidLogin && (int) $gSettingsManager->get('mail_recipients_with_roles') === 1) {
+                            // fill recipient with sender address to prevent problems with provider
+                            $this->addAddress($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'));
+                        } elseif ((int) $gSettingsManager->get('mail_recipients_with_roles') === 2
+                        || (!$gValidLogin && (int) $gSettingsManager->get('mail_recipients_with_roles') === 1)) {
+                            // fill recipient with administrators address to prevent problems with provider
+                            $this->addAddress($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
+                        }
+
+                        // add all recipients as bcc to the mail
+                        foreach ($recipientsArray as $recipientBCC) {
+                            $this->addBCC($recipientBCC['address'], $recipientBCC['name']);
+                            if ($gDebug) {
+                                $gLogger->notice('Email send as BCC to ' . $recipientBCC['name'] . ' (' . $recipientBCC['address'] . ')');
+                            }
+                        }
+                    }
+
+                    // now send mail
+                    $this->send();
                 }
             }
             // now send the email as a copy to the sender

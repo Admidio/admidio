@@ -513,6 +513,13 @@ $formEmailDispatch->addInput(
     $formValues['mail_sendmail_name'],
     array('maxLength' => 50, 'helpTextIdInline' => 'SYS_SENDER_NAME_DESC')
 );
+$selectBoxEntries = array(0 => $gL10n->get('SYS_MAIL_BULK'), 1 => $gL10n->get('SYS_MAIL_SINGLE'));
+$formEmailDispatch->addSelectBox(
+    'mail_sending_mode',
+    $gL10n->get('SYS_MAIL_SENDING_MODE'),
+    $selectBoxEntries,
+    array('defaultValue' => $formValues['mail_sending_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MAIL_SENDING_MODE_DESC')
+);
 $selectBoxEntries = array(0 => $gL10n->get('SYS_HIDDEN'), 1 => $gL10n->get('SYS_SENDER'), 2 => $gL10n->get('SYS_ADMINISTRATOR'));
 $formEmailDispatch->addSelectBox(
     'mail_recipients_with_roles',
