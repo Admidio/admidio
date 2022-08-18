@@ -143,6 +143,20 @@ class MainMenu
     }
 
     /**
+     * Get all MenuNodes of the current Menu.
+     * It also loads the menu from the adm_menu database table if it has not already been done.
+     * @return array Array with the main nodes and their entries
+     */
+    public function getAllNodes()
+    {
+        if (!$this->menuLoaded) {
+            $this->loadFromDatabase();
+        }
+        
+        return $this->menuNodes;
+    }
+
+    /**
      * Load the menu from the database table adm_menu
      */
     public function loadFromDatabase()
