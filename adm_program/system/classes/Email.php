@@ -620,6 +620,7 @@ class Email extends PHPMailer
      * Method will send the email to all recipients. Therefore, the method will evaluate how to send the email.
      * If it's necessary all recipients will be added to BCC and also smaller packages of recipients will be
      * created. So maybe several emails will be send. Also a copy to the sender will be send if the preferences are set.
+     * If the Sending Mode is set to "SINGLE" every e-mail will be send on its own, so there will be send out a lot e-mails.
      * @return true|string
      */
     public function sendEmail()
