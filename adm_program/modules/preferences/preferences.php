@@ -520,25 +520,31 @@ $formEmailDispatch->addSelectBox(
     $selectBoxEntries,
     array('defaultValue' => $formValues['mail_sending_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MAIL_SENDING_MODE_DESC')
 );
-$selectBoxEntries = array(0 => $gL10n->get('SYS_HIDDEN'), 1 => $gL10n->get('SYS_SENDER'), 2 => $gL10n->get('SYS_ADMINISTRATOR'));
-$formEmailDispatch->addSelectBox(
-    'mail_recipients_with_roles',
-    $gL10n->get('SYS_MULTIPLE_RECIPIENTS'),
-    $selectBoxEntries,
-    array('defaultValue' => $formValues['mail_recipients_with_roles'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MULTIPLE_RECIPIENTS_DESC')
-);
-$formEmailDispatch->addCheckbox(
-    'mail_into_to',
-    $gL10n->get('SYS_INTO_TO'),
-    (bool) $formValues['mail_into_to'],
-    array('helpTextIdInline' => 'SYS_INTO_TO_DESC')
-);
-$formEmailDispatch->addInput(
-    'mail_number_recipients',
-    $gL10n->get('SYS_NUMBER_RECIPIENTS'),
-    $formValues['mail_number_recipients'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_NUMBER_RECIPIENTS_DESC')
-);
+
+$sendingMode = $gSettingsManager->getInt('mail_sending_mode');
+
+// Only show this options if SendingMode = 0 / SYS_MAIL_BULK
+if($sendingMode == 0) {
+    $selectBoxEntries = array(0 => $gL10n->get('SYS_HIDDEN'), 1 => $gL10n->get('SYS_SENDER'), 2 => $gL10n->get('SYS_ADMINISTRATOR'));
+    $formEmailDispatch->addSelectBox(
+        'mail_recipients_with_roles',
+        $gL10n->get('SYS_MULTIPLE_RECIPIENTS'),
+        $selectBoxEntries,
+        array('defaultValue' => $formValues['mail_recipients_with_roles'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MULTIPLE_RECIPIENTS_DESC')
+    );
+    $formEmailDispatch->addCheckbox(
+        'mail_into_to',
+        $gL10n->get('SYS_INTO_TO'),
+        (bool) $formValues['mail_into_to'],
+        array('helpTextIdInline' => 'SYS_INTO_TO_DESC')
+    );
+    $formEmailDispatch->addInput(
+        'mail_number_recipients',
+        $gL10n->get('SYS_NUMBER_RECIPIENTS'),
+        $formValues['mail_number_recipients'],
+        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_NUMBER_RECIPIENTS_DESC')
+    );
+}
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
 $formEmailDispatch->addSelectBox(
     'mail_character_encoding',
