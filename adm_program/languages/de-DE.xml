@@ -1043,6 +1043,10 @@
   <string name="SYS_MOVE_VAR">#VAR1# verschieben</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger:innen</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Empfänger:innen enthalten alle Empfänger:innen im BCC-Feld. Damit ist sichergestellt, dass keiner die E-Mail-Adressen der anderen Empfänger:innen sieht. Das TO-Feld muss allerdings auch befüllt werden. Über diese Einstellung kann festgelegt werden, was im Empfängerfeld (TO) hinterlegt wird. Dies kein ein versteckter Wert \"Undisclosed Recipients\" sein, was aber bei manchen Providern zu Problemen führt. Alternativ kann das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administrator:innen-Adresse aus den Systembenachrichtigungen gefüllt werden. Hinweis: Alle Emails an mehrere Empfänger:innen werden dann auch an die E-Mail-Adresse im Empfängerfeld (TO) geschickt. (Voreinstellung: Absender:in)</string>
+  <string name="SYS_MAIL_SENDING_MODE">E-mail Versand</string>
+  <string name="SYS_MAIL_SENDING_MODE_DESC">Im Modus "Gebündelter versandt" werden E-Mails in einer oder mehrerer gebündelten E-Mails versendet. Dabei werden die Empfänger als BCC oder TO eingefügt. Im Modus "Einzelempfänger" wird jede E-Mail einzeln an den entsprechenden Empfänger im TO Feld versendet. In diesem Modus gibt es weitere Platzhalter die verwendet werden können:\nEmpfänger Vorname:\n#receiver_first_name# #receiver_firstname# #receiver_surname#\nEmpfänger Nachname:\n#receiver_lastname#\nEmpfänger E-Mail:\n#receiver_email#\nEmpfänger Name:\n#receiver_name#</string>
+  <string name="SYS_MAIL_BULK">Gebündelter versandt</string>
+  <string name="SYS_MAIL_SINGLE">Einzelempfänger</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">Die Rolle Administrator:in muss mindestens ein Mitglied haben!</string>
   <string name="SYS_MYLIST_CONDITION_DESC">Hier können Sie Bedingungen zu jedem Feld in Ihrer Liste hinterlegen. Damit werden die ermittelten Mitglieder der ausgewählten Rolle mit Ihren Bedingungen weiter eingeschränkt.</string>
   <string name="SYS_NAME">Name</string>
