@@ -263,7 +263,7 @@ class UserRegistration extends User
                 while ($row = $emailStatement->fetch()) {
                     // send mail that a new registration is available
                     $sysmail = new SystemMail($this->db);
-                    $sysmail->addRecipient($row['email'], $row['first_name']. ' '. $row['last_name']);
+                    $sysmail->addRecipient($row['email'], $row['first_name'], $row['last_name']);
                     $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $this); // TODO Exception handling
                 }
             }

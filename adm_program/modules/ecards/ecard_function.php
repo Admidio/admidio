@@ -156,7 +156,7 @@ class FunctionClass
      * @param string $photoServerPath der Pfad wo die Bilder in der Grußkarte am Server liegen
      * @return bool|string
      */
-    public function sendEcard($senderName, $senderEmail, $ecardHtmlData, $recipientName, $recipientEmail, $photoServerPath)
+    public function sendEcard($senderName, $senderEmail, $ecardHtmlData, $recipientFirstName, $recipientName, $recipientEmail, $photoServerPath)
     {
         global $gSettingsManager, $gLogger;
 
@@ -166,7 +166,7 @@ class FunctionClass
         $email = new Email();
         $email->setSender($senderEmail, $senderName);
         $email->setSubject($this->newMessageReceivedString);
-        $email->addRecipient($recipientEmail, $recipientName);
+        $email->addRecipient($recipientEmail, $recipientFirstName, $recipientName);
 
         // alle Bilder werden aus dem Template herausgeholt, damit diese als Anhang verschickt werden koennen
         if (preg_match_all('/(<img .*src=")(.*)(".*>)/Uim', $ecardHtmlData, $matchArray)) {
