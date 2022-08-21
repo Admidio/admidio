@@ -617,6 +617,52 @@ class Email extends PHPMailer
     }
 
     /**
+     * Sends a copy of the mail back to the sender. If the flag emListRecipients it set than all
+     * recipients will be listed in the mail.
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
+    private function sendCopyMail()
+    {
+        global $gL10n;
+
+        // remove all recipients
+        $this->clearAllRecipients();
+
+        $this->Subject = $gL10n->get('SYS_CARBON_COPY') . ': ' . $this->Subject;
+
+        // add a separate header with info of the copy mail
+        if ($this->emSendAsHTML) {
+            $copyHeader = $gL10n->get('SYS_COPY_OF_YOUR_EMAIL') . ':' . static::$LE . '<hr style="border: 1px solid;" />' .
+                static::$LE . static::$LE;
+        } else {
+            $copyHeader = $gL10n->get('SYS_COPY_OF_YOUR_EMAIL') . ':' . static::$LE .
+                '*****************************************************************************************************************************' .
+                static::$LE . static::$LE;
+        }
+
+        // if the flag emListRecipients is set than list all recipients of the mail
+        if ($this->emListRecipients) {
+            $copyHeader = $gL10n->get('SYS_MESSAGE_WENT_TO').':' . static::$LE . static::$LE .
+                implode(static::$LE, $this->emRecipientsNames) . static::$LE . static::$LE . $copyHeader;
+        }
+
+        $this->emText = $copyHeader . $this->emText;
+        $this->emHtmlText = nl2br($copyHeader) . $this->emHtmlText;
+
+        // add the text of the message
+        if ($this->emSendAsHTML) {
+            $this->msgHTML($this->emHtmlText);
+        } else {
+            $this->Body = $this->emText;
+        }
+
+        // now set the sender of the original mail as the recipients of the copy mail
+        $this->addAddress($this->emSender['address'], $this->emSender['name']);
+
+        $this->send();
+    }
+
+    /**
      * Method will send the email to all recipients. Therefore, the method will evaluate how to send the email.
      * If it's necessary all recipients will be added to BCC and also smaller packages of recipients will be
      * created. So maybe several emails will be send. Also a copy to the sender will be send if the preferences are set.
