@@ -157,22 +157,23 @@ class Email extends PHPMailer
      * in the recipients list. The decision if the recipient will be sent as TO or BCC will be done later
      * in the email send process.
      * @param string $address A valid email address to which the email should be sent.
-     * @param string $name    The name of the recipient that will be shown in the email header.
+     * @param string $firstName    The first name of the recipient that will be shown in the email header.
+     * @param string $lastName    The last name of the recipient that will be shown in the email header.
      * @param array $additionalFields    Additional fields to map in a Key Value like Array. Not used at all yet.
      * @return bool Returns **true** if the address was added to the recipients list.
      */
-    public function addRecipient($address, $firstName = '', $name = '', $additionalFields = array())
+    public function addRecipient($address, $firstName = '', $lastName = '', $additionalFields = array())
     {
         // Recipients must be Ascii-US formatted, so encode in MimeHeader
-        $asciiName = stripslashes($firstName  . ' ' . $name);
+        $asciiName = stripslashes($firstName  . ' ' . $lastName);
 
         // check if valid email address and if email not in the recipients array
         if (StringUtils::strValidCharacters($address, 'email')
         && array_search($address, array_column($this->emRecipientsArray, 'address')) === false) {
-            $recipient = array('name' => $asciiName, 'address' => $address, 'firstname' => $firstName, 'surname' => $name);
+            $recipient = array('name' => $asciiName, 'address' => $address, 'firstname' => $firstName, 'surname' => $lastName);
             $recipient = array_merge($recipient , $additionalFields);
             $this->emRecipientsArray[] = $recipient;
-            $this->emRecipientsNames[] = $firstName  . ' ' . $name;
+            $this->emRecipientsNames[] = $firstName  . ' ' . $lastName;
             
             return true;
         }
@@ -332,20 +333,20 @@ class Email extends PHPMailer
     /**
      * method adds CC recipients to mail
      * @param string $address
-     * @param string $name
+     * @param string $lastName
      * @return true|string
      */
-    public function addCopy($address, $firstName = '', $name = '')
+    public function addCopy($address, $firstName = '', $lastName = '')
     {
         try {
-            $this->addCC($address, $firstName .' '. $name);
+            $this->addCC($address, $firstName .' '. $lastName);
         } catch (Exception $e) {
             return $e->errorMessage();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
 
-        $this->emRecipientsNames[] = $name;
+        $this->emRecipientsNames[] = $lastName;
 
         return true;
     }
@@ -354,13 +355,13 @@ class Email extends PHPMailer
      * method adds BCC recipients to mail
      * Bcc Empfänger werden ersteinmal gesammelt, damit später Päckchen verschickt werden können
      * @param string $address
-     * @param string $name
+     * @param string $lastName
      * @return bool
      * @deprecated 4.2.0:4.3.0 "addBlindCopy()" is deprecated, use "addRecipient()" instead.
      */
-    public function addBlindCopy($address, $firstName = '', $name = '')
+    public function addBlindCopy($address, $firstName = '', $lastName = '')
     {
-        return $this->addRecipient($address, $firstName, $name);
+        return $this->addRecipient($address, $firstName, $lastName);
     }
 
     /**
@@ -593,9 +594,7 @@ class Email extends PHPMailer
 
         // replace parameters in email template
         $replaces = array(
-            '#receiver_first_name#' => $firstName,
             '#receiver_firstname#'  => $firstName,
-            '#receiver_surname#'    => $surname,
             '#receiver_lastname#'   => $surname,
             '#receiver_email#'      => $email,
             '#receiver_name#'       => $name
