@@ -513,6 +513,32 @@ $formEmailDispatch->addInput(
     $formValues['mail_sendmail_name'],
     array('maxLength' => 50, 'helpTextIdInline' => 'SYS_SENDER_NAME_DESC')
 );
+
+// Add js to show or hide mail options
+$page->addJavascript('
+    $(function(){
+        var fieldsToHideOnSingleMode = "#mail_recipients_with_roles_group, #mail_into_to_group, #mail_number_recipients_group";
+        if($("#mail_sending_mode").val() == 1) {
+            $(fieldsToHideOnSingleMode).hide();
+        }
+        $("#mail_sending_mode").on("change", function() {
+            if($("#mail_sending_mode").val() == 1) {
+                $(fieldsToHideOnSingleMode).hide();
+            } else {
+                $(fieldsToHideOnSingleMode).show();
+            }
+        });
+    });
+');
+
+$selectBoxEntries = array(0 => $gL10n->get('SYS_MAIL_BULK'), 1 => $gL10n->get('SYS_MAIL_SINGLE'));
+$formEmailDispatch->addSelectBox(
+    'mail_sending_mode',
+    $gL10n->get('SYS_MAIL_SENDING_MODE'),
+    $selectBoxEntries,
+    array('defaultValue' => $formValues['mail_sending_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_MAIL_SENDING_MODE_DESC')
+);
+
 $selectBoxEntries = array(0 => $gL10n->get('SYS_HIDDEN'), 1 => $gL10n->get('SYS_SENDER'), 2 => $gL10n->get('SYS_ADMINISTRATOR'));
 $formEmailDispatch->addSelectBox(
     'mail_recipients_with_roles',
@@ -532,6 +558,7 @@ $formEmailDispatch->addInput(
     $formValues['mail_number_recipients'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_NUMBER_RECIPIENTS_DESC')
 );
+
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
 $formEmailDispatch->addSelectBox(
     'mail_character_encoding',

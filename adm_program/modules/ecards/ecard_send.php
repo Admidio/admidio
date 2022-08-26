@@ -144,7 +144,7 @@ if (count($arrayRoles) > 0) {
         if ($ecardSendResult) {
             // create and send ecard
             $ecardHtmlData   = $funcClass->parseEcardTemplate($imageUrl, $postMessage, $ecardDataToParse, $row['first_name'].' '.$row['last_name'], $row['email']);
-            $ecardSendResult = $funcClass->sendEcard($senderName, $senderEmail, $ecardHtmlData, $row['first_name'].' '.$row['last_name'], $row['email'], $imageServerPath);
+            $ecardSendResult = $funcClass->sendEcard($senderName, $senderEmail, $ecardHtmlData, $row['first_name'], $row['last_name'], $row['email'], $imageServerPath);
         }
     }
 
@@ -183,7 +183,7 @@ if (count($arrayUsers) > 0) {
         if ($ecardSendResult) {
             // create and send ecard
             $ecardHtmlData   = $funcClass->parseEcardTemplate($imageUrl, $postMessage, $ecardDataToParse, $row['first_name'].' '.$row['last_name'], $row['email']);
-            $ecardSendResult = $funcClass->sendEcard($senderName, $senderEmail, $ecardHtmlData, $row['first_name'].' '.$row['last_name'], $row['email'], $imageServerPath);
+            $ecardSendResult = $funcClass->sendEcard($senderName, $senderEmail, $ecardHtmlData, $row['first_name'], $row['last_name'], $row['email'], $imageServerPath);
         }
     }
 

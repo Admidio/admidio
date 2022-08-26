@@ -1039,6 +1039,10 @@
   <string name="SYS_MOVE_VAR">#VAR1# verschieben</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger:innen</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Empfänger:innen enthalten alle Empfänger:innen im BCC-Feld. Damit ist sichergestellt, dass keiner die E-Mail-Adressen der anderen Empfänger:innen sieht. Das TO-Feld muss allerdings auch befüllt werden. Über diese Einstellung kann festgelegt werden, was im Empfängerfeld (TO) hinterlegt wird. Dies kein ein versteckter Wert \"Undisclosed Recipients\" sein, was aber bei manchen Providern zu Problemen führt. Alternativ kann das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administrator:innen-Adresse aus den Systembenachrichtigungen gefüllt werden. Hinweis: Alle Emails an mehrere Empfänger:innen werden dann auch an die E-Mail-Adresse im Empfängerfeld (TO) geschickt. (Voreinstellung: Absender:in)</string>
+  <string name="SYS_MAIL_SENDING_MODE">Versandmodus</string>
+  <string name="SYS_MAIL_SENDING_MODE_DESC">Im Modus 'Gebündelt' werden E-Mails an mehrere Empfänger zusammengefasst. Eine E-Mail erhält dann eine konfigurierte Anzahl an Empfänger im TO oder BCC Feld. Dies ist sinnvoll, wenn der Hoster den Versand von vielen E-Mails nicht erlaubt. Im Modus 'Einzeln' erhält jeder Empfänger eine separate E-Mail. In diesem Modus können einer E-Mail-Vorlage weitere Felder hinzugefügt werden.</string>
+  <string name="SYS_MAIL_BULK">Gebündelt</string>
+  <string name="SYS_MAIL_SINGLE">Einzeln</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">Die Rolle Administrator:in muss mindestens ein Mitglied haben!</string>
   <string name="SYS_MYLIST_CONDITION_DESC">Hier kannst du Bedingungen zu jedem Feld in deiner Liste hinterlegen. Damit werden die ermittelten Mitglieder der ausgewählten Rolle mit deinen Bedingungen weiter eingeschränkt.</string>
   <string name="SYS_NAME">Name</string>

@@ -49,6 +49,7 @@ $defaultOrgPreferences = array(
 
     // E-mail dispatch
     'mail_send_method'               => 'phpmail',
+    'mail_sending_mode'              => '0',
     'mail_recipients_with_roles'     => '1',
     'mail_number_recipients'         => '50',
     'mail_into_to'                   => '0',
