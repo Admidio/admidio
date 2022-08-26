@@ -33,6 +33,10 @@ class TableMessage extends TableAccess
      * @var object of TableAcess for the current content of the message.
      */
     protected $msgContentObject;
+    /**
+     * @var int ID the conversation partner of a private message. This is the recipient of the message from msg_usr_id_sender.
+     */
+    protected $msgConversationPartnerId = 0;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_messages.
@@ -311,14 +315,23 @@ class TableMessage extends TableAccess
     }
 
     /**
-     * If the message type is PM this method will return the conversation partner of the PM.
-     * @return int Returns **ID** of the user that is partner in the actual conversation or false if it's not a message.
+     * If the message type is PM this method will return the conversation partner of the PM. This is the
+     * recipient of the message send from **msg_usr_id_sender**.
+     * @return int Returns **ID** of the user that is partner in the actual conversation or **false** if it's not a message.
      */
     public function getConversationPartner()
     {
         if ($this->getValue('msg_type') === self::MESSAGE_TYPE_PM) {
-            $recipients = $this->readRecipientsData();
-            return $recipients[0]['id'];
+            if($this->msgConversationPartnerId === 0) {
+                $recipients = $this->readRecipientsData();
+                foreach ($recipients as $recipient) {
+                    if ($recipient['id'] !== $this->getValue('msg_usr_id_sender')) {
+                        $this->msgConversationPartnerId = $recipient['id'];
+                    }
+                }
+            }
+
+            return $this->msgConversationPartnerId;
         }
 
         return false;
