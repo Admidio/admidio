@@ -74,9 +74,9 @@ if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
         cre_user.usr_uuid AS create_uuid, cha_user.usr_uuid AS change_uuid ';
     $additionalTables = '
         LEFT JOIN '. TBL_USERS .' AS cre_user
-               ON cre_username.usr_id = room_usr_id_create
+               ON cre_user.usr_id = room_usr_id_create
         LEFT JOIN '. TBL_USERS .' AS cha_user
-               ON cha_username.usr_id = room_usr_id_change ';
+               ON cha_user.usr_id = room_usr_id_change ';
     $queryParams = array();
 }
 
