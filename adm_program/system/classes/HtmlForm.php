@@ -261,14 +261,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' ' . $class;
         }
 
-        // add a row with the captcha puzzle
-        $this->openControlStructure('captcha_puzzle', '', self::FIELD_DEFAULT, '', '', $attributes['class']);
-        $onClickCode = 'document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/dapphp/securimage/securimage_show.php?\' + Math.random(); return false;';
-        $this->addHtml('<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/dapphp/securimage/securimage_show.php" alt="CAPTCHA Image" />
-                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="' . $onClickCode . '">
-                            <i class="fas fa-sync-alt fa-lg" data-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>');
-        $this->closeControlStructure(array('helpTextIdInline' => '', 'property' => ''));
-
+        $this->addHtml($this->render('form.captcha', ['attributes' => $attributes]));
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addInput(
             $id,
@@ -276,6 +269,7 @@ class HtmlForm extends HtmlFormBasic
             '',
             array('property' => self::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_CAPTCHA_DESCRIPTION', 'class' => 'form-control-small')
         );
+
     }
 
     /**
@@ -671,6 +665,9 @@ class HtmlForm extends HtmlFormBasic
 
         // create array with all options
         $optionsDefault = array(
+            'id'               => $id,
+            'label'            => $label,
+            'value'            => $value,
             'type'             => 'text',
             'placeholder'      => '',
             'pattern'          => '',
@@ -686,9 +683,12 @@ class HtmlForm extends HtmlFormBasic
             'helpTextIdInline' => '',
             'icon'             => '',
             'class'            => '',
-            'htmlAfter'        => ''
+            'htmlAfter'        => '',
+            'alertWarning'     => ''
         );
         $optionsAll = array_replace($optionsDefault, $options);
+       
+        $optionsAll['helpTextIdInline'] = self::getHelpText($optionsAll['helpTextIdInline']);
 
         $attributes['placeholder'] = $optionsAll['placeholder'];
 
@@ -790,7 +790,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if ($this->htmlPage instanceof HtmlPage) {
+            /*if ($this->htmlPage instanceof HtmlPage) {
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/css/bootstrap-datepicker3.css');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/js/bootstrap-datepicker.js');
                 // datepicker doesn't deliver a en language file therefore we should not try to load it
@@ -798,7 +798,8 @@ class HtmlForm extends HtmlFormBasic
                     $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/locales/bootstrap-datepicker.' . $gL10n->getLanguageLibs() . '.min.js');
                 }
             }
-            $this->addJavascriptCode($javascriptCode, true);
+            
+            $this->addJavascriptCode($javascriptCode, true);*/
         }
 
         // Remove attributes that are not set
@@ -807,7 +808,7 @@ class HtmlForm extends HtmlFormBasic
         });
 
         // now create html for the field
-        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
+       // $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
 
         // if datetime then add a time field behind the date field
         if ($optionsAll['type'] === 'datetime') {
@@ -823,21 +824,24 @@ class HtmlForm extends HtmlFormBasic
             }
             // now add a date and a time field to the form
             $attributes['class'] .= ' datetime-date-control';
-            $this->addSimpleInput('text', $id, $id, $dateValue, $attributes);
+            $attributes['datevalue'] = $dateValue;
+            $attributes['dateplaceholder'] = $attributes['datevalue'];
+            //$this->addSimpleInput('text', $id, $id, $dateValue, $attributes);
             $attributes['class'] .= ' datetime-time-control';
             $attributes['placeholder'] = 'HH:MM';
             $attributes['data-provide'] = '';
-            $this->addSimpleInput('text', $id . '_time', $id . '_time', $timeValue, $attributes);
+            $attributes['timevalue'] = $timeValue;
+            //$this->addSimpleInput('text', $id . '_time', $id . '_time', $timeValue, $attributes);
         } else {
             // a date type has some problems with chrome so we set it as text type
             if ($optionsAll['type'] === 'date' || $optionsAll['type'] === 'birthday') {
-                $optionsAll['type'] = 'text';
+                //$optionsAll['type'] = 'text';
             }
-            $this->addSimpleInput($optionsAll['type'], $id, $id, $value, $attributes);
+            //$this->addSimpleInput($optionsAll['type'], $id, $id, $value, $attributes);
         }
 
         if ($optionsAll['htmlAfter'] !== '') {
-            $this->addHtml($optionsAll['htmlAfter']);
+            //$this->addHtml($optionsAll['htmlAfter']);
         }
 
         if ($optionsAll['passwordStrength']) {
@@ -862,19 +866,21 @@ class HtmlForm extends HtmlFormBasic
                         progressBar.addClass(cssClasses[result.score]);
                     });
                 ';
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
-                $this->htmlPage->addJavascript($javascriptCode, true);
+               // $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
+               // $this->htmlPage->addJavascript($javascriptCode, true);
             }
 
-            $this->addHtml('
+          /*  $this->addHtml('
                 <div id="admidio-password-strength" class="progress ' . $optionsAll['class'] . '">
                     <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                     <div id="admidio-password-strength-minimum"></div>
                 </div>
-            ');
+            ');*/
         }
 
-        $this->closeControlStructure($optionsAll);
+       // $this->closeControlStructure($optionsAll);
+        $optionsAll["attributes"] = $attributes;
+        $this->addHtml($this->render("form.input", $optionsAll));
     }
 
     /**
@@ -1848,6 +1854,34 @@ class HtmlForm extends HtmlFormBasic
             title="' . $gL10n->get($title) . '" data-content="' . SecurityUtils::encodeHTML($text) . '"></i>';
         }
         return $html;
+    }
+    
+    public static function getHelpText($text)
+    {
+        global $gL10n;
+        $parameters = array();
+
+        if (is_array($text)) {
+            $parameters = $text[1];
+            $text = $text[0];
+        }
+
+        if ($text !== '') {
+            // if text is a translation-id then translate it
+            if (Language::isTranslationStringId($text)) {
+                foreach ($parameters as &$parameter) {
+                    // parameters should be strings
+                    $parameter = (string)$parameter;
+
+                    // if parameter is a translation-id then translate it
+                    $parameter = Language::translateIfTranslationStrId($parameter);
+                }
+                unset($parameter);
+
+                $text = $GLOBALS['gL10n']->get($text, $parameters);
+            }
+        }
+        return $text;
     }
 
     /**
