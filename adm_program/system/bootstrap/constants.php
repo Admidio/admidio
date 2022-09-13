@@ -58,7 +58,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_SERVER']) && $_SERVER['HTTP_X_FORWARDED_SER
     define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
     define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
 }
-define('ADMIDIO_URL_PATH', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
+define('ADMIDIO_URL_PATH', is_null(parse_url($g_root_path, PHP_URL_PATH)) ? '' : parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
 
 // PATHS
 define('SERVER_PATH', realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www
