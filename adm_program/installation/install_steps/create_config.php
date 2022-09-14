@@ -155,6 +155,7 @@ $page->addJavascript('
     $("#next_page").on("click", function() {
         $(this).prop("disabled", true);
         $(this).html("<i class=\"fas fa-sync fa-spin\"></i> ' . $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED') . '");
+        $("#installation-form").submit();
     });', true);
 
 // now save new configuration file in Admidio folder if user has write access to this folder
@@ -170,10 +171,10 @@ if ($configFileHandle) {
     $page->assign('text', $gL10n->get('INS_DATA_FULLY_ENTERED'));
 
     $form = new HtmlForm('installation-form', SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
-    $form->addSubmitButton(
+    $form->addButton(
         'next_page',
         $gL10n->get('INS_INSTALL_ADMIDIO'),
-        array('icon' => 'fa-sync')
+        array('icon' => 'fa-sync', 'class' => ' btn-primary admidio-margin-bottom')
     );
 } else {
     // if user doesn't has write access then create a page with a download link for the config file
@@ -191,10 +192,10 @@ if ($configFileHandle) {
         $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'),
         array('icon' => 'fa-download', 'link' => SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'download_config')))
     );
-    $form->addSubmitButton(
+    $form->addButton(
         'next_page',
         $gL10n->get('INS_INSTALL_ADMIDIO'),
-        array('icon' => 'fa-sync')
+        array('icon' => 'fa-sync', 'class' => ' btn-primary admidio-margin-bottom')
     );
 }
 
