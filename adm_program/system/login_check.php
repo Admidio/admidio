@@ -24,8 +24,12 @@ if (!array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
 }
 
 // remove login page from navigation stack
-if (str_ends_with($gNavigation->getUrl(), '/login.php')) {
-    $gNavigation->deleteLastUrl();
+try {
+    if (str_ends_with($gNavigation->getUrl(), '/login.php')) {
+        $gNavigation->deleteLastUrl();
+    }
+} catch (AdmException $e) {
+    $gNavigation->clear();
 }
 
 // If no forward url has been set, then refer to the start page after login
