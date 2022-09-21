@@ -297,7 +297,11 @@ class ProfileFields
                         $arrListValuesWithKeys[++$index] = $listValue;
                     }
 
-                    $htmlValue = $arrListValuesWithKeys[$value];
+                    if(count($arrListValuesWithKeys) > 0) {
+                        $htmlValue = $arrListValuesWithKeys[$value];
+                    } else {
+                        $htmlValue = '';
+                    }
                     break;
                 case 'PHONE':
                     if ($value !== '') {
