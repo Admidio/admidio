@@ -61,9 +61,9 @@ if (DB_ENGINE === Database::PDO_ENGINE_MYSQL && $gSettingsManager->getBool('syst
         '(  (   last_name.usd_value  = '. $lastName.'
             AND first_name.usd_value = '. $firstName.')
          OR (   last_name.usd_value  = '. $lastName.'
-            AND SUBSTRING(first_name.usd_value, 1, POSITION(\' \', first_name.usd_value)) = '. $firstName.')
+            AND SUBSTRING(first_name.usd_value, 1, POSITION(\' \' IN first_name.usd_value)) = '. $firstName.')
          OR (   last_name.usd_value  = '. $lastName.'
-            AND first_name.usd_value = SUBSTRING('. $firstName.', 1, POSITION(\' \', '. $firstName.')))
+            AND first_name.usd_value = SUBSTRING('. $firstName.', 1, POSITION(\' \' IN '. $firstName.')))
          OR (   last_name.usd_value  = '. $firstName.'
             AND first_name.usd_value = '. $lastName.') )';
 }
