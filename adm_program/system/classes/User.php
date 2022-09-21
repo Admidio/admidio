@@ -1176,9 +1176,14 @@ class User extends TableAccess
         $now = new \DateTime();
         $minutesOffset = new \DateInterval('PT15M');
         $minutesBefore = $now->sub($minutesOffset);
-        $dateInvalid = \DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
 
-        if ($this->getValue('usr_number_invalid') < self::MAX_INVALID_LOGINS || $minutesBefore->getTimestamp() > $dateInvalid->getTimestamp()) {
+        if(is_null($this->getValue('usr_date_invalid', 'Y-m-d H:i:s'))) {
+            $dateInvalid = $minutesBefore;
+        } else {
+            $dateInvalid = \DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
+        }
+
+        if ($this->getValue('usr_number_invalid') < self::MAX_INVALID_LOGINS || $minutesBefore->getTimestamp() >= $dateInvalid->getTimestamp()) {
             return false;
         }
 
