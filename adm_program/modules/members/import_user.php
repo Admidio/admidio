@@ -99,6 +99,12 @@ for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) 
         $columnValue = trim(strip_tags($columnValue));
 
         if (Uuid::isValid($assignedFieldColumnId)) {
+            // special case for date columns from excel. We read the data without format
+            // so excel give us an integer for the date that must be converted
+            if ($gProfileFields->getPropertyByUuid($assignedFieldColumnId, 'usf_type') === 'DATE' && is_numeric($columnValue)) {
+                $columnValue = date($gSettingsManager->getString('system_date'), \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($columnValue));
+            }
+
             $userImport->setValue($gProfileFields->getPropertyByUuid($assignedFieldColumnId, 'usf_name_intern'), $columnValue);
         } else {
             // remember username and password and add it later to the user
