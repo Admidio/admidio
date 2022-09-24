@@ -147,7 +147,8 @@ if (isset($reader) and !is_null($reader)) {
             $gMessage->show($gL10n->get('SYS_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet)));
         // => EXIT
         } else {
-            $_SESSION['import_data']       = $sheet->toArray();
+            // read data to array without any format
+            $_SESSION['import_data'] = $sheet->toArray(null, true, false);
         }
     } catch (\PhpOffice\PhpSpreadsheet\Exception | \Exception $e) {
         $gMessage->show($e->getMessage());
