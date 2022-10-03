@@ -509,7 +509,6 @@ abstract class HtmlElement extends \Smarty
         foreach($asigns as $key => $asign) {
             $this->assign($key, $asign);
         }
-
         $this->assign("ADMIDIO_URL", ADMIDIO_URL);
         $this->assign("FOLDER_LIBS_SERVER", FOLDER_LIBS_SERVER);
         $this->assign("data", $asigns);

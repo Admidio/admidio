@@ -180,7 +180,7 @@ class HtmlForm extends HtmlFormBasic
     public function addButton($id, $text, array $options = array())
     {
         // create array with all options
-        $optionsDefault = array(
+        $optionsDefault = array('formtype' => $this->type,
             'icon' => '', 
             'link' => '', 
             'class' => '', 
@@ -265,7 +265,7 @@ class HtmlForm extends HtmlFormBasic
         $cssClasses   = 'checkbox';
 
         // create array with all options
-        $optionsDefault = array(
+        $optionsDefault = array('formtype' => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'helpTextIdLabel'  => '',
             'helpTextIdInline' => '',
@@ -325,7 +325,7 @@ class HtmlForm extends HtmlFormBasic
     public function addCustomContent($label, $content, array $options = array())
     {
         // create array with all options
-        $optionsDefault = array(
+        $optionsDefault = array('formtype' => $this->type,
             'property'         => '',
             'referenceId'      => '',
             'helpTextIdLabel'  => '',
@@ -386,7 +386,7 @@ class HtmlForm extends HtmlFormBasic
         $flagLabelVertical = $this->type;
 
         // create array with all options
-        $optionsDefault = array(
+        $optionsDefault = array('formtype' => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'toolbar'          => 'AdmidioDefault',
             'height'           => '300',
@@ -476,7 +476,7 @@ class HtmlForm extends HtmlFormBasic
         $attributes = array('class' => 'form-control');
 
         // create array with all options
-        $optionsDefault = array(
+        $optionsDefault = array('formtype' => $this->type,
             'property'           => self::FIELD_DEFAULT,
             'maxUploadSize'      => $gSettingsManager->getInt('max_file_upload_size') * 1024 * 1024, // MiB
             'allowedMimeTypes'   => array(),
@@ -577,7 +577,7 @@ class HtmlForm extends HtmlFormBasic
         $attributes = array('class' => 'form-control');
 
         // create array with all options
-        $optionsDefault = array(
+        $optionsDefault = array('formtype' => $this->type,
             'id'               => $id,
             'label'            => $label,
             'value'            => $value,
@@ -796,7 +796,7 @@ class HtmlForm extends HtmlFormBasic
         $attributes = array('class' => 'form-control');
 
         // create array with all options
-        $optionsDefault = array(
+        $optionsDefault = array('formtype' => $this->type,
             'property'         => self::FIELD_DEFAULT,
             'maxLength'        => 0,
             'helpTextIdLabel'  => '',
@@ -895,7 +895,7 @@ class HtmlForm extends HtmlFormBasic
         $attributes = array('class' => '');
 
         // create array with all options
-        $optionsDefault = array(
+        $optionsDefault = array('formtype' => $this->type,
             'property'          => self::FIELD_DEFAULT,
             'defaultValue'      => '',
             'showNoValueButton' => false,
@@ -984,7 +984,7 @@ class HtmlForm extends HtmlFormBasic
         $name = $id;
 
         // create array with all options
-        $optionsDefault = array(
+        $optionsDefault = array('formtype' => $this->type,
             'property'                       => self::FIELD_DEFAULT,
             'defaultValue'                   => '',
             'showContextDependentFirstEntry' => true,
@@ -1377,7 +1377,7 @@ class HtmlForm extends HtmlFormBasic
         global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
         // create array with all options
-        $optionsDefault = array(
+        $optionsDefault = array('formtype' => $this->type,
             'property'                       => self::FIELD_DEFAULT,
             'defaultValue'                   => '',
             'arrayKeyIsNotValue'             => false,
@@ -1529,7 +1529,7 @@ class HtmlForm extends HtmlFormBasic
         $attributes = array('class' => 'form-control-static');
 
         // create array with all options
-        $optionsDefault = array('property' => '', 'helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
+        $optionsDefault = array('formtype' => $this->type,'property' => '', 'helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // set specific css class for this field
@@ -1562,7 +1562,7 @@ class HtmlForm extends HtmlFormBasic
     public function addSubmitButton($id, $text, array $options = array())
     {
         // create array with all options
-        $optionsDefault = array('icon' => '', 'link' => '', 'class' => '', 'type' => 'submit');
+        $optionsDefault = array('formtype' => $this->type,'icon' => '', 'link' => '', 'class' => '', 'type' => 'submit');
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add default css classes

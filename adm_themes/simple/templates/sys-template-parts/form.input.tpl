@@ -8,15 +8,16 @@
     {$itemvar@key}="{$itemvar}"
     {/foreach}>
 {else}
+
 <div
     id="{$id}_group"
-    class="form-group row {if $property eq 1}admidio-form-group-required{/if}">    
-    <label for="{$id}" class="col-sm-3 control-label">
+    class="form-group {if $data.formtype neq 'vertical'}row{/if} {if $property eq 1}admidio-form-group-required{/if}">    
+    <label for="{$id}" class="{if $data.formtype neq 'vertical'}col-sm-3{/if} control-label">
         {include file='sys-template-parts/parts/form.part.icon.tpl'}
         {$label}
         {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}
     </label>
-    <div class="col-sm-9">
+    <div class="{if $data.formtype neq 'vertical'}col-sm-9{/if}">
         {if $type == 'datetime'}
             <input
             type="datetime-local"
@@ -49,12 +50,12 @@
             {$itemvar@key}="{$itemvar}"
             {/foreach}
             >
-            
+            {if $data.passwordStrength eq 1}
             <div id="admidio-password-strength" class="progress ' . $optionsAll['class'] . '">
                 <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                 <div id="admidio-password-strength-minimum"></div>
             </div>
-
+            {/if}
             {$htmlAfter}
         {else}
         <input

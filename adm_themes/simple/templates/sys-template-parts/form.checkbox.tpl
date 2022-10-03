@@ -1,5 +1,5 @@
-<div id="{$id}_group" class="form-group row">
-    <div class="offset-sm-3 col-sm-9">
+<div id="{$id}_group" class="form-group {if $data.formtype neq 'vertical'}row{/if}">
+    <div class="{if $data.formtype neq 'vertical'}offset-sm-3 col-sm-9{/if}">
         <div class="checkbox">
             <label>
                 <input type="checkbox" name="{$id}" id="{$id}" value="1" {foreach $data.attributes as $itemvar}
