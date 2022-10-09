@@ -116,7 +116,7 @@
     <step id="680">CREATE UNIQUE INDEX %PREFIX%_idx_msg_uuid ON %PREFIX%_messages (msg_uuid)</step>
     <step id="690" database="mysql">ALTER TABLE %PREFIX%_organizations MODIFY COLUMN org_uuid varchar(36) NOT NULL</step>
     <step id="695" database="pgsql">ALTER TABLE %PREFIX%_organizations ALTER COLUMN org_uuid SET NOT NULL</step>
-    <step id="7ß0">CREATE UNIQUE INDEX %PREFIX%_idx_org_uuid ON %PREFIX%_organizations (org_uuid)</step>
+    <step id="700">CREATE UNIQUE INDEX %PREFIX%_idx_org_uuid ON %PREFIX%_organizations (org_uuid)</step>
     <step id="710" database="mysql">ALTER TABLE %PREFIX%_rooms MODIFY COLUMN room_uuid varchar(36) NOT NULL</step>
     <step id="715" database="pgsql">ALTER TABLE %PREFIX%_rooms ALTER COLUMN room_uuid SET NOT NULL</step>
     <step id="720">CREATE UNIQUE INDEX %PREFIX%_idx_room_uuid ON %PREFIX%_rooms (room_uuid)</step>
