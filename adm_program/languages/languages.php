@@ -98,5 +98,10 @@ $gSupportedLanguages = array(
         'name'    => 'Swedish - Svenska',
         'isocode' => 'sv',
         'libs'    => 'sv'
+    ),
+    'uk'    => array(
+        'name'    => 'Ukrainian - український',
+        'isocode' => 'uk',
+        'libs'    => 'uk'
     )
 );

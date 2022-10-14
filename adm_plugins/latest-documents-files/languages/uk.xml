@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_FILES_HEADLINE">Документи &amp; файли</string>
+  <string name="PLG_LATEST_FILES_MORE_DOWNLOADS">Більше документів &amp; файлів</string>
+  <string name="PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE">Немає доступних документів чи файлів.</string>
+  <string name="PLG_LATEST_FILES_UPLOAD_FROM_AT">Завантажено #VAR1# #VAR2#</string>
+</resources>
