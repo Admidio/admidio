@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Поточний місяць</string>
+  <string name="PLG_CALENDAR_MONTH">Січень,лютий,березень,квітень,травень,червень,липень,серпень,вересень,жовтень,листопад,грудень</string>
+  <string name="PLG_CALENDAR_MORE">(... детальніше)</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">ПН</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">ВТ</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">СР</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">ЧТ</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">ПТ</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">СБ</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">НД</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Кілька днів</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# буде #VAR3# років за #VAR2# днів,  #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# святкує день народження через #VAR2# днів</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Дні народження</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR"> #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Сьогодні #VAR1# святкують день народження.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Сьогодні ніхто з учасників товариства не святкує день народження. </string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Сьогодні свій день народження святкує член товариства.</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# виповнилося #VAR3# років #VAR2# днів тому, #VAR4#</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# святкував свій день народження #VAR2# днів тому</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# сьогодні виповниться #VAR2#</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# святкує сьогодні свій день народження</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# завтра виповниться #VAR3# років, #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# святкує завтра свій день народження</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">#VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# виповнилося #VAR3# років учора, #VAR4#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# вчора світкував свій день народження</string>
+</resources>

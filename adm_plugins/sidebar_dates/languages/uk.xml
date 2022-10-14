@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_DATES_ALL_EVENTS">Всі події</string>
+  <string name="PLG_DATES_HEADLINE">Події</string>
+  <string name="PLG_DATES_NO_ENTRIES_VISITORS">Немає подій, доступних для відвідувачів. Увійдіть, щоб переглянути події.</string>
+</resources>
