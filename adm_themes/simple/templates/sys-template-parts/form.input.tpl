@@ -29,7 +29,7 @@
             {/foreach}
             >
             {$htmlAfter}
-        {elseif $type == 'date' OR $type == 'birthday'}{$value}
+        {elseif $type == 'date' OR $type == 'birthday'}
             <input
             type="date"
             name="{$id}"
