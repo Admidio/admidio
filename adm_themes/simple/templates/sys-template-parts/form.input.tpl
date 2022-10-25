@@ -35,6 +35,7 @@
             name="{$id}"
             id="{$id}"
             value="{$value}"
+            data-provide="datepicker-birthday"
             {foreach $data.attributes as $itemvar}
             {$itemvar@key}="{$itemvar}"
             {/foreach}
