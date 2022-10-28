@@ -219,19 +219,6 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                             array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $registrationOrgId)
                         );
                     }
-                } else {
-                    // only show link if user is member of this organization.
-                    // Password of own user could be changed.
-                    // Administrators are allowed to change password if no login was configured or no email is set to send a generated password.
-                    if (isMember((int) $user->getValue('usr_id'))
-                    && ($gCurrentUserId === (int) $user->getValue('usr_id')
-                       || ($gCurrentUser->isAdministrator()
-                          && (strlen($user->getValue('usr_login_name')) === 0 || strlen($user->getValue('EMAIL')) === 0)))) {
-                        $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
-                            <a id="password_link" class="btn openPopup" href="javascript:void(0);"
-                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('user_uuid' => $getUserUuid)).'">
-                                <i class="fas fa-key"></i>'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
-                    }
                 }
                 $form->addLine();
             }

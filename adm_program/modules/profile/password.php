@@ -32,13 +32,14 @@ if ($getMode === 'change') {
 
 $user = new User($gDb, $gProfileFields);
 $user->readDataByUuid($getUserUuid);
-$userId    = $user->getValue('usr_id');
+$userId = $user->getValue('usr_id');
 
 // only the own password could be individual set.
-// Administrator could only send a generated password or set a password if no password was set before
+// Administrators could only set password if systemmail is deactivated and a loginname is set
 if ($gCurrentUserId !== $userId
 && (!isMember($userId)
 || (!$gCurrentUser->isAdministrator() && $gCurrentUserId !== $userId)
+|| ($gCurrentUser->isAdministrator() && $user->getValue('usr_login_name') === '')
 || ($gCurrentUser->isAdministrator() && $user->getValue('EMAIL') !== '' && $gSettingsManager->getBool('system_notifications_enabled')))) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
