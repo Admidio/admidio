@@ -165,23 +165,13 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         $form->openGroupBox('gb_category_'.$field->getValue('cat_name_intern'), $field->getValue('cat_name'));
 
         if ($field->getValue('cat_name_intern') === 'BASIC_DATA') {
-            if ($userId > 0 || $getNewUser === 2 || $getNewUser === 1) {
+            if (($userId > 0 && $gCurrentUser->isAdministrator()) || $getNewUser === 2 || $getNewUser === 1) {
                 // add username to form
-                $fieldProperty = HtmlForm::FIELD_DEFAULT;
-                $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
-
-                if (!$gCurrentUser->isAdministrator() && $getNewUser === 0) {
-                    $fieldProperty = HtmlForm::FIELD_DISABLED;
-                    $fieldHelpId   = '';
-                } elseif ($getNewUser >= 2) {
-                    $fieldProperty = HtmlForm::FIELD_REQUIRED;
-                }
-
                 $form->addInput(
                     'usr_login_name',
                     $gL10n->get('SYS_USERNAME'),
                     $user->getValue('usr_login_name'),
-                    array('maxLength' => 254, 'property' => $fieldProperty, 'helpTextIdLabel' => $fieldHelpId, 'class' => 'form-control-small')
+                    array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'PRO_USERNAME_DESCRIPTION', 'class' => 'form-control-small')
                 );
 
                 if ($getNewUser === 2) {
