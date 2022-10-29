@@ -132,21 +132,18 @@ $page->addJavascript('
 // show form
 $form = new HtmlForm('roles_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_function.php', array('role_uuid' => $getRoleUuid, 'mode' => '2')), $page);
 $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->get('SYS_CATEGORY'));
+
 if ($role->getValue('rol_administrator') === 1 || $eventRole) {
-    $form->addInput(
-        'rol_name',
-        $gL10n->get('SYS_NAME'),
-        $role->getValue('rol_name', 'database'),
-        array('maxLength' => 100, 'property' => HtmlForm::FIELD_READONLY)
-    );
+    $fieldProperty = HtmlForm::FIELD_READONLY;
 } else {
-    $form->addInput(
-        'rol_name',
-        $gL10n->get('SYS_NAME'),
-        $role->getValue('rol_name', 'database'),
-        array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
-    );
+    $fieldProperty = HtmlForm::FIELD_REQUIRED;
 }
+$form->addInput(
+    'rol_name',
+    $gL10n->get('SYS_NAME'),
+    $role->getValue('rol_name', 'database'),
+    array('maxLength' => 100, 'property' => $fieldProperty)
+);
 $form->addMultilineTextInput(
     'rol_description',
     $gL10n->get('SYS_DESCRIPTION'),
@@ -158,7 +155,7 @@ $form->addSelectBoxForCategories(
     'rol_cat_id',
     $gL10n->get('SYS_CATEGORY'),
     $gDb,
-    'ROL',
+    ($eventRole ? 'ROL_EVENT' : 'ROL'),
     HtmlForm::SELECT_BOX_MODUS_EDIT,
     array('property' => ($eventRole ? HtmlForm::FIELD_READONLY : HtmlForm::FIELD_REQUIRED), 'defaultValue' => $role->getValue('cat_uuid'))
 );
