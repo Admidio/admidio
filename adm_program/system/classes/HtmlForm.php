@@ -1512,7 +1512,10 @@ class HtmlForm extends HtmlFormBasic
      * @param string   $id             Id of the selectbox. This will also be the name of the selectbox.
      * @param string   $label          The label of the selectbox.
      * @param Database $database       A Admidio database object that contains a valid connection to a database
-     * @param string   $categoryType   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
+     * @param string   $categoryType   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown.
+     *                                 The type 'ROL' will ot list event role categories. Therefore you need to set
+     *                                 the type 'ROL_EVENT'. It's not possible to show role categories together with
+     *                                 event categories.
      * @param string   $selectBoxModus The selectbox could be shown in 2 different modus.
      *                                 - **EDIT_CATEGORIES** : First entry will be "Please choose" and default category will be preselected.
      *                                 - **FILTER_CATEGORIES** : First entry will be "All" and only categories with childs will be shown.
@@ -1593,13 +1596,23 @@ class HtmlForm extends HtmlFormBasic
                     $sqlTables = ' INNER JOIN ' . TBL_LINKS . ' ON cat_id = lnk_cat_id ';
                     break;
                 case 'ROL':
-                    // don't show system categories
+                case 'ROL_EVENT':
                     $sqlTables = ' INNER JOIN ' . TBL_ROLES . ' ON cat_id = rol_cat_id';
-                    $sqlConditions = ' AND cat_name_intern <> \'EVENTS\' ';
                     break;
             }
         } else {
-            $catIdParams = array_merge(array(0), $gCurrentUser->getAllEditableCategories($categoryType));
+            $catIdParams = array_merge(array(0), $gCurrentUser->getAllEditableCategories(($categoryType === 'ROL_EVENT' ? 'ROL' : $categoryType)));
+        }
+
+        switch ($categoryType) {
+            case 'ROL':
+                // don't show event categories
+                $sqlConditions .= ' AND cat_name_intern <> \'EVENTS\' ';
+                break;
+            case 'ROL_EVENT':
+                // only show event categories
+                $sqlConditions .= ' AND cat_name_intern = \'EVENTS\' ';
+                break;
         }
 
         if (!$optionsAll['showSystemCategory']) {
@@ -1625,7 +1638,7 @@ class HtmlForm extends HtmlFormBasic
         $queryParams = array_merge(
             $catIdParams,
             array(
-                $categoryType,
+                ($categoryType === 'ROL_EVENT' ? 'ROL' : $categoryType),
                 $GLOBALS['gCurrentOrgId']
             )
         );
@@ -1666,7 +1679,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
 
-        // now call method to create selectbox from array
+        // now call method to create select box from array
         $this->addSelectBox($id, $label, $categoriesArray, $optionsAll);
     }
 
