@@ -20,13 +20,24 @@
     <div class="{if $data.formtype neq 'vertical'}col-sm-9{/if}">
         {if $type == 'datetime'}
             <input
-            type="datetime-local"
+            type="text"
             name="{$id}"
             id="{$id}"
-            value="{$value}"
-            {foreach $data.attributes as $itemvar}
+            value="{$data.attributes.dateValue}"
+            {foreach $data.attributes.dateValueAttributes as $itemvar}
             {$itemvar@key}="{$itemvar}"
             {/foreach}
+            data-provide="datepicker"
+            >
+            <input
+            type="time"
+            name="{$id}_time"
+            id="{$id}_time"
+            value="{$data.attributes.timeValue}"
+            {foreach $data.attributes.timeValueAttributes as $itemvar}
+            {$itemvar@key}="{$itemvar}"
+            {/foreach}
+            data-provide=""
             >
             {$htmlAfter}
         {elseif $type == 'date' OR $type == 'birthday'}
