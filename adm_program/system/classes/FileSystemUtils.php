@@ -699,12 +699,12 @@ final class FileSystemUtils
     {
         self::checkIsInAllowedDirectories($path);
 
-        $total = disk_total_space($path);
+        $total = function_exists('disk_total_space') ? disk_total_space($path) : false;
         if ($total === false) {
             throw new \RuntimeException('Total disk-space could not be determined!');
         }
 
-        $free = disk_free_space($path);
+        $free = function_exists('disk_free_space') ? disk_free_space($path) : false;
         if ($free === false) {
             throw new \RuntimeException('Free disk-space could not be determined!');
         }
