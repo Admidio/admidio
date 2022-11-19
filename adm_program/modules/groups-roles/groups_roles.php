@@ -448,7 +448,7 @@ foreach ($listsResult['recordset'] as $row) {
                 break;
         }
 
-        switch ($role->getValue('rol_this_list_view')) {
+        switch ($role->getValue('rol_view_memberships')) {
             case 0:
                 $viewRole = 'SYS_NOBODY';
                 break;

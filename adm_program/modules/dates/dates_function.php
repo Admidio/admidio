@@ -402,7 +402,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                 $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
                 $role->setValue('rol_description', substr($date->getValue('dat_description'), 0, 3999));
                 // role members are allowed to view lists
-                $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? 1 : 0);
+                $role->setValue('rol_view_memberships', isset($_POST['date_right_list_view']) ? 1 : 0);
                 // role members are allowed to send mail to this role
                 $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? 1 : 0);
                 $role->setValue('rol_max_members', (int)$date->getValue('dat_max_members'));
@@ -432,7 +432,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                     // these are the default settings for a date role
                     $role->setValue('rol_cat_id', (int)$pdoStatement->fetchColumn());
                     // role members are allowed to view lists
-                    $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? 1 : 0);
+                    $role->setValue('rol_view_memberships', isset($_POST['date_right_list_view']) ? 1 : 0);
                     // role members are allowed to send mail to this role
                     $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? 1 : 0);
                     $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations

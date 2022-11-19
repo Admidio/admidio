@@ -60,7 +60,7 @@ if ($getRoleUuid !== '') {
         $showSystemCategory = true;
     }
 } else {
-    $role->setValue('rol_this_list_view', 1);
+    $role->setValue('rol_view_memberships', 1);
     $role->setValue('rol_mail_this_role', 2);
 }
 
@@ -176,11 +176,11 @@ if ($gSettingsManager->getBool('enable_mail_module')) {
 }
 $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'));
 $form->addSelectBox(
-    'rol_this_list_view',
+    'rol_view_memberships',
     $gL10n->get('SYS_DISPLAY_ROLE_MEMBERSHIP'),
     $selectBoxEntries,
     array(
-        'defaultValue'                   => $role->getValue('rol_this_list_view'),
+        'defaultValue'                   => $role->getValue('rol_view_memberships'),
         'showContextDependentFirstEntry' => false,
         'helpTextIdLabel'                => $gL10n->get('SYS_RIGHT_THIS_LIST_VIEW_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW'))
     )

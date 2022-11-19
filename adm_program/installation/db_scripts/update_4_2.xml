@@ -23,5 +23,9 @@
     <step id="190">ALTER TABLE %PREFIX%_user_fields DROP COLUMN usf_mandatory</step>
     <step id="200">UPDATE %PREFIX%_user_fields SET usf_required_input = 2 WHERE usf_name_intern = 'EMAIL' AND usf_required_input = 0</step>
     <step id="210">UPDATE %PREFIX%_user_fields SET usf_required_input = 2 WHERE usf_name_intern = 'DATA_PROTECTION_PERMISSION'</step>
+    <step id="220">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_view_memberships smallint NOT NULL DEFAULT 0</step>
+    <step id="230">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_view_members_profiles smallint NOT NULL DEFAULT 0</step>
+    <step id="240">UPDATE %PREFIX%_roles SET rol_view_memberships = rol_this_list_view, rol_view_members_profiles = rol_this_list_view</step>
+    <step id="250">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_this_list_view</step>
     <step>stop</step>
 </update>

@@ -387,7 +387,7 @@ class TableRoles extends TableAccess
             return $gCurrentUser->hasRightViewRole($rolId);
         }
 
-        if ((int) $this->getValue('rol_this_list_view') === 0) {
+        if ((int) $this->getValue('rol_view_memberships') === 0) {
             return false;
         }
 

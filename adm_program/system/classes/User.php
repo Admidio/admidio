@@ -430,10 +430,10 @@ class User extends TableAccess
 
                 // Remember list view setting
                 // leaders are allowed to see the role
-                if ($row['mem_usr_id'] > 0 && ($row['rol_this_list_view'] > 0 || $memLeader)) {
+                if ($row['mem_usr_id'] > 0 && ($row['rol_view_memberships'] > 0 || $memLeader)) {
                     // Membership to the role and this is not locked, then look at it
                     $this->listViewRights[$rolId] = true;
-                } elseif ((int) $row['rol_this_list_view'] === 2) {
+                } elseif (array_key_exists('rol_view_memberships', $row) && (int) $row['rol_view_memberships'] === 2) {
                     // look at other roles when everyone is allowed to see them
                     $this->listViewRights[$rolId] = true;
                 } else {
@@ -1343,7 +1343,7 @@ class User extends TableAccess
             return true;
         }
 
-        $sql = 'SELECT rol_id, rol_this_list_view
+        $sql = 'SELECT rol_id, rol_view_memberships
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
                     ON rol_id = mem_rol_id
@@ -1361,7 +1361,7 @@ class User extends TableAccess
         if ($listViewStatement->rowCount() > 0) {
             while ($row = $listViewStatement->fetch()) {
                 $rolId = (int) $row['rol_id'];
-                $rolThisListView = (int) $row['rol_this_list_view'];
+                $rolThisListView = (int) $row['rol_view_memberships'];
 
                 if ($gValidLogin && $rolThisListView === 2) {
                     // alle angemeldeten Benutzer duerfen Rollenlisten/-profile sehen
