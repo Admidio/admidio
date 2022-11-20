@@ -726,7 +726,7 @@
   <string name="SYS_DISK_SPACE_ERROR">Användningen av lagringsutrymmet kunde inte fastställas. \n\n Felmeddelande: \n #VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Visa omdirigering</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Aktivera automatisk vidarebefordran för länkar. Användaren kommer att meddelas av ett varningsmeddelande om att lämna Admidios sidor när han klickar på en hyperlänk i länkmodulen. Klicka på hyperlänk öppnas efter fördefinierad tid. Är omdirigeringen inställd på 0, kommer hyperlänken att öppnas utan att visa varningsmeddelandet (standard: 10 sekunder).</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Visa rollmedlemskap</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Visa rollmedlemskap</string>
   <string name="SYS_DO_NOT_EDIT">Ändra inte</string>
   <string name="SYS_DOCUMENTS_FILES">Dokument &amp; Filer</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Olika dokument och filer kan visas eller tillhandahållas för nedladdning. Dessa filer kan kategoriseras i mappar med olika behörighetsnivåer.</string>
@@ -1174,7 +1174,7 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">Skicka e-post till alla roller</string>
   <string name="SYS_RIGHT_PHOTOS">Ladda upp och redigera foton</string>
   <string name="SYS_RIGHT_PROFILE">Redigera egen profil</string>
-  <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">Definiera vilken användare som ska kunna se flera listor och vissa användarprofiler för medlemmar i den aktuella rollen. Rolltillstånd #VAR1_BOLD# är moderkonfiguration är den aktuella behörighetsnivån.</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Definiera vilken användare som ska kunna se flera listor och vissa användarprofiler för medlemmar i den aktuella rollen. Rolltillstånd #VAR1_BOLD# är moderkonfiguration är den aktuella behörighetsnivån.</string>
   <string name="SYS_RIGHT_WEBLINKS">Hantera webblänkar</string>
   <string name="SYS_ROLE">Roll</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">På den här sidan kan du konfigurera vem som kan visa mappen #VAR1_BOLD#, ladda ner filer eller ladda upp filer. Behörigheterna ärvs till alla undermappar och befintliga behörigheter i undermappar skrivs över. Endast roller med åtkomst till överordnad mapp kan väljas. Administratörer har alla behörigheter för mappen.</string>

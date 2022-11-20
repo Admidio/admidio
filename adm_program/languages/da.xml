@@ -737,7 +737,7 @@
   <string name="SYS_DISK_SPACE_ERROR">Brugen af lagerpladsen kunne ikke bestemmes.\n\n Fejlmeddelelse:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Vis viderestilling</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Aktiver automatisk viderestilling for links. Brugeren vil blive advaret om at de forlader Admidio siderne når de klikker på et link i linkmodulet. Klikkede links vil åbne efter forud defineret tid. Hvis viderestilling er sat til 0, så vil linket blivet åbnet uden varsel. (Standard: 10 sekunder).</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Se rollemedlemskaber</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Se rollemedlemskaber</string>
   <string name="SYS_DIVERSE">Alsidig</string>
   <string name="SYS_DO_NOT_EDIT">Rediger ikke</string>
   <string name="SYS_DOCUMENTS_FILES">Dokumenter &amp; Filer</string>
@@ -1219,7 +1219,7 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">Send e-mails til alle roller</string>
   <string name="SYS_RIGHT_PHOTOS">Overfør og rediger billeder</string>
   <string name="SYS_RIGHT_PROFILE">Rediger egen profil</string>
-  <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">Denne indstilling styrer, hvilke brugere der har ret til at få vist forskellige lister og de enkelte medlemmers individuelle brugerprofiler. Men, rolle rettigheden #VAR1_BOLD# ligger dog stadig over denne indstilling.</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Denne indstilling styrer, hvilke brugere der har ret til at få vist forskellige lister og de enkelte medlemmers individuelle brugerprofiler. Men, rolle rettigheden #VAR1_BOLD# ligger dog stadig over denne indstilling.</string>
   <string name="SYS_RIGHT_WEBLINKS">Administrer weblink</string>
   <string name="SYS_ROLE">Rolle</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">På denne side kan du konfigurere, hvem der kan se mappen #VAR1_BOLD#, downloade filer eller uploade filer. Tilladelserne arves til alle undermapper, og eksisterende tilladelser i undermapper overskrives. Kun roller med adgang til overordnet mappe kan vælges. Administratorer har alle tilladelser til mappen.</string>

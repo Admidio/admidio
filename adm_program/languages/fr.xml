@@ -737,7 +737,7 @@
   <string name="SYS_DISK_SPACE_ERROR"> L\'utilisation de l\'espace disque n\'a pas pu être déterminée.\n\nMessage d\'erreur:\n#VAR1#.</string>
   <string name="SYS_DISPLAY_REDIRECT">Afficher la redirection</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Ici, le transfert automatique des liens peut être activé. Lorsque tu appel un lien à partir du module de lien, une page d\'avis s\'affiche qui indique que tu quitte les pages d\'Admidio. Après un temps spécifié en secondes, le lien actuel est alors appelé. Si la redirection est réglée sur 0, le lien est appelé directement sans afficher la page d\'avis. (Par défaut : 10 secondes)</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Afficher l\'adhésion aux rôle </string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Afficher l\'adhésion aux rôle </string>
   <string name="SYS_DIVERSE">Diverse</string>
   <string name="SYS_DO_NOT_EDIT">Ne pas éditer</string>
   <string name="SYS_DOCUMENTS_FILES">Documents &amp; Dossiers</string>
@@ -1219,7 +1219,7 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">Envoyer des courriels à tous les rôles</string>
   <string name="SYS_RIGHT_PHOTOS">Télécharger et modifier des photos</string>
   <string name="SYS_RIGHT_PROFILE">Modifier mon propre profil</string>
-  <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">Ce paramètre contrôle qui a le droit d\'envoyer des courriels à ce rôle à l\'aide du module de message. Cependant, le droit du rôle  #VAR1_BOLD# est toujours au-dessus de ce paramètre.</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Ce paramètre contrôle qui a le droit d\'envoyer des courriels à ce rôle à l\'aide du module de message. Cependant, le droit du rôle  #VAR1_BOLD# est toujours au-dessus de ce paramètre.</string>
   <string name="SYS_RIGHT_WEBLINKS">Gérer les liens Web</string>
   <string name="SYS_ROLE">Rôle</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Sur cette page tu peux configurer, qui peut voir le dossier #VAR1_BOLD# ou télécharger des fichiers. Les droits sont hérités à tous les sous-dossiers et les drois existants dans les sous-dossiers sont écrasés. Seuls les rôles qui ont accès au dossier parent sont disponibles. Les administrateurs ont tous les droits pour le dossier.</string>

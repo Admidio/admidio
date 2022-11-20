@@ -197,11 +197,12 @@ if ($getShow === 'permissions') {
         $gL10n->get('SYS_GROUPS_ROLES'),
         $gL10n->get('SYS_PERMISSIONS'),
         $gL10n->get('SYS_SEND_MAILS'),
-        $gL10n->get('SYS_DISPLAY_ROLE_MEMBERSHIP'),
+        $gL10n->get('SYS_VIEW_ROLE_MEMBERSHIPS'),
+        $gL10n->get('SYS_VIEW_PROFILES_OF_ROLE_MEMBERS'),
         $gL10n->get('SYS_LEADER'),
         '&nbsp;'
     );
-    $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'right'));
+    $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
     $table->disableDatatablesColumnsSort(array(3, 7));
     $table->setDatatablesColumnsNotHideResponsive(array(7));
     $table->setDatatablesGroupColumn(1);
@@ -430,7 +431,8 @@ foreach ($listsResult['recordset'] as $row) {
         }
 
         $viewEmail = '';
-        $viewRole  = '';
+        $viewMemberships  = '';
+        $viewProfiles = '';
         $leaderRights = '';
 
         switch ($role->getValue('rol_mail_this_role')) {
@@ -450,13 +452,25 @@ foreach ($listsResult['recordset'] as $row) {
 
         switch ($role->getValue('rol_view_memberships')) {
             case 0:
-                $viewRole = 'SYS_NOBODY';
+                $viewMemberships = 'SYS_NOBODY';
                 break;
             case 1:
-                $viewRole = 'SYS_ROLE_MEMBERS';
+                $viewMemberships = 'SYS_ROLE_MEMBERS';
                 break;
             case 2:
-                $viewRole = 'ORG_REGISTERED_USERS';
+                $viewMemberships = 'ORG_REGISTERED_USERS';
+                break;
+        }
+
+        switch ($role->getValue('rol_view_members_profiles')) {
+            case 0:
+                $viewProfiles = 'SYS_NOBODY';
+                break;
+            case 1:
+                $viewProfiles = 'SYS_ROLE_MEMBERS';
+                break;
+            case 2:
+                $viewProfiles = 'ORG_REGISTERED_USERS';
                 break;
         }
 
@@ -500,7 +514,8 @@ foreach ($listsResult['recordset'] as $row) {
             '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $roleUuid)).'">'.$rolName.'</a>',
             $assignRoles,
             $gL10n->get($viewEmail),
-            $gL10n->get($viewRole),
+            $gL10n->get($viewMemberships),
+            $gL10n->get($viewProfiles),
             $gL10n->get($leaderRights),
             $linkAdministration
         );

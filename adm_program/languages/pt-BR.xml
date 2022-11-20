@@ -694,7 +694,7 @@
   <string name="SYS_DISK_SPACE_ERROR">Não foi possível determinar a alocação do espaço de armazenamento.\n\nMensagem de erro:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Exibir redirecionamento</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Ativar auto-redirecionamento para links. O usuário será notificado que estará a deixar o Admidio ao clicar num link no módulo de links. O link será aberto após um tempo predefinido. Se zero, o link será aberto será aberto sem notificar o usuário (padrão: 10 segundos).</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Exibir filiações de cargo</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Exibir filiações de cargo</string>
   <string name="SYS_DO_NOT_EDIT">Não editar</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Diferentes arquivos e documentos podem ser visualizados ou disponíveis para download. Estes arquivos podem ser classificados em pastas com diferentes níveis de permissão de acesso.</string>
   <string name="SYS_DONATE">Doar</string>
@@ -1077,7 +1077,7 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">Enviar e-mail para todos os cargos</string>
   <string name="SYS_RIGHT_PHOTOS">Enviar e editar fotos</string>
   <string name="SYS_RIGHT_PROFILE">Editar o meu perfil</string>
-  <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">Defina quais usuários podem ver várias listas e determinados perfis de usuário de membros do cargo atual. A permissão de cargo #VAR1_BOLD# é configuração pai do nível de permissão em questão.</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Defina quais usuários podem ver várias listas e determinados perfis de usuário de membros do cargo atual. A permissão de cargo #VAR1_BOLD# é configuração pai do nível de permissão em questão.</string>
   <string name="SYS_RIGHT_WEBLINKS">Gerenciar links web</string>
   <string name="SYS_ROLE">Cargo</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Nesta página é possível configurar quem pode ver a pasta #VAR1_BOLD#, baixar e/ou enviar arquivos. As permissões são herdadas por todos as subpastas, sobrescrevendo suas permissões existentes. Apenas cargos com acesso à pasta pai são elegíveis. Administradores possuem todas as permissões para a pasta.</string>

@@ -177,12 +177,22 @@ if ($gSettingsManager->getBool('enable_mail_module')) {
 $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'));
 $form->addSelectBox(
     'rol_view_memberships',
-    $gL10n->get('SYS_DISPLAY_ROLE_MEMBERSHIP'),
+    $gL10n->get('SYS_VIEW_ROLE_MEMBERSHIPS'),
     $selectBoxEntries,
     array(
         'defaultValue'                   => $role->getValue('rol_view_memberships'),
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => $gL10n->get('SYS_RIGHT_THIS_LIST_VIEW_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW'))
+        'helpTextIdLabel'                => $gL10n->get('SYS_VIEW_ROLE_MEMBERSHIPS_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW'))
+    )
+);
+$form->addSelectBox(
+    'rol_view_members_profiles',
+    $gL10n->get('SYS_VIEW_PROFILES_OF_ROLE_MEMBERS'),
+    $selectBoxEntries,
+    array(
+        'defaultValue'                   => $role->getValue('rol_view_members_profiles'),
+        'showContextDependentFirstEntry' => false,
+        'helpTextIdLabel'                => $gL10n->get('SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW'))
     )
 );
 $selectBoxEntries = array(0 => $gL10n->get('SYS_NO_ADDITIONAL_RIGHTS'), 1 => $gL10n->get('SYS_ASSIGN_MEMBERS'), 2 => $gL10n->get('SYS_EDIT_MEMBERS'), 3 => $gL10n->get('SYS_ASSIGN_EDIT_MEMBERS'));

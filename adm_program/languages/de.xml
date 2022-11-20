@@ -733,7 +733,6 @@
   <string name="SYS_DISK_SPACE_ERROR">Die Belegung des Speicherplatzes konnte nicht ermittelt werden.\n\nFehlermeldung:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Anzeige Weiterleitung</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Voreinstellung: 10 Sekunden)</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
   <string name="SYS_DIVERSE">Divers</string>
   <string name="SYS_DO_NOT_EDIT">Nicht bearbeiten</string>
   <string name="SYS_DOCUMENTS_FILES">Dokumente &amp; Dateien</string>
@@ -1223,7 +1222,6 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">E-Mails an alle Rollen schreiben</string>
   <string name="SYS_RIGHT_PHOTOS">Fotos hochladen und bearbeiten</string>
   <string name="SYS_RIGHT_PROFILE">Eigenes Profil bearbeiten</string>
-  <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">Diese Einstellung steuert, welche Benutzer:innen das Recht haben, diverse Listen und die einzelnen Profile der Rollenmitglieder anzuschauen. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
   <string name="SYS_RIGHT_WEBLINKS">Weblinks verwalten</string>
   <string name="SYS_ROLE">Rolle</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administrierende besitzen alle Berechtigungen für den Ordner.</string>
@@ -1445,6 +1443,10 @@
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VIEW">Ansicht</string>
   <string name="SYS_VIEW_PICTURE_FULL_SIZED">Bild in voller Größe anzeigen</string>
+  <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">Profile der Rollenmitlieder sehen</string>
+  <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC">Mit dieser Einstellung kann festgelegt werden, wer die Profile der Mitglieder dieser Rolle sehen kann. Der Benutzer bzw. die Benutzerin kann das Profil der jeweiligen Person aufrufen und in Listen zu der Rolle alle hinterlegten Spalten sehen. Das Rollenrecht #VAR1_BOLD# überschreibt dieser Einstellung.</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Rollenmitgliedschaft sehen</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Mit dieser Einstellung kann festgelegt werden, wer die Mitglieder dieser Rolle sehen kann. Der Benutzer bzw. die Benutzerin kann die Rollenmitgliedschaft im Profil der jeweiligen Person sehen und in Listen zu der Rolle. Mit dieser Einstellung wird kein Zugriff auf das Profil der Rollenmitglieder ermöglicht. In Listen werden nur Name und Vorname angezeigt. Das Rollenrecht #VAR1_BOLD# überschreibt dieser Einstellung.</string>
   <string name="SYS_VISIBLE">Sichtbar</string>
   <string name="SYS_VISIBLE_FOR">Sichtbar für</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# nur für angemeldete Benutzer:innen sichtbar</string>

@@ -737,7 +737,7 @@
   <string name="SYS_DISK_SPACE_ERROR">Het gebruik van de schijfruimte kon niet worden bepaald.\n\nFoutmelding:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Toon doorverwijzing</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Activeer automatisch doorverwijzen van links. Als gebruiker op een link klikt zal hij/zij gewaarschuwd worden middels een bericht wanneer hij/zij de pagina\'s van Admidio verlaat. De link waarop geklikt wordt zal geopend worden na een vooraf ingestelde tijd. Als doorverwijzen op 0 staat, zal link geopend worden zonder waarschuwing vooraf. (Standaard: 10 seconden)</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Toon rol lidmaatschappen</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Toon rol lidmaatschappen</string>
   <string name="SYS_DIVERSE">Verschillend</string>
   <string name="SYS_DO_NOT_EDIT">Niet bewerken</string>
   <string name="SYS_DOCUMENTS_FILES">Documenten &amp; bestanden</string>
@@ -1219,7 +1219,7 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">E-mail naar alle rollen sturen</string>
   <string name="SYS_RIGHT_PHOTOS">Foto\'s uploaden en bewerken</string>
   <string name="SYS_RIGHT_PROFILE">Bewerk eigen profiel</string>
-  <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">Deze instelling bepaalt welke gebruikers het recht hebben om verschillende lijsten en de individuele gebruikersprofielen van de rolleden te bekijken. Het recht van de rol #VAR1_BOLD# staat nog steeds boven deze instelling.</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Deze instelling bepaalt welke gebruikers het recht hebben om verschillende lijsten en de individuele gebruikersprofielen van de rolleden te bekijken. Het recht van de rol #VAR1_BOLD# staat nog steeds boven deze instelling.</string>
   <string name="SYS_RIGHT_WEBLINKS">Beheer weblinks</string>
   <string name="SYS_ROLE">Rol</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Op deze pagina kunt u instellen wie de map #VAR1_BOLD# kan zien, bestanden kan downloaden of bestanden kan uploaden. De ingestelde rechten worden overgenomen door alle submappen en bestaande rechten in submappen worden overschreven. Alleen rollen die toegang hebben tot de hoofdmap zijn beschikbaar. Beheerders hebben alle rechten voor de map.</string>

@@ -744,7 +744,7 @@
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Show redirect</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Activate auto forwarding for links. User will be notified by a warning message about leaving the pages of Admidio when clicking a hyperlink in link module. Clicked hyperlink will be opened after predefined time. Is redirection set to 0, hyperlink will be opened without showing the warning message (default: 10 seconds).</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Виждане на участието в ролята</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Виждане на участието в ролята</string>
   <string name="SYS_DIVERSE">Diverse</string>
   <string name="SYS_DO_NOT_EDIT">Do not edit</string>
   <string name="SYS_DOCUMENTS_FILES">Документи и файлове</string>
@@ -1211,7 +1211,7 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">Изпращане на имейли до всички роли</string>
   <string name="SYS_RIGHT_PHOTOS">Качване и редактиране на снимки</string>
   <string name="SYS_RIGHT_PROFILE">Редактиране на собствения профил</string>
-  <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">Определете кой потребител трябва да може да вижда списъци и профили на потребители участници с текущата роля. Позволението на роля #VAR1_BOLD# е родитеска конфигурация в нивото на текущото позволение.</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Определете кой потребител трябва да може да вижда списъци и профили на потребители участници с текущата роля. Позволението на роля #VAR1_BOLD# е родитеска конфигурация в нивото на текущото позволение.</string>
   <string name="SYS_RIGHT_WEBLINKS">Управляване на интернет връзки</string>
   <string name="SYS_ROLE">Роля</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">На тази страница можета да конфигурирате кой може да вижда папка #VAR1_BOLD#, да изтегля или качва файлове. Позволението се наследява от всички под-папки и съществуващите позволения в под-папките са заместват. Само роли с достъп до съдържащата папка може да се избират. Администраторите имат всички позволения в папката.</string>
