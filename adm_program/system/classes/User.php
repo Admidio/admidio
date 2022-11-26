@@ -29,13 +29,17 @@ class User extends TableAccess
      */
     protected $rolesRights = array();
     /**
-     * @var array<int,bool> Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
+     * @var array<int,bool> Array with all roles and a flag if the user could view this role e.g. array(0 => role_id_1, 1 => role_id_2, ...)
      */
-    protected $listViewRights = array();
+    protected $rolesViewMemberships = array();
     /**
-     * @var array<int,bool> Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
+     * @var array<int,bool> Array with all roles and a flag if the user could view profiles of the roles members e.g. array(0 => role_id_1, 1 => role_id_2, ...)
      */
-    protected $listMailRights = array();
+    protected $rolesViewProfiles = array();
+    /**
+     * @var array<int,bool> Array with all roles and a flag if the user could write a mail to this role e.g. array(0 => role_id_1, 1 => role_id_2, ...)
+     */
+    protected $rolesWriteMails = array();
     /**
      * @var array<int,int> Array with all roles who the user is assigned
      */
@@ -346,6 +350,8 @@ class User extends TableAccess
      */
     public function checkRolesRight($right = null)
     {
+        $sqlFetchedRows = array();
+
         if ((int) $this->getValue('usr_id') === 0) {
             return false;
         }
@@ -385,29 +391,29 @@ class User extends TableAccess
             $rolesStatement = $this->db->queryPrepared($sql, $queryParams);
 
             while ($row = $rolesStatement->fetch()) {
-                $rolId = (int) $row['rol_id'];
-                $memLeader = (bool) $row['mem_leader'];
+                $roleId = (int) $row['rol_id'];
+                $sqlFetchedRows[] = $row;
 
                 if ($row['mem_usr_id'] > 0) {
                     // Sql selects all roles. Only consider roles where user is a member.
-                    if ($memLeader) {
-                        $rolLeaderRights = (int) $row['rol_leader_rights'];
+                    if ((bool) $row['mem_leader']) {
+                        $rolLeaderRights = (int)$row['rol_leader_rights'];
 
                         // if user is leader in this role than add role id and leader rights to array
-                        $this->rolesMembershipLeader[$rolId] = $rolLeaderRights;
+                        $this->rolesMembershipLeader[$roleId] = $rolLeaderRights;
 
                         // if role leader could assign new members then remember this setting
                         // roles for confirmation of dates should be ignored
                         if ($row['cat_name_intern'] !== 'EVENTS'
-                        && ($rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)) {
+                            && ($rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)) {
                             $this->assignRoles = true;
                         }
                     } else {
-                        $this->rolesMembershipNoLeader[] = $rolId;
+                        $this->rolesMembershipNoLeader[] = $roleId;
                     }
 
                     // add role to membership array
-                    $this->rolesMembership[] = $rolId;
+                    $this->rolesMembership[] = $roleId;
 
                     // Transfer the rights of the roles into the array, if these have not yet been set by other roles
                     foreach ($tmpRolesRights as $key => &$value) {
@@ -418,50 +424,67 @@ class User extends TableAccess
                     unset($value);
 
                     // set flag assignRoles of user can manage roles
-                    if ((int) $row['rol_assign_roles'] === 1) {
+                    if ((int)$row['rol_assign_roles'] === 1) {
                         $this->assignRoles = true;
                     }
 
                     // set administrator flag
-                    if ((int) $row['rol_administrator'] === 1) {
+                    if ((int)$row['rol_administrator'] === 1) {
                         $this->administrator = true;
                     }
-                }
-
-                // Remember list view setting
-                // leaders are allowed to see the role
-                if ($row['mem_usr_id'] > 0 && ($row['rol_view_memberships'] > 0 || $memLeader)) {
-                    // Membership to the role and this is not locked, then look at it
-                    $this->listViewRights[$rolId] = true;
-                } elseif (array_key_exists('rol_view_memberships', $row) && (int) $row['rol_view_memberships'] === 2) {
-                    // look at other roles when everyone is allowed to see them
-                    $this->listViewRights[$rolId] = true;
-                } else {
-                    $this->listViewRights[$rolId] = false;
-                }
-
-                // Set mail permissions
-                // Leaders are allowed to write mails to the role
-                if ($row['mem_usr_id'] > 0 && ($row['rol_mail_this_role'] > 0 || $memLeader)) {
-                    // Membership to the role and this is not locked, then look at it
-                    $this->listMailRights[$rolId] = true;
-                } elseif ($row['rol_mail_this_role'] >= 2) {
-                    // look at other roles when everyone is allowed to see them
-                    $this->listMailRights[$rolId] = true;
-                } else {
-                    $this->listMailRights[$rolId] = false;
                 }
             }
             $this->rolesRights = $tmpRolesRights;
 
-            // if the right 'view all lists' is set, then set this also in the array for all roles
-            if ($this->rolesRights['rol_all_lists_view']) {
-                $this->listViewRights = array_fill_keys(array_keys($this->listViewRights), true);
-            }
+            // go again through all roles, but now the rolesRights are set and can be evaluated
+            foreach ($sqlFetchedRows as $sqlRow) {
+                $roleId = (int) $sqlRow['rol_id'];
+                $memLeader = (bool) $sqlRow['mem_leader'];
 
-            // if the right 'write emails to all roles' is set, then set this also in the array for all roles
-            if ($this->rolesRights['rol_mail_to_all']) {
-                $this->listMailRights = array_fill_keys(array_keys($this->listMailRights), true);
+                if (array_key_exists('rol_view_memberships', $sqlRow)) {
+                    // Remember roles view setting
+                    if ((int) $sqlRow['rol_view_memberships'] === 1 && $sqlRow['mem_usr_id'] > 0) {
+                        // only role members are allowed to view memberships
+                        $this->rolesViewMemberships[] = $roleId;
+                    } elseif ((int) $sqlRow['rol_view_memberships'] === 2) {
+                        // all registered users are allowed to view memberships
+                        $this->rolesViewMemberships[] = $roleId;
+                    } elseif ((int) $sqlRow['rol_view_memberships'] === 3 && $memLeader) {
+                        // only leaders are allowed to view memberships
+                        $this->rolesViewMemberships[] = $roleId;
+                    } elseif ($this->rolesRights['rol_all_lists_view']) {
+                        // user is allowed to view all roles than also view this membership
+                        $this->rolesViewMemberships[] = $roleId;
+                    }
+
+                    // Remember profile view setting
+                    if ((int) $sqlRow['rol_view_members_profiles'] === 1 && $sqlRow['mem_usr_id'] > 0) {
+                        // only role members are allowed to view memberships
+                        $this->rolesViewProfiles[] = $roleId;
+                    } elseif ((int) $sqlRow['rol_view_members_profiles'] === 2) {
+                        // all registered users are allowed to view memberships
+                        $this->rolesViewProfiles[] = $roleId;
+                    } elseif ((int) $sqlRow['rol_view_members_profiles'] === 3 && $memLeader) {
+                        // only leaders are allowed to view memberships
+                        $this->rolesViewProfiles[] = $roleId;
+                    } elseif ($this->rolesRights['rol_all_lists_view']) {
+                        // user is allowed to view all roles than also view this membership
+                        $this->rolesViewProfiles[] = $roleId;
+                    }
+                }
+
+                // Set mail permissions
+                if ($sqlRow['mem_usr_id'] > 0 && ($sqlRow['rol_mail_this_role'] > 0 || $memLeader)) {
+                    // Leaders are allowed to write mails to the role
+                    // Membership to the role and this is not locked, then look at it
+                    $this->rolesWriteMails[] = $roleId;
+                } elseif ($sqlRow['rol_mail_this_role'] >= 2) {
+                    // look at other roles when everyone is allowed to see them
+                    $this->rolesWriteMails[] = $roleId;
+                } elseif ($this->rolesRights['rol_mail_to_all']) {
+                    // user is allowed to write emails to all roles than also write to this role
+                    $this->rolesWriteMails[] = $roleId;
+                }
             }
         }
 
@@ -836,31 +859,13 @@ class User extends TableAccess
     }
 
     /**
-     * @param array<int,bool> $rightsList
-     * @return array<int,int>
-     */
-    private function getAllRolesWithRight(array $rightsList)
-    {
-        $this->checkRolesRight();
-
-        $visibleRoles = array();
-
-        foreach ($rightsList as $roleId => $hasRight) {
-            if ($hasRight) {
-                $visibleRoles[] = $roleId;
-            }
-        }
-
-        return $visibleRoles;
-    }
-
-    /**
      * Creates an array with all roles where the user has the right to mail them
      * @return array<int,int> Array with role ids where user has the right to mail them
+     * @deprecated 4.2.0:4.3.0 "getAllMailRoles()" is deprecated, use "getRolesWriteMails()" instead.
      */
     public function getAllMailRoles()
     {
-        return $this->getAllRolesWithRight($this->listMailRights);
+        return $this->rolesWriteMails;
     }
 
     /**
@@ -917,12 +922,12 @@ class User extends TableAccess
     /**
      * Creates an array with all roles where the user has the right to view them
      * @return array<int,int> Array with role ids where user has the right to view them
+     * @deprecated 4.2.0:4.3.0 "getAllVisibleRoles()" is deprecated, use "getRolesViewMemberships()" instead.
      */
     public function getAllVisibleRoles()
     {
-        return $this->getAllRolesWithRight($this->listViewRights);
+        return $this->rolesViewMemberships;
     }
-
 
     /**
      * Returns the id of the organization this user object has been assigned.
@@ -946,6 +951,33 @@ class User extends TableAccess
         $orgStatement = $this->db->queryPrepared($sql, array($this->organizationId));
 
         return $orgStatement->fetchColumn();
+    }
+
+    /**
+     * Returns an array with all roles where the user has the right to view the profiles of the role members
+     * @return array<int,int> Array with role ids where user has the right to view the profiles of the role members
+     */
+    public function getRolesViewProfiles(): array
+    {
+        return $this->rolesViewProfiles;
+    }
+
+    /**
+     * Returns an array with all roles where the user has the right to view the memberships
+     * @return array<int,int> Array with role ids where user has the right to view the memberships
+     */
+    public function getRolesViewMemberships(): array
+    {
+        return $this->rolesViewMemberships;
+    }
+
+    /**
+     * Returns an array with all roles where the user has the right to write an email to the role members
+     * @return array<int,int> Array with role ids where user has the right to mail them
+     */
+    public function getRolesWriteMails()
+    {
+        return $this->rolesWriteMails;
     }
 
     /**
@@ -1269,11 +1301,11 @@ class User extends TableAccess
 
     /**
      * @param array<int,bool> $rightsList
-     * @param string          $rightName
-     * @param int             $roleId
+     * @param string $rightName
+     * @param int $roleId
      * @return bool
      */
-    private function hasRightRole(array $rightsList, $rightName, $roleId)
+    private function hasRightRole(array $rightsList, string $rightName, int $roleId): bool
     {
         // if user has right to view all lists then he could also view this role
         if ($this->checkRolesRight($rightName)) {
@@ -1281,7 +1313,7 @@ class User extends TableAccess
         }
 
         // check if user has the right to view this role
-        return array_key_exists($roleId, $rightsList) && $rightsList[$roleId];
+        return in_array($roleId, $rightsList);
     }
 
     /**
@@ -1289,9 +1321,9 @@ class User extends TableAccess
      * @param int $roleId Id of the role that should be checked.
      * @return bool Return **true** if the user has the right to send an email to the role.
      */
-    public function hasRightSendMailToRole($roleId)
+    public function hasRightSendMailToRole(int $roleId): bool
     {
-        return $this->hasRightRole($this->listMailRights, 'rol_mail_to_all', $roleId);
+        return $this->hasRightRole($this->rolesWriteMails, 'rol_mail_to_all', $roleId);
     }
 
     /**
@@ -1300,7 +1332,7 @@ class User extends TableAccess
      * @param int $roleId Id of the role that should be checked.
      * @return bool Return **true** if the user has the right to view former roles members
      */
-    public function hasRightViewFormerRolesMembers($roleId)
+    public function hasRightViewFormerRolesMembers(int $roleId): bool
     {
         global $gSettingsManager;
 
@@ -1319,12 +1351,12 @@ class User extends TableAccess
 
     /**
      * Checks if the current user is allowed to view the profile of the user of the parameter.
-     * If will check if user has edit rights with method editProfile or if the user is a member
+     * It will check if user has edit rights with method **hasRightEditProfile** or if the user is a member
      * of a role where the current user has the right to view profiles.
      * @param User $user User object of the user that should be checked if the current user can view his profile.
      * @return bool Return **true** if the current user is allowed to view the profile of the user from **$user**.
      */
-    public function hasRightViewProfile(self $user)
+    public function hasRightViewProfile(self $user): bool
     {
         global $gValidLogin;
 
@@ -1338,12 +1370,12 @@ class User extends TableAccess
             return true;
         }
 
-        // Benutzer, die alle Listen einsehen duerfen, koennen auch alle Profile sehen
+        // Users who can see all lists can also see all profiles
         if ($this->checkRolesRight('rol_all_lists_view')) {
             return true;
         }
 
-        $sql = 'SELECT rol_id, rol_view_memberships
+        $sql = 'SELECT rol_id, rol_view_members_profiles
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
                     ON rol_id = mem_rol_id
@@ -1361,15 +1393,15 @@ class User extends TableAccess
         if ($listViewStatement->rowCount() > 0) {
             while ($row = $listViewStatement->fetch()) {
                 $rolId = (int) $row['rol_id'];
-                $rolThisListView = (int) $row['rol_view_memberships'];
+                $rolThisProfileView = (int) $row['rol_view_members_profiles'];
 
-                if ($gValidLogin && $rolThisListView === 2) {
-                    // alle angemeldeten Benutzer duerfen Rollenlisten/-profile sehen
+                if ($gValidLogin && $rolThisProfileView === 2) {
+                    // all logged in users can see role lists/profiles
                     return true;
                 }
 
-                if ($rolThisListView === 1 && array_key_exists($rolId, $this->listViewRights) && $this->listViewRights[$rolId]) {
-                    // nur Rollenmitglieder duerfen Rollenlisten/-profile sehen
+                if ($rolThisProfileView === 1 && in_array($rolId, $this->rolesViewProfiles)) {
+                    // only role members can see role lists/profiles
                     return true;
                 }
             }
@@ -1379,13 +1411,24 @@ class User extends TableAccess
     }
 
     /**
+     * Check if the user of this object has the right to view profiles of members from the role
+     * that is set in the parameter.
+     * @param int $roleId The id of the role that should be checked.
+     * @return bool Return **true** if the user has the right to view profiles of members from the role otherwise **false**.
+     */
+    public function hasRightViewProfiles(int $roleId): bool
+    {
+        return $this->hasRightRole($this->rolesViewMemberships, 'rol_all_lists_view', $roleId);
+    }
+
+    /**
      * Check if the user of this object has the right to view the role that is set in the parameter.
      * @param int $roleId The id of the role that should be checked.
      * @return bool Return **true** if the user has the right to view the role otherwise **false**.
      */
-    public function hasRightViewRole($roleId)
+    public function hasRightViewRole(int $roleId): bool
     {
-        return $this->hasRightRole($this->listViewRights, 'rol_all_lists_view', $roleId);
+        return $this->hasRightRole($this->rolesViewMemberships, 'rol_all_lists_view', $roleId);
     }
 
     /**
@@ -1661,8 +1704,8 @@ class User extends TableAccess
     {
         // initialize rights arrays
         $this->rolesRights     = array();
-        $this->listViewRights  = array();
-        $this->listMailRights  = array();
+        $this->rolesViewMemberships  = array();
+        $this->rolesWriteMails  = array();
         $this->rolesMembership = array();
         $this->rolesMembershipLeader   = array();
         $this->rolesMembershipNoLeader = array();

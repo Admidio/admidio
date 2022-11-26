@@ -163,7 +163,7 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 $list = array();
 
 // list all roles where login users could send mails to
-$arrayMailRoles = $gCurrentUser->getAllMailRoles();
+$arrayMailRoles = $gCurrentUser->getRolesWriteMails();
 
 $sql = 'SELECT rol_id, rol_name
           FROM '.TBL_ROLES.'
@@ -179,7 +179,7 @@ while ($row = $statement->fetch()) {
 }
 
 // select all users
-$arrayRoles = array_merge($arrayMailRoles, $gCurrentUser->getAllVisibleRoles());
+$arrayRoles = array_merge($arrayMailRoles, $gCurrentUser->getRolesViewMemberships());
 $arrayUniqueRoles = array_unique($arrayRoles);
 
 $sql = 'SELECT DISTINCT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name

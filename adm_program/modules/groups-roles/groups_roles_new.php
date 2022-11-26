@@ -174,7 +174,7 @@ if ($gSettingsManager->getBool('enable_mail_module')) {
         )
     );
 }
-$selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'));
+$selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 3 => $gL10n->get('SYS_LEADERS'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'));
 $form->addSelectBox(
     'rol_view_memberships',
     $gL10n->get('SYS_VIEW_ROLE_MEMBERSHIPS'),

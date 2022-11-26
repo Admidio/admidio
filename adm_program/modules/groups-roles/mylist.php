@@ -619,7 +619,7 @@ $form->openGroupBox('gb_select_members', $gL10n->get('SYS_SELECT_MEMBERS'));
 // show all roles where the user has the right to view them
 $sqlData = array();
 if ($getActiveRole) {
-    $allVisibleRoles = $gCurrentUser->getAllVisibleRoles();
+    $allVisibleRoles = $gCurrentUser->getRolesViewMemberships();
 
     // check if there are roles that the current user could view
     if (count($allVisibleRoles) === 0) {
