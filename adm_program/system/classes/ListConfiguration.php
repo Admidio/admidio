@@ -66,7 +66,7 @@ class ListConfiguration extends TableLists
         }
 
         // uuid could only be added by an administrator
-        if(!$gCurrentUser->editUsers() && $field === 'usr_uuid') {
+        if($field === 'usr_uuid' && !$gCurrentUser->editUsers()) {
             return false;
         }
 
