@@ -52,88 +52,96 @@ mailq
 # generate admidio config.php
 ADMIDIO_CONFIG_TEMPLATE="/opt/app-root/src/provisioning/adm_my_files/config_example.php"
 ADMIDIO_CONFIG="/opt/app-root/src/adm_my_files/config.php"
+ADMIDIO_FIRSTRUN="/opt/app-root/src/adm_my_files/.admidio_installed"
 
-# if nessary environment variables exist, copy config template to config file
-if ! ( [ -z "${ADMIDIO_DB_HOST}" ] || ( [ -z "${ADMIDIO_DB_PORT}" ] && [ -z "${ADMIDIO_DB_HOST##*:}" ] ) || [ -z "${ADMIDIO_DB_NAME}" ] || [ -z "${ADMIDIO_DB_USER}" ] || [ -z "${ADMIDIO_DB_PASSWORD}" ] ) ; then
-    echo "[INFO ] generate admidio config.php file"
-    cp --preserve=mode,ownership,timestamps "${ADMIDIO_CONFIG_TEMPLATE}" "${ADMIDIO_CONFIG}"
-fi
-# chown default.root "${ADMIDIO_CONFIG}"
-# chmod 664 "${ADMIDIO_CONFIG}"
 
-if [ -f "${ADMIDIO_CONFIG}" ]; then
-    echo "[INFO ] configure admidio config.php file"
+if [ -f "${ADMIDIO_FIRSTRUN}" ]; then
+    # if nessary environment variables exist, copy config template to config file
+    if ! ( [ -z "${ADMIDIO_DB_HOST}" ] || ( [ -z "${ADMIDIO_DB_PORT}" ] && [ -z "${ADMIDIO_DB_HOST##*:}" ] ) || [ -z "${ADMIDIO_DB_NAME}" ] || [ -z "${ADMIDIO_DB_USER}" ] || [ -z "${ADMIDIO_DB_PASSWORD}" ] ) ; then
+        echo "[INFO ] generate admidio config.php file"
+        cp --preserve=mode,ownership,timestamps "${ADMIDIO_CONFIG_TEMPLATE}" "${ADMIDIO_CONFIG}"
+    fi
+    # chown default.root "${ADMIDIO_CONFIG}"
+    # chmod 664 "${ADMIDIO_CONFIG}"
 
-    # Select your database system for example 'mysql' or 'pgsql'
-    # $gDbType = 'mysql';
-    sed -i "s/^\$gDbType.*/\$gDbType = '${ADMIDIO_DB_TYPE:-mysql}';/g" "${ADMIDIO_CONFIG}"
+    if [ -f "${ADMIDIO_CONFIG}" ]; then
+        echo "[INFO ] configure admidio config.php file"
 
-    # // Table prefix for Admidio-Tables in database
-    # // Example: 'adm'
-    # $g_tbl_praefix = 'adm';
-    sed -i "s/^\$g_tbl_praefix.*/\$g_tbl_praefix = '${ADMIDIO_DB_TABLE_PRAEFIX:-adm}';/g" "${ADMIDIO_CONFIG}"
-    #
-    # // Access to the database of the MySQL-Server
-    # $g_adm_srv  = 'URL_to_your_MySQL-Server';    // Server
-    if [ "${ADMIDIO_DB_HOST}" != "" ]; then
-        sed -i "s/^\$g_adm_srv.*/\$g_adm_srv = '${ADMIDIO_DB_HOST%%:*}';/g" "${ADMIDIO_CONFIG}"
+        # Select your database system for example 'mysql' or 'pgsql'
+        # $gDbType = 'mysql';
+        sed -i "s/^\$gDbType.*/\$gDbType = '${ADMIDIO_DB_TYPE:-mysql}';/g" "${ADMIDIO_CONFIG}"
+
+        # // Table prefix for Admidio-Tables in database
+        # // Example: 'adm'
+        # $g_tbl_praefix = 'adm';
+        sed -i "s/^\$g_tbl_praefix.*/\$g_tbl_praefix = '${ADMIDIO_DB_TABLE_PRAEFIX:-adm}';/g" "${ADMIDIO_CONFIG}"
+        #
+        # // Access to the database of the MySQL-Server
+        # $g_adm_srv  = 'URL_to_your_MySQL-Server';    // Server
+        if [ "${ADMIDIO_DB_HOST}" != "" ]; then
+            sed -i "s/^\$g_adm_srv.*/\$g_adm_srv = '${ADMIDIO_DB_HOST%%:*}';/g" "${ADMIDIO_CONFIG}"
+        else
+            sed -i "s/^\$g_adm_srv.*/\$g_adm_srv = 'localhost';/g" "${ADMIDIO_CONFIG}"
+        fi
+
+        # $g_adm_port = null;                          // Port
+        if [ "${ADMIDIO_DB_PORT}" != "" ]; then
+            sed -i "s/^\$g_adm_port.*/\$g_adm_port = ${ADMIDIO_DB_PORT};/g" "${ADMIDIO_CONFIG}"
+        elif [ "${ADMIDIO_DB_HOST}" != "" ]; then
+            sed -i "s/^\$g_adm_port.*/\$g_adm_port = ${ADMIDIO_DB_HOST##*:};/g" "${ADMIDIO_CONFIG}"
+        else
+            sed -i "s/^\$g_adm_port.*/\$g_adm_port = null;/g" "${ADMIDIO_CONFIG}"
+        fi
+        # $g_adm_db   = 'Databasename';                // Database
+        sed -i "s/^\$g_adm_db.*/\$g_adm_db = '${ADMIDIO_DB_NAME:-admidio}';/g" "${ADMIDIO_CONFIG}"
+        # $g_adm_usr  = 'Username';                    // User
+        sed -i "s/^\$g_adm_usr.*/\$g_adm_usr = '${ADMIDIO_DB_USER:-admidio}';/g" "${ADMIDIO_CONFIG}"
+        # $g_adm_pw   = 'Password';                    // Password
+        sed -i "s/^\$g_adm_pw.*/\$g_adm_pw = '${ADMIDIO_DB_PASSWORD:-admidio}';/g" "${ADMIDIO_CONFIG}"
+
+        # // URL to this Admidio installation
+        # // Example: 'https://www.admidio.org/example'
+        # $g_root_path = 'https://www.your-website.de/admidio';
+        if [ "${ADMIDIO_ROOT_PATH}" != "" ]; then
+            sed -i "s#^\$g_root_path.*#\$g_root_path = '${ADMIDIO_ROOT_PATH}';#g" "${ADMIDIO_CONFIG}"
+        fi
+
+        # // Short description of the organization that is running Admidio
+        # // This short description must correspond to your input in the installation wizard !!!
+        # // Example: 'ADMIDIO'
+        # // Maximum of 10 characters !!!
+        # $g_organization = 'Shortcut';
+        if [ "${ADMIDIO_ORGANISATION}" != "" ]; then
+            sed -i "s/^\$g_organization.*/\$g_organization = '${ADMIDIO_ORGANISATION}';/g" "${ADMIDIO_CONFIG}"
+        fi
+
+        # // The name of the timezone in which your organization is located.
+        # // This must be one of the strings that are defined here https://www.php.net/manual/en/timezones.php
+        # // Example: 'Europe/Berlin'
+        # $gTimezone = 'Europe/Berlin';
+        if [ "${TZ}" != "" ]; then
+            sed -i "s#^\$gTimezone.*#\$gTimezone = '${TZ}';#g" "${ADMIDIO_CONFIG}"
+        fi
+
+        # // If this flag is set = 1 then you must enter your loginname and password
+        # // for an update of the Admidio database to a new version of Admidio.
+        # // For a more comfortable and easy update you can set this preference = 0.
+        # $gLoginForUpdate = 1;
+        sed -i "s/^\$gLoginForUpdate.*/\$gLoginForUpdate = ${ADMIDIO_LOGIN_FOR_UPDATE:-1};/g" "${ADMIDIO_CONFIG}"
+
+        # // Set the preferred password hashing algorithm.
+        # // Possible values are: 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT', 'SHA512'
+        # $gPasswordHashAlgorithm = 'DEFAULT';
+        sed -i "s/^\$gPasswordHashAlgorithm.*/\$gPasswordHashAlgorithm = '${ADMIDIO_PASSWORD_HASH_ALGORITHM:-DEFAULT}';/g" "${ADMIDIO_CONFIG}"
     else
-        sed -i "s/^\$g_adm_srv.*/\$g_adm_srv = 'localhost';/g" "${ADMIDIO_CONFIG}"
+        echo "[WARNING] admidio config.php file does not exist."
     fi
-
-    # $g_adm_port = null;                          // Port
-    if [ "${ADMIDIO_DB_PORT}" != "" ]; then
-        sed -i "s/^\$g_adm_port.*/\$g_adm_port = ${ADMIDIO_DB_PORT};/g" "${ADMIDIO_CONFIG}"
-    elif [ "${ADMIDIO_DB_HOST}" != "" ]; then
-        sed -i "s/^\$g_adm_port.*/\$g_adm_port = ${ADMIDIO_DB_HOST##*:};/g" "${ADMIDIO_CONFIG}"
-    else
-        sed -i "s/^\$g_adm_port.*/\$g_adm_port = null;/g" "${ADMIDIO_CONFIG}"
-    fi
-    # $g_adm_db   = 'Databasename';                // Database
-    sed -i "s/^\$g_adm_db.*/\$g_adm_db = '${ADMIDIO_DB_NAME:-admidio}';/g" "${ADMIDIO_CONFIG}"
-    # $g_adm_usr  = 'Username';                    // User
-    sed -i "s/^\$g_adm_usr.*/\$g_adm_usr = '${ADMIDIO_DB_USER:-admidio}';/g" "${ADMIDIO_CONFIG}"
-    # $g_adm_pw   = 'Password';                    // Password
-    sed -i "s/^\$g_adm_pw.*/\$g_adm_pw = '${ADMIDIO_DB_PASSWORD:-admidio}';/g" "${ADMIDIO_CONFIG}"
-
-    # // URL to this Admidio installation
-    # // Example: 'https://www.admidio.org/example'
-    # $g_root_path = 'https://www.your-website.de/admidio';
-    if [ "${ADMIDIO_ROOT_PATH}" != "" ]; then
-        sed -i "s#^\$g_root_path.*#\$g_root_path = '${ADMIDIO_ROOT_PATH}';#g" "${ADMIDIO_CONFIG}"
-    fi
-
-    # // Short description of the organization that is running Admidio
-    # // This short description must correspond to your input in the installation wizard !!!
-    # // Example: 'ADMIDIO'
-    # // Maximum of 10 characters !!!
-    # $g_organization = 'Shortcut';
-    if [ "${ADMIDIO_ORGANISATION}" != "" ]; then
-        sed -i "s/^\$g_organization.*/\$g_organization = '${ADMIDIO_ORGANISATION}';/g" "${ADMIDIO_CONFIG}"
-    fi
-
-    # // The name of the timezone in which your organization is located.
-    # // This must be one of the strings that are defined here https://www.php.net/manual/en/timezones.php
-    # // Example: 'Europe/Berlin'
-    # $gTimezone = 'Europe/Berlin';
-    if [ "${TZ}" != "" ]; then
-        sed -i "s#^\$gTimezone.*#\$gTimezone = '${TZ}';#g" "${ADMIDIO_CONFIG}"
-    fi
-
-    # // If this flag is set = 1 then you must enter your loginname and password
-    # // for an update of the Admidio database to a new version of Admidio.
-    # // For a more comfortable and easy update you can set this preference = 0.
-    # $gLoginForUpdate = 1;
-    sed -i "s/^\$gLoginForUpdate.*/\$gLoginForUpdate = ${ADMIDIO_LOGIN_FOR_UPDATE:-1};/g" "${ADMIDIO_CONFIG}"
-
-    # // Set the preferred password hashing algorithm.
-    # // Possible values are: 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT', 'SHA512'
-    # $gPasswordHashAlgorithm = 'DEFAULT';
-    sed -i "s/^\$gPasswordHashAlgorithm.*/\$gPasswordHashAlgorithm = '${ADMIDIO_PASSWORD_HASH_ALGORITHM:-DEFAULT}';/g" "${ADMIDIO_CONFIG}"
-else
-    echo "[WARNING] admidio config.php file does not exist."
 fi
 
+if [ ! -f "${ADMIDIO_FIRSTRUN}" ]; then
+    echo "[INFO ] create .admidio_installed file (${ADMIDIO_FIRSTRUN})"
+    touch "${ADMIDIO_FIRSTRUN}"
+fi
 
 # run apache with php enabled as user default
 echo "[INFO ] run apache with php enabled (/usr/libexec/s2i/run)"
