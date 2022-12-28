@@ -133,7 +133,7 @@
  * echo HtmlElement::getHtmlElement();
  * ```
  */
-abstract class HtmlElement
+abstract class HtmlElement extends \Smarty
 {
     /**
      * @var bool Flag enables nesting of main elements, e.g div blocks ( Default : true )
@@ -187,6 +187,17 @@ abstract class HtmlElement
         $this->nesting        = $nesting;
         $this->mainElement    = $element;
         $this->currentElement = $element;
+        
+        parent::__construct();
+        // initialize php template engine smarty
+        if (defined('THEME_PATH')) {
+            $this->setTemplateDir(THEME_PATH . '/templates/');
+        }
+
+        $this->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
+        $this->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
+        $this->addPluginsDir(ADMIDIO_PATH . '/adm_program/system/smarty-plugins/');
+
     }
 
     /**
@@ -491,5 +502,18 @@ abstract class HtmlElement
         $this->htmlString .= '</' . $this->mainElement . '>';
 
         return $this->htmlString;
+    }
+
+    public function render($templateName, $asigns) {
+        global $gL10n;
+        foreach($asigns as $key => $asign) {
+            $this->assign($key, $asign);
+        }
+        $this->assign("ADMIDIO_URL", ADMIDIO_URL);
+        $this->assign("FOLDER_LIBS_SERVER", FOLDER_LIBS_SERVER);
+        $this->assign("data", $asigns);
+       
+        $this->assign('l10n', $gL10n);
+        return $this->fetch("sys-template-parts/".$templateName.'.tpl');
     }
 }

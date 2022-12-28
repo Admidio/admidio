@@ -214,7 +214,7 @@ input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
 }
 
 .datetime-time-control {
-    width: 100px !important;
+    width: 110px !important;
     margin-left: 20px;
 }
 

@@ -64,6 +64,7 @@
  * // print the form
  * echo $form->getHtmlForm();
  * ```
+ * @deprecated 
  */
 class HtmlFormBasic extends HtmlElement
 {
@@ -124,26 +125,19 @@ class HtmlFormBasic extends HtmlElement
      * @param string               $value         Value of the field (Default: empty)
      * @param array<string,string> $arrAttributes Further attributes as array with key/value pairs
      */
-    public function addSimpleInput($type, $name, $id = null, $value = '', array $arrAttributes = null)
+    public function addSimpleInput($type, $name, $id = null, $value = '', array $arrAttributes = [])
     {
-        $this->addElement('input', '', '', '', true);
+        $data = [
+            'type' => $type, 
+            'name' => $name, 
+            'id' => $id , 
+            'value' => $value
+        ];
+        $data = array_merge($data, $arrAttributes);
 
-        // set all attributes
-        $this->addAttribute('type', $type);
-        $this->addAttribute('name', $name);
+        $data = array_filter($data);
 
-        if ($id !== null) {
-            $this->addAttribute('id', $id);
-        }
-
-        $this->addAttribute('value', $value);
-
-        // Check optional attributes in associative array and set all attributes
-        if ($arrAttributes !== null) {
-            $this->setAttributesFromArray($arrAttributes);
-        }
-
-        $this->addData(' ', true);
+        $this->addHtml($this->render('form.input.simple', ["attributes" => $data]));
     }
 
     /**
