@@ -115,7 +115,8 @@ $page->addJavascript(
 if ($getAnnUuid === '') {
     // create filter menu with elements for category
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
-    $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
+    $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', $page, array('type' => 'navbar', 'setFocus' => false));
+    $form->addInput('headline', 'headline', $getHeadline, array('property' => HtmlForm::FIELD_HIDDEN));
     $form->addSelectBoxForCategories(
         'cat_uuid',
         $gL10n->get('SYS_CATEGORY'),

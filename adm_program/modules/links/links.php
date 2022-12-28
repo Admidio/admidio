@@ -106,7 +106,8 @@ if ($weblinks->getId() === 0) {
 
     // create filter menu with elements for category
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
-    $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
+    $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', $page, array('type' => 'navbar', 'setFocus' => false));
+    $form->addInput('headline', 'headline', $getHeadline, array('property' => HtmlForm::FIELD_HIDDEN));
     $form->addSelectBoxForCategories(
         'cat_uuid',
         $gL10n->get('SYS_CATEGORY'),

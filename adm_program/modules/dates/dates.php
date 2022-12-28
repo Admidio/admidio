@@ -160,7 +160,8 @@ if ($getViewMode === 'html') {
 
         // create filter menu with elements for calendar and start-/enddate
         $filterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
-        $form = new HtmlForm('navbar_filter_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('headline' => $getHeadline, 'view' => $getView)), $page, array('type' => 'navbar', 'setFocus' => false));
+        $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', $page, array('type' => 'navbar', 'setFocus' => false));
+        $form->addInput('headline', 'headline', $getHeadline, array('property' => HtmlForm::FIELD_HIDDEN));
         if ($gSettingsManager->getBool('dates_show_rooms')) {
             $selectBoxEntries = array(
                 'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
