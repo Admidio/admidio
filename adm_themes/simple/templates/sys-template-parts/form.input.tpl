@@ -8,16 +8,15 @@
     {$itemvar@key}="{$itemvar}"
     {/foreach}>
 {else}
-
 <div
     id="{$id}_group"
-    class="form-group {if $data.formtype neq 'vertical'}row{/if} {if $property eq 1}admidio-form-group-required{/if}">    
-    <label for="{$id}" class="{if $data.formtype neq 'vertical'}col-sm-3{/if} control-label">
+    class="form-group {if $data.formtype neq 'vertical' and $data.formtype neq 'navbar'}row{/if} {if $property eq 1}admidio-form-group-required{/if}">    
+    <label for="{$id}" class="{if $data.formtype neq 'vertical' and $data.formtype neq 'navbar'}col-sm-3{/if} control-label">
         {include file='sys-template-parts/parts/form.part.icon.tpl'}
         {$label}
         {include file='sys-template-parts/parts/form.part.iconhelp.tpl'}
     </label>
-    <div class="{if $data.formtype neq 'vertical'}col-sm-9{/if}">
+    <div class="{if $data.formtype neq 'vertical' and $data.formtype neq 'navbar'}col-sm-9{/if}">
         {if $type == 'datetime'}
             <input
             type="text"
@@ -40,7 +39,7 @@
             data-provide=""
             >
             {$htmlAfter}
-        {elseif $type == 'date' OR $type == 'birthday'}
+        {elseif $type == 'date' and $type == 'birthday'}
             <input
             type="date"
             name="{$id}"
