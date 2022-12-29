@@ -19,6 +19,11 @@ class TableRoles extends TableAccess
 {
     public const ROLE_GROUP = 0;
     public const ROLE_EVENT = 1;
+
+    public const VIEW_NOBODY = 0;
+    public const VIEW_LEADERS = 3;
+    public const VIEW_ROLE_MEMBERS = 1;
+    public const VIEW_LOGIN_USERS = 2;
     /**
      * @var int number of leaders of this role
      */

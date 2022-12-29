@@ -443,13 +443,13 @@ class User extends TableAccess
 
                 if (array_key_exists('rol_view_memberships', $sqlRow)) {
                     // Remember roles view setting
-                    if ((int) $sqlRow['rol_view_memberships'] === 1 && $sqlRow['mem_usr_id'] > 0) {
+                    if ((int) $sqlRow['rol_view_memberships'] === TableRoles::VIEW_ROLE_MEMBERS && $sqlRow['mem_usr_id'] > 0) {
                         // only role members are allowed to view memberships
                         $this->rolesViewMemberships[] = $roleId;
-                    } elseif ((int) $sqlRow['rol_view_memberships'] === 2) {
+                    } elseif ((int) $sqlRow['rol_view_memberships'] === TableRoles::VIEW_LOGIN_USERS) {
                         // all registered users are allowed to view memberships
                         $this->rolesViewMemberships[] = $roleId;
-                    } elseif ((int) $sqlRow['rol_view_memberships'] === 3 && $memLeader) {
+                    } elseif ((int) $sqlRow['rol_view_memberships'] === TableRoles::VIEW_LEADERS && $memLeader) {
                         // only leaders are allowed to view memberships
                         $this->rolesViewMemberships[] = $roleId;
                     } elseif ($this->rolesRights['rol_all_lists_view']) {
@@ -458,13 +458,13 @@ class User extends TableAccess
                     }
 
                     // Remember profile view setting
-                    if ((int) $sqlRow['rol_view_members_profiles'] === 1 && $sqlRow['mem_usr_id'] > 0) {
+                    if ((int) $sqlRow['rol_view_members_profiles'] === TableRoles::VIEW_ROLE_MEMBERS && $sqlRow['mem_usr_id'] > 0) {
                         // only role members are allowed to view memberships
                         $this->rolesViewProfiles[] = $roleId;
-                    } elseif ((int) $sqlRow['rol_view_members_profiles'] === 2) {
+                    } elseif ((int) $sqlRow['rol_view_members_profiles'] === TableRoles::VIEW_LOGIN_USERS) {
                         // all registered users are allowed to view memberships
                         $this->rolesViewProfiles[] = $roleId;
-                    } elseif ((int) $sqlRow['rol_view_members_profiles'] === 3 && $memLeader) {
+                    } elseif ((int) $sqlRow['rol_view_members_profiles'] === TableRoles::VIEW_LEADERS && $memLeader) {
                         // only leaders are allowed to view memberships
                         $this->rolesViewProfiles[] = $roleId;
                     } elseif ($this->rolesRights['rol_all_lists_view']) {
@@ -1392,16 +1392,17 @@ class User extends TableAccess
 
         if ($listViewStatement->rowCount() > 0) {
             while ($row = $listViewStatement->fetch()) {
-                $rolId = (int) $row['rol_id'];
-                $rolThisProfileView = (int) $row['rol_view_members_profiles'];
+                $rolId = (int)$row['rol_id'];
+                $rolThisProfileView = (int)$row['rol_view_members_profiles'];
 
-                if ($gValidLogin && $rolThisProfileView === 2) {
+                if ($rolThisProfileView === TableRoles::VIEW_LOGIN_USERS && $gValidLogin) {
                     // all logged in users can see role lists/profiles
                     return true;
-                }
-
-                if ($rolThisProfileView === 1 && in_array($rolId, $this->rolesViewProfiles)) {
+                } elseif ($rolThisProfileView === TableRoles::VIEW_ROLE_MEMBERS && in_array($rolId, $this->rolesViewProfiles)) {
                     // only role members can see role lists/profiles
+                    return true;
+                } elseif ($rolThisProfileView === TableRoles::VIEW_LEADERS && $this->isLeaderOfRole($rolId)) {
+                    // only leaders of the role could view the profile of the role members
                     return true;
                 }
             }

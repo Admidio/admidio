@@ -111,15 +111,15 @@ class ListConfiguration extends TableLists
 
     /**
      * Convert the content of the column independence of the output format.
-     * Therefore the method will check which datatype the column has and which format the
-     * ouput should have.
-     * @param int     $columnNumber Number of the column for which the content should be converted.
-     * @param string  $format       The following formats are possible 'html', 'print', 'csv' or 'pdf'
-     * @param string  $content      The content that should be converted.
-     * @param string  $userUuid     Uuid of the user for which the content should converted. This is not the login user.
-     * @return string Returns the converted content.
+     * Therefore, the method will check which datatype the column has and which format the
+     * output should have.
+     * @param int $columnNumber Number of the column for which the content should be converted.
+     * @param string $format    The following formats are possible 'html', 'print', 'csv' or 'pdf'
+     * @param string $content   The content that should be converted.
+     * @param string $userUuid  Uuid of the user for which the content should be converted. This is not the login user.
+     * @return string Returns the converted content.
      */
-    public function convertColumnContentForOutput($columnNumber, $format, $content, $userUuid)
+    public function convertColumnContentForOutput(int $columnNumber, string $format, string $content, string $userUuid)
     {
         global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
