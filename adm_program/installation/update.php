@@ -14,7 +14,7 @@
  *        3 : Show result of update
  ***********************************************************************************************
  */
-$rootPath = dirname(dirname(__DIR__));
+$rootPath = dirname(__DIR__, 2);
 
 // embed config file
 $configPath = $rootPath . '/adm_my_files/config.php';
@@ -34,7 +34,7 @@ require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/update_functions.php');
 
 // Initialize and check the parameters
 
-define('THEME_URL', 'layout');
+const THEME_URL = 'layout';
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
 
 // connect to database
@@ -51,7 +51,7 @@ try {
 // start PHP session
 try {
     Session::start(COOKIE_PREFIX);
-} catch (\RuntimeException $exception) {
+} catch (RuntimeException $exception) {
     // TODO
 }
 
@@ -64,7 +64,7 @@ if (array_key_exists('gCurrentSession', $_SESSION)) {
     $_SESSION['gCurrentSession'] = $gCurrentSession;
 }
 
-// check if adm_my_files has write privileges
+// check if adm_my_files has "write" privileges
 if (!is_writable(ADMIDIO_PATH . FOLDER_DATA)) {
     echo $gL10n->get('INS_FOLDER_NOT_WRITABLE', array('adm_my_files'));
     exit();
@@ -111,10 +111,10 @@ $gChangeNotification = new ChangeNotification();
 if (FileSystemUtils::isUnixWithPosix() && (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FOLDER_DATA))) {
     try {
         FileSystemUtils::chmodDirectory(ADMIDIO_PATH . FOLDER_DATA);
-    } catch (\RuntimeException $exception) {
+    } catch (RuntimeException $exception) {
         try {
             $pathPermissions = FileSystemUtils::getPathPermissions(ADMIDIO_PATH . FOLDER_DATA);
-        } catch (\RuntimeException $exception) {
+        } catch (RuntimeException $exception) {
             $pathPermissions = array('exception' => $exception->getMessage());
         }
         $pathPermissions['path'] = ADMIDIO_PATH . FOLDER_DATA;
@@ -131,7 +131,7 @@ if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA 
     // try to delete the config file at the old place otherwise show notice to user
     try {
         FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . '/config.php');
-    } catch (\RuntimeException $exception) {
+    } catch (RuntimeException $exception) {
         showErrorMessage($gL10n->get('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL)), true);
         // => EXIT
     }
@@ -190,7 +190,7 @@ if ($installedDbVersion === '') {
 if ($getMode === 1) {
     $gLogger->info('UPDATE: Show update start-view');
 
-    // if database version is smaller then source version -> update
+    // if database version is smaller than source version -> update
     // if database version is equal to source but beta has a difference -> update
     if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<')
     || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep)) {
@@ -264,7 +264,7 @@ if ($getMode === 1) {
         );
     // => EXIT
     }
-    // if source version smaller then database -> show error
+    // if source version smaller than database -> show error
     else {
         $page = new HtmlPageInstallation('admidio-update-message');
         $page->setUpdateModus();
