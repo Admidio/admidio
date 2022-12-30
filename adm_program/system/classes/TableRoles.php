@@ -50,6 +50,13 @@ class TableRoles extends TableAccess
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'rol_cat_id');
 
         parent::__construct($database, TBL_ROLES, 'rol', $rolId);
+
+        // set default values for new roles
+        if($rolId === 0) {
+            $this->setValue('rol_view_memberships', TableRoles::VIEW_ROLE_MEMBERS);
+            $this->setValue('rol_view_members_profiles', TableRoles::VIEW_NOBODY);
+            $this->setValue('rol_mail_this_role', TableRoles::VIEW_LOGIN_USERS);
+        }
     }
 
     /**

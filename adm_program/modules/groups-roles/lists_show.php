@@ -229,6 +229,11 @@ try {
         $list->readDataByUuid($getListUuid);
     }
 
+    // only first name and last name should be shown
+    if (!$hasRightViewMembersProfile) {
+        $list->setModeShowOnlyNames();
+    }
+
     // remove columns that are not necessary for the selected role
     if (!$showComment) {
         $list->removeColumn('mem_comment');

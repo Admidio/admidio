@@ -36,7 +36,7 @@ if ($getRoleUuid !== '') {
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// Rollenobjekt anlegen
+// create role object
 $role = new TableRoles($gDb);
 
 if ($getRoleUuid !== '') {
@@ -49,7 +49,7 @@ if ($getRoleUuid !== '') {
         // => EXIT
     }
 
-    // Administrator role could only be created or edited by administrators
+    // administrator role could only be created or edited by administrators
     if ($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator()) {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -59,19 +59,16 @@ if ($getRoleUuid !== '') {
     if ($role->getValue('cat_system') == 1) {
         $showSystemCategory = true;
     }
-} else {
-    $role->setValue('rol_view_memberships', 1);
-    $role->setValue('rol_mail_this_role', 2);
 }
 
 if (isset($_SESSION['roles_request'])) {
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    // due to incorrect input the user has returned to this form
+    // now write the previously entered contents into the object
     $role->setArray($_SESSION['roles_request']);
     unset($_SESSION['roles_request']);
 }
 
-// holt eine Liste der ausgewaehlten abhaengigen Rolen
+// get all dependent roles of this role
 $childRoles = RoleDependency::getChildRoles($gDb, $role->getValue('rol_id'));
 
 $childRoleObjects = array();
@@ -129,7 +126,6 @@ $page->addJavascript('
     }
 ');
 
-// show form
 $form = new HtmlForm('roles_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_function.php', array('role_uuid' => $getRoleUuid, 'mode' => '2')), $page);
 $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->get('SYS_CATEGORY'));
 

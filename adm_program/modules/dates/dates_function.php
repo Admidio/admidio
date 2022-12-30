@@ -402,9 +402,9 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                 $role->setValue('rol_name', $date->getDateTimePeriod(false) . ' ' . $date->getValue('dat_headline'));
                 $role->setValue('rol_description', substr($date->getValue('dat_description'), 0, 3999));
                 // role members are allowed to view lists
-                $role->setValue('rol_view_memberships', isset($_POST['date_right_list_view']) ? 1 : 0);
+                $role->setValue('rol_view_memberships', isset($_POST['date_right_list_view']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
                 // role members are allowed to send mail to this role
-                $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? 1 : 0);
+                $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? TableRoles::VIEW_ROLE_MEMBERS : TableRoles::VIEW_NOBODY);
                 $role->setValue('rol_max_members', (int)$date->getValue('dat_max_members'));
 
                 $role->save();

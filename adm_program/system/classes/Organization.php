@@ -238,7 +238,6 @@ class Organization extends TableAccess
         $roleAdministrator->setValue('rol_mail_to_all', 1);
         $roleAdministrator->setValue('rol_mail_this_role', 3);
         $roleAdministrator->setValue('rol_profile', 1);
-        $roleAdministrator->setValue('rol_view_memberships', 1);
         $roleAdministrator->setValue('rol_all_lists_view', 1);
         $roleAdministrator->setValue('rol_administrator', 1);
         $roleAdministrator->save();
@@ -251,7 +250,6 @@ class Organization extends TableAccess
         $roleMember->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_MEMBER'));
         $roleMember->setValue('rol_mail_this_role', 2);
         $roleMember->setValue('rol_profile', 1);
-        $roleMember->setValue('rol_view_memberships', 0);
         $roleMember->setValue('rol_default_registration', 1);
         $roleMember->save();
 
@@ -268,7 +266,6 @@ class Organization extends TableAccess
         $roleManagement->setValue('rol_mail_to_all', 1);
         $roleManagement->setValue('rol_mail_this_role', 2);
         $roleManagement->setValue('rol_profile', 1);
-        $roleManagement->setValue('rol_view_memberships', 1);
         $roleManagement->setValue('rol_all_lists_view', 1);
         $roleManagement->save();
 

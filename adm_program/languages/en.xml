@@ -1206,7 +1206,7 @@
   <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESTRICTIONS">Restrictions</string>
-  <string name="SYS_RIGHT_ALL_LISTS_VIEW">View membership lists of all roles</string>
+  <string name="SYS_RIGHT_ALL_LISTS_VIEW">View member lists of all roles and all member profiles</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Manage announcements</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Organize and assign registrations</string>
   <string name="SYS_RIGHT_ASSIGN_ROLES">Organize and assign roles</string>

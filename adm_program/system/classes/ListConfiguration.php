@@ -25,6 +25,11 @@ class ListConfiguration extends TableLists
      * @var array<int,string> Array with the usr_id as key and the first name, last name as values
      */
     protected $arrUserNames = array();
+    /**
+     * @var boolean Flag if only the name of the user (first name, last name) should be shown and all other fields
+     * should be removed.
+     */
+    protected $showOnlyNames = false;
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
@@ -783,11 +788,14 @@ class ListConfiguration extends TableLists
 
     /**
      * Read data of responsible columns and store in object. Only columns of profile fields which the current
-     * user is allowed to view will be stored in the object.
+     * user is allowed to view will be stored in the object. If only the role membership should be shown than
+     * remove all columns except first name, last name and assignment timestamps.
      */
     public function readColumns()
     {
         global $gCurrentUser, $gProfileFields;
+
+        $this->columns = array();
 
         $sql = 'SELECT *
                   FROM '.TBL_LIST_COLUMNS.'
@@ -796,15 +804,22 @@ class ListConfiguration extends TableLists
         $lscStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('lst_id')));
 
         while ($lscRow = $lscStatement->fetch()) {
+            $usfId = (int) $lscRow['lsc_usf_id'];
+
             // only add columns to the array if the current user is allowed to view them
-            if ((int) $lscRow['lsc_usf_id'] === 0
-            || $gProfileFields->isVisible($gProfileFields->getPropertyById((int) $lscRow['lsc_usf_id'], 'usf_name_intern'), $gCurrentUser->editUsers())) {
-                // some user fields should only be viewed by users that could edit roles
-                if (!in_array($lscRow['lsc_special_field'], array('usr_login_name', 'usr_usr_id_create', 'usr_timestamp_create', 'usr_usr_id_change', 'usr_timestamp_change', 'usr_login_name', 'usr_uuid'))
-                    || $gCurrentUser->editUsers()) {
-                    $lscNumber = (int) $lscRow['lsc_number'];
-                    $this->columns[$lscNumber] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
-                    $this->columns[$lscNumber]->setArray($lscRow);
+            if ($usfId === 0
+            || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers())) {
+                // if only names should be shown, than check if it's a name field
+                if (!$this->showOnlyNames
+                    || ($usfId > 0 && in_array($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), array('FIRST_NAME', 'LAST_NAME')))
+                    || ($usfId === 0 && in_array($lscRow['lsc_special_field'], array('mem_begin', 'mem_end', 'mem_leader', 'mem_usr_id_change', 'mem_timestamp_change', 'mem_approved', 'mem_comment', 'mem_count_guests')))) {
+                    // some user fields should only be viewed by users that could edit roles
+                    if (!in_array($lscRow['lsc_special_field'], array('usr_login_name', 'usr_usr_id_create', 'usr_timestamp_create', 'usr_usr_id_change', 'usr_timestamp_change', 'usr_login_name', 'usr_uuid'))
+                        || $gCurrentUser->editUsers()) {
+                        $lscNumber = (int)$lscRow['lsc_number'];
+                        $this->columns[$lscNumber] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
+                        $this->columns[$lscNumber]->setArray($lscRow);
+                    }
                 }
             }
         }
@@ -901,5 +916,20 @@ class ListConfiguration extends TableLists
         $this->db->endTransaction();
 
         return $returnValue;
+    }
+
+    /**
+     * Set a mode that only first name and last name will be returned if the sql is called or columns should be
+     * returned. This is useful is a role has the setting that no profile information should be shown, but the
+     * membership could be viewed.
+     * @return void
+     */
+    public function setModeShowOnlyNames()
+    {
+        $this->showOnlyNames = true;
+
+        if(count($this->columns) > 0) {
+            $this->readColumns();
+        }
     }
 }

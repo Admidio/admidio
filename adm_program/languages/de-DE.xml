@@ -1207,7 +1207,7 @@
   <string name="SYS_REQUIRED_FIELDS">Pflichtfelder</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Sie sind bereits im System angemeldet. Das Anfordern eines neuen Passworts ist nicht notwendig.</string>
   <string name="SYS_RESTRICTIONS">Einschränkungen</string>
-  <string name="SYS_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen einsehen</string>
+  <string name="SYS_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen und alle Mitgliederprofile einsehen</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Ankündigungen verwalten</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Registrierungen verwalten und zuordnen</string>
   <string name="SYS_RIGHT_ASSIGN_ROLES">Rollen verwalten und zuordnen</string>

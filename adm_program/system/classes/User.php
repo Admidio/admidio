@@ -1419,7 +1419,7 @@ class User extends TableAccess
      */
     public function hasRightViewProfiles(int $roleId): bool
     {
-        return $this->hasRightRole($this->rolesViewMemberships, 'rol_all_lists_view', $roleId);
+        return $this->hasRightRole($this->rolesViewProfiles, 'rol_all_lists_view', $roleId);
     }
 
     /**
