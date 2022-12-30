@@ -44,16 +44,7 @@ try {
     $gLanguageData = new LanguageData('en');
     $gL10n = new Language($gLanguageData);
 
-    $page = new HtmlPageInstallation('admidio-update-message');
-    $page->setUpdateModus();
-    $page->showMessage(
-        'error',
-        $gL10n->get('SYS_NOTE'),
-        $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
-        $gL10n->get('SYS_RELOAD'),
-        'fa-arrow-circle-right',
-        ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php'
-    );
+    showErrorMessage($gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())), true);
     // => EXIT
 }
 
@@ -130,16 +121,7 @@ if (FileSystemUtils::isUnixWithPosix() && (!is_executable(ADMIDIO_PATH . FOLDER_
 
         $gLogger->error('FILESYSTEM: Could not set the necessary directory mode!', $pathPermissions);
 
-        $page = new HtmlPageInstallation('admidio-update-message');
-        $page->setUpdateModus();
-        $page->showMessage(
-            'error',
-            $gL10n->get('SYS_NOTE'),
-            $gL10n->get('INS_DATA_DIR_RIGHTS'),
-            $gL10n->get('SYS_RELOAD'),
-            'fa-arrow-circle-right',
-            ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php'
-        );
+        showErrorMessage($gL10n->get('INS_DATA_DIR_RIGHTS'), true);
         // => EXIT
     }
 }
@@ -150,16 +132,7 @@ if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA 
     try {
         FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . '/config.php');
     } catch (\RuntimeException $exception) {
-        $page = new HtmlPageInstallation('admidio-update-message');
-        $page->setUpdateModus();
-        $page->showMessage(
-            'error',
-            $gL10n->get('SYS_NOTE'),
-            $gL10n->get('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL)),
-            $gL10n->get('SYS_RELOAD'),
-            'fa-arrow-circle-right',
-            ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php'
-        );
+        showErrorMessage($gL10n->get('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL)), true);
         // => EXIT
     }
 }
@@ -168,16 +141,7 @@ if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA 
 $message = checkDatabaseVersion($gDb);
 
 if ($message !== '') {
-    $page = new HtmlPageInstallation('admidio-update-message');
-    $page->setUpdateModus();
-    $page->showMessage(
-        'error',
-        $gL10n->get('SYS_NOTE'),
-        $message,
-        $gL10n->get('SYS_OVERVIEW'),
-        'fa-home',
-        ADMIDIO_URL . '/adm_program/overview.php'
-    );
+    showErrorMessage($message);
     // => EXIT
 }
 
@@ -212,18 +176,14 @@ if ($installedDbBetaVersion > 0) {
     $installedDbVersion = $installedDbVersion . ' Beta ' . $installedDbBetaVersion;
 }
 
+if (version_compare($installedDbVersion, '3.1.0', '<')) {
+    showErrorMessage($gL10n->get('SYS_VERSION_TO_OLD', array($installedDbVersion, ADMIDIO_VERSION_TEXT)));
+    // => EXIT
+}
+
 // if database version is not set then show notice
 if ($installedDbVersion === '') {
-    $page = new HtmlPageInstallation('admidio-update-message');
-    $page->setUpdateModus();
-    $page->showMessage(
-        'error',
-        $gL10n->get('SYS_NOTE'),
-        $gL10n->get('INS_UPDATE_NOT_POSSIBLE') . '<p>' . $gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', array(ADMIDIO_VERSION_TEXT)) . '</p>',
-        $gL10n->get('SYS_OVERVIEW'),
-        'fa-home',
-        ADMIDIO_URL . '/adm_program/overview.php'
-    );
+    showErrorMessage($gL10n->get('INS_UPDATE_NOT_POSSIBLE') . '<p>' . $gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', array(ADMIDIO_VERSION_TEXT)) . '</p>');
     // => EXIT
 }
 

@@ -63,6 +63,8 @@ class ChangeNotification
     public function __construct()
     {
         global $gSettingsManager;
+
+        $gSettingsManager->disableExceptions();
         $this->format = $gSettingsManager->getBool('mail_html_registered_users') ? 'html' : 'text';
 
         // Register a shutdown function, which will be called when the whole PHP

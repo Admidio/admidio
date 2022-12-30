@@ -149,3 +149,25 @@ function doAdmidioUpdate($installedDbVersion)
     $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = \'true\'';
     $gDb->queryPrepared($sql);
 }
+
+/**
+ * Shows an error dialog with a error message to the user.
+ * @param string $message Message that should be shown to the user.
+ * @param bool $reloadPage If set to **true** than the user could reload the update page.
+ * @return void
+ */
+function showErrorMessage(string $message, bool $reloadPage = false)
+{
+    global $gL10n;
+
+    $page = new HtmlPageInstallation('admidio-update-message');
+    $page->setUpdateModus();
+    $page->showMessage(
+        'error',
+        $gL10n->get('SYS_NOTE'),
+        $message,
+        ($reloadPage) ? $gL10n->get('SYS_RELOAD') : $gL10n->get('SYS_OVERVIEW'),
+        ($reloadPage) ? 'fa-redo-alt' : 'fa-home',
+        ($reloadPage) ? ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php' : ADMIDIO_URL . '/adm_program/overview.php'
+    );
+}

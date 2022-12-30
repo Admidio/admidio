@@ -1441,6 +1441,7 @@
   <string name="SYS_VARIOUS_ROLES">Various roles</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Various relationships</string>
   <string name="SYS_VERSION">Version</string>
+  <string name="SYS_VERSION_TO_OLD">Your current database version is #VAR1#. Unfortunately, it is not possible to update to #VAR2# with this version.\n\nPlease install Admidio 4.1 first and then update to Admidio #VAR2#.</string>
   <string name="SYS_VIEW">View</string>
   <string name="SYS_VIEW_PICTURE_FULL_SIZED">Show full size picture</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS">View role memberships</string>
