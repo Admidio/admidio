@@ -733,7 +733,6 @@
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Show redirect</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Activate auto forwarding for links. User will be notified by a warning message about leaving the pages of Admidio when clicking a hyperlink in link module. Clicked hyperlink will be opened after predefined time. Is redirection set to 0, hyperlink will be opened without showing the warning message (default: 10 seconds).</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">View role memberships</string>
   <string name="SYS_DIVERSE">Diverse</string>
   <string name="SYS_DO_NOT_EDIT">Do not edit</string>
   <string name="SYS_DOCUMENTS_FILES">Documents &amp; Files</string>
@@ -1207,7 +1206,7 @@
   <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESTRICTIONS">Restrictions</string>
-  <string name="SYS_RIGHT_ALL_LISTS_VIEW">View membership lists of all roles</string>
+  <string name="SYS_RIGHT_ALL_LISTS_VIEW">View member lists of all roles and all member profiles</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Manage announcements</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Organize and assign registrations</string>
   <string name="SYS_RIGHT_ASSIGN_ROLES">Organize and assign roles</string>
@@ -1223,7 +1222,6 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">Send e-mails to all roles</string>
   <string name="SYS_RIGHT_PHOTOS">Upload and edit photos</string>
   <string name="SYS_RIGHT_PROFILE">Edit own profile</string>
-  <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">This setting controls which users have the right to view various lists and the individual user profiles of the role members. However, the role right #VAR1_BOLD# is still above this setting.</string>
   <string name="SYS_RIGHT_WEBLINKS">Manage web links</string>
   <string name="SYS_ROLE">Role</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">On this page you can configure who can view the folder #VAR1_BOLD#, download files or upload files. The permissions are inherited to all subfolders, and existing permissions in subfolders are overwritten. Only roles with access to the parent folder are selectable. Administrators have all permissions for the folder.</string>
@@ -1445,6 +1443,10 @@
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VIEW">View</string>
   <string name="SYS_VIEW_PICTURE_FULL_SIZED">Show full size picture</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">View role memberships</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">With this setting you can define who can see the members of this role. The user can see the role membership in the profile of the respective person and in lists for the role. This setting does not allow access to the role members profile. In lists only name and first name are displayed. The role right #VAR1_BOLD# overrides this setting.</string>
+  <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">View profiles of role members</string>
+  <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC">This setting can be used to define who can see the profiles of the members of this role. The user can call the profile of the respective person and see all stored columns in lists for the role. The role right #VAR1_BOLD# overrides this setting.</string>
   <string name="SYS_VISIBLE">Visible</string>
   <string name="SYS_VISIBLE_FOR">Visible for</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# visible only to logged in users</string>

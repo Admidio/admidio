@@ -102,7 +102,7 @@ if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM && $gSettingsManager->getInt('
 }
 
 $list = array();
-$arrAllMailRoles = $gCurrentUser->getAllMailRoles();
+$arrAllMailRoles = $gCurrentUser->getRolesWriteMails();
 
 if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrAllMailRoles) > 0) {
     $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
@@ -302,7 +302,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         // no user or role was committed then show list with all roles and users
         // where the current user has the right to send email
         $preloadData = isset($formValues['msg_to']) ? $formValues['msg_to'] : '';
-        $sqlRoleIds = $gCurrentUser->getAllMailRoles();
+        $sqlRoleIds = $gCurrentUser->getRolesWriteMails();
         $sqlParticipationRoles = ' AND cat_name_intern <> \'EVENTS\' ';
     }
 
@@ -315,7 +315,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
 
         if (count($sqlRoleIds) === 0) {
             // if only send mail to one user than this user must be in a role the current user is allowed to see
-            $listVisibleRoleArray = $gCurrentUser->getAllVisibleRoles();
+            $listVisibleRoleArray = $gCurrentUser->getRolesViewMemberships();
         } else {
             // list array with all roles where user is allowed to send mail to
             $sql = 'SELECT rol_id, rol_uuid, rol_name
@@ -345,7 +345,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
             }
 
             $list = array_merge($list, $listFormer, $listActiveAndFormer);
-            $listVisibleRoleArray = array_intersect($listRoleIdsArray, $gCurrentUser->getAllVisibleRoles());
+            $listVisibleRoleArray = array_intersect($listRoleIdsArray, $gCurrentUser->getRolesViewMemberships());
         }
 
         if ($getRoleUuid === '' && count($listVisibleRoleArray) > 0) {

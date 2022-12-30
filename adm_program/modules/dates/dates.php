@@ -406,8 +406,8 @@ if ($datesResult['totalCount'] === 0) {
             }
         }
 
-        // check the rights if the user is allowed to view the participiants or he is allowed to participate
-        if ($gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id'))
+        // check the rights if the user is allowed to view the participants or he is allowed to participate
+        if ($gCurrentUser->hasRightViewRole((int) $date->getValue('dat_rol_id'))
             || $row['mem_leader'] == 1
             || $gCurrentUser->editDates()
             || $date->allowedToParticipate()) {

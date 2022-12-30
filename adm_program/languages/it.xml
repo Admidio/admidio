@@ -658,7 +658,7 @@
   <string name="SYS_DESIGNATION">Nome</string>
   <string name="SYS_DISPLAY_REDIRECT">Mostra reindirizzamento</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Attiva l\'auto forward per i collegamenti. L\'utente sarà avvisato da un messaggio di allerta che sta lasciando le pagine di Admidio quando clicca su un collegamento nel modulo collegamenti. Il collegamento cliccato sarà aperto dopo un tempo predefinito. Se il reindirizzamento è impostato a 0, il collegamento sarà aperto senza mostrare il messaggio di allerta (predefinito: 10 secondi).</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Visualizza le membership del ruolo</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Visualizza le membership del ruolo</string>
   <string name="SYS_DO_NOT_EDIT">Non modificare</string>
   <string name="SYS_DONATE">Dona</string>
   <string name="SYS_DONT_DELETE_CATEGORY">Non è possibile cancellare la categoria #VAR1_BOLD# perché a #VAR2# sono associati degli inserimenti.</string>
@@ -961,7 +961,7 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">Invia email a tutti i ruoli</string>
   <string name="SYS_RIGHT_PHOTOS">Carica e modifica le foto</string>
   <string name="SYS_RIGHT_PROFILE">Modifica il proprio profilo</string>
-  <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">Definisci quale utente dovrebbe essere in grado di vedere i singoli elenchi e alcuni profili utente dei membri del ruolo attuale. Il permesso del ruolo #VAR1_BOLD# è la configurazione padre dell livello di autorizzazione corrente.</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Definisci quale utente dovrebbe essere in grado di vedere i singoli elenchi e alcuni profili utente dei membri del ruolo attuale. Il permesso del ruolo #VAR1_BOLD# è la configurazione padre dell livello di autorizzazione corrente.</string>
   <string name="SYS_ROLE">Ruolo</string>
   <string name="SYS_ROLE_ASSIGNMENT_FOR">Mappatura del ruolo #VAR1# #VAR2#</string>
   <string name="SYS_ROLE_DEPENDENCIES_DESC">Un membro di un ruolo dipendente diventa automaticamente un membro di #VAR1#!\n\nQuando questa dipendenza è impostata tutti i membri esistenti del ruolo dipendente diventeranno membri di #VAR1#. Quando una dipendenza sta per essere cancellato, le membership rimarranno le stesse!</string>

@@ -53,45 +53,56 @@ $roleName        = $gL10n->get('SYS_VARIOUS_ROLES');
 $htmlSubHeadline = '';
 $showLinkMailToList = true;
 $hasRightViewFormerMembers = true;
+$hasRightViewMembersProfile = true;
 $showComment = true;
 $showCountGuests = true;
 
-if ($numberRoles > 1) {
-    $sql = 'SELECT rol_id, rol_name, rol_valid
-              FROM '.TBL_ROLES.'
-             WHERE rol_id IN ('.Database::getQmForValues($roleIds).')';
-    $rolesStatement = $gDb->queryPrepared($sql, $roleIds);
-    $rolesData      = $rolesStatement->fetchAll();
+// read informations about the roles
+$sql = 'SELECT rol_id, rol_name, rol_valid
+          FROM '.TBL_ROLES.'
+         WHERE rol_id IN ('.Database::getQmForValues($roleIds).')';
+$rolesStatement = $gDb->queryPrepared($sql, $roleIds);
+$rolesData      = $rolesStatement->fetchAll();
 
-    foreach ($rolesData as $role) {
-        $roleId = (int) $role['rol_id'];
+foreach ($rolesData as $role) {
+    $roleId = (int) $role['rol_id'];
 
-        // check if user has right to view all roles
-        // only users with the right to assign roles can view inactive roles
-        if (!$gCurrentUser->hasRightViewRole($roleId)
-        || ((int) $role['rol_valid'] === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles'))) {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
-        }
-
-        // check if user has right to send mail to role
-        if (!$gCurrentUser->hasRightSendMailToRole($roleId)) {
-            $showLinkMailToList = false;
-            // => do not show the link
-        }
-
-        if (!$gCurrentUser->hasRightViewFormerRolesMembers($roleId)) {
-            $hasRightViewFormerMembers = false;
-        }
-
-        $htmlSubHeadline .= ', '.$role['rol_name'];
+    // check if user has right to view all roles
+    // only users with the right to assign roles can view inactive roles
+    if (!$gCurrentUser->hasRightViewRole($roleId)
+    || ((int) $role['rol_valid'] === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles'))) {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
 
-    $htmlSubHeadline = substr($htmlSubHeadline, 2);
-} else {
-    $role = new TableRoles($gDb, $roleIds[0]);
+    // check if the user is allowed to view all profiles
+    // if not, than only first name and last name will be shown
+    if (!$gCurrentUser->hasRightViewProfiles($roleId)) {
+        $hasRightViewMembersProfile = false;
+    }
 
-    // If its an event list and user has right to edit user states then a additional column with edit link is shown
+    // check if user has right to send mail to role
+    if (!$gCurrentUser->hasRightSendMailToRole($roleId)) {
+        $showLinkMailToList = false;
+        // => do not show the link
+    }
+
+    if (!$gCurrentUser->hasRightViewFormerRolesMembers($roleId)) {
+        $hasRightViewFormerMembers = false;
+    }
+
+    $htmlSubHeadline .= ', '.$role['rol_name'];
+}
+
+$htmlSubHeadline = substr($htmlSubHeadline, 2);
+
+if ($numberRoles === 1) {
+    $role = new TableRoles($gDb, $roleIds[0]);
+    $roleName        = $role->getValue('rol_name');
+    $htmlSubHeadline = $role->getValue('cat_name');
+    $hasRightViewFormerMembers = $gCurrentUser->hasRightViewFormerRolesMembers($roleIds[0]);
+
+    // If it's an event list and user has right to edit user states then a additional column with edit link is shown
     if ($role->getValue('cat_name_intern') === 'EVENTS') {
         $event = new TableDate($gDb);
         $event->readDataByRoleId($roleIds[0]);
@@ -103,24 +114,6 @@ if ($numberRoles > 1) {
             $editUserStatus = true;
         }
     }
-
-    // check if user has right to view role
-    // only users with the right to assign roles can view inactive roles
-    if (!$gCurrentUser->hasRightViewRole($roleIds[0])
-    || ((int) $role->getValue('rol_valid') === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles'))) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-
-    // check if user has right to send mail to role
-    if (!$gCurrentUser->hasRightSendMailToRole($roleIds[0])) {
-        $showLinkMailToList = false;
-        // => do not show the link
-    }
-
-    $roleName         = $role->getValue('rol_name');
-    $htmlSubHeadline .= $role->getValue('cat_name');
-    $hasRightViewFormerMembers = $gCurrentUser->hasRightViewFormerRolesMembers($roleIds[0]);
 }
 
 // if user should not view former roles members then disallow it
@@ -131,18 +124,18 @@ if (!$hasRightViewFormerMembers) {
 }
 
 // Create date objects and format dates in system format
-$objDateFrom = \DateTime::createFromFormat('Y-m-d', $getDateFrom);
+$objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if ($objDateFrom === false) {
     // check if date_from  has system format
-    $objDateFrom = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateFrom);
+    $objDateFrom = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateFrom);
 }
 $dateFrom = $objDateFrom->format($gSettingsManager->getString('system_date'));
 $startDateEnglishFormat = $objDateFrom->format('Y-m-d');
 
-$objDateTo = \DateTime::createFromFormat('Y-m-d', $getDateTo);
+$objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
 if ($objDateTo === false) {
     // check if date_from  has system format
-    $objDateTo = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateTo);
+    $objDateTo = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateTo);
 }
 $dateTo = $objDateTo->format($gSettingsManager->getString('system_date'));
 $endDateEnglishFormat = $objDateTo->format('Y-m-d');
@@ -234,6 +227,11 @@ try {
         // create list configuration object and create a sql statement out of it
         $list = new ListConfiguration($gDb);
         $list->readDataByUuid($getListUuid);
+    }
+
+    // only first name and last name should be shown
+    if (!$hasRightViewMembersProfile) {
+        $list->setModeShowOnlyNames();
     }
 
     // remove columns that are not necessary for the selected role
@@ -360,7 +358,7 @@ if ($getMode !== 'csv') {
         $page = new HtmlPage('admidio-lists-show', $headline);
         $page->setTitle($title);
 
-        // create selectbox with all list configurations
+        // create select box with all list configurations
         $sql = 'SELECT lst_uuid, lst_name, lst_global
                   FROM '.TBL_LISTS.'
                  WHERE lst_org_id = ? -- $gCurrentOrgId
@@ -387,7 +385,7 @@ if ($getMode !== 'csv') {
         // add list item for own list
         $listConfigurations[] = array('mylist', $gL10n->get('SYS_CONFIGURE_LISTS'), $gL10n->get('SYS_CONFIGURATION'));
 
-        // add navbar with filter elements and the selectbox with all lists configuraitons
+        // add navbar with filter elements and the select box with all lists configurations
         $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
         $form->addSelectBox(
@@ -400,7 +398,7 @@ if ($getMode !== 'csv') {
 
         // Only for active members of a role and if user has right to view former members
         if ($hasRightViewFormerMembers) {
-            // create filter menu with elements for start-/enddate
+            // create filter menu with elements for start-/end date
             $form->addInput('date_from', $gL10n->get('SYS_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('SYS_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('list_uuid', '', $getListUuid, array('property' => HtmlForm::FIELD_HIDDEN));
@@ -628,9 +626,9 @@ foreach ($membersList as $member) {
 
         // fill content with data of database
         if ($getMode === 'csv') {
-            $csvStr .= $separator.$valueQuotes . $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_uuid']) . $valueQuotes;
+            $csvStr .= $separator.$valueQuotes . $list->convertColumnContentForOutput($columnNumber, $getMode, (string) $member[$sqlColumnNumber], $member['usr_uuid']) . $valueQuotes;
         } else {
-            $columnValues[] = $list->convertColumnContentForOutput($columnNumber, $getMode, $member[$sqlColumnNumber], $member['usr_uuid']);
+            $columnValues[] = $list->convertColumnContentForOutput($columnNumber, $getMode, (string) $member[$sqlColumnNumber], $member['usr_uuid']);
         }
     }
 

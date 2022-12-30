@@ -744,7 +744,7 @@
   <string name="SYS_DISK_SPACE_ERROR">Tallennustilan käyttöä ei voitu määrittää. \n \nVirhesanoma: \n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Näytä uudelleenohjaus</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Aktivoi linkkien automaattinen edelleenlähetys. Käyttäjälle ilmoitetaan varoitusviestillä Admidion sivuilta poistumisesta, kun hän napsauttaa hyperlinkkiä linkkimoduulissa. Napsautettu hyperlinkki avataan ennalta määritetyn ajan kuluttua. Jos uudelleenohjaus on asetettu arvoon 0, hyperlinkki avataan näyttämättä varoitusviestiä (oletus: 10 sekuntia).</string>
-  <string name="SYS_DISPLAY_ROLE_MEMBERSHIP">Näytä rooli -jäsenyydet</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Näytä rooli -jäsenyydet</string>
   <string name="SYS_DIVERSE">Monipuolinen</string>
   <string name="SYS_DO_NOT_EDIT">Älä muokkaa</string>
   <string name="SYS_DOCUMENTS_FILES">Asiakirjat &amp; Tiedostot</string>
@@ -1213,7 +1213,7 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">Lähetä sähköpostit kaikille rooleille</string>
   <string name="SYS_RIGHT_PHOTOS">Lähetä ja muokkaa valokuvia</string>
   <string name="SYS_RIGHT_PROFILE">Muokkaa omaa profiilia</string>
-  <string name="SYS_RIGHT_THIS_LIST_VIEW_DESC">Määritä, kenen käyttäjän pitäisi voida nähdä useita luetteloita ja tiettyjä käyttäjäprofiileja nykyisen roolin jäsenistä. Roolilupa #VAR1_BOLD# on pääkonfiguraatio, joka on nykyinen käyttöoikeustaso.</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Määritä, kenen käyttäjän pitäisi voida nähdä useita luetteloita ja tiettyjä käyttäjäprofiileja nykyisen roolin jäsenistä. Roolilupa #VAR1_BOLD# on pääkonfiguraatio, joka on nykyinen käyttöoikeustaso.</string>
   <string name="SYS_RIGHT_WEBLINKS">Hallitse verkkolinkkejä</string>
   <string name="SYS_ROLE">Rooli</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Tällä sivulla voit määrittää, kuka voi tarkastella kansiota #VAR1_BOLD#, ladata tiedostoja tai ladata tiedostoja. Käyttöoikeudet periytyvät kaikille alikansioille ja alikansioiden nykyiset käyttöoikeudet korvataan. Vain roolit, joilla on pääsy pääkansioon, ovat valittavissa. Järjestelmänvalvojilla on kaikki kansion käyttöoikeudet.</string>

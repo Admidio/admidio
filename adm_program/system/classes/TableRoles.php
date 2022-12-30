@@ -19,6 +19,11 @@ class TableRoles extends TableAccess
 {
     public const ROLE_GROUP = 0;
     public const ROLE_EVENT = 1;
+
+    public const VIEW_NOBODY = 0;
+    public const VIEW_LEADERS = 3;
+    public const VIEW_ROLE_MEMBERS = 1;
+    public const VIEW_LOGIN_USERS = 2;
     /**
      * @var int number of leaders of this role
      */
@@ -45,6 +50,13 @@ class TableRoles extends TableAccess
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'rol_cat_id');
 
         parent::__construct($database, TBL_ROLES, 'rol', $rolId);
+
+        // set default values for new roles
+        if($rolId === 0) {
+            $this->setValue('rol_view_memberships', TableRoles::VIEW_ROLE_MEMBERS);
+            $this->setValue('rol_view_members_profiles', TableRoles::VIEW_NOBODY);
+            $this->setValue('rol_mail_this_role', TableRoles::VIEW_LOGIN_USERS);
+        }
     }
 
     /**
@@ -387,7 +399,7 @@ class TableRoles extends TableAccess
             return $gCurrentUser->hasRightViewRole($rolId);
         }
 
-        if ((int) $this->getValue('rol_this_list_view') === 0) {
+        if ((int) $this->getValue('rol_view_memberships') === 0) {
             return false;
         }
 
