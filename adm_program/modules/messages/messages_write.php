@@ -292,11 +292,11 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
 
     if ($getUserUuid !== '') {
         // usr_id was committed then write email to this user
-        $preloadData = $user->getValue('usr_id');
+        $preloadData = $getUserUuid;
         $sqlUserIds  = ' AND usr_id = ? -- $user->getValue(\'usr_id\')';
     } elseif ($getRoleUuid !== '') {
         // role id was committed then write email to this role
-        $preloadData = 'groupID: '.$role->getValue('rol_id');
+        $preloadData = 'groupID: '.$getRoleUuid;
         $sqlRoleIds  = array($role->getValue('rol_id'));
     } else {
         // no user or role was committed then show list with all roles and users
