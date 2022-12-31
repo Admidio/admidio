@@ -174,7 +174,7 @@ class Email extends PHPMailer
             $recipient = array_merge($recipient , $additionalFields);
             $this->emRecipientsArray[] = $recipient;
             $this->emRecipientsNames[] = $firstName  . ' ' . $lastName;
-            
+
             return true;
         }
         return false;
@@ -581,11 +581,11 @@ class Email extends PHPMailer
 
     /**
      * Add the user specific template text to the email message and replace the plaeholders of the template.
-     * @param string $text        Email text that should be send
-     * @param string $firstname  Receiver firstname
-     * @param string $surname Receiver surname
-     * @param string $email  Receiver email address
-     * @param string $name  Receiver firstname and surname
+     * @param string $text      Email text that should be send
+     * @param string $firstName Recipients firstname
+     * @param string $surname Recipients surname
+     * @param string $email  Recipients email address
+     * @param string $name  Recipients firstname and surname
      */
     public function setUserSpecificTemplateText($text, $firstName, $surname, $email, $name)
     {
@@ -594,10 +594,10 @@ class Email extends PHPMailer
 
         // replace parameters in email template
         $replaces = array(
-            '#receiver_firstname#'  => $firstName,
-            '#receiver_lastname#'   => $surname,
-            '#receiver_email#'      => $email,
-            '#receiver_name#'       => $name
+            '#recipient_firstname#'  => $firstName,
+            '#recipient_lastname#'   => $surname,
+            '#recipient_email#'      => $email,
+            '#recipient_name#'       => $name
         );
         return StringUtils::strMultiReplace($text, $replaces);
     }
@@ -682,14 +682,22 @@ class Email extends PHPMailer
                     }
 
                     // add body to the email
-                    if ($this->emSendAsHTML) {
-                        $html = $this->setUserSpecificTemplateText($this->emHtmlText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
-                        $this->msgHTML($html);
+                    if($gValidLogin) {
+                        if ($this->emSendAsHTML) {
+                            $html = $this->setUserSpecificTemplateText($this->emHtmlText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
+                            $this->msgHTML($html);
+                        } else {
+                            $txt = $this->setUserSpecificTemplateText($this->emText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
+                            $this->Body = $txt;
+                        }
                     } else {
-                        $txt = $this->setUserSpecificTemplateText($this->emText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
-                        $this->Body = $txt;
+                        if ($this->emSendAsHTML) {
+                            $this->msgHTML($this->emHtmlText);
+                        } else {
+                            $this->Body = $this->emText;
+                        }
                     }
-                    
+
                     // now send mail
                     $this->send();
                 }
