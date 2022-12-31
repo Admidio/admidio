@@ -181,10 +181,10 @@ class HtmlForm extends HtmlFormBasic
     {
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
-            'icon' => '', 
-            'link' => '', 
-            'class' => '', 
-            'type' => 'button', 
+            'icon' => '',
+            'link' => '',
+            'class' => '',
+            'type' => 'button',
             'data-admidio' => '',
             'id' => $id,
             'value' => $text,
@@ -195,7 +195,7 @@ class HtmlForm extends HtmlFormBasic
         $attributes['type'] = $optionsAll['type'];
         $attributes['data-admidio'] = $optionsAll['data-admidio'];
         ++$this->countElements;
-        
+
         $attributes['class'] = "btn btn-primary ".$optionsAll['class'];
 
         $optionsAll['attributes'] = $attributes;
@@ -338,7 +338,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         $this->addHtml($this->render('form.customcontent', $optionsAll));
- 
+
 
     }
 
@@ -430,7 +430,7 @@ class HtmlForm extends HtmlFormBasic
             }
             $this->addJavascriptCode($javascriptCode, true);
         }
-        
+
         $this->type = $flagLabelVertical;
         $optionsAll["attributes"] = $attributes;
         $this->addHtml($this->render('form.editor', $optionsAll));
@@ -600,7 +600,7 @@ class HtmlForm extends HtmlFormBasic
             'alertWarning'     => ''
         );
         $optionsAll = array_replace($optionsDefault, $options);
-       
+
         $optionsAll['helpTextIdInline'] = self::getHelpText($optionsAll['helpTextIdInline']);
 
         $attributes['placeholder'] = $optionsAll['placeholder'];
@@ -687,10 +687,10 @@ class HtmlForm extends HtmlFormBasic
             $optionsAll['system_time_format'] = $gSettingsManager->getString('system_time');
 
             $datetime = \DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $value);
-            
+
             // now add a date and a time field to the form
             $attributes['data-provide'] = '';
-            
+
             $attributes['dateValue'] = null;
             $attributes['timeValue'] = null;
 
@@ -710,7 +710,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['timeValueAttributes']['placeholder'] = 'HH:MM';
             $attributes['timeValueAttributes']['data-provide'] = '';
             $attributes['timeValueAttributes']['timeValue'] = $attributes['timeValue'];
-            
+
             $attributes['data-provide'] = 'datepicker';
             $datepickerOptions = ' todayBtn: "linked", ';
 
@@ -886,7 +886,7 @@ class HtmlForm extends HtmlFormBasic
 
         $attributes["rows"] = $rows;
         $attributes["cols"] = 80;
-        
+
         $optionsAll["attributes"] = $attributes;
         $this->addHtml($this->render('form.multiline', $optionsAll));
     }
@@ -1654,7 +1654,7 @@ class HtmlForm extends HtmlFormBasic
      *                        - **alertWarning** : Add a bootstrap warning alert box after the select box. The value of this option
      *                          will be the text of the alertbox
      */
-    
+
     protected function closeControlStructure(array $options = array())
     {
         if ($options['property'] !== self::FIELD_HIDDEN) {
@@ -1704,7 +1704,7 @@ class HtmlForm extends HtmlFormBasic
     /**
      * Close all html elements of a groupbox that was created before.
      */
-    
+
     public function closeGroupBox()
     {
         $this->addHtml('</div></div>');
@@ -1739,7 +1739,7 @@ class HtmlForm extends HtmlFormBasic
         }
         return $html;
     }
-    
+
     public static function getHelpText($text)
     {
         global $gL10n;
@@ -1772,7 +1772,7 @@ class HtmlForm extends HtmlFormBasic
      * Open a bootstrap btn-group if the form need more than one button.
      */
 
-    
+
     public function openButtonGroup()
     {
         $this->buttonGroupOpen = true;
@@ -1796,7 +1796,7 @@ class HtmlForm extends HtmlFormBasic
      * @param string $class      (optional) An additional css classname for the row. The class **admFieldRow**
      *                           is set as default and need not set with this parameter.
      */
-    
+
     protected function openControlStructure($id, $label, $property = self::FIELD_DEFAULT, $helpTextId = '', $icon = '', $class = '')
     {
         if ($property !== self::FIELD_HIDDEN) {
@@ -1864,7 +1864,7 @@ class HtmlForm extends HtmlFormBasic
      * @param string $class    (optional) An additional css classname for the row. The class **admFieldRow**
      *                         is set as default and need not set with this parameter.
      */
-    
+
     public function openGroupBox($id, $headline = null, $class = '')
     {
         $this->addHtml('<div id="' . $id . '" class="card admidio-field-group ' . $class . '">');

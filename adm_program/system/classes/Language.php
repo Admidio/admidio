@@ -38,6 +38,7 @@
  */
 class Language
 {
+    const BOLD = '_BOLD#';
     /**
      * @var LanguageData An object of the class **LanguageData** that stores all necessary language data in a session
      */
@@ -351,7 +352,7 @@ class Language
 
             $replaces = array(
                 '#VAR' . $paramNr . '#'      => $param,
-                '#VAR' . $paramNr . '_BOLD#' => '<strong>' . $param . '</strong>'
+                '#VAR' . $paramNr . self::BOLD => '<strong>' . $param . '</strong>'
             );
             $text = StringUtils::strMultiReplace($text, $replaces);
         }
