@@ -81,7 +81,6 @@ class TableGuestbookComment extends TableAccess
     public function save($updateFingerPrint = true)
     {
         if ($this->newRecord) {
-            $this->setValue('gbc_org_id', $GLOBALS['gCurrentOrgId']);
             $this->setValue('gbc_ip_address', $_SERVER['REMOTE_ADDR']);
         }
 
