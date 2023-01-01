@@ -10,7 +10,7 @@
 {else}
 <div
     id="{$id}_group"
-    class="form-group {if $data.formtype neq 'vertical' and $data.formtype neq 'navbar'}row{/if} {if $property eq 1}admidio-form-group-required{/if}">    
+    class="form-group {if $data.formtype neq 'vertical' and $data.formtype neq 'navbar'}row{/if} {if $property eq 1}admidio-form-group-required{/if}">
     <label for="{$id}" class="{if $data.formtype neq 'vertical' and $data.formtype neq 'navbar'}col-sm-3{/if} control-label">
         {include file='sys-template-parts/parts/form.part.icon.tpl'}
         {$label}
@@ -19,14 +19,13 @@
     <div class="{if $data.formtype neq 'vertical' and $data.formtype neq 'navbar'}col-sm-9{/if}">
         {if $type == 'datetime'}
             <input
-            type="text"
+            type="date"
             name="{$id}"
             id="{$id}"
             value="{$data.attributes.dateValue}"
             {foreach $data.attributes.dateValueAttributes as $itemvar}
             {$itemvar@key}="{$itemvar}"
             {/foreach}
-            data-provide="datepicker"
             >
             <input
             type="time"
@@ -36,16 +35,14 @@
             {foreach $data.attributes.timeValueAttributes as $itemvar}
             {$itemvar@key}="{$itemvar}"
             {/foreach}
-            data-provide=""
             >
             {$htmlAfter}
-        {elseif $type == 'date' and $type == 'birthday'}
+        {elseif $type == 'date'}
             <input
             type="date"
             name="{$id}"
             id="{$id}"
             value="{$value}"
-            data-provide="datepicker"
             {foreach $data.attributes as $itemvar}
             {$itemvar@key}="{$itemvar}"
             {/foreach}

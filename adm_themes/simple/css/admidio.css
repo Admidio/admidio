@@ -306,8 +306,12 @@ label {
     margin-right: 15px;
 }
 
-input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
+input[type=date] {
     width: 200px;
+}
+
+input[type=time] {
+    width: 100px;
 }
 
 .datetime-date-control {
