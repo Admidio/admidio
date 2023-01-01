@@ -1092,16 +1092,16 @@ class User extends TableAccess
 
         if ($gCurrentUser->allowedViewProfileField($this, 'FIRST_NAME')) {
             $vCard[] = 'N;CHARSET=ISO-8859-1:' .
-                utf8_decode($this->getValue('LAST_NAME', 'database')) . ';' .
-                utf8_decode($this->getValue('FIRST_NAME', 'database')) . ';;;';
+                iconv("UTF-8","ISO-8859-1", $this->getValue('LAST_NAME', 'database')) . ';' .
+                iconv("UTF-8","ISO-8859-1", $this->getValue('FIRST_NAME', 'database')) . ';;;';
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'LAST_NAME')) {
             $vCard[] = 'FN;CHARSET=ISO-8859-1:' .
-                utf8_decode($this->getValue('FIRST_NAME')) . ' ' .
-                utf8_decode($this->getValue('LAST_NAME'));
+                iconv("UTF-8","ISO-8859-1", $this->getValue('FIRST_NAME')) . ' ' .
+                iconv("UTF-8","ISO-8859-1", $this->getValue('LAST_NAME'));
         }
         if ($this->getValue('usr_login_name') !== '') {
-            $vCard[] = 'NICKNAME;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('usr_login_name'));
+            $vCard[] = 'NICKNAME;CHARSET=ISO-8859-1:' . iconv("UTF-8","ISO-8859-1", $this->getValue('usr_login_name'));
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'PHONE')) {
             $vCard[] = 'TEL;HOME;VOICE:' . $this->getValue('PHONE');
@@ -1117,10 +1117,10 @@ class User extends TableAccess
         &&  $gCurrentUser->allowedViewProfileField($this, 'POSTCODE')
         &&  $gCurrentUser->allowedViewProfileField($this, 'COUNTRY')) {
             $vCard[] = 'ADR;CHARSET=ISO-8859-1;HOME:;;' .
-                utf8_decode($this->getValue('STREET', 'database')) . ';' .
-                utf8_decode($this->getValue('CITY', 'database')) . ';;' .
-                utf8_decode($this->getValue('POSTCODE', 'database')) . ';' .
-                utf8_decode($this->getValue('COUNTRY', 'database'));
+                iconv("UTF-8","ISO-8859-1", $this->getValue('STREET', 'database')) . ';' .
+                iconv("UTF-8","ISO-8859-1", $this->getValue('CITY', 'database')) . ';;' .
+                iconv("UTF-8","ISO-8859-1", $this->getValue('POSTCODE', 'database')) . ';' .
+                iconv("UTF-8","ISO-8859-1", $this->getValue('COUNTRY', 'database'));
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'WEBSITE')) {
             $vCard[] = 'URL;HOME:' . $this->getValue('WEBSITE');
