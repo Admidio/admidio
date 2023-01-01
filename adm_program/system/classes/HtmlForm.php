@@ -667,6 +667,11 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$optionsAll['class'];
         }
 
+        // Remove attributes that are not set
+        $attributes = array_filter($attributes, function ($attribute) {
+            return $attribute !== '' && $attribute !== null;
+        });
+
         if (in_array($optionsAll['type'], array('date', 'datetime', 'birthday'), true)) {
             if ($optionsAll['placeholder'] === '') {
                 $attributes['placeholder'] = DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date'));
@@ -674,64 +679,67 @@ class HtmlForm extends HtmlFormBasic
                 $attributes['placeholder'] = $optionsAll['placeholder'];
             }
             $javascriptCode = '';
-        }
 
-        // Remove attributes that are not set
-        $attributes = array_filter($attributes, function ($attribute) {
-            return $attribute !== '' && $attribute !== null;
-        });
+            // if datetime then add a time field behind the date field
+            if ($optionsAll['type'] === 'datetime') {
+                $datetime = \DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $value);
 
-        // if datetime then add a time field behind the date field
-        if ($optionsAll['type'] === 'datetime') {
-            $optionsAll['system_date_format'] = $gSettingsManager->getString('system_date');
-            $optionsAll['system_time_format'] = $gSettingsManager->getString('system_time');
+                // now add a date and a time field to the form
+                $attributes['data-provide'] = '';
+                $attributes['dateValue'] = null;
+                $attributes['timeValue'] = null;
 
-            $datetime = \DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $value);
+                if ($datetime) {
+                    $attributes['dateValue'] = $datetime->format($gSettingsManager->getString('system_date'));
+                    $attributes['timeValue'] = $datetime->format($gSettingsManager->getString('system_time'));
+                }
 
-            // now add a date and a time field to the form
-            $attributes['data-provide'] = '';
+                // now add a date and a time field to the form
+                $attributes['dateValueAttributes'] = array();
+                $attributes['dateValueAttributes']['class'] = 'form-control datetime-date-control';
+                $attributes['dateValueAttributes']['placeholder'] = DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date'));
+                $attributes['dateValueAttributes']['data-provide'] = 'datepicker';
+                $attributes['dateValueAttributes']['dateValue'] = $attributes['dateValue'];
 
-            $attributes['dateValue'] = null;
-            $attributes['timeValue'] = null;
+                $attributes['timeValueAttributes'] = array();
+                $attributes['timeValueAttributes']['class'] = 'form-control datetime-date-control datetime-time-control';
+                $attributes['timeValueAttributes']['placeholder'] = 'HH:MM';
+                $attributes['timeValueAttributes']['data-provide'] = '';
+                $attributes['timeValueAttributes']['timeValue'] = $attributes['timeValue'];
+/*
+                $javascriptCode = '
+                $("input[data-provide=\'' . $attributes['dateValueAttributes']['data-provide'] . '\']").each(function() {
+                    $(this).datepicker({
+                        language: "' . $gL10n->getLanguageLibs() . '",
+                        format: "' . DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')) . '",
+                        todayBtn: "linked",
+                        todayHighlight: true
+                    });
+                })';
+                $this->addJavascriptCode($javascriptCode, true);*/
 
-            if ($datetime) {
-                $attributes['dateValue'] = $datetime->format($gSettingsManager->getString('system_date'));
-                $attributes['timeValue'] = $datetime->format($gSettingsManager->getString('system_time'));
+            } elseif ($optionsAll['type'] === 'date' || $optionsAll['type'] === 'birthday') {
+                    $datetime = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
+                    if (!empty($value))
+                        $value = $datetime->format('Y-m-d');
+                    $optionsAll['type'] = 'date';
+                    $attributes['data-provide'] = 'datepicker';
             }
 
-            // now add a date and a time field to the form
-            $attributes['dateValueAttributes'] = array();
-            $attributes['dateValueAttributes']['class'] = 'form-control datetime-date-control';
-            $attributes['dateValueAttributes']['dateValue'] = $attributes['dateValue'];
-            $attributes['dateValueAttributes']['dateplaceholder'] = $gSettingsManager->getString('system_date');
+           /* if (!$this->datepickerInitialized) {
+                $javascriptCode = '
+                $("input[data-provide=\'datepicker\']").each(function() {
+                    $(this).datepicker({
+                        language: "' . $gL10n->getLanguageLibs() . '",
+                        format: "' . DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')) . '",
+                        todayBtn: "linked",
+                        todayHighlight: true
+                    });
+                });';
+                $this->addJavascriptCode($javascriptCode, true);
 
-            $attributes['timeValueAttributes'] = array();
-            $attributes['timeValueAttributes']['class'] = 'form-control datetime-date-control datetime-time-control';
-            $attributes['timeValueAttributes']['placeholder'] = 'HH:MM';
-            $attributes['timeValueAttributes']['data-provide'] = '';
-            $attributes['timeValueAttributes']['timeValue'] = $attributes['timeValue'];
-
-            $attributes['data-provide'] = 'datepicker';
-            $datepickerOptions = ' todayBtn: "linked", ';
-
-            $javascriptCode = '
-            $("input[data-provide=\'' . $attributes['data-provide'] . '\']").each(function() {
-                $(this).datepicker({
-                    language: "' . $gL10n->getLanguageLibs() . '",
-                    format: "' . DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')) . '",
-                    ' . $datepickerOptions . '
-                    todayHighlight: true
-                });
-            })';
-            $this->addJavascriptCode($javascriptCode, true);
-
-        } else {
-            if ($optionsAll['type'] === 'date' || $optionsAll['type'] === 'birthday') {
-                $datetime = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
-                if(!empty($value))
-                    $value = $datetime->format('Y-m-d');
-                $optionsAll['type'] = 'date';
-            }
+                $this->datepickerInitialized = true;
+            }*/
         }
 
         if ($optionsAll['passwordStrength']) {
