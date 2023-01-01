@@ -159,9 +159,9 @@ if ($getMode === 2) {
     $validToDate   = '';
 
     if (strlen($_POST['rol_start_date']) > 0) {
-        $validFromDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $_POST['rol_start_date']);
+        $validFromDate = \DateTime::createFromFormat('Y-m-d', $_POST['rol_start_date']);
         if (!$validFromDate) {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_FROM'), $gSettingsManager->getString('system_date'))));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_FROM'), 'YYYY-MM-DD')));
         // => EXIT
         } else {
             // now write date and time with database format to date object
@@ -170,9 +170,9 @@ if ($getMode === 2) {
     }
 
     if (strlen($_POST['rol_end_date']) > 0) {
-        $validToDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $_POST['rol_end_date']);
+        $validToDate = \DateTime::createFromFormat('Y-m-d', $_POST['rol_end_date']);
         if (!$validToDate) {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_TO'), $gSettingsManager->getString('system_date'))));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_TO'), 'YYYY-MM-DD')));
         // => EXIT
         } else {
             // now write date and time with database format to date object

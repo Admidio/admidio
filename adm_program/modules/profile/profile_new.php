@@ -315,11 +315,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             $format    = '';
 
             if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DATE') {
-                if ($usfNameIntern === 'BIRTHDAY') {
-                    $fieldType = 'birthday';
-                } else {
-                    $fieldType = 'date';
-                }
+                $fieldType = 'date';
                 $maxlength = '10';
             } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'EMAIL') {
                 // email could not be longer than 254 characters

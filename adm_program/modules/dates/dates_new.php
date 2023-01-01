@@ -56,9 +56,9 @@ if (isset($_SESSION['dates_request'])) {
     $_SESSION['dates_request']['dat_begin'] = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
     $_SESSION['dates_request']['dat_end']   = $_SESSION['dates_request']['date_to'].' '.$_SESSION['dates_request']['date_to_time'];
 
-    $dateTimeBegin = \DateTime::createFromFormat($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'), $_SESSION['dates_request']['dat_begin']);
+    $dateTimeBegin = \DateTime::createFromFormat('Y-m-d '.$gSettingsManager->getString('system_time'), $_SESSION['dates_request']['dat_begin']);
     $_SESSION['dates_request']['dat_begin'] = $dateTimeBegin->format('Y-m-d H:i:s');
-    $dateTimeEnd = \DateTime::createFromFormat($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'), $_SESSION['dates_request']['dat_end']);
+    $dateTimeEnd = \DateTime::createFromFormat('Y-m-d '.$gSettingsManager->getString('system_time'), $_SESSION['dates_request']['dat_end']);
     $_SESSION['dates_request']['dat_end'] = $dateTimeEnd->format('Y-m-d H:i:s');
 
     $date->setArray($_SESSION['dates_request']);

@@ -137,7 +137,6 @@ and sharing great software.
 
 - [Admidio Team](https://github.com/Admidio/admidio/graphs/contributors): The core developers of this project
 - [Bootstrap](https://getbootstrap.com/): HTML, CSS and JS framework
-- [Bootstrap-Datepicker](https://github.com/eternicode/bootstrap-datepicker): Datepicker for Bootstrap
 - [CKEditor](http://ckeditor.com/): Javascript-Editor
 - [Composer](https://getcomposer.org/): A Dependency Manager for PHP.
 - [Cookie Consent](https://cookieconsent.insites.com/): The most popular solution to the EU cookie law
