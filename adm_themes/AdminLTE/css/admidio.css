@@ -1,0 +1,609 @@
+/******************************************************************************
+ * Cascading-Style-Sheets file for Admidio
+ *
+ * @copyright 2004-2022 The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ *
+ * Here you can edit the look and feel of Admidio
+ *
+ *****************************************************************************/
+
+#admidio-main-navbar {
+    background-color: #349aaa;
+    min-height: 4rem;
+    position: sticky;
+    padding-bottom: 0px;
+}
+
+#admidio-main-navbar {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.7rem;
+    padding-top: 0px;
+}
+
+#admidio-main-navbar .navbar-brand img {
+    margin-right: 10px;
+}
+
+#admidio-main-navbar a {
+    color: #263340;
+    font-size: 1rem
+}
+
+#admidio-main-navbar a:hover {
+    color: #000000;
+}
+
+@media (max-width: 767px)
+{
+    /* navbar should not be fixed at top if in mobile view */
+    #admidio-main-navbar.fixed-top
+    {
+        position: relative;
+        top: auto;
+    }
+}
+
+.admidio-content-col {
+    padding: 0px;
+}
+
+.admidio-content {
+    order: 1;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/***********************************/
+/* Sidebar Navigation */
+/***********************************/
+.admidio-sidebar {
+    padding: 0px;
+    background-color: #263340;
+    overflow-y: auto;
+}
+
+.admidio-module-headline {
+    margin-top: 20px;
+}
+
+.admidio-headline-mobile-menu {
+    width: 100%;
+    font-size: 1.1rem;
+    color: #eeeeee;
+    letter-spacing: 2px;
+}
+
+.admidio-headline-mobile-menu .btn {
+    padding: 0px;
+}
+
+.admidio-menu-list {
+    overflow-y: auto;
+}
+
+.admidio-menu-list a {
+    color: #dddddd;
+}
+
+.admidio-menu-list .dropdown-item {
+    color: #263340;
+}
+
+.admidio-menu-list a:hover {
+    color: #ffffff;
+    background-color: #324b64;
+}
+
+@media (min-width: 768px)
+{
+    /* sidebar should only be there in non mobile view */
+    .admidio-sidebar {
+        position: sticky;
+        top: 4rem;
+        z-index: 1000;
+        height: calc(100vh - 4rem);
+    }
+
+    .admidio-menu-list {
+        display: block !important;
+    }
+}
+
+.admidio-menu-header {
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    margin: 0px;
+    color: rgba(222, 222, 222, 0.65);
+}
+
+/***********************************/
+/* page function menu */
+/***********************************/
+
+.admidio-menu-function-node {
+    margin-top: 25px;
+}
+
+.admidio-menu-function-node .nav-link {
+    margin-right: 25px;
+    margin-top: 15px;
+}
+
+@media (max-width: 767px) {
+    .admidio-menu-function-node .nav-link {
+        max-width: 150px;
+    }
+}
+
+/***********************************/
+/* Default tags */
+/***********************************/
+
+body {
+    color: #263340;
+}
+
+h6, h5 {
+    font-weight: bold;
+}
+
+a, .btn-link, .page-link, a.btn {
+    color: #349aaa;
+}
+
+a:hover, .page-link:hover, a.btn:hover {
+    color: #25717d;
+}
+
+a.btn-primary, .btn-secondary {
+    color: #f7f7f7 !important;
+}
+
+a.btn-primary:hover, .btn-secondary:hover {
+    color: #ffffff !important;
+}
+
+.btn-primary {
+    background-color: #349aaa;
+    border-color: #349aaa;
+}
+
+.btn-primary:hover {
+    background-color: #25717d;
+    border-color: #25717d;
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+    background-color: #6b979f;
+    border-color: #6b979f;
+}
+
+/* default distance between elements */
+.admidio-blog, .admidio-field-group, .pagination,
+.admidio-info-created-edited, .admidio-img-presenter,
+.navbar-filter, .table-responsive, .admidio-content-header,
+.dataTables_wrapper, .admidio-margin-bottom, .admidio-row,
+.admidio-content-subheader {
+    margin-bottom: 40px;
+}
+
+/* add 5px distance to all icons within a icon text combination */
+.admidio-icon-chain, .nav-link .fas, .btn .fas, .alert .fas,
+.admidio-profile-user-right .fas, .checkbox .fas, input[type="radio"],
+label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
+    margin-right: 5px;
+}
+
+.admidio-icon-link {
+    margin-left: 0px;
+    padding-left: 0px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.admidio-reduced {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.btn-group-vertical {
+    display: block;
+}
+
+/* show vertical btn group in mobile view */
+@media (max-width: 767px)
+{
+    .btn-group {
+        display: block;
+    }
+
+    .btn-group .btn {
+        display: block;
+        float: none;
+        width: 100%;
+    }
+}
+
+/***********************************/
+/* Mark mandatory fields */
+/***********************************/
+.admidio-form-group-required .control-label:after,
+.admidio-form-group-required .checkbox label:after,
+.admidio-form-required-notice span:after {
+    font-family: "Font Awesome 5 Free";
+    font-size: 6pt;
+    content: "\f111";
+    color: #d91515;
+    white-space: nowrap;
+    vertical-align: super;
+    margin-left: 3px;
+}
+
+.admidio-form-required-notice {
+    font-size: 9pt;
+    margin-top: 5px;
+    margin-bottom: -10px;
+    text-align: right;
+    width: 100%;
+    display: inline-block;
+    max-width: 1000px;
+}
+
+/***********************************/
+/* Forms */
+/***********************************/
+
+form, .message {
+    max-width: 1000px;
+}
+
+.form-control:focus, .select2-container--bootstrap4.select2-container--focus .select2-selection,
+input[type=checkbox]:focus, button:focus {
+    border-color: #349aaa;
+    background-color: #d6ebee;
+    box-shadow: none !important;
+}
+
+.btn-primary:focus {
+    background-color: #25717d !important;
+}
+
+input[type=checkbox] {
+    margin-right: 10px;
+}
+
+label {
+    font-weight: bold;
+}
+
+@media (min-width: 768px) {
+    .offset-sm-3.btn {
+        margin-left: 25.5%;
+    }
+
+    .form-control-small {
+        width: 50%;
+    }
+}
+
+.form-inline div {
+    padding-right: 15px;
+}
+
+.form-inline label {
+    padding-right: 5px;
+}
+
+.form-control-static {
+    margin-bottom: 0px;
+}
+
+.radio-inline {
+    margin-right: 15px;
+}
+
+input[data-provide=datepicker], input[data-provide=datepicker-birthday] {
+    width: 200px;
+}
+
+.datetime-date-control {
+    display: inline;
+}
+
+.datetime-time-control {
+    width: 110px !important;
+    margin-left: 20px;
+}
+
+.dropdown-menu .btn {
+    text-align: left;
+}
+
+/***********************************/
+/* Cards */
+/***********************************/
+
+.admidio-blog, .admidio-field-group {
+    border: none;
+    max-width: 1000px;
+}
+
+.admidio-blog .card-header, .admidio-blog .card-body, .admidio-blog .card-footer,
+.admidio-field-group .card-header, .admidio-field-group .card-body, .admidio-field-group .card-footer {
+    border: none;
+    background-color: #eeeeee;
+}
+
+.card-header {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+.card-header .fas, .card-header .fab {
+    margin-right: 10px;
+}
+
+.card-header .float-right .fas {
+    margin-right: 0px;
+}
+
+.card-header .dropdown .fas, .card-header .dropdown .fab {
+    margin-right: 0px;
+}
+
+.admidio-blog .card-footer {
+    font-size: 80%;
+}
+
+.admidio-field-group .list-group-item {
+    border: none;
+    background-color: #eeeeee;
+    padding: 0px 0px 1rem 0px;
+}
+
+.admidio-field-group .list-group-item .list-group-item {
+    padding: 0px;
+}
+
+.card .admidio-info-created-edited {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.card-footer .admidio-info-created-edited {
+    font-size: 100% !important;
+}
+
+.admidio-blog-comment .card-header, .admidio-blog-comment .card-body, .admidio-blog-comment .card-footer {
+    background-color: #dddddd;
+}
+
+.admidio-blog-comment .card-header {
+    font-size: 120%;
+    padding-bottom: 0px;
+}
+
+.admidio-blog-comment {
+    margin-bottom: 20px;
+}
+
+.admidio-blog .card-body > .btn {
+    margin-top: 20px;
+    display: block;
+    text-align: left;
+}
+
+.admidio-card {
+    border: none;
+    background-color: #eeeeee;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    height: 95%;
+}
+
+.admidio-card li {
+    padding-left: 0px;
+    padding-right: 0px;
+    background-color: #eeeeee;
+}
+
+/***********************************/
+/* Nav-Bars */
+/***********************************/
+
+.navbar button {
+    margin-bottom: 0px;
+}
+
+.navbar label {
+    margin-right: 10px;
+}
+
+.navbar-filter {
+    background-color: #eeeeee;
+}
+
+.navbar-filter .form-group {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/***********************************/
+/* Accordion */
+/***********************************/
+
+.accordion .card-header:hover {
+    color: #eeeeee;
+    background-color: #263340;
+    cursor: pointer;
+}
+
+.accordion .card-header {
+    color: #349aaa;
+}
+
+/***********************************/
+/* Various settings */
+/***********************************/
+
+.admidio-opacity-reduced {
+    opacity: 0.4;
+}
+
+.badge {
+    margin-left: 5px;
+}
+
+.list-unstyled li {
+    padding-top: 7px;
+}
+
+.admidio-info-created {
+    display: block;
+}
+
+.admidio-info-created-edited {
+    font-size: 80%;
+}
+
+.breadcrumb-item {
+    display: block;
+}
+
+/* Style for popover */
+.popover-header {
+    color: white;
+    background-color: #263340;
+}
+
+.popover-body {
+    background-color: #eeeeee;
+}
+
+.page-item.active .page-link {
+    background-color: #263340;
+    border-color: #263340;
+}
+
+#imprint {
+    margin-bottom: 30px;
+    font-size: 80%;
+}
+
+.admidio-info-icon {
+    color: #4496dd;
+    cursor: pointer;
+    margin-left: 6px;
+}
+
+.admidio-profile-user-right {
+    cursor: help;
+}
+
+.admidio-event-highlight .card-header, tr.admidio-event-highlight {
+    background-color: #cccccc;
+}
+
+.admidio-event-approval-state-attend .fas {
+    color: #00b100 !important;
+}
+
+.admidio-event-approval-state-tentative .fas {
+    color: #9b009b !important;
+}
+
+.admidio-event-approval-state-cancel .fas {
+    color: #df2424 !important;
+}
+
+#admidio-password-strength {
+    margin-top: 10px;
+}
+
+#admidio-password-strength-minimum {
+    position: absolute;
+    border: 9px solid transparent;
+    border-left-color: #263340;
+    border-right-width: 0;
+}
+
+.progress {
+    background-color: #dddddd;
+    height: 20px !important;
+}
+
+.admidio-attachment {
+    margin-left: 20px;
+}
+
+/***********************************/
+/* Chat module */
+/***********************************/
+
+#chat-area {
+    height: 350px;
+    overflow: auto;
+    border: 1px solid #666;
+    padding: 20px;
+    background: white;
+    max-width: 1000px;
+}
+
+#chat-area span {
+    color: #ffffff;
+    background: #263340;
+    padding: 4px 8px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#chat-area time {
+    font-size: 75%;
+    padding: 4px 0px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#chat-area p {
+    padding: 10px 0;
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 0px;
+}
+
+#sendie_group {
+    margin-top: 20px;
+}
+
+/***********************************/
+/* Overview page */
+/***********************************/
+
+#plgCalendarTable {
+    width: 100%;
+}
+
+#plgCalendarTable td.plgCalendarToday {
+    background-color: #324b64;
+    border-radius: 5px;
+    color: white;
+}
+
+#plgCalendarTable td {
+    text-align: center;
+}
+
+#plugin-login-form .btn {
+    margin-bottom: 15px;
+}
+
+.admidio-plugin-content ul {
+    padding-left: 15px;
+}
+
+#plugin-latest-documents-files hr {
+    margin: 5px 0px;
+}
