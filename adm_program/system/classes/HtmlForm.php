@@ -1524,7 +1524,7 @@ class HtmlForm extends HtmlFormBasic
 
         while ($row = $pdoStatement->fetch()) {
             // if several categories exist than select default category
-            if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $optionsAll['defaultValue'] === 0
+            if ($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $optionsAll['defaultValue'] === ''
             && ($countCategories === 1 || $row['cat_default'] === 1)) {
                 $optionsAll['defaultValue'] = $row['cat_uuid'];
             }
