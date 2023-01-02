@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- (c) 2004 - 2020 The Admidio Team - https://www.admidio.org -->
+    <!-- (c) 2004 - 2023 The Admidio Team - https://www.admidio.org -->
 
     <link rel="shortcut icon" type="image/x-icon" href="{$urlTheme}/images/favicon.ico" />
     <link rel="icon" type="image/png" href="{$urlTheme}/images/favicon-32x32.png" sizes="32x32" />

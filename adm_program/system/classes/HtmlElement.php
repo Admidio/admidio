@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2022 The Admidio Team
+ * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -187,7 +187,7 @@ abstract class HtmlElement extends \Smarty
         $this->nesting        = $nesting;
         $this->mainElement    = $element;
         $this->currentElement = $element;
-        
+
         parent::__construct();
         // initialize php template engine smarty
         if (defined('THEME_PATH')) {
@@ -512,7 +512,7 @@ abstract class HtmlElement extends \Smarty
         $this->assign("ADMIDIO_URL", ADMIDIO_URL);
         $this->assign("FOLDER_LIBS_SERVER", FOLDER_LIBS_SERVER);
         $this->assign("data", $asigns);
-       
+
         $this->assign('l10n', $gL10n);
         return $this->fetch("sys-template-parts/".$templateName.'.tpl');
     }

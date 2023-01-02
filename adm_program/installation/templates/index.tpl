@@ -6,7 +6,7 @@
     <meta name="author"   content="Admidio Team" />
     <meta name="robots"   content="noindex" />
 
-    <!-- (c) 2004 - 2020 The Admidio Team - https://www.admidio.org -->
+    <!-- (c) 2004 - 2023 The Admidio Team - https://www.admidio.org -->
 
     <link rel="shortcut icon" type="image/x-icon" href="{$urlAdmidio}/adm_program/system/logo/favicon.ico" />
     <link rel="icon" type="image/png" href="{$urlAdmidio}/adm_program/system/logo/admidio_logo_32.png" sizes="32x32" />

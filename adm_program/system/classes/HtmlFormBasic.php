@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2022 The Admidio Team
+ * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -64,7 +64,7 @@
  * // print the form
  * echo $form->getHtmlForm();
  * ```
- * @deprecated 
+ * @deprecated
  */
 class HtmlFormBasic extends HtmlElement
 {
@@ -128,9 +128,9 @@ class HtmlFormBasic extends HtmlElement
     public function addSimpleInput($type, $name, $id = null, $value = '', array $arrAttributes = [])
     {
         $data = [
-            'type' => $type, 
-            'name' => $name, 
-            'id' => $id , 
+            'type' => $type,
+            'name' => $name,
+            'id' => $id ,
             'value' => $value
         ];
         $data = array_merge($data, $arrAttributes);

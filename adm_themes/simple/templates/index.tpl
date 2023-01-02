@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- (c) 2004 - 2020 The Admidio Team - https://www.admidio.org -->
+    <!-- (c) 2004 - 2023 The Admidio Team - https://www.admidio.org -->
 
     <link rel="shortcut icon" type="image/x-icon" href="{$urlTheme}/images/favicon.ico" />
     <link rel="icon" type="image/png" href="{$urlTheme}/images/favicon-32x32.png" sizes="32x32" />
@@ -146,7 +146,7 @@
                         {include file=$templateFile}
                     {/if}
 
-                    <div id="imprint">&copy; 2004 - 2022&nbsp;&nbsp;<a href="https://www.admidio.org">Admidio</a>
+                    <div id="imprint">&copy; 2004 - 2023&nbsp;&nbsp;<a href="https://www.admidio.org">Admidio</a>
                         {if $urlImprint != ''}
                             &nbsp;&nbsp;-&nbsp;&nbsp;<a href="{$urlImprint}">{$l10n->get('SYS_IMPRINT')}</a>
                         {/if}
