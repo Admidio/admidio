@@ -1153,11 +1153,14 @@ class HtmlForm extends HtmlFormBasic
                     language: "' . $gL10n->getLanguageLibs() . '"
                 });';
 
-            // add default values to multi select
             if (is_array($optionsAll['defaultValue']) && count($optionsAll['defaultValue']) > 0) {
+                // add default values to multi select
                 $htmlDefaultValues = '"' . implode('", "', $optionsAll['defaultValue']) . '"';
 
-                $javascriptCode .= ' $("#' . $id . '").val([' . $htmlDefaultValues . ']).trigger("change");';
+                $javascriptCode .= ' $("#' . $id . '").val([' . $htmlDefaultValues . ']).trigger("change.select2");';
+            } elseif (count($values) === 1 && $optionsAll['property'] === self::FIELD_REQUIRED) {
+                // if there is only one entry and a required field than select this entry
+                $javascriptCode .= ' $("#' . $id . '").val("'.$values[0][0].'").trigger("change.select2");';
             }
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
