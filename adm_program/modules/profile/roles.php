@@ -276,7 +276,7 @@ while ($row = $statement->fetch()) {
 $html .= $table->show();
 
 $html .= '
-    <button class="btn-primary btn" id="btn_save" type="submit"><i class=\"fas fa-check\"></i>'.$gL10n->get('SYS_SAVE').'</button>
+    <button class="btn-primary btn" id="btn_save" type="submit"><i class="fas fa-check"></i>'.$gL10n->get('SYS_SAVE').'</button>
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>';
 
