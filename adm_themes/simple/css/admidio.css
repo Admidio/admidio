@@ -136,6 +136,7 @@
 @media (max-width: 767px) {
     .admidio-menu-function-node .nav-link {
         max-width: 150px;
+        margin-right: 15px;
     }
 }
 
