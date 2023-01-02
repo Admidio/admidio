@@ -64,7 +64,6 @@
  * // print the form
  * echo $form->getHtmlForm();
  * ```
- * @deprecated
  */
 class HtmlFormBasic extends HtmlElement
 {
