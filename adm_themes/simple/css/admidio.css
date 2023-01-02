@@ -525,6 +525,10 @@ input[type=time] {
     color: #df2424 !important;
 }
 
+.admidio-album-thumbnail {
+    margin-bottom: 25px;
+}
+
 #admidio-password-strength {
     margin-top: 10px;
 }
