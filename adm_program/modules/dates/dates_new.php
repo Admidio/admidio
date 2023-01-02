@@ -55,12 +55,12 @@ if (isset($_SESSION['dates_request'])) {
     // first set date and time field to a datetime within system format and add this to date class
     $_SESSION['dates_request']['dat_begin'] = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
     $_SESSION['dates_request']['dat_end']   = $_SESSION['dates_request']['date_to'].' '.$_SESSION['dates_request']['date_to_time'];
-
-    $dateTimeBegin = \DateTime::createFromFormat('Y-m-d '.$gSettingsManager->getString('system_time'), $_SESSION['dates_request']['dat_begin']);
+/*
+    $dateTimeBegin = \DateTime::createFromFormat('Y-m-d H:i', $_SESSION['dates_request']['dat_begin']);
     $_SESSION['dates_request']['dat_begin'] = $dateTimeBegin->format('Y-m-d H:i:s');
-    $dateTimeEnd = \DateTime::createFromFormat('Y-m-d '.$gSettingsManager->getString('system_time'), $_SESSION['dates_request']['dat_end']);
+    $dateTimeEnd = \DateTime::createFromFormat('Y-m-d H:i', $_SESSION['dates_request']['dat_end']);
     $_SESSION['dates_request']['dat_end'] = $dateTimeEnd->format('Y-m-d H:i:s');
-
+*/
     $date->setArray($_SESSION['dates_request']);
 
     // get the selected roles for visibility

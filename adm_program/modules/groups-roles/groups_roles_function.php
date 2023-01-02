@@ -124,8 +124,8 @@ if ($getMode === 2) {
         $_POST['rol_max_members'] = '';
     }
 
-    // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
-    // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
+    // for all checkboxes must be checked if a value was transferred
+    // if not, then set the value here to 0, since 0 is not transferred.
 
     $checkboxes = array(
         'rol_assign_roles',
@@ -145,7 +145,7 @@ if ($getMode === 2) {
     );
 
     foreach ($checkboxes as $value) {
-        // initialize the roles rights if value not set or not = 1 or its a event role
+        // initialize the roles rights if value not set, it's not = 1, it's an event role
         if (!isset($_POST[$value]) || $_POST[$value] != 1 || $eventRole) {
             $_POST[$value] = 0;
         }
@@ -159,7 +159,7 @@ if ($getMode === 2) {
     $validToDate   = '';
 
     if (strlen($_POST['rol_start_date']) > 0) {
-        $validFromDate = \DateTime::createFromFormat('Y-m-d', $_POST['rol_start_date']);
+        $validFromDate = DateTime::createFromFormat('Y-m-d', $_POST['rol_start_date']);
         if (!$validFromDate) {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_FROM'), 'YYYY-MM-DD')));
         // => EXIT
@@ -170,7 +170,7 @@ if ($getMode === 2) {
     }
 
     if (strlen($_POST['rol_end_date']) > 0) {
-        $validToDate = \DateTime::createFromFormat('Y-m-d', $_POST['rol_end_date']);
+        $validToDate = DateTime::createFromFormat('Y-m-d', $_POST['rol_end_date']);
         if (!$validToDate) {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_VALID_TO'), 'YYYY-MM-DD')));
         // => EXIT
@@ -193,9 +193,9 @@ if ($getMode === 2) {
     // ------------------------------------------------
 
     if (strlen($_POST['rol_start_time']) > 0) {
-        $validFromTime = \DateTime::createFromFormat('Y-m-d '.$gSettingsManager->getString('system_time'), DATE_NOW.' '.$_POST['rol_start_time']);
+        $validFromTime = DateTime::createFromFormat('Y-m-d H:i', DATE_NOW.' '.$_POST['rol_start_time']);
         if (!$validFromTime) {
-            $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('ROL_TIME_FROM'), $gSettingsManager->getString('system_time'))));
+            $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME_FROM'), 'HH:ii')));
         // => EXIT
         } else {
             // now write date and time with database format to date object
@@ -204,9 +204,9 @@ if ($getMode === 2) {
     }
 
     if (strlen($_POST['rol_end_time']) > 0) {
-        $validToTime = \DateTime::createFromFormat('Y-m-d '.$gSettingsManager->getString('system_time'), DATE_NOW.' '.$_POST['rol_end_time']);
+        $validToTime = DateTime::createFromFormat('Y-m-d H:i', DATE_NOW.' '.$_POST['rol_end_time']);
         if (!$validToTime) {
-            $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('ROL_TIME_TO'), $gSettingsManager->getString('system_time'))));
+            $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME_TO'), 'HH:ii')));
         // => EXIT
         } else {
             // now write date and time with database format to date object

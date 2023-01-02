@@ -150,7 +150,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     // Check valid format of date and time input
     // ------------------------------------------------
 
-    $startDateTime = \DateTime::createFromFormat('Y-m-d '.$gSettingsManager->getString('system_time'), $_POST['date_from'].' '.$_POST['date_from_time']);
+    $startDateTime = \DateTime::createFromFormat('Y-m-d H:i', $_POST['date_from'].' '.$_POST['date_from_time']);
     if (!$startDateTime) {
         // Error: now check if date format or time format was wrong and show message
         $startDateTime = \DateTime::createFromFormat('Y-m-d', $_POST['date_from']);
@@ -159,7 +159,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), 'YYYY-MM-DD')));
         // => EXIT
         } else {
-            $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START'), $gSettingsManager->getString('system_time'))));
+            $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START'), 'HH:ii')));
             // => EXIT
         }
     } else {
@@ -175,7 +175,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         $_POST['date_to_time'] = $_POST['date_from_time'];
     }
 
-    $endDateTime = \DateTime::createFromFormat('Y-m-d '.$gSettingsManager->getString('system_time'), $_POST['date_to'].' '.$_POST['date_to_time']);
+    $endDateTime = \DateTime::createFromFormat('Y-m-d H:i', $_POST['date_to'].' '.$_POST['date_to_time']);
 
     if (!$endDateTime) {
         // Error: now check if date format or time format was wrong and show message
@@ -185,7 +185,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), 'YYYY-MM-DD')));
         // => EXIT
         } else {
-            $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END'), $gSettingsManager->getString('system_time'))));
+            $gMessage->show($gL10n->get('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END'), 'HH:ii')));
             // => EXIT
         }
     } else {
