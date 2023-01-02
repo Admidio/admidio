@@ -192,7 +192,7 @@ class HtmlForm extends HtmlFormBasic
         $attributes['data-admidio'] = $optionsAll['data-admidio'];
         ++$this->countElements;
 
-        $attributes['class'] = "btn btn-primary ".$optionsAll['class'];
+        $attributes['class'] = "btn btn-secondary ".$optionsAll['class'];
 
         $optionsAll['attributes'] = $attributes;
         $this->addHtml($this->render('form.button', $optionsAll));
