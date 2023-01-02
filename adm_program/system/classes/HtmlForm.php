@@ -210,6 +210,7 @@ class HtmlForm extends HtmlFormBasic
         global $gL10n;
 
         $attributes = array('class' => 'captcha');
+        ++$this->countElements;
 
         // set specific css class for this field
         if ($class !== '') {
@@ -256,6 +257,7 @@ class HtmlForm extends HtmlFormBasic
     public function addCheckbox($id, $label, $checked = false, array $options = array())
     {
         $attributes   = array('class' => '');
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
@@ -377,6 +379,7 @@ class HtmlForm extends HtmlFormBasic
 
         $attributes = array('class' => 'editor');
         $flagLabelVertical = $this->type;
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
@@ -467,6 +470,7 @@ class HtmlForm extends HtmlFormBasic
         global $gSettingsManager;
 
         $attributes = array('class' => 'form-control');
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
@@ -568,6 +572,7 @@ class HtmlForm extends HtmlFormBasic
         global $gSettingsManager, $gLogger;
 
         $attributes = array('class' => 'form-control');
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,
@@ -786,6 +791,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addMultilineTextInput($id, $label, $value, $rows, array $options = array())
     {
+        ++$this->countElements;
         $attributes = array('class' => 'form-control');
 
         // create array with all options
@@ -885,6 +891,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addRadioButton($id, $label, array $values, array $options = array())
     {
+        ++$this->countElements;
         $attributes = array('class' => '');
 
         // create array with all options
@@ -973,6 +980,7 @@ class HtmlForm extends HtmlFormBasic
     {
         global $gL10n;
 
+        ++$this->countElements;
         $attributes = array('class' => 'form-control');
         $name = $id;
 
@@ -1533,6 +1541,7 @@ class HtmlForm extends HtmlFormBasic
     public function addStaticControl($id, $label, $value, array $options = array())
     {
         $attributes = array('class' => 'form-control-static');
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array('formtype' => $this->type,'property' => '', 'helpTextIdLabel' => '', 'helpTextIdInline' => '', 'icon' => '', 'class' => '');
@@ -1764,8 +1773,6 @@ class HtmlForm extends HtmlFormBasic
             $htmlIcon = '';
             $htmlHelpIcon = '';
             $htmlIdFor = '';
-
-            ++$this->countElements;
 
             // set specific css class for this row
             if ($class !== '') {
