@@ -13,8 +13,6 @@ function ProfileJS(gRootPath) {
     this.formerRoleCount         = 0;
     this.futureRoleCount         = 0;
     this.userUuid                = "";
-    this.deleteRole_ConfirmText  = "";
-    this.deleteFRole_ConfirmText = "";
     this.errorID                 = 0;
 
     this.reloadRoleMemberships = function () {
