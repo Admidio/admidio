@@ -198,7 +198,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
     }
 
     // create thumbnail container
-    $page->addHtml('<div class="row admidio-row">');
+    $page->addHtml('<div class="row">');
 
     for ($actThumbnail = $firstPhotoNr; $actThumbnail <= $lastPhotoNr && $actThumbnail <= $photoAlbum->getValue('pho_quantity'); ++$actThumbnail) {
         if ($actThumbnail <= $photoAlbum->getValue('pho_quantity')) {
@@ -215,7 +215,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
             // Bootstrap modal with lightbox
             elseif ((int) $gSettingsManager->get('photo_show_mode') === 1) {
                 $photoThumbnailTable .= '
-                        <a data-gallery="admidio-gallery" data-type="image" data-parent=".admidio-row" data-toggle="lightbox" data-title="'.$headline.'"
+                        <a data-gallery="admidio-gallery" data-type="image" data-parent=".admidio-album-thumbnail" data-toggle="lightbox" data-title="'.$headline.'"
                             href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
                             class="rounded" id="img_'.$actThumbnail.'" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" alt="'.$actThumbnail.'" /></a>';
             }
@@ -345,7 +345,7 @@ if ($albumsCount > 0) {
 
     $childPhotoAlbum = new TablePhotos($gDb);
 
-    $page->addHtml('<div class="row admidio-row">');
+    $page->addHtml('<div class="row admidio-margin-bottom">');
 
     for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_per_page') - 1 && $x < $albumsCount; ++$x) {
         $htmlLock = '';
