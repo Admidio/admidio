@@ -96,8 +96,6 @@ $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 
 $page->addJavascript('
     var profileJS = new ProfileJS(gRootPath);
-    profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('SYS_MEMBERSHIP_DELETE', array('[rol_name]')).'";
-    profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('SYS_LINK_MEMBERSHIP_DELETE', array('[rol_name]')).'";
     profileJS.userUuid                = "'.$getUserUuid.'";
 
     /**
