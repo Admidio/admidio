@@ -221,7 +221,7 @@ class FunctionClass
             $returnCode = $email->sendEmail();
         }
 
-        // nun noch das von der Groesse angepasste Bild loeschen
+        // now delete the resized image
         try {
             FileSystemUtils::deleteFileIfExists($imgPhotoPath);
         } catch (\RuntimeException $exception) {
