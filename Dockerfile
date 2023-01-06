@@ -36,7 +36,7 @@ RUN yum update -y --allowerasing --skip-broken --nobest --setopt=tsflags=nodocs 
     yum remove -y nodejs nodejs-docs npm && \
     yum autoremove -y && \
     rm -rf /usr/lib/node_modules && \
-    yum -y clean all --enablerepo='*'
+    yum -y clean all --enablerepo='*' && rm -rf /var/cache/yum
 
 COPY . .
 RUN mkdir provisioning && cp -a adm_plugins adm_themes adm_my_files provisioning/ && rm -rf adm_plugins adm_themes adm_my_files
@@ -53,7 +53,7 @@ RUN set -euf -o pipefail ; \
       trivy filesystem --exit-code 1 --severity CRITICAL --no-progress / && \
       echo "scan image with trivy (trivy filesystem --exit-code 1 --severity MEDIUM,HIGH --no-progress /)" && \
       trivy filesystem --exit-code 0 --severity MEDIUM,HIGH --no-progress / && \
-      rm -rf /opt/app-root/src/.cache/trivy ; \
+      rm -rf /opt/app-root/src/.cache/trivy; \
     fi
 
 
