@@ -169,7 +169,7 @@ class Email extends PHPMailer
 
         // check if valid email address and if email not in the recipients array
         if (StringUtils::strValidCharacters($address, 'email')
-        && array_search($address, array_column($this->emRecipientsArray, 'address')) === false) {
+        && !in_array($address, array_column($this->emRecipientsArray, 'address'))) {
             $recipient = array('name' => $asciiName, 'address' => $address, 'firstname' => $firstName, 'surname' => $lastName);
             $recipient = array_merge($recipient , $additionalFields);
             $this->emRecipientsArray[] = $recipient;
@@ -379,7 +379,7 @@ class Email extends PHPMailer
      */
     public function adminNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'system_notifications_new_entries')
     {
-        return $this->sendNotification($subject, $message, $editorName, $editorEmail, $enable_flag);
+        return $this->sendNotification($subject, $message, $editorName, $editorEmail);
     }
 
     /**
@@ -541,7 +541,7 @@ class Email extends PHPMailer
         // load the template and set the new email body with template
         try {
             $emailTemplateText = FileSystemUtils::readFile(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/' . $gSettingsManager->getString('mail_template'));
-        } catch (\RuntimeException $exception) {
+        } catch (RuntimeException $exception) {
             $emailTemplateText = '#message#';
         }
 
@@ -621,7 +621,7 @@ class Email extends PHPMailer
     /**
      * Sends a copy of the mail back to the sender. If the flag emListRecipients it set than all
      * recipients will be listed in the mail.
-     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws PHPMailer\PHPMailer\Exception|Exception
      */
     private function sendCopyMail()
     {
@@ -788,7 +788,7 @@ class Email extends PHPMailer
      * @param string $message     The body of the email.
      * @param string $editorName  The name of the sender of the email.
      * @param string $editorEmail The email address of the sender of the email.
-     * @return bool|string
+     * @return bool
      *@throws AdmException 'SYS_EMAIL_NOT_SEND'
      */
     public function sendNotification(string $subject, string $message, string $editorName = '', string $editorEmail = '')
