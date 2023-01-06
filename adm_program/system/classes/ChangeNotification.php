@@ -468,8 +468,7 @@ class ChangeNotification
                         ),
                         $message,
                         $currfullname,
-                        $gCurrentUser->getValue('EMAIL'),
-                        'system_notifications_profile_changes'
+                        $gCurrentUser->getValue('EMAIL')
                     );
                 }
             }

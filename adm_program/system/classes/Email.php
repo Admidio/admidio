@@ -156,13 +156,13 @@ class Email extends PHPMailer
      * Adds the name and address to the recipients list. The valid email address will only be added if it's not already
      * in the recipients list. The decision if the recipient will be sent as TO or BCC will be done later
      * in the email send process.
-     * @param string $address A valid email address to which the email should be sent.
-     * @param string $firstName    The first name of the recipient that will be shown in the email header.
-     * @param string $lastName    The last name of the recipient that will be shown in the email header.
-     * @param array $additionalFields    Additional fields to map in a Key Value like Array. Not used at all yet.
+     * @param string $address   A valid email address to which the email should be sent.
+     * @param string $firstName The first name of the recipient that will be shown in the email header.
+     * @param string $lastName  The last name of the recipient that will be shown in the email header.
+     * @param array $additionalFields Additional fields to map in a Key Value like Array. Not used at all yet.
      * @return bool Returns **true** if the address was added to the recipients list.
      */
-    public function addRecipient($address, $firstName = '', $lastName = '', $additionalFields = array())
+    public function addRecipient(string $address, string $firstName = '', string $lastName = '', array $additionalFields = array()): bool
     {
         // Recipients must be Ascii-US formatted, so encode in MimeHeader
         $asciiName = stripslashes($firstName  . ' ' . $lastName);
@@ -187,11 +187,11 @@ class Email extends PHPMailer
      * @param int $memberStatus Status of the members who should get the email. Possible values are
      *                          EMAIL_ALL_MEMBERS, EMAIL_ONLY_ACTIVE_MEMBERS, EMAIL_ONLY_FORMER_MEMBERS
      *                          The default value will be EMAIL_ONLY_ACTIVE_MEMBERS.
-     * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
-     *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
      * @return int Returns the number of added email addresses.
+     *@throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
+     *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
      */
-    public function addRecipientsByRole($roleUuid, $memberStatus = self::EMAIL_ONLY_ACTIVE_MEMBERS)
+    public function addRecipientsByRole(string $roleUuid, int $memberStatus = self::EMAIL_ONLY_ACTIVE_MEMBERS): int
     {
         global $gSettingsManager, $gProfileFields, $gL10n, $gDb, $gCurrentOrgId, $gCurrentUserId, $gValidLogin;
 
@@ -281,11 +281,11 @@ class Email extends PHPMailer
      * Add the name and email address of the given user id to the email as a normal recipient. If the system setting
      * **mail_send_to_all_addresses** is set than all email addresses of the given user id will be added.
      * @param int $userId ID of a user who should be the recipient of the email.
-     * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
-     *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
      * @return int Returns the number of added email addresses.
+     *@throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
+     *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
      */
-    public function addRecipientsByUserId($userId)
+    public function addRecipientsByUserId(int $userId): int
     {
         global $gSettingsManager, $gProfileFields, $gL10n, $gDb;
 
@@ -331,12 +331,14 @@ class Email extends PHPMailer
     }
 
     /**
-     * method adds CC recipients to mail
-     * @param string $address
-     * @param string $lastName
-     * @return true|string
+     * Adds the name and address to the carbon copy recipients list. The valid email address will only be
+     * added if it's not already in the recipients list.
+     * @param string $address   A valid email address to which the email should be sent.
+     * @param string $firstName The first name of the recipient that will be shown in the email header.
+     * @param string $lastName  The last name of the recipient that will be shown in the email header.
+     * @return true|string Returns **true** if the address was added to the recipients list otherwise the error message
      */
-    public function addCopy($address, $firstName = '', $lastName = '')
+    public function addCopy(string $address, string $firstName = '', string $lastName = '')
     {
         try {
             $this->addCC($address, $firstName .' '. $lastName);
@@ -384,7 +386,7 @@ class Email extends PHPMailer
      * Get the count of all recipients that are currently set for this email.
      * @return int Returns the number of recipients currently set for this email.
      */
-    public function countRecipients()
+    public function countRecipients(): int
     {
         return count($this->emRecipientsArray);
     }
@@ -392,10 +394,10 @@ class Email extends PHPMailer
     /**
      * Returns the maximum size of an attachment
      * @param string $sizeUnit  'Byte' = byte, 'KiB' = kibibyte, 'MiB' = mebibyte, 'GiB' = gibibyte, 'TiB' = tebibyte
-     * @param int    $precision The number of decimal digits to round to
+     * @param int $precision The number of decimal digits to round to
      * @return float The maximum attachment size in the given size-unit
      */
-    public static function getMaxAttachmentSize($sizeUnit = self::SIZE_UNIT_BYTE, $precision = 1)
+    public static function getMaxAttachmentSize(string $sizeUnit = self::SIZE_UNIT_BYTE, int $precision = 1): float
     {
         global $gSettingsManager;
 
@@ -430,7 +432,7 @@ class Email extends PHPMailer
      * **$GLOBALS['phpmailer_output_debug']**. Otherwise the output will go to the Admidio log files.
      * @param bool $outputGlobalVar Put the output in a global variable **$GLOBALS['phpmailer_output_debug']**.
      */
-    public function setDebugMode($outputGlobalVar = false)
+    public function setDebugMode(bool $outputGlobalVar = false)
     {
         global $gLogger;
 
@@ -446,7 +448,7 @@ class Email extends PHPMailer
     }
 
     /**
-     * Funktion um das Flag zu setzen, dass eine Kopie verschickt werden soll...
+     * Set a flag that a copy of the email will be sent to the sender
      */
     public function setCopyToSenderFlag()
     {
@@ -462,7 +464,7 @@ class Email extends PHPMailer
     }
 
     /**
-     * Funktion um das Flag zu setzen, dass in der Kopie alle Empfaenger der Mail aufgelistet werden
+     * Set a flag that all recipients will be separately listed in the copy of the mail to the sender.
      */
     public function setListRecipientsFlag()
     {
@@ -475,7 +477,7 @@ class Email extends PHPMailer
      * @param string $name
      * @return true|string
      */
-    public function setSender($address, $name = '')
+    public function setSender(string $address, string $name = '')
     {
         global $gSettingsManager;
 
@@ -514,7 +516,7 @@ class Email extends PHPMailer
      * @param string $subject A text that should be the subject of the email
      * @return bool Returns **false** if the parameter has no text
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject): bool
     {
         if ($subject !== '') {
             $this->Subject = stripslashes($subject);
@@ -528,9 +530,10 @@ class Email extends PHPMailer
      * @param string $text        Email text that should be send
      * @param string $senderName  Firstname and lastname of email sender
      * @param string $senderEmail The email address of the sender
+     * @param string $senderUuid  The unique ID of the sender.
      * @param string $recipients  List with firstname and lastname of all recipients of this mail
      */
-    public function setTemplateText($text, $senderName, $senderEmail, $senderUuid, $recipients)
+    public function setTemplateText(string $text, string $senderName, string $senderEmail, string $senderUuid, string $recipients)
     {
         global $gValidLogin, $gCurrentOrganization, $gSettingsManager, $gL10n;
 
@@ -587,7 +590,7 @@ class Email extends PHPMailer
      * @param string $email  Recipients email address
      * @param string $name  Recipients firstname and surname
      */
-    public function setUserSpecificTemplateText($text, $firstName, $surname, $email, $name)
+    private function setUserSpecificTemplateText(string $text, string $firstName, string $surname, string $email, string $name): string
     {
         // replace all line feeds within the mailtext into simple breaks because only those are valid within mails
         $text = str_replace("\r\n", "\n", $text);
@@ -606,7 +609,7 @@ class Email extends PHPMailer
      * Funktion um den Nachrichtentext an die Mail uebergeben
      * @param string $text
      */
-    public function setText($text)
+    public function setText(string $text)
     {
         // replace all line feeds within the mailtext into simple breaks because only those are valid within mails
         $text = str_replace("\r\n", "\n", $text);
@@ -670,7 +673,7 @@ class Email extends PHPMailer
      */
     public function sendEmail()
     {
-        global $gSettingsManager, $gLogger, $gDebug, $gValidLogin, $gCurrentUser;
+        global $gSettingsManager, $gLogger, $gDebug, $gValidLogin, $gCurrentUser, $gL10n;
         try {
             // If sending mode is "SINGLE" every E-mail is send on its own, so we do not need to check anything else here
             if($this->sendingMode == Email::SENDINGMODE_SINGLE) {
@@ -785,16 +788,12 @@ class Email extends PHPMailer
      * @param string $message     The body of the email.
      * @param string $editorName  The name of the sender of the email.
      * @param string $editorEmail The email address of the sender of the email.
-     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
      * @return bool|string
+     *@throws AdmException 'SYS_EMAIL_NOT_SEND'
      */
-    public function sendNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'system_notifications_new_entries')
+    public function sendNotification(string $subject, string $message, string $editorName = '', string $editorEmail = '')
     {
         global $gSettingsManager, $gCurrentOrganization;
-
-        if (!$gSettingsManager->getBool($enable_flag)) {
-            return false;
-        }
 
         // Send notification to configured role
         $this->addRecipientsByRole($gSettingsManager->getString('system_notifications_role'));
