@@ -40,7 +40,8 @@
 class Navigation
 {
     /**
-     * @var array<int,array<string,string>>
+     * @var array<array<string,string,string>> Array with all urls of the navigation class.
+     * The sub array will contain the url, a headline and an icon.
      */
     private $urlStack = array();
 
@@ -124,6 +125,19 @@ class Navigation
         // if the last url is equal to the new url than don't add the new url
         if ($count > 0 && $url === $this->urlStack[$count - 1]['url']) {
             return false;
+        }
+
+        // if the text of the last url is equal to the new url and the main url without query parameters is equal
+        // than replace the last url with the current url.
+        if($text !== '' && $text === $this->urlStack[$count - 1]['text']) {
+            $urlParts = parse_url($url);
+            $previousUrlParts = parse_url($this->urlStack[$count - 1]['url']);
+
+            if($urlParts['scheme'] === $previousUrlParts['scheme']
+            && $urlParts['host'] === $previousUrlParts['host']
+            && $urlParts['path'] === $previousUrlParts['path']) {
+                array_pop($this->urlStack);
+            }
         }
 
         // if the second last url is equal to the new url then only remove the last url
