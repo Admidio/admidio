@@ -167,11 +167,17 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         if ($field->getValue('cat_name_intern') === 'BASIC_DATA') {
             if (($userId > 0 && $gCurrentUser->isAdministrator()) || $getNewUser === 2 || $getNewUser === 1) {
                 // add username to form
+                $fieldProperty = HtmlForm::FIELD_DEFAULT;
+
+                if ($getNewUser >= 2) {
+                    $fieldProperty = HtmlForm::FIELD_REQUIRED;
+                }
+
                 $form->addInput(
                     'usr_login_name',
                     $gL10n->get('SYS_USERNAME'),
                     $user->getValue('usr_login_name'),
-                    array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'PRO_USERNAME_DESCRIPTION', 'class' => 'form-control-small')
+                    array('maxLength' => 254, 'property' => $fieldProperty, 'helpTextIdLabel' => 'PRO_USERNAME_DESCRIPTION', 'class' => 'form-control-small')
                 );
 
                 if ($getNewUser === 2) {
