@@ -36,7 +36,7 @@ $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation'
 $getForward    = admFuncVariableIsValid($_GET, 'forward', 'bool');
 
 // Check form values
-$postUserIdList = admFuncVariableIsValid($_POST, 'userIdList', 'string');
+$postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
 $postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid', 'string');
 
 
@@ -432,7 +432,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         $showlist = new ListConfiguration($gDb);
         $showlist->readDataByUuid($postListUuid);
         $list = array('dummy' => $gL10n->get('SYS_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : ''));
-        $form->addInput('userIdList', '', $postUserIdList, array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addInput('userUuidList', '', $postUserUuidList, array('property' => HtmlForm::FIELD_HIDDEN));
         $form->addInput('list_uuid', '', $postListUuid, array('property' => HtmlForm::FIELD_HIDDEN));
     }
 

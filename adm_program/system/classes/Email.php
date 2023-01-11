@@ -188,7 +188,7 @@ class Email extends PHPMailer
      *                          EMAIL_ALL_MEMBERS, EMAIL_ONLY_ACTIVE_MEMBERS, EMAIL_ONLY_FORMER_MEMBERS
      *                          The default value will be EMAIL_ONLY_ACTIVE_MEMBERS.
      * @return int Returns the number of added email addresses.
-     *@throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
+     * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
      *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
      */
     public function addRecipientsByRole(string $roleUuid, int $memberStatus = self::EMAIL_ONLY_ACTIVE_MEMBERS): int
@@ -282,7 +282,7 @@ class Email extends PHPMailer
      * **mail_send_to_all_addresses** is set than all email addresses of the given user id will be added.
      * @param int $userId ID of a user who should be the recipient of the email.
      * @return int Returns the number of added email addresses.
-     *@throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
+     * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
      *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
      */
     public function addRecipientsByUserId(int $userId): int
