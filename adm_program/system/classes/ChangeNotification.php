@@ -395,11 +395,11 @@ class ChangeNotification
                 $table_end = '</table><br>';
             } else {
                 $format_hdr = "%25s %25s -> %25s\n";
-                $format_row = "%25.25s %25.25s -> %25s\n ";
+                $format_row = "%25.25s %25.25s -> %25s\n";
                 $format_rolhdr = "%25s %25s %25s -> %25s\n";
-                $format_rolrow = "%25.25s %25s %25.25s -> %25s\n ";
-                $table_begin = '\n';
-                $table_end = '\n\n';
+                $format_rolrow = "%25.25s %25s %25.25s -> %25s\n";
+                $table_begin = "\n";
+                $table_end = "\n\n";
             }
 
             $changes = $this->changes;
