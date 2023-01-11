@@ -29,7 +29,7 @@ $postSubjectSQL = admFuncVariableIsValid($_POST, 'msg_subject', 'string');
 $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
-$postUserIdList = admFuncVariableIsValid($_POST, 'userIdList', 'string');
+$postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
 $postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid', 'string');
 
 // save form data in session for back navigation
@@ -150,64 +150,68 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
 
     if (isset($postTo)) {
         if ($postListUuid !== '') { // the uuid of a list was passed
-            $postTo = explode(',', $postUserIdList);
+            $postTo = explode(',', $postUserUuidList);
         }
 
         // Create new Email Object
         $email = new Email();
 
-        foreach ($postTo as $value) {
-            // set condition if email should only send to the email address of the user field
-            // with the internal name 'EMAIL'
-            if (!$gSettingsManager->getBool('mail_send_to_all_addresses')) {
-                $sqlEmailField = ' AND field.usf_name_intern = \'EMAIL\' ';
-            }
+        try {
+            foreach ($postTo as $value) {
+                // set condition if email should only send to the email address of the user field
+                // with the internal name 'EMAIL'
+                if (!$gSettingsManager->getBool('mail_send_to_all_addresses')) {
+                    $sqlEmailField = ' AND field.usf_name_intern = \'EMAIL\' ';
+                }
 
-            // check if role or user is given
-            if (str_contains($value, ':')) {
-                $moduleMessages = new ModuleMessages();
-                $group = $moduleMessages->msgGroupSplit($value);
+                // check if role or user is given
+                if (str_contains($value, ':')) {
+                    $moduleMessages = new ModuleMessages();
+                    $group = $moduleMessages->msgGroupSplit($value);
 
-                // check if role rights are granted to the User
-                $sql = 'SELECT rol_mail_this_role, rol_id, rol_name
+                    // check if role rights are granted to the User
+                    $sql = 'SELECT rol_mail_this_role, rol_id, rol_name
                           FROM ' . TBL_ROLES . '
                     INNER JOIN ' . TBL_CATEGORIES . '
                             ON cat_id = rol_cat_id
                            AND (  cat_org_id = ? -- $gCurrentOrgId
                                OR cat_org_id IS NULL)
                          WHERE rol_uuid = ? -- $group[\'uuid\']';
-                $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $group['uuid']));
-                $row = $statement->fetch();
+                    $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $group['uuid']));
+                    $row = $statement->fetch();
 
-                // logged out ones just to role with permission level "all visitors"
-                // logged in user is just allowed to send to role with permission
-                // role must be from actual Organisation
-                if ((!$gValidLogin && (int) $row['rol_mail_this_role'] !== 3)
-                || ($gValidLogin  && !$gCurrentUser->hasRightSendMailToRole((int) $row['rol_id']))
-                || $row['rol_id'] === null) {
-                    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-                    // => EXIT
-                }
+                    // logged out ones just to role with permission level "all visitors"
+                    // logged in user is just allowed to send to role with permission
+                    // role must be from actual Organisation
+                    if ((!$gValidLogin && (int)$row['rol_mail_this_role'] !== 3)
+                        || ($gValidLogin && !$gCurrentUser->hasRightSendMailToRole((int)$row['rol_id']))
+                        || $row['rol_id'] === null) {
+                        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                        // => EXIT
+                    }
 
-                // add role to the message object
-                $message->addRole($row['rol_id'], $group['role_mode'], $row['rol_name']);
+                    // add role to the message object
+                    $message->addRole($row['rol_id'], $group['role_mode'], $row['rol_name']);
 
-                // add all role members as recipients to the email
-                $email->addRecipientsByRole($group['uuid'], $group['status']);
-            } else {
-                // create user object
-                $user = new User($gDb, $gProfileFields);
-                $user->readDataByUuid($value);
+                    // add all role members as recipients to the email
+                    $email->addRecipientsByRole($group['uuid'], $group['status']);
+                } else {
+                    // create user object
+                    $user = new User($gDb, $gProfileFields);
+                    $user->readDataByUuid($value);
 
-                // only send email to user if current user is allowed to view this user, and he has a valid email address
-                if ($gCurrentUser->hasRightViewProfile($user)) {
-                    // add user to the message object
-                    $message->addUser((int) $user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
+                    // only send email to user if current user is allowed to view this user, and he has a valid email address
+                    if ($gCurrentUser->hasRightViewProfile($user)) {
+                        // add user to the message object
+                        $message->addUser((int)$user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
 
-                    // add user as recipients to the email
-                    $email->addRecipientsByUserId((int) $user->getValue('usr_id'));
+                        // add user as recipients to the email
+                        $email->addRecipientsByUserId((int)$user->getValue('usr_id'));
+                    }
                 }
             }
+        } catch (AdmException $e) {
+            $e->showHtml();
         }
     } else {
         // message when no receiver is given

@@ -261,13 +261,13 @@ $numMembers = $listStatement->rowCount();
 // get all members and their data of this list in an array
 $membersList = $listStatement->fetchAll(\PDO::FETCH_BOTH);
 
-$userIdList = array();
+$userUuidList = array();
 foreach ($membersList as $member) {
     $user = new User($gDb, $gProfileFields, $member['usr_id']);
 
     // besitzt der User eine gueltige E-Mail-Adresse? && aktuellen User ausschließen
     if (StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email') && $gCurrentUserId !== (int) $member['usr_id']) {
-        $userIdList[] = $member['usr_id'];
+        $userUuidList[] = $member['usr_uuid'];
     }
 }
 
@@ -426,7 +426,7 @@ if ($getMode !== 'csv') {
             });
 
             $("#menu_item_mail_to_list").click(function() {
-                redirectPost("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {list_uuid: "'.$getListUuid.'", userIdList: "'.implode(',', $userIdList).'"});
+                redirectPost("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {list_uuid: "'.$getListUuid.'", userUuidList: "'.implode(',', $userUuidList).'"});
                 return false;
             });
 
