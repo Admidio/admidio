@@ -29,8 +29,13 @@ $postSubjectSQL = admFuncVariableIsValid($_POST, 'msg_subject', 'string');
 $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
-$postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
-$postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid', 'string');
+$postUserUuidList = '';
+$postListUuid = '';
+
+if ($gValidLogin) {
+    $postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
+    $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'string');
+}
 
 // save form data in session for back navigation
 $_SESSION['message_request'] = $_POST;

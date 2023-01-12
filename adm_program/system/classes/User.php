@@ -1704,9 +1704,10 @@ class User extends TableAccess
     public function renewRoleData()
     {
         // initialize rights arrays
-        $this->rolesRights     = array();
-        $this->rolesViewMemberships  = array();
-        $this->rolesWriteMails  = array();
+        $this->rolesRights = array();
+        $this->rolesViewMemberships = array();
+        $this->rolesViewMemberships = array();
+        $this->rolesWriteMails = array();
         $this->rolesMembership = array();
         $this->rolesMembershipLeader   = array();
         $this->rolesMembershipNoLeader = array();
@@ -1820,8 +1821,10 @@ class User extends TableAccess
      */
     public function setOrganization($organizationId)
     {
-        $this->organizationId = $organizationId;
-        $this->rolesRights    = array();
+        if($organizationId !== $this->organizationId) {
+            $this->organizationId = $organizationId;
+            $this->renewRoleData();
+        }
     }
 
     /**
