@@ -34,11 +34,14 @@ $getRoleUuid   = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
 $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
 $getForward    = admFuncVariableIsValid($_GET, 'forward', 'bool');
+$postUserUuidList = '';
+$postListUuid = '';
 
 // Check form values
-$postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
-$postListUuid   = admFuncVariableIsValid($_POST, 'list_uuid', 'string');
-
+if ($gValidLogin) {
+    $postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
+    $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'string');
+}
 
 $message = new TableMessage($gDb);
 $message->readDataByUuid($getMsgUuid);

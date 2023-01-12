@@ -129,7 +129,7 @@ class Navigation
 
         // if the text of the last url is equal to the new url and the main url without query parameters is equal
         // than replace the last url with the current url.
-        if($text !== '' && $text === $this->urlStack[$count - 1]['text']) {
+        if($count > 0 && $text !== '' && $text === $this->urlStack[$count - 1]['text']) {
             $urlParts = parse_url($url);
             $previousUrlParts = parse_url($this->urlStack[$count - 1]['url']);
 
