@@ -307,9 +307,9 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (7300, 1, 'photo_image_text', '© demo.admidio.org'),
     (7305, 1, 'photo_image_text_size', '40'),
     (7350, 1, 'photo_albums_per_page', '24'),
-    (7400, 1, 'photo_save_scale', '640'),
-    (7500, 1, 'photo_show_width', '640'),
-    (7600, 1, 'photo_show_height', '480'),
+    (7400, 1, 'photo_save_scale', '1000'),
+    (7500, 1, 'photo_show_width', '1000'),
+    (7600, 1, 'photo_show_height', '750'),
     (7700, 1, 'photo_show_mode', '1'),
     (7800, 1, 'photo_thumbs_scale', '200'),
     (7900, 1, 'photo_thumbs_page', '16'),
@@ -425,9 +425,9 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (73000, 2, 'photo_albums_per_page', '24'),
     (73025, 2, 'photo_image_text', '© demo.admidio.org'),
     (73050, 2, 'photo_image_text_size', '40'),
-    (74001, 2, 'photo_save_scale', '640'),
-    (75001, 2, 'photo_show_width', '640'),
-    (76001, 2, 'photo_show_height', '480'),
+    (74001, 2, 'photo_save_scale', '1000'),
+    (75001, 2, 'photo_show_width', '1000'),
+    (76001, 2, 'photo_show_height', '750'),
     (77001, 2, 'photo_show_mode', '1'),
     (78001, 2, 'photo_thumbs_scale', '200'),
     (79001, 2, 'photo_thumbs_page', '16'),
@@ -1157,10 +1157,10 @@ INSERT INTO %PREFIX%_registrations (reg_id, reg_org_id, reg_usr_id, reg_timestam
 --
 
 INSERT INTO %PREFIX%_photos (pho_id, pho_org_id, pho_uuid, pho_quantity, pho_name, pho_begin, pho_end, pho_description, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
-(1, 1, 'b4aaf3eb-8735-45b3-a2f0-f2a7e9d289eb', 0, 'DDT_PHO_CROATIA', '2009-10-05', '2009-10-11', 'DDT_PHO_CROATIA_DESC', 'DDT_PHO_STEVEN_SMITH', false, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
-(2, 1, '3d45f9cf-957e-41be-bb48-f452429fcd05', 3, 'DDT_PHO_PLITVICE_LAKES', '2009-10-05', '2009-10-07', NULL, 'DDT_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
-(3, 1, 'bf174cf8-f190-4898-bb3e-af881ad68780', 3, 'Krka', '2009-10-08', '2009-10-11', NULL, 'DDT_PHO_STEVEN_SMITH', false, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
-(4, 1, 'f6af3421-f80c-4145-89f2-75bec24640b8', 5, 'Machu Picchu', '2009-09-14', '2009-09-17', 'DDT_PHO_MACHU_PICCHU_DESC', 'Admin', false, NULL, 1, '2009-10-23 18:20:50', NULL, NULL);
+(1, 1, 'b4aaf3eb-8735-45b3-a2f0-f2a7e9d289eb', 0, 'DDT_PHO_CROATIA', '2022-10-05', '2022-10-11', 'DDT_PHO_CROATIA_DESC', 'DDT_PHO_STEVEN_SMITH', false, NULL, 1, '2022-10-23 18:15:37', NULL, NULL),
+(2, 1, '3d45f9cf-957e-41be-bb48-f452429fcd05', 5, 'DDT_PHO_PLITVICE_LAKES', '2022-10-05', '2022-10-07', NULL, 'DDT_PHO_STEVEN_SMITH', false, 1, 1, '2022-10-23 18:17:44', NULL, NULL),
+(3, 1, 'bf174cf8-f190-4898-bb3e-af881ad68780', 4, 'Krka', '2022-10-08', '2022-10-11', NULL, 'DDT_PHO_STEVEN_SMITH', false, 1, 1, '2022-10-23 18:18:44', NULL, NULL),
+(4, 1, 'f6af3421-f80c-4145-89f2-75bec24640b8', 6, 'Machu Picchu', '2022-09-14', '2022-09-17', 'DDT_PHO_MACHU_PICCHU_DESC', 'Admin', false, NULL, 1, '2022-10-23 18:20:50', NULL, NULL);
 
 
 --
