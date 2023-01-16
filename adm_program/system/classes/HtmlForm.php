@@ -192,7 +192,13 @@ class HtmlForm extends HtmlFormBasic
         $attributes['data-admidio'] = $optionsAll['data-admidio'];
         ++$this->countElements;
 
-        $attributes['class'] = "btn btn-secondary ".$optionsAll['class'];
+        if(strstr($attributes['class'], ' btn ') === false) {
+            $attributes['class'] = "btn btn-secondary " . $optionsAll['class'];
+
+            if ($this->type !== 'navbar') {
+                $attributes['class'] .= '  admidio-margin-bottom';
+            }
+        }
 
         $optionsAll['attributes'] = $attributes;
         $this->addHtml($this->render('form.button', $optionsAll));
@@ -1584,7 +1590,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll     = array_replace($optionsDefault, $options);
 
         // add default css classes
-        $optionsAll['class'] .= ' btn-primary';
+        $optionsAll['class'] .= ' btn btn-primary';
         if ($this->type !== 'navbar') {
             $optionsAll['class'] .= '  admidio-margin-bottom';
         }

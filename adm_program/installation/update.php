@@ -316,7 +316,7 @@ if ($getMode === 1) {
     $form->addButton(
         'main_page',
         $gL10n->get('SYS_LATER'),
-        array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/overview.php', 'class' => 'admidio-margin-bottom')
+        array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/overview.php')
     );
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-heart'));
 

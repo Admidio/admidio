@@ -60,7 +60,10 @@ class HtmlPageInstallation extends HtmlPage
      */
     private function assignDefaultVariables()
     {
-        global $gDebug, $gCurrentOrganization, $gValidLogin, $gL10n;
+        global $gDebug, $gSettingsManager, $gValidLogin, $gL10n;
+
+        $urlImprint = '';
+        $urlDataProtection = '';
 
         $this->assign('additionalHeaderData', $this->getHtmlAdditionalHeader());
         $this->assign('id', $this->id);
@@ -80,6 +83,18 @@ class HtmlPageInstallation extends HtmlPage
 
         // add translation object
         $this->assign('l10n', $gL10n);
+
+        // add imprint and data protection
+        if(is_object($gSettingsManager)) {
+            if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0) {
+                $urlImprint = $gSettingsManager->getString('system_url_imprint');
+            }
+            if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0) {
+                $urlDataProtection = $gSettingsManager->getString('system_url_data_protection');
+            }
+        }
+        $this->assign('urlImprint', $urlImprint);
+        $this->assign('urlDataProtection', $urlDataProtection);
     }
 
     /**
