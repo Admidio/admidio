@@ -1,2 +1,18 @@
-Order deny,allow
-Deny from all
+<IfModule mod_version.c>
+ <IfVersion < 2.4>
+  Order Deny,Allow
+  Deny from All
+ </IfVersion>
+ <IfVersion >= 2.4>
+  Require all denied
+ </IfVersion>
+</IfModule>
+<IfModule !mod_version.c>
+ <IfModule !mod_authz_core.c>
+  Order Allow,Deny
+  Deny from All
+ </IfModule>
+ <IfModule mod_authz_core.c>
+  Require all denied
+ </IfModule>
+</IfModule>
