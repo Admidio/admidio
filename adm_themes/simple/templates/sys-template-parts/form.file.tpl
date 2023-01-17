@@ -1,6 +1,6 @@
 <div
     id="{$id}_group"
-    class="form-group form-upload row {if $property eq 1}admidio-form-group-required{/if}">    
+    class="form-group form-upload row {if $property eq 1}admidio-form-group-required{/if}">
     <label for="{$id}" class="col-sm-3 control-label">
         {include file='sys-template-parts/parts/form.part.icon.tpl'}
         {$label}
@@ -16,16 +16,13 @@
     />
     {/if}
     {if $hideUploadField != true OR !$enableMultiUploads}
-        <input type="file" name="userfile[]" 
-            {foreach $data.attributes as $itemvar} 
-            {$itemvar@key}="{$itemvar}"
+        <input type="file" name="userfile[]"
+            {foreach $data.attributes as $itemvar}
+                {$itemvar@key}="{$itemvar}"
             {/foreach}
-            {if $allowedMimeTypes}
-            accept="{$allowedMimeTypes}"
-            {/if}
         />
     {/if}
-    
+
     {if $enableMultiUploads}
     <button
       type="button"
