@@ -504,14 +504,14 @@ abstract class HtmlElement extends \Smarty
         return $this->htmlString;
     }
 
-    public function render($templateName, $asigns) {
+    public function render($templateName, $assigns) {
         global $gL10n;
-        foreach($asigns as $key => $asign) {
-            $this->assign($key, $asign);
+        foreach($assigns as $key => $assign) {
+            $this->assign($key, $assign);
         }
         $this->assign("ADMIDIO_URL", ADMIDIO_URL);
         $this->assign("FOLDER_LIBS_SERVER", FOLDER_LIBS_SERVER);
-        $this->assign("data", $asigns);
+        $this->assign("data", $assigns);
 
         $this->assign('l10n', $gL10n);
         return $this->fetch("sys-template-parts/".$templateName.'.tpl');
