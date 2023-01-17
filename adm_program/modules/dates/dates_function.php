@@ -368,9 +368,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
                 $notification->sendNotification(
                     $gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'),
-                    $message,
-                    $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'),
-                    $gCurrentUser->getValue('EMAIL')
+                    $message
                 );
             } else {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $date->getDateTimePeriod(), $calendar))
@@ -378,9 +376,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
                 $notification->sendNotification(
                     $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'),
-                    $message,
-                    $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'),
-                    $gCurrentUser->getValue('EMAIL')
+                    $message
                 );
             }
         } catch (AdmException $e) {

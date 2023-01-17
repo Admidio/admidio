@@ -379,7 +379,7 @@ class Email extends PHPMailer
      */
     public function adminNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'system_notifications_new_entries')
     {
-        return $this->sendNotification($subject, $message, $editorName, $editorEmail);
+        return $this->sendNotification($subject, $message);
     }
 
     /**
@@ -786,26 +786,23 @@ class Email extends PHPMailer
      * global preference **system_notifications_role**.
      * @param string $subject     The subject of the email.
      * @param string $message     The body of the email.
-     * @param string $editorName  The name of the sender of the email.
-     * @param string $editorEmail The email address of the sender of the email.
-     * @return bool
+     * @return bool Returns **true** if the notification could be sent
      *@throws AdmException 'SYS_EMAIL_NOT_SEND'
      */
-    public function sendNotification(string $subject, string $message, string $editorName = '', string $editorEmail = '')
+    public function sendNotification(string $subject, string $message)
     {
-        global $gSettingsManager, $gCurrentOrganization;
+        global $gSettingsManager, $gCurrentOrganization, $gCurrentUser;
 
         // Send notification to configured role
         $this->addRecipientsByRole($gSettingsManager->getString('system_notifications_role'));
 
         // Set Sender
-        if ($editorEmail === '') {
+        if ($gCurrentUser->getValue('EMAIL') === '') {
             $this->setSender($gSettingsManager->getString('email_administrator'));
         } else {
-            $this->setSender($editorEmail, $editorName);
+            $this->setSender($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
         }
 
-        // Set Subject
         $this->setSubject($gCurrentOrganization->getValue('org_shortname').': '.$subject);
 
         // send html if preference is set
@@ -816,10 +813,7 @@ class Email extends PHPMailer
             $message = str_replace('<br />', "\n", $message);
         }
 
-        // Set Text
         $this->setText($message);
-
-        // Verschicken
         $returnCode = $this->sendEmail();
 
         // if something went wrong then throw an exception with the error message
