@@ -75,23 +75,20 @@ class UploadHandlerDownload extends UploadHandler
 
                 $newFile->save();
 
-                // Benachrichtigungs-Email für neue Einträge
-                $fullName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
+                // send notification email for new entries
                 $message = $gL10n->get(
                     'SYS_EMAIL_FILE_NOTIFICATION_MESSAGE',
                     array(
                         $gCurrentOrganization->getValue('org_longname'),
                         $file->name,
-                        $fullName,
+                        $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
                         date($gSettingsManager->getString('system_date'))
                     )
                 );
                 $notification = new Email();
                 $notification->sendNotification(
                     $gL10n->get('SYS_EMAIL_FILE_NOTIFICATION_TITLE'),
-                    $message,
-                    $fullName,
-                    $gCurrentUser->getValue('EMAIL')
+                    $message
                 );
             } catch (AdmException $e) {
                 $file->error = $e->getText();

@@ -384,8 +384,7 @@ class ChangeNotification
         if ($gSettingsManager->has('system_notifications_profile_changes')
             && $gSettingsManager->getBool('system_notifications_profile_changes')
             && is_object($gCurrentUser)) {
-            $currfullname = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
-            $currname = $currfullname . ' (login: ' . $gCurrentUser->getValue('usr_login_name') . ')';
+            $currentName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . ' (login: ' . $gCurrentUser->getValue('usr_login_name') . ')';
             if ($this->format == 'html') {
                 $format_hdr = "<tr><th> %s </th><th> %s </th><th> %s </th></tr>\n";
                 $format_row = "<tr><th> %s </th><td> %s </td><td> %s </td></tr>\n";
@@ -424,7 +423,7 @@ class ChangeNotification
 
                 $message = $gL10n->get(
                     $message,
-                    array($userdata['first_name'], $userdata['last_name'], $userdata['usr_login_name'], $currname)
+                    array($userdata['first_name'], $userdata['last_name'], $userdata['usr_login_name'], $currentName)
                 );
 
                 $changes = $userdata['profile_changes'];
@@ -466,9 +465,7 @@ class ChangeNotification
                             $messageTitle,
                             array($userdata['first_name'], $userdata['last_name'], $userdata['usr_login_name'])
                         ),
-                        $message,
-                        $currfullname,
-                        $gCurrentUser->getValue('EMAIL')
+                        $message
                     );
                 }
             }

@@ -206,7 +206,7 @@ if ($getMode === 1 || $getMode === 3) {
             }
             try {
                 $notification = new Email();
-                $notification->sendNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $gboText, $gboName, date($gSettingsManager->getString('system_date')))), $senderName, $gboEmail);
+                $notification->sendNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $gboText, $gboName, date($gSettingsManager->getString('system_date')))));
             } catch (AdmException $e) {
                 $e->showHtml();
             }
@@ -354,7 +354,7 @@ if ($getMode === 1 || $getMode === 3) {
             );
             try {
                 $notification = new Email();
-                $notification->sendNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $senderName, $gbcEmail);
+                $notification->sendNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message);
             } catch (AdmException $e) {
                 $e->showHtml();
             }
