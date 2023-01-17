@@ -48,9 +48,6 @@ switch ($getCKEditor) {
     case 'msg_body':
         $folderName = 'mail';
         break;
-    case 'plugin_CKEditor':
-        $folderName = 'plugins';
-        break;
     case 'room_description':
         $folderName = 'rooms';
         break;
@@ -58,7 +55,8 @@ switch ($getCKEditor) {
         $folderName = 'user_fields';
         break;
     default:
-        // TODO
+        $folderName = 'plugins';
+        break;
 }
 
 try {
