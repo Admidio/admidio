@@ -374,7 +374,7 @@ class Email extends PHPMailer
      * @param string $editorName  The name of the sender of the email.
      * @param string $editorEmail The email address of the sender of the email.
      * @throws AdmException 'SYS_EMAIL_NOT_SEND'
-     * @return bool|string
+     * @return bool
      * @deprecated 4.2.0:4.3.0 "adminNotification()" is deprecated, use "sendNotification()" instead.
      */
     public function adminNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'system_notifications_new_entries')
@@ -621,7 +621,7 @@ class Email extends PHPMailer
     /**
      * Sends a copy of the mail back to the sender. If the flag emListRecipients it set than all
      * recipients will be listed in the mail.
-     * @throws PHPMailer\PHPMailer\Exception|Exception
+     * @throws \PHPMailer\PHPMailer\Exception|Exception
      */
     private function sendCopyMail()
     {
@@ -786,15 +786,21 @@ class Email extends PHPMailer
      * global preference **system_notifications_role**.
      * @param string $subject     The subject of the email.
      * @param string $message     The body of the email.
-     * @return bool Returns **true** if the notification could be sent
+     * @return bool Returns **true** if the notification was sent
      *@throws AdmException 'SYS_EMAIL_NOT_SEND'
      */
-    public function sendNotification(string $subject, string $message)
+    public function sendNotification(string $subject, string $message): bool
     {
         global $gSettingsManager, $gCurrentOrganization, $gCurrentUser;
 
-        // Send notification to configured role
-        $this->addRecipientsByRole($gSettingsManager->getString('system_notifications_role'));
+        try {
+            // Send notification to configured role
+            $this->addRecipientsByRole($gSettingsManager->getString('system_notifications_role'));
+        } catch (AdmException $e) {
+            // exception is thrown if no valid recipient for notification email was found,
+            // but we don't want to show an error because this will break the action the
+            // user wants to do and here we only want to send a notification
+        }
 
         // Set Sender
         if ($gCurrentUser->getValue('EMAIL') === '') {
