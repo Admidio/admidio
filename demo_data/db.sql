@@ -146,7 +146,6 @@ CREATE TABLE %PREFIX%_components
     com_version                 varchar(10)         NOT NULL,
     com_beta                    smallint            NOT NULL    DEFAULT 0,
     com_update_step             integer             NOT NULL    DEFAULT 0,
-    com_update_completed        boolean             NOT NULL    DEFAULT true,
     com_timestamp_installed     timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (com_id)
 )
@@ -284,7 +283,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX %PREFIX%_idx_gbc_uuid ON %PREFIX%_guestbook_comments (gbc_uuid);
+CREATE UNIQUE INDEX %PREFIX%_idx_gbo_uuid ON %PREFIX%_guestbook_comments (gbc_uuid);
 
 /*==============================================================*/
 /* Table: adm_ids                                               */
@@ -601,11 +600,10 @@ CREATE TABLE %PREFIX%_roles
     rol_photo                   boolean             NOT NULL    DEFAULT false,
     rol_profile                 boolean             NOT NULL    DEFAULT false,
     rol_weblinks                boolean             NOT NULL    DEFAULT false,
+    rol_this_list_view          smallint            NOT NULL    DEFAULT 0,
     rol_all_lists_view          boolean             NOT NULL    DEFAULT false,
     rol_default_registration    boolean             NOT NULL    DEFAULT false,
     rol_leader_rights           smallint            NOT NULL    DEFAULT 0,
-    rol_view_memberships        smallint            NOT NULL    DEFAULT 0,
-    rol_view_members_profiles   smallint            NOT NULL    DEFAULT 0,
     rol_start_date              date,
     rol_start_time              time,
     rol_end_date                date,
@@ -738,15 +736,13 @@ CREATE TABLE %PREFIX%_user_fields
     usf_description             text,
     usf_description_inline      boolean             NOT NULL    DEFAULT false,
     usf_value_list              text,
-    usf_default_value           varchar(100),
-    usf_regex                   varchar(100),
     usf_icon                    varchar(100),
     usf_url                     varchar(2000),
     usf_system                  boolean             NOT NULL    DEFAULT false,
     usf_disabled                boolean             NOT NULL    DEFAULT false,
     usf_hidden                  boolean             NOT NULL    DEFAULT false,
+    usf_mandatory               boolean             NOT NULL    DEFAULT false,
     usf_registration            boolean             NOT NULL    DEFAULT false,
-    usf_required_input          smallint            NOT NULL    DEFAULT 0,
     usf_sequence                smallint            NOT NULL,
     usf_usr_id_create           integer unsigned,
     usf_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
