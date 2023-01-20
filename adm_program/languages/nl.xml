@@ -8,7 +8,6 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Opmerkingen tijdens aanmelding toestaan</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Deelnemers kunnen opmerkingen maken over hun deelname. De opmerkingen kunnen worden bekeken via de deelnemerslijst</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Voeg deelnemers toe</string>
-  <string name="SYS_PARTICIPATE">Deelnemen</string>
   <string name="DAT_ATTEND_DATE">U heeft zich aangemeld voor het evenement #VAR1_BOLD# op #VAR2#.</string>
   <string name="DAT_ATTEND_POSSIBLY">U heeft uw deelname voor evenement #VAR1_BOLD# op #VAR2# onder voorbehoud toegezegd.</string>
   <string name="DAT_CALENDAR">Kalender</string>
@@ -288,11 +287,8 @@
   <string name="ORG_FIELD_HIDDEN_DESC">Een veld is normaal voor alle gebruikers die het profiel mogen zien zichtbaar. Is deze instelling niet gekozen, dan kunnen enkel de gebruikers die het profiel mogen bewerken dit veld zien.</string>
   <string name="ORG_FIELD_NOT_DISABLED">Veld kan door gebruiker zelf bewerkt worden.</string>
   <string name="ORG_FIELD_NOT_HIDDEN">Veld is zichtbaar voor alle gebruikers.</string>
-  <string name="ORG_FIELD_NOT_MANDATORY">Veld is verplicht. Het moet ingevuld worden.</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Veld is niet zichtbaar tijdens registratie</string>
   <string name="ORG_FIELD_REGISTRATION">Veld is zichtbaar tijdens registratie</string>
-  <string name="ORG_FIELD_REQUIRED">Verplichte velden moeten altijd ingevuld worden.</string>
-  <string name="ORG_FIELD_REQUIRED_DESC">Aangevinkte (verplichte) velden moeten altijd ingevuld worden. Dit geldt voor registratie en wijzigingen van het profiel door gebruiker.</string>
   <string name="ORG_FIELD_URL_DESC">De ingevoerde URL koppelt later in het profiel de inhoud die de gebruiker in dit veld heeft ingevoerd. Optioneel kan de placeholder #user_content# aan de URL worden toegevoegd. Dit is de inhoud die de gebruiker in het veld heeft ingevoerd.\n\nVoorbeeld:\nURL: https://www.google.de/search?q=#user_content#\nVeldinhoud: Admidio\nLink in profiel: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Deze pagina verschijnt wanneer een gebruiker is ingelogd. Pad moet worden opgegeven als verwant pad van de Admidio-hoofdmap.\n(v.b.: adm_program/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Deze pagina is de standaardpagina van Admidio voor gasten. Pad moet worden opgegeven als verwant pad van de Admidio-hoofdmap.\n(v.b.: adm_program/overview.php)</string>
@@ -587,7 +583,7 @@
   <string name="SYS_CHANGE_HISTORY">Wijzigingsgeschiedenis</string>
   <string name="SYS_CHANGE_HISTORY_OF">Wijzig geschiedenis van #VAR1#</string>
   <string name="SYS_CHANGE_PASSWORD">Wachtwoord wijzigen</string>
-  <string name="SYS_CHANGED_AT">Laatst aangepast</string>
+  <string name="SYS_CHANGED_AT">Laatst gewijzigd</string>
   <string name="SYS_CHANGED_BY">Gewijzigd door</string>
   <string name="SYS_CHARACTER_ENCODING">Karakter codering</string>
   <string name="SYS_CHARACTER_ENCODING_DESC">Er wordt codering van karakters gebruikt bij het versturen van Admidio e-mails. Niet alle e-mail clients ondersteunen UTF-8. ISO-8859-1 kan als alternatief gebruikt worden.</string>
@@ -737,7 +733,6 @@
   <string name="SYS_DISK_SPACE_ERROR">Het gebruik van de schijfruimte kon niet worden bepaald.\n\nFoutmelding:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Toon doorverwijzing</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Activeer automatisch doorverwijzen van links. Als gebruiker op een link klikt zal hij/zij gewaarschuwd worden middels een bericht wanneer hij/zij de pagina\'s van Admidio verlaat. De link waarop geklikt wordt zal geopend worden na een vooraf ingestelde tijd. Als doorverwijzen op 0 staat, zal link geopend worden zonder waarschuwing vooraf. (Standaard: 10 seconden)</string>
-  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Toon rol lidmaatschappen</string>
   <string name="SYS_DIVERSE">Verschillend</string>
   <string name="SYS_DO_NOT_EDIT">Niet bewerken</string>
   <string name="SYS_DOCUMENTS_FILES">Documenten &amp; bestanden</string>
@@ -792,6 +787,7 @@
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Deze e-mail is verzonden via de website #VAR1# van de organisatie #VAR2# met de e-mail instellingen hier opgeslagen.</string>
   <string name="SYS_EMAIL_INVALID">Het e-mailadres in veld #VAR1_BOLD# bevat onjuiste karakters of is niet compleet.</string>
   <string name="SYS_EMAIL_NOT_SEND">De e-mail kon niet worden verzonden naar #VAR1_BOLD#.\n\nDe volgende fout heeft plaatsgevonden:\n#VAR2#</string>
+  <string name="SYS_EMAIL_PARAMETERS_DESC">U kunt de volgende placeholders in de tekst van de e-mail gebruiken om de ontvanger van de e-mail rechtstreeks aan te spreken. #VAR1# voor de voornaam, #VAR2# voor de achternaam, #VAR3# voor de voor- en achternaam, en #VAR4# voor het e-mailadres.</string>
   <string name="SYS_EMAIL_SEND">De e-mail is verstuurd.</string>
   <string name="SYS_EMAIL_TEMPLATE">E-mail sjabloon</string>
   <string name="SYS_EMAIL_TEMPLATE_DESC">Hier kunt u een HTML sjabloon-bestand kiezen uit de map #VAR1_BOLD#. Bij het verzenden van een e-mail wordt de inhoud van dit bestand naar de e-mail gekopieerd en worden de volgende variabelen vervangen: #sender#, #message#, #recipients#, #organization_name#, #organization_shortname#, #organization_website#. Voor meer informatie over het gebruik van e-mail sjablonen, zie de #VAR2#documentatie#VAR3#.</string>
@@ -948,6 +944,7 @@
   <string name="SYS_LANGUAGE">Taal</string>
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Ontbreekt uw taal of wilt u meer teksten vertalen of bestaande vertalingen verbeteren? Kijk dan eens op de #VAR1#Wiki pagina van Admidio#VAR2# om te kijken hoe u kunt helpen met de vertaling.</string>
   <string name="SYS_LAST_EDITED_BY">Als laatste bewerkt door #VAR1# op #VAR2#</string>
+  <string name="SYS_LAST_LOGIN_ON">Laatste inlog op #VAR1# om #VAR2#</string>
   <string name="SYS_LASTNAME">Achternaam</string>
   <string name="SYS_LATER">Later</string>
   <string name="SYS_LAYOUT">Layout</string>
@@ -989,7 +986,6 @@
   <string name="SYS_MAKE_FORMER">Een gebruiker kan status voormalige gebruiker krijgen. Hierdoor blijft alle informatie inclusief rollen bewaard, voor eventueel later gebruik.</string>
   <string name="SYS_MALE">Mannelijk</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Hier kunt u nieuwe registraties beheren, goedkeuren of afkeuren.</string>
-  <string name="SYS_MANDATORY_FIELD">Verplicht veld</string>
   <string name="SYS_MAP">Plattegrond</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Geeft de plaats weer op Google Maps. De straat, postcode, plaats en land worden verstuurd naar Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Geeft een route weer van uw eigen woonplaats naar de locatie van deze gebruiker op Google Maps. De straat, postcode, plaats en land worden verstuurd naar Google.</string>
@@ -1043,6 +1039,10 @@
   <string name="SYS_MOVE_VAR">Verplaats #VAR1#</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Meerdere ontvangers</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-mails naar meerdere ontvangers bevatten alle ontvangers in het BCC-veld. Dit zorgt ervoor dat niemand de e-mailadressen van de andere ontvangers ziet. Echter, het TO-veld moet ook worden ingevuld. Deze instelling kan worden gebruikt om te bepalen wat er in het ontvangerveld (TO) is ingevoerd. Dit kan een verborgen waarde zijn \"Undisclosed Recipients\", maar dit veroorzaakt problemen bij sommige providers. Als alternatief kan het ontvangerveld (TO) worden gevuld met het afzenderadres of het beheerdersadres van de systeemnotificaties. Let op: alle e-mails naar meerdere ontvangers worden dan ook naar het e-mailadres in het ontvangerveld (TO) gestuurd. (Standaard: afzender)</string>
+  <string name="SYS_MAIL_SENDING_MODE">E-mail verstuur modus</string>
+  <string name="SYS_MAIL_SENDING_MODE_DESC">In de \'Gebundelde\' modus worden e-mails naar meerdere ontvangers gecombineerd. Een e-mail ontvangt dan een geconfigureerd aantal ontvangers in het veld AAN of BCC. Dit is handig als de hoster het verzenden van veel e-mails niet toestaat. In de \'Enkelvoudige\' modus ontvangt elke ontvanger een aparte e-mail. In deze modus kunnen verschillende placeholders met de gegevens van de ontvanger aan de tekst van de e-mail worden toegevoegd.</string>
+  <string name="SYS_MAIL_BULK">Gebundeld</string>
+  <string name="SYS_MAIL_SINGLE">Enkelvoudig</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">De rol van beheerder moet tenminste één lid hebben!</string>
   <string name="SYS_MYLIST_CONDITION_DESC">Hier kunt u voorwaarden definiëren voor elk veld in uw lijst. Deze voorwaarden zullen bepaalde leden van de geselecteerde rol verder beperken.</string>
   <string name="SYS_NAME">Naam</string>
@@ -1080,6 +1080,7 @@
   <string name="SYS_NO_VALID_RECIPIENTS">De e-mail kan niet verzonden worden omdat de geselecteerde rollen en/of gebruikers niet over een geldig e-mailadres beschikken.</string>
   <string name="SYS_NOBODY">Niemand</string>
   <string name="SYS_NONE">Geen</string>
+  <string name="SYS_NOT_AT_REGISTRATION">Niet op registratie</string>
   <string name="SYS_NOT_EMPTY">Niet leeg</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">U bent geen lid van organisatie #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Gelieve een geldig nummer te gebruiken als voorwaarde voor het veld #VAR1_BOLD#.</string>
@@ -1103,6 +1104,7 @@
   <string name="SYS_ON">Aan</string>
   <string name="SYS_ONE_TIME">Eenmalig</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Het online ledenbeheer</string>
+  <string name="SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE">Alleen op registratie en eigen profiel</string>
   <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Deze instelling kan alleen ingesteld worden door de hoofdorganisatie.</string>
   <string name="SYS_OPERATING_SYSTEM">Besturingssysteem</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Tegenovergestelde relatie</string>
@@ -1116,6 +1118,8 @@
   <string name="SYS_PAGE_NEXT">Volgende</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# en #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Leden</string>
+  <string name="SYS_PARTICIPATE">Deelnemen</string>
+  <string name="SYS_PARTICIPATE_QUESTION">Deelnemen?</string>
   <string name="SYS_PARTICIPATION_INFORMATION">Deelnemersinformatie</string>
   <string name="SYS_PARTICIPATION_STATUS">Status deelnemer</string>
   <string name="SYS_PASSWORD">Wachtwoord</string>
@@ -1200,10 +1204,10 @@
   <string name="SYS_REMOVE_USER_DESC">Door #VAR1_BOLD# te kiezen, zullen alle gegevens verwijderd worden. Deze informatie zal niet langer beschikbaar zijn.</string>
   <string name="SYS_REPEAT">Herhalen</string>
   <string name="SYS_REPLACE">Herplaats</string>
-  <string name="SYS_REQUIRED_FIELDS">Verplichte velden</string>
+  <string name="SYS_REQUIRED_INPUT">Verplichte invoer</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">U bent al ingelogd op het systeem. Het is niet nodig om een nieuw wachtwoord aan te vragen.</string>
   <string name="SYS_RESTRICTIONS">Voorwaarden</string>
-  <string name="SYS_RIGHT_ALL_LISTS_VIEW">Bekijk lidmaatschapslijsten van alle rollen</string>
+  <string name="SYS_RIGHT_ALL_LISTS_VIEW">Bekijk ledenlijsten van alle rollen en alle ledenprofielen</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Beheer mededelingen</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Registraties toewijzen en bewerken</string>
   <string name="SYS_RIGHT_ASSIGN_ROLES">Rollen bewerken en toewijzen</string>
@@ -1219,7 +1223,6 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">E-mail naar alle rollen sturen</string>
   <string name="SYS_RIGHT_PHOTOS">Foto\'s uploaden en bewerken</string>
   <string name="SYS_RIGHT_PROFILE">Bewerk eigen profiel</string>
-  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Deze instelling bepaalt welke gebruikers het recht hebben om verschillende lijsten en de individuele gebruikersprofielen van de rolleden te bekijken. Het recht van de rol #VAR1_BOLD# staat nog steeds boven deze instelling.</string>
   <string name="SYS_RIGHT_WEBLINKS">Beheer weblinks</string>
   <string name="SYS_ROLE">Rol</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Op deze pagina kunt u instellen wie de map #VAR1_BOLD# kan zien, bestanden kan downloaden of bestanden kan uploaden. De ingestelde rechten worden overgenomen door alle submappen en bestaande rechten in submappen worden overschreven. Alleen rollen die toegang hebben tot de hoofdmap zijn beschikbaar. Beheerders hebben alle rechten voor de map.</string>
@@ -1351,7 +1354,7 @@
   <string name="SYS_SMTP_PORT">SMTP-poort</string>
   <string name="SYS_SMTP_PORT_DESC">Specificeren van de poort die moet worden gebruikt voor het maken van een SMTP-verbinding. (Standaard: 587)</string>
   <string name="SYS_SMTP_SECURE">SMTP-versleuteling</string>
-  <string name="SYS_SMTP_SECURE_DESC">Hier kun je kiezen of en hoe de SMTP-verbinding versleuteld moet worden. (Standaard: TLS)</string>
+  <string name="SYS_SMTP_SECURE_DESC">Hier kunt u kiezen of en hoe de SMTP-verbinding versleuteld moet worden. (Standaard: TLS)</string>
   <string name="SYS_SMTP_SECURE_NO">nee</string>
   <string name="SYS_SMTP_SECURE_SSL">SSL</string>
   <string name="SYS_SMTP_SECURE_TLS">TLS</string>
@@ -1439,8 +1442,13 @@
   <string name="SYS_VARIOUS_ROLES">Verschillende rollen</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Verschillende relaties</string>
   <string name="SYS_VERSION">Versie</string>
+  <string name="SYS_VERSION_TO_OLD">Uw huidige database versie is #VAR1#. Helaas kunt u met deze versie niet updaten naar #VAR2#.\n\nInstalleer svp eerst Admidio 4.1 en update dan naar Admidio #VAR2#.</string>
   <string name="SYS_VIEW">Weergave</string>
   <string name="SYS_VIEW_PICTURE_FULL_SIZED">Toon volledige grootte</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Bekijk rol lidmaatschappen</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Met deze instelling kunt u bepalen wie de leden van deze rol kan zien. De gebruiker kan het rol lidmaatschap zien in het profiel van de betreffende persoon en in lijsten voor de rol. Deze instelling staat geen toegang toe tot het profiel van de de rolleden. In lijsten worden alleen naam en voornaam weergegeven. Het rolrecht #VAR1_BOLD# overschrijft deze instelling.</string>
+  <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">Bekijk profielen van rolleden</string>
+  <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC">Deze instelling kan worden gebruikt om te definiëren wie de profielen van de leden van deze rol kan zien. De gebruiker kan het profiel van de betreffende persoon oproepen en alle opgeslagen kolommen in lijsten voor de rol zien. Het rolrecht #VAR1_BOLD# overschrijft deze instelling.</string>
   <string name="SYS_VISIBLE">Zichtbaar</string>
   <string name="SYS_VISIBLE_FOR">Zichtbaar voor</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# is alleen zichtbaar voor ingelogde gebruikers</string>
