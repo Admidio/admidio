@@ -187,7 +187,7 @@ if ($getMode === 1) {
 
         if ($getType === 'USF') {
             // delete cache with profile categories rights
-            $gProfileFields = new ProfileFields($gDb, $orgId);
+            $gProfileFields = new ProfileFields($gDb, $gCurrentOrgId);
         } else {
             // until now we don't use edit rights for profile fields
             $rightCategoryEdit = new RolesRights($gDb, 'category_edit', (int) $category->getValue('cat_id'));
