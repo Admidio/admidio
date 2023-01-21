@@ -383,7 +383,7 @@ class TableRoles extends TableAccess
 
         $rolId = (int) $this->getValue('rol_id');
 
-        if ($this->type === TableRoles::ROLE_EVENT) {
+        if ($this->type !== TableRoles::ROLE_EVENT) {
             return $gCurrentUser->hasRightViewRole($rolId);
         }
 
