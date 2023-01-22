@@ -100,9 +100,9 @@ $columnCount = count($report->headerData);
 // define title (html) and headline
 $title       = $gL10n->get('SYS_CATEGORY_REPORT');
 $headline    = $gL10n->get('SYS_CATEGORY_REPORT');
-$subheadline = $config[$report->getConfiguration()]['name'];
+$subHeadline = $config[$report->getConfiguration()]['name'];
 
-$filename    = $g_organization.'-'.$headline.'-'.$subheadline;
+$filename    = $gCurrentOrganization->getValue('org_shortname').'-'.$headline.'-'.$subHeadline;
 
 if ($getMode === 'html') {
     $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-list-ul');
@@ -117,7 +117,7 @@ if ($getMode !== 'csv') {
         $page->setPrintMode();
         $page->setTitle($title);
         $page->setHeadline($headline);
-        $page->addHtml('<h5 class="admidio-content-subheader">'.$subheadline.'</h5>');
+        $page->addHtml('<h5 class="admidio-content-subheader">'.$subHeadline.'</h5>');
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
     } elseif ($getMode === 'pdf') {
         if (ini_get('max_execution_time')<600) {
@@ -160,7 +160,7 @@ if ($getMode !== 'csv') {
         $table->addTableHeader();
         $table->addRow();
         $table->addAttribute('align', 'center');
-        $table->addColumn($subheadline, array('colspan' => $columnCount + 1));
+        $table->addColumn($subHeadline, array('colspan' => $columnCount + 1));
         $table->addRow();
     } elseif ($getMode === 'html') {
         if ($getExportAndFilter) {
@@ -286,7 +286,7 @@ if ($getMode !== 'csv') {
         $filterNavbar->addForm($form->show());
         $page->addHtml($filterNavbar->show());
 
-        $page->addHtml('<h5 class="admidio-content-subheader">'.$subheadline.'</h5>');
+        $page->addHtml('<h5 class="admidio-content-subheader">'.$subHeadline.'</h5>');
 
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
         $table->setDatatablesRowsPerPage($gSettingsManager->getInt('groups_roles_members_per_page'));

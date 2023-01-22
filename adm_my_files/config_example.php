@@ -33,12 +33,6 @@ $g_adm_pw   = 'Password';                    // Password
 // Example: 'https://www.admidio.org/example'
 $g_root_path = 'https://www.your-website.de/admidio';
 
-// Short description of the organization that is running Admidio
-// This short description must correspond to your input in the installation wizard !!!
-// Example: 'ADMIDIO'
-// Maximum of 10 characters !!!
-$g_organization = 'Shortcut';
-
 // The name of the timezone in which your organization is located.
 // This must be one of the strings that are defined here https://www.php.net/manual/en/timezones.php
 // Example: 'Europe/Berlin'

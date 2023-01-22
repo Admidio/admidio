@@ -142,7 +142,6 @@ $replaces = array(
     '%DB_PASSWORD%'  => $_SESSION['db_password'],
     '%TABLE_PREFIX%' => $_SESSION['table_prefix'],
     '%ROOT_PATH%'    => $g_root_path,
-    '%ORGANIZATION%' => $_SESSION['orga_shortname'],
     '%TIMEZONE%'     => $_SESSION['orga_timezone']
 );
 $configFileContent = StringUtils::strMultiReplace($configFileContent, $replaces);

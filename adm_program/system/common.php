@@ -27,6 +27,9 @@ require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
 
 // global parameters
 $gValidLogin = false;
+if(!isset($g_organization)) {
+    $g_organization = '';
+}
 
 try {
     $gDb = Database::createDatabaseInstance();
@@ -98,7 +101,7 @@ if (array_key_exists('gCurrentSession', $_SESSION)
     if ($gCurrentSession->getOrganizationId() > 0) {
         $gCurrentOrganization = new Organization($gDb, $gCurrentSession->getOrganizationId());
     } else {
-        $gCurrentOrganization = new Organization($gDb, $g_organization);
+        $gCurrentOrganization = Organization::createDefaultOrganizationObject($gDb, $g_organization);
     }
 
     /**
