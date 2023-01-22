@@ -450,7 +450,9 @@ class TableAccess
         // if no record was found then save the array fields in the object
         if (!$returnCode) {
             foreach ($columnArray as $columnName => $columnValue) {
-                $this->setValue($columnName, $columnValue);
+                if(str_starts_with($columnName, $this->columnPrefix . '_')) {
+                    $this->setValue($columnName, $columnValue);
+                }
             }
         }
 
