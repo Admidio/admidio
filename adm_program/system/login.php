@@ -89,11 +89,8 @@ if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager-
 }
 
 $page->addHtml('
-    <div id="login_forgot_password_link">
+    <div id="login_forgot_password_link" class="admidio-margin-bottom">
         <small><a href="'.$forgotPasswordLink.'">'.$gL10n->get('SYS_FORGOT_MY_PASSWORD').'</a></small>
-    </div>
-    <div id="login_admidio_link">
-        <small>Powered by <a href="'.ADMIDIO_HOMEPAGE.'">Admidio</a></small>
     </div>');
 
 $page->show();
