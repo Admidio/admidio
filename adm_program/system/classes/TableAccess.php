@@ -159,7 +159,7 @@ class TableAccess
      * }
      * ```
      */
-    protected function connectAdditionalTable($table, $columnNameAdditionalTable, $columnNameClassTable)
+    public function connectAdditionalTable($table, $columnNameAdditionalTable, $columnNameClassTable)
     {
         $this->additionalTables[] = array(
             'table'                     => $table,
