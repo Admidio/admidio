@@ -55,12 +55,7 @@ if (isset($_SESSION['dates_request'])) {
     // first set date and time field to a datetime within system format and add this to date class
     $_SESSION['dates_request']['dat_begin'] = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
     $_SESSION['dates_request']['dat_end']   = $_SESSION['dates_request']['date_to'].' '.$_SESSION['dates_request']['date_to_time'];
-/*
-    $dateTimeBegin = \DateTime::createFromFormat('Y-m-d H:i', $_SESSION['dates_request']['dat_begin']);
-    $_SESSION['dates_request']['dat_begin'] = $dateTimeBegin->format('Y-m-d H:i:s');
-    $dateTimeEnd = \DateTime::createFromFormat('Y-m-d H:i', $_SESSION['dates_request']['dat_end']);
-    $_SESSION['dates_request']['dat_end'] = $dateTimeEnd->format('Y-m-d H:i:s');
-*/
+
     $date->setArray($_SESSION['dates_request']);
 
     // get the selected roles for visibility
@@ -166,19 +161,6 @@ $page->addJavascript('
         }
     }
 
-    /**
-     * Funktion belegt das Datum-bis entsprechend dem Datum-Von
-     */
-    function setDateTo() {
-        var dateFrom = Date.parseDate($("#date_from").val(), "'.$gSettingsManager->getString('system_date').'");
-        var dateTo   = Date.parseDate($("#date_to").val(), "'.$gSettingsManager->getString('system_date').'");
-
-        if (dateFrom.getTime() > dateTo.getTime()) {
-            $("#date_to").val($("#date_from").val());
-            $("#date_to").datepicker("update");
-        }
-    }
-
     function setLocationCountry() {
         if ($("#dat_location").val().length > 0) {
             $("#dat_country_group").show();
@@ -207,7 +189,9 @@ $page->addJavascript(
         setLocationCountry();
     });
     $("#date_from").change(function() {
-        setDateTo();
+        if ($("#date_from").val() > $("#date_to").val()) {
+            $("#date_to").val($("#date_from").val());
+        }
     });
 
     // if date participation should be removed than ask user
