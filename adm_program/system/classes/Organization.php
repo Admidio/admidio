@@ -49,7 +49,7 @@ class Organization extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_organizations.
      * If the id is set than the specific organization will be loaded.
-     * @param Database   $database     Object of the class Database. This should be the default global object **$gDb**.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int|string $organization The recordset of the organization with this id will be loaded.
      *                                 The organization can be the table id or the organization shortname.
      *                                 If id isn't set than an empty object of the table is created.
@@ -64,23 +64,10 @@ class Organization extends TableAccess
             $this->readDataByColumns(array('org_shortname' => $organization));
         }
 
-        if ((int) $this->getValue('org_id') > 0) {
-            $this->settingsManager = new SettingsManager($database, (int) $this->getValue('org_id'));
+        if ((int)$this->getValue('org_id') > 0) {
+            $this->settingsManager = new SettingsManager($database, (int)$this->getValue('org_id'));
             $this->settingsManager->resetAll();
         }
-    }
-
-    /**
-     * @return SettingsManager
-     */
-    public function &getSettingsManager()
-    {
-        if (!$this->settingsManager instanceof SettingsManager) {
-            $this->settingsManager = new SettingsManager($this->db, (int) $this->getValue('org_id'));
-            $this->settingsManager->resetAll();
-        }
-
-        return $this->settingsManager;
     }
 
     /**
@@ -92,8 +79,8 @@ class Organization extends TableAccess
         parent::clear();
 
         $this->bCheckChildOrganizations = false;
-        $this->childOrganizations       = array();
-        $this->countOrganizations       = 0;
+        $this->childOrganizations = array();
+        $this->countOrganizations = 0;
 
         if ($this->settingsManager instanceof SettingsManager) {
             $this->settingsManager->clearAll();
@@ -125,26 +112,26 @@ class Organization extends TableAccess
 
         // read id of system user from database
         $sql = 'SELECT usr_id
-                  FROM '.TBL_USERS.'
+                  FROM ' . TBL_USERS . '
                  WHERE usr_login_name = ? -- $gL10n->get(\'SYS_SYSTEM\')';
         $systemUserStatement = $this->db->queryPrepared($sql, array($gL10n->get('SYS_SYSTEM')));
-        $systemUserId = (int) $systemUserStatement->fetchColumn();
+        $systemUserId = (int)$systemUserStatement->fetchColumn();
 
         // create all systemmail texts and write them into table adm_texts
         $systemmailsTexts = array(
-            'SYSMAIL_REGISTRATION_USER'      => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
+            'SYSMAIL_REGISTRATION_USER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
             'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
-            'SYSMAIL_REFUSE_REGISTRATION'    => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
-            'SYSMAIL_NEW_PASSWORD'           => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
-            'SYSMAIL_PASSWORD_RESET'         => $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET')
+            'SYSMAIL_REFUSE_REGISTRATION' => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
+            'SYSMAIL_NEW_PASSWORD' => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
+            'SYSMAIL_PASSWORD_RESET' => $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET')
         );
         $text = new TableText($this->db);
 
-        $orgId = (int) $this->getValue('org_id');
+        $orgId = (int)$this->getValue('org_id');
 
         foreach ($systemmailsTexts as $key => $value) {
             // convert <br /> to a normal line feed
-            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $value);
+            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13) . chr(10), $value);
 
             $text->clear();
             $text->setValue('txt_org_id', $orgId);
@@ -154,14 +141,14 @@ class Organization extends TableAccess
         }
 
         // create default category for roles, events and weblinks
-        $sql = 'INSERT INTO '.TBL_CATEGORIES.'
+        $sql = 'INSERT INTO ' . TBL_CATEGORIES . '
                        (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                 VALUES (?, ?, \'ROL\', \'COMMON\', \'SYS_COMMON\', 1, 1, ?, ?)';
         $queryParams = array($orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW);
         $this->db->queryPrepared($sql, $queryParams);
         $categoryCommon = $this->db->lastInsertId();
 
-        $sql = 'INSERT INTO '.TBL_CATEGORIES.'
+        $sql = 'INSERT INTO ' . TBL_CATEGORIES . '
                        (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                 VALUES (?, ?, \'ROL\', \'GROUPS\',    \'INS_GROUPS\',    false, false, 2, ?, ?)
                      , (?, ?, \'ROL\', \'COURSES\',   \'INS_COURSES\',   false, false, 3, ?, ?)
@@ -211,7 +198,7 @@ class Organization extends TableAccess
         }
 
         // insert root folder name for documents & files module
-        $sql = 'INSERT INTO '.TBL_FOLDERS.'
+        $sql = 'INSERT INTO ' . TBL_FOLDERS . '
                        (fol_org_id, fol_uuid, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp)
                 VALUES (?, ?, \'DOCUMENTS\', ?, ?, false, true, ?, ?)';
         $queryParams = array($orgId, Uuid::uuid4(), TableFolder::getRootFolderName('documents', $this->getValue('org_shortname')), FOLDER_DATA, $systemUserId, DATETIME_NOW);
@@ -271,8 +258,8 @@ class Organization extends TableAccess
 
         // Create membership for user in role 'Administrator' and 'Members'
         $member = new TableMembers($this->db);
-        $member->startMembership((int) $roleAdministrator->getValue('rol_id'), $userId);
-        $member->startMembership((int) $roleMember->getValue('rol_id'), $userId);
+        $member->startMembership((int)$roleAdministrator->getValue('rol_id'), $userId);
+        $member->startMembership((int)$roleMember->getValue('rol_id'), $userId);
 
         // create object with current user field structure
         $gProfileFields = new ProfileFields($this->db, $orgId);
@@ -282,48 +269,48 @@ class Organization extends TableAccess
         $addressList->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
         $addressList->setValue('lst_org_id', $orgId);
         $addressList->setValue('lst_global', 1);
-        $addressList->addColumn((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
-        $addressList->addColumn((int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
-        $addressList->addColumn((int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-        $addressList->addColumn((int) $gProfileFields->getProperty('STREET', 'usf_id'));
-        $addressList->addColumn((int) $gProfileFields->getProperty('POSTCODE', 'usf_id'));
-        $addressList->addColumn((int) $gProfileFields->getProperty('CITY', 'usf_id'));
+        $addressList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
+        $addressList->addColumn((int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
+        $addressList->addColumn((int)$gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $addressList->addColumn((int)$gProfileFields->getProperty('STREET', 'usf_id'));
+        $addressList->addColumn((int)$gProfileFields->getProperty('POSTCODE', 'usf_id'));
+        $addressList->addColumn((int)$gProfileFields->getProperty('CITY', 'usf_id'));
         $addressList->save();
 
         $phoneList = new ListConfiguration($this->db);
         $phoneList->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
         $phoneList->setValue('lst_org_id', $orgId);
         $phoneList->setValue('lst_global', 1);
-        $phoneList->addColumn((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
-        $phoneList->addColumn((int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
-        $phoneList->addColumn((int) $gProfileFields->getProperty('PHONE', 'usf_id'));
-        $phoneList->addColumn((int) $gProfileFields->getProperty('MOBILE', 'usf_id'));
-        $phoneList->addColumn((int) $gProfileFields->getProperty('EMAIL', 'usf_id'));
-        $phoneList->addColumn((int) $gProfileFields->getProperty('FAX', 'usf_id'));
+        $phoneList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
+        $phoneList->addColumn((int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
+        $phoneList->addColumn((int)$gProfileFields->getProperty('PHONE', 'usf_id'));
+        $phoneList->addColumn((int)$gProfileFields->getProperty('MOBILE', 'usf_id'));
+        $phoneList->addColumn((int)$gProfileFields->getProperty('EMAIL', 'usf_id'));
+        $phoneList->addColumn((int)$gProfileFields->getProperty('FAX', 'usf_id'));
         $phoneList->save();
 
         $contactList = new ListConfiguration($this->db);
         $contactList->setValue('lst_name', $gL10n->get('SYS_CONTACT_DETAILS'));
         $contactList->setValue('lst_org_id', $orgId);
         $contactList->setValue('lst_global', 1);
-        $contactList->addColumn((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
-        $contactList->addColumn((int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
-        $contactList->addColumn((int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-        $contactList->addColumn((int) $gProfileFields->getProperty('STREET', 'usf_id'));
-        $contactList->addColumn((int) $gProfileFields->getProperty('POSTCODE', 'usf_id'));
-        $contactList->addColumn((int) $gProfileFields->getProperty('CITY', 'usf_id'));
-        $contactList->addColumn((int) $gProfileFields->getProperty('PHONE', 'usf_id'));
-        $contactList->addColumn((int) $gProfileFields->getProperty('MOBILE', 'usf_id'));
-        $contactList->addColumn((int) $gProfileFields->getProperty('EMAIL', 'usf_id'));
+        $contactList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
+        $contactList->addColumn((int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
+        $contactList->addColumn((int)$gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $contactList->addColumn((int)$gProfileFields->getProperty('STREET', 'usf_id'));
+        $contactList->addColumn((int)$gProfileFields->getProperty('POSTCODE', 'usf_id'));
+        $contactList->addColumn((int)$gProfileFields->getProperty('CITY', 'usf_id'));
+        $contactList->addColumn((int)$gProfileFields->getProperty('PHONE', 'usf_id'));
+        $contactList->addColumn((int)$gProfileFields->getProperty('MOBILE', 'usf_id'));
+        $contactList->addColumn((int)$gProfileFields->getProperty('EMAIL', 'usf_id'));
         $contactList->save();
 
         $formerList = new ListConfiguration($this->db);
         $formerList->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
         $formerList->setValue('lst_org_id', $orgId);
         $formerList->setValue('lst_global', 1);
-        $formerList->addColumn((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
-        $formerList->addColumn((int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
-        $formerList->addColumn((int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $formerList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
+        $formerList->addColumn((int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
+        $formerList->addColumn((int)$gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
         $formerList->addColumn('mem_begin');
         $formerList->addColumn('mem_end');
         $formerList->save();
@@ -332,8 +319,8 @@ class Organization extends TableAccess
         $participantList->setValue('lst_name', $gL10n->get('SYS_PARTICIPANTS'));
         $participantList->setValue('lst_org_id', $orgId);
         $participantList->setValue('lst_global', 1);
-        $participantList->addColumn((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
-        $participantList->addColumn((int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
+        $participantList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
+        $participantList->addColumn((int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
         $participantList->addColumn('mem_approved');
         $participantList->addColumn('mem_comment');
         $participantList->addColumn('mem_count_guests');
@@ -343,22 +330,22 @@ class Organization extends TableAccess
         $userManagementList->setValue('lst_name', $gL10n->get('SYS_MEMBERS'));
         $userManagementList->setValue('lst_org_id', $orgId);
         $userManagementList->setValue('lst_global', 1);
-        $userManagementList->addColumn((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
-        $userManagementList->addColumn((int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
+        $userManagementList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
+        $userManagementList->addColumn((int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 0, 'ASC');
         $userManagementList->addColumn('usr_login_name');
-        $userManagementList->addColumn((int) $gProfileFields->getProperty('GENDER', 'usf_id'));
-        $userManagementList->addColumn((int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-        $userManagementList->addColumn((int) $gProfileFields->getProperty('CITY', 'usf_id'));
+        $userManagementList->addColumn((int)$gProfileFields->getProperty('GENDER', 'usf_id'));
+        $userManagementList->addColumn((int)$gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $userManagementList->addColumn((int)$gProfileFields->getProperty('CITY', 'usf_id'));
         $userManagementList->save();
 
         // create default category report configuration
-        $categoryReportColumns = 'p'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').','.
-                                 'p'.$gProfileFields->getProperty('LAST_NAME', 'usf_id').','.
-                                 'p'.$gProfileFields->getProperty('STREET', 'usf_id').','.
-                                 'p'.$gProfileFields->getProperty('CITY', 'usf_id').','.
-                                 'r'.$roleAdministrator->getValue('rol_id').','.
-                                 'r'.$roleManagement->getValue('rol_id').','.
-                                 'r'.$roleMember->getValue('rol_id');
+        $categoryReportColumns = 'p' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . ',' .
+            'p' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . ',' .
+            'p' . $gProfileFields->getProperty('STREET', 'usf_id') . ',' .
+            'p' . $gProfileFields->getProperty('CITY', 'usf_id') . ',' .
+            'r' . $roleAdministrator->getValue('rol_id') . ',' .
+            'r' . $roleManagement->getValue('rol_id') . ',' .
+            'r' . $roleMember->getValue('rol_id');
         $categoryReport = new TableAccess($this->db, TBL_CATEGORY_REPORT, 'crt');
         $categoryReport->setValue('crt_org_id', $orgId);
         $categoryReport->setValue('crt_name', $gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
@@ -377,6 +364,43 @@ class Organization extends TableAccess
         if ($this->countAllRecords() > 1) {
             $organizationSettings->set('system_organization_select', true);
         }
+    }
+
+    /**
+     * Create a organization object depending on a optional organization shortname string. If a
+     * organization shortname is set than this organization will be read otherwise the organization
+     * with the minimum ID will be read.
+     * @param Database $db Object of the class Database. This should be the default global object **$gDb**.
+     * @param string $organization The organization shortname. If this is set than this organization
+     *                                 will be read otherwise the organization with the minimum ID.
+     * @return Organization Returns an organization object.
+     */
+    public static function createDefaultOrganizationObject(Database $db, string $organization = ''): Organization
+    {
+        if($organization !== '') {
+            $organizationObject = new Organization($db, $organization);
+        } else {
+            $sql = 'SELECT MIN(org_id) as organization_id FROM ' . TBL_ORGANIZATIONS;
+            $pdoStatement = $db->queryPrepared($sql, array(), false);
+            $row = $pdoStatement->fetch();
+            $organizationObject = new Organization($db, (int) $row['organization_id']);
+        }
+
+        return $organizationObject;
+    }
+
+    /**
+     * @return array<int,string> Returns an array with all child organizations
+     */
+    protected function getChildOrganizations()
+    {
+        if (!$this->bCheckChildOrganizations) {
+            // Daten erst einmal aus DB einlesen
+            $this->childOrganizations = $this->getOrganizationsInRelationship(true, false);
+            $this->bCheckChildOrganizations = true;
+        }
+
+        return $this->childOrganizations;
     }
 
     /**
@@ -452,17 +476,16 @@ class Organization extends TableAccess
     }
 
     /**
-     * @return array<int,string> Returns an array with all child organizations
+     * @return SettingsManager
      */
-    protected function getChildOrganizations()
+    public function &getSettingsManager()
     {
-        if (!$this->bCheckChildOrganizations) {
-            // Daten erst einmal aus DB einlesen
-            $this->childOrganizations = $this->getOrganizationsInRelationship(true, false);
-            $this->bCheckChildOrganizations = true;
+        if (!$this->settingsManager instanceof SettingsManager) {
+            $this->settingsManager = new SettingsManager($this->db, (int) $this->getValue('org_id'));
+            $this->settingsManager->resetAll();
         }
 
-        return $this->childOrganizations;
+        return $this->settingsManager;
     }
 
     /**

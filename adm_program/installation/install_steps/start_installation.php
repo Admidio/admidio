@@ -37,8 +37,7 @@ if (isset($_SESSION['table_prefix'])
     || $_SESSION['db_name']        !== DB_NAME
     || $_SESSION['db_username']    !== DB_USERNAME
     || $_SESSION['db_password']    !== DB_PASSWORD
-    || $_SESSION['table_prefix']   !== TABLE_PREFIX
-    || $_SESSION['orga_shortname'] !== $g_organization)) {
+    || $_SESSION['table_prefix']   !== TABLE_PREFIX)) {
     $page = new HtmlPageInstallation('admidio-installation-message');
     $page->showMessage(
         'error',

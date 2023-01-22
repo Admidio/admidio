@@ -201,13 +201,9 @@ if (isset($_SESSION['orga_shortname'])) {
     $orgaLongName  = $_SESSION['orga_longname'];
     $orgaEmail     = $_SESSION['orga_email'];
 } else {
-    $orgaShortName = $g_organization;
+    $orgaShortName = '';
     $orgaLongName  = '';
     $orgaEmail     = '';
-
-    if ($g_organization !== '') {
-        $shortnameProperty = HtmlForm::FIELD_READONLY;
-    }
 }
 
 // create array with possible PHP timezones

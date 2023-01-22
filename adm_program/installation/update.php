@@ -17,7 +17,9 @@
 $rootPath = dirname(__DIR__, 2);
 
 // embed config file
+$g_organization = '';
 $configPath = $rootPath . '/adm_my_files/config.php';
+
 if (is_file($configPath)) {
     require_once($configPath);
 } elseif (is_file($rootPath . '/config.php')) {
@@ -81,7 +83,7 @@ if (!$pdoStatement || $pdoStatement->rowCount() === 0) {
 }
 
 // create an organization object of the current organization
-$gCurrentOrganization = new Organization($gDb, $g_organization);
+$gCurrentOrganization = Organization::createDefaultOrganizationObject($gDb, $g_organization);
 $gCurrentOrgId  = $gCurrentOrganization->getValue('org_id');
 
 // get system user id
