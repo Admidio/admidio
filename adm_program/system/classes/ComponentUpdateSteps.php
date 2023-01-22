@@ -213,7 +213,8 @@ final class ComponentUpdateSteps
                 $config['config_default'] = 0;
 
                 // Read out the role IDs of the "Administrator", "Board" and "Member" roles
-                $role = new TableRoles(self::$db);
+                $role = new TableAccess(self::$db, TBL_ROLES, 'rol');
+                $role->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'rol_cat_id');
                 if ($role->readDataByColumns(array('rol_name' => $gL10n->get('SYS_ADMINISTRATOR'), 'cat_org_id' => $orgId))) {
                     $config['col_fields'][0] .= ',r'.$role->getValue('rol_id');
                 }
@@ -462,7 +463,7 @@ final class ComponentUpdateSteps
         $rolesStatement = self::$db->queryPrepared($sql);
 
         while ($row = $rolesStatement->fetch()) {
-            $role = new TableRoles(self::$db);
+            $role = new TableAccess(self::$db, TBL_ROLES, 'rol');
             $role->setArray($row);
             $role->saveChangesWithoutRights();
 
@@ -1040,7 +1041,7 @@ final class ComponentUpdateSteps
         $rolesStatement = self::$db->queryPrepared($sql);
 
         while ($roleId = $rolesStatement->fetchColumn()) {
-            $role = new TableRoles(self::$db, (int) $roleId);
+            $role = new TableAccess(self::$db, TBL_ROLES, 'rol', (int) $roleId);
             $role->delete(); // TODO Exception handling
         }
     }
