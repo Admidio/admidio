@@ -106,13 +106,18 @@ if [ -f "${ADMIDIO_FIRSTRUN}" ]; then
             sed -i "s#^\$g_root_path.*#\$g_root_path = '${ADMIDIO_ROOT_PATH}';#g" "${ADMIDIO_CONFIG}"
         fi
 
-        # // Short description of the organization that is running Admidio
-        # // This short description must correspond to your input in the installation wizard !!!
-        # // Example: 'ADMIDIO'
-        # // Maximum of 10 characters !!!
-        # $g_organization = 'Shortcut';
         if [ "${ADMIDIO_ORGANISATION}" != "" ]; then
-            sed -i "s/^\$g_organization.*/\$g_organization = '${ADMIDIO_ORGANISATION}';/g" "${ADMIDIO_CONFIG}"
+            if [ "$(egrep '^\$g_organization' ${ADMIDIO_CONFIG})" != "" ]; then
+                sed -i "s/^\$g_organization.*/\$g_organization = '${ADMIDIO_ORGANISATION}';/g" "${ADMIDIO_CONFIG}"
+            else
+                echo "" >> "${ADMIDIO_CONFIG}"
+                echo "# // Short description of the organization that is running Admidio" >> "${ADMIDIO_CONFIG}"
+                echo "# // This short description must correspond to your input in the installation wizard !!!" >> "${ADMIDIO_CONFIG}"
+                echo "# // Example: 'ADMIDIO'" >> "${ADMIDIO_CONFIG}"
+                echo "# // Maximum of 10 characters !!!" >> "${ADMIDIO_CONFIG}"
+                echo "\$g_organization = '${ADMIDIO_ORGANISATION}';" >> "${ADMIDIO_CONFIG}"
+                echo "" >> "${ADMIDIO_CONFIG}"
+            fi
         fi
 
         # // The name of the timezone in which your organization is located.
