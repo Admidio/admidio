@@ -254,7 +254,7 @@ foreach($config as $key => $value)
                AND ( cat_org_id = '. $gCurrentOrgId . '
                 OR cat_org_id IS NULL )';
     $formConfigurations->addSelectBoxFromSql('selection_role'.$key, $gL10n->get('SYS_ROLE_SELECTION'), $gDb, $sql,
-        array('defaultValue' => explode(',',$value['selection_role']),'multiselect' => true, 'helpTextIdLabel' => 'SYS_ROLE_SELECTION_CONF_DESC'));
+        array('defaultValue' => explode(',', (string) $value['selection_role']),'multiselect' => true, 'helpTextIdLabel' => 'SYS_ROLE_SELECTION_CONF_DESC'));
 
     $sql = 'SELECT cat_id, cat_name
               FROM '.TBL_CATEGORIES.' , '.TBL_ROLES.'
@@ -262,7 +262,7 @@ foreach($config as $key => $value)
                AND ( cat_org_id = ' . $gCurrentOrgId . '
                 OR cat_org_id IS NULL )';
     $formConfigurations->addSelectBoxFromSql('selection_cat'.$key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
-        array('defaultValue' => explode(',',$value['selection_cat']),'multiselect' => true, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_CONF_DESC'));
+        array('defaultValue' => explode(',', (string) $value['selection_cat']),'multiselect' => true, 'helpTextIdLabel' => 'SYS_CAT_SELECTION_CONF_DESC'));
     $formConfigurations->addCheckbox('number_col'.$key, $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', $value['number_col'], array('helpTextIdLabel' => 'SYS_NUMBER_COL_DESC'));
     $formConfigurations->addInput('id'.$key, '', $value['id'], array('property' => HtmlForm::FIELD_HIDDEN));
     $formConfigurations->addInput('default_conf'.$key, '', $value['default_conf'], array('property' => HtmlForm::FIELD_HIDDEN));

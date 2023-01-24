@@ -302,10 +302,10 @@ foreach ($listsResult['recordset'] as $row) {
         }
 
         // block with informations about events and meeting-point
-        if (strlen($role->getValue('rol_start_date')) > 0 || $role->getValue('rol_weekday') > 0
-                    || strlen($role->getValue('rol_start_time')) > 0 || strlen($role->getValue('rol_location')) > 0) {
+        if ($role->getValue('rol_start_date') !== '' || $role->getValue('rol_weekday') > 0
+            || $role->getValue('rol_start_time') !== '' || $role->getValue('rol_location') !== '') {
             $page->addHtml('<li class="list-group-item"><h6>'.$gL10n->get('DAT_DATES').' / '.$gL10n->get('SYS_MEETINGS').'</h6>');
-            if (strlen($role->getValue('rol_start_date')) > 0) {
+            if ($role->getValue('rol_start_date') !== '') {
                 $page->addHtml('<span class="d-block">'.$gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))).'</span>');
             }
 
@@ -328,16 +328,16 @@ foreach ($listsResult['recordset'] as $row) {
         }
 
         // show members fee
-        if (strlen($role->getValue('rol_cost')) > 0 || $role->getValue('rol_cost_period') > 0) {
+        if (!empty($role->getValue('rol_cost')) || $role->getValue('rol_cost_period') > 0) {
             $html = '';
 
             // Member fee
-            if (strlen($role->getValue('rol_cost')) > 0) {
+            if (!empty($role->getValue('rol_cost'))) {
                 $html .= (float) $role->getValue('rol_cost').' '.$gSettingsManager->getString('system_currency');
             }
 
             // Contributory period
-            if (strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0) {
+            if (!empty($role->getValue('rol_cost_period')) && $role->getValue('rol_cost_period') != 0) {
                 $html .= ' - ' . TableRoles::getCostPeriods($role->getValue('rol_cost_period'));
             }
 

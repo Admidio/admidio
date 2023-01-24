@@ -16,7 +16,7 @@ final class SecurityUtils
      * @param string $encoding  Define character encoding to use
      * @return string Encoded string
      */
-    public static function encodeHTML($input, $encodeAll = false, $encoding = 'UTF-8')
+    public static function encodeHTML(string $input, bool $encodeAll = false, string $encoding = 'UTF-8')
     {
         if ($encodeAll) {
             // Encodes: all special HTML characters

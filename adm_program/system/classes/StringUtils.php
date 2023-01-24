@@ -130,7 +130,7 @@ final class StringUtils
     {
         if (is_array($value)) {
             // call function for every array element
-            $value = array_map('self::strStripTags', $value);
+            $value = array_map(self::class . '::strStripTags', $value);
         } else {
             // remove whitespaces at beginning and end
             $value = trim($value);

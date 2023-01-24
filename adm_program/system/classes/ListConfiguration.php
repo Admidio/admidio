@@ -18,9 +18,13 @@
 class ListConfiguration extends TableLists
 {
     /**
-     * @var array<int,TableAccess> Array with all Listenspaltenobjekte
+     * @var array<int,TableAccess> Array with all columns of the current list
      */
     protected $columns = array();
+    /**
+     * @var array<int,TableAccess> array with all column names of the sql statement that belong to the select clause
+     */
+    protected $columnsSqlNames = array();
     /**
      * @var array<int,string> Array with the usr_id as key and the first name, last name as values
      */

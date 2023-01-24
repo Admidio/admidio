@@ -213,7 +213,7 @@ class TableAccess
         $columnValue = '';
 
         if (array_key_exists($columnName, $this->dbColumns)) {
-            // wenn Schluesselfeld leer ist, dann 0 zurueckgeben
+            // if key field is empty, return 0
             if ($this->keyColumnName === $columnName && empty($this->dbColumns[$columnName])) {
                 $columnValue = 0;
             } else {
@@ -229,7 +229,7 @@ class TableAccess
                 case 'text':
                     if ($format !== 'database') {
                         // if text field and format not 'database' then convert all quotes to html syntax
-                        $columnValue = SecurityUtils::encodeHTML($columnValue);
+                        $columnValue = SecurityUtils::encodeHTML((string) $columnValue);
                     }
                     break;
 
@@ -262,6 +262,8 @@ class TableAccess
                         } catch (Exception $e) {
                             $columnValue = $this->dbColumns[$columnName];
                         }
+                    } else {
+                        $columnValue = '';
                     }
                     break;
             }
