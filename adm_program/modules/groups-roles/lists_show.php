@@ -719,8 +719,8 @@ elseif ($getMode === 'pdf') {
         || strlen($role->getValue('rol_start_date')) > 0
         || strlen($role->getValue('rol_start_time')) > 0
         || strlen($role->getValue('rol_location')) > 0
-        || strlen($role->getValue('rol_cost')) > 0
-        || strlen($role->getValue('rol_max_members')) > 0) {
+        || !empty($role->getValue('rol_cost'))
+        || !empty($role->getValue('rol_max_members'))) {
             $htmlBox = '
             <div class="card admidio-blog" id="adm_lists_infobox">
                 <div class="card-header">'.$gL10n->get('SYS_INFOBOX').': '.$role->getValue('rol_name').'</div>

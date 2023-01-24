@@ -1696,18 +1696,18 @@ class HtmlForm extends HtmlFormBasic
      * @param string $string    A text that should be shown or a unique text id from the translation xml files
      *                          that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
      * @param string $title     A text-id that represents the title of the help text. Default will be SYS_NOTE.
-     * @param string|null $parameter If you need an additional parameter for the text you can set this parameter.
+     * @param array $parameter If you need an additional parameters for the text you can set this parameter values within an array.
      * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
      */
-    public static function getHelpTextIcon($string, $title = 'SYS_NOTE',  $parameter = null)
+    public static function getHelpTextIcon(string $string, string $title = 'SYS_NOTE', array $parameter = array())
     {
         global $gL10n;
 
         $html = '';
 
-        if(!empty($string)) {
+        if(strlen($string) > 0) {
             if (Language::isTranslationStringId($string)) {
-                $text  = $gL10n->get($string, array($parameter));
+                $text  = $gL10n->get($string, $parameter);
             } else {
                 $text  = $string;
             }

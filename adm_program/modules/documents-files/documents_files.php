@@ -124,7 +124,7 @@ if (isset($folderContent['folders'])) {
             1, // Type folder
             '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $nextFolder['fol_uuid'])). '">
                 <i class="fas fa-fw fa-folder" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').'"></i></a>',
-            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $nextFolder['fol_uuid'])). '">'. $nextFolder['fol_name']. '</a>'.HtmlForm::getHelpTextIcon($nextFolder['fol_description'], 'SYS_DESCRIPTION'),
+            '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php', array('folder_uuid' => $nextFolder['fol_uuid'])). '">'. $nextFolder['fol_name']. '</a>'.HtmlForm::getHelpTextIcon((string) $nextFolder['fol_description'], 'SYS_DESCRIPTION'),
             '',
             '',
             ''

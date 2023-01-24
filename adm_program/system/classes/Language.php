@@ -288,7 +288,7 @@ class Language
      * @param string $string The string to check
      * @return bool Returns true if the given string is a translation-string-id
      */
-    public static function isTranslationStringId($string)
+    public static function isTranslationStringId(string $string)
     {
         return (bool) preg_match('/^[A-Z]{3}_([A-Z0-9]_?)*[A-Z0-9]$/', $string);
     }
