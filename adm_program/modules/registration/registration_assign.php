@@ -156,7 +156,7 @@ while ($row = $usrStatement->fetch()) {
 
     if (isMember($row['usr_id'])) {
         // found user is member of this organization
-        if (strlen($row['usr_login_name']) > 0) {
+        if ((string) $row['usr_login_name'] !== '') {
             // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken
             $page->addHtml('<p>'.$gL10n->get('SYS_USER_VALID_LOGIN'));
             if ($gSettingsManager->getBool('system_notifications_enabled')) {

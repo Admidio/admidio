@@ -294,7 +294,7 @@ if ($numberBirthdays > 0) {
                         target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $plgShowName. '</a>';
 
                 // E-Mail-Adresse ist hinterlegt und soll auch bei eingeloggten Benutzern verlinkt werden
-                if (strlen($row['email']) > 0 && $plg_show_email_extern < 2) {
+                if ((string) $row['email'] !== '' && $plg_show_email_extern < 2) {
                     $plgShowName .= '
                             <a class="admidio-icon-link" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('user_uuid' => $row['usr_uuid'])) . '">'.
                                 '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_WRITE_EMAIL').'"></i></a>';

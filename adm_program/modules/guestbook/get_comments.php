@@ -98,7 +98,7 @@ if ($getCommentGboUuid !== '') {
             echo '</div>';
 
             // show information about user who edit the recordset
-            if (strlen($gbComment->getValue('gbc_usr_id_change')) > 0) {
+            if ((int) $gbComment->getValue('gbc_usr_id_change') > 0) {
                 echo '<div class="card-footer">'.admFuncShowCreateChangeInfoById(
                     0,
                     '',

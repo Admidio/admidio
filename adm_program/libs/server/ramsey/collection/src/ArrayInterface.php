@@ -27,8 +27,7 @@ use Serializable;
 interface ArrayInterface extends
     ArrayAccess,
     Countable,
-    IteratorAggregate,
-    Serializable
+    IteratorAggregate
 {
     /**
      * Removes all items from this array.
