@@ -349,7 +349,7 @@ if ($countGuestbookEntries === 0) {
         $page->addHtml('</div>');
 
         // show information about user who edit the recordset
-        if (strlen($guestbook->getValue('gbo_usr_id_change')) > 0) {
+        if ((int) $guestbook->getValue('gbo_usr_id_change') > 0) {
             $page->addHtml('<div class="card-footer">'.admFuncShowCreateChangeInfoById(
                 0,
                 '',

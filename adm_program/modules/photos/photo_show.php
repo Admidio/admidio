@@ -136,7 +136,7 @@ if ($image !== null) {
             $text = $gSettingsManager->getString('photo_image_text');
         }
 
-        imagettftext($image->getImageResource(), $fontSize, 0, $fontX, $fontY, $fontColor, $fontTtf, $text);
+        imagettftext($image->getImageResource(), $fontSize, 0, (int) $fontX, (int) $fontY, $fontColor, $fontTtf, $text);
     }
 
     // Return of the new image
