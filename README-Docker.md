@@ -22,7 +22,7 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 
 -	[`latest`](https://github.com/Admidio/admidio/blob/master/Dockerfile)
 -	[`branch-v4.1`](https://github.com/Admidio/admidio/blob/v4.1/Dockerfile)
-- `vN.N.N` (e.g.: `v4.1.7`)
+- `vN.N.N` (e.g.: `v4.1.19`)
 - see https://hub.docker.com/r/admidio/admidio/tags for all available tags
 
 You can find the releasenotes on Github [admidio/releases](https://github.com/Admidio/admidio/releases) and the Docker images on Dockerhub [admidio/admidio](https://hub.docker.com/r/admidio/admidio/).
@@ -46,7 +46,7 @@ docker run --detach -it --name "Admidio-MariaDB" \
 ```
 
 ## Start an `admidio` server instance
-Starting a admidio instance is simple:
+Starting a admidio instance is quite simple:
 
 ```bash
 docker run --detach -it --name "Admidio" \
@@ -55,7 +55,12 @@ docker run --detach -it --name "Admidio" \
   -v "Admidio-files:/opt/app-root/src/adm_my_files" \
   -v "Admidio-themes:/opt/app-root/src/adm_themes" \
   -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
-  --link "Admidio-MariaDB:mysql" \
+  --link "Admidio-MariaDB:db" \
+  -e ADMIDIO_DB_HOST="db:3306" \
+  -e ADMIDIO_DB_NAME="admidio" \
+  -e ADMIDIO_DB_USER="admidio" \
+  -e ADMIDIO_DB_PASSWORD="my_VerySecureAdmidioUserPassword.01" \
+  -e ADMIDIO_ROOT_PATH="https://www.mydomain.at/admidio" \
   admidio/admidio:latest
 ```
 
@@ -70,7 +75,7 @@ docker run --detach -it --name "Admidio" \
   -v "Admidio-files:/opt/app-root/src/adm_my_files" \
   -v "Admidio-themes:/opt/app-root/src/adm_themes" \
   -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
-  --link "Admidio-MariaDB:mysql" \
+  --link "Admidio-MariaDB:db" \
   -e ADMIDIO_DB_TYPE="mysql" \
   -e ADMIDIO_DB_HOST="db:3306" \
   -e ADMIDIO_DB_NAME="admidio" \
@@ -99,7 +104,7 @@ docker run --detach -it --name "Admidio" \
 * **`--name "Admidio"`:** Docker container name
 * **`--memory="1024m"`:** limit ram usage of docker container to 1GB
 * **`-p 8080:8080`:** published port (see https://docs.docker.com/config/containers/container-networking/#published-ports)
-* **admidio/admidio:latest:** Image name with version tag. We recommend a special version tag to be used instead of latest (e.g.: `admidio/admidio:v4.1.7`)
+* **admidio/admidio:latest:** Image name with version tag. We recommend a special version tag to be used instead of latest (e.g.: `admidio/admidio:v4.1.19`)
 
 ## Database container link
 * **`--link "Admidio-MariaDB:db"`:** connect to docker database server instance.  
@@ -191,7 +196,12 @@ Possible values: `​DEFAULT`,​ `​BCRYPT`,​ `​SHA512`, `ARGON2ID`, `ARGO
 see https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:konfigurationsdatei_config.php#gpasswordhashalgorithm
 
 ### `ADMIDIO_ROOT_PATH`
-"https://www.mydomain.at/admidio" \
+URL of the current Admidio installation. The URL must not end with a slash or backslash. If the Admidio folder moved, so these variables must be adapted accordingly.
+
+Possible values: https://www.admidio.org/demo or the URL to your Admidio installation
+Required version: from 1.0
+
+see https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:konfigurationsdatei_config.php#g_root_path
 
 ### `TZ`
 Specifying the time zone that will be used for this organization. The value corresponds to one of PHP support Time Zone. The time zone is set once during installation and should not thereafter be changed. Must the time zone be nevertheless adjusted later, so the times already recorded are not adjusted to the new time zone.
@@ -225,13 +235,18 @@ docker rm Admidio
 * use the same start command as last
 ```bash
 docker run --detach -it --name "Admidio" \
-    -p 8080:8080 \
-    --restart="unless-stopped" \
-    -v "Admidio-files:/opt/app-root/src/adm_my_files" \
-    -v "Admidio-themes:/opt/app-root/src/adm_themes" \
-    -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
-    --link "Admidio-MariaDB:mysql" \
-    admidio/admidio:latest
+  -p 8080:8080 \
+  --restart="unless-stopped" \
+  -v "Admidio-files:/opt/app-root/src/adm_my_files" \
+  -v "Admidio-themes:/opt/app-root/src/adm_themes" \
+  -v "Admidio-plugins:/opt/app-root/src/adm_plugins" \
+  --link "Admidio-MariaDB:db" \
+  -e ADMIDIO_DB_HOST="db:3306" \
+  -e ADMIDIO_DB_NAME="admidio" \
+  -e ADMIDIO_DB_USER="admidio" \
+  -e ADMIDIO_DB_PASSWORD="my_VerySecureAdmidioUserPassword.01" \
+  -e ADMIDIO_ROOT_PATH="https://www.mydomain.at/admidio" \
+  admidio/admidio:latest
 ```
 * look at admidio update page and follow the instructions for the specified version [Admidio Wiki Update](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update).
 
