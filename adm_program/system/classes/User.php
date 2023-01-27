@@ -514,7 +514,7 @@ class User extends TableAccess
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isAdministrator = false)
     {
-        global $gLogger, $gSettingsManager, $gCurrentSession, $installedDbVersion, $gL10n;
+        global $gSettingsManager, $gCurrentSession, $installedDbVersion, $gL10n;
 
         if ($this->hasMaxInvalidLogins()) {
             throw new AdmException($gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN'));
@@ -527,8 +527,6 @@ class User extends TableAccess
         }
 
         if (!$this->getValue('usr_valid')) {
-            $gLogger->warning('AUTHENTICATION: User is not activated!', array('username' => $this->getValue('usr_login_name')));
-
             throw new AdmException($gL10n->get('SYS_LOGIN_NOT_ACTIVATED'));
         }
 
@@ -1202,8 +1200,6 @@ class User extends TableAccess
      */
     private function hasMaxInvalidLogins()
     {
-        global $gLogger;
-
         // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
         $now = new \DateTime();
         $minutesOffset = new \DateInterval('PT15M');
@@ -1218,13 +1214,6 @@ class User extends TableAccess
         if ($this->getValue('usr_number_invalid') < self::MAX_INVALID_LOGINS || $minutesBefore->getTimestamp() >= $dateInvalid->getTimestamp()) {
             return false;
         }
-
-        $loggingObject = array(
-            'username'      => $this->getValue('usr_login_name'),
-            'numberInvalid' => (int) $this->getValue('usr_number_invalid'),
-            'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
-        );
-        $gLogger->warning('AUTHENTICATION: Maximum number of invalid logins!', $loggingObject);
 
         $this->clear();
 
@@ -1438,8 +1427,6 @@ class User extends TableAccess
      */
     private function handleIncorrectPasswordLogin()
     {
-        global $gLogger;
-
         // log invalid logins
         if ($this->getValue('usr_number_invalid') >= self::MAX_INVALID_LOGINS) {
             $this->setValue('usr_number_invalid', 1);
@@ -1451,23 +1438,13 @@ class User extends TableAccess
         $this->saveChangesWithoutRights();
         $this->save(false); // don't update timestamp // TODO Exception handling
 
-        $loggingObject = array(
-            'username'      => $this->getValue('usr_login_name'),
-            'numberInvalid' => (int) $this->getValue('usr_number_invalid'),
-            'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
-        );
-
         if ($this->getValue('usr_number_invalid') >= self::MAX_INVALID_LOGINS) {
             $this->clear();
-
-            $gLogger->warning('AUTHENTICATION: Maximum number of invalid logins!', $loggingObject);
 
             return 'SYS_LOGIN_MAX_INVALID_LOGIN';
         }
 
         $this->clear();
-
-        $gLogger->warning('AUTHENTICATION: Incorrect username/password!', $loggingObject);
 
         return 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT';
     }
@@ -1523,7 +1500,7 @@ class User extends TableAccess
      */
     private function isAdminOfOrganization($orgLongName)
     {
-        global $gLogger, $installedDbVersion;
+        global $installedDbVersion;
 
         // Deprecated: Fallback for updates from v3.0 and v3.1
         if (version_compare($installedDbVersion, '3.2', '>=')) {
@@ -1552,13 +1529,6 @@ class User extends TableAccess
             return true;
         }
 
-        $loggingObject = array(
-            'username'     => $this->getValue('usr_login_name'),
-            'organisation' => $orgLongName
-        );
-
-        $gLogger->warning('AUTHENTICATION: User is no administrator!', $loggingObject);
-
         return false;
     }
 
@@ -1579,8 +1549,6 @@ class User extends TableAccess
      */
     private function isMemberOfOrganization($orgLongName)
     {
-        global $gLogger;
-
         // Check if user is currently member of a role of an organisation
         $sql = 'SELECT mem_usr_id
                   FROM '.TBL_MEMBERS.'
@@ -1599,13 +1567,6 @@ class User extends TableAccess
         if ($pdoStatement->rowCount() > 0) {
             return true;
         }
-
-        $loggingObject = array(
-            'username'     => $this->getValue('usr_login_name'),
-            'organisation' => $orgLongName
-        );
-
-        $gLogger->warning('AUTHENTICATION: User is not member in this organisation!', $loggingObject);
 
         return false;
     }
@@ -1681,8 +1642,6 @@ class User extends TableAccess
      */
     private function rehashIfNecessary($password)
     {
-        global $gLogger;
-
         if (!PasswordUtils::needsRehash($this->getValue('usr_password'))) {
             return false;
         }
@@ -1690,8 +1649,6 @@ class User extends TableAccess
         $this->saveChangesWithoutRights();
         $this->setPassword($password);
         $this->save(); // TODO Exception handling
-
-        $gLogger->info('AUTHENTICATION: Password rehashed!', array('username' => $this->getValue('usr_login_name')));
 
         return true;
     }
