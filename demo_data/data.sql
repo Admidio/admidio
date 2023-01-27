@@ -860,12 +860,14 @@ INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, l
 (143, 15, 4, 11, NULL, NULL, NULL),
 (144, 15, 5, 10, NULL, NULL, NULL),
 (145, 15, 6, 5, NULL, NULL, NULL),
+(146, 15, 7, NULL, 'usr_timestamp_change', NULL, NULL),
 (150, 16, 1, 1, NULL, 'ASC', NULL),
 (151, 16, 2, 2, NULL, 'ASC', NULL),
 (152, 16, 3, NULL, 'usr_login_name', NULL, NULL),
 (153, 16, 4, 11, NULL, NULL, NULL),
 (154, 16, 5, 10, NULL, NULL, NULL),
-(155, 16, 6, 5, NULL, NULL, NULL);
+(155, 16, 6, 5, NULL, NULL, NULL),
+(156, 16, 7, NULL, 'usr_timestamp_change', NULL, NULL);
 
 --
 -- Data for table adm_members
