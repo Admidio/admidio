@@ -10,7 +10,7 @@
  * Parameters:
  *
  * list_uuid    : UUID of the list configuration that should be shown
- * rol_ids      : (Optional) Id of the role or an integer array of all role ids whose members should be shown
+ * rol_ids      : (Optional) ID of the role or an integer array of all role ids whose members should be shown
  * active_role  : true  - (Default) List only active roles
  *                false - List only deactivated roles
  * show_members : 0 - (Default) show active members of role
@@ -219,7 +219,7 @@ $javascriptCode = '
 // create a multidimensional array for all columns with the necessary data
 $i = 0;
 $oldCategoryNameIntern = '';
-$arrParticipientsInformation = array(
+$arrParticipantsInformation = array(
     'mem_approved'         => $gL10n->get('SYS_PARTICIPATION_STATUS'),
     'mem_usr_id_change'    => $gL10n->get('SYS_CHANGED_BY'),
     'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
@@ -321,7 +321,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
         };';
 
     // add new category with participant information of events
-    foreach ($arrParticipientsInformation as $memberStatus => $columnName) {
+    foreach ($arrParticipantsInformation as $memberStatus => $columnName) {
         $javascriptCode .= '
             userFields['. ++$i . '] = {
                 "cat_name" : "'.$gL10n->get('SYS_PARTICIPATION_INFORMATION').'",
@@ -520,10 +520,10 @@ $configurationsStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $gCur
 $configurations = $configurationsStatement->fetchAll();
 
 foreach ($configurations as $configuration) {
-    if ($configuration['lst_global'] == 0 && !$yourLastConfigurationsGroup && strlen($configuration['lst_name']) === 0) {
+    if ($configuration['lst_global'] == 0 && !$yourLastConfigurationsGroup && (string) $configuration['lst_name'] === '') {
         $actualGroup = $gL10n->get('SYS_YOUR_LAST_CONFIGURATION');
         $yourLastConfigurationsGroup = true;
-    } elseif ($configuration['lst_global'] == 0 && !$yourConfigurationsGroup && strlen($configuration['lst_name']) > 0) {
+    } elseif ($configuration['lst_global'] == 0 && !$yourConfigurationsGroup && (string) $configuration['lst_name'] !== '') {
         $actualGroup = $gL10n->get('SYS_YOUR_CONFIGURATION');
         $yourConfigurationsGroup = true;
     } elseif ($configuration['lst_global'] == 1 && !$presetConfigurationsGroup) {
@@ -531,23 +531,28 @@ foreach ($configurations as $configuration) {
         $presetConfigurationsGroup = true;
     }
 
-    // if it's a temporary saved configuration than show timestamp of creating as name
-    if (strlen($configuration['lst_name']) === 0) {
-        $objListTimestamp = new \DateTime($configuration['lst_timestamp']);
-        ++$numberLastConfigurations;
+    try {// if it's a temporary saved configuration than show timestamp of creating as name
+        if ((string)$configuration['lst_name'] === '') {
+            $objListTimestamp = new DateTime($configuration['lst_timestamp']);
+            ++$numberLastConfigurations;
 
-        // only 5 configurations without a name should be saved for each user
-        if ($numberLastConfigurations > 5) {
-            // delete all other configurations
-            $delList = new ListConfiguration($gDb, $configuration['lst_id']);
-            $delList->delete();
+            // only 5 configurations without a name should be saved for each user
+            if ($numberLastConfigurations > 5) {
+                // delete all other configurations
+                $delList = new ListConfiguration($gDb, $configuration['lst_id']);
+                $delList->delete();
+            } else {
+                // now add configuration to array
+                $configurationsArray[] = array($configuration['lst_uuid'], $objListTimestamp->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), $actualGroup);
+            }
         } else {
             // now add configuration to array
-            $configurationsArray[] = array($configuration['lst_uuid'], $objListTimestamp->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')), $actualGroup);
+            $configurationsArray[] = array($configuration['lst_uuid'], $configuration['lst_name'], $actualGroup);
         }
-    } else {
-        // now add configuration to array
-        $configurationsArray[] = array($configuration['lst_uuid'], $configuration['lst_name'], $actualGroup);
+    } catch (AdmException $e) {
+        $e->showHtml();
+    } catch (Exception $e) {
+        echo $e->getMessage();
     }
 }
 
