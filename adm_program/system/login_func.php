@@ -50,7 +50,7 @@ function initLoginParams($prefix)
  */
 function createUserObjectFromPost()
 {
-    global $gLogger, $gCurrentUser, $gSettingsManager, $gMenu, $loginname, $password, $gDb, $gL10n;
+    global $gCurrentUser, $gSettingsManager, $gMenu, $loginname, $password, $gDb, $gL10n;
     global $gCurrentOrganization, $bAutoLogin, $organizationId, $gProfileFields, $userStatement;
     global $gCurrentSession, $gCurrentOrgId;
 
@@ -79,11 +79,6 @@ function createUserObjectFromPost()
     $userStatement = $gDb->queryPrepared($sql, array($loginname));
 
     if ($userStatement->rowCount() === 0) {
-        $gLogger->warning('AUTHENTICATION: Incorrect username/password!', array(
-            'username' => $loginname,
-            'password' => '******'
-        ));
-
         throw new AdmException('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
         // => EXIT
     }
