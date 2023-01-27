@@ -336,6 +336,7 @@ class Organization extends TableAccess
         $userManagementList->addColumn((int)$gProfileFields->getProperty('GENDER', 'usf_id'));
         $userManagementList->addColumn((int)$gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
         $userManagementList->addColumn((int)$gProfileFields->getProperty('CITY', 'usf_id'));
+        $userManagementList->addColumn('usr_timestamp_change');
         $userManagementList->save();
 
         // create default category report configuration
