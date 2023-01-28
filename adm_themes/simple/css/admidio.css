@@ -187,7 +187,8 @@ a.btn-primary:hover, .btn-secondary:hover {
 .admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, .admidio-img-presenter,
 .navbar-filter, .table-responsive, .admidio-content-header,
-.dataTables_wrapper, .admidio-margin-bottom, .admidio-content-subheader {
+.dataTables_wrapper, .admidio-margin-bottom, .admidio-content-subheader,
+.tab-content {
     margin-bottom: 40px;
 }
 
