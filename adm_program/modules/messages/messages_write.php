@@ -203,8 +203,12 @@ if (isset($_SESSION['message_request'])) {
     }
 }
 
-// add current url to navigation stack
-$gNavigation->addUrl(CURRENT_URL, $headline);
+if(!$gValidLogin && $getUserUuid === '' && $getRoleUuid === '') {
+    // visitors have no message modul and start the navigation here
+    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+} else {
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+}
 
 // create html page object
 $page = new HtmlPage('admidio-messages-write', $headline);
