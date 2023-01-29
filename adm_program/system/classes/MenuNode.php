@@ -81,7 +81,7 @@ class MenuNode
 
         // translate name and description
         $node['men_name'] = Language::translateIfTranslationStrId($name);
-        $node['men_description'] = Language::translateIfTranslationStrId($description);
+        $node['men_description'] = Language::translateIfTranslationStrId((string) $description);
 
         // add root path to link unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $url) === 0 && strpos($url, 'javascript:') !== 0) {
