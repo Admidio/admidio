@@ -89,7 +89,7 @@ class MenuNode
         }
         $node['men_url'] = $url;
 
-        if (strlen($icon) === 0) {
+        if ((string) $icon === '') {
             $icon = 'fa-trash-alt invisible';
         }
         $node['men_icon'] = $icon;
