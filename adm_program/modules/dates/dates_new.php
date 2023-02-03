@@ -53,8 +53,9 @@ if (isset($_SESSION['dates_request'])) {
     // By wrong input, the user returned to this form now write the previously entered contents into the object
 
     // first set date and time field to a datetime within system format and add this to date class
-    $_SESSION['dates_request']['dat_begin'] = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
-    $_SESSION['dates_request']['dat_end']   = $_SESSION['dates_request']['date_to'].' '.$_SESSION['dates_request']['date_to_time'];
+    $_SESSION['dates_request']['dat_begin']    = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
+    $_SESSION['dates_request']['dat_end']      = $_SESSION['dates_request']['date_to'].' '.$_SESSION['dates_request']['date_to_time'];
+    $_SESSION['dates_request']['dat_deadline'] = $_SESSION['dates_request']['date_deadline'].' '.$_SESSION['dates_request']['date_deadline_time'];
 
     $date->setArray($_SESSION['dates_request']);
 

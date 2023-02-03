@@ -690,6 +690,7 @@
   <string name="SYS_DAYS_VAR">#VAR1# days</string>
   <string name="SYS_DEACTIVATE_ROLE">Deactivate role</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">If you deactivate role #VAR1_BOLD#, the role can no longer be used and assigned to objects. Likewise, all rights of this role are no longer effective. However, the role with its setting and all member mappings remains and can be reactivated at a later date.</string>
+  <string name="SYS_DEADLINE_AFTER_START">The deadline for registration is after the start of the event.</string>
   <string name="SYS_DEBUG_OUTPUT">Debug output</string>
   <string name="SYS_DECIMAL_NUMBER">Decimal number</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Default assignment of registering</string>
