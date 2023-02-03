@@ -19,12 +19,21 @@ for dir in "adm_plugins" "adm_themes" "adm_my_files" ; do
 done
 
 # fix permissions for docker filesystem volumes
-echo "[INFO ] set filesystem permissions (chown -R default:root .)"
-chown -R default:root .
+echo "[INFO ] set filesystem permissions (chown -R www-data:root .)"
+chown -R www-data:root .
 
 # configure apache
-echo "[INFO ] configure ServerName in /etc/httpd/conf/httpd.conf"
-sed -i "s/#ServerName.*/ServerName \$\{HOSTNAME\}/g" /etc/httpd/conf/httpd.conf
+echo "[INFO ] configure Listen port in /etc/apache2/ports.conf"
+sed -i "s/^Listen 80$/Listen 8080/g" /etc/apache2/ports.conf
+echo "[INFO ] configure VirtualHost port in /etc/apache2/sites-available/000-default.conf"
+sed -i "s/^<VirtualHost \*:80>$/<VirtualHost *:8080>/g" /etc/apache2/sites-available/000-default.conf
+if [ "${ADMIDIO_ROOT_PATH}" != "" ]; then
+    ADMIDIO_HOSTNAME=$(awk -F/ '{print $3}' <<<"${ADMIDIO_ROOT_PATH}")
+    echo "[INFO ] configure ServerName in /etc/apache2/sites-available/000-default.conf"
+    sed -i "s/[^#]ServerName.+/ServerName ${ADMIDIO_HOSTNAME}/g" /etc/apache2/sites-available/000-default.conf
+    sed -i "s/#ServerName www.example.com/ServerName ${ADMIDIO_HOSTNAME}/g" /etc/apache2/sites-available/000-default.conf
+fi
+
 
 # configure postfix
 if [ "${ADMIDIO_MAIL_RELAYHOST}" != "" ]; then
@@ -149,5 +158,5 @@ if [ ! -f "${ADMIDIO_FIRSTRUN}" ]; then
 fi
 
 # run apache with php enabled as user default
-echo "[INFO ] run apache with php enabled (/usr/libexec/s2i/run)"
-/usr/libexec/s2i/run
+echo "[INFO ] run apache with php enabled (apache2-foreground)"
+apache2-foreground

@@ -21,8 +21,8 @@ like member lists, event manager, guestbook, photo album or a documents & files 
 ![Docker Pulls](https://img.shields.io/docker/pulls/admidio/admidio?style=plastic)
 
 -	[`latest`](https://github.com/Admidio/admidio/blob/master/Dockerfile)
--	[`branch-v4.1`](https://github.com/Admidio/admidio/blob/v4.1/Dockerfile)
-- `vN.N.N` (e.g.: `v4.1.19`)
+-	[`branch-v4.2`](https://github.com/Admidio/admidio/blob/v4.2/Dockerfile)
+- `vN.N.N` (e.g.: `v4.2.0`)
 - see https://hub.docker.com/r/admidio/admidio/tags for all available tags
 
 You can find the releasenotes on Github [admidio/releases](https://github.com/Admidio/admidio/releases) and the Docker images on Dockerhub [admidio/admidio](https://hub.docker.com/r/admidio/admidio/).
@@ -88,14 +88,6 @@ docker run --detach -it --name "Admidio" \
   -e ADMIDIO_PASSWORD_HASH_ALGORITHM="DEFAULT" \
   -e ADMIDIO_ROOT_PATH="https://www.mydomain.at/admidio" \
   -e TZ="Europe/Vienna" \
-  -e HTTPD_START_SERVERS="8" \
-  -e DOCUMENTROOT="/" \
-  -e PHP_MEMORY_LIMIT="256M" \
-  -e ERROR_REPORTING="E_ALL & ~E_NOTICE" \
-  -e DISPLAY_ERRORS="ON" \
-  -e DISPLAY_STARTUP_ERRORS="OFF" \
-  -e TRACK_ERRORS="OFF" \
-  -e HTML_ERRORS="ON" \
   admidio/admidio:latest
 ```
 
@@ -104,7 +96,7 @@ docker run --detach -it --name "Admidio" \
 * **`--name "Admidio"`:** Docker container name
 * **`--memory="1024m"`:** limit ram usage of docker container to 1GB
 * **`-p 8080:8080`:** published port (see https://docs.docker.com/config/containers/container-networking/#published-ports)
-* **admidio/admidio:latest:** Image name with version tag. We recommend a special version tag to be used instead of latest (e.g.: `admidio/admidio:v4.1.19`)
+* **admidio/admidio:latest:** Image name with version tag. We recommend a special version tag to be used instead of latest (e.g.: `admidio/admidio:v4.2.0`)
 
 ## Database container link
 * **`--link "Admidio-MariaDB:db"`:** connect to docker database server instance.  
@@ -210,11 +202,6 @@ Possible values: `Europe/Vienna`
 
 see https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:konfigurationsdatei_config.php#gtimezone
 
-### `HTTPD_START_SERVERS` / `PHP_MEMORY_LIMIT` / ...
-Some environment variables come from ubi8 base image.
-See `Environment variables for Source-to-Image` on https://catalog.redhat.com/software/containers/ubi8/php-74/5f521244e05bbcd88f128b63 for detailed information.
-
-
 
 ## Admidio update
 
@@ -292,20 +279,12 @@ services:
       - ADMIDIO_DB_USER=admidio
       - ADMIDIO_DB_PASSWORD=password
       #- ADMIDIO_DB_TABLE_PRAEFIX=adm
-      # - ADMIDIO_MAIL_RELAYHOST=hostname.domain.at:25
+      #- ADMIDIO_MAIL_RELAYHOST=hostname.domain.at:25
       #- ADMIDIO_LOGIN_FOR_UPDATE=1
-      # - ADMIDIO_ORGANISATION=TEST02
+      #- ADMIDIO_ORGANISATION=TEST02
       #- ADMIDIO_PASSWORD_HASH_ALGORITHM=DEFAULT
-      # - ADMIDIO_ROOT_PATH=http://localhost:8084
+      - ADMIDIO_ROOT_PATH=http://localhost:8084
       - TZ=Europe/Vienna
-      #- HTTPD_START_SERVERS=8
-      #- DOCUMENTROOT=/
-      #- PHP_MEMORY_LIMIT=256M
-      #- ERROR_REPORTING=E_ALL & ~E_NOTICE
-      #- DISPLAY_ERRORS=ON
-      #- DISPLAY_STARTUP_ERRORS=OFF
-      #- TRACK_ERRORS=OFF
-      #- HTML_ERRORS=ON
 
 volumes:
   Admidio_MariaDB_config:
@@ -357,20 +336,12 @@ services:
       - ADMIDIO_DB_USER=admidio
       - ADMIDIO_DB_PASSWORD=password
       #- ADMIDIO_DB_TABLE_PRAEFIX=adm
-      # - ADMIDIO_MAIL_RELAYHOST=hostname.domain.at:25
+      #- ADMIDIO_MAIL_RELAYHOST=hostname.domain.at:25
       #- ADMIDIO_LOGIN_FOR_UPDATE=1
-      # - ADMIDIO_ORGANISATION=TEST02
+      #- ADMIDIO_ORGANISATION=TEST02
       #- ADMIDIO_PASSWORD_HASH_ALGORITHM=DEFAULT
-      # - ADMIDIO_ROOT_PATH=http://localhost:8084
+      - ADMIDIO_ROOT_PATH=http://localhost:8084
       - TZ=Europe/Vienna
-      #- HTTPD_START_SERVERS=8
-      #- DOCUMENTROOT=/
-      #- PHP_MEMORY_LIMIT=256M
-      #- ERROR_REPORTING=E_ALL & ~E_NOTICE
-      #- DISPLAY_ERRORS=ON
-      #- DISPLAY_STARTUP_ERRORS=OFF
-      #- TRACK_ERRORS=OFF
-      #- HTML_ERRORS=ON
 
 volumes:
   Admidio_MariaDB_config:
