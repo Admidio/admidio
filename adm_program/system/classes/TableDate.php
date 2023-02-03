@@ -438,12 +438,15 @@ class TableDate extends TableAccess
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @param mixed $newValue The new value that should be stored in the database field
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws AdmException
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
+        global $gL10n;
+
         if ($checkValue) {
             if ($columnName === 'dat_description') {
                 return parent::setValue($columnName, $newValue, false);
@@ -459,14 +462,20 @@ class TableDate extends TableAccess
                     }
                     $newValue = $category->getValue('cat_id');
                 }
+            } elseif ($columnName === 'dat_deadline') {
+                if((string) $newValue !== '' && !DateTime::createFromFormat('Y-m-d H:i', $newValue)) {
+                    throw new AdmException($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('DAT_DEADLINE'), 'YYYY-MM-DD')));
+                } elseif (strtotime($newValue) > strtotime($this->getValue('dat_begin'))) {
+                    throw new AdmException('SYS_DEADLINE_AFTER_START');
+                }
             }
         }
 
         if ($columnName === 'dat_end' && (int) $this->getValue('dat_all_day') === 1) {
-            // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
-            // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
-            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $newValue);
-            $oneDayOffset = new \DateInterval('P1D');
+            // for full day appointments, the to date must be incremented by one day
+            // so that the event is correctly taken into account in SQL queries
+            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $newValue);
+            $oneDayOffset = new DateInterval('P1D');
             $newValue = $dateTime->add($oneDayOffset)->format('Y-m-d H:i:s');
         }
 

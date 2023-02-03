@@ -132,10 +132,8 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     }
 
     if (isset($_POST['dat_all_day'])) {
-        $midnightDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
-        $_POST['date_from_time']        = $midnightDateTime->format($gSettingsManager->getString('system_time'));
-        $_POST['date_to_time']          = $midnightDateTime->format($gSettingsManager->getString('system_time'));
-        $_POST['date_deadline_time']    = $midnightDateTime->format($gSettingsManager->getString('system_time'));
+        $_POST['date_from_time']        = '00:00';
+        $_POST['date_to_time']          = '00:00';
         $date->setValue('dat_all_day', 1);
     } else {
         $date->setValue('dat_all_day', 0);
@@ -228,26 +226,10 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         $_POST['dat_additional_guests'] = 0;
     }
 
-    if ($_POST['date_registration_possible'] == 1) {
-        if (strlen($_POST['date_deadline_time']) === 0) {
-            $midnightDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
-            $_POST['date_deadline_time'] = $midnightDateTime->format($gSettingsManager->getString('system_time'));
-        }
-
-        $deadlineDateTime = \DateTime::createFromFormat($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'), $_POST['date_deadline'].' '.$_POST['date_deadline_time']);
-        if (!$deadlineDateTime) {
-            $deadlineDateTime = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $_POST['date_deadline']);
-        }
-
-        if (!$deadlineDateTime || $deadlineDateTime > $startDateTime) {
-            $date->setValue('dat_deadline', null);
-        } else {
-            $date->setValue('dat_deadline', $deadlineDateTime->format('Y-m-d H:i:s'));
-        }
-
-        // now write date and time with database format to date object
+    if ($_POST['date_registration_possible'] == 1 && (string) $_POST['date_deadline'] !== '') {
+        $_POST['dat_deadline'] = $_POST['date_deadline'].' '.((string) $_POST['date_deadline_time'] === '' ? '00:00' : $_POST['date_deadline_time']);
     } else {
-        $date->setValue('dat_deadline', null);
+        $_POST['dat_deadline'] = null;
     }
 
     if (isset($_POST['adm_event_participation_right'])) {
