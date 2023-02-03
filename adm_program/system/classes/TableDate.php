@@ -290,9 +290,12 @@ class TableDate extends TableAccess
                 $format = 'Y-m-d';
             }
 
-            // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
-            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $this->dbColumns['dat_end']);
-            $oneDayOffset = new \DateInterval('P1D');
+            // for full day events the end date is always set back 1 day
+            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $this->dbColumns['dat_end']);
+            if(!$dateTime) {
+                $dateTime = DateTime::createFromFormat('Y-m-d H:i', $this->dbColumns['dat_end']);
+            }
+            $oneDayOffset = new DateInterval('P1D');
             $value = $dateTime->sub($oneDayOffset)->format($format);
         } elseif ($columnName === 'dat_description') {
             if (!isset($this->dbColumns['dat_description'])) {
@@ -308,7 +311,7 @@ class TableDate extends TableAccess
 
         if ($format !== 'database') {
             if ($columnName === 'dat_country' && $value) {
-                // beim Land die sprachabhaengige Bezeichnung auslesen
+                // read out the language-dependent designation for the country
                 $value = $gL10n->getCountryName($value);
             } elseif ($columnName === 'cat_name') {
                 // if text is a translation-id then translate it
