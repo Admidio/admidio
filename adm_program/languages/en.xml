@@ -540,7 +540,7 @@
   <string name="SYS_ATTACHMENT">Attachment</string>
   <string name="SYS_ATTACHMENT_ONE">1 attachment</string>
   <string name="SYS_ATTACHMENT_SIZE">Maximum size of e-mail attachments</string>
-  <string name="SYS_ATTACHMENT_SIZE_DESC">Users can only attach files where the file size is less than the value specified here. If there is 0 here, no attachments are possible in the e-mail module. (Default: 1MB)</string>
+  <string name="SYS_ATTACHMENT_SIZE_DESC">Users can only attach files where the file size is less than the value specified here. If there is 0 here, no attachments are possible in the e-mail module. (Default: 5MB)</string>
   <string name="SYS_ATTACHMENT_TO_LARGE">E-mail attachment upload error.\nFile size is most likely to large!</string>
   <string name="SYS_ATTACHMENTS_VAR">#VAR1# attachments</string>
   <string name="SYS_AUTO_DETECT">Auto-detect</string>

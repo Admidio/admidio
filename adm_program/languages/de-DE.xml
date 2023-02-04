@@ -540,7 +540,7 @@
   <string name="SYS_ATTACHMENT">Anhang</string>
   <string name="SYS_ATTACHMENT_ONE">1 Anhang</string>
   <string name="SYS_ATTACHMENT_SIZE">Maximale Dateigröße für Anhänge</string>
-  <string name="SYS_ATTACHMENT_SIZE_DESC">Benutzer:innen können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im E-Mailmodul möglich. (Voreinstellung: 1MB)</string>
+  <string name="SYS_ATTACHMENT_SIZE_DESC">Benutzer:innen können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im E-Mailmodul möglich. (Voreinstellung: 5MB)</string>
   <string name="SYS_ATTACHMENT_TO_LARGE">Ihr Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</string>
   <string name="SYS_ATTACHMENTS_VAR">#VAR1# Anhänge</string>
   <string name="SYS_AUTO_DETECT">Automatische Erkennung</string>
