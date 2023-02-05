@@ -45,7 +45,7 @@ if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
 }
 
 if ($getMode !== 6 || (int) $gSettingsManager->get('enable_dates_module') === 2) {
-    // All functions, except export and login, are only available for logged in users.
+    // All functions, except export and login, are only available for logged-in users.
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
@@ -127,8 +127,6 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     if (strlen($_POST['dat_cat_id']) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('DAT_CALENDAR'))));
         // => EXIT
-    } else {
-        $date->setValue('dat_cat_id', $_POST['dat_cat_id']);
     }
 
     if (isset($_POST['dat_all_day'])) {
@@ -148,10 +146,10 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     // Check valid format of date and time input
     // ------------------------------------------------
 
-    $startDateTime = \DateTime::createFromFormat('Y-m-d H:i', $_POST['date_from'].' '.$_POST['date_from_time']);
+    $startDateTime = DateTime::createFromFormat('Y-m-d H:i', $_POST['date_from'].' '.$_POST['date_from_time']);
     if (!$startDateTime) {
         // Error: now check if date format or time format was wrong and show message
-        $startDateTime = \DateTime::createFromFormat('Y-m-d', $_POST['date_from']);
+        $startDateTime = DateTime::createFromFormat('Y-m-d', $_POST['date_from']);
 
         if (!$startDateTime) {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), 'YYYY-MM-DD')));
@@ -162,7 +160,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         }
     } else {
         // now write date and time with database format to date object
-        $date->setValue('dat_begin', $startDateTime->format('Y-m-d H:i:s'));
+        $_POST['dat_begin'] = $_POST['date_from'].' '.$_POST['date_from_time'];
     }
 
     // if date-to is not filled then take date-from
@@ -173,11 +171,11 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         $_POST['date_to_time'] = $_POST['date_from_time'];
     }
 
-    $endDateTime = \DateTime::createFromFormat('Y-m-d H:i', $_POST['date_to'].' '.$_POST['date_to_time']);
+    $endDateTime = DateTime::createFromFormat('Y-m-d H:i', $_POST['date_to'].' '.$_POST['date_to_time']);
 
     if (!$endDateTime) {
         // Error: now check if date format or time format was wrong and show message
-        $endDateTime = \DateTime::createFromFormat('Y-m-d', $_POST['date_to']);
+        $endDateTime = DateTime::createFromFormat('Y-m-d', $_POST['date_to']);
 
         if (!$endDateTime) {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), 'YYYY-MM-DD')));
@@ -188,7 +186,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         }
     } else {
         // now write date and time with database format to date object
-        $date->setValue('dat_end', $endDateTime->format('Y-m-d H:i:s'));
+        $_POST['dat_end'] = $_POST['date_to'].' '.$_POST['date_to_time'];
     }
 
     // DateTo should be greater than DateFrom (Timestamp must be less)
@@ -373,7 +371,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     try {
         if($_POST['date_registration_possible'] == 1) {
             if ($date->getValue('dat_rol_id') > 0) {
-                // if event exists and you could register to this event then we must check
+                // if event exists, and you could register to this event then we must check
                 // if the data of the role must be changed
                 $role = new TableRoles($gDb, (int)$date->getValue('dat_rol_id'));
 
@@ -435,8 +433,8 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                 $member->startMembership((int)$role->getValue('rol_id'), $user->getValue('usr_id'), true, 2);
             } elseif (!isset($_POST['date_current_user_assigned'])
                 && $gCurrentUser->isMemberOfRole((int)$date->getValue('dat_rol_id'))) {
-                // user does't want to participate as leader -> remove his participation as leader from the event,
-                // dont remove the participation itself!
+                // user doesn't want to participate as leader -> remove his participation as leader from the event,
+                // don't remove the participation itself!
                 $member = new TableMembers($gDb);
                 $member->readDataByColumns(array('mem_rol_id' => (int)$role->getValue('rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
                 $member->setValue('mem_leader', 0);
@@ -541,11 +539,9 @@ if (in_array($getMode, array(3, 4, 7), true)) {
         if ($participationPossible) {
             switch ($getMode) {
                 case 3:  // User attends to the event
-                    if ($participationPossible) {
-                        $member->startMembership((int) $date->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_YES);
-                        $outputMessage = $gL10n->get('DAT_ATTEND_DATE', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));
-                        // => EXIT
-                    }
+                    $member->startMembership((int) $date->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_YES);
+                    $outputMessage = $gL10n->get('DAT_ATTEND_DATE', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));
+                    // => EXIT
                     break;
 
                 case 4:  // User cancel the event
@@ -562,11 +558,9 @@ if (in_array($getMode, array(3, 4, 7), true)) {
                     break;
 
                 case 7:  // User may participate in the event
-                    if ($participationPossible) {
-                        $member->startMembership((int) $date->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_MAYBE);
-                        $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));
-                        // => EXIT
-                    }
+                    $member->startMembership((int) $date->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_MAYBE);
+                    $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));
+                    // => EXIT
                     break;
             }
         }

@@ -122,7 +122,7 @@ $sqlQueries[] = 'UPDATE '.TBL_DATES.'
 
 $sqlQueries[] = 'UPDATE '.TBL_DATES.'
                     SET dat_begin = \''.addDaysToDate(30).' 00:00:00\'
-                      , dat_end   = \''.addDaysToDate(35).' 00:00:00\'
+                      , dat_end   = \''.addDaysToDate(36).' 00:00:00\'
                   WHERE dat_id = 5 ';
 
 $sqlQueries[] = 'UPDATE '.TBL_DATES.'
@@ -132,7 +132,7 @@ $sqlQueries[] = 'UPDATE '.TBL_DATES.'
 
 $sqlQueries[] = 'UPDATE '.TBL_DATES.'
                     SET dat_begin = \''.addDaysToDate(2, true).' 00:00:00\'
-                      , dat_end   = \''.addDaysToDate(2, true).' 00:00:00\'
+                      , dat_end   = \''.addDaysToDate(1, true).' 00:00:00\'
                   WHERE dat_id = 7 ';
 
 $sqlQueries[] = 'UPDATE '.TBL_DATES.'
