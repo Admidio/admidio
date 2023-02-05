@@ -285,19 +285,7 @@ class TableDate extends TableAccess
     {
         global $gL10n;
 
-        if ($columnName === 'dat_end' && (int) $this->dbColumns['dat_all_day'] === 1) {
-            if ($format === '') {
-                $format = 'Y-m-d';
-            }
-
-            // for full day events the end date is always set back 1 day
-            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $this->dbColumns['dat_end']);
-            if(!$dateTime) {
-                $dateTime = DateTime::createFromFormat('Y-m-d H:i', $this->dbColumns['dat_end']);
-            }
-            $oneDayOffset = new DateInterval('P1D');
-            $value = $dateTime->sub($oneDayOffset)->format($format);
-        } elseif ($columnName === 'dat_description') {
+        if ($columnName === 'dat_description') {
             if (!isset($this->dbColumns['dat_description'])) {
                 $value = '';
             } elseif ($format === 'database') {
@@ -472,11 +460,9 @@ class TableDate extends TableAccess
         }
 
         if ($columnName === 'dat_end' && (int) $this->getValue('dat_all_day') === 1) {
-            // for full day appointments, the to date must be incremented by one day
-            // so that the event is correctly taken into account in SQL queries
-            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $newValue);
-            $oneDayOffset = new DateInterval('P1D');
-            $newValue = $dateTime->add($oneDayOffset)->format('Y-m-d H:i:s');
+            // for full day appointments, the end date must be the last second of the day
+            $dateTime = DateTime::createFromFormat('Y-m-d H:i', $newValue);
+            $newValue = $dateTime->format('Y-m-d') . ' 23:59:59';
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);

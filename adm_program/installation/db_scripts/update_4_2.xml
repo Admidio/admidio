@@ -27,5 +27,7 @@
     <step id="230">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_view_members_profiles smallint NOT NULL DEFAULT 0</step>
     <step id="240">UPDATE %PREFIX%_roles SET rol_view_memberships = rol_this_list_view, rol_view_members_profiles = rol_this_list_view</step>
     <step id="250">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_this_list_view</step>
+    <step id="260" database="mysql">UPDATE %PREFIX%_dates SET dat_end = date_sub(dat_end, interval 1 second) WHERE dat_all_day = true</step>
+    <step id="270" database="pgsql">UPDATE %PREFIX%_dates SET dat_end = dat_end - interval '1 second' WHERE dat_all_day = true</step>
     <step>stop</step>
 </update>
