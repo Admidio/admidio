@@ -215,6 +215,10 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
     display: block;
 }
 
+.alert-info {
+    background-color: #abd7e0;
+}
+
 /* show vertical btn group in mobile view */
 @media (max-width: 767px)
 {

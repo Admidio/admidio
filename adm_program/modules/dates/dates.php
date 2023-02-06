@@ -520,16 +520,22 @@ if ($datesResult['totalCount'] === 0) {
                 } else {
                     // Show warning for member of the date role if deadline is exceeded and now no changes are possible anymore
                     if ($participants->isMemberOfEvent($gCurrentUserId)) {
+                        if ($getView !== 'detail') {
+                            $outputButtonParticipation = '<span class="' . $buttonClass . '">' . $iconParticipationStatus . '</span>';
+                        }
                         $attentionDeadline = '
-                            <div class="alert alert-warning" role="alert">
-                                <strong>' .$gL10n->get('DAT_DEADLINE') . '! </strong>' . $gL10n->get('DAT_DEADLINE_ATTENTION') . '
-                            </div>';
+                        <div class="alert alert-info" role="alert">
+                            <span class="'.$buttonClass.'">' . $iconParticipationStatus . ' ' . $buttonText . '</span>
+                            <i class="fas fa-info-circle admidio-info-icon" data-toggle="popover"
+                                data-html="true" data-trigger="hover click" data-placement="auto"
+                                title="' . $gL10n->get('SYS_NOTE') . '" data-content="' . SecurityUtils::encodeHTML($gL10n->get('DAT_DEADLINE_ATTENTION')) . '"></i>
+                        </div>';
                     }
                 }
 
                 // Check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
                 if (!$participants->isMemberOfEvent($gCurrentUserId) && !$date->participationPossible($outputNumberMembers)) {
-                    $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
+                    $attentionDeadline = '<div class="alert alert-info" role="alert">'.$gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE').'</div>';
                     $iconParticipationStatus = '';
                 }
 
