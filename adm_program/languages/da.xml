@@ -8,7 +8,6 @@
   <string name="DAT_ALLOW_USER_COMMENTS">Tillad kommentarer for deltagere</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Deltagere kan kommentere på deres deltagelse. Kommentarerne kan ses via deltagerlisten.</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Tilføj deltagere</string>
-  <string name="SYS_PARTICIPATE">Deltag</string>
   <string name="DAT_ATTEND_DATE">Du tilmeldte dig aktiviteten #VAR1_BOLD# den #VAR2#.</string>
   <string name="DAT_ATTEND_POSSIBLY">Du har lavet en midlertidig tilmelding til aktiviteten #VAR1_BOLD# den #VAR2#.</string>
   <string name="DAT_CALENDAR">Kalender</string>
@@ -288,11 +287,8 @@
   <string name="ORG_FIELD_HIDDEN_DESC">Sædvanligvis er et felt synligt for alle brugere som har tilladelse til at se profilen. Hvis denne indstilling er valgt fra så er det kun brugere med tilladelse til at redigere profilen der kan se dette felt.</string>
   <string name="ORG_FIELD_NOT_DISABLED">Felt kan rettes af brugeren selv.</string>
   <string name="ORG_FIELD_NOT_HIDDEN">Feltet er synligt for alle brugere.</string>
-  <string name="ORG_FIELD_NOT_MANDATORY">Feltet er påkrævet. Det skal udfyldes.</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Feltet vises IKKE under registrering</string>
   <string name="ORG_FIELD_REGISTRATION">Feltet vises ved registrering</string>
-  <string name="ORG_FIELD_REQUIRED">Krævet felt der altid skal udfyldes.</string>
-  <string name="ORG_FIELD_REQUIRED_DESC">Mærket (påkrævet) felter skalaltid udfyldes. Denne regel gælder for registreringer og for regulære profil ændringer udført af brugerne selv.</string>
   <string name="ORG_FIELD_URL_DESC">Den indtastede URL linker til indholdet i profilen som brugeren har skrevet i dette felt. Eventuelt kan wildcardet #user_content# bruges i URL\'en. Dette er indholdet, som brugeren har indtastet i feltet.. \n\nExample:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nLink in profile: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Denne side vises når en bruger er logget ind. Stien skal angives som en relativ sti til Admidio hoved folder.\n(f.eks.: adm_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Denne side vises som standard til Admidio gæster. Stien skal angives som en relativ sti til Admidio hoved folder.\n(f.eks.: adm_program/index.php)</string>
@@ -544,7 +540,7 @@
   <string name="SYS_ATTACHMENT">Vedhæftet:</string>
   <string name="SYS_ATTACHMENT_ONE">1 Vedhæftet</string>
   <string name="SYS_ATTACHMENT_SIZE">Maximum størrelse af vedhæftede filer</string>
-  <string name="SYS_ATTACHMENT_SIZE_DESC">Brugere kan kun vedhæfte filer, hvor filstørrelsen er mindre end den her angivne værdi. Hvis der er 0 her, er der ingen mulighed for vedhæftede filer i e-mail-modulet. (Standard: 1 MB)</string>
+  <string name="SYS_ATTACHMENT_SIZE_DESC">Brugere kan kun vedhæfte filer, hvor filstørrelsen er mindre end den her angivne værdi. Hvis der står 0 her, er der ingen mulighed for vedhæftede filer i e-mail-modulet. (Standard: 5 MB)</string>
   <string name="SYS_ATTACHMENT_TO_LARGE">Filerne vedhæftet e-mailen kunne ikke overføres.\nFilen er sikkert for stor!</string>
   <string name="SYS_ATTACHMENTS_VAR">#VAR1# vedhæftede</string>
   <string name="SYS_AUTO_DETECT">Find pr. automatik</string>
@@ -587,7 +583,7 @@
   <string name="SYS_CHANGE_HISTORY">Ændrings historik</string>
   <string name="SYS_CHANGE_HISTORY_OF">Ændrings historik af #VAR1#</string>
   <string name="SYS_CHANGE_PASSWORD">Skift kodeord</string>
-  <string name="SYS_CHANGED_AT">Sidst gennemgået</string>
+  <string name="SYS_CHANGED_AT">Sidst ændret</string>
   <string name="SYS_CHANGED_BY">Ændret af</string>
   <string name="SYS_CHARACTER_ENCODING">Karakter kodning</string>
   <string name="SYS_CHARACTER_ENCODING_DESC">Karakter kodningen brugt i e-mails sendt af Admidio. Ikke alle e-mail klienter kan håndtere UTF-8. Derfor kan du sætte den til ISO-8859-1 som alternativ.</string>
@@ -694,6 +690,7 @@
   <string name="SYS_DAYS_VAR">#VAR1# Dage</string>
   <string name="SYS_DEACTIVATE_ROLE">Deaktiver rolle</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Hvis du deaktiverer rolle #VAR1_BOLD#, kan rollen ikke længere anvendes og tildeles til objekter. Samtidigt, så er rettighederne for denne rolle ikke længere aktive. Rollen, med alle indstillinger og medlemmer forbliver dog og kan reaktiveres igen.</string>
+  <string name="SYS_DEADLINE_AFTER_START">Tidsfristen for registrering er efter starten på arrangementet.</string>
   <string name="SYS_DEBUG_OUTPUT">Debug resultat</string>
   <string name="SYS_DECIMAL_NUMBER">Decimal nummer</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standard tildeling ved registrering</string>
@@ -737,7 +734,6 @@
   <string name="SYS_DISK_SPACE_ERROR">Brugen af lagerpladsen kunne ikke bestemmes.\n\n Fejlmeddelelse:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Vis viderestilling</string>
   <string name="SYS_DISPLAY_REDIRECT_DESC">Aktiver automatisk viderestilling for links. Brugeren vil blive advaret om at de forlader Admidio siderne når de klikker på et link i linkmodulet. Klikkede links vil åbne efter forud defineret tid. Hvis viderestilling er sat til 0, så vil linket blivet åbnet uden varsel. (Standard: 10 sekunder).</string>
-  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Se rollemedlemskaber</string>
   <string name="SYS_DIVERSE">Alsidig</string>
   <string name="SYS_DO_NOT_EDIT">Rediger ikke</string>
   <string name="SYS_DOCUMENTS_FILES">Dokumenter &amp; Filer</string>
@@ -792,6 +788,7 @@
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Denne e-mail blev sendt via #VAR1# webstedet for #VAR2# organisationen med de e-mail indstillinger der er gemt der.</string>
   <string name="SYS_EMAIL_INVALID">E-mail adressen i feltet #VAR1_BOLD# mangler eller indeholder ugyldige karakterer.</string>
   <string name="SYS_EMAIL_NOT_SEND">E-mailen kunne ikke sendes til #VAR1_BOLD#.\n\nDen følgende fejl opstod:\n#VAR2#</string>
+  <string name="SYS_EMAIL_PARAMETERS_DESC">Du kan bruge følgende pladsholdere i e-mail-teksten til direkte at henvende dig til modtageren af e-mailen. #VAR1# for fornavnet, #VAR2# for efternavnet, #VAR3# for for- og efternavn og #VAR4# for e-mailadressen.</string>
   <string name="SYS_EMAIL_SEND">Mailen er afsendt</string>
   <string name="SYS_EMAIL_TEMPLATE">E-mail skabelon</string>
   <string name="SYS_EMAIL_TEMPLATE_DESC">Her kan du vælge en HTML-skabelonfil fra mappen #VAR1_BOLD#. Når du sender en e-mail, kopieres indholdet af denne fil til e-mailen, og de følgende variabler erstattes: #afsender#, #meddelelse#, #modtagere#, #organisationsnavn#, #organisation_kortnavn#, #organisation_website#. For mere information om brug af e-mail-skabeloner, se #VAR2# dokumentation #VAR3#.</string>
@@ -948,6 +945,7 @@
   <string name="SYS_LANGUAGE">Sprog</string>
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Mangler dit sprog, vil du hjælpe med at oversætte tekster eIler forbedre allerede eksisterende oversættelser? Så tag et kig på #VAR1#Wiki siden for  Admidio#VAR2# for at se hvordan du kan hjælpe med oversættelser.</string>
   <string name="SYS_LAST_EDITED_BY">Sidst redigeret af #VAR1# den #VAR2#</string>
+  <string name="SYS_LAST_LOGIN_ON">Sidste login den #VAR1# klokken #VAR2#</string>
   <string name="SYS_LASTNAME">Efternavn</string>
   <string name="SYS_LATER">Senere</string>
   <string name="SYS_LAYOUT">Layout</string>
@@ -989,7 +987,6 @@
   <string name="SYS_MAKE_FORMER">En brugers status kan ændres til tidligere medlem. Dette vil bevare al bruger information inklusivt rolle medlemskab til senere brug.</string>
   <string name="SYS_MALE">Hankøn</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Nye registreringer af brugere kan listes, godkendes eller afvist her.</string>
-  <string name="SYS_MANDATORY_FIELD">Krævet felt</string>
   <string name="SYS_MAP">Kort</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Viser placeringen på Google Maps. Gaden, postnummer, by og land overføres til Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Viser en rute fra dit eget bopæl til denne brugers placering på Google Maps. Gaden, postnummer, by og land overføres til Google.</string>
@@ -1043,6 +1040,10 @@
   <string name="SYS_MOVE_VAR">‎Flytte #VAR1#‎</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Flere modtagere</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-mails til flere modtagere indeholder alle modtagere i BCC feltet. Dette sikrer at ingen kan se e-mail adresserne til de andre modtagere. Men, (TIL) feltet skal også udfyldes. Denne indstilling kan bruges til at definere hvad der skal stå i modtgerens (TIL) felt. Det kan være en skjult værdi som \"Skjulte modtagere\", men dette skaber problemer hos nogen udbydere af e-mail tjenester. Alternativt kan modtager feltet (TIL) udfyldes med administratorens afsender adresse fra System meddelelserne. Fodnote: Alle emails til flere modtagere bliver da også sendt til den e-mail adresse der står i (TIL) feltet. (Standard: Afsender)</string>
+  <string name="SYS_MAIL_SENDING_MODE">E-mail afsendelsestilstand</string>
+  <string name="SYS_MAIL_SENDING_MODE_DESC">I tilstanden \'Samlet\' kombineres e-mails til flere modtagere. En e-mail modtager derefter et konfigureret antal modtagere i feltet TIL eller BCC. Dette er nyttigt, hvis hosteren ikke tillader at sende mange e-mails. I \'enkelt\'-tilstand modtager hver modtager en separat e-mail. I denne tilstand kan forskellige pladsholdere med modtagerdata tilføjes til e-mail-teksten.</string>
+  <string name="SYS_MAIL_BULK">Samlet</string>
+  <string name="SYS_MAIL_SINGLE">Enkelt</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">Rollen \'Administrator\' skal have mindst ét medlem tildelt til denne rolle.</string>
   <string name="SYS_MYLIST_CONDITION_DESC">Her kan du definere betingelser for hvert felt i din liste. Dette vil yderligere begrænse de bestemte medlemmer af den valgte rolle med dine betingelser.</string>
   <string name="SYS_NAME">Navn</string>
@@ -1080,6 +1081,7 @@
   <string name="SYS_NO_VALID_RECIPIENTS">De valgte roller og brugere har ingen gyldige e-mail adresser. Derfor kan der ikke sendes e-mail til disse.</string>
   <string name="SYS_NOBODY">Ingen</string>
   <string name="SYS_NONE">Ingen</string>
+  <string name="SYS_NOT_AT_REGISTRATION">Ikke ved registrering</string>
   <string name="SYS_NOT_EMPTY">Ikke tom</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Du er ikke medlem af organisationen #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Venligst anvend et validt nummer som grundlag for feltet #VAR1_BOLD#.</string>
@@ -1103,6 +1105,7 @@
   <string name="SYS_ON">Tændt</string>
   <string name="SYS_ONE_TIME">Engangs</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Online medlemsskabs administration</string>
+  <string name="SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE">Kun ved registrering og egen profil</string>
   <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">Denne præference kan kun indstilles af moderorganisationen.</string>
   <string name="SYS_OPERATING_SYSTEM">Operativ system</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Modsat relation</string>
@@ -1116,6 +1119,8 @@
   <string name="SYS_PAGE_NEXT">Næste</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# og #VAR2#</string>
   <string name="SYS_PARTICIPANTS">Medlemmer</string>
+  <string name="SYS_PARTICIPATE">Deltag</string>
+  <string name="SYS_PARTICIPATE_QUESTION">Deltag?</string>
   <string name="SYS_PARTICIPATION_INFORMATION">Deltager information</string>
   <string name="SYS_PARTICIPATION_STATUS">Deltager status</string>
   <string name="SYS_PASSWORD">Kodeord</string>
@@ -1200,10 +1205,10 @@
   <string name="SYS_REMOVE_USER_DESC">Ved at vælge #VAR1_BOLD#, vil alle data blive slettet og denne information vil ikke være tilgængelig mere.</string>
   <string name="SYS_REPEAT">Gentag</string>
   <string name="SYS_REPLACE">Udskift</string>
-  <string name="SYS_REQUIRED_FIELDS">Krævede felter</string>
+  <string name="SYS_REQUIRED_INPUT">Påkrævet indtastning</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">‎Du er allerede logget på systemet. Det er ikke nødvendigt at anmode om en ny adgangskode.‎</string>
   <string name="SYS_RESTRICTIONS">Begrænsninger</string>
-  <string name="SYS_RIGHT_ALL_LISTS_VIEW">Vis alle medlemskabs lister for alle roller</string>
+  <string name="SYS_RIGHT_ALL_LISTS_VIEW">Se medlemslister over alle roller og alle medlemsprofiler</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Administrer meddelelser</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Organiser og tildel registreringer</string>
   <string name="SYS_RIGHT_ASSIGN_ROLES">Organiser og tildel roller</string>
@@ -1219,7 +1224,6 @@
   <string name="SYS_RIGHT_MAIL_TO_ALL">Send e-mails til alle roller</string>
   <string name="SYS_RIGHT_PHOTOS">Overfør og rediger billeder</string>
   <string name="SYS_RIGHT_PROFILE">Rediger egen profil</string>
-  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Denne indstilling styrer, hvilke brugere der har ret til at få vist forskellige lister og de enkelte medlemmers individuelle brugerprofiler. Men, rolle rettigheden #VAR1_BOLD# ligger dog stadig over denne indstilling.</string>
   <string name="SYS_RIGHT_WEBLINKS">Administrer weblink</string>
   <string name="SYS_ROLE">Rolle</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">På denne side kan du konfigurere, hvem der kan se mappen #VAR1_BOLD#, downloade filer eller uploade filer. Tilladelserne arves til alle undermapper, og eksisterende tilladelser i undermapper overskrives. Kun roller med adgang til overordnet mappe kan vælges. Administratorer har alle tilladelser til mappen.</string>
@@ -1439,8 +1443,13 @@
   <string name="SYS_VARIOUS_ROLES">Diverse roller</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Forskellige bekendtskaber</string>
   <string name="SYS_VERSION">Version</string>
+  <string name="SYS_VERSION_TO_OLD">Din nuværende databaseversion er #VAR1#. Desværre er det ikke muligt at opdatere til #VAR2# med denne version.\n\nInstaller venligst Admidio 4.1 først og opdater derefter til Admidio #VAR2#.</string>
   <string name="SYS_VIEW">Vis</string>
   <string name="SYS_VIEW_PICTURE_FULL_SIZED">Vis fuld størrelse billede</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Se rollemedlemskaber</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Med denne indstilling kan du definere, hvem der kan se medlemmerne af denne rolle. Brugeren kan se rollemedlemskabet i den respektive persons profil og i lister for rollen. Denne indstilling tillader ikke adgang til rollemedlemsprofilen. På lister vises kun navn og fornavn. Rollen til højre #VAR1_BOLD# tilsidesætter denne indstilling.</string>
+  <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">Se profiler af rollemedlemmer</string>
+  <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC">Denne indstilling kan bruges til at definere, hvem der kan se profilerne for medlemmerne af denne rolle. Brugeren kan ringe til den respektive persons profil og se alle gemte kolonner i lister for rollen. Rollen til højre #VAR1_BOLD# tilsidesætter denne indstilling.</string>
   <string name="SYS_VISIBLE">Synlig</string>
   <string name="SYS_VISIBLE_FOR">Synlig for</string>
   <string name="SYS_VISIBLE_TO_USERS">#VAR1# synlig kun for indloggede brugere</string>
