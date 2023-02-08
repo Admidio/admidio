@@ -1438,7 +1438,7 @@
   <string name="SYS_UTF16LE">UTF-16LE</string>
   <string name="SYS_UTF32BE">UTF-32BE</string>
   <string name="SYS_UTF32LE">UTF-32LE</string>
-  <string name="SYS_VALID_FROM" description="Date valid from">Valid starting from</string>
+  <string name="SYS_VALID_FROM" description="Date valid from">Valid from</string>
   <string name="SYS_VALID_TO" description="Date valid to">Valid until</string>
   <string name="SYS_VARIOUS_ROLES">Various roles</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Various relationships</string>
