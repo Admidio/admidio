@@ -4,7 +4,7 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step, com_update_completed)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.2.0', 2, 250, true)
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.2.0', 0, 250, true)
                               , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.2.0', 0, 0, true)
                               , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.2.0', 0, 0, true)
                               , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.2.0', 0, 0, true)
