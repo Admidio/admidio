@@ -141,6 +141,13 @@ function doAdmidioUpdate($installedDbVersion)
     // create ".htaccess" file for folder "adm_my_files"
     $htaccess = new Htaccess(ADMIDIO_PATH . FOLDER_DATA);
 
+    try {
+        // remove compiled templates so new ones will be created with the new version
+        FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/templates', true);
+    } catch (UnexpectedValueException|RuntimeException $e) {
+        // do nothing
+    }
+
     if (!$htaccess->protectFolder()) {
         $gLogger->warning('.htaccess file could not be created!');
     }
