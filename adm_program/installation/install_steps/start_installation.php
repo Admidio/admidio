@@ -162,7 +162,7 @@ $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, false, NULL, false, false, 0, false, 10, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, false, \'fa-mars|SYS_MALE
 fa-venus|SYS_FEMALE
-fa-mars-stroke-v|SYS_DIVERSE\', 0, 0, 0, 0, 11, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+fa-mars-stroke-v|SYS_DIVERSE\', false, false, 0, false, 11, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, false, NULL, true, false, 2, true, 12, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, false, NULL, false, false, 0, false, 13, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdAddidionalData.', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \''.$gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC').'\', true, NULL, false, false, 2, false, 14, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
