@@ -601,20 +601,20 @@ Thüringen', NULL, NULL, false, false, false, 0, true, 6, 1, '2013-11-27T17:50:1
 (7 , '88c73af3-dea9-4d5c-b8d3-b2c743da5b14', 1, 'PHONE', 'PHONE', 'SYS_PHONE', NULL, false, NULL, NULL, NULL, false, false, false, 0, true, 8, 1, '2012-01-08 11:12:05', NULL, NULL),
 (8 , '6d85e436-4edd-4d7d-b9d7-df17ea4de1fb', 1, 'PHONE', 'MOBILE', 'SYS_MOBILE', NULL, false, NULL, NULL, NULL, false, false, false, 0, true, 9, 1, '2012-01-08 11:12:05', NULL, NULL),
 (9 , 'ba722e5a-843f-4b0c-8083-0a2db1e85630', 1, 'PHONE', 'FAX', 'SYS_FAX', NULL, false, NULL, NULL, NULL, false, false, false, 0, true, 10, 1, '2012-01-08 11:12:05', NULL, NULL),
-(10, 'f3dca1e4-d439-4501-967e-e87545060b03', 1, 'DATE', 'BIRTHDAY', 'SYS_BIRTHDAY', false, NULL, NULL, NULL, NULL, false, false, false, 0, true, 11, 1, '2012-01-08 11:12:05', NULL, NULL),
+(10, 'f3dca1e4-d439-4501-967e-e87545060b03', 1, 'DATE', 'BIRTHDAY', 'SYS_BIRTHDAY', NULL, false, NULL, NULL, NULL, false, false, false, 0, true, 11, 1, '2012-01-08 11:12:05', NULL, NULL),
 (11, '944252e6-7275-42bd-9d7a-03ff294080fb', 1, 'RADIO_BUTTON', 'GENDER', 'SYS_GENDER', NULL, false, 'fa-mars|SYS_MALE
 fa-venus|SYS_FEMALE
 fa-mars-stroke-v|SYS_DIVERSE', NULL, NULL, false, false, false, 0, true, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
 (12, '09556bd3-0bc5-4e97-800a-4ed347f6327e', 1, 'EMAIL', 'EMAIL', 'SYS_EMAIL', NULL, false, NULL, NULL, NULL, true, false, false, 2, true, 13, 1, '2012-01-08 11:12:05', NULL, NULL),
 (13, '627c57a6-f17b-44df-9d31-3d668634eb97', 1, 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, false, NULL, NULL, NULL, false, false, false, 0, true, 14, 1, '2012-01-08 11:12:05', NULL, NULL),
 (14, 'd1b9314d-953c-4198-8250-d10f4661abe7', 1, 'CHECKBOX', 'DATA_PROTECTION_PERMISSION', 'SYS_DATA_PROTECTION_PERMISSION', 'SYS_DATA_PROTECTION_PERMISSION_DESC', true, NULL, NULL, NULL, false, false, false, 2, true, 15, 1, '2012-01-08 11:12:05', NULL, NULL),
-(22, '041f1bb5-4305-47d7-8538-c1e7163339a6', 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'INS_FACEBOOK_DESC', NULL, false, 'fab fa-facebook', 'https://www.facebook.com/#user_content#', false, false, false, 0, false, 1, 1, '2012-01-08 11:11:40', NULL, NULL),
-(16, '37d17c5a-f134-4002-b25d-59ec671dc946', 2, 'TEXT', 'ICQ', 'INS_ICQ', 'INS_ICQ_DESC', NULL, false, 'icq.png', 'https://www.icq.com/people/#user_content#', false, false, false, 0, false, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
-(18, 'f4d0eca5-8a8c-4805-9379-be9d2e824a89', 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'INS_SKYPE_DESC', NULL, false, 'fab fa-skype', NULL, false, false, false, 0, false, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
-(23, '30d0f751-7b38-4704-b042-cf6fbe2f447d', 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'INS_TWITTER_DESC', NULL, false, 'fab fa-twitter', 'https://twitter.com/#user_content#', false, false, false, 0, false, 4, 1, '2012-01-08 11:11:40', NULL, NULL),
-(24, '1b2045a6-bae3-4948-91fa-f0e669c488b4', 2, 'TEXT', 'XING', 'INS_XING', 'INS_XING_DESC', NULL, false, 'fab fa-xing', 'https://www.xing.com/profile/#user_content#', false, false, false, 0, false, 5, 1, '2012-01-08 11:11:40', NULL, NULL),
+(22, '041f1bb5-4305-47d7-8538-c1e7163339a6', 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'INS_FACEBOOK_DESC', false, NULL, 'fab fa-facebook', 'https://www.facebook.com/#user_content#', false, false, false, 0, false, 1, 1, '2012-01-08 11:11:40', NULL, NULL),
+(16, '37d17c5a-f134-4002-b25d-59ec671dc946', 2, 'TEXT', 'ICQ', 'INS_ICQ', 'INS_ICQ_DESC', false, NULL, 'icq.png', 'https://www.icq.com/people/#user_content#', false, false, false, 0, false, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
+(18, 'f4d0eca5-8a8c-4805-9379-be9d2e824a89', 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'INS_SKYPE_DESC', false, NULL, 'fab fa-skype', NULL, false, false, false, 0, false, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
+(23, '30d0f751-7b38-4704-b042-cf6fbe2f447d', 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'INS_TWITTER_DESC', false, NULL, 'fab fa-twitter', 'https://twitter.com/#user_content#', false, false, false, 0, false, 4, 1, '2012-01-08 11:11:40', NULL, NULL),
+(24, '1b2045a6-bae3-4948-91fa-f0e669c488b4', 2, 'TEXT', 'XING', 'INS_XING', 'INS_XING_DESC', false, NULL, 'fab fa-xing', 'https://www.xing.com/profile/#user_content#', false, false, false, 0, false, 5, 1, '2012-01-08 11:11:40', NULL, NULL),
 (20, '89b33bc0-913a-404c-9899-e53ad5080fec', 8, 'NUMBER', 'MEMBERSHIP_NUMBER', 'DDT_PRO_MEMBERSHIP_NUMBER', NULL, false, NULL, NULL, NULL, false, true, false, 0, false, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
-(21, '15b324bc-29d8-4b79-bee9-10072b8d7489', 8, 'TEXT', 'FAVORITE_COLOR', 'DDT_PRO_FAVORITE_COLOR', 'DDT_PRO_FAVORITE_COLOR_CONTENT', NULL, false, NULL, NULL, false, false, false, 0, false, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
+(21, '15b324bc-29d8-4b79-bee9-10072b8d7489', 8, 'TEXT', 'FAVORITE_COLOR', 'DDT_PRO_FAVORITE_COLOR', 'DDT_PRO_FAVORITE_COLOR_CONTENT', false, NULL, NULL, NULL, false, false, false, 0, false, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
 
 
 --
@@ -666,8 +666,8 @@ INSERT INTO %PREFIX%_announcements (ann_id, ann_uuid, ann_cat_id, ann_headline, 
 --
 
 INSERT INTO %PREFIX%_category_report (crt_id, crt_org_id, crt_name, crt_col_fields, crt_selection_role, crt_selection_cat, crt_number_col) VALUES
-(1, 1, 'SYS_GENERAL_ROLE_ASSIGNMENT', 'p2,p1,p3,p5,r1', NULL, NULL, 0),
-(2, 2, 'SYS_GENERAL_ROLE_ASSIGNMENT', 'p2,p1,p3,p5,r6', NULL, NULL, 0);
+(1, 1, 'SYS_GENERAL_ROLE_ASSIGNMENT', 'p2,p1,p3,p5,r1', NULL, NULL, false),
+(2, 2, 'SYS_GENERAL_ROLE_ASSIGNMENT', 'p2,p1,p3,p5,r6', NULL, NULL, false);
 
 
 --
