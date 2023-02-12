@@ -3,7 +3,7 @@
     <step id="1">ALTER TABLE %PREFIX%_components ADD COLUMN com_update_completed boolean NOT NULL DEFAULT true</step>
     <step id="5">UPDATE %PREFIX%_components SET com_update_completed = false WHERE com_name_intern = 'CORE'</step>
     <step id="10" database="mysql">UPDATE %PREFIX%_preferences INNER JOIN %PREFIX%_roles ON rol_administrator = true SET prf_value = rol_uuid WHERE prf_name = 'system_notifications_role'</step>
-    <step id="20" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = rol_uuid FROM %PREFIX%_preferences WHERE prf_name = 'system_notifications_role' AND rol_administrator = true</step>
+    <step id="20" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = rol_uuid FROM %PREFIX%_roles WHERE prf_name = 'system_notifications_role' AND rol_administrator = true</step>
     <step id="30" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_bcc_count' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_number_recipients'</step>
     <step id="40" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_bcc_count' AND pr1.prf_name = 'mail_number_recipients'</step>
     <step id="50">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_bcc_count'</step>
@@ -19,7 +19,8 @@
     <step id="150">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_default_value varchar(100)</step>
     <step id="160">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_regex varchar(100)</step>
     <step id="170">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_required_input smallint NOT NULL DEFAULT 0</step>
-    <step id="180">UPDATE %PREFIX%_user_fields SET usf_required_input = usf_mandatory</step>
+    <step id="180" database="mysql">UPDATE %PREFIX%_user_fields SET usf_required_input = usf_mandatory</step>
+    <step id="185" database="pgsql">UPDATE %PREFIX%_user_fields SET usf_required_input = usf_mandatory::int</step>
     <step id="190">ALTER TABLE %PREFIX%_user_fields DROP COLUMN usf_mandatory</step>
     <step id="200">UPDATE %PREFIX%_user_fields SET usf_required_input = 2 WHERE usf_name_intern = 'EMAIL' AND usf_required_input = 0</step>
     <step id="210">UPDATE %PREFIX%_user_fields SET usf_required_input = 2 WHERE usf_name_intern = 'DATA_PROTECTION_PERMISSION'</step>
