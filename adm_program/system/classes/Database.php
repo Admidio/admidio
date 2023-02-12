@@ -489,7 +489,7 @@ class Database
 
             foreach ($columnsList as $properties) {
                 $props = array(
-                    'serial'   => str_contains($properties['column_default'], 'nextval'),
+                    'serial'   => str_contains((string) $properties['column_default'], 'nextval'),
                     'null'     => $properties['is_nullable'] === 'YES',
                     'key'      => null,
                     'default'  => $properties['column_default'],
