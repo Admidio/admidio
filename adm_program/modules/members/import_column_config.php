@@ -59,7 +59,7 @@ function getColumnAssignmentHtml(array $arrayColumnList, array $arrayCsvColumns)
 
             $html .= '<tbody>
                     <tr class="admidio-group-heading">
-                        <td colspan="4">' . $column['cat_name'] . HtmlForm::getHelpTextIcon($column['cat_tooltip']) . '</td>
+                        <td colspan="4">' . $column['cat_name'] . HtmlForm::getHelpTextIcon((string) $column['cat_tooltip']) . '</td>
                     </tr>
                 </tbody>
                 <tbody>';

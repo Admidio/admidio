@@ -187,7 +187,7 @@ if (isset($folderContent['files'])) {
             2, // Type file
             '<a class="admidio-icon-link" href="' . $fileLink . '"' . $target . '>
                 <i class="fas fa-fw ' . $file->getFontAwesomeIcon() . '" data-toggle="tooltip" title="'.$gL10n->get('SYS_FILE').'"></i></a>',
-            '<a href="' . $fileLink . '"' . $target . '>'. $file->getValue('fil_name'). '</a>'.HtmlForm::getHelpTextIcon($file->getValue('fil_description'), 'SYS_DESCRIPTION'),
+            '<a href="' . $fileLink . '"' . $target . '>'. $file->getValue('fil_name'). '</a>'.HtmlForm::getHelpTextIcon((string) $file->getValue('fil_description'), 'SYS_DESCRIPTION'),
             $timestamp->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
             round($file->getValue('fil_size') / 1024). ' kB&nbsp;',
             ($file->getValue('fil_counter') !== '') ? $file->getValue('fil_counter') : 0
