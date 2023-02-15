@@ -151,7 +151,7 @@ class MenuNode
 
             foreach ($this->nodeEntries as $menuEntry) {
                 $htmlBadge = '';
-                $htmlIcon = Image::getIconHtml($menuEntry['men_icon'], $menuEntry['men_name']);
+                $htmlIcon = Image::getIconHtml((string) $menuEntry['men_icon'], $menuEntry['men_name']);
 
                 if ($menuEntry['badge_count'] > 0) {
                     $htmlBadge = '<span class="badge badge-light">' . $menuEntry['badge_count'] . '</span>';
@@ -167,7 +167,7 @@ class MenuNode
                         <div class="dropdown-menu dropdown-menu-left">';
                     foreach ($menuEntry['sub_items'] as $subMenuEntry) {
                         $htmlSubBadge = '';
-                        $htmlSubIcon = Image::getIconHtml($subMenuEntry['men_icon'], $subMenuEntry['men_name']);
+                        $htmlSubIcon = Image::getIconHtml((string) $subMenuEntry['men_icon'], $subMenuEntry['men_name']);
 
                         if ($subMenuEntry['badge_count'] > 0) {
                             $htmlSubBadge = '<span class="badge badge-light">' . $subMenuEntry['badge_count'] . '</span>';
