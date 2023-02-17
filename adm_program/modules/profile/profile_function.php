@@ -133,38 +133,29 @@ if ($getMode === 1) {
         exit($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    $formatedStartDate = '';
-    $formatedEndDate   = '';
-
     // Check das Beginn Datum
-    $startDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $postMembershipStart);
+    $startDate = \DateTime::createFromFormat('Y-m-d', $postMembershipStart);
     if ($startDate === false) {
         exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), $gSettingsManager->getString('system_date'))));
-    } else {
-        // Datum formatiert zurueckschreiben
-        $formatedStartDate = $startDate->format('Y-m-d');
     }
 
     // Falls gesetzt wird das Enddatum gecheckt
     if ($postMembershipEnd !== '') {
-        $endDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $postMembershipEnd);
+        $endDate = \DateTime::createFromFormat('Y-m-d', $postMembershipEnd);
         if ($endDate === false) {
             exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), $gSettingsManager->getString('system_date'))));
-        } else {
-            // Datum formatiert zurueckschreiben
-            $formatedEndDate = $endDate->format('Y-m-d');
         }
 
         // If start-date is later/bigger or on same day than end-date we show an error
-        if ($formatedStartDate > $formatedEndDate) {
+        if ($startDate > $endDate) {
             exit($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
         }
     } else {
-        $formatedEndDate = DATE_MAX;
+        $postMembershipEnd = DATE_MAX;
     }
 
     // save role membership
-    $user->editRoleMembership($member->getValue('mem_id'), $formatedStartDate, $formatedEndDate);
+    $user->editRoleMembership($member->getValue('mem_id'), $postMembershipStart, $postMembershipEnd);
 
     echo 'success';
 }
