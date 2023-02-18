@@ -48,7 +48,7 @@ if ($gCurrentUser->hasRightViewProfile($user)) {
     } else {
         // show photo from database
         if ((int) $gSettingsManager->get('profile_photo_storage') === 0) {
-            if (strlen($user->getValue('usr_photo')) != null) {
+            if ((string) $user->getValue('usr_photo') !== '') {
                 $image = new Image();
                 $image->setImageFromData($user->getValue('usr_photo'));
             } else {
