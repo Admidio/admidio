@@ -465,10 +465,15 @@ class HtmlPage extends \Smarty
         // add translation object
         $this->assign('l10n', $gL10n);
 
-        if ($this->modeInline) {
-            $this->display('index_reduced.tpl');
-        } else {
-            $this->display('index.tpl');
+        try {
+            if ($this->modeInline) {
+                $this->display('index_reduced.tpl');
+            } else {
+                $this->display('index.tpl');
+            }
+        } catch (SmartyException $exception) {
+            echo $exception->getMessage();
+            echo '<br />Please check if the theme folder "<strong>' . $gSettingsManager->getString('theme') . '</strong>" exists within the folder "adm_themes".';
         }
     }
 }
