@@ -298,7 +298,7 @@ $page->addHtml('
                 }
 
                 if($userId === $gCurrentUserId || $gCurrentUser->isAdministrator()) {
-                    $userName .= HtmlForm::getHelpTextIcon($gL10n->get('SYS_LAST_LOGIN_ON', array($gCurrentUser->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $gCurrentUser->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));
+                    $userName .= HtmlForm::getHelpTextIcon($gL10n->get('SYS_LAST_LOGIN_ON', array($user->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $user->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));
                 }
 
                 $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'), $userName);
