@@ -3,7 +3,7 @@
 
 
 # https://hub.docker.com/_/php/tags?page=1&name=-apache-bullseye
-FROM php:8.2.1-apache-bullseye
+FROM php:8.2.3-apache-bullseye
 
 # Build-time metadata as defined at http://label-schema.org
 ARG ADMIDIO_BUILD_DATE
@@ -29,6 +29,7 @@ ENV APACHE_DOCUMENT_ROOT="/opt/app-root/src"
 
 # install package updates and required dependencies
 RUN apt-get update \
+    && apt-get dist-upgrade -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         postfix \
         libpq-dev \
@@ -55,7 +56,7 @@ COPY . ${APACHE_DOCUMENT_ROOT}/
 WORKDIR ${APACHE_DOCUMENT_ROOT}
 
 RUN mkdir ${APACHE_DOCUMENT_ROOT}/provisioning && \
-    cp -a ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/adm_themes ${APACHE_DOCUMENT_ROOT}/adm_my_files ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    cp -a ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/adm_themes ${APACHE_DOCUMENT_ROOT}/adm_my_files ${APACHE_DOCUMENT_ROOT}/adm_program ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
     rm -rf ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/adm_themes ${APACHE_DOCUMENT_ROOT}/adm_my_files
 
 
