@@ -1,5 +1,6 @@
 <button
     id="{$id}"
+    name="{$id}"
     {if $link}onclick="self.location.href='{$link}'" {/if}
     {foreach $data.attributes as $itemvar}
         {$itemvar@key}="{$itemvar}"
