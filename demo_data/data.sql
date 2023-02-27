@@ -600,7 +600,6 @@ Thüringen', NULL, NULL, false, false, false, 0, true, 6, 1, '2013-11-27T17:50:1
 (6 , '75dcb582-231f-4b24-81fc-5cdce79a3069', 1, 'TEXT', 'COUNTRY', 'SYS_COUNTRY', NULL, false, NULL, NULL, NULL, false, false, false, 0, true, 7, 1, '2012-01-08 11:12:05', NULL, NULL),
 (7 , '88c73af3-dea9-4d5c-b8d3-b2c743da5b14', 1, 'PHONE', 'PHONE', 'SYS_PHONE', NULL, false, NULL, NULL, NULL, false, false, false, 0, true, 8, 1, '2012-01-08 11:12:05', NULL, NULL),
 (8 , '6d85e436-4edd-4d7d-b9d7-df17ea4de1fb', 1, 'PHONE', 'MOBILE', 'SYS_MOBILE', NULL, false, NULL, NULL, NULL, false, false, false, 0, true, 9, 1, '2012-01-08 11:12:05', NULL, NULL),
-(9 , 'ba722e5a-843f-4b0c-8083-0a2db1e85630', 1, 'PHONE', 'FAX', 'SYS_FAX', NULL, false, NULL, NULL, NULL, false, false, false, 0, true, 10, 1, '2012-01-08 11:12:05', NULL, NULL),
 (10, 'f3dca1e4-d439-4501-967e-e87545060b03', 1, 'DATE', 'BIRTHDAY', 'SYS_BIRTHDAY', NULL, false, NULL, NULL, NULL, false, false, false, 0, true, 11, 1, '2012-01-08 11:12:05', NULL, NULL),
 (11, '944252e6-7275-42bd-9d7a-03ff294080fb', 1, 'RADIO_BUTTON', 'GENDER', 'SYS_GENDER', NULL, false, 'fa-mars|SYS_MALE
 fa-venus|SYS_FEMALE
@@ -785,7 +784,6 @@ INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, l
 (12, 2, 3, 7, NULL, NULL, NULL),
 (13, 2, 4, 8, NULL, NULL, NULL),
 (14, 2, 5, 12, NULL, NULL, NULL),
-(15, 2, 6, 9, NULL, NULL, NULL),
 (20, 3, 1, 1, NULL, 'ASC', NULL),
 (21, 3, 2, 2, NULL, 'ASC', NULL),
 (22, 3, 3, 10, NULL, NULL, NULL),
@@ -829,7 +827,6 @@ INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, l
 (109, 10, 3, 7, NULL, NULL, NULL),
 (110, 10, 4, 8, NULL, NULL, NULL),
 (111, 10, 5, 12, NULL, NULL, NULL),
-(112, 10, 6, 9, NULL, NULL, NULL),
 (113, 11, 1, 1, NULL, 'ASC', NULL),
 (114, 11, 2, 2, NULL, 'ASC', NULL),
 (115, 11, 3, 10, NULL, NULL, NULL),
