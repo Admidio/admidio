@@ -131,7 +131,7 @@ final class StringUtils
         if (is_array($value)) {
             // call function for every array element
             $value = array_map(self::class . '::strStripTags', $value);
-        } else {
+        } elseif ((string) $value !== '') {
             // remove whitespaces at beginning and end
             $value = trim($value);
             // removes html and php code
