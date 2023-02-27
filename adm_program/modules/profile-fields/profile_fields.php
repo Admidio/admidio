@@ -114,7 +114,7 @@ while ($row = $statement->fetch()) {
         $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'admidio-group-row-'.$categoryId));
         $table->addColumn(
             '<a id="caret_'.$blockId.'" class="admidio-icon-link admidio-open-close-caret"><i class="fas fa-caret-down"></i></a>'.$userField->getValue('cat_name'),
-            array('id' => 'group_'.$blockId, 'colspan' => '9')
+            array('id' => 'group_'.$blockId, 'colspan' => '10')
         );
         $table->addTableBody('id', $blockId);
         $table->addAttribute('class', 'admidio-sortable');
