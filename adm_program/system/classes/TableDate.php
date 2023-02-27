@@ -450,8 +450,8 @@ class TableDate extends TableAccess
                     }
                     $newValue = $category->getValue('cat_id');
                 }
-            } elseif ($columnName === 'dat_deadline') {
-                if((string) $newValue !== '' && !DateTime::createFromFormat('Y-m-d H:i', $newValue)) {
+            } elseif ($columnName === 'dat_deadline' && (string) $newValue !== '') {
+                if(!DateTime::createFromFormat('Y-m-d H:i', $newValue)) {
                     throw new AdmException($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('DAT_DEADLINE'), 'YYYY-MM-DD')));
                 } elseif (strtotime($newValue) > strtotime($this->getValue('dat_begin'))) {
                     throw new AdmException('SYS_DEADLINE_AFTER_START');
