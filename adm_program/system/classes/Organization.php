@@ -286,7 +286,6 @@ class Organization extends TableAccess
         $phoneList->addColumn((int)$gProfileFields->getProperty('PHONE', 'usf_id'));
         $phoneList->addColumn((int)$gProfileFields->getProperty('MOBILE', 'usf_id'));
         $phoneList->addColumn((int)$gProfileFields->getProperty('EMAIL', 'usf_id'));
-        $phoneList->addColumn((int)$gProfileFields->getProperty('FAX', 'usf_id'));
         $phoneList->save();
 
         $contactList = new ListConfiguration($this->db);
