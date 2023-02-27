@@ -158,7 +158,6 @@ $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'COUNTRY\',    \'SYS_COUNTRY\',   NULL, false, NULL, false, false, 0, false, 6,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'PHONE\',      \'SYS_PHONE\',     NULL, false, NULL, false, false, 0, false, 7,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, false, NULL, false, false, 0, false, 8,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'FAX\',        \'SYS_FAX\',       NULL, false, NULL, false, false, 0, false, 9,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, false, NULL, false, false, 0, false, 10, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, false, \'fa-mars|SYS_MALE
 fa-venus|SYS_FEMALE
