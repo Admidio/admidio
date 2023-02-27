@@ -265,7 +265,7 @@ class Email extends PHPMailer
             // all email addresses will be attached as BCC
             while ($row = $statement->fetch()) {
                 if (StringUtils::strValidCharacters($row['email'], 'email')) {
-                    $this->addRecipient($row['email'], $row['firstname'], $row['lastname']);
+                    $this->addRecipient($row['email'], (string) $row['firstname'], (string) $row['lastname']);
                     ++$numberRecipientsAdded;
                 }
             }
