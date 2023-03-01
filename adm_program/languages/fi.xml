@@ -1312,8 +1312,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Palvelimen asetukset eivät salli tiedostojen lataamista.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Aseta kansioiden käyttöoikeudet</string>
   <string name="SYS_SETTINGS">Asetukset</string>
-  <string name="SYS_SHOW_ALL_USERS">Näytä kaikki käyttäjät</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Jos tämä asetus on asetettu, entiset jäsenet sekä muiden organisaatioiden jäsenet näytetään tämän organisaation aktiivisten jäsenten lisäksi.</string>
+  <string name="SYS_SHOW_ALL">Näytä kaikki käyttäjät</string>
+  <string name="SYS_SHOW_ALL_DESC">Jos tämä asetus on asetettu, entiset jäsenet sekä muiden organisaatioiden jäsenet näytetään tämän organisaation aktiivisten jäsenten lisäksi.</string>
   <string name="SYS_SHOW_CALENDAR">Näytä kalenteri</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Kirjautuneille käyttäjille aakkosnumeerinen teksti tulee näkyviin, kun captcha -moduuli aktivoidaan. Annettu teksti on kirjoitettava oikeaan kenttään. Tämän pitäisi estää roskapostittajien lomakkeen väärinkäyttö. (oletus: kyllä)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Näytä entiset jäsenet</string>

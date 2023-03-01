@@ -673,8 +673,8 @@
   <string name="SYS_SERVER">Servidor</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Eestablecer permisos de carpeta</string>
   <string name="SYS_SETTINGS">Ajustes</string>
-  <string name="SYS_SHOW_ALL_USERS">Mostar todo los usuarios</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Si esta opción no está seleccionada, solo serán listados los miembros de esta organización. De lo contrario, serán visibles todos los usuarios de la base de datos.</string>
+  <string name="SYS_SHOW_ALL">Mostar todo los usuarios</string>
+  <string name="SYS_SHOW_ALL_DESC">Si esta opción no está seleccionada, solo serán listados los miembros de esta organización. De lo contrario, serán visibles todos los usuarios de la base de datos.</string>
   <string name="SYS_SHOW_CALENDAR">Mostrar calendario</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Para los usuarios desconectados aparecerá un texto alfanumérico cuando el módulo captcha esté activado. El texto suministrado debe escribirse en el campo apropiado. Esto debería evitar el acceso de los spammers. (Predeterminado: sí)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Muestra a los ex miembros.</string>

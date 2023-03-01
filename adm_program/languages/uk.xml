@@ -1323,8 +1323,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Налаштування сервера не дозволяють завантажувати файли.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Встановити права доступу до папок</string>
   <string name="SYS_SETTINGS">Переваги</string>
-  <string name="SYS_SHOW_ALL_USERS">Показати всіх користувачів</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Якщо цей параметр встановлений, то крім активних членів цієї організації відображаються колишні члени, а також члени інших організацій.</string>
+  <string name="SYS_SHOW_ALL">Показати всіх користувачів</string>
+  <string name="SYS_SHOW_ALL_DESC">Якщо цей параметр встановлений, то крім активних членів цієї організації відображаються колишні члени, а також члени інших організацій.</string>
   <string name="SYS_SHOW_CALENDAR">Відобразити календар</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Для авторизованих користувачів при активації модуля капчі з\'явиться алфавітно-цифровий текст. Наданий текст необхідно ввести у відповідне поле. Це має запобігти зловживанню формою з боку спамерів. (за замовчуванням: так)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Показати колишніх учасників</string>

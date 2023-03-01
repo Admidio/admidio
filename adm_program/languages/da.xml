@@ -1323,8 +1323,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Server indstillinger tillader ikke fil overførsler.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Sæt folder rettigheder</string>
   <string name="SYS_SETTINGS">Indstillinger</string>
-  <string name="SYS_SHOW_ALL_USERS">Vis alle brugere</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Hvis denne indstilling er angivet, vises tidligere medlemmer såvel som medlemmer af andre organisationer ud over de aktive medlemmer af denne organisation.</string>
+  <string name="SYS_SHOW_ALL">Vis alle brugere</string>
+  <string name="SYS_SHOW_ALL_DESC">Hvis denne indstilling er angivet, vises tidligere medlemmer såvel som medlemmer af andre organisationer ud over de aktive medlemmer af denne organisation.</string>
   <string name="SYS_SHOW_CALENDAR">Vis kalender</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For udloggede brugere vises en alfanumerisk tekst, når captcha-modulet er aktiveret. Den medfølgende tekst skal indtastes i det rigtige felt. Dette skal forhindre misbrug af formularen fra spammere. (standard: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Vis tidligere medlemmer</string>

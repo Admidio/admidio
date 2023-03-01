@@ -1323,8 +1323,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
   <string name="SYS_SETTINGS">Einstellungen</string>
-  <string name="SYS_SHOW_ALL_USERS">Alle Benutzer:innen anzeigen</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Bei gesetzter Einstellung werden neben den aktiven Mitgliedern dieser Organisation auch ehemalige Mitglieder, sowie Mitglieder anderer Organisationen angezeigt.</string>
+  <string name="SYS_SHOW_ALL">Alle anzeigen</string>
+  <string name="SYS_SHOW_ALL_DESC">Bei gesetzter Einstellung werden neben den aktiven Mitgliedern dieser Organisation auch ehemalige Mitglieder, sowie Mitglieder anderer Organisationen angezeigt.</string>
   <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Für nicht angemeldete Benutzer:innen wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss die Benutzerin oder der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Zeige ehemalige Mitglieder</string>

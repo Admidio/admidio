@@ -1322,8 +1322,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Server instellingen staan niet toe dat bestanden geüpload worden.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Toegangsrechten map instellen</string>
   <string name="SYS_SETTINGS">Voorkeuren</string>
-  <string name="SYS_SHOW_ALL_USERS">Toon alle gebruikers</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Als deze instelling is ingesteld, worden naast de actieve leden van deze organisatie ook voormalige leden en leden van andere organisaties weergegeven.</string>
+  <string name="SYS_SHOW_ALL">Toon alle gebruikers</string>
+  <string name="SYS_SHOW_ALL_DESC">Als deze instelling is ingesteld, worden naast de actieve leden van deze organisatie ook voormalige leden en leden van andere organisaties weergegeven.</string>
   <string name="SYS_SHOW_CALENDAR">Toon kalender</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Voor niet-ingelogde gebruikers zal een alfanumerieke code weergegeven worden, als de captcha is geactiveerd. Dit moet correct worden ingevoerd in het betreffende veld. Dit is om ervoor te zorgen dat het formulier niet kan worden misbruikt door spammers. (Standaard: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Toon voormalige leden</string>

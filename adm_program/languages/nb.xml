@@ -308,7 +308,7 @@
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Serverinnstillingene tillater ikke filopplastninger</string>
   <string name="SYS_SETTINGS">Preferanser</string>
-  <string name="SYS_SHOW_ALL_USERS">Vi alle brukere</string>
+  <string name="SYS_SHOW_ALL">Vi alle brukere</string>
   <string name="SYS_SHOW_CALENDAR">Vis kalender</string>
   <string name="SYS_SHOW_LIST">Vis liste</string>
   <string name="SYS_SHOW_PROFILE">Vis profil</string>

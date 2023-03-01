@@ -78,7 +78,7 @@ if ($gSettingsManager->getBool('members_show_all_users')) {
     // create filter menu with elements for category
     $filterNavbar = new HtmlNavbar('navbar_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-    $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL_USERS'), $flagShowMembers, array('helpTextIdLabel' => 'SYS_SHOW_ALL_USERS_DESC'));
+    $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL'), $flagShowMembers, array('helpTextIdLabel' => 'SYS_SHOW_ALL_DESC'));
     $filterNavbar->addForm($form->show());
     $page->addHtml($filterNavbar->show());
 }

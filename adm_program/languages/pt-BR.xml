@@ -1165,8 +1165,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">O servidor está configurado para proibir envio de arquivos.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Definir permissões de pasta</string>
   <string name="SYS_SETTINGS">Preferências</string>
-  <string name="SYS_SHOW_ALL_USERS">Exibir todos os usuários</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Se não estiver definida, apenas os membros ativos desta organização serão listados. Caso contrário todos os membros serão listados.</string>
+  <string name="SYS_SHOW_ALL">Exibir todos os usuários</string>
+  <string name="SYS_SHOW_ALL_DESC">Se não estiver definida, apenas os membros ativos desta organização serão listados. Caso contrário todos os membros serão listados.</string>
   <string name="SYS_SHOW_CALENDAR">Exibir calendário</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Para usuários que não estão em sessão, um texto alfanumérico aparecerá se o módulo de CAPTCHA está ativo. O texto precisa ser inserido no campo adequado. Isto deve prevenir que spammers abusem do formulário. (padrão: sim)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Mostrar ex-membros</string>

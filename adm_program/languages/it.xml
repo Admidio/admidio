@@ -1028,8 +1028,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Le impostazioni del server non consentono il caricamento di file.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Imposta i permessi per la cartella</string>
   <string name="SYS_SETTINGS">Preferenze</string>
-  <string name="SYS_SHOW_ALL_USERS">Visualizza tutti gli utenti</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Solo i membri attivi di questa organizzazione saranno elencati se questa opzione non è impostata. Altrimenti saranno elencati tutti gli utenti del database.</string>
+  <string name="SYS_SHOW_ALL">Visualizza tutti gli utenti</string>
+  <string name="SYS_SHOW_ALL_DESC">Solo i membri attivi di questa organizzazione saranno elencati se questa opzione non è impostata. Altrimenti saranno elencati tutti gli utenti del database.</string>
   <string name="SYS_SHOW_CALENDAR">Visualizza calendartio</string>
   <string name="SYS_SHOW_LIST">Visualizza elenco</string>
   <string name="SYS_SHOW_PROFILE">Mostra profilo</string>
