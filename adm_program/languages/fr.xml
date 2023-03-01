@@ -1319,8 +1319,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Les paramètres du serveur n\'autorisent pas les téléchargements de fichiers.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Attribuer des droits aux dossiers</string>
   <string name="SYS_SETTINGS">Paramétrages</string>
-  <string name="SYS_SHOW_ALL_USERS">Afficher tous les membres</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Si ce paramètre est défini, les anciens membres ainsi que les membres d\'autres organisations sont affichés en plus des membres actifs de cette organisation.</string>
+  <string name="SYS_SHOW_ALL">Afficher tous les membres</string>
+  <string name="SYS_SHOW_ALL_DESC">Si ce paramètre est défini, les anciens membres ainsi que les membres d\'autres organisations sont affichés en plus des membres actifs de cette organisation.</string>
   <string name="SYS_SHOW_CALENDAR">Affichage du calendrier</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Pour les utilisateurs qui ne sont pas connectés, un code alphanumérique est affiché dans le formulaire de courriel lorsque Captcha est activé. L\'utilisateur doit le saisir correctement avant d\'envoyer le courriel. Ceci afin de s\'assurer que le formulaire ne peut pas être utilisé à mauvais escient par les spammeurs. (Par défaut : oui)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Afficher les anciens membres</string>

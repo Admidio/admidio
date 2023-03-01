@@ -1269,8 +1269,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Serverinställningar tillåter inte uppladdning av filer.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ange mappbehörigheter</string>
   <string name="SYS_SETTINGS">Inställningar</string>
-  <string name="SYS_SHOW_ALL_USERS">Visa alla användare</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Endast aktiva medlemmar i denna organisation kommer att listas om detta alternativ inte är inställt. Annars listas alla användare av databasen.</string>
+  <string name="SYS_SHOW_ALL">Visa alla användare</string>
+  <string name="SYS_SHOW_ALL_DESC">Endast aktiva medlemmar i denna organisation kommer att listas om detta alternativ inte är inställt. Annars listas alla användare av databasen.</string>
   <string name="SYS_SHOW_CALENDAR">Visa kalender</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">För utloggade användare kommer en alfanumerisk text att visas när captcha-modulen är aktiverad. Den medföljande texten måste anges i rätt fält. Detta bör förhindra missbruk av formuläret av spammare. (standard: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Förändringar</string>

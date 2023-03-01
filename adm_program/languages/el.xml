@@ -1307,8 +1307,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Ρυθμίσεις server που δεν επιτρέπουν την μεταφόρτωση αρχείων.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ορισμός προτιμήσεων φακέλου</string>
   <string name="SYS_SETTINGS">Προτιμήσεις</string>
-  <string name="SYS_SHOW_ALL_USERS">Εμφάνιση όλων των χρηστών</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">Μόνο ενεργά μέλη του συλλόγου θα βρίσκονται στη λίστα όταν αυτή η επιλογή δεν είναι ενεργή. Διαφορετικά όλοι οι χρήστες της βάσης δεδομένων θα βρίσκονται στη λίστα.</string>
+  <string name="SYS_SHOW_ALL">Εμφάνιση όλων των χρηστών</string>
+  <string name="SYS_SHOW_ALL_DESC">Μόνο ενεργά μέλη του συλλόγου θα βρίσκονται στη λίστα όταν αυτή η επιλογή δεν είναι ενεργή. Διαφορετικά όλοι οι χρήστες της βάσης δεδομένων θα βρίσκονται στη λίστα.</string>
   <string name="SYS_SHOW_CALENDAR">Εμφάνιση ημερολογίου</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Για χρήστε εκτός σύνδεσης, ένα αλφαρηθμιτικό κείμενο θα εμφανιστεί όταν η μέθοδος captcha είναι ενεργοποιημένη. Το κείμενο θα πρέπει να εισαχθεί στο αντίστοιχο πεδίο. Αυτό θα αποτρέψει τυχόν εισβολή από spammers. (default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Προβολή πρώην μελών</string>

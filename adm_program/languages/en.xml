@@ -1323,8 +1323,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Server settings do not allow files uploads.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
   <string name="SYS_SETTINGS">Preferences</string>
-  <string name="SYS_SHOW_ALL_USERS">Show all users</string>
-  <string name="SYS_SHOW_ALL_USERS_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
+  <string name="SYS_SHOW_ALL">Show all</string>
+  <string name="SYS_SHOW_ALL_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
   <string name="SYS_SHOW_CALENDAR">Display calendar</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For logged out users an alphanumeric text will appear when captcha module is activated. The provided text has to be entered into the proper field. This should prevent abuse of the form by spammers. (default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Show former members</string>
