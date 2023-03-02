@@ -357,8 +357,8 @@ if ($albumsCount > 0) {
         $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $childPhotoAlbum->getValue('pho_id');
 
         // show album if album is not locked or it has child albums or the user has the photo module edit right
-        if ((is_dir($albumFolder) && $childPhotoAlbum->getValue('pho_locked') == 0)
-        || $childPhotoAlbum->hasChildAlbums() || $gCurrentUser->editPhotoRight()) {
+        if ((is_dir($albumFolder) && $childPhotoAlbum->isVisible())
+        || $childPhotoAlbum->hasChildAlbums()) {
             // Get random image for preview
             $shuffleImage = $childPhotoAlbum->shuffleImage();
 
@@ -383,7 +383,7 @@ if ($albumsCount > 0) {
                             <h5 class="card-title">'.$albumTitle);
             // if user has admin rights for photo module then show some functions
             if ($gCurrentUser->editPhotoRight()) {
-                if ($childPhotoAlbum->getValue('pho_locked') !== 1) {
+                if ((bool) $childPhotoAlbum->getValue('pho_locked') === false) {
                     $htmlLock = '<a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'), 'mode' => 'lock')).'">
                                             <i class="fas fa-lock" data-toggle="tooltip"></i> '.$gL10n->get('PHO_ALBUM_LOCK').'</a>';
                 }

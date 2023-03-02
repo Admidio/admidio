@@ -357,7 +357,7 @@
   <string name="PHO_ALBUM_DELETE">Album löschen</string>
   <string name="PHO_ALBUM_LOCK">Album sperren</string>
   <string name="PHO_ALBUM_LOCK_DESC">Gesperrte Alben können von Gästen und Mitgliedern nicht eingesehen werden. Sie können zum Beispiel ein Album vorübergehen sperren, während Sie gerade alle Bilder des Albums hochladen.</string>
-  <string name="PHO_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Gästen aus diesem Grund nicht angezeigt.</string>
+  <string name="PHO_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Gästen und Mitgliedern aus diesem Grund nicht angezeigt.</string>
   <string name="PHO_ALBUM_UNLOCK">Album entsperren</string>
   <string name="PHO_CAPTION_SIZE">Größe des Bildtextes</string>
   <string name="PHO_CAPTION_SIZE_DESC">Die Größe des Bildtextes wird proportional zur Bildgröße, nach der Formel \"Bildgröße/Devisor\" berechnet. Durch Erhöhung des Devisors verringert sich die Schriftgröße. (Voreinstellung: 40)</string>
