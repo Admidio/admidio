@@ -357,7 +357,7 @@
   <string name="PHO_ALBUM_DELETE">Delete album</string>
   <string name="PHO_ALBUM_LOCK">Lock album</string>
   <string name="PHO_ALBUM_LOCK_DESC">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</string>
-  <string name="PHO_ALBUM_NOT_APPROVED">The album is currently locked and will not be shown to visitors for this reason.</string>
+  <string name="PHO_ALBUM_NOT_APPROVED">The album is currently locked and will not be shown to visitors and members for this reason.</string>
   <string name="PHO_ALBUM_UNLOCK">Unlock album</string>
   <string name="PHO_CAPTION_SIZE">Caption size</string>
   <string name="PHO_CAPTION_SIZE_DESC">The size of the caption is proportional to the image size, calculated by the formula \"Image size / Devisor\". By increasing the devisor, the font size will be reduced. (Default: 40)</string>
