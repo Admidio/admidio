@@ -23,7 +23,7 @@ if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 // => EXIT
 } elseif ((int) $gSettingsManager->get('enable_photo_module') === 2) {
-    // only logged in users can access the module
+    // only logged-in users can access the module
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
@@ -185,13 +185,13 @@ if ($getPhotoUuid !== '') {
 }
 
 // THUMBNAILS
-// Nur wenn uebergebenes Album Bilder enthaelt
+// Only if current album contains images
 if ($photoAlbum->getValue('pho_quantity') > 0) {
     $photoThumbnailTable = '';
     $firstPhotoNr        = 1;
     $lastPhotoNr         = $gSettingsManager->getInt('photo_thumbs_page');
 
-    // Wenn Bild übergeben wurde richtige Albenseite öffnen
+    // Open the correct album page when image number has been set
     if ($getPhotoNr > 0) {
         $firstPhotoNr = (round(($getPhotoNr - 1) / $gSettingsManager->getInt('photo_thumbs_page')) * $gSettingsManager->getInt('photo_thumbs_page')) + 1;
         $lastPhotoNr  = $firstPhotoNr + $gSettingsManager->getInt('photo_thumbs_page') - 1;
@@ -224,7 +224,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
             elseif ((int) $gSettingsManager->get('photo_show_mode') === 2) {
                 $photoThumbnailTable .= '
                         <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $actThumbnail, 'photo_uuid' => $getPhotoUuid)).'"><img
-                            class="rounded" id="img_'.$actThumbnail.'" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" />
+                            class="rounded" id="img_'.$actThumbnail.'" src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" alt="'.$actThumbnail.'" />
                         </a>';
             }
 
@@ -338,7 +338,7 @@ $albumList      = $albumStatement->fetchAll();
 $albumsCount    = $albumStatement->rowCount();
 
 if ($albumsCount > 0) {
-    // if there are photos in the current album and sub albums exists, than show a separator
+    // if there are photos in the current album and a sub albums exists, then show a separator
     if ($photoAlbum->getValue('pho_quantity') > 0) {
         $page->addHtml('<hr />');
     }
@@ -356,7 +356,7 @@ if ($albumsCount > 0) {
         // folder of the album
         $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $childPhotoAlbum->getValue('pho_id');
 
-        // show album if album is not locked or it has child albums or the user has the photo module edit right
+        // show album if album is not locked, or it has child albums or the user has the photo module edit right
         if ((is_dir($albumFolder) && $childPhotoAlbum->isVisible())
         || $childPhotoAlbum->hasChildAlbums()) {
             // Get random image for preview
@@ -424,7 +424,7 @@ if ($albumsCount > 0) {
 
             $page->addHtml('<p class="card-text">' . $childPhotoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $childPhotoAlbum->getValue('pho_photographers') . '</p>');
 
-            // Notice for users with foto edit rights that the folder of the album doesn't exists
+            // Notice for users with foto edit rights that the folder of the album doesn't exist
             if (!is_dir($albumFolder) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight()) {
                 $page->addHtml('<p class="card-text"><div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('PHO_FOLDER_NOT_FOUND').'</div></p>');
             }
@@ -450,8 +450,7 @@ if ($albumsCount > 0) {
     $page->addHtml('</div>');
 }
 
-// Leeres Album
-// Falls das Album weder Fotos noch Unterordner enthaelt
+// Empty album, if the album contains neither photos nor sub-folders
 if ($albumsCount === 0 && ($photoAlbum->getValue('pho_quantity') == 0 || strlen($photoAlbum->getValue('pho_quantity')) === 0)) {  // alle vorhandenen Albumen werden ignoriert
     $page->addHtml($gL10n->get('PHO_NO_ALBUM_CONTENT'));
 }
