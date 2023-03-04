@@ -134,7 +134,9 @@ class Image
      */
     public function delete()
     {
-        imagedestroy($this->imageResource);
+        if(is_object($this->imageResource)) {
+            imagedestroy($this->imageResource);
+        }
         $this->imageResource = null;
         $this->imagePath = '';
     }
