@@ -212,22 +212,24 @@ class CategoryReport
             $number_row_count = 0;
 
             // bestehen Rollen- und/oder Kategorieeinschraenkungen?
-            $rolecatmarker = true;
-            if ($this->arrConfiguration[$this->conf]['selection_role'] != ''
-             || $this->arrConfiguration[$this->conf]['selection_cat'] != '') {
-                $rolecatmarker = false;
+            $roleCategoryMarker = true;
+            if ((string) $this->arrConfiguration[$this->conf]['selection_role'] !== '') {
+                $roleCategoryMarker = false;
                 foreach (explode(',', $this->arrConfiguration[$this->conf]['selection_role']) as $rol) {
-                    if ($user->isMemberOfRole((int) $rol)) {
-                        $rolecatmarker = true;
-                    }
-                }
-                foreach (explode(',', $this->arrConfiguration[$this->conf]['selection_cat']) as $cat) {
-                    if ($this->isMemberOfCategorie($cat, $member)) {
-                        $rolecatmarker = true;
+                    if ($user->isMemberOfRole((int)$rol)) {
+                        $roleCategoryMarker = true;
                     }
                 }
             }
-            if (!$rolecatmarker) {
+
+            if ((string) $this->arrConfiguration[$this->conf]['selection_cat'] !== '') {
+                foreach (explode(',', $this->arrConfiguration[$this->conf]['selection_cat']) as $cat) {
+                    if ($this->isMemberOfCategorie($cat, $member)) {
+                        $roleCategoryMarker = true;
+                    }
+                }
+            }
+            if (!$roleCategoryMarker) {
                 unset($this->listData[$member]);
                 continue;
             }
