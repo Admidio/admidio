@@ -182,7 +182,7 @@ class CategoryReport
 
         $number_col[1] = $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')';
 
-        // alle Mitglieder der aktuellen Organisation einlesen
+        // Read in all members of the current organisation
         $sql = ' SELECT mem_usr_id
              	   FROM '.TBL_MEMBERS.', '.TBL_ROLES.', '.TBL_CATEGORIES. '
              	  WHERE mem_rol_id = rol_id
@@ -205,13 +205,13 @@ class CategoryReport
 
         $user = new User($gDb, $gProfileFields);
 
-        // alle Mitlieder durchlaufen   ...
+        // go through all members
         foreach ($this->listData as $member => $dummy) {
             $user->readDataById($member);
             $memberShips = $user->getRoleMemberships();
             $number_row_count = 0;
 
-            // bestehen Rollen- und/oder Kategorieeinschraenkungen?
+            // Are there role and/or category restrictions?
             $roleCategoryMarker = true;
             if ((string) $this->arrConfiguration[$this->conf]['selection_role'] !== '') {
                 $roleCategoryMarker = false;
@@ -236,12 +236,7 @@ class CategoryReport
 
             foreach ($workarray as $key => $data) {
                 if ($data['type'] == 'p') {
-                    if (($gProfileFields->getPropertyById($data['id'], 'usf_type') == 'DROPDOWN'
-                           || $gProfileFields->getPropertyById($data['id'], 'usf_type') == 'RADIO_BUTTON')) {
-                        $this->listData[$member][$key] = $user->getValue($gProfileFields->getPropertyById($data['id'], 'usf_name_intern'), 'database');
-                    } else {
-                        $this->listData[$member][$key] = $user->getValue($gProfileFields->getPropertyById($data['id'], 'usf_name_intern'));
-                    }
+                    $this->listData[$member][$key] = $user->getValue($gProfileFields->getPropertyById($data['id'], 'usf_name_intern'), 'database');
                 } elseif ($data['type'] == 'a') {              //Sonderfall: Rollengesamtuebersicht erstellen
                     $role = new TableRoles($gDb);
 
