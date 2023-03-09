@@ -428,7 +428,7 @@ class ProfileFields
         // get html output for that field type and value
         if ($format === 'html') {
             // decode html special chars because getHtmlValue encodes them again
-            $value = $this->getHtmlValue($fieldNameIntern, htmlspecialchars_decode($value, ENT_QUOTES));
+            $value = $this->getHtmlValue($fieldNameIntern, htmlspecialchars_decode($value, ENT_QUOTES | ENT_HTML5));
         }
 
         return $value;
