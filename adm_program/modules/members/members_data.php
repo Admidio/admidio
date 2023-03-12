@@ -99,13 +99,15 @@ if (array_key_exists('order', $_GET)) {
 
 // create search conditions
 $searchCondition = '';
+$queryParamsSearch = array();
 $searchColumns = $membersListConfig->getSearchConditions();
 
 if ($getSearch !== '' && count($searchColumns) > 0) {
     $searchString = explode(' ', $getSearch);
 
     foreach ($searchString as $searchWord) {
-        $searchCondition .= ' AND CONCAT(' . implode(', \' \', ', $searchColumns) . ') LIKE \'%'.$searchWord.'%\' ';
+        $searchCondition .= ' AND CONCAT(' . implode(', \' \', ', $searchColumns) . ") LIKE CONCAT('%', ?, '%') ";
+        $queryParamsSearch[] = htmlspecialchars_decode($searchWord, ENT_QUOTES | ENT_HTML5);
     }
 
     $searchCondition = ' WHERE ' . substr($searchCondition, 4);
@@ -183,7 +185,7 @@ $mainSql = 'SELECT DISTINCT '.$memberOfThisOrganizationSelect.' AS member_this_o
                     AND email.usd_usf_id = ? /* $gProfileFields->getProperty(\'email\', \'usf_id\') */
                  ) AS member_email, '.
             substr($mainSql, 15);
-$queryParamsMain = array(
+$queryParamsEmail = array(
     $gProfileFields->getProperty('EMAIL', 'usf_id')
 ); // TODO add more params
 $limitCondition = '';
@@ -201,6 +203,7 @@ if ($getSearch === '') {
                 .$orderCondition
                 .$limitCondition;
 }
+$queryParamsMain = array_merge($queryParamsEmail, $queryParamsSearch);
 $mglStatement = $gDb->queryPrepared($sql, $queryParamsMain); // TODO add more params
 
 $orgName   = $gCurrentOrganization->getValue('org_longname');
