@@ -180,7 +180,12 @@ class TableUserField extends TableAccess
             return '';
         }
 
-        if ($format !== 'database') {
+        if ($format === 'database') {
+            if ($columnName === 'usf_icon' && $value !== '' && !preg_match('/fa-[a-zA-z0-9]/', $value)) {
+                // if not font awesome icon that create url with icon file
+                $value = THEME_URL . '/images/' . $value;
+            }
+        } else {
             switch ($columnName) {
                 case 'usf_name': // fallthrough
                 case 'cat_name':
