@@ -59,7 +59,7 @@
             {/foreach}
             >
             {if $data.passwordStrength eq 1}
-            <div id="admidio-password-strength" class="progress ' . $optionsAll['class'] . '">
+            <div id="admidio-password-strength" class="progress {$data.attributes.class}">
                 <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                 <div id="admidio-password-strength-minimum"></div>
             </div>
