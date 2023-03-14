@@ -428,6 +428,7 @@ class HtmlPage extends \Smarty
         $this->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
 
         $this->assign('printView', $this->printView);
+        $this->assign('menuNavigation', $gMenu->getAllMenuItems());
         $this->assign('menuSidebar', $gMenu);
         $this->assign('menuFunctions', $this->menuNodePageFunctions);
         $this->assign('templateFile', $this->templateFile);

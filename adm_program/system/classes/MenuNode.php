@@ -45,7 +45,7 @@ class MenuNode
      * @param string $nodeTextId A unique id for this menu node.
      * @param string $nodeName   The name of this menu node that should be displayed for the user
      */
-    public function __construct($nodeTextId, $nodeName)
+    public function __construct(string $nodeTextId, string $nodeName)
     {
         $this->textId = $nodeTextId;
         $this->name   = Language::translateIfTranslationStrId($nodeName);
@@ -55,7 +55,7 @@ class MenuNode
      * Count the number of entries from this node
      * @return int Number of entries from this node
      */
-    public function count()
+    public function count(): int
     {
         return count($this->nodeEntries);
     }
@@ -63,40 +63,37 @@ class MenuNode
     /**
      * Add a new item to this menu node. If a dropdown menu item should be created than $parentMenuItemId must be set
      * to each entry of the dropdown. If a badge should be shown at this menu item than set the $badgeCount.
-     * @param string $id          A id string for the menu item. That will be used as html id tag.
+     * @param string $id          ID string for the menu item. That will be used as html id tag.
      *                            It should be unique within this menu node.
-     * @param string $name        Name of the menu node that will also shown in the menu
+     * @param string $name        Name of the menu node that will also be shown in the menu
      * @param string $url         The url of this menu item that will be called if someone click the menu item
      * @param string $icon        An icon that will be shown together with the name in the menu
      * @param string $parentMenuItemId The id of the parent item to which this item will be added.
-     * @param string $badgeCount  If set > 0 than a small badge with the number will be shown after the menu item name
-     * @param string $description A optional description of the menu node that could be shown in some output cases
-     * @param string $componentId Optional the component id could be set
+     * @param int $badgeCount     If set > 0 than a small badge with the number will be shown after the menu item name
+     * @param string $description An optional description of the menu node that could be shown in some output cases
      */
-    public function addItem($id, $name, $url, $icon, $parentMenuItemId = '', $badgeCount = 0, $description = '', $componentId = 0)
+    public function addItem(string $id, string $name, string $url, string $icon, string $parentMenuItemId = '', int $badgeCount = 0, string $description = '')
     {
-        $node['men_id'] = $this->count();
-        $node['men_name_intern'] = $id;
-        $node['men_com_id'] = $componentId;
+        $node['id'] = $id;
 
         // translate name and description
-        $node['men_name'] = Language::translateIfTranslationStrId($name);
-        $node['men_description'] = Language::translateIfTranslationStrId((string) $description);
+        $node['name'] = Language::translateIfTranslationStrId($name);
+        $node['description'] = Language::translateIfTranslationStrId($description);
 
         // add root path to link unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $url) === 0 && strpos($url, 'javascript:') !== 0) {
             $url = ADMIDIO_URL . $url;
         }
-        $node['men_url'] = $url;
+        $node['url'] = $url;
 
-        if ((string) $icon === '') {
+        if ($icon === '') {
             $icon = 'fa-trash-alt invisible';
         }
-        $node['men_icon'] = $icon;
+        $node['icon'] = $icon;
         $node['badge_count'] = $badgeCount;
 
         if ($parentMenuItemId === '') {
-            $this->nodeEntries[$node['men_name_intern']] = $node;
+            $this->nodeEntries[$id] = $node;
         } else {
             $this->nodeEntries[$parentMenuItemId]['sub_items'][] = $node;
         }
@@ -106,7 +103,7 @@ class MenuNode
      * Get the entries of this node as an array.
      * @return array Array with all entries of this node
      */
-    public function getEntries()
+    public function getEntries(): array
     {
         return $this->nodeEntries;
     }
@@ -121,21 +118,12 @@ class MenuNode
     }
 
     /**
-     * Get the internal name of this node.
-     * @return string The internal name e.g. '''modules''' of this node
-     */
-    public function getTextId()
-    {
-        return $this->textId;
-    }
-
-    /**
      * Create the html code of the menu node as a html list. If a node has sub items than
      * a dropdown will be created.
      * @param bool $mainMenu Flag, if the menu node should be added to the main menu
      * @return string Html code of the menu.
      */
-    public function getHtml($mainMenu = false)
+    public function getHtml(bool $mainMenu = false): string
     {
         $html = '';
         $linkClasses = '';
@@ -151,7 +139,7 @@ class MenuNode
 
             foreach ($this->nodeEntries as $menuEntry) {
                 $htmlBadge = '';
-                $htmlIcon = Image::getIconHtml((string) $menuEntry['men_icon'], $menuEntry['men_name']);
+                $htmlIcon = Image::getIconHtml((string) $menuEntry['icon'], $menuEntry['name']);
 
                 if ($menuEntry['badge_count'] > 0) {
                     $htmlBadge = '<span class="badge badge-light">' . $menuEntry['badge_count'] . '</span>';
@@ -160,22 +148,22 @@ class MenuNode
                 if (isset($menuEntry['sub_items'])) {
                     $html .= '
                     <li class="nav-item dropdown">
-                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link ' . $linkClasses . ' dropdown-toggle" data-toggle="dropdown"
+                        <a id="'.$menuEntry['id'].'" class="nav-link ' . $linkClasses . ' dropdown-toggle" data-toggle="dropdown"
                             href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            ' . $htmlIcon . $menuEntry['men_name'] . $htmlBadge . '
+                            ' . $htmlIcon . $menuEntry['name'] . $htmlBadge . '
                         </a>
                         <div class="dropdown-menu dropdown-menu-left">';
                     foreach ($menuEntry['sub_items'] as $subMenuEntry) {
                         $htmlSubBadge = '';
-                        $htmlSubIcon = Image::getIconHtml((string) $subMenuEntry['men_icon'], $subMenuEntry['men_name']);
+                        $htmlSubIcon = Image::getIconHtml((string) $subMenuEntry['icon'], $subMenuEntry['name']);
 
                         if ($subMenuEntry['badge_count'] > 0) {
                             $htmlSubBadge = '<span class="badge badge-light">' . $subMenuEntry['badge_count'] . '</span>';
                         }
 
                         $html .= '
-                                <a id="'.$subMenuEntry['men_name_intern'].'" class="dropdown-item" href="'.$subMenuEntry['men_url'].'">
-                                    ' . $htmlSubIcon . $subMenuEntry['men_name'] . $htmlSubBadge . '
+                                <a id="'.$subMenuEntry['id'].'" class="dropdown-item" href="'.$subMenuEntry['url'].'">
+                                    ' . $htmlSubIcon . $subMenuEntry['name'] . $htmlSubBadge . '
                                 </a>';
                     }
                     $html .= '</div>
@@ -183,8 +171,8 @@ class MenuNode
                 } else {
                     $html .= '
                     <li class="nav-item">
-                        <a id="'.$menuEntry['men_name_intern'].'" class="nav-link ' . $linkClasses . '" href="'.$menuEntry['men_url'].'">
-                            ' . $htmlIcon . $menuEntry['men_name'] . $htmlBadge . '
+                        <a id="'.$menuEntry['id'].'" class="nav-link ' . $linkClasses . '" href="'.$menuEntry['url'].'">
+                            ' . $htmlIcon . $menuEntry['name'] . $htmlBadge . '
                         </a>
                     </li>';
                 }
@@ -202,7 +190,7 @@ class MenuNode
      * the internal array $nodeEntries.
      * @param int $nodeId The database id of the node menu entry
      */
-    public function loadFromDatabase($nodeId)
+    public function loadFromDatabase(int $nodeId)
     {
         global $gDb, $gValidLogin, $gL10n;
 
@@ -235,12 +223,12 @@ class MenuNode
                         $menuName = $node['men_name'];
                     }
 
-                    $this->addItem($node['men_name_intern'], $menuName, $menuUrl, $menuIcon, '', $badgeCount, $node['men_description'], $node['men_com_id']);
+                    $this->addItem($node['men_name_intern'], $menuName, $menuUrl, $menuIcon, '', $badgeCount, $node['men_description']);
                 }
             }
         }
 
-        // if only the overview entry exists, than don't show anly menu item
+        // if only the overview entry exists, then don't show any menu item
         if (count($this->nodeEntries) === 1 && $this->nodeEntries[key($this->nodeEntries)]['men_name_intern'] === 'overview') {
             $this->nodeEntries = array();
         }
@@ -249,11 +237,11 @@ class MenuNode
     /**
      * This method checks if a special menu item of the current node is visible for the current user.
      * Therefor this method checks if roles are assigned to the menu item and if the current
-     * user is a member of at least one of this roles.
-     * @param menuId The id of the menu item that should be checked if it's visible.
+     * user is a member of at least one of these roles.
+     * @param int $menuId The id of the menu item that should be checked if it's visible.
      * @return bool Return true if the menu item is visible to the current user.
      */
-    public function menuItemIsVisible($menuId)
+    public function menuItemIsVisible(int $menuId): bool
     {
         global $gDb, $gCurrentUser;
 
@@ -275,7 +263,7 @@ class MenuNode
      * Sets the translated name of this node.
      * @param string $name Translated name of the node.
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }
