@@ -45,11 +45,6 @@ class MainMenu
      */
     protected $menuLoaded;
 
-    /**
-     * @var bool Flag to remember if the function node was already added to the menu
-     */
-    protected $functionsNodeAdded;
-
     public function __construct()
     {
         $this->initialize();
@@ -70,10 +65,9 @@ class MainMenu
      */
     public function initialize()
     {
-        $this->menuNodes          = array();
-        $this->menuItems        = array();
-        $this->menuLoaded         = false;
-        $this->functionsNodeAdded = false;
+        $this->menuNodes  = array();
+        $this->menuItems  = array();
+        $this->menuLoaded = false;
     }
 
     /**
@@ -81,13 +75,14 @@ class MainMenu
      * Array ( [0] => Array (
      *      [id] => modules
      *      [name] => Module
-     *      [entries] => Array (
+     *      [items] => Array (
      *          [overview] => Array (
      *              [id] => overview
      *              [name] => Übersicht
      *              [description] =>
      *              [url] => http://localhost/GitHub/admidio/adm_program/overview.php
-     *              [icon] => fa-home [badge_count] => 0 )
+     *              [icon] => fa-home
+     *              [badgeCount] => 0 )
      *          [announcements] => Array (
      *              [id] => announcements
      *              [name] => Ankündigungen
@@ -104,42 +99,6 @@ class MainMenu
         }
 
         return $this->menuItems;
-    }
-
-    /**
-     * Create the html code of the menu as a list. The different menu nodes will be created by the html method
-     * of the subclass MenuNode.
-     * @return string Html code of the menu.
-     */
-    public function getHtml(): string
-    {
-        if (!$this->menuLoaded) {
-            $this->loadFromDatabase();
-        }
-
-        $html = '<nav class="admidio-menu-list collapse" id="admidio-main-menu">';
-
-        foreach ($this->menuNodes as $menuNode) {
-            $html .= $menuNode->getHtml(true);
-        }
-
-        $html .= '</nav>';
-
-        return $html;
-    }
-
-    /**
-     * Get all MenuNodes of the current Menu.
-     * It also loads the menu from the adm_menu database table if it has not already been done.
-     * @return array Array with the main nodes and their entries
-     */
-    public function getAllNodes(): array
-    {
-        if (!$this->menuLoaded) {
-            $this->loadFromDatabase();
-        }
-
-        return $this->menuNodes;
     }
 
     /**
@@ -163,21 +122,13 @@ class MainMenu
             $countMenuNodes++;
             $this->menuNodes[$countMenuNodes] = new MenuNode($mainNodes['men_name_intern'], $mainNodes['men_name']);
             $this->menuNodes[$countMenuNodes]->loadFromDatabase($mainNodes['men_id']);
-            $this->menuItems[]= array(
-                'id' => $mainNodes['men_name_intern'],
-                'name' => $mainNodes['men_name'],
-                'entries' => $this->menuNodes[$countMenuNodes]->getEntries());
-        }
-    }
 
-    /**
-     * Removes the functions node from the current menu
-     */
-    public function removeFunctionsNode()
-    {
-        if ($this->functionsNodeAdded) {
-            array_shift($this->menuNodes);
-            $this->functionsNodeAdded = false;
+            if ($this->menuNodes[$countMenuNodes]->count() > 0) {
+                $this->menuItems[] = array(
+                    'id' => $mainNodes['men_name_intern'],
+                    'name' => $mainNodes['men_name'],
+                    'items' => $this->menuNodes[$countMenuNodes]->getEntries());
+            }
         }
     }
 }

@@ -89,8 +89,8 @@ class MenuNode
         if ($icon === '') {
             $icon = 'fa-trash-alt invisible';
         }
-        $node['icon'] = $icon;
-        $node['badge_count'] = $badgeCount;
+        $node['icon'] = Image::getIconHtml($icon, $name);
+        $node['badgeCount'] = $badgeCount;
 
         if ($parentMenuItemId === '') {
             $this->nodeEntries[$id] = $node;
@@ -139,10 +139,9 @@ class MenuNode
 
             foreach ($this->nodeEntries as $menuEntry) {
                 $htmlBadge = '';
-                $htmlIcon = Image::getIconHtml((string) $menuEntry['icon'], $menuEntry['name']);
 
-                if ($menuEntry['badge_count'] > 0) {
-                    $htmlBadge = '<span class="badge badge-light">' . $menuEntry['badge_count'] . '</span>';
+                if ($menuEntry['badgeCount'] > 0) {
+                    $htmlBadge = '<span class="badge badge-light">' . $menuEntry['badgeCount'] . '</span>';
                 }
 
                 if (isset($menuEntry['sub_items'])) {
@@ -150,15 +149,15 @@ class MenuNode
                     <li class="nav-item dropdown">
                         <a id="'.$menuEntry['id'].'" class="nav-link ' . $linkClasses . ' dropdown-toggle" data-toggle="dropdown"
                             href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            ' . $htmlIcon . $menuEntry['name'] . $htmlBadge . '
+                            ' . $menuEntry['icon'] . $menuEntry['name'] . $htmlBadge . '
                         </a>
                         <div class="dropdown-menu dropdown-menu-left">';
                     foreach ($menuEntry['sub_items'] as $subMenuEntry) {
                         $htmlSubBadge = '';
                         $htmlSubIcon = Image::getIconHtml((string) $subMenuEntry['icon'], $subMenuEntry['name']);
 
-                        if ($subMenuEntry['badge_count'] > 0) {
-                            $htmlSubBadge = '<span class="badge badge-light">' . $subMenuEntry['badge_count'] . '</span>';
+                        if ($subMenuEntry['badgeCount'] > 0) {
+                            $htmlSubBadge = '<span class="badge badge-light">' . $subMenuEntry['badgeCount'] . '</span>';
                         }
 
                         $html .= '
@@ -172,7 +171,7 @@ class MenuNode
                     $html .= '
                     <li class="nav-item">
                         <a id="'.$menuEntry['id'].'" class="nav-link ' . $linkClasses . '" href="'.$menuEntry['url'].'">
-                            ' . $htmlIcon . $menuEntry['name'] . $htmlBadge . '
+                            ' . $menuEntry['icon'] . $menuEntry['name'] . $htmlBadge . '
                         </a>
                     </li>';
                 }
@@ -223,13 +222,13 @@ class MenuNode
                         $menuName = $node['men_name'];
                     }
 
-                    $this->addItem($node['men_name_intern'], $menuName, $menuUrl, $menuIcon, '', $badgeCount, $node['men_description']);
+                    $this->addItem($node['men_name_intern'], $menuName, $menuUrl, (string) $menuIcon, '', $badgeCount, (string) $node['men_description']);
                 }
             }
         }
 
         // if only the overview entry exists, then don't show any menu item
-        if (count($this->nodeEntries) === 1 && $this->nodeEntries[key($this->nodeEntries)]['men_name_intern'] === 'overview') {
+        if (count($this->nodeEntries) === 1 && $this->nodeEntries[key($this->nodeEntries)]['id'] === 'overview') {
             $this->nodeEntries = array();
         }
     }

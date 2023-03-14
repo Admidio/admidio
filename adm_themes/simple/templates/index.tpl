@@ -109,7 +109,23 @@
                     <i class="fas fa-bars fa-fw"></i>
                 </button>
                 </div>
-                {$menuSidebar->getHtml()}
+                <nav class="admidio-menu-list collapse" id="admidio-main-menu">
+                    {foreach $menuNavigation as $menuGroup}
+                        <div class="admidio-menu-header">{$menuGroup.name}</div>
+                        <ul class="nav admidio-menu-node flex-column mb-0">
+                            {foreach $menuGroup.items as $menuItem}
+                                <li class="nav-item">
+                                    <a id="{$menuItem.id}" class="nav-link" href="{$menuItem.url}">
+                                        {$menuItem.icon}{$menuItem.name}
+                                        {if $menuItem.badgeCount > 0}
+                                            <span class="badge badge-light">{$menuItem.badgeCount}</span>
+                                        {/if}
+                                    </a>
+                                </li>
+                            {/foreach}
+                        </ul>
+                    {/foreach}
+                </nav>
             </div>
 
             <div class="admidio-content-col col-12 col-md-9 col-xl-10">
