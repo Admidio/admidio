@@ -60,17 +60,6 @@ class MainMenu
     }
 
     /**
-     * Initialise the member parameters of this class. This method should also be called if
-     * the menu structure should be reloaded from database.
-     */
-    public function initialize()
-    {
-        $this->menuNodes  = array();
-        $this->menuItems  = array();
-        $this->menuLoaded = false;
-    }
-
-    /**
      * Returns an array with all menu items. The array has the following structure:
      * Array ( [0] => Array (
      *      [id] => modules
@@ -102,6 +91,17 @@ class MainMenu
     }
 
     /**
+     * Initialise the member parameters of this class. This method should also be called if
+     * the menu structure should be reloaded from database.
+     */
+    public function initialize()
+    {
+        $this->menuNodes  = array();
+        $this->menuItems  = array();
+        $this->menuLoaded = false;
+    }
+
+    /**
      * Load the menu from the database table adm_menu
      */
     public function loadFromDatabase()
@@ -119,7 +119,6 @@ class MainMenu
         $mainNodesStatement = $gDb->queryPrepared($sql);
 
         while ($mainNodes = $mainNodesStatement->fetch()) {
-            $countMenuNodes++;
             $this->menuNodes[$countMenuNodes] = new MenuNode($mainNodes['men_name_intern'], $mainNodes['men_name']);
             $this->menuNodes[$countMenuNodes]->loadFromDatabase($mainNodes['men_id']);
 
@@ -127,7 +126,7 @@ class MainMenu
                 $this->menuItems[] = array(
                     'id' => $mainNodes['men_name_intern'],
                     'name' => $mainNodes['men_name'],
-                    'items' => $this->menuNodes[$countMenuNodes]->getEntries());
+                    'items' => $this->menuNodes[$countMenuNodes]->getAllItems());
             }
         }
     }

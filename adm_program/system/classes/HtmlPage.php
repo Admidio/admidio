@@ -215,10 +215,10 @@ class HtmlPage extends \Smarty
      * @param string $url         The url of this menu item that will be called if someone click the menu item
      * @param string $icon        An icon that will be shown together with the name in the menu
      * @param string $parentMenuItemId The id of the parent item to which this item will be added.
-     * @param string $badgeCount  If set > 0 than a small badge with the number will be shown after the menu item name
+     * @param int $badgeCount  If set > 0 than a small badge with the number will be shown after the menu item name
      * @param string $description A optional description of the menu node that could be shown in some output cases
      */
-    public function addPageFunctionsMenuItem($id, $name, $url, $icon, $parentMenuItemId = '', $badgeCount = 0, $description = '')
+    public function addPageFunctionsMenuItem(string $id, string $name, string $url, string $icon, string $parentMenuItemId = '', int $badgeCount = 0, string $description = '')
     {
         $this->menuNodePageFunctions->addItem($id, $name, $url, $icon, $parentMenuItemId, $badgeCount, $description);
     }
@@ -429,8 +429,7 @@ class HtmlPage extends \Smarty
 
         $this->assign('printView', $this->printView);
         $this->assign('menuNavigation', $gMenu->getAllMenuItems());
-        $this->assign('menuSidebar', $gMenu);
-        $this->assign('menuFunctions', $this->menuNodePageFunctions);
+        $this->assign('menuFunctions', $this->menuNodePageFunctions->getAllItems());
         $this->assign('templateFile', $this->templateFile);
         $this->assign('content', $this->pageContent);
 

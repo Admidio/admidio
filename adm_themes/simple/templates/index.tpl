@@ -109,6 +109,7 @@
                     <i class="fas fa-bars fa-fw"></i>
                 </button>
                 </div>
+                {* Create the sidebar menu out of the navigation menu array *}
                 <nav class="admidio-menu-list collapse" id="admidio-main-menu">
                     {foreach $menuNavigation as $menuGroup}
                         <div class="admidio-menu-header">{$menuGroup.name}</div>
@@ -149,7 +150,31 @@
                 <div id="content" class="admidio-content" role="main">
                     <div class="admidio-content-header">
                         <h1 class="admidio-module-headline">{$headline}</h1>
-                        {$menuFunctions->getHtml()}
+                        {* Create the functions menu out of the menu array *}
+                        <ul class="nav admidio-menu-function-node">
+                            {foreach $menuFunctions as $menuItem}
+                                {if array_key_exists('items', $menuItem)}
+                                    <li class="nav-item dropdown">
+                                        <a id="{$menuItem.id}" class="nav-link btn btn-secondary dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                            {$menuItem.icon}{$menuItem.name}
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-left">
+                                            {foreach $menuItem.items as $subItem}
+                                                <a id="{$subItem.id}" class="dropdown-item" href="{$subItem.url}">
+                                                    {$subItem.icon}{$subItem.name}
+                                                </a>
+                                            {/foreach}
+                                        </div>
+                                    </li>
+                                {else}
+                                    <li class="nav-item">
+                                        <a id="{$menuItem.id}" class="nav-link btn btn-secondary" href="{$menuItem.url}">
+                                            {$menuItem.icon}{$menuItem.name}
+                                        </a>
+                                    </li>
+                                {/if}
+                            {/foreach}
+                        </ul>
                     </div>
 
                     {* The main content of the page that will be generated through the Admidio scripts *}

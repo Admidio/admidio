@@ -95,15 +95,15 @@ class MenuNode
         if ($parentMenuItemId === '') {
             $this->nodeEntries[$id] = $node;
         } else {
-            $this->nodeEntries[$parentMenuItemId]['sub_items'][] = $node;
+            $this->nodeEntries[$parentMenuItemId]['items'][] = $node;
         }
     }
 
     /**
-     * Get the entries of this node as an array.
+     * Get all the items of this node as an array.
      * @return array Array with all entries of this node
      */
-    public function getEntries(): array
+    public function getAllItems(): array
     {
         return $this->nodeEntries;
     }
@@ -115,72 +115,6 @@ class MenuNode
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Create the html code of the menu node as a html list. If a node has sub items than
-     * a dropdown will be created.
-     * @param bool $mainMenu Flag, if the menu node should be added to the main menu
-     * @return string Html code of the menu.
-     */
-    public function getHtml(bool $mainMenu = false): string
-    {
-        $html = '';
-        $linkClasses = '';
-
-        if ($this->count() > 0) {
-            if($mainMenu) {
-                $html .= '<div class="admidio-menu-header">'.$this->name.'</div>
-                            <ul class="nav admidio-menu-node flex-column mb-0">';
-            } else {
-                $html .= '<ul class="nav admidio-menu-function-node">';
-                $linkClasses = ' btn btn-secondary ';
-            }
-
-            foreach ($this->nodeEntries as $menuEntry) {
-                $htmlBadge = '';
-
-                if ($menuEntry['badgeCount'] > 0) {
-                    $htmlBadge = '<span class="badge badge-light">' . $menuEntry['badgeCount'] . '</span>';
-                }
-
-                if (isset($menuEntry['sub_items'])) {
-                    $html .= '
-                    <li class="nav-item dropdown">
-                        <a id="'.$menuEntry['id'].'" class="nav-link ' . $linkClasses . ' dropdown-toggle" data-toggle="dropdown"
-                            href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            ' . $menuEntry['icon'] . $menuEntry['name'] . $htmlBadge . '
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-left">';
-                    foreach ($menuEntry['sub_items'] as $subMenuEntry) {
-                        $htmlSubBadge = '';
-                        $htmlSubIcon = Image::getIconHtml((string) $subMenuEntry['icon'], $subMenuEntry['name']);
-
-                        if ($subMenuEntry['badgeCount'] > 0) {
-                            $htmlSubBadge = '<span class="badge badge-light">' . $subMenuEntry['badgeCount'] . '</span>';
-                        }
-
-                        $html .= '
-                                <a id="'.$subMenuEntry['id'].'" class="dropdown-item" href="'.$subMenuEntry['url'].'">
-                                    ' . $htmlSubIcon . $subMenuEntry['name'] . $htmlSubBadge . '
-                                </a>';
-                    }
-                    $html .= '</div>
-                    </li>';
-                } else {
-                    $html .= '
-                    <li class="nav-item">
-                        <a id="'.$menuEntry['id'].'" class="nav-link ' . $linkClasses . '" href="'.$menuEntry['url'].'">
-                            ' . $menuEntry['icon'] . $menuEntry['name'] . $htmlBadge . '
-                        </a>
-                    </li>';
-                }
-            }
-
-            $html .= '</ul>';
-        }
-
-        return $html;
     }
 
     /**
