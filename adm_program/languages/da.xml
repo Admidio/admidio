@@ -357,7 +357,7 @@
   <string name="PHO_ALBUM_DELETE">Slet album</string>
   <string name="PHO_ALBUM_LOCK">Lås album</string>
   <string name="PHO_ALBUM_LOCK_DESC">Låste albummer kan ikke ses af gæster eller medlemmer, f.eks. kan du låse et album imens alle billeder er ved at blive lagt op.</string>
-  <string name="PHO_ALBUM_NOT_APPROVED">Albummet er i øjeblikket låst og vises ikke til besøgende af denne grund.</string>
+  <string name="PHO_ALBUM_NOT_APPROVED">Albummet er i øjeblikket låst og vil ikke blive vist til besøgende og medlemmer af denne grund.</string>
   <string name="PHO_ALBUM_UNLOCK">Lås album op</string>
   <string name="PHO_CAPTION_SIZE">Størrelse på billedtekst</string>
   <string name="PHO_CAPTION_SIZE_DESC">Størrelsen på billedteksten er proportional med billedstørrelsen, beregnet med formlen \"Billedstørrelse / Devisor\". Ved at øge devisor reduceres skriftstørrelsen. (Standard: 40)</string>
@@ -1323,8 +1323,8 @@
   <string name="SYS_SERVER_NO_UPLOAD">Server indstillinger tillader ikke fil overførsler.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Sæt folder rettigheder</string>
   <string name="SYS_SETTINGS">Indstillinger</string>
-  <string name="SYS_SHOW_ALL">Vis alle brugere</string>
-  <string name="SYS_SHOW_ALL_DESC">Hvis denne indstilling er angivet, vises tidligere medlemmer såvel som medlemmer af andre organisationer ud over de aktive medlemmer af denne organisation.</string>
+  <string name="SYS_SHOW_ALL">Vis alt</string>
+  <string name="SYS_SHOW_ALL_DESC">Hvis denne indstilling er sat, vil tidligere medlemmer såvel som medlemmer af andre organisationer blive vist sammen med de aktive  medlemmer af denne organisation. </string>
   <string name="SYS_SHOW_CALENDAR">Vis kalender</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For udloggede brugere vises en alfanumerisk tekst, når captcha-modulet er aktiveret. Den medfølgende tekst skal indtastes i det rigtige felt. Dette skal forhindre misbrug af formularen fra spammere. (standard: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Vis tidligere medlemmer</string>
@@ -1438,7 +1438,7 @@
   <string name="SYS_UTF16LE">UTF-16LE</string>
   <string name="SYS_UTF32BE">UTF-32BE</string>
   <string name="SYS_UTF32LE">UTF-32LE</string>
-  <string name="SYS_VALID_FROM" description="Date valid from">Gyldig startende fra</string>
+  <string name="SYS_VALID_FROM" description="Date valid from">Gyldig fra</string>
   <string name="SYS_VALID_TO" description="Date valid to">Gyldig indtil</string>
   <string name="SYS_VARIOUS_ROLES">Diverse roller</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Forskellige bekendtskaber</string>
