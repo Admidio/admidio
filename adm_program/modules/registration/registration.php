@@ -34,19 +34,19 @@ $headline = $gL10n->get('SYS_NEW_REGISTRATIONS');
 // Navigation in module starts here
 $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
 
-$moduleRegistration = new ModuleRegistration();
+//$moduleRegistration = new ModuleRegistration();
 
-$registrations = $moduleRegistration->getRegistrationsArray();
-
+//$registrations = $moduleRegistration->getRegistrationsArray();
+/*
 if (count($registrations) === 0) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_NO_NEW_REGISTRATIONS'), $gL10n->get('SYS_REGISTRATION'));
     // => EXIT
-}
+}*/
 
 // create html page object
-$page = new HtmlPage('admidio-registration', $headline);
-
+$page = new ModuleRegistration('admidio-registration', $headline);
+/*
 $table = new HtmlTable('new_user_table', $page, true);
 
 // create array with all column heading values
@@ -86,4 +86,6 @@ foreach($registrations as $registrationUser) {
 }
 
 $page->addHtml($table->show());
+*/
+$page->createContent();
 $page->show();

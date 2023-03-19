@@ -27,13 +27,14 @@
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
  * ```
  */
-class ModuleRegistration extends Module
+class ModuleRegistration extends HtmlPage
 {
     /**
      * Constructor that initialize the class member parameters
      */
-    public function __construct()
+    public function __construct(string $id, string $headline = '')
     {
+        parent::__construct($id, $headline);
     }
 
     /**
@@ -70,5 +71,50 @@ class ModuleRegistration extends Module
             $gCurrentOrgId
         );
         return $gDb->getArrayFromSql($sql, $queryParameters);
+    }
+
+    public function createContent()
+    {
+        global $gL10n, $gSettingsManager;
+
+        $registrations = $this->getRegistrationsArray();
+        $templateData = array();
+
+        foreach($registrations as $row) {
+            $templateRow = array();
+            $templateRow['id'] = 'row_user_'.$row['userUUID'];
+            $templateRow['title'] = $row['firstName'] . ' ' . $row['lastName'];
+
+            $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['registrationTimestamp']);
+            $templateRow['information'][] = $gL10n->get('SYS_REGISTRATION_AT', array($timestampCreate->format($gSettingsManager->getString('system_date')), $timestampCreate->format($gSettingsManager->getString('system_time'))));
+            $templateRow['information'][] = $gL10n->get('SYS_USERNAME') . ': ' . $row['loginName'];
+            if ($gSettingsManager->getBool('enable_mail_module')) {
+                $mailLink = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['userUUID'])).'">'.$row['email'].'</a>';
+            } else {
+                $mailLink  = '<a href="mailto:'.$registrationUser['email'].'">'.$row['email'].'</a>';
+            }
+            $templateRow['information'][] = $gL10n->get('SYS_EMAIL') . ': ' . $mailLink;
+
+            $templateRow['actions'][] = array(
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['userUUID'])),
+                'icon' => 'fas fa-eye',
+                'tooltip' => $gL10n->get('SYS_SHOW_PROFILE')
+            );
+            $templateRow['actions'][] = array(
+                'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/popup_message.php', array('type' => 'nwu', 'element_id' => 'row_user_'.$row['userUUID'], 'name' => $row['firstName'].' '.$row['lastName'], 'database_id' => $row['userUUID'])),
+                'icon' => 'fas fa-trash-alt',
+                'tooltip' => $gL10n->get('SYS_DELETE')
+            );
+            $templateRow['buttons'][] = array(
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_uuid' => $row['userUUID'])),
+                'name' => $gL10n->get('SYS_ASSIGN_REGISTRATION'),
+                'class' => ''
+            );
+
+            $templateData[] = $templateRow;
+        }
+
+        $this->assign('cards', $templateData);
+        $this->pageContent = $this->fetch('modules/registration.list.tpl');
     }
 }

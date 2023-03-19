@@ -148,14 +148,14 @@ class Database
      * If the engine is invalid or the connection not possible an exception will be thrown.
      * @param string $engine   The database type that is supported from Admidio. **mysql** and **pgsql** are valid values.
      * @param string $host     The hostname or server where the database is running. e.g. localhost or 127.0.0.1
-     * @param int    $port     If you don't use the default port of the database then set your port here.
+     * @param int $port        If you don't use the default port of the database then set your port here.
      * @param string $dbName   Name of the database you want to connect.
-     * @param string $username Username to connect to database
-     * @param string $password Password to connect to database
+     * @param string|null $username Username to connect to database
+     * @param string|null $password Password to connect to database
      * @param array  $options
      * @throws AdmException
      */
-    public function __construct($engine, $host, $port, $dbName, $username = null, $password = null, array $options = array())
+    public function __construct(string $engine, string $host, $port, string $dbName, $username = null, $password = null, array $options = array())
     {
         global $gLogger;
 
@@ -194,7 +194,7 @@ class Database
      * function will only return false,
      * @return bool Return true if write access is set for the current database user.
      */
-    public function checkWriteAccess()
+    public function checkWriteAccess(): bool
     {
         $sql = 'CREATE TABLE adm_sys (sys varchar(10)) ';
         if ($this->query($sql, true) !== false) {
@@ -238,12 +238,12 @@ class Database
     /**
      * The method will commit an open transaction to the database. If the
      * transaction counter is greater 1 than only the counter will be
-     * decreased and no commit will performed.
+     * decreased and no commit will be performed.
      * @return bool Returns **true** if the commit was successful otherwise **false**
      * @see Database#startTransaction
      * @see Database#rollback
      */
-    public function endTransaction()
+    public function endTransaction(): bool
     {
         global $gLogger;
 
@@ -282,7 +282,7 @@ class Database
      * @return string Returns a quoted string that is theoretically safe to pass into an SQL statement.
      * @see <a href="https://www.php.net/manual/en/pdo.quote.php">PDO::quote</a>
      */
-    public function escapeString($string)
+    public function escapeString(string $string): string
     {
         return $this->pdo->quote($string);
     }
@@ -311,7 +311,7 @@ class Database
      * scripts were called than each script with their position will be listed in the backtrace.
      * @return string Returns a string with the backtrace of all called scripts.
      */
-    protected function getBacktrace()
+    protected function getBacktrace(): string
     {
         $output = '<div style="font-family: monospace;">';
         $backtrace = debug_backtrace();
@@ -363,7 +363,7 @@ class Database
      * Get the minimum required version of the database that is necessary to run Admidio.
      * @return string Returns a string with the minimum required database version e.g. '5.0.1'
      */
-    public function getMinimumRequiredVersion()
+    public function getMinimumRequiredVersion(): string
     {
         if ($this->minRequiredVersion === '') {
             $this->minRequiredVersion = $this->getPropertyFromDatabaseConfig('minversion');
@@ -376,7 +376,7 @@ class Database
      * Get the name of the database that is running Admidio.
      * @return string Returns a string with the name of the database e.g. 'MySQL' or 'PostgreSQL'
      */
-    public function getName()
+    public function getName(): string
     {
         if ($this->databaseName === '') {
             $this->databaseName = $this->getPropertyFromDatabaseConfig('name');
@@ -389,7 +389,7 @@ class Database
      * @param string $property Property name of the in use database config
      * @return string Returns the value of the chosen property
      */
-    protected function getPropertyFromDatabaseConfig($property)
+    protected function getPropertyFromDatabaseConfig(string $property): string
     {
         $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', 0, true);
         $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->engine . '"]/' . $property);
@@ -402,11 +402,11 @@ class Database
      * could use syntax that will be prepared through Database::prepareSqlAdmidioParameters(). The
      * method will return an array with each SQL statement.
      * @param string $sqlFilePath The path to the SQL file
-     * @throws UnexpectedValueException Throws if the file does not exist or is not readable
-     * @throws RuntimeException         Throws if the read process fails
      * @return array<int,string> Returns an array with all prepared SQL statements
+     * @throws RuntimeException         Throws if the read process fails
+     * @throws UnexpectedValueException Throws if the file does not exist or is not readable
      */
-    public static function getSqlStatementsFromSqlFile($sqlFilePath)
+    public static function getSqlStatementsFromSqlFile(string $sqlFilePath): array
     {
         $sqlFileContent = FileSystemUtils::readFile($sqlFilePath);
 
@@ -428,7 +428,7 @@ class Database
      * @param string $table Name of the database table for which the columns-properties should be shown.
      * @return array<string,array<string,mixed>> Returns an array with column-names.
      */
-    public function getTableColumnsProperties($table)
+    public function getTableColumnsProperties(string $table): array
     {
         if (!array_key_exists($table, $this->dbStructure)) {
             $this->loadTableColumnsProperties($table);
@@ -442,7 +442,7 @@ class Database
      * @param string $table Name of the database table for which the columns should be shown.
      * @return array<int,string> Returns an array with each column and their properties.
      */
-    public function getTableColumns($table)
+    public function getTableColumns(string $table): array
     {
         if (!array_key_exists($table, $this->dbStructure)) {
             $this->loadTableColumnsProperties($table);
@@ -455,7 +455,7 @@ class Database
      * Get the version of the connected database.
      * @return string Returns a string with the database version e.g. '5.5.8'
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         $versionStatement = $this->queryPrepared('SELECT version()');
         $version = $versionStatement->fetchColumn();
@@ -495,7 +495,7 @@ class Database
      *       https://wiki.postgresql.org/wiki/Retrieve_primary_key_columns
      *       https://dev.mysql.com/doc/refman/5.7/en/columns-table.html
      */
-    private function loadTableColumnsProperties($table)
+    private function loadTableColumnsProperties(string $table)
     {
         $tableColumnsProperties = array();
 
@@ -573,7 +573,7 @@ class Database
      * @return int Return ID value of the last INSERT operation.
      * @see Database#insert_id
      */
-    public function lastInsertId()
+    public function lastInsertId(): int
     {
         if ($this->engine === self::PDO_ENGINE_PGSQL) {
             $lastValStatement = $this->queryPrepared('SELECT lastval()');
@@ -588,7 +588,7 @@ class Database
      * @param string $sql
      * @return string
      */
-    private function preparePgSqlQuery($sql)
+    private function preparePgSqlQuery(string $sql): string
     {
         // prepare the sql statement to be compatible with PostgreSQL
         if (StringUtils::strContains($sql, 'CREATE TABLE', false)) {
@@ -624,7 +624,7 @@ class Database
      * @param string $sql The SQL statement with the parameters that should be replaced.
      * @return string Returns the SQL statement with the replaced parameters.
      */
-    public static function prepareSqlAdmidioParameters($sql)
+    public static function prepareSqlAdmidioParameters(string $sql): string
     {
         // replace parameter %PREFIX% with the configured table prefix of this installation
         $sql = str_replace('%PREFIX%', TABLE_PREFIX, $sql);
@@ -642,7 +642,7 @@ class Database
      * @param string $sql
      * @return string
      */
-    private static function prepareSqlForLog($sql)
+    private static function prepareSqlForLog(string $sql): string
     {
         $sql = preg_replace('/\/\*.+\*\//sU', '', $sql); // Removes /* ... */ (multi-line) comments
         $sql = preg_replace('/--.+$/m', '', $sql); // Removes -- (single-line) comments
@@ -656,14 +656,14 @@ class Database
      * then this statement will be written to the error log. If it's a **SELECT** statement
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be send to the browser.
-     * @param string $sql        A string with the sql statement that should be executed in database.
-     * @param bool   $showError  Default will be **true** and if an error the script will be terminated and
-     *                           occurred the error with a backtrace will be send to the browser. If set to
-     *                           **false** no error will be shown and the script will be continued.
-     * @return \PDOStatement|false For **SELECT** statements an object of <a href="https://www.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
+     * @param string $sql      A string with the sql statement that should be executed in database.
+     * @param bool $showError  Default will be **true** and if an error the script will be terminated and
+     *                         occurred the error with a backtrace will be send to the browser. If set to
+     *                         **false** no error will be shown and the script will be continued.
+     * @return PDOStatement|false For **SELECT** statements an object of <a href="https://www.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
      */
-    public function query($sql, $showError = true)
+    public function query(string $sql, bool $showError = true)
     {
         global $gLogger;
 
@@ -708,15 +708,15 @@ class Database
      * then this statement will be written to the error log. If it's a **SELECT** statement
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be send to the browser.
-     * @param string           $sql        A string with the sql statement that should be executed in database.
+     * @param string $sql        A string with the sql statement that should be executed in database.
      * @param array<int,mixed> $params     An array of parameters to bind to the prepared statement.
-     * @param bool             $showError  Default will be **true** and if an error the script will be terminated and
+     * @param bool $showError  Default will be **true** and if an error the script will be terminated and
      *                                     occurred the error with a backtrace will be send to the browser. If set to
      *                                     **false** no error will be shown and the script will be continued.
-     * @return \PDOStatement|false For **SELECT** statements an object of <a href="https://www.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
+     * @return PDOStatement|false For **SELECT** statements an object of <a href="https://www.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
      */
-    public function queryPrepared($sql, array $params = array(), $showError = true)
+    public function queryPrepared(string $sql, array $params = array(), bool $showError = true)
     {
         global $gLogger;
 
@@ -765,7 +765,7 @@ class Database
      * @param array<int,mixed> $valuesArray An array with the values that should be replaced with question marks
      * @return string Question marks string
      */
-    public static function getQmForValues(array $valuesArray)
+    public static function getQmForValues(array $valuesArray): string
     {
         return implode(',', array_fill(0, count($valuesArray), '?'));
     }
@@ -777,7 +777,7 @@ class Database
      * @see Database#startTransaction
      * @see Database#endTransaction
      */
-    public function rollback()
+    public function rollback(): bool
     {
         global $gLogger;
 
@@ -883,7 +883,7 @@ class Database
      * @param string $errorMessage Optional an error message could be set and integrated in the output of the sql error.
      * @return void Will exit the script and returns a html output with the error information.
      */
-    public function showError($errorMessage = '')
+    public function showError(string $errorMessage = '')
     {
         global $gLogger, $gSettingsManager, $gL10n;
 
@@ -929,7 +929,7 @@ class Database
      * @see Database#endTransaction
      * @see Database#rollback
      */
-    public function startTransaction()
+    public function startTransaction(): bool
     {
         global $gLogger;
 
