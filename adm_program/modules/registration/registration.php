@@ -22,7 +22,7 @@ if (!$gValidLogin) {
     // => EXIT
 }
 
-// Only Users with the right "approve users" can confirm registrations. Otherwise exit.
+// Only Users with the right "approve users" can confirm registrations, otherwise exit.
 if (!$gCurrentUser->approveUsers()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT

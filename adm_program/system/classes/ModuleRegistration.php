@@ -15,7 +15,7 @@
  *
  * **Code example**
  * ```
- * // check the given Array for charecter and split it.
+ * // check the given Array for character and split it.
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
  *
  * // show a message and set a link to a page that should be shown after user click ok
@@ -73,27 +73,31 @@ class ModuleRegistration extends HtmlPage
         return $gDb->getArrayFromSql($sql, $queryParameters);
     }
 
+    /**
+     * @throws SmartyException
+     */
     public function createContent()
     {
-        global $gL10n, $gSettingsManager;
+        global $gL10n, $gSettingsManager, $gMessage, $gHomepage;
 
         $registrations = $this->getRegistrationsArray();
         $templateData = array();
+
+        if (count($registrations) === 0) {
+            $gMessage->setForwardUrl($gHomepage);
+            $gMessage->show($gL10n->get('SYS_NO_NEW_REGISTRATIONS'), $gL10n->get('SYS_REGISTRATION'));
+            // => EXIT
+        }
 
         foreach($registrations as $row) {
             $templateRow = array();
             $templateRow['id'] = 'row_user_'.$row['userUUID'];
             $templateRow['title'] = $row['firstName'] . ' ' . $row['lastName'];
 
-            $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['registrationTimestamp']);
+            $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['registrationTimestamp']);
             $templateRow['information'][] = $gL10n->get('SYS_REGISTRATION_AT', array($timestampCreate->format($gSettingsManager->getString('system_date')), $timestampCreate->format($gSettingsManager->getString('system_time'))));
             $templateRow['information'][] = $gL10n->get('SYS_USERNAME') . ': ' . $row['loginName'];
-            if ($gSettingsManager->getBool('enable_mail_module')) {
-                $mailLink = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['userUUID'])).'">'.$row['email'].'</a>';
-            } else {
-                $mailLink  = '<a href="mailto:'.$registrationUser['email'].'">'.$row['email'].'</a>';
-            }
-            $templateRow['information'][] = $gL10n->get('SYS_EMAIL') . ': ' . $mailLink;
+            $templateRow['information'][] = $gL10n->get('SYS_EMAIL') . ': <a href="mailto:'.$row['email'].'">'.$row['email'].'</a>';
 
             $templateRow['actions'][] = array(
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['userUUID'])),
@@ -107,8 +111,7 @@ class ModuleRegistration extends HtmlPage
             );
             $templateRow['buttons'][] = array(
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_uuid' => $row['userUUID'])),
-                'name' => $gL10n->get('SYS_ASSIGN_REGISTRATION'),
-                'class' => ''
+                'name' => $gL10n->get('SYS_ASSIGN_REGISTRATION')
             );
 
             $templateData[] = $templateRow;

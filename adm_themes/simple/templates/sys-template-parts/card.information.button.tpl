@@ -18,7 +18,7 @@
                 {/foreach}
             </ul>
             {foreach $card.buttons as $buttonItem}
-                <a class="btn btn-primary {$buttonItem.class} mt-auto" href="{$buttonItem.url}">{$buttonItem.name}</a>
+                <a class="btn btn-primary mt-auto" href="{$buttonItem.url}">{$buttonItem.name}</a>
             {/foreach}
         </div>
     </div>
