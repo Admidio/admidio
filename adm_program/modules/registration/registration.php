@@ -34,33 +34,11 @@ $headline = $gL10n->get('SYS_NEW_REGISTRATIONS');
 // Navigation in module starts here
 $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
 
-// Select new Members of the group
-$sql = 'SELECT usr_id, usr_uuid, usr_login_name, reg_timestamp, last_name.usd_value AS last_name,
-               first_name.usd_value AS first_name, email.usd_value AS email
-          FROM '.TBL_REGISTRATIONS.'
-    INNER JOIN '.TBL_USERS.'
-            ON usr_id = reg_usr_id
-     LEFT JOIN '.TBL_USER_DATA.' AS last_name
-            ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-     LEFT JOIN '.TBL_USER_DATA.' AS first_name
-            ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-     LEFT JOIN '.TBL_USER_DATA.' AS email
-            ON email.usd_usr_id = usr_id
-           AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
-         WHERE usr_valid = false
-           AND reg_org_id = ? -- $gCurrentOrgId
-      ORDER BY last_name, first_name';
-$queryParams = array(
-    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-    $gProfileFields->getProperty('EMAIL', 'usf_id'),
-    $gCurrentOrgId
-);
-$usrStatement = $gDb->queryPrepared($sql, $queryParams);
+$moduleRegistration = new ModuleRegistration();
 
-if ($usrStatement->rowCount() === 0) {
+$registrations = $moduleRegistration->getRegistrationsArray();
+
+if (count($registrations) === 0) {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_NO_NEW_REGISTRATIONS'), $gL10n->get('SYS_REGISTRATION'));
     // => EXIT
@@ -82,29 +60,29 @@ $columnHeading = array(
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 $table->addRowHeadingByArray($columnHeading);
 
-while ($row = $usrStatement->fetch()) {
-    $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['reg_timestamp']);
+foreach($registrations as $registrationUser) {
+    $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $registrationUser['registrationTimestamp']);
     $datetimeCreate  = $timestampCreate->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
 
     if ($gSettingsManager->getBool('enable_mail_module')) {
-        $mailLink = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['usr_uuid'])).'">'.$row['email'].'</a>';
+        $mailLink = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $registrationUser['userUUID'])).'">'.$registrationUser['email'].'</a>';
     } else {
-        $mailLink  = '<a href="mailto:'.$row['email'].'">'.$row['email'].'</a>';
+        $mailLink  = '<a href="mailto:'.$registrationUser['email'].'">'.$registrationUser['email'].'</a>';
     }
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])).'">'.$row['last_name'].', '.$row['first_name'].'</a>',
+        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $registrationUser['userUUID'])).'">'.$registrationUser['lastName'].', '.$registrationUser['firstName'].'</a>',
         $datetimeCreate,
-        $row['usr_login_name'],
+        $registrationUser['loginName'],
         $mailLink,
-        '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_uuid' => $row['usr_uuid'])).'">
+        '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_uuid' => $registrationUser['userUUID'])).'">
             <i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('SYS_ASSIGN_REGISTRATION').'"></i></a>
         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'nwu', 'element_id' => 'row_user_'.$row['usr_id'], 'name' => $row['first_name'].' '.$row['last_name'], 'database_id' => $row['usr_uuid'])).'">
+            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'nwu', 'element_id' => 'row_user_'.$registrationUser['userUUID'], 'name' => $registrationUser['firstName'].' '.$registrationUser['lastName'], 'database_id' => $registrationUser['userUUID'])).'">
             <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
 
-    $table->addRowByArray($columnValues, 'row_user_'.$row['usr_id']);
+    $table->addRowByArray($columnValues, 'row_user_'.$registrationUser['userUUID']);
 }
 
 $page->addHtml($table->show());

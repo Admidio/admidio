@@ -288,6 +288,25 @@ class Database
     }
 
     /**
+     * This method returns an array with all rows of the executed SQL statement. Each row entry will contain
+     * a sub array with all columns of that row.
+     * @param string $sql A valid SQL select statement.
+     * @param array $queryParameters Optional the parameters for the SQL statement.
+     * @return array Returns array with all rows and a sub array with the columns of each row.
+     */
+    public function getArrayFromSql(string $sql, array $queryParameters = array()): array
+    {
+        $arrayResults = array();
+        $statement    = $this->queryPrepared($sql, $queryParameters);
+
+        while ($row = $statement->fetch()) {
+            $arrayResults[] = $row;
+        }
+
+        return $arrayResults;
+    }
+
+    /**
      * This method will create an backtrace of the current position in the script. If several
      * scripts were called than each script with their position will be listed in the backtrace.
      * @return string Returns a string with the backtrace of all called scripts.
@@ -341,19 +360,6 @@ class Database
     }
 
     /**
-     * Get the name of the database that is running Admidio.
-     * @return string Returns a string with the name of the database e.g. 'MySQL' or 'PostgreSQL'
-     */
-    public function getName()
-    {
-        if ($this->databaseName === '') {
-            $this->databaseName = $this->getPropertyFromDatabaseConfig('name');
-        }
-
-        return $this->databaseName;
-    }
-
-    /**
      * Get the minimum required version of the database that is necessary to run Admidio.
      * @return string Returns a string with the minimum required database version e.g. '5.0.1'
      */
@@ -367,6 +373,19 @@ class Database
     }
 
     /**
+     * Get the name of the database that is running Admidio.
+     * @return string Returns a string with the name of the database e.g. 'MySQL' or 'PostgreSQL'
+     */
+    public function getName()
+    {
+        if ($this->databaseName === '') {
+            $this->databaseName = $this->getPropertyFromDatabaseConfig('name');
+        }
+
+        return $this->databaseName;
+    }
+
+    /**
      * @param string $property Property name of the in use database config
      * @return string Returns the value of the chosen property
      */
@@ -376,6 +395,32 @@ class Database
         $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->engine . '"]/' . $property);
 
         return (string) $node[0];
+    }
+
+    /**
+     * Reads a SQL file where each SQL statement is separated through a semicolon. The SQL statements
+     * could use syntax that will be prepared through Database::prepareSqlAdmidioParameters(). The
+     * method will return an array with each SQL statement.
+     * @param string $sqlFilePath The path to the SQL file
+     * @throws UnexpectedValueException Throws if the file does not exist or is not readable
+     * @throws RuntimeException         Throws if the read process fails
+     * @return array<int,string> Returns an array with all prepared SQL statements
+     */
+    public static function getSqlStatementsFromSqlFile($sqlFilePath)
+    {
+        $sqlFileContent = FileSystemUtils::readFile($sqlFilePath);
+
+        $sqlArray = explode(';', $sqlFileContent);
+
+        $sqlStatements = array();
+        foreach ($sqlArray as $sql) {
+            $sql = self::prepareSqlAdmidioParameters(trim($sql));
+            if ($sql !== '') {
+                $sqlStatements[] = $sql;
+            }
+        }
+
+        return $sqlStatements;
     }
 
     /**
@@ -908,29 +953,5 @@ class Database
         $this->transactions = 1;
 
         return $result;
-    }
-
-    /**
-     * Reads an prepares a SQL file to SQL statements
-     * @param string $sqlFilePath The path to the SQL file
-     * @throws \UnexpectedValueException Throws if the file does not exist or is not readable
-     * @throws \RuntimeException         Throws if the read process fails
-     * @return array<int,string> Returns an array with all prepared SQL statements
-     */
-    public static function getSqlStatementsFromSqlFile($sqlFilePath)
-    {
-        $sqlFileContent = FileSystemUtils::readFile($sqlFilePath);
-
-        $sqlArray = explode(';', $sqlFileContent);
-
-        $sqlStatements = array();
-        foreach ($sqlArray as $sql) {
-            $sql = self::prepareSqlAdmidioParameters(trim($sql));
-            if ($sql !== '') {
-                $sqlStatements[] = $sql;
-            }
-        }
-
-        return $sqlStatements;
     }
 }
