@@ -179,7 +179,6 @@ if ($gCurrentSession->hasObject('gMenu')) {
      * @var MainMenu $gMenu
      */
     $gMenu =& $gCurrentSession->getObject('gMenu');
-    $gMenu->removeFunctionsNode();
 } else {
     // read menu from database
     $gMenu = new MainMenu();
