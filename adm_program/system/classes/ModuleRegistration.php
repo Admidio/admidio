@@ -8,23 +8,17 @@
  */
 
 /**
- * Some functions for the registration module
+ * Needful functions for the registration module
  *
  * This class adds some functions that are used in the registration module to keep the
  * code easy to read and short
  *
  * **Code example**
  * ```
- * // check the given Array for character and split it.
- * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
- *
- * // show a message and set a link to a page that should be shown after user click ok
- * $gMessage->setForwardUrl('https://www.example.com/mypage.php');
- * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
- *
- * // show a message with yes and no button and set a link to a page that should be shown after user click yes
- * $gMessage->setForwardYesNo('https://www.example.com/mypage.php');
- * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
+ * // generate html output with available registrations
+ * $page = new ModuleRegistration('admidio-registration', $headline);
+ * $page->createContent();
+ * $page->show();
  * ```
  */
 class ModuleRegistration extends HtmlPage
@@ -74,6 +68,9 @@ class ModuleRegistration extends HtmlPage
     }
 
     /**
+     * Read all available registrations from the database and create the html content of this
+     * page with the Smarty template engine and write the html output to the internal
+     * parameter **$pageContent**. If no registration is found than show a message to the user.
      * @throws SmartyException
      */
     public function createContent()

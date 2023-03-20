@@ -41,7 +41,6 @@ return array(
     'MainMenu' => $baseDir . '/adm_program/system/classes/MainMenu.php',
     'MenuNode' => $baseDir . '/adm_program/system/classes/MenuNode.php',
     'Message' => $baseDir . '/adm_program/system/classes/Message.php',
-    'Module' => $baseDir . '/adm_program/system/classes/Module.php',
     'ModuleAnnouncements' => $baseDir . '/adm_program/system/classes/ModuleAnnouncements.php',
     'ModuleDates' => $baseDir . '/adm_program/system/classes/ModuleDates.php',
     'ModuleLists' => $baseDir . '/adm_program/system/classes/ModuleLists.php',
