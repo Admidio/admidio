@@ -218,7 +218,6 @@ $javascriptCode = '
 
 // create a multidimensional array for all columns with the necessary data
 $i = 0;
-$oldCategoryNameIntern = '';
 $arrParticipantsInformation = array(
     'mem_approved'         => $gL10n->get('SYS_PARTICIPATION_STATUS'),
     'mem_usr_id_change'    => $gL10n->get('SYS_CHANGED_BY'),
@@ -228,59 +227,6 @@ $arrParticipantsInformation = array(
 );
 
 foreach ($gProfileFields->getProfileFields() as $field) {
-    // at the end of category basic data save positions for loginname and username
-    // they will be added after profile fields loop
-    if ($oldCategoryNameIntern === 'BASIC_DATA' && $field->getValue('cat_name_intern') !== 'BASIC_DATA') {
-        $javascriptCode .= '
-            userFields[' . ++$i . '] = {
-                "cat_name": userFields[1]["cat_name"],
-                "usf_name": "'.$gL10n->get('SYS_PHOTO').'",
-                "usf_name_intern": "usr_photo"
-            };';
-
-        // administrator could export the uuid of each user to identify the user later at the import
-        if($gCurrentUser->editUsers()) {
-            $javascriptCode .= '
-                userFields[' . ++$i . '] = {
-                    "cat_name": userFields[1]["cat_name"],
-                    "usf_name": "'.$gL10n->get('SYS_USERNAME').'",
-                    "usf_name_intern": "usr_login_name"
-                };
-
-                userFields[' . ++$i . '] = {
-                    "cat_name": userFields[1]["cat_name"],
-                    "usf_name": "'.$gL10n->get('SYS_CREATED_BY').'",
-                    "usf_name_intern": "usr_usr_id_create"
-                    };
-
-                userFields[' . ++$i . '] = {
-                    "cat_name": userFields[1]["cat_name"],
-                    "usf_name": "'.$gL10n->get('SYS_CREATED_AT').'",
-                    "usf_name_intern": "usr_timestamp_create"
-                    };
-
-                userFields[' . ++$i . '] = {
-                    "cat_name": userFields[1]["cat_name"],
-                    "usf_name": "'.$gL10n->get('SYS_CHANGED_BY').'",
-                    "usf_name_intern": "usr_usr_id_change"
-                    };
-
-                userFields[' . ++$i . '] = {
-                    "cat_name": userFields[1]["cat_name"],
-                    "usf_name": "'.$gL10n->get('SYS_CHANGED_AT').'",
-                    "usf_name_intern": "usr_timestamp_change"
-                    };
-
-                userFields[' . ++$i . '] = {
-                    "cat_name": userFields[1]["cat_name"],
-                    "usf_name": "'.$gL10n->get('SYS_UNIQUE_ID').'",
-                    "usf_name_intern": "usr_uuid"
-                    };';
-        }
-
-        $oldCategoryNameIntern = $field->getValue('cat_name_intern');
-    }
-
     // add profile field to user field array
     if ($gProfileFields->isVisible($field->getValue('usf_name_intern'), $gCurrentUser->editUsers())) {
         $javascriptCode .= '
@@ -303,11 +249,57 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 userFields[' . $i . ']["usf_value_list"] = "";';
         }
     }
-
-    $oldCategoryNameIntern = $field->getValue('cat_name_intern');
 }
 
+// after the profile fields add add some special profile informations e.g. username, photo, created at ...
+$javascriptCode .= '
+        userFields[' . ++$i . '] = {
+            "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
+            "usf_name": "' . $gL10n->get('SYS_PHOTO') . '",
+            "usf_name_intern": "usr_photo"
+        };';
+
+// administrator could export the uuid of each user to identify the user later at the import
+if ($gCurrentUser->editUsers()) {
     $javascriptCode .= '
+            userFields[' . ++$i . '] = {
+                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
+                "usf_name": "' . $gL10n->get('SYS_USERNAME') . '",
+                "usf_name_intern": "usr_login_name"
+            };
+
+            userFields[' . ++$i . '] = {
+                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
+                "usf_name": "' . $gL10n->get('SYS_CREATED_BY') . '",
+                "usf_name_intern": "usr_usr_id_create"
+                };
+
+            userFields[' . ++$i . '] = {
+                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
+                "usf_name": "' . $gL10n->get('SYS_CREATED_AT') . '",
+                "usf_name_intern": "usr_timestamp_create"
+                };
+
+            userFields[' . ++$i . '] = {
+                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
+                "usf_name": "' . $gL10n->get('SYS_CHANGED_BY') . '",
+                "usf_name_intern": "usr_usr_id_change"
+                };
+
+            userFields[' . ++$i . '] = {
+                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
+                "usf_name": "' . $gL10n->get('SYS_CHANGED_AT') . '",
+                "usf_name_intern": "usr_timestamp_change"
+                };
+
+            userFields[' . ++$i . '] = {
+                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
+                "usf_name": "' . $gL10n->get('SYS_UNIQUE_ID') . '",
+                "usf_name_intern": "usr_uuid"
+                };';
+}
+
+$javascriptCode .= '
         userFields[' . ++$i . '] = {
             "cat_name": "'.$gL10n->get('SYS_ROLE_INFORMATION').'",
             "usf_name": "'.$gL10n->get('SYS_MEMBERSHIP_START').'",
@@ -330,7 +322,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             };';
     }
 
-    $javascriptCode .= '
+$javascriptCode .= '
         return userFields;
 }
 
