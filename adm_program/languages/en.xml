@@ -1078,7 +1078,6 @@
   <string name="SYS_NO_ROLES_AND_USERS">There are no roles or users released to whom you can send messages.</string>
   <string name="SYS_NO_TEMPLATE">No template</string>
   <string name="SYS_NO_USER_FOUND">No member of your criteria could be found.</string>
-  <string name="SYS_NO_VALID_RECIPIENTS">The selected roles and users have no valid e-mail addresses. For this reason, the e-mail can`t be sent.</string>
   <string name="SYS_NOBODY">Nobody</string>
   <string name="SYS_NONE">None</string>
   <string name="SYS_NOT_AT_REGISTRATION">Not at registration</string>
