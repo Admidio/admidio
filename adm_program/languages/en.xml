@@ -1172,6 +1172,7 @@
   <string name="SYS_PROCESS_CANCELED">Process canceled.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing the data.</string>
   <string name="SYS_PROFILE_FIELD">Profile field</string>
+  <string name="SYS_PROFILE_INFORMATION">Profile information</string>
   <string name="SYS_PROFILE_PHOTO">Profile photo</string>
   <string name="SYS_PROPERTIES">Properties</string>
   <string name="SYS_QUANTITY">Quantity</string>
@@ -1186,6 +1187,7 @@
   <string name="SYS_REDIRECT_URL_INVALID">The specified redirect URL is not valid.</string>
   <string name="SYS_REGISTERED_AS">Logged in as</string>
   <string name="SYS_REGISTRATION">Registration</string>
+  <string name="SYS_REGISTRATION_AT">Registration on #VAR1# at #VAR2#</string>
   <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Adopt all data from the registration for the existing user</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">If a newly registered user already exists in the database, all data from the registration will be transferred to the existing user if this setting is set. If this setting is not set, only the user name and the password are taken over. In case of users, which did not exist before, all data from the registration will always be taken over, independent of this setting. (Default: yes)</string>
