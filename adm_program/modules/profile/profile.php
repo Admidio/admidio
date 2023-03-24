@@ -297,7 +297,8 @@ $page->addHtml('
                     $userName .= $user->getValue('usr_login_name');
                 }
 
-                if($userId === $gCurrentUserId || $gCurrentUser->isAdministrator()) {
+                if(!empty($user->getValue('usr_actual_login'))
+                    && ($userId === $gCurrentUserId || $gCurrentUser->isAdministrator())) {
                     $userName .= HtmlForm::getHelpTextIcon($gL10n->get('SYS_LAST_LOGIN_ON', array($user->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $user->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));
                 }
 
