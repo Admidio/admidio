@@ -38,8 +38,12 @@ if ($getCopy) {
     $headline = $gL10n->get('SYS_CREATE_ENTRY');
 }
 
-// add current url to navigation stack
-$gNavigation->addUrl(CURRENT_URL, $headline);
+try {
+    // add current url to navigation stack
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+} catch (AdmException $e) {
+    $e->showHtml();
+}
 
 // Create announcements object
 $announcement = new TableAnnouncement($gDb);
