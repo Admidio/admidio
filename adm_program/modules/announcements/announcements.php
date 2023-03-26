@@ -58,11 +58,15 @@ $announcements->setDateRange($getDateFrom, $getDateTo);
 // get parameters and number of recordsets
 $announcementsCount = $announcements->getDataSetCount();
 
-// add url to navigation stack
-if ($getAnnUuid !== '') {
-    $gNavigation->addUrl(CURRENT_URL, $getHeadline);
-} else {
-    $gNavigation->addStartUrl(CURRENT_URL, $getHeadline, 'fa-newspaper');
+try {
+    // add url to navigation stack
+    if ($getAnnUuid !== '') {
+        $gNavigation->addUrl(CURRENT_URL, $getHeadline);
+    } else {
+        $gNavigation->addStartUrl(CURRENT_URL, $getHeadline, 'fa-newspaper');
+    }
+} catch (AdmException $e) {
+    $e->showHtml();
 }
 
 // create html page object
