@@ -190,6 +190,7 @@ class ListConfiguration extends TableLists
                 case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
                     $text = $gL10n->get('DAT_USER_INVITED');
                     $htmlText = '<i class="fas fa-calendar-check admidio-icon-chain"></i>' . $text;
+                    $buttonClass = '';
                     break;
                 case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
                     $text = $gL10n->get('DAT_USER_ATTEND');
