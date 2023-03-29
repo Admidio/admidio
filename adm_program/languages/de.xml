@@ -1091,10 +1091,10 @@
   <string name="SYS_NOTE">Hinweis</string>
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Benachrichtigung nach einer neuen Registrierung</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Hier kann eine Systembenachrichtigung für neue Einträge in den Modulen Ankündigungen, Termine, Gästebuch, Weblinks und Fotos aktiviert werden. Mitglieder der hinterlegten Benachrichtigungsrolle erhalten so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen. (Voreinstellung: nein)</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Hier kann eine Systembenachrichtigung für neue Einträge in den Modulen Ankündigungen, Termine, Dokumente &amp; Dateien, Fotos, Weblinks und Gästebuch aktiviert werden. Mitglieder der hinterlegten Benachrichtigungsrolle erhalten so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen. (Voreinstellung: nein)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Benachrichtigung bei Profiländerungen</string>
-  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Hier kann eine Systembenachrichtigung für neue Einträge in den Modulen Ankündigungen, Termine, Gästebuch, Weblinks und Fotos aktiviert werden. Mitglieder der hinterlegten Benachrichtigungsrolle erhalten so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen. (Voreinstellung: nein)</string>
-  <string name="SYS_NOTIFICATION_ROLE">Rolle für Benachrichtungen</string>
+  <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Hier kann eine Systembenachrichtigung für geänderte Profildaten aktiviert werden. Werden von einer Benutzerin oder einem Benutzer Profildaten erstellt, geändert oder gelöscht, erfolgt eine Benachrichtigung an die Mitglieder der hinterlegten Benachrichtigungsrolle per E-Mail. (Voreinstellung: nein)</string>
+  <string name="SYS_NOTIFICATION_ROLE">Rolle für Benachrichtigungen</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Benachrichtigungen über neue Einträge oder Profiländerungen werden an alle Mitglieder dieser Rolle gesendet.</string>
   <string name="SYS_NUMBER">Zahl</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Anzahl Rollen pro Seite</string>
