@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.1] - 2023-03-28
+
+### Security
+- Fixed Cross site scripting vulnerability in Javascript escaping. This addresses CVE-2023-28447.
+
+### Fixed
+- `$smarty->muteUndefinedOrNullWarnings()` now also mutes PHP7 notices for undefined array indexes [#736](https://github.com/smarty-php/smarty/issues/736)
+- `$smarty->muteUndefinedOrNullWarnings()` now treats undefined vars and array access of a null or false variables 
+  equivalent across all supported PHP versions
+- `$smarty->muteUndefinedOrNullWarnings()` now allows dereferencing of non-objects across all supported PHP versions [#831](https://github.com/smarty-php/smarty/issues/831)
+- PHP 8.1 deprecation warnings on null strings in modifiers [#834](https://github.com/smarty-php/smarty/pull/834)
+
 ## [4.3.0] - 2022-11-22
 
 ### Added
@@ -14,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Include docs and demo in the releases [#799](https://github.com/smarty-php/smarty/issues/799)
 - Using PHP functions as modifiers now triggers a deprecation notice because we will drop support for this in the next major release [#813](https://github.com/smarty-php/smarty/issues/813) 
--  Dropped remaining references to removed PHP-support in Smarty 4 from docs, lexer and security class. [#816](https://github.com/smarty-php/smarty/issues/816)
+- Dropped remaining references to removed PHP-support in Smarty 4 from docs, lexer and security class. [#816](https://github.com/smarty-php/smarty/issues/816)
 - Support umask when writing (template) files and set dir permissions to 777 [#548](https://github.com/smarty-php/smarty/issues/548) [#819](https://github.com/smarty-php/smarty/issues/819) 
  
 ### Fixed
@@ -26,7 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed PHP8.1 deprecation errors passing null to parameter in trim [#807](https://github.com/smarty-php/smarty/pull/807)
 - Adapt Smarty upper/lower functions to be codesafe (e.g. for Turkish locale) [#586](https://github.com/smarty-php/smarty/pull/586)
 - Bug fix for underscore and limited length in template name in custom resources [#581](https://github.com/smarty-php/smarty/pull/581)
-
 
 ## [4.2.1] - 2022-09-14
 

@@ -188,8 +188,6 @@ class Email extends PHPMailer
      *                          EMAIL_ALL_MEMBERS, EMAIL_ONLY_ACTIVE_MEMBERS, EMAIL_ONLY_FORMER_MEMBERS
      *                          The default value will be EMAIL_ONLY_ACTIVE_MEMBERS.
      * @return int Returns the number of added email addresses.
-     * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
-     *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
      */
     public function addRecipientsByRole(string $roleUuid, int $memberStatus = self::EMAIL_ONLY_ACTIVE_MEMBERS): int
     {
@@ -269,8 +267,6 @@ class Email extends PHPMailer
                     ++$numberRecipientsAdded;
                 }
             }
-        } else {
-            throw new AdmException($gL10n->get('SYS_NO_VALID_RECIPIENTS'));
         }
 
 
@@ -282,8 +278,6 @@ class Email extends PHPMailer
      * **mail_send_to_all_addresses** is set than all email addresses of the given user id will be added.
      * @param int $userId ID of a user who should be the recipient of the email.
      * @return int Returns the number of added email addresses.
-     * @throws AdmException in case of errors. exception->text contains a string with the reason why no recipient could be added.
-     *                     Possible reasons: SYS_NO_VALID_RECIPIENTS
      */
     public function addRecipientsByUserId(int $userId): int
     {
@@ -323,8 +317,6 @@ class Email extends PHPMailer
                     ++$numberRecipientsAdded;
                 }
             }
-        } else {
-            throw new AdmException($gL10n->get('SYS_NO_VALID_RECIPIENTS'));
         }
 
         return $numberRecipientsAdded > 0;
@@ -793,14 +785,8 @@ class Email extends PHPMailer
     {
         global $gSettingsManager, $gCurrentOrganization, $gCurrentUser;
 
-        try {
-            // Send notification to configured role
-            $this->addRecipientsByRole($gSettingsManager->getString('system_notifications_role'));
-        } catch (AdmException $e) {
-            // exception is thrown if no valid recipient for notification email was found,
-            // but we don't want to show an error because this will break the action the
-            // user wants to do and here we only want to send a notification
-        }
+        // Send notification to configured role
+        $this->addRecipientsByRole($gSettingsManager->getString('system_notifications_role'));
 
         // Set Sender
         if ($gCurrentUser->getValue('EMAIL') === '') {

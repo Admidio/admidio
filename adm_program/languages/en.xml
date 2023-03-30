@@ -278,7 +278,7 @@
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Enable registration</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">The registration by visitors of the homepage can be activated or deactivated by this setting. The profile fields that are displayed during the registration process can be configured in the profile field settings for each field. (Default: yes)</string>
   <string name="ORG_ENABLE_RSS_FEEDS">Enable web feeds</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio is able to provide web feeds for several modules (announcements, appointments, guestbook, photo gallery and weblinks) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</string>
+  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio is able to provide web feeds for several modules (announcements, events, guestbook, photos and web links) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</string>
   <string name="ORG_FIELD_DESCRIPTION">Define unlimited additional fields. Fields will be displayed and can be edited in user\'s profile. These fields will be available in own list, too.</string>
   <string name="ORG_FIELD_DISABLED">Field only editable for user with permission #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by the user in its own profile. It can be edited only by users who have the permission to edit all users. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
@@ -661,7 +661,7 @@
   <string name="SYS_CURRENT_DATABASE_VERSION">Current database version</string>
   <string name="SYS_CURRENT_MEMBER">Current member</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your #VAR1#profile#VAR2#.</string>
-  <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, weblinks ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD#</string>
+  <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, web links ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Data visible to multiple organizations</string>
   <string name="SYS_DATA_PROTECTION">Data protection</string>
   <string name="SYS_DATA_PROTECTION_DESC">Here, the URL to your page with the privacy policy can be deposited. This page is linked to the use of cookies for further information. If the selected theme supports this, a link will also be displayed on the Admidio pages. (Example: https://www.example.com/data_protection.html)</string>
@@ -1078,7 +1078,6 @@
   <string name="SYS_NO_ROLES_AND_USERS">There are no roles or users released to whom you can send messages.</string>
   <string name="SYS_NO_TEMPLATE">No template</string>
   <string name="SYS_NO_USER_FOUND">No member of your criteria could be found.</string>
-  <string name="SYS_NO_VALID_RECIPIENTS">The selected roles and users have no valid e-mail addresses. For this reason, the e-mail can`t be sent.</string>
   <string name="SYS_NOBODY">Nobody</string>
   <string name="SYS_NONE">None</string>
   <string name="SYS_NOT_AT_REGISTRATION">Not at registration</string>
@@ -1091,7 +1090,7 @@
   <string name="SYS_NOTE">Note</string>
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notification after a new registration</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification for new entries</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Here you can activate a system notification for new entries in the modules Announcements, Events, Guestbook, Web Links and Photos. Members of the stored notification role get the possibility to be notified about new entries in the modules by e-mail. (Default: no)</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Here you can activate a system notification for new entries in the modules announcements, events, documents &amp; files, photos, web links and guestbook. Members of the stored notification role get the possibility to be notified about new entries in the modules by e-mail. (Default: no)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notification for changed profile fields</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">A system notification for changed profile data can be activated here. If profile data is created, changed or deleted by a user, the members of the stored notification role are notified by e-mail. (Default: no)</string>
   <string name="SYS_NOTIFICATION_ROLE">Notification role</string>
@@ -1172,6 +1171,7 @@
   <string name="SYS_PROCESS_CANCELED">Process canceled.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing the data.</string>
   <string name="SYS_PROFILE_FIELD">Profile field</string>
+  <string name="SYS_PROFILE_INFORMATION">Profile information</string>
   <string name="SYS_PROFILE_PHOTO">Profile photo</string>
   <string name="SYS_PROPERTIES">Properties</string>
   <string name="SYS_QUANTITY">Quantity</string>
