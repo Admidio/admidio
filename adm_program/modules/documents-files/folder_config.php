@@ -69,6 +69,7 @@ $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
                     AND rol_system = false
                         '.$sqlRolesViewRight.'
                     AND cat_org_id = ? -- $gCurrentOrgId
+                    AND cat_name_intern <> \'EVENTS\'
                ORDER BY cat_sequence, rol_name';
 $sqlDataView = array(
     'query'  => $sqlViewRoles,
