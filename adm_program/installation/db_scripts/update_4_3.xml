@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<update>
+    <step id="10">ALTER TABLE %PREFIX%_registrations ADD COLUMN reg_validation_id varchar(50)</step>
+    <step id="20">UPDATE %PREFIX%_registrations SET reg_validation_id = %UUID%</step>
+    <step>stop</step>
+</update>

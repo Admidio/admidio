@@ -555,6 +555,7 @@ CREATE TABLE %PREFIX%_registrations
     reg_org_id                  integer unsigned    NOT NULL,
     reg_usr_id                  integer unsigned    NOT NULL,
     reg_timestamp               timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    reg_validation_id           varchar(50),
     PRIMARY KEY (reg_id)
 )
 ENGINE = InnoDB

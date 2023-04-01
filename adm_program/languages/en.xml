@@ -1187,6 +1187,8 @@
   <string name="SYS_REGISTERED_AS">Logged in as</string>
   <string name="SYS_REGISTRATION">Registration</string>
   <string name="SYS_REGISTRATION_AT">Registration on #VAR1# at #VAR2#</string>
+  <string name="SYS_REGISTRATION_CONFIRMED">Registration has been confirmed by the user.</string>
+  <string name="SYS_REGISTRATION_NOT_CONFIRMED">Registration has not yet been confirmed by the user.</string>
   <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Adopt all data from the registration for the existing user</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">If a newly registered user already exists in the database, all data from the registration will be transferred to the existing user if this setting is set. If this setting is not set, only the user name and the password are taken over. In case of users, which did not exist before, all data from the registration will always be taken over, independent of this setting. (Default: yes)</string>
@@ -1441,7 +1443,7 @@
   <string name="SYS_UTF32LE">UTF-32LE</string>
   <string name="SYS_VALID_FROM" description="Date valid from">Valid from</string>
   <string name="SYS_VALID_TO" description="Date valid to">Valid until</string>
-  <string name="SYS_VARIOUS_ROLES">Various roles</string>
+  <string name="SYS_VALIDATION_NOT_OK">Various roles</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Various relationships</string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VERSION_TO_OLD">Your current database version is #VAR1#. Unfortunately, it is not possible to update to #VAR2# with this version.\n\nPlease install Admidio 4.1 first and then update to Admidio #VAR2#.</string>

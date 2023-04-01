@@ -33,7 +33,7 @@ class ModuleRegistration extends HtmlPage
 
     /**
      * Creates an array with all available registrations. The array contains the following entries:
-     * array(userID, userUUID, loginName, registrationTimestamp, lastName, firstName, email)
+     * array(userID, userUUID, loginName, registrationTimestamp, lastName, firstName, email, validationID)
      * @return array Returns an array with information about every available registration
      */
     public function getRegistrationsArray(): array
@@ -42,7 +42,7 @@ class ModuleRegistration extends HtmlPage
 
         // Select new Members of the group
         $sql = 'SELECT usr_id as userID, usr_uuid as userUUID, usr_login_name as loginName, reg_timestamp as registrationTimestamp, last_name.usd_value AS lastName,
-                       first_name.usd_value AS firstName, email.usd_value AS email
+                       first_name.usd_value AS firstName, email.usd_value AS email, reg_validation_id as validationID
                   FROM '.TBL_REGISTRATIONS.'
             INNER JOIN '.TBL_USERS.'
                     ON usr_id = reg_usr_id
@@ -95,6 +95,12 @@ class ModuleRegistration extends HtmlPage
             $templateRow['information'][] = $gL10n->get('SYS_REGISTRATION_AT', array($timestampCreate->format($gSettingsManager->getString('system_date')), $timestampCreate->format($gSettingsManager->getString('system_time'))));
             $templateRow['information'][] = $gL10n->get('SYS_USERNAME') . ': ' . $row['loginName'];
             $templateRow['information'][] = $gL10n->get('SYS_EMAIL') . ': <a href="mailto:'.$row['email'].'">'.$row['email'].'</a>';
+
+            if ((string) $row['validationID'] === '') {
+                $templateRow['information'][] = '<div class="alert alert-success"><i class="fas fa-check-circle"></i>' . $gL10n->get('SYS_REGISTRATION_CONFIRMED') . '</div>';
+            } else {
+                $templateRow['information'][] = '<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i>' . $gL10n->get('SYS_REGISTRATION_NOT_CONFIRMED') . '</div>';
+            }
 
             $templateRow['actions'][] = array(
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['userUUID'])),
