@@ -1022,6 +1022,14 @@ class Securimage
      * @var int
      */
     protected $gdsignaturecolor;
+    /**
+     * @var string
+     */
+    private $code_entered;
+    /**
+     * @var bool
+     */
+    private $correct_code;
 
     /**
      * Create a new securimage object, pass options to set in the constructor.
