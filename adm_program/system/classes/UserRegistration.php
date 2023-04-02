@@ -14,7 +14,7 @@
  * If a new user is saved than there will be an additional table entry in the
  * registration table. This entry must be deleted if a registration is confirmed
  * or deleted. If a registration is confirmed or deleted then a notification SystemMail
- * will be send to the user. If email couldn't be send than an AdmException will be thrown.
+ * will be sent to the user. If email couldn't be sent than an AdmException will be thrown.
  *
  * **Code example**
  * ```
@@ -74,10 +74,11 @@ class UserRegistration extends User
     /**
      * Deletes the registration record and set the user to valid. The user will also be assigned to all roles
      * that have the flag **rol_default_registration**. After that a notification email is send to the user.
-     * If function returns true than the user can login for the organization of this object.
+     * If function returns **true** than the user can log in for the organization of this object.
      * @return true Returns **true** if the registration was successful
+     * @throws AdmException
      */
-    public function acceptRegistration()
+    public function acceptRegistration(): bool
     {
         $this->db->startTransaction();
 
@@ -131,13 +132,14 @@ class UserRegistration extends User
     /**
      * Deletes the selected user registration. If user is not valid and has no other registrations than
      * delete user because he has no use for the system. After that a notification email is send to the user.
-     * If the user is valid than only the registration will be deleted!
+     * If the user is valider than only the registration will be deleted!
      * @return bool **true** if no error occurred
+     * @throws AdmException
      */
-    public function delete()
+    public function delete(): bool
     {
         // only send mail if systemmails are enabled and user has email address
-        // mail must be send before user data is removed from this object
+        // mail must be sent before user data is removed from this object
         if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled') && $this->sendEmail && $this->getValue('EMAIL') !== '') {
             // send mail to user that his registration was rejected
             $sysmail = new SystemMail($this->db);
@@ -180,13 +182,13 @@ class UserRegistration extends User
      * Reads a record out of the table in database selected by the unique uuid column in the table.
      * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
      * Per default all columns of the default table will be read and stored in the object.
-     * Not every Admidio table has a uuid. Please check the database structure before you use this method.
+     * Not every Admidio table has an uuid. Please check the database structure before you use this method.
      * @param int $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
      */
-    public function readDataByUuid($uuid)
+    public function readDataByUuid($uuid): bool
     {
         $returnValue = parent::readDataByUuid($uuid);
 
@@ -201,12 +203,13 @@ class UserRegistration extends User
     /**
      * Save all changed columns of the recordset in table of database. If it's a new user
      * than the registration table will also be filled with a new recordset and optional a
-     * notification mail will be send to all users of roles that have the right to confirm registrations
+     * notification mail will be sent to all users of roles that have the right to confirm registrations
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool
+     * @throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save($updateFingerPrint = true): bool
     {
         // if new registration is saved then set user not valid
         if ($this->tableRegistration->isNewRecord()) {
@@ -217,53 +220,33 @@ class UserRegistration extends User
 
         // if new registration is saved then save also record in registration table and send notification mail
         if ($this->tableRegistration->isNewRecord()) {
+            // create a unique validation id
+            $passwordResetId = SecurityUtils::getRandomString(50);
+
             // save registration record
             $this->tableRegistration->setValue('reg_org_id', $this->organizationId);
             $this->tableRegistration->setValue('reg_usr_id', (int) $this->getValue('usr_id'));
             $this->tableRegistration->setValue('reg_timestamp', DATETIME_NOW);
+            $this->tableRegistration->setValue('reg_validation_id', $passwordResetId);
             $this->tableRegistration->save();
 
             // send a notification mail to all role members of roles that can approve registrations
             // therefore the flags system mails and notification mail for roles with approve registration must be activated
             if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled')
                 && $GLOBALS['gSettingsManager']->getBool('enable_registration_admin_mail') && $this->sendEmail) {
-                $sql = 'SELECT DISTINCT first_name.usd_value AS first_name, last_name.usd_value AS last_name, email.usd_value AS email
-                          FROM '.TBL_MEMBERS.'
-                    INNER JOIN '.TBL_ROLES.'
-                            ON rol_id = mem_rol_id
+                $sql = 'SELECT rol_uuid
+                          FROM '.TBL_ROLES.'
                     INNER JOIN '.TBL_CATEGORIES.'
                             ON cat_id = rol_cat_id
-                    INNER JOIN '.TBL_USERS.'
-                            ON usr_id = mem_usr_id
-                    RIGHT JOIN '.TBL_USER_DATA.' AS email
-                            ON email.usd_usr_id = usr_id
-                           AND email.usd_usf_id = ? -- $this->mProfileFieldsData->getProperty(\'EMAIL\', \'usf_id\')
-                           AND LENGTH(email.usd_value) > 0
-                     LEFT JOIN '.TBL_USER_DATA.' AS first_name
-                            ON first_name.usd_usr_id = usr_id
-                           AND first_name.usd_usf_id = ? -- $this->mProfileFieldsData->getProperty(\'FIRST_NAME\', \'usf_id\')
-                     LEFT JOIN '.TBL_USER_DATA.' AS last_name
-                            ON last_name.usd_usr_id = usr_id
-                           AND last_name.usd_usf_id = ? -- $this->mProfileFieldsData->getProperty(\'LAST_NAME\', \'usf_id\')
                          WHERE rol_approve_users = true
-                           AND usr_valid  = true
-                           AND cat_org_id = ? -- $this->organizationId
-                           AND mem_begin <= ? -- DATE_NOW
-                           AND mem_end    > ? -- DATE_NOW';
-                $queryParams = array(
-                    $this->mProfileFieldsData->getProperty('EMAIL', 'usf_id'),
-                    $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_id'),
-                    $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_id'),
-                    $this->organizationId,
-                    DATE_NOW,
-                    DATE_NOW
-                );
-                $emailStatement = $this->db->queryPrepared($sql, $queryParams);
+                           AND rol_valid = true
+                           AND cat_org_id = ? -- $this->organizationId';
+                $rolesStatement = $this->db->queryPrepared($sql, array($this->organizationId));
 
-                while ($row = $emailStatement->fetch()) {
+                while ($row = $rolesStatement->fetch()) {
                     // send mail that a new registration is available
                     $sysmail = new SystemMail($this->db);
-                    $sysmail->addRecipient($row['email'], $row['first_name'], $row['last_name']);
+                    $sysmail->addRecipientsByRole($row['rol_uuid']);
                     $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $this); // TODO Exception handling
                 }
             }
