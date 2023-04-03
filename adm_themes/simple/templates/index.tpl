@@ -117,7 +117,7 @@
                             {foreach $menuGroup.items as $menuItem}
                                 <li class="nav-item">
                                     <a id="{$menuItem.id}" class="nav-link" href="{$menuItem.url}">
-                                        {$menuItem.icon}{$menuItem.name}
+                                        <i class="{$menuItem.icon} fa-fw"></i>{$menuItem.name}
                                         {if $menuItem.badgeCount > 0}
                                             <span class="badge badge-light">{$menuItem.badgeCount}</span>
                                         {/if}
@@ -156,12 +156,12 @@
                                 {if array_key_exists('items', $menuItem)}
                                     <li class="nav-item dropdown">
                                         <a id="{$menuItem.id}" class="nav-link btn btn-secondary dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                            {$menuItem.icon}{$menuItem.name}
+                                            <i class="{$menuItem.icon} fa-fw"></i>{$menuItem.name}
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-left">
                                             {foreach $menuItem.items as $subItem}
                                                 <a id="{$subItem.id}" class="dropdown-item" href="{$subItem.url}">
-                                                    {$subItem.icon}{$subItem.name}
+                                                    <i class="{$subItem.icon} fa-fw"></i>{$subItem.name}
                                                 </a>
                                             {/foreach}
                                         </div>
@@ -169,7 +169,7 @@
                                 {else}
                                     <li class="nav-item">
                                         <a id="{$menuItem.id}" class="nav-link btn btn-secondary" href="{$menuItem.url}">
-                                            {$menuItem.icon}{$menuItem.name}
+                                            <i class="{$menuItem.icon} fa-fw"></i>{$menuItem.name}
                                         </a>
                                     </li>
                                 {/if}
