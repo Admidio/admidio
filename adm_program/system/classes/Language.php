@@ -372,7 +372,8 @@ class Language
         $replaces = array(
             '\\n'  => '<br />',
             '\\\'' => '\'',
-            '\''   => '&rsquo;'
+            '\''   => '&rsquo;',
+            '\\"'  => '&quot;'
         );
         return StringUtils::strMultiReplace($text, $replaces);
     }
@@ -380,32 +381,30 @@ class Language
     /**
      * Search for text id in a language xml file and return the text. If no text was found than nothing is returned.
      * @param array<string,\SimpleXMLElement> $xmlLanguageObjects The reference to an array where every SimpleXMLElement of each language path is stored
-     * @param string                          $languageFilePath   The path of the language file to search in.
-     * @param string                          $textId             The id of the text that will be searched in the file.
-     * @throws \OutOfBoundsException
+     * @param string $languageFilePath The path of the language file to search in.
+     * @param string $textId The id of the text that will be searched in the file.
      * @return string Return the text in the language or nothing if text id wasn't found.
+     * @throws Exception
+     * @throws OutOfBoundsException
      */
     private function searchLanguageText(array &$xmlLanguageObjects, $languageFilePath, $textId)
     {
-        global $gLogger;
-
         // if not exists create a \SimpleXMLElement of the language file in the language path
         // and add it to the array of language objects
         if (!array_key_exists($languageFilePath, $xmlLanguageObjects)) {
             if (!is_file($languageFilePath)) {
-                // don't log missing file because user could not fix that problem if there is no translation file
-                //$gLogger->error('L10N: Language file does not exist!', array('languageFilePath' => $languageFilePath));
-                throw new \OutOfBoundsException('Language file does not exist!');
+                // throw exception and don't log missing file because user could not fix that problem if there is no translation file
+                throw new OutOfBoundsException('Language file does not exist!');
             }
 
-            $xmlLanguageObjects[$languageFilePath] = new \SimpleXMLElement($languageFilePath, 0, true);
+            $xmlLanguageObjects[$languageFilePath] = new SimpleXMLElement($languageFilePath, 0, true);
         }
 
         // text not in cache -> read from xml file in "Android Resource String" format
         $xmlNodes = $xmlLanguageObjects[$languageFilePath]->xpath('/resources/string[@name="'.$textId.'"]');
 
         if ($xmlNodes === false || count($xmlNodes) === 0) {
-            throw new \OutOfBoundsException('Could not found text-id!');
+            throw new OutOfBoundsException('Could not found text-id!');
         }
 
         $text = self::prepareXmlText((string) $xmlNodes[0]);
@@ -419,8 +418,8 @@ class Language
      * @param array<string,\SimpleXMLElement> $xmlLanguageObjects SimpleXMLElement array of each language path is stored
      * @param string                          $language           Language code
      * @param string                          $textId             Unique text id of the text that should be read e.g. SYS_COMMON
-     * @throws \OutOfBoundsException
-     * @throws \UnexpectedValueException
+     * @throws OutOfBoundsException
+     * @throws UnexpectedValueException
      * @return string Returns the text string of the text id.
      */
     private function searchTextIdInLangObject(array &$xmlLanguageObjects, $language, $textId)
@@ -431,12 +430,12 @@ class Language
                 $languageFilePath = $languageFolderPath . '/' . $language . '.xml';
 
                 return $this->searchLanguageText($xmlLanguageObjects, $languageFilePath, $textId);
-            } catch (\OutOfBoundsException $exception) {
+            } catch (OutOfBoundsException $exception) {
                 // continue searching, no debug output because this will be default way if you have several language path through plugins
             }
         }
 
-        throw new \OutOfBoundsException('Could not found text-id!');
+        throw new OutOfBoundsException('Could not found text-id!');
     }
 
     /**
