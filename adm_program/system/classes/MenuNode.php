@@ -89,7 +89,7 @@ class MenuNode
         if ($icon === '') {
             $icon = 'fa-trash-alt invisible';
         }
-        $node['icon'] = Image::getIconHtml($icon, $name);
+        $node['icon'] = 'fas ' . $icon;
         $node['badgeCount'] = $badgeCount;
 
         if ($parentMenuItemId === '') {

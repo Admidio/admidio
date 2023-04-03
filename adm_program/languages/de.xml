@@ -877,7 +877,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">Beim Umbenennen des Ordners #VAR1# ist ein Fehler aufgetreten.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an eine:n #VAR2#Administrator:in#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
   <string name="SYS_FONT">Schriftart</string>
-  <string name="SYS_FONT_AWESOME_DESC">Du kannst ein Icon  auf verschiedene Arten speichern:\n1. Ein Icon der Webschriftart \"Font Awesome\". Gehe dazu zu #VAR1#http://fontawesome.com#VAR2# und wähle ein freies Icon aus der Sammlung \"Solid\" oder \"Brands\". Als Präfix muss ein fa- vorangestellt werden. Wenn du also das Icon \"user\" wählst, musst du hier \"fa-user\" eingeben.\n2. Ein JPEG- oder PNG-Icon. Lege dazu die Icon-Datei in den Themeordner \"images\". Hinterlege hier den Namen der Icon-Datei.</string>
+  <string name="SYS_FONT_AWESOME_DESC">Hier kannst du ein Icon der Webschriftart \"Font Awesome\" hinterlegen. Gehe dazu zu #VAR1#http://fontawesome.com#VAR2# und wähle ein freies Icon aus der Sammlung \"Solid\" oder \"Brands\". Als Präfix muss ein fa- vorangestellt werden. Wenn du also das Icon \"user\" wählst, musst du hier \"fa-user\" eingeben.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Ich habe mein Passwort vergessen!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Ehemaliger</string>

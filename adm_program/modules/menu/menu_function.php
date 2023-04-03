@@ -84,14 +84,10 @@ if ($getMode === 1) {
         // => EXIT
     }
 
-    // check if font awesome syntax is used or if its a valid filename syntax
+    // check if font awesome syntax is used
     if ($postIcon !== '' && !preg_match('/fa-[a-zA-z0-9]/', $postIcon)) {
-        try {
-            StringUtils::strIsValidFileName($postIcon, true);
-        } catch (AdmException $e) {
-            $gMessage->show($gL10n->get('SYS_INVALID_FONT_AWESOME'));
-            // => EXIT
-        }
+        $gMessage->show($gL10n->get('SYS_INVALID_FONT_AWESOME'));
+        // => EXIT
     }
 
     $menu->setValue('men_icon', $postIcon);
