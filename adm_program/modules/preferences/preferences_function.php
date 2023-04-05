@@ -423,7 +423,7 @@ switch ($getMode) {
 
         // set email data
         $email->setSender($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
-        $email->addRecipientsByUserId($gCurrentUserId);
+        $email->addRecipientsByUser($gCurrentUser->getValue('usr_uuid'));
         $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname'))));
         $email->setTemplateText(
             $gL10n->get('SYS_EMAIL_FUNCTION_TEST_CONTENT', array($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'))),

@@ -211,7 +211,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
                         $message->addUser((int)$user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
 
                         // add user as recipients to the email
-                        $email->addRecipientsByUserId((int)$user->getValue('usr_id'));
+                        $email->addRecipientsByUser($user->getValue('usr_uuid'));
                     }
                 }
             }

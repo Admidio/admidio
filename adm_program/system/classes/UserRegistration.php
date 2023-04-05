@@ -99,7 +99,7 @@ class UserRegistration extends User
         if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled') && $this->sendEmail) {
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipientsByUserId((int) $this->getValue('usr_id'));
+            $sysmail->addRecipientsByUser($this->getValue('usr_uuid'));
             $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_APPROVED', $this); // TODO Exception handling
         }
 
@@ -143,7 +143,7 @@ class UserRegistration extends User
         if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled') && $this->sendEmail && $this->getValue('EMAIL') !== '') {
             // send mail to user that his registration was rejected
             $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipientsByUserId((int) $this->getValue('usr_id'));
+            $sysmail->addRecipientsByUser($this->getValue('usr_uuid'));
             $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_REFUSED', $this); // TODO Exception handling
         }
 
@@ -221,15 +221,24 @@ class UserRegistration extends User
         // if new registration is saved then save also record in registration table and send notification mail
         if ($this->tableRegistration->isNewRecord()) {
             // create a unique validation id
-            $passwordResetId = SecurityUtils::getRandomString(50);
+            $validationId = SecurityUtils::getRandomString(50);
 
             // save registration record
             $this->tableRegistration->setValue('reg_org_id', $this->organizationId);
             $this->tableRegistration->setValue('reg_usr_id', (int) $this->getValue('usr_id'));
             $this->tableRegistration->setValue('reg_timestamp', DATETIME_NOW);
-            $this->tableRegistration->setValue('reg_validation_id', $passwordResetId);
+            $this->tableRegistration->setValue('reg_validation_id', $validationId);
             $this->tableRegistration->save();
 
+            // send a notification mail to the user to confirm his registration
+            if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled')
+                && $GLOBALS['gSettingsManager']->getBool('enable_registration_admin_mail') && $this->sendEmail) {
+                $sysmail = new SystemMail($this->db);
+                $sysmail->addRecipientsByUser($this->getValue('usr_uuid'));
+                $sysmail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('user_uuid' => $this->getValue('usr_uuid'), 'id' => $validationId)));
+                $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_CONFIRMATION', $this); // TODO Exception handling
+            }
+/*
             // send a notification mail to all role members of roles that can approve registrations
             // therefore the flags system mails and notification mail for roles with approve registration must be activated
             if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled')
@@ -249,7 +258,7 @@ class UserRegistration extends User
                     $sysmail->addRecipientsByRole($row['rol_uuid']);
                     $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_NEW', $this); // TODO Exception handling
                 }
-            }
+            }*/
         }
 
         return $returnValue;

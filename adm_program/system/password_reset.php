@@ -226,7 +226,7 @@ if ($getUserUuid !== '') {
             $user->setValue('usr_pw_reset_timestamp', DATETIME_NOW);
 
             $sysmail = new SystemMail($gDb);
-            $sysmail->addRecipientsByUserId((int) $user->getValue('usr_id'));
+            $sysmail->addRecipientsByUser($user->getValue('usr_uuid'));
             $sysmail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php', array('user_uuid' => $user->getValue('usr_uuid'), 'id' => $passwordResetId)));
             $sysmail->sendSystemMail('SYSMAIL_PASSWORD_RESET', $user);
 

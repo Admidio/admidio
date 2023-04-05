@@ -191,7 +191,7 @@ class Email extends PHPMailer
      */
     public function addRecipientsByRole(string $roleUuid, int $memberStatus = self::EMAIL_ONLY_ACTIVE_MEMBERS): int
     {
-        global $gSettingsManager, $gProfileFields, $gL10n, $gDb, $gCurrentOrgId, $gCurrentUserId, $gValidLogin;
+        global $gSettingsManager, $gProfileFields, $gDb, $gCurrentOrgId, $gCurrentUserId, $gValidLogin;
 
         $sqlEmailField = '';
         $numberRecipientsAdded = 0;
@@ -274,14 +274,14 @@ class Email extends PHPMailer
     }
 
     /**
-     * Add the name and email address of the given user id to the email as a normal recipient. If the system setting
-     * **mail_send_to_all_addresses** is set than all email addresses of the given user id will be added.
-     * @param int $userId ID of a user who should be the recipient of the email.
+     * Add the name and email address of the given user UUID to the email as a normal recipient. If the system setting
+     * **mail_send_to_all_addresses** is set than all email addresses of the given user will be added.
+     * @param string $userUuid UUID of a user who should be the recipient of the email.
      * @return int Returns the number of added email addresses.
      */
-    public function addRecipientsByUserId(int $userId): int
+    public function addRecipientsByUser(string $userUuid): int
     {
-        global $gSettingsManager, $gProfileFields, $gL10n, $gDb;
+        global $gSettingsManager, $gProfileFields, $gDb;
 
         $sqlEmailField = '';
         $numberRecipientsAdded = 0;
@@ -293,7 +293,10 @@ class Email extends PHPMailer
         }
 
         $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
-                  FROM ' . TBL_USER_DATA . ' AS email
+                  FROM ' . TBL_USER . '
+            INNER JOIN ' . TBL_USER_DATA . ' AS email
+                    ON email.usd_usr_id = usr_id
+                   AND LENGTH(email.usd_value) > 0
             INNER JOIN ' . TBL_USER_FIELDS . ' AS field
                     ON field.usf_id = email.usd_usf_id
                    AND field.usf_type = \'EMAIL\'
@@ -304,10 +307,9 @@ class Email extends PHPMailer
             INNER JOIN ' . TBL_USER_DATA . ' AS first_name
                     ON first_name.usd_usr_id = email.usd_usr_id
                    AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                 WHERE email.usd_usr_id = ? -- userId
-                   AND LENGTH(email.usd_value) > 0 ';
+                 WHERE usr_uuid = ? -- $userUuid ';
 
-        $statement = $gDb->queryPrepared($sql, array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $userId));
+        $statement = $gDb->queryPrepared($sql, array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $userUuid));
 
         if ($statement->rowCount() > 0) {
             // all email addresses will be attached as BCC
