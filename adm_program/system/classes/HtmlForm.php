@@ -283,6 +283,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['disabled'] = 'disabled';
         } elseif ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
+            $this->flagRequiredFields = true;
         }
 
         // if checked = true then set checkbox checked
@@ -409,6 +410,7 @@ class HtmlForm extends HtmlFormBasic
 
         if ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
+            $this->flagRequiredFields = true;
         }
 
         // set specific css class for this field
@@ -500,6 +502,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['disabled'] = 'disabled';
         } elseif ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
+            $this->flagRequiredFields = true;
         }
 
         if (count($optionsAll['allowedMimeTypes']) > 0) {
@@ -658,6 +661,7 @@ class HtmlForm extends HtmlFormBasic
 
             case self::FIELD_REQUIRED:
                 $attributes['required'] = 'required';
+                $this->flagRequiredFields = true;
                 break;
 
             case self::FIELD_HIDDEN:
@@ -826,6 +830,7 @@ class HtmlForm extends HtmlFormBasic
 
             case self::FIELD_REQUIRED:
                 $attributes['required'] = 'required';
+                $this->flagRequiredFields = true;
                 break;
 
             case self::FIELD_HIDDEN:
@@ -920,6 +925,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['disabled'] = 'disabled';
         } elseif ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
+            $this->flagRequiredFields = true;
         }
 
         // set specific css class for this field
@@ -1022,6 +1028,7 @@ class HtmlForm extends HtmlFormBasic
 
             case self::FIELD_REQUIRED:
                 $attributes['required'] = 'required';
+                $this->flagRequiredFields = true;
                 break;
 
             case self::FIELD_HIDDEN:
@@ -1795,7 +1802,6 @@ class HtmlForm extends HtmlFormBasic
             // if necessary set css class for a mandatory element
             if ($property === self::FIELD_REQUIRED && $this->showRequiredFields) {
                 $cssClassRow .= ' admidio-form-group-required';
-                $this->flagRequiredFields = true;
             }
 
             if ($id !== '') {
