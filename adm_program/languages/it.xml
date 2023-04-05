@@ -264,7 +264,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Parole (inglese)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Qui puoi definire il tipo di Captcha. Il Captcha sarà visualizzato come immagine. Può consistere in caratteri casuali, un piccolo problema matematico o due parole. Ulteriori opzioni permettono di definire il Captcha in dettaglio. (predefinito: caratteri casuali)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Larghezza del captcha in pixel. L\'altezza del captcha sarà calcolata in proporzione alla larghezza. Inoltre definirà la dimensione del carattere. (predefinito: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Conferma della registrazione dopo la conferma manuale.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Conferma della registrazione dopo la conferma manuale.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Crea campo della voce</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Crea campo del profilo</string>
   <string name="ORG_CURRENCY">Valuta</string>
@@ -309,7 +309,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Inserisci l\'abbreviazione, il nome ufficiale e l\'indirizzo email dell\'organizzazione che vuoi aggiungere. L\'indirizzo email potrebbe essere uno generale. Esso sarà usato come indirizzo di invio quando saranno inviate notifiche automatiche di sistema.</string>
   <string name="ORG_NO_FIELD_CREATED">Nessun campo specifico dell\'organizzazione è stato ancora creato!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Cambiando la vista tutte le modifiche non salvate andranno perse.</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notifica per l\'amministratore sulle nuove registrazioni</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Notifica per l\'amministratore sulle nuove registrazioni</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Numero di voci per pagina</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definisci il numero di elementi visualizzati in una pagina. La paginazione viene fornita se il numero di elementi supera il valore definito. L\'anteprima di stampa e le funzionalità di esportazione non sono interessate. Se il valore è 0, tutti gli elementi saranno elencati e la paginazione è disattivata. (predefinito: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Solo per gli utenti registrati</string>

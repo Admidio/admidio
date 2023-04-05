@@ -263,7 +263,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Palavras (inglês)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Defina o tipo do CAPTCHA aqui. Ele é uma imagem, com caracteres aleatórios, um pequeno problema de matemática ou duas palavras. As próximas opções permitem configurar o CAPTCHA minuciosamente. (padrão: caracteres aleatórios)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Largura do CAPTCHA em pixels. A altura será calculada para manter a proporção com a largura. Isso também define o tamanho da fonte. (padrão: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Confirmação de registro após confirmação manual</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Confirmação de registro após confirmação manual</string>
   <string name="ORG_CREATE_ITEM_FIELD">Criar campo item</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Criar campo perfil</string>
   <string name="ORG_CURRENCY">Moeda</string>
@@ -308,7 +308,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Insira a abreviação, o nome oficial e o endereço de e-mail da organização que desejas adicionar. O endereço de e-mail deve ser um geral, visto que ele será usado como remetente no envio de notificações de sistema automáticas.</string>
   <string name="ORG_NO_FIELD_CREATED">Ainda não foi criado nenhum campo específico de organização!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Ao alterar a visualização, serão perdidas todas as alterações não guardadas.</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notificar o administrador sobre novos registros</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Notificar o administrador sobre novos registros</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Número de notas por página</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Defina o número de itens exibidos numa página. A paginação é ativada se o número de itens exceder o valor definido. Pré visualização de impressão e exportação não serão afetadas. Se o valor é 0, todos os itens serão exibidos de uma vez (Predefinição: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Apenas para usuários em sessão</string>

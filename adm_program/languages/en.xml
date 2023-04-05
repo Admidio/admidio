@@ -262,7 +262,6 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Words (english)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Here you can define the Captcha type. The Captcha will be displayed as image. It can consist of random characters, a small math problem or two words. Further options allow to define the Captcha in detail. (default: random characters)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Captcha width in pixel. Captcha height will be calculated by proportion in regard to the width. In addition it will define the character size. (default: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Registration confirmation after manual confirmation.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Create item field</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Create profile field</string>
   <string name="ORG_CURRENCY">Currency</string>
@@ -614,6 +613,7 @@
   <string name="SYS_CONFIGURATION_LIST">List configuration</string>
   <string name="SYS_CONFIGURATION_SAVE">Please select name for configuration set?</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirm password</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Registration confirmation after manual approval</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirm value</string>
   <string name="SYS_CONNECTION_ERROR">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the #VAR1# website for manual update.</string>
   <string name="SYS_CONTACT_DETAILS">Contact information</string>
@@ -1089,6 +1089,8 @@
   <string name="SYS_NOT_VALID_DATE_FORMAT">Please use a valid date as condition for field #VAR1_BOLD#.</string>
   <string name="SYS_NOTE">Note</string>
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notification after a new registration</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Notification to approve a registration</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_CONFIRMATION">Notification to confirm the registration</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification for new entries</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Here you can activate a system notification for new entries in the modules announcements, events, documents &amp; files, photos, web links and guestbook. Members of the stored notification role get the possibility to be notified about new entries in the modules by e-mail. (Default: no)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notification for changed profile fields</string>
@@ -1377,11 +1379,12 @@
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
   <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Switch to relationship configuration</string>
   <string name="SYS_SYMMETRICAL">Symmetrical</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Login data for #organization_long_name#\n#content# Hello #user_first_name#,\n\nYou receive your login data for the website #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nCheers,\nThe administrators</string>
-  <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Reset password for #organization_long_name#\n#content# Hello #user_first_name#,\n\nWe have received a request to reset your password on #organization_homepage#.\n\nIf the request came from you, you can use the following link to reset your password and set a new one: \n#variable1#\n\nBest regards\nThe administrators</string>
-  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in registration at #organization_long_name# rejected.\n#content#Hello #user_first_name#,\n\nyour registration at #organization_homepage# was rejected.\n\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\nTo clarify the reasons for the rejection please contact the administrator #administrator_email# from #organization_homepage#.\n\nRegards,\nThe administrators</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration at #organization_long_name# confirmed\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# has been confirmed.\n\nYou can now log in to the homepage with your username #user_login_name# and your password.\n\nIf you have any questions, write an email to #administrator_email#.\n\nCheers,\nThe administrators</string>
+  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Login data for #organization_long_name#\n#content# Hello #user_first_name#,\n\nYou receive your login data for the website #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nRegards,\nThe team of #organization_long_name#</string>
+  <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Reset password for #organization_long_name#\n#content# Hello #user_first_name#,\n\nWe have received a request to reset your password on #organization_homepage#.\n\nIf the request came from you, you can use the following link to reset your password and set a new one: \n#variable1#\n\nRegards,\nThe team of #organization_long_name#</string>
+  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in registration at #organization_long_name# rejected.\n#content#Hello #user_first_name#,\n\nyour registration at #organization_homepage# was rejected.\n\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\nTo clarify the reasons for the rejection please contact the administrator #administrator_email# from #organization_homepage#.\n\nRegards,\nThe team of #organization_long_name#</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration at #organization_long_name# confirmed\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# has been confirmed.\n\nYou can now log in to the homepage with your username #user_login_name# and your password.\n\nIf you have any questions, write an email to #administrator_email#.\n\nRegards,\nThe team of #organization_long_name#</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# New registration at #organization_long_name# website\n#content# A new user has registered on #organization_homepage#.\n\nSurname: #user_last_name#\nFirst Name: #user_first_name#\nE-Mail: #user_email#\n\n\nThis message was generated automatically.</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_CONFIRMATION">#subject# Your registration at #organization_long_name#\n#content# Hello #user_first_name#,\nwe are very glad that you have registered on our website #organization_homepage#.\n\nTo complete your registration, please click on the following link: #variable1#. By clicking on the link you will be automatically redirected to our website and your registration will be confirmed.\n\nOnce you have confirmed your registration, we will check it. You will receive a reply within a few hours whether your registration has been accepted and you can log in with your credentials or whether your registration has been rejected.\n\nBest regards\nThe team of #organization_long_name#</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">System-wide default list</string>
   <string name="SYS_SYSTEM_MAILS">System notifications</string>

@@ -26,6 +26,26 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method will add a new systemmail text to the database table **adm_texts** for each
+     * organization in the database.
+     */
+    public static function updateStep43AddNewNotificationText()
+    {
+        global $gL10n;
+
+        $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+
+        while ($row = $organizationStatement->fetch()) {
+            $textPasswordReset = new TableText(self::$db);
+            $textPasswordReset->setValue('txt_org_id', $row['org_id']);
+            $textPasswordReset->setValue('txt_name', 'SYSMAIL_REGISTRATION_CONFIRMATION');
+            $textPasswordReset->setValue('txt_text', $gL10n->get('SYS_SYSMAIL_REGISTRATION_CONFIRMATION'));
+            $textPasswordReset->save();
+        }
+    }
+
+    /**
      * This method only execute an sql statement but because of the use of & it could not done in our XML structure
      */
     public static function updateStep41CleanUpRoleNames()
@@ -341,13 +361,10 @@ final class ComponentUpdateSteps
         $organizationStatement = self::$db->queryPrepared($sql);
 
         while ($row = $organizationStatement->fetch()) {
-            // convert <br /> to a normal line feed
-            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET'));
-
-            $textPasswordReset = new TableAccess(self::$db, TBL_TEXTS, 'txt');
+            $textPasswordReset = new TableText(self::$db);
             $textPasswordReset->setValue('txt_org_id', $row['org_id']);
             $textPasswordReset->setValue('txt_name', 'SYSMAIL_PASSWORD_RESET');
-            $textPasswordReset->setValue('txt_text', $value);
+            $textPasswordReset->setValue('txt_text', $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET'));
             $textPasswordReset->save();
         }
     }

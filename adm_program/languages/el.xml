@@ -265,7 +265,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Λέξεις (Αγγλικά)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Εδώ μπορείτε να ορίσετε τον τύπο Captcha. Το Captcha θα εμφανιστεί ως εικόνα. Μπορεί να αποτελείται από τυχαίους χαρακτήρες, ένα μικρό μαθηματικό πρόβλημα ή δύο λέξεις. Περαιτέρω επιλογές επιτρέπουν τον λεπτομερή ορισμό του Captcha. (default: random characters)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Πλάτος Captcha σε pixel. Το ύψος Captcha θα υπολογιστεί αναλογικά με το πλάτος. Επιπλέον, θα καθορίσει το μέγεθος του χαρακτήρα. (default: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Επιβεβαίωση εγγραφής μετά από μη αυτόματη επιβεβαίωση.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Επιβεβαίωση εγγραφής μετά από μη αυτόματη επιβεβαίωση.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Δημιουργία πεδίου αντικειμένου</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Δημιουργία πεδίου προφίλ</string>
   <string name="ORG_CURRENCY">Νόμισμα</string>
@@ -310,7 +310,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Εισαγάγετε τη συντομογραφία, το επίσημο όνομα και τη διεύθυνση email για τον σύλλογο που θέλετε να προσθέσετε. Η διεύθυνση email πρέπει να είναι γενική. Θα χρησιμοποιηθεί ως διεύθυνση αποστολέα κατά την αποστολή αυτόματων ειδοποιήσεων συστήματος.</string>
   <string name="ORG_NO_FIELD_CREATED">Δεν έχει δημιουργηθεί ακόμη πεδίο συγκεκριμένου συλλόγου!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Κατά την αλλαγή της προβολής, όλες οι μη αποθηκευμένες αλλαγές θα χαθούν.</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Ειδοποίηση για τον διαχειριστή για νέες εγγραφές</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Ειδοποίηση για τον διαχειριστή για νέες εγγραφές</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Αριθμός εγγραφών ανά σελίδα</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Καθορίστε τον αριθμό των στοιχείων που εμφανίζονται σε μια σελίδα. Η σελιδοποίηση παρέχεται εάν ο αριθμός των στοιχείων υπερβαίνει την καθορισμένη τιμή. Η προεπισκόπηση εκτύπωσης και η λειτουργία εξαγωγής δεν επηρεάζονται. Εάν η τιμή είναι 0, όλα τα στοιχεία θα εμφανίζονται στη λίστα και η σελιδοποίηση θα απενεργοποιηθεί. (default: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Μόνο για συνδεδεμένους χρήστες</string>

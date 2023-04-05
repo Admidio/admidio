@@ -265,7 +265,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Думи (на английски)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Тук можете да определите типа Captcha. Captcha ще се покаже като изображение. Може да се състои от произволни знаци, малка математическа задача или две думи. Допълнителни опции позволяват да се дефинира подробно Captcha. (По подразбиране: случайни знаци)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Ширина на Captcha в пиксели. Височината на Captcha ще бъде изчислена пропорционално по отношение на ширината. Освен това ще се определи и размера на символите. (По подразбиране: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Потвърждение за регистрация след ръчно регистриране.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Потвърждение за регистрация след ръчно регистриране.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Създаване на поле за артикул</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Създаване на поле за профил</string>
   <string name="ORG_CURRENCY">Валута</string>
@@ -310,7 +310,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Въведете съкращение, официално неименование и имейл адрес на организацията, която искате да добавите. Имейл адресът трябва да е общ. Той ще се използва като подател при изпращане на автоматични уведомления от системата.</string>
   <string name="ORG_NO_FIELD_CREATED">Все още не е създадено специфично за организацията поле!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">При промяна на изгледа всички незапазени промени ще бъдат загубени.</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Уведомление за администратора за нови регистрации</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Уведомление за администратора за нови регистрации</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Брой записи на страница</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Определете броя на елементите, показвани на една страница. Ако броят на елементите надвишава дефинираната стойност се прилага странициране. Функционалността за визуализация за печат и експортиране не се засягат. Ако стойността е 0, всички елементи ще бъдат изброени и страницирането е деактивирано.(По подразбиране: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Само за влезли потребители</string>

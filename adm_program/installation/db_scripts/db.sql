@@ -717,7 +717,7 @@ CREATE TABLE %PREFIX%_texts
 (
     txt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     txt_org_id                  integer unsigned    NOT NULL,
-    txt_name                    varchar(30)         NOT NULL,
+    txt_name                    varchar(100)        NOT NULL,
     txt_text                    text,
     PRIMARY KEY (txt_id)
 )

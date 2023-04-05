@@ -262,7 +262,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Ord (Engelske)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Her kan du definere CAPTCHA typen. CAPTCHA vil blive vist som et billede. Det kan bestå af tilfældige karakterer, et lille matematisk problem eller to ord. Yderligere indstillinger tillader at konfigurerer CAPTCHA mere detaljeret. (Standard: Tilfældige karakterer)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">CAPTCHA bredde i pixel, CAPTCHA højden vil blive udregnet i forhold til bredden. Dette vil også definere font størrelsen. (Standard: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Registrerings bekræftelse efter manuel bekræftelse.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Registrerings bekræftelse efter manuel bekræftelse.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Opret emne felt</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Opret profil felt</string>
   <string name="ORG_CURRENCY">Møntfod</string>
@@ -1089,7 +1089,7 @@
   <string name="SYS_NOT_SET">ikke sat</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Venligst anvend en valid dato som grundlag for feltet #VAR1_BOLD#.</string>
   <string name="SYS_NOTE">Noter</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Meddelelse efter ny tilmelding</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Meddelelse efter ny tilmelding</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Meddelelse for nye poster</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Her kan du aktivere en systemnotifikation for nye tilmeldinger i modulerne Meddelelser, Begivenheder, Gæstebog, Weblinks og Billeder. Medlemmer af den lagrede notifikationsrolle får mulighed for at få besked om nye poster i modulerne via e-mail. (Standard: nej)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Meddelelse for ændrede profilfelter</string>

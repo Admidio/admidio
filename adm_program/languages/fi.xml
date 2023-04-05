@@ -265,7 +265,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Sanat (englanti)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Tässä voit määrittää Captcha -tyypin. Captcha näytetään kuvana. Se voi koostua satunnaisista merkeistä, pienestä matemaattisesta tehtävästä tai kahdesta sanasta. Lisävaihtoehtojen avulla voit määrittää Captchan yksityiskohtaisesti. (oletus: satunnaiset merkit)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Captcha -leveys pikseleinä. Captcha -korkeus lasketaan suhteessa leveyteen. Lisäksi se määrittää merkin koon. (oletus: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Rekisteröinnin vahvistus manuaalisen vahvistuksen jälkeen.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Rekisteröinnin vahvistus manuaalisen vahvistuksen jälkeen.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Luo kohdekenttä</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Luo profiilikenttä</string>
   <string name="ORG_CURRENCY">Valuutta</string>
@@ -310,7 +310,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Anna lisättävän organisaation lyhenne, virallinen nimi ja sähköpostiosoite. Sähköpostiosoitteen tulee olla yleinen. Sitä käytetään lähettäjän osoitteena lähetettäessä automaattisia järjestelmäilmoituksia.</string>
   <string name="ORG_NO_FIELD_CREATED">Organisaatiokohtaista kenttää ei ole vielä luotu!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Kun muutat näkymää, kaikki tallentamattomat muutokset menetetään.</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Ilmoitus järjestelmänvalvojalle uusista rekisteröinneistä</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Ilmoitus järjestelmänvalvojalle uusista rekisteröinneistä</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Merkintöjen määrä sivulla</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Määritä sivulla näytettävien kohteiden määrä. Sivut annetaan, jos kohteiden määrä ylittää määritetyn arvon. Tämä ei vaikuta tulostuksen esikatselu- ja vientitoimintoihin. Jos arvo on 0, kaikki kohteet näkyvät luettelossa ja sivut on poistettu käytöstä. (oletus: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Vain kirjautuneille käyttäjille</string>

@@ -262,7 +262,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Слова (англ.)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Тут ви можете задати тип Captcha. Captcha буде відображатися у вигляді зображення. Воно може складатися з випадкових символів, невеликої математичної задачі або двох слів. Подальші опції дозволяють більш детально задати Captcha. (за замовчуванням: випадкові символи)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Ширина Captcha в пікселях. Висота captcha буде розраховуватися пропорційно по відношенню до ширини. Додатково буде визначати розмір символів. (за замовчуванням: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Підтвердження реєстрації після ручного підтвердження.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Підтвердження реєстрації після ручного підтвердження.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Створити поле елемента</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Створити поле профілю</string>
   <string name="ORG_CURRENCY">Валюта</string>
@@ -1088,7 +1088,7 @@
   <string name="SYS_NOT_SET">Не встановлено</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Будь ласка, використовуйте дійсну дату в якості умови для поля #VAR1_BOLD#.</string>
   <string name="SYS_NOTE">Примітка</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Повідомлення після нової реєстрації</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Повідомлення після нової реєстрації</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Повідомлення про нові записи</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Тут можна активувати системне сповіщення про нові записи в модулях \"Оголошення\", \"Події\", \"Гостьова книга\", \"Веб-посилання\" та \"Фотографії\". Користувачі з збереженою роллю сповіщення отримують можливість отримувати повідомлення про нові записи в модулях на електронну пошту. (За замовчуванням: ні)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Повідомлення про зміну полів профілю</string>

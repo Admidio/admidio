@@ -262,7 +262,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Woorden (Engels)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Hier kunt u het captcha-type kiezen. De captcha wordt weergegeven als een afbeelding en kan bestaan uit willekeurige tekens, een kleine rekenopgave of 2 woorden. Met de andere instellingen kan de afbeelding worden aangepast. (Standaard: willekeurige tekens)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">De breedte van de captcha-afbeelding in pixels. De hoogte wordt berekend in verhouding tot de breedte. Deze instelling bepaalt ook de grootte van de tekens. (Standaard: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Bevestiging registratie na handmatige goedkeuring</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Bevestiging registratie na handmatige goedkeuring</string>
   <string name="ORG_CREATE_ITEM_FIELD">Maak itemveld</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Maak profielveld</string>
   <string name="ORG_CURRENCY">Valuta</string>
@@ -1088,7 +1088,7 @@
   <string name="SYS_NOT_SET">Niet ingesteld</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Gelieve een geldig datum te gebruiken als voorwaarde voor het veld #VAR1_BOLD#.</string>
   <string name="SYS_NOTE">Bericht</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notificatie na een nieuwe registratie</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Notificatie na een nieuwe registratie</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notificatie voor nieuwe berichten</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Hier kunt u een systeemnotificatie activeren voor nieuwe berichten in de modules Mededelingen, Evenementen, Gastenboek, Weblinks en Foto\'s. Leden van de opgeslagen notificatierol krijgen de mogelijkheid om per e-mail op de hoogte te worden gehouden van nieuwe berichten in de modules. (Standaard: nee)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notificatie voor gewijzigde profielvelden</string>

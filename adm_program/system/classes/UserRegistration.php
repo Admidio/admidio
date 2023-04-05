@@ -100,7 +100,7 @@ class UserRegistration extends User
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
             $sysmail->addRecipientsByUserId((int) $this->getValue('usr_id'));
-            $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $this); // TODO Exception handling
+            $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_APPROVED', $this); // TODO Exception handling
         }
 
         return true;
@@ -144,7 +144,7 @@ class UserRegistration extends User
             // send mail to user that his registration was rejected
             $sysmail = new SystemMail($this->db);
             $sysmail->addRecipientsByUserId((int) $this->getValue('usr_id'));
-            $sysmail->sendSystemMail('SYSMAIL_REFUSE_REGISTRATION', $this); // TODO Exception handling
+            $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_REFUSED', $this); // TODO Exception handling
         }
 
         $this->db->startTransaction();
@@ -247,7 +247,7 @@ class UserRegistration extends User
                     // send mail that a new registration is available
                     $sysmail = new SystemMail($this->db);
                     $sysmail->addRecipientsByRole($row['rol_uuid']);
-                    $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $this); // TODO Exception handling
+                    $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_NEW', $this); // TODO Exception handling
                 }
             }
         }

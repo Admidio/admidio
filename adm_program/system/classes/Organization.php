@@ -119,9 +119,10 @@ class Organization extends TableAccess
 
         // create all systemmail texts and write them into table adm_texts
         $systemmailsTexts = array(
-            'SYSMAIL_REGISTRATION_USER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
-            'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
-            'SYSMAIL_REFUSE_REGISTRATION' => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
+            'SYSMAIL_REGISTRATION_CONFIRMATION' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_CONFIRMATION'),
+            'SYSMAIL_REGISTRATION_NEW' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
+            'SYSMAIL_REGISTRATION_APPROVED' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
+            'SYSMAIL_REGISTRATION_REFUSED' => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
             'SYSMAIL_NEW_PASSWORD' => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
             'SYSMAIL_PASSWORD_RESET' => $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET')
         );
@@ -130,9 +131,6 @@ class Organization extends TableAccess
         $orgId = (int)$this->getValue('org_id');
 
         foreach ($systemmailsTexts as $key => $value) {
-            // convert <br /> to a normal line feed
-            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13) . chr(10), $value);
-
             $text->clear();
             $text->setValue('txt_org_id', $orgId);
             $text->setValue('txt_name', $key);

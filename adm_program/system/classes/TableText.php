@@ -8,13 +8,6 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
-/**
- * Diese Klasse dient dazu ein Textobjekt zu erstellen.
- * Texte koennen ueber diese Klasse in der Datenbank verwaltet werden.
- *
- * Es stehen die Methoden der Elternklasse TableAccess zur Verfuegung.
- */
 class TableText extends TableAccess
 {
     /**
@@ -48,15 +41,16 @@ class TableText extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
      * For new records the organization will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save($updateFingerPrint = true): bool
     {
         if ($this->newRecord && $this->getValue('txt_org_id') === '') {
             // Insert
@@ -64,5 +58,24 @@ class TableText extends TableAccess
         }
 
         return parent::save($updateFingerPrint);
+    }
+
+    /**
+     * Set a new value for a column of the database table.
+     * The value is only saved in the object. You must call the method **save** to store the new value to the database
+     * @param string $columnName The name of the database column whose value should get a new value
+     * @param mixed $newValue The new value that should be stored in the database field
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws AdmException
+     */
+    public function setValue($columnName, $newValue, $checkValue = true): bool
+    {
+        if ($columnName === 'txt_text') {
+            // convert <br /> to a normal line feed
+            $newValue = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13) . chr(10), $newValue);
+        }
+
+        return parent::setValue($columnName, $newValue, $checkValue);
     }
 }
