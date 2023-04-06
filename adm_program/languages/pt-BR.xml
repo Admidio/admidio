@@ -307,7 +307,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Insira a abreviação, o nome oficial e o endereço de e-mail da organização que desejas adicionar. O endereço de e-mail deve ser um geral, visto que ele será usado como remetente no envio de notificações de sistema automáticas.</string>
   <string name="ORG_NO_FIELD_CREATED">Nenhum campo específico de organização foi criado ainda!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Ao mudar a visualização todas as alteração não salvas serão perdidas.</string>
-  <string name="SYS_NOTIFICATION_REGISTRATION_NEW">Notificar o administrador sobre novos registros</string>
+  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notificar o administrador sobre novos registros</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Número de notas por página</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Defina o número de itens exibidos numa página. A paginação é ativada se o número de itens exceder o valor definido. Pré visualização de impressão e exportação não serão afetadas. Se o valor é 0, todos os itens serão exibidos de uma vez (Predefinição: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Apenas para usuários em sessão</string>
