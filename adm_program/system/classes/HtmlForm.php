@@ -298,6 +298,11 @@ class HtmlForm extends HtmlFormBasic
 
         $optionsAll["attributes"] = $attributes;
 
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
         $this->addHtml($this->render('form.checkbox', $optionsAll));
     }
 
@@ -437,6 +442,12 @@ class HtmlForm extends HtmlFormBasic
 
         $this->type = $flagLabelVertical;
         $optionsAll["attributes"] = $attributes;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
         $this->addHtml($this->render('form.editor', $optionsAll));
     }
 
@@ -538,6 +549,12 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $optionsAll["attributes"] = $attributes;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
         $this->addHtml($this->render('form.file', $optionsAll));
     }
 
@@ -741,8 +758,13 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $optionsAll["attributes"] = $attributes;
-
         $optionsAll['value'] = $value;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
         $this->addHtml($this->render("form.input", $optionsAll));
     }
 
@@ -864,8 +886,13 @@ class HtmlForm extends HtmlFormBasic
 
         $attributes["rows"] = $rows;
         $attributes["cols"] = 80;
-
         $optionsAll["attributes"] = $attributes;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
         $this->addHtml($this->render('form.multiline', $optionsAll));
     }
 
@@ -934,6 +961,12 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $optionsAll["attributes"] = $attributes;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
         $this->addHtml($this->render('form.radio', $optionsAll));
     }
 
