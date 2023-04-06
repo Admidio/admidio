@@ -283,6 +283,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['disabled'] = 'disabled';
         } elseif ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
+            $this->flagRequiredFields = true;
         }
 
         // if checked = true then set checkbox checked
@@ -296,6 +297,11 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $optionsAll["attributes"] = $attributes;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
 
         $this->addHtml($this->render('form.checkbox', $optionsAll));
     }
@@ -409,6 +415,7 @@ class HtmlForm extends HtmlFormBasic
 
         if ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
+            $this->flagRequiredFields = true;
         }
 
         // set specific css class for this field
@@ -435,6 +442,12 @@ class HtmlForm extends HtmlFormBasic
 
         $this->type = $flagLabelVertical;
         $optionsAll["attributes"] = $attributes;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
         $this->addHtml($this->render('form.editor', $optionsAll));
     }
 
@@ -500,6 +513,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['disabled'] = 'disabled';
         } elseif ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
+            $this->flagRequiredFields = true;
         }
 
         if (count($optionsAll['allowedMimeTypes']) > 0) {
@@ -535,6 +549,12 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $optionsAll["attributes"] = $attributes;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
         $this->addHtml($this->render('form.file', $optionsAll));
     }
 
@@ -658,6 +678,7 @@ class HtmlForm extends HtmlFormBasic
 
             case self::FIELD_REQUIRED:
                 $attributes['required'] = 'required';
+                $this->flagRequiredFields = true;
                 break;
 
             case self::FIELD_HIDDEN:
@@ -737,8 +758,13 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $optionsAll["attributes"] = $attributes;
-
         $optionsAll['value'] = $value;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
         $this->addHtml($this->render("form.input", $optionsAll));
     }
 
@@ -826,6 +852,7 @@ class HtmlForm extends HtmlFormBasic
 
             case self::FIELD_REQUIRED:
                 $attributes['required'] = 'required';
+                $this->flagRequiredFields = true;
                 break;
 
             case self::FIELD_HIDDEN:
@@ -859,8 +886,13 @@ class HtmlForm extends HtmlFormBasic
 
         $attributes["rows"] = $rows;
         $attributes["cols"] = 80;
-
         $optionsAll["attributes"] = $attributes;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
         $this->addHtml($this->render('form.multiline', $optionsAll));
     }
 
@@ -920,6 +952,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['disabled'] = 'disabled';
         } elseif ($optionsAll['property'] === self::FIELD_REQUIRED) {
             $attributes['required'] = 'required';
+            $this->flagRequiredFields = true;
         }
 
         // set specific css class for this field
@@ -928,6 +961,12 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $optionsAll["attributes"] = $attributes;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
         $this->addHtml($this->render('form.radio', $optionsAll));
     }
 
@@ -1022,6 +1061,7 @@ class HtmlForm extends HtmlFormBasic
 
             case self::FIELD_REQUIRED:
                 $attributes['required'] = 'required';
+                $this->flagRequiredFields = true;
                 break;
 
             case self::FIELD_HIDDEN:
@@ -1795,7 +1835,6 @@ class HtmlForm extends HtmlFormBasic
             // if necessary set css class for a mandatory element
             if ($property === self::FIELD_REQUIRED && $this->showRequiredFields) {
                 $cssClassRow .= ' admidio-form-group-required';
-                $this->flagRequiredFields = true;
             }
 
             if ($id !== '') {

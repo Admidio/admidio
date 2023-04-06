@@ -145,7 +145,7 @@ function doAdmidioUpdate($installedDbVersion)
         // remove compiled templates so new ones will be created with the new version
         FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/templates', true);
     } catch (UnexpectedValueException|RuntimeException $e) {
-        // do nothing
+        $gLogger->warning('Folder adm_my_files/templates could not be deleted!');
     }
 
     if (!$htaccess->protectFolder()) {
