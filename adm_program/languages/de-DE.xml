@@ -1089,7 +1089,7 @@
   <string name="SYS_NOT_SET">nicht gesetzt</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Bitte in der Bedingung des Feldes #VAR1_BOLD# ein gültiges Datum verwenden.</string>
   <string name="SYS_NOTE">Hinweis</string>
-  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Benachrichtigung nach einer neuen Registrierung</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_NEW">Benachrichtigung nach einer neuen Registrierung</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Hier kann eine Systembenachrichtigung für neue Einträge in den Modulen Ankündigungen, Termine, Dokumente &amp; Dateien, Fotos, Weblinks und Gästebuch aktiviert werden. Mitglieder der hinterlegten Benachrichtigungsrolle erhalten so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen. (Voreinstellung: nein)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Benachrichtigung bei Profiländerungen</string>

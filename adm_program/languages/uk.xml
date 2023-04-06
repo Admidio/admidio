@@ -1088,7 +1088,7 @@
   <string name="SYS_NOT_SET">Не встановлено</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Будь ласка, використовуйте дійсну дату в якості умови для поля #VAR1_BOLD#.</string>
   <string name="SYS_NOTE">Примітка</string>
-  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Повідомлення після нової реєстрації</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_NEW">Повідомлення після нової реєстрації</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Повідомлення про нові записи</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Тут можна активувати системне сповіщення про нові записи в модулях \"Оголошення\", \"Події\", \"Гостьова книга\", \"Веб-посилання\" та \"Фотографії\". Користувачі з збереженою роллю сповіщення отримують можливість отримувати повідомлення про нові записи в модулях на електронну пошту. (За замовчуванням: ні)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Повідомлення про зміну полів профілю</string>
