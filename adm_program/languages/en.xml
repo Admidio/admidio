@@ -1445,7 +1445,7 @@
   <string name="SYS_UTF32LE">UTF-32LE</string>
   <string name="SYS_VALID_FROM" description="Date valid from">Valid from</string>
   <string name="SYS_VALID_TO" description="Date valid to">Valid until</string>
-  <string name="SYS_VALIDATION_NOT_OK">Various roles</string>
+  <string name="SYS_VARIOUS_ROLES">Various roles</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Various relationships</string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VERSION_TO_OLD">Your current database version is #VAR1#. Unfortunately, it is not possible to update to #VAR2# with this version.\n\nPlease install Admidio 4.1 first and then update to Admidio #VAR2#.</string>
