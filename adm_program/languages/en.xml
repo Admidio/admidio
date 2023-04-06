@@ -613,7 +613,6 @@
   <string name="SYS_CONFIGURATION_LIST">List configuration</string>
   <string name="SYS_CONFIGURATION_SAVE">Please select name for configuration set?</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirm password</string>
-  <string name="SYS_CONFIRM_REGISTRATION">Registration confirmation after manual approval</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirm value</string>
   <string name="SYS_CONNECTION_ERROR">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the #VAR1# website for manual update.</string>
   <string name="SYS_CONTACT_DETAILS">Contact information</string>
