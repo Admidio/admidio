@@ -182,7 +182,7 @@ class UserImport extends User
      * @param string $columnName The name of the database column whose value should get a new value or the
      *                           internal unique profile field name
      * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                           not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      *
@@ -194,7 +194,7 @@ class UserImport extends User
      * $gCurrentUser->getValue('EMAIL', 'administrator@admidio.org');
      * ```
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true)
     {
         global $gL10n, $gLogger;
 

@@ -177,7 +177,7 @@ class TablePhotos extends TableAccess
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         if ($columnName === 'pho_description' && $format === 'html') {
             $value = nl2br(parent::getValue($columnName));
@@ -248,7 +248,7 @@ class TablePhotos extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true)
     {
         if ($this->newRecord) {
             $this->setValue('pho_org_id', $GLOBALS['gCurrentOrgId']);

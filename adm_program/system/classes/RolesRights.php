@@ -167,14 +167,14 @@ class RolesRights extends TableAccess
      * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
      * If the sql find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param string $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
-    protected function readData($sqlWhereCondition, array $queryParams = array())
+    protected function readData(string $sqlWhereCondition, array $queryParams = array())
     {
         if (parent::readData($sqlWhereCondition, $queryParams)) {
             $sql = 'SELECT *

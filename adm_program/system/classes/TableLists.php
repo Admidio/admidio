@@ -76,7 +76,7 @@ class TableLists extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true)
     {
         $this->setValue('lst_timestamp', DATETIME_NOW);
         $this->setValue('lst_usr_id', $GLOBALS['gCurrentUserId']);

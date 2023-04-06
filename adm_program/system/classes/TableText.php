@@ -31,7 +31,7 @@ class TableText extends TableAccess
      * @return int|string Returns the value of the database column.
      *                    If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         if ($columnName === 'txt_text') {
             return $this->dbColumns['txt_text'];
@@ -50,7 +50,7 @@ class TableText extends TableAccess
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws AdmException
      */
-    public function save($updateFingerPrint = true): bool
+    public function save(bool $updateFingerPrint = true): bool
     {
         if ($this->newRecord && $this->getValue('txt_org_id') === '') {
             // Insert
@@ -69,7 +69,7 @@ class TableText extends TableAccess
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws AdmException
      */
-    public function setValue($columnName, $newValue, $checkValue = true): bool
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         if ($columnName === 'txt_text') {
             // convert <br /> to a normal line feed

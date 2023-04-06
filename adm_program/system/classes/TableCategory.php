@@ -179,7 +179,7 @@ class TableCategory extends TableAccess
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         global $gL10n;
 
@@ -314,12 +314,12 @@ class TableCategory extends TableAccess
     /**
      * Reads a category out of the table in database selected by the unique category id in the table.
      * Per default all columns of adm_categories will be read and stored in the object.
-     * @param int $catId Unique cat_id
+     * @param int $id Unique cat_id
      * @return bool Returns **true** if one record is found
      */
-    public function readDataById($catId)
+    public function readDataById(int $id)
     {
-        $returnValue = parent::readDataById($catId);
+        $returnValue = parent::readDataById($id);
 
         if ($returnValue) {
             $this->setTableAndColumnByCatType();
@@ -353,12 +353,12 @@ class TableCategory extends TableAccess
      * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
      * Per default all columns of the default table will be read and stored in the object.
      * Not every Admidio table has a uuid. Please check the database structure before you use this method.
-     * @param int $uuid Unique uuid that should be searched.
+     * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
      */
-    public function readDataByUuid($uuid)
+    public function readDataByUuid(string $uuid)
     {
         $returnValue = parent::readDataByUuid($uuid);
 
@@ -378,7 +378,7 @@ class TableCategory extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true)
     {
         global $gCurrentSession;
 
@@ -470,10 +470,10 @@ class TableCategory extends TableAccess
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true)
     {
         if ($checkValue) {
             // System categories should not be renamed

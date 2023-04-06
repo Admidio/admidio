@@ -95,7 +95,7 @@ class TableMenu extends TableAccess
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         global $gL10n;
 
@@ -158,12 +158,12 @@ class TableMenu extends TableAccess
     /**
      * Reads a menu out of the table in database selected by the unique menu id in the table.
      * Per default all columns of adm_menu will be read and stored in the object.
-     * @param int $menId Unique men_id
+     * @param int $id Unique men_id
      * @return bool Returns **true** if one record is found
      */
-    public function readDataById($menId)
+    public function readDataById(int $id)
     {
-        $returnValue = parent::readDataById($menId);
+        $returnValue = parent::readDataById($id);
 
         if ($returnValue) {
             $this->elementTable = TBL_MENU;
@@ -203,7 +203,7 @@ class TableMenu extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true)
     {
         global $gCurrentSession;
 

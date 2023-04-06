@@ -183,12 +183,12 @@ class UserRegistration extends User
      * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
      * Per default all columns of the default table will be read and stored in the object.
      * Not every Admidio table has an uuid. Please check the database structure before you use this method.
-     * @param int $uuid Unique uuid that should be searched.
+     * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
      */
-    public function readDataByUuid($uuid): bool
+    public function readDataByUuid(string $uuid): bool
     {
         $returnValue = parent::readDataByUuid($uuid);
 
@@ -209,7 +209,7 @@ class UserRegistration extends User
      * @return bool
      * @throws AdmException
      */
-    public function save($updateFingerPrint = true): bool
+    public function save(bool $updateFingerPrint = true): bool
     {
         // if new registration is saved then set user not valid
         if ($this->tableRegistration->isNewRecord()) {

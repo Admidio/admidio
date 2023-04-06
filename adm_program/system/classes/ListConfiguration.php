@@ -835,12 +835,12 @@ class ListConfiguration extends TableLists
      * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
      * Per default all columns of the default table will be read and stored in the object.
      * Not every Admidio table has a uuid. Please check the database structure before you use this method.
-     * @param int $uuid Unique uuid that should be searched.
+     * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
      */
-    public function readDataByUuid($uuid)
+    public function readDataByUuid(string $uuid)
     {
         $returnValue = parent::readDataByUuid($uuid);
 
@@ -904,7 +904,7 @@ class ListConfiguration extends TableLists
      * @param bool $updateFingerPrint
      * @return bool
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true)
     {
         $this->db->startTransaction();
 

@@ -60,7 +60,7 @@ class TableGuestbook extends TableAccess
      * @return mixed Returns the value of the database column.
      *         If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         if ($columnName === 'gbo_text') {
             if (!isset($this->dbColumns['gbo_text'])) {
@@ -96,7 +96,7 @@ class TableGuestbook extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true)
     {
         if ($this->newRecord) {
             $this->setValue('gbo_org_id', $GLOBALS['gCurrentOrgId']);
@@ -111,10 +111,10 @@ class TableGuestbook extends TableAccess
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true)
     {
         if ($checkValue) {
             if ($columnName === 'gbo_text') {
