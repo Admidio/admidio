@@ -50,13 +50,14 @@ class UserRegistration extends User
     /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
-     * @param Database      $database       Object of the class Database. This should be the default global object **$gDb**.
-     * @param ProfileFields $userFields     An object of the ProfileFields class with the profile field structure
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
+     * @param ProfileFields $userFields An object of the ProfileFields class with the profile field structure
      *                                      of the current organization. This could be the default object .
-     * @param int           $userId         The id of the user who should be loaded. If id isn't set than an empty object
+     * @param int $userId The id of the user who should be loaded. If id isn't set than an empty object
      *                                      with no specific user is created.
-     * @param int           $organizationId The id of the organization for which the user should be registered.
+     * @param int $organizationId The id of the organization for which the user should be registered.
      *                                      If no id is set than the user will be registered for the current organization.
+     * @throws AdmException
      */
     public function __construct(Database $database, ProfileFields $userFields, $userId = 0, $organizationId = 0)
     {
@@ -98,9 +99,9 @@ class UserRegistration extends User
         // only send mail if systemmails are enabled
         if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled') && $this->sendEmail) {
             // send mail to user that his registration was accepted
-            $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipientsByUser($this->getValue('usr_uuid'));
-            $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_APPROVED', $this); // TODO Exception handling
+            $sysMail = new SystemMail($this->db);
+            $sysMail->addRecipientsByUser($this->getValue('usr_uuid'));
+            $sysMail->sendSystemMail('SYSMAIL_REGISTRATION_APPROVED', $this); // TODO Exception handling
         }
 
         return true;
@@ -142,9 +143,9 @@ class UserRegistration extends User
         // mail must be sent before user data is removed from this object
         if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled') && $this->sendEmail && $this->getValue('EMAIL') !== '') {
             // send mail to user that his registration was rejected
-            $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipientsByUser($this->getValue('usr_uuid'));
-            $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_REFUSED', $this); // TODO Exception handling
+            $sysMail = new SystemMail($this->db);
+            $sysMail->addRecipientsByUser($this->getValue('usr_uuid'));
+            $sysMail->sendSystemMail('SYSMAIL_REGISTRATION_REFUSED', $this); // TODO Exception handling
         }
 
         $this->db->startTransaction();
@@ -185,8 +186,9 @@ class UserRegistration extends User
      * Not every Admidio table has an uuid. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
-     * @see TableAccess#readData
+     * @throws AdmException
      * @see TableAccess#readDataByColumns
+     * @see TableAccess#readData
      */
     public function readDataByUuid(string $uuid): bool
     {
@@ -211,6 +213,8 @@ class UserRegistration extends User
      */
     public function save(bool $updateFingerPrint = true): bool
     {
+        global $gSettingsManager;
+
         // if new registration is saved then set user not valid
         if ($this->tableRegistration->isNewRecord()) {
             $this->setValue('usr_valid', 0);
@@ -231,18 +235,18 @@ class UserRegistration extends User
             $this->tableRegistration->save();
 
             // send a notification mail to the user to confirm his registration
-            if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled')
-                && $GLOBALS['gSettingsManager']->getBool('enable_registration_admin_mail') && $this->sendEmail) {
-                $sysmail = new SystemMail($this->db);
-                $sysmail->addRecipientsByUser($this->getValue('usr_uuid'));
-                $sysmail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('user_uuid' => $this->getValue('usr_uuid'), 'id' => $validationId)));
-                $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_CONFIRMATION', $this); // TODO Exception handling
+            if ($gSettingsManager->getBool('system_notifications_enabled')
+                && $gSettingsManager->getBool('enable_registration_admin_mail') && $this->sendEmail) {
+                $sysMail = new SystemMail($this->db);
+                $sysMail->addRecipientsByUser($this->getValue('usr_uuid'));
+                $sysMail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('user_uuid' => $this->getValue('usr_uuid'), 'id' => $validationId)));
+                $sysMail->sendSystemMail('SYSMAIL_REGISTRATION_CONFIRMATION', $this); // TODO Exception handling
             }
 /*
             // send a notification mail to all role members of roles that can approve registrations
             // therefore the flags system mails and notification mail for roles with approve registration must be activated
-            if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled')
-                && $GLOBALS['gSettingsManager']->getBool('enable_registration_admin_mail') && $this->sendEmail) {
+            if ($gSettingsManager->getBool('system_notifications_enabled')
+                && $gSettingsManager->getBool('enable_registration_admin_mail') && $this->sendEmail) {
                 $sql = 'SELECT rol_uuid
                           FROM '.TBL_ROLES.'
                     INNER JOIN '.TBL_CATEGORIES.'
@@ -254,13 +258,52 @@ class UserRegistration extends User
 
                 while ($row = $rolesStatement->fetch()) {
                     // send mail that a new registration is available
-                    $sysmail = new SystemMail($this->db);
-                    $sysmail->addRecipientsByRole($row['rol_uuid']);
-                    $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_NEW', $this); // TODO Exception handling
+                    $sysMail = new SystemMail($this->db);
+                    $sysMail->addRecipientsByRole($row['rol_uuid']);
+                    $sysMail->sendSystemMail('SYSMAIL_REGISTRATION_NEW', $this); // TODO Exception handling
                 }
             }*/
         }
 
         return $returnValue;
+    }
+
+    /**
+     * Method will search in the registration table for a valid registration for this user in combination with the
+     * validation ID. If a valid registration was found than reg_validation_id will be cleared and so the
+     * registration is validated through the user. After that the registration must be manually approved by a member
+     * of the organization.
+     * @param string $validationId A validation ID of the registration that should be checked.
+     * @return bool Return **true** if the given data could be joined to a valid registration
+     * @throws AdmException
+     */
+    public function validate(string $validationId): bool
+    {
+        $sql = 'SELECT reg.*
+                  FROM ' . TBL_REGISTRATIONS . ' reg
+                 WHERE reg_usr_id = ? -- $this->getValue(\'usr_id\')
+                   AND reg_validation_id = ? -- $validationId ';
+        $queryParams = array(
+            $this->getValue('usr_id'),
+            $validationId
+        );
+        $registrationStatement = $this->db->queryPrepared($sql, $queryParams);
+
+        if ($registrationStatement->rowCount() === 1) {
+            $row = $registrationStatement->fetch();
+            $registration = new TableAccess($this->db, TBL_REGISTRATIONS, 'reg');
+            $registration->setArray($row);
+
+            // registration ID is only valid for 1 day
+            $timeGap = time() - strtotime($row['reg_timestamp']);
+
+            if ($timeGap < 60 * 60 * 24) {
+                $registration->setValue('reg_validation_id', null);
+                $registration->save();
+                return true;
+            }
+        }
+
+        return false;
     }
 }

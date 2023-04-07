@@ -1189,6 +1189,8 @@
   <string name="SYS_REDIRECT_URL_INVALID">Die angegebene Weiterleitungs-URL ist nicht gültig.</string>
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
   <string name="SYS_REGISTRATION">Registrierung</string>
+  <string name="SYS_REGISTRATION_VALIDATION_OK">Du hast deine Registrierung erfolgreich bestätigt. Diese wird nun von einem Mitglied aus dem Team von #VAR1# geprüft. Du erhältst anschließend eine E-Mail, ob deine Registrierung angenommen oder abgelehnt wurde.</string>
+  <string name="SYS_REGISTRATION_VALIDATION_FAILED">Der aufgerufene Link ist ungültig. Ein Registrierungslink ist nur bis zu 24 Stunden nach der Registrierung gültig. Bitte registriere dich erneut auf der Seite und bestätige deine Registrierung, sobald du die E-Mail mit dem Link erhältst.</string>
   <string name="SYS_REGISTRATION_AT">Registrierung am #VAR1# um #VAR2# Uhr</string>
   <string name="SYS_REGISTRATION_CONFIRMED">Registrierung wurde durch den Benutzer bestätigt.</string>
   <string name="SYS_REGISTRATION_NOT_CONFIRMED">Registrierung wurde durch den Benutzer noch nicht bestätigt.</string>
