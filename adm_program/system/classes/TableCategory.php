@@ -69,7 +69,7 @@ class TableCategory extends TableAccess
      *                      SYS_DONT_DELETE_CATEGORY
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         global $gCurrentSession;
 
@@ -317,7 +317,7 @@ class TableCategory extends TableAccess
      * @param int $id Unique cat_id
      * @return bool Returns **true** if one record is found
      */
-    public function readDataById(int $id)
+    public function readDataById(int $id): bool
     {
         $returnValue = parent::readDataById($id);
 
@@ -337,7 +337,7 @@ class TableCategory extends TableAccess
      * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns **true** if one record is found
      */
-    public function readDataByColumns(array $columnArray)
+    public function readDataByColumns(array $columnArray): bool
     {
         $returnValue = parent::readDataByColumns($columnArray);
 
@@ -358,7 +358,7 @@ class TableCategory extends TableAccess
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
      */
-    public function readDataByUuid(string $uuid)
+    public function readDataByUuid(string $uuid): bool
     {
         $returnValue = parent::readDataByUuid($uuid);
 
@@ -378,7 +378,7 @@ class TableCategory extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save(bool $updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentSession;
 
@@ -473,7 +473,7 @@ class TableCategory extends TableAccess
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         if ($checkValue) {
             // System categories should not be renamed

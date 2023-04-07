@@ -202,7 +202,7 @@ class TableMessage extends TableAccess
      * @return bool **true** if message is deleted or message with additional information if it is marked
      *         for other user to delete. On error it is false
      */
-    public function delete()
+    public function delete(): bool
     {
         $this->db->startTransaction();
 
@@ -484,7 +484,7 @@ class TableMessage extends TableAccess
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      *@throws AdmException
      */
-    public function save(bool $updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         if ($this->newRecord) {
             // Insert

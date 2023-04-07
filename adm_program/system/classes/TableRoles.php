@@ -207,7 +207,7 @@ class TableRoles extends TableAccess
      * @throws AdmException
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         global $gCurrentSession, $gL10n;
 
@@ -425,7 +425,7 @@ class TableRoles extends TableAccess
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
-    protected function readData(string $sqlWhereCondition, array $queryParams = array())
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
         if (parent::readData($sqlWhereCondition, $queryParams)) {
             if($this->getValue('cat_name_intern') === 'EVENTS') {
@@ -447,7 +447,7 @@ class TableRoles extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save(bool $updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentSession, $gCurrentUser;
 
@@ -499,7 +499,7 @@ class TableRoles extends TableAccess
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      *@throws AdmException
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gL10n, $gCurrentUser;
 

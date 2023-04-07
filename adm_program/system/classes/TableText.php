@@ -14,10 +14,10 @@ class TableText extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_texts.
      * If the id is set than the specific text will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param string   $name     The recordset of the text with this name will be loaded.
+     * @param string $name     The recordset of the text with this name will be loaded.
      *                           If name isn't set than an empty object of the table is created.
      */
-    public function __construct(Database $database, $name = '')
+    public function __construct(Database $database, string $name = '')
     {
         parent::__construct($database, TBL_TEXTS, 'txt', $name);
     }

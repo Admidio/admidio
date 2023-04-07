@@ -840,7 +840,7 @@ class ListConfiguration extends TableLists
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
      */
-    public function readDataByUuid(string $uuid)
+    public function readDataByUuid(string $uuid): bool
     {
         $returnValue = parent::readDataByUuid($uuid);
 
@@ -904,7 +904,7 @@ class ListConfiguration extends TableLists
      * @param bool $updateFingerPrint
      * @return bool
      */
-    public function save(bool $updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         $this->db->startTransaction();
 

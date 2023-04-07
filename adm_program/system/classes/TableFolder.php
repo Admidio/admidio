@@ -204,7 +204,7 @@ class TableFolder extends TableAccess
      * @param int $folderId
      * @return bool **true** if no error occurred
      */
-    public function delete($folderId = 0)
+    public function delete($folderId = 0): bool
     {
         global $gLogger;
 
@@ -693,7 +693,7 @@ class TableFolder extends TableAccess
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
-    protected function readData(string $sqlWhereCondition, array $queryParams = array())
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
         if (parent::readData($sqlWhereCondition, $queryParams)) {
             $folId = (int) $this->getValue('fol_id');
@@ -759,7 +759,7 @@ class TableFolder extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save(bool $updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         if ($this->newRecord) {
             $this->setValue('fol_timestamp', DATETIME_NOW);

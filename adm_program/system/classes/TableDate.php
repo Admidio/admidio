@@ -87,7 +87,7 @@ class TableDate extends TableAccess
      * After that the class will be initialize.
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         $datId     = (int) $this->getValue('dat_id');
         $datRoleId = (int) $this->getValue('dat_rol_id');
@@ -411,7 +411,7 @@ class TableDate extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save(bool $updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentUser;
 
@@ -431,7 +431,7 @@ class TableDate extends TableAccess
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws AdmException
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 

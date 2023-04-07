@@ -78,7 +78,7 @@ class TableGuestbookComment extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save(bool $updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         if ($this->newRecord) {
             $this->setValue('gbc_ip_address', $_SERVER['REMOTE_ADDR']);
@@ -95,7 +95,7 @@ class TableGuestbookComment extends TableAccess
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         if ($checkValue) {
             if ($columnName === 'gbc_text') {

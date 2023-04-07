@@ -601,7 +601,7 @@ class User extends TableAccess
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         global $gChangeNotification;
 
@@ -1168,7 +1168,7 @@ class User extends TableAccess
      * Returns true if a column of user table or profile fields has changed
      * @return bool Returns true if a column of user table or profile fields has changed
      */
-    public function hasColumnsValueChanged()
+    public function hasColumnsValueChanged(): bool
     {
         return parent::hasColumnsValueChanged() || $this->mProfileFieldsData->hasColumnsValueChanged();
     }
@@ -1598,7 +1598,7 @@ class User extends TableAccess
      * @param int $id Unique id of the user that should be read
      * @return bool Returns **true** if one record is found
      */
-    public function readDataById(int $id)
+    public function readDataById(int $id): bool
     {
         if (parent::readDataById($id)) {
             // read data of all user fields from current user
@@ -1622,7 +1622,7 @@ class User extends TableAccess
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
      */
-    public function readDataByUuid(string $uuid)
+    public function readDataByUuid(string $uuid): bool
     {
         if (parent::readDataByUuid($uuid)) {
             // read data of all user fields from current user
@@ -1691,7 +1691,7 @@ class User extends TableAccess
      * @return bool
      *@throws AdmException
      */
-    public function save(bool $updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentSession, $gCurrentUser, $gChangeNotification;
 
@@ -1889,7 +1889,7 @@ class User extends TableAccess
      * $gCurrentUser->getValue('EMAIL', 'administrator@admidio.org');
      * ```
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gSettingsManager, $gChangeNotification;
 

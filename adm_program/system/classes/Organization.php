@@ -92,7 +92,7 @@ class Organization extends TableAccess
      * this method will cache the value and will return the cached value on multiple calls.
      * @return int Number of all organizations in database.
      */
-    public function countAllRecords()
+    public function countAllRecords(): int
     {
         if ($this->countOrganizations === 0) {
             $this->countOrganizations = parent::countAllRecords();
@@ -512,7 +512,7 @@ class Organization extends TableAccess
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         if ($checkValue) {
             // org_shortname shouldn't be edited

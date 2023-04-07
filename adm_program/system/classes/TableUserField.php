@@ -65,7 +65,7 @@ class TableUserField extends TableAccess
      * Also the gap in sequence will be closed. After that the class will be initialize.
      * @return true true if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         global $gCurrentSession;
 
@@ -375,7 +375,7 @@ class TableUserField extends TableAccess
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      *@throws AdmException
      */
-    public function save(bool $updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentSession, $gCurrentUser;
 
@@ -411,7 +411,7 @@ class TableUserField extends TableAccess
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      *@throws AdmException
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 

@@ -52,7 +52,7 @@ class TableFile extends TableAccess
      * After that the class will be initialize.
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         global $gLogger;
 
@@ -195,7 +195,7 @@ class TableFile extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save(bool $updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         if ($this->newRecord) {
             $this->setValue('fil_timestamp', DATETIME_NOW);

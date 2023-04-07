@@ -194,7 +194,7 @@ class UserImport extends User
      * $gCurrentUser->getValue('EMAIL', 'administrator@admidio.org');
      * ```
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gL10n, $gLogger;
 

@@ -106,7 +106,7 @@ class RolesRights extends TableAccess
      * After that the class will be initialize.
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         if (count($this->rolesRightsDataObjects) > 0) {
             $this->db->startTransaction();
@@ -174,7 +174,7 @@ class RolesRights extends TableAccess
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
-    protected function readData(string $sqlWhereCondition, array $queryParams = array())
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
         if (parent::readData($sqlWhereCondition, $queryParams)) {
             $sql = 'SELECT *

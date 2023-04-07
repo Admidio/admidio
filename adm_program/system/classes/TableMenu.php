@@ -45,7 +45,7 @@ class TableMenu extends TableAccess
      * After that the class will be initialize.
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         global $gCurrentSession;
 
@@ -161,7 +161,7 @@ class TableMenu extends TableAccess
      * @param int $id Unique men_id
      * @return bool Returns **true** if one record is found
      */
-    public function readDataById(int $id)
+    public function readDataById(int $id): bool
     {
         $returnValue = parent::readDataById($id);
 
@@ -182,7 +182,7 @@ class TableMenu extends TableAccess
      * @param array $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns **true** if one record is found
      */
-    public function readDataByColumns(array $columnArray)
+    public function readDataByColumns(array $columnArray): bool
     {
         $returnValue = parent::readDataByColumns($columnArray);
 
@@ -203,7 +203,7 @@ class TableMenu extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save(bool $updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentSession;
 
