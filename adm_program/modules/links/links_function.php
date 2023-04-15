@@ -97,7 +97,7 @@ if ($getMode === 1) {
         $e->showHtml();
     }
 
-    if ($returnCode === true && $weblinkIsNew) {
+    if ($returnCode === true && $weblinkIsNew && $gSettingsManager->getBool('system_notifications_new_entries')) {
         // Notification email for new entries
         $message = $gL10n->get('SYS_LINK_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
         try {
