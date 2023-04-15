@@ -73,7 +73,7 @@ class Email extends PHPMailer
     public const EMAIL_ONLY_ACTIVE_MEMBERS = 1;
     public const EMAIL_ONLY_FORMER_MEMBERS = 2;
 
-    public const SENDINGMODE_BULK = 1;
+    public const SENDINGMODE_BULK = 0;
     public const SENDINGMODE_SINGLE = 1;
 
     /**
@@ -107,7 +107,7 @@ class Email extends PHPMailer
     /**
     * @var int The sending mode from the settings: 0 = BULK, 1 = SINGLE
     */
-    private $sendingMode = Email::SENDINGMODE_BULK;
+    private $sendingMode;
     /**
      * @var array<int,array<string,string>>
      */
@@ -293,7 +293,7 @@ class Email extends PHPMailer
         }
 
         $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
-                  FROM ' . TBL_USER . '
+                  FROM ' . TBL_USERS . '
             INNER JOIN ' . TBL_USER_DATA . ' AS email
                     ON email.usd_usr_id = usr_id
                    AND LENGTH(email.usd_value) > 0
@@ -345,35 +345,6 @@ class Email extends PHPMailer
         $this->emRecipientsNames[] = $lastName;
 
         return true;
-    }
-
-    /**
-     * method adds BCC recipients to mail
-     * Bcc Empfänger werden ersteinmal gesammelt, damit später Päckchen verschickt werden können
-     * @param string $address
-     * @param string $lastName
-     * @return bool
-     * @deprecated 4.2.0:4.3.0 "addBlindCopy()" is deprecated, use "addRecipient()" instead.
-     */
-    public function addBlindCopy($address, $firstName = '', $lastName = '')
-    {
-        return $this->addRecipient($address, $firstName, $lastName);
-    }
-
-    /**
-     * Send a notification email to all members of the notification role. This role is configured within the
-     * global preference **system_notifications_role**.
-     * @param string $subject     The subject of the email.
-     * @param string $message     The body of the email.
-     * @param string $editorName  The name of the sender of the email.
-     * @param string $editorEmail The email address of the sender of the email.
-     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
-     * @return bool
-     * @deprecated 4.2.0:4.3.0 "adminNotification()" is deprecated, use "sendNotification()" instead.
-     */
-    public function adminNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'system_notifications_new_entries')
-    {
-        return $this->sendNotification($subject, $message);
     }
 
     /**
@@ -466,7 +437,7 @@ class Email extends PHPMailer
     }
 
     /**
-     * method adds sender to mail
+     * Method adds sender to the email.
      * @param string $address
      * @param string $name
      * @return true|string
@@ -475,18 +446,16 @@ class Email extends PHPMailer
     {
         global $gSettingsManager;
 
-        // save sender if a copy of the mail should be send to him
+        // save sender if a copy of the mail should be sent to him
         $this->emSender = array('address' => $address, 'name' => $name);
 
-        // Falls so eingestellt soll die Mail von einer bestimmten Adresse aus versendet werden
+        // If set, the mail should be sent from a specific address
         if (strlen($gSettingsManager->getString('mail_sendmail_address')) > 0) {
-            // hier wird die Absenderadresse gesetzt
             $fromName    = $gSettingsManager->getString('mail_sendmail_name');
             $fromAddress = $gSettingsManager->getString('mail_sendmail_address');
         }
-        // Im Normalfall wird aber versucht von der Adresse des schreibenden aus zu schicken
         else {
-            // Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
+            // Normally, however, an attempt is made to send from the address of the writing party
             $fromName    = $name;
             $fromAddress = $address;
         }
@@ -520,8 +489,8 @@ class Email extends PHPMailer
     }
 
     /**
-     * Add the template text to the email message and replace the plaeholders of the template.
-     * @param string $text        Email text that should be send
+     * Add the template text to the email message and replace the placeholders of the template.
+     * @param string $text        Email text that should be sent
      * @param string $senderName  Firstname and lastname of email sender
      * @param string $senderEmail The email address of the sender
      * @param string $senderUuid  The unique ID of the sender.
@@ -567,7 +536,7 @@ class Email extends PHPMailer
             $substring = substr($emailText, strpos($emailText, '<style'), strpos($emailText, '</style>') + 6);
             $emailText = str_replace($substring, '', $emailText);
         }
-        // remove linefeeds from html \r\n but don't remove the linefeed from the message \n
+        // remove line feeds from html \r\n but don't remove the linefeed from the message \n
         $emailText = str_replace(array("\t", "\r\n"), '', $emailText);
         $emailText = trim($emailText);
 
@@ -577,8 +546,8 @@ class Email extends PHPMailer
 
 
     /**
-     * Add the user specific template text to the email message and replace the plaeholders of the template.
-     * @param string $text      Email text that should be send
+     * Add the user specific template text to the email message and replace the placeholders of the template.
+     * @param string $text      Email text that should be sent
      * @param string $firstName Recipients firstname
      * @param string $surname Recipients surname
      * @param string $email  Recipients email address
@@ -600,7 +569,7 @@ class Email extends PHPMailer
     }
 
     /**
-     * Funktion um den Nachrichtentext an die Mail uebergeben
+     * Method to pass the message text to the email.
      * @param string $text
      */
     public function setText(string $text)
@@ -661,8 +630,8 @@ class Email extends PHPMailer
     /**
      * Method will send the email to all recipients. Therefore, the method will evaluate how to send the email.
      * If it's necessary all recipients will be added to BCC and also smaller packages of recipients will be
-     * created. So maybe several emails will be send. Also a copy to the sender will be send if the preferences are set.
-     * If the Sending Mode is set to "SINGLE" every e-mail will be send on its own, so there will be send out a lot e-mails.
+     * created. So maybe several emails will be sent. Also, a copy to the sender will be sent if the preferences are set.
+     * If the Sending Mode is set to "SINGLE" every e-mail will be sent on its own, so there will be sent out a lot of emails.
      * @return true|string
      */
     public function sendEmail()
