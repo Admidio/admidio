@@ -87,8 +87,8 @@ for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) 
         $userImport->readDataByUuid($line[$importProfileFields['usr_uuid']]);
     } else {
         $userImport->readDataByFirstnameLastName(
-            $line[$importProfileFields[$gProfileFields->getProperty('FIRST_NAME', 'usf_uuid')]],
-            $line[$importProfileFields[$gProfileFields->getProperty('LAST_NAME', 'usf_uuid')]]
+            trim($line[$importProfileFields[$gProfileFields->getProperty('FIRST_NAME', 'usf_uuid')]]),
+            trim($line[$importProfileFields[$gProfileFields->getProperty('LAST_NAME', 'usf_uuid')]])
         );
     }
 
