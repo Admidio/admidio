@@ -124,14 +124,14 @@ if ($getMode === 'new' || $getMode === 'change') {
         if (is_array($error)) {
             $photoAlbum->delete();
 
-            // der entsprechende Ordner konnte nicht angelegt werden
+            // the corresponding folder could not be created
             $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php');
             $gMessage->show($gL10n->get($error['text'], array($error['path'], '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
             // => EXIT
         }
 
-        if ($error === null) {
-            // Benachrichtigungs-Email für neue Einträge
+        if ($error === null && $gSettingsManager->getBool('system_notifications_new_entries')) {
+            // Notification email for new entries
             $notification = new Email();
             try {
                 $message = $gL10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['pho_name'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));

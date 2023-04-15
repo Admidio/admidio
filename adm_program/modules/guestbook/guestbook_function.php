@@ -185,11 +185,10 @@ if ($getMode === 1 || $getMode === 3) {
             $guestbook->setValue('gbo_locked', '1');
         }
 
-        // Daten in Datenbank schreiben
         $returnCode = $guestbook->save();
 
-        if ($returnCode === true) {
-            // Benachrichtigungs-Email für neue Einträge
+        if ($returnCode === true && $gSettingsManager->getBool('system_notifications_new_entries')) {
+            // Notification email for new entries
             if (!$gValidLogin) {
                 $gboName  = $_POST['gbo_name'];
                 $gboEmail = $_POST['gbo_email'];
@@ -328,11 +327,10 @@ if ($getMode === 1 || $getMode === 3) {
             $gbComment->setValue('gbc_locked', '1');
         }
 
-        // Daten in Datenbank schreiben
         $returnCode = $gbComment->save();
 
-        if ($returnCode === true) {
-            // Benachrichtigungs-Email für neue Einträge
+        if ($returnCode === true && $gSettingsManager->getBool('system_notifications_new_entries')) {
+            // Notification email for new entries
             if (!$gValidLogin) {
                 $gbcName  = $gbComment->getValue('gbc_name');
                 $gbcEmail = $gbComment->getValue('gbc_email');

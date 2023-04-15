@@ -88,7 +88,8 @@ if ($getMode === 1) {
 
         $returnValue = $announcement->save();
 
-        if ($returnValue === true && $getAnnUuid === '') {
+        if ($returnValue === true && $getAnnUuid === '' && $gSettingsManager->getBool('system_notifications_new_entries')) {
+            // Notification email for new entries
             $message = $gL10n->get('SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
 
             $notification = new Email();
