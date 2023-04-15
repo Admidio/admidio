@@ -986,6 +986,8 @@
   <string name="SYS_MAKE_FORMER">A user can be changed to status former member. This will preserve all user information including role memberships for later use.</string>
   <string name="SYS_MALE">Male</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">New registrations of visitors can be listed, approved or refused here.</string>
+  <string name="SYS_MANUAL_APPROVAL">Manual approval</string>
+  <string name="SYS_MANUAL_APPROVAL_DESC">New registrations must be approved manually by role members with the #VAR1_BOLD# right. Only then it is possible for the new member to log in to the system. If the setting is deactivated, new members can log on to the system directly after successful registration. (Default: Enabled)</string>
   <string name="SYS_MAP">Map</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Displays the location on Google Maps. The street, postal code, city and country are transferred to Google.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Displays a route from your own place of residence to the location of this user on Google Maps. The street, postal code, city and country are transferred to Google.</string>
@@ -1195,6 +1197,7 @@
   <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</string>
   <string name="SYS_REGISTRATION_VALIDATION_FAILED">The called link is invalid. A registration link is valid only up to 24 hours after registration. Please register again on the site and confirm your registration as soon as you receive the email with the link.</string>
   <string name="SYS_REGISTRATION_VALIDATION_OK">You have successfully confirmed your registration. The registration will now be checked by a member of the #VAR1# team. You will then receive an email whether your registration has been accepted or rejected.</string>.
+  <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">You have successfully confirmed your registration. You can now log in with your username and password.</string>
   <string name="SYS_REGULAR_EXPRESSION">Regular expression</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Any regular expression can be stored that will be applied to the user's entered content in this profile field. The content must match the conditions of the regular expression for the entered value to be stored in the field. The regular expression is checked in addition to the general conditions of the data type.</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationship configuration</string>

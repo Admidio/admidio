@@ -21,12 +21,6 @@ if (!$gSettingsManager->getBool('registration_enable_module')) {
     // => EXIT
 }
 
-// if there is no login then show a profile form where the user can register himself
-if (!$gValidLogin) {
-    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '2')));
-    // => EXIT
-}
-
 // Initialize and check the parameters
 $getRegistrationId = admFuncVariableIsValid($_GET, 'id', 'string');
 $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
@@ -40,10 +34,20 @@ if ($getUserUuid !== '') {
         $userRegistration->readDataByUuid($getUserUuid);
 
         if ($userRegistration->validate($getRegistrationId)) {
-            $userRegistration->notifyAuthorizedMembers();
+            if ($gSettingsManager->getBool('registration_manual_approval')) {
+                // notify all authorized members about the new registration to approve it
+                $userRegistration->notifyAuthorizedMembers();
 
-            $gMessage->show($gL10n->get('SYS_REGISTRATION_VALIDATION_OK', array($gCurrentOrganization->getValue('org_longname'))));
-            // => EXIT
+                $gMessage->show($gL10n->get('SYS_REGISTRATION_VALIDATION_OK', array($gCurrentOrganization->getValue('org_longname'))));
+                // => EXIT
+            } else {
+                // user has done a successful registration, so the account could be activated
+                $userRegistration->acceptRegistration();
+
+                $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/login.php');
+                $gMessage->show($gL10n->get('SYS_REGISTRATION_VALIDATION_OK_SELF'));
+                // => EXIT
+            }
         } else {
             $gMessage->show($gL10n->get('SYS_REGISTRATION_VALIDATION_FAILED'));
             // => EXIT
@@ -53,6 +57,12 @@ if ($getUserUuid !== '') {
     }
 } else {
     // show list with all registrations that should be approved
+
+    // if there is no login then show a profile form where the user can register himself
+    if (!$gValidLogin) {
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '2')));
+        // => EXIT
+    }
 
     // Only Users with the right "approve users" can confirm registrations, otherwise exit.
     if (!$gCurrentUser->approveUsers()) {

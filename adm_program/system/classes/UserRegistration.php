@@ -81,6 +81,8 @@ class UserRegistration extends User
      */
     public function acceptRegistration(): bool
     {
+        global $gSettingsManager;
+
         $this->db->startTransaction();
 
         // set user active
@@ -97,7 +99,8 @@ class UserRegistration extends User
         $this->db->endTransaction();
 
         // only send mail if systemmails are enabled
-        if ($GLOBALS['gSettingsManager']->getBool('system_notifications_enabled') && $this->sendEmail) {
+        if ($gSettingsManager->getBool('system_notifications_enabled')
+        && $gSettingsManager->getBool('registration_manual_approval') && $this->sendEmail) {
             // send mail to user that his registration was accepted
             $sysMail = new SystemMail($this->db);
             $sysMail->addRecipientsByUser($this->getValue('usr_uuid'));

@@ -987,6 +987,8 @@
   <string name="SYS_MAKE_FORMER">Du kannst die Benutzerin bzw. den Benutzer zu einer/einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und du später immer wieder sehen kannst, welchen Rollen diese Person zugeordnet war.</string>
   <string name="SYS_MALE">Männlich</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Besucher:innen, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
+  <string name="SYS_MANUAL_APPROVAL">Manuelle Freigabe</string>
+  <string name="SYS_MANUAL_APPROVAL_DESC">Neue Registrierungen müssen manuell von Rollenmitgliedern mit dem Recht #VAR1_BOLD# freigegeben werden. Erst danach ist es für das neue Mitglied möglich sich am System anzumelden. Wird die Einstellung deaktiviert, so können sich neue Mitglieder nach erfolgreicher Registrierung direkt am System anmelden. (Voreinstellung: ja)</string>
   <string name="SYS_MAP">Karte</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Zeigt den Wohnort bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt eine Route vom eigenen Wohnort zum Wohnort dieser Benutzerin bzw. dieses Benutzers bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
@@ -1190,6 +1192,7 @@
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
   <string name="SYS_REGISTRATION">Registrierung</string>
   <string name="SYS_REGISTRATION_VALIDATION_OK">Du hast deine Registrierung erfolgreich bestätigt. Diese wird nun von einem Mitglied aus dem Team von #VAR1# geprüft. Du erhältst anschließend eine E-Mail, ob deine Registrierung angenommen oder abgelehnt wurde.</string>
+  <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Du hast deine Registrierung erfolgreich bestätigt. Du kannst dich jetzt mit deinem Anmeldenamen und Passwort anmelden.</string>
   <string name="SYS_REGISTRATION_VALIDATION_FAILED">Der aufgerufene Link ist ungültig. Ein Registrierungslink ist nur bis zu 24 Stunden nach der Registrierung gültig. Bitte registriere dich erneut auf der Seite und bestätige deine Registrierung, sobald du die E-Mail mit dem Link erhältst.</string>
   <string name="SYS_REGISTRATION_AT">Registrierung am #VAR1# um #VAR2# Uhr</string>
   <string name="SYS_REGISTRATION_CONFIRMED">Registrierung wurde durch den Benutzer bestätigt.</string>

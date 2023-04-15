@@ -235,7 +235,7 @@ if ($getUserUuid !== '') {
         }
 
         // always show a positive feedback to prevent hackers to validate an email-address or username
-        $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/login.php');
+        $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/login.php');
 
         if (StringUtils::strValidCharacters($_POST['recipient_email'], 'email')) {
             $gMessage->show($gL10n->get('SYS_LOSTPW_SEND_EMAIL', array($_POST['recipient_email'])));

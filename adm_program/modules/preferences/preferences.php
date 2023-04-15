@@ -461,6 +461,12 @@ $formRegistration->addCheckbox(
     array('helpTextIdInline' => 'ORG_ENABLE_REGISTRATION_MODULE_DESC')
 );
 $formRegistration->addCheckbox(
+    'registration_manual_approval',
+    $gL10n->get('SYS_MANUAL_APPROVAL'),
+    (bool) $formValues['registration_manual_approval'],
+    array('helpTextIdInline' => array('SYS_MANUAL_APPROVAL_DESC', array('SYS_RIGHT_APPROVE_USERS')))
+);
+$formRegistration->addCheckbox(
     'registration_enable_captcha',
     $gL10n->get('ORG_ENABLE_CAPTCHA'),
     (bool) $formValues['registration_enable_captcha'],
