@@ -40,6 +40,8 @@ if ($getUserUuid !== '') {
         $userRegistration->readDataByUuid($getUserUuid);
 
         if ($userRegistration->validate($getRegistrationId)) {
+            $userRegistration->notifyAuthorizedMembers();
+
             $gMessage->show($gL10n->get('SYS_REGISTRATION_VALIDATION_OK', array($gCurrentOrganization->getValue('org_longname'))));
             // => EXIT
         } else {

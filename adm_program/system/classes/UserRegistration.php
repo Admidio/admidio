@@ -172,6 +172,34 @@ class UserRegistration extends User
     }
 
     /**
+     * Send a notification email to all role members of roles that can approve registrations
+     * therefore the flags system mails and notification mail for roles with approve registration must be activated
+     */
+    public function notifyAuthorizedMembers()
+    {
+        global $gSettingsManager;
+
+        if ($gSettingsManager->getBool('system_notifications_enabled')
+            && $gSettingsManager->getBool('enable_registration_admin_mail') && $this->sendEmail) {
+            $sql = 'SELECT rol_uuid
+                      FROM '.TBL_ROLES.'
+                INNER JOIN '.TBL_CATEGORIES.'
+                        ON cat_id = rol_cat_id
+                     WHERE rol_approve_users = true
+                       AND rol_valid = true
+                       AND cat_org_id = ? -- $this->organizationId';
+            $rolesStatement = $this->db->queryPrepared($sql, array($this->organizationId));
+
+            while ($row = $rolesStatement->fetch()) {
+                // send mail that a new registration is available
+                $sysMail = new SystemMail($this->db);
+                $sysMail->addRecipientsByRole($row['rol_uuid']);
+                $sysMail->sendSystemMail('SYSMAIL_REGISTRATION_NEW', $this); // TODO Exception handling
+            }
+        }
+    }
+
+    /**
      * If called than the object will not send a SystemMail when registration was accepted or deleted.
      */
     public function notSendEmail()
@@ -242,27 +270,6 @@ class UserRegistration extends User
                 $sysMail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('user_uuid' => $this->getValue('usr_uuid'), 'id' => $validationId)));
                 $sysMail->sendSystemMail('SYSMAIL_REGISTRATION_CONFIRMATION', $this); // TODO Exception handling
             }
-/*
-            // send a notification mail to all role members of roles that can approve registrations
-            // therefore the flags system mails and notification mail for roles with approve registration must be activated
-            if ($gSettingsManager->getBool('system_notifications_enabled')
-                && $gSettingsManager->getBool('enable_registration_admin_mail') && $this->sendEmail) {
-                $sql = 'SELECT rol_uuid
-                          FROM '.TBL_ROLES.'
-                    INNER JOIN '.TBL_CATEGORIES.'
-                            ON cat_id = rol_cat_id
-                         WHERE rol_approve_users = true
-                           AND rol_valid = true
-                           AND cat_org_id = ? -- $this->organizationId';
-                $rolesStatement = $this->db->queryPrepared($sql, array($this->organizationId));
-
-                while ($row = $rolesStatement->fetch()) {
-                    // send mail that a new registration is available
-                    $sysMail = new SystemMail($this->db);
-                    $sysMail->addRecipientsByRole($row['rol_uuid']);
-                    $sysMail->sendSystemMail('SYSMAIL_REGISTRATION_NEW', $this); // TODO Exception handling
-                }
-            }*/
         }
 
         return $returnValue;
