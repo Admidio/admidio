@@ -52,6 +52,7 @@ if ($getUserUuid !== '') {
         $e->showHtml();
     }
 } else {
+    // show list with all registrations that should be approved
 
     // Only Users with the right "approve users" can confirm registrations, otherwise exit.
     if (!$gCurrentUser->approveUsers()) {

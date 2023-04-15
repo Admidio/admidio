@@ -461,9 +461,9 @@ $formRegistration->addCheckbox(
     array('helpTextIdInline' => 'ORG_ENABLE_REGISTRATION_MODULE_DESC')
 );
 $formRegistration->addCheckbox(
-    'enable_registration_captcha',
+    'registration_enable_captcha',
     $gL10n->get('ORG_ENABLE_CAPTCHA'),
-    (bool) $formValues['enable_registration_captcha'],
+    (bool) $formValues['registration_enable_captcha'],
     array('helpTextIdInline' => 'ORG_CAPTCHA_REGISTRATION')
 );
 $formRegistration->addCheckbox(
@@ -473,9 +473,9 @@ $formRegistration->addCheckbox(
     array('helpTextIdInline' => 'SYS_REGISTRATION_ADOPT_ALL_DATA_DESC')
 );
 $formRegistration->addCheckbox(
-    'enable_registration_admin_mail',
+    'registration_send_notification_email',
     $gL10n->get('ORG_EMAIL_ALERTS'),
-    (bool) $formValues['enable_registration_admin_mail'],
+    (bool) $formValues['registration_send_notification_email'],
     array('helpTextIdInline' => array('ORG_EMAIL_ALERTS_DESC', array('SYS_RIGHT_APPROVE_USERS')))
 );
 $formRegistration->addSubmitButton(

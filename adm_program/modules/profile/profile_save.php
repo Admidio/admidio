@@ -219,7 +219,7 @@ if ($getNewUser === 2) {
     $user->setPassword($_POST['usr_password']);
 
     // At user registration with activated captcha check the captcha input
-    if ($gSettingsManager->getBool('enable_registration_captcha')) {
+    if ($gSettingsManager->getBool('registration_enable_captcha')) {
         try {
             FormValidation::checkCaptcha($_POST['captcha_code']);
         } catch (AdmException $e) {

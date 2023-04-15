@@ -180,7 +180,7 @@ class UserRegistration extends User
         global $gSettingsManager;
 
         if ($gSettingsManager->getBool('system_notifications_enabled')
-            && $gSettingsManager->getBool('enable_registration_admin_mail') && $this->sendEmail) {
+            && $gSettingsManager->getBool('registration_send_notification_email') && $this->sendEmail) {
             $sql = 'SELECT rol_uuid
                       FROM '.TBL_ROLES.'
                 INNER JOIN '.TBL_CATEGORIES.'
@@ -264,7 +264,7 @@ class UserRegistration extends User
 
             // send a notification mail to the user to confirm his registration
             if ($gSettingsManager->getBool('system_notifications_enabled')
-                && $gSettingsManager->getBool('enable_registration_admin_mail') && $this->sendEmail) {
+                && $gSettingsManager->getBool('registration_send_notification_email') && $this->sendEmail) {
                 $sysMail = new SystemMail($this->db);
                 $sysMail->addRecipientsByUser($this->getValue('usr_uuid'));
                 $sysMail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('user_uuid' => $this->getValue('usr_uuid'), 'id' => $validationId)));
