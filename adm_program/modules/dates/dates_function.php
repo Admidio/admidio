@@ -536,7 +536,8 @@ if (in_array($getMode, array(3, 4, 7), true)) {
 
         $member->save();
 
-        if ($participationPossible) {
+        // change the participation status, it's always possible to cancel the participation
+        if ($participationPossible || $getMode === 4) {
             switch ($getMode) {
                 case 3:  // User attends to the event
                     $member->startMembership((int) $date->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_YES);
