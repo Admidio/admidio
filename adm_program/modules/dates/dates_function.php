@@ -515,7 +515,7 @@ if (in_array($getMode, array(3, 4, 7), true)) {
             $participants = new Participants($gDb, (int) $date->getValue('dat_rol_id'));
             $totalMembers = $participants->getCount();
 
-            if ($totalMembers + ($postAdditionalGuests - (int) $member->getValue('mem_count_guests')) <= $date->getValue('dat_max_members')) {
+            if ($totalMembers + ($postAdditionalGuests - (int) $member->getValue('mem_count_guests')) < $date->getValue('dat_max_members')) {
                 $member->setValue('mem_count_guests', $postAdditionalGuests);
             } else {
                 $participationPossible = false;
