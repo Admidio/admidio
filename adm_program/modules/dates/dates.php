@@ -463,8 +463,8 @@ if ($datesResult['totalCount'] === 0) {
                 }
 
                 // Check participation deadline and show buttons if allowed
-                if ((!$date->deadlineExceeded()/* && array_key_exists($gCurrentUserId, $participantsArray))
-                    || ($outputNumberMembers < (int) $date->getValue('dat_max_members') && !array_key_exists($gCurrentUserId, $participantsArray)*/)) {
+                if ((!$date->deadlineExceeded() && array_key_exists($gCurrentUserId, $participantsArray))
+                    || ($outputNumberMembers < (int) $date->getValue('dat_max_members') && !array_key_exists($gCurrentUserId, $participantsArray))) {
                     $disableStatusAttend    = '';
                     $disableStatusTentative = '';
 
