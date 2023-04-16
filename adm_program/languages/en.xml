@@ -1194,7 +1194,7 @@
   <string name="SYS_REGISTRATION_AT">Registration on #VAR1# at #VAR2#</string>
   <string name="SYS_REGISTRATION_CONFIRMED">Registration has been confirmed by the user.</string>
   <string name="SYS_REGISTRATION_NOT_CONFIRMED">Registration has not yet been confirmed by the user.</string>
-  <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</string>
+  <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nYou will now receive an email with a confirmation link. After you have executed this link, your registration can be processed further.</string>
   <string name="SYS_REGISTRATION_VALIDATION_FAILED">The called link is invalid. A registration link is valid only up to 24 hours after registration. Please register again on the site and confirm your registration as soon as you receive the email with the link.</string>
   <string name="SYS_REGISTRATION_VALIDATION_OK">You have successfully confirmed your registration. The registration will now be checked by a member of the #VAR1# team. You will then receive an email whether your registration has been accepted or rejected.</string>.
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">You have successfully confirmed your registration. You can now log in with your username and password.</string>

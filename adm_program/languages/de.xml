@@ -1197,7 +1197,7 @@
   <string name="SYS_REGISTRATION_AT">Registrierung am #VAR1# um #VAR2# Uhr</string>
   <string name="SYS_REGISTRATION_CONFIRMED">Registrierung wurde durch den Benutzer bestätigt.</string>
   <string name="SYS_REGISTRATION_NOT_CONFIRMED">Registrierung wurde durch den Benutzer noch nicht bestätigt.</string>
-  <string name="SYS_REGISTRATION_SAVED">Deine Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Deine Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung wirst du per E-Mail benachrichtigt.</string>
+  <string name="SYS_REGISTRATION_SAVED">Deine Daten wurden gespeichert.\n\nDu erhältst nun eine E-Mail mit einem Bestätigungslink. Nachdem du diesen Link ausgeführt hast, kann deine Registrierung weiter bearbeitet werden.</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer:innen übernehmen</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Existiert eine neu registrierte Benutzerin oder ein neu registrierter Benutzer bereits in der Datenbank, so werden bei gesetzter Einstellung alle Daten aus der Registrierung in den bestehenden Datensatz übernommen. Wenn diese Einstellung nicht gesetzt ist, werden nur der Anmeldename und das Passwort übernommen. Bei Benutzerinnen und Benutzern, welche bisher noch nicht vorhanden waren, werden unabhängig von dieser Einstellung immer alle Daten aus der Registrierung übernommen. (Voreinstellung: ja)</string>
   <string name="SYS_REGULAR_EXPRESSION">Regulärer Ausdruck</string>
