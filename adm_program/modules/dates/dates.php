@@ -149,7 +149,7 @@ if ($getViewMode === 'html') {
         }
 
         if ($gCurrentUser->editDates()) {
-            // if no calendar selectbox is shown, then show link to edit calendars
+            // if no calendar select box is shown, then show link to edit calendars
             $page->addPageFunctionsMenuItem(
                 'menu_item_event_categories',
                 $gL10n->get('SYS_EDIT_CALENDARS'),
@@ -158,7 +158,7 @@ if ($getViewMode === 'html') {
             );
         }
 
-        // create filter menu with elements for calendar and start-/enddate
+        // create filter menu with elements for calendar and start/end date
         $filterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', $page, array('type' => 'navbar', 'setFocus' => false));
         $form->addInput('headline', 'headline', $getHeadline, array('property' => HtmlForm::FIELD_HIDDEN));
@@ -406,7 +406,7 @@ if ($datesResult['totalCount'] === 0) {
             }
         }
 
-        // check the rights if the user is allowed to view the participants or he is allowed to participate
+        // check the rights if the user is allowed to view the participants, or he is allowed to participate
         if ($gCurrentUser->hasRightViewRole((int) $date->getValue('dat_rol_id'))
             || $row['mem_leader'] == 1
             || $gCurrentUser->editDates()
@@ -462,43 +462,44 @@ if ($datesResult['totalCount'] === 0) {
                     $buttonText = '';
                 }
 
-                $disableStatusAttend    = '';
-                $disableStatusTentative = '';
+                // Check participation deadline and show buttons if allowed
+                if ((!$date->deadlineExceeded()/* && array_key_exists($gCurrentUserId, $participantsArray))
+                    || ($outputNumberMembers < (int) $date->getValue('dat_max_members') && !array_key_exists($gCurrentUserId, $participantsArray)*/)) {
+                    $disableStatusAttend    = '';
+                    $disableStatusTentative = '';
 
-                // Check limit of participants
-                if ($date->getValue('dat_max_members') > 0 && $outputNumberMembers >= $date->getValue('dat_max_members')) {
-                    // Check current user. If user is member of the event role then get his current approval status and set the options
-                    if (in_array($gCurrentUserId, $participantsArray, true)) {
-                        switch ($participantsArray[$gCurrentUserId]['approved']) {
-                            case Participants::PARTICIPATION_MAYBE:
-                                $disableStatusTentative = 'disabled';
-                                break;
-                            case Participants::PARTICIPATION_YES:
-                                $disableStatusAttend    = 'disabled';
-                                break;
-                            case Participants::PARTICIPATION_NO:
-                                $disableStatusAttend    = 'disabled';
-                                $disableStatusTentative = 'disabled';
-                                break;
+                    // Check limit of participants
+                    if ($date->getValue('dat_max_members') > 0 && $outputNumberMembers >= (int) $date->getValue('dat_max_members')) {
+                        // Check current user. If user is member of the event role then get his current approval status and set the options
+                        if (array_key_exists($gCurrentUserId, $participantsArray)) {
+                            switch ($participantsArray[$gCurrentUserId]['approved']) {
+                                case Participants::PARTICIPATION_MAYBE:
+                                    $disableStatusTentative = 'disabled';
+                                    break;
+                                case Participants::PARTICIPATION_YES:
+                                    $disableStatusAttend    = 'disabled';
+                                    break;
+                                case Participants::PARTICIPATION_NO:
+                                    $disableStatusAttend    = 'disabled';
+                                    $disableStatusTentative = 'disabled';
+                                    break;
+                            }
                         }
                     }
-                }
 
-                // Check participation deadline and show buttons if allowed
-                if (!$date->deadlineExceeded()) {
                     if ($participateModalForm === false) {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
                                 <button class="btn btn-secondary dropdown-toggle ' . $buttonClass . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'</button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="btn admidio-event-approval-state-attend" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '3', 'dat_uuid' => $dateUuid)) . '"' . $disableStatusAttend . '>
+                                        <a class="btn admidio-event-approval-state-attend '.$disableStatusAttend.'" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '3', 'dat_uuid' => $dateUuid)) . '">
                                             <i class="fas fa-check-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>' . $gL10n->get('SYS_PARTICIPATE') . '
                                         </a>
                                     </li>';
                         if ($gSettingsManager->getBool('dates_may_take_part')) {
                             $outputButtonParticipation .= '<li>
-                                            <a class="btn admidio-event-approval-state-tentative" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_uuid' => $dateUuid)) . '"' . $disableStatusTentative . '>
+                                            <a class="btn admidio-event-approval-state-tentative '.$disableStatusTentative.'" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_uuid' => $dateUuid)) . '">
                                                 <i class="fas fa-question-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_USER_TENTATIVE').'"></i>' . $gL10n->get('DAT_USER_TENTATIVE') . '
                                             </a>
                                         </li>';
@@ -816,7 +817,7 @@ if ($datesResult['totalCount'] === 0) {
         $page->addHtml($compactTable->show());
     }
 }
-// If necessary show links to navigate to next and previous recordsets of the query
+// If necessary show links to navigate to next and previous recordset of the query
 $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'), 'view_mode' => $getViewMode));
 $page->addHtml(admFuncGeneratePagination($baseUrl, $datesResult['totalCount'], $datesResult['limit'], $getStart));
 $page->show();
