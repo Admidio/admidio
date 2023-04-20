@@ -320,10 +320,11 @@ input[type=time] {
 }
 
 .datetime-date-control {
-    display: inline;
+    display: inline-block;
 }
 
 .datetime-time-control {
+    display: inline-block;
     width: 110px !important;
     margin-left: 20px;
 }
