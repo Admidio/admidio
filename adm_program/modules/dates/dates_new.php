@@ -30,10 +30,12 @@ if ((int) $gSettingsManager->get('enable_dates_module') === 0) {
     // => EXIT
 }
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$dateRegistrationPossible = false;
-$dateCurrentUserAssigned  = false;
-$roleViewSet              = array();
+// Initialize local parameters
+$dateParticipationPossible = false;
+$dateCurrentUserAssigned   = false;
+$roleViewSet               = array();
+$flagDateRightListView     = false;
+$flagDateRightSendMail     = false;
 
 // set headline of the script
 if ($getCopy) {
@@ -65,14 +67,17 @@ if (isset($_SESSION['dates_request'])) {
         $roleViewSet = $_SESSION['dates_request']['adm_event_participation_right'];
     }
 
-    // check if a registration to this event is possible
     if (array_key_exists('date_registration_possible', $_SESSION['dates_request'])) {
-        $dateRegistrationPossible = (bool) $_SESSION['dates_request']['date_registration_possible'];
+        $dateParticipationPossible = (bool) $_SESSION['dates_request']['date_registration_possible'];
     }
-
-    // check if current user is assigned to this date
     if (array_key_exists('date_current_user_assigned', $_SESSION['dates_request'])) {
         $dateCurrentUserAssigned = (bool) $_SESSION['dates_request']['date_current_user_assigned'];
+    }
+    if (array_key_exists('date_right_list_view', $_SESSION['dates_request'])) {
+        $flagDateRightListView = (bool) $_SESSION['dates_request']['date_right_list_view'];
+    }
+    if (array_key_exists('date_right_send_mail', $_SESSION['dates_request'])) {
+        $flagDateRightSendMail = (bool) $_SESSION['dates_request']['date_right_send_mail'];
     }
 
     unset($_SESSION['dates_request']);
@@ -90,6 +95,17 @@ if (isset($_SESSION['dates_request'])) {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
+
+        // check if a participation to this event is possible
+        if ($date->getValue('dat_rol_id') > 0) {
+            $dateParticipationPossible = true;
+            $role = new TableRoles($gDb, (int) $date->getValue('dat_rol_id'));
+            $flagDateRightListView = (bool) $role->getValue('rol_view_memberships');
+            $flagDateRightSendMail = (bool) $role->getValue('rol_mail_this_role');
+        }
+
+        // check if current user is assigned to this date
+        $dateCurrentUserAssigned = $gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id'));
     } else {
         // check if the user has the right to edit at least one category
         if (count($gCurrentUser->getAllEditableCategories('DAT')) === 0) {
@@ -97,7 +113,7 @@ if (isset($_SESSION['dates_request'])) {
             // => EXIT
         }
 
-        // bei neuem Termin Datum mit aktuellen Daten vorbelegen
+        // For new events preset date with current date
         $now = new \DateTime();
         $oneHourOffset = new \DateInterval('PT1H');
         $twoHourOffset = new \DateInterval('PT2H');
@@ -106,21 +122,6 @@ if (isset($_SESSION['dates_request'])) {
         $date->setValue('dat_begin', $beginDate);
         $date->setValue('dat_end', $endDate);
     }
-
-    // check if a registration to this event is possible
-    if ($date->getValue('dat_rol_id') > 0) {
-        $dateRegistrationPossible = true;
-    }
-    // check if current user is assigned to this date
-    $dateCurrentUserAssigned = $gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id'));
-}
-
-if ($date->getValue('dat_rol_id') > 0) {
-    $dateRoleId = (int) $date->getValue('dat_rol_id');
-    $role = new TableRoles($gDb, $dateRoleId);
-} else {
-    $dateRoleId = 0;
-    $role = new TableRoles($gDb);
 }
 
 // create html page object
@@ -129,7 +130,7 @@ $page = new HtmlPage('admidio-events-edit', $headline);
 $page->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/date-functions.js');
 $page->addJavascript('
     /**
-     * Funktion blendet Zeitfelder ein/aus
+     * Function hides/show date and time fields
      */
     function setAllDay() {
         if ($("#dat_all_day:checked").val() !== undefined) {
@@ -175,7 +176,7 @@ $page->addJavascript('
 
 $page->addJavascript(
     '
-    var dateRoleID = '.$dateRoleId.';
+    var dateParticipationPossible = ' . ($dateParticipationPossible ? 1 : 0) .';
 
     setAllDay();
     setDateParticipation();
@@ -200,7 +201,7 @@ $page->addJavascript(
     $("#btn_save").click(function(event) {
         event.preventDefault();
 
-        if (dateRoleID > 0 && $("#date_registration_possible").is(":checked") === false) {
+        if (dateParticipationPossible > 0 && $("#date_registration_possible").is(":checked") === false) {
             var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
             if (msg_result) {
                 $("#dates_edit_form").submit();
@@ -300,7 +301,7 @@ $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), (bool) $d
 $form->addCheckbox(
     'date_registration_possible',
     $gL10n->get('DAT_REGISTRATION_POSSIBLE'),
-    $dateRegistrationPossible,
+    $dateParticipationPossible,
     array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE')
 );
 
@@ -361,8 +362,8 @@ $form->addInput(
     $date->getValue('dat_deadline', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
     array('type' => 'datetime', 'helpTextIdLabel' => 'DAT_DEADLINE_DESC')
 );
-$form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), (bool) $role->getValue('rol_view_memberships'));
-$form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), (bool) $role->getValue('rol_mail_this_role'));
+$form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
+$form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
