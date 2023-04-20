@@ -67,8 +67,8 @@ if (isset($_SESSION['dates_request'])) {
         $roleViewSet = $_SESSION['dates_request']['adm_event_participation_right'];
     }
 
-    if (array_key_exists('date_registration_possible', $_SESSION['dates_request'])) {
-        $dateParticipationPossible = (bool) $_SESSION['dates_request']['date_registration_possible'];
+    if (array_key_exists('date_participation_possible', $_SESSION['dates_request'])) {
+        $dateParticipationPossible = (bool) $_SESSION['dates_request']['date_participation_possible'];
     }
     if (array_key_exists('date_current_user_assigned', $_SESSION['dates_request'])) {
         $dateCurrentUserAssigned = (bool) $_SESSION['dates_request']['date_current_user_assigned'];
@@ -97,7 +97,7 @@ if (isset($_SESSION['dates_request'])) {
         }
 
         // check if a participation to this event is possible
-        if ($date->getValue('dat_rol_id') > 0) {
+        if ((int) $date->getValue('dat_rol_id') > 0) {
             $dateParticipationPossible = true;
             $role = new TableRoles($gDb, (int) $date->getValue('dat_rol_id'));
             $flagDateRightListView = (bool) $role->getValue('rol_view_memberships');
@@ -114,9 +114,9 @@ if (isset($_SESSION['dates_request'])) {
         }
 
         // For new events preset date with current date
-        $now = new \DateTime();
-        $oneHourOffset = new \DateInterval('PT1H');
-        $twoHourOffset = new \DateInterval('PT2H');
+        $now = new DateTime();
+        $oneHourOffset = new DateInterval('PT1H');
+        $twoHourOffset = new DateInterval('PT2H');
         $beginDate = $now->add($oneHourOffset)->format('Y-m-d H:00:00');
         $endDate   = $now->add($twoHourOffset)->format('Y-m-d H:00:00');
         $date->setValue('dat_begin', $beginDate);
@@ -143,7 +143,8 @@ $page->addJavascript('
     }
 
     function setDateParticipation() {
-        if ($("#date_registration_possible:checked").val() !== undefined) {
+        if ($("#date_participation_possible:checked").val() !== undefined) {
+            $("#adm_event_participation_right_group").addClass("admidio-form-group-required");
             $("#adm_event_participation_right_group").show("slow");
             $("#date_current_user_assigned_group").show("slow");
             $("#dat_max_members_group").show("slow");
@@ -182,7 +183,7 @@ $page->addJavascript(
     setDateParticipation();
     setLocationCountry();
 
-    $("#date_registration_possible").click(function() {
+    $("#date_participation_possible").click(function() {
         setDateParticipation();
     });
     $("#dat_all_day").click(function() {
@@ -201,7 +202,7 @@ $page->addJavascript(
     $("#btn_save").click(function(event) {
         event.preventDefault();
 
-        if (dateParticipationPossible > 0 && $("#date_registration_possible").is(":checked") === false) {
+        if (dateParticipationPossible == 1 && $("#date_participation_possible").is(":checked") === false) {
             var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
             if (msg_result) {
                 $("#dates_edit_form").submit();
@@ -251,7 +252,7 @@ if ($gSettingsManager->getBool('dates_show_map_link')) {
     );
 }
 
-// if room selection is activated then show a selectbox with all rooms
+// if room selection is activated then show a select box with all rooms
 if ($gSettingsManager->getBool('dates_show_rooms')) {
     if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
         $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
@@ -299,13 +300,13 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
 $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), (bool) $date->getValue('dat_highlight'));
 $form->addCheckbox(
-    'date_registration_possible',
+    'date_participation_possible',
     $gL10n->get('DAT_REGISTRATION_POSSIBLE'),
     $dateParticipationPossible,
     array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE')
 );
 
-// add a multiselectbox to the form where the user can choose all roles whose members could participate to this event
+// add a multi select box to the form where the user can choose all roles whose members could participate in this event
 // read all roles of the current organization
 $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
                    FROM '.TBL_ROLES.'
@@ -321,7 +322,7 @@ $sqlDataView = array(
     'params' => array($gCurrentOrgId)
 );
 
-// show selectbox with all assigned roles
+// show select box with all assigned roles
 $form->addSelectBoxFromSql(
     'adm_event_participation_right',
     $gL10n->get('DAT_REGISTRATION_POSSIBLE_FOR'),
