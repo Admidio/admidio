@@ -720,11 +720,8 @@ if ($datesResult['totalCount'] === 0) {
                 $cssClass = 'admidio-event-highlight';
             }
 
-            // date beginn
             $dateBegin = $date->getValue('dat_begin', $gSettingsManager->getString('system_date'));
             $timeBegin = $date->getValue('dat_begin', $gSettingsManager->getString('system_time'));
-
-            // date beginn
             $dateEnd = $date->getValue('dat_end', $gSettingsManager->getString('system_date'));
             $timeEnd = $date->getValue('dat_end', $gSettingsManager->getString('system_time'));
 
@@ -739,7 +736,7 @@ if ($datesResult['totalCount'] === 0) {
             $columnValues[] = $date->getDateTimePeriod();
 
             if ($getViewMode === 'html') {
-                if (strlen($date->getValue('dat_deadline')) > 0) {
+                if ($outputDeadline !== '') {
                     $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('dat_uuid' => $dateUuid, 'view_mode' => 'html', 'view' => 'detail', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '<br />' . $gL10n->get('DAT_DEADLINE') . ': ' . $outputDeadline . '</a>';
                 } else {
                     $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('dat_uuid' => $dateUuid, 'view_mode' => 'html', 'view' => 'detail', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '</a>';
