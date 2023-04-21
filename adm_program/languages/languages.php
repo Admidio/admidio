@@ -89,11 +89,6 @@ $gSupportedLanguages = array(
         'isocode' => 'es',
         'libs'    => 'es'
     ),
-    'sw'    => array(
-        'name'    => 'Swahili - Kiswahili',
-        'isocode' => 'sw',
-        'libs'    => 'sw'
-    ),
     'sv'    => array(
         'name'    => 'Swedish - Svenska',
         'isocode' => 'sv',

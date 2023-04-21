@@ -237,8 +237,8 @@ if ($getMode === 'choose') {
 
     // Auflösungskontrolle
     $imageDimensions = $imageProperties[0] * $imageProperties[1];
-    if ($imageDimensions > admFuncProcessableImageSize()) {
-        $gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', array(round(admFuncProcessableImageSize()/1000000, 2))));
+    if ($imageDimensions > SystemInfoUtils::getProcessableImageSize()) {
+        $gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', array(round(SystemInfoUtils::getProcessableImageSize()/1000000, 2))));
         // => EXIT
     }
 

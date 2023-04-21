@@ -81,4 +81,24 @@ final class SystemInfoUtils
     {
         return PHP_MAXPATHLEN;
     }
+
+    /**
+     * Returns the maximum number of pixels the memory can handle.
+     * @return int Returns the maximum number of pixels the memory can handle.
+     */
+    public static function getProcessableImageSize(): int
+    {
+        $memoryLimit = PhpIniUtils::getMemoryLimit();
+        // if memory_limit is disabled in php.ini
+        if (is_infinite($memoryLimit)) {
+            $memoryLimit = 128 * 1024 * 1024; // 128MB
+        }
+
+        // For each Pixel 3 Bytes are necessary (RGB)
+        $bytesPerPixel = 3;
+        // The memory must be available twice. After a few tests 2.5x has proven to be safe.
+        $factor = 2.5;
+
+        return (int) round($memoryLimit / ($bytesPerPixel * $factor));
+    }
 }

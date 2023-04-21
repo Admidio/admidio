@@ -242,22 +242,11 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
 /**
  * Funktion gibt die maximale Pixelzahl zurück die der Speicher verarbeiten kann
  * @return int
+ * @deprecated 4.3.0 "admFuncProcessableImageSize()" is deprecated, use "SystemInfoUtils::getProcessableImageSize()" instead.
  */
 function admFuncProcessableImageSize()
 {
-    $memoryLimit = PhpIniUtils::getMemoryLimit();
-    // if memory_limit is disabled in php.ini
-    if (is_infinite($memoryLimit)) {
-        $memoryLimit = 128 * 1024 * 1024; // 128MB
-    }
-
-    // For each Pixel 3 Bytes are necessary (RGB)
-    $bytesPerPixel = 3;
-    // der Speicher muss doppelt zur Verfügung stehen
-    // nach ein paar tests hat sich 2.5x als sicher herausgestellt
-    $factor = 2.5;
-
-    return (int) round($memoryLimit / ($bytesPerPixel * $factor));
+    return SystemInfoUtils::getProcessableImageSize();
 }
 
 /**

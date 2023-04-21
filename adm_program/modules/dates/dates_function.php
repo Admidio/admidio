@@ -94,10 +94,10 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     // check if all necessary fields are filled
     // ------------------------------------------------
 
-    if (!isset($_POST['date_registration_possible'])) {
-        $_POST['date_registration_possible'] = 0;
+    if (!isset($_POST['date_participation_possible'])) {
+        $_POST['date_participation_possible'] = 0;
     }
-    if ($_POST['date_registration_possible'] == 1
+    if ($_POST['date_participation_possible'] == 1
     && (!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0)) {
         $_SESSION['dates_request']['adm_event_participation_right'] = '';
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('DAT_REGISTRATION_POSSIBLE_FOR'))));
@@ -224,7 +224,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         $_POST['dat_additional_guests'] = 0;
     }
 
-    if ($_POST['date_registration_possible'] == 1 && (string) $_POST['date_deadline'] !== '') {
+    if ($_POST['date_participation_possible'] == 1 && (string) $_POST['date_deadline'] !== '') {
         $_POST['dat_deadline'] = $_POST['date_deadline'].' '.((string) $_POST['date_deadline_time'] === '' ? '00:00' : $_POST['date_deadline_time']);
     } else {
         $_POST['dat_deadline'] = null;
@@ -369,7 +369,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
     // ----------------------------------------------
 
     try {
-        if($_POST['date_registration_possible'] == 1) {
+        if($_POST['date_participation_possible'] == 1) {
             if ($date->getValue('dat_rol_id') > 0) {
                 // if event exists, and you could register to this event then we must check
                 // if the data of the role must be changed
@@ -515,7 +515,7 @@ if (in_array($getMode, array(3, 4, 7), true)) {
             $participants = new Participants($gDb, (int) $date->getValue('dat_rol_id'));
             $totalMembers = $participants->getCount();
 
-            if ($totalMembers + ($postAdditionalGuests - (int) $member->getValue('mem_count_guests')) <= $date->getValue('dat_max_members')) {
+            if ($totalMembers + ($postAdditionalGuests - (int) $member->getValue('mem_count_guests')) < $date->getValue('dat_max_members')) {
                 $member->setValue('mem_count_guests', $postAdditionalGuests);
             } else {
                 $participationPossible = false;
@@ -536,7 +536,8 @@ if (in_array($getMode, array(3, 4, 7), true)) {
 
         $member->save();
 
-        if ($participationPossible) {
+        // change the participation status, it's always possible to cancel the participation
+        if ($participationPossible || $getMode === 4) {
             switch ($getMode) {
                 case 3:  // User attends to the event
                     $member->startMembership((int) $date->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_YES);

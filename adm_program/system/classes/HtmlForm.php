@@ -713,12 +713,10 @@ class HtmlForm extends HtmlFormBasic
             // now add a date and a time field to the form
             $attributes['dateValueAttributes'] = array();
             $attributes['dateValueAttributes']['class'] = 'form-control datetime-date-control';
-            $attributes['dateValueAttributes']['dateValue'] = $attributes['dateValue'];
             $attributes['dateValueAttributes']['pattern'] = '\d{4}-\d{2}-\d{2}';
 
             $attributes['timeValueAttributes'] = array();
-            $attributes['timeValueAttributes']['class'] = 'form-control datetime-date-control datetime-time-control';
-            $attributes['timeValueAttributes']['timeValue'] = $attributes['timeValue'];
+            $attributes['timeValueAttributes']['class'] = 'form-control datetime-time-control';
         } elseif ($optionsAll['type'] === 'date') {
             $datetime = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
             if (!empty($value) && is_object($datetime))
