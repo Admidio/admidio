@@ -89,7 +89,7 @@ class UploadHandlerPhoto extends UploadHandler
                 }
 
                 $imageDimensions = $imageProperties[0] * $imageProperties[1];
-                $processableImageSize = admFuncProcessableImageSize();
+                $processableImageSize = SystemInfoUtils::getProcessableImageSize();
                 if ($imageDimensions > $processableImageSize) {
                     throw new AdmException($gL10n->get('PHO_RESOLUTION_MORE_THAN') . ' ' . round($processableImageSize / 1000000, 2) . ' ' . $gL10n->get('SYS_MEGAPIXEL'));
                 }

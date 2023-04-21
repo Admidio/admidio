@@ -981,7 +981,7 @@ if (is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess')) {
 }
 $formSystemInformation->addStaticControl('directory_protection', $gL10n->get('SYS_DIRECTORY_PROTECTION'), $html);
 
-$formSystemInformation->addStaticControl('max_processable_image_size', $gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE'), round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('SYS_MEGAPIXEL'));
+$formSystemInformation->addStaticControl('max_processable_image_size', $gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE'), round(SystemInfoUtils::getProcessableImageSize()/1000000, 2).' '.$gL10n->get('SYS_MEGAPIXEL'));
 
 if (isset($gDebug) && $gDebug) {
     $html = getStaticText('danger', $gL10n->get('SYS_ON'));
