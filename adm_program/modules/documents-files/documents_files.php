@@ -96,7 +96,7 @@ if ($currentFolder->hasUploadRight()) {
 }
 
 if ($gCurrentUser->adminDocumentsFiles()) {
-    $page->addHtml('<div class="alert alert-info" role="alert"><i class="fas fa-info-circle"></i>' . $gL10n->get('SYS_DOCUMENTS_FILES_ROLES_VIEW', array(implode(', ', $currentFolder->getRoleViewArrayOfFolder()))) . '</div>');
+    $page->addHtml('<div class="alert alert-info" role="alert"><i class="fas fa-info-circle"></i>' . $gL10n->get('SYS_DOCUMENTS_FILES_ROLES_VIEW', array(implode(', ', $currentFolder->getViewRolesNames()))) . '</div>');
 }
 
 // Create table object

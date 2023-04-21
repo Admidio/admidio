@@ -50,7 +50,7 @@ try {
         $parentFolder->getFolderForDownload($parentFolder->getValue('fol_uuid'));
 
         // get assigned roles of the parent folder
-        $rolesViewRightParentFolder = $parentFolder->getRoleViewArrayOfFolder();
+        $rolesViewRightParentFolder = $parentFolder->getViewRolesIds();
         if (count($rolesViewRightParentFolder) > 0) {
             $sqlRolesViewRight = ' AND rol_id IN (' . Database::getQmForValues($rolesViewRightParentFolder) . ')';
         }
@@ -83,7 +83,7 @@ if (count($rolesViewRightParentFolder) === 0) {
 }
 
 // get assigned roles of this folder
-$roleViewSet = $folder->getRoleViewArrayOfFolder();
+$roleViewSet = $folder->getViewRolesIds();
 
 // if no roles are assigned then set "all users" as default
 if (count($roleViewSet) === 0) {
@@ -91,7 +91,7 @@ if (count($roleViewSet) === 0) {
 }
 
 // get assigned roles of this folder
-$roleUploadSet = $folder->getRoleUploadArrayOfFolder();
+$roleUploadSet = $folder->getUploadRolesIds();
 
 // if no roles are assigned then set "all users" as default
 if (count($roleUploadSet) === 0) {
