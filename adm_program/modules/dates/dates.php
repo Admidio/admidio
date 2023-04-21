@@ -362,9 +362,7 @@ if ($datesResult['totalCount'] === 0) {
                 $locationUrl = SecurityUtils::encodeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => $urlParam));
 
                 $outputLinkLocation = '
-                    <a href="' . $locationUrl . '" target="_blank" title="' . $gL10n->get('DAT_SHOW_ON_MAP') . '">
-                        <strong>' . $dateLocation . '</strong>
-                    </a>';
+                    <a href="' . $locationUrl . '" target="_blank" title="' . $gL10n->get('DAT_SHOW_ON_MAP') . '">' . $dateLocation . '</a>';
 
                 // if valid login and enough information about address exist - calculate the route
                 if ($gValidLogin && $gCurrentUser->getValue('STREET') !== ''
@@ -400,7 +398,7 @@ if ($datesResult['totalCount'] === 0) {
 
             if ($getViewMode === 'html') {
                 $roomLink = SecurityUtils::encodeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'room_detail', 'message_title' => 'DAT_ROOM_INFORMATIONS', 'message_var1' => $dateRoomId, 'inline' => 'true'));
-                $outputLinkRoom = '<strong><a class="openPopup" href="javascript:void(0);" data-href="' . $roomLink . '">' . $room->getValue('room_name') . '</a></strong>';
+                $outputLinkRoom = '<a class="openPopup" href="javascript:void(0);" data-href="' . $roomLink . '">' . $room->getValue('room_name') . '</a>';
             } else { // $getViewMode = 'print'
                 $outputLinkRoom = $room->getValue('room_name');
             }
