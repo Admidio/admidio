@@ -95,6 +95,10 @@ if ($currentFolder->hasUploadRight()) {
     }
 }
 
+if ($gCurrentUser->adminDocumentsFiles()) {
+    $page->addHtml('<div class="alert alert-info" role="alert"><i class="fas fa-info-circle"></i>' . $gL10n->get('SYS_DOCUMENTS_FILES_ROLES_VIEW', array(implode(', ', $currentFolder->getRoleViewArrayOfFolder()))) . '</div>');
+}
+
 // Create table object
 $documentsFilesOverview = new HtmlTable('tbl_documents_files', $page, true, true);
 
@@ -180,7 +184,7 @@ if (isset($folderContent['files'])) {
         }
 
         // Format timestamp
-        $timestamp = \DateTime::createFromFormat('Y-m-d H:i:s', $nextFile['fil_timestamp']);
+        $timestamp = DateTime::createFromFormat('Y-m-d H:i:s', $nextFile['fil_timestamp']);
 
         // create array with all column values
         $columnValues = array(

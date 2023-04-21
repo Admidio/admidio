@@ -26,7 +26,7 @@ if (!$gSettingsManager->getBool('documents_files_enable_module')) {
     // => EXIT
 }
 
-// erst prüfen, ob der User auch die entsprechenden Rechte hat
+// first check whether the user also has the appropriate rights
 if (!$gCurrentUser->adminDocumentsFiles()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT

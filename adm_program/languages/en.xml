@@ -738,6 +738,7 @@
   <string name="SYS_DO_NOT_EDIT">Do not edit</string>
   <string name="SYS_DOCUMENTS_FILES">Documents &amp; Files</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Different documents and files can be viewed or provided for download. These files can be categorized in folders with different access permission levels.</string>
+  <string name="SYS_DOCUMENTS_FILES_ROLES_VIEW">Members of the following roles can view the documents and files in this folder: #VAR1#</string>
   <string name="SYS_DONATE">Donate</string>
   <string name="SYS_DONT_DELETE_CATEGORY">Could not delete category #VAR1_BOLD# because of #VAR2# depending entries.</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
