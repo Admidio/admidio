@@ -119,7 +119,7 @@ class UserRegistration extends User
      */
     public function adoptUser(User $user)
     {
-        // always adopt loginname and password to the destination user
+        // always adopt login name and password to the destination user
         $user->setValue('usr_login_name', $this->getValue('usr_login_name'));
         $user->setPassword($this->getValue('usr_password'), false);
 
@@ -276,6 +276,71 @@ class UserRegistration extends User
         }
 
         return $returnValue;
+    }
+
+    /**
+     * Method will search for other users in the database with a similar first name and last name. When using MySQL the
+     * SQL function SOUNDEX will be used.
+     * the following combinations within first name and last name will be checked:
+     * 1. first name and last name are equal (under consideration of soundex)
+     * 2. last name is equal and only first part of first name of existing members is equal
+     * 3. last name is equal and only first part of first name of new registration member is equal
+     * 4. last name is equal to first name and first name is equal to last name
+     * @return array<int,int> Returns an array with the user IDs of all found similar users.
+     */
+    public function searchSimilarUsers(): array
+    {
+        global $gSettingsManager;
+
+        $foundUserIds = array();
+        $lastName  = $this->db->escapeString($this->getValue('LAST_NAME', 'database'));
+        $firstName = $this->db->escapeString($this->getValue('FIRST_NAME', 'database'));
+
+        // search for users with similar names (SQL function SOUNDEX only available in MySQL)
+        if (DB_ENGINE === Database::PDO_ENGINE_MYSQL && $gSettingsManager->getBool('system_search_similar')) {
+            $sqlSimilarName =
+                    '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
+                AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4) )
+             OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
+                AND SUBSTRING(SOUNDEX(SUBSTRING(first_name.usd_value, 1, LOCATE(\' \', first_name.usd_value))), 1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4) )
+             OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
+                AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(SUBSTRING('. $firstName.', 1, LOCATE(\' \', '.$firstName.'))), 1, 4) )
+             OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $firstName.'), 1, 4)
+                AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4) ) )';
+        } else {
+            $sqlSimilarName =
+                    '(  (   last_name.usd_value  = '. $lastName.'
+                AND first_name.usd_value = '. $firstName.')
+             OR (   last_name.usd_value  = '. $lastName.'
+                AND SUBSTRING(first_name.usd_value, 1, POSITION(\' \' IN first_name.usd_value)) = '. $firstName.')
+             OR (   last_name.usd_value  = '. $lastName.'
+                AND first_name.usd_value = SUBSTRING('. $firstName.', 1, POSITION(\' \' IN '. $firstName.')))
+             OR (   last_name.usd_value  = '. $firstName.'
+                AND first_name.usd_value = '. $lastName.') )';
+        }
+
+        // select all users from the database that have the same first and last name
+        $sql = 'SELECT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name
+                  FROM '.TBL_USERS.'
+            RIGHT JOIN '.TBL_USER_DATA.' AS last_name
+                    ON last_name.usd_usr_id = usr_id
+                   AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+            RIGHT JOIN '.TBL_USER_DATA.' AS first_name
+                    ON first_name.usd_usr_id = usr_id
+                   AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+                 WHERE usr_valid = true
+                   AND '.$sqlSimilarName;
+        $queryParams = array(
+            $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_id'),
+            $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_id')
+        );
+        $usrStatement = $this->db->queryPrepared($sql, $queryParams);
+
+        while ($row = $usrStatement->fetch()) {
+            $foundUserIds[] = $row['usr_id'];
+        }
+
+        return $foundUserIds;
     }
 
     /**

@@ -41,29 +41,15 @@ class ModuleRegistration extends HtmlPage
         global $gDb, $gProfileFields, $gCurrentOrgId;
 
         // Select new Members of the group
-        $sql = 'SELECT usr_id as userID, usr_uuid as userUUID, usr_login_name as loginName, reg_timestamp as registrationTimestamp, last_name.usd_value AS lastName,
-                       first_name.usd_value AS firstName, email.usd_value AS email, reg_validation_id as validationID
+        $sql = 'SELECT usr_id as userID, usr_uuid as userUUID, usr_login_name as loginName,
+                       reg_timestamp as registrationTimestamp, reg_validation_id as validationID
                   FROM '.TBL_REGISTRATIONS.'
             INNER JOIN '.TBL_USERS.'
                     ON usr_id = reg_usr_id
-             LEFT JOIN '.TBL_USER_DATA.' AS last_name
-                    ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-             LEFT JOIN '.TBL_USER_DATA.' AS first_name
-                    ON first_name.usd_usr_id = usr_id
-                   AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-             LEFT JOIN '.TBL_USER_DATA.' AS email
-                    ON email.usd_usr_id = usr_id
-                   AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
                  WHERE usr_valid = false
                    AND reg_org_id = ? -- $gCurrentOrgId
-              ORDER BY lastName, firstName';
-        $queryParameters = array(
-            $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-            $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-            $gProfileFields->getProperty('EMAIL', 'usf_id'),
-            $gCurrentOrgId
-        );
+              ORDER BY reg_validation_id ASC, reg_timestamp DESC';
+        $queryParameters = array($gCurrentOrgId);
         return $gDb->getArrayFromSql($sql, $queryParameters);
     }
 
@@ -72,10 +58,11 @@ class ModuleRegistration extends HtmlPage
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
      * @throws SmartyException
+     * @throws AdmException
      */
     public function createContent()
     {
-        global $gL10n, $gSettingsManager, $gMessage, $gHomepage;
+        global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields;
 
         $registrations = $this->getRegistrationsArray();
         $templateData = array();
@@ -87,14 +74,21 @@ class ModuleRegistration extends HtmlPage
         }
 
         foreach($registrations as $row) {
+            $user = new UserRegistration($gDb, $gProfileFields, $row['userID']);
+            $similarUserIDs = $user->searchSimilarUsers();
+
             $templateRow = array();
             $templateRow['id'] = 'row_user_'.$row['userUUID'];
-            $templateRow['title'] = $row['firstName'] . ' ' . $row['lastName'];
+            $templateRow['title'] = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
 
             $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['registrationTimestamp']);
             $templateRow['information'][] = $gL10n->get('SYS_REGISTRATION_AT', array($timestampCreate->format($gSettingsManager->getString('system_date')), $timestampCreate->format($gSettingsManager->getString('system_time'))));
             $templateRow['information'][] = $gL10n->get('SYS_USERNAME') . ': ' . $row['loginName'];
-            $templateRow['information'][] = $gL10n->get('SYS_EMAIL') . ': <a href="mailto:'.$row['email'].'">'.$row['email'].'</a>';
+            $templateRow['information'][] = $gL10n->get('SYS_EMAIL') . ': <a href="mailto:'.$user->getValue('EMAIL').'">'.$user->getValue('EMAIL').'</a>';
+
+            if (count($similarUserIDs) > 0) {
+                $templateRow['information'][] = '<div class="alert alert-info"><i class="fas fa-info-circle"></i>' . (count($similarUserIDs) === 1 ? $gL10n->get('SYS_MEMBER_SIMILAR_NAME') : $gL10n->get('SYS_MEMBERS_SIMILAR_NAME') ) . '</div>';
+            }
 
             if ((string) $row['validationID'] === '') {
                 $templateRow['information'][] = '<div class="alert alert-success"><i class="fas fa-check-circle"></i>' . $gL10n->get('SYS_REGISTRATION_CONFIRMED') . '</div>';
@@ -108,13 +102,13 @@ class ModuleRegistration extends HtmlPage
                 'tooltip' => $gL10n->get('SYS_SHOW_PROFILE')
             );
             $templateRow['actions'][] = array(
-                'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/popup_message.php', array('type' => 'nwu', 'element_id' => 'row_user_'.$row['userUUID'], 'name' => $row['firstName'].' '.$row['lastName'], 'database_id' => $row['userUUID'])),
+                'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/popup_message.php', array('type' => 'nwu', 'element_id' => 'row_user_'.$row['userUUID'], 'name' => $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), 'database_id' => $row['userUUID'])),
                 'icon' => 'fas fa-trash-alt',
                 'tooltip' => $gL10n->get('SYS_DELETE')
             );
             $templateRow['buttons'][] = array(
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_uuid' => $row['userUUID'])),
-                'name' => $gL10n->get('SYS_ASSIGN_REGISTRATION')
+                'name' => (count($similarUserIDs) > 0 ? $gL10n->get('SYS_ASSIGN_REGISTRATION') : $gL10n->get('SYS_CONFIRM_REGISTRATION') )
             );
 
             $templateData[] = $templateRow;

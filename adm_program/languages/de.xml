@@ -262,7 +262,6 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Wörter (englisch)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Hier kann die Art des Captchas gewählt werden. Das Captcha wird als Bild angezeigt und kann aus zufälligen Zeichen, aus einer kleinen Rechenaufgabe oder aus 2 Wörtern bestehen. Mit den weiteren Einstellungen kann das Bild angepasst werden. (Voreinstellung: Zufällige Zeichen)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Angabe der Breite in Pixel des Captcha-Bildes. Die Höhe wird proportional zur Breite errechnet. Über diese Einstellung wird auch die Größe der Zeichen bestimmt. (Voreinstellung: 215)</string>
-  <string name="SYS_CONFIRM_REGISTRATION">Bestätigung der Anmeldung nach der manuellen Freigabe</string>
   <string name="ORG_CREATE_ITEM_FIELD">Neues Artikelfeld</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Profilfeld anlegen</string>
   <string name="ORG_CURRENCY">Währung</string>
@@ -614,6 +613,7 @@
   <string name="SYS_CONFIGURATION_LIST">Listenkonfiguration</string>
   <string name="SYS_CONFIGURATION_SAVE">Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden?</string>
   <string name="SYS_CONFIRM_PASSWORD">Passwort bestätigen</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Registrierung bestätigen</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bestätigung der Eingaben</string>
   <string name="SYS_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. Alternativ kannst Du auch manuell auf der Webseite von #VAR1# prüfen ob ein Update vorliegt.</string>
   <string name="SYS_CONTACT_DETAILS">Kontaktdaten</string>
@@ -1008,12 +1008,14 @@
   <string name="SYS_MEMBER">Mitglied</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Mitglied der Organisation #VAR1#</string>
+  <string name="SYS_MEMBER_SIMILAR_NAME">Es wurde ein Mitglied mit einem ähnlichen Namen gefunden.</string>
   <string name="SYS_MEMBERS">Mitglieder</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Mitglieder zwischen #VAR1# und #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann für die Anzeige der Mitgliederverwaltung genutzt werden. Es werden anschließend in der Mitgliederverwaltung die Spalten der ausgewählten Listenkonfiguration angezeigt.</string>
   <string name="SYS_MEMBERS_DESC">Alle aktiven und ehemaligen Mitglieder können hier eingesehen und verwaltet werden. Neue Mitglieder können angelegt oder importiert werden.</string>
   <string name="SYS_MEMBERS_PER_PAGE">Anzahl Teilnehmende pro Seite</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Voreinstellung: 25)</string>
+  <string name="SYS_MEMBERS_SIMILAR_NAME">Es wurden #VAR1# Mitglieder mit einem ähnlichen Namen gefunden.</string>
   <string name="SYS_MEMBERSHIP_END">Mitgliedschaftsende</string>
   <string name="SYS_MEMBERSHIP_DELETE">Willst du die Mitgliedschaft bei der Rolle #VAR1_BOLD# wirklich beenden?</string>
   <string name="SYS_MEMBERSHIP_START">Mitgliedschaftsbeginn</string>
