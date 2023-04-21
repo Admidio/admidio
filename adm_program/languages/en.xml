@@ -847,7 +847,6 @@
   <string name="SYS_FILE_NAME_RULES">The file should be named in such a way that you can infer the content from the name. The file name has an influence on the display order. In a folder where, for example, meeting minutes are stored, the file names should always begin with the date (yyyy-mm-dd).</string>
   <string name="SYS_FILE_NOT_EXIST">Selected file does not exist on the server.</string>
   <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">The file is physically not available anymore on the server. It should be deleted from the database.</string>
-  <string name="SYS_FILE_RENAME">File #VAR1# was renamed.</string>
   <string name="SYS_FILE_RENAME_ERROR">An error occurred while file #VAR1# was renamed.</string>
   <string name="SYS_FILE_TO_LARGE_SERVER">Size of uploaded file exceeds server defined maximum file size of #VAR1# MB.</string>
   <string name="SYS_FILE_TYPE">File type</string>
@@ -865,7 +864,6 @@
   <string name="SYS_FIRSTNAME">First name</string>
   <string name="SYS_FIRSTNAME_LASTNAME">First name and lastname</string>
   <string name="SYS_FOLDER">Folder</string>
-  <string name="SYS_FOLDER_CREATED">Folder #VAR1_BOLD# was created.</string>
   <string name="SYS_FOLDER_EXISTS">Folder #VAR1# already exists!\n\nPlease select different folder name.</string>
   <string name="SYS_FOLDER_NO_FILES">Folder contains no files.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">You are not allowed to display selected folder.</string>
@@ -873,7 +871,6 @@
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created.\n\nPlease ask an #VAR2#administrator#VAR3# for help to check write permissions of the parent folder.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Folder does not exist anymore on the server. It should be deleted from the database.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Folder (ID #VAR1#) not found.</string>
-  <string name="SYS_FOLDER_RENAME">Folder #VAR1# was renamed.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while folder #VAR1# was renamed.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
