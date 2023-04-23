@@ -9,8 +9,9 @@
  *
  * Parameters:
  *
- * id        : Validation id to confirm the registration by the user
- * user_uuid : UUID of the user who wants to confirm his registration
+ * id        : Validation id to confirm the registration by the user.
+ * user_uuid : UUID of the user who wants to confirm his registration.
+ * mode      : show_similar - Show users with similar names with the option to assign the registration to them.
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -24,8 +25,16 @@ if (!$gSettingsManager->getBool('registration_enable_module')) {
 // Initialize and check the parameters
 $getRegistrationId = admFuncVariableIsValid($_GET, 'id', 'string');
 $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('validValues' => array('show_similar')));
 
-if ($getUserUuid !== '') {
+// Only Users with the right "approve users" can work with registrations, otherwise exit.
+// User is only allowed to confirm his own registration with the registration ID
+if ($getRegistrationId === '' && !$gCurrentUser->approveUsers()) {
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
+}
+
+if ($getRegistrationId !== '') {
     // user has clicked the link in his registration email, and now we must check if it's a valid request
     // and then confirm his registration
 
@@ -55,18 +64,12 @@ if ($getUserUuid !== '') {
     } catch (AdmException $e) {
         $e->showHtml();
     }
-} else {
+} elseif ($getMode === '' && $getUserUuid === '') {
     // show list with all registrations that should be approved
 
     // if there is no login then show a profile form where the user can register himself
     if (!$gValidLogin) {
         admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '2')));
-        // => EXIT
-    }
-
-    // Only Users with the right "approve users" can confirm registrations, otherwise exit.
-    if (!$gCurrentUser->approveUsers()) {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 
@@ -79,7 +82,21 @@ if ($getUserUuid !== '') {
     try {
         // create html page object
         $page = new ModuleRegistration('admidio-registration', $headline);
-        $page->createContent();
+        $page->createContentRegistrationList();
+        $page->show();
+    } catch (SmartyException $e) {
+        $gMessage->show($e->getMessage());
+    }
+} elseif ($getMode === 'show_similar') {
+    // set headline of the script
+    $headline = $gL10n->get('SYS_ASSIGN_REGISTRATION');
+
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+
+    try {
+        // create html page object
+        $page = new ModuleRegistration('admidio-registration-assign', $headline);
+        $page->createContentAssignUser();
         $page->show();
     } catch (SmartyException $e) {
         $gMessage->show($e->getMessage());

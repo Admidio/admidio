@@ -57,10 +57,29 @@ class ModuleRegistration extends HtmlPage
      * Read all available registrations from the database and create the html content of this
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
+     */
+    public function createContentAssignUser(int $userId): string
+    {
+        global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields;
+
+        $user = new UserRegistration($gDb, $gProfileFields, $userId);
+        $similarUserIDs = $user->searchSimilarUsers();
+
+        foreach ($similarUserIDs as $internalNumber => $similarUserID) {
+            $similarUser = new User($gDb, $gProfileFields, $similarUserID);
+
+            $this->assign('description', $gL10n->get('SYS_SIMILAR_USERS_FOUND', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
+        }
+    }
+
+    /**
+     * Read all available registrations from the database and create the html content of this
+     * page with the Smarty template engine and write the html output to the internal
+     * parameter **$pageContent**. If no registration is found than show a message to the user.
      * @throws SmartyException
      * @throws AdmException
      */
-    public function createContent()
+    public function createContentRegistrationList()
     {
         global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields;
 
