@@ -339,79 +339,81 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
         $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
     }
 
-    switch ($datatype) {
-        case 'file': // fallthrough
-        case 'folder':
-            try {
-                if ($value !== '') {
-                    StringUtils::strIsValidFileName($value, false);
+    if ($errorMessage === '') {
+        switch ($datatype) {
+            case 'file': // fallthrough
+            case 'folder':
+                try {
+                    if ($value !== '') {
+                        StringUtils::strIsValidFileName($value, false);
+                    }
+                } catch (AdmException $e) {
+                    $errorMessage = $e->getText();
                 }
-            } catch (AdmException $e) {
-                $errorMessage = $e->getText();
-            }
-            break;
+                break;
 
-        case 'date':
-            // check if date is a valid Admidio date format
-            $objAdmidioDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
+            case 'date':
+                // check if date is a valid Admidio date format
+                $objAdmidioDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
 
-            if (!$objAdmidioDate) {
-                // check if date has english format
-                $objEnglishDate = \DateTime::createFromFormat('Y-m-d', $value);
+                if (!$objAdmidioDate) {
+                    // check if date has english format
+                    $objEnglishDate = \DateTime::createFromFormat('Y-m-d', $value);
 
-                if (!$objEnglishDate) {
-                    $errorMessage = $gL10n->get('SYS_NOT_VALID_DATE_FORMAT', array($variableName));
+                    if (!$objEnglishDate) {
+                        $errorMessage = $gL10n->get('SYS_NOT_VALID_DATE_FORMAT', array($variableName));
+                    }
                 }
-            }
-            break;
+                break;
 
-        case 'bool': // fallthrough
-        case 'boolean':
-            $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-            if ($valid === null) {
-                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-            }
-            $value = $valid;
-            break;
+            case 'bool': // fallthrough
+            case 'boolean':
+                $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+                if ($valid === null) {
+                    $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+                }
+                $value = $valid;
+                break;
 
-        case 'int': // fallthrough
-        case 'float': // fallthrough
-        case 'numeric':
-            // numeric datatype should only contain numbers
-            if (!is_numeric($value)) {
-                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-            } else {
-                if ($datatype === 'int') {
-                    $value = filter_var($value, FILTER_VALIDATE_INT);
-                } elseif ($datatype === 'float') {
-                    $value = filter_var($value, FILTER_VALIDATE_FLOAT);
+            case 'int': // fallthrough
+            case 'float': // fallthrough
+            case 'numeric':
+                // numeric datatype should only contain numbers
+                if (!is_numeric($value)) {
+                    $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
                 } else {
-                    // https://www.php.net/manual/en/function.is-numeric.php#107326
-                    $value += 0;
+                    if ($datatype === 'int') {
+                        $value = filter_var($value, FILTER_VALIDATE_INT);
+                    } elseif ($datatype === 'float') {
+                        $value = filter_var($value, FILTER_VALIDATE_FLOAT);
+                    } else {
+                        // https://www.php.net/manual/en/function.is-numeric.php#107326
+                        $value += 0;
+                    }
                 }
-            }
-            break;
+                break;
 
-        case 'string':
-            $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
-            break;
+            case 'string':
+                $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
+                break;
 
-        case 'html':
-            // check html string vor invalid tags and scripts
-            $config = HTMLPurifier_Config::createDefault();
-            $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
-            $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
-            $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+            case 'html':
+                // check html string vor invalid tags and scripts
+                $config = HTMLPurifier_Config::createDefault();
+                $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
+                $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
+                $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
 
-            $filter = new HTMLPurifier($config);
-            $value = $filter->purify($value);
-            break;
+                $filter = new HTMLPurifier($config);
+                $value = $filter->purify($value);
+                break;
 
-        case 'url':
-            if (!StringUtils::strValidCharacters($value, 'url')) {
-                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-            }
-            break;
+            case 'url':
+                if (!StringUtils::strValidCharacters($value, 'url')) {
+                    $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+                }
+                break;
+        }
     }
 
     // if no error was detected, then return the contents of the variable
