@@ -95,6 +95,10 @@ $sqlQueries[] = 'UPDATE '.TBL_REGISTRATIONS.'
                     SET reg_timestamp = \''.addDaysToDate(1, true).' 20:54:12\'
                   WHERE reg_id IN (2) ';
 
+$sqlQueries[] = 'UPDATE '.TBL_REGISTRATIONS.'
+                    SET reg_timestamp = \''.addDaysToDate(1, true).' 05:03:52\'
+                  WHERE reg_id IN (4) ';
+
 // set date of announcements
 $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.'
                     SET ann_timestamp_create = \''.addDaysToDate(7, true).' 09:12:34\'
