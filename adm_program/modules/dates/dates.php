@@ -289,7 +289,7 @@ if ($datesResult['totalCount'] === 0) {
         // initialize all output elements
         $attentionDeadline  = '';
         $outputEndDate      = '';
-        $outputButtonIcal   = '';
+        $outputButtonICal   = '';
         $outputButtonEdit   = '';
         $outputButtonDelete = '';
         $outputButtonCopy   = '';
@@ -319,7 +319,7 @@ if ($datesResult['totalCount'] === 0) {
         if ($getViewMode === 'html') {
             // ical Download
             if ($gSettingsManager->getBool('enable_dates_ical')) {
-                $outputButtonIcal = '
+                $outputButtonICal = '
                     <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_uuid' => $dateUuid, 'mode' => 6)).'">
                         <i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('DAT_EXPORT_ICAL').'"></i></a>';
             }
@@ -416,7 +416,7 @@ if ($datesResult['totalCount'] === 0) {
         }
 
         // if current user is allowed to participate then show buttons for participation
-        if ($date->allowedToParticipate()) {
+        if ($date->possibleToParticipate()) {
             $buttonClass = '';
 
             if ($date->getValue('dat_deadline') !== null) {
@@ -460,86 +460,62 @@ if ($datesResult['totalCount'] === 0) {
                     $buttonText = '';
                 }
 
-                // Check participation deadline and show buttons if allowed
-                if ((!$date->deadlineExceeded() && array_key_exists($gCurrentUserId, $participantsArray))
-                    || ($outputNumberMembers < (int) $date->getValue('dat_max_members') && !array_key_exists($gCurrentUserId, $participantsArray))) {
-                    $disableStatusAttend    = '';
-                    $disableStatusTentative = '';
+                $disableStatusAttend    = '';
+                $disableStatusTentative = '';
 
-                    // Check limit of participants
-                    if ($date->getValue('dat_max_members') > 0 && $outputNumberMembers >= (int) $date->getValue('dat_max_members')) {
-                        // Check current user. If user is member of the event role then get his current approval status and set the options
-                        if (array_key_exists($gCurrentUserId, $participantsArray)) {
-                            switch ($participantsArray[$gCurrentUserId]['approved']) {
-                                case Participants::PARTICIPATION_MAYBE:
-                                    $disableStatusTentative = 'disabled';
-                                    break;
-                                case Participants::PARTICIPATION_YES:
-                                    $disableStatusAttend    = 'disabled';
-                                    break;
-                                case Participants::PARTICIPATION_NO:
-                                    $disableStatusAttend    = 'disabled';
-                                    $disableStatusTentative = 'disabled';
-                                    break;
-                            }
+                // Check limit of participants
+                if ($date->getValue('dat_max_members') > 0 && $outputNumberMembers >= (int) $date->getValue('dat_max_members')) {
+                    // Check current user. If user is member of the event role then get his current approval status and set the options
+                    if (array_key_exists($gCurrentUserId, $participantsArray)) {
+                        switch ($participantsArray[$gCurrentUserId]['approved']) {
+                            case Participants::PARTICIPATION_MAYBE:
+                                $disableStatusTentative = 'disabled';
+                                break;
+                            case Participants::PARTICIPATION_YES:
+                                $disableStatusAttend    = 'disabled';
+                                break;
+                            case Participants::PARTICIPATION_NO:
+                                $disableStatusAttend    = 'disabled';
+                                $disableStatusTentative = 'disabled';
+                                break;
                         }
-                    }
-
-                    if ($participateModalForm === false) {
-                        $outputButtonParticipation = '
-                            <div class="btn-group" role="group">
-                                <button class="btn btn-secondary dropdown-toggle ' . $buttonClass . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'</button>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="btn admidio-event-approval-state-attend '.$disableStatusAttend.'" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '3', 'dat_uuid' => $dateUuid)) . '">
-                                            <i class="fas fa-check-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>' . $gL10n->get('SYS_PARTICIPATE') . '
-                                        </a>
-                                    </li>';
-                        if ($gSettingsManager->getBool('dates_may_take_part')) {
-                            $outputButtonParticipation .= '<li>
-                                            <a class="btn admidio-event-approval-state-tentative '.$disableStatusTentative.'" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_uuid' => $dateUuid)) . '">
-                                                <i class="fas fa-question-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_USER_TENTATIVE').'"></i>' . $gL10n->get('DAT_USER_TENTATIVE') . '
-                                            </a>
-                                        </li>';
-                        }
-                        $outputButtonParticipation .= '<li>
-                                        <a class="btn admidio-event-approval-state-cancel" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '4', 'dat_uuid' => $dateUuid)) . '">
-                                            <i class="fas fa-times-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_CANCEL').'"></i>' . $gL10n->get('DAT_CANCEL') . '
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>';
-                    } else {
-                        $outputButtonParticipation = '
-                            <div class="btn-group" role="group">
-                                <button class="btn btn-secondary openPopup" href="javascript:void(0);"
-                                    data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_uuid' => $dateUuid)) . '">' . $iconParticipationStatus . $buttonText . '
-                            </div>';
-                    }
-                } else {
-                    // Show warning for member of the date role if deadline is exceeded and now no changes are possible anymore
-                    if ($participants->isMemberOfEvent($gCurrentUserId)) {
-                        if ($getView !== 'detail') {
-                            $outputButtonParticipation = '<span class="' . $buttonClass . '">' . $iconParticipationStatus . '</span>';
-                        }
-                        $attentionDeadline = '
-                        <div class="alert alert-info" role="alert">
-                            <span class="'.$buttonClass.'">' . $iconParticipationStatus . ' ' . $buttonText . '</span>
-                            <i class="fas fa-info-circle admidio-info-icon" data-toggle="popover"
-                                data-html="true" data-trigger="hover click" data-placement="auto"
-                                title="' . $gL10n->get('SYS_NOTE') . '" data-content="' . SecurityUtils::encodeHTML($gL10n->get('DAT_DEADLINE_ATTENTION')) . '"></i>
-                        </div>';
                     }
                 }
 
-                // Check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
-                if (!$participants->isMemberOfEvent($gCurrentUserId) && !$date->participationPossible($outputNumberMembers)) {
-                    $attentionDeadline = '<div class="alert alert-info" role="alert">'.$gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE').'</div>';
-                    $iconParticipationStatus = '';
+                if ($participateModalForm === false) {
+                    $outputButtonParticipation = '
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-secondary dropdown-toggle ' . $buttonClass . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'</button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="btn admidio-event-approval-state-attend '.$disableStatusAttend.'" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '3', 'dat_uuid' => $dateUuid)) . '">
+                                        <i class="fas fa-check-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>' . $gL10n->get('SYS_PARTICIPATE') . '
+                                    </a>
+                                </li>';
+                    if ($gSettingsManager->getBool('dates_may_take_part')) {
+                        $outputButtonParticipation .= '<li>
+                                        <a class="btn admidio-event-approval-state-tentative '.$disableStatusTentative.'" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_uuid' => $dateUuid)) . '">
+                                            <i class="fas fa-question-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_USER_TENTATIVE').'"></i>' . $gL10n->get('DAT_USER_TENTATIVE') . '
+                                        </a>
+                                    </li>';
+                    }
+                    $outputButtonParticipation .= '<li>
+                                    <a class="btn admidio-event-approval-state-cancel" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '4', 'dat_uuid' => $dateUuid)) . '">
+                                        <i class="fas fa-times-circle" data-toggle="tooltip" title="'.$gL10n->get('DAT_CANCEL').'"></i>' . $gL10n->get('DAT_CANCEL') . '
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>';
+                } else {
+                    $outputButtonParticipation = '
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-secondary openPopup" href="javascript:void(0);"
+                                data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_uuid' => $dateUuid)) . '">' . $iconParticipationStatus . $buttonText . '
+                        </div>';
                 }
 
                 // Link to participants list
-                if ($gValidLogin && $gCurrentUser->hasRightViewRole($dateRolId)) {
+                if ($gCurrentUser->hasRightViewRole($dateRolId)) {
                     if ($outputNumberMembers > 0 || $outputNumberLeaders > 0) {
                         $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $dateRolId));
 
@@ -556,7 +532,7 @@ if ($datesResult['totalCount'] === 0) {
                 }
 
                 // Link to send email to participants
-                if ($gValidLogin && $gCurrentUser->hasRightSendMailToRole($dateRolId)) {
+                if ($gCurrentUser->hasRightSendMailToRole($dateRolId)) {
                     if ($outputNumberMembers > 0 || $outputNumberLeaders > 0) {
                         $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('role_uuid' => $date->getValue('rol_uuid')));
 
@@ -586,6 +562,23 @@ if ($datesResult['totalCount'] === 0) {
                                 <i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'"></i></a>';
                     }
                 }
+            }
+        } elseif ($date->deadlineExceeded() || $outputNumberMembers >= (int) $date->getValue('dat_max_members')) {
+            // Show warning for member of the date role if deadline is exceeded and now no changes are possible anymore
+            if ($participants->isMemberOfEvent($gCurrentUserId)) {
+                if ($getView !== 'detail') {
+                    $outputButtonParticipation = '<span class="' . $buttonClass . '">' . $iconParticipationStatus . '</span>';
+                }
+                $attentionDeadline = '
+                        <div class="alert alert-info" role="alert">
+                            <span class="'.$buttonClass.'">' . $iconParticipationStatus . ' ' . $buttonText . '</span>
+                            <i class="fas fa-info-circle admidio-info-icon" data-toggle="popover"
+                                data-html="true" data-trigger="hover click" data-placement="auto"
+                                title="' . $gL10n->get('SYS_NOTE') . '" data-content="' . SecurityUtils::encodeHTML($gL10n->get('DAT_DEADLINE_ATTENTION')) . '"></i>
+                        </div>';
+            } else {
+                $attentionDeadline = '<div class="alert alert-info" role="alert">'.$gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE').'</div>';
+                $iconParticipationStatus = '';
             }
         }
 
@@ -800,7 +793,7 @@ if ($datesResult['totalCount'] === 0) {
             }
 
             if ($getViewMode === 'html') {
-                $columnValues[] = $outputButtonIcal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete;
+                $columnValues[] = $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete;
             }
 
             $compactTable->addRowByArray($columnValues, null, array('class' => $cssClass));

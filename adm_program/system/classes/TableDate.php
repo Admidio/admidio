@@ -38,6 +38,11 @@
 class TableDate extends TableAccess
 {
     /**
+     * @var Database db object must public because of session handling
+     */
+    private $mParticipants;
+
+    /**
      * Constructor that will create an object of a recordset of the table adm_dates.
      * If the id is set than the specific date will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
@@ -52,12 +57,12 @@ class TableDate extends TableAccess
     }
 
     /**
-     * Check if the current user is allowed to participate to this event.
-     * Therefore we check if the user is member of a role that is assigned to
+     * Check if the current user is allowed to participate in this event.
+     * Therefore, we check if the user is member of a role that is assigned to
      * the right event_participation.
-     * @return bool Return true if the current user is allowed to participate to the event.
+     * @return bool Return true if the current user is allowed to participate in the event.
      */
-    public function allowedToParticipate()
+    public function allowedToParticipate(): bool
     {
         global $gCurrentUser;
 
@@ -65,6 +70,32 @@ class TableDate extends TableAccess
             $eventParticipationRoles = new RolesRights($this->db, 'event_participation', (int) $this->getValue('dat_id'));
 
             if (count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if it's possible for the current user to participate in this event.
+     * Therefore, we check if the user is allowed to participate and if the deadline of the event isn't exceeded.
+     * There should be no participants limit or the limit is not reached or the current user is already member
+     * of the event.
+     * @return bool Return true if it's possible for the current user to participate in the event.
+     */
+    public function possibleToParticipate(): bool
+    {
+        global $gCurrentUserId;
+
+        if($this->allowedToParticipate() && !$this->deadlineExceeded()) {
+            if(!is_object($this->mParticipants)) {
+                $this->mParticipants = new Participants($this->db, $this->getValue('dat_rol_id'));
+            }
+
+            if((int) $this->getValue('dat_max_members') === 0
+            || ($this->mParticipants->getCount() < (int) $this->getValue('dat_max_members'))
+            || $this->mParticipants->isMemberOfEvent($gCurrentUserId)) {
                 return true;
             }
         }
@@ -368,22 +399,6 @@ class TableDate extends TableAccess
 
         // check if the current user could view the category of the event
         return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('DAT'), true);
-    }
-
-    /**
-     * Checks if it's still possible to participate to an event. Therefore the participation deadline of the should not be expired.
-     * Also the maximum of allowed members for the event should not be exceeded or there is no maximum of allowed members set.
-     * @param int $currentCountParticipations Number of participiants that participate to the current event.
-     * @return bool Returns true if still users can participate to the event or false if it's not possible any more.
-     */
-    public function participationPossible($currentCountParticipations)
-    {
-        if (!$this->deadlineExceeded()
-        && ($this->getValue('dat_max_members') === 0
-           || ($this->getValue('dat_max_members') > 0 && $currentCountParticipations < $this->getValue('dat_max_members')))) {
-            return true;
-        }
-        return false;
     }
 
     /* Read an event that has the given role has stored as participant role.
