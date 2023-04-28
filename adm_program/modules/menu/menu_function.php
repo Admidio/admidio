@@ -59,7 +59,7 @@ if ($getMode === 1) {
     $postComId    = admFuncVariableIsValid($_POST, 'men_com_id', 'int');
     $postName     = admFuncVariableIsValid($_POST, 'men_name', 'string', array('default' => ''));
     $postDesc     = admFuncVariableIsValid($_POST, 'men_description', 'string', array('default' => ''));
-    $postUrl      = $_POST['men_url'];
+    $postUrl      = admFuncVariableIsValid($_POST, 'men_url', 'string', array('default' => ''));
     $postIcon     = admFuncVariableIsValid($_POST, 'men_icon', 'string', array('default' => ''));
 
     // within standard menu items the url should not be changed
