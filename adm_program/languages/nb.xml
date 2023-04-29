@@ -1,19 +1,31 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in Datesmodule-->
+  <!--Phrases only in event module-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Legg til hendelse i kalender</string>
   <string name="DAT_ALL_DAY">Fulltid</string>
   <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Deltakere kan registrere anonyme gjester</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Legg til deltakere</string>
-  <string name="SYS_PARTICIPATE">Delta</string>
+  <string name="DAT_ATTEND_DATE">Du meldte deg på arrangementet #VAR1_BOLD# på #VAR2#.</string>
+  <string name="DAT_ATTEND_POSSIBLY">Du meldte deg foreløpig på arrangementet #VAR1_BOLD# på #VAR2#.</string>
   <string name="DAT_CALENDAR">Kalender</string>
   <string name="DAT_CANCEL">Avbryt</string>
+  <string name="DAT_CANCEL_DATE">Du meldte deg av arrangementet #VAR1_BOLD# på #VAR2#.</string>
+  <string name="DAT_CURRENT_DATES_OF_ORGA">Aktive arrangement for organisasjonen #VAR1#</string>
   <string name="DAT_DATE">Hendelse</string>
   <string name="DAT_DATES">Hendelser</string>
+  <string name="DAT_DATES_DESC">Du kan opprette og redigere arrangement her. Brukere kan melde seg på dette arrangementet.</string>
+  <string name="DAT_DEADLINE">Frist</string>
   <string name="DAT_DEADLINE_ATTENTION">Din registrering kan ikke endres fordi den oppgitte sluttdatoen for registreringer er oppnådd eller datoen er tidligere. Ta kontakt med sjefen eller en administrator!</string>
   <string name="DAT_EDIT_CALENDAR_DESC">Her kan du opprette og endre kalendere.</string>
-  <string name="DAT_LOCATION">By</string>
-  <!--Phrases only in Guestbookmodule-->
+  <string name="DAT_EDIT_ROOMS">Rediger rom</string>
+  <string name="DAT_EDIT_ROOMS_DESC">Her kan du opprette og redigere rom for arrangement.</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Et arrangement har blitt endret</string>
+  <string name="DAT_EMAIL_NOTIFICATION_TITLE">Et nytt arrangement har blitt opprettet</string>
+  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Opprettet: #VAR1#</string>
+  <string name="DAT_ENABLE_ICAL">Slå på iCal-funksjon</string>
+  <string name="DAT_EXPORT_ICAL">Eksporter (iCal)</string>
+  <string name="DAT_LOCATION">Sted</string>
+  <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tilbake til gjesteboken</string>
   <string name="GBO_COMMENTS4ALL">Tillat anonyme kommentarer</string>
   <string name="INS_ADD_ORGANIZATION">Legg til organisasjon</string>
@@ -62,10 +74,9 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Hvis flere organisasjoner er satt opp i databasen, kan de bli vist en valgboks i påloggingsdialogen med alle organisasjoner. Brukeren kan da velge en annen organisasjon (som satt i config.php) å logge seg på. Imidlertid må brukeren også være registrert i denne organisasjonen.</string>
   <string name="ORG_TIME_FORMAT">Tidsformat</string>
   <string name="ORG_TIMEZONE">Tidssone</string>
-  <string name="SYS_URL">URL</string>
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Organisasjonsnavn</string>
   <string name="ORG_VARIABLE_NEW_PASSWORD">Nytt brukerpassord</string>
-  <!--Phrases only in Photomodule-->
+  <!--Phrases only in photo module-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Slett album</string>
   <string name="PHO_ALBUM_LOCK">Lås album</string>
@@ -114,7 +125,6 @@
   <string name="SYS_COLUMN">Kolonne</string>
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Generelt</string>
-  <string name="SYS_CONDITION">Betingelser</string>
   <string name="SYS_CONFIGURATION">Konfigurasjon</string>
   <string name="SYS_CONFIRM_PASSWORD">Bekreft passord</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bekreft verdi</string>
@@ -130,8 +140,6 @@
   <string name="SYS_CREATE">Opprett</string>
   <string name="SYS_CREATE_NEW_USER">Legg til ny bruker</string>
   <string name="SYS_CREATE_ROLE">Opprett rolle</string>
-  <string name="SYS_CREATE_MEMBER">Opprett bruker</string>
-  <string name="SYS_CREATED_AT">Opprettet</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_BACKUP">Sikkerhetskopier database</string>
@@ -162,7 +170,6 @@
   <string name="SYS_ERROR">Feil</string>
   <string name="SYS_EXAMPLE">Eksempel</string>
   <string name="SYS_EXAMPLES">Eksempler</string>
-  <string name="SYS_EXISTING_MEMBERS">Eksisterende bruker</string>
   <string name="SYS_FAX">Faks</string>
   <string name="SYS_FEMALE">Kvinne</string>
   <string name="SYS_FIELD">Felt</string>
@@ -193,8 +200,6 @@
   <string name="SYS_HOURS_VAR">#VAR1# timer</string>
   <string name="SYS_ICON">Ikon</string>
   <string name="SYS_IMPORT">Import</string>
-  <string name="SYS_IMPORT_MEMBERS">Brukerimport</string>
-  <string name="SYS_INFORMATIONS">informasjon</string>
   <string name="SYS_INSTALLED">Installert</string>
   <string name="SYS_INTERNAL_NAME">Internt navn</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ugyldig sidevisning</string>
@@ -212,7 +217,6 @@
   <string name="SYS_LOGIN">Logg inn</string>
   <string name="SYS_MAIL_DISPATCH">Epost-utsendelse</string>
   <string name="SYS_MALE">Mann</string>
-  <string name="SYS_MANDATORY_FIELD">Påkrevet felt</string>
   <string name="SYS_MAP">Kart</string>
   <string name="SYS_MEMBER">Medlem</string>
   <string name="SYS_MEMBERS">Medlemmer</string>
@@ -281,7 +285,6 @@
   <string name="SYS_REMOVE_USER">Fjern bruker</string>
   <string name="SYS_REPEAT">Gjenta</string>
   <string name="SYS_REPLACE">Erstatt</string>
-  <string name="SYS_REQUIRED_FIELDS">Obligatoriske felt</string>
   <string name="SYS_RESTRICTIONS">Restriksjoner</string>
   <string name="SYS_ROLE">Rolle</string>
   <string name="SYS_ROLES">Roller</string>
@@ -308,7 +311,6 @@
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Serverinnstillingene tillater ikke filopplastninger</string>
   <string name="SYS_SETTINGS">Preferanser</string>
-  <string name="SYS_SHOW_ALL">Vi alle brukere</string>
   <string name="SYS_SHOW_CALENDAR">Vis kalender</string>
   <string name="SYS_SHOW_LIST">Vis liste</string>
   <string name="SYS_SHOW_PROFILE">Vis profil</string>
@@ -349,14 +351,10 @@
   <string name="SYS_UPLOAD_MAX_FILESIZE">Maks. størrelse for filopplastning</string>
   <string name="SYS_UPLOAD_NAME_ERROR">Filnavnet kan ikke være \"submit\".</string>
   <string name="SYS_USER">Bruker</string>
-  <string name="SYS_USER_COULD_BE_CREATED">Bruker kunne opprettes</string>
   <string name="SYS_USER_FOUND">Bruker funnet</string>
   <string name="SYS_USER_ID_NOT_FOUND">Ingen brukere med denne ID\'en ble funnet!</string>
-  <string name="SYS_USER_MANAGEMENT">Brukerhåndtering</string>
-  <string name="SYS_PROFILE_PHOTO">Brukerbilde</string>
   <string name="SYS_USERNAME">Brukernavn</string>
   <string name="SYS_USERNAME_OR_EMAIL">Brukernavn eller epost</string>
-  <string name="SYS_USERS_PER_PAGE">Antall brukere pr. side</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_VARIOUS_ROLES">Diverse roller</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Diverse relasjoner</string>
