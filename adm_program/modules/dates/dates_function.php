@@ -501,8 +501,8 @@ if (in_array($getMode, array(3, 4, 7), true)) {
 
     $member = new TableMembers($gDb);
 
-    // Check participation deadline and update user inputs if possible
-    if ($date->allowedToParticipate() && !$date->deadlineExceeded()) {
+    // if participation is possible update user inputs
+    if ($date->possibleToParticipate()) {
         $member->readDataByColumns(array('mem_rol_id' => (int) $date->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
         $member->setValue('mem_comment', $postUserComment); // Comments will be saved in any case. Maybe it is a documentation afterwards by a leader or admin
 
