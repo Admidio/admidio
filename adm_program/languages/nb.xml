@@ -24,7 +24,7 @@
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Opprettet: #VAR1#</string>
   <string name="DAT_ENABLE_ICAL">Slå på iCal-funksjon</string>
   <string name="DAT_EXPORT_ICAL">Eksporter (iCal)</string>
-  <string name="DAT_LOCATION">Sted</string>
+  <string name="DAT_LOCATION">Beliggenhet</string>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tilbake til gjesteboken</string>
   <string name="GBO_COMMENTS4ALL">Tillat anonyme kommentarer</string>
