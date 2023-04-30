@@ -119,6 +119,15 @@ if ($getMode === 1) {
         // => EXIT
     }
 
+    if ($_POST['usf_default_value'] !== '' && $_POST['usf_default_value'] !== $userField->getValue('usf_default_value')) {
+        try {
+            $profileFields = new ProfileFields($gDb, $gCurrentOrgId);
+            $profileFields->setValue($userField->getValue('usf_name_intern'), $_POST['usf_default_value']);
+        } catch (AdmException $e) {
+            $e->showHtml();
+        }
+    }
+
     // lastname and firstname must always be mandatory fields and visible in registration dialog
     if ($userField->getValue('usf_name_intern') === 'LAST_NAME'
     || $userField->getValue('usf_name_intern') === 'FIRST_NAME') {
