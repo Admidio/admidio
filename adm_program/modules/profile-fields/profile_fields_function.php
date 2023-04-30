@@ -69,7 +69,7 @@ if ($getUsfUuid !== '') {
 }
 
 if ($getMode === 1) {
-    // Feld anlegen oder updaten
+    // Create or edit profile field
 
     $_SESSION['fields_request'] = $_POST;
 
@@ -82,7 +82,7 @@ if ($getMode === 1) {
     }
 
     // Check if mandatory fields are filled
-    // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
+    // (in case of system fields, these fields must not be changed)
     if ($userField->getValue('usf_system') == 0 && $_POST['usf_name'] === '') {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
@@ -104,10 +104,10 @@ if ($getMode === 1) {
         // => EXIT
     }
 
-    // check if font awesome syntax is used or if its a valid filename syntax
+    // check if font awesome syntax is used or if it's a valid filename syntax
     if ($_POST['usf_icon'] !== '' && !preg_match('/fa-[a-zA-z0-9]/', $_POST['usf_icon'])) {
         try {
-            StringUtils::strIsValidFileName($_POST['usf_icon'], true);
+            StringUtils::strIsValidFileName($_POST['usf_icon']);
         } catch (AdmException $e) {
             $gMessage->show($gL10n->get('SYS_INVALID_FONT_AWESOME'));
             // => EXIT
@@ -132,7 +132,7 @@ if ($getMode === 1) {
     }
 
     if (isset($_POST['usf_name']) && $userField->getValue('usf_name') !== $_POST['usf_name']) {
-        // Schauen, ob das Feld bereits existiert
+        // See if the field already exists
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_USER_FIELDS.'
                  WHERE usf_name   = ? -- $_POST[\'usf_name\']
@@ -146,7 +146,7 @@ if ($getMode === 1) {
         }
     }
 
-    // Eingabe verdrehen, da der Feldname anders als im Dialog ist
+    // Swap input, because the field name is different from the dialog
     if (isset($_POST['usf_hidden'])) {
         $_POST['usf_hidden'] = 0;
     } else {
@@ -172,11 +172,11 @@ if ($getMode === 1) {
                 $userField->setValue($key, $value);
             }
         }
+
+        $userField->save();
     } catch (AdmException $e) {
         $e->showHtml();
     }
-
-    $userField->save();
 
     $gNavigation->deleteLastUrl();
     unset($_SESSION['fields_request']);
@@ -186,31 +186,36 @@ if ($getMode === 1) {
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 // => EXIT
 } elseif ($getMode === 2) {
+    // delete profile field
+
     if ($userField->getValue('usf_system') == 1) {
-        // Systemfelder duerfen nicht geloescht werden
+        // System fields must not be deleted
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT
     }
 
-    // Feld loeschen
     if ($userField->delete()) {
-        // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+        // Delete successful -> return for XMLHttpRequest
         echo 'done';
     }
     exit();
 } elseif ($getMode === 4) {
     // update field order
 
-    if (!empty($getOrder)) {
-        // set new order (drag'n'drop)
-        $userField->setSequence($getOrder);
-    } else {
-        // move field up/down by one
-        if ($userField->moveSequence($getSequence)) {
-            echo 'done';
+    try {
+        if (!empty($getOrder)) {
+            // set new order (drag and drop)
+            $userField->setSequence($getOrder);
         } else {
-            echo 'Sequence could not be changed.';
+            // move field up/down by one
+            if ($userField->moveSequence($getSequence)) {
+                echo 'done';
+            } else {
+                echo 'Sequence could not be changed.';
+            }
         }
+    } catch (AdmException $e) {
+        echo $e->getText();
     }
     exit();
 }
