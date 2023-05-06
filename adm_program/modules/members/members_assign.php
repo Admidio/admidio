@@ -156,11 +156,11 @@ echo '
     echo '</div>
 </div>
 <div class="card">
-    <div class="card-header">'.$gL10n->get('SYS_CREATE_NEW_USER').'</div>
+    <div class="card-header">'.$gL10n->get('SYS_CREATE_MEMBER').'</div>
     <div class="card-body">
         <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER').'</p>
 
         <button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => 1, 'lastname' => $getLastname, 'firstname' => $getFirstname)).'\'">
-            <i class="fas fa-plus-circle"></i>'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
+            <i class="fas fa-plus-circle"></i>'.$gL10n->get('SYS_CREATE_MEMBER').'</button>
     </div>
 </div>';

@@ -123,9 +123,9 @@ $page = new HtmlPage('admidio-registration-assign', $headline);
 
 $page->addHtml(
     '
-    <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', array($newUser->getValue('FIRST_NAME'). ' '. $newUser->getValue('LAST_NAME'))).'</p>
+    <p class="lead">'.$gL10n->get('SYS_SIMILAR_MEMBERS_FOUND_DESC', array($newUser->getValue('FIRST_NAME'). ' '. $newUser->getValue('LAST_NAME'))).'</p>
     <div class="card admidio-blog">
-        <div class="card-header">'.$gL10n->get('SYS_USER_FOUND').'</div>
+        <div class="card-header">'.$gL10n->get('SYS_SIMILAR_MEMBERS_FOUND').'</div>
         <div class="card-body">'
 );
 
@@ -167,7 +167,7 @@ while ($row = $usrStatement->fetch()) {
             }
         } else {
             // Logindaten sind NICHT vorhanden -> diese nun zuordnen
-            $page->addHtml('<p>'.$gL10n->get('SYS_USER_NO_VALID_LOGIN').'</p>
+            $page->addHtml('<p>'.$gL10n->get('SYS_MEMBER_NO_VALID_LOGIN').'</p>
 
             <button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $getNewUserUuid, 'user_uuid' => $row['usr_uuid'], 'mode' => '1')).'\'">
                 <i class="fas fa-user-check"></i>'.$gL10n->get('SYS_ASSIGN_LOGIN_INFORMATION').'</button>');
@@ -181,7 +181,7 @@ while ($row = $usrStatement->fetch()) {
             $page->addHtml('<p>'.$gL10n->get('SYS_USER_NO_MEMBERSHIP_LOGIN', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
 
             <button class="btn btn-primary" onclick="window.location.href=\''.$link.'\'">
-                <i class="fas fa-user-check"></i>'.$gL10n->get('SYS_ASSIGN_MEMBERSHIP_AND_LOGIN').'</button>');
+                <i class="fas fa-user-check"></i>'.$gL10n->get('SYS_ASSIGN_MEMBERSHIP').'</button>');
         } else {
             // KEINE Logindaten vorhanden
             $page->addHtml('<p>'.$gL10n->get('SYS_USER_NO_MEMBERSHIP_NO_LOGIN', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
@@ -197,12 +197,12 @@ $page->addHtml(
     </div>
     </div>
     <div class="card admidio-blog">
-        <div class="card-header">'.$gL10n->get('SYS_CREATE_NEW_USER').'</div>
+        <div class="card-header">'.$gL10n->get('SYS_CREATE_MEMBER').'</div>
         <div class="card-body">
             <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '</p>
 
             <button class="btn btn-primary" onclick="window.location.href=\''.$urlCreateNewUser.'\'">
-                <i class="fas fa-plus-circle"></i>'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
+                <i class="fas fa-plus-circle"></i>'.$gL10n->get('SYS_CREATE_MEMBER').'</button>
         </div>
     </div>'
 );

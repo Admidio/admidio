@@ -530,7 +530,6 @@
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Login data has been successfully assigned and user has been informed via e-mail.</string>
   <string name="SYS_ASSIGN_MEMBERS">Assign members</string>
   <string name="SYS_ASSIGN_MEMBERSHIP">Assign membership</string>
-  <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Assign membership and login information to selected user.</string>
   <string name="SYS_ASSIGN_REGISTRATION">Assign registration</string>
   <string name="SYS_ASSIGN_ROLE">Assign role</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Select a role for all imported users.\n\nAvailable are only roles which you have user permission for.</string>
@@ -649,8 +648,7 @@
   <string name="SYS_CREATE_LINK">Create new link</string>
   <string name="SYS_CREATE_MEMBER">Create member</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Create a new configuration</string>
-  <string name="SYS_CREATE_NEW_USER">Add new user</string>
-  <string name="SYS_CREATE_NOT_FOUND_USER">If the new user is not listed among the users found, you can create it.</string>
+  <string name="SYS_CREATE_NOT_FOUND_USER">If the registration does not belong to one of the found members, then you can create a new member and assign the appropriate roles to it.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Create relationship</string>
   <string name="SYS_CREATE_ROLE">Create role</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
@@ -1007,6 +1005,7 @@
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Member</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Member assignment</string>
+  <string name="SYS_MEMBER_NO_VALID_LOGIN">This member does not have a registration yet.\nDo you want to assign the data of this registration?</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Member of organization #VAR1#</string>
   <string name="SYS_MEMBER_SIMILAR_NAME">A member with a similar name was found.</string>
   <string name="SYS_MEMBERS">Members</string>
@@ -1210,7 +1209,7 @@
   <string name="SYS_RELATIONSHIP_TYPE_DESC">An asymmetrical relationship is e.g. used for parent / child while symmetrical relations e.g. can be used for siblings. These are always bidirectional, however,  unidirectional relations only mark in one direction.</string>
   <string name="SYS_RELOAD">Reload</string>
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
-  <string name="SYS_REMINDER_SEND_LOGIN">Would you like to send the user their login data with a new password as a reminder?</string>
+  <string name="SYS_REMINDER_SEND_LOGIN">Would you like to send the member their login data with a new password as a reminder?</string>
   <string name="SYS_REMOVE">Remove</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REMOVE_USER">Remove user</string>
@@ -1348,7 +1347,8 @@
   <string name="SYS_SHOW_PERMISSIONS">Show permissions</string>
   <string name="SYS_SHOW_PROFILE">Show profile</string>
   <string name="SYS_SHOW_ROUTE">Show route</string>
-  <string name="SYS_SIMILAR_USERS_FOUND">At least one user with similar name (#VAR1_BOLD# ) was found in the database.</string>
+  <string name="SYS_SIMILAR_MEMBERS_FOUND">Similar members found</string>
+  <string name="SYS_SIMILAR_MEMBERS_FOUND_DESC">Already found members with similar name as #VAR1_BOLD#. Check the registration and assign it to a found member or create a new member.</string>
   <string name="SYS_SINCE">since #VAR1#</string>
   <string name="SYS_SINCE_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_SIZE">Size</string>
@@ -1429,13 +1429,11 @@
   <string name="SYS_USER">User</string>
   <string name="SYS_USER_COULD_BE_CREATED">The Person could be created.</string>
   <string name="SYS_USER_DELETE_DESC">Would you like to delete #VAR1_BOLD#?\n\nUser is going to be physically deleted in the database which makes later access impossible.</string>
-  <string name="SYS_USER_FOUND">User found</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">This user is not a member of organization #VAR1# yet.</string>
-  <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">User is not a member of organization #VAR1# but has already login data assigned.</string>
-  <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">User is not a member of organization #VAR1# and has no login data registered.</string>
-  <string name="SYS_USER_NO_VALID_LOGIN">User has no login yet.\nWould you like to assign the information of the selected registration to the user?</string>
+  <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">The person found is not yet a member of the organization #VAR1#, but already has access data. Do you want to assign the new credentials, as well as the corresponding roles to this person?</string>
+  <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">The found person is not yet a member of the organization #VAR1# and has no access data yet. Do you want to assign the access data and the corresponding roles to this person?</string>
   <string name="SYS_USER_RELATION">Relationship</string>
   <string name="SYS_USER_RELATIONS">Relationships</string>
   <string name="SYS_USER_RELATION_TYPE">Relationship type</string>

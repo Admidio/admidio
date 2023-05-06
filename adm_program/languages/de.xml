@@ -530,7 +530,6 @@
   <string name="SYS_ASSIGN_LOGIN_EMAIL">Die Zugangsdaten wurden erfolgreich zugeordnet und die Benutzerin bzw. der Benutzer ist darüber per E-Mail benachrichtigt worden.</string>
   <string name="SYS_ASSIGN_MEMBERS">Mitglieder zuordnen</string>
   <string name="SYS_ASSIGN_MEMBERSHIP">Mitgliedschaft zuweisen</string>
-  <string name="SYS_ASSIGN_MEMBERSHIP_AND_LOGIN">Mitgliedschaft und Zugangsdaten dieser Benutzerin bzw. diesem Benutzer zuordnen</string>
   <string name="SYS_ASSIGN_REGISTRATION">Registrierung zuordnen</string>
   <string name="SYS_ASSIGN_ROLE">Rolle zuordnen</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Wähle bitte eine Rolle aus, der alle importierten Benutzer:innen automatisch zugeordnet werden.\n\nDir stehen nur Rollen zur Auswahl, die du sehen darfst und keine Rollenzuordnungsberechtigung besitzen, falls du diese selber nicht besitzt.</string>
@@ -649,8 +648,7 @@
   <string name="SYS_CREATE_LINK">Link anlegen</string>
   <string name="SYS_CREATE_MEMBER">Mitglied anlegen</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Neue Konfiguration erstellen</string>
-  <string name="SYS_CREATE_NEW_USER">Neue:n Benutzer:in anlegen</string>
-  <string name="SYS_CREATE_NOT_FOUND_USER">Falls die neue Benutzerin bzw. der neue Benutzer nicht unter den gefundenen Daten aufgelistet ist, kannst du diese:n neu anlegen.</string>
+  <string name="SYS_CREATE_NOT_FOUND_USER">Gehört die Registrierung nicht zu einem der gefundenen Mitglieder, dann kannst du ein neues Mitglied anlegen und diesem die entsprechenden Rollen zuweisen.</string>
   <string name="SYS_CREATE_RELATIONSHIP">Beziehung anlegen</string>
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
@@ -1211,7 +1209,7 @@
   <string name="SYS_RELATIONSHIP_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen z.B. für Geschwister verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
   <string name="SYS_RELOAD">Neuladen</string>
   <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
-  <string name="SYS_REMINDER_SEND_LOGIN">Möchtest du der Benutzerin bzw. dem Benutzer seine Zugangsdaten mit Passwort als Erinnerung zuschicken?</string>
+  <string name="SYS_REMINDER_SEND_LOGIN">Möchtest du dem Mitglied seine Zugangsdaten mit Passwort als Erinnerung zuschicken?</string>
   <string name="SYS_REMOVE">Entfernen</string>
   <string name="SYS_REMOVE_MESSAGE">Nachricht entfernen</string>
   <string name="SYS_REMOVE_USER">Benutzer:in entfernen</string>
@@ -1349,7 +1347,8 @@
   <string name="SYS_SHOW_PERMISSIONS">Berechtigungen anzeigen</string>
   <string name="SYS_SHOW_PROFILE">Profil anzeigen</string>
   <string name="SYS_SHOW_ROUTE">Route anzeigen</string>
-  <string name="SYS_SIMILAR_USERS_FOUND">Es wurden bereits Benutzer:innen mit ähnlichem Namen wie #VAR1_BOLD# in der Datenbank gefunden.</string>
+  <string name="SYS_SIMILAR_MEMBERS_FOUND">Ähnliche Mitglieder gefunden</string>
+  <string name="SYS_SIMILAR_MEMBERS_FOUND_DESC">Es wurden bereits Mitglieder mit einem ähnlichem Namen wie #VAR1_BOLD# gefunden. Prüfe die Registrierung und ordne diese einem gefunden Mitglied zu oder lege ein neues Mitglied an.</string>
   <string name="SYS_SINCE">seit #VAR1#</string>
   <string name="SYS_SINCE_TO">seit #VAR1# bis #VAR2#</string>
   <string name="SYS_SIZE">Größe</string>
@@ -1430,13 +1429,12 @@
   <string name="SYS_USER">Benutzer:in</string>
   <string name="SYS_USER_COULD_BE_CREATED">Die Person kann angelegt werden.</string>
   <string name="SYS_USER_DELETE_DESC">Willst du #VAR1_BOLD# wirklich löschen?\n\nDie Benutzerin bzw. der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
-  <string name="SYS_USER_FOUND">Gefundene Benutzer:innen</string>
   <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein:e Benutzer:in zu der übergebenen ID gefunden werden!</string>
   <string name="SYS_USER_NO_EMAIL">#VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Diese:r Benutzer:in ist noch kein Mitglied der Organisation #VAR1#.</string>
-  <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Diese:r Benutzer:in ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Zugangsdaten.</string>
-  <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Diese:r Benutzer:in ist noch kein Mitglied der Organisation #VAR1# und besitzt auch keine Zugangsdaten.</string>
-  <string name="SYS_USER_NO_VALID_LOGIN">Diese:r Benutzer:in besitzt noch kein Login.\nMöchtest du ihm die Daten dieser Registrierung zuordnen?</string>
+  <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Die gefundene Person ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Zugangsdaten. Möchtest du die neuen Zugangsdaten, sowie die entsprechenden Rollen dieser Person zuordnen?</string>
+  <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Die gefundene Person ist noch kein Mitglied der Organisation #VAR1# und hat auch noch keine Zugangsdaten. Möchtest du die Zugangsdaten, sowie die entsprechenden Rollen dieser Person zuordnen?</string>
+  <string name="SYS_MEMBER_NO_VALID_LOGIN">Dieses Mitglied besitzt noch keine Anmeldung.\nMöchtest du die Daten dieser Registrierung zuordnen?</string>
   <string name="SYS_USER_RELATION">Beziehung</string>
   <string name="SYS_USER_RELATIONS">Beziehungen</string>
   <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
