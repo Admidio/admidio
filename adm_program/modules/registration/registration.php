@@ -96,7 +96,7 @@ if ($getRegistrationId !== '') {
     try {
         // create html page object
         $page = new ModuleRegistration('admidio-registration-assign', $headline);
-        $page->createContentAssignUser();
+        $page->createContentAssignUser($getUserUuid);
         $page->show();
     } catch (SmartyException $e) {
         $gMessage->show($e->getMessage());

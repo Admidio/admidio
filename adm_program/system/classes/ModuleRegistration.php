@@ -38,7 +38,7 @@ class ModuleRegistration extends HtmlPage
      */
     public function getRegistrationsArray(): array
     {
-        global $gDb, $gProfileFields, $gCurrentOrgId;
+        global $gDb, $gCurrentOrgId;
 
         // Select new Members of the group
         $sql = 'SELECT usr_id as userID, usr_uuid as userUUID, usr_login_name as loginName,
@@ -57,19 +57,39 @@ class ModuleRegistration extends HtmlPage
      * Read all available registrations from the database and create the html content of this
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
+     * @throws SmartyException|AdmException
      */
-    public function createContentAssignUser(int $userId): string
+    public function createContentAssignUser(string $userUuid)
     {
         global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields;
 
-        $user = new UserRegistration($gDb, $gProfileFields, $userId);
+        $templateData = array();
+
+        $user = new UserRegistration($gDb, $gProfileFields);
+        $user->readDataByUuid($userUuid);
         $similarUserIDs = $user->searchSimilarUsers();
+
+        $this->assign('description', $gL10n->get('SYS_SIMILAR_MEMBERS_FOUND_DESC', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
 
         foreach ($similarUserIDs as $internalNumber => $similarUserID) {
             $similarUser = new User($gDb, $gProfileFields, $similarUserID);
 
-            $this->assign('description', $gL10n->get('SYS_SIMILAR_USERS_FOUND', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
+            $templateRow = array();
+            $templateRow['data'] = $similarUser->getProfileFieldsData();
+            $templateRow['profileUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $similarUser->getValue('usr_uuid')));
+
+            if ($gSettingsManager->getBool('enable_mail_module')) {
+                $templateRow['emailUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $similarUser->getValue('usr_uuid')));
+            } else {
+                $templateRow['emailUrl'] = 'mailto:'.$similarUser->getValue('EMAIL');
+            }
+
+            $templateData[] = $templateRow;
         }
+
+        $this->assign('similarUsers', $templateData);
+        $this->assign('l10n', $gL10n);
+        $this->pageContent = $this->fetch('modules/registration.assign.tpl');
     }
 
     /**
@@ -126,7 +146,8 @@ class ModuleRegistration extends HtmlPage
                 'tooltip' => $gL10n->get('SYS_DELETE')
             );
             $templateRow['buttons'][] = array(
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_uuid' => $row['userUUID'])),
+                //'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_uuid' => $row['userUUID'])),
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('mode' => 'show_similar', 'user_uuid' => $row['userUUID'])),
                 'name' => (count($similarUserIDs) > 0 ? $gL10n->get('SYS_ASSIGN_REGISTRATION') : $gL10n->get('SYS_CONFIRM_REGISTRATION') )
             );
 
