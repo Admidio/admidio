@@ -50,10 +50,15 @@ if ($getUserUuid !== '' && $getNewUser !== 0 && $getNewUser !== 3) {
     // => EXIT
 }
 
-// read user data
-$user = new User($gDb, $gProfileFields);
-$user->readDataByUuid($getUserUuid);
-$userId = $user->getValue('usr_id');
+
+try {
+    // read user data
+    $user = new User($gDb, $gProfileFields);
+    $user->readDataByUuid($getUserUuid);
+    $userId = $user->getValue('usr_id');
+} catch (AdmException $e) {
+    $e->showHtml();
+}
 
 // set headline of the script
 if ($getCopy) {

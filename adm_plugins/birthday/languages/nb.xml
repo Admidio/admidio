@@ -5,7 +5,7 @@
   <string name="PLG_BIRTHDAY_HEADLINE">Fødselsdager</string>
   <string name="PLG_BIRTHDAY_MAN_VAR">Herr #VAR1#</string>
   <string name="PLG_BIRTHDAY_MORE_MEMBERS">I dag har #VAR1# medlemmer fødselsdag.</string>
-  <string name="PLG_BIRTHDAY_NO_MEMBERS">I dag har ingen medlemmer fødselsdag,</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Ingen medlemmer har fødselsdag i dag.</string>
   <string name="PLG_BIRTHDAY_ONE_MEMBER">I dag har et medlem fødselsdag.</string>
   <string name="PLG_BIRTHDAY_PAST">#VAR1# ble #VAR3# år gammel #VAR2# dager før, på #VAR4#</string>
   <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# hadde fødselsdag for #VAR2# dager siden</string>
