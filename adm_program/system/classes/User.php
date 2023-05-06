@@ -532,7 +532,7 @@ class User extends TableAccess
 
         $orgLongName = $this->getOrgLongname();
 
-        if (!$this->isMemberOfOrganization($orgLongName)) {
+        if (!$this->isMemberOfOrganization()) {
             throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongName)));
         }
 
@@ -1543,11 +1543,11 @@ class User extends TableAccess
     }
 
     /**
-     * Checks if this user is a member of this organization.
-     * @param string $orgLongName The longname of this organization.
-     * @return bool Return true if user is member of this organization.
+     * Checks if this user is a member of the organization. The organization is the current organization of
+     * the session or the organization that was set to this object by setOrganization().
+     * @return bool Return true if user is member of the organization.
      */
-    private function isMemberOfOrganization($orgLongName)
+    public function isMemberOfOrganization(): bool
     {
         // Check if user is currently member of a role of an organisation
         $sql = 'SELECT mem_usr_id

@@ -1,4 +1,4 @@
-<p class="lead">{$description}</p>
+<p class="lead admidio-max-with">{$description}</p>
 <div class="card admidio-blog">
     <div class="card-header">{$l10n->get('SYS_SIMILAR_MEMBERS_FOUND')}</div>
     <div class="card-body">
@@ -16,8 +16,22 @@
                     {if $similarUser.data->getValue('EMAIL') ne ''}
                         <a href="{$similarUser.emailUrl}">{$similarUser.data->getValue('EMAIL')}</a><br />
                     {/if}
+                    <br />
+
+                    <p>{$similarUser.button.description}</p>
+                    <button class="btn btn-primary" onclick="window.location.href=\'{$similarUser.button.url}\'">
+                        <i class="fas {$similarUser.button.icon}"></i>{$similarUser.button.label}</button>
                 </li>
             {/foreach}
         </ul>
+    </div>
+</div>
+<div class="card admidio-blog">
+    <div class="card-header">{$l10n->get('SYS_CREATE_MEMBER')}</div>
+    <div class="card-body">
+        <p>{$l10n->get('SYS_CREATE_NOT_FOUND_USER')}</p>
+
+        <button class="btn btn-primary" onclick="window.location.href=\'{$createNewUserUrl}\'">
+            <i class="fas fa-plus-circle"></i>{$l10n->get('SYS_CREATE_MEMBER')}</button>
     </div>
 </div>

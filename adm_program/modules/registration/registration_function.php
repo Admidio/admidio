@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Approve new users - functions
+ * Approve new registrations - functions
  *
  * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
@@ -9,9 +9,9 @@
  *
  * Parameters:
  *
- * mode: 1 - Assign registration to a user who is already a member of the Orga
- *       2 - Assign registration to a user who is NOT yet a member of the Orga
- *       3 - Notification to the user that he/she is now unlocked for the current orga
+ * mode: 1 - Assign registration to a user who is already a member of the organization
+ *       2 - Assign registration to a user who is NOT yet a member of the organization
+ *       3 - Notification to the user that he/she is now unlocked for the current organization
  *       4 - Delete user account
  *       5 - Create new user and assign roles automatically without dialog
  *       6 - Registration does not need to be assigned, simply send login data
@@ -38,9 +38,13 @@ if (!$gSettingsManager->getBool('registration_enable_module')) {
     // => EXIT
 }
 
-// create user objects
-$registrationUser = new UserRegistration($gDb, $gProfileFields);
-$registrationUser->readDataByUuid($getNewUserUuid);
+try {
+    // create user objects
+    $registrationUser = new UserRegistration($gDb, $gProfileFields);
+    $registrationUser->readDataByUuid($getNewUserUuid);
+} catch (AdmException $e) {
+    $e->showHtml();
+}
 
 if ($getMode === 1 || $getMode === 2) {
     try {
@@ -61,7 +65,7 @@ if ($getMode === 1 || $getMode === 2) {
             $user->assignDefaultRoles();
         }
     } catch (AdmException $e) {
-        // exception is thrown when email couldn't be send
+        // exception is thrown when email couldn't be sent
         // so save user data and then show error
         $user->save();
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
@@ -139,7 +143,7 @@ if ($getMode === 1 || $getMode === 2) {
         // => EXIT
     }
 } elseif ($getMode === 6) {
-    // Der User existiert schon und besitzt auch ein Login
+    // User already exists and has a login
 
     try {
         // delete registration
@@ -150,7 +154,7 @@ if ($getMode === 1 || $getMode === 2) {
         // => EXIT
     }
 
-    // Zugangsdaten neu verschicken
+    // Resend access data
     $gNavigation->addUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
     admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('mode' => '4', 'user_uuid' => $getUserUuid)));
     // => EXIT

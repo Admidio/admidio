@@ -86,6 +86,8 @@ if ($getRegistrationId !== '') {
         $page->show();
     } catch (SmartyException $e) {
         $gMessage->show($e->getMessage());
+    } catch (AdmException $e) {
+        $e->showHtml();
     }
 } elseif ($getMode === 'show_similar') {
     // set headline of the script
@@ -100,5 +102,7 @@ if ($getRegistrationId !== '') {
         $page->show();
     } catch (SmartyException $e) {
         $gMessage->show($e->getMessage());
+    } catch (AdmException $e) {
+        $e->showHtml();
     }
 }

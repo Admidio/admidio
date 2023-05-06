@@ -54,14 +54,16 @@ class ModuleRegistration extends HtmlPage
     }
 
     /**
-     * Read all available registrations from the database and create the html content of this
-     * page with the Smarty template engine and write the html output to the internal
-     * parameter **$pageContent**. If no registration is found than show a message to the user.
+     * Search for similar users of the new registration and show all found users with the option to assign
+     * the current registration to the existing user or to create a new member. If the registration is
+     * assigned to an existing user than there will be a different handling if the user is member of the current
+     * organization and if the user has already a login.
+     * @param string $userUuid UUID if the user whose registration should be assigned.
      * @throws SmartyException|AdmException
      */
     public function createContentAssignUser(string $userUuid)
     {
-        global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields;
+        global $gL10n, $gSettingsManager, $gCurrentUser, $gDb, $gProfileFields, $gCurrentOrganization;
 
         $templateData = array();
 
@@ -71,7 +73,13 @@ class ModuleRegistration extends HtmlPage
 
         $this->assign('description', $gL10n->get('SYS_SIMILAR_MEMBERS_FOUND_DESC', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
 
-        foreach ($similarUserIDs as $internalNumber => $similarUserID) {
+        // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
+        if ($gCurrentUser->editUsers()) {
+            $this->assign('createNewUserUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_uuid' => $userUuid)));
+        } else {
+            $this->assign('createNewUserUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '5', 'new_user_uuid' => $userUuid)));
+        }
+        foreach ($similarUserIDs as $similarUserID) {
             $similarUser = new User($gDb, $gProfileFields, $similarUserID);
 
             $templateRow = array();
@@ -83,6 +91,37 @@ class ModuleRegistration extends HtmlPage
             } else {
                 $templateRow['emailUrl'] = 'mailto:'.$similarUser->getValue('EMAIL');
             }
+
+            if ($similarUser->isMemberOfOrganization()) {
+                // found user is member of this organization
+                if ($similarUser->getValue('usr_login_name') !== '') {
+                    // Login data already exists -> Send login data again
+                    $button['description'] = $gL10n->get('SYS_USER_VALID_LOGIN'). '<br />'.$gL10n->get('SYS_REMINDER_SEND_LOGIN');
+                    $button['label'] = $gL10n->get('SYS_SEND_LOGIN_INFORMATION');
+                    $button['icon'] = 'fa-key';
+                    $button['url']  = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => '6'));
+                } else {
+                    // Login data are NOT available -> assign them now
+                    $button['description'] = $gL10n->get('SYS_MEMBER_NO_VALID_LOGIN');
+                    $button['label'] = $gL10n->get('SYS_ASSIGN_LOGIN_INFORMATION');
+                    $button['icon'] = 'fa-user-check';
+                    $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => '1'));
+                }
+            } else {
+                // found user is NOT a member of this organization yet
+                $button['label'] = $gL10n->get('SYS_ASSIGN_MEMBERSHIP');
+                $button['icon'] = 'fa-user-check';
+                $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_uuid' => $userUuid, 'user_uuid' => $similarUser->getValue('usr_uuid'), 'mode' => '2'));
+
+                if ($similarUser->getValue('usr_login_name') !== '') {
+                    // Login data are already available
+                    $button['description'] = $gL10n->get('SYS_USER_NO_MEMBERSHIP_LOGIN', array($gCurrentOrganization->getValue('org_longname')));
+                } else {
+                    // NO login data available
+                    $button['description'] = $gL10n->get('SYS_USER_NO_MEMBERSHIP_NO_LOGIN', array($gCurrentOrganization->getValue('org_longname')));
+                }
+            }
+            $templateRow['button'] = $button;
 
             $templateData[] = $templateRow;
         }
@@ -96,8 +135,7 @@ class ModuleRegistration extends HtmlPage
      * Read all available registrations from the database and create the html content of this
      * page with the Smarty template engine and write the html output to the internal
      * parameter **$pageContent**. If no registration is found than show a message to the user.
-     * @throws SmartyException
-     * @throws AdmException
+     * @throws SmartyException|AdmException
      */
     public function createContentRegistrationList()
     {
