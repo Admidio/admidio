@@ -240,7 +240,7 @@ if (!$eventRole) {
         'rol_cost',
         $gL10n->get('SYS_CONTRIBUTION').' '.$gSettingsManager->getString('system_currency'),
         $role->getValue('rol_cost'),
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1)
+        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => '0.01')
     );
     $form->addSelectBox(
         'rol_cost_period',
