@@ -285,6 +285,7 @@ if ($datesResult['totalCount'] === 0) {
         $dateUuid     = $date->getValue('dat_uuid');
         $dateRolId    = $date->getValue('dat_rol_id');
         $dateHeadline = $date->getValue('dat_headline');
+        $participants = new Participants($gDb, $dateRolId);
 
         // initialize all output elements
         $attentionDeadline  = '';
@@ -409,7 +410,6 @@ if ($datesResult['totalCount'] === 0) {
             || $row['mem_leader'] == 1
             || $gCurrentUser->editDates()
             || $date->allowedToParticipate()) {
-            $participants = new Participants($gDb, $dateRolId);
             $outputNumberMembers = $participants->getCount();
             $outputNumberLeaders = $participants->getNumLeaders();
             $participantsArray   = $participants->getParticipantsArray($dateRolId);
