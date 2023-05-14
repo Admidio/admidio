@@ -59,7 +59,8 @@ class TableDate extends TableAccess
     /**
      * Check if the current user is allowed to participate in this event.
      * Therefore, we check if the user is member of a role that is assigned to
-     * the right event_participation.
+     * the right event_participation. This method will also return **true** if the deadline is exceeded
+     * and a further participation isn't possible.
      * @return bool Return true if the current user is allowed to participate in the event.
      */
     public function allowedToParticipate(): bool

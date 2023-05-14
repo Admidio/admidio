@@ -576,7 +576,7 @@ if ($datesResult['totalCount'] === 0) {
                                 data-html="true" data-trigger="hover click" data-placement="auto"
                                 title="' . $gL10n->get('SYS_NOTE') . '" data-content="' . SecurityUtils::encodeHTML($gL10n->get('DAT_DEADLINE_ATTENTION')) . '"></i>
                         </div>';
-            } else {
+            } elseif ($date->allowedToParticipate()) {
                 $attentionDeadline = '<div class="alert alert-info" role="alert">'.$gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE').'</div>';
                 $iconParticipationStatus = '';
             }
