@@ -1125,7 +1125,7 @@
   <string name="SYS_PARTICIPATION_STATUS">Status der teilnehmenden Person</string>
   <string name="SYS_PASSWORD">Passwort</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen?</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Bitte geben Sie Ihre E-Mail-Adresse ein, mit der Sie sich angemeldet haben. Wir werden Ihnen dann einen Link schicken, mit dem Sie Ihr Passwort zurücksetzen und anschließend ein neues Passwort vergeben können.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Bitte geben Sie Ihren Anmeldenamen oder Ihre E-Mail-Adresse ein. Wir werden Ihnen dann einen Link schicken, mit dem Sie Ihr Passwort zurücksetzen und anschließend ein neues Passwort vergeben können.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Hat die Benutzerin oder der Benutzer sein Passwort vergessen, kann er sich einen Link zuschicken lassen, über den er auf dieser Webseite ein neues Passwort für seinen Account vergeben kann. Ist diese Option deaktiviert, kann die Benutzerin oder der Benutzer nur eine Anfrage per E-Mail an die Administratorinnen und Administratoren stellen, damit dieser ein neues Passwort hinterlegt. Damit das Passwort zugesendet werden kann, muss zusätzlich die Einstellung #VAR1_BOLD# gesetzt sein. (Voreinstellung: ja)</string>
   <string name="SYS_PASSWORD_RESET_INVALID">Sie haben einen ungültigen Link zum Zurücksetzen Ihres Passworts aufgerufen. Falls Sie Ihr Passwort noch nicht zurückgesetzt haben, fordern Sie bitte einen neuen Link über die Funktion #VAR1# an.</string>
   <string name="SYS_PASSWORD_RESET_SAVED">Das neue Passwort wurde nun übernommen!</string>

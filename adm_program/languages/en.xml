@@ -1125,7 +1125,7 @@
   <string name="SYS_PARTICIPATION_STATUS">Participant Status</string>
   <string name="SYS_PASSWORD">Password</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten?</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Please enter the email address you registered with. We will then send you a link where you can reset your password and then set a new one.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Please enter your login name or email address. We will then send you a link where you can reset your password and after that set a new password.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">If the user has forgotten his password, he can request a link to be sent to him, through which he can set a new password for his account on this website. If this option is deactivated, the user can only send a request by e-mail to the administrator to deposit a new password. In order for the password to be sent, the #VAR1_BOLD# setting must also be set. (Default: yes)</string>
   <string name="SYS_PASSWORD_RESET_INVALID">You have requested an invalid password reset link. If you haven't reset your password yet, please request a new link using the #VAR1# function.</string>
   <string name="SYS_PASSWORD_RESET_SAVED">The new password has now been applied!</string>
