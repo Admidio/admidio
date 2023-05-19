@@ -40,7 +40,7 @@ if ($gCurrentUser->getValue('usr_uuid') === $getUserUuid) {
 
 // Read participants
 $participants = new Participants($gDb, (int) $date->getValue('dat_rol_id'));
-$participantsArray = $participants->getParticipantsArray((int) $date->getValue('dat_rol_id'));
+$participantsArray = $participants->getParticipantsArray();
 
 // If extended options for participation are allowed then show in form
 if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1) {

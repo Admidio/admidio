@@ -30,5 +30,7 @@
     <step id="250">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_this_list_view</step>
     <step id="260" database="mysql">UPDATE %PREFIX%_dates SET dat_end = date_sub(dat_end, interval 1 second) WHERE dat_all_day = true</step>
     <step id="270" database="pgsql">UPDATE %PREFIX%_dates SET dat_end = dat_end - interval '1 second' WHERE dat_all_day = true</step>
+    <step id="280" database="mysql">UPDATE %PREFIX%_roles INNER JOIN %PREFIX%_categories ON cat_id = rol_cat_id AND cat_name_intern = 'EVENTS' SET rol_view_memberships = 3 WHERE rol_view_memberships = 0</step>
+    <step id="290" database="pgsql">UPDATE %PREFIX%_roles SET rol_view_memberships = 3 FROM %PREFIX%_categories WHERE cat_id = rol_cat_id AND cat_name_intern = 'EVENTS' AND rol_view_memberships = 0</step>
     <step>stop</step>
 </update>
