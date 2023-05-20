@@ -617,11 +617,18 @@ if (isset($messageStatement)) {
             $attachments   = $message->getAttachmentsInformations();
 
             if (count($attachments) > 0) {
-                $messageFooter .= '<div class="card-footer"><i class="fas fa-paperclip"></i> ' . $gL10n->get('SYS_ATTACHMENT');
+                $messageFooter .= '<div class="card-footer"><span class="mr-3"><i class="fas fa-paperclip"></i> ' . $gL10n->get('SYS_ATTACHMENT') . '</span>';
             }
 
             foreach ($attachments as $attachment) {
-                $messageFooter .= '<a class="admidio-attachment" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/get_attachment.php', array('msa_id' => $attachment['msa_id'])) . '">' . $attachment['file_name'] . '</a>';
+                // get complete path with filename of the attachment
+                $attachmentPath = ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name'];
+
+                if (file_exists($attachmentPath)) {
+                    $messageFooter .= '<a class="admidio-attachment mr-3" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/get_attachment.php', array('msa_id' => $attachment['msa_id'])) . '">' . $attachment['file_name'] . '</a>';
+                } else {
+                    $messageFooter .= '<span class="mr-3">' . $attachment['file_name'] . '</span>';
+                }
             }
 
             if (count($attachments) > 0) {
