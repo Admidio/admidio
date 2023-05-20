@@ -284,7 +284,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                 $date->setValue('dat_max_members', $datMaxMembers);
             }
             // Raumname für Benachrichtigung
-            $raum = $room->getValue('room_name');
+            $room = $room->getValue('room_name');
         }
     }
 
@@ -324,13 +324,13 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         $calendar = $pdoStatement->fetchColumn();
 
         if (strlen($_POST['dat_location']) > 0) {
-            $ort = $_POST['dat_location'];
+            $location = $_POST['dat_location'];
         } else {
-            $ort = 'n/a';
+            $location = 'n/a';
         }
 
         if ($_POST['dat_room_id'] == 0) {
-            $raum = 'n/a';
+            $room = 'n/a';
         }
 
         if (strlen($_POST['dat_max_members']) > 0) {
@@ -343,22 +343,27 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
             $notification = new Email();
 
             if ($dateIsNew) {
-                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $date->getDateTimePeriod(), $calendar))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
-                $notification->sendNotification(
-                    $gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'),
-                    $message
-                );
+                $messageTitleText = 'SYS_EMAIL_CREATE_EVENT_NOTIFICATION_TITLE';
+                $messageUserText = 'SYS_CREATED_BY';
+                $messageDateText = 'SYS_CREATED_AT';
             } else {
-                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $date->getDateTimePeriod(), $calendar))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
-                $notification->sendNotification(
-                    $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'),
-                    $message
-                );
+                $messageTitleText = 'SYS_EMAIL_CHANGE_EVENT_NOTIFICATION_TITLE';
+                $messageUserText = 'SYS_CHANGED_BY';
+                $messageDateText = 'SYS_CHANGED_AT';
             }
+            $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '\n\n'
+                . $gL10n->get('SYS_TITLE') . ': ' . $_POST['dat_headline'] . '\n'
+                . $gL10n->get('SYS_DATE') . ': ' . $date->getDateTimePeriod() . '\n'
+                . $gL10n->get('DAT_CALENDAR') . ': ' . $calendar . '\n'
+                . $gL10n->get('DAT_LOCATION') . ': ' . $location . '\n'
+                . $gL10n->get('SYS_ROOM') . ': ' . $room . '\n'
+                . $gL10n->get('SYS_PARTICIPANTS') . ': ' . $participants . '\n'
+                . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME') . '\n'
+                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date')) . '\n';
+            $notification->sendNotification(
+                $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
+                $message
+            );
         } catch (AdmException $e) {
             $e->showHtml();
         }
