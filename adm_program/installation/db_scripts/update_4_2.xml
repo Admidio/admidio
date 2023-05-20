@@ -32,5 +32,6 @@
     <step id="270" database="pgsql">UPDATE %PREFIX%_dates SET dat_end = dat_end - interval '1 second' WHERE dat_all_day = true</step>
     <step id="280" database="mysql">UPDATE %PREFIX%_roles INNER JOIN %PREFIX%_categories ON cat_id = rol_cat_id AND cat_name_intern = 'EVENTS' SET rol_view_memberships = 3 WHERE rol_view_memberships = 0</step>
     <step id="290" database="pgsql">UPDATE %PREFIX%_roles SET rol_view_memberships = 3 FROM %PREFIX%_categories WHERE cat_id = rol_cat_id AND cat_name_intern = 'EVENTS' AND rol_view_memberships = 0</step>
+    <step id="300">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_name = 'mail_save_attachments' AND prf_value NOT LIKE '0'</step>
     <step>stop</step>
 </update>
