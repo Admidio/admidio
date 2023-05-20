@@ -361,7 +361,7 @@ $form->addInput(
     'date_deadline',
     $gL10n->get('DAT_DEADLINE'),
     $date->getValue('dat_deadline', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
-    array('type' => 'datetime', 'helpTextIdLabel' => 'DAT_DEADLINE_DESC')
+    array('type' => 'datetime', 'helpTextIdLabel' => 'SYS_EVENT_DEADLINE_DESC')
 );
 $form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
 $form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);
