@@ -521,21 +521,27 @@ class TableMessage extends TableAccess
      */
     protected function saveAttachments()
     {
-        try {
-            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments');
-        } catch (\RuntimeException $exception) {
-            return array(
-                'text' => 'SYS_FOLDER_NOT_CREATED',
-                'path' => ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments'
-            );
+        global $gSettingsManager;
+
+        if ($gSettingsManager->getBool('mail_save_attachments')) {
+            try {
+                FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments');
+            } catch (\RuntimeException $exception) {
+                return array(
+                    'text' => 'SYS_FOLDER_NOT_CREATED',
+                    'path' => ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments'
+                );
+            }
         }
 
         foreach ($this->msgAttachments as $attachement) {
             $file_name = $this->getValue('msg_id').'_'.$attachement[1];
 
-            FileSystemUtils::copyFile($attachement[0], ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $file_name);
+            if ($gSettingsManager->getBool('mail_save_attachments')) {
+                FileSystemUtils::copyFile($attachement[0], ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $file_name);
+            }
 
-            // save message recipient as TableAcess object to the array
+            // save message recipient as TableAccess object to the array
             $messageAttachment = new TableAccess($this->db, TBL_MESSAGES_ATTACHMENTS, 'msa');
             $messageAttachment->setValue('msa_msg_id', $this->getValue('msg_id'));
             $messageAttachment->setValue('msa_file_name', $file_name);
