@@ -155,7 +155,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Gruppe aller Administratorinnen und Administratoren des Systems</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Zugangsdaten zur Datenbank eingeben</string>
   <string name="INS_ERROR_OPEN_FILE">Die Datei #VAR1_BOLD# konnte nicht geöffnet werden.</string>
-  <string name="INS_FACEBOOK">Facebook</string>
+  <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Wollen Sie Ihr Facebook-Profil hier verlinken? Dazu benötigen Sie Ihren Nutzernamen bei Facebook. Melden Sie sich bei Facebook an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher:innen aus Ihrem Profil direkt Ihr Facebook-Profil aufrufen.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Der Ordner #VAR1_BOLD# besitzt keine Schreibrechte. Ohne Schreibrechte können keine Dateien oder Fotos von den Anwendern hochgeladen werden.</string>
   <string name="INS_GROUPS">Gruppen</string>
@@ -180,14 +180,14 @@
   <string name="INS_SET_ORGANIZATION">Organisation festlegen</string>
   <string name="INS_SET_UP_ORGANIZATION">Organisation einrichten</string>
   <string name="INS_SETUP_WAS_SUCCESSFUL">Die Einrichtung war erfolgreich</string>
-  <string name="INS_SKYPE">Skype</string>
-  <string name="INS_SKYPE_DESC">Geben Sie hier Ihren eindeutigen Skype-Namen ein. Haben Sie in Skype Ihren Online-Status freigegeben, so wird dieser später in Ihrem Profil angezeigt.</string>
+  <string name="SYS_SKYPE">Skype</string>
+  <string name="SYS_SKYPE_DESC">Geben Sie hier Ihren eindeutigen Skype-Namen ein. Haben Sie in Skype Ihren Online-Status freigegeben, so wird dieser später in Ihrem Profil angezeigt.</string>
   <string name="INS_SUPPORT_FURTHER_DEVELOPMENT">Wir würden uns freuen, wenn Sie die weitere Entwicklung von Admidio mit einer Spende unterstützen!</string>
   <string name="INS_TABLE_PREFIX">Tabellenpräfix</string>
   <string name="INS_TABLE_PREFIX_INVALID">Das Tabellenpräfix enthält ungültige Zeichen!</string>
   <string name="INS_TEAMS">Mannschaften</string>
   <string name="INS_TRAINING">Training</string>
-  <string name="INS_TWITTER">Twitter</string>
+  <string name="SYS_TWITTER">Twitter</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Wollen Sie Ihr Twitter-Profil hier verlinken? Dazu benötigen Sie Ihren eindeutigen Namen bei Twitter. Melden Sie sich bei Twitter an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher:innen aus Ihrem Profil direkt Ihr Twitter-Profil aufrufen.</string>
   <string name="INS_UPDATE">Update</string>
   <string name="INS_UPDATE_DATABASE">Datenbank aktualisieren</string>
@@ -201,7 +201,7 @@
   <string name="INS_WELCOME_TEXT">Dieser Assistent hilft Ihnen die Mitgliederverwaltung Admidio einzurichten. Es werden nun alle notwendigen Daten abgefragt, damit das System vollständig eingerichtet werden kann und Sie sich als Administrator:in anmelden können.\n\nHaben Sie Fragen oder Probleme mit der Installation, schauen Sie bitte #VAR1#unsere Installationsanleitung#VAR2# an oder wenden Sie sich an #VAR3#unser Supportforum#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">Sie haben bereits die Verzeichnisse von Admidio mit einer neuen Version aktualisiert. Nun müssen Sie noch die Datenbank von der aktuellen Version #VAR2# auf die Version #VAR1# aktualisieren, damit Admidio mit der neuen Version laufen kann.\n\nHaben Sie Fragen oder Probleme mit dem Update, schauen Sie bitte #VAR3#unsere Update-Anleitung#VAR4# an oder wenden Sie sich an #VAR5#unser Supportforum#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# setzt mindestens die MySQL-Version #VAR2# voraus. Sie sollten versuchen die MySQL-Datenbank zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu Ihrer Datenbank ist.</string>
-  <string name="INS_XING">Xing</string>
+  <string name="SYS_XING">Xing</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Wollen Sie Ihr Xing-Profil hier verlinken? Dazu benötigen Sie Ihren eindeutigen Namen bei Xing. Melden Sie sich bei Xing an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher:innen aus Ihrem Profil direkt Ihr Xing-Profil aufrufen.</string>
   <string name="INS_BOYFRIEND">Freund</string>
   <string name="INS_BROTHER">Bruder</string>

@@ -155,7 +155,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">System administrator gruppe</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Indtast database adgangs information</string>
   <string name="INS_ERROR_OPEN_FILE">Filen #VAR1_BOLD# kunne ikke åbnes.</string>
-  <string name="INS_FACEBOOK">Facebook</string>
+  <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Kunne du tænke dig at linke til din Facebook profil? Dit Facebook login navn er påkrævet. Log ind i din Facebook konto og vis din profil. Kopier Facebook URL\'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Facebook profil.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Folderen #VAR1_BOLD# er ikke skrivbar. Venligst sæt skrive rettigheder for at kunne overføre billeder og filer til fil modulet.</string>
   <string name="INS_GROUPS">Grupper</string>
@@ -180,14 +180,14 @@
   <string name="INS_SET_ORGANIZATION">Opretter organisation</string>
   <string name="INS_SET_UP_ORGANIZATION">Konfigurer organisation</string>
   <string name="INS_SETUP_WAS_SUCCESSFUL">Konfiguration færdig</string>
-  <string name="INS_SKYPE">Skype</string>
-  <string name="INS_SKYPE_DESC">Indtast dit præcise Skype navn her. Hvis din status kan vises på web (aktiveret i ICQ), så vil din status blive vist i din profil.</string>
+  <string name="SYS_SKYPE">Skype</string>
+  <string name="SYS_SKYPE_DESC">Indtast dit præcise Skype navn her. Hvis din status kan vises på web (aktiveret i ICQ), så vil din status blive vist i din profil.</string>
   <string name="INS_SUPPORT_FURTHER_DEVELOPMENT">Vi vil sætte stor pris på hvis du kunne støtte udviklingen af Admidio med en donation!</string>
   <string name="INS_TABLE_PREFIX">Tabel prefix</string>
   <string name="INS_TABLE_PREFIX_INVALID">Tabel prefix indeholder ulovlige karakterer!</string>
   <string name="INS_TEAMS">Teams</string>
   <string name="INS_TRAINING">Træning</string>
-  <string name="INS_TWITTER">Twitter</string>
+  <string name="SYS_TWITTER">Twitter</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Kunne du tænke dig at linke til din Twitter profil? For at gøre dette har du brug for dit Twitter login navn. Log ind i din Twitter konto og vis din profil. Kopier Twitter URL\'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Twitter profil.</string>
   <string name="INS_UPDATE">Opdater</string>
   <string name="INS_UPDATE_DATABASE">Opdater database</string>
@@ -201,7 +201,7 @@
   <string name="INS_WELCOME_TEXT">Denne assistent hjælper dig med at konfigurere Admidio-medlemsadministrationen. Alle nødvendige data vil blive anmodet om, så systemet kan konfigureres fuldt ud, og du kan logge ind som administrator. \n\nHvis du har spørgsmål eller problemer med installationen, skal du kontrollere #VAR1# vores installationsvejledning #VAR2# eller kontakte os på #VAR3# vores supportforum #VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">Du har allerede opdateret Admidios kataloger med en ny version. Nu skal databasen opdateres fra den aktuelle version #VAR2# til versionen #VAR1#, så Admidio kan køre med den nye version.\n\nHvis du har spørgsmål eller problemer med opdateringen, skal du kontrollere #VAR3# vores opdater instruktion #VAR4# eller kontakt #VAR5# vores supportforum #VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# kræver mindst MySQL version #VAR2#. Venligst opdater din MySQL database eller brug en #VAR3#ældre Admidio version#VAR4# for at sikre kompatabilitet.</string>
-  <string name="INS_XING">Xing</string>
+  <string name="SYS_XING">Xing</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Kunne du tænke dig at linke til din Xing profil? For at gøre dette har du brug for dit Xing login navn. Log ind i din Xing konto og vis din profil. Kopier Xing URL\'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Xing profil.</string>
   <string name="INS_BOYFRIEND">Ven</string>
   <string name="INS_BROTHER">Bror</string>

@@ -155,7 +155,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Група системних адміністраторів</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Ввести інформацію про доступ до бази даних</string>
   <string name="INS_ERROR_OPEN_FILE">Файл #VAR1_BOLD# не вдалося відкрити.</string>
-  <string name="INS_FACEBOOK">Facebook</string>
+  <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Бажаєте встановити посилання на свій профіль у Facebook? Необхідно ввести ім\'я для входу в Facebook. Увійдіть у свій обліковий запис Facebook і відобразіть свій профіль. Скопіюйте URL-адресу в цьому полі та збережіть свій профіль тут. Відвідувачі вашого профілю тепер можуть безпосередньо відкрити ваш профіль у Facebook.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Папка #VAR1_BOLD# не має дозволу на запис. Без дозволу на запис користувачі не можуть завантажувати файли або фотографії.</string>
   <string name="INS_GROUPS">Групи</string>
@@ -180,14 +180,14 @@
   <string name="INS_SET_ORGANIZATION">Визначити організацію</string>
   <string name="INS_SET_UP_ORGANIZATION">Створення організації</string>
   <string name="INS_SETUP_WAS_SUCCESSFUL">Налаштування організації</string>
-  <string name="INS_SKYPE">Skype</string>
-  <string name="INS_SKYPE_DESC">Введіть тут своє точне ім\'я в Skype. Якщо ваш статус дозволяє відображатися в Інтернеті (включено в ICQ), то він буде відображатися у вашому профілі.</string>
+  <string name="SYS_SKYPE">Skype</string>
+  <string name="SYS_SKYPE_DESC">Введіть тут своє точне ім\'я в Skype. Якщо ваш статус дозволяє відображатися в Інтернеті (включено в ICQ), то він буде відображатися у вашому профілі.</string>
   <string name="INS_SUPPORT_FURTHER_DEVELOPMENT">Ми будемо дуже вдячні, якщо ви підтримаєте розвиток Admidio благодійним внеском!</string>
   <string name="INS_TABLE_PREFIX">Префікс таблиці</string>
   <string name="INS_TABLE_PREFIX_INVALID">Префікс таблиці містить недопустимий символ!</string>
   <string name="INS_TEAMS">Команди</string>
   <string name="INS_TRAINING">Навчання</string>
-  <string name="INS_TWITTER">Twitter</string>
+  <string name="SYS_TWITTER">Twitter</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Бажаєте встановити посилання на свій профіль у Twitter? Необхідно ввести ім\'я для входу в Twitter. Увійдіть до свого облікового запису Twitter та відобразіть свій профіль. Скопіюйте URL-адресу в цьому полі та збережіть свій профіль тут. Відвідувачі вашого профілю тепер можуть безпосередньо відкрити ваш профіль у Twitter.</string>
   <string name="INS_UPDATE">Оновлення</string>
   <string name="INS_UPDATE_DATABASE">Оновлення бази даних</string>
@@ -201,7 +201,7 @@
   <string name="INS_WELCOME_TEXT">Цей помічник допоможе вам налаштувати управління користувачами Admidio. Будуть запитані всі необхідні дані для повного налаштування системи та входу в систему в якості адміністратора.\n\nЯкщо у вас виникли питання або проблеми з установкою, будь ласка, перевірте #VAR1#наші інструкції по встановленню#VAR2# або зв\'яжіться з нами через #VAR3#наш форум підтримки#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">Ви вже оновили каталоги Admidio новою версією. Наразі базу даних необхідно оновити з поточної версії #VAR2#до версії #VAR1#, щоб Admidio міг працювати з новою версією.\n\nЯкщо у вас виникли питання або проблеми з оновленням, будь ласка, перевірте #VAR3#наша інструкція по оновленню#VAR4# або зв\'яжіться з нами через #VAR5#наш форум підтримки#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# вимагає щонайменше MySQL версія #VAR2#. Будь ласка, спробуйте оновити базу даних MySQL або скористайтеся #VAR3#старішою версією Admidio#VAR4# з метою забезпечення взаємосумісності.</string>
-  <string name="INS_XING">Xing</string>
+  <string name="SYS_XING">Xing</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Бажаєте встановити посилання на свій профіль на Xing? Потрібно ввести своє ім\'я для входу в Xing. Увійдіть у свій обліковий запис Xing і відобразіть свій профіль. Скопіюйте URL-адресу в цьому полі і збережіть свій профіль тут. Відвідувачі вашого профілю тепер можуть відкрити ваш профіль Xing безпосередньо.</string>
   <string name="INS_BOYFRIEND">Друг</string>
   <string name="INS_BROTHER">Брат</string>

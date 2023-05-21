@@ -145,12 +145,9 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Group of system administrators</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Enter database access information</string>
   <string name="INS_ERROR_OPEN_FILE">File #VAR1_BOLD# could not be opened.</string>
-  <string name="INS_FACEBOOK">Facebook</string>
   <string name="INS_FOLDER_NOT_WRITABLE">The folder #VAR1_BOLD# has no write permissions. Without write permissions, no files or photos can be uploaded by users.</string>
   <string name="INS_GROUPS">Groups</string>
   <string name="INS_HOST_INVALID">Hostname is not valid. Enter a valid host name or IP address.</string>
-  <string name="INS_ICQ">ICQ</string>
-  <string name="INS_ICQ_DESC">Enter your ICQ number here. If your status can be shown on the web (enabled in Skype), it will be displayed in your profile.</string>
   <string name="INS_INSTALL_ADMIDIO">Install Admidio</string>
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">The database already contains an Admidio installation. An additional installation is not possible.</string>
@@ -160,7 +157,6 @@
   <string name="INS_INTERN">Internal</string>
   <string name="INS_LANGUAGE_NOT_CHOSEN">No language has been selected.</string>
   <string name="INS_MEMBERSHIP">Membership</string>
-  <string name="INS_MESSENGER">Messenger</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Could not find the current installation. If you\'ve used Admidio 1.x update to Admidio 2.x first. Afterwards you can update the version to #VAR1#. If you are already using Admidio 2.x or higher please check the consistency of your database.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Organization #VAR1_BOLD# already exists. Please select another name.</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Provided organization name is not complete!</string>
@@ -169,14 +165,11 @@
   <string name="INS_SET_ORGANIZATION">Define organization</string>
   <string name="INS_SET_UP_ORGANIZATION">Setting up organization</string>
   <string name="INS_SETUP_WAS_SUCCESSFUL">Set up successful</string>
-  <string name="INS_SKYPE">Skype</string>
-  <string name="INS_SKYPE_DESC">Enter your exact Skype name here. If your status can be shown on the web (enabled in ICQ), it will be displayed in your profile.</string>
   <string name="INS_SUPPORT_FURTHER_DEVELOPMENT">We would appreciate a lot if you could support the development of Admidio with your donation!</string>
   <string name="INS_TABLE_PREFIX">Table prefix</string>
   <string name="INS_TABLE_PREFIX_INVALID">Table prefix includes invalid character!</string>
   <string name="INS_TEAMS">Teams</string>
   <string name="INS_TRAINING">Training</string>
-  <string name="INS_TWITTER">Twitter</string>
   <string name="INS_UPDATE">Update</string>
   <string name="INS_UPDATE_DATABASE">Update database</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Updating the database is currently not possible!</string>
@@ -189,7 +182,6 @@
   <string name="INS_WELCOME_TEXT">This assistant helps you to set up the Admidio member management. All necessary data will be requested so that the system can be fully set up and you can log in as an administrator.\n\nIf you have questions or problems with the installation, please check #VAR1#our installation instructions#VAR2# or contact us at #VAR3#our support forum#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">You have already updated the directories of Admidio with a new version. Now the database has to be updated from the current version #VAR2# to the version #VAR1#, so that Admidio can run with the new version.\n\nIf you have questions or problems with the update, please check #VAR3#our update instruction#VAR4# or contact #VAR5#our support forum#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requires at least MySQL version #VAR2#. Please try to update your MySQL database or use an #VAR3#older Admidio version#VAR4# in order to ensure compatibility.</string>
-  <string name="INS_XING">Xing</string>
   <string name="INS_BOYFRIEND">Friend</string>
   <string name="INS_BROTHER">Brother</string>
   <string name="INS_CHILD">Child</string>
@@ -821,6 +813,7 @@
   <string name="SYS_EXPORT_LISTS">Export lists</string>
   <string name="SYS_EXPORT_LISTS_DESC">Lists of groups and roles can be exported by users, provided that you have the right to view these lists. This setting can be used to restrict the export function. (Default: All)</string>
   <string name="SYS_EXPORT_TO">Export to</string>
+  <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FADE_IN">Fade in</string>
   <string name="SYS_FAX">Fax</string>
   <string name="SYS_FEMALE">Female</string>
@@ -903,6 +896,7 @@
   <string name="SYS_HTML_TABLE">HTML table</string>
   <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icon</string>
+  <string name="SYS_ICQ">ICQ</string>
   <string name="SYS_IDENTIFY_USERS">Identification of existing users is made by means of first name and surname.</string>
   <string name="SYS_IMPORTANT">Important</string>
   <string name="SYS_IMPORT">Import</string>
@@ -1334,6 +1328,7 @@
   <string name="SYS_SINCE">since #VAR1#</string>
   <string name="SYS_SINCE_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_SIZE">Size</string>
+  <string name="SYS_SKYPE">Skype</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP authentication</string>
   <string name="SYS_SMTP_AUTH_DESC">If the SMTP server requires authentication, the username and password fields are also required. (Default: Yes)</string>
@@ -1355,8 +1350,9 @@
   <string name="SYS_SMTP_SECURE_TLS">TLS</string>
   <string name="SYS_SMTP_USER">SMTP username</string>
   <string name="SYS_SMTP_USER_DESC">The username that is used in the SMTP authentication.</string>
-  <string name="SYS_SOCIAL_NETWORKS">Social media</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Would you like to set a link to your #VAR1# profile? Your #VAR1# login name is required. Log in to your #VAR1# account and go to your profile. Now copy the URL in this field and save your profile here. Visitors of your profile are now able to open your #VAR1# profile directly.</string>
+  <string name="SYS_SOCIAL_NETWORKS">Social networks</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Here you can enter your username that you use in this social network. Other members will then be able to find you in this network.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_URL_DESC">Would you like to set a link to your #VAR1# profile? Your #VAR1# login name is required. Log in to your #VAR1# account and go to your profile. Now copy the URL in this field and save your profile here. Visitors of your profile are now able to open your #VAR1# profile directly.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
   <string name="SYS_START_BACKUP">Start backup process</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
@@ -1393,6 +1389,7 @@
   <string name="SYS_TO" description="E-Mail">To</string>
   <string name="SYS_TOTAL">Total</string>
   <string name="SYS_TUESDAY">Tuesday</string>
+  <string name="SYS_TWITTER">Twitter</string>
   <string name="SYS_TYPE">Type</string>
   <string name="SYS_UNIQUE_ID">Unique ID</string>
   <string name="SYS_UNIX">UNIX</string>
@@ -1464,6 +1461,7 @@
   <string name="SYS_WRITE_EMAIL">Write e-mail</string>
   <string name="SYS_WRITE_ENTRY">Write entry</string>
   <string name="SYS_WRITE_PM">Write private message</string>
+  <string name="SYS_XING">Xing</string>
   <string name="SYS_YES">Yes</string>
   <string name="SYS_YOUR_CONFIGURATION">Your configuration</string>
   <string name="SYS_YOUR_EMAIL">Your e-mail</string>

@@ -156,7 +156,7 @@
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Grupo de administradores do sistema </string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Insira as informações de acesso ao banco de dados</string>
   <string name="INS_ERROR_OPEN_FILE">O arquivo #VAR1_BOLD# não pôde ser aberto.</string>
-  <string name="INS_FACEBOOK">Facebook</string>
+  <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Gostaria de adicionar um link para o teu perfil do Facebook? Teu nome de usuário é necessário. Inicie a sessão no Facebook e abra o teu perfil. Copie a URL para este campo e guarde teu perfil aqui. Visitantes do teu perfil poderão exibi-lo diretamente.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">A pasta #VAR1_BOLD# não possui permissão de escrita. Conceda permissão de escrita para carregar fotos e arquivos para o módulo de download.</string>
   <string name="INS_GROUPS">Grupos</string>
@@ -181,14 +181,14 @@
   <string name="INS_SET_ORGANIZATION">Definir organização</string>
   <string name="INS_SET_UP_ORGANIZATION">A configurar organização</string>
   <string name="INS_SETUP_WAS_SUCCESSFUL">Configuração completa</string>
-  <string name="INS_SKYPE">Skype</string>
-  <string name="INS_SKYPE_DESC">Insira teu nome de Skype aqui. Se teu status puder ser exibido na web (ativado no ICQ), ele será exibido no teu perfil.</string>
+  <string name="SYS_SKYPE">Skype</string>
+  <string name="SYS_SKYPE_DESC">Insira teu nome de Skype aqui. Se teu status puder ser exibido na web (ativado no ICQ), ele será exibido no teu perfil.</string>
   <string name="INS_SUPPORT_FURTHER_DEVELOPMENT">Apreciaríamos bastante se pudesses ajudar o desenvolvimento do Admidio com uma doação.</string>
   <string name="INS_TABLE_PREFIX">Prefixo de tabela</string>
   <string name="INS_TABLE_PREFIX_INVALID">Prefixo de tabela contém caracteres inválidos!</string>
   <string name="INS_TEAMS">Equipes</string>
   <string name="INS_TRAINING">Treinamento</string>
-  <string name="INS_TWITTER">Twitter</string>
+  <string name="SYS_TWITTER">Twitter</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Gostaria de adicionar um link para o teu perfil do Twitter? Teu nome de usuário é necessário. Inicie a sessão no Twitter e abra o teu perfil. Copie a URL para este campo e guarde teu perfil aqui. Visitantes do teu perfil poderão exibi-lo diretamente.</string>
   <string name="INS_UPDATE">Atualizar</string>
   <string name="INS_UPDATE_DATABASE">Atualizar banco de dados</string>
@@ -202,7 +202,7 @@
   <string name="INS_WELCOME_TEXT">Este assistente lhe ajudará a configurar o gerenciamento de membros do Admidio. Todos os dados necessários serão pedidos, para que o sistema seja completamente configurado e seja possível iniciar sessão como administrador.\n\nEm caso de dúvidas ou problemas com a instalação, por favor confira #VAR1#nossas instruções de instalação#VAR2# ou entre em contato conosco em #VAR3#nosso fórum#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">As pastas do Admidio já estão atualizadas. Agora o banco de dados precisa ser atualizado da versão atual #VAR2# para a versão #VAR1#, assim Admidio poderá funcionar com a nova versão.\n\nEm caso de dúvidas ou problemas com a atualização, por favor confira #VAR3#nossas instruções de atualização#VAR4# ou entre em contato conosco em #VAR5#nosso fórum#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requer o MySQL versão #VAR2# ou superior. Por favor, atualize o banco de dados do MySQL ou utilize uma #VAR3# versão mais antiga do Admidio #VAR4# para garantir compatibilidade.</string>
-  <string name="INS_XING">Xing</string>
+  <string name="SYS_XING">Xing</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Gostaria de adicionar um link para o teu perfil do Xing? Teu nome de usuário é necessário. Inicie a sessão no Xing e abra o teu perfil. Copie a URL para este campo e guarde teu perfil aqui. Visitantes do teu perfil poderão exibi-lo diretamente.</string>
   <string name="INS_BOYFRIEND">Amigo</string>
   <string name="INS_BROTHER">Irmão</string>

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
     <step id="10">ComponentUpdateSteps::updateStep43AddProfileFieldLinkedIn</step>
+    <step id="20">UPDATE %PREFIX%_user_fields SET usf_description = 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC' WHERE usf_description IN ('INS_FACEBOOK_DESC', 'INS_TWITTER_DESC', 'INS_XING_DESC')</step>
+    <step id="25">UPDATE %PREFIX%_user_fields SET usf_description = 'SYS_SOCIAL_NETWORK_FIELD_DESC' WHERE usf_description IN ('INS_SKYPE_DESC', 'INS_ICQ_DESC')</step>
+    <step id="30">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_FACEBOOK' WHERE usf_name LIKE 'INS_FACEBOOK'</step>
+    <step id="40">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_SKYPE' WHERE usf_name LIKE 'INS_SKYPE'</step>
+    <step id="50">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_TWITTER' WHERE usf_name LIKE 'INS_TWITTER'</step>
+    <step id="60">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_XING' WHERE usf_name LIKE 'INS_XING'</step>
+    <step id="70">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_ICQ' WHERE usf_name LIKE 'INS_ICQ'</step>
     <step>stop</step>
 </update>
