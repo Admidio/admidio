@@ -157,7 +157,7 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Insira as informações de acesso à base de dados</string>
   <string name="INS_ERROR_OPEN_FILE">O ficheiro #VAR1_BOLD# não pôde ser aberto.</string>
   <string name="INS_FACEBOOK">Facebook</string>
-  <string name="INS_FACEBOOK_DESC">Gostaria de adicionar um link para o teu perfil do Facebook? Teu nome de usuário é necessário. Inicie a sessão no Facebook e abra o teu perfil. Copie a URL para este campo e guarde teu perfil aqui. Visitantes do teu perfil poderão exibi-lo diretamente.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Gostaria de adicionar um link para o teu perfil do Facebook? Teu nome de usuário é necessário. Inicie a sessão no Facebook e abra o teu perfil. Copie a URL para este campo e guarde teu perfil aqui. Visitantes do teu perfil poderão exibi-lo diretamente.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">O diretório #VAR1_BOLD# não possui permissão de escrita. Conceda permissão de escrita para carregar fotos e ficheiros para o módulo de transferência.</string>
   <string name="INS_GROUPS">Grupos</string>
   <string name="INS_HOST_INVALID">O servidor não é válido. Insira um nome ou endereço IP válido.</string>
@@ -189,7 +189,7 @@
   <string name="INS_TEAMS">Equipes</string>
   <string name="INS_TRAINING">Treinamento</string>
   <string name="INS_TWITTER">Twitter</string>
-  <string name="INS_TWITTER_DESC">Gostaria de adicionar um link para o teu perfil do Twitter? Teu nome de usuário é necessário. Inicie a sessão no Twitter e abra o teu perfil. Copie a URL para este campo e guarde teu perfil aqui. Visitantes do teu perfil poderão exibi-lo diretamente.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Gostaria de adicionar um link para o teu perfil do Twitter? Teu nome de usuário é necessário. Inicie a sessão no Twitter e abra o teu perfil. Copie a URL para este campo e guarde teu perfil aqui. Visitantes do teu perfil poderão exibi-lo diretamente.</string>
   <string name="INS_UPDATE">Atualizar</string>
   <string name="INS_UPDATE_DATABASE">Atualizar base de dados</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Não é possível atualizares a base de dados agora!</string>
@@ -203,7 +203,7 @@
   <string name="INS_WELCOME_TEXT_UPDATE">Os diretórios do Admidio já estão atualizados. Agora a base de dados precisa ser atualizada da versão atual #VAR2# para a versão #VAR1#, assim Admidio poderá funcionar com a nova versão.\n\nEm caso de dúvidas ou problemas com a atualização, por favor confira #VAR3#nossas instruções de atualização#VAR4# ou entre em contato conosco em #VAR5#nosso fórum#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requer o MySQL versão #VAR2# ou superior. Por favor, atualize tua base de dados do MySQL ou utilize uma #VAR3# versão mais antiga do Admidio #VAR4# para garantir compatibilidade.</string>
   <string name="INS_XING">Xing</string>
-  <string name="INS_XING_DESC">Gostaria de adicionar um link para o teu perfil do Xing? Teu nome de usuário é necessário. Inicie a sessão no Xing e abra o teu perfil. Copie a URL para este campo e guarde teu perfil aqui. Visitantes do teu perfil poderão exibi-lo diretamente.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Gostaria de adicionar um link para o teu perfil do Xing? Teu nome de usuário é necessário. Inicie a sessão no Xing e abra o teu perfil. Copie a URL para este campo e guarde teu perfil aqui. Visitantes do teu perfil poderão exibi-lo diretamente.</string>
   <string name="INS_BOYFRIEND">Amigo</string>
   <string name="INS_BROTHER">Irmão</string>
   <string name="INS_CHILD">Criança</string>

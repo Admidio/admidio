@@ -146,7 +146,6 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Enter database access information</string>
   <string name="INS_ERROR_OPEN_FILE">File #VAR1_BOLD# could not be opened.</string>
   <string name="INS_FACEBOOK">Facebook</string>
-  <string name="INS_FACEBOOK_DESC">Would you like to set a link to your Facebook profile? Your Facebook login name is required. Log in to your Facebook account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Facebook profile directly.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">The folder #VAR1_BOLD# has no write permissions. Without write permissions, no files or photos can be uploaded by users.</string>
   <string name="INS_GROUPS">Groups</string>
   <string name="INS_HOST_INVALID">Hostname is not valid. Enter a valid host name or IP address.</string>
@@ -178,7 +177,6 @@
   <string name="INS_TEAMS">Teams</string>
   <string name="INS_TRAINING">Training</string>
   <string name="INS_TWITTER">Twitter</string>
-  <string name="INS_TWITTER_DESC">Would you like to set a link to your Twitter profile? Your Twitter login name is required. Log in to your Twitter account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Twitter profile directly.</string>
   <string name="INS_UPDATE">Update</string>
   <string name="INS_UPDATE_DATABASE">Update database</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Updating the database is currently not possible!</string>
@@ -192,7 +190,6 @@
   <string name="INS_WELCOME_TEXT_UPDATE">You have already updated the directories of Admidio with a new version. Now the database has to be updated from the current version #VAR2# to the version #VAR1#, so that Admidio can run with the new version.\n\nIf you have questions or problems with the update, please check #VAR3#our update instruction#VAR4# or contact #VAR5#our support forum#VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requires at least MySQL version #VAR2#. Please try to update your MySQL database or use an #VAR3#older Admidio version#VAR4# in order to ensure compatibility.</string>
   <string name="INS_XING">Xing</string>
-  <string name="INS_XING_DESC">Would you like to set a link to your Xing profile? Your Xing login name is required. Log in to your Xing account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Xing profile directly.</string>
   <string name="INS_BOYFRIEND">Friend</string>
   <string name="INS_BROTHER">Brother</string>
   <string name="INS_CHILD">Child</string>
@@ -959,7 +956,6 @@
   <string name="SYS_LINK_TARGET_DESC">Choose if selected website should be displayed in the window of Admidio or in a new window.</string>
   <string name="SYS_LINK_TO">Link to #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Would you like to set a link to your #VAR1# profile? Your #VAR1# login name is required. Log in to your #VAR1# account and go to your profile. Now copy the URL in this field and save your profile here. Visitors of your profile are now able to open your #VAR1# profile directly.</string>
   <string name="SYS_LIST">List</string>
   <string name="SYS_LOADING_CONTENT">Loading content ...</string>
   <string name="SYS_LOCATION" description="Location of a date">City</string>
@@ -1360,6 +1356,7 @@
   <string name="SYS_SMTP_USER">SMTP username</string>
   <string name="SYS_SMTP_USER_DESC">The username that is used in the SMTP authentication.</string>
   <string name="SYS_SOCIAL_NETWORKS">Social media</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Would you like to set a link to your #VAR1# profile? Your #VAR1# login name is required. Log in to your #VAR1# account and go to your profile. Now copy the URL in this field and save your profile here. Visitors of your profile are now able to open your #VAR1# profile directly.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
   <string name="SYS_START_BACKUP">Start backup process</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>

@@ -157,7 +157,7 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Ange databasåtkomstinformation</string>
   <string name="INS_ERROR_OPEN_FILE">Fil #VAR1_BOLD# kunde inte öppnas.</string>
   <string name="INS_FACEBOOK">Facebook</string>
-  <string name="INS_FACEBOOK_DESC">Vill du ställa in en länk till din Facebook-profil? Ditt Facebook-inloggningsnamn krävs. Logga in på ditt Facebook-konto och visa din profil. Kopiera URL i det här fältet och spara din profil här. Besökare av din profil kan nu öppna din Facebook-profil direkt.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Vill du ställa in en länk till din Facebook-profil? Ditt Facebook-inloggningsnamn krävs. Logga in på ditt Facebook-konto och visa din profil. Kopiera URL i det här fältet och spara din profil här. Besökare av din profil kan nu öppna din Facebook-profil direkt.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Mapp #VAR1_BOLD# är inte skrivbar. Vänligen ge skrivåtkomst för att ladda upp foton och filer för att ladda ner modulen.</string>
   <string name="INS_GROUPS">Grupper</string>
   <string name="INS_HOST_INVALID">Värdnamnet är inte giltigt. Ange ett giltigt värdnamn eller IP-adress.</string>
@@ -189,7 +189,7 @@
   <string name="INS_TEAMS">Team</string>
   <string name="INS_TRAINING">Utbildning</string>
   <string name="INS_TWITTER">Twitter</string>
-  <string name="INS_TWITTER_DESC">Vill du ställa in en länk till din Twitter-profil? Ditt inloggningsnamn på Twitter krävs. Logga in på ditt Twitter-konto och visa din profil. Kopiera URL i det här fältet och spara din profil här. Besökare av din profil kan nu öppna din Twitter-profil direkt.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Vill du ställa in en länk till din Twitter-profil? Ditt inloggningsnamn på Twitter krävs. Logga in på ditt Twitter-konto och visa din profil. Kopiera URL i det här fältet och spara din profil här. Besökare av din profil kan nu öppna din Twitter-profil direkt.</string>
   <string name="INS_UPDATE">Uppdatera</string>
   <string name="INS_UPDATE_DATABASE">Uppdatera databas</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Det är för närvarande inte möjligt att uppdatera databasen!</string>
@@ -203,7 +203,7 @@
   <string name="INS_WELCOME_TEXT_UPDATE">Du har redan uppdaterat Admidios kataloger med en ny version. Nu måste databasen uppdateras från den aktuella versionen #VAR2# till versionen #VAR1#, så Admidio kan köras med den nya versionen. \n\nOm du har frågor eller problem med uppdateringen, vänligen kontrollera #VAR3# vår uppdatera instruktionen #VAR4# eller kontakta # VAR5 # vårt supportforum # VAR6 #.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# kräver minst MySQL-version #VAR2#. Försök att uppdatera din MySQL-databas eller använd en #VAR3# äldre Admidio-version #VAR4# för att säkerställa kompatibilitet.</string>
   <string name="INS_XING">Xing</string>
-  <string name="INS_XING_DESC">Vill du ställa in en länk till din Xing-profil? Ditt inloggningsnamn för Xing krävs. Logga in på ditt Xing-konto och visa din profil. Kopiera URL i det här fältet och spara din profil här. Besökare av din profil kan nu öppna din Xing-profil direkt.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Vill du ställa in en länk till din Xing-profil? Ditt inloggningsnamn för Xing krävs. Logga in på ditt Xing-konto och visa din profil. Kopiera URL i det här fältet och spara din profil här. Besökare av din profil kan nu öppna din Xing-profil direkt.</string>
   <string name="INS_BOYFRIEND">Vän</string>
   <string name="INS_BROTHER">Syskon</string>
   <string name="INS_CHILD">Barn</string>

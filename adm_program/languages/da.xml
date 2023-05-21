@@ -156,7 +156,7 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Indtast database adgangs information</string>
   <string name="INS_ERROR_OPEN_FILE">Filen #VAR1_BOLD# kunne ikke åbnes.</string>
   <string name="INS_FACEBOOK">Facebook</string>
-  <string name="INS_FACEBOOK_DESC">Kunne du tænke dig at linke til din Facebook profil? Dit Facebook login navn er påkrævet. Log ind i din Facebook konto og vis din profil. Kopier Facebook URL\'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Facebook profil.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Kunne du tænke dig at linke til din Facebook profil? Dit Facebook login navn er påkrævet. Log ind i din Facebook konto og vis din profil. Kopier Facebook URL\'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Facebook profil.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Folderen #VAR1_BOLD# er ikke skrivbar. Venligst sæt skrive rettigheder for at kunne overføre billeder og filer til fil modulet.</string>
   <string name="INS_GROUPS">Grupper</string>
   <string name="INS_HOST_INVALID">Hostnavnet er ikke gyldigt. Indtast et gyldigt hostnavn eller IP adresse.</string>
@@ -188,7 +188,7 @@
   <string name="INS_TEAMS">Teams</string>
   <string name="INS_TRAINING">Træning</string>
   <string name="INS_TWITTER">Twitter</string>
-  <string name="INS_TWITTER_DESC">Kunne du tænke dig at linke til din Twitter profil? For at gøre dette har du brug for dit Twitter login navn. Log ind i din Twitter konto og vis din profil. Kopier Twitter URL\'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Twitter profil.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Kunne du tænke dig at linke til din Twitter profil? For at gøre dette har du brug for dit Twitter login navn. Log ind i din Twitter konto og vis din profil. Kopier Twitter URL\'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Twitter profil.</string>
   <string name="INS_UPDATE">Opdater</string>
   <string name="INS_UPDATE_DATABASE">Opdater database</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Opdatering af databasen er ikke mulig lige nu!</string>
@@ -202,7 +202,7 @@
   <string name="INS_WELCOME_TEXT_UPDATE">Du har allerede opdateret Admidios kataloger med en ny version. Nu skal databasen opdateres fra den aktuelle version #VAR2# til versionen #VAR1#, så Admidio kan køre med den nye version.\n\nHvis du har spørgsmål eller problemer med opdateringen, skal du kontrollere #VAR3# vores opdater instruktion #VAR4# eller kontakt #VAR5# vores supportforum #VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# kræver mindst MySQL version #VAR2#. Venligst opdater din MySQL database eller brug en #VAR3#ældre Admidio version#VAR4# for at sikre kompatabilitet.</string>
   <string name="INS_XING">Xing</string>
-  <string name="INS_XING_DESC">Kunne du tænke dig at linke til din Xing profil? For at gøre dette har du brug for dit Xing login navn. Log ind i din Xing konto og vis din profil. Kopier Xing URL\'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Xing profil.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Kunne du tænke dig at linke til din Xing profil? For at gøre dette har du brug for dit Xing login navn. Log ind i din Xing konto og vis din profil. Kopier Xing URL\'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Xing profil.</string>
   <string name="INS_BOYFRIEND">Ven</string>
   <string name="INS_BROTHER">Bror</string>
   <string name="INS_CHILD">Barn</string>

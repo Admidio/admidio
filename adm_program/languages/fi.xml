@@ -157,7 +157,7 @@
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Anna tietokannan käyttötiedot</string>
   <string name="INS_ERROR_OPEN_FILE">Tiedostoa #VAR1_BOLD# ei voitu avata.</string>
   <string name="INS_FACEBOOK">Facebook</string>
-  <string name="INS_FACEBOOK_DESC">Haluatko asettaa linkin Facebook -profiiliisi? Facebook -kirjautumisnimesi on pakollinen. Kirjaudu Facebook -tiliisi ja näytä profiilisi. Kopioi URL -osoite tähän kenttään ja tallenna profiilisi tähän. Profiilisi vierailijat voivat nyt avata Facebook -profiilisi suoraan.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Haluatko asettaa linkin Facebook -profiiliisi? Facebook -kirjautumisnimesi on pakollinen. Kirjaudu Facebook -tiliisi ja näytä profiilisi. Kopioi URL -osoite tähän kenttään ja tallenna profiilisi tähän. Profiilisi vierailijat voivat nyt avata Facebook -profiilisi suoraan.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Kansiolla #VAR1_BOLD# ei ole kirjoitusoikeuksia. Ilman kirjoitusoikeuksia käyttäjät eivät voi ladata tiedostoja tai valokuvia.</string>
   <string name="INS_GROUPS">Ryhmät</string>
   <string name="INS_HOST_INVALID">Isäntänimi ei kelpaa. Anna kelvollinen isäntänimi tai IP -osoite.</string>
@@ -189,7 +189,7 @@
   <string name="INS_TEAMS">Joukkueet</string>
   <string name="INS_TRAINING">Koulutus</string>
   <string name="INS_TWITTER">Twitter</string>
-  <string name="INS_TWITTER_DESC">Haluatko asettaa linkin Twitter -profiiliisi? Twitter -kirjautumisnimesi on pakollinen. Kirjaudu Twitter -tiliisi ja näytä profiilisi. Kopioi URL -osoite tähän kenttään ja tallenna profiilisi tähän. Profiilisi vierailijat voivat nyt avata Twitter -profiilisi suoraan.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Haluatko asettaa linkin Twitter -profiiliisi? Twitter -kirjautumisnimesi on pakollinen. Kirjaudu Twitter -tiliisi ja näytä profiilisi. Kopioi URL -osoite tähän kenttään ja tallenna profiilisi tähän. Profiilisi vierailijat voivat nyt avata Twitter -profiilisi suoraan.</string>
   <string name="INS_UPDATE">Päivitä</string>
   <string name="INS_UPDATE_DATABASE">Päivitä tietokanta</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Tietokannan päivittäminen ei ole tällä hetkellä mahdollista!</string>
@@ -203,7 +203,7 @@
   <string name="INS_WELCOME_TEXT_UPDATE">Olet jo päivittänyt Admidion hakemistot uudella versiolla. Nyt tietokanta on päivitettävä nykyisestä versiosta #VAR2# versioon #VAR1#, jotta Admidio voi käyttää uutta versiota. \n\nJos sinulla on kysymyksiä tai ongelmia päivityksen kanssa, tarkista #VAR3# meidän päivitysohje #VAR4# tai ota yhteyttä #VAR5# tukifoorumiimme #VAR6#.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# vaatii vähintään MySQL -version #VAR2#. Yritä päivittää MySQL -tietokanta tai käytä #VAR3# vanhempaa Admidio -versiota #VAR4# varmistaaksesi yhteensopivuuden.</string>
   <string name="INS_XING">Xing</string>
-  <string name="INS_XING_DESC">Haluatko asettaa linkin Xing -profiiliisi? Xing -kirjautumisnimesi on pakollinen. Kirjaudu Xing -tiliisi ja näytä profiilisi. Kopioi URL -osoite tähän kenttään ja tallenna profiilisi tähän. Profiilisi vierailijat voivat nyt avata Xing -profiilisi suoraan.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Haluatko asettaa linkin Xing -profiiliisi? Xing -kirjautumisnimesi on pakollinen. Kirjaudu Xing -tiliisi ja näytä profiilisi. Kopioi URL -osoite tähän kenttään ja tallenna profiilisi tähän. Profiilisi vierailijat voivat nyt avata Xing -profiilisi suoraan.</string>
   <string name="INS_BOYFRIEND">Ystävä</string>
   <string name="INS_BROTHER">Veli</string>
   <string name="INS_CHILD">Lapsi</string>
