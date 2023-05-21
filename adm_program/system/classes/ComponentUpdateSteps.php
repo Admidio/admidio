@@ -26,6 +26,29 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method will add a new profile field LinkedIn to the database,
+     * but only if the category social networks exists
+     */
+    public static function updateStep43AddProfileFieldLinkedIn()
+    {
+        $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_name_intern = \'SOCIAL_NETWORKS\' ';
+        $categoriesStatement = self::$db->queryPrepared($sql);
+
+        if ($row = $categoriesStatement->fetch()) {
+            $profileField = new TableUserField(self::$db);
+            $profileField->saveChangesWithoutRights();
+            $profileField->setValue('usf_cat_id', $row['cat_id']);
+            $profileField->setValue('usf_type', 'TEXT');
+            $profileField->setValue('usf_name_intern', 'LINKEDIN');
+            $profileField->setValue('usf_name', 'SYS_LINKEDIN');
+            $profileField->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_DESC');
+            $profileField->setValue('usf_icon', 'fab fa-linkedin');
+            $profileField->setValue('usf_url', 'https://www.linkedin.com/in/#user_content#');
+            $profileField->save();
+        }
+    }
+
+    /**
      * This method only execute an sql statement but because of the use of & it could not done in our XML structure
      */
     public static function updateStep41CleanUpRoleNames()

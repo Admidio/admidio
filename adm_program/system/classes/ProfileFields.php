@@ -709,6 +709,30 @@ class ProfileFields
                     break;
             }
 
+            // if profile field has an url with a placeholder #user_content# and the current value is also an url than
+            // we expect a profile url of a social network an scan for the profile name
+            if(strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '#user_content#') !== false) {
+                if (StringUtils::strValidCharacters($fieldValue, 'url') && str_contains($fieldValue, '/')) {
+                    if (strrpos($fieldValue, '/profile.php?id=') > 0) {
+                        // extract facebook id (not facebook unique name) from url
+                        $fieldValue = substr($fieldValue, strrpos($fieldValue, '/profile.php?id=') + 16);
+                    } else {
+                        if (strrpos($fieldValue, '/posts') > 0) {
+                            $fieldValue = substr($fieldValue, 0, strrpos($fieldValue, '/posts'));
+                        }
+                        // xing has the suffix /cv in the url
+                        if (strrpos($fieldValue, '/cv') > 0) {
+                            $fieldValue = substr($fieldValue, 0, strrpos($fieldValue, '/cv'));
+                        }
+
+                        $fieldValue = substr(rtrim($fieldValue, '/'), strrpos(rtrim($fieldValue, '/'), '/') + 1);
+                        if (strrpos($fieldValue, '?') > 0) {
+                            $fieldValue = substr($fieldValue, 0, strrpos($fieldValue, '?'));
+                        }
+                    }
+                }
+            }
+
             if($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex') !== ''
             && preg_match($this->mProfileFields[$fieldNameIntern]->getValue('usf_regex'), $fieldValue) === 0) {
                 throw new AdmException($gL10n->get('SYS_FIELD_INVALID_REGEX', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'))));

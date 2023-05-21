@@ -958,6 +958,8 @@
   <string name="SYS_LINK_TARGET">Link target</string>
   <string name="SYS_LINK_TARGET_DESC">Choose if selected website should be displayed in the window of Admidio or in a new window.</string>
   <string name="SYS_LINK_TO">Link to #VAR1#</string>
+  <string name="SYS_LINKEDIN">LinkedIn</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Would you like to set a link to your #VAR1# profile? Your #VAR1# login name is required. Log in to your #VAR1# account and go to your profile. Now copy the URL in this field and save your profile here. Visitors of your profile are now able to open your #VAR1# profile directly.</string>
   <string name="SYS_LIST">List</string>
   <string name="SYS_LOADING_CONTENT">Loading content ...</string>
   <string name="SYS_LOCATION" description="Location of a date">City</string>

@@ -244,6 +244,9 @@ foreach ($gProfileFields->getProfileFields() as $field) {
 
         if (strlen($gProfileFields->getProperty($usfNameIntern, 'usf_description')) > 0) {
             $helpId = $gProfileFields->getProperty($gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'), 'usf_description');
+            if (Language::isTranslationStringId($helpId)) {
+                $helpId = array($helpId, array($gProfileFields->getProperty($usfNameIntern, 'usf_name')));
+            }
         }
 
         if ($gProfileFields->getProperty($usfNameIntern, 'usf_description_inline')) {
