@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES">Wszystkie wpisy</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE">Ogłoszenia</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_NO_ENTRIES_VISITORS">Brak ogłoszeń dostępnych dla gości. Zaloguj się aby zobaczyć ogłoszenia.</string>
+</resources>
