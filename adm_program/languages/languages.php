@@ -74,6 +74,11 @@ $gSupportedLanguages = array(
         'isocode' => 'nb',
         'libs'    => 'nb'
     ),
+    'pl'    => array(
+        'name'    => 'Polish - Polski',
+        'isocode' => 'pl',
+        'libs'    => 'pl'
+    ),
     'pt'    => array(
         'name'    => 'Portuguese - Português',
         'isocode' => 'pt',
