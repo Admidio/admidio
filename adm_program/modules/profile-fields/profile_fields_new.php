@@ -135,7 +135,7 @@ if ($userField->getValue('usf_system') == 1) {
     );
 }
 $form->closeGroupBox();
-$form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
+$form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION') . ' & ' . $gL10n->get('SYS_PERMISSIONS'));
 $userFieldText = array(
     'CHECKBOX'     => $gL10n->get('SYS_CHECKBOX'),
     'DATE'         => $gL10n->get('SYS_DATE'),
@@ -175,6 +175,50 @@ $form->addMultilineTextInput(
     6,
     array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC')
 );
+$mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES', 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE', 3 => 'SYS_NOT_AT_REGISTRATION');
+if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
+    $form->addInput(
+        'usf_required_input',
+        $gL10n->get('SYS_REQUIRED_INPUT'),
+        $gL10n->get($mandatoryFieldValues[$userField->getValue('usf_required_input')]),
+        array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+    );
+} else {
+    $form->addSelectBox(
+        'usf_required_input',
+        $gL10n->get('SYS_REQUIRED_INPUT'),
+        $mandatoryFieldValues,
+        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_required_input'))
+    );
+}
+$form->addCheckbox(
+    'usf_hidden',
+    $gL10n->get('ORG_FIELD_NOT_HIDDEN'),
+    (bool) $userField->getValue('usf_hidden'),
+    array('helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'fa-eye')
+);
+$form->addCheckbox(
+    'usf_disabled',
+    $gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))),
+    (bool) $userField->getValue('usf_disabled'),
+    array('helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'fa-key')
+);
+
+if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNameIntern === 'EMAIL') {
+    $form->addCheckbox(
+        'usf_registration',
+        $gL10n->get('ORG_FIELD_REGISTRATION'),
+        (bool) $userField->getValue('usf_registration'),
+        array('property' => HtmlForm::FIELD_DISABLED, 'icon' => 'fa-address-card')
+    );
+} else {
+    $form->addCheckbox(
+        'usf_registration',
+        $gL10n->get('ORG_FIELD_REGISTRATION'),
+        (bool) $userField->getValue('usf_registration'),
+        array('icon' => 'fa-address-card')
+    );
+}
 $form->addInput(
     'usf_icon',
     $gL10n->get('SYS_ICON'),
@@ -205,52 +249,7 @@ $form->addInput(
     array('helpTextIdLabel' => 'SYS_REGULAR_EXPRESSION_DESC')
 );
 $form->closeGroupBox();
-$form->openGroupBox('gb_permissions', $gL10n->get('SYS_PERMISSIONS'));
-$form->addCheckbox(
-    'usf_hidden',
-    $gL10n->get('ORG_FIELD_NOT_HIDDEN'),
-    (bool) $userField->getValue('usf_hidden'),
-    array('helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'fa-eye')
-);
-$form->addCheckbox(
-    'usf_disabled',
-    $gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('SYS_RIGHT_EDIT_USER'))),
-    (bool) $userField->getValue('usf_disabled'),
-    array('helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'fa-key')
-);
 
-if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNameIntern === 'EMAIL') {
-    $form->addCheckbox(
-        'usf_registration',
-        $gL10n->get('ORG_FIELD_REGISTRATION'),
-        (bool) $userField->getValue('usf_registration'),
-        array('property' => HtmlForm::FIELD_DISABLED, 'icon' => 'fa-address-card')
-    );
-} else {
-    $form->addCheckbox(
-        'usf_registration',
-        $gL10n->get('ORG_FIELD_REGISTRATION'),
-        (bool) $userField->getValue('usf_registration'),
-        array('icon' => 'fa-address-card')
-    );
-}
-$mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES', 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE', 3 => 'SYS_NOT_AT_REGISTRATION');
-if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
-    $form->addInput(
-        'usf_required_input',
-        $gL10n->get('SYS_REQUIRED_INPUT'),
-        $gL10n->get($mandatoryFieldValues[$userField->getValue('usf_required_input')]),
-        array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
-    );
-} else {
-    $form->addSelectBox(
-        'usf_required_input',
-        $gL10n->get('SYS_REQUIRED_INPUT'),
-        $mandatoryFieldValues,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_required_input'))
-    );
-}
-$form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
 $form->addEditor('usf_description', '', $userField->getValue('usf_description'), array('height' => '200px'));
 $form->addDescription($gL10n->get('SYS_DESCRIPTION_POPOVER_DESC'));
