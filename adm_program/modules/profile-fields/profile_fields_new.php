@@ -135,7 +135,7 @@ if ($userField->getValue('usf_system') == 1) {
     );
 }
 $form->closeGroupBox();
-$form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION') . ' & ' . $gL10n->get('SYS_PERMISSIONS'));
+$form->openGroupBox('gb_settings', $gL10n->get('SYS_SETTINGS'));
 $userFieldText = array(
     'CHECKBOX'     => $gL10n->get('SYS_CHECKBOX'),
     'DATE'         => $gL10n->get('SYS_DATE'),
@@ -220,6 +220,18 @@ if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNam
     );
 }
 $form->addInput(
+    'usf_default_value',
+    $gL10n->get('SYS_DEFAULT_VALUE'),
+    $userField->getValue('usf_default_value'),
+    array('helpTextIdLabel' => 'SYS_DEFAULT_VALUE_DESC')
+);
+$form->addInput(
+    'usf_regex',
+    $gL10n->get('SYS_REGULAR_EXPRESSION'),
+    $userField->getValue('usf_regex'),
+    array('helpTextIdLabel' => 'SYS_REGULAR_EXPRESSION_DESC')
+);
+$form->addInput(
     'usf_icon',
     $gL10n->get('SYS_ICON'),
     $userField->getValue('usf_icon', 'database'),
@@ -235,21 +247,6 @@ $form->addInput(
     array('maxLength' => 2000, 'helpTextIdLabel' => 'ORG_FIELD_URL_DESC')
 );
 $form->closeGroupBox();
-$form->openGroupBox('gb_conditions', $gL10n->get('SYS_CONDITIONS'));
-$form->addInput(
-    'usf_default_value',
-    $gL10n->get('SYS_DEFAULT_VALUE'),
-    $userField->getValue('usf_default_value'),
-    array('helpTextIdLabel' => 'SYS_DEFAULT_VALUE_DESC')
-);
-$form->addInput(
-    'usf_regex',
-    $gL10n->get('SYS_REGULAR_EXPRESSION'),
-    $userField->getValue('usf_regex'),
-    array('helpTextIdLabel' => 'SYS_REGULAR_EXPRESSION_DESC')
-);
-$form->closeGroupBox();
-
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
 $form->addEditor('usf_description', '', $userField->getValue('usf_description'), array('height' => '200px'));
 $form->addDescription($gL10n->get('SYS_DESCRIPTION_POPOVER_DESC'));
