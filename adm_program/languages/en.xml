@@ -597,7 +597,6 @@
   <string name="SYS_COMMON">General</string>
   <string name="SYS_COMPLEMENT">Complement</string>
   <string name="SYS_CONDITION">Condition</string>
-  <string name="SYS_CONDITIONS">Conditions</string>
   <string name="SYS_CONFIGURATION">Configuration</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Permission to use configuration for all members</string>
   <string name="SYS_CONFIGURATION_DELETE">Would you like to delete selected list configuration?</string>
@@ -1150,7 +1149,6 @@
   <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST size</string>
   <string name="SYS_POSTCODE">Postal code</string>
-  <string name="SYS_PRESENTATION">Display</string>
   <string name="SYS_PRESET_CONFIGURATION">Default configuration</string>
   <string name="SYS_PRESET_CONFIGURATION_DESC">Administrators are able to define default configurations for all users. Configure columns and conditions and save them by naming the configuration set.</string>
   <string name="SYS_PREVIEW">Preview</string>
