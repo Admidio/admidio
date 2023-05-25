@@ -135,7 +135,7 @@ if ($userField->getValue('usf_system') == 1) {
     );
 }
 $form->closeGroupBox();
-$form->openGroupBox('gb_settings', $gL10n->get('SYS_SETTINGS'));
+$form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
 $userFieldText = array(
     'CHECKBOX'     => $gL10n->get('SYS_CHECKBOX'),
     'DATE'         => $gL10n->get('SYS_DATE'),
