@@ -1178,6 +1178,8 @@ final class FileSystemUtils
     }
 
     /**
+     * Method will read the content of the file that is set through the parameter and return the
+     * file content. It will check if the file exists and if it's readable for the PHP user.
      * @param string $filePath The file to read
      * @throws \UnexpectedValueException Throws if the file does not exist or is not readable
      * @throws \RuntimeException         Throws if the read process fails
@@ -1187,11 +1189,6 @@ final class FileSystemUtils
     public static function readFile($filePath)
     {
         self::checkIsInAllowedDirectories($filePath);
-
-        $parentDirectoryPath = dirname($filePath);
-        if (self::isUnix() && !is_executable($parentDirectoryPath)) {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
-        }
 
         if (!is_file($filePath)) {
             throw new \UnexpectedValueException('File "' . $filePath . '" does not exist!');
