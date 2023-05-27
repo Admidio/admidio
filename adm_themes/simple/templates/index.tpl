@@ -102,31 +102,7 @@
     <div class="container-fluid">
         <div class="row flex-xl-nowrap">
             <div class="col-12 col-md-3 col-xl-2 admidio-sidebar" id="sidebar">
-                <div class="admidio-headline-mobile-menu d-md-none p-2">
-                <span class="text-uppercase">{$l10n->get('SYS_MENU')}</span>
-                <button class="btn btn-link d-md-none collapsed float-right" type="button" data-toggle="collapse"
-                    data-target="#admidio-main-menu" aria-controls="admidio-main-menu" aria-expanded="false">
-                    <i class="fas fa-bars fa-fw"></i>
-                </button>
-                </div>
-                {* Create the sidebar menu out of the navigation menu array *}
-                <nav class="admidio-menu-list collapse" id="admidio-main-menu">
-                    {foreach $menuNavigation as $menuGroup}
-                        <div class="admidio-menu-header">{$menuGroup.name}</div>
-                        <ul class="nav admidio-menu-node flex-column mb-0">
-                            {foreach $menuGroup.items as $menuItem}
-                                <li class="nav-item">
-                                    <a id="{$menuItem.id}" class="nav-link" href="{$menuItem.url}">
-                                        <i class="{$menuItem.icon} fa-fw"></i>{$menuItem.name}
-                                        {if $menuItem.badgeCount > 0}
-                                            <span class="badge badge-light">{$menuItem.badgeCount}</span>
-                                        {/if}
-                                    </a>
-                                </li>
-                            {/foreach}
-                        </ul>
-                    {/foreach}
-                </nav>
+                {include file='sys-template-parts/menu.main.tpl'}
             </div>
 
             <div class="admidio-content-col col-12 col-md-9 col-xl-10">
@@ -150,31 +126,7 @@
                 <div id="content" class="admidio-content" role="main">
                     <div class="admidio-content-header">
                         <h1 class="admidio-module-headline">{$headline}</h1>
-                        {* Create the functions menu out of the menu array *}
-                        <ul class="nav admidio-menu-function-node">
-                            {foreach $menuFunctions as $menuItem}
-                                {if array_key_exists('items', $menuItem)}
-                                    <li class="nav-item dropdown">
-                                        <a id="{$menuItem.id}" class="nav-link btn btn-secondary dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                            <i class="{$menuItem.icon} fa-fw"></i>{$menuItem.name}
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-left">
-                                            {foreach $menuItem.items as $subItem}
-                                                <a id="{$subItem.id}" class="dropdown-item" href="{$subItem.url}">
-                                                    <i class="{$subItem.icon} fa-fw"></i>{$subItem.name}
-                                                </a>
-                                            {/foreach}
-                                        </div>
-                                    </li>
-                                {else}
-                                    <li class="nav-item">
-                                        <a id="{$menuItem.id}" class="nav-link btn btn-secondary" href="{$menuItem.url}">
-                                            <i class="{$menuItem.icon} fa-fw"></i>{$menuItem.name}
-                                        </a>
-                                    </li>
-                                {/if}
-                            {/foreach}
-                        </ul>
+                        {include file='sys-template-parts/menu.functions.tpl'}
                     </div>
 
                     {* The main content of the page that will be generated through the Admidio scripts *}
