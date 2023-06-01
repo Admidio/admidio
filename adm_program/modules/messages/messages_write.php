@@ -87,7 +87,7 @@ if ($getMsgUuid !== '') {
         $messageStatement = $message->getConversation($message->getValue('msg_id'));
     }
 
-    $getSubject = $message->getValue('msg_subject', 'database');
+    $getSubject = $message->getValue('msg_subject');
     if($gCurrentUserId !== $message->getValue('msg_usr_id_sender')) {
         $user = new User($gDb, $gProfileFields, $message->getValue('msg_usr_id_sender'));
     } else {
@@ -243,7 +243,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
         $form->addInput(
             'msg_subject',
             $gL10n->get('SYS_SUBJECT'),
-            $message->getValue('msg_subject', 'database'),
+            $message->getValue('msg_subject'),
             array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
         );
     } else {
@@ -544,7 +544,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
     $form->addInput(
         'msg_subject',
         $gL10n->get('SYS_SUBJECT'),
-        $message->getValue('msg_subject', 'database'),
+        $message->getValue('msg_subject'),
         array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 

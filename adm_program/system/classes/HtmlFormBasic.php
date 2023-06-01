@@ -177,7 +177,7 @@ class HtmlFormBasic extends HtmlElement
     {
         $this->addElement('option');
         // replace quotes with html entities to prevent xss attacks
-        $this->addAttribute('value', htmlentities($value, ENT_QUOTES));
+        $this->addAttribute('value', $value);
 
         if ($id !== null) {
             $this->addAttribute('id', $id);

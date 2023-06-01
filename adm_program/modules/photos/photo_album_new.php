@@ -113,7 +113,7 @@ $form = new HtmlForm('photo_album_edit_form', SecurityUtils::encodeUrl(ADMIDIO_U
 $form->addInput(
     'pho_name',
     $gL10n->get('PHO_ALBUM'),
-    $photoAlbum->getValue('pho_name', 'database'),
+    $photoAlbum->getValue('pho_name'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 50)
 );
 subfolder(0, '', $photoAlbum->getValue('pho_id'));
@@ -143,13 +143,13 @@ $form->addInput(
 $form->addInput(
     'pho_photographers',
     $gL10n->get('PHO_PHOTOGRAPHER'),
-    $photoAlbum->getValue('pho_photographers', 'database'),
+    $photoAlbum->getValue('pho_photographers'),
     array('maxLength' => 100)
 );
 $form->addMultilineTextInput(
     'pho_description',
     $gL10n->get('SYS_DESCRIPTION'),
-    $photoAlbum->getValue('pho_description', 'database'),
+    $photoAlbum->getValue('pho_description'),
     6,
     array('maxLength' => 4000)
 );
