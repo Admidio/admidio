@@ -221,7 +221,7 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
 $form->addInput(
     'dat_headline',
     $gL10n->get('SYS_TITLE'),
-    $date->getValue('dat_headline', 'database'),
+    $date->getValue('dat_headline'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 
@@ -230,7 +230,7 @@ if ($gSettingsManager->getBool('dates_show_map_link')) {
     $form->addInput(
         'dat_location',
         $gL10n->get('DAT_LOCATION'),
-        $date->getValue('dat_location', 'database'),
+        $date->getValue('dat_location'),
         array('maxLength' => 100, 'helpTextIdLabel' => 'DAT_LOCATION_LINK')
     );
 
@@ -247,7 +247,7 @@ if ($gSettingsManager->getBool('dates_show_map_link')) {
     $form->addInput(
         'dat_location',
         $gL10n->get('DAT_LOCATION'),
-        $date->getValue('dat_location', 'database'),
+        $date->getValue('dat_location'),
         array('maxLength' => 100)
     );
 }

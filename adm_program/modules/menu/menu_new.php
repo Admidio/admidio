@@ -135,7 +135,7 @@ subMenu($menuList, 1, (int) $menu->getValue('men_id'));
 $form->addInput(
     'men_name',
     $gL10n->get('SYS_NAME'),
-    $menu->getValue('men_name', 'database'),
+    $menu->getValue('men_name'),
     array('maxLength' => 100, 'property'=> HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_MENU_NAME_DESC')
 );
 
@@ -143,7 +143,7 @@ if ($getMenuUuid !== '') {
     $form->addInput(
         'men_name_intern',
         $gL10n->get('SYS_INTERNAL_NAME'),
-        $menu->getValue('men_name_intern', 'database'),
+        $menu->getValue('men_name_intern'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC')
     );
 }
@@ -151,7 +151,7 @@ if ($getMenuUuid !== '') {
 $form->addMultilineTextInput(
     'men_description',
     $gL10n->get('SYS_DESCRIPTION'),
-    $menu->getValue('men_description', 'database'),
+    $menu->getValue('men_description'),
     2,
     array('maxLength' => 4000)
 );
@@ -193,7 +193,7 @@ if ((bool) $menu->getValue('men_node') === false) {
     $form->addInput(
         'men_url',
         $gL10n->get('SYS_URL'),
-        $menu->getValue('men_url', 'database'),
+        $menu->getValue('men_url'),
         array('maxLength' => 2000, 'property' => $fieldRequired)
     );
 }
@@ -201,7 +201,7 @@ if ((bool) $menu->getValue('men_node') === false) {
 $form->addInput(
     'men_icon',
     $gL10n->get('SYS_ICON'),
-    $menu->getValue('men_icon', 'database'),
+    $menu->getValue('men_icon'),
     array(
         'maxLength' => 100,
         'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>')),

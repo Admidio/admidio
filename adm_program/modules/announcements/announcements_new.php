@@ -83,7 +83,7 @@ $form = new HtmlForm('announcements_edit_form', SecurityUtils::encodeUrl(ADMIDIO
 $form->addInput(
     'ann_headline',
     $gL10n->get('SYS_TITLE'),
-    $announcement->getValue('ann_headline', 'database'),
+    $announcement->getValue('ann_headline'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addSelectBoxForCategories(

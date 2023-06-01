@@ -184,7 +184,7 @@ if ($category->getValue('cat_system') == 1) {
 $form->addInput(
     'cat_name',
     $gL10n->get('SYS_NAME'),
-    $category->getValue('cat_name', 'database'),
+    $category->getValue('cat_name'),
     array('maxLength' => 100, 'property' => $fieldPropertyCatName)
 );
 
