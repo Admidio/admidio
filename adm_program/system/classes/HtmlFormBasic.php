@@ -176,8 +176,8 @@ class HtmlFormBasic extends HtmlElement
     public function addOption($value, $label, $id = null, $selected = false, $disable = false, array $arrAttributes = null)
     {
         $this->addElement('option');
-        // set attributes
-        $this->addAttribute('value', $value);
+        // replace quotes with html entities to prevent xss attacks
+        $this->addAttribute('value', htmlentities($value, ENT_QUOTES));
 
         if ($id !== null) {
             $this->addAttribute('id', $id);
