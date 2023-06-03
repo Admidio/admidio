@@ -148,10 +148,6 @@ body {
     color: #263340;
 }
 
-h6, h5 {
-    font-weight: bold;
-}
-
 a, .btn-link, .page-link, a.btn {
     color: #349aaa;
 }
@@ -571,10 +567,6 @@ input[type=time] {
 
 #plugin-login-form .btn {
     margin-bottom: 15px;
-}
-
-.admidio-plugin-content ul {
-    padding-left: 15px;
 }
 
 #plugin-latest-documents-files hr {

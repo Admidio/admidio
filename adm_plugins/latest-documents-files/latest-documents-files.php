@@ -71,7 +71,7 @@ if (Component::isVisible('DOCUMENTS-FILES')) {
     $filesStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
     if ($filesStatement->rowCount() > 0) {
-        echo '<div class="btn-group-vertical" role="group">';
+        echo '<ul class="list-group list-group-flush">';
 
         while ($rowFile = $filesStatement->fetch()) {
             $errorCode = '';
@@ -110,9 +110,10 @@ if (Component::isVisible('DOCUMENTS-FILES')) {
                     $tooltip .= '<br />'. $gL10n->get('PLG_LATEST_FILES_UPLOAD_FROM_AT', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $file->getValue('fil_timestamp')));
                 }
 
-                echo '
-                <a class="btn admidio-icon-link" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/documents-files/get_file.php', array('file_uuid' => $rowFile['fil_uuid'])). '">'.
-                    '<i class="fas ' . $file->getFontAwesomeIcon() . '"></i>' . $fileName . '.' . $file->getFileExtension() . '</a>';
+                echo '<li class="list-group-item">
+                    <a class="btn admidio-icon-link" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/documents-files/get_file.php', array('file_uuid' => $rowFile['fil_uuid'])). '">'.
+                        '<i class="fas ' . $file->getFontAwesomeIcon() . '"></i>' . $fileName . '.' . $file->getFileExtension() . '</a>
+                </li>';
 
                 if ($countVisibleDownloads === $plgCountFiles) {
                     break;
@@ -120,7 +121,12 @@ if (Component::isVisible('DOCUMENTS-FILES')) {
             }
         }
 
-        echo '</div>';
+        if ($countVisibleDownloads > 0) {
+            echo '<li class="list-group-item">
+                <a class="btn admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php"><i class="fas fa-list"></i>' . $gL10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS').'</a>
+            </li>';
+        }
+        echo '</ul>';
     }
 
     if ($countVisibleDownloads === 0) {
@@ -129,9 +135,6 @@ if (Component::isVisible('DOCUMENTS-FILES')) {
         } else {
             echo $gL10n->get('SYS_FOLDER_NO_FILES_VISITOR');
         }
-    } else {
-        echo '<hr />
-        <a class="btn admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php"><i class="fas fa-list"></i>' . $gL10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS').'</a>';
     }
     echo '</div>';
 }

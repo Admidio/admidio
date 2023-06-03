@@ -57,10 +57,6 @@ body {
     background-color: #eeeeee;
 }
 
-h6, h5 {
-    font-weight: bold;
-}
-
 a, .btn-link, .page-link, a.btn {
     color: #349aaa;
 }
