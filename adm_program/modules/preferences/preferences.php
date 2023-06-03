@@ -1407,12 +1407,6 @@ $formGroupsRoles->addCheckbox(
     (bool) $formValues['groups_roles_enable_module'],
     array('helpTextIdInline' => 'SYS_ENABLE_GROUPS_ROLES_DESC')
 );
-$formGroupsRoles->addInput(
-    'groups_roles_roles_per_page',
-    $gL10n->get('SYS_NUMBER_OF_ROLES_PER_PAGE'),
-    $formValues['groups_roles_roles_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
-);
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formGroupsRoles->addSelectBox(
     'groups_roles_members_per_page',

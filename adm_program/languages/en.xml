@@ -1090,7 +1090,6 @@
   <string name="SYS_NOTIFICATION_ROLE">Notification role</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Notifications about new entries or profile changes are sent to all members of this role.</string>
   <string name="SYS_NUMBER">Number</string>
-  <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Number of roles per page</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Number of entries displayed on a page. If there are more entries, navigation elements are displayed to scroll between the pages. (Default: #VAR1#)</string>
   <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Spreadsheet (*.ods)</string>

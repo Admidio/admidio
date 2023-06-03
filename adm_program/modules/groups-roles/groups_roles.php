@@ -533,9 +533,4 @@ if ($getShow === 'card') {
     $page->addHtml($table->show());
 }
 
-
-// If necessary show links to navigate to next and previous recordsets of the query
-$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('cat_uuid' => $getCatUuid, 'role_type' => (int) $getRoleType, 'show' => $getShow));
-$page->addHtml(admFuncGeneratePagination($baseUrl, $listsResult['totalCount'], $gSettingsManager->getInt('groups_roles_roles_per_page'), $getStart));
-
 $page->show();
