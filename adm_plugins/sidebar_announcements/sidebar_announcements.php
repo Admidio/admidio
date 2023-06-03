@@ -82,12 +82,14 @@ if ($gSettingsManager->getInt('enable_announcements_module') > 0) {
             // get announcements data
             $plgGetAnnouncements = $plgAnnouncements->getDataSet(0, $plg_announcements_count);
             $plgAnnouncement = new TableAnnouncement($gDb);
+            echo '<ul class="list-group list-group-flush">';
 
             foreach ($plgGetAnnouncements['recordset'] as $plgRow) {
                 $plgAnnouncement->clear();
                 $plgAnnouncement->setArray($plgRow);
 
-                echo '<h5><a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php',
+                echo '<li class="list-group-item">
+                    <h5><a href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php',
                         array('ann_uuid' => $plgAnnouncement->getValue('ann_uuid'), 'headline' => $plg_headline)
                     ). '" target="'. $plg_link_target. '">';
 
@@ -131,10 +133,12 @@ if ($gSettingsManager->getInt('enable_announcements_module') > 0) {
 
                 echo '
                 <div><em>('. $plgAnnouncement->getValue('ann_timestamp_create', $gSettingsManager->getString('system_date')). ')</em></div>
-                <hr />';
+                </li>';
             }
 
-            echo '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $plg_headline)).'" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES').'</a>';
+            echo '<li class="list-group-item">
+                <a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $plg_headline)).'" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES').'</a>
+            </li></ul>';
         } else {
             echo $gL10n->get('SYS_NO_ENTRIES');
         }

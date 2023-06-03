@@ -83,12 +83,15 @@ if ($gSettingsManager->getInt('enable_dates_module') > 0) {
     if ($gSettingsManager->getInt('enable_dates_module') === 1
     || ($gSettingsManager->getInt('enable_dates_module') === 2 && $gValidLogin)) {
         if ($plgDatesResult['numResults'] > 0) {
+            echo '<ul class="list-group list-group-flush">';
+
             foreach ($plgDatesResult['recordset'] as $plgRow) {
                 $plgDate->clear();
                 $plgDate->setArray($plgRow);
                 $plgHtmlEndDate = '';
 
-                echo '<h5>'.$plgDate->getDateTimePeriod($plg_show_date_end);
+                echo '<li class="list-group-item">
+                    <h5>'.$plgDate->getDateTimePeriod($plg_show_date_end);
 
                 // create a link to date module
                 echo '<br /><a href="'. SecurityUtils::encodeUrl($plg_link_url,
@@ -133,11 +136,13 @@ if ($gSettingsManager->getInt('enable_dates_module') > 0) {
                     echo '<div>'.$textPrev.'</div>';
                 }
 
-                echo '<hr />';
+                echo '</li>';
             }
 
             // forward to $plg_link_url without any additional parameters
-            echo '<a href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_DATES_ALL_EVENTS').'</a>';
+            echo '<li class="list-group-item">
+                <a href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_DATES_ALL_EVENTS').'</a>
+            </li></ul>';
         } else {
             echo $gL10n->get('SYS_NO_ENTRIES');
         }
