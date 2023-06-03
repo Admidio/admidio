@@ -76,7 +76,7 @@ try {
 }
 
 // Number of events each page for default view 'html' or 'compact' view
-if ($gSettingsManager->getInt('dates_per_page') > 0 && $getViewMode === 'html') {
+if ($getViewMode === 'html' && $getView === 'detail') {
     $datesPerPage = $gSettingsManager->getInt('dates_per_page');
 } else {
     $datesPerPage = $dates->getDataSetCount();
@@ -233,6 +233,7 @@ if ($datesResult['totalCount'] === 0) {
     // Output table header for compact view
     if ($getView !== 'detail') { // $getView = 'compact' or 'room' or 'participants' or 'description'
         $compactTable = new HtmlTable('events_compact_table', $page, $hoverRows, $datatable, $classTable);
+        $compactTable->setDatatablesRowsPerPage($gSettingsManager->getInt('dates_per_page'));
 
         $columnHeading = array();
         $columnAlign   = array();
@@ -814,7 +815,10 @@ if ($datesResult['totalCount'] === 0) {
         $page->addHtml($compactTable->show());
     }
 }
-// If necessary show links to navigate to next and previous recordset of the query
-$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'), 'view_mode' => $getViewMode));
-$page->addHtml(admFuncGeneratePagination($baseUrl, $datesResult['totalCount'], $datesResult['limit'], $getStart));
+
+if ($getView === 'detail') {
+    // If necessary show links to navigate to next and previous recordset of the query
+    $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php', array('view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'), 'view_mode' => $getViewMode));
+    $page->addHtml(admFuncGeneratePagination($baseUrl, $datesResult['totalCount'], $datesResult['limit'], $getStart));
+}
 $page->show();

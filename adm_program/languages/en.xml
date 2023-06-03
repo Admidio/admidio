@@ -1091,6 +1091,7 @@
   <string name="SYS_NOTIFICATION_ROLE_DESC">Notifications about new entries or profile changes are sent to all members of this role.</string>
   <string name="SYS_NUMBER">Number</string>
   <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Number of roles per page</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Number of entries displayed on a page. If there are more entries, navigation elements are displayed to scroll between the pages. (Default: #VAR1#)</string>
   <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Spreadsheet (*.ods)</string>
   <string name="SYS_OFF">Off</string>
@@ -1425,7 +1426,6 @@
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
   <string name="SYS_USERS_PER_PAGE">Number of members per page</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">The number of members listed on a page in a member management. If there are more members to the organization, you can scroll to the next page within the overview. (Default: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">You are using a current #VAR1#version of Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
