@@ -630,8 +630,8 @@ final class FileSystemUtils
     /**
      * Deletes a file if it exists
      * @param string $filePath The file to delete
-     * @throws \UnexpectedValueException Throws if the file is not writable
-     * @throws \RuntimeException         Throws if the delete process fails
+     * @throws UnexpectedValueException Throws if the file is not writable
+     * @throws RuntimeException         Throws if the delete process fails
      * @return bool Returns true if file was successfully deleted or false if file already did not exist
      * @see https://www.php.net/manual/en/function.unlink.php
      */
@@ -641,10 +641,10 @@ final class FileSystemUtils
 
         $parentDirectoryPath = dirname($filePath);
         if (self::isUnix() && !is_executable($parentDirectoryPath)) {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
+            throw new UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
         if (!is_writable($parentDirectoryPath)) {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not writable!');
+            throw new UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not writable!');
         }
 
         if (!is_file($filePath)) {
@@ -653,7 +653,7 @@ final class FileSystemUtils
 
         $unlinkResult = unlink($filePath);
         if (!$unlinkResult) {
-            throw new \RuntimeException('File "' . $filePath . '" cannot be deleted!');
+            throw new RuntimeException('File "' . $filePath . '" cannot be deleted!');
         }
 
         return true;

@@ -198,11 +198,11 @@ class TableMessage extends TableAccess
 
     /**
      * Deletes the selected message with all associated fields.
-     * After that the class will be initialize.
+     * After that the class will be initialized.
      * @return bool **true** if message is deleted or message with additional information if it is marked
-     *         for other user to delete. On error it is false
+     *         for other user to delete. On error, it is false
      */
-    public function delete()
+    public function delete(): bool
     {
         $this->db->startTransaction();
 
@@ -213,9 +213,8 @@ class TableMessage extends TableAccess
             $attachments   = $this->getAttachmentsInformations();
 
             foreach ($attachments as $attachment) {
-                if (!FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name'])) {
-                    throw new AdmException('INS_DATABASE_FILE_NOT_FOUND', array(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments', $attachment['admidio_file_name']));
-                }
+                // delete attachment in file system
+                FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name']);
             }
 
             $sql = 'DELETE FROM '.TBL_MESSAGES_ATTACHMENTS.'
