@@ -143,7 +143,7 @@ if ($getViewMode === 'html') {
             $page->addPageFunctionsMenuItem(
                 'menu_item_event_ical',
                 $gL10n->get('DAT_EXPORT_ICAL'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('headline' => $getHeadline, 'cat_uuid' => $getCatUuid, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
+                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('cat_uuid' => $getCatUuid, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
                 'fa-file-export'
             );
         }
