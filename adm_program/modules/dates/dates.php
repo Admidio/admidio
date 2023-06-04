@@ -418,6 +418,44 @@ if ($datesResult['totalCount'] === 0) {
                 $participantsArray = $participants->getParticipantsArray();
             }
 
+            // If user is invited to the event then the approval state is not initialized and has value "null" in data table
+            if ($row['member_date_role'] > 0 && $row['member_approval_state'] == null) {
+                $row['member_approval_state'] = ModuleDates::MEMBER_APPROVAL_STATE_INVITED;
+            }
+
+            // set status of participation
+            switch ($row['member_approval_state']) {
+                case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
+                    $buttonText = $gL10n->get('SYS_PARTICIPATE_QUESTION');
+                    $buttonClass = '';
+                    $iconParticipationStatus = '<i class="fas fa-user-plus"></i>';
+                    break;
+                case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
+                    $buttonText = $gL10n->get('DAT_USER_ATTEND');
+                    $buttonClass = 'admidio-event-approval-state-attend';
+                    $iconParticipationStatus = '<i class="fas fa-check-circle"></i>';
+                    break;
+                case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
+                    $buttonText = $gL10n->get('DAT_USER_TENTATIVE');
+                    $buttonClass = 'admidio-event-approval-state-tentative';
+                    $iconParticipationStatus = '<i class="fas fa-question-circle"></i>';
+                    break;
+                case ModuleDates::MEMBER_APPROVAL_STATE_REFUSED:
+                    $buttonText = $gL10n->get('DAT_USER_REFUSED');
+                    $buttonClass = 'admidio-event-approval-state-cancel';
+                    $iconParticipationStatus = '<i class="fas fa-times-circle"></i>';
+                    break;
+                default:
+                    $buttonText = $gL10n->get('SYS_PARTICIPATE');
+                    $buttonClass = '';
+                    $iconParticipationStatus = '<i class="fas fa-edit"></i>';
+            }
+
+            if ($getView !== 'detail') {
+                // Status text only in detail view
+                $buttonText = '';
+            }
+
             // show notice that no new participation could be assigned to the event because the deadline exceeded or
             // the max number of participants is reached.
             if ($date->deadlineExceeded() || $date->participantLimitReached()) {
@@ -441,8 +479,6 @@ if ($datesResult['totalCount'] === 0) {
 
             // if current user is allowed to participate then show buttons for participation
             if ($date->possibleToParticipate() || $gCurrentUser->editDates() || $participants->isLeader($gCurrentUserId)) {
-                $buttonClass = '';
-
                 if ($date->getValue('dat_deadline') !== null) {
                     $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
                 }
@@ -450,40 +486,7 @@ if ($datesResult['totalCount'] === 0) {
                 // Links for the participation only in html mode
                 if ($getViewMode === 'html') {
                     if($date->possibleToParticipate()) {
-                        // If user is invited to the event then the approval state is not initialized and has value "null" in data table
-                        if ($row['member_date_role'] > 0 && $row['member_approval_state'] == null) {
-                            $row['member_approval_state'] = ModuleDates::MEMBER_APPROVAL_STATE_INVITED;
-                        }
 
-                        switch ($row['member_approval_state']) {
-                            case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
-                                $buttonText = $gL10n->get('SYS_PARTICIPATE_QUESTION');
-                                $iconParticipationStatus = '<i class="fas fa-user-plus"></i>';
-                                break;
-                            case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
-                                $buttonText = $gL10n->get('DAT_USER_ATTEND');
-                                $buttonClass = 'admidio-event-approval-state-attend';
-                                $iconParticipationStatus = '<i class="fas fa-check-circle"></i>';
-                                break;
-                            case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
-                                $buttonText = $gL10n->get('DAT_USER_TENTATIVE');
-                                $buttonClass = 'admidio-event-approval-state-tentative';
-                                $iconParticipationStatus = '<i class="fas fa-question-circle"></i>';
-                                break;
-                            case ModuleDates::MEMBER_APPROVAL_STATE_REFUSED:
-                                $buttonText = $gL10n->get('DAT_USER_REFUSED');
-                                $buttonClass = 'admidio-event-approval-state-cancel';
-                                $iconParticipationStatus = '<i class="fas fa-times-circle"></i>';
-                                break;
-                            default:
-                                $buttonText = $gL10n->get('SYS_PARTICIPATE');
-                                $iconParticipationStatus = '<i class="fas fa-edit"></i>';
-                        }
-
-                        if ($getView !== 'detail') {
-                            // Status text only in detail view
-                            $buttonText = '';
-                        }
 
                         $disableStatusAttend = '';
                         $disableStatusTentative = '';
