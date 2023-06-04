@@ -477,7 +477,7 @@ if ($datesResult['totalCount'] === 0) {
                 }
             }
 
-            // if current user is allowed to participate then show buttons for participation
+            // if current user is allowed to participate or user could edit this event then show buttons for participation
             if ($date->possibleToParticipate() || $gCurrentUser->editDates() || $participants->isLeader($gCurrentUserId)) {
                 if ($date->getValue('dat_deadline') !== null) {
                     $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
