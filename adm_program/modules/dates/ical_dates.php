@@ -19,8 +19,6 @@
 
 require_once(__DIR__ . '/../../system/common.php');
 
-unset($_SESSION['dates_request']);
-
 // Initialize and check the parameters
 $getCatUuid  = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
