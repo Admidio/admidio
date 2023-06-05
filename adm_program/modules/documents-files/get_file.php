@@ -49,7 +49,6 @@ $file->save();
 
 // determine filesize
 $fileSize = filesize($completePath);
-$filename = FileSystemUtils::getSanitizedPathEntry($file->getValue('fil_name'));
 
 if ($getView) {
     $content = 'inline';
@@ -60,7 +59,7 @@ if ($getView) {
 // Create appropriate header information of the file
 header('Content-Type: ' . $file->getMimeType());
 header('Content-Length: ' . $fileSize);
-header('Content-Disposition: ' . $content . '; filename="' . $filename . '"');
+header('Content-Disposition: ' . $content . '; filename="' . $file->getValue('fil_name') . '"');
 
 // necessary for IE, because without it the download with SSL has problems
 header('Cache-Control: private');
