@@ -1090,7 +1090,6 @@
   <string name="SYS_NOTIFICATION_ROLE">Rolle für Benachrichtigungen</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Benachrichtigungen über neue Einträge oder Profiländerungen werden an alle Mitglieder dieser Rolle gesendet.</string>
   <string name="SYS_NUMBER">Zahl</string>
-  <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Anzahl Rollen pro Seite</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge, so werden Navigationselemente angezeigt, um zwischen den Seiten zu blättern. (Voreinstellung: #VAR1#)</string>
   <string name="SYS_NUMBER_COL_DESC">Soll am Ende des Reports eine Zeile mit der Anzahl der Mitgliedschaften angezeigt werden, so ist der Haken zu setzen.</string>
   <string name="SYS_ODF_SPREADSHEET">ODF-Tabellendokument (*.ods)</string>
@@ -1426,7 +1425,6 @@
   <string name="SYS_USERNAME_OR_EMAIL">Anmeldename oder E-Mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# am #VAR2# um #VAR3#</string>
   <string name="SYS_USERS_PER_PAGE">Anzahl Mitglieder pro Seite</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">Die Anzahl der Mitglieder die auf einer Seite in einer Mitgliederverwaltung aufgelistet werden. Gibt es mehr Mitglieder zu der Organisation, so kann man innerhalb der Übersicht blättern. (Voreinstellung: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">Du benutzt eine aktuelle #VAR1#Version von Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
