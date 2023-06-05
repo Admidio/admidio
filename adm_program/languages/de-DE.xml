@@ -24,7 +24,7 @@
   <string name="DAT_EDIT_EVENTS">Termine bearbeiten</string>
   <string name="DAT_EDIT_ROOMS">Räume bearbeiten</string>
   <string name="DAT_EDIT_ROOMS_DESC">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</string>
-  <string name="DAT_ENABLE_ICAL">iCal-Funktion aktivieren</string>
+  <string name="DAT_ENABLE_ICAL">iCal-Export ermöglichen</string>
   <string name="DAT_ENABLE_ICAL_DESC">Ist diese Funktion aktiviert, lassen sich einzelne Termine oder alle Termine in einem festgelegten Zeitraum herunterladen. Auch das Abonnieren der Termine mit einer Kalendersoftware wird möglich. (Voreinstellung: ja)</string>
   <string name="DAT_EXPORT_ICAL">Exportieren (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Termin optisch hervorheben</string>
