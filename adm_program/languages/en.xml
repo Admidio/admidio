@@ -24,7 +24,7 @@
   <string name="DAT_EDIT_EVENTS">Edit events</string>
   <string name="DAT_EDIT_ROOMS">Edit rooms</string>
   <string name="DAT_EDIT_ROOMS_DESC">Here you can create and edit rooms for events.</string>
-  <string name="DAT_ENABLE_ICAL">Enable iCal function</string>
+  <string name="DAT_ENABLE_ICAL">Enable iCal export</string>
   <string name="DAT_ENABLE_ICAL_DESC">If iCal is enabled, individual events or all events within a given time period can be downloaded. Also, users will be able to subscribe to events by using their own calendar client software . (default: yes)</string>
   <string name="DAT_EXPORT_ICAL">Export (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Highlight date</string>
