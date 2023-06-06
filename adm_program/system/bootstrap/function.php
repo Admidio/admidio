@@ -255,7 +255,7 @@ function admFuncProcessableImageSize()
     $bytesPerPixel = 3;
     // der Speicher muss doppelt zur Verfügung stehen
     // nach ein paar tests hat sich 2.5x als sicher herausgestellt
-    $factor = 2.5;
+    $factor = 1;
 
     return (int) round($memoryLimit / ($bytesPerPixel * $factor));
 }
