@@ -96,8 +96,8 @@ final class SystemInfoUtils
 
         // For each Pixel 3 Bytes are necessary (RGB)
         $bytesPerPixel = 3;
-        // The memory must be available twice. After a few tests 2.5x has proven to be safe.
-        $factor = 2.5;
+        // current tests have shown that we don't need a factor to limit the processable image size
+        $factor = 1;
 
         return (int) round($memoryLimit / ($bytesPerPixel * $factor));
     }
