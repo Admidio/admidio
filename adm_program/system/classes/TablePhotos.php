@@ -232,7 +232,7 @@ class TablePhotos extends TableAccess
             return false;
         }
         // locked photo album could only be viewed by module administrators
-        elseif ((int) $this->getValue('pho_locked') === 1 && !$GLOBALS['gCurrentUser']->editPhotoRight()) {
+        elseif ($this->getValue('pho_locked') && !$GLOBALS['gCurrentUser']->editPhotoRight()) {
             return false;
         }
 
