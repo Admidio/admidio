@@ -233,8 +233,10 @@ class ListConfiguration extends TableLists
 
         // format value for csv export
         if ($format === 'csv') {
+            // replace tab and line feed
             $content = preg_replace("/\t/", "\\t", $content);
             $content = preg_replace("/\r?\n/", "\\n", $content);
+            // replace special chars in excel so no app or function could be implicit executed
             $outputContent = preg_replace("/^[@=+-]/", "#", $content);
         }
         // pdf should show only text and not much html content
