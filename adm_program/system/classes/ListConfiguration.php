@@ -233,7 +233,9 @@ class ListConfiguration extends TableLists
 
         // format value for csv export
         if ($format === 'csv') {
-            $outputContent = $content;
+            $content = preg_replace("/\t/", "\\t", $content);
+            $content = preg_replace("/\r?\n/", "\\n", $content);
+            $outputContent = preg_replace("/^[@=+-]/", "#", $content);
         }
         // pdf should show only text and not much html content
         elseif ($format === 'pdf') {
