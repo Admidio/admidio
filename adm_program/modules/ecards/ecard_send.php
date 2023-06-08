@@ -11,6 +11,12 @@
 require_once(__DIR__ . '/../../system/common.php');
 require_once(__DIR__ . '/ecard_function.php');
 
+// check if the module is enabled and disallow access if it's disabled
+if (!$gSettingsManager->getBool('enable_ecard_module')) {
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
 // Initialize and check the parameters
 $postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));
 $postPhotoUuid    = admFuncVariableIsValid($_POST, 'photo_uuid', 'string', array('requireValue' => true));
@@ -33,14 +39,15 @@ try {
     // => EXIT
 }
 
-// check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('enable_ecard_module')) {
-    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+// check if user has right to view the album
+if (!$photoAlbum->isVisible()) {
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }
-// pruefen ob User eingeloggt ist
-if (!$gValidLogin) {
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+
+// the logged-in user has no valid mail address stored in his profile, which can be used as sender
+if ($gValidLogin && $gCurrentUser->getValue('EMAIL') === '') {
+    $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', array('<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php">', '</a>')));
     // => EXIT
 }
 
@@ -58,7 +65,7 @@ if ($postMessage === '') {
     // => EXIT
 }
 
-// Template wird geholt
+// read template from file system
 $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName);
 
 // if template was not found then show error

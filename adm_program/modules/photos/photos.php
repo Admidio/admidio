@@ -59,7 +59,7 @@ if ($getPhotoUuid !== '') {
 
     $headline = $photoAlbum->getValue('pho_name');
 
-    // URL auf Navigationstack ablegen
+    // Drop URL on navigation stack
     $gNavigation->addUrl(CURRENT_URL, $headline);
 } else {
     $headline = $getHeadline;
