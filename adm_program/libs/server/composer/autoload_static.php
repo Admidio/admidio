@@ -154,6 +154,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'ComponentUpdateSteps' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ComponentUpdateSteps.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'ConditionParser' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ConditionParser.php',
+        'DataArray' => __DIR__ . '/../../../..' . '/adm_program/system/classes/DataArray.php',
         'Database' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Database.php',
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
         'DateTimeExtended' => __DIR__ . '/../../../..' . '/adm_program/system/classes/DateTimeExtended.php',

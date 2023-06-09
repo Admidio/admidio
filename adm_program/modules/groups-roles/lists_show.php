@@ -20,6 +20,10 @@
  *                      1 - show only former members of the role
  ***********************************************************************************************
  */
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+
 require_once(__DIR__ . '/../../system/common.php');
 
 unset($list);
@@ -259,7 +263,11 @@ $listStatement = $gDb->query($mainSql); // TODO add more params
 $numMembers = $listStatement->rowCount();
 
 // get all members and their data of this list in an array
-$membersList = $listStatement->fetchAll(\PDO::FETCH_BOTH);
+if($getMode === 'csv') {
+    $membersList = $listStatement->fetchAll(\PDO::FETCH_ASSOC);
+} else {
+    $membersList = $listStatement->fetchAll(\PDO::FETCH_BOTH);
+}
 
 $userUuidList = array();
 foreach ($membersList as $member) {
@@ -288,6 +296,41 @@ if (count($relationTypeIds) === 1) {
 // if html mode and last url was not a list view then save this url to navigation stack
 if ($getMode === 'html' && !str_contains($gNavigation->getUrl(), 'lists_show.php')) {
     $gNavigation->addUrl(CURRENT_URL, $headline);
+}
+
+if($getMode === 'csv') {
+    $spreadsheet = new Spreadsheet();
+    $activeWorksheet = $spreadsheet->getActiveSheet();
+    $activeWorksheet->fromArray($membersList);
+
+    $writer = new Xlsx($spreadsheet);
+    //$writer = new Xls($spreadsheet);
+
+
+    $file = ADMIDIO_PATH . FOLDER_DATA . '/test.xlsx';
+    $writer->save($file);
+    $fileSize = filesize($file);
+
+    // Redirect
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment; filename="test.xlsx"');
+    header('Cache-Control: max-age=0');
+    readfile($file);
+    exit();
+
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment; filename="test.xls"');
+    try {
+        $writer->save($file);
+        ob_start();
+        $writer->save('php://output');
+        $ret['data'] = base64_encode(ob_get_contents());
+        ob_end_clean();
+    } catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
+        echo $e->getMessage();
+    }
+
+    exit();
 }
 
 if ($getMode !== 'csv') {

@@ -16,6 +16,7 @@ return array(
     'ComponentUpdateSteps' => $baseDir . '/adm_program/system/classes/ComponentUpdateSteps.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'ConditionParser' => $baseDir . '/adm_program/system/classes/ConditionParser.php',
+    'DataArray' => $baseDir . '/adm_program/system/classes/DataArray.php',
     'Database' => $baseDir . '/adm_program/system/classes/Database.php',
     'Datamatrix' => $vendorDir . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
     'DateTimeExtended' => $baseDir . '/adm_program/system/classes/DateTimeExtended.php',
