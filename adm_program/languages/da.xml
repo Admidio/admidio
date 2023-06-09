@@ -24,7 +24,7 @@
   <string name="DAT_EDIT_EVENTS">Rediger begivenheder</string>
   <string name="DAT_EDIT_ROOMS">Rediger lokale</string>
   <string name="DAT_EDIT_ROOMS_DESC">Her kan du oprette og redigere lokaler til aktiviteter.</string>
-  <string name="DAT_ENABLE_ICAL">Aktiver iCal</string>
+  <string name="DAT_ENABLE_ICAL">Aktiver iCal-eksport</string>
   <string name="DAT_ENABLE_ICAL_DESC">Hvis iCal er aktiveret, kan aftaler (individuelle eller alle) inden for et givent tidspunkt downloades. Og brugerne kan abonnere på aftaler ved at bruge deres egen kalender software. (Standard: Ja)</string>
   <string name="DAT_EXPORT_ICAL">Eksport (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Fremhæv dato</string>
@@ -270,13 +270,13 @@
   <string name="ORG_ENABLE_RSS_FEEDS">Aktiver web-feeds</string>
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio er i stand til at levere webfeeds til flere moduler (annonceringer, arrangementer, gæstebog, billeder og weblinks) på oversigtssiden for hvert modul. Abonnement er muligt via browser eller feed-læser. (standard: ja)</string>
   <string name="ORG_FIELD_DESCRIPTION">Definér antal eller ubegrænset yderligere felter. Felterne vil blive vist og kan redigeres i brugerens profil. Disse felter vil også være tilgængelige i egne lister.</string>
-  <string name="ORG_FIELD_DISABLED">Feltet kan kun redigeres for bruger med tilladelse #VAR1_BOLD#</string>
-  <string name="ORG_FIELD_DISABLED_DESC">Et låst profil felt kan ikke længere redigeres af brugeren i dennes egen profil. Det kan kun redigeres af brugere der har rettigheder til at redigere på alle bruger profiler. Lederen af en rolle med rettigheder til at redigere profiler for rolle medlemmerne, kan også redigere dette profil felt.  </string>
+  <string name="ORG_FIELD_DISABLED">Feltet kan kun redigeres af medlemmer med tilladelse #VAR1_BOLD#</string>
+  <string name="ORG_FIELD_DISABLED_DESC">Et låst profilfelt kan ikke længere redigeres af et medlem i sin egen profil. Den kan kun redigeres af medlemmer, der har tilladelse til at redigere alle medlemmer. Ledere af en rolle med tilladelse til at redigere profiler for rollemedlemmer kan også redigere dette profilfelt.</string>
   <string name="ORG_FIELD_EXIST">Feltnavnet eksisterer allerede i denne kategori.</string>
-  <string name="ORG_FIELD_HIDDEN">Feltet er kun synligt for godkendte brugere (egen profil &amp; rolle autorisation)</string>
-  <string name="ORG_FIELD_HIDDEN_DESC">Sædvanligvis er et felt synligt for alle brugere som har tilladelse til at se profilen. Hvis denne indstilling er valgt fra så er det kun brugere med tilladelse til at redigere profilen der kan se dette felt.</string>
-  <string name="ORG_FIELD_NOT_DISABLED">Felt kan rettes af brugeren selv.</string>
-  <string name="ORG_FIELD_NOT_HIDDEN">Feltet er synligt for alle brugere.</string>
+  <string name="ORG_FIELD_HIDDEN">Feltet kan kun ses for autoriserede medlemmer (egen profil &amp; rollerettigheder)</string>
+  <string name="ORG_FIELD_HIDDEN_DESC">Normalt er et felt synligt for alle, der har tilladelse til at se profilen. Hvis denne mulighed er fravalgt, kan kun medlemmer, der har tilladelse til at redigere denne profil, se feltet.</string>
+  <string name="ORG_FIELD_NOT_DISABLED">Feltet kan redigeres af medlemmerne selv.</string>
+  <string name="ORG_FIELD_NOT_HIDDEN">Feltet er synligt for alle medlemmer.</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Feltet vises IKKE under registrering</string>
   <string name="ORG_FIELD_REGISTRATION">Feltet vises ved registrering</string>
   <string name="ORG_FIELD_URL_DESC">Den indtastede URL linker til indholdet i profilen som brugeren har skrevet i dette felt. Eventuelt kan wildcardet #user_content# bruges i URL\'en. Dette er indholdet, som brugeren har indtastet i feltet.. \n\nExample:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nLink in profile: https://www.google.de/search?q=Admidio</string>
@@ -597,7 +597,6 @@
   <string name="SYS_COMMON">Generel</string>
   <string name="SYS_COMPLEMENT">Supplere</string>
   <string name="SYS_CONDITION">Betingelse</string>
-  <string name="SYS_CONDITIONS">Betingelser</string>
   <string name="SYS_CONFIGURATION">Liste indstilling</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Tilladelse til at bruge listen for alle medlemer</string>
   <string name="SYS_CONFIGURATION_DELETE">Vil du slette den valgte liste?</string>
@@ -1091,7 +1090,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Notifikationsrolle</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Meddelelser om nye poster eller profilændringer sendes til alle medlemmer af denne rolle.</string>
   <string name="SYS_NUMBER">Nummer</string>
-  <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Antal roller pr. side.</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster vist på en side. Hvis der er flere poster, vises navigationselementer for at rulle mellem siderne. (Standard: #VAR1#)</string>
   <string name="SYS_NUMBER_COL_DESC">Det respektive afkrydsningsfelt skal aktiveres, hvis du vil have vist en linje med antallet af medlemskaber i slutningen af rapporten.</string>
   <string name="SYS_ODF_SPREADSHEET">‎ODF-regneark (*.ods)‎</string>
   <string name="SYS_OFF">Slukket</string>
@@ -1150,7 +1149,6 @@
   <string name="SYS_POSSIBLE_FIELDNAMES">Kolonnenavne til automatisk registrering: #VAR1#</string>
   <string name="SYS_POST_MAX_SIZE">max. POST størrelse</string>
   <string name="SYS_POSTCODE">Postnummer</string>
-  <string name="SYS_PRESENTATION">Vis</string>
   <string name="SYS_PRESET_CONFIGURATION">Standard liste indstillinger</string>
   <string name="SYS_PRESET_CONFIGURATION_DESC">Administratorer kan definere standard konfigurationer for alle brugere. Konfigurer rækker og kolonner og gem dem ved at give konfigurationen et navn.</string>
   <string name="SYS_PREVIEW">Vis</string>
@@ -1427,7 +1425,6 @@
   <string name="SYS_USERNAME_OR_EMAIL">Brugernavn eller e-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# på #VAR2# den #VAR3#</string>
   <string name="SYS_USERS_PER_PAGE">Antal medlemmer pr. side</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">Antallet af medlemmer, der er angivet på en side i en medlemsadministration. Er der flere medlemmer i organisationen, kan du scrolle til næste side i oversigten. (Standard: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">Du bruger den nyeste version af Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
