@@ -1029,30 +1029,30 @@ final class FileSystemUtils
 
     /**
      * Gets the content of a directory and optional recursive from all subdirectories
-     * @param string            $directoryPath        The directory from which to get the content
-     * @param bool              $recursive            If true, also all subdirectories are scanned
-     * @param bool              $fullPath             Set true to get the full paths instead of the content entry names
+     * @param string $directoryPath        The directory from which to get the content
+     * @param bool $recursive            If true, also all subdirectories are scanned
+     * @param bool $fullPath             Set true to get the full paths instead of the content entry names
      * @param array<int,string> $includedContentTypes A list with all content types that should get returned (directories, files, links)
-     * @throws \UnexpectedValueException Throws if directory is not readable
-     * @throws \RuntimeException         Throws if the opendir process fails
      * @return array<string,string|array> The content of the directory (and all the subdirectories)
+     * @throws RuntimeException         Throws if the open dir process fails
+     * @throws UnexpectedValueException Throws if directory is not readable
      * @see https://www.php.net/manual/en/function.opendir.php
      * @see https://www.php.net/manual/en/function.readdir.php
      */
-    public static function getDirectoryContent($directoryPath, $recursive = false, $fullPath = true, array $includedContentTypes = array(self::CONTENT_TYPE_DIRECTORY, self::CONTENT_TYPE_FILE, self::CONTENT_TYPE_LINK))
+    public static function getDirectoryContent(string $directoryPath, bool $recursive = false, bool $fullPath = true, array $includedContentTypes = array(self::CONTENT_TYPE_DIRECTORY, self::CONTENT_TYPE_FILE, self::CONTENT_TYPE_LINK)): array
     {
         self::checkIsInAllowedDirectories($directoryPath);
 
         if (!is_dir($directoryPath)) {
-            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
+            throw new UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
         }
         if (!is_readable($directoryPath)) {
-            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" is not readable!');
+            throw new UnexpectedValueException('Directory "' . $directoryPath . '" is not readable!');
         }
 
         $dirHandle = opendir($directoryPath);
         if ($dirHandle === false) {
-            throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be opened!');
+            throw new RuntimeException('Directory "' . $directoryPath . '" cannot be opened!');
         }
 
         $directoryContent = array();

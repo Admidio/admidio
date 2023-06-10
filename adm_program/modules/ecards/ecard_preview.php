@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Preview of ecard
+ * Preview of eCard
  *
  * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
@@ -13,10 +13,16 @@
 // then show nothing. Second call is with POST parameters then show preview
 require_once(__DIR__ . '/../../system/common.php');
 
-// check if the module is enabled and disallow access if it's disabled
+// check if the photo module is enabled and eCard is enabled
 if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
+} elseif ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+} elseif ((int) $gSettingsManager->get('photo_module_enabled') === 2) {
+    // only logged-in users can access the module
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 $gMessage->showThemeBody(false);
