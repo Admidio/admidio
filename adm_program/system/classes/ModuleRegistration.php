@@ -71,7 +71,7 @@ class ModuleRegistration extends HtmlPage
         $user->readDataByUuid($userUuid);
         $similarUserIDs = $user->searchSimilarUsers();
 
-        $this->assign('description', $gL10n->get('SYS_SIMILAR_MEMBERS_FOUND_DESC', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
+        $this->assign('description', $gL10n->get('SYS_SIMILAR_MEMBERS_FOUND_REGISTRATION', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
 
         // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
         if ($gCurrentUser->editUsers()) {
@@ -139,7 +139,7 @@ class ModuleRegistration extends HtmlPage
      */
     public function createContentRegistrationList()
     {
-        global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields;
+        global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields, $gCurrentUser;
 
         $registrations = $this->getRegistrationsArray();
         $templateData = array();
@@ -183,11 +183,17 @@ class ModuleRegistration extends HtmlPage
                 'icon' => 'fas fa-trash-alt',
                 'tooltip' => $gL10n->get('SYS_DELETE')
             );
-            $templateRow['buttons'][] = array(
-                //'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_uuid' => $row['userUUID'])),
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('mode' => 'show_similar', 'user_uuid' => $row['userUUID'])),
-                'name' => (count($similarUserIDs) > 0 ? $gL10n->get('SYS_ASSIGN_REGISTRATION') : $gL10n->get('SYS_CONFIRM_REGISTRATION') )
-            );
+            if (count($similarUserIDs) > 0) {
+                $templateRow['buttons'][] = array(
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('mode' => 'show_similar', 'user_uuid' => $row['userUUID'])),
+                    'name' => $gL10n->get('SYS_ASSIGN_REGISTRATION')
+                );
+            } else {
+                $templateRow['buttons'][] = array(
+                    'url' => ($gCurrentUser->editUsers() ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_uuid' => $row['userUUID'])) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '5', 'new_user_uuid' => $row['userUUID']))),
+                    'name' => $gL10n->get('SYS_CONFIRM_REGISTRATION')
+                );
+            }
 
             $templateData[] = $templateRow;
         }

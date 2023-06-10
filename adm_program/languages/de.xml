@@ -402,7 +402,6 @@
   <string name="PHO_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
   <!--Phrases only in profile module-->
   <string name="PRO_ASSIGNED_BY_ROLES">Vergeben durch die Rollen</string>
-  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Die Registrierung wurde erfolgreich bestätigt. Die Benutzerin oder der Benutzer kann sich jetzt im System anmelden.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
   <string name="PRO_CANCEL_USER_RELATION">Beziehung löschen</string>
   <string name="PRO_CHANGE_DATE">Datum ändern</string>
@@ -521,6 +520,7 @@
   <string name="SYS_ASSIGN_MEMBERS">Mitglieder zuordnen</string>
   <string name="SYS_ASSIGN_MEMBERSHIP">Mitgliedschaft zuweisen</string>
   <string name="SYS_ASSIGN_REGISTRATION">Registrierung zuordnen</string>
+  <string name="SYS_ASSIGN_REGISTRATION_SUCCESSFUL">Die Registrierung wurde erfolgreich bestätigt. Das Mitglied kann sich jetzt am System anmelden.</string>
   <string name="SYS_ASSIGN_ROLE">Rolle zuordnen</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Wähle bitte eine Rolle aus, der alle importierten Benutzer:innen automatisch zugeordnet werden.\n\nDir stehen nur Rollen zur Auswahl, die du sehen darfst und keine Rollenzuordnungsberechtigung besitzen, falls du diese selber nicht besitzt.</string>
   <string name="SYS_ASSIGN_ROLES">Rollen zuordnen</string>

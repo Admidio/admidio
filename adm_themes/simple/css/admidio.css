@@ -380,6 +380,11 @@ input[type=time] {
     margin-top: 0;
 }
 
+.card-body .list-group-item {
+    padding-left: 0;
+    background-color: #eeeeee;
+}
+
 .card-footer .admidio-info-created-edited {
     font-size: 100% !important;
 }

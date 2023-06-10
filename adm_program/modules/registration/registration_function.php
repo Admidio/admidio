@@ -50,6 +50,7 @@ if ($getMode === 1 || $getMode === 2) {
     try {
         $user = new User($gDb, $gProfileFields);
         $user->readDataByUuid($getUserUuid);
+        $gDb->startTransaction();
 
         // adopt the data of the registration user to the existing user account
         $registrationUser->adoptUser($user);
@@ -64,10 +65,13 @@ if ($getMode === 1 || $getMode === 2) {
         if ($getMode === 1) {
             $user->assignDefaultRoles();
         }
+        $gDb->endTransaction();
     } catch (AdmException $e) {
         // exception is thrown when email couldn't be sent
         // so save user data and then show error
         $user->save();
+        $gDb->endTransaction();
+
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
         $e->showHtml();
         // => EXIT
@@ -77,7 +81,6 @@ if ($getMode === 1 || $getMode === 2) {
     // otherwise go to previous url (default roles are assigned automatically)
     if ($gCurrentUser->manageRoles()) {
         // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
-        $gNavigation->addUrl(SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_uuid' => $getUserUuid, 'new_user_uuid' => $getNewUserUuid)));
         admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $getUserUuid)));
     // => EXIT
     } else {
@@ -139,7 +142,7 @@ if ($getMode === 1 || $getMode === 2) {
     // => EXIT
     } else {
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
-        $gMessage->show($gL10n->get('PRO_ASSIGN_REGISTRATION_SUCCESSFUL'));
+        $gMessage->show($gL10n->get('SYS_ASSIGN_REGISTRATION_SUCCESSFUL'));
         // => EXIT
     }
 } elseif ($getMode === 6) {

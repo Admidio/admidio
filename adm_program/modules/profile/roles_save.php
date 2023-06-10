@@ -245,7 +245,7 @@ if ($getInline) {
     echo 'success';
 } else {
     if ($getNewUser === 3) {
-        $messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+        $messageId = 'SYS_ASSIGN_REGISTRATION_SUCCESSFUL';
         $gMessage->setForwardUrl($gNavigation->getUrl());
     } else {
         $messageId = 'SYS_SAVE_DATA';

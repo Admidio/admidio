@@ -220,7 +220,8 @@ INSERT INTO %PREFIX%_users (usr_id, usr_uuid, usr_login_name, usr_password, usr_
 (356, '232a5ee7-4ed9-41de-b081-0b5090b00462', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
 (357, 'd1ba8d2b-ad8f-43bc-a22d-cbd71eed09a4', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
 (358, 'fc793b70-16c7-4ff7-b245-6df94d5d6057', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2019-04-26 20:47:22', NULL, NULL, true),
-(359, 'ac793b70-16c7-4ff8-b245-6df94d5d6123', 'bakers', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2023-04-26 20:47:22', NULL, NULL, false);
+(359, 'ac793b70-16c7-4ff8-b245-6df94d5d6123', 'bakers', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2023-04-26 20:47:22', NULL, NULL, false),
+(360, 'reg93b70-76c7-4fdf-b344-6df94re64343', 'smith', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2023-04-15 18:06:22', NULL, NULL, false);
 
 
 --
@@ -1155,7 +1156,7 @@ INSERT INTO %PREFIX%_messages_recipients (msr_id, msr_msg_id, msr_rol_id, msr_us
 INSERT INTO %PREFIX%_registrations (reg_id, reg_org_id, reg_usr_id, reg_timestamp) VALUES
 (1, 1, 352, '2023-03-28 13:43:02'),
 (2, 1, 353, '2023-03-25 18:05:32'),
-(3, 2, 352, '2023-03-28 13:44:02'),
+(3, 2, 360, '2023-03-28 13:44:02'),
 (4, 1, 359, '2023-03-27 05:03:34');
 
 
@@ -2919,7 +2920,14 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (2103, 359, 4, '3845'),
 (2104, 359, 5, 'Birmingham'),
 (2105, 359, 6, 'GBR'),
-(2106, 359, 12, 'c.bakers@example.com');
+(2106, 359, 12, 'c.bakers@example.com'),
+(2200, 360, 1, 'Smith'),
+(2201, 360, 2, 'Barbara'),
+(2202, 360, 3, 'Mainstreet 876'),
+(2203, 360, 4, '573545'),
+(2204, 360, 5, 'Boston'),
+(2205, 360, 6, 'USA'),
+(2206, 360, 12, 'bab.smith@example.com');
 
 
 --

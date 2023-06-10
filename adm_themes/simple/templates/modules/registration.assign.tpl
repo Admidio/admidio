@@ -5,7 +5,7 @@
         <ul class="list-group list-group-flush">
             {foreach $similarUsers as $similarUser}
                 <li class="list-group-item">
-                    <a class="btn" href="{$similarUser.profileUrl}" title="{$l10n->get('SYS_SHOW_PROFILE')}">
+                    <a href="{$similarUser.profileUrl}" title="{$l10n->get('SYS_SHOW_PROFILE')}">
                         <i class="fas fa-user"></i>{$similarUser.data->getValue('FIRST_NAME')} {$similarUser.data->getValue('LAST_NAME')}</a><br />
                     {if $similarUser.data->getValue('STREET') ne ''}
                         {$similarUser.data->getValue('STREET')}<br />

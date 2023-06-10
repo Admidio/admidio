@@ -402,7 +402,6 @@
   <string name="PHO_WANT_DELETE_PHOTO">Selected photo will be deleted. Are you sure?</string>
   <!--Phrases only in profile module-->
   <string name="PRO_ASSIGNED_BY_ROLES">Set by the roles</string>
-  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Registration has been confirmed. The user can now log on to the system.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Cancel membership</string>
   <string name="PRO_CANCEL_USER_RELATION">Delete relationship</string>
   <string name="PRO_CHANGE_DATE">Change date</string>
@@ -521,6 +520,7 @@
   <string name="SYS_ASSIGN_MEMBERS">Assign members</string>
   <string name="SYS_ASSIGN_MEMBERSHIP">Assign membership</string>
   <string name="SYS_ASSIGN_REGISTRATION">Assign registration</string>
+  <string name="SYS_ASSIGN_REGISTRATION_SUCCESSFUL">Registration has been confirmed. The member can now log on to the system.</string>
   <string name="SYS_ASSIGN_ROLE">Assign role</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Select a role for all imported users.\n\nAvailable are only roles which you have user permission for.</string>
   <string name="SYS_ASSIGN_ROLES">Assign roles</string>
@@ -1341,7 +1341,8 @@
   <string name="SYS_SHOW_PROFILE">Show profile</string>
   <string name="SYS_SHOW_ROUTE">Show route</string>
   <string name="SYS_SIMILAR_MEMBERS_FOUND">Similar members found</string>
-  <string name="SYS_SIMILAR_MEMBERS_FOUND_DESC">Already found members with similar name as #VAR1_BOLD#. Check the registration and assign it to a found member or create a new member.</string>
+  <string name="SYS_SIMILAR_MEMBERS_FOUND_ASSIGN">Members with a similar name as #VAR1_BOLD# were found.</string>
+  <string name="SYS_SIMILAR_MEMBERS_FOUND_REGISTRATION">Members with a similar name as #VAR1_BOLD# were found. Check the registration and assign it to a found member or create a new member.</string>
   <string name="SYS_SINCE">since #VAR1#</string>
   <string name="SYS_SINCE_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_SIZE">Size</string>

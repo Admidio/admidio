@@ -105,7 +105,7 @@ if ($memberCount === 0) {
 
 // html output
 echo '
-<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', array($getFirstname. ' '. $getLastname)).'</p>
+<p class="lead">'.$gL10n->get('SYS_SIMILAR_MEMBERS_FOUND_ASSIGN', array($getFirstname. ' '. $getLastname)).'</p>
 
 <div class="card">
     <div class="card-header">'.$gL10n->get('SYS_USER_FOUND').'</div>
