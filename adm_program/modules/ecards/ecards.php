@@ -15,7 +15,6 @@
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/ecard_function.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
@@ -25,7 +24,7 @@ $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr', 'int', array('requireV
 $showPage     = admFuncVariableIsValid($_GET, 'show_page', 'int', array('defaultValue' => 1));
 
 // Initialisierung lokaler Variablen
-$funcClass = new FunctionClass($gL10n);
+$funcClass = new ECard($gL10n);
 $templates = $funcClass->getFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates');
 $headline  = $gL10n->get('SYS_SEND_GREETING_CARD');
 

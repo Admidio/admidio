@@ -12,7 +12,6 @@
 // preview will be called before form is send, so there are now POST parameters available
 // then show nothing. Second call is with POST parameters then show preview
 require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/ecard_function.php');
 
 $gMessage->showThemeBody(false);
 $gMessage->showInModalWindow();
@@ -41,7 +40,7 @@ $ecardMessage     = admFuncVariableIsValid($_POST, 'ecard_message', 'html');
 
 $imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale')));
 
-$funcClass = new FunctionClass($gL10n);
+$funcClass = new ECard($gL10n);
 
 // read content of template file
 $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName);

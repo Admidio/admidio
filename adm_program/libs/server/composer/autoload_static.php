@@ -157,6 +157,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'Database' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Database.php',
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
         'DateTimeExtended' => __DIR__ . '/../../../..' . '/adm_program/system/classes/DateTimeExtended.php',
+        'ECard' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ECard.php',
         'Email' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Email.php',
         'FileSystemUtils' => __DIR__ . '/../../../..' . '/adm_program/system/classes/FileSystemUtils.php',
         'FileUpload' => __DIR__ . '/../../../..' . '/adm_program/system/classes/FileUpload.php',
