@@ -1249,6 +1249,37 @@ $formPhotos->addCheckbox(
     (bool) $formValues['photo_keep_original'],
     array('helpTextIdInline' => array('PHO_KEEP_ORIGINAL_DESC', array($gL10n->get('PHO_DOWNLOAD_ENABLED'))))
 );
+$formPhotos->addCheckbox(
+    'photo_ecard_enabled',
+    $gL10n->get('SYS_ENABLE_GREETING_CARDS'),
+    (bool) $formValues['photo_ecard_enabled'],
+    array('helpTextIdInline' => 'SYS_ENABLE_GREETING_CARDS_DESC')
+);
+$formPhotos->addInput(
+    'photo_ecard_scale',
+    $gL10n->get('PHO_SCALE_THUMBNAILS'),
+    $formValues['photo_ecard_scale'],
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
+);
+
+try {
+    // get all eCard templates from the theme folder eCard_templates
+    $eCardTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+} catch (UnexpectedValueException $e) {
+    $eCardTemplatesFiles = array();
+}
+
+foreach ($eCardTemplatesFiles as &$templateName) {
+    $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
+}
+unset($templateName);
+
+$formPhotos->addSelectBox(
+    'photo_ecard_template',
+    $gL10n->get('SYS_TEMPLATE'),
+    $eCardTemplatesFiles,
+    array('defaultValue' => $formValues['photo_ecard_template'], 'showContextDependentFirstEntry' => false, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'SYS_TEMPLATE_DESC')
+);
 $formPhotos->addSubmitButton(
     'btn_save_photos',
     $gL10n->get('SYS_SAVE'),
@@ -1325,54 +1356,6 @@ $formGuestbook->addSubmitButton(
 );
 
 $page->addHtml(getPreferencePanel('modules', 'guestbook', 'accordion_modules', $gL10n->get('GBO_GUESTBOOK'), 'fas fa-book', $formGuestbook->show()));
-
-// PANEL: ECARDS
-
-$formEcards = new HtmlForm(
-    'ecards_preferences_form',
-    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'ecards')),
-    $page,
-    array('class' => 'form-preferences')
-);
-
-$formEcards->addCheckbox(
-    'photo_ecard_enabled',
-    $gL10n->get('SYS_ENABLE_GREETING_CARDS'),
-    (bool) $formValues['photo_ecard_enabled'],
-    array('helpTextIdInline' => 'SYS_ENABLE_GREETING_CARDS_DESC')
-);
-$formEcards->addInput(
-    'photo_ecard_scale',
-    $gL10n->get('PHO_SCALE_THUMBNAILS'),
-    $formValues['photo_ecard_scale'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
-);
-
-try {
-    // get all ecard templates from the theme folder ecard_templates
-    $ecardTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-} catch (\UnexpectedValueException $e) {
-    $ecardTemplatesFiles = array();
-}
-
-foreach ($ecardTemplatesFiles as &$templateName) {
-    $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
-}
-unset($templateName);
-
-$formEcards->addSelectBox(
-    'photo_ecard_template',
-    $gL10n->get('SYS_TEMPLATE'),
-    $ecardTemplatesFiles,
-    array('defaultValue' => $formValues['photo_ecard_template'], 'showContextDependentFirstEntry' => false, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'SYS_TEMPLATE_DESC')
-);
-$formEcards->addSubmitButton(
-    'btn_save_ecards',
-    $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
-);
-
-$page->addHtml(getPreferencePanel('modules', 'ecards', 'accordion_modules', $gL10n->get('SYS_GREETING_CARDS'), 'fas fa-file-image', $formEcards->show()));
 
 // PANEL: GROUPS AND ROLES
 
