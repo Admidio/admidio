@@ -19,7 +19,7 @@
                     <br />
 
                     <p>{$similarUser.button.description}</p>
-                    <button class="btn btn-primary" onclick="window.location.href=\'{$similarUser.button.url}\'">
+                    <button class="btn btn-primary" onclick="window.location.href='{$similarUser.button.url}'">
                         <i class="fas {$similarUser.button.icon}"></i>{$similarUser.button.label}</button>
                 </li>
             {/foreach}
@@ -31,7 +31,7 @@
     <div class="card-body">
         <p>{$l10n->get('SYS_CREATE_NOT_FOUND_USER')}</p>
 
-        <button class="btn btn-primary" onclick="window.location.href=\'{$createNewUserUrl}\'">
+        <button class="btn btn-primary" onclick="window.location.href='{$createNewUserUrl}'">
             <i class="fas fa-plus-circle"></i>{$l10n->get('SYS_CREATE_MEMBER')}</button>
     </div>
 </div>

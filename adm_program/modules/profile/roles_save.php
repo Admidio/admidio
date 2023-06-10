@@ -235,7 +235,8 @@ if ($getNewUser > 0 && $assignedCount === 0) {
 
 // back to the starting page
 
-if (str_contains($gNavigation->getUrl(), 'new_user_assign.php')) {
+if (str_contains($gNavigation->getUrl(), 'mode=show_similar')
+|| str_contains($gNavigation->getPreviousUrl(), 'mode=show_similar')) {
     // go directly back to the registration overview
     $gNavigation->deleteLastUrl();
 }
@@ -245,11 +246,12 @@ if ($getInline) {
 } else {
     if ($getNewUser === 3) {
         $messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+        $gMessage->setForwardUrl($gNavigation->getUrl());
     } else {
         $messageId = 'SYS_SAVE_DATA';
+        $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     }
 
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get($messageId));
     // => EXIT
 }
