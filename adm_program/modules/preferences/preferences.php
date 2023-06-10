@@ -34,7 +34,7 @@ $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManag
 $page = new HtmlPage('admidio-preferences', $headline);
 
 $showOptionValidModules = array(
-    'announcements', 'documents-files', 'guestbook', 'ecards', 'groups-roles',
+    'announcements', 'documents-files', 'guestbook', 'groups-roles',
     'messages', 'photos', 'profile', 'events', 'links', 'user_management', 'category-report'
 );
 
