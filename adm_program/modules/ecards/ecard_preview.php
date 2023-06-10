@@ -13,6 +13,12 @@
 // then show nothing. Second call is with POST parameters then show preview
 require_once(__DIR__ . '/../../system/common.php');
 
+// check if the module is enabled and disallow access if it's disabled
+if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
 $gMessage->showThemeBody(false);
 $gMessage->showInModalWindow();
 
@@ -38,7 +44,7 @@ $nameRecipient    = admFuncVariableIsValid($_POST, 'name_recipient', 'string');
 $emailRecipient   = admFuncVariableIsValid($_POST, 'email_recipient', 'string');
 $ecardMessage     = admFuncVariableIsValid($_POST, 'ecard_message', 'html');
 
-$imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale')));
+$imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'), 'max_height' => $gSettingsManager->getInt('photo_ecard_scale')));
 
 $funcClass = new ECard($gL10n);
 

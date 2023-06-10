@@ -11,7 +11,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('enable_ecard_module')) {
+if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -25,7 +25,7 @@ $postMessage      = admFuncVariableIsValid($_POST, 'ecard_message', 'html');
 $funcClass       = new ECard($gL10n);
 $photoAlbum      = new TablePhotos($gDb);
 $photoAlbum->readDataByUuid($postPhotoUuid);
-$imageUrl        = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale')));
+$imageUrl        = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'), 'max_height' => $gSettingsManager->getInt('photo_ecard_scale')));
 $imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id').'/'.$postPhotoNr.'.jpg';
 
 $_SESSION['ecard_request'] = $_POST;

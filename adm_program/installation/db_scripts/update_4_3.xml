@@ -4,5 +4,17 @@
     <step id="20">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'ecard_card_picture_width'</step>
     <step id="30">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'ecard_card_picture_height'</step>
     <step id="40">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'photo_save_scale'</step>
+    <step id="50" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_ecard_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'photo_ecard_enabled'</step>
+    <step id="60" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_ecard_module' AND pr1.prf_name = 'photo_ecard_enabled'</step>
+    <step id="70">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_ecard_module'</step>
+    <step id="80" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'ecard_thumbs_scale' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'photo_ecard_scale'</step>
+    <step id="90" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'ecard_thumbs_scale' AND pr1.prf_name = 'photo_ecard_scale'</step>
+    <step id="100">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'ecard_thumbs_scale'</step>
+    <step id="110" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'ecard_template' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'photo_ecard_template'</step>
+    <step id="120" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'ecard_template' AND pr1.prf_name = 'photo_ecard_template'</step>
+    <step id="130">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'ecard_template'</step>
+    <step id="140" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_photo_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'photo_module_enabled'</step>
+    <step id="150" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_photo_module' AND pr1.prf_name = 'photo_module_enabled'</step>
+    <step id="160">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_photo_module'</step>
     <step>stop</step>
 </update>

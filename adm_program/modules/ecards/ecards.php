@@ -17,6 +17,12 @@
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
+// check if the module is enabled and disallow access if it's disabled
+if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
 // Initialize and check the parameters
 $getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string', array('requireValue' => true));
 $getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
@@ -27,12 +33,6 @@ $showPage     = admFuncVariableIsValid($_GET, 'show_page', 'int', array('default
 $funcClass = new ECard($gL10n);
 $templates = $funcClass->getFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates');
 $headline  = $gL10n->get('SYS_SEND_GREETING_CARD');
-
-// check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('enable_ecard_module')) {
-    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-    // => EXIT
-}
 
 // Drop URL on navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -84,7 +84,7 @@ if (isset($_SESSION['ecard_request'])) {
     $recipients = $_SESSION['ecard_request']['ecard_recipients'];
     $message    = $_SESSION['ecard_request']['ecard_message'];
 } else {
-    $template   = $gSettingsManager->getString('ecard_template');
+    $template   = $gSettingsManager->getString('photo_ecard_template');
     $recipients = null;
     $message    = '';
 }
@@ -131,7 +131,7 @@ $form->openGroupBox('gb_layout', $gL10n->get('SYS_LAYOUT'));
 $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
     <a data-toggle="lightbox" data-type="image" data-title="'.$gL10n->get('SYS_PREVIEW').'"
         href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
-        src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale'))).'"
+        src="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'), 'max_height' => $gSettingsManager->getInt('photo_ecard_scale'))).'"
         class="imageFrame" alt="'.$gL10n->get('SYS_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('SYS_VIEW_PICTURE_FULL_SIZED').'" />
     </a>');
 $templates = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));

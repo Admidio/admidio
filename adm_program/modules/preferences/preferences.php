@@ -1179,10 +1179,10 @@ $selectBoxEntries = array(
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formPhotos->addSelectBox(
-    'enable_photo_module',
+    'photo_module_enabled',
     $gL10n->get('ORG_ACCESS_TO_MODULE'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['enable_photo_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
+    array('defaultValue' => $formValues['photo_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
 );
 $selectBoxEntries = array(
     '1' => $gL10n->get('PHO_MODAL_WINDOW'),
@@ -1336,15 +1336,15 @@ $formEcards = new HtmlForm(
 );
 
 $formEcards->addCheckbox(
-    'enable_ecard_module',
+    'photo_ecard_enabled',
     $gL10n->get('SYS_ENABLE_GREETING_CARDS'),
-    (bool) $formValues['enable_ecard_module'],
+    (bool) $formValues['photo_ecard_enabled'],
     array('helpTextIdInline' => 'SYS_ENABLE_GREETING_CARDS_DESC')
 );
 $formEcards->addInput(
-    'ecard_thumbs_scale',
+    'photo_ecard_scale',
     $gL10n->get('PHO_SCALE_THUMBNAILS'),
-    $formValues['ecard_thumbs_scale'],
+    $formValues['photo_ecard_scale'],
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
 );
 
@@ -1361,10 +1361,10 @@ foreach ($ecardTemplatesFiles as &$templateName) {
 unset($templateName);
 
 $formEcards->addSelectBox(
-    'ecard_template',
+    'photo_ecard_template',
     $gL10n->get('SYS_TEMPLATE'),
     $ecardTemplatesFiles,
-    array('defaultValue' => $formValues['ecard_template'], 'showContextDependentFirstEntry' => false, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'SYS_TEMPLATE_DESC')
+    array('defaultValue' => $formValues['photo_ecard_template'], 'showContextDependentFirstEntry' => false, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'SYS_TEMPLATE_DESC')
 );
 $formEcards->addSubmitButton(
     'btn_save_ecards',

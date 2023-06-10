@@ -164,7 +164,7 @@ switch ($getMode) {
                     break;
 
                 case 'ecards':
-                    $checkboxes = array('enable_ecard_module');
+                    $checkboxes = array('photo_ecard_enabled');
                     break;
 
                 case 'groups-roles':

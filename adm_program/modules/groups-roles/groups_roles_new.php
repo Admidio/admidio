@@ -308,7 +308,7 @@ if (!$eventRole) {
             array('helpTextIdLabel' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-calendar-alt')
         );
     }
-    if ((int) $gSettingsManager->get('enable_photo_module') > 0) {
+    if ((int) $gSettingsManager->get('photo_module_enabled') > 0) {
         $form->addCheckbox(
             'rol_photo',
             $gL10n->get('SYS_RIGHT_PHOTOS'),

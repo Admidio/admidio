@@ -197,7 +197,7 @@ class ECard
                     $imgPhotoPath  = $imgServerPath;
 
                     $imageSized = new Image($photoServerPath);
-                    $imageSized->scale($gSettingsManager->getInt('ecard_thumbs_scale'), $gSettingsManager->getInt('ecard_thumbs_scale'));
+                    $imageSized->scale($gSettingsManager->getInt('photo_ecard_scale'), $gSettingsManager->getInt('photo_ecard_scale'));
                     $imageSized->copyToFile(null, $imgServerPath);
                 }
 

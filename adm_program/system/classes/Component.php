@@ -280,8 +280,8 @@ class Component extends TableAccess
                 break;
 
             case 'PHOTOS':
-                if ((int) $gSettingsManager->get('enable_photo_module') === 1
-                || ((int) $gSettingsManager->get('enable_photo_module') === 2 && $gValidLogin)) {
+                if ((int) $gSettingsManager->get('photo_module_enabled') === 1
+                || ((int) $gSettingsManager->get('photo_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
