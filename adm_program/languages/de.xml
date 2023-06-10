@@ -364,9 +364,6 @@
   <string name="PHO_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesucher:innen der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</string>
   <string name="PHO_KEEP_ORIGINAL">Originale zusätzlich speichern</string>
   <string name="PHO_KEEP_ORIGINAL_DESC">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option #VAR1_BOLD# aktiviert, werden die Originalfotos herunterladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</string>
-  <string name="PHO_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster haben darf. Bei einem Modalen-Fenster oder Popup-Fenster wird das Fenster automatisch in der Größe an das Foto angepasst. Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder für die Anzeige nicht neu skaliert werden müssen. (Voreinstellung: 640 x 400 Pixel)</string>
-  <string name="PHO_MAX_PHOTO_SIZE_HEIGHT">Max. Bildanzeigegröße (Höhe)</string>
-  <string name="PHO_MAX_PHOTO_SIZE_WIDTH">Max. Bildanzeigegröße (Breite)</string>
   <string name="PHO_MODAL_WINDOW">Modales Fenster</string>
   <string name="PHO_NEXT_PHOTO">Nächstes Bild</string>
   <string name="PHO_NO_ALBUM_CONTENT">Dieses Album enthält leider noch keine Fotos.</string>
@@ -987,6 +984,9 @@
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmende</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# von max. #VAR2# Teilnehmende</string>
   <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
+  <string name="SYS_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Breite bzw. Höhe haben darf. Die Fotos werden beim Hochladen auf diese Größe skaliert. Bei einem Modalen-Fenster oder Popup-Fenster wird das Fenster automatisch in die Größe des Foto angepasst. (Voreinstellung: #VAR1# x #VAR2# Pixel)</string>
+  <string name="SYS_MAX_PHOTO_SIZE_HEIGHT">Maximale Bildhöhe</string>
+  <string name="SYS_MAX_PHOTO_SIZE_WIDTH">Maximale Bildbreite</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
   <string name="SYS_MAX_RECEIVER">Maximale Anzahl Empfänger:innen für E-Mails</string>
   <string name="SYS_MAX_RECEIVER_DESC">Dieser Wert gibt an, wie viele Empfänger:innen man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden.</string>

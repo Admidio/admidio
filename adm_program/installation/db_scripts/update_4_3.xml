@@ -3,5 +3,6 @@
     <step id="10">UPDATE %PREFIX%_preferences SET prf_value = '500' WHERE prf_name = 'ecard_thumbs_scale'</step>
     <step id="20">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'ecard_card_picture_width'</step>
     <step id="30">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'ecard_card_picture_height'</step>
+    <step id="40">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'photo_save_scale'</step>
     <step>stop</step>
 </update>

@@ -1214,22 +1214,16 @@ $formPhotos->addInput(
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PHO_SCALE_THUMBNAILS_DESC')
 );
 $formPhotos->addInput(
-    'photo_save_scale',
-    $gL10n->get('PHO_SCALE_AT_UPLOAD'),
-    $formValues['photo_save_scale'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PHO_SCALE_AT_UPLOAD_DESC')
-);
-$formPhotos->addInput(
     'photo_show_width',
-    $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'),
+    $gL10n->get('SYS_MAX_PHOTO_SIZE_WIDTH'),
     $formValues['photo_show_width'],
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1)
 );
 $formPhotos->addInput(
     'photo_show_height',
-    $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'),
+    $gL10n->get('SYS_MAX_PHOTO_SIZE_HEIGHT'),
     $formValues['photo_show_height'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PHO_MAX_PHOTO_SIZE_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_MAX_PHOTO_SIZE_DESC', array(1000, 800)))
 );
 $formPhotos->addInput(
     'photo_image_text',
