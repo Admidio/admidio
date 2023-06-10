@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_FILES_HEADLINE">Dokumentumok és fájlok</string>
+  <string name="PLG_LATEST_FILES_MORE_DOWNLOADS">További dokumentumok és fájlok</string>
+  <string name="PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE">Nincsenek dokumentumok vagy fájlok.</string>
+  <string name="PLG_LATEST_FILES_UPLOAD_FROM_AT">Feltöltötte #VAR1# a #VAR2# időpontban</string>
+</resources>

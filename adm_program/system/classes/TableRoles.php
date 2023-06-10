@@ -483,10 +483,17 @@ class TableRoles extends TableAccess
 
     /**
      * Set the current role inactive.
-     * @return bool Returns **true** if the role could be set to inactive.
+     * Administrator and event roles could not be set to inactive.
+     * @return bool Returns **true** if the role was set to inactive.
+     * @throws AdmException
      */
-    public function setInactive()
+    public function setInactive(): bool
     {
+        if ($this->getValue('rol_administrator')) {
+            throw new AdmException('Administrator role cannot be set to inactive.');
+        } elseif ($this->getValue('cat_name_intern') === 'EVENTS') {
+            throw new AdmException('Event role cannot be set to inactive.');
+        }
         return $this->toggleValid(false);
     }
 

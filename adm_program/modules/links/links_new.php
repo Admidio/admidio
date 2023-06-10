@@ -71,7 +71,7 @@ $form = new HtmlForm('weblinks_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL.
 $form->addInput(
     'lnk_name',
     $gL10n->get('SYS_LINK_NAME'),
-    $link->getValue('lnk_name', 'database'),
+    $link->getValue('lnk_name'),
     array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(

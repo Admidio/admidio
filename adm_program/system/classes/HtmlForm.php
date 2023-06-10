@@ -756,6 +756,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $optionsAll["attributes"] = $attributes;
+        // replace quotes with html entities to prevent xss attacks
         $optionsAll['value'] = $value;
 
         // required field should not be highlighted so set it to a default field

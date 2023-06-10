@@ -284,7 +284,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                 $date->setValue('dat_max_members', $datMaxMembers);
             }
             // Raumname für Benachrichtigung
-            $raum = $room->getValue('room_name');
+            $room = $room->getValue('room_name');
         }
     }
 
@@ -324,13 +324,13 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         $calendar = $pdoStatement->fetchColumn();
 
         if (strlen($_POST['dat_location']) > 0) {
-            $ort = $_POST['dat_location'];
+            $location = $_POST['dat_location'];
         } else {
-            $ort = 'n/a';
+            $location = 'n/a';
         }
 
         if ($_POST['dat_room_id'] == 0) {
-            $raum = 'n/a';
+            $room = 'n/a';
         }
 
         if (strlen($_POST['dat_max_members']) > 0) {
@@ -343,22 +343,27 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
             $notification = new Email();
 
             if ($dateIsNew) {
-                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $date->getDateTimePeriod(), $calendar))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
-                $notification->sendNotification(
-                    $gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'),
-                    $message
-                );
+                $messageTitleText = 'SYS_EMAIL_CREATE_EVENT_NOTIFICATION_TITLE';
+                $messageUserText = 'SYS_CREATED_BY';
+                $messageDateText = 'SYS_CREATED_AT';
             } else {
-                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $date->getDateTimePeriod(), $calendar))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
-                $notification->sendNotification(
-                    $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'),
-                    $message
-                );
+                $messageTitleText = 'SYS_EMAIL_CHANGE_EVENT_NOTIFICATION_TITLE';
+                $messageUserText = 'SYS_CHANGED_BY';
+                $messageDateText = 'SYS_CHANGED_AT';
             }
+            $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '\n\n'
+                . $gL10n->get('SYS_TITLE') . ': ' . $_POST['dat_headline'] . '\n'
+                . $gL10n->get('SYS_DATE') . ': ' . $date->getDateTimePeriod() . '\n'
+                . $gL10n->get('DAT_CALENDAR') . ': ' . $calendar . '\n'
+                . $gL10n->get('DAT_LOCATION') . ': ' . $location . '\n'
+                . $gL10n->get('SYS_ROOM') . ': ' . $room . '\n'
+                . $gL10n->get('SYS_PARTICIPANTS') . ': ' . $participants . '\n'
+                . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME') . '\n'
+                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date')) . '\n';
+            $notification->sendNotification(
+                $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
+                $message
+            );
         } catch (AdmException $e) {
             $e->showHtml();
         }
@@ -408,7 +413,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
                     // these are the default settings for a date role
                     $role->setValue('rol_cat_id', (int)$pdoStatement->fetchColumn());
                     // role members are allowed to view lists
-                    $role->setValue('rol_view_memberships', isset($_POST['date_right_list_view']) ? 1 : 0);
+                    $role->setValue('rol_view_memberships', isset($_POST['date_right_list_view']) ? 1 : 3);
                     // role members are allowed to send mail to this role
                     $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? 1 : 0);
                     $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations
@@ -500,9 +505,10 @@ if (in_array($getMode, array(3, 4, 7), true)) {
     }
 
     $member = new TableMembers($gDb);
+    $participants = new Participants($gDb, (int) $date->getValue('dat_rol_id'));
 
-    // if participation is possible update user inputs
-    if ($date->possibleToParticipate()) {
+    // if current user is allowed to participate or user could edit this event then update user inputs
+    if ($date->possibleToParticipate() || $participants->isLeader($gCurrentUserId)) {
         $member->readDataByColumns(array('mem_rol_id' => (int) $date->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
         $member->setValue('mem_comment', $postUserComment); // Comments will be saved in any case. Maybe it is a documentation afterwards by a leader or admin
 
@@ -512,7 +518,6 @@ if (in_array($getMode, array(3, 4, 7), true)) {
 
         // Now check participants limit and save guests if possible
         if ($date->getValue('dat_max_members') > 0) {
-            $participants = new Participants($gDb, (int) $date->getValue('dat_rol_id'));
             $totalMembers = $participants->getCount();
 
             if ($totalMembers + ($postAdditionalGuests - (int) $member->getValue('mem_count_guests')) < $date->getValue('dat_max_members')) {

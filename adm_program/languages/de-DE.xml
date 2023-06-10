@@ -16,25 +16,15 @@
   <string name="DAT_CURRENT_DATES_OF_ORGA">Aktuelle Termine der Organisation #VAR1#</string>
   <string name="DAT_DATE">Termin</string>
   <string name="DAT_DATES">Termine</string>
-  <string name="DAT_DATES_DESC">Termine können hier angelegt und angeschaut werden. Benutzer:innen können sich auf Wunsch zu diesen Terminen anmelden.</string>
   <string name="DAT_DEADLINE">Anmeldeschluss</string>
   <string name="DAT_DEADLINE_ATTENTION">Ihre Anmeldung kann nicht mehr verändert werden, da das vorgegebene Enddatum für Anmeldungen erreicht wurde oder der Termin in der Vergangenheit liegt. Bitte wenden Sie sich an die Leiter:innen des Termins oder eine:n Administrator:in!</string>
-  <string name="DAT_DEADLINE_DESC">Teilnehmende können sich bis zu diesem Datum am Termin anmelden. Leiter:innen und Benutzer:innen mit dem Recht Termine zu bearbeiten können weiterhin Teilnehmende zuordnen. Wenn kein Datumswert angegeben wird, dann wird als Default das Startdatum des Termins als Anmeldeschluss angenommen.</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standardkonfiguration der Liste aller Teilnehmenden</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für die Liste aller Teilnehmenden an Terminen dieser Organisation gemacht werden. Teilnehmende von Terminen werden mit dieser Konfiguration angezeigt.</string>
   <string name="DAT_EDIT_CALENDAR_DESC">Hier können Kalender angelegt und bearbeitet werden.</string>
   <string name="DAT_EDIT_EVENTS">Termine bearbeiten</string>
   <string name="DAT_EDIT_ROOMS">Räume bearbeiten</string>
   <string name="DAT_EDIT_ROOMS_DESC">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Ein Termin wurde geändert</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">Es wurde ein Termin bei #VAR1# geändert.\n\nTitel: #VAR2#\nDatum: #VAR3#\nKalender: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Ort: #VAR1#\nRaum: #VAR2#\Teilnehmende: #VAR3#\nGeändert von: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3">Geändert am: #VAR1#</string>
-  <string name="DAT_EMAIL_NOTIFICATION_TITLE">Ein neuer Termin wurde angelegt</string>
-  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">Es wurde ein neuer Termin bei #VAR1# angelegt.\n\nTitel: #VAR2#\nDatum: #VAR3#\nKalender: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Ort: #VAR1#\nRaum: #VAR2#\Teilnehmende: #VAR3#\nAngelegt von: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Angelegt am: #VAR1#</string>
-  <string name="DAT_ENABLE_ICAL">iCal-Funktion aktivieren</string>
+  <string name="DAT_ENABLE_ICAL">iCal-Export ermöglichen</string>
   <string name="DAT_ENABLE_ICAL_DESC">Ist diese Funktion aktiviert, lassen sich einzelne Termine oder alle Termine in einem festgelegten Zeitraum herunterladen. Auch das Abonnieren der Termine mit einer Kalendersoftware wird möglich. (Voreinstellung: ja)</string>
   <string name="DAT_EXPORT_ICAL">Exportieren (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Termin optisch hervorheben</string>
@@ -280,13 +270,13 @@
   <string name="ORG_ENABLE_RSS_FEEDS">Web-Feeds aktivieren</string>
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kann Web-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Voreinstellung: ja)</string>
   <string name="ORG_FIELD_DESCRIPTION">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</string>
-  <string name="ORG_FIELD_DISABLED">Feld nur für Benutzer:innen mit dem Recht #VAR1_BOLD# editierbar</string>
-  <string name="ORG_FIELD_DISABLED_DESC">Ein gesperrtes Feld kann von der Benutzerin oder dem Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzerinnn und Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer:innen zu bearbeiten. Leiter:innen einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</string>
+  <string name="ORG_FIELD_DISABLED">Feld nur für Mitglieder mit dem Recht #VAR1_BOLD# editierbar</string>
+  <string name="ORG_FIELD_DISABLED_DESC">Ein gesperrtes Feld kann von dem Mitglied im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Mitgliedern bearbeitet werden, die das Rollenrecht besitzen alle Mitglieder zu bearbeiten. Leiter:innen einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</string>
   <string name="ORG_FIELD_EXIST">Es existiert bereits ein Feld in dieser Kategorie mit dem selben Namen.</string>
-  <string name="ORG_FIELD_HIDDEN">Feld nur für berechtigte Benutzer:innen (eigenes Profil &amp; Rollenrecht) sichtbar</string>
-  <string name="ORG_FIELD_HIDDEN_DESC">Ein Feld ist normalerweise für alle Benutzer:innen sichtbar, die das Profil sehen dürfen. Ist diese Einstellung nicht gesetzt, dann können nur Benutzer:innen das Feld sehen, die das Profil auch bearbeiten dürfen.</string>
-  <string name="ORG_FIELD_NOT_DISABLED">Feld kann durch Benutzer:innen selbst bearbeitet werden</string>
-  <string name="ORG_FIELD_NOT_HIDDEN">Feld für alle Benutzer:innen sichtbar</string>
+  <string name="ORG_FIELD_HIDDEN">Feld nur für berechtigte Mitglieder (eigenes Profil &amp; Rollenrecht) sichtbar</string>
+  <string name="ORG_FIELD_HIDDEN_DESC">Ein Feld ist normalerweise für alle Mitglieder sichtbar, die das Profil sehen dürfen. Ist diese Einstellung nicht gesetzt, dann können nur Mitglieder das Feld sehen, die das Profil auch bearbeiten dürfen.</string>
+  <string name="ORG_FIELD_NOT_DISABLED">Feld kann durch Mitglieder selbst bearbeitet werden</string>
+  <string name="ORG_FIELD_NOT_HIDDEN">Feld für alle Mitglieder sichtbar</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Feld wird bei der Registrierung nicht angezeigt</string>
   <string name="ORG_FIELD_REGISTRATION">Feld wird bei der Registrierung angezeigt</string>
   <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später im Profil den Inhalt, den die Benutzerin oder der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter #user_content# in die URL eingebaut werden. Dies ist dann der Inhalt, den die Benutzerin oder der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: https://www.google.de/search?q=#user_content#\nFeldinhalt: Admidio\nLink im Profil: https://www.google.de/search?q=Admidio</string>
@@ -607,7 +597,6 @@
   <string name="SYS_COMMON">Allgemein</string>
   <string name="SYS_COMPLEMENT">Ergänzen</string>
   <string name="SYS_CONDITION">Bedingung</string>
-  <string name="SYS_CONDITIONS">Bedingungen</string>
   <string name="SYS_CONFIGURATION">Konfiguration</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Konfiguration allen Benutzer:innen zur Verfügung stellen</string>
   <string name="SYS_CONFIGURATION_DELETE">Wollen Sie aktuelle Listenkonfiguration wirklich löschen?</string>
@@ -775,8 +764,10 @@
   <string name="SYS_EMAIL_ADMINISTRATOR_DESC">Die E-Mail-Adresse eines Administrierenden wird im System immer dann angezeigt, wenn ein unerwartetes Ereignis eingetreten ist. Es erfolgt der Hinweis, das man Kontakt mit einem Administrator aufnehmen sollte.</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">Eine neue Ankündigung wurde angelegt</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">Es wurde eine neue Ankündigung bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
+  <string name="SYS_EMAIL_CHANGE_EVENT_NOTIFICATION_TITLE">Ein Termin bei #VAR1# wurde geändert</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde geändert</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profildaten von #VAR1# #VAR2# (Login: #VAR3#) wurden geändert durch #VAR4#.</string>
+  <string name="SYS_EMAIL_CREATE_EVENT_NOTIFICATION_TITLE">Ein Termin bei #VAR1# wurde angelegt</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde erstellt</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde von #VAR4# erstellt.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Benutzer:in #VAR1# #VAR2# (Login: #VAR3#) wurde gelöscht</string>
@@ -820,6 +811,8 @@
   <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n#VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist als Standardkonfiguration für das Modul #VAR1# in dieser Organisation hinterlegt und kann nicht gelöscht werden. Wählen Sie in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuchen Sie danach diese Konfiguration zu löschen.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - Seite nicht gefunden!</string>
+  <string name="SYS_EVENT_DEADLINE_DESC">Teilnehmende können sich bis zu diesem Datum am Termin anmelden. Leiter:innen und Mitglieder mit dem Recht Termine zu bearbeiten können weiterhin Teilnehmende zuordnen. Wenn kein Datum angegeben wird, dann wird das Startdatum des Termins als Anmeldeschluss angenommen.</string>
+  <string name="SYS_EVENTS_DESC">Es können Termine angelegt und angeschaut werden. Mitglieder können sich auf Wunsch zu speziellen Terminen anmelden.</string>
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Termine - Teilnahmebestätigung</string>
   <string name="SYS_EXAMPLE">Beispiel</string>
   <string name="SYS_EXAMPLES">Beispiele</string>
@@ -877,7 +870,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">Beim Umbenennen des Ordners #VAR1# ist ein Fehler aufgetreten.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWenden Sie sich bitte an eine:n #VAR2#Administrator:in#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
   <string name="SYS_FONT">Schriftart</string>
-  <string name="SYS_FONT_AWESOME_DESC">Sie können ein Icon auf verschiedene Arten speichern:\n1. Ein Icon der Webschriftart \"Font Awesome\". Gehen Sie zu #VAR1#http://fontawesome.com#VAR2# und wählen Sie ein freies Icon aus der Sammlung \"Solid\" oder \"Brands\". Als Präfix muss ein fa- vorangestellt werden. Wenn Sie also das Icon \"user\" wählen, müssen Sie hier \"fa-user\" eingeben.\n2. Ein JPEG- oder PNG-Icon. Legen Sie dazu die Icon-Datei in den Themeordner \"images\". Hinterlegen Sie hier den Namen der Icon-Datei.</string>
+  <string name="SYS_FONT_AWESOME_DESC">Hier können Sie ein Icon der Webschriftart \"Font Awesome\" hinterlegen. Gehen Sie dazu zu #VAR1#http://fontawesome.com#VAR2# und wählen Sie ein freies Icon aus der Sammlung \"Solid\" oder \"Brands\". Als Präfix muss ein fa- vorangestellt werden. Wenn Sie also das Icon \"user\" wählen, müssen Sie hier \"fa-user\" eingeben.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Ich habe mein Passwort vergessen!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Ehemaliger</string>
@@ -934,7 +927,7 @@
   <string name="SYS_INTERNAL_NAME">Interner Name</string>
   <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
   <string name="SYS_INTO_TO">Empfänger:innen im TO-Feld und nicht im BCC-Feld auflisten</string>
-  <string name="SYS_INTO_TO_DESC">Geht eine E-Mail an mehrere Personen, dann werden die Empfänger:innen bei gesetzter Einstellung alle im TO-Feld der E-Mail aufgelistet. Dadurch kann jeder Empfangende die Namen und E-Mail-Adressen der anderen Empfangenden sehen. Außerdem hat er die Möglichkeit auf diese E-Mail an alle anderen Empfänger:innen zu antworten. (Voreinstellung: Deaktiviert)</string>
+  <string name="SYS_INTO_TO_DESC">Geht eine E-Mail an mehrere Personen, dann werden die Empfänger:innen bei gesetzter Einstellung alle im TO-Feld der E-Mail aufgelistet. Dadurch kann jeder Empfangende die Namen und E-Mail-Adressen der anderen Empfangenden sehen. Außerdem hat er die Möglichkeit auf diese E-Mail an alle anderen Empfänger:innen zu antworten. (Voreinstellung: nein)</string>
   <string name="SYS_INVALID_FONT_AWESOME">Der eingegebene Icon-Name entspricht nicht der Syntax von Font Awesome. Prüfen Sie bitte, ob es diesen Namen auch als Icon gibt.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <string name="SYS_IO_ERROR">E/A Fehler</string>
@@ -1000,7 +993,7 @@
   <string name="SYS_MAXIMUM_FILE_SIZE">Maximale Dateigröße</string>
   <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Benutzer:innen können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Voreinstellung: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Mit Vorbehalt teilnehmen</string>
-  <string name="SYS_MAYBE_PARTICIPATE_DESC">Ist diese Option aktiviert, so steht bei der Terminanmeldung neben den Möglichkeiten #VAR1_BOLD# und #VAR2_BOLD# noch eine dritte Option #VAR3_BOLD# zur Verfügung. (Voreinstellung: Deaktiviert)</string>
+  <string name="SYS_MAYBE_PARTICIPATE_DESC">Ist diese Option aktiviert, so steht bei der Terminanmeldung neben den Möglichkeiten #VAR1_BOLD# und #VAR2_BOLD# noch eine dritte Option #VAR3_BOLD# zur Verfügung. (Voreinstellung: nein)</string>
   <string name="SYS_MEETINGS">Treffen</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Mitglied</string>
@@ -1097,7 +1090,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Rolle für Benachrichtigungen</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Benachrichtigungen über neue Einträge oder Profiländerungen werden an alle Mitglieder dieser Rolle gesendet.</string>
   <string name="SYS_NUMBER">Zahl</string>
-  <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Anzahl Rollen pro Seite</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge, so werden Navigationselemente angezeigt, um zwischen den Seiten zu blättern. (Voreinstellung: #VAR1#)</string>
   <string name="SYS_NUMBER_COL_DESC">Soll am Ende des Reports eine Zeile mit der Anzahl der Mitgliedschaften angezeigt werden, so ist der Haken zu setzen.</string>
   <string name="SYS_ODF_SPREADSHEET">ODF-Tabellendokument (*.ods)</string>
   <string name="SYS_OFF">aus</string>
@@ -1125,7 +1118,7 @@
   <string name="SYS_PARTICIPATION_STATUS">Status der teilnehmenden Person</string>
   <string name="SYS_PASSWORD">Passwort</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen?</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Bitte geben Sie Ihre E-Mail-Adresse ein, mit der Sie sich angemeldet haben. Wir werden Ihnen dann einen Link schicken, mit dem Sie Ihr Passwort zurücksetzen und anschließend ein neues Passwort vergeben können.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Bitte geben Sie Ihren Anmeldenamen oder Ihre E-Mail-Adresse ein. Wir werden Ihnen dann einen Link schicken, mit dem Sie Ihr Passwort zurücksetzen und anschließend ein neues Passwort vergeben können.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Hat die Benutzerin oder der Benutzer sein Passwort vergessen, kann er sich einen Link zuschicken lassen, über den er auf dieser Webseite ein neues Passwort für seinen Account vergeben kann. Ist diese Option deaktiviert, kann die Benutzerin oder der Benutzer nur eine Anfrage per E-Mail an die Administratorinnen und Administratoren stellen, damit dieser ein neues Passwort hinterlegt. Damit das Passwort zugesendet werden kann, muss zusätzlich die Einstellung #VAR1_BOLD# gesetzt sein. (Voreinstellung: ja)</string>
   <string name="SYS_PASSWORD_RESET_INVALID">Sie haben einen ungültigen Link zum Zurücksetzen Ihres Passworts aufgerufen. Falls Sie Ihr Passwort noch nicht zurückgesetzt haben, fordern Sie bitte einen neuen Link über die Funktion #VAR1# an.</string>
   <string name="SYS_PASSWORD_RESET_SAVED">Das neue Passwort wurde nun übernommen!</string>
@@ -1156,7 +1149,6 @@
   <string name="SYS_POSSIBLE_FIELDNAMES">Spaltennamen für automatische Erkennung: #VAR1#</string>
   <string name="SYS_POST_MAX_SIZE">max. POST-Größe</string>
   <string name="SYS_POSTCODE">PLZ</string>
-  <string name="SYS_PRESENTATION">Darstellung</string>
   <string name="SYS_PRESET_CONFIGURATION">Vorgegebene Konfigurationen</string>
   <string name="SYS_PRESET_CONFIGURATION_DESC">Als Administrator:in können Sie Konfigurationen erstellen, auf die alle Benutzer:innen des Systems Zugriff haben. Konfigurieren Sie die entsprechenden Spalten und Bedingungen und speichern Sie diese unter dem gewünschten Namen.</string>
   <string name="SYS_PREVIEW">Vorschau</string>
@@ -1187,6 +1179,7 @@
   <string name="SYS_REDIRECT_URL_INVALID">Die angegebene Weiterleitungs-URL ist ungültig.</string>
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
   <string name="SYS_REGISTRATION">Registrierung</string>
+  <string name="SYS_REGISTRATION_AT">Registrierung am #VAR1# um #VAR2# Uhr</string>
   <string name="SYS_REGISTRATION_SAVED">Ihre Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Ihre Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung werden Sie per E-Mail benachrichtigt.</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer:innen übernehmen</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Existiert eine neu registrierte Benutzerin oder ein neu registrierter Benutzer bereits in der Datenbank, so werden bei gesetzter Einstellung alle Daten aus der Registrierung in den bestehenden Datensatz übernommen. Wenn diese Einstellung nicht gesetzt ist, werden nur der Anmeldename und das Passwort übernommen. Bei Benutzerinnen und Benutzern, welche bisher noch nicht vorhanden waren, werden unabhängig von dieser Einstellung immer alle Daten aus der Registrierung übernommen. (Voreinstellung: ja)</string>
@@ -1257,7 +1250,7 @@
   <string name="SYS_SATURDAY">Samstag</string>
   <string name="SYS_SAVE">Speichern</string>
   <string name="SYS_SAVE_ATTACHMENTS">Anhänge speichern</string>
-  <string name="SYS_SAVE_ATTACHMENTS_DESC">E-Mail-Anhänge werden auf dem Webspace gespeichert und können nach dem Versand weiterhin in der gespeicherten E-Mail aufgerufen werden. (Voreinstellung: aktiviert)</string>
+  <string name="SYS_SAVE_ATTACHMENTS_DESC">E-Mail-Anhänge werden auf dem Webspace gespeichert und können nach dem Versand weiterhin in der gespeicherten E-Mail aufgerufen werden. (Voreinstellung: ja)</string>
   <string name="SYS_SAVE_CHANGES">Änderungen speichern</string>
   <string name="SYS_SAVE_CONFIGURATION">Konfiguration speichern</string>
   <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>
@@ -1297,10 +1290,10 @@
   <string name="SYS_SEND_COPY">Kopie der E-Mail an mich senden</string>
   <string name="SYS_SEND_EMAIL">E-Mail senden</string>
   <string name="SYS_SEND_EMAIL_FORMER">E-Mails an Ehemalige senden</string>
-  <string name="SYS_SEND_EMAIL_FORMER_DESC">Ist diese Einstellung gesetzt, dann können E-Mails an einzelne ehemalige Mitglieder, sowie an alle ehemaligen Mitglieder einer Rolle gesendet werden. (Voreinstellung: Aktiviert)</string>
+  <string name="SYS_SEND_EMAIL_FORMER_DESC">Ist diese Einstellung gesetzt, dann können E-Mails an einzelne ehemalige Mitglieder, sowie an alle ehemaligen Mitglieder einer Rolle gesendet werden. (Voreinstellung: ja)</string>
   <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">E-Mails an alle E-Mail-Adressen der Benutzerin bzw. des Benutzers senden</string>
-  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen der Benutzerin oder des Benutzers gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail-Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: Aktiviert)</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen der Benutzerin oder des Benutzers gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail-Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: ja)</string>
   <string name="SYS_SEND_GREETING_CARD">Grußkarte versenden</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Zugangsdaten versenden</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen und Empfänger zur Verfügung, an die Sie E-Mails schreiben können.</string>
@@ -1337,7 +1330,7 @@
   <string name="SYS_SHOW_PERMISSIONS">Berechtigungen anzeigen</string>
   <string name="SYS_SHOW_PROFILE">Profil anzeigen</string>
   <string name="SYS_SHOW_ROUTE">Route anzeigen</string>
-  <string name="SYS_SIMILAR_USERS_FOUND">Es wurden bereits Benutzer:innen mit ähnlichem Namen wie #VAR1_BOLD# in der Datenbank gefunden.</string>
+  <string name="SYS_SIMILAR_USERS_FOUND">Es wurden Mitglieder mit einem ähnlichem Namen wie #VAR1_BOLD# gefunden.</string>
   <string name="SYS_SINCE">seit #VAR1#</string>
   <string name="SYS_SINCE_TO">seit #VAR1# bis #VAR2#</string>
   <string name="SYS_SIZE">Größe</string>
@@ -1432,7 +1425,6 @@
   <string name="SYS_USERNAME_OR_EMAIL">Anmeldename oder E-Mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# am #VAR2# um #VAR3#</string>
   <string name="SYS_USERS_PER_PAGE">Anzahl Benutzer:innen pro Seite</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">Die Anzahl der Mitglieder die auf einer Seite in einer Mitgliederverwaltung aufgelistet werden. Gibt es mehr Mitglieder zu der Organisation, so kann man innerhalb der Übersicht blättern. (Voreinstellung: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">Sie benutzen eine aktuelle #VAR1#Version von Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>

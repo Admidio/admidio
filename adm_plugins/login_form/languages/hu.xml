@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LOGIN_ACTIVE_SINCE">Aktív </string>
+  <string name="PLG_LOGIN_HONORARY_MEMBER">Tiszteletbeli tag</string>
+  <string name="PLG_LOGIN_LAST_LOGIN">Utolsó bejelentkezés</string>
+  <string name="PLG_LOGIN_NEW_ONLINE_MEMBER">Új online tag</string>
+  <string name="PLG_LOGIN_NUMBER_OF_LOGINS">Bejelentkezések száma</string>
+  <string name="PLG_LOGIN_ONLINE_MEMBER">Online tag</string>
+  <string name="PLG_LOGIN_SENIOR_ONLINE_MEMBER">Rangidős online tag</string>
+</resources>

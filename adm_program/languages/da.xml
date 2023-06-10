@@ -16,25 +16,15 @@
   <string name="DAT_CURRENT_DATES_OF_ORGA">Nuværende møder i organisation #VAR1#</string>
   <string name="DAT_DATE">Aktivitet</string>
   <string name="DAT_DATES">Aktiviteter</string>
-  <string name="DAT_DATES_DESC">Du kan oprette og redigere aktiviteter her. Andre brugere kan tilmelde sig aktiviteterne.</string>
   <string name="DAT_DEADLINE">Deadline</string>
   <string name="DAT_DEADLINE_ATTENTION">Din registrering kan ikke ændres fordi deadline for registrering er nået, eller datoen er fortid. Venligst kontakt en der leder aktiviteten eller en administrator!</string>
-  <string name="DAT_DEADLINE_DESC">Deltagere kan registrere sig op til denne dato for aktiviteten. Ledere og brugere med de rigtige rettigheder til at redigere i aktiviteten kan stadig tilføje deltagere. Hvis der ikke står en dato, så formodes startdatoen for aktiviteten at være standard deadline for registrering.</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standard konfiguration af deltagerlisten</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">En af de her givne konfigurationer kan indstilles som standardkonfiguration for deltagerlisten på begivenheder i denne organisation. Deltagere af begivenheder ses med denne konfiguration.</string>
   <string name="DAT_EDIT_CALENDAR_DESC">Her kan du oprette og redigere kalendre.</string>
   <string name="DAT_EDIT_EVENTS">Rediger begivenheder</string>
   <string name="DAT_EDIT_ROOMS">Rediger lokale</string>
   <string name="DAT_EDIT_ROOMS_DESC">Her kan du oprette og redigere lokaler til aktiviteter.</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">En dato blev ændret</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">En dato for #VAR1# blev ændret.\n\nTitel: #VAR2#\nDato: #VAR3#\nKalender: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Sted: #VAR1#\nRum: #VAR2#\nDeltagere: #VAR3#\nÆndret af: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3">Ændret den: #VAR1#</string>
-  <string name="DAT_EMAIL_NOTIFICATION_TITLE">En ny mødedato blev oprettet</string>
-  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">En ny mødedato i #VAR1# blev oprettet.\n\nTitel: #VAR2#\nDato: #VAR3#\nKalender: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Lokalitet: #VAR1#\nLokale: #VAR2#\nDeltagere: #VAR3#\nOprettet af: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Oprettet den: #VAR1#</string>
-  <string name="DAT_ENABLE_ICAL">Aktiver iCal</string>
+  <string name="DAT_ENABLE_ICAL">Aktiver iCal-eksport</string>
   <string name="DAT_ENABLE_ICAL_DESC">Hvis iCal er aktiveret, kan aftaler (individuelle eller alle) inden for et givent tidspunkt downloades. Og brugerne kan abonnere på aftaler ved at bruge deres egen kalender software. (Standard: Ja)</string>
   <string name="DAT_EXPORT_ICAL">Eksport (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Fremhæv dato</string>
@@ -278,15 +268,15 @@
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Aktiver registrering</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Registrering af besøgende på hjemmesiden kan aktiveres eller deaktiveres ved denne indstilling. Profilfelterne, der vises under registreringsprocessen, kan konfigureres i profilfeltindstillingerne for hvert felt. (Standard: ja)</string>
   <string name="ORG_ENABLE_RSS_FEEDS">Aktiver web-feeds</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan levere web-feeds til adskillige moduler (Annonceringer, aftaler, gæstebog, fotogalleri og weblinks) på oversigten for hvert modul. Tilmelding er mulig via browser eller feed læser. (Standard: Ja)</string>
+  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio er i stand til at levere webfeeds til flere moduler (annonceringer, arrangementer, gæstebog, billeder og weblinks) på oversigtssiden for hvert modul. Abonnement er muligt via browser eller feed-læser. (standard: ja)</string>
   <string name="ORG_FIELD_DESCRIPTION">Definér antal eller ubegrænset yderligere felter. Felterne vil blive vist og kan redigeres i brugerens profil. Disse felter vil også være tilgængelige i egne lister.</string>
-  <string name="ORG_FIELD_DISABLED">Feltet kan kun redigeres for bruger med tilladelse #VAR1_BOLD#</string>
-  <string name="ORG_FIELD_DISABLED_DESC">Et låst profil felt kan ikke længere redigeres af brugeren i dennes egen profil. Det kan kun redigeres af brugere der har rettigheder til at redigere på alle bruger profiler. Lederen af en rolle med rettigheder til at redigere profiler for rolle medlemmerne, kan også redigere dette profil felt.  </string>
+  <string name="ORG_FIELD_DISABLED">Feltet kan kun redigeres af medlemmer med tilladelse #VAR1_BOLD#</string>
+  <string name="ORG_FIELD_DISABLED_DESC">Et låst profilfelt kan ikke længere redigeres af et medlem i sin egen profil. Den kan kun redigeres af medlemmer, der har tilladelse til at redigere alle medlemmer. Ledere af en rolle med tilladelse til at redigere profiler for rollemedlemmer kan også redigere dette profilfelt.</string>
   <string name="ORG_FIELD_EXIST">Feltnavnet eksisterer allerede i denne kategori.</string>
-  <string name="ORG_FIELD_HIDDEN">Feltet er kun synligt for godkendte brugere (egen profil &amp; rolle autorisation)</string>
-  <string name="ORG_FIELD_HIDDEN_DESC">Sædvanligvis er et felt synligt for alle brugere som har tilladelse til at se profilen. Hvis denne indstilling er valgt fra så er det kun brugere med tilladelse til at redigere profilen der kan se dette felt.</string>
-  <string name="ORG_FIELD_NOT_DISABLED">Felt kan rettes af brugeren selv.</string>
-  <string name="ORG_FIELD_NOT_HIDDEN">Feltet er synligt for alle brugere.</string>
+  <string name="ORG_FIELD_HIDDEN">Feltet kan kun ses for autoriserede medlemmer (egen profil &amp; rollerettigheder)</string>
+  <string name="ORG_FIELD_HIDDEN_DESC">Normalt er et felt synligt for alle, der har tilladelse til at se profilen. Hvis denne mulighed er fravalgt, kan kun medlemmer, der har tilladelse til at redigere denne profil, se feltet.</string>
+  <string name="ORG_FIELD_NOT_DISABLED">Feltet kan redigeres af medlemmerne selv.</string>
+  <string name="ORG_FIELD_NOT_HIDDEN">Feltet er synligt for alle medlemmer.</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Feltet vises IKKE under registrering</string>
   <string name="ORG_FIELD_REGISTRATION">Feltet vises ved registrering</string>
   <string name="ORG_FIELD_URL_DESC">Den indtastede URL linker til indholdet i profilen som brugeren har skrevet i dette felt. Eventuelt kan wildcardet #user_content# bruges i URL\'en. Dette er indholdet, som brugeren har indtastet i feltet.. \n\nExample:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nLink in profile: https://www.google.de/search?q=Admidio</string>
@@ -607,7 +597,6 @@
   <string name="SYS_COMMON">Generel</string>
   <string name="SYS_COMPLEMENT">Supplere</string>
   <string name="SYS_CONDITION">Betingelse</string>
-  <string name="SYS_CONDITIONS">Betingelser</string>
   <string name="SYS_CONFIGURATION">Liste indstilling</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Tilladelse til at bruge listen for alle medlemer</string>
   <string name="SYS_CONFIGURATION_DELETE">Vil du slette den valgte liste?</string>
@@ -661,7 +650,7 @@
   <string name="SYS_CURRENT_DATABASE_VERSION">Nuværende database version</string>
   <string name="SYS_CURRENT_MEMBER">Nuværende medlem</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du har ikke indtastet en gyldig e-mail adresse!\n\nIndtast en gyldig e-mail adresse i din #VAR1#profil#VAR2#.</string>
-  <string name="SYS_DATA_CATEGORY_GLOBAL">Hvis denne indstilling er aktiveret, vises dataene (Begivenheder, meddelelser, weblinks ...) i denne kategori også på følgende organisationers websteder:\n#VAR1_BOLD#</string>
+  <string name="SYS_DATA_CATEGORY_GLOBAL">Hvis denne mulighed er aktiveret, vil dataene (begivenheder, meddelelser, weblinks ...) i denne kategori også blive vist på følgende organisationers websteder:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Data er synlig for flere organisationer</string>
   <string name="SYS_DATA_PROTECTION">Data beskyttelse</string>
   <string name="SYS_DATA_PROTECTION_DESC">Her kan URL\'en til din side med fortrolighedspolitikken indtastes. Denne side er knyttet til brugen af cookies til yderligere information. Hvis det valgte tema understøtter dette, vises et link også på Admidio-siderne. (Eksempel: https://www.example.com/data_protection.html)</string>
@@ -775,8 +764,10 @@
   <string name="SYS_EMAIL_ADMINISTRATOR_DESC">Når der sker noget uventet, vises en e-mail adresse til en administrator. Det er en hentydning til at kontakte administratoren.</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">En ny meddelelse blev oprettet</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">En ny meddelelse på #VAR1# blev oprettet. \n\nTitel: #VAR2#\ nOprettet af: #VAR3#\nOprettet på: #VAR4#</string>
+  <string name="SYS_EMAIL_CHANGE_EVENT_NOTIFICATION_TITLE">En begivenhed på #VAR1# blev ændret</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev ændret</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profildataene for brugeren #VAR1# #VAR2# (login: #VAR3#) blev ændret af #VAR4#.</string>
+  <string name="SYS_EMAIL_CREATE_EVENT_NOTIFICATION_TITLE">En ny begivenhed på #VAR1# blev oprettet</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev oprettet</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">Brugeren #VAR1# #VAR2# (login: #VAR3#) blev oprettet af #VAR4#.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev slettet</string>
@@ -820,6 +811,8 @@
   <string name="SYS_ERROR_DATABASE_ACCESS">Der opstod en fejl i kommunikationen med databasen:\n\n#VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Liste konfigurationen #VAR1_BOLD# er standard konfigurationen for lister i denne organisation og kan derfor ikke slettes. Vælg en anden konfiguration som standard konfiguration i modul indstillingerne og prøv så efterfølgende at slette denne konfiguration igen.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">FEJL 404 - SIDE IKKE FUNDET!</string>
+  <string name="SYS_EVENT_DEADLINE_DESC">Deltagere kan tilmelde sig arrangementet indtil denne dato. Ledere og medlemmer med ret til at redigere begivenheder kan stadig tildele deltagere. Hvis der ikke er angivet en dato for tilmeldingsfrist, tages startdatoen for arrangementet som tilmeldingsfrist.</string>
+  <string name="SYS_EVENTS_DESC">Begivenheder kan oprettes og ses. Medlemmer kan tilmelde sig særlige arrangementer, hvis de ønsker det.</string>
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Aktiviteter - Bekræft deltagelse</string>
   <string name="SYS_EXAMPLE">Eksempel</string>
   <string name="SYS_EXAMPLES">Eksempler</string>
@@ -877,7 +870,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">En fejl opstod imens folderen #VAR1# blev omdøbt.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folderen #VAR1_BOLD# kan ikke oprettes med de krævede skriverettigheder.\n\nVenligst snak med en  #VAR2#administrator#VAR3# om at få hjælp til at undersøge om skriverettighederne er i orden på folderen. (Dette kan gøres med et FTP program, du skal ændre rettigheden til 0777 eller drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
-  <string name="SYS_FONT_AWESOME_DESC">Du kan gemme et ikon på forskellige måder:\n1. Et ikon for web-fonten \"Font Awesome\". Gå til #VAR1#http://fontawesome.com#VAR2# og vælg et gratis ikon fra samlingen \"Solid\" eller \"Brands\". Som præfiks skal du sætte en fa- foran. Så hvis du vælger ikonet \"bruger\", skal du indtaste \"fa-bruger\" her.\n2. Et JPEG- eller PNG-ikon. For at gøre dette skal du lægge ikon filen i temamappen \"billeder\". Tilføj navnet på ikon filen her.</string>
+  <string name="SYS_FONT_AWESOME_DESC">Her kan du tilføje et ikon af web-fonten \"Font Awesome\". Gå til #VAR1#http://fontawesome.com#VAR2# og vælg et gratis ikon fra samlingen \"Solid\" eller \"Brands\". Som præfiks skal du sætte et fa- foran. Så hvis du vælger ikonet \"bruger\", skal du indtaste \"fa-bruger\" her.</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Jeg har glemt mit kodeord!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Tidligere medlem</string>
@@ -1078,7 +1071,7 @@
   <string name="SYS_NO_ROLES_AND_USERS">Der er ikke nogen roller eller brugere, til hvem du kan sende beskeder.</string>
   <string name="SYS_NO_TEMPLATE">Ingen skabelon</string>
   <string name="SYS_NO_USER_FOUND">Intet medlem af dine kriterier kunne findes.</string>
-  <string name="SYS_NO_VALID_RECIPIENTS">De valgte roller og brugere har ingen gyldige e-mail adresser. Derfor kan der ikke sendes e-mail til disse.</string>
+  <string name="SYS_NO_VALID_RECIPIENTS">Den/de valgte roller og brugere har ikke en valid e-mail adresse. Derfor kan e-mailen ikke afsendes. </string>
   <string name="SYS_NOBODY">Ingen</string>
   <string name="SYS_NONE">Ingen</string>
   <string name="SYS_NOT_AT_REGISTRATION">Ikke ved registrering</string>
@@ -1091,13 +1084,13 @@
   <string name="SYS_NOTE">Noter</string>
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Meddelelse efter ny tilmelding</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Meddelelse for nye poster</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Her kan du aktivere en systemnotifikation for nye tilmeldinger i modulerne Meddelelser, Begivenheder, Gæstebog, Weblinks og Billeder. Medlemmer af den lagrede notifikationsrolle får mulighed for at få besked om nye poster i modulerne via e-mail. (Standard: nej)</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Her kan du aktivere en systemmeddelelse for nye poster i modulerne meddelelser, begivenheder, dokumenter &amp; filer, billeder, weblinks og gæstebog. Medlemmer af den lagrede notifikationsrolle får mulighed for at få besked om nye poster i modulerne via e-mail. (Standard: nej)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Meddelelse for ændrede profilfelter</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">En system meddelelse for ændrede profildata kan aktiveres her. Hvis profildata oprettes, ændres eller slettes af en bruger, får medlemmerne af den gemte notifikationsrolle besked via e-mail. (Standard: nej)</string>
   <string name="SYS_NOTIFICATION_ROLE">Notifikationsrolle</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Meddelelser om nye poster eller profilændringer sendes til alle medlemmer af denne rolle.</string>
   <string name="SYS_NUMBER">Nummer</string>
-  <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Antal roller pr. side.</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster vist på en side. Hvis der er flere poster, vises navigationselementer for at rulle mellem siderne. (Standard: #VAR1#)</string>
   <string name="SYS_NUMBER_COL_DESC">Det respektive afkrydsningsfelt skal aktiveres, hvis du vil have vist en linje med antallet af medlemskaber i slutningen af rapporten.</string>
   <string name="SYS_ODF_SPREADSHEET">‎ODF-regneark (*.ods)‎</string>
   <string name="SYS_OFF">Slukket</string>
@@ -1125,7 +1118,7 @@
   <string name="SYS_PARTICIPATION_STATUS">Deltager status</string>
   <string name="SYS_PASSWORD">Kodeord</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Glemt kodeord</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Hvis du har glemt dit kodeord, så kan systemet generere et nyt kodeord og sende det til din e-mail adresse. Venligst skriv det brugernavn eller den e-mail adresse der blev anvendt ved registrering i systemet. Det nye kodeord bliver sendt øjeblikkeligt til den registrerede e-mail adresse. </string>
+  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Indtast venligst dit login navn eller e-mailadresse. Vi sender dig derefter et link, hvor du kan nulstille din adgangskode og derefter lave en ny adgangskode.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">‎Hvis brugeren har glemt sin adgangskode, kan brugeren anmode om et link, der skal sendes til brugeren, hvorigennem brugeren kan indstille en ny adgangskode til sin konto på denne hjemmeside. Hvis denne indstilling er deaktiveret, kan brugeren kun sende en anmodning via e-mail til administratoren om at indsætte en ny adgangskode. Hvis adgangskoden skal sendes, skal indstillingen #VAR1_BOLD# også angives. (Standard: ja)‎</string>
   <string name="SYS_PASSWORD_RESET_INVALID">‎Du har anmodet om et link til nulstilling af en ugyldig adgangskode. Hvis du endnu ikke har nulstillet din adgangskode, skal du anmode om et nyt link ved hjælp af funktionen #VAR1#.‎</string>
   <string name="SYS_PASSWORD_RESET_SAVED">‎Den nye adgangskode er nu blevet anvendt!‎</string>
@@ -1156,7 +1149,6 @@
   <string name="SYS_POSSIBLE_FIELDNAMES">Kolonnenavne til automatisk registrering: #VAR1#</string>
   <string name="SYS_POST_MAX_SIZE">max. POST størrelse</string>
   <string name="SYS_POSTCODE">Postnummer</string>
-  <string name="SYS_PRESENTATION">Vis</string>
   <string name="SYS_PRESET_CONFIGURATION">Standard liste indstillinger</string>
   <string name="SYS_PRESET_CONFIGURATION_DESC">Administratorer kan definere standard konfigurationer for alle brugere. Konfigurer rækker og kolonner og gem dem ved at give konfigurationen et navn.</string>
   <string name="SYS_PREVIEW">Vis</string>
@@ -1172,6 +1164,7 @@
   <string name="SYS_PROCESS_CANCELED">Proces afbrudt.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Det følgende problem opstod under arbejdet med data.</string>
   <string name="SYS_PROFILE_FIELD">Profil felt</string>
+  <string name="SYS_PROFILE_INFORMATION">Profil information</string>
   <string name="SYS_PROFILE_PHOTO">Profilbillede</string>
   <string name="SYS_PROPERTIES">Indstillinger</string>
   <string name="SYS_QUANTITY">Antal</string>
@@ -1186,6 +1179,7 @@
   <string name="SYS_REDIRECT_URL_INVALID">Den specificerede redirect URL er ugyldig.</string>
   <string name="SYS_REGISTERED_AS">Logget ind som</string>
   <string name="SYS_REGISTRATION">Registrering</string>
+  <string name="SYS_REGISTRATION_AT">Registreret den #VAR1# kl. #VAR2#</string>
   <string name="SYS_REGISTRATION_SAVED">Dine data er blevet gemt.\n\nDu kan logge ind efter de er godkendt. Du vil blive informeret via e-mail når dine data er godkendt.</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Overfør alle data fra registreringen for den eksisterende bruger</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Hvis der allerede findes en nyregistreret bruger i databasen, overføres alle data fra registreringen til den eksisterende bruger, hvis denne indstilling er sat. Hvis denne indstilling ikke er indstillet, overføres kun brugernavnet og adgangskoden. I tilfælde af brugere, der ikke eksisterede før, vil alle data fra registreringen altid blive overført uafhængigt af denne indstilling. (Standard: Ja)</string>
@@ -1431,7 +1425,6 @@
   <string name="SYS_USERNAME_OR_EMAIL">Brugernavn eller e-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# på #VAR2# den #VAR3#</string>
   <string name="SYS_USERS_PER_PAGE">Antal medlemmer pr. side</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">Antallet af medlemmer, der er angivet på en side i en medlemsadministration. Er der flere medlemmer i organisationen, kan du scrolle til næste side i oversigten. (Standard: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">Du bruger den nyeste version af Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>

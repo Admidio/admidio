@@ -1077,7 +1077,7 @@ $formAnnouncements->addSubmitButton(
 
 $page->addHtml(getPreferencePanel('modules', 'announcements', 'accordion_modules', $gL10n->get('SYS_ANNOUNCEMENTS'), 'fas fa-newspaper', $formAnnouncements->show()));
 
-// PANEL: USER MANAGEMENT
+// PANEL: MEMBERS
 
 $formUserManagement = new HtmlForm(
     'user_management_preferences_form',
@@ -1110,7 +1110,7 @@ $formUserManagement->addSelectBox(
     'members_users_per_page',
     $gL10n->get('SYS_USERS_PER_PAGE'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['members_users_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_USERS_PER_PAGE_DESC')
+    array('defaultValue' => $formValues['members_users_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(25)))
 );
 $formUserManagement->addInput(
     'members_days_field_history',
@@ -1414,12 +1414,6 @@ $formGroupsRoles->addCheckbox(
     $gL10n->get('SYS_ENABLE_GROUPS_ROLES'),
     (bool) $formValues['groups_roles_enable_module'],
     array('helpTextIdInline' => 'SYS_ENABLE_GROUPS_ROLES_DESC')
-);
-$formGroupsRoles->addInput(
-    'groups_roles_roles_per_page',
-    $gL10n->get('SYS_NUMBER_OF_ROLES_PER_PAGE'),
-    $formValues['groups_roles_roles_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formGroupsRoles->addSelectBox(
@@ -1725,11 +1719,12 @@ $formEvents->addSelectBox(
     $selectBoxEntries,
     array('defaultValue' => $formValues['dates_view'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('DAT_VIEW_MODE_DESC', array('DAT_VIEW_MODE_DETAIL', 'DAT_VIEW_MODE_COMPACT')))
 );
-$formEvents->addInput(
+$selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+$formEvents->addSelectBox(
     'dates_per_page',
     $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'),
-    $formValues['dates_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+    $selectBoxEntries,
+    array('defaultValue' => $formValues['dates_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $formEvents->addCheckbox(
     'enable_dates_ical',

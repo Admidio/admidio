@@ -94,14 +94,14 @@ if ($userField->getValue('usf_system') == 1) {
     $form->addInput(
         'usf_name',
         $gL10n->get('SYS_NAME'),
-        $userField->getValue('usf_name', 'database'),
+        $userField->getValue('usf_name'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
     );
 } else {
     $form->addInput(
         'usf_name',
         $gL10n->get('SYS_NAME'),
-        $userField->getValue('usf_name', 'database'),
+        $userField->getValue('usf_name'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 }
@@ -135,7 +135,7 @@ if ($userField->getValue('usf_system') == 1) {
     );
 }
 $form->closeGroupBox();
-$form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
+$form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
 $userFieldText = array(
     'CHECKBOX'     => $gL10n->get('SYS_CHECKBOX'),
     'DATE'         => $gL10n->get('SYS_DATE'),
@@ -171,41 +171,26 @@ if ($userField->getValue('usf_system') == 1) {
 $form->addMultilineTextInput(
     'usf_value_list',
     $gL10n->get('ORG_VALUE_LIST'),
-    $userField->getValue('usf_value_list', 'database'),
+    $userField->getValue('usf_value_list'),
     6,
     array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC')
 );
-$form->addInput(
-    'usf_icon',
-    $gL10n->get('SYS_ICON'),
-    $userField->getValue('usf_icon', 'database'),
-    array(
-        'maxLength' => 100,
-        'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>'))
-    )
-);
-$form->addInput(
-    'usf_url',
-    $gL10n->get('SYS_URL'),
-    $userField->getValue('usf_url'),
-    array('maxLength' => 2000, 'helpTextIdLabel' => 'ORG_FIELD_URL_DESC')
-);
-$form->closeGroupBox();
-$form->openGroupBox('gb_conditions', $gL10n->get('SYS_CONDITIONS'));
-$form->addInput(
-    'usf_default_value',
-    $gL10n->get('SYS_DEFAULT_VALUE'),
-    $userField->getValue('usf_default_value'),
-    array('helpTextIdLabel' => 'SYS_DEFAULT_VALUE_DESC')
-);
-$form->addInput(
-    'usf_regex',
-    $gL10n->get('SYS_REGULAR_EXPRESSION'),
-    $userField->getValue('usf_regex'),
-    array('helpTextIdLabel' => 'SYS_REGULAR_EXPRESSION_DESC')
-);
-$form->closeGroupBox();
-$form->openGroupBox('gb_permissions', $gL10n->get('SYS_PERMISSIONS'));
+$mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES', 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE', 3 => 'SYS_NOT_AT_REGISTRATION');
+if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
+    $form->addInput(
+        'usf_required_input',
+        $gL10n->get('SYS_REQUIRED_INPUT'),
+        $gL10n->get($mandatoryFieldValues[$userField->getValue('usf_required_input')]),
+        array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+    );
+} else {
+    $form->addSelectBox(
+        'usf_required_input',
+        $gL10n->get('SYS_REQUIRED_INPUT'),
+        $mandatoryFieldValues,
+        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_required_input'))
+    );
+}
 $form->addCheckbox(
     'usf_hidden',
     $gL10n->get('ORG_FIELD_NOT_HIDDEN'),
@@ -234,22 +219,33 @@ if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNam
         array('icon' => 'fa-address-card')
     );
 }
-$mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES', 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE', 3 => 'SYS_NOT_AT_REGISTRATION');
-if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
-    $form->addInput(
-        'usf_required_input',
-        $gL10n->get('SYS_REQUIRED_INPUT'),
-        $gL10n->get($mandatoryFieldValues[$userField->getValue('usf_required_input')]),
-        array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
-    );
-} else {
-    $form->addSelectBox(
-        'usf_required_input',
-        $gL10n->get('SYS_REQUIRED_INPUT'),
-        $mandatoryFieldValues,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_required_input'))
-    );
-}
+$form->addInput(
+    'usf_default_value',
+    $gL10n->get('SYS_DEFAULT_VALUE'),
+    $userField->getValue('usf_default_value'),
+    array('helpTextIdLabel' => 'SYS_DEFAULT_VALUE_DESC')
+);
+$form->addInput(
+    'usf_regex',
+    $gL10n->get('SYS_REGULAR_EXPRESSION'),
+    $userField->getValue('usf_regex'),
+    array('helpTextIdLabel' => 'SYS_REGULAR_EXPRESSION_DESC')
+);
+$form->addInput(
+    'usf_icon',
+    $gL10n->get('SYS_ICON'),
+    $userField->getValue('usf_icon'),
+    array(
+        'maxLength' => 100,
+        'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>'))
+    )
+);
+$form->addInput(
+    'usf_url',
+    $gL10n->get('SYS_URL'),
+    $userField->getValue('usf_url'),
+    array('maxLength' => 2000, 'helpTextIdLabel' => 'ORG_FIELD_URL_DESC')
+);
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
 $form->addEditor('usf_description', '', $userField->getValue('usf_description'), array('height' => '200px'));

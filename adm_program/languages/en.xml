@@ -16,25 +16,15 @@
   <string name="DAT_CURRENT_DATES_OF_ORGA">Current events of organizations #VAR1#</string>
   <string name="DAT_DATE">Event</string>
   <string name="DAT_DATES">Events</string>
-  <string name="DAT_DATES_DESC">You are able to create and edit events here. Users can register for this events.</string>
   <string name="DAT_DEADLINE">Deadline</string>
   <string name="DAT_DEADLINE_ATTENTION">Your registration can not be changed because the given end date for registrations has been reached or the date is in the past. Please contact a leader of the event or an administrator!</string>
-  <string name="DAT_DEADLINE_DESC">Participants can register up to this date on the event. Leaders and users with permission to edit events can still assign participants. If no date value is specified, then the start date of the event is assumed as default value.</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION">Default configuration of participants list</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">One of the configurations given here can be set as standard configuration for the participant list on events of this organization. Participants of events are viewed with this configuration.</string>
   <string name="DAT_EDIT_CALENDAR_DESC">Here you can create and edit calendars.</string>
   <string name="DAT_EDIT_EVENTS">Edit events</string>
   <string name="DAT_EDIT_ROOMS">Edit rooms</string>
   <string name="DAT_EDIT_ROOMS_DESC">Here you can create and edit rooms for events.</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">An event was changed</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">An event at #VAR1# was changed.\n\nTitle: #VAR2#\nDate: #VAR3#\nCalendar: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Location: #VAR1#\nRoom: #VAR2#\nParticipants: #VAR3#\nChanged by: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3">Changed at: #VAR1#</string>
-  <string name="DAT_EMAIL_NOTIFICATION_TITLE">A new event was created</string>
-  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">A new event at #VAR1# was created.\n\nTitle: #VAR2#\nDate: #VAR3#\nCalendar: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Location: #VAR1#\nRoom: #VAR2#\nParticipants: #VAR3#\nCreated by: #VAR4#\n</string>
-  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Created at: #VAR1#</string>
-  <string name="DAT_ENABLE_ICAL">Enable iCal function</string>
+  <string name="DAT_ENABLE_ICAL">Enable iCal export</string>
   <string name="DAT_ENABLE_ICAL_DESC">If iCal is enabled, individual events or all events within a given time period can be downloaded. Also, users will be able to subscribe to events by using their own calendar client software . (default: yes)</string>
   <string name="DAT_EXPORT_ICAL">Export (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Highlight date</string>
@@ -279,13 +269,13 @@
   <string name="ORG_ENABLE_RSS_FEEDS">Enable web feeds</string>
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio is able to provide web feeds for several modules (announcements, events, guestbook, photos and web links) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</string>
   <string name="ORG_FIELD_DESCRIPTION">Define unlimited additional fields. Fields will be displayed and can be edited in user\'s profile. These fields will be available in own list, too.</string>
-  <string name="ORG_FIELD_DISABLED">Field only editable for user with permission #VAR1_BOLD#</string>
-  <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by the user in its own profile. It can be edited only by users who have the permission to edit all users. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
+  <string name="ORG_FIELD_DISABLED">Field only editable for members with permission #VAR1_BOLD#</string>
+  <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by a member in its own profile. It can be edited only by members who have the permission to edit all members. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
   <string name="ORG_FIELD_EXIST">Field with same name already exists in this category.</string>
-  <string name="ORG_FIELD_HIDDEN">Field viewable for authorized users only (own profile &amp; role rights)</string>
-  <string name="ORG_FIELD_HIDDEN_DESC">Usually a field is visible to everybody who is allowed to view the profile. If this option is deselected only user who are allowed to edit this profile can see the field.</string>
-  <string name="ORG_FIELD_NOT_DISABLED">Field can be edited by users themselves.</string>
-  <string name="ORG_FIELD_NOT_HIDDEN">Field visible for all users.</string>
+  <string name="ORG_FIELD_HIDDEN">Field viewable for authorized members only (own profile &amp; role rights)</string>
+  <string name="ORG_FIELD_HIDDEN_DESC">Usually a field is visible to everybody who is allowed to view the profile. If this option is deselected only members who are allowed to edit this profile can see the field.</string>
+  <string name="ORG_FIELD_NOT_DISABLED">Field can be edited by members themselves.</string>
+  <string name="ORG_FIELD_NOT_HIDDEN">Field visible for all members.</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Field is not displayed during registration</string>
   <string name="ORG_FIELD_REGISTRATION">Field is displayed during registration</string>
   <string name="ORG_FIELD_URL_DESC">The entered URL later links in the profile to the content that the user has entered in this field. Optionally, even the wildcard #user_content# can be defined in the URL. This is the content that the user has entered in the field..\n\nExample:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nLink in profile: https://www.google.de/search?q=Admidio</string>
@@ -605,7 +595,6 @@
   <string name="SYS_COMMON">General</string>
   <string name="SYS_COMPLEMENT">Complement</string>
   <string name="SYS_CONDITION">Condition</string>
-  <string name="SYS_CONDITIONS">Conditions</string>
   <string name="SYS_CONFIGURATION">Configuration</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Permission to use configuration for all members</string>
   <string name="SYS_CONFIGURATION_DELETE">Would you like to delete selected list configuration?</string>
@@ -773,8 +762,10 @@
   <string name="SYS_EMAIL_ADMINISTRATOR_DESC">The e-mail address of an administrator is displayed in the system whenever an unexpected event has occurred. There is a hint that you should contact an administrator.</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE">A new announcement was created</string>
   <string name="SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE">A new announcement at #VAR1# was created.\n\nTitle: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
+  <string name="SYS_EMAIL_CHANGE_EVENT_NOTIFICATION_TITLE">An event at #VAR1# was changed</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was changed</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">The profile data of the user #VAR1# #VAR2# (login: #VAR3#) was changed by #VAR4#.</string>
+  <string name="SYS_EMAIL_CREATE_EVENT_NOTIFICATION_TITLE">A new event at #VAR1# was created</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was created</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">The user #VAR1# #VAR2# (login: #VAR3#) was created by #VAR4#.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was deleted</string>
@@ -818,6 +809,8 @@
   <string name="SYS_ERROR_DATABASE_ACCESS">Error occurred during database access:\n\n#VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">The list #VAR1_BOLD# is stored as default configuration for the module #VAR1# in this organization and cannot be deleted. Set another configuration to the default configuration in the module settings and try to delete this configuration afterwards.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - PAGE NOT FOUND!</string>
+  <string name="SYS_EVENT_DEADLINE_DESC">Participants can register at the event until this date. Leaders and members with the right to edit events can still assign participants. If no date is specified, the start date of the event is taken as the registration deadline.</string>
+  <string name="SYS_EVENTS_DESC">Events can be created and viewed. Members can register for special events if they wish.</string>
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Events - Confirmation of attendance</string>
   <string name="SYS_EXAMPLE">Example</string>
   <string name="SYS_EXAMPLES">Examples</string>
@@ -1081,6 +1074,7 @@
   <string name="SYS_NO_ROLES_AND_USERS">There are no roles or users released to whom you can send messages.</string>
   <string name="SYS_NO_TEMPLATE">No template</string>
   <string name="SYS_NO_USER_FOUND">No member of your criteria could be found.</string>
+  <string name="SYS_NO_VALID_RECIPIENTS">The selected roles and users have no valid e-mail addresses. For this reason, the e-mail can`t be sent.</string>
   <string name="SYS_NOBODY">Nobody</string>
   <string name="SYS_NONE">None</string>
   <string name="SYS_NOT_AT_REGISTRATION">Not at registration</string>
@@ -1101,7 +1095,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Notification role</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Notifications about new entries or profile changes are sent to all members of this role.</string>
   <string name="SYS_NUMBER">Number</string>
-  <string name="SYS_NUMBER_OF_ROLES_PER_PAGE">Number of roles per page</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Number of entries displayed on a page. If there are more entries, navigation elements are displayed to scroll between the pages. (Default: #VAR1#)</string>
   <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Spreadsheet (*.ods)</string>
   <string name="SYS_OFF">Off</string>
@@ -1129,7 +1123,7 @@
   <string name="SYS_PARTICIPATION_STATUS">Participant Status</string>
   <string name="SYS_PASSWORD">Password</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten?</string>
-  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Please enter the email address you registered with. We will then send you a link where you can reset your password and then set a new one.</string>
+  <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Please enter your login name or email address. We will then send you a link where you can reset your password and after that set a new password.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">If the user has forgotten his password, he can request a link to be sent to him, through which he can set a new password for his account on this website. If this option is deactivated, the user can only send a request by e-mail to the administrator to deposit a new password. In order for the password to be sent, the #VAR1_BOLD# setting must also be set. (Default: yes)</string>
   <string name="SYS_PASSWORD_RESET_INVALID">You have requested an invalid password reset link. If you haven't reset your password yet, please request a new link using the #VAR1# function.</string>
   <string name="SYS_PASSWORD_RESET_SAVED">The new password has now been applied!</string>
@@ -1160,7 +1154,6 @@
   <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST size</string>
   <string name="SYS_POSTCODE">Postal code</string>
-  <string name="SYS_PRESENTATION">Display</string>
   <string name="SYS_PRESET_CONFIGURATION">Default configuration</string>
   <string name="SYS_PRESET_CONFIGURATION_DESC">Administrators are able to define default configurations for all users. Configure columns and conditions and save them by naming the configuration set.</string>
   <string name="SYS_PREVIEW">Preview</string>
@@ -1442,7 +1435,6 @@
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
   <string name="SYS_USERS_PER_PAGE">Number of members per page</string>
-  <string name="SYS_USERS_PER_PAGE_DESC">The number of members listed on a page in a member management. If there are more members to the organization, you can scroll to the next page within the overview. (Default: 25)</string>
   <string name="SYS_USING_CURRENT_VERSION">You are using a current #VAR1#version of Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>

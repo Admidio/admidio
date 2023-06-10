@@ -19,7 +19,7 @@ require_once(__DIR__ . '/ecard_function.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string', array('requireValue' => true));
 $getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr', 'int', array('requireValue' => true));
 $showPage     = admFuncVariableIsValid($_GET, 'show_page', 'int', array('defaultValue' => 1));
@@ -35,47 +35,43 @@ if (!$gSettingsManager->getBool('enable_ecard_module')) {
     // => EXIT
 }
 
-// URL auf Navigationstack ablegen
+// Drop URL on navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
+// Create photo album object or read from session
 if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid) {
     $photoAlbum =& $_SESSION['photo_album'];
 } else {
-    // einlesen des Albums falls noch nicht in Session gespeichert
     $photoAlbum = new TablePhotos($gDb);
-    if ($getPhotoUuid !== '') {
-        $photoAlbum->readDataByUuid($getPhotoUuid);
-    }
+    $photoAlbum->readDataByUuid($getPhotoUuid);
 
     $_SESSION['photo_album'] = $photoAlbum;
 }
 
-// pruefen, ob Album zur aktuellen Organisation gehoert
-if ($getPhotoUuid !== '' && (int) $photoAlbum->getValue('pho_org_id') !== $gCurrentOrgId) {
+// check if user has right to view the album
+if (!$photoAlbum->isVisible()) {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }
 
 if ($gValidLogin && $gCurrentUser->getValue('EMAIL') === '') {
-    // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
-    // die als Absender genutzt werden kann...
+    // the logged in user has no valid mail address stored in his profile, which can be used as sender
     $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', array('<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php">', '</a>')));
     // => EXIT
 }
 
 if ($getUserUuid !== '') {
-    // usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
+    // UUID was set than read contact data of this user
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
 
-    // darf auf die User-Id zugegriffen werden
+    // check if the current user has the right communicate with that member
     if ((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || strlen($user->getValue('usr_id')) === 0) {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
         // => EXIT
     }
 
-    // besitzt der User eine gueltige E-Mail-Adresse
+    // check if the member has a valid email address
     if (!StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email')) {
         $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))));
         // => EXIT

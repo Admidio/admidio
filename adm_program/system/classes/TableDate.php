@@ -59,7 +59,8 @@ class TableDate extends TableAccess
     /**
      * Check if the current user is allowed to participate in this event.
      * Therefore, we check if the user is member of a role that is assigned to
-     * the right event_participation.
+     * the right event_participation. This method will also return **true** if the deadline is exceeded
+     * and a further participation isn't possible.
      * @return bool Return true if the current user is allowed to participate in the event.
      */
     public function allowedToParticipate(): bool
@@ -399,6 +400,24 @@ class TableDate extends TableAccess
 
         // check if the current user could view the category of the event
         return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('DAT'), true);
+    }
+
+    /**
+     * Method will return true if the event has a maximum count of participants set and this limit
+     * is reached.
+     * @return bool Return **true** if the limit of participants is reached.
+     */
+    public function participantLimitReached(): bool
+    {
+        if(!is_object($this->mParticipants)) {
+            $this->mParticipants = new Participants($this->db, $this->getValue('dat_rol_id'));
+        }
+
+        if ((int) $this->getValue('dat_max_members') > 0
+            && (int) $this->getValue('dat_max_members') > $this->mParticipants->getCount()) {
+            return true;
+        }
+        return false;
     }
 
     /* Read an event that has the given role has stored as participant role.

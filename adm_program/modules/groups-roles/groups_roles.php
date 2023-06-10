@@ -262,18 +262,19 @@ foreach ($listsResult['recordset'] as $row) {
                             '<i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'"></i></a>';
         }
 
-        // edit roles of you are allowed to assign roles
         if ($gCurrentUser->manageRoles()) {
-            if ($getRoleType === ROLE_TYPE_INACTIVE) {
+            // set role active or inactive
+            if ($getRoleType === ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                 $html .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'role_details_panel_'.$roleUuid, 'name' => $role->getValue('rol_name'), 'database_id' => $roleUuid)).'">'.
                             '<i class="fas fa-user-check" data-toggle="tooltip" title="'.$gL10n->get('SYS_ACTIVATE_ROLE').'"></i></a>';
-            } elseif ($getRoleType === ROLE_TYPE_ACTIVE) {
+            } elseif ($getRoleType === ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                 $html .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'role_details_panel_'.$roleUuid, 'name' => $role->getValue('rol_name'), 'database_id' => $roleUuid)).'">'.
                             '<i class="fas fa-user-slash" data-toggle="tooltip" title="'.$gL10n->get('SYS_DEACTIVATE_ROLE').'"></i></a>';
             }
 
+            // edit roles of you are allowed to assign roles
             $html .= '
                         <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles_new.php', array('role_uuid' => $role->getValue('rol_uuid'))).'">'.
                             '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_ROLE').'"></i></a>
@@ -494,11 +495,11 @@ foreach ($listsResult['recordset'] as $row) {
 
         $linkAdministration .= '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)).'">'.
                                     '<i class="fas fa-list-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_SHOW_ROLE_MEMBERSHIP').'"></i></a>';
-        if ($getRoleType === ROLE_TYPE_INACTIVE) {
+        if ($getRoleType === ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
             $linkAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'row_'.$roleUuid, 'name' => $role->getValue('rol_name'), 'database_id' => $roleUuid)).'">'.
                 '<i class="fas fa-user-check" data-toggle="tooltip" title="'.$gL10n->get('SYS_ACTIVATE_ROLE').'"></i></a>';
-        } elseif ($getRoleType === ROLE_TYPE_ACTIVE) {
+        } elseif ($getRoleType === ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
             $linkAdministration .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'row_'.$roleUuid, 'name' => $role->getValue('rol_name'), 'database_id' => $roleUuid)).'">'.
                 '<i class="fas fa-user-slash" data-toggle="tooltip" title="'.$gL10n->get('SYS_DEACTIVATE_ROLE').'"></i></a>';
@@ -531,10 +532,5 @@ if ($getShow === 'card') {
 } else {
     $page->addHtml($table->show());
 }
-
-
-// If necessary show links to navigate to next and previous recordsets of the query
-$baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('cat_uuid' => $getCatUuid, 'role_type' => (int) $getRoleType, 'show' => $getShow));
-$page->addHtml(admFuncGeneratePagination($baseUrl, $listsResult['totalCount'], $gSettingsManager->getInt('groups_roles_roles_per_page'), $getStart));
 
 $page->show();

@@ -255,7 +255,7 @@ if ($plg_show_headline) {
 
 if ($numberBirthdays > 0) {
     if ($plgBirthdayShowNames) {
-        echo '<ul id="plgBirthdayNameList">';
+        echo '<ul class="list-group list-group-flush">';
 
         // how many birthdays should be displayed (as a maximum)
         $birthdayCount = null;
@@ -338,7 +338,7 @@ if ($numberBirthdays > 0) {
             }
 
             // now show string with the birthday person
-            echo '<li><span id="'.$plgCssClass.'">'.
+            echo '<li class="list-group-item"><span id="'.$plgCssClass.'">'.
                     $gL10n->get($birthdayText, array($plgShowName, $plgDays, $row['age'], $birthdayDate->format($gSettingsManager->getString('system_date')))).
                 '</span></li>';
 

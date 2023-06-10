@@ -4,24 +4,24 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step, com_update_completed)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.2.0', 0, 250, true)
-                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.2.0', 0, 0, true)
-                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.2.0', 0, 0, true)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.2.0', 0, 0, true)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.2.0', 0, 0, true)
-                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.2.0', 0, 0, true)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.2.0', 0, 0, true)
-                              , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.2.0', 0, 0, true)
-                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.2.0', 0, 0, true)
-                              , (100, 'MODULE', 'SYS_MEMBERS', 'MEMBERS', '4.2.0', 0, 0, true)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.2.0', 0, 0, true)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.2.0', 0, 0, true)
-                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.2.0', 0, 0, true)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.2.0', 0, 0, true)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.2.0', 0, 0, true)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.2.0', 0, 0, true)
-                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.2.0', 0, 0, true)
-                              , (190, 'MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.2.0', 0, 0, true);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '4.2.7', 0, 310, true)
+                              , (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '4.2.7', 0, 0, true)
+                              , (30, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.2.7', 0, 0, true)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.2.7', 0, 0, true)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '4.2.7', 0, 0, true)
+                              , (60, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.2.7', 0, 0, true)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.2.7', 0, 0, true)
+                              , (80, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.2.7', 0, 0, true)
+                              , (90, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.2.7', 0, 0, true)
+                              , (100, 'MODULE', 'SYS_MEMBERS', 'MEMBERS', '4.2.7', 0, 0, true)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '4.2.7', 0, 0, true)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '4.2.7', 0, 0, true)
+                              , (130, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.2.7', 0, 0, true)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.2.7', 0, 0, true)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '4.2.7', 0, 0, true)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.2.7', 0, 0, true)
+                              , (180, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.2.7', 0, 0, true)
+                              , (190, 'MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.2.7', 0, 0, true);
 
 --
 -- Data for table adm_organizations
@@ -45,7 +45,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (20, 1, false, 2, true, 'announcements', '/adm_program/modules/announcements/announcements.php', 'fa-newspaper', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC', 'd96ba837-9b02-4c4e-afa5-c12167cd01db'),
 (130, 1, false, 5, true, 'photo', '/adm_program/modules/photos/photos.php', 'fa-image', 'SYS_PHOTOS', 'PHO_PHOTOS_DESC', '21db7ac5-7aae-4616-bf88-5b29507d4a02'),
 (70, 1, false, 6, true, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'fa-book', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC', 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e'),
-(50, 1, false, 8, true, 'dates', '/adm_program/modules/dates/dates.php', 'fa-calendar-alt', 'DAT_DATES', 'DAT_DATES_DESC', '446a2c54-b269-4b6c-8a1c-869901b35b01'),
+(50, 1, false, 8, true, 'dates', '/adm_program/modules/dates/dates.php', 'fa-calendar-alt', 'DAT_DATES', 'SYS_EVENTS_DESC', '446a2c54-b269-4b6c-8a1c-869901b35b01'),
 (80, 1, false, 9, true, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC', '5b8b3e60-bc71-4375-bfc3-a9783a63bb72'),
 (190, 1, false, 10, true, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC', 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b'),
 (30, 2, false, 4, true, 'dbback', '/adm_program/modules/backup/backup.php', 'fa-database', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC', '9c6d01e3-b104-4f75-8562-7e7ebe7a929b'),
@@ -277,7 +277,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (6450, 1, 'groups_roles_enable_module', '1'),
     (6455, 1, 'groups_roles_export', '1'),
     (6600, 1, 'groups_roles_members_per_page', '25'),
-    (6700, 1, 'groups_roles_roles_per_page', '24'),
     (6705, 1, 'groups_roles_default_configuration', '1'),
     (6710, 1, 'groups_roles_show_former_members', '2'),
     (6720, 1, 'groups_roles_edit_lists', '1'),
@@ -293,6 +292,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (7000, 1, 'mail_sendmail_address', 'demo@admidio.org'),
     (7010, 1, 'mail_sendmail_name', 'Demo-User'),
     (7020, 1, 'mail_send_method', 'phpmail'),
+    (7025, 1, 'mail_sending_mode', '1'),
     (7030, 1, 'mail_smtp_host', ''),
     (7040, 1, 'mail_smtp_auth', '1'),
     (7050, 1, 'mail_smtp_port', '587'),
@@ -301,6 +301,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (7080, 1, 'mail_smtp_user', ''),
     (7090, 1, 'mail_smtp_password', ''),
     (7095, 1, 'mail_send_to_all_addresses', '1'),
+    (7098, 1, 'mail_template', 'default.html'),
     (7100, 1, 'max_email_attachment_size', '1'),
     (7200, 1, 'max_file_upload_size', '3'),
     (7250, 1, 'members_users_per_page', '25'),
@@ -396,7 +397,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (64050, 2, 'groups_roles_enable_module', '1'),
     (64055, 2, 'groups_roles_export', '1'),
     (66001, 2, 'groups_roles_members_per_page', '25'),
-    (67001, 2, 'groups_roles_roles_per_page', '24'),
     (67005, 2, 'groups_roles_default_configuration', '9'),
     (67010, 2, 'groups_roles_show_former_members', '2'),
     (67020, 2, 'groups_roles_edit_lists', '1'),
@@ -412,6 +412,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (70001, 2, 'mail_sendmail_address', 'demo@admidio.org'),
     (70010, 2, 'mail_sendmail_name', 'Demo-User'),
     (70020, 2, 'mail_send_method', 'phpmail'),
+    (70025, 2, 'mail_sending_mode', '1'),
     (70030, 2, 'mail_smtp_host', ''),
     (70040, 2, 'mail_smtp_auth', '1'),
     (70050, 2, 'mail_smtp_port', '587'),
@@ -420,6 +421,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (70080, 2, 'mail_smtp_user', ''),
     (70090, 2, 'mail_smtp_password', ''),
     (70095, 2, 'mail_send_to_all_addresses', '1'),
+    (70098, 2, 'mail_template', 'default.html'),
     (71001, 2, 'max_email_attachment_size', '1'),
     (72001, 2, 'max_file_upload_size', '3'),
     (72500, 2, 'members_users_per_page', '25'),
