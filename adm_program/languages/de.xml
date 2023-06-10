@@ -737,7 +737,7 @@
   <string name="SYS_DOWNLOAD_PHOTO">Foto herunterladen</string>
   <string name="SYS_DUPLICATE">Duplizieren</string>
   <string name="SYS_ECARD_FROM">Eine Grußkarte von</string>
-  <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Grußkarte haben darf. (Voreinstellung: 400 x 250 Pixel)</string>
+  <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">Der angegebene Wert bestimmen die maximale Größe in Pixel, die die längere Seite des Bildes in der Grußkarte haben darf. (Voreinstellung: #VAR1# Pixel)</string>
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Deine Grußkarte wurde leider nicht erfolgreich versendet!</string>
   <string name="SYS_ECARD_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</string>
   <string name="SYS_EDIT">Bearbeiten</string>

@@ -1351,19 +1351,7 @@ $formEcards->addInput(
     'ecard_thumbs_scale',
     $gL10n->get('PHO_SCALE_THUMBNAILS'),
     $formValues['ecard_thumbs_scale'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_SCALE_THUMBNAILS_DESC')
-);
-$formEcards->addInput(
-    'ecard_card_picture_width',
-    $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'),
-    $formValues['ecard_card_picture_width'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1)
-);
-$formEcards->addInput(
-    'ecard_card_picture_height',
-    $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'),
-    $formValues['ecard_card_picture_height'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_ECARD_MAX_PHOTO_SIZE_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
 );
 
 try {

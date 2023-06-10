@@ -144,9 +144,7 @@ $defaultOrgPreferences = array(
 
     // E-Cards
     'enable_ecard_module'       => '1',
-    'ecard_thumbs_scale'        => '250',
-    'ecard_card_picture_width'  => '400',
-    'ecard_card_picture_height' => '250',
+    'ecard_thumbs_scale'        => '500',
     'ecard_template'            => 'postcard.tpl',
 
     // Profile

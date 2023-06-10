@@ -737,7 +737,7 @@
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
   <string name="SYS_DUPLICATE">Duplicate</string>
   <string name="SYS_ECARD_FROM">Greeting card sent by</string>
-  <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">The defined values indicate the maximum size of an image in the greeting card (Standard: 400 x 250 Pixel).</string>
+  <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">The specified value determine the maximum size in pixel that the longer side of the image may have in the greeting card. (Default: #VAR1# pixels)</string>
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Your greeting card could not be sent!</string>
   <string name="SYS_ECARD_SUCCESSFULLY_SEND">Your greeting card was sent.</string>
   <string name="SYS_EDIT">Edit</string>
@@ -1254,7 +1254,6 @@
   <string name="SYS_SAVE_CHANGES">Save changes</string>
   <string name="SYS_SAVE_CONFIGURATION">Save configuration</string>
   <string name="SYS_SAVE_DATA">Data has been saved.</string>
-  <string name="SYS_SCALE_THUMBNAILS_DESC">Here you can define the size to which the longer side of a thumbnail images should be scaled to (Default: 250px).</string>
   <string name="SYS_SEARCH">Search</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
   <string name="SYS_SEARCH_AGE_DESC">Searching for all users older than 18 years</string>
