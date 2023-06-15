@@ -212,13 +212,16 @@ INSERT INTO %PREFIX%_users (usr_id, usr_uuid, usr_login_name, usr_password, usr_
 (348, 'd00f7e21-53a4-41bd-8324-52cfd7a01e99', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:20', NULL, NULL, true),
 (349, 'b50d8ea6-2afe-44ae-9721-dea54413724d', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:21', 1, '2009-02-14 20:47:21', true),
 (350, 'eace5159-f088-4af0-afa0-5e691f3d5cc8', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
-(351, '56920e00-761c-495a-b43d-082eda94a145', 'Demo', '5c4896c0c3fefb8ef0b326e436790906', NULL, NULL, '2008-05-12 20:29:15', '2009-02-27 22:34:06', 2, NULL, 0, 351, '2008-05-12 20:29:33', 354, '2011-02-03 14:19:13', true),
-(352, '4cae66ed-6c2f-4eac-be07-2635ddc1ceda', 'Mustermann01', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 23:31:26', NULL, NULL, false),
-(353, '386e8531-deb7-40ed-a06b-df4366d9bba6', 'Dina', 'c33367701511b4f6020ec61ded352059', NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 23:33:38', NULL, NULL, false),
+(351, '56920e00-761c-495a-b43d-082eda94a145', 'Demo', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, '2008-05-12 20:29:15', '2009-02-27 22:34:06', 2, NULL, 0, 351, '2008-05-12 20:29:33', 354, '2011-02-03 14:19:13', true),
+(352, '4cae66ed-6c2f-4eac-be07-2635ddc1ceda', 'Mustermann01', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 23:31:26', NULL, NULL, false),
+(353, '386e8531-deb7-40ed-a06b-df4366d9bba6', 'Dina', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 23:33:38', NULL, NULL, false),
 (354, '006bd130-34d4-4b86-9e82-b1464ad60a0b', 'DDT_CHAIRMAN', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', true),
 (355, '97f8346c-ca53-40de-857a-459d26d9df40', 'SYS_MEMBER', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', true),
 (356, '232a5ee7-4ed9-41de-b081-0b5090b00462', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
-(357, 'd1ba8d2b-ad8f-43bc-a22d-cbd71eed09a4', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true);
+(357, 'd1ba8d2b-ad8f-43bc-a22d-cbd71eed09a4', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', true),
+(358, 'fc793b70-16c7-4ff7-b245-6df94d5d6057', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2019-04-26 20:47:22', NULL, NULL, true),
+(359, 'ac793b70-16c7-4ff8-b245-6df94d5d6123', 'bakers', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2023-04-26 20:47:22', NULL, NULL, false),
+(360, 'reg93b70-76c7-4fdf-b344-6df94re64343', 'smith', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2023-04-15 18:06:22', NULL, NULL, false);
 
 
 --
@@ -1089,7 +1092,8 @@ INSERT INTO %PREFIX%_members (mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begi
 (526, 'd03a900b-4ac6-4ab8-963b-27a079b36303', 12, 310, '2018-06-04', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
 (540, 'fd47c224-6f9e-4689-8c9c-d36e6c0257c7', 11, 351, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
 (541, '34dd8ad2-3d96-465c-b7d0-2071fa79c9fb', 11, 354, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 2, NULL, 0),
-(542, '58cde084-6aa8-49c9-88ab-8238ca510bbf', 11, 240, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0);
+(542, '58cde084-6aa8-49c9-88ab-8238ca510bbf', 11, 240, '2018-06-05', '9999-12-31', false, 2, '2008-05-03 07:43:02', NULL, NULL, 3, NULL, 0),
+(543, 'bae36fe4-161b-438e-a99d-0a8df95ee29b', 7, 358, '2018-11-15', '9999-12-31', false, 2, '2022-05-03 07:43:02', NULL, NULL, NULL, NULL, 0);
 
 
 --
@@ -1150,9 +1154,10 @@ INSERT INTO %PREFIX%_messages_recipients (msr_id, msr_msg_id, msr_rol_id, msr_us
 --
 
 INSERT INTO %PREFIX%_registrations (reg_id, reg_org_id, reg_usr_id, reg_timestamp) VALUES
-(1, 1, 352, '2013-03-28 13:43:02'),
-(2, 1, 353, '2013-03-25 18:05:32'),
-(3, 2, 352, '2013-03-28 13:44:02');
+(1, 1, 352, '2023-03-28 13:43:02'),
+(2, 1, 353, '2023-03-25 18:05:32'),
+(3, 2, 360, '2023-03-28 13:44:02'),
+(4, 1, 359, '2023-03-27 05:03:34');
 
 
 --
@@ -2853,7 +2858,7 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1792, 351, 20, '4711'),
 (17921, 351, 25, '3'),
 (1793, 352, 1, 'Suppenkasper'),
-(1794, 352, 2, 'Walter'),
+(1794, 352, 2, 'Walther'),
 (1795, 352, 3, 'Kurfürstendamm 21'),
 (1796, 352, 4, '10707'),
 (1797, 352, 5, 'Berlin'),
@@ -2902,7 +2907,27 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1914, 357, 5, 'Berlin'),
 (1915, 357, 6, 'DEU'),
 (1916, 357, 10, '2014-01-21'),
-(1917, 357, 11, 1);
+(1917, 357, 11, 1),
+(2000, 358, 1, 'Suppenkasper'),
+(2001, 358, 2, 'Walter'),
+(2002, 358, 3, 'Heinrichsallee 254'),
+(2003, 358, 4, '10118'),
+(2004, 358, 5, 'Berlin'),
+(2005, 358, 6, 'DEU'),
+(2100, 359, 1, 'Bakers'),
+(2101, 359, 2, 'Colin'),
+(2102, 359, 3, 'Wallingtonstreet 73'),
+(2103, 359, 4, '3845'),
+(2104, 359, 5, 'Birmingham'),
+(2105, 359, 6, 'GBR'),
+(2106, 359, 12, 'c.bakers@example.com'),
+(2200, 360, 1, 'Smith'),
+(2201, 360, 2, 'Barbara'),
+(2202, 360, 3, 'Mainstreet 876'),
+(2203, 360, 4, '573545'),
+(2204, 360, 5, 'Boston'),
+(2205, 360, 6, 'USA'),
+(2206, 360, 12, 'bab.smith@example.com');
 
 
 --

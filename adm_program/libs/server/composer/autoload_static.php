@@ -184,6 +184,7 @@ class ComposerStaticInitc301026038c71b1da7db13211002b5b3
         'ModuleDates' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleDates.php',
         'ModuleLists' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleLists.php',
         'ModuleMessages' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleMessages.php',
+        'ModuleRegistration' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleRegistration.php',
         'ModuleWeblinks' => __DIR__ . '/../../../..' . '/adm_program/system/classes/ModuleWeblinks.php',
         'Modules' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Modules.php',
         'Navigation' => __DIR__ . '/../../../..' . '/adm_program/system/classes/Navigation.php',

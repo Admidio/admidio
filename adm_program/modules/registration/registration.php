@@ -6,6 +6,12 @@
  * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ *
+ * Parameters:
+ *
+ * id        : Validation id to confirm the registration by the user.
+ * user_uuid : UUID of the user who wants to confirm his registration.
+ * mode      : show_similar - Show users with similar names with the option to assign the registration to them.
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -16,96 +22,86 @@ if (!$gSettingsManager->getBool('registration_enable_module')) {
     // => EXIT
 }
 
-// if there is no login then show a profile form where the user can register himself
-if (!$gValidLogin) {
-    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '2')));
-    // => EXIT
-}
+// Initialize and check the parameters
+$getRegistrationId = admFuncVariableIsValid($_GET, 'id', 'string');
+$getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('validValues' => array('show_similar')));
 
-// Only Users with the right "approve users" can confirm registrations. Otherwise exit.
-if (!$gCurrentUser->approveUsers()) {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
-// set headline of the script
-$headline = $gL10n->get('SYS_NEW_REGISTRATIONS');
-
-// Navigation in module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
-
-// Select new Members of the group
-$sql = 'SELECT usr_id, usr_uuid, usr_login_name, reg_timestamp, last_name.usd_value AS last_name,
-               first_name.usd_value AS first_name, email.usd_value AS email
-          FROM '.TBL_REGISTRATIONS.'
-    INNER JOIN '.TBL_USERS.'
-            ON usr_id = reg_usr_id
-     LEFT JOIN '.TBL_USER_DATA.' AS last_name
-            ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-     LEFT JOIN '.TBL_USER_DATA.' AS first_name
-            ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-     LEFT JOIN '.TBL_USER_DATA.' AS email
-            ON email.usd_usr_id = usr_id
-           AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
-         WHERE usr_valid = false
-           AND reg_org_id = ? -- $gCurrentOrgId
-      ORDER BY last_name, first_name';
-$queryParams = array(
-    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-    $gProfileFields->getProperty('EMAIL', 'usf_id'),
-    $gCurrentOrgId
-);
-$usrStatement = $gDb->queryPrepared($sql, $queryParams);
-
-if ($usrStatement->rowCount() === 0) {
-    $gMessage->setForwardUrl($gHomepage);
-    $gMessage->show($gL10n->get('SYS_NO_NEW_REGISTRATIONS'), $gL10n->get('SYS_REGISTRATION'));
-    // => EXIT
-}
-
-// create html page object
-$page = new HtmlPage('admidio-registration', $headline);
-
-$table = new HtmlTable('new_user_table', $page, true);
-
-// create array with all column heading values
-$columnHeading = array(
-    $gL10n->get('SYS_NAME'),
-    $gL10n->get('SYS_REGISTRATION'),
-    $gL10n->get('SYS_USERNAME'),
-    $gL10n->get('SYS_EMAIL'),
-    '&nbsp;'
-);
-$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
-$table->addRowHeadingByArray($columnHeading);
-
-while ($row = $usrStatement->fetch()) {
-    $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['reg_timestamp']);
-    $datetimeCreate  = $timestampCreate->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
-
-    if ($gSettingsManager->getBool('enable_mail_module')) {
-        $mailLink = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $row['usr_uuid'])).'">'.$row['email'].'</a>';
-    } else {
-        $mailLink  = '<a href="mailto:'.$row['email'].'">'.$row['email'].'</a>';
+if ($getRegistrationId === '') {
+    if (!$gValidLogin) {
+        // if there is no login then show a profile form where the user can register himself
+        admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '2')));
+        // => EXIT
+    } elseif (!$gCurrentUser->approveUsers()) {
+        // Only Users with the right "approve users" can work with registrations, otherwise exit.
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
     }
+} else {
+    // user has clicked the link in his registration email, and now we must check if it's a valid request
+    // and then confirm his registration
 
-    // create array with all column values
-    $columnValues = array(
-        '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])).'">'.$row['last_name'].', '.$row['first_name'].'</a>',
-        $datetimeCreate,
-        $row['usr_login_name'],
-        $mailLink,
-        '<a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_uuid' => $row['usr_uuid'])).'">
-            <i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('SYS_ASSIGN_REGISTRATION').'"></i></a>
-        <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-            data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'nwu', 'element_id' => 'row_user_'.$row['usr_id'], 'name' => $row['first_name'].' '.$row['last_name'], 'database_id' => $row['usr_uuid'])).'">
-            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
+    try {
+        $userRegistration = new UserRegistration($gDb, $gProfileFields);
+        $userRegistration->readDataByUuid($getUserUuid);
 
-    $table->addRowByArray($columnValues, 'row_user_'.$row['usr_id']);
+        if ($userRegistration->validate($getRegistrationId)) {
+            if ($gSettingsManager->getBool('registration_manual_approval')) {
+                // notify all authorized members about the new registration to approve it
+                $userRegistration->notifyAuthorizedMembers();
+
+                $gMessage->show($gL10n->get('SYS_REGISTRATION_VALIDATION_OK', array($gCurrentOrganization->getValue('org_longname'))));
+                // => EXIT
+            } else {
+                // user has done a successful registration, so the account could be activated
+                $userRegistration->acceptRegistration();
+
+                $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/login.php');
+                $gMessage->show($gL10n->get('SYS_REGISTRATION_VALIDATION_OK_SELF'));
+                // => EXIT
+            }
+        } else {
+            $gMessage->show($gL10n->get('SYS_REGISTRATION_VALIDATION_FAILED'));
+            // => EXIT
+        }
+    } catch (AdmException $e) {
+        $e->showHtml();
+    }
 }
 
-$page->addHtml($table->show());
-$page->show();
+if ($getMode === '' && $getUserUuid === '') {
+    // show list with all registrations that should be approved
+
+    // set headline of the script
+    $headline = $gL10n->get('SYS_NEW_REGISTRATIONS');
+
+    // Navigation in module starts here
+    $gNavigation->addStartUrl(CURRENT_URL, $headline, 'fa-address-card');
+
+    try {
+        // create html page object
+        $page = new ModuleRegistration('admidio-registration', $headline);
+        $page->createContentRegistrationList();
+        $page->show();
+    } catch (SmartyException $e) {
+        $gMessage->show($e->getMessage());
+    } catch (AdmException $e) {
+        $e->showHtml();
+    }
+} elseif ($getMode === 'show_similar') {
+    // set headline of the script
+    $headline = $gL10n->get('SYS_ASSIGN_REGISTRATION');
+
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+
+    try {
+        // create html page object
+        $page = new ModuleRegistration('admidio-registration-assign', $headline);
+        $page->createContentAssignUser($getUserUuid);
+        $page->show();
+    } catch (SmartyException $e) {
+        $gMessage->show($e->getMessage());
+    } catch (AdmException $e) {
+        $e->showHtml();
+    }
+}

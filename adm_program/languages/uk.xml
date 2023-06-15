@@ -262,7 +262,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Слова (англ.)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Тут ви можете задати тип Captcha. Captcha буде відображатися у вигляді зображення. Воно може складатися з випадкових символів, невеликої математичної задачі або двох слів. Подальші опції дозволяють більш детально задати Captcha. (за замовчуванням: випадкові символи)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Ширина Captcha в пікселях. Висота captcha буде розраховуватися пропорційно по відношенню до ширини. Додатково буде визначати розмір символів. (за замовчуванням: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Підтвердження реєстрації після ручного підтвердження.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Підтвердження реєстрації після ручного підтвердження.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Створити поле елемента</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Створити поле профілю</string>
   <string name="ORG_CURRENCY">Валюта</string>

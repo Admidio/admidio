@@ -480,10 +480,10 @@ class TableMessage extends TableAccess
      * For new records the name intern will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if
      *                                table has columns like **usr_id_create** or **usr_id_changed**
-     * @throws AdmException
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     *@throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         if ($this->newRecord) {
             // Insert

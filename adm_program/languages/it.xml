@@ -264,7 +264,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Parole (inglese)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Qui puoi definire il tipo di Captcha. Il Captcha sarà visualizzato come immagine. Può consistere in caratteri casuali, un piccolo problema matematico o due parole. Ulteriori opzioni permettono di definire il Captcha in dettaglio. (predefinito: caratteri casuali)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Larghezza del captcha in pixel. L\'altezza del captcha sarà calcolata in proporzione alla larghezza. Inoltre definirà la dimensione del carattere. (predefinito: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Conferma della registrazione dopo la conferma manuale.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Conferma della registrazione dopo la conferma manuale.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Crea campo della voce</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Crea campo del profilo</string>
   <string name="ORG_CURRENCY">Valuta</string>

@@ -461,9 +461,15 @@ $formRegistration->addCheckbox(
     array('helpTextIdInline' => 'ORG_ENABLE_REGISTRATION_MODULE_DESC')
 );
 $formRegistration->addCheckbox(
-    'enable_registration_captcha',
+    'registration_manual_approval',
+    $gL10n->get('SYS_MANUAL_APPROVAL'),
+    (bool) $formValues['registration_manual_approval'],
+    array('helpTextIdInline' => array('SYS_MANUAL_APPROVAL_DESC', array('SYS_RIGHT_APPROVE_USERS')))
+);
+$formRegistration->addCheckbox(
+    'registration_enable_captcha',
     $gL10n->get('ORG_ENABLE_CAPTCHA'),
-    (bool) $formValues['enable_registration_captcha'],
+    (bool) $formValues['registration_enable_captcha'],
     array('helpTextIdInline' => 'ORG_CAPTCHA_REGISTRATION')
 );
 $formRegistration->addCheckbox(
@@ -473,9 +479,9 @@ $formRegistration->addCheckbox(
     array('helpTextIdInline' => 'SYS_REGISTRATION_ADOPT_ALL_DATA_DESC')
 );
 $formRegistration->addCheckbox(
-    'enable_registration_admin_mail',
+    'registration_send_notification_email',
     $gL10n->get('ORG_EMAIL_ALERTS'),
-    (bool) $formValues['enable_registration_admin_mail'],
+    (bool) $formValues['registration_send_notification_email'],
     array('helpTextIdInline' => array('ORG_EMAIL_ALERTS_DESC', array('SYS_RIGHT_APPROVE_USERS')))
 );
 $formRegistration->addSubmitButton(
@@ -695,12 +701,14 @@ $formSystemNotification->addCustomContent(
 );
 
 $text = new TableText($gDb);
-$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_WEBMASTER', 'txt_org_id' => $gCurrentOrgId));
-$formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_WEBMASTER', $gL10n->get('SYS_NOTIFICATION_NEW_REGISTRATION'), $text->getValue('txt_text'), 7);
-$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_USER', 'txt_org_id' => $gCurrentOrgId));
-$formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_USER', $gL10n->get('ORG_CONFIRM_REGISTRATION'), $text->getValue('txt_text'), 7);
-$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REFUSE_REGISTRATION', 'txt_org_id' => $gCurrentOrgId));
-$formSystemNotification->addMultilineTextInput('SYSMAIL_REFUSE_REGISTRATION', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
+$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_CONFIRMATION', 'txt_org_id' => $gCurrentOrgId));
+$formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_CONFIRMATION', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_CONFIRMATION'), $text->getValue('txt_text'), 7);
+$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_NEW', 'txt_org_id' => $gCurrentOrgId));
+$formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_NEW', $gL10n->get('SYS_NOTIFICATION_NEW_REGISTRATION'), $text->getValue('txt_text'), 7);
+$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_APPROVED', 'txt_org_id' => $gCurrentOrgId));
+$formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_APPROVED', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_APPROVAL'), $text->getValue('txt_text'), 7);
+$text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_REFUSED', 'txt_org_id' => $gCurrentOrgId));
+$formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_REFUSED', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
 $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrgId));
 $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD');
 $formSystemNotification->addMultilineTextInput(
