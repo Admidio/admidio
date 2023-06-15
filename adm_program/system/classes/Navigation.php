@@ -65,7 +65,7 @@ class Navigation
      * Number of urls that are currently in the stack
      * @return int Returns the number of the urls in the stack.
      */
-    public function count()
+    public function count(): int
     {
         return count($this->urlStack);
     }
@@ -81,7 +81,7 @@ class Navigation
      * @return void
      * @throws AdmException Throws an exception if the url has invalid characters.
      */
-    public function addStartUrl($url, $text = null, $icon = null)
+    public function addStartUrl(string $url, string $text = '', string $icon = '')
     {
         $this->clear();
         $this->addUrl($url, $text, $icon);
@@ -93,7 +93,7 @@ class Navigation
      * url that should be called.
      * @return array<string,string>|null Returns the removed element
      */
-    public function deleteLastUrl()
+    public function deleteLastUrl(): ?array
     {
         if (count($this->urlStack) > 1) {
             return array_pop($this->urlStack);
@@ -111,10 +111,10 @@ class Navigation
      *                     would be linked with the $url.
      * @param string $icon The name of a fontawesome icon that should be shown in the html navigation stack
      *                     together with the text and would be linked with the $url.
-     * @throws AdmException Throws an exception if the url has invalid characters.
      * @return bool Returns true if the navigation-stack got changed and false if not.
+     *@throws AdmException Throws an exception if the url has invalid characters.
      */
-    public function addUrl($url, $text = null, $icon = null)
+    public function addUrl(string $url, string $text = '', string $icon = ''): bool
     {
         if (!StringUtils::strValidCharacters($url, 'url')) {
             throw new AdmException('SYS_URL_INVALID_CHAR', array($url));
@@ -154,7 +154,7 @@ class Navigation
      * The navigation stack contains each url. Optional a text and an icon is also set for the url.
      * @return array<int,array<string,string> Array with the navigation stack. The array has the following element **url**, **text** and **icon**
      */
-    public function getStack()
+    public function getStack(): array
     {
         return $this->urlStack;
     }
@@ -162,9 +162,9 @@ class Navigation
     /**
      * Get the last added url from the stack.
      * @throws AdmException Throws an exception if no url is in the navigation stack.
-     * @return string|null Returns the last added url. If the stack is empty returns null
+     * @return string Returns the last added url. If the stack is empty returns null
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         $count = count($this->urlStack);
 
@@ -178,9 +178,9 @@ class Navigation
     /**
      * Get the previous url from the stack. This is not the last url that was added to the stack!
      * @throws AdmException Throws an exception if no previous url is in the navigation stack.
-     * @return string|null Returns the previous added url. If only one url is added it returns this one. If no url is added returns null
+     * @return string Returns the previous added url. If only one url is added it returns this one. If no url is added returns null
      */
-    public function getPreviousUrl()
+    public function getPreviousUrl(): string
     {
         $count = count($this->urlStack);
 

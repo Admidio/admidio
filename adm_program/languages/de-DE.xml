@@ -252,7 +252,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Wörter (englisch)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Hier kann die Art des Captchas gewählt werden. Das Captcha wird als Bild angezeigt und kann aus zufälligen Zeichen, aus einer kleinen Rechenaufgabe oder aus 2 Wörtern bestehen. Mit den weiteren Einstellungen kann das Bild angepasst werden. (Voreinstellung: Zufällige Zeichen)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Angabe der Breite in Pixel des Captcha-Bildes. Die Höhe wird proportional zur Breite errechnet. Über diese Einstellung wird auch die Größe der Zeichen bestimmt. (Voreinstellung: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Bestätigung der Anmeldung nach der manuellen Freigabe</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Bestätigung der Anmeldung nach der manuellen Freigabe</string>
   <string name="ORG_CREATE_ITEM_FIELD">Neues Artikelfeld</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Profilfeld anlegen</string>
   <string name="ORG_CURRENCY">Währung</string>

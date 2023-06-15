@@ -117,7 +117,7 @@ while ($row = $statementAdminRoles->fetch()) {
 // create html page object
 $page = new HtmlPage('admidio-documents-files-config-folder', $headline);
 
-$page->addHtml('<p class="lead">'.$gL10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))).'</p>');
+$page->addHtml('<p class="lead admidio-max-with">'.$gL10n->get('SYS_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))).'</p>');
 
 // show form
 $form = new HtmlForm('folder_rights_form', SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files_function.php', array('mode' => '7', 'folder_uuid' => $getFolderUuid)), $page);

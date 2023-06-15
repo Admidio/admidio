@@ -219,7 +219,7 @@ if ($getNewUser === 2) {
     $user->setPassword($_POST['usr_password']);
 
     // At user registration with activated captcha check the captcha input
-    if ($gSettingsManager->getBool('enable_registration_captcha')) {
+    if ($gSettingsManager->getBool('registration_enable_captcha')) {
         try {
             FormValidation::checkCaptcha($_POST['captcha_code']);
         } catch (AdmException $e) {
@@ -265,7 +265,7 @@ if ($getNewUser === 1 || $getNewUser === 3) {
         try {
             // accept a registration, assign necessary roles and send a notification email
             $user->acceptRegistration();
-            $messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+            $messageId = 'SYS_ASSIGN_REGISTRATION_SUCCESSFUL';
         } catch (AdmException $e) {
             $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
             $e->showHtml();

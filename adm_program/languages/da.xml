@@ -252,7 +252,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Ord (Engelske)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Her kan du definere CAPTCHA typen. CAPTCHA vil blive vist som et billede. Det kan bestå af tilfældige karakterer, et lille matematisk problem eller to ord. Yderligere indstillinger tillader at konfigurerer CAPTCHA mere detaljeret. (Standard: Tilfældige karakterer)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">CAPTCHA bredde i pixel, CAPTCHA højden vil blive udregnet i forhold til bredden. Dette vil også definere font størrelsen. (Standard: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Registrerings bekræftelse efter manuel bekræftelse.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Registrerings bekræftelse efter manuel bekræftelse.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Opret emne felt</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Opret profil felt</string>
   <string name="ORG_CURRENCY">Møntfod</string>

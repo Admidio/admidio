@@ -42,10 +42,11 @@ $defaultOrgPreferences = array(
     'system_organization_select'     => '0',
 
     // Registration
-    'registration_enable_module'     => '1',
-    'enable_registration_captcha'    => '1',
-    'enable_registration_admin_mail' => '1',
-    'registration_adopt_all_data'    => '1',
+    'registration_adopt_all_data'          => '1',
+    'registration_enable_captcha'          => '1',
+    'registration_enable_module'           => '1',
+    'registration_manual_approval'         => '1',
+    'registration_send_notification_email' => '1',
 
     // E-mail dispatch
     'mail_send_method'               => 'phpmail',
