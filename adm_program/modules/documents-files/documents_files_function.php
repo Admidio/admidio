@@ -101,7 +101,7 @@ if ($getMode === 2) {
 // create folder
 elseif ($getMode === 3) {
     if ($getFolderUuid === '') {
-        // FolderId ist zum Anlegen eines Unterordners erforderlich
+        // Folder UUID is required to create a sub-folder
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT
     }
@@ -110,12 +110,12 @@ elseif ($getMode === 3) {
         $newFolderName = admFuncVariableIsValid($_POST, 'new_folder', 'file', array('requireValue' => true));
         $newFolderDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
 
-        // Test ob der Ordner schon existiert im Filesystem
+        // Test if the folder already exists in the file system
         if (is_dir($folder->getFullFolderPath() . '/' . $newFolderName)) {
             $gMessage->show($gL10n->get('SYS_FOLDER_EXISTS', array($newFolderName)));
         // => EXIT
         } else {
-            // Ordner erstellen
+            // create folder
             $error = $folder->createFolder($newFolderName);
 
             if ($error === null) {
@@ -139,14 +139,15 @@ elseif ($getMode === 3) {
                 $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folId);
                 $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
             } else {
-                // der entsprechende Ordner konnte nicht angelegt werden
+                // the corresponding folder could not be created
                 $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files/documents_files.php');
                 $gMessage->show($gL10n->get($error['text'], array($error['path'], '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
                 // => EXIT
             }
 
-            $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-            $gMessage->show($gL10n->get('SYS_FOLDER_CREATED', array($newFolderName)));
+            unset($_SESSION['documents_files_request']);
+            $gNavigation->deleteLastUrl();
+            admRedirect($gNavigation->getUrl());
             // => EXIT
         }
     } catch (AdmException $e) {
@@ -164,7 +165,7 @@ elseif ($getMode === 3) {
 // rename folder or file
 elseif ($getMode === 4) {
     if (!$getFileUuid && !$getFolderUuid) {
-        // fileid and/or folderid must be set
+        // file UUID and/or folder UUID must be set
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT
     }
@@ -204,8 +205,9 @@ elseif ($getMode === 4) {
                 $file->setValue('fil_description', $newDescription);
                 $file->save();
 
-                $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-                $gMessage->show($gL10n->get('SYS_FILE_RENAME', array($oldName)));
+                unset($_SESSION['documents_files_request']);
+                $gNavigation->deleteLastUrl();
+                admRedirect($gNavigation->getUrl());
                 // => EXIT
             }
         } elseif ($getFolderUuid !== '') {
@@ -242,8 +244,9 @@ elseif ($getMode === 4) {
                 $folder->setValue('fol_description', $newDescription);
                 $folder->save();
 
-                $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-                $gMessage->show($gL10n->get('SYS_FOLDER_RENAME', array($oldName)));
+                unset($_SESSION['documents_files_request']);
+                $gNavigation->deleteLastUrl();
+                admRedirect($gNavigation->getUrl());
                 // => EXIT
             }
         }
@@ -365,8 +368,9 @@ elseif ($getMode === 7) {
 
         $folder->save();
 
-        $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-        $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+        unset($_SESSION['documents_files_request']);
+        $gNavigation->deleteLastUrl();
+        admRedirect($gNavigation->getUrl());
         // => EXIT
     } catch (AdmException $e) {
         $e->showHtml();

@@ -722,6 +722,7 @@
   <string name="SYS_DO_NOT_EDIT">Nicht bearbeiten</string>
   <string name="SYS_DOCUMENTS_FILES">Dokumente &amp; Dateien</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Unterschiedliche Dokumente und Dateien können hier zur Ansicht oder zum Download angeboten werden. Diese können in Ordnern mit individuellen Zugriffsrechten zusammengefasst werden.</string>
+  <string name="SYS_DOCUMENTS_FILES_ROLES_VIEW">Mitglieder der folgenden Rollen können die Dokumente und Dateien dieses Ordners sehen: #VAR1#</string>
   <string name="SYS_DONATE">Spenden</string>
   <string name="SYS_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
   <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
