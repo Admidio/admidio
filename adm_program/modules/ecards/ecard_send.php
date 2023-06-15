@@ -9,12 +9,17 @@
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/ecard_function.php');
 
-// check if the module is enabled and disallow access if it's disabled
-if (!$gSettingsManager->getBool('enable_ecard_module')) {
+// check if the photo module is enabled and eCard is enabled
+if (!$gSettingsManager->getBool('photo_ecard_enabled')) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
+} elseif ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+} elseif ((int) $gSettingsManager->get('photo_module_enabled') === 2) {
+    // only logged-in users can access the module
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // Initialize and check the parameters
@@ -23,10 +28,10 @@ $postPhotoUuid    = admFuncVariableIsValid($_POST, 'photo_uuid', 'string', array
 $postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr', 'int', array('requireValue' => true));
 $postMessage      = admFuncVariableIsValid($_POST, 'ecard_message', 'html');
 
-$funcClass       = new FunctionClass($gL10n);
+$funcClass       = new ECard($gL10n);
 $photoAlbum      = new TablePhotos($gDb);
 $photoAlbum->readDataByUuid($postPhotoUuid);
-$imageUrl        = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_card_picture_width'), 'max_height' => $gSettingsManager->getInt('ecard_card_picture_height')));
+$imageUrl        = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'), 'max_height' => $gSettingsManager->getInt('photo_ecard_scale')));
 $imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id').'/'.$postPhotoNr.'.jpg';
 
 $_SESSION['ecard_request'] = $_POST;
@@ -98,10 +103,14 @@ if (count($arrayRoles) === 0 && count($arrayUsers) === 0) {
 }
 
 // object to handle the current message in the database
-$message = new TableMessage($gDb);
-$message->setValue('msg_type', TableMessage::MESSAGE_TYPE_EMAIL);
-$message->setValue('msg_subject', $gL10n->get('SYS_GREETING_CARD').': '.$gL10n->get('SYS_NEW_MESSAGE_RECEIVED'));
-$message->setValue('msg_usr_id_sender', $gCurrentUserId);
+try {
+    $message = new TableMessage($gDb);
+    $message->setValue('msg_type', TableMessage::MESSAGE_TYPE_EMAIL);
+    $message->setValue('msg_subject', $gL10n->get('SYS_GREETING_CARD') . ': ' . $gL10n->get('SYS_NEW_MESSAGE_RECEIVED'));
+    $message->setValue('msg_usr_id_sender', $gCurrentUserId);
+} catch (AdmException $e) {
+    $e->showHtml();
+}
 
 // set condition if email should only send to the email address of the user field
 // with the internal name 'EMAIL'
@@ -110,7 +119,7 @@ if (!$gSettingsManager->getBool('mail_send_to_all_addresses')) {
 }
 
 if (count($arrayRoles) > 0) {
-    // Wenn schon dann alle Namen und die dazugehörigen Emails auslesen und in die versand Liste hinzufügen
+    // read all names and the corresponding emails and add them to the send list
     $sql = 'SELECT DISTINCT first_name.usd_value AS first_name, last_name.usd_value AS last_name, email.usd_value AS email, rol_name
               FROM '.TBL_MEMBERS.'
         INNER JOIN '.TBL_ROLES.'
@@ -202,8 +211,12 @@ if (count($arrayUsers) > 0) {
 
 // show result
 if ($ecardSendResult) {
-    $message->addContent($ecardHtmlData);
-    $message->save();
+    try {
+        $message->addContent($ecardHtmlData);
+        $message->save();
+    } catch (AdmException $e) {
+        $e->showHtml();
+    }
 
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
     $gMessage->show($gL10n->get('SYS_ECARD_SUCCESSFULLY_SEND'));

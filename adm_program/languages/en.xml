@@ -363,9 +363,6 @@
   <string name="PHO_FOLDER_NOT_FOUND">Folder could not be found. In case the folder was deleted by using FTP or in case to be  inaccessible, please delete the folder in Admidio.\nGuests without photo management permission can not display selected album.</string>
   <string name="PHO_KEEP_ORIGINAL">Save original files additionally</string>
   <string name="PHO_KEEP_ORIGINAL_DESC">Saves each photo not only with selected resolution but with original size. If option #VAR1_BOLD# is active all original photos will be downloaded. This option requires significantly more storage space and should only be selected If enough space is available.</string>
-  <string name="PHO_MAX_PHOTO_SIZE_DESC">The values specified determine the maximum size that an image may have in the display window. In a modal window or pop-up window, the window is automatically resized to fit the photo. Ideal size should follow original picture size in order to avoid rescaling. (default: 640 x 400 pixels)</string>
-  <string name="PHO_MAX_PHOTO_SIZE_HEIGHT">Maximum image size (height)</string>
-  <string name="PHO_MAX_PHOTO_SIZE_WIDTH">Maximum image size (width)</string>
   <string name="PHO_MODAL_WINDOW">Modal window</string>
   <string name="PHO_NEXT_PHOTO">Next picture</string>
   <string name="PHO_NO_ALBUM_CONTENT">Album contains no photos.</string>
@@ -388,8 +385,6 @@
   <string name="PHO_RECENT_ALBUMS_OF_ORGA">Latest photo album of organization #VAR1#</string>
   <string name="PHO_RESOLUTION_MORE_THAN">Resolution greater than</string>
   <string name="PHO_SAME_WINDOW">Same window</string>
-  <string name="PHO_SCALE_AT_UPLOAD">Upload scaling</string>
-  <string name="PHO_SCALE_AT_UPLOAD_DESC">Photos will be resized during upload. Pixel value defines long edge of portrait and landscape format photos. Other side remains proportional to long edge. (default: 640 pixels)</string>
   <string name="PHO_SCALE_THUMBNAILS">Thumbnail scaling</string>
   <string name="PHO_SCALE_THUMBNAILS_DESC">Set long edge of thumbnails. Attention: do not scale width too large in order to avoid conflict with thumbnail row and column preference. Otherwise try adjustment of thumbnail row and column preferences. (default: 160 pixels)</string>
   <string name="PHO_SELECT_FOTOS">Select image</string>
@@ -735,7 +730,7 @@
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
   <string name="SYS_DUPLICATE">Duplicate</string>
   <string name="SYS_ECARD_FROM">Greeting card sent by</string>
-  <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">The defined values indicate the maximum size of an image in the greeting card (Standard: 400 x 250 Pixel).</string>
+  <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">The specified value determine the maximum size in pixel that the longer side of the image may have in the greeting card. (Default: #VAR1# pixels)</string>
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Your greeting card could not be sent!</string>
   <string name="SYS_ECARD_SUCCESSFULLY_SEND">Your greeting card was sent.</string>
   <string name="SYS_EDIT">Edit</string>
@@ -886,7 +881,6 @@
   <string name="SYS_GEN_RANDOM_EXCEPTION">The program can not generate random numbers.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">The program expects a string with at least 2 different characters.</string>
   <string name="SYS_GREETING_CARD">Greeting card</string>
-  <string name="SYS_GREETING_CARDS">Greeting cards</string>
   <string name="SYS_GROUPS_ROLES">Groups &amp; roles</string>
   <string name="SYS_GROUPS_ROLES_DESC">Overview and management of all groups and roles of the organization. Different member lists can be displayed, exported and own lists can be created.</string>
   <string name="SYS_HALF_YEARLY">Half-yearly</string>
@@ -987,6 +981,9 @@
   <string name="SYS_MAX_PARTICIPANTS">Max. participants</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# of max. #VAR2# participants</string>
   <string name="SYS_MAX_PATH_LENGTH">Max path length</string>
+  <string name="SYS_MAX_PHOTO_SIZE_DESC">The specified values determine the maximum size that an image may have in width or height. The photos are scaled to this size when uploaded. In case of a modal window or popup window, the window is automatically adjusted to the size of the photo. (Default: #VAR1# x #VAR2# pixels)</string>
+  <string name="SYS_MAX_PHOTO_SIZE_HEIGHT">Maximum image height</string>
+  <string name="SYS_MAX_PHOTO_SIZE_WIDTH">Maximum image width</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. processable image size</string>
   <string name="SYS_MAX_RECEIVER">Maximum number of mail recipients</string>
   <string name="SYS_MAX_RECEIVER_DESC">This value defines the maximum amount of mail recipients. A role counts as one recipient.</string>
@@ -1264,7 +1261,6 @@
   <string name="SYS_SAVE_CHANGES">Save changes</string>
   <string name="SYS_SAVE_CONFIGURATION">Save configuration</string>
   <string name="SYS_SAVE_DATA">Data has been saved.</string>
-  <string name="SYS_SCALE_THUMBNAILS_DESC">Here you can define the size to which the longer side of a thumbnail images should be scaled to (Default: 250px).</string>
   <string name="SYS_SEARCH">Search</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
   <string name="SYS_SEARCH_AGE_DESC">Searching for all users older than 18 years</string>

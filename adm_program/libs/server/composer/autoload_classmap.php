@@ -19,6 +19,7 @@ return array(
     'Database' => $baseDir . '/adm_program/system/classes/Database.php',
     'Datamatrix' => $vendorDir . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
     'DateTimeExtended' => $baseDir . '/adm_program/system/classes/DateTimeExtended.php',
+    'ECard' => $baseDir . '/adm_program/system/classes/ECard.php',
     'Email' => $baseDir . '/adm_program/system/classes/Email.php',
     'FileSystemUtils' => $baseDir . '/adm_program/system/classes/FileSystemUtils.php',
     'FileUpload' => $baseDir . '/adm_program/system/classes/FileUpload.php',

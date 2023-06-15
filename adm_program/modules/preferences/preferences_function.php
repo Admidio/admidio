@@ -163,10 +163,6 @@ switch ($getMode) {
                                         'enable_intial_comments_loading');
                     break;
 
-                case 'ecards':
-                    $checkboxes = array('enable_ecard_module');
-                    break;
-
                 case 'groups-roles':
                     $checkboxes = array('groups_roles_enable_module');
                     break;
@@ -181,7 +177,7 @@ switch ($getMode) {
                     break;
 
                 case 'photos':
-                    $checkboxes = array('photo_download_enabled', 'photo_keep_original');
+                    $checkboxes = array('photo_download_enabled', 'photo_keep_original', 'photo_ecard_enabled');
                     break;
 
                 case 'profile':

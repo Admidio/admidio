@@ -410,7 +410,7 @@ foreach ($listsResult['recordset'] as $row) {
         if ($role->getValue('rol_dates') == 1 && (int) $gSettingsManager->get('enable_dates_module') > 0) {
             $assignRoles .= '<i class="admidio-icon-chain fas fa-calendar-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_RIGHT_DATES').'"></i>';
         }
-        if ($role->getValue('rol_photo') == 1 && (int) $gSettingsManager->get('enable_photo_module') > 0) {
+        if ($role->getValue('rol_photo') == 1 && (int) $gSettingsManager->get('photo_module_enabled') > 0) {
             $assignRoles .= '<i class="admidio-icon-chain fas fa-image" data-toggle="tooltip" title="'.$gL10n->get('SYS_RIGHT_PHOTOS').'"></i>';
         }
         if ($role->getValue('rol_documents_files') == 1 && (int) $gSettingsManager->getBool('documents_files_enable_module')) {

@@ -34,7 +34,7 @@ $formValues = array_merge($gCurrentOrganization->getDbColumns(), $gSettingsManag
 $page = new HtmlPage('admidio-preferences', $headline);
 
 $showOptionValidModules = array(
-    'announcements', 'documents-files', 'guestbook', 'ecards', 'groups-roles',
+    'announcements', 'documents-files', 'guestbook', 'groups-roles',
     'messages', 'photos', 'profile', 'events', 'links', 'user_management', 'category-report'
 );
 
@@ -1187,10 +1187,10 @@ $selectBoxEntries = array(
     '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
 );
 $formPhotos->addSelectBox(
-    'enable_photo_module',
+    'photo_module_enabled',
     $gL10n->get('ORG_ACCESS_TO_MODULE'),
     $selectBoxEntries,
-    array('defaultValue' => $formValues['enable_photo_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
+    array('defaultValue' => $formValues['photo_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC')
 );
 $selectBoxEntries = array(
     '1' => $gL10n->get('PHO_MODAL_WINDOW'),
@@ -1222,22 +1222,16 @@ $formPhotos->addInput(
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PHO_SCALE_THUMBNAILS_DESC')
 );
 $formPhotos->addInput(
-    'photo_save_scale',
-    $gL10n->get('PHO_SCALE_AT_UPLOAD'),
-    $formValues['photo_save_scale'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PHO_SCALE_AT_UPLOAD_DESC')
-);
-$formPhotos->addInput(
     'photo_show_width',
-    $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'),
+    $gL10n->get('SYS_MAX_PHOTO_SIZE_WIDTH'),
     $formValues['photo_show_width'],
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1)
 );
 $formPhotos->addInput(
     'photo_show_height',
-    $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'),
+    $gL10n->get('SYS_MAX_PHOTO_SIZE_HEIGHT'),
     $formValues['photo_show_height'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'PHO_MAX_PHOTO_SIZE_DESC')
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_MAX_PHOTO_SIZE_DESC', array(1000, 800)))
 );
 $formPhotos->addInput(
     'photo_image_text',
@@ -1262,6 +1256,37 @@ $formPhotos->addCheckbox(
     $gL10n->get('PHO_KEEP_ORIGINAL'),
     (bool) $formValues['photo_keep_original'],
     array('helpTextIdInline' => array('PHO_KEEP_ORIGINAL_DESC', array($gL10n->get('PHO_DOWNLOAD_ENABLED'))))
+);
+$formPhotos->addCheckbox(
+    'photo_ecard_enabled',
+    $gL10n->get('SYS_ENABLE_GREETING_CARDS'),
+    (bool) $formValues['photo_ecard_enabled'],
+    array('helpTextIdInline' => 'SYS_ENABLE_GREETING_CARDS_DESC')
+);
+$formPhotos->addInput(
+    'photo_ecard_scale',
+    $gL10n->get('PHO_SCALE_THUMBNAILS'),
+    $formValues['photo_ecard_scale'],
+    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
+);
+
+try {
+    // get all eCard templates from the theme folder eCard_templates
+    $eCardTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
+} catch (UnexpectedValueException $e) {
+    $eCardTemplatesFiles = array();
+}
+
+foreach ($eCardTemplatesFiles as &$templateName) {
+    $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
+}
+unset($templateName);
+
+$formPhotos->addSelectBox(
+    'photo_ecard_template',
+    $gL10n->get('SYS_TEMPLATE'),
+    $eCardTemplatesFiles,
+    array('defaultValue' => $formValues['photo_ecard_template'], 'showContextDependentFirstEntry' => false, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'SYS_TEMPLATE_DESC')
 );
 $formPhotos->addSubmitButton(
     'btn_save_photos',
@@ -1339,66 +1364,6 @@ $formGuestbook->addSubmitButton(
 );
 
 $page->addHtml(getPreferencePanel('modules', 'guestbook', 'accordion_modules', $gL10n->get('GBO_GUESTBOOK'), 'fas fa-book', $formGuestbook->show()));
-
-// PANEL: ECARDS
-
-$formEcards = new HtmlForm(
-    'ecards_preferences_form',
-    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'ecards')),
-    $page,
-    array('class' => 'form-preferences')
-);
-
-$formEcards->addCheckbox(
-    'enable_ecard_module',
-    $gL10n->get('SYS_ENABLE_GREETING_CARDS'),
-    (bool) $formValues['enable_ecard_module'],
-    array('helpTextIdInline' => 'SYS_ENABLE_GREETING_CARDS_DESC')
-);
-$formEcards->addInput(
-    'ecard_thumbs_scale',
-    $gL10n->get('PHO_SCALE_THUMBNAILS'),
-    $formValues['ecard_thumbs_scale'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_SCALE_THUMBNAILS_DESC')
-);
-$formEcards->addInput(
-    'ecard_card_picture_width',
-    $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'),
-    $formValues['ecard_card_picture_width'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1)
-);
-$formEcards->addInput(
-    'ecard_card_picture_height',
-    $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'),
-    $formValues['ecard_card_picture_height'],
-    array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'SYS_ECARD_MAX_PHOTO_SIZE_DESC')
-);
-
-try {
-    // get all ecard templates from the theme folder ecard_templates
-    $ecardTemplatesFiles = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
-} catch (\UnexpectedValueException $e) {
-    $ecardTemplatesFiles = array();
-}
-
-foreach ($ecardTemplatesFiles as &$templateName) {
-    $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
-}
-unset($templateName);
-
-$formEcards->addSelectBox(
-    'ecard_template',
-    $gL10n->get('SYS_TEMPLATE'),
-    $ecardTemplatesFiles,
-    array('defaultValue' => $formValues['ecard_template'], 'showContextDependentFirstEntry' => false, 'firstEntry' => $gL10n->get('SYS_NO_TEMPLATE'), 'arrayKeyIsNotValue' => true, 'helpTextIdInline' => 'SYS_TEMPLATE_DESC')
-);
-$formEcards->addSubmitButton(
-    'btn_save_ecards',
-    $gL10n->get('SYS_SAVE'),
-    array('icon' => 'fa-check', 'class' => ' offset-sm-3')
-);
-
-$page->addHtml(getPreferencePanel('modules', 'ecards', 'accordion_modules', $gL10n->get('SYS_GREETING_CARDS'), 'fas fa-file-image', $formEcards->show()));
 
 // PANEL: GROUPS AND ROLES
 
