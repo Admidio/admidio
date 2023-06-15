@@ -14,7 +14,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-$rootPath = dirname(dirname(__DIR__));
+$rootPath = dirname(__DIR__, 2);
 $pluginFolder = basename(__DIR__);
 
 require_once($rootPath . '/adm_program/system/common.php');
@@ -30,7 +30,7 @@ $getDateId = admFuncVariableIsValid($_GET, 'date_id', 'string');
 // global variable to show names of the members who have birthday
 $plgCalendarShowNames = false;
 
-// set default values if there no value has been stored in the config.php
+// set default values if there is no value has been stored in the config.php
 if (!isset($plg_ajaxbox)) {
     $plg_ajaxbox = 1;
 }
@@ -88,7 +88,7 @@ if (isset($plg_rolle_sql) && is_array($plg_rolle_sql) && count($plg_rolle_sql) >
 }
 
 // check if the link url was set or is empty
-// otherwise the defaut url to the Admidio event module will be set
+// otherwise the default url to the Admidio event module will be set
 if (!isset($plg_link_url) || $plg_link_url === '') {
     $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
 }
@@ -163,8 +163,8 @@ if ($plg_ter_aktiv) {
     $datesStatement = $gDb->queryPrepared($sql, $queryParams);
 
     while ($row = $datesStatement->fetch()) {
-        $startDate = new \DateTime($row['dat_begin']);
-        $endDate   = new \DateTime($row['dat_end']);
+        $startDate = new DateTime($row['dat_begin']);
+        $endDate   = new DateTime($row['dat_end']);
 
         // set custom name of plugin for calendar or use default Admidio name
         if ($plg_kal_cat_show) {
@@ -184,12 +184,10 @@ if ($plg_ter_aktiv) {
                 'all_day'  => $row['dat_all_day'],
                 'location' => $row['dat_location'],
                 'headline' => $row['dat_headline'],
-                'one_day'  => false
+                'one_day'  => true
             );
         } else {
             // event within several days
-
-            $oneDayDate = false;
 
             if ($startDate->format('m') !== $currentMonth) {
                 $firstDay = 1;
@@ -200,16 +198,7 @@ if ($plg_ter_aktiv) {
             if ($endDate->format('m') !== $currentMonth) {
                 $lastDay = $lastDayCurrentMonth;
             } else {
-                if ($row['dat_all_day'] == 1) {
-                    $oneDay  = new \DateInterval('P1D');
-                    $endDate = $endDate->sub($oneDay);
-                }
-
                 $lastDay = $endDate->format('j');
-            }
-
-            if ($startDate->format('Y-m-d') === $endDate->format('Y-m-d')) {
-                $oneDayDate = true;
             }
 
             // now add event to every relevant day of month
@@ -220,7 +209,7 @@ if ($plg_ter_aktiv) {
                     'all_day'  => $row['dat_all_day'],
                     'location' => $row['dat_location'],
                     'headline' => $row['dat_headline'],
-                    'one_day'  => $oneDayDate
+                    'one_day'  => false
                 );
             }
         }
@@ -292,7 +281,7 @@ if ($plg_geb_aktiv) {
     $birthdayStatement = $gDb->queryPrepared($sql, $queryParams);
 
     while ($row = $birthdayStatement->fetch()) {
-        $birthdayDate = new \DateTime($row['birthday']);
+        $birthdayDate = new DateTime($row['birthday']);
 
         switch ($plg_geb_displayNames) {
             case 1:
@@ -325,7 +314,7 @@ if ($firstWeekdayOfMonth === 0) {
 echo '<div id="plgCalendarContent" class="admidio-plugin-content">
 <h3>'.$gL10n->get('DAT_CALENDAR').'</h3>
 
-<table border="0" id="plgCalendarTable">
+<table id="plgCalendarTable">
     <tr>';
         if ($plg_ajaxbox) {
             echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
@@ -348,7 +337,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                 }
             }); return false;">&raquo;</a></th>';
         } else {
-            echo '<th colspan="7" align="center" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
+            echo '<th colspan="7" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
         }
     echo '</tr>
     <tr>
@@ -380,7 +369,7 @@ while ($currentDay <= $lastDayCurrentMonth) {
     $hasBirthdays = false;
     $countEvents  = 0;
 
-    $dateObj = \DateTime::createFromFormat('Y-m-j', $currentYear.'-'.$currentMonth.'-'.$currentDay);
+    $dateObj = DateTime::createFromFormat('Y-m-j', $currentYear.'-'.$currentMonth.'-'.$currentDay);
 
     // add events to the calendar
     if ($plg_ter_aktiv) {
@@ -400,7 +389,7 @@ while ($currentDay <= $lastDayCurrentMonth) {
                         $htmlContent .= '<br />';
                     }
                     if ($eventArray['all_day'] == 1) {
-                        if ($eventArray['one_day'] == true) {
+                        if ($eventArray['one_day']) {
                             $htmlContent .= '<strong>'.$gL10n->get('DAT_ALL_DAY').'</strong> '.$eventArray['headline'].$eventArray['location'];
                             $textContent .= $gL10n->get('DAT_ALL_DAY').' '.$eventArray['headline'].$eventArray['location'];
                         } else {
@@ -450,11 +439,7 @@ while ($currentDay <= $lastDayCurrentMonth) {
         }
     }
 
-    // Hier erfolgt nun die Bestimmung der Linkklasse
-    // Dabei werden 3 Linkklassen verwendet:
-    // geb (Geburtstage), date (Termine) und merge (gleichzeitig Geburtstage und Termine
-
-    // Zuerst Vorbelegung der Wochentagsklassen
+    // First pre-assignment of the weekday classes
     $plgLinkClassSaturday = 'plgCalendarSaturday';
     $plgLinkClassSunday   = 'plgCalendarSunday';
     $plgLinkClassWeekday  = 'plgCalendarDay';
@@ -479,7 +464,6 @@ while ($currentDay <= $lastDayCurrentMonth) {
         $plgLinkClassSunday   .= ' plgCalendarMergeDay';
         $plgLinkClassWeekday  .= ' plgCalendarMergeDay';
     }
-    // Ende der Linklassenbestimmung
 
     if ($boolNewStart) {
         echo '<tr>';
@@ -489,10 +473,8 @@ while ($currentDay <= $lastDayCurrentMonth) {
     if ($currentDay === $today) {
         echo '<td class="plgCalendarToday">';
     } elseif ($rest === 6) {
-        // CSS aus der Linkklassenbestimmung verwenden
         echo '<td class="'.$plgLinkClassSaturday.'">';
     } elseif ($rest === 0) {
-        // CSS aus der Linkklassenbestimmung verwenden
         echo '<td class="'.$plgLinkClassSunday.'">';
     } else {
         echo '<td class="'.$plgLinkClassWeekday.'">';
@@ -500,9 +482,9 @@ while ($currentDay <= $lastDayCurrentMonth) {
 
     if ($currentDay === $today || $hasEvents || $hasBirthdays) {
         if (!$hasEvents && $hasBirthdays) {
-            // Link-URL bei Geburtstag durch # abschalten
+            // Switch off link URL for birthday by #.
             $plgLink = '#';
-            // Link_Target für Geburtstagvorgabe einstellen
+            // Set Link_Target for Birthday Default
             $plgLinkTarget = $plg_link_target_geb;
         }
 

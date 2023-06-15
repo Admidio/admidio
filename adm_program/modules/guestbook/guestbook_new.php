@@ -112,14 +112,14 @@ if ($gCurrentUserId > 0) {
     $form->addInput(
         'gbo_name',
         $gL10n->get('SYS_NAME'),
-        $guestbook->getValue('gbo_name', 'database'),
+        $guestbook->getValue('gbo_name'),
         array('maxLength' => 60, 'property' => HtmlForm::FIELD_DISABLED)
     );
 } else {
     $form->addInput(
         'gbo_name',
         $gL10n->get('SYS_NAME'),
-        $guestbook->getValue('gbo_name', 'database'),
+        $guestbook->getValue('gbo_name'),
         array('maxLength' => 60, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 }

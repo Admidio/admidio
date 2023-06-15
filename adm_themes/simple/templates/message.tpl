@@ -1,5 +1,5 @@
 
-<div class="message">
+<div class="message admidio-max-with">
     <p class="lead">{$message}</p>
 
     {if $forwardUrl != ''}

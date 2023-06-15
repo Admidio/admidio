@@ -59,6 +59,11 @@ $gSupportedLanguages = array(
         'isocode' => 'el',
         'libs'    => 'el'
     ),
+    'hu'    => array(
+        'name'    => 'Hungarian - Magyar',
+        'isocode' => 'hu',
+        'libs'    => 'hu'
+    ),
     'id'    => array(
         'name'    => 'Indonesian - bahasa Indonesia',
         'isocode' => 'id',
@@ -73,6 +78,11 @@ $gSupportedLanguages = array(
         'name'    => 'Norwegian Bokmål - Norsk Bokmål',
         'isocode' => 'nb',
         'libs'    => 'nb'
+    ),
+    'pl'    => array(
+        'name'    => 'Polish - Polski',
+        'isocode' => 'pl',
+        'libs'    => 'pl'
     ),
     'pt'    => array(
         'name'    => 'Portuguese - Português',

@@ -126,7 +126,7 @@ switch ($getMode) {
                     break;
 
                 case 'registration':
-                    $checkboxes = array('registration_enable_module', 'enable_registration_captcha', 'registration_adopt_all_data', 'enable_registration_admin_mail');
+                    $checkboxes = array('registration_adopt_all_data', 'registration_enable_module', 'registration_enable_captcha', 'registration_manual_approval', 'registration_send_notification_email');
                     break;
 
                 case 'email_dispatch':
@@ -163,10 +163,6 @@ switch ($getMode) {
                                         'enable_intial_comments_loading');
                     break;
 
-                case 'ecards':
-                    $checkboxes = array('enable_ecard_module');
-                    break;
-
                 case 'groups-roles':
                     $checkboxes = array('groups_roles_enable_module');
                     break;
@@ -181,7 +177,7 @@ switch ($getMode) {
                     break;
 
                 case 'photos':
-                    $checkboxes = array('photo_download_enabled', 'photo_keep_original');
+                    $checkboxes = array('photo_download_enabled', 'photo_keep_original', 'photo_ecard_enabled');
                     break;
 
                 case 'profile':
@@ -423,7 +419,7 @@ switch ($getMode) {
 
         // set email data
         $email->setSender($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
-        $email->addRecipientsByUserId($gCurrentUserId);
+        $email->addRecipientsByUser($gCurrentUser->getValue('usr_uuid'));
         $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname'))));
         $email->setTemplateText(
             $gL10n->get('SYS_EMAIL_FUNCTION_TEST_CONTENT', array($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'))),

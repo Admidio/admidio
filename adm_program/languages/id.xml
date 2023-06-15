@@ -183,7 +183,7 @@
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Inserisci la tua firma preferita per il captcha. Sarà usato il tipo di font prefdefinito del tema corrente.</string>
   <string name="ORG_CAPTCHA_TYPE">Tipo di captcha</string>
   <string name="ORG_CAPTCHA_TYPE_CALC">Calcolo</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Conferma della registrazione dopo la conferma manuale.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Conferma della registrazione dopo la conferma manuale.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Crea campo della voce</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Crea campo del profilo</string>
   <string name="ORG_CURRENCY">Valuta</string>

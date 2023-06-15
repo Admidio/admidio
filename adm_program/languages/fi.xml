@@ -265,7 +265,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Sanat (englanti)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Tässä voit määrittää Captcha -tyypin. Captcha näytetään kuvana. Se voi koostua satunnaisista merkeistä, pienestä matemaattisesta tehtävästä tai kahdesta sanasta. Lisävaihtoehtojen avulla voit määrittää Captchan yksityiskohtaisesti. (oletus: satunnaiset merkit)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Captcha -leveys pikseleinä. Captcha -korkeus lasketaan suhteessa leveyteen. Lisäksi se määrittää merkin koon. (oletus: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Rekisteröinnin vahvistus manuaalisen vahvistuksen jälkeen.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Rekisteröinnin vahvistus manuaalisen vahvistuksen jälkeen.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Luo kohdekenttä</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Luo profiilikenttä</string>
   <string name="ORG_CURRENCY">Valuutta</string>

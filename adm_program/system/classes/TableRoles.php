@@ -207,7 +207,7 @@ class TableRoles extends TableAccess
      * @throws AdmException
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         global $gCurrentSession, $gL10n;
 
@@ -345,7 +345,7 @@ class TableRoles extends TableAccess
      * @return int|float|string|bool Returns the value of the database column.
      *                               If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         global $gL10n;
 
@@ -418,14 +418,14 @@ class TableRoles extends TableAccess
      * If the sql find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * If one record is found than the type of the role (ROLE_GROUP or ROLE_EVENT) is set.
-     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param string $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
-    protected function readData($sqlWhereCondition, array $queryParams = array())
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
         if (parent::readData($sqlWhereCondition, $queryParams)) {
             if($this->getValue('cat_name_intern') === 'EVENTS') {
@@ -447,7 +447,7 @@ class TableRoles extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentSession, $gCurrentUser;
 
@@ -483,10 +483,17 @@ class TableRoles extends TableAccess
 
     /**
      * Set the current role inactive.
-     * @return bool Returns **true** if the role could be set to inactive.
+     * Administrator and event roles could not be set to inactive.
+     * @return bool Returns **true** if the role was set to inactive.
+     * @throws AdmException
      */
-    public function setInactive()
+    public function setInactive(): bool
     {
+        if ($this->getValue('rol_administrator')) {
+            throw new AdmException('Administrator role cannot be set to inactive.');
+        } elseif ($this->getValue('cat_name_intern') === 'EVENTS') {
+            throw new AdmException('Event role cannot be set to inactive.');
+        }
         return $this->toggleValid(false);
     }
 
@@ -495,11 +502,11 @@ class TableRoles extends TableAccess
      * You must call the method **save** to store the new value to the database.
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
-     * @throws AdmException
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     *@throws AdmException
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gL10n, $gCurrentUser;
 

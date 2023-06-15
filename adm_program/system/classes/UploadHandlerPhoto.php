@@ -97,7 +97,7 @@ class UploadHandlerPhoto extends UploadHandler
                 // create image object and scale image to defined size of preferences
                 $image = new Image($fileLocation);
                 $image->setImageType('jpeg');
-                $image->scaleLargerSide($gSettingsManager->getInt('photo_save_scale'));
+                $image->scale($gSettingsManager->getInt('photo_show_width'), $gSettingsManager->getInt('photo_show_height'));
                 $image->copyToFile(null, $albumFolder.'/'.$newPhotoFileNumber.'.jpg');
                 $image->delete();
 

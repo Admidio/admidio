@@ -32,7 +32,7 @@ $uploadUrl               = '';
 // module specific checks
 if ($getModule === 'photos') {
     // check if the module is activated
-    if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
+    if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
         $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
         // => EXIT
     }

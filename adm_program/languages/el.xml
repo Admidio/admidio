@@ -265,7 +265,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Λέξεις (Αγγλικά)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Εδώ μπορείτε να ορίσετε τον τύπο Captcha. Το Captcha θα εμφανιστεί ως εικόνα. Μπορεί να αποτελείται από τυχαίους χαρακτήρες, ένα μικρό μαθηματικό πρόβλημα ή δύο λέξεις. Περαιτέρω επιλογές επιτρέπουν τον λεπτομερή ορισμό του Captcha. (default: random characters)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Πλάτος Captcha σε pixel. Το ύψος Captcha θα υπολογιστεί αναλογικά με το πλάτος. Επιπλέον, θα καθορίσει το μέγεθος του χαρακτήρα. (default: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Επιβεβαίωση εγγραφής μετά από μη αυτόματη επιβεβαίωση.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Επιβεβαίωση εγγραφής μετά από μη αυτόματη επιβεβαίωση.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Δημιουργία πεδίου αντικειμένου</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Δημιουργία πεδίου προφίλ</string>
   <string name="ORG_CURRENCY">Νόμισμα</string>

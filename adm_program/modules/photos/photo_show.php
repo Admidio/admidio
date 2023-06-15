@@ -34,10 +34,10 @@ $getThumbnail = admFuncVariableIsValid($_GET, 'thumb', 'bool');
 $image        = null;
 
 // check if the module is enabled and disallow access if it's disabled
-if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
+if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 // => EXIT
-} elseif ((int) $gSettingsManager->get('enable_photo_module') === 2) {
+} elseif ((int) $gSettingsManager->get('photo_module_enabled') === 2) {
     // only logged in users can access the module
     require(__DIR__ . '/../../system/login_valid.php');
 }

@@ -265,7 +265,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Думи (на английски)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Тук можете да определите типа Captcha. Captcha ще се покаже като изображение. Може да се състои от произволни знаци, малка математическа задача или две думи. Допълнителни опции позволяват да се дефинира подробно Captcha. (По подразбиране: случайни знаци)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Ширина на Captcha в пиксели. Височината на Captcha ще бъде изчислена пропорционално по отношение на ширината. Освен това ще се определи и размера на символите. (По подразбиране: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Потвърждение за регистрация след ръчно регистриране.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Потвърждение за регистрация след ръчно регистриране.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Създаване на поле за артикул</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Създаване на поле за профил</string>
   <string name="ORG_CURRENCY">Валута</string>

@@ -42,10 +42,11 @@ $defaultOrgPreferences = array(
     'system_organization_select'     => '0',
 
     // Registration
-    'registration_enable_module'     => '1',
-    'enable_registration_captcha'    => '1',
-    'enable_registration_admin_mail' => '1',
-    'registration_adopt_all_data'    => '1',
+    'registration_adopt_all_data'          => '1',
+    'registration_enable_captcha'          => '1',
+    'registration_enable_module'           => '1',
+    'registration_manual_approval'         => '1',
+    'registration_send_notification_email' => '1',
 
     // E-mail dispatch
     'mail_send_method'               => 'phpmail',
@@ -97,18 +98,20 @@ $defaultOrgPreferences = array(
     'max_file_upload_size'          => '3',
 
     // Photos
-    'enable_photo_module'    => '1',
-    'photo_show_mode'        => '1',
     'photo_albums_per_page'  => '24',
-    'photo_save_scale'       => '1000',
-    'photo_thumbs_page'      => '16',
-    'photo_thumbs_scale'     => '200',
-    'photo_show_width'       => '1000',
-    'photo_show_height'      => '750',
+    'photo_download_enabled' => '0',
+    'photo_ecard_enabled'    => '1',
+    'photo_ecard_scale'      => '500',
+    'photo_ecard_template'   => 'postcard.tpl',
     'photo_image_text'       => '© '.DOMAIN,
     'photo_image_text_size'  => '40',
     'photo_keep_original'    => '0',
-    'photo_download_enabled' => '0',
+    'photo_module_enabled'   => '1',
+    'photo_show_width'       => '1000',
+    'photo_show_height'      => '800',
+    'photo_show_mode'        => '1',
+    'photo_thumbs_page'      => '16',
+    'photo_thumbs_scale'     => '200',
 
     // Guestbook
     'enable_guestbook_module'        => '0',
@@ -125,7 +128,6 @@ $defaultOrgPreferences = array(
     'groups_roles_export'                => '1',
     'groups_roles_edit_lists'            => '1',
     'groups_roles_members_per_page'      => '25',
-    'groups_roles_roles_per_page'        => '24',
     'groups_roles_show_former_members'   => '2',
 
     // Messages
@@ -142,13 +144,6 @@ $defaultOrgPreferences = array(
     'mail_show_former'            => '1',
     'mail_template'               => 'default.html',
     'max_email_attachment_size'   => '1',
-
-    // E-Cards
-    'enable_ecard_module'       => '1',
-    'ecard_thumbs_scale'        => '250',
-    'ecard_card_picture_width'  => '400',
-    'ecard_card_picture_height' => '250',
-    'ecard_template'            => 'postcard.tpl',
 
     // Profile
     'profile_log_edit_fields'   => '1',

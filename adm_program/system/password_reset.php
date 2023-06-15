@@ -226,7 +226,7 @@ if ($getUserUuid !== '') {
             $user->setValue('usr_pw_reset_timestamp', DATETIME_NOW);
 
             $sysmail = new SystemMail($gDb);
-            $sysmail->addRecipientsByUserId((int) $user->getValue('usr_id'));
+            $sysmail->addRecipientsByUser($user->getValue('usr_uuid'));
             $sysmail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/password_reset.php', array('user_uuid' => $user->getValue('usr_uuid'), 'id' => $passwordResetId)));
             $sysmail->sendSystemMail('SYSMAIL_PASSWORD_RESET', $user);
 
@@ -235,7 +235,7 @@ if ($getUserUuid !== '') {
         }
 
         // always show a positive feedback to prevent hackers to validate an email-address or username
-        $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/login.php');
+        $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_SYSTEM.'/login.php');
 
         if (StringUtils::strValidCharacters($_POST['recipient_email'], 'email')) {
             $gMessage->show($gL10n->get('SYS_LOSTPW_SEND_EMAIL', array($_POST['recipient_email'])));

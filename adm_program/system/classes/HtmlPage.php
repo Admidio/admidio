@@ -96,7 +96,7 @@ class HtmlPage extends \Smarty
      * @param string $headline A string that contains the headline for the page that will be shown in the <h1> tag
      *                         and also set the title of the page.
      */
-    public function __construct($id, $headline = '')
+    public function __construct(string $id, string $headline = '')
     {
         global $gSettingsManager;
 

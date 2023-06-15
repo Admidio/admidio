@@ -263,7 +263,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Mots (anglais)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Ici, tu peux sélectionner le type de Captcha. Le Captcha est affiché sous forme d\'image et peut être composé de caractères aléatoires, d\'un petit calcul ou de 2 mots. Utilise les autres réglages pour ajuster l\'image. (Par défaut : Caractères aléatoires)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Spécifie la largeur en pixels de l\'image Captcha. La hauteur est calculée proportionnellement à la largeur. Ce paramètre détermine également la taille des caractères. (Par défaut : 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Confirmation d\'inscription après validation manuelle.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Confirmation d\'inscription après validation manuelle.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Nouveau champ d\'article</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Créer un champ de profil</string>
   <string name="ORG_CURRENCY">Devise</string>

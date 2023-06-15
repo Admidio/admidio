@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="PLG_ONLINE_HEADLINE">Mtandaoni</string>
-  <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">Hakuna mgeni aliyeko kwenye tovuti..</string>
-  <string name="PLG_ONLINE_VAR_NUM_VISITORS">Wageni #VAR1#</string>
-  <string name="PLG_ONLINE_VAR_NUM_MEMBER">#VAR1# Medlem</string>
-  <string name="PLG_ONLINE_VAR_NUM_MEMBERS">#VAR1# Medlemmar</string>
-</resources>

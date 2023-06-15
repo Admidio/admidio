@@ -264,7 +264,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Ord (engelska)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Här kan du definiera typen Captcha. Captcha visas som bild. Det kan bestå av slumpmässiga tecken, ett litet matematikproblem eller två ord. Ytterligare alternativ gör det möjligt att definiera Captcha i detalj. (standard: slumpmässiga tecken)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Captcha-bredd i pixel. Captcha-höjden kommer att beräknas i proportion till bredden. Dessutom kommer den att definiera teckenstorleken. (standard: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Registreringsbekräftelse efter manuell bekräftelse.</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Registreringsbekräftelse efter manuell bekräftelse.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Skapa objektfält</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Skapa profilfält</string>
   <string name="ORG_CURRENCY">Valuta</string>
@@ -309,7 +309,7 @@
   <string name="ORG_NEW_ORGANIZATION_DESC">Ange förkortningen, det officiella namnet och e-postadressen för den organisation du vill lägga till. E-postadressen ska vara en allmän adress. Den kommer att användas som avsändaradress när du skickar automatiska systemaviseringar.</string>
   <string name="ORG_NO_FIELD_CREATED">Inget organisationsspecifikt fält har skapats än!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">När du ändrar vyn kommer alla osparade ändringar att gå förlorade.</string>
-  <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Meddelande till administratören om nya registreringar</string>
+  <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Meddelande till administratören om nya registreringar</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster per sida</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definiera antalet objekt som visas på en sida. Pagination tillhandahålls om antalet objekt överstiger det definierade värdet. Utskriftsförhandsgranskning och exportfunktioner påverkas inte. Om värdet är 0 kommer alla objekt att listas och paginering inaktiveras. (standard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">För inloggade användare endast</string>

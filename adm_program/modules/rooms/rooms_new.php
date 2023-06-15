@@ -57,7 +57,7 @@ $form->openGroupBox('gb_name_properties', $gL10n->get('SYS_NAME').' &amp; '.$gL1
 $form->addInput(
     'room_name',
     $gL10n->get('SYS_ROOM'),
-    $room->getValue('room_name', 'database'),
+    $room->getValue('room_name'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(

@@ -32,7 +32,7 @@
  *
  * Parameters:
  *
- * rol_id        - Id of role to which members should be assigned or removed
+ * rol_id        - ID of role to which members should be assigned or removed
  * filter_rol_id - If set only users from this role will be shown in list.
  * mem_show_all  - true  : (Default) Show active and inactive members of all organizations in database
  *                 false : Show only active members of the current organization
@@ -260,7 +260,7 @@ while ($user = $userStatement->fetch()) {
     $arrContent  = array();
     $addressText = '';
 
-    // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
+    // Select icon for member and non-member of the organisation
     if ($user['member_this_orga'] > 0) {
         $icon = 'fa-user';
         $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname')));
@@ -286,11 +286,11 @@ while ($user = $userStatement->fetch()) {
     }
 
     // create string with user address
-    if (strlen($user['country']) > 0 && $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())) {
+    if ((string) $user['country'] !== '' && $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())) {
         $addressText .= $gL10n->getCountryName($user['country']);
     }
-    if ((strlen($user['zip_code']) > 0 && $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers()))
-    || (strlen($user['city']) > 0 && $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers()))) {
+    if (((string) $user['zip_code'] !== '' && $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers()))
+    || ((string) $user['city'] !== '' && $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers()))) {
         // some countries have the order postcode city others have city postcode
         if ((int) $gProfileFields->getProperty('CITY', 'usf_sequence') > (int) $gProfileFields->getProperty('POSTCODE', 'usf_sequence')) {
             $addressText .= ' - '. $user['zip_code']. ' '. $user['city'];
@@ -298,7 +298,7 @@ while ($user = $userStatement->fetch()) {
             $addressText .= ' - '. $user['city']. ' '. $user['zip_code'];
         }
     }
-    if (strlen($user['street']) > 0 && $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())) {
+    if ((string) $user['street'] !== '' && $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())) {
         $addressText .= ' - '. $user['street'];
     }
 
@@ -306,7 +306,7 @@ while ($user = $userStatement->fetch()) {
     || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())) {
-        if (strlen($addressText) > 0) {
+        if ($addressText !== '') {
             $arrContent[] = '<i class="fas fa-map-marker-alt" data-toggle="tooltip" title="' . trim($addressText, ' -') . '"></i>';
         } else {
             $arrContent[] = '&nbsp;';
@@ -315,8 +315,8 @@ while ($user = $userStatement->fetch()) {
 
     if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers())) {
         // show birthday if it's known
-        if (strlen($user['birthday']) > 0) {
-            $birthdayDate = \DateTime::createFromFormat('Y-m-d', $user['birthday']);
+        if ((string) $user['birthday'] !== '') {
+            $birthdayDate = DateTime::createFromFormat('Y-m-d', $user['birthday']);
             $arrContent[] = $birthdayDate->format($gSettingsManager->getString('system_date'));
         } else {
             $arrContent[] = '&nbsp;';

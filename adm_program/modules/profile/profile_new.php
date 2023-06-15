@@ -369,7 +369,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
 $form->closeGroupBox();
 
 // if captchas are enabled then visitors of the website must resolve this
-if ($getNewUser === 2 && $gSettingsManager->getBool('enable_registration_captcha')) {
+if ($getNewUser === 2 && $gSettingsManager->getBool('registration_enable_captcha')) {
     $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
     $form->addCaptcha('captcha_code');
     $form->closeGroupBox();

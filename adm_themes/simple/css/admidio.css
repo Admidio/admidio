@@ -13,14 +13,14 @@
     background-color: #349aaa;
     min-height: 4rem;
     position: sticky;
-    padding-bottom: 0px;
+    padding-bottom: 0;
 }
 
 #admidio-main-navbar {
     color: #ffffff;
     font-weight: bold;
     font-size: 1.7rem;
-    padding-top: 0px;
+    padding-top: 0;
 }
 
 #admidio-main-navbar .navbar-brand img {
@@ -47,7 +47,7 @@
 }
 
 .admidio-content-col {
-    padding: 0px;
+    padding: 0;
 }
 
 .admidio-content {
@@ -60,7 +60,7 @@
 /* Sidebar Navigation */
 /***********************************/
 .admidio-sidebar {
-    padding: 0px;
+    padding: 0;
     background-color: #263340;
     overflow-y: auto;
 }
@@ -77,7 +77,7 @@
 }
 
 .admidio-headline-mobile-menu .btn {
-    padding: 0px;
+    padding: 0;
 }
 
 .admidio-menu-list {
@@ -116,7 +116,7 @@
     font-weight: bold;
     text-transform: uppercase;
     padding: 8px 16px;
-    margin: 0px;
+    margin: 0;
     color: rgba(222, 222, 222, 0.65);
 }
 
@@ -146,10 +146,6 @@
 
 body {
     color: #263340;
-}
-
-h6, h5 {
-    font-weight: bold;
 }
 
 a, .btn-link, .page-link, a.btn {
@@ -200,8 +196,8 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
 }
 
 .admidio-icon-link {
-    margin-left: 0px;
-    padding-left: 0px;
+    margin-left: 0;
+    padding-left: 0;
     text-align: left;
     cursor: pointer;
 }
@@ -239,7 +235,7 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
 .admidio-form-group-required .control-label:after,
 .admidio-form-group-required .checkbox label:after,
 .admidio-form-required-notice span:after {
-    font-family: "Font Awesome 5 Free";
+    font-family: "Font Awesome 5 Free", serif;
     font-size: 6pt;
     content: "\f111";
     color: #d91515;
@@ -262,7 +258,7 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
 /* Forms */
 /***********************************/
 
-form, .message {
+form, .admidio-max-with {
     max-width: 1000px;
 }
 
@@ -304,7 +300,7 @@ label {
 }
 
 .form-control-static {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .radio-inline {
@@ -358,11 +354,11 @@ input[type=time] {
 }
 
 .card-header .float-right .fas {
-    margin-right: 0px;
+    margin-right: 0;
 }
 
 .card-header .dropdown .fas, .card-header .dropdown .fab {
-    margin-right: 0px;
+    margin-right: 0;
 }
 
 .admidio-blog .card-footer {
@@ -372,16 +368,21 @@ input[type=time] {
 .admidio-field-group .list-group-item {
     border: none;
     background-color: #eeeeee;
-    padding: 0px 0px 1rem 0px;
+    padding: 0 0 1rem 0;
 }
 
 .admidio-field-group .list-group-item .list-group-item {
-    padding: 0px;
+    padding: 0;
 }
 
 .card .admidio-info-created-edited {
-    margin-bottom: 0px;
-    margin-top: 0px;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.card-body .list-group-item {
+    padding-left: 0;
+    background-color: #eeeeee;
 }
 
 .card-footer .admidio-info-created-edited {
@@ -394,7 +395,7 @@ input[type=time] {
 
 .admidio-blog-comment .card-header {
     font-size: 120%;
-    padding-bottom: 0px;
+    padding-bottom: 0;
 }
 
 .admidio-blog-comment {
@@ -416,8 +417,8 @@ input[type=time] {
 }
 
 .admidio-card li {
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
     background-color: #eeeeee;
 }
 
@@ -426,7 +427,7 @@ input[type=time] {
 /***********************************/
 
 .navbar button {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .navbar label {
@@ -571,12 +572,4 @@ input[type=time] {
 
 #plugin-login-form .btn {
     margin-bottom: 15px;
-}
-
-.admidio-plugin-content ul {
-    padding-left: 15px;
-}
-
-#plugin-latest-documents-files hr {
-    margin: 5px 0px;
 }

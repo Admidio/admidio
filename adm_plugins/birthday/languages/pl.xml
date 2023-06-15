@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# będzie miał/a #VAR3# lat za #VAR2# dni, w #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# ma urodziny za #VAR2# dni</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Urodziny</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Pan #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">#VAR1# użytkowników ma dziś urodziny.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Dziś żaden użytkownik nie ma urodzin.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Dziś użytkownik ma urodziny.</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# skończył/a #VAR3# lat #VAR2# dni temu, #VAR4#</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# miał urodziny #VAR2# dni temu</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# kończy dziś #VAR2# lat</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# ma dziś urodziny</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# jutro,  #VAR4#, kończy #VAR3# lat</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# ma jutro urodziny</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Pani #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# skończył #VAR3# lat wczoraj #VAR4#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# miał wczoraj urodziny</string>
+</resources>

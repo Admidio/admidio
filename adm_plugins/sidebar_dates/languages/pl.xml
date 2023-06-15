@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_DATES_ALL_EVENTS">Wszystkie zdarzenia</string>
+  <string name="PLG_DATES_HEADLINE">Zdarzenia</string>
+  <string name="PLG_DATES_NO_ENTRIES_VISITORS">Nie ma zdarzeń dostępnych dla odwiedzających , zaloguj się aby zobaczyć zdarzenia.</string>
+</resources>

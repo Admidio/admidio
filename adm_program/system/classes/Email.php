@@ -73,7 +73,7 @@ class Email extends PHPMailer
     public const EMAIL_ONLY_ACTIVE_MEMBERS = 1;
     public const EMAIL_ONLY_FORMER_MEMBERS = 2;
 
-    public const SENDINGMODE_BULK = 1;
+    public const SENDINGMODE_BULK = 0;
     public const SENDINGMODE_SINGLE = 1;
 
     /**
@@ -107,7 +107,7 @@ class Email extends PHPMailer
     /**
     * @var int The sending mode from the settings: 0 = BULK, 1 = SINGLE
     */
-    private $sendingMode = Email::SENDINGMODE_BULK;
+    private $sendingMode;
     /**
      * @var array<int,array<string,string>>
      */
@@ -191,7 +191,7 @@ class Email extends PHPMailer
      */
     public function addRecipientsByRole(string $roleUuid, int $memberStatus = self::EMAIL_ONLY_ACTIVE_MEMBERS): int
     {
-        global $gSettingsManager, $gProfileFields, $gL10n, $gDb, $gCurrentOrgId, $gCurrentUserId, $gValidLogin;
+        global $gSettingsManager, $gProfileFields, $gDb, $gCurrentOrgId, $gCurrentUserId, $gValidLogin;
 
         $sqlEmailField = '';
         $numberRecipientsAdded = 0;
@@ -274,14 +274,14 @@ class Email extends PHPMailer
     }
 
     /**
-     * Add the name and email address of the given user id to the email as a normal recipient. If the system setting
-     * **mail_send_to_all_addresses** is set than all email addresses of the given user id will be added.
-     * @param int $userId ID of a user who should be the recipient of the email.
+     * Add the name and email address of the given user UUID to the email as a normal recipient. If the system setting
+     * **mail_send_to_all_addresses** is set than all email addresses of the given user will be added.
+     * @param string $userUuid UUID of a user who should be the recipient of the email.
      * @return int Returns the number of added email addresses.
      */
-    public function addRecipientsByUserId(int $userId): int
+    public function addRecipientsByUser(string $userUuid): int
     {
-        global $gSettingsManager, $gProfileFields, $gL10n, $gDb;
+        global $gSettingsManager, $gProfileFields, $gDb;
 
         $sqlEmailField = '';
         $numberRecipientsAdded = 0;
@@ -293,7 +293,10 @@ class Email extends PHPMailer
         }
 
         $sql = 'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
-                  FROM ' . TBL_USER_DATA . ' AS email
+                  FROM ' . TBL_USERS . '
+            INNER JOIN ' . TBL_USER_DATA . ' AS email
+                    ON email.usd_usr_id = usr_id
+                   AND LENGTH(email.usd_value) > 0
             INNER JOIN ' . TBL_USER_FIELDS . ' AS field
                     ON field.usf_id = email.usd_usf_id
                    AND field.usf_type = \'EMAIL\'
@@ -304,10 +307,9 @@ class Email extends PHPMailer
             INNER JOIN ' . TBL_USER_DATA . ' AS first_name
                     ON first_name.usd_usr_id = email.usd_usr_id
                    AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                 WHERE email.usd_usr_id = ? -- userId
-                   AND LENGTH(email.usd_value) > 0 ';
+                 WHERE usr_uuid = ? -- $userUuid ';
 
-        $statement = $gDb->queryPrepared($sql, array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $userId));
+        $statement = $gDb->queryPrepared($sql, array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $userUuid));
 
         if ($statement->rowCount() > 0) {
             // all email addresses will be attached as BCC
@@ -343,35 +345,6 @@ class Email extends PHPMailer
         $this->emRecipientsNames[] = $lastName;
 
         return true;
-    }
-
-    /**
-     * method adds BCC recipients to mail
-     * Bcc Empfänger werden ersteinmal gesammelt, damit später Päckchen verschickt werden können
-     * @param string $address
-     * @param string $lastName
-     * @return bool
-     * @deprecated 4.2.0:4.3.0 "addBlindCopy()" is deprecated, use "addRecipient()" instead.
-     */
-    public function addBlindCopy($address, $firstName = '', $lastName = '')
-    {
-        return $this->addRecipient($address, $firstName, $lastName);
-    }
-
-    /**
-     * Send a notification email to all members of the notification role. This role is configured within the
-     * global preference **system_notifications_role**.
-     * @param string $subject     The subject of the email.
-     * @param string $message     The body of the email.
-     * @param string $editorName  The name of the sender of the email.
-     * @param string $editorEmail The email address of the sender of the email.
-     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
-     * @return bool
-     * @deprecated 4.2.0:4.3.0 "adminNotification()" is deprecated, use "sendNotification()" instead.
-     */
-    public function adminNotification($subject, $message, $editorName = '', $editorEmail = '', $enable_flag = 'system_notifications_new_entries')
-    {
-        return $this->sendNotification($subject, $message);
     }
 
     /**
@@ -464,7 +437,7 @@ class Email extends PHPMailer
     }
 
     /**
-     * method adds sender to mail
+     * Method adds sender to the email.
      * @param string $address
      * @param string $name
      * @return true|string
@@ -473,18 +446,16 @@ class Email extends PHPMailer
     {
         global $gSettingsManager;
 
-        // save sender if a copy of the mail should be send to him
+        // save sender if a copy of the mail should be sent to him
         $this->emSender = array('address' => $address, 'name' => $name);
 
-        // Falls so eingestellt soll die Mail von einer bestimmten Adresse aus versendet werden
+        // If set, the mail should be sent from a specific address
         if (strlen($gSettingsManager->getString('mail_sendmail_address')) > 0) {
-            // hier wird die Absenderadresse gesetzt
             $fromName    = $gSettingsManager->getString('mail_sendmail_name');
             $fromAddress = $gSettingsManager->getString('mail_sendmail_address');
         }
-        // Im Normalfall wird aber versucht von der Adresse des schreibenden aus zu schicken
         else {
-            // Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
+            // Normally, however, an attempt is made to send from the address of the writing party
             $fromName    = $name;
             $fromAddress = $address;
         }
@@ -518,8 +489,8 @@ class Email extends PHPMailer
     }
 
     /**
-     * Add the template text to the email message and replace the plaeholders of the template.
-     * @param string $text        Email text that should be send
+     * Add the template text to the email message and replace the placeholders of the template.
+     * @param string $text        Email text that should be sent
      * @param string $senderName  Firstname and lastname of email sender
      * @param string $senderEmail The email address of the sender
      * @param string $senderUuid  The unique ID of the sender.
@@ -565,7 +536,7 @@ class Email extends PHPMailer
             $substring = substr($emailText, strpos($emailText, '<style'), strpos($emailText, '</style>') + 6);
             $emailText = str_replace($substring, '', $emailText);
         }
-        // remove linefeeds from html \r\n but don't remove the linefeed from the message \n
+        // remove line feeds from html \r\n but don't remove the linefeed from the message \n
         $emailText = str_replace(array("\t", "\r\n"), '', $emailText);
         $emailText = trim($emailText);
 
@@ -575,8 +546,8 @@ class Email extends PHPMailer
 
 
     /**
-     * Add the user specific template text to the email message and replace the plaeholders of the template.
-     * @param string $text      Email text that should be send
+     * Add the user specific template text to the email message and replace the placeholders of the template.
+     * @param string $text      Email text that should be sent
      * @param string $firstName Recipients firstname
      * @param string $surname Recipients surname
      * @param string $email  Recipients email address
@@ -598,7 +569,7 @@ class Email extends PHPMailer
     }
 
     /**
-     * Funktion um den Nachrichtentext an die Mail uebergeben
+     * Method to pass the message text to the email.
      * @param string $text
      */
     public function setText(string $text)
@@ -659,8 +630,8 @@ class Email extends PHPMailer
     /**
      * Method will send the email to all recipients. Therefore, the method will evaluate how to send the email.
      * If it's necessary all recipients will be added to BCC and also smaller packages of recipients will be
-     * created. So maybe several emails will be send. Also a copy to the sender will be send if the preferences are set.
-     * If the Sending Mode is set to "SINGLE" every e-mail will be send on its own, so there will be send out a lot e-mails.
+     * created. So maybe several emails will be sent. Also, a copy to the sender will be sent if the preferences are set.
+     * If the Sending Mode is set to "SINGLE" every e-mail will be sent on its own, so there will be sent out a lot of emails.
      * @return true|string
      */
     public function sendEmail()
