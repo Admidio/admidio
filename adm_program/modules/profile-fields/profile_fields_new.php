@@ -94,14 +94,14 @@ if ($userField->getValue('usf_system') == 1) {
     $form->addInput(
         'usf_name',
         $gL10n->get('SYS_NAME'),
-        $userField->getValue('usf_name'),
+        htmlentities($userField->getValue('usf_name', 'database'), ENT_QUOTES),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
     );
 } else {
     $form->addInput(
         'usf_name',
         $gL10n->get('SYS_NAME'),
-        $userField->getValue('usf_name'),
+        htmlentities($userField->getValue('usf_name', 'database'), ENT_QUOTES),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 }
@@ -171,7 +171,7 @@ if ($userField->getValue('usf_system') == 1) {
 $form->addMultilineTextInput(
     'usf_value_list',
     $gL10n->get('ORG_VALUE_LIST'),
-    $userField->getValue('usf_value_list'),
+    htmlentities($userField->getValue('usf_value_list', 'database'), ENT_QUOTES),
     6,
     array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC')
 );
@@ -234,7 +234,7 @@ $form->addInput(
 $form->addInput(
     'usf_icon',
     $gL10n->get('SYS_ICON'),
-    $userField->getValue('usf_icon'),
+    htmlentities($userField->getValue('usf_icon', 'database'), ENT_QUOTES),
     array(
         'maxLength' => 100,
         'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>'))
