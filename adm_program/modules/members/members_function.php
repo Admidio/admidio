@@ -145,7 +145,7 @@ if ($getMode === 2) {
 
             // Send mail with login data to user
             $sysMail = new SystemMail($gDb);
-            $sysMail->addRecipientsByUserId((int) $user->getValue('usr_id'));
+            $sysMail->addRecipientsByUser($getUserUuid);
             $sysMail->setVariable(1, $password);
             $sysMail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user);
         } catch (AdmException $e) {

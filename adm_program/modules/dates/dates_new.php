@@ -221,7 +221,7 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
 $form->addInput(
     'dat_headline',
     $gL10n->get('SYS_TITLE'),
-    $date->getValue('dat_headline', 'database'),
+    $date->getValue('dat_headline'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 
@@ -230,7 +230,7 @@ if ($gSettingsManager->getBool('dates_show_map_link')) {
     $form->addInput(
         'dat_location',
         $gL10n->get('DAT_LOCATION'),
-        $date->getValue('dat_location', 'database'),
+        $date->getValue('dat_location'),
         array('maxLength' => 100, 'helpTextIdLabel' => 'DAT_LOCATION_LINK')
     );
 
@@ -247,7 +247,7 @@ if ($gSettingsManager->getBool('dates_show_map_link')) {
     $form->addInput(
         'dat_location',
         $gL10n->get('DAT_LOCATION'),
-        $date->getValue('dat_location', 'database'),
+        $date->getValue('dat_location'),
         array('maxLength' => 100)
     );
 }
@@ -361,7 +361,7 @@ $form->addInput(
     'date_deadline',
     $gL10n->get('DAT_DEADLINE'),
     $date->getValue('dat_deadline', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
-    array('type' => 'datetime', 'helpTextIdLabel' => 'DAT_DEADLINE_DESC')
+    array('type' => 'datetime', 'helpTextIdLabel' => 'SYS_EVENT_DEADLINE_DESC')
 );
 $form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
 $form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);

@@ -124,14 +124,14 @@ if ($gCurrentUserId > 0) {
     $form->addInput(
         'gbc_name',
         $gL10n->get('SYS_NAME'),
-        $gbComment->getValue('gbc_name', 'database'),
+        $gbComment->getValue('gbc_name'),
         array('maxLength' => 60, 'property' => HtmlForm::FIELD_DISABLED)
     );
 } else {
     $form->addInput(
         'gbc_name',
         $gL10n->get('SYS_NAME'),
-        $gbComment->getValue('gbc_name', 'database'),
+        $gbComment->getValue('gbc_name'),
         array('maxLength' => 60, 'property' => HtmlForm::FIELD_REQUIRED)
     );
 }

@@ -630,8 +630,8 @@ final class FileSystemUtils
     /**
      * Deletes a file if it exists
      * @param string $filePath The file to delete
-     * @throws \UnexpectedValueException Throws if the file is not writable
-     * @throws \RuntimeException         Throws if the delete process fails
+     * @throws UnexpectedValueException Throws if the file is not writable
+     * @throws RuntimeException         Throws if the delete process fails
      * @return bool Returns true if file was successfully deleted or false if file already did not exist
      * @see https://www.php.net/manual/en/function.unlink.php
      */
@@ -641,10 +641,10 @@ final class FileSystemUtils
 
         $parentDirectoryPath = dirname($filePath);
         if (self::isUnix() && !is_executable($parentDirectoryPath)) {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
+            throw new UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
         if (!is_writable($parentDirectoryPath)) {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not writable!');
+            throw new UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not writable!');
         }
 
         if (!is_file($filePath)) {
@@ -653,7 +653,7 @@ final class FileSystemUtils
 
         $unlinkResult = unlink($filePath);
         if (!$unlinkResult) {
-            throw new \RuntimeException('File "' . $filePath . '" cannot be deleted!');
+            throw new RuntimeException('File "' . $filePath . '" cannot be deleted!');
         }
 
         return true;
@@ -1029,30 +1029,30 @@ final class FileSystemUtils
 
     /**
      * Gets the content of a directory and optional recursive from all subdirectories
-     * @param string            $directoryPath        The directory from which to get the content
-     * @param bool              $recursive            If true, also all subdirectories are scanned
-     * @param bool              $fullPath             Set true to get the full paths instead of the content entry names
+     * @param string $directoryPath        The directory from which to get the content
+     * @param bool $recursive            If true, also all subdirectories are scanned
+     * @param bool $fullPath             Set true to get the full paths instead of the content entry names
      * @param array<int,string> $includedContentTypes A list with all content types that should get returned (directories, files, links)
-     * @throws \UnexpectedValueException Throws if directory is not readable
-     * @throws \RuntimeException         Throws if the opendir process fails
      * @return array<string,string|array> The content of the directory (and all the subdirectories)
+     * @throws RuntimeException         Throws if the open dir process fails
+     * @throws UnexpectedValueException Throws if directory is not readable
      * @see https://www.php.net/manual/en/function.opendir.php
      * @see https://www.php.net/manual/en/function.readdir.php
      */
-    public static function getDirectoryContent($directoryPath, $recursive = false, $fullPath = true, array $includedContentTypes = array(self::CONTENT_TYPE_DIRECTORY, self::CONTENT_TYPE_FILE, self::CONTENT_TYPE_LINK))
+    public static function getDirectoryContent(string $directoryPath, bool $recursive = false, bool $fullPath = true, array $includedContentTypes = array(self::CONTENT_TYPE_DIRECTORY, self::CONTENT_TYPE_FILE, self::CONTENT_TYPE_LINK)): array
     {
         self::checkIsInAllowedDirectories($directoryPath);
 
         if (!is_dir($directoryPath)) {
-            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
+            throw new UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
         }
         if (!is_readable($directoryPath)) {
-            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" is not readable!');
+            throw new UnexpectedValueException('Directory "' . $directoryPath . '" is not readable!');
         }
 
         $dirHandle = opendir($directoryPath);
         if ($dirHandle === false) {
-            throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be opened!');
+            throw new RuntimeException('Directory "' . $directoryPath . '" cannot be opened!');
         }
 
         $directoryContent = array();
@@ -1178,6 +1178,8 @@ final class FileSystemUtils
     }
 
     /**
+     * Method will read the content of the file that is set through the parameter and return the
+     * file content. It will check if the file exists and if it's readable for the PHP user.
      * @param string $filePath The file to read
      * @throws \UnexpectedValueException Throws if the file does not exist or is not readable
      * @throws \RuntimeException         Throws if the read process fails
@@ -1187,11 +1189,6 @@ final class FileSystemUtils
     public static function readFile($filePath)
     {
         self::checkIsInAllowedDirectories($filePath);
-
-        $parentDirectoryPath = dirname($filePath);
-        if (self::isUnix() && !is_executable($parentDirectoryPath)) {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
-        }
 
         if (!is_file($filePath)) {
             throw new \UnexpectedValueException('File "' . $filePath . '" does not exist!');

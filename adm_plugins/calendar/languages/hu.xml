@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Aktuális hónap</string>
+  <string name="PLG_CALENDAR_MONTH">Január,Február,Március,Április,Május,Június,Július,Augusztus,Szeptember,Október,November,December</string>
+  <string name="PLG_CALENDAR_MORE">(... tovább)</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Hé</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Ke</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Sze</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">Csüt</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">Pén</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">Szo</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Vas</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Több nap</string>
+</resources>

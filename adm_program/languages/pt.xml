@@ -263,7 +263,7 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Palavras (inglês)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Defina o tipo do CAPTCHA aqui. Ele é uma imagem, com caracteres aleatórios, um pequeno problema de matemática ou duas palavras. As próximas opções permitem configurar o CAPTCHA minuciosamente. (padrão: caracteres aleatórios)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Largura do CAPTCHA em pixels. A altura será calculada para manter a proporção com a largura. Isso também define o tamanho da fonte. (padrão: 215)</string>
-  <string name="ORG_CONFIRM_REGISTRATION">Confirmação de registro após confirmação manual</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Confirmação de registro após confirmação manual</string>
   <string name="ORG_CREATE_ITEM_FIELD">Criar campo item</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Criar campo perfil</string>
   <string name="ORG_CURRENCY">Moeda</string>

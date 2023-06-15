@@ -664,7 +664,7 @@ class ProfileFields
                     if ($date === false) {
                         $date = DateTime::createFromFormat('Y-m-d', $fieldValue);
                         if ($date === false && !$this->noValueCheck) {
-                            throw new AdmException($gL10n->get('SYS_DATE_INVALID', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'))));
+                            throw new AdmException($gL10n->get('SYS_DATE_INVALID', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'), $gSettingsManager->getString('system_date'))));
                         }
                     } else {
                         $fieldValue = $date->format('Y-m-d');

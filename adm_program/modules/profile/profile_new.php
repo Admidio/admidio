@@ -50,10 +50,15 @@ if ($getUserUuid !== '' && $getNewUser !== 0 && $getNewUser !== 3) {
     // => EXIT
 }
 
-// read user data
-$user = new User($gDb, $gProfileFields);
-$user->readDataByUuid($getUserUuid);
-$userId = $user->getValue('usr_id');
+
+try {
+    // read user data
+    $user = new User($gDb, $gProfileFields);
+    $user->readDataByUuid($getUserUuid);
+    $userId = $user->getValue('usr_id');
+} catch (AdmException $e) {
+    $e->showHtml();
+}
 
 // set headline of the script
 if ($getCopy) {
@@ -361,7 +366,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
 $form->closeGroupBox();
 
 // if captchas are enabled then visitors of the website must resolve this
-if ($getNewUser === 2 && $gSettingsManager->getBool('enable_registration_captcha')) {
+if ($getNewUser === 2 && $gSettingsManager->getBool('registration_enable_captcha')) {
     $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
     $form->addCaptcha('captcha_code');
     $form->closeGroupBox();

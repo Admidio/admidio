@@ -55,14 +55,14 @@ if (!isset($plg_show_headline) || !is_numeric($plg_show_headline)) {
     $plg_show_headline = 1;
 }
 
-if ($gSettingsManager->getInt('enable_photo_module') > 0) {
+if ($gSettingsManager->getInt('photo_module_enabled') > 0) {
     echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
     if ($plg_show_headline) {
         echo '<h3>'.$gL10n->get('SYS_PHOTOS').'</h3>';
     }
 
-    if ($gSettingsManager->getInt('enable_photo_module') === 1
-    || ($gSettingsManager->getInt('enable_photo_module') === 2 && $gValidLogin)) {
+    if ($gSettingsManager->getInt('photo_module_enabled') === 1
+    || ($gSettingsManager->getInt('photo_module_enabled') === 2 && $gValidLogin)) {
         // call photo albums
         $sql = 'SELECT *
                   FROM '.TBL_PHOTOS.'

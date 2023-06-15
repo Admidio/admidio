@@ -49,11 +49,11 @@ class TableMembers extends TableAccess
      * messages. Apart from this, the parent's setValue is used to set the new value.
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @see TableAccess#getValue
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gChangeNotification, $gCurrentSession;
 
@@ -113,7 +113,7 @@ class TableMembers extends TableAccess
      * Deletes the selected record of the table and optionally sends an admin notification if configured
      * @return true Returns **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         // Queue admin notification about membership deletion
         global $gChangeNotification;
@@ -172,7 +172,7 @@ class TableMembers extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentSession, $gChangeNotification;
 

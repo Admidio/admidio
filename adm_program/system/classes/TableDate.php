@@ -38,6 +38,11 @@
 class TableDate extends TableAccess
 {
     /**
+     * @var Database db object must public because of session handling
+     */
+    private $mParticipants;
+
+    /**
      * Constructor that will create an object of a recordset of the table adm_dates.
      * If the id is set than the specific date will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
@@ -52,12 +57,13 @@ class TableDate extends TableAccess
     }
 
     /**
-     * Check if the current user is allowed to participate to this event.
-     * Therefore we check if the user is member of a role that is assigned to
-     * the right event_participation.
-     * @return bool Return true if the current user is allowed to participate to the event.
+     * Check if the current user is allowed to participate in this event.
+     * Therefore, we check if the user is member of a role that is assigned to
+     * the right event_participation. This method will also return **true** if the deadline is exceeded
+     * and a further participation isn't possible.
+     * @return bool Return true if the current user is allowed to participate in the event.
      */
-    public function allowedToParticipate()
+    public function allowedToParticipate(): bool
     {
         global $gCurrentUser;
 
@@ -65,6 +71,32 @@ class TableDate extends TableAccess
             $eventParticipationRoles = new RolesRights($this->db, 'event_participation', (int) $this->getValue('dat_id'));
 
             if (count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if it's possible for the current user to participate in this event.
+     * Therefore, we check if the user is allowed to participate and if the deadline of the event isn't exceeded.
+     * There should be no participants limit or the limit is not reached or the current user is already member
+     * of the event.
+     * @return bool Return true if it's possible for the current user to participate in the event.
+     */
+    public function possibleToParticipate(): bool
+    {
+        global $gCurrentUserId;
+
+        if($this->allowedToParticipate() && !$this->deadlineExceeded()) {
+            if(!is_object($this->mParticipants)) {
+                $this->mParticipants = new Participants($this->db, $this->getValue('dat_rol_id'));
+            }
+
+            if((int) $this->getValue('dat_max_members') === 0
+            || ($this->mParticipants->getCount() < (int) $this->getValue('dat_max_members'))
+            || $this->mParticipants->isMemberOfEvent($gCurrentUserId)) {
                 return true;
             }
         }
@@ -87,7 +119,7 @@ class TableDate extends TableAccess
      * After that the class will be initialize.
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         $datId     = (int) $this->getValue('dat_id');
         $datRoleId = (int) $this->getValue('dat_rol_id');
@@ -281,7 +313,7 @@ class TableDate extends TableAccess
      * @return int|string|bool Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         global $gL10n;
 
@@ -371,16 +403,18 @@ class TableDate extends TableAccess
     }
 
     /**
-     * Checks if it's still possible to participate to an event. Therefore the participation deadline of the should not be expired.
-     * Also the maximum of allowed members for the event should not be exceeded or there is no maximum of allowed members set.
-     * @param int $currentCountParticipations Number of participiants that participate to the current event.
-     * @return bool Returns true if still users can participate to the event or false if it's not possible any more.
+     * Method will return true if the event has a maximum count of participants set and this limit
+     * is reached.
+     * @return bool Return **true** if the limit of participants is reached.
      */
-    public function participationPossible($currentCountParticipations)
+    public function participantLimitReached(): bool
     {
-        if (!$this->deadlineExceeded()
-        && ($this->getValue('dat_max_members') === 0
-           || ($this->getValue('dat_max_members') > 0 && $currentCountParticipations < $this->getValue('dat_max_members')))) {
+        if(!is_object($this->mParticipants)) {
+            $this->mParticipants = new Participants($this->db, $this->getValue('dat_rol_id'));
+        }
+
+        if ((int) $this->getValue('dat_max_members') > 0
+            && (int) $this->getValue('dat_max_members') > $this->mParticipants->getCount()) {
             return true;
         }
         return false;
@@ -411,7 +445,7 @@ class TableDate extends TableAccess
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentUser;
 
@@ -431,7 +465,7 @@ class TableDate extends TableAccess
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws AdmException
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 

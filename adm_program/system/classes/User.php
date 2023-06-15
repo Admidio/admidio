@@ -532,7 +532,7 @@ class User extends TableAccess
 
         $orgLongName = $this->getOrgLongname();
 
-        if (!$this->isMemberOfOrganization($orgLongName)) {
+        if (!$this->isMemberOfOrganization()) {
             throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongName)));
         }
 
@@ -601,7 +601,7 @@ class User extends TableAccess
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
      */
-    public function delete()
+    public function delete(): bool
     {
         global $gChangeNotification;
 
@@ -1056,7 +1056,7 @@ class User extends TableAccess
      * $email = $gCurrentUser->getValue('EMAIL');
      * ```
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         global $gSettingsManager;
 
@@ -1168,7 +1168,7 @@ class User extends TableAccess
      * Returns true if a column of user table or profile fields has changed
      * @return bool Returns true if a column of user table or profile fields has changed
      */
-    public function hasColumnsValueChanged()
+    public function hasColumnsValueChanged(): bool
     {
         return parent::hasColumnsValueChanged() || $this->mProfileFieldsData->hasColumnsValueChanged();
     }
@@ -1543,11 +1543,11 @@ class User extends TableAccess
     }
 
     /**
-     * Checks if this user is a member of this organization.
-     * @param string $orgLongName The longname of this organization.
-     * @return bool Return true if user is member of this organization.
+     * Checks if this user is a member of the organization. The organization is the current organization of
+     * the session or the organization that was set to this object by setOrganization().
+     * @return bool Return true if user is member of the organization.
      */
-    private function isMemberOfOrganization($orgLongName)
+    public function isMemberOfOrganization(): bool
     {
         // Check if user is currently member of a role of an organisation
         $sql = 'SELECT mem_usr_id
@@ -1595,14 +1595,14 @@ class User extends TableAccess
      * Reads a user record out of the table adm_users in database selected by the unique user id.
      * All profile fields of the object **mProfileFieldsData** will also be read. If no user was
      * found than the default values of all profile fields will be set.
-     * @param int $userId Unique id of the user that should be read
+     * @param int $id Unique id of the user that should be read
      * @return bool Returns **true** if one record is found
      */
-    public function readDataById($userId)
+    public function readDataById(int $id): bool
     {
-        if (parent::readDataById($userId)) {
+        if (parent::readDataById($id)) {
             // read data of all user fields from current user
-            $this->mProfileFieldsData->readUserData($userId, $this->organizationId);
+            $this->mProfileFieldsData->readUserData($id, $this->organizationId);
             return true;
         } else {
             $this->setDefaultValues();
@@ -1617,12 +1617,12 @@ class User extends TableAccess
      * Per default all columns of the default table will be read and stored in the object. If no user
      * was found than the default values of all profile fields will be set.
      * Not every Admidio table has an uuid. Please check the database structure before you use this method.
-     * @param int $uuid Unique uuid that should be searched.
+     * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
      */
-    public function readDataByUuid($uuid)
+    public function readDataByUuid(string $uuid): bool
     {
         if (parent::readDataByUuid($uuid)) {
             // read data of all user fields from current user
@@ -1688,10 +1688,10 @@ class User extends TableAccess
      * If the user doesn't have the right to save data of this user than an exception will be thrown.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if table has columns like **usr_id_create** or **usr_id_changed**
-     * @throws AdmException
      * @return bool
+     *@throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         global $gCurrentSession, $gCurrentUser, $gChangeNotification;
 
@@ -1877,7 +1877,7 @@ class User extends TableAccess
      * @param string $columnName The name of the database column whose value should get a new value or the
      *                           internal unique profile field name
      * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                           not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      *
@@ -1889,7 +1889,7 @@ class User extends TableAccess
      * $gCurrentUser->getValue('EMAIL', 'administrator@admidio.org');
      * ```
      */
-    public function setValue($columnName, $newValue, $checkValue = true)
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
         global $gSettingsManager, $gChangeNotification;
 

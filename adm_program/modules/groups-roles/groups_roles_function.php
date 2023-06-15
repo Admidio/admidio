@@ -286,12 +286,14 @@ if ($getMode === 2) {
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 // => EXIT
 } elseif ($getMode === 3) { // set role inactive
-    // event roles should not set inactive
+    // event roles and administrator cannot be set to inactive
     // all other roles could now set inactive
-    if (!$eventRole && $role->setInactive()) {
+    try {
+        $role->setInactive();
         echo 'done';
-    } else {
-        echo $gL10n->get('SYS_NO_RIGHTS');
+    }
+    catch (AdmException $e) {
+        echo $e->showText();
     }
     exit();
 } elseif ($getMode === 4) {

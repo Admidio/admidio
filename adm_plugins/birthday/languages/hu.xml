@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# #VAR3# éves lesz #VAR2# nap múlva, #VAR4# napon</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# születésnapja #VAR2# nap múlva lesz</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Születésnapok</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Mr. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Ma #VAR1# tagnak születésnapja van.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Ma nincs egy tagnak sem születésnapja.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Ma egy tag születésnapja van.</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# #VAR3# éves lett #VAR2# napja, #VAR4# napon</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1#-nak/nek #VAR2# nappal ezelőtt volt a születésnapja</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# ma lesz #VAR2#</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1#-nak/nek ma van a születésnapja</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# holnap lesz #VAR3# éves, #VAR4# napon</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1#-nak/nek holnap van a születésnapja</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Mrs. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# tegnap lett #VAR3# éves #VAR4# napon</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1#-nak/nek tegnap volt a születésnapja</string>
+</resources>

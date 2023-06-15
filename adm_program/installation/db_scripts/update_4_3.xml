@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<update>
+    <step id="10">UPDATE %PREFIX%_preferences SET prf_value = '500' WHERE prf_name = 'ecard_thumbs_scale'</step>
+    <step id="20">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'ecard_card_picture_width'</step>
+    <step id="30">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'ecard_card_picture_height'</step>
+    <step id="40">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'photo_save_scale'</step>
+    <step id="50" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_ecard_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'photo_ecard_enabled'</step>
+    <step id="60" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_ecard_module' AND pr1.prf_name = 'photo_ecard_enabled'</step>
+    <step id="70">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_ecard_module'</step>
+    <step id="80" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'ecard_thumbs_scale' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'photo_ecard_scale'</step>
+    <step id="90" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'ecard_thumbs_scale' AND pr1.prf_name = 'photo_ecard_scale'</step>
+    <step id="100">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'ecard_thumbs_scale'</step>
+    <step id="110" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'ecard_template' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'photo_ecard_template'</step>
+    <step id="120" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'ecard_template' AND pr1.prf_name = 'photo_ecard_template'</step>
+    <step id="130">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'ecard_template'</step>
+    <step id="140" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_photo_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'photo_module_enabled'</step>
+    <step id="150" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_photo_module' AND pr1.prf_name = 'photo_module_enabled'</step>
+    <step id="160">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_photo_module'</step>
+    <step id="170">ALTER TABLE %PREFIX%_registrations ADD COLUMN reg_validation_id varchar(50)</step>
+    <step id="180">UPDATE %PREFIX%_registrations SET reg_validation_id = %UUID%</step>
+    <step id="190" database="mysql">ALTER TABLE %PREFIX%_texts MODIFY COLUMN txt_name varchar(100) NOT NULL</step>
+    <step id="200" database="pgsql">ALTER TABLE %PREFIX%_texts ALTER COLUMN txt_name TYPE varchar(100)</step>
+    <step id="210">UPDATE %PREFIX%_texts SET txt_name = 'SYSMAIL_REGISTRATION_REFUSED' WHERE txt_name = 'SYSMAIL_REFUSE_REGISTRATION'</step>
+    <step id="220">UPDATE %PREFIX%_texts SET txt_name = 'SYSMAIL_REGISTRATION_APPROVED' WHERE txt_name = 'SYSMAIL_REGISTRATION_USER'</step>
+    <step id="230">UPDATE %PREFIX%_texts SET txt_name = 'SYSMAIL_REGISTRATION_NEW' WHERE txt_name = 'SYSMAIL_REGISTRATION_WEBMASTER'</step>
+    <step id="240">ComponentUpdateSteps::updateStep43AddNewNotificationText</step>
+    <step id="250" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_registration_admin_mail' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'registration_send_notification_email'</step>
+    <step id="260" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_registration_admin_mail' AND pr1.prf_name = 'registration_send_notification_email'</step>
+    <step id="270">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_registration_admin_mail'</step>
+    <step id="280" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_registration_captcha' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'registration_enable_captcha'</step>
+    <step id="290" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_registration_captcha' AND pr1.prf_name = 'registration_enable_captcha'</step>
+    <step id="300">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_registration_captcha'</step>
+    <step>stop</step>
+</update>

@@ -9,20 +9,6 @@
  ***********************************************************************************************
  */
 
-/**
- * Beside the methods of the parent class there are the following additional methods:
- *
- * getMailText($systemMailId, $user)
- *                  - diese Methode liest den Mailtext aus der DB und ersetzt
- *                    vorkommende Platzhalter durch den gewuenschten Inhalt
- *
- * setVariable($number, $value)
- *                  - hier kann der Inhalt fuer zusaetzliche Variablen gesetzt werden
- *
- * sendSystemMail($systemMailId, $user)
- *                  - diese Methode sendet eine Systemmail nachdem der Mailtext
- *                    ausgelesen und Platzhalter ersetzt wurden
- */
 class SystemMail extends Email
 {
     /**
@@ -46,7 +32,7 @@ class SystemMail extends Email
      */
     private $smMailHeader;
     /**
-     * @var array<int,string> speichert zusaetzliche Variablen fuer den Mailtext
+     * @var array<int,string> stores additional variables for the mail text
      */
     private $smVariables = array();
 
@@ -62,12 +48,13 @@ class SystemMail extends Email
     }
 
     /**
-     * diese Methode liest den Mailtext aus der DB und ersetzt vorkommende Platzhalter durch den gewuenschten Inhalt
-     * @param string $systemMailId eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
-     * @param User   $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
-     * @return string
+     * This method reads the mail text from the database and replaces occurring placeholders with the desired content.
+     * @param string $systemMailId Unique name of the corresponding system mail, corresponds to adm_texts.txt_name
+     * @param User $user User object for which the data is then read and placed in the appropriate placeholders.
+     * @return string Returns the text for the email with the replaced placeholders.
+     * @throws AdmException
      */
-    public function getMailText($systemMailId, User $user)
+    public function getMailText(string $systemMailId, User $user): string
     {
         global $gSettingsManager;
 
@@ -86,7 +73,7 @@ class SystemMail extends Email
 
         $mailSrcText = $this->smTextObject->getValue('txt_text');
 
-        // use unix linefeeds in mail
+        // use unix line feeds in mail
         $mailSrcText = str_replace("\r\n", "\n", $mailSrcText);
 
         // now replace all parameters in email text
@@ -103,12 +90,12 @@ class SystemMail extends Email
 
         $mailSrcText = preg_replace(array_keys($pregRepArray), array_values($pregRepArray), $mailSrcText);
 
-        // zusaetzliche Variablen ersetzen
+        // replace additional variables
         foreach ($this->smVariables as $number => $value) {
             $mailSrcText = str_replace('#variable'.$number.'#', $value, $mailSrcText);
         }
 
-        // Betreff und Inhalt anhand von Kennzeichnungen splitten oder ggf. Default-Inhalte nehmen
+        // Split subject and content based on labels or take default content if necessary
         if (str_contains($mailSrcText, '#subject#')) {
             $this->smMailHeader = trim(substr($mailSrcText, strpos($mailSrcText, '#subject#') + 9, strpos($mailSrcText, '#content#') - 9));
         } else {
@@ -125,38 +112,42 @@ class SystemMail extends Email
     }
 
     /**
-     * die Methode setzt den Inhalt fuer spezielle Variablen
-     * @param int    $number
+     * This method sets the content for special variables.
+     * @param int $number
      * @param string $value
      */
-    public function setVariable($number, $value)
+    public function setVariable(int $number, string $value)
     {
         $this->smVariables[$number] = $value;
     }
 
     /**
-     * diese Methode sendet eine Systemmail nachdem der Mailtext ausgelesen und Platzhalter ersetzt wurden
-     * @param string $systemMailId eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
-     * @param User   $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
-     * @throws AdmException SYS_EMAIL_NOT_SEND
-     * @return true
+     * This method sends a system mail after reading the mail text and replacing placeholders.
+     * @param string $systemMailId Unique name of the corresponding system mail, corresponds to adm_texts.txt_name
+     * @param User   $user         User object for which the data is then read and placed in the appropriate placeholders.
+     * @return true Return **true** if the mail was sent and false if it should not be sent because of preferences.
+     *@throws AdmException SYS_EMAIL_NOT_SEND
      */
-    public function sendSystemMail($systemMailId, User $user)
+    public function sendSystemMail(string $systemMailId, User $user): bool
     {
         global $gSettingsManager;
 
-        $this->getMailText($systemMailId, $user);
-        $this->setSender($gSettingsManager->getString('email_administrator'));
-        $this->setSubject($this->smMailHeader);
-        $this->setText($this->smMailText);
+        if ($gSettingsManager->getBool('system_notifications_enabled')) {
+            $this->getMailText($systemMailId, $user);
+            $this->setSender($gSettingsManager->getString('email_administrator'));
+            $this->setSubject($this->smMailHeader);
+            $this->setText($this->smMailText);
 
-        $returnMessage = $this->sendEmail();
+            $returnMessage = $this->sendEmail();
 
-        // if something went wrong then throw an exception with the error message
-        if ($returnMessage !== true) {
-            throw new AdmException('SYS_EMAIL_NOT_SEND', array($user->getValue('EMAIL'), $returnMessage));
+            if ($returnMessage) {
+                return true;
+            } else {
+                // if something went wrong then throw an exception with the error message
+                throw new AdmException('SYS_EMAIL_NOT_SEND', array($user->getValue('EMAIL'), $returnMessage));
+            }
         }
 
-        return true;
+        return false;
     }
 }

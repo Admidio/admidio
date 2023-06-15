@@ -590,7 +590,7 @@ if ($gSettingsManager->getBool('profile_show_roles')) {
                 'icon'  => 'fa-calendar-alt'
             );
         }
-        if ($user->checkRolesRight('rol_photo') && (int) $gSettingsManager->get('enable_photo_module') > 0) {
+        if ($user->checkRolesRight('rol_photo') && (int) $gSettingsManager->get('photo_module_enabled') > 0) {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_photo'],
                 'right' => $gL10n->get('SYS_RIGHT_PHOTOS'),

@@ -620,7 +620,7 @@ class TableFolder extends TableAccess
      * @return mixed Returns the value of the database column.
      *         If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
-    public function getValue($columnName, $format = '')
+    public function getValue(string $columnName, string $format = '')
     {
         $value = parent::getValue($columnName, $format);
 
@@ -658,14 +658,14 @@ class TableFolder extends TableAccess
      * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
      * If the sql find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param string $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns **true** if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByUuid
      * @see TableAccess#readDataByColumns
      */
-    protected function readData($sqlWhereCondition, array $queryParams = array()): bool
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
         if (parent::readData($sqlWhereCondition, $queryParams)) {
             $folId = (int) $this->getValue('fol_id');
@@ -733,7 +733,7 @@ class TableFolder extends TableAccess
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws AdmException
      */
-    public function save($updateFingerPrint = true): bool
+    public function save(bool $updateFingerPrint = true): bool
     {
         if ($this->newRecord) {
             $this->setValue('fol_timestamp', DATETIME_NOW);

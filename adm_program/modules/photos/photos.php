@@ -19,10 +19,10 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // check if the module is enabled and disallow access if it's disabled
-if ((int) $gSettingsManager->get('enable_photo_module') === 0) {
+if ((int) $gSettingsManager->get('photo_module_enabled') === 0) {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 // => EXIT
-} elseif ((int) $gSettingsManager->get('enable_photo_module') === 2) {
+} elseif ((int) $gSettingsManager->get('photo_module_enabled') === 2) {
     // only logged-in users can access the module
     require(__DIR__ . '/../../system/login_valid.php');
 }
@@ -59,7 +59,7 @@ if ($getPhotoUuid !== '') {
 
     $headline = $photoAlbum->getValue('pho_name');
 
-    // URL auf Navigationstack ablegen
+    // Drop URL on navigation stack
     $gNavigation->addUrl(CURRENT_URL, $headline);
 } else {
     $headline = $getHeadline;
@@ -228,12 +228,12 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
                         </a>';
             }
 
-            if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('enable_ecard_module')) || $gSettingsManager->getBool('photo_download_enabled')) {
+            if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) || $gSettingsManager->getBool('photo_download_enabled')) {
                 $photoThumbnailTable .= '<div id="image_preferences_'.$actThumbnail.'" class="text-center" style="width: ' . $gSettingsManager->getInt('photo_thumbs_scale') . 'px">';
             }
 
 
-            if ($gValidLogin && $gSettingsManager->getBool('enable_ecard_module')) {
+            if ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) {
                 $photoThumbnailTable .= '
                         <a class="admidio-icon-link" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/ecards/ecards.php', array('photo_nr' => $actThumbnail, 'photo_uuid' => $getPhotoUuid, 'show_page' => $getPhotoNr)).'">
                             <i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'"></i></a>';
@@ -259,7 +259,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
                             <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
             }
 
-            if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('enable_ecard_module')) || $gSettingsManager->getBool('photo_download_enabled')) {
+            if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) || $gSettingsManager->getBool('photo_download_enabled')) {
                 $photoThumbnailTable .= '</div>';
             }
             $photoThumbnailTable .= '</div>';
@@ -394,7 +394,7 @@ if ($albumsCount > 0) {
                                             <i class="fas fa-chevron-circle-down" data-toggle="tooltip"></i></a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                             <a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'), 'mode' => 'change')).'">
-                                                <i class="fas fa-clone" data-toggle="tooltip"></i> '.$gL10n->get('PHO_EDIT_ALBUM').'</a>
+                                                <i class="fas fa-edit" data-toggle="tooltip"></i> '.$gL10n->get('PHO_EDIT_ALBUM').'</a>
                                             ' .$htmlLock . '
                                             <a class="dropdown-item btn openPopup" href="javascript:void(0);"
                                                 data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_' . $childPhotoAlbum->getValue('pho_uuid'),

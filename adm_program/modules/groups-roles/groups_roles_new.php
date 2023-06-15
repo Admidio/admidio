@@ -137,13 +137,13 @@ if ($role->getValue('rol_administrator') === 1 || $eventRole) {
 $form->addInput(
     'rol_name',
     $gL10n->get('SYS_NAME'),
-    $role->getValue('rol_name', 'database'),
+    $role->getValue('rol_name'),
     array('maxLength' => 100, 'property' => $fieldProperty)
 );
 $form->addMultilineTextInput(
     'rol_description',
     $gL10n->get('SYS_DESCRIPTION'),
-    $role->getValue('rol_description', 'database'),
+    $role->getValue('rol_description'),
     3,
     array('property' => ($eventRole ? HtmlForm::FIELD_READONLY : HtmlForm::FIELD_DEFAULT), 'maxLength' => 4000)
 );
@@ -240,7 +240,7 @@ if (!$eventRole) {
         'rol_cost',
         $gL10n->get('SYS_CONTRIBUTION').' '.$gSettingsManager->getString('system_currency'),
         $role->getValue('rol_cost'),
-        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1)
+        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => '0.01')
     );
     $form->addSelectBox(
         'rol_cost_period',
@@ -308,7 +308,7 @@ if (!$eventRole) {
             array('helpTextIdLabel' => 'SYS_ROLES_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-calendar-alt')
         );
     }
-    if ((int) $gSettingsManager->get('enable_photo_module') > 0) {
+    if ((int) $gSettingsManager->get('photo_module_enabled') > 0) {
         $form->addCheckbox(
             'rol_photo',
             $gL10n->get('SYS_RIGHT_PHOTOS'),
@@ -356,7 +356,7 @@ if (!$eventRole) {
     $form->addInput('rol_start_time', $gL10n->get('SYS_TIME_FROM'), $role->getValue('rol_start_time'), array('type' => 'time'));
     $form->addInput('rol_end_time', $gL10n->get('SYS_TIME_TO'), $role->getValue('rol_end_time'), array('type' => 'time'));
     $form->addSelectBox('rol_weekday', $gL10n->get('SYS_WEEKDAY'), DateTimeExtended::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday')));
-    $form->addInput('rol_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location', 'database'), array('maxLength' => 100));
+    $form->addInput('rol_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'), array('maxLength' => 100));
     $form->closeGroupBox();
 
     $form->openGroupBox('gb_dependencies', $gL10n->get('SYS_DEPENDENCIES').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');

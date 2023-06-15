@@ -198,11 +198,11 @@ class TableMessage extends TableAccess
 
     /**
      * Deletes the selected message with all associated fields.
-     * After that the class will be initialize.
+     * After that the class will be initialized.
      * @return bool **true** if message is deleted or message with additional information if it is marked
-     *         for other user to delete. On error it is false
+     *         for other user to delete. On error, it is false
      */
-    public function delete()
+    public function delete(): bool
     {
         $this->db->startTransaction();
 
@@ -213,9 +213,8 @@ class TableMessage extends TableAccess
             $attachments   = $this->getAttachmentsInformations();
 
             foreach ($attachments as $attachment) {
-                if (!FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name'])) {
-                    throw new AdmException('INS_DATABASE_FILE_NOT_FOUND', array(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments', $attachment['admidio_file_name']));
-                }
+                // delete attachment in file system
+                FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name']);
             }
 
             $sql = 'DELETE FROM '.TBL_MESSAGES_ATTACHMENTS.'
@@ -481,10 +480,10 @@ class TableMessage extends TableAccess
      * For new records the name intern will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if
      *                                table has columns like **usr_id_create** or **usr_id_changed**
-     * @throws AdmException
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     *@throws AdmException
      */
-    public function save($updateFingerPrint = true)
+    public function save(bool $updateFingerPrint = true): bool
     {
         if ($this->newRecord) {
             // Insert
@@ -521,21 +520,27 @@ class TableMessage extends TableAccess
      */
     protected function saveAttachments()
     {
-        try {
-            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments');
-        } catch (\RuntimeException $exception) {
-            return array(
-                'text' => 'SYS_FOLDER_NOT_CREATED',
-                'path' => ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments'
-            );
+        global $gSettingsManager;
+
+        if ($gSettingsManager->getBool('mail_save_attachments')) {
+            try {
+                FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments');
+            } catch (\RuntimeException $exception) {
+                return array(
+                    'text' => 'SYS_FOLDER_NOT_CREATED',
+                    'path' => ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments'
+                );
+            }
         }
 
         foreach ($this->msgAttachments as $attachement) {
             $file_name = $this->getValue('msg_id').'_'.$attachement[1];
 
-            FileSystemUtils::copyFile($attachement[0], ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $file_name);
+            if ($gSettingsManager->getBool('mail_save_attachments')) {
+                FileSystemUtils::copyFile($attachement[0], ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $file_name);
+            }
 
-            // save message recipient as TableAcess object to the array
+            // save message recipient as TableAccess object to the array
             $messageAttachment = new TableAccess($this->db, TBL_MESSAGES_ATTACHMENTS, 'msa');
             $messageAttachment->setValue('msa_msg_id', $this->getValue('msg_id'));
             $messageAttachment->setValue('msa_file_name', $file_name);

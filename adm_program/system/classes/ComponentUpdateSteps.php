@@ -26,6 +26,26 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * This method will add a new systemmail text to the database table **adm_texts** for each
+     * organization in the database.
+     */
+    public static function updateStep43AddNewNotificationText()
+    {
+        global $gL10n;
+
+        $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+
+        while ($row = $organizationStatement->fetch()) {
+            $textPasswordReset = new TableText(self::$db);
+            $textPasswordReset->setValue('txt_org_id', $row['org_id']);
+            $textPasswordReset->setValue('txt_name', 'SYSMAIL_REGISTRATION_CONFIRMATION');
+            $textPasswordReset->setValue('txt_text', $gL10n->get('SYS_SYSMAIL_REGISTRATION_CONFIRMATION'));
+            $textPasswordReset->save();
+        }
+    }
+
+    /**
      * This method only execute an sql statement but because of the use of & it could not done in our XML structure
      */
     public static function updateStep41CleanUpRoleNames()
@@ -341,13 +361,10 @@ final class ComponentUpdateSteps
         $organizationStatement = self::$db->queryPrepared($sql);
 
         while ($row = $organizationStatement->fetch()) {
-            // convert <br /> to a normal line feed
-            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET'));
-
-            $textPasswordReset = new TableAccess(self::$db, TBL_TEXTS, 'txt');
+            $textPasswordReset = new TableText(self::$db);
             $textPasswordReset->setValue('txt_org_id', $row['org_id']);
             $textPasswordReset->setValue('txt_name', 'SYSMAIL_PASSWORD_RESET');
-            $textPasswordReset->setValue('txt_text', $value);
+            $textPasswordReset->setValue('txt_text', $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET'));
             $textPasswordReset->save();
         }
     }
@@ -677,7 +694,7 @@ final class ComponentUpdateSteps
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, 0, 2, 1, \'announcements\', \''.FOLDER_MODULES.'/announcements/announcements.php\', \'announcements.png\', \'SYS_ANNOUNCEMENTS\', \'SYS_ANNOUNCEMENTS_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'photo.png\', \'SYS_PHOTOS\', \'PHO_PHOTOS_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GUESTBOOK\'), 1, 0, 6, 1, \'guestbook\', \''.FOLDER_MODULES.'/guestbook/guestbook.php\', \'guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DATES\'), 1, 0, 8, 1, \'dates\', \''.FOLDER_MODULES.'/dates/dates.php\', \'dates.png\', \'DAT_DATES\', \'DAT_DATES_DESC\')
+                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DATES\'), 1, 0, 8, 1, \'dates\', \''.FOLDER_MODULES.'/dates/dates.php\', \'dates.png\', \'DAT_DATES\', \'SYS_EVENTS_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, 0, 9, 1, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'weblinks.png\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'BACKUP\'), 2, 0, 4, 1, \'dbback\', \''.FOLDER_MODULES.'/backup/backup.php\', \'backup.png\', \'SYS_DATABASE_BACKUP\', \'SYS_DATABASE_BACKUP_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, 0, 6, 1, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
