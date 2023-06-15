@@ -30,5 +30,13 @@
     <step id="280" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_registration_captcha' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'registration_enable_captcha'</step>
     <step id="290" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_registration_captcha' AND pr1.prf_name = 'registration_enable_captcha'</step>
     <step id="300">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_registration_captcha'</step>
+    <step id="310">ComponentUpdateSteps::updateStep43AddProfileFieldLinkedIn</step>
+    <step id="320">UPDATE %PREFIX%_user_fields SET usf_description = 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC' WHERE usf_description IN ('INS_FACEBOOK_DESC', 'INS_TWITTER_DESC', 'INS_XING_DESC')</step>
+    <step id="325">UPDATE %PREFIX%_user_fields SET usf_description = 'SYS_SOCIAL_NETWORK_FIELD_DESC' WHERE usf_description IN ('INS_SKYPE_DESC', 'INS_ICQ_DESC')</step>
+    <step id="330">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_FACEBOOK' WHERE usf_name LIKE 'INS_FACEBOOK'</step>
+    <step id="340">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_SKYPE' WHERE usf_name LIKE 'INS_SKYPE'</step>
+    <step id="350">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_TWITTER' WHERE usf_name LIKE 'INS_TWITTER'</step>
+    <step id="360">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_XING' WHERE usf_name LIKE 'INS_XING'</step>
+    <step id="370">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_ICQ' WHERE usf_name LIKE 'INS_ICQ'</step>
     <step>stop</step>
 </update>
