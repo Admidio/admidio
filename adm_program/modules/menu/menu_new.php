@@ -18,18 +18,18 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getMenuUuid = admFuncVariableIsValid($_GET, 'menu_uuid', 'string');
 
-// Rechte pruefen
+// check rights
 if (!$gCurrentUser->isAdministrator()) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 /**
  * @param array<int,string> $menuList
- * @param int               $level
- * @param int               $menId
- * @param int               $parentId
+ * @param int $level
+ * @param int $menId
+ * @param int|null $parentId
  */
-function subMenu(&$menuList, $level, $menId, $parentId = null)
+function subMenu(array &$menuList, int $level, int $menId, int $parentId = null)
 {
     global $gDb;
 
@@ -68,7 +68,7 @@ function subMenu(&$menuList, $level, $menId, $parentId = null)
 // create menu object
 $menu = new TableMenu($gDb);
 
-// systemcategories should not be renamed
+// system categories should not be renamed
 $roleViewSet[] = 0;
 
 if ($getMenuUuid !== '') {
@@ -110,7 +110,7 @@ $rolesViewStatement = $gDb->queryPrepared($sqlRoles);
 
 $parentRoleViewSet = array();
 while ($rowViewRoles = $rolesViewStatement->fetch()) {
-    // Jede Rolle wird nun dem Array hinzugefuegt
+    // Each role is now added to this array
     $parentRoleViewSet[] = array(
         $rowViewRoles['rol_id'],
         $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')',
@@ -124,7 +124,7 @@ $form = new HtmlForm('menu_edit_form', SecurityUtils::encodeUrl(ADMIDIO_URL . FO
 $fieldRequired = HtmlForm::FIELD_REQUIRED;
 $fieldDefault  = HtmlForm::FIELD_DEFAULT;
 
-if ((bool) $menu->getValue('men_standard')) {
+if ($menu->getValue('men_standard')) {
     $fieldRequired = HtmlForm::FIELD_DISABLED;
     $fieldDefault  = HtmlForm::FIELD_DISABLED;
 }
@@ -135,7 +135,7 @@ subMenu($menuList, 1, (int) $menu->getValue('men_id'));
 $form->addInput(
     'men_name',
     $gL10n->get('SYS_NAME'),
-    $menu->getValue('men_name'),
+    htmlentities($menu->getValue('men_name', 'database'), ENT_QUOTES),
     array('maxLength' => 100, 'property'=> HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_MENU_NAME_DESC')
 );
 
