@@ -414,7 +414,7 @@ class TableDate extends TableAccess
         }
 
         if ((int) $this->getValue('dat_max_members') > 0
-            && (int) $this->getValue('dat_max_members') > $this->mParticipants->getCount()) {
+            && (int) $this->getValue('dat_max_members') <= $this->mParticipants->getCount()) {
             return true;
         }
         return false;
