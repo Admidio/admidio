@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES">Kõik sissekanded</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE">Teated</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_NO_ENTRIES_VISITORS">Külastajatele pole teadaandeid. Teadete nägemiseks logige sisse.</string>
+</resources>

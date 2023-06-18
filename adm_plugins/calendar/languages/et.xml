@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Käesolev kuu</string>
+  <string name="PLG_CALENDAR_MONTH">Jaanuar, veebruar, märts, aprill, mai, juuni, juuli, august, september, oktoober, november, detsember</string>
+  <string name="PLG_CALENDAR_MORE">(... rohkem)</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">E</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">T</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">K</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">N</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">R</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">L</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">P</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Mitu päeva</string>
+</resources>

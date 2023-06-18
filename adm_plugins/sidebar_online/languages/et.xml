@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ONLINE_HEADLINE">Kes on Internetis?</string>
+  <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">Veebisaidil pole külastajaid..</string>
+  <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# Külastajad</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBER">#VAR1# liige</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBERS">#VAR1# liikmed</string>
+  <string name="PLG_ONLINE_VAR_ONLINE_ARE">Internetis on #VAR1#</string>
+  <string name="PLG_ONLINE_VAR_ONLINE_IS">Internetis on #VAR1#</string>
+</resources>

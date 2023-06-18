@@ -34,6 +34,11 @@ $gSupportedLanguages = array(
         'isocode' => 'en',
         'libs'    => 'en'
     ),
+    'et'    => array(
+        'name'    => 'Estonian - Eesti keel',
+        'isocode' => 'et',
+        'libs'    => 'et'
+    ),
     'fi'    => array(
         'name'    => 'Finnish - Suomalainen',
         'isocode' => 'fi',

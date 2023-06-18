@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_FILES_HEADLINE">Dokumendid &amp; failid</string>
+  <string name="PLG_LATEST_FILES_MORE_DOWNLOADS">Rohkem dokumente &amp; failid</string>
+  <string name="PLG_LATEST_FILES_NO_DOWNLOADS_AVAILABLE">Dokumente ega faile pole saadaval.</string>
+  <string name="PLG_LATEST_FILES_UPLOAD_FROM_AT">#VAR1# laadis üles #VAR2#</string>
+</resources>
