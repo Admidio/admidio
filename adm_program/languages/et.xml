@@ -917,7 +917,7 @@
   <string name="SYS_ITEMNAME">Asja nimi</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Pikuti</string>
   <string name="SYS_LANGUAGE">keel</string>
-  <string name="SYS_LANGUAGE_HELP_TRANSLATION">Kas teie keel puudub või soovite tõlkida rohkem tekste või parandada olemasolevaid tõlkeid? Seejärel vaadake Admidio#VAR2# #VAR1#Wiki lehte, et näha, kuidas saate tõlkimisel aidata.</string>
+  <string name="SYS_LANGUAGE_HELP_TRANSLATION">Kas teie keel puudub või soovite tõlkida rohkem tekste või parandada olemasolevaid tõlkeid? Seejärel vaadake #VAR1#Admidio Wiki lehte#VAR2#, et näha, kuidas saate tõlkimisel aidata.</string>
   <string name="SYS_LAST_EDITED_BY">Viimati redigeerinud #VAR1# #VAR2#</string>
   <string name="SYS_LAST_LOGIN_ON">Viimane sisselogimine #VAR1# kell #VAR2#</string>
   <string name="SYS_LASTNAME">Perekonnanimi</string>
