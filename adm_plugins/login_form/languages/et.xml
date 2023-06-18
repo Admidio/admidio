@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LOGIN_ACTIVE_SINCE">Aktiivne alates</string>
+  <string name="PLG_LOGIN_HONORARY_MEMBER">Auliige</string>
+  <string name="PLG_LOGIN_LAST_LOGIN">Viimane sisselogimine</string>
+  <string name="PLG_LOGIN_NEW_ONLINE_MEMBER">Uus võrguliige</string>
+  <string name="PLG_LOGIN_NUMBER_OF_LOGINS">Sisselogimiste arv</string>
+  <string name="PLG_LOGIN_ONLINE_MEMBER">Online liige</string>
+  <string name="PLG_LOGIN_SENIOR_ONLINE_MEMBER">Vanem võrguliige</string>
+</resources>
