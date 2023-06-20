@@ -803,7 +803,7 @@ if ($datesResult['totalCount'] === 0) {
                 $columnValues[] = $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete;
             }
 
-            $compactTable->addRowByArray($columnValues, null, array('class' => $cssClass));
+            $compactTable->addRowByArray($columnValues, 'dat_' . $date->getValue('dat_uuid'), array('class' => $cssClass));
         }
     }  // End foreach
 
