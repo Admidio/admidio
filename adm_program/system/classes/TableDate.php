@@ -79,6 +79,17 @@ class TableDate extends TableAccess
     }
 
     /**
+     * Calls clear() Method of parent class and initialize child class specific parameters
+     */
+    public function clear()
+    {
+        parent::clear();
+
+        // initialize class members
+        unset($this->mParticipants);
+    }
+
+    /**
      * Check if it's possible for the current user to participate in this event.
      * Therefore, we check if the user is allowed to participate and if the deadline of the event isn't exceeded.
      * There should be no participants limit or the limit is not reached or the current user is already member
@@ -89,15 +100,16 @@ class TableDate extends TableAccess
     {
         global $gCurrentUserId;
 
-        if($this->allowedToParticipate() && !$this->deadlineExceeded()) {
+        if(!$this->deadlineExceeded()) {
             if(!is_object($this->mParticipants)) {
                 $this->mParticipants = new Participants($this->db, $this->getValue('dat_rol_id'));
             }
 
-            if((int) $this->getValue('dat_max_members') === 0
-            || ($this->mParticipants->getCount() < (int) $this->getValue('dat_max_members'))
-            || $this->mParticipants->isMemberOfEvent($gCurrentUserId)) {
-                return true;
+            if ($this->allowedToParticipate() || $this->mParticipants->isMemberOfEvent($gCurrentUserId)) {
+                if ((int) $this->getValue('dat_max_members') === 0
+                    || ($this->mParticipants->getCount() < (int) $this->getValue('dat_max_members'))) {
+                    return true;
+                }
             }
         }
 
