@@ -281,6 +281,7 @@ if ($datesResult['totalCount'] === 0) {
 
     foreach ($datesResult['recordset'] as $row) {
         // write of current event data to date object
+        $date->clear();
         $date->setArray($row);
 
         $dateUuid     = $date->getValue('dat_uuid');
