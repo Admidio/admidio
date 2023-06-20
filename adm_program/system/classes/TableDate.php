@@ -38,7 +38,7 @@
 class TableDate extends TableAccess
 {
     /**
-     * @var Database db object must public because of session handling
+     * @var Participants object to handle all participants of this event
      */
     private $mParticipants;
 
@@ -86,7 +86,7 @@ class TableDate extends TableAccess
         parent::clear();
 
         // initialize class members
-        unset($this->mParticipants);
+        $this->mParticipants = null;
     }
 
     /**
