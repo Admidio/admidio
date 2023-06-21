@@ -305,7 +305,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 $gProfileFields->getProperty($usfNameIntern, 'usf_value_list'),
                 array(
                     'property'          => $fieldProperty,
-                    'defaultValue'      => $user->getValue($usfNameIntern, 'database'),
+                    'defaultValue'      => (int) $user->getValue($usfNameIntern, 'database'),
                     'showNoValueButton' => $showDummyRadioButton,
                     $helpTextMode       => $helpId,
                     'icon'              => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
@@ -315,7 +315,7 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             $form->addMultilineTextInput(
                 'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                $user->getValue($usfNameIntern, 'database'),
+                $user->getValue($usfNameIntern),
                 3,
                 array(
                     'maxLength'       => 4000,
@@ -326,7 +326,6 @@ foreach ($gProfileFields->getProfileFields() as $field) {
             );
         } else {
             $fieldType = 'text';
-            $format    = '';
 
             if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DATE') {
                 $fieldType = 'date';
@@ -343,16 +342,14 @@ foreach ($gProfileFields->getProfileFields() as $field) {
                 $maxlength = array(0, 9999999999, 1);
             } elseif ($gProfileFields->getProperty($usfNameIntern, 'cat_name_intern') === 'SOCIAL_NETWORKS') {
                 $maxlength = '255';
-                $format = 'database';
             } else {
                 $maxlength = '100';
-                $format = 'database';
             }
 
             $form->addInput(
                 'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                $user->getValue($usfNameIntern, $format),
+                $user->getValue($usfNameIntern),
                 array(
                     'type'            => $fieldType,
                     'maxLength'       => $maxlength,
