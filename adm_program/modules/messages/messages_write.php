@@ -253,7 +253,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
     $form->addMultilineTextInput(
         'msg_body',
         $gL10n->get('SYS_MESSAGE'),
-        $message->getContent(),
+        $message->getContent('database'),
         10,
         array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
     );
@@ -566,12 +566,12 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM) {
 
     // add multiline text element or ckeditor to form
     if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users')) {
-        $form->addEditor('msg_body', '', $message->getContent(), array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdInline' => ($gValidLogin && $gSettingsManager->getInt('mail_sending_mode') === Email::SENDINGMODE_SINGLE) ? array('SYS_EMAIL_PARAMETERS_DESC', array('#recipient_firstname#', '#recipient_lastname#', '#recipient_name#', '#recipient_email#')) : null));
+        $form->addEditor('msg_body', '', $message->getContent('database'), array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdInline' => ($gValidLogin && $gSettingsManager->getInt('mail_sending_mode') === Email::SENDINGMODE_SINGLE) ? array('SYS_EMAIL_PARAMETERS_DESC', array('#recipient_firstname#', '#recipient_lastname#', '#recipient_name#', '#recipient_email#')) : null));
     } else {
         $form->addMultilineTextInput(
             'msg_body',
             $gL10n->get('SYS_TEXT'),
-            $message->getContent(),
+            $message->getContent('database'),
             10,
             array('property' => HtmlForm::FIELD_REQUIRED)
         );

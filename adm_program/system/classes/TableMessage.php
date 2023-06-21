@@ -48,7 +48,7 @@ class TableMessage extends TableAccess
     {
         parent::__construct($database, TBL_MESSAGES, 'msg', $msgId);
 
-        $this->getContent();
+        $this->getContent('database');
     }
 
     /**
@@ -147,7 +147,7 @@ class TableMessage extends TableAccess
      */
     public function addContent($content)
     {
-        $this->msgContentObject = new TableAccess($this->db, TBL_MESSAGES_CONTENT, 'msc');
+        $this->msgContentObject = new TableMessageContent($this->db);
         $this->msgContentObject->setValue('msc_msg_id', $this->getValue('msg_id'));
         $this->msgContentObject->setValue('msc_message', $content, false);
         $this->msgContentObject->setValue('msc_timestamp', DATETIME_NOW);
@@ -267,9 +267,10 @@ class TableMessage extends TableAccess
     /**
      * Get the content of the message or email. If it's a message conversation than only
      * the last content will be returned.
+     * @param string $format The format can be **database** that would return the original database value without any transformations
      * @return string Returns the content of the message.
      */
-    public function getContent()
+    public function getContent(string $format = ''): string
     {
         $content = '';
 
@@ -286,13 +287,13 @@ class TableMessage extends TableAccess
                            )';
             $messageContentStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
 
-            $this->msgContentObject = new TableAccess($this->db, TBL_MESSAGES_CONTENT, 'msc');
+            $this->msgContentObject = new TableMessageContent($this->db);
             $this->msgContentObject->setArray($messageContentStatement->fetch());
         }
 
         // read content of the content object
         if (is_object($this->msgContentObject)) {
-            $content = $this->msgContentObject->getValue('msc_message', 'database');
+            $content = $this->msgContentObject->getValue('msc_message', $format);
         }
 
         return $content;

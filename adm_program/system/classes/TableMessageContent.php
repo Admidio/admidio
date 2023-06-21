@@ -41,10 +41,10 @@ class TableMessageContent extends TableAccess
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['msc_message']));
             } elseif($this->dbColumns['msc_message'] != strip_tags($this->dbColumns['msc_message'])) {
                 // text contains html
-                $value = htmlspecialchars_decode(stripslashes($this->dbColumns['msc_message']));
+                $value = htmlspecialchars_decode(stripslashes(SecurityUtils::encodeHTML($this->dbColumns['msc_message'])));
             } else {
                 // simple plain text than replace the line breaks
-                $value = nl2br($this->dbColumns['msc_message']);
+                $value = nl2br(SecurityUtils::encodeHTML($this->dbColumns['msc_message']));
             }
 
             return $value;
