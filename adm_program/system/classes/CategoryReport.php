@@ -375,7 +375,7 @@ class CategoryReport
             while ($row = $statement->fetch()) {
                 $values = array();
                 $values['id']             = $row['crt_id'];
-                $values['name']           = $row['crt_name'];
+                $values['name']           = SecurityUtils::encodeHTML($row['crt_name']);
                 $values['col_fields']     = $row['crt_col_fields'];
                 $values['selection_role'] = $row['crt_selection_role'];
                 $values['selection_cat']  = $row['crt_selection_cat'];
