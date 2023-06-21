@@ -31,7 +31,7 @@
   <string name="DAT_ICAL_DAYS_FUTURE">Number of iCal days in the future</string>
   <string name="DAT_ICAL_DAYS_FUTURE_DESC">Number of days in the future, to be included in an iCal download or abo. If the iCal download is started within the event module, then this setting is ignored and the filtered appointments are exported. (Default: 365)</string>
   <string name="DAT_ICAL_DAYS_PAST">Number of iCal days in the past</string>
-  <string name="DAT_ICAL_DAYS_PAST_DESC">Number of days in the past, to be included in a iCal download or -Abo. If the iCal download started within the Event module, this setting is ignored and exports the filtered appointments. (Default: 30)</string>
+  <string name="DAT_ICAL_DAYS_PAST_DESC">Number of days in the past, to be included in a iCal download or subscriptions. If the iCal download started within the Event module, this setting is ignored and exports the filtered appointments. (Default: 30)</string>
   <string name="DAT_LOCATION">Location</string>
   <string name="DAT_LOCATION_LINK">If enough information regarding location is provided (street, city, location), Google Maps is able to calculate route to location.</string>
   <string name="DAT_LOGIN_POSSIBLE">Do you want to enable event registration?\nIf event is deleted, all registered participants will be removed, too.\nWould you like to block further registrations, please reduce number of allowed participants.</string>
@@ -140,7 +140,7 @@
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Enter the administrator\'s name, e-mail and access information. Log in with the administrator’s credentials after installation.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Data of the organization</string>
   <string name="INS_DESCRIPTION_BOARD">Administrative board of association</string>
-  <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</string>
+  <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Meetings can take place here.</string>
   <string name="INS_DESCRIPTION_MEMBER">All organization members</string>
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Group of system administrators</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Enter database access information</string>
