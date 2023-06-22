@@ -117,7 +117,7 @@ class Navigation
     public function addUrl($url, $text = null, $icon = null)
     {
         if (!StringUtils::strValidCharacters($url, 'url')) {
-            throw new AdmException('SYS_URL_INVALID_CHAR', array($url));
+            throw new AdmException('SYS_URL_INVALID_CHAR', array('navigation stack'));
         }
 
         $count = count($this->urlStack);
