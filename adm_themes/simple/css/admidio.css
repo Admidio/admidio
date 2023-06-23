@@ -216,7 +216,7 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
 }
 
 /* show vertical btn group in mobile view */
-@media (max-width: 767px)
+@media (max-width: 500px)
 {
     .btn-group {
         display: block;
@@ -528,6 +528,11 @@ input[type=time] {
 
 .admidio-album-thumbnail {
     margin-bottom: 25px;
+}
+
+.admidio-img-presenter img {
+    max-width: 100%;
+    height: auto;
 }
 
 #admidio-password-strength {

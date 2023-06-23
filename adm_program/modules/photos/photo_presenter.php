@@ -89,7 +89,7 @@ if ($nextImage <= $photoAlbum->getValue('pho_quantity')) {
 
 // show link to navigate to next and previous photos
 if ((int) $gSettingsManager->get('photo_show_mode') !== PHOTO_SHOW_MODAL) {
-    $page->addHtml('<div class="btn-group">');
+    $page->addHtml('<div class="btn-group admidio-margin-bottom">');
 
     if ($previousImage > 0) {
         $page->addHtml('
