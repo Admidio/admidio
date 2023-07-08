@@ -10,27 +10,26 @@
  * Parameters:
  *
  * mode         : 1 - (Default) check availability of updates
- *                2 - Show results of updatecheck
+ *                2 - Show results of update check
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1, 'directOutput' => true));
 
-if ($getMode === 3 && !$gCurrentUser->isAdministrator()) {
+if (!$gCurrentUser->isAdministrator()) {
     echo $gL10n->get('SYS_NO_RIGHTS');
     exit();
 }
 
 /**
- * Funktion zur Ermittlung der Update-Version
+ * Function to determine the update version
  * @param string $updateInfo
  * @param string $search
  * @return string
  */
-function getUpdateVersion($updateInfo, $search)
+function getUpdateVersion(string $updateInfo, string $search): string
 {
     // Variablen festlegen
     $i = 0;
@@ -50,7 +49,7 @@ function getUpdateVersion($updateInfo, $search)
 }
 
 /**
- * Funktion zur Überprüfung eines Updates
+ * Function to check an update
  * @param string $currentVersion
  * @param string $checkStableVersion
  * @param string $checkBetaVersion
@@ -58,9 +57,9 @@ function getUpdateVersion($updateInfo, $search)
  * @param string $betaFlag
  * @return int
  */
-function checkVersion($currentVersion, $checkStableVersion, $checkBetaVersion, $betaRelease, $betaFlag)
+function checkVersion(string $currentVersion, string $checkStableVersion, string $checkBetaVersion, string $betaRelease, string $betaFlag): int
 {
-    // Updatezustand (0 = Kein Update, 1 = Neue stabile Version, 2 = Neue Beta-Version, 3 = Neue stabile + Beta Version)
+    // Update state (0 = No update, 1 = New stable version, 2 = New beta version, 3 = New stable + beta version)
     $update = 0;
 
     // Zunächst auf stabile Version prüfen
@@ -68,7 +67,7 @@ function checkVersion($currentVersion, $checkStableVersion, $checkBetaVersion, $
         $update = 1;
     }
 
-    // Jetzt auf Beta Version prüfen
+    // Check for beta version now
     $status = version_compare($checkBetaVersion, $currentVersion);
     if ($status === 1 || ($status === 0 && version_compare($betaRelease, $betaFlag, '>'))) {
         if ($update === 1) {
@@ -81,9 +80,9 @@ function checkVersion($currentVersion, $checkStableVersion, $checkBetaVersion, $
     return $update;
 }
 
-// Erreichbarkeit der Updateinformation prüfen und bei Verbindung
-// verfügbare Admidio Versionen vom Server einlesen (Textfile)
-// Zunächst die Methode selektieren (CURL bevorzugt)
+// check availability of update information and if connected
+// read available Admidio versions from server (text file)
+// First select the method (CURL preferred)
 $updateInfoUrl = ADMIDIO_HOMEPAGE . 'update.txt';
 if (@file_get_contents($updateInfoUrl) === false) {
     // Admidio Versionen nicht auslesbar
@@ -95,35 +94,31 @@ if (@file_get_contents($updateInfoUrl) === false) {
 } else {
     $updateInfo = file_get_contents($updateInfoUrl);
 
-    // Admidio Versionen vom Server übergeben
+    // Admidio versions passed from server
     $stableVersion = getUpdateVersion($updateInfo, 'Version=');
     $betaVersion   = getUpdateVersion($updateInfo, 'Beta-Version=');
     $betaRelease   = getUpdateVersion($updateInfo, 'Beta-Release=');
 
-    // Keine Stabile Version verfügbar (eigentlich unmöglich)
+    // No stable version available (actually impossible)
     if ($stableVersion === '') {
         $stableVersion = 'n/a';
     }
 
-    // Keine Beatversion verfügbar
+    // No beat version available
     if ($betaVersion === '') {
         $betaVersion = 'n/a';
         $betaRelease = '';
     }
 
-    // Auf Update prüfen
+    // check for update
     $versionUpdate = checkVersion(ADMIDIO_VERSION, $stableVersion, $betaVersion, $betaRelease, ADMIDIO_VERSION_BETA);
 }
 
-// Nur im Anzeigemodus geht es weiter, ansonsten kann der aktuelle Updatestand
-// in der Variable $versionUpdate abgefragt werden.
-// $versionUpdate (0 = Kein Update, 1 = Neue stabile Version, 2 = Neue Beta-Version, 3 = Neue stabile + Beta Version, 99 = Keine Verbindung)
-
+// Only continues in display mode, otherwise the current update state can be
+// queried in the $versionUpdate variable.
+// $versionUpdate (0 = No update, 1 = New stable version, 2 = New beta version, 3 = New stable + beta version, 99 = No connection)
 if ($getMode === 2) {
-
-    // Updateergebnis anzeigen
-
-
+    // show update result
     if ($versionUpdate === 1) {
         $versionsText = $gL10n->get('SYS_NEW_VERSION_AVAILABLE');
     } elseif ($versionUpdate === 2) {
