@@ -143,8 +143,10 @@ if (!($gCurrentUserId > 0 && (int) $gSettingsManager->get('mail_delivery_confirm
 }
 
 // object to handle the current message in the database
+if ($message->isNewRecord()) {
+    $message->setValue('msg_subject', $postSubject);
+}
 $message->setValue('msg_type', $getMsgType);
-$message->setValue('msg_subject', $postSubject);
 $message->setValue('msg_usr_id_sender', $gCurrentUserId);
 $message->addContent($postBody);
 
@@ -351,12 +353,22 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL) {
         $postTo = array($postTo);
     }
 
-    // get user data from Database
-    $user = new User($gDb, $gProfileFields, $postTo[0]);
+    // check if user is allowed to view message
+    if(!in_array($gCurrentUserId, array($message->getValue('msg_usr_id_sender'), $message->getConversationPartner()))) {
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
+    }
 
-    // add user to the message object
-    $message->addUser((int) $user->getValue('usr_id'));
-    $message->setValue('msg_read', 1);
+    try {
+        // get user data from Database
+        $user = new User($gDb, $gProfileFields, $postTo[0]);
+
+        // add user to the message object
+        $message->addUser((int) $user->getValue('usr_id'));
+        $message->setValue('msg_read', 1);
+    } catch (AdmException $e) {
+        $e->showHtml();
+    }
 
     // check if it is allowed to send to this user
     if ((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || $user->getValue('usr_id') === '') {
