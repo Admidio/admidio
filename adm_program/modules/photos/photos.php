@@ -80,23 +80,17 @@ if ($gSettingsManager->getBool('enable_rss')) {
 }
 
 if ($photoAlbum->isEditable()) {
-    $page->addJavascript(
-        '
-        /**
-         * rotate image
-         * @param {int}    img
-         * @param {string} direction
-         */
-        function imageRotate(img, direction) {
-            $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php", {photo_uuid: "'.$getPhotoUuid.'", photo_nr: img, job: "rotate", direction: direction}, function(data) {
-                // Appending the random number is necessary to trick the browser cache
-                $("#img_" + img).attr("src", "'.SecurityUtils::encodeUrl(
-            ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php',
-            array('photo_uuid' => $getPhotoUuid, 'thumb' => 1)
-        ).'&photo_nr=" + img + "&rand=" + Math.random());
-                return true;
-            });
-        }
+    $page->addJavascript('
+        $(".admidio-image-rotate").click(function() {
+            imageNr = $(this).data("image");
+            $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php",
+                {photo_uuid: "'.$getPhotoUuid.'", photo_nr: $(this).data("image"), job: "rotate", direction: $(this).data("direction")},
+                function(data) {
+                    // Appending the random number is necessary to trick the browser cache
+                    $("#img_" + imageNr).attr("src", "'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?photo_uuid='.$getPhotoUuid.'&thumb=1&photo_nr=" + imageNr + "&rand=" + Math.random());
+                }
+            );
+        });
 
         $(".admidio-album-lock").click(function() {
             $.post("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php?mode=" + $(this).data("mode") + "&photo_uuid=" + $(this).data("id"),
@@ -263,9 +257,9 @@ if ($photoAlbum->getValue('pho_quantity') > 0) {
             // buttons for moderation
             if ($gCurrentUser->editPhotoRight()) {
                 $photoThumbnailTable .= '
-                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="return imageRotate('.$actThumbnail.', \'right\')">
+                        <a class="admidio-icon-link admidio-image-rotate" href="javascript:void(0)" data-image="'.$actThumbnail.'" data-direction="right">
                             <i class="fas fa-redo-alt" data-toggle="tooltip" title="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'"></i></a>
-                        <a class="admidio-icon-link"  href="javascript:void(0)" onclick="return imageRotate('.$actThumbnail.', \'left\')">
+                        <a class="admidio-icon-link admidio-image-rotate"  href="javascript:void(0)"  data-image="'.$actThumbnail.'" data-direction="left"">
                             <i class="fas fa-undo-alt" data-toggle="tooltip" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'"></i></a>
                         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
                             data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho', 'element_id' => 'div_image_'.$actThumbnail,
@@ -398,7 +392,7 @@ if ($albumsCount > 0) {
             // if user has admin rights for photo module then show some functions
             if ($gCurrentUser->editPhotoRight()) {
                 if ((bool) $childPhotoAlbum->getValue('pho_locked') === false) {
-                    $htmlLock = '<a class="dropdown-item btn admidio-album-lock" href="#" data-id="'.$childPhotoAlbum->getValue('pho_uuid').'" data-mode="lock">
+                    $htmlLock = '<a class="dropdown-item btn admidio-album-lock" href="javascript:void(0)" data-id="'.$childPhotoAlbum->getValue('pho_uuid').'" data-mode="lock">
                                             <i class="fas fa-lock" data-toggle="tooltip"></i> '.$gL10n->get('PHO_ALBUM_LOCK').'</a>';
                 }
 
