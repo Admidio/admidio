@@ -49,15 +49,15 @@ if (!$photoAlbum->isEditable()) {
 // Location with the path from the database
 $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 
-if ($getMode === 'new' || $getMode === 'change') {
-    try {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    } catch (AdmException $exception) {
-        $exception->showHtml();
-        // => EXIT
-    }
+try {
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+} catch (AdmException $exception) {
+    $exception->showText();
+    // => EXIT
+}
 
+if ($getMode === 'new' || $getMode === 'change') {
     // Release (must be done first as this may not be set)
     if (!isset($_POST['pho_locked'])) {
         $_POST['pho_locked'] = 0;
@@ -176,14 +176,6 @@ if ($getMode === 'new' || $getMode === 'change') {
 
 // delete photo album
 elseif ($getMode === 'delete') {
-    try {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    } catch (AdmException $exception) {
-        $exception->showText();
-        // => EXIT
-    }
-
     if ($photoAlbum->delete()) {
         echo 'done';
     }
@@ -195,8 +187,8 @@ elseif ($getMode === 'lock') {
     $photoAlbum->setValue('pho_locked', 1);
     $photoAlbum->save();
 
-    admRedirect($gNavigation->getUrl());
-// => EXIT
+    echo 'done';
+    exit();
 }
 
 // unlock photo album
@@ -204,6 +196,6 @@ elseif ($getMode === 'unlock') {
     $photoAlbum->setValue('pho_locked', 0);
     $photoAlbum->save();
 
-    admRedirect($gNavigation->getUrl());
-    // => EXIT
+    echo 'done';
+    exit();
 }
