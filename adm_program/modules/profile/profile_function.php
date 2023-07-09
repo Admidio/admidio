@@ -49,6 +49,11 @@ $user->readDataByUuid($getUserUuid);
 if ($getMode === 1) {
     // Export vCard of user
 
+    if (!$gCurrentUser->hasRightViewProfile($user)) {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        exit();
+    }
+
     $filename = $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME');
 
     $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.vcf';
