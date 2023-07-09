@@ -101,18 +101,19 @@ class TableMessage extends TableAccess
     }
 
     /**
-     * A user could be added to the class to which the email was send. This information will
-     * later be stored in the database. If you need the user name within the class before the
-     * data is stored in database than you should set the user name with the parameter $fullName.
-     * @param int    $userId   Id the user to which the message was send
+     * A user could be added to the class to which the email was sent. This information will
+     * later be stored in the database. If you need the users name within the class before the
+     * data is stored in database than you should set the users name with the parameter $fullName.
+     * @param int $userId Id the user to which the message was sent
      * @param string $fullName Optional the name of the user. Should be set if the name should be used within the class.
+     * @throws AdmException
      */
-    public function addUser($userId, $fullName = '')
+    public function addUser(int $userId, string $fullName = '')
     {
         // PM always update the recipient if the message exists
         if ($this->getValue('msg_type') === self::MESSAGE_TYPE_PM) {
             if (count($this->msgRecipientsObjectArray) === 1) {
-                $this->msgRecipientsObjectArray->setValue('msr_usr_id', $userId);
+                $this->msgRecipientsObjectArray[0]->setValue('msr_usr_id', $userId);
                 return;
             }
         } else { // EMAIL
