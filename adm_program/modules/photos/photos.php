@@ -96,7 +96,21 @@ if ($photoAlbum->isEditable()) {
         ).'&photo_nr=" + img + "&rand=" + Math.random());
                 return true;
             });
-        }'
+        }
+
+        $(".admidio-album-lock").click(function() {
+            $.post("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php?mode=" + $(this).data("mode") + "&photo_uuid=" + $(this).data("id"),
+                {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '"},
+                function(data) {
+                    if (data === "done") {
+                        location.reload();
+                    } else {
+                        alert(data);
+                    }
+                }
+            );
+        });',
+        true
     );
 }
 
@@ -384,7 +398,7 @@ if ($albumsCount > 0) {
             // if user has admin rights for photo module then show some functions
             if ($gCurrentUser->editPhotoRight()) {
                 if ((bool) $childPhotoAlbum->getValue('pho_locked') === false) {
-                    $htmlLock = '<a class="dropdown-item btn" href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'), 'mode' => 'lock')).'">
+                    $htmlLock = '<a class="dropdown-item btn admidio-album-lock" href="#" data-id="'.$childPhotoAlbum->getValue('pho_uuid').'" data-mode="lock">
                                             <i class="fas fa-lock" data-toggle="tooltip"></i> '.$gL10n->get('PHO_ALBUM_LOCK').'</a>';
                 }
 
@@ -435,9 +449,7 @@ if ($albumsCount > 0) {
             }
 
             if ($gCurrentUser->editPhotoRight() && $childPhotoAlbum->getValue('pho_locked') == 1) {
-                $page->addHtml('<button class="btn btn-primary" onclick="window.location.href=\''.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'), 'mode' => 'unlock')).'\'">
-                                    '.$gL10n->get('PHO_ALBUM_UNLOCK').'
-                                </button>');
+                $page->addHtml('<button class="btn btn-primary admidio-album-lock" data-id="'.$childPhotoAlbum->getValue('pho_uuid').'" data-mode="unlock">'.$gL10n->get('PHO_ALBUM_UNLOCK').'</button>');
             }
 
             $page->addHtml('</div>
