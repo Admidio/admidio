@@ -138,6 +138,14 @@ if (!$photoAlbum->isEditable()) {
     // => EXIT
 }
 
+try {
+    // check the CSRF token of the form against the session token
+    SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
+} catch (AdmException $exception) {
+    $exception->showText();
+    // => EXIT
+}
+
 // Rotate the photo by 90°
 if ($getJob === 'rotate') {
     if ($getDirection !== '') {
@@ -151,21 +159,17 @@ if ($getJob === 'rotate') {
         $image->rotate($getDirection);
         $image->delete();
     }
+
+    echo 'done';
+    exit();
 }
 // delete photo from filesystem and update photo album
 elseif ($getJob === 'delete') {
-    try {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['admidio-csrf-token']);
-    } catch (AdmException $exception) {
-        $exception->showText();
-        // => EXIT
-    }
-
     deletePhoto($photoAlbum, $getPhotoNr);
 
     $_SESSION['photo_album'] = $photoAlbum;
 
     // Delete successful -> return for XMLHttpRequest
     echo 'done';
+    exit();
 }

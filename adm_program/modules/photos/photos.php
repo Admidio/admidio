@@ -83,11 +83,15 @@ if ($photoAlbum->isEditable()) {
     $page->addJavascript('
         $(".admidio-image-rotate").click(function() {
             imageNr = $(this).data("image");
-            $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php",
-                {photo_uuid: "'.$getPhotoUuid.'", photo_nr: $(this).data("image"), job: "rotate", direction: $(this).data("direction")},
+            $.post("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php?photo_uuid='.$getPhotoUuid.'&photo_nr=" + $(this).data("image") + "&job=rotate&direction=" + $(this).data("direction"),
+                {"admidio-csrf-token": "' . $gCurrentSession->getCsrfToken() . '"},
                 function(data) {
-                    // Appending the random number is necessary to trick the browser cache
-                    $("#img_" + imageNr).attr("src", "'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?photo_uuid='.$getPhotoUuid.'&thumb=1&photo_nr=" + imageNr + "&rand=" + Math.random());
+                    if (data === "done") {
+                        // Appending the random number is necessary to trick the browser cache
+                        $("#img_" + imageNr).attr("src", "'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?photo_uuid='.$getPhotoUuid.'&thumb=1&photo_nr=" + imageNr + "&rand=" + Math.random());
+                    } else {
+                        alert(data);
+                    }
                 }
             );
         });
