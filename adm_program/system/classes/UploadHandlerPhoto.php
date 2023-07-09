@@ -70,7 +70,7 @@ class UploadHandlerPhoto extends UploadHandler
 
                 $newPhotoFileNumber = $photoAlbum->getValue('pho_quantity') + 1;
 
-                // read image size
+                // check if the file contains a valid image and read image properties
                 $imageProperties = getimagesize($fileLocation);
                 if ($imageProperties === false) {
                     throw new AdmException('PHO_PHOTO_FORMAT_INVALID');

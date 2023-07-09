@@ -42,9 +42,9 @@ class TableFile extends TableAccess
      * documents and files module.
      * @return bool Return true if the file extension is allowed to be used within Admidio.
      */
-    public function allowedFileExtension()
+    public function allowedFileExtension(): bool
     {
-        return FileSystemUtils::allowedFileExtension($this->getFileExtension());
+        return FileSystemUtils::allowedFileExtension($this->getValue('fil_name', 'database'));
     }
 
     /**

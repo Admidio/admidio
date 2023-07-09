@@ -86,11 +86,13 @@ final class FileSystemUtils
     /**
      * Check if the file extension of the current file format is allowed for upload and the
      * documents and files module.
-     * @param string $fileExtension The file extension that should be checked.
+     * @param string $filename The name of the file that should be checked.
      * @return bool Return true if the file extension is allowed to be used within Admidio.
      */
-    public static function allowedFileExtension($fileExtension)
+    public static function allowedFileExtension(string $filename): bool
     {
+        $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
         if (array_key_exists($fileExtension, self::$iconFileExtension)) {
             return true;
         }
