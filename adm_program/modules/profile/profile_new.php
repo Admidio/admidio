@@ -28,8 +28,6 @@ require_once(__DIR__ . '/../../system/common.php');
 // Initialize and check the parameters
 $getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 $getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'int');
-$getLastname  = stripslashes($_GET['lastname']);
-$getFirstname = stripslashes($_GET['firstname']);
 $getCopy      = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
 $registrationOrgId = $gCurrentOrgId;
@@ -96,8 +94,8 @@ switch ($getNewUser) {
         }
 
         // If last name and first name are passed, then these are already preassigned
-        $user->setValue('LAST_NAME', $getLastname);
-        $user->setValue('FIRST_NAME', $getFirstname);
+        $user->setValue('LAST_NAME', stripslashes($_GET['lastname']));
+        $user->setValue('FIRST_NAME', stripslashes($_GET['firstname']));
         break;
 
     case 2: // fallthrough
