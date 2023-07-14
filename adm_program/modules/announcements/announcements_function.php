@@ -88,12 +88,9 @@ if ($getMode === 1) {
 
         $returnValue = $announcement->save();
 
-        if ($returnValue === true && $getAnnUuid === '' && $gSettingsManager->getBool('system_notifications_new_entries')) {
-            // Notification email for new entries
-            $message = $gL10n->get('SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
-
-            $notification = new Email();
-            $notification->sendNotification($gL10n->get('SYS_EMAIL_ANNOUNCEMENT_NOTIFICATION_TITLE'), $message);
+        if ($returnValue) {
+            // Notification a email for new or changed entries to all members of the notification role
+            $announcement->sendNotification();
         }
     } catch (AdmException $e) {
         $e->showHtml();
