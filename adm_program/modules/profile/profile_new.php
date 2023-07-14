@@ -28,8 +28,8 @@ require_once(__DIR__ . '/../../system/common.php');
 // Initialize and check the parameters
 $getUserUuid  = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 $getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'int');
-$getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname', 'string'));
-$getFirstname = stripslashes(admFuncVariableIsValid($_GET, 'firstname', 'string'));
+$getLastname  = stripslashes($_GET['lastname']);
+$getFirstname = stripslashes($_GET['firstname']);
 $getCopy      = admFuncVariableIsValid($_GET, 'copy', 'bool');
 
 $registrationOrgId = $gCurrentOrgId;
