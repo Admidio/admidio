@@ -62,6 +62,9 @@ class UserRegistration extends User
     {
         parent::__construct($database, $userFields, $userId);
 
+        // changes to a registration user should not be relevant for the change notifications
+        $this->disableChangeNotification();
+
         if ($organizationId > 0) {
             $this->setOrganization($organizationId);
         }
