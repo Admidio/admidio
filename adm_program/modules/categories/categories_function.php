@@ -27,7 +27,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'string');
 $getType    = admFuncVariableIsValid($_GET, 'type', 'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'DAT', 'AWA')));
-$getMode    = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getMode    = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 4)));
 
 // set text strings for the different modules
 switch ($getType) {

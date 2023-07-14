@@ -26,7 +26,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'string');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(2, 3, 4, 5, 6)));
 
 // only members who are allowed to create and edit roles should have access to
 // most of these functions

@@ -24,7 +24,7 @@ require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getMenuUuid = admFuncVariableIsValid($_GET, 'menu_uuid', 'string');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3)));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
 
 // check rights

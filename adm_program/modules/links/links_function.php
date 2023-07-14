@@ -19,7 +19,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'string');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2)));
 
 try {
     // check the CSRF token of the form against the session token
@@ -112,8 +112,4 @@ if ($getMode === 1) {
 
     // Delete successful -> Return for XMLHttpRequest
     echo 'done';
-} else {
-    // Falls der mode unbekannt ist, ist natürlich Ende...
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-    // => EXIT
 }

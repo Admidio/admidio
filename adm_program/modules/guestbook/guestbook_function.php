@@ -28,7 +28,7 @@ require_once(__DIR__ . '/../../system/common.php');
 // Initialize and check the parameters
 $getGboUuid  = admFuncVariableIsValid($_GET, 'gbo_uuid', 'string');
 $getGbcUuid  = admFuncVariableIsValid($_GET, 'gbc_uuid', 'string');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3, 4, 5, 6, 8, 9, 10)));
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // check if the module is enabled and disallow access if it's disabled

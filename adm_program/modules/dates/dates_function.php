@@ -28,7 +28,7 @@ if ($_GET['mode'] == 2) {
 
 // Initialize and check the parameters
 $getDateUuid          = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
-$getMode              = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getMode              = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3, 4, 6, 7)));
 $getCopy              = admFuncVariableIsValid($_GET, 'copy', 'bool');
 $getUserUuid          = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 $postAdditionalGuests = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
