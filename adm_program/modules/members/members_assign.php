@@ -38,8 +38,8 @@ if (strlen($_POST['firstname']) === 0) {
 }
 
 // Initialize and check the parameters
-$getLastname  = admFuncVariableIsValid($_POST, 'lastname', 'string', array('requireValue' => true));
-$getFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string', array('requireValue' => true));
+$getLastname  = $_POST['lastname'];
+$getFirstname = $_POST['firstname'];
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
 if ($gSettingsManager->getBool('system_search_similar') && DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
