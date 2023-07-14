@@ -82,19 +82,19 @@ class CategoryReport
                 case 'c':                    //c=categorie
 
                     $sql = 'SELECT DISTINCT mem_usr_id
-             				           FROM '.TBL_MEMBERS.', '.TBL_CATEGORIES.', '.TBL_ROLES.'
-             				          WHERE cat_type = \'ROL\'
-             				            AND cat_id = rol_cat_id
-             				            AND mem_rol_id = rol_id
+             				           FROM '.TBL_CATEGORIES.'
+             				          INNER JOIN '.TBL_ROLES.' ON rol_cat_id = cat_id
+             				          INNER JOIN '.TBL_MEMBERS.' ON mem_rol_id = rol_id
+             				          WHERE cat_id = ? -- $id
+             				            AND cat_type = \'ROL\'
              				            AND mem_begin <= ? -- DATE_NOW
            					            AND mem_end    > ? -- DATE_NOW
-             				            AND cat_id = ? -- $id
              				            AND ( cat_org_id = ? -- $gCurrentOrgId
                				             OR cat_org_id IS NULL )';
                     $queryParams = array(
-                        DATE_NOW,
-                        DATE_NOW,
                         $id,
+                        DATE_NOW,
+                        DATE_NOW,
                         $gCurrentOrgId
                     );
                     $statement = $gDb->queryPrepared($sql, $queryParams);
@@ -107,15 +107,17 @@ class CategoryReport
                 case 'r':                    //r=role
 
                     $sql = 'SELECT mem_usr_id
-             				  FROM '.TBL_MEMBERS.', '.TBL_ROLES.'
-             				 WHERE mem_rol_id = rol_id
+             				  FROM '.TBL_ROLES.'
+                             INNER JOIN '.TBL_MEMBERS.' ON mem_rol_id = rol_id
+                             INNER JOIN '.TBL_CATEGORIES.' ON cat_id = rol_cat_id
+                               AND cat_type = \'ROL\'
+             				 WHERE rol_id = ? -- $id
              				   AND mem_begin <= ? -- DATE_NOW
-           					   AND mem_end    > ? -- DATE_NOW
-             				   AND rol_id = ? -- $id ';
+           					   AND mem_end    > ? -- DATE_NOW ';
                     $queryParams = array(
+                        $id,
                         DATE_NOW,
-                        DATE_NOW,
-                        $id
+                        DATE_NOW
                     );
                     $statement = $gDb->queryPrepared($sql, $queryParams);
 
@@ -127,16 +129,18 @@ class CategoryReport
                 case 'w':                    //w=without (Leader)
 
                     $sql = 'SELECT mem_usr_id
-             				  FROM '.TBL_MEMBERS.', '.TBL_ROLES.'
-             				 WHERE mem_rol_id = rol_id
+             				  FROM '.TBL_ROLES.'
+                             INNER JOIN '.TBL_MEMBERS.' ON mem_rol_id = rol_id
+                             INNER JOIN '.TBL_CATEGORIES.' ON cat_id = rol_cat_id
+                               AND cat_type = \'ROL\'
+             				 WHERE rol_id = ? -- $id
              				   AND mem_begin <= ? -- DATE_NOW
            					   AND mem_end    > ? -- DATE_NOW
-             				   AND rol_id = ? -- $id
              				   AND mem_leader = false ';
                     $queryParams = array(
+                        $id,
                         DATE_NOW,
-                        DATE_NOW,
-                        $id
+                        DATE_NOW
                     );
                     $statement = $gDb->queryPrepared($sql, $queryParams);
 
@@ -148,16 +152,18 @@ class CategoryReport
                 case 'l':                    //l=leader
 
                     $sql = 'SELECT mem_usr_id
-             				  FROM '.TBL_MEMBERS.', '.TBL_ROLES.'
-             				 WHERE mem_rol_id = rol_id
+             				  FROM '.TBL_ROLES.'
+                             INNER JOIN '.TBL_MEMBERS.' ON mem_rol_id = rol_id
+                             INNER JOIN '.TBL_CATEGORIES.' ON cat_id = rol_cat_id
+                               AND cat_type = \'ROL\'
+             				 WHERE rol_id = ? -- $id
              				   AND mem_begin <= ? -- DATE_NOW
            					   AND mem_end    > ? -- DATE_NOW
-             				   AND rol_id = ? -- $id
              				   AND mem_leader = true ';
                     $queryParams = array(
+                        $id,
                         DATE_NOW,
-                        DATE_NOW,
-                        $id
+                        DATE_NOW
                     );
                     $statement = $gDb->queryPrepared($sql, $queryParams);
 
@@ -184,12 +190,13 @@ class CategoryReport
 
         // Read in all members of the current organisation
         $sql = ' SELECT mem_usr_id
-             	   FROM '.TBL_MEMBERS.', '.TBL_ROLES.', '.TBL_CATEGORIES. '
-             	  WHERE mem_rol_id = rol_id
-             	    AND rol_valid  = true
-             	    AND rol_cat_id = cat_id
+                   FROM '.TBL_CATEGORIES.'
+                  INNER JOIN '.TBL_ROLES.' ON rol_cat_id = cat_id
+                  INNER JOIN '.TBL_MEMBERS.' ON mem_rol_id = rol_id
+                  WHERE cat_type = \'ROL\'
              	    AND ( cat_org_id = ? -- $gCurrentOrgId
                		 OR cat_org_id IS NULL )
+             	    AND rol_valid  = true
              	    AND mem_begin <= ? -- DATE_NOW
            		    AND mem_end    > ? -- DATE_NOW ';
         $queryParams = array(
@@ -289,12 +296,11 @@ class CategoryReport
         }
 
         // alle (Rollen-)Kategorien der aktuellen Organisation einlesen
-        $sql = ' SELECT DISTINCT cat.cat_name, cat.cat_id
-             	            FROM '.TBL_CATEGORIES.' AS cat, '.TBL_ROLES.' AS rol
-             	           WHERE cat.cat_type = \'ROL\'
-             	             AND cat.cat_id = rol.rol_cat_id
-             	             AND ( cat.cat_org_id = ? -- $gCurrentOrgId
-               	              OR cat.cat_org_id IS NULL )';
+        $sql = ' SELECT cat_name, cat_id
+             	   FROM '.TBL_CATEGORIES.'
+             	  WHERE cat_type = \'ROL\'
+             	    AND ( cat_org_id = ? -- $gCurrentOrgId
+               	        OR cat_org_id IS NULL )';
         $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
         $k = 0;
@@ -316,10 +322,10 @@ class CategoryReport
             $this->headerSelection[$i]['data']	   = $data['data'];
             $i++;
 
-            $sql = 'SELECT DISTINCT rol.rol_name, rol.rol_id, rol.rol_valid
-                	           FROM '.TBL_CATEGORIES.' AS cat, '.TBL_ROLES.' AS rol
-                	          WHERE cat.cat_id = ?
-                	            AND cat.cat_id = rol.rol_cat_id';
+            $sql = 'SELECT DISTINCT rol_name, rol_id, rol_valid
+                	           FROM '.TBL_CATEGORIES.'
+                	          INNER JOIN '.TBL_ROLES.' ON rol_cat_id = cat_id
+                	          WHERE cat_id = ? ';
             $statement = $gDb->queryPrepared($sql, array($data['cat_id']));
 
             while ($row = $statement->fetch()) {
