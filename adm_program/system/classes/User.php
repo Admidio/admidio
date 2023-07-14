@@ -72,6 +72,10 @@ class User extends TableAccess
      * @var bool Flag if relationships for this user were checked
      */
     protected $relationshipsChecked = false;
+    /**
+     * @var bool Flag if the changes to the user data should be handled by the ChangeNotification service.
+     */
+    protected $changeNotificationEnabled;
 
     /**
      * Constructor that will create an object of a recordset of the users table.
@@ -84,6 +88,8 @@ class User extends TableAccess
      */
     public function __construct(Database $database, ProfileFields $userFields = null, $userId = 0)
     {
+        $this->changeNotificationEnabled = true;
+
         if ($userFields !== null) {
             $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
         }
@@ -793,6 +799,18 @@ class User extends TableAccess
     public function deleteUserFieldData()
     {
         $this->mProfileFieldsData->deleteUserData();
+    }
+
+    /**
+     * Changes to user data could be sent as a notification email to a specific role if this
+     * function is enabled in the settings. If you want to suppress this logic you can
+     * explicit disable it with this method for this user. So no changes to this user object will
+     * result in a notification email.
+     * @return void
+     */
+    public function disableChangeNotification()
+    {
+        $this->changeNotificationEnabled = false;
     }
 
     /**
@@ -1744,7 +1762,7 @@ class User extends TableAccess
         }
         // The record is a new record, which was just stored to the database
         // for the first time => record it as a user creation now
-        if ($newRecord && is_object($gChangeNotification)) {
+        if ($newRecord && $this->changeNotificationEnabled && is_object($gChangeNotification)) {
             // Register all non-empty fields for the notification
             $gChangeNotification->logUserCreation($usrId, $this);
         }
@@ -1796,7 +1814,7 @@ class User extends TableAccess
         global $gSettingsManager, $gPasswordHashAlgorithm, $gChangeNotification;
 
         if (!$doHashing) {
-            if (is_object($gChangeNotification)) {
+            if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
                 $gChangeNotification->logUserChange(
                     (int) $this->getValue('usr_id'),
                     'usr_password',
@@ -1820,7 +1838,7 @@ class User extends TableAccess
             return false;
         }
 
-        if (is_object($gChangeNotification)) {
+        if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
             $gChangeNotification->logUserChange(
                 (int) $this->getValue('usr_id'),
                 'usr_password',
@@ -1914,7 +1932,7 @@ class User extends TableAccess
             // as the record might never be saved to the database (e.g. when
             // doing a check for an existing user)! => For new records,
             // log the changes only when $this->save is called!
-            if (!$this->newRecord && is_object($gChangeNotification)) {
+            if (!$this->newRecord && $this->changeNotificationEnabled && is_object($gChangeNotification)) {
                 $gChangeNotification->logUserChange(
                     $this->getValue('usr_id'),
                     $columnName,
