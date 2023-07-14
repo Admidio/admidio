@@ -929,12 +929,12 @@
   <string name="SYS_LEADER_ASSIGN_MEMBERS">Head of this role can add new role members or remove existing members.</string>
   <string name="SYS_LEADER_RIGHTS_DESC">Roles members can be appointed as managers of a role and get optional extended rights.\nThey can get the right to manipulate profile data of all roles members and / or the right to add or remove members of the role. Having both rights, however, they would be able to edit information of all members.</string>
   <string name="SYS_LEADERS">Leader</string>
-  <string name="SYS_LINK_COLLECTION_FROM">Links of #VAR1#</string>
-  <string name="SYS_LINK_EMAIL_NOTIFICATION_TITLE">A new weblink was created</string>
-  <string name="SYS_LINK_EMAIL_NOTIFICATION_MESSAGE">A new weblink at #VAR1# was created.\n\nLink address: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
   <string name="SYS_LINK_ADDRESS">Link address</string>
   <string name="SYS_LINK_MEMBERSHIP_DELETE">Do you really want to remove the reference to the former membership in the role #VAR1_BOLD#?</string>
   <string name="SYS_LINK_NAME">Link name</string>
+  <string name="SYS_LINK_CHANGED_TITLE">A weblink was changed at #VAR1#</string>
+  <string name="SYS_LINK_COLLECTION_FROM">Links of #VAR1#</string>
+  <string name="SYS_LINK_CREATED_TITLE">A new weblink was created at #VAR1#</string>
   <string name="SYS_LINK_TARGET">Link target</string>
   <string name="SYS_LINK_TARGET_DESC">Choose if selected website should be displayed in the window of Admidio or in a new window.</string>
   <string name="SYS_LINK_TO">Link to #VAR1#</string>

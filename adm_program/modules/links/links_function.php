@@ -61,7 +61,6 @@ if ($getLinkUuid !== '') {
 
 if ($getMode === 1) {
     $_SESSION['links_request'] = $_POST;
-    $weblinkIsNew = $link->isNewRecord();
 
     if (strlen(StringUtils::strStripTags($_POST['lnk_name'])) === 0) {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LINK_NAME'))));
@@ -93,19 +92,13 @@ if ($getMode === 1) {
         }
 
         $returnCode = $link->save();
+
+        if ($returnCode) {
+            // Notification an email for new or changed entries to all members of the notification role
+            $link->sendNotification();
+        }
     } catch (AdmException $e) {
         $e->showHtml();
-    }
-
-    if ($returnCode === true && $weblinkIsNew && $gSettingsManager->getBool('system_notifications_new_entries')) {
-        // Notification email for new entries
-        $message = $gL10n->get('SYS_LINK_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
-        try {
-            $notification = new Email();
-            $notification->sendNotification($gL10n->get('SYS_LINK_EMAIL_NOTIFICATION_TITLE'), $message);
-        } catch (AdmException $e) {
-            $e->showHtml();
-        }
     }
 
     unset($_SESSION['links_request']);
