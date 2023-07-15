@@ -296,9 +296,7 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         }
 
         $gDb->startTransaction();
-        $returnCode = $date->save();
-
-        if ($returnCode) {
+        if($date->save()) {
             // Notification a email for new or changed entries to all members of the notification role
             $date->sendNotification();
         }

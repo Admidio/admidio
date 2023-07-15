@@ -1074,8 +1074,8 @@
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notification after a new registration</string>
   <string name="SYS_NOTIFICATION_REGISTRATION_APPROVAL">Notification to approve a registration</string>
   <string name="SYS_NOTIFICATION_REGISTRATION_CONFIRMATION">Notification to confirm the registration</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification for new entries</string>
-  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Here you can activate a system notification for new entries in the modules announcements, events, documents &amp; files, photos, web links and guestbook. Members of the stored notification role get the possibility to be notified about new entries in the modules by e-mail. (Default: no)</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification for new or changed entries</string>
+  <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Here you can activate a system notification for new or changed entries in the modules Announcements, Events, Documents &amp; Files, Photos, Web Links and Guestbook. Members of the stored notification role get the possibility to be notified about new or changed entries in the modules by e-mail. (Default: no)</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notification for changed profile fields</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">A system notification for changed profile data can be activated here. If profile data is created, changed or deleted by a user, the members of the stored notification role are notified by e-mail. (Default: no)</string>
   <string name="SYS_NOTIFICATION_ROLE">Notification role</string>

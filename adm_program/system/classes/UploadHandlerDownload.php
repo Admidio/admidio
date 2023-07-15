@@ -73,9 +73,7 @@ class UploadHandlerDownload extends UploadHandler
                     throw new AdmException('SYS_FILE_EXTENSION_INVALID');
                 }
 
-                $returnCode = $newFile->save();
-
-                if ($returnCode) {
+                if($newFile->save()) {
                     // Notification a email for new or changed entries to all members of the notification role
                     $newFile->sendNotification();
                 }

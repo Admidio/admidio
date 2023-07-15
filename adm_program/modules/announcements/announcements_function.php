@@ -86,9 +86,7 @@ if ($getMode === 1) {
             }
         }
 
-        $returnCode = $announcement->save();
-
-        if ($returnCode) {
+        if ($announcement->save()) {
             // Notification email for new or changed entries to all members of the notification role
             $announcement->sendNotification();
         }

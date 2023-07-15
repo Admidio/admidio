@@ -91,9 +91,7 @@ if ($getMode === 1) {
             $link->setValue('lnk_counter', 0);
         }
 
-        $returnCode = $link->save();
-
-        if ($returnCode) {
+        if ($link->save()) {
             // Notification an email for new or changed entries to all members of the notification role
             $link->sendNotification();
         }

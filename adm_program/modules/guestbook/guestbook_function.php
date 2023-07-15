@@ -180,9 +180,7 @@ if ($getMode === 1 || $getMode === 3) {
             $guestbook->setValue('gbo_locked', '1');
         }
 
-        $returnCode = $guestbook->save();
-
-        if ($returnCode) {
+        if ($guestbook->save()){
             // Notification email for new or changed entries to all members of the notification role
             $guestbook->sendNotification();
         }
@@ -304,9 +302,7 @@ if ($getMode === 1 || $getMode === 3) {
             $gbComment->setValue('gbc_locked', '1');
         }
 
-        $returnCode = $gbComment->save();
-
-        if ($returnCode) {
+        if ($gbComment->save()) {
             // Notification email for new or changed entries to all members of the notification role
             $gbComment->sendNotification();
         }
