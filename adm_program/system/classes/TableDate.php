@@ -469,6 +469,78 @@ class TableDate extends TableAccess
     }
 
     /**
+     * Send a notification email that a new event was created or an existing event was changed
+     * to all members of the notification role. This role is configured within the global preference
+     * **system_notifications_role**. The email contains the event title, date, time, location, room,
+     * the name of the current user, timestamp and the url to this event.
+     * @return bool Returns **true** if the notification was sent
+     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     */
+    public function sendNotification(): bool
+    {
+        global $gCurrentOrganization, $gCurrentUser, $gSettingsManager, $gL10n, $gDb;
+
+        if ($gSettingsManager->getBool('system_notifications_new_entries')) {
+            // read calendar information because new events doesn't have them in this object
+            $sqlCal = 'SELECT cat_name
+                         FROM '.TBL_CATEGORIES.'
+                        WHERE cat_id = ?';
+            $pdoStatement = $gDb->queryPrepared($sqlCal, array((int) $this->getValue('dat_cat_id')));
+            $calendar = $pdoStatement->fetchColumn();
+
+            if ((string) $this->getValue('dat_location') !== '') {
+                $location = $this->getValue('dat_location');
+            } else {
+                $location = 'n/a';
+            }
+
+            if((int) $this->getValue('dat_room_id') > 0) {
+                // read room name from database
+                $sqlCal = 'SELECT room_name
+                             FROM ' . TBL_ROOMS . '
+                            WHERE room_id = ?';
+                $pdoStatement = $gDb->queryPrepared($sqlCal, array((int) $this->getValue('dat_room_id')));
+                $room = $pdoStatement->fetchColumn();
+            } else {
+                $room = 'n/a';
+            }
+
+            if ((string) $this->getValue('dat_max_members') !== '') {
+                $participants = $this->getValue('dat_max_members');
+            } else {
+                $participants = 'n/a';
+            }
+
+            $notification = new Email();
+
+            if ($this->isNewRecord()) {
+                $messageTitleText = 'SYS_EVENT_CREATED_TITLE';
+                $messageUserText = 'SYS_CREATED_BY';
+                $messageDateText = 'SYS_CREATED_AT';
+            } else {
+                $messageTitleText = 'SYS_EVENT_CHANGED_TITLE';
+                $messageUserText = 'SYS_CHANGED_BY';
+                $messageDateText = 'SYS_CHANGED_AT';
+            }
+            $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '\n\n'
+                . $gL10n->get('SYS_TITLE') . ': ' . $_POST['dat_headline'] . '\n'
+                . $gL10n->get('SYS_DATE') . ': ' . $this->getDateTimePeriod() . '\n'
+                . $gL10n->get('DAT_CALENDAR') . ': ' . $calendar . '\n'
+                . $gL10n->get('DAT_LOCATION') . ': ' . $location . '\n'
+                . $gL10n->get('SYS_ROOM') . ': ' . $room . '\n'
+                . $gL10n->get('SYS_PARTICIPANTS') . ': ' . $participants . '\n'
+                . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME') . '\n'
+                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '\n'
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php?dat_uuid=' . $this->getValue('dat_uuid') . '\n';
+            return $notification->sendNotification(
+                $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
+                $message
+            );
+        }
+        return false;
+    }
+
+    /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value

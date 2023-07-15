@@ -750,41 +750,44 @@ class Email extends PHPMailer
      * @param string $subject     The subject of the email.
      * @param string $message     The body of the email.
      * @return bool Returns **true** if the notification was sent
-     *@throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
      */
     public function sendNotification(string $subject, string $message): bool
     {
         global $gSettingsManager, $gCurrentOrganization, $gCurrentUser;
 
-        // Send notification to configured role
-        $this->addRecipientsByRole($gSettingsManager->getString('system_notifications_role'));
+        if ($gSettingsManager->getBool('system_notifications_enabled')) {
+            // Send notification to configured role
+            $this->addRecipientsByRole($gSettingsManager->getString('system_notifications_role'));
 
-        // Set Sender
-        if ($gCurrentUser->getValue('EMAIL') === '') {
-            $this->setSender($gSettingsManager->getString('email_administrator'));
-        } else {
-            $this->setSender($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
+            // Set Sender
+            if ($gCurrentUser->getValue('EMAIL') === '') {
+                $this->setSender($gSettingsManager->getString('email_administrator'));
+            } else {
+                $this->setSender($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
+            }
+
+            $this->setSubject($gCurrentOrganization->getValue('org_shortname') . ': ' . $subject);
+
+            // send html if preference is set
+            if ($gSettingsManager->getBool('mail_html_registered_users')) {
+                $this->setHtmlMail();
+            } else {
+                // html linebreaks should be converted in simple linefeed
+                $message = str_replace('<br />', "\n", $message);
+            }
+
+            $this->setText($message);
+            $returnCode = $this->sendEmail();
+
+            // if something went wrong then throw an exception with the error message
+            if ($returnCode !== true) {
+                throw new AdmException('SYS_EMAIL_NOT_SEND', array($gSettingsManager->getString('email_administrator'), $returnCode));
+            }
+
+            return true;
         }
-
-        $this->setSubject($gCurrentOrganization->getValue('org_shortname').': '.$subject);
-
-        // send html if preference is set
-        if ($gSettingsManager->getBool('mail_html_registered_users')) {
-            $this->setHtmlMail();
-        } else {
-            // html linebreaks should be converted in simple linefeed
-            $message = str_replace('<br />', "\n", $message);
-        }
-
-        $this->setText($message);
-        $returnCode = $this->sendEmail();
-
-        // if something went wrong then throw an exception with the error message
-        if ($returnCode !== true) {
-            throw new AdmException('SYS_EMAIL_NOT_SEND', array($gSettingsManager->getString('email_administrator'), $returnCode));
-        }
-
-        return true;
+        return false;
     }
 }
 

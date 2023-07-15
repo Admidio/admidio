@@ -27,7 +27,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getUserUuid   = admFuncVariableIsValid($_GET, 'user_uuid', 'string');
 $getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid', 'string');
-$getMode       = admFuncVariableIsValid($_GET, 'mode', 'int');
+$getMode       = admFuncVariableIsValid($_GET, 'mode', 'int', array('validValues' => array(1, 2, 3, 4, 5, 6, 7)));
 
 if (in_array($getMode, array(2, 3, 7))) {
     try {

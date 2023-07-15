@@ -108,55 +108,50 @@ if ($getMode === 'new' || $getMode === 'change') {
     $photoAlbumParent->readDataByUuid($_POST['parent_album_uuid']);
     $_POST['pho_pho_id_parent'] = $photoAlbumParent->getValue('pho_id');
 
-    //  POST Write variables to the Role object
-    foreach ($_POST as $key => $value) { // TODO possible security issue
-        if (str_starts_with($key, 'pho_')) {
-            $photoAlbum->setValue($key, $value);
-        }
-    }
-
-    if ($getMode === 'new') {
-        // write recordset with new album into database
-        $photoAlbum->save();
-
-        $error = $photoAlbum->createFolder();
-
-        if (is_array($error)) {
-            $photoAlbum->delete();
-
-            // the corresponding folder could not be created
-            $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php');
-            $gMessage->show($gL10n->get($error['text'], array($error['path'], '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
-            // => EXIT
-        }
-
-        if ($error === null && $gSettingsManager->getBool('system_notifications_new_entries')) {
-            // Notification email for new entries
-            $notification = new Email();
-            try {
-                $message = $gL10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['pho_name'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
-                $notification->sendNotification($gL10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), $message);
-            } catch (AdmException $e) {
-                $e->showHtml();
+    try {
+        //  POST Write variables to the Role object
+        foreach ($_POST as $key => $value) { // TODO possible security issue
+            if (str_starts_with($key, 'pho_')) {
+                $photoAlbum->setValue($key, $value);
             }
         }
-    } else {
-        // if begin date changed than the folder must also be changed
-        if ($albumPath !== ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $photoAlbum->getValue('pho_id')) {
-            $newFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $photoAlbum->getValue('pho_id');
 
-            // das komplette Album in den neuen Ordner verschieben
-            try {
+        if ($getMode === 'new') {
+            // write recordset with new album into database
+            if ($photoAlbum->save()) {
+                $error = $photoAlbum->createFolder();
+
+                if (is_array($error)) {
+                    $photoAlbum->delete();
+
+                    // the corresponding folder could not be created
+                    $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php');
+                    $gMessage->show($gL10n->get($error['text'], array($error['path'], '<a href="mailto:' . $gSettingsManager->getString('email_administrator') . '">', '</a>')));
+                    // => EXIT
+                } else {
+                    // Notification email for new or changed entries to all members of the notification role
+                    $photoAlbum->sendNotification();
+                }
+            }
+        } else {
+            // if begin date changed than the folder must also be changed
+            if ($albumPath !== ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $photoAlbum->getValue('pho_id')) {
+                // move the complete album to the new folder
+                $newFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $photoAlbum->getValue('pho_id');
                 FileSystemUtils::moveDirectory($albumPath, $newFolder);
-            } catch (\RuntimeException $exception) {
-                $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php');
-                $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', array($newFolder, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
-                // => EXIT
+            }
+
+            if ($photoAlbum->save()) {
+                // Notification email for new or changed entries to all members of the notification role
+                $photoAlbum->sendNotification();
             }
         }
-
-        // now save changes to database
-        $photoAlbum->save();
+    } catch (RuntimeException $exception) {
+        $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php');
+        $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', array($newFolder, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
+        // => EXIT
+    } catch (AdmException $e) {
+        $e->showHtml();
     }
 
     unset($_SESSION['photo_album_request'], $_SESSION['photo_album']);

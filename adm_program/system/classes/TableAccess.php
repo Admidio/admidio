@@ -504,6 +504,7 @@ class TableAccess
         $sqlFieldArray = array();
         $sqlSetArray = array();
         $queryParams = array();
+        $returnCode = false;
 
         // Loop over all DB fields and add them to the update
         foreach ($this->dbColumns as $key => $value) {
@@ -542,27 +543,29 @@ class TableAccess
         }
 
         if ($this->newRecord) {
-            // insert record and mark this object as not new and remember the new id
+            // insert record and remember the new id
             $sql = 'INSERT INTO '.$this->tableName.'
                            ('.implode(',', $sqlFieldArray).')
                     VALUES ('.Database::getQmForValues($sqlFieldArray).')';
-            $this->db->queryPrepared($sql, $queryParams);
-
-            $this->newRecord = false;
-            if ($this->keyColumnName !== '') {
-                $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
+            if ($this->db->queryPrepared($sql, $queryParams) !== false) {
+                $returnCode = true;
+                if ($this->keyColumnName !== '') {
+                    $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
+                }
             }
         } else {
             $sql = 'UPDATE '.$this->tableName.'
                        SET '.implode(', ', $sqlSetArray).'
                      WHERE '.$this->keyColumnName.' = ? -- $this->dbColumns[$this->keyColumnName]';
             $queryParams[] = $this->dbColumns[$this->keyColumnName];
-            $this->db->queryPrepared($sql, $queryParams);
+            if ($this->db->queryPrepared($sql, $queryParams) !== false) {
+                $returnCode = true;
+            }
         }
 
         $this->columnsValueChanged = false;
 
-        return true;
+        return $returnCode;
     }
 
     /**

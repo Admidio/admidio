@@ -298,14 +298,26 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
     // set default value for each datatype if no value is given and no value was required
     if (array_key_exists($variableName, $array) && $array[$variableName] !== '') {
-        $value = $array[$variableName];
+        if ($datatype === 'bool' || $datatype === 'boolean') {
+            $value = (bool) $array[$variableName];
+        } elseif ($datatype === 'numeric' || $datatype === 'int') {
+            $value = (int) $array[$variableName];
+        } elseif ($datatype === 'float') {
+            $value = (float) $array[$variableName];
+        } else {
+            $value = (string) $array[$variableName];
+        }
     } else {
         if ($optionsAll['requireValue']) {
             // if value is required an no value is given then show error
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
         } elseif ($optionsAll['defaultValue'] !== null) {
             // if a default value was set then take this value
-            $value = html_entity_decode($optionsAll['defaultValue']);
+            if (is_string($optionsAll['defaultValue'])) {
+                $value = html_entity_decode($optionsAll['defaultValue']);
+            } else {
+                $value = $optionsAll['defaultValue'];
+            }
         } else {
             // no value set then initialize the parameter
             if ($datatype === 'bool' || $datatype === 'boolean') {

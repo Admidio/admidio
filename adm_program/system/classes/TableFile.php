@@ -3,23 +3,15 @@
  ***********************************************************************************************
  * Class manages access to database table adm_files
  *
+ * With the given ID a file object is created from the data in the database table **adm_files**.
+ * The class will handle the communication with the database and give easy access to the data. New
+ * file could be created or existing file could be edited. Special properties of
+ * data like save urls, checks for evil code or timestamps of last changes will be handled within this class.
+ *
  * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- */
-
-/**
- * Diese Klasse dient dazu ein Fileobjekt zu erstellen.
- * Eine Datei kann ueber diese Klasse in der Datenbank verwaltet werden
- *
- * Beside the methods of the parent class there are the following additional methods:
- *
- * getFileForDownload($fileId)
- *                         - File mit der uebergebenen ID aus der Datenbank auslesen fuer
- *                           das Downloadmodul. Hier wird auch direkt ueberprueft ob die
- *                           Datei oder der Ordner gesperrt ist.
- * getCompletePathOfFile() - Gibt den kompletten Pfad der Datei zurueck
  */
 class TableFile extends TableAccess
 {
@@ -49,7 +41,7 @@ class TableFile extends TableAccess
 
     /**
      * Deletes the selected record of the table and the associated file in the file system.
-     * After that the class will be initialize.
+     * After that the class will be initialized.
      * @return bool **true** if no error occurred
      */
     public function delete(): bool
@@ -58,12 +50,12 @@ class TableFile extends TableAccess
 
         try {
             FileSystemUtils::deleteFileIfExists($this->getFullFilePath());
-        } catch (\RuntimeException $exception) {
+        } catch (RuntimeException $exception) {
             $gLogger->error('Could not delete file!', array('filePath' => $this->getFullFilePath()));
             // TODO
         }
 
-        // Even if the delete won't work, return true, so that the entry of the DB disappears
+        // Even if delete won't work, return true, so that the entry of the DB disappears
         return parent::delete();
     }
 
@@ -71,7 +63,7 @@ class TableFile extends TableAccess
      * Gets the absolute path of the folder (with folder-name)
      * @return string Returns the folder path of the current file.
      */
-    public function getFullFolderPath()
+    public function getFullFolderPath(): string
     {
         return ADMIDIO_PATH . $this->getValue('fol_path', 'database') . '/' . $this->getValue('fol_name', 'database');
     }
@@ -80,7 +72,7 @@ class TableFile extends TableAccess
      * Gets the absolute path of the file
      * @return string Returns the folder path with the file name of the current file.
      */
-    public function getFullFilePath()
+    public function getFullFilePath(): string
     {
         return $this->getFullFolderPath() . '/' . $this->getValue('fil_name', 'database');
     }
@@ -89,20 +81,20 @@ class TableFile extends TableAccess
      * Get the extension of the file
      * @return string Extension of the file e.g. 'pdf' or 'jpg'
      */
-    public function getFileExtension()
+    public function getFileExtension(): string
     {
         return strtolower(pathinfo($this->getValue('fil_name'), PATHINFO_EXTENSION));
     }
 
     /**
      * Reads the file recordset from database table **adm_folders** and throws an AdmException
-     * if the user has no right to see the corresponding folder or the file id doesn't exists.
+     * if the user has no right to see the corresponding folder or the file id doesn't exist.
      * @param string $fileUuid The UUID of the file.
-     * @throws AdmException SYS_FOLDER_NO_RIGHTS
-     *                      SYS_INVALID_PAGE_VIEW
      * @return true Returns **true** if everything is ok otherwise an AdmException is thrown.
+     *@throws AdmException SYS_FOLDER_NO_RIGHTS
+     *                      SYS_INVALID_PAGE_VIEW
      */
-    public function getFileForDownload($fileUuid)
+    public function getFileForDownload(string $fileUuid): bool
     {
         global $gCurrentUser;
 
@@ -144,7 +136,7 @@ class TableFile extends TableAccess
      * Get the relevant Font Awesome icon for the current file
      * @return string Returns the name of the Font Awesome icon
      */
-    public function getFontAwesomeIcon()
+    public function getFontAwesomeIcon(): string
     {
         return FileSystemUtils::getFileFontAwesomeIcon($this->getValue('fil_name'));
     }
@@ -153,7 +145,7 @@ class TableFile extends TableAccess
      * Get the MIME type of the current file e.g. 'image/jpeg'
      * @return string MIME type of the current file
      */
-    public function getMimeType()
+    public function getMimeType(): string
     {
         return FileSystemUtils::getFileMimeType($this->getValue('fil_name'));
     }
@@ -182,18 +174,19 @@ class TableFile extends TableAccess
      * Check if the current file format could be viewed within a browser.
      * @return bool Return true if the file could be viewed in the browser otherwise false.
      */
-    public function isViewableInBrowser()
+    public function isViewableInBrowser(): bool
     {
         return FileSystemUtils::isViewableFileInBrowser($this->getValue('fil_name'));
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * For new records the user and timestamp will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws AdmException
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -202,6 +195,42 @@ class TableFile extends TableAccess
             $this->setValue('fil_usr_id', $GLOBALS['gCurrentUserId']);
         }
 
-        return parent::save($updateFingerPrint);
+        $returnCode = parent::save($updateFingerPrint);
+
+        // read data to fill folder information to the object
+        if ($this->newRecord) {
+            $this->readDataById($this->getValue('fil_id'));
+            $this->newRecord = true;
+        }
+
+        return $returnCode;
+    }
+
+    /**
+     * Send a notification email that a new file was uploaded or an existing file was changed
+     * to all members of the notification role. This role is configured within the global preference
+     * **system_notifications_role**. The email contains the file name, the name of the current user,
+     * the timestamp and the url to the folder of the file.
+     * @return bool Returns **true** if the notification was sent
+     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     */
+    public function sendNotification(): bool
+    {
+        global $gCurrentOrganization, $gCurrentUser, $gSettingsManager, $gL10n;
+
+        if ($gSettingsManager->getBool('system_notifications_new_entries')) {
+            $notification = new Email();
+
+            $message = $gL10n->get('SYS_FILE_CREATED_TITLE', array($gCurrentOrganization->getValue('org_longname'))) . '\n\n'
+                . $gL10n->get('SYS_FILE') . ': ' . $this->getValue('fil_name') . '\n'
+                . $gL10n->get('SYS_CREATED_BY') . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '\n'
+                . $gL10n->get('SYS_CREATED_AT') . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '\n'
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php?folder_uuid=' . $this->getValue('fol_uuid') . '\n';
+            return $notification->sendNotification(
+                $gL10n->get('SYS_FILE_CREATED_TITLE', array($gCurrentOrganization->getValue('org_longname'))),
+                $message
+            );
+        }
+        return false;
     }
 }

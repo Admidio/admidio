@@ -21,7 +21,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1, 'validValues' => array(1, 2, 3, 4, 5)));
 $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
 
 // in ajax mode only return simple text on error

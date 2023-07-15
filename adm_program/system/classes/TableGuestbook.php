@@ -3,19 +3,15 @@
  ***********************************************************************************************
  * Class manages access to database table adm_guestbook
  *
+ * With the given id a guestbook entry object is created from the data in the database table **adm_guestbook**.
+ * The class will handle the communication with the database and give easy access to the data. New
+ * guestbook entries could be created or existing guestbook entries could be edited. Special properties of
+ * data like save urls, checks for evil code or timestamps of last changes will be handled within this class.
+ *
  * @copyright 2004-2023 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- */
-
-/**
- * Diese Klasse dient dazu ein Gaestebucheintragsobjekt zu erstellen.
- * Eine Gaestebucheintrag kann ueber diese Klasse in der Datenbank verwaltet werden
- *
- * Beside the methods of the parent class there are the following additional methods:
- *
- * moderate()       - guestbook entry will be published, if moderate mode is set
  */
 class TableGuestbook extends TableAccess
 {
@@ -32,7 +28,7 @@ class TableGuestbook extends TableAccess
 
     /**
      * Deletes the selected guestbook entry and all comments.
-     * After that the class will be initialize.
+     * After that the class will be initialized.
      * @return bool **true** if no error occurred
      */
     public function delete(): bool
@@ -88,13 +84,14 @@ class TableGuestbook extends TableAccess
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
+     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
      * For new records the organization and ip address will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @throws AdmException
      */
     public function save(bool $updateFingerPrint = true): bool
     {
@@ -107,12 +104,51 @@ class TableGuestbook extends TableAccess
     }
 
     /**
+     * Send a notification email that a new guestbook entry was created or an existing guestbook entry was changed
+     * to all members of the notification role. This role is configured within the global preference
+     * **system_notifications_role**. The email contains the guestbook entry text, the name of the user,
+     * the timestamp and the url to this guestbook entry.
+     * @return bool Returns **true** if the notification was sent
+     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     */
+    public function sendNotification(): bool
+    {
+        global $gCurrentOrganization, $gCurrentUser, $gSettingsManager, $gL10n;
+
+        if ($gSettingsManager->getBool('system_notifications_new_entries')) {
+            $notification = new Email();
+
+            if ($this->isNewRecord()) {
+                $messageTitleText = 'SYS_GUESTBOOK_ENTRY_CREATED_TITLE';
+                $messageUserText = 'SYS_CREATED_BY';
+                $messageDateText = 'SYS_CREATED_AT';
+            } else {
+                $messageTitleText = 'SYS_GUESTBOOK_ENTRY_CHANGED_TITLE';
+                $messageUserText = 'SYS_CHANGED_BY';
+                $messageDateText = 'SYS_CHANGED_AT';
+            }
+
+            $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '\n\n'
+                . $gL10n->get('SYS_TEXT') . ': ' . $this->getValue('gbo_text') . '\n'
+                . $gL10n->get($messageUserText) . ': ' . $this->getValue('gbo_name') . '\n'
+                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '\n'
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php?gbo_uuid=' . $this->getValue('gbo_uuid') . '\n';
+            return $notification->sendNotification(
+                $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
+                $message
+            );
+        }
+        return false;
+    }
+
+    /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws AdmException
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
@@ -120,7 +156,7 @@ class TableGuestbook extends TableAccess
             if ($columnName === 'gbo_text') {
                 return parent::setValue($columnName, $newValue, false);
             } elseif ($columnName === 'gbo_email' && $newValue !== '') {
-                // If Email has a invalid format, it won't be set
+                // If Email has an invalid format, it won't be set
                 if (!StringUtils::strValidCharacters($newValue, 'email')) {
                     return false;
                 }

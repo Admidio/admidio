@@ -28,7 +28,7 @@ if ($_GET['mode'] == 2) {
 
 // Initialize and check the parameters
 $getDateUuid          = admFuncVariableIsValid($_GET, 'dat_uuid', 'string');
-$getMode              = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true));
+$getMode              = admFuncVariableIsValid($_GET, 'mode', 'int', array('requireValue' => true, 'validValues' => array(1, 2, 3, 4, 6, 7)));
 $getCopy              = admFuncVariableIsValid($_GET, 'copy', 'bool');
 $getUserUuid          = admFuncVariableIsValid($_GET, 'user_uuid', 'string', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 $postAdditionalGuests = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
@@ -80,7 +80,6 @@ if (in_array($getMode, array(1, 2), true)) {
 
 if ($getMode === 1) {  // Create a new event or edit an existing event
     $_SESSION['dates_request'] = $_POST;
-    $dateIsNew = $date->isNewRecord();
 
     try {
         // check the CSRF token of the form against the session token
@@ -297,7 +296,10 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
         }
 
         $gDb->startTransaction();
-        $returnCode = $date->save();
+        if($date->save()) {
+            // Notification a email for new or changed entries to all members of the notification role
+            $date->sendNotification();
+        }
     } catch (AdmException $e) {
         $e->showHtml();
     }
@@ -313,61 +315,6 @@ if ($getMode === 1) {  // Create a new event or edit an existing event
 
     $rightEventParticipation = new RolesRights($gDb, 'event_participation', $datId);
     $rightEventParticipation->saveRoles($eventParticipationRoles);
-
-    if ($returnCode === true && $gSettingsManager->getBool('system_notifications_new_entries')) {
-        // Notification email for new entries
-
-        $sqlCal = 'SELECT cat_name
-                     FROM '.TBL_CATEGORIES.'
-                    WHERE cat_id = ?';
-        $pdoStatement = $gDb->queryPrepared($sqlCal, array((int) $date->getValue('dat_cat_id')));
-        $calendar = $pdoStatement->fetchColumn();
-
-        if (strlen($_POST['dat_location']) > 0) {
-            $location = $_POST['dat_location'];
-        } else {
-            $location = 'n/a';
-        }
-
-        if ($_POST['dat_room_id'] == 0) {
-            $room = 'n/a';
-        }
-
-        if (strlen($_POST['dat_max_members']) > 0) {
-            $participants = $_POST['dat_max_members'];
-        } else {
-            $participants = 'n/a';
-        }
-
-        try {
-            $notification = new Email();
-
-            if ($dateIsNew) {
-                $messageTitleText = 'SYS_EMAIL_CREATE_EVENT_NOTIFICATION_TITLE';
-                $messageUserText = 'SYS_CREATED_BY';
-                $messageDateText = 'SYS_CREATED_AT';
-            } else {
-                $messageTitleText = 'SYS_EMAIL_CHANGE_EVENT_NOTIFICATION_TITLE';
-                $messageUserText = 'SYS_CHANGED_BY';
-                $messageDateText = 'SYS_CHANGED_AT';
-            }
-            $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '\n\n'
-                . $gL10n->get('SYS_TITLE') . ': ' . $_POST['dat_headline'] . '\n'
-                . $gL10n->get('SYS_DATE') . ': ' . $date->getDateTimePeriod() . '\n'
-                . $gL10n->get('DAT_CALENDAR') . ': ' . $calendar . '\n'
-                . $gL10n->get('DAT_LOCATION') . ': ' . $location . '\n'
-                . $gL10n->get('SYS_ROOM') . ': ' . $room . '\n'
-                . $gL10n->get('SYS_PARTICIPANTS') . ': ' . $participants . '\n'
-                . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME') . '\n'
-                . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date')) . '\n';
-            $notification->sendNotification(
-                $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
-                $message
-            );
-        } catch (AdmException $e) {
-            $e->showHtml();
-        }
-    }
 
     // ----------------------------------------------
     // if necessary write away role for participation
