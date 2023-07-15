@@ -81,10 +81,6 @@
   <string name="GBO_COMMENTS4ALL_DESC">Users who are not logged in can comment on the entries in the guestbook after activating this option. The rights assignment for this function via role management is then ignored. (Default: no)</string>
   <string name="GBO_CREATE_COMMENT">Leave comment</string>
   <string name="GBO_EDIT_COMMENT">Edit comment</string>
-  <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">New guestbook comment was created</string>
-  <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">New guestbook comment at #VAR1# was created.\n\nText: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
-  <string name="GBO_EMAIL_NOTIFICATION_TITLE">New guestbook entry was created</string>
-  <string name="GBO_EMAIL_NOTIFICATION_MESSAGE">New guestbook entry at #VAR1# was created.\n\nText: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
   <string name="GBO_ENTRY_QUEUED">Entry saved. It will be displayed after moderation.</string>
   <string name="GBO_FLOODING_PROTECTION">Your last entry was created less than #VAR1# seconds ago.</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Interval</string>
@@ -752,6 +748,10 @@
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">A new announcement was created at #VAR1#</string>
   <string name="SYS_EVENT_CREATED_TITLE">A new event was created at #VAR1#</string>
   <string name="SYS_FILE_CREATED_TITLE">A new file was uploaded at #VAR1#</string>
+  <string name="SYS_GUESTBOOK_COMMENT_CREATED_TITLE">New guestbook comment was created at #VAR1#</string>
+  <string name="SYS_GUESTBOOK_COMMENT_CHANGED_TITLE">A guestbook comment was changed at #VAR1#</string>
+  <string name="SYS_GUESTBOOK_ENTRY_CREATED_TITLE">New guestbook entry was created at #VAR1#</string>
+  <string name="SYS_GUESTBOOK_ENTRY_CHANGED_TITLE">A guestbook entry was changed at #VAR1#</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was created</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">The user #VAR1# #VAR2# (login: #VAR3#) was created by #VAR4#.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was deleted</string>

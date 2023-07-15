@@ -89,7 +89,7 @@ if ($getMode === 1) {
         $returnCode = $announcement->save();
 
         if ($returnCode) {
-            // Notification a email for new or changed entries to all members of the notification role
+            // Notification email for new or changed entries to all members of the notification role
             $announcement->sendNotification();
         }
     } catch (AdmException $e) {
