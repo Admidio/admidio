@@ -751,13 +751,12 @@
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">The profile data of the user #VAR1# #VAR2# (login: #VAR3#) was changed by #VAR4#.</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">A new announcement was created at #VAR1#</string>
   <string name="SYS_EVENT_CREATED_TITLE">A new event was created at #VAR1#</string>
+  <string name="SYS_FILE_CREATED_TITLE">A new file was uploaded at #VAR1#</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was created</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">The user #VAR1# #VAR2# (login: #VAR3#) was created by #VAR4#.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was deleted</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">The profile of the user #VAR1# #VAR2# (login: #VAR3#) was deleted by #VAR4#.</string>
   <string name="SYS_EMAIL_DESC">E-mails can be sent to different roles like groups, courses or departments.</string>
-  <string name="SYS_EMAIL_FILE_NOTIFICATION_TITLE">A new file was uploaded</string>
-  <string name="SYS_EMAIL_FILE_NOTIFICATION_MESSAGE">A new file was uploaded at #VAR1#\n\nFile: #VAR2#\nUploaded by: #VAR3#\nUploaded at: #VAR4#</string>
   <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# function test email</string>
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">This email was sent via the #VAR1# website of the #VAR2# organization with the email settings stored there.</string>
   <string name="SYS_EMAIL_INVALID">E-mail address in field #VAR1_BOLD# includes invalid characters or is incomplete.</string>
