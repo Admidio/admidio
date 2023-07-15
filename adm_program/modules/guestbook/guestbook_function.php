@@ -310,8 +310,8 @@ if ($getMode === 1 || $getMode === 3) {
                 $sql = 'SELECT COUNT(*) AS count
                           FROM '.TBL_GUESTBOOK_COMMENTS.'
                          WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->getInt(\'flooding_protection_time\')
-                           AND gbc_ip_address = ? -- $gbComment->getValue(\'gbc_ip_adress\')';
-                $pdoStatement = $gDb->queryPrepared($sql, array($gSettingsManager->getInt('flooding_protection_time'), $gbComment->getValue('gbc_ip_adress')));
+                           AND gbc_ip_address = ? -- $gbComment->getValue(\'gbc_ip_address\')';
+                $pdoStatement = $gDb->queryPrepared($sql, array($gSettingsManager->getInt('flooding_protection_time'), $gbComment->getValue('gbc_ip_address')));
 
                 if ($pdoStatement->fetchColumn() > 0) {
                     // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
