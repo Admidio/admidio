@@ -23,7 +23,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string');
+$getPhotoUuid = admFuncVariableIsValid($_GET, 'photo_uuid', 'string', array('requireValue' => true));
 $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
 
 // check if the module is enabled and disallow access if it's disabled
@@ -69,14 +69,13 @@ if ($getPhotoNr == null) {
     // get number of photos in total
     $quantity = $photoAlbum->getValue('pho_quantity');
 
-    // tempfolder
-    // change this value if your provider requires the usage of special directories (e.g. HostEurope)
-    //$tempfolder = "/is/htdocs/user_tmp/xxxxxx/";
+    // get tempFolder and unlink zip file otherwise get a PHP deprecated warning from zip open
     $tempFolder  = sys_get_temp_dir();
     $zipTempName = tempnam($tempFolder, 'zip');
+    unlink($zipTempName);
 
-    $zip = new \ZipArchive();
-    $zipOpenCode = $zip->open($zipTempName, \ZipArchive::CREATE);
+    $zip = new ZipArchive();
+    $zipOpenCode = $zip->open($zipTempName, ZipArchive::CREATE);
 
     if ($zipOpenCode !== true) {
         $gMessage->show($gL10n->get('PHP_DOWNLOAD_ZIP_ERROR'));
@@ -106,28 +105,18 @@ if ($getPhotoNr == null) {
 
     // add sub albums as subfolders
 
+    if (!$gCurrentUser->editPhotoRight()) {
+        $sqlConditions .= ' AND pho_locked = false ';
+    }
+
     // get sub albums
     $sql = 'SELECT pho_id
               FROM '.TBL_PHOTOS.'
-             WHERE pho_org_id = ? -- $gCurrentOrgId';
-    $queryParams = array($gCurrentOrgId);
-
-    if ($getPhotoUuid !== '') {
-        $sql .= '
-            AND pho_pho_id_parent = ? -- $photoAlbum->getValue(\'pho_id\')';
-        $queryParams[] = (int) $photoAlbum->getValue('pho_id');
-    } else {
-        $sql .= '
-            AND (pho_pho_id_parent IS NULL)';
-    }
-
-    if (!$gCurrentUser->editPhotoRight()) {
-        $sql .= '
-            AND pho_locked = false ';
-    }
-
-    $sql .= '
-        ORDER BY pho_begin DESC';
+             WHERE pho_org_id = ? -- $gCurrentOrgId
+               AND pho_pho_id_parent = ? -- $photoAlbum->getValue(\'pho_id\')
+                   '.$sqlConditions.'
+             ORDER BY pho_begin DESC ';
+    $queryParams = array($gCurrentOrgId, (int) $photoAlbum->getValue('pho_id'));
     $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
     // number of sub albums
@@ -188,7 +177,7 @@ if ($getPhotoNr == null) {
 
     try {
         FileSystemUtils::deleteFileIfExists($zipTempName);
-    } catch (\RuntimeException $exception) {
+    } catch (RuntimeException $exception) {
         $gLogger->error('Could not delete file!', array('filePath' => $zipTempName));
         // TODO
     }
