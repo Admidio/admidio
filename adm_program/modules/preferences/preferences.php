@@ -383,7 +383,7 @@ if ($gCurrentOrganization->countAllRecords() > 1) {
 
 $html = '<a class="btn btn-secondary" id="add_another_organization" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '2')).'">
             <i class="fas fa-plus-circle"></i>'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
-$formOrganization->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextIdInline' => $gL10n->get('ORG_ADD_ORGANIZATION_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+$formOrganization->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextIdInline' => 'ORG_ADD_ORGANIZATION_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formOrganization->addSubmitButton(
     'btn_save_organization',
     $gL10n->get('SYS_SAVE'),
@@ -675,6 +675,7 @@ $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
                  ON org_id = cat_org_id
               WHERE rol_valid  = true
                 AND rol_system = false
+                AND rol_all_lists_view = true
                 AND cat_org_id = ? -- $gCurrentOrgId
                 AND cat_name_intern <> \'EVENTS\'
            ORDER BY cat_name, rol_name';
@@ -684,7 +685,7 @@ $formSystemNotification->addSelectBoxFromSql(
     $gL10n->get('SYS_NOTIFICATION_ROLE'),
     $gDb,
     $sqlData,
-    array('defaultValue' => $formValues['system_notifications_role'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'SYS_NOTIFICATION_ROLE_DESC')
+    array('defaultValue' => $formValues['system_notifications_role'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('SYS_NOTIFICATION_ROLE_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW')))
 );
 
 $formSystemNotification->addCustomContent(
@@ -868,7 +869,7 @@ $formAdmidioUpdate->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_U
 
 $html = '<a id="donate" href="'. ADMIDIO_HOMEPAGE . 'donate.php" target="_blank">
             <i class="fas fa-heart"></i>'.$gL10n->get('SYS_DONATE').'</a>';
-$formAdmidioUpdate->addCustomContent($gL10n->get('SYS_SUPPORT_ADMIDIO'), $html, array('helpTextIdInline' => $gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT')));
+$formAdmidioUpdate->addCustomContent($gL10n->get('SYS_SUPPORT_ADMIDIO'), $html, array('helpTextIdInline' => 'INS_SUPPORT_FURTHER_DEVELOPMENT'));
 
 $page->addHtml(getPreferencePanel('common', 'admidio_update', 'accordion_preferences', $gL10n->get('SYS_ADMIDIO_UPDATE'), 'fas fa-cloud-download-alt', $formAdmidioUpdate->show()));
 
@@ -1067,7 +1068,7 @@ $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_
 $formAnnouncements->addCustomContent(
     $gL10n->get('SYS_EDIT_CATEGORIES'),
     $html,
-    array('helpTextIdInline' => $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+    array('helpTextIdInline' =>'DAT_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
 );
 $formAnnouncements->addSubmitButton(
     'btn_save_announcements',
@@ -1133,7 +1134,7 @@ $formUserManagement->addCheckbox(
 
 $html = '<a class="btn btn-secondary" href="'. ADMIDIO_URL. FOLDER_MODULES.'/userrelations/relationtypes.php">
             <i class="fas fa-people-arrows"></i>'.$gL10n->get('SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION').'</a>';
-$formUserManagement->addCustomContent($gL10n->get('SYS_USER_RELATIONS'), $html, array('helpTextIdInline' => $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+$formUserManagement->addCustomContent($gL10n->get('SYS_USER_RELATIONS'), $html, array('helpTextIdInline' => 'SYS_MAINTAIN_USER_RELATION_TYPES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 
 $formUserManagement->addSubmitButton(
     'btn_save_user_management',
@@ -1249,13 +1250,13 @@ $formPhotos->addCheckbox(
     'photo_download_enabled',
     $gL10n->get('PHO_DOWNLOAD_ENABLED'),
     (bool) $formValues['photo_download_enabled'],
-    array('helpTextIdInline' => array('PHO_DOWNLOAD_ENABLED_DESC', array($gL10n->get('PHO_KEEP_ORIGINAL'))))
+    array('helpTextIdInline' => array('PHO_DOWNLOAD_ENABLED_DESC', array('PHO_KEEP_ORIGINAL')))
 );
 $formPhotos->addCheckbox(
     'photo_keep_original',
     $gL10n->get('PHO_KEEP_ORIGINAL'),
     (bool) $formValues['photo_keep_original'],
-    array('helpTextIdInline' => array('PHO_KEEP_ORIGINAL_DESC', array($gL10n->get('PHO_DOWNLOAD_ENABLED'))))
+    array('helpTextIdInline' => array('PHO_KEEP_ORIGINAL_DESC', array('PHO_DOWNLOAD_ENABLED')))
 );
 $formPhotos->addCheckbox(
     'photo_ecard_enabled',
@@ -1437,7 +1438,7 @@ $formGroupsRoles->addSelectBox(
 );
 $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
-$formGroupsRoles->addCustomContent($gL10n->get('SYS_EDIT_CATEGORIES'), $html, array('helpTextIdInline' => $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+$formGroupsRoles->addCustomContent($gL10n->get('SYS_EDIT_CATEGORIES'), $html, array('helpTextIdInline' => 'DAT_MAINTAIN_CATEGORIES_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formGroupsRoles->addSubmitButton(
     'btn_save_lists',
     $gL10n->get('SYS_SAVE'),
@@ -1592,7 +1593,7 @@ $formProfile = new HtmlForm(
 
 $html = '<a class="btn btn-secondary" href="'. ADMIDIO_URL. FOLDER_MODULES.'/profile-fields/profile_fields.php">
             <i class="fas fa-th-list"></i>'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
-$formProfile->addCustomContent($gL10n->get('SYS_EDIT_PROFILE_FIELDS'), $html, array('helpTextIdInline' => $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+$formProfile->addCustomContent($gL10n->get('SYS_EDIT_PROFILE_FIELDS'), $html, array('helpTextIdInline' => 'PRO_MAINTAIN_PROFILE_FIELDS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formProfile->addCheckbox(
     'profile_log_edit_fields',
     $gL10n->get('PRO_LOG_EDIT_FIELDS'),
@@ -1739,11 +1740,11 @@ $formEvents->addCheckbox(
     'dates_may_take_part',
     $gL10n->get('SYS_MAYBE_PARTICIPATE'),
     (bool) $formValues['dates_may_take_part'],
-    array('helpTextIdInline' => $gL10n->get('SYS_MAYBE_PARTICIPATE_DESC', array('SYS_PARTICIPATE', 'DAT_CANCEL', 'DAT_USER_TENTATIVE')))
+    array('helpTextIdInline' => array('SYS_MAYBE_PARTICIPATE_DESC', array('SYS_PARTICIPATE', 'DAT_CANCEL', 'DAT_USER_TENTATIVE')))
 );
 $html = '<a class="btn btn-secondary" href="'. SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
-$formEvents->addCustomContent($gL10n->get('SYS_EDIT_CALENDARS'), $html, array('helpTextIdInline' => $gL10n->get('DAT_EDIT_CALENDAR_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+$formEvents->addCustomContent($gL10n->get('SYS_EDIT_CALENDARS'), $html, array('helpTextIdInline' => 'DAT_EDIT_CALENDAR_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formEvents->addCheckbox(
     'dates_show_rooms',
     $gL10n->get('DAT_ROOM_SELECTABLE'),
@@ -1752,7 +1753,7 @@ $formEvents->addCheckbox(
 );
 $html = '<a class="btn btn-secondary" href="'. ADMIDIO_URL. FOLDER_MODULES.'/rooms/rooms.php">
             <i class="fas fa-home"></i>'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
-$formEvents->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => $gL10n->get('DAT_EDIT_ROOMS_DESC'), 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
+$formEvents->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => 'DAT_EDIT_ROOMS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST')));
 $formEvents->addSubmitButton(
     'btn_save_events',
     $gL10n->get('SYS_SAVE'),
