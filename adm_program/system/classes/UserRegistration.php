@@ -269,8 +269,7 @@ class UserRegistration extends User
             $this->tableRegistration->save();
 
             // send a notification mail to the user to confirm his registration
-            if ($gSettingsManager->getBool('system_notifications_enabled')
-                && $gSettingsManager->getBool('registration_send_notification_email') && $this->sendEmail) {
+            if ($gSettingsManager->getBool('system_notifications_enabled') && $this->sendEmail) {
                 $sysMail = new SystemMail($this->db);
                 $sysMail->addRecipientsByUser($this->getValue('usr_uuid'));
                 $sysMail->setVariable(1, SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php', array('user_uuid' => $this->getValue('usr_uuid'), 'id' => $validationId)));
