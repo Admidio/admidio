@@ -78,6 +78,8 @@ class UploadHandlerDownload extends UploadHandler
                     $newFile->sendNotification();
                 }
             } catch (AdmException $e) {
+                // remove XSS from filename before the name will be shown in the error message
+                $file->name = SecurityUtils::encodeHTML(StringUtils::strStripTags($file->name));
                 $file->error = $e->getText();
 
                 try {

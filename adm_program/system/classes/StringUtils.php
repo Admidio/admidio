@@ -230,7 +230,7 @@ final class StringUtils
             (!self::strValidCharacters($filename, 'file') && $checkExtension) ||
             (!self::strValidCharacters($filename, 'folder') && !$checkExtension)
         ) {
-            throw new AdmException('SYS_FILENAME_INVALID', array(self::strStripTags($filename)));
+            throw new AdmException('SYS_FILENAME_INVALID', array(SecurityUtils::encodeHTML(self::strStripTags($filename))));
         }
 
         if ($checkExtension) {
