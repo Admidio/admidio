@@ -99,10 +99,6 @@ if ($getMode === 'new' || $getMode === 'change') {
         // => EXIT
     }
 
-    if (strlen($_POST['pho_photographers']) === 0) {
-        $_POST['pho_photographers'] = $gL10n->get('SYS_UNKNOWN');
-    }
-
     // set parent photo id
     $photoAlbumParent = new TablePhotos($gDb);
     $photoAlbumParent->readDataByUuid($_POST['parent_album_uuid']);
