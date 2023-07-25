@@ -130,7 +130,7 @@ if ($image !== null) {
         $fontTtf = ADMIDIO_PATH . '/adm_program/system/fonts/mrphone.ttf';
 
         // show name of photograph if set otherwise show name of organization
-        if ((string) $photoAlbum->getValue('pho_photographers') !== '') {
+        if ((string) $photoAlbum->getValue('pho_photographers', 'database') !== '') {
             $text = '© ' . $photoAlbum->getValue('pho_photographers', 'database');
         } else {
             $text = $gSettingsManager->getString('photo_image_text');

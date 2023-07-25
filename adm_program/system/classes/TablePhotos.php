@@ -163,10 +163,17 @@ class TablePhotos extends TableAccess
      */
     public function getValue(string $columnName, string $format = '')
     {
+        global $gL10n;
+
         if ($columnName === 'pho_description' && $format === 'html') {
             $value = nl2br(parent::getValue($columnName));
         } else {
             $value = parent::getValue($columnName, $format);
+        }
+
+        // in html mode always return a photographer name
+        if ($columnName === 'pho_photographers' && $format !== 'database' && (string) $value === '') {
+            $value = $gL10n->get('SYS_UNKNOWN');
         }
 
         return $value;
