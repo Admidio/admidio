@@ -143,14 +143,15 @@ class UploadHandlerPhoto extends UploadHandler
                     throw new AdmException('PHO_PHOTO_PROCESSING_ERROR');
                 }
             } catch (AdmException $e) {
+                try {
+                    FileSystemUtils::deleteFileIfExists($this->options['upload_dir'].$file->name);
+                } catch (RuntimeException $exception) {
+                    $gLogger->error('Could not delete file!', array('filePath' => $this->options['upload_dir'].$file->name));
+                    // TODO
+                }
                 // remove XSS from filename before the name will be shown in the error message
                 $file->name = SecurityUtils::encodeHTML(StringUtils::strStripTags($file->name));
                 $file->error = $e->getText();
-
-                try {
-                    FileSystemUtils::deleteFileIfExists($this->options['upload_dir'].$file->name);
-                } catch (\RuntimeException $exception) {
-                }
 
                 return $file;
             }
