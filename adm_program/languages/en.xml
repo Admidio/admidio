@@ -371,8 +371,6 @@
   <string name="PHO_SCALE_THUMBNAILS">Thumbnail scaling</string>
   <string name="PHO_SCALE_THUMBNAILS_DESC">Set long edge of thumbnails. Attention: do not scale width too large in order to avoid conflict with thumbnail row and column preference. Otherwise try adjustment of thumbnail row and column preferences. (default: 160 pixels)</string>
   <string name="PHO_SELECT_FOTOS">Select image</string>
-  <string name="PHO_SHOW_CAPTION">Show watermark</string>
-  <string name="PHO_SHOW_CAPTION_DESC">Text will be shown in all photos with a long edge larger than 200 pixels. (default: © #VAR1#)</string>
   <string name="PHO_SHOWN_ON_READY">Photos have been successfully added to album if they appear on this page.</string>
   <string name="PHO_THUMBNAILS_PER_PAGE">Thumbnails per page</string>
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">This option defines how many thumbnail previews will be displayed on each page. If there are more images in this album a page navigation will be added automatically. (Default: 16)</string>
@@ -1325,6 +1323,8 @@
   <string name="SYS_SHOW_PERMISSIONS">Show permissions</string>
   <string name="SYS_SHOW_PROFILE">Show profile</string>
   <string name="SYS_SHOW_ROUTE">Show route</string>
+  <string name="SYS_SHOW_WATERMARK">Show watermark</string>
+  <string name="SYS_SHOW_WATERMARK_DESC">The entered text will be shown in all displayed photos, starting from a scale of 200 pixels of the longer side. If the photographer was deposited in the album, the name of the photographer with copyright is displayed instead of this text. If no image text is to be displayed, this field can be left empty. (Default: #VAR1#)</string>
   <string name="SYS_SIMILAR_MEMBERS_FOUND">Similar members found</string>
   <string name="SYS_SIMILAR_MEMBERS_FOUND_ASSIGN">Members with a similar name as #VAR1_BOLD# were found.</string>
   <string name="SYS_SIMILAR_MEMBERS_FOUND_REGISTRATION">Members with a similar name as #VAR1_BOLD# were found. Check the registration and assign it to a found member or create a new member.</string>

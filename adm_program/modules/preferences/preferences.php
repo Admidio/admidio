@@ -1236,9 +1236,9 @@ $formPhotos->addInput(
 );
 $formPhotos->addInput(
     'photo_image_text',
-    $gL10n->get('PHO_SHOW_CAPTION'),
+    $gL10n->get('SYS_SHOW_WATERMARK'),
     $formValues['photo_image_text'],
-    array('maxLength' => 60, 'helpTextIdInline' => array('PHO_SHOW_CAPTION_DESC', array(DOMAIN)))
+    array('maxLength' => 60, 'helpTextIdInline' => array('SYS_SHOW_WATERMARK_DESC', array('© '.DOMAIN)))
 );
 $formPhotos->addInput(
     'photo_image_text_size',
