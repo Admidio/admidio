@@ -1396,6 +1396,7 @@
   <string name="SYS_UNIQUE_ID">Unique ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNLIMITED">Unlimited</string>
+  <string name="SYS_UNKNOWN">Unknown</string>
   <string name="SYS_UNLOCK">Unlock</string>
   <string name="SYS_UNIDIRECTIONAL">Unidirectional</string>
   <string name="SYS_UNMANAGED_FILES">Unmanaged files</string>
