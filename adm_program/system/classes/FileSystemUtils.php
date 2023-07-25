@@ -1217,7 +1217,8 @@ final class FileSystemUtils
     {
         // remove NULL value from filename
         $filename = str_replace(chr(0), '', $filename);
-        $filename = preg_replace("/([^\w\s\d\-_~:;<>|\[\]\(\).])/u", '', $filename);
+        //$filename = preg_replace("/([^\w\s\d\-_~:;<>|\[\]\(\).])/u", '', $filename);
+        $filename = preg_replace("/<>:\?\/\*\"'/", '-', $filename);
         // Remove any runs of periods
         $filename = preg_replace("/([\.]{2,})/u", '', $filename);
 
