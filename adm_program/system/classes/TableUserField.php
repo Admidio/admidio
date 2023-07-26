@@ -180,12 +180,7 @@ class TableUserField extends TableAccess
             return '';
         }
 
-        if ($format === 'database') {
-            if ($columnName === 'usf_icon' && $value !== '' && !preg_match('/fa-[a-zA-z0-9]/', $value)) {
-                // if not font awesome icon that create url with icon file
-                $value = THEME_URL . '/images/' . $value;
-            }
-        } else {
+        if ($format !== 'database') {
             switch ($columnName) {
                 case 'usf_name': // fallthrough
                 case 'cat_name':
@@ -431,6 +426,11 @@ class TableUserField extends TableAccess
                             throw new AdmException('No Category with the given uuid '. $newValue. ' was found in the database.');
                         }
                         $newValue = $category->getValue('cat_id');
+                    }
+                } elseif ($columnName === 'usf_icon' && $newValue !== '') {
+                    // check if font awesome syntax is used
+                    if (!preg_match('/fa-[a-zA-z0-9]/', $newValue)) {
+                        throw new AdmException('SYS_INVALID_FONT_AWESOME');
                     }
                 } elseif ($columnName === 'usf_url' && $newValue !== '') {
                     $newValue = admFuncCheckUrl($newValue);

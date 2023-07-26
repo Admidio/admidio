@@ -906,7 +906,7 @@
   <string name="SYS_INTERNAL_NAME_DESC">The internal name is used to uniquely access this data object. This is not relevant for program use. In development, however, this name must always be used to identify the field, e.g. to address with getValue (). The internal name is automatically filled when creating a data record.</string>
   <string name="SYS_INTO_TO">Recipients need to be listed in the TO field instead of the BCC field</string>
   <string name="SYS_INTO_TO_DESC">All recipients will be listed in the TO field if set accordingly and an email will be received by multiple person. Thus each recipient will see the name and email address of the other recipients. In addition each recipient can reply to all. (Default: deactivated)</string>
-  <string name="SYS_INVALID_FONT_AWESOME">The entered icon name does not correspond to the expected syntax. An icon of font Awesome must correspond to the schema fa-iconname. A file must be stored in the images theme folder and have a png or jpg extension.</string>
+  <string name="SYS_INVALID_FONT_AWESOME">The entered icon name does not correspond to the expected syntax. An icon of font Awesome must correspond to the schema fa-iconName.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Invalid page view</string>
   <string name="SYS_IO_ERROR">I/O error</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>

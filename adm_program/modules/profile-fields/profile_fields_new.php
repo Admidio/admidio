@@ -234,7 +234,7 @@ $form->addInput(
 $form->addInput(
     'usf_icon',
     $gL10n->get('SYS_ICON'),
-    htmlentities($userField->getValue('usf_icon', 'database'), ENT_QUOTES),
+    $userField->getValue('usf_icon', 'database'),
     array(
         'maxLength' => 100,
         'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>'))

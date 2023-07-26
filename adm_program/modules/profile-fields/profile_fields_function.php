@@ -104,16 +104,6 @@ if ($getMode === 1) {
         // => EXIT
     }
 
-    // check if font awesome syntax is used or if it's a valid filename syntax
-    if ($_POST['usf_icon'] !== '' && !preg_match('/fa-[a-zA-z0-9]/', $_POST['usf_icon'])) {
-        try {
-            StringUtils::strIsValidFileName($_POST['usf_icon']);
-        } catch (AdmException $e) {
-            $gMessage->show($gL10n->get('SYS_INVALID_FONT_AWESOME'));
-            // => EXIT
-        }
-    }
-
     if ($_POST['usf_url'] !== '' && !StringUtils::strValidCharacters($_POST['usf_url'], 'url')) {
         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_URL'))));
         // => EXIT

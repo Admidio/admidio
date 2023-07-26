@@ -234,4 +234,28 @@ class TableMenu extends TableAccess
 
         return $returnValue;
     }
+
+    /**
+     * Set a new value for a column of the database table.
+     * The value is only saved in the object. You must call the method **save** to store the new value to the database
+     * @param string $columnName The name of the database column whose value should get a new value
+     * @param mixed  $newValue The new value that should be stored in the database field
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     *@throws AdmException
+     */
+    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    {
+        if ($newValue !== parent::getValue($columnName) && $checkValue) {
+            if ($columnName === 'men_icon' && $newValue !== '') {
+                // check if font awesome syntax is used
+                if (!preg_match('/fa-[a-zA-z0-9]/', $newValue)) {
+                    throw new AdmException('SYS_INVALID_FONT_AWESOME');
+                }
+            }
+
+            return parent::setValue($columnName, $newValue, $checkValue);
+        }
+        return false;
+    }
 }
