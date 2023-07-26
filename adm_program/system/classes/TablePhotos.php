@@ -150,6 +150,24 @@ class TablePhotos extends TableAccess
     }
 
     /**
+     * Returns the name of the photographers. If there is no photographer(s) saved within this
+     * album then the method will return the name "unknown".
+     * @return string Name of the photographer(s)
+     */
+    public function getPhotographer(): string
+    {
+        global $gL10n;
+
+        $photographer = (string) $this->getValue('pho_photographers');
+
+        if ($photographer === '') {
+            $photographer = $gL10n->get('SYS_UNKNOWN');
+        }
+
+        return $photographer;
+    }
+
+    /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
@@ -169,11 +187,6 @@ class TablePhotos extends TableAccess
             $value = nl2br(parent::getValue($columnName));
         } else {
             $value = parent::getValue($columnName, $format);
-        }
-
-        // in html mode always return a photographer name
-        if ($columnName === 'pho_photographers' && $format !== 'database' && (string) $value === '') {
-            $value = $gL10n->get('SYS_UNKNOWN');
         }
 
         return $value;

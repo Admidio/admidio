@@ -77,7 +77,7 @@ if ((int) $gSettingsManager->get('photo_show_mode') !== PHOTO_SHOW_MODAL) {
         $datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'));
     }
 
-    $page->addHtml('<p class="lead">' . $datePeriod . '<br />' . $gL10n->get('SYS_PHOTO_OF_VAR', array($photoAlbum->getValue('pho_photographers'))) . '</p>');
+    $page->addHtml('<p class="lead">' . $datePeriod . '<br />' . $gL10n->get('SYS_PHOTO_OF_VAR', array($photoAlbum->getPhotographer())) . '</p>');
 }
 
 // Show photo with link to next photo
@@ -118,7 +118,7 @@ if ((int) $gSettingsManager->get('photo_show_mode') !== PHOTO_SHOW_MODAL) {
     </div>
     <div class="row">
         <div class="col-sm-2 col-4">'.$gL10n->get('PHO_PHOTOGRAPHER').'</div>
-        <div class="col-sm-4 col-8"><strong>'.$photoAlbum->getValue('pho_photographers').'</strong></div>
+        <div class="col-sm-4 col-8"><strong>'.$photoAlbum->getPhotographer().'</strong></div>
     </div>');
 }
 

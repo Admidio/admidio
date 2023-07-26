@@ -160,7 +160,7 @@ if ($getPhotoNr == null) {
         // => EXIT
     }
 
-    $filename = $photoAlbum->getValue('pho_name').' - '.$photoAlbum->getValue('pho_photographers').'.zip';
+    $filename = $photoAlbum->getValue('pho_name').' - '.$photoAlbum->getPhotographer().'.zip';
     $filename = FileSystemUtils::getSanitizedPathEntry($filename);
 
     header('Content-Type: application/zip');

@@ -123,7 +123,7 @@ while ($row = $statement->fetch()) {
     if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin')) {
         $description = $gL10n->get('SYS_DATE_FROM_TO', array($description, $photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'))));
     }
-    $description .= '<br />' . $photoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $photoAlbum->getValue('pho_photographers');
+    $description .= '<br />' . $photoAlbum->countImages() . ' ' . $gL10n->get('PHO_PHOTOGRAPHER') . ' ' . $photoAlbum->getPhotographer();
 
     if (strlen($photoAlbum->getValue('pho_description')) > 0) {
         $description .= '<br /><br />' . $photoAlbum->getValue('pho_description') . '</p>';
