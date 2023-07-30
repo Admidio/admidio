@@ -240,6 +240,10 @@ class Session extends TableAccess
         }
 
         $this->db->endTransaction();
+
+        // remove session object with all data
+        session_unset();
+        session_destroy();
     }
 
     /**
